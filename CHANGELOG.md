@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Core Application
 - Initial React 19 + Vite + Tailwind 4 project setup
 - 6-zone training system with scientific basis (Z1-Z6)
-- 118+ workout templates across 11 categories
+- 136 workout templates across 11 categories
 - Multi-page routing: Home, Library, Workout Detail, Settings, Favorites
 - Docker deployment configuration
 
