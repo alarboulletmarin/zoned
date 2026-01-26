@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Header, Footer } from "@/components/layout";
-import { HomePage, LibraryPage, WorkoutDetailPage, SettingsPage, FavoritesPage } from "@/pages";
+import { HomePage, LibraryPage, WorkoutDetailPage, SettingsPage, FavoritesPage, QuizPage } from "@/pages";
 
 function App() {
   // Theme state with localStorage persistence
@@ -44,6 +44,7 @@ function App() {
             <Route path="/workout/:id" element={<WorkoutDetailPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/favorites" element={<FavoritesPage />} />
+            <Route path="/quiz" element={<QuizPage />} />
           </Routes>
         </main>
 

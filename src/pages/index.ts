@@ -3,3 +3,4 @@ export { LibraryPage } from "./LibraryPage";
 export { WorkoutDetailPage } from "./WorkoutDetailPage";
 export { SettingsPage } from "./SettingsPage";
 export { FavoritesPage } from "./FavoritesPage";
+export { QuizPage } from "./QuizPage";

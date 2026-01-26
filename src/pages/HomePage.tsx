@@ -60,6 +60,35 @@ export function HomePage() {
       {/* Workout of the Day */}
       <WorkoutOfTheDay />
 
+      {/* Quiz Teaser */}
+      <section>
+        <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
+          <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6">
+            <div className="flex items-center gap-4">
+              <div className="rounded-full bg-primary/10 p-3">
+                <Target className="size-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg">
+                  {isEn ? "Not sure what to do?" : "Pas sûr de ta séance ?"}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  {isEn
+                    ? "3 quick questions to find a suitable workout."
+                    : "3 questions rapides pour trouver une séance adaptée."}
+                </p>
+              </div>
+            </div>
+            <Button asChild>
+              <Link to="/quiz">
+                {isEn ? "Take the quiz" : "Faire le quiz"}
+                <ArrowRight className="ml-2 size-4" />
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </section>
+
       {/* Zone System Preview */}
       <section className="space-y-6">
         <h2 className="text-2xl font-bold text-center">

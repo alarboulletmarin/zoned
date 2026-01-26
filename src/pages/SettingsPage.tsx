@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ZoneCalculator } from "@/components/domain";
+import { ZoneCalculator, PaceCalculator } from "@/components/domain";
 
 export function SettingsPage() {
   const { t } = useTranslation("common");
@@ -11,7 +11,10 @@ export function SettingsPage() {
         <p className="text-muted-foreground">{t("settings.description")}</p>
       </div>
 
-      <ZoneCalculator />
+      <div className="space-y-6">
+        <ZoneCalculator />
+        <PaceCalculator />
+      </div>
     </div>
   );
 }

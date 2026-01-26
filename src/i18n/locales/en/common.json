@@ -3,6 +3,31 @@
     "name": "Zoned",
     "tagline": "Scientific running workouts for runners"
   },
+  "quiz": {
+    "title": "Quick Quiz",
+    "subtitle": "Find your ideal workout in 3 questions",
+    "step": "Step",
+    "back": "Back",
+    "restart": "Start over",
+    "results": "Your recommended workouts",
+    "resultsHint": "Based on your answers, here are the workouts that match your needs",
+    "noResults": "No workouts exactly match your criteria. Try changing your answers.",
+    "goalQuestion": "What is your goal today?",
+    "goalHint": "Choose what best matches your needs",
+    "timeQuestion": "How much time do you have?",
+    "timeHint": "Available duration for your workout",
+    "environmentQuestion": "What terrain do you have?",
+    "environmentHint": "The environment available for your training",
+    "recover": "Recover",
+    "progress": "Progress",
+    "perform": "Perform",
+    "short": "Less than 30 min",
+    "medium": "30 to 60 min",
+    "long": "More than 60 min",
+    "anywhere": "Anywhere",
+    "track": "Track available",
+    "hills": "Hills available"
+  },
   "workoutOfTheDay": {
     "title": "Workout of the Day",
     "coachingTips": "Coaching Tips",
@@ -52,6 +77,15 @@
       "save": "Save",
       "saved": "Saved",
       "clear": "Clear"
+    },
+    "paceCalculator": {
+      "title": "Pace Calculator",
+      "description": "Estimate your race times based on your VMA",
+      "distance": "Distance",
+      "vmaPercent": "% VMA",
+      "pace": "Pace",
+      "time": "Estimated Time",
+      "noVma": "Enter your VMA to display time estimates"
     }
   }
 }

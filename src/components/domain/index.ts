@@ -9,4 +9,6 @@ export { WorkoutStructure, CoachingTips } from "./WorkoutStructure";
 export { WorkoutOfTheDay } from "./WorkoutOfTheDay";
 export { CategoryIcon } from "./CategoryIcon";
 export { ZoneCalculator } from "./ZoneCalculator";
+export { PaceCalculator } from "./PaceCalculator";
 export { FavoriteButton } from "./FavoriteButton";
+export { WorkoutQuiz } from "./WorkoutQuiz";

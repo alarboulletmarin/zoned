@@ -3,6 +3,31 @@
     "name": "Zoned",
     "tagline": "Séances d'entraînement scientifiques pour coureurs"
   },
+  "quiz": {
+    "title": "Quiz Rapide",
+    "subtitle": "Trouvez la séance idéale en 3 questions",
+    "step": "Etape",
+    "back": "Retour",
+    "restart": "Recommencer",
+    "results": "Vos séances recommandées",
+    "resultsHint": "Basées sur vos réponses, voici les séances qui vous correspondent",
+    "noResults": "Aucune séance ne correspond exactement à vos critères. Essayez de modifier vos réponses.",
+    "goalQuestion": "Quel est votre objectif aujourd'hui ?",
+    "goalHint": "Choisissez ce qui correspond le mieux à vos besoins",
+    "timeQuestion": "Combien de temps avez-vous ?",
+    "timeHint": "Durée disponible pour votre séance",
+    "environmentQuestion": "Quel terrain avez-vous ?",
+    "environmentHint": "L'environnement disponible pour votre entraînement",
+    "recover": "Récupérer",
+    "progress": "Progresser",
+    "perform": "Performer",
+    "short": "Moins de 30 min",
+    "medium": "30 à 60 min",
+    "long": "Plus de 60 min",
+    "anywhere": "N'importe où",
+    "track": "Piste disponible",
+    "hills": "Côtes disponibles"
+  },
   "workoutOfTheDay": {
     "title": "La Séance du Jour",
     "coachingTips": "Conseils du coach",
@@ -52,6 +77,15 @@
       "save": "Sauvegarder",
       "saved": "Sauvegardé",
       "clear": "Effacer"
+    },
+    "paceCalculator": {
+      "title": "Calculateur d'Allures",
+      "description": "Estimez vos temps de course en fonction de votre VMA",
+      "distance": "Distance",
+      "vmaPercent": "% VMA",
+      "pace": "Allure",
+      "time": "Temps estimé",
+      "noVma": "Entrez votre VMA pour afficher les estimations de temps"
     }
   }
 }
