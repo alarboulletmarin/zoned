@@ -1,0 +1,34 @@
+{
+  "app": {
+    "name": "Zoned",
+    "tagline": "Séances d'entraînement scientifiques pour coureurs"
+  },
+  "nav": {
+    "home": "Accueil",
+    "library": "Bibliothèque",
+    "about": "À propos"
+  },
+  "actions": {
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "clear": "Effacer",
+    "viewDetails": "Voir les détails",
+    "backToLibrary": "Retour à la bibliothèque"
+  },
+  "units": {
+    "minutes": "min",
+    "minutesFull": "minutes",
+    "workouts": "séances",
+    "categories": "catégories",
+    "zones": "zones"
+  },
+  "theme": {
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
+  },
+  "language": {
+    "fr": "Français",
+    "en": "English"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "title": "Workout Library",
+  "subtitle": "{{count}} scientific training sessions",
+  "filters": {
+    "category": "Category",
+    "difficulty": "Difficulty",
+    "duration": "Duration",
+    "allCategories": "All categories",
+    "allDifficulties": "All levels",
+    "durationRange": "{{min}} - {{max}} min"
+  },
+  "categories": {
+    "recovery": "Recovery",
+    "endurance": "Endurance",
+    "tempo": "Tempo",
+    "threshold": "Threshold",
+    "vma": "VO2max",
+    "long_run": "Long Run",
+    "hills": "Hills",
+    "fartlek": "Fartlek",
+    "race_pace": "Race Pace",
+    "mixed": "Mixed"
+  },
+  "difficulty": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "elite": "Elite"
+  },
+  "sort": {
+    "label": "Sort by",
+    "name": "Name",
+    "difficulty": "Difficulty",
+    "duration": "Duration"
+  },
+  "noResults": "No workouts match your criteria",
+  "clearFilters": "Clear filters"
+}

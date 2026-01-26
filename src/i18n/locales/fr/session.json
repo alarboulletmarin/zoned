@@ -1,0 +1,53 @@
+{
+  "structure": {
+    "warmup": "Échauffement",
+    "main": "Corps de séance",
+    "cooldown": "Retour au calme"
+  },
+  "zones": {
+    "Z1": "Zone 1 - Récupération",
+    "Z2": "Zone 2 - Endurance",
+    "Z3": "Zone 3 - Tempo",
+    "Z4": "Zone 4 - Seuil",
+    "Z5": "Zone 5 - VO2max",
+    "Z6": "Zone 6 - Sprint"
+  },
+  "zoneShort": {
+    "Z1": "Z1",
+    "Z2": "Z2",
+    "Z3": "Z3",
+    "Z4": "Z4",
+    "Z5": "Z5",
+    "Z6": "Z6"
+  },
+  "details": {
+    "duration": "Durée",
+    "difficulty": "Difficulté",
+    "category": "Catégorie",
+    "environment": "Environnement",
+    "targetSystem": "Système ciblé"
+  },
+  "targetSystems": {
+    "aerobic_base": "Base aérobie",
+    "aerobic_power": "Puissance aérobie",
+    "lactate_threshold": "Seuil lactique",
+    "vo2max": "VO2max",
+    "speed": "Vitesse",
+    "strength": "Force",
+    "race_specific": "Spécifique course"
+  },
+  "environment": {
+    "requiresHills": "Nécessite des côtes",
+    "requiresTrack": "Nécessite une piste",
+    "prefersFlat": "Terrain plat préféré",
+    "noRequirements": "Pas d'exigence particulière"
+  },
+  "coaching": {
+    "tips": "Conseils",
+    "mistakes": "Erreurs courantes"
+  },
+  "variations": {
+    "title": "Variantes",
+    "related": "Séances similaires"
+  }
+}

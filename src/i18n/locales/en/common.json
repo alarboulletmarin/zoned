@@ -1,0 +1,34 @@
+{
+  "app": {
+    "name": "Zoned",
+    "tagline": "Scientific running workouts for runners"
+  },
+  "nav": {
+    "home": "Home",
+    "library": "Library",
+    "about": "About"
+  },
+  "actions": {
+    "search": "Search",
+    "filter": "Filter",
+    "clear": "Clear",
+    "viewDetails": "View details",
+    "backToLibrary": "Back to library"
+  },
+  "units": {
+    "minutes": "min",
+    "minutesFull": "minutes",
+    "workouts": "workouts",
+    "categories": "categories",
+    "zones": "zones"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "fr": "Français",
+    "en": "English"
+  }
+}

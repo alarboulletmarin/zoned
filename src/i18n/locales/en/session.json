@@ -1,0 +1,53 @@
+{
+  "structure": {
+    "warmup": "Warm-up",
+    "main": "Main Set",
+    "cooldown": "Cool-down"
+  },
+  "zones": {
+    "Z1": "Zone 1 - Recovery",
+    "Z2": "Zone 2 - Endurance",
+    "Z3": "Zone 3 - Tempo",
+    "Z4": "Zone 4 - Threshold",
+    "Z5": "Zone 5 - VO2max",
+    "Z6": "Zone 6 - Sprint"
+  },
+  "zoneShort": {
+    "Z1": "Z1",
+    "Z2": "Z2",
+    "Z3": "Z3",
+    "Z4": "Z4",
+    "Z5": "Z5",
+    "Z6": "Z6"
+  },
+  "details": {
+    "duration": "Duration",
+    "difficulty": "Difficulty",
+    "category": "Category",
+    "environment": "Environment",
+    "targetSystem": "Target System"
+  },
+  "targetSystems": {
+    "aerobic_base": "Aerobic Base",
+    "aerobic_power": "Aerobic Power",
+    "lactate_threshold": "Lactate Threshold",
+    "vo2max": "VO2max",
+    "speed": "Speed",
+    "strength": "Strength",
+    "race_specific": "Race Specific"
+  },
+  "environment": {
+    "requiresHills": "Requires hills",
+    "requiresTrack": "Requires track",
+    "prefersFlat": "Flat terrain preferred",
+    "noRequirements": "No special requirements"
+  },
+  "coaching": {
+    "tips": "Tips",
+    "mistakes": "Common Mistakes"
+  },
+  "variations": {
+    "title": "Variations",
+    "related": "Similar Workouts"
+  }
+}

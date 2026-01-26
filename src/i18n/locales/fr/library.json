@@ -1,0 +1,38 @@
+{
+  "title": "Bibliothèque de séances",
+  "subtitle": "{{count}} séances d'entraînement scientifiques",
+  "filters": {
+    "category": "Catégorie",
+    "difficulty": "Difficulté",
+    "duration": "Durée",
+    "allCategories": "Toutes les catégories",
+    "allDifficulties": "Tous les niveaux",
+    "durationRange": "{{min}} - {{max}} min"
+  },
+  "categories": {
+    "recovery": "Récupération",
+    "endurance": "Endurance",
+    "tempo": "Tempo",
+    "threshold": "Seuil",
+    "vma": "VMA",
+    "long_run": "Sortie longue",
+    "hills": "Côtes",
+    "fartlek": "Fartlek",
+    "race_pace": "Allure course",
+    "mixed": "Mixte"
+  },
+  "difficulty": {
+    "beginner": "Débutant",
+    "intermediate": "Intermédiaire",
+    "advanced": "Avancé",
+    "elite": "Élite"
+  },
+  "sort": {
+    "label": "Trier par",
+    "name": "Nom",
+    "difficulty": "Difficulté",
+    "duration": "Durée"
+  },
+  "noResults": "Aucune séance ne correspond à vos critères",
+  "clearFilters": "Effacer les filtres"
+}
