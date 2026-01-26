@@ -392,6 +392,168 @@
         "tags": ["taper", "pre-race"],
         "priorityScore": 90
       }
+    },
+    {
+      "id": "RP-009",
+      "name": "Yasso 800s",
+      "nameEn": "Yasso 800s",
+      "description": "10x800m avec temps cible = objectif marathon. Ex: marathon en 3h30 = 800m en 3min30. Methode popularisee par Bart Yasso (Runner's World).",
+      "descriptionEn": "10x800m with target time = marathon goal. Ex: 3:30 marathon = 800m in 3:30. Method popularized by Bart Yasso (Runner's World).",
+      "category": "race_pace",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et 4x lignes droites", "descriptionEn": "Drills and 4x strides", "durationMin": 10 }
+      ],
+      "mainSetTemplate": [
+        { "description": "10x800m avec recup jog egale au temps du 800m", "descriptionEn": "10x800m with jog recovery equal to 800m time", "distanceM": 800, "zone": "Z4-Z5", "repetitions": 10, "recovery": "Footing = temps du 800m" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de recuperation", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Temps 800m (min:sec) = temps marathon (h:min)",
+        "Predicteur simple mais pas parfait",
+        "Construction progressive: commencez par 6x800m",
+        "Recup = meme duree que l'effort"
+      ],
+      "coachingTipsEn": [
+        "800m time (min:sec) = marathon time (h:min)",
+        "Simple predictor but not perfect",
+        "Progressive build: start with 6x800m",
+        "Recovery = same duration as effort"
+      ],
+      "commonMistakes": [
+        "Croire que c'est un predicteur exact",
+        "Commencer par 10 repetitions",
+        "Recuperation trop courte"
+      ],
+      "commonMistakesEn": [
+        "Believing it's an exact predictor",
+        "Starting with 10 repetitions",
+        "Recovery too short"
+      ],
+      "variationIds": ["RP-001", "VMA-014"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["marathon", "yasso", "predictor", "800m"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "RP-010",
+      "name": "Rosario 800s",
+      "nameEn": "Rosario 800s",
+      "description": "Alternance 800m rapide + 800m lent en continu sans arret. Developpe l'endurance a l'allure cible avec recuperation active (methode Canova).",
+      "descriptionEn": "Alternating 800m fast + 800m slow continuously without stopping. Develops endurance at target pace with active recovery (Canova method).",
+      "category": "race_pace",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes", "descriptionEn": "Drills", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "8-10km en alternance: 800m allure semi / 800m Z2", "descriptionEn": "8-10km alternating: 800m half-marathon pace / 800m Z2", "distanceM": 8000, "zone": "Z3-Z4", "pace": "Alternance semi/Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de recuperation", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Jamais d'arret, flux continu",
+        "Le 800m lent doit etre vraiment en Z2",
+        "Methode italienne de Renato Canova",
+        "Excellent pour les coureurs de semi/marathon"
+      ],
+      "coachingTipsEn": [
+        "Never stop, continuous flow",
+        "The slow 800m must be truly in Z2",
+        "Italian method by Renato Canova",
+        "Excellent for half/full marathon runners"
+      ],
+      "commonMistakes": [
+        "Courir les 800m lents trop vite",
+        "S'arreter entre les repetitions",
+        "Ne pas compter les tours"
+      ],
+      "commonMistakesEn": [
+        "Running the slow 800ms too fast",
+        "Stopping between repetitions",
+        "Not counting laps"
+      ],
+      "variationIds": ["RP-003", "RP-009"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["marathon", "half-marathon", "canova", "continuous"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "RP-011",
+      "name": "Cutdown marathon",
+      "nameEn": "Marathon Cutdown",
+      "description": "Seance en decroissance: 5km allure marathon, 3km allure semi, 1.5km allure 10K. Simule le finish de marathon avec negative split.",
+      "descriptionEn": "Descending session: 5km at marathon pace, 3km at half pace, 1.5km at 10K pace. Simulates marathon finish with negative split.",
+      "category": "race_pace",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 65, "max": 80 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "5km a allure marathon", "descriptionEn": "5km at marathon pace", "distanceM": 5000, "zone": "Z3", "pace": "Allure Marathon" },
+        { "description": "Transition sans arret", "descriptionEn": "Transition without stopping" },
+        { "description": "3km a allure semi-marathon", "descriptionEn": "3km at half-marathon pace", "distanceM": 3000, "zone": "Z3-Z4", "pace": "Allure Semi" },
+        { "description": "Transition sans arret", "descriptionEn": "Transition without stopping" },
+        { "description": "1.5km a allure 10K", "descriptionEn": "1.5km at 10K pace", "distanceM": 1500, "zone": "Z4", "pace": "Allure 10K" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de recuperation", "descriptionEn": "Recovery jog", "durationMin": 15, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Enchainement continu sans pause",
+        "Simule un finish agressif de marathon",
+        "Les transitions doivent etre fluides",
+        "Seance mentalement tres exigeante"
+      ],
+      "coachingTipsEn": [
+        "Continuous sequence without breaks",
+        "Simulates an aggressive marathon finish",
+        "Transitions must be smooth",
+        "Mentally very demanding session"
+      ],
+      "commonMistakes": [
+        "Partir trop vite des le debut",
+        "Ne pas accelerer suffisamment a la fin",
+        "S'arreter entre les segments"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast from the beginning",
+        "Not accelerating enough at the end",
+        "Stopping between segments"
+      ],
+      "variationIds": ["RP-001", "RP-006"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["marathon", "cutdown", "negative-split", "race-simulation"],
+        "priorityScore": 80
+      }
     }
   ]
 }
