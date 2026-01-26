@@ -27,6 +27,7 @@ import {
   CoachingTips,
   WorkoutCardCompact,
   FavoriteButton,
+  ExportMenu,
 } from "@/components/domain";
 import { SessionTimeline, ZoneDistribution } from "@/components/visualization";
 import { getWorkoutById, getRelatedWorkouts } from "@/data/workouts";
@@ -117,6 +118,7 @@ export function WorkoutDetailPage() {
             </p>
           </div>
           <div className="flex items-center gap-2">
+            <ExportMenu workout={workout} />
             <FavoriteButton workoutId={workout.id} />
             <ZoneBadge zone={dominantZone} size="lg" showLabel />
           </div>

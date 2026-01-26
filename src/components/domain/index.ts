@@ -12,3 +12,6 @@ export { ZoneCalculator } from "./ZoneCalculator";
 export { PaceCalculator } from "./PaceCalculator";
 export { FavoriteButton } from "./FavoriteButton";
 export { WorkoutQuiz } from "./WorkoutQuiz";
+export { ExportMenu } from "./ExportMenu";
+export { ExportDatePicker } from "./ExportDatePicker";
+export { ExportableWorkoutCard } from "./ExportableWorkoutCard";
