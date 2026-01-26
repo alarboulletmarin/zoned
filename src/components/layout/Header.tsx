@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Languages, Menu, X, Settings, Heart, Dices } from "lucide-react";
+import { Moon, Sun, Languages, Menu, X, Settings, Heart, Dices, Home, BookOpen } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -56,8 +56,8 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
           ))}
         </nav>
 
-        {/* Actions */}
-        <div className="flex items-center gap-2">
+        {/* Actions Desktop - tous les boutons */}
+        <div className="hidden md:flex items-center gap-2">
           {/* Language Selector */}
           <Select
             value={currentLang}
@@ -125,12 +125,28 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
               <Sun className="size-4" />
             )}
           </Button>
+        </div>
+
+        {/* Actions Mobile - minimal */}
+        <div className="flex md:hidden items-center gap-1">
+          {/* Theme Toggle */}
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={onThemeToggle}
+            aria-label={theme === "light" ? t("theme.dark") : t("theme.light")}
+          >
+            {theme === "light" ? (
+              <Moon className="size-4" />
+            ) : (
+              <Sun className="size-4" />
+            )}
+          </Button>
 
           {/* Mobile Menu Toggle */}
           <Button
             variant="ghost"
             size="icon-sm"
-            className="md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Menu"
           >
@@ -147,21 +163,100 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
       {mobileMenuOpen && (
         <nav className="md:hidden border-t bg-background">
           <div className="container mx-auto px-4 py-3 space-y-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={cn(
-                  "block py-2 text-sm font-medium transition-colors",
-                  location.pathname === link.href
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
+            {/* Home */}
+            <Link
+              to="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className={cn(
+                "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
+                location.pathname === "/"
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Home className="size-4" />
+              {t("nav.home")}
+            </Link>
+
+            {/* Library */}
+            <Link
+              to="/library"
+              onClick={() => setMobileMenuOpen(false)}
+              className={cn(
+                "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
+                location.pathname === "/library"
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <BookOpen className="size-4" />
+              {t("nav.library")}
+            </Link>
+
+            {/* Quiz */}
+            <Link
+              to="/quiz"
+              onClick={() => setMobileMenuOpen(false)}
+              className={cn(
+                "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
+                location.pathname === "/quiz"
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Dices className="size-4" />
+              {t("quiz.title")}
+            </Link>
+
+            {/* Favorites */}
+            <Link
+              to="/favorites"
+              onClick={() => setMobileMenuOpen(false)}
+              className={cn(
+                "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
+                location.pathname === "/favorites"
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Heart className="size-4" />
+              {t("nav.favorites")}
+            </Link>
+
+            {/* Settings */}
+            <Link
+              to="/settings"
+              onClick={() => setMobileMenuOpen(false)}
+              className={cn(
+                "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
+                location.pathname === "/settings"
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Settings className="size-4" />
+              {t("settings.title")}
+            </Link>
+
+            {/* Language Selector */}
+            <div className="flex items-center gap-2 py-2">
+              <Languages className="size-4 text-muted-foreground" />
+              <Select
+                value={currentLang}
+                onValueChange={(value) => changeLanguage(value as "fr" | "en")}
               >
-                {link.label}
-              </Link>
-            ))}
+                <SelectTrigger className="w-auto h-8 gap-1 border-none shadow-none px-0">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {supportedLanguages.map((lang) => (
+                    <SelectItem key={lang.code} value={lang.code}>
+                      {lang.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </nav>
       )}
