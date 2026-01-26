@@ -1,3 +1,4 @@
+import { GitlabIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export function Footer() {
@@ -16,14 +17,25 @@ export function Footer() {
 
           {/* Stats */}
           <p className="text-sm text-muted-foreground text-center">
-            118 {t("units.workouts")} • 10 {t("units.categories")} • 6{" "}
+            136 {t("units.workouts")} • 11 {t("units.categories")} • 6{" "}
             {t("units.zones")}
           </p>
 
-          {/* Copyright */}
-          <p className="text-xs text-muted-foreground">
-            © {currentYear} {t("app.name")}. Based on Planr training library.
-          </p>
+          {/* Copyright & GitLab */}
+          <div className="flex items-center gap-3">
+            <p className="text-xs text-muted-foreground">
+              © {currentYear} {t("app.name")}
+            </p>
+            <a
+              href="https://gitlab.com/alarboulletmarin-oss/zoned"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="GitLab repository"
+            >
+              <GitlabIcon className="w-4 h-4" />
+            </a>
+          </div>
         </div>
       </div>
     </footer>
