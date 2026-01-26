@@ -1,5 +1,6 @@
 import { GitlabIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { categories, totalWorkoutCount } from "@/data/workouts";
 
 export function Footer() {
   const { t } = useTranslation("common");
@@ -17,8 +18,8 @@ export function Footer() {
 
           {/* Stats */}
           <p className="text-sm text-muted-foreground text-center">
-            136 {t("units.workouts")} • 11 {t("units.categories")} • 6{" "}
-            {t("units.zones")}
+            {totalWorkoutCount} {t("units.workouts")} • {categories.length}{" "}
+            {t("units.categories")} • 6 {t("units.zones")}
           </p>
 
           {/* Copyright & GitLab */}
