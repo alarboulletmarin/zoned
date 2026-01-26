@@ -1,6 +1,7 @@
 /**
  * Transform session blocks into visualization-ready data
  * Key feature: Expands repetitions into individual segments
+ * Handles complex patterns like "2x(12x 30s VMA / 30s récup)"
  */
 
 import type { WorkoutBlock } from "@/types";
@@ -61,13 +62,13 @@ export function parseZoneNumber(zone: string | undefined): ZoneNumber | null {
 }
 
 /**
- * Parse recovery/rest string to get duration in minutes
- * "1min", "1'30", "90s", "récup 2min", "30s"
+ * Parse duration from string
+ * Handles: "30s", "1min", "1'30", "90s", "2min", "400m" (estimate)
  */
-function parseRecoveryDuration(recovery: string | undefined): number {
-  if (!recovery) return 1; // Default 1 min
+function parseDuration(text: string | undefined, defaultMin: number = 1): number {
+  if (!text) return defaultMin;
 
-  const normalized = recovery.toLowerCase();
+  const normalized = text.toLowerCase().trim();
 
   // Match "Xmin" or "X min"
   const minMatch = normalized.match(/(\d+(?:\.\d+)?)\s*min/);
@@ -83,12 +84,88 @@ function parseRecoveryDuration(recovery: string | undefined): number {
   const secMatch = normalized.match(/(\d+)\s*s(?:ec)?/);
   if (secMatch) return parseInt(secMatch[1], 10) / 60;
 
-  return 1; // Fallback
+  // Match distance "Xm" - estimate based on Z5 pace (~4min/km)
+  const meterMatch = normalized.match(/(\d+)\s*m(?:ètre)?s?\b/);
+  if (meterMatch) {
+    const meters = parseInt(meterMatch[1], 10);
+    return (meters / 1000) * 4; // ~4min/km at VO2max
+  }
+
+  return defaultMin;
+}
+
+/**
+ * Parse interval pattern from description
+ * Handles: "2x(12x 30s VMA / 30s récup)", "3x(8x 400m / 200m récup)"
+ * Returns: { sets, repsPerSet, workDuration, recoveryDuration }
+ */
+interface IntervalPattern {
+  sets: number;
+  repsPerSet: number;
+  workDuration: number; // minutes
+  recoveryDuration: number; // minutes (between reps)
+  seriesRecovery: number; // minutes (between sets)
+}
+
+function parseIntervalPattern(description: string, block: WorkoutBlock): IntervalPattern | null {
+  const desc = description.toLowerCase();
+
+  // Pattern: Nx(Mx duration / duration récup)
+  // Examples: "2x(12x 30s VMA / 30s récup)", "3x(8x 400m / 200m récup)"
+  const fullPattern = desc.match(/(\d+)\s*x\s*\((\d+)\s*x\s*(\d+\s*(?:s|sec|min|m|'?\d*))[^/]*\/\s*(\d+\s*(?:s|sec|min|m|'?\d*)[^)]*)\)/i);
+
+  if (fullPattern) {
+    const sets = parseInt(fullPattern[1], 10);
+    const repsPerSet = parseInt(fullPattern[2], 10);
+    const workDuration = parseDuration(fullPattern[3]);
+    const recoveryDuration = parseDuration(fullPattern[4]);
+
+    return {
+      sets,
+      repsPerSet,
+      workDuration,
+      recoveryDuration,
+      seriesRecovery: 3, // Default 3 minutes between sets
+    };
+  }
+
+  // Simpler pattern: Nx duration / duration (like "12x 30s / 30s")
+  const simplePattern = desc.match(/(\d+)\s*x\s*(\d+\s*(?:s|sec|min|m|'?\d*))[^/]*\/\s*(\d+\s*(?:s|sec|min|m|'?\d*)?)/i);
+
+  if (simplePattern) {
+    const reps = parseInt(simplePattern[1], 10);
+    const workDuration = parseDuration(simplePattern[2]);
+    const recoveryDuration = parseDuration(simplePattern[3]);
+
+    return {
+      sets: 1,
+      repsPerSet: reps,
+      workDuration,
+      recoveryDuration,
+      seriesRecovery: 0,
+    };
+  }
+
+  // Fallback: use block.repetitions if present
+  if (block.repetitions && block.repetitions > 1) {
+    const workDuration = block.durationMin ?? 1;
+    const recoveryDuration = parseDuration(block.rest);
+
+    return {
+      sets: 1,
+      repsPerSet: block.repetitions,
+      workDuration,
+      recoveryDuration,
+      seriesRecovery: 0,
+    };
+  }
+
+  return null;
 }
 
 /**
  * Transform a single block into timeline segments
- * CRITICAL: Expands repetitions into individual segments with recovery gaps
+ * CRITICAL: Handles complex interval patterns with multiple sets
  */
 function blockToSegments(
   block: WorkoutBlock,
@@ -98,11 +175,74 @@ function blockToSegments(
   const segments: TimelineSegment[] = [];
   const zoneNumber = parseZoneNumber(block.zone);
 
-  // Calculate base duration for one rep
-  let baseDuration = block.durationMin ?? 5; // Fallback 5 min
+  // Try to parse interval pattern from description
+  const pattern = parseIntervalPattern(block.description, block);
 
+  if (pattern) {
+    // Complex interval block with parsed pattern
+    const { sets, repsPerSet, workDuration, recoveryDuration, seriesRecovery } = pattern;
+    const totalReps = sets * repsPerSet;
+    let globalRepIndex = 0;
+
+    for (let set = 0; set < sets; set++) {
+      // Add series recovery before this set (except first)
+      if (set > 0 && seriesRecovery > 0) {
+        segments.push({
+          id: `${type}-${startIndex}-series-recov-${set}`,
+          type,
+          description: `Récup série ${set + 1}`,
+          durationMin: seriesRecovery,
+          zoneNumber: 1,
+          widthPercent: 0,
+          isRecovery: true,
+          isSeriesRecovery: true,
+        });
+      }
+
+      // Add reps for this set
+      for (let rep = 0; rep < repsPerSet; rep++) {
+        globalRepIndex++;
+
+        // Work segment
+        segments.push({
+          id: `${type}-${startIndex}-work-${set}-${rep}`,
+          type,
+          description: block.description,
+          durationMin: workDuration,
+          zoneNumber,
+          widthPercent: 0,
+          isRecovery: false,
+          repetitionIndex: globalRepIndex,
+          totalRepetitions: totalReps,
+          setIndex: sets > 1 ? set + 1 : undefined,
+          totalSets: sets > 1 ? sets : undefined,
+        });
+
+        // Recovery segment (except after last rep of last set)
+        const isLastRepOfSet = rep === repsPerSet - 1;
+        const isLastSet = set === sets - 1;
+
+        if (!(isLastRepOfSet && isLastSet) && !isLastRepOfSet) {
+          segments.push({
+            id: `${type}-${startIndex}-recov-${set}-${rep}`,
+            type,
+            description: block.rest || "Récup",
+            durationMin: recoveryDuration,
+            zoneNumber: 1,
+            widthPercent: 0,
+            isRecovery: true,
+          });
+        }
+      }
+    }
+
+    return segments;
+  }
+
+  // Simple block without interval pattern
+  const baseDuration = block.durationMin ?? 5;
   const repetitions = block.repetitions ?? 1;
-  const recoveryDuration = parseRecoveryDuration(block.rest);
+  const recoveryDuration = parseDuration(block.rest);
 
   for (let rep = 0; rep < repetitions; rep++) {
     // Work segment
@@ -112,7 +252,7 @@ function blockToSegments(
       description: block.description,
       durationMin: baseDuration,
       zoneNumber,
-      widthPercent: 0, // Calculated later
+      widthPercent: 0,
       isRecovery: false,
       repetitionIndex: repetitions > 1 ? rep + 1 : undefined,
       totalRepetitions: repetitions > 1 ? repetitions : undefined,
@@ -125,7 +265,7 @@ function blockToSegments(
         type,
         description: block.rest,
         durationMin: recoveryDuration,
-        zoneNumber: 1, // Recovery is always Z1
+        zoneNumber: 1,
         widthPercent: 0,
         isRecovery: true,
       });

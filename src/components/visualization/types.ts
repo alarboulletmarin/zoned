@@ -25,6 +25,12 @@ export interface TimelineSegment {
   repetitionIndex?: number;
   /** For repetition blocks: total reps in parent block */
   totalRepetitions?: number;
+  /** For multi-set blocks: which set (1-based) */
+  setIndex?: number;
+  /** For multi-set blocks: total sets */
+  totalSets?: number;
+  /** Is this a longer recovery between sets? */
+  isSeriesRecovery?: boolean;
 }
 
 /**

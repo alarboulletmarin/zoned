@@ -77,7 +77,15 @@ function SegmentTooltipContent({ segment, t }: SegmentTooltipContentProps) {
       </div>
       {segment.repetitionIndex && segment.totalRepetitions && (
         <p className="text-xs text-muted-foreground font-mono">
-          {segment.repetitionIndex}/{segment.totalRepetitions}
+          {segment.setIndex && segment.totalSets && (
+            <span>Série {segment.setIndex}/{segment.totalSets} • </span>
+          )}
+          Rép {segment.repetitionIndex}/{segment.totalRepetitions}
+        </p>
+      )}
+      {segment.isSeriesRecovery && (
+        <p className="text-xs text-muted-foreground italic">
+          Récupération inter-séries
         </p>
       )}
     </div>
