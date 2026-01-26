@@ -1,15 +1,17 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Filter } from "lucide-react";
+import { Filter, Search, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
+import { EmptyState } from "@/components/ui/empty-state";
 import {
   WorkoutCard,
   WorkoutFilters,
   defaultFilters,
   type WorkoutFiltersState,
 } from "@/components/domain";
-import { useFavorites } from "@/hooks";
+import { useFavorites, useKeyboardShortcuts } from "@/hooks";
 import { allWorkouts } from "@/data/workouts";
 import { getEstimatedDuration } from "@/types";
 import type { WorkoutCategory } from "@/types";
@@ -19,6 +21,16 @@ export function LibraryPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const { favorites } = useFavorites();
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const closeMobileFilters = useCallback(() => {
+    setShowMobileFilters(false);
+  }, []);
+
+  useKeyboardShortcuts({
+    searchRef: searchInputRef,
+    onCloseMobileFilters: closeMobileFilters,
+  });
 
   // Initialize filters from URL params
   const [filters, setFilters] = useState<WorkoutFiltersState>(() => {
@@ -123,7 +135,11 @@ export function LibraryPage() {
         {/* Sidebar Filters - Desktop */}
         <aside className="hidden lg:block w-64 shrink-0">
           <div className="sticky top-20">
-            <WorkoutFilters filters={filters} onFiltersChange={setFilters} />
+            <WorkoutFilters
+              filters={filters}
+              onFiltersChange={setFilters}
+              searchInputRef={searchInputRef}
+            />
           </div>
         </aside>
 
@@ -132,7 +148,7 @@ export function LibraryPage() {
           <div className="fixed inset-0 z-50 lg:hidden">
             <div
               className="absolute inset-0 bg-background/80 backdrop-blur-sm"
-              onClick={() => setShowMobileFilters(false)}
+              onClick={closeMobileFilters}
             />
             <div className="absolute inset-y-0 right-0 w-full max-w-xs bg-background border-l p-6 shadow-lg">
               <div className="flex items-center justify-between mb-6">
@@ -140,7 +156,7 @@ export function LibraryPage() {
                 <Button
                   variant="ghost"
                   size="icon-sm"
-                  onClick={() => setShowMobileFilters(false)}
+                  onClick={closeMobileFilters}
                 >
                   ×
                 </Button>
@@ -159,19 +175,29 @@ export function LibraryPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">{t("noResults")}</p>
-              <Button
-                variant="link"
-                onClick={() => setFilters(defaultFilters)}
-                className="mt-2"
-              >
-                {t("clearFilters")}
-              </Button>
-            </div>
+            <EmptyState
+              icon={filters.favoritesOnly ? Heart : Search}
+              title={
+                filters.favoritesOnly
+                  ? t("emptyState.noFavorites")
+                  : t("emptyState.noResults")
+              }
+              description={
+                filters.favoritesOnly
+                  ? t("emptyState.noFavoritesDescription")
+                  : t("emptyState.noResultsDescription")
+              }
+              action={
+                <Button variant="link" onClick={() => setFilters(defaultFilters)}>
+                  {t("clearFilters")}
+                </Button>
+              }
+            />
           )}
         </div>
       </div>
+
+      <ScrollToTop />
     </div>
   );
 }
