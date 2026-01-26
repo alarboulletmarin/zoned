@@ -1,0 +1,398 @@
+{
+  "category": "fartlek",
+  "templates": [
+    {
+      "id": "FAR-001",
+      "name": "Fartlek libre",
+      "nameEn": "Free Fartlek",
+      "description": "Jeu de vitesse non structuré basé sur les sensations. Alternez librement entre efforts et récup.",
+      "descriptionEn": "Unstructured speed play based on feel. Freely alternate between efforts and recovery.",
+      "category": "fartlek",
+      "sessionType": "fartlek",
+      "targetSystem": "mixed",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 10, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Fartlek libre selon envie", "durationMin": 25, "zone": "Z2-Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Utilisez les repères du parcours",
+        "Variez les durées selon l'humeur",
+        "Séance pour retrouver le plaisir"
+      ],
+      "coachingTipsEn": [
+        "Use landmarks on the course",
+        "Vary durations based on how you feel",
+        "A session to rediscover the joy of running"
+      ],
+      "commonMistakes": [
+        "Transformer en fractionné structuré",
+        "Faire uniquement des efforts courts"
+      ],
+      "commonMistakesEn": [
+        "Turning it into structured intervals",
+        "Only doing short efforts"
+      ],
+      "variationIds": ["FAR-002", "FAR-003"],
+      "selectionCriteria": {
+        "phases": ["base", "build", "peak"],
+        "weekPositions": ["early", "mid"],
+        "relativeLoad": "moderate",
+        "tags": ["fartlek", "fun", "varied"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "FAR-002",
+      "name": "Fartlek suédois",
+      "nameEn": "Swedish Fartlek",
+      "description": "Fartlek original style suédois : efforts et récupérations variés selon le terrain.",
+      "descriptionEn": "Original Swedish-style fartlek: varied efforts and recoveries based on terrain.",
+      "category": "fartlek",
+      "sessionType": "fartlek",
+      "targetSystem": "mixed",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 10, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Fartlek terrain : accélérations sur montées, récup en descentes", "durationMin": 35, "zone": "Z2-Z5" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Utilisez le relief du terrain",
+        "Poussez dans les montées",
+        "Récupérez dans les descentes"
+      ],
+      "coachingTipsEn": [
+        "Use the terrain features",
+        "Push on the uphills",
+        "Recover on the downhills"
+      ],
+      "commonMistakes": [
+        "Ignorer le terrain",
+        "Courir à plat en mode chrono"
+      ],
+      "commonMistakesEn": [
+        "Ignoring the terrain",
+        "Running on flat ground in time-trial mode"
+      ],
+      "variationIds": ["FAR-001"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["fartlek", "swedish", "terrain"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "FAR-003",
+      "name": "Fartlek structuré",
+      "nameEn": "Structured Fartlek",
+      "description": "Fartlek avec structure définie : 1-2-3-2-1 minutes.",
+      "descriptionEn": "Fartlek with defined structure: 1-2-3-2-1 minute pyramid.",
+      "category": "fartlek",
+      "sessionType": "fartlek",
+      "targetSystem": "mixed",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "1min rapide", "durationMin": 1, "zone": "Z4" },
+        { "description": "1min récup", "durationMin": 1, "zone": "Z2" },
+        { "description": "2min rapide", "durationMin": 2, "zone": "Z4" },
+        { "description": "2min récup", "durationMin": 2, "zone": "Z2" },
+        { "description": "3min rapide", "durationMin": 3, "zone": "Z4" },
+        { "description": "3min récup", "durationMin": 3, "zone": "Z2" },
+        { "description": "2min rapide", "durationMin": 2, "zone": "Z4" },
+        { "description": "2min récup", "durationMin": 2, "zone": "Z2" },
+        { "description": "1min rapide", "durationMin": 1, "zone": "Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Structure pyramidale classique",
+        "Le 3min est le moment clé",
+        "Récup égale au temps d'effort"
+      ],
+      "coachingTipsEn": [
+        "Classic pyramid structure",
+        "The 3-minute effort is the key moment",
+        "Recovery equals effort time"
+      ],
+      "commonMistakes": [
+        "Partir trop vite sur le 1min",
+        "Ralentir sur le 3min"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast on the 1-minute",
+        "Slowing down on the 3-minute"
+      ],
+      "variationIds": ["FAR-001"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["fartlek", "structured", "pyramid"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "FAR-004",
+      "name": "Fartlek lactique",
+      "nameEn": "Lactate Fartlek",
+      "description": "Fartlek avec efforts courts et intenses. Développe la tolérance lactique.",
+      "descriptionEn": "Fartlek with short, intense efforts. Develops lactate tolerance.",
+      "category": "fartlek",
+      "sessionType": "fartlek",
+      "targetSystem": "lactate_tolerance",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 45, "max": 55 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Accélérations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "10x(30s très rapide + 90s récup active)", "zone": "Z5", "repetitions": 10, "recovery": "90s footing Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Efforts très intenses",
+        "Récupération en Z2, pas en Z1",
+        "Développe la capacité à répéter les efforts"
+      ],
+      "coachingTipsEn": [
+        "Very intense efforts",
+        "Recovery in Z2, not Z1",
+        "Develops ability to repeat hard efforts"
+      ],
+      "commonMistakes": [
+        "Récupérer trop lentement",
+        "Partir en sprint dès le début"
+      ],
+      "commonMistakesEn": [
+        "Recovering too slowly",
+        "Going all-out sprint from the start"
+      ],
+      "variationIds": ["FAR-003"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["fartlek", "lactate", "speed"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "FAR-005",
+      "name": "Fartlek nature",
+      "nameEn": "Trail Fartlek",
+      "description": "Fartlek sur sentiers et chemins. Efforts dictés par le terrain.",
+      "descriptionEn": "Fartlek on trails and paths. Efforts dictated by terrain.",
+      "category": "fartlek",
+      "sessionType": "fartlek",
+      "targetSystem": "mixed",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 65 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing sur chemin", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Fartlek sur sentier : efforts sur montées et parties techniques", "durationMin": 35, "zone": "Z2-Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour tranquille", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Laissez le terrain dicter les efforts",
+        "Poussez sur les parties roulantes",
+        "Profitez du décor"
+      ],
+      "coachingTipsEn": [
+        "Let the terrain dictate the efforts",
+        "Push on the runnable sections",
+        "Enjoy the scenery"
+      ],
+      "commonMistakes": [
+        "Ignorer le terrain naturel",
+        "Se focaliser sur l'allure"
+      ],
+      "commonMistakesEn": [
+        "Ignoring the natural terrain",
+        "Focusing on pace instead of effort"
+      ],
+      "variationIds": ["FAR-001", "FAR-002"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["fartlek", "nature", "trail"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "FAR-006",
+      "name": "Fartlek tempo",
+      "nameEn": "Tempo Fartlek",
+      "description": "Fartlek avec efforts à allure tempo. Plus contrôlé que le fartlek classique.",
+      "descriptionEn": "Fartlek with efforts at tempo pace. More controlled than classic fartlek.",
+      "category": "fartlek",
+      "sessionType": "fartlek",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "6x(3min tempo + 2min récup)", "durationMin": 30, "zone": "Z3", "repetitions": 6, "recovery": "2min footing Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Efforts à allure tempo, pas plus",
+        "Récupération active en Z2",
+        "Transition vers le tempo continu"
+      ],
+      "coachingTipsEn": [
+        "Efforts at tempo pace, not faster",
+        "Active recovery in Z2",
+        "Transition toward continuous tempo"
+      ],
+      "commonMistakes": [
+        "Courir trop vite sur les efforts",
+        "Récupérer trop longtemps"
+      ],
+      "commonMistakesEn": [
+        "Running too fast on the efforts",
+        "Recovering too long"
+      ],
+      "variationIds": ["FAR-003", "TMP-004"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["fartlek", "tempo"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "FAR-007",
+      "name": "Fartlek en groupe",
+      "nameEn": "Group Fartlek",
+      "description": "Fartlek couru à plusieurs. Chacun son tour mène un effort.",
+      "descriptionEn": "Fartlek run with others. Each person takes turns leading an effort.",
+      "category": "fartlek",
+      "sessionType": "fartlek",
+      "targetSystem": "mixed",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing de groupe", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Fartlek en groupe : chacun lance un effort à son tour", "durationMin": 30, "zone": "Z2-Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing ensemble", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Adaptez-vous au niveau du groupe",
+        "Variez qui mène les efforts",
+        "Séance sociale et motivante"
+      ],
+      "coachingTipsEn": [
+        "Adapt to the group's level",
+        "Rotate who leads the efforts",
+        "Social and motivating session"
+      ],
+      "commonMistakes": [
+        "Lancer des efforts trop durs",
+        "Ne pas participer activement"
+      ],
+      "commonMistakesEn": [
+        "Launching efforts that are too hard",
+        "Not actively participating"
+      ],
+      "variationIds": ["FAR-001"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["fartlek", "group", "social"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "FAR-008",
+      "name": "Fartlek pré-course",
+      "nameEn": "Pre-Race Fartlek",
+      "description": "Fartlek léger pour maintenir la fraîcheur avant une compétition.",
+      "descriptionEn": "Light fartlek to maintain freshness before a competition.",
+      "category": "fartlek",
+      "sessionType": "fartlek",
+      "targetSystem": "mixed",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 35, "max": 45 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 10, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "4-5 accélérations de 30s-1min à allure course", "durationMin": 15, "zone": "Z3-Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Juste quelques sensations de vitesse",
+        "Aucune fatigue résiduelle",
+        "Idéal J-3 ou J-4"
+      ],
+      "coachingTipsEn": [
+        "Just a few speed sensations",
+        "No residual fatigue",
+        "Ideal on race day -3 or -4"
+      ],
+      "commonMistakes": [
+        "En faire trop avant la course",
+        "Courir les efforts trop vite"
+      ],
+      "commonMistakesEn": [
+        "Doing too much before the race",
+        "Running the efforts too fast"
+      ],
+      "variationIds": ["FAR-001"],
+      "selectionCriteria": {
+        "phases": ["taper"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "light",
+        "tags": ["fartlek", "taper", "pre-race"],
+        "priorityScore": 80
+      }
+    }
+  ]
+}

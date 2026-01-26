@@ -1,0 +1,397 @@
+{
+  "category": "race_pace",
+  "templates": [
+    {
+      "id": "RP-001",
+      "name": "Allure marathon",
+      "nameEn": "Marathon Pace",
+      "description": "Séance à allure spécifique marathon. Habitue le corps à l'allure de course visée.",
+      "descriptionEn": "Marathon-specific pace session. Acclimates the body to target race pace.",
+      "category": "race_pace",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 60, "max": 80 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Bloc à allure marathon", "durationMin": 20, "zone": "Z3", "pace": "Allure Marathon" },
+        { "description": "Récupération", "durationMin": 3, "zone": "Z1" },
+        { "description": "Bloc à allure marathon", "durationMin": 15, "zone": "Z3", "pace": "Allure Marathon" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 15, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Visez précisément votre allure cible",
+        "Respiration contrôlée",
+        "Parfait sur parcours plat et mesuré"
+      ],
+      "coachingTipsEn": [
+        "Aim precisely for your target pace",
+        "Keep breathing controlled",
+        "Best on flat, measured courses"
+      ],
+      "commonMistakes": [
+        "Courir à allure semi au lieu de marathon",
+        "Ne pas avoir calculé son allure réaliste"
+      ],
+      "commonMistakesEn": [
+        "Running at half-marathon pace instead of marathon pace",
+        "Not having calculated a realistic target pace"
+      ],
+      "variationIds": ["RP-002", "RP-003"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid", "late"],
+        "relativeLoad": "hard",
+        "tags": ["marathon", "specific", "race-prep"],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "RP-002",
+      "name": "Allure 10K",
+      "nameEn": "10K Pace",
+      "description": "Séance à allure spécifique 10km. Travail au seuil lactique.",
+      "descriptionEn": "10K-specific pace session. Lactate threshold training.",
+      "category": "race_pace",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Accélérations progressives", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "3x2km à allure 10K", "distanceM": 2000, "zone": "Z4", "pace": "Allure 10K", "repetitions": 3, "recovery": "500m footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Allure 10K = environ 95-100% du seuil",
+        "Chaque bloc au même rythme",
+        "Idéal 3-4 semaines avant un 10K"
+      ],
+      "coachingTipsEn": [
+        "10K pace = about 95-100% of threshold",
+        "Each block at the same rhythm",
+        "Ideal 3-4 weeks before a 10K race"
+      ],
+      "commonMistakes": [
+        "Confondre allure 10K et 5K",
+        "Partir trop vite"
+      ],
+      "commonMistakesEn": [
+        "Confusing 10K pace with 5K pace",
+        "Starting too fast"
+      ],
+      "variationIds": ["RP-001", "RP-003"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["10k", "specific", "race-prep"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "RP-003",
+      "name": "Allure semi-marathon",
+      "nameEn": "Half-Marathon Pace",
+      "description": "Blocs à allure spécifique semi-marathon. Entre tempo et seuil.",
+      "descriptionEn": "Half-marathon specific pace blocks. Between tempo and threshold.",
+      "category": "race_pace",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 60, "max": 75 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "2x20min à allure semi", "durationMin": 40, "zone": "Z3-Z4", "pace": "Allure Semi", "repetitions": 2, "recovery": "3min footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Allure semi = entre marathon et seuil",
+        "Effort soutenu mais contrôlé",
+        "Séance clé prépa semi"
+      ],
+      "coachingTipsEn": [
+        "Half-marathon pace = between marathon and threshold",
+        "Sustained but controlled effort",
+        "Key session for half-marathon prep"
+      ],
+      "commonMistakes": [
+        "Courir à allure 10K",
+        "Ne pas maintenir l'allure sur le 2e bloc"
+      ],
+      "commonMistakesEn": [
+        "Running at 10K pace",
+        "Failing to maintain pace on the second block"
+      ],
+      "variationIds": ["RP-001", "RP-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["half-marathon", "specific"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "RP-004",
+      "name": "Allure 5K",
+      "nameEn": "5K Pace",
+      "description": "Répétitions à allure spécifique 5km. Développe la vitesse de course.",
+      "descriptionEn": "5K-specific pace repetitions. Develops race speed.",
+      "category": "race_pace",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et accélérations", "durationMin": 10 }
+      ],
+      "mainSetTemplate": [
+        { "description": "5x1000m à allure 5K", "distanceM": 1000, "zone": "Z5", "pace": "Allure 5K", "repetitions": 5, "recovery": "400m footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Allure 5K = environ 95-100% VMA",
+        "Séance clé pour le 5K",
+        "Régularité essentielle"
+      ],
+      "coachingTipsEn": [
+        "5K pace = approximately 95-100% VO2max pace",
+        "Key session for 5K racing",
+        "Consistency is essential"
+      ],
+      "commonMistakes": [
+        "Confondre avec VMA pure",
+        "Partir trop vite"
+      ],
+      "commonMistakesEn": [
+        "Confusing with pure VO2max pace",
+        "Starting too fast"
+      ],
+      "variationIds": ["RP-002"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["5k", "specific", "speed"],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "RP-005",
+      "name": "Allure trail",
+      "nameEn": "Trail Pace",
+      "description": "Travail spécifique allure trail sur terrain adapté.",
+      "descriptionEn": "Trail-specific effort work on appropriate terrain.",
+      "category": "race_pace",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 70, "max": 90 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing sur sentier", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course à effort spécifique trail sur terrain varié", "durationMin": 45, "zone": "Z3", "pace": "Effort Trail" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour calme", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Effort constant, pas allure constante",
+        "Marchez les montées raides",
+        "Testez votre équipement"
+      ],
+      "coachingTipsEn": [
+        "Constant effort, not constant pace",
+        "Walk steep uphills",
+        "Test your gear"
+      ],
+      "commonMistakes": [
+        "Vouloir maintenir une allure",
+        "Négliger la nutrition"
+      ],
+      "commonMistakesEn": [
+        "Trying to maintain a pace",
+        "Neglecting nutrition"
+      ],
+      "variationIds": ["RP-001"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid", "late"],
+        "relativeLoad": "hard",
+        "tags": ["trail", "specific"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "RP-006",
+      "name": "Allure progressive",
+      "nameEn": "Progressive Pace",
+      "description": "Séance commençant à allure marathon et finissant à allure semi.",
+      "descriptionEn": "Session starting at marathon pace and finishing at half-marathon pace.",
+      "category": "race_pace",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 60, "max": 70 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "15min allure marathon", "durationMin": 15, "zone": "Z3", "pace": "Allure Marathon" },
+        { "description": "10min allure semi", "durationMin": 10, "zone": "Z3-Z4", "pace": "Allure Semi" },
+        { "description": "5min allure 10K", "durationMin": 5, "zone": "Z4", "pace": "Allure 10K" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 15, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Progression logique d'intensité",
+        "Simule un finish de course",
+        "Séance mentalement exigeante"
+      ],
+      "coachingTipsEn": [
+        "Logical intensity progression",
+        "Simulates a race finish",
+        "Mentally demanding session"
+      ],
+      "commonMistakes": [
+        "Démarrer trop vite",
+        "Ne pas accélérer suffisamment"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast",
+        "Not accelerating enough"
+      ],
+      "variationIds": ["RP-001", "RP-003"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["progressive", "race-simulation"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "RP-007",
+      "name": "Allure marathon longue",
+      "nameEn": "Marathon Pace Long Run",
+      "description": "Long bloc à allure marathon dans une sortie longue.",
+      "descriptionEn": "Long block at marathon pace within a long run.",
+      "category": "race_pace",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "elite",
+      "typicalDuration": { "min": 100, "max": 130 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing tranquille", "durationMin": 20, "zone": "Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Endurance Z2", "durationMin": 20, "zone": "Z2" },
+        { "description": "Allure marathon", "durationMin": 45, "zone": "Z3", "pace": "Allure Marathon" },
+        { "description": "Retour Z2", "durationMin": 15, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "45min à allure marathon sur jambes travaillées",
+        "Séance longue et spécifique",
+        "Nutrition et hydratation essentielles"
+      ],
+      "coachingTipsEn": [
+        "45min at marathon pace on tired legs",
+        "Long and specific session",
+        "Nutrition and hydration are essential"
+      ],
+      "commonMistakes": [
+        "Courir le bloc spécifique trop vite",
+        "Négliger le ravitaillement"
+      ],
+      "commonMistakesEn": [
+        "Running the specific block too fast",
+        "Neglecting fueling"
+      ],
+      "variationIds": ["RP-001", "SL-002"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["late"],
+        "relativeLoad": "key",
+        "tags": ["marathon", "long", "elite"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "RP-008",
+      "name": "Allure pré-course",
+      "nameEn": "Pre-Race Pace Reminder",
+      "description": "Rappel d'allure en semaine de compétition. Court et ciblé.",
+      "descriptionEn": "Pace reminder during race week. Short and targeted.",
+      "category": "race_pace",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "2x5min à allure course cible", "durationMin": 10, "zone": "Z3-Z4", "pace": "Allure Course", "repetitions": 2, "recovery": "2min footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Juste un rappel des sensations",
+        "Idéal J-4 ou J-3",
+        "Terminez frais et confiant"
+      ],
+      "coachingTipsEn": [
+        "Just a reminder of the sensations",
+        "Ideal on race day -4 or -3",
+        "Finish fresh and confident"
+      ],
+      "commonMistakes": [
+        "En faire trop avant la course",
+        "Courir plus vite que l'allure cible"
+      ],
+      "commonMistakesEn": [
+        "Doing too much before the race",
+        "Running faster than target pace"
+      ],
+      "variationIds": ["RP-001"],
+      "selectionCriteria": {
+        "phases": ["taper"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["taper", "pre-race"],
+        "priorityScore": 90
+      }
+    }
+  ]
+}

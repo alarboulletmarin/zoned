@@ -1,0 +1,511 @@
+{
+  "category": "mixed",
+  "templates": [
+    {
+      "id": "MIX-001",
+      "name": "Combiné tempo-VMA",
+      "nameEn": "Tempo-VO2max Combo",
+      "description": "Bloc tempo suivi d'intervalles VMA. Développe plusieurs qualités en une séance.",
+      "descriptionEn": "Tempo block followed by VO2max intervals. Develops multiple qualities in one session.",
+      "category": "mixed",
+      "sessionType": "mixed",
+      "targetSystem": "mixed",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 60, "max": 75 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes dynamiques", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "Bloc tempo", "durationMin": 15, "zone": "Z3" },
+        { "description": "Récupération", "durationMin": 5, "zone": "Z1" },
+        { "description": "10x30/30 VMA", "zone": "Z5", "repetitions": 10, "recovery": "30s footing" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Le tempo prépare les jambes pour les intervalles",
+        "Gardez le meilleur pour la fin",
+        "Séance exigeante, récupération adaptée après"
+      ],
+      "coachingTipsEn": [
+        "The tempo prepares legs for the intervals",
+        "Save your best for last",
+        "Demanding session, proper recovery needed after"
+      ],
+      "commonMistakes": [
+        "Sous-estimer la fatigue avant les intervalles",
+        "Faire le tempo trop vite"
+      ],
+      "commonMistakesEn": [
+        "Underestimating fatigue before the intervals",
+        "Running the tempo too fast"
+      ],
+      "variationIds": ["MIX-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["mixed", "tempo", "intervals"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "MIX-002",
+      "name": "Endurance + côtes",
+      "nameEn": "Endurance with Hills",
+      "description": "Sortie endurance avec séquence de côtes intégrée.",
+      "descriptionEn": "Endurance run with integrated hill sequence.",
+      "category": "mixed",
+      "sessionType": "mixed",
+      "targetSystem": "mixed",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Endurance Z2", "durationMin": 15, "zone": "Z2" },
+        { "description": "6x côtes courtes", "repetitions": 6, "recovery": "Descente" },
+        { "description": "Endurance Z2", "durationMin": 15, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Les côtes au milieu cassent la monotonie",
+        "Travail de force + endurance",
+        "Séance complète et variée"
+      ],
+      "coachingTipsEn": [
+        "Hills in the middle break up monotony",
+        "Strength + endurance work",
+        "Complete and varied session"
+      ],
+      "commonMistakes": [
+        "Courir l'endurance trop vite",
+        "Négliger les côtes"
+      ],
+      "commonMistakesEn": [
+        "Running endurance portion too fast",
+        "Neglecting the hills"
+      ],
+      "variationIds": ["MIX-001"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["mixed", "hills", "endurance"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "MIX-003",
+      "name": "Pyramide complète",
+      "nameEn": "Full Pyramid",
+      "description": "Séance pyramidale couvrant toutes les zones : 1-2-3-4-3-2-1 min.",
+      "descriptionEn": "Pyramid session covering all zones: 1-2-3-4-3-2-1 min.",
+      "category": "mixed",
+      "sessionType": "mixed",
+      "targetSystem": "mixed",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "1min Z4", "durationMin": 1, "zone": "Z4", "recovery": "1min Z2" },
+        { "description": "2min Z4", "durationMin": 2, "zone": "Z4", "recovery": "1min Z2" },
+        { "description": "3min Z4", "durationMin": 3, "zone": "Z4", "recovery": "2min Z2" },
+        { "description": "4min Z4", "durationMin": 4, "zone": "Z4", "recovery": "2min Z2" },
+        { "description": "3min Z4", "durationMin": 3, "zone": "Z4", "recovery": "2min Z2" },
+        { "description": "2min Z4", "durationMin": 2, "zone": "Z4", "recovery": "1min Z2" },
+        { "description": "1min Z4", "durationMin": 1, "zone": "Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Le 4min est le sommet de la pyramide",
+        "Même allure sur tous les intervalles",
+        "Séance mentalement variée"
+      ],
+      "coachingTipsEn": [
+        "The 4-minute is the peak of the pyramid",
+        "Same pace for all intervals",
+        "Mentally engaging session"
+      ],
+      "commonMistakes": [
+        "Accélérer sur les courts",
+        "Ralentir sur les longs"
+      ],
+      "commonMistakesEn": [
+        "Speeding up on short intervals",
+        "Slowing down on long intervals"
+      ],
+      "variationIds": ["MIX-001"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["mixed", "pyramid"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "MIX-004",
+      "name": "Séance sandwich",
+      "nameEn": "Sandwich Session",
+      "description": "Endurance - Qualité - Endurance. Format polyvalent.",
+      "descriptionEn": "Endurance - Quality - Endurance. Versatile format.",
+      "category": "mixed",
+      "sessionType": "mixed",
+      "targetSystem": "mixed",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 60, "max": 75 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Début tranquille", "durationMin": 10, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Endurance Z2", "durationMin": 20, "zone": "Z2" },
+        { "description": "Bloc qualité au choix (tempo ou seuil)", "durationMin": 15, "zone": "Z3-Z4" },
+        { "description": "Endurance Z2", "durationMin": 15, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour au calme", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Adaptez le bloc qualité selon la forme",
+        "La fatigue pré-existante rend le bloc plus dur",
+        "Format flexible et efficace"
+      ],
+      "coachingTipsEn": [
+        "Adapt the quality block based on how you feel",
+        "Pre-existing fatigue makes the block harder",
+        "Flexible and efficient format"
+      ],
+      "commonMistakes": [
+        "Courir l'endurance trop vite",
+        "Bloc qualité trop ambitieux"
+      ],
+      "commonMistakesEn": [
+        "Running endurance too fast",
+        "Quality block too ambitious"
+      ],
+      "variationIds": ["MIX-001"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["mixed", "sandwich", "flexible"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "MIX-005",
+      "name": "Descending + Tempo",
+      "nameEn": "Descending Intervals with Tempo",
+      "description": "Intervalles décroissants suivis d'un bloc tempo.",
+      "descriptionEn": "Descending intervals followed by a tempo block.",
+      "category": "mixed",
+      "sessionType": "mixed",
+      "targetSystem": "mixed",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 60, "max": 70 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "4min Z4", "durationMin": 4, "zone": "Z4", "recovery": "2min Z1" },
+        { "description": "3min Z4", "durationMin": 3, "zone": "Z4", "recovery": "90s Z1" },
+        { "description": "2min Z4", "durationMin": 2, "zone": "Z4", "recovery": "1min Z1" },
+        { "description": "1min Z4+", "durationMin": 1, "zone": "Z4-Z5" },
+        { "description": "Récupération", "durationMin": 5, "zone": "Z1" },
+        { "description": "Tempo Z3", "durationMin": 10, "zone": "Z3" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Accélérez légèrement à chaque intervalle",
+        "Le tempo arrive sur des jambes travaillées",
+        "Séance très complète"
+      ],
+      "coachingTipsEn": [
+        "Slightly accelerate with each interval",
+        "The tempo comes on tired legs",
+        "Very complete session"
+      ],
+      "commonMistakes": [
+        "Partir trop vite sur le 4min",
+        "Craquer sur le tempo final"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast on the 4-minute",
+        "Cracking on the final tempo"
+      ],
+      "variationIds": ["MIX-001", "MIX-003"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["mixed", "descending", "tempo"],
+        "priorityScore": 60
+      }
+    },
+    {
+      "id": "MIX-006",
+      "name": "Double séance",
+      "nameEn": "Double Day Session",
+      "description": "Deux mini-séances dans la journée. Matin récup, soir qualité.",
+      "descriptionEn": "Two mini-sessions in one day. Morning recovery, evening quality.",
+      "category": "mixed",
+      "sessionType": "mixed",
+      "targetSystem": "mixed",
+      "difficulty": "elite",
+      "typicalDuration": { "min": 70, "max": 90 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Session matin : footing réveil Z1", "durationMin": 25, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Session soir : échauffement", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Session soir : bloc qualité", "durationMin": 20, "zone": "Z3-Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Minimum 6h entre les deux sessions",
+        "Le matin prépare le soir",
+        "Réservé aux coureurs expérimentés"
+      ],
+      "coachingTipsEn": [
+        "Minimum 6 hours between sessions",
+        "Morning prepares for evening",
+        "Reserved for experienced runners"
+      ],
+      "commonMistakes": [
+        "Sessions trop rapprochées",
+        "Faire trop le matin"
+      ],
+      "commonMistakesEn": [
+        "Sessions too close together",
+        "Doing too much in the morning"
+      ],
+      "variationIds": ["MIX-001"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["mixed", "double", "elite"],
+        "priorityScore": 45
+      }
+    },
+    {
+      "id": "MIX-007",
+      "name": "Fartlek + Tempo",
+      "nameEn": "Fartlek with Tempo Finish",
+      "description": "Fartlek libre suivi d'un bloc tempo structuré.",
+      "descriptionEn": "Free fartlek followed by a structured tempo block.",
+      "category": "mixed",
+      "sessionType": "mixed",
+      "targetSystem": "mixed",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 10, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Fartlek libre varié", "durationMin": 20, "zone": "Z2-Z4" },
+        { "description": "Récupération", "durationMin": 5, "zone": "Z1" },
+        { "description": "Tempo continu", "durationMin": 12, "zone": "Z3" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Le fartlek réveille les jambes",
+        "Le tempo contrôle l'effort",
+        "Bon équilibre plaisir/structure"
+      ],
+      "coachingTipsEn": [
+        "The fartlek wakes up the legs",
+        "The tempo controls the effort",
+        "Good balance of fun and structure"
+      ],
+      "commonMistakes": [
+        "Fartlek trop intense",
+        "Pas assez d'énergie pour le tempo"
+      ],
+      "commonMistakesEn": [
+        "Fartlek too intense",
+        "Not enough energy left for tempo"
+      ],
+      "variationIds": ["MIX-001", "FAR-001"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["mixed", "fartlek", "tempo"],
+        "priorityScore": 60
+      }
+    },
+    {
+      "id": "MIX-008",
+      "name": "Test + Qualité",
+      "nameEn": "Fitness Test with Quality",
+      "description": "Court test d'effort suivi d'une séance adaptée au résultat.",
+      "descriptionEn": "Short fitness test followed by a session adapted to the result.",
+      "category": "mixed",
+      "sessionType": "mixed",
+      "targetSystem": "mixed",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "Test 1000m ou 3min pour évaluer la forme", "durationMin": 4, "zone": "Z5" },
+        { "description": "Récupération et analyse", "durationMin": 5, "zone": "Z1" },
+        { "description": "Séance adaptée selon le résultat du test", "durationMin": 15, "zone": "Z3-Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Le test indique la forme du jour",
+        "Adaptez la suite en conséquence",
+        "Apprenez à lire vos sensations"
+      ],
+      "coachingTipsEn": [
+        "The test indicates your form for the day",
+        "Adapt what follows accordingly",
+        "Learn to read your body signals"
+      ],
+      "commonMistakes": [
+        "Ignorer le résultat du test",
+        "Toujours faire la même chose après"
+      ],
+      "commonMistakesEn": [
+        "Ignoring the test result",
+        "Always doing the same thing afterwards"
+      ],
+      "variationIds": ["MIX-001"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["early"],
+        "relativeLoad": "moderate",
+        "tags": ["mixed", "test", "adaptive"],
+        "priorityScore": 55
+      }
+    },
+    {
+      "id": "MIX-009",
+      "name": "Longue avec accélérations",
+      "nameEn": "Long Run with Surges",
+      "description": "Sortie longue ponctuée d'accélérations brèves.",
+      "descriptionEn": "Long run punctuated with brief surges.",
+      "category": "mixed",
+      "sessionType": "mixed",
+      "targetSystem": "mixed",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 80, "max": 100 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Début très progressif", "durationMin": 15, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course Z2 avec 6-8 accélérations de 20-30s réparties", "durationMin": 60, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour au calme", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Les accélérations réveillent les jambes",
+        "Pas trop intenses, juste Z4",
+        "Casse la monotonie des longues"
+      ],
+      "coachingTipsEn": [
+        "Surges wake up the legs",
+        "Not too intense, just Z4",
+        "Breaks up the monotony of long runs"
+      ],
+      "commonMistakes": [
+        "Trop d'accélérations",
+        "Accélérations trop longues ou intenses"
+      ],
+      "commonMistakesEn": [
+        "Too many surges",
+        "Surges too long or too intense"
+      ],
+      "variationIds": ["SL-001"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["late"],
+        "relativeLoad": "hard",
+        "tags": ["mixed", "long", "strides"],
+        "priorityScore": 60
+      }
+    },
+    {
+      "id": "MIX-010",
+      "name": "Séance pré-compétition",
+      "nameEn": "Pre-Race Tune-Up",
+      "description": "Rappel multi-allures avant une course. Touche à tout sans fatiguer.",
+      "descriptionEn": "Multi-pace reminder before a race. Touches all speeds without fatigue.",
+      "category": "mixed",
+      "sessionType": "mixed",
+      "targetSystem": "mixed",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "5min allure course", "durationMin": 5, "zone": "Z3-Z4", "pace": "Allure Course" },
+        { "description": "Récup", "durationMin": 3, "zone": "Z1" },
+        { "description": "3x30s rapide", "zone": "Z5", "repetitions": 3, "recovery": "1min footing" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Juste un rappel des différentes allures",
+        "Aucune fatigue résiduelle",
+        "Terminez confiant et affûté"
+      ],
+      "coachingTipsEn": [
+        "Just a reminder of different paces",
+        "No residual fatigue",
+        "Finish confident and sharp"
+      ],
+      "commonMistakes": [
+        "En faire trop avant la course",
+        "Courir les efforts trop fort"
+      ],
+      "commonMistakesEn": [
+        "Doing too much before the race",
+        "Running efforts too hard"
+      ],
+      "variationIds": ["MIX-001"],
+      "selectionCriteria": {
+        "phases": ["taper"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "light",
+        "tags": ["mixed", "taper", "pre-race"],
+        "priorityScore": 85
+      }
+    }
+  ]
+}

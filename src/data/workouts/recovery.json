@@ -1,0 +1,371 @@
+{
+  "category": "recovery",
+  "templates": [
+    {
+      "id": "REC-001",
+      "name": "Footing récupération",
+      "nameEn": "Recovery Jog",
+      "description": "Footing très lent en Zone 1 pour favoriser la récupération active. Rythme conversationnel facile, respiration nasale possible.",
+      "descriptionEn": "Very slow jog in Zone 1 to promote active recovery. Easy conversational pace, nasal breathing should be possible.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 30, "max": 45 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [],
+      "mainSetTemplate": [
+        { "description": "Footing très lent en Z1", "durationMin": 30, "zone": "Z1" }
+      ],
+      "cooldownTemplate": [],
+      "coachingTips": [
+        "Courez suffisamment lentement pour pouvoir tenir une conversation complète",
+        "Si vous ne pouvez pas respirer par le nez, ralentissez",
+        "Privilégiez un terrain plat et souple"
+      ],
+      "coachingTipsEn": [
+        "Run slowly enough to hold a full conversation",
+        "If you can't breathe through your nose, slow down",
+        "Choose flat and soft terrain"
+      ],
+      "commonMistakes": [
+        "Courir trop vite - c'est la séance la plus facile de la semaine",
+        "Sauter cette séance alors qu'elle est cruciale pour la récupération"
+      ],
+      "commonMistakesEn": [
+        "Running too fast - this is the easiest session of the week",
+        "Skipping this session when it's crucial for recovery"
+      ],
+      "variationIds": ["REC-002"],
+      "selectionCriteria": {
+        "phases": ["base", "build", "peak", "taper", "recovery"],
+        "weekPositions": ["early", "late"],
+        "relativeLoad": "light",
+        "tags": ["recovery", "easy"],
+        "priorityScore": 90
+      }
+    },
+    {
+      "id": "REC-002",
+      "name": "Récup marche-course",
+      "nameEn": "Walk-Run Recovery",
+      "description": "Alternance marche rapide et footing très léger. Idéal pour les débutants ou après une course/compétition.",
+      "descriptionEn": "Alternating brisk walking and very light jogging. Ideal for beginners or after a race/competition.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 25, "max": 35 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Marche rapide", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "Alternance 3min footing Z1 / 2min marche", "durationMin": 20, "zone": "Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Marche tranquille", "durationMin": 5 }
+      ],
+      "coachingTips": [
+        "Ne culpabilisez pas de marcher, c'est le but",
+        "Idéal le surlendemain d'une compétition",
+        "Écoutez votre corps"
+      ],
+      "coachingTipsEn": [
+        "Don't feel guilty about walking, that's the point",
+        "Ideal two days after a competition",
+        "Listen to your body"
+      ],
+      "commonMistakes": [
+        "Transformer les phases de course en vrai footing",
+        "Ignorer les signaux de fatigue"
+      ],
+      "commonMistakesEn": [
+        "Turning running phases into actual jogging",
+        "Ignoring fatigue signals"
+      ],
+      "variationIds": ["REC-001", "REC-003"],
+      "selectionCriteria": {
+        "phases": ["base", "taper", "recovery"],
+        "weekPositions": ["early"],
+        "relativeLoad": "light",
+        "tags": ["recovery", "beginner", "post-race"],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "REC-003",
+      "name": "Décrassage post-course",
+      "nameEn": "Post-Race Flush Run",
+      "description": "Footing de décrassage spécifique après une compétition. Très court et très lent pour éliminer les toxines.",
+      "descriptionEn": "Specific flush run after a competition. Very short and very slow to clear metabolic waste.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 20, "max": 30 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [],
+      "mainSetTemplate": [
+        { "description": "Footing ultra-lent Z1 bas", "durationMin": 20, "zone": "Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Étirements légers", "durationMin": 5 }
+      ],
+      "coachingTips": [
+        "À faire 24-48h après la course, pas le jour même",
+        "Allure encore plus lente que d'habitude",
+        "Hydratez-vous bien avant et après"
+      ],
+      "coachingTipsEn": [
+        "Do this 24-48h after the race, not on race day",
+        "Even slower pace than usual",
+        "Hydrate well before and after"
+      ],
+      "commonMistakes": [
+        "Faire ce footing le jour même de la course",
+        "Courir trop longtemps en pensant mieux récupérer"
+      ],
+      "commonMistakesEn": [
+        "Doing this jog on race day itself",
+        "Running too long thinking it will improve recovery"
+      ],
+      "variationIds": ["REC-001", "REC-002"],
+      "selectionCriteria": {
+        "phases": [],
+        "weekPositions": ["early"],
+        "relativeLoad": "light",
+        "tags": ["recovery", "post-race", "decrassage", "manual"],
+        "priorityScore": 95
+      }
+    },
+    {
+      "id": "REC-004",
+      "name": "Récupération nature",
+      "nameEn": "Nature Recovery Run",
+      "description": "Footing de récupération en milieu naturel (forêt, parc). Le terrain varié et l'environnement favorisent la détente.",
+      "descriptionEn": "Recovery jog in natural surroundings (forest, park). Varied terrain and environment promote relaxation.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 35, "max": 50 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [],
+      "mainSetTemplate": [
+        { "description": "Footing nature en Z1, terrain varié", "durationMin": 40, "zone": "Z1" }
+      ],
+      "cooldownTemplate": [],
+      "coachingTips": [
+        "Choisissez un parcours agréable plutôt qu'efficace",
+        "Profitez du paysage, déconnectez",
+        "Marchez dans les montées si nécessaire"
+      ],
+      "coachingTipsEn": [
+        "Choose a pleasant route rather than an efficient one",
+        "Enjoy the scenery, disconnect",
+        "Walk uphills if needed"
+      ],
+      "commonMistakes": [
+        "Choisir un parcours trop technique",
+        "Se mettre la pression sur l'allure"
+      ],
+      "commonMistakesEn": [
+        "Choosing a route that's too technical",
+        "Putting pressure on yourself about pace"
+      ],
+      "variationIds": ["REC-001"],
+      "selectionCriteria": {
+        "phases": ["base", "build", "peak"],
+        "weekPositions": ["late"],
+        "relativeLoad": "light",
+        "tags": ["recovery", "nature", "mental"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "REC-005",
+      "name": "Régénération active",
+      "nameEn": "Active Regeneration",
+      "description": "Séance très courte combinant footing léger et mobilité. Parfait en fin de semaine de charge.",
+      "descriptionEn": "Very short session combining light jogging and mobility work. Perfect at the end of a hard training week.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 25, "max": 35 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Mobilité articulaire", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "Footing très lent", "durationMin": 15, "zone": "Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Étirements et automassage", "durationMin": 10 }
+      ],
+      "coachingTips": [
+        "Les étirements post-course sont importants ici",
+        "Utilisez un rouleau de massage si disponible",
+        "Hydratez-vous abondamment"
+      ],
+      "coachingTipsEn": [
+        "Post-run stretching is important here",
+        "Use a foam roller if available",
+        "Hydrate generously"
+      ],
+      "commonMistakes": [
+        "Négliger la partie mobilité/étirements",
+        "Allonger la durée du footing"
+      ],
+      "commonMistakesEn": [
+        "Neglecting the mobility/stretching portion",
+        "Extending the jogging duration"
+      ],
+      "variationIds": ["REC-001", "REC-006"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["late"],
+        "relativeLoad": "light",
+        "tags": ["recovery", "mobility", "regeneration"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "REC-006",
+      "name": "Double récup (matin)",
+      "nameEn": "Double Day Recovery (Morning)",
+      "description": "Premier footing d'une journée à deux séances. Ultra-court pour activer sans fatiguer.",
+      "descriptionEn": "First jog of a two-session day. Ultra-short to activate without fatiguing.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 20, "max": 25 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [],
+      "mainSetTemplate": [
+        { "description": "Footing réveil en Z1", "durationMin": 20, "zone": "Z1" }
+      ],
+      "cooldownTemplate": [],
+      "coachingTips": [
+        "Courez à jeun ou après une collation légère",
+        "Objectif : activation, pas entraînement",
+        "Laissez au moins 6h avant la séance suivante"
+      ],
+      "coachingTipsEn": [
+        "Run fasted or after a light snack",
+        "Goal: activation, not training",
+        "Leave at least 6 hours before the next session"
+      ],
+      "commonMistakes": [
+        "Vouloir en faire trop sur ce footing",
+        "Ne pas assez manger/récupérer avant la séance principale"
+      ],
+      "commonMistakesEn": [
+        "Trying to do too much on this jog",
+        "Not eating/recovering enough before the main session"
+      ],
+      "variationIds": ["REC-001"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["early", "mid"],
+        "relativeLoad": "light",
+        "tags": ["recovery", "double", "activation"],
+        "priorityScore": 60
+      }
+    },
+    {
+      "id": "REC-007",
+      "name": "Récup pré-compétition",
+      "nameEn": "Pre-Race Shakeout",
+      "description": "Footing léger avec quelques accélérations la veille ou avant-veille de course. Garde les jambes réactives.",
+      "descriptionEn": "Light jog with a few strides the day before or two days before a race. Keeps legs responsive.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 25, "max": 35 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [],
+      "mainSetTemplate": [
+        { "description": "Footing tranquille Z1", "durationMin": 15, "zone": "Z1" },
+        { "description": "3-4 accélérations progressives de 20s", "durationMin": 5, "zone": "Z3-Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing retour au calme", "durationMin": 5, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Les accélérations activent les fibres rapides sans fatiguer",
+        "Terminez en vous sentant frais et réactif",
+        "Idéal J-2 ou J-1 selon la distance de course"
+      ],
+      "coachingTipsEn": [
+        "Strides activate fast-twitch fibers without causing fatigue",
+        "Finish feeling fresh and responsive",
+        "Ideal on race day -2 or -1 depending on race distance"
+      ],
+      "commonMistakes": [
+        "Faire trop d'accélérations",
+        "Accélérations trop longues ou intenses"
+      ],
+      "commonMistakesEn": [
+        "Doing too many strides",
+        "Strides that are too long or intense"
+      ],
+      "variationIds": ["REC-001", "REC-008"],
+      "selectionCriteria": {
+        "phases": ["taper"],
+        "weekPositions": ["late"],
+        "relativeLoad": "light",
+        "tags": ["recovery", "pre-race", "activation"],
+        "priorityScore": 90
+      }
+    },
+    {
+      "id": "REC-008",
+      "name": "Shakeout run",
+      "nameEn": "Race Morning Shakeout",
+      "description": "Footing très court le matin de la course pour réveiller le corps. Uniquement pour les coureurs expérimentés.",
+      "descriptionEn": "Very short jog on race morning to wake up the body. Only for experienced runners.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 10, "max": 15 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [],
+      "mainSetTemplate": [
+        { "description": "Footing très léger", "durationMin": 10, "zone": "Z1" },
+        { "description": "2-3 foulées bondissantes", "durationMin": 2 }
+      ],
+      "cooldownTemplate": [],
+      "coachingTips": [
+        "À faire 3-4h avant le départ de la course",
+        "Uniquement si vous avez l'habitude de ce rituel",
+        "Maximum 15 minutes, pas plus"
+      ],
+      "coachingTipsEn": [
+        "Do this 3-4 hours before race start",
+        "Only if you're used to this routine",
+        "Maximum 15 minutes, no more"
+      ],
+      "commonMistakes": [
+        "Faire ce shakeout sans l'avoir testé avant",
+        "Le faire trop près du départ de la course"
+      ],
+      "commonMistakesEn": [
+        "Doing this shakeout without having tested it before",
+        "Doing it too close to race start"
+      ],
+      "variationIds": ["REC-007"],
+      "selectionCriteria": {
+        "phases": ["taper"],
+        "weekPositions": ["late"],
+        "relativeLoad": "light",
+        "tags": ["recovery", "race-day", "shakeout"],
+        "priorityScore": 50
+      }
+    }
+  ]
+}

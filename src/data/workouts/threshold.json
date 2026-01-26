@@ -1,0 +1,750 @@
+{
+  "category": "threshold",
+  "templates": [
+    {
+      "id": "THR-001",
+      "name": "Seuil continu",
+      "nameEn": "Continuous Threshold",
+      "description": "Course à allure seuil (Z4) pendant 15-20 minutes continues. Travail au seuil lactique.",
+      "descriptionEn": "Running at threshold pace (Z4) for 15-20 continuous minutes. Lactate threshold training.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "3x30s accélérations progressives", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course au seuil", "durationMin": 20, "zone": "Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 15, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "L'allure seuil = allure 10K ou semi lent",
+        "Effort difficile mais tenable",
+        "Idéal sur parcours plat et balisé"
+      ],
+      "coachingTipsEn": [
+        "Threshold pace = 10K pace or slow half-marathon pace",
+        "Hard but sustainable effort",
+        "Ideal on flat, marked courses"
+      ],
+      "commonMistakes": [
+        "Partir à allure 5K au lieu de seuil",
+        "S'arrêter au premier signe d'inconfort"
+      ],
+      "commonMistakesEn": [
+        "Starting at 5K pace instead of threshold",
+        "Stopping at the first sign of discomfort"
+      ],
+      "variationIds": ["THR-002", "THR-003"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["threshold", "lactate", "quality"],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "THR-002",
+      "name": "Seuil fractionné",
+      "nameEn": "Interval Threshold",
+      "description": "Intervalles longs au seuil avec récupération courte. Format 3x8min ou 4x6min.",
+      "descriptionEn": "Long threshold intervals with short recovery. Format 3x8min or 4x6min.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et accélérations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "3x8min seuil avec 2min récup", "durationMin": 24, "zone": "Z4", "repetitions": 3, "recovery": "2min footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Maintenez la même allure sur chaque intervalle",
+        "Récupération active mais très lente",
+        "Progression vers le seuil continu"
+      ],
+      "coachingTipsEn": [
+        "Maintain the same pace on each interval",
+        "Active but very slow recovery",
+        "Progression toward continuous threshold"
+      ],
+      "commonMistakes": [
+        "Démarrer le premier intervalle trop vite",
+        "Récupérer trop longtemps"
+      ],
+      "commonMistakesEn": [
+        "Starting the first interval too fast",
+        "Recovering too long"
+      ],
+      "variationIds": ["THR-001", "THR-003"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["threshold", "intervals"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "THR-003",
+      "name": "Seuil court débutant",
+      "nameEn": "Beginner Short Threshold",
+      "description": "Introduction au travail au seuil. Blocs courts de 4-5 minutes.",
+      "descriptionEn": "Introduction to threshold training. Short blocks of 4-5 minutes.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 45, "max": 55 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "4x4min seuil avec 2min récup", "durationMin": 16, "zone": "Z4", "repetitions": 4, "recovery": "2min footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Première approche du seuil",
+        "Les blocs courts aident à trouver le bon rythme",
+        "Progressez vers des blocs plus longs"
+      ],
+      "coachingTipsEn": [
+        "First approach to threshold",
+        "Short blocks help find the right rhythm",
+        "Progress toward longer blocks"
+      ],
+      "commonMistakes": [
+        "Vouloir aller trop vite",
+        "Sauter cette étape d'initiation"
+      ],
+      "commonMistakesEn": [
+        "Trying to go too fast",
+        "Skipping this introductory phase"
+      ],
+      "variationIds": ["THR-002"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["threshold", "beginner"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "THR-004",
+      "name": "Seuil 2x15min",
+      "nameEn": "Threshold 2x15min",
+      "description": "Deux blocs de 15 minutes au seuil. Excellent compromis volume/intensité.",
+      "descriptionEn": "Two blocks of 15 minutes at threshold. Excellent volume/intensity compromise.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 60, "max": 75 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Accélérations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "15min seuil", "durationMin": 15, "zone": "Z4" },
+        { "description": "Récupération", "durationMin": 3, "zone": "Z1" },
+        { "description": "15min seuil", "durationMin": 15, "zone": "Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "30 minutes totales au seuil",
+        "Le deuxième bloc doit être au même rythme",
+        "Séance clé pour le semi-marathon"
+      ],
+      "coachingTipsEn": [
+        "30 total minutes at threshold",
+        "The second block should be at the same pace",
+        "Key session for half-marathon"
+      ],
+      "commonMistakes": [
+        "Partir trop vite sur le premier bloc",
+        "Craquer sur le deuxième bloc"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast on the first block",
+        "Cracking on the second block"
+      ],
+      "variationIds": ["THR-001", "THR-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["threshold", "endurance", "half-marathon"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "THR-005",
+      "name": "Seuil pyramide",
+      "nameEn": "Threshold Pyramid",
+      "description": "Intervalles au seuil en pyramide : 4-6-8-6-4 minutes.",
+      "descriptionEn": "Threshold intervals in pyramid: 4-6-8-6-4 minutes.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "4min seuil", "durationMin": 4, "zone": "Z4" },
+        { "description": "Récup", "durationMin": 2, "zone": "Z1" },
+        { "description": "6min seuil", "durationMin": 6, "zone": "Z4" },
+        { "description": "Récup", "durationMin": 2, "zone": "Z1" },
+        { "description": "8min seuil", "durationMin": 8, "zone": "Z4" },
+        { "description": "Récup", "durationMin": 2, "zone": "Z1" },
+        { "description": "6min seuil", "durationMin": 6, "zone": "Z4" },
+        { "description": "Récup", "durationMin": 2, "zone": "Z1" },
+        { "description": "4min seuil", "durationMin": 4, "zone": "Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Le bloc central est le plus dur",
+        "Même allure tout au long",
+        "Séance variée et motivante"
+      ],
+      "coachingTipsEn": [
+        "The central block is the hardest",
+        "Same pace throughout",
+        "Varied and motivating session"
+      ],
+      "commonMistakes": [
+        "Accélérer sur les blocs courts",
+        "Ralentir sur le bloc de 8min"
+      ],
+      "commonMistakesEn": [
+        "Speeding up on short blocks",
+        "Slowing down on the 8-minute block"
+      ],
+      "variationIds": ["THR-002"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["threshold", "pyramid", "variety"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "THR-006",
+      "name": "Seuil progressif",
+      "nameEn": "Progressive Threshold",
+      "description": "Bloc au seuil avec intensité légèrement croissante du début à la fin.",
+      "descriptionEn": "Threshold block with slightly increasing intensity from start to finish.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Seuil progressif : bas Z4 vers haut Z4", "durationMin": 20, "zone": "Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 15, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Commencez en bas de Z4, finissez en haut",
+        "Progression très douce",
+        "Prépare aux fins de course rapides"
+      ],
+      "coachingTipsEn": [
+        "Start in low Z4, finish in high Z4",
+        "Very gradual progression",
+        "Prepares for fast race finishes"
+      ],
+      "commonMistakes": [
+        "Démarrer trop vite",
+        "Accélérer trop brusquement"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast",
+        "Accelerating too abruptly"
+      ],
+      "variationIds": ["THR-001"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["threshold", "progression", "finish"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "THR-007",
+      "name": "Seuil piste",
+      "nameEn": "Track Threshold",
+      "description": "Travail au seuil sur piste d'athlétisme. Contrôle parfait de l'allure.",
+      "descriptionEn": "Threshold work on a track. Perfect pace control.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing autour de la piste", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Lignes droites", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "3x2000m seuil avec 400m récup", "distanceM": 2000, "zone": "Z4", "repetitions": 3, "recovery": "400m footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Visez un temps précis au tour",
+        "Chaque 2000m au même chrono",
+        "Parfait pour calibrer l'allure"
+      ],
+      "coachingTipsEn": [
+        "Aim for a precise time per lap",
+        "Each 2000m at the same time",
+        "Perfect for calibrating pace"
+      ],
+      "commonMistakes": [
+        "Ne pas compter les tours",
+        "Varier l'allure d'un bloc à l'autre"
+      ],
+      "commonMistakesEn": [
+        "Not counting laps",
+        "Varying pace from one block to another"
+      ],
+      "variationIds": ["THR-002", "VMA-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["threshold", "track", "precision"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "THR-008",
+      "name": "Lactate shuttle",
+      "nameEn": "Lactate Shuttle",
+      "description": "Alternance seuil et footing. Apprend au corps à recycler le lactate.",
+      "descriptionEn": "Alternating threshold and jogging. Teaches the body to recycle lactate.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "lactate_tolerance",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "6x(3min seuil + 2min footing Z2)", "durationMin": 30, "zone": "Z4", "repetitions": 6, "recovery": "2min footing Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Récupération en Z2, pas en Z1",
+        "Le corps apprend à recycler le lactate",
+        "Efficace pour améliorer le seuil"
+      ],
+      "coachingTipsEn": [
+        "Recovery in Z2, not Z1",
+        "The body learns to recycle lactate",
+        "Effective for improving threshold"
+      ],
+      "commonMistakes": [
+        "Récupérer trop lentement (Z1)",
+        "Aller trop vite sur les phases seuil"
+      ],
+      "commonMistakesEn": [
+        "Recovering too slowly (Z1)",
+        "Going too fast on threshold phases"
+      ],
+      "variationIds": ["THR-002"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["threshold", "lactate", "metabolic"],
+        "priorityScore": 60
+      }
+    },
+    {
+      "id": "THR-009",
+      "name": "Tempo-seuil",
+      "nameEn": "Tempo-Threshold",
+      "description": "Bloc tempo suivi d'un bloc au seuil. Progression d'intensité.",
+      "descriptionEn": "Tempo block followed by threshold block. Intensity progression.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 60, "max": 75 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "15min tempo Z3", "durationMin": 15, "zone": "Z3" },
+        { "description": "Transition", "durationMin": 2, "zone": "Z2" },
+        { "description": "10min seuil Z4", "durationMin": 10, "zone": "Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 15, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Le tempo prépare au seuil",
+        "Transition progressive",
+        "Simule une montée en régime"
+      ],
+      "coachingTipsEn": [
+        "Tempo prepares for threshold",
+        "Progressive transition",
+        "Simulates ramping up intensity"
+      ],
+      "commonMistakes": [
+        "Faire le tempo trop vite",
+        "Craquer sur le bloc seuil"
+      ],
+      "commonMistakesEn": [
+        "Doing tempo too fast",
+        "Cracking on the threshold block"
+      ],
+      "variationIds": ["THR-001", "TMP-001"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["threshold", "tempo", "combined"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "THR-010",
+      "name": "Seuil 10K pace",
+      "nameEn": "Threshold 10K Pace",
+      "description": "Travail spécifique à allure 10K, légèrement au-dessus du seuil.",
+      "descriptionEn": "10K-specific work, slightly above threshold.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Accélérations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "3x2km à allure 10K avec 500m récup", "distanceM": 2000, "zone": "Z4", "pace": "Allure 10K", "repetitions": 3, "recovery": "500m footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Allure 10K = haut de Z4",
+        "Chaque 2km au même chrono",
+        "Séance clé prépa 10K"
+      ],
+      "coachingTipsEn": [
+        "10K pace = high Z4",
+        "Each 2km at the same time",
+        "Key session for 10K prep"
+      ],
+      "commonMistakes": [
+        "Confondre allure 10K et 5K",
+        "Partir trop vite"
+      ],
+      "commonMistakesEn": [
+        "Confusing 10K pace with 5K pace",
+        "Starting too fast"
+      ],
+      "variationIds": ["RP-002"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["threshold", "10k", "specific"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "THR-011",
+      "name": "Seuil vallonné",
+      "nameEn": "Hilly Threshold",
+      "description": "Travail au seuil sur terrain vallonné. Force + seuil.",
+      "descriptionEn": "Threshold work on hilly terrain. Strength + threshold.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Seuil sur parcours vallonné, effort constant", "durationMin": 20, "zone": "Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 15, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Maintenez l'effort, pas l'allure",
+        "Légèrement plus dur en montée",
+        "Récupérez en descente sans ralentir trop"
+      ],
+      "coachingTipsEn": [
+        "Maintain effort, not pace",
+        "Slightly harder on uphills",
+        "Recover on downhills without slowing too much"
+      ],
+      "commonMistakes": [
+        "Essayer de maintenir l'allure en montée",
+        "Exploser sur les premières côtes"
+      ],
+      "commonMistakesEn": [
+        "Trying to maintain pace on uphills",
+        "Blowing up on the first hills"
+      ],
+      "variationIds": ["THR-001"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["threshold", "hills", "strength"],
+        "priorityScore": 55
+      }
+    },
+    {
+      "id": "THR-012",
+      "name": "Seuil sandwich long",
+      "nameEn": "Long Sandwich Threshold",
+      "description": "Seuil encadré par de longues portions d'endurance. Simule une course.",
+      "descriptionEn": "Threshold sandwiched between long endurance portions. Simulates a race.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 70, "max": 90 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 10, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Endurance Z2", "durationMin": 25, "zone": "Z2" },
+        { "description": "Seuil Z4", "durationMin": 15, "zone": "Z4" },
+        { "description": "Endurance Z2", "durationMin": 20, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Le seuil arrive sur des jambes fatiguées",
+        "Simule les conditions réelles de course",
+        "Séance longue et exigeante"
+      ],
+      "coachingTipsEn": [
+        "Threshold comes on tired legs",
+        "Simulates real race conditions",
+        "Long and demanding session"
+      ],
+      "commonMistakes": [
+        "Courir l'endurance trop vite",
+        "Craquer sur le bloc seuil"
+      ],
+      "commonMistakesEn": [
+        "Running endurance too fast",
+        "Cracking on the threshold block"
+      ],
+      "variationIds": ["THR-001", "SL-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["late"],
+        "relativeLoad": "key",
+        "tags": ["threshold", "simulation", "marathon"],
+        "priorityScore": 60
+      }
+    },
+    {
+      "id": "THR-013",
+      "name": "Seuil descending",
+      "nameEn": "Descending Threshold",
+      "description": "Intervalles au seuil de plus en plus courts : 10-8-6-4 min.",
+      "descriptionEn": "Threshold intervals getting shorter: 10-8-6-4 min.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "10min seuil", "durationMin": 10, "zone": "Z4" },
+        { "description": "Récup", "durationMin": 2, "zone": "Z1" },
+        { "description": "8min seuil", "durationMin": 8, "zone": "Z4" },
+        { "description": "Récup", "durationMin": 2, "zone": "Z1" },
+        { "description": "6min seuil", "durationMin": 6, "zone": "Z4" },
+        { "description": "Récup", "durationMin": 2, "zone": "Z1" },
+        { "description": "4min seuil", "durationMin": 4, "zone": "Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Chaque bloc légèrement plus rapide",
+        "Les derniers blocs peuvent toucher Z4 haut",
+        "Finir en ayant tout donné"
+      ],
+      "coachingTipsEn": [
+        "Each block slightly faster",
+        "Last blocks can touch high Z4",
+        "Finish having given everything"
+      ],
+      "commonMistakes": [
+        "Démarrer trop vite le premier bloc",
+        "Ne pas accélérer sur les derniers blocs"
+      ],
+      "commonMistakesEn": [
+        "Starting the first block too fast",
+        "Not accelerating on the final blocks"
+      ],
+      "variationIds": ["THR-002", "THR-005"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["threshold", "descending", "speed"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "THR-014",
+      "name": "Seuil en duo",
+      "nameEn": "Duo Threshold",
+      "description": "Travail au seuil avec partenaire, relais toutes les 2-3 minutes.",
+      "descriptionEn": "Threshold work with a partner, relay every 2-3 minutes.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing ensemble", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Seuil en relais (2min devant chacun)", "durationMin": 20, "zone": "Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Le draft aide à maintenir l'allure",
+        "Trouvez un partenaire de niveau similaire",
+        "Communiquez pour les transitions"
+      ],
+      "coachingTipsEn": [
+        "Drafting helps maintain pace",
+        "Find a partner of similar level",
+        "Communicate for transitions"
+      ],
+      "commonMistakes": [
+        "Partenaire trop rapide ou trop lent",
+        "Accélérer quand on passe devant"
+      ],
+      "commonMistakesEn": [
+        "Partner too fast or too slow",
+        "Accelerating when taking the lead"
+      ],
+      "variationIds": ["THR-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["threshold", "duo", "social"],
+        "priorityScore": 55
+      }
+    },
+    {
+      "id": "THR-015",
+      "name": "Seuil pre-race",
+      "nameEn": "Pre-Race Threshold",
+      "description": "Rappel seuil court en semaine de compétition. Maintient les sensations.",
+      "descriptionEn": "Short threshold reminder during race week. Maintains feel.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "2x5min seuil avec 2min récup", "durationMin": 10, "zone": "Z4", "repetitions": 2, "recovery": "2min footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Juste un rappel, pas une séance difficile",
+        "Idéal J-4 ou J-5 avant la course",
+        "Terminez frais et confiant"
+      ],
+      "coachingTipsEn": [
+        "Just a reminder, not a hard session",
+        "Ideal on race day -4 or -5",
+        "Finish fresh and confident"
+      ],
+      "commonMistakes": [
+        "En faire trop en semaine de course",
+        "Courir plus vite que l'allure seuil"
+      ],
+      "commonMistakesEn": [
+        "Doing too much during race week",
+        "Running faster than threshold pace"
+      ],
+      "variationIds": ["THR-002"],
+      "selectionCriteria": {
+        "phases": ["taper"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["threshold", "taper", "pre-race"],
+        "priorityScore": 85
+      }
+    }
+  ]
+}

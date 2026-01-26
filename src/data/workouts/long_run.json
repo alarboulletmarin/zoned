@@ -1,0 +1,587 @@
+{
+  "category": "long_run",
+  "templates": [
+    {
+      "id": "SL-001",
+      "name": "Sortie longue progressive",
+      "nameEn": "Progressive Long Run",
+      "description": "Sortie longue avec finish progressif. Première moitié en Z2, accélération vers Z3 sur la deuxième moitié.",
+      "descriptionEn": "Long run with progressive finish. First half in Z2, accelerating to Z3 in the second half.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 90, "max": 120 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Début très lent", "durationMin": 10, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course en Z2 confortable", "durationMin": 50, "zone": "Z2" },
+        { "description": "Accélération progressive vers Z3", "durationMin": 30, "zone": "Z2-Z3" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour au calme", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Emportez de l'eau et gel si > 90 min",
+        "L'accélération finale doit être progressive",
+        "Privilégiez un parcours connu"
+      ],
+      "coachingTipsEn": [
+        "Bring water and gels if > 90 min",
+        "The final acceleration should be gradual",
+        "Choose a familiar route"
+      ],
+      "commonMistakes": [
+        "Partir trop vite et exploser",
+        "Ne pas s'alimenter sur les longues sorties"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast and blowing up",
+        "Not fueling on long runs"
+      ],
+      "variationIds": ["SL-002", "SL-003"],
+      "selectionCriteria": {
+        "phases": ["base", "build", "peak"],
+        "weekPositions": ["late"],
+        "relativeLoad": "hard",
+        "tags": ["long", "endurance", "progression"],
+        "priorityScore": 90
+      }
+    },
+    {
+      "id": "SL-002",
+      "name": "Sortie longue allure spécifique",
+      "nameEn": "Race-Specific Long Run",
+      "description": "Sortie longue avec blocs à allure marathon. Développe l'endurance spécifique.",
+      "descriptionEn": "Long run with marathon pace blocks. Develops race-specific endurance.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 100, "max": 140 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing tranquille", "durationMin": 20, "zone": "Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course Z2", "durationMin": 30, "zone": "Z2" },
+        { "description": "Bloc allure marathon", "durationMin": 30, "zone": "Z3", "pace": "Allure Marathon" },
+        { "description": "Retour en Z2", "durationMin": 20, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Le bloc à allure spécifique doit rester contrôlé",
+        "Pratiquez votre stratégie de ravitaillement",
+        "Terminez fatigué mais pas détruit"
+      ],
+      "coachingTipsEn": [
+        "The race-pace block should stay controlled",
+        "Practice your fueling strategy",
+        "Finish tired but not destroyed"
+      ],
+      "commonMistakes": [
+        "Courir les blocs spécifiques trop vite",
+        "Négliger l'hydratation"
+      ],
+      "commonMistakesEn": [
+        "Running specific blocks too fast",
+        "Neglecting hydration"
+      ],
+      "variationIds": ["SL-001", "SL-003"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["late"],
+        "relativeLoad": "key",
+        "tags": ["long", "specific", "marathon"],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "SL-003",
+      "name": "Sortie longue endurance pure",
+      "nameEn": "Pure Endurance Long Run",
+      "description": "Sortie longue classique en Z2 pure. Construction de la base aérobie.",
+      "descriptionEn": "Classic long run in pure Z2. Building aerobic base.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 80, "max": 100 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Début très progressif", "durationMin": 10, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course continue Z2", "durationMin": 70, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour au calme", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Pas de contrainte d'allure, juste la durée",
+        "Marchez si nécessaire pour tenir",
+        "Hydratez-vous régulièrement"
+      ],
+      "coachingTipsEn": [
+        "No pace constraint, just duration",
+        "Walk if needed to complete",
+        "Hydrate regularly"
+      ],
+      "commonMistakes": [
+        "Vouloir aller trop vite",
+        "Augmenter la durée trop rapidement"
+      ],
+      "commonMistakesEn": [
+        "Trying to go too fast",
+        "Increasing duration too quickly"
+      ],
+      "variationIds": ["SL-001"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["late"],
+        "relativeLoad": "hard",
+        "tags": ["long", "endurance", "base"],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "SL-004",
+      "name": "Sortie longue semi-marathon",
+      "nameEn": "Half-Marathon Long Run",
+      "description": "Sortie longue avec blocs à allure semi. Préparation spécifique semi-marathon.",
+      "descriptionEn": "Long run with half-marathon pace blocks. Half-marathon specific preparation.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 90, "max": 110 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course Z2", "durationMin": 25, "zone": "Z2" },
+        { "description": "Bloc allure semi", "durationMin": 25, "zone": "Z3-Z4", "pace": "Allure Semi" },
+        { "description": "Retour Z2", "durationMin": 15, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Allure semi = entre tempo et seuil",
+        "Séance clé pour prépa semi",
+        "Hydratation importante"
+      ],
+      "coachingTipsEn": [
+        "Half-marathon pace = between tempo and threshold",
+        "Key session for half-marathon prep",
+        "Hydration is important"
+      ],
+      "commonMistakes": [
+        "Confondre allure semi et 10K",
+        "Ne pas adapter la nutrition"
+      ],
+      "commonMistakesEn": [
+        "Confusing half-marathon and 10K pace",
+        "Not adapting nutrition"
+      ],
+      "variationIds": ["SL-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["late"],
+        "relativeLoad": "key",
+        "tags": ["long", "half-marathon", "specific"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "SL-005",
+      "name": "Sortie longue vallonnée",
+      "nameEn": "Hilly Long Run",
+      "description": "Sortie longue sur terrain vallonné. Développe force et endurance.",
+      "descriptionEn": "Long run on hilly terrain. Develops strength and endurance.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 90, "max": 120 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Début sur terrain facile", "durationMin": 10, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course sur terrain vallonné, effort Z2", "durationMin": 75, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour tranquille", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Gérez l'effort, pas l'allure",
+        "Marchez les montées raides",
+        "Prévoyez plus de temps que d'habitude"
+      ],
+      "coachingTipsEn": [
+        "Manage effort, not pace",
+        "Walk steep climbs",
+        "Plan for more time than usual"
+      ],
+      "commonMistakes": [
+        "Attaquer les montées trop fort",
+        "Sous-estimer le temps nécessaire"
+      ],
+      "commonMistakesEn": [
+        "Attacking climbs too hard",
+        "Underestimating time needed"
+      ],
+      "variationIds": ["SL-001", "SL-006"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["late"],
+        "relativeLoad": "hard",
+        "tags": ["long", "hills", "strength"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "SL-006",
+      "name": "Sortie longue trail",
+      "nameEn": "Trail Long Run",
+      "description": "Sortie longue sur sentiers. Préparation aux courses nature.",
+      "descriptionEn": "Long run on trails. Preparation for trail races.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 100, "max": 150 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Marche puis footing sur chemin", "durationMin": 15, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course sur sentiers, effort Z2", "durationMin": 90, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour calme", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Marchez dans les montées techniques",
+        "Emportez eau et ravitaillement",
+        "Prévoyez une marge pour les imprévus"
+      ],
+      "coachingTipsEn": [
+        "Walk technical climbs",
+        "Bring water and nutrition",
+        "Plan extra time for the unexpected"
+      ],
+      "commonMistakes": [
+        "Sous-estimer les difficultés du terrain",
+        "Ne pas adapter l'équipement"
+      ],
+      "commonMistakesEn": [
+        "Underestimating terrain difficulty",
+        "Not adapting equipment"
+      ],
+      "variationIds": ["SL-005"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["late"],
+        "relativeLoad": "hard",
+        "tags": ["long", "trail", "nature"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "SL-007",
+      "name": "Sortie longue avec finish tempo",
+      "nameEn": "Long Run with Tempo Finish",
+      "description": "Sortie longue terminant par 20 minutes à allure tempo.",
+      "descriptionEn": "Long run finishing with 20 minutes at tempo pace.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 100, "max": 120 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Début très progressif", "durationMin": 10, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course Z2", "durationMin": 60, "zone": "Z2" },
+        { "description": "Tempo final", "durationMin": 20, "zone": "Z3" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour au calme", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Le tempo arrive sur jambes fatiguées",
+        "Simule la fin de marathon",
+        "Séance mentalement exigeante"
+      ],
+      "coachingTipsEn": [
+        "The tempo comes on tired legs",
+        "Simulates marathon finish",
+        "Mentally demanding session"
+      ],
+      "commonMistakes": [
+        "Courir Z2 trop vite",
+        "Craquer sur le tempo final"
+      ],
+      "commonMistakesEn": [
+        "Running Z2 too fast",
+        "Cracking on the final tempo"
+      ],
+      "variationIds": ["SL-001", "SL-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["late"],
+        "relativeLoad": "key",
+        "tags": ["long", "tempo", "marathon"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "SL-008",
+      "name": "Sortie longue débutant",
+      "nameEn": "Beginner Long Run",
+      "description": "Première sortie longue pour débutant. Durée modérée, rythme lent.",
+      "descriptionEn": "First long run for beginners. Moderate duration, slow pace.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 80, "max": 100 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Marche puis footing lent", "durationMin": 10, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Footing Z1-Z2, pauses marche autorisées", "durationMin": 70, "zone": "Z1-Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Marche et étirements", "durationMin": 10 }
+      ],
+      "coachingTips": [
+        "L'objectif est la durée, pas la vitesse",
+        "Marchez quand vous en avez besoin",
+        "Augmentez de 5-10min chaque semaine"
+      ],
+      "coachingTipsEn": [
+        "The goal is duration, not speed",
+        "Walk when you need to",
+        "Increase by 5-10min each week"
+      ],
+      "commonMistakes": [
+        "Vouloir courir sans pause",
+        "Augmenter trop vite la durée"
+      ],
+      "commonMistakesEn": [
+        "Wanting to run without breaks",
+        "Increasing duration too quickly"
+      ],
+      "variationIds": ["SL-003"],
+      "selectionCriteria": {
+        "phases": ["base"],
+        "weekPositions": ["late"],
+        "relativeLoad": "moderate",
+        "tags": ["long", "beginner"],
+        "priorityScore": 90
+      }
+    },
+    {
+      "id": "SL-009",
+      "name": "Sortie longue à jeun",
+      "nameEn": "Fasted Long Run",
+      "description": "Sortie longue matinale à jeun. Améliore l'oxydation des graisses.",
+      "descriptionEn": "Morning long run in fasted state. Improves fat oxidation.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 70, "max": 90 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Démarrage très lent", "durationMin": 15, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course Z1-Z2 bas", "durationMin": 55, "zone": "Z1-Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour calme", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Maximum 90 min à jeun",
+        "Emportez un gel de secours",
+        "Hydratez-vous avant de partir"
+      ],
+      "coachingTipsEn": [
+        "Maximum 90 min fasted",
+        "Bring an emergency gel",
+        "Hydrate before leaving"
+      ],
+      "commonMistakes": [
+        "Dépasser 90 min à jeun",
+        "Courir trop vite sans réserves"
+      ],
+      "commonMistakesEn": [
+        "Exceeding 90 min fasted",
+        "Running too fast without fuel reserves"
+      ],
+      "variationIds": ["SL-003"],
+      "selectionCriteria": {
+        "phases": ["base"],
+        "weekPositions": ["late"],
+        "relativeLoad": "hard",
+        "tags": ["long", "fasted", "fat-burning"],
+        "priorityScore": 55
+      }
+    },
+    {
+      "id": "SL-010",
+      "name": "Sortie longue simulation course",
+      "nameEn": "Race Simulation Long Run",
+      "description": "Sortie reproduisant les conditions de course : ravitaillement, équipement, nutrition.",
+      "descriptionEn": "Run replicating race conditions: fueling, gear, nutrition.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 120, "max": 150 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Échauffement type jour de course", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course à allure marathon avec ravitos tous les 5km", "durationMin": 100, "zone": "Z3", "pace": "Allure Marathon" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Récupération active", "durationMin": 15, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Testez votre équipement de course",
+        "Pratiquez le ravitaillement en courant",
+        "Dernière répétition générale avant la course"
+      ],
+      "coachingTipsEn": [
+        "Test your race gear",
+        "Practice fueling while running",
+        "Last dress rehearsal before race"
+      ],
+      "commonMistakes": [
+        "Tester de nouvelles choses le jour J",
+        "Courir plus vite que l'allure cible"
+      ],
+      "commonMistakesEn": [
+        "Testing new things on race day",
+        "Running faster than target pace"
+      ],
+      "variationIds": ["SL-002"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["late"],
+        "relativeLoad": "key",
+        "tags": ["long", "simulation", "race-prep"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "SL-011",
+      "name": "Back-to-back jour 2",
+      "nameEn": "Back-to-Back Day 2",
+      "description": "Sortie longue le lendemain d'une séance dure. Simule la fatigue marathon.",
+      "descriptionEn": "Long run the day after a hard session. Simulates marathon fatigue.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "elite",
+      "typicalDuration": { "min": 90, "max": 110 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Début très lent", "durationMin": 15, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course Z2 sur jambes fatiguées", "durationMin": 70, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour calme", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Le but est de courir fatigué",
+        "Réservé aux coureurs expérimentés",
+        "Récupération importante après"
+      ],
+      "coachingTipsEn": [
+        "The goal is to run on tired legs",
+        "Reserved for experienced runners",
+        "Significant recovery needed after"
+      ],
+      "commonMistakes": [
+        "Sous-estimer la fatigue",
+        "Faire trop de back-to-back"
+      ],
+      "commonMistakesEn": [
+        "Underestimating fatigue",
+        "Doing too many back-to-backs"
+      ],
+      "variationIds": ["SL-001"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["late"],
+        "relativeLoad": "key",
+        "tags": ["long", "fatigue", "elite"],
+        "priorityScore": 50
+      }
+    },
+    {
+      "id": "SL-012",
+      "name": "Sortie longue pré-compétition",
+      "nameEn": "Pre-Race Long Run",
+      "description": "Dernière sortie longue avant la course. Durée réduite, confiance boostée.",
+      "descriptionEn": "Last long run before the race. Reduced duration, confidence boosted.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 60, "max": 80 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Début progressif", "durationMin": 10, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course Z2 avec 10min à allure course", "durationMin": 45, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour tranquille", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "2 semaines avant la course environ",
+        "Plus courte que les sorties précédentes",
+        "Terminez confiant et frais"
+      ],
+      "coachingTipsEn": [
+        "About 2 weeks before the race",
+        "Shorter than previous long runs",
+        "Finish confident and fresh"
+      ],
+      "commonMistakes": [
+        "Faire une vraie sortie longue trop près de la course",
+        "Vouloir compenser le volume réduit"
+      ],
+      "commonMistakesEn": [
+        "Doing a full long run too close to race",
+        "Trying to compensate for reduced volume"
+      ],
+      "variationIds": ["SL-001"],
+      "selectionCriteria": {
+        "phases": ["taper"],
+        "weekPositions": ["late"],
+        "relativeLoad": "moderate",
+        "tags": ["long", "taper", "pre-race"],
+        "priorityScore": 85
+      }
+    }
+  ]
+}

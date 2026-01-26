@@ -1,0 +1,993 @@
+{
+  "category": "vma_intervals",
+  "templates": [
+    {
+      "id": "VMA-001",
+      "name": "30/30 classique",
+      "nameEn": "Classic 30/30",
+      "description": "Séance VMA en intervalles courts 30 secondes vite / 30 secondes lent. Format de base pour développer la VO2max.",
+      "descriptionEn": "VO2max session with short intervals: 30 seconds fast / 30 seconds slow. Foundational format for developing VO2max.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et 4x accélérations progressives", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "2x(12x 30s VMA / 30s récup)", "zone": "Z5", "repetitions": 12, "recovery": "30s footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Allure VMA ou légèrement au-dessus",
+        "Ne marchez pas pendant la récup, trottinez",
+        "Gardez une foulée fluide"
+      ],
+      "coachingTipsEn": [
+        "Run at VO2max pace or slightly above",
+        "Don't walk during recovery, keep jogging",
+        "Maintain a smooth stride"
+      ],
+      "commonMistakes": [
+        "Partir en sprint sur les premières répétitions",
+        "S'arrêter pendant la phase de récupération"
+      ],
+      "commonMistakesEn": [
+        "Sprinting on the first repetitions",
+        "Stopping during the recovery phase"
+      ],
+      "variationIds": ["VMA-002", "VMA-003"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["vma", "vo2max", "intervals", "speed"],
+        "priorityScore": 90
+      }
+    },
+    {
+      "id": "VMA-002",
+      "name": "400m piste",
+      "nameEn": "400m track repeats",
+      "description": "Répétitions de 400m à allure VMA sur piste. Format idéal pour la régularité d'allure.",
+      "descriptionEn": "400m repeats at VO2max pace on track. Ideal format for pace consistency.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing autour de la piste", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et lignes droites", "durationMin": 10 }
+      ],
+      "mainSetTemplate": [
+        { "description": "10x400m VMA avec 200m récup footing", "distanceM": 400, "zone": "Z5", "repetitions": 10, "recovery": "200m footing" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Chronométrez chaque 400m pour la régularité",
+        "Récup = temps du 400m environ",
+        "Visualisez votre allure avant de partir"
+      ],
+      "coachingTipsEn": [
+        "Time each 400m for consistency",
+        "Recovery time should roughly equal 400m time",
+        "Visualize your pace before starting"
+      ],
+      "commonMistakes": [
+        "Partir trop vite sur le premier 400m",
+        "Courir les 200m de récup trop vite"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast on the first 400m",
+        "Running the 200m recovery too fast"
+      ],
+      "variationIds": ["VMA-001", "VMA-003", "VMA-004"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["vma", "track", "intervals"],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "VMA-003",
+      "name": "1000m VMA",
+      "nameEn": "1000m VO2max intervals",
+      "description": "Intervalles longs de 1000m à allure VMA. Développe l'endurance à haute intensité.",
+      "descriptionEn": "Long 1000m intervals at VO2max pace. Develops high-intensity endurance.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 60, "max": 75 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et accélérations", "durationMin": 10 }
+      ],
+      "mainSetTemplate": [
+        { "description": "5x1000m VMA avec 400m récup", "distanceM": 1000, "zone": "Z5", "repetitions": 5, "recovery": "400m footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Séance exigeante, bien reposé avant",
+        "Chaque 1000m au même temps",
+        "La récup doit être vraiment lente"
+      ],
+      "coachingTipsEn": [
+        "Demanding session, be well-rested beforehand",
+        "Each 1000m should be the same time",
+        "Recovery must be truly slow"
+      ],
+      "commonMistakes": [
+        "Partir trop vite",
+        "Récupérer trop activement"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast",
+        "Recovering too actively"
+      ],
+      "variationIds": ["VMA-002", "VMA-004"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["vma", "long-intervals", "5k"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "VMA-004",
+      "name": "200m explosifs",
+      "nameEn": "Explosive 200m repeats",
+      "description": "Répétitions courtes de 200m à 105% VMA. Développe la puissance et la vitesse.",
+      "descriptionEn": "Short 200m repeats at 105% VO2max. Develops power and speed.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes complètes et lignes droites", "durationMin": 10 }
+      ],
+      "mainSetTemplate": [
+        { "description": "12x200m à 105% VMA avec 200m récup", "distanceM": 200, "zone": "Z5+", "repetitions": 12, "recovery": "200m marche/footing" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Plus rapide que l'allure VMA standard",
+        "Récupération complète importante",
+        "Concentrez-vous sur la technique"
+      ],
+      "coachingTipsEn": [
+        "Faster than standard VO2max pace",
+        "Full recovery is important",
+        "Focus on technique"
+      ],
+      "commonMistakes": [
+        "Courir en sprint au lieu de VMA+",
+        "Ne pas assez récupérer"
+      ],
+      "commonMistakesEn": [
+        "Sprinting instead of VO2max+",
+        "Not recovering enough"
+      ],
+      "variationIds": ["VMA-002"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["vma", "speed", "power"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "VMA-005",
+      "name": "45/15",
+      "nameEn": "45/15 intervals",
+      "description": "Format 45 secondes vite / 15 secondes lent. Plus exigeant que le 30/30.",
+      "descriptionEn": "45 seconds fast / 15 seconds slow format. More demanding than 30/30.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et accélérations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "2x(10x 45s VMA / 15s récup)", "zone": "Z5", "repetitions": 10, "recovery": "15s footing très lent" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Récupération très courte = maintien VO2max élevée",
+        "Allure légèrement sous VMA possible",
+        "Séance très exigeante"
+      ],
+      "coachingTipsEn": [
+        "Very short recovery = sustained high VO2max",
+        "Slightly below VO2max pace is acceptable",
+        "Very demanding session"
+      ],
+      "commonMistakes": [
+        "Partir à l'allure du 30/30",
+        "Ne pas maintenir l'intensité sur les dernières répétitions"
+      ],
+      "commonMistakesEn": [
+        "Starting at 30/30 pace",
+        "Failing to maintain intensity on final repetitions"
+      ],
+      "variationIds": ["VMA-001", "VMA-006"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["vma", "vo2max", "demanding"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "VMA-006",
+      "name": "1min/1min",
+      "nameEn": "1min/1min intervals",
+      "description": "Alternance 1 minute vite / 1 minute lent. Excellent compromis intensité/volume.",
+      "descriptionEn": "Alternating 1 minute fast / 1 minute slow. Excellent intensity/volume balance.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "12x(1min VMA / 1min récup)", "zone": "Z5", "repetitions": 12, "recovery": "1min footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Allure VMA mais sur une minute",
+        "Récup complète avant de repartir",
+        "Plus accessible que le 30/30 pour débuter"
+      ],
+      "coachingTipsEn": [
+        "VO2max pace sustained for one minute",
+        "Full recovery before restarting",
+        "More accessible than 30/30 for beginners"
+      ],
+      "commonMistakes": [
+        "Démarrer trop vite",
+        "Ne pas respecter la minute complète de récup"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast",
+        "Not respecting the full minute of recovery"
+      ],
+      "variationIds": ["VMA-001"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["vma", "vo2max", "balanced"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "VMA-007",
+      "name": "VMA courte débutant",
+      "nameEn": "Beginner short VO2max",
+      "description": "Introduction à la VMA avec des intervalles courts et beaucoup de récup.",
+      "descriptionEn": "Introduction to VO2max with short intervals and plenty of recovery.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing très progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Marche rapide et accélérations douces", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "8x(30s rapide / 1min récup)", "zone": "Z4-Z5", "repetitions": 8, "recovery": "1min footing lent" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing très lent", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Première découverte de l'intensité",
+        "Ne cherchez pas la performance",
+        "Récupération longue pour bien encaisser"
+      ],
+      "coachingTipsEn": [
+        "First introduction to high intensity",
+        "Don't chase performance",
+        "Long recovery to absorb the effort"
+      ],
+      "commonMistakes": [
+        "Vouloir aller trop vite dès le début",
+        "Réduire la récupération"
+      ],
+      "commonMistakesEn": [
+        "Wanting to go too fast from the start",
+        "Cutting the recovery short"
+      ],
+      "variationIds": ["VMA-001"],
+      "selectionCriteria": {
+        "phases": ["base"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["vma", "beginner", "introduction"],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "VMA-008",
+      "name": "VMA pyramide",
+      "nameEn": "VO2max pyramid",
+      "description": "Intervalles en pyramide : 200-400-600-400-200m.",
+      "descriptionEn": "Pyramid intervals: 200-400-600-400-200m.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et lignes droites", "durationMin": 10 }
+      ],
+      "mainSetTemplate": [
+        { "description": "200m VMA", "distanceM": 200, "zone": "Z5", "recovery": "200m récup" },
+        { "description": "400m VMA", "distanceM": 400, "zone": "Z5", "recovery": "200m récup" },
+        { "description": "600m VMA", "distanceM": 600, "zone": "Z5", "recovery": "400m récup" },
+        { "description": "400m VMA", "distanceM": 400, "zone": "Z5", "recovery": "200m récup" },
+        { "description": "200m VMA", "distanceM": 200, "zone": "Z5" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Même allure sur toutes les distances",
+        "Le 600m est le moment clé",
+        "Séance variée et motivante"
+      ],
+      "coachingTipsEn": [
+        "Same pace across all distances",
+        "The 600m is the key moment",
+        "Varied and motivating session"
+      ],
+      "commonMistakes": [
+        "Accélérer sur les courtes distances",
+        "Ralentir sur le 600m"
+      ],
+      "commonMistakesEn": [
+        "Accelerating on shorter distances",
+        "Slowing down on the 600m"
+      ],
+      "variationIds": ["VMA-002"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["vma", "pyramid", "variety"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "VMA-009",
+      "name": "VMA longue 3min",
+      "nameEn": "Long VO2max 3min intervals",
+      "description": "Intervalles longs de 3 minutes à allure VMA. Très exigeant.",
+      "descriptionEn": "Long 3-minute intervals at VO2max pace. Very demanding.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "elite",
+      "typicalDuration": { "min": 60, "max": 75 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et accélérations", "durationMin": 10 }
+      ],
+      "mainSetTemplate": [
+        { "description": "5x3min VMA avec 2min récup", "durationMin": 15, "zone": "Z5", "repetitions": 5, "recovery": "2min footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 15, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "15 minutes au total à VMA",
+        "Chaque bloc doit être au même rythme",
+        "Séance élite, excellente forme requise"
+      ],
+      "coachingTipsEn": [
+        "15 minutes total at VO2max",
+        "Each block should be at the same pace",
+        "Elite session, excellent fitness required"
+      ],
+      "commonMistakes": [
+        "Surestimer son niveau pour cette séance",
+        "Partir trop vite sur le premier bloc"
+      ],
+      "commonMistakesEn": [
+        "Overestimating your fitness for this session",
+        "Starting too fast on the first block"
+      ],
+      "variationIds": ["VMA-003"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["vma", "elite", "demanding"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "VMA-010",
+      "name": "500m répétés",
+      "nameEn": "500m repeats",
+      "description": "Répétitions de 500m à allure VMA. Entre le 400 et le 1000m.",
+      "descriptionEn": "500m repeats at VO2max pace. Between 400m and 1000m intervals.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "8x500m VMA avec 200m récup", "distanceM": 500, "zone": "Z5", "repetitions": 8, "recovery": "200m footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Bonne transition entre 400m et 1000m",
+        "Environ 90-100s par 500m selon niveau",
+        "Régularité essentielle"
+      ],
+      "coachingTipsEn": [
+        "Good transition between 400m and 1000m",
+        "Approximately 90-100s per 500m depending on level",
+        "Consistency is essential"
+      ],
+      "commonMistakes": [
+        "Varier les temps entre les répétitions",
+        "Récupérer trop activement"
+      ],
+      "commonMistakesEn": [
+        "Varying times between repetitions",
+        "Recovering too actively"
+      ],
+      "variationIds": ["VMA-002", "VMA-003"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["vma", "track"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "VMA-011",
+      "name": "VMA nature",
+      "nameEn": "Trail VO2max",
+      "description": "Fractionné VMA sur chemin ou sentier. Alternative à la piste.",
+      "descriptionEn": "VO2max intervals on path or trail. Alternative to track work.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing sur sentier", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Accélérations progressives", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "10x1min VMA / 1min récup sur chemin", "zone": "Z5", "repetitions": 10, "recovery": "1min footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing retour", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Basez-vous sur l'effort, pas l'allure",
+        "Le terrain varié sollicite davantage",
+        "Changez de la monotonie de la piste"
+      ],
+      "coachingTipsEn": [
+        "Base it on effort, not pace",
+        "Varied terrain provides additional stimulus",
+        "Break from track monotony"
+      ],
+      "commonMistakes": [
+        "Chercher à maintenir l'allure piste",
+        "Choisir un terrain trop technique"
+      ],
+      "commonMistakesEn": [
+        "Trying to maintain track pace",
+        "Choosing terrain that is too technical"
+      ],
+      "variationIds": ["VMA-001"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["vma", "nature", "trail"],
+        "priorityScore": 60
+      }
+    },
+    {
+      "id": "VMA-012",
+      "name": "20/20",
+      "nameEn": "20/20 intervals",
+      "description": "Format ultra-court : 20 secondes vite / 20 secondes lent. Très dynamique.",
+      "descriptionEn": "Ultra-short format: 20 seconds fast / 20 seconds slow. Very dynamic.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 45, "max": 55 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et sprints courts", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "3x(15x 20s VMA / 20s récup)", "zone": "Z5+", "repetitions": 15, "recovery": "20s footing très lent" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Intensité légèrement au-dessus de VMA possible",
+        "Séance très dynamique",
+        "Comptez bien les répétitions"
+      ],
+      "coachingTipsEn": [
+        "Intensity slightly above VO2max is possible",
+        "Very dynamic session",
+        "Count repetitions carefully"
+      ],
+      "commonMistakes": [
+        "Confondre avec du sprint",
+        "Perdre le rythme"
+      ],
+      "commonMistakesEn": [
+        "Confusing it with sprinting",
+        "Losing the rhythm"
+      ],
+      "variationIds": ["VMA-001"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["vma", "short", "dynamic"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "VMA-013",
+      "name": "VMA 2min",
+      "nameEn": "VO2max 2min intervals",
+      "description": "Intervalles de 2 minutes à VMA. Bon compromis entre court et long.",
+      "descriptionEn": "2-minute intervals at VO2max. Good balance between short and long.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "6x2min VMA avec 2min récup", "durationMin": 12, "zone": "Z5", "repetitions": 6, "recovery": "2min footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "12 minutes au total à VMA",
+        "Ratio 1:1 travail/récup",
+        "Transition du court vers le long"
+      ],
+      "coachingTipsEn": [
+        "12 minutes total at VO2max",
+        "1:1 work-to-rest ratio",
+        "Transition from short to long intervals"
+      ],
+      "commonMistakes": [
+        "Sous-estimer la difficulté",
+        "Partir trop vite"
+      ],
+      "commonMistakesEn": [
+        "Underestimating the difficulty",
+        "Starting too fast"
+      ],
+      "variationIds": ["VMA-006", "VMA-009"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["vma", "medium"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "VMA-014",
+      "name": "800m répétés",
+      "nameEn": "800m repeats",
+      "description": "Répétitions de 800m à allure VMA. Classic de l'entraînement demi-fond.",
+      "descriptionEn": "800m repeats at VO2max pace. Classic middle-distance training.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et lignes droites", "durationMin": 10 }
+      ],
+      "mainSetTemplate": [
+        { "description": "6x800m VMA avec 400m récup", "distanceM": 800, "zone": "Z5", "repetitions": 6, "recovery": "400m footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Deux tours de piste à allure VMA",
+        "Chaque 800m au même chrono",
+        "Séance de qualité pour le 5K-10K"
+      ],
+      "coachingTipsEn": [
+        "Two laps at VO2max pace",
+        "Each 800m at the same time",
+        "Quality session for 5K-10K preparation"
+      ],
+      "commonMistakes": [
+        "Partir en mode 400m",
+        "Varier les temps"
+      ],
+      "commonMistakesEn": [
+        "Starting as if running a 400m",
+        "Varying the times"
+      ],
+      "variationIds": ["VMA-002", "VMA-003"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["vma", "track", "800m"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "VMA-015",
+      "name": "Fartlek VMA",
+      "nameEn": "VO2max fartlek",
+      "description": "Fartlek structuré avec efforts à intensité VMA. Plus ludique que la piste.",
+      "descriptionEn": "Structured fartlek with VO2max intensity efforts. More playful than track work.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Fartlek : 8x(1min VMA + 2min Z2)", "zone": "Z5", "repetitions": 8, "recovery": "2min footing Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Utilisez les repères du terrain",
+        "Récup en Z2, pas en Z1",
+        "Séance variée et agréable"
+      ],
+      "coachingTipsEn": [
+        "Use terrain landmarks",
+        "Recover in Z2, not Z1",
+        "Varied and enjoyable session"
+      ],
+      "commonMistakes": [
+        "Transformer en simple fartlek non structuré",
+        "Ne pas atteindre l'intensité VMA"
+      ],
+      "commonMistakesEn": [
+        "Turning it into unstructured fartlek",
+        "Not reaching VO2max intensity"
+      ],
+      "variationIds": ["VMA-001", "FAR-001"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["vma", "fartlek", "fun"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "VMA-016",
+      "name": "VMA descendante",
+      "nameEn": "Descending VO2max intervals",
+      "description": "Intervalles décroissants : 1000-800-600-400-200m.",
+      "descriptionEn": "Descending intervals: 1000-800-600-400-200m.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et accélérations", "durationMin": 10 }
+      ],
+      "mainSetTemplate": [
+        { "description": "1000m VMA", "distanceM": 1000, "zone": "Z5", "recovery": "400m récup" },
+        { "description": "800m VMA", "distanceM": 800, "zone": "Z5", "recovery": "300m récup" },
+        { "description": "600m VMA", "distanceM": 600, "zone": "Z5", "recovery": "200m récup" },
+        { "description": "400m VMA", "distanceM": 400, "zone": "Z5", "recovery": "200m récup" },
+        { "description": "200m VMA", "distanceM": 200, "zone": "Z5" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Légère accélération au fil des répétitions",
+        "Finir fort sur le 200m",
+        "Séance progressive mentalement"
+      ],
+      "coachingTipsEn": [
+        "Slight acceleration through repetitions",
+        "Finish strong on the 200m",
+        "Mentally progressive session"
+      ],
+      "commonMistakes": [
+        "Exploser sur le 1000m initial",
+        "Ne pas accélérer sur les courtes distances"
+      ],
+      "commonMistakesEn": [
+        "Going all out on the initial 1000m",
+        "Not accelerating on shorter distances"
+      ],
+      "variationIds": ["VMA-008"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["vma", "descending", "speed"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "VMA-017",
+      "name": "VMA séries",
+      "nameEn": "VO2max sets",
+      "description": "Deux ou trois séries de répétitions avec récup longue entre séries.",
+      "descriptionEn": "Two or three sets of repetitions with long recovery between sets.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 60, "max": 75 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes", "durationMin": 10 }
+      ],
+      "mainSetTemplate": [
+        { "description": "Série 1: 5x400m VMA", "distanceM": 400, "zone": "Z5", "repetitions": 5, "recovery": "200m footing" },
+        { "description": "Récup longue", "durationMin": 5, "zone": "Z1" },
+        { "description": "Série 2: 5x400m VMA", "distanceM": 400, "zone": "Z5", "repetitions": 5, "recovery": "200m footing" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "La pause entre séries permet de mieux encaisser",
+        "Même allure sur les deux séries",
+        "Volume total important : 4km à VMA"
+      ],
+      "coachingTipsEn": [
+        "The break between sets helps you absorb the effort",
+        "Same pace for both sets",
+        "High total volume: 4km at VO2max"
+      ],
+      "commonMistakes": [
+        "Accélérer sur la deuxième série",
+        "Récup entre séries trop courte"
+      ],
+      "commonMistakesEn": [
+        "Accelerating on the second set",
+        "Recovery between sets too short"
+      ],
+      "variationIds": ["VMA-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["vma", "volume", "sets"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "VMA-018",
+      "name": "VMA spécifique 5K",
+      "nameEn": "5K-specific VO2max",
+      "description": "Séance VMA orientée préparation 5km. Intervalles proches de l'allure course.",
+      "descriptionEn": "VO2max session targeting 5K preparation. Intervals close to race pace.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et accélérations", "durationMin": 10 }
+      ],
+      "mainSetTemplate": [
+        { "description": "5x1000m à allure 5K avec 400m récup", "distanceM": 1000, "zone": "Z5", "pace": "Allure 5K", "repetitions": 5, "recovery": "400m footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Allure 5K = environ 95-100% VMA",
+        "Séance clé de la prépa 5K",
+        "Chaque 1000m au même temps"
+      ],
+      "coachingTipsEn": [
+        "5K pace = approximately 95-100% VO2max",
+        "Key session for 5K preparation",
+        "Each 1000m at the same time"
+      ],
+      "commonMistakes": [
+        "Confondre allure 5K et VMA pure",
+        "Partir trop vite"
+      ],
+      "commonMistakesEn": [
+        "Confusing 5K pace with pure VO2max pace",
+        "Starting too fast"
+      ],
+      "variationIds": ["VMA-003"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["vma", "5k", "specific"],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "VMA-019",
+      "name": "VMA duo",
+      "nameEn": "Partner VO2max",
+      "description": "Séance VMA en binôme avec relais.",
+      "descriptionEn": "VO2max session with a partner using relay format.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing ensemble", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "10x400m en relais (un court, un récupère)", "distanceM": 400, "zone": "Z5", "repetitions": 10, "recovery": "Temps du partenaire" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération ensemble", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Le partenaire récupère pendant que l'autre court",
+        "Motivation mutuelle",
+        "Trouvez un partenaire de niveau proche"
+      ],
+      "coachingTipsEn": [
+        "Partner recovers while the other runs",
+        "Mutual motivation",
+        "Find a partner of similar fitness level"
+      ],
+      "commonMistakes": [
+        "Partenaire avec trop d'écart de niveau",
+        "Se tirer la bourre au lieu de collaborer"
+      ],
+      "commonMistakesEn": [
+        "Partner with too big a fitness gap",
+        "Competing instead of collaborating"
+      ],
+      "variationIds": ["VMA-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["vma", "duo", "social"],
+        "priorityScore": 60
+      }
+    },
+    {
+      "id": "VMA-020",
+      "name": "VMA pre-race",
+      "nameEn": "Pre-race VO2max tune-up",
+      "description": "Rappel VMA en semaine de compétition. Court et intense.",
+      "descriptionEn": "VO2max tune-up during race week. Short and intense.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "5x(30s VMA / 30s récup)", "zone": "Z5", "repetitions": 5, "recovery": "30s footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Juste un rappel, pas une séance difficile",
+        "Idéal J-3 ou J-4 avant la course",
+        "Terminez frais et vif"
+      ],
+      "coachingTipsEn": [
+        "Just a tune-up, not a hard session",
+        "Ideal 3-4 days before the race",
+        "Finish feeling fresh and sharp"
+      ],
+      "commonMistakes": [
+        "En faire trop en semaine de course",
+        "Courir plus vite que nécessaire"
+      ],
+      "commonMistakesEn": [
+        "Doing too much during race week",
+        "Running faster than necessary"
+      ],
+      "variationIds": ["VMA-001"],
+      "selectionCriteria": {
+        "phases": ["taper"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["vma", "taper", "pre-race"],
+        "priorityScore": 85
+      }
+    }
+  ]
+}

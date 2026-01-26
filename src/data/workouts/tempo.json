@@ -1,0 +1,737 @@
+{
+  "category": "tempo",
+  "templates": [
+    {
+      "id": "TMP-001",
+      "name": "Tempo classique",
+      "nameEn": "Classic Tempo",
+      "description": "Course continue à allure tempo (Z3/seuil aérobie). Effort soutenu mais contrôlé, environ 80-85% FCmax.",
+      "descriptionEn": "Continuous run at tempo pace (Z3/aerobic threshold). Sustained but controlled effort, approximately 80-85% HRmax.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing lent progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et accélérations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course tempo continue", "durationMin": 25, "zone": "Z3" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "L'allure tempo = allure marathon + 10-20 sec/km",
+        "Vous devez pouvoir prononcer des phrases courtes",
+        "Maintenez un effort constant"
+      ],
+      "coachingTipsEn": [
+        "Tempo pace = marathon pace + 10-20 sec/km",
+        "You should be able to speak short sentences",
+        "Maintain a constant effort"
+      ],
+      "commonMistakes": [
+        "Démarrer trop vite et craquer après 15 minutes",
+        "Confondre tempo et seuil (tempo est plus lent)"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast and fading after 15 minutes",
+        "Confusing tempo and threshold (tempo is slower)"
+      ],
+      "variationIds": ["TMP-002", "TMP-003"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["tempo", "threshold", "race-prep"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "TMP-002",
+      "name": "Tempo court",
+      "nameEn": "Short Tempo",
+      "description": "Version courte du tempo pour débutants ou semaines de récupération. 15 minutes à allure tempo.",
+      "descriptionEn": "Short version of tempo for beginners or recovery weeks. 15 minutes at tempo pace.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Tempo continu", "durationMin": 15, "zone": "Z3" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Parfait pour s'initier au tempo",
+        "Concentrez-vous sur les sensations",
+        "Progressez de 2-3 min par semaine"
+      ],
+      "coachingTipsEn": [
+        "Perfect for getting started with tempo",
+        "Focus on how it feels",
+        "Progress by 2-3 min per week"
+      ],
+      "commonMistakes": [
+        "Vouloir allonger trop vite la durée",
+        "Courir en Z4 au lieu de Z3"
+      ],
+      "commonMistakesEn": [
+        "Wanting to extend duration too quickly",
+        "Running in Z4 instead of Z3"
+      ],
+      "variationIds": ["TMP-001"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["tempo", "beginner"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "TMP-003",
+      "name": "Tempo long",
+      "nameEn": "Long Tempo",
+      "description": "Tempo étendu sur 30-35 minutes. Développe l'endurance spécifique et la résistance à la fatigue.",
+      "descriptionEn": "Extended tempo over 30-35 minutes. Develops specific endurance and fatigue resistance.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 60, "max": 75 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Accélérations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "Tempo continu", "durationMin": 35, "zone": "Z3" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Séance exigeante, réservez-la pour les semaines normales",
+        "Hydratez-vous avant et après",
+        "Excellente préparation marathon"
+      ],
+      "coachingTipsEn": [
+        "Demanding session, save it for normal training weeks",
+        "Hydrate before and after",
+        "Excellent marathon preparation"
+      ],
+      "commonMistakes": [
+        "Faire cette séance trop souvent",
+        "Ne pas récupérer suffisamment après"
+      ],
+      "commonMistakesEn": [
+        "Doing this session too often",
+        "Not recovering enough afterward"
+      ],
+      "variationIds": ["TMP-001"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["tempo", "marathon", "endurance"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "TMP-004",
+      "name": "Tempo fractionné",
+      "nameEn": "Interval Tempo",
+      "description": "Tempo découpé en blocs avec courte récupération. Plus accessible que le tempo continu.",
+      "descriptionEn": "Tempo broken into blocks with short recovery. More accessible than continuous tempo.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "3x10min tempo avec 2min récup Z1", "durationMin": 30, "zone": "Z3", "repetitions": 3, "recovery": "2min footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Chaque bloc au même rythme",
+        "La récupération est courte, restez actif",
+        "Parfait pour progresser vers le tempo continu"
+      ],
+      "coachingTipsEn": [
+        "Each block at the same pace",
+        "Recovery is short, stay active",
+        "Perfect for progressing toward continuous tempo"
+      ],
+      "commonMistakes": [
+        "Accélérer le dernier bloc",
+        "Récupérer trop longtemps"
+      ],
+      "commonMistakesEn": [
+        "Speeding up the last block",
+        "Recovering too long"
+      ],
+      "variationIds": ["TMP-001", "TMP-002"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["tempo", "intervals"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "TMP-005",
+      "name": "Tempo progressif",
+      "nameEn": "Progressive Tempo",
+      "description": "Tempo qui commence doucement et accélère progressivement. Apprend à gérer l'effort sur la durée.",
+      "descriptionEn": "Tempo that starts easy and progressively speeds up. Teaches effort management over time.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Tempo bas de Z3", "durationMin": 10, "zone": "Z3" },
+        { "description": "Tempo milieu Z3", "durationMin": 8, "zone": "Z3" },
+        { "description": "Tempo haut Z3", "durationMin": 7, "zone": "Z3" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Progression très douce, quelques secondes/km",
+        "Le dernier bloc doit rester contrôlable",
+        "Excellente préparation pour les négative splits"
+      ],
+      "coachingTipsEn": [
+        "Very gradual progression, just a few seconds/km",
+        "The last block should remain manageable",
+        "Excellent preparation for negative splits"
+      ],
+      "commonMistakes": [
+        "Accélérer trop au début",
+        "Finir en sprint"
+      ],
+      "commonMistakesEn": [
+        "Accelerating too much at the start",
+        "Finishing in a sprint"
+      ],
+      "variationIds": ["TMP-001"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["tempo", "progression", "pacing"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "TMP-006",
+      "name": "Tempo sandwich",
+      "nameEn": "Sandwich Tempo",
+      "description": "Tempo encadré par de l'endurance. Simule la fatigue de course.",
+      "descriptionEn": "Tempo sandwiched between endurance segments. Simulates race fatigue.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 70, "max": 85 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 10, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Endurance Z2", "durationMin": 20, "zone": "Z2" },
+        { "description": "Tempo Z3", "durationMin": 20, "zone": "Z3" },
+        { "description": "Endurance Z2", "durationMin": 15, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Le tempo arrive sur des jambes déjà travaillées",
+        "Simule les conditions de course",
+        "Excellent pour le mental"
+      ],
+      "coachingTipsEn": [
+        "The tempo comes on already tired legs",
+        "Simulates race conditions",
+        "Excellent for mental toughness"
+      ],
+      "commonMistakes": [
+        "Courir l'endurance initiale trop vite",
+        "Ne pas maintenir le tempo sur la fin"
+      ],
+      "commonMistakesEn": [
+        "Running the initial endurance too fast",
+        "Failing to maintain tempo at the end"
+      ],
+      "variationIds": ["TMP-001", "SL-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid", "late"],
+        "relativeLoad": "key",
+        "tags": ["tempo", "marathon", "fatigue-resistance"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "TMP-007",
+      "name": "Tempo cut-down",
+      "nameEn": "Cut-Down Tempo",
+      "description": "Blocs de tempo de plus en plus courts mais de plus en plus rapides.",
+      "descriptionEn": "Tempo blocks that get shorter but progressively faster.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Accélérations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "12min tempo bas Z3", "durationMin": 12, "zone": "Z3" },
+        { "description": "Récup", "durationMin": 2, "zone": "Z1" },
+        { "description": "8min tempo milieu Z3", "durationMin": 8, "zone": "Z3" },
+        { "description": "Récup", "durationMin": 2, "zone": "Z1" },
+        { "description": "4min tempo haut Z3/Z4", "durationMin": 4, "zone": "Z3-Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Chaque bloc légèrement plus rapide",
+        "Le dernier bloc peut toucher Z4",
+        "Séance exigeante mentalement"
+      ],
+      "coachingTipsEn": [
+        "Each block slightly faster",
+        "The last block can touch Z4",
+        "Mentally demanding session"
+      ],
+      "commonMistakes": [
+        "Démarrer trop vite le premier bloc",
+        "Ne pas accélérer suffisamment les blocs suivants"
+      ],
+      "commonMistakesEn": [
+        "Starting the first block too fast",
+        "Not accelerating enough on subsequent blocks"
+      ],
+      "variationIds": ["TMP-001", "TMP-005"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["tempo", "progression", "speed"],
+        "priorityScore": 60
+      }
+    },
+    {
+      "id": "TMP-008",
+      "name": "Tempo marathon",
+      "nameEn": "Marathon Tempo",
+      "description": "Tempo très spécifique à allure marathon. Développe l'efficacité à cette intensité précise.",
+      "descriptionEn": "Marathon-specific tempo. Develops efficiency at this precise intensity.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course à allure marathon exacte", "durationMin": 25, "zone": "Z3", "pace": "Allure Marathon" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Utilisez votre montre GPS pour calibrer l'allure",
+        "Ressentez cette allure, mémorisez-la",
+        "Idéal sur parcours plat et mesuré"
+      ],
+      "coachingTipsEn": [
+        "Use your GPS watch to calibrate pace",
+        "Feel this pace, memorize it",
+        "Ideal on flat, measured courses"
+      ],
+      "commonMistakes": [
+        "Courir plus vite que l'allure cible",
+        "Varier l'allure pendant le bloc"
+      ],
+      "commonMistakesEn": [
+        "Running faster than target pace",
+        "Varying pace during the block"
+      ],
+      "variationIds": ["TMP-001", "RP-001"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["tempo", "marathon", "specific"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "TMP-009",
+      "name": "Tempo semi-marathon",
+      "nameEn": "Half-Marathon Tempo",
+      "description": "Tempo à allure semi-marathon. Entre le tempo classique et le seuil.",
+      "descriptionEn": "Tempo at half-marathon pace. Between classic tempo and threshold.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course à allure semi-marathon", "durationMin": 20, "zone": "Z3-Z4", "pace": "Allure Semi" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Allure semi = entre marathon et seuil",
+        "Respirez de manière contrôlée",
+        "Séance clé pour prépa semi-marathon"
+      ],
+      "coachingTipsEn": [
+        "Half-marathon pace = between marathon and threshold",
+        "Breathe in a controlled manner",
+        "Key session for half-marathon prep"
+      ],
+      "commonMistakes": [
+        "Confondre avec allure 10K",
+        "Ne pas assez récupérer après"
+      ],
+      "commonMistakesEn": [
+        "Confusing with 10K pace",
+        "Not recovering enough afterward"
+      ],
+      "variationIds": ["TMP-001", "TMP-008"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["tempo", "half-marathon", "specific"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "TMP-010",
+      "name": "Tempo vallonné",
+      "nameEn": "Hilly Tempo",
+      "description": "Tempo sur parcours vallonné. Développe la force et l'adaptation au terrain.",
+      "descriptionEn": "Tempo on hilly course. Develops strength and terrain adaptation.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing sur le plat", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Tempo sur parcours vallonné, effort constant", "durationMin": 25, "zone": "Z3" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Maintenez l'effort, pas l'allure",
+        "Poussez légèrement en montée",
+        "Récupérez dans les descentes"
+      ],
+      "coachingTipsEn": [
+        "Maintain effort, not pace",
+        "Push slightly on uphills",
+        "Recover on downhills"
+      ],
+      "commonMistakes": [
+        "Essayer de maintenir la même allure partout",
+        "Attaquer trop fort les montées"
+      ],
+      "commonMistakesEn": [
+        "Trying to maintain the same pace everywhere",
+        "Attacking uphills too hard"
+      ],
+      "variationIds": ["TMP-001"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["tempo", "hills", "strength"],
+        "priorityScore": 55
+      }
+    },
+    {
+      "id": "TMP-011",
+      "name": "Tempo avec finish rapide",
+      "nameEn": "Tempo with Fast Finish",
+      "description": "Tempo classique avec accélération finale vers le seuil. Apprend à finir fort.",
+      "descriptionEn": "Classic tempo with final acceleration toward threshold. Teaches finishing strong.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Tempo Z3", "durationMin": 18, "zone": "Z3" },
+        { "description": "Finish à allure seuil Z4", "durationMin": 5, "zone": "Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Le finish ne doit pas être un sprint",
+        "Transition progressive vers Z4",
+        "Simule un finish de course"
+      ],
+      "coachingTipsEn": [
+        "The finish should not be a sprint",
+        "Progressive transition toward Z4",
+        "Simulates a race finish"
+      ],
+      "commonMistakes": [
+        "Garder trop de réserve au début",
+        "Finir en anaérobie"
+      ],
+      "commonMistakesEn": [
+        "Holding too much back at the start",
+        "Finishing in anaerobic zone"
+      ],
+      "variationIds": ["TMP-001", "TMP-005"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["tempo", "finish", "race-simulation"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "TMP-012",
+      "name": "Cruise intervals",
+      "nameEn": "Cruise Intervals",
+      "description": "Intervalles longs à allure tempo avec récupération très courte. Format américain populaire.",
+      "descriptionEn": "Long intervals at tempo pace with very short recovery. Popular American format.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "5x5min tempo avec 1min récup", "durationMin": 25, "zone": "Z3", "repetitions": 5, "recovery": "1min footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Récupération courte = cumul de fatigue",
+        "Chaque intervalle au même rythme",
+        "Total de 25min à allure tempo"
+      ],
+      "coachingTipsEn": [
+        "Short recovery = cumulative fatigue",
+        "Each interval at the same pace",
+        "Total of 25min at tempo pace"
+      ],
+      "commonMistakes": [
+        "Accélérer les premiers intervalles",
+        "Récupérer trop longtemps"
+      ],
+      "commonMistakesEn": [
+        "Speeding up the first intervals",
+        "Recovering too long"
+      ],
+      "variationIds": ["TMP-001", "TMP-004"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["tempo", "cruise", "intervals"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "TMP-013",
+      "name": "Tempo Kenyan",
+      "nameEn": "Kenyan Tempo",
+      "description": "Tempo inspiré des entraînements kenyans : effort soutenu au feeling, sans montre.",
+      "descriptionEn": "Tempo inspired by Kenyan training: sustained effort by feel, no watch.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 50, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing facile", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course à effort tempo au feeling", "durationMin": 25, "zone": "Z3" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Laissez le GPS à la maison",
+        "Courez à la sensation",
+        "L'effort doit être soutenu mais tenable"
+      ],
+      "coachingTipsEn": [
+        "Leave the GPS at home",
+        "Run by feel",
+        "The effort should be sustained but sustainable"
+      ],
+      "commonMistakes": [
+        "Courir trop vite sans repères",
+        "Ne pas écouter ses sensations"
+      ],
+      "commonMistakesEn": [
+        "Running too fast without reference points",
+        "Not listening to your body"
+      ],
+      "variationIds": ["TMP-001"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["tempo", "feel", "kenyan"],
+        "priorityScore": 50
+      }
+    },
+    {
+      "id": "TMP-014",
+      "name": "Tempo en groupe",
+      "nameEn": "Group Tempo",
+      "description": "Tempo couru avec un partenaire ou groupe de niveau similaire.",
+      "descriptionEn": "Tempo run with a partner or group of similar level.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing de groupe", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Tempo ensemble, relais de tête", "durationMin": 25, "zone": "Z3" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération ensemble", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Trouvez des partenaires de niveau similaire",
+        "Alternez qui mène toutes les 5min",
+        "Le draft aide à maintenir l'allure"
+      ],
+      "coachingTipsEn": [
+        "Find partners of similar level",
+        "Rotate who leads every 5 minutes",
+        "Drafting helps maintain pace"
+      ],
+      "commonMistakes": [
+        "Courir avec quelqu'un de trop rapide",
+        "Laisser l'autre faire tout le travail devant"
+      ],
+      "commonMistakesEn": [
+        "Running with someone too fast",
+        "Letting others do all the work at the front"
+      ],
+      "variationIds": ["TMP-001"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["tempo", "group", "social"],
+        "priorityScore": 60
+      }
+    },
+    {
+      "id": "TMP-015",
+      "name": "Tempo pre-race",
+      "nameEn": "Pre-Race Tempo",
+      "description": "Tempo court et contrôlé en semaine de compétition. Maintient les sensations sans fatiguer.",
+      "descriptionEn": "Short and controlled tempo during race week. Maintains feel without fatigue.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Tempo contrôlé", "durationMin": 12, "zone": "Z3" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Moins long et moins intense que d'habitude",
+        "Objectif : maintenir la forme, pas progresser",
+        "Idéal J-4 ou J-5 avant course"
+      ],
+      "coachingTipsEn": [
+        "Shorter and less intense than usual",
+        "Goal: maintain fitness, not progress",
+        "Ideal on race day -4 or -5"
+      ],
+      "commonMistakes": [
+        "En faire trop en semaine de course",
+        "Courir à allure course au lieu de tempo"
+      ],
+      "commonMistakesEn": [
+        "Doing too much during race week",
+        "Running at race pace instead of tempo"
+      ],
+      "variationIds": ["TMP-001", "TMP-002"],
+      "selectionCriteria": {
+        "phases": ["taper"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["tempo", "taper", "pre-race"],
+        "priorityScore": 85
+      }
+    }
+  ]
+}

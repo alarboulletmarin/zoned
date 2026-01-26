@@ -1,0 +1,493 @@
+{
+  "category": "hills",
+  "templates": [
+    {
+      "id": "HIL-001",
+      "name": "Côtes courtes",
+      "nameEn": "Short Hill Repeats",
+      "description": "Répétitions de côtes courtes (80-120m) à effort maximal. Développe la puissance musculaire.",
+      "descriptionEn": "Short hill repeats (80-120m) at maximum effort. Develops muscular power.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "neuromuscular",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 45, "max": 55 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing avec activation progressive", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et 2-3 côtes d'échauffement", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "8x100m côte effort maximal", "distanceM": 100, "repetitions": 8, "recovery": "Descente en marchant" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération sur le plat", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Pente de 8-12% idéalement",
+        "Poussez avec les bras, genoux hauts",
+        "Récupérez complètement avant de repartir"
+      ],
+      "coachingTipsEn": [
+        "Ideally 8-12% gradient",
+        "Drive with arms, high knees",
+        "Recover fully before starting again"
+      ],
+      "commonMistakes": [
+        "Côte trop longue ou trop raide",
+        "Ne pas assez récupérer"
+      ],
+      "commonMistakesEn": [
+        "Hill too long or too steep",
+        "Not recovering enough"
+      ],
+      "variationIds": ["HIL-002", "HIL-003"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["early", "mid"],
+        "relativeLoad": "hard",
+        "tags": ["hills", "strength", "power"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "HIL-002",
+      "name": "Côtes moyennes",
+      "nameEn": "Medium Hill Repeats",
+      "description": "Répétitions de côtes de 200-300m. Compromis entre puissance et endurance.",
+      "descriptionEn": "Hill repeats of 200-300m. Balance between power and endurance.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "neuromuscular",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et côtes d'échauffement", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "6x250m côte à 90-95%", "distanceM": 250, "zone": "Z4-Z5", "repetitions": 6, "recovery": "Descente en trottinant" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Allure soutenue mais pas sprint",
+        "Maintenez la technique jusqu'en haut",
+        "Descendez activement pour récupérer"
+      ],
+      "coachingTipsEn": [
+        "Sustained pace but not a sprint",
+        "Maintain technique to the top",
+        "Jog down actively to recover"
+      ],
+      "commonMistakes": [
+        "Partir trop vite et craquer",
+        "Technique qui se dégrade en haut"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast and fading",
+        "Technique breaking down at the top"
+      ],
+      "variationIds": ["HIL-001", "HIL-003"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["hills", "strength"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "HIL-003",
+      "name": "Côtes longues",
+      "nameEn": "Long Hill Repeats",
+      "description": "Côtes de 400-600m pour développer l'endurance en montée.",
+      "descriptionEn": "Hills of 400-600m to develop uphill endurance.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "5x500m côte à effort seuil", "distanceM": 500, "zone": "Z4", "repetitions": 5, "recovery": "Descente + 1min récup" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Effort similaire au seuil",
+        "Régularité essentielle",
+        "Pente modérée 5-8%"
+      ],
+      "coachingTipsEn": [
+        "Effort similar to threshold",
+        "Consistency is essential",
+        "Moderate gradient 5-8%"
+      ],
+      "commonMistakes": [
+        "Choisir une pente trop raide",
+        "Partir trop vite"
+      ],
+      "commonMistakesEn": [
+        "Choosing a gradient that's too steep",
+        "Starting too fast"
+      ],
+      "variationIds": ["HIL-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["hills", "threshold", "endurance"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "HIL-004",
+      "name": "Côtes bondissantes",
+      "nameEn": "Bounding Hill Repeats",
+      "description": "Montées avec foulées bondissantes. Développe l'élasticité et l'économie de course.",
+      "descriptionEn": "Uphill with bounding strides. Develops elasticity and running economy.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "neuromuscular",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 45, "max": 55 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes avec bonds", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "6x80m côte en bonds", "distanceM": 80, "repetitions": 6, "recovery": "Descente en marchant" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Poussez vers le haut et l'avant",
+        "Temps de contact minimal au sol",
+        "Pente modérée 5-8%"
+      ],
+      "coachingTipsEn": [
+        "Push up and forward",
+        "Minimal ground contact time",
+        "Moderate gradient 5-8%"
+      ],
+      "commonMistakes": [
+        "Confondre avec du sprint",
+        "Sauter au lieu de bondir"
+      ],
+      "commonMistakesEn": [
+        "Confusing with sprinting",
+        "Jumping instead of bounding"
+      ],
+      "variationIds": ["HIL-001"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["early"],
+        "relativeLoad": "moderate",
+        "tags": ["hills", "plyometrics", "technique"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "HIL-005",
+      "name": "Côtes kenyan",
+      "nameEn": "Kenyan Hills",
+      "description": "Style kenyan : côtes courtes répétées sans pause. Très exigeant.",
+      "descriptionEn": "Kenyan style: short hills repeated without pause. Very demanding.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "vo2max",
+      "difficulty": "elite",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "3x(5x100m côte avec footing descente)", "distanceM": 100, "zone": "Z5", "repetitions": 5, "recovery": "Footing descente, 3min entre séries" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Récupération active seulement",
+        "Format élite, excellente forme requise",
+        "Simule les entraînements kenyans"
+      ],
+      "coachingTipsEn": [
+        "Active recovery only",
+        "Elite format, excellent fitness required",
+        "Simulates Kenyan training methods"
+      ],
+      "commonMistakes": [
+        "Surestimer son niveau",
+        "Ne pas s'arrêter si la technique cède"
+      ],
+      "commonMistakesEn": [
+        "Overestimating your fitness level",
+        "Not stopping if technique breaks down"
+      ],
+      "variationIds": ["HIL-001"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["hills", "elite", "kenyan"],
+        "priorityScore": 55
+      }
+    },
+    {
+      "id": "HIL-006",
+      "name": "Côtes progressives",
+      "nameEn": "Progressive Hills",
+      "description": "Côtes avec intensité croissante. De l'endurance vers la VMA.",
+      "descriptionEn": "Hills with increasing intensity. From endurance to VO2max.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "mixed",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "2x côte lente Z2", "distanceM": 200, "zone": "Z2", "recovery": "Descente" },
+        { "description": "2x côte tempo Z3", "distanceM": 200, "zone": "Z3", "recovery": "Descente" },
+        { "description": "2x côte seuil Z4", "distanceM": 200, "zone": "Z4", "recovery": "Descente" },
+        { "description": "2x côte VMA Z5", "distanceM": 150, "zone": "Z5", "recovery": "Descente" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Progression logique d'intensité",
+        "Écoutez vos sensations",
+        "Séance complète et variée"
+      ],
+      "coachingTipsEn": [
+        "Logical intensity progression",
+        "Listen to your body",
+        "Complete and varied session"
+      ],
+      "commonMistakes": [
+        "Commencer trop vite",
+        "Ne pas monter en intensité"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast",
+        "Not building intensity"
+      ],
+      "variationIds": ["HIL-002"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["hills", "progressive", "variety"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "HIL-007",
+      "name": "Côtes + descentes",
+      "nameEn": "Uphills and Downhills",
+      "description": "Travail des montées ET des descentes. Complet pour le trail.",
+      "descriptionEn": "Working both uphills AND downhills. Complete for trail running.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "neuromuscular",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "6x(montée rapide + descente technique)", "distanceM": 200, "zone": "Z4", "repetitions": 6, "recovery": "30s en bas" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "La descente fait partie du travail",
+        "Technique de descente : fréquence élevée",
+        "Indispensable pour le trail"
+      ],
+      "coachingTipsEn": [
+        "The downhill is part of the workout",
+        "Downhill technique: high cadence",
+        "Essential for trail running"
+      ],
+      "commonMistakes": [
+        "Négliger le travail de descente",
+        "Freiner excessivement"
+      ],
+      "commonMistakesEn": [
+        "Neglecting the downhill work",
+        "Braking excessively"
+      ],
+      "variationIds": ["HIL-002"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["hills", "downhill", "trail"],
+        "priorityScore": 60
+      }
+    },
+    {
+      "id": "HIL-008",
+      "name": "Côtes débutant",
+      "nameEn": "Beginner Hills",
+      "description": "Introduction aux côtes. Pente modérée, intensité contrôlée.",
+      "descriptionEn": "Introduction to hills. Moderate gradient, controlled intensity.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "neuromuscular",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing très progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "5x60m côte modérée", "distanceM": 60, "zone": "Z3-Z4", "repetitions": 5, "recovery": "Marche descente + 1min" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing lent", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Choisissez une pente douce (4-6%)",
+        "Effort soutenu mais pas maximal",
+        "Récupération complète entre les répétitions"
+      ],
+      "coachingTipsEn": [
+        "Choose a gentle gradient (4-6%)",
+        "Sustained but not maximal effort",
+        "Full recovery between reps"
+      ],
+      "commonMistakes": [
+        "Choisir une côte trop raide",
+        "Vouloir aller trop vite dès le début"
+      ],
+      "commonMistakesEn": [
+        "Choosing a hill that's too steep",
+        "Trying to go too fast from the start"
+      ],
+      "variationIds": ["HIL-001"],
+      "selectionCriteria": {
+        "phases": ["base"],
+        "weekPositions": ["early"],
+        "relativeLoad": "moderate",
+        "tags": ["hills", "beginner"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "HIL-009",
+      "name": "Côtes en circuit",
+      "nameEn": "Hill Circuit",
+      "description": "Parcours avec plusieurs côtes enchaînées. Simule une course vallonnée.",
+      "descriptionEn": "Course with multiple hills in sequence. Simulates a hilly race.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "3 boucles d'un circuit vallonné, effort soutenu", "durationMin": 35, "zone": "Z3-Z4" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Trouvez un circuit avec 3-4 côtes",
+        "Maintenez un effort régulier",
+        "Parfait pour préparer les courses vallonnées"
+      ],
+      "coachingTipsEn": [
+        "Find a circuit with 3-4 hills",
+        "Maintain a steady effort",
+        "Perfect for preparing for hilly races"
+      ],
+      "commonMistakes": [
+        "Attaquer les côtes trop fort",
+        "Ne pas récupérer dans les descentes"
+      ],
+      "commonMistakesEn": [
+        "Attacking hills too hard",
+        "Not recovering on the descents"
+      ],
+      "variationIds": ["HIL-003"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["hills", "circuit", "race-simulation"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "HIL-010",
+      "name": "Côtes pré-trail",
+      "nameEn": "Pre-Trail Hills",
+      "description": "Séance spécifique trail avec côtes variées et terrains techniques.",
+      "descriptionEn": "Trail-specific session with varied hills and technical terrain.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "mixed",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 60, "max": 80 },
+      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing sur sentier", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Montées variées (3 courtes + 2 longues) sur sentier", "durationMin": 40, "zone": "Z3-Z5" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing retour", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Variez les types de côtes",
+        "Travaillez la technique trail",
+        "Utilisez les bâtons si prévu en course"
+      ],
+      "coachingTipsEn": [
+        "Vary the types of hills",
+        "Work on trail running technique",
+        "Use poles if planned for the race"
+      ],
+      "commonMistakes": [
+        "Ne pas s'adapter au terrain",
+        "Oublier de tester l'équipement"
+      ],
+      "commonMistakesEn": [
+        "Not adapting to the terrain",
+        "Forgetting to test equipment"
+      ],
+      "variationIds": ["HIL-009"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["hills", "trail", "specific"],
+        "priorityScore": 60
+      }
+    }
+  ]
+}
