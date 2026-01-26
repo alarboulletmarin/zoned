@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2026-01-26
+
+### Added
+
+#### Export System
+- Export workouts to 4 formats from detail page
+- **ICS (Calendar)**: Add workout to Google Calendar, Apple Calendar, Outlook
+- **PNG (Image)**: High-resolution export with full workout card (name, description, timeline, zones, blocks)
+- **PDF (Document)**: Printable document with workout structure, coaching tips, and common mistakes
+- **Garmin FIT**: Native workout file for Garmin devices with HR zones and step intensity
+
+#### UI Components
+- Dropdown menu component (Radix-based)
+- Date/time picker for calendar export
+- Exportable workout card with complete workout summary
+
+### Changed
+
+- Footer now displays dynamic workout and category counts
+- Added GitLab repository link in footer
+
+### Chores
+
+- Clean up TypeScript cache files
+
 ## [0.1.0] - 2026-01-26
 
 ### Added
