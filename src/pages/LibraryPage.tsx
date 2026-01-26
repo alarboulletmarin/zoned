@@ -150,9 +150,14 @@ export function LibraryPage() {
               className="absolute inset-0 bg-background/80 backdrop-blur-sm"
               onClick={closeMobileFilters}
             />
-            <div className="absolute inset-y-0 right-0 w-full max-w-xs bg-background border-l p-6 shadow-lg">
+            <div
+              className="absolute inset-y-0 right-0 w-full max-w-xs bg-background border-l p-6 shadow-lg"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="mobile-filters-title"
+            >
               <div className="flex items-center justify-between mb-6">
-                <h2 className="font-semibold">{t("filters.category")}</h2>
+                <h2 id="mobile-filters-title" className="font-semibold">{t("filters.category")}</h2>
                 <Button
                   variant="ghost"
                   size="icon-sm"
