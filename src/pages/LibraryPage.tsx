@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Filter, Search, Heart } from "lucide-react";
+import { Filter, Search, Heart, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -16,12 +16,19 @@ import { allWorkouts } from "@/data/workouts";
 import { getEstimatedDuration } from "@/types";
 import type { WorkoutCategory } from "@/types";
 
+// Duration constants (same as in WorkoutFilters)
+const DURATION_MIN = 15;
+const DURATION_MAX = 180;
+
 export function LibraryPage() {
-  const { t } = useTranslation("library");
+  const { t } = useTranslation(["library", "common"]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const { favorites } = useFavorites();
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Temporary filters for mobile (apply/cancel behavior)
+  const [tempFilters, setTempFilters] = useState<WorkoutFiltersState>(defaultFilters);
 
   const closeMobileFilters = useCallback(() => {
     setShowMobileFilters(false);
@@ -31,6 +38,40 @@ export function LibraryPage() {
     searchRef: searchInputRef,
     onCloseMobileFilters: closeMobileFilters,
   });
+
+  // Count active filters (excluding searchQuery which is visible separately)
+  const getActiveFiltersCount = (f: WorkoutFiltersState) => {
+    let count = 0;
+    if (f.category !== "all") count++;
+    if (f.difficulty !== "all") count++;
+    if (f.durationRange[0] !== DURATION_MIN || f.durationRange[1] !== DURATION_MAX) count++;
+    if (f.terrain !== "all") count++;
+    if (f.targetSystem !== "all") count++;
+    if (f.favoritesOnly) count++;
+    return count;
+  };
+
+  // Open mobile filters and sync temp state
+  const openMobileFilters = () => {
+    setTempFilters(filters);
+    setShowMobileFilters(true);
+  };
+
+  // Apply temporary filters
+  const applyFilters = () => {
+    setFilters(tempFilters);
+    setShowMobileFilters(false);
+  };
+
+  // Cancel without applying
+  const cancelFilters = () => {
+    setShowMobileFilters(false);
+  };
+
+  // Clear all filters
+  const clearAllFilters = () => {
+    setFilters(defaultFilters);
+  };
 
   // Initialize filters from URL params
   const [filters, setFilters] = useState<WorkoutFiltersState>(() => {
@@ -108,6 +149,70 @@ export function LibraryPage() {
     });
   }, [filters, favorites]);
 
+  // Calculate temp filtered count for Apply button
+  const tempFilteredCount = useMemo(() => {
+    if (!showMobileFilters) return 0;
+    return allWorkouts.filter((workout) => {
+      // Favorites filter
+      if (tempFilters.favoritesOnly && !favorites.includes(workout.id)) {
+        return false;
+      }
+
+      // Category filter
+      if (tempFilters.category !== "all" && workout.category !== tempFilters.category) {
+        return false;
+      }
+
+      // Difficulty filter
+      if (
+        tempFilters.difficulty !== "all" &&
+        workout.difficulty !== tempFilters.difficulty
+      ) {
+        return false;
+      }
+
+      // Terrain filter
+      if (tempFilters.terrain !== "all") {
+        const env = workout.environment;
+        if (tempFilters.terrain === "hills" && !env.requiresHills) return false;
+        if (tempFilters.terrain === "track" && !env.requiresTrack) return false;
+        if (tempFilters.terrain === "flat" && (env.requiresHills || env.requiresTrack)) return false;
+      }
+
+      // Target system filter
+      if (tempFilters.targetSystem !== "all" && workout.targetSystem !== tempFilters.targetSystem) {
+        return false;
+      }
+
+      // Duration filter
+      const duration = getEstimatedDuration(workout);
+      if (
+        duration < tempFilters.durationRange[0] ||
+        duration > tempFilters.durationRange[1]
+      ) {
+        return false;
+      }
+
+      // Search filter
+      if (tempFilters.searchQuery) {
+        const query = tempFilters.searchQuery.toLowerCase();
+        return (
+          workout.name.toLowerCase().includes(query) ||
+          workout.nameEn.toLowerCase().includes(query) ||
+          workout.description.toLowerCase().includes(query) ||
+          workout.descriptionEn.toLowerCase().includes(query)
+        );
+      }
+
+      return true;
+    }).length;
+  }, [tempFilters, showMobileFilters, favorites]);
+
+  // Count active filters
+  const activeFiltersCount = useMemo(() => {
+    return getActiveFiltersCount(filters);
+  }, [filters]);
+
   return (
     <div className="py-8">
       {/* Header */}
@@ -120,16 +225,30 @@ export function LibraryPage() {
             </p>
           </div>
 
-          {/* Mobile filter toggle */}
-          <Button
-            variant="outline"
-            size="sm"
-            className="lg:hidden"
-            onClick={() => setShowMobileFilters(!showMobileFilters)}
-          >
-            <Filter className="size-4 mr-2" />
-            {t("filters.title")}
-          </Button>
+          {/* Mobile filter buttons */}
+          <div className="flex gap-2 lg:hidden">
+            {/* Active filters badge with clear */}
+            {activeFiltersCount > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearAllFilters}
+              >
+                <X className="size-4 mr-2" />
+                {activeFiltersCount} {t("filters.activeFilters")}
+              </Button>
+            )}
+
+            {/* Filter toggle */}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={openMobileFilters}
+            >
+              <Filter className="size-4 mr-2" />
+              {t("filters.title")}
+            </Button>
+          </div>
         </div>
 
         {/* Mobile search bar */}
@@ -164,25 +283,51 @@ export function LibraryPage() {
           <div className="fixed inset-0 z-50 lg:hidden">
             <div
               className="absolute inset-0 bg-background/80 backdrop-blur-sm"
-              onClick={closeMobileFilters}
+              onClick={cancelFilters}
             />
             <div
-              className="absolute inset-y-0 right-0 w-full max-w-xs bg-background border-l p-6 shadow-lg"
+              className="absolute inset-y-0 right-0 w-full max-w-xs bg-background border-l shadow-lg flex flex-col"
               role="dialog"
               aria-modal="true"
               aria-labelledby="mobile-filters-title"
             >
-              <div className="flex items-center justify-between mb-6">
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b shrink-0">
                 <h2 id="mobile-filters-title" className="font-semibold">{t("filters.title")}</h2>
                 <Button
                   variant="ghost"
                   size="icon-sm"
-                  onClick={closeMobileFilters}
+                  onClick={cancelFilters}
                 >
                   ×
                 </Button>
               </div>
-              <WorkoutFilters filters={filters} onFiltersChange={setFilters} hideSearch />
+
+              {/* Filters content - scrollable */}
+              <div className="flex-1 overflow-y-auto p-6">
+                <WorkoutFilters
+                  filters={tempFilters}
+                  onFiltersChange={setTempFilters}
+                  hideSearch
+                />
+              </div>
+
+              {/* Footer with Apply/Cancel */}
+              <div className="border-t p-4 flex gap-2 shrink-0">
+                <Button
+                  variant="outline"
+                  onClick={cancelFilters}
+                  className="flex-1"
+                >
+                  {t("common:actions.cancel")}
+                </Button>
+                <Button
+                  onClick={applyFilters}
+                  className="flex-1"
+                >
+                  {t("filters.apply")} ({tempFilteredCount})
+                </Button>
+              </div>
             </div>
           </div>
         )}
