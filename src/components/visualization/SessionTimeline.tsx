@@ -1,198 +1,197 @@
-import { useMemo } from "react";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  ResponsiveContainer,
-  Tooltip,
-  ReferenceLine,
-} from "recharts";
-import { useTranslation } from "react-i18next";
-import type { WorkoutTemplate, ZoneNumber, WorkoutBlock } from "@/types";
-import { getZoneNumber, ZONE_META } from "@/types";
+/**
+ * SessionTimeline - Horizontal flexbox bar showing workout structure
+ *
+ * Like TrainingPeaks/Strava workout builders:
+ * - Horizontal bar with segments proportional to duration
+ * - Height proportional to zone intensity
+ * - Color-coded by training zone
+ * - Repetitions expanded into individual segments
+ */
+
+import { useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
-
-// Zone colors
-const ZONE_COLORS: Record<ZoneNumber, string> = {
-  1: "#94a3b8",
-  2: "#22c55e",
-  3: "#eab308",
-  4: "#f97316",
-  5: "#ef4444",
-  6: "#7c3aed",
-};
-
-interface TimelinePoint {
-  time: number;
-  zone: ZoneNumber;
-  phase: "warmup" | "main" | "cooldown";
-  description: string;
-}
+import { useTranslation } from "react-i18next";
+import type { WorkoutTemplate } from "@/types";
+import type { TimelineSegment, ZoneNumber } from "./types";
+import { transformSessionBlocks, formatDurationMinutes } from "./transforms";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface SessionTimelineProps {
   workout: WorkoutTemplate;
   className?: string;
-  height?: number;
 }
 
-export function SessionTimeline({
-  workout,
-  className,
-  height = 200,
-}: SessionTimelineProps) {
-  const { t, i18n } = useTranslation("session");
-  const isEn = i18n.language === "en";
+/**
+ * Zone colors using CSS variables for theme support
+ */
+const ZONE_COLORS: Record<ZoneNumber, string> = {
+  1: "var(--zone-1)",
+  2: "var(--zone-2)",
+  3: "var(--zone-3)",
+  4: "var(--zone-4)",
+  5: "var(--zone-5)",
+  6: "var(--zone-6)",
+};
 
-  const { data, phaseMarkers } = useMemo(() => {
-    const points: TimelinePoint[] = [];
-    let currentTime = 0;
-    const markers: { time: number; label: string }[] = [];
+/**
+ * Height percentage based on zone intensity
+ * Z1 = 30%, Z6 = 100% (linear interpolation)
+ */
+function getHeightPercent(zone: ZoneNumber | null): number {
+  if (!zone) return 40;
+  return 30 + (zone - 1) * 14;
+}
 
-    const processBlocks = (
-      blocks: WorkoutBlock[],
-      phase: "warmup" | "main" | "cooldown"
-    ) => {
-      if (blocks.length === 0) return;
+interface SegmentTooltipContentProps {
+  segment: TimelineSegment;
+  t: (key: string) => string;
+}
 
-      const phaseStart = currentTime;
-      for (const block of blocks) {
-        const duration = block.durationMin || 5; // Default 5 min if not specified
-        const zone = block.zone ? getZoneNumber(block.zone) : 2; // Default Z2
-        const desc = isEn && block.descriptionEn ? block.descriptionEn : block.description;
-
-        // Add point at start
-        points.push({
-          time: currentTime,
-          zone,
-          phase,
-          description: desc,
-        });
-
-        // Add point at end (same zone)
-        currentTime += duration;
-        points.push({
-          time: currentTime,
-          zone,
-          phase,
-          description: desc,
-        });
-      }
-
-      // Mark phase boundary
-      if (phaseStart > 0 && phase !== "warmup") {
-        markers.push({
-          time: phaseStart,
-          label: t(`structure.${phase}`),
-        });
-      }
-    };
-
-    processBlocks(workout.warmupTemplate, "warmup");
-    processBlocks(workout.mainSetTemplate, "main");
-    processBlocks(workout.cooldownTemplate, "cooldown");
-
-    return { data: points, phaseMarkers: markers };
-  }, [workout, t, isEn]);
-
-  if (data.length === 0) {
-    return null;
-  }
-
-  const maxTime = data[data.length - 1]?.time || 60;
+function SegmentTooltipContent({ segment, t }: SegmentTooltipContentProps) {
+  const typeLabel = {
+    warmup: t("structure.warmup"),
+    main: t("structure.main"),
+    cooldown: t("structure.cooldown"),
+  }[segment.type];
 
   return (
-    <div className={cn("w-full", className)}>
-      <ResponsiveContainer width="100%" height={height}>
-        <AreaChart
-          data={data}
-          margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-        >
-          <defs>
-            <linearGradient id="zoneGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#f97316" stopOpacity={0.3} />
-              <stop offset="95%" stopColor="#f97316" stopOpacity={0} />
-            </linearGradient>
-          </defs>
-
-          <XAxis
-            dataKey="time"
-            type="number"
-            domain={[0, maxTime]}
-            tickFormatter={(value) => `${value}'`}
-            tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
-            axisLine={{ stroke: "hsl(var(--border))" }}
-            tickLine={{ stroke: "hsl(var(--border))" }}
+    <div className="space-y-1">
+      <p className="font-medium text-sm">{segment.description}</p>
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        {segment.zoneNumber && (
+          <span
+            className="inline-block w-3 h-3 rounded-full shrink-0"
+            style={{ backgroundColor: ZONE_COLORS[segment.zoneNumber] }}
           />
-
-          <YAxis
-            domain={[0, 6]}
-            ticks={[1, 2, 3, 4, 5, 6]}
-            tickFormatter={(value) => `Z${value}`}
-            tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
-            axisLine={{ stroke: "hsl(var(--border))" }}
-            tickLine={{ stroke: "hsl(var(--border))" }}
-            width={30}
-          />
-
-          {/* Phase markers */}
-          {phaseMarkers.map((marker, index) => (
-            <ReferenceLine
-              key={index}
-              x={marker.time}
-              stroke="hsl(var(--border))"
-              strokeDasharray="3 3"
-            />
-          ))}
-
-          <Tooltip
-            content={({ active, payload }) => {
-              if (active && payload?.[0]) {
-                const point = payload[0].payload as TimelinePoint;
-                const meta = ZONE_META[point.zone];
-                return (
-                  <div className="bg-popover text-popover-foreground rounded-md border px-3 py-2 shadow-md text-sm">
-                    <p className="font-medium" style={{ color: ZONE_COLORS[point.zone] }}>
-                      Z{point.zone} - {isEn ? meta.labelEn : meta.label}
-                    </p>
-                    <p className="text-muted-foreground text-xs mt-1">
-                      {point.description}
-                    </p>
-                    <p className="text-muted-foreground text-xs">
-                      {t(`structure.${point.phase}`)} • {point.time} min
-                    </p>
-                  </div>
-                );
-              }
-              return null;
-            }}
-          />
-
-          <Area
-            type="stepAfter"
-            dataKey="zone"
-            stroke="#f97316"
-            strokeWidth={2}
-            fill="url(#zoneGradient)"
-            dot={false}
-          />
-        </AreaChart>
-      </ResponsiveContainer>
-
-      {/* Zone legend */}
-      <div className="flex flex-wrap gap-3 justify-center mt-3">
-        {([1, 2, 3, 4, 5, 6] as ZoneNumber[]).map((zone) => (
-          <div key={zone} className="flex items-center gap-1 text-xs">
-            <div
-              className="size-2 rounded-full"
-              style={{ backgroundColor: ZONE_COLORS[zone] }}
-            />
-            <span className="text-muted-foreground">
-              Z{zone}
-            </span>
-          </div>
-        ))}
+        )}
+        <span>{typeLabel}</span>
+        <span className="font-mono">{formatDurationMinutes(segment.durationMin)}</span>
+        {segment.zoneNumber && (
+          <span className="font-mono font-medium">Z{segment.zoneNumber}</span>
+        )}
       </div>
+      {segment.repetitionIndex && segment.totalRepetitions && (
+        <p className="text-xs text-muted-foreground font-mono">
+          {segment.repetitionIndex}/{segment.totalRepetitions}
+        </p>
+      )}
     </div>
   );
 }
+
+export function SessionTimeline({ workout, className }: SessionTimelineProps) {
+  const { t, i18n } = useTranslation("session");
+  const isEn = i18n.language === "en";
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const { segments, totalDurationMin } = useMemo(() => {
+    return transformSessionBlocks(
+      {
+        warmup: workout.warmupTemplate,
+        mainSet: workout.mainSetTemplate,
+        cooldown: workout.cooldownTemplate,
+      },
+      isEn
+    );
+  }, [workout, isEn]);
+
+  if (segments.length === 0) {
+    return (
+      <div className={cn("rounded-lg bg-muted/50 p-4 text-center", className)}>
+        <p className="text-sm text-muted-foreground italic">
+          {t("visualization.noData")}
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <TooltipProvider delayDuration={100}>
+      <div className={cn("w-full", className)}>
+        {/* Timeline bar container */}
+        <div
+          className="relative flex items-end h-16 rounded-lg overflow-hidden bg-slate-300 dark:bg-slate-700 border-2 border-border"
+          role="img"
+          aria-label={t("visualization.timeline")}
+        >
+          {segments.map((segment, index) => {
+            const heightPercent = getHeightPercent(segment.zoneNumber);
+            const isHovered = hoveredIndex === index;
+            const prevSegment = index > 0 ? segments[index - 1] : null;
+            const isTypeChange = prevSegment && prevSegment.type !== segment.type;
+
+            return (
+              <Tooltip key={segment.id}>
+                <TooltipTrigger asChild>
+                  <div
+                    className={cn(
+                      "relative transition-all duration-150 cursor-pointer",
+                      "hover:brightness-110 hover:z-10",
+                      segment.isRecovery && "opacity-60",
+                      isHovered && "brightness-110"
+                    )}
+                    style={{
+                      width: `${segment.widthPercent}%`,
+                      height: `${heightPercent}%`,
+                      backgroundColor: segment.zoneNumber
+                        ? ZONE_COLORS[segment.zoneNumber]
+                        : "hsl(var(--muted))",
+                      // Dark outline for accessibility
+                      boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.3)",
+                      // Gap between segments
+                      marginLeft: index > 0 ? "1px" : undefined,
+                      // Stronger border on type change
+                      borderLeft: isTypeChange
+                        ? "3px solid rgba(0,0,0,0.5)"
+                        : undefined,
+                    }}
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                  >
+                    {/* Recovery indicator pattern */}
+                    {segment.isRecovery && (
+                      <div
+                        className="absolute inset-0 opacity-30"
+                        style={{
+                          backgroundImage:
+                            "repeating-linear-gradient(45deg, transparent, transparent 2px, hsl(var(--background)) 2px, hsl(var(--background)) 4px)",
+                        }}
+                      />
+                    )}
+
+                    {/* Type indicator dots */}
+                    {!segment.isRecovery && segment.type === "warmup" && (
+                      <div className="absolute top-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white/50" />
+                    )}
+                    {!segment.isRecovery && segment.type === "cooldown" && (
+                      <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white/50" />
+                    )}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="max-w-xs">
+                  <SegmentTooltipContent segment={segment} t={t} />
+                </TooltipContent>
+              </Tooltip>
+            );
+          })}
+        </div>
+
+        {/* Time labels */}
+        <div className="flex justify-between text-xs text-muted-foreground mt-1.5 px-0.5">
+          <span>{t("visualization.start")}</span>
+          <span className="font-mono font-medium">
+            {formatDurationMinutes(totalDurationMin)}
+          </span>
+          <span>{t("visualization.end")}</span>
+        </div>
+      </div>
+    </TooltipProvider>
+  );
+}
+
+export default SessionTimeline;
