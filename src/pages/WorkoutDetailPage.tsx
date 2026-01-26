@@ -104,7 +104,7 @@ export function WorkoutDetailPage() {
 
       {/* Header */}
       <header className={`zone-${dominantZone} zone-stripe pl-3 space-y-4`}>
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <CategoryIcon className="size-4" />
@@ -117,10 +117,11 @@ export function WorkoutDetailPage() {
               {isEn ? workout.descriptionEn : workout.description}
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
             <ExportMenu workout={workout} />
             <FavoriteButton workoutId={workout.id} />
-            <ZoneBadge zone={dominantZone} size="lg" showLabel />
+            <ZoneBadge zone={dominantZone} size="md" className="sm:hidden" />
+            <ZoneBadge zone={dominantZone} size="lg" showLabel className="hidden sm:inline-flex" />
           </div>
         </div>
 
