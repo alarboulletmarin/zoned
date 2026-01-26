@@ -15,6 +15,7 @@ import hillsData from "./hills.json";
 import fartlekData from "./fartlek.json";
 import racePaceData from "./race_pace.json";
 import mixedData from "./mixed.json";
+import assessmentData from "./assessment.json";
 
 // Type assertion for JSON imports
 const recovery = recoveryData as WorkoutCategoryFile;
@@ -27,6 +28,7 @@ const hills = hillsData as WorkoutCategoryFile;
 const fartlek = fartlekData as WorkoutCategoryFile;
 const racePace = racePaceData as WorkoutCategoryFile;
 const mixed = mixedData as WorkoutCategoryFile;
+const assessment = assessmentData as WorkoutCategoryFile;
 
 // Export workouts grouped by category
 export const workoutsByCategory: Record<WorkoutCategory, WorkoutTemplate[]> = {
@@ -40,6 +42,7 @@ export const workoutsByCategory: Record<WorkoutCategory, WorkoutTemplate[]> = {
   fartlek: fartlek.templates,
   race_pace: racePace.templates,
   mixed: mixed.templates,
+  assessment: assessment.templates,
 };
 
 // Export all workouts as a flat array
@@ -112,4 +115,5 @@ export const categories: WorkoutCategory[] = [
   "fartlek",
   "race_pace",
   "mixed",
+  "assessment",
 ];

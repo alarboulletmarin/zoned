@@ -1,0 +1,219 @@
+{
+  "category": "assessment",
+  "templates": [
+    {
+      "id": "ASS-001",
+      "name": "Test VMA demi-Cooper",
+      "nameEn": "Half-Cooper VO2max Test",
+      "description": "Test de 6 minutes pour estimer la VMA (demi-Cooper). Distance parcourue x 10 = VMA approximative. Protocole simple et fiable.",
+      "descriptionEn": "6-minute test to estimate VO2max (half-Cooper test). Distance covered x 10 = approximate vVO2max. Simple and reliable protocol.",
+      "category": "assessment",
+      "sessionType": "vo2max",
+      "targetSystem": "vo2max",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 30, "max": 40 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 10, "zone": "Z1-Z2" },
+        { "description": "Gammes et 3x accélérations", "descriptionEn": "Drills and 3x accelerations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "Test 6 minutes : courir la plus grande distance possible", "descriptionEn": "6-minute test: run the greatest distance possible", "durationMin": 6, "zone": "Z5" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Marche puis footing très lent", "descriptionEn": "Walking then very slow jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Partez vite mais pas en sprint",
+        "Maintenez un effort constant sur les 6 minutes",
+        "Notez la distance au mètre près",
+        "VMA (km/h) = distance (m) / 100"
+      ],
+      "coachingTipsEn": [
+        "Start fast but not sprinting",
+        "Maintain constant effort for 6 minutes",
+        "Note the distance to the nearest meter",
+        "vVO2max (km/h) = distance (m) / 100"
+      ],
+      "commonMistakes": [
+        "Partir trop vite et s'effondrer",
+        "Ne pas être assez échauffé",
+        "Faire le test sur terrain non mesuré"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast and collapsing",
+        "Not warming up enough",
+        "Running the test on unmeasured terrain"
+      ],
+      "variationIds": ["ASS-002", "ASS-004"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["early"],
+        "relativeLoad": "hard",
+        "tags": ["test", "vma", "assessment", "cooper"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "ASS-002",
+      "name": "Test allure critique (CV)",
+      "nameEn": "Critical Velocity Test",
+      "description": "Test pour determiner l'allure critique (Critical Velocity). Basé sur deux contre-la-montre (1200m et 3600m) pour calculer CV. Protocole de Billat.",
+      "descriptionEn": "Test to determine Critical Velocity (CV). Based on two time trials (1200m and 3600m) to calculate CV. Billat protocol.",
+      "category": "assessment",
+      "sessionType": "threshold",
+      "targetSystem": "lactate_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 50, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et accélérations", "descriptionEn": "Drills and accelerations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "CLM 1200m (effort maximal)", "descriptionEn": "1200m time trial (maximal effort)", "distanceM": 1200, "zone": "Z5" },
+        { "description": "Récupération complete", "descriptionEn": "Full recovery", "durationMin": 15, "zone": "Z1" },
+        { "description": "CLM 3600m (effort maximal)", "descriptionEn": "3600m time trial (maximal effort)", "distanceM": 3600, "zone": "Z4-Z5" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "CV = (D2-D1) / (T2-T1) avec D en metres et T en secondes",
+        "Le 1200m doit etre couru a fond",
+        "Le 3600m demande une bonne gestion d'allure",
+        "CV correspond environ a l'allure 10K-semi"
+      ],
+      "coachingTipsEn": [
+        "CV = (D2-D1) / (T2-T1) with D in meters and T in seconds",
+        "The 1200m must be run all-out",
+        "The 3600m requires good pace management",
+        "CV corresponds roughly to 10K-half marathon pace"
+      ],
+      "commonMistakes": [
+        "Ne pas etre assez repose pour ce test",
+        "Recuperation trop courte entre les deux CLM",
+        "Mal gerer le 3600m"
+      ],
+      "commonMistakesEn": [
+        "Not being rested enough for this test",
+        "Recovery too short between the two time trials",
+        "Poor pacing on the 3600m"
+      ],
+      "variationIds": ["ASS-001", "ASS-003"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["early"],
+        "relativeLoad": "key",
+        "tags": ["test", "critical-velocity", "assessment", "billat"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "ASS-003",
+      "name": "Time trial 5K",
+      "nameEn": "5K Time Trial",
+      "description": "Contre-la-montre 5km pour evaluer la forme actuelle et predire les performances sur d'autres distances. Reference classique.",
+      "descriptionEn": "5K time trial to evaluate current fitness and predict performance over other distances. Classic benchmark.",
+      "category": "assessment",
+      "sessionType": "race_specific",
+      "targetSystem": "vo2max",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 45, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et 4x lignes droites", "descriptionEn": "Drills and 4x strides", "durationMin": 10 }
+      ],
+      "mainSetTemplate": [
+        { "description": "5000m contre-la-montre (effort maximal)", "descriptionEn": "5000m time trial (maximal effort)", "distanceM": 5000, "zone": "Z4-Z5" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Marche puis footing de recuperation", "descriptionEn": "Walking then recovery jog", "durationMin": 15, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Gerez votre allure : le premier km ne doit pas etre le plus rapide",
+        "Visez des splits reguliers",
+        "Ce temps permet d'estimer VMA, seuil et allures marathon",
+        "Idealement sur piste ou parcours certifie"
+      ],
+      "coachingTipsEn": [
+        "Manage your pace: the first km should not be the fastest",
+        "Aim for even splits",
+        "This time allows estimation of VO2max, threshold and marathon paces",
+        "Ideally on track or certified course"
+      ],
+      "commonMistakes": [
+        "Partir trop vite",
+        "Ne pas connaitre son allure cible",
+        "Faire le test fatigue"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast",
+        "Not knowing your target pace",
+        "Running the test fatigued"
+      ],
+      "variationIds": ["ASS-001", "ASS-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["early"],
+        "relativeLoad": "key",
+        "tags": ["test", "5k", "time-trial", "benchmark"],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "ASS-004",
+      "name": "Test VMA terrain (navettes)",
+      "nameEn": "Field VO2max Test (Shuttle)",
+      "description": "Test VMA sur terrain avec navettes de 20m (protocole VAMEVAL ou Luc Leger). Progressif jusqu'a epuisement.",
+      "descriptionEn": "Field VO2max test with 20m shuttles (VAMEVAL or Luc Leger protocol). Progressive until exhaustion.",
+      "category": "assessment",
+      "sessionType": "vo2max",
+      "targetSystem": "vo2max",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 25, "max": 35 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing leger", "descriptionEn": "Light jog", "durationMin": 8, "zone": "Z1" },
+        { "description": "Mobilite et accelerations courtes", "descriptionEn": "Mobility and short accelerations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "Test navettes 20m progressif (bip sonore) jusqu'a l'arret", "descriptionEn": "Progressive 20m shuttle test (audio beep) until failure", "zone": "Z1-Z5" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Marche et recuperation", "descriptionEn": "Walking and recovery", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Besoin d'une bande sonore ou application pour le test",
+        "Vitesse de depart : 8 km/h, +0.5 km/h par palier",
+        "VMA = dernier palier complete",
+        "Test valide scientifiquement (Leger & Lambert, 1982)"
+      ],
+      "coachingTipsEn": [
+        "Need audio track or app for the test",
+        "Starting speed: 8 km/h, +0.5 km/h per stage",
+        "vVO2max = last completed stage",
+        "Scientifically validated test (Leger & Lambert, 1982)"
+      ],
+      "commonMistakes": [
+        "Ne pas avoir le bon fichier audio",
+        "Distance entre plots mal mesuree",
+        "S'arreter avant l'epuisement reel"
+      ],
+      "commonMistakesEn": [
+        "Not having the correct audio file",
+        "Distance between cones poorly measured",
+        "Stopping before actual exhaustion"
+      ],
+      "variationIds": ["ASS-001"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["early"],
+        "relativeLoad": "hard",
+        "tags": ["test", "vma", "shuttle", "vameval", "leger"],
+        "priorityScore": 70
+      }
+    }
+  ]
+}

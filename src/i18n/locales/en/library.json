@@ -37,7 +37,8 @@
     "hills": "Hills",
     "fartlek": "Fartlek",
     "race_pace": "Race Pace",
-    "mixed": "Mixed"
+    "mixed": "Mixed",
+    "assessment": "Assessment"
   },
   "difficulty": {
     "beginner": "Beginner",
