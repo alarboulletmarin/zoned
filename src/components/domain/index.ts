@@ -6,3 +6,5 @@ export {
   type WorkoutFiltersState,
 } from "./WorkoutFilters";
 export { WorkoutStructure, CoachingTips } from "./WorkoutStructure";
+export { WorkoutOfTheDay } from "./WorkoutOfTheDay";
+export { CategoryIcon } from "./CategoryIcon";
