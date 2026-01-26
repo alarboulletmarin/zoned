@@ -12,6 +12,7 @@
   "nav": {
     "home": "Accueil",
     "library": "Bibliothèque",
+    "favorites": "Favoris",
     "about": "À propos"
   },
   "actions": {

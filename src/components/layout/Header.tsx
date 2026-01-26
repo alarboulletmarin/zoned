@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Languages, Menu, X, Settings } from "lucide-react";
+import { Moon, Sun, Languages, Menu, X, Settings, Heart } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -75,6 +75,18 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
               ))}
             </SelectContent>
           </Select>
+
+          {/* Favorites */}
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            asChild
+            aria-label={t("nav.favorites")}
+          >
+            <Link to="/favorites">
+              <Heart className="size-4" />
+            </Link>
+          </Button>
 
           {/* Settings */}
           <Button
