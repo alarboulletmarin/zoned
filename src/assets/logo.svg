@@ -1,0 +1,28 @@
+<svg width="200" height="100" viewBox="5 35 190 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="pulseGradient" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" style="stop-color:#94a3b8;stop-opacity:1" />
+      <stop offset="20%" style="stop-color:#22c55e;stop-opacity:1" />
+      <stop offset="40%" style="stop-color:#eab308;stop-opacity:1" />
+      <stop offset="60%" style="stop-color:#f97316;stop-opacity:1" />
+      <stop offset="80%" style="stop-color:#ef4444;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+    <filter id="pulseGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Heart rate / intensity pulse line -->
+  <path d="M 10 100 L 30 100 L 35 110 L 45 70 L 55 130 L 65 50 L 75 120 L 85 40 L 95 100 L 115 100 L 120 110 L 130 70 L 140 130 L 150 50 L 160 120 L 170 40 L 180 100 L 190 100"
+        stroke="url(#pulseGradient)"
+        stroke-width="6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"
+        filter="url(#pulseGlow)"/>
+</svg>
