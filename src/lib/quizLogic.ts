@@ -123,7 +123,7 @@ export function getRecommendedWorkouts(
     return true;
   });
 
-  // If no exact matches, relax duration constraint
+  // If no exact matches, relax duration constraint but sort by closest duration
   if (matchingWorkouts.length === 0) {
     const relaxedWorkouts = allWorkouts.filter((workout) => {
       if (!targetCategories.includes(workout.category)) {
@@ -136,16 +136,29 @@ export function getRecommendedWorkouts(
     });
 
     if (relaxedWorkouts.length > 0) {
-      return shuffleAndPick(relaxedWorkouts, maxResults);
+      // Sort by duration to show closest matches first
+      const targetDuration = (TIME_RANGES[answers.time].min + TIME_RANGES[answers.time].max) / 2;
+      const sorted = relaxedWorkouts.sort((a, b) => {
+        const durationA = getEstimatedDuration(a);
+        const durationB = getEstimatedDuration(b);
+        return Math.abs(durationA - targetDuration) - Math.abs(durationB - targetDuration);
+      });
+      return sorted.slice(0, maxResults);
     }
   }
 
-  // If still no matches, just filter by category
+  // If still no matches, just filter by category and sort by duration
   if (matchingWorkouts.length === 0) {
     const categoryOnly = allWorkouts.filter((workout) =>
       targetCategories.includes(workout.category)
     );
-    return shuffleAndPick(categoryOnly, maxResults);
+    const targetDuration = (TIME_RANGES[answers.time].min + TIME_RANGES[answers.time].max) / 2;
+    const sorted = categoryOnly.sort((a, b) => {
+      const durationA = getEstimatedDuration(a);
+      const durationB = getEstimatedDuration(b);
+      return Math.abs(durationA - targetDuration) - Math.abs(durationB - targetDuration);
+    });
+    return sorted.slice(0, maxResults);
   }
 
   return shuffleAndPick(matchingWorkouts, maxResults);
