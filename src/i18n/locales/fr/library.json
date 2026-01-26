@@ -13,7 +13,8 @@
     "allSystems": "Tous les systèmes",
     "durationRange": "{{min}} - {{max}} min",
     "favoritesOnly": "Favoris uniquement",
-    "search": "Rechercher..."
+    "search": "Rechercher...",
+    "searchLabel": "Rechercher des séances"
   },
   "emptyState": {
     "noResults": "Aucune séance trouvée",

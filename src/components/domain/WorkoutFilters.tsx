@@ -93,6 +93,7 @@ export function WorkoutFilters({
         <input
           ref={searchInputRef}
           type="text"
+          aria-label={t("filters.searchLabel")}
           placeholder={t("filters.search")}
           value={filters.searchQuery}
           onChange={(e) => updateFilter("searchQuery", e.target.value)}

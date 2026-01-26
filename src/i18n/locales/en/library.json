@@ -13,7 +13,8 @@
     "allSystems": "All systems",
     "durationRange": "{{min}} - {{max}} min",
     "favoritesOnly": "Favorites only",
-    "search": "Search..."
+    "search": "Search...",
+    "searchLabel": "Search workouts"
   },
   "emptyState": {
     "noResults": "No workouts found",
