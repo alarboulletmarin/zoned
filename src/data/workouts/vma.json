@@ -988,6 +988,165 @@
         "tags": ["vma", "taper", "pre-race"],
         "priorityScore": 85
       }
+    },
+    {
+      "id": "VMA-021",
+      "name": "Billat 30/30",
+      "nameEn": "Billat 30/30",
+      "description": "Protocole Billat original : 30s a 100% vVO2max / 30s a 50% vVO2max. Maximise le temps passe a VO2max selon les travaux de Veronique Billat.",
+      "descriptionEn": "Original Billat protocol: 30s at 100% vVO2max / 30s at 50% vVO2max. Maximizes time spent at VO2max according to Veronique Billat's research.",
+      "category": "vma_intervals",
+      "sessionType": "vo2max",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 50, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et 4x accelerations progressives", "descriptionEn": "Drills and 4x progressive accelerations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "2x(15x 30s a 100% VMA / 30s a 50% VMA) avec 5min entre series", "descriptionEn": "2x(15x 30s at 100% vVO2max / 30s at 50% vVO2max) with 5min between sets", "zone": "Z5", "repetitions": 15, "recovery": "30s footing a 50% VMA" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de recuperation", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "La recup a 50% VMA est essentielle au protocole",
+        "Ne marchez pas, trottinez vraiment a 50% VMA",
+        "Reference scientifique : Billat et al., 2000",
+        "15 minutes totales a VMA par seance"
+      ],
+      "coachingTipsEn": [
+        "Recovery at 50% vVO2max is essential to the protocol",
+        "Don't walk, actually jog at 50% vVO2max",
+        "Scientific reference: Billat et al., 2000",
+        "15 total minutes at vVO2max per session"
+      ],
+      "commonMistakes": [
+        "Recuperer trop lentement (marche)",
+        "Partir trop vite sur les premieres repetitions",
+        "Ne pas connaitre sa VMA precise"
+      ],
+      "commonMistakesEn": [
+        "Recovering too slowly (walking)",
+        "Starting too fast on the first repetitions",
+        "Not knowing your precise vVO2max"
+      ],
+      "variationIds": ["VMA-001", "VMA-006"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["vma", "billat", "scientific", "vo2max"],
+        "priorityScore": 90
+      }
+    },
+    {
+      "id": "VMA-022",
+      "name": "Speed Endurance 20-40s",
+      "nameEn": "Speed Endurance 20-40s",
+      "description": "Intervalles courts a tres haute intensite (105-110% VMA). Developpe l'endurance de vitesse et la tolerance lactique. Protocole inspire des travaux de Mosey Bangsbo.",
+      "descriptionEn": "Short intervals at very high intensity (105-110% vVO2max). Develops speed endurance and lactate tolerance. Protocol inspired by Bangsbo's research.",
+      "category": "vma_intervals",
+      "sessionType": "speed",
+      "targetSystem": "vo2max",
+      "difficulty": "elite",
+      "typicalDuration": { "min": 45, "max": 55 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes completes et 5x accelerations", "descriptionEn": "Full drills and 5x accelerations", "durationMin": 10 }
+      ],
+      "mainSetTemplate": [
+        { "description": "8-10x 20-40s a 105-110% VMA avec 2-3min recup complete", "descriptionEn": "8-10x 20-40s at 105-110% vVO2max with 2-3min full recovery", "zone": "Z5+", "repetitions": 10, "recovery": "2-3min marche/footing lent" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de recuperation", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Intensite supra-maximale : au-dessus de la VMA",
+        "Recuperation complete entre chaque repetition",
+        "Qualite prime sur quantite",
+        "Seance reservee aux coureurs experimentes"
+      ],
+      "coachingTipsEn": [
+        "Supra-maximal intensity: above vVO2max",
+        "Full recovery between each repetition",
+        "Quality over quantity",
+        "Session reserved for experienced runners"
+      ],
+      "commonMistakes": [
+        "Recuperation trop courte",
+        "Trop de repetitions",
+        "Faire cette seance fatigue"
+      ],
+      "commonMistakesEn": [
+        "Recovery too short",
+        "Too many repetitions",
+        "Doing this session when fatigued"
+      ],
+      "variationIds": ["VMA-004", "VMA-012"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["vma", "speed-endurance", "supra-maximal", "elite"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "VMA-023",
+      "name": "Sprints neuromusculaires (NRRs)",
+      "nameEn": "Neuromuscular Running Repeats (NRRs)",
+      "description": "10-12x 80m sprints avec recuperation complete. Developpe la puissance neuromusculaire et l'economie de course. Methode Hudson/Magness.",
+      "descriptionEn": "10-12x 80m sprints with full recovery. Develops neuromuscular power and running economy. Hudson/Magness method.",
+      "category": "vma_intervals",
+      "sessionType": "speed",
+      "targetSystem": "speed",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes dynamiques et educatifs de sprint", "descriptionEn": "Dynamic drills and sprint technique work", "durationMin": 10 }
+      ],
+      "mainSetTemplate": [
+        { "description": "10-12x 80m sprint (95% effort) avec retour marche", "descriptionEn": "10-12x 80m sprint (95% effort) with walk-back recovery", "distanceM": 80, "zone": "Z6", "repetitions": 12, "recovery": "Marche retour ~2min" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de recuperation", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Pas de sprint maximal : 95% pour preserver la technique",
+        "Focus sur la frequence de foulee et l'amplitude",
+        "Ameliore l'economie de course selon Hudson",
+        "Peut etre integre a un footing endurance"
+      ],
+      "coachingTipsEn": [
+        "Not maximal sprint: 95% to preserve technique",
+        "Focus on stride frequency and range",
+        "Improves running economy according to Hudson",
+        "Can be integrated into an endurance jog"
+      ],
+      "commonMistakes": [
+        "Sprinter a 100% et perdre la technique",
+        "Recuperation trop courte",
+        "Negliger l'echauffement"
+      ],
+      "commonMistakesEn": [
+        "Sprinting at 100% and losing technique",
+        "Recovery too short",
+        "Neglecting warm-up"
+      ],
+      "variationIds": ["VMA-004"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["speed", "neuromuscular", "economy", "hudson"],
+        "priorityScore": 65
+      }
     }
   ]
 }
