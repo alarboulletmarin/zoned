@@ -1,24 +1,389 @@
+/* Zone System Typography - Space Grotesk */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
 @import "tailwindcss";
 
-/* Base variables - will be extended in Phase 2 with Zone System */
+@custom-variant dark (&:is(.dark *));
+
+/* Theme Zoned - Design System (based on Planr Zone System) */
+@theme inline {
+  /* Motion tokens */
+  --duration-instant: 75ms;
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 500ms;
+
+  /* Radius scale */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  /* Semantic color mappings */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Training zones - Zone System colors */
+  --color-zone-1: var(--zone-1);
+  --color-zone-1-bg: var(--zone-1-bg);
+  --color-zone-1-text: var(--zone-1-text);
+  --color-zone-2: var(--zone-2);
+  --color-zone-2-bg: var(--zone-2-bg);
+  --color-zone-2-text: var(--zone-2-text);
+  --color-zone-3: var(--zone-3);
+  --color-zone-3-bg: var(--zone-3-bg);
+  --color-zone-3-text: var(--zone-3-text);
+  --color-zone-4: var(--zone-4);
+  --color-zone-4-bg: var(--zone-4-bg);
+  --color-zone-4-text: var(--zone-4-text);
+  --color-zone-5: var(--zone-5);
+  --color-zone-5-bg: var(--zone-5-bg);
+  --color-zone-5-text: var(--zone-5-text);
+  --color-zone-6: var(--zone-6);
+  --color-zone-6-bg: var(--zone-6-bg);
+  --color-zone-6-text: var(--zone-6-text);
+
+  /* Typography */
+  --font-sans: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+}
+
+/* ==========================================================================
+   LIGHT MODE - Zoned Palette
+   Primary: Zone 4 Orange (#F97316)
+   ========================================================================== */
 :root {
-  --background: 0 0% 100%;
-  --foreground: 240 10% 3.9%;
+  --radius: 0.5rem;
+
+  /* Neutrals */
+  --background: #fafafa;
+  --foreground: #171717;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --popover: #ffffff;
+  --popover-foreground: #171717;
+
+  /* Primary - Zone 4 Orange */
+  --primary: #f97316;
+  --primary-foreground: #ffffff;
+
+  /* Secondary */
+  --secondary: #f5f5f5;
+  --secondary-foreground: #171717;
+
+  /* Muted */
+  --muted: #f5f5f5;
+  --muted-foreground: #525252;
+
+  /* Accent (Zone 4 background/text for interactive states) */
+  --accent: #ffedd5;
+  --accent-foreground: #9a3412;
+
+  /* Semantic colors */
+  --destructive: #b91c1c;
+  --success: #15803d;
+  --warning: #ca8a04;
+  --info: #1d4ed8;
+
+  /* Borders and inputs */
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #f97316;
+
+  /* ==========================================================================
+     ZONE SYSTEM - Training zones as visual identity
+     ========================================================================== */
+
+  /* Zone 1 - Recovery (Slate) */
+  --zone-1: #94a3b8;
+  --zone-1-bg: #f1f5f9;
+  --zone-1-text: #475569;
+
+  /* Zone 2 - Endurance (Green) */
+  --zone-2: #22c55e;
+  --zone-2-bg: #dcfce7;
+  --zone-2-text: #166534;
+
+  /* Zone 3 - Tempo (Yellow) */
+  --zone-3: #eab308;
+  --zone-3-bg: #fef9c3;
+  --zone-3-text: #854d0e;
+
+  /* Zone 4 - Threshold (Orange) - Also the primary accent */
+  --zone-4: #f97316;
+  --zone-4-bg: #ffedd5;
+  --zone-4-text: #9a3412;
+
+  /* Zone 5 - VO2max (Red) */
+  --zone-5: #ef4444;
+  --zone-5-bg: #fee2e2;
+  --zone-5-text: #991b1b;
+
+  /* Zone 6 - Sprint (Purple) */
+  --zone-6: #7c3aed;
+  --zone-6-bg: #ede9fe;
+  --zone-6-text: #5b21b6;
 }
 
+/* ==========================================================================
+   DARK MODE
+   ========================================================================== */
 .dark {
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --card: #171717;
+  --card-foreground: #fafafa;
+  --popover: #171717;
+  --popover-foreground: #fafafa;
+
+  /* Primary - Zone 4 Orange */
+  --primary: #f97316;
+  --primary-foreground: #ffffff;
+
+  /* Secondary */
+  --secondary: #262626;
+  --secondary-foreground: #fafafa;
+
+  /* Muted */
+  --muted: #262626;
+  --muted-foreground: #a3a3a3;
+
+  /* Accent (Zone 4 dark mode variants) */
+  --accent: #431407;
+  --accent-foreground: #fdba74;
+
+  /* Semantic colors - adjusted for dark mode */
+  --destructive: #dc2626;
+  --success: #22c55e;
+  --warning: #eab308;
+  --info: #3b82f6;
+
+  /* Borders and inputs */
+  --border: #262626;
+  --input: #262626;
+  --ring: #f97316;
+
+  /* ==========================================================================
+     ZONE SYSTEM - Dark mode variants
+     ========================================================================== */
+
+  /* Zone 1 - Recovery */
+  --zone-1: #94a3b8;
+  --zone-1-bg: #1e293b;
+  --zone-1-text: #cbd5e1;
+
+  /* Zone 2 - Endurance */
+  --zone-2: #22c55e;
+  --zone-2-bg: #14532d;
+  --zone-2-text: #86efac;
+
+  /* Zone 3 - Tempo */
+  --zone-3: #eab308;
+  --zone-3-bg: #422006;
+  --zone-3-text: #fde047;
+
+  /* Zone 4 - Threshold */
+  --zone-4: #f97316;
+  --zone-4-bg: #431407;
+  --zone-4-text: #fdba74;
+
+  /* Zone 5 - VO2max */
+  --zone-5: #ef4444;
+  --zone-5-bg: #450a0a;
+  --zone-5-text: #fca5a5;
+
+  /* Zone 6 - Sprint */
+  --zone-6: #7c3aed;
+  --zone-6-bg: #2e1065;
+  --zone-6-text: #c4b5fd;
 }
 
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+/* ==========================================================================
+   BASE STYLES
+   ========================================================================== */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Focus visible for accessibility */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
 }
 
-.bg-background {
-  background-color: hsl(var(--background));
+/* ==========================================================================
+   SCROLLBAR STYLING
+   ========================================================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-.text-foreground {
-  color: hsl(var(--foreground));
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 4px;
+  opacity: 0.5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  opacity: 0.8;
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   ZONE SYSTEM - Utility Classes & Components
+   ========================================================================== */
+
+/* Zone context classes - apply to parent to set zone colors */
+.zone-1 {
+  --zone-color: var(--zone-1);
+  --zone-bg: var(--zone-1-bg);
+  --zone-text: var(--zone-1-text);
+}
+.zone-2 {
+  --zone-color: var(--zone-2);
+  --zone-bg: var(--zone-2-bg);
+  --zone-text: var(--zone-2-text);
+}
+.zone-3 {
+  --zone-color: var(--zone-3);
+  --zone-bg: var(--zone-3-bg);
+  --zone-text: var(--zone-3-text);
+}
+.zone-4 {
+  --zone-color: var(--zone-4);
+  --zone-bg: var(--zone-4-bg);
+  --zone-text: var(--zone-4-text);
+}
+.zone-5 {
+  --zone-color: var(--zone-5);
+  --zone-bg: var(--zone-5-bg);
+  --zone-text: var(--zone-5-text);
+}
+.zone-6 {
+  --zone-color: var(--zone-6);
+  --zone-bg: var(--zone-6-bg);
+  --zone-text: var(--zone-6-text);
+}
+
+/* Zone stripe - 4px left border indicating zone */
+.zone-stripe {
+  position: relative;
+}
+
+.zone-stripe::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--zone-color);
+  border-radius: 2px 0 0 2px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Zone badge - compact zone indicator */
+.zone-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.5rem;
+  background: var(--zone-bg);
+  color: var(--zone-color);
+  border-radius: var(--radius-sm, 0.375rem);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-out;
+}
+
+.zone-badge:hover {
+  transform: scale(1.05);
+}
+
+/* Intensity accent bar - gradient of all zones */
+.intensity-bar {
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--zone-1) 0%,
+    var(--zone-2) 20%,
+    var(--zone-3) 40%,
+    var(--zone-4) 60%,
+    var(--zone-5) 80%,
+    var(--zone-6) 100%
+  );
+  border-radius: 2px;
+}
+
+.intensity-bar.thin {
+  height: 2px;
+}
+
+.intensity-bar.thick {
+  height: 4px;
+}
+
+/* Zone progress bar fill */
+.zone-fill {
+  background: var(--zone-color);
+}
+
+/* Zone text colors */
+.text-zone {
+  color: var(--zone-color);
+}
+
+.bg-zone {
+  background: var(--zone-bg);
+}
+
+.border-zone {
+  border-color: var(--zone-color);
 }
