@@ -1,17 +1,45 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Clock, Dumbbell } from "lucide-react";
+import {
+  Clock,
+  Dumbbell,
+  Circle,
+  Mountain,
+  Leaf,
+  Footprints,
+  Zap,
+  Flame,
+  Rocket,
+  Route,
+  Timer,
+  Target,
+  Shuffle,
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ZoneBadge } from "./ZoneBadge";
+import { SessionIntensityBar } from "@/components/visualization";
 import { cn } from "@/lib/utils";
-import type { WorkoutTemplate } from "@/types";
+import type { WorkoutTemplate, WorkoutCategory } from "@/types";
 import {
   getDominantZone,
   getEstimatedDuration,
-  CATEGORY_META,
   DIFFICULTY_META,
 } from "@/types";
+
+/** Category icons using Lucide */
+const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: string }>> = {
+  recovery: Leaf,
+  endurance: Footprints,
+  tempo: Zap,
+  threshold: Flame,
+  vma_intervals: Rocket,
+  long_run: Route,
+  hills: Mountain,
+  fartlek: Timer,
+  race_pace: Target,
+  mixed: Shuffle,
+};
 
 interface WorkoutCardProps {
   workout: WorkoutTemplate;
@@ -23,9 +51,8 @@ export function WorkoutCard({ workout, className }: WorkoutCardProps) {
   const isEn = i18n.language === "en";
   const dominantZone = getDominantZone(workout);
   const duration = getEstimatedDuration(workout);
-  const categoryMeta = CATEGORY_META[workout.category];
-  // Reserved for potential future use
-void DIFFICULTY_META[workout.difficulty];
+  const CategoryIcon = CATEGORY_ICONS[workout.category];
+  void DIFFICULTY_META[workout.difficulty];
 
   return (
     <Link to={`/workout/${workout.id}`}>
@@ -50,31 +77,36 @@ void DIFFICULTY_META[workout.difficulty];
           </p>
         </CardHeader>
 
-        <CardContent className="px-4 pt-0">
+        <CardContent className="px-4 pt-0 space-y-3">
+          {/* Intensity bar showing zone distribution */}
+          <SessionIntensityBar workout={workout} />
+
           <div className="flex items-center gap-3 text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
               <Clock className="size-3.5" />
               <span>{duration} {t("common:units.minutes")}</span>
             </div>
             <div className="flex items-center gap-1">
-              <span>{categoryMeta.icon}</span>
+              <CategoryIcon className="size-3.5" />
               <span>{t(`categories.${workout.category}`)}</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 mt-3">
+          <div className="flex items-center gap-2">
             <Badge variant="secondary" className="text-xs">
               <Dumbbell className="size-3 mr-1" />
               {t(`difficulty.${workout.difficulty}`)}
             </Badge>
             {workout.environment.requiresTrack && (
-              <Badge variant="outline" className="text-xs">
-                🏟️ Track
+              <Badge variant="outline" className="text-xs gap-1">
+                <Circle className="size-3" />
+                {isEn ? "Track" : "Piste"}
               </Badge>
             )}
             {workout.environment.requiresHills && (
-              <Badge variant="outline" className="text-xs">
-                ⛰️ Hills
+              <Badge variant="outline" className="text-xs gap-1">
+                <Mountain className="size-3" />
+                {isEn ? "Hills" : "Côtes"}
               </Badge>
             )}
           </div>

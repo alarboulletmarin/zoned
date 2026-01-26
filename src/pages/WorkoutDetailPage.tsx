@@ -1,6 +1,22 @@
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, Clock, Dumbbell, MapPin, Target } from "lucide-react";
+import {
+  ArrowLeft,
+  Clock,
+  Dumbbell,
+  MapPin,
+  Target,
+  Circle,
+  Mountain,
+  Route,
+  Leaf,
+  Footprints,
+  Zap,
+  Flame,
+  Rocket,
+  Timer,
+  Shuffle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,12 +28,26 @@ import {
 } from "@/components/domain";
 import { SessionTimeline, ZoneDistribution } from "@/components/visualization";
 import { getWorkoutById, getRelatedWorkouts } from "@/data/workouts";
+import type { WorkoutCategory } from "@/types";
 import {
   getDominantZone,
   getEstimatedDuration,
-  CATEGORY_META,
   DIFFICULTY_META,
 } from "@/types";
+
+/** Category icons using Lucide */
+const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: string }>> = {
+  recovery: Leaf,
+  endurance: Footprints,
+  tempo: Zap,
+  threshold: Flame,
+  vma_intervals: Rocket,
+  long_run: Route,
+  hills: Mountain,
+  fartlek: Timer,
+  race_pace: Target,
+  mixed: Shuffle,
+};
 
 export function WorkoutDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -42,20 +72,20 @@ export function WorkoutDetailPage() {
 
   const dominantZone = getDominantZone(workout);
   const duration = getEstimatedDuration(workout);
-  const categoryMeta = CATEGORY_META[workout.category];
-  void DIFFICULTY_META[workout.difficulty]; // Reserved
+  const CategoryIcon = CATEGORY_ICONS[workout.category];
+  void DIFFICULTY_META[workout.difficulty];
   const relatedWorkouts = getRelatedWorkouts(workout);
 
   // Environment requirements
-  const envRequirements = [];
+  const envRequirements: { icon: React.ComponentType<{ className?: string }>; text: string }[] = [];
   if (workout.environment.requiresTrack) {
-    envRequirements.push({ icon: "🏟️", text: t("environment.requiresTrack") });
+    envRequirements.push({ icon: Circle, text: t("environment.requiresTrack") });
   }
   if (workout.environment.requiresHills) {
-    envRequirements.push({ icon: "⛰️", text: t("environment.requiresHills") });
+    envRequirements.push({ icon: Mountain, text: t("environment.requiresHills") });
   }
   if (workout.environment.prefersFlat) {
-    envRequirements.push({ icon: "🛤️", text: t("environment.prefersFlat") });
+    envRequirements.push({ icon: Route, text: t("environment.prefersFlat") });
   }
 
   return (
@@ -73,7 +103,7 @@ export function WorkoutDetailPage() {
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <span>{categoryMeta.icon}</span>
+              <CategoryIcon className="size-4" />
               <span>{t(`library:categories.${workout.category}`)}</span>
             </div>
             <h1 className="text-3xl font-bold">
@@ -103,7 +133,10 @@ export function WorkoutDetailPage() {
           {envRequirements.length > 0 && (
             <Badge variant="outline" className="gap-1.5">
               <MapPin className="size-3.5" />
-              {envRequirements.map((r) => r.icon).join(" ")}
+              {envRequirements.map((r, i) => {
+                const Icon = r.icon;
+                return <Icon key={i} className="size-3.5" />;
+              })}
             </Badge>
           )}
         </div>
@@ -116,11 +149,11 @@ export function WorkoutDetailPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">
-                {isEn ? "Session Timeline" : "Timeline de la séance"}
+                {t("titles.sessionTimeline")}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <SessionTimeline workout={workout} height={180} />
+              <SessionTimeline workout={workout} />
             </CardContent>
           </Card>
 
@@ -128,7 +161,7 @@ export function WorkoutDetailPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">
-                {isEn ? "Workout Structure" : "Structure de la séance"}
+                {t("titles.workoutStructure")}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -140,7 +173,7 @@ export function WorkoutDetailPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">
-                {isEn ? "Coaching Tips" : "Conseils d'entraînement"}
+                {t("titles.coachingTips")}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -155,7 +188,7 @@ export function WorkoutDetailPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-medium">
-                {isEn ? "Zone Distribution" : "Répartition des zones"}
+                {t("titles.zoneDistribution")}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -167,7 +200,7 @@ export function WorkoutDetailPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-medium">
-                {isEn ? "Details" : "Détails"}
+                {t("titles.details")}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
@@ -191,12 +224,15 @@ export function WorkoutDetailPage() {
                     {t("details.environment")}
                   </span>
                   <ul className="space-y-1">
-                    {envRequirements.map((req, index) => (
-                      <li key={index} className="flex items-center gap-2">
-                        <span>{req.icon}</span>
-                        <span className="text-xs">{req.text}</span>
-                      </li>
-                    ))}
+                    {envRequirements.map((req, index) => {
+                      const Icon = req.icon;
+                      return (
+                        <li key={index} className="flex items-center gap-2">
+                          <Icon className="size-4" />
+                          <span className="text-xs">{req.text}</span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               )}
@@ -208,7 +244,7 @@ export function WorkoutDetailPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-sm font-medium">
-                  {t("variations.related")}
+                  {t("titles.relatedWorkouts")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
