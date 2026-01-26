@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { Header, Footer } from "@/components/layout";
 import { HomePage, LibraryPage, WorkoutDetailPage, SettingsPage, FavoritesPage, QuizPage } from "@/pages";
 
@@ -83,6 +84,7 @@ function App() {
 
         <Footer />
       </div>
+      <Analytics />
     </BrowserRouter>
   );
 }
