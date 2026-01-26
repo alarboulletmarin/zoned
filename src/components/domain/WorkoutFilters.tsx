@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { X, Search } from "lucide-react";
+import { X, Search, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -202,6 +203,19 @@ export function WorkoutFilters({
           <span>{filters.durationRange[0]} min</span>
           <span>{filters.durationRange[1]} min</span>
         </div>
+      </div>
+
+      {/* Favorites Only */}
+      <div className="flex items-center justify-between py-2">
+        <label htmlFor="favoritesOnly" className="flex items-center gap-2 text-sm font-medium cursor-pointer">
+          <Heart className="size-4 text-red-500" />
+          {t("filters.favoritesOnly")}
+        </label>
+        <Switch
+          id="favoritesOnly"
+          checked={filters.favoritesOnly}
+          onCheckedChange={(checked) => updateFilter("favoritesOnly", checked)}
+        />
       </div>
 
       {/* Clear Filters */}

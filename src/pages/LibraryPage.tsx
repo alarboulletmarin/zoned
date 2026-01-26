@@ -9,6 +9,7 @@ import {
   defaultFilters,
   type WorkoutFiltersState,
 } from "@/components/domain";
+import { useFavorites } from "@/hooks";
 import { allWorkouts } from "@/data/workouts";
 import { getEstimatedDuration } from "@/types";
 import type { WorkoutCategory } from "@/types";
@@ -17,6 +18,7 @@ export function LibraryPage() {
   const { t } = useTranslation("library");
   const [searchParams, setSearchParams] = useSearchParams();
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const { favorites } = useFavorites();
 
   // Initialize filters from URL params
   const [filters, setFilters] = useState<WorkoutFiltersState>(() => {
@@ -39,6 +41,11 @@ export function LibraryPage() {
   // Filter workouts
   const filteredWorkouts = useMemo(() => {
     return allWorkouts.filter((workout) => {
+      // Favorites filter
+      if (filters.favoritesOnly && !favorites.includes(workout.id)) {
+        return false;
+      }
+
       // Category filter
       if (filters.category !== "all" && workout.category !== filters.category) {
         return false;
@@ -87,7 +94,7 @@ export function LibraryPage() {
 
       return true;
     });
-  }, [filters]);
+  }, [filters, favorites]);
 
   return (
     <div className="py-8">

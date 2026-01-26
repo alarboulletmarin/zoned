@@ -18,6 +18,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ZoneBadge } from "./ZoneBadge";
+import { FavoriteButton } from "./FavoriteButton";
 import { SessionIntensityBar } from "@/components/visualization";
 import { cn } from "@/lib/utils";
 import type { WorkoutTemplate, WorkoutCategory } from "@/types";
@@ -67,10 +68,13 @@ export function WorkoutCard({ workout, className }: WorkoutCardProps) {
       >
         <CardHeader className="pb-2 px-4">
           <div className="flex items-start justify-between gap-2">
-            <CardTitle className="text-base line-clamp-1">
+            <CardTitle className="text-base line-clamp-1 flex-1">
               {isEn ? workout.nameEn : workout.name}
             </CardTitle>
-            <ZoneBadge zone={dominantZone} size="sm" />
+            <div className="flex items-center gap-1">
+              <FavoriteButton workoutId={workout.id} size="sm" />
+              <ZoneBadge zone={dominantZone} size="sm" />
+            </div>
           </div>
           <p className="text-muted-foreground text-sm line-clamp-2">
             {isEn ? workout.descriptionEn : workout.description}

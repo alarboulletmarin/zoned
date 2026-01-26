@@ -25,6 +25,7 @@ import {
   WorkoutStructure,
   CoachingTips,
   WorkoutCardCompact,
+  FavoriteButton,
 } from "@/components/domain";
 import { SessionTimeline, ZoneDistribution } from "@/components/visualization";
 import { getWorkoutById, getRelatedWorkouts } from "@/data/workouts";
@@ -113,7 +114,10 @@ export function WorkoutDetailPage() {
               {isEn ? workout.descriptionEn : workout.description}
             </p>
           </div>
-          <ZoneBadge zone={dominantZone} size="lg" showLabel />
+          <div className="flex items-center gap-2">
+            <FavoriteButton workoutId={workout.id} />
+            <ZoneBadge zone={dominantZone} size="lg" showLabel />
+          </div>
         </div>
 
         {/* Quick Info */}
