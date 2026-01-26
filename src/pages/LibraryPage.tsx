@@ -52,6 +52,19 @@ export function LibraryPage() {
         return false;
       }
 
+      // Terrain filter
+      if (filters.terrain !== "all") {
+        const env = workout.environment;
+        if (filters.terrain === "hills" && !env.requiresHills) return false;
+        if (filters.terrain === "track" && !env.requiresTrack) return false;
+        if (filters.terrain === "flat" && (env.requiresHills || env.requiresTrack)) return false;
+      }
+
+      // Target system filter
+      if (filters.targetSystem !== "all" && workout.targetSystem !== filters.targetSystem) {
+        return false;
+      }
+
       // Duration filter
       const duration = getEstimatedDuration(workout);
       if (

@@ -5,9 +5,27 @@
     "category": "Catégorie",
     "difficulty": "Difficulté",
     "duration": "Durée",
+    "terrain": "Terrain",
+    "targetSystem": "Système ciblé",
     "allCategories": "Toutes les catégories",
     "allDifficulties": "Tous les niveaux",
-    "durationRange": "{{min}} - {{max}} min"
+    "allTerrains": "Tous les terrains",
+    "allSystems": "Tous les systèmes",
+    "durationRange": "{{min}} - {{max}} min",
+    "favoritesOnly": "Favoris uniquement"
+  },
+  "terrain": {
+    "flat": "Plat préféré",
+    "hills": "Côtes requises",
+    "track": "Piste requise"
+  },
+  "targetSystem": {
+    "aerobic_base": "Base aérobie",
+    "aerobic_power": "Puissance aérobie",
+    "lactate_threshold": "Seuil lactique",
+    "vo2max": "VO2max",
+    "speed": "Vitesse",
+    "strength": "Force"
   },
   "categories": {
     "recovery": "Récupération",

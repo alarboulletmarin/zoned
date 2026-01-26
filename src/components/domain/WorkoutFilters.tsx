@@ -10,14 +10,30 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import type { WorkoutCategory, Difficulty } from "@/types";
+import type { WorkoutCategory, Difficulty, TargetSystem } from "@/types";
 import { categories } from "@/data/workouts";
+
+// Terrain filter options
+export type TerrainFilter = "all" | "flat" | "hills" | "track";
+
+// Target system options for filter
+const targetSystems: TargetSystem[] = [
+  "aerobic_base",
+  "aerobic_power",
+  "lactate_threshold",
+  "vo2max",
+  "speed",
+  "strength",
+];
 
 export interface WorkoutFiltersState {
   category: WorkoutCategory | "all";
   difficulty: Difficulty | "all";
   durationRange: [number, number];
   searchQuery: string;
+  terrain: TerrainFilter;
+  targetSystem: TargetSystem | "all";
+  favoritesOnly: boolean;
 }
 
 interface WorkoutFiltersProps {
@@ -48,7 +64,10 @@ export function WorkoutFilters({
     filters.difficulty !== "all" ||
     filters.durationRange[0] !== DURATION_MIN ||
     filters.durationRange[1] !== DURATION_MAX ||
-    filters.searchQuery !== "";
+    filters.searchQuery !== "" ||
+    filters.terrain !== "all" ||
+    filters.targetSystem !== "all" ||
+    filters.favoritesOnly;
 
   const clearFilters = () => {
     onFiltersChange({
@@ -56,6 +75,9 @@ export function WorkoutFilters({
       difficulty: "all",
       durationRange: [DURATION_MIN, DURATION_MAX],
       searchQuery: "",
+      terrain: "all",
+      targetSystem: "all",
+      favoritesOnly: false,
     });
   };
 
@@ -120,6 +142,50 @@ export function WorkoutFilters({
         </Select>
       </div>
 
+      {/* Terrain */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">{t("filters.terrain")}</label>
+        <Select
+          value={filters.terrain}
+          onValueChange={(value) =>
+            updateFilter("terrain", value as TerrainFilter)
+          }
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder={t("filters.allTerrains")} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t("filters.allTerrains")}</SelectItem>
+            <SelectItem value="flat">{t("terrain.flat")}</SelectItem>
+            <SelectItem value="hills">{t("terrain.hills")}</SelectItem>
+            <SelectItem value="track">{t("terrain.track")}</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Target System */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">{t("filters.targetSystem")}</label>
+        <Select
+          value={filters.targetSystem}
+          onValueChange={(value) =>
+            updateFilter("targetSystem", value as TargetSystem | "all")
+          }
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder={t("filters.allSystems")} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t("filters.allSystems")}</SelectItem>
+            {targetSystems.map((sys) => (
+              <SelectItem key={sys} value={sys}>
+                {t(`targetSystem.${sys}`)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
       {/* Duration Range */}
       <div className="space-y-3">
         <label className="text-sm font-medium">{t("filters.duration")}</label>
@@ -160,4 +226,7 @@ export const defaultFilters: WorkoutFiltersState = {
   difficulty: "all",
   durationRange: [DURATION_MIN, DURATION_MAX],
   searchQuery: "",
+  terrain: "all",
+  targetSystem: "all",
+  favoritesOnly: false,
 };

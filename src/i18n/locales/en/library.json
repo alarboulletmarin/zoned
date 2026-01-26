@@ -5,9 +5,27 @@
     "category": "Category",
     "difficulty": "Difficulty",
     "duration": "Duration",
+    "terrain": "Terrain",
+    "targetSystem": "Target System",
     "allCategories": "All categories",
     "allDifficulties": "All levels",
-    "durationRange": "{{min}} - {{max}} min"
+    "allTerrains": "All terrains",
+    "allSystems": "All systems",
+    "durationRange": "{{min}} - {{max}} min",
+    "favoritesOnly": "Favorites only"
+  },
+  "terrain": {
+    "flat": "Flat preferred",
+    "hills": "Hills required",
+    "track": "Track required"
+  },
+  "targetSystem": {
+    "aerobic_base": "Aerobic Base",
+    "aerobic_power": "Aerobic Power",
+    "lactate_threshold": "Lactate Threshold",
+    "vo2max": "VO2max",
+    "speed": "Speed",
+    "strength": "Strength"
   },
   "categories": {
     "recovery": "Recovery",
