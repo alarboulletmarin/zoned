@@ -157,7 +157,7 @@ export function LibraryPage() {
               aria-labelledby="mobile-filters-title"
             >
               <div className="flex items-center justify-between mb-6">
-                <h2 id="mobile-filters-title" className="font-semibold">{t("filters.category")}</h2>
+                <h2 id="mobile-filters-title" className="font-semibold">{t("filters.title")}</h2>
                 <Button
                   variant="ghost"
                   size="icon-sm"

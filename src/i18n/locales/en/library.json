@@ -2,6 +2,7 @@
   "title": "Workout Library",
   "subtitle": "{{count}} scientific training sessions",
   "filters": {
+    "title": "Filters",
     "category": "Category",
     "difficulty": "Difficulty",
     "duration": "Duration",

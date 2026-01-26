@@ -2,6 +2,7 @@
   "title": "Bibliothèque de séances",
   "subtitle": "{{count}} séances d'entraînement scientifiques",
   "filters": {
+    "title": "Filtres",
     "category": "Catégorie",
     "difficulty": "Difficulté",
     "duration": "Durée",
