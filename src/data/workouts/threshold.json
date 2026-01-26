@@ -745,6 +745,167 @@
         "tags": ["threshold", "taper", "pre-race"],
         "priorityScore": 85
       }
+    },
+    {
+      "id": "THR-016",
+      "name": "Double seuil norvegien",
+      "nameEn": "Norwegian Double Threshold",
+      "description": "Deux seances seuil le meme jour (matin + soir). Methode norvegienne popularisee par les freres Ingebrigtsen. Stimule fortement les adaptations au seuil.",
+      "descriptionEn": "Two threshold sessions on the same day (morning + evening). Norwegian method popularized by the Ingebrigtsen brothers. Strongly stimulates threshold adaptations.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "lactate_threshold",
+      "difficulty": "elite",
+      "typicalDuration": { "min": 80, "max": 100 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Session matin: footing + gammes", "descriptionEn": "Morning session: jog + drills", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Matin: 5x6min seuil avec 60s recup", "descriptionEn": "Morning: 5x6min threshold with 60s recovery", "durationMin": 35, "zone": "Z4", "repetitions": 5, "recovery": "60s footing Z1" },
+        { "description": "--- 6-8h de repos ---", "descriptionEn": "--- 6-8h rest ---" },
+        { "description": "Soir: 5x6min seuil avec 60s recup", "descriptionEn": "Evening: 5x6min threshold with 60s recovery", "durationMin": 35, "zone": "Z4", "repetitions": 5, "recovery": "60s footing Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de recuperation (chaque session)", "descriptionEn": "Recovery jog (each session)", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Methode des coureurs norvegiens d'elite",
+        "Minimum 6h entre les deux sessions",
+        "Recup de 60s seulement entre intervalles",
+        "Reserve aux coureurs tres experimentes"
+      ],
+      "coachingTipsEn": [
+        "Method used by elite Norwegian runners",
+        "Minimum 6 hours between sessions",
+        "Only 60s recovery between intervals",
+        "Reserved for very experienced runners"
+      ],
+      "commonMistakes": [
+        "Sessions trop rapprochees",
+        "Aller plus vite que le seuil",
+        "Manquer de sommeil/nutrition"
+      ],
+      "commonMistakesEn": [
+        "Sessions too close together",
+        "Going faster than threshold",
+        "Lacking sleep/nutrition"
+      ],
+      "variationIds": ["THR-002", "THR-017"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["threshold", "norwegian", "double", "elite", "ingebrigtsen"],
+        "priorityScore": 60
+      }
+    },
+    {
+      "id": "THR-017",
+      "name": "Micro-intervalles Z3",
+      "nameEn": "Z3 Micro-intervals",
+      "description": "20-25x 45-60s a allure 10K avec 15-20s recup. Methode norvegienne alternative. Accumule du temps a haute intensite avec peu de stress.",
+      "descriptionEn": "20-25x 45-60s at 10K pace with 15-20s recovery. Alternative Norwegian method. Accumulates time at high intensity with little stress.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "lactate_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et accelerations", "descriptionEn": "Drills and accelerations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        { "description": "25x 50s allure 10K avec 15s recup", "descriptionEn": "25x 50s at 10K pace with 15s recovery", "zone": "Z4", "repetitions": 25, "recovery": "15s footing tres lent" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de recuperation", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "La recup ultra-courte maintient l'elevation metabolique",
+        "Allure 10K, pas plus vite",
+        "20+ minutes totales a l'allure cible",
+        "Moins traumatisant qu'un seuil continu"
+      ],
+      "coachingTipsEn": [
+        "Ultra-short recovery maintains metabolic elevation",
+        "10K pace, not faster",
+        "20+ total minutes at target pace",
+        "Less traumatic than continuous threshold"
+      ],
+      "commonMistakes": [
+        "Aller plus vite que l'allure 10K",
+        "Recuperation trop longue",
+        "Pas assez de repetitions"
+      ],
+      "commonMistakesEn": [
+        "Going faster than 10K pace",
+        "Recovery too long",
+        "Not enough repetitions"
+      ],
+      "variationIds": ["THR-002", "THR-016"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["threshold", "norwegian", "micro-intervals", "10k"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "THR-018",
+      "name": "Seuil guide lactate",
+      "nameEn": "Lactate-Guided Threshold",
+      "description": "Seance seuil avec controle du lactate (2-4 mmol/L). Approche norvegienne basee sur la physiologie. Necessite un analyseur de lactate portable.",
+      "descriptionEn": "Threshold session with lactate monitoring (2-4 mmol/L). Norwegian approach based on physiology. Requires a portable lactate analyzer.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "lactate_threshold",
+      "difficulty": "elite",
+      "typicalDuration": { "min": 60, "max": 75 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Test lactate de base", "descriptionEn": "Baseline lactate test", "durationMin": 2 }
+      ],
+      "mainSetTemplate": [
+        { "description": "5x6min seuil en maintenant lactate 2-4 mmol/L", "descriptionEn": "5x6min threshold maintaining lactate 2-4 mmol/L", "durationMin": 30, "zone": "Z4", "repetitions": 5, "recovery": "60s + mesure lactate" },
+        { "description": "Ajustez l'allure selon les mesures", "descriptionEn": "Adjust pace based on readings" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de recuperation + mesure finale", "descriptionEn": "Recovery jog + final measurement", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Cible: lactate entre 2 et 4 mmol/L",
+        "Ajustez l'allure en temps reel",
+        "Les norvegiens visent souvent 3-4 mmol/L",
+        "Necessite equipement specifique (Lactate Pro, etc.)"
+      ],
+      "coachingTipsEn": [
+        "Target: lactate between 2 and 4 mmol/L",
+        "Adjust pace in real-time",
+        "Norwegians often target 3-4 mmol/L",
+        "Requires specific equipment (Lactate Pro, etc.)"
+      ],
+      "commonMistakes": [
+        "Ne pas avoir d'analyseur de lactate",
+        "Ignorer les mesures et courir trop vite",
+        "Prendre les mesures trop souvent"
+      ],
+      "commonMistakesEn": [
+        "Not having a lactate analyzer",
+        "Ignoring readings and running too fast",
+        "Taking measurements too frequently"
+      ],
+      "variationIds": ["THR-016", "THR-017"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["threshold", "norwegian", "lactate", "scientific", "elite"],
+        "priorityScore": 55
+      }
     }
   ]
 }
