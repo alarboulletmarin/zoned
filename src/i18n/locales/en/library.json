@@ -12,7 +12,14 @@
     "allTerrains": "All terrains",
     "allSystems": "All systems",
     "durationRange": "{{min}} - {{max}} min",
-    "favoritesOnly": "Favorites only"
+    "favoritesOnly": "Favorites only",
+    "search": "Search..."
+  },
+  "emptyState": {
+    "noResults": "No workouts found",
+    "noResultsDescription": "Try adjusting your filters to find workouts.",
+    "noFavorites": "No favorites yet",
+    "noFavoritesDescription": "Add workouts to your favorites to find them easily here."
   },
   "terrain": {
     "flat": "Flat preferred",

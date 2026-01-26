@@ -12,7 +12,14 @@
     "allTerrains": "Tous les terrains",
     "allSystems": "Tous les systèmes",
     "durationRange": "{{min}} - {{max}} min",
-    "favoritesOnly": "Favoris uniquement"
+    "favoritesOnly": "Favoris uniquement",
+    "search": "Rechercher..."
+  },
+  "emptyState": {
+    "noResults": "Aucune séance trouvée",
+    "noResultsDescription": "Essayez de modifier vos filtres pour trouver des séances.",
+    "noFavorites": "Aucun favori",
+    "noFavoritesDescription": "Ajoutez des séances à vos favoris pour les retrouver facilement ici."
   },
   "terrain": {
     "flat": "Plat préféré",
