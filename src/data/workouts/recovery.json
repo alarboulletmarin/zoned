@@ -15,7 +15,7 @@
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [],
       "mainSetTemplate": [
-        { "description": "Footing très lent en Z1", "durationMin": 30, "zone": "Z1" }
+        { "description": "Footing très lent en Z1", "descriptionEn": "Very slow jog in Z1", "durationMin": 30, "zone": "Z1" }
       ],
       "cooldownTemplate": [],
       "coachingTips": [
@@ -58,13 +58,13 @@
       "typicalDuration": { "min": 25, "max": 35 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Marche rapide", "durationMin": 5 }
+        { "description": "Marche rapide", "descriptionEn": "Brisk walking", "durationMin": 5 }
       ],
       "mainSetTemplate": [
-        { "description": "Alternance 3min footing Z1 / 2min marche", "durationMin": 20, "zone": "Z1" }
+        { "description": "Alternance 3min footing Z1 / 2min marche", "descriptionEn": "Alternating 3min Z1 jog / 2min walk", "durationMin": 20, "zone": "Z1" }
       ],
       "cooldownTemplate": [
-        { "description": "Marche tranquille", "durationMin": 5 }
+        { "description": "Marche tranquille", "descriptionEn": "Easy walking", "durationMin": 5 }
       ],
       "coachingTips": [
         "Ne culpabilisez pas de marcher, c'est le but",
@@ -107,10 +107,10 @@
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [],
       "mainSetTemplate": [
-        { "description": "Footing ultra-lent Z1 bas", "durationMin": 20, "zone": "Z1" }
+        { "description": "Footing ultra-lent Z1 bas", "descriptionEn": "Ultra-slow jog in low Z1", "durationMin": 20, "zone": "Z1" }
       ],
       "cooldownTemplate": [
-        { "description": "Étirements légers", "durationMin": 5 }
+        { "description": "Étirements légers", "descriptionEn": "Light stretching", "durationMin": 5 }
       ],
       "coachingTips": [
         "À faire 24-48h après la course, pas le jour même",
@@ -153,7 +153,7 @@
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
       "warmupTemplate": [],
       "mainSetTemplate": [
-        { "description": "Footing nature en Z1, terrain varié", "durationMin": 40, "zone": "Z1" }
+        { "description": "Footing nature en Z1, terrain varié", "descriptionEn": "Nature jog in Z1, varied terrain", "durationMin": 40, "zone": "Z1" }
       ],
       "cooldownTemplate": [],
       "coachingTips": [
@@ -196,13 +196,13 @@
       "typicalDuration": { "min": 25, "max": 35 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Mobilité articulaire", "durationMin": 5 }
+        { "description": "Mobilité articulaire", "descriptionEn": "Joint mobility", "durationMin": 5 }
       ],
       "mainSetTemplate": [
-        { "description": "Footing très lent", "durationMin": 15, "zone": "Z1" }
+        { "description": "Footing très lent", "descriptionEn": "Very slow jog", "durationMin": 15, "zone": "Z1" }
       ],
       "cooldownTemplate": [
-        { "description": "Étirements et automassage", "durationMin": 10 }
+        { "description": "Étirements et automassage", "descriptionEn": "Stretching and self-massage", "durationMin": 10 }
       ],
       "coachingTips": [
         "Les étirements post-course sont importants ici",
@@ -245,7 +245,7 @@
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [],
       "mainSetTemplate": [
-        { "description": "Footing réveil en Z1", "durationMin": 20, "zone": "Z1" }
+        { "description": "Footing réveil en Z1", "descriptionEn": "Wake-up jog in Z1", "durationMin": 20, "zone": "Z1" }
       ],
       "cooldownTemplate": [],
       "coachingTips": [
@@ -289,11 +289,11 @@
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [],
       "mainSetTemplate": [
-        { "description": "Footing tranquille Z1", "durationMin": 15, "zone": "Z1" },
-        { "description": "3-4 accélérations progressives de 20s", "durationMin": 5, "zone": "Z3-Z4" }
+        { "description": "Footing tranquille Z1", "descriptionEn": "Easy jog Z1", "durationMin": 15, "zone": "Z1" },
+        { "description": "3-4 accélérations progressives de 20s", "descriptionEn": "3-4 progressive 20s strides", "durationMin": 5, "zone": "Z3-Z4" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing retour au calme", "durationMin": 5, "zone": "Z1" }
+        { "description": "Footing retour au calme", "descriptionEn": "Cool-down jog", "durationMin": 5, "zone": "Z1" }
       ],
       "coachingTips": [
         "Les accélérations activent les fibres rapides sans fatiguer",
@@ -336,8 +336,8 @@
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [],
       "mainSetTemplate": [
-        { "description": "Footing très léger", "durationMin": 10, "zone": "Z1" },
-        { "description": "2-3 foulées bondissantes", "durationMin": 2 }
+        { "description": "Footing très léger", "descriptionEn": "Very light jog", "durationMin": 10, "zone": "Z1" },
+        { "description": "2-3 foulées bondissantes", "descriptionEn": "2-3 bounding strides", "durationMin": 2 }
       ],
       "cooldownTemplate": [],
       "coachingTips": [

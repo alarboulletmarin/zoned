@@ -14,14 +14,14 @@
       "typicalDuration": { "min": 90, "max": 120 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
       "warmupTemplate": [
-        { "description": "Début très lent", "durationMin": 10, "zone": "Z1" }
+        { "description": "Début très lent", "descriptionEn": "Very slow start", "durationMin": 10, "zone": "Z1" }
       ],
       "mainSetTemplate": [
-        { "description": "Course en Z2 confortable", "durationMin": 50, "zone": "Z2" },
-        { "description": "Accélération progressive vers Z3", "durationMin": 30, "zone": "Z2-Z3" }
+        { "description": "Course en Z2 confortable", "descriptionEn": "Comfortable Z2 running", "durationMin": 50, "zone": "Z2" },
+        { "description": "Accélération progressive vers Z3", "descriptionEn": "Progressive acceleration to Z3", "durationMin": 30, "zone": "Z2-Z3" }
       ],
       "cooldownTemplate": [
-        { "description": "Retour au calme", "durationMin": 10, "zone": "Z1" }
+        { "description": "Retour au calme", "descriptionEn": "Cool down", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Emportez de l'eau et gel si > 90 min",
@@ -63,15 +63,15 @@
       "typicalDuration": { "min": 100, "max": 140 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing tranquille", "durationMin": 20, "zone": "Z2" }
+        { "description": "Footing tranquille", "descriptionEn": "Easy jog", "durationMin": 20, "zone": "Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "Course Z2", "durationMin": 30, "zone": "Z2" },
-        { "description": "Bloc allure marathon", "durationMin": 30, "zone": "Z3", "pace": "Allure Marathon" },
-        { "description": "Retour en Z2", "durationMin": 20, "zone": "Z2" }
+        { "description": "Course Z2", "descriptionEn": "Z2 running", "durationMin": 30, "zone": "Z2" },
+        { "description": "Bloc allure marathon", "descriptionEn": "Marathon pace block", "durationMin": 30, "zone": "Z3", "pace": "Allure Marathon" },
+        { "description": "Retour en Z2", "descriptionEn": "Return to Z2", "durationMin": 20, "zone": "Z2" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Le bloc à allure spécifique doit rester contrôlé",
@@ -113,13 +113,13 @@
       "typicalDuration": { "min": 80, "max": 100 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
       "warmupTemplate": [
-        { "description": "Début très progressif", "durationMin": 10, "zone": "Z1" }
+        { "description": "Début très progressif", "descriptionEn": "Very gradual start", "durationMin": 10, "zone": "Z1" }
       ],
       "mainSetTemplate": [
-        { "description": "Course continue Z2", "durationMin": 70, "zone": "Z2" }
+        { "description": "Course continue Z2", "descriptionEn": "Continuous Z2 running", "durationMin": 70, "zone": "Z2" }
       ],
       "cooldownTemplate": [
-        { "description": "Retour au calme", "durationMin": 10, "zone": "Z1" }
+        { "description": "Retour au calme", "descriptionEn": "Cool down", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Pas de contrainte d'allure, juste la durée",
@@ -161,15 +161,15 @@
       "typicalDuration": { "min": 90, "max": 110 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z2" }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "Course Z2", "durationMin": 25, "zone": "Z2" },
-        { "description": "Bloc allure semi", "durationMin": 25, "zone": "Z3-Z4", "pace": "Allure Semi" },
-        { "description": "Retour Z2", "durationMin": 15, "zone": "Z2" }
+        { "description": "Course Z2", "descriptionEn": "Z2 running", "durationMin": 25, "zone": "Z2" },
+        { "description": "Bloc allure semi", "descriptionEn": "Half-marathon pace block", "durationMin": 25, "zone": "Z3-Z4", "pace": "Allure Semi" },
+        { "description": "Retour Z2", "descriptionEn": "Return to Z2", "durationMin": 15, "zone": "Z2" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Allure semi = entre tempo et seuil",
@@ -211,13 +211,13 @@
       "typicalDuration": { "min": 90, "max": 120 },
       "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
       "warmupTemplate": [
-        { "description": "Début sur terrain facile", "durationMin": 10, "zone": "Z1" }
+        { "description": "Début sur terrain facile", "descriptionEn": "Start on easy terrain", "durationMin": 10, "zone": "Z1" }
       ],
       "mainSetTemplate": [
-        { "description": "Course sur terrain vallonné, effort Z2", "durationMin": 75, "zone": "Z2" }
+        { "description": "Course sur terrain vallonné, effort Z2", "descriptionEn": "Running on hilly terrain, Z2 effort", "durationMin": 75, "zone": "Z2" }
       ],
       "cooldownTemplate": [
-        { "description": "Retour tranquille", "durationMin": 10, "zone": "Z1" }
+        { "description": "Retour tranquille", "descriptionEn": "Easy return", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Gérez l'effort, pas l'allure",
@@ -259,13 +259,13 @@
       "typicalDuration": { "min": 100, "max": 150 },
       "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
       "warmupTemplate": [
-        { "description": "Marche puis footing sur chemin", "durationMin": 15, "zone": "Z1" }
+        { "description": "Marche puis footing sur chemin", "descriptionEn": "Walk then jog on path", "durationMin": 15, "zone": "Z1" }
       ],
       "mainSetTemplate": [
-        { "description": "Course sur sentiers, effort Z2", "durationMin": 90, "zone": "Z2" }
+        { "description": "Course sur sentiers, effort Z2", "descriptionEn": "Trail running, Z2 effort", "durationMin": 90, "zone": "Z2" }
       ],
       "cooldownTemplate": [
-        { "description": "Retour calme", "durationMin": 10, "zone": "Z1" }
+        { "description": "Retour calme", "descriptionEn": "Calm return", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Marchez dans les montées techniques",
@@ -307,14 +307,14 @@
       "typicalDuration": { "min": 100, "max": 120 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Début très progressif", "durationMin": 10, "zone": "Z1" }
+        { "description": "Début très progressif", "descriptionEn": "Very gradual start", "durationMin": 10, "zone": "Z1" }
       ],
       "mainSetTemplate": [
-        { "description": "Course Z2", "durationMin": 60, "zone": "Z2" },
-        { "description": "Tempo final", "durationMin": 20, "zone": "Z3" }
+        { "description": "Course Z2", "descriptionEn": "Z2 running", "durationMin": 60, "zone": "Z2" },
+        { "description": "Tempo final", "descriptionEn": "Final tempo", "durationMin": 20, "zone": "Z3" }
       ],
       "cooldownTemplate": [
-        { "description": "Retour au calme", "durationMin": 10, "zone": "Z1" }
+        { "description": "Retour au calme", "descriptionEn": "Cool down", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Le tempo arrive sur jambes fatiguées",
@@ -356,13 +356,13 @@
       "typicalDuration": { "min": 80, "max": 100 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Marche puis footing lent", "durationMin": 10, "zone": "Z1" }
+        { "description": "Marche puis footing lent", "descriptionEn": "Walk then slow jog", "durationMin": 10, "zone": "Z1" }
       ],
       "mainSetTemplate": [
-        { "description": "Footing Z1-Z2, pauses marche autorisées", "durationMin": 70, "zone": "Z1-Z2" }
+        { "description": "Footing Z1-Z2, pauses marche autorisées", "descriptionEn": "Z1-Z2 jog, walk breaks allowed", "durationMin": 70, "zone": "Z1-Z2" }
       ],
       "cooldownTemplate": [
-        { "description": "Marche et étirements", "durationMin": 10 }
+        { "description": "Marche et étirements", "descriptionEn": "Walk and stretching", "durationMin": 10 }
       ],
       "coachingTips": [
         "L'objectif est la durée, pas la vitesse",
@@ -404,13 +404,13 @@
       "typicalDuration": { "min": 70, "max": 90 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Démarrage très lent", "durationMin": 15, "zone": "Z1" }
+        { "description": "Démarrage très lent", "descriptionEn": "Very slow start", "durationMin": 15, "zone": "Z1" }
       ],
       "mainSetTemplate": [
-        { "description": "Course Z1-Z2 bas", "durationMin": 55, "zone": "Z1-Z2" }
+        { "description": "Course Z1-Z2 bas", "descriptionEn": "Low Z1-Z2 running", "durationMin": 55, "zone": "Z1-Z2" }
       ],
       "cooldownTemplate": [
-        { "description": "Retour calme", "durationMin": 10, "zone": "Z1" }
+        { "description": "Retour calme", "descriptionEn": "Calm return", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Maximum 90 min à jeun",
@@ -452,13 +452,13 @@
       "typicalDuration": { "min": 120, "max": 150 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Échauffement type jour de course", "durationMin": 15, "zone": "Z1-Z2" }
+        { "description": "Échauffement type jour de course", "descriptionEn": "Race-day style warm-up", "durationMin": 15, "zone": "Z1-Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "Course à allure marathon avec ravitos tous les 5km", "durationMin": 100, "zone": "Z3", "pace": "Allure Marathon" }
+        { "description": "Course à allure marathon avec ravitos tous les 5km", "descriptionEn": "Marathon pace running with aid stations every 5km", "durationMin": 100, "zone": "Z3", "pace": "Allure Marathon" }
       ],
       "cooldownTemplate": [
-        { "description": "Récupération active", "durationMin": 15, "zone": "Z1" }
+        { "description": "Récupération active", "descriptionEn": "Active recovery", "durationMin": 15, "zone": "Z1" }
       ],
       "coachingTips": [
         "Testez votre équipement de course",
@@ -500,13 +500,13 @@
       "typicalDuration": { "min": 90, "max": 110 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Début très lent", "durationMin": 15, "zone": "Z1" }
+        { "description": "Début très lent", "descriptionEn": "Very slow start", "durationMin": 15, "zone": "Z1" }
       ],
       "mainSetTemplate": [
-        { "description": "Course Z2 sur jambes fatiguées", "durationMin": 70, "zone": "Z2" }
+        { "description": "Course Z2 sur jambes fatiguées", "descriptionEn": "Z2 running on tired legs", "durationMin": 70, "zone": "Z2" }
       ],
       "cooldownTemplate": [
-        { "description": "Retour calme", "durationMin": 10, "zone": "Z1" }
+        { "description": "Retour calme", "descriptionEn": "Calm return", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Le but est de courir fatigué",
@@ -548,13 +548,13 @@
       "typicalDuration": { "min": 60, "max": 80 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Début progressif", "durationMin": 10, "zone": "Z1" }
+        { "description": "Début progressif", "descriptionEn": "Gradual start", "durationMin": 10, "zone": "Z1" }
       ],
       "mainSetTemplate": [
-        { "description": "Course Z2 avec 10min à allure course", "durationMin": 45, "zone": "Z2" }
+        { "description": "Course Z2 avec 10min à allure course", "descriptionEn": "Z2 running with 10min at race pace", "durationMin": 45, "zone": "Z2" }
       ],
       "cooldownTemplate": [
-        { "description": "Retour tranquille", "durationMin": 10, "zone": "Z1" }
+        { "description": "Retour tranquille", "descriptionEn": "Easy return", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "2 semaines avant la course environ",

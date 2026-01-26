@@ -14,14 +14,14 @@
       "typicalDuration": { "min": 55, "max": 70 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "3x30s accélérations progressives", "durationMin": 5 }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "3x30s accélérations progressives", "descriptionEn": "3x30s progressive accelerations", "durationMin": 5 }
       ],
       "mainSetTemplate": [
-        { "description": "Course au seuil", "durationMin": 20, "zone": "Z4" }
+        { "description": "Course au seuil", "descriptionEn": "Threshold run", "durationMin": 20, "zone": "Z4" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 15, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 15, "zone": "Z1" }
       ],
       "coachingTips": [
         "L'allure seuil = allure 10K ou semi lent",
@@ -63,14 +63,14 @@
       "typicalDuration": { "min": 55, "max": 70 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Gammes et accélérations", "durationMin": 5 }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et accélérations", "descriptionEn": "Drills and accelerations", "durationMin": 5 }
       ],
       "mainSetTemplate": [
-        { "description": "3x8min seuil avec 2min récup", "durationMin": 24, "zone": "Z4", "repetitions": 3, "recovery": "2min footing Z1" }
+        { "description": "3x8min seuil avec 2min récup", "descriptionEn": "3x8min threshold with 2min recovery", "durationMin": 24, "zone": "Z4", "repetitions": 3, "recovery": "2min footing Z1" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Maintenez la même allure sur chaque intervalle",
@@ -112,13 +112,13 @@
       "typicalDuration": { "min": 45, "max": 55 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "4x4min seuil avec 2min récup", "durationMin": 16, "zone": "Z4", "repetitions": 4, "recovery": "2min footing Z1" }
+        { "description": "4x4min seuil avec 2min récup", "descriptionEn": "4x4min threshold with 2min recovery", "durationMin": 16, "zone": "Z4", "repetitions": 4, "recovery": "2min footing Z1" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Première approche du seuil",
@@ -160,16 +160,16 @@
       "typicalDuration": { "min": 60, "max": 75 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Accélérations", "durationMin": 5 }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Accélérations", "descriptionEn": "Accelerations", "durationMin": 5 }
       ],
       "mainSetTemplate": [
-        { "description": "15min seuil", "durationMin": 15, "zone": "Z4" },
-        { "description": "Récupération", "durationMin": 3, "zone": "Z1" },
-        { "description": "15min seuil", "durationMin": 15, "zone": "Z4" }
+        { "description": "15min seuil", "descriptionEn": "15min threshold", "durationMin": 15, "zone": "Z4" },
+        { "description": "Récupération", "descriptionEn": "Recovery", "durationMin": 3, "zone": "Z1" },
+        { "description": "15min seuil", "descriptionEn": "15min threshold", "durationMin": 15, "zone": "Z4" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "30 minutes totales au seuil",
@@ -211,21 +211,21 @@
       "typicalDuration": { "min": 55, "max": 65 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "4min seuil", "durationMin": 4, "zone": "Z4" },
-        { "description": "Récup", "durationMin": 2, "zone": "Z1" },
-        { "description": "6min seuil", "durationMin": 6, "zone": "Z4" },
-        { "description": "Récup", "durationMin": 2, "zone": "Z1" },
-        { "description": "8min seuil", "durationMin": 8, "zone": "Z4" },
-        { "description": "Récup", "durationMin": 2, "zone": "Z1" },
-        { "description": "6min seuil", "durationMin": 6, "zone": "Z4" },
-        { "description": "Récup", "durationMin": 2, "zone": "Z1" },
-        { "description": "4min seuil", "durationMin": 4, "zone": "Z4" }
+        { "description": "4min seuil", "descriptionEn": "4min threshold", "durationMin": 4, "zone": "Z4" },
+        { "description": "Récup", "descriptionEn": "Recovery", "durationMin": 2, "zone": "Z1" },
+        { "description": "6min seuil", "descriptionEn": "6min threshold", "durationMin": 6, "zone": "Z4" },
+        { "description": "Récup", "descriptionEn": "Recovery", "durationMin": 2, "zone": "Z1" },
+        { "description": "8min seuil", "descriptionEn": "8min threshold", "durationMin": 8, "zone": "Z4" },
+        { "description": "Récup", "descriptionEn": "Recovery", "durationMin": 2, "zone": "Z1" },
+        { "description": "6min seuil", "descriptionEn": "6min threshold", "durationMin": 6, "zone": "Z4" },
+        { "description": "Récup", "descriptionEn": "Recovery", "durationMin": 2, "zone": "Z1" },
+        { "description": "4min seuil", "descriptionEn": "4min threshold", "durationMin": 4, "zone": "Z4" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Le bloc central est le plus dur",
@@ -267,13 +267,13 @@
       "typicalDuration": { "min": 55, "max": 65 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "Seuil progressif : bas Z4 vers haut Z4", "durationMin": 20, "zone": "Z4" }
+        { "description": "Seuil progressif : bas Z4 vers haut Z4", "descriptionEn": "Progressive threshold: low Z4 to high Z4", "durationMin": 20, "zone": "Z4" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 15, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 15, "zone": "Z1" }
       ],
       "coachingTips": [
         "Commencez en bas de Z4, finissez en haut",
@@ -315,14 +315,14 @@
       "typicalDuration": { "min": 55, "max": 70 },
       "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing autour de la piste", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Lignes droites", "durationMin": 5 }
+        { "description": "Footing autour de la piste", "descriptionEn": "Jog around the track", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Lignes droites", "descriptionEn": "Straights", "durationMin": 5 }
       ],
       "mainSetTemplate": [
-        { "description": "3x2000m seuil avec 400m récup", "distanceM": 2000, "zone": "Z4", "repetitions": 3, "recovery": "400m footing Z1" }
+        { "description": "3x2000m seuil avec 400m récup", "descriptionEn": "3x2000m threshold with 400m recovery", "distanceM": 2000, "zone": "Z4", "repetitions": 3, "recovery": "400m footing Z1" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Visez un temps précis au tour",
@@ -364,13 +364,13 @@
       "typicalDuration": { "min": 55, "max": 65 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "6x(3min seuil + 2min footing Z2)", "durationMin": 30, "zone": "Z4", "repetitions": 6, "recovery": "2min footing Z2" }
+        { "description": "6x(3min seuil + 2min footing Z2)", "descriptionEn": "6x(3min threshold + 2min Z2 jog)", "durationMin": 30, "zone": "Z4", "repetitions": 6, "recovery": "2min footing Z2" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Récupération en Z2, pas en Z1",
@@ -412,15 +412,15 @@
       "typicalDuration": { "min": 60, "max": 75 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "15min tempo Z3", "durationMin": 15, "zone": "Z3" },
-        { "description": "Transition", "durationMin": 2, "zone": "Z2" },
-        { "description": "10min seuil Z4", "durationMin": 10, "zone": "Z4" }
+        { "description": "15min tempo Z3", "descriptionEn": "15min tempo Z3", "durationMin": 15, "zone": "Z3" },
+        { "description": "Transition", "descriptionEn": "Transition", "durationMin": 2, "zone": "Z2" },
+        { "description": "10min seuil Z4", "descriptionEn": "10min threshold Z4", "durationMin": 10, "zone": "Z4" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 15, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 15, "zone": "Z1" }
       ],
       "coachingTips": [
         "Le tempo prépare au seuil",
@@ -462,14 +462,14 @@
       "typicalDuration": { "min": 55, "max": 65 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Accélérations", "durationMin": 5 }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Accélérations", "descriptionEn": "Accelerations", "durationMin": 5 }
       ],
       "mainSetTemplate": [
-        { "description": "3x2km à allure 10K avec 500m récup", "distanceM": 2000, "zone": "Z4", "pace": "Allure 10K", "repetitions": 3, "recovery": "500m footing Z1" }
+        { "description": "3x2km à allure 10K avec 500m récup", "descriptionEn": "3x2km at 10K pace with 500m recovery", "distanceM": 2000, "zone": "Z4", "pace": "Allure 10K", "repetitions": 3, "recovery": "500m footing Z1" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Allure 10K = haut de Z4",
@@ -511,13 +511,13 @@
       "typicalDuration": { "min": 55, "max": 70 },
       "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "Seuil sur parcours vallonné, effort constant", "durationMin": 20, "zone": "Z4" }
+        { "description": "Seuil sur parcours vallonné, effort constant", "descriptionEn": "Threshold on hilly course, constant effort", "durationMin": 20, "zone": "Z4" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 15, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 15, "zone": "Z1" }
       ],
       "coachingTips": [
         "Maintenez l'effort, pas l'allure",
@@ -559,15 +559,15 @@
       "typicalDuration": { "min": 70, "max": 90 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 10, "zone": "Z1-Z2" }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 10, "zone": "Z1-Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "Endurance Z2", "durationMin": 25, "zone": "Z2" },
-        { "description": "Seuil Z4", "durationMin": 15, "zone": "Z4" },
-        { "description": "Endurance Z2", "durationMin": 20, "zone": "Z2" }
+        { "description": "Endurance Z2", "descriptionEn": "Endurance Z2", "durationMin": 25, "zone": "Z2" },
+        { "description": "Seuil Z4", "descriptionEn": "Threshold Z4", "durationMin": 15, "zone": "Z4" },
+        { "description": "Endurance Z2", "descriptionEn": "Endurance Z2", "durationMin": 20, "zone": "Z2" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Le seuil arrive sur des jambes fatiguées",
@@ -609,19 +609,19 @@
       "typicalDuration": { "min": 55, "max": 65 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "10min seuil", "durationMin": 10, "zone": "Z4" },
-        { "description": "Récup", "durationMin": 2, "zone": "Z1" },
-        { "description": "8min seuil", "durationMin": 8, "zone": "Z4" },
-        { "description": "Récup", "durationMin": 2, "zone": "Z1" },
-        { "description": "6min seuil", "durationMin": 6, "zone": "Z4" },
-        { "description": "Récup", "durationMin": 2, "zone": "Z1" },
-        { "description": "4min seuil", "durationMin": 4, "zone": "Z4" }
+        { "description": "10min seuil", "descriptionEn": "10min threshold", "durationMin": 10, "zone": "Z4" },
+        { "description": "Récup", "descriptionEn": "Recovery", "durationMin": 2, "zone": "Z1" },
+        { "description": "8min seuil", "descriptionEn": "8min threshold", "durationMin": 8, "zone": "Z4" },
+        { "description": "Récup", "descriptionEn": "Recovery", "durationMin": 2, "zone": "Z1" },
+        { "description": "6min seuil", "descriptionEn": "6min threshold", "durationMin": 6, "zone": "Z4" },
+        { "description": "Récup", "descriptionEn": "Recovery", "durationMin": 2, "zone": "Z1" },
+        { "description": "4min seuil", "descriptionEn": "4min threshold", "durationMin": 4, "zone": "Z4" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Chaque bloc légèrement plus rapide",
@@ -663,13 +663,13 @@
       "typicalDuration": { "min": 55, "max": 65 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing ensemble", "durationMin": 15, "zone": "Z1-Z2" }
+        { "description": "Footing ensemble", "descriptionEn": "Jog together", "durationMin": 15, "zone": "Z1-Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "Seuil en relais (2min devant chacun)", "durationMin": 20, "zone": "Z4" }
+        { "description": "Seuil en relais (2min devant chacun)", "descriptionEn": "Threshold relay (2min leading each)", "durationMin": 20, "zone": "Z4" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Le draft aide à maintenir l'allure",
@@ -711,13 +711,13 @@
       "typicalDuration": { "min": 40, "max": 50 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "2x5min seuil avec 2min récup", "durationMin": 10, "zone": "Z4", "repetitions": 2, "recovery": "2min footing Z1" }
+        { "description": "2x5min seuil avec 2min récup", "descriptionEn": "2x5min threshold with 2min recovery", "durationMin": 10, "zone": "Z4", "repetitions": 2, "recovery": "2min footing Z1" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Juste un rappel, pas une séance difficile",

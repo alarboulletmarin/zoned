@@ -14,15 +14,15 @@
       "typicalDuration": { "min": 60, "max": 80 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "Bloc à allure marathon", "durationMin": 20, "zone": "Z3", "pace": "Allure Marathon" },
-        { "description": "Récupération", "durationMin": 3, "zone": "Z1" },
-        { "description": "Bloc à allure marathon", "durationMin": 15, "zone": "Z3", "pace": "Allure Marathon" }
+        { "description": "Bloc à allure marathon", "descriptionEn": "Marathon pace block", "durationMin": 20, "zone": "Z3", "pace": "Allure Marathon" },
+        { "description": "Récupération", "descriptionEn": "Recovery", "durationMin": 3, "zone": "Z1" },
+        { "description": "Bloc à allure marathon", "descriptionEn": "Marathon pace block", "durationMin": 15, "zone": "Z3", "pace": "Allure Marathon" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 15, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 15, "zone": "Z1" }
       ],
       "coachingTips": [
         "Visez précisément votre allure cible",
@@ -64,14 +64,14 @@
       "typicalDuration": { "min": 55, "max": 65 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Accélérations progressives", "durationMin": 5 }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Accélérations progressives", "descriptionEn": "Progressive accelerations", "durationMin": 5 }
       ],
       "mainSetTemplate": [
-        { "description": "3x2km à allure 10K", "distanceM": 2000, "zone": "Z4", "pace": "Allure 10K", "repetitions": 3, "recovery": "500m footing Z1" }
+        { "description": "3x2km à allure 10K", "descriptionEn": "3x2km at 10K pace", "distanceM": 2000, "zone": "Z4", "pace": "Allure 10K", "repetitions": 3, "recovery": "500m footing Z1" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Allure 10K = environ 95-100% du seuil",
@@ -113,13 +113,13 @@
       "typicalDuration": { "min": 60, "max": 75 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "2x20min à allure semi", "durationMin": 40, "zone": "Z3-Z4", "pace": "Allure Semi", "repetitions": 2, "recovery": "3min footing Z1" }
+        { "description": "2x20min à allure semi", "descriptionEn": "2x20min at half-marathon pace", "durationMin": 40, "zone": "Z3-Z4", "pace": "Allure Semi", "repetitions": 2, "recovery": "3min footing Z1" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Allure semi = entre marathon et seuil",
@@ -161,14 +161,14 @@
       "typicalDuration": { "min": 50, "max": 60 },
       "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Gammes et accélérations", "durationMin": 10 }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et accélérations", "descriptionEn": "Drills and accelerations", "durationMin": 10 }
       ],
       "mainSetTemplate": [
-        { "description": "5x1000m à allure 5K", "distanceM": 1000, "zone": "Z5", "pace": "Allure 5K", "repetitions": 5, "recovery": "400m footing Z1" }
+        { "description": "5x1000m à allure 5K", "descriptionEn": "5x1000m at 5K pace", "distanceM": 1000, "zone": "Z5", "pace": "Allure 5K", "repetitions": 5, "recovery": "400m footing Z1" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Allure 5K = environ 95-100% VMA",
@@ -210,13 +210,13 @@
       "typicalDuration": { "min": 70, "max": 90 },
       "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
       "warmupTemplate": [
-        { "description": "Footing sur sentier", "durationMin": 15, "zone": "Z1-Z2" }
+        { "description": "Footing sur sentier", "descriptionEn": "Trail jog", "durationMin": 15, "zone": "Z1-Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "Course à effort spécifique trail sur terrain varié", "durationMin": 45, "zone": "Z3", "pace": "Effort Trail" }
+        { "description": "Course à effort spécifique trail sur terrain varié", "descriptionEn": "Trail-specific effort on varied terrain", "durationMin": 45, "zone": "Z3", "pace": "Effort Trail" }
       ],
       "cooldownTemplate": [
-        { "description": "Retour calme", "durationMin": 10, "zone": "Z1" }
+        { "description": "Retour calme", "descriptionEn": "Cool down", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Effort constant, pas allure constante",
@@ -258,15 +258,15 @@
       "typicalDuration": { "min": 60, "max": 70 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "15min allure marathon", "durationMin": 15, "zone": "Z3", "pace": "Allure Marathon" },
-        { "description": "10min allure semi", "durationMin": 10, "zone": "Z3-Z4", "pace": "Allure Semi" },
-        { "description": "5min allure 10K", "durationMin": 5, "zone": "Z4", "pace": "Allure 10K" }
+        { "description": "15min allure marathon", "descriptionEn": "15min at marathon pace", "durationMin": 15, "zone": "Z3", "pace": "Allure Marathon" },
+        { "description": "10min allure semi", "descriptionEn": "10min at half-marathon pace", "durationMin": 10, "zone": "Z3-Z4", "pace": "Allure Semi" },
+        { "description": "5min allure 10K", "descriptionEn": "5min at 10K pace", "durationMin": 5, "zone": "Z4", "pace": "Allure 10K" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 15, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 15, "zone": "Z1" }
       ],
       "coachingTips": [
         "Progression logique d'intensité",
@@ -308,15 +308,15 @@
       "typicalDuration": { "min": 100, "max": 130 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing tranquille", "durationMin": 20, "zone": "Z2" }
+        { "description": "Footing tranquille", "descriptionEn": "Easy jog", "durationMin": 20, "zone": "Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "Endurance Z2", "durationMin": 20, "zone": "Z2" },
-        { "description": "Allure marathon", "durationMin": 45, "zone": "Z3", "pace": "Allure Marathon" },
-        { "description": "Retour Z2", "durationMin": 15, "zone": "Z2" }
+        { "description": "Endurance Z2", "descriptionEn": "Z2 endurance", "durationMin": 20, "zone": "Z2" },
+        { "description": "Allure marathon", "descriptionEn": "Marathon pace", "durationMin": 45, "zone": "Z3", "pace": "Allure Marathon" },
+        { "description": "Retour Z2", "descriptionEn": "Return to Z2", "durationMin": 15, "zone": "Z2" }
       ],
       "cooldownTemplate": [
-        { "description": "Récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Récupération", "descriptionEn": "Recovery", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "45min à allure marathon sur jambes travaillées",
@@ -358,13 +358,13 @@
       "typicalDuration": { "min": 40, "max": 50 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
-        { "description": "Footing progressif", "durationMin": 15, "zone": "Z1-Z2" }
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
       ],
       "mainSetTemplate": [
-        { "description": "2x5min à allure course cible", "durationMin": 10, "zone": "Z3-Z4", "pace": "Allure Course", "repetitions": 2, "recovery": "2min footing Z1" }
+        { "description": "2x5min à allure course cible", "descriptionEn": "2x5min at target race pace", "durationMin": 10, "zone": "Z3-Z4", "pace": "Allure Course", "repetitions": 2, "recovery": "2min footing Z1" }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "durationMin": 10, "zone": "Z1" }
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
       ],
       "coachingTips": [
         "Juste un rappel des sensations",
