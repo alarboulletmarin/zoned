@@ -132,28 +132,28 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
           {/* Theme Toggle */}
           <Button
             variant="ghost"
-            size="icon-sm"
+            size="icon"
             onClick={onThemeToggle}
             aria-label={theme === "light" ? t("theme.dark") : t("theme.light")}
           >
             {theme === "light" ? (
-              <Moon className="size-4" />
+              <Moon className="size-5" />
             ) : (
-              <Sun className="size-4" />
+              <Sun className="size-5" />
             )}
           </Button>
 
           {/* Mobile Menu Toggle */}
           <Button
             variant="ghost"
-            size="icon-sm"
+            size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Menu"
           >
             {mobileMenuOpen ? (
-              <X className="size-4" />
+              <X className="size-5" />
             ) : (
-              <Menu className="size-4" />
+              <Menu className="size-5" />
             )}
           </Button>
         </div>
