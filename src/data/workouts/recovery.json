@@ -366,6 +366,107 @@
         "tags": ["recovery", "race-day", "shakeout"],
         "priorityScore": 50
       }
+    },
+    {
+      "id": "REC-009",
+      "name": "Regeneration longue",
+      "nameEn": "Long Regeneration Run",
+      "description": "Sortie longue de recuperation 90-120 min en Z1 strict (<70% FCmax). Style kenyan pour maximiser l'adaptation aerobique sans stress.",
+      "descriptionEn": "Long regeneration run 90-120 min in strict Z1 (<70% HRmax). Kenyan style to maximize aerobic adaptation without stress.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 90, "max": 120 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true, "prefersSoft": true },
+      "warmupTemplate": [],
+      "mainSetTemplate": [
+        { "description": "Footing ultra-lent en Z1 strict (FC < 70% FCmax)", "descriptionEn": "Ultra-slow jog in strict Z1 (HR < 70% HRmax)", "durationMin": 100, "zone": "Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Marche et etirements legers", "descriptionEn": "Walking and light stretching", "durationMin": 10 }
+      ],
+      "coachingTips": [
+        "Inspiree de l'approche kenyane : volume eleve, intensite tres basse",
+        "FC ne doit jamais depasser 70% FCmax",
+        "Privilegiez un terrain souple (herbe, terre)",
+        "Favorise les adaptations mitochondriales sans fatigue"
+      ],
+      "coachingTipsEn": [
+        "Inspired by Kenyan approach: high volume, very low intensity",
+        "HR should never exceed 70% HRmax",
+        "Choose soft terrain (grass, dirt)",
+        "Promotes mitochondrial adaptations without fatigue"
+      ],
+      "commonMistakes": [
+        "Courir trop vite - ce n'est PAS une sortie longue classique",
+        "Negliger l'hydratation et la nutrition pendant",
+        "Faire cette seance fatigue"
+      ],
+      "commonMistakesEn": [
+        "Running too fast - this is NOT a classic long run",
+        "Neglecting hydration and nutrition during",
+        "Doing this session while fatigued"
+      ],
+      "variationIds": ["REC-001", "REC-004"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["late"],
+        "relativeLoad": "moderate",
+        "tags": ["recovery", "long", "kenyan", "aerobic", "regeneration"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "REC-010",
+      "name": "Yoga-running",
+      "nameEn": "Yoga-Running Session",
+      "description": "Seance combinee 20min footing Z1 + 20min yoga/stretching. Approche holistique pour la recuperation corps-esprit.",
+      "descriptionEn": "Combined session 20min Z1 jog + 20min yoga/stretching. Holistic approach for body-mind recovery.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [],
+      "mainSetTemplate": [
+        { "description": "Footing leger Z1", "descriptionEn": "Light jog Z1", "durationMin": 20, "zone": "Z1" },
+        { "description": "Sequence yoga/stretching (sun salutations, postures de recuperation)", "descriptionEn": "Yoga/stretching sequence (sun salutations, recovery poses)", "durationMin": 20 }
+      ],
+      "cooldownTemplate": [
+        { "description": "Relaxation et respiration profonde", "descriptionEn": "Relaxation and deep breathing", "durationMin": 5 }
+      ],
+      "coachingTips": [
+        "Le yoga apres la course ameliore la flexibilite et la recuperation",
+        "Focalisez sur les postures qui ciblent hanches, ischio-jambiers, mollets",
+        "Respirez profondement pendant les etirements",
+        "Approche recommandee par des coaches comme Jay Johnson"
+      ],
+      "coachingTipsEn": [
+        "Post-run yoga improves flexibility and recovery",
+        "Focus on poses targeting hips, hamstrings, calves",
+        "Breathe deeply during stretches",
+        "Approach recommended by coaches like Jay Johnson"
+      ],
+      "commonMistakes": [
+        "Sauter la partie yoga quand on est presse",
+        "Faire des etirements trop intenses apres la course",
+        "Ne pas avoir un espace adapte pour le yoga"
+      ],
+      "commonMistakesEn": [
+        "Skipping the yoga portion when rushed",
+        "Doing too intense stretches after running",
+        "Not having a suitable space for yoga"
+      ],
+      "variationIds": ["REC-005", "REC-001"],
+      "selectionCriteria": {
+        "phases": ["base", "build", "recovery"],
+        "weekPositions": ["late"],
+        "relativeLoad": "light",
+        "tags": ["recovery", "yoga", "stretching", "holistic", "flexibility"],
+        "priorityScore": 70
+      }
     }
   ]
 }
