@@ -1,7 +1,16 @@
 {
   "app": {
     "name": "Zoned",
-    "tagline": "Séances d'entraînement scientifiques pour coureurs"
+    "tagline": "Seances d'entrainement scientifiques pour coureurs"
+  },
+  "export": {
+    "title": "Exporter",
+    "calendar": "Calendrier (ICS)",
+    "image": "Image (PNG)",
+    "pdf": "Document (PDF)",
+    "garmin": "Garmin (FIT)",
+    "selectDateTime": "Choisir date et heure",
+    "download": "Telecharger"
   },
   "quiz": {
     "title": "Quiz Rapide",

@@ -3,6 +3,15 @@
     "name": "Zoned",
     "tagline": "Scientific running workouts for runners"
   },
+  "export": {
+    "title": "Export",
+    "calendar": "Calendar (ICS)",
+    "image": "Image (PNG)",
+    "pdf": "Document (PDF)",
+    "garmin": "Garmin (FIT)",
+    "selectDateTime": "Select date and time",
+    "download": "Download"
+  },
   "quiz": {
     "title": "Quick Quiz",
     "subtitle": "Find your ideal workout in 3 questions",
