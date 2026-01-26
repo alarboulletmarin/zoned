@@ -2,6 +2,8 @@
 
 A static web app showcasing 118+ scientific running workouts based on the 6-zone training system.
 
+**Live demo:** https://zoned-blond.vercel.app/
+
 ## Quick Start
 
 ```bash
