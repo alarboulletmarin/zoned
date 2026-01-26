@@ -45,10 +45,13 @@
   "targetSystems": {
     "aerobic_base": "Aerobic Base",
     "aerobic_power": "Aerobic Power",
+    "aerobic_threshold": "Aerobic Threshold",
     "lactate_threshold": "Lactate Threshold",
+    "lactate_tolerance": "Lactate Tolerance",
     "vo2max": "VO2max",
     "speed": "Speed",
     "strength": "Strength",
+    "neuromuscular": "Neuromuscular",
     "race_specific": "Race Specific",
     "mixed": "Mixed"
   },

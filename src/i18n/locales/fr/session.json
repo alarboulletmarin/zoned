@@ -45,10 +45,13 @@
   "targetSystems": {
     "aerobic_base": "Base aérobie",
     "aerobic_power": "Puissance aérobie",
+    "aerobic_threshold": "Seuil aérobie",
     "lactate_threshold": "Seuil lactique",
+    "lactate_tolerance": "Tolérance lactique",
     "vo2max": "VO2max",
     "speed": "Vitesse",
     "strength": "Force",
+    "neuromuscular": "Neuromusculaire",
     "race_specific": "Spécifique course",
     "mixed": "Mixte"
   },
