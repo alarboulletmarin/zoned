@@ -43,6 +43,7 @@ interface WorkoutFiltersProps {
   onFiltersChange: (filters: WorkoutFiltersState) => void;
   className?: string;
   searchInputRef?: RefObject<HTMLInputElement | null>;
+  hideSearch?: boolean;
 }
 
 const DURATION_MIN = 15;
@@ -53,6 +54,7 @@ export function WorkoutFilters({
   onFiltersChange,
   className,
   searchInputRef,
+  hideSearch = false,
 }: WorkoutFiltersProps) {
   const { t } = useTranslation("library");
 
@@ -88,18 +90,20 @@ export function WorkoutFilters({
   return (
     <div className={cn("space-y-4", className)}>
       {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-        <input
-          ref={searchInputRef}
-          type="text"
-          aria-label={t("filters.searchLabel")}
-          placeholder={t("filters.search")}
-          value={filters.searchQuery}
-          onChange={(e) => updateFilter("searchQuery", e.target.value)}
-          className="w-full h-9 pl-9 pr-3 rounded-md border border-input bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        />
-      </div>
+      {!hideSearch && (
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <input
+            ref={searchInputRef}
+            type="text"
+            aria-label={t("filters.searchLabel")}
+            placeholder={t("filters.search")}
+            value={filters.searchQuery}
+            onChange={(e) => updateFilter("searchQuery", e.target.value)}
+            className="w-full h-9 pl-9 pr-3 rounded-md border border-input bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          />
+        </div>
+      )}
 
       {/* Category */}
       <div className="space-y-2">

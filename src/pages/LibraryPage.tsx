@@ -111,24 +111,40 @@ export function LibraryPage() {
   return (
     <div className="py-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold">{t("title")}</h1>
-          <p className="text-muted-foreground">
-            {t("subtitle", { count: filteredWorkouts.length })}
-          </p>
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-2xl font-bold">{t("title")}</h1>
+            <p className="text-muted-foreground">
+              {t("subtitle", { count: filteredWorkouts.length })}
+            </p>
+          </div>
+
+          {/* Mobile filter toggle */}
+          <Button
+            variant="outline"
+            size="sm"
+            className="lg:hidden"
+            onClick={() => setShowMobileFilters(!showMobileFilters)}
+          >
+            <Filter className="size-4 mr-2" />
+            {t("filters.title")}
+          </Button>
         </div>
 
-        {/* Mobile filter toggle */}
-        <Button
-          variant="outline"
-          size="sm"
-          className="lg:hidden"
-          onClick={() => setShowMobileFilters(!showMobileFilters)}
-        >
-          <Filter className="size-4 mr-2" />
-          {t("filters.category")}
-        </Button>
+        {/* Mobile search bar */}
+        <div className="lg:hidden relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <input
+            ref={searchInputRef}
+            type="text"
+            aria-label={t("filters.searchLabel")}
+            placeholder={t("filters.search")}
+            value={filters.searchQuery}
+            onChange={(e) => setFilters({ ...filters, searchQuery: e.target.value })}
+            className="w-full h-10 pl-9 pr-3 rounded-md border border-input bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          />
+        </div>
       </div>
 
       <div className="flex gap-8">
@@ -166,7 +182,7 @@ export function LibraryPage() {
                   ×
                 </Button>
               </div>
-              <WorkoutFilters filters={filters} onFiltersChange={setFilters} />
+              <WorkoutFilters filters={filters} onFiltersChange={setFilters} hideSearch />
             </div>
           </div>
         )}
