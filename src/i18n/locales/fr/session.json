@@ -20,12 +20,27 @@
     "Z5": "Z5",
     "Z6": "Z6"
   },
+  "visualization": {
+    "noData": "Aucune donnée de zone disponible",
+    "timeline": "Structure de la séance",
+    "start": "Début",
+    "end": "Fin",
+    "zoneDistribution": "Répartition des zones"
+  },
   "details": {
     "duration": "Durée",
     "difficulty": "Difficulté",
     "category": "Catégorie",
     "environment": "Environnement",
     "targetSystem": "Système ciblé"
+  },
+  "titles": {
+    "sessionTimeline": "Structure de la séance",
+    "workoutStructure": "Détail des phases",
+    "coachingTips": "Conseils d'entraînement",
+    "zoneDistribution": "Répartition des zones",
+    "details": "Détails",
+    "relatedWorkouts": "Séances similaires"
   },
   "targetSystems": {
     "aerobic_base": "Base aérobie",

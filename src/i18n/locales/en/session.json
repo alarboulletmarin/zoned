@@ -20,12 +20,27 @@
     "Z5": "Z5",
     "Z6": "Z6"
   },
+  "visualization": {
+    "noData": "No zone data available",
+    "timeline": "Session Timeline",
+    "start": "Start",
+    "end": "End",
+    "zoneDistribution": "Zone Distribution"
+  },
   "details": {
     "duration": "Duration",
     "difficulty": "Difficulty",
     "category": "Category",
     "environment": "Environment",
     "targetSystem": "Target System"
+  },
+  "titles": {
+    "sessionTimeline": "Session Timeline",
+    "workoutStructure": "Workout Structure",
+    "coachingTips": "Coaching Tips",
+    "zoneDistribution": "Zone Distribution",
+    "details": "Details",
+    "relatedWorkouts": "Similar Workouts"
   },
   "targetSystems": {
     "aerobic_base": "Aerobic Base",
