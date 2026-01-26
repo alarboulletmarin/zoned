@@ -11,6 +11,7 @@
     "restart": "Start over",
     "results": "Your recommended workouts",
     "resultsHint": "Based on your answers, here are the workouts that match your needs",
+    "resultsHintApprox": "No exact duration match, here are the closest workouts",
     "noResults": "No workouts exactly match your criteria. Try changing your answers.",
     "goalQuestion": "What is your goal today?",
     "goalHint": "Choose what best matches your needs",

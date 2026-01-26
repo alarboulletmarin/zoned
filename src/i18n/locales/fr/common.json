@@ -11,6 +11,7 @@
     "restart": "Recommencer",
     "results": "Vos séances recommandées",
     "resultsHint": "Basées sur vos réponses, voici les séances qui vous correspondent",
+    "resultsHintApprox": "Pas de correspondance exacte pour la durée, voici les séances les plus proches",
     "noResults": "Aucune séance ne correspond exactement à vos critères. Essayez de modifier vos réponses.",
     "goalQuestion": "Quel est votre objectif aujourd'hui ?",
     "goalHint": "Choisissez ce qui correspond le mieux à vos besoins",

@@ -48,6 +48,7 @@ const QUIZ_STORAGE_KEY = "zoned-quiz-results";
 interface StoredQuizState {
   answers: QuizAnswers;
   resultIds: string[];
+  isExactMatch: boolean;
 }
 
 export function WorkoutQuiz() {
@@ -55,6 +56,7 @@ export function WorkoutQuiz() {
   const [step, setStep] = useState<QuizStep>(1);
   const [answers, setAnswers] = useState<Partial<QuizAnswers>>({});
   const [results, setResults] = useState<WorkoutTemplate[]>([]);
+  const [isExactMatch, setIsExactMatch] = useState(true);
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
 
   // Restore results from sessionStorage on mount
@@ -62,7 +64,7 @@ export function WorkoutQuiz() {
     try {
       const stored = sessionStorage.getItem(QUIZ_STORAGE_KEY);
       if (stored) {
-        const { answers: storedAnswers, resultIds } = JSON.parse(stored) as StoredQuizState;
+        const { answers: storedAnswers, resultIds, isExactMatch: storedIsExactMatch } = JSON.parse(stored) as StoredQuizState;
         const restoredResults = resultIds
           .map((id) => allWorkouts.find((w) => w.id === id))
           .filter((w): w is WorkoutTemplate => w !== undefined);
@@ -70,6 +72,7 @@ export function WorkoutQuiz() {
         if (restoredResults.length > 0) {
           setAnswers(storedAnswers);
           setResults(restoredResults);
+          setIsExactMatch(storedIsExactMatch ?? true);
           setStep("results");
         }
       }
@@ -97,14 +100,16 @@ export function WorkoutQuiz() {
       setDirection("forward");
 
       if (isQuizComplete(newAnswers)) {
-        const recommended = getRecommendedWorkouts(newAnswers, allWorkouts, 3);
-        setResults(recommended);
+        const { workouts, isExactMatch: exact } = getRecommendedWorkouts(newAnswers, allWorkouts, 3);
+        setResults(workouts);
+        setIsExactMatch(exact);
         setStep("results");
 
         // Save to sessionStorage for back navigation
         const toStore: StoredQuizState = {
           answers: newAnswers as QuizAnswers,
-          resultIds: recommended.map((w) => w.id),
+          resultIds: workouts.map((w) => w.id),
+          isExactMatch: exact,
         };
         sessionStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(toStore));
       }
@@ -127,6 +132,7 @@ export function WorkoutQuiz() {
     setDirection("backward");
     setAnswers({});
     setResults([]);
+    setIsExactMatch(true);
     setStep(1);
     sessionStorage.removeItem(QUIZ_STORAGE_KEY);
   }, []);
@@ -259,7 +265,9 @@ export function WorkoutQuiz() {
     <div className="animate-fade-in">
       <div className="text-center mb-8">
         <h2 className="text-xl font-semibold">{t("quiz.results")}</h2>
-        <p className="text-muted-foreground mt-1">{t("quiz.resultsHint")}</p>
+        <p className="text-muted-foreground mt-1">
+          {isExactMatch ? t("quiz.resultsHint") : t("quiz.resultsHintApprox")}
+        </p>
       </div>
 
       {results.length > 0 ? (

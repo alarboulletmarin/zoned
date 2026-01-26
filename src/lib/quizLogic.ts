@@ -90,6 +90,11 @@ function matchesDuration(
   return duration >= minWithBuffer && duration <= maxWithBuffer;
 }
 
+export interface QuizResult {
+  workouts: WorkoutTemplate[];
+  isExactMatch: boolean;
+}
+
 /**
  * Returns recommended workouts based on quiz answers
  * @param answers - The user's quiz answers
@@ -100,7 +105,7 @@ export function getRecommendedWorkouts(
   answers: QuizAnswers,
   allWorkouts: WorkoutTemplate[],
   maxResults: number = 3
-): WorkoutTemplate[] {
+): QuizResult {
   const targetCategories = getTargetCategories(answers);
 
   // Filter workouts by category, environment, and duration
@@ -143,7 +148,7 @@ export function getRecommendedWorkouts(
         const durationB = getEstimatedDuration(b);
         return Math.abs(durationA - targetDuration) - Math.abs(durationB - targetDuration);
       });
-      return sorted.slice(0, maxResults);
+      return { workouts: sorted.slice(0, maxResults), isExactMatch: false };
     }
   }
 
@@ -158,10 +163,10 @@ export function getRecommendedWorkouts(
       const durationB = getEstimatedDuration(b);
       return Math.abs(durationA - targetDuration) - Math.abs(durationB - targetDuration);
     });
-    return sorted.slice(0, maxResults);
+    return { workouts: sorted.slice(0, maxResults), isExactMatch: false };
   }
 
-  return shuffleAndPick(matchingWorkouts, maxResults);
+  return { workouts: shuffleAndPick(matchingWorkouts, maxResults), isExactMatch: true };
 }
 
 /**
