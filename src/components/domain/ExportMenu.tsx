@@ -10,7 +10,7 @@
 
 import { useState, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Download, Calendar, Image, FileText, Watch } from "lucide-react";
+import { Download, Calendar, Image, FileText, Watch, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -101,7 +101,11 @@ export function ExportMenu({ workout }: ExportMenuProps) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm" disabled={isExporting}>
-            <Download className="size-4 mr-2" />
+            {isExporting ? (
+              <Loader2 className="size-4 mr-2 animate-spin" />
+            ) : (
+              <Download className="size-4 mr-2" />
+            )}
             {t("export.title")}
           </Button>
         </DropdownMenuTrigger>
