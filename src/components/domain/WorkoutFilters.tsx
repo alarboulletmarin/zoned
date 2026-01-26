@@ -1,0 +1,163 @@
+import { useTranslation } from "react-i18next";
+import { X, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+import type { WorkoutCategory, Difficulty } from "@/types";
+import { categories } from "@/data/workouts";
+
+export interface WorkoutFiltersState {
+  category: WorkoutCategory | "all";
+  difficulty: Difficulty | "all";
+  durationRange: [number, number];
+  searchQuery: string;
+}
+
+interface WorkoutFiltersProps {
+  filters: WorkoutFiltersState;
+  onFiltersChange: (filters: WorkoutFiltersState) => void;
+  className?: string;
+}
+
+const DURATION_MIN = 15;
+const DURATION_MAX = 180;
+
+export function WorkoutFilters({
+  filters,
+  onFiltersChange,
+  className,
+}: WorkoutFiltersProps) {
+  const { t } = useTranslation("library");
+
+  const updateFilter = <K extends keyof WorkoutFiltersState>(
+    key: K,
+    value: WorkoutFiltersState[K]
+  ) => {
+    onFiltersChange({ ...filters, [key]: value });
+  };
+
+  const hasActiveFilters =
+    filters.category !== "all" ||
+    filters.difficulty !== "all" ||
+    filters.durationRange[0] !== DURATION_MIN ||
+    filters.durationRange[1] !== DURATION_MAX ||
+    filters.searchQuery !== "";
+
+  const clearFilters = () => {
+    onFiltersChange({
+      category: "all",
+      difficulty: "all",
+      durationRange: [DURATION_MIN, DURATION_MAX],
+      searchQuery: "",
+    });
+  };
+
+  return (
+    <div className={cn("space-y-4", className)}>
+      {/* Search */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+        <input
+          type="text"
+          placeholder={t("filters.category")}
+          value={filters.searchQuery}
+          onChange={(e) => updateFilter("searchQuery", e.target.value)}
+          className="w-full h-9 pl-9 pr-3 rounded-md border border-input bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        />
+      </div>
+
+      {/* Category */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">{t("filters.category")}</label>
+        <Select
+          value={filters.category}
+          onValueChange={(value) =>
+            updateFilter("category", value as WorkoutCategory | "all")
+          }
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder={t("filters.allCategories")} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t("filters.allCategories")}</SelectItem>
+            {categories.map((cat) => (
+              <SelectItem key={cat} value={cat}>
+                {t(`categories.${cat}`)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Difficulty */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">{t("filters.difficulty")}</label>
+        <Select
+          value={filters.difficulty}
+          onValueChange={(value) =>
+            updateFilter("difficulty", value as Difficulty | "all")
+          }
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder={t("filters.allDifficulties")} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t("filters.allDifficulties")}</SelectItem>
+            <SelectItem value="beginner">{t("difficulty.beginner")}</SelectItem>
+            <SelectItem value="intermediate">
+              {t("difficulty.intermediate")}
+            </SelectItem>
+            <SelectItem value="advanced">{t("difficulty.advanced")}</SelectItem>
+            <SelectItem value="elite">{t("difficulty.elite")}</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Duration Range */}
+      <div className="space-y-3">
+        <label className="text-sm font-medium">{t("filters.duration")}</label>
+        <Slider
+          value={filters.durationRange}
+          min={DURATION_MIN}
+          max={DURATION_MAX}
+          step={5}
+          onValueChange={(value) =>
+            updateFilter("durationRange", value as [number, number])
+          }
+        />
+        <div className="flex justify-between text-xs text-muted-foreground">
+          <span>{filters.durationRange[0]} min</span>
+          <span>{filters.durationRange[1]} min</span>
+        </div>
+      </div>
+
+      {/* Clear Filters */}
+      {hasActiveFilters && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={clearFilters}
+          className="w-full"
+        >
+          <X className="size-4 mr-1" />
+          {t("clearFilters")}
+        </Button>
+      )}
+    </div>
+  );
+}
+
+// Default filter state
+export const defaultFilters: WorkoutFiltersState = {
+  category: "all",
+  difficulty: "all",
+  durationRange: [DURATION_MIN, DURATION_MAX],
+  searchQuery: "",
+};
