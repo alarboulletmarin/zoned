@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Lightbulb, AlertTriangle } from "lucide-react";
 import { ZoneBadge } from "./ZoneBadge";
 import { cn } from "@/lib/utils";
 import type { WorkoutTemplate, WorkoutBlock } from "@/types";
@@ -100,7 +101,7 @@ export function CoachingTips({ workout, className }: CoachingTipsProps) {
       {tips.length > 0 && (
         <div className="space-y-2">
           <h4 className="text-sm font-semibold flex items-center gap-2">
-            <span className="text-success">💡</span>
+            <Lightbulb className="size-4 text-success" />
             {t("coaching.tips")}
           </h4>
           <ul className="space-y-1.5">
@@ -119,7 +120,7 @@ export function CoachingTips({ workout, className }: CoachingTipsProps) {
       {mistakes.length > 0 && (
         <div className="space-y-2">
           <h4 className="text-sm font-semibold flex items-center gap-2">
-            <span className="text-destructive">⚠️</span>
+            <AlertTriangle className="size-4 text-destructive" />
             {t("coaching.mistakes")}
           </h4>
           <ul className="space-y-1.5">
