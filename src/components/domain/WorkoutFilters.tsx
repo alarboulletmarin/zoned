@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import type { RefObject } from "react";
 import { X, Search, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -41,6 +42,7 @@ interface WorkoutFiltersProps {
   filters: WorkoutFiltersState;
   onFiltersChange: (filters: WorkoutFiltersState) => void;
   className?: string;
+  searchInputRef?: RefObject<HTMLInputElement | null>;
 }
 
 const DURATION_MIN = 15;
@@ -50,6 +52,7 @@ export function WorkoutFilters({
   filters,
   onFiltersChange,
   className,
+  searchInputRef,
 }: WorkoutFiltersProps) {
   const { t } = useTranslation("library");
 
@@ -88,8 +91,9 @@ export function WorkoutFilters({
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
         <input
+          ref={searchInputRef}
           type="text"
-          placeholder={t("filters.category")}
+          placeholder={t("filters.search")}
           value={filters.searchQuery}
           onChange={(e) => updateFilter("searchQuery", e.target.value)}
           className="w-full h-9 pl-9 pr-3 rounded-md border border-input bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
