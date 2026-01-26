@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Moon, Sun, Languages, Menu, X, Settings, Heart, Dices, Home, BookOpen } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import Logo from "@/assets/logo.svg?react";
 import {
   Select,
   SelectContent,
@@ -34,7 +35,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
       <div className="container mx-auto flex h-14 items-center justify-between px-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <div className="intensity-bar w-6 h-6 rounded-full" />
+          <Logo className="w-16 h-8" />
           <span className="font-bold text-lg">{t("app.name")}</span>
         </Link>
 

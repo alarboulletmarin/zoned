@@ -16,7 +16,8 @@
     "@vitejs/plugin-react": "^5.1.2",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "vite-plugin-svgr": "^4.5.0"
   },
   "dependencies": {
     "@garmin/fitsdk": "^21.188.0",
