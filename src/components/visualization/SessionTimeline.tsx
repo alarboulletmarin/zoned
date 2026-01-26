@@ -96,6 +96,7 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
   const { t, i18n } = useTranslation("session");
   const isEn = i18n.language === "en";
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [openTooltipIndex, setOpenTooltipIndex] = useState<number | null>(null);
 
   const { segments, totalDurationMin } = useMemo(() => {
     return transformSessionBlocks(
@@ -134,7 +135,17 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
             const isTypeChange = prevSegment && prevSegment.type !== segment.type;
 
             return (
-              <Tooltip key={segment.id}>
+              <Tooltip
+                key={segment.id}
+                open={openTooltipIndex === index}
+                onOpenChange={(open) => {
+                  if (open) {
+                    setOpenTooltipIndex(index);
+                  } else if (openTooltipIndex === index) {
+                    setOpenTooltipIndex(null);
+                  }
+                }}
+              >
                 <TooltipTrigger asChild>
                   <div
                     className={cn(
@@ -149,17 +160,17 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
                       backgroundColor: segment.zoneNumber
                         ? ZONE_COLORS[segment.zoneNumber]
                         : "hsl(var(--muted))",
-                      // Dark outline for accessibility
                       boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.3)",
-                      // Gap between segments
                       marginLeft: index > 0 ? "1px" : undefined,
-                      // Stronger border on type change
                       borderLeft: isTypeChange
                         ? "3px solid rgba(0,0,0,0.5)"
                         : undefined,
                     }}
                     onMouseEnter={() => setHoveredIndex(index)}
                     onMouseLeave={() => setHoveredIndex(null)}
+                    onClick={() => {
+                      setOpenTooltipIndex(openTooltipIndex === index ? null : index);
+                    }}
                   >
                     {/* Recovery indicator pattern */}
                     {segment.isRecovery && (
