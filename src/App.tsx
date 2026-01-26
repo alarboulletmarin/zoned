@@ -1,7 +1,17 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { Header, Footer } from "@/components/layout";
 import { HomePage, LibraryPage, WorkoutDetailPage, SettingsPage, FavoritesPage, QuizPage } from "@/pages";
+
+function ScrollToTopOnNavigate() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 function App() {
   // Track if user has manually set theme preference
@@ -56,6 +66,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTopOnNavigate />
       <div className="min-h-screen bg-background text-foreground flex flex-col">
         <Header theme={theme} onThemeToggle={toggleTheme} />
 
