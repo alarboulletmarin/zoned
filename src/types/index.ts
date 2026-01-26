@@ -8,7 +8,7 @@ export type WorkoutCategory =
   | "endurance"
   | "tempo"
   | "threshold"
-  | "vma"
+  | "vma_intervals"
   | "long_run"
   | "hills"
   | "fartlek"
@@ -178,7 +178,7 @@ export const CATEGORY_META: Record<
   endurance: { label: "Endurance", labelEn: "Endurance", icon: "🏃" },
   tempo: { label: "Tempo", labelEn: "Tempo", icon: "⚡" },
   threshold: { label: "Seuil", labelEn: "Threshold", icon: "🔥" },
-  vma: { label: "VMA", labelEn: "VO2max", icon: "🚀" },
+  vma_intervals: { label: "VMA", labelEn: "VO2max", icon: "🚀" },
   long_run: { label: "Sortie longue", labelEn: "Long Run", icon: "🛤️" },
   hills: { label: "Côtes", labelEn: "Hills", icon: "⛰️" },
   fartlek: { label: "Fartlek", labelEn: "Fartlek", icon: "🎯" },
