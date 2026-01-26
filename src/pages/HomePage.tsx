@@ -3,9 +3,8 @@ import { useTranslation } from "react-i18next";
 import { ArrowRight, Zap, Target, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { WorkoutCard } from "@/components/domain";
+import { WorkoutCard, WorkoutOfTheDay, CategoryIcon } from "@/components/domain";
 import { totalWorkoutCount, categories, workoutsByCategory } from "@/data/workouts";
-import { CATEGORY_META } from "@/types";
 
 export function HomePage() {
   const { t, i18n } = useTranslation(["common", "library"]);
@@ -23,10 +22,7 @@ export function HomePage() {
       <section className="text-center space-y-6 py-12">
         <div className="space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            {isEn ? "Scientific Running" : "Entraînements"}
-            <span className="block text-primary">
-              {isEn ? "Workouts" : "Scientifiques"}
-            </span>
+            {isEn ? "Running Workouts" : "Entraînements"}
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             {t("common:app.tagline")}
@@ -60,6 +56,9 @@ export function HomePage() {
           </Link>
         </Button>
       </section>
+
+      {/* Workout of the Day */}
+      <WorkoutOfTheDay />
 
       {/* Zone System Preview */}
       <section className="space-y-6">
@@ -108,7 +107,7 @@ export function HomePage() {
           {featuredWorkouts.map(({ category, workout }) => (
             <div key={category} className="space-y-2">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span>{CATEGORY_META[category].icon}</span>
+                <CategoryIcon category={category} size="sm" />
                 <span>{t(`library:categories.${category}`)}</span>
               </div>
               <WorkoutCard workout={workout} />
@@ -124,7 +123,6 @@ export function HomePage() {
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           {categories.map((cat) => {
-            const meta = CATEGORY_META[cat];
             const count = workoutsByCategory[cat].length;
             return (
               <Link
@@ -138,7 +136,7 @@ export function HomePage() {
                   className="text-center h-full"
                 >
                   <CardContent className="pt-4">
-                    <span className="text-2xl">{meta.icon}</span>
+                    <CategoryIcon category={cat} size="lg" className="mx-auto" />
                     <p className="font-medium mt-2">
                       {t(`library:categories.${cat}`)}
                     </p>
