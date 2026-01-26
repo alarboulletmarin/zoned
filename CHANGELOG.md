@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Branding
+- Project logo with pulse design integrated in header
+- Optimized favicon variants (16x16, 32x32, 180x180, 192x192, 512x512)
+- SVG import support for logo assets
+
 #### UI Components
 - Empty state component with i18n support
 - Scroll-to-top floating button
