@@ -5,6 +5,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2026-01-26
+
+### Added
+
+#### UI Components
+- Empty state component with i18n support
+- Scroll-to-top floating button
+- Loading spinner on export button for better feedback
+
+#### Accessibility
+- Keyboard shortcuts for search functionality
+- ARIA modal attributes to filter drawer for screen readers
+- ARIA label to search input for accessibility
+- Increased touch targets in mobile header for easier interaction
+
+#### Mobile Experience
+- Modal filter system with apply/cancel actions on mobile
+- Search bar moved outside filter drawer for better discoverability
+
+#### User Experience
+- Quick wins UI improvements integrated in library
+- Real-time system theme preference listener
+- Automatic scroll to top on page navigation
+
+### Changed
+
+- Renamed mobile filter drawer to "Filters" for clarity
+
+### Fixed
+
+#### Mobile Layout
+- Prevented mobile overflow in workout detail header
+- Prevented mobile overflow by reorganizing header actions
+
+#### Internationalization
+- Translated workout not found error message
+- Added translations for modal filter actions (apply/cancel)
+
+### Chores
+
+- Ignore Serena config directory in version control
+
 ## [0.1.1] - 2026-01-26
 
 ### Added
