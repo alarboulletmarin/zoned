@@ -219,6 +219,22 @@ export function getDominantZone(workout: WorkoutTemplate): ZoneNumber {
   return Math.max(...zones) as ZoneNumber;
 }
 
+// User Zone Preferences (for personalized zones)
+export interface UserZonePreferences {
+  fcMax?: number; // Max heart rate in bpm
+  vma?: number; // Maximal Aerobic Speed in km/h
+  updatedAt?: string; // ISO timestamp
+}
+
+// Calculated zone ranges
+export interface ZoneRange {
+  zone: ZoneNumber;
+  hrMin?: number;
+  hrMax?: number;
+  paceMinPerKm?: number; // min/km (lower = faster)
+  paceMaxPerKm?: number; // min/km (higher = slower)
+}
+
 // Helper to calculate total duration
 export function getEstimatedDuration(workout: WorkoutTemplate): number {
   let total = 0;

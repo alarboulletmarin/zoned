@@ -1,0 +1,125 @@
+import type { ZoneNumber, ZoneRange, UserZonePreferences } from "@/types";
+
+// HR Zone percentages (% of FCmax)
+const HR_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
+  1: [50, 60],
+  2: [60, 70],
+  3: [70, 80],
+  4: [80, 90],
+  5: [90, 100],
+  6: [100, 110], // Sprint zone can exceed max
+};
+
+// VMA Zone percentages (% of VMA)
+const VMA_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
+  1: [50, 60],
+  2: [60, 75],
+  3: [75, 85],
+  4: [85, 92],
+  5: [92, 100],
+  6: [100, 120], // Sprint can exceed VMA
+};
+
+/**
+ * Calculate HR zones from max heart rate
+ */
+export function calculateHRZones(fcMax: number): ZoneRange[] {
+  return ([1, 2, 3, 4, 5, 6] as ZoneNumber[]).map((zone) => {
+    const [minPct, maxPct] = HR_ZONE_PERCENTAGES[zone];
+    return {
+      zone,
+      hrMin: Math.round(fcMax * (minPct / 100)),
+      hrMax: Math.round(fcMax * (maxPct / 100)),
+    };
+  });
+}
+
+/**
+ * Convert VMA (km/h) to pace (min/km)
+ */
+function vmaToPace(vma: number, percentage: number): number {
+  const speedKmh = vma * (percentage / 100);
+  if (speedKmh <= 0) return 15; // Cap at 15 min/km for very slow
+  const paceMinPerKm = 60 / speedKmh;
+  return Math.round(paceMinPerKm * 100) / 100; // Round to 2 decimals
+}
+
+/**
+ * Format pace as mm:ss
+ */
+export function formatPace(paceMinPerKm: number): string {
+  const minutes = Math.floor(paceMinPerKm);
+  const seconds = Math.round((paceMinPerKm - minutes) * 60);
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
+
+/**
+ * Calculate pace zones from VMA
+ */
+export function calculatePaceZones(vma: number): ZoneRange[] {
+  return ([1, 2, 3, 4, 5, 6] as ZoneNumber[]).map((zone) => {
+    const [minPct, maxPct] = VMA_ZONE_PERCENTAGES[zone];
+    // Note: higher % = faster speed = lower pace (min/km)
+    return {
+      zone,
+      paceMinPerKm: vmaToPace(vma, maxPct), // Faster pace (lower number)
+      paceMaxPerKm: vmaToPace(vma, minPct), // Slower pace (higher number)
+    };
+  });
+}
+
+/**
+ * Get combined zones with both HR and pace if available
+ */
+export function calculateAllZones(prefs: UserZonePreferences): ZoneRange[] {
+  const hrZones = prefs.fcMax ? calculateHRZones(prefs.fcMax) : null;
+  const paceZones = prefs.vma ? calculatePaceZones(prefs.vma) : null;
+
+  if (!hrZones && !paceZones) {
+    return [];
+  }
+
+  return ([1, 2, 3, 4, 5, 6] as ZoneNumber[]).map((zone) => {
+    const hr = hrZones?.find((z) => z.zone === zone);
+    const pace = paceZones?.find((z) => z.zone === zone);
+
+    return {
+      zone,
+      hrMin: hr?.hrMin,
+      hrMax: hr?.hrMax,
+      paceMinPerKm: pace?.paceMinPerKm,
+      paceMaxPerKm: pace?.paceMaxPerKm,
+    };
+  });
+}
+
+// localStorage key
+const STORAGE_KEY = "zoned-userZones";
+
+/**
+ * Save user zone preferences to localStorage
+ */
+export function saveUserZonePrefs(prefs: UserZonePreferences): void {
+  const data = { ...prefs, updatedAt: new Date().toISOString() };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+/**
+ * Load user zone preferences from localStorage
+ */
+export function loadUserZonePrefs(): UserZonePreferences | null {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return null;
+    return JSON.parse(stored) as UserZonePreferences;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Clear user zone preferences
+ */
+export function clearUserZonePrefs(): void {
+  localStorage.removeItem(STORAGE_KEY);
+}
