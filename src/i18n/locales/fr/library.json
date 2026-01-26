@@ -15,7 +15,9 @@
     "durationRange": "{{min}} - {{max}} min",
     "favoritesOnly": "Favoris uniquement",
     "search": "Rechercher...",
-    "searchLabel": "Rechercher des séances"
+    "searchLabel": "Rechercher des séances",
+    "apply": "Appliquer",
+    "activeFilters": "filtres actifs"
   },
   "emptyState": {
     "noResults": "Aucune séance trouvée",

@@ -15,7 +15,9 @@
     "durationRange": "{{min}} - {{max}} min",
     "favoritesOnly": "Favorites only",
     "search": "Search...",
-    "searchLabel": "Search workouts"
+    "searchLabel": "Search workouts",
+    "apply": "Apply",
+    "activeFilters": "active filters"
   },
   "emptyState": {
     "noResults": "No workouts found",

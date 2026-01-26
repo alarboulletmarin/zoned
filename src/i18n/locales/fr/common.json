@@ -58,7 +58,8 @@
     "filter": "Filtrer",
     "clear": "Effacer",
     "viewDetails": "Voir les détails",
-    "backToLibrary": "Retour à la bibliothèque"
+    "backToLibrary": "Retour à la bibliothèque",
+    "cancel": "Annuler"
   },
   "units": {
     "minutes": "min",
