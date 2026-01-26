@@ -235,26 +235,9 @@ export interface ZoneRange {
   paceMaxPerKm?: number; // min/km (higher = slower)
 }
 
-// Helper to calculate total duration
+// Helper to get estimated duration from typicalDuration
 export function getEstimatedDuration(workout: WorkoutTemplate): number {
-  let total = 0;
-
-  for (const block of [
-    ...workout.warmupTemplate,
-    ...workout.mainSetTemplate,
-    ...workout.cooldownTemplate,
-  ]) {
-    if (block.durationMin) {
-      total += block.durationMin;
-    }
-  }
-
-  // If no duration specified, use typical duration average
-  if (total === 0) {
-    return Math.round(
-      (workout.typicalDuration.min + workout.typicalDuration.max) / 2
-    );
-  }
-
-  return total;
+  return Math.round(
+    (workout.typicalDuration.min + workout.typicalDuration.max) / 2
+  );
 }
