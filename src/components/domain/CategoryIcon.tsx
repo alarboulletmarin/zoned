@@ -9,6 +9,7 @@ import {
   Crosshair,
   Flag,
   RefreshCw,
+  ClipboardCheck,
   type LucideIcon,
 } from "lucide-react";
 import type { WorkoutCategory } from "@/types";
@@ -25,6 +26,7 @@ const CATEGORY_ICONS: Record<WorkoutCategory, LucideIcon> = {
   fartlek: Crosshair,
   race_pace: Flag,
   mixed: RefreshCw,
+  assessment: ClipboardCheck,
 };
 
 interface CategoryIconProps {

@@ -16,6 +16,7 @@ import {
   Rocket,
   Timer,
   Shuffle,
+  ClipboardCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -48,6 +49,7 @@ const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: 
   fartlek: Timer,
   race_pace: Target,
   mixed: Shuffle,
+  assessment: ClipboardCheck,
 };
 
 export function WorkoutDetailPage() {

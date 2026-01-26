@@ -13,7 +13,8 @@ export type WorkoutCategory =
   | "hills"
   | "fartlek"
   | "race_pace"
-  | "mixed";
+  | "mixed"
+  | "assessment";
 
 // Session Types (training focus)
 export type SessionType =
@@ -170,20 +171,22 @@ export const ZONE_META: Record<
 };
 
 // Category Display Metadata
+// Icon names correspond to Lucide React icons used in CategoryIcon.tsx
 export const CATEGORY_META: Record<
   WorkoutCategory,
   { label: string; labelEn: string; icon: string }
 > = {
-  recovery: { label: "Récupération", labelEn: "Recovery", icon: "🌿" },
-  endurance: { label: "Endurance", labelEn: "Endurance", icon: "🏃" },
-  tempo: { label: "Tempo", labelEn: "Tempo", icon: "⚡" },
-  threshold: { label: "Seuil", labelEn: "Threshold", icon: "🔥" },
-  vma_intervals: { label: "VMA", labelEn: "VO2max", icon: "🚀" },
-  long_run: { label: "Sortie longue", labelEn: "Long Run", icon: "🛤️" },
-  hills: { label: "Côtes", labelEn: "Hills", icon: "⛰️" },
-  fartlek: { label: "Fartlek", labelEn: "Fartlek", icon: "🎯" },
-  race_pace: { label: "Allure course", labelEn: "Race Pace", icon: "🏁" },
-  mixed: { label: "Mixte", labelEn: "Mixed", icon: "🔄" },
+  recovery: { label: "Récupération", labelEn: "Recovery", icon: "Leaf" },
+  endurance: { label: "Endurance", labelEn: "Endurance", icon: "Activity" },
+  tempo: { label: "Tempo", labelEn: "Tempo", icon: "Gauge" },
+  threshold: { label: "Seuil", labelEn: "Threshold", icon: "Flame" },
+  vma_intervals: { label: "VMA", labelEn: "VO2max", icon: "Rocket" },
+  long_run: { label: "Sortie longue", labelEn: "Long Run", icon: "Route" },
+  hills: { label: "Côtes", labelEn: "Hills", icon: "Mountain" },
+  fartlek: { label: "Fartlek", labelEn: "Fartlek", icon: "Crosshair" },
+  race_pace: { label: "Allure course", labelEn: "Race Pace", icon: "Flag" },
+  mixed: { label: "Mixte", labelEn: "Mixed", icon: "RefreshCw" },
+  assessment: { label: "Tests", labelEn: "Assessment", icon: "ClipboardCheck" },
 };
 
 // Difficulty Display Metadata
