@@ -92,6 +92,14 @@ export function getCategoryStats(): {
 // Total workout count
 export const totalWorkoutCount = allWorkouts.length;
 
+// Get workout of the day (deterministic based on date)
+export function getWorkoutOfTheDay(): WorkoutTemplate {
+  const today = new Date();
+  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+  const index = seed % allWorkouts.length;
+  return allWorkouts[index];
+}
+
 // Export category list for iteration
 export const categories: WorkoutCategory[] = [
   "recovery",
