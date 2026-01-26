@@ -36,5 +36,21 @@
   "language": {
     "fr": "Français",
     "en": "English"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Customize your training zones",
+    "zoneCalculator": {
+      "title": "Zone Calculator",
+      "description": "Enter your max HR and/or VMA to display your personalized zones",
+      "fcMax": "Max Heart Rate",
+      "vma": "Maximal Aerobic Speed",
+      "zone": "Zone",
+      "heartRate": "Heart Rate",
+      "pace": "Pace",
+      "save": "Save",
+      "saved": "Saved",
+      "clear": "Clear"
+    }
   }
 }

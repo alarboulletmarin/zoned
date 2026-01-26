@@ -36,5 +36,21 @@
   "language": {
     "fr": "Français",
     "en": "English"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "description": "Personnalisez vos zones d'entraînement",
+    "zoneCalculator": {
+      "title": "Calculateur de Zones",
+      "description": "Entrez votre FCmax et/ou VMA pour afficher vos zones personnalisées",
+      "fcMax": "Fréquence cardiaque max",
+      "vma": "Vitesse Maximale Aérobie",
+      "zone": "Zone",
+      "heartRate": "Fréquence cardiaque",
+      "pace": "Allure",
+      "save": "Sauvegarder",
+      "saved": "Sauvegardé",
+      "clear": "Effacer"
+    }
   }
 }

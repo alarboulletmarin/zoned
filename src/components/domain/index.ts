@@ -8,3 +8,4 @@ export {
 export { WorkoutStructure, CoachingTips } from "./WorkoutStructure";
 export { WorkoutOfTheDay } from "./WorkoutOfTheDay";
 export { CategoryIcon } from "./CategoryIcon";
+export { ZoneCalculator } from "./ZoneCalculator";
