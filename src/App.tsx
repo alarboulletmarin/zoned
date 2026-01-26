@@ -1,9 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Header, Footer } from "@/components/layout";
 import { HomePage, LibraryPage, WorkoutDetailPage, SettingsPage, FavoritesPage, QuizPage } from "@/pages";
 
 function App() {
+  // Track if user has manually set theme preference
+  const userHasSetTheme = useRef(
+    typeof window !== "undefined" && localStorage.getItem("zoned-theme") !== null
+  );
+
   // Theme state with localStorage persistence
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     if (typeof window !== "undefined") {
@@ -17,7 +22,7 @@ function App() {
     return "light";
   });
 
-  // Apply theme to document
+  // Apply theme to document (only save to localStorage if user explicitly set it)
   useEffect(() => {
     const root = document.documentElement;
     if (theme === "dark") {
@@ -25,10 +30,27 @@ function App() {
     } else {
       root.classList.remove("dark");
     }
-    localStorage.setItem("zoned-theme", theme);
+    if (userHasSetTheme.current) {
+      localStorage.setItem("zoned-theme", theme);
+    }
   }, [theme]);
 
+  // Listen for system theme changes (only when no user preference)
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (!userHasSetTheme.current) {
+        setTheme(e.matches ? "dark" : "light");
+      }
+    };
+
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
   const toggleTheme = () => {
+    userHasSetTheme.current = true;
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
