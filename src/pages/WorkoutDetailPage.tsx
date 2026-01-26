@@ -63,7 +63,7 @@ export function WorkoutDetailPage() {
   if (!workout) {
     return (
       <div className="py-12 text-center">
-        <p className="text-muted-foreground">Workout not found</p>
+        <p className="text-muted-foreground">{t("common:errors.workoutNotFound")}</p>
         <Button variant="link" asChild className="mt-4">
           <Link to="/library">
             <ArrowLeft className="mr-2 size-4" />

@@ -50,6 +50,9 @@
     "favorites": "Favorites",
     "about": "About"
   },
+  "errors": {
+    "workoutNotFound": "Workout not found"
+  },
   "actions": {
     "search": "Search",
     "filter": "Filter",
