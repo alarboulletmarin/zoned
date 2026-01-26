@@ -49,7 +49,8 @@
     "vo2max": "VO2max",
     "speed": "Speed",
     "strength": "Strength",
-    "race_specific": "Race Specific"
+    "race_specific": "Race Specific",
+    "mixed": "Mixed"
   },
   "environment": {
     "requiresHills": "Requires hills",

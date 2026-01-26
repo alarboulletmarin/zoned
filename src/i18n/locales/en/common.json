@@ -3,6 +3,12 @@
     "name": "Zoned",
     "tagline": "Scientific running workouts for runners"
   },
+  "workoutOfTheDay": {
+    "title": "Workout of the Day",
+    "coachingTips": "Coaching Tips",
+    "commonMistakes": "Common Mistakes",
+    "seeDetails": "See full details"
+  },
   "nav": {
     "home": "Home",
     "library": "Library",

@@ -3,6 +3,12 @@
     "name": "Zoned",
     "tagline": "Séances d'entraînement scientifiques pour coureurs"
   },
+  "workoutOfTheDay": {
+    "title": "La Séance du Jour",
+    "coachingTips": "Conseils du coach",
+    "commonMistakes": "Erreurs à éviter",
+    "seeDetails": "Voir tous les détails"
+  },
   "nav": {
     "home": "Accueil",
     "library": "Bibliothèque",
