@@ -1,14 +1,17 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowRight, Zap, Target, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { WorkoutCard, WorkoutOfTheDay, CategoryIcon } from "@/components/domain";
+import { WorkoutCard, WorkoutOfTheDay, CategoryIcon, ZoneDetailModal } from "@/components/domain";
 import { totalWorkoutCount, categories, workoutsByCategory } from "@/data/workouts";
+import { ZONE_META, type ZoneNumber } from "@/types";
 
 export function HomePage() {
   const { t, i18n } = useTranslation(["common", "library"]);
   const isEn = i18n.language === "en";
+  const [selectedZone, setSelectedZone] = useState<ZoneNumber | null>(null);
 
   // Get one featured workout per category (first one of each)
   const featuredWorkouts = categories.slice(0, 6).map((cat) => ({
@@ -92,31 +95,45 @@ export function HomePage() {
       {/* Zone System Preview */}
       <section className="space-y-6">
         <h2 className="text-2xl font-bold text-center">
-          {isEn ? "Training Zones" : "Zones d'entraînement"}
+          {isEn ? "Training Zones" : "Zones d'entrainement"}
         </h2>
+        <p className="text-center text-sm text-muted-foreground">
+          {isEn ? "Click a zone to learn more" : "Cliquez sur une zone pour en savoir plus"}
+        </p>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {([1, 2, 3, 4, 5, 6] as const).map((zone) => (
-            <Card
-              key={zone}
-              className={`zone-${zone} zone-stripe pl-2`}
-              size="compact"
-            >
-              <CardHeader className="pb-2 px-4">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <span className="zone-badge">Z{zone}</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="px-4 pt-0">
-                <p className="text-xs text-muted-foreground">
-                  {isEn
-                    ? ["Recovery", "Endurance", "Tempo", "Threshold", "VO2max", "Sprint"][zone - 1]
-                    : ["Récupération", "Endurance", "Tempo", "Seuil", "VO2max", "Sprint"][zone - 1]}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
+          {([1, 2, 3, 4, 5, 6] as const).map((zone) => {
+            const meta = ZONE_META[zone];
+            return (
+              <Card
+                key={zone}
+                className={`zone-${zone} zone-stripe pl-2 cursor-pointer transition-transform hover:scale-105`}
+                size="compact"
+                interactive
+                onClick={() => setSelectedZone(zone)}
+              >
+                <CardHeader className="pb-2 px-4">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <span className="zone-badge">Z{zone}</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="px-4 pt-0">
+                  <p className="text-xs text-muted-foreground">
+                    {isEn ? meta.labelEn : meta.label}
+                  </p>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       </section>
+
+      {/* Zone Detail Modal */}
+      <ZoneDetailModal
+        zone={selectedZone}
+        zoneMeta={selectedZone ? ZONE_META[selectedZone] : null}
+        open={selectedZone !== null}
+        onOpenChange={(open) => !open && setSelectedZone(null)}
+      />
 
       {/* Featured Workouts */}
       <section className="space-y-6">
