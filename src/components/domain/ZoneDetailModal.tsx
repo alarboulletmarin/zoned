@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { Brain, Heart, Sparkles, Dumbbell } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Brain, Heart, Sparkles, Dumbbell, ArrowRight } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -7,8 +8,10 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import type { ZoneNumber, ZoneMeta } from "@/types";
+import { allWorkouts } from "@/data/workouts";
+import { getDominantZone } from "@/types";
 
 interface ZoneDetailModalProps {
   zone: ZoneNumber | null;
@@ -32,7 +35,13 @@ export function ZoneDetailModal({
   const physiology = zoneMeta ? (isEn ? zoneMeta.physiologyEn : zoneMeta.physiology) : "";
   const sensation = zoneMeta ? (isEn ? zoneMeta.sensationEn : zoneMeta.sensation) : "";
   const benefit = zoneMeta ? (isEn ? zoneMeta.benefitEn : zoneMeta.benefit) : "";
-  const examples = zoneMeta ? (isEn ? zoneMeta.examplesEn : zoneMeta.examples) : [];
+
+  // Find 3 example workouts for this zone
+  const exampleWorkouts = zone
+    ? allWorkouts
+        .filter((w) => getDominantZone(w) === zone)
+        .slice(0, 3)
+    : [];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -80,18 +89,29 @@ export function ZoneDetailModal({
           </section>
 
           {/* Examples Section */}
-          <section className="space-y-2">
+          <section className="space-y-3">
             <h4 className="flex items-center gap-2 font-medium text-sm">
               <Dumbbell className="size-4 text-muted-foreground" />
-              {isEn ? "Example workouts" : "Exemples de seances"}
+              {isEn ? "Example workouts" : "Exemples de séances"}
             </h4>
-            <div className="flex flex-wrap gap-2">
-              {examples.map((example, index) => (
-                <Badge key={index} variant="secondary" className="text-xs">
-                  {example}
-                </Badge>
+            <div className="space-y-2">
+              {exampleWorkouts.map((workout) => (
+                <Link
+                  key={workout.id}
+                  to={`/workout/${workout.id}`}
+                  onClick={() => onOpenChange(false)}
+                  className="flex items-center justify-between p-2 rounded-md hover:bg-muted transition-colors group"
+                >
+                  <span className="text-sm">{isEn ? workout.nameEn : workout.name}</span>
+                  <ArrowRight className="size-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+                </Link>
               ))}
             </div>
+            <Button variant="outline" size="sm" asChild className="w-full mt-2">
+              <Link to="/library" onClick={() => onOpenChange(false)}>
+                {isEn ? "See all workouts" : "Voir toutes les séances"}
+              </Link>
+            </Button>
           </section>
         </div>
       </DialogContent>
