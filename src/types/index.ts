@@ -58,8 +58,10 @@ export interface WorkoutBlock {
   durationMin?: number;
   repetitions?: number;
   distance?: string;
+  distanceM?: number; // Distance in meters (used in interval workouts)
   zone?: Zone;
   rest?: string;
+  recovery?: string; // Recovery description (e.g., "200m footing")
 }
 
 // Environment Requirements
@@ -315,9 +317,143 @@ export interface ZoneRange {
   paceMaxPerKm?: number; // min/km (higher = slower)
 }
 
-// Helper to get estimated duration from typicalDuration
+/**
+ * Parse duration string like "30s", "1min", "1:30" into minutes
+ */
+function parseDurationToMin(duration?: string): number {
+  if (!duration) return 0;
+  const str = duration.toLowerCase().trim();
+
+  // Format "1:30" (mm:ss)
+  if (str.includes(":")) {
+    const [min, sec] = str.split(":").map(Number);
+    return min + (sec || 0) / 60;
+  }
+
+  // Format "30s" or "30sec"
+  const secMatch = str.match(/^(\d+(?:\.\d+)?)\s*s(?:ec)?/);
+  if (secMatch) {
+    return parseFloat(secMatch[1]) / 60;
+  }
+
+  // Format "1min" or "1m"
+  const minMatch = str.match(/^(\d+(?:\.\d+)?)\s*m(?:in)?/);
+  if (minMatch) {
+    return parseFloat(minMatch[1]);
+  }
+
+  // Just a number, assume minutes
+  const num = parseFloat(str);
+  return isNaN(num) ? 0 : num;
+}
+
+/**
+ * Parse distance string like "400m", "1km", "1.5km" into meters
+ */
+function parseDistanceToMeters(distance?: string): number {
+  if (!distance) return 0;
+  const str = distance.toLowerCase().trim();
+
+  // Format "1km" or "1.5km"
+  const kmMatch = str.match(/^(\d+(?:\.\d+)?)\s*km/);
+  if (kmMatch) {
+    return parseFloat(kmMatch[1]) * 1000;
+  }
+
+  // Format "400m"
+  const mMatch = str.match(/^(\d+(?:\.\d+)?)\s*m/);
+  if (mMatch) {
+    return parseFloat(mMatch[1]);
+  }
+
+  // Just a number, assume meters
+  const num = parseFloat(str);
+  return isNaN(num) ? 0 : num;
+}
+
+/**
+ * Estimate duration for a distance in meters at a given zone
+ * Returns duration in minutes
+ */
+function estimateDistanceDuration(distanceM: number, zone?: string): number {
+  // Approximate pace per zone (min/km for a ~15 km/h VMA runner)
+  const zonePaces: Record<string, number> = {
+    "Z1": 7.0,
+    "Z2": 6.0,
+    "Z3": 5.2,
+    "Z4": 4.8,
+    "Z5": 4.2,
+    "Z6": 3.8,
+  };
+  const pace = zone ? (zonePaces[zone.toUpperCase()] ?? 5.0) : 5.0;
+  return (distanceM / 1000) * pace;
+}
+
+/**
+ * Calculate total duration of a workout from its blocks
+ * Returns duration in minutes
+ */
 export function getEstimatedDuration(workout: WorkoutTemplate): number {
-  return Math.round(
-    (workout.typicalDuration.min + workout.typicalDuration.max) / 2
-  );
+  let totalMin = 0;
+
+  const calcBlockDuration = (block: WorkoutBlock): number => {
+    let workDurationMin = 0;
+
+    // If durationMin is set, use it
+    if (block.durationMin) {
+      workDurationMin = block.durationMin;
+    }
+    // If distanceM is set (number), estimate from distance
+    else if (block.distanceM) {
+      workDurationMin = estimateDistanceDuration(block.distanceM, block.zone);
+    }
+    // If distance is set (string like "400m"), parse and estimate
+    else if (block.distance) {
+      const meters = parseDistanceToMeters(block.distance);
+      workDurationMin = estimateDistanceDuration(meters, block.zone);
+    }
+    // Default duration if nothing else
+    else {
+      workDurationMin = 5;
+    }
+
+    // Handle repetitions
+    const reps = block.repetitions ?? 1;
+    if (reps > 1) {
+      // Parse recovery (could be "200m footing" or "1min" etc.)
+      const recoveryStr = block.recovery || block.rest || "";
+      let recoveryMin = 0;
+
+      // Try to parse as distance first (e.g., "200m footing")
+      const recoveryMeters = parseDistanceToMeters(recoveryStr);
+      if (recoveryMeters > 0) {
+        recoveryMin = estimateDistanceDuration(recoveryMeters, "Z1");
+      } else {
+        // Try to parse as duration
+        recoveryMin = parseDurationToMin(recoveryStr);
+      }
+
+      // Total = work * reps + recovery between reps
+      return workDurationMin * reps + recoveryMin * (reps - 1);
+    }
+
+    return workDurationMin;
+  };
+
+  // Sum warmup blocks
+  for (const block of workout.warmupTemplate) {
+    totalMin += calcBlockDuration(block);
+  }
+
+  // Sum main set blocks
+  for (const block of workout.mainSetTemplate) {
+    totalMin += calcBlockDuration(block);
+  }
+
+  // Sum cooldown blocks
+  for (const block of workout.cooldownTemplate) {
+    totalMin += calcBlockDuration(block);
+  }
+
+  return Math.round(totalMin);
 }
