@@ -36,7 +36,7 @@ export function ZoneDetailModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={`zone-${zone ?? 1} zone-stripe pl-4 max-h-[85vh] overflow-y-auto`}>
+      <DialogContent className={`zone-${zone ?? 1} max-h-[85vh] overflow-y-auto border-l-4`} style={{ borderLeftColor: 'var(--zone-color)' }}>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3">
             <span className="zone-badge text-lg">Z{zone}</span>
