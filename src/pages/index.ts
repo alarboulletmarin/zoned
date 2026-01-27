@@ -4,3 +4,6 @@ export { WorkoutDetailPage } from "./WorkoutDetailPage";
 export { MyZonesPage } from "./MyZonesPage";
 export { FavoritesPage } from "./FavoritesPage";
 export { QuizPage } from "./QuizPage";
+export { AboutPage } from "./AboutPage";
+export { LearnPage } from "./LearnPage";
+export { ArticlePage } from "./ArticlePage";

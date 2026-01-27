@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import { useState, useEffect, useRef } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { Header, Footer } from "@/components/layout";
-import { HomePage, LibraryPage, WorkoutDetailPage, MyZonesPage, FavoritesPage, QuizPage } from "@/pages";
+import { HomePage, LibraryPage, WorkoutDetailPage, MyZonesPage, FavoritesPage, QuizPage, AboutPage, LearnPage, ArticlePage } from "@/pages";
 
 function ScrollToTopOnNavigate() {
   const { pathname } = useLocation();
@@ -80,6 +80,9 @@ function App() {
             <Route path="/settings" element={<Navigate to="/my-zones" replace />} />
             <Route path="/favorites" element={<FavoritesPage />} />
             <Route path="/quiz" element={<QuizPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/learn" element={<LearnPage />} />
+            <Route path="/learn/:slug" element={<ArticlePage />} />
           </Routes>
         </main>
 
