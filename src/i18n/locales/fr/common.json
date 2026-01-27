@@ -36,7 +36,8 @@
     "long": "Plus de 60 min",
     "anywhere": "N'importe où",
     "track": "Piste disponible",
-    "hills": "Côtes disponibles"
+    "hills": "Côtes disponibles",
+    "seeMore": "Voir plus dans la bibliothèque"
   },
   "workoutOfTheDay": {
     "title": "La Séance du Jour",
@@ -77,8 +78,13 @@
     "fr": "Français",
     "en": "English"
   },
-  "settings": {
-    "title": "Paramètres",
+  "zonePersonalization": {
+    "ctaMessage": "Personnalisez vos zones pour voir vos allures",
+    "ctaButton": "Configurer mes zones",
+    "dismiss": "Masquer"
+  },
+  "myZones": {
+    "title": "Mes Zones",
     "description": "Personnalisez vos zones d'entraînement",
     "zoneCalculator": {
       "title": "Calculateur de Zones",

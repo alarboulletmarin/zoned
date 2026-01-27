@@ -36,7 +36,8 @@
     "long": "More than 60 min",
     "anywhere": "Anywhere",
     "track": "Track available",
-    "hills": "Hills available"
+    "hills": "Hills available",
+    "seeMore": "See more in library"
   },
   "workoutOfTheDay": {
     "title": "Workout of the Day",
@@ -77,8 +78,13 @@
     "fr": "Français",
     "en": "English"
   },
-  "settings": {
-    "title": "Settings",
+  "zonePersonalization": {
+    "ctaMessage": "Personalize your zones to see your paces",
+    "ctaButton": "Configure my zones",
+    "dismiss": "Dismiss"
+  },
+  "myZones": {
+    "title": "My Zones",
     "description": "Customize your training zones",
     "zoneCalculator": {
       "title": "Zone Calculator",
