@@ -1,7 +1,39 @@
 {
   "app": {
     "name": "Zoned",
-    "tagline": "Seances d'entrainement scientifiques pour coureurs"
+    "tagline": "Séances d'entraînement scientifiques pour coureurs"
+  },
+  "about": {
+    "title": "À propos de Zoned",
+    "description": "Zoned est une bibliothèque de séances de course à pied basée sur un système de 6 zones d'entraînement scientifique. L'objectif est de rendre l'entraînement structuré accessible à tous les coureurs, du débutant au compétiteur.",
+    "openSource": {
+      "title": "Open Source",
+      "description": "Un projet libre et ouvert",
+      "contributions": "Ce projet est open source et disponible sur GitLab. Les contributions sont les bienvenues !",
+      "viewRepo": "Voir le dépôt"
+    },
+    "vibeCoded": {
+      "title": "Vibe Coded",
+      "description": "Une expérience de développement assistée par IA",
+      "claude": "Développé avec Claude Code et le modèle Opus 4.5 d'Anthropic",
+      "human": "Guidé et vérifié par un développeur humain",
+      "experience": "Une expérience de 'vibe coding' où l'IA assiste la création"
+    },
+    "privacy": {
+      "title": "Vie privée",
+      "description": "Vos données restent les vôtres",
+      "noServer": "Aucune donnée n'est envoyée à un serveur",
+      "localStorage": "Tout est stocké localement dans votre navigateur (localStorage)",
+      "noAccount": "Pas de compte utilisateur requis",
+      "analytics": "Pas de tracking invasif (juste Vercel Analytics anonymisé)"
+    },
+    "credits": {
+      "title": "Crédits",
+      "description": "Technologies utilisées",
+      "framework": "React + Vite + TypeScript",
+      "ui": "shadcn/ui + Tailwind CSS",
+      "icons": "Lucide React"
+    }
   },
   "export": {
     "title": "Exporter",
@@ -48,6 +80,7 @@
   "nav": {
     "home": "Accueil",
     "library": "Bibliothèque",
+    "learn": "Apprendre",
     "favorites": "Favoris",
     "about": "À propos"
   },
@@ -107,5 +140,22 @@
       "time": "Temps estimé",
       "noVma": "Entrez votre VMA pour afficher les estimations de temps"
     }
+  },
+  "learn": {
+    "title": "Apprendre",
+    "description": "Guides et articles pour progresser en course à pied",
+    "allCategories": "Tous",
+    "categories": {
+      "fundamentals": "Fondamentaux",
+      "training": "Entraînement",
+      "lifestyle": "Mode de vie"
+    },
+    "articleCount": "{{count}} article(s)",
+    "readTime": "de lecture",
+    "prevArticle": "Article précédent",
+    "nextArticle": "Article suivant",
+    "backToHub": "Retour aux articles",
+    "zonesCtaText": "Prêt à personnaliser vos zones d'entraînement ?",
+    "zonesCtaButton": "Configurer mes zones"
   }
 }

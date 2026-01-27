@@ -26,18 +26,17 @@ export function ZoneDetailModal({
   const { i18n } = useTranslation();
   const isEn = i18n.language === "en";
 
-  if (!zone || !zoneMeta) return null;
-
-  const label = isEn ? zoneMeta.labelEn : zoneMeta.label;
-  const description = isEn ? zoneMeta.descriptionEn : zoneMeta.description;
-  const physiology = isEn ? zoneMeta.physiologyEn : zoneMeta.physiology;
-  const sensation = isEn ? zoneMeta.sensationEn : zoneMeta.sensation;
-  const benefit = isEn ? zoneMeta.benefitEn : zoneMeta.benefit;
-  const examples = isEn ? zoneMeta.examplesEn : zoneMeta.examples;
+  // Derive display values only when zoneMeta is available
+  const label = zoneMeta ? (isEn ? zoneMeta.labelEn : zoneMeta.label) : "";
+  const description = zoneMeta ? (isEn ? zoneMeta.descriptionEn : zoneMeta.description) : "";
+  const physiology = zoneMeta ? (isEn ? zoneMeta.physiologyEn : zoneMeta.physiology) : "";
+  const sensation = zoneMeta ? (isEn ? zoneMeta.sensationEn : zoneMeta.sensation) : "";
+  const benefit = zoneMeta ? (isEn ? zoneMeta.benefitEn : zoneMeta.benefit) : "";
+  const examples = zoneMeta ? (isEn ? zoneMeta.examplesEn : zoneMeta.examples) : [];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={`zone-${zone} zone-stripe pl-4 max-h-[85vh] overflow-y-auto`}>
+      <DialogContent className={`zone-${zone ?? 1} zone-stripe pl-4 max-h-[85vh] overflow-y-auto`}>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3">
             <span className="zone-badge text-lg">Z{zone}</span>

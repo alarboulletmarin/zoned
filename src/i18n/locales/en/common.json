@@ -3,6 +3,38 @@
     "name": "Zoned",
     "tagline": "Scientific running workouts for runners"
   },
+  "about": {
+    "title": "About Zoned",
+    "description": "Zoned is a running workout library based on a 6-zone scientific training system. The goal is to make structured training accessible to all runners, from beginners to competitors.",
+    "openSource": {
+      "title": "Open Source",
+      "description": "A free and open project",
+      "contributions": "This project is open source and available on GitLab. Contributions are welcome!",
+      "viewRepo": "View repository"
+    },
+    "vibeCoded": {
+      "title": "Vibe Coded",
+      "description": "An AI-assisted development experience",
+      "claude": "Developed with Claude Code and Anthropic's Opus 4.5 model",
+      "human": "Guided and verified by a human developer",
+      "experience": "A 'vibe coding' experience where AI assists creation"
+    },
+    "privacy": {
+      "title": "Privacy",
+      "description": "Your data stays yours",
+      "noServer": "No data is sent to any server",
+      "localStorage": "Everything is stored locally in your browser (localStorage)",
+      "noAccount": "No user account required",
+      "analytics": "No invasive tracking (just anonymized Vercel Analytics)"
+    },
+    "credits": {
+      "title": "Credits",
+      "description": "Technologies used",
+      "framework": "React + Vite + TypeScript",
+      "ui": "shadcn/ui + Tailwind CSS",
+      "icons": "Lucide React"
+    }
+  },
   "export": {
     "title": "Export",
     "calendar": "Calendar (ICS)",
@@ -48,6 +80,7 @@
   "nav": {
     "home": "Home",
     "library": "Library",
+    "learn": "Learn",
     "favorites": "Favorites",
     "about": "About"
   },
@@ -107,5 +140,22 @@
       "time": "Estimated Time",
       "noVma": "Enter your VMA to display time estimates"
     }
+  },
+  "learn": {
+    "title": "Learn",
+    "description": "Guides and articles to improve your running",
+    "allCategories": "All",
+    "categories": {
+      "fundamentals": "Fundamentals",
+      "training": "Training",
+      "lifestyle": "Lifestyle"
+    },
+    "articleCount": "{{count}} article(s)",
+    "readTime": "read",
+    "prevArticle": "Previous article",
+    "nextArticle": "Next article",
+    "backToHub": "Back to articles",
+    "zonesCtaText": "Ready to personalize your training zones?",
+    "zonesCtaButton": "Configure my zones"
   }
 }
