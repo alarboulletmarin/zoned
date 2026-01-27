@@ -11,17 +11,44 @@
       "sessionType": "hills",
       "targetSystem": "neuromuscular",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 45, "max": 55 },
-      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 25,
+        "max": 35
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Footing avec activation progressive", "descriptionEn": "Jog with progressive activation", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Gammes et 2-3 côtes d'échauffement", "descriptionEn": "Drills and 2-3 warm-up hills", "durationMin": 5 }
+        {
+          "description": "Footing avec activation progressive",
+          "descriptionEn": "Jog with progressive activation",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes et 2-3 côtes d'échauffement",
+          "descriptionEn": "Drills and 2-3 warm-up hills",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
-        { "description": "8x100m côte effort maximal", "descriptionEn": "8x100m hill at maximum effort", "distanceM": 100, "repetitions": 8, "recovery": "Descente en marchant" }
+        {
+          "description": "8x100m côte effort maximal",
+          "descriptionEn": "8x100m hill at maximum effort",
+          "distanceM": 100,
+          "repetitions": 8,
+          "recovery": "Descente en marchant"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération sur le plat", "descriptionEn": "Recovery jog on flat terrain", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération sur le plat",
+          "descriptionEn": "Recovery jog on flat terrain",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Pente de 8-12% idéalement",
@@ -41,12 +68,25 @@
         "Hill too long or too steep",
         "Not recovering enough"
       ],
-      "variationIds": ["HIL-002", "HIL-003"],
+      "variationIds": [
+        "HIL-002",
+        "HIL-003"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["early", "mid"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "early",
+          "mid"
+        ],
         "relativeLoad": "hard",
-        "tags": ["hills", "strength", "power"],
+        "tags": [
+          "hills",
+          "strength",
+          "power"
+        ],
         "priorityScore": 80
       }
     },
@@ -60,17 +100,45 @@
       "sessionType": "hills",
       "targetSystem": "neuromuscular",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 50, "max": 60 },
-      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 25,
+        "max": 35
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Gammes et côtes d'échauffement", "descriptionEn": "Drills and warm-up hills", "durationMin": 5 }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes et côtes d'échauffement",
+          "descriptionEn": "Drills and warm-up hills",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
-        { "description": "6x250m côte à 90-95%", "descriptionEn": "6x250m hill at 90-95%", "distanceM": 250, "zone": "Z4-Z5", "repetitions": 6, "recovery": "Descente en trottinant" }
+        {
+          "description": "6x250m côte à 90-95%",
+          "descriptionEn": "6x250m hill at 90-95%",
+          "distanceM": 250,
+          "zone": "Z4-Z5",
+          "repetitions": 6,
+          "recovery": "Descente en trottinant"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Allure soutenue mais pas sprint",
@@ -90,12 +158,22 @@
         "Starting too fast and fading",
         "Technique breaking down at the top"
       ],
-      "variationIds": ["HIL-001", "HIL-003"],
+      "variationIds": [
+        "HIL-001",
+        "HIL-003"
+      ],
       "selectionCriteria": {
-        "phases": ["build"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "hard",
-        "tags": ["hills", "strength"],
+        "tags": [
+          "hills",
+          "strength"
+        ],
         "priorityScore": 75
       }
     },
@@ -109,17 +187,45 @@
       "sessionType": "hills",
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 55, "max": 70 },
-      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 25,
+        "max": 35
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Gammes", "descriptionEn": "Drills", "durationMin": 5 }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes",
+          "descriptionEn": "Drills",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
-        { "description": "5x500m côte à effort seuil", "descriptionEn": "5x500m hill at threshold effort", "distanceM": 500, "zone": "Z4", "repetitions": 5, "recovery": "Descente + 1min récup" }
+        {
+          "description": "5x500m côte à effort seuil",
+          "descriptionEn": "5x500m hill at threshold effort",
+          "distanceM": 500,
+          "zone": "Z4",
+          "repetitions": 5,
+          "recovery": "Descente + 1min récup"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Effort similaire au seuil",
@@ -139,12 +245,23 @@
         "Choosing a gradient that's too steep",
         "Starting too fast"
       ],
-      "variationIds": ["HIL-002"],
+      "variationIds": [
+        "HIL-002"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "key",
-        "tags": ["hills", "threshold", "endurance"],
+        "tags": [
+          "hills",
+          "threshold",
+          "endurance"
+        ],
         "priorityScore": 70
       }
     },
@@ -158,17 +275,44 @@
       "sessionType": "hills",
       "targetSystem": "neuromuscular",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 45, "max": 55 },
-      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 25,
+        "max": 35
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Gammes avec bonds", "descriptionEn": "Drills with bounds", "durationMin": 5 }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes avec bonds",
+          "descriptionEn": "Drills with bounds",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
-        { "description": "6x80m côte en bonds", "descriptionEn": "6x80m hill with bounding", "distanceM": 80, "repetitions": 6, "recovery": "Descente en marchant" }
+        {
+          "description": "6x80m côte en bonds",
+          "descriptionEn": "6x80m hill with bounding",
+          "distanceM": 80,
+          "repetitions": 6,
+          "recovery": "Descente en marchant"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Poussez vers le haut et l'avant",
@@ -188,12 +332,23 @@
         "Confusing with sprinting",
         "Jumping instead of bounding"
       ],
-      "variationIds": ["HIL-001"],
+      "variationIds": [
+        "HIL-001"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["early"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "early"
+        ],
         "relativeLoad": "moderate",
-        "tags": ["hills", "plyometrics", "technique"],
+        "tags": [
+          "hills",
+          "plyometrics",
+          "technique"
+        ],
         "priorityScore": 65
       }
     },
@@ -207,17 +362,45 @@
       "sessionType": "hills",
       "targetSystem": "vo2max",
       "difficulty": "elite",
-      "typicalDuration": { "min": 50, "max": 60 },
-      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 25,
+        "max": 35
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Gammes", "descriptionEn": "Drills", "durationMin": 5 }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes",
+          "descriptionEn": "Drills",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
-        { "description": "3x(5x100m côte avec footing descente)", "descriptionEn": "3x(5x100m hill with jog down)", "distanceM": 100, "zone": "Z5", "repetitions": 5, "recovery": "Footing descente, 3min entre séries" }
+        {
+          "description": "3x(5x100m côte avec footing descente)",
+          "descriptionEn": "3x(5x100m hill with jog down)",
+          "distanceM": 100,
+          "zone": "Z5",
+          "repetitions": 5,
+          "recovery": "Footing descente, 3min entre séries"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Récupération active seulement",
@@ -237,12 +420,22 @@
         "Overestimating your fitness level",
         "Not stopping if technique breaks down"
       ],
-      "variationIds": ["HIL-001"],
+      "variationIds": [
+        "HIL-001"
+      ],
       "selectionCriteria": {
-        "phases": ["peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "key",
-        "tags": ["hills", "elite", "kenyan"],
+        "tags": [
+          "hills",
+          "elite",
+          "kenyan"
+        ],
         "priorityScore": 55
       }
     },
@@ -256,19 +449,60 @@
       "sessionType": "hills",
       "targetSystem": "mixed",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 50, "max": 60 },
-      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 20,
+        "max": 30
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "2x côte lente Z2", "descriptionEn": "2x slow hill Z2", "distanceM": 200, "zone": "Z2", "recovery": "Descente" },
-        { "description": "2x côte tempo Z3", "descriptionEn": "2x tempo hill Z3", "distanceM": 200, "zone": "Z3", "recovery": "Descente" },
-        { "description": "2x côte seuil Z4", "descriptionEn": "2x threshold hill Z4", "distanceM": 200, "zone": "Z4", "recovery": "Descente" },
-        { "description": "2x côte VMA Z5", "descriptionEn": "2x VO2max hill Z5", "distanceM": 150, "zone": "Z5", "recovery": "Descente" }
+        {
+          "description": "2x côte lente Z2",
+          "descriptionEn": "2x slow hill Z2",
+          "distanceM": 200,
+          "zone": "Z2",
+          "recovery": "Descente"
+        },
+        {
+          "description": "2x côte tempo Z3",
+          "descriptionEn": "2x tempo hill Z3",
+          "distanceM": 200,
+          "zone": "Z3",
+          "recovery": "Descente"
+        },
+        {
+          "description": "2x côte seuil Z4",
+          "descriptionEn": "2x threshold hill Z4",
+          "distanceM": 200,
+          "zone": "Z4",
+          "recovery": "Descente"
+        },
+        {
+          "description": "2x côte VMA Z5",
+          "descriptionEn": "2x VO2max hill Z5",
+          "distanceM": 150,
+          "zone": "Z5",
+          "recovery": "Descente"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Progression logique d'intensité",
@@ -288,12 +522,22 @@
         "Starting too fast",
         "Not building intensity"
       ],
-      "variationIds": ["HIL-002"],
+      "variationIds": [
+        "HIL-002"
+      ],
       "selectionCriteria": {
-        "phases": ["build"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "hard",
-        "tags": ["hills", "progressive", "variety"],
+        "tags": [
+          "hills",
+          "progressive",
+          "variety"
+        ],
         "priorityScore": 70
       }
     },
@@ -307,16 +551,40 @@
       "sessionType": "hills",
       "targetSystem": "neuromuscular",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 55, "max": 70 },
-      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 20,
+        "max": 30
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "6x(montée rapide + descente technique)", "descriptionEn": "6x(fast uphill + technical downhill)", "distanceM": 200, "zone": "Z4", "repetitions": 6, "recovery": "30s en bas" }
+        {
+          "description": "6x(montée rapide + descente technique)",
+          "descriptionEn": "6x(fast uphill + technical downhill)",
+          "distanceM": 200,
+          "zone": "Z4",
+          "repetitions": 6,
+          "recovery": "30s en bas"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "La descente fait partie du travail",
@@ -336,12 +604,22 @@
         "Neglecting the downhill work",
         "Braking excessively"
       ],
-      "variationIds": ["HIL-002"],
+      "variationIds": [
+        "HIL-002"
+      ],
       "selectionCriteria": {
-        "phases": ["build"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "hard",
-        "tags": ["hills", "downhill", "trail"],
+        "tags": [
+          "hills",
+          "downhill",
+          "trail"
+        ],
         "priorityScore": 60
       }
     },
@@ -355,16 +633,40 @@
       "sessionType": "hills",
       "targetSystem": "neuromuscular",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 40, "max": 50 },
-      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 20,
+        "max": 30
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Footing très progressif", "descriptionEn": "Very progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
+        {
+          "description": "Footing très progressif",
+          "descriptionEn": "Very progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "5x60m côte modérée", "descriptionEn": "5x60m moderate hill", "distanceM": 60, "zone": "Z3-Z4", "repetitions": 5, "recovery": "Marche descente + 1min" }
+        {
+          "description": "5x60m côte modérée",
+          "descriptionEn": "5x60m moderate hill",
+          "distanceM": 60,
+          "zone": "Z3-Z4",
+          "repetitions": 5,
+          "recovery": "Marche descente + 1min"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing lent", "descriptionEn": "Slow jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing lent",
+          "descriptionEn": "Slow jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Choisissez une pente douce (4-6%)",
@@ -384,12 +686,21 @@
         "Choosing a hill that's too steep",
         "Trying to go too fast from the start"
       ],
-      "variationIds": ["HIL-001"],
+      "variationIds": [
+        "HIL-001"
+      ],
       "selectionCriteria": {
-        "phases": ["base"],
-        "weekPositions": ["early"],
+        "phases": [
+          "base"
+        ],
+        "weekPositions": [
+          "early"
+        ],
         "relativeLoad": "moderate",
-        "tags": ["hills", "beginner"],
+        "tags": [
+          "hills",
+          "beginner"
+        ],
         "priorityScore": 80
       }
     },
@@ -403,16 +714,38 @@
       "sessionType": "hills",
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 55, "max": 70 },
-      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 55,
+        "max": 70
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "3 boucles d'un circuit vallonné, effort soutenu", "descriptionEn": "3 loops of a hilly circuit, sustained effort", "durationMin": 35, "zone": "Z3-Z4" }
+        {
+          "description": "3 boucles d'un circuit vallonné, effort soutenu",
+          "descriptionEn": "3 loops of a hilly circuit, sustained effort",
+          "durationMin": 35,
+          "zone": "Z3-Z4"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Trouvez un circuit avec 3-4 côtes",
@@ -432,12 +765,23 @@
         "Attacking hills too hard",
         "Not recovering on the descents"
       ],
-      "variationIds": ["HIL-003"],
+      "variationIds": [
+        "HIL-003"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "hard",
-        "tags": ["hills", "circuit", "race-simulation"],
+        "tags": [
+          "hills",
+          "circuit",
+          "race-simulation"
+        ],
         "priorityScore": 65
       }
     },
@@ -451,16 +795,38 @@
       "sessionType": "hills",
       "targetSystem": "mixed",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 60, "max": 80 },
-      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 60,
+        "max": 80
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Footing sur sentier", "descriptionEn": "Trail jog", "durationMin": 15, "zone": "Z1-Z2" }
+        {
+          "description": "Footing sur sentier",
+          "descriptionEn": "Trail jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Montées variées (3 courtes + 2 longues) sur sentier", "descriptionEn": "Varied climbs (3 short + 2 long) on trail", "durationMin": 40, "zone": "Z3-Z5" }
+        {
+          "description": "Montées variées (3 courtes + 2 longues) sur sentier",
+          "descriptionEn": "Varied climbs (3 short + 2 long) on trail",
+          "durationMin": 40,
+          "zone": "Z3-Z5"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing retour", "descriptionEn": "Jog back", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing retour",
+          "descriptionEn": "Jog back",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Variez les types de côtes",
@@ -480,12 +846,22 @@
         "Not adapting to the terrain",
         "Forgetting to test equipment"
       ],
-      "variationIds": ["HIL-009"],
+      "variationIds": [
+        "HIL-009"
+      ],
       "selectionCriteria": {
-        "phases": ["peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "key",
-        "tags": ["hills", "trail", "specific"],
+        "tags": [
+          "hills",
+          "trail",
+          "specific"
+        ],
         "priorityScore": 60
       }
     }

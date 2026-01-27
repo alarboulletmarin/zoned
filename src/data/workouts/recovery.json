@@ -11,7 +11,7 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 30, "max": 45 },
+      "typicalDuration": { "min": 25, "max": 35 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [],
       "mainSetTemplate": [

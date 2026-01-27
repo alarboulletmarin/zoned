@@ -11,17 +11,44 @@
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 90, "max": 120 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 90,
+        "max": 120
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Début très lent", "descriptionEn": "Very slow start", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Début très lent",
+          "descriptionEn": "Very slow start",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Course en Z2 confortable", "descriptionEn": "Comfortable Z2 running", "durationMin": 50, "zone": "Z2" },
-        { "description": "Accélération progressive vers Z3", "descriptionEn": "Progressive acceleration to Z3", "durationMin": 30, "zone": "Z2-Z3" }
+        {
+          "description": "Course en Z2 confortable",
+          "descriptionEn": "Comfortable Z2 running",
+          "durationMin": 50,
+          "zone": "Z2"
+        },
+        {
+          "description": "Accélération progressive vers Z3",
+          "descriptionEn": "Progressive acceleration to Z3",
+          "durationMin": 30,
+          "zone": "Z2-Z3"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Retour au calme", "descriptionEn": "Cool down", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Retour au calme",
+          "descriptionEn": "Cool down",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Emportez de l'eau et gel si > 90 min",
@@ -41,12 +68,25 @@
         "Starting too fast and blowing up",
         "Not fueling on long runs"
       ],
-      "variationIds": ["SL-002", "SL-003"],
+      "variationIds": [
+        "SL-002",
+        "SL-003"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build", "peak"],
-        "weekPositions": ["late"],
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "hard",
-        "tags": ["long", "endurance", "progression"],
+        "tags": [
+          "long",
+          "endurance",
+          "progression"
+        ],
         "priorityScore": 90
       }
     },
@@ -60,18 +100,51 @@
       "sessionType": "long_run",
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 100, "max": 140 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 95,
+        "max": 125
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing tranquille", "descriptionEn": "Easy jog", "durationMin": 20, "zone": "Z2" }
+        {
+          "description": "Footing tranquille",
+          "descriptionEn": "Easy jog",
+          "durationMin": 20,
+          "zone": "Z2"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Course Z2", "descriptionEn": "Z2 running", "durationMin": 30, "zone": "Z2" },
-        { "description": "Bloc allure marathon", "descriptionEn": "Marathon pace block", "durationMin": 30, "zone": "Z3", "pace": "Allure Marathon" },
-        { "description": "Retour en Z2", "descriptionEn": "Return to Z2", "durationMin": 20, "zone": "Z2" }
+        {
+          "description": "Course Z2",
+          "descriptionEn": "Z2 running",
+          "durationMin": 30,
+          "zone": "Z2"
+        },
+        {
+          "description": "Bloc allure marathon",
+          "descriptionEn": "Marathon pace block",
+          "durationMin": 30,
+          "zone": "Z3",
+          "pace": "Allure Marathon"
+        },
+        {
+          "description": "Retour en Z2",
+          "descriptionEn": "Return to Z2",
+          "durationMin": 20,
+          "zone": "Z2"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Le bloc à allure spécifique doit rester contrôlé",
@@ -91,12 +164,24 @@
         "Running specific blocks too fast",
         "Neglecting hydration"
       ],
-      "variationIds": ["SL-001", "SL-003"],
+      "variationIds": [
+        "SL-001",
+        "SL-003"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["late"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "key",
-        "tags": ["long", "specific", "marathon"],
+        "tags": [
+          "long",
+          "specific",
+          "marathon"
+        ],
         "priorityScore": 85
       }
     },
@@ -110,16 +195,38 @@
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 80, "max": 100 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 80,
+        "max": 100
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Début très progressif", "descriptionEn": "Very gradual start", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Début très progressif",
+          "descriptionEn": "Very gradual start",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Course continue Z2", "descriptionEn": "Continuous Z2 running", "durationMin": 70, "zone": "Z2" }
+        {
+          "description": "Course continue Z2",
+          "descriptionEn": "Continuous Z2 running",
+          "durationMin": 70,
+          "zone": "Z2"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Retour au calme", "descriptionEn": "Cool down", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Retour au calme",
+          "descriptionEn": "Cool down",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Pas de contrainte d'allure, juste la durée",
@@ -139,12 +246,23 @@
         "Trying to go too fast",
         "Increasing duration too quickly"
       ],
-      "variationIds": ["SL-001"],
+      "variationIds": [
+        "SL-001"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["late"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "hard",
-        "tags": ["long", "endurance", "base"],
+        "tags": [
+          "long",
+          "endurance",
+          "base"
+        ],
         "priorityScore": 85
       }
     },
@@ -158,18 +276,51 @@
       "sessionType": "long_run",
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 90, "max": 110 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 80,
+        "max": 100
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z2" }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z2"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Course Z2", "descriptionEn": "Z2 running", "durationMin": 25, "zone": "Z2" },
-        { "description": "Bloc allure semi", "descriptionEn": "Half-marathon pace block", "durationMin": 25, "zone": "Z3-Z4", "pace": "Allure Semi" },
-        { "description": "Retour Z2", "descriptionEn": "Return to Z2", "durationMin": 15, "zone": "Z2" }
+        {
+          "description": "Course Z2",
+          "descriptionEn": "Z2 running",
+          "durationMin": 25,
+          "zone": "Z2"
+        },
+        {
+          "description": "Bloc allure semi",
+          "descriptionEn": "Half-marathon pace block",
+          "durationMin": 25,
+          "zone": "Z3-Z4",
+          "pace": "Allure Semi"
+        },
+        {
+          "description": "Retour Z2",
+          "descriptionEn": "Return to Z2",
+          "durationMin": 15,
+          "zone": "Z2"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Allure semi = entre tempo et seuil",
@@ -189,12 +340,23 @@
         "Confusing half-marathon and 10K pace",
         "Not adapting nutrition"
       ],
-      "variationIds": ["SL-002"],
+      "variationIds": [
+        "SL-002"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["late"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "key",
-        "tags": ["long", "half-marathon", "specific"],
+        "tags": [
+          "long",
+          "half-marathon",
+          "specific"
+        ],
         "priorityScore": 80
       }
     },
@@ -208,16 +370,38 @@
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 90, "max": 120 },
-      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 85,
+        "max": 105
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Début sur terrain facile", "descriptionEn": "Start on easy terrain", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Début sur terrain facile",
+          "descriptionEn": "Start on easy terrain",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Course sur terrain vallonné, effort Z2", "descriptionEn": "Running on hilly terrain, Z2 effort", "durationMin": 75, "zone": "Z2" }
+        {
+          "description": "Course sur terrain vallonné, effort Z2",
+          "descriptionEn": "Running on hilly terrain, Z2 effort",
+          "durationMin": 75,
+          "zone": "Z2"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Retour tranquille", "descriptionEn": "Easy return", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Retour tranquille",
+          "descriptionEn": "Easy return",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Gérez l'effort, pas l'allure",
@@ -237,12 +421,24 @@
         "Attacking climbs too hard",
         "Underestimating time needed"
       ],
-      "variationIds": ["SL-001", "SL-006"],
+      "variationIds": [
+        "SL-001",
+        "SL-006"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["late"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "hard",
-        "tags": ["long", "hills", "strength"],
+        "tags": [
+          "long",
+          "hills",
+          "strength"
+        ],
         "priorityScore": 70
       }
     },
@@ -256,16 +452,38 @@
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 100, "max": 150 },
-      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 100,
+        "max": 130
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Marche puis footing sur chemin", "descriptionEn": "Walk then jog on path", "durationMin": 15, "zone": "Z1" }
+        {
+          "description": "Marche puis footing sur chemin",
+          "descriptionEn": "Walk then jog on path",
+          "durationMin": 15,
+          "zone": "Z1"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Course sur sentiers, effort Z2", "descriptionEn": "Trail running, Z2 effort", "durationMin": 90, "zone": "Z2" }
+        {
+          "description": "Course sur sentiers, effort Z2",
+          "descriptionEn": "Trail running, Z2 effort",
+          "durationMin": 90,
+          "zone": "Z2"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Retour calme", "descriptionEn": "Calm return", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Retour calme",
+          "descriptionEn": "Calm return",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Marchez dans les montées techniques",
@@ -285,12 +503,23 @@
         "Underestimating terrain difficulty",
         "Not adapting equipment"
       ],
-      "variationIds": ["SL-005"],
+      "variationIds": [
+        "SL-005"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["late"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "hard",
-        "tags": ["long", "trail", "nature"],
+        "tags": [
+          "long",
+          "trail",
+          "nature"
+        ],
         "priorityScore": 65
       }
     },
@@ -304,17 +533,44 @@
       "sessionType": "long_run",
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 100, "max": 120 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 90,
+        "max": 110
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Début très progressif", "descriptionEn": "Very gradual start", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Début très progressif",
+          "descriptionEn": "Very gradual start",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Course Z2", "descriptionEn": "Z2 running", "durationMin": 60, "zone": "Z2" },
-        { "description": "Tempo final", "descriptionEn": "Final tempo", "durationMin": 20, "zone": "Z3" }
+        {
+          "description": "Course Z2",
+          "descriptionEn": "Z2 running",
+          "durationMin": 60,
+          "zone": "Z2"
+        },
+        {
+          "description": "Tempo final",
+          "descriptionEn": "Final tempo",
+          "durationMin": 20,
+          "zone": "Z3"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Retour au calme", "descriptionEn": "Cool down", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Retour au calme",
+          "descriptionEn": "Cool down",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Le tempo arrive sur jambes fatiguées",
@@ -334,12 +590,24 @@
         "Running Z2 too fast",
         "Cracking on the final tempo"
       ],
-      "variationIds": ["SL-001", "SL-002"],
+      "variationIds": [
+        "SL-001",
+        "SL-002"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["late"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "key",
-        "tags": ["long", "tempo", "marathon"],
+        "tags": [
+          "long",
+          "tempo",
+          "marathon"
+        ],
         "priorityScore": 75
       }
     },
@@ -353,16 +621,37 @@
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 80, "max": 100 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 80,
+        "max": 100
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Marche puis footing lent", "descriptionEn": "Walk then slow jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Marche puis footing lent",
+          "descriptionEn": "Walk then slow jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Footing Z1-Z2, pauses marche autorisées", "descriptionEn": "Z1-Z2 jog, walk breaks allowed", "durationMin": 70, "zone": "Z1-Z2" }
+        {
+          "description": "Footing Z1-Z2, pauses marche autorisées",
+          "descriptionEn": "Z1-Z2 jog, walk breaks allowed",
+          "durationMin": 70,
+          "zone": "Z1-Z2"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Marche et étirements", "descriptionEn": "Walk and stretching", "durationMin": 10 }
+        {
+          "description": "Marche et étirements",
+          "descriptionEn": "Walk and stretching",
+          "durationMin": 10
+        }
       ],
       "coachingTips": [
         "L'objectif est la durée, pas la vitesse",
@@ -382,12 +671,21 @@
         "Wanting to run without breaks",
         "Increasing duration too quickly"
       ],
-      "variationIds": ["SL-003"],
+      "variationIds": [
+        "SL-003"
+      ],
       "selectionCriteria": {
-        "phases": ["base"],
-        "weekPositions": ["late"],
+        "phases": [
+          "base"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "moderate",
-        "tags": ["long", "beginner"],
+        "tags": [
+          "long",
+          "beginner"
+        ],
         "priorityScore": 90
       }
     },
@@ -401,16 +699,38 @@
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 70, "max": 90 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 70,
+        "max": 90
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Démarrage très lent", "descriptionEn": "Very slow start", "durationMin": 15, "zone": "Z1" }
+        {
+          "description": "Démarrage très lent",
+          "descriptionEn": "Very slow start",
+          "durationMin": 15,
+          "zone": "Z1"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Course Z1-Z2 bas", "descriptionEn": "Low Z1-Z2 running", "durationMin": 55, "zone": "Z1-Z2" }
+        {
+          "description": "Course Z1-Z2 bas",
+          "descriptionEn": "Low Z1-Z2 running",
+          "durationMin": 55,
+          "zone": "Z1-Z2"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Retour calme", "descriptionEn": "Calm return", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Retour calme",
+          "descriptionEn": "Calm return",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Maximum 90 min à jeun",
@@ -430,12 +750,22 @@
         "Exceeding 90 min fasted",
         "Running too fast without fuel reserves"
       ],
-      "variationIds": ["SL-003"],
+      "variationIds": [
+        "SL-003"
+      ],
       "selectionCriteria": {
-        "phases": ["base"],
-        "weekPositions": ["late"],
+        "phases": [
+          "base"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "hard",
-        "tags": ["long", "fasted", "fat-burning"],
+        "tags": [
+          "long",
+          "fasted",
+          "fat-burning"
+        ],
         "priorityScore": 55
       }
     },
@@ -449,16 +779,39 @@
       "sessionType": "long_run",
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 120, "max": 150 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 120,
+        "max": 150
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Échauffement type jour de course", "descriptionEn": "Race-day style warm-up", "durationMin": 15, "zone": "Z1-Z2" }
+        {
+          "description": "Échauffement type jour de course",
+          "descriptionEn": "Race-day style warm-up",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Course à allure marathon avec ravitos tous les 5km", "descriptionEn": "Marathon pace running with aid stations every 5km", "durationMin": 100, "zone": "Z3", "pace": "Allure Marathon" }
+        {
+          "description": "Course à allure marathon avec ravitos tous les 5km",
+          "descriptionEn": "Marathon pace running with aid stations every 5km",
+          "durationMin": 100,
+          "zone": "Z3",
+          "pace": "Allure Marathon"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Récupération active", "descriptionEn": "Active recovery", "durationMin": 15, "zone": "Z1" }
+        {
+          "description": "Récupération active",
+          "descriptionEn": "Active recovery",
+          "durationMin": 15,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Testez votre équipement de course",
@@ -478,12 +831,22 @@
         "Testing new things on race day",
         "Running faster than target pace"
       ],
-      "variationIds": ["SL-002"],
+      "variationIds": [
+        "SL-002"
+      ],
       "selectionCriteria": {
-        "phases": ["peak"],
-        "weekPositions": ["late"],
+        "phases": [
+          "peak"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "key",
-        "tags": ["long", "simulation", "race-prep"],
+        "tags": [
+          "long",
+          "simulation",
+          "race-prep"
+        ],
         "priorityScore": 80
       }
     },
@@ -497,16 +860,38 @@
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
       "difficulty": "elite",
-      "typicalDuration": { "min": 90, "max": 110 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 90,
+        "max": 110
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Début très lent", "descriptionEn": "Very slow start", "durationMin": 15, "zone": "Z1" }
+        {
+          "description": "Début très lent",
+          "descriptionEn": "Very slow start",
+          "durationMin": 15,
+          "zone": "Z1"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Course Z2 sur jambes fatiguées", "descriptionEn": "Z2 running on tired legs", "durationMin": 70, "zone": "Z2" }
+        {
+          "description": "Course Z2 sur jambes fatiguées",
+          "descriptionEn": "Z2 running on tired legs",
+          "durationMin": 70,
+          "zone": "Z2"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Retour calme", "descriptionEn": "Calm return", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Retour calme",
+          "descriptionEn": "Calm return",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Le but est de courir fatigué",
@@ -526,12 +911,22 @@
         "Underestimating fatigue",
         "Doing too many back-to-backs"
       ],
-      "variationIds": ["SL-001"],
+      "variationIds": [
+        "SL-001"
+      ],
       "selectionCriteria": {
-        "phases": ["peak"],
-        "weekPositions": ["late"],
+        "phases": [
+          "peak"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "key",
-        "tags": ["long", "fatigue", "elite"],
+        "tags": [
+          "long",
+          "fatigue",
+          "elite"
+        ],
         "priorityScore": 50
       }
     },
@@ -545,16 +940,38 @@
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 60, "max": 80 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 60,
+        "max": 80
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Début progressif", "descriptionEn": "Gradual start", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Début progressif",
+          "descriptionEn": "Gradual start",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Course Z2 avec 10min à allure course", "descriptionEn": "Z2 running with 10min at race pace", "durationMin": 45, "zone": "Z2" }
+        {
+          "description": "Course Z2 avec 10min à allure course",
+          "descriptionEn": "Z2 running with 10min at race pace",
+          "durationMin": 45,
+          "zone": "Z2"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Retour tranquille", "descriptionEn": "Easy return", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Retour tranquille",
+          "descriptionEn": "Easy return",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "2 semaines avant la course environ",
@@ -574,12 +991,22 @@
         "Doing a full long run too close to race",
         "Trying to compensate for reduced volume"
       ],
-      "variationIds": ["SL-001"],
+      "variationIds": [
+        "SL-001"
+      ],
       "selectionCriteria": {
-        "phases": ["taper"],
-        "weekPositions": ["late"],
+        "phases": [
+          "taper"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "moderate",
-        "tags": ["long", "taper", "pre-race"],
+        "tags": [
+          "long",
+          "taper",
+          "pre-race"
+        ],
         "priorityScore": 85
       }
     }

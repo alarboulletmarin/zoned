@@ -11,19 +11,56 @@
       "sessionType": "mixed",
       "targetSystem": "mixed",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 60, "max": 75 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 45,
+        "max": 55
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Gammes dynamiques", "descriptionEn": "Dynamic drills", "durationMin": 5 }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes dynamiques",
+          "descriptionEn": "Dynamic drills",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Bloc tempo", "descriptionEn": "Tempo block", "durationMin": 15, "zone": "Z3" },
-        { "description": "Récupération", "descriptionEn": "Recovery", "durationMin": 5, "zone": "Z1" },
-        { "description": "10x30/30 VMA", "descriptionEn": "10x30/30 VO2max intervals", "zone": "Z5", "repetitions": 10, "recovery": "30s footing" }
+        {
+          "description": "Bloc tempo",
+          "descriptionEn": "Tempo block",
+          "durationMin": 15,
+          "zone": "Z3"
+        },
+        {
+          "description": "Récupération",
+          "descriptionEn": "Recovery",
+          "durationMin": 5,
+          "zone": "Z1"
+        },
+        {
+          "description": "10x30/30 VMA",
+          "descriptionEn": "10x30/30 VO2max intervals",
+          "zone": "Z5",
+          "repetitions": 10,
+          "recovery": "30s footing"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Le tempo prépare les jambes pour les intervalles",
@@ -43,12 +80,23 @@
         "Underestimating fatigue before the intervals",
         "Running the tempo too fast"
       ],
-      "variationIds": ["MIX-002"],
+      "variationIds": [
+        "MIX-002"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "key",
-        "tags": ["mixed", "tempo", "intervals"],
+        "tags": [
+          "mixed",
+          "tempo",
+          "intervals"
+        ],
         "priorityScore": 70
       }
     },
@@ -62,18 +110,50 @@
       "sessionType": "mixed",
       "targetSystem": "mixed",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 55, "max": 70 },
-      "environment": { "requiresHills": true, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 50,
+        "max": 60
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Endurance Z2", "descriptionEn": "Z2 endurance", "durationMin": 15, "zone": "Z2" },
-        { "description": "6x côtes courtes", "descriptionEn": "6x short hills", "repetitions": 6, "recovery": "Descente" },
-        { "description": "Endurance Z2", "descriptionEn": "Z2 endurance", "durationMin": 15, "zone": "Z2" }
+        {
+          "description": "Endurance Z2",
+          "descriptionEn": "Z2 endurance",
+          "durationMin": 15,
+          "zone": "Z2"
+        },
+        {
+          "description": "6x côtes courtes",
+          "descriptionEn": "6x short hills",
+          "repetitions": 6,
+          "recovery": "Descente"
+        },
+        {
+          "description": "Endurance Z2",
+          "descriptionEn": "Z2 endurance",
+          "durationMin": 15,
+          "zone": "Z2"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Les côtes au milieu cassent la monotonie",
@@ -93,12 +173,23 @@
         "Running endurance portion too fast",
         "Neglecting the hills"
       ],
-      "variationIds": ["MIX-001"],
+      "variationIds": [
+        "MIX-001"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "hard",
-        "tags": ["mixed", "hills", "endurance"],
+        "tags": [
+          "mixed",
+          "hills",
+          "endurance"
+        ],
         "priorityScore": 65
       }
     },
@@ -112,22 +203,80 @@
       "sessionType": "mixed",
       "targetSystem": "mixed",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 55, "max": 65 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 35,
+        "max": 45
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "1min Z4", "descriptionEn": "1min Z4", "durationMin": 1, "zone": "Z4", "recovery": "1min Z2" },
-        { "description": "2min Z4", "descriptionEn": "2min Z4", "durationMin": 2, "zone": "Z4", "recovery": "1min Z2" },
-        { "description": "3min Z4", "descriptionEn": "3min Z4", "durationMin": 3, "zone": "Z4", "recovery": "2min Z2" },
-        { "description": "4min Z4", "descriptionEn": "4min Z4", "durationMin": 4, "zone": "Z4", "recovery": "2min Z2" },
-        { "description": "3min Z4", "descriptionEn": "3min Z4", "durationMin": 3, "zone": "Z4", "recovery": "2min Z2" },
-        { "description": "2min Z4", "descriptionEn": "2min Z4", "durationMin": 2, "zone": "Z4", "recovery": "1min Z2" },
-        { "description": "1min Z4", "descriptionEn": "1min Z4", "durationMin": 1, "zone": "Z4" }
+        {
+          "description": "1min Z4",
+          "descriptionEn": "1min Z4",
+          "durationMin": 1,
+          "zone": "Z4",
+          "recovery": "1min Z2"
+        },
+        {
+          "description": "2min Z4",
+          "descriptionEn": "2min Z4",
+          "durationMin": 2,
+          "zone": "Z4",
+          "recovery": "1min Z2"
+        },
+        {
+          "description": "3min Z4",
+          "descriptionEn": "3min Z4",
+          "durationMin": 3,
+          "zone": "Z4",
+          "recovery": "2min Z2"
+        },
+        {
+          "description": "4min Z4",
+          "descriptionEn": "4min Z4",
+          "durationMin": 4,
+          "zone": "Z4",
+          "recovery": "2min Z2"
+        },
+        {
+          "description": "3min Z4",
+          "descriptionEn": "3min Z4",
+          "durationMin": 3,
+          "zone": "Z4",
+          "recovery": "2min Z2"
+        },
+        {
+          "description": "2min Z4",
+          "descriptionEn": "2min Z4",
+          "durationMin": 2,
+          "zone": "Z4",
+          "recovery": "1min Z2"
+        },
+        {
+          "description": "1min Z4",
+          "descriptionEn": "1min Z4",
+          "durationMin": 1,
+          "zone": "Z4"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Le 4min est le sommet de la pyramide",
@@ -147,12 +296,21 @@
         "Speeding up on short intervals",
         "Slowing down on long intervals"
       ],
-      "variationIds": ["MIX-001"],
+      "variationIds": [
+        "MIX-001"
+      ],
       "selectionCriteria": {
-        "phases": ["build"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "hard",
-        "tags": ["mixed", "pyramid"],
+        "tags": [
+          "mixed",
+          "pyramid"
+        ],
         "priorityScore": 70
       }
     },
@@ -166,18 +324,50 @@
       "sessionType": "mixed",
       "targetSystem": "mixed",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 60, "max": 75 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 60,
+        "max": 75
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Début tranquille", "descriptionEn": "Easy start", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Début tranquille",
+          "descriptionEn": "Easy start",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Endurance Z2", "descriptionEn": "Z2 endurance", "durationMin": 20, "zone": "Z2" },
-        { "description": "Bloc qualité au choix (tempo ou seuil)", "descriptionEn": "Quality block of choice (tempo or threshold)", "durationMin": 15, "zone": "Z3-Z4" },
-        { "description": "Endurance Z2", "descriptionEn": "Z2 endurance", "durationMin": 15, "zone": "Z2" }
+        {
+          "description": "Endurance Z2",
+          "descriptionEn": "Z2 endurance",
+          "durationMin": 20,
+          "zone": "Z2"
+        },
+        {
+          "description": "Bloc qualité au choix (tempo ou seuil)",
+          "descriptionEn": "Quality block of choice (tempo or threshold)",
+          "durationMin": 15,
+          "zone": "Z3-Z4"
+        },
+        {
+          "description": "Endurance Z2",
+          "descriptionEn": "Z2 endurance",
+          "durationMin": 15,
+          "zone": "Z2"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Retour au calme", "descriptionEn": "Cool down", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Retour au calme",
+          "descriptionEn": "Cool down",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Adaptez le bloc qualité selon la forme",
@@ -197,12 +387,22 @@
         "Running endurance too fast",
         "Quality block too ambitious"
       ],
-      "variationIds": ["MIX-001"],
+      "variationIds": [
+        "MIX-001"
+      ],
       "selectionCriteria": {
-        "phases": ["build"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "hard",
-        "tags": ["mixed", "sandwich", "flexible"],
+        "tags": [
+          "mixed",
+          "sandwich",
+          "flexible"
+        ],
         "priorityScore": 65
       }
     },
@@ -216,21 +416,71 @@
       "sessionType": "mixed",
       "targetSystem": "mixed",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 60, "max": 70 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 45,
+        "max": 55
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "4min Z4", "descriptionEn": "4min Z4", "durationMin": 4, "zone": "Z4", "recovery": "2min Z1" },
-        { "description": "3min Z4", "descriptionEn": "3min Z4", "durationMin": 3, "zone": "Z4", "recovery": "90s Z1" },
-        { "description": "2min Z4", "descriptionEn": "2min Z4", "durationMin": 2, "zone": "Z4", "recovery": "1min Z1" },
-        { "description": "1min Z4+", "descriptionEn": "1min Z4+", "durationMin": 1, "zone": "Z4-Z5" },
-        { "description": "Récupération", "descriptionEn": "Recovery", "durationMin": 5, "zone": "Z1" },
-        { "description": "Tempo Z3", "descriptionEn": "Z3 tempo", "durationMin": 10, "zone": "Z3" }
+        {
+          "description": "4min Z4",
+          "descriptionEn": "4min Z4",
+          "durationMin": 4,
+          "zone": "Z4",
+          "recovery": "2min Z1"
+        },
+        {
+          "description": "3min Z4",
+          "descriptionEn": "3min Z4",
+          "durationMin": 3,
+          "zone": "Z4",
+          "recovery": "90s Z1"
+        },
+        {
+          "description": "2min Z4",
+          "descriptionEn": "2min Z4",
+          "durationMin": 2,
+          "zone": "Z4",
+          "recovery": "1min Z1"
+        },
+        {
+          "description": "1min Z4+",
+          "descriptionEn": "1min Z4+",
+          "durationMin": 1,
+          "zone": "Z4-Z5"
+        },
+        {
+          "description": "Récupération",
+          "descriptionEn": "Recovery",
+          "durationMin": 5,
+          "zone": "Z1"
+        },
+        {
+          "description": "Tempo Z3",
+          "descriptionEn": "Z3 tempo",
+          "durationMin": 10,
+          "zone": "Z3"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Accélérez légèrement à chaque intervalle",
@@ -250,12 +500,23 @@
         "Starting too fast on the 4-minute",
         "Cracking on the final tempo"
       ],
-      "variationIds": ["MIX-001", "MIX-003"],
+      "variationIds": [
+        "MIX-001",
+        "MIX-003"
+      ],
       "selectionCriteria": {
-        "phases": ["peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "key",
-        "tags": ["mixed", "descending", "tempo"],
+        "tags": [
+          "mixed",
+          "descending",
+          "tempo"
+        ],
         "priorityScore": 60
       }
     },
@@ -269,17 +530,44 @@
       "sessionType": "mixed",
       "targetSystem": "mixed",
       "difficulty": "elite",
-      "typicalDuration": { "min": 70, "max": 90 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 60,
+        "max": 80
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Session matin : footing réveil Z1", "descriptionEn": "Morning session: wake-up jog Z1", "durationMin": 25, "zone": "Z1" }
+        {
+          "description": "Session matin : footing réveil Z1",
+          "descriptionEn": "Morning session: wake-up jog Z1",
+          "durationMin": 25,
+          "zone": "Z1"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Session soir : échauffement", "descriptionEn": "Evening session: warm-up", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Session soir : bloc qualité", "descriptionEn": "Evening session: quality block", "durationMin": 20, "zone": "Z3-Z4" }
+        {
+          "description": "Session soir : échauffement",
+          "descriptionEn": "Evening session: warm-up",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Session soir : bloc qualité",
+          "descriptionEn": "Evening session: quality block",
+          "durationMin": 20,
+          "zone": "Z3-Z4"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Récupération", "descriptionEn": "Recovery", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Récupération",
+          "descriptionEn": "Recovery",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Minimum 6h entre les deux sessions",
@@ -299,12 +587,23 @@
         "Sessions too close together",
         "Doing too much in the morning"
       ],
-      "variationIds": ["MIX-001"],
+      "variationIds": [
+        "MIX-001"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "key",
-        "tags": ["mixed", "double", "elite"],
+        "tags": [
+          "mixed",
+          "double",
+          "elite"
+        ],
         "priorityScore": 45
       }
     },
@@ -318,18 +617,50 @@
       "sessionType": "mixed",
       "targetSystem": "mixed",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 55, "max": 65 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 55,
+        "max": 65
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 10, "zone": "Z1-Z2" }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 10,
+          "zone": "Z1-Z2"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Fartlek libre varié", "descriptionEn": "Free varied fartlek", "durationMin": 20, "zone": "Z2-Z4" },
-        { "description": "Récupération", "descriptionEn": "Recovery", "durationMin": 5, "zone": "Z1" },
-        { "description": "Tempo continu", "descriptionEn": "Continuous tempo", "durationMin": 12, "zone": "Z3" }
+        {
+          "description": "Fartlek libre varié",
+          "descriptionEn": "Free varied fartlek",
+          "durationMin": 20,
+          "zone": "Z2-Z4"
+        },
+        {
+          "description": "Récupération",
+          "descriptionEn": "Recovery",
+          "durationMin": 5,
+          "zone": "Z1"
+        },
+        {
+          "description": "Tempo continu",
+          "descriptionEn": "Continuous tempo",
+          "durationMin": 12,
+          "zone": "Z3"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Le fartlek réveille les jambes",
@@ -349,12 +680,23 @@
         "Fartlek too intense",
         "Not enough energy left for tempo"
       ],
-      "variationIds": ["MIX-001", "FAR-001"],
+      "variationIds": [
+        "MIX-001",
+        "FAR-001"
+      ],
       "selectionCriteria": {
-        "phases": ["build"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "hard",
-        "tags": ["mixed", "fartlek", "tempo"],
+        "tags": [
+          "mixed",
+          "fartlek",
+          "tempo"
+        ],
         "priorityScore": 60
       }
     },
@@ -368,19 +710,55 @@
       "sessionType": "mixed",
       "targetSystem": "mixed",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 50, "max": 60 },
-      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 50,
+        "max": 60
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": true,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Gammes", "descriptionEn": "Drills", "durationMin": 5 }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes",
+          "descriptionEn": "Drills",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Test 1000m ou 3min pour évaluer la forme", "descriptionEn": "1000m or 3min test to assess fitness", "durationMin": 4, "zone": "Z5" },
-        { "description": "Récupération et analyse", "descriptionEn": "Recovery and analysis", "durationMin": 5, "zone": "Z1" },
-        { "description": "Séance adaptée selon le résultat du test", "descriptionEn": "Session adapted based on test result", "durationMin": 15, "zone": "Z3-Z4" }
+        {
+          "description": "Test 1000m ou 3min pour évaluer la forme",
+          "descriptionEn": "1000m or 3min test to assess fitness",
+          "durationMin": 4,
+          "zone": "Z5"
+        },
+        {
+          "description": "Récupération et analyse",
+          "descriptionEn": "Recovery and analysis",
+          "durationMin": 5,
+          "zone": "Z1"
+        },
+        {
+          "description": "Séance adaptée selon le résultat du test",
+          "descriptionEn": "Session adapted based on test result",
+          "durationMin": 15,
+          "zone": "Z3-Z4"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Le test indique la forme du jour",
@@ -400,12 +778,22 @@
         "Ignoring the test result",
         "Always doing the same thing afterwards"
       ],
-      "variationIds": ["MIX-001"],
+      "variationIds": [
+        "MIX-001"
+      ],
       "selectionCriteria": {
-        "phases": ["build"],
-        "weekPositions": ["early"],
+        "phases": [
+          "build"
+        ],
+        "weekPositions": [
+          "early"
+        ],
         "relativeLoad": "moderate",
-        "tags": ["mixed", "test", "adaptive"],
+        "tags": [
+          "mixed",
+          "test",
+          "adaptive"
+        ],
         "priorityScore": 55
       }
     },
@@ -419,16 +807,38 @@
       "sessionType": "mixed",
       "targetSystem": "mixed",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 80, "max": 100 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 80,
+        "max": 100
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Début très progressif", "descriptionEn": "Very gradual start", "durationMin": 15, "zone": "Z1" }
+        {
+          "description": "Début très progressif",
+          "descriptionEn": "Very gradual start",
+          "durationMin": 15,
+          "zone": "Z1"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Course Z2 avec 6-8 accélérations de 20-30s réparties", "descriptionEn": "Z2 run with 6-8 scattered 20-30s surges", "durationMin": 60, "zone": "Z2" }
+        {
+          "description": "Course Z2 avec 6-8 accélérations de 20-30s réparties",
+          "descriptionEn": "Z2 run with 6-8 scattered 20-30s surges",
+          "durationMin": 60,
+          "zone": "Z2"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Retour au calme", "descriptionEn": "Cool down", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Retour au calme",
+          "descriptionEn": "Cool down",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Les accélérations réveillent les jambes",
@@ -448,12 +858,22 @@
         "Too many surges",
         "Surges too long or too intense"
       ],
-      "variationIds": ["SL-001"],
+      "variationIds": [
+        "SL-001"
+      ],
       "selectionCriteria": {
-        "phases": ["build"],
-        "weekPositions": ["late"],
+        "phases": [
+          "build"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "hard",
-        "tags": ["mixed", "long", "strides"],
+        "tags": [
+          "mixed",
+          "long",
+          "strides"
+        ],
         "priorityScore": 60
       }
     },
@@ -467,18 +887,52 @@
       "sessionType": "mixed",
       "targetSystem": "mixed",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 40, "max": 50 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 30,
+        "max": 35
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "5min allure course", "descriptionEn": "5min at race pace", "durationMin": 5, "zone": "Z3-Z4", "pace": "Allure Course" },
-        { "description": "Récup", "descriptionEn": "Recovery", "durationMin": 3, "zone": "Z1" },
-        { "description": "3x30s rapide", "descriptionEn": "3x30s fast", "zone": "Z5", "repetitions": 3, "recovery": "1min footing" }
+        {
+          "description": "5min allure course",
+          "descriptionEn": "5min at race pace",
+          "durationMin": 5,
+          "zone": "Z3-Z4",
+          "pace": "Allure Course"
+        },
+        {
+          "description": "Récup",
+          "descriptionEn": "Recovery",
+          "durationMin": 3,
+          "zone": "Z1"
+        },
+        {
+          "description": "3x30s rapide",
+          "descriptionEn": "3x30s fast",
+          "zone": "Z5",
+          "repetitions": 3,
+          "recovery": "1min footing"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Juste un rappel des différentes allures",
@@ -498,12 +952,22 @@
         "Doing too much before the race",
         "Running efforts too hard"
       ],
-      "variationIds": ["MIX-001"],
+      "variationIds": [
+        "MIX-001"
+      ],
       "selectionCriteria": {
-        "phases": ["taper"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "taper"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "light",
-        "tags": ["mixed", "taper", "pre-race"],
+        "tags": [
+          "mixed",
+          "taper",
+          "pre-race"
+        ],
         "priorityScore": 85
       }
     },
@@ -517,21 +981,67 @@
       "sessionType": "intervals",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 35, "max": 45 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 35,
+        "max": 45
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 10, "zone": "Z1-Z2" },
-        { "description": "Mobilite et accelerations", "descriptionEn": "Mobility and accelerations", "durationMin": 5 }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 10,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Mobilite et accelerations",
+          "descriptionEn": "Mobility and accelerations",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Bloc 1: 5x (30s Z1 + 20s Z3 + 10s sprint)", "descriptionEn": "Block 1: 5x (30s Z1 + 20s Z3 + 10s sprint)", "durationMin": 5, "zone": "Z1-Z6" },
-        { "description": "Recuperation entre blocs", "descriptionEn": "Recovery between blocks", "durationMin": 2, "zone": "Z1" },
-        { "description": "Bloc 2: 5x (30s Z1 + 20s Z3 + 10s sprint)", "descriptionEn": "Block 2: 5x (30s Z1 + 20s Z3 + 10s sprint)", "durationMin": 5, "zone": "Z1-Z6" },
-        { "description": "Recuperation entre blocs", "descriptionEn": "Recovery between blocks", "durationMin": 2, "zone": "Z1" },
-        { "description": "Bloc 3: 5x (30s Z1 + 20s Z3 + 10s sprint)", "descriptionEn": "Block 3: 5x (30s Z1 + 20s Z3 + 10s sprint)", "durationMin": 5, "zone": "Z1-Z6" }
+        {
+          "description": "Bloc 1: 5x (30s Z1 + 20s Z3 + 10s sprint)",
+          "descriptionEn": "Block 1: 5x (30s Z1 + 20s Z3 + 10s sprint)",
+          "durationMin": 5,
+          "zone": "Z1-Z6"
+        },
+        {
+          "description": "Recuperation entre blocs",
+          "descriptionEn": "Recovery between blocks",
+          "durationMin": 2,
+          "zone": "Z1"
+        },
+        {
+          "description": "Bloc 2: 5x (30s Z1 + 20s Z3 + 10s sprint)",
+          "descriptionEn": "Block 2: 5x (30s Z1 + 20s Z3 + 10s sprint)",
+          "durationMin": 5,
+          "zone": "Z1-Z6"
+        },
+        {
+          "description": "Recuperation entre blocs",
+          "descriptionEn": "Recovery between blocks",
+          "durationMin": 2,
+          "zone": "Z1"
+        },
+        {
+          "description": "Bloc 3: 5x (30s Z1 + 20s Z3 + 10s sprint)",
+          "descriptionEn": "Block 3: 5x (30s Z1 + 20s Z3 + 10s sprint)",
+          "durationMin": 5,
+          "zone": "Z1-Z6"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de recuperation", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de recuperation",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Le sprint de 10s doit etre maximal",
@@ -555,12 +1065,25 @@
         "Running the 30s too fast",
         "Skipping recovery between blocks"
       ],
-      "variationIds": ["MIX-012", "MIX-013"],
+      "variationIds": [
+        "MIX-012",
+        "MIX-013"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "hard",
-        "tags": ["mixed", "bangsbo", "10-20-30", "scientific"],
+        "tags": [
+          "mixed",
+          "bangsbo",
+          "10-20-30",
+          "scientific"
+        ],
         "priorityScore": 80
       }
     },
@@ -574,20 +1097,62 @@
       "sessionType": "intervals",
       "targetSystem": "aerobic_power",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 30, "max": 40 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 30,
+        "max": 40
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 10, "zone": "Z1-Z2" }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 10,
+          "zone": "Z1-Z2"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Bloc 1: 5x (30s Z1 + 20s Z3 + 10s rapide 80%)", "descriptionEn": "Block 1: 5x (30s Z1 + 20s Z3 + 10s fast 80%)", "durationMin": 5, "zone": "Z1-Z5" },
-        { "description": "Recuperation entre blocs", "descriptionEn": "Recovery between blocks", "durationMin": 2, "zone": "Z1" },
-        { "description": "Bloc 2: 5x (30s Z1 + 20s Z3 + 10s rapide 80%)", "descriptionEn": "Block 2: 5x (30s Z1 + 20s Z3 + 10s fast 80%)", "durationMin": 5, "zone": "Z1-Z5" },
-        { "description": "Recuperation entre blocs", "descriptionEn": "Recovery between blocks", "durationMin": 2, "zone": "Z1" },
-        { "description": "Bloc 3: 5x (30s Z1 + 20s Z3 + 10s rapide 80%)", "descriptionEn": "Block 3: 5x (30s Z1 + 20s Z3 + 10s fast 80%)", "durationMin": 5, "zone": "Z1-Z5" }
+        {
+          "description": "Bloc 1: 5x (30s Z1 + 20s Z3 + 10s rapide 80%)",
+          "descriptionEn": "Block 1: 5x (30s Z1 + 20s Z3 + 10s fast 80%)",
+          "durationMin": 5,
+          "zone": "Z1-Z5"
+        },
+        {
+          "description": "Recuperation entre blocs",
+          "descriptionEn": "Recovery between blocks",
+          "durationMin": 2,
+          "zone": "Z1"
+        },
+        {
+          "description": "Bloc 2: 5x (30s Z1 + 20s Z3 + 10s rapide 80%)",
+          "descriptionEn": "Block 2: 5x (30s Z1 + 20s Z3 + 10s fast 80%)",
+          "durationMin": 5,
+          "zone": "Z1-Z5"
+        },
+        {
+          "description": "Recuperation entre blocs",
+          "descriptionEn": "Recovery between blocks",
+          "durationMin": 2,
+          "zone": "Z1"
+        },
+        {
+          "description": "Bloc 3: 5x (30s Z1 + 20s Z3 + 10s rapide 80%)",
+          "descriptionEn": "Block 3: 5x (30s Z1 + 20s Z3 + 10s fast 80%)",
+          "durationMin": 5,
+          "zone": "Z1-Z5"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de recuperation", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de recuperation",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "80% du sprint = rapide mais controle",
@@ -609,12 +1174,25 @@
         "Starting directly with the maximal version",
         "Increasing intensity too quickly"
       ],
-      "variationIds": ["MIX-011", "MIX-013"],
+      "variationIds": [
+        "MIX-011",
+        "MIX-013"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "moderate",
-        "tags": ["mixed", "bangsbo", "10-20-30", "beginner"],
+        "tags": [
+          "mixed",
+          "bangsbo",
+          "10-20-30",
+          "beginner"
+        ],
         "priorityScore": 75
       }
     },
@@ -628,19 +1206,55 @@
       "sessionType": "intervals",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 30, "max": 50 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 70,
+        "max": 90
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 10, "zone": "Z1-Z2" },
-        { "description": "Mobilite", "descriptionEn": "Mobility", "durationMin": 3 }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 10,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Mobilite",
+          "descriptionEn": "Mobility",
+          "durationMin": 3
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Semaine 1-2: 2 blocs de 5x(30s Z1 + 20s Z3 + 10s sprint)", "descriptionEn": "Week 1-2: 2 blocks of 5x(30s Z1 + 20s Z3 + 10s sprint)", "durationMin": 12, "zone": "Z1-Z6" },
-        { "description": "OU Semaine 3-4: 3 blocs", "descriptionEn": "OR Week 3-4: 3 blocks", "durationMin": 19, "zone": "Z1-Z6" },
-        { "description": "OU Semaine 5-6: 4 blocs", "descriptionEn": "OR Week 5-6: 4 blocks", "durationMin": 26, "zone": "Z1-Z6" }
+        {
+          "description": "Semaine 1-2: 2 blocs de 5x(30s Z1 + 20s Z3 + 10s sprint)",
+          "descriptionEn": "Week 1-2: 2 blocks of 5x(30s Z1 + 20s Z3 + 10s sprint)",
+          "durationMin": 12,
+          "zone": "Z1-Z6"
+        },
+        {
+          "description": "OU Semaine 3-4: 3 blocs",
+          "descriptionEn": "OR Week 3-4: 3 blocks",
+          "durationMin": 19,
+          "zone": "Z1-Z6"
+        },
+        {
+          "description": "OU Semaine 5-6: 4 blocs",
+          "descriptionEn": "OR Week 5-6: 4 blocks",
+          "durationMin": 26,
+          "zone": "Z1-Z6"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de recuperation", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de recuperation",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Augmentez d'un bloc toutes les 2 semaines",
@@ -664,12 +1278,25 @@
         "Doing too many sessions per week",
         "Not respecting recovery phases"
       ],
-      "variationIds": ["MIX-011", "MIX-012"],
+      "variationIds": [
+        "MIX-011",
+        "MIX-012"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "hard",
-        "tags": ["mixed", "bangsbo", "10-20-30", "progression"],
+        "tags": [
+          "mixed",
+          "bangsbo",
+          "10-20-30",
+          "progression"
+        ],
         "priorityScore": 70
       }
     }

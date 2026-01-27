@@ -11,17 +11,43 @@
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 30, "max": 40 },
-      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 30,
+        "max": 40
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": true,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 10, "zone": "Z1-Z2" },
-        { "description": "Gammes et 3x accélérations", "descriptionEn": "Drills and 3x accelerations", "durationMin": 5 }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 10,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes et 3x accélérations",
+          "descriptionEn": "Drills and 3x accelerations",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Test 6 minutes : courir la plus grande distance possible", "descriptionEn": "6-minute test: run the greatest distance possible", "durationMin": 6, "zone": "Z5" }
+        {
+          "description": "Test 6 minutes : courir la plus grande distance possible",
+          "descriptionEn": "6-minute test: run the greatest distance possible",
+          "durationMin": 6,
+          "zone": "Z5"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Marche puis footing très lent", "descriptionEn": "Walking then very slow jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Marche puis footing très lent",
+          "descriptionEn": "Walking then very slow jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Partez vite mais pas en sprint",
@@ -45,12 +71,25 @@
         "Not warming up enough",
         "Running the test on unmeasured terrain"
       ],
-      "variationIds": ["ASS-002", "ASS-004"],
+      "variationIds": [
+        "ASS-002",
+        "ASS-004"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["early"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "early"
+        ],
         "relativeLoad": "hard",
-        "tags": ["test", "vma", "assessment", "cooper"],
+        "tags": [
+          "test",
+          "vma",
+          "assessment",
+          "cooper"
+        ],
         "priorityScore": 80
       }
     },
@@ -64,19 +103,55 @@
       "sessionType": "threshold",
       "targetSystem": "lactate_threshold",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 50, "max": 65 },
-      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 40,
+        "max": 50
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": true,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Gammes et accélérations", "descriptionEn": "Drills and accelerations", "durationMin": 5 }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes et accélérations",
+          "descriptionEn": "Drills and accelerations",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
-        { "description": "CLM 1200m (effort maximal)", "descriptionEn": "1200m time trial (maximal effort)", "distanceM": 1200, "zone": "Z5" },
-        { "description": "Récupération complete", "descriptionEn": "Full recovery", "durationMin": 15, "zone": "Z1" },
-        { "description": "CLM 3600m (effort maximal)", "descriptionEn": "3600m time trial (maximal effort)", "distanceM": 3600, "zone": "Z4-Z5" }
+        {
+          "description": "CLM 1200m (effort maximal)",
+          "descriptionEn": "1200m time trial (maximal effort)",
+          "distanceM": 1200,
+          "zone": "Z5"
+        },
+        {
+          "description": "Récupération complete",
+          "descriptionEn": "Full recovery",
+          "durationMin": 15,
+          "zone": "Z1"
+        },
+        {
+          "description": "CLM 3600m (effort maximal)",
+          "descriptionEn": "3600m time trial (maximal effort)",
+          "distanceM": 3600,
+          "zone": "Z4-Z5"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "CV = (D2-D1) / (T2-T1) avec D en metres et T en secondes",
@@ -100,12 +175,25 @@
         "Recovery too short between the two time trials",
         "Poor pacing on the 3600m"
       ],
-      "variationIds": ["ASS-001", "ASS-003"],
+      "variationIds": [
+        "ASS-001",
+        "ASS-003"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["early"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "early"
+        ],
         "relativeLoad": "key",
-        "tags": ["test", "critical-velocity", "assessment", "billat"],
+        "tags": [
+          "test",
+          "critical-velocity",
+          "assessment",
+          "billat"
+        ],
         "priorityScore": 75
       }
     },
@@ -119,17 +207,43 @@
       "sessionType": "race_specific",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 45, "max": 60 },
-      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 35,
+        "max": 45
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": true,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Gammes et 4x lignes droites", "descriptionEn": "Drills and 4x strides", "durationMin": 10 }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes et 4x lignes droites",
+          "descriptionEn": "Drills and 4x strides",
+          "durationMin": 10
+        }
       ],
       "mainSetTemplate": [
-        { "description": "5000m contre-la-montre (effort maximal)", "descriptionEn": "5000m time trial (maximal effort)", "distanceM": 5000, "zone": "Z4-Z5" }
+        {
+          "description": "5000m contre-la-montre (effort maximal)",
+          "descriptionEn": "5000m time trial (maximal effort)",
+          "distanceM": 5000,
+          "zone": "Z4-Z5"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Marche puis footing de recuperation", "descriptionEn": "Walking then recovery jog", "durationMin": 15, "zone": "Z1" }
+        {
+          "description": "Marche puis footing de recuperation",
+          "descriptionEn": "Walking then recovery jog",
+          "durationMin": 15,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Gerez votre allure : le premier km ne doit pas etre le plus rapide",
@@ -153,12 +267,25 @@
         "Not knowing your target pace",
         "Running the test fatigued"
       ],
-      "variationIds": ["ASS-001", "ASS-002"],
+      "variationIds": [
+        "ASS-001",
+        "ASS-002"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["early"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "early"
+        ],
         "relativeLoad": "key",
-        "tags": ["test", "5k", "time-trial", "benchmark"],
+        "tags": [
+          "test",
+          "5k",
+          "time-trial",
+          "benchmark"
+        ],
         "priorityScore": 85
       }
     },
@@ -172,17 +299,42 @@
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 25, "max": 35 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 20,
+        "max": 25
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing leger", "descriptionEn": "Light jog", "durationMin": 8, "zone": "Z1" },
-        { "description": "Mobilite et accelerations courtes", "descriptionEn": "Mobility and short accelerations", "durationMin": 5 }
+        {
+          "description": "Footing leger",
+          "descriptionEn": "Light jog",
+          "durationMin": 8,
+          "zone": "Z1"
+        },
+        {
+          "description": "Mobilite et accelerations courtes",
+          "descriptionEn": "Mobility and short accelerations",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Test navettes 20m progressif (bip sonore) jusqu'a l'arret", "descriptionEn": "Progressive 20m shuttle test (audio beep) until failure", "zone": "Z1-Z5" }
+        {
+          "description": "Test navettes 20m progressif (bip sonore) jusqu'a l'arret",
+          "descriptionEn": "Progressive 20m shuttle test (audio beep) until failure",
+          "zone": "Z1-Z5"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Marche et recuperation", "descriptionEn": "Walking and recovery", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Marche et recuperation",
+          "descriptionEn": "Walking and recovery",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
       ],
       "coachingTips": [
         "Besoin d'une bande sonore ou application pour le test",
@@ -206,12 +358,25 @@
         "Distance between cones poorly measured",
         "Stopping before actual exhaustion"
       ],
-      "variationIds": ["ASS-001"],
+      "variationIds": [
+        "ASS-001"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["early"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "early"
+        ],
         "relativeLoad": "hard",
-        "tags": ["test", "vma", "shuttle", "vameval", "leger"],
+        "tags": [
+          "test",
+          "vma",
+          "shuttle",
+          "vameval",
+          "leger"
+        ],
         "priorityScore": 70
       }
     }
