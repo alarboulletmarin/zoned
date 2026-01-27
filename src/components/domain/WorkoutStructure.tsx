@@ -2,15 +2,17 @@ import { useTranslation } from "react-i18next";
 import { Lightbulb, AlertTriangle } from "lucide-react";
 import { ZoneBadge } from "./ZoneBadge";
 import { cn } from "@/lib/utils";
-import type { WorkoutTemplate, WorkoutBlock } from "@/types";
+import type { WorkoutTemplate, WorkoutBlock, ZoneRange, ZoneNumber } from "@/types";
 import { getZoneNumber } from "@/types";
+import { formatPace } from "@/lib/zones";
 
 interface WorkoutStructureProps {
   workout: WorkoutTemplate;
+  userZones?: ZoneRange[];
   className?: string;
 }
 
-export function WorkoutStructure({ workout, className }: WorkoutStructureProps) {
+export function WorkoutStructure({ workout, userZones, className }: WorkoutStructureProps) {
   const { t, i18n } = useTranslation("session");
   const isEn = i18n.language === "en";
 
@@ -41,7 +43,7 @@ export function WorkoutStructure({ workout, className }: WorkoutStructureProps) 
           </h4>
           <div className="space-y-2">
             {phase.blocks.map((block, index) => (
-              <BlockItem key={index} block={block} isEn={isEn} />
+              <BlockItem key={index} block={block} isEn={isEn} userZones={userZones} />
             ))}
           </div>
         </div>
@@ -53,31 +55,75 @@ export function WorkoutStructure({ workout, className }: WorkoutStructureProps) 
 interface BlockItemProps {
   block: WorkoutBlock;
   isEn: boolean;
+  userZones?: ZoneRange[];
 }
 
-function BlockItem({ block, isEn }: BlockItemProps) {
+/**
+ * Format personalized zone info from user zones
+ */
+function formatPersonalizedZone(zoneNumber: ZoneNumber, userZones: ZoneRange[]): string | null {
+  const zoneData = userZones.find((z) => z.zone === zoneNumber);
+  if (!zoneData) return null;
+
+  const parts: string[] = [];
+
+  // Add HR range if available
+  if (zoneData.hrMin && zoneData.hrMax) {
+    parts.push(`${zoneData.hrMin}-${zoneData.hrMax} bpm`);
+  }
+
+  // Add pace range if available
+  if (zoneData.paceMinPerKm && zoneData.paceMaxPerKm) {
+    parts.push(`${formatPace(zoneData.paceMinPerKm)}-${formatPace(zoneData.paceMaxPerKm)}/km`);
+  }
+
+  return parts.length > 0 ? parts.join(" · ") : null;
+}
+
+function BlockItem({ block, isEn, userZones }: BlockItemProps) {
   const description = isEn && block.descriptionEn
     ? block.descriptionEn
     : block.description;
 
+  const zoneNumber = block.zone ? getZoneNumber(block.zone) : null;
+  const personalizedInfo = zoneNumber && userZones && userZones.length > 0
+    ? formatPersonalizedZone(zoneNumber, userZones)
+    : null;
+
+  // Build duration/meta string
+  const metaParts: string[] = [];
+  if (block.durationMin) metaParts.push(`${block.durationMin} min`);
+  if (block.repetitions) metaParts.push(`${block.repetitions}x`);
+  if (block.distance) metaParts.push(block.distance);
+  if (block.rest) metaParts.push(`Rest: ${block.rest}`);
+  const metaString = metaParts.join(" · ");
+
   return (
     <div
       className={cn(
-        "flex items-start gap-3 p-3 rounded-lg bg-muted/50",
+        "p-3 rounded-lg bg-muted/50",
         block.zone && `zone-${getZoneNumber(block.zone)} zone-stripe pl-2`
       )}
     >
+      {/* Header row: Zone badge + personalized info */}
       {block.zone && (
-        <ZoneBadge zone={block.zone} size="sm" className="shrink-0 mt-0.5" />
-      )}
-      <div className="flex-1 min-w-0">
-        <p className="text-sm">{description}</p>
-        <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-          {block.durationMin && <span>{block.durationMin} min</span>}
-          {block.repetitions && <span>×{block.repetitions}</span>}
-          {block.distance && <span>{block.distance}</span>}
-          {block.rest && <span>Rest: {block.rest}</span>}
+        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+          <ZoneBadge zone={block.zone} size="sm" showLabel />
+          {personalizedInfo && (
+            <span className="text-[11px] text-muted-foreground">
+              {personalizedInfo}
+            </span>
+          )}
         </div>
+      )}
+      {/* Content row: Description + meta aligned */}
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-sm flex-1 min-w-0">{description}</p>
+        {metaString && (
+          <span className="text-xs text-muted-foreground whitespace-nowrap shrink-0">
+            {metaString}
+          </span>
+        )}
       </div>
     </div>
   );

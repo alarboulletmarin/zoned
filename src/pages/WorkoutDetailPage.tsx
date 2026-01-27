@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -28,15 +29,17 @@ import {
   WorkoutCardCompact,
   FavoriteButton,
   ExportMenu,
+  ZonePersonalizationCTA,
 } from "@/components/domain";
 import { SessionTimeline, ZoneDistribution } from "@/components/visualization";
 import { getWorkoutById, getRelatedWorkouts } from "@/data/workouts";
-import type { WorkoutCategory } from "@/types";
+import type { WorkoutCategory, ZoneRange } from "@/types";
 import {
   getDominantZone,
   getEstimatedDuration,
   DIFFICULTY_META,
 } from "@/types";
+import { loadUserZonePrefs, calculateAllZones } from "@/lib/zones";
 
 /** Category icons using Lucide */
 const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: string }>> = {
@@ -59,6 +62,22 @@ export function WorkoutDetailPage() {
   const isEn = i18n.language === "en";
 
   const workout = id ? getWorkoutById(id) : undefined;
+
+  // Load user zones from localStorage
+  const [userZones, setUserZones] = useState<ZoneRange[]>([]);
+  const [hasUserZones, setHasUserZones] = useState(false);
+
+  useEffect(() => {
+    const prefs = loadUserZonePrefs();
+    if (prefs && (prefs.fcMax || prefs.vma)) {
+      const zones = calculateAllZones(prefs);
+      setUserZones(zones);
+      setHasUserZones(true);
+    } else {
+      setUserZones([]);
+      setHasUserZones(false);
+    }
+  }, []);
 
   if (!workout) {
     return (
@@ -120,8 +139,7 @@ export function WorkoutDetailPage() {
           <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
             <ExportMenu workout={workout} />
             <FavoriteButton workoutId={workout.id} />
-            <ZoneBadge zone={dominantZone} size="md" className="sm:hidden" />
-            <ZoneBadge zone={dominantZone} size="lg" showLabel className="hidden sm:inline-flex" />
+            <ZoneBadge zone={dominantZone} size="lg" showLabel />
           </div>
         </div>
 
@@ -151,6 +169,9 @@ export function WorkoutDetailPage() {
         </div>
       </header>
 
+      {/* Zone Personalization CTA - show only if user has no zones configured */}
+      {!hasUserZones && <ZonePersonalizationCTA />}
+
       <div className="grid gap-8 lg:grid-cols-3">
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-8">
@@ -174,7 +195,7 @@ export function WorkoutDetailPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <WorkoutStructure workout={workout} />
+              <WorkoutStructure workout={workout} userZones={hasUserZones ? userZones : undefined} />
             </CardContent>
           </Card>
 

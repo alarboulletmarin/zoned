@@ -15,3 +15,5 @@ export { WorkoutQuiz } from "./WorkoutQuiz";
 export { ExportMenu } from "./ExportMenu";
 export { ExportDatePicker } from "./ExportDatePicker";
 export { ExportableWorkoutCard } from "./ExportableWorkoutCard";
+export { ZoneDetailModal } from "./ZoneDetailModal";
+export { ZonePersonalizationCTA } from "./ZonePersonalizationCTA";
