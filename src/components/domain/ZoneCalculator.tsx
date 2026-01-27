@@ -64,10 +64,10 @@ export function ZoneCalculator() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Gauge className="size-5" />
-          {t("settings.zoneCalculator.title")}
+          {t("myZones.zoneCalculator.title")}
         </CardTitle>
         <CardDescription>
-          {t("settings.zoneCalculator.description")}
+          {t("myZones.zoneCalculator.description")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -76,7 +76,7 @@ export function ZoneCalculator() {
           <div className="space-y-2">
             <label htmlFor="fcMax" className="flex items-center gap-2 text-sm font-medium">
               <Heart className="size-4 text-red-500" />
-              {t("settings.zoneCalculator.fcMax")}
+              {t("myZones.zoneCalculator.fcMax")}
             </label>
             <div className="flex items-center gap-2">
               <input
@@ -99,7 +99,7 @@ export function ZoneCalculator() {
           <div className="space-y-2">
             <label htmlFor="vma" className="flex items-center gap-2 text-sm font-medium">
               <Gauge className="size-4 text-blue-500" />
-              {t("settings.zoneCalculator.vma")}
+              {t("myZones.zoneCalculator.vma")}
             </label>
             <div className="flex items-center gap-2">
               <input
@@ -128,16 +128,16 @@ export function ZoneCalculator() {
               <thead>
                 <tr className="border-b">
                   <th className="py-2 px-3 text-left font-medium">
-                    {t("settings.zoneCalculator.zone")}
+                    {t("myZones.zoneCalculator.zone")}
                   </th>
                   {prefs.fcMax && (
                     <th className="py-2 px-3 text-left font-medium">
-                      {t("settings.zoneCalculator.heartRate")}
+                      {t("myZones.zoneCalculator.heartRate")}
                     </th>
                   )}
                   {prefs.vma && (
                     <th className="py-2 px-3 text-left font-medium">
-                      {t("settings.zoneCalculator.pace")}
+                      {t("myZones.zoneCalculator.pace")}
                     </th>
                   )}
                 </tr>
@@ -193,13 +193,13 @@ export function ZoneCalculator() {
           <Button onClick={handleSave} disabled={!hasValues || saved}>
             <Save className="size-4 mr-2" />
             {saved
-              ? t("settings.zoneCalculator.saved")
-              : t("settings.zoneCalculator.save")}
+              ? t("myZones.zoneCalculator.saved")
+              : t("myZones.zoneCalculator.save")}
           </Button>
           {saved && (
             <Button variant="outline" onClick={handleClear}>
               <Trash2 className="size-4 mr-2" />
-              {t("settings.zoneCalculator.clear")}
+              {t("myZones.zoneCalculator.clear")}
             </Button>
           )}
         </div>

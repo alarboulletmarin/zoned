@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Languages, Menu, X, Settings, Heart, Dices, Home, BookOpen } from "lucide-react";
+import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/logo.svg?react";
@@ -101,15 +101,15 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             </Link>
           </Button>
 
-          {/* Settings */}
+          {/* My Zones */}
           <Button
             variant="ghost"
             size="icon-sm"
             asChild
-            aria-label={t("settings.title")}
+            aria-label={t("myZones.title")}
           >
-            <Link to="/settings">
-              <Settings className="size-4" />
+            <Link to="/my-zones">
+              <Target className="size-4" />
             </Link>
           </Button>
 
@@ -224,19 +224,19 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
               {t("nav.favorites")}
             </Link>
 
-            {/* Settings */}
+            {/* My Zones */}
             <Link
-              to="/settings"
+              to="/my-zones"
               onClick={() => setMobileMenuOpen(false)}
               className={cn(
                 "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
-                location.pathname === "/settings"
+                location.pathname === "/my-zones"
                   ? "text-primary"
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
-              <Settings className="size-4" />
-              {t("settings.title")}
+              <Target className="size-4" />
+              {t("myZones.title")}
             </Link>
 
             {/* Language Selector */}

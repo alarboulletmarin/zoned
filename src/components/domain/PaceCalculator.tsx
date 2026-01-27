@@ -33,10 +33,10 @@ export function PaceCalculator() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Timer className="size-5" />
-          {t("settings.paceCalculator.title")}
+          {t("myZones.paceCalculator.title")}
         </CardTitle>
         <CardDescription>
-          {t("settings.paceCalculator.description")}
+          {t("myZones.paceCalculator.description")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -47,7 +47,7 @@ export function PaceCalculator() {
             className="flex items-center gap-2 text-sm font-medium"
           >
             <Gauge className="size-4 text-blue-500" />
-            {t("settings.zoneCalculator.vma")}
+            {t("myZones.zoneCalculator.vma")}
           </label>
           <div className="flex items-center gap-2">
             <input
@@ -74,16 +74,16 @@ export function PaceCalculator() {
               <thead>
                 <tr className="border-b">
                   <th className="py-2 px-3 text-left font-medium">
-                    {t("settings.paceCalculator.distance")}
+                    {t("myZones.paceCalculator.distance")}
                   </th>
                   <th className="py-2 px-3 text-left font-medium">
-                    {t("settings.paceCalculator.vmaPercent")}
+                    {t("myZones.paceCalculator.vmaPercent")}
                   </th>
                   <th className="py-2 px-3 text-left font-medium">
-                    {t("settings.paceCalculator.pace")}
+                    {t("myZones.paceCalculator.pace")}
                   </th>
                   <th className="py-2 px-3 text-left font-medium">
-                    {t("settings.paceCalculator.time")}
+                    {t("myZones.paceCalculator.time")}
                   </th>
                 </tr>
               </thead>
@@ -113,7 +113,7 @@ export function PaceCalculator() {
         ) : (
           <div className="flex items-center gap-2 text-sm text-muted-foreground py-4">
             <Info className="size-4" />
-            {t("settings.paceCalculator.noVma")}
+            {t("myZones.paceCalculator.noVma")}
           </div>
         )}
       </CardContent>
