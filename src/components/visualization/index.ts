@@ -1,3 +1,4 @@
 export { ZoneDistribution, SessionIntensityBar } from "./ZoneDistribution";
 export { SessionTimeline } from "./SessionTimeline";
-export type { ZoneNumber, TimelineSegment, ZoneBreakdown } from "./types";
+export { transformSessionBlocks } from "./transforms";
+export type { ZoneNumber, TimelineSegment, ZoneBreakdown, SessionVisualizationData } from "./types";

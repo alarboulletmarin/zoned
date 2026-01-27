@@ -31,12 +31,11 @@ import {
   ExportMenu,
   ZonePersonalizationCTA,
 } from "@/components/domain";
-import { SessionTimeline, ZoneDistribution } from "@/components/visualization";
+import { SessionTimeline, ZoneDistribution, transformSessionBlocks } from "@/components/visualization";
 import { getWorkoutById, getRelatedWorkouts } from "@/data/workouts";
 import type { WorkoutCategory, ZoneRange } from "@/types";
 import {
   getDominantZone,
-  getEstimatedDuration,
   DIFFICULTY_META,
 } from "@/types";
 import { loadUserZonePrefs, calculateAllZones } from "@/lib/zones";
@@ -94,7 +93,15 @@ export function WorkoutDetailPage() {
   }
 
   const dominantZone = getDominantZone(workout);
-  const duration = getEstimatedDuration(workout);
+  const sessionData = transformSessionBlocks(
+    {
+      warmup: workout.warmupTemplate,
+      mainSet: workout.mainSetTemplate,
+      cooldown: workout.cooldownTemplate,
+    },
+    isEn
+  );
+  const duration = sessionData.totalDurationMin;
   const CategoryIcon = CATEGORY_ICONS[workout.category];
   void DIFFICULTY_META[workout.difficulty];
   const relatedWorkouts = getRelatedWorkouts(workout);
@@ -236,9 +243,7 @@ export function WorkoutDetailPage() {
             <CardContent className="space-y-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">{t("details.duration")}</span>
-                <span>
-                  {workout.typicalDuration.min}-{workout.typicalDuration.max} min
-                </span>
+                <span>{duration} min</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">{t("details.difficulty")}</span>
