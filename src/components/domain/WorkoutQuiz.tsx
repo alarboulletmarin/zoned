@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, RotateCcw, Target, Clock, MapPin } from "lucide-react";
+import { ArrowLeft, RotateCcw, Target, Clock, MapPin, Library } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { WorkoutCard } from "./WorkoutCard";
@@ -51,8 +52,54 @@ interface StoredQuizState {
   isExactMatch: boolean;
 }
 
+/**
+ * Maps quiz answers to Library URL parameters
+ */
+function buildLibraryParams(answers: QuizAnswers): URLSearchParams {
+  const params = new URLSearchParams();
+
+  // Map goal to category
+  // Based on quizLogic.ts getTargetCategories()
+  if (answers.goal === "recover") {
+    params.set("category", "recovery");
+  } else if (answers.goal === "progress") {
+    if (answers.time === "short" || answers.time === "medium") {
+      params.set("category", "tempo");
+    } else {
+      params.set("category", "long_run");
+    }
+  } else if (answers.goal === "perform") {
+    if (answers.environment === "track") {
+      params.set("category", "vma_intervals");
+    } else if (answers.environment === "hills") {
+      params.set("category", "hills");
+    } else {
+      params.set("category", "tempo");
+    }
+  }
+
+  // Map time to maxDuration
+  if (answers.time === "short") {
+    params.set("maxDuration", "30");
+  } else if (answers.time === "medium") {
+    params.set("maxDuration", "60");
+  }
+  // "long" = no max duration limit
+
+  // Map environment to terrain
+  if (answers.environment === "track") {
+    params.set("terrain", "track");
+  } else if (answers.environment === "hills") {
+    params.set("terrain", "hills");
+  }
+  // "anywhere" = no terrain filter
+
+  return params;
+}
+
 export function WorkoutQuiz() {
   const { t } = useTranslation("common");
+  const navigate = useNavigate();
   const [step, setStep] = useState<QuizStep>(1);
   const [answers, setAnswers] = useState<Partial<QuizAnswers>>({});
   const [results, setResults] = useState<WorkoutTemplate[]>([]);
@@ -136,6 +183,13 @@ export function WorkoutQuiz() {
     setStep(1);
     sessionStorage.removeItem(QUIZ_STORAGE_KEY);
   }, []);
+
+  const handleSeeMore = useCallback(() => {
+    if (isQuizComplete(answers)) {
+      const params = buildLibraryParams(answers);
+      navigate(`/library?${params.toString()}`);
+    }
+  }, [answers, navigate]);
 
   const getStepNumber = (): number => {
     if (step === "results") return 3;
@@ -282,8 +336,12 @@ export function WorkoutQuiz() {
         </div>
       )}
 
-      <div className="flex justify-center">
-        <Button onClick={handleRestart} variant="outline">
+      <div className="flex flex-col sm:flex-row justify-center gap-3">
+        <Button onClick={handleSeeMore} variant="outline">
+          <Library className="size-4 mr-2" />
+          {t("quiz.seeMore")}
+        </Button>
+        <Button onClick={handleRestart} variant="ghost">
           <RotateCcw className="size-4 mr-2" />
           {t("quiz.restart")}
         </Button>

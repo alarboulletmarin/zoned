@@ -20,6 +20,42 @@ import type { WorkoutCategory } from "@/types";
 const DURATION_MIN = 15;
 const DURATION_MAX = 180;
 
+/**
+ * Parses URL search params into filter state
+ */
+function parseFiltersFromParams(searchParams: URLSearchParams): Partial<WorkoutFiltersState> {
+  const filters: Partial<WorkoutFiltersState> = {};
+
+  // Category
+  const category = searchParams.get("category");
+  if (category) {
+    filters.category = category as WorkoutCategory;
+  }
+
+  // Difficulty
+  const difficulty = searchParams.get("difficulty");
+  if (difficulty && ["beginner", "intermediate", "advanced", "elite"].includes(difficulty)) {
+    filters.difficulty = difficulty as WorkoutFiltersState["difficulty"];
+  }
+
+  // Terrain
+  const terrain = searchParams.get("terrain");
+  if (terrain && ["flat", "hills", "track"].includes(terrain)) {
+    filters.terrain = terrain as WorkoutFiltersState["terrain"];
+  }
+
+  // Max duration - sets the upper bound of duration range
+  const maxDuration = searchParams.get("maxDuration");
+  if (maxDuration) {
+    const maxDur = parseInt(maxDuration, 10);
+    if (!isNaN(maxDur) && maxDur >= DURATION_MIN && maxDur <= DURATION_MAX) {
+      filters.durationRange = [DURATION_MIN, maxDur];
+    }
+  }
+
+  return filters;
+}
+
 export function LibraryPage() {
   const { t } = useTranslation(["library", "common"]);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -75,21 +111,32 @@ export function LibraryPage() {
 
   // Initialize filters from URL params
   const [filters, setFilters] = useState<WorkoutFiltersState>(() => {
-    const category = searchParams.get("category") as WorkoutCategory | null;
+    const paramsFilters = parseFiltersFromParams(searchParams);
     return {
       ...defaultFilters,
-      category: category || "all",
+      ...paramsFilters,
     };
   });
 
-  // Update URL when category changes
+  // Update URL when filters change
   useEffect(() => {
+    const params = new URLSearchParams();
+
     if (filters.category !== "all") {
-      setSearchParams({ category: filters.category });
-    } else {
-      setSearchParams({});
+      params.set("category", filters.category);
     }
-  }, [filters.category, setSearchParams]);
+    if (filters.difficulty !== "all") {
+      params.set("difficulty", filters.difficulty);
+    }
+    if (filters.terrain !== "all") {
+      params.set("terrain", filters.terrain);
+    }
+    if (filters.durationRange[1] !== DURATION_MAX) {
+      params.set("maxDuration", filters.durationRange[1].toString());
+    }
+
+    setSearchParams(params);
+  }, [filters.category, filters.difficulty, filters.terrain, filters.durationRange, setSearchParams]);
 
   // Filter workouts
   const filteredWorkouts = useMemo(() => {
@@ -112,12 +159,16 @@ export function LibraryPage() {
         return false;
       }
 
-      // Terrain filter
+      // Terrain filter - matches the availability-based logic from Quiz
+      // "track" = user has access to track, show track workouts + general workouts
+      // "hills" = user has access to hills, show hills workouts + general workouts
+      // "flat" = user only has flat terrain, exclude workouts requiring hills/track
       if (filters.terrain !== "all") {
         const env = workout.environment;
-        if (filters.terrain === "hills" && !env.requiresHills) return false;
-        if (filters.terrain === "track" && !env.requiresTrack) return false;
         if (filters.terrain === "flat" && (env.requiresHills || env.requiresTrack)) return false;
+        // For track/hills: allow workouts that match OR don't have terrain requirements
+        if (filters.terrain === "track" && env.requiresHills) return false;
+        if (filters.terrain === "hills" && env.requiresTrack) return false;
       }
 
       // Target system filter
@@ -171,12 +222,16 @@ export function LibraryPage() {
         return false;
       }
 
-      // Terrain filter
+      // Terrain filter - matches the availability-based logic from Quiz
+      // "track" = user has access to track, show track workouts + general workouts
+      // "hills" = user has access to hills, show hills workouts + general workouts
+      // "flat" = user only has flat terrain, exclude workouts requiring hills/track
       if (tempFilters.terrain !== "all") {
         const env = workout.environment;
-        if (tempFilters.terrain === "hills" && !env.requiresHills) return false;
-        if (tempFilters.terrain === "track" && !env.requiresTrack) return false;
         if (tempFilters.terrain === "flat" && (env.requiresHills || env.requiresTrack)) return false;
+        // For track/hills: allow workouts that match OR don't have terrain requirements
+        if (tempFilters.terrain === "track" && env.requiresHills) return false;
+        if (tempFilters.terrain === "hills" && env.requiresTrack) return false;
       }
 
       // Target system filter
