@@ -5,10 +5,10 @@ import { Analytics } from "@vercel/analytics/react";
 import { Header, Footer } from "@/components/layout";
 import { PageLoader } from "@/components/ui/page-loader";
 
-// Critical pages (loaded immediately)
-import { HomePage, LibraryPage, WorkoutDetailPage } from "@/pages";
-
-// Secondary pages (lazy loaded)
+// All pages lazy loaded for optimal code-splitting
+const HomePage = lazy(() => import("@/pages/HomePage").then(m => ({ default: m.HomePage })));
+const LibraryPage = lazy(() => import("@/pages/LibraryPage").then(m => ({ default: m.LibraryPage })));
+const WorkoutDetailPage = lazy(() => import("@/pages/WorkoutDetailPage").then(m => ({ default: m.WorkoutDetailPage })));
 const MyZonesPage = lazy(() => import("@/pages/MyZonesPage").then(m => ({ default: m.MyZonesPage })));
 const FavoritesPage = lazy(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
 const QuizPage = lazy(() => import("@/pages/QuizPage").then(m => ({ default: m.QuizPage })));

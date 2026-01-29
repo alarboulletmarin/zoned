@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 import { ZoneBadge } from "./ZoneBadge";
 import { cn } from "@/lib/utils";
-import type { GlossaryTerm } from "@/data/glossary";
+import type { GlossaryTerm } from "@/data/glossary/types";
 
 interface GlossaryCardProps {
   term: GlossaryTerm;

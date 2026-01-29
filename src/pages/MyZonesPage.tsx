@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { ZoneCalculator, PaceCalculator } from "@/components/domain";
+import { ZoneCalculator } from "@/components/domain/ZoneCalculator";
+import { PaceCalculator } from "@/components/domain/PaceCalculator";
 import { SEOHead } from "@/components/seo";
 
 export function MyZonesPage() {

@@ -234,34 +234,19 @@ export function getWorkoutsByCategorySync(
 }
 
 // ============================================================
-// Backward Compatibility Layer
-// These synchronous exports are DEPRECATED - use async versions above
-// They will load all data on first access and return empty until loaded
+// Backward Compatibility Layer (DEPRECATED)
+// Use async versions above instead
+// These return empty/0 until loadAllWorkouts() is called via hooks
 // ============================================================
 
-// Lazy-initialized sync access
-let _allWorkoutsSync: WorkoutTemplate[] | null = null;
-let _workoutsByCategorySync: Record<WorkoutCategory, WorkoutTemplate[]> | null = null;
-let _totalWorkoutCountSync: number | null = null;
-
-// Start loading immediately for backward compatibility
-const initPromise = loadAllWorkouts().then((workouts) => {
-  _allWorkoutsSync = workouts;
-  _totalWorkoutCountSync = workouts.length;
-  _workoutsByCategorySync = {} as Record<WorkoutCategory, WorkoutTemplate[]>;
-  for (const cat of categories) {
-    _workoutsByCategorySync[cat] = categoryCache[cat] || [];
-  }
-});
-
 /**
- * @deprecated Use loadAllWorkouts() instead
- * Returns all workouts synchronously (may be empty on first access)
+ * @deprecated Use loadAllWorkouts() with useWorkouts() hook instead
+ * Returns all workouts from cache (empty array if not loaded)
  */
 export const allWorkouts: WorkoutTemplate[] = new Proxy([] as WorkoutTemplate[], {
   get(target, prop) {
-    if (_allWorkoutsSync) {
-      return Reflect.get(_allWorkoutsSync, prop);
+    if (allWorkoutsCache) {
+      return Reflect.get(allWorkoutsCache, prop);
     }
     return Reflect.get(target, prop);
   },
@@ -269,14 +254,14 @@ export const allWorkouts: WorkoutTemplate[] = new Proxy([] as WorkoutTemplate[],
 
 /**
  * @deprecated Use loadCategory() or getWorkoutsByCategory() instead
- * Returns workouts by category synchronously (may be empty on first access)
+ * Returns workouts by category from cache (empty array if not loaded)
  */
 export const workoutsByCategory: Record<WorkoutCategory, WorkoutTemplate[]> = new Proxy(
   {} as Record<WorkoutCategory, WorkoutTemplate[]>,
   {
     get(target, prop) {
-      if (_workoutsByCategorySync && prop in _workoutsByCategorySync) {
-        return _workoutsByCategorySync[prop as WorkoutCategory];
+      if (prop in categoryCache) {
+        return categoryCache[prop as WorkoutCategory];
       }
       // Return empty array for category access before load
       if (categories.includes(prop as WorkoutCategory)) {
@@ -289,19 +274,23 @@ export const workoutsByCategory: Record<WorkoutCategory, WorkoutTemplate[]> = ne
 
 /**
  * @deprecated Use getTotalWorkoutCount() instead
- * Returns total workout count (may be 0 on first access)
+ * Returns total workout count from cache (0 if not loaded)
  */
 export const totalWorkoutCount = new Proxy({ value: 0 }, {
   get(_target, prop) {
+    const count = allWorkoutsCache?.length ?? 0;
     if (prop === "valueOf" || prop === Symbol.toPrimitive) {
-      return () => _totalWorkoutCountSync ?? 0;
+      return () => count;
     }
     if (prop === "toString") {
-      return () => String(_totalWorkoutCountSync ?? 0);
+      return () => String(count);
     }
-    return _totalWorkoutCountSync ?? 0;
+    return count;
   },
 }) as unknown as number;
 
-// Export init promise for components that need to wait
-export { initPromise as workoutsReady };
+/**
+ * @deprecated No longer needed - data loads on demand via hooks
+ * Returns a resolved promise for backward compatibility
+ */
+export const workoutsReady: Promise<WorkoutTemplate[]> = Promise.resolve([]);

@@ -1,9 +1,9 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChevronLeft, ChevronRight, Clock, BookOpen, Home } from "@/components/icons";
+import { ChevronLeft, ChevronRight, Clock, BookOpen, Home, Loader2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
-import { getArticleBySlug, getAdjacentArticles } from "@/data/articles";
+import { useArticle, useAdjacentArticles } from "@/hooks/useArticles";
 import { cn } from "@/lib/utils";
 
 /**
@@ -179,8 +179,19 @@ export function ArticlePage() {
   const { t, i18n } = useTranslation("common");
   const isEn = i18n.language === "en";
 
-  const article = slug ? getArticleBySlug(slug) : undefined;
-  const { prev, next } = slug ? getAdjacentArticles(slug) : { prev: null, next: null };
+  const { article, isLoading } = useArticle(slug);
+  const { prev, next } = useAdjacentArticles(slug);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="py-8 max-w-3xl mx-auto">
+        <div className="flex items-center justify-center py-24">
+          <Loader2 className="size-8 animate-spin text-muted-foreground" />
+        </div>
+      </div>
+    );
+  }
 
   if (!article) {
     return <Navigate to="/learn" replace />;

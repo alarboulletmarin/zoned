@@ -1,5 +1,14 @@
 // src/data/glossary/index.ts
-// Main glossary index with helper functions
+// Lazy-loading API with code-splitting for glossary terms
+
+export type {
+  GlossaryTerm,
+  GlossaryCategory,
+  GlossaryCategoryInfo,
+  ExternalLink,
+} from "./types";
+
+export { categories } from "./categories";
 
 import type {
   GlossaryTerm,
@@ -7,69 +16,146 @@ import type {
   GlossaryCategoryInfo,
 } from "./types";
 import { categories } from "./categories";
-import { metricsTerms } from "./terms/metrics";
-import { periodizationTerms } from "./terms/periodization";
-import { sessionsTerms } from "./terms/sessions";
-import { zonesTerms } from "./terms/zones";
-import { physiologyTerms } from "./terms/physiology";
-import { recoveryTerms } from "./terms/recovery";
 
-// ============================================================================
-// Aggregate all terms
-// ============================================================================
+// ============================================================
+// Lazy Loading API with Code-Splitting
+// Each category is loaded as a separate chunk on demand
+// ============================================================
 
-const allTerms: GlossaryTerm[] = [
-  ...metricsTerms,
-  ...periodizationTerms,
-  ...sessionsTerms,
-  ...zonesTerms,
-  ...physiologyTerms,
-  ...recoveryTerms,
-];
+// Cache for loaded terms
+let allTermsCache: GlossaryTerm[] | null = null;
+let termsByIdCache: Map<string, GlossaryTerm> | null = null;
+let termsByCategoryCache: Map<GlossaryCategory, GlossaryTerm[]> | null = null;
 
-// Index by ID for O(1) lookup
-const termsById = new Map<string, GlossaryTerm>(
-  allTerms.map((term) => [term.id, term])
-);
+// Loading promise to prevent duplicate fetches
+let loadingPromise: Promise<GlossaryTerm[]> | null = null;
 
-// Index by category
-const termsByCategory = new Map<GlossaryCategory, GlossaryTerm[]>();
-for (const term of allTerms) {
-  const existing = termsByCategory.get(term.category) ?? [];
-  existing.push(term);
-  termsByCategory.set(term.category, existing);
-}
-
-// ============================================================================
-// Export types
-// ============================================================================
-
-export type { GlossaryTerm, GlossaryCategory, GlossaryCategoryInfo };
-
-// ============================================================================
-// Getter functions
-// ============================================================================
+// Dynamic import loaders for each term category (explicit for proper code-splitting)
+const termLoaders: Record<GlossaryCategory, () => Promise<GlossaryTerm[]>> = {
+  metrics: () => import("./terms/metrics").then((m) => m.metricsTerms),
+  periodization: () => import("./terms/periodization").then((m) => m.periodizationTerms),
+  sessions: () => import("./terms/sessions").then((m) => m.sessionsTerms),
+  zones: () => import("./terms/zones").then((m) => m.zonesTerms),
+  physiology: () => import("./terms/physiology").then((m) => m.physiologyTerms),
+  recovery: () => import("./terms/recovery").then((m) => m.recoveryTerms),
+};
 
 /**
- * Get all glossary terms
+ * Build lookup caches from loaded terms
  */
-export function getAllTerms(): GlossaryTerm[] {
-  return allTerms;
+function buildCaches(terms: GlossaryTerm[]): void {
+  termsByIdCache = new Map(terms.map((term) => [term.id, term]));
+  termsByCategoryCache = new Map();
+  for (const term of terms) {
+    const existing = termsByCategoryCache.get(term.category) ?? [];
+    existing.push(term);
+    termsByCategoryCache.set(term.category, existing);
+  }
 }
 
 /**
- * Get a term by its ID
+ * Load all glossary terms lazily (with dynamic imports for code-splitting)
+ * Returns immediately from cache if available
  */
-export function getTermById(id: string): GlossaryTerm | undefined {
-  return termsById.get(id);
+export async function loadAllTerms(): Promise<GlossaryTerm[]> {
+  // Return from cache if available
+  if (allTermsCache) {
+    return allTermsCache;
+  }
+
+  // Return existing promise if already loading
+  if (loadingPromise) {
+    return loadingPromise;
+  }
+
+  // Create loading promise with dynamic imports
+  loadingPromise = (async () => {
+    const categoryKeys = Object.keys(termLoaders) as GlossaryCategory[];
+    const results = await Promise.all(
+      categoryKeys.map((cat) => termLoaders[cat]())
+    );
+
+    const allTerms = results.flat();
+    allTermsCache = allTerms;
+    buildCaches(allTerms);
+    loadingPromise = null;
+    return allTerms;
+  })();
+
+  return loadingPromise;
 }
 
 /**
- * Get all terms in a specific category
+ * Load terms for a specific category
  */
-export function getTermsByCategory(category: GlossaryCategory): GlossaryTerm[] {
-  return termsByCategory.get(category) ?? [];
+export async function loadTermsByCategory(
+  category: GlossaryCategory
+): Promise<GlossaryTerm[]> {
+  // If all terms are cached, use the category cache
+  if (termsByCategoryCache) {
+    return termsByCategoryCache.get(category) ?? [];
+  }
+
+  // Otherwise load the specific category
+  const loader = termLoaders[category];
+  if (!loader) {
+    return [];
+  }
+
+  return loader();
 }
+
+/**
+ * Get term by ID (async, loads all terms if not cached)
+ */
+export async function getTermByIdAsync(
+  id: string
+): Promise<GlossaryTerm | undefined> {
+  // Return from cache if available
+  const cached = termsByIdCache;
+  if (cached !== null) {
+    return cached.get(id);
+  }
+
+  // Load terms and return from cache
+  await loadAllTerms();
+  return termsByIdCache!.get(id);
+}
+
+/**
+ * Check if all terms are loaded in cache
+ */
+export function isAllTermsLoaded(): boolean {
+  return allTermsCache !== null;
+}
+
+/**
+ * Get all terms synchronously (returns empty array if not loaded)
+ * Use loadAllTerms() for async loading with caching
+ */
+export function getAllTermsSync(): GlossaryTerm[] {
+  return allTermsCache ?? [];
+}
+
+/**
+ * Get term by ID synchronously (returns undefined if not loaded)
+ */
+export function getTermByIdSync(id: string): GlossaryTerm | undefined {
+  return termsByIdCache?.get(id);
+}
+
+/**
+ * Get terms by category synchronously (returns empty array if not loaded)
+ */
+export function getTermsByCategorySync(
+  category: GlossaryCategory
+): GlossaryTerm[] {
+  return termsByCategoryCache?.get(category) ?? [];
+}
+
+// ============================================================
+// Category Functions (synchronous - categories are lightweight)
+// ============================================================
 
 /**
  * Get all category metadata
@@ -87,18 +173,16 @@ export function getCategoryInfo(
   return categories.find((c) => c.id === id);
 }
 
-/**
- * Check if a term exists
- */
-export function termExists(id: string): boolean {
-  return termsById.has(id);
-}
+// ============================================================
+// Search and Utility Functions (async)
+// ============================================================
 
 /**
- * Search terms by query string
+ * Search terms by query string (async)
  * Searches in: term, termEn, acronym, shortDefinition, shortDefinitionEn, keywords
  */
-export function searchTerms(query: string): GlossaryTerm[] {
+export async function searchTerms(query: string): Promise<GlossaryTerm[]> {
+  const allTerms = await loadAllTerms();
   const normalizedQuery = query.toLowerCase().trim();
 
   if (!normalizedQuery) {
@@ -123,50 +207,56 @@ export function searchTerms(query: string): GlossaryTerm[] {
 }
 
 /**
- * Get terms sorted alphabetically by display name (acronym or term)
+ * Get related terms for a given term (async)
  */
-export function getTermsSortedAlphabetically(lang: "fr" | "en" = "fr"): GlossaryTerm[] {
-  return [...allTerms].sort((a, b) => {
-    const aLabel = a.acronym ?? (lang === "en" && a.termEn ? a.termEn : a.term);
-    const bLabel = b.acronym ?? (lang === "en" && b.termEn ? b.termEn : b.term);
-    return aLabel.localeCompare(bLabel, lang);
-  });
+export async function getRelatedTerms(termId: string): Promise<GlossaryTerm[]> {
+  const term = await getTermByIdAsync(termId);
+  if (!term?.relatedTerms) return [];
+
+  // Ensure terms are loaded
+  await loadAllTerms();
+  return term.relatedTerms
+    .map((id) => termsByIdCache?.get(id))
+    .filter((t): t is GlossaryTerm => t !== undefined);
 }
 
 /**
- * Get terms grouped by first letter
+ * Get the total count of terms (async)
  */
-export function getTermsGroupedByLetter(lang: "fr" | "en" = "fr"): Record<string, GlossaryTerm[]> {
-  const sorted = getTermsSortedAlphabetically(lang);
-  const groups: Record<string, GlossaryTerm[]> = {};
-
-  for (const term of sorted) {
-    const label = term.acronym ?? (lang === "en" && term.termEn ? term.termEn : term.term);
-    const firstLetter = label[0].toUpperCase();
-    if (!groups[firstLetter]) {
-      groups[firstLetter] = [];
-    }
-    groups[firstLetter].push(term);
-  }
-
-  return groups;
-}
-
-/**
- * Get the total count of terms
- */
-export function getTermsCount(): number {
+export async function getTermsCount(): Promise<number> {
+  const allTerms = await loadAllTerms();
   return allTerms.length;
 }
 
-/**
- * Get related terms for a given term
- */
-export function getRelatedTerms(termId: string): GlossaryTerm[] {
-  const term = getTermById(termId);
-  if (!term?.relatedTerms) return [];
+// ============================================================
+// Backward Compatibility
+// These synchronous functions work only after loadAllTerms() is called
+// ============================================================
 
-  return term.relatedTerms
-    .map((id) => getTermById(id))
-    .filter((t): t is GlossaryTerm => t !== undefined);
+/**
+ * @deprecated Use getTermByIdSync() or getTermByIdAsync() instead
+ */
+export function getTermById(id: string): GlossaryTerm | undefined {
+  return getTermByIdSync(id);
+}
+
+/**
+ * @deprecated Use getAllTermsSync() or loadAllTerms() instead
+ */
+export function getAllTerms(): GlossaryTerm[] {
+  return getAllTermsSync();
+}
+
+/**
+ * @deprecated Use getTermsByCategorySync() or loadTermsByCategory() instead
+ */
+export function getTermsByCategory(category: GlossaryCategory): GlossaryTerm[] {
+  return getTermsByCategorySync(category);
+}
+
+/**
+ * @deprecated Check isAllTermsLoaded() instead
+ */
+export function termExists(id: string): boolean {
+  return termsByIdCache?.has(id) ?? false;
 }

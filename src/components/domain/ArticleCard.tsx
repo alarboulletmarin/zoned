@@ -4,22 +4,22 @@ import { Clock, BookOpen, Heart, Dumbbell } from "@/components/icons";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import type { Article } from "@/data/articles";
+import type { ArticleMeta, ArticleCategory } from "@/data/articles";
 
-const CATEGORY_ICONS: Record<Article["category"], React.ComponentType<{ className?: string }>> = {
+const CATEGORY_ICONS: Record<ArticleCategory, React.ComponentType<{ className?: string }>> = {
   fundamentals: BookOpen,
   training: Dumbbell,
   lifestyle: Heart,
 };
 
-const CATEGORY_COLORS: Record<Article["category"], string> = {
+const CATEGORY_COLORS: Record<ArticleCategory, string> = {
   fundamentals: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
   training: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300",
   lifestyle: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
 };
 
 interface ArticleCardProps {
-  article: Article;
+  article: ArticleMeta;
   className?: string;
 }
 

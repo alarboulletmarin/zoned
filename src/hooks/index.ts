@@ -8,3 +8,8 @@ export {
   useRelatedWorkouts,
   useFilteredWorkouts,
 } from "./useWorkouts";
+
+// NOTE: useArticles and useGlossary are NOT exported here to avoid
+// pulling their data into the main bundle. Import them directly:
+// import { useArticle } from "@/hooks/useArticles";
+// import { useGlossary } from "@/hooks/useGlossary";

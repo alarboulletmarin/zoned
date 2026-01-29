@@ -1,22 +1,31 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { BookOpen, Dumbbell, Heart, Filter } from "@/components/icons";
+import { BookOpen, Dumbbell, Heart, Filter, Loader2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
 import { ArticleCard } from "@/components/domain/ArticleCard";
-import { articles, articleCategories, type Article } from "@/data/articles";
+import { useArticles } from "@/hooks/useArticles";
+import type { ArticleCategory } from "@/data/articles/types";
 import { cn } from "@/lib/utils";
 
-const CATEGORY_ICONS: Record<Article["category"], React.ComponentType<{ className?: string }>> = {
+const CATEGORY_ICONS: Record<ArticleCategory, React.ComponentType<{ className?: string }>> = {
   fundamentals: BookOpen,
   training: Dumbbell,
   lifestyle: Heart,
 };
 
+const ARTICLE_CATEGORIES: ArticleCategory[] = [
+  "fundamentals",
+  "training",
+  "lifestyle",
+];
+
 export function LearnPage() {
   const { t, i18n } = useTranslation("common");
   const isEn = i18n.language === "en";
-  const [selectedCategory, setSelectedCategory] = useState<Article["category"] | "all">("all");
+  const [selectedCategory, setSelectedCategory] = useState<ArticleCategory | "all">("all");
+
+  const { articles, isLoading } = useArticles();
 
   const filteredArticles = selectedCategory === "all"
     ? articles
@@ -50,7 +59,7 @@ export function LearnPage() {
         >
           {t("learn.allCategories")}
         </Button>
-        {articleCategories.map((category) => {
+        {ARTICLE_CATEGORIES.map((category) => {
           const Icon = CATEGORY_ICONS[category];
           return (
             <Button
@@ -67,20 +76,29 @@ export function LearnPage() {
         })}
       </div>
 
-      {/* Articles Grid */}
-      <div className={cn(
-        "grid gap-4",
-        "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-      )}>
-        {filteredArticles.map((article) => (
-          <ArticleCard key={article.id} article={article} />
-        ))}
-      </div>
+      {/* Loading State */}
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="size-8 animate-spin text-muted-foreground" />
+        </div>
+      ) : (
+        <>
+          {/* Articles Grid */}
+          <div className={cn(
+            "grid gap-4",
+            "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+          )}>
+            {filteredArticles.map((article) => (
+              <ArticleCard key={article.id} article={article} />
+            ))}
+          </div>
 
-      {/* Stats */}
-      <div className="mt-8 text-center text-sm text-muted-foreground">
-        {t("learn.articleCount", { count: filteredArticles.length })}
-      </div>
+          {/* Stats */}
+          <div className="mt-8 text-center text-sm text-muted-foreground">
+            {t("learn.articleCount", { count: filteredArticles.length })}
+          </div>
+        </>
+      )}
     </div>
     </>
   );

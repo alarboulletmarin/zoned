@@ -8,8 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ZoneBadge } from "./ZoneBadge";
 import { cn } from "@/lib/utils";
-import type { GlossaryTerm } from "@/data/glossary";
-import { getCategoryInfo, getTermById } from "@/data/glossary";
+import type { GlossaryTerm } from "@/data/glossary/types";
+import { useGlossaryCategoryInfo, useRelatedTerms } from "@/hooks/useGlossary";
 
 interface GlossaryDetailProps {
   term: GlossaryTerm;
@@ -19,7 +19,8 @@ interface GlossaryDetailProps {
 export function GlossaryDetail({ term, className }: GlossaryDetailProps) {
   const { t, i18n } = useTranslation("glossary");
   const isEn = i18n.language === "en";
-  const category = getCategoryInfo(term.category);
+  const category = useGlossaryCategoryInfo(term.category);
+  const { terms: relatedTerms } = useRelatedTerms(term.id);
 
   // Get localized content
   const displayTerm = isEn && term.termEn ? term.termEn : term.term;
@@ -72,30 +73,26 @@ export function GlossaryDetail({ term, className }: GlossaryDetailProps) {
       )}
 
       {/* Related Terms */}
-      {term.relatedTerms && term.relatedTerms.length > 0 && (
+      {relatedTerms.length > 0 && (
         <div>
           <p className="text-sm font-medium text-muted-foreground mb-3">
             {t("relatedTerms")}
           </p>
           <div className="flex flex-wrap gap-2">
-            {term.relatedTerms.map((relatedId) => {
-              const related = getTermById(relatedId);
-              if (!related) return null;
-              return (
-                <Button
-                  key={relatedId}
-                  variant="outline"
-                  size="sm"
-                  asChild
-                  className="h-8"
-                >
-                  <Link to={`/glossary/${relatedId}`}>
-                    <Link2 className="h-3 w-3 mr-1.5" />
-                    {related.acronym ?? (isEn && related.termEn ? related.termEn : related.term)}
-                  </Link>
-                </Button>
-              );
-            })}
+            {relatedTerms.map((related) => (
+              <Button
+                key={related.id}
+                variant="outline"
+                size="sm"
+                asChild
+                className="h-8"
+              >
+                <Link to={`/glossary/${related.id}`}>
+                  <Link2 className="h-3 w-3 mr-1.5" />
+                  {related.acronym ?? (isEn && related.termEn ? related.termEn : related.term)}
+                </Link>
+              </Button>
+            ))}
           </div>
         </div>
       )}

@@ -3,19 +3,30 @@
 
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChevronLeft, Book, Search } from "@/components/icons";
+import { ChevronLeft, Book, Search, Loader2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { SEOHead } from "@/components/seo";
-import { GlossaryDetail } from "@/components/domain";
-import { getTermById } from "@/data/glossary";
+import { GlossaryDetail } from "@/components/domain/GlossaryDetail";
+import { useGlossaryTerm } from "@/hooks/useGlossary";
 
 export function GlossaryTermPage() {
   const { id } = useParams<{ id: string }>();
   const { t, i18n } = useTranslation("glossary");
   const isEn = i18n.language === "en";
 
-  const term = id ? getTermById(id) : undefined;
+  const { term, isLoading } = useGlossaryTerm(id);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="py-8">
+        <div className="flex items-center justify-center py-24">
+          <Loader2 className="size-8 animate-spin text-muted-foreground" />
+        </div>
+      </div>
+    );
+  }
 
   if (!term) {
     return (

@@ -25,13 +25,12 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ZoneBadge,
-  WorkoutStructure,
-  CoachingTips,
   WorkoutCardCompact,
   FavoriteButton,
-  ExportMenu,
   ZonePersonalizationCTA,
 } from "@/components/domain";
+import { WorkoutStructure, CoachingTips } from "@/components/domain/WorkoutStructure";
+import { ExportMenu } from "@/components/domain/ExportMenu";
 import { SEOHead } from "@/components/seo";
 import { SessionTimeline, ZoneDistribution, transformSessionBlocks } from "@/components/visualization";
 import { useWorkout, useRelatedWorkouts } from "@/hooks";

@@ -5,18 +5,27 @@ export {
   defaultFilters,
   type WorkoutFiltersState,
 } from "./WorkoutFilters";
-export { WorkoutStructure, CoachingTips } from "./WorkoutStructure";
-export { WorkoutOfTheDay } from "./WorkoutOfTheDay";
 export { CategoryIcon } from "./CategoryIcon";
-export { ZoneCalculator } from "./ZoneCalculator";
-export { PaceCalculator } from "./PaceCalculator";
 export { FavoriteButton } from "./FavoriteButton";
-export { WorkoutQuiz } from "./WorkoutQuiz";
-export { ExportMenu } from "./ExportMenu";
-export { ExportDatePicker } from "./ExportDatePicker";
-export { ExportableWorkoutCard } from "./ExportableWorkoutCard";
-export { ZoneDetailModal } from "./ZoneDetailModal";
 export { ZonePersonalizationCTA } from "./ZonePersonalizationCTA";
-export { ArticleCard } from "./ArticleCard";
-export { GlossaryCard } from "./GlossaryCard";
-export { GlossaryDetail } from "./GlossaryDetail";
+
+// NOTE: Heavy components are NOT exported here to keep the main bundle small.
+// Import them directly from their files when needed:
+//
+// Visualization-dependent (import visualization code):
+// import { WorkoutOfTheDay } from "@/components/domain/WorkoutOfTheDay";
+// import { WorkoutStructure, CoachingTips } from "@/components/domain/WorkoutStructure";
+// import { ExportMenu } from "@/components/domain/ExportMenu";
+// import { ExportableWorkoutCard } from "@/components/domain/ExportableWorkoutCard";
+//
+// Lazy-loaded pages only:
+// import { ZoneCalculator } from "@/components/domain/ZoneCalculator";
+// import { PaceCalculator } from "@/components/domain/PaceCalculator";
+// import { WorkoutQuiz } from "@/components/domain/WorkoutQuiz";
+// import { ExportDatePicker } from "@/components/domain/ExportDatePicker";
+// import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
+//
+// Data-dependent (import articles/glossary):
+// import { ArticleCard } from "@/components/domain/ArticleCard";
+// import { GlossaryCard } from "@/components/domain/GlossaryCard";
+// import { GlossaryDetail } from "@/components/domain/GlossaryDetail";

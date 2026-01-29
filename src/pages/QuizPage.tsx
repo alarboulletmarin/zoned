@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { WorkoutQuiz } from "@/components/domain";
+import { WorkoutQuiz } from "@/components/domain/WorkoutQuiz";
 import { SEOHead } from "@/components/seo";
 
 export function QuizPage() {

@@ -3,7 +3,7 @@
 
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Search, Book, Filter } from "@/components/icons";
+import { Search, Book, Filter, Loader2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -14,16 +14,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SEOHead } from "@/components/seo";
-import { GlossaryCard } from "@/components/domain";
+import { GlossaryCard } from "@/components/domain/GlossaryCard";
 import {
-  getAllTerms,
-  getCategories,
-  searchTerms,
-  getTermsByCategory,
-  getTermsCount,
-  type GlossaryCategory,
-  type GlossaryTerm,
-} from "@/data/glossary";
+  useGlossary,
+  useGlossaryCategories,
+  useGlossaryCount,
+} from "@/hooks/useGlossary";
+import type { GlossaryCategory, GlossaryTerm } from "@/data/glossary/types";
 
 export function GlossaryPage() {
   const { t, i18n } = useTranslation("glossary");
@@ -33,8 +30,11 @@ export function GlossaryPage() {
     GlossaryCategory | "all"
   >("all");
 
-  const categories = getCategories();
-  const totalCount = getTermsCount();
+  const { terms: allTerms, isLoading: termsLoading } = useGlossary();
+  const { categories, isLoading: categoriesLoading } = useGlossaryCategories();
+  const { count: totalCount } = useGlossaryCount();
+
+  const isLoading = termsLoading || categoriesLoading;
 
   // Helper to get the display label for a term (acronym or localized term)
   const getTermDisplayLabel = (term: GlossaryTerm): string => {
@@ -46,18 +46,26 @@ export function GlossaryPage() {
   const filteredTerms = useMemo(() => {
     let terms =
       selectedCategory === "all"
-        ? getAllTerms()
-        : getTermsByCategory(selectedCategory);
+        ? allTerms
+        : allTerms.filter((t) => t.category === selectedCategory);
 
     if (searchQuery.trim()) {
-      const searchResults = searchTerms(searchQuery);
-      // Intersect with category filter if needed
-      if (selectedCategory !== "all") {
-        const categoryTermIds = new Set(terms.map((t) => t.id));
-        terms = searchResults.filter((t) => categoryTermIds.has(t.id));
-      } else {
-        terms = searchResults;
-      }
+      const normalizedQuery = searchQuery.toLowerCase().trim();
+      terms = terms.filter((term) => {
+        const searchableText = [
+          term.term,
+          term.termEn,
+          term.acronym,
+          term.shortDefinition,
+          term.shortDefinitionEn,
+          ...(term.keywords ?? []),
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+
+        return searchableText.includes(normalizedQuery);
+      });
     }
 
     // Sort alphabetically using localized content
@@ -66,7 +74,7 @@ export function GlossaryPage() {
       const bLabel = getTermDisplayLabel(b);
       return aLabel.localeCompare(bLabel, isEn ? "en" : "fr");
     });
-  }, [searchQuery, selectedCategory, isEn]);
+  }, [allTerms, searchQuery, selectedCategory, isEn]);
 
   // Group terms by first letter (using localized label)
   const groupedTerms = useMemo(() => {
@@ -115,101 +123,110 @@ export function GlossaryPage() {
         </p>
       </div>
 
-      {/* Search and Filters */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder={t("searchPlaceholder")}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-10 pl-9 pr-3 rounded-md border border-input bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          />
-        </div>
-        <Select
-          value={selectedCategory}
-          onValueChange={(v) =>
-            setSelectedCategory(v as typeof selectedCategory)
-          }
-        >
-          <SelectTrigger className="w-full sm:w-56">
-            <Filter className="h-4 w-4 mr-2" />
-            <SelectValue placeholder={t("categoryPlaceholder")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("allCategories")}</SelectItem>
-            {categories.map((cat) => (
-              <SelectItem key={cat.id} value={cat.id}>
-                {getCategoryLabel(cat.id)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Results count and active filters */}
-      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-        <span>
-          {t("resultCount", { count: filteredTerms.length })}
-        </span>
-        {selectedCategory !== "all" && (
-          <Badge variant="secondary" className="ml-2">
-            {getCategoryLabel(selectedCategory)}
-            <button
-              onClick={() => setSelectedCategory("all")}
-              className="ml-1 hover:text-foreground"
-              aria-label={t("removeCategoryFilter")}
-            >
-              ×
-            </button>
-          </Badge>
-        )}
-        {searchQuery && (
-          <Badge variant="secondary" className="ml-1">
-            "{searchQuery}"
-            <button
-              onClick={() => setSearchQuery("")}
-              className="ml-1 hover:text-foreground"
-              aria-label={t("clearSearch")}
-            >
-              ×
-            </button>
-          </Badge>
-        )}
-      </div>
-
-      {/* Terms List - Grouped alphabetically */}
-      {filteredTerms.length > 0 ? (
-        <div className="space-y-8">
-          {Object.keys(groupedTerms)
-            .sort()
-            .map((letter) => (
-              <div key={letter}>
-                <h2 className="text-lg font-semibold text-primary mb-4 sticky top-14 bg-background py-2 z-10 border-b">
-                  {letter}
-                </h2>
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {groupedTerms[letter].map((term) => (
-                    <GlossaryCard key={term.id} term={term} />
-                  ))}
-                </div>
-              </div>
-            ))}
+      {/* Loading State */}
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="size-8 animate-spin text-muted-foreground" />
         </div>
       ) : (
-        /* Empty state */
-        <div className="text-center py-12">
-          <p className="text-muted-foreground mb-4">
-            {t("noResults")}
-            {searchQuery && ` ${t("noResultsForQuery", { query: searchQuery })}`}
-            {selectedCategory !== "all" &&
-              ` ${t("noResultsInCategory", { category: getCategoryLabel(selectedCategory) })}`}
-          </p>
-          <Button variant="outline" onClick={handleClearFilters}>
-            {t("resetFilters")}
-          </Button>
-        </div>
+        <>
+          {/* Search and Filters */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder={t("searchPlaceholder")}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-10 pl-9 pr-3 rounded-md border border-input bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              />
+            </div>
+            <Select
+              value={selectedCategory}
+              onValueChange={(v) =>
+                setSelectedCategory(v as typeof selectedCategory)
+              }
+            >
+              <SelectTrigger className="w-full sm:w-56">
+                <Filter className="h-4 w-4 mr-2" />
+                <SelectValue placeholder={t("categoryPlaceholder")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t("allCategories")}</SelectItem>
+                {categories.map((cat) => (
+                  <SelectItem key={cat.id} value={cat.id}>
+                    {getCategoryLabel(cat.id)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Results count and active filters */}
+          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+            <span>
+              {t("resultCount", { count: filteredTerms.length })}
+            </span>
+            {selectedCategory !== "all" && (
+              <Badge variant="secondary" className="ml-2">
+                {getCategoryLabel(selectedCategory)}
+                <button
+                  onClick={() => setSelectedCategory("all")}
+                  className="ml-1 hover:text-foreground"
+                  aria-label={t("removeCategoryFilter")}
+                >
+                  x
+                </button>
+              </Badge>
+            )}
+            {searchQuery && (
+              <Badge variant="secondary" className="ml-1">
+                "{searchQuery}"
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="ml-1 hover:text-foreground"
+                  aria-label={t("clearSearch")}
+                >
+                  x
+                </button>
+              </Badge>
+            )}
+          </div>
+
+          {/* Terms List - Grouped alphabetically */}
+          {filteredTerms.length > 0 ? (
+            <div className="space-y-8">
+              {Object.keys(groupedTerms)
+                .sort()
+                .map((letter) => (
+                  <div key={letter}>
+                    <h2 className="text-lg font-semibold text-primary mb-4 sticky top-14 bg-background py-2 z-10 border-b">
+                      {letter}
+                    </h2>
+                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      {groupedTerms[letter].map((term) => (
+                        <GlossaryCard key={term.id} term={term} />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+            </div>
+          ) : (
+            /* Empty state */
+            <div className="text-center py-12">
+              <p className="text-muted-foreground mb-4">
+                {t("noResults")}
+                {searchQuery && ` ${t("noResultsForQuery", { query: searchQuery })}`}
+                {selectedCategory !== "all" &&
+                  ` ${t("noResultsInCategory", { category: getCategoryLabel(selectedCategory) })}`}
+              </p>
+              <Button variant="outline" onClick={handleClearFilters}>
+                {t("resetFilters")}
+              </Button>
+            </div>
+          )}
+        </>
       )}
     </div>
     </>
