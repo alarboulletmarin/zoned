@@ -1,12 +1,12 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, RotateCcw, Target, Clock, MapPin, Library } from "lucide-react";
+import { ArrowLeft, RotateCcw, Target, Clock, MapPin, Library } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { WorkoutCard } from "./WorkoutCard";
 import { cn } from "@/lib/utils";
-import { allWorkouts } from "@/data/workouts";
+import { useWorkouts } from "@/hooks";
 import {
   getRecommendedWorkouts,
   isQuizComplete,
@@ -100,6 +100,7 @@ function buildLibraryParams(answers: QuizAnswers): URLSearchParams {
 export function WorkoutQuiz() {
   const { t } = useTranslation("common");
   const navigate = useNavigate();
+  const { workouts: allWorkouts } = useWorkouts();
   const [step, setStep] = useState<QuizStep>(1);
   const [answers, setAnswers] = useState<Partial<QuizAnswers>>({});
   const [results, setResults] = useState<WorkoutTemplate[]>([]);

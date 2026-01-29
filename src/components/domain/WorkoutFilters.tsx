@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import type { RefObject } from "react";
-import { X, Search, Heart } from "lucide-react";
+import { X, Search, Heart } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";

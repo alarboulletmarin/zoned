@@ -10,12 +10,13 @@ import {
   Flag,
   RefreshCw,
   ClipboardCheck,
-  type LucideIcon,
-} from "lucide-react";
+  type IconProps,
+} from "@/components/icons";
 import type { WorkoutCategory } from "@/types";
 import { cn } from "@/lib/utils";
+import type { ComponentType } from "react";
 
-const CATEGORY_ICONS: Record<WorkoutCategory, LucideIcon> = {
+const CATEGORY_ICONS: Record<WorkoutCategory, ComponentType<IconProps>> = {
   recovery: Leaf,
   endurance: Activity,
   tempo: Gauge,

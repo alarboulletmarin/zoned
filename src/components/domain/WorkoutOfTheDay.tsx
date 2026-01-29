@@ -1,18 +1,31 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowRight, Lightbulb, AlertTriangle } from "lucide-react";
+import { ArrowRight, Lightbulb, AlertTriangle, Loader2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ZoneBadge } from "./ZoneBadge";
 import { SessionTimeline, ZoneDistribution } from "@/components/visualization";
-import { getWorkoutOfTheDay } from "@/data/workouts";
+import { useWorkoutOfTheDay } from "@/hooks";
 import { getDominantZone } from "@/types";
 
 export function WorkoutOfTheDay() {
   const { t, i18n } = useTranslation(["common", "session", "library"]);
   const isEn = i18n.language === "en";
 
-  const workout = getWorkoutOfTheDay();
+  const { workout, isLoading } = useWorkoutOfTheDay();
+
+  if (isLoading || !workout) {
+    return (
+      <section className="space-y-6">
+        <Card className="pl-2">
+          <CardContent className="flex items-center justify-center py-12">
+            <Loader2 className="size-6 animate-spin text-muted-foreground" />
+          </CardContent>
+        </Card>
+      </section>
+    );
+  }
+
   const dominantZone = getDominantZone(workout);
 
   const name = isEn ? workout.nameEn : workout.name;
@@ -65,7 +78,7 @@ export function WorkoutOfTheDay() {
                     {t("common:workoutOfTheDay.coachingTips")}
                   </h4>
                   <ul className="space-y-1.5">
-                    {tips.slice(0, 3).map((tip, index) => (
+                    {tips.slice(0, 3).map((tip: string, index: number) => (
                       <li
                         key={index}
                         className="text-sm text-muted-foreground pl-5 relative before:content-['•'] before:absolute before:left-0 before:text-success"
@@ -84,7 +97,7 @@ export function WorkoutOfTheDay() {
                     {t("common:workoutOfTheDay.commonMistakes")}
                   </h4>
                   <ul className="space-y-1.5">
-                    {mistakes.slice(0, 2).map((mistake, index) => (
+                    {mistakes.slice(0, 2).map((mistake: string, index: number) => (
                       <li
                         key={index}
                         className="text-sm text-muted-foreground pl-5 relative before:content-['•'] before:absolute before:left-0 before:text-destructive"

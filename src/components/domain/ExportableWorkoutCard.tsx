@@ -10,7 +10,7 @@
 
 import { forwardRef } from "react";
 import { useTranslation } from "react-i18next";
-import { Clock, Dumbbell, Target, Zap } from "lucide-react";
+import { Clock, Dumbbell, Target, Zap } from "@/components/icons";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ZoneBadge } from "./ZoneBadge";

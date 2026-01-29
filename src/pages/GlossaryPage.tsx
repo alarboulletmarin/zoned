@@ -3,7 +3,7 @@
 
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Search, Book, Filter } from "lucide-react";
+import { Search, Book, Filter } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {

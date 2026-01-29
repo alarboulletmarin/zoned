@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Lightbulb, AlertTriangle } from "lucide-react";
+import { Lightbulb, AlertTriangle } from "@/components/icons";
 import { ZoneBadge } from "./ZoneBadge";
 import { cn } from "@/lib/utils";
 import type { WorkoutTemplate, WorkoutBlock, ZoneRange, ZoneNumber } from "@/types";

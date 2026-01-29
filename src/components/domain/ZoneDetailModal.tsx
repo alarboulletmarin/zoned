@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { Brain, Heart, Sparkles, Dumbbell, ArrowRight } from "lucide-react";
+import { Brain, Heart, Sparkles, Dumbbell, ArrowRight } from "@/components/icons";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import type { ZoneNumber, ZoneMeta } from "@/types";
-import { allWorkouts } from "@/data/workouts";
+import { useWorkouts } from "@/hooks";
 import { getDominantZone } from "@/types";
 
 interface ZoneDetailModalProps {
@@ -28,6 +28,7 @@ export function ZoneDetailModal({
 }: ZoneDetailModalProps) {
   const { i18n } = useTranslation();
   const isEn = i18n.language === "en";
+  const { workouts: allWorkouts } = useWorkouts();
 
   // Derive display values only when zoneMeta is available
   const label = zoneMeta ? (isEn ? zoneMeta.labelEn : zoneMeta.label) : "";

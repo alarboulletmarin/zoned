@@ -18,7 +18,8 @@ import {
   Timer,
   Shuffle,
   ClipboardCheck,
-} from "lucide-react";
+  Loader2,
+} from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,7 +34,7 @@ import {
 } from "@/components/domain";
 import { SEOHead } from "@/components/seo";
 import { SessionTimeline, ZoneDistribution, transformSessionBlocks } from "@/components/visualization";
-import { getWorkoutById, getRelatedWorkouts } from "@/data/workouts";
+import { useWorkout, useRelatedWorkouts } from "@/hooks";
 import type { WorkoutCategory, ZoneRange } from "@/types";
 import {
   getDominantZone,
@@ -61,7 +62,8 @@ export function WorkoutDetailPage() {
   const { t, i18n } = useTranslation(["session", "library", "common"]);
   const isEn = i18n.language === "en";
 
-  const workout = id ? getWorkoutById(id) : undefined;
+  const { workout, isLoading } = useWorkout(id);
+  const { workouts: relatedWorkouts } = useRelatedWorkouts(workout);
 
   // Load user zones from localStorage
   const [userZones, setUserZones] = useState<ZoneRange[]>([]);
@@ -78,6 +80,14 @@ export function WorkoutDetailPage() {
       setHasUserZones(false);
     }
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="py-12 flex items-center justify-center">
+        <Loader2 className="size-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   if (!workout) {
     return (
@@ -105,7 +115,6 @@ export function WorkoutDetailPage() {
   const duration = sessionData.totalDurationMin;
   const CategoryIcon = CATEGORY_ICONS[workout.category];
   void DIFFICULTY_META[workout.difficulty];
-  const relatedWorkouts = getRelatedWorkouts(workout);
 
   // Environment requirements
   const envRequirements: { icon: React.ComponentType<{ className?: string }>; text: string }[] = [];

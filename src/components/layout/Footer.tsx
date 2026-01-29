@@ -1,12 +1,14 @@
-import { GitlabIcon } from "lucide-react";
+import { GitlabIcon } from "@/components/icons";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { categories, totalWorkoutCount } from "@/data/workouts";
+import { categories } from "@/data/workouts";
+import { useWorkouts } from "@/hooks";
 import Logo from "@/assets/logo.svg?react";
 
 export function Footer() {
   const { t } = useTranslation("common");
   const currentYear = new Date().getFullYear();
+  const { workouts } = useWorkouts();
 
   return (
     <footer className="border-t py-6 md:py-8">
@@ -20,7 +22,7 @@ export function Footer() {
 
           {/* Stats */}
           <p className="text-sm text-muted-foreground text-center">
-            {totalWorkoutCount} {t("units.workouts")} • {categories.length}{" "}
+            {workouts.length} {t("units.workouts")} • {categories.length}{" "}
             {t("units.categories")} • 6 {t("units.zones")}
           </p>
 

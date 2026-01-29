@@ -1,21 +1,25 @@
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Heart, ArrowRight } from "lucide-react";
+import { Heart, ArrowRight, Loader2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
 import { WorkoutCard } from "@/components/domain";
-import { useFavorites } from "@/hooks";
-import { getWorkoutById } from "@/data/workouts";
+import { useFavorites, useWorkouts } from "@/hooks";
 
 export function FavoritesPage() {
   const { t, i18n } = useTranslation(["common", "library"]);
   const isEn = i18n.language === "en";
   const { favorites } = useFavorites();
+  const { workouts, isLoading } = useWorkouts();
 
   // Get workout objects for all favorites
-  const favoriteWorkouts = favorites
-    .map((id) => getWorkoutById(id))
-    .filter((w) => w !== undefined);
+  const favoriteWorkouts = useMemo(() => {
+    if (isLoading) return [];
+    return favorites
+      .map((id) => workouts.find((w) => w.id === id))
+      .filter((w) => w !== undefined);
+  }, [favorites, workouts, isLoading]);
 
   return (
     <>
@@ -41,7 +45,11 @@ export function FavoritesPage() {
       </div>
 
       {/* Content */}
-      {favoriteWorkouts.length > 0 ? (
+      {isLoading ? (
+        <div className="flex items-center justify-center py-16">
+          <Loader2 className="size-8 animate-spin text-muted-foreground" />
+        </div>
+      ) : favoriteWorkouts.length > 0 ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {favoriteWorkouts.map((workout) => (
             <WorkoutCard key={workout.id} workout={workout} />

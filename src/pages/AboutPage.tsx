@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { GitlabIcon, Shield, Heart, Code, Sparkles, ExternalLink } from "lucide-react";
+import { GitlabIcon, Shield, Heart, Code, Sparkles, ExternalLink } from "@/components/icons";
 import {
   Card,
   CardContent,

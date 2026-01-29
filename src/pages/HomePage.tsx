@@ -1,28 +1,33 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowRight, Zap, Target, Clock } from "lucide-react";
+import { ArrowRight, Zap, Target, Clock } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { WorkoutCard, WorkoutOfTheDay, CategoryIcon, ZoneDetailModal } from "@/components/domain";
 import { SEOHead } from "@/components/seo";
-import { totalWorkoutCount, categories, workoutsByCategory } from "@/data/workouts";
-import { ZONE_META, type ZoneNumber } from "@/types";
+import { categories } from "@/data/workouts";
+import { useWorkouts } from "@/hooks";
+import { ZONE_META, type ZoneNumber, type WorkoutCategory } from "@/types";
 
 export function HomePage() {
   const { t, i18n } = useTranslation(["common", "library"]);
   const isEn = i18n.language === "en";
   const [selectedZone, setSelectedZone] = useState<ZoneNumber | null>(null);
+  const { workouts } = useWorkouts();
+  const workoutCount = workouts.length;
 
   // Get one featured workout per category (first one of each)
   const featuredWorkouts = categories.slice(0, 6).map((cat) => ({
     category: cat,
-    workout: workoutsByCategory[cat][0],
-  }));
+    workout: workouts.find((w) => w.category === cat),
+  })).filter((item): item is { category: WorkoutCategory; workout: NonNullable<typeof item.workout> } =>
+    item.workout !== undefined
+  );
 
   const seoDescription = isEn
-    ? `${totalWorkoutCount} science-based running workouts organized by training zones. Free workout library for runners of all levels.`
-    : `${totalWorkoutCount} séances de course à pied scientifiques organisées par zones d'entraînement. Bibliothèque gratuite pour coureurs de tous niveaux.`;
+    ? `${workoutCount || 118} science-based running workouts organized by training zones. Free workout library for runners of all levels.`
+    : `${workoutCount || 118} séances de course à pied scientifiques organisées par zones d'entraînement. Bibliothèque gratuite pour coureurs de tous niveaux.`;
 
   return (
     <>
@@ -58,7 +63,7 @@ export function HomePage() {
         <div className="flex flex-wrap justify-center gap-8 py-6">
           <div className="flex items-center gap-2">
             <Zap className="size-5 text-primary" />
-            <span className="text-2xl font-bold">{totalWorkoutCount}</span>
+            <span className="text-2xl font-bold">{workoutCount || 118}</span>
             <span className="text-muted-foreground">{t("common:units.workouts")}</span>
           </div>
           <div className="flex items-center gap-2">
@@ -191,7 +196,7 @@ export function HomePage() {
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           {categories.map((cat) => {
-            const count = workoutsByCategory[cat].length;
+            const count = workouts.filter((w) => w.category === cat).length;
             return (
               <Link
                 key={cat}

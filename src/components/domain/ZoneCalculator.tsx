@@ -1,6 +1,6 @@
 import { useState, useEffect, type ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { Save, Trash2, Heart, Gauge } from "lucide-react";
+import { Save, Trash2, Heart, Gauge } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   Card,

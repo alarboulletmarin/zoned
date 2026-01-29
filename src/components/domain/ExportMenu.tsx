@@ -10,7 +10,7 @@
 
 import { useState, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Download, Calendar, Image, FileText, Watch, Loader2 } from "lucide-react";
+import { Download, Calendar, Image, FileText, Watch, Loader2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,

@@ -1,6 +1,6 @@
 import { useState, useEffect, type ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { Timer, Gauge, Info } from "lucide-react";
+import { Timer, Gauge, Info } from "@/components/icons";
 import {
   Card,
   CardContent,

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { BookOpen, Dumbbell, Heart, Filter } from "lucide-react";
+import { BookOpen, Dumbbell, Heart, Filter } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
 import { ArticleCard } from "@/components/domain/ArticleCard";

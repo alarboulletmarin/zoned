@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Filter, Search, Heart, X } from "lucide-react";
+import { Filter, Search, Heart, X } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -12,8 +12,7 @@ import {
   type WorkoutFiltersState,
 } from "@/components/domain";
 import { SEOHead } from "@/components/seo";
-import { useFavorites, useKeyboardShortcuts } from "@/hooks";
-import { allWorkouts } from "@/data/workouts";
+import { useFavorites, useKeyboardShortcuts, useWorkouts } from "@/hooks";
 import { getEstimatedDuration } from "@/types";
 import type { WorkoutCategory } from "@/types";
 
@@ -63,6 +62,7 @@ export function LibraryPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const { favorites } = useFavorites();
+  const { workouts: allWorkouts } = useWorkouts();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Temporary filters for mobile (apply/cancel behavior)

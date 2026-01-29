@@ -1,6 +1,6 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChevronLeft, ChevronRight, Clock, BookOpen, Home } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock, BookOpen, Home } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
 import { getArticleBySlug, getAdjacentArticles } from "@/data/articles";

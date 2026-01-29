@@ -31,9 +31,171 @@
     <link rel="alternate" hreflang="fr" href="https://zoned.run/" />
     <link rel="alternate" hreflang="en" href="https://zoned.run/?lang=en" />
     <link rel="alternate" hreflang="x-default" href="https://zoned.run/" />
+
+    <!-- Theme sync script - MUST run before any render to prevent flash -->
+    <script>
+      (function() {
+        var stored = localStorage.getItem('zoned-theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var isDark = stored === 'dark' || (!stored && prefersDark);
+        if (isDark) document.documentElement.classList.add('dark');
+      })();
+    </script>
+
+    <!-- Critical CSS for instant FCP -->
+    <style>
+      /* CSS Variables for theming - must match Tailwind theme */
+      :root {
+        --bg: #fafafa;
+        --fg: #0a0a0a;
+        --muted: #737373;
+        --border: #e5e5e5;
+        --primary: #2563eb;
+      }
+      /* Dark mode via class (applied by script above) */
+      .dark {
+        --bg: #0a0a0a;
+        --fg: #fafafa;
+        --muted: #a3a3a3;
+        --border: #262626;
+        --primary: #3b82f6;
+      }
+
+      /* Initial background */
+      body { background: var(--bg); color: var(--fg); }
+
+      /* Base - scoped to loading shell only */
+      #loading-shell { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+      #loading-shell * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      /* Loading Shell */
+      #loading-shell {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      /* Header Shell */
+      .shell-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        width: 100%;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg);
+        backdrop-filter: blur(8px);
+      }
+      .shell-header-inner {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: flex;
+        height: 56px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+      }
+      .shell-logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .shell-logo svg {
+        width: 64px;
+        height: 32px;
+      }
+      .shell-logo span {
+        font-weight: 700;
+        font-size: 18px;
+      }
+      .shell-nav {
+        display: none;
+        gap: 24px;
+      }
+      @media (min-width: 768px) {
+        .shell-nav { display: flex; }
+      }
+      .shell-nav-item {
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      /* Loading Content */
+      .shell-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 50vh;
+      }
+
+      /* Spinner */
+      .spinner {
+        width: 32px;
+        height: 32px;
+        border: 2px solid transparent;
+        border-bottom-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      /* Hide shell when app loads */
+      #loading-shell.hidden {
+        display: none;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Loading Shell - displayed instantly, hidden when React mounts -->
+    <div id="loading-shell">
+      <header class="shell-header">
+        <div class="shell-header-inner">
+          <div class="shell-logo">
+            <svg width="200" height="100" viewBox="5 35 190 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="pulseGradient" x1="0%" y1="50%" x2="100%" y2="50%">
+                  <stop offset="0%" style="stop-color:#94a3b8;stop-opacity:1" />
+                  <stop offset="20%" style="stop-color:#22c55e;stop-opacity:1" />
+                  <stop offset="40%" style="stop-color:#eab308;stop-opacity:1" />
+                  <stop offset="60%" style="stop-color:#f97316;stop-opacity:1" />
+                  <stop offset="80%" style="stop-color:#ef4444;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+                </linearGradient>
+                <filter id="pulseGlow">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              <path d="M 10 100 L 30 100 L 35 110 L 45 70 L 55 130 L 65 50 L 75 120 L 85 40 L 95 100 L 115 100 L 120 110 L 130 70 L 140 130 L 150 50 L 160 120 L 170 40 L 180 100 L 190 100"
+                    stroke="url(#pulseGradient)"
+                    stroke-width="6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    fill="none"
+                    filter="url(#pulseGlow)"/>
+            </svg>
+            <span>Zoned</span>
+          </div>
+          <nav class="shell-nav">
+            <span class="shell-nav-item">Accueil</span>
+            <span class="shell-nav-item">Bibliothèque</span>
+            <span class="shell-nav-item">Apprendre</span>
+            <span class="shell-nav-item">Glossaire</span>
+          </nav>
+        </div>
+      </header>
+      <main class="shell-content">
+        <div class="spinner"></div>
+      </main>
+    </div>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

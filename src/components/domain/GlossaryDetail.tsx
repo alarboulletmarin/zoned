@@ -3,7 +3,7 @@
 
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ExternalLink as ExternalLinkIcon, Link2 } from "lucide-react";
+import { ExternalLink as ExternalLinkIcon, Link2 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ZoneBadge } from "./ZoneBadge";

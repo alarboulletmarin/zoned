@@ -3,7 +3,7 @@
 
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChevronLeft, Book, Search } from "lucide-react";
+import { ChevronLeft, Book, Search } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { SEOHead } from "@/components/seo";

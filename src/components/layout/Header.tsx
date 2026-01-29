@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book } from "lucide-react";
+import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book } from "@/components/icons";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/logo.svg?react";
