@@ -1,0 +1,31 @@
+{
+  "title": "Glossary",
+  "subtitle": "{{count}} training terms explained",
+  "searchPlaceholder": "Search terms...",
+  "categoryPlaceholder": "Category",
+  "allCategories": "All categories",
+  "resultCount_one": "{{count}} term",
+  "resultCount_other": "{{count}} terms",
+  "removeCategoryFilter": "Remove category filter",
+  "clearSearch": "Clear search",
+  "noResults": "No matching terms found",
+  "noResultsForQuery": "for \"{{query}}\"",
+  "noResultsInCategory": "in category \"{{category}}\"",
+  "resetFilters": "Reset filters",
+  "formula": "Formula",
+  "example": "Example",
+  "relatedTerms": "Related terms",
+  "learnMore": "Learn more",
+  "backToGlossary": "Back to glossary",
+  "termNotFound": "Term not found",
+  "termNotFoundDescription": "The requested term does not exist in the glossary.",
+  "viewDefinition": "View definition of {{term}}",
+  "categories": {
+    "metrics": "Metrics",
+    "periodization": "Periodization",
+    "sessions": "Sessions",
+    "zones": "Zones",
+    "physiology": "Physiology",
+    "recovery": "Recovery"
+  }
+}

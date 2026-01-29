@@ -1,0 +1,31 @@
+{
+  "title": "Glossaire",
+  "subtitle": "{{count}} termes techniques de l'entraînement",
+  "searchPlaceholder": "Rechercher un terme...",
+  "categoryPlaceholder": "Catégorie",
+  "allCategories": "Toutes les catégories",
+  "resultCount_one": "{{count}} terme",
+  "resultCount_other": "{{count}} termes",
+  "removeCategoryFilter": "Retirer le filtre de catégorie",
+  "clearSearch": "Effacer la recherche",
+  "noResults": "Aucun terme trouvé",
+  "noResultsForQuery": "pour « {{query}} »",
+  "noResultsInCategory": "dans la catégorie « {{category}} »",
+  "resetFilters": "Réinitialiser les filtres",
+  "formula": "Formule",
+  "example": "Exemple",
+  "relatedTerms": "Termes associés",
+  "learnMore": "Pour aller plus loin",
+  "backToGlossary": "Retour au glossaire",
+  "termNotFound": "Terme non trouvé",
+  "termNotFoundDescription": "Le terme demandé n'existe pas dans le glossaire.",
+  "viewDefinition": "Voir la définition de {{term}}",
+  "categories": {
+    "metrics": "Métriques",
+    "periodization": "Périodisation",
+    "sessions": "Séances",
+    "zones": "Zones",
+    "physiology": "Physiologie",
+    "recovery": "Récupération"
+  }
+}

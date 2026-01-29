@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap } from "lucide-react";
+import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/logo.svg?react";
@@ -29,6 +29,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
     { href: "/", label: t("nav.home") },
     { href: "/library", label: t("nav.library") },
     { href: "/learn", label: t("nav.learn") },
+    { href: "/glossary", label: t("nav.glossary") },
   ];
 
   return (
@@ -208,6 +209,21 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             >
               <GraduationCap className="size-4" />
               {t("nav.learn")}
+            </Link>
+
+            {/* Glossary */}
+            <Link
+              to="/glossary"
+              onClick={() => setMobileMenuOpen(false)}
+              className={cn(
+                "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
+                location.pathname === "/glossary" || location.pathname.startsWith("/glossary/")
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Book className="size-4" />
+              {t("nav.glossary")}
             </Link>
 
             {/* Quiz */}

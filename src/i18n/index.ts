@@ -6,10 +6,12 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import frCommon from "./locales/fr/common.json";
 import frLibrary from "./locales/fr/library.json";
 import frSession from "./locales/fr/session.json";
+import frGlossary from "./locales/fr/glossary.json";
 
 import enCommon from "./locales/en/common.json";
 import enLibrary from "./locales/en/library.json";
 import enSession from "./locales/en/session.json";
+import enGlossary from "./locales/en/glossary.json";
 
 // Resources object
 const resources = {
@@ -17,11 +19,13 @@ const resources = {
     common: frCommon,
     library: frLibrary,
     session: frSession,
+    glossary: frGlossary,
   },
   en: {
     common: enCommon,
     library: enLibrary,
     session: enSession,
+    glossary: enGlossary,
   },
 };
 
@@ -35,7 +39,7 @@ i18n
     resources,
     fallbackLng: "fr",
     defaultNS: "common",
-    ns: ["common", "library", "session"],
+    ns: ["common", "library", "session", "glossary"],
 
     // Detection options
     detection: {

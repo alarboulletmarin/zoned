@@ -7,3 +7,5 @@ export { QuizPage } from "./QuizPage";
 export { AboutPage } from "./AboutPage";
 export { LearnPage } from "./LearnPage";
 export { ArticlePage } from "./ArticlePage";
+export { GlossaryPage } from "./GlossaryPage";
+export { GlossaryTermPage } from "./GlossaryTermPage";

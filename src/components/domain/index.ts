@@ -18,3 +18,5 @@ export { ExportableWorkoutCard } from "./ExportableWorkoutCard";
 export { ZoneDetailModal } from "./ZoneDetailModal";
 export { ZonePersonalizationCTA } from "./ZonePersonalizationCTA";
 export { ArticleCard } from "./ArticleCard";
+export { GlossaryCard } from "./GlossaryCard";
+export { GlossaryDetail } from "./GlossaryDetail";
