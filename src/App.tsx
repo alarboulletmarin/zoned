@@ -1,9 +1,22 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { Analytics } from "@vercel/analytics/react";
 import { Header, Footer } from "@/components/layout";
-import { HomePage, LibraryPage, WorkoutDetailPage, MyZonesPage, FavoritesPage, QuizPage, AboutPage, LearnPage, ArticlePage, GlossaryPage, GlossaryTermPage } from "@/pages";
+import { PageLoader } from "@/components/ui/page-loader";
+
+// Critical pages (loaded immediately)
+import { HomePage, LibraryPage, WorkoutDetailPage } from "@/pages";
+
+// Secondary pages (lazy loaded)
+const MyZonesPage = lazy(() => import("@/pages/MyZonesPage").then(m => ({ default: m.MyZonesPage })));
+const FavoritesPage = lazy(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
+const QuizPage = lazy(() => import("@/pages/QuizPage").then(m => ({ default: m.QuizPage })));
+const AboutPage = lazy(() => import("@/pages/AboutPage").then(m => ({ default: m.AboutPage })));
+const LearnPage = lazy(() => import("@/pages/LearnPage").then(m => ({ default: m.LearnPage })));
+const ArticlePage = lazy(() => import("@/pages/ArticlePage").then(m => ({ default: m.ArticlePage })));
+const GlossaryPage = lazy(() => import("@/pages/GlossaryPage").then(m => ({ default: m.GlossaryPage })));
+const GlossaryTermPage = lazy(() => import("@/pages/GlossaryTermPage").then(m => ({ default: m.GlossaryTermPage })));
 
 function ScrollToTopOnNavigate() {
   const { pathname } = useLocation();
@@ -74,20 +87,22 @@ function App() {
           <Header theme={theme} onThemeToggle={toggleTheme} />
 
           <main className="flex-1 container mx-auto px-4">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/library" element={<LibraryPage />} />
-              <Route path="/workout/:id" element={<WorkoutDetailPage />} />
-              <Route path="/my-zones" element={<MyZonesPage />} />
-              <Route path="/settings" element={<Navigate to="/my-zones" replace />} />
-              <Route path="/favorites" element={<FavoritesPage />} />
-              <Route path="/quiz" element={<QuizPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/learn" element={<LearnPage />} />
-              <Route path="/learn/:slug" element={<ArticlePage />} />
-              <Route path="/glossary" element={<GlossaryPage />} />
-              <Route path="/glossary/:id" element={<GlossaryTermPage />} />
-            </Routes>
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/library" element={<LibraryPage />} />
+                <Route path="/workout/:id" element={<WorkoutDetailPage />} />
+                <Route path="/my-zones" element={<MyZonesPage />} />
+                <Route path="/settings" element={<Navigate to="/my-zones" replace />} />
+                <Route path="/favorites" element={<FavoritesPage />} />
+                <Route path="/quiz" element={<QuizPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/learn" element={<LearnPage />} />
+                <Route path="/learn/:slug" element={<ArticlePage />} />
+                <Route path="/glossary" element={<GlossaryPage />} />
+                <Route path="/glossary/:id" element={<GlossaryTermPage />} />
+              </Routes>
+            </Suspense>
           </main>
 
           <Footer />
