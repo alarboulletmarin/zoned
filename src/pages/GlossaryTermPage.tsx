@@ -6,12 +6,14 @@ import { useTranslation } from "react-i18next";
 import { ChevronLeft, Book, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
+import { SEOHead } from "@/components/seo";
 import { GlossaryDetail } from "@/components/domain";
 import { getTermById } from "@/data/glossary";
 
 export function GlossaryTermPage() {
   const { id } = useParams<{ id: string }>();
-  const { t } = useTranslation("glossary");
+  const { t, i18n } = useTranslation("glossary");
+  const isEn = i18n.language === "en";
 
   const term = id ? getTermById(id) : undefined;
 
@@ -32,9 +34,19 @@ export function GlossaryTermPage() {
     );
   }
 
+  const termName = term.acronym || (isEn && term.termEn ? term.termEn : term.term);
+  const termDefinition = isEn && term.shortDefinitionEn ? term.shortDefinitionEn : term.shortDefinition;
+  const truncatedDefinition = termDefinition.length > 155 ? termDefinition.slice(0, 152) + "..." : termDefinition;
+
   return (
-    <div className="py-8">
-      {/* Breadcrumb */}
+    <>
+      <SEOHead
+        title={termName}
+        description={truncatedDefinition}
+        canonical={`/glossary/${id}`}
+      />
+      <div className="py-8">
+        {/* Breadcrumb */}
       <div className="mb-6">
         <Button variant="ghost" size="sm" asChild className="gap-1 -ml-2">
           <Link to="/glossary">
@@ -50,6 +62,7 @@ export function GlossaryTermPage() {
         <GlossaryDetail term={term} />
       </div>
     </div>
+    </>
   );
 }
 

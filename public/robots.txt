@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /my-zones
+Disallow: /favorites
+
+Sitemap: https://zoned.run/sitemap.xml

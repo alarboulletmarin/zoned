@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BookOpen, Dumbbell, Heart, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SEOHead } from "@/components/seo";
 import { ArticleCard } from "@/components/domain/ArticleCard";
 import { articles, articleCategories, type Article } from "@/data/articles";
 import { cn } from "@/lib/utils";
@@ -13,7 +14,8 @@ const CATEGORY_ICONS: Record<Article["category"], React.ComponentType<{ classNam
 };
 
 export function LearnPage() {
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
+  const isEn = i18n.language === "en";
   const [selectedCategory, setSelectedCategory] = useState<Article["category"] | "all">("all");
 
   const filteredArticles = selectedCategory === "all"
@@ -21,7 +23,15 @@ export function LearnPage() {
     : articles.filter((a) => a.category === selectedCategory);
 
   return (
-    <div className="py-8">
+    <>
+      <SEOHead
+        title={isEn ? "Learn" : "Apprendre"}
+        description={isEn
+          ? "Explore running guides, training fundamentals, and zone-based workout explanations."
+          : "Explorez les guides de course, les fondamentaux de l'entrainement et les explications des seances par zones."}
+        canonical="/learn"
+      />
+      <div className="py-8">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">{t("learn.title")}</h1>
@@ -72,5 +82,6 @@ export function LearnPage() {
         {t("learn.articleCount", { count: filteredArticles.length })}
       </div>
     </div>
+    </>
   );
 }

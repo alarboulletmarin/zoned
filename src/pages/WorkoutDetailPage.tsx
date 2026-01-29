@@ -31,6 +31,7 @@ import {
   ExportMenu,
   ZonePersonalizationCTA,
 } from "@/components/domain";
+import { SEOHead } from "@/components/seo";
 import { SessionTimeline, ZoneDistribution, transformSessionBlocks } from "@/components/visualization";
 import { getWorkoutById, getRelatedWorkouts } from "@/data/workouts";
 import type { WorkoutCategory, ZoneRange } from "@/types";
@@ -118,9 +119,28 @@ export function WorkoutDetailPage() {
     envRequirements.push({ icon: Route, text: t("environment.prefersFlat") });
   }
 
+  const seoTitle = isEn ? workout.nameEn : workout.name;
+  const seoDescription = (isEn ? workout.descriptionEn : workout.description).slice(0, 155);
+
   return (
-    <div className="py-8 space-y-8">
-      {/* Back Button */}
+    <>
+      <SEOHead
+        title={seoTitle}
+        description={seoDescription}
+        canonical={`/workout/${workout.id}`}
+        ogType="article"
+        jsonLd={{
+          "@type": "ExercisePlan",
+          name: seoTitle,
+          description: seoDescription,
+          exerciseType: "Running",
+          activityDuration: `PT${duration}M`,
+          activityFrequency: "As needed",
+          intensity: workout.difficulty,
+        }}
+      />
+      <div className="py-8 space-y-8">
+        {/* Back Button */}
       <Button variant="ghost" size="sm" asChild>
         <Link to="/library">
           <ArrowLeft className="mr-2 size-4" />
@@ -292,5 +312,6 @@ export function WorkoutDetailPage() {
         </aside>
       </div>
     </div>
+    </>
   );
 }

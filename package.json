@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "generate:sitemap": "bun run scripts/generate-sitemap.ts",
+    "generate:og": "bun run scripts/generate-og-image.ts",
     "preview": "vite preview"
   },
   "devDependencies": {
@@ -40,6 +42,7 @@
     "pdfmake": "^0.3.3",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
+    "react-helmet-async": "^2.0.5",
     "react-i18next": "^16.5.3",
     "react-router-dom": "^7.13.0",
     "recharts": "^3.7.0",

@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SEOHead } from "@/components/seo";
 import { GlossaryCard } from "@/components/domain";
 import {
   getAllTerms,
@@ -94,7 +95,15 @@ export function GlossaryPage() {
   };
 
   return (
-    <div className="py-8">
+    <>
+      <SEOHead
+        title={isEn ? "Glossary" : "Glossaire"}
+        description={isEn
+          ? "Running terminology explained: training zones, workout types, and key concepts for runners."
+          : "Terminologie de la course a pied expliquee: zones d'entrainement, types de seances et concepts cles."}
+        canonical="/glossary"
+      />
+      <div className="py-8">
       {/* Page Header */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-2">
@@ -203,6 +212,7 @@ export function GlossaryPage() {
         </div>
       )}
     </div>
+    </>
   );
 }
 

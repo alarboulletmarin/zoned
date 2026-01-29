@@ -2,6 +2,7 @@ import { useParams, Link, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ChevronLeft, ChevronRight, Clock, BookOpen, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SEOHead } from "@/components/seo";
 import { getArticleBySlug, getAdjacentArticles } from "@/data/articles";
 import { cn } from "@/lib/utils";
 
@@ -188,9 +189,22 @@ export function ArticlePage() {
   const content = isEn ? article.contentEn : article.content;
   const title = isEn ? article.titleEn : article.title;
   const description = isEn ? article.descriptionEn : article.description;
+  const truncatedDescription = description.length > 155 ? description.slice(0, 152) + "..." : description;
 
   return (
-    <div className="py-8 max-w-3xl mx-auto">
+    <>
+      <SEOHead
+        title={title}
+        description={truncatedDescription}
+        canonical={`/learn/${slug}`}
+        ogType="article"
+        jsonLd={{
+          "@type": "Article",
+          headline: title,
+          description: truncatedDescription,
+        }}
+      />
+      <div className="py-8 max-w-3xl mx-auto">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
         <Link to="/" className="hover:text-foreground transition-colors">
@@ -287,5 +301,6 @@ export function ArticlePage() {
         </Button>
       </div>
     </div>
+    </>
   );
 }

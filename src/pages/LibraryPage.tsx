@@ -11,6 +11,7 @@ import {
   defaultFilters,
   type WorkoutFiltersState,
 } from "@/components/domain";
+import { SEOHead } from "@/components/seo";
 import { useFavorites, useKeyboardShortcuts } from "@/hooks";
 import { allWorkouts } from "@/data/workouts";
 import { getEstimatedDuration } from "@/types";
@@ -57,7 +58,8 @@ function parseFiltersFromParams(searchParams: URLSearchParams): Partial<WorkoutF
 }
 
 export function LibraryPage() {
-  const { t } = useTranslation(["library", "common"]);
+  const { t, i18n } = useTranslation(["library", "common"]);
+  const isEn = i18n.language === "en";
   const [searchParams, setSearchParams] = useSearchParams();
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const { favorites } = useFavorites();
@@ -268,9 +270,19 @@ export function LibraryPage() {
     return getActiveFiltersCount(filters);
   }, [filters]);
 
+  const seoDescription = isEn
+    ? `Browse ${allWorkouts.length} science-based running workouts. Filter by category, difficulty, duration, and terrain.`
+    : `Parcourez ${allWorkouts.length} séances de course scientifiques. Filtrez par catégorie, difficulté, durée et terrain.`;
+
   return (
-    <div className="py-8">
-      {/* Header */}
+    <>
+      <SEOHead
+        title={isEn ? "Workout Library" : "Bibliothèque"}
+        description={seoDescription}
+        canonical="/library"
+      />
+      <div className="py-8">
+        {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -420,5 +432,6 @@ export function LibraryPage() {
 
       <ScrollToTop />
     </div>
+    </>
   );
 }

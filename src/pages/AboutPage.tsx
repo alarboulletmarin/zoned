@@ -8,12 +8,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { SEOHead } from "@/components/seo";
 
 export function AboutPage() {
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
+  const isEn = i18n.language === "en";
 
   return (
-    <div className="py-8 space-y-8 max-w-4xl mx-auto">
+    <>
+      <SEOHead
+        title={isEn ? "About" : "A propos"}
+        description={isEn
+          ? "Learn about Zoned, an open-source running workout library with zone-based training."
+          : "Decouvrez Zoned, une bibliotheque open-source de seances de course a pied basee sur les zones."}
+        canonical="/about"
+      />
+      <div className="py-8 space-y-8 max-w-4xl mx-auto">
       {/* Header */}
       <div className="text-center space-y-4">
         <h1 className="text-3xl font-bold">{t("about.title")}</h1>
@@ -125,5 +135,6 @@ export function AboutPage() {
         </Card>
       </div>
     </div>
+    </>
   );
 }

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Heart, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SEOHead } from "@/components/seo";
 import { WorkoutCard } from "@/components/domain";
 import { useFavorites } from "@/hooks";
 import { getWorkoutById } from "@/data/workouts";
@@ -17,7 +18,13 @@ export function FavoritesPage() {
     .filter((w) => w !== undefined);
 
   return (
-    <div className="py-8 space-y-6">
+    <>
+      <SEOHead
+        noindex={true}
+        title={isEn ? "My Favorites" : "Mes Favoris"}
+        canonical="/favorites"
+      />
+      <div className="py-8 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
         <Heart className="size-6 text-red-500 fill-red-500" />
@@ -62,5 +69,6 @@ export function FavoritesPage() {
         </div>
       )}
     </div>
+    </>
   );
 }

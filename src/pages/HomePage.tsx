@@ -5,6 +5,7 @@ import { ArrowRight, Zap, Target, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { WorkoutCard, WorkoutOfTheDay, CategoryIcon, ZoneDetailModal } from "@/components/domain";
+import { SEOHead } from "@/components/seo";
 import { totalWorkoutCount, categories, workoutsByCategory } from "@/data/workouts";
 import { ZONE_META, type ZoneNumber } from "@/types";
 
@@ -19,9 +20,30 @@ export function HomePage() {
     workout: workoutsByCategory[cat][0],
   }));
 
+  const seoDescription = isEn
+    ? `${totalWorkoutCount} science-based running workouts organized by training zones. Free workout library for runners of all levels.`
+    : `${totalWorkoutCount} séances de course à pied scientifiques organisées par zones d'entraînement. Bibliothèque gratuite pour coureurs de tous niveaux.`;
+
   return (
-    <div className="space-y-12 py-8">
-      {/* Hero Section */}
+    <>
+      <SEOHead
+        title={isEn ? "Scientific Running Workouts" : "Séances de Course Scientifiques"}
+        description={seoDescription}
+        canonical="/"
+        jsonLd={{
+          "@type": "WebSite",
+          name: "Zoned",
+          url: "https://zoned.run",
+          description: seoDescription,
+          potentialAction: {
+            "@type": "SearchAction",
+            target: "https://zoned.run/library?search={search_term_string}",
+            "query-input": "required name=search_term_string",
+          },
+        }}
+      />
+      <div className="space-y-12 py-8">
+        {/* Hero Section */}
       <section className="text-center space-y-6 py-12">
         <div className="space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
@@ -41,7 +63,7 @@ export function HomePage() {
           </div>
           <div className="flex items-center gap-2">
             <Target className="size-5 text-zone-3" />
-            <span className="text-2xl font-bold">10</span>
+            <span className="text-2xl font-bold">{categories.length}</span>
             <span className="text-muted-foreground">{t("common:units.categories")}</span>
           </div>
           <div className="flex items-center gap-2">
@@ -197,5 +219,6 @@ export function HomePage() {
         </div>
       </section>
     </div>
+    </>
   );
 }
