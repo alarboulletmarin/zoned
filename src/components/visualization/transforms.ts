@@ -361,3 +361,23 @@ export function formatDurationMinutes(minutes: number): string {
   const mins = Math.round(minutes % 60);
   return mins > 0 ? `${hours}h${mins.toString().padStart(2, "0")}` : `${hours}h`;
 }
+
+/**
+ * Get accurate workout duration by parsing all blocks including complex interval patterns
+ * This is the single source of truth for workout duration calculations
+ */
+export function getWorkoutDuration(workout: {
+  warmupTemplate?: WorkoutBlock[];
+  mainSetTemplate: WorkoutBlock[];
+  cooldownTemplate?: WorkoutBlock[];
+}): number {
+  const { totalDurationMin } = transformSessionBlocks(
+    {
+      warmup: workout.warmupTemplate ?? [],
+      mainSet: workout.mainSetTemplate,
+      cooldown: workout.cooldownTemplate ?? [],
+    },
+    false // isEn doesn't matter for duration calculation
+  );
+  return Math.round(totalDurationMin);
+}
