@@ -8,7 +8,8 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import type { TDocumentDefinitions, Content, TableCell } from "pdfmake/interfaces";
 import type { WorkoutTemplate, WorkoutBlock } from "@/types";
-import { getEstimatedDuration, CATEGORY_META, DIFFICULTY_META } from "@/types";
+import { CATEGORY_META, DIFFICULTY_META } from "@/types";
+import { getWorkoutDuration } from "@/components/visualization";
 
 // Initialize fonts
 pdfMake.vfs = pdfFonts.vfs;
@@ -71,7 +72,7 @@ export async function exportToPDF(
 ): Promise<void> {
   const title = isEn ? workout.nameEn : workout.name;
   const description = isEn ? workout.descriptionEn : workout.description;
-  const duration = getEstimatedDuration(workout);
+  const duration = getWorkoutDuration(workout);
   const category = isEn
     ? CATEGORY_META[workout.category].labelEn
     : CATEGORY_META[workout.category].label;
@@ -204,9 +205,17 @@ export async function exportToPDF(
     pageMargins: [40, 40, 40, 40],
   };
 
-  return new Promise((resolve) => {
-    pdfMake.createPdf(docDefinition).download(`${workout.id}.pdf`, () => {
-      resolve();
-    });
-  });
+  // pdfmake types are outdated - getBlob() returns Promise<Blob> in recent versions
+  const pdf = pdfMake.createPdf(docDefinition) as unknown as { getBlob: () => Promise<Blob> };
+  const blob = await pdf.getBlob();
+
+  // Trigger download manually (same pattern as ICS/FIT)
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${workout.id}.pdf`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
