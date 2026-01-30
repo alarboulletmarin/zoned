@@ -56,12 +56,15 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             <Link
               key={link.href}
               to={link.href}
+              viewTransition
               className={cn(
                 "text-sm font-medium transition-colors hover:text-primary whitespace-nowrap",
+                "nav-link-animated",
                 location.pathname === link.href
                   ? "text-foreground"
                   : "text-muted-foreground"
               )}
+              data-active={location.pathname === link.href}
             >
               {link.label}
             </Link>
@@ -226,6 +229,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             {/* Home */}
             <Link
               to="/"
+              viewTransition
               onClick={() => setMobileMenuOpen(false)}
               className={cn(
                 "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
@@ -241,6 +245,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             {/* Library */}
             <Link
               to="/library"
+              viewTransition
               onClick={() => setMobileMenuOpen(false)}
               className={cn(
                 "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
@@ -256,6 +261,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             {/* Learn */}
             <Link
               to="/learn"
+              viewTransition
               onClick={() => setMobileMenuOpen(false)}
               className={cn(
                 "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
@@ -271,6 +277,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             {/* Glossary */}
             <Link
               to="/glossary"
+              viewTransition
               onClick={() => setMobileMenuOpen(false)}
               className={cn(
                 "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
@@ -286,6 +293,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             {/* Quiz */}
             <Link
               to="/quiz"
+              viewTransition
               onClick={() => setMobileMenuOpen(false)}
               className={cn(
                 "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
@@ -301,6 +309,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             {/* Favorites */}
             <Link
               to="/favorites"
+              viewTransition
               onClick={() => setMobileMenuOpen(false)}
               className={cn(
                 "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
@@ -316,6 +325,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             {/* My Zones */}
             <Link
               to="/my-zones"
+              viewTransition
               onClick={() => setMobileMenuOpen(false)}
               className={cn(
                 "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
