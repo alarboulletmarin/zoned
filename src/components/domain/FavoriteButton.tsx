@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Heart } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -16,6 +17,17 @@ export function FavoriteButton({
 }: FavoriteButtonProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const favorited = isFavorite(workoutId);
+  const [animating, setAnimating] = useState(false);
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!favorited) {
+      setAnimating(true);
+      setTimeout(() => setAnimating(false), 400);
+    }
+    toggleFavorite(workoutId);
+  };
 
   return (
     <Button
@@ -26,17 +38,14 @@ export function FavoriteButton({
         favorited && "text-red-500 hover:text-red-600",
         className
       )}
-      onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        toggleFavorite(workoutId);
-      }}
+      onClick={handleClick}
       aria-label={favorited ? "Remove from favorites" : "Add to favorites"}
     >
       <Heart
         className={cn(
           size === "sm" ? "size-4" : "size-5",
-          favorited && "fill-current"
+          favorited && "fill-current",
+          animating && "animate-heart-bounce"
         )}
       />
     </Button>
