@@ -1007,6 +1007,575 @@
         ],
         "priorityScore": 80
       }
+    },
+    {
+      "id": "RP-012",
+      "name": "Spé 10km pyramide",
+      "nameEn": "10K Specific Pyramid",
+      "description": "Séance spécifique 10km en pyramide décroissante : 3km + 2km + 2x1km à allure 10K visée. Développe l'endurance spécifique et la gestion d'allure.",
+      "descriptionEn": "10K specific session in descending pyramid: 3km + 2km + 2x1km at target 10K pace. Develops specific endurance and pace management.",
+      "category": "race_pace",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 50,
+        "max": 65
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes et accélérations",
+          "descriptionEn": "Drills and accelerations",
+          "durationMin": 5
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3km allure 10K visée",
+          "descriptionEn": "3km at target 10K pace",
+          "distanceM": 3000,
+          "zone": "Z4",
+          "pace": "Allure 10K"
+        },
+        {
+          "description": "Récup 2min",
+          "descriptionEn": "2min recovery",
+          "durationMin": 2,
+          "zone": "Z1"
+        },
+        {
+          "description": "2km allure 10K visée",
+          "descriptionEn": "2km at target 10K pace",
+          "distanceM": 2000,
+          "zone": "Z4",
+          "pace": "Allure 10K"
+        },
+        {
+          "description": "Récup 2min",
+          "descriptionEn": "2min recovery",
+          "durationMin": 2,
+          "zone": "Z1"
+        },
+        {
+          "description": "2x1km allure 10K visée",
+          "descriptionEn": "2x1km at target 10K pace",
+          "distanceM": 1000,
+          "zone": "Z4",
+          "pace": "Allure 10K",
+          "repetitions": 2,
+          "recovery": "1min30 footing Z1"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "8km au total à allure 10K",
+        "La pyramide décroissante aide mentalement",
+        "Séance clé 3-4 semaines avant le 10K",
+        "Même allure sur chaque bloc"
+      ],
+      "coachingTipsEn": [
+        "8km total at 10K pace",
+        "Descending pyramid helps mentally",
+        "Key session 3-4 weeks before the 10K",
+        "Same pace on each block"
+      ],
+      "commonMistakes": [
+        "Partir trop vite sur le 3km",
+        "Accélérer sur les 1km finaux",
+        "Récupération trop courte"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast on the 3km",
+        "Accelerating on the final 1kms",
+        "Recovery too short"
+      ],
+      "variationIds": [
+        "RP-002",
+        "RP-004"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "key",
+        "tags": [
+          "10k",
+          "specific",
+          "pyramid",
+          "race-prep"
+        ],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "RP-013",
+      "name": "Multi-allures progressif",
+      "nameEn": "Progressive Multi-Pace",
+      "description": "Séance en escalier : 3km allure semi-marathon, 2x1km allure 10K visée, 2x1km allure 5K. 3min de récup entre chaque série. Développe la capacité à accélérer sur jambes fatiguées.",
+      "descriptionEn": "Ladder session: 3km at half-marathon pace, 2x1km at target 10K pace, 2x1km at 5K pace. 3min recovery between sets. Develops ability to accelerate on tired legs.",
+      "category": "race_pace",
+      "sessionType": "mixed",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 55,
+        "max": 70
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes et accélérations",
+          "descriptionEn": "Drills and accelerations",
+          "durationMin": 5
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3km allure semi-marathon",
+          "descriptionEn": "3km at half-marathon pace",
+          "distanceM": 3000,
+          "zone": "Z3-Z4",
+          "pace": "Allure Semi"
+        },
+        {
+          "description": "Récup 3min",
+          "descriptionEn": "3min recovery",
+          "durationMin": 3,
+          "zone": "Z1"
+        },
+        {
+          "description": "2x1km allure 10K visée",
+          "descriptionEn": "2x1km at target 10K pace",
+          "distanceM": 1000,
+          "zone": "Z4",
+          "pace": "Allure 10K",
+          "repetitions": 2,
+          "recovery": "90s footing Z1"
+        },
+        {
+          "description": "Récup 3min",
+          "descriptionEn": "3min recovery",
+          "durationMin": 3,
+          "zone": "Z1"
+        },
+        {
+          "description": "2x1km allure 5K",
+          "descriptionEn": "2x1km at 5K pace",
+          "distanceM": 1000,
+          "zone": "Z5",
+          "pace": "Allure 5K",
+          "repetitions": 2,
+          "recovery": "90s footing Z1"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Progression semi → 10K → 5K",
+        "Simule un finish agressif",
+        "Les 3min de récup sont importantes",
+        "Séance mentalement exigeante"
+      ],
+      "coachingTipsEn": [
+        "Progression from half → 10K → 5K",
+        "Simulates an aggressive finish",
+        "The 3min recovery periods are important",
+        "Mentally demanding session"
+      ],
+      "commonMistakes": [
+        "Partir trop vite sur le 3km semi",
+        "Ne pas accélérer suffisamment sur le 5K",
+        "Réduire les temps de récup"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast on the half-marathon 3km",
+        "Not accelerating enough on the 5K portion",
+        "Cutting the recovery times"
+      ],
+      "variationIds": [
+        "RP-002",
+        "RP-003",
+        "RP-004"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "key",
+        "tags": [
+          "multi-pace",
+          "progressive",
+          "race-simulation"
+        ],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "RP-014",
+      "name": "Semi-10K combiné",
+      "nameEn": "Half-Marathon to 10K Combined",
+      "description": "Séance mixte semi/10K : 1km allure semi, 4km allure 10K visée, 2x2km allure semi. 2min de récup entre les séries. Travaille l'alternance d'allures.",
+      "descriptionEn": "Mixed half/10K session: 1km at half pace, 4km at target 10K pace, 2x2km at half pace. 2min recovery between sets. Works on pace alternation.",
+      "category": "race_pace",
+      "sessionType": "mixed",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 55,
+        "max": 70
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Accélérations progressives",
+          "descriptionEn": "Progressive accelerations",
+          "durationMin": 5
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "1km allure semi-marathon",
+          "descriptionEn": "1km at half-marathon pace",
+          "distanceM": 1000,
+          "zone": "Z3-Z4",
+          "pace": "Allure Semi"
+        },
+        {
+          "description": "Récup 2min",
+          "descriptionEn": "2min recovery",
+          "durationMin": 2,
+          "zone": "Z1"
+        },
+        {
+          "description": "4km allure 10K visée",
+          "descriptionEn": "4km at target 10K pace",
+          "distanceM": 4000,
+          "zone": "Z4",
+          "pace": "Allure 10K"
+        },
+        {
+          "description": "Récup 2min",
+          "descriptionEn": "2min recovery",
+          "durationMin": 2,
+          "zone": "Z1"
+        },
+        {
+          "description": "2x2km allure semi-marathon",
+          "descriptionEn": "2x2km at half-marathon pace",
+          "distanceM": 2000,
+          "zone": "Z3-Z4",
+          "pace": "Allure Semi",
+          "repetitions": 2,
+          "recovery": "2min footing Z1"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "9km au total avec alternance d'allures",
+        "Le bloc 4km 10K est le cœur de la séance",
+        "Finir sur l'allure semi = retour au contrôle",
+        "Excellent pour la prépa semi-marathon"
+      ],
+      "coachingTipsEn": [
+        "9km total with pace alternation",
+        "The 4km 10K block is the heart of the session",
+        "Finishing at half pace = return to control",
+        "Excellent for half-marathon preparation"
+      ],
+      "commonMistakes": [
+        "Courir le 4km trop vite",
+        "Ne pas redescendre en allure semi après",
+        "Récup trop courte entre les blocs"
+      ],
+      "commonMistakesEn": [
+        "Running the 4km too fast",
+        "Not dropping back to half pace afterwards",
+        "Recovery too short between blocks"
+      ],
+      "variationIds": [
+        "RP-002",
+        "RP-003"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "half-marathon",
+          "10k",
+          "combined",
+          "pace-alternation"
+        ],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "RP-015",
+      "name": "6km confiance 10K",
+      "nameEn": "10K Confidence Run",
+      "description": "6km d'un bloc à allure 10K visée. Séance de confiance à faire 10 jours avant la course. Valide la capacité à tenir l'allure sur plus de la moitié de la distance cible.",
+      "descriptionEn": "6km block at target 10K pace. Confidence session to do 10 days before the race. Validates ability to hold pace for more than half the target distance.",
+      "category": "race_pace",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 45,
+        "max": 55
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Quelques accélérations courtes",
+          "descriptionEn": "A few short accelerations",
+          "durationMin": 5
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "6km allure 10K visée",
+          "descriptionEn": "6km at target 10K pace",
+          "distanceM": 6000,
+          "zone": "Z4",
+          "pace": "Allure 10K visée"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 15,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "À faire 10 jours avant le 10K",
+        "Met en confiance pour le jour J",
+        "Si vous tenez 6km, vous tiendrez 10km",
+        "Ne pas forcer, juste valider l'allure",
+        "Séance qui booste le mental"
+      ],
+      "coachingTipsEn": [
+        "Do this 10 days before your 10K",
+        "Builds confidence for race day",
+        "If you can hold 6km, you can hold 10km",
+        "Don't push too hard, just validate the pace",
+        "Session that boosts mental confidence"
+      ],
+      "commonMistakes": [
+        "Courir plus vite que l'allure cible",
+        "Faire cette séance trop près de la course",
+        "Ne pas profiter de l'effet confiance"
+      ],
+      "commonMistakesEn": [
+        "Running faster than target pace",
+        "Doing this session too close to the race",
+        "Not benefiting from the confidence effect"
+      ],
+      "variationIds": [
+        "RP-002",
+        "RP-008"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "taper"
+        ],
+        "weekPositions": [
+          "early",
+          "mid"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "10k",
+          "confidence",
+          "pre-race",
+          "specific",
+          "taper"
+        ],
+        "priorityScore": 90
+      }
+    },
+    {
+      "id": "RP-016",
+      "name": "Échauffement simulation course",
+      "nameEn": "Race Day Warm-up Simulation",
+      "description": "Simulation complète de l'échauffement du jour de course. Permet de tester et mémoriser sa routine. À faire 1-2 semaines avant la compétition.",
+      "descriptionEn": "Complete simulation of race day warm-up. Allows testing and memorizing your routine. Do 1-2 weeks before competition.",
+      "category": "race_pace",
+      "sessionType": "warm-up",
+      "targetSystem": "neuromuscular",
+      "difficulty": "beginner",
+      "typicalDuration": {
+        "min": 30,
+        "max": 40
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing très progressif",
+          "descriptionEn": "Very progressive jog",
+          "durationMin": 10,
+          "zone": "Z1-Z2"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "Gammes complètes (montées de genoux, talons-fesses, pas chassés)",
+          "descriptionEn": "Full drills (high knees, butt kicks, side shuffles)",
+          "durationMin": 5
+        },
+        {
+          "description": "4x accélérations progressives 80m",
+          "descriptionEn": "4x progressive accelerations 80m",
+          "distanceM": 80,
+          "zone": "Z4-Z5",
+          "repetitions": 4,
+          "recovery": "Marche retour"
+        },
+        {
+          "description": "2x 200m à allure course",
+          "descriptionEn": "2x 200m at race pace",
+          "distanceM": 200,
+          "zone": "Z4",
+          "pace": "Allure Course",
+          "repetitions": 2,
+          "recovery": "2min footing"
+        },
+        {
+          "description": "5min de repos avant le départ simulé",
+          "descriptionEn": "5min rest before simulated start",
+          "durationMin": 5,
+          "zone": "repos"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Reproduisez exactement votre routine course",
+        "Notez les timings pour le jour J",
+        "Testez votre tenue et chaussures",
+        "Terminez 5-10min avant le départ fictif",
+        "Mémorisez les sensations d'être prêt"
+      ],
+      "coachingTipsEn": [
+        "Reproduce your exact race routine",
+        "Note the timings for race day",
+        "Test your outfit and shoes",
+        "Finish 5-10min before fictional start",
+        "Memorize the feeling of being ready"
+      ],
+      "commonMistakes": [
+        "Ne pas chronométrer l'échauffement",
+        "Oublier une partie de la routine",
+        "Se fatiguer avec trop d'accélérations"
+      ],
+      "commonMistakesEn": [
+        "Not timing the warm-up",
+        "Forgetting part of the routine",
+        "Getting tired with too many accelerations"
+      ],
+      "variationIds": [
+        "RP-008"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "taper"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "light",
+        "tags": [
+          "warm-up",
+          "race-simulation",
+          "routine",
+          "pre-race"
+        ],
+        "priorityScore": 85
+      }
     }
   ]
 }

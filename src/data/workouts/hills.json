@@ -864,6 +864,104 @@
         ],
         "priorityScore": 60
       }
+    },
+    {
+      "id": "HIL-011",
+      "name": "Descentes techniques",
+      "nameEn": "Technical Downhill Training",
+      "description": "Travail spécifique en descente : technique de pied, relâchement, fréquence. Essentiel pour le trail et la prévention des blessures.",
+      "descriptionEn": "Specific downhill training: foot technique, relaxation, cadence. Essential for trail running and injury prevention.",
+      "category": "hills",
+      "sessionType": "technique",
+      "targetSystem": "neuromuscular",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 40,
+        "max": 50
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif sur terrain vallonné",
+          "descriptionEn": "Progressive jog on rolling terrain",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes et mobilité chevilles",
+          "descriptionEn": "Drills and ankle mobility",
+          "durationMin": 5
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "6-8x descentes de 200-300m (pente 8-12%) en contrôle",
+          "descriptionEn": "6-8x downhill 200-300m (8-12% grade) controlled",
+          "zone": "Z3",
+          "repetitions": 7,
+          "recovery": "Remontée en marchant"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing plat de récupération",
+          "descriptionEn": "Flat recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Fréquence de pas élevée, pas d'amplitude excessive",
+        "Regard loin devant, pas aux pieds",
+        "Corps légèrement penché vers l'avant",
+        "Relâcher les épaules et les bras",
+        "Atterrissage médio-pied, pas sur les talons"
+      ],
+      "coachingTipsEn": [
+        "High cadence, avoid overstriding",
+        "Look ahead, not at your feet",
+        "Body slightly leaning forward",
+        "Relax shoulders and arms",
+        "Midfoot landing, not on heels"
+      ],
+      "commonMistakes": [
+        "Freiner avec les talons",
+        "Se pencher en arrière",
+        "Contracter les épaules",
+        "Regarder ses pieds"
+      ],
+      "commonMistakesEn": [
+        "Braking with heels",
+        "Leaning backward",
+        "Tensing shoulders",
+        "Looking at your feet"
+      ],
+      "variationIds": [
+        "HIL-007",
+        "HIL-010"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "hills",
+          "downhill",
+          "technique",
+          "trail",
+          "injury-prevention"
+        ],
+        "priorityScore": 70
+      }
     }
   ]
 }

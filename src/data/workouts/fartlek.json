@@ -704,6 +704,115 @@
         ],
         "priorityScore": 80
       }
+    },
+    {
+      "id": "FAR-009",
+      "name": "Moneghetti Fartlek",
+      "nameEn": "Moneghetti Fartlek",
+      "description": "Fartlek australien structuré créé par Steve Moneghetti : 2x90s, 4x60s, 4x30s, 4x15s. Récup = durée de l'effort. Format pyramidal décroissant très populaire.",
+      "descriptionEn": "Structured Australian fartlek created by Steve Moneghetti: 2x90s, 4x60s, 4x30s, 4x15s. Recovery = effort duration. Very popular descending pyramid format.",
+      "category": "fartlek",
+      "sessionType": "fartlek",
+      "targetSystem": "mixed",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 35,
+        "max": 45
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "2x(90s rapide / 90s récup)",
+          "descriptionEn": "2x(90s fast / 90s recovery)",
+          "zone": "Z4-Z5",
+          "repetitions": 2,
+          "recovery": "90s footing Z2"
+        },
+        {
+          "description": "4x(60s rapide / 60s récup)",
+          "descriptionEn": "4x(60s fast / 60s recovery)",
+          "zone": "Z4-Z5",
+          "repetitions": 4,
+          "recovery": "60s footing Z2"
+        },
+        {
+          "description": "4x(30s rapide / 30s récup)",
+          "descriptionEn": "4x(30s fast / 30s recovery)",
+          "zone": "Z5",
+          "repetitions": 4,
+          "recovery": "30s footing Z2"
+        },
+        {
+          "description": "4x(15s sprint / 15s récup)",
+          "descriptionEn": "4x(15s sprint / 15s recovery)",
+          "zone": "Z5+",
+          "repetitions": 4,
+          "recovery": "15s footing Z2"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Format pyramidal : efforts de plus en plus courts",
+        "Récup = même durée que l'effort",
+        "Intensité croissante au fil de la séance",
+        "Créé par Steve Moneghetti, marathonien australien"
+      ],
+      "coachingTipsEn": [
+        "Pyramid format: increasingly shorter efforts",
+        "Recovery = same duration as effort",
+        "Increasing intensity throughout the session",
+        "Created by Steve Moneghetti, Australian marathoner"
+      ],
+      "commonMistakes": [
+        "Partir trop vite sur les 90s",
+        "Ne pas accélérer sur les 15s finaux",
+        "Réduire les temps de récup"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast on the 90s",
+        "Not accelerating on the final 15s",
+        "Cutting recovery times"
+      ],
+      "variationIds": [
+        "FAR-002",
+        "FAR-003"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "fartlek",
+          "moneghetti",
+          "australian",
+          "pyramid"
+        ],
+        "priorityScore": 85
+      }
     }
   ]
 }

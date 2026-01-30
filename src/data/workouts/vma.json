@@ -2084,6 +2084,573 @@
         ],
         "priorityScore": 65
       }
+    },
+    {
+      "id": "VMA-024",
+      "name": "45/45",
+      "nameEn": "45/45 intervals",
+      "description": "Format 45 secondes à VMA / 45 secondes récup active. Développe l'endurance à haute intensité. Plus exigeant que le 30/30, basé sur les principes Billat.",
+      "descriptionEn": "45 seconds at VO2max / 45 seconds active recovery format. Develops high-intensity endurance. More demanding than 30/30, based on Billat principles.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 30,
+        "max": 40
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes et 4x accélérations progressives",
+          "descriptionEn": "Drills and 4x progressive accelerations",
+          "durationMin": 5
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "2x(10x 45s VMA / 45s récup active) avec 4min entre séries",
+          "descriptionEn": "2x(10x 45s VO2max / 45s active recovery) with 4min between sets",
+          "zone": "Z5",
+          "repetitions": 10,
+          "recovery": "45s footing à 50-55% VMA"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Récupération active obligatoire à 50-55% VMA",
+        "Ne marchez pas, trottinez vraiment",
+        "Plus exigeant que le 30/30, préparez-vous mentalement",
+        "15min totales à VMA par séance"
+      ],
+      "coachingTipsEn": [
+        "Active recovery mandatory at 50-55% VO2max",
+        "Don't walk, actually jog",
+        "More demanding than 30/30, prepare mentally",
+        "15 total minutes at VO2max per session"
+      ],
+      "commonMistakes": [
+        "Récupérer trop lentement (marche)",
+        "Partir trop vite sur les premières répétitions",
+        "Ne pas maintenir l'intensité sur la 2e série"
+      ],
+      "commonMistakesEn": [
+        "Recovering too slowly (walking)",
+        "Starting too fast on the first repetitions",
+        "Failing to maintain intensity on the second set"
+      ],
+      "variationIds": [
+        "VMA-001",
+        "VMA-005",
+        "VMA-006"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "key",
+        "tags": [
+          "vma",
+          "vo2max",
+          "billat",
+          "endurance-vitesse"
+        ],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "VMA-025",
+      "name": "Float Recovery",
+      "nameEn": "Float Recovery Intervals",
+      "description": "Intervalles VMA avec récupération 'flottante' en Z3 au lieu de Z1. Maintient le métabolisme élevé tout au long de la séance. Méthode moderne d'entraînement.",
+      "descriptionEn": "VO2max intervals with 'float' recovery in Z3 instead of Z1. Maintains elevated metabolism throughout the session. Modern training method.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 35,
+        "max": 45
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes et accélérations",
+          "descriptionEn": "Drills and accelerations",
+          "durationMin": 5
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "6x(2min VMA / 2min float Z3)",
+          "descriptionEn": "6x(2min VO2max / 2min float Z3)",
+          "zone": "Z5",
+          "repetitions": 6,
+          "recovery": "2min en Z3 (pas Z1)"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "La récup float est en Z3, pas lente",
+        "Maintient le stress métabolique élevé",
+        "Plus exigeant que les intervalles classiques",
+        "Excellent pour le demi-fond et 10K"
+      ],
+      "coachingTipsEn": [
+        "Float recovery is in Z3, not slow",
+        "Maintains high metabolic stress",
+        "More demanding than classic intervals",
+        "Excellent for middle-distance and 10K"
+      ],
+      "commonMistakes": [
+        "Récupérer trop lentement (en Z1)",
+        "Récupérer trop vite (en Z4)",
+        "Ne pas ajuster l'intensité VMA"
+      ],
+      "commonMistakesEn": [
+        "Recovering too slowly (in Z1)",
+        "Recovering too fast (in Z4)",
+        "Not adjusting VO2max intensity"
+      ],
+      "variationIds": [
+        "VMA-006",
+        "VMA-013"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "key",
+        "tags": [
+          "vma",
+          "float",
+          "modern",
+          "advanced"
+        ],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "VMA-026",
+      "name": "Diagonales",
+      "nameEn": "Diagonal Sprints",
+      "description": "Sprints en diagonale sur terrain de football. Classique français pour travailler la fréquence, les changements de direction et la vitesse.",
+      "descriptionEn": "Diagonal sprints across a football pitch. French classic for working on cadence, direction changes and speed.",
+      "category": "vma_intervals",
+      "sessionType": "speed",
+      "targetSystem": "speed",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 30,
+        "max": 40
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif autour du terrain",
+          "descriptionEn": "Progressive jog around the pitch",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes dynamiques",
+          "descriptionEn": "Dynamic drills",
+          "durationMin": 10
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "10-12x diagonale sprint (coin à coin) + récup petit côté en trottinant",
+          "descriptionEn": "10-12x diagonal sprint (corner to corner) + jog recovery on short side",
+          "zone": "Z5-Z6",
+          "repetitions": 12,
+          "recovery": "Trot sur le petit côté (~30s)"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Sprint d'un coin à l'autre du terrain",
+        "Récup en trottinant le petit côté",
+        "Travaille l'accélération et la fréquence",
+        "Classique de l'athlétisme français"
+      ],
+      "coachingTipsEn": [
+        "Sprint from one corner to the opposite",
+        "Recover by jogging the short side",
+        "Works on acceleration and cadence",
+        "Classic French athletics drill"
+      ],
+      "commonMistakes": [
+        "Sprinter à 100% dès le début",
+        "Récupération trop rapide",
+        "Négliger l'échauffement"
+      ],
+      "commonMistakesEn": [
+        "Sprinting at 100% from the start",
+        "Recovery too fast",
+        "Neglecting warm-up"
+      ],
+      "variationIds": [
+        "VMA-004",
+        "VMA-023"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "speed",
+          "diagonales",
+          "french",
+          "technique"
+        ],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "VMA-027",
+      "name": "Lignes droites",
+      "nameEn": "Strides",
+      "description": "8-10 lignes droites de 100m à 90% avec marche retour. Travail de technique, relâchement et économie de course. Séance de base essentielle.",
+      "descriptionEn": "8-10 strides of 100m at 90% with walk-back recovery. Works on technique, relaxation and running economy. Essential basic session.",
+      "category": "vma_intervals",
+      "sessionType": "speed",
+      "targetSystem": "neuromuscular",
+      "difficulty": "beginner",
+      "typicalDuration": {
+        "min": 30,
+        "max": 40
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes et mobilité",
+          "descriptionEn": "Drills and mobility",
+          "durationMin": 10
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "8-10x 100m à 90% (relâché) avec marche retour",
+          "descriptionEn": "8-10x 100m at 90% (relaxed) with walk-back recovery",
+          "distanceM": 100,
+          "zone": "Z5",
+          "repetitions": 10,
+          "recovery": "Marche retour ~90s"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "90% d'effort, pas sprint maximal",
+        "Focus sur le relâchement et la fluidité",
+        "Récupération complète entre chaque",
+        "Peut se faire en fin de footing",
+        "Améliore l'économie de course"
+      ],
+      "coachingTipsEn": [
+        "90% effort, not maximal sprint",
+        "Focus on relaxation and fluidity",
+        "Complete recovery between each",
+        "Can be done at end of easy run",
+        "Improves running economy"
+      ],
+      "commonMistakes": [
+        "Sprinter au lieu de courir relâché",
+        "Récupération trop courte",
+        "Négliger la technique"
+      ],
+      "commonMistakesEn": [
+        "Sprinting instead of running relaxed",
+        "Recovery too short",
+        "Neglecting technique"
+      ],
+      "variationIds": [
+        "VMA-023"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "early",
+          "mid"
+        ],
+        "relativeLoad": "light",
+        "tags": [
+          "strides",
+          "technique",
+          "economy",
+          "beginner-friendly"
+        ],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "VMA-028",
+      "name": "6x1km australien",
+      "nameEn": "Australian 6x1km",
+      "description": "6x1000m avec seulement 90s de récupération. Format exigeant populaire en Australie et Nouvelle-Zélande. Développe l'endurance à haute intensité.",
+      "descriptionEn": "6x1000m with only 90s recovery. Demanding format popular in Australia and New Zealand. Develops high-intensity endurance.",
+      "category": "vma_intervals",
+      "sessionType": "intervals",
+      "targetSystem": "vo2max",
+      "difficulty": "elite",
+      "typicalDuration": {
+        "min": 35,
+        "max": 45
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": true,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes et accélérations",
+          "descriptionEn": "Drills and accelerations",
+          "durationMin": 10
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "6x1000m à 95% VMA avec 90s récup",
+          "descriptionEn": "6x1000m at 95% VO2max with 90s recovery",
+          "distanceM": 1000,
+          "zone": "Z5",
+          "repetitions": 6,
+          "recovery": "90s footing Z1 (récup courte)"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Récupération courte = séance très exigeante",
+        "Populaire chez les coureurs australiens/néo-zélandais",
+        "Excellent pour le 5K et 10K",
+        "Chaque 1km au même temps",
+        "Réservé aux coureurs expérimentés"
+      ],
+      "coachingTipsEn": [
+        "Short recovery = very demanding session",
+        "Popular among Australian/NZ runners",
+        "Excellent for 5K and 10K",
+        "Each 1km at the same time",
+        "Reserved for experienced runners"
+      ],
+      "commonMistakes": [
+        "Partir trop vite sur les premiers 1km",
+        "Allonger la récup quand ça devient dur",
+        "Sous-estimer la difficulté"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast on the first 1kms",
+        "Extending recovery when it gets hard",
+        "Underestimating the difficulty"
+      ],
+      "variationIds": [
+        "VMA-003",
+        "VMA-014"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "key",
+        "tags": [
+          "vma",
+          "australian",
+          "demanding",
+          "elite"
+        ],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "VMA-029",
+      "name": "Final Kick",
+      "nameEn": "Final Kick Training",
+      "description": "Travail du finish de course : capacité à accélérer dans les derniers 400-800m. Séance clé pour le 5K et 10K. Inspiré des méthodes de Jimmy Gressier.",
+      "descriptionEn": "Race finish training: ability to accelerate in the final 400-800m. Key session for 5K and 10K. Inspired by Jimmy Gressier's methods.",
+      "category": "vma_intervals",
+      "sessionType": "speed",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 40,
+        "max": 50
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": true,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes et accélérations",
+          "descriptionEn": "Drills and accelerations",
+          "durationMin": 10
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3x(1200m allure 10K + 400m sprint finish)",
+          "descriptionEn": "3x(1200m at 10K pace + 400m sprint finish)",
+          "zone": "Z4→Z5+",
+          "repetitions": 3,
+          "recovery": "4min footing Z1"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Simule la fin de course : allure contrôlée puis sprint",
+        "Le 400m final doit être VRAIMENT rapide",
+        "Travaille la transition allure→sprint",
+        "Mental : apprendre à accélérer quand on est fatigué",
+        "Séance utilisée par Jimmy Gressier en prépa 5K/10K"
+      ],
+      "coachingTipsEn": [
+        "Simulates race finish: controlled pace then sprint",
+        "The final 400m must be REALLY fast",
+        "Works on pace→sprint transition",
+        "Mental: learn to accelerate when tired",
+        "Session used by Jimmy Gressier in 5K/10K prep"
+      ],
+      "commonMistakes": [
+        "Courir le 1200m trop vite",
+        "Ne pas vraiment sprinter le 400m",
+        "Récupération trop courte"
+      ],
+      "commonMistakesEn": [
+        "Running the 1200m too fast",
+        "Not really sprinting the 400m",
+        "Recovery too short"
+      ],
+      "variationIds": [
+        "VMA-002",
+        "VMA-018"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "key",
+        "tags": [
+          "final-kick",
+          "finish",
+          "5k",
+          "10k",
+          "gressier",
+          "race-simulation"
+        ],
+        "priorityScore": 85
+      }
     }
   ]
 }

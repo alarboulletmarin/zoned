@@ -1293,6 +1293,102 @@
         ],
         "priorityScore": 85
       }
+    },
+    {
+      "id": "TMP-016",
+      "name": "Tempo continu 40min",
+      "nameEn": "Continuous 40min Tempo",
+      "description": "Le classique de Jack Daniels : 40 minutes continues au seuil sans pause. Développe l'endurance au seuil lactique. Séance exigeante mentalement.",
+      "descriptionEn": "Jack Daniels classic: 40 continuous minutes at threshold without breaks. Develops lactate threshold endurance. Mentally demanding session.",
+      "category": "tempo",
+      "sessionType": "threshold",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 60,
+        "max": 70
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Quelques accélérations",
+          "descriptionEn": "A few accelerations",
+          "durationMin": 5
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "40min continu au seuil",
+          "descriptionEn": "40min continuous at threshold",
+          "durationMin": 40,
+          "zone": "Z4",
+          "pace": "Seuil lactique"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Allure seuil = respiration contrôlée mais soutenue",
+        "Pas de pause, effort continu",
+        "Parcours plat et mesuré idéal",
+        "Séance mentale autant que physique",
+        "Référence Jack Daniels Running Formula"
+      ],
+      "coachingTipsEn": [
+        "Threshold pace = controlled but sustained breathing",
+        "No breaks, continuous effort",
+        "Flat, measured course ideal",
+        "Mental session as much as physical",
+        "Reference: Jack Daniels Running Formula"
+      ],
+      "commonMistakes": [
+        "Partir trop vite",
+        "Confondre seuil et allure 10K",
+        "Abandonner mentalement à mi-parcours"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast",
+        "Confusing threshold with 10K pace",
+        "Giving up mentally mid-way"
+      ],
+      "variationIds": [
+        "TMP-001",
+        "TMP-003"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "key",
+        "tags": [
+          "tempo",
+          "threshold",
+          "daniels",
+          "continuous",
+          "mental"
+        ],
+        "priorityScore": 80
+      }
     }
   ]
 }
