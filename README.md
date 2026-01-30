@@ -1,10 +1,20 @@
 # Zoned
 
-A static web app showcasing 136 scientific running workouts based on the 6-zone training system.
+A library of **150 structured running workouts** based on the 6-zone training system.
 
-**Live demo:** https://zoned.run
+**Live**: [zoned.run](https://zoned.run)
 
-## Quick Start
+## Features
+
+- **Structured workouts**: Warm-up, main set, cool-down, and coaching tips
+- **6 training zones**: From Z1 (recovery) to Z6 (sprint)
+- **Zone calculator**: Personalized heart rate and pace zones
+- **Glossary**: Understand technical terms
+- **Quiz**: Find the right workout for your goal
+- **Offline-ready**: Everything stays on your device
+- **Bilingual**: French and English
+
+## Installation
 
 ```bash
 bun install
@@ -16,13 +26,11 @@ Open [http://localhost:5173](http://localhost:5173)
 ## Build
 
 ```bash
-bun run build    # outputs to dist/
-bun run preview  # preview production build
+bun run build    # Build to dist/
+bun run preview  # Preview production build
 ```
 
-## Self-Hosted Deployment
-
-### Docker Compose
+## Docker
 
 ```bash
 docker compose up -d
@@ -30,20 +38,19 @@ docker compose up -d
 
 Open [http://localhost:8080](http://localhost:8080)
 
-### Manual Docker
-
-```bash
-docker build -t zoned .
-docker run -d -p 8080:80 zoned
-```
-
-## Tech Stack
+## Stack
 
 - React 19
 - Vite 7
 - Tailwind CSS 4
 - Recharts
 - i18next (FR/EN)
+
+## Contributing
+
+This project is developed in collaboration with AI (Claude Code).
+
+Issues and suggestions welcome on [GitLab](https://gitlab.com/andmusic/zoned/-/issues).
 
 ## License
 
