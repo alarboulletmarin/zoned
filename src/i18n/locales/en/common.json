@@ -142,6 +142,12 @@
       "noVma": "Enter your VMA to display time estimates"
     }
   },
+  "search": {
+    "placeholder": "Search workouts...",
+    "shortcut": "Cmd+K",
+    "noResults": "No workouts found",
+    "viewAll": "View all in Library"
+  },
   "learn": {
     "title": "Learn",
     "description": "Guides and articles to improve your running",
