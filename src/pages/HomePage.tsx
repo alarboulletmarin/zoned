@@ -16,7 +16,7 @@ export function HomePage() {
   const { t, i18n } = useTranslation(["common", "library"]);
   const isEn = i18n.language === "en";
   const [selectedZone, setSelectedZone] = useState<ZoneNumber | null>(null);
-  const { workouts } = useWorkouts();
+  const { workouts, isLoading } = useWorkouts();
   const workoutCount = workouts.length;
 
   // Get one featured workout per category (first one of each)
@@ -216,7 +216,7 @@ export function HomePage() {
                       {t(`library:categories.${cat}`)}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {count} {t("common:units.workouts")}
+                      {isLoading ? "..." : `${count} ${t("common:units.workouts")}`}
                     </p>
                   </CardContent>
                 </Card>
