@@ -764,7 +764,7 @@
         {
           "description": "5x3min VMA avec 2min récup",
           "descriptionEn": "5x3min VO2max with 2min recovery",
-          "durationMin": 15,
+          "durationMin": 3,
           "zone": "Z5",
           "repetitions": 5,
           "recovery": "2min footing Z1"
@@ -1112,7 +1112,7 @@
         {
           "description": "6x2min VMA avec 2min récup",
           "descriptionEn": "6x2min VO2max with 2min recovery",
-          "durationMin": 12,
+          "durationMin": 2,
           "zone": "Z5",
           "repetitions": 6,
           "recovery": "2min footing Z1"

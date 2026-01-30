@@ -285,7 +285,7 @@
         {
           "description": "3x10min tempo avec 2min récup Z1",
           "descriptionEn": "3x10min tempo with 2min Z1 recovery",
-          "durationMin": 30,
+          "durationMin": 10,
           "zone": "Z3",
           "repetitions": 3,
           "recovery": "2min footing Z1"
@@ -998,7 +998,7 @@
         {
           "description": "5x5min tempo avec 1min récup",
           "descriptionEn": "5x5min tempo with 1min recovery",
-          "durationMin": 25,
+          "durationMin": 5,
           "zone": "Z3",
           "repetitions": 5,
           "recovery": "1min footing Z1"

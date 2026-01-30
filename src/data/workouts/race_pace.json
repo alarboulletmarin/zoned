@@ -218,7 +218,7 @@
         {
           "description": "2x20min à allure semi",
           "descriptionEn": "2x20min at half-marathon pace",
-          "durationMin": 40,
+          "durationMin": 20,
           "zone": "Z3-Z4",
           "pace": "Allure Semi",
           "repetitions": 2,

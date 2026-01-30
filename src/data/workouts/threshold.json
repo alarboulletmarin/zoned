@@ -124,7 +124,7 @@
         {
           "description": "3x8min seuil avec 2min récup",
           "descriptionEn": "3x8min threshold with 2min recovery",
-          "durationMin": 24,
+          "durationMin": 8,
           "zone": "Z4",
           "repetitions": 3,
           "recovery": "2min footing Z1"
@@ -207,7 +207,7 @@
         {
           "description": "4x4min seuil avec 2min récup",
           "descriptionEn": "4x4min threshold with 2min recovery",
-          "durationMin": 16,
+          "durationMin": 4,
           "zone": "Z4",
           "repetitions": 4,
           "recovery": "2min footing Z1"
@@ -685,7 +685,7 @@
         {
           "description": "6x(3min seuil + 2min footing Z2)",
           "descriptionEn": "6x(3min threshold + 2min Z2 jog)",
-          "durationMin": 30,
+          "durationMin": 3,
           "zone": "Z4",
           "repetitions": 6,
           "recovery": "2min footing Z2"
@@ -1403,7 +1403,7 @@
         {
           "description": "Matin: 5x6min seuil avec 60s recup",
           "descriptionEn": "Morning: 5x6min threshold with 60s recovery",
-          "durationMin": 35,
+          "durationMin": 6,
           "zone": "Z4",
           "repetitions": 5,
           "recovery": "60s footing Z1"
@@ -1415,7 +1415,7 @@
         {
           "description": "Soir: 5x6min seuil avec 60s recup",
           "descriptionEn": "Evening: 5x6min threshold with 60s recovery",
-          "durationMin": 35,
+          "durationMin": 6,
           "zone": "Z4",
           "repetitions": 5,
           "recovery": "60s footing Z1"
@@ -1602,7 +1602,7 @@
         {
           "description": "5x6min seuil en maintenant lactate 2-4 mmol/L",
           "descriptionEn": "5x6min threshold maintaining lactate 2-4 mmol/L",
-          "durationMin": 30,
+          "durationMin": 6,
           "zone": "Z4",
           "repetitions": 5,
           "recovery": "60s + mesure lactate"

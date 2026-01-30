@@ -493,7 +493,7 @@
         {
           "description": "6x(3min tempo + 2min récup)",
           "descriptionEn": "6x(3min tempo + 2min recovery)",
-          "durationMin": 30,
+          "durationMin": 3,
           "zone": "Z3",
           "repetitions": 6,
           "recovery": "2min footing Z2"
