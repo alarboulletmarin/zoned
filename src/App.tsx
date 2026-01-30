@@ -4,6 +4,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { Analytics } from "@vercel/analytics/react";
 import { Header, Footer } from "@/components/layout";
 import { PageLoader } from "@/components/ui/page-loader";
+import { FavoritesProvider } from "@/hooks";
 
 // All pages lazy loaded for optimal code-splitting
 const HomePage = lazy(() => import("@/pages/HomePage").then(m => ({ default: m.HomePage })));
@@ -81,34 +82,36 @@ function App() {
 
   return (
     <HelmetProvider>
-      <BrowserRouter>
-        <ScrollToTopOnNavigate />
-        <div className="min-h-screen bg-background text-foreground flex flex-col">
-          <Header theme={theme} onThemeToggle={toggleTheme} />
+      <FavoritesProvider>
+        <BrowserRouter>
+          <ScrollToTopOnNavigate />
+          <div className="min-h-screen bg-background text-foreground flex flex-col">
+            <Header theme={theme} onThemeToggle={toggleTheme} />
 
-          <main className="flex-1 container mx-auto px-4">
-            <Suspense fallback={<PageLoader />}>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/library" element={<LibraryPage />} />
-                <Route path="/workout/:id" element={<WorkoutDetailPage />} />
-                <Route path="/my-zones" element={<MyZonesPage />} />
-                <Route path="/settings" element={<Navigate to="/my-zones" replace />} />
-                <Route path="/favorites" element={<FavoritesPage />} />
-                <Route path="/quiz" element={<QuizPage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/learn" element={<LearnPage />} />
-                <Route path="/learn/:slug" element={<ArticlePage />} />
-                <Route path="/glossary" element={<GlossaryPage />} />
-                <Route path="/glossary/:id" element={<GlossaryTermPage />} />
-              </Routes>
-            </Suspense>
-          </main>
+            <main className="flex-1 container mx-auto px-4">
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/library" element={<LibraryPage />} />
+                  <Route path="/workout/:id" element={<WorkoutDetailPage />} />
+                  <Route path="/my-zones" element={<MyZonesPage />} />
+                  <Route path="/settings" element={<Navigate to="/my-zones" replace />} />
+                  <Route path="/favorites" element={<FavoritesPage />} />
+                  <Route path="/quiz" element={<QuizPage />} />
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="/learn" element={<LearnPage />} />
+                  <Route path="/learn/:slug" element={<ArticlePage />} />
+                  <Route path="/glossary" element={<GlossaryPage />} />
+                  <Route path="/glossary/:id" element={<GlossaryTermPage />} />
+                </Routes>
+              </Suspense>
+            </main>
 
-          <Footer />
-        </div>
-        <Analytics />
-      </BrowserRouter>
+            <Footer />
+          </div>
+          <Analytics />
+        </BrowserRouter>
+      </FavoritesProvider>
     </HelmetProvider>
   );
 }

@@ -1,4 +1,4 @@
-export { useFavorites } from "./useFavorites";
+export { useFavorites, FavoritesProvider } from "./useFavorites";
 export { useKeyboardShortcuts } from "./useKeyboardShortcuts";
 export {
   useWorkouts,
