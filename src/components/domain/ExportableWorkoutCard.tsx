@@ -16,7 +16,8 @@ import { Badge } from "@/components/ui/badge";
 import { ZoneBadge } from "./ZoneBadge";
 import { SessionTimeline, ZoneDistribution } from "@/components/visualization";
 import type { WorkoutTemplate } from "@/types";
-import { getDominantZone, getEstimatedDuration } from "@/types";
+import { getDominantZone } from "@/types";
+import { getWorkoutDuration } from "@/components/visualization";
 
 interface ExportableWorkoutCardProps {
   workout: WorkoutTemplate;
@@ -30,7 +31,7 @@ export const ExportableWorkoutCard = forwardRef<
   const isEn = i18n.language === "en";
 
   const dominantZone = getDominantZone(workout);
-  const duration = getEstimatedDuration(workout);
+  const duration = getWorkoutDuration(workout);
 
   // Count blocks
   const warmupBlocks = workout.warmupTemplate?.length || 0;

@@ -23,11 +23,8 @@ import { FavoriteButton } from "./FavoriteButton";
 import { SessionIntensityBar } from "@/components/visualization";
 import { cn } from "@/lib/utils";
 import type { WorkoutTemplate, WorkoutCategory } from "@/types";
-import {
-  getDominantZone,
-  getEstimatedDuration,
-  DIFFICULTY_META,
-} from "@/types";
+import { getDominantZone, DIFFICULTY_META } from "@/types";
+import { getWorkoutDuration } from "@/components/visualization";
 
 /** Category icons using Lucide */
 const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: string }>> = {
@@ -53,7 +50,7 @@ export function WorkoutCard({ workout, className }: WorkoutCardProps) {
   const { t, i18n } = useTranslation(["library", "common"]);
   const isEn = i18n.language === "en";
   const dominantZone = getDominantZone(workout);
-  const duration = getEstimatedDuration(workout);
+  const duration = getWorkoutDuration(workout);
   const CategoryIcon = CATEGORY_ICONS[workout.category];
   void DIFFICULTY_META[workout.difficulty];
 

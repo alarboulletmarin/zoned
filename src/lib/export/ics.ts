@@ -6,7 +6,7 @@
 
 import { createEvent, type EventAttributes } from "ics";
 import type { WorkoutTemplate } from "@/types";
-import { getEstimatedDuration } from "@/types";
+import { getWorkoutDuration } from "@/components/visualization";
 
 /**
  * Formats workout blocks into a readable description for calendar events
@@ -66,7 +66,7 @@ export async function exportToICS(
   startDateTime: Date,
   isEn: boolean
 ): Promise<void> {
-  const durationMinutes = getEstimatedDuration(workout);
+  const durationMinutes = getWorkoutDuration(workout);
   const title = isEn ? workout.nameEn : workout.name;
   const description = formatWorkoutDescription(workout, isEn);
 

@@ -13,7 +13,7 @@ import {
 } from "@/components/domain";
 import { SEOHead } from "@/components/seo";
 import { useFavorites, useKeyboardShortcuts, useWorkouts } from "@/hooks";
-import { getEstimatedDuration } from "@/types";
+import { getWorkoutDuration } from "@/components/visualization";
 import type { WorkoutCategory } from "@/types";
 
 // Duration constants (same as in WorkoutFilters)
@@ -179,7 +179,7 @@ export function LibraryPage() {
       }
 
       // Duration filter
-      const duration = getEstimatedDuration(workout);
+      const duration = getWorkoutDuration(workout);
       if (
         duration < filters.durationRange[0] ||
         duration > filters.durationRange[1]
@@ -242,7 +242,7 @@ export function LibraryPage() {
       }
 
       // Duration filter
-      const duration = getEstimatedDuration(workout);
+      const duration = getWorkoutDuration(workout);
       if (
         duration < tempFilters.durationRange[0] ||
         duration > tempFilters.durationRange[1]

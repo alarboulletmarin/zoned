@@ -111,7 +111,7 @@ export function WorkoutDetailPage() {
     },
     isEn
   );
-  const duration = sessionData.totalDurationMin;
+  const duration = Math.round(sessionData.totalDurationMin);
   const CategoryIcon = CATEGORY_ICONS[workout.category];
   void DIFFICULTY_META[workout.difficulty];
 

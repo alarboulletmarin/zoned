@@ -1,5 +1,5 @@
 import type { WorkoutTemplate, WorkoutCategory } from "@/types";
-import { getEstimatedDuration } from "@/types";
+import { getWorkoutDuration } from "@/components/visualization";
 
 // Quiz answer types
 export type Goal = "recover" | "progress" | "perform";
@@ -80,7 +80,7 @@ function matchesDuration(
   workout: WorkoutTemplate,
   time: TimeAvailable
 ): boolean {
-  const duration = getEstimatedDuration(workout);
+  const duration = getWorkoutDuration(workout);
   const range = TIME_RANGES[time];
 
   // Allow some flexibility on boundaries
@@ -144,8 +144,8 @@ export function getRecommendedWorkouts(
       // Sort by duration to show closest matches first
       const targetDuration = (TIME_RANGES[answers.time].min + TIME_RANGES[answers.time].max) / 2;
       const sorted = relaxedWorkouts.sort((a, b) => {
-        const durationA = getEstimatedDuration(a);
-        const durationB = getEstimatedDuration(b);
+        const durationA = getWorkoutDuration(a);
+        const durationB = getWorkoutDuration(b);
         return Math.abs(durationA - targetDuration) - Math.abs(durationB - targetDuration);
       });
       return { workouts: sorted.slice(0, maxResults), isExactMatch: false };
@@ -159,8 +159,8 @@ export function getRecommendedWorkouts(
     );
     const targetDuration = (TIME_RANGES[answers.time].min + TIME_RANGES[answers.time].max) / 2;
     const sorted = categoryOnly.sort((a, b) => {
-      const durationA = getEstimatedDuration(a);
-      const durationB = getEstimatedDuration(b);
+      const durationA = getWorkoutDuration(a);
+      const durationB = getWorkoutDuration(b);
       return Math.abs(durationA - targetDuration) - Math.abs(durationB - targetDuration);
     });
     return { workouts: sorted.slice(0, maxResults), isExactMatch: false };
