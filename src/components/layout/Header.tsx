@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book } from "@/components/icons";
+import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book, Search, MoreHorizontal } from "@/components/icons";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/logo.svg?react";
@@ -11,8 +11,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { supportedLanguages, changeLanguage, getCurrentLanguage } from "@/i18n";
+import { useCommandPalette } from "@/components/search";
 
 interface HeaderProps {
   theme: "light" | "dark";
@@ -24,6 +32,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const currentLang = getCurrentLanguage();
+  const { openPalette } = useCommandPalette();
 
   const navLinks = [
     { href: "/", label: t("nav.home") },
@@ -38,17 +47,17 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <Logo className="w-16 h-8" />
-          <span className="font-bold text-lg">{t("app.name")}</span>
+          <span className="font-bold text-lg hidden lg:inline">{t("app.name")}</span>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-3 lg:gap-6">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               to={link.href}
               className={cn(
-                "text-sm font-medium transition-colors hover:text-primary",
+                "text-sm font-medium transition-colors hover:text-primary whitespace-nowrap",
                 location.pathname === link.href
                   ? "text-foreground"
                   : "text-muted-foreground"
@@ -60,31 +69,44 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
         </nav>
 
         {/* Actions Desktop - tous les boutons */}
-        <div className="hidden md:flex items-center gap-2">
-          {/* Language Selector */}
-          <Select
-            value={currentLang}
-            onValueChange={(value) => changeLanguage(value as "fr" | "en")}
+        <div className="hidden md:flex items-center gap-1 lg:gap-2">
+          {/* Search Button */}
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={openPalette}
+            aria-label={t("actions.search")}
           >
-            <SelectTrigger className="w-auto h-8 gap-1 border-none shadow-none">
-              <Languages className="size-4" />
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {supportedLanguages.map((lang) => (
-                <SelectItem key={lang.code} value={lang.code}>
-                  {lang.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <Search className="size-4" />
+          </Button>
 
-          {/* Quiz */}
+          {/* Language Selector - visible uniquement sur lg+ */}
+          <div className="hidden lg:block">
+            <Select
+              value={currentLang}
+              onValueChange={(value) => changeLanguage(value as "fr" | "en")}
+            >
+              <SelectTrigger className="w-auto h-8 gap-1 border-none shadow-none">
+                <Languages className="size-4" />
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {supportedLanguages.map((lang) => (
+                  <SelectItem key={lang.code} value={lang.code}>
+                    {lang.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Quiz - visible uniquement sur lg+ */}
           <Button
             variant="ghost"
             size="icon-sm"
             asChild
             aria-label={t("quiz.title")}
+            className="hidden lg:inline-flex"
           >
             <Link to="/quiz">
               <Dices className="size-4" />
@@ -128,10 +150,45 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
               <Sun className="size-4" />
             )}
           </Button>
+
+          {/* More Menu - visible uniquement entre md et lg */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild className="lg:hidden">
+              <Button variant="ghost" size="icon-sm">
+                <MoreHorizontal className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <Link to="/quiz" className="flex items-center gap-2">
+                  <Dices className="size-4" />
+                  {t("quiz.title")}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => changeLanguage(currentLang === "fr" ? "en" : "fr")}
+                className="flex items-center gap-2"
+              >
+                <Languages className="size-4" />
+                {currentLang === "fr" ? "English" : "Français"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* Actions Mobile - minimal */}
         <div className="flex md:hidden items-center gap-1">
+          {/* Search Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={openPalette}
+            aria-label={t("actions.search")}
+          >
+            <Search className="size-5" />
+          </Button>
+
           {/* Theme Toggle */}
           <Button
             variant="ghost"
