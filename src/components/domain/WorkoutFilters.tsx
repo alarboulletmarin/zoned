@@ -46,7 +46,7 @@ interface WorkoutFiltersProps {
   hideSearch?: boolean;
 }
 
-const DURATION_MIN = 15;
+const DURATION_MIN = 10;
 const DURATION_MAX = 180;
 
 export function WorkoutFilters({
