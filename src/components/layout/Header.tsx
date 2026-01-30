@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book, Search, MoreHorizontal } from "@/components/icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/logo.svg?react";
 import {
@@ -33,6 +33,11 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const currentLang = getCurrentLanguage();
   const { openPalette } = useCommandPalette();
+
+  // Close mobile menu on route change (e.g. when navigating via Command Palette)
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   const navLinks = [
     { href: "/", label: t("nav.home") },
