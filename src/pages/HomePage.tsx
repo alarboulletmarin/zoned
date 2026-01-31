@@ -1,23 +1,36 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowRight, Zap, Target, Clock } from "@/components/icons";
+import { ArrowRight, Zap, Target, Clock, Dices } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { WorkoutCard, CategoryIcon } from "@/components/domain";
 import { WorkoutOfTheDay } from "@/components/domain/WorkoutOfTheDay";
 import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
 import { SEOHead } from "@/components/seo";
-import { categories } from "@/data/workouts";
+import { categories, getRandomWorkout } from "@/data/workouts";
 import { useWorkouts } from "@/hooks";
 import { ZONE_META, type ZoneNumber, type WorkoutCategory } from "@/types";
 
 export function HomePage() {
   const { t, i18n } = useTranslation(["common", "library"]);
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
+  const navigate = useNavigate();
   const [selectedZone, setSelectedZone] = useState<ZoneNumber | null>(null);
+  const [isLoadingRandom, setIsLoadingRandom] = useState(false);
   const { workouts, isLoading } = useWorkouts();
   const workoutCount = workouts.length;
+
+  const handleRandomWorkout = async () => {
+    if (isLoadingRandom) return;
+    setIsLoadingRandom(true);
+    try {
+      const workout = await getRandomWorkout();
+      navigate(`/workout/${workout.id}`);
+    } finally {
+      setIsLoadingRandom(false);
+    }
+  };
 
   // Get one featured workout per category (first one of each)
   const featuredWorkouts = categories.slice(0, 6).map((cat) => ({
@@ -116,6 +129,31 @@ export function HomePage() {
                 {isEn ? "Take the quiz" : "Faire le quiz"}
                 <ArrowRight className="ml-2 size-4" />
               </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </section>
+
+      {/* Random Workout Teaser */}
+      <section>
+        <Card className="bg-gradient-to-r from-zone-5/10 to-zone-6/10 border-zone-5/20">
+          <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6">
+            <div className="flex items-center gap-4">
+              <div className="rounded-full bg-zone-5/10 p-3">
+                <Dices className="size-6 text-zone-5" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg">
+                  {t("common:randomWorkout.title")}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  {t("common:randomWorkout.description")}
+                </p>
+              </div>
+            </div>
+            <Button onClick={handleRandomWorkout} disabled={isLoadingRandom}>
+              {t("common:randomWorkout.button")}
+              <Dices className="ml-2 size-4" />
             </Button>
           </CardContent>
         </Card>
