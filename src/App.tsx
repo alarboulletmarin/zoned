@@ -1,10 +1,11 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { Analytics } from "@vercel/analytics/react";
 import { Header, Footer } from "@/components/layout";
 import { PageLoader } from "@/components/ui/page-loader";
 import { FavoritesProvider } from "@/hooks";
+import { SettingsProvider } from "@/hooks/useSettings";
 import { CommandPaletteProvider, CommandPalette } from "@/components/search";
 
 // All pages lazy loaded for optimal code-splitting
@@ -19,6 +20,7 @@ const LearnPage = lazy(() => import("@/pages/LearnPage").then(m => ({ default: m
 const ArticlePage = lazy(() => import("@/pages/ArticlePage").then(m => ({ default: m.ArticlePage })));
 const GlossaryPage = lazy(() => import("@/pages/GlossaryPage").then(m => ({ default: m.GlossaryPage })));
 const GlossaryTermPage = lazy(() => import("@/pages/GlossaryTermPage").then(m => ({ default: m.GlossaryTermPage })));
+const SettingsPage = lazy(() => import("@/pages/SettingsPage").then(m => ({ default: m.SettingsPage })));
 
 function ScrollToTopOnNavigate() {
   const { pathname } = useLocation();
@@ -83,8 +85,9 @@ function App() {
 
   return (
     <HelmetProvider>
-      <FavoritesProvider>
-        <BrowserRouter>
+      <SettingsProvider>
+        <FavoritesProvider>
+          <BrowserRouter>
           <CommandPaletteProvider>
             <ScrollToTopOnNavigate />
             <div className="min-h-screen bg-background text-foreground flex flex-col">
@@ -97,7 +100,7 @@ function App() {
                     <Route path="/library" element={<LibraryPage />} />
                     <Route path="/workout/:id" element={<WorkoutDetailPage />} />
                     <Route path="/my-zones" element={<MyZonesPage />} />
-                    <Route path="/settings" element={<Navigate to="/my-zones" replace />} />
+                    <Route path="/settings" element={<SettingsPage />} />
                     <Route path="/favorites" element={<FavoritesPage />} />
                     <Route path="/quiz" element={<QuizPage />} />
                     <Route path="/about" element={<AboutPage />} />
@@ -114,8 +117,9 @@ function App() {
             <CommandPalette />
           </CommandPaletteProvider>
           <Analytics />
-        </BrowserRouter>
-      </FavoritesProvider>
+          </BrowserRouter>
+        </FavoritesProvider>
+      </SettingsProvider>
     </HelmetProvider>
   );
 }
