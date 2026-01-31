@@ -77,6 +77,11 @@
     "commonMistakes": "Erreurs à éviter",
     "seeDetails": "Voir tous les détails"
   },
+  "randomWorkout": {
+    "title": "Séance Aléatoire",
+    "description": "Pas d'inspiration ? Laissez le hasard choisir.",
+    "button": "Tenter sa chance"
+  },
   "nav": {
     "home": "Accueil",
     "library": "Bibliothèque",

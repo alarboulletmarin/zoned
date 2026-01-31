@@ -77,6 +77,11 @@
     "commonMistakes": "Common Mistakes",
     "seeDetails": "See full details"
   },
+  "randomWorkout": {
+    "title": "Random Workout",
+    "description": "No inspiration? Let chance decide.",
+    "button": "Try your luck"
+  },
   "nav": {
     "home": "Home",
     "library": "Library",
