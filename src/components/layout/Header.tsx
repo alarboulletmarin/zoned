@@ -1,6 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book, Search, MoreHorizontal } from "@/components/icons";
+import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book, Search, MoreHorizontal, ClipboardCheck } from "@/components/icons";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/logo.svg?react";
@@ -21,6 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import { supportedLanguages, changeLanguage, getCurrentLanguage } from "@/i18n";
 import { useCommandPalette } from "@/components/search";
+import { getRandomWorkout } from "@/data/workouts";
 
 interface HeaderProps {
   theme: "light" | "dark";
@@ -30,9 +31,22 @@ interface HeaderProps {
 export function Header({ theme, onThemeToggle }: HeaderProps) {
   const { t } = useTranslation("common");
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoadingRandom, setIsLoadingRandom] = useState(false);
   const currentLang = getCurrentLanguage();
   const { openPalette } = useCommandPalette();
+
+  const handleRandomWorkout = async () => {
+    if (isLoadingRandom) return;
+    setIsLoadingRandom(true);
+    try {
+      const workout = await getRandomWorkout();
+      navigate(`/workout/${workout.id}`);
+    } finally {
+      setIsLoadingRandom(false);
+    }
+  };
 
   // Close mobile menu on route change (e.g. when navigating via Command Palette)
   useEffect(() => {
@@ -117,8 +131,20 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             className="hidden lg:inline-flex"
           >
             <Link to="/quiz">
-              <Dices className="size-4" />
+              <ClipboardCheck className="size-4" />
             </Link>
+          </Button>
+
+          {/* Random Workout - visible uniquement sur lg+ */}
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={handleRandomWorkout}
+            disabled={isLoadingRandom}
+            aria-label={t("randomWorkout.title")}
+            className="hidden lg:inline-flex"
+          >
+            <Dices className="size-4" />
           </Button>
 
           {/* Favorites */}
@@ -169,9 +195,17 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
                 <Link to="/quiz" className="flex items-center gap-2">
-                  <Dices className="size-4" />
+                  <ClipboardCheck className="size-4" />
                   {t("quiz.title")}
                 </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={handleRandomWorkout}
+                disabled={isLoadingRandom}
+                className="flex items-center gap-2"
+              >
+                <Dices className="size-4" />
+                {t("randomWorkout.title")}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -307,9 +341,22 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
-              <Dices className="size-4" />
+              <ClipboardCheck className="size-4" />
               {t("quiz.title")}
             </Link>
+
+            {/* Random Workout */}
+            <button
+              onClick={() => {
+                handleRandomWorkout();
+                setMobileMenuOpen(false);
+              }}
+              disabled={isLoadingRandom}
+              className="flex items-center gap-2 py-2 text-sm font-medium transition-colors text-muted-foreground hover:text-foreground w-full text-left"
+            >
+              <Dices className="size-4" />
+              {t("randomWorkout.title")}
+            </button>
 
             {/* Favorites */}
             <Link
