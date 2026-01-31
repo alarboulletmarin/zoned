@@ -10,9 +10,18 @@ import {
 } from "@/components/ui/card";
 import { calculateRaceTimes } from "@/lib/paceCalculator";
 import { loadUserZonePrefs } from "@/lib/zones";
+import { useSettings } from "@/hooks/useSettings";
+import {
+  convertPace,
+  convertDistanceText,
+  getSpeedUnit,
+  getPaceUnit,
+} from "@/lib/units";
 
 export function PaceCalculator() {
   const { t } = useTranslation("common");
+  const { settings } = useSettings();
+  const unit = settings.unitSystem;
 
   const [vma, setVma] = useState<string>("");
 
@@ -63,7 +72,7 @@ export function PaceCalculator() {
               }}
               className="flex h-9 w-full max-w-[120px] rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
-            <span className="text-sm text-muted-foreground">km/h</span>
+            <span className="text-sm text-muted-foreground">{getSpeedUnit(unit)}</span>
           </div>
         </div>
 
@@ -88,25 +97,35 @@ export function PaceCalculator() {
                 </tr>
               </thead>
               <tbody>
-                {raceEstimates.map((estimate) => (
-                  <tr
-                    key={estimate.distance}
-                    className="border-b last:border-b-0 hover:bg-muted/50"
-                  >
-                    <td className="py-2 px-3 font-medium">
-                      {estimate.distance}
-                    </td>
-                    <td className="py-2 px-3 tabular-nums text-muted-foreground">
-                      {estimate.vmaPercentage}%
-                    </td>
-                    <td className="py-2 px-3 tabular-nums">
-                      {estimate.paceMinKm}/km
-                    </td>
-                    <td className="py-2 px-3 tabular-nums font-medium">
-                      {estimate.estimatedTime}
-                    </td>
-                  </tr>
-                ))}
+                {raceEstimates.map((estimate) => {
+                  // Parse pace string "4:30" -> minutes
+                  const [min, sec] = estimate.paceMinKm.split(":").map(Number);
+                  const paceMinPerKm = min + sec / 60;
+                  const convertedPace = convertPace(paceMinPerKm, unit);
+                  const convertedMin = Math.floor(convertedPace);
+                  const convertedSec = Math.round((convertedPace - convertedMin) * 60);
+                  const paceDisplay = `${convertedMin}:${convertedSec.toString().padStart(2, "0")}`;
+
+                  return (
+                    <tr
+                      key={estimate.distance}
+                      className="border-b last:border-b-0 hover:bg-muted/50"
+                    >
+                      <td className="py-2 px-3 font-medium">
+                        {convertDistanceText(estimate.distance, unit)}
+                      </td>
+                      <td className="py-2 px-3 tabular-nums text-muted-foreground">
+                        {estimate.vmaPercentage}%
+                      </td>
+                      <td className="py-2 px-3 tabular-nums">
+                        {paceDisplay}{getPaceUnit(unit)}
+                      </td>
+                      <td className="py-2 px-3 tabular-nums font-medium">
+                        {estimate.estimatedTime}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

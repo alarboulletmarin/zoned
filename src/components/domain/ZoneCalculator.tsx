@@ -18,10 +18,14 @@ import {
   saveUserZonePrefs,
   clearUserZonePrefs,
 } from "@/lib/zones";
+import { useSettings } from "@/hooks/useSettings";
+import { convertPace, getSpeedUnit, getPaceUnit } from "@/lib/units";
 
 export function ZoneCalculator() {
   const { t, i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
+  const { settings } = useSettings();
+  const unit = settings.unitSystem;
 
   const [fcMax, setFcMax] = useState<string>("");
   const [vma, setVma] = useState<string>("");
@@ -116,7 +120,7 @@ export function ZoneCalculator() {
                 }}
                 className="flex h-9 w-full max-w-[120px] rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               />
-              <span className="text-sm text-muted-foreground">km/h</span>
+              <span className="text-sm text-muted-foreground">{getSpeedUnit(unit)}</span>
             </div>
           </div>
         </div>
@@ -176,8 +180,8 @@ export function ZoneCalculator() {
                       )}
                       {prefs.vma && (
                         <td className="py-2 px-3 tabular-nums">
-                          {formatPace(z.paceMinPerKm!)}-
-                          {formatPace(z.paceMaxPerKm!)} /km
+                          {formatPace(convertPace(z.paceMinPerKm!, unit))}-
+                          {formatPace(convertPace(z.paceMaxPerKm!, unit))} {getPaceUnit(unit)}
                         </td>
                       )}
                     </tr>
