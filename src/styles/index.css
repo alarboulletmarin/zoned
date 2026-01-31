@@ -220,6 +220,140 @@
 }
 
 /* ==========================================================================
+   COLOR BLIND ACCESSIBLE PALETTES
+   ========================================================================== */
+
+/* Deuteranopia - Blue/Yellow/Orange spectrum (red-green color blindness) */
+.palette-deuteranopia {
+  /* Zone 1 - Recovery (Light Blue) */
+  --zone-1: #6fa8dc;
+  --zone-1-bg: #d9ead3;
+  --zone-1-text: #3d5a80;
+
+  /* Zone 2 - Endurance (Teal) */
+  --zone-2: #2cb5b5;
+  --zone-2-bg: #d0f0f0;
+  --zone-2-text: #1a6969;
+
+  /* Zone 3 - Tempo (Yellow) */
+  --zone-3: #f1c232;
+  --zone-3-bg: #fff2cc;
+  --zone-3-text: #7f6000;
+
+  /* Zone 4 - Threshold (Orange) */
+  --zone-4: #e69138;
+  --zone-4-bg: #fce5cd;
+  --zone-4-text: #b45f06;
+
+  /* Zone 5 - VO2max (Dark Blue) */
+  --zone-5: #3d85c6;
+  --zone-5-bg: #cfe2f3;
+  --zone-5-text: #1c4587;
+
+  /* Zone 6 - Sprint (Dark Purple) */
+  --zone-6: #674ea7;
+  --zone-6-bg: #d9d2e9;
+  --zone-6-text: #351c75;
+}
+
+.palette-deuteranopia.dark {
+  /* Zone 1 - Recovery */
+  --zone-1: #6fa8dc;
+  --zone-1-bg: #1e3a5f;
+  --zone-1-text: #a4c2d9;
+
+  /* Zone 2 - Endurance */
+  --zone-2: #2cb5b5;
+  --zone-2-bg: #134545;
+  --zone-2-text: #7ed4d4;
+
+  /* Zone 3 - Tempo */
+  --zone-3: #f1c232;
+  --zone-3-bg: #4d3d00;
+  --zone-3-text: #ffd966;
+
+  /* Zone 4 - Threshold */
+  --zone-4: #e69138;
+  --zone-4-bg: #4d2800;
+  --zone-4-text: #f9b268;
+
+  /* Zone 5 - VO2max */
+  --zone-5: #3d85c6;
+  --zone-5-bg: #0d2d4d;
+  --zone-5-text: #8ab4d9;
+
+  /* Zone 6 - Sprint */
+  --zone-6: #674ea7;
+  --zone-6-bg: #2d1f4d;
+  --zone-6-text: #a18dcf;
+}
+
+/* Tritanopia - Red/Pink/Green spectrum (blue-yellow color blindness) */
+.palette-tritanopia {
+  /* Zone 1 - Recovery (Light Pink) */
+  --zone-1: #e6a8bf;
+  --zone-1-bg: #fce8f0;
+  --zone-1-text: #8b4d6b;
+
+  /* Zone 2 - Endurance (Green) */
+  --zone-2: #6aa84f;
+  --zone-2-bg: #d9ead3;
+  --zone-2-text: #38761d;
+
+  /* Zone 3 - Tempo (Coral) */
+  --zone-3: #e69191;
+  --zone-3-bg: #f4cccc;
+  --zone-3-text: #a61c00;
+
+  /* Zone 4 - Threshold (Red-Orange) */
+  --zone-4: #cc4125;
+  --zone-4-bg: #f4cccc;
+  --zone-4-text: #990000;
+
+  /* Zone 5 - VO2max (Dark Red) */
+  --zone-5: #a61c00;
+  --zone-5-bg: #e6b8af;
+  --zone-5-text: #660000;
+
+  /* Zone 6 - Sprint (Magenta) */
+  --zone-6: #a64d79;
+  --zone-6-bg: #ead1dc;
+  --zone-6-text: #741b47;
+}
+
+.palette-tritanopia.dark {
+  /* Zone 1 - Recovery */
+  --zone-1: #e6a8bf;
+  --zone-1-bg: #4d2a3a;
+  --zone-1-text: #f0c9da;
+
+  /* Zone 2 - Endurance */
+  --zone-2: #6aa84f;
+  --zone-2-bg: #274e13;
+  --zone-2-text: #a4d495;
+
+  /* Zone 3 - Tempo */
+  --zone-3: #e69191;
+  --zone-3-bg: #4d1f1f;
+  --zone-3-text: #f0b8b8;
+
+  /* Zone 4 - Threshold */
+  --zone-4: #cc4125;
+  --zone-4-bg: #4d1a0e;
+  --zone-4-text: #e67c63;
+
+  /* Zone 5 - VO2max */
+  --zone-5: #a61c00;
+  --zone-5-bg: #3d0d00;
+  --zone-5-text: #d96b56;
+
+  /* Zone 6 - Sprint */
+  --zone-6: #a64d79;
+  --zone-6-bg: #3d1c2d;
+  --zone-6-text: #cf8aab;
+}
+
+/* ==========================================================================
    BASE STYLES
    ========================================================================== */
 @layer base {
