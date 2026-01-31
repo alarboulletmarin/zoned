@@ -6,19 +6,8 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { WorkoutTemplate } from "@/types";
-import type { ZoneNumber } from "./types";
 import { transformSessionBlocks } from "./transforms";
 import { cn } from "@/lib/utils";
-
-// Zone colors (hex values matching CSS variables)
-const ZONE_COLORS: Record<ZoneNumber, string> = {
-  1: "#94a3b8",
-  2: "#22c55e",
-  3: "#eab308",
-  4: "#f97316",
-  5: "#ef4444",
-  6: "#7c3aed",
-};
 
 interface ZoneDistributionProps {
   workout: WorkoutTemplate;
@@ -61,7 +50,7 @@ export function ZoneDistribution({ workout, className }: ZoneDistributionProps) 
                 className="h-full rounded-full transition-all"
                 style={{
                   width: `${item.percent}%`,
-                  backgroundColor: ZONE_COLORS[item.zone],
+                  backgroundColor: `var(--zone-${item.zone})`,
                 }}
               />
             </div>
@@ -105,7 +94,7 @@ export function SessionIntensityBar({ workout, className }: SessionIntensityBarP
           key={item.zone}
           style={{
             flex: item.percent,
-            backgroundColor: ZONE_COLORS[item.zone],
+            backgroundColor: `var(--zone-${item.zone})`,
           }}
         />
       ))}
