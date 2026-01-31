@@ -1,5 +1,7 @@
 export { ZoneBadge, ZoneBadges } from "./ZoneBadge";
 export { WorkoutCard, WorkoutCardCompact } from "./WorkoutCard";
+export { WorkoutListItem } from "./WorkoutListItem";
+export { ViewModeSelector } from "./ViewModeSelector";
 export {
   WorkoutFilters,
   defaultFilters,
