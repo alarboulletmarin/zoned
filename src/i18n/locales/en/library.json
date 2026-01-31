@@ -1,6 +1,11 @@
 {
   "title": "Workout Library",
   "subtitle": "{{count}} scientific training sessions",
+  "viewMode": {
+    "label": "View",
+    "grid": "Grid",
+    "list": "List"
+  },
   "filters": {
     "title": "Filters",
     "category": "Category",

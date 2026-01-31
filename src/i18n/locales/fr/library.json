@@ -1,6 +1,11 @@
 {
   "title": "Bibliothèque de séances",
   "subtitle": "{{count}} séances d'entraînement scientifiques",
+  "viewMode": {
+    "label": "Affichage",
+    "grid": "Grille",
+    "list": "Liste"
+  },
   "filters": {
     "title": "Filtres",
     "category": "Catégorie",

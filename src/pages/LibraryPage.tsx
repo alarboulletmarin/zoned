@@ -8,11 +8,13 @@ import { EmptyState } from "@/components/ui/empty-state";
 import {
   WorkoutCard,
   WorkoutFilters,
+  WorkoutListItem,
+  ViewModeSelector,
   defaultFilters,
   type WorkoutFiltersState,
 } from "@/components/domain";
 import { SEOHead } from "@/components/seo";
-import { useFavorites, useKeyboardShortcuts, useWorkouts } from "@/hooks";
+import { useFavorites, useKeyboardShortcuts, useWorkouts, useViewMode } from "@/hooks";
 import { getWorkoutDuration } from "@/components/visualization";
 import type { WorkoutCategory } from "@/types";
 
@@ -63,6 +65,7 @@ export function LibraryPage() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const { favorites } = useFavorites();
   const { workouts: allWorkouts } = useWorkouts();
+  const { viewMode, setViewMode } = useViewMode();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Temporary filters for mobile (apply/cancel behavior)
@@ -292,6 +295,13 @@ export function LibraryPage() {
             </p>
           </div>
 
+          <div className="flex items-center gap-2">
+            {/* View mode selector */}
+            <ViewModeSelector
+              value={viewMode}
+              onChange={setViewMode}
+            />
+
           {/* Mobile filter buttons */}
           <div className="flex gap-2 lg:hidden">
             {/* Active filters badge with clear */}
@@ -315,6 +325,7 @@ export function LibraryPage() {
               <Filter className="size-4 mr-2" />
               {t("filters.title")}
             </Button>
+          </div>
           </div>
         </div>
 
@@ -399,14 +410,26 @@ export function LibraryPage() {
           </div>
         )}
 
-        {/* Workout Grid */}
+        {/* Workout Display */}
         <div className="flex-1">
           {filteredWorkouts.length > 0 ? (
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {filteredWorkouts.map((workout) => (
-                <WorkoutCard key={workout.id} workout={workout} />
-              ))}
-            </div>
+            <>
+              {viewMode === "grid" && (
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                  {filteredWorkouts.map((workout) => (
+                    <WorkoutCard key={workout.id} workout={workout} />
+                  ))}
+                </div>
+              )}
+
+              {viewMode === "list" && (
+                <div className="space-y-2">
+                  {filteredWorkouts.map((workout) => (
+                    <WorkoutListItem key={workout.id} workout={workout} />
+                  ))}
+                </div>
+              )}
+            </>
           ) : (
             <EmptyState
               icon={filters.favoritesOnly ? Heart : Search}
