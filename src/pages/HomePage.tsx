@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowRight, Zap, Target, Clock, Dices } from "@/components/icons";
+import { ArrowRight, Zap, Target, Clock, Dices, ClipboardCheck } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { WorkoutCard, CategoryIcon } from "@/components/domain";
+import { WorkoutCard, CategoryIcon, TipCard } from "@/components/domain";
 import { WorkoutOfTheDay } from "@/components/domain/WorkoutOfTheDay";
 import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
 import { SEOHead } from "@/components/seo";
 import { categories, getRandomWorkout } from "@/data/workouts";
-import { useWorkouts } from "@/hooks";
+import { useWorkouts, useTips } from "@/hooks";
 import { ZONE_META, type ZoneNumber, type WorkoutCategory } from "@/types";
 
 export function HomePage() {
@@ -20,6 +20,7 @@ export function HomePage() {
   const [isLoadingRandom, setIsLoadingRandom] = useState(false);
   const { workouts, isLoading } = useWorkouts();
   const workoutCount = workouts.length;
+  const { tip, dismissTip } = useTips();
 
   const handleRandomWorkout = async () => {
     if (isLoadingRandom) return;
@@ -105,13 +106,20 @@ export function HomePage() {
       {/* Workout of the Day */}
       <WorkoutOfTheDay />
 
+      {/* Tip of the Day */}
+      {tip && (
+        <section>
+          <TipCard tip={tip} variant="banner" onDismiss={dismissTip} />
+        </section>
+      )}
+
       {/* Quiz Teaser */}
       <section>
         <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6">
             <div className="flex items-center gap-4">
               <div className="rounded-full bg-primary/10 p-3">
-                <Target className="size-6 text-primary" />
+                <ClipboardCheck className="size-6 text-primary" />
               </div>
               <div>
                 <h3 className="font-semibold text-lg">
@@ -127,7 +135,7 @@ export function HomePage() {
             <Button asChild>
               <Link to="/quiz">
                 {isEn ? "Take the quiz" : "Faire le quiz"}
-                <ArrowRight className="ml-2 size-4" />
+                <ClipboardCheck className="ml-2 size-4" />
               </Link>
             </Button>
           </CardContent>

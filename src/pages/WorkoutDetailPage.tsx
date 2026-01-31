@@ -28,12 +28,13 @@ import {
   WorkoutCardCompact,
   FavoriteButton,
   ZonePersonalizationCTA,
+  TipCard,
 } from "@/components/domain";
 import { WorkoutStructure, CoachingTips } from "@/components/domain/WorkoutStructure";
 import { ExportMenu } from "@/components/domain/ExportMenu";
 import { SEOHead } from "@/components/seo";
 import { SessionTimeline, ZoneDistribution, transformSessionBlocks } from "@/components/visualization";
-import { useWorkout, useRelatedWorkouts } from "@/hooks";
+import { useWorkout, useRelatedWorkouts, useTips } from "@/hooks";
 import type { WorkoutCategory, ZoneRange } from "@/types";
 import {
   getDominantZone,
@@ -63,6 +64,13 @@ export function WorkoutDetailPage() {
 
   const { workout, isLoading } = useWorkout(id);
   const { workouts: relatedWorkouts } = useRelatedWorkouts(workout);
+
+  // Get contextual tip based on dominant zone
+  const dominantZoneForTip = workout ? getDominantZone(workout) : undefined;
+  const { tip, dismissTip } = useTips({
+    filters: dominantZoneForTip ? { zones: [dominantZoneForTip] } : undefined,
+    autoLoad: !!workout,
+  });
 
   // Load user zones from localStorage
   const [userZones, setUserZones] = useState<ZoneRange[]>([]);
@@ -301,6 +309,11 @@ export function WorkoutDetailPage() {
               )}
             </CardContent>
           </Card>
+
+          {/* Contextual Tip */}
+          {tip && (
+            <TipCard tip={tip} variant="card" onDismiss={dismissTip} />
+          )}
 
           {/* Related Workouts */}
           {relatedWorkouts.length > 0 && (
