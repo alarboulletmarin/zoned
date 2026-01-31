@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book, Search, MoreHorizontal, ClipboardCheck } from "@/components/icons";
+import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book, Search, MoreHorizontal, ClipboardCheck, Settings } from "@/components/icons";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/logo.svg?react";
@@ -183,6 +183,18 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             ) : (
               <Sun className="size-4" />
             )}
+          </Button>
+
+          {/* Settings */}
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            asChild
+            aria-label={t("nav.settings")}
+          >
+            <Link to="/settings">
+              <Settings className="size-4" />
+            </Link>
           </Button>
 
           {/* More Menu - visible uniquement entre md et lg */}
@@ -388,6 +400,22 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             >
               <Target className="size-4" />
               {t("myZones.title")}
+            </Link>
+
+            {/* Settings */}
+            <Link
+              to="/settings"
+              viewTransition
+              onClick={() => setMobileMenuOpen(false)}
+              className={cn(
+                "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
+                location.pathname === "/settings"
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Settings className="size-4" />
+              {t("nav.settings")}
             </Link>
 
             {/* Language Selector */}
