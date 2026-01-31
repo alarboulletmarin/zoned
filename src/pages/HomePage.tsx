@@ -20,7 +20,7 @@ export function HomePage() {
   const [isLoadingRandom, setIsLoadingRandom] = useState(false);
   const { workouts, isLoading } = useWorkouts();
   const workoutCount = workouts.length;
-  const { tip, dismissTip } = useTips();
+  const { tip } = useTips();
 
   const handleRandomWorkout = async () => {
     if (isLoadingRandom) return;
@@ -106,66 +106,53 @@ export function HomePage() {
       {/* Workout of the Day */}
       <WorkoutOfTheDay />
 
-      {/* Tip of the Day */}
-      {tip && (
-        <section>
-          <TipCard tip={tip} variant="banner" onDismiss={dismissTip} />
-        </section>
-      )}
+      {/* CTA Sections - Compact layout */}
+      <div className="space-y-3">
+        {/* Tip of the Day */}
+        {tip && <TipCard tip={tip} variant="banner" />}
 
-      {/* Quiz Teaser */}
-      <section>
-        <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
-          <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6">
-            <div className="flex items-center gap-4">
-              <div className="rounded-full bg-primary/10 p-3">
-                <ClipboardCheck className="size-6 text-primary" />
+        {/* Quiz + Random - Side by side */}
+        <div className="grid grid-cols-2 gap-3">
+          {/* Quiz */}
+          <Link to="/quiz">
+            <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20 h-full hover:shadow-md transition-shadow">
+              <CardContent className="flex flex-col items-center justify-center gap-2.5 py-5 sm:py-6 text-center">
+                <div className="rounded-full bg-primary/10 p-2.5 sm:p-3">
+                  <ClipboardCheck className="size-5 sm:size-6 text-primary" />
+                </div>
+                <div className="space-y-0.5">
+                  <p className="text-sm sm:text-base font-semibold">
+                    {isEn ? "Find your workout" : "Trouve ta séance"}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {isEn ? "3 quick questions" : "3 questions rapides"}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          {/* Random */}
+          <Card
+            className="bg-gradient-to-r from-zone-5/10 to-zone-6/10 border-zone-5/20 h-full hover:shadow-md transition-shadow cursor-pointer"
+            onClick={handleRandomWorkout}
+          >
+            <CardContent className="flex flex-col items-center justify-center gap-2.5 py-5 sm:py-6 text-center">
+              <div className="rounded-full bg-zone-5/10 p-2.5 sm:p-3">
+                <Dices className={`size-5 sm:size-6 text-zone-5 ${isLoadingRandom ? "animate-spin" : ""}`} />
               </div>
-              <div>
-                <h3 className="font-semibold text-lg">
-                  {isEn ? "Not sure what to do?" : "Pas sûr de ta séance ?"}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {isEn
-                    ? "3 quick questions to find a suitable workout."
-                    : "3 questions rapides pour trouver une séance adaptée."}
+              <div className="space-y-0.5">
+                <p className="text-sm sm:text-base font-semibold">
+                  {isEn ? "Random workout" : "Séance aléatoire"}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {isEn ? "Surprise me!" : "Surprends-moi !"}
                 </p>
               </div>
-            </div>
-            <Button asChild>
-              <Link to="/quiz">
-                {isEn ? "Take the quiz" : "Faire le quiz"}
-                <ClipboardCheck className="ml-2 size-4" />
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </section>
-
-      {/* Random Workout Teaser */}
-      <section>
-        <Card className="bg-gradient-to-r from-zone-5/10 to-zone-6/10 border-zone-5/20">
-          <CardContent className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6">
-            <div className="flex items-center gap-4">
-              <div className="rounded-full bg-zone-5/10 p-3">
-                <Dices className="size-6 text-zone-5" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg">
-                  {t("common:randomWorkout.title")}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {t("common:randomWorkout.description")}
-                </p>
-              </div>
-            </div>
-            <Button onClick={handleRandomWorkout} disabled={isLoadingRandom}>
-              {t("common:randomWorkout.button")}
-              <Dices className="ml-2 size-4" />
-            </Button>
-          </CardContent>
-        </Card>
-      </section>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
 
       {/* Zone System Preview */}
       <section className="space-y-6">

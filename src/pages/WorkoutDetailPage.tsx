@@ -67,7 +67,7 @@ export function WorkoutDetailPage() {
 
   // Get contextual tip based on dominant zone
   const dominantZoneForTip = workout ? getDominantZone(workout) : undefined;
-  const { tip, dismissTip } = useTips({
+  const { tip } = useTips({
     filters: dominantZoneForTip ? { zones: [dominantZoneForTip] } : undefined,
     autoLoad: !!workout,
   });
@@ -312,7 +312,7 @@ export function WorkoutDetailPage() {
 
           {/* Contextual Tip */}
           {tip && (
-            <TipCard tip={tip} variant="card" onDismiss={dismissTip} />
+            <TipCard tip={tip} variant="card" />
           )}
 
           {/* Related Workouts */}
