@@ -14,7 +14,7 @@ interface WorkoutStructureProps {
 
 export function WorkoutStructure({ workout, userZones, className }: WorkoutStructureProps) {
   const { t, i18n } = useTranslation("session");
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
 
   const phases = [
     {
@@ -137,7 +137,7 @@ interface CoachingTipsProps {
 
 export function CoachingTips({ workout, className }: CoachingTipsProps) {
   const { t, i18n } = useTranslation("session");
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
 
   const tips = isEn ? workout.coachingTipsEn : workout.coachingTips;
   const mistakes = isEn ? workout.commonMistakesEn : workout.commonMistakes;

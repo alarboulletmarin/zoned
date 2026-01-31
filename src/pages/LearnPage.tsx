@@ -22,7 +22,7 @@ const ARTICLE_CATEGORIES: ArticleCategory[] = [
 
 export function LearnPage() {
   const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
   const [selectedCategory, setSelectedCategory] = useState<ArticleCategory | "all">("all");
 
   const { articles, isLoading } = useArticles();

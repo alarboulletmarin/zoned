@@ -25,7 +25,7 @@ interface ArticleCardProps {
 
 export function ArticleCard({ article, className }: ArticleCardProps) {
   const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
   const CategoryIcon = CATEGORY_ICONS[article.category];
 
   return (

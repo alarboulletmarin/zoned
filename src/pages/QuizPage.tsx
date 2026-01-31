@@ -4,7 +4,7 @@ import { SEOHead } from "@/components/seo";
 
 export function QuizPage() {
   const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
 
   return (
     <>

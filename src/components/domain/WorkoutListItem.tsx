@@ -16,7 +16,7 @@ interface WorkoutListItemProps {
 
 export function WorkoutListItem({ workout, className }: WorkoutListItemProps) {
   const { t, i18n } = useTranslation(["library", "common"]);
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);
 

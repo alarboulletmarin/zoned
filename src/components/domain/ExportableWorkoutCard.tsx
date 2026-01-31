@@ -28,7 +28,7 @@ export const ExportableWorkoutCard = forwardRef<
   ExportableWorkoutCardProps
 >(function ExportableWorkoutCard({ workout }, ref) {
   const { t, i18n } = useTranslation(["session", "library", "common"]);
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
 
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);

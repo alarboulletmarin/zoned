@@ -23,7 +23,7 @@ export const GlossaryCard = memo(function GlossaryCard({
   className,
 }: GlossaryCardProps) {
   const { i18n } = useTranslation();
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
 
   // Get localized content
   const displayTerm = isEn && term.termEn ? term.termEn : term.term;

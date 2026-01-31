@@ -60,7 +60,7 @@ function parseFiltersFromParams(searchParams: URLSearchParams): Partial<WorkoutF
 
 export function LibraryPage() {
   const { t, i18n } = useTranslation(["library", "common"]);
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
   const [searchParams, setSearchParams] = useSearchParams();
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const { favorites } = useFavorites();

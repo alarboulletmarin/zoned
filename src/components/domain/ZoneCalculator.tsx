@@ -21,7 +21,7 @@ import {
 
 export function ZoneCalculator() {
   const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
 
   const [fcMax, setFcMax] = useState<string>("");
   const [vma, setVma] = useState<string>("");

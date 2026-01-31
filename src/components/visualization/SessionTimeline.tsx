@@ -94,7 +94,7 @@ function SegmentTooltipContent({ segment, t }: SegmentTooltipContentProps) {
 
 export function SessionTimeline({ workout, className }: SessionTimelineProps) {
   const { t, i18n } = useTranslation("session");
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [openTooltipIndex, setOpenTooltipIndex] = useState<number | null>(null);
 

@@ -177,7 +177,7 @@ function renderMarkdown(content: string): React.ReactNode {
 export function ArticlePage() {
   const { slug } = useParams<{ slug: string }>();
   const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
 
   const { article, isLoading } = useArticle(slug);
   const { prev, next } = useAdjacentArticles(slug);

@@ -9,7 +9,7 @@ import { useFavorites, useWorkouts } from "@/hooks";
 
 export function FavoritesPage() {
   const { t, i18n } = useTranslation(["common", "library"]);
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
   const { favorites } = useFavorites();
   const { workouts, isLoading } = useWorkouts();
 

@@ -27,7 +27,7 @@ interface ZoneDistributionProps {
 
 export function ZoneDistribution({ workout, className }: ZoneDistributionProps) {
   const { i18n } = useTranslation();
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
 
   const { zoneBreakdown, totalDurationMin } = useMemo(() => {
     return transformSessionBlocks(

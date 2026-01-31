@@ -10,7 +10,7 @@ import { getDominantZone } from "@/types";
 
 export function WorkoutOfTheDay() {
   const { t, i18n } = useTranslation(["common", "session", "library"]);
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
 
   const { workout, isLoading } = useWorkoutOfTheDay();
 

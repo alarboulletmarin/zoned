@@ -59,7 +59,7 @@ const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: 
 export function WorkoutDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { t, i18n } = useTranslation(["session", "library", "common"]);
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
 
   const { workout, isLoading } = useWorkout(id);
   const { workouts: relatedWorkouts } = useRelatedWorkouts(workout);

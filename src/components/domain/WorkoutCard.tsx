@@ -48,7 +48,7 @@ interface WorkoutCardProps {
 
 export function WorkoutCard({ workout, className }: WorkoutCardProps) {
   const { t, i18n } = useTranslation(["library", "common"]);
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);
   const CategoryIcon = CATEGORY_ICONS[workout.category];
@@ -130,7 +130,7 @@ export function WorkoutCardCompact({
   className,
 }: WorkoutCardCompactProps) {
   const { i18n } = useTranslation();
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
   const dominantZone = getDominantZone(workout);
 
   return (

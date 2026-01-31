@@ -13,7 +13,7 @@ import { useGlossaryTerm } from "@/hooks/useGlossary";
 export function GlossaryTermPage() {
   const { id } = useParams<{ id: string }>();
   const { t, i18n } = useTranslation("glossary");
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
 
   const { term, isLoading } = useGlossaryTerm(id);
 

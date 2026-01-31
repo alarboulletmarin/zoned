@@ -14,7 +14,7 @@ interface SearchResultItemProps {
 
 export function SearchResultItem({ workout, isSelected, onClick }: SearchResultItemProps) {
   const { i18n } = useTranslation();
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
 
   const name = isEn ? workout.nameEn : workout.name;
   const categoryMeta = CATEGORY_META[workout.category];

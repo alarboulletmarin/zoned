@@ -18,7 +18,7 @@ interface GlossaryDetailProps {
 
 export function GlossaryDetail({ term, className }: GlossaryDetailProps) {
   const { t, i18n } = useTranslation("glossary");
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
   const category = useGlossaryCategoryInfo(term.category);
   const { terms: relatedTerms } = useRelatedTerms(term.id);
 

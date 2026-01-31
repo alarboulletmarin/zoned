@@ -27,7 +27,7 @@ export function ZoneDetailModal({
   onOpenChange,
 }: ZoneDetailModalProps) {
   const { i18n } = useTranslation();
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
   const { workouts: allWorkouts } = useWorkouts();
 
   // Derive display values only when zoneMeta is available

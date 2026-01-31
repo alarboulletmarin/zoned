@@ -19,7 +19,7 @@ export function ZoneBadge({
   const { i18n } = useTranslation();
   const zoneNum = typeof zone === "number" ? zone : getZoneNumber(zone);
   const meta = ZONE_META[zoneNum];
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
 
   const sizeClasses = {
     sm: "text-[10px] px-1.5 py-0.5",

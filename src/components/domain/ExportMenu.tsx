@@ -29,7 +29,7 @@ interface ExportMenuProps {
 
 export function ExportMenu({ workout }: ExportMenuProps) {
   const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [renderForExport, setRenderForExport] = useState(false);
