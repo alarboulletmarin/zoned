@@ -5,6 +5,74 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2026-01-31
+
+### Added
+
+#### Educational Content
+- Knowledge hub with 12 bilingual articles on training principles
+- Glossary page with 50+ training terms and definitions
+- Educational tips system with 69 contextual tips (shown on homepage and workout details)
+- New articles: zones, testing-vma, warmup, recovery, nutrition, faq, periodization, supercompensation, tapering, polarized-training, progressive-overload, consistency
+
+#### Random Workout
+- Random workout button in header with dice icon
+- Random workout CTA card on homepage
+- Quick access to discover new workouts
+
+#### Settings & Personalization
+- Settings page with theme and unit preferences
+- Color blind accessible palettes (deuteranopia, protanopia, tritanopia)
+- Unit conversion between metric (km/h, min/km) and imperial (mph, min/mi)
+- Pace and zone calculators with unit support
+
+#### Library Enhancements
+- View mode selector (grid/list views)
+- Command palette search with Cmd+K / Ctrl+K
+- 14 new workout sessions (150 total)
+- Mobile filter button with active filter badge
+
+#### UI/UX Improvements
+- Compact mobile layout for homepage CTAs (Quiz and Random side by side)
+- Tips banner without dismiss button (always visible)
+- Animated navigation underline
+- Heart bounce animation on favorite button
+- View transitions between pages
+- Responsive header with intermediate breakpoint
+- Zone detail modal with clickable workout links
+
+#### SEO & Analytics
+- Comprehensive SEO infrastructure with meta tags
+- Structured data (JSON-LD) for workouts
+- Vercel Analytics integration
+- About page with project information
+
+### Changed
+
+- Homepage CTAs use compact 2-column grid layout on mobile
+- Replaced lucide-react with inline SVG icons (65 icons)
+- Zone colors now use CSS variables for theming
+- Personalized zones displayed on workout detail page
+- Quiz results integrate with library filters
+
+### Fixed
+
+- Language detection handles locale variants (en-US, fr-CA)
+- Glossary cards re-render on language change
+- Mobile menu closes on route change
+- Interval parsing improved for recovery zone extraction
+- Duration calculations aligned between timeline and metadata
+- PDF export uses async blob download
+- Various modal/dialog background fixes
+- Minimum filter duration lowered to 10 minutes
+
+### Performance
+
+- Lazy-load articles and glossary data
+- Code-splitting for workout data by category
+- Main bundle reduced from 1MB to 88KB gzip
+- Dead code elimination
+
 ## [0.1.2] - 2026-01-26
 
 ### Added
