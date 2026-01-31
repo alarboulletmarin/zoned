@@ -194,6 +194,16 @@ export async function getWorkoutOfTheDay(): Promise<WorkoutTemplate> {
 export const getWorkoutOfTheDayAsync = getWorkoutOfTheDay;
 
 /**
+ * Get a truly random workout (async)
+ * Uses Math.random() for true randomness (vs getWorkoutOfTheDay which is deterministic)
+ */
+export async function getRandomWorkout(): Promise<WorkoutTemplate> {
+  const workouts = await loadAllWorkouts();
+  const index = Math.floor(Math.random() * workouts.length);
+  return workouts[index];
+}
+
+/**
  * Get total workout count (async)
  */
 export async function getTotalWorkoutCount(): Promise<number> {
