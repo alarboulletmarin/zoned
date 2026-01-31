@@ -10,6 +10,7 @@ export {
 export { CategoryIcon } from "./CategoryIcon";
 export { FavoriteButton } from "./FavoriteButton";
 export { ZonePersonalizationCTA } from "./ZonePersonalizationCTA";
+export { TipCard } from "./TipCard";
 
 // NOTE: Heavy components are NOT exported here to keep the main bundle small.
 // Import them directly from their files when needed:

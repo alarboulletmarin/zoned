@@ -173,6 +173,11 @@
       "imperial": "Imperial (miles)"
     }
   },
+  "tips": {
+    "title": "Did you know?",
+    "learnMore": "Learn more",
+    "dismiss": "Dismiss"
+  },
   "learn": {
     "title": "Learn",
     "description": "Guides and articles to improve your running",

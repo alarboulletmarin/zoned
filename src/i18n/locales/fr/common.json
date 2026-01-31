@@ -173,6 +173,11 @@
       "imperial": "Impérial (miles)"
     }
   },
+  "tips": {
+    "title": "Le saviez-vous ?",
+    "learnMore": "En savoir plus",
+    "dismiss": "Masquer"
+  },
   "learn": {
     "title": "Apprendre",
     "description": "Guides et articles pour progresser en course à pied",
