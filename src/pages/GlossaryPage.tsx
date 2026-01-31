@@ -24,7 +24,7 @@ import type { GlossaryCategory, GlossaryTerm } from "@/data/glossary/types";
 
 export function GlossaryPage() {
   const { t, i18n } = useTranslation("glossary");
-  const isEn = i18n.language === "en";
+  const isEn = i18n.language?.startsWith("en") ?? false;
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<
     GlossaryCategory | "all"
@@ -206,7 +206,7 @@ export function GlossaryPage() {
                     </h2>
                     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                       {groupedTerms[letter].map((term) => (
-                        <GlossaryCard key={term.id} term={term} />
+                        <GlossaryCard key={`${term.id}-${i18n.language}`} term={term} />
                       ))}
                     </div>
                   </div>
