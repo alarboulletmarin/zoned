@@ -88,7 +88,8 @@
     "learn": "Learn",
     "glossary": "Glossary",
     "favorites": "Favorites",
-    "about": "About"
+    "about": "About",
+    "settings": "Settings"
   },
   "errors": {
     "workoutNotFound": "Workout not found"
@@ -152,6 +153,25 @@
     "shortcut": "Cmd+K",
     "noResults": "No workouts found",
     "viewAll": "View all in Library"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Customize your experience",
+    "colorPalette": {
+      "title": "Color Palette",
+      "description": "Adapted for visual accessibility",
+      "options": {
+        "standard": "Standard",
+        "deuteranopia": "Deuteranopia (Red-Green)",
+        "tritanopia": "Tritanopia (Blue-Yellow)"
+      }
+    },
+    "unitSystem": {
+      "title": "Unit System",
+      "description": "Metric or imperial",
+      "metric": "Metric (km)",
+      "imperial": "Imperial (miles)"
+    }
   },
   "learn": {
     "title": "Learn",

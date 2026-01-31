@@ -88,7 +88,8 @@
     "learn": "Apprendre",
     "glossary": "Glossaire",
     "favorites": "Favoris",
-    "about": "À propos"
+    "about": "À propos",
+    "settings": "Paramètres"
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée"
@@ -152,6 +153,25 @@
     "shortcut": "Cmd+K",
     "noResults": "Aucune séance trouvée",
     "viewAll": "Voir tout dans la bibliothèque"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "description": "Personnalisez votre expérience",
+    "colorPalette": {
+      "title": "Palette de couleurs",
+      "description": "Adaptée à l'accessibilité visuelle",
+      "options": {
+        "standard": "Standard",
+        "deuteranopia": "Deutéranopie (Rouge-Vert)",
+        "tritanopia": "Tritanopie (Bleu-Jaune)"
+      }
+    },
+    "unitSystem": {
+      "title": "Système d'unités",
+      "description": "Métrique ou impérial",
+      "metric": "Métrique (km)",
+      "imperial": "Impérial (miles)"
+    }
   },
   "learn": {
     "title": "Apprendre",
