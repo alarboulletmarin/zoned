@@ -37,6 +37,11 @@ const contentLoaders: Record<string, () => Promise<{ default: ArticleContent }>>
   recovery: () => import("./content/recovery"),
   nutrition: () => import("./content/nutrition"),
   faq: () => import("./content/faq"),
+  periodization: () => import("./content/periodization"),
+  supercompensation: () => import("./content/supercompensation"),
+  tapering: () => import("./content/tapering"),
+  "polarized-training": () => import("./content/polarized-training"),
+  "progressive-overload": () => import("./content/progressive-overload"),
 };
 
 /**

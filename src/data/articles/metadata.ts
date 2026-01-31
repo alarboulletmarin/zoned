@@ -77,6 +77,66 @@ export const articleMetadata: ArticleMeta[] = [
     category: "fundamentals",
     readTime: 8,
   },
+  {
+    id: "periodization",
+    slug: "periodization",
+    title: "La périodisation en course à pied",
+    titleEn: "Periodization in Running",
+    description:
+      "Organiser son entraînement en cycles pour progresser efficacement et atteindre ses objectifs",
+    descriptionEn:
+      "Organizing training in cycles to progress efficiently and reach your goals",
+    category: "training",
+    readTime: 8,
+  },
+  {
+    id: "supercompensation",
+    slug: "supercompensation",
+    title: "Comprendre la surcompensation",
+    titleEn: "Understanding Supercompensation",
+    description:
+      "Le mécanisme clé de la progression : pourquoi on progresse au repos et comment en tirer parti",
+    descriptionEn:
+      "The key mechanism of progression: why we improve at rest and how to leverage it",
+    category: "training",
+    readTime: 6,
+  },
+  {
+    id: "tapering",
+    slug: "tapering",
+    title: "L'art du taper",
+    titleEn: "The Art of Tapering",
+    description:
+      "Réduire l'entraînement avant une course pour arriver au sommet de sa forme",
+    descriptionEn:
+      "Reducing training before a race to arrive at peak form",
+    category: "training",
+    readTime: 7,
+  },
+  {
+    id: "polarized-training",
+    slug: "polarized-training",
+    title: "L'entraînement polarisé 80/20",
+    titleEn: "Polarized Training 80/20",
+    description:
+      "Courir lentement pour progresser vite : la méthode des élites décryptée",
+    descriptionEn:
+      "Run slow to get fast: the elite method explained",
+    category: "training",
+    readTime: 8,
+  },
+  {
+    id: "progressive-overload",
+    slug: "progressive-overload",
+    title: "La surcharge progressive",
+    titleEn: "Progressive Overload",
+    description:
+      "Le principe fondamental pour progresser sans se blesser : augmenter graduellement la charge",
+    descriptionEn:
+      "The fundamental principle for progress without injury: gradually increasing the load",
+    category: "training",
+    readTime: 6,
+  },
 ];
 
 /**
