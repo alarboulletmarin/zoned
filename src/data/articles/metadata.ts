@@ -137,6 +137,18 @@ export const articleMetadata: ArticleMeta[] = [
     category: "training",
     readTime: 6,
   },
+  {
+    id: "consistency",
+    slug: "consistency",
+    title: "La régularité : clé de la progression",
+    titleEn: "Consistency: The Key to Progress",
+    description:
+      "Pourquoi la régularité compte plus que l'intensité et comment bâtir des habitudes durables",
+    descriptionEn:
+      "Why consistency matters more than intensity and how to build sustainable habits",
+    category: "fundamentals",
+    readTime: 5,
+  },
 ];
 
 /**

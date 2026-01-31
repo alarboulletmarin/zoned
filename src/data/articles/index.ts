@@ -42,6 +42,7 @@ const contentLoaders: Record<string, () => Promise<{ default: ArticleContent }>>
   tapering: () => import("./content/tapering"),
   "polarized-training": () => import("./content/polarized-training"),
   "progressive-overload": () => import("./content/progressive-overload"),
+  consistency: () => import("./content/consistency"),
 };
 
 /**
