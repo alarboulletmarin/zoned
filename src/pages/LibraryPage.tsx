@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Filter, Search, Heart, X } from "@/components/icons";
+import { Filter, Search, Heart } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -107,11 +107,6 @@ export function LibraryPage() {
   // Cancel without applying
   const cancelFilters = () => {
     setShowMobileFilters(false);
-  };
-
-  // Clear all filters
-  const clearAllFilters = () => {
-    setFilters(defaultFilters);
   };
 
   // Initialize filters from URL params
@@ -295,37 +290,28 @@ export function LibraryPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             {/* View mode selector */}
             <ViewModeSelector
               value={viewMode}
               onChange={setViewMode}
             />
 
-          {/* Mobile filter buttons */}
-          <div className="flex gap-2 lg:hidden">
-            {/* Active filters badge with clear */}
+          {/* Mobile filter button with badge */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={openMobileFilters}
+            className="lg:hidden relative"
+          >
+            <Filter className="size-4" />
+            <span className="hidden sm:inline ml-2">{t("filters.title")}</span>
             {activeFiltersCount > 0 && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={clearAllFilters}
-              >
-                <X className="size-4 mr-2" />
-                {activeFiltersCount} {t("filters.activeFilters")}
-              </Button>
+              <span className="absolute -top-1.5 -right-1.5 size-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
+                {activeFiltersCount}
+              </span>
             )}
-
-            {/* Filter toggle */}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={openMobileFilters}
-            >
-              <Filter className="size-4 mr-2" />
-              {t("filters.title")}
-            </Button>
-          </div>
+          </Button>
           </div>
         </div>
 
