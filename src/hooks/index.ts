@@ -1,5 +1,6 @@
 export { useFavorites, FavoritesProvider } from "./useFavorites";
 export { useKeyboardShortcuts } from "./useKeyboardShortcuts";
+export { useViewMode, type ViewMode } from "./useViewMode";
 export {
   useWorkouts,
   useWorkout,
