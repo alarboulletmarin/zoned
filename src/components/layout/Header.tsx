@@ -14,7 +14,9 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -63,7 +65,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-14 items-center justify-between px-4">
+      <div className="container mx-auto grid h-14 grid-cols-[auto_1fr_auto] items-center px-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <Logo className="w-16 h-8" />
@@ -71,7 +73,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-3 lg:gap-6">
+        <nav className="hidden md:flex items-center justify-center gap-3 lg:gap-6">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -91,7 +93,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
           ))}
         </nav>
 
-        {/* Actions Desktop - tous les boutons */}
+        {/* Actions Desktop */}
         <div className="hidden md:flex items-center gap-1 lg:gap-2">
           {/* Search Button */}
           <Button
@@ -103,72 +105,16 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             <Search className="size-4" />
           </Button>
 
-          {/* Language Selector - visible uniquement sur lg+ */}
-          <div className="hidden lg:block">
-            <Select
-              value={currentLang}
-              onValueChange={(value) => changeLanguage(value as "fr" | "en")}
-            >
-              <SelectTrigger className="w-auto h-8 gap-1 border-none shadow-none">
-                <Languages className="size-4" />
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {supportedLanguages.map((lang) => (
-                  <SelectItem key={lang.code} value={lang.code}>
-                    {lang.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Quiz - visible uniquement sur lg+ */}
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            asChild
-            aria-label={t("quiz.title")}
-            className="hidden lg:inline-flex"
-          >
-            <Link to="/quiz">
-              <ClipboardCheck className="size-4" />
-            </Link>
-          </Button>
-
-          {/* Random Workout - visible uniquement sur lg+ */}
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={handleRandomWorkout}
-            disabled={isLoadingRandom}
-            aria-label={t("randomWorkout.title")}
-            className="hidden lg:inline-flex"
-          >
-            <Dices className="size-4" />
-          </Button>
-
-          {/* Favorites */}
+          {/* Favorites - visible lg+ only */}
           <Button
             variant="ghost"
             size="icon-sm"
             asChild
             aria-label={t("nav.favorites")}
+            className="hidden lg:inline-flex"
           >
             <Link to="/favorites">
               <Heart className="size-4" />
-            </Link>
-          </Button>
-
-          {/* My Zones */}
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            asChild
-            aria-label={t("myZones.title")}
-          >
-            <Link to="/my-zones">
-              <Target className="size-4" />
             </Link>
           </Button>
 
@@ -186,40 +132,54 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             )}
           </Button>
 
-          {/* Settings */}
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            asChild
-            aria-label={t("nav.settings")}
-          >
-            <Link to="/settings">
-              <Settings className="size-4" />
-            </Link>
-          </Button>
-
-          {/* More Menu - visible uniquement entre md et lg */}
+          {/* More Menu */}
           <DropdownMenu>
-            <DropdownMenuTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon-sm">
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon-sm" aria-label={t("actions.more")}>
                 <MoreHorizontal className="size-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem asChild>
-                <Link to="/quiz" className="flex items-center gap-2">
-                  <ClipboardCheck className="size-4" />
-                  {t("quiz.title")}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={handleRandomWorkout}
-                disabled={isLoadingRandom}
-                className="flex items-center gap-2"
-              >
-                <Dices className="size-4" />
-                {t("randomWorkout.title")}
-              </DropdownMenuItem>
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>{t("actions.tools")}</DropdownMenuLabel>
+                <DropdownMenuItem asChild>
+                  <Link to="/quiz" className="flex items-center gap-2">
+                    <ClipboardCheck className="size-4" />
+                    {t("quiz.title")}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={handleRandomWorkout}
+                  disabled={isLoadingRandom}
+                  className="flex items-center gap-2"
+                >
+                  <Dices className="size-4" />
+                  {t("randomWorkout.title")}
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>{t("actions.navigate")}</DropdownMenuLabel>
+                {/* Favorites - in dropdown on md (hidden on lg where it's in the bar) */}
+                <DropdownMenuItem asChild className="lg:hidden">
+                  <Link to="/favorites" className="flex items-center gap-2">
+                    <Heart className="size-4" />
+                    {t("nav.favorites")}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/my-zones" className="flex items-center gap-2">
+                    <Target className="size-4" />
+                    {t("myZones.title")}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/settings" className="flex items-center gap-2">
+                    <Settings className="size-4" />
+                    {t("nav.settings")}
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => changeLanguage(currentLang === "fr" ? "en" : "fr")}
@@ -233,7 +193,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
         </div>
 
         {/* Actions Mobile - minimal */}
-        <div className="flex md:hidden items-center gap-1">
+        <div className="flex md:hidden items-center gap-1 col-start-3 justify-self-end">
           {/* Search Button */}
           <Button
             variant="ghost"

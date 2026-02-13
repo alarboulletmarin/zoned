@@ -100,7 +100,10 @@
     "clear": "Clear",
     "viewDetails": "View details",
     "backToLibrary": "Back to library",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "tools": "Tools",
+    "navigate": "Navigate",
+    "more": "More options"
   },
   "units": {
     "minutes": "min",
