@@ -40,7 +40,8 @@
     "coachingTips": "Conseils d'entraînement",
     "zoneDistribution": "Répartition des zones",
     "details": "Détails",
-    "relatedWorkouts": "Séances similaires"
+    "relatedWorkouts": "Séances similaires",
+    "nutritionRecovery": "Nutrition & Récupération"
   },
   "targetSystems": {
     "aerobic_base": "Base aérobie",
@@ -68,5 +69,21 @@
   "variations": {
     "title": "Variantes",
     "related": "Séances similaires"
+  },
+  "recommendations": {
+    "phases": {
+      "before": "Avant",
+      "during": "Pendant",
+      "after": "Après"
+    },
+    "domains": {
+      "nutrition": "Nutrition",
+      "hydration": "Hydratation",
+      "recovery": "Récupération"
+    },
+    "learnMore": {
+      "nutrition": "Guide nutrition complet",
+      "recovery": "Guide récupération complet"
+    }
   }
 }

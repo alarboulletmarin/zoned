@@ -32,6 +32,7 @@ import {
 } from "@/components/domain";
 import { WorkoutStructure, CoachingTips } from "@/components/domain/WorkoutStructure";
 import { ExportMenu } from "@/components/domain/ExportMenu";
+import { NutritionRecoverySection } from "@/components/domain/NutritionRecoverySection";
 import { SEOHead } from "@/components/seo";
 import { SessionTimeline, ZoneDistribution, transformSessionBlocks } from "@/components/visualization";
 import { useWorkout, useRelatedWorkouts, useTips } from "@/hooks";
@@ -253,6 +254,9 @@ export function WorkoutDetailPage() {
               <CoachingTips workout={workout} />
             </CardContent>
           </Card>
+
+          {/* Nutrition & Recovery */}
+          <NutritionRecoverySection workout={workout} />
         </div>
 
         {/* Sidebar */}
