@@ -194,5 +194,22 @@
     "backToHub": "Retour aux articles",
     "zonesCtaText": "Prêt à personnaliser vos zones d'entraînement ?",
     "zonesCtaButton": "Configurer mes zones"
+  },
+  "collections": {
+    "title": "Collections",
+    "subtitle": "Des parcours thématiques pour chaque objectif",
+    "workoutCount": "{{count}} séance",
+    "workoutCount_plural": "{{count}} séances",
+    "viewAll": "Voir toutes les collections",
+    "backToCollections": "Retour aux collections",
+    "progression": "Parcours progressif",
+    "freeSelection": "Sélection libre",
+    "step": "Étape {{number}}",
+    "featured": "Collections à découvrir",
+    "difficulty": {
+      "beginner": "Débutant",
+      "intermediate": "Intermédiaire",
+      "advanced": "Avancé"
+    }
   }
 }

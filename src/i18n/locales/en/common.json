@@ -194,5 +194,22 @@
     "backToHub": "Back to articles",
     "zonesCtaText": "Ready to personalize your training zones?",
     "zonesCtaButton": "Configure my zones"
+  },
+  "collections": {
+    "title": "Collections",
+    "subtitle": "Themed workout paths for every goal",
+    "workoutCount": "{{count}} workout",
+    "workoutCount_plural": "{{count}} workouts",
+    "viewAll": "View all collections",
+    "backToCollections": "Back to collections",
+    "progression": "Progressive path",
+    "freeSelection": "Free selection",
+    "step": "Step {{number}}",
+    "featured": "Featured collections",
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    }
   }
 }

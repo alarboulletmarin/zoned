@@ -9,3 +9,5 @@ export { LearnPage } from "./LearnPage";
 export { ArticlePage } from "./ArticlePage";
 export { GlossaryPage } from "./GlossaryPage";
 export { GlossaryTermPage } from "./GlossaryTermPage";
+export { CollectionsPage } from "./CollectionsPage";
+export { CollectionDetailPage } from "./CollectionDetailPage";

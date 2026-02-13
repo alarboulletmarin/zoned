@@ -4,8 +4,9 @@ import { useTranslation } from "react-i18next";
 import { ArrowRight, Zap, Target, Clock, Dices, ClipboardCheck } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { WorkoutCard, CategoryIcon, TipCard } from "@/components/domain";
+import { WorkoutCard, CategoryIcon, TipCard, CollectionCard } from "@/components/domain";
 import { WorkoutOfTheDay } from "@/components/domain/WorkoutOfTheDay";
+import { getCollectionBySlug } from "@/data/collections";
 import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
 import { SEOHead } from "@/components/seo";
 import { categories, getRandomWorkout } from "@/data/workouts";
@@ -40,6 +41,15 @@ export function HomePage() {
   })).filter((item): item is { category: WorkoutCategory; workout: NonNullable<typeof item.workout> } =>
     item.workout !== undefined
   );
+
+  const featuredCollections = [
+    "debuter-le-running",
+    "seances-mythiques",
+    "objectif-marathon",
+    "progresser-vma",
+  ]
+    .map((slug) => getCollectionBySlug(slug))
+    .filter((c): c is NonNullable<typeof c> => c !== undefined);
 
   const seoDescription = isEn
     ? `${workoutCount || 118} science-based running workouts organized by training zones. Free workout library for runners of all levels.`
@@ -105,6 +115,26 @@ export function HomePage() {
 
       {/* Workout of the Day */}
       <WorkoutOfTheDay />
+
+      {/* Featured Collections */}
+      <section className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold">
+            {t("common:collections.featured")}
+          </h2>
+          <Button variant="ghost" asChild>
+            <Link to="/collections">
+              {t("common:collections.viewAll")}
+              <ArrowRight className="ml-1 size-4" />
+            </Link>
+          </Button>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {featuredCollections.map((collection) => (
+            <CollectionCard key={collection.id} collection={collection} featured />
+          ))}
+        </div>
+      </section>
 
       {/* CTA Sections - Compact layout */}
       <div className="space-y-3">

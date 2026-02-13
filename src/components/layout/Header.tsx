@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book, Search, MoreHorizontal, ClipboardCheck, Settings } from "@/components/icons";
+import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book, Search, MoreHorizontal, ClipboardCheck, Settings, Library } from "@/components/icons";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/logo.svg?react";
@@ -56,6 +56,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
   const navLinks = [
     { href: "/", label: t("nav.home") },
     { href: "/library", label: t("nav.library") },
+    { href: "/collections", label: t("collections.title") },
     { href: "/learn", label: t("nav.learn") },
     { href: "/glossary", label: t("nav.glossary") },
   ];
@@ -307,6 +308,22 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             >
               <BookOpen className="size-4" />
               {t("nav.library")}
+            </Link>
+
+            {/* Collections */}
+            <Link
+              to="/collections"
+              viewTransition
+              onClick={() => setMobileMenuOpen(false)}
+              className={cn(
+                "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
+                location.pathname === "/collections" || location.pathname.startsWith("/collections/")
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Library className="size-4" />
+              {t("collections.title")}
             </Link>
 
             {/* Learn */}

@@ -21,6 +21,8 @@ const ArticlePage = lazy(() => import("@/pages/ArticlePage").then(m => ({ defaul
 const GlossaryPage = lazy(() => import("@/pages/GlossaryPage").then(m => ({ default: m.GlossaryPage })));
 const GlossaryTermPage = lazy(() => import("@/pages/GlossaryTermPage").then(m => ({ default: m.GlossaryTermPage })));
 const SettingsPage = lazy(() => import("@/pages/SettingsPage").then(m => ({ default: m.SettingsPage })));
+const CollectionsPage = lazy(() => import("@/pages/CollectionsPage").then(m => ({ default: m.CollectionsPage })));
+const CollectionDetailPage = lazy(() => import("@/pages/CollectionDetailPage").then(m => ({ default: m.CollectionDetailPage })));
 
 function ScrollToTopOnNavigate() {
   const { pathname } = useLocation();
@@ -106,6 +108,8 @@ function App() {
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/learn" element={<LearnPage />} />
                     <Route path="/learn/:slug" element={<ArticlePage />} />
+                    <Route path="/collections" element={<CollectionsPage />} />
+                    <Route path="/collections/:slug" element={<CollectionDetailPage />} />
                     <Route path="/glossary" element={<GlossaryPage />} />
                     <Route path="/glossary/:id" element={<GlossaryTermPage />} />
                   </Routes>
