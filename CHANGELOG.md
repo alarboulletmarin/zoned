@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.4] - 2026-02-13
+
+### Added
+
+#### Collections
+- 12 curated thematic workout collections (beginner, anti-stress, injury comeback, pre/post-race, 5K/10K/half/marathon/ultra goals, legendary workouts, VO2max progression)
+- Collections listing page with responsive grid layout
+- Collection detail page with gradient hero, step numbering for progression paths
+- Featured collections section on homepage
+- Navigation link in header (desktop + mobile)
+
+#### PWA
+- Progressive Web App support with offline caching via Workbox
+- Service worker with auto-update strategy
+- App manifest with icons and theme colors
+
+#### Workout Detail
+- Dynamic nutrition recommendations based on workout duration and intensity
+- Hydration guidelines adapted to session type
+- Recovery recommendations with timeline and tips
+
+### Changed
+
+- Header actions consolidated with grid layout and dropdown menu
+- Updated README with new features and tech stack
+
 ## [0.1.3] - 2026-01-31
 
 ### Added
