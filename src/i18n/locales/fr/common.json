@@ -42,7 +42,19 @@
     "pdf": "Document (PDF)",
     "garmin": "Garmin (FIT)",
     "selectDateTime": "Choisir date et heure",
-    "download": "Telecharger"
+    "download": "Telecharger",
+    "success": {
+      "calendar": "Événement calendrier exporté",
+      "image": "Image exportée avec succès",
+      "pdf": "Document PDF exporté",
+      "garmin": "Fichier Garmin exporté"
+    },
+    "error": {
+      "calendar": "Erreur lors de l'export calendrier",
+      "image": "Erreur lors de l'export image",
+      "pdf": "Erreur lors de l'export PDF",
+      "garmin": "Erreur lors de l'export Garmin"
+    }
   },
   "quiz": {
     "title": "Quiz Rapide",
@@ -92,7 +104,18 @@
     "settings": "Paramètres"
   },
   "errors": {
-    "workoutNotFound": "Séance non trouvée"
+    "workoutNotFound": "Séance non trouvée",
+    "notFound": {
+      "title": "Page introuvable",
+      "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
+      "backHome": "Retour à l'accueil"
+    },
+    "boundary": {
+      "title": "Une erreur est survenue",
+      "description": "Quelque chose s'est mal passé. Essayez de recharger la page.",
+      "reload": "Recharger",
+      "backHome": "Retour à l'accueil"
+    }
   },
   "actions": {
     "search": "Rechercher",
@@ -103,7 +126,13 @@
     "cancel": "Annuler",
     "tools": "Outils",
     "navigate": "Navigation",
-    "more": "Plus d'options"
+    "more": "Plus d'options",
+    "close": "Fermer",
+    "menu": "Menu",
+    "scrollToTop": "Retour en haut",
+    "addToFavorites": "Ajouter aux favoris",
+    "removeFromFavorites": "Retirer des favoris",
+    "viewRepo": "Dépôt GitLab"
   },
   "units": {
     "minutes": "min",

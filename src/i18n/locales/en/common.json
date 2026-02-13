@@ -42,7 +42,19 @@
     "pdf": "Document (PDF)",
     "garmin": "Garmin (FIT)",
     "selectDateTime": "Select date and time",
-    "download": "Download"
+    "download": "Download",
+    "success": {
+      "calendar": "Calendar event exported",
+      "image": "Image exported successfully",
+      "pdf": "PDF document exported",
+      "garmin": "Garmin file exported"
+    },
+    "error": {
+      "calendar": "Failed to export calendar event",
+      "image": "Failed to export image",
+      "pdf": "Failed to export PDF",
+      "garmin": "Failed to export Garmin file"
+    }
   },
   "quiz": {
     "title": "Quick Quiz",
@@ -92,7 +104,18 @@
     "settings": "Settings"
   },
   "errors": {
-    "workoutNotFound": "Workout not found"
+    "workoutNotFound": "Workout not found",
+    "notFound": {
+      "title": "Page not found",
+      "description": "The page you are looking for does not exist or has been moved.",
+      "backHome": "Back to home"
+    },
+    "boundary": {
+      "title": "Something went wrong",
+      "description": "An unexpected error occurred. Try reloading the page.",
+      "reload": "Reload",
+      "backHome": "Back to home"
+    }
   },
   "actions": {
     "search": "Search",
@@ -103,7 +126,13 @@
     "cancel": "Cancel",
     "tools": "Tools",
     "navigate": "Navigate",
-    "more": "More options"
+    "more": "More options",
+    "close": "Close",
+    "menu": "Menu",
+    "scrollToTop": "Scroll to top",
+    "addToFavorites": "Add to favorites",
+    "removeFromFavorites": "Remove from favorites",
+    "viewRepo": "GitLab repository"
   },
   "units": {
     "minutes": "min",

@@ -378,6 +378,7 @@ export function LibraryPage() {
                   variant="ghost"
                   size="icon-sm"
                   onClick={cancelFilters}
+                  aria-label={t("actions.close")}
                 >
                   ×
                 </Button>

@@ -4,15 +4,10 @@
  * Creates comprehensive PDF documents from workout templates
  */
 
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
 import type { TDocumentDefinitions, Content, TableCell } from "pdfmake/interfaces";
 import type { WorkoutTemplate, WorkoutBlock } from "@/types";
 import { CATEGORY_META, DIFFICULTY_META } from "@/types";
 import { getWorkoutDuration } from "@/components/visualization";
-
-// Initialize fonts
-pdfMake.vfs = pdfFonts.vfs;
 
 /**
  * Zone colors for PDF (RGB values)
@@ -70,6 +65,11 @@ export async function exportToPDF(
   workout: WorkoutTemplate,
   isEn: boolean
 ): Promise<void> {
+  const pdfMakeModule = await import("pdfmake/build/pdfmake");
+  const pdfFontsModule = await import("pdfmake/build/vfs_fonts");
+  const pdfMake = pdfMakeModule.default;
+  pdfMake.vfs = pdfFontsModule.default.vfs;
+
   const title = isEn ? workout.nameEn : workout.name;
   const description = isEn ? workout.descriptionEn : workout.description;
   const duration = getWorkoutDuration(workout);

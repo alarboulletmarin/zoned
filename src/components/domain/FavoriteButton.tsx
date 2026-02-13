@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Heart } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -15,6 +16,7 @@ export function FavoriteButton({
   size = "default",
   className,
 }: FavoriteButtonProps) {
+  const { t } = useTranslation("common");
   const { isFavorite, toggleFavorite } = useFavorites();
   const favorited = isFavorite(workoutId);
   const [animating, setAnimating] = useState(false);
@@ -39,7 +41,7 @@ export function FavoriteButton({
         className
       )}
       onClick={handleClick}
-      aria-label={favorited ? "Remove from favorites" : "Add to favorites"}
+      aria-label={favorited ? t("actions.removeFromFavorites") : t("actions.addToFavorites")}
     >
       <Heart
         className={cn(

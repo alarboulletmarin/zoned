@@ -223,7 +223,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Menu"
+            aria-label={t("actions.menu")}
           >
             {mobileMenuOpen ? (
               <X className="size-5" />

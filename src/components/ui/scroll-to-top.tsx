@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { ArrowUp } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -6,6 +7,7 @@ import { cn } from "@/lib/utils";
 const SCROLL_THRESHOLD = 300;
 
 export function ScrollToTop() {
+  const { t } = useTranslation("common");
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export function ScrollToTop() {
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-4 pointer-events-none"
       )}
-      aria-label="Scroll to top"
+      aria-label={t("actions.scrollToTop")}
     >
       <ArrowUp className="size-4" />
     </Button>

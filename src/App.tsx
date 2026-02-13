@@ -2,7 +2,9 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { Analytics } from "@vercel/analytics/react";
+import { Toaster } from "sonner";
 import { Header, Footer } from "@/components/layout";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { PageLoader } from "@/components/ui/page-loader";
 import { FavoritesProvider } from "@/hooks";
 import { SettingsProvider } from "@/hooks/useSettings";
@@ -23,6 +25,7 @@ const GlossaryTermPage = lazy(() => import("@/pages/GlossaryTermPage").then(m =>
 const SettingsPage = lazy(() => import("@/pages/SettingsPage").then(m => ({ default: m.SettingsPage })));
 const CollectionsPage = lazy(() => import("@/pages/CollectionsPage").then(m => ({ default: m.CollectionsPage })));
 const CollectionDetailPage = lazy(() => import("@/pages/CollectionDetailPage").then(m => ({ default: m.CollectionDetailPage })));
+const NotFoundPage = lazy(() => import("@/pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
 
 function ScrollToTopOnNavigate() {
   const { pathname } = useLocation();
@@ -96,24 +99,27 @@ function App() {
               <Header theme={theme} onThemeToggle={toggleTheme} />
 
               <main className="flex-1 container mx-auto px-4">
-                <Suspense fallback={<PageLoader />}>
-                  <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/library" element={<LibraryPage />} />
-                    <Route path="/workout/:id" element={<WorkoutDetailPage />} />
-                    <Route path="/my-zones" element={<MyZonesPage />} />
-                    <Route path="/settings" element={<SettingsPage />} />
-                    <Route path="/favorites" element={<FavoritesPage />} />
-                    <Route path="/quiz" element={<QuizPage />} />
-                    <Route path="/about" element={<AboutPage />} />
-                    <Route path="/learn" element={<LearnPage />} />
-                    <Route path="/learn/:slug" element={<ArticlePage />} />
-                    <Route path="/collections" element={<CollectionsPage />} />
-                    <Route path="/collections/:slug" element={<CollectionDetailPage />} />
-                    <Route path="/glossary" element={<GlossaryPage />} />
-                    <Route path="/glossary/:id" element={<GlossaryTermPage />} />
-                  </Routes>
-                </Suspense>
+                <ErrorBoundary>
+                  <Suspense fallback={<PageLoader />}>
+                    <Routes>
+                      <Route path="/" element={<HomePage />} />
+                      <Route path="/library" element={<LibraryPage />} />
+                      <Route path="/workout/:id" element={<WorkoutDetailPage />} />
+                      <Route path="/my-zones" element={<MyZonesPage />} />
+                      <Route path="/settings" element={<SettingsPage />} />
+                      <Route path="/favorites" element={<FavoritesPage />} />
+                      <Route path="/quiz" element={<QuizPage />} />
+                      <Route path="/about" element={<AboutPage />} />
+                      <Route path="/learn" element={<LearnPage />} />
+                      <Route path="/learn/:slug" element={<ArticlePage />} />
+                      <Route path="/collections" element={<CollectionsPage />} />
+                      <Route path="/collections/:slug" element={<CollectionDetailPage />} />
+                      <Route path="/glossary" element={<GlossaryPage />} />
+                      <Route path="/glossary/:id" element={<GlossaryTermPage />} />
+                      <Route path="*" element={<NotFoundPage />} />
+                    </Routes>
+                  </Suspense>
+                </ErrorBoundary>
               </main>
 
               <Footer />
@@ -121,6 +127,7 @@ function App() {
             <CommandPalette />
           </CommandPaletteProvider>
           <Analytics />
+          <Toaster richColors position="bottom-right" />
           </BrowserRouter>
         </FavoritesProvider>
       </SettingsProvider>

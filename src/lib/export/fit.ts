@@ -4,8 +4,6 @@
  * Creates Garmin FIT workout files from workout templates
  */
 
-// @ts-expect-error - @garmin/fitsdk doesn't ship type definitions
-import { Encoder } from "@garmin/fitsdk";
 import type { WorkoutTemplate } from "@/types";
 import { transformSessionBlocks } from "@/components/visualization/transforms";
 import type { TimelineSegment, BlockType } from "@/components/visualization/types";
@@ -62,6 +60,9 @@ function getIntensity(type: BlockType, isRecovery: boolean): number {
  * @returns Promise that resolves when download is triggered
  */
 export async function exportToFIT(workout: WorkoutTemplate): Promise<void> {
+  // @ts-expect-error - @garmin/fitsdk doesn't ship type definitions
+  const { Encoder } = await import("@garmin/fitsdk");
+
   // Transform workout into segments using existing logic
   const { segments } = transformSessionBlocks({
     warmup: workout.warmupTemplate,

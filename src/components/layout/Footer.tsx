@@ -42,7 +42,7 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="GitLab repository"
+              aria-label={t("actions.viewRepo")}
             >
               <GitlabIcon className="w-4 h-4" />
             </a>

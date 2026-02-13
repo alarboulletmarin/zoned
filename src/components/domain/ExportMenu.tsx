@@ -21,6 +21,7 @@ import {
 import { ExportDatePicker } from "./ExportDatePicker";
 import { ExportableWorkoutCard } from "./ExportableWorkoutCard";
 import { exportToICS, exportToPNG, exportToPDF, exportToFIT } from "@/lib/export";
+import { toast } from "sonner";
 import type { WorkoutTemplate } from "@/types";
 
 interface ExportMenuProps {
@@ -44,8 +45,9 @@ export function ExportMenu({ workout }: ExportMenuProps) {
     setIsExporting(true);
     try {
       await exportToICS(workout, dateTime, isEn);
+      toast.success(t("export.success.calendar"));
     } catch (error) {
-      console.error("ICS export failed:", error);
+      toast.error(t("export.error.calendar"));
     } finally {
       setIsExporting(false);
     }
@@ -63,11 +65,12 @@ export function ExportMenu({ workout }: ExportMenuProps) {
     try {
       if (exportCardRef.current) {
         await exportToPNG(exportCardRef.current, workout.id);
+        toast.success(t("export.success.image"));
       } else {
         throw new Error("Export card not rendered");
       }
     } catch (error) {
-      console.error("PNG export failed:", error);
+      toast.error(t("export.error.image"));
     } finally {
       setRenderForExport(false);
       setIsExporting(false);
@@ -78,8 +81,9 @@ export function ExportMenu({ workout }: ExportMenuProps) {
     setIsExporting(true);
     try {
       await exportToPDF(workout, isEn);
+      toast.success(t("export.success.pdf"));
     } catch (error) {
-      console.error("PDF export failed:", error);
+      toast.error(t("export.error.pdf"));
     } finally {
       setIsExporting(false);
     }
@@ -89,8 +93,9 @@ export function ExportMenu({ workout }: ExportMenuProps) {
     setIsExporting(true);
     try {
       await exportToFIT(workout);
+      toast.success(t("export.success.garmin"));
     } catch (error) {
-      console.error("FIT export failed:", error);
+      toast.error(t("export.error.garmin"));
     } finally {
       setIsExporting(false);
     }

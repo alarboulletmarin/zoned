@@ -42,7 +42,7 @@ export function ExportDatePicker({ onSelect, onCancel }: ExportDatePickerProps) 
             <Calendar className="size-5" />
             {t("export.selectDateTime")}
           </h3>
-          <Button variant="ghost" size="icon-sm" onClick={onCancel}>
+          <Button variant="ghost" size="icon-sm" onClick={onCancel} aria-label={t("actions.close")}>
             <X className="size-4" />
           </Button>
         </div>

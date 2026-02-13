@@ -4,7 +4,6 @@
  * Captures workout visualization as high-resolution PNG
  */
 
-import { toPng } from "html-to-image";
 import type { RefObject } from "react";
 
 /**
@@ -25,6 +24,8 @@ export async function exportToPNG(
   if (!element) {
     throw new Error("Element is not available");
   }
+
+  const { toPng } = await import("html-to-image");
 
   const dataUrl = await toPng(element, {
     pixelRatio: 2, // 2x resolution for retina quality
