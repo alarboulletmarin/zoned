@@ -31,6 +31,23 @@ export function ZoneCalculator() {
   const [vma, setVma] = useState<string>("");
   const [saved, setSaved] = useState(false);
 
+  // Validation helpers
+  const parsedFcMax = fcMax ? parseFloat(fcMax) : undefined;
+  const parsedVma = vma ? parseFloat(vma) : undefined;
+
+  const fcMaxError =
+    fcMax !== "" &&
+    (parsedFcMax === undefined ||
+      !Number.isFinite(parsedFcMax) ||
+      parsedFcMax < 100 ||
+      parsedFcMax > 250);
+  const vmaError =
+    vma !== "" &&
+    (parsedVma === undefined ||
+      !Number.isFinite(parsedVma) ||
+      parsedVma < 8 ||
+      parsedVma > 30);
+
   // Load stored preferences on mount
   useEffect(() => {
     const prefs = loadUserZonePrefs();
@@ -42,15 +59,16 @@ export function ZoneCalculator() {
   }, []);
 
   const prefs: UserZonePreferences = {
-    fcMax: fcMax ? parseFloat(fcMax) : undefined,
-    vma: vma ? parseFloat(vma) : undefined,
+    fcMax: fcMax && !fcMaxError ? parsedFcMax : undefined,
+    vma: vma && !vmaError ? parsedVma : undefined,
   };
 
   const zones = calculateAllZones(prefs);
   const hasValues = prefs.fcMax || prefs.vma;
+  const hasErrors = fcMaxError || vmaError;
 
   const handleSave = () => {
-    if (hasValues) {
+    if (hasValues && !hasErrors) {
       saveUserZonePrefs(prefs);
       setSaved(true);
     }
@@ -94,10 +112,20 @@ export function ZoneCalculator() {
                   setFcMax(e.target.value);
                   setSaved(false);
                 }}
-                className="flex h-9 w-full max-w-[120px] rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className={cn(
+                  "flex h-9 w-full max-w-[120px] rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2",
+                  fcMaxError
+                    ? "border-red-500 focus-visible:ring-red-500"
+                    : "border-input focus-visible:ring-ring"
+                )}
               />
               <span className="text-sm text-muted-foreground">bpm</span>
             </div>
+            {fcMaxError && (
+              <p className="text-xs text-red-500">
+                {t("myZones.zoneCalculator.invalidFcMax")}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -118,10 +146,20 @@ export function ZoneCalculator() {
                   setVma(e.target.value);
                   setSaved(false);
                 }}
-                className="flex h-9 w-full max-w-[120px] rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className={cn(
+                  "flex h-9 w-full max-w-[120px] rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2",
+                  vmaError
+                    ? "border-red-500 focus-visible:ring-red-500"
+                    : "border-input focus-visible:ring-ring"
+                )}
               />
               <span className="text-sm text-muted-foreground">{getSpeedUnit(unit)}</span>
             </div>
+            {vmaError && (
+              <p className="text-xs text-red-500">
+                {t("myZones.zoneCalculator.invalidVma")}
+              </p>
+            )}
           </div>
         </div>
 
@@ -194,7 +232,7 @@ export function ZoneCalculator() {
 
         {/* Actions */}
         <div className="flex gap-2">
-          <Button onClick={handleSave} disabled={!hasValues || saved}>
+          <Button onClick={handleSave} disabled={!hasValues || saved || hasErrors}>
             <Save className="size-4 mr-2" />
             {saved
               ? t("myZones.zoneCalculator.saved")

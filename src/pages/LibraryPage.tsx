@@ -67,6 +67,8 @@ export function LibraryPage() {
   const { workouts: allWorkouts } = useWorkouts();
   const { viewMode, setViewMode } = useViewMode();
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const PAGE_SIZE = 24;
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   // Temporary filters for mobile (apply/cancel behavior)
   const [tempFilters, setTempFilters] = useState<WorkoutFiltersState>(defaultFilters);
@@ -137,6 +139,11 @@ export function LibraryPage() {
 
     setSearchParams(params);
   }, [filters.category, filters.difficulty, filters.terrain, filters.durationRange, setSearchParams]);
+
+  // Reset visible count when filters change
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [filters]);
 
   // Filter workouts
   const filteredWorkouts = useMemo(() => {
@@ -268,6 +275,9 @@ export function LibraryPage() {
     return getActiveFiltersCount(filters);
   }, [filters]);
 
+  const visibleWorkouts = filteredWorkouts.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredWorkouts.length;
+
   const seoDescription = isEn
     ? `Browse ${allWorkouts.length} science-based running workouts. Filter by category, difficulty, duration, and terrain.`
     : `Parcourez ${allWorkouts.length} séances de course scientifiques. Filtrez par catégorie, difficulté, durée et terrain.`;
@@ -278,6 +288,12 @@ export function LibraryPage() {
         title={isEn ? "Workout Library" : "Bibliothèque"}
         description={seoDescription}
         canonical="/library"
+        jsonLd={{
+          "@type": "CollectionPage",
+          name: isEn ? "Workout Library" : "Bibliothèque",
+          description: seoDescription,
+          url: "https://zoned.run/library",
+        }}
       />
       <div className="py-8">
         {/* Header */}
@@ -402,7 +418,7 @@ export function LibraryPage() {
             <>
               {viewMode === "grid" && (
                 <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                  {filteredWorkouts.map((workout) => (
+                  {visibleWorkouts.map((workout) => (
                     <WorkoutCard key={workout.id} workout={workout} />
                   ))}
                 </div>
@@ -410,11 +426,29 @@ export function LibraryPage() {
 
               {viewMode === "list" && (
                 <div className="space-y-2">
-                  {filteredWorkouts.map((workout) => (
+                  {visibleWorkouts.map((workout) => (
                     <WorkoutListItem key={workout.id} workout={workout} />
                   ))}
                 </div>
               )}
+
+              {/* Pagination: count + show more */}
+              <div className="mt-6 flex flex-col items-center gap-3">
+                <p className="text-sm text-muted-foreground">
+                  {t("showingCount", {
+                    visible: visibleWorkouts.length,
+                    total: filteredWorkouts.length,
+                  })}
+                </p>
+                {hasMore && (
+                  <Button
+                    variant="outline"
+                    onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
+                  >
+                    {t("showMore")}
+                  </Button>
+                )}
+              </div>
             </>
           ) : (
             <EmptyState

@@ -19,6 +19,14 @@ export function CollectionsPage() {
           ? "Themed workout paths for every goal. Browse curated running collections."
           : "Des parcours thematiques pour chaque objectif. Parcourez les collections de course a pied."}
         canonical="/collections"
+        jsonLd={{
+          "@type": "CollectionPage",
+          name: "Collections",
+          description: isEn
+            ? "Themed workout paths for every goal. Browse curated running collections."
+            : "Des parcours thematiques pour chaque objectif. Parcourez les collections de course a pied.",
+          url: "https://zoned.run/collections",
+        }}
       />
       <div className="py-8">
         {/* Header */}

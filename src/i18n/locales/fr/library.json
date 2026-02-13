@@ -69,5 +69,7 @@
     "duration": "Durée"
   },
   "noResults": "Aucune séance ne correspond à vos critères",
-  "clearFilters": "Effacer les filtres"
+  "clearFilters": "Effacer les filtres",
+  "showMore": "Voir plus",
+  "showingCount": "{{visible}} sur {{total}} séances"
 }

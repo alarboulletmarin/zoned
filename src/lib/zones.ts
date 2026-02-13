@@ -69,11 +69,35 @@ export function calculatePaceZones(vma: number): ZoneRange[] {
 }
 
 /**
+ * Validate user zone preferences, replacing invalid values with undefined
+ */
+export function validateZonePrefs(
+  prefs: UserZonePreferences
+): UserZonePreferences {
+  const result: UserZonePreferences = { ...prefs };
+
+  if (result.fcMax !== undefined) {
+    if (!Number.isFinite(result.fcMax) || result.fcMax < 100 || result.fcMax > 250) {
+      result.fcMax = undefined;
+    }
+  }
+
+  if (result.vma !== undefined) {
+    if (!Number.isFinite(result.vma) || result.vma < 8 || result.vma > 30) {
+      result.vma = undefined;
+    }
+  }
+
+  return result;
+}
+
+/**
  * Get combined zones with both HR and pace if available
  */
 export function calculateAllZones(prefs: UserZonePreferences): ZoneRange[] {
-  const hrZones = prefs.fcMax ? calculateHRZones(prefs.fcMax) : null;
-  const paceZones = prefs.vma ? calculatePaceZones(prefs.vma) : null;
+  const validated = validateZonePrefs(prefs);
+  const hrZones = validated.fcMax ? calculateHRZones(validated.fcMax) : null;
+  const paceZones = validated.vma ? calculatePaceZones(validated.vma) : null;
 
   if (!hrZones && !paceZones) {
     return [];
@@ -100,7 +124,8 @@ const STORAGE_KEY = "zoned-userZones";
  * Save user zone preferences to localStorage
  */
 export function saveUserZonePrefs(prefs: UserZonePreferences): void {
-  const data = { ...prefs, updatedAt: new Date().toISOString() };
+  const validated = validateZonePrefs(prefs);
+  const data = { ...validated, updatedAt: new Date().toISOString() };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
@@ -111,7 +136,8 @@ export function loadUserZonePrefs(): UserZonePreferences | null {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) return null;
-    return JSON.parse(stored) as UserZonePreferences;
+    const parsed = JSON.parse(stored) as UserZonePreferences;
+    return validateZonePrefs(parsed);
   } catch {
     return null;
   }

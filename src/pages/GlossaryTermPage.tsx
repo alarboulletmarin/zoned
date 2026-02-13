@@ -55,6 +55,17 @@ export function GlossaryTermPage() {
         title={termName}
         description={truncatedDefinition}
         canonical={`/glossary/${id}`}
+        jsonLd={{
+          "@type": "DefinedTerm",
+          name: termName,
+          description: termDefinition,
+          url: `https://zoned.run/glossary/${id}`,
+          inDefinedTermSet: {
+            "@type": "DefinedTermSet",
+            name: isEn ? "Glossary" : "Glossaire",
+            url: "https://zoned.run/glossary",
+          },
+        }}
       />
       <div className="py-8">
         {/* Breadcrumb */}

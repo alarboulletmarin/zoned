@@ -39,6 +39,14 @@ export function LearnPage() {
           ? "Explore running guides, training fundamentals, and zone-based workout explanations."
           : "Explorez les guides de course, les fondamentaux de l'entrainement et les explications des seances par zones."}
         canonical="/learn"
+        jsonLd={{
+          "@type": "CollectionPage",
+          name: isEn ? "Learn" : "Apprendre",
+          description: isEn
+            ? "Explore running guides, training fundamentals, and zone-based workout explanations."
+            : "Explorez les guides de course, les fondamentaux de l'entrainement et les explications des seances par zones.",
+          url: "https://zoned.run/learn",
+        }}
       />
       <div className="py-8">
       {/* Header */}

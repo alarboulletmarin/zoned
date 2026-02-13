@@ -139,7 +139,9 @@
       "pace": "Pace",
       "save": "Save",
       "saved": "Saved",
-      "clear": "Clear"
+      "clear": "Clear",
+      "invalidFcMax": "Max HR must be between 100 and 250 bpm",
+      "invalidVma": "VMA must be between 8 and 30 km/h"
     },
     "paceCalculator": {
       "title": "Pace Calculator",

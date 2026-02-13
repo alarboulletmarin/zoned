@@ -80,6 +80,19 @@ export function CollectionDetailPage() {
         title={name}
         description={description.slice(0, 155)}
         canonical={`/collections/${collection.slug}`}
+        jsonLd={{
+          "@type": "ItemList",
+          name,
+          description: description.slice(0, 155),
+          url: `https://zoned.run/collections/${collection.slug}`,
+          numberOfItems: workouts.length,
+          itemListElement: workouts.map((w, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            name: isEn ? w.nameEn : w.name,
+            url: `https://zoned.run/workout/${w.id}`,
+          })),
+        }}
       />
       <div className="py-8 space-y-6">
         {/* Back Link */}

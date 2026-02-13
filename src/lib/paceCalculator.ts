@@ -49,7 +49,7 @@ function formatTime(totalMinutes: number): string {
  * @returns Array of race estimates for common distances
  */
 export function calculateRaceTimes(vma: number): RaceEstimate[] {
-  if (!vma || vma <= 0) {
+  if (!Number.isFinite(vma) || vma <= 0) {
     return [];
   }
 

@@ -139,7 +139,9 @@
       "pace": "Allure",
       "save": "Sauvegarder",
       "saved": "Sauvegardé",
-      "clear": "Effacer"
+      "clear": "Effacer",
+      "invalidFcMax": "FCmax doit être entre 100 et 250 bpm",
+      "invalidVma": "VMA doit être entre 8 et 30 km/h"
     },
     "paceCalculator": {
       "title": "Calculateur d'Allures",

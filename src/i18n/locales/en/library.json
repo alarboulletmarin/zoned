@@ -69,5 +69,7 @@
     "duration": "Duration"
   },
   "noResults": "No workouts match your criteria",
-  "clearFilters": "Clear filters"
+  "clearFilters": "Clear filters",
+  "showMore": "Show more",
+  "showingCount": "{{visible}} of {{total}} workouts"
 }

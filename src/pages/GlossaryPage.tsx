@@ -110,6 +110,14 @@ export function GlossaryPage() {
           ? "Running terminology explained: training zones, workout types, and key concepts for runners."
           : "Terminologie de la course a pied expliquee: zones d'entrainement, types de seances et concepts cles."}
         canonical="/glossary"
+        jsonLd={{
+          "@type": "DefinedTermSet",
+          name: isEn ? "Glossary" : "Glossaire",
+          description: isEn
+            ? "Running terminology explained: training zones, workout types, and key concepts for runners."
+            : "Terminologie de la course a pied expliquee: zones d'entrainement, types de seances et concepts cles.",
+          url: "https://zoned.run/glossary",
+        }}
       />
       <div className="py-8">
       {/* Page Header */}
