@@ -36,6 +36,25 @@ const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
   Rocket,
 };
 
+const ZONE_MAP: Record<string, number> = {
+  "debuter-le-running": 1,
+  "anti-stress": 1,
+  "retour-de-blessure": 1,
+  "post-course": 1,
+  "pre-course": 3,
+  "seances-mythiques": 5,
+  "objectif-5k": 5,
+  "objectif-10k": 4,
+  "objectif-semi": 4,
+  "objectif-marathon": 4,
+  "objectif-ultra": 3,
+  "progresser-vma": 5,
+};
+
+function getCollectionZone(slug: string): number {
+  return ZONE_MAP[slug] ?? 3;
+}
+
 export function CollectionDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const { t, i18n } = useTranslation("common");
@@ -106,20 +125,15 @@ export function CollectionDetailPage() {
         {/* Hero Section */}
         <div
           className={cn(
-            "relative overflow-hidden rounded-2xl bg-gradient-to-br",
-            collection.gradient,
-            "text-white p-8 md:p-10"
+            "rounded-2xl border bg-card shadow-sm",
+            `zone-${getCollectionZone(collection.slug)}`,
+            "zone-stripe pl-2 p-8 md:p-10"
           )}
         >
-          {/* Background decoration */}
-          <div className="absolute -right-8 -top-8 opacity-10">
-            <Icon className="size-48" />
-          </div>
-
           {/* Content */}
-          <div className="relative z-10 space-y-4 max-w-2xl">
+          <div className="space-y-4 max-w-2xl">
             {/* Icon */}
-            <div className="inline-flex items-center justify-center rounded-xl bg-white/20 p-3">
+            <div className="inline-flex items-center justify-center rounded-xl bg-secondary p-3">
               <Icon className="size-8" />
             </div>
 
@@ -129,22 +143,16 @@ export function CollectionDetailPage() {
             </h1>
 
             {/* Description */}
-            <p className="text-white/85 text-lg leading-relaxed">
+            <p className="text-muted-foreground text-lg leading-relaxed">
               {description}
             </p>
 
             {/* Badges */}
             <div className="flex flex-wrap items-center gap-2 pt-2">
-              <Badge
-                variant="secondary"
-                className="bg-white/20 text-white border-transparent hover:bg-white/20"
-              >
+              <Badge variant="secondary">
                 {t("collections.workoutCount", { count: workoutCount })}
               </Badge>
-              <Badge
-                variant="outline"
-                className="border-white/30 text-white hover:bg-transparent"
-              >
+              <Badge variant="outline">
                 {collection.isProgression
                   ? t("collections.progression")
                   : t("collections.freeSelection")}

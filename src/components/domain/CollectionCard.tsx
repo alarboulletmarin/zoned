@@ -17,7 +17,24 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { Collection } from "@/data/collections/types";
 
-/** Map collection icon strings to actual icon components */
+const ZONE_MAP: Record<string, number> = {
+  "debuter-le-running": 1,
+  "anti-stress": 1,
+  "retour-de-blessure": 1,
+  "post-course": 1,
+  "pre-course": 3,
+  "seances-mythiques": 5,
+  "objectif-5k": 5,
+  "objectif-10k": 4,
+  "objectif-semi": 4,
+  "objectif-marathon": 4,
+  "objectif-ultra": 3,
+  "progresser-vma": 5,
+};
+
+function getCollectionZone(slug: string): number {
+  return ZONE_MAP[slug] ?? 3;
+}
 const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
   Footprints,
   Leaf,
@@ -47,70 +64,54 @@ export function CollectionCard({ collection, featured = false }: CollectionCardP
   const workoutCount = collection.workoutIds.length;
 
   return (
-    <Link to={`/collections/${collection.slug}`} className="group block">
+    <Link to={`/collections/${collection.slug}`} className="group block h-full">
       <div
         className={cn(
-          "relative overflow-hidden rounded-xl bg-gradient-to-br",
-          collection.gradient,
-          "text-white transition-all duration-200",
-          "hover:shadow-lg hover:scale-[1.02]",
+          "zone-stripe pl-2 rounded-xl border bg-card shadow-sm h-full flex flex-col",
+          `zone-${getCollectionZone(collection.slug)}`,
+          "hover:shadow-md hover:-translate-y-0.5 transition-all",
           featured ? "p-6" : "p-4"
         )}
       >
-        {/* Background decoration */}
-        <div className="absolute -right-4 -top-4 opacity-10">
-          <Icon className={featured ? "size-28" : "size-20"} />
-        </div>
-
-        {/* Content */}
-        <div className="relative z-10 space-y-2">
-          {/* Icon */}
-          <div
-            className={cn(
-              "inline-flex items-center justify-center rounded-lg bg-white/20",
-              featured ? "p-2.5" : "p-2"
-            )}
-          >
-            <Icon className={featured ? "size-6" : "size-5"} />
+        <div className="space-y-2 flex-1">
+          <div className="flex items-center gap-3">
+            <div
+              className={cn(
+                "inline-flex items-center justify-center rounded-lg bg-secondary",
+                featured ? "p-2.5" : "p-2"
+              )}
+            >
+              <Icon className={featured ? "size-6" : "size-5"} />
+            </div>
+            <h3
+              className={cn(
+                "font-semibold leading-tight",
+                featured ? "text-lg" : "text-base"
+              )}
+            >
+              {name}
+            </h3>
           </div>
 
-          {/* Name */}
-          <h3
-            className={cn(
-              "font-bold leading-tight",
-              featured ? "text-lg" : "text-base"
-            )}
-          >
-            {name}
-          </h3>
-
-          {/* Description */}
           <p
             className={cn(
-              "text-white/80 line-clamp-2",
-              featured ? "text-sm" : "text-xs"
+              "text-muted-foreground line-clamp-2",
+              featured ? "text-sm" : "text-sm"
             )}
           >
             {description}
           </p>
+        </div>
 
-          {/* Footer: badges */}
-          <div className="flex flex-wrap items-center gap-1.5 pt-1">
-            <Badge
-              variant="secondary"
-              className="bg-white/20 text-white border-transparent text-xs hover:bg-white/20"
-            >
-              {t("collections.workoutCount", { count: workoutCount })}
-            </Badge>
-            <Badge
-              variant="outline"
-              className="border-white/30 text-white text-xs hover:bg-transparent"
-            >
-              {collection.isProgression
-                ? t("collections.progression")
-                : t("collections.freeSelection")}
-            </Badge>
-          </div>
+        <div className="flex flex-wrap items-center gap-1.5 pt-2">
+          <Badge variant="secondary" className="text-xs">
+            {t("collections.workoutCount", { count: workoutCount })}
+          </Badge>
+          <Badge variant="outline" className="text-xs">
+            {collection.isProgression
+              ? t("collections.progression")
+              : t("collections.freeSelection")}
+          </Badge>
         </div>
       </div>
     </Link>
