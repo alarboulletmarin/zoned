@@ -28,18 +28,31 @@ import {
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { usePlan } from "@/hooks/usePlans";
-import { deletePlan } from "@/lib/planStorage";
+import { deletePlan, updatePlanSession } from "@/lib/planStorage";
 import { getWorkoutById } from "@/data/workouts";
 import { exportPlanToICS, exportPlanToPDF } from "@/lib/export";
+import { computePlanStats } from "@/lib/planStats";
 import {
   PHASE_META,
   RACE_DISTANCE_META,
 } from "@/types/plan";
 import type { WorkoutTemplate } from "@/types";
 import { toast } from "sonner";
+import { IcsExportDialog } from "@/components/domain/IcsExportDialog";
+import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
 
-const DAY_NAMES_FR = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
-const DAY_NAMES_EN = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const SESSION_TYPE_COLORS: Record<string, string> = {
+  endurance: "bg-blue-400",
+  long_run: "bg-blue-600",
+  tempo: "bg-yellow-400",
+  threshold: "bg-orange-400",
+  vo2max: "bg-red-500",
+  speed: "bg-red-400",
+  fartlek: "bg-purple-400",
+  hills: "bg-green-500",
+  race_specific: "bg-amber-500",
+  recovery: "bg-slate-300",
+};
 
 const SESSION_TYPE_LABELS: Record<string, { fr: string; en: string }> = {
   recovery: { fr: "Récupération", en: "Recovery" },
@@ -77,14 +90,27 @@ export function PlanViewPage() {
   const { i18n } = useTranslation("plan");
   const isEn = i18n.language?.startsWith("en") ?? false;
 
-  const { plan, isLoading } = usePlan(id);
+  const { plan, isLoading, reload: reloadPlan } = usePlan(id);
   const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set());
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showIcsDialog, setShowIcsDialog] = useState(false);
   const [workoutNames, setWorkoutNames] = useState<Record<string, string>>({});
+  const [workoutTemplates, setWorkoutTemplates] = useState<Record<string, WorkoutTemplate>>({});
+  const [swapTarget, setSwapTarget] = useState<{
+    weekNumber: number;
+    sessionIndex: number;
+    workoutId: string;
+    sessionType: string;
+  } | null>(null);
 
   const currentWeek = useMemo(() => {
     if (!plan) return 0;
     return getCurrentWeek(plan.config.createdAt);
+  }, [plan]);
+
+  const stats = useMemo(() => {
+    if (!plan) return null;
+    return computePlanStats(plan);
   }, [plan]);
 
   // Auto-expand current week
@@ -112,12 +138,15 @@ export function PlanViewPage() {
       })
     ).then((results) => {
       const names: Record<string, string> = {};
+      const templates: Record<string, WorkoutTemplate> = {};
       for (const [wid, workout] of results) {
         if (workout) {
           names[wid] = isEn ? workout.nameEn : workout.name;
+          templates[wid] = workout;
         }
       }
       setWorkoutNames(names);
+      setWorkoutTemplates(templates);
     });
   }, [plan, isEn]);
 
@@ -141,31 +170,51 @@ export function PlanViewPage() {
 
   const [isExporting, setIsExporting] = useState(false);
 
-  const handleExportICS = useCallback(async () => {
+  const handleIcsExport = useCallback(async (selectedDays: number[], longRunDay: number) => {
     if (!plan || isExporting) return;
     setIsExporting(true);
+    setShowIcsDialog(false);
     try {
-      exportPlanToICS(plan, workoutNames, isEn);
+      exportPlanToICS(plan, workoutNames, workoutTemplates, isEn, selectedDays, longRunDay);
       toast.success(isEn ? "Calendar exported" : "Calendrier exporté");
     } catch {
       toast.error(isEn ? "Export failed" : "Échec de l'export");
     } finally {
       setIsExporting(false);
     }
-  }, [plan, workoutNames, isEn, isExporting]);
+  }, [plan, workoutNames, workoutTemplates, isEn, isExporting]);
 
   const handleExportPDF = useCallback(async () => {
     if (!plan || isExporting) return;
     setIsExporting(true);
     try {
-      await exportPlanToPDF(plan, workoutNames, isEn);
+      await exportPlanToPDF(plan, workoutNames, workoutTemplates, isEn);
       toast.success(isEn ? "PDF exported" : "PDF exporté");
     } catch {
       toast.error(isEn ? "Export failed" : "Échec de l'export");
     } finally {
       setIsExporting(false);
     }
-  }, [plan, workoutNames, isEn, isExporting]);
+  }, [plan, workoutNames, workoutTemplates, isEn, isExporting]);
+
+  const handleSwapSession = useCallback((workout: WorkoutTemplate) => {
+    if (!plan || !swapTarget) return;
+
+    const week = plan.weeks.find(w => w.weekNumber === swapTarget.weekNumber);
+    if (!week) return;
+
+    const originalIndex = week.sessions.findIndex(s => s.workoutId === swapTarget.workoutId);
+    if (originalIndex === -1) return;
+
+    const success = updatePlanSession(plan.id, swapTarget.weekNumber, originalIndex, workout.id);
+    if (success) {
+      reloadPlan();
+      toast.success(isEn ? "Session replaced" : "Séance remplacée");
+    } else {
+      toast.error(isEn ? "Failed to update session" : "Échec de la mise à jour");
+    }
+    setSwapTarget(null);
+  }, [plan, swapTarget, isEn, reloadPlan]);
 
   // Loading state
   if (isLoading) {
@@ -195,8 +244,6 @@ export function PlanViewPage() {
 
   const raceMeta = RACE_DISTANCE_META[plan.config.raceDistance];
   const planName = isEn ? plan.nameEn : plan.name;
-  const dayNames = isEn ? DAY_NAMES_EN : DAY_NAMES_FR;
-
   const raceDate = plan.config.raceDate;
 
   return (
@@ -299,6 +346,73 @@ export function PlanViewPage() {
           </CardContent>
         </Card>
 
+        {/* Plan Stats */}
+        {stats && (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <Card size="compact">
+              <CardContent className="px-4">
+                <p className="text-xs text-muted-foreground">{isEn ? "Sessions" : "Seances"}</p>
+                <p className="text-2xl font-bold">{stats.totalSessions}</p>
+              </CardContent>
+            </Card>
+            <Card size="compact">
+              <CardContent className="px-4">
+                <p className="text-xs text-muted-foreground">{isEn ? "Total hours" : "Heures totales"}</p>
+                <p className="text-2xl font-bold">{Math.round(stats.totalDurationMin / 60)}<span className="text-sm font-normal text-muted-foreground">h</span></p>
+              </CardContent>
+            </Card>
+            <Card size="compact">
+              <CardContent className="px-4">
+                <p className="text-xs text-muted-foreground">{isEn ? "Avg/week" : "Moy./semaine"}</p>
+                <p className="text-2xl font-bold">{Math.round(stats.avgDurationPerWeekMin)}<span className="text-sm font-normal text-muted-foreground">min</span></p>
+              </CardContent>
+            </Card>
+            <Card size="compact">
+              <CardContent className="px-4">
+                <p className="text-xs text-muted-foreground">{isEn ? "Key sessions" : "Seances cles"}</p>
+                <p className="text-2xl font-bold">{stats.keySessionCount}</p>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Session type distribution bar */}
+        {stats && (
+          <Card size="compact">
+            <CardContent className="px-4">
+              <p className="text-sm font-medium mb-2">{isEn ? "Session types" : "Types de seances"}</p>
+              <div className="flex rounded-full overflow-hidden h-3">
+                {Object.entries(stats.sessionsByType)
+                  .sort(([,a], [,b]) => b - a)
+                  .map(([type, count]) => {
+                    const sessionLabel = SESSION_TYPE_LABELS[type];
+                    return (
+                      <div
+                        key={type}
+                        className={SESSION_TYPE_COLORS[type] || "bg-gray-300"}
+                        style={{ width: `${(count / stats.totalSessions) * 100}%` }}
+                        title={`${sessionLabel ? (isEn ? sessionLabel.en : sessionLabel.fr) : type}: ${count}`}
+                      />
+                    );
+                  })}
+              </div>
+              <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2">
+                {Object.entries(stats.sessionsByType)
+                  .sort(([,a], [,b]) => b - a)
+                  .map(([type, count]) => {
+                    const sessionLabel = SESSION_TYPE_LABELS[type];
+                    return (
+                      <div key={type} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <div className={`size-2.5 rounded-full ${SESSION_TYPE_COLORS[type] || "bg-gray-300"}`} />
+                        <span>{sessionLabel ? (isEn ? sessionLabel.en : sessionLabel.fr) : type} ({count})</span>
+                      </div>
+                    );
+                  })}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Week List */}
         <div className="space-y-2">
           {plan.weeks.map((week) => {
@@ -347,8 +461,11 @@ export function PlanViewPage() {
                     )}
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
-                    <span className="text-sm text-muted-foreground">
-                      {week.volumePercent}%
+                    <span
+                      className="text-sm text-muted-foreground"
+                      title={isEn ? "Training volume relative to plan peak" : "Volume d'entraînement relatif au pic du plan"}
+                    >
+                      Vol. {week.volumePercent}%
                     </span>
                     {isExpanded ? (
                       <ChevronUp className="size-4 text-muted-foreground" />
@@ -368,68 +485,104 @@ export function PlanViewPage() {
                           : "Aucune séance cette semaine"}
                       </p>
                     ) : (
-                      week.sessions.map((session, idx) => {
-                        const isRaceDay =
-                          session.workoutId === "__race_day__";
-                        const sessionLabel =
-                          SESSION_TYPE_LABELS[session.sessionType];
+                      (() => {
+                        const sortedSessions = [...week.sessions].sort((a, b) => {
+                          const priority = (s: typeof a) => {
+                            if (s.workoutId === "__race_day__") return 0;
+                            if (s.sessionType === "long_run") return 1;
+                            if (s.isKeySession) return 2;
+                            if (s.sessionType === "endurance") return 3;
+                            return 4;
+                          };
+                          return priority(a) - priority(b);
+                        });
+                        return sortedSessions.map((session, idx) => {
+                          const isRaceDay =
+                            session.workoutId === "__race_day__";
+                          const sessionLabel =
+                            SESSION_TYPE_LABELS[session.sessionType];
 
-                        return (
-                          <div
-                            key={idx}
-                            className={cn(
-                              "flex items-center gap-3 rounded-lg p-3",
-                              isRaceDay
-                                ? "bg-primary/10 border border-primary/20"
-                                : "bg-secondary/50"
-                            )}
-                          >
-                            {/* Day */}
-                            <span className="text-sm font-medium w-10 shrink-0">
-                              {dayNames[session.dayOfWeek]}
-                            </span>
+                          return (
+                            <div
+                              key={idx}
+                              className={cn(
+                                "flex items-center gap-3 rounded-lg p-3",
+                                isRaceDay
+                                  ? "bg-primary/10 border border-primary/20"
+                                  : "bg-secondary/50"
+                              )}
+                            >
 
-                            {/* Content */}
-                            <div className="flex-1 min-w-0">
-                              {isRaceDay ? (
-                                <div className="flex items-center gap-2">
-                                  <Flag className="size-4 text-primary" />
-                                  <span className="font-semibold text-primary">
-                                    {isEn ? "Race Day!" : "Jour de course !"}
+
+                              {/* Content */}
+                              <div className="flex-1 min-w-0">
+                                {isRaceDay ? (
+                                  <div className="flex items-center gap-2">
+                                    <Flag className="size-4 text-primary" />
+                                    <span className="font-semibold text-primary">
+                                      {isEn ? "Race Day!" : "Jour de course !"}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <>
+                                    <Link
+                                      to={`/workout/${session.workoutId}`}
+                                      state={{ from: "plan", planId: plan.id, planName: planName }}
+                                      className="text-sm font-medium hover:underline line-clamp-1"
+                                    >
+                                      {workoutNames[session.workoutId] ||
+                                        session.workoutId}
+                                    </Link>
+                                    {(isEn ? session.notesEn : session.notes) && (
+                                      <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                                        {isEn ? session.notesEn : session.notes}
+                                      </p>
+                                    )}
+                                  </>
+                                )}
+                              </div>
+
+                              {/* Badges */}
+                              <div className="flex items-center gap-2 shrink-0">
+                                {session.isKeySession && (
+                                  <Star className="size-4 text-yellow-500 fill-yellow-500" />
+                                )}
+                                {!isRaceDay && sessionLabel && (
+                                  <Badge variant="outline" className="text-xs">
+                                    {isEn ? sessionLabel.en : sessionLabel.fr}
+                                  </Badge>
+                                )}
+                                {!isRaceDay && (
+                                  <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                    <Clock className="size-3" />
+                                    {session.estimatedDurationMin}
+                                    {isEn ? "min" : "min"}
                                   </span>
-                                </div>
-                              ) : (
-                                <Link
-                                  to={`/workout/${session.workoutId}`}
-                                  className="text-sm font-medium hover:underline line-clamp-1"
-                                >
-                                  {workoutNames[session.workoutId] ||
-                                    session.workoutId}
-                                </Link>
-                              )}
+                                )}
+                                {!isRaceDay && (
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-6 w-6 p-0"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setSwapTarget({
+                                        weekNumber: week.weekNumber,
+                                        sessionIndex: idx,
+                                        workoutId: session.workoutId,
+                                        sessionType: session.sessionType,
+                                      });
+                                    }}
+                                    title={isEn ? "Replace session" : "Remplacer la séance"}
+                                  >
+                                    <span className="text-xs">{"\u21c4"}</span>
+                                  </Button>
+                                )}
+                              </div>
                             </div>
-
-                            {/* Badges */}
-                            <div className="flex items-center gap-2 shrink-0">
-                              {session.isKeySession && (
-                                <Star className="size-4 text-yellow-500 fill-yellow-500" />
-                              )}
-                              {!isRaceDay && sessionLabel && (
-                                <Badge variant="outline" className="text-xs">
-                                  {isEn ? sessionLabel.en : sessionLabel.fr}
-                                </Badge>
-                              )}
-                              {!isRaceDay && (
-                                <span className="text-xs text-muted-foreground flex items-center gap-1">
-                                  <Clock className="size-3" />
-                                  {session.estimatedDurationMin}
-                                  {isEn ? "min" : "min"}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })
+                          );
+                        });
+                      })()
                     )}
                   </div>
                 )}
@@ -444,7 +597,7 @@ export function PlanViewPage() {
             {isExporting ? <Loader2 className="size-4 animate-spin" /> : <Download className="size-4" />}
             {isEn ? "Export PDF" : "Exporter PDF"}
           </Button>
-          <Button variant="outline" onClick={handleExportICS} disabled={isExporting}>
+          <Button variant="outline" onClick={() => setShowIcsDialog(true)} disabled={isExporting}>
             {isExporting ? <Loader2 className="size-4 animate-spin" /> : <Calendar className="size-4" />}
             {isEn ? "Export ICS" : "Exporter ICS"}
           </Button>
@@ -476,6 +629,25 @@ export function PlanViewPage() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        {/* ICS Export Dialog */}
+        <IcsExportDialog
+          open={showIcsDialog}
+          onOpenChange={setShowIcsDialog}
+          daysPerWeek={plan.config.daysPerWeek}
+          onExport={handleIcsExport}
+          isEn={isEn}
+        />
+
+        {/* Swap Session Dialog */}
+        <SwapSessionDialog
+          open={swapTarget !== null}
+          onOpenChange={(open) => !open && setSwapTarget(null)}
+          currentWorkoutId={swapTarget?.workoutId ?? ""}
+          sessionType={swapTarget?.sessionType ?? ""}
+          onSelect={handleSwapSession}
+          isEn={isEn}
+        />
       </div>
     </>
   );

@@ -34,7 +34,7 @@ export function usePlan(id: string | undefined) {
   const [plan, setPlan] = useState<TrainingPlan | undefined>();
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  const reload = useCallback(() => {
     if (!id) {
       setPlan(undefined);
       setIsLoading(false);
@@ -44,7 +44,11 @@ export function usePlan(id: string | undefined) {
     setIsLoading(false);
   }, [id]);
 
-  return { plan, isLoading };
+  useEffect(() => {
+    reload();
+  }, [reload]);
+
+  return { plan, isLoading, reload };
 }
 
 /**

@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import { Link } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   Calendar,
@@ -7,6 +7,7 @@ import {
   Plus,
   Loader2,
   ArrowRight,
+  Trash2,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,15 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { usePlans } from "@/hooks/usePlans";
@@ -58,10 +68,13 @@ function getCurrentPhase(
 function PlanCard({
   plan,
   isEn,
+  onDelete,
 }: {
   plan: TrainingPlan;
   isEn: boolean;
+  onDelete: (id: string) => void;
 }) {
+  const navigate = useNavigate();
   const raceMeta = RACE_DISTANCE_META[plan.config.raceDistance];
   const planName = isEn ? plan.nameEn : plan.name;
   const currentWeek = getCurrentWeek(plan.config.createdAt);
@@ -73,81 +86,112 @@ function PlanCard({
   const weeksElapsed = Math.min(Math.max(currentWeek, 0), plan.totalWeeks);
 
   return (
-    <Link to={`/plan/${plan.id}`}>
-      <Card interactive className="h-full">
-        <CardHeader>
-          <div className="flex items-start justify-between gap-2">
-            <CardTitle className="text-lg line-clamp-1 flex-1">
-              {planName}
-            </CardTitle>
-            <Badge variant="default" className="shrink-0">
-              {isEn ? raceMeta.labelEn : raceMeta.label}
-            </Badge>
-          </div>
-          <CardDescription>
-            <span className="flex items-center gap-1">
-              <Calendar className="size-3.5" />
-              {formatDate(plan.config.createdAt, isEn)} →{" "}
-              {formatDate(plan.config.raceDate, isEn)}
+    <Card interactive className="h-full">
+      <CardHeader
+        className="cursor-pointer"
+        onClick={() => navigate(`/plan/${plan.id}`)}
+      >
+        <div className="flex items-start justify-between gap-2">
+          <CardTitle className="text-lg line-clamp-1 flex-1">
+            {planName}
+          </CardTitle>
+          <Badge variant="default" className="shrink-0">
+            {isEn ? raceMeta.labelEn : raceMeta.label}
+          </Badge>
+        </div>
+        <CardDescription>
+          <span className="flex items-center gap-1">
+            <Calendar className="size-3.5" />
+            {formatDate(plan.config.createdAt, isEn)} →{" "}
+            {formatDate(plan.config.raceDate, isEn)}
+          </span>
+        </CardDescription>
+      </CardHeader>
+      <CardContent
+        className="space-y-3 cursor-pointer"
+        onClick={() => navigate(`/plan/${plan.id}`)}
+      >
+        {/* Current Phase */}
+        {currentPhase && (
+          <div className="flex items-center gap-2">
+            <div
+              className={cn(
+                "size-2.5 rounded-full",
+                PHASE_META[currentPhase].color
+              )}
+            />
+            <span className="text-sm">
+              {isEn
+                ? PHASE_META[currentPhase].labelEn
+                : PHASE_META[currentPhase].label}
             </span>
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {/* Current Phase */}
-          {currentPhase && (
-            <div className="flex items-center gap-2">
-              <div
-                className={cn(
-                  "size-2.5 rounded-full",
-                  PHASE_META[currentPhase].color
-                )}
-              />
-              <span className="text-sm">
-                {isEn
-                  ? PHASE_META[currentPhase].labelEn
-                  : PHASE_META[currentPhase].label}
-              </span>
-            </div>
-          )}
-
-          {/* Progress Bar */}
-          <div className="space-y-1">
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span>
-                {isEn
-                  ? `Week ${weeksElapsed} / ${plan.totalWeeks}`
-                  : `Semaine ${weeksElapsed} / ${plan.totalWeeks}`}
-              </span>
-              <span>{Math.round(progressPercent)}%</span>
-            </div>
-            <div className="h-2 rounded-full bg-secondary overflow-hidden">
-              <div
-                className="h-full rounded-full bg-primary transition-all"
-                style={{ width: `${progressPercent}%` }}
-              />
-            </div>
           </div>
+        )}
 
-          {/* Race Time Prediction */}
-          {plan.raceTimePrediction && (
-            <div className="flex items-center gap-1 text-sm text-muted-foreground">
-              <Clock className="size-3.5" />
-              <span>
-                {isEn ? "Target: " : "Objectif : "}
-                {plan.raceTimePrediction}
-              </span>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </Link>
+        {/* Progress Bar */}
+        <div className="space-y-1">
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>
+              {isEn
+                ? `Week ${weeksElapsed} / ${plan.totalWeeks}`
+                : `Semaine ${weeksElapsed} / ${plan.totalWeeks}`}
+            </span>
+            <span>{Math.round(progressPercent)}%</span>
+          </div>
+          <div className="h-2 rounded-full bg-secondary overflow-hidden">
+            <div
+              className="h-full rounded-full bg-primary transition-all"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Race Time Prediction */}
+        {plan.raceTimePrediction && (
+          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+            <Clock className="size-3.5" />
+            <span>
+              {isEn ? "Target: " : "Objectif : "}
+              {plan.raceTimePrediction}
+            </span>
+          </div>
+        )}
+      </CardContent>
+
+      {/* Actions */}
+      <div className="px-6 pb-4 flex gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="flex-1"
+          asChild
+        >
+          <Link to={`/plan/${plan.id}`}>
+            <ArrowRight className="size-3.5" />
+            {isEn ? "View" : "Voir"}
+          </Link>
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(plan.id);
+          }}
+        >
+          <Trash2 className="size-3.5" />
+        </Button>
+      </div>
+    </Card>
   );
 }
 
 export function PlansPage() {
   const { i18n } = useTranslation("plan");
   const isEn = i18n.language?.startsWith("en") ?? false;
-  const { plans, isLoading } = usePlans();
+  const { plans, isLoading, remove } = usePlans();
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const deleteTargetPlan = plans.find((p) => p.id === deleteTarget);
 
   // Sort plans by creation date (newest first)
   const sortedPlans = useMemo(
@@ -202,7 +246,7 @@ export function PlansPage() {
               )}
             >
               {sortedPlans.map((plan) => (
-                <PlanCard key={plan.id} plan={plan} isEn={isEn} />
+                <PlanCard key={plan.id} plan={plan} isEn={isEn} onDelete={setDeleteTarget} />
               ))}
             </div>
 
@@ -237,6 +281,43 @@ export function PlansPage() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteTarget !== null} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {isEn ? "Delete this plan?" : "Supprimer ce plan ?"}
+            </DialogTitle>
+            <DialogDescription>
+              {deleteTargetPlan
+                ? (isEn
+                    ? `"${deleteTargetPlan.nameEn}" will be permanently deleted. This action cannot be undone.`
+                    : `"${deleteTargetPlan.name}" sera définitivement supprimé. Cette action est irréversible.`)
+                : ""}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">
+                {isEn ? "Cancel" : "Annuler"}
+              </Button>
+            </DialogClose>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                if (deleteTarget) {
+                  remove(deleteTarget);
+                  setDeleteTarget(null);
+                }
+              }}
+            >
+              <Trash2 className="size-4" />
+              {isEn ? "Delete" : "Supprimer"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

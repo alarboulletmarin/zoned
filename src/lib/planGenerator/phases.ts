@@ -13,10 +13,23 @@ export function calculatePhases(totalWeeks: number, raceDistance: RaceDistance):
   const taperWeeks = TAPER_WEEKS[raceDistance];
   const availableWeeks = totalWeeks - taperWeeks;
 
+  const isTrailRace = raceDistance === "trail_short" || raceDistance === "trail" || raceDistance === "ultra";
+
   // Distribute available weeks across base/build/peak
-  let baseWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * BASE_PHASE_PCT));
-  let buildWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * BUILD_PHASE_PCT));
-  let peakWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * PEAK_PHASE_PCT));
+  let baseWeeks: number;
+  let buildWeeks: number;
+  let peakWeeks: number;
+
+  if (isTrailRace) {
+    // Trail: more base (50%), less peak (10%), build stays same
+    baseWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * 0.50));
+    buildWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * 0.30));
+    peakWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * 0.10));
+  } else {
+    baseWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * BASE_PHASE_PCT));
+    buildWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * BUILD_PHASE_PCT));
+    peakWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * PEAK_PHASE_PCT));
+  }
 
   // Adjust to fit exactly (give/take from base which is the largest)
   const assigned = baseWeeks + buildWeeks + peakWeeks;

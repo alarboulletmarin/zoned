@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
@@ -60,8 +60,14 @@ const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: 
 
 export function WorkoutDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
   const { t, i18n } = useTranslation(["session", "library", "common"]);
   const isEn = i18n.language?.startsWith("en") ?? false;
+
+  const locationState = location.state as { from?: string; planId?: string; planName?: string } | null;
+  const backTo = locationState?.from === "plan" && locationState.planId
+    ? { path: `/plan/${locationState.planId}`, label: isEn ? `Back to ${locationState.planName || "plan"}` : `Retour au plan` }
+    : { path: "/library", label: t("common:actions.backToLibrary") };
 
   const { workout, isLoading } = useWorkout(id);
   const { workouts: relatedWorkouts } = useRelatedWorkouts(workout);
@@ -102,9 +108,9 @@ export function WorkoutDetailPage() {
       <div className="py-12 text-center">
         <p className="text-muted-foreground">{t("common:errors.workoutNotFound")}</p>
         <Button variant="link" asChild className="mt-4">
-          <Link to="/library">
+          <Link to={backTo.path}>
             <ArrowLeft className="mr-2 size-4" />
-            {t("common:actions.backToLibrary")}
+            {backTo.label}
           </Link>
         </Button>
       </div>
@@ -159,9 +165,9 @@ export function WorkoutDetailPage() {
       <div className="py-8 space-y-8">
         {/* Back Button */}
       <Button variant="ghost" size="sm" asChild>
-        <Link to="/library">
+        <Link to={backTo.path}>
           <ArrowLeft className="mr-2 size-4" />
-          {t("common:actions.backToLibrary")}
+          {backTo.label}
         </Link>
       </Button>
 

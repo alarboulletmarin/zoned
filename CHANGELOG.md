@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Trail race support: short trail (30km), trail (60km), ultra trail (100km) with terrain-adapted training
+- Plan statistics overview: total sessions, hours, avg/week, key sessions, session type distribution bar
+- Swap/replace any session in a plan with another workout from the library (search + type filters)
+- ICS export dialog: choose your training days and long run day before calendar export
+- Enriched PDF export with full workout blocks (warm-up, main set, cool-down, coaching tips)
+- Enriched ICS export with full session details and coaching tips
+- Pace target notes generated for tempo/threshold/VO2max/long run sessions
+- Elevation notes for long run sessions when race has elevation gain
+- Keyboard shortcuts (Enter to advance) in plan creation wizard
+- Delete plans directly from the plans list page with confirmation dialog
+
+### Fixed
+- "Base — Base" duplicate label in week headers (phase shown twice)
+- Duration calculation now uses actual workout blocks instead of inaccurate `typicalDuration` metadata
+- Trail workouts no longer selected for road races (even with elevation)
+- Dates beyond 24 weeks now blocked (was only a warning)
+- Missing session type labels for "intervals", "mixed", "technique", "warm-up" in swap dialog
+
+### Changed
+- Removed day-of-week assignment: runners are free to choose their own training days
+- Removed long run day selector from wizard (default Sunday used internally)
+- Sessions displayed by priority (long run → key → endurance → recovery) without day labels
+- Volume percentage now shows "Vol." label with explanatory tooltip
+
 ## [0.1.5] - 2026-03-14
 
 ### Added

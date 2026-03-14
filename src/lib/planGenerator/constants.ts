@@ -15,6 +15,9 @@ export const TAPER_WEEKS: Record<RaceDistance, number> = {
   "10K": 2,
   semi: 2,
   marathon: 3,
+  trail_short: 2,
+  trail: 2,
+  ultra: 3,
 };
 
 // ── Plan constraints ───────────────────────────────────────────────
@@ -75,6 +78,9 @@ export const VMA_RACE_PERCENTAGES: Record<RaceDistance, number> = {
   "10K": 92,
   semi: 82,
   marathon: 77,
+  trail_short: 72,
+  trail: 65,
+  ultra: 55,
 };
 
 // ── Distance tags for workout matching ─────────────────────────────
@@ -84,6 +90,9 @@ export const DISTANCE_TAGS: Record<RaceDistance, string[]> = {
   "10K": ["10k", "10km", "medium-distance"],
   semi: ["half-marathon", "semi", "semi-marathon"],
   marathon: ["marathon", "long-distance"],
+  trail_short: ["trail", "nature", "short-trail"],
+  trail: ["trail", "nature", "long-trail"],
+  ultra: ["trail", "ultra", "nature", "ultra-trail"],
 };
 
 // ── Days of week labels ────────────────────────────────────────────

@@ -7,8 +7,24 @@
 
 import type { TDocumentDefinitions, Content, TableCell } from "pdfmake/interfaces";
 import type { TrainingPlan } from "@/types/plan";
+import type { WorkoutTemplate, WorkoutBlock } from "@/types";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
-import { DAY_LABELS } from "@/lib/planGenerator/constants";
+
+/**
+ * Format workout blocks into a readable text string for PDF.
+ */
+function formatWorkoutBlocks(blocks: WorkoutBlock[], isEn: boolean): string {
+  return blocks
+    .map((block) => {
+      const desc = isEn ? (block.descriptionEn || block.description) : block.description;
+      const duration = block.durationMin ? ` (${block.durationMin}min)` : "";
+      const zone = block.zone ? ` [${block.zone}]` : "";
+      const reps = block.repetitions && block.repetitions > 1 ? `${block.repetitions}x ` : "";
+      const rest = block.rest ? ` — ${isEn ? "rest" : "recup"}: ${block.rest}` : "";
+      return `${reps}${desc}${duration}${zone}${rest}`;
+    })
+    .join("\n");
+}
 
 /**
  * Phase colors for PDF backgrounds (light versions for row fills)
@@ -52,6 +68,7 @@ function formatDate(isoDate: string, isEn: boolean): string {
 export async function exportPlanToPDF(
   plan: TrainingPlan,
   workoutNames: Record<string, string>,
+  workoutTemplates: Record<string, WorkoutTemplate>,
   isEn: boolean,
 ): Promise<void> {
   // Dynamic import pdfmake (code-split)
@@ -62,8 +79,6 @@ export async function exportPlanToPDF(
 
   const raceMeta = RACE_DISTANCE_META[plan.config.raceDistance];
   const planName = isEn ? plan.nameEn : plan.name;
-  const dayLabels = isEn ? DAY_LABELS.en : DAY_LABELS.fr;
-
   const content: Content = [];
 
   // ── Title Page ──────────────────────────────────────────────────────
@@ -184,9 +199,8 @@ export async function exportPlanToPDF(
       continue;
     }
 
-    // Session table: Jour | Seance | Type | Duree | Cle
+    // Session table: Seance | Type | Duree | Cle
     const tableHeader: TableCell[] = [
-      { text: isEn ? "Day" : "Jour", style: "tableHeader" },
       { text: isEn ? "Workout" : "Seance", style: "tableHeader" },
       { text: "Type", style: "tableHeader" },
       { text: isEn ? "Duration" : "Duree", style: "tableHeader" },
@@ -195,7 +209,6 @@ export async function exportPlanToPDF(
 
     const rows: TableCell[][] = week.sessions.map((session) => {
       const isRaceDay = session.workoutId === "__race_day__";
-      const dayLabel = dayLabels[session.dayOfWeek];
       const sessionLabel = SESSION_TYPE_LABELS[session.sessionType];
       const typeName = sessionLabel
         ? (isEn ? sessionLabel.en : sessionLabel.fr)
@@ -203,7 +216,6 @@ export async function exportPlanToPDF(
 
       if (isRaceDay) {
         return [
-          { text: dayLabel, margin: [4, 3, 4, 3] },
           {
             text: isEn ? "RACE DAY" : "JOUR DE COURSE",
             bold: true,
@@ -217,7 +229,6 @@ export async function exportPlanToPDF(
       }
 
       return [
-        { text: dayLabel, margin: [4, 3, 4, 3] },
         {
           text: workoutNames[session.workoutId] || session.workoutId,
           margin: [4, 3, 4, 3],
@@ -241,7 +252,7 @@ export async function exportPlanToPDF(
     content.push({
       table: {
         headerRows: 1,
-        widths: [55, "*", 75, 55, 30],
+        widths: ["*", 80, 55, 30],
         body: [tableHeader, ...rows],
       },
       layout: {
@@ -252,6 +263,103 @@ export async function exportPlanToPDF(
       },
       margin: [0, 0, 0, 12],
     });
+
+    // Workout detail blocks for each session
+    for (const session of week.sessions) {
+      if (session.workoutId === "__race_day__") continue;
+      const template = workoutTemplates[session.workoutId];
+      if (!template) continue;
+
+      const workoutName = workoutNames[session.workoutId] || session.workoutId;
+      const detailStack: Content[] = [];
+
+      detailStack.push({
+        text: workoutName,
+        bold: true,
+        fontSize: 9,
+        margin: [0, 6, 0, 2],
+      });
+
+      // Notes (pace targets)
+      const notes = isEn ? session.notesEn : session.notes;
+      if (notes) {
+        detailStack.push({
+          text: notes,
+          italics: true,
+          fontSize: 8,
+          color: "#666",
+          margin: [0, 0, 0, 2],
+        });
+      }
+
+      if (template.warmupTemplate?.length) {
+        detailStack.push({
+          text: isEn ? "Warm-up:" : "Echauffement :",
+          bold: true,
+          fontSize: 8,
+          color: "#555",
+          margin: [0, 2, 0, 1],
+        });
+        detailStack.push({
+          text: formatWorkoutBlocks(template.warmupTemplate, isEn),
+          fontSize: 8,
+          color: "#555",
+          margin: [8, 0, 0, 2],
+        });
+      }
+
+      if (template.mainSetTemplate?.length) {
+        detailStack.push({
+          text: isEn ? "Main set:" : "Corps de seance :",
+          bold: true,
+          fontSize: 8,
+          color: "#555",
+          margin: [0, 2, 0, 1],
+        });
+        detailStack.push({
+          text: formatWorkoutBlocks(template.mainSetTemplate, isEn),
+          fontSize: 8,
+          color: "#555",
+          margin: [8, 0, 0, 2],
+        });
+      }
+
+      if (template.cooldownTemplate?.length) {
+        detailStack.push({
+          text: isEn ? "Cool-down:" : "Retour au calme :",
+          bold: true,
+          fontSize: 8,
+          color: "#555",
+          margin: [0, 2, 0, 1],
+        });
+        detailStack.push({
+          text: formatWorkoutBlocks(template.cooldownTemplate, isEn),
+          fontSize: 8,
+          color: "#555",
+          margin: [8, 0, 0, 2],
+        });
+      }
+
+      // Add pace note from config
+      if (plan.config.targetPaceMinKm) {
+        const sessionType = session.sessionType;
+        if (sessionType === "tempo" || sessionType === "threshold" || sessionType === "race_specific") {
+          const paceMin = Math.floor(plan.config.targetPaceMinKm);
+          const paceSec = Math.round((plan.config.targetPaceMinKm - paceMin) * 60);
+          detailStack.push({
+            text: `${isEn ? "Target pace" : "Allure cible"}: ${paceMin}:${paceSec.toString().padStart(2, "0")}/km`,
+            italics: true,
+            fontSize: 8,
+            color: "#666",
+            margin: [0, 2, 0, 0],
+          });
+        }
+      }
+
+      if (detailStack.length > 1) {
+        content.push({ stack: detailStack, margin: [0, 0, 0, 4] });
+      }
+    }
   }
 
   // ── Footer ─────────────────────────────────────────────────────────

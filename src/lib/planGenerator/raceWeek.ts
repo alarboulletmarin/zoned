@@ -2,6 +2,16 @@ import type { RaceDistance, PlanWeek, PlanSession } from "@/types/plan";
 import type { Difficulty, WorkoutTemplate } from "@/types";
 import { RACE_WEEK_VOLUME_PCT, OPENER_DAYS_BEFORE_RACE } from "./constants";
 
+function getRaceLabel(raceDistance: RaceDistance): { fr: string; en: string } {
+  switch (raceDistance) {
+    case "semi": return { fr: "Semi-marathon", en: "Half Marathon" };
+    case "trail_short": return { fr: "Trail court", en: "Short Trail" };
+    case "trail": return { fr: "Trail", en: "Trail" };
+    case "ultra": return { fr: "Ultra trail", en: "Ultra Trail" };
+    default: return { fr: raceDistance, en: raceDistance };
+  }
+}
+
 /**
  * Generate the race week (last week of plan).
  */
@@ -16,14 +26,15 @@ export function generateRaceWeek(
   const sessions: PlanSession[] = [];
 
   // Race day
+  const raceLabel = getRaceLabel(raceDistance);
   const raceDaySession: PlanSession = {
     dayOfWeek: longRunDay,
     workoutId: "__race_day__",
     sessionType: "race_specific",
     isKeySession: true,
     estimatedDurationMin: 0, // Race duration varies
-    notes: `Jour de course - ${raceDistance === "semi" ? "Semi-marathon" : raceDistance}`,
-    notesEn: `Race day - ${raceDistance === "semi" ? "Half Marathon" : raceDistance}`,
+    notes: `Jour de course - ${raceLabel.fr}`,
+    notesEn: `Race day - ${raceLabel.en}`,
   };
   sessions.push(raceDaySession);
 

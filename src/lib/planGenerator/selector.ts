@@ -1,5 +1,6 @@
 import type {
   WorkoutTemplate,
+  WorkoutBlock,
   Difficulty,
   TrainingPhase,
   SessionType,
@@ -60,6 +61,45 @@ function getLoadFilter(slotType: string): RelativeLoad[] {
   }
 }
 
+/**
+ * Estimate the actual duration of a workout from its blocks.
+ * Falls back to typicalDuration if blocks don't have timing info.
+ */
+function estimateWorkoutDuration(workout: WorkoutTemplate): number {
+  let total = 0;
+  let hasBlockDurations = false;
+
+  const blocks: WorkoutBlock[] = [
+    ...(workout.warmupTemplate || []),
+    ...(workout.mainSetTemplate || []),
+    ...(workout.cooldownTemplate || []),
+  ];
+
+  for (const block of blocks) {
+    if (block.durationMin) {
+      total += block.durationMin * (block.repetitions || 1);
+      hasBlockDurations = true;
+    } else if (block.distanceM) {
+      // Estimate duration from distance: ~5min/km average (including recovery)
+      const distanceKm = block.distanceM / 1000;
+      const reps = block.repetitions || 1;
+      // Each rep: run time + recovery estimate (~60% of run time)
+      const runTimeMin = distanceKm * 5; // ~5min/km at effort
+      const hasRecovery = block.recovery || block.rest;
+      const recoveryMin = hasRecovery ? runTimeMin * 0.6 : 0;
+      total += (runTimeMin + recoveryMin) * reps;
+      hasBlockDurations = true;
+    }
+  }
+
+  if (hasBlockDurations && total > 0) {
+    return Math.round(total);
+  }
+
+  // Fallback to typicalDuration
+  return Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2);
+}
+
 // ── Internal selector ──────────────────────────────────────────────
 
 function findBestWorkout(
@@ -71,12 +111,31 @@ function findBestWorkout(
   usedWorkoutIds: string[],
   volumePercent: number,
   slotType: string,
+  _elevationGain?: number,
 ): WorkoutSelection | null {
   const categories = SESSION_TO_CATEGORY[sessionType] ?? [];
   const diffLevel = DIFFICULTY_LEVELS[difficulty];
-
   // Step 1: Filter by category
   let candidates = allWorkouts.filter((w) => categories.includes(w.category));
+
+  // Step 1b: Exclude trail workouts for road races, include for trail races
+  const isTrailRace = raceDistance === "trail_short" || raceDistance === "trail" || raceDistance === "ultra";
+  if (!isTrailRace) {
+    candidates = candidates.filter((w) =>
+      !w.selectionCriteria.tags.includes("trail"),
+    );
+  }
+
+  // For trail races, broaden endurance and long_run to include hills
+  if (isTrailRace && (sessionType === "endurance" || sessionType === "long_run")) {
+    const hillsCandidates = allWorkouts.filter((w) => w.category === "hills");
+    const existingIds = new Set(candidates.map(c => c.id));
+    for (const hw of hillsCandidates) {
+      if (!existingIds.has(hw.id)) {
+        candidates.push(hw);
+      }
+    }
+  }
 
   // Step 2: Filter by phase
   candidates = candidates.filter((w) =>
@@ -122,9 +181,8 @@ function findBestWorkout(
 
   const workout = finalList[0];
 
-  // Calculate duration based on typical duration and volume
-  const baseDuration =
-    (workout.typicalDuration.min + workout.typicalDuration.max) / 2;
+  // Calculate duration based on actual block durations and volume
+  const baseDuration = estimateWorkoutDuration(workout);
   const estimatedDurationMin = Math.round(baseDuration * (volumePercent / 100));
 
   return {
@@ -153,6 +211,7 @@ export function selectWorkout(
   allWorkouts: WorkoutTemplate[],
   usedWorkoutIds: string[], // IDs used in last 3 weeks
   volumePercent: number,
+  elevationGain?: number,
 ): WorkoutSelection | null {
   // Try each preferred session type in order
   for (const sessionType of slot.sessionTypes) {
@@ -165,6 +224,7 @@ export function selectWorkout(
       usedWorkoutIds,
       volumePercent,
       slot.slotType,
+      elevationGain,
     );
     if (result) return result;
   }

@@ -2,7 +2,7 @@ import type { Difficulty, TrainingPhase, SessionType } from "@/types";
 
 // ── Race distance type ──────────────────────────────────────────────
 
-export type RaceDistance = "5K" | "10K" | "semi" | "marathon";
+export type RaceDistance = "5K" | "10K" | "semi" | "marathon" | "trail_short" | "trail" | "ultra";
 
 // ── Plan configuration (user inputs) ───────────────────────────────
 
@@ -84,6 +84,24 @@ export const RACE_DISTANCE_META: Record<
     labelEn: "Marathon",
     distanceKm: 42.195,
     icon: "Trophy",
+  },
+  trail_short: {
+    label: "Trail court",
+    labelEn: "Short Trail",
+    distanceKm: 30,
+    icon: "Mountain",
+  },
+  trail: {
+    label: "Trail",
+    labelEn: "Trail",
+    distanceKm: 60,
+    icon: "Mountain",
+  },
+  ultra: {
+    label: "Ultra trail",
+    labelEn: "Ultra Trail",
+    distanceKm: 100,
+    icon: "Mountain",
   },
 };
 

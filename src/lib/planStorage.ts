@@ -39,3 +39,28 @@ export function deletePlan(id: string): void {
 export function getPlanCount(): number {
   return getAllPlans().length;
 }
+
+export function updatePlanSession(
+  planId: string,
+  weekNumber: number,
+  sessionIndex: number,
+  newWorkoutId: string,
+): boolean {
+  const plans = getAllPlans();
+  const planIdx = plans.findIndex(p => p.id === planId);
+  if (planIdx === -1) return false;
+
+  const plan = plans[planIdx];
+  const week = plan.weeks.find(w => w.weekNumber === weekNumber);
+  if (!week || sessionIndex >= week.sessions.length) return false;
+
+  week.sessions[sessionIndex].workoutId = newWorkoutId;
+  plans[planIdx] = plan;
+
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
+    return true;
+  } catch {
+    return false;
+  }
+}

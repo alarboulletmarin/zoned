@@ -12,7 +12,6 @@ import {
   Mountain,
   CheckIcon,
   Loader2,
-  AlertTriangle,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -36,31 +35,14 @@ const WARN_WEEKS = 24;
 
 const DAYS_PER_WEEK_OPTIONS = [3, 4, 5, 6] as const;
 
-const DAY_NAMES_FR = [
-  "Lundi",
-  "Mardi",
-  "Mercredi",
-  "Jeudi",
-  "Vendredi",
-  "Samedi",
-  "Dimanche",
-] as const;
-
-const DAY_NAMES_EN = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-] as const;
-
 const RACE_DISTANCE_ICONS: Record<RaceDistance, React.ReactNode> = {
   "5K": <Zap className="size-6 text-primary" />,
   "10K": <Timer className="size-6 text-primary" />,
   semi: <Route className="size-6 text-primary" />,
   marathon: <Flag className="size-6 text-primary" />,
+  trail_short: <Mountain className="size-6 text-primary" />,
+  trail: <Mountain className="size-6 text-primary" />,
+  ultra: <Mountain className="size-6 text-primary" />,
 };
 
 // ── Helpers ──────────────────────────────────────────────────────────
@@ -172,14 +154,20 @@ export function PlanCreatePage() {
     [form.raceDate]
   );
 
-  const dateValid = weeksCount >= MIN_WEEKS;
-  const dateWarning = weeksCount > WARN_WEEKS;
+  const minWeeksForDistance = useMemo(() => {
+    if (form.raceDistance === "ultra") return 12;
+    if (form.raceDistance === "trail" || form.raceDistance === "trail_short") return 10;
+    return MIN_WEEKS; // 8
+  }, [form.raceDistance]);
+
+  const dateValid = weeksCount >= minWeeksForDistance && weeksCount <= WARN_WEEKS;
+  const dateTooLong = weeksCount > WARN_WEEKS;
 
   const minDate = useMemo(() => {
     const d = new Date();
-    d.setDate(d.getDate() + MIN_WEEKS * 7);
+    d.setDate(d.getDate() + minWeeksForDistance * 7);
     return d.toISOString().split("T")[0];
-  }, []);
+  }, [minWeeksForDistance]);
 
   const paceSeconds = useMemo(
     () => parsePaceToSeconds(form.targetPace),
@@ -190,8 +178,6 @@ export function PlanCreatePage() {
     () => (userPrefs?.vma ? suggestLevel(userPrefs.vma) : null),
     [userPrefs]
   );
-
-  const dayNames = isEn ? DAY_NAMES_EN : DAY_NAMES_FR;
 
   // ── Submit handler ───────────────────────────────────────────────
 
@@ -341,8 +327,8 @@ export function PlanCreatePage() {
         </h2>
         <p className="text-muted-foreground mt-1">
           {isEn
-            ? "At least 8 weeks from now"
-            : "Au minimum 8 semaines a partir d'aujourd'hui"}
+            ? `At least ${minWeeksForDistance} weeks from now`
+            : `Au minimum ${minWeeksForDistance} semaines a partir d'aujourd'hui`}
         </p>
       </div>
 
@@ -355,6 +341,9 @@ export function PlanCreatePage() {
             onChange={(e) =>
               setForm((f) => ({ ...f, raceDate: e.target.value }))
             }
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && dateValid) goForward();
+            }}
             className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
 
@@ -368,20 +357,17 @@ export function PlanCreatePage() {
           {form.raceDate && !dateValid && (
             <p className="text-sm text-destructive text-center">
               {isEn
-                ? `Too close! You need at least ${MIN_WEEKS} weeks.`
-                : `Trop proche ! Il faut au moins ${MIN_WEEKS} semaines.`}
+                ? `Too close! You need at least ${minWeeksForDistance} weeks.`
+                : `Trop proche ! Il faut au moins ${minWeeksForDistance} semaines.`}
             </p>
           )}
 
-          {form.raceDate && dateWarning && (
-            <div className="flex items-center gap-2 text-sm text-yellow-600 dark:text-yellow-400">
-              <AlertTriangle className="size-4 shrink-0" />
-              <span>
-                {isEn
-                  ? "Over 24 weeks is a very long preparation. Consider starting closer to the race."
-                  : "Plus de 24 semaines est une tres longue preparation. Envisagez de commencer plus pres de la course."}
-              </span>
-            </div>
+          {form.raceDate && dateTooLong && (
+            <p className="text-sm text-destructive text-center">
+              {isEn
+                ? "Over 24 weeks is not supported. Choose a closer date."
+                : "Plus de 24 semaines n'est pas possible. Choisissez une date plus proche."}
+            </p>
           )}
         </CardContent>
       </Card>
@@ -425,6 +411,9 @@ export function PlanCreatePage() {
             onChange={(e) =>
               setForm((f) => ({ ...f, raceName: e.target.value }))
             }
+            onKeyDown={(e) => {
+              if (e.key === "Enter") goForward();
+            }}
             placeholder={
               isEn ? "e.g. Paris Marathon" : "ex. Marathon de Paris"
             }
@@ -583,28 +572,6 @@ export function PlanCreatePage() {
             </div>
           </div>
 
-          {/* Long run day */}
-          <div>
-            <label className="text-sm font-medium mb-3 block">
-              {isEn ? "Long run day" : "Jour de la sortie longue"}
-            </label>
-            <select
-              value={form.longRunDay}
-              onChange={(e) =>
-                setForm((f) => ({
-                  ...f,
-                  longRunDay: parseInt(e.target.value, 10),
-                }))
-              }
-              className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              {dayNames.map((name, idx) => (
-                <option key={idx} value={idx}>
-                  {name}
-                </option>
-              ))}
-            </select>
-          </div>
         </CardContent>
       </Card>
 
@@ -644,6 +611,13 @@ export function PlanCreatePage() {
               ? "Optional - you can skip this step"
               : "Optionnel - vous pouvez passer cette etape"}
           </p>
+          {(form.raceDistance === "trail_short" || form.raceDistance === "trail" || form.raceDistance === "ultra") && (
+            <p className="text-sm text-primary text-center mt-2">
+              {isEn
+                ? "Elevation data is important for trail-specific training"
+                : "Le denivele est important pour un entrainement trail adapte"}
+            </p>
+          )}
         </div>
 
         <Card>
@@ -659,6 +633,9 @@ export function PlanCreatePage() {
                 onChange={(e) =>
                   setForm((f) => ({ ...f, targetPace: e.target.value }))
                 }
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && (paceSeconds || !form.targetPace)) goForward();
+                }}
                 placeholder="5:30"
                 className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
@@ -799,11 +776,6 @@ export function PlanCreatePage() {
             <SummaryRow
               label={isEn ? "Sessions/week" : "Seances/semaine"}
               value={`${form.daysPerWeek}`}
-            />
-            {/* Long run day */}
-            <SummaryRow
-              label={isEn ? "Long run" : "Sortie longue"}
-              value={dayNames[form.longRunDay]}
             />
             {/* Pace */}
             {paceSeconds && (

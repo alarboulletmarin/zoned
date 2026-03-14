@@ -1,4 +1,4 @@
-import type { TrainingPlan, PlanConfig, PlanWeek, PlanSession } from "@/types/plan";
+import type { TrainingPlan, PlanConfig, PlanWeek, PlanSession, RaceDistance } from "@/types/plan";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import { loadAllWorkouts } from "@/data/workouts";
 import { calculateRaceTimes } from "@/lib/paceCalculator";
@@ -27,9 +27,14 @@ function calculateTotalWeeks(raceDate: string): number {
  */
 function predictRaceTime(
   vma: number,
-  raceDistance: "5K" | "10K" | "semi" | "marathon"
+  raceDistance: RaceDistance
 ): string | undefined {
   if (!vma || vma <= 0) return undefined;
+
+  // No reliable time prediction for trail races (too terrain-dependent)
+  if (raceDistance === "trail_short" || raceDistance === "trail" || raceDistance === "ultra") {
+    return undefined;
+  }
 
   const estimates = calculateRaceTimes(vma);
   // Map our RaceDistance to paceCalculator distance labels
@@ -81,7 +86,7 @@ function generatePlanName(config: PlanConfig): { name: string; nameEn: string } 
 function getWeekLabel(
   weekNumber: number,
   totalWeeks: number,
-  phase: string,
+  _phase: string,
   isRecoveryWeek: boolean
 ): { weekLabel: string; weekLabelEn: string } {
   if (weekNumber === totalWeeks) {
@@ -91,18 +96,9 @@ function getWeekLabel(
     return { weekLabel: "Semaine de récupération", weekLabelEn: "Recovery Week" };
   }
 
-  const phaseLabels: Record<string, { fr: string; en: string }> = {
-    base: { fr: "Base", en: "Base" },
-    build: { fr: "Construction", en: "Build" },
-    peak: { fr: "Pic", en: "Peak" },
-    taper: { fr: "Affûtage", en: "Taper" },
-    recovery: { fr: "Récupération", en: "Recovery" },
-  };
-
-  const label = phaseLabels[phase] || { fr: phase, en: phase };
   return {
-    weekLabel: `S${weekNumber} - ${label.fr}`,
-    weekLabelEn: `W${weekNumber} - ${label.en}`,
+    weekLabel: `S${weekNumber}`,
+    weekLabelEn: `W${weekNumber}`,
   };
 }
 
@@ -197,17 +193,57 @@ export async function generatePlan(config: PlanConfig): Promise<TrainingPlan> {
         config.raceDistance,
         allWorkouts,
         usedWorkoutIds,
-        volumePercent
+        volumePercent,
+        config.elevationGain,
       );
 
       if (selection) {
-        sessions.push({
+        const session: PlanSession = {
           dayOfWeek: slot.dayOfWeek,
           workoutId: selection.workoutId,
           sessionType: slot.sessionTypes[0],
           isKeySession: slot.slotType === "key_quality",
           estimatedDurationMin: selection.estimatedDurationMin,
-        });
+        };
+
+        // Add pace-based notes if target pace is defined
+        if (config.targetPaceMinKm) {
+          const paceMin = Math.floor(config.targetPaceMinKm);
+          const paceSec = Math.round((config.targetPaceMinKm - paceMin) * 60);
+          const paceStr = `${paceMin}:${paceSec.toString().padStart(2, "0")}`;
+
+          // Easy pace is roughly target + 1:00/km
+          const easyPaceMin = Math.floor(config.targetPaceMinKm + 1);
+          const easyPaceSec = Math.round(((config.targetPaceMinKm + 1) - easyPaceMin) * 60);
+          const easyPaceStr = `${easyPaceMin}:${easyPaceSec.toString().padStart(2, "0")}`;
+
+          const st = slot.sessionTypes[0];
+          if (st === "tempo" || st === "threshold" || st === "race_specific") {
+            session.notes = `Allure cible : ${paceStr}/km`;
+            session.notesEn = `Target pace: ${paceStr}/km`;
+          } else if (st === "long_run") {
+            session.notes = `Allure endurance : ~${easyPaceStr}/km`;
+            session.notesEn = `Easy pace: ~${easyPaceStr}/km`;
+          } else if (st === "vo2max" || st === "speed") {
+            // VO2max pace is roughly target - 0:30/km
+            const vmaPace = config.targetPaceMinKm - 0.5;
+            const vmaPaceMin = Math.floor(vmaPace);
+            const vmaPaceSec = Math.round((vmaPace - vmaPaceMin) * 60);
+            const vmaPaceStr = `${vmaPaceMin}:${vmaPaceSec.toString().padStart(2, "0")}`;
+            session.notes = `Allure VMA : ~${vmaPaceStr}/km`;
+            session.notesEn = `VO2max pace: ~${vmaPaceStr}/km`;
+          }
+        }
+
+        // Add elevation note if present
+        if (config.elevationGain && config.elevationGain > 0 && slot.sessionTypes[0] === "long_run") {
+          const elevNote = `Course avec ${config.elevationGain}m D+ — intégrez du dénivelé`;
+          const elevNoteEn = `Race has ${config.elevationGain}m elevation — include hills`;
+          session.notes = session.notes ? `${session.notes}\n${elevNote}` : elevNote;
+          session.notesEn = session.notesEn ? `${session.notesEn}\n${elevNoteEn}` : elevNoteEn;
+        }
+
+        sessions.push(session);
         weekUsedIds.push(selection.workoutId);
       }
     }
