@@ -1,7 +1,8 @@
 import { useMemo, useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Filter, Search, Heart } from "@/components/icons";
+import { Filter, Search, Heart, Loader2 } from "@/components/icons";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { Button } from "@/components/ui/button";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -278,6 +279,15 @@ export function LibraryPage() {
   const visibleWorkouts = filteredWorkouts.slice(0, visibleCount);
   const hasMore = visibleCount < filteredWorkouts.length;
 
+  const handleLoadMore = useCallback(() => {
+    setVisibleCount((prev) => prev + PAGE_SIZE);
+  }, []);
+
+  const { sentinelRef } = useInfiniteScroll({
+    hasMore,
+    onLoadMore: handleLoadMore,
+  });
+
   const seoDescription = isEn
     ? `Browse ${allWorkouts.length} science-based running workouts. Filter by category, difficulty, duration, and terrain.`
     : `Parcourez ${allWorkouts.length} séances de course scientifiques. Filtrez par catégorie, difficulté, durée et terrain.`;
@@ -433,7 +443,7 @@ export function LibraryPage() {
                 </div>
               )}
 
-              {/* Pagination: count + show more */}
+              {/* Pagination: count + infinite scroll */}
               <div className="mt-6 flex flex-col items-center gap-3">
                 <p className="text-sm text-muted-foreground">
                   {t("showingCount", {
@@ -442,12 +452,12 @@ export function LibraryPage() {
                   })}
                 </p>
                 {hasMore && (
-                  <Button
-                    variant="outline"
-                    onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
-                  >
-                    {t("showMore")}
-                  </Button>
+                  <>
+                    <div ref={sentinelRef} className="w-full h-1" aria-hidden="true" />
+                    <div className="flex items-center justify-center py-4">
+                      <Loader2 className="size-5 animate-spin text-muted-foreground" />
+                    </div>
+                  </>
                 )}
               </div>
             </>

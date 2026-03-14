@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowRight, Zap, Target, Clock, Dices, ClipboardCheck } from "@/components/icons";
+import { ArrowRight, Zap, Target, Clock, Dices, ClipboardCheck, CalendarRange } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { WorkoutCard, CategoryIcon, TipCard, CollectionCard } from "@/components/domain";
@@ -11,6 +11,7 @@ import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
 import { SEOHead } from "@/components/seo";
 import { categories, getRandomWorkout } from "@/data/workouts";
 import { useWorkouts, useTips } from "@/hooks";
+import { usePlans } from "@/hooks/usePlans";
 import { ZONE_META, type ZoneNumber, type WorkoutCategory } from "@/types";
 
 export function HomePage() {
@@ -22,6 +23,9 @@ export function HomePage() {
   const { workouts, isLoading } = useWorkouts();
   const workoutCount = workouts.length;
   const { tip } = useTips();
+  const { plans } = usePlans();
+  const hasPlans = plans.length > 0;
+  const planLink = hasPlans ? "/plans" : "/plan/new";
 
   const handleRandomWorkout = async () => {
     if (isLoadingRandom) return;
@@ -105,12 +109,22 @@ export function HomePage() {
         </div>
 
         {/* CTA */}
-        <Button asChild size="lg" className="mt-4">
-          <Link to="/library">
-            {t("library:title")}
-            <ArrowRight className="ml-2 size-4" />
-          </Link>
-        </Button>
+        <div className="flex flex-wrap justify-center gap-3 mt-4">
+          <Button asChild size="lg">
+            <Link to="/library">
+              {t("library:title")}
+              <ArrowRight className="ml-2 size-4" />
+            </Link>
+          </Button>
+          <Button asChild size="lg" variant="outline">
+            <Link to={planLink}>
+              <CalendarRange className="mr-2 size-4" />
+              {hasPlans
+                ? (isEn ? "My plans" : "Mes plans")
+                : (isEn ? "Create a plan" : "Créer un plan")}
+            </Link>
+          </Button>
+        </div>
       </section>
 
       {/* Workout of the Day */}
@@ -141,8 +155,8 @@ export function HomePage() {
         {/* Tip of the Day */}
         {tip && <TipCard tip={tip} variant="banner" />}
 
-        {/* Quiz + Random - Side by side */}
-        <div className="grid grid-cols-2 gap-3">
+        {/* Quiz + Random + Plan */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
           {/* Quiz */}
           <Link to="/quiz">
             <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20 h-full hover:shadow-md transition-shadow">
@@ -181,6 +195,29 @@ export function HomePage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Training Plan */}
+          <Link to={planLink} className="col-span-2 lg:col-span-1">
+            <Card className="bg-gradient-to-r from-zone-3/10 to-zone-4/10 border-zone-3/20 h-full hover:shadow-md transition-shadow">
+              <CardContent className="flex flex-col items-center justify-center gap-2.5 py-5 sm:py-6 text-center">
+                <div className="rounded-full bg-zone-3/10 p-2.5 sm:p-3">
+                  <CalendarRange className="size-5 sm:size-6 text-zone-3" />
+                </div>
+                <div className="space-y-0.5">
+                  <p className="text-sm sm:text-base font-semibold">
+                    {hasPlans
+                      ? (isEn ? "My plans" : "Mes plans")
+                      : (isEn ? "Training plan" : "Plan d'entraînement")}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {hasPlans
+                      ? (isEn ? `${plans.length} plan${plans.length > 1 ? "s" : ""}` : `${plans.length} plan${plans.length > 1 ? "s" : ""}`)
+                      : (isEn ? "5K to Marathon · 8-24 weeks" : "5K au Marathon · 8-24 sem.")}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
       </div>
 

@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Training Plans
+- Training plan CTA button in hero section (adapts: "Create a plan" / "My plans")
+- Training plan card in homepage CTA grid alongside Quiz and Random cards
+- Adaptive behavior based on existing plans count (links to create or list)
+
+#### Library
+- Infinite scroll replacing "Show more" button using IntersectionObserver
+- New `useInfiniteScroll` reusable hook with sentinel-based auto-loading
+
 #### Changelog
 - Changelog page (`/changelog`) with version timeline and bilingual content (FR/EN)
 - "What's New" indicator in footer with localStorage-based version tracking
