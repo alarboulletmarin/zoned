@@ -7,22 +7,60 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-03-14
+
 ### Added
 
+#### Navigation
+- New collapsible sidebar navigation (Notion/Linear-style) with 3 states: expanded, collapsed, mobile sheet
+- Minimal top bar with logo, centered search, and quick actions
+- Sidebar with grouped sections (Training, Discover, Tools) and tooltips in collapsed mode
+- Smooth collapse/expand animation with unified CSS transitions
+- Sidebar state persistence (collapsed/expanded) in localStorage
+
+#### Community Contribution
+- Community contribution form with two modes (quick idea / full workout)
+- 4-step wizard to create detailed workouts with real-time preview
+- Automatic generation of pre-filled GitLab issues from the form
+- GitLab issue templates for workout submissions (quick idea and detailed)
+- Contribution guide (CONTRIBUTING.md) with conventions and instructions
+
 #### Training Plans
-- Training plan CTA button in hero section (adapts: "Create a plan" / "My plans")
-- Training plan card in homepage CTA grid alongside Quiz and Random cards
-- Adaptive behavior based on existing plans count (links to create or list)
+- Personalized training plan generator with multi-step wizard, phase management, and progressive volume
+- Training plan export to PDF and ICS (calendar)
+- Training plan CTA on homepage with adaptive behavior (links to create or list)
+
+#### Guides
+- 3 bilingual practical guides: runner's nutrition, race preparation, and warm-up routines
 
 #### Library
-- Infinite scroll replacing "Show more" button using IntersectionObserver
-- New `useInfiniteScroll` reusable hook with sentinel-based auto-loading
+- 17 new scientifically-grounded workouts (181 total)
+- 4 new assessment tests: Cooper, Conconi, Yasso 800s, MAF Maffetone
+- 5 new fartleks: Kenyan 1/1, descending, long distance 2/1, ascending ladder, whistle
+- 4 new recovery sessions: barefoot, aqua jogging, joint mobility, nature regeneration
+- 4 new hill sessions: explosive sprints, progressive gradient, rolling hills, downhill technique
+- Infinite scroll on library replacing "Show more" button
 
-#### Changelog
-- Changelog page (`/changelog`) with version timeline and bilingual content (FR/EN)
-- "What's New" indicator in footer with localStorage-based version tracking
-- Changelog link in header dropdown menu and mobile navigation
-- Structured changelog data layer with typed versions and change categories
+#### Features
+- Changelog page (`/changelog`) with version timeline and "What's New" indicator
+- Custom 404 page with navigation suggestions
+- Toast notifications for action feedback (exports, favorites, etc.)
+- Error Boundary component for graceful error handling
+
+### Changed
+
+- Replaced horizontal navigation with responsive vertical sidebar
+- Removed theme/language toggles from sidebar (already present in top bar)
+- Reduced logo size in top bar for better visual balance
+- Collections pages unified with flat minimal design
+- Dynamic imports for all pages (lazy loading)
+- Improved zone calculator validation
+- Pagination added to library
+
+### Fixed
+
+- Center search bar and logo in top bar (correct alignment on mobile, tablet and desktop)
+- Center icons in collapsed sidebar (removed ghost gap)
 
 ## [0.1.4] - 2026-02-13
 

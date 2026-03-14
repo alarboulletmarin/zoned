@@ -2,7 +2,7 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
-    version: "0.1.6",
+    version: "0.1.5",
     date: "2026-03-14",
     changes: {
       added: [
@@ -36,48 +36,6 @@ export const changelogVersions: ChangelogVersion[] = [
           category: "UX",
           categoryEn: "UX",
         },
-      ],
-      fixed: [
-        {
-          text: "Centrage de la barre de recherche et du logo dans la top bar (alignement correct sur mobile, tablette et desktop)",
-          textEn: "Center search bar and logo in top bar (correct alignment on mobile, tablet and desktop)",
-          category: "Navigation",
-          categoryEn: "Navigation",
-        },
-        {
-          text: "Centrage des icônes dans la sidebar en mode collapsed (suppression du gap fantôme)",
-          textEn: "Center icons in collapsed sidebar (removed ghost gap)",
-          category: "Navigation",
-          categoryEn: "Navigation",
-        },
-      ],
-      changed: [
-        {
-          text: "Suppression des boutons thème/langue de la sidebar (déjà présents dans la top bar)",
-          textEn: "Removed theme/language toggles from sidebar (already in top bar)",
-          category: "Navigation",
-          categoryEn: "Navigation",
-        },
-        {
-          text: "Réduction de la taille du logo dans la top bar pour un meilleur équilibre visuel",
-          textEn: "Reduced logo size in top bar for better visual balance",
-          category: "UX",
-          categoryEn: "UX",
-        },
-        {
-          text: "Remplacement de la navigation horizontale par une sidebar verticale responsive",
-          textEn: "Replaced horizontal navigation with a responsive vertical sidebar",
-          category: "Navigation",
-          categoryEn: "Navigation",
-        },
-      ],
-    },
-  },
-  {
-    version: "0.1.5",
-    date: "2026-03-14",
-    changes: {
-      added: [
         {
           text: "Formulaire de contribution communautaire avec deux modes (idée rapide / séance complète)",
           textEn:
@@ -146,6 +104,124 @@ export const changelogVersions: ChangelogVersion[] = [
             "4 new hill sessions: explosive sprints, progressive gradient, rolling hills, downhill technique",
           category: "Bibliothèque",
           categoryEn: "Library",
+        },
+        {
+          text: "Générateur de plans d'entraînement personnalisés avec wizard multi-étapes, gestion des phases et volume progressif",
+          textEn:
+            "Personalized training plan generator with multi-step wizard, phase management and progressive volume",
+          category: "Plans d'entraînement",
+          categoryEn: "Training Plans",
+        },
+        {
+          text: "Export des plans d'entraînement en PDF et ICS (calendrier)",
+          textEn: "Training plan export to PDF and ICS (calendar)",
+          category: "Plans d'entraînement",
+          categoryEn: "Training Plans",
+        },
+        {
+          text: "3 guides pratiques bilingues : nutrition du coureur, préparation avant course, et routines d'échauffement",
+          textEn:
+            "3 bilingual practical guides: runner's nutrition, race preparation, and warm-up routines",
+          category: "Guides",
+          categoryEn: "Guides",
+        },
+        {
+          text: "Page changelog avec timeline des versions et indicateur 'Quoi de neuf'",
+          textEn:
+            "Changelog page with version timeline and 'What's New' indicator",
+          category: "Fonctionnalités",
+          categoryEn: "Features",
+        },
+        {
+          text: "Page 404 personnalisée avec suggestions de navigation",
+          textEn: "Custom 404 page with navigation suggestions",
+          category: "Fonctionnalités",
+          categoryEn: "Features",
+        },
+        {
+          text: "Notifications toast pour les retours d'actions (exports, favoris, etc.)",
+          textEn:
+            "Toast notifications for action feedback (exports, favorites, etc.)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Composant Error Boundary pour la gestion gracieuse des erreurs",
+          textEn: "Error Boundary component for graceful error handling",
+          category: "Fonctionnalités",
+          categoryEn: "Features",
+        },
+        {
+          text: "Défilement infini sur la bibliothèque remplaçant le bouton 'Voir plus'",
+          textEn:
+            "Infinite scroll on library replacing 'Show more' button",
+          category: "Bibliothèque",
+          categoryEn: "Library",
+        },
+        {
+          text: "CTA Plans d'entraînement sur la page d'accueil avec comportement adaptatif",
+          textEn:
+            "Training plan CTA on homepage with adaptive behavior",
+          category: "Plans d'entraînement",
+          categoryEn: "Training Plans",
+        },
+      ],
+      changed: [
+        {
+          text: "Design des pages collections unifié avec style plat et minimaliste",
+          textEn: "Collections pages unified with flat minimal design",
+          category: "UI",
+          categoryEn: "UI",
+        },
+        {
+          text: "Imports dynamiques pour toutes les pages (lazy loading)",
+          textEn: "Dynamic imports for all pages (lazy loading)",
+          category: "Performance",
+          categoryEn: "Performance",
+        },
+        {
+          text: "Validation améliorée du calculateur de zones",
+          textEn: "Improved zone calculator validation",
+          category: "Outils",
+          categoryEn: "Tools",
+        },
+        {
+          text: "Pagination ajoutée à la bibliothèque",
+          textEn: "Pagination added to library",
+          category: "Bibliothèque",
+          categoryEn: "Library",
+        },
+        {
+          text: "Suppression des boutons thème/langue de la sidebar (déjà présents dans la top bar)",
+          textEn: "Removed theme/language toggles from sidebar (already in top bar)",
+          category: "Navigation",
+          categoryEn: "Navigation",
+        },
+        {
+          text: "Réduction de la taille du logo dans la top bar pour un meilleur équilibre visuel",
+          textEn: "Reduced logo size in top bar for better visual balance",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Remplacement de la navigation horizontale par une sidebar verticale responsive",
+          textEn: "Replaced horizontal navigation with a responsive vertical sidebar",
+          category: "Navigation",
+          categoryEn: "Navigation",
+        },
+      ],
+      fixed: [
+        {
+          text: "Centrage de la barre de recherche et du logo dans la top bar (alignement correct sur mobile, tablette et desktop)",
+          textEn: "Center search bar and logo in top bar (correct alignment on mobile, tablet and desktop)",
+          category: "Navigation",
+          categoryEn: "Navigation",
+        },
+        {
+          text: "Centrage des icônes dans la sidebar en mode collapsed (suppression du gap fantôme)",
+          textEn: "Center icons in collapsed sidebar (removed ghost gap)",
+          category: "Navigation",
+          categoryEn: "Navigation",
         },
       ],
     },
