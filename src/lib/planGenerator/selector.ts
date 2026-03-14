@@ -65,45 +65,60 @@ function getLoadFilter(slotType: string): RelativeLoad[] {
  * Estimate the actual duration of a workout from its blocks.
  * Falls back to typicalDuration if blocks don't have timing info.
  */
-function estimateWorkoutDuration(workout: WorkoutTemplate): number {
+/**
+ * Estimate block group duration from structured data.
+ */
+function estimateBlocksDuration(blocks: WorkoutBlock[]): number {
   let total = 0;
-  let hasBlockDurations = false;
-
-  const blocks: WorkoutBlock[] = [
-    ...(workout.warmupTemplate || []),
-    ...(workout.mainSetTemplate || []),
-    ...(workout.cooldownTemplate || []),
-  ];
+  let hasDurations = false;
 
   for (const block of blocks) {
     if (block.durationMin) {
       total += block.durationMin * (block.repetitions || 1);
-      hasBlockDurations = true;
+      hasDurations = true;
     } else if (block.distanceM) {
-      // Estimate duration from distance: ~5min/km average (including recovery)
       const distanceKm = block.distanceM / 1000;
       const reps = block.repetitions || 1;
       const runTimeMin = distanceKm * 5;
       const hasRecovery = block.recovery || block.rest;
       const recoveryMin = hasRecovery ? runTimeMin * 0.6 : 0;
       total += (runTimeMin + recoveryMin) * reps;
-      hasBlockDurations = true;
+      hasDurations = true;
     } else if (block.repetitions && block.repetitions > 1) {
-      // Interval block with reps but no explicit duration/distance
-      // Estimate ~2min per rep (work + recovery) for short intervals
       const hasRecovery = block.recovery || block.rest;
       const perRepMin = hasRecovery ? 2 : 1;
       total += perRepMin * block.repetitions;
-      hasBlockDurations = true;
+      hasDurations = true;
     }
   }
 
-  if (hasBlockDurations && total > 0) {
-    return Math.round(total);
+  return hasDurations ? total : -1; // -1 = no data
+}
+
+/**
+ * Estimate workout duration with volume scaling.
+ * Warmup and cooldown keep their full duration.
+ * Only the main set is scaled by volume percentage.
+ */
+function estimateWorkoutDuration(workout: WorkoutTemplate, volumePercent: number): number {
+  const warmupMin = estimateBlocksDuration(workout.warmupTemplate || []);
+  const mainMin = estimateBlocksDuration(workout.mainSetTemplate || []);
+  const cooldownMin = estimateBlocksDuration(workout.cooldownTemplate || []);
+
+  const hasData = warmupMin >= 0 || mainMin >= 0 || cooldownMin >= 0;
+
+  if (hasData) {
+    const warmup = Math.max(0, warmupMin);
+    const main = Math.max(0, mainMin);
+    const cooldown = Math.max(0, cooldownMin);
+    // Scale only the main set by volume %
+    const scaledMain = Math.round(main * (volumePercent / 100));
+    return Math.round(warmup + scaledMain + cooldown);
   }
 
-  // Fallback to typicalDuration
-  return Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2);
+  // Fallback to typicalDuration scaled by volume
+  const avg = (workout.typicalDuration.min + workout.typicalDuration.max) / 2;
+  return Math.round(avg * (volumePercent / 100));
 }
 
 // ── Internal selector ──────────────────────────────────────────────
@@ -219,9 +234,8 @@ function findBestWorkout(
 
   const workout = finalList[0];
 
-  // Use actual workout duration from blocks — don't scale by volume %
-  // Volume reduction comes from selecting lighter workouts, not shrinking durations
-  const estimatedDurationMin = estimateWorkoutDuration(workout);
+  // Scale only the main set by volume %, keep warmup/cooldown full duration
+  const estimatedDurationMin = estimateWorkoutDuration(workout, _volumePercent);
 
   return {
     workoutId: workout.id,
