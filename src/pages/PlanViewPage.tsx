@@ -477,7 +477,7 @@ export function PlanViewPage() {
 
                 {/* Week Sessions (expandable) */}
                 {isExpanded && (
-                  <div className="border-t px-4 pb-4 space-y-2">
+                  <div className="border-t px-4 py-4 space-y-2">
                     {week.sessions.length === 0 ? (
                       <p className="text-sm text-muted-foreground py-3">
                         {isEn
