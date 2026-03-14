@@ -6,7 +6,6 @@ import { useCommandPalette } from "@/components/search";
 import { changeLanguage, getCurrentLanguage } from "@/i18n";
 import Logo from "@/assets/logo.svg?react";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { cn } from "@/lib/utils";
 
 interface TopBarProps {
   theme: "light" | "dark";
@@ -15,7 +14,7 @@ interface TopBarProps {
   sidebarCollapsed?: boolean;
 }
 
-export function TopBar({ theme, onThemeToggle, onMobileMenuOpen, sidebarCollapsed }: TopBarProps) {
+export function TopBar({ theme, onThemeToggle, onMobileMenuOpen }: TopBarProps) {
   const { t } = useTranslation("common");
   const { openPalette } = useCommandPalette();
   const currentLang = getCurrentLanguage();
@@ -23,10 +22,10 @@ export function TopBar({ theme, onThemeToggle, onMobileMenuOpen, sidebarCollapse
 
   return (
     <header className="sticky top-0 z-50 h-12 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="flex h-full items-center px-4">
+      <div className="relative flex h-full items-center px-4">
         {isMobile ? (
-          /* Mobile: 3-column grid for true center alignment */
-          <div className="grid h-full w-full grid-cols-[auto_1fr_auto] items-center">
+          /* Mobile: absolute center for logo+title regardless of left/right asymmetry */
+          <div className="flex h-full w-full items-center">
             <Button
               variant="ghost"
               size="icon-sm"
@@ -39,13 +38,15 @@ export function TopBar({ theme, onThemeToggle, onMobileMenuOpen, sidebarCollapse
             <Link
               to="/"
               viewTransition
-              className="flex items-center justify-center gap-1.5"
+              className="absolute inset-0 flex items-center justify-center pointer-events-none"
             >
-              <Logo className="w-16 h-8" />
-              <span className="font-bold text-sm">{t("app.name")}</span>
+              <div className="pointer-events-auto flex items-center gap-1.5">
+                <Logo className="w-16 h-8" />
+                <span className="font-bold text-sm">{t("app.name")}</span>
+              </div>
             </Link>
 
-            <div className="flex items-center gap-0.5">
+            <div className="ml-auto flex items-center gap-0.5">
               <Button
                 variant="ghost"
                 size="icon-sm"
@@ -85,28 +86,24 @@ export function TopBar({ theme, onThemeToggle, onMobileMenuOpen, sidebarCollapse
               <span className="font-bold text-lg whitespace-nowrap">{t("app.name")}</span>
             </Link>
 
-            {/* Centered search - compensate sidebar width for viewport centering */}
-            <div className={cn(
-              "flex flex-1 justify-center transition-[margin] duration-300",
-              sidebarCollapsed === false && "-ml-24",
-              sidebarCollapsed === true && "-ml-6"
-            )}>
+            {/* Centered search - absolute positioning for true center regardless of logo/actions width */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={openPalette}
-                className="h-8 w-72 justify-start gap-2 text-muted-foreground"
+                className="pointer-events-auto h-8 w-48 lg:w-72 justify-start gap-2 text-muted-foreground"
               >
                 <Search className="size-3.5" />
                 <span className="text-sm">{t("actions.search")}</span>
-                <kbd className="pointer-events-none ml-auto hidden select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground sm:inline-flex">
+                <kbd className="pointer-events-none ml-auto hidden select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground lg:inline-flex">
                   <span className="text-xs">&#8984;</span>K
                 </kbd>
               </Button>
             </div>
 
             {/* Right actions */}
-            <div className="flex items-center gap-1">
+            <div className="ml-auto flex items-center gap-1">
               <Button
                 variant="ghost"
                 size="icon-sm"
