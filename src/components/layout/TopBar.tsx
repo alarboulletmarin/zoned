@@ -23,8 +23,8 @@ export function TopBar({ theme, onThemeToggle, onMobileMenuOpen }: TopBarProps) 
     <header className="sticky top-0 z-50 h-12 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-full items-center px-4">
         {isMobile ? (
-          /* Mobile: hamburger + logo center + actions right */
-          <>
+          /* Mobile: 3-column grid for true center alignment */
+          <div className="grid h-full w-full grid-cols-[auto_1fr_auto] items-center">
             <Button
               variant="ghost"
               size="icon-sm"
@@ -37,7 +37,7 @@ export function TopBar({ theme, onThemeToggle, onMobileMenuOpen }: TopBarProps) 
             <Link
               to="/"
               viewTransition
-              className="flex flex-1 items-center justify-center gap-1.5"
+              className="flex items-center justify-center gap-1.5"
             >
               <Logo className="w-16 h-8" />
               <span className="font-bold text-sm">{t("app.name")}</span>
@@ -69,7 +69,7 @@ export function TopBar({ theme, onThemeToggle, onMobileMenuOpen }: TopBarProps) 
                 {theme === "light" ? <Moon className="size-4" /> : <Sun className="size-4" />}
               </Button>
             </div>
-          </>
+          </div>
         ) : (
           /* Desktop / Tablet */
           <>

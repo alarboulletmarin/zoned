@@ -31,7 +31,6 @@ import {
 import { cn } from "@/lib/utils";
 import { changeLanguage, getCurrentLanguage } from "@/i18n";
 import { getRandomWorkout } from "@/data/workouts";
-import Logo from "@/assets/logo.svg?react";
 
 // ---------------------------------------------------------------------------
 // Types & Data
@@ -318,7 +317,7 @@ export function Sidebar({
   return (
     <aside
       className={cn(
-        "sticky top-12 hidden md:flex h-[calc(100vh-3rem)] flex-col border-r bg-background overflow-hidden",
+        "sticky top-0 hidden md:flex h-screen flex-col border-r bg-background overflow-hidden",
         "transition-[width] duration-300 ease-in-out",
         collapsed ? "w-[52px]" : "w-60",
         className
@@ -380,13 +379,10 @@ export function MobileSidebar({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="left" className="w-[280px] p-0">
-        <SheetHeader className="border-b px-4 py-3">
-          <SheetTitle className="flex items-center gap-2">
-            <Logo className="w-16 h-8" />
-            <span className="font-bold text-base">{t("app.name")}</span>
-          </SheetTitle>
+        <SheetHeader className="sr-only">
+          <SheetTitle>{t("actions.menu")}</SheetTitle>
         </SheetHeader>
-        <div className="h-[calc(100%-57px)]">
+        <div className="h-full">
           <SidebarContent
             collapsed={false}
             theme={theme}

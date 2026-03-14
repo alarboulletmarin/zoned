@@ -121,29 +121,31 @@ function App() {
           <BrowserRouter>
           <CommandPaletteProvider>
             <ScrollToTopOnNavigate />
-            <div className="min-h-screen bg-background text-foreground flex flex-col">
-              <TopBar
+            <div className="min-h-screen bg-background text-foreground flex">
+              {/* Sidebar - fixed left column */}
+              <Sidebar
+                collapsed={sidebarCollapsed}
+                onToggleCollapse={toggleSidebar}
                 theme={theme}
                 onThemeToggle={toggleTheme}
-                onMobileMenuOpen={() => setMobileSidebarOpen(true)}
               />
 
-              <div className="flex flex-1">
-                <Sidebar
-                  collapsed={sidebarCollapsed}
-                  onToggleCollapse={toggleSidebar}
+              <MobileSidebar
+                open={mobileSidebarOpen}
+                onOpenChange={setMobileSidebarOpen}
+                theme={theme}
+                onThemeToggle={toggleTheme}
+              />
+
+              {/* Right column: TopBar + content */}
+              <div className="flex flex-1 min-w-0 flex-col">
+                <TopBar
                   theme={theme}
                   onThemeToggle={toggleTheme}
+                  onMobileMenuOpen={() => setMobileSidebarOpen(true)}
                 />
 
-                <MobileSidebar
-                  open={mobileSidebarOpen}
-                  onOpenChange={setMobileSidebarOpen}
-                  theme={theme}
-                  onThemeToggle={toggleTheme}
-                />
-
-                <main className="flex-1 min-w-0 px-4 md:px-6 lg:px-8 py-4">
+                <main className="flex-1 px-4 md:px-6 lg:px-8 py-4">
                   <div className="mx-auto max-w-6xl">
                     <ErrorBoundary>
                       <Suspense fallback={<PageLoader />}>
@@ -178,9 +180,9 @@ function App() {
                     </ErrorBoundary>
                   </div>
                 </main>
-              </div>
 
-              <Footer />
+                <Footer />
+              </div>
             </div>
             <CommandPalette />
           </CommandPaletteProvider>
