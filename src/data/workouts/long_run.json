@@ -1009,6 +1009,106 @@
         ],
         "priorityScore": 85
       }
+    },
+    {
+      "id": "LR-013",
+      "name": "Sortie longue débutant",
+      "nameEn": "Beginner Long Run",
+      "description": "Sortie longue accessible pour les débutants. 50 à 60 minutes en Z2 continue pour construire progressivement la base aérobie.",
+      "descriptionEn": "Accessible long run for beginners. 50 to 60 minutes of continuous Z2 to progressively build aerobic base.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 50, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Marche rapide puis footing très lent", "descriptionEn": "Brisk walk then very slow jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course continue en Z2, pauses marche si nécessaire", "descriptionEn": "Continuous Z2 run, walk breaks if needed", "durationMin": 45, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour au calme et étirements", "descriptionEn": "Cool-down and stretching", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "L'objectif est la durée, pas la vitesse",
+        "Marchez si vous en avez besoin, c'est normal",
+        "Augmentez de 5 à 10 minutes par semaine",
+        "Emportez de l'eau si > 45 minutes"
+      ],
+      "coachingTipsEn": [
+        "The goal is duration, not speed",
+        "Walk if you need to, it's normal",
+        "Increase by 5 to 10 minutes per week",
+        "Bring water if > 45 minutes"
+      ],
+      "commonMistakes": [
+        "Vouloir aller trop vite dès le début",
+        "Augmenter la durée de plus de 10% par semaine"
+      ],
+      "commonMistakesEn": [
+        "Trying to go too fast from the start",
+        "Increasing duration by more than 10% per week"
+      ],
+      "variationIds": ["SL-003", "SL-008"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["late"],
+        "relativeLoad": "moderate",
+        "tags": ["progressive", "aerobic"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "LR-014",
+      "name": "Sortie longue courte",
+      "nameEn": "Short Long Run",
+      "description": "Version réduite de la sortie longue pour les semaines de taper ou de récupération. 40 à 50 minutes en Z2.",
+      "descriptionEn": "Reduced version of the long run for taper or recovery weeks. 40 to 50 minutes in Z2.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Départ très progressif", "descriptionEn": "Very gradual start", "durationMin": 5, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course continue en Z2 confortable", "descriptionEn": "Comfortable continuous Z2 run", "durationMin": 35, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour au calme et étirements", "descriptionEn": "Cool-down and stretching", "durationMin": 5, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Sortie longue allégée pour garder le rythme",
+        "Parfait pour les semaines de charge réduite",
+        "Ne compensez pas en courant plus vite",
+        "Terminez en vous sentant frais"
+      ],
+      "coachingTipsEn": [
+        "Lighter long run to maintain rhythm",
+        "Perfect for reduced-load weeks",
+        "Don't compensate by running faster",
+        "Finish feeling fresh"
+      ],
+      "commonMistakes": [
+        "Vouloir compenser la durée réduite par plus de vitesse",
+        "Confondre avec un footing classique (la SL courte reste un effort mental)"
+      ],
+      "commonMistakesEn": [
+        "Wanting to compensate for reduced duration with more speed",
+        "Confusing with a regular jog (the short long run is still a mental effort)"
+      ],
+      "variationIds": ["SL-003", "SL-012"],
+      "selectionCriteria": {
+        "phases": ["taper", "peak", "recovery"],
+        "weekPositions": ["late"],
+        "relativeLoad": "moderate",
+        "tags": ["taper", "short"],
+        "priorityScore": 70
+      }
     }
   ]
 }

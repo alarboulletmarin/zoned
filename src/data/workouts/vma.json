@@ -2651,6 +2651,99 @@
         ],
         "priorityScore": 85
       }
+    },
+    {
+      "id": "VMA-030",
+      "name": "VMA découverte",
+      "nameEn": "VO2max Discovery",
+      "description": "Introduction à la VMA pour débutants. 8 intervalles de 30 secondes à allure VMA avec 30 secondes de récupération. Format accessible pour découvrir l'intensité VO2max.",
+      "descriptionEn": "Introduction to VO2max for beginners. 8 intervals of 30 seconds at VO2max pace with 30 seconds recovery. Accessible format to discover VO2max intensity.",
+      "category": "vma_intervals",
+      "sessionType": "vo2max",
+      "targetSystem": "vo2max",
+      "difficulty": "beginner",
+      "typicalDuration": {
+        "min": 35,
+        "max": 45
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing lent avec éducatifs",
+          "descriptionEn": "Slow jog with running drills",
+          "durationMin": 10,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Étirements dynamiques et 3x accélérations progressives",
+          "descriptionEn": "Dynamic stretches and 3x progressive accelerations",
+          "durationMin": 5
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "8x 30s VMA / 30s récup footing",
+          "descriptionEn": "8x 30s VO2max / 30s recovery jog",
+          "zone": "Z5",
+          "repetitions": 8,
+          "recovery": "30s footing Z1"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération et étirements",
+          "descriptionEn": "Recovery jog and stretching",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Seulement 8 répétitions au lieu de 12 : volume réduit pour les débutants",
+        "Allure VMA = effort très intense mais tenable 30 secondes",
+        "La récupération de 30s est courte : restez en mouvement",
+        "Séance passerelle avant le 30/30 classique"
+      ],
+      "coachingTipsEn": [
+        "Only 8 repetitions instead of 12: reduced volume for beginners",
+        "VO2max pace = very intense but sustainable for 30 seconds",
+        "The 30s recovery is short: keep moving",
+        "Stepping-stone session before the classic 30/30"
+      ],
+      "commonMistakes": [
+        "Sprinter au lieu de courir à allure VMA",
+        "Partir trop vite et ne pas finir les 8 répétitions",
+        "S'arrêter complètement pendant la récupération"
+      ],
+      "commonMistakesEn": [
+        "Sprinting instead of running at VO2max pace",
+        "Starting too fast and not finishing all 8 repetitions",
+        "Stopping completely during recovery"
+      ],
+      "variationIds": [
+        "VMA-001",
+        "VMA-003"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "vma",
+          "beginner",
+          "discovery",
+          "30/30"
+        ],
+        "priorityScore": 80
+      }
     }
   ]
 }

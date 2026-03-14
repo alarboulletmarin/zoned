@@ -7,11 +7,18 @@ import frCommon from "./locales/fr/common.json";
 import frLibrary from "./locales/fr/library.json";
 import frSession from "./locales/fr/session.json";
 import frGlossary from "./locales/fr/glossary.json";
+import frContribute from "./locales/fr/contribute.json";
+import frPlan from "./locales/fr/plan.json";
 
 import enCommon from "./locales/en/common.json";
 import enLibrary from "./locales/en/library.json";
 import enSession from "./locales/en/session.json";
 import enGlossary from "./locales/en/glossary.json";
+import enContribute from "./locales/en/contribute.json";
+import enPlan from "./locales/en/plan.json";
+
+import frGuides from "./locales/fr/guides.json";
+import enGuides from "./locales/en/guides.json";
 
 // Resources object
 const resources = {
@@ -20,12 +27,18 @@ const resources = {
     library: frLibrary,
     session: frSession,
     glossary: frGlossary,
+    contribute: frContribute,
+    plan: frPlan,
+    guides: frGuides,
   },
   en: {
     common: enCommon,
     library: enLibrary,
     session: enSession,
     glossary: enGlossary,
+    contribute: enContribute,
+    plan: enPlan,
+    guides: enGuides,
   },
 };
 
@@ -39,7 +52,7 @@ i18n
     resources,
     fallbackLng: "fr",
     defaultNS: "common",
-    ns: ["common", "library", "session", "glossary"],
+    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides"],
 
     // Detection options
     detection: {

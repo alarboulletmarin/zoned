@@ -1664,6 +1664,66 @@
         ],
         "priorityScore": 55
       }
+    },
+    {
+      "id": "THR-019",
+      "name": "Seuil découverte",
+      "nameEn": "Threshold Introduction",
+      "description": "Introduction au travail au seuil pour les débutants. Trois répétitions de 5 minutes en Z4 avec récupération complète.",
+      "descriptionEn": "Introduction to threshold work for beginners. Three 5-minute repetitions in Z4 with complete recovery.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "lactate_threshold",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing lent progressif", "descriptionEn": "Slow progressive jog", "durationMin": 10, "zone": "Z1-Z2" },
+        { "description": "Étirements dynamiques et 3x accélérations progressives", "descriptionEn": "Dynamic stretches and 3x progressive accelerations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3x 5min au seuil (Z4) / 3min récup footing",
+          "descriptionEn": "3x 5min at threshold (Z4) / 3min recovery jog",
+          "durationMin": 5,
+          "zone": "Z4",
+          "repetitions": 3,
+          "recovery": "3min footing Z1"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération et étirements", "descriptionEn": "Recovery jog and stretching", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Z4 = effort intense mais tenable sur 5 minutes",
+        "La récupération de 3min permet de bien récupérer entre les efforts",
+        "Séance passerelle vers le seuil continu",
+        "Commencez par 3 répétitions puis ajoutez-en une par semaine"
+      ],
+      "coachingTipsEn": [
+        "Z4 = intense effort but sustainable for 5 minutes",
+        "The 3min recovery allows full recovery between efforts",
+        "Stepping-stone toward continuous threshold",
+        "Start with 3 repetitions then add one per week"
+      ],
+      "commonMistakes": [
+        "Courir en Z5 au lieu de Z4",
+        "Partir trop vite sur la première répétition",
+        "Raccourcir la récupération"
+      ],
+      "commonMistakesEn": [
+        "Running in Z5 instead of Z4",
+        "Starting too fast on the first repetition",
+        "Shortening the recovery"
+      ],
+      "variationIds": ["THR-001", "THR-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["introduction", "threshold"],
+        "priorityScore": 70
+      }
     }
   ]
 }

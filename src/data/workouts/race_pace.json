@@ -1576,6 +1576,272 @@
         ],
         "priorityScore": 85
       }
+    },
+    {
+      "id": "RP-017",
+      "name": "Découverte allure 5K",
+      "nameEn": "5K Pace Introduction",
+      "description": "Séance d'introduction à l'allure 5K. Trois répétitions courtes pour apprivoiser l'intensité spécifique sans surcharger.",
+      "descriptionEn": "Introduction to 5K pace. Three short repetitions to get familiar with race-specific intensity without overloading.",
+      "category": "race_pace",
+      "sessionType": "race_specific",
+      "targetSystem": "vo2max",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 35, "max": 45 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing lent progressif", "descriptionEn": "Slow progressive jog", "durationMin": 10, "zone": "Z1-Z2" },
+        { "description": "Étirements dynamiques et 3x accélérations progressives", "descriptionEn": "Dynamic stretches and 3x progressive accelerations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3x 3min à allure 5K / 3min récup footing",
+          "descriptionEn": "3x 3min at 5K pace / 3min easy recovery jog",
+          "durationMin": 3,
+          "zone": "Z4-Z5",
+          "pace": "Allure 5K",
+          "repetitions": 3,
+          "recovery": "3min footing Z1-Z2"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération et étirements", "descriptionEn": "Recovery jog and stretching", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Allure 5K = effort soutenu mais pas un sprint",
+        "La récupération de 3min permet de bien récupérer entre les efforts",
+        "Concentrez-vous sur un rythme régulier",
+        "Séance idéale pour découvrir sa vitesse spécifique"
+      ],
+      "coachingTipsEn": [
+        "5K pace = sustained effort but not a sprint",
+        "The 3min recovery allows full recovery between efforts",
+        "Focus on maintaining a steady rhythm",
+        "Ideal session for discovering your specific speed"
+      ],
+      "commonMistakes": [
+        "Partir trop vite sur la première répétition",
+        "Confondre allure 5K et sprint",
+        "Ne pas respecter le temps de récupération"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast on the first repetition",
+        "Confusing 5K pace with sprinting",
+        "Not respecting the recovery time"
+      ],
+      "variationIds": ["RP-004"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["5k", "specific", "introduction"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "RP-018",
+      "name": "Découverte allure 10K",
+      "nameEn": "10K Pace Introduction",
+      "description": "Initiation douce à l'allure spécifique 10K. Trois blocs de 5 minutes pour habituer le corps à l'effort soutenu.",
+      "descriptionEn": "Gentle introduction to 10K-specific pace. Three 5-minute blocks to accustom the body to sustained effort.",
+      "category": "race_pace",
+      "sessionType": "race_specific",
+      "targetSystem": "lactate_threshold",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing lent progressif", "descriptionEn": "Slow progressive jog", "durationMin": 10, "zone": "Z1-Z2" },
+        { "description": "Étirements dynamiques et 3x accélérations progressives", "descriptionEn": "Dynamic stretches and 3x progressive accelerations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3x 5min à allure 10K / 3min récup footing",
+          "descriptionEn": "3x 5min at 10K pace / 3min easy recovery jog",
+          "durationMin": 5,
+          "zone": "Z4",
+          "pace": "Allure 10K",
+          "repetitions": 3,
+          "recovery": "3min footing Z1-Z2"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération et étirements", "descriptionEn": "Recovery jog and stretching", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Allure 10K = environ 85-90% FCmax",
+        "Effort soutenu mais pas maximal",
+        "Les 3min de récup permettent de bien redescendre",
+        "Première étape avant les séances spé 10K plus longues"
+      ],
+      "coachingTipsEn": [
+        "10K pace = approximately 85-90% HRmax",
+        "Sustained effort but not maximal",
+        "The 3min recovery allows a good cooldown between efforts",
+        "First step before longer 10K-specific sessions"
+      ],
+      "commonMistakes": [
+        "Courir à allure 5K au lieu de 10K",
+        "Partir trop vite et ne pas tenir les 5 minutes",
+        "Récupérer en marchant au lieu de trottiner"
+      ],
+      "commonMistakesEn": [
+        "Running at 5K pace instead of 10K",
+        "Starting too fast and not holding the 5 minutes",
+        "Walking during recovery instead of jogging"
+      ],
+      "variationIds": ["RP-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["10k", "specific", "introduction"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "RP-019",
+      "name": "Initiation allure semi",
+      "nameEn": "Half Marathon Pace Introduction",
+      "description": "Découverte progressive de l'allure semi-marathon. Deux blocs de 10 minutes pour apprendre à gérer un effort prolongé.",
+      "descriptionEn": "Progressive introduction to half-marathon pace. Two 10-minute blocks to learn managing a prolonged effort.",
+      "category": "race_pace",
+      "sessionType": "race_specific",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 45, "max": 55 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing lent progressif", "descriptionEn": "Slow progressive jog", "durationMin": 10, "zone": "Z1-Z2" },
+        { "description": "Étirements dynamiques et 3x accélérations progressives", "descriptionEn": "Dynamic stretches and 3x progressive accelerations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "10min à allure semi-marathon",
+          "descriptionEn": "10min at half-marathon pace",
+          "durationMin": 10,
+          "zone": "Z3-Z4",
+          "pace": "Allure Semi"
+        },
+        {
+          "description": "Récupération footing",
+          "descriptionEn": "Easy jog recovery",
+          "durationMin": 5,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "10min à allure semi-marathon",
+          "descriptionEn": "10min at half-marathon pace",
+          "durationMin": 10,
+          "zone": "Z3-Z4",
+          "pace": "Allure Semi"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération et étirements", "descriptionEn": "Recovery jog and stretching", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Allure semi = effort contrôlé, respiration régulière",
+        "Vous devez pouvoir dire quelques mots entre les respirations",
+        "La récupération de 5min est importante : ne la raccourcissez pas",
+        "Séance passerelle vers les sorties longues à allure spécifique"
+      ],
+      "coachingTipsEn": [
+        "Half-marathon pace = controlled effort, regular breathing",
+        "You should be able to say a few words between breaths",
+        "The 5min recovery is important: don't shorten it",
+        "Stepping-stone session toward race-pace long runs"
+      ],
+      "commonMistakes": [
+        "Courir le premier bloc trop vite",
+        "Confondre allure semi et allure 10K",
+        "Ne pas assez s'échauffer avant l'effort"
+      ],
+      "commonMistakesEn": [
+        "Running the first block too fast",
+        "Confusing half-marathon pace with 10K pace",
+        "Not warming up enough before the effort"
+      ],
+      "variationIds": ["RP-003"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["half-marathon", "specific", "introduction"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "RP-020",
+      "name": "Initiation allure marathon",
+      "nameEn": "Marathon Pace Introduction",
+      "description": "Premiers pas à allure marathon. Deux blocs de 12 minutes pour apprendre le rythme de croisière marathon.",
+      "descriptionEn": "First steps at marathon pace. Two 12-minute blocks to learn the marathon cruising rhythm.",
+      "category": "race_pace",
+      "sessionType": "race_specific",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing lent progressif", "descriptionEn": "Slow progressive jog", "durationMin": 10, "zone": "Z1-Z2" },
+        { "description": "Étirements dynamiques et 3x accélérations progressives", "descriptionEn": "Dynamic stretches and 3x progressive accelerations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "12min à allure marathon",
+          "descriptionEn": "12min at marathon pace",
+          "durationMin": 12,
+          "zone": "Z3",
+          "pace": "Allure Marathon"
+        },
+        {
+          "description": "Récupération footing",
+          "descriptionEn": "Easy jog recovery",
+          "durationMin": 5,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "12min à allure marathon",
+          "descriptionEn": "12min at marathon pace",
+          "durationMin": 12,
+          "zone": "Z3",
+          "pace": "Allure Marathon"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération et étirements", "descriptionEn": "Recovery jog and stretching", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Allure marathon = confortable mais soutenue",
+        "Vous devez pouvoir tenir une conversation en phrases courtes",
+        "Mémorisez cette sensation : c'est votre vitesse de croisière",
+        "Séance fondatrice pour la préparation marathon"
+      ],
+      "coachingTipsEn": [
+        "Marathon pace = comfortable but sustained",
+        "You should be able to hold a conversation in short sentences",
+        "Memorize this feeling: it's your cruising speed",
+        "Foundation session for marathon preparation"
+      ],
+      "commonMistakes": [
+        "Courir trop vite, à allure semi au lieu de marathon",
+        "Ne pas utiliser de montre GPS pour calibrer l'allure",
+        "Raccourcir la récupération entre les blocs"
+      ],
+      "commonMistakesEn": [
+        "Running too fast, at half-marathon pace instead of marathon",
+        "Not using a GPS watch to calibrate pace",
+        "Shortening the recovery between blocks"
+      ],
+      "variationIds": ["RP-001"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid", "late"],
+        "relativeLoad": "moderate",
+        "tags": ["marathon", "specific", "introduction"],
+        "priorityScore": 75
+      }
     }
   ]
 }

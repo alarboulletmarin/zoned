@@ -1,0 +1,109 @@
+{
+  "title": "Plans d'entraînement",
+  "create": "Créer un plan",
+  "createTitle": "Nouveau plan d'entraînement",
+  "myPlans": "Mes plans",
+  "empty": {
+    "title": "Pas encore de plan",
+    "description": "Créez votre premier plan d'entraînement personnalisé",
+    "cta": "Créer mon premier plan"
+  },
+  "step": {
+    "distance": "Distance",
+    "date": "Date de course",
+    "name": "Nom de la course",
+    "level": "Niveau",
+    "config": "Configuration",
+    "pace": "Allure & Dénivelé",
+    "summary": "Récapitulatif"
+  },
+  "distance": {
+    "title": "Choisissez votre distance",
+    "subtitle": "Sélectionnez la distance de votre objectif"
+  },
+  "date": {
+    "title": "Date de votre course",
+    "subtitle": "Quand est votre course ?",
+    "weeks": "{{count}} semaines de préparation",
+    "tooSoon": "La date doit être dans au moins 8 semaines",
+    "tooFar": "La date ne peut pas dépasser 24 semaines"
+  },
+  "raceName": {
+    "title": "Nom de la course",
+    "subtitle": "Optionnel - donnez un nom à votre objectif",
+    "placeholder": "Ex: Marathon de Paris",
+    "skip": "Passer"
+  },
+  "level": {
+    "title": "Votre niveau",
+    "subtitle": "Sélectionnez votre niveau actuel",
+    "vmaSuggestion": "Basé sur votre VMA de {{vma}} km/h, nous suggérons :",
+    "beginner": "Débutant",
+    "intermediate": "Intermédiaire",
+    "advanced": "Avancé",
+    "elite": "Élite"
+  },
+  "config": {
+    "title": "Configuration",
+    "subtitle": "Personnalisez votre entraînement",
+    "daysPerWeek": "Jours par semaine",
+    "longRunDay": "Jour de sortie longue"
+  },
+  "pace": {
+    "title": "Allure & Dénivelé",
+    "subtitle": "Optionnel - précisez vos objectifs",
+    "targetPace": "Allure cible (min/km)",
+    "pacePlaceholder": "Ex: 5:30",
+    "estimatedTime": "Temps estimé : {{time}}",
+    "elevation": "Dénivelé positif (m)",
+    "elevationPlaceholder": "Ex: 500",
+    "skip": "Passer cette étape"
+  },
+  "summary": {
+    "title": "Récapitulatif",
+    "subtitle": "Vérifiez vos paramètres avant de générer",
+    "distance": "Distance",
+    "date": "Date",
+    "name": "Course",
+    "level": "Niveau",
+    "days": "Jours/semaine",
+    "longRun": "Sortie longue",
+    "pace": "Allure cible",
+    "elevation": "Dénivelé",
+    "generate": "Générer le plan",
+    "generating": "Génération en cours..."
+  },
+  "view": {
+    "title": "Mon plan",
+    "currentWeek": "Semaine en cours",
+    "phases": "Phases",
+    "sessions": "séances",
+    "duration": "{{min}} min",
+    "keySession": "Séance clé",
+    "raceDay": "Jour de course",
+    "racePrediction": "Temps estimé",
+    "delete": "Supprimer le plan",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce plan ?",
+    "export": "Exporter",
+    "exportPdf": "Exporter en PDF",
+    "exportIcs": "Ajouter au calendrier"
+  },
+  "card": {
+    "weeks": "{{current}}/{{total}} semaines",
+    "phase": "Phase : {{phase}}"
+  },
+  "days": {
+    "0": "Lundi",
+    "1": "Mardi",
+    "2": "Mercredi",
+    "3": "Jeudi",
+    "4": "Vendredi",
+    "5": "Samedi",
+    "6": "Dimanche"
+  },
+  "nav": {
+    "back": "Retour",
+    "next": "Suivant",
+    "step": "Étape {{current}} sur {{total}}"
+  }
+}

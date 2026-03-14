@@ -1389,6 +1389,76 @@
         ],
         "priorityScore": 80
       }
+    },
+    {
+      "id": "TMP-017",
+      "name": "Tempo découverte",
+      "nameEn": "Introduction Tempo",
+      "description": "Première expérience du tempo pour les débutants. Deux blocs de 8 minutes en Z3 pour découvrir l'effort soutenu.",
+      "descriptionEn": "First tempo experience for beginners. Two 8-minute blocks in Z3 to discover sustained effort.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "lactate_threshold",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing lent progressif", "descriptionEn": "Slow progressive jog", "durationMin": 10, "zone": "Z1-Z2" },
+        { "description": "Étirements dynamiques et 3x accélérations progressives", "descriptionEn": "Dynamic stretches and 3x progressive accelerations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "8min tempo Z3",
+          "descriptionEn": "8min tempo Z3",
+          "durationMin": 8,
+          "zone": "Z3"
+        },
+        {
+          "description": "Récupération footing",
+          "descriptionEn": "Easy jog recovery",
+          "durationMin": 3,
+          "zone": "Z1"
+        },
+        {
+          "description": "8min tempo Z3",
+          "descriptionEn": "8min tempo Z3",
+          "durationMin": 8,
+          "zone": "Z3"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération et étirements", "descriptionEn": "Recovery jog and stretching", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Z3 = effort soutenu mais contrôlable",
+        "Vous devez pouvoir prononcer des phrases courtes",
+        "Séance passerelle vers le tempo classique de 20-25min",
+        "Progressez de 2min par semaine sur chaque bloc"
+      ],
+      "coachingTipsEn": [
+        "Z3 = sustained but manageable effort",
+        "You should be able to speak short sentences",
+        "Stepping-stone toward the classic 20-25min tempo",
+        "Progress by 2min per week on each block"
+      ],
+      "commonMistakes": [
+        "Courir en Z4 au lieu de Z3",
+        "Vouloir allonger les blocs trop rapidement",
+        "Ne pas respecter la récupération de 3 minutes"
+      ],
+      "commonMistakesEn": [
+        "Running in Z4 instead of Z3",
+        "Wanting to extend the blocks too quickly",
+        "Not respecting the 3-minute recovery"
+      ],
+      "variationIds": ["TMP-001", "TMP-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["introduction", "sustained"],
+        "priorityScore": 70
+      }
     }
   ]
 }

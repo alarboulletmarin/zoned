@@ -1,0 +1,29 @@
+{
+  "backToGuides": "Back to guides",
+  "guides": {
+    "title": "Guides",
+    "subtitle": "Resources to improve"
+  },
+  "nutrition": {
+    "title": "Nutrition",
+    "description": "Nutrition, hydration and race fueling"
+  },
+  "racePrep": {
+    "title": "Race Preparation",
+    "subtitle": "Everything you need to perform on race day",
+    "description": "Checklist, strategy, recovery",
+    "recoveryTimelines": "Recovery Timelines",
+    "recoveryTimelinesDescription": "Recommended recovery periods by race distance",
+    "days": "days"
+  },
+  "warmup": {
+    "title": "Warm-up & Cool-down",
+    "subtitle": "Routines, stretching and activation drills",
+    "description": "Warm-up routines and stretching",
+    "routines": "Warm-up Routines",
+    "selectRoutine": "Select a routine"
+  },
+  "explore": "Explore",
+  "rep": "rep",
+  "min": "min"
+}

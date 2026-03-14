@@ -1,0 +1,109 @@
+{
+  "title": "Training Plans",
+  "create": "Create a plan",
+  "createTitle": "New training plan",
+  "myPlans": "My plans",
+  "empty": {
+    "title": "No plans yet",
+    "description": "Create your first personalized training plan",
+    "cta": "Create my first plan"
+  },
+  "step": {
+    "distance": "Distance",
+    "date": "Race date",
+    "name": "Race name",
+    "level": "Level",
+    "config": "Configuration",
+    "pace": "Pace & Elevation",
+    "summary": "Summary"
+  },
+  "distance": {
+    "title": "Choose your distance",
+    "subtitle": "Select your goal distance"
+  },
+  "date": {
+    "title": "Your race date",
+    "subtitle": "When is your race?",
+    "weeks": "{{count}} weeks of preparation",
+    "tooSoon": "The date must be at least 8 weeks away",
+    "tooFar": "The date cannot exceed 24 weeks"
+  },
+  "raceName": {
+    "title": "Race name",
+    "subtitle": "Optional - give your goal a name",
+    "placeholder": "E.g.: Boston Marathon",
+    "skip": "Skip"
+  },
+  "level": {
+    "title": "Your level",
+    "subtitle": "Select your current level",
+    "vmaSuggestion": "Based on your VMA of {{vma}} km/h, we suggest:",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "elite": "Elite"
+  },
+  "config": {
+    "title": "Configuration",
+    "subtitle": "Customize your training",
+    "daysPerWeek": "Days per week",
+    "longRunDay": "Long run day"
+  },
+  "pace": {
+    "title": "Pace & Elevation",
+    "subtitle": "Optional - specify your goals",
+    "targetPace": "Target pace (min/km)",
+    "pacePlaceholder": "E.g.: 5:30",
+    "estimatedTime": "Estimated time: {{time}}",
+    "elevation": "Elevation gain (m)",
+    "elevationPlaceholder": "E.g.: 500",
+    "skip": "Skip this step"
+  },
+  "summary": {
+    "title": "Summary",
+    "subtitle": "Review your settings before generating",
+    "distance": "Distance",
+    "date": "Date",
+    "name": "Race",
+    "level": "Level",
+    "days": "Days/week",
+    "longRun": "Long run",
+    "pace": "Target pace",
+    "elevation": "Elevation",
+    "generate": "Generate plan",
+    "generating": "Generating..."
+  },
+  "view": {
+    "title": "My plan",
+    "currentWeek": "Current week",
+    "phases": "Phases",
+    "sessions": "sessions",
+    "duration": "{{min}} min",
+    "keySession": "Key session",
+    "raceDay": "Race day",
+    "racePrediction": "Estimated time",
+    "delete": "Delete plan",
+    "deleteConfirm": "Are you sure you want to delete this plan?",
+    "export": "Export",
+    "exportPdf": "Export as PDF",
+    "exportIcs": "Add to calendar"
+  },
+  "card": {
+    "weeks": "{{current}}/{{total}} weeks",
+    "phase": "Phase: {{phase}}"
+  },
+  "days": {
+    "0": "Monday",
+    "1": "Tuesday",
+    "2": "Wednesday",
+    "3": "Thursday",
+    "4": "Friday",
+    "5": "Saturday",
+    "6": "Sunday"
+  },
+  "nav": {
+    "back": "Back",
+    "next": "Next",
+    "step": "Step {{current}} of {{total}}"
+  }
+}

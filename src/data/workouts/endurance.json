@@ -583,6 +583,102 @@
         "tags": ["endurance", "mental", "tough"],
         "priorityScore": 45
       }
+    },
+    {
+      "id": "END-013",
+      "name": "Footing de maintien",
+      "nameEn": "Maintenance Jog",
+      "description": "Footing court et facile en Z2 pour les phases de taper et récupération. Maintient la forme sans accumuler de fatigue.",
+      "descriptionEn": "Short and easy Z2 jog for taper and recovery phases. Maintains fitness without accumulating fatigue.",
+      "category": "endurance",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 30, "max": 35 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Marche rapide puis footing très lent", "descriptionEn": "Brisk walking then very slow jog", "durationMin": 5, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Footing continu en Z2 bas", "descriptionEn": "Continuous jog in low Z2", "durationMin": 25, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour au calme et étirements légers", "descriptionEn": "Cool-down and light stretching", "durationMin": 5, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Séance volontairement courte pour préserver la fraîcheur",
+        "Idéal en semaine de taper ou après un bloc intense",
+        "Ne cherchez pas à progresser, juste à maintenir"
+      ],
+      "coachingTipsEn": [
+        "Deliberately short session to preserve freshness",
+        "Ideal during taper week or after an intense block",
+        "Don't seek to improve, just maintain"
+      ],
+      "commonMistakes": [
+        "Vouloir allonger la sortie par culpabilité",
+        "Courir trop vite pour une séance de maintien"
+      ],
+      "commonMistakesEn": [
+        "Wanting to extend the run out of guilt",
+        "Running too fast for a maintenance session"
+      ],
+      "variationIds": ["END-001", "END-008"],
+      "selectionCriteria": {
+        "phases": ["taper", "recovery", "base"],
+        "weekPositions": ["early", "mid", "late"],
+        "relativeLoad": "light",
+        "tags": ["easy", "maintenance", "taper"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "END-014",
+      "name": "Sortie aérobie légère",
+      "nameEn": "Light Aerobic Run",
+      "description": "Footing de 40 minutes en Z2 stable pour les périodes de taper et récupération. Maintient les adaptations aérobies acquises.",
+      "descriptionEn": "40-minute steady Z2 jog for taper and recovery periods. Maintains acquired aerobic adaptations.",
+      "category": "endurance",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 40, "max": 45 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing lent", "descriptionEn": "Slow jog", "durationMin": 5, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Course continue Z2 stable", "descriptionEn": "Steady continuous Z2 run", "durationMin": 35, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour en Z1 et étirements", "descriptionEn": "Return in Z1 and stretching", "durationMin": 5, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Restez dans le bas de Z2, pas de dérive cardiaque",
+        "Parfait pour garder le rythme en semaine de taper",
+        "Profitez de cette séance pour tester votre récupération"
+      ],
+      "coachingTipsEn": [
+        "Stay in low Z2, avoid cardiac drift",
+        "Perfect for keeping rhythm during taper week",
+        "Use this session to assess your recovery"
+      ],
+      "commonMistakes": [
+        "Transformer en séance d'endurance classique (trop long)",
+        "Courir en Z3 par habitude"
+      ],
+      "commonMistakesEn": [
+        "Turning it into a classic endurance session (too long)",
+        "Running in Z3 out of habit"
+      ],
+      "variationIds": ["END-001", "END-013"],
+      "selectionCriteria": {
+        "phases": ["taper", "recovery"],
+        "weekPositions": ["early", "mid"],
+        "relativeLoad": "light",
+        "tags": ["easy", "maintenance", "taper"],
+        "priorityScore": 70
+      }
     }
   ]
 }

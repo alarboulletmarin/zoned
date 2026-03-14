@@ -1,0 +1,29 @@
+{
+  "backToGuides": "Retour aux guides",
+  "guides": {
+    "title": "Guides",
+    "subtitle": "Ressources pour progresser"
+  },
+  "nutrition": {
+    "title": "Nutrition",
+    "description": "Alimentation, hydratation et ravitaillement en course"
+  },
+  "racePrep": {
+    "title": "Preparation Course",
+    "subtitle": "Tout ce qu'il faut pour performer le jour J",
+    "description": "Checklist, strategie, recuperation",
+    "recoveryTimelines": "Timelines de recuperation",
+    "recoveryTimelinesDescription": "Periodes de recuperation recommandees par distance de course",
+    "days": "jours"
+  },
+  "warmup": {
+    "title": "Echauffement & Retour au Calme",
+    "subtitle": "Routines, etirements et exercices d'activation",
+    "description": "Routines d'echauffement et etirements",
+    "routines": "Routines d'echauffement",
+    "selectRoutine": "Selectionnez une routine"
+  },
+  "explore": "Explorer",
+  "rep": "rep",
+  "min": "min"
+}

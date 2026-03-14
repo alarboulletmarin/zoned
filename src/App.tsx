@@ -27,6 +27,13 @@ const SettingsPage = lazy(() => import("@/pages/SettingsPage").then(m => ({ defa
 const CollectionsPage = lazy(() => import("@/pages/CollectionsPage").then(m => ({ default: m.CollectionsPage })));
 const CollectionDetailPage = lazy(() => import("@/pages/CollectionDetailPage").then(m => ({ default: m.CollectionDetailPage })));
 const ChangelogPage = lazy(() => import("@/pages/ChangelogPage").then(m => ({ default: m.ChangelogPage })));
+const PlansPage = lazy(() => import("@/pages/PlansPage").then(m => ({ default: m.PlansPage })));
+const PlanCreatePage = lazy(() => import("@/pages/PlanCreatePage").then(m => ({ default: m.PlanCreatePage })));
+const PlanViewPage = lazy(() => import("@/pages/PlanViewPage").then(m => ({ default: m.PlanViewPage })));
+const NutritionGuidePage = lazy(() => import("@/pages/NutritionGuidePage").then(m => ({ default: m.NutritionGuidePage })));
+const GuidesPage = lazy(() => import("@/pages/GuidesPage").then(m => ({ default: m.GuidesPage })));
+const RacePrepGuidePage = lazy(() => import("@/pages/RacePrepGuidePage").then(m => ({ default: m.RacePrepGuidePage })));
+const WarmupGuidePage = lazy(() => import("@/pages/WarmupGuidePage").then(m => ({ default: m.WarmupGuidePage })));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
 
 function ScrollToTopOnNavigate() {
@@ -120,6 +127,14 @@ function App() {
                       <Route path="/glossary" element={<GlossaryPage />} />
                       <Route path="/glossary/:id" element={<GlossaryTermPage />} />
                       <Route path="/changelog" element={<ChangelogPage />} />
+                      <Route path="/guides" element={<GuidesPage />} />
+                      <Route path="/guides/nutrition" element={<NutritionGuidePage />} />
+                      <Route path="/guides/race-prep" element={<RacePrepGuidePage />} />
+                      <Route path="/guides/warmup" element={<WarmupGuidePage />} />
+                      <Route path="/nutrition" element={<NutritionGuidePage />} />
+                      <Route path="/plans" element={<PlansPage />} />
+                      <Route path="/plan/new" element={<PlanCreatePage />} />
+                      <Route path="/plan/:id" element={<PlanViewPage />} />
                       <Route path="*" element={<NotFoundPage />} />
                     </Routes>
                   </Suspense>
