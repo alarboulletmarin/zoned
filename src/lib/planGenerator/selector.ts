@@ -115,7 +115,7 @@ function findBestWorkout(
   raceDistance: RaceDistance,
   allWorkouts: WorkoutTemplate[],
   usedWorkoutIds: string[],
-  volumePercent: number,
+  _volumePercent: number,
   slotType: string,
   _elevationGain?: number,
 ): WorkoutSelection | null {
@@ -219,13 +219,13 @@ function findBestWorkout(
 
   const workout = finalList[0];
 
-  // Calculate duration based on actual block durations and volume
-  const baseDuration = estimateWorkoutDuration(workout);
-  const estimatedDurationMin = Math.round(baseDuration * (volumePercent / 100));
+  // Use actual workout duration from blocks — don't scale by volume %
+  // Volume reduction comes from selecting lighter workouts, not shrinking durations
+  const estimatedDurationMin = estimateWorkoutDuration(workout);
 
   return {
     workoutId: workout.id,
-    estimatedDurationMin: Math.max(20, estimatedDurationMin), // Minimum 20min
+    estimatedDurationMin: Math.max(20, estimatedDurationMin),
   };
 }
 
