@@ -126,6 +126,26 @@ export function ExternalLink({ className, size = 24 }: IconProps) {
   );
 }
 
+export function PanelLeftClose({ className, size = 24 }: IconProps) {
+  return (
+    <svg {...defaultProps} width={size} height={size} className={className}>
+      <rect width="18" height="18" x="3" y="3" rx="2" />
+      <path d="M9 3v18" />
+      <path d="m16 15-3-3 3-3" />
+    </svg>
+  );
+}
+
+export function PanelLeftOpen({ className, size = 24 }: IconProps) {
+  return (
+    <svg {...defaultProps} width={size} height={size} className={className}>
+      <rect width="18" height="18" x="3" y="3" rx="2" />
+      <path d="M9 3v18" />
+      <path d="m14 9 3 3-3 3" />
+    </svg>
+  );
+}
+
 export function LayoutGrid({ className, size = 24 }: IconProps) {
   return (
     <svg {...defaultProps} width={size} height={size} className={className}>

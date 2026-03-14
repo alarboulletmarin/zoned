@@ -105,7 +105,8 @@
     "settings": "Paramètres",
     "changelog": "Nouveautés",
     "plans": "Plans",
-    "discover": "Découvrir"
+    "discover": "Découvrir",
+    "training": "Entraînement"
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",

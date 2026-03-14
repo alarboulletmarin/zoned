@@ -2,6 +2,52 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.1.6",
+    date: "2026-03-14",
+    changes: {
+      added: [
+        {
+          text: "Nouvelle navigation sidebar collapsible style Notion/Linear avec 3 états (expanded, collapsed, mobile sheet)",
+          textEn: "New collapsible sidebar navigation Notion/Linear-style with 3 states (expanded, collapsed, mobile sheet)",
+          category: "Navigation",
+          categoryEn: "Navigation",
+        },
+        {
+          text: "Top bar minimaliste avec logo, recherche centrée et actions rapides",
+          textEn: "Minimal top bar with logo, centered search and quick actions",
+          category: "Navigation",
+          categoryEn: "Navigation",
+        },
+        {
+          text: "Sidebar avec sections groupées (Entraînement, Découvrir, Outils) et tooltips en mode collapsed",
+          textEn: "Sidebar with grouped sections (Training, Discover, Tools) and tooltips in collapsed mode",
+          category: "Navigation",
+          categoryEn: "Navigation",
+        },
+        {
+          text: "Animation fluide de collapse/expand avec transitions CSS unifiées",
+          textEn: "Smooth collapse/expand animation with unified CSS transitions",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Persistance de l'état sidebar (collapsed/expanded) dans localStorage",
+          textEn: "Sidebar state persistence (collapsed/expanded) in localStorage",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      changed: [
+        {
+          text: "Remplacement de la navigation horizontale par une sidebar verticale responsive",
+          textEn: "Replaced horizontal navigation with a responsive vertical sidebar",
+          category: "Navigation",
+          categoryEn: "Navigation",
+        },
+      ],
+    },
+  },
+  {
     version: "0.1.5",
     date: "2026-03-14",
     changes: {

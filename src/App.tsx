@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { useState, useEffect, useRef, lazy, Suspense } from "react";
+import { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "sonner";
-import { Header, Footer } from "@/components/layout";
+import { Sidebar, MobileSidebar, TopBar, Footer } from "@/components/layout";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { PageLoader } from "@/components/ui/page-loader";
 import { FavoritesProvider } from "@/hooks";
@@ -97,6 +97,23 @@ function App() {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
+  // Sidebar state with localStorage persistence
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    const stored = localStorage.getItem("zoned-sidebar-collapsed");
+    if (stored !== null) return stored === "true";
+    return typeof window !== "undefined" && window.innerWidth < 1024;
+  });
+
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
+  const toggleSidebar = useCallback(() => {
+    setSidebarCollapsed((prev) => {
+      const next = !prev;
+      localStorage.setItem("zoned-sidebar-collapsed", String(next));
+      return next;
+    });
+  }, []);
+
   return (
     <HelmetProvider>
       <SettingsProvider>
@@ -105,41 +122,63 @@ function App() {
           <CommandPaletteProvider>
             <ScrollToTopOnNavigate />
             <div className="min-h-screen bg-background text-foreground flex flex-col">
-              <Header theme={theme} onThemeToggle={toggleTheme} />
+              <TopBar
+                theme={theme}
+                onThemeToggle={toggleTheme}
+                onMobileMenuOpen={() => setMobileSidebarOpen(true)}
+              />
 
-              <main className="flex-1 container mx-auto px-4">
-                <ErrorBoundary>
-                  <Suspense fallback={<PageLoader />}>
-                    <Routes>
-                      <Route path="/" element={<HomePage />} />
-                      <Route path="/library" element={<LibraryPage />} />
-                      <Route path="/workout/:id" element={<WorkoutDetailPage />} />
-                      <Route path="/my-zones" element={<MyZonesPage />} />
-                      <Route path="/settings" element={<SettingsPage />} />
-                      <Route path="/favorites" element={<FavoritesPage />} />
-                      <Route path="/quiz" element={<QuizPage />} />
-                      <Route path="/contribute" element={<ContributePage />} />
-                      <Route path="/about" element={<AboutPage />} />
-                      <Route path="/learn" element={<LearnPage />} />
-                      <Route path="/learn/:slug" element={<ArticlePage />} />
-                      <Route path="/collections" element={<CollectionsPage />} />
-                      <Route path="/collections/:slug" element={<CollectionDetailPage />} />
-                      <Route path="/glossary" element={<GlossaryPage />} />
-                      <Route path="/glossary/:id" element={<GlossaryTermPage />} />
-                      <Route path="/changelog" element={<ChangelogPage />} />
-                      <Route path="/guides" element={<GuidesPage />} />
-                      <Route path="/guides/nutrition" element={<NutritionGuidePage />} />
-                      <Route path="/guides/race-prep" element={<RacePrepGuidePage />} />
-                      <Route path="/guides/warmup" element={<WarmupGuidePage />} />
-                      <Route path="/nutrition" element={<NutritionGuidePage />} />
-                      <Route path="/plans" element={<PlansPage />} />
-                      <Route path="/plan/new" element={<PlanCreatePage />} />
-                      <Route path="/plan/:id" element={<PlanViewPage />} />
-                      <Route path="*" element={<NotFoundPage />} />
-                    </Routes>
-                  </Suspense>
-                </ErrorBoundary>
-              </main>
+              <div className="flex flex-1">
+                <Sidebar
+                  collapsed={sidebarCollapsed}
+                  onToggleCollapse={toggleSidebar}
+                  theme={theme}
+                  onThemeToggle={toggleTheme}
+                />
+
+                <MobileSidebar
+                  open={mobileSidebarOpen}
+                  onOpenChange={setMobileSidebarOpen}
+                  theme={theme}
+                  onThemeToggle={toggleTheme}
+                />
+
+                <main className="flex-1 min-w-0 px-4 md:px-6 lg:px-8 py-4">
+                  <div className="mx-auto max-w-6xl">
+                    <ErrorBoundary>
+                      <Suspense fallback={<PageLoader />}>
+                        <Routes>
+                          <Route path="/" element={<HomePage />} />
+                          <Route path="/library" element={<LibraryPage />} />
+                          <Route path="/workout/:id" element={<WorkoutDetailPage />} />
+                          <Route path="/my-zones" element={<MyZonesPage />} />
+                          <Route path="/settings" element={<SettingsPage />} />
+                          <Route path="/favorites" element={<FavoritesPage />} />
+                          <Route path="/quiz" element={<QuizPage />} />
+                          <Route path="/contribute" element={<ContributePage />} />
+                          <Route path="/about" element={<AboutPage />} />
+                          <Route path="/learn" element={<LearnPage />} />
+                          <Route path="/learn/:slug" element={<ArticlePage />} />
+                          <Route path="/collections" element={<CollectionsPage />} />
+                          <Route path="/collections/:slug" element={<CollectionDetailPage />} />
+                          <Route path="/glossary" element={<GlossaryPage />} />
+                          <Route path="/glossary/:id" element={<GlossaryTermPage />} />
+                          <Route path="/changelog" element={<ChangelogPage />} />
+                          <Route path="/guides" element={<GuidesPage />} />
+                          <Route path="/guides/nutrition" element={<NutritionGuidePage />} />
+                          <Route path="/guides/race-prep" element={<RacePrepGuidePage />} />
+                          <Route path="/guides/warmup" element={<WarmupGuidePage />} />
+                          <Route path="/nutrition" element={<NutritionGuidePage />} />
+                          <Route path="/plans" element={<PlansPage />} />
+                          <Route path="/plan/new" element={<PlanCreatePage />} />
+                          <Route path="/plan/:id" element={<PlanViewPage />} />
+                          <Route path="*" element={<NotFoundPage />} />
+                        </Routes>
+                      </Suspense>
+                    </ErrorBoundary>
+                  </div>
+                </main>
+              </div>
 
               <Footer />
             </div>

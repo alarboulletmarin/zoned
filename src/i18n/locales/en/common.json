@@ -105,7 +105,8 @@
     "settings": "Settings",
     "changelog": "What's New",
     "plans": "Plans",
-    "discover": "Discover"
+    "discover": "Discover",
+    "training": "Training"
   },
   "errors": {
     "workoutNotFound": "Workout not found",
