@@ -17,6 +17,7 @@ const WorkoutDetailPage = lazy(() => import("@/pages/WorkoutDetailPage").then(m 
 const MyZonesPage = lazy(() => import("@/pages/MyZonesPage").then(m => ({ default: m.MyZonesPage })));
 const FavoritesPage = lazy(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
 const QuizPage = lazy(() => import("@/pages/QuizPage").then(m => ({ default: m.QuizPage })));
+const ContributePage = lazy(() => import("@/pages/ContributePage").then(m => ({ default: m.ContributePage })));
 const AboutPage = lazy(() => import("@/pages/AboutPage").then(m => ({ default: m.AboutPage })));
 const LearnPage = lazy(() => import("@/pages/LearnPage").then(m => ({ default: m.LearnPage })));
 const ArticlePage = lazy(() => import("@/pages/ArticlePage").then(m => ({ default: m.ArticlePage })));
@@ -25,6 +26,7 @@ const GlossaryTermPage = lazy(() => import("@/pages/GlossaryTermPage").then(m =>
 const SettingsPage = lazy(() => import("@/pages/SettingsPage").then(m => ({ default: m.SettingsPage })));
 const CollectionsPage = lazy(() => import("@/pages/CollectionsPage").then(m => ({ default: m.CollectionsPage })));
 const CollectionDetailPage = lazy(() => import("@/pages/CollectionDetailPage").then(m => ({ default: m.CollectionDetailPage })));
+const ChangelogPage = lazy(() => import("@/pages/ChangelogPage").then(m => ({ default: m.ChangelogPage })));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
 
 function ScrollToTopOnNavigate() {
@@ -109,6 +111,7 @@ function App() {
                       <Route path="/settings" element={<SettingsPage />} />
                       <Route path="/favorites" element={<FavoritesPage />} />
                       <Route path="/quiz" element={<QuizPage />} />
+                      <Route path="/contribute" element={<ContributePage />} />
                       <Route path="/about" element={<AboutPage />} />
                       <Route path="/learn" element={<LearnPage />} />
                       <Route path="/learn/:slug" element={<ArticlePage />} />
@@ -116,6 +119,7 @@ function App() {
                       <Route path="/collections/:slug" element={<CollectionDetailPage />} />
                       <Route path="/glossary" element={<GlossaryPage />} />
                       <Route path="/glossary/:id" element={<GlossaryTermPage />} />
+                      <Route path="/changelog" element={<ChangelogPage />} />
                       <Route path="*" element={<NotFoundPage />} />
                     </Routes>
                   </Suspense>

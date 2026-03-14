@@ -1,0 +1,772 @@
+import type { ChangelogVersion } from "./types";
+
+export const changelogVersions: ChangelogVersion[] = [
+  {
+    version: "0.1.4",
+    date: "2026-02-13",
+    changes: {
+      added: [
+        {
+          text: "12 collections thématiques de séances (débutant, anti-stress, retour de blessure, pré/post-course, objectifs 5K/10K/semi/marathon/ultra, séances légendaires, progression VO2max)",
+          textEn:
+            "12 curated thematic workout collections (beginner, anti-stress, injury comeback, pre/post-race, 5K/10K/half/marathon/ultra goals, legendary workouts, VO2max progression)",
+          category: "Collections",
+          categoryEn: "Collections",
+        },
+        {
+          text: "Page de listing des collections avec grille responsive",
+          textEn: "Collections listing page with responsive grid layout",
+          category: "Collections",
+          categoryEn: "Collections",
+        },
+        {
+          text: "Page de détail de collection avec hero en gradient et numérotation des étapes",
+          textEn:
+            "Collection detail page with gradient hero, step numbering for progression paths",
+          category: "Collections",
+          categoryEn: "Collections",
+        },
+        {
+          text: "Section collections mises en avant sur la page d'accueil",
+          textEn: "Featured collections section on homepage",
+          category: "Collections",
+          categoryEn: "Collections",
+        },
+        {
+          text: "Lien de navigation dans le header (desktop + mobile)",
+          textEn: "Navigation link in header (desktop + mobile)",
+          category: "Collections",
+          categoryEn: "Collections",
+        },
+        {
+          text: "Support Progressive Web App avec cache hors-ligne via Workbox",
+          textEn:
+            "Progressive Web App support with offline caching via Workbox",
+          category: "PWA",
+          categoryEn: "PWA",
+        },
+        {
+          text: "Service worker avec stratégie de mise à jour automatique",
+          textEn: "Service worker with auto-update strategy",
+          category: "PWA",
+          categoryEn: "PWA",
+        },
+        {
+          text: "Manifeste d'application avec icônes et couleurs du thème",
+          textEn: "App manifest with icons and theme colors",
+          category: "PWA",
+          categoryEn: "PWA",
+        },
+        {
+          text: "Recommandations nutritionnelles dynamiques basées sur la durée et l'intensité",
+          textEn:
+            "Dynamic nutrition recommendations based on workout duration and intensity",
+          category: "Détail séance",
+          categoryEn: "Workout Detail",
+        },
+        {
+          text: "Conseils d'hydratation adaptés au type de séance",
+          textEn: "Hydration guidelines adapted to session type",
+          category: "Détail séance",
+          categoryEn: "Workout Detail",
+        },
+        {
+          text: "Recommandations de récupération avec chronologie et conseils",
+          textEn: "Recovery recommendations with timeline and tips",
+          category: "Détail séance",
+          categoryEn: "Workout Detail",
+        },
+      ],
+      changed: [
+        {
+          text: "Actions du header consolidées avec grille et menu déroulant",
+          textEn:
+            "Header actions consolidated with grid layout and dropdown menu",
+        },
+      ],
+    },
+  },
+  {
+    version: "0.1.3",
+    date: "2026-01-31",
+    changes: {
+      added: [
+        {
+          text: "Hub de connaissances avec 12 articles bilingues sur les principes d'entraînement",
+          textEn:
+            "Knowledge hub with 12 bilingual articles on training principles",
+          category: "Contenu éducatif",
+          categoryEn: "Educational Content",
+        },
+        {
+          text: "Page glossaire avec 50+ termes et définitions d'entraînement",
+          textEn: "Glossary page with 50+ training terms and definitions",
+          category: "Contenu éducatif",
+          categoryEn: "Educational Content",
+        },
+        {
+          text: "Système de conseils éducatifs avec 69 conseils contextuels (accueil et détails des séances)",
+          textEn:
+            "Educational tips system with 69 contextual tips (shown on homepage and workout details)",
+          category: "Contenu éducatif",
+          categoryEn: "Educational Content",
+        },
+        {
+          text: "Nouveaux articles : zones, test VMA, échauffement, récupération, nutrition, FAQ, périodisation, surcompensation, affûtage, entraînement polarisé, surcharge progressive, régularité",
+          textEn:
+            "New articles: zones, testing-vma, warmup, recovery, nutrition, faq, periodization, supercompensation, tapering, polarized-training, progressive-overload, consistency",
+          category: "Contenu éducatif",
+          categoryEn: "Educational Content",
+        },
+        {
+          text: "Bouton de séance aléatoire dans le header avec icône de dé",
+          textEn: "Random workout button in header with dice icon",
+          category: "Séance aléatoire",
+          categoryEn: "Random Workout",
+        },
+        {
+          text: "Carte CTA de séance aléatoire sur la page d'accueil",
+          textEn: "Random workout CTA card on homepage",
+          category: "Séance aléatoire",
+          categoryEn: "Random Workout",
+        },
+        {
+          text: "Accès rapide pour découvrir de nouvelles séances",
+          textEn: "Quick access to discover new workouts",
+          category: "Séance aléatoire",
+          categoryEn: "Random Workout",
+        },
+        {
+          text: "Page de paramètres avec préférences de thème et d'unités",
+          textEn: "Settings page with theme and unit preferences",
+          category: "Paramètres",
+          categoryEn: "Settings & Personalization",
+        },
+        {
+          text: "Palettes accessibles pour les daltoniens (deutéranopie, protanopie, tritanopie)",
+          textEn:
+            "Color blind accessible palettes (deuteranopia, protanopia, tritanopia)",
+          category: "Paramètres",
+          categoryEn: "Settings & Personalization",
+        },
+        {
+          text: "Conversion d'unités entre métrique (km/h, min/km) et impérial (mph, min/mi)",
+          textEn:
+            "Unit conversion between metric (km/h, min/km) and imperial (mph, min/mi)",
+          category: "Paramètres",
+          categoryEn: "Settings & Personalization",
+        },
+        {
+          text: "Calculateurs de pace et de zones avec support des unités",
+          textEn: "Pace and zone calculators with unit support",
+          category: "Paramètres",
+          categoryEn: "Settings & Personalization",
+        },
+        {
+          text: "Sélecteur de mode d'affichage (grille/liste)",
+          textEn: "View mode selector (grid/list views)",
+          category: "Bibliothèque",
+          categoryEn: "Library Enhancements",
+        },
+        {
+          text: "Recherche par palette de commandes avec Cmd+K / Ctrl+K",
+          textEn: "Command palette search with Cmd+K / Ctrl+K",
+          category: "Bibliothèque",
+          categoryEn: "Library Enhancements",
+        },
+        {
+          text: "14 nouvelles séances d'entraînement (150 au total)",
+          textEn: "14 new workout sessions (150 total)",
+          category: "Bibliothèque",
+          categoryEn: "Library Enhancements",
+        },
+        {
+          text: "Bouton de filtre mobile avec badge de filtres actifs",
+          textEn: "Mobile filter button with active filter badge",
+          category: "Bibliothèque",
+          categoryEn: "Library Enhancements",
+        },
+        {
+          text: "Mise en page compacte mobile pour les CTAs de la page d'accueil (Quiz et Aléatoire côté à côté)",
+          textEn:
+            "Compact mobile layout for homepage CTAs (Quiz and Random side by side)",
+          category: "UI/UX",
+          categoryEn: "UI/UX Improvements",
+        },
+        {
+          text: "Bannière de conseils sans bouton de fermeture (toujours visible)",
+          textEn: "Tips banner without dismiss button (always visible)",
+          category: "UI/UX",
+          categoryEn: "UI/UX Improvements",
+        },
+        {
+          text: "Soulignement animé de la navigation",
+          textEn: "Animated navigation underline",
+          category: "UI/UX",
+          categoryEn: "UI/UX Improvements",
+        },
+        {
+          text: "Animation de rebond du coeur sur le bouton favori",
+          textEn: "Heart bounce animation on favorite button",
+          category: "UI/UX",
+          categoryEn: "UI/UX Improvements",
+        },
+        {
+          text: "Transitions de vue entre les pages",
+          textEn: "View transitions between pages",
+          category: "UI/UX",
+          categoryEn: "UI/UX Improvements",
+        },
+        {
+          text: "Header responsive avec point d'arrêt intermédiaire",
+          textEn: "Responsive header with intermediate breakpoint",
+          category: "UI/UX",
+          categoryEn: "UI/UX Improvements",
+        },
+        {
+          text: "Modal de détail de zone avec liens cliquables vers les séances",
+          textEn: "Zone detail modal with clickable workout links",
+          category: "UI/UX",
+          categoryEn: "UI/UX Improvements",
+        },
+        {
+          text: "Infrastructure SEO complète avec meta tags",
+          textEn: "Comprehensive SEO infrastructure with meta tags",
+          category: "SEO & Analytics",
+          categoryEn: "SEO & Analytics",
+        },
+        {
+          text: "Données structurées (JSON-LD) pour les séances",
+          textEn: "Structured data (JSON-LD) for workouts",
+          category: "SEO & Analytics",
+          categoryEn: "SEO & Analytics",
+        },
+        {
+          text: "Intégration Vercel Analytics",
+          textEn: "Vercel Analytics integration",
+          category: "SEO & Analytics",
+          categoryEn: "SEO & Analytics",
+        },
+        {
+          text: "Page à propos avec informations du projet",
+          textEn: "About page with project information",
+          category: "SEO & Analytics",
+          categoryEn: "SEO & Analytics",
+        },
+      ],
+      changed: [
+        {
+          text: "Les CTAs de la page d'accueil utilisent une grille compacte à 2 colonnes sur mobile",
+          textEn:
+            "Homepage CTAs use compact 2-column grid layout on mobile",
+        },
+        {
+          text: "Remplacement de lucide-react par des icônes SVG inline (65 icônes)",
+          textEn: "Replaced lucide-react with inline SVG icons (65 icons)",
+        },
+        {
+          text: "Les couleurs de zone utilisent maintenant des variables CSS pour le théming",
+          textEn: "Zone colors now use CSS variables for theming",
+        },
+        {
+          text: "Zones personnalisées affichées sur la page de détail de séance",
+          textEn: "Personalized zones displayed on workout detail page",
+        },
+        {
+          text: "Les résultats du quiz s'intègrent aux filtres de la bibliothèque",
+          textEn: "Quiz results integrate with library filters",
+        },
+      ],
+      fixed: [
+        {
+          text: "La détection de langue gère les variantes de locale (en-US, fr-CA)",
+          textEn:
+            "Language detection handles locale variants (en-US, fr-CA)",
+        },
+        {
+          text: "Les cartes du glossaire se re-rendent au changement de langue",
+          textEn: "Glossary cards re-render on language change",
+        },
+        {
+          text: "Le menu mobile se ferme au changement de route",
+          textEn: "Mobile menu closes on route change",
+        },
+        {
+          text: "Amélioration du parsing d'intervalles pour l'extraction de la zone de récupération",
+          textEn:
+            "Interval parsing improved for recovery zone extraction",
+        },
+        {
+          text: "Calculs de durée alignés entre la timeline et les métadonnées",
+          textEn:
+            "Duration calculations aligned between timeline and metadata",
+        },
+        {
+          text: "L'export PDF utilise un téléchargement blob asynchrone",
+          textEn: "PDF export uses async blob download",
+        },
+        {
+          text: "Corrections diverses des arrière-plans de modales/dialogues",
+          textEn: "Various modal/dialog background fixes",
+        },
+        {
+          text: "Durée minimale de filtre abaissée à 10 minutes",
+          textEn: "Minimum filter duration lowered to 10 minutes",
+        },
+      ],
+      performance: [
+        {
+          text: "Chargement différé des articles et données du glossaire",
+          textEn: "Lazy-load articles and glossary data",
+        },
+        {
+          text: "Découpe du code pour les données de séance par catégorie",
+          textEn: "Code-splitting for workout data by category",
+        },
+        {
+          text: "Bundle principal réduit de 1 Mo à 88 Ko gzip",
+          textEn: "Main bundle reduced from 1MB to 88KB gzip",
+        },
+        {
+          text: "Élimination du code mort",
+          textEn: "Dead code elimination",
+        },
+      ],
+    },
+  },
+  {
+    version: "0.1.2",
+    date: "2026-01-26",
+    changes: {
+      added: [
+        {
+          text: "Logo du projet avec design pulse intégré dans le header",
+          textEn: "Project logo with pulse design integrated in header",
+          category: "Branding",
+          categoryEn: "Branding",
+        },
+        {
+          text: "Variantes de favicon optimisées (16x16, 32x32, 180x180, 192x192, 512x512)",
+          textEn:
+            "Optimized favicon variants (16x16, 32x32, 180x180, 192x192, 512x512)",
+          category: "Branding",
+          categoryEn: "Branding",
+        },
+        {
+          text: "Support d'import SVG pour les assets du logo",
+          textEn: "SVG import support for logo assets",
+          category: "Branding",
+          categoryEn: "Branding",
+        },
+        {
+          text: "Composant d'état vide avec support i18n",
+          textEn: "Empty state component with i18n support",
+          category: "Composants UI",
+          categoryEn: "UI Components",
+        },
+        {
+          text: "Bouton flottant de retour en haut de page",
+          textEn: "Scroll-to-top floating button",
+          category: "Composants UI",
+          categoryEn: "UI Components",
+        },
+        {
+          text: "Indicateur de chargement sur le bouton d'export",
+          textEn: "Loading spinner on export button for better feedback",
+          category: "Composants UI",
+          categoryEn: "UI Components",
+        },
+        {
+          text: "Raccourcis clavier pour la fonctionnalité de recherche",
+          textEn: "Keyboard shortcuts for search functionality",
+          category: "Accessibilité",
+          categoryEn: "Accessibility",
+        },
+        {
+          text: "Attributs ARIA modal au tiroir de filtres pour les lecteurs d'écran",
+          textEn:
+            "ARIA modal attributes to filter drawer for screen readers",
+          category: "Accessibilité",
+          categoryEn: "Accessibility",
+        },
+        {
+          text: "Label ARIA sur le champ de recherche pour l'accessibilité",
+          textEn: "ARIA label to search input for accessibility",
+          category: "Accessibilité",
+          categoryEn: "Accessibility",
+        },
+        {
+          text: "Zones tactiles agrandies dans le header mobile pour une interaction facilitée",
+          textEn:
+            "Increased touch targets in mobile header for easier interaction",
+          category: "Accessibilité",
+          categoryEn: "Accessibility",
+        },
+        {
+          text: "Système de filtres modal avec actions appliquer/annuler sur mobile",
+          textEn:
+            "Modal filter system with apply/cancel actions on mobile",
+          category: "Expérience mobile",
+          categoryEn: "Mobile Experience",
+        },
+        {
+          text: "Barre de recherche déplacée hors du tiroir de filtres pour une meilleure découverte",
+          textEn:
+            "Search bar moved outside filter drawer for better discoverability",
+          category: "Expérience mobile",
+          categoryEn: "Mobile Experience",
+        },
+        {
+          text: "Améliorations rapides de l'interface intégrées dans la bibliothèque",
+          textEn: "Quick wins UI improvements integrated in library",
+          category: "Expérience utilisateur",
+          categoryEn: "User Experience",
+        },
+        {
+          text: "Écouteur en temps réel des préférences de thème système",
+          textEn: "Real-time system theme preference listener",
+          category: "Expérience utilisateur",
+          categoryEn: "User Experience",
+        },
+        {
+          text: "Retour automatique en haut de page lors de la navigation",
+          textEn: "Automatic scroll to top on page navigation",
+          category: "Expérience utilisateur",
+          categoryEn: "User Experience",
+        },
+      ],
+      changed: [
+        {
+          text: "Tiroir de filtre mobile renommé en \"Filtres\" pour plus de clarté",
+          textEn:
+            'Renamed mobile filter drawer to "Filters" for clarity',
+        },
+      ],
+      fixed: [
+        {
+          text: "Correction du débordement mobile dans le header du détail de séance",
+          textEn:
+            "Prevented mobile overflow in workout detail header",
+          category: "Mise en page mobile",
+          categoryEn: "Mobile Layout",
+        },
+        {
+          text: "Correction du débordement mobile par réorganisation des actions du header",
+          textEn:
+            "Prevented mobile overflow by reorganizing header actions",
+          category: "Mise en page mobile",
+          categoryEn: "Mobile Layout",
+        },
+        {
+          text: "Traduction du message d'erreur de séance introuvable",
+          textEn: "Translated workout not found error message",
+          category: "Internationalisation",
+          categoryEn: "Internationalization",
+        },
+        {
+          text: "Ajout des traductions pour les actions du filtre modal (appliquer/annuler)",
+          textEn:
+            "Added translations for modal filter actions (apply/cancel)",
+          category: "Internationalisation",
+          categoryEn: "Internationalization",
+        },
+      ],
+    },
+  },
+  {
+    version: "0.1.1",
+    date: "2026-01-26",
+    changes: {
+      added: [
+        {
+          text: "Export des séances en 4 formats depuis la page de détail",
+          textEn: "Export workouts to 4 formats from detail page",
+          category: "Système d'export",
+          categoryEn: "Export System",
+        },
+        {
+          text: "ICS (Calendrier) : ajouter une séance à Google Calendar, Apple Calendar, Outlook",
+          textEn:
+            "ICS (Calendar): Add workout to Google Calendar, Apple Calendar, Outlook",
+          category: "Système d'export",
+          categoryEn: "Export System",
+        },
+        {
+          text: "PNG (Image) : export haute résolution avec la carte complète de séance (nom, description, timeline, zones, blocs)",
+          textEn:
+            "PNG (Image): High-resolution export with full workout card (name, description, timeline, zones, blocks)",
+          category: "Système d'export",
+          categoryEn: "Export System",
+        },
+        {
+          text: "PDF (Document) : document imprimable avec structure de séance, conseils et erreurs courantes",
+          textEn:
+            "PDF (Document): Printable document with workout structure, coaching tips, and common mistakes",
+          category: "Système d'export",
+          categoryEn: "Export System",
+        },
+        {
+          text: "Garmin FIT : fichier natif pour appareils Garmin avec zones FC et intensité des étapes",
+          textEn:
+            "Garmin FIT: Native workout file for Garmin devices with HR zones and step intensity",
+          category: "Système d'export",
+          categoryEn: "Export System",
+        },
+        {
+          text: "Composant de menu déroulant (basé sur Radix)",
+          textEn: "Dropdown menu component (Radix-based)",
+          category: "Composants UI",
+          categoryEn: "UI Components",
+        },
+        {
+          text: "Sélecteur de date/heure pour l'export calendrier",
+          textEn: "Date/time picker for calendar export",
+          category: "Composants UI",
+          categoryEn: "UI Components",
+        },
+        {
+          text: "Carte de séance exportable avec résumé complet",
+          textEn: "Exportable workout card with complete workout summary",
+          category: "Composants UI",
+          categoryEn: "UI Components",
+        },
+      ],
+      changed: [
+        {
+          text: "Le pied de page affiche maintenant le nombre dynamique de séances et catégories",
+          textEn:
+            "Footer now displays dynamic workout and category counts",
+        },
+        {
+          text: "Ajout du lien vers le dépôt GitLab dans le pied de page",
+          textEn: "Added GitLab repository link in footer",
+        },
+      ],
+    },
+  },
+  {
+    version: "0.1.0",
+    date: "2026-01-26",
+    changes: {
+      added: [
+        {
+          text: "Projet initial React 19 + Vite + Tailwind 4",
+          textEn: "Initial React 19 + Vite + Tailwind 4 project setup",
+          category: "Application principale",
+          categoryEn: "Core Application",
+        },
+        {
+          text: "Système d'entraînement à 6 zones avec base scientifique (Z1-Z6)",
+          textEn:
+            "6-zone training system with scientific basis (Z1-Z6)",
+          category: "Application principale",
+          categoryEn: "Core Application",
+        },
+        {
+          text: "136 modèles de séances répartis en 11 catégories",
+          textEn: "136 workout templates across 11 categories",
+          category: "Application principale",
+          categoryEn: "Core Application",
+        },
+        {
+          text: "Navigation multi-pages : Accueil, Bibliothèque, Détail séance, Paramètres, Favoris",
+          textEn:
+            "Multi-page routing: Home, Library, Workout Detail, Settings, Favorites",
+          category: "Application principale",
+          categoryEn: "Core Application",
+        },
+        {
+          text: "Configuration de déploiement Docker",
+          textEn: "Docker deployment configuration",
+          category: "Application principale",
+          categoryEn: "Core Application",
+        },
+        {
+          text: "Catégories : récupération, endurance, tempo, seuil, VMA, sortie longue, côtes, fartlek, allure course, mixte, évaluation",
+          textEn:
+            "Categories: recovery, endurance, tempo, threshold, VMA, long run, hills, fartlek, race pace, mixed, assessment",
+          category: "Bibliothèque de séances",
+          categoryEn: "Workout Library",
+        },
+        {
+          text: "Catégorie évaluation avec test de Cooper, VAMEVAL, demi-Cooper et Léger-Boucher",
+          textEn:
+            "Assessment category with Cooper test, VAMEVAL, half-Cooper, and Leger-Boucher tests",
+          category: "Bibliothèque de séances",
+          categoryEn: "Workout Library",
+        },
+        {
+          text: "Séances de double seuil norvégien",
+          textEn: "Norwegian double threshold sessions",
+          category: "Bibliothèque de séances",
+          categoryEn: "Workout Library",
+        },
+        {
+          text: "Séances méthode Bangsbo 10-20-30",
+          textEn: "Bangsbo 10-20-30 method sessions",
+          category: "Bibliothèque de séances",
+          categoryEn: "Workout Library",
+        },
+        {
+          text: "Séances VMA Billat 30/30, SET et NRRs",
+          textEn: "Billat 30/30, SET and NRRs VMA sessions",
+          category: "Bibliothèque de séances",
+          categoryEn: "Workout Library",
+        },
+        {
+          text: "Séances Yasso 800, Rosario et cutdown",
+          textEn: "Yasso 800s, Rosario, and cutdown sessions",
+          category: "Bibliothèque de séances",
+          categoryEn: "Workout Library",
+        },
+        {
+          text: "Séances de sortie longue de régénération et yoga-run",
+          textEn: "Long regeneration and yoga-run sessions",
+          category: "Bibliothèque de séances",
+          categoryEn: "Workout Library",
+        },
+        {
+          text: "Timeline interactive montrant la structure de la séance",
+          textEn: "Interactive timeline showing workout structure",
+          category: "Visualisation",
+          categoryEn: "Visualization",
+        },
+        {
+          text: "Affichage de la distribution des zones",
+          textEn: "Zone distribution display",
+          category: "Visualisation",
+          categoryEn: "Visualization",
+        },
+        {
+          text: "Indicateur de barre d'intensité",
+          textEn: "Intensity bar indicator",
+          category: "Visualisation",
+          categoryEn: "Visualization",
+        },
+        {
+          text: "Support des patterns d'intervalles complexes (ex : 2x12x30s)",
+          textEn:
+            "Support for complex interval patterns (e.g., 2x12x30s)",
+          category: "Visualisation",
+          categoryEn: "Visualization",
+        },
+        {
+          text: "Calculateur de zones avec entrées FCmax/VMA",
+          textEn: "Zone calculator with FCmax/VMA inputs",
+          category: "Personnalisation",
+          categoryEn: "Personalization",
+        },
+        {
+          text: "Préférences de zones personnelles avec persistence localStorage",
+          textEn:
+            "Personal zone preferences with localStorage persistence",
+          category: "Personnalisation",
+          categoryEn: "Personalization",
+        },
+        {
+          text: "Système de favoris avec page /favorites dédiée",
+          textEn: "Favorites system with dedicated /favorites page",
+          category: "Personnalisation",
+          categoryEn: "Personalization",
+        },
+        {
+          text: "Filtres avancés : type de terrain, système cible, favoris uniquement",
+          textEn:
+            "Advanced filters: terrain type, target system, favorites only",
+          category: "Personnalisation",
+          categoryEn: "Personalization",
+        },
+        {
+          text: "Quiz de recommandation de séances basé sur les objectifs et contraintes",
+          textEn:
+            "Workout recommendation quiz based on goals and constraints",
+          category: "Découverte",
+          categoryEn: "Discovery",
+        },
+        {
+          text: "Calculateur de pace pour les temps cibles",
+          textEn: "Pace calculator for target times",
+          category: "Découverte",
+          categoryEn: "Discovery",
+        },
+        {
+          text: "Séance du jour avec sélection quotidienne déterministe",
+          textEn:
+            "Workout of the Day with deterministic daily selection",
+          category: "Découverte",
+          categoryEn: "Discovery",
+        },
+        {
+          text: "Français par défaut avec support complet de l'anglais",
+          textEn: "French-first with full English support",
+          category: "Internationalisation",
+          categoryEn: "Internationalization",
+        },
+        {
+          text: "Tous les blocs de séance traduits dans les deux langues",
+          textEn: "All workout blocks translated in both languages",
+          category: "Internationalisation",
+          categoryEn: "Internationalization",
+        },
+        {
+          text: "Détection de langue via localStorage, navigator ou balise HTML",
+          textEn:
+            "Language detection via localStorage, navigator, or HTML tag",
+          category: "Internationalisation",
+          categoryEn: "Internationalization",
+        },
+        {
+          text: "Composants shadcn/ui avec primitives Radix",
+          textEn: "shadcn/ui components with Radix primitives",
+          category: "UI/UX",
+          categoryEn: "UI/UX",
+        },
+        {
+          text: "Icônes Lucide dans toute l'application (remplacement des emojis)",
+          textEn: "Lucide icons throughout (replaced emoji icons)",
+          category: "UI/UX",
+          categoryEn: "UI/UX",
+        },
+        {
+          text: "Composants CategoryIcon pour la catégorisation visuelle",
+          textEn: "CategoryIcon components for visual categorization",
+          category: "UI/UX",
+          categoryEn: "UI/UX",
+        },
+        {
+          text: "Tooltips tactiles pour l'accessibilité mobile",
+          textEn: "Tap-to-reveal tooltips for mobile accessibility",
+          category: "UI/UX",
+          categoryEn: "UI/UX",
+        },
+      ],
+      fixed: [
+        {
+          text: "Parsing des patterns d'intervalles multi-séries (2x12x30s)",
+          textEn: "Multi-set interval pattern parsing (2x12x30s)",
+        },
+        {
+          text: "Résultats de secours du quiz triés par durée la plus proche",
+          textEn: "Quiz fallback results sorted by closest duration",
+        },
+        {
+          text: "Affichage du message quand aucune correspondance exacte de durée dans le quiz",
+          textEn:
+            "Message display when no exact duration match in quiz",
+        },
+        {
+          text: "Estimations de durée utilisant le champ typicalDuration",
+          textEn: "Duration estimates using typicalDuration field",
+        },
+        {
+          text: "Titres français dans les traductions de la visualisation",
+          textEn: "French titles in visualization translations",
+        },
+        {
+          text: "Mappages de types de catégories (vma -> vma_intervals)",
+          textEn: "Category type mappings (vma -> vma_intervals)",
+        },
+      ],
+    },
+  },
+];

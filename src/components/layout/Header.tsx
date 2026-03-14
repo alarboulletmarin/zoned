@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book, Search, MoreHorizontal, ClipboardCheck, Settings, Library } from "@/components/icons";
+import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book, Search, MoreHorizontal, ClipboardCheck, Settings, Library, Sparkles, Send } from "@/components/icons";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/logo.svg?react";
@@ -156,6 +156,12 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
                   <Dices className="size-4" />
                   {t("randomWorkout.title")}
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/contribute" className="flex items-center gap-2">
+                    <Send className="size-4" />
+                    {t("nav.contribute")}
+                  </Link>
+                </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
@@ -177,6 +183,12 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
                   <Link to="/settings" className="flex items-center gap-2">
                     <Settings className="size-4" />
                     {t("nav.settings")}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/changelog" className="flex items-center gap-2">
+                    <Sparkles className="size-4" />
+                    {t("nav.changelog")}
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
@@ -347,6 +359,22 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
               {t("randomWorkout.title")}
             </button>
 
+            {/* Contribute */}
+            <Link
+              to="/contribute"
+              viewTransition
+              onClick={() => setMobileMenuOpen(false)}
+              className={cn(
+                "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
+                location.pathname === "/contribute"
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Send className="size-4" />
+              {t("nav.contribute")}
+            </Link>
+
             {/* Favorites */}
             <Link
               to="/favorites"
@@ -393,6 +421,22 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             >
               <Settings className="size-4" />
               {t("nav.settings")}
+            </Link>
+
+            {/* Changelog */}
+            <Link
+              to="/changelog"
+              viewTransition
+              onClick={() => setMobileMenuOpen(false)}
+              className={cn(
+                "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
+                location.pathname === "/changelog"
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Sparkles className="size-4" />
+              {t("nav.changelog")}
             </Link>
 
             {/* Language Selector */}

@@ -3,12 +3,14 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { categories } from "@/data/workouts";
 import { useWorkouts } from "@/hooks";
+import { useWhatsNew } from "@/hooks/useWhatsNew";
 import Logo from "@/assets/logo.svg?react";
 
 export function Footer() {
   const { t } = useTranslation("common");
   const currentYear = new Date().getFullYear();
   const { workouts } = useWorkouts();
+  const { hasNewVersion } = useWhatsNew();
 
   return (
     <footer className="border-t py-6 md:py-8">
@@ -36,6 +38,21 @@ export function Footer() {
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
               {t("nav.about")}
+            </Link>
+            <Link
+              to="/contribute"
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {t("nav.contribute")}
+            </Link>
+            <Link
+              to="/changelog"
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors relative"
+            >
+              {t("nav.changelog")}
+              {hasNewVersion && (
+                <span className="absolute -top-1 -right-2 size-1.5 bg-primary rounded-full" />
+              )}
             </Link>
             <a
               href="https://gitlab.com/alarboulletmarin-oss/zoned"

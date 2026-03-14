@@ -101,7 +101,9 @@
     "glossary": "Glossaire",
     "favorites": "Favoris",
     "about": "À propos",
-    "settings": "Paramètres"
+    "contribute": "Contribuer",
+    "settings": "Paramètres",
+    "changelog": "Nouveautés"
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",
@@ -228,6 +230,16 @@
     "backToHub": "Retour aux articles",
     "zonesCtaText": "Prêt à personnaliser vos zones d'entraînement ?",
     "zonesCtaButton": "Configurer mes zones"
+  },
+  "changelog": {
+    "title": "Nouveautés",
+    "subtitle": "Historique des mises à jour et nouvelles fonctionnalités",
+    "added": "Ajouté",
+    "changed": "Modifié",
+    "fixed": "Corrigé",
+    "performance": "Performance",
+    "version": "Version {{version}}",
+    "released": "Publié le {{date}}"
   },
   "collections": {
     "title": "Collections",
