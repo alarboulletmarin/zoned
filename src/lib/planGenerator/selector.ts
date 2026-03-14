@@ -144,9 +144,22 @@ function findBestWorkout(
   }
 
   // Step 2: Filter by phase
-  candidates = candidates.filter((w) =>
-    w.selectionCriteria.phases.includes(phase),
-  );
+  // For easy/recovery slots, relax the phase filter — low-intensity
+  // workouts are appropriate regardless of training phase
+  if (slotType !== "easy" && slotType !== "recovery") {
+    candidates = candidates.filter((w) =>
+      w.selectionCriteria.phases.includes(phase),
+    );
+  } else {
+    // Still prefer phase-matching workouts, but keep all as fallback
+    const phaseMatched = candidates.filter((w) =>
+      w.selectionCriteria.phases.includes(phase),
+    );
+    if (phaseMatched.length >= 3) {
+      candidates = phaseMatched;
+    }
+    // Otherwise keep full candidate pool for variety
+  }
 
   // Step 3: Filter by difficulty (exact match first, then +/-1 tolerance)
   let filtered = candidates.filter((w) => w.difficulty === difficulty);
