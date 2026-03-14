@@ -467,6 +467,318 @@
         "tags": ["recovery", "yoga", "stretching", "holistic", "flexibility"],
         "priorityScore": 70
       }
+    },
+    {
+      "id": "REC-011",
+      "name": "Shakeout run",
+      "nameEn": "Shakeout Run",
+      "description": "Footing très facile de 20 minutes en Z1 la veille de course. Routine pré-course pour garder les jambes légères.",
+      "descriptionEn": "Very easy 20-minute Z1 jog the day before a race. Pre-race routine to keep legs feeling light.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 20, "max": 25 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Marche rapide 2-3 minutes", "descriptionEn": "Brisk walk 2-3 minutes", "durationMin": 3 }
+      ],
+      "mainSetTemplate": [
+        { "description": "Footing très facile en Z1", "descriptionEn": "Very easy jog in Z1", "durationMin": 17, "zone": "Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Marche et étirements légers", "descriptionEn": "Walk and light stretching", "durationMin": 5 }
+      ],
+      "coachingTips": [
+        "Aucun effort, juste bouger les jambes",
+        "Idéal la veille ou l'avant-veille de course",
+        "Terminez en vous sentant frais et détendu",
+        "Testez vos chaussures et tenue de course"
+      ],
+      "coachingTipsEn": [
+        "No effort, just move the legs",
+        "Ideal the day before or two days before a race",
+        "Finish feeling fresh and relaxed",
+        "Test your race shoes and outfit"
+      ],
+      "commonMistakes": [
+        "Courir trop vite par nervosité pré-course",
+        "Allonger la durée par anxiété"
+      ],
+      "commonMistakesEn": [
+        "Running too fast due to pre-race nerves",
+        "Extending the duration out of anxiety"
+      ],
+      "variationIds": ["REC-007", "REC-008"],
+      "selectionCriteria": {
+        "phases": ["taper"],
+        "weekPositions": ["late"],
+        "relativeLoad": "light",
+        "tags": ["race-prep", "shakeout", "taper"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "REC-012",
+      "name": "Activation pré-course",
+      "nameEn": "Pre-Race Activation",
+      "description": "Footing léger suivi de quelques accélérations courtes pour activer le système neuromusculaire avant une compétition.",
+      "descriptionEn": "Light jog followed by a few short strides to activate the neuromuscular system before a competition.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 25, "max": 30 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Marche rapide 2 minutes", "descriptionEn": "Brisk walk 2 minutes", "durationMin": 2 }
+      ],
+      "mainSetTemplate": [
+        { "description": "Footing facile en Z1", "descriptionEn": "Easy jog in Z1", "durationMin": 15, "zone": "Z1" },
+        {
+          "description": "4x 20s accélérations progressives en Z4 / 60s récup footing",
+          "descriptionEn": "4x 20s progressive strides at Z4 / 60s jog recovery",
+          "zone": "Z4",
+          "repetitions": 4,
+          "recovery": "60s footing Z1"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing retour au calme et étirements légers", "descriptionEn": "Cool-down jog and light stretching", "durationMin": 5, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Les accélérations réveillent les fibres rapides sans fatiguer",
+        "Terminez en vous sentant réactif et prêt",
+        "Idéal J-1 ou J-2 selon la distance de course",
+        "Ne forcez pas : ce sont des ouvertures, pas des sprints"
+      ],
+      "coachingTipsEn": [
+        "The strides wake up fast-twitch fibers without causing fatigue",
+        "Finish feeling responsive and ready",
+        "Ideal on race day -1 or -2 depending on race distance",
+        "Don't force it: these are openers, not sprints"
+      ],
+      "commonMistakes": [
+        "Faire trop d'accélérations et se fatiguer",
+        "Courir les strides trop vite, en sprint",
+        "Faire cette séance trop loin de la course"
+      ],
+      "commonMistakesEn": [
+        "Doing too many strides and getting tired",
+        "Running the strides too fast, at sprint effort",
+        "Doing this session too far from the race"
+      ],
+      "variationIds": ["REC-007", "REC-011"],
+      "selectionCriteria": {
+        "phases": ["taper"],
+        "weekPositions": ["late"],
+        "relativeLoad": "light",
+        "tags": ["race-prep", "opener", "taper"],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "REC-013",
+      "name": "Récupération pieds nus sur herbe",
+      "nameEn": "Barefoot Grass Recovery",
+      "description": "Séance de récupération sur herbe pieds nus (ou chaussures minimalistes). Renforce la proprioception, stimule la voûte plantaire et les terminaisons nerveuses du pied. Marche et footing très lent sur surface souple naturelle.",
+      "descriptionEn": "Recovery session on grass barefoot (or minimalist shoes). Strengthens proprioception, stimulates the arch and nerve endings in the foot. Walking and very slow jogging on natural soft surface.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 20, "max": 30 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true, "prefersSoft": true },
+      "warmupTemplate": [],
+      "mainSetTemplate": [
+        { "description": "5min marche pieds nus sur herbe", "descriptionEn": "5min barefoot walking on grass", "durationMin": 5, "zone": "Z1" },
+        { "description": "10min footing très lent pieds nus sur herbe", "descriptionEn": "10min very slow barefoot jog on grass", "durationMin": 10, "zone": "Z1" },
+        { "description": "5min marche avec exercices d'équilibre (se tenir sur un pied, marche talon-pointe)", "descriptionEn": "5min walking with balance exercises (single-leg stance, heel-to-toe walk)", "durationMin": 5, "zone": "Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Marche tranquille et étirements des pieds et mollets", "descriptionEn": "Easy walking and foot/calf stretches", "durationMin": 5, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Commencez par 10-15 minutes si vous n'avez jamais couru pieds nus — augmentez progressivement",
+        "Choisissez une pelouse entretenue et vérifiez qu'il n'y a pas d'objets coupants",
+        "Le grounding (contact pied-terre) favorise la circulation et réduit l'inflammation"
+      ],
+      "coachingTipsEn": [
+        "Start with 10-15 minutes if you've never run barefoot — increase gradually",
+        "Choose a well-maintained lawn and check for sharp objects",
+        "Grounding (foot-earth contact) promotes circulation and reduces inflammation"
+      ],
+      "commonMistakes": [
+        "Courir trop longtemps pieds nus dès la première séance — risque de blessure",
+        "Choisir un terrain mal entretenu avec des pierres ou débris",
+        "Courir trop vite : c'est une séance de récupération, pas d'entraînement"
+      ],
+      "commonMistakesEn": [
+        "Running barefoot too long from the first session — injury risk",
+        "Choosing a poorly maintained area with stones or debris",
+        "Running too fast: this is a recovery session, not training"
+      ],
+      "variationIds": ["REC-001"],
+      "selectionCriteria": {
+        "phases": ["base", "build", "recovery"],
+        "weekPositions": ["early", "late"],
+        "relativeLoad": "light",
+        "tags": ["recovery", "barefoot", "proprioception", "grounding"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "REC-014",
+      "name": "Aqua jogging récupération",
+      "nameEn": "Aqua Jogging Recovery",
+      "description": "Séance de course en eau profonde (deep water running) sans impact. Simule la course à pied en supprimant toutes les contraintes articulaires. FC cible 65-75% de FCmax. Idéal après une grosse charge d'entraînement ou en prévention de blessure.",
+      "descriptionEn": "Deep water running session with zero impact. Simulates running while eliminating all joint stress. Target HR 65-75% of HRmax. Ideal after heavy training load or for injury prevention.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 30, "max": 45 },
+      "environment": { "requiresHills": false, "requiresTrack": false },
+      "warmupTemplate": [
+        { "description": "5min aqua jogging très lent pour s'adapter à l'eau", "descriptionEn": "5min very slow aqua jogging to adapt to water", "durationMin": 5, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "25-35min aqua jogging à FC 65-75% FCmax. Pieds ne touchent pas le fond. Cadence cible : 70-80 enjambées/min.", "descriptionEn": "25-35min aqua jogging at HR 65-75% HRmax. Feet don't touch the bottom. Target cadence: 70-80 strides/min.", "durationMin": 30, "zone": "Z2" }
+      ],
+      "cooldownTemplate": [
+        { "description": "5min aqua jogging très lent puis étirements dans l'eau", "descriptionEn": "5min very slow aqua jogging then stretches in water", "durationMin": 5, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Utilisez une ceinture de flottaison pour maintenir une posture verticale correcte",
+        "La cadence optimale est d'environ 70-80 pas par minute — plus lente qu'en course terrestre",
+        "La FC en eau est généralement 10-15 bpm plus basse qu'en course à pied à même effort"
+      ],
+      "coachingTipsEn": [
+        "Use a flotation belt to maintain correct vertical posture",
+        "Optimal cadence is about 70-80 steps per minute — slower than land running",
+        "Water HR is typically 10-15 bpm lower than running at the same effort"
+      ],
+      "commonMistakes": [
+        "Toucher le fond de la piscine avec les pieds — l'exercice doit être sans impact",
+        "Pencher le buste vers l'avant au lieu de maintenir une posture verticale",
+        "Reprendre la course à pied trop vite après une période d'aqua jogging exclusive"
+      ],
+      "commonMistakesEn": [
+        "Touching the pool bottom with feet — the exercise must be zero-impact",
+        "Leaning the torso forward instead of maintaining vertical posture",
+        "Returning to land running too quickly after an exclusive aqua jogging period"
+      ],
+      "variationIds": ["REC-005"],
+      "selectionCriteria": {
+        "phases": ["base", "build", "peak", "recovery"],
+        "weekPositions": ["early", "late"],
+        "relativeLoad": "light",
+        "tags": ["recovery", "aqua", "cross-training", "zero-impact", "injury-prevention"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "REC-015",
+      "name": "Récupération avec mobilité articulaire",
+      "nameEn": "Mobility-Focused Recovery Run",
+      "description": "Footing très léger entrecoupé d'exercices de mobilité articulaire. Alternance course Z1 et arrêts pour mobilisations des hanches, chevilles, épaules et colonne. Combine récupération active et entretien de l'amplitude de mouvement.",
+      "descriptionEn": "Very light jog interspersed with joint mobility exercises. Alternating Z1 running and stops for hip, ankle, shoulder, and spine mobilizations. Combines active recovery and range-of-motion maintenance.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 30, "max": 40 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Marche avec rotations des bras et du buste", "descriptionEn": "Walking with arm and torso rotations", "durationMin": 5, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "5min footing Z1", "descriptionEn": "5min jog Z1", "durationMin": 5, "zone": "Z1" },
+        { "description": "3min exercices de mobilité : cercles de hanches, flexions chevilles, rotations colonne", "descriptionEn": "3min mobility exercises: hip circles, ankle flexions, spine rotations", "durationMin": 3, "zone": "Z1" },
+        { "description": "5min footing Z1", "descriptionEn": "5min jog Z1", "durationMin": 5, "zone": "Z1" },
+        { "description": "3min exercices de mobilité : fentes dynamiques, balanciers de jambe, ouverture thoracique", "descriptionEn": "3min mobility: dynamic lunges, leg swings, thoracic openers", "durationMin": 3, "zone": "Z1" },
+        { "description": "5min footing Z1", "descriptionEn": "5min jog Z1", "durationMin": 5, "zone": "Z1" },
+        { "description": "3min exercices de mobilité : squats profonds, rotations de cheville, étirements quadriceps", "descriptionEn": "3min mobility: deep squats, ankle rotations, quad stretches", "durationMin": 3, "zone": "Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Marche et étirements statiques 5min", "descriptionEn": "Walking and static stretching 5min", "durationMin": 5, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Le footing doit rester très lent : l'objectif principal est la mobilité, pas le cardio",
+        "Concentrez-vous sur les zones de tension spécifiques à votre morphologie",
+        "Séance idéale le lendemain d'une séance intense ou d'une compétition"
+      ],
+      "coachingTipsEn": [
+        "The jog should remain very slow: the main goal is mobility, not cardio",
+        "Focus on tension areas specific to your body",
+        "Ideal session the day after an intense workout or competition"
+      ],
+      "commonMistakes": [
+        "Accélérer le rythme de course entre les blocs de mobilité",
+        "Faire les exercices de mobilité trop vite sans contrôler le mouvement",
+        "Négliger les exercices de mobilité du haut du corps (épaules, thorax)"
+      ],
+      "commonMistakesEn": [
+        "Speeding up the running pace between mobility blocks",
+        "Doing mobility exercises too fast without controlling the movement",
+        "Neglecting upper body mobility exercises (shoulders, thorax)"
+      ],
+      "variationIds": ["REC-001", "REC-011"],
+      "selectionCriteria": {
+        "phases": ["base", "build", "peak", "recovery"],
+        "weekPositions": ["early", "late"],
+        "relativeLoad": "light",
+        "tags": ["recovery", "mobility", "flexibility", "post-race"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "REC-016",
+      "name": "Footing régénération longue en nature",
+      "nameEn": "Long Nature Regeneration Run",
+      "description": "Sortie longue et très lente en environnement naturel (forêt, parc, chemin). Effort minimal, plaisir maximal. 45-60 minutes en Z1 strict sur terrain souple. Favorise la régénération mentale autant que physique.",
+      "descriptionEn": "Long and very slow run in natural environment (forest, park, trails). Minimal effort, maximum enjoyment. 45-60 minutes in strict Z1 on soft terrain. Promotes mental regeneration as much as physical.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 45, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersSoft": true },
+      "warmupTemplate": [],
+      "mainSetTemplate": [
+        { "description": "45-60min footing très lent en nature (forêt, parc, sentier). Z1 stricte. Aucun objectif d'allure. Marchez dans les côtes si nécessaire.", "descriptionEn": "45-60min very slow jog in nature (forest, park, trail). Strict Z1. No pace objective. Walk uphills if needed.", "durationMin": 50, "zone": "Z1" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Étirements légers en plein air", "descriptionEn": "Light stretching outdoors", "durationMin": 5, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Laissez votre montre à la maison ou cachez l'écran : courez sans aucune donnée",
+        "Si vous pouvez respirer par le nez tout du long, vous êtes à la bonne allure",
+        "Privilégiez les sentiers en terre, l'herbe ou le sous-bois pour réduire l'impact"
+      ],
+      "coachingTipsEn": [
+        "Leave your watch at home or hide the screen: run with no data",
+        "If you can breathe through your nose the whole time, you're at the right pace",
+        "Prefer dirt trails, grass, or forest floor to reduce impact"
+      ],
+      "commonMistakes": [
+        "Transformer cette sortie en vrai entraînement en accélérant progressivement",
+        "Courir sur route et béton au lieu de terrain souple naturel",
+        "Se sentir coupable de courir si lentement : la lenteur est le but"
+      ],
+      "commonMistakesEn": [
+        "Turning this outing into real training by progressively speeding up",
+        "Running on road and concrete instead of natural soft terrain",
+        "Feeling guilty about running so slowly: slowness is the goal"
+      ],
+      "variationIds": ["REC-004", "REC-010"],
+      "selectionCriteria": {
+        "phases": ["base", "build", "recovery"],
+        "weekPositions": ["early", "late"],
+        "relativeLoad": "light",
+        "tags": ["recovery", "nature", "mental", "regeneration", "slow"],
+        "priorityScore": 85
+      }
     }
   ]
 }

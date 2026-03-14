@@ -103,7 +103,9 @@
     "about": "À propos",
     "contribute": "Contribuer",
     "settings": "Paramètres",
-    "changelog": "Nouveautés"
+    "changelog": "Nouveautés",
+    "plans": "Plans",
+    "discover": "Découvrir"
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",

@@ -2,6 +2,83 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.1.5",
+    date: "2026-03-14",
+    changes: {
+      added: [
+        {
+          text: "Formulaire de contribution communautaire avec deux modes (idée rapide / séance complète)",
+          textEn:
+            "Community contribution form with two modes (quick idea / full workout)",
+          category: "Contribution",
+          categoryEn: "Contribution",
+        },
+        {
+          text: "Wizard 4 étapes pour créer une séance détaillée avec prévisualisation en temps réel",
+          textEn:
+            "4-step wizard to create a detailed workout with real-time preview",
+          category: "Contribution",
+          categoryEn: "Contribution",
+        },
+        {
+          text: "Génération automatique d'issues GitLab pré-remplies depuis le formulaire",
+          textEn:
+            "Automatic generation of pre-filled GitLab issues from the form",
+          category: "Contribution",
+          categoryEn: "Contribution",
+        },
+        {
+          text: "Templates d'issues GitLab pour les soumissions de séances (idée rapide et détaillée)",
+          textEn:
+            "GitLab issue templates for workout submissions (quick idea and detailed)",
+          category: "Contribution",
+          categoryEn: "Contribution",
+        },
+        {
+          text: "Guide de contribution (CONTRIBUTING.md) avec conventions et instructions",
+          textEn:
+            "Contribution guide (CONTRIBUTING.md) with conventions and instructions",
+          category: "Contribution",
+          categoryEn: "Contribution",
+        },
+        {
+          text: "17 nouvelles séances scientifiquement fondées (181 au total)",
+          textEn: "17 new scientifically-grounded workouts (181 total)",
+          category: "Bibliothèque",
+          categoryEn: "Library",
+        },
+        {
+          text: "4 nouveaux tests d'évaluation : Cooper, Conconi, Yasso 800s, MAF Maffetone",
+          textEn:
+            "4 new assessment tests: Cooper, Conconi, Yasso 800s, MAF Maffetone",
+          category: "Bibliothèque",
+          categoryEn: "Library",
+        },
+        {
+          text: "5 nouveaux fartleks : kényan 1/1, dégressif, 2/1 longue distance, escalier montant, whistle",
+          textEn:
+            "5 new fartleks: Kenyan 1/1, descending, long distance 2/1, ascending ladder, whistle",
+          category: "Bibliothèque",
+          categoryEn: "Library",
+        },
+        {
+          text: "4 nouvelles séances de récupération : pieds nus, aqua jogging, mobilité articulaire, régénération nature",
+          textEn:
+            "4 new recovery sessions: barefoot, aqua jogging, joint mobility, nature regeneration",
+          category: "Bibliothèque",
+          categoryEn: "Library",
+        },
+        {
+          text: "4 nouvelles séances de côtes : sprints explosifs, gradient progressif, rolling hills, technique de descente",
+          textEn:
+            "4 new hill sessions: explosive sprints, progressive gradient, rolling hills, downhill technique",
+          category: "Bibliothèque",
+          categoryEn: "Library",
+        },
+      ],
+    },
+  },
+  {
     version: "0.1.4",
     date: "2026-02-13",
     changes: {

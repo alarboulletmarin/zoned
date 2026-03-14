@@ -1,0 +1,92 @@
+{
+  "title": "Contribuer",
+  "subtitle": "Proposez une séance à la communauté",
+  "description": "Partagez vos séances d'entraînement préférées avec la communauté Zoned",
+  "quickIdea": {
+    "title": "Idée rapide",
+    "subtitle": "Décrivez votre idée de séance en quelques mots",
+    "nameLabel": "Nom de la séance",
+    "namePlaceholder": "Ex: Fartlek en nature",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Décrivez la séance, son objectif, et comment la réaliser...",
+    "categoryLabel": "Catégorie",
+    "difficultyLabel": "Niveau"
+  },
+  "fullWorkout": {
+    "title": "Séance complète",
+    "subtitle": "Construisez une séance détaillée avec prévisualisation",
+    "step1Title": "Informations de base",
+    "step2Title": "Échauffement et corps de séance",
+    "step3Title": "Retour au calme et conseils",
+    "step4Title": "Prévisualisation et soumission",
+    "nameLabel": "Nom (FR)",
+    "nameEnLabel": "Nom (EN)",
+    "nameEnPlaceholder": "English name (optional)",
+    "descriptionLabel": "Description (FR)",
+    "descriptionEnLabel": "Description (EN)",
+    "descriptionEnPlaceholder": "English description (optional)",
+    "sessionTypeLabel": "Type de séance",
+    "targetSystemLabel": "Système ciblé",
+    "durationLabel": "Durée typique (minutes)",
+    "durationMin": "Min",
+    "durationMax": "Max"
+  },
+  "blocks": {
+    "warmup": "Échauffement",
+    "mainSet": "Corps de séance",
+    "cooldown": "Retour au calme",
+    "addBlock": "Ajouter un bloc",
+    "removeBlock": "Supprimer",
+    "moveUp": "Monter",
+    "moveDown": "Descendre",
+    "description": "Description",
+    "descriptionPlaceholder": "Ex: Footing progressif en Z2",
+    "descriptionEn": "Description (EN)",
+    "descriptionEnPlaceholder": "English description (optional)",
+    "duration": "Durée (min)",
+    "zone": "Zone",
+    "repetitions": "Répétitions",
+    "recovery": "Récupération",
+    "recoveryPlaceholder": "Ex: 2min footing Z1",
+    "emptyState": "Aucun bloc. Ajoutez-en un pour commencer."
+  },
+  "tips": {
+    "coachingLabel": "Conseils d'entraîneur",
+    "coachingPlaceholder": "Ex: Gardez une foulée relâchée et régulière",
+    "mistakesLabel": "Erreurs courantes",
+    "mistakesPlaceholder": "Ex: Partir trop vite sur les premières répétitions",
+    "coachingEnLabel": "Coaching tips (EN)",
+    "mistakesEnLabel": "Common mistakes (EN)",
+    "addTip": "Ajouter",
+    "removeTip": "Supprimer"
+  },
+  "environment": {
+    "title": "Environnement",
+    "requiresHills": "Nécessite des côtes",
+    "requiresTrack": "Nécessite une piste",
+    "prefersFlat": "Préfère le plat",
+    "prefersSoft": "Préfère sol souple"
+  },
+  "preview": {
+    "title": "Prévisualisation",
+    "show": "Afficher la prévisualisation",
+    "hide": "Masquer la prévisualisation",
+    "emptyState": "Complétez les informations ci-dessus pour voir un aperçu de votre séance"
+  },
+  "submit": {
+    "generateIssue": "Soumettre sur GitLab",
+    "copyDescription": "Copier la description",
+    "openGitlab": "Ouvrir GitLab",
+    "urlTooLong": "La description est trop longue pour un lien direct. Elle a été copiée dans votre presse-papiers.",
+    "copied": "Copié dans le presse-papiers !",
+    "success": "Merci pour votre contribution !",
+    "thankYou": "Votre séance sera examinée par les mainteneurs du projet.",
+    "required": "Ce champ est requis",
+    "atLeastOneBlock": "Ajoutez au moins un bloc dans le corps de séance"
+  },
+  "steps": {
+    "next": "Suivant",
+    "previous": "Précédent",
+    "step": "Étape"
+  }
+}

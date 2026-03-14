@@ -103,7 +103,9 @@
     "about": "About",
     "contribute": "Contribute",
     "settings": "Settings",
-    "changelog": "What's New"
+    "changelog": "What's New",
+    "plans": "Plans",
+    "discover": "Discover"
   },
   "errors": {
     "workoutNotFound": "Workout not found",

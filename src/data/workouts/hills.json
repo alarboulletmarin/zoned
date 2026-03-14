@@ -962,6 +962,388 @@
         ],
         "priorityScore": 70
       }
+    },
+    {
+      "id": "HIL-012",
+      "name": "Sprints en côte explosifs",
+      "nameEn": "Explosive Hill Sprints",
+      "description": "Sprints maximaux de 8-10 secondes en côte raide (8-12% de pente). Travail neuromusculaire pur : recrute les fibres rapides et améliore la puissance de propulsion sans accumulation de lactate. Récupération complète entre chaque sprint. Protocole Hudson/Canova.",
+      "descriptionEn": "Maximal sprints of 8-10 seconds on a steep hill (8-12% gradient). Pure neuromuscular work: recruits fast-twitch fibers and improves propulsion power without lactate accumulation. Full recovery between sprints. Hudson/Canova protocol.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "speed",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 30,
+        "max": 40
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing avec activation progressive incluant la côte",
+          "descriptionEn": "Jog with progressive activation including the hill",
+          "durationMin": 15,
+          "zone": "Z2"
+        },
+        {
+          "description": "Gammes : montées de genoux, talon-fesses, griffes, plus 2 côtes à 70% d'effort",
+          "descriptionEn": "Drills: high knees, butt kicks, pawing, plus 2 hills at 70% effort",
+          "durationMin": 5,
+          "zone": "Z3"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "6-8x sprint en côte maximal de 8-10 secondes. Pente 8-12%. Effort 100%.",
+          "descriptionEn": "6-8x maximal hill sprint of 8-10 seconds. Gradient 8-12%. 100% effort.",
+          "repetitions": 8,
+          "zone": "Z6",
+          "recovery": "Descente en marchant + 2-3 min repos complet"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération sur plat",
+          "descriptionEn": "Recovery jog on flat",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Chaque sprint doit être à effort maximal — si vous ralentissez, arrêtez la séance",
+        "La récupération complète (2-3 min) est essentielle : ce n'est pas du travail cardio mais neuromusculaire",
+        "Débutez avec 4 sprints et ajoutez 1 par semaine jusqu'à 8-10"
+      ],
+      "coachingTipsEn": [
+        "Each sprint must be maximal effort — if you slow down, stop the session",
+        "Full recovery (2-3 min) is essential: this is neuromuscular work, not cardio",
+        "Start with 4 sprints and add 1 per week up to 8-10"
+      ],
+      "commonMistakes": [
+        "Faire des sprints trop longs (15-20s) qui deviennent du travail lactique",
+        "Ne pas récupérer assez entre les sprints, dégradant la qualité de l'effort",
+        "Utiliser une côte trop raide (>15%) qui dégrade la mécanique de course"
+      ],
+      "commonMistakesEn": [
+        "Doing sprints too long (15-20s) that become lactate work",
+        "Not recovering enough between sprints, degrading effort quality",
+        "Using a hill too steep (>15%) that degrades running mechanics"
+      ],
+      "variationIds": [
+        "HIL-001"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "early",
+          "mid"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "hills",
+          "sprint",
+          "explosive",
+          "neuromuscular",
+          "power"
+        ],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "HIL-013",
+      "name": "Côtes en escalier (gradient progressif)",
+      "nameEn": "Staircase Hills (Progressive Gradient)",
+      "description": "Séance sur une côte avec sections de pente croissante. Commencer par la partie la moins raide et progresser vers les sections les plus pentues. Développe la force spécifique en côte de façon progressive.",
+      "descriptionEn": "Session on a hill with sections of increasing gradient. Start on the gentlest section and progress to the steepest parts. Develops hill-specific strength progressively.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "strength",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 40,
+        "max": 50
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif sur le plat et début de côte",
+          "descriptionEn": "Progressive jog on flat and start of hill",
+          "durationMin": 15,
+          "zone": "Z2"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3x200m côte douce (4-6% pente)",
+          "descriptionEn": "3x200m gentle hill (4-6% gradient)",
+          "distanceM": 200,
+          "repetitions": 3,
+          "zone": "Z3",
+          "recovery": "Descente en trottinant"
+        },
+        {
+          "description": "3x200m côte moyenne (6-8% pente)",
+          "descriptionEn": "3x200m moderate hill (6-8% gradient)",
+          "distanceM": 200,
+          "repetitions": 3,
+          "zone": "Z4",
+          "recovery": "Descente en trottinant"
+        },
+        {
+          "description": "3x150m côte raide (8-12% pente)",
+          "descriptionEn": "3x150m steep hill (8-12% gradient)",
+          "distanceM": 150,
+          "repetitions": 3,
+          "zone": "Z5",
+          "recovery": "Descente en marchant"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération sur terrain plat",
+          "descriptionEn": "Recovery jog on flat terrain",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "L'idée est de progresser dans la difficulté : ne partez pas sur la section la plus raide",
+        "Adaptez votre technique à la pente : corps plus penché vers l'avant et foulée plus courte sur les sections raides",
+        "Si vous n'avez pas une côte avec gradient variable, utilisez 3 côtes différentes"
+      ],
+      "coachingTipsEn": [
+        "The idea is to progress in difficulty: don't start on the steepest section",
+        "Adapt your technique to the slope: lean forward more and shorten stride on steep sections",
+        "If you don't have a variable gradient hill, use 3 different hills"
+      ],
+      "commonMistakes": [
+        "Courir toutes les répétitions à la même intensité sans adapter au gradient",
+        "Négliger la technique de course en côte raide (bras, posture, fréquence)",
+        "Enchaîner trop rapidement sans récupérer entre les séries de gradient différent"
+      ],
+      "commonMistakesEn": [
+        "Running all reps at the same intensity without adapting to the gradient",
+        "Neglecting steep hill running technique (arms, posture, cadence)",
+        "Moving too quickly between sets of different gradient without recovering"
+      ],
+      "variationIds": [
+        "HIL-001",
+        "HIL-006"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "hills",
+          "gradient",
+          "progressive",
+          "staircase",
+          "strength"
+        ],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "HIL-014",
+      "name": "Course continue en terrain vallonné",
+      "nameEn": "Rolling Hills Continuous Run",
+      "description": "Course continue de 40-50 minutes sur terrain vallonné sans structure d'intervalles. Effort constant basé sur la perception : pousser dans les montées, relâcher légèrement dans les descentes. Méthode Lydiard.",
+      "descriptionEn": "40-50 minute continuous run on undulating terrain without interval structure. Constant perceived effort: push on uphills, ease slightly on downhills. Lydiard method.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 45,
+        "max": 60
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif sur les premiers vallonnements",
+          "descriptionEn": "Progressive jog on the first rolling sections",
+          "durationMin": 10,
+          "zone": "Z2"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "35-45min course continue sur terrain vallonné. Effort constant (Z2-Z3). Pousser dans les montées sans exploser. Relâcher dans les descentes sans sprinter.",
+          "descriptionEn": "35-45min continuous run on undulating terrain. Constant effort (Z2-Z3). Push on uphills without blowing up. Ease on downhills without sprinting.",
+          "durationMin": 40,
+          "zone": "Z3"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération sur terrain plat",
+          "descriptionEn": "Recovery jog on flat terrain",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "L'effort perçu doit rester constant : l'allure changera avec le terrain mais la sensation reste la même",
+        "Comme le disait Lydiard : 'undulating, undulating, not hills' — cherchez les vallonnements, pas les cols",
+        "Le terrain herbeux et vallonné (parc, campagne) est idéal pour cette séance"
+      ],
+      "coachingTipsEn": [
+        "Perceived effort should remain constant: pace will change with terrain but the feeling stays the same",
+        "As Lydiard said: 'undulating, undulating, not hills' — seek rolling terrain, not mountain passes",
+        "Grassy undulating terrain (park, countryside) is ideal for this session"
+      ],
+      "commonMistakes": [
+        "Accélérer dans les descentes et transformer la séance en interval training naturel",
+        "Choisir un terrain trop vallonné avec des côtes trop longues et raides",
+        "Se focaliser sur l'allure au lieu de l'effort perçu sur ce type de terrain"
+      ],
+      "commonMistakesEn": [
+        "Speeding up on downhills turning the session into natural interval training",
+        "Choosing too hilly terrain with hills that are too long and steep",
+        "Focusing on pace instead of perceived effort on this type of terrain"
+      ],
+      "variationIds": [
+        "HIL-007"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid",
+          "late"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "hills",
+          "rolling",
+          "continuous",
+          "lydiard",
+          "endurance"
+        ],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "HIL-015",
+      "name": "Technique de descente contrôlée",
+      "nameEn": "Controlled Downhill Technique",
+      "description": "Séance dédiée à la technique de descente pour préparer les courses vallonnées et trails. Descentes répétées à allure modérée avec focus sur la technique : cadence élevée, posture droite, atterrissage sous le centre de gravité. Entraîne la contraction excentrique des quadriceps.",
+      "descriptionEn": "Session dedicated to downhill technique for hilly races and trail preparation. Repeated descents at moderate pace with focus on technique: high cadence, upright posture, landing under center of gravity. Trains eccentric quadriceps contraction.",
+      "category": "hills",
+      "sessionType": "hills",
+      "targetSystem": "strength",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 40,
+        "max": 50
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif sur terrain mixte",
+          "descriptionEn": "Progressive jog on mixed terrain",
+          "durationMin": 15,
+          "zone": "Z2"
+        },
+        {
+          "description": "Montée et descente douce en trottinant x2 pour échauffer les quadriceps",
+          "descriptionEn": "Gentle uphill and downhill jog x2 to warm up quadriceps",
+          "durationMin": 5,
+          "zone": "Z2"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "6x montée en footing (récupération active)",
+          "descriptionEn": "6x jog uphill (active recovery)",
+          "durationMin": 3,
+          "zone": "Z3",
+          "repetitions": 6
+        },
+        {
+          "description": "6x descente de 200-300m à allure modérée (pente 5-8%). Focus technique : cadence haute (>180 spm), posture droite, pas de freinage, atterrissage médiopied",
+          "descriptionEn": "6x 200-300m descent at moderate pace (5-8% grade). Technique focus: high cadence (>180 spm), upright posture, no braking, midfoot landing",
+          "distanceM": 250,
+          "repetitions": 6,
+          "zone": "Z3"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération sur plat",
+          "descriptionEn": "Recovery jog on flat",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "L'objectif n'est PAS la vitesse mais la technique : cadence élevée, pas courts, corps droit",
+        "Commencez par des pentes douces (4-5%) avant de passer aux descentes plus raides",
+        "Attendez 72h minimum avant de refaire une séance de descente : les DOMS arrivent avec un délai de 24-48h"
+      ],
+      "coachingTipsEn": [
+        "The goal is NOT speed but technique: high cadence, short steps, upright body",
+        "Start with gentle slopes (4-5%) before moving to steeper descents",
+        "Wait at least 72h before repeating a downhill session: DOMS arrive with a 24-48h delay"
+      ],
+      "commonMistakes": [
+        "Freiner avec des grands pas en descente : utilisez des pas courts et rapides",
+        "Se pencher en arrière : gardez le buste au-dessus des pieds",
+        "Faire cette séance sur surface dure (béton) : privilégiez les chemins en terre"
+      ],
+      "commonMistakesEn": [
+        "Braking with long strides on descent: use short, quick steps",
+        "Leaning backward: keep your torso above your feet",
+        "Doing this session on hard surface (concrete): prefer dirt trails"
+      ],
+      "variationIds": [
+        "HIL-011"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "hills",
+          "downhill",
+          "technique",
+          "eccentric",
+          "trail"
+        ],
+        "priorityScore": 75
+      }
     }
   ]
 }

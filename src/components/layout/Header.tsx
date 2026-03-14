@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book, Search, MoreHorizontal, ClipboardCheck, Settings, Library, Sparkles, Send } from "@/components/icons";
+import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book, Search, MoreHorizontal, ClipboardCheck, Settings, Library, Sparkles, Send, CalendarRange, Compass } from "@/components/icons";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/logo.svg?react";
@@ -58,6 +58,10 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
   const navLinks = [
     { href: "/", label: t("nav.home") },
     { href: "/library", label: t("nav.library") },
+    { href: "/plans", label: t("nav.plans", "Plans") },
+  ];
+
+  const discoverLinks = [
     { href: "/collections", label: t("collections.title") },
     { href: "/learn", label: t("nav.learn") },
     { href: "/glossary", label: t("nav.glossary") },
@@ -91,6 +95,31 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
               {link.label}
             </Link>
           ))}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-primary whitespace-nowrap flex items-center gap-1",
+                  "nav-link-animated",
+                  discoverLinks.some(l => location.pathname === l.href || location.pathname.startsWith(l.href + "/"))
+                    ? "text-foreground"
+                    : "text-muted-foreground"
+                )}
+              >
+                <Compass className="size-4" />
+                {t("nav.discover", "Discover")}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="center">
+              {discoverLinks.map((link) => (
+                <DropdownMenuItem key={link.href} asChild>
+                  <Link to={link.href} viewTransition>
+                    {link.label}
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </nav>
 
         {/* Actions Desktop */}
@@ -282,6 +311,28 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
               {t("nav.library")}
             </Link>
 
+            {/* Plans */}
+            <Link
+              to="/plans"
+              viewTransition
+              onClick={() => setMobileMenuOpen(false)}
+              className={cn(
+                "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
+                location.pathname === "/plans" || location.pathname.startsWith("/plan/")
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <CalendarRange className="size-4" />
+              {t("nav.plans", "Plans")}
+            </Link>
+
+            {/* Discover separator */}
+            <div className="border-t my-2" />
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-0 py-1">
+              {t("nav.discover", "Discover")}
+            </span>
+
             {/* Collections */}
             <Link
               to="/collections"
@@ -329,6 +380,9 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
               <Book className="size-4" />
               {t("nav.glossary")}
             </Link>
+
+            {/* Tools separator */}
+            <div className="border-t my-2" />
 
             {/* Quiz */}
             <Link

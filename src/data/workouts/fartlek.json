@@ -813,6 +813,595 @@
         ],
         "priorityScore": 85
       }
+    },
+    {
+      "id": "FAR-010",
+      "name": "Fartlek découverte",
+      "nameEn": "Introduction Fartlek",
+      "description": "Fartlek accessible pour les débutants. Huit courtes accélérations de 30 secondes avec récupération généreuse. Jeu de vitesse ludique.",
+      "descriptionEn": "Accessible fartlek for beginners. Eight short 30-second accelerations with generous recovery. Fun speed play.",
+      "category": "fartlek",
+      "sessionType": "fartlek",
+      "targetSystem": "aerobic_power",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 35, "max": 45 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Footing lent progressif", "descriptionEn": "Slow progressive jog", "durationMin": 10, "zone": "Z1-Z2" },
+        { "description": "Étirements dynamiques", "descriptionEn": "Dynamic stretches", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "8x 30s plus rapide (Z3-Z4) / 90s récup footing facile (Z1-Z2)",
+          "descriptionEn": "8x 30s faster (Z3-Z4) / 90s easy recovery jog (Z1-Z2)",
+          "zone": "Z3-Z4",
+          "repetitions": 8,
+          "recovery": "90s footing Z1-Z2"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération et étirements", "descriptionEn": "Recovery jog and stretching", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Les accélérations sont modérées, pas des sprints",
+        "Utilisez des repères visuels (lampadaires, arbres)",
+        "La récupération de 90s permet de bien récupérer",
+        "Séance amusante pour découvrir le changement de rythme"
+      ],
+      "coachingTipsEn": [
+        "Accelerations are moderate, not sprints",
+        "Use visual landmarks (lampposts, trees)",
+        "The 90s recovery allows full recovery",
+        "Fun session to discover pace changes"
+      ],
+      "commonMistakes": [
+        "Partir en sprint dès la première accélération",
+        "Récupérer en marchant au lieu de trottiner",
+        "Ne pas s'amuser : le fartlek est un jeu de vitesse"
+      ],
+      "commonMistakesEn": [
+        "Sprinting from the first acceleration",
+        "Walking during recovery instead of jogging",
+        "Not having fun: fartlek is speed play"
+      ],
+      "variationIds": ["FAR-001", "FAR-003"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["speed-play", "introduction"],
+        "priorityScore": 70
+      }
+    },
+    {
+      "id": "FAR-011",
+      "name": "Fartlek kényan (1/1)",
+      "nameEn": "Kenyan Fartlek (1/1)",
+      "description": "Fartlek standard des camps d'entraînement kényans. Alternance stricte 1 minute rapide / 1 minute récup pendant 30-40 minutes. Effort basé sur les sensations, sans montre. Séance emblématique du jeudi à Iten (Kenya).",
+      "descriptionEn": "Standard fartlek from Kenyan training camps. Strict alternation of 1 minute fast / 1 minute recovery for 30-40 minutes. Effort-based, no watch needed. Iconic Thursday session in Iten (Kenya).",
+      "category": "fartlek",
+      "sessionType": "fartlek",
+      "targetSystem": "aerobic_power",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 55,
+        "max": 70
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif sur chemin",
+          "descriptionEn": "Progressive jog on path",
+          "durationMin": 15,
+          "zone": "Z2"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "20x(1min rapide effort 5K-10K / 1min footing actif)",
+          "descriptionEn": "20x(1min fast at 5K-10K effort / 1min active jog)",
+          "durationMin": 1,
+          "zone": "Z5",
+          "repetitions": 20,
+          "recovery": "1min footing soutenu Z2-Z3"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "L'effort est basé sur les sensations, pas sur l'allure GPS — courez à l'instinct comme les Kényans",
+        "La récupération est un footing soutenu (float), pas de la marche ni du jogging très lent",
+        "Variante : utilisez 2/1 ou 3/1 pour varier le stimulus"
+      ],
+      "coachingTipsEn": [
+        "Effort is based on feel, not GPS pace — run by instinct like the Kenyans",
+        "Recovery is a sustained float jog, not walking or very slow jogging",
+        "Variation: use 2/1 or 3/1 ratios to vary the stimulus"
+      ],
+      "commonMistakes": [
+        "Courir les efforts trop vite au début et ne pas pouvoir maintenir sur 20 répétitions",
+        "Récupérer en marchant au lieu de maintenir un rythme de footing actif",
+        "Regarder sa montre constamment au lieu de sentir l'effort"
+      ],
+      "commonMistakesEn": [
+        "Running efforts too fast early and being unable to maintain over 20 reps",
+        "Recovering by walking instead of maintaining an active jog rhythm",
+        "Constantly checking the watch instead of feeling the effort"
+      ],
+      "variationIds": [
+        "FAR-001",
+        "FAR-013"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "fartlek",
+          "kenyan",
+          "1-1",
+          "effort-based"
+        ],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "FAR-012",
+      "name": "Fartlek dégressif",
+      "nameEn": "Descending Fartlek",
+      "description": "Fartlek avec efforts de plus en plus courts mais de plus en plus rapides. Schéma : 5min-4min-3min-2min-1min avec récupération de 90 secondes. Intensité croissante du tempo au sprint. Développe la capacité à accélérer en fin de course.",
+      "descriptionEn": "Fartlek with progressively shorter but faster efforts. Pattern: 5min-4min-3min-2min-1min with 90-second recovery. Increasing intensity from tempo to sprint. Develops ability to accelerate in late race stages.",
+      "category": "fartlek",
+      "sessionType": "fartlek",
+      "targetSystem": "aerobic_power",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 45,
+        "max": 55
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z2"
+        },
+        {
+          "description": "Gammes et 3x accélérations",
+          "descriptionEn": "Drills and 3x accelerations",
+          "durationMin": 5,
+          "zone": "Z3"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "5min à allure tempo",
+          "descriptionEn": "5min at tempo pace",
+          "durationMin": 5,
+          "zone": "Z3"
+        },
+        {
+          "description": "90s récupération footing",
+          "descriptionEn": "90s recovery jog",
+          "durationMin": 1.5,
+          "zone": "Z2"
+        },
+        {
+          "description": "4min à allure seuil",
+          "descriptionEn": "4min at threshold pace",
+          "durationMin": 4,
+          "zone": "Z4"
+        },
+        {
+          "description": "90s récupération footing",
+          "descriptionEn": "90s recovery jog",
+          "durationMin": 1.5,
+          "zone": "Z2"
+        },
+        {
+          "description": "3min à allure 10K",
+          "descriptionEn": "3min at 10K pace",
+          "durationMin": 3,
+          "zone": "Z4"
+        },
+        {
+          "description": "90s récupération footing",
+          "descriptionEn": "90s recovery jog",
+          "durationMin": 1.5,
+          "zone": "Z2"
+        },
+        {
+          "description": "2min à allure 5K",
+          "descriptionEn": "2min at 5K pace",
+          "durationMin": 2,
+          "zone": "Z5"
+        },
+        {
+          "description": "90s récupération footing",
+          "descriptionEn": "90s recovery jog",
+          "durationMin": 1.5,
+          "zone": "Z2"
+        },
+        {
+          "description": "1min à effort maximal",
+          "descriptionEn": "1min at near max effort",
+          "durationMin": 1,
+          "zone": "Z5"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "L'effort doit augmenter de façon progressive — ne sprintez pas dès le départ",
+        "Le dernier effort d'1 minute doit être le plus rapide de toute la séance",
+        "90 secondes de récupération suffisent pour maintenir l'enchaînement sans récupérer totalement"
+      ],
+      "coachingTipsEn": [
+        "Effort should increase progressively — don't sprint from the start",
+        "The last 1-minute effort should be the fastest of the entire session",
+        "90 seconds of recovery is enough to maintain flow without fully recovering"
+      ],
+      "commonMistakes": [
+        "Courir le 5 minutes trop vite et ne pas pouvoir accélérer ensuite",
+        "Garder la même allure sur tous les efforts au lieu d'accélérer progressivement",
+        "Allonger les récupérations au-delà de 90 secondes"
+      ],
+      "commonMistakesEn": [
+        "Running the 5-minute effort too fast and being unable to accelerate later",
+        "Keeping the same pace on all efforts instead of progressively accelerating",
+        "Extending recoveries beyond 90 seconds"
+      ],
+      "variationIds": [
+        "FAR-003"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "fartlek",
+          "descending",
+          "progressive",
+          "race-finish"
+        ],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "FAR-013",
+      "name": "Fartlek 2/1 longue distance",
+      "nameEn": "Long Distance 2/1 Fartlek",
+      "description": "Fartlek d'endurance spécifique au demi-marathon et marathon. Alternance 2 minutes à allure seuil / 1 minute footing pendant 40 minutes. Volume élevé à intensité modérée-haute. Classique des camps d'entraînement kényans pour le marathon.",
+      "descriptionEn": "Endurance-specific fartlek for half-marathon and marathon. Alternating 2 minutes at threshold pace / 1 minute jog for 40 minutes. High volume at moderate-high intensity. Classic Kenyan camp workout for marathon preparation.",
+      "category": "fartlek",
+      "sessionType": "fartlek",
+      "targetSystem": "lactate_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 60,
+        "max": 75
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z2"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "14x(2min à allure seuil / 1min footing actif)",
+          "descriptionEn": "14x(2min at threshold pace / 1min active jog)",
+          "durationMin": 2,
+          "zone": "Z4",
+          "repetitions": 14,
+          "recovery": "1min footing Z2-Z3"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération progressif",
+          "descriptionEn": "Progressive recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "L'allure de seuil correspond à votre allure semi-marathon ou légèrement plus rapide",
+        "La minute de récupération est un footing soutenu, pas de la marche",
+        "Séance clé pour le demi-marathon et marathon : développe l'endurance au seuil"
+      ],
+      "coachingTipsEn": [
+        "Threshold pace corresponds to your half-marathon pace or slightly faster",
+        "The recovery minute is a sustained jog, not walking",
+        "Key session for half-marathon and marathon: develops threshold endurance"
+      ],
+      "commonMistakes": [
+        "Courir les efforts trop vite : ce n'est pas du VMA mais du seuil",
+        "Récupérer trop lentement, ce qui diminue le stimulus aérobie continu",
+        "Ne pas avoir assez de base d'endurance pour supporter 40 minutes de travail"
+      ],
+      "commonMistakesEn": [
+        "Running efforts too fast: this is threshold work, not VO2max",
+        "Recovering too slowly, which reduces the continuous aerobic stimulus",
+        "Not having enough endurance base to support 40 minutes of work"
+      ],
+      "variationIds": [
+        "FAR-011",
+        "FAR-006"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "key",
+        "tags": [
+          "fartlek",
+          "marathon",
+          "half-marathon",
+          "kenyan",
+          "threshold"
+        ],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "FAR-014",
+      "name": "Fartlek en escalier montant",
+      "nameEn": "Ascending Ladder Fartlek",
+      "description": "Fartlek progressif avec efforts de plus en plus longs : 1-2-3-4-5 minutes, avec récupération égale à la moitié du temps d'effort. Apprend à gérer l'effort croissant et développe l'endurance mentale. Idéal pour la préparation marathon.",
+      "descriptionEn": "Progressive fartlek with increasingly longer efforts: 1-2-3-4-5 minutes, with recovery equal to half the effort time. Teaches managing increasing effort and develops mental endurance. Ideal for marathon preparation.",
+      "category": "fartlek",
+      "sessionType": "fartlek",
+      "targetSystem": "aerobic_power",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 45,
+        "max": 55
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z2"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "1min rapide (allure 5K)",
+          "descriptionEn": "1min fast (5K pace)",
+          "durationMin": 1,
+          "zone": "Z5"
+        },
+        {
+          "description": "30s récupération footing",
+          "descriptionEn": "30s recovery jog",
+          "durationMin": 0.5,
+          "zone": "Z2"
+        },
+        {
+          "description": "2min rapide (allure 10K)",
+          "descriptionEn": "2min fast (10K pace)",
+          "durationMin": 2,
+          "zone": "Z4"
+        },
+        {
+          "description": "1min récupération footing",
+          "descriptionEn": "1min recovery jog",
+          "durationMin": 1,
+          "zone": "Z2"
+        },
+        {
+          "description": "3min soutenu (allure seuil)",
+          "descriptionEn": "3min sustained (threshold pace)",
+          "durationMin": 3,
+          "zone": "Z4"
+        },
+        {
+          "description": "90s récupération footing",
+          "descriptionEn": "90s recovery jog",
+          "durationMin": 1.5,
+          "zone": "Z2"
+        },
+        {
+          "description": "4min soutenu (allure tempo)",
+          "descriptionEn": "4min sustained (tempo pace)",
+          "durationMin": 4,
+          "zone": "Z3"
+        },
+        {
+          "description": "2min récupération footing",
+          "descriptionEn": "2min recovery jog",
+          "durationMin": 2,
+          "zone": "Z2"
+        },
+        {
+          "description": "5min soutenu (allure marathon-semi)",
+          "descriptionEn": "5min sustained (marathon-half pace)",
+          "durationMin": 5,
+          "zone": "Z3"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "L'effort doit rester constant malgré la durée croissante — ne ralentissez pas sur le 5min",
+        "La récupération courte (moitié du temps d'effort) maintient le stress métabolique",
+        "Pensez à votre respiration : contrôlée sur les efforts longs"
+      ],
+      "coachingTipsEn": [
+        "Effort should remain constant despite increasing duration — don't slow down on the 5min",
+        "Short recovery (half the effort time) maintains metabolic stress",
+        "Focus on your breathing: controlled during long efforts"
+      ],
+      "commonMistakes": [
+        "Partir trop vite sur le 1min et ne pas pouvoir maintenir les efforts suivants",
+        "Allonger les récupérations quand l'effort grandit",
+        "Abandonner mentalement sur le 4 ou 5 minutes — c'est le cœur de la séance"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast on the 1min and being unable to maintain subsequent efforts",
+        "Extending recoveries as efforts get longer",
+        "Mentally giving up on the 4 or 5 minutes — that's the core of the session"
+      ],
+      "variationIds": [
+        "FAR-003",
+        "FAR-012"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "fartlek",
+          "ladder",
+          "ascending",
+          "progressive",
+          "mental"
+        ],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "FAR-015",
+      "name": "Fartlek Whistle (intervalles aléatoires)",
+      "nameEn": "Whistle Fartlek (Random Intervals)",
+      "description": "Fartlek avec changements de rythme aléatoires signalés par un coup de sifflet (ou une alarme). Un partenaire ou une application décide des moments de changement. Efforts de 15s à 3min, imprévisibles. Simule les changements d'allure en course.",
+      "descriptionEn": "Fartlek with random pace changes signaled by a whistle (or alarm). A partner or app decides when to change. Efforts from 15s to 3min, unpredictable. Simulates race pace changes.",
+      "category": "fartlek",
+      "sessionType": "fartlek",
+      "targetSystem": "speed",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 40,
+        "max": 50
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z2"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "25 minutes de fartlek à intervalles aléatoires : au signal, alternez effort rapide (Z4-Z5) et footing (Z2). Efforts de 15s à 3min, décidés par un partenaire ou une application.",
+          "descriptionEn": "25 minutes of random interval fartlek: on the signal, alternate between fast effort (Z4-Z5) and jog (Z2). Efforts from 15s to 3min, decided by a partner or app.",
+          "durationMin": 25,
+          "zone": "Z4"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Utilisez une application de timer aléatoire ou un partenaire avec un sifflet",
+        "L'imprévisibilité est la clé : ne planifiez pas les intervalles à l'avance",
+        "Réagissez au signal immédiatement, comme un changement d'allure en course"
+      ],
+      "coachingTipsEn": [
+        "Use a random timer app or a partner with a whistle",
+        "Unpredictability is key: don't plan intervals in advance",
+        "React to the signal immediately, like a pace change in a race"
+      ],
+      "commonMistakes": [
+        "Rendre les intervalles prévisibles en utilisant un pattern régulier",
+        "Ne pas réagir au signal assez rapidement — la transition doit être immédiate",
+        "Faire uniquement des efforts courts au détriment des efforts de 2-3 minutes"
+      ],
+      "commonMistakesEn": [
+        "Making intervals predictable by using a regular pattern",
+        "Not reacting to the signal quickly enough — the transition must be immediate",
+        "Only doing short efforts at the expense of 2-3 minute efforts"
+      ],
+      "variationIds": [
+        "FAR-001"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid",
+          "late"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "fartlek",
+          "whistle",
+          "random",
+          "social",
+          "fun"
+        ],
+        "priorityScore": 75
+      }
     }
   ]
 }

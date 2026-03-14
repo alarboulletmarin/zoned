@@ -379,6 +379,361 @@
         ],
         "priorityScore": 70
       }
+    },
+    {
+      "id": "ASS-005",
+      "name": "Test de Cooper (12 minutes)",
+      "nameEn": "Cooper Test (12 Minutes)",
+      "description": "Test d'endurance de 12 minutes créé par le Dr Kenneth Cooper en 1968. Courez la plus grande distance possible en 12 minutes. Formule : VO2max = (distance en mètres - 504.9) / 44.73. Corrélation de 0.90 avec le VO2max mesuré en laboratoire.",
+      "descriptionEn": "12-minute endurance test created by Dr. Kenneth Cooper in 1968. Run the greatest distance possible in 12 minutes. Formula: VO2max = (distance in meters - 504.9) / 44.73. Correlation of 0.90 with laboratory-measured VO2max.",
+      "category": "assessment",
+      "sessionType": "vo2max",
+      "targetSystem": "vo2max",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 40,
+        "max": 50
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": true,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 12,
+          "zone": "Z2"
+        },
+        {
+          "description": "Gammes athlétiques et 3x accélérations progressives",
+          "descriptionEn": "Athletic drills and 3x progressive accelerations",
+          "durationMin": 5,
+          "zone": "Z2"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "Test 12 minutes : courez la plus grande distance possible à effort soutenu",
+          "descriptionEn": "12-minute test: run the greatest distance possible at sustained effort",
+          "durationMin": 12,
+          "zone": "Z5"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Marche 3min puis footing très lent",
+          "descriptionEn": "Walk 3min then very slow jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Dosez votre effort : partez à une allure que vous pouvez tenir 12 minutes, pas en sprint",
+        "L'allure idéale est entre votre allure 3000m et 5000m",
+        "Notez la distance totale au mètre près pour le calcul du VO2max"
+      ],
+      "coachingTipsEn": [
+        "Pace yourself: start at a pace you can hold for 12 minutes, not a sprint",
+        "The ideal pace is between your 3000m and 5000m pace",
+        "Record total distance to the nearest meter for VO2max calculation"
+      ],
+      "commonMistakes": [
+        "Partir en sprint et exploser après 3-4 minutes",
+        "Ne pas s'échauffer suffisamment avant un effort maximal",
+        "Effectuer le test par temps chaud ou venteux, ce qui fausse les résultats"
+      ],
+      "commonMistakesEn": [
+        "Starting with a sprint and blowing up after 3-4 minutes",
+        "Not warming up sufficiently before a maximal effort",
+        "Performing the test in hot or windy conditions, skewing results"
+      ],
+      "variationIds": [
+        "ASS-001"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "assessment",
+          "vo2max",
+          "cooper"
+        ],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "ASS-006",
+      "name": "Test de Conconi",
+      "nameEn": "Conconi Test",
+      "description": "Test progressif pour déterminer le seuil anaérobique par déflexion de la fréquence cardiaque. Vitesse croissante de 0.5 km/h toutes les 2 minutes. Le point de déflexion (HRDP) indique le seuil anaérobique. Protocole de Francesco Conconi (1982).",
+      "descriptionEn": "Progressive test to determine anaerobic threshold via heart rate deflection. Speed increases by 0.5 km/h every 2 minutes. The deflection point (HRDP) indicates anaerobic threshold. Francesco Conconi protocol (1982).",
+      "category": "assessment",
+      "sessionType": "threshold",
+      "targetSystem": "lactate_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 45,
+        "max": 55
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": true,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z2"
+        },
+        {
+          "description": "Mobilité et 2x accélérations douces",
+          "descriptionEn": "Mobility and 2x gentle accelerations",
+          "durationMin": 5,
+          "zone": "Z2"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "Course progressive : démarrer à 8-9 km/h, augmenter de 0.5 km/h toutes les 200m (ou 2 min). Noter FC à chaque palier. Continuer jusqu'à épuisement.",
+          "descriptionEn": "Progressive run: start at 8-9 km/h, increase by 0.5 km/h every 200m (or 2 min). Record HR at each stage. Continue until exhaustion.",
+          "durationMin": 20,
+          "zone": "Z4"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Marche puis footing très lent de récupération",
+          "descriptionEn": "Walk then very slow recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Un cardiofréquencemètre précis est indispensable pour ce test",
+        "Le point de déflexion est le moment où la FC cesse d'augmenter linéairement avec la vitesse",
+        "Réalisez le test sur piste pour un contrôle précis de la vitesse"
+      ],
+      "coachingTipsEn": [
+        "An accurate heart rate monitor is essential for this test",
+        "The deflection point is where HR stops increasing linearly with speed",
+        "Perform the test on a track for precise speed control"
+      ],
+      "commonMistakes": [
+        "Augmenter la vitesse de façon irrégulière entre les paliers",
+        "Ne pas porter de cardiofréquencemètre fiable",
+        "Effectuer le test en état de fatigue ou de déshydratation"
+      ],
+      "commonMistakesEn": [
+        "Increasing speed irregularly between stages",
+        "Not wearing a reliable heart rate monitor",
+        "Performing the test while fatigued or dehydrated"
+      ],
+      "variationIds": [
+        "ASS-001"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "assessment",
+          "threshold",
+          "conconi",
+          "heart-rate"
+        ],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "ASS-007",
+      "name": "Yasso 800s (Prédicteur marathon)",
+      "nameEn": "Yasso 800s (Marathon Predictor)",
+      "description": "Séance de 10x800m créée par Bart Yasso pour prédire le temps marathon. Le temps de chaque 800m en minutes:secondes prédit le marathon en heures:minutes. Ex : 3min30 par 800m = 3h30 au marathon. Récupération égale au temps d'effort.",
+      "descriptionEn": "Workout of 10x800m created by Bart Yasso to predict marathon time. The time of each 800m in minutes:seconds predicts marathon time in hours:minutes. E.g., 3:30 per 800m = 3h30 marathon. Recovery equals effort time.",
+      "category": "assessment",
+      "sessionType": "race_specific",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 50,
+        "max": 65
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": true,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z2"
+        },
+        {
+          "description": "Gammes et 4x lignes droites",
+          "descriptionEn": "Drills and 4x strides",
+          "durationMin": 10,
+          "zone": "Z3"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "10x800m à allure cible (temps en min:sec = temps marathon en h:min)",
+          "descriptionEn": "10x800m at target pace (time in min:sec = marathon time in h:min)",
+          "distanceM": 800,
+          "repetitions": 10,
+          "zone": "Z4",
+          "recovery": "Footing lent même durée que l'effort"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Construisez progressivement : commencez par 4x800m et ajoutez une répétition par semaine",
+        "La récupération doit durer exactement le même temps que l'effort du 800m",
+        "Ce n'est pas un test scientifique précis mais un excellent repère de forme"
+      ],
+      "coachingTipsEn": [
+        "Build progressively: start with 4x800m and add one rep per week",
+        "Recovery must last exactly the same time as the 800m effort",
+        "This isn't a precise scientific test but an excellent fitness benchmark"
+      ],
+      "commonMistakes": [
+        "Vouloir faire les 10 répétitions dès la première séance",
+        "Courir les premiers 800m trop vite par rapport aux derniers",
+        "Raccourcir la récupération, ce qui fausse la prédiction"
+      ],
+      "commonMistakesEn": [
+        "Trying to do all 10 reps from the first session",
+        "Running the first 800m reps too fast compared to the last ones",
+        "Shortening recovery, which skews the prediction"
+      ],
+      "variationIds": [
+        "ASS-002"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "hard",
+        "tags": [
+          "assessment",
+          "marathon",
+          "yasso",
+          "predictor"
+        ],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "ASS-008",
+      "name": "Test MAF (Fonction Aérobie Maximale)",
+      "nameEn": "MAF Test (Maximum Aerobic Function)",
+      "description": "Test mensuel de suivi aérobie du Dr Phil Maffetone. Courez 5 km à fréquence cardiaque MAF (180 - âge, ajustée). Mesurez le temps par kilomètre : l'amélioration des temps reflète le progrès aérobie.",
+      "descriptionEn": "Monthly aerobic tracking test by Dr. Phil Maffetone. Run 5 km at MAF heart rate (180 - age, adjusted). Measure time per kilometer: improving times reflect aerobic progress.",
+      "category": "assessment",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": {
+        "min": 40,
+        "max": 55
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Échauffement progressif : marche puis accélération très graduelle sur 12-15 min jusqu'à atteindre la FC MAF",
+          "descriptionEn": "Progressive warmup: walk then very gradual acceleration over 12-15 min to reach MAF HR",
+          "durationMin": 15,
+          "zone": "Z1"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "5 km à FC MAF constante (180 - âge). Notez le temps de chaque kilomètre.",
+          "descriptionEn": "5 km at constant MAF HR (180 - age). Record time for each kilometer.",
+          "distanceM": 5000,
+          "zone": "Z2"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Décroissance progressive de l'allure sur 10-15 min",
+          "descriptionEn": "Progressive pace decrease over 10-15 min",
+          "durationMin": 12,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "La FC MAF doit rester constante : si elle monte, ralentissez immédiatement",
+        "Le premier kilomètre est normalement le plus rapide et le dernier le plus lent — c'est normal",
+        "Répétez ce test chaque mois dans les mêmes conditions pour suivre votre progression aérobie"
+      ],
+      "coachingTipsEn": [
+        "MAF HR must stay constant: if it rises, slow down immediately",
+        "The first kilometer is normally the fastest and the last the slowest — this is normal",
+        "Repeat this test monthly under the same conditions to track aerobic progress"
+      ],
+      "commonMistakes": [
+        "Ne pas respecter strictement la FC MAF et courir trop vite",
+        "Comparer des tests réalisés dans des conditions différentes (chaleur, vent, terrain)",
+        "Se décourager si les allures initiales sont très lentes — c'est le point de départ normal"
+      ],
+      "commonMistakesEn": [
+        "Not strictly following MAF HR and running too fast",
+        "Comparing tests done under different conditions (heat, wind, terrain)",
+        "Getting discouraged if initial paces are very slow — that's the normal starting point"
+      ],
+      "variationIds": [],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "early",
+          "mid"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "assessment",
+          "aerobic",
+          "maffetone",
+          "monthly"
+        ],
+        "priorityScore": 85
+      }
     }
   ]
 }

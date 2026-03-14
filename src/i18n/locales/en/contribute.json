@@ -1,0 +1,92 @@
+{
+  "title": "Contribute",
+  "subtitle": "Suggest a workout to the community",
+  "description": "Share your favorite training sessions with the Zoned community",
+  "quickIdea": {
+    "title": "Quick idea",
+    "subtitle": "Describe your workout idea in a few words",
+    "nameLabel": "Workout name",
+    "namePlaceholder": "E.g.: Nature fartlek",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Describe the workout, its goal, and how to perform it...",
+    "categoryLabel": "Category",
+    "difficultyLabel": "Level"
+  },
+  "fullWorkout": {
+    "title": "Full workout",
+    "subtitle": "Build a detailed workout with live preview",
+    "step1Title": "Basic information",
+    "step2Title": "Warm-up and main set",
+    "step3Title": "Cool-down and tips",
+    "step4Title": "Preview and submission",
+    "nameLabel": "Name (FR)",
+    "nameEnLabel": "Name (EN)",
+    "nameEnPlaceholder": "English name (optional)",
+    "descriptionLabel": "Description (FR)",
+    "descriptionEnLabel": "Description (EN)",
+    "descriptionEnPlaceholder": "English description (optional)",
+    "sessionTypeLabel": "Session type",
+    "targetSystemLabel": "Target system",
+    "durationLabel": "Typical duration (minutes)",
+    "durationMin": "Min",
+    "durationMax": "Max"
+  },
+  "blocks": {
+    "warmup": "Warm-up",
+    "mainSet": "Main set",
+    "cooldown": "Cool-down",
+    "addBlock": "Add block",
+    "removeBlock": "Remove",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "description": "Description",
+    "descriptionPlaceholder": "E.g.: Progressive jog in Z2",
+    "descriptionEn": "Description (EN)",
+    "descriptionEnPlaceholder": "English description (optional)",
+    "duration": "Duration (min)",
+    "zone": "Zone",
+    "repetitions": "Repetitions",
+    "recovery": "Recovery",
+    "recoveryPlaceholder": "E.g.: 2min jog Z1",
+    "emptyState": "No blocks yet. Add one to get started."
+  },
+  "tips": {
+    "coachingLabel": "Coaching tips",
+    "coachingPlaceholder": "E.g.: Keep a relaxed and steady stride",
+    "mistakesLabel": "Common mistakes",
+    "mistakesPlaceholder": "E.g.: Starting too fast on the first reps",
+    "coachingEnLabel": "Coaching tips (EN)",
+    "mistakesEnLabel": "Common mistakes (EN)",
+    "addTip": "Add",
+    "removeTip": "Remove"
+  },
+  "environment": {
+    "title": "Environment",
+    "requiresHills": "Requires hills",
+    "requiresTrack": "Requires track",
+    "prefersFlat": "Prefers flat terrain",
+    "prefersSoft": "Prefers soft ground"
+  },
+  "preview": {
+    "title": "Preview",
+    "show": "Show preview",
+    "hide": "Hide preview",
+    "emptyState": "Fill in the information above to see a preview of your workout"
+  },
+  "submit": {
+    "generateIssue": "Submit on GitLab",
+    "copyDescription": "Copy description",
+    "openGitlab": "Open GitLab",
+    "urlTooLong": "The description is too long for a direct link. It has been copied to your clipboard.",
+    "copied": "Copied to clipboard!",
+    "success": "Thank you for your contribution!",
+    "thankYou": "Your workout will be reviewed by the project maintainers.",
+    "required": "This field is required",
+    "atLeastOneBlock": "Add at least one block to the main set"
+  },
+  "steps": {
+    "next": "Next",
+    "previous": "Previous",
+    "step": "Step"
+  }
+}
