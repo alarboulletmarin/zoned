@@ -82,8 +82,8 @@ export function TopBar({ theme, onThemeToggle, onMobileMenuOpen }: TopBarProps) 
               viewTransition
               className="flex items-center gap-2 mr-4"
             >
-              <Logo className="w-20 h-10" />
-              <span className="font-bold text-lg whitespace-nowrap">{t("app.name")}</span>
+              <Logo className="w-14 h-7" />
+              <span className="font-bold text-sm whitespace-nowrap">{t("app.name")}</span>
             </Link>
 
             {/* Centered search - absolute positioning for true center regardless of logo/actions width */}

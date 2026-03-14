@@ -126,15 +126,11 @@ function App() {
               <Sidebar
                 collapsed={sidebarCollapsed}
                 onToggleCollapse={toggleSidebar}
-                theme={theme}
-                onThemeToggle={toggleTheme}
               />
 
               <MobileSidebar
                 open={mobileSidebarOpen}
                 onOpenChange={setMobileSidebarOpen}
-                theme={theme}
-                onThemeToggle={toggleTheme}
               />
 
               {/* Right column: TopBar + content */}

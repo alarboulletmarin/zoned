@@ -14,8 +14,6 @@ import {
   Send,
   Settings,
   Sparkles,
-  Moon,
-  Sun,
   PanelLeftClose,
   PanelLeftOpen,
 } from "@/components/icons";
@@ -29,7 +27,6 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { changeLanguage, getCurrentLanguage } from "@/i18n";
 import { getRandomWorkout } from "@/data/workouts";
 
 // ---------------------------------------------------------------------------
@@ -39,16 +36,12 @@ import { getRandomWorkout } from "@/data/workouts";
 interface SidebarProps {
   collapsed: boolean;
   onToggleCollapse: () => void;
-  theme: "light" | "dark";
-  onThemeToggle: () => void;
   className?: string;
 }
 
 interface MobileSidebarProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  theme: "light" | "dark";
-  onThemeToggle: () => void;
 }
 
 interface NavItem {
@@ -140,8 +133,8 @@ function SidebarNavItem({
   };
 
   const classes = cn(
-    "flex items-center gap-3 rounded-md py-2 text-sm font-medium transition-all duration-300 whitespace-nowrap",
-    collapsed ? "justify-center px-2" : "px-3",
+    "flex items-center rounded-md py-2 text-sm font-medium transition-all duration-300 whitespace-nowrap",
+    collapsed ? "justify-center px-2 gap-0" : "px-3 gap-3",
     active
       ? "bg-accent text-accent-foreground"
       : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground"
@@ -200,18 +193,13 @@ function SidebarNavItem({
 
 function SidebarContent({
   collapsed,
-  theme,
-  onThemeToggle,
   onLinkClick,
 }: {
   collapsed: boolean;
-  theme: "light" | "dark";
-  onThemeToggle: () => void;
   onLinkClick?: () => void;
 }) {
   const { t } = useTranslation("common");
   const location = useLocation();
-  const currentLang = getCurrentLanguage();
 
   return (
     <div className="flex h-full flex-col">
@@ -259,43 +247,6 @@ function SidebarContent({
           ))}
         </div>
 
-        {/* Theme & Language toggles */}
-        <div className="mt-3 flex items-center gap-1">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={onThemeToggle}
-                aria-label={theme === "light" ? t("theme.dark") : t("theme.light")}
-              >
-                {theme === "light" ? <Moon className="size-4" /> : <Sun className="size-4" />}
-              </Button>
-            </TooltipTrigger>
-            {collapsed && (
-              <TooltipContent side="right">
-                {theme === "light" ? t("theme.dark") : t("theme.light")}
-              </TooltipContent>
-            )}
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={() => changeLanguage(currentLang === "fr" ? "en" : "fr")}
-                aria-label={currentLang === "fr" ? "English" : "Français"}
-              >
-                <span className="text-xs font-semibold">{currentLang.toUpperCase()}</span>
-              </Button>
-            </TooltipTrigger>
-            {collapsed && (
-              <TooltipContent side="right">
-                {currentLang === "fr" ? "English" : "Français"}
-              </TooltipContent>
-            )}
-          </Tooltip>
-        </div>
       </div>
     </div>
   );
@@ -308,8 +259,6 @@ function SidebarContent({
 export function Sidebar({
   collapsed,
   onToggleCollapse,
-  theme,
-  onThemeToggle,
   className,
 }: SidebarProps) {
   const { t } = useTranslation("common");
@@ -350,11 +299,7 @@ export function Sidebar({
       </div>
 
       {/* Content */}
-      <SidebarContent
-        collapsed={collapsed}
-        theme={theme}
-        onThemeToggle={onThemeToggle}
-      />
+      <SidebarContent collapsed={collapsed} />
     </aside>
   );
 }
@@ -366,8 +311,6 @@ export function Sidebar({
 export function MobileSidebar({
   open,
   onOpenChange,
-  theme,
-  onThemeToggle,
 }: MobileSidebarProps) {
   const { t } = useTranslation("common");
   const location = useLocation();
@@ -385,8 +328,6 @@ export function MobileSidebar({
         <div className="h-full">
           <SidebarContent
             collapsed={false}
-            theme={theme}
-            onThemeToggle={onThemeToggle}
             onLinkClick={() => onOpenChange(false)}
           />
         </div>

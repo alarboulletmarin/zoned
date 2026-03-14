@@ -37,7 +37,33 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "UX",
         },
       ],
+      fixed: [
+        {
+          text: "Centrage de la barre de recherche et du logo dans la top bar (alignement correct sur mobile, tablette et desktop)",
+          textEn: "Center search bar and logo in top bar (correct alignment on mobile, tablet and desktop)",
+          category: "Navigation",
+          categoryEn: "Navigation",
+        },
+        {
+          text: "Centrage des icônes dans la sidebar en mode collapsed (suppression du gap fantôme)",
+          textEn: "Center icons in collapsed sidebar (removed ghost gap)",
+          category: "Navigation",
+          categoryEn: "Navigation",
+        },
+      ],
       changed: [
+        {
+          text: "Suppression des boutons thème/langue de la sidebar (déjà présents dans la top bar)",
+          textEn: "Removed theme/language toggles from sidebar (already in top bar)",
+          category: "Navigation",
+          categoryEn: "Navigation",
+        },
+        {
+          text: "Réduction de la taille du logo dans la top bar pour un meilleur équilibre visuel",
+          textEn: "Reduced logo size in top bar for better visual balance",
+          category: "UX",
+          categoryEn: "UX",
+        },
         {
           text: "Remplacement de la navigation horizontale par une sidebar verticale responsive",
           textEn: "Replaced horizontal navigation with a responsive vertical sidebar",
