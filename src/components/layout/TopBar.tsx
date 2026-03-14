@@ -6,14 +6,16 @@ import { useCommandPalette } from "@/components/search";
 import { changeLanguage, getCurrentLanguage } from "@/i18n";
 import Logo from "@/assets/logo.svg?react";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { cn } from "@/lib/utils";
 
 interface TopBarProps {
   theme: "light" | "dark";
   onThemeToggle: () => void;
   onMobileMenuOpen: () => void;
+  sidebarCollapsed?: boolean;
 }
 
-export function TopBar({ theme, onThemeToggle, onMobileMenuOpen }: TopBarProps) {
+export function TopBar({ theme, onThemeToggle, onMobileMenuOpen, sidebarCollapsed }: TopBarProps) {
   const { t } = useTranslation("common");
   const { openPalette } = useCommandPalette();
   const currentLang = getCurrentLanguage();
@@ -83,8 +85,12 @@ export function TopBar({ theme, onThemeToggle, onMobileMenuOpen }: TopBarProps) 
               <span className="font-bold text-lg whitespace-nowrap">{t("app.name")}</span>
             </Link>
 
-            {/* Centered search */}
-            <div className="flex flex-1 justify-center">
+            {/* Centered search - compensate sidebar width for viewport centering */}
+            <div className={cn(
+              "flex flex-1 justify-center transition-[margin] duration-300",
+              sidebarCollapsed === false && "-ml-24",
+              sidebarCollapsed === true && "-ml-6"
+            )}>
               <Button
                 variant="outline"
                 size="sm"

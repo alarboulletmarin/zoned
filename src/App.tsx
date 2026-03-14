@@ -143,6 +143,7 @@ function App() {
                   theme={theme}
                   onThemeToggle={toggleTheme}
                   onMobileMenuOpen={() => setMobileSidebarOpen(true)}
+                  sidebarCollapsed={sidebarCollapsed}
                 />
 
                 <main className="flex-1 px-4 md:px-6 lg:px-8 py-4">
