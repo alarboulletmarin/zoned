@@ -83,11 +83,17 @@ function estimateWorkoutDuration(workout: WorkoutTemplate): number {
       // Estimate duration from distance: ~5min/km average (including recovery)
       const distanceKm = block.distanceM / 1000;
       const reps = block.repetitions || 1;
-      // Each rep: run time + recovery estimate (~60% of run time)
-      const runTimeMin = distanceKm * 5; // ~5min/km at effort
+      const runTimeMin = distanceKm * 5;
       const hasRecovery = block.recovery || block.rest;
       const recoveryMin = hasRecovery ? runTimeMin * 0.6 : 0;
       total += (runTimeMin + recoveryMin) * reps;
+      hasBlockDurations = true;
+    } else if (block.repetitions && block.repetitions > 1) {
+      // Interval block with reps but no explicit duration/distance
+      // Estimate ~2min per rep (work + recovery) for short intervals
+      const hasRecovery = block.recovery || block.rest;
+      const perRepMin = hasRecovery ? 2 : 1;
+      total += perRepMin * block.repetitions;
       hasBlockDurations = true;
     }
   }
@@ -175,7 +181,26 @@ function findBestWorkout(
 
   // Step 7: Prefer workouts not used recently (variety)
   const unused = candidates.filter((w) => !usedWorkoutIds.includes(w.id));
-  const finalList = unused.length > 0 ? unused : candidates;
+  let finalList = unused.length > 0 ? unused : candidates;
+
+  // Step 8: Add randomization within priority tiers for variety
+  // Group by similar priority (within 10 points) and pick randomly within top tier
+  if (finalList.length > 1) {
+    const topPriority = finalList[0].selectionCriteria.priorityScore;
+    const topTier = finalList.filter(
+      (w) => topPriority - w.selectionCriteria.priorityScore <= 15,
+    );
+    if (topTier.length > 1) {
+      // Shuffle top tier using Fisher-Yates
+      for (let i = topTier.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [topTier[i], topTier[j]] = [topTier[j], topTier[i]];
+      }
+      finalList = [...topTier, ...finalList.filter(
+        (w) => topPriority - w.selectionCriteria.priorityScore > 15,
+      )];
+    }
+  }
 
   if (finalList.length === 0) return null;
 
