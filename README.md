@@ -96,6 +96,7 @@ Open [http://localhost:8080](http://localhost:8080)
 - `/workout/:id` - Workout detail with export, nutrition, zones
 - `/plans` - Training plans
 - `/plan/new` - Plan generator wizard
+- `/plan/:id` - Plan view
 - `/collections` - Curated workout collections
 - `/learn` - Knowledge hub articles
 - `/glossary` - Training glossary
