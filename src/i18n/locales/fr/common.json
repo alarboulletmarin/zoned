@@ -137,7 +137,9 @@
     "scrollToTop": "Retour en haut",
     "addToFavorites": "Ajouter aux favoris",
     "removeFromFavorites": "Retirer des favoris",
-    "viewRepo": "Dépôt GitLab"
+    "viewRepo": "Dépôt GitLab",
+    "copyLink": "Copier le lien",
+    "linkCopied": "Lien copié !"
   },
   "units": {
     "minutes": "min",

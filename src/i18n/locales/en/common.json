@@ -137,7 +137,9 @@
     "scrollToTop": "Scroll to top",
     "addToFavorites": "Add to favorites",
     "removeFromFavorites": "Remove from favorites",
-    "viewRepo": "GitLab repository"
+    "viewRepo": "GitLab repository",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied!"
   },
   "units": {
     "minutes": "min",

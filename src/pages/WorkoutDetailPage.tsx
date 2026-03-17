@@ -19,6 +19,7 @@ import {
   Shuffle,
   ClipboardCheck,
   Loader2,
+  Link2,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -32,6 +33,8 @@ import {
 } from "@/components/domain";
 import { WorkoutStructure, CoachingTips } from "@/components/domain/WorkoutStructure";
 import { ExportMenu } from "@/components/domain/ExportMenu";
+import { toast } from "sonner";
+import { copyToClipboard } from "@/lib/issueBuilder";
 import { NutritionRecoverySection } from "@/components/domain/NutritionRecoverySection";
 import { SEOHead } from "@/components/seo";
 import { SessionTimeline, ZoneDistribution, transformSessionBlocks } from "@/components/visualization";
@@ -187,6 +190,18 @@ export function WorkoutDetailPage() {
             </p>
           </div>
           <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+            <Button
+              variant="outline"
+              size="icon-sm"
+              onClick={async () => {
+                const ok = await copyToClipboard(window.location.href);
+                if (ok) toast.success(t("common:actions.linkCopied"));
+                else toast.error(t("common:errors.generic"));
+              }}
+              title={t("common:actions.copyLink")}
+            >
+              <Link2 className="size-4" />
+            </Button>
             <ExportMenu workout={workout} />
             <FavoriteButton workoutId={workout.id} />
             <ZoneBadge zone={dominantZone} size="lg" showLabel />
