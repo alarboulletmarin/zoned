@@ -181,13 +181,14 @@ export async function getCategoryStats(): Promise<
  */
 export async function getWorkoutOfTheDay(): Promise<WorkoutTemplate> {
   const workouts = await loadAllWorkouts();
+  const sorted = [...workouts].sort((a, b) => a.id.localeCompare(b.id));
   const today = new Date();
   const seed =
     today.getFullYear() * 10000 +
     (today.getMonth() + 1) * 100 +
     today.getDate();
-  const index = seed % workouts.length;
-  return workouts[index];
+  const index = seed % sorted.length;
+  return sorted[index];
 }
 
 // Alias for backward compatibility
