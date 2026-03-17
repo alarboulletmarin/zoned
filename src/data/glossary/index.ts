@@ -38,6 +38,9 @@ const termLoaders: Record<GlossaryCategory, () => Promise<GlossaryTerm[]>> = {
   zones: () => import("./terms/zones").then((m) => m.zonesTerms),
   physiology: () => import("./terms/physiology").then((m) => m.physiologyTerms),
   recovery: () => import("./terms/recovery").then((m) => m.recoveryTerms),
+  biomechanics: () => import("./terms/biomechanics").then((m) => m.biomechanicsTerms),
+  injuries: () => import("./terms/injuries").then((m) => m.injuriesTerms),
+  nutrition: () => import("./terms/nutrition").then((m) => m.nutritionTerms),
 };
 
 /**

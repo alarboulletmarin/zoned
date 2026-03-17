@@ -26,6 +26,9 @@
     "sessions": "Séances",
     "zones": "Zones",
     "physiology": "Physiologie",
-    "recovery": "Récupération"
+    "recovery": "Récupération",
+    "biomechanics": "Biomécanique",
+    "injuries": "Blessures & Prévention",
+    "nutrition": "Nutrition"
   }
 }

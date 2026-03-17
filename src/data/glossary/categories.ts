@@ -52,4 +52,28 @@ export const categories: GlossaryCategoryInfo[] = [
     descriptionEn: "Rest and adaptation",
     icon: "Moon",
   },
+  {
+    id: "biomechanics",
+    label: "Biomécanique",
+    labelEn: "Biomechanics",
+    description: "Mécanique de la foulée et posture",
+    descriptionEn: "Stride mechanics and posture",
+    icon: "Footprints",
+  },
+  {
+    id: "injuries",
+    label: "Blessures & Prévention",
+    labelEn: "Injuries & Prevention",
+    description: "Blessures courantes et comment les éviter",
+    descriptionEn: "Common injuries and how to prevent them",
+    icon: "ShieldAlert",
+  },
+  {
+    id: "nutrition",
+    label: "Nutrition",
+    labelEn: "Nutrition",
+    description: "Alimentation et hydratation du coureur",
+    descriptionEn: "Runner's diet and hydration",
+    icon: "Apple",
+  },
 ];

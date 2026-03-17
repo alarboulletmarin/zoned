@@ -10,7 +10,10 @@ export type GlossaryCategory =
   | "sessions" // Types de séances (tempo, intervals...)
   | "zones" // Zones d'entraînement
   | "physiology" // Physiologie (VO2max, seuils...)
-  | "recovery"; // Récupération
+  | "recovery" // Récupération
+  | "biomechanics" // Biomécanique de course
+  | "injuries" // Blessures & prévention
+  | "nutrition"; // Nutrition du coureur
 
 /**
  * External link to scientific sources or documentation
