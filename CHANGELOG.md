@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.6] - 2026-03-17
+
+### Added
+
+#### Glossary
+- 3 new glossary categories: Biomechanics (12 terms), Injuries & Prevention (10 terms), Nutrition (17 terms)
+- 39 new bilingual glossary terms covering stride mechanics, common running injuries, and sports nutrition
+- Nutrition terms include: isotonic drinks, maltodextrin, glucose-fructose ratio, BCAAs, caffeine, vitamin D, iron deficiency
+
+#### Calculators
+- New `/calculateurs` hub page with 7 running calculator tools
+- Race equivalence calculator (predict times across distances)
+- Age-graded performance calculator (compare performances across ages)
+
+#### SEO
+- Post-build prerendering of all 318 pages via Puppeteer for non-JS crawlers
+- Enriched JSON-LD structured data on workout pages (ExercisePlan + BreadcrumbList)
+- Enriched JSON-LD on glossary term pages (DefinedTerm + BreadcrumbList)
+- WebSite schema with SearchAction on homepage (enables Google sitelinks search box)
+- CollectionPage and DefinedTermSet schemas on listing pages
+- SEOHead component now supports multiple JSON-LD blocks
+- New `build:seo` script combining build + sitemap generation + prerendering
+
+#### Features
+- Copy link button on workout detail page
+
+### Fixed
+
+- Sitemap generator now correctly reads glossary `.ts` files (was looking for `.json`, finding 0 terms)
+- Sitemap expanded from 175 to 318 URLs (added guides, collections, calculators, all glossary terms)
+- Workout of the day: hash-based seed for stable selection across catalog changes
+- Workout of the day: selection no longer shifts when workouts are added/removed
+- Plan generation: limit check now runs before generation instead of after
+
 ## [0.1.5] - 2026-03-14
 
 ### Added

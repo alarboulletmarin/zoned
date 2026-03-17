@@ -2,6 +2,84 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.1.6",
+    date: "2026-03-17",
+    changes: {
+      added: [
+        {
+          text: "3 nouvelles catégories de glossaire : Biomécanique (12 termes), Blessures & Prévention (10 termes), Nutrition (17 termes)",
+          textEn: "3 new glossary categories: Biomechanics (12 terms), Injuries & Prevention (10 terms), Nutrition (17 terms)",
+          category: "Glossaire",
+          categoryEn: "Glossary",
+        },
+        {
+          text: "39 termes bilingues couvrant la mécanique de foulée, les blessures courantes et la nutrition sportive",
+          textEn: "39 bilingual terms covering stride mechanics, common running injuries, and sports nutrition",
+          category: "Glossaire",
+          categoryEn: "Glossary",
+        },
+        {
+          text: "Page hub /calculateurs avec 7 outils de calcul pour coureurs",
+          textEn: "Calculator hub page /calculateurs with 7 running calculator tools",
+          category: "Calculateurs",
+          categoryEn: "Calculators",
+        },
+        {
+          text: "Calculateur d'équivalence de course (prédire ses temps sur différentes distances)",
+          textEn: "Race equivalence calculator (predict times across distances)",
+          category: "Calculateurs",
+          categoryEn: "Calculators",
+        },
+        {
+          text: "Calculateur de performance ajustée à l'âge (comparer ses performances entre différents âges)",
+          textEn: "Age-graded performance calculator (compare performances across ages)",
+          category: "Calculateurs",
+          categoryEn: "Calculators",
+        },
+        {
+          text: "Pré-rendu de 318 pages au build pour les moteurs de recherche (SEO)",
+          textEn: "Post-build prerendering of 318 pages for search engine crawlers (SEO)",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
+        {
+          text: "Données structurées JSON-LD enrichies (ExercisePlan, DefinedTerm, BreadcrumbList, WebSite, SearchAction)",
+          textEn: "Enriched JSON-LD structured data (ExercisePlan, DefinedTerm, BreadcrumbList, WebSite, SearchAction)",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
+        {
+          text: "Bouton copier le lien sur la page détail d'un entraînement",
+          textEn: "Copy link button on workout detail page",
+          category: "Fonctionnalités",
+          categoryEn: "Features",
+        },
+      ],
+      fixed: [
+        {
+          text: "Le générateur de sitemap lit maintenant les fichiers glossaire .ts (cherchait des .json, 0 termes trouvés)",
+          textEn: "Sitemap generator now correctly reads glossary .ts files (was looking for .json, finding 0 terms)",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
+        {
+          text: "Sitemap étendu de 175 à 318 URLs (ajout des guides, collections, calculateurs et tous les termes glossaire)",
+          textEn: "Sitemap expanded from 175 to 318 URLs (added guides, collections, calculators, all glossary terms)",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
+        {
+          text: "Séance du jour : sélection stable grâce à un seed basé sur un hash (ne change plus quand le catalogue évolue)",
+          textEn: "Workout of the day: stable selection with hash-based seed (no longer shifts when catalog changes)",
+        },
+        {
+          text: "Génération de plan : vérification de la limite avant la génération au lieu d'après",
+          textEn: "Plan generation: limit check now runs before generation instead of after",
+        },
+      ],
+    },
+  },
+  {
     version: "0.1.5",
     date: "2026-03-14",
     changes: {
