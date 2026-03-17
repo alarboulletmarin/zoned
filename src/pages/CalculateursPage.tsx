@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Target, Gauge, RefreshCw, Route, Timer, ArrowRight, List } from "@/components/icons";
+import { Target, Gauge, RefreshCw, Route, Timer, ArrowRight, List, Shuffle, Star } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
@@ -71,6 +71,24 @@ const CALCULATEURS: CalculateurEntry[] = [
     description: "Estimez votre VMA à partir d'un résultat de course",
     descriptionEn: "Estimate your VMA from a race result",
     href: "/calculateurs/vma",
+  },
+  {
+    id: "equivalence",
+    icon: Shuffle,
+    title: "Équivalence entre distances",
+    titleEn: "Race Equivalence",
+    description: "Prédisez vos temps sur toutes les distances depuis un résultat",
+    descriptionEn: "Predict your times across all distances from one result",
+    href: "/calculateurs/equivalence",
+  },
+  {
+    id: "age-graded",
+    icon: Star,
+    title: "Performance age-graded",
+    titleEn: "Age-Graded Performance",
+    description: "Comparez votre performance au record mondial de votre catégorie",
+    descriptionEn: "Compare your performance to the world record for your category",
+    href: "/calculateurs/age-graded",
   },
 ];
 

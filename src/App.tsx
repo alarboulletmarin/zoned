@@ -38,10 +38,12 @@ const PaceCalculatorPage = lazy(() => import("@/pages/PaceCalculatorPage").then(
 const TreadmillConverterPage = lazy(() => import("@/pages/TreadmillConverterPage").then(m => ({ default: m.TreadmillConverterPage })));
 const SplitGeneratorPage = lazy(() => import("@/pages/SplitGeneratorPage").then(m => ({ default: m.SplitGeneratorPage })));
 const VmaCalculatorPage = lazy(() => import("@/pages/VmaCalculatorPage").then(m => ({ default: m.VmaCalculatorPage })));
+const RaceEquivalencePage = lazy(() => import("@/pages/RaceEquivalencePage").then(m => ({ default: m.RaceEquivalencePage })));
 const RacePrepGuidePage = lazy(() => import("@/pages/RacePrepGuidePage").then(m => ({ default: m.RacePrepGuidePage })));
 const WarmupGuidePage = lazy(() => import("@/pages/WarmupGuidePage").then(m => ({ default: m.WarmupGuidePage })));
 const PaceConverterPage = lazy(() => import("@/pages/PaceConverterPage").then(m => ({ default: m.PaceConverterPage })));
 const PaceTablePage = lazy(() => import("@/pages/PaceTablePage").then(m => ({ default: m.PaceTablePage })));
+const AgeGradedPage = lazy(() => import("@/pages/AgeGradedPage").then(m => ({ default: m.AgeGradedPage })));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
 
 function ScrollToTopOnNavigate() {
@@ -167,6 +169,8 @@ function App() {
                           <Route path="/calculateurs/tapis-roulant" element={<TreadmillConverterPage />} />
                           <Route path="/calculateurs/splits" element={<SplitGeneratorPage />} />
                           <Route path="/calculateurs/vma" element={<VmaCalculatorPage />} />
+                          <Route path="/calculateurs/equivalence" element={<RaceEquivalencePage />} />
+                          <Route path="/calculateurs/age-graded" element={<AgeGradedPage />} />
                           <Route path="/settings" element={<SettingsPage />} />
                           <Route path="/favorites" element={<FavoritesPage />} />
                           <Route path="/quiz" element={<QuizPage />} />
