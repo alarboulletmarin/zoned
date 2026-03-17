@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
@@ -114,7 +114,7 @@ export function PlanCreatePage() {
   const { i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const navigate = useNavigate();
-  const { createPlan, isGenerating, error } = useCreatePlan();
+  const { createPlan, isGenerating, error, canCreate } = useCreatePlan();
 
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
@@ -794,7 +794,16 @@ export function PlanCreatePage() {
           </CardContent>
         </Card>
 
-        {error && (
+        {!canCreate && (
+          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive text-center">
+            {isEn ? "You've reached the limit of 5 plans. " : "Limite de 5 plans atteinte. "}
+            <Link to="/plans" className="underline font-medium">
+              {isEn ? "Delete an existing plan" : "Supprimer un plan existant"}
+            </Link>
+          </div>
+        )}
+
+        {error && canCreate && (
           <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive text-center">
             {error}
           </div>
@@ -804,7 +813,7 @@ export function PlanCreatePage() {
           <Button
             size="lg"
             onClick={handleGenerate}
-            disabled={isGenerating}
+            disabled={isGenerating || !canCreate}
             className="w-full sm:w-auto"
           >
             {isGenerating ? (
