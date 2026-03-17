@@ -55,17 +55,28 @@ export function GlossaryTermPage() {
         title={termName}
         description={truncatedDefinition}
         canonical={`/glossary/${id}`}
-        jsonLd={{
-          "@type": "DefinedTerm",
-          name: termName,
-          description: termDefinition,
-          url: `https://zoned.run/glossary/${id}`,
-          inDefinedTermSet: {
-            "@type": "DefinedTermSet",
-            name: isEn ? "Glossary" : "Glossaire",
-            url: "https://zoned.run/glossary",
+        jsonLd={[
+          {
+            "@type": "DefinedTerm",
+            name: termName,
+            description: isEn && term.fullDefinitionEn ? term.fullDefinitionEn : term.fullDefinition,
+            url: `https://zoned.run/glossary/${id}`,
+            ...(term.acronym && { termCode: term.acronym }),
+            inDefinedTermSet: {
+              "@type": "DefinedTermSet",
+              name: isEn ? "Zoned Running Glossary" : "Glossaire Zoned Running",
+              url: "https://zoned.run/glossary",
+            },
           },
-        }}
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: isEn ? "Glossary" : "Glossaire", item: "https://zoned.run/glossary" },
+              { "@type": "ListItem", position: 3, name: termName },
+            ],
+          },
+        ]}
       />
       <div className="py-8">
         {/* Breadcrumb */}

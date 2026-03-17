@@ -8,7 +8,9 @@
     "build": "tsc && vite build",
     "generate:sitemap": "bun run scripts/generate-sitemap.ts",
     "generate:og": "bun run scripts/generate-og-image.ts",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prerender": "bun run scripts/prerender.ts",
+    "build:seo": "tsc && vite build && bun run scripts/generate-sitemap.ts && bun run scripts/prerender.ts"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.18",
@@ -17,6 +19,7 @@
     "@types/react-dom": "^19.2.3",
     "@vite-pwa/assets-generator": "^1.0.2",
     "@vitejs/plugin-react": "^5.1.2",
+    "puppeteer": "^24.39.1",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",

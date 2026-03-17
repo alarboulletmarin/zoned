@@ -28,44 +28,77 @@ function getWorkoutIds(): string[] {
 }
 
 function getArticleSlugs(): string[] {
-  return ["zones", "testing-vma", "warmup", "recovery", "nutrition", "faq"];
+  return [
+    "zones",
+    "testing-vma",
+    "warmup",
+    "recovery",
+    "nutrition",
+    "faq",
+    "periodization",
+    "supercompensation",
+    "tapering",
+    "polarized-training",
+    "progressive-overload",
+    "consistency",
+  ];
 }
 
-function getGlossaryTerms(): string[] {
-  const glossaryDir = join(DATA_DIR, "glossary/terms");
-  try {
-    const files = readdirSync(glossaryDir).filter((f) => f.endsWith(".json"));
-    return files.map((f) => f.replace(".json", ""));
-  } catch {
-    return [];
+async function getGlossaryTermIds(): Promise<string[]> {
+  const termsDir = join(DATA_DIR, "glossary/terms");
+  const files = readdirSync(termsDir).filter((f) => f.endsWith(".ts"));
+  const ids: string[] = [];
+
+  for (const file of files) {
+    const mod = await import(join(termsDir, file));
+    const exported = Object.values(mod);
+    for (const val of exported) {
+      if (Array.isArray(val)) {
+        for (const term of val as { id: string }[]) {
+          if (term.id) ids.push(term.id);
+        }
+      }
+    }
   }
+
+  return ids;
 }
 
-function generateSitemap(): string {
+async function generateSitemap(): Promise<string> {
   const workoutIds = getWorkoutIds();
   const articleSlugs = getArticleSlugs();
-  const glossaryTerms = getGlossaryTerms();
+  const glossaryTermIds = await getGlossaryTermIds();
   const today = new Date().toISOString().split("T")[0];
 
   const urls: { loc: string; priority: string; changefreq: string }[] = [
+    // Main pages
     { loc: "/", priority: "1.0", changefreq: "weekly" },
     { loc: "/library", priority: "0.9", changefreq: "weekly" },
     { loc: "/learn", priority: "0.8", changefreq: "monthly" },
-    { loc: "/glossary", priority: "0.7", changefreq: "monthly" },
-    { loc: "/about", priority: "0.5", changefreq: "monthly" },
+    { loc: "/glossary", priority: "0.8", changefreq: "monthly" },
     { loc: "/quiz", priority: "0.6", changefreq: "monthly" },
+    { loc: "/about", priority: "0.5", changefreq: "monthly" },
+    { loc: "/collections", priority: "0.6", changefreq: "monthly" },
+    { loc: "/calculateurs", priority: "0.6", changefreq: "monthly" },
+    // Guide pages
+    { loc: "/guides/nutrition", priority: "0.7", changefreq: "monthly" },
+    { loc: "/guides/race-prep", priority: "0.7", changefreq: "monthly" },
+    { loc: "/guides/warmup", priority: "0.7", changefreq: "monthly" },
   ];
 
+  // Articles
   for (const slug of articleSlugs) {
     urls.push({ loc: `/learn/${slug}`, priority: "0.7", changefreq: "monthly" });
   }
 
+  // Workouts
   for (const id of workoutIds) {
     urls.push({ loc: `/workout/${id}`, priority: "0.7", changefreq: "monthly" });
   }
 
-  for (const term of glossaryTerms) {
-    urls.push({ loc: `/glossary/${term}`, priority: "0.5", changefreq: "monthly" });
+  // Glossary terms
+  for (const id of glossaryTermIds) {
+    urls.push({ loc: `/glossary/${id}`, priority: "0.6", changefreq: "monthly" });
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -85,7 +118,7 @@ ${urls
   return xml;
 }
 
-const sitemap = generateSitemap();
+const sitemap = await generateSitemap();
 writeFileSync(OUTPUT_PATH, sitemap);
 console.log(`Sitemap generated at ${OUTPUT_PATH}`);
 console.log(`Total URLs: ${sitemap.match(/<url>/g)?.length || 0}`);

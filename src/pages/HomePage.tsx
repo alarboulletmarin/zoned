@@ -72,7 +72,7 @@ export function HomePage() {
           description: seoDescription,
           potentialAction: {
             "@type": "SearchAction",
-            target: "https://zoned.run/library?search={search_term_string}",
+            target: "https://zoned.run/library?q={search_term_string}",
             "query-input": "required name=search_term_string",
           },
         }}

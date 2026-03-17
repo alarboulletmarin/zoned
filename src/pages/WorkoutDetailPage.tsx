@@ -155,15 +155,34 @@ export function WorkoutDetailPage() {
         description={seoDescription}
         canonical={`/workout/${workout.id}`}
         ogType="article"
-        jsonLd={{
-          "@type": "ExercisePlan",
-          name: seoTitle,
-          description: seoDescription,
-          exerciseType: "Running",
-          activityDuration: `PT${duration}M`,
-          activityFrequency: "As needed",
-          intensity: workout.difficulty,
-        }}
+        jsonLd={[
+          {
+            "@type": "ExercisePlan",
+            name: seoTitle,
+            description: seoDescription,
+            exerciseType: "Running",
+            activityDuration: `PT${duration}M`,
+            intensity: workout.difficulty,
+            additionalProperty: [
+              { "@type": "PropertyValue", name: "Category", value: workout.category },
+              { "@type": "PropertyValue", name: "Target System", value: workout.targetSystem },
+              { "@type": "PropertyValue", name: "Difficulty", value: workout.difficulty },
+            ],
+            isPartOf: {
+              "@type": "CollectionPage",
+              name: "Zoned Running Workouts Library",
+              url: "https://zoned.run/library",
+            },
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: "Bibliothèque", item: "https://zoned.run/library" },
+              { "@type": "ListItem", position: 3, name: seoTitle },
+            ],
+          },
+        ]}
       />
       <div className="py-8 space-y-8">
         {/* Back Button */}

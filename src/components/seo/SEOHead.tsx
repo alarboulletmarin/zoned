@@ -12,7 +12,7 @@ interface SEOHeadProps {
   ogImage?: string;
   ogType?: "website" | "article";
   noindex?: boolean;
-  jsonLd?: Record<string, unknown>;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 export function SEOHead({
@@ -64,14 +64,14 @@ export function SEOHead({
       <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}${canonical || "/"}`} />
 
       {/* JSON-LD Structured Data */}
-      {jsonLd && (
-        <script type="application/ld+json">
+      {jsonLd && (Array.isArray(jsonLd) ? jsonLd : [jsonLd]).map((ld, i) => (
+        <script key={i} type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
-            ...jsonLd,
+            ...ld,
           })}
         </script>
-      )}
+      ))}
     </Helmet>
   );
 }

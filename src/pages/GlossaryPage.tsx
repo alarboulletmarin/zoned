@@ -112,10 +112,8 @@ export function GlossaryPage() {
         canonical="/glossary"
         jsonLd={{
           "@type": "DefinedTermSet",
-          name: isEn ? "Glossary" : "Glossaire",
-          description: isEn
-            ? "Running terminology explained: training zones, workout types, and key concepts for runners."
-            : "Terminologie de la course a pied expliquee: zones d'entrainement, types de seances et concepts cles.",
+          name: isEn ? "Zoned Running Glossary" : "Glossaire Zoned Running",
+          description: isEn ? "Complete glossary of running training terms" : "Glossaire complet des termes d'entraînement running",
           url: "https://zoned.run/glossary",
         }}
       />
