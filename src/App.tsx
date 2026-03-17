@@ -32,8 +32,16 @@ const PlanCreatePage = lazy(() => import("@/pages/PlanCreatePage").then(m => ({ 
 const PlanViewPage = lazy(() => import("@/pages/PlanViewPage").then(m => ({ default: m.PlanViewPage })));
 const NutritionGuidePage = lazy(() => import("@/pages/NutritionGuidePage").then(m => ({ default: m.NutritionGuidePage })));
 const GuidesPage = lazy(() => import("@/pages/GuidesPage").then(m => ({ default: m.GuidesPage })));
+const CalculateursPage = lazy(() => import("@/pages/CalculateursPage").then(m => ({ default: m.CalculateursPage })));
+const ZonesCalculatorPage = lazy(() => import("@/pages/ZonesCalculatorPage").then(m => ({ default: m.ZonesCalculatorPage })));
+const PaceCalculatorPage = lazy(() => import("@/pages/PaceCalculatorPage").then(m => ({ default: m.PaceCalculatorPage })));
+const TreadmillConverterPage = lazy(() => import("@/pages/TreadmillConverterPage").then(m => ({ default: m.TreadmillConverterPage })));
+const SplitGeneratorPage = lazy(() => import("@/pages/SplitGeneratorPage").then(m => ({ default: m.SplitGeneratorPage })));
+const VmaCalculatorPage = lazy(() => import("@/pages/VmaCalculatorPage").then(m => ({ default: m.VmaCalculatorPage })));
 const RacePrepGuidePage = lazy(() => import("@/pages/RacePrepGuidePage").then(m => ({ default: m.RacePrepGuidePage })));
 const WarmupGuidePage = lazy(() => import("@/pages/WarmupGuidePage").then(m => ({ default: m.WarmupGuidePage })));
+const PaceConverterPage = lazy(() => import("@/pages/PaceConverterPage").then(m => ({ default: m.PaceConverterPage })));
+const PaceTablePage = lazy(() => import("@/pages/PaceTablePage").then(m => ({ default: m.PaceTablePage })));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
 
 function ScrollToTopOnNavigate() {
@@ -151,6 +159,14 @@ function App() {
                           <Route path="/library" element={<LibraryPage />} />
                           <Route path="/workout/:id" element={<WorkoutDetailPage />} />
                           <Route path="/my-zones" element={<MyZonesPage />} />
+                          <Route path="/calculateurs" element={<CalculateursPage />} />
+                          <Route path="/calculateurs/zones" element={<ZonesCalculatorPage />} />
+                          <Route path="/calculateurs/allures" element={<PaceCalculatorPage />} />
+                          <Route path="/calculateurs/convertisseur" element={<PaceConverterPage />} />
+                          <Route path="/calculateurs/table-allures" element={<PaceTablePage />} />
+                          <Route path="/calculateurs/tapis-roulant" element={<TreadmillConverterPage />} />
+                          <Route path="/calculateurs/splits" element={<SplitGeneratorPage />} />
+                          <Route path="/calculateurs/vma" element={<VmaCalculatorPage />} />
                           <Route path="/settings" element={<SettingsPage />} />
                           <Route path="/favorites" element={<FavoritesPage />} />
                           <Route path="/quiz" element={<QuizPage />} />

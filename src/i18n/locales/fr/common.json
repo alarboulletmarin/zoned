@@ -246,6 +246,12 @@
     "version": "Version {{version}}",
     "released": "Publié le {{date}}"
   },
+  "calculateurs": {
+    "title": "Calculateurs",
+    "description": "Tous les outils de calcul pour vos entraînements",
+    "explore": "Ouvrir",
+    "comingSoon": "Bientôt"
+  },
   "collections": {
     "title": "Collections",
     "subtitle": "Des parcours thématiques pour chaque objectif",

@@ -5,7 +5,7 @@ import {
   BookOpen,
   CalendarRange,
   Heart,
-  Target,
+  Calculator,
   Library,
   GraduationCap,
   Book,
@@ -63,7 +63,7 @@ const navGroups: NavGroup[] = [
       { href: "/library", icon: BookOpen, labelKey: "nav.library" },
       { href: "/plans", icon: CalendarRange, labelKey: "nav.plans" },
       { href: "/favorites", icon: Heart, labelKey: "nav.favorites" },
-      { href: "/my-zones", icon: Target, labelKey: "myZones.title" },
+      { href: "/calculateurs", icon: Calculator, labelKey: "calculateurs.title" },
     ],
   },
   {
@@ -89,7 +89,7 @@ const footerItems: NavItem[] = [
   { href: "/changelog", icon: Sparkles, labelKey: "nav.changelog" },
 ];
 
-const prefixRoutes = ["/learn", "/collections", "/glossary", "/plan"];
+const prefixRoutes = ["/learn", "/collections", "/glossary", "/plan", "/calculateurs"];
 
 function isActive(pathname: string, href: string): boolean {
   if (pathname === href) return true;
