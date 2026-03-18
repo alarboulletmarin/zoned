@@ -13,41 +13,33 @@ export function Footer() {
   const { hasNewVersion } = useWhatsNew();
 
   return (
-    <footer className="border-t py-6 md:py-7">
+    <footer className="border-t py-4 md:py-5">
       <div className="px-4 md:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl flex flex-wrap items-center justify-center gap-x-6 gap-y-2 lg:justify-between">
-          {/* Branding */}
-          <Link to="/" className="flex items-center gap-2">
-            <Logo className="w-12 h-6" />
-            <span className="font-semibold">{t("app.name")}</span>
-          </Link>
+        <div className="flex items-center justify-between gap-4">
+          {/* Left: branding + stats */}
+          <div className="flex items-center gap-4 min-w-0">
+            <Link to="/" className="flex items-center gap-2 shrink-0">
+              <Logo className="w-12 h-6" />
+              <span className="font-semibold text-sm hidden md:inline">{t("app.name")}</span>
+            </Link>
+            <span className="text-xs text-muted-foreground whitespace-nowrap hidden sm:inline">
+              {workouts.length} {t("units.workouts")} · {categories.length}{" "}
+              {t("units.categories")} · 6 {t("units.zones")}
+            </span>
+          </div>
 
-          {/* Stats */}
-          <p className="text-sm text-muted-foreground text-center">
-            {workouts.length} {t("units.workouts")} • {categories.length}{" "}
-            {t("units.categories")} • 6 {t("units.zones")}
-          </p>
-
-          {/* Copyright, About & GitLab */}
-          <div className="flex items-center gap-3">
-            <p className="text-xs text-muted-foreground">
-              © {currentYear} {t("app.name")}
-            </p>
-            <Link
-              to="/about"
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
+          {/* Right: links */}
+          <div className="flex items-center gap-3 shrink-0 text-xs text-muted-foreground">
+            <span className="hidden lg:inline">© {currentYear}</span>
+            <Link to="/about" className="hover:text-foreground transition-colors">
               {t("nav.about")}
             </Link>
-            <Link
-              to="/contribute"
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
+            <Link to="/contribute" className="hover:text-foreground transition-colors hidden sm:inline">
               {t("nav.contribute")}
             </Link>
             <Link
               to="/changelog"
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors relative"
+              className="hover:text-foreground transition-colors relative"
             >
               {t("nav.changelog")}
               {hasNewVersion && (
@@ -58,7 +50,7 @@ export function Footer() {
               href="https://gitlab.com/alarboulletmarin-oss/zoned"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              className="hover:text-foreground transition-colors"
               aria-label={t("actions.viewRepo")}
             >
               <GitlabIcon className="w-4 h-4" />
