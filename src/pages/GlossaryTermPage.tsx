@@ -1,9 +1,9 @@
 // src/pages/GlossaryTermPage.tsx
 // Detail page for a single glossary term
 
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChevronLeft, Book, Search, Loader2 } from "@/components/icons";
+import { Book, Search, Loader2, ArrowLeft } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { SEOHead } from "@/components/seo";
@@ -14,6 +14,10 @@ export function GlossaryTermPage() {
   const { id } = useParams<{ id: string }>();
   const { t, i18n } = useTranslation("glossary");
   const isEn = i18n.language?.startsWith("en") ?? false;
+  const navigate = useNavigate();
+
+  // Detect if user came from within the app (has history to go back to)
+  const canGoBack = window.history.length > 1;
 
   const { term, isLoading } = useGlossaryTerm(id);
 
@@ -79,11 +83,21 @@ export function GlossaryTermPage() {
         ]}
       />
       <div className="py-8">
-        {/* Breadcrumb */}
-      <div className="mb-6">
-        <Button variant="ghost" size="sm" asChild className="gap-1 -ml-2">
+        {/* Back navigation */}
+      <div className="mb-6 flex items-center gap-2">
+        {canGoBack && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate(-1)}
+            className="gap-1 -ml-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            {t("back")}
+          </Button>
+        )}
+        <Button variant="ghost" size="sm" asChild className="gap-1">
           <Link to="/glossary">
-            <ChevronLeft className="h-4 w-4" />
             <Book className="h-4 w-4 mr-1" />
             {t("backToGlossary")}
           </Link>
