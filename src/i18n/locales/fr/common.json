@@ -106,7 +106,8 @@
     "changelog": "Nouveautés",
     "plans": "Plans",
     "discover": "Découvrir",
-    "training": "Entraînement"
+    "training": "Entraînement",
+    "methodology": "Méthodologie"
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",

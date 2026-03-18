@@ -106,7 +106,8 @@
     "changelog": "What's New",
     "plans": "Plans",
     "discover": "Discover",
-    "training": "Training"
+    "training": "Training",
+    "methodology": "Methodology"
   },
   "errors": {
     "workoutNotFound": "Workout not found",

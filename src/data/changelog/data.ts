@@ -2,6 +2,90 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.2.0",
+    date: "2026-03-19",
+    changes: {
+      added: [
+        {
+          text: "Page Méthodologie : fondements scientifiques du système 6 zones avec 8 chercheurs, 6 études (liens PubMed), livres, blogs et podcasts de référence",
+          textEn: "Methodology page: scientific foundations of the 6-zone system with 8 researchers, 6 studies (PubMed links), reference books, blogs and podcasts",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Nouveau design éditorial inspiré de Google Stitch : page d'accueil avec hero asymétrique, stats en bento grid, cartes avec border-top coloré par zone",
+          textEn: "New editorial design inspired by Google Stitch: homepage with asymmetric hero, bento grid stats, cards with zone-colored top border",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Page détail de séance : header bento avec grille de métriques (durée, difficulté, système cible, environnement), boutons d'export proéminents, favori en haut à droite",
+          textEn: "Workout detail page: bento header with metrics grid (duration, difficulty, target system, environment), prominent export buttons, favorite in top right",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Séance du jour repensée : layout bento avec durée en grand, conseils du coach dans la colonne droite, card entièrement cliquable",
+          textEn: "Redesigned Workout of the Day: bento layout with large duration, coaching tips in right column, fully clickable card",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Visualisation de la timeline agrandie (h-40/h-56) avec labels de zone au survol et meilleur contraste des segments",
+          textEn: "Enlarged session timeline visualization (h-40/h-56) with zone labels on hover and better segment contrast",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      changed: [
+        {
+          text: "Remplacement du zone-stripe (bande colorée à gauche) par des border-top colorés sur toutes les cartes (séances, collections, articles)",
+          textEn: "Replaced zone-stripe (left colored border) with colored top borders on all cards (workouts, collections, articles)",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Responsive mobile : tailles réduites sur mobile pour le hero, les stats, les boutons et la séance du jour",
+          textEn: "Mobile responsive: reduced sizes on mobile for hero, stats, buttons and workout of the day",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Suppression de la carte Détails redondante dans le sidebar de la page de séance",
+          textEn: "Removed redundant Details card from workout page sidebar",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      fixed: [
+        {
+          text: "Affichage de la récupération entre les répétitions dans le détail des phases (3x30s, fartlek, etc.) sans redondance avec la description",
+          textEn: "Display recovery between repetitions in phase details (3x30s, fartlek, etc.) without redundancy with description",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Indication du repos inter-séries pour les blocs multi-séries (ex: 2x(10x 45s VMA / 15s récup) → ~3 min footing entre les séries)",
+          textEn: "Inter-series rest indication for multi-set blocks (e.g. 2x(10x 45s VO2max / 15s recovery) → ~3 min jog between sets)",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Collection « Séances mythiques » manquante sur la page d'accueil (accent manquant dans le slug)",
+          textEn: "Missing 'Mythic Workouts' collection on homepage (missing accent in slug)",
+          category: "Bug",
+          categoryEn: "Bug",
+        },
+        {
+          text: "Segments sans zone (gammes, transitions) invisibles dans la timeline — couleur de fallback corrigée",
+          textEn: "Segments without zone (drills, transitions) invisible in timeline — fallback color fixed",
+          category: "Bug",
+          categoryEn: "Bug",
+        },
+      ],
+    },
+  },
+  {
     version: "0.1.7",
     date: "2026-03-18",
     changes: {

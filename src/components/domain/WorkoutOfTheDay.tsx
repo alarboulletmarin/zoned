@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowRight, Lightbulb, AlertTriangle, Loader2 } from "@/components/icons";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowRight, Lightbulb, Loader2 } from "@/components/icons";
+import { Card, CardContent } from "@/components/ui/card";
 import { ZoneBadge } from "./ZoneBadge";
-import { SessionTimeline, ZoneDistribution } from "@/components/visualization";
+import { SessionTimeline, transformSessionBlocks } from "@/components/visualization";
 import { useWorkoutOfTheDay } from "@/hooks";
 import { getDominantZone } from "@/types";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
@@ -17,120 +16,108 @@ export function WorkoutOfTheDay() {
 
   if (isLoading || !workout) {
     return (
-      <section className="space-y-6">
-        <Card className="pl-2">
-          <CardContent className="flex items-center justify-center py-12">
-            <Loader2 className="size-6 animate-spin text-muted-foreground" />
-          </CardContent>
-        </Card>
-      </section>
+      <Card className="rounded-xl">
+        <CardContent className="flex items-center justify-center py-12">
+          <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        </CardContent>
+      </Card>
     );
   }
 
   const dominantZone = getDominantZone(workout);
-
   const name = isEn ? workout.nameEn : workout.name;
   const description = isEn ? workout.descriptionEn : workout.description;
   const tips = isEn ? workout.coachingTipsEn : workout.coachingTips;
-  const mistakes = isEn ? workout.commonMistakesEn : workout.commonMistakes;
+  const sessionData = transformSessionBlocks(
+    { warmup: workout.warmupTemplate, mainSet: workout.mainSetTemplate, cooldown: workout.cooldownTemplate },
+    isEn
+  );
+  const duration = Math.round(sessionData.totalDurationMin);
 
   return (
-    <section className="space-y-6">
-      <Card className={`zone-${dominantZone} zone-stripe pl-2`}>
-        <CardHeader>
-          <div className="flex items-start justify-between gap-4">
+    <Link to={`/workout/${workout.id}`} className="block group">
+    <Card className="rounded-xl overflow-hidden transition-shadow group-hover:shadow-lg">
+      {/* Bento header: content left + duration & tips right */}
+      <div className="grid grid-cols-1 md:grid-cols-12">
+        {/* Left: identity */}
+        <div className="md:col-span-8 p-5 md:p-10 space-y-3 md:space-y-4">
+          <p className="text-sm md:text-base font-bold text-primary uppercase tracking-widest">
+            {t("common:workoutOfTheDay.title")}
+          </p>
+
+          <h3 className="text-xl md:text-3xl font-bold leading-tight">
+            {name}
+          </h3>
+
+          <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+            <ZoneBadge zone={`Z${dominantZone}`} size="sm" showLabel />
+            <span className="text-border">·</span>
+            <span>{t(`library:categories.${workout.category}`)}</span>
+            <span className="text-border">·</span>
+            <span>{t(`library:difficulty.${workout.difficulty}`)}</span>
+            {/* Duration inline on mobile only */}
+            <span className="text-border md:hidden">·</span>
+            <span className="font-bold text-foreground md:hidden">{duration} {t("common:units.minutes")}</span>
+          </div>
+
+          <p className="text-sm md:text-base text-muted-foreground leading-relaxed line-clamp-2 max-w-2xl">
+            <GlossaryLinkedText text={description} />
+          </p>
+        </div>
+
+        {/* Right: duration compact + tips (desktop/tablet only) */}
+        <div className="md:col-span-4 bg-muted/30 p-6 md:p-8 hidden md:flex flex-col justify-between">
+          {/* Duration */}
+          <div className="text-center mb-4">
+            <span className="text-4xl lg:text-5xl font-bold tracking-tight text-primary block">
+              {duration}
+            </span>
+            <span className="text-xs text-muted-foreground">
+              {t("common:units.minutes")}
+            </span>
+          </div>
+
+          {/* Tips */}
+          {tips.length > 0 && (
             <div className="space-y-2">
-              <p className="text-sm text-muted-foreground font-medium">
-                {t("common:workoutOfTheDay.title")}
-              </p>
-              <CardTitle className="text-2xl">
-                {name}
-              </CardTitle>
-              <div className="flex items-center gap-2">
-                <ZoneBadge zone={`Z${dominantZone}`} size="sm" />
-                <span className="text-sm text-muted-foreground">
-                  {t(`library:categories.${workout.category}`)}
-                </span>
+              {tips.slice(0, 3).map((tip: string, index: number) => (
+                <div key={index} className="flex items-start gap-2">
+                  <Lightbulb className="size-3.5 text-amber-500 shrink-0 mt-0.5" />
+                  <p className="text-xs text-muted-foreground line-clamp-2">{tip}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Timeline - full width */}
+      <div className="px-5 md:px-10">
+        <SessionTimeline workout={workout} />
+      </div>
+
+      {/* Bottom: tips (mobile) + subtle CTA indicator */}
+      <div className="px-5 md:px-10 pb-5 md:pb-8 pt-3 md:pt-4 space-y-3">
+        {/* Tips on mobile only */}
+        {tips.length > 0 && (
+          <div className="space-y-2 md:hidden">
+            {tips.slice(0, 2).map((tip: string, index: number) => (
+              <div key={index} className="flex items-start gap-2">
+                <Lightbulb className="size-3.5 text-amber-500 shrink-0 mt-0.5" />
+                <p className="text-xs text-muted-foreground">{tip}</p>
               </div>
-            </div>
+            ))}
           </div>
-        </CardHeader>
+        )}
 
-        <CardContent className="space-y-6">
-          {/* Description */}
-          <p className="text-muted-foreground"><GlossaryLinkedText text={description} /></p>
-
-          {/* Timeline */}
-          <div className="space-y-2">
-            <h4 className="text-sm font-semibold">
-              {t("session:visualization.timeline")}
-            </h4>
-            <SessionTimeline workout={workout} />
-          </div>
-
-          {/* Grid: Tips & Zones */}
-          <div className="grid gap-6 md:grid-cols-2">
-            {/* Left column: Tips */}
-            <div className="space-y-4">
-              {tips.length > 0 && (
-                <div className="space-y-2">
-                  <h4 className="text-sm font-semibold flex items-center gap-2">
-                    <Lightbulb className="size-4 text-success" />
-                    {t("common:workoutOfTheDay.coachingTips")}
-                  </h4>
-                  <ul className="space-y-1.5">
-                    {tips.slice(0, 3).map((tip: string, index: number) => (
-                      <li
-                        key={index}
-                        className="text-sm text-muted-foreground pl-5 relative before:content-['•'] before:absolute before:left-0 before:text-success"
-                      >
-                        {tip}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {mistakes.length > 0 && (
-                <div className="space-y-2">
-                  <h4 className="text-sm font-semibold flex items-center gap-2">
-                    <AlertTriangle className="size-4 text-destructive" />
-                    {t("common:workoutOfTheDay.commonMistakes")}
-                  </h4>
-                  <ul className="space-y-1.5">
-                    {mistakes.slice(0, 2).map((mistake: string, index: number) => (
-                      <li
-                        key={index}
-                        className="text-sm text-muted-foreground pl-5 relative before:content-['•'] before:absolute before:left-0 before:text-destructive"
-                      >
-                        {mistake}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            {/* Right column: Zone Distribution */}
-            <div className="space-y-2">
-              <h4 className="text-sm font-semibold">
-                {t("session:visualization.zoneDistribution")}
-              </h4>
-              <ZoneDistribution workout={workout} />
-            </div>
-          </div>
-
-          {/* CTA */}
-          <div className="pt-2">
-            <Button asChild variant="outline">
-              <Link to={`/workout/${workout.id}`}>
-                {t("common:workoutOfTheDay.seeDetails")}
-                <ArrowRight className="ml-2 size-4" />
-              </Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </section>
+        <div className="flex justify-end">
+          <span className="text-sm font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
+            {t("common:workoutOfTheDay.seeDetails")}
+            <ArrowRight className="size-4" />
+          </span>
+        </div>
+      </div>
+    </Card>
+    </Link>
   );
 }

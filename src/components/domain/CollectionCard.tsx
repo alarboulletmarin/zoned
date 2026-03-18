@@ -67,8 +67,8 @@ export function CollectionCard({ collection, featured = false }: CollectionCardP
     <Link to={`/collections/${collection.slug}`} className="group block h-full">
       <div
         className={cn(
-          "zone-stripe pl-2 rounded-xl border bg-card shadow-sm h-full flex flex-col",
-          `zone-${getCollectionZone(collection.slug)}`,
+          "rounded-xl border border-t-4 bg-card shadow-sm h-full flex flex-col",
+          `zone-${getCollectionZone(collection.slug)} border-t-zone-${getCollectionZone(collection.slug)}`,
           "hover:shadow-md hover:-translate-y-0.5 transition-all",
           featured ? "p-6" : "p-4"
         )}

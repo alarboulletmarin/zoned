@@ -105,7 +105,7 @@ export function ExportMenu({ workout }: ExportMenuProps) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" disabled={isExporting}>
+          <Button variant="default" disabled={isExporting} className="rounded-full px-5 py-2.5 h-auto font-bold">
             {isExporting ? (
               <Loader2 className="size-4 mr-2 animate-spin" />
             ) : (

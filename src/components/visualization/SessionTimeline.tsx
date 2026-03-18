@@ -121,10 +121,11 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
 
   return (
     <TooltipProvider delayDuration={100}>
-      <div className={cn("w-full", className)}>
+      <div className={cn("w-full pt-6", className)}>
         {/* Timeline bar container */}
         <div
-          className="relative flex items-end h-16 rounded-lg overflow-hidden bg-slate-300 dark:bg-slate-700 border-2 border-border"
+          className="relative flex items-end h-40 md:h-56 rounded-xl overflow-hidden"
+          style={{ backgroundColor: "hsl(0 0% 85% / 0.3)" }}
           role="img"
           aria-label={t("visualization.timeline")}
         >
@@ -149,9 +150,9 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
                 <TooltipTrigger asChild>
                   <div
                     className={cn(
-                      "relative transition-all duration-150 cursor-pointer",
+                      "relative transition-all duration-200 cursor-pointer rounded-t-sm",
                       "hover:brightness-110 hover:z-10",
-                      segment.isRecovery && "opacity-60",
+                      segment.isRecovery && "opacity-70",
                       isHovered && "brightness-110"
                     )}
                     style={{
@@ -159,11 +160,10 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
                       height: `${heightPercent}%`,
                       backgroundColor: segment.zoneNumber
                         ? ZONE_COLORS[segment.zoneNumber]
-                        : "hsl(var(--muted))",
-                      boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.3)",
-                      marginLeft: index > 0 ? "1px" : undefined,
+                        : "#9ca3af",
+                      marginLeft: index > 0 ? "2px" : undefined,
                       borderLeft: isTypeChange
-                        ? "3px solid rgba(0,0,0,0.5)"
+                        ? "3px solid rgba(0,0,0,0.3)"
                         : undefined,
                     }}
                     onMouseEnter={() => setHoveredIndex(index)}
@@ -172,23 +172,22 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
                       setOpenTooltipIndex(openTooltipIndex === index ? null : index);
                     }}
                   >
+                    {/* Hover label */}
+                    {isHovered && segment.zoneNumber && segment.widthPercent > 3 && (
+                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground text-background text-[10px] px-2 py-1 rounded font-bold whitespace-nowrap z-20 pointer-events-none">
+                        Z{segment.zoneNumber} · {formatDurationMinutes(segment.durationMin)}
+                      </div>
+                    )}
+
                     {/* Recovery indicator pattern */}
                     {segment.isRecovery && (
                       <div
                         className="absolute inset-0 opacity-30"
                         style={{
                           backgroundImage:
-                            "repeating-linear-gradient(45deg, transparent, transparent 2px, hsl(var(--background)) 2px, hsl(var(--background)) 4px)",
+                            "repeating-linear-gradient(45deg, transparent, transparent 3px, hsl(var(--background)) 3px, hsl(var(--background)) 6px)",
                         }}
                       />
-                    )}
-
-                    {/* Type indicator dots */}
-                    {!segment.isRecovery && segment.type === "warmup" && (
-                      <div className="absolute top-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white/50" />
-                    )}
-                    {!segment.isRecovery && segment.type === "cooldown" && (
-                      <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white/50" />
                     )}
                   </div>
                 </TooltipTrigger>
@@ -201,9 +200,9 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
         </div>
 
         {/* Time labels */}
-        <div className="flex justify-between text-xs text-muted-foreground mt-1.5 px-0.5">
+        <div className="flex justify-between text-xs text-muted-foreground mt-3 px-1">
           <span>{t("visualization.start")}</span>
-          <span className="font-mono font-medium">
+          <span className="font-mono font-bold text-foreground">
             {formatDurationMinutes(totalDurationMin)}
           </span>
           <span>{t("visualization.end")}</span>

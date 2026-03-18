@@ -19,6 +19,12 @@ const CATEGORY_COLORS: Record<ArticleCategory, string> = {
   lifestyle: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
 };
 
+const CATEGORY_BORDER: Record<ArticleCategory, string> = {
+  fundamentals: "border-t-blue-500",
+  training: "border-t-orange-500",
+  lifestyle: "border-t-green-500",
+};
+
 interface ArticleCardProps {
   article: ArticleMeta;
   className?: string;
@@ -33,7 +39,7 @@ export function ArticleCard({ article, className }: ArticleCardProps) {
     <Link to={`/learn/${article.slug}`}>
       <Card
         interactive
-        className={cn("h-full", className)}
+        className={cn("h-full border-t-4", CATEGORY_BORDER[article.category], className)}
       >
         <CardHeader className="pb-2">
           <div className="flex items-start justify-between gap-2">

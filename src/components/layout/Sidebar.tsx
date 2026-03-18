@@ -9,6 +9,7 @@ import {
   Library,
   GraduationCap,
   Book,
+  FlaskConical,
   ClipboardCheck,
   Dices,
   Send,
@@ -72,6 +73,7 @@ const navGroups: NavGroup[] = [
       { href: "/collections", icon: Library, labelKey: "collections.title" },
       { href: "/learn", icon: GraduationCap, labelKey: "nav.learn" },
       { href: "/glossary", icon: Book, labelKey: "nav.glossary" },
+      { href: "/methodology", icon: FlaskConical, labelKey: "nav.methodology" },
     ],
   },
   {

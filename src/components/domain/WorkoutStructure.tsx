@@ -94,16 +94,27 @@ function BlockItem({ block, isEn, userZones }: BlockItemProps) {
   // Build duration/meta string
   const metaParts: string[] = [];
   if (block.durationMin) metaParts.push(`${block.durationMin} min`);
-  if (block.repetitions) metaParts.push(`${block.repetitions}x`);
+  if (block.repetitions && block.repetitions > 1) metaParts.push(`${block.repetitions}x`);
   if (block.distance) metaParts.push(block.distance);
-  if (block.rest) metaParts.push(`Rest: ${block.rest}`);
   const metaString = metaParts.join(" · ");
+
+  // Recovery info — skip if description already mentions it
+  const rawRecovery = block.recovery || block.rest;
+  const descLower = description.toLowerCase();
+  const hasIntervalSlash = /\d+s?\s*\/\s*\d+/.test(description);
+  const hasIntervalPlus = /\d+\s*min\s.*\+\s*\d+/.test(description);
+  const descAlreadyMentionsRecovery = descLower.includes("récup") || descLower.includes("recovery") || descLower.includes("repos") || hasIntervalSlash || hasIntervalPlus;
+  const recoveryText = rawRecovery && !descAlreadyMentionsRecovery ? rawRecovery : null;
+
+  // Inter-series recovery for multi-set patterns like "2x(10x ...)"
+  const seriesMatch = description.match(/^(\d+)x\s*\(/);
+  const seriesCount = seriesMatch ? parseInt(seriesMatch[1]) : null;
 
   return (
     <div
       className={cn(
         "p-3 rounded-lg bg-muted/50",
-        block.zone && `zone-${getZoneNumber(block.zone)} zone-stripe pl-2`
+        block.zone && `zone-${getZoneNumber(block.zone)}`
       )}
     >
       {/* Header row: Zone badge + personalized info */}
@@ -126,6 +137,20 @@ function BlockItem({ block, isEn, userZones }: BlockItemProps) {
           </span>
         )}
       </div>
+      {/* Recovery between reps */}
+      {recoveryText && (
+        <p className="text-xs text-muted-foreground mt-1.5 italic">
+          {isEn ? "Recovery" : "Récupération"} : {recoveryText}
+        </p>
+      )}
+      {/* Inter-series recovery for multi-set blocks */}
+      {seriesCount && seriesCount > 1 && (
+        <p className="text-xs text-muted-foreground mt-1 italic">
+          {isEn
+            ? `${seriesCount} sets — ~3 min jog between sets`
+            : `${seriesCount} séries — ~3 min footing entre les séries`}
+        </p>
+      )}
     </div>
   );
 }

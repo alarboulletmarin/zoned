@@ -128,7 +128,7 @@ export function CollectionDetailPage() {
           className={cn(
             "rounded-2xl border bg-card shadow-sm",
             `zone-${getCollectionZone(collection.slug)}`,
-            "zone-stripe pl-2 p-8 md:p-10"
+            "p-8 md:p-10"
           )}
         >
           {/* Content */}

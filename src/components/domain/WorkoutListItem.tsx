@@ -24,8 +24,8 @@ export function WorkoutListItem({ workout, className }: WorkoutListItemProps) {
     <Link
       to={`/workout/${workout.id}`}
       className={cn(
-        `zone-${dominantZone}`,
-        "zone-stripe pl-2 flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors",
+        `zone-${dominantZone} border-l-4 border-l-zone-${dominantZone}`,
+        "flex items-center gap-3 p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors",
         className
       )}
     >

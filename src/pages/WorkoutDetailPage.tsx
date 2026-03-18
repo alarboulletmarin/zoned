@@ -149,6 +149,11 @@ export function WorkoutDetailPage() {
   const seoTitle = isEn ? workout.nameEn : workout.name;
   const seoDescription = (isEn ? workout.descriptionEn : workout.description).slice(0, 155);
 
+  // Derive the environment label for the metric card
+  const envLabel = envRequirements.length > 0
+    ? envRequirements.map((r) => r.text).join(", ")
+    : t("details.environment");
+
   return (
     <>
       <SEOHead
@@ -185,199 +190,166 @@ export function WorkoutDetailPage() {
           },
         ]}
       />
-      <div className="py-8 space-y-8">
+      <div className={`zone-${dominantZone} py-8 space-y-8`}>
         {/* Back Button */}
-      <Button variant="ghost" size="sm" asChild>
-        <Link to={backTo.path}>
-          <ArrowLeft className="mr-2 size-4" />
-          {backTo.label}
-        </Link>
-      </Button>
+        <Button variant="ghost" size="sm" asChild>
+          <Link to={backTo.path}>
+            <ArrowLeft className="mr-2 size-4" />
+            {backTo.label}
+          </Link>
+        </Button>
 
-      {/* Header */}
-      <header className={`zone-${dominantZone} zone-stripe pl-3 space-y-4`}>
-        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <CategoryIcon className="size-4" />
-              <span>{t(`library:categories.${workout.category}`)}</span>
-            </div>
-            <h1 className="text-3xl font-bold">
-              {isEn ? workout.nameEn : workout.name}
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl">
-              <GlossaryLinkedText text={isEn ? workout.descriptionEn : workout.description} />
-            </p>
-          </div>
-          <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
-            <Button
-              variant="outline"
-              size="icon-sm"
-              onClick={async () => {
-                const ok = await copyToClipboard(window.location.href);
-                if (ok) toast.success(t("common:actions.linkCopied"));
-                else toast.error(t("common:errors.generic"));
-              }}
-              title={t("common:actions.copyLink")}
-            >
-              <Link2 className="size-4" />
-            </Button>
-            <ExportMenu workout={workout} />
-            <FavoriteButton workoutId={workout.id} />
-            <ZoneBadge zone={dominantZone} size="lg" showLabel />
-          </div>
-        </div>
-
-        {/* Quick Info */}
-        <div className="flex flex-wrap gap-4">
-          <Badge variant="secondary" className="gap-1.5">
-            <Clock className="size-3.5" />
-            {duration} {t("common:units.minutes")}
-          </Badge>
-          <Badge variant="secondary" className="gap-1.5">
-            <Dumbbell className="size-3.5" />
-            {t(`library:difficulty.${workout.difficulty}`)}
-          </Badge>
-          <Badge variant="secondary" className="gap-1.5">
-            <Target className="size-3.5" />
-            {t(`targetSystems.${workout.targetSystem}`)}
-          </Badge>
-          {envRequirements.length > 0 && (
-            <Badge variant="outline" className="gap-1.5">
-              <MapPin className="size-3.5" />
-              {envRequirements.map((r, i) => {
-                const Icon = r.icon;
-                return <Icon key={i} className="size-3.5" />;
-              })}
-            </Badge>
-          )}
-        </div>
-      </header>
-
-      {/* Zone Personalization CTA - show only if user has no zones configured */}
-      {!hasUserZones && <ZonePersonalizationCTA />}
-
-      <div className="grid gap-8 lg:grid-cols-3">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-8">
-          {/* Timeline Visualization */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">
-                {t("titles.sessionTimeline")}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <SessionTimeline workout={workout} />
-            </CardContent>
-          </Card>
-
-          {/* Structure */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">
-                {t("titles.workoutStructure")}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <WorkoutStructure workout={workout} userZones={hasUserZones ? userZones : undefined} />
-            </CardContent>
-          </Card>
-
-          {/* Coaching Tips */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">
-                {t("titles.coachingTips")}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CoachingTips workout={workout} />
-            </CardContent>
-          </Card>
-
-          {/* Nutrition & Recovery */}
-          <NutritionRecoverySection workout={workout} />
-        </div>
-
-        {/* Sidebar */}
-        <aside className="space-y-6">
-          {/* Zone Distribution */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm font-medium">
-                {t("titles.zoneDistribution")}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ZoneDistribution workout={workout} />
-            </CardContent>
-          </Card>
-
-          {/* Details */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm font-medium">
-                {t("titles.details")}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">{t("details.duration")}</span>
-                <span>{duration} min</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">{t("details.difficulty")}</span>
-                <span>{t(`library:difficulty.${workout.difficulty}`)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">{t("details.targetSystem")}</span>
-                <span>{t(`targetSystems.${workout.targetSystem}`)}</span>
-              </div>
-              {envRequirements.length > 0 && (
-                <div className="pt-2 border-t">
-                  <span className="text-muted-foreground block mb-2">
-                    {t("details.environment")}
-                  </span>
-                  <ul className="space-y-1">
-                    {envRequirements.map((req, index) => {
-                      const Icon = req.icon;
-                      return (
-                        <li key={index} className="flex items-center gap-2">
-                          <Icon className="size-4" />
-                          <span className="text-xs">{req.text}</span>
-                        </li>
-                      );
-                    })}
-                  </ul>
+        {/* Bento Header */}
+        <header className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Session Identity Card */}
+          <div className="lg:col-span-8 bg-card border rounded-xl p-8 md:p-10 flex flex-col justify-between min-h-[240px]">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <ZoneBadge zone={dominantZone} size="lg" showLabel />
+                  <Badge variant="outline" className="gap-1.5 text-muted-foreground">
+                    <CategoryIcon className="size-3.5" />
+                    {t(`library:categories.${workout.category}`)}
+                  </Badge>
                 </div>
-              )}
-            </CardContent>
-          </Card>
+                <FavoriteButton workoutId={workout.id} />
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4">
+                {isEn ? workout.nameEn : workout.name}
+              </h1>
+              <p className="text-muted-foreground max-w-2xl leading-relaxed text-lg">
+                <GlossaryLinkedText text={isEn ? workout.descriptionEn : workout.description} />
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-8">
+              <ExportMenu workout={workout} />
+              <Button
+                variant="secondary"
+                className="rounded-full px-5 py-2.5 h-auto font-bold"
+                onClick={async () => {
+                  const ok = await copyToClipboard(window.location.href);
+                  if (ok) toast.success(t("common:actions.linkCopied"));
+                  else toast.error(t("common:errors.generic"));
+                }}
+              >
+                <Link2 className="size-4 mr-2" />
+                {t("common:actions.copyLink")}
+              </Button>
+            </div>
+          </div>
 
-          {/* Contextual Tip */}
-          {tip && (
-            <TipCard tip={tip} variant="card" />
-          )}
+          {/* Summary Metrics */}
+          <div className="lg:col-span-4">
+            <div className="grid grid-cols-2 gap-2 lg:gap-4">
+              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-4 lg:p-6 flex flex-col items-center justify-center text-center">
+                <Clock className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
+                <span className="text-lg lg:text-2xl font-bold">{duration}</span>
+                <span className="text-[10px] lg:text-xs text-muted-foreground">{t("common:units.minutes")}</span>
+              </div>
+              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-4 lg:p-6 flex flex-col items-center justify-center text-center">
+                <Dumbbell className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
+                <span className="text-sm lg:text-lg font-bold">{t(`library:difficulty.${workout.difficulty}`)}</span>
+                <span className="text-[10px] lg:text-xs text-muted-foreground">{t("details.difficulty")}</span>
+              </div>
+              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-4 lg:p-6 flex flex-col items-center justify-center text-center">
+                <Target className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
+                <span className="text-sm font-bold">{t(`targetSystems.${workout.targetSystem}`)}</span>
+                <span className="text-[10px] lg:text-xs text-muted-foreground">{t("details.targetSystem")}</span>
+              </div>
+              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-4 lg:p-6 flex flex-col items-center justify-center text-center">
+                <MapPin className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
+                <span className="text-sm font-bold">
+                  {envRequirements.length > 0 ? envLabel : (isEn ? "Any" : "Tous")}
+                </span>
+                <span className="text-[10px] lg:text-xs text-muted-foreground">{t("details.environment")}</span>
+              </div>
+            </div>
+          </div>
+        </header>
 
-          {/* Related Workouts */}
-          {relatedWorkouts.length > 0 && (
-            <Card>
+        {/* Zone Personalization CTA - show only if user has no zones configured */}
+        {!hasUserZones && <ZonePersonalizationCTA />}
+
+        <div className="grid gap-8 lg:grid-cols-3">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Timeline Visualization */}
+            <Card className="rounded-xl">
               <CardHeader>
-                <CardTitle className="text-sm font-medium">
-                  {t("titles.relatedWorkouts")}
+                <CardTitle className="text-lg">
+                  {t("titles.sessionTimeline")}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
-                {relatedWorkouts.map((related) => (
-                  <WorkoutCardCompact key={related.id} workout={related} />
-                ))}
+              <CardContent>
+                <SessionTimeline workout={workout} />
               </CardContent>
             </Card>
-          )}
-        </aside>
+
+            {/* Structure */}
+            <Card className="rounded-xl">
+              <CardHeader>
+                <CardTitle className="text-lg">
+                  {t("titles.workoutStructure")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <WorkoutStructure workout={workout} userZones={hasUserZones ? userZones : undefined} />
+              </CardContent>
+            </Card>
+
+            {/* Coaching Tips */}
+            <Card className="rounded-xl">
+              <CardHeader>
+                <CardTitle className="text-lg">
+                  {t("titles.coachingTips")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CoachingTips workout={workout} />
+              </CardContent>
+            </Card>
+
+            {/* Nutrition & Recovery */}
+            <NutritionRecoverySection workout={workout} />
+          </div>
+
+          {/* Sidebar */}
+          <aside className="space-y-6">
+            {/* Zone Distribution */}
+            <Card className="rounded-xl">
+              <CardHeader>
+                <CardTitle className="text-sm font-medium">
+                  {t("titles.zoneDistribution")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ZoneDistribution workout={workout} />
+              </CardContent>
+            </Card>
+
+            {/* Contextual Tip */}
+            {tip && (
+              <TipCard tip={tip} variant="card" />
+            )}
+
+            {/* Related Workouts */}
+            {relatedWorkouts.length > 0 && (
+              <Card className="rounded-xl">
+                <CardHeader>
+                  <CardTitle className="text-sm font-medium">
+                    {t("titles.relatedWorkouts")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {relatedWorkouts.map((related) => (
+                    <WorkoutCardCompact key={related.id} workout={related} />
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+          </aside>
+        </div>
       </div>
-    </div>
     </>
   );
 }

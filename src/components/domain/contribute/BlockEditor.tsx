@@ -50,7 +50,7 @@ export function BlockEditor({
       size="compact"
       className={cn(
         "relative overflow-hidden",
-        block.zone && `zone-${zoneNumber} zone-stripe`
+        block.zone && `zone-${zoneNumber}`
       )}
     >
       <CardContent className="p-4 pl-4 space-y-3">

@@ -45,7 +45,7 @@ export const ExportableWorkoutCard = forwardRef<
       style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
     >
       {/* Header */}
-      <div className={`zone-${dominantZone} zone-stripe pl-3 mb-6`}>
+      <div className={`zone-${dominantZone} mb-6`}>
         <div className="flex items-start justify-between gap-4 mb-3">
           <div className="flex-1">
             <h1 className="text-2xl font-bold text-gray-900 mb-1">
