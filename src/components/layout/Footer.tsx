@@ -13,9 +13,9 @@ export function Footer() {
   const { hasNewVersion } = useWhatsNew();
 
   return (
-    <footer className="border-t py-6 md:py-8">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+    <footer className="border-t py-6 md:py-7">
+      <div className="px-4 md:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl flex flex-wrap items-center justify-center gap-x-6 gap-y-2 lg:justify-between">
           {/* Branding */}
           <Link to="/" className="flex items-center gap-2">
             <Logo className="w-12 h-6" />

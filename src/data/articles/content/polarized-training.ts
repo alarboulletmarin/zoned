@@ -4,9 +4,9 @@ import type { ArticleContent } from "../types";
 const content: ArticleContent = {
   content: `## Le modele 80/20 : courir lentement pour progresser vite
 
-Tu as probablement entendu ce conseil : "Cours a une allure ou tu peux discuter." Mais la plupart des coureurs amateurs l'ignorent. Ils courent leurs footings trop vite, leurs seances intenses pas assez fort, et finissent par passer l'essentiel de leur temps dans une zone d'intensite mediocre.
+Tu as probablement entendu ce conseil : "Cours a une allure ou tu peux discuter." Mais la plupart des coureurs amateurs l'ignorent. Ils courent leurs footings trop vite, leurs séances intenses pas assez fort, et finissent par passer l'essentiel de leur temps dans une zone d'intensite mediocre.
 
-L'[[entrainement-polarise]] propose une approche radicalement differente : 80% de ton entrainement a faible intensite, 20% a haute intensite, et quasi rien entre les deux.
+L'[[entraînement-polarise]] propose une approche radicalement differente : 80% de ton entraînement a faible intensite, 20% a haute intensite, et quasi rien entre les deux.
 
 ---
 
@@ -14,7 +14,7 @@ L'[[entrainement-polarise]] propose une approche radicalement differente : 80% d
 
 Au debut des annees 2000, le chercheur norvegien Stephen Seiler s'est pose une question simple : comment s'entrainent vraiment les meilleurs athletes d'endurance au monde ?
 
-En analysant les carnets d'entrainement de skieurs de fond, cyclistes, et rameurs olympiques, il a decouvert un pattern surprenant. Ces athletes, qu'on imagine souffrir en permanence, passent en realite la grande majorite de leur temps a intensite tres faible.
+En analysant les carnets d'entraînement de skieurs de fond, cyclistes, et rameurs olympiques, il a decouvert un pattern surprenant. Ces athletes, qu'on imagine souffrir en permanence, passent en realite la grande majorite de leur temps a intensite tres faible.
 
 ### Les chiffres
 
@@ -26,13 +26,13 @@ En analysant les carnets d'entrainement de skieurs de fond, cyclistes, et rameur
 
 Le 80/20 n'est pas une invention theorique. C'est l'observation de ce que font naturellement les meilleurs.
 
-> 📊 Les etudes de Stephen Seiler montrent que 75 a 85% du temps d'entrainement des athletes d'elite se fait a faible intensite. Ce ratio est remarquablement constant d'un sport d'endurance a l'autre.
+> 📊 Les etudes de Stephen Seiler montrent que 75 a 85% du temps d'entraînement des athletes d'elite se fait a faible intensite. Ce ratio est remarquablement constant d'un sport d'endurance a l'autre.
 
 ---
 
 ## Les trois zones du modele polarise
 
-L'entrainement polarise simplifie les zones en trois categories :
+L'entraînement polarise simplifie les zones en trois categories :
 
 ### Zone 1 : En-dessous du seuil aerobie
 
@@ -65,9 +65,9 @@ C'est contre-intuitif. La zone grise semble "productive" : tu transpires, tu te 
 
 ### Trop dur pour recuperer
 
-Les seances en zone grise creent une fatigue significative sans apporter de stimulus d'adaptation superieur a l'endurance facile.
+Les séances en zone grise creent une fatigue significative sans apporter de stimulus d'adaptation superieur a l'endurance facile.
 
-Resultat : tu mets plus de temps a recuperer qu'apres un footing facile, mais tu n'as pas les benefices d'une vraie seance intense.
+Resultat : tu mets plus de temps a recuperer qu'apres un footing facile, mais tu n'as pas les benefices d'une vraie séance intense.
 
 ### Pas assez dur pour progresser au maximum
 
@@ -96,13 +96,13 @@ Courir lentement (vraiment lentement) permet d'accumuler beaucoup de volume sans
 - L'efficacite cardiaque (plus de sang pompe par battement)
 - L'utilisation des graisses comme carburant
 
-### 2. Seances intenses de meilleure qualite
+### 2. Séances intenses de meilleure qualite
 
-Quand tes jours faciles sont vraiment faciles, tu arrives frais a tes seances de qualite. Tu peux donner plus, a de meilleures allures, avec une meilleure forme.
+Quand tes jours faciles sont vraiment faciles, tu arrives frais a tes séances de qualite. Tu peux donner plus, a de meilleures allures, avec une meilleure forme.
 
-### 3. Recuperation acceleree
+### 3. Récupération acceleree
 
-Moins de stress cumule = recuperation plus rapide = capacite a absorber plus de travail sur le long terme.
+Moins de stress cumule = récupération plus rapide = capacite a absorber plus de travail sur le long terme.
 
 ### 4. Reduction du risque de blessure
 
@@ -128,7 +128,7 @@ Utilise ta frequence cardiaque ou tes sensations :
 
 ### Etape 2 : Compter en temps, pas en distance
 
-Le 80/20 s'applique au temps d'entrainement, pas aux kilometres. Une seance de fractionne peut faire peu de kilometres mais beaucoup de temps en zone 3.
+Le 80/20 s'applique au temps d'entraînement, pas aux kilometres. Une séance de fractionne peut faire peu de kilometres mais beaucoup de temps en zone 3.
 
 ### Etape 3 : Ralentir tes footings
 
@@ -136,13 +136,13 @@ C'est le plus difficile pour la plupart des coureurs. Si tu cours actuellement t
 
 **Teste :** Peux-tu tenir une conversation complete sur l'ensemble de ton footing ? Si non, tu vas trop vite.
 
-### Etape 4 : Intensifier tes seances dures
+### Etape 4 : Intensifier tes séances dures
 
-Quand tu fais une seance de qualite, engage-toi vraiment. Pas de "seance facile-difficile". Soit c'est facile, soit c'est dur.
+Quand tu fais une séance de qualite, engage-toi vraiment. Pas de "séance facile-difficile". Soit c'est facile, soit c'est dur.
 
 ### Etape 5 : Minimiser la zone grise
 
-Les seances tempo (zone 3) ont leur place, mais elles ne devraient pas dominer ton programme. Reserve-les pour la preparation specifique avant une course.
+Les séances tempo (zone 3) ont leur place, mais elles ne devraient pas dominer ton programme. Reserve-les pour la preparation specifique avant une course.
 
 ---
 
@@ -150,7 +150,7 @@ Les seances tempo (zone 3) ont leur place, mais elles ne devraient pas dominer t
 
 Pour un coureur qui s'entraine 5 fois par semaine (environ 5-6h) :
 
-| Jour | Seance | Zone | Duree |
+| Jour | Séance | Zone | Duree |
 |------|--------|------|-------|
 | Lundi | Repos | - | - |
 | Mardi | Fractionne | Zone 3 (intense) | 50min |
@@ -166,7 +166,7 @@ Pour un coureur qui s'entraine 5 fois par semaine (environ 5-6h) :
 
 ## Les pieges a eviter
 
-> ⚠️ L'erreur la plus courante : courir les jours faciles trop vite et les jours durs pas assez fort. Le resultat est un entrainement mediocre qui ne produit ni recuperation ni adaptation.
+> ⚠️ L'erreur la plus courante : courir les jours faciles trop vite et les jours durs pas assez fort. Le resultat est un entraînement mediocre qui ne produit ni récupération ni adaptation.
 
 ### Piege 1 : "Facile" n'est pas assez facile
 
@@ -178,7 +178,7 @@ La plupart des coureurs sous-estiment a quel point leurs footings devraient etre
 
 ### Piege 3 : Ajouter des accelerations aux footings
 
-Finir un footing par 3x100m rapides transforme une seance de recuperation en seance mixte. Si ton objectif est de recuperer, recupere.
+Finir un footing par 3x100m rapides transforme une séance de récupération en séance mixte. Si ton objectif est de recuperer, recupere.
 
 ### Piege 4 : Compter les pourcentages sur une seule semaine
 
@@ -190,15 +190,15 @@ Le 80/20 est une moyenne sur plusieurs semaines. Une semaine avec une course peu
 
 Pour les marathoniens, l'approche polarisee fonctionne particulierement bien. L'allure marathon (autour de la zone grise) est travaillee specifiquement dans les dernieres semaines de preparation, pas tout au long du plan.
 
-Les longues sorties restent en zone 1-2, meme si c'est tentant d'accelerer. Les seances de qualite ciblent soit le seuil (zone 3-4), soit la VMA (zone 5).
+Les longues sorties restent en zone 1-2, meme si c'est tentant d'accelerer. Les séances de qualite ciblent soit le seuil (zone 3-4), soit la VMA (zone 5).
 
 ---
 
 ## La science confirme
 
-Plusieurs etudes comparant l'entrainement polarise a l'entrainement "threshold" (plus de zone grise) montrent des resultats en faveur de la polarisation :
+Plusieurs etudes comparant l'entraînement polarise a l'entraînement "threshold" (plus de zone grise) montrent des resultats en faveur de la polarisation :
 
-- **Stoggl & Sperlich (2014)** : L'entrainement polarise produit de meilleures ameliorations de VO2max et de performance sur 10 km que l'approche threshold.
+- **Stoggl & Sperlich (2014)** : L'entraînement polarise produit de meilleures ameliorations de VO2max et de performance sur 10 km que l'approche threshold.
 
 - **Neal et al. (2013)** : Cyclistes amateurs ayant suivi 6 semaines de polarise vs threshold. Le groupe polarise a montre une progression superieure.
 
@@ -210,18 +210,18 @@ Plusieurs etudes comparant l'entrainement polarise a l'entrainement "threshold" 
 
 Si tu viens d'un modele ou tu cours tout moderement vite, la transition vers le polarise peut etre difficile psychologiquement.
 
-**Semaine 1-2 :** Ralentis juste tes footings. Pas de changement aux seances de qualite.
+**Semaine 1-2 :** Ralentis juste tes footings. Pas de changement aux séances de qualite.
 
-**Semaine 3-4 :** Intensifie tes seances de qualite. Vraiment dur quand c'est dur.
+**Semaine 3-4 :** Intensifie tes séances de qualite. Vraiment dur quand c'est dur.
 
 **Semaine 5+ :** Ajuste la repartition vers 80/20.
 
-Ca prend du temps de se recalibrer. Mais une fois que tu auras ressenti les benefices - jambes fraiches, seances de qualite reussies, progression reguliere - tu ne reviendras pas en arriere.`,
+Ca prend du temps de se recalibrer. Mais une fois que tu auras ressenti les benefices - jambes fraiches, séances de qualite reussies, progression reguliere - tu ne reviendras pas en arriere.`,
   contentEn: `## The 80/20 model: run slow to get fast
 
 You've probably heard this advice: "Run at a pace where you can chat." But most recreational runners ignore it. They run their easy runs too fast, their intense sessions not hard enough, and end up spending most of their time in a mediocre intensity zone.
 
-[[entrainement-polarise]] offers a radically different approach: 80% of your training at low intensity, 20% at high intensity, and almost nothing in between.
+[[entraînement-polarise]] offers a radically different approach: 80% of your training at low intensity, 20% at high intensity, and almost nothing in between.
 
 ---
 

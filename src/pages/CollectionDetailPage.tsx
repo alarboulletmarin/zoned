@@ -183,7 +183,7 @@ export function CollectionDetailPage() {
             <p className="text-muted-foreground">
               {isEn
                 ? "No workouts found for this collection."
-                : "Aucune seance trouvee pour cette collection."}
+                : "Aucune séance trouvée pour cette collection."}
             </p>
           </div>
         )}

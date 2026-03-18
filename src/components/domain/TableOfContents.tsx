@@ -65,11 +65,19 @@ export function TableOfContents({
   if (headings.length < 2) return null;
 
   const handleClick = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    // Close the dropdown first so it doesn't affect layout
     setMobileOpen(false);
+
+    // Wait for the dropdown to close before scrolling
+    requestAnimationFrame(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        // Header = 48px + some breathing room
+        const offset = isMobile ? 80 : 64;
+        const top = el.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+    });
   };
 
   const activeHeading = headings.find((h) => h.id === activeId);

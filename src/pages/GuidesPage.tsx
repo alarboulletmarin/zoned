@@ -29,18 +29,18 @@ const GUIDES: GuideEntry[] = [
   {
     id: "race-prep",
     icon: Target,
-    title: "Preparation Course",
+    title: "Préparation Course",
     titleEn: "Race Preparation",
-    description: "Checklist, strategie, recuperation",
+    description: "Checklist, stratégie, récupération",
     descriptionEn: "Checklist, strategy, recovery",
     href: "/guides/race-prep",
   },
   {
     id: "warmup",
     icon: Flame,
-    title: "Echauffement",
+    title: "Échauffement",
     titleEn: "Warm-up",
-    description: "Routines d'echauffement et etirements",
+    description: "Routines d'échauffement et étirements",
     descriptionEn: "Warm-up routines and stretching",
     href: "/guides/warmup",
   },
@@ -57,7 +57,7 @@ export function GuidesPage() {
         description={
           isEn
             ? "Running guides: nutrition, race preparation, warm-up routines and more."
-            : "Guides de course : nutrition, preparation course, routines d'echauffement et plus."
+            : "Guides de course : nutrition, préparation course, routines d'échauffement et plus."
         }
         canonical="/guides"
         jsonLd={{
@@ -65,7 +65,7 @@ export function GuidesPage() {
           name: "Guides",
           description: isEn
             ? "Running guides: nutrition, race preparation, warm-up routines and more."
-            : "Guides de course : nutrition, preparation course, routines d'echauffement et plus.",
+            : "Guides de course : nutrition, préparation course, routines d'échauffement et plus.",
           url: "https://zoned.run/guides",
         }}
       />

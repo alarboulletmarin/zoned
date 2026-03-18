@@ -1841,26 +1841,26 @@
       ],
       "mainSetTemplate": [
         {
-          "description": "2x(15x 30s a 100% VMA / 30s a 50% VMA) avec 5min entre series",
+          "description": "2x(15x 30s à 100% VMA / 30s à 50% VMA) avec 5min entre séries",
           "descriptionEn": "2x(15x 30s at 100% vVO2max / 30s at 50% vVO2max) with 5min between sets",
           "zone": "Z5",
           "repetitions": 15,
-          "recovery": "30s footing a 50% VMA"
+          "recovery": "30s footing à 50% VMA"
         }
       ],
       "cooldownTemplate": [
         {
-          "description": "Footing de recuperation",
+          "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
           "zone": "Z1"
         }
       ],
       "coachingTips": [
-        "La recup a 50% VMA est essentielle au protocole",
-        "Ne marchez pas, trottinez vraiment a 50% VMA",
-        "Reference scientifique : Billat et al., 2000",
-        "15 minutes totales a VMA par seance"
+        "La récup à 50% VMA est essentielle au protocole",
+        "Ne marchez pas, trottinez vraiment à 50% VMA",
+        "Référence scientifique : Billat et al., 2000",
+        "15 minutes totales à VMA par séance"
       ],
       "coachingTipsEn": [
         "Recovery at 50% vVO2max is essential to the protocol",
@@ -1869,9 +1869,9 @@
         "15 total minutes at vVO2max per session"
       ],
       "commonMistakes": [
-        "Recuperer trop lentement (marche)",
-        "Partir trop vite sur les premieres repetitions",
-        "Ne pas connaitre sa VMA precise"
+        "Récupérer trop lentement (marche)",
+        "Partir trop vite sur les premières répétitions",
+        "Ne pas connaître sa VMA précise"
       ],
       "commonMistakesEn": [
         "Recovering too slowly (walking)",
@@ -1904,7 +1904,7 @@
       "id": "VMA-022",
       "name": "Speed Endurance 20-40s",
       "nameEn": "Speed Endurance 20-40s",
-      "description": "Intervalles courts a tres haute intensite (105-110% VMA). Developpe l'endurance de vitesse et la tolerance lactique. Protocole inspire des travaux de Mosey Bangsbo.",
+      "description": "Intervalles courts à très haute intensité (105-110% VMA). Développe l'endurance de vitesse et la tolérance lactique. Protocole inspiré des travaux de Mosey Bangsbo.",
       "descriptionEn": "Short intervals at very high intensity (105-110% vVO2max). Develops speed endurance and lactate tolerance. Protocol inspired by Bangsbo's research.",
       "category": "vma_intervals",
       "sessionType": "speed",
@@ -1927,14 +1927,14 @@
           "zone": "Z1-Z2"
         },
         {
-          "description": "Gammes completes et 5x accelerations",
+          "description": "Gammes complètes et 5x accélérations",
           "descriptionEn": "Full drills and 5x accelerations",
           "durationMin": 10
         }
       ],
       "mainSetTemplate": [
         {
-          "description": "8-10x 20-40s a 105-110% VMA avec 2-3min recup complete",
+          "description": "8-10x 20-40s à 105-110% VMA avec 2-3min récup complète",
           "descriptionEn": "8-10x 20-40s at 105-110% vVO2max with 2-3min full recovery",
           "zone": "Z5+",
           "repetitions": 10,
@@ -1943,17 +1943,17 @@
       ],
       "cooldownTemplate": [
         {
-          "description": "Footing de recuperation",
+          "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
           "zone": "Z1"
         }
       ],
       "coachingTips": [
-        "Intensite supra-maximale : au-dessus de la VMA",
-        "Recuperation complete entre chaque repetition",
-        "Qualite prime sur quantite",
-        "Seance reservee aux coureurs experimentes"
+        "Intensité supra-maximale : au-dessus de la VMA",
+        "Récupération complète entre chaque répétition",
+        "Qualité prime sur quantité",
+        "Séance réservée aux coureurs expérimentés"
       ],
       "coachingTipsEn": [
         "Supra-maximal intensity: above vVO2max",
@@ -1962,9 +1962,9 @@
         "Session reserved for experienced runners"
       ],
       "commonMistakes": [
-        "Recuperation trop courte",
-        "Trop de repetitions",
-        "Faire cette seance fatigue"
+        "Récupération trop courte",
+        "Trop de répétitions",
+        "Faire cette séance fatigué"
       ],
       "commonMistakesEn": [
         "Recovery too short",
@@ -1996,7 +1996,7 @@
       "id": "VMA-023",
       "name": "Sprints neuromusculaires (NRRs)",
       "nameEn": "Neuromuscular Running Repeats (NRRs)",
-      "description": "10-12x 80m sprints avec recuperation complete. Developpe la puissance neuromusculaire et l'economie de course. Methode Hudson/Magness.",
+      "description": "10-12x 80m sprints avec récupération complète. Développe la puissance neuromusculaire et l'économie de course. Méthode Hudson/Magness.",
       "descriptionEn": "10-12x 80m sprints with full recovery. Develops neuromuscular power and running economy. Hudson/Magness method.",
       "category": "vma_intervals",
       "sessionType": "speed",
@@ -2019,7 +2019,7 @@
           "zone": "Z1-Z2"
         },
         {
-          "description": "Gammes dynamiques et educatifs de sprint",
+          "description": "Gammes dynamiques et éducatifs de sprint",
           "descriptionEn": "Dynamic drills and sprint technique work",
           "durationMin": 10
         }
@@ -2036,17 +2036,17 @@
       ],
       "cooldownTemplate": [
         {
-          "description": "Footing de recuperation",
+          "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
           "zone": "Z1"
         }
       ],
       "coachingTips": [
-        "Pas de sprint maximal : 95% pour preserver la technique",
-        "Focus sur la frequence de foulee et l'amplitude",
-        "Ameliore l'economie de course selon Hudson",
-        "Peut etre integre a un footing endurance"
+        "Pas de sprint maximal : 95% pour préserver la technique",
+        "Focus sur la fréquence de foulée et l'amplitude",
+        "Améliore l'économie de course selon Hudson",
+        "Peut être intégré à un footing endurance"
       ],
       "coachingTipsEn": [
         "Not maximal sprint: 95% to preserve technique",
@@ -2055,9 +2055,9 @@
         "Can be integrated into an endurance jog"
       ],
       "commonMistakes": [
-        "Sprinter a 100% et perdre la technique",
-        "Recuperation trop courte",
-        "Negliger l'echauffement"
+        "Sprinter à 100% et perdre la technique",
+        "Récupération trop courte",
+        "Négliger l'échauffement"
       ],
       "commonMistakesEn": [
         "Sprinting at 100% and losing technique",

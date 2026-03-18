@@ -100,7 +100,7 @@ export function TreadmillConverterPage() {
         description={
           isEn
             ? "Convert treadmill speed and incline to equivalent outdoor pace and training zone."
-            : "Convertissez la vitesse et l'inclinaison du tapis roulant en allure exterieure equivalente et zone d'entrainement."
+            : "Convertissez la vitesse et l'inclinaison du tapis roulant en allure extérieure équivalente et zone d'entraînement."
         }
         canonical="/calculateurs/tapis-roulant"
       />
@@ -220,7 +220,7 @@ export function TreadmillConverterPage() {
               {matchedZone && (
                 <div className="mt-4 pt-4 border-t flex items-center gap-2">
                   <span className="text-sm text-muted-foreground">
-                    {isEn ? "Training zone:" : "Zone d'entrainement :"}
+                    {isEn ? "Training zone:" : "Zone d'entraînement :"}
                   </span>
                   <ZoneBadge zone={matchedZone} showLabel size="md" />
                 </div>
@@ -231,7 +231,7 @@ export function TreadmillConverterPage() {
                   <Info className="size-4 shrink-0" />
                   {isEn
                     ? "Configure your VMA in My Zones to see the training zone."
-                    : "Configurez votre VMA dans Mes Zones pour voir la zone d'entrainement."}
+                    : "Configurez votre VMA dans Mes Zones pour voir la zone d'entraînement."}
                 </div>
               )}
             </CardContent>

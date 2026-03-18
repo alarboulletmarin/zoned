@@ -252,7 +252,7 @@ export const periodizationTerms: GlossaryTerm[] = [
     ],
   },
   {
-    id: "entrainement-polarise",
+    id: "entraînement-polarise",
     term: "Entraînement Polarisé",
     termEn: "Polarized Training",
     category: "periodization",
@@ -268,7 +268,7 @@ export const periodizationTerms: GlossaryTerm[] = [
       "Sur une semaine de 10h d'entraînement polarisé : 8h en endurance fondamentale (zone 2), 2h d'intervalles intenses (zone 4-5), et presque rien en zone 3.",
     exampleEn:
       "In a 10-hour polarized training week: 8h in fundamental endurance (zone 2), 2h of intense intervals (zones 4-5), and almost nothing in zone 3.",
-    relatedTerms: ["zone-2", "zone-5", "periodization-ondulee", "zones-entrainement"],
+    relatedTerms: ["zone-2", "zone-5", "periodization-ondulee", "zones-entraînement"],
     keywords: ["polarisé", "80/20", "Seiler", "distribution", "intensité"],
     externalLinks: [
       {

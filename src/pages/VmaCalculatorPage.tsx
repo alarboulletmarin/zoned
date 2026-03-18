@@ -126,7 +126,7 @@ export function VmaCalculatorPage() {
           <p className="text-muted-foreground text-lg">
             {isEn
               ? "Enter a recent race time to estimate your VMA (Maximal Aerobic Speed) and see your training zones."
-              : "Entrez un chrono recent pour estimer votre VMA (Vitesse Maximale Aerobie) et voir vos zones d'entrainement."}
+              : "Entrez un chrono récent pour estimer votre VMA (Vitesse Maximale Aérobie) et voir vos zones d'entraînement."}
           </p>
         </div>
 

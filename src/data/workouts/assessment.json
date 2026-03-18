@@ -97,7 +97,7 @@
       "id": "ASS-002",
       "name": "Test allure critique (CV)",
       "nameEn": "Critical Velocity Test",
-      "description": "Test pour determiner l'allure critique (Critical Velocity). Basé sur deux contre-la-montre (1200m et 3600m) pour calculer CV. Protocole de Billat.",
+      "description": "Test pour déterminer l'allure critique (Critical Velocity). Basé sur deux contre-la-montre (1200m et 3600m) pour calculer CV. Protocole de Billat.",
       "descriptionEn": "Test to determine Critical Velocity (CV). Based on two time trials (1200m and 3600m) to calculate CV. Billat protocol.",
       "category": "assessment",
       "sessionType": "threshold",
@@ -133,7 +133,7 @@
           "zone": "Z5"
         },
         {
-          "description": "Récupération complete",
+          "description": "Récupération complète",
           "descriptionEn": "Full recovery",
           "durationMin": 15,
           "zone": "Z1"
@@ -154,10 +154,10 @@
         }
       ],
       "coachingTips": [
-        "CV = (D2-D1) / (T2-T1) avec D en metres et T en secondes",
-        "Le 1200m doit etre couru a fond",
+        "CV = (D2-D1) / (T2-T1) avec D en mètres et T en secondes",
+        "Le 1200m doit être couru à fond",
         "Le 3600m demande une bonne gestion d'allure",
-        "CV correspond environ a l'allure 10K-semi"
+        "CV correspond environ à l'allure 10K-semi"
       ],
       "coachingTipsEn": [
         "CV = (D2-D1) / (T2-T1) with D in meters and T in seconds",
@@ -166,9 +166,9 @@
         "CV corresponds roughly to 10K-half marathon pace"
       ],
       "commonMistakes": [
-        "Ne pas etre assez repose pour ce test",
-        "Recuperation trop courte entre les deux CLM",
-        "Mal gerer le 3600m"
+        "Ne pas être assez reposé pour ce test",
+        "Récupération trop courte entre les deux CLM",
+        "Mal gérer le 3600m"
       ],
       "commonMistakesEn": [
         "Not being rested enough for this test",
@@ -201,7 +201,7 @@
       "id": "ASS-003",
       "name": "Time trial 5K",
       "nameEn": "5K Time Trial",
-      "description": "Contre-la-montre 5km pour evaluer la forme actuelle et predire les performances sur d'autres distances. Reference classique.",
+      "description": "Contre-la-montre 5km pour évaluer la forme actuelle et prédire les performances sur d'autres distances. Référence classique.",
       "descriptionEn": "5K time trial to evaluate current fitness and predict performance over other distances. Classic benchmark.",
       "category": "assessment",
       "sessionType": "race_specific",
@@ -239,17 +239,17 @@
       ],
       "cooldownTemplate": [
         {
-          "description": "Marche puis footing de recuperation",
+          "description": "Marche puis footing de récupération",
           "descriptionEn": "Walking then recovery jog",
           "durationMin": 15,
           "zone": "Z1"
         }
       ],
       "coachingTips": [
-        "Gerez votre allure : le premier km ne doit pas etre le plus rapide",
-        "Visez des splits reguliers",
+        "Gérez votre allure : le premier km ne doit pas être le plus rapide",
+        "Visez des splits réguliers",
         "Ce temps permet d'estimer VMA, seuil et allures marathon",
-        "Idealement sur piste ou parcours certifie"
+        "Idéalement sur piste ou parcours certifié"
       ],
       "coachingTipsEn": [
         "Manage your pace: the first km should not be the fastest",
@@ -259,8 +259,8 @@
       ],
       "commonMistakes": [
         "Partir trop vite",
-        "Ne pas connaitre son allure cible",
-        "Faire le test fatigue"
+        "Ne pas connaître son allure cible",
+        "Faire le test fatigué"
       ],
       "commonMistakesEn": [
         "Starting too fast",
@@ -293,7 +293,7 @@
       "id": "ASS-004",
       "name": "Test VMA terrain (navettes)",
       "nameEn": "Field VO2max Test (Shuttle)",
-      "description": "Test VMA sur terrain avec navettes de 20m (protocole VAMEVAL ou Luc Leger). Progressif jusqu'a epuisement.",
+      "description": "Test VMA sur terrain avec navettes de 20m (protocole VAMEVAL ou Luc Léger). Progressif jusqu'à épuisement.",
       "descriptionEn": "Field VO2max test with 20m shuttles (VAMEVAL or Luc Leger protocol). Progressive until exhaustion.",
       "category": "assessment",
       "sessionType": "vo2max",
@@ -310,27 +310,27 @@
       },
       "warmupTemplate": [
         {
-          "description": "Footing leger",
+          "description": "Footing léger",
           "descriptionEn": "Light jog",
           "durationMin": 8,
           "zone": "Z1"
         },
         {
-          "description": "Mobilite et accelerations courtes",
+          "description": "Mobilité et accélérations courtes",
           "descriptionEn": "Mobility and short accelerations",
           "durationMin": 5
         }
       ],
       "mainSetTemplate": [
         {
-          "description": "Test navettes 20m progressif (bip sonore) jusqu'a l'arret",
+          "description": "Test navettes 20m progressif (bip sonore) jusqu'à l'arrêt",
           "descriptionEn": "Progressive 20m shuttle test (audio beep) until failure",
           "zone": "Z1-Z5"
         }
       ],
       "cooldownTemplate": [
         {
-          "description": "Marche et recuperation",
+          "description": "Marche et récupération",
           "descriptionEn": "Walking and recovery",
           "durationMin": 10,
           "zone": "Z1"
@@ -338,9 +338,9 @@
       ],
       "coachingTips": [
         "Besoin d'une bande sonore ou application pour le test",
-        "Vitesse de depart : 8 km/h, +0.5 km/h par palier",
-        "VMA = dernier palier complete",
-        "Test valide scientifiquement (Leger & Lambert, 1982)"
+        "Vitesse de départ : 8 km/h, +0.5 km/h par palier",
+        "VMA = dernier palier complété",
+        "Test validé scientifiquement (Léger & Lambert, 1982)"
       ],
       "coachingTipsEn": [
         "Need audio track or app for the test",
@@ -350,8 +350,8 @@
       ],
       "commonMistakes": [
         "Ne pas avoir le bon fichier audio",
-        "Distance entre plots mal mesuree",
-        "S'arreter avant l'epuisement reel"
+        "Distance entre plots mal mesurée",
+        "S'arrêter avant l'épuisement réel"
       ],
       "commonMistakesEn": [
         "Not having the correct audio file",

@@ -108,7 +108,7 @@ export function GlossaryPage() {
         title={isEn ? "Glossary" : "Glossaire"}
         description={isEn
           ? "Running terminology explained: training zones, workout types, and key concepts for runners."
-          : "Terminologie de la course a pied expliquee: zones d'entrainement, types de seances et concepts cles."}
+          : "Terminologie de la course à pied expliquée: zones d'entraînement, types de séances et concepts clés."}
         canonical="/glossary"
         jsonLd={{
           "@type": "DefinedTermSet",

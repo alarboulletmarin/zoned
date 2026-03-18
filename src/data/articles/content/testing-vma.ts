@@ -4,7 +4,7 @@ import type { ArticleContent } from "../types";
 const content: ArticleContent = {
   content: `## Connaitre ses chiffres pour mieux s'entrainer
 
-Deux valeurs dominent la planification de l'entrainement en course a pied : la VMA (Vitesse Maximale Aerobie) et la FCmax (Frequence Cardiaque Maximale). La premiere determine vos allures de travail, la seconde definit vos zones d'intensite. Sans ces references, vous courez a l'aveugle - trop vite certains jours, pas assez d'autres.
+Deux valeurs dominent la planification de l'entraînement en course a pied : la VMA (Vitesse Maximale Aerobie) et la FCmax (Frequence Cardiaque Maximale). La premiere determine vos allures de travail, la seconde definit vos zones d'intensite. Sans ces references, vous courez a l'aveugle - trop vite certains jours, pas assez d'autres.
 
 Mais attention : ces valeurs sont personnelles. La VMA de votre voisin de peloton ne vous dit rien sur la votre, et les formules generales masquent des variations individuelles importantes. Seule une mesure directe vous donnera des donnees fiables.
 
@@ -16,15 +16,15 @@ Mais attention : ces valeurs sont personnelles. La VMA de votre voisin de peloto
 
 La Vitesse Maximale Aerobie correspond a la vitesse de course a laquelle votre consommation d'oxygene atteint son maximum. C'est le point ou votre systeme aerobie tourne a plein regime - au-dela, seuls les systemes anaerobies peuvent fournir plus d'energie, mais pour une duree tres limitee.
 
-En laboratoire, on mesure directement le VO2max (volume d'oxygene consomme par minute) avec un masque et un tapis roulant. Sur le terrain, on estime plutot la VMA : la vitesse a laquelle vous atteignez ce VO2max. Pour les coureurs, c'est une donnee plus pratique car elle se traduit directement en allures d'entrainement.
+En laboratoire, on mesure directement le VO2max (volume d'oxygene consomme par minute) avec un masque et un tapis roulant. Sur le terrain, on estime plutot la VMA : la vitesse a laquelle vous atteignez ce VO2max. Pour les coureurs, c'est une donnee plus pratique car elle se traduit directement en allures d'entraînement.
 
 Concretement, la VMA est la vitesse maximale que vous pouvez maintenir environ 4 a 7 minutes. Un coureur avec une VMA de 15 km/h court donc a 15 km/h sur un test de 5-6 minutes a fond, mais ne tiendra cette allure qu'une poignee de minutes avant de devoir ralentir.
 
 ### Pourquoi c'est fondamental
 
-> 📌 Connaitre sa VMA est indispensable : toutes vos allures d'entrainement en decoulent, du footing de recuperation au fractionne a haute intensite.
+> 📌 Connaitre sa VMA est indispensable : toutes vos allures d'entraînement en decoulent, du footing de récupération au fractionne a haute intensite.
 
-Toutes les allures d'entrainement decoulent de la VMA. Une seance de seuil se court autour de 85% de VMA. Un 30/30 se fait a 100-105% de VMA. Votre allure marathon tourne autour de 75-80% de VMA.
+Toutes les allures d'entraînement decoulent de la VMA. Une séance de seuil se court autour de 85% de VMA. Un 30/30 se fait a 100-105% de VMA. Votre allure marathon tourne autour de 75-80% de VMA.
 
 Sans connaitre votre VMA, vous ne pouvez que deviner ces allures. Et les estimations sont souvent fausses : soit vous vous sous-estimez et stagnez, soit vous vous surestimez et accumulez la fatigue.
 
@@ -34,7 +34,7 @@ Sans connaitre votre VMA, vous ne pouvez que deviner ces allures. Et les estimat
 
 ### Le test demi-Cooper (6 minutes)
 
-C'est le test le plus simple et le plus repandu. Le protocole est elementaire : apres un echauffement complet, courez le plus loin possible en exactement 6 minutes.
+C'est le test le plus simple et le plus repandu. Le protocole est elementaire : apres un échauffement complet, courez le plus loin possible en exactement 6 minutes.
 
 **Preparation :**
 Echauffez-vous pendant 15 a 20 minutes avec un footing progressif, quelques gammes (montees de genoux, talons-fesses), et 2-3 accelerations progressives. Vous devez arriver au depart du test avec les muscles chauds et le cardio active, mais sans fatigue.
@@ -59,7 +59,7 @@ Votre VMA correspond au dernier palier complete entierement. Ce test a l'avantag
 
 ### Le test des 5 minutes
 
-Similaire au demi-Cooper, mais sur 5 minutes. Apres echauffement, courez au maximum de vos capacites pendant exactement 5 minutes.
+Similaire au demi-Cooper, mais sur 5 minutes. Apres échauffement, courez au maximum de vos capacites pendant exactement 5 minutes.
 
 **Calcul :**
 VMA (km/h) = distance (m) x 12 / 1000
@@ -89,7 +89,7 @@ La formule de Tanaka (208 - 0,7 x age) est legerement meilleure mais reste une a
 
 Le protocole le plus fiable combine progressivite et effort maximal final.
 
-**Echauffement (20 minutes) :**
+**Échauffement (20 minutes) :**
 Commencez par 10 minutes de footing tres facile, puis 5 minutes a allure moderee. Ajoutez quelques gammes et 2-3 accelerations progressives sur 50m.
 
 **Phase de montee (10-15 minutes) :**
@@ -124,13 +124,13 @@ Une fois votre FCmax connue, vos zones se calculent simplement :
 
 Pour une FCmax de 185 bpm, la Zone 2 (endurance fondamentale) se situe entre 111 et 130 bpm.
 
-### Calculer vos allures d'entrainement
+### Calculer vos allures d'entraînement
 
 A partir de votre VMA, vous pouvez definir vos allures cibles :
 
-| Type de seance | % VMA | Exemple (VMA 15 km/h) |
+| Type de séance | % VMA | Exemple (VMA 15 km/h) |
 |----------------|-------|----------------------|
-| Recuperation | 60-65% | 9-9,8 km/h |
+| Récupération | 60-65% | 9-9,8 km/h |
 | Endurance fondamentale | 65-75% | 9,8-11,3 km/h |
 | Tempo / Allure marathon | 75-85% | 11,3-12,8 km/h |
 | Seuil / Allure 10km | 85-90% | 12,8-13,5 km/h |
@@ -138,7 +138,7 @@ A partir de votre VMA, vous pouvez definir vos allures cibles :
 
 ### Quand refaire les tests
 
-Vos valeurs evoluent avec l'entrainement. Prevoyez un nouveau test :
+Vos valeurs evoluent avec l'entraînement. Prevoyez un nouveau test :
 - Tous les 2-3 mois en periode de progression active
 - Apres une coupure de plus de 2 semaines
 - Avant de preparer un nouvel objectif
@@ -163,7 +163,7 @@ Attention : testez-vous dans de bonnes conditions (repose, pas trop chaud, surfa
 
 ## Passez a l'action
 
-Les tests sont un moment de verite : 6 minutes de lucidite sur votre condition physique actuelle. L'important n'est pas le chiffre absolu, mais ce que vous en faites. Avec votre VMA et votre FCmax en poche, vous pouvez maintenant configurer vos zones et commencer un entrainement veritablement personnalise.`,
+Les tests sont un moment de verite : 6 minutes de lucidite sur votre condition physique actuelle. L'important n'est pas le chiffre absolu, mais ce que vous en faites. Avec votre VMA et votre FCmax en poche, vous pouvez maintenant configurer vos zones et commencer un entraînement veritablement personnalise.`,
   contentEn: `## Know your numbers to train better
 
 Two values dominate running training planning: VO2max speed (Maximal Aerobic Speed, or MAS) and HRmax (Maximum Heart Rate). The first determines your training paces, the second defines your intensity zones. Without these benchmarks, you're running blind - too fast some days, not enough on others.

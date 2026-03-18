@@ -157,7 +157,7 @@ export const metricsTerms: GlossaryTerm[] = [
       "RPE 6-7 correspond à un effort 'dur mais soutenable' typique d'une séance tempo. RPE 9-10 est réservé aux efforts maximaux courts.",
     exampleEn:
       "RPE 6-7 corresponds to a 'hard but sustainable' effort typical of a tempo session. RPE 9-10 is reserved for short maximal efforts.",
-    relatedTerms: ["zones-entrainement", "threshold"],
+    relatedTerms: ["zones-entraînement", "threshold"],
     keywords: ["perception", "effort", "Borg", "subjectif", "échelle"],
     externalLinks: [
       {
@@ -398,7 +398,7 @@ export const metricsTerms: GlossaryTerm[] = [
     exampleEn:
       "With a Max HR of 185 bpm, your zone 2 (endurance) would be approximately 120-145 bpm using the Karvonen method.",
     formula: "Estimation : 220 - âge (peu fiable, ±10-15 bpm)",
-    relatedTerms: ["fc-repos", "zones-entrainement", "hrv"],
+    relatedTerms: ["fc-repos", "zones-entraînement", "hrv"],
     keywords: ["cardiaque", "maximum", "battements", "cœur", "test"],
   },
   {

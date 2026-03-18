@@ -120,9 +120,9 @@ export function exportPlanToICS(
         const descriptionLines: string[] = [];
         descriptionLines.push(`${isEn ? "Week" : "Semaine"}: ${weekLabel}`);
         descriptionLines.push(`${isEn ? "Day" : "Jour"}: ${dayLabel}`);
-        descriptionLines.push(`${isEn ? "Duration" : "Duree"}: ${session.estimatedDurationMin} min`);
+        descriptionLines.push(`${isEn ? "Duration" : "Durée"}: ${session.estimatedDurationMin} min`);
         if (session.isKeySession) {
-          descriptionLines.push(isEn ? "Key session" : "Seance cle");
+          descriptionLines.push(isEn ? "Key session" : "Séance clé");
         }
         const notes = isEn ? session.notesEn : session.notes;
         if (notes) {
@@ -139,7 +139,7 @@ export function exportPlanToICS(
           // Warmup
           if (template.warmupTemplate?.length) {
             descriptionLines.push("");
-            descriptionLines.push(isEn ? "--- Warm-up ---" : "--- Echauffement ---");
+            descriptionLines.push(isEn ? "--- Warm-up ---" : "--- Échauffement ---");
             for (const block of template.warmupTemplate) {
               const blockDesc = isEn ? (block.descriptionEn || block.description) : block.description;
               const dur = block.durationMin ? ` (${block.durationMin}min)` : "";
@@ -151,7 +151,7 @@ export function exportPlanToICS(
           // Main set
           if (template.mainSetTemplate?.length) {
             descriptionLines.push("");
-            descriptionLines.push(isEn ? "--- Main set ---" : "--- Corps de seance ---");
+            descriptionLines.push(isEn ? "--- Main set ---" : "--- Corps de séance ---");
             for (const block of template.mainSetTemplate) {
               const blockDesc = isEn ? (block.descriptionEn || block.description) : block.description;
               const dur = block.durationMin ? ` (${block.durationMin}min)` : "";

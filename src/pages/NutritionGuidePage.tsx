@@ -468,7 +468,7 @@ export function NutritionGuidePage() {
         description={
           isEn
             ? "Complete nutrition guide for runners: daily nutrition, carb loading, race fueling, hydration, recovery and interactive fueling calculator."
-            : "Guide nutrition complet pour coureurs : alimentation quotidienne, surcharge glucidique, ravitaillement en course, hydratation, recuperation et calculateur interactif."
+            : "Guide nutrition complet pour coureurs : alimentation quotidienne, surcharge glucidique, ravitaillement en course, hydratation, récupération et calculateur interactif."
         }
         canonical="/nutrition"
         jsonLd={{
@@ -490,7 +490,7 @@ export function NutritionGuidePage() {
           <p className="text-muted-foreground text-lg max-w-2xl">
             {isEn
               ? "Evidence-based nutrition strategies for training, racing and recovery. Use the calculator to build your personalized fueling plan."
-              : "Strategies nutritionnelles basees sur la science pour l'entrainement, la competition et la recuperation. Utilisez le calculateur pour construire votre plan de ravitaillement personnalise."}
+              : "Stratégies nutritionnelles basées sur la science pour l'entraînement, la compétition et la récupération. Utilisez le calculateur pour construire votre plan de ravitaillement personnalisé."}
           </p>
         </div>
 

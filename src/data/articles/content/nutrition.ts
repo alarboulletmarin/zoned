@@ -6,7 +6,7 @@ const content: ArticleContent = {
 
 La course a pied est l'une des activites les plus energivores qui soient. Un coureur de 70 kg brule environ 700 calories par heure a allure moderee - bien plus que la natation, le velo ou la musculation. Cette depense energetique considerable fait de la nutrition un levier de performance majeur, souvent sous-exploite.
 
-Mal vous alimenter, c'est comme partir en roadtrip avec un reservoir a moitie vide : vous n'irez pas tres loin, et l'experience sera penible. Bien vous alimenter, c'est disposer du carburant optimal au bon moment - et faire la difference entre une seance subie et une seance maitrisee.
+Mal vous alimenter, c'est comme partir en roadtrip avec un reservoir a moitie vide : vous n'irez pas tres loin, et l'experience sera penible. Bien vous alimenter, c'est disposer du carburant optimal au bon moment - et faire la difference entre une séance subie et une séance maitrisee.
 
 ---
 
@@ -14,13 +14,13 @@ Mal vous alimenter, c'est comme partir en roadtrip avec un reservoir a moitie vi
 
 ### Le timing est crucial
 
-> 📌 Le timing nutritionnel autour de l'entrainement est aussi important que le contenu de l'assiette : mangez trop tot et l'energie n'est pas disponible, trop tard et la digestion gene l'effort.
+> 📌 Le timing nutritionnel autour de l'entraînement est aussi important que le contenu de l'assiette : mangez trop tot et l'energie n'est pas disponible, trop tard et la digestion gene l'effort.
 
-Votre systeme digestif et votre systeme musculaire sont en competition pour le flux sanguin. Pendant la digestion, le sang afflue vers l'estomac et les intestins. Pendant l'effort, il file vers les muscles. Manger trop pres d'une seance cree un conflit : crampes, nausees, inconfort.
+Votre systeme digestif et votre systeme musculaire sont en compétition pour le flux sanguin. Pendant la digestion, le sang afflue vers l'estomac et les intestins. Pendant l'effort, il file vers les muscles. Manger trop pres d'une séance cree un conflit : crampes, nausees, inconfort.
 
 La regle generale : plus le repas est copieux, plus il doit etre eloigne de l'effort.
 
-**3-4 heures avant** : repas complet normal. C'est votre dernier "vrai" repas avant une seance importante ou une competition. Privilegiez les glucides complexes (pates, riz, pain complet), une source de proteines maigres (poulet, poisson, oeufs), des legumes cuits plutot que crus. Evitez les graisses en exces qui ralentissent la vidange gastrique.
+**3-4 heures avant** : repas complet normal. C'est votre dernier "vrai" repas avant une séance importante ou une compétition. Privilegiez les glucides complexes (pates, riz, pain complet), une source de proteines maigres (poulet, poisson, oeufs), des legumes cuits plutot que crus. Evitez les graisses en exces qui ralentissent la vidange gastrique.
 
 **2-3 heures avant** : repas leger si vous n'avez pas eu le temps de manger plus tot. Un bol de riz avec un peu de poulet, un sandwich simple, des pates avec une sauce legere.
 
@@ -34,7 +34,7 @@ La regle generale : plus le repas est copieux, plus il doit etre eloigne de l'ef
 
 **Les graisses lourdes.** Fromage, friture, viande grasse - leur digestion prend des heures. Elles restent sur l'estomac pendant que vous essayez de courir.
 
-**Les aliments non testes.** Ce n'est pas le matin de la competition qu'il faut essayer un nouveau gel ou une nouvelle barre. Chaque changement doit etre valide a l'entrainement d'abord.
+**Les aliments non testes.** Ce n'est pas le matin de la compétition qu'il faut essayer un nouveau gel ou une nouvelle barre. Chaque changement doit etre valide a l'entraînement d'abord.
 
 **L'exces de cafe.** Un cafe 1-2 heures avant peut ameliorer la vigilance et la performance. Trois cafes juste avant le depart risquent de vous rendre nerveux et d'accelerer le transit intestinal.
 
@@ -68,9 +68,9 @@ Au-dela de 90 minutes d'effort, vos reserves de glycogene musculaire commencent 
 
 ### Le piege du test le jour J
 
-Chaque organisme reagit differemment. Un gel qui passe tres bien chez votre partenaire d'entrainement peut vous donner des crampes d'estomac. La seule facon de savoir, c'est de tester a l'entrainement.
+Chaque organisme reagit differemment. Un gel qui passe tres bien chez votre partenaire d'entraînement peut vous donner des crampes d'estomac. La seule facon de savoir, c'est de tester a l'entraînement.
 
-Avant une competition importante, reproduisez exactement votre strategie de ravitaillement lors d'une sortie longue. Memes marques, memes quantites, memes timings. Pas de mauvaises surprises le jour J.
+Avant une compétition importante, reproduisez exactement votre strategie de ravitaillement lors d'une sortie longue. Memes marques, memes quantites, memes timings. Pas de mauvaises surprises le jour J.
 
 ---
 
@@ -84,15 +84,15 @@ Cette "fenetre anabolique" n'est pas un mythe commercial - les etudes le confirm
 
 ### Le ratio ideal
 
-Les etudes pointent vers un ratio 3:1 ou 4:1 entre glucides et proteines pour une recuperation optimale.
+Les etudes pointent vers un ratio 3:1 ou 4:1 entre glucides et proteines pour une récupération optimale.
 
-**Les glucides** reconstituent le glycogene musculaire. Apres une sortie longue ou intense, vos reserves sont videes - vous partez pour votre prochaine seance avec un reservoir a moitie plein si vous ne les rechargez pas.
+**Les glucides** reconstituent le glycogene musculaire. Apres une sortie longue ou intense, vos reserves sont videes - vous partez pour votre prochaine séance avec un reservoir a moitie plein si vous ne les rechargez pas.
 
 **Les proteines** fournissent les briques pour reparer les fibres musculaires endommagees. 20-30 grammes suffisent ; au-dela, l'exces n'apporte pas de benefice supplementaire immediat.
 
 ### Exemples concrets
 
-**Le champion inattendu : le lait chocolate.** Ce classique des vestiaires n'est pas qu'une tradition - c'est un rapport qualite-prix imbattable. Un grand verre de lait chocolate apporte ~30g de glucides et ~10g de proteines dans un format liquide facile a absorber. Ajoutez une banane et vous avez une collation de recuperation quasi parfaite.
+**Le champion inattendu : le lait chocolate.** Ce classique des vestiaires n'est pas qu'une tradition - c'est un rapport qualite-prix imbattable. Un grand verre de lait chocolate apporte ~30g de glucides et ~10g de proteines dans un format liquide facile a absorber. Ajoutez une banane et vous avez une collation de récupération quasi parfaite.
 
 **Autres options efficaces :**
 - Yaourt grec + fruits + miel
@@ -102,7 +102,7 @@ Les etudes pointent vers un ratio 3:1 ou 4:1 entre glucides et proteines pour un
 
 ### Le repas principal (2-3 heures apres)
 
-La collation de recuperation ne remplace pas un vrai repas. Quelques heures apres l'effort, prenez un repas complet et equilibre :
+La collation de récupération ne remplace pas un vrai repas. Quelques heures apres l'effort, prenez un repas complet et equilibre :
 
 - **Glucides complexes** : pates, riz, pommes de terre, quinoa
 - **Proteines de qualite** : poulet, poisson, oeufs, legumineuses
@@ -120,12 +120,12 @@ Apres un effort tres long (marathon, sortie de 3h+), ce repas est particuliereme
 Avant meme de penser a l'effort, assurez-vous d'etre correctement hydrate au quotidien. Un coureur devrait viser :
 
 - **1,5-2 litres d'eau par jour** en temps normal
-- **+500 ml a 1 litre** par heure d'entrainement
+- **+500 ml a 1 litre** par heure d'entraînement
 - **+30%** par temps chaud ou en altitude
 
 ### L'indicateur le plus fiable
 
-> 💡 Verifiez la couleur de vos urines avant chaque seance : jaune pale = bien hydrate, jaune fonce = buvez avant de partir.
+> 💡 Verifiez la couleur de vos urines avant chaque séance : jaune pale = bien hydrate, jaune fonce = buvez avant de partir.
 
 Oubliez les calculs complexes. La couleur de vos urines vous dit tout ce que vous avez besoin de savoir :
 
@@ -136,7 +136,7 @@ Oubliez les calculs complexes. La couleur de vos urines vous dit tout ce que vou
 | Jaune fonce | Commencez a boire |
 | Ambre/orange | Deshydratation significative |
 
-Le premier reflexe au reveil et avant chaque seance : verifier votre urine. Partir s'entrainer avec une urine foncee, c'est partir avec un handicap.
+Le premier reflexe au reveil et avant chaque séance : verifier votre urine. Partir s'entrainer avec une urine foncee, c'est partir avec un handicap.
 
 ### Les electrolytes
 
@@ -154,9 +154,9 @@ Une boisson sportive, un comprime d'electrolytes dans votre gourde, ou simplemen
 
 L'estomac plein qui fait "splash" a chaque foulee, c'est non seulement inconfortable mais aussi inefficace. Ce que vous mangez 30 minutes avant ne sera pas digere a temps pour fournir de l'energie.
 
-### Tester en competition
+### Tester en compétition
 
-Nouveau gel, nouvelle marque, nouvelle strategie - testez toujours a l'entrainement d'abord. Les troubles digestifs en course transforment une belle journee en calvaire.
+Nouveau gel, nouvelle marque, nouvelle strategie - testez toujours a l'entraînement d'abord. Les troubles digestifs en course transforment une belle journee en calvaire.
 
 ### Sous-estimer l'hydratation
 
@@ -164,26 +164,26 @@ Nouveau gel, nouvelle marque, nouvelle strategie - testez toujours a l'entrainem
 
 Une perte hydrique de seulement 2% du poids corporel diminue les performances de 10-20%. Sur un semi-marathon par temps chaud, c'est la difference entre votre objectif et dix minutes de plus.
 
-### Oublier la fenetre de recuperation
+### Oublier la fenetre de récupération
 
 Vous rentrez de votre sortie, prenez une douche, faites deux-trois trucs, et soudain il est 14h. Vous avez rate la fenetre optimale. Gardez toujours une collation prete pour les minutes qui suivent l'effort.
 
 ### Les regimes restrictifs
 
-Certains coureurs, surtout en quete de perte de poids, coupent drastiquement les glucides ou les calories totales. Resultat : fatigue chronique, performances en chute libre, blessures a repetition. Un coureur a besoin de carburant - beaucoup de carburant si l'entrainement est consequent.
+Certains coureurs, surtout en quete de perte de poids, coupent drastiquement les glucides ou les calories totales. Resultat : fatigue chronique, performances en chute libre, blessures a repetition. Un coureur a besoin de carburant - beaucoup de carburant si l'entraînement est consequent.
 
-Si la perte de poids est un objectif, le deficit calorique doit etre modere et jamais cree en coupant avant/pendant/apres l'entrainement.
+Si la perte de poids est un objectif, le deficit calorique doit etre modere et jamais cree en coupant avant/pendant/apres l'entraînement.
 
 ---
 
 ## En resume
 
-La nutrition n'est pas accessoire - c'est une variable de performance au meme titre que l'entrainement. Bien manger, c'est :
+La nutrition n'est pas accessoire - c'est une variable de performance au meme titre que l'entraînement. Bien manger, c'est :
 
-- Planifier vos repas autour de vos seances
-- Tester votre strategie de ravitaillement avant les competitions
+- Planifier vos repas autour de vos séances
+- Tester votre strategie de ravitaillement avant les compétitions
 - Ne jamais partir a l'effort sans avoir verifie votre hydratation
-- Profiter de la fenetre de recuperation pour reconstruire
+- Profiter de la fenetre de récupération pour reconstruire
 - Ecouter votre corps et ajuster en fonction de vos sensations
 
 Chaque coureur est different. Ces principes sont des bases - a vous de les adapter a votre metabolisme, vos gouts, et vos reactions individuelles.`,
@@ -205,7 +205,7 @@ Your digestive system and muscular system compete for blood flow. During digesti
 
 The general rule: the larger the meal, the further it should be from the effort.
 
-**3-4 hours before**: normal complete meal. This is your last "real" meal before an important session or competition. Favor complex carbohydrates (pasta, rice, whole grain bread), a source of lean protein (chicken, fish, eggs), cooked vegetables rather than raw. Avoid excess fats that slow gastric emptying.
+**3-4 hours before**: normal complete meal. This is your last "real" meal before an important session or compétition. Favor complex carbohydrates (pasta, rice, whole grain bread), a source of lean protein (chicken, fish, eggs), cooked vegetables rather than raw. Avoid excess fats that slow gastric emptying.
 
 **2-3 hours before**: light meal if you didn't have time to eat earlier. A bowl of rice with some chicken, a simple sandwich, pasta with light sauce.
 
@@ -255,7 +255,7 @@ Beyond 90 minutes of effort, your muscle glycogen reserves begin to deplete. If 
 
 Every organism reacts differently. A gel that goes down perfectly for your training partner might give you stomach cramps. The only way to know is to test in training.
 
-Before an important competition, exactly reproduce your fueling strategy during a long run. Same brands, same quantities, same timing. No bad surprises on race day.
+Before an important compétition, exactly reproduce your fueling strategy during a long run. Same brands, same quantities, same timing. No bad surprises on race day.
 
 ---
 
@@ -339,7 +339,7 @@ A sports drink, an electrolyte tablet in your bottle, or simply slightly salty f
 
 A full stomach that goes "splash" with every stride is not only uncomfortable but also ineffective. What you eat 30 minutes before won't be digested in time to provide energy.
 
-### Testing in competition
+### Testing in compétition
 
 New gel, new brand, new strategy - always test in training first. Digestive troubles during a race transform a beautiful day into an ordeal.
 
@@ -366,7 +366,7 @@ If weight loss is a goal, the caloric deficit should be moderate and never creat
 Nutrition isn't an accessory - it's a performance variable just like training. Eating well means:
 
 - Planning your meals around your sessions
-- Testing your fueling strategy before competitions
+- Testing your fueling strategy before compétitions
 - Never starting effort without checking your hydration
 - Taking advantage of the recovery window to rebuild
 - Listening to your body and adjusting based on your sensations

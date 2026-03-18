@@ -237,11 +237,11 @@ export function RacePrepGuidePage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "Race Preparation" : "Preparation Course"}
+        title={isEn ? "Race Preparation" : "Préparation Course"}
         description={
           isEn
             ? "Complete race preparation guide: checklists, strategy, warm-up, pacing and recovery timelines."
-            : "Guide complet de preparation course : checklists, strategie, echauffement, allure et timelines de recuperation."
+            : "Guide complet de préparation course : checklists, stratégie, échauffement, allure et timelines de récupération."
         }
         canonical="/guides/race-prep"
         jsonLd={{
@@ -249,7 +249,7 @@ export function RacePrepGuidePage() {
           name: isEn ? "Race Preparation Guide" : "Guide de Preparation Course",
           description: isEn
             ? "Complete race preparation guide for runners."
-            : "Guide complet de preparation course pour coureurs.",
+            : "Guide complet de préparation course pour coureurs.",
           url: "https://zoned.run/guides/race-prep",
         }}
       />
@@ -266,7 +266,7 @@ export function RacePrepGuidePage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
-            {isEn ? "Race Preparation" : "Preparation Course"}
+            {isEn ? "Race Preparation" : "Préparation Course"}
           </h1>
           <p className="text-muted-foreground text-lg">
             {isEn
@@ -306,12 +306,12 @@ export function RacePrepGuidePage() {
         {/* Recovery Timelines */}
         <div className="mt-12">
           <h2 className="text-xl font-semibold mb-2">
-            {isEn ? "Recovery Timelines" : "Timelines de recuperation"}
+            {isEn ? "Recovery Timelines" : "Timelines de récupération"}
           </h2>
           <p className="text-muted-foreground text-sm mb-6">
             {isEn
               ? "Recommended recovery periods by race distance"
-              : "Periodes de recuperation recommandees par distance de course"}
+              : "Périodes de récupération recommandées par distance de course"}
           </p>
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             {recoveryTimelines.map((tl) => renderRecoveryTimeline(tl))}

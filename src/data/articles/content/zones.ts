@@ -18,9 +18,9 @@ Avant de parler de zones, il faut comprendre comment votre corps produit l'energ
 
 C'est le systeme principal pour les efforts prolonges. Il utilise l'oxygene pour transformer les graisses et les glucides en energie. Le processus est lent mais extremement efficace : vous pouvez courir des heures tant que l'oxygene arrive en quantite suffisante aux muscles.
 
-La filiere aerobie se developpe en Zone 1 et Zone 2, la ou l'intensite reste moderee. C'est pourquoi les marathoniens passent 80% de leur temps d'entrainement a ces allures "faciles". Ils construisent leur moteur d'endurance.
+La filiere aerobie se developpe en Zone 1 et Zone 2, la ou l'intensite reste moderee. C'est pourquoi les marathoniens passent 80% de leur temps d'entraînement a ces allures "faciles". Ils construisent leur moteur d'endurance.
 
-> 📊 Les marathoniens d'elite passent 80% de leur entrainement en Zone 1-2. Ce n'est pas un manque d'ambition, c'est de la science.
+> 📊 Les marathoniens d'elite passent 80% de leur entraînement en Zone 1-2. Ce n'est pas un manque d'ambition, c'est de la science.
 
 ### La filiere anaerobie lactique : le turbo
 
@@ -38,19 +38,19 @@ Cette filiere s'epuise en 8 a 10 secondes, mais elle n'a besoin que de 2 a 3 min
 
 ## Les six zones en detail
 
-### Zone 1 - Recuperation (50-60% FCmax)
+### Zone 1 - Récupération (50-60% FCmax)
 
-La Zone 1, c'est le footing de recuperation au sens strict. Vous devez pouvoir tenir une conversation complete sans aucun essoufflement. Si vous ne pouvez pas raconter votre week-end a votre partenaire d'entrainement, vous allez trop vite.
+La Zone 1, c'est le footing de récupération au sens strict. Vous devez pouvoir tenir une conversation complete sans aucun essoufflement. Si vous ne pouvez pas raconter votre week-end a votre partenaire d'entraînement, vous allez trop vite.
 
-A cette intensite, votre corps brule essentiellement des graisses. Le flux sanguin augmente accelere l'elimination des dechets metaboliques accumules lors des seances intenses. C'est pourquoi un footing lent le lendemain d'une grosse seance recupere mieux que le repos complet.
+A cette intensite, votre corps brule essentiellement des graisses. Le flux sanguin augmente accelere l'elimination des dechets metaboliques accumules lors des séances intenses. C'est pourquoi un footing lent le lendemain d'une grosse séance recupere mieux que le repos complet.
 
 **Sensation typique** : effort quasi imperceptible, vous pourriez continuer indefiniment.
 
 ### Zone 2 - Endurance fondamentale (60-70% FCmax)
 
-La Zone 2 est le coeur de l'entrainement de tout coureur serieux. C'est ici que se construit votre base aerobie, cette fondation sur laquelle repose toute performance durable.
+La Zone 2 est le coeur de l'entraînement de tout coureur serieux. C'est ici que se construit votre base aerobie, cette fondation sur laquelle repose toute performance durable.
 
-A cette intensite, vos cellules musculaires developpent davantage de mitochondries - les centrales energetiques qui transforment l'oxygene en mouvement. Votre reseau capillaire s'etend, ameliorant l'irrigation des muscles. Votre coeur devient plus efficace, pompant plus de sang a chaque battement.
+A cette intensite, vos cellules musculaires developpent davantage de mitochondries - les centrales energetiques qui transforment l'oxygene en mouvement. Votre reseau capillaire s'etend, améliorant l'irrigation des muscles. Votre coeur devient plus efficace, pompant plus de sang a chaque battement.
 
 La conversation reste aisee, meme si vous preferez peut-etre des phrases plus courtes. Vous transpirez, la respiration est presente mais controlee. Beaucoup de coureurs commettent l'erreur de negliger cette zone, la jugeant "trop facile". C'est pourtant la que se forge l'endurance qui vous portera sur vos plus longues distances.
 
@@ -72,7 +72,7 @@ Cette zone est utile pour les sorties longues rythmees et pour apprendre a "gere
 
 Le seuil lactique est un concept cle en physiologie de l'effort. C'est l'intensite a laquelle l'acide lactique commence a s'accumuler plus vite que votre corps ne peut l'eliminer. Passe ce point, la fatigue devient exponentielle.
 
-Travailler en Zone 4, c'est repousser ce seuil. Plus il est eleve, plus vous pouvez courir vite longtemps. Les seances de seuil sont exigeantes : 20 a 40 minutes a une allure ou vous ne pouvez dire que quelques mots entre deux respirations.
+Travailler en Zone 4, c'est repousser ce seuil. Plus il est eleve, plus vous pouvez courir vite longtemps. Les séances de seuil sont exigeantes : 20 a 40 minutes a une allure ou vous ne pouvez dire que quelques mots entre deux respirations.
 
 C'est l'allure de votre 10 km, peut-etre un peu plus rapide. Inconfortable mais gerable sur une duree limitee.
 
@@ -82,11 +82,11 @@ C'est l'allure de votre 10 km, peut-etre un peu plus rapide. Inconfortable mais 
 
 La Vitesse Maximale Aerobie represente la vitesse a laquelle vous atteignez votre consommation maximale d'oxygene (VO2max). C'est le sommet de votre capacite aerobie, la frontiere entre ce que vos poumons peuvent fournir et ce que vos muscles reclament.
 
-Le travail en Zone 5 se fait par intervalles : 30 secondes a 3 minutes d'effort intense, suivies de recuperation. Ces seances de fractionne - les fameux "30/30" ou "1000m" - sont celles qui font le plus progresser votre vitesse pure.
+Le travail en Zone 5 se fait par intervalles : 30 secondes a 3 minutes d'effort intense, suivies de récupération. Ces séances de fractionne - les fameux "30/30" ou "1000m" - sont celles qui font le plus progresser votre vitesse pure.
 
-Mais attention : ce type d'entrainement est tres sollicitant. Deux seances par semaine maximum, avec au moins 48 heures de recuperation entre chaque.
+Mais attention : ce type d'entraînement est tres sollicitant. Deux séances par semaine maximum, avec au moins 48 heures de récupération entre chaque.
 
-> ⚠️ Ne depassez jamais deux seances de VMA par semaine. Le risque de blessure et de surentrainement augmente fortement au-dela.
+> ⚠️ Ne depassez jamais deux séances de VMA par semaine. Le risque de blessure et de surentraînement augmente fortement au-dela.
 
 **Sensation typique** : respiration maximale, impossible de parler, duree limitee.
 
@@ -94,9 +94,9 @@ Mais attention : ce type d'entrainement est tres sollicitant. Deux seances par s
 
 La Zone 6 est le domaine de l'effort maximal, celui ou toutes les fibres musculaires sont recrutees. On ne parle plus de minutes mais de secondes : 10, 20, 30 secondes de sprint pur.
 
-Ce travail developpe la coordination neuromusculaire - la capacite de votre cerveau a activer efficacement les muscles - et la puissance pure. Il est particulierement utile pour ameliorer votre finish de course ou votre capacite d'acceleration.
+Ce travail developpe la coordination neuromusculaire - la capacite de votre cerveau a activer efficacement les muscles - et la puissance pure. Il est particulierement utile pour améliorer votre finish de course ou votre capacite d'acceleration.
 
-Les seances de cotes courtes et les sprints en fin de footing sollicitent cette zone.
+Les séances de cotes courtes et les sprints en fin de footing sollicitent cette zone.
 
 **Sensation typique** : effort total, la fin est presque un soulagement.
 
@@ -104,11 +104,11 @@ Les seances de cotes courtes et les sprints en fin de footing sollicitent cette 
 
 ## Determiner vos zones personnelles
 
-Les pourcentages de frequence cardiaque maximale (FCmax) donnes ci-dessus sont des moyennes. Pour un entrainement precis, vous devez connaitre votre propre FCmax.
+Les pourcentages de frequence cardiaque maximale (FCmax) donnes ci-dessus sont des moyennes. Pour un entraînement precis, vous devez connaitre votre propre FCmax.
 
 ### Le test de terrain
 
-La methode la plus fiable reste le test. Apres un echauffement complet de 15-20 minutes, enchainez 3 a 4 cotes de 2-3 minutes en accelerant progressivement. Sur la derniere, donnez tout ce que vous avez. Le pic affiche sur votre montre sera proche de votre FCmax reelle.
+La methode la plus fiable reste le test. Apres un échauffement complet de 15-20 minutes, enchainez 3 a 4 cotes de 2-3 minutes en accelerant progressivement. Sur la derniere, donnez tout ce que vous avez. Le pic affiche sur votre montre sera proche de votre FCmax reelle.
 
 ### Les formules
 
@@ -122,7 +122,7 @@ En complement du cardio, l'echelle de Borg (RPE de 1 a 10) vous aide a calibrer 
 
 | Zone | RPE | Description |
 |------|-----|-------------|
-| Z1 | 2-3 | Tres facile, recuperation |
+| Z1 | 2-3 | Tres facile, récupération |
 | Z2 | 3-4 | Confortable, peut durer longtemps |
 | Z3 | 5-6 | Moderement difficile |
 | Z4 | 7-8 | Difficile, inconfortable |
@@ -133,21 +133,21 @@ Avec l'experience, vous apprendrez a correler vos sensations avec les donnees de
 
 ---
 
-## Appliquer les zones a votre entrainement
+## Appliquer les zones a votre entraînement
 
-La repartition classique chez les coureurs de fond suit la regle du 80/20 : 80% du volume d'entrainement en Zone 1-2, 20% en Zone 4 et au-dessus. Cette polarisation, validee par des decennies de recherche, maximise les adaptations tout en limitant la fatigue.
+La repartition classique chez les coureurs de fond suit la regle du 80/20 : 80% du volume d'entraînement en Zone 1-2, 20% en Zone 4 et au-dessus. Cette polarisation, validee par des decennies de recherche, maximise les adaptations tout en limitant la fatigue.
 
 Concretement, sur 4 sorties hebdomadaires :
 - 3 sorties en Zone 1-2 (footings, sortie longue)
-- 1 seance avec de l'intensite (seuil, fractionne, ou tempo)
+- 1 séance avec de l'intensite (seuil, fractionne, ou tempo)
 
-Le piege classique est de courir trop vite les jours faciles et trop lentement les jours durs. Resultat : vous etes constamment dans la Zone 3, ni assez leger pour recuperer, ni assez intense pour progresser. C'est ce qu'on appelle l'entrainement en "zone grise" - beaucoup d'efforts pour peu de resultats.
+Le piege classique est de courir trop vite les jours faciles et trop lentement les jours durs. Resultat : vous etes constamment dans la Zone 3, ni assez leger pour recuperer, ni assez intense pour progresser. C'est ce qu'on appelle l'entraînement en "zone grise" - beaucoup d'efforts pour peu de resultats.
 
 ---
 
 ## Passez a la pratique
 
-Vous connaissez maintenant la theorie. L'etape suivante est de calculer vos zones personnelles et de les appliquer a vos seances. Notre calculateur vous permet d'obtenir vos plages precises basees sur votre FCmax et votre VMA.`,
+Vous connaissez maintenant la theorie. L'etape suivante est de calculer vos zones personnelles et de les appliquer a vos séances. Notre calculateur vous permet d'obtenir vos plages precises basees sur votre FCmax et votre VMA.`,
   contentEn: `## Your body is a multi-speed machine
 
 Picture your body as a hybrid car with multiple engines. At low speeds, you run on electric: economical, quiet, you can go for hours. When you accelerate, the combustion engine takes over: more powerful, but fuel consumption rises and range drops. Push to the max, and you switch to boost mode: peak performance, but impossible to maintain for more than a few seconds.

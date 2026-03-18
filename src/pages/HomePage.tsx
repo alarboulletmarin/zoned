@@ -224,7 +224,7 @@ export function HomePage() {
       {/* Zone System Preview */}
       <section className="space-y-6">
         <h2 className="text-2xl font-bold text-center">
-          {isEn ? "Training Zones" : "Zones d'entrainement"}
+          {isEn ? "Training Zones" : "Zones d'entraînement"}
         </h2>
         <p className="text-center text-sm text-muted-foreground">
           {isEn ? "Click a zone to learn more" : "Cliquez sur une zone pour en savoir plus"}

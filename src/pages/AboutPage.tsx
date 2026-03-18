@@ -20,7 +20,7 @@ export function AboutPage() {
         title={isEn ? "About" : "A propos"}
         description={isEn
           ? "Learn about Zoned, an open-source running workout library with zone-based training."
-          : "Decouvrez Zoned, une bibliotheque open-source de seances de course a pied basee sur les zones."}
+          : "Découvrez Zoned, une bibliothèque open-source de séances de course à pied basée sur les zones."}
         canonical="/about"
         jsonLd={{
           "@type": "Organization",
@@ -28,7 +28,7 @@ export function AboutPage() {
           url: "https://zoned.run",
           description: isEn
             ? "An open-source running workout library with zone-based training."
-            : "Une bibliotheque open-source de seances de course a pied basee sur les zones.",
+            : "Une bibliothèque open-source de séances de course à pied basée sur les zones.",
         }}
       />
       <div className="py-8 space-y-8 max-w-4xl mx-auto">

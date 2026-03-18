@@ -4,9 +4,9 @@ import type { ArticleContent } from "../types";
 const content: ArticleContent = {
   content: `## Qu'est-ce que le taper ?
 
-Les semaines de preparation sont derriere toi. Tu as accumule les kilometres, les seances de seuil, les fractionnees. Maintenant vient la phase la plus contre-intuitive de l'entrainement : en faire moins pour performer plus.
+Les semaines de preparation sont derriere toi. Tu as accumule les kilometres, les séances de seuil, les fractionnees. Maintenant vient la phase la plus contre-intuitive de l'entraînement : en faire moins pour performer plus.
 
-Le [[taper]] (ou affutage) est une reduction controlee et progressive de la charge d'entrainement dans les semaines precedant une competition majeure. L'objectif ? Dissiper la fatigue accumulee tout en maintenant - et meme optimisant - ta forme.
+Le [[taper]] (ou affutage) est une reduction controlee et progressive de la charge d'entraînement dans les semaines precedant une compétition majeure. L'objectif ? Dissiper la fatigue accumulee tout en maintenant - et meme optimisant - ta forme.
 
 ---
 
@@ -14,7 +14,7 @@ Le [[taper]] (ou affutage) est une reduction controlee et progressive de la char
 
 ### Pourquoi ca marche
 
-Ton corps fonctionne sur deux composantes antagonistes : la forme (fitness) et la fatigue. Pendant l'entrainement, les deux augmentent. Ta forme progresse, mais la fatigue masque une partie de cette progression.
+Ton corps fonctionne sur deux composantes antagonistes : la forme (fitness) et la fatigue. Pendant l'entraînement, les deux augmentent. Ta forme progresse, mais la fatigue masque une partie de cette progression.
 
 Le taper reduit la fatigue plus rapidement que la forme ne decline. Resultat : ta performance "nette" - forme moins fatigue - atteint un pic.
 
@@ -38,13 +38,13 @@ Contrairement a ce qu'on pourrait croire, le corps ne fait pas que se reposer. I
 
 ### Regle 1 : Reduire le volume, maintenir l'intensite
 
-> 📌 Le principe cle du taper : reduire le volume de 40 a 60% tout en maintenant l'intensite des seances. C'est le volume qui genere la fatigue, pas l'intensite.
+> 📌 Le principe cle du taper : reduire le volume de 40 a 60% tout en maintenant l'intensite des séances. C'est le volume qui genere la fatigue, pas l'intensite.
 
-C'est le principe fondamental. Tu cours moins, mais tu gardes des seances avec de l'intensite.
+C'est le principe fondamental. Tu cours moins, mais tu gardes des séances avec de l'intensite.
 
 **Le volume** peut etre reduit de 40% a 60% selon la duree du taper.
 
-**L'intensite** des seances cles est maintenue. Tu continues a faire des fractions a allure course ou des tempos au seuil - juste en quantite reduite.
+**L'intensite** des séances cles est maintenue. Tu continues a faire des fractions a allure course ou des tempos au seuil - juste en quantite reduite.
 
 Pourquoi ? L'intensite maintient les adaptations neuromusculaires et la "sensation" de l'allure cible. Le volume est le principal generateur de fatigue, donc c'est lui qu'on coupe.
 
@@ -54,7 +54,7 @@ Pourquoi ? L'intensite maintient les adaptations neuromusculaires et la "sensati
 
 ### Regle 2 : Reduire la frequence avec moderation
 
-La frequence (nombre de seances) peut baisser legerement, mais moins que le volume.
+La frequence (nombre de séances) peut baisser legerement, mais moins que le volume.
 
 - Si tu courais 6 fois/semaine, passe a 4-5
 - Si tu courais 4 fois/semaine, garde 3-4
@@ -91,7 +91,7 @@ Supposons que ta semaine normale de pic soit a 70 km.
 
 ### Semaine -3 (70% du volume = 50 km)
 
-| Jour | Seance | Volume |
+| Jour | Séance | Volume |
 |------|--------|--------|
 | Lundi | Repos | - |
 | Mardi | 4x1000m allure 10km | 10 km total |
@@ -103,7 +103,7 @@ Supposons que ta semaine normale de pic soit a 70 km.
 
 ### Semaine -2 (50% du volume = 35 km)
 
-| Jour | Seance | Volume |
+| Jour | Séance | Volume |
 |------|--------|--------|
 | Lundi | Repos | - |
 | Mardi | 3x1000m allure 10km | 8 km total |
@@ -115,7 +115,7 @@ Supposons que ta semaine normale de pic soit a 70 km.
 
 ### Semaine de course (35% du volume = 25 km)
 
-| Jour | Seance | Volume |
+| Jour | Séance | Volume |
 |------|--------|--------|
 | Lundi | Repos | - |
 | Mardi | 3x400m allure marathon | 6 km total |
@@ -133,7 +133,7 @@ Supposons que ta semaine normale de pic soit a 70 km.
 
 ### Piege 1 : La panique de derniere minute
 
-Tu te sens soudain "lourd" ou "plat". Tes jambes sont bizarres. Tu paniques : "Je perds ma forme !" et tu rajoutes une seance.
+Tu te sens soudain "lourd" ou "plat". Tes jambes sont bizarres. Tu paniques : "Je perds ma forme !" et tu rajoutes une séance.
 
 **La realite :** Ces sensations sont normales. Ton corps n'est plus habitue a autant de repos. La "panique du taper" est quasi universelle et ne predit rien de ta performance.
 
@@ -149,13 +149,13 @@ Tu cours moins, alors tu remplis le vide : plus de musculation, du velo intensif
 
 ### Piege 3 : Trop couper
 
-> ⚠️ Couper totalement l'entrainement est aussi nefaste que ne pas taper du tout. Sans stimulus, tu perds les adaptations neuromusculaires et la "sensation" de tes allures.
+> ⚠️ Couper totalement l'entraînement est aussi nefaste que ne pas taper du tout. Sans stimulus, tu perds les adaptations neuromusculaires et la "sensation" de tes allures.
 
 A l'inverse, certains coupent totalement et passent une semaine sur le canape.
 
 **La realite :** Sans stimulus, tu perds les adaptations neuromusculaires, les sensations, et parfois meme de la confiance.
 
-**Solution :** Maintiens des seances courtes avec de l'intensite. Tu veux arriver frais, pas rouille.
+**Solution :** Maintiens des séances courtes avec de l'intensite. Tu veux arriver frais, pas rouille.
 
 ### Piege 4 : Ignorer la nutrition
 
@@ -175,13 +175,13 @@ Le taper n'est pas seulement physique. C'est aussi le moment de preparer ta cour
 
 - **Visualiser** : imagine ta course, ton allure, les moments difficiles et comment tu les geres
 - **Planifier** : prepare ta logistique (tenue, nutrition course, transport)
-- **Relire ton carnet** : rappelle-toi du chemin parcouru, des seances reussies
+- **Relire ton carnet** : rappelle-toi du chemin parcouru, des séances reussies
 - **Te reposer vraiment** : siestes, sommeil allonge, reduction du stress
 
 ### Ce que tu dois eviter
 
 - Chercher des conseils de derniere minute sur internet
-- Analyser obsessionnellement tes donnees d'entrainement
+- Analyser obsessionnellement tes donnees d'entraînement
 - Te comparer aux autres
 - Experimenter quoi que ce soit de nouveau (materiel, nutrition, strategie)
 
@@ -212,7 +212,7 @@ Alors resiste a la tentation d'en faire plus. Accepte l'inconfort du repos. Et p
 
 The preparation weeks are behind you. You've accumulated the kilometers, the threshold sessions, the intervals. Now comes the most counterintuitive phase of training: doing less to perform more.
 
-The [[taper]] is a controlled and progressive reduction of training load in the weeks before a major competition. The goal? Dissipate accumulated fatigue while maintaining - and even optimizing - your fitness.
+The [[taper]] is a controlled and progressive reduction of training load in the weeks before a major compétition. The goal? Dissipate accumulated fatigue while maintaining - and even optimizing - your fitness.
 
 ---
 

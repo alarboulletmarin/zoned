@@ -13,7 +13,7 @@ export function ContributePage() {
         description={
           isEn
             ? "Share your favorite training sessions with the Zoned community"
-            : "Partagez vos seances d'entrainement preferees avec la communaute Zoned"
+            : "Partagez vos séances d'entraînement préférées avec la communauté Zoned"
         }
         canonical="/contribute"
       />

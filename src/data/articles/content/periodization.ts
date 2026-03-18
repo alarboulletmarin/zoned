@@ -2,9 +2,9 @@
 import type { ArticleContent } from "../types";
 
 const content: ArticleContent = {
-  content: `## Pourquoi planifier son entrainement
+  content: `## Pourquoi planifier son entraînement
 
-Courir au feeling, ca marche... un temps. Tu progresses pendant quelques mois, puis tu stagnes. Tu te blesses. Tu perds la motivation. La periodisation, c'est exactement l'inverse : une approche structuree qui organise ton entrainement dans le temps pour maximiser tes adaptations et arriver au top de ta forme le jour J.
+Courir au feeling, ca marche... un temps. Tu progresses pendant quelques mois, puis tu stagnes. Tu te blesses. Tu perds la motivation. La periodisation, c'est exactement l'inverse : une approche structuree qui organise ton entraînement dans le temps pour maximiser tes adaptations et arriver au top de ta forme le jour J.
 
 Le principe est simple : ton corps ne peut pas tout developper en meme temps. Si tu travailles l'endurance, la vitesse, et la force simultanement avec la meme intensite, tu dilues tes efforts. La periodisation consiste a concentrer tes ressources sur des qualites specifiques, dans un ordre logique, pour construire une performance solide.
 
@@ -20,7 +20,7 @@ La periodisation s'articule autour de trois niveaux d'organisation, comme des po
 
 Le [[macrocycle]] represente la periode complete de preparation vers un objectif majeur. Pour un marathon de printemps, ton macrocycle pourrait s'etendre de novembre a avril, soit environ 20 semaines.
 
-C'est a cette echelle que tu definis tes grandes phases et que tu places tes courses intermediaires. Un macrocycle bien construit alterne des periodes de charge et de recuperation, avec une montee progressive vers l'objectif.
+C'est a cette echelle que tu definis tes grandes phases et que tu places tes courses intermediaires. Un macrocycle bien construit alterne des periodes de charge et de récupération, avec une montee progressive vers l'objectif.
 
 La duree typique d'un macrocycle varie selon l'objectif :
 - **10 km** : 8-12 semaines
@@ -28,7 +28,7 @@ La duree typique d'un macrocycle varie selon l'objectif :
 - **Marathon** : 16-20 semaines
 - **Ultra-trail** : 20-30 semaines
 
-### Le mesocycle : les blocs d'entrainement
+### Le mesocycle : les blocs d'entraînement
 
 Le [[mesocycle]] est un bloc de 3 a 6 semaines ayant un objectif de developpement specifique. Chaque mesocycle se concentre sur une qualite particuliere : endurance de base, travail au seuil, vitesse specifique...
 
@@ -36,20 +36,20 @@ La structure classique d'un mesocycle suit un pattern de charge progressive :
 - **Pattern 3:1** : 3 semaines de charge croissante + 1 semaine de decharge
 - **Pattern 2:1** : 2 semaines de charge + 1 semaine de decharge (pour coureurs plus ages ou sujet aux blessures)
 
-Cette alternance charge/recuperation est essentielle. C'est pendant les semaines de [[deload]] que ton corps consolide les adaptations.
+Cette alternance charge/récupération est essentielle. C'est pendant les semaines de [[deload]] que ton corps consolide les adaptations.
 
 > 💡 Adopte le pattern 3:1 pour commencer : 3 semaines de charge progressive suivies d'1 semaine de decharge. C'est le format le plus eprouve et le plus simple a suivre.
 
 ### Le microcycle : la semaine type
 
-Le [[microcycle]] correspond generalement a une semaine d'entrainement. Il definit l'agencement des seances, leur type, et les jours de repos.
+Le [[microcycle]] correspond generalement a une semaine d'entraînement. Il definit l'agencement des séances, leur type, et les jours de repos.
 
 Un microcycle equilibre alterne intelligemment :
-- Seances de qualite (fractionne, seuil, tempo)
-- Seances d'endurance facile
-- Jours de repos ou recuperation active
+- Séances de qualite (fractionne, seuil, tempo)
+- Séances d'endurance facile
+- Jours de repos ou récupération active
 
-L'enjeu est de placer les seances dures quand tu es frais, et de permettre suffisamment de recuperation avant la prochaine seance intense.
+L'enjeu est de placer les séances dures quand tu es frais, et de permettre suffisamment de récupération avant la prochaine séance intense.
 
 ---
 
@@ -64,12 +64,12 @@ C'est la fondation. Tu construis ta [[endurance-fondamentale]], tu renforces tes
 **Caracteristiques :**
 - 80-85% du volume en [[zone-2]]
 - Augmentation progressive du volume (max +10%/semaine)
-- Peu ou pas de seances intenses
+- Peu ou pas de séances intenses
 - Travail technique et renforcement musculaire
 
 **Duree typique :** 6-8 semaines
 
-L'erreur classique est de bruler cette phase pour passer directement aux seances "qui font mal". Mais sans base solide, les seances intenses ne s'appuient sur rien.
+L'erreur classique est de bruler cette phase pour passer directement aux séances "qui font mal". Mais sans base solide, les séances intenses ne s'appuient sur rien.
 
 ### Phase 2 : Preparation specifique
 
@@ -77,7 +77,7 @@ Tu commences a introduire du travail a des intensites plus elevees, specifiques 
 
 **Caracteristiques :**
 - Introduction progressive du travail au [[seuil-lactique]]
-- Premieres seances de fractionne en [[zone-5]]
+- Premieres séances de fractionne en [[zone-5]]
 - Sorties longues avec portions a allure specifique
 - Volume qui se stabilise ou augmente legerement
 
@@ -87,10 +87,10 @@ C'est la phase ou tu "affutes tes armes". Le volume reste important, mais l'inte
 
 ### Phase 3 : Competition (peak)
 
-Tu vises le pic de forme pour ta course objectif. L'entrainement devient tres specifique.
+Tu vises le pic de forme pour ta course objectif. L'entraînement devient tres specifique.
 
 **Caracteristiques :**
-- Seances a allure de course
+- Séances a allure de course
 - Volume qui commence a diminuer
 - Intensite maintenue ou legerement augmentee
 - Focus mental et confiance
@@ -103,7 +103,7 @@ Reduction controlee de la charge pour arriver frais le jour J. On en parle en de
 
 **Caracteristiques :**
 - Volume reduit de 40-60%
-- Intensite des seances cles maintenue
+- Intensite des séances cles maintenue
 - Repos et sommeil prioritaires
 
 **Duree typique :** 2-3 semaines selon la distance
@@ -119,8 +119,8 @@ Voici comment pourrait s'articuler la periodisation d'une preparation marathon :
 | 1-4 | Preparation generale | Endurance, volume | 70% -> 85% |
 | 5-8 | Preparation specifique 1 | Seuil, tempo | 85% -> 95% |
 | 9-12 | Preparation specifique 2 | Allure marathon, VO2max | 95% -> 100% |
-| 13-14 | Peak | Seances specifiques | 90% -> 80% |
-| 15-16 | Taper | Recuperation, fraicheur | 60% -> 40% |
+| 13-14 | Peak | Séances specifiques | 90% -> 80% |
+| 15-16 | Taper | Récupération, fraicheur | 60% -> 40% |
 
 Chaque bloc de 4 semaines suit un pattern 3:1 avec une semaine de decharge.
 
@@ -137,7 +137,7 @@ Chaque bloc de 4 semaines suit un pattern 3:1 avec une semaine de decharge.
 
 ## Periodisation lineaire vs ondulee
 
-Deux grandes approches s'affrontent dans le monde de l'entrainement.
+Deux grandes approches s'affrontent dans le monde de l'entraînement.
 
 ### La periodisation lineaire (classique)
 
@@ -183,11 +183,11 @@ Variante avancee ou tu concentres 2-3 semaines sur une seule qualite avant de pa
 
 ### 1. Sauter la phase de base
 
-Tout le monde veut faire du fractionne. Mais sans fondation aerobie solide, les seances intenses ne produisent que de la fatigue sans adaptation durable.
+Tout le monde veut faire du fractionne. Mais sans fondation aerobie solide, les séances intenses ne produisent que de la fatigue sans adaptation durable.
 
 ### 2. Ignorer les semaines de decharge
 
-"Je me sens bien, je continue". Mauvaise idee. C'est pendant les semaines de recuperation que se produisent les adaptations. Les supprimer, c'est compromettre ta progression.
+"Je me sens bien, je continue". Mauvaise idee. C'est pendant les semaines de récupération que se produisent les adaptations. Les supprimer, c'est compromettre ta progression.
 
 > ⚠️ Ne supprime jamais les semaines de decharge, meme quand tu te sens en forme. C'est la que les adaptations se consolident. Les ignorer mene a la stagnation ou la blessure.
 
@@ -203,7 +203,7 @@ Un plan n'est pas un contrat. Si tu es malade, fatigue, ou surmene, adapte. L'ec
 
 ## Periodiser pour progresser longtemps
 
-La periodisation n'est pas reservee aux elites. Que tu vises ton premier marathon ou un record personnel, structurer ton entrainement dans le temps te permettra de :
+La periodisation n'est pas reservee aux elites. Que tu vises ton premier marathon ou un record personnel, structurer ton entraînement dans le temps te permettra de :
 - Progresser de maniere continue
 - Eviter les blessures de surcharge
 - Arriver frais et confiant le jour J

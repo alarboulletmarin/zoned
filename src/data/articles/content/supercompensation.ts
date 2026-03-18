@@ -2,25 +2,25 @@
 import type { ArticleContent } from "../types";
 
 const content: ArticleContent = {
-  content: `## Le paradoxe de l'entrainement
+  content: `## Le paradoxe de l'entraînement
 
-Voici une verite contre-intuitive : tu ne progresses pas pendant tes seances d'entrainement. Tu progresses apres. La seance ne fait que creer le stimulus. C'est pendant le repos que ton corps s'adapte et devient plus fort.
+Voici une verite contre-intuitive : tu ne progresses pas pendant tes séances d'entraînement. Tu progresses apres. La séance ne fait que creer le stimulus. C'est pendant le repos que ton corps s'adapte et devient plus fort.
 
-Ce phenomene porte un nom : la [[surcompensation]]. Comprendre ce mecanisme change radicalement ta facon d'aborder l'entrainement.
+Ce phenomene porte un nom : la [[surcompensation]]. Comprendre ce mecanisme change radicalement ta facon d'aborder l'entraînement.
 
 ---
 
 ## Le cycle de la surcompensation
 
-Imagine ta forme physique comme un niveau d'eau dans un reservoir. Chaque seance d'entrainement fait baisser ce niveau - tu crees de la fatigue, tu "consommes" tes reserves. Puis, progressivement, le niveau remonte. Mais voila le point cle : il ne revient pas simplement a son niveau initial. Il le depasse legerement.
+Imagine ta forme physique comme un niveau d'eau dans un reservoir. Chaque séance d'entraînement fait baisser ce niveau - tu crees de la fatigue, tu "consommes" tes reserves. Puis, progressivement, le niveau remonte. Mais voila le point cle : il ne revient pas simplement a son niveau initial. Il le depasse legerement.
 
 C'est ca, la surcompensation : ton corps ne se contente pas de reparer les degats, il se prepare a mieux encaisser la prochaine fois.
 
-> 📌 Tu ne progresses pas pendant l'effort, mais apres. La seance cree le stress, le repos cree l'adaptation. Sans repos adequat, pas de progression.
+> 📌 Tu ne progresses pas pendant l'effort, mais apres. La séance cree le stress, le repos cree l'adaptation. Sans repos adequat, pas de progression.
 
-### Phase 1 : Le stimulus (la seance)
+### Phase 1 : Le stimulus (la séance)
 
-Tu cours ta seance de fractionne. Tes fibres musculaires subissent des micro-lesions. Tes reserves de glycogene s'epuisent. Ton systeme nerveux fatigue. Sur le moment, tu es plus faible qu'avant la seance.
+Tu cours ta séance de fractionne. Tes fibres musculaires subissent des micro-lesions. Tes reserves de glycogene s'epuisent. Ton systeme nerveux fatigue. Sur le moment, tu es plus faible qu'avant la séance.
 
 **Ce qui se passe :**
 - Depletion du glycogene musculaire
@@ -28,7 +28,7 @@ Tu cours ta seance de fractionne. Tes fibres musculaires subissent des micro-les
 - Fatigue du systeme nerveux central
 - Accumulation de metabolites
 
-### Phase 2 : La recuperation
+### Phase 2 : La récupération
 
 Dans les heures et jours qui suivent, ton corps se met au travail. Il repare les tissus, reconstitue les reserves, elimine les dechets. Tu reviens progressivement a ton niveau de base.
 
@@ -58,24 +58,24 @@ Si tu ne relances pas un nouveau stimulus, la surcompensation s'estompe. Ton cor
 
 ## La fenetre optimale : timing is everything
 
-> 📊 La fenetre de surcompensation optimale se situe entre 36 et 96 heures apres une seance intense, selon le type d'effort et ta capacite de recuperation.
+> 📊 La fenetre de surcompensation optimale se situe entre 36 et 96 heures apres une séance intense, selon le type d'effort et ta capacite de récupération.
 
-Le timing de ta prochaine seance est crucial. Trop tot, tu cumules les fatigues. Trop tard, tu rates la fenetre de surcompensation.
+Le timing de ta prochaine séance est crucial. Trop tot, tu cumules les fatigues. Trop tard, tu rates la fenetre de surcompensation.
 
 ### Delais selon l'intensite
 
-| Type de seance | Surcompensation optimale | Fenetre de recuperation |
+| Type de séance | Surcompensation optimale | Fenetre de récupération |
 |----------------|--------------------------|-------------------------|
 | Footing leger ([[zone-1]], [[zone-2]]) | 24-36h | 12-48h |
 | Tempo/seuil ([[zone-4]]) | 48-72h | 36-96h |
 | Fractionne VO2max ([[zone-5]]) | 72-96h | 48-120h |
 | Seance longue intensive | 72-96h | 48-120h |
-| Course/competition | 7-14 jours | Variable |
+| Course/compétition | 7-14 jours | Variable |
 
 Ces durees sont indicatives et varient selon :
-- Ton niveau d'entrainement
+- Ton niveau d'entraînement
 - Ton age
-- La qualite de ta recuperation (sommeil, nutrition)
+- La qualite de ta récupération (sommeil, nutrition)
 - Ta charge globale de vie (stress, travail)
 
 ### Comment identifier sa fenetre
@@ -97,11 +97,11 @@ Les signaux qu'il est trop tot :
 
 ## Les erreurs qui sabotent la surcompensation
 
-### Erreur 1 : Enchainer les seances dures
+### Erreur 1 : Enchainer les séances dures
 
-C'est le piege le plus courant. Tu fais une bonne seance de fractionne mardi, tu te sens bien mercredi, alors tu refais une seance intense. Resultat : tu accumules la fatigue sans jamais atteindre la phase de surcompensation.
+C'est le piege le plus courant. Tu fais une bonne séance de fractionne mardi, tu te sens bien mercredi, alors tu refais une séance intense. Resultat : tu accumules la fatigue sans jamais atteindre la phase de surcompensation.
 
-**La regle d'or :** 48-72h minimum entre deux seances de haute intensite.
+**La regle d'or :** 48-72h minimum entre deux séances de haute intensite.
 
 ### Erreur 2 : Courir trop vite les jours faciles
 
@@ -111,16 +111,16 @@ Tes jours "faciles" ne sont pas assez faciles. Au lieu de recuperer, tu crees un
 
 ### Erreur 3 : Sous-estimer les facteurs externes
 
-La surcompensation ne se produit pas dans le vide. Stress au travail, mauvaise nuit, alimentation negligee... tout ca prolonge ta recuperation.
+La surcompensation ne se produit pas dans le vide. Stress au travail, mauvaise nuit, alimentation negligee... tout ca prolonge ta récupération.
 
-**Les multiplicateurs de recuperation :**
+**Les multiplicateurs de récupération :**
 - Sommeil insuffisant (<7h) : +20-40% temps de recup
 - Stress eleve : +15-30% temps de recup
 - Alimentation pauvre : +15-25% temps de recup
 
-### Erreur 4 : Ignorer les signes de surentrainement
+### Erreur 4 : Ignorer les signes de surentraînement
 
-Quand tu ne laisses jamais le temps a la surcompensation de se produire, tu accumules une dette de fatigue. Eventuellement, tu bascules dans le [[overtraining]], ou la recuperation se compte en semaines, pas en jours.
+Quand tu ne laisses jamais le temps a la surcompensation de se produire, tu accumules une dette de fatigue. Eventuellement, tu bascules dans le [[overtraining]], ou la récupération se compte en semaines, pas en jours.
 
 ---
 
@@ -128,13 +128,13 @@ Quand tu ne laisses jamais le temps a la surcompensation de se produire, tu accu
 
 ### Principes de base
 
-1. **Alterner dur et facile :** Chaque seance de qualite doit etre suivie de 1-2 jours de recuperation ou d'endurance facile.
+1. **Alterner dur et facile :** Chaque séance de qualite doit etre suivie de 1-2 jours de récupération ou d'endurance facile.
 
 2. **Respecter les patterns de charge :** Pattern 3:1 (3 semaines de charge, 1 de decharge) ou 2:1 pour coureurs fragiles.
 
 3. **Ajuster selon les signaux :** Ton corps ne ment pas. FC elevee, fatigue, perte de motivation = besoin de recuperer.
 
-4. **Soigner la recuperation :** Sommeil, nutrition, gestion du stress sont aussi importants que l'entrainement lui-meme.
+4. **Soigner la récupération :** Sommeil, nutrition, gestion du stress sont aussi importants que l'entraînement lui-meme.
 
 ### Semaine type bien periodisee
 
@@ -150,7 +150,7 @@ Voici un exemple de microcycle qui respecte les principes de surcompensation :
 | Samedi | Footing Z2 | Endurance, pas trop intense |
 | Dimanche | Sortie longue | Seance cle de la semaine |
 
-Remarque comment les seances de qualite (mardi, jeudi, dimanche) sont separees par des jours faciles.
+Remarque comment les séances de qualite (mardi, jeudi, dimanche) sont separees par des jours faciles.
 
 ---
 
@@ -164,24 +164,24 @@ Apres 3 semaines de charge progressive, une semaine de [[deload]] permet une sur
 
 ### A l'echelle du macrocycle
 
-Le [[taper]] avant une competition est une mega-surcompensation planifiee. Tu reduis la charge pendant 2-3 semaines pour dissiper toute la fatigue accumulee et arriver au pic de forme.
+Le [[taper]] avant une compétition est une méga-surcompensation planifiée. Tu reduis la charge pendant 2-3 semaines pour dissiper toute la fatigue accumulee et arriver au pic de forme.
 
 ### A l'echelle de l'annee
 
-Apres une saison de competition, une phase de transition (2-4 semaines de repos ou activite reduite) permet au corps de se regenerer completement avant le prochain macrocycle.
+Après une saison de compétition, une phase de transition (2-4 semaines de repos ou activite reduite) permet au corps de se regenerer completement avant le prochain macrocycle.
 
 ---
 
-## Surcompensation et niveau d'entrainement
+## Surcompensation et niveau d'entraînement
 
 Les debutants surcompensent plus facilement que les athletes avances. Le moindre stimulus cree une adaptation. C'est pourquoi les progres sont rapides au debut.
 
-Plus tu es entraine, plus le stimulus doit etre important pour creer une adaptation, et plus la recuperation est longue. C'est la loi des rendements decroissants.
+Plus tu es entraine, plus le stimulus doit etre important pour creer une adaptation, et plus la récupération est longue. C'est la loi des rendements decroissants.
 
 **Implications pratiques :**
-- Debutant : recuperation plus rapide, mais attention a ne pas en faire trop
-- Intermediaire : equilibre charge/recuperation crucial
-- Avance : stimuli intenses necessaires, recuperation soignee indispensable
+- Debutant : récupération plus rapide, mais attention a ne pas en faire trop
+- Intermediaire : equilibre charge/récupération crucial
+- Avance : stimuli intenses necessaires, récupération soignee indispensable
 
 ---
 
@@ -190,11 +190,11 @@ Plus tu es entraine, plus le stimulus doit etre important pour creer une adaptat
 La surcompensation n'est pas une formule mathematique. Les delais indicatifs sont des moyennes. Ton corps a son propre rythme.
 
 Les outils modernes peuvent aider :
-- **Variabilite cardiaque (HRV)** : un HRV eleve suggere une bonne recuperation
+- **Variabilite cardiaque (HRV)** : un HRV eleve suggere une bonne récupération
 - **FC au repos** : une elevation indique une fatigue residuelle
 - **Perception de l'effort** : si un footing facile te semble dur, tu n'es pas recupere
 
-Mais le meilleur outil reste ton ressenti. Apprends a te connaitre, note tes sensations dans un carnet d'entrainement, et ajuste en fonction.
+Mais le meilleur outil reste ton ressenti. Apprends a te connaitre, note tes sensations dans un carnet d'entraînement, et ajuste en fonction.
 
 La surcompensation, c'est l'art de danser avec la fatigue : assez de stress pour progresser, assez de repos pour l'assimiler. Maitrise ce rythme, et tu progresseras pour longtemps.`,
   contentEn: `## The training paradox

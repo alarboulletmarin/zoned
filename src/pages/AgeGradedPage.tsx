@@ -170,7 +170,7 @@ export function AgeGradedPage() {
         description={
           isEn
             ? "Compare your performance to the age and gender adjusted world record. Discover your level."
-            : "Comparez votre performance au record mondial ajuste pour votre age et sexe. Decouvrez votre niveau."
+            : "Comparez votre performance au record mondial ajusté pour votre âge et sexe. Découvrez votre niveau."
         }
         canonical="/calculateurs/age-graded"
         jsonLd={{

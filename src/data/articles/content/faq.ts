@@ -2,7 +2,7 @@
 import type { ArticleContent } from "../types";
 
 const content: ArticleContent = {
-  content: `## Sur les zones d'entrainement
+  content: `## Sur les zones d'entraînement
 
 ### Ma montre indique Zone 4 mais je me sens en Zone 2. Qui croire ?
 
@@ -12,13 +12,13 @@ Faites confiance a vos sensations. La frequence cardiaque peut etre faussee par 
 
 La regle d'or pour la Zone 2 : vous devez pouvoir tenir une conversation normale. Si vous pouvez parler sans effort, vous etes dans la bonne zone - peu importe ce qu'affiche votre montre.
 
-Avec l'experience, vous apprendrez a calibrer vos sensations avec vos donnees. Mais en cas de doute, l'intention de la seance prime sur le chiffre affiche.
+Avec l'experience, vous apprendrez a calibrer vos sensations avec vos donnees. Mais en cas de doute, l'intention de la séance prime sur le chiffre affiche.
 
 ### Dois-je rester exactement dans ma zone ?
 
 Non, les zones sont des plages indicatives, pas des cibles au battement pres. Etre a 3-5 bpm au-dessus ou en-dessous de la limite n'a aucune importance physiologique significative.
 
-Ce qui compte, c'est de respecter l'objectif de la seance. Une sortie "facile" doit vraiment etre facile - si vous terminez essouffle, vous avez rate la cible meme si votre montre affichait Z2 tout du long. Une seance "intense" doit vraiment vous solliciter - si vous finissez frais comme une rose, vous n'avez pas assez pousse.
+Ce qui compte, c'est de respecter l'objectif de la séance. Une sortie "facile" doit vraiment etre facile - si vous terminez essouffle, vous avez rate la cible meme si votre montre affichait Z2 tout du long. Une séance "intense" doit vraiment vous solliciter - si vous finissez frais comme une rose, vous n'avez pas assez pousse.
 
 ### Comment savoir si mes zones sont bien calibrees ?
 
@@ -31,13 +31,13 @@ Si ces correspondances ne collent pas, vos valeurs de reference (FCmax ou VMA) s
 
 ---
 
-## Sur le volume d'entrainement
+## Sur le volume d'entraînement
 
 ### Combien de fois par semaine dois-je courir ?
 
-Il n'y a pas de reponse universelle - cela depend de votre niveau, vos objectifs, et votre recuperation.
+Il n'y a pas de réponse universelle - cela depend de votre niveau, vos objectifs, et votre récupération.
 
-**Debutants (< 1 an de pratique)** : 2-3 sorties par semaine suffisent. Votre corps n'est pas encore adapte aux contraintes de la course ; lui laisser des jours de recuperation entre chaque sortie previent les blessures.
+**Debutants (< 1 an de pratique)** : 2-3 sorties par semaine suffisent. Votre corps n'est pas encore adapte aux contraintes de la course ; lui laisser des jours de récupération entre chaque sortie previent les blessures.
 
 **Coureurs reguliers** : 3-5 sorties couvrent la plupart des objectifs, du 10 km au marathon. L'important n'est pas le nombre de sorties mais leur distribution : alternez jours durs et jours faciles.
 
@@ -55,7 +55,7 @@ Utilisez-la comme principe directeur, pas comme regle rigide.
 
 ### Quand vais-je voir des progres ?
 
-Les premiers changements cardiovasculaires apparaissent des 2-3 semaines d'entrainement regulier. Vous ne le verrez pas forcement sur vos chronos, mais vous sentirez que l'effort devient plus facile.
+Les premiers changements cardiovasculaires apparaissent des 2-3 semaines d'entraînement regulier. Vous ne le verrez pas forcement sur vos chronos, mais vous sentirez que l'effort devient plus facile.
 
 Les progres mesurables sur un test ou une course arrivent generalement apres 6-12 semaines de travail coherent. C'est le temps necessaire aux adaptations musculaires, metaboliques et neuromusculaires.
 
@@ -71,13 +71,13 @@ La patience est cruciale. Les coureurs qui changent de programme toutes les 3 se
 
 Distinguez l'inconfort de la douleur :
 
-**Inconfort** (lourdeur, legere raideur, courbatures) : souvent normal, surtout en debut de seance. Continuez en surveillant - ca passe generalement apres 10-15 minutes.
+**Inconfort** (lourdeur, legere raideur, courbatures) : souvent normal, surtout en debut de séance. Continuez en surveillant - ca passe generalement apres 10-15 minutes.
 
-> 💡 Dans le doute entre inconfort et douleur, arretez-vous. Une seance manquee par prudence vaut mieux que des semaines d'arret force.
+> 💡 Dans le doute entre inconfort et douleur, arretez-vous. Une séance manquee par prudence vaut mieux que des semaines d'arret force.
 
 **Douleur** (aigue, localisee, qui augmente ou qui fait boiter) : arretez immediatement. Forcer sur une vraie douleur transforme une blessure legere en blessure grave.
 
-Dans le doute, ecoutez votre corps. Une seance manquee par prudence est toujours preferable a des semaines d'arret force.
+Dans le doute, ecoutez votre corps. Une séance manquee par prudence est toujours preferable a des semaines d'arret force.
 
 ### Quand dois-je consulter ?
 
@@ -110,7 +110,7 @@ La prevention repose sur quelques principes simples :
 
 Physiologiquement, le soir a un leger avantage : temperature corporelle plus elevee, articulations plus mobiles, temps de reaction meilleur. Certaines etudes montrent des performances legerement superieures en fin de journee.
 
-Mais la vraie reponse est : le meilleur moment est celui ou vous courez reellement. Si vous etes du matin et que les sorties du soir se transforment en canape, courez le matin. La constance bat l'optimisation theorique.
+Mais la vraie réponse est : le meilleur moment est celui ou vous courez reellement. Si vous etes du matin et que les sorties du soir se transforment en canape, courez le matin. La constance bat l'optimisation theorique.
 
 ### Puis-je courir tous les jours ?
 
@@ -120,7 +120,7 @@ C'est possible, mais avec des precautions :
 - Au moins 1-2 jours par semaine doivent etre tres legers ou en cross-training (velo, natation)
 - Ecoutez votre corps - la fatigue accumulee se manifeste tot ou tard
 
-Beaucoup de coureurs prosperent avec 5-6 jours par semaine et 1-2 jours de repos complet. Le repos fait partie de l'entrainement.
+Beaucoup de coureurs prosperent avec 5-6 jours par semaine et 1-2 jours de repos complet. Le repos fait partie de l'entraînement.
 
 ### Comment gerer la chaleur ?
 
@@ -134,7 +134,7 @@ La chaleur est l'ennemie du coureur. Votre corps doit a la fois produire l'energ
 
 **Protegez-vous.** Casquette, vetements clairs et legers, creme solaire sur les zones exposees.
 
-**Soyez patient.** L'acclimatation prend 10-14 jours d'exposition reguliere. Les premieres sorties par grosse chaleur sont difficiles - ca s'ameliore.
+**Soyez patient.** L'acclimatation prend 10-14 jours d'exposition reguliere. Les premieres sorties par grosse chaleur sont difficiles - ca s'améliore.
 
 ### Comment gerer le froid ?
 
@@ -144,9 +144,9 @@ Le froid est moins problematique que la chaleur, mais demande une adaptation ves
 
 **Protegez les extremites.** Gants, bonnet ou bandeau, chaussettes plus epaisses si besoin. Les mains et les oreilles se refroidissent vite.
 
-**Allongez l'echauffement.** Les muscles froids sont moins souples. Prevoyez quelques minutes supplementaires avant d'accelerer.
+**Allongez l'échauffement.** Les muscles froids sont moins souples. Prevoyez quelques minutes supplementaires avant d'accelerer.
 
-**Gardez le mouvement.** Evitez les longues pauses a l'arret pendant les seances. Le refroidissement est rapide quand la transpiration mouille les vetements.`,
+**Gardez le mouvement.** Evitez les longues pauses a l'arret pendant les séances. Le refroidissement est rapide quand la transpiration mouille les vetements.`,
   contentEn: `## On training zones
 
 ### My watch shows Zone 4 but I feel like I'm in Zone 2. Who should I trust?

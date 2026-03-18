@@ -6,38 +6,38 @@ export const nutritionSections: NutritionSection[] = [
   // ─────────────────────────────────────────────────────────
   {
     id: "daily-nutrition",
-    title: "Nutrition quotidienne d'entrainement",
+    title: "Nutrition quotidienne d'entraînement",
     titleEn: "Daily Training Nutrition",
     icon: "UtensilsCrossed",
     content: [
       {
         type: "paragraph",
-        text: "L'alimentation quotidienne du coureur doit etre adaptee au volume et a l'intensite de l'entrainement. Les recommandations suivantes sont basees sur le consensus IOC et les travaux de Burke et al. (2011).",
+        text: "L'alimentation quotidienne du coureur doit être adaptée au volume et à l'intensité de l'entraînement. Les recommandations suivantes sont basées sur le consensus IOC et les travaux de Burke et al. (2011).",
         textEn: "A runner's daily nutrition should be tailored to training volume and intensity. The following recommendations are based on the IOC consensus and Burke et al. (2011).",
       },
       {
         type: "table",
         rows: [
           {
-            label: "Entrainement leger (30-60 min/jour)",
+            label: "Entraînement léger (30-60 min/jour)",
             labelEn: "Light training (30-60 min/day)",
             value: "3-5g glucides/kg, 1.2-1.4g proteines/kg, 1g lipides/kg",
             valueEn: "3-5g carbs/kg, 1.2-1.4g protein/kg, 1g fat/kg",
           },
           {
-            label: "Entrainement modere (60-90 min/jour)",
+            label: "Entraînement modéré (60-90 min/jour)",
             labelEn: "Moderate training (60-90 min/day)",
             value: "5-7g glucides/kg, 1.4-1.6g proteines/kg, 1-1.2g lipides/kg",
             valueEn: "5-7g carbs/kg, 1.4-1.6g protein/kg, 1-1.2g fat/kg",
           },
           {
-            label: "Entrainement intensif (90-120+ min/jour)",
+            label: "Entraînement intensif (90-120+ min/jour)",
             labelEn: "Heavy training (90-120+ min/day)",
             value: "7-10g glucides/kg, 1.6-1.8g proteines/kg, 1-1.5g lipides/kg",
             valueEn: "7-10g carbs/kg, 1.6-1.8g protein/kg, 1-1.5g fat/kg",
           },
           {
-            label: "Double seance ou ultra",
+            label: "Double séance ou ultra",
             labelEn: "Double session or ultra",
             value: "10-12g glucides/kg, 1.8-2.0g proteines/kg, 1.5g lipides/kg",
             valueEn: "10-12g carbs/kg, 1.8-2.0g protein/kg, 1.5g fat/kg",
@@ -53,36 +53,36 @@ export const nutritionSections: NutritionSection[] = [
         type: "list",
         items: [
           {
-            text: "Repartir les proteines sur 4-5 prises de 0.3-0.4g/kg pour optimiser la synthese proteique musculaire.",
+            text: "Répartir les protéines sur 4-5 prises de 0.3-0.4g/kg pour optimiser la synthèse protéique musculaire.",
             textEn: "Spread protein across 4-5 servings of 0.3-0.4g/kg to optimize muscle protein synthesis.",
           },
           {
-            text: "Privilegier les glucides complexes (riz, pates, patates douces, avoine) en dehors de la fenetre peri-effort.",
+            text: "Privilégier les glucides complexes (riz, pâtes, patates douces, avoine) en dehors de la fenêtre péri-effort.",
             textEn: "Favor complex carbs (rice, pasta, sweet potatoes, oats) outside the peri-exercise window.",
           },
           {
-            text: "Inclure des sources de fer heminique (viande rouge, abats) 2-3 fois par semaine, surtout pour les coureuses.",
+            text: "Inclure des sources de fer héminique (viande rouge, abats) 2-3 fois par semaine, surtout pour les coureuses.",
             textEn: "Include heme iron sources (red meat, organ meats) 2-3 times per week, especially for female runners.",
           },
           {
-            text: "Assurer un apport en omega-3 via poissons gras (saumon, sardines, maquereau) 2-3 fois par semaine.",
+            text: "Assurer un apport en oméga-3 via poissons gras (saumon, sardines, maquereau) 2-3 fois par semaine.",
             textEn: "Ensure omega-3 intake through fatty fish (salmon, sardines, mackerel) 2-3 times per week.",
           },
         ],
       },
       {
         type: "tip",
-        text: "Hydratation de base : visez 30-35ml/kg/jour hors entrainement. Verifiez la couleur de vos urines : jaune pale = bien hydrate.",
+        text: "Hydratation de base : visez 30-35ml/kg/jour hors entraînement. Vérifiez la couleur de vos urines : jaune pâle = bien hydraté.",
         textEn: "Baseline hydration: aim for 30-35ml/kg/day outside training. Check urine color: pale yellow = well hydrated.",
       },
       {
         type: "paragraph",
-        text: "Micronutriments cles pour le coureur : vitamine D (surtout en hiver, viser 1000-2000 UI/jour si carence), calcium (1000-1300mg/jour pour la sante osseuse), fer (surveiller la ferritine, seuil optimal > 30-50 ng/ml), magnesium (300-400mg/jour).",
+        text: "Micronutriments clés pour le coureur : vitamine D (surtout en hiver, viser 1000-2000 UI/jour si carence), calcium (1000-1300mg/jour pour la santé osseuse), fer (surveiller la ferritine, seuil optimal > 30-50 ng/ml), magnésium (300-400mg/jour).",
         textEn: "Key micronutrients for runners: vitamin D (especially in winter, aim for 1000-2000 IU/day if deficient), calcium (1000-1300mg/day for bone health), iron (monitor ferritin, optimal threshold > 30-50 ng/ml), magnesium (300-400mg/day).",
       },
       {
         type: "warning",
-        text: "Evitez le deficit energetique relatif (RED-S). Un apport calorique insuffisant degrade la performance, la sante osseuse, l'immunite et les hormones. Si vous perdez du poids involontairement, consultez un dieteticien du sport.",
+        text: "Évitez le déficit énergétique relatif (RED-S). Un apport calorique insuffisant dégrade la performance, la santé osseuse, l'immunité et les hormones. Si vous perdez du poids involontairement, consultez un diététicien du sport.",
         textEn: "Avoid Relative Energy Deficiency in Sport (RED-S). Insufficient caloric intake impairs performance, bone health, immunity, and hormones. If you are losing weight unintentionally, consult a sports dietitian.",
       },
     ],
@@ -99,22 +99,22 @@ export const nutritionSections: NutritionSection[] = [
     content: [
       {
         type: "paragraph",
-        text: "La surcharge glucidique permet de maximiser les reserves de glycogene musculaire avant une competition de plus de 90 minutes. Le protocole moderne (Bussau et al. 2002) est plus simple que l'ancien regime dissociatif.",
+        text: "La surcharge glucidique permet de maximiser les réserves de glycogène musculaire avant une compétition de plus de 90 minutes. Le protocole moderne (Bussau et al. 2002) est plus simple que l'ancien régime dissociatif.",
         textEn: "Carbohydrate loading maximizes muscle glycogen stores before competitions lasting over 90 minutes. The modern protocol (Bussau et al. 2002) is simpler than the old dissociated regimen.",
       },
       {
         type: "table",
         rows: [
           {
-            label: "J-3 a J-1",
+            label: "J-3 à J-1",
             labelEn: "D-3 to D-1",
             value: "8-12g glucides/kg/jour",
             valueEn: "8-12g carbs/kg/day",
           },
           {
-            label: "Volume d'entrainement",
+            label: "Volume d'entraînement",
             labelEn: "Training volume",
-            value: "Reduire a 30-50% du volume normal",
+            value: "Réduire à 30-50% du volume normal",
             valueEn: "Reduce to 30-50% of normal volume",
           },
           {
@@ -247,7 +247,7 @@ export const nutritionSections: NutritionSection[] = [
       },
       {
         type: "tip",
-        text: "La cafeine (3-6mg/kg, 60-90 min avant) est l'un des rares supplements avec des preuves solides d'amelioration de la performance en endurance. Mais testez-la a l'entrainement d'abord.",
+        text: "La caféine (3-6mg/kg, 60-90 min avant) est l'un des rares suppléments avec des preuves solides d'amélioration de la performance en endurance. Mais testez-la à l'entraînement d'abord.",
         textEn: "Caffeine (3-6mg/kg, 60-90 min before) is one of the few supplements with strong evidence for endurance performance improvement. But test it in training first.",
       },
       {
@@ -324,7 +324,7 @@ export const nutritionSections: NutritionSection[] = [
       },
       {
         type: "tip",
-        text: "Entrainement du systeme digestif (gut training) : consommer des glucides pendant les seances longues d'entrainement. Commencez par 30g/h et augmentez de 10g/h toutes les 2 semaines jusqu'a votre cible de course.",
+        text: "Entraînement du système digestif (gut training) : consommer des glucides pendant les séances longues d'entraînement. Commencez par 30g/h et augmentez de 10g/h toutes les 2 semaines jusqu'à votre cible de course.",
         textEn: "Gut training: consume carbs during long training sessions. Start at 30g/h and increase by 10g/h every 2 weeks up to your race target.",
       },
       {
@@ -416,7 +416,7 @@ export const nutritionSections: NutritionSection[] = [
       },
       {
         type: "paragraph",
-        text: "Rehydratation post-effort : buvez 1.5 fois le volume de poids perdu dans les 2-4 heures suivant l'effort. Incluez du sodium (bouillon, eau salee, boisson de recuperation) pour favoriser la retention hydrique.",
+        text: "Réhydratation post-effort : buvez 1.5 fois le volume de poids perdu dans les 2-4 heures suivant l'effort. Incluez du sodium (bouillon, eau salée, boisson de récupération) pour favoriser la rétention hydrique.",
         textEn: "Post-exercise rehydration: drink 1.5 times the volume of weight lost within 2-4 hours after exercise. Include sodium (broth, salted water, recovery drink) to promote fluid retention.",
       },
     ],
@@ -427,20 +427,20 @@ export const nutritionSections: NutritionSection[] = [
   // ─────────────────────────────────────────────────────────
   {
     id: "post-race-recovery",
-    title: "Nutrition de recuperation post-course",
+    title: "Nutrition de récupération post-course",
     titleEn: "Post-Race Recovery Nutrition",
     icon: "HeartPulse",
     content: [
       {
         type: "paragraph",
-        text: "La fenetre de recuperation dans les 30-60 minutes apres l'effort est cruciale pour reconstituer le glycogene et initier la reparation musculaire. Les recommandations sont basees sur le consensus IOC (Maughan et al. 2018).",
+        text: "La fenêtre de récupération dans les 30-60 minutes après l'effort est cruciale pour reconstituer le glycogène et initier la réparation musculaire. Les recommandations sont basées sur le consensus IOC (Maughan et al. 2018).",
         textEn: "The recovery window within 30-60 minutes after exercise is crucial for glycogen replenishment and initiating muscle repair. Recommendations are based on the IOC consensus (Maughan et al. 2018).",
       },
       {
         type: "table",
         rows: [
           {
-            label: "0-30 min apres l'effort",
+            label: "0-30 min après l'effort",
             labelEn: "0-30 min post-exercise",
             value: "1-1.2g glucides/kg + 0.3-0.4g proteines/kg",
             valueEn: "1-1.2g carbs/kg + 0.3-0.4g protein/kg",
@@ -452,15 +452,15 @@ export const nutritionSections: NutritionSection[] = [
             valueEn: "1g carbs/kg per serving",
           },
           {
-            label: "Rehydratation",
+            label: "Réhydratation",
             labelEn: "Rehydration",
             value: "1.5x le poids perdu, avec sodium",
             valueEn: "1.5x weight lost, with sodium",
           },
           {
-            label: "Proteines totales J+0",
+            label: "Protéines totales J+0",
             labelEn: "Total protein D+0",
-            value: "1.6-1.8g/kg reparties sur la journee",
+            value: "1.6-1.8g/kg réparties sur la journée",
             valueEn: "1.6-1.8g/kg spread across the day",
           },
         ],
@@ -469,36 +469,36 @@ export const nutritionSections: NutritionSection[] = [
         type: "list",
         items: [
           {
-            text: "Option rapide : lait chocolate (ratio glucides:proteines 3-4:1 naturellement optimal). 500ml = ~50g glucides + 16g proteines.",
+            text: "Option rapide : lait chocolaté (ratio glucides:protéines 3-4:1 naturellement optimal). 500ml = ~50g glucides + 16g protéines.",
             textEn: "Quick option: chocolate milk (naturally optimal 3-4:1 carb:protein ratio). 500ml = ~50g carbs + 16g protein.",
           },
           {
-            text: "Option complete : banane + shaker proteine (30g whey) + poignee de bretzels sales.",
+            text: "Option complète : banane + shaker protéine (30g whey) + poignée de bretzels salés.",
             textEn: "Complete option: banana + protein shake (30g whey) + handful of salted pretzels.",
           },
           {
-            text: "Repas dans les 2h : poulet/saumon + riz + legumes cuits + huile d'olive. Equilibre glucides + proteines + antioxydants.",
+            text: "Repas dans les 2h : poulet/saumon + riz + légumes cuits + huile d'olive. Équilibre glucides + protéines + antioxydants.",
             textEn: "Meal within 2h: chicken/salmon + rice + cooked vegetables + olive oil. Balanced carbs + protein + antioxidants.",
           },
           {
-            text: "Caseine (fromage blanc, yaourt) avant le coucher pour soutenir la reparation musculaire nocturne (30-40g).",
+            text: "Caséine (fromage blanc, yaourt) avant le coucher pour soutenir la réparation musculaire nocturne (30-40g).",
             textEn: "Casein (cottage cheese, yogurt) before bed to support overnight muscle repair (30-40g).",
           },
         ],
       },
       {
         type: "tip",
-        text: "La synthese proteique musculaire est maximale avec 20-40g de proteines riches en leucine (whey, oeufs, viande) par prise. Au-dela de 40g, le surplus n'apporte pas de benefice supplementaire.",
+        text: "La synthèse protéique musculaire est maximale avec 20-40g de protéines riches en leucine (whey, oeufs, viande) par prise. Au-delà de 40g, le surplus n'apporte pas de bénéfice supplémentaire.",
         textEn: "Muscle protein synthesis is maximized with 20-40g of leucine-rich protein (whey, eggs, meat) per serving. Above 40g, the excess provides no additional benefit.",
       },
       {
         type: "warning",
-        text: "Evitez l'alcool dans les 4-6h post-course : il inhibe la synthese proteique musculaire, aggrave la deshydratation et perturbe le sommeil reparateur. Si vous celebrez, mangez d'abord et hydratez-vous bien.",
+        text: "Évitez l'alcool dans les 4-6h post-course : il inhibe la synthèse protéique musculaire, aggrave la déshydratation et perturbe le sommeil réparateur. Si vous célébrez, mangez d'abord et hydratez-vous bien.",
         textEn: "Avoid alcohol within 4-6h post-race: it inhibits muscle protein synthesis, worsens dehydration, and disrupts restorative sleep. If celebrating, eat first and hydrate well.",
       },
       {
         type: "paragraph",
-        text: "Pour les efforts tres longs (marathon, ultra), la recuperation digestive prend 24-48h. Les premiers repas post-course doivent etre faciles a digerer : soupes, purrees, riz, bananes. Reintroduisez progressivement les fibres et les graisses.",
+        text: "Pour les efforts très longs (marathon, ultra), la récupération digestive prend 24-48h. Les premiers repas post-course doivent être faciles à digérer : soupes, purées, riz, bananes. Réintroduisez progressivement les fibres et les graisses.",
         textEn: "For very long efforts (marathon, ultra), digestive recovery takes 24-48h. First post-race meals should be easy to digest: soups, purees, rice, bananas. Gradually reintroduce fiber and fats.",
       },
     ],
@@ -509,13 +509,13 @@ export const nutritionSections: NutritionSection[] = [
   // ─────────────────────────────────────────────────────────
   {
     id: "recovery-week",
-    title: "Nutrition en semaine de recuperation",
+    title: "Nutrition en semaine de récupération",
     titleEn: "Recovery Week Nutrition",
     icon: "Leaf",
     content: [
       {
         type: "paragraph",
-        text: "Les semaines de recuperation (deload) necessitent un ajustement nutritionnel. L'objectif est de soutenir la reparation tissulaire tout en adaptant l'apport energetique au volume reduit. Trop restreindre compromet l'adaptation ; trop manger sans le volume n'est pas necessaire.",
+        text: "Les semaines de récupération (deload) nécessitent un ajustement nutritionnel. L'objectif est de soutenir la réparation tissulaire tout en adaptant l'apport énergétique au volume réduit. Trop restreindre compromet l'adaptation ; trop manger sans le volume n'est pas nécessaire.",
         textEn: "Recovery weeks (deload) require nutritional adjustment. The goal is to support tissue repair while matching energy intake to reduced volume. Too much restriction compromises adaptation; overeating without the volume is unnecessary.",
       },
       {
@@ -524,25 +524,25 @@ export const nutritionSections: NutritionSection[] = [
           {
             label: "Glucides",
             labelEn: "Carbohydrates",
-            value: "3-5g/kg/jour (reduire proportionnellement au volume)",
+            value: "3-5g/kg/jour (réduire proportionnellement au volume)",
             valueEn: "3-5g/kg/day (reduce proportionally to volume)",
           },
           {
-            label: "Proteines",
+            label: "Protéines",
             labelEn: "Protein",
-            value: "Maintenir 1.6-1.8g/kg/jour (la reparation est en cours)",
+            value: "Maintenir 1.6-1.8g/kg/jour (la réparation est en cours)",
             valueEn: "Maintain 1.6-1.8g/kg/day (repair is ongoing)",
           },
           {
             label: "Lipides",
             labelEn: "Fat",
-            value: "1-1.5g/kg/jour, privilegier omega-3 et mono-insatures",
+            value: "1-1.5g/kg/jour, privilégier oméga-3 et mono-insaturés",
             valueEn: "1-1.5g/kg/day, favor omega-3 and monounsaturated fats",
           },
           {
             label: "Calories totales",
             labelEn: "Total calories",
-            value: "Reduire de 10-20% par rapport a la semaine normale",
+            value: "Réduire de 10-20% par rapport à la semaine normale",
             valueEn: "Reduce by 10-20% compared to normal week",
           },
         ],
@@ -555,37 +555,37 @@ export const nutritionSections: NutritionSection[] = [
             textEn: "Anti-inflammatory foods: blueberries, cherries, pomegranates, turmeric (with black pepper), ginger, fatty fish.",
           },
           {
-            text: "Privilegier les proteines de haute qualite : oeufs, poisson, volaille, produits laitiers, legumineuses + cereales.",
+            text: "Privilégier les protéines de haute qualité : oeufs, poisson, volaille, produits laitiers, légumineuses + céréales.",
             textEn: "Favor high-quality protein: eggs, fish, poultry, dairy, legumes + grains.",
           },
           {
-            text: "Maintenir l'hydratation (30-35ml/kg/jour) meme si l'effort est reduit. Le processus de reparation necessite de l'eau.",
+            text: "Maintenir l'hydratation (30-35ml/kg/jour) même si l'effort est réduit. Le processus de réparation nécessite de l'eau.",
             textEn: "Maintain hydration (30-35ml/kg/day) even with reduced effort. The repair process requires water.",
           },
           {
-            text: "Sommeil : viser 8-9h. La nutrition du sommeil compte : eviter la cafeine apres 14h, diner leger 2-3h avant le coucher.",
+            text: "Sommeil : viser 8-9h. La nutrition du sommeil compte : éviter la caféine après 14h, dîner léger 2-3h avant le coucher.",
             textEn: "Sleep: aim for 8-9h. Sleep nutrition matters: avoid caffeine after 2pm, light dinner 2-3h before bed.",
           },
         ],
       },
       {
         type: "tip",
-        text: "Profitez de la semaine de recuperation pour varier votre alimentation et reintroduire des aliments riches en fibres et micronutriments que vous avez peut-etre negliges pendant les semaines intenses : legumes colores, fruits entiers, noix, graines.",
+        text: "Profitez de la semaine de récupération pour varier votre alimentation et réintroduire des aliments riches en fibres et micronutriments que vous avez peut-être négligés pendant les semaines intenses : légumes colorés, fruits entiers, noix, graines.",
         textEn: "Use recovery week to diversify your diet and reintroduce fiber-rich and micronutrient-dense foods you may have neglected during hard weeks: colorful vegetables, whole fruits, nuts, seeds.",
       },
       {
         type: "paragraph",
-        text: "Supplements utiles pendant la recuperation : omega-3 (2-3g EPA+DHA/jour), vitamine D (1000-2000 UI/jour si carence), magnesium (300-400mg/jour), tart cherry juice (30ml de concentre 2x/jour pour reduire les courbatures).",
+        text: "Suppléments utiles pendant la récupération : oméga-3 (2-3g EPA+DHA/jour), vitamine D (1000-2000 UI/jour si carence), magnésium (300-400mg/jour), tart cherry juice (30ml de concentré 2x/jour pour réduire les courbatures).",
         textEn: "Useful supplements during recovery: omega-3 (2-3g EPA+DHA/day), vitamin D (1000-2000 IU/day if deficient), magnesium (300-400mg/day), tart cherry juice (30ml concentrate 2x/day to reduce soreness).",
       },
       {
         type: "warning",
-        text: "Ne coupez pas drastiquement les calories en semaine de recuperation. Le corps repare les tissus, reconstruit le glycogene et adapte les systemes cardiovasculaire et musculaire. Un deficit trop important compromet ces adaptations.",
+        text: "Ne coupez pas drastiquement les calories en semaine de récupération. Le corps répare les tissus, reconstruit le glycogène et adapte les systèmes cardiovasculaire et musculaire. Un déficit trop important compromet ces adaptations.",
         textEn: "Do not drastically cut calories during recovery week. The body is repairing tissues, rebuilding glycogen, and adapting cardiovascular and muscular systems. Too large a deficit compromises these adaptations.",
       },
       {
         type: "paragraph",
-        text: "Si vous ressentez des fringales inhabituelles pendant la recuperation, ecoutez votre corps : c'est souvent le signe que la reparation est active et que vos besoins energetiques sont plus eleves que prevu.",
+        text: "Si vous ressentez des fringales inhabituelles pendant la récupération, écoutez votre corps : c'est souvent le signe que la réparation est active et que vos besoins énergétiques sont plus élevés que prévu.",
         textEn: "If you experience unusual cravings during recovery, listen to your body: it is often a sign that repair is active and your energy needs are higher than expected.",
       },
     ],

@@ -5,7 +5,7 @@ import type { GlossaryTerm } from "../types";
 
 export const zonesTerms: GlossaryTerm[] = [
   {
-    id: "zones-entrainement",
+    id: "zones-entraînement",
     term: "Zones d'entraînement",
     termEn: "Training Zones",
     category: "zones",

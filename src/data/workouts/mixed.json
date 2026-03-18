@@ -975,7 +975,7 @@
       "id": "MIX-011",
       "name": "10-20-30 Bangsbo classique",
       "nameEn": "Classic 10-20-30 Bangsbo",
-      "description": "Methode Bangsbo originale : 30s Z1 / 20s Z3 / 10s sprint x 5 reps x 3-4 blocs. Ameliore VO2max et performance avec moins de volume (Gunnarsson & Bangsbo, 2012).",
+      "description": "Méthode Bangsbo originale : 30s Z1 / 20s Z3 / 10s sprint x 5 reps x 3-4 blocs. Améliore VO2max et performance avec moins de volume (Gunnarsson & Bangsbo, 2012).",
       "descriptionEn": "Original Bangsbo method: 30s Z1 / 20s Z3 / 10s sprint x 5 reps x 3-4 blocks. Improves VO2max and performance with less volume (Gunnarsson & Bangsbo, 2012).",
       "category": "mixed",
       "sessionType": "intervals",
@@ -998,7 +998,7 @@
           "zone": "Z1-Z2"
         },
         {
-          "description": "Mobilite et accelerations",
+          "description": "Mobilité et accélérations",
           "descriptionEn": "Mobility and accelerations",
           "durationMin": 5
         }
@@ -1011,7 +1011,7 @@
           "zone": "Z1-Z6"
         },
         {
-          "description": "Recuperation entre blocs",
+          "description": "Récupération entre blocs",
           "descriptionEn": "Recovery between blocks",
           "durationMin": 2,
           "zone": "Z1"
@@ -1023,7 +1023,7 @@
           "zone": "Z1-Z6"
         },
         {
-          "description": "Recuperation entre blocs",
+          "description": "Récupération entre blocs",
           "descriptionEn": "Recovery between blocks",
           "durationMin": 2,
           "zone": "Z1"
@@ -1037,17 +1037,17 @@
       ],
       "cooldownTemplate": [
         {
-          "description": "Footing de recuperation",
+          "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
           "zone": "Z1"
         }
       ],
       "coachingTips": [
-        "Le sprint de 10s doit etre maximal",
-        "Les 30s doivent etre vraiment lentes (Z1)",
-        "Etude : +4% VO2max en 7 semaines avec moins de km",
-        "Seance ideale pour les coureurs presses"
+        "Le sprint de 10s doit être maximal",
+        "Les 30s doivent être vraiment lentes (Z1)",
+        "Étude : +4% VO2max en 7 semaines avec moins de km",
+        "Séance idéale pour les coureurs pressés"
       ],
       "coachingTipsEn": [
         "The 10s sprint must be maximal",
@@ -1058,7 +1058,7 @@
       "commonMistakes": [
         "Ne pas sprinter vraiment sur les 10s",
         "Courir les 30s trop vite",
-        "Sauter la recuperation entre blocs"
+        "Sauter la récupération entre blocs"
       ],
       "commonMistakesEn": [
         "Not truly sprinting during the 10s",
@@ -1091,7 +1091,7 @@
       "id": "MIX-012",
       "name": "10-20-30 sous-maximal",
       "nameEn": "Sub-maximal 10-20-30",
-      "description": "Version moderee du 10-20-30 : sprint a 80% au lieu de maximal. Ideal pour l'introduction au protocole ou en periode de charge moderee.",
+      "description": "Version modérée du 10-20-30 : sprint à 80% au lieu de maximal. Idéal pour l'introduction au protocole ou en période de charge modérée.",
       "descriptionEn": "Moderate version of 10-20-30: sprint at 80% instead of maximal. Ideal for introduction to the protocol or during moderate load periods.",
       "category": "mixed",
       "sessionType": "intervals",
@@ -1122,7 +1122,7 @@
           "zone": "Z1-Z5"
         },
         {
-          "description": "Recuperation entre blocs",
+          "description": "Récupération entre blocs",
           "descriptionEn": "Recovery between blocks",
           "durationMin": 2,
           "zone": "Z1"
@@ -1134,7 +1134,7 @@
           "zone": "Z1-Z5"
         },
         {
-          "description": "Recuperation entre blocs",
+          "description": "Récupération entre blocs",
           "descriptionEn": "Recovery between blocks",
           "durationMin": 2,
           "zone": "Z1"
@@ -1148,15 +1148,15 @@
       ],
       "cooldownTemplate": [
         {
-          "description": "Footing de recuperation",
+          "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
           "zone": "Z1"
         }
       ],
       "coachingTips": [
-        "80% du sprint = rapide mais controle",
-        "Parfait pour decouvrir le protocole",
+        "80% du sprint = rapide mais contrôlé",
+        "Parfait pour découvrir le protocole",
         "Progressez vers la version classique",
         "Moins de stress neuromusculaire"
       ],
@@ -1168,7 +1168,7 @@
       ],
       "commonMistakes": [
         "Commencer directement par la version maximale",
-        "Augmenter l'intensite trop vite"
+        "Augmenter l'intensité trop vite"
       ],
       "commonMistakesEn": [
         "Starting directly with the maximal version",
@@ -1200,7 +1200,7 @@
       "id": "MIX-013",
       "name": "10-20-30 progressif",
       "nameEn": "Progressive 10-20-30",
-      "description": "Version progressive : 2 blocs la premiere semaine, puis 3, puis 4 blocs. Plan de progression sur 4-6 semaines selon Bangsbo.",
+      "description": "Version progressive : 2 blocs la première semaine, puis 3, puis 4 blocs. Plan de progression sur 4-6 semaines selon Bangsbo.",
       "descriptionEn": "Progressive version: 2 blocks the first week, then 3, then 4 blocks. 4-6 week progression plan according to Bangsbo.",
       "category": "mixed",
       "sessionType": "intervals",
@@ -1223,7 +1223,7 @@
           "zone": "Z1-Z2"
         },
         {
-          "description": "Mobilite",
+          "description": "Mobilité",
           "descriptionEn": "Mobility",
           "durationMin": 3
         }
@@ -1250,7 +1250,7 @@
       ],
       "cooldownTemplate": [
         {
-          "description": "Footing de recuperation",
+          "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
           "zone": "Z1"
@@ -1258,8 +1258,8 @@
       ],
       "coachingTips": [
         "Augmentez d'un bloc toutes les 2 semaines",
-        "Ne depassez pas 4 blocs par seance",
-        "2-3 seances par semaine maximum",
+        "Ne dépassez pas 4 blocs par séance",
+        "2-3 séances par semaine maximum",
         "Remplace une partie du volume habituel"
       ],
       "coachingTipsEn": [
@@ -1270,8 +1270,8 @@
       ],
       "commonMistakes": [
         "Progresser trop vite",
-        "Faire trop de seances par semaine",
-        "Ne pas respecter les phases de recuperation"
+        "Faire trop de séances par semaine",
+        "Ne pas respecter les phases de récupération"
       ],
       "commonMistakesEn": [
         "Progressing too quickly",

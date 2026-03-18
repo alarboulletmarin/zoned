@@ -61,7 +61,7 @@ export function ChangelogPage() {
         description={
           isEn
             ? "See what's new in Zoned - all notable changes and updates to the running workout library."
-            : "Decouvrez les nouveautes de Zoned - tous les changements notables de la bibliotheque de seances."
+            : "Découvrez les nouveautés de Zoned - tous les changements notables de la bibliothèque de séances."
         }
         canonical="/changelog"
       />

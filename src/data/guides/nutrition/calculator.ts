@@ -242,7 +242,7 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
   const tips: { text: string; textEn: string }[] = [];
 
   tips.push({
-    text: "Testez toujours votre strategie nutritionnelle a l'entrainement avant la course. Ne jamais rien essayer de nouveau le jour J.",
+    text: "Testez toujours votre stratégie nutritionnelle à l'entraînement avant la course. Ne jamais rien essayer de nouveau le jour J.",
     textEn: "Always test your nutrition strategy in training before race day. Never try anything new on race day.",
   });
 

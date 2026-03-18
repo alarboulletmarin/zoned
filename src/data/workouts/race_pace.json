@@ -756,7 +756,7 @@
       ],
       "cooldownTemplate": [
         {
-          "description": "Footing de recuperation",
+          "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
           "zone": "Z1"
@@ -810,7 +810,7 @@
       "id": "RP-010",
       "name": "Rosario 800s",
       "nameEn": "Rosario 800s",
-      "description": "Alternance 800m rapide + 800m lent en continu sans arret. Developpe l'endurance a l'allure cible avec recuperation active (methode Canova).",
+      "description": "Alternance 800m rapide + 800m lent en continu sans arrêt. Développe l'endurance à l'allure cible avec récupération active (méthode Canova).",
       "descriptionEn": "Alternating 800m fast + 800m slow continuously without stopping. Develops endurance at target pace with active recovery (Canova method).",
       "category": "race_pace",
       "sessionType": "tempo",
@@ -849,16 +849,16 @@
       ],
       "cooldownTemplate": [
         {
-          "description": "Footing de recuperation",
+          "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
           "zone": "Z1"
         }
       ],
       "coachingTips": [
-        "Jamais d'arret, flux continu",
-        "Le 800m lent doit etre vraiment en Z2",
-        "Methode italienne de Renato Canova",
+        "Jamais d'arrêt, flux continu",
+        "Le 800m lent doit être vraiment en Z2",
+        "Méthode italienne de Renato Canova",
         "Excellent pour les coureurs de semi/marathon"
       ],
       "coachingTipsEn": [
@@ -869,7 +869,7 @@
       ],
       "commonMistakes": [
         "Courir les 800m lents trop vite",
-        "S'arreter entre les repetitions",
+        "S'arrêter entre les répétitions",
         "Ne pas compter les tours"
       ],
       "commonMistakesEn": [
@@ -959,7 +959,7 @@
       ],
       "cooldownTemplate": [
         {
-          "description": "Footing de recuperation",
+          "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 15,
           "zone": "Z1"

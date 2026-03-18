@@ -12,13 +12,13 @@ C'est le [[progressive-overload]] - la surcharge progressive. Un principe simple
 
 ## Comment fonctionne la surcharge progressive
 
-Ton corps est une machine d'adaptation remarquable. Quand tu lui imposes un stress (une seance d'entrainement), il repond en devenant plus fort pour mieux gerer ce stress la prochaine fois. C'est la [[surcompensation]].
+Ton corps est une machine d'adaptation remarquable. Quand tu lui imposes un stress (une séance d'entraînement), il repond en devenant plus fort pour mieux gerer ce stress la prochaine fois. C'est la [[surcompensation]].
 
 Mais cette adaptation a une limite : une fois que ton corps s'est adapte a un stimulus, ce meme stimulus ne le fera plus progresser. Tu dois augmenter la difficulte.
 
 ### Le cycle vertueux
 
-1. **Tu imposes un stress** : seance d'entrainement
+1. **Tu imposes un stress** : séance d'entraînement
 2. **Ton corps s'adapte** : il devient plus fort/endurant
 3. **Le meme stress devient insuffisant** : ton corps le gere facilement
 4. **Tu augmentes le stress** : retour a l'etape 1
@@ -38,7 +38,7 @@ Le plus evident : courir plus de kilometres ou plus longtemps.
 **Exemples :**
 - Passer de 30 km/semaine a 35 km
 - Allonger la sortie longue de 1h30 a 1h45
-- Ajouter une seance supplementaire dans la semaine
+- Ajouter une séance supplementaire dans la semaine
 
 **Avantages :** Developpe l'endurance fondamentale, renforce les structures
 **Limites :** Le plus risque pour les blessures si augmente trop vite
@@ -53,30 +53,30 @@ Courir plus vite ou a des pourcentages plus eleves de tes zones.
 - Ajouter une portion a allure course dans la sortie longue
 
 **Avantages :** Developpe la vitesse, le seuil lactique
-**Limites :** Tres exigeant, necessite plus de recuperation
+**Limites :** Tres exigeant, necessite plus de récupération
 
 ### 3. La frequence
 
 S'entrainer plus souvent.
 
 **Exemples :**
-- Passer de 3 a 4 seances par semaine
-- Ajouter un footing de recuperation le lendemain d'une seance dure
-- Introduire le "double" (deux seances dans la journee)
+- Passer de 3 a 4 séances par semaine
+- Ajouter un footing de récupération le lendemain d'une séance dure
+- Introduire le "double" (deux séances dans la journee)
 
 **Avantages :** Augmente le temps total d'adaptation
-**Limites :** Moins de recuperation entre les seances
+**Limites :** Moins de récupération entre les séances
 
 ### 4. La densite
 
-Reduire les temps de recuperation ou augmenter le travail par unite de temps.
+Reduire les temps de récupération ou augmenter le travail par unite de temps.
 
 **Exemples :**
 - Fractionne : passer de 2min de recup entre les fractions a 1min30
 - Tempo : enchainer les blocs au lieu de recuperer entre
-- Seance : reduire l'echauffement/retour au calme pour plus de travail effectif
+- Seance : reduire l'échauffement/retour au calme pour plus de travail effectif
 
-**Avantages :** Ameliore la capacite de recuperation pendant l'effort
+**Avantages :** Ameliore la capacite de récupération pendant l'effort
 **Limites :** Augmente significativement la difficulte perceptuelle
 
 ---
@@ -149,11 +149,11 @@ Comment savoir si tu es pret pour la prochaine marche ?
 
 ### Signaux positifs
 
-- Les seances te semblent faciles (meme allure, moins d'effort percu)
+- Les séances te semblent faciles (meme allure, moins d'effort percu)
 - Ta frequence cardiaque a effort egal diminue
-- Tu recuperes plus vite entre les seances
-- Tu termines les seances sans etre completement epuise
-- Tes temps sur des parcours de reference s'ameliorent
+- Tu recuperes plus vite entre les séances
+- Tu termines les séances sans etre completement epuise
+- Tes temps sur des parcours de reference s'améliorent
 
 ### Tu es pret pour une surcharge quand...
 
@@ -173,16 +173,16 @@ A l'inverse, certains signaux indiquent que tu forces trop :
 ### Signaux physiques
 
 - **Fatigue persistante** : meme apres une bonne nuit, tu es epuise
-- **Douleurs articulaires ou tendineuses** : qui ne disparaissent pas apres l'echauffement
-- **Performances en baisse** : malgre l'entrainement, tu ralentis
+- **Douleurs articulaires ou tendineuses** : qui ne disparaissent pas apres l'échauffement
+- **Performances en baisse** : malgre l'entraînement, tu ralentis
 - **Maladies frequentes** : rhumes, infections a repetition
 - **Troubles du sommeil** : difficulte a s'endormir ou reveils nocturnes
 
 ### Signaux psychologiques
 
-- **Perte de motivation** : l'entrainement devient une corvee
+- **Perte de motivation** : l'entraînement devient une corvee
 - **Irritabilite** : tu es a cran en permanence
-- **Apprehension** : tu redoutes les seances
+- **Apprehension** : tu redoutes les séances
 - **Obsession** : tu ne penses qu'aux chiffres
 
 Si tu reconnais plusieurs de ces signes, tu es peut-etre en [[overreaching-non-fonctionnel]] ou en route vers le [[overtraining]]. La solution : reculer d'un cran, pas forcer davantage.

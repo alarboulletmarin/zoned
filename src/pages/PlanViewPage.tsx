@@ -380,7 +380,7 @@ export function PlanViewPage() {
         {stats && (
           <Card size="compact">
             <CardContent className="px-4">
-              <p className="text-sm font-medium mb-2">{isEn ? "Session types" : "Types de seances"}</p>
+              <p className="text-sm font-medium mb-2">{isEn ? "Session types" : "Types de séances"}</p>
               <div className="flex rounded-full overflow-hidden h-3">
                 {Object.entries(stats.sessionsByType)
                   .sort(([,a], [,b]) => b - a)

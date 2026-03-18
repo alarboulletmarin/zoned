@@ -152,7 +152,7 @@ export function SplitGeneratorPage() {
         description={
           isEn
             ? "Generate per-km or per-mile splits for your target race time with even, negative, or positive split strategies."
-            : "Generez vos temps de passage par km pour votre objectif chrono avec des strategies de splits reguliers, negatifs ou positifs."
+            : "Générez vos temps de passage par km pour votre objectif chrono avec des stratégies de splits réguliers, négatifs ou positifs."
         }
         canonical="/calculateurs/splits"
       />

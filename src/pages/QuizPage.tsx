@@ -9,10 +9,10 @@ export function QuizPage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "Workout Quiz" : "Quiz d'entrainement"}
+        title={isEn ? "Workout Quiz" : "Quiz d'entraînement"}
         description={isEn
           ? "Answer a few questions to find the perfect running workout for your goals and fitness level."
-          : "Repondez a quelques questions pour trouver la seance de course parfaite pour vos objectifs."}
+          : "Répondez à quelques questions pour trouver la séance de course parfaite pour vos objectifs."}
         canonical="/quiz"
       />
       <div className="py-8">

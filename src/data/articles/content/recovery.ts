@@ -2,31 +2,31 @@
 import type { ArticleContent } from "../types";
 
 const content: ArticleContent = {
-  content: `## Le paradoxe de l'entrainement
+  content: `## Le paradoxe de l'entraînement
 
 Voici une verite contre-intuitive : vous ne progressez pas pendant que vous courez. Vous progressez pendant que vous recuperez.
 
-L'entrainement est un stress. Chaque seance inflige a votre corps des micro-traumatismes : fibres musculaires endommagees, reserves de glycogene videes, systeme nerveux sollicite. C'est pendant le repos qui suit que la magie opere. Votre corps ne se contente pas de reparer les degats - il surcompense, devenant un peu plus fort, un peu plus endurant qu'avant.
+L'entraînement est un stress. Chaque séance inflige a votre corps des micro-traumatismes : fibres musculaires endommagees, reserves de glycogene videes, systeme nerveux sollicite. C'est pendant le repos qui suit que la magie opere. Votre corps ne se contente pas de reparer les degats - il surcompense, devenant un peu plus fort, un peu plus endurant qu'avant.
 
-Ce phenomene s'appelle la supercompensation. Mais il ne fonctionne qu'a une condition : laisser au corps le temps de completer son travail de reconstruction. Couper ce processus par une nouvelle seance trop precoce, c'est construire sur des fondations inachevees.
+Ce phenomene s'appelle la supercompensation. Mais il ne fonctionne qu'a une condition : laisser au corps le temps de completer son travail de reconstruction. Couper ce processus par une nouvelle séance trop precoce, c'est construire sur des fondations inachevees.
 
-> 📌 Vous ne progressez pas pendant l'effort, mais pendant la recuperation qui suit. Sans repos adequat, pas de supercompensation.
+> 📌 Vous ne progressez pas pendant l'effort, mais pendant la récupération qui suit. Sans repos adequat, pas de supercompensation.
 
 ---
 
-## Les deux types de recuperation
+## Les deux types de récupération
 
-### La recuperation active
+### La récupération active
 
 Apres un effort intense, le sang est charge de dechets metaboliques : lactate, ions hydrogene, radicaux libres. Ces substances, normales et inevitables, contribuent a la sensation de fatigue et de raideur musculaire.
 
-Un mouvement leger - footing tres lent, velo a faible intensite, marche - accelere leur elimination. Le flux sanguin augmente "nettoie" les tissus, apporte oxygene et nutriments frais. C'est pourquoi une sortie de 20-30 minutes en Zone 1 le lendemain d'une grosse seance recupere souvent mieux que le repos total.
+Un mouvement leger - footing tres lent, velo a faible intensite, marche - accelere leur elimination. Le flux sanguin augmente "nettoie" les tissus, apporte oxygene et nutriments frais. C'est pourquoi une sortie de 20-30 minutes en Zone 1 le lendemain d'une grosse séance recupere souvent mieux que le repos total.
 
-L'astuce : resister a la tentation d'accelerer. Si vous transformez votre recuperation active en vraie seance, vous ajoutez du stress au lieu d'en eliminer.
+L'astuce : resister a la tentation d'accelerer. Si vous transformez votre récupération active en vraie séance, vous ajoutez du stress au lieu d'en eliminer.
 
-### La recuperation passive
+### La récupération passive
 
-Parfois, le corps a besoin de ne rien faire. Apres un effort particulierement violent - competition, seance de seuil eprouvante, sortie tres longue - ou en cas d'accumulation de fatigue, le repos complet prime.
+Parfois, le corps a besoin de ne rien faire. Apres un effort particulierement violent - competition, séance de seuil eprouvante, sortie tres longue - ou en cas d'accumulation de fatigue, le repos complet prime.
 
 Cela signifie : pas de course, pas de cross-training intense, juste des activites quotidiennes normales. Le sommeil, les etirements doux, peut-etre une marche tranquille. Votre corps dispose alors de toute son energie pour la reconstruction.
 
@@ -34,11 +34,11 @@ Cela signifie : pas de course, pas de cross-training intense, juste des activite
 
 ## Le sommeil : votre arme secrete
 
-Si vous ne deviez retenir qu'une chose de cet article, ce serait celle-ci : le sommeil est le facteur de recuperation le plus puissant et le plus sous-estime.
+Si vous ne deviez retenir qu'une chose de cet article, ce serait celle-ci : le sommeil est le facteur de récupération le plus puissant et le plus sous-estime.
 
 ### Ce qui se passe la nuit
 
-Pendant le sommeil profond, votre corps libere massivement l'hormone de croissance (GH). Cette hormone est le chef d'orchestre de la reconstruction : elle stimule la synthese proteique, repare les fibres musculaires, renforce les tendons, consolide les adaptations de l'entrainement.
+Pendant le sommeil profond, votre corps libere massivement l'hormone de croissance (GH). Cette hormone est le chef d'orchestre de la reconstruction : elle stimule la synthese proteique, repare les fibres musculaires, renforce les tendons, consolide les adaptations de l'entraînement.
 
 Le systeme immunitaire aussi travaille la nuit. Les cellules de defense se multiplient, les inflammations se resorbent, les micro-blessures se soignent. Un coureur qui dort mal compromet ces processus essentiels.
 
@@ -46,9 +46,9 @@ Le systeme immunitaire aussi travaille la nuit. Les cellules de defense se multi
 
 La recommandation standard de 7-8 heures s'applique aux sedentaires. Un coureur qui s'entraine regulierement a besoin de davantage : 8-9 heures pour recuperer de maniere optimale. Les athletes d'elite dorment souvent 9-10 heures, siestes comprises.
 
-> 💡 Visez 8 a 9 heures de sommeil par nuit. Ajoutez une sieste de 20 minutes apres une seance intense pour accelerer la recuperation.
+> 💡 Visez 8 a 9 heures de sommeil par nuit. Ajoutez une sieste de 20 minutes apres une séance intense pour accelerer la récupération.
 
-Au-dela de la duree, la regularite compte. Se coucher et se lever a heures fixes synchronise votre horloge biologique, ameliorant la qualite du sommeil meme a duree egale.
+Au-dela de la duree, la régularité compte. Se coucher et se lever a heures fixes synchronise votre horloge biologique, améliorant la qualite du sommeil meme a duree egale.
 
 ### Optimiser votre sommeil
 
@@ -67,14 +67,14 @@ Un manque de sommeil chronique se manifeste par des symptomes identifiables :
 - Frequence cardiaque au repos plus elevee que d'habitude
 - Difficulte a atteindre vos allures habituelles
 - Moral en berne, motivation absente
-- Recuperation plus lente entre les seances
+- Recuperation plus lente entre les séances
 - Sensibilite accrue aux infections
 
-Si ces signes apparaissent, avant de modifier votre entrainement, examinez d'abord votre sommeil.
+Si ces signes apparaissent, avant de modifier votre entraînement, examinez d'abord votre sommeil.
 
 ---
 
-## La nutrition de recuperation
+## La nutrition de récupération
 
 ### La fenetre metabolique
 
@@ -84,7 +84,7 @@ Cette "fenetre anabolique" n'est pas un mythe - les etudes la confirment. Manque
 
 ### Ce dont votre corps a besoin
 
-**Des glucides** pour reconstituer le glycogene musculaire. Apres une seance longue ou intense, vos reserves sont partiellement ou totalement videes. Les glucides a index glycemique moyen-eleve (fruits, pain, riz) sont bien absorbes.
+**Des glucides** pour reconstituer le glycogene musculaire. Apres une séance longue ou intense, vos reserves sont partiellement ou totalement videes. Les glucides a index glycemique moyen-eleve (fruits, pain, riz) sont bien absorbes.
 
 **Des proteines** pour reparer les fibres musculaires endommagees. 20-30 grammes suffisent ; davantage n'apporte pas de benefice supplementaire immediat.
 
@@ -92,7 +92,7 @@ Cette "fenetre anabolique" n'est pas un mythe - les etudes la confirment. Manque
 
 ### Exemples pratiques
 
-Une collation simple post-entrainement :
+Une collation simple post-entraînement :
 - Un verre de lait chocolate (naturellement equilibre en glucides/proteines)
 - Une banane avec du yaourt grec
 - Un sandwich au jambon sur pain complet
@@ -102,19 +102,19 @@ Le repas principal, 2-3 heures apres, peut etre plus complet : pates ou riz, pro
 
 ---
 
-## Planifier la recuperation
+## Planifier la récupération
 
 ### A l'echelle de la semaine
 
-Un plan d'entrainement bien concu integre la recuperation. Sur 5-6 sorties hebdomadaires, seules 2-3 doivent etre vraiment sollicitantes. Les autres sont des seances faciles en Zone 1-2 ou des jours de repos complet.
+Un plan d'entraînement bien concu integre la récupération. Sur 5-6 sorties hebdomadaires, seules 2-3 doivent etre vraiment sollicitantes. Les autres sont des séances faciles en Zone 1-2 ou des jours de repos complet.
 
-Le piege classique : enchainer deux seances de haute intensite. Votre corps n'a pas le temps de s'adapter entre les deux. Une regle simple : toujours separer les seances VMA ou seuil d'au moins 48-72 heures.
+Le piege classique : enchainer deux séances de haute intensite. Votre corps n'a pas le temps de s'adapter entre les deux. Une regle simple : toujours separer les séances VMA ou seuil d'au moins 48-72 heures.
 
 ### A l'echelle du mois
 
-Accumuler de la fatigue semaine apres semaine mene au surentrainement. La solution : la semaine de decharge.
+Accumuler de la fatigue semaine apres semaine mene au surentraînement. La solution : la semaine de decharge.
 
-Toutes les 3-4 semaines, reduisez votre volume d'entrainement de 30-40%. Gardez une ou deux seances qualitatives mais raccourcies. Cette pause controlee permet au corps de "digerer" les adaptations accumulees.
+Toutes les 3-4 semaines, reduisez votre volume d'entraînement de 30-40%. Gardez une ou deux séances qualitatives mais raccourcies. Cette pause controlee permet au corps de "digerer" les adaptations accumulees.
 
 Les coureurs qui negligent les semaines de decharge stagnent ou regressent - tout le contraire de ce qu'ils recherchent en s'entrainant plus.
 
@@ -122,19 +122,19 @@ Les coureurs qui negligent les semaines de decharge stagnent ou regressent - tou
 
 Meme les meilleurs ont besoin de coupures. Apres un objectif majeur (marathon, competition importante), prevoyez 2-4 semaines de repos actif : pas de plan, pas d'objectif, juste bouger pour le plaisir.
 
-Cette coupure regenere le mental autant que le physique. Elle previent l'usure psychologique qui accompagne les annees d'entrainement continu.
+Cette coupure regenere le mental autant que le physique. Elle previent l'usure psychologique qui accompagne les annees d'entraînement continu.
 
 ---
 
-## Reconnaitre le surentrainement
+## Reconnaitre le surentraînement
 
-Le surentrainement n'est pas de la simple fatigue. C'est un etat pathologique ou votre corps n'arrive plus a recuperer, meme avec du repos. En arriver la demande des mois d'erreurs - et en sortir peut prendre des mois egalement.
+Le surentraînement n'est pas de la simple fatigue. C'est un etat pathologique ou votre corps n'arrive plus a recuperer, meme avec du repos. En arriver la demande des mois d'erreurs - et en sortir peut prendre des mois egalement.
 
-> ⚠️ Si votre frequence cardiaque au repos augmente de 5+ battements et que vos performances chutent malgre l'entrainement, arretez-vous. Ce sont des signaux serieux de surentrainement.
+> ⚠️ Si votre frequence cardiaque au repos augmente de 5+ battements et que vos performances chutent malgre l'entraînement, arretez-vous. Ce sont des signaux serieux de surentraînement.
 
 ### Les signes physiques
 
-- Performances qui stagnent ou regressent malgre l'entrainement
+- Performances qui stagnent ou regressent malgre l'entraînement
 - Fatigue persistante qui ne disparait pas apres le repos
 - Frequence cardiaque au repos anormalement elevee ou basse
 - Blessures a repetition (tendinites, fractures de fatigue)
@@ -147,14 +147,14 @@ Le surentrainement n'est pas de la simple fatigue. C'est un etat pathologique ou
 - Motivation en chute libre
 - Irritabilite accrue
 - Difficultes de concentration
-- Anxiete liee a l'entrainement
+- Anxiete liee a l'entraînement
 - Perte du plaisir de courir
 
 ### Que faire si vous vous reconnaissez
 
 Si vous presentez plusieurs de ces symptomes, la premiere reponse est contre-intuitive : arretez. Pas une semaine facile - un arret complet de la course pendant 1-2 semaines minimum.
 
-Consultez un medecin du sport si les symptomes persistent. Le surentrainement peut masquer d'autres problemes (anemie, deficits nutritionnels, troubles thyroidiens).
+Consultez un medecin du sport si les symptomes persistent. Le surentraînement peut masquer d'autres problemes (anemie, deficits nutritionnels, troubles thyroidiens).
 
 La prevention reste la meilleure strategie : respecter les semaines de decharge, ne pas augmenter le volume trop vite, et surtout ecouter son corps quand il reclame du repos.
 
@@ -162,9 +162,9 @@ La prevention reste la meilleure strategie : respecter les semaines de decharge,
 
 ## Le mot de la fin
 
-La recuperation n'est pas une faiblesse, c'est une intelligence. Les coureurs qui progressent le plus ne sont pas ceux qui s'entrainent le plus dur - ce sont ceux qui maitrisent l'equilibre entre stress et repos.
+La récupération n'est pas une faiblesse, c'est une intelligence. Les coureurs qui progressent le plus ne sont pas ceux qui s'entrainent le plus dur - ce sont ceux qui maitrisent l'equilibre entre stress et repos.
 
-Integrez la recuperation comme une partie de votre entrainement, pas comme une absence d'entrainement. Dormez suffisamment, mangez correctement apres l'effort, respectez les jours faciles. Votre corps vous le rendra en performances.`,
+Integrez la récupération comme une partie de votre entraînement, pas comme une absence d'entraînement. Dormez suffisamment, mangez correctement apres l'effort, respectez les jours faciles. Votre corps vous le rendra en performances.`,
   contentEn: `## The training paradox
 
 Here's a counterintuitive truth: you don't improve while running. You improve while recovering.

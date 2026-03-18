@@ -136,58 +136,58 @@ export interface ZoneMeta {
 
 export const ZONE_META: Record<ZoneNumber, ZoneMeta> = {
   1: {
-    label: "Recuperation",
+    label: "Récupération",
     labelEn: "Recovery",
     color: "zone-1",
-    description: "Effort tres leger, recuperation active",
+    description: "Effort très léger, récupération active",
     descriptionEn: "Very light effort, active recovery",
     physiology:
-      "Stimule la circulation sanguine sans stress musculaire, favorise l'elimination des dechets metaboliques",
+      "Stimule la circulation sanguine sans stress musculaire, favorise l'élimination des déchets métaboliques",
     physiologyEn:
       "Stimulates blood circulation without muscle stress, promotes metabolic waste elimination",
     sensation: "Effort minimal, respiration naturelle, conversation facile",
     sensationEn: "Minimal effort, natural breathing, easy conversation",
-    benefit: "Accelere la recuperation entre les seances intenses",
+    benefit: "Accélère la récupération entre les séances intenses",
     benefitEn: "Accelerates recovery between intense sessions",
-    examples: ["Footing recuperation", "Jogging lendemain de competition"],
+    examples: ["Footing récupération", "Jogging lendemain de compétition"],
     examplesEn: ["Recovery jog", "Day-after-race easy run"],
   },
   2: {
     label: "Endurance",
     labelEn: "Endurance",
     color: "zone-2",
-    description: "Effort modere, base aerobie",
+    description: "Effort modéré, base aérobie",
     descriptionEn: "Moderate effort, aerobic base",
     physiology:
-      "Developpe le reseau capillaire et la densite mitochondriale, ameliore l'utilisation des graisses",
+      "Développe le réseau capillaire et la densité mitochondriale, améliore l'utilisation des graisses",
     physiologyEn:
       "Develops capillary network and mitochondrial density, improves fat utilization",
     sensation:
-      "Effort confortable, respiration reguliere, peut tenir une conversation",
+      "Effort confortable, respiration régulière, peut tenir une conversation",
     sensationEn:
       "Comfortable effort, regular breathing, can hold a conversation",
-    benefit: "Construit la base aerobie, ameliore l'economie de course",
+    benefit: "Construit la base aérobie, améliore l'économie de course",
     benefitEn: "Builds aerobic base, improves running economy",
-    examples: ["Sortie longue", "Footing quotidien", "Echauffement"],
+    examples: ["Sortie longue", "Footing quotidien", "Échauffement"],
     examplesEn: ["Long run", "Daily jog", "Warm-up"],
   },
   3: {
     label: "Tempo",
     labelEn: "Tempo",
     color: "zone-3",
-    description: "Effort soutenu, seuil aerobie",
+    description: "Effort soutenu, seuil aérobie",
     descriptionEn: "Sustained effort, aerobic threshold",
     physiology:
-      "Stimule le seuil lactique 1, ameliore la clairance du lactate",
+      "Stimule le seuil lactique 1, améliore la clairance du lactate",
     physiologyEn:
       "Stimulates lactate threshold 1, improves lactate clearance",
     sensation:
-      "Effort modere, respiration plus profonde, phrases courtes possibles",
+      "Effort modéré, respiration plus profonde, phrases courtes possibles",
     sensationEn:
       "Moderate effort, deeper breathing, short sentences possible",
-    benefit: "Augmente l'endurance a allure marathon",
+    benefit: "Augmente l'endurance à allure marathon",
     benefitEn: "Increases endurance at marathon pace",
-    examples: ["Tempo run", "Course a allure marathon"],
+    examples: ["Tempo run", "Course à allure marathon"],
     examplesEn: ["Tempo run", "Marathon pace run"],
   },
   4: {
@@ -197,15 +197,15 @@ export const ZONE_META: Record<ZoneNumber, ZoneMeta> = {
     description: "Effort intense, seuil lactique",
     descriptionEn: "Intense effort, lactate threshold",
     physiology:
-      "Travaille au seuil lactique 2, repousse le point de basculement metabolique",
+      "Travaille au seuil lactique 2, repousse le point de basculement métabolique",
     physiologyEn:
       "Works at lactate threshold 2, pushes back the metabolic tipping point",
     sensation:
-      "Effort soutenu, respiration controlee mais intense, quelques mots seulement",
+      "Effort soutenu, respiration contrôlée mais intense, quelques mots seulement",
     sensationEn:
       "Sustained effort, controlled but intense breathing, only a few words",
     benefit:
-      "Ameliore la vitesse de croisiere sur semi-marathon et plus",
+      "Améliore la vitesse de croisière sur semi-marathon et plus",
     benefitEn: "Improves cruising speed for half-marathon and beyond",
     examples: ["Intervalles au seuil", "Tempo soutenu 20-40min"],
     examplesEn: ["Threshold intervals", "Sustained tempo 20-40min"],
@@ -214,18 +214,18 @@ export const ZONE_META: Record<ZoneNumber, ZoneMeta> = {
     label: "VO2max",
     labelEn: "VO2max",
     color: "zone-5",
-    description: "Effort tres intense, puissance aerobie",
+    description: "Effort très intense, puissance aérobie",
     descriptionEn: "Very intense effort, aerobic power",
     physiology:
-      "Sollicite la consommation maximale d'oxygene, developpe la puissance aerobie",
+      "Sollicite la consommation maximale d'oxygène, développe la puissance aérobie",
     physiologyEn:
       "Engages maximal oxygen consumption, develops aerobic power",
     sensation: "Effort intense, respiration difficile, impossible de parler",
     sensationEn: "Intense effort, labored breathing, impossible to talk",
     benefit:
-      "Augmente la VMA et la capacite a maintenir des allures rapides",
+      "Augmente la VMA et la capacité à maintenir des allures rapides",
     benefitEn: "Increases VO2max and ability to sustain fast paces",
-    examples: ["30/30", "Fractionne court", "Intervalles 400m-1000m"],
+    examples: ["30/30", "Fractionné court", "Intervalles 400m-1000m"],
     examplesEn: ["30/30 intervals", "Short repeats", "400m-1000m intervals"],
   },
   6: {
@@ -235,16 +235,16 @@ export const ZONE_META: Record<ZoneNumber, ZoneMeta> = {
     description: "Effort maximal, vitesse",
     descriptionEn: "Maximal effort, speed",
     physiology:
-      "Developpe la puissance neuromusculaire et la tolerance au lactate",
+      "Développe la puissance neuromusculaire et la tolérance au lactate",
     physiologyEn:
       "Develops neuromuscular power and lactate tolerance",
     sensation:
       "Effort maximal, sprint, ne peut pas maintenir plus de 30-60 secondes",
     sensationEn:
       "Maximal effort, sprint, cannot sustain for more than 30-60 seconds",
-    benefit: "Ameliore la vitesse pure et le kick final",
+    benefit: "Améliore la vitesse pure et le kick final",
     benefitEn: "Improves pure speed and finishing kick",
-    examples: ["Sprints courts", "Cotes rapides", "Accelerations"],
+    examples: ["Sprints courts", "Côtes rapides", "Accélérations"],
     examplesEn: ["Short sprints", "Fast hill repeats", "Accelerations"],
   },
 };

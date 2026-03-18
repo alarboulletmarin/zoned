@@ -234,7 +234,7 @@ function SidebarContent({
       </nav>
 
       {/* Footer */}
-      <div className="border-t px-2 py-3">
+      <div className="border-t px-2 py-4">
         <div className="flex flex-col gap-0.5">
           {footerItems.map((item) => (
             <SidebarNavItem

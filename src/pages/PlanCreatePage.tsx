@@ -463,7 +463,7 @@ export function PlanCreatePage() {
           <p className="text-muted-foreground mt-1">
             {isEn
               ? "This determines workout intensity"
-              : "Cela determine l'intensite des seances"}
+              : "Cela détermine l'intensité des séances"}
           </p>
         </div>
 
@@ -542,12 +542,12 @@ export function PlanCreatePage() {
           <Calendar className="size-8 text-primary" />
         </div>
         <h2 className="text-xl font-semibold">
-          {isEn ? "Training schedule" : "Planning d'entrainement"}
+          {isEn ? "Training schedule" : "Planning d'entraînement"}
         </h2>
         <p className="text-muted-foreground mt-1">
           {isEn
             ? "How many sessions per week?"
-            : "Combien de seances par semaine ?"}
+            : "Combien de séances par semaine ?"}
         </p>
       </div>
 
@@ -615,7 +615,7 @@ export function PlanCreatePage() {
             <p className="text-sm text-primary text-center mt-2">
               {isEn
                 ? "Elevation data is important for trail-specific training"
-                : "Le denivele est important pour un entrainement trail adapte"}
+                : "Le dénivelé est important pour un entraînement trail adapté"}
             </p>
           )}
         </div>
@@ -837,11 +837,11 @@ export function PlanCreatePage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "Create Training Plan" : "Creer un plan d'entrainement"}
+        title={isEn ? "Create Training Plan" : "Créer un plan d'entraînement"}
         description={
           isEn
             ? "Create a personalized running training plan for your next race."
-            : "Creez un plan d'entrainement personnalise pour votre prochaine course."
+            : "Créez un plan d'entraînement personnalisé pour votre prochaine course."
         }
         canonical="/plan/create"
       />

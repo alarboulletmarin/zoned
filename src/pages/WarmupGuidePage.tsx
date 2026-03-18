@@ -190,19 +190,19 @@ export function WarmupGuidePage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "Warm-up & Cool-down" : "Echauffement & Retour au Calme"}
+        title={isEn ? "Warm-up & Cool-down" : "Échauffement & Retour au Calme"}
         description={
           isEn
             ? "Warm-up routines, cool-down protocols, dynamic stretching and activation drills for runners."
-            : "Routines d'echauffement, protocoles de retour au calme, etirements dynamiques et exercices d'activation pour coureurs."
+            : "Routines d'échauffement, protocoles de retour au calme, étirements dynamiques et exercices d'activation pour coureurs."
         }
         canonical="/guides/warmup"
         jsonLd={{
           "@type": "Article",
-          name: isEn ? "Warm-up & Cool-down Guide" : "Guide Echauffement & Retour au Calme",
+          name: isEn ? "Warm-up & Cool-down Guide" : "Guide Échauffement & Retour au Calme",
           description: isEn
             ? "Complete warm-up and cool-down guide for runners."
-            : "Guide complet d'echauffement et retour au calme pour coureurs.",
+            : "Guide complet d'échauffement et retour au calme pour coureurs.",
           url: "https://zoned.run/guides/warmup",
         }}
       />
@@ -219,19 +219,19 @@ export function WarmupGuidePage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
-            {isEn ? "Warm-up & Cool-down" : "Echauffement & Retour au Calme"}
+            {isEn ? "Warm-up & Cool-down" : "Échauffement & Retour au Calme"}
           </h1>
           <p className="text-muted-foreground text-lg">
             {isEn
               ? "Routines, stretching and activation drills"
-              : "Routines, etirements et exercices d'activation"}
+              : "Routines, étirements et exercices d'activation"}
           </p>
         </div>
 
         {/* Routine Selector */}
         <section className="mb-10">
           <h2 className="text-xl font-semibold mb-4">
-            {isEn ? "Warm-up Routines" : "Routines d'echauffement"}
+            {isEn ? "Warm-up Routines" : "Routines d'échauffement"}
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
             {warmupRoutines.map((routine) => renderRoutineCard(routine))}
