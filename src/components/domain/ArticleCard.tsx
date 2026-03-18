@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { ArticleMeta, ArticleCategory } from "@/data/articles";
+import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 
 const CATEGORY_ICONS: Record<ArticleCategory, React.ComponentType<{ className?: string }>> = {
   fundamentals: BookOpen,
@@ -55,7 +56,7 @@ export function ArticleCard({ article, className }: ArticleCardProps) {
 
         <CardContent>
           <p className="text-sm text-muted-foreground line-clamp-2">
-            {isEn ? article.descriptionEn : article.description}
+            <GlossaryLinkedText text={isEn ? article.descriptionEn : article.description} />
           </p>
         </CardContent>
       </Card>

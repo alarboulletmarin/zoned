@@ -7,8 +7,8 @@ export const changelogVersions: ChangelogVersion[] = [
     changes: {
       added: [
         {
-          text: "Auto-liens style Wikipedia : les termes techniques (VMA, seuil, VO2max, zones…) deviennent cliquables partout dans l'app avec un aperçu au survol",
-          textEn: "Wikipedia-style auto-linking: technical terms (VMA, threshold, VO2max, zones…) become clickable throughout the app with hover previews",
+          text: "Auto-liens style Wikipedia : les 200+ termes du glossaire et les 12 articles deviennent cliquables partout dans l'app (séances, articles, guides, glossaire, collections, tips) avec aperçu au survol",
+          textEn: "Wikipedia-style auto-linking: all 200+ glossary terms and 12 articles become clickable throughout the entire app (workouts, articles, guides, glossary, collections, tips) with hover previews",
           category: "SEO & UX",
           categoryEn: "SEO & UX",
         },

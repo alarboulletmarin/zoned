@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ZoneBadge } from "./ZoneBadge";
 import { cn } from "@/lib/utils";
 import type { GlossaryTerm } from "@/data/glossary/types";
+import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 
 interface GlossaryCardProps {
   term: GlossaryTerm;
@@ -55,7 +56,7 @@ export const GlossaryCard = memo(function GlossaryCard({
                 </span>
               </div>
               <p className="text-sm text-muted-foreground line-clamp-2">
-                {shortDef}
+                <GlossaryLinkedText text={shortDef} />
               </p>
             </div>
             {term.zone && <ZoneBadge zone={term.zone} size="sm" />}
