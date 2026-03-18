@@ -2,6 +2,54 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.1.7",
+    date: "2026-03-18",
+    changes: {
+      added: [
+        {
+          text: "Auto-liens style Wikipedia : les termes techniques (VMA, seuil, VO2max, zones…) deviennent cliquables partout dans l'app avec un aperçu au survol",
+          textEn: "Wikipedia-style auto-linking: technical terms (VMA, threshold, VO2max, zones…) become clickable throughout the app with hover previews",
+          category: "SEO & UX",
+          categoryEn: "SEO & UX",
+        },
+        {
+          text: "Liens automatiques vers les articles d'apprentissage (périodisation, surcompensation, échauffement…) avec aperçu intégré",
+          textEn: "Automatic links to learning articles (periodization, supercompensation, warm-up…) with inline preview",
+          category: "SEO & UX",
+          categoryEn: "SEO & UX",
+        },
+        {
+          text: "Popover d'aperçu unifié desktop et mobile : croix pour fermer, lien vers la page complète",
+          textEn: "Unified preview popover for desktop and mobile: close button, link to full page",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      changed: [
+        {
+          text: "Suppression de dangerouslySetInnerHTML dans les articles au profit de composants React sécurisés",
+          textEn: "Replaced dangerouslySetInnerHTML in articles with secure React components",
+          category: "Sécurité",
+          categoryEn: "Security",
+        },
+      ],
+      fixed: [
+        {
+          text: "Le bouton retour sur les pages glossaire ramène maintenant à la page précédente (et non toujours au glossaire)",
+          textEn: "Back button on glossary pages now returns to the previous page (not always to the glossary)",
+          category: "Navigation",
+          categoryEn: "Navigation",
+        },
+        {
+          text: "Zones tactiles des boutons mobile agrandies à 44px (standard Apple HIG) sans débordement visuel",
+          textEn: "Mobile button touch targets enlarged to 44px (Apple HIG standard) without visual overflow",
+          category: "Accessibilité",
+          categoryEn: "Accessibility",
+        },
+      ],
+    },
+  },
+  {
     version: "0.1.6",
     date: "2026-03-17",
     changes: {
