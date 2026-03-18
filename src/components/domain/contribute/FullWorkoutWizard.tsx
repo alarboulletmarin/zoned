@@ -62,26 +62,26 @@ const TARGET_SYSTEMS: TargetSystem[] = [
 
 // Simple display labels (no extra i18n needed - these are technical terms)
 const SESSION_TYPE_LABELS: Record<SessionType, { fr: string; en: string }> = {
-  recovery: { fr: "Recuperation", en: "Recovery" },
+  recovery: { fr: "Récupération", en: "Recovery" },
   endurance: { fr: "Endurance", en: "Endurance" },
   tempo: { fr: "Tempo", en: "Tempo" },
   threshold: { fr: "Seuil", en: "Threshold" },
   vo2max: { fr: "VO2max", en: "VO2max" },
   speed: { fr: "Vitesse", en: "Speed" },
   long_run: { fr: "Sortie longue", en: "Long Run" },
-  hills: { fr: "Cotes", en: "Hills" },
+  hills: { fr: "Côtes", en: "Hills" },
   fartlek: { fr: "Fartlek", en: "Fartlek" },
-  race_specific: { fr: "Specifique course", en: "Race Specific" },
+  race_specific: { fr: "Spécifique course", en: "Race Specific" },
 };
 
 const TARGET_SYSTEM_LABELS: Record<TargetSystem, { fr: string; en: string }> = {
-  aerobic_base: { fr: "Base aerobie", en: "Aerobic Base" },
-  aerobic_power: { fr: "Puissance aerobie", en: "Aerobic Power" },
+  aerobic_base: { fr: "Base aérobie", en: "Aerobic Base" },
+  aerobic_power: { fr: "Puissance aérobie", en: "Aerobic Power" },
   lactate_threshold: { fr: "Seuil lactique", en: "Lactate Threshold" },
   vo2max: { fr: "VO2max", en: "VO2max" },
   speed: { fr: "Vitesse", en: "Speed" },
   strength: { fr: "Force", en: "Strength" },
-  race_specific: { fr: "Specifique course", en: "Race Specific" },
+  race_specific: { fr: "Spécifique course", en: "Race Specific" },
 };
 
 // ---------------------------------------------------------------------------

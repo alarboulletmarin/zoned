@@ -21,25 +21,25 @@ export const nutritionSections: NutritionSection[] = [
           {
             label: "Entraînement léger (30-60 min/jour)",
             labelEn: "Light training (30-60 min/day)",
-            value: "3-5g glucides/kg, 1.2-1.4g proteines/kg, 1g lipides/kg",
+            value: "3-5g glucides/kg, 1.2-1.4g protéines/kg, 1g lipides/kg",
             valueEn: "3-5g carbs/kg, 1.2-1.4g protein/kg, 1g fat/kg",
           },
           {
             label: "Entraînement modéré (60-90 min/jour)",
             labelEn: "Moderate training (60-90 min/day)",
-            value: "5-7g glucides/kg, 1.4-1.6g proteines/kg, 1-1.2g lipides/kg",
+            value: "5-7g glucides/kg, 1.4-1.6g protéines/kg, 1-1.2g lipides/kg",
             valueEn: "5-7g carbs/kg, 1.4-1.6g protein/kg, 1-1.2g fat/kg",
           },
           {
             label: "Entraînement intensif (90-120+ min/jour)",
             labelEn: "Heavy training (90-120+ min/day)",
-            value: "7-10g glucides/kg, 1.6-1.8g proteines/kg, 1-1.5g lipides/kg",
+            value: "7-10g glucides/kg, 1.6-1.8g protéines/kg, 1-1.5g lipides/kg",
             valueEn: "7-10g carbs/kg, 1.6-1.8g protein/kg, 1-1.5g fat/kg",
           },
           {
             label: "Double séance ou ultra",
             labelEn: "Double session or ultra",
-            value: "10-12g glucides/kg, 1.8-2.0g proteines/kg, 1.5g lipides/kg",
+            value: "10-12g glucides/kg, 1.8-2.0g protéines/kg, 1.5g lipides/kg",
             valueEn: "10-12g carbs/kg, 1.8-2.0g protein/kg, 1.5g fat/kg",
           },
         ],
@@ -115,18 +115,18 @@ export const nutritionSections: NutritionSection[] = [
             label: "Volume d'entraînement",
             labelEn: "Training volume",
             value: "Réduire à 30-50% du volume normal",
-            valueEn: "Reduce to 30-50% of normal volume",
+            valueEn: "Réduce to 30-50% of normal volume",
           },
           {
             label: "J-1 soir",
             labelEn: "D-1 evening",
-            value: "Repas riche en feculents, faible en fibres et graisses",
+            value: "Repas riche en féculents, faible en fibres et graisses",
             valueEn: "Starch-rich meal, low fiber and fat",
           },
           {
             label: "Jour J matin",
             labelEn: "Race day morning",
-            value: "1-4g glucides/kg, 3-4h avant le depart",
+            value: "1-4g glucides/kg, 3-4h avant le départ",
             valueEn: "1-4g carbs/kg, 3-4h before start",
           },
         ],
@@ -135,36 +135,36 @@ export const nutritionSections: NutritionSection[] = [
         type: "list",
         items: [
           {
-            text: "Aliments a privilegier : pates blanches, riz blanc, pain blanc, pommes de terre, bananes, compote, miel, sirop d'erable, confiture.",
+            text: "Aliments à privilégier : pâtes blanches, riz blanc, pain blanc, pommes de terre, bananes, compote, miel, sirop d'érable, confiture.",
             textEn: "Preferred foods: white pasta, white rice, white bread, potatoes, bananas, applesauce, honey, maple syrup, jam.",
           },
           {
-            text: "Reduire les fibres 24-48h avant : eviter legumineuses, cereales completes, crudites en exces.",
-            textEn: "Reduce fiber 24-48h before: avoid legumes, whole grains, excess raw vegetables.",
+            text: "Réduire les fibres 24-48h avant : éviter légumineuses, céréales complètes, crudités en excès.",
+            textEn: "Réduce fiber 24-48h before: avoid légumes, whole grains, excess raw vegetables.",
           },
           {
-            text: "Reduire les graisses : elles ralentissent la vidange gastrique et prennent la place des glucides.",
-            textEn: "Reduce fats: they slow gastric emptying and displace carbohydrate calories.",
+            text: "Réduire les graisses : elles ralentissent la vidange gastrique et prennent la place des glucides.",
+            textEn: "Réduce fats: they slow gastric emptying and displace carbohydrate calories.",
           },
           {
-            text: "Boire regulierement : chaque gramme de glycogene stocke s'accompagne de 3g d'eau.",
+            text: "Boire régulièrement : chaque gramme de glycogène stocké s'accompagne de 3g d'eau.",
             textEn: "Drink regularly: each gram of stored glycogen binds 3g of water.",
           },
         ],
       },
       {
         type: "tip",
-        text: "Exemple pour un coureur de 70kg : J-3 a J-1, viser 560-840g de glucides/jour. Cela represente environ 700g de pates cuites + 4 bananes + pain + boissons glucidiques par jour.",
+        text: "Exemple pour un coureur de 70kg : J-3 à J-1, viser 560-840g de glucides/jour. Cela représente environ 700g de pâtes cuites + 4 bananes + pain + boissons glucidiques par jour.",
         textEn: "Example for a 70kg runner: D-3 to D-1, aim for 560-840g carbs/day. That's roughly 700g cooked pasta + 4 bananas + bread + carb drinks per day.",
       },
       {
         type: "warning",
-        text: "La surcharge glucidique n'est utile que pour des efforts de plus de 90 minutes (semi-marathon, marathon, trail). Pour un 10km ou moins, votre alimentation normale avec un repas pre-course classique suffit.",
+        text: "La surcharge glucidique n'est utile que pour des efforts de plus de 90 minutes (semi-marathon, marathon, trail). Pour un 10km ou moins, votre alimentation normale avec un repas pré-course classique suffit.",
         textEn: "Carbohydrate loading is only useful for efforts over 90 minutes (half-marathon, marathon, trail). For a 10K or shorter, your normal diet with a standard pre-race meal is sufficient.",
       },
       {
         type: "paragraph",
-        text: "Il est normal de prendre 1-2kg pendant la phase de surcharge. Ce n'est pas de la graisse mais du glycogene et de l'eau qui seront utilises pendant la course.",
+        text: "Il est normal de prendre 1-2kg pendant la phase de surcharge. Ce n'est pas de la graisse mais du glycogène et de l'eau qui seront utilises pendant la course.",
         textEn: "It is normal to gain 1-2kg during the loading phase. This is not fat but glycogen and water that will be used during the race.",
       },
     ],
@@ -181,8 +181,8 @@ export const nutritionSections: NutritionSection[] = [
     content: [
       {
         type: "paragraph",
-        text: "Le repas d'avant-course complete les reserves de glycogene hepatique (foie) apres le jeune nocturne. Il doit etre pris 3-4 heures avant le depart pour permettre une digestion complete (ACSM Position Stand 2016).",
-        textEn: "The pre-race meal tops off liver glycogen stores after the overnight fast. It should be eaten 3-4 hours before the start to allow complete digestion (ACSM Position Stand 2016).",
+        text: "Le repas d'avant-course complète les réserves de glycogène hepatique (foie) après le jeûne nocturne. Il doit être pris 3-4 heures avant le départ pour permettre une digestion complète (ACSM Position Stand 2016).",
+        textEn: "The pre-race meal tops off liver glycogen stores after the overnight fast. It should be eaten 3-4 hours before the start to allow complète digestion (ACSM Position Stand 2016).",
       },
       {
         type: "table",
@@ -194,9 +194,9 @@ export const nutritionSections: NutritionSection[] = [
             valueEn: "1-4g/kg (e.g., 70-280g for 70kg)",
           },
           {
-            label: "Proteines",
+            label: "Protéines",
             labelEn: "Protein",
-            value: "Moderees, 15-25g max (faciles a digerer)",
+            value: "Modérées, 15-25g max (faciles a digerer)",
             valueEn: "Moderate, 15-25g max (easy to digest)",
           },
           {
@@ -208,7 +208,7 @@ export const nutritionSections: NutritionSection[] = [
           {
             label: "Fibres",
             labelEn: "Fiber",
-            value: "Faibles, < 10g (eviter les troubles digestifs)",
+            value: "Faibles, < 10g (éviter les troubles digestifs)",
             valueEn: "Low, < 10g (to avoid GI distress)",
           },
           {
@@ -223,7 +223,7 @@ export const nutritionSections: NutritionSection[] = [
         type: "list",
         items: [
           {
-            text: "Option 1 : Toast pain blanc + confiture + banane + the ou cafe (leger en cafeine).",
+            text: "Option 1 : Toast pain blanc + confiture + banane + the ou cafe (léger en cafeine).",
             textEn: "Option 1: White toast + jam + banana + tea or coffee (light caffeine).",
           },
           {
@@ -242,7 +242,7 @@ export const nutritionSections: NutritionSection[] = [
       },
       {
         type: "warning",
-        text: "A eviter le matin de la course : produits laitiers lourds (fromage, lait entier), aliments epices, excces de cafeine (> 3mg/kg), aliments riches en fibres (muesli complet, fruits secs en quantite), aliments que vous n'avez jamais testes.",
+        text: "A éviter le matin de la course : produits laitiers lourds (fromage, lait entier), aliments épicés, excès de cafeine (> 3mg/kg), aliments riches en fibres (muesli complet, fruits secs en quantite), aliments que vous n'avez jamais testes.",
         textEn: "Avoid on race morning: heavy dairy (cheese, whole milk), spicy foods, excess caffeine (> 3mg/kg), high-fiber foods (whole muesli, large amounts of dried fruit), any food you have never tested.",
       },
       {
@@ -252,7 +252,7 @@ export const nutritionSections: NutritionSection[] = [
       },
       {
         type: "paragraph",
-        text: "Si vous courez tot le matin et ne pouvez pas manger 3-4h avant, optez pour un petit dejeuner liquide (smoothie, boisson glucidique) 1-2h avant, avec 0.5-1g glucides/kg.",
+        text: "Si vous courez tôt le matin et ne pouvez pas manger 3-4h avant, optez pour un petit dejeuner liquide (smoothie, boisson glucidique) 1-2h avant, avec 0.5-1g glucides/kg.",
         textEn: "If you run early morning and cannot eat 3-4h before, opt for a liquid breakfast (smoothie, carb drink) 1-2h before, with 0.5-1g carbs/kg.",
       },
     ],
@@ -269,7 +269,7 @@ export const nutritionSections: NutritionSection[] = [
     content: [
       {
         type: "paragraph",
-        text: "Le ravitaillement pendant l'effort est determinant pour les performances sur des distances superieures a 60 minutes. Les recommandations sont basees sur Jeukendrup (2014) et la position de l'ACSM.",
+        text: "Le ravitaillement pendant l'effort est déterminant pour les performances sur des distances superieures a 60 minutes. Les recommandations sont basees sur Jeukendrup (2014) et la position de l'ACSM.",
         textEn: "Fueling during exercise is critical for performance in events lasting over 60 minutes. Recommendations are based on Jeukendrup (2014) and the ACSM Position Stand.",
       },
       {
@@ -278,7 +278,7 @@ export const nutritionSections: NutritionSection[] = [
           {
             label: "< 60 min (10km)",
             labelEn: "< 60 min (10K)",
-            value: "Eau uniquement. Rincage de bouche avec boisson glucidique.",
+            value: "Eau uniquement. Rinçage de bouche avec boisson glucidique.",
             valueEn: "Water only. Mouth rinse with carb drink.",
           },
           {
@@ -290,7 +290,7 @@ export const nutritionSections: NutritionSection[] = [
           {
             label: "90-150 min (semi-marathon)",
             labelEn: "90-150 min (half-marathon)",
-            value: "60g glucides/h. Commencer des les 20 premieres minutes.",
+            value: "60g glucides/h. Commencer des les 20 premières minutes.",
             valueEn: "60g carbs/h. Start within the first 20 minutes.",
           },
           {
@@ -305,7 +305,7 @@ export const nutritionSections: NutritionSection[] = [
         type: "list",
         items: [
           {
-            text: "Gels energetiques : ~25g de glucides par gel. Prendre avec 150-200ml d'eau (jamais avec une boisson energetique).",
+            text: "Gels énergétiques : ~25g de glucides par gel. Prendre avec 150-200ml d'eau (jamais avec une boisson énergétique).",
             textEn: "Energy gels: ~25g carbs per gel. Take with 150-200ml water (never with a sports drink).",
           },
           {
@@ -317,7 +317,7 @@ export const nutritionSections: NutritionSection[] = [
             textEn: "Bars and solid food: useful for ultra and trail. Chew slowly, favor tested foods.",
           },
           {
-            text: "Commencer le ravitaillement tot (20-25 min) : n'attendez pas la faim ou la baisse d'energie.",
+            text: "Commencer le ravitaillement tôt (20-25 min) : n'attendez pas la faim ou la baisse d'énergie.",
             textEn: "Start fueling early (20-25 min): do not wait for hunger or energy dip.",
           },
         ],
@@ -329,12 +329,12 @@ export const nutritionSections: NutritionSection[] = [
       },
       {
         type: "warning",
-        text: "Les troubles gastro-intestinaux sont la premiere cause d'abandon en marathon et ultra. Les facteurs de risque : AINS (ibuprofene), fibres, fructose en exces, deshydratation, et aliments non testes. Evitez les AINS pendant l'effort.",
+        text: "Les troubles gastro-intestinaux sont la première cause d'abandon en marathon et ultra. Les facteurs de risque : AINS (ibuprofene), fibres, fructose en exces, déshydratation, et aliments non testes. Évitez les AINS pendant l'effort.",
         textEn: "Gastrointestinal issues are the leading cause of DNF in marathons and ultras. Risk factors: NSAIDs (ibuprofen), fiber, excess fructose, dehydration, and untested foods. Avoid NSAIDs during exercise.",
       },
       {
         type: "paragraph",
-        text: "Pour les trails et ultras (> 4h), integrez des aliments sales (bretzels, bouillon, chips) pour maintenir l'appetit et l'apport en sodium. Alternez sucre et sale pour eviter la saturation gustative.",
+        text: "Pour les trails et ultras (> 4h), integrez des aliments sales (bretzels, bouillon, chips) pour maintenir l'appetit et l'apport en sodium. Alternez sucre et sale pour éviter la saturation gustative.",
         textEn: "For trails and ultras (> 4h), include salty foods (pretzels, broth, chips) to maintain appetite and sodium intake. Alternate sweet and salty to avoid palate fatigue.",
       },
     ],
@@ -345,13 +345,13 @@ export const nutritionSections: NutritionSection[] = [
   // ─────────────────────────────────────────────────────────
   {
     id: "hydration",
-    title: "Hydratation et electrolytes",
+    title: "Hydratation et électrolytes",
     titleEn: "Hydration & Electrolytes",
     icon: "Droplets",
     content: [
       {
         type: "paragraph",
-        text: "L'hydratation pendant l'effort est un equilibre delicat : la deshydratation degrade la performance, mais la surhydratation (hyponatremie) peut etre mortelle. Les recommandations actuelles (Sawka et al. 2007, ACSM) privilegient un plan individualise.",
+        text: "L'hydratation pendant l'effort est un équilibre délicat : la déshydratation dégrade la performance, mais la surhydratation (hyponatremie) peut-être mortelle. Les recommandations actuelles (Sawka et al. 2007, ACSM) privilégient un plan individualise.",
         textEn: "Hydration during exercise is a delicate balance: dehydration impairs performance, but overhydration (hyponatremia) can be fatal. Current recommendations (Sawka et al. 2007, ACSM) favor individualized plans.",
       },
       {
@@ -387,15 +387,15 @@ export const nutritionSections: NutritionSection[] = [
         type: "list",
         items: [
           {
-            text: "Estimez votre taux de sudation : pesez-vous avant et apres 1h de course. Chaque kg perdu = 1L de sueur.",
+            text: "Estimez votre taux de sudation : pesez-vous avant et après 1h de course. Chaque kg perdu = 1L de sueur.",
             textEn: "Estimate your sweat rate: weigh yourself before and after 1h of running. Each kg lost = 1L of sweat.",
           },
           {
-            text: "Buvez selon la soif ET le plan : la soif est un bon guide mais peut etre retardee par le froid ou l'intensite.",
+            text: "Buvez selon la soif ET le plan : la soif est un bon guide mais peut-être retardee par le froid ou l'intensité.",
             textEn: "Drink to thirst AND to plan: thirst is a good guide but can be delayed by cold or intensity.",
           },
           {
-            text: "En conditions chaudes (> 25°C), augmentez de 25-50% votre apport hydrique et commencez a boire plus tot.",
+            text: "En conditions chaudes (> 25°C), augmentez de 25-50% votre apport hydrique et commencez a boire plus tôt.",
             textEn: "In hot conditions (> 25°C/77°F), increase fluid intake by 25-50% and start drinking earlier.",
           },
           {
@@ -406,7 +406,7 @@ export const nutritionSections: NutritionSection[] = [
       },
       {
         type: "warning",
-        text: "L'hyponatremie (sodium sanguin trop bas par surhydratation) est plus dangereuse que la deshydratation moderee. Symptomes : nausees, confusion, maux de tete, prise de poids pendant l'effort. Ne buvez JAMAIS plus que votre taux de sudation.",
+        text: "L'hyponatremie (sodium sanguin trop bas par surhydratation) est plus dangereuse que la déshydratation modérée. Symptomes : nausées, confusion, maux de tête, prise de poids pendant l'effort. Ne buvez JAMAIS plus que votre taux de sudation.",
         textEn: "Hyponatremia (low blood sodium from overhydration) is more dangerous than moderate dehydration. Symptoms: nausea, confusion, headache, weight gain during exercise. NEVER drink more than your sweat rate.",
       },
       {
@@ -442,7 +442,7 @@ export const nutritionSections: NutritionSection[] = [
           {
             label: "0-30 min après l'effort",
             labelEn: "0-30 min post-exercise",
-            value: "1-1.2g glucides/kg + 0.3-0.4g proteines/kg",
+            value: "1-1.2g glucides/kg + 0.3-0.4g protéines/kg",
             valueEn: "1-1.2g carbs/kg + 0.3-0.4g protein/kg",
           },
           {
@@ -543,7 +543,7 @@ export const nutritionSections: NutritionSection[] = [
             label: "Calories totales",
             labelEn: "Total calories",
             value: "Réduire de 10-20% par rapport à la semaine normale",
-            valueEn: "Reduce by 10-20% compared to normal week",
+            valueEn: "Réduce by 10-20% compared to normal week",
           },
         ],
       },
@@ -556,7 +556,7 @@ export const nutritionSections: NutritionSection[] = [
           },
           {
             text: "Privilégier les protéines de haute qualité : oeufs, poisson, volaille, produits laitiers, légumineuses + céréales.",
-            textEn: "Favor high-quality protein: eggs, fish, poultry, dairy, legumes + grains.",
+            textEn: "Favor high-quality protein: eggs, fish, poultry, dairy, légumes + grains.",
           },
           {
             text: "Maintenir l'hydratation (30-35ml/kg/jour) même si l'effort est réduit. Le processus de réparation nécessite de l'eau.",
@@ -581,12 +581,12 @@ export const nutritionSections: NutritionSection[] = [
       {
         type: "warning",
         text: "Ne coupez pas drastiquement les calories en semaine de récupération. Le corps répare les tissus, reconstruit le glycogène et adapte les systèmes cardiovasculaire et musculaire. Un déficit trop important compromet ces adaptations.",
-        textEn: "Do not drastically cut calories during recovery week. The body is repairing tissues, rebuilding glycogen, and adapting cardiovascular and muscular systems. Too large a deficit compromises these adaptations.",
+        textEn: "Do not drastically cut calories during recovery week. The body is repairing tissues, rebuilding glycogen, and adapting cardiovascular and muscular systems. Too large a déficit compromises these adaptations.",
       },
       {
         type: "paragraph",
         text: "Si vous ressentez des fringales inhabituelles pendant la récupération, écoutez votre corps : c'est souvent le signe que la réparation est active et que vos besoins énergétiques sont plus élevés que prévu.",
-        textEn: "If you experience unusual cravings during recovery, listen to your body: it is often a sign that repair is active and your energy needs are higher than expected.",
+        textEn: "If you expérience unusual cravings during recovery, listen to your body: it is often a sign that repair is active and your energy needs are higher than expected.",
       },
     ],
   },

@@ -14,14 +14,14 @@ C'est le [[progressive-overload]] - la surcharge progressive. Un principe simple
 
 Ton corps est une machine d'adaptation remarquable. Quand tu lui imposes un stress (une séance d'entraînement), il repond en devenant plus fort pour mieux gerer ce stress la prochaine fois. C'est la [[surcompensation]].
 
-Mais cette adaptation a une limite : une fois que ton corps s'est adapte a un stimulus, ce meme stimulus ne le fera plus progresser. Tu dois augmenter la difficulte.
+Mais cette adaptation a une limite : une fois que ton corps s'est adapte a un stimulus, ce même stimulus ne le fera plus progresser. Tu dois augmenter la difficulté.
 
 ### Le cycle vertueux
 
 1. **Tu imposes un stress** : séance d'entraînement
 2. **Ton corps s'adapte** : il devient plus fort/endurant
-3. **Le meme stress devient insuffisant** : ton corps le gere facilement
-4. **Tu augmentes le stress** : retour a l'etape 1
+3. **Le même stress devient insuffisant** : ton corps le gere facilement
+4. **Tu augmentes le stress** : retour a l'étape 1
 
 C'est un escalier qu'on monte marche par marche, pas un ascenseur express.
 
@@ -29,7 +29,7 @@ C'est un escalier qu'on monte marche par marche, pas un ascenseur express.
 
 ## Les quatre dimensions de la surcharge
 
-La surcharge progressive ne se resume pas a "courir plus". Tu peux augmenter la difficulte sur quatre axes :
+La surcharge progressive ne se resume pas a "courir plus". Tu peux augmenter la difficulté sur quatre axes :
 
 ### 1. Le volume
 
@@ -43,9 +43,9 @@ Le plus evident : courir plus de kilometres ou plus longtemps.
 **Avantages :** Developpe l'endurance fondamentale, renforce les structures
 **Limites :** Le plus risque pour les blessures si augmente trop vite
 
-### 2. L'intensite
+### 2. L'intensité
 
-Courir plus vite ou a des pourcentages plus eleves de tes zones.
+Courir plus vite ou a des pourcentages plus élevés de tes zones.
 
 **Exemples :**
 - Passer les fractions de 90% VMA a 95% VMA
@@ -53,11 +53,11 @@ Courir plus vite ou a des pourcentages plus eleves de tes zones.
 - Ajouter une portion a allure course dans la sortie longue
 
 **Avantages :** Developpe la vitesse, le seuil lactique
-**Limites :** Tres exigeant, necessite plus de récupération
+**Limites :** Tres exigeant, nécessite plus de récupération
 
-### 3. La frequence
+### 3. La fréquence
 
-S'entrainer plus souvent.
+S'entraîner plus souvent.
 
 **Exemples :**
 - Passer de 3 a 4 séances par semaine
@@ -67,39 +67,39 @@ S'entrainer plus souvent.
 **Avantages :** Augmente le temps total d'adaptation
 **Limites :** Moins de récupération entre les séances
 
-### 4. La densite
+### 4. La densité
 
-Reduire les temps de récupération ou augmenter le travail par unite de temps.
+Réduire les temps de récupération ou augmenter le travail par unite de temps.
 
 **Exemples :**
 - Fractionne : passer de 2min de recup entre les fractions a 1min30
-- Tempo : enchainer les blocs au lieu de recuperer entre
-- Seance : reduire l'échauffement/retour au calme pour plus de travail effectif
+- Tempo : enchaîner les blocs au lieu de récupérer entre
+- Séance : réduire l'échauffement/retour au calme pour plus de travail effectif
 
-**Avantages :** Ameliore la capacite de récupération pendant l'effort
-**Limites :** Augmente significativement la difficulte perceptuelle
+**Avantages :** Ameliore la capacité de récupération pendant l'effort
+**Limites :** Augmente significativement la difficulté perceptuelle
 
 ---
 
-## La regle des 10%
+## La règle des 10%
 
-> 📌 La regle des 10% : n'augmente pas ton volume hebdomadaire de plus de 10% par semaine. C'est un garde-fou simple et efficace pour eviter les blessures de surcharge.
+> 📌 La règle des 10% : n'augmente pas ton volume hebdomadaire de plus de 10% par semaine. C'est un garde-fou simple et efficace pour éviter les blessures de surcharge.
 
-Une recommandation classique : n'augmente pas ta charge de plus de 10% par semaine. Cette regle concerne principalement le volume.
+Une recommandation classique : n'augmente pas ta charge de plus de 10% par semaine. Cette règle concerne principalement le volume.
 
 **Exemple :**
 - Semaine 1 : 40 km
 - Semaine 2 : 44 km max (+10%)
 - Semaine 3 : 48 km max (+10%)
-- Semaine 4 : decharge a 35-40 km
+- Semaine 4 : décharge a 35-40 km
 
 ### Pourquoi 10% ?
 
 Ce seuil vient de l'observation que des augmentations plus importantes sont correlees avec un risque accru de blessure, notamment chez les coureurs recreatifs.
 
-### Limites de la regle
+### Limites de la règle
 
-- Elle s'applique au volume, pas a l'intensite
+- Elle s'applique au volume, pas a l'intensité
 - Les coureurs experimentes peuvent parfois augmenter plus rapidement
 - A faible volume, 10% represente peu (4 km sur 40 km)
 - Elle ne tient pas compte des facteurs individuels
@@ -125,19 +125,19 @@ La plupart des plans suivent un pattern 3:1 ou 2:1 :
 **Pattern 2:1 :**
 - Semaine 1 : charge augmentee
 - Semaine 2 : charge maximale
-- Semaine 3 : decharge
+- Semaine 3 : décharge
 
 Le pattern 2:1 convient mieux aux coureurs plus ages ou sujets aux blessures.
 
 ### L'importance du deload
 
-> 💡 Programme tes semaines de deload a l'avance (toutes les 3-4 semaines). Elles ne sont pas negociables : c'est pendant le repos que les adaptations se consolident.
+> 💡 Programme tes semaines de deload a l'avance (toutes les 3-4 semaines). Elles ne sont pas négociables : c'est pendant le repos que les adaptations se consolident.
 
 La semaine de [[deload]] n'est pas une perte de temps. C'est pendant cette phase que :
-- Les tissus se reparent completement
-- Les reserves se reconstituent
+- Les tissus se réparent complètement
+- Les réserves se reconstituent
 - Les adaptations se consolident
-- Le systeme nerveux recupere
+- Le système nerveux récupéré
 
 Sans deload, tu accumules une dette de fatigue qui finit par te rattraper.
 
@@ -149,17 +149,17 @@ Comment savoir si tu es pret pour la prochaine marche ?
 
 ### Signaux positifs
 
-- Les séances te semblent faciles (meme allure, moins d'effort percu)
-- Ta frequence cardiaque a effort egal diminue
+- Les séances te semblent faciles (même allure, moins d'effort percu)
+- Ta fréquence cardiaque a effort egal diminue
 - Tu recuperes plus vite entre les séances
-- Tu termines les séances sans etre completement epuise
-- Tes temps sur des parcours de reference s'améliorent
+- Tu termines les séances sans être complètement épuisé
+- Tes temps sur des parcours de référence s'améliorent
 
 ### Tu es pret pour une surcharge quand...
 
 Tu peux cocher plusieurs de ces cases :
 - [ ] Derniere semaine bien assimilee
-- [ ] Sommeil et energie corrects
+- [ ] Sommeil et énergie corrects
 - [ ] Pas de douleur persistante
 - [ ] Motivation intacte
 - [ ] FC de repos normale
@@ -172,11 +172,11 @@ A l'inverse, certains signaux indiquent que tu forces trop :
 
 ### Signaux physiques
 
-- **Fatigue persistante** : meme apres une bonne nuit, tu es epuise
-- **Douleurs articulaires ou tendineuses** : qui ne disparaissent pas apres l'échauffement
+- **Fatigue persistante** : même après une bonne nuit, tu es épuisé
+- **Douleurs articulaires ou tendineuses** : qui ne disparaissent pas après l'échauffement
 - **Performances en baisse** : malgre l'entraînement, tu ralentis
-- **Maladies frequentes** : rhumes, infections a repetition
-- **Troubles du sommeil** : difficulte a s'endormir ou reveils nocturnes
+- **Maladies fréquentes** : rhumes, infections a répétition
+- **Troubles du sommeil** : difficulté a s'endormir ou réveils nocturnes
 
 ### Signaux psychologiques
 
@@ -185,17 +185,17 @@ A l'inverse, certains signaux indiquent que tu forces trop :
 - **Apprehension** : tu redoutes les séances
 - **Obsession** : tu ne penses qu'aux chiffres
 
-Si tu reconnais plusieurs de ces signes, tu es peut-etre en [[overreaching-non-fonctionnel]] ou en route vers le [[overtraining]]. La solution : reculer d'un cran, pas forcer davantage.
+Si tu reconnais plusieurs de ces signes, tu es peut-être en [[overreaching-non-fonctionnel]] ou en route vers le [[overtraining]]. La solution : reculer d'un cran, pas forcer davantage.
 
 ---
 
 ## Application pratique : progression sur 3 mois
 
-Voici un exemple de surcharge progressive pour un coureur intermediaire visant a passer de 35 km/semaine a 50 km/semaine sur 12 semaines :
+Voici un exemple de surcharge progressive pour un coureur intermédiaire visant a passer de 35 km/semaine a 50 km/semaine sur 12 semaines :
 
-| Semaine | Volume | Seances | Note |
+| Semaine | Volume | Séances | Note |
 |---------|--------|---------|------|
-| 1 | 35 km | 4 | Base de depart |
+| 1 | 35 km | 4 | Base de départ |
 | 2 | 38 km | 4 | +8% |
 | 3 | 42 km | 4 | +10% |
 | 4 | 35 km | 4 | Deload |
@@ -212,19 +212,19 @@ Remarque : les progressions ne sont pas parfaitement lineaires. On avance par pa
 
 ---
 
-## Erreurs frequentes
+## Erreurs fréquentes
 
-### Erreur 1 : Tout augmenter en meme temps
+### Erreur 1 : Tout augmenter en même temps
 
-> ⚠️ Augmenter volume, intensite et frequence en meme temps est la recette garantie pour la blessure ou l'epuisement. N'augmente qu'une dimension a la fois.
+> ⚠️ Augmenter volume, intensité et fréquence en même temps est la recette garantie pour la blessure ou l'épuisement. N'augmente qu'une dimension a la fois.
 
-Tu veux plus de volume ET plus d'intensite ET plus de frequence. Trop de stress d'un coup = blessure ou epuisement.
+Tu veux plus de volume ET plus d'intensité ET plus de fréquence. Trop de stress d'un coup = blessure ou épuisement.
 
 **Solution :** N'augmente qu'une dimension a la fois.
 
 ### Erreur 2 : Ignorer les signaux de fatigue
 
-"J'ai mal mais le plan dit d'augmenter." Le plan ne connait pas ton corps.
+"J'ai mal mais le plan dit d'augmenter." Le plan ne connaît pas ton corps.
 
 **Solution :** Adapte le plan a tes sensations, pas l'inverse.
 
@@ -232,26 +232,26 @@ Tu veux plus de volume ET plus d'intensite ET plus de frequence. Trop de stress 
 
 "Mon ami court 80 km/semaine, je devrais pouvoir aussi." Chaque corps est different.
 
-**Solution :** Ta seule reference, c'est ton toi du passe.
+**Solution :** Ta seule référence, c'est ton toi du passe.
 
 ### Erreur 4 : Oublier de decharger
 
-Semaine apres semaine, tu augmentes sans jamais souffler.
+Semaine après semaine, tu augmentes sans jamais souffler.
 
-**Solution :** Programme tes semaines de deload a l'avance. Elles ne sont pas negociables.
+**Solution :** Programme tes semaines de deload a l'avance. Elles ne sont pas négociables.
 
 ---
 
-## La patience comme strategie
+## La patience comme stratégie
 
-La surcharge progressive est un marathon, pas un sprint (ironiquement). Les coureurs qui progressent le plus sur le long terme sont ceux qui acceptent une progression lente et reguliere.
+La surcharge progressive est un marathon, pas un sprint (ironiquement). Les coureurs qui progressent le plus sur le long terme sont ceux qui acceptent une progression lente et régulière.
 
 **Quelques chiffres :**
 - Un coureur recreatif peut progresser de 5-10% par an sur ses temps de course
 - Il faut 2-3 ans pour atteindre un plateau de kilometrage "mature"
 - Les adaptations structurelles (tendons, os) prennent plus de temps que les adaptations cardiovasculaires
 
-La tentation de forcer est forte. Mais chaque blessure te fait perdre des semaines, voire des mois. Mieux vaut progresser doucement et regulierement que vite et par a-coups.`,
+La tentation de forcer est forte. Mais chaque blessure te fait perdre des semaines, voire des mois. Mieux vaut progresser doucement et régulièrement que vite et par a-coups.`,
   contentEn: `## The fundamental principle of progression
 
 Why do we progress? Because our body adapts to the constraints we impose on it. But there's a catch: once adapted, you need to increase the constraint to keep progressing.
@@ -482,7 +482,7 @@ You want more volume AND more intensity AND more frequency. Too much stress at o
 
 "My friend runs 80 km/week, I should be able to as well." Every body is different.
 
-**Solution:** Your only reference is your past self.
+**Solution:** Your only référence is your past self.
 
 ### Mistake 4: Forgetting to deload
 

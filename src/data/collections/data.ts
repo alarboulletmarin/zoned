@@ -20,18 +20,18 @@ export const collections: Collection[] = [
     isProgression: true,
     workoutIds: [
       "REC-002", // Recup marche-course (walk-run intro)
-      "REC-001", // Footing recuperation (easy jog)
+      "REC-001", // Footing récupération (easy jog)
       "END-001", // Endurance fondamentale
       "END-007", // Endurance en groupe
-      "END-003", // Endurance longue debutant
+      "END-003", // Endurance longue débutant
       "FAR-001", // Fartlek libre (playful speed intro)
       "END-008", // Endurance regeneratrice
       "VMA-027", // Lignes droites (gentle speed strides)
       "TMP-002", // Tempo court (first tempo taste)
-      "SL-008", // Sortie longue debutant
+      "SL-008", // Sortie longue débutant
     ],
     tags: [
-      "debutant",
+      "débutant",
       "beginner",
       "progression",
       "marche",
@@ -52,7 +52,7 @@ export const collections: Collection[] = [
     gradient: "from-teal-400 to-cyan-500",
     isProgression: false,
     workoutIds: [
-      "REC-004", // Recuperation nature
+      "REC-004", // Récupération nature
       "REC-010", // Yoga-running
       "REC-005", // Regeneration active
       "END-001", // Endurance fondamentale
@@ -62,7 +62,7 @@ export const collections: Collection[] = [
       "END-009", // Endurance trail
     ],
     tags: [
-      "bien-etre",
+      "bien-être",
       "wellness",
       "zen",
       "detente",
@@ -85,11 +85,11 @@ export const collections: Collection[] = [
     isProgression: true,
     workoutIds: [
       "REC-002", // Recup marche-course
-      "REC-001", // Footing recuperation
+      "REC-001", // Footing récupération
       "REC-005", // Regeneration active
       "END-008", // Endurance regeneratrice
       "END-001", // Endurance fondamentale
-      "END-003", // Endurance longue debutant
+      "END-003", // Endurance longue débutant
       "FAR-001", // Fartlek libre
       "VMA-027", // Lignes droites
     ],
@@ -111,20 +111,20 @@ export const collections: Collection[] = [
     description:
       "Le protocole idéal pour récupérer après une compétition et relancer l'entraînement.",
     descriptionEn:
-      "The ideal protocol to recover after a race and restart training",
+      "The idéal protocol to recover after a race and restart training",
     icon: "RefreshCw",
     gradient: "from-sky-400 to-blue-500",
     isProgression: true,
     workoutIds: [
       "REC-003", // Decrassage post-course
-      "REC-001", // Footing recuperation
+      "REC-001", // Footing récupération
       "REC-005", // Regeneration active
       "REC-009", // Regeneration longue
       "END-008", // Endurance regeneratrice
       "END-001", // Endurance fondamentale
     ],
     tags: [
-      "recuperation",
+      "récupération",
       "recovery",
       "post-race",
       "competition",
@@ -144,16 +144,16 @@ export const collections: Collection[] = [
     gradient: "from-violet-500 to-purple-600",
     isProgression: true,
     workoutIds: [
-      "END-001",  // Endurance fondamentale (volume reduction)
+      "END-001",  // Endurance fondamentale (volume réduction)
       "THR-015",  // Seuil pre-race
       "VMA-020",  // VMA pre-race
       "TMP-015",  // Tempo pre-race
       "FAR-008",  // Fartlek pre-course
-      "MIX-010",  // Seance pre-competition
+      "MIX-010",  // Séance pre-competition
       "REC-007",  // Recup pre-competition
       "RP-008",   // Allure pre-course
       "SL-012",   // Sortie longue pre-competition
-      "RP-016",   // Echauffement simulation course
+      "RP-016",   // Échauffement simulation course
     ],
     tags: [
       "affutage",
@@ -167,8 +167,8 @@ export const collections: Collection[] = [
 
   // ── Iconic Workouts ───────────────────────────────────────
   {
-    id: "seances-mythiques",
-    slug: "seances-mythiques",
+    id: "séances-mythiques",
+    slug: "séances-mythiques",
     name: "Séances mythiques",
     nameEn: "Legendary Workouts",
     description:
@@ -183,7 +183,7 @@ export const collections: Collection[] = [
       "RP-009",   // Yasso 800s
       "FAR-009",  // Moneghetti Fartlek
       "TMP-013",  // Tempo Kenyan
-      "HIL-005",  // Cotes Kenyan
+      "HIL-005",  // Côtes Kenyan
       "THR-016",  // Double seuil norvegien
       "VMA-028",  // 6x1km australien
       "MIX-011",  // 10-20-30 Bangsbo classique
@@ -196,7 +196,7 @@ export const collections: Collection[] = [
       "classique",
       "classic",
       "elite",
-      "reference",
+      "référence",
       "billat",
       "yasso",
       "kenyan",
@@ -223,7 +223,7 @@ export const collections: Collection[] = [
       "TMP-001",  // Tempo classique
       "VMA-006",  // 1min/1min
       "THR-002",  // Seuil fractionne
-      "VMA-018",  // VMA specifique 5K
+      "VMA-018",  // VMA spécifique 5K
       "RP-004",   // Allure 5K
       "RP-015",   // 6km confiance 10K (builds 5K speed endurance)
     ],
@@ -308,7 +308,7 @@ export const collections: Collection[] = [
       "TMP-008",  // Tempo marathon
       "RP-001",   // Allure marathon
       "SL-005",   // Sortie longue vallonnee
-      "SL-002",   // Sortie longue allure specifique
+      "SL-002",   // Sortie longue allure spécifique
       "RP-007",   // Allure marathon longue
       "RP-011",   // Cutdown marathon
       "SL-010",   // Sortie longue simulation course
@@ -331,7 +331,7 @@ export const collections: Collection[] = [
     description:
       "Construisez l'endurance extrême et la résistance nécessaires pour l'ultra-distance.",
     descriptionEn:
-      "Build the extreme endurance and resilience needed for ultra-distance",
+      "Build the extreme endurance and résilience needed for ultra-distance",
     icon: "Mountain",
     gradient: "from-emerald-600 to-teal-700",
     difficulty: "elite",
@@ -342,8 +342,8 @@ export const collections: Collection[] = [
       "SL-006",   // Sortie longue trail
       "SL-005",   // Sortie longue vallonnee
       "END-009",  // Endurance trail
-      "HIL-003",  // Cotes longues
-      "HIL-010",  // Cotes pre-trail
+      "HIL-003",  // Côtes longues
+      "HIL-010",  // Côtes pre-trail
       "SL-009",   // Sortie longue a jeun
       "SL-011",   // Back-to-back jour 2
       "RP-005",   // Allure trail
@@ -375,11 +375,11 @@ export const collections: Collection[] = [
     isProgression: true,
     workoutIds: [
       "VMA-027",  // Lignes droites (strides warm-up)
-      "VMA-007",  // VMA courte debutant
+      "VMA-007",  // VMA courte débutant
       "VMA-012",  // 20/20
       "VMA-001",  // 30/30 classique
       "VMA-006",  // 1min/1min
-      "VMA-010",  // 500m repetes
+      "VMA-010",  // 500m répétés
       "VMA-008",  // VMA pyramide
       "VMA-013",  // VMA 2min
       "VMA-003",  // 1000m VMA

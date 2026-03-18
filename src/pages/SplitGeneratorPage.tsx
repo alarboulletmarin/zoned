@@ -151,7 +151,7 @@ export function SplitGeneratorPage() {
         }
         description={
           isEn
-            ? "Generate per-km or per-mile splits for your target race time with even, negative, or positive split strategies."
+            ? "Generate per-km or per-mile splits for your target race time with even, negative, or positive split stratégies."
             : "Générez vos temps de passage par km pour votre objectif chrono avec des stratégies de splits réguliers, négatifs ou positifs."
         }
         canonical="/calculateurs/splits"
@@ -264,7 +264,7 @@ export function SplitGeneratorPage() {
               </label>
               <div className="flex gap-2">
                 {([
-                  { value: "even" as Strategy, label: isEn ? "Even" : "Regulier", labelLong: isEn ? "Even splits" : "Splits reguliers" },
+                  { value: "even" as Strategy, label: isEn ? "Even" : "Régulier", labelLong: isEn ? "Even splits" : "Splits réguliers" },
                   { value: "negative" as Strategy, label: isEn ? "Negative" : "Negatif", labelLong: isEn ? "Negative splits" : "Splits negatifs" },
                   { value: "positive" as Strategy, label: isEn ? "Positive" : "Positif", labelLong: isEn ? "Positive splits" : "Splits positifs" },
                 ] as const).map((s) => (
@@ -287,15 +287,15 @@ export function SplitGeneratorPage() {
                 {strategy === "even" &&
                   (isEn
                     ? "All splits at the same pace."
-                    : "Tous les splits a la meme allure.")}
+                    : "Tous les splits à la même allure.")}
                 {strategy === "negative" &&
                   (isEn
                     ? "Start slower, finish faster (-2% to +2%)."
-                    : "Depart plus lent, finish plus rapide (-2% a +2%).")}
+                    : "Départ plus lent, finish plus rapide (-2% à +2%).")}
                 {strategy === "positive" &&
                   (isEn
                     ? "Start faster, finish slower (+2% to -2%)."
-                    : "Depart plus rapide, finish plus lent (+2% a -2%).")}
+                    : "Départ plus rapide, finish plus lent (+2% à -2%).")}
               </p>
             </div>
           </CardContent>
@@ -408,7 +408,7 @@ export function SplitGeneratorPage() {
             <Info className="size-4 shrink-0" />
             {isEn
               ? "Enter a distance and target time to generate your splits."
-              : "Entrez une distance et un temps cible pour generer vos splits."}
+              : "Entrez une distance et un temps cible pour générer vos splits."}
           </div>
         )}
       </div>

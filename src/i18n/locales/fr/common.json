@@ -42,7 +42,7 @@
     "pdf": "Document (PDF)",
     "garmin": "Garmin (FIT)",
     "selectDateTime": "Choisir date et heure",
-    "download": "Telecharger",
+    "download": "Télécharger",
     "success": {
       "calendar": "Événement calendrier exporté",
       "image": "Image exportée avec succès",
@@ -59,7 +59,7 @@
   "quiz": {
     "title": "Quiz Rapide",
     "subtitle": "Trouvez la séance idéale en 3 questions",
-    "step": "Etape",
+    "step": "Étape",
     "back": "Retour",
     "restart": "Recommencer",
     "results": "Vos séances recommandées",

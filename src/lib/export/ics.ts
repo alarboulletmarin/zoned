@@ -19,14 +19,14 @@ function formatWorkoutDescription(workout: WorkoutTemplate, isEn: boolean): stri
   lines.push("");
 
   // Structure
-  lines.push(isEn ? "=== WARMUP ===" : "=== ECHAUFFEMENT ===");
+  lines.push(isEn ? "=== WARMUP ===" : "=== ÉCHAUFFEMENT ===");
   for (const block of workout.warmupTemplate) {
     const desc = isEn && block.descriptionEn ? block.descriptionEn : block.description;
     lines.push(`- ${desc}`);
   }
   lines.push("");
 
-  lines.push(isEn ? "=== MAIN SET ===" : "=== CORPS DE SEANCE ===");
+  lines.push(isEn ? "=== MAIN SET ===" : "=== CORPS DE SÉANCE ===");
   for (const block of workout.mainSetTemplate) {
     const desc = isEn && block.descriptionEn ? block.descriptionEn : block.description;
     const zone = block.zone ? ` (${block.zone})` : "";

@@ -4,11 +4,11 @@ import type { ArticleContent } from "../types";
 const content: ArticleContent = {
   content: `## Pourquoi planifier son entraînement
 
-Courir au feeling, ca marche... un temps. Tu progresses pendant quelques mois, puis tu stagnes. Tu te blesses. Tu perds la motivation. La periodisation, c'est exactement l'inverse : une approche structuree qui organise ton entraînement dans le temps pour maximiser tes adaptations et arriver au top de ta forme le jour J.
+Courir au feeling, ça marche... un temps. Tu progresses pendant quelques mois, puis tu stagnes. Tu te blesses. Tu perds la motivation. La periodisation, c'est exactement l'inverse : une approche structurée qui organise ton entraînement dans le temps pour maximiser tes adaptations et arriver au top de ta forme le jour J.
 
-Le principe est simple : ton corps ne peut pas tout developper en meme temps. Si tu travailles l'endurance, la vitesse, et la force simultanement avec la meme intensite, tu dilues tes efforts. La periodisation consiste a concentrer tes ressources sur des qualites specifiques, dans un ordre logique, pour construire une performance solide.
+Le principe est simple : ton corps ne peut pas tout développer en même temps. Si tu travailles l'endurance, la vitesse, et la force simultanement avec la même intensité, tu dilues tes efforts. La periodisation consiste a concentrer tes ressources sur des qualités spécifiques, dans un ordre logique, pour construire une performance solide.
 
-> 📌 La periodisation repose sur un principe cle : concentrer ses efforts sur une qualite a la fois, dans un ordre logique, plutot que tout travailler en meme temps.
+> 📌 La periodisation repose sur un principe clé : concentrer ses efforts sur une qualité a la fois, dans un ordre logique, plutôt que tout travailler en même temps.
 
 ---
 
@@ -18,11 +18,11 @@ La periodisation s'articule autour de trois niveaux d'organisation, comme des po
 
 ### Le macrocycle : la vision d'ensemble
 
-Le [[macrocycle]] represente la periode complete de preparation vers un objectif majeur. Pour un marathon de printemps, ton macrocycle pourrait s'etendre de novembre a avril, soit environ 20 semaines.
+Le [[macrocycle]] represente la periode complète de preparation vers un objectif majeur. Pour un marathon de printemps, ton macrocycle pourrait s'etendre de novembre a avril, soit environ 20 semaines.
 
-C'est a cette echelle que tu definis tes grandes phases et que tu places tes courses intermediaires. Un macrocycle bien construit alterne des periodes de charge et de récupération, avec une montee progressive vers l'objectif.
+C'est a cette échelle que tu définis tes grandes phases et que tu places tes courses intermédiaires. Un macrocycle bien construit alterne des periodes de charge et de récupération, avec une montee progressive vers l'objectif.
 
-La duree typique d'un macrocycle varie selon l'objectif :
+La durée typique d'un macrocycle varie selon l'objectif :
 - **10 km** : 8-12 semaines
 - **Semi-marathon** : 10-14 semaines
 - **Marathon** : 16-20 semaines
@@ -30,22 +30,22 @@ La duree typique d'un macrocycle varie selon l'objectif :
 
 ### Le mesocycle : les blocs d'entraînement
 
-Le [[mesocycle]] est un bloc de 3 a 6 semaines ayant un objectif de developpement specifique. Chaque mesocycle se concentre sur une qualite particuliere : endurance de base, travail au seuil, vitesse specifique...
+Le [[mesocycle]] est un bloc de 3 a 6 semaines ayant un objectif de développement spécifique. Chaque mesocycle se concentre sur une qualité particuliere : endurance de base, travail au seuil, vitesse spécifique...
 
 La structure classique d'un mesocycle suit un pattern de charge progressive :
-- **Pattern 3:1** : 3 semaines de charge croissante + 1 semaine de decharge
-- **Pattern 2:1** : 2 semaines de charge + 1 semaine de decharge (pour coureurs plus ages ou sujet aux blessures)
+- **Pattern 3:1** : 3 semaines de charge croissante + 1 semaine de décharge
+- **Pattern 2:1** : 2 semaines de charge + 1 semaine de décharge (pour coureurs plus ages ou sujet aux blessures)
 
 Cette alternance charge/récupération est essentielle. C'est pendant les semaines de [[deload]] que ton corps consolide les adaptations.
 
-> 💡 Adopte le pattern 3:1 pour commencer : 3 semaines de charge progressive suivies d'1 semaine de decharge. C'est le format le plus eprouve et le plus simple a suivre.
+> 💡 Adopte le pattern 3:1 pour commencer : 3 semaines de charge progressive suivies d'1 semaine de décharge. C'est le format le plus éprouvé et le plus simple a suivre.
 
 ### Le microcycle : la semaine type
 
-Le [[microcycle]] correspond generalement a une semaine d'entraînement. Il definit l'agencement des séances, leur type, et les jours de repos.
+Le [[microcycle]] correspond généralement a une semaine d'entraînement. Il definit l'agencement des séances, leur type, et les jours de repos.
 
-Un microcycle equilibre alterne intelligemment :
-- Séances de qualite (fractionne, seuil, tempo)
+Un microcycle équilibre alterne intelligemment :
+- Séances de qualité (fractionne, seuil, tempo)
 - Séances d'endurance facile
 - Jours de repos ou récupération active
 
@@ -55,58 +55,58 @@ L'enjeu est de placer les séances dures quand tu es frais, et de permettre suff
 
 ## Les quatre phases de preparation
 
-Un macrocycle complet se decompose en phases successives, chacune avec ses priorites.
+Un macrocycle complet se décompose en phases successives, chacune avec ses priorites.
 
-### Phase 1 : Preparation generale (base building)
+### Phase 1 : Preparation générale (base building)
 
-C'est la fondation. Tu construis ta [[endurance-fondamentale]], tu renforces tes structures (tendons, muscles, os), et tu developpes ta capacite aerobie.
+C'est la fondation. Tu construis ta [[endurance-fondamentale]], tu renforces tes structures (tendons, muscles, os), et tu developpes ta capacité aérobie.
 
-**Caracteristiques :**
+**Caractéristiques :**
 - 80-85% du volume en [[zone-2]]
 - Augmentation progressive du volume (max +10%/semaine)
 - Peu ou pas de séances intenses
 - Travail technique et renforcement musculaire
 
-**Duree typique :** 6-8 semaines
+**Durée typique :** 6-8 semaines
 
-L'erreur classique est de bruler cette phase pour passer directement aux séances "qui font mal". Mais sans base solide, les séances intenses ne s'appuient sur rien.
+L'erreur classique est de brûler cette phase pour passer directement aux séances "qui font mal". Mais sans base solide, les séances intenses ne s'appuient sur rien.
 
-### Phase 2 : Preparation specifique
+### Phase 2 : Preparation spécifique
 
-Tu commences a introduire du travail a des intensites plus elevees, specifiques a ton objectif.
+Tu commences a introduire du travail a des intensites plus élevées, spécifiques a ton objectif.
 
-**Caracteristiques :**
+**Caractéristiques :**
 - Introduction progressive du travail au [[seuil-lactique]]
 - Premieres séances de fractionne en [[zone-5]]
-- Sorties longues avec portions a allure specifique
-- Volume qui se stabilise ou augmente legerement
+- Sorties longues avec portions a allure spécifique
+- Volume qui se stabilise ou augmente légèrement
 
-**Duree typique :** 6-8 semaines
+**Durée typique :** 6-8 semaines
 
-C'est la phase ou tu "affutes tes armes". Le volume reste important, mais l'intensite augmente.
+C'est la phase ou tu "affutes tes armes". Le volume reste important, mais l'intensité augmente.
 
 ### Phase 3 : Competition (peak)
 
-Tu vises le pic de forme pour ta course objectif. L'entraînement devient tres specifique.
+Tu vises le pic de forme pour ta course objectif. L'entraînement devient très spécifique.
 
-**Caracteristiques :**
+**Caractéristiques :**
 - Séances a allure de course
 - Volume qui commence a diminuer
-- Intensite maintenue ou legerement augmentee
+- Intensite maintenue ou légèrement augmentee
 - Focus mental et confiance
 
-**Duree typique :** 3-4 semaines avant le taper
+**Durée typique :** 3-4 semaines avant le taper
 
 ### Phase 4 : Affutage (taper)
 
-Reduction controlee de la charge pour arriver frais le jour J. On en parle en detail dans l'article dedie au [[taper]].
+Réduction contrôlée de la charge pour arriver frais le jour J. On en parle en detail dans l'article dédié au [[taper]].
 
-**Caracteristiques :**
-- Volume reduit de 40-60%
+**Caractéristiques :**
+- Volume réduit de 40-60%
 - Intensite des séances cles maintenue
 - Repos et sommeil prioritaires
 
-**Duree typique :** 2-3 semaines selon la distance
+**Durée typique :** 2-3 semaines selon la distance
 
 ---
 
@@ -116,20 +116,20 @@ Voici comment pourrait s'articuler la periodisation d'une preparation marathon :
 
 | Semaines | Phase | Focus | Volume relatif |
 |----------|-------|-------|----------------|
-| 1-4 | Preparation generale | Endurance, volume | 70% -> 85% |
-| 5-8 | Preparation specifique 1 | Seuil, tempo | 85% -> 95% |
-| 9-12 | Preparation specifique 2 | Allure marathon, VO2max | 95% -> 100% |
-| 13-14 | Peak | Séances specifiques | 90% -> 80% |
+| 1-4 | Preparation générale | Endurance, volume | 70% -> 85% |
+| 5-8 | Preparation spécifique 1 | Seuil, tempo | 85% -> 95% |
+| 9-12 | Preparation spécifique 2 | Allure marathon, VO2max | 95% -> 100% |
+| 13-14 | Peak | Séances spécifiques | 90% -> 80% |
 | 15-16 | Taper | Récupération, fraicheur | 60% -> 40% |
 
-Chaque bloc de 4 semaines suit un pattern 3:1 avec une semaine de decharge.
+Chaque bloc de 4 semaines suit un pattern 3:1 avec une semaine de décharge.
 
-**Semaine type en preparation specifique :**
+**Semaine type en preparation spécifique :**
 - Lundi : Repos
 - Mardi : Fractionne (ex: 6x1000m a allure 10km)
 - Mercredi : Footing endurance [[zone-2]]
 - Jeudi : Tempo 40min au [[seuil-lactique]]
-- Vendredi : Repos ou footing leger
+- Vendredi : Repos ou footing léger
 - Samedi : Footing endurance [[zone-2]]
 - Dimanche : Sortie longue 1h45-2h15
 
@@ -141,61 +141,61 @@ Deux grandes approches s'affrontent dans le monde de l'entraînement.
 
 ### La periodisation lineaire (classique)
 
-C'est l'approche decrite ci-dessus : des phases successives qui developpent une qualite a la fois. On commence par le volume et l'endurance, on termine par l'intensite et la specificite.
+C'est l'approche decrite ci-dessus : des phases successives qui développent une qualité a la fois. On commence par le volume et l'endurance, on termine par l'intensité et la spécificité.
 
 **Avantages :**
 - Simple a comprendre et a planifier
-- Eprouvee depuis des decennies
-- Ideal pour les debutants et les objectifs bien definis
+- Éprouvée depuis des décennies
+- Ideal pour les débutants et les objectifs bien définis
 
 **Limites :**
-- Les qualites developpees tot peuvent se "desaffuter"
+- Les qualités developpees tôt peuvent se "désaffûter"
 - Moins adaptee aux calendriers avec plusieurs objectifs
 
 ### La [[periodization-ondulee]]
 
-Tu varies les intensites au sein d'une meme semaine plutot que par blocs. Chaque semaine inclut endurance, seuil, et vitesse.
+Tu varies les intensites au sein d'une même semaine plutôt que par blocs. Chaque semaine inclut endurance, seuil, et vitesse.
 
 **Avantages :**
-- Maintien de toutes les qualites en permanence
-- Plus de variete, moins de monotonie
+- Maintien de toutes les qualités en permanence
+- Plus de variété, moins de monotonie
 - Bien adaptee aux coureurs amateurs avec contraintes de temps
 
 **Limites :**
 - Plus complexe a gerer
-- Peut diluer le developpement de qualites specifiques
+- Peut diluer le développement de qualités spécifiques
 
 ### La [[block-periodization]]
 
-Variante avancee ou tu concentres 2-3 semaines sur une seule qualite avant de passer a la suivante. Approche popularisee par Vladimir Issurin.
+Variante avancee ou tu concentres 2-3 semaines sur une seule qualité avant de passer a la suivante. Approche popularisee par Vladimir Issurin.
 
 **Avantages :**
-- Maximise le developpement de chaque qualite
+- Maximise le développement de chaque qualité
 - Efficace pour les athletes avances
 
 **Limites :**
 - Demande une bonne connaissance de son corps
-- Risque de detraining des autres qualites
+- Risque de detraining des autres qualités
 
 ---
 
-## Les pieges a eviter
+## Les pièges a éviter
 
 ### 1. Sauter la phase de base
 
-Tout le monde veut faire du fractionne. Mais sans fondation aerobie solide, les séances intenses ne produisent que de la fatigue sans adaptation durable.
+Tout le monde veut faire du fractionne. Mais sans fondation aérobie solide, les séances intenses ne produisent que de la fatigue sans adaptation durable.
 
-### 2. Ignorer les semaines de decharge
+### 2. Ignorer les semaines de décharge
 
 "Je me sens bien, je continue". Mauvaise idee. C'est pendant les semaines de récupération que se produisent les adaptations. Les supprimer, c'est compromettre ta progression.
 
-> ⚠️ Ne supprime jamais les semaines de decharge, meme quand tu te sens en forme. C'est la que les adaptations se consolident. Les ignorer mene a la stagnation ou la blessure.
+> ⚠️ Ne supprime jamais les semaines de décharge, même quand tu te sens en forme. C'est la que les adaptations se consolident. Les ignorer mene a la stagnation ou la blessure.
 
 ### 3. Multiplier les objectifs
 
-Vouloir etre au top sur un 10 km en mars, un semi en avril, et un marathon en mai est une recette pour l'echec. Choisis un objectif principal par macrocycle.
+Vouloir être au top sur un 10 km en mars, un semi en avril, et un marathon en mai est une recette pour l'échec. Choisis un objectif principal par macrocycle.
 
-### 4. Etre rigide
+### 4. Être rigide
 
 Un plan n'est pas un contrat. Si tu es malade, fatigue, ou surmene, adapte. L'ecoute de ton corps reste la meilleure boussole.
 
@@ -203,7 +203,7 @@ Un plan n'est pas un contrat. Si tu es malade, fatigue, ou surmene, adapte. L'ec
 
 ## Periodiser pour progresser longtemps
 
-La periodisation n'est pas reservee aux elites. Que tu vises ton premier marathon ou un record personnel, structurer ton entraînement dans le temps te permettra de :
+La periodisation n'est pas reservee aux élites. Que tu vises ton premier marathon ou un record personnel, structurer ton entraînement dans le temps te permettra de :
 - Progresser de maniere continue
 - Eviter les blessures de surcharge
 - Arriver frais et confiant le jour J
@@ -226,7 +226,7 @@ Periodization is built around three levels of organization, like Russian nesting
 
 ### The macrocycle: the big picture
 
-The [[macrocycle]] represents the complete preparation period toward a major goal. For a spring marathon, your macrocycle might extend from November to April, about 20 weeks.
+The [[macrocycle]] represents the complète preparation period toward a major goal. For a spring marathon, your macrocycle might extend from November to April, about 20 weeks.
 
 This is the scale at which you define your major phases and place your intermediate races. A well-constructed macrocycle alternates periods of load and recovery, with a progressive build toward the goal.
 
@@ -263,7 +263,7 @@ The challenge is placing hard sessions when you're fresh and allowing sufficient
 
 ## The four preparation phases
 
-A complete macrocycle breaks down into successive phases, each with its priorities.
+A complète macrocycle breaks down into successive phases, each with its priorities.
 
 ### Phase 1: General preparation (base building)
 
@@ -307,7 +307,7 @@ You target peak form for your goal race. Training becomes very specific.
 
 ### Phase 4: Tapering
 
-Controlled load reduction to arrive fresh on race day. We discuss this in detail in the dedicated [[taper]] article.
+Controlled load réduction to arrive fresh on race day. We discuss this in detail in the dedicated [[taper]] article.
 
 **Characteristics:**
 - Volume reduced by 40-60%
@@ -411,7 +411,7 @@ A plan isn't a contract. If you're sick, tired, or overtrained, adapt. Listening
 
 ## Periodizing for long-term progress
 
-Periodization isn't reserved for elites. Whether you're targeting your first marathon or a personal record, structuring your training over time will help you:
+Periodization isn't reserved for élites. Whether you're targeting your first marathon or a personal record, structuring your training over time will help you:
 - Progress continuously
 - Avoid overuse injuries
 - Arrive fresh and confident on race day

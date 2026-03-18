@@ -26,7 +26,7 @@ export interface FuelingCheckpoint {
 }
 
 /**
- * Fueling strategies based on Jeukendrup 2014 and ACSM Position Stand.
+ * Fueling stratégies based on Jeukendrup 2014 and ACSM Position Stand.
  * Indexed by duration thresholds.
  */
 const STRATEGIES: FuelingStrategy[] = [
@@ -37,7 +37,7 @@ const STRATEGIES: FuelingStrategy[] = [
     sodiumMgPerHour: [0, 0],
     gelFrequencyMin: 0,
     notes:
-      "Eau uniquement. Un rincage de bouche avec boisson glucidique peut ameliorer la performance.",
+      "Eau uniquement. Un rinçage de bouche avec boisson glucidique peut améliorer la performance.",
     notesEn:
       "Water only. A carbohydrate mouth rinse can still improve performance.",
   },
@@ -48,7 +48,7 @@ const STRATEGIES: FuelingStrategy[] = [
     sodiumMgPerHour: [0, 300],
     gelFrequencyMin: 30,
     notes:
-      "Debut de l'apport glucidique. Glucides simples (glucose, maltodextrine) suffisants.",
+      "Début de l'apport glucidique. Glucides simples (glucose, maltodextrine) suffisants.",
     notesEn:
       "Start carbohydrate intake. Single transportable carbs (glucose, maltodextrin) are sufficient.",
   },
@@ -59,7 +59,7 @@ const STRATEGIES: FuelingStrategy[] = [
     sodiumMgPerHour: [300, 500],
     gelFrequencyMin: 25,
     notes:
-      "Apport regulier indispensable. Commencer tot, ne pas attendre la faim.",
+      "Apport régulier indispensable. Commencer tôt, ne pas attendre la faim.",
     notesEn:
       "Regular intake essential. Start early, do not wait until you feel hungry.",
   },
@@ -70,7 +70,7 @@ const STRATEGIES: FuelingStrategy[] = [
     sodiumMgPerHour: [400, 600],
     gelFrequencyMin: 20,
     notes:
-      "Utiliser un ratio glucose:fructose 2:1 pour maximiser l'absorption (jusqu'a 90g/h). Entrainer le systeme digestif.",
+      "Utiliser un ratio glucose:fructose 2:1 pour maximiser l'absorption (jusqu'à 90g/h). Entraîner le système digestif.",
     notesEn:
       "Use a 2:1 glucose:fructose ratio to maximize absorption (up to 90g/h). Train your gut.",
   },
@@ -146,21 +146,21 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
   // Pre-race: T-3h meal
   timeline.push({
     timeMin: -180,
-    action: `Repas pre-course : ${Math.round(weight * 2)}–${Math.round(weight * 3)}g de glucides (${Math.round(weight * 2 / 50)}-${Math.round(weight * 3 / 50)} portions de feculents), faible en gras et fibres.`,
+    action: `Repas pré-course : ${Math.round(weight * 2)}–${Math.round(weight * 3)}g de glucides (${Math.round(weight * 2 / 50)}-${Math.round(weight * 3 / 50)} portions de féculents), faible en gras et fibres.`,
     actionEn: `Pre-race meal: ${Math.round(weight * 2)}–${Math.round(weight * 3)}g carbs (${Math.round(weight * 2 / 50)}-${Math.round(weight * 3 / 50)} starchy servings), low fat and fiber.`,
   });
 
   // T-60min: top-up
   timeline.push({
     timeMin: -60,
-    action: `Petite collation optionnelle : banane ou barre energetique (30-50g glucides).`,
+    action: `Petite collation optionnelle : banane ou barre énergétique (30-50g glucides).`,
     actionEn: `Optional small snack: banana or energy bar (30-50g carbs).`,
   });
 
   // T-15min: final hydration
   timeline.push({
     timeMin: -15,
-    action: `Hydratation finale : 150-200ml d'eau ou boisson sport. Arreter de boire pour eviter l'inconfort.`,
+    action: `Hydratation finale : 150-200ml d'eau ou boisson sport. Arrêter de boire pour éviter l'inconfort.`,
     actionEn: `Final hydration: 150-200ml water or sports drink. Stop drinking to avoid discomfort.`,
   });
 
@@ -169,13 +169,13 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
     // Short effort: water only
     timeline.push({
       timeMin: 0,
-      action: `Depart. Eau disponible, boire selon la soif (400-600ml/h).`,
+      action: `Départ. Eau disponible, boire selon la soif (400-600ml/h).`,
       actionEn: `Start. Water available, drink to thirst (400-600ml/h).`,
     });
     if (durationMin > 30) {
       timeline.push({
         timeMin: 30,
-        action: `Rincage de bouche avec boisson glucidique (ne pas avaler obligatoirement).`,
+        action: `Rinçage de bouche avec boisson glucidique (ne pas avaler obligatoirement).`,
         actionEn: `Mouth rinse with carb drink (no need to swallow).`,
       });
     }
@@ -183,7 +183,7 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
     // Long effort: build gel/drink schedule
     timeline.push({
       timeMin: 0,
-      action: `Depart. Commencer l'hydratation des les premiers ravitaillements.`,
+      action: `Départ. Commencer l'hydratation dès les premiers ravitaillements.`,
       actionEn: `Start. Begin hydrating at the first aid stations.`,
     });
 
@@ -197,7 +197,7 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
         if (isEvenGel && electrolyteDrink) {
           timeline.push({
             timeMin: gelTime,
-            action: `Gel #${gelNumber} (${CARBS_PER_GEL}g glucides) + boisson electrolytes (${Math.round(fluidMlPerHour / 3)}ml avec ${Math.round(sodiumMgPerHour / 3)}mg sodium).`,
+            action: `Gel #${gelNumber} (${CARBS_PER_GEL}g glucides) + boisson électrolytes (${Math.round(fluidMlPerHour / 3)}ml avec ${Math.round(sodiumMgPerHour / 3)}mg sodium).`,
             actionEn: `Gel #${gelNumber} (${CARBS_PER_GEL}g carbs) + electrolyte drink (${Math.round(fluidMlPerHour / 3)}ml with ${Math.round(sodiumMgPerHour / 3)}mg sodium).`,
           });
         } else {
@@ -220,7 +220,7 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
         if (!existing) {
           timeline.push({
             timeMin: midpoint,
-            action: `Mi-course : verifier l'hydratation. Boire meme sans soif. Viser ${fluidMlPerHour}ml/h.`,
+            action: `Mi-course : vérifier l'hydratation. Boire même sans soif. Viser ${fluidMlPerHour}ml/h.`,
             actionEn: `Mid-race: check hydration. Drink even without thirst. Target ${fluidMlPerHour}ml/h.`,
           });
         }
@@ -231,7 +231,7 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
   // Post-race recovery checkpoint
   timeline.push({
     timeMin: durationMin,
-    action: `Arrivee ! Dans les 30min : ${Math.round(weight * 1)}–${Math.round(weight * 1.2)}g glucides + ${Math.round(weight * 0.3)}–${Math.round(weight * 0.4)}g proteines. Rehydrater : ${Math.round(totalFluidMl * 0.5)}ml minimum.`,
+    action: `Arrivée ! Dans les 30min : ${Math.round(weight * 1)}–${Math.round(weight * 1.2)}g glucides + ${Math.round(weight * 0.3)}–${Math.round(weight * 0.4)}g protéines. Réhydrater : ${Math.round(totalFluidMl * 0.5)}ml minimum.`,
     actionEn: `Finish! Within 30min: ${Math.round(weight * 1)}–${Math.round(weight * 1.2)}g carbs + ${Math.round(weight * 0.3)}–${Math.round(weight * 0.4)}g protein. Rehydrate: ${Math.round(totalFluidMl * 0.5)}ml minimum.`,
   });
 
@@ -248,25 +248,25 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
 
   if (durationMin > 90) {
     tips.push({
-      text: "Entrainez votre systeme digestif : commencez par 30g/h et augmentez progressivement sur 4-6 semaines.",
+      text: "Entraînez votre système digestif : commencez par 30g/h et augmentez progressivement sur 4-6 semaines.",
       textEn: "Train your gut: start at 30g/h and gradually increase over 4-6 weeks.",
     });
   }
 
   if (durationMin > 150) {
     tips.push({
-      text: `Utilisez un ratio glucose:fructose 2:1 pour depasser 60g/h. Les gels a base de fructose + maltodextrine sont ideaux.`,
-      textEn: `Use a 2:1 glucose:fructose ratio to exceed 60g/h. Gels with fructose + maltodextrin are ideal.`,
+      text: `Utilisez un ratio glucose:fructose 2:1 pour dépasser 60g/h. Les gels à base de fructose + maltodextrine sont idéaux.`,
+      textEn: `Use a 2:1 glucose:fructose ratio to exceed 60g/h. Gels with fructose + maltodextrin are idéal.`,
     });
     tips.push({
-      text: "Variez les textures : alterner gels, barres, et boissons pour eviter la lassitude et les nausees.",
+      text: "Variez les textures : alterner gels, barres, et boissons pour éviter la lassitude et les nausées.",
       textEn: "Vary textures: alternate gels, bars, and drinks to avoid palate fatigue and nausea.",
     });
   }
 
   if (carbsPerHourG > 0) {
     tips.push({
-      text: "Prenez chaque gel avec de l'eau (jamais avec une boisson energetique, risque de surdosage glucidique).",
+      text: "Prenez chaque gel avec de l'eau (jamais avec une boisson énergétique, risque de surdosage glucidique).",
       textEn: "Take each gel with water (never with a sports drink to avoid carbohydrate overload).",
     });
   }
@@ -279,7 +279,7 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
   }
 
   tips.push({
-    text: "Pesez-vous avant et apres l'effort pour estimer vos pertes hydriques et affiner votre plan.",
+    text: "Pesez-vous avant et après l'effort pour estimer vos pertes hydriques et affiner votre plan.",
     textEn: "Weigh yourself before and after exercise to estimate fluid losses and refine your plan.",
   });
 

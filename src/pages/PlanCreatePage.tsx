@@ -214,7 +214,7 @@ export function PlanCreatePage() {
     <div className="mb-8">
       <div className="flex items-center justify-between text-sm text-muted-foreground mb-3">
         <span>
-          {isEn ? "Step" : "Etape"} {step}/{TOTAL_STEPS}
+          {isEn ? "Step" : "Étape"} {step}/{TOTAL_STEPS}
         </span>
         {step > 1 && (
           <Button
@@ -399,7 +399,7 @@ export function PlanCreatePage() {
           {isEn ? "Name your race" : "Nom de la course"}
         </h2>
         <p className="text-muted-foreground mt-1">
-          {isEn ? "Optional - you can skip this step" : "Optionnel - vous pouvez passer cette etape"}
+          {isEn ? "Optional - you can skip this step" : "Optionnel - vous pouvez passer cette étape"}
         </p>
       </div>
 
@@ -513,7 +513,7 @@ export function PlanCreatePage() {
                     </div>
                     {isSuggested && (
                       <div className="text-xs text-primary">
-                        {isEn ? "Suggested" : "Suggere"}
+                        {isEn ? "Suggested" : "Suggéré"}
                       </div>
                     )}
                   </div>
@@ -556,7 +556,7 @@ export function PlanCreatePage() {
           {/* Days per week */}
           <div>
             <label className="text-sm font-medium mb-3 block">
-              {isEn ? "Sessions per week" : "Seances par semaine"}
+              {isEn ? "Sessions per week" : "Séances par semaine"}
             </label>
             <div className="flex gap-2">
               {DAYS_PER_WEEK_OPTIONS.map((n) => (
@@ -609,7 +609,7 @@ export function PlanCreatePage() {
           <p className="text-muted-foreground mt-1">
             {isEn
               ? "Optional - you can skip this step"
-              : "Optionnel - vous pouvez passer cette etape"}
+              : "Optionnel - vous pouvez passer cette étape"}
           </p>
           {(form.raceDistance === "trail_short" || form.raceDistance === "trail" || form.raceDistance === "ultra") && (
             <p className="text-sm text-primary text-center mt-2">
@@ -723,7 +723,7 @@ export function PlanCreatePage() {
           <p className="text-muted-foreground mt-1">
             {isEn
               ? "Review your selections before generating"
-              : "Verifiez vos choix avant de generer le plan"}
+              : "Vérifiez vos choix avant de générer le plan"}
           </p>
         </div>
 
@@ -774,7 +774,7 @@ export function PlanCreatePage() {
             />
             {/* Days */}
             <SummaryRow
-              label={isEn ? "Sessions/week" : "Seances/semaine"}
+              label={isEn ? "Sessions/week" : "Séances/semaine"}
               value={`${form.daysPerWeek}`}
             />
             {/* Pace */}

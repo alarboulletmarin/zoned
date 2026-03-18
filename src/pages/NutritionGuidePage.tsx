@@ -233,7 +233,7 @@ function FuelingCalculator({ isEn }: { isEn: boolean }) {
 
           <div className="space-y-1.5">
             <label htmlFor="calc-duration" className="text-sm font-medium">
-              {isEn ? "Duration (min)" : "Duree (min)"}
+              {isEn ? "Duration (min)" : "Durée (min)"}
             </label>
             <input
               id="calc-duration"
@@ -295,7 +295,7 @@ function FuelingCalculator({ isEn }: { isEn: boolean }) {
                 }
               />
               <SummaryCard
-                label={isEn ? "Gels needed" : "Gels necessaires"}
+                label={isEn ? "Gels needed" : "Gels nécessaires"}
                 value={String(result.gelCount)}
                 sub={
                   result.gelFrequencyMin > 0
@@ -304,7 +304,7 @@ function FuelingCalculator({ isEn }: { isEn: boolean }) {
                       : `toutes les ${result.gelFrequencyMin} min`
                     : isEn
                       ? "not needed"
-                      : "non necessaire"
+                      : "non nécessaire"
                 }
               />
               <SummaryCard
@@ -323,7 +323,7 @@ function FuelingCalculator({ isEn }: { isEn: boolean }) {
                   result.electrolyteDrink
                     ? isEn
                       ? "electrolyte drink recommended"
-                      : "boisson electrolytes recommandee"
+                      : "boisson électrolytes recommandee"
                     : isEn
                       ? "water sufficient"
                       : "eau suffisante"
@@ -489,7 +489,7 @@ export function NutritionGuidePage() {
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl">
             {isEn
-              ? "Evidence-based nutrition strategies for training, racing and recovery. Use the calculator to build your personalized fueling plan."
+              ? "Evidence-based nutrition stratégies for training, racing and recovery. Use the calculator to build your personalized fueling plan."
               : "Stratégies nutritionnelles basées sur la science pour l'entraînement, la compétition et la récupération. Utilisez le calculateur pour construire votre plan de ravitaillement personnalisé."}
           </p>
         </div>

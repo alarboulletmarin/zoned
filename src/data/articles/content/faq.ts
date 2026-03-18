@@ -6,19 +6,19 @@ const content: ArticleContent = {
 
 ### Ma montre indique Zone 4 mais je me sens en Zone 2. Qui croire ?
 
-Faites confiance a vos sensations. La frequence cardiaque peut etre faussee par de nombreux facteurs : chaleur, stress, fatigue, cafeine, position du capteur. Un capteur optique de poignet est particulierement sujet aux erreurs lors des mouvements repetitifs de la course.
+Faites confiance a vos sensations. La fréquence cardiaque peut-être faussee par de nombreux facteurs : chaleur, stress, fatigue, cafeine, position du capteur. Un capteur optique de poignet est particulièrement sujet aux erreurs lors des mouvements répétitifs de la course.
 
-> 💡 La regle d'or pour la Zone 2 : si vous pouvez tenir une conversation normale sans effort, vous etes dans la bonne zone, peu importe ce qu'affiche votre montre.
+> 💡 La règle d'or pour la Zone 2 : si vous pouvez tenir une conversation normale sans effort, vous etes dans la bonne zone, peu importe ce qu'affiche votre montre.
 
-La regle d'or pour la Zone 2 : vous devez pouvoir tenir une conversation normale. Si vous pouvez parler sans effort, vous etes dans la bonne zone - peu importe ce qu'affiche votre montre.
+La règle d'or pour la Zone 2 : vous devez pouvoir tenir une conversation normale. Si vous pouvez parler sans effort, vous etes dans la bonne zone - peu importe ce qu'affiche votre montre.
 
-Avec l'experience, vous apprendrez a calibrer vos sensations avec vos donnees. Mais en cas de doute, l'intention de la séance prime sur le chiffre affiche.
+Avec l'expérience, vous apprendrez a calibrer vos sensations avec vos donnees. Mais en cas de doute, l'intention de la séance prime sur le chiffre affiche.
 
 ### Dois-je rester exactement dans ma zone ?
 
-Non, les zones sont des plages indicatives, pas des cibles au battement pres. Etre a 3-5 bpm au-dessus ou en-dessous de la limite n'a aucune importance physiologique significative.
+Non, les zones sont des plages indicatives, pas des cibles au battement près. Être a 3-5 bpm au-dessus ou en-dessous de la limite n'a aucune importance physiologique significative.
 
-Ce qui compte, c'est de respecter l'objectif de la séance. Une sortie "facile" doit vraiment etre facile - si vous terminez essouffle, vous avez rate la cible meme si votre montre affichait Z2 tout du long. Une séance "intense" doit vraiment vous solliciter - si vous finissez frais comme une rose, vous n'avez pas assez pousse.
+Ce qui compte, c'est de respecter l'objectif de la séance. Une sortie "facile" doit vraiment être facile - si vous terminez essouffle, vous avez rate la cible même si votre montre affichait Z2 tout du long. Une séance "intense" doit vraiment vous solliciter - si vous finissez frais comme une rose, vous n'avez pas assez pousse.
 
 ### Comment savoir si mes zones sont bien calibrees ?
 
@@ -27,7 +27,7 @@ Vos zones sont correctes si :
 - La Zone 4 (seuil) vous laisse dire quelques mots, mais pas tenir une conversation
 - La Zone 5 (VMA) est tenable 3-6 minutes a fond, pas plus
 
-Si ces correspondances ne collent pas, vos valeurs de reference (FCmax ou VMA) sont probablement inexactes. Refaites un test.
+Si ces correspondances ne collent pas, vos valeurs de référence (FCmax ou VMA) sont probablement inexactes. Refaites un test.
 
 ---
 
@@ -37,29 +37,29 @@ Si ces correspondances ne collent pas, vos valeurs de reference (FCmax ou VMA) s
 
 Il n'y a pas de réponse universelle - cela depend de votre niveau, vos objectifs, et votre récupération.
 
-**Debutants (< 1 an de pratique)** : 2-3 sorties par semaine suffisent. Votre corps n'est pas encore adapte aux contraintes de la course ; lui laisser des jours de récupération entre chaque sortie previent les blessures.
+**Débutants (< 1 an de pratique)** : 2-3 sorties par semaine suffisent. Votre corps n'est pas encore adapte aux contraintes de la course ; lui laisser des jours de récupération entre chaque sortie prévient les blessures.
 
-**Coureurs reguliers** : 3-5 sorties couvrent la plupart des objectifs, du 10 km au marathon. L'important n'est pas le nombre de sorties mais leur distribution : alternez jours durs et jours faciles.
+**Coureurs réguliers** : 3-5 sorties couvrent la plupart des objectifs, du 10 km au marathon. L'important n'est pas le nombre de sorties mais leur distribution : alternez jours durs et jours faciles.
 
-**Coureurs avances** : 5-7 sorties, parfois avec du biquotidien, permettent d'accumuler du volume sans epuiser le corps. Mais ce niveau demande des annees de progression graduelle.
+**Coureurs avances** : 5-7 sorties, parfois avec du biquotidien, permettent d'accumuler du volume sans épuiser le corps. Mais ce niveau demande des années de progression graduelle.
 
-### La regle des 10%, c'est un mythe ou une realite ?
+### La règle des 10%, c'est un mythe ou une realite ?
 
-La regle (n'augmentez pas votre volume hebdomadaire de plus de 10%) est un garde-fou utile, pas une loi physiologique absolue.
+La règle (n'augmentez pas votre volume hebdomadaire de plus de 10%) est un garde-fou utile, pas une loi physiologique absolue.
 
-Son merite : elle force la progressivite. Le corps s'adapte aux contraintes, mais il lui faut du temps. Passer de 20 km a 40 km par semaine en deux semaines est une recette pour la blessure.
+Son merite : elle force la progressivité. Le corps s'adapte aux contraintes, mais il lui faut du temps. Passer de 20 km a 40 km par semaine en deux semaines est une recette pour la blessure.
 
-Sa limite : elle ne tient pas compte de votre historique. Un coureur qui reprend apres une blessure, avec 10 ans d'experience, peut probablement remonter plus vite qu'un debutant absolu.
+Sa limite : elle ne tient pas compte de votre historique. Un coureur qui reprend après une blessure, avec 10 ans d'expérience, peut probablement remonter plus vite qu'un débutant absolu.
 
-Utilisez-la comme principe directeur, pas comme regle rigide.
+Utilisez-la comme principe directeur, pas comme règle rigide.
 
 ### Quand vais-je voir des progres ?
 
-Les premiers changements cardiovasculaires apparaissent des 2-3 semaines d'entraînement regulier. Vous ne le verrez pas forcement sur vos chronos, mais vous sentirez que l'effort devient plus facile.
+Les premiers changements cardiovasculaires apparaissent des 2-3 semaines d'entraînement régulier. Vous ne le verrez pas forcement sur vos chronos, mais vous sentirez que l'effort devient plus facile.
 
-Les progres mesurables sur un test ou une course arrivent generalement apres 6-12 semaines de travail coherent. C'est le temps necessaire aux adaptations musculaires, metaboliques et neuromusculaires.
+Les progres mesurables sur un test ou une course arrivent généralement après 6-12 semaines de travail coherent. C'est le temps nécessaire aux adaptations musculaires, métaboliques et neuromusculaires.
 
-> 💡 Les progres mesurables arrivent apres 6 a 12 semaines de travail coherent. Changer de programme toutes les 3 semaines ne laisse jamais le temps aux adaptations de s'installer.
+> 💡 Les progres mesurables arrivent après 6 a 12 semaines de travail coherent. Changer de programme toutes les 3 semaines ne laisse jamais le temps aux adaptations de s'installer.
 
 La patience est cruciale. Les coureurs qui changent de programme toutes les 3 semaines ne laissent jamais le temps aux adaptations de s'installer.
 
@@ -67,17 +67,17 @@ La patience est cruciale. Les coureurs qui changent de programme toutes les 3 se
 
 ## Sur les blessures
 
-### J'ai mal pendant la course. Je continue ou j'arrete ?
+### J'ai mal pendant la course. Je continue ou j'arrête ?
 
 Distinguez l'inconfort de la douleur :
 
-**Inconfort** (lourdeur, legere raideur, courbatures) : souvent normal, surtout en debut de séance. Continuez en surveillant - ca passe generalement apres 10-15 minutes.
+**Inconfort** (lourdeur, légère raideur, courbatures) : souvent normal, surtout en début de séance. Continuez en surveillant - ça passe généralement après 10-15 minutes.
 
-> 💡 Dans le doute entre inconfort et douleur, arretez-vous. Une séance manquee par prudence vaut mieux que des semaines d'arret force.
+> 💡 Dans le doute entre inconfort et douleur, arrêtez-vous. Une séance manquee par prudence vaut mieux que des semaines d'arrêt force.
 
-**Douleur** (aigue, localisee, qui augmente ou qui fait boiter) : arretez immediatement. Forcer sur une vraie douleur transforme une blessure legere en blessure grave.
+**Douleur** (aigue, localisee, qui augmente ou qui fait boiter) : arrêtez immediatement. Forcer sur une vraie douleur transforme une blessure légère en blessure grave.
 
-Dans le doute, ecoutez votre corps. Une séance manquee par prudence est toujours preferable a des semaines d'arret force.
+Dans le doute, écoutez votre corps. Une séance manquee par prudence est toujours preferable a des semaines d'arrêt force.
 
 ### Quand dois-je consulter ?
 
@@ -88,19 +88,19 @@ Consultez un professionnel de sante si :
 - La douleur revient systematiquement a la course
 - Vous soupconnez une fracture de fatigue (douleur osseuse localisee)
 
-N'attendez pas que ca s'aggrave. Plus une blessure est prise tot, plus vite elle guerit.
+N'attendez pas que ça s'aggrave. Plus une blessure est prise tôt, plus vite elle guérit.
 
-### Comment eviter les blessures ?
+### Comment éviter les blessures ?
 
-La prevention repose sur quelques principes simples :
+La prévention repose sur quelques principes simples :
 
-**Progresser graduellement.** La majorite des blessures de course viennent d'un volume ou d'une intensite augmentes trop vite.
+**Progresser graduellement.** La majorite des blessures de course viennent d'un volume ou d'une intensité augmentes trop vite.
 
-**Varier les stimuli.** Terrains differents, chaussures differentes (en rotation), allures differentes - la variete repartit les contraintes.
+**Varier les stimuli.** Terrains differents, chaussures differentes (en rotation), allures differentes - la variété repartit les contraintes.
 
 **Renforcement musculaire.** Des ischio-jambiers, quadriceps, mollets et fessiers solides absorbent mieux les chocs. 15-20 minutes de renforcement 2 fois par semaine font une difference enorme.
 
-**Ecouter les signaux.** Une legere gene qui revient a chaque sortie est un avertissement. La traiter a ce stade prend quelques jours ; l'ignorer peut couter des mois.
+**Écouter les signaux.** Une légère gêne qui revient a chaque sortie est un avertissement. La traiter a ce stade prend quelques jours ; l'ignorer peut couter des mois.
 
 ---
 
@@ -108,45 +108,45 @@ La prevention repose sur quelques principes simples :
 
 ### Matin ou soir, qu'est-ce qui est mieux ?
 
-Physiologiquement, le soir a un leger avantage : temperature corporelle plus elevee, articulations plus mobiles, temps de reaction meilleur. Certaines etudes montrent des performances legerement superieures en fin de journee.
+Physiologiquement, le soir a un léger avantage : temperature corporelle plus élevée, articulations plus mobiles, temps de reaction meilleur. Certaines études montrent des performances légèrement superieures en fin de journee.
 
-Mais la vraie réponse est : le meilleur moment est celui ou vous courez reellement. Si vous etes du matin et que les sorties du soir se transforment en canape, courez le matin. La constance bat l'optimisation theorique.
+Mais la vraie réponse est : le meilleur moment est celui ou vous courez reellement. Si vous etes du matin et que les sorties du soir se transforment en canape, courez le matin. La constance bat l'optimisation théorique.
 
 ### Puis-je courir tous les jours ?
 
 C'est possible, mais avec des precautions :
 
 - Alternez imperativement jours faciles et jours durs
-- Au moins 1-2 jours par semaine doivent etre tres legers ou en cross-training (velo, natation)
-- Ecoutez votre corps - la fatigue accumulee se manifeste tot ou tard
+- Au moins 1-2 jours par semaine doivent être très légers ou en cross-training (velo, natation)
+- Écoutez votre corps - la fatigue accumulée se manifeste tôt ou tard
 
 Beaucoup de coureurs prosperent avec 5-6 jours par semaine et 1-2 jours de repos complet. Le repos fait partie de l'entraînement.
 
 ### Comment gerer la chaleur ?
 
-La chaleur est l'ennemie du coureur. Votre corps doit a la fois produire l'energie pour courir et evacuer la chaleur generee - en ete, ces deux besoins entrent en competition.
+La chaleur est l'ennemie du coureur. Votre corps doit a la fois produire l'énergie pour courir et evacuer la chaleur générée - en ete, ces deux besoins entrent en competition.
 
-**Adaptez vos horaires.** Courez tot le matin ou tard le soir, quand le soleil est bas et la temperature plus clemente.
+**Adaptez vos horaires.** Courez tôt le matin ou tard le soir, quand le soleil est bas et la temperature plus clemente.
 
 **Reduisez vos attentes.** Vos zones cardiaques montent naturellement de 5-15 bpm par temps chaud. Courir en Z2 l'ete peut donner l'allure de Z1 l'hiver - acceptez-le.
 
-**Hydratez-vous plus.** Commencez hydrate, buvez pendant si l'effort depasse 45 minutes, compensez apres.
+**Hydratez-vous plus.** Commencez hydrate, buvez pendant si l'effort dépasse 45 minutes, compensez après.
 
-**Protegez-vous.** Casquette, vetements clairs et legers, creme solaire sur les zones exposees.
+**Protegez-vous.** Casquette, vetements clairs et légers, creme solaire sur les zones exposees.
 
-**Soyez patient.** L'acclimatation prend 10-14 jours d'exposition reguliere. Les premieres sorties par grosse chaleur sont difficiles - ca s'améliore.
+**Soyez patient.** L'acclimatation prend 10-14 jours d'exposition régulière. Les premières sorties par grosse chaleur sont difficiles - ça s'améliore.
 
 ### Comment gerer le froid ?
 
 Le froid est moins problematique que la chaleur, mais demande une adaptation vestimentaire.
 
-**Superposez les couches.** Une couche technique pres du corps pour evacuer la transpiration, une couche intermediaire isolante, une couche exterieure coupe-vent si necessaire. Vous devez avoir legerement froid au depart - vous vous rechaufferez vite.
+**Superposez les couches.** Une couche technique près du corps pour evacuer la transpiration, une couche intermédiaire isolante, une couche exterieure coupe-vent si nécessaire. Vous devez avoir légèrement froid au départ - vous vous rechaufferez vite.
 
-**Protegez les extremites.** Gants, bonnet ou bandeau, chaussettes plus epaisses si besoin. Les mains et les oreilles se refroidissent vite.
+**Protegez les extremites.** Gants, bonnet ou bandeau, chaussettes plus épaisses si besoin. Les mains et les oreilles se refroidissent vite.
 
-**Allongez l'échauffement.** Les muscles froids sont moins souples. Prevoyez quelques minutes supplementaires avant d'accelerer.
+**Allongez l'échauffement.** Les muscles froids sont moins souples. Prévoyez quelques minutes supplementaires avant d'accélérer.
 
-**Gardez le mouvement.** Evitez les longues pauses a l'arret pendant les séances. Le refroidissement est rapide quand la transpiration mouille les vetements.`,
+**Gardez le mouvement.** Évitez les longues pauses a l'arrêt pendant les séances. Le refroidissement est rapide quand la transpiration mouille les vetements.`,
   contentEn: `## On training zones
 
 ### My watch shows Zone 4 but I feel like I'm in Zone 2. Who should I trust?
@@ -157,11 +157,11 @@ Trust your sensations. Heart rate can be skewed by many factors: heat, stress, f
 
 The golden rule for Zone 2: you should be able to hold a normal conversation. If you can talk effortlessly, you're in the right zone - regardless of what your watch displays.
 
-With experience, you'll learn to calibrate your sensations with your data. But when in doubt, the session's intention takes precedence over the displayed number.
+With expérience, you'll learn to calibrate your sensations with your data. But when in doubt, the session's intention takes precedence over the displayed number.
 
 ### Should I stay exactly in my zone?
 
-No, zones are indicative ranges, not beat-precise targets. Being 3-5 bpm above or below the limit has no significant physiological importance.
+No, zones are indicative ranges, not beat-précise targets. Being 3-5 bpm above or below the limit has no significant physiological importance.
 
 What matters is respecting the session's objective. An "easy" outing should really be easy - if you finish breathless, you missed the target even if your watch showed Z2 throughout. An "intense" session should really challenge you - if you finish fresh as a daisy, you didn't push enough.
 
@@ -172,7 +172,7 @@ Your zones are correct if:
 - Zone 4 (threshold) lets you say a few words, but not hold a conversation
 - Zone 5 (VO2max) is sustainable 3-6 minutes at full effort, no more
 
-If these correspondences don't match, your reference values (HRmax or MAS) are probably inaccurate. Redo a test.
+If these correspondences don't match, your référence values (HRmax or MAS) are probably inaccurate. Redo a test.
 
 ---
 
@@ -194,7 +194,7 @@ The rule (don't increase your weekly volume by more than 10%) is a useful guardr
 
 Its merit: it forces progressivity. The body adapts to demands, but it needs time. Going from 20 km to 40 km per week in two weeks is a recipe for injury.
 
-Its limitation: it doesn't account for your history. A runner returning after injury, with 10 years of experience, can probably ramp up faster than an absolute beginner.
+Its limitation: it doesn't account for your history. A runner returning after injury, with 10 years of expérience, can probably ramp up faster than an absolute beginner.
 
 Use it as a guiding principle, not a rigid rule.
 
@@ -265,7 +265,7 @@ It's possible, but with precautions:
 - At least 1-2 days per week should be very light or cross-training (cycling, swimming)
 - Listen to your body - accumulated fatigue manifests sooner or later
 
-Many runners thrive with 5-6 days per week and 1-2 days of complete rest. Rest is part of training.
+Many runners thrive with 5-6 days per week and 1-2 days of complète rest. Rest is part of training.
 
 ### How do I handle heat?
 

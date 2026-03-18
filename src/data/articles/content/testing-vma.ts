@@ -2,31 +2,31 @@
 import type { ArticleContent } from "../types";
 
 const content: ArticleContent = {
-  content: `## Connaitre ses chiffres pour mieux s'entrainer
+  content: `## Connaître ses chiffres pour mieux s'entraîner
 
-Deux valeurs dominent la planification de l'entraînement en course a pied : la VMA (Vitesse Maximale Aerobie) et la FCmax (Frequence Cardiaque Maximale). La premiere determine vos allures de travail, la seconde definit vos zones d'intensite. Sans ces references, vous courez a l'aveugle - trop vite certains jours, pas assez d'autres.
+Deux valeurs dominent la planification de l'entraînement en course à pied : la VMA (Vitesse Maximale Aérobie) et la FCmax (Fréquence Cardiaque Maximale). La première détermine vos allures de travail, la seconde définit vos zones d'intensité. Sans ces références, vous courez à l'aveugle - trop vite certains jours, pas assez d'autres.
 
-Mais attention : ces valeurs sont personnelles. La VMA de votre voisin de peloton ne vous dit rien sur la votre, et les formules generales masquent des variations individuelles importantes. Seule une mesure directe vous donnera des donnees fiables.
+Mais attention : ces valeurs sont personnelles. La VMA de votre voisin de peloton ne vous dit rien sur la vôtre, et les formules générales masquent des variations individuelles importantes. Seule une mesure directe vous donnera des données fiables.
 
 ---
 
-## La VMA : votre plafond aerobie
+## La VMA : votre plafond aérobie
 
 ### Ce que mesure vraiment la VMA
 
-La Vitesse Maximale Aerobie correspond a la vitesse de course a laquelle votre consommation d'oxygene atteint son maximum. C'est le point ou votre systeme aerobie tourne a plein regime - au-dela, seuls les systemes anaerobies peuvent fournir plus d'energie, mais pour une duree tres limitee.
+La Vitesse Maximale Aérobie correspond à la vitesse de course à laquelle votre consommation d'oxygène atteint son maximum. C'est le point où votre système aérobie tourne à plein régime - au-delà, seuls les systèmes anaérobies peuvent fournir plus d'énergie, mais pour une durée très limitée.
 
-En laboratoire, on mesure directement le VO2max (volume d'oxygene consomme par minute) avec un masque et un tapis roulant. Sur le terrain, on estime plutot la VMA : la vitesse a laquelle vous atteignez ce VO2max. Pour les coureurs, c'est une donnee plus pratique car elle se traduit directement en allures d'entraînement.
+En laboratoire, on mesure directement le VO2max (volume d'oxygène consommé par minute) avec un masque et un tapis roulant. Sur le terrain, on estime plutôt la VMA : la vitesse à laquelle vous atteignez ce VO2max. Pour les coureurs, c'est une donnée plus pratique car elle se traduit directement en allures d'entraînement.
 
-Concretement, la VMA est la vitesse maximale que vous pouvez maintenir environ 4 a 7 minutes. Un coureur avec une VMA de 15 km/h court donc a 15 km/h sur un test de 5-6 minutes a fond, mais ne tiendra cette allure qu'une poignee de minutes avant de devoir ralentir.
+Concrètement, la VMA est la vitesse maximale que vous pouvez maintenir environ 4 à 7 minutes. Un coureur avec une VMA de 15 km/h court donc à 15 km/h sur un test de 5-6 minutes à fond, mais ne tiendra cette allure qu'une poignée de minutes avant de devoir ralentir.
 
 ### Pourquoi c'est fondamental
 
-> 📌 Connaitre sa VMA est indispensable : toutes vos allures d'entraînement en decoulent, du footing de récupération au fractionne a haute intensite.
+> 📌 Connaître sa VMA est indispensable : toutes vos allures d'entraînement en découlent, du footing de récupération au fractionné à haute intensité.
 
-Toutes les allures d'entraînement decoulent de la VMA. Une séance de seuil se court autour de 85% de VMA. Un 30/30 se fait a 100-105% de VMA. Votre allure marathon tourne autour de 75-80% de VMA.
+Toutes les allures d'entraînement découlent de la VMA. Une séance de seuil se court autour de 85% de VMA. Un 30/30 se fait à 100-105% de VMA. Votre allure marathon tourne autour de 75-80% de VMA.
 
-Sans connaitre votre VMA, vous ne pouvez que deviner ces allures. Et les estimations sont souvent fausses : soit vous vous sous-estimez et stagnez, soit vous vous surestimez et accumulez la fatigue.
+Sans connaître votre VMA, vous ne pouvez que deviner ces allures. Et les estimations sont souvent fausses : soit vous vous sous-estimez et stagnez, soit vous vous surestimez et accumulez la fatigue.
 
 ---
 
@@ -34,41 +34,41 @@ Sans connaitre votre VMA, vous ne pouvez que deviner ces allures. Et les estimat
 
 ### Le test demi-Cooper (6 minutes)
 
-C'est le test le plus simple et le plus repandu. Le protocole est elementaire : apres un échauffement complet, courez le plus loin possible en exactement 6 minutes.
+C'est le test le plus simple et le plus répandu. Le protocole est élémentaire : après un échauffement complet, courez le plus loin possible en exactement 6 minutes.
 
-**Preparation :**
-Echauffez-vous pendant 15 a 20 minutes avec un footing progressif, quelques gammes (montees de genoux, talons-fesses), et 2-3 accelerations progressives. Vous devez arriver au depart du test avec les muscles chauds et le cardio active, mais sans fatigue.
+**Préparation :**
+Échauffez-vous pendant 15 à 20 minutes avec un footing progressif, quelques gammes (montées de genoux, talons-fesses), et 2-3 accélérations progressives. Vous devez arriver au départ du test avec les muscles chauds et le cardio activé, mais sans fatigue.
 
-> 💡 Prevoyez 48 heures de repos avant le test, mangez leger 2-3 heures avant, et choisissez un jour tempere sans vent pour des resultats fiables.
+> 💡 Prévoyez 48 heures de repos avant le test, mangez léger 2-3 heures avant, et choisissez un jour tempéré sans vent pour des résultats fiables.
 
-**Execution :**
-Lancez votre chronometre et partez. Le piege classique est de partir trop vite - les premieres minutes semblent faciles, puis la dette d'oxygene se paie cash. Visez un effort regulier, difficile des le depart mais soutenable. Les deux dernieres minutes doivent etre une lutte.
+**Exécution :**
+Lancez votre chronomètre et partez. Le piège classique est de partir trop vite - les premières minutes semblent faciles, puis la dette d'oxygène se paie cash. Visez un effort régulier, difficile dès le départ mais soutenable. Les deux dernières minutes doivent être une lutte.
 
 **Calcul :**
-VMA (km/h) = distance parcourue (en metres) / 100
+VMA (km/h) = distance parcourue (en mètres) / 100
 
-Si vous avez parcouru 1 620 metres, votre VMA est de 16,2 km/h.
+Si vous avez parcouru 1 620 mètres, votre VMA est de 16,2 km/h.
 
 ### Le test VAMEVAL
 
-Ce test progressif par paliers est plus precis mais demande une piste de 400m avec des plots tous les 20 metres, ainsi qu'un enregistrement audio pour les signaux.
+Ce test progressif par paliers est plus précis mais demande une piste de 400m avec des plots tous les 20 mètres, ainsi qu'un enregistrement audio pour les signaux.
 
-Le principe : vous demarrez a 8 km/h et la vitesse augmente de 0,5 km/h chaque minute. Des bips reguliers vous indiquent quand passer chaque plot. Quand vous ne parvenez plus a suivre le rythme, le test est termine.
+Le principe : vous démarrez à 8 km/h et la vitesse augmente de 0,5 km/h chaque minute. Des bips réguliers vous indiquent quand passer chaque plot. Quand vous ne parvenez plus à suivre le rythme, le test est terminé.
 
-Votre VMA correspond au dernier palier complete entierement. Ce test a l'avantage d'imposer une allure progressive, evitant le probleme du depart trop rapide.
+Votre VMA correspond au dernier palier complété entièrement. Ce test a l'avantage d'imposer une allure progressive, évitant le problème du départ trop rapide.
 
 ### Le test des 5 minutes
 
-Similaire au demi-Cooper, mais sur 5 minutes. Apres échauffement, courez au maximum de vos capacites pendant exactement 5 minutes.
+Similaire au demi-Cooper, mais sur 5 minutes. Après échauffement, courez au maximum de vos capacités pendant exactement 5 minutes.
 
 **Calcul :**
 VMA (km/h) = distance (m) x 12 / 1000
 
-Ce test est legerement plus court et donc plus intense. Certains coureurs le preferent car il limite la composante mentale - 5 minutes de souffrance semblent plus gerables que 6.
+Ce test est légèrement plus court et donc plus intense. Certains coureurs le préfèrent car il limite la composante mentale - 5 minutes de souffrance semblent plus gérables que 6.
 
 ### Tests de distance (1500m ou 2000m)
 
-Si vous preferez raisonner en distance plutot qu'en temps, ces tests sont une alternative. L'idee : courir 1500m ou 2000m le plus vite possible.
+Si vous préférez raisonner en distance plutôt qu'en temps, ces tests sont une alternative. L'idée : courir 1500m ou 2000m le plus vite possible.
 
 **Calcul :**
 VMA (km/h) = distance (m) / temps (s) x 3,6
@@ -81,33 +81,33 @@ Pour 1500m en 5:30 (330 secondes) : VMA = 1500 / 330 x 3,6 = 16,4 km/h
 
 ### Pourquoi les formules sont insuffisantes
 
-La formule "220 - age" a ete etablie dans les annees 1970 sur une population limitee. Son ecart-type est de 10-12 battements par minute. Autrement dit, pour une personne de 40 ans, la FCmax "theorique" de 180 bpm peut en realite etre n'importe ou entre 168 et 192 bpm.
+La formule "220 - âge" a été établie dans les années 1970 sur une population limitée. Son écart-type est de 10-12 battements par minute. Autrement dit, pour une personne de 40 ans, la FCmax "théorique" de 180 bpm peut en réalité être n'importe où entre 168 et 192 bpm.
 
-La formule de Tanaka (208 - 0,7 x age) est legerement meilleure mais reste une approximation. Si vous basez vos zones sur une FCmax erronee de 10 battements, toutes vos plages seront decalees.
+La formule de Tanaka (208 - 0,7 x âge) est légèrement meilleure mais reste une approximation. Si vous basez vos zones sur une FCmax erronée de 10 battements, toutes vos plages seront décalées.
 
 ### Le test de terrain pour la FCmax
 
-Le protocole le plus fiable combine progressivite et effort maximal final.
+Le protocole le plus fiable combine progressivité et effort maximal final.
 
 **Échauffement (20 minutes) :**
-Commencez par 10 minutes de footing tres facile, puis 5 minutes a allure moderee. Ajoutez quelques gammes et 2-3 accelerations progressives sur 50m.
+Commencez par 10 minutes de footing très facile, puis 5 minutes à allure modérée. Ajoutez quelques gammes et 2-3 accélérations progressives sur 50m.
 
-**Phase de montee (10-15 minutes) :**
-Trouvez une cote de 200-400 metres avec une pente de 5-8%. Enchainez 3 a 4 montees de 2-3 minutes en augmentant progressivement l'intensite :
-- 1re montee : allure tempo, respiration controlee
-- 2e montee : allure seuil, respiration plus soutenue
-- 3e montee : allure VMA, respiration maximale
-- 4e montee : tout ce qu'il vous reste, sprint final dans les 100 derniers metres
+**Phase de montée (10-15 minutes) :**
+Trouvez une côte de 200-400 mètres avec une pente de 5-8%. Enchaînez 3 à 4 montées de 2-3 minutes en augmentant progressivement l'intensité :
+- 1re montée : allure tempo, respiration contrôlée
+- 2e montée : allure seuil, respiration plus soutenue
+- 3e montée : allure VMA, respiration maximale
+- 4e montée : tout ce qu'il vous reste, sprint final dans les 100 derniers mètres
 
 **Lecture :**
-Consultez le pic de frequence cardiaque sur votre montre juste apres la derniere montee. Ce pic sera tres proche de votre FCmax reelle.
+Consultez le pic de fréquence cardiaque sur votre montre juste après la dernière montée. Ce pic sera très proche de votre FCmax réelle.
 
-**Precautions :**
-Ce test est physiologiquement exigeant. Ne le faites que si vous etes en bonne sante, sans antecedent cardiaque, et habitue aux efforts intenses. En cas de doute, optez pour un test d'effort medicalise.
+**Précautions :**
+Ce test est physiologiquement exigeant. Ne le faites que si vous êtes en bonne santé, sans antécédent cardiaque, et habitué aux efforts intenses. En cas de doute, optez pour un test d'effort médicalisé.
 
 ---
 
-## Interpreter et utiliser vos resultats
+## Interpréter et utiliser vos résultats
 
 ### Calculer vos zones cardiaques
 
@@ -126,7 +126,7 @@ Pour une FCmax de 185 bpm, la Zone 2 (endurance fondamentale) se situe entre 111
 
 ### Calculer vos allures d'entraînement
 
-A partir de votre VMA, vous pouvez definir vos allures cibles :
+À partir de votre VMA, vous pouvez définir vos allures cibles :
 
 | Type de séance | % VMA | Exemple (VMA 15 km/h) |
 |----------------|-------|----------------------|
@@ -138,37 +138,37 @@ A partir de votre VMA, vous pouvez definir vos allures cibles :
 
 ### Quand refaire les tests
 
-Vos valeurs evoluent avec l'entraînement. Prevoyez un nouveau test :
-- Tous les 2-3 mois en periode de progression active
-- Apres une coupure de plus de 2 semaines
-- Avant de preparer un nouvel objectif
+Vos valeurs évoluent avec l'entraînement. Prévoyez un nouveau test :
+- Tous les 2-3 mois en période de progression active
+- Après une coupure de plus de 2 semaines
+- Avant de préparer un nouvel objectif
 
-Attention : testez-vous dans de bonnes conditions (repose, pas trop chaud, surface adaptee) pour obtenir des resultats comparables.
-
----
-
-## Les pieges a eviter
-
-> ⚠️ L'erreur numero un : partir trop vite. Les premieres secondes semblent faciles, mais un depart rapide se paie toujours dans les dernieres minutes du test.
-
-**Partir trop vite.** C'est l'erreur numero un sur les tests chronometres. Les premieres secondes semblent faciles, mais le depart rapide se paie toujours dans les dernieres minutes.
-
-**Tester fatigue.** Un test apres une semaine chargee sous-estimera vos capacites reelles. Prevoyez 48 heures de repos relatif avant.
-
-**Ignorer les conditions.** Chaleur, vent de face, ou terrain vallonne fausseront vos resultats. Choisissez une surface plane, un jour tempere, et si possible sans vent.
-
-**Se comparer aux autres.** Votre VMA est personnelle. Une VMA de 14 km/h chez quelqu'un qui court depuis 3 mois est excellente. La meme valeur chez un coureur de 10 ans d'experience indique une marge de progression.
+Attention : testez-vous dans de bonnes conditions (reposé, pas trop chaud, surface adaptée) pour obtenir des résultats comparables.
 
 ---
 
-## Passez a l'action
+## Les pièges à éviter
 
-Les tests sont un moment de verite : 6 minutes de lucidite sur votre condition physique actuelle. L'important n'est pas le chiffre absolu, mais ce que vous en faites. Avec votre VMA et votre FCmax en poche, vous pouvez maintenant configurer vos zones et commencer un entraînement veritablement personnalise.`,
+> ⚠️ L'erreur numéro un : partir trop vite. Les premières secondes semblent faciles, mais un départ rapide se paie toujours dans les dernières minutes du test.
+
+**Partir trop vite.** C'est l'erreur numéro un sur les tests chronométrés. Les premières secondes semblent faciles, mais le départ rapide se paie toujours dans les dernières minutes.
+
+**Tester fatigué.** Un test après une semaine chargée sous-estimera vos capacités réelles. Prévoyez 48 heures de repos relatif avant.
+
+**Ignorer les conditions.** Chaleur, vent de face, ou terrain vallonné fausseront vos résultats. Choisissez une surface plane, un jour tempéré, et si possible sans vent.
+
+**Se comparer aux autres.** Votre VMA est personnelle. Une VMA de 14 km/h chez quelqu'un qui court depuis 3 mois est excellente. La même valeur chez un coureur de 10 ans d'expérience indique une marge de progression.
+
+---
+
+## Passez à l'action
+
+Les tests sont un moment de vérité : 6 minutes de lucidité sur votre condition physique actuelle. L'important n'est pas le chiffre absolu, mais ce que vous en faites. Avec votre VMA et votre FCmax en poche, vous pouvez maintenant configurer vos zones et commencer un entraînement véritablement personnalisé.`,
   contentEn: `## Know your numbers to train better
 
 Two values dominate running training planning: VO2max speed (Maximal Aerobic Speed, or MAS) and HRmax (Maximum Heart Rate). The first determines your training paces, the second defines your intensity zones. Without these benchmarks, you're running blind - too fast some days, not enough on others.
 
-But be careful: these values are personal. Your running buddy's MAS tells you nothing about yours, and general formulas mask significant individual variations. Only direct measurement will give you reliable data.
+But be careful: these values are personal. Your running buddy's MAS tells you nothing about yours, and général formulas mask significant individual variations. Only direct measurement will give you reliable data.
 
 ---
 
@@ -196,7 +196,7 @@ Without knowing your MAS, you can only guess these paces. And guesses are often 
 
 ### The half-Cooper test (6 minutes)
 
-This is the simplest and most common test. The protocol is elementary: after a complete warm-up, run as far as possible in exactly 6 minutes.
+This is the simplest and most common test. The protocol is elementary: after a complète warm-up, run as far as possible in exactly 6 minutes.
 
 **Preparation:**
 Warm up for 15 to 20 minutes with progressive jogging, some drills (high knees, butt kicks), and 2-3 progressive accelerations. You should arrive at the test start with warm muscles and activated cardio, but without fatigue.
@@ -213,7 +213,7 @@ If you covered 1,620 meters, your MAS is 16.2 km/h.
 
 ### The VAMEVAL test
 
-This progressive step test is more precise but requires a 400m track with cones every 20 meters, plus an audio recording for signals.
+This progressive step test is more précise but requires a 400m track with cones every 20 meters, plus an audio recording for signals.
 
 The principle: you start at 8 km/h and speed increases by 0.5 km/h every minute. Regular beeps indicate when to pass each cone. When you can no longer keep up with the pace, the test is over.
 
@@ -319,7 +319,7 @@ Note: test yourself in good conditions (rested, not too hot, suitable surface) t
 
 **Ignoring conditions.** Heat, headwind, or hilly terrain will skew your results. Choose a flat surface, a temperate day, and if possible no wind.
 
-**Comparing yourself to others.** Your MAS is personal. A MAS of 14 km/h for someone who's been running for 3 months is excellent. The same value for a runner with 10 years of experience indicates room for improvement.
+**Comparing yourself to others.** Your MAS is personal. A MAS of 14 km/h for someone who's been running for 3 months is excellent. The same value for a runner with 10 years of expérience indicates room for improvement.
 
 ---
 
