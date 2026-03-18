@@ -24,6 +24,18 @@ export const changelogVersions: ChangelogVersion[] = [
           category: "UX",
           categoryEn: "UX",
         },
+        {
+          text: "Blocs callout dans les 12 articles : conseils, avertissements, points clés et statistiques",
+          textEn: "Callout blocks in all 12 articles: tips, warnings, key takeaways and statistics",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Barre de progression de lecture et table des matières (sidebar desktop, dropdown mobile) dans les articles",
+          textEn: "Reading progress bar and table of contents (desktop sidebar, mobile dropdown) in articles",
+          category: "UX",
+          categoryEn: "UX",
+        },
       ],
       changed: [
         {
@@ -45,6 +57,18 @@ export const changelogVersions: ChangelogVersion[] = [
           textEn: "Mobile button touch targets enlarged to 44px (Apple HIG standard) without visual overflow",
           category: "Accessibilité",
           categoryEn: "Accessibility",
+        },
+        {
+          text: "Correction complète des accents et de l'orthographe française sur l'ensemble de l'application",
+          textEn: "Comprehensive French accent and spelling corrections across the entire application",
+          category: "i18n",
+          categoryEn: "i18n",
+        },
+        {
+          text: "Amélioration du layout footer et sidebar (alignement, responsive)",
+          textEn: "Improved footer and sidebar layout (alignment, responsive)",
+          category: "UI",
+          categoryEn: "UI",
         },
       ],
     },
