@@ -7,6 +7,7 @@ import { ZoneBadge } from "./ZoneBadge";
 import { SessionTimeline, ZoneDistribution } from "@/components/visualization";
 import { useWorkoutOfTheDay } from "@/hooks";
 import { getDominantZone } from "@/types";
+import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 
 export function WorkoutOfTheDay() {
   const { t, i18n } = useTranslation(["common", "session", "library"]);
@@ -57,7 +58,7 @@ export function WorkoutOfTheDay() {
 
         <CardContent className="space-y-6">
           {/* Description */}
-          <p className="text-muted-foreground">{description}</p>
+          <p className="text-muted-foreground"><GlossaryLinkedText text={description} /></p>
 
           {/* Timeline */}
           <div className="space-y-2">

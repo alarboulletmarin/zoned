@@ -19,6 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
+import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { racePrepSections, recoveryTimelines } from "@/data/guides/race-prep";
 import type { ContentBlock, RecoveryTimeline } from "@/data/guides/race-prep";
 
@@ -70,7 +71,7 @@ export function RacePrepGuidePage() {
       case "paragraph":
         return (
           <p key={blockIdx} className="text-muted-foreground leading-relaxed">
-            {text}
+            <GlossaryLinkedText text={text ?? ""} />
           </p>
         );
 
@@ -163,7 +164,7 @@ export function RacePrepGuidePage() {
             className="flex gap-3 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4"
           >
             <Info className="size-5 shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
-            <p className="text-sm text-emerald-800 dark:text-emerald-200">{text}</p>
+            <p className="text-sm text-emerald-800 dark:text-emerald-200"><GlossaryLinkedText text={text ?? ""} /></p>
           </div>
         );
 
@@ -174,7 +175,7 @@ export function RacePrepGuidePage() {
             className="flex gap-3 rounded-lg border border-amber-500/20 bg-amber-500/5 p-4"
           >
             <AlertTriangle className="size-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
-            <p className="text-sm text-amber-800 dark:text-amber-200">{text}</p>
+            <p className="text-sm text-amber-800 dark:text-amber-200"><GlossaryLinkedText text={text ?? ""} /></p>
           </div>
         );
 

@@ -24,6 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
+import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import {
   nutritionSections,
   calculateFueling,
@@ -70,7 +71,7 @@ function renderBlock(block: NutritionBlock, isEn: boolean, index: number) {
     case "paragraph":
       return (
         <p key={index} className="text-muted-foreground leading-relaxed">
-          {isEn ? block.textEn : block.text}
+          <GlossaryLinkedText text={(isEn ? block.textEn : block.text) ?? ""} />
         </p>
       );
 

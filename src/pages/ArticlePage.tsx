@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Clock, BookOpen, Home, Loader2 } from "@/com
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
 import { useArticle, useAdjacentArticles } from "@/hooks/useArticles";
+import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { cn } from "@/lib/utils";
 
 /**
@@ -69,13 +70,49 @@ function renderMarkdown(content: string): React.ReactNode {
   };
 
   const parseInline = (text: string): React.ReactNode => {
-    // Bold
-    text = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-    // Links
-    text = text.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-primary underline hover:no-underline">$1</a>');
+    // Split on bold markers and links, producing React elements
+    const parts: React.ReactNode[] = [];
+    let partKey = 0;
 
-    // Return as HTML
-    return <span dangerouslySetInnerHTML={{ __html: text }} />;
+    // Combined regex to find **bold** or [link text](url)
+    const inlineRegex = /(\*\*(.*?)\*\*)|(\[(.*?)\]\((.*?)\))/g;
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = inlineRegex.exec(text)) !== null) {
+      // Add plain text before this match
+      if (match.index > lastIndex) {
+        const plainText = text.slice(lastIndex, match.index);
+        parts.push(<GlossaryLinkedText key={partKey++} text={plainText} />);
+      }
+
+      if (match[2] !== undefined) {
+        // Bold: **text**
+        parts.push(<strong key={partKey++}>{match[2]}</strong>);
+      } else if (match[4] !== undefined && match[5] !== undefined) {
+        // Link: [text](url)
+        parts.push(
+          <a key={partKey++} href={match[5]} className="text-primary underline hover:no-underline">
+            {match[4]}
+          </a>
+        );
+      }
+
+      lastIndex = match.index + match[0].length;
+    }
+
+    // Add remaining plain text
+    if (lastIndex < text.length) {
+      const plainText = text.slice(lastIndex);
+      parts.push(<GlossaryLinkedText key={partKey++} text={plainText} />);
+    }
+
+    // If no inline formatting found, just use GlossaryLinkedText for the whole thing
+    if (parts.length === 0) {
+      return <GlossaryLinkedText text={text} />;
+    }
+
+    return <>{parts}</>;
   };
 
   for (let i = 0; i < lines.length; i++) {
@@ -239,7 +276,7 @@ export function ArticlePage() {
           <span>{article.readTime} min {t("learn.readTime")}</span>
         </div>
         <h1 className="text-3xl font-bold mb-3">{title}</h1>
-        <p className="text-lg text-muted-foreground">{description}</p>
+        <p className="text-lg text-muted-foreground"><GlossaryLinkedText text={description} /></p>
       </header>
 
       {/* Content */}

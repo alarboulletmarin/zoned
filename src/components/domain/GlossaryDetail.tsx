@@ -10,6 +10,7 @@ import { ZoneBadge } from "./ZoneBadge";
 import { cn } from "@/lib/utils";
 import type { GlossaryTerm } from "@/data/glossary/types";
 import { useGlossaryCategoryInfo, useRelatedTerms } from "@/hooks/useGlossary";
+import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 
 interface GlossaryDetailProps {
   term: GlossaryTerm;
@@ -46,7 +47,7 @@ export function GlossaryDetail({ term, className }: GlossaryDetailProps) {
       {/* Definition */}
       <div>
         <p className="text-muted-foreground leading-relaxed text-lg">
-          {fullDef}
+          <GlossaryLinkedText text={fullDef} />
         </p>
       </div>
 
@@ -68,7 +69,7 @@ export function GlossaryDetail({ term, className }: GlossaryDetailProps) {
           <p className="text-sm font-medium text-muted-foreground mb-2">
             {t("example")}
           </p>
-          <p className="text-sm">{example}</p>
+          <p className="text-sm"><GlossaryLinkedText text={example} /></p>
         </div>
       )}
 

@@ -36,6 +36,7 @@ import { ExportMenu } from "@/components/domain/ExportMenu";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/issueBuilder";
 import { NutritionRecoverySection } from "@/components/domain/NutritionRecoverySection";
+import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { SEOHead } from "@/components/seo";
 import { SessionTimeline, ZoneDistribution, transformSessionBlocks } from "@/components/visualization";
 import { useWorkout, useRelatedWorkouts, useTips } from "@/hooks";
@@ -205,7 +206,7 @@ export function WorkoutDetailPage() {
               {isEn ? workout.nameEn : workout.name}
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl">
-              {isEn ? workout.descriptionEn : workout.description}
+              <GlossaryLinkedText text={isEn ? workout.descriptionEn : workout.description} />
             </p>
           </div>
           <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">

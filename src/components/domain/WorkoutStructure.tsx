@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import type { WorkoutTemplate, WorkoutBlock, ZoneRange, ZoneNumber } from "@/types";
 import { getZoneNumber } from "@/types";
 import { formatPace } from "@/lib/zones";
+import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 
 interface WorkoutStructureProps {
   workout: WorkoutTemplate;
@@ -118,7 +119,7 @@ function BlockItem({ block, isEn, userZones }: BlockItemProps) {
       )}
       {/* Content row: Description + meta aligned */}
       <div className="flex items-start justify-between gap-3">
-        <p className="text-sm flex-1 min-w-0">{description}</p>
+        <p className="text-sm flex-1 min-w-0"><GlossaryLinkedText text={description} /></p>
         {metaString && (
           <span className="text-xs text-muted-foreground whitespace-nowrap shrink-0">
             {metaString}
@@ -156,7 +157,7 @@ export function CoachingTips({ workout, className }: CoachingTipsProps) {
                 key={index}
                 className="text-sm text-muted-foreground pl-5 relative before:content-['•'] before:absolute before:left-0 before:text-success"
               >
-                {tip}
+                <GlossaryLinkedText text={tip} />
               </li>
             ))}
           </ul>
@@ -175,7 +176,7 @@ export function CoachingTips({ workout, className }: CoachingTipsProps) {
                 key={index}
                 className="text-sm text-muted-foreground pl-5 relative before:content-['•'] before:absolute before:left-0 before:text-destructive"
               >
-                {mistake}
+                <GlossaryLinkedText text={mistake} />
               </li>
             ))}
           </ul>

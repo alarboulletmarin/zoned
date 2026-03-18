@@ -21,6 +21,7 @@ import { SEOHead } from "@/components/seo";
 import { WorkoutCard } from "@/components/domain";
 import { useCollection } from "@/hooks/useCollections";
 import { cn } from "@/lib/utils";
+import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 
 /** Map collection icon strings to actual icon components (same as CollectionCard) */
 const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
@@ -144,7 +145,7 @@ export function CollectionDetailPage() {
 
             {/* Description */}
             <p className="text-muted-foreground text-lg leading-relaxed">
-              {description}
+              <GlossaryLinkedText text={description} />
             </p>
 
             {/* Badges */}

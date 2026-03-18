@@ -9,6 +9,7 @@ import { PageLoader } from "@/components/ui/page-loader";
 import { FavoritesProvider } from "@/hooks";
 import { SettingsProvider } from "@/hooks/useSettings";
 import { CommandPaletteProvider, CommandPalette } from "@/components/search";
+import { GlossaryMatcherProvider } from "@/contexts/GlossaryMatcherContext";
 
 // All pages lazy loaded for optimal code-splitting
 const HomePage = lazy(() => import("@/pages/HomePage").then(m => ({ default: m.HomePage })));
@@ -129,6 +130,7 @@ function App() {
       <SettingsProvider>
         <FavoritesProvider>
           <BrowserRouter>
+          <GlossaryMatcherProvider>
           <CommandPaletteProvider>
             <ScrollToTopOnNavigate />
             <div className="min-h-screen bg-background text-foreground flex">
@@ -203,6 +205,7 @@ function App() {
             </div>
             <CommandPalette />
           </CommandPaletteProvider>
+          </GlossaryMatcherProvider>
           <Analytics />
           <Toaster richColors position="bottom-right" />
           </BrowserRouter>

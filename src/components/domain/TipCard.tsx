@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { Tip } from "@/data/tips";
+import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 
 export interface TipCardProps {
   tip: Tip;
@@ -35,7 +36,7 @@ export function TipCard({
       <div className={cn("flex items-start gap-2 text-sm", className)}>
         <Lightbulb className="size-4 text-amber-500 shrink-0 mt-0.5" />
         <div className="flex-1">
-          <span className="text-muted-foreground">{text}</span>
+          <span className="text-muted-foreground"><GlossaryLinkedText text={text} /></span>
           {hasLink && linkTo && (
             <Link
               to={linkTo}
@@ -58,7 +59,7 @@ export function TipCard({
             <Lightbulb className="size-4 sm:size-5 text-amber-500" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm text-muted-foreground">{text}</p>
+            <p className="text-sm text-muted-foreground"><GlossaryLinkedText text={text} /></p>
           </div>
           {hasLink && linkTo && (
             <Button variant="outline" size="sm" asChild className="shrink-0">
@@ -85,7 +86,7 @@ export function TipCard({
             <p className="text-xs font-medium text-amber-600 dark:text-amber-400 mb-0.5">
               {t("tips.title")}
             </p>
-            <p className="text-sm text-muted-foreground">{text}</p>
+            <p className="text-sm text-muted-foreground"><GlossaryLinkedText text={text} /></p>
             {hasLink && linkTo && (
               <Link
                 to={linkTo}
