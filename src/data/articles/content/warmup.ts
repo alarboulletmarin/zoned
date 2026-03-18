@@ -4,9 +4,9 @@ import type { ArticleContent } from "../types";
 const content: ArticleContent = {
   content: `## Un rituel souvent bâclé
 
-Regardez les coureurs au départ d'une course populaire. Certains arrivent en trottinant depuis 20 minutes, font quelques accelerations, paraissent détendus. D'autres debarquent de leur voiture, enfilent leurs chaussures, et se placent directement sur la ligne. Les premiers termineront probablement mieux que les seconds - non pas parce qu'ils sont plus forts, mais parce qu'ils ont prepare leur corps a l'effort.
+Regardez les coureurs au départ d'une course populaire. Certains arrivent en trottinant depuis 20 minutes, font quelques accélérations, paraissent détendus. D'autres débarquent de leur voiture, enfilent leurs chaussures, et se placent directement sur la ligne. Les premiers termineront probablement mieux que les seconds - non pas parce qu'ils sont plus forts, mais parce qu'ils ont préparé leur corps à l'effort.
 
-L'échauffement n'est pas une formalite. C'est une sequence physiologique qui prepare chaque système de votre corps : muscles, articulations, système cardiovasculaire, métabolisme. Bien exécuté, il améliore votre performance et réduit le risque de blessure. Négligé ou mal fait, il vous place dans les pires conditions pour courir.
+L'échauffement n'est pas une formalité. C'est une séquence physiologique qui prépare chaque système de votre corps : muscles, articulations, système cardiovasculaire, métabolisme. Bien exécuté, il améliore votre performance et réduit le risque de blessure. Négligé ou mal fait, il vous place dans les pires conditions pour courir.
 
 ---
 
@@ -14,25 +14,25 @@ L'échauffement n'est pas une formalite. C'est une sequence physiologique qui pr
 
 ### L'élévation de température
 
-Vos muscles fonctionnent mieux chauds. Littéralement. Une augmentation de 1C de la température musculaire améliore leur capacité de contraction de 2 a 5%. Les enzymes qui produisent l'énergie travaillent plus efficacement, la viscosite musculaire diminue, les fibres glissent mieux les unes sur les autres.
+Vos muscles fonctionnent mieux chauds. Littéralement. Une augmentation de 1°C de la température musculaire améliore leur capacité de contraction de 2 à 5%. Les enzymes qui produisent l'énergie travaillent plus efficacement, la viscosité musculaire diminue, les fibres glissent mieux les unes sur les autres.
 
-C'est pourquoi le mot "échauffement" est approprie : vous cherchez vraiment a élever la température de vos tissus. Un footing de 10-15 minutes augmente la température centrale d'environ 1C et celle des muscles actifs de 2 a 3C.
+C'est pourquoi le mot "échauffement" est approprié : vous cherchez vraiment à élever la température de vos tissus. Un footing de 10-15 minutes augmente la température centrale d'environ 1°C et celle des muscles actifs de 2 à 3°C.
 
 ### L'activation cardiovasculaire
 
-Au repos, votre coeur bat doucement et le sang circule lentement dans vos muscles. Passer brutalement a l'effort intense crée un décalage : vos muscles réclament de l'oxygene que le système cardiovasculaire n'est pas encore pret a fournir. Résultat : vous accumulez une dette d'oxygene des les premières minutes, et la sensation d'essoufflement arrive trop tôt.
+Au repos, votre cœur bat doucement et le sang circule lentement dans vos muscles. Passer brutalement à l'effort intense crée un décalage : vos muscles réclament de l'oxygène que le système cardiovasculaire n'est pas encore prêt à fournir. Résultat : vous accumulez une dette d'oxygène dès les premières minutes, et la sensation d'essoufflement arrive trop tôt.
 
-L'échauffement progressif permet au coeur d'accélérer graduellement, aux vaisseaux sanguins de se dilater, au flux sanguin vers les muscles de s'amplifier. Quand l'effort reel commence, le système est déjà en régime.
+L'échauffement progressif permet au cœur d'accélérer graduellement, aux vaisseaux sanguins de se dilater, au flux sanguin vers les muscles de s'amplifier. Quand l'effort réel commence, le système est déjà en régime.
 
 ### La lubrification articulaire
 
-Vos articulations sont entourees de liquide synovial, un lubrifiant naturel qui réduit la friction entre les surfaces osseuses. Ce liquide s'épaissit au repos et se fluidifie avec le mouvement. Les premières minutes de footing léger "reveillent" vos articulations : chevilles, genoux, hanches gagnent en amplitude et en fluidite.
+Vos articulations sont entourées de liquide synovial, un lubrifiant naturel qui réduit la friction entre les surfaces osseuses. Ce liquide s'épaissit au repos et se fluidifie avec le mouvement. Les premières minutes de footing léger "réveillent" vos articulations : chevilles, genoux, hanches gagnent en amplitude et en fluidité.
 
 ### L'activation neuromusculaire
 
-Courir n'est pas qu'une affaire de muscles. C'est une coordination complexe entre votre cerveau et des dizaines de groupes musculaires qui doivent se contracter et se relacher au bon moment, dans le bon ordre, avec la bonne intensité.
+Courir n'est pas qu'une affaire de muscles. C'est une coordination complexe entre votre cerveau et des dizaines de groupes musculaires qui doivent se contracter et se relâcher au bon moment, dans le bon ordre, avec la bonne intensité.
 
-Les gammes athletiques - montees de genoux, talons-fesses, pas chasses - "reveillent" ces circuits nerveux. Elles preparent votre système neuromusculaire aux mouvements spécifiques de la course.
+Les gammes athlétiques - montées de genoux, talons-fesses, pas chassés - "réveillent" ces circuits nerveux. Elles préparent votre système neuromusculaire aux mouvements spécifiques de la course.
 
 ---
 
@@ -42,37 +42,37 @@ Les gammes athletiques - montees de genoux, talons-fesses, pas chasses - "reveil
 
 Commencez par un trot très lent, en Zone 1. Les premières minutes doivent sembler ridiculement faciles. Si vous avez une montre cardio, visez 50-60% de votre FCmax.
 
-Augmentez progressivement l'allure au fil des minutes, sans jamais dépasser la Zone 2. A la fin de cette phase, vous devez sentir une légère chaleur, une respiration un peu plus marquee, mais aucune fatigue.
+Augmentez progressivement l'allure au fil des minutes, sans jamais dépasser la Zone 2. À la fin de cette phase, vous devez sentir une légère chaleur, une respiration un peu plus marquée, mais aucune fatigue.
 
-L'objectif n'est pas de "se preparer a être fatigue". C'est de preparer tous les systèmes a fonctionner ensemble efficacement.
+L'objectif n'est pas de "se préparer à être fatigué". C'est de préparer tous les systèmes à fonctionner ensemble efficacement.
 
 > 💡 Commencez toujours ridiculement lent. Si les premières minutes ne vous semblent pas "trop faciles", vous allez probablement trop vite.
 
-### Phase 2 : Gammes athletiques (5-8 minutes)
+### Phase 2 : Gammes athlétiques (5-8 minutes)
 
-Sur une ligne droite de 30-40 metres, enchaînez ces exercices avec retour en trottinant :
+Sur une ligne droite de 30-40 mètres, enchaînez ces exercices avec retour en trottinant :
 
-**Montees de genoux** : levez les genoux haut devant vous, un pas après l'autre, comme si vous montiez un escalier exagerement. Gardez le buste droit, les bras actifs. Deux passages de 30m.
+**Montées de genoux** : levez les genoux haut devant vous, un pas après l'autre, comme si vous montiez un escalier exagérément. Gardez le buste droit, les bras actifs. Deux passages de 30m.
 
-**Talons-fesses** : ramenez vos talons vers vos fessiers a chaque foulee. Le mouvement doit être vif, le contact au sol bref. Deux passages de 30m.
+**Talons-fesses** : ramenez vos talons vers vos fessiers à chaque foulée. Le mouvement doit être vif, le contact au sol bref. Deux passages de 30m.
 
-**Pas chasses** : deplacez-vous lateralement, pieds paralleles, sans croiser les jambes. Un passage de chaque cote.
+**Pas chassés** : déplacez-vous latéralement, pieds parallèles, sans croiser les jambes. Un passage de chaque côté.
 
-**Jambes tendues** : avancez en gardant les jambes presque tendues, comme une marche de soldat exageree. Cet exercice etire les ischio-jambiers tout en activant les flechisseurs de hanche. Deux passages de 20m.
+**Jambes tendues** : avancez en gardant les jambes presque tendues, comme une marche de soldat exagérée. Cet exercice étire les ischio-jambiers tout en activant les fléchisseurs de hanche. Deux passages de 20m.
 
-**Foulees bondissantes** : exagerez chaque foulee avec une poussee verticale marquee. L'idee est de "rebondir" d'un pied sur l'autre. Deux passages de 20m.
+**Foulées bondissantes** : exagérez chaque foulée avec une poussée verticale marquée. L'idée est de "rebondir" d'un pied sur l'autre. Deux passages de 20m.
 
 ### Phase 3 : Accelerations progressives (3-5 minutes)
 
-Avant les exercices de vitesse ou une compétition, ajoutez 3 a 4 accelerations progressives de 60-80 metres.
+Avant les exercices de vitesse ou une compétition, ajoutez 3 à 4 accélérations progressives de 60-80 mètres.
 
-Le principe : partez a allure modérée et accélérez progressivement jusqu'a 85-90% de votre vitesse maximale. Ne sprintez pas a fond - le but est de preparer vos muscles aux vitesses élevées, pas de vous épuiser.
+Le principe : partez à allure modérée et accélérez progressivement jusqu'à 85-90% de votre vitesse maximale. Ne sprintez pas à fond - le but est de préparer vos muscles aux vitesses élevées, pas de vous épuiser.
 
-Récupération complète entre chaque acceleration : revenez en marchant ou en trottinant très léger.
+Récupération complète entre chaque accélération : revenez en marchant ou en trottinant très léger.
 
 ---
 
-## Adapter l'échauffement a la séance
+## Adapter l'échauffement à la séance
 
 ### Avant un footing facile
 
@@ -80,27 +80,27 @@ Un long échauffement serait contre-productif. Partez simplement très lentement
 
 ### Avant une sortie longue
 
-Même logique que le footing, mais avec 5-10 minutes de trot vraiment lent avant de vous installer dans votre rythme de croisiere. Votre corps a besoin de temps pour mobiliser ses réserves énergétiques.
+Même logique que le footing, mais avec 5-10 minutes de trot vraiment lent avant de vous installer dans votre rythme de croisière. Votre corps a besoin de temps pour mobiliser ses réserves énergétiques.
 
 ### Avant une séance de seuil ou tempo
 
-L'échauffement complet devient important. Comptez 15-20 minutes : footing progressif, quelques gammes simplifiees, et 2-3 accelerations a l'allure cible de la séance. Vous devez arriver au premier bloc de travail avec le cardio "pret a monter".
+L'échauffement complet devient important. Comptez 15-20 minutes : footing progressif, quelques gammes simplifiées, et 2-3 accélérations à l'allure cible de la séance. Vous devez arriver au premier bloc de travail avec le cardio "prêt à monter".
 
-### Avant du fractionne VMA
+### Avant du fractionné VMA
 
-C'est la que l'échauffement est le plus crucial. Les efforts très intenses sollicitent brutalement les muscles et les tendons - un démarrage a froid multiplie le risque de blessure.
+C'est là que l'échauffement est le plus crucial. Les efforts très intenses sollicitent brutalement les muscles et les tendons - un démarrage à froid multiplie le risque de blessure.
 
-Prévoyez 20-25 minutes : footing progressif de 15 minutes, gammes complètes, et 3-4 accelerations dont la dernière proche de votre allure VMA.
+Prévoyez 20-25 minutes : footing progressif de 15 minutes, gammes complètes, et 3-4 accélérations dont la dernière proche de votre allure VMA.
 
-> 📌 Plus la séance est intense, plus l'échauffement doit être long et complet. Pour du fractionne VMA, prévoyez au minimum 20 minutes de preparation.
+> 📌 Plus la séance est intense, plus l'échauffement doit être long et complet. Pour du fractionné VMA, prévoyez au minimum 20 minutes de préparation.
 
 ### Avant une compétition
 
-L'échauffement pre-course est un art en soi. Il doit être complet sans être fatigant, et se terminer juste avant le départ (5-10 minutes maximum).
+L'échauffement pré-course est un art en soi. Il doit être complet sans être fatigant, et se terminer juste avant le départ (5-10 minutes maximum).
 
-Sur un 10 km ou moins, l'échauffement est déterminant : vous serez dans le dur des les premières minutes. Comptez 25-30 minutes avec le protocole complet.
+Sur un 10 km ou moins, l'échauffement est déterminant : vous serez dans le dur dès les premières minutes. Comptez 25-30 minutes avec le protocole complet.
 
-Sur un marathon, l'échauffement peut-être plus léger : 10-15 minutes de trot et quelques gammes suffisent. Les premiers kilometres de course serviront de fin d'échauffement.
+Sur un marathon, l'échauffement peut être plus léger : 10-15 minutes de trot et quelques gammes suffisent. Les premiers kilomètres de course serviront de fin d'échauffement.
 
 ---
 
@@ -108,47 +108,47 @@ Sur un marathon, l'échauffement peut-être plus léger : 10-15 minutes de trot 
 
 ### Les étirements statiques avant l'effort
 
-Pendant des décennies, on a conseille de s'etirer avant de courir. Les études récentes montrent l'inverse : les étirements statiques (maintenir une position 20-30 secondes) réduisent temporairement la force et la puissance musculaire de 5 a 10%.
+Pendant des décennies, on a conseillé de s'étirer avant de courir. Les études récentes montrent l'inverse : les étirements statiques (maintenir une position 20-30 secondes) réduisent temporairement la force et la puissance musculaire de 5 à 10%.
 
-> ⚠️ Les étirements statiques avant l'effort réduisent votre force musculaire de 5 a 10%. Gardez-les pour après la séance et privilegiez les gammes dynamiques avant de courir.
+> ⚠️ Les étirements statiques avant l'effort réduisent votre force musculaire de 5 à 10%. Gardez-les pour après la séance et privilégiez les gammes dynamiques avant de courir.
 
-Reservez les étirements statiques pour après la séance, quand les muscles sont chauds et que la récupération commence. Avant l'effort, préférez les mouvements dynamiques des gammes athletiques.
+Réservez les étirements statiques pour après la séance, quand les muscles sont chauds et que la récupération commence. Avant l'effort, préférez les mouvements dynamiques des gammes athlétiques.
 
 ### L'échauffement trop court
 
-"Je n'ai pas le temps" est l'excuse classique. Mais courir 5 km de plus dans de mauvaises conditions est moins efficace que courir 3 km bien prepare.
+"Je n'ai pas le temps" est l'excuse classique. Mais courir 5 km de plus dans de mauvaises conditions est moins efficace que courir 3 km bien préparé.
 
-Un échauffement bâclé vous fait partir en dette d'oxygene, avec des muscles raides et des articulations mal lubrifiees. Les premières minutes de la séance servent alors d'échauffement force - mais le mal est fait.
+Un échauffement bâclé vous fait partir en dette d'oxygène, avec des muscles raides et des articulations mal lubrifiées. Les premières minutes de la séance servent alors d'échauffement forcé - mais le mal est fait.
 
 ### L'échauffement trop intense
 
-A l'inverse, certains coureurs transforment l'échauffement en pre-fatigue. Si vous etes déjà essouffle avant de commencer la vraie séance, c'est rate. L'échauffement doit activer, pas épuiser.
+À l'inverse, certains coureurs transforment l'échauffement en pré-fatigue. Si vous êtes déjà essoufflé avant de commencer la vraie séance, c'est raté. L'échauffement doit activer, pas épuiser.
 
-Restez en Zone 1-2, sauf pour les accelerations finales qui restent breves.
+Restez en Zone 1-2, sauf pour les accélérations finales qui restent brèves.
 
-### Le timing mal calcule
+### Le timing mal calculé
 
 En compétition, terminer son échauffement 30 minutes avant le départ annule tous les bénéfices. La température musculaire redescend, le système cardiovasculaire se "rendort".
 
-Idealement, les dernières accelerations doivent se faire 5-10 minutes avant le départ. Pas toujours facile avec les sas et les consignes organisateurs, mais visez ce timing.
+Idéalement, les dernières accélérations doivent se faire 5-10 minutes avant le départ. Pas toujours facile avec les sas et les consignes organisateurs, mais visez ce timing.
 
 ---
 
-## Conditions particulieres
+## Conditions particulières
 
-**Par temps froid** : les muscles mettent plus longtemps a chauffer. Ajoutez 5-10 minutes de footing, et portez des vetements chauds que vous retirerez juste avant le départ.
+**Par temps froid** : les muscles mettent plus longtemps à chauffer. Ajoutez 5-10 minutes de footing, et portez des vêtements chauds que vous retirerez juste avant le départ.
 
-**Par temps chaud** : le risque n'est plus le froid mais la surchauffe. Reduisez l'intensité de l'échauffement, restez a l'ombre si possible, et hydratez-vous.
+**Par temps chaud** : le risque n'est plus le froid mais la surchauffe. Réduisez l'intensité de l'échauffement, restez à l'ombre si possible, et hydratez-vous.
 
-**Le matin tôt** : votre corps sort de plusieurs heures d'immobilite. Les disques vertebraux sont gorges de liquide, les muscles raides. Prévoyez quelques minutes supplementaires et démarrez encore plus progressivement.
+**Le matin tôt** : votre corps sort de plusieurs heures d'immobilité. Les disques vertébraux sont gorgés de liquide, les muscles raides. Prévoyez quelques minutes supplémentaires et démarrez encore plus progressivement.
 
 ---
 
-## En resume
+## En résumé
 
-L'échauffement n'est pas du temps perdu - c'est du temps investi. Quinze a vingt minutes de preparation peuvent faire la difference entre une séance reussie et une blessure, entre une course ou vous vous sentez léger et une autre ou vous luttez des le premier kilometre.
+L'échauffement n'est pas du temps perdu - c'est du temps investi. Quinze à vingt minutes de préparation peuvent faire la différence entre une séance réussie et une blessure, entre une course où vous vous sentez léger et une autre où vous luttez dès le premier kilomètre.
 
-Transformez-le en rituel. Avec l'habitude, vous sentirez la difference : un corps pret a l'effort repond differemment qu'un corps lance a froid.`,
+Transformez-le en rituel. Avec l'habitude, vous sentirez la différence : un corps prêt à l'effort répond différemment qu'un corps lancé à froid.`,
   contentEn: `## An often rushed ritual
 
 Watch the runners at the start of a popular race. Some arrive jogging for 20 minutes, do a few accelerations, look relaxed. Others jump out of their car, put on their shoes, and head straight to the line. The former will probably finish better than the latter - not because they're stronger, but because they've prepared their body for effort.

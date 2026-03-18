@@ -24,7 +24,7 @@ const STANDARD_DISTANCES = [
  */
 const DISTANCE_OPTIONS = [
   ...STANDARD_DISTANCES,
-  { id: "custom", label: "Personnalise", labelEn: "Custom", km: 0 },
+  { id: "custom", label: "Personnalisé", labelEn: "Custom", km: 0 },
 ] as const;
 
 /**

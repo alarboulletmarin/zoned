@@ -716,7 +716,7 @@
       "id": "RP-009",
       "name": "Yasso 800s",
       "nameEn": "Yasso 800s",
-      "description": "10x800m avec temps cible = objectif marathon. Ex: marathon en 3h30 = 800m en 3min30. Methode popularisee par Bart Yasso (Runner's World).",
+      "description": "10x800m avec temps cible = objectif marathon. Ex : marathon en 3h30 = 800m en 3min30. Méthode popularisée par Bart Yasso (Runner's World).",
       "descriptionEn": "10x800m with target time = marathon goal. Ex: 3:30 marathon = 800m in 3:30. Method popularized by Bart Yasso (Runner's World).",
       "category": "race_pace",
       "sessionType": "intervals",
@@ -746,7 +746,7 @@
       ],
       "mainSetTemplate": [
         {
-          "description": "10x800m avec recup jog egale au temps du 800m",
+          "description": "10x800m avec récup jog égale au temps du 800m",
           "descriptionEn": "10x800m with jog recovery equal to 800m time",
           "distanceM": 800,
           "zone": "Z4-Z5",
@@ -764,9 +764,9 @@
       ],
       "coachingTips": [
         "Temps 800m (min:sec) = temps marathon (h:min)",
-        "Predicteur simple mais pas parfait",
-        "Construction progressive: commencez par 6x800m",
-        "Recup = meme duree que l'effort"
+        "Prédicteur simple mais pas parfait",
+        "Construction progressive : commencez par 6x800m",
+        "Récup = même durée que l'effort"
       ],
       "coachingTipsEn": [
         "800m time (min:sec) = marathon time (h:min)",
@@ -775,9 +775,9 @@
         "Recovery = same duration as effort"
       ],
       "commonMistakes": [
-        "Croire que c'est un predicteur exact",
-        "Commencer par 10 repetitions",
-        "Recuperation trop courte"
+        "Croire que c'est un prédicteur exact",
+        "Commencer par 10 répétitions",
+        "Récupération trop courte"
       ],
       "commonMistakesEn": [
         "Believing it's an exact predictor",
@@ -928,7 +928,7 @@
       ],
       "mainSetTemplate": [
         {
-          "description": "5km a allure marathon",
+          "description": "5km à allure marathon",
           "descriptionEn": "5km at marathon pace",
           "distanceM": 5000,
           "zone": "Z3",
@@ -939,7 +939,7 @@
           "descriptionEn": "Transition without stopping"
         },
         {
-          "description": "3km a allure semi-marathon",
+          "description": "3km à allure semi-marathon",
           "descriptionEn": "3km at half-marathon pace",
           "distanceM": 3000,
           "zone": "Z3-Z4",
@@ -950,7 +950,7 @@
           "descriptionEn": "Transition without stopping"
         },
         {
-          "description": "1.5km a allure 10K",
+          "description": "1.5km à allure 10K",
           "descriptionEn": "1.5km at 10K pace",
           "distanceM": 1500,
           "zone": "Z4",
@@ -978,9 +978,9 @@
         "Mentally very demanding session"
       ],
       "commonMistakes": [
-        "Partir trop vite des le debut",
-        "Ne pas accelerer suffisamment a la fin",
-        "S'arreter entre les segments"
+        "Partir trop vite dès le début",
+        "Ne pas accélérer suffisamment à la fin",
+        "S'arrêter entre les segments"
       ],
       "commonMistakesEn": [
         "Starting too fast from the beginning",

@@ -54,7 +54,7 @@ export const biomechanicsTerms: GlossaryTerm[] = [
     shortDefinitionEn:
       "Foot strike where the ball of the foot (metatarsals) contacts the ground first.",
     fullDefinition:
-      "L'attaque avant-pied (ou forefoot strike) est un patron de course o\u00f9 la partie ant\u00e9rieure du pied, au niveau des m\u00e9tatarses, touche le sol en premier. Ce type de foul\u00e9e est fr\u00e9quent chez les sprinteurs et les coureurs \u00e9lites de demi-fond. Elle \u00e9limine le pic d'impact initial mais impose une charge importante sur le mollet, le tendon d'Achille et les m\u00e9tatarses. L'attaque avant-pied est naturelle \u00e0 haute vitesse mais difficile \u00e0 maintenir sur de longues distances pour la plupart des coureurs. Une transition trop rapide vers ce type de foul\u00e9e est une cause fr\u00e9quente de tendinopathie achil\u00e9enne et de fractures de stress m\u00e9tatarsiennes.",
+      "L'attaque avant-pied (ou forefoot strike) est un patron de course o\u00f9 la partie ant\u00e9rieure du pied, au niveau des m\u00e9tatarses, touche le sol en premier. Ce type de foul\u00e9e est fr\u00e9quent chez les sprinteurs et les coureurs \u00e9lites de demi-fond. Elle \u00e9limine le pic d'impact initial mais impose une charge importante sur le mollet, le tendon d'Achille et les m\u00e9tatarses. L'attaque avant-pied est naturelle \u00e0 haute vitesse mais difficile \u00e0 maintenir sur de longues distances pour la plupart des coureurs. Une transition trop rapide vers ce type de foul\u00e9e est une cause fr\u00e9quente de tendinopathie achill\u00e9enne et de fractures de stress m\u00e9tatarsiennes.",
     fullDefinitionEn:
       "Forefoot strike is a running pattern where the front part of the foot, at the metatarsal level, contacts the ground first. This gait pattern is common among sprinters and elite middle-distance runners. It eliminates the initial impact peak but places significant load on the calf, Achilles tendon, and metatarsals. Forefoot striking is natural at high speeds but difficult to maintain over long distances for most runners. A too-rapid transition to this gait is a common cause of Achilles tendinopathy and metatarsal stress fractures.",
     example:
@@ -158,7 +158,7 @@ export const biomechanicsTerms: GlossaryTerm[] = [
     fullDefinitionEn:
       "Shoe drop (or heel-to-toe drop) refers to the height difference between the rear and front parts of a running shoe's sole, expressed in millimeters. Traditional shoes have a drop of 10 to 12 mm, intermediate shoes 6 to 8 mm, and minimalist shoes 0 to 4 mm. A high drop promotes heel striking and relieves the Achilles tendon. A low drop encourages a more natural foot strike (midfoot or forefoot) but places greater demand on the calf and Achilles tendon. Drop selection should be adapted to the runner's personal biomechanics, and any significant change should be gradual.",
     example:
-      "Si tu passes d'une chaussure \u00e0 drop 12 mm \u00e0 une chaussure \u00e0 drop 4 mm, fais la transition sur 4-6 semaines en alternant les deux paires pour \u00e9viter une tendinopathie achil\u00e9enne.",
+      "Si tu passes d'une chaussure \u00e0 drop 12 mm \u00e0 une chaussure \u00e0 drop 4 mm, fais la transition sur 4-6 semaines en alternant les deux paires pour \u00e9viter une tendinopathie achill\u00e9enne.",
     exampleEn:
       "If you switch from a 12 mm drop shoe to a 4 mm drop shoe, transition over 4-6 weeks by alternating both pairs to avoid Achilles tendinopathy.",
     relatedTerms: ["attaque-talon", "medio-pied", "avant-pied"],

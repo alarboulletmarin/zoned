@@ -1811,7 +1811,7 @@
       "id": "VMA-021",
       "name": "Billat 30/30",
       "nameEn": "Billat 30/30",
-      "description": "Protocole Billat original : 30s a 100% vVO2max / 30s a 50% vVO2max. Maximise le temps passe a VO2max selon les travaux de Veronique Billat.",
+      "description": "Protocole Billat original : 30s à 100% vVO2max / 30s à 50% vVO2max. Maximise le temps passé à VO2max selon les travaux de Véronique Billat.",
       "descriptionEn": "Original Billat protocol: 30s at 100% vVO2max / 30s at 50% vVO2max. Maximizes time spent at VO2max according to Veronique Billat's research.",
       "category": "vma_intervals",
       "sessionType": "vo2max",
@@ -1834,7 +1834,7 @@
           "zone": "Z1-Z2"
         },
         {
-          "description": "Gammes et 4x accelerations progressives",
+          "description": "Gammes et 4x accélérations progressives",
           "descriptionEn": "Drills and 4x progressive accelerations",
           "durationMin": 5
         }

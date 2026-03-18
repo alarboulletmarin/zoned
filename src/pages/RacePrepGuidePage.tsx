@@ -246,7 +246,7 @@ export function RacePrepGuidePage() {
         canonical="/guides/race-prep"
         jsonLd={{
           "@type": "Article",
-          name: isEn ? "Race Preparation Guide" : "Guide de Preparation Course",
+          name: isEn ? "Race Preparation Guide" : "Guide de Préparation Course",
           description: isEn
             ? "Complete race preparation guide for runners."
             : "Guide complet de préparation course pour coureurs.",

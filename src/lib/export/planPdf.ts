@@ -20,7 +20,7 @@ function formatWorkoutBlocks(blocks: WorkoutBlock[], isEn: boolean): string {
       const duration = block.durationMin ? ` (${block.durationMin}min)` : "";
       const zone = block.zone ? ` [${block.zone}]` : "";
       const reps = block.repetitions && block.repetitions > 1 ? `${block.repetitions}x ` : "";
-      const rest = block.rest ? ` — ${isEn ? "rest" : "recup"}: ${block.rest}` : "";
+      const rest = block.rest ? ` — ${isEn ? "rest" : "récup"}: ${block.rest}` : "";
       return `${reps}${desc}${duration}${zone}${rest}`;
     })
     .join("\n");

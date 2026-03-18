@@ -190,7 +190,7 @@ function FuelingCalculator({ isEn }: { isEn: boolean }) {
         <CardDescription>
           {isEn
             ? "Get a personalized fueling plan based on Jeukendrup 2014 and ACSM guidelines."
-            : "Obtenez un plan de ravitaillement personnalise base sur Jeukendrup 2014 et les recommandations ACSM."}
+            : "Obtenez un plan de ravitaillement personnalisé basé sur Jeukendrup 2014 et les recommandations ACSM."}
         </CardDescription>
       </CardHeader>
 
@@ -323,7 +323,7 @@ function FuelingCalculator({ isEn }: { isEn: boolean }) {
                   result.electrolyteDrink
                     ? isEn
                       ? "electrolyte drink recommended"
-                      : "boisson électrolytes recommandee"
+                      : "boisson électrolytes recommandée"
                     : isEn
                       ? "water sufficient"
                       : "eau suffisante"
@@ -438,7 +438,7 @@ function SummaryCard({
 // Format timeline minutes (e.g. -180 -> "T-3h", 25 -> "T+25min", 0 -> "Start")
 // ---------------------------------------------------------------------------
 function formatTimeMin(min: number, isEn: boolean): string {
-  if (min === 0) return isEn ? "Start" : "Depart";
+  if (min === 0) return isEn ? "Start" : "Départ";
 
   const abs = Math.abs(min);
   const sign = min < 0 ? "-" : "+";
@@ -489,7 +489,7 @@ export function NutritionGuidePage() {
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl">
             {isEn
-              ? "Evidence-based nutrition stratégies for training, racing and recovery. Use the calculator to build your personalized fueling plan."
+              ? "Evidence-based nutrition strategies for training, racing and recovery. Use the calculator to build your personalized fueling plan."
               : "Stratégies nutritionnelles basées sur la science pour l'entraînement, la compétition et la récupération. Utilisez le calculateur pour construire votre plan de ravitaillement personnalisé."}
           </p>
         </div>

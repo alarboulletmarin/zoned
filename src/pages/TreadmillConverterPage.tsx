@@ -113,7 +113,7 @@ export function TreadmillConverterPage() {
           <p className="text-muted-foreground text-lg">
             {isEn
               ? "Convert treadmill speed and incline to equivalent outdoor pace."
-              : "Convertissez vitesse et inclinaison en allure de course equivalente."}
+              : "Convertissez vitesse et inclinaison en allure de course équivalente."}
           </p>
         </div>
 
@@ -122,7 +122,7 @@ export function TreadmillConverterPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <RefreshCw className="size-5" />
-              {isEn ? "Treadmill Settings" : "Parametres du tapis"}
+              {isEn ? "Treadmill Settings" : "Paramètres du tapis"}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -184,7 +184,7 @@ export function TreadmillConverterPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Gauge className="size-5" />
-                {isEn ? "Equivalent Outdoor Effort" : "Effort exterieur equivalent"}
+                {isEn ? "Equivalent Outdoor Effort" : "Effort extérieur équivalent"}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -244,7 +244,7 @@ export function TreadmillConverterPage() {
             <p className="text-sm text-muted-foreground italic">
               {isEn
                 ? "The formula accounts for the lack of air resistance and incline effect. A 1% incline roughly compensates for indoor running. Each additional 1% incline adds approximately 3% to the effort."
-                : "La formule tient compte de l'absence de resistance de l'air et de l'effet de l'inclinaison. Une inclinaison de 1% compense approximativement la course en interieur. Chaque 1% d'inclinaison supplementaire ajoute environ 3% a l'effort."}
+                : "La formule tient compte de l'absence de résistance de l'air et de l'effet de l'inclinaison. Une inclinaison de 1% compense approximativement la course en intérieur. Chaque 1% d'inclinaison supplémentaire ajoute environ 3% à l'effort."}
             </p>
           </CardContent>
         </Card>

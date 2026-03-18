@@ -147,11 +147,11 @@ export function SplitGeneratorPage() {
         title={
           isEn
             ? "Split Generator"
-            : "Generateur de Splits"
+            : "Générateur de Splits"
         }
         description={
           isEn
-            ? "Generate per-km or per-mile splits for your target race time with even, negative, or positive split stratégies."
+            ? "Generate per-km or per-mile splits for your target race time with even, negative, or positive split strategies."
             : "Générez vos temps de passage par km pour votre objectif chrono avec des stratégies de splits réguliers, négatifs ou positifs."
         }
         canonical="/calculateurs/splits"
@@ -160,7 +160,7 @@ export function SplitGeneratorPage() {
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold mb-2">
-            {isEn ? "Split Generator" : "Generateur de Splits"}
+            {isEn ? "Split Generator" : "Générateur de Splits"}
           </h1>
           <p className="text-muted-foreground text-lg">
             {isEn
@@ -174,7 +174,7 @@ export function SplitGeneratorPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Route className="size-5" />
-              {isEn ? "Race Parameters" : "Parametres de course"}
+              {isEn ? "Race Parameters" : "Paramètres de course"}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -195,7 +195,7 @@ export function SplitGeneratorPage() {
                   </option>
                 ))}
                 <option value="custom">
-                  {isEn ? "Custom" : "Personnalise"}
+                  {isEn ? "Custom" : "Personnalisé"}
                 </option>
               </select>
               {isCustom && (
@@ -260,12 +260,12 @@ export function SplitGeneratorPage() {
             {/* Strategy */}
             <div className="space-y-2">
               <label className="text-sm font-medium">
-                {isEn ? "Strategy" : "Strategie"}
+                {isEn ? "Strategy" : "Stratégie"}
               </label>
               <div className="flex gap-2">
                 {([
                   { value: "even" as Strategy, label: isEn ? "Even" : "Régulier", labelLong: isEn ? "Even splits" : "Splits réguliers" },
-                  { value: "negative" as Strategy, label: isEn ? "Negative" : "Negatif", labelLong: isEn ? "Negative splits" : "Splits negatifs" },
+                  { value: "negative" as Strategy, label: isEn ? "Negative" : "Négatif", labelLong: isEn ? "Negative splits" : "Splits négatifs" },
                   { value: "positive" as Strategy, label: isEn ? "Positive" : "Positif", labelLong: isEn ? "Positive splits" : "Splits positifs" },
                 ] as const).map((s) => (
                   <button
@@ -291,11 +291,11 @@ export function SplitGeneratorPage() {
                 {strategy === "negative" &&
                   (isEn
                     ? "Start slower, finish faster (-2% to +2%)."
-                    : "Départ plus lent, finish plus rapide (-2% à +2%).")}
+                    : "Départ plus lent, arrivée plus rapide (-2% à +2%).")}
                 {strategy === "positive" &&
                   (isEn
                     ? "Start faster, finish slower (+2% to -2%)."
-                    : "Départ plus rapide, finish plus lent (+2% à -2%).")}
+                    : "Départ plus rapide, arrivée plus lente (+2% à -2%).")}
               </p>
             </div>
           </CardContent>
@@ -397,7 +397,7 @@ export function SplitGeneratorPage() {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
             >
               <Download className="size-4" />
-              {isEn ? "Download PNG" : "Telecharger en PNG"}
+              {isEn ? "Download PNG" : "Télécharger en PNG"}
             </button>
           </>
         )}

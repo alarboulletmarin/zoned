@@ -1401,7 +1401,7 @@
       ],
       "mainSetTemplate": [
         {
-          "description": "Matin: 5x6min seuil avec 60s recup",
+          "description": "Matin: 5x6min seuil avec 60s récup",
           "descriptionEn": "Morning: 5x6min threshold with 60s recovery",
           "durationMin": 6,
           "zone": "Z4",
@@ -1413,7 +1413,7 @@
           "descriptionEn": "--- 6-8h rest ---"
         },
         {
-          "description": "Soir: 5x6min seuil avec 60s recup",
+          "description": "Soir: 5x6min seuil avec 60s récup",
           "descriptionEn": "Evening: 5x6min threshold with 60s recovery",
           "durationMin": 6,
           "zone": "Z4",
@@ -1477,7 +1477,7 @@
       "id": "THR-017",
       "name": "Micro-intervalles Z3",
       "nameEn": "Z3 Micro-intervals",
-      "description": "20-25x 45-60s a allure 10K avec 15-20s recup. Methode norvegienne alternative. Accumule du temps a haute intensite avec peu de stress.",
+      "description": "20-25x 45-60s à allure 10K avec 15-20s récup. Méthode norvégienne alternative. Accumule du temps à haute intensité avec peu de stress.",
       "descriptionEn": "20-25x 45-60s at 10K pace with 15-20s recovery. Alternative Norwegian method. Accumulates time at high intensity with little stress.",
       "category": "threshold",
       "sessionType": "threshold",
@@ -1507,7 +1507,7 @@
       ],
       "mainSetTemplate": [
         {
-          "description": "25x 50s allure 10K avec 15s recup",
+          "description": "25x 50s allure 10K avec 15s récup",
           "descriptionEn": "25x 50s at 10K pace with 15s recovery",
           "zone": "Z4",
           "repetitions": 25,

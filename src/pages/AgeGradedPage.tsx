@@ -70,7 +70,7 @@ function getPerformanceLevel(
     };
   if (percentage >= 70)
     return {
-      label: isEn ? "Regional level" : "Niveau regional",
+      label: isEn ? "Regional level" : "Niveau régional",
       colorClass: "text-zone-4",
     };
   if (percentage >= 60)
@@ -79,7 +79,7 @@ function getPerformanceLevel(
       colorClass: "text-zone-3",
     };
   return {
-    label: isEn ? "Recreational" : "Recreatif",
+    label: isEn ? "Recreational" : "Récréatif",
     colorClass: "text-zone-2",
   };
 }
@@ -180,7 +180,7 @@ export function AgeGradedPage() {
             : "Calculateur Performance Age-Graded",
           description: isEn
             ? "Compare your performance to the age and gender adjusted world record"
-            : "Comparez votre performance au record mondial ajuste pour votre age et sexe",
+            : "Comparez votre performance au record mondial ajusté pour votre âge et sexe",
           url: "https://zoned.run/calculateurs/age-graded",
           applicationCategory: "SportsApplication",
         }}
@@ -195,7 +195,7 @@ export function AgeGradedPage() {
           <p className="text-muted-foreground text-lg">
             {isEn
               ? "Enter your age, gender, distance and time to see how your performance compares to the world record for your category."
-              : "Entrez votre age, sexe, distance et temps pour voir comment votre performance se compare au record mondial de votre categorie."}
+              : "Entrez votre âge, sexe, distance et temps pour voir comment votre performance se compare au record mondial de votre catégorie."}
           </p>
         </div>
 
@@ -207,7 +207,7 @@ export function AgeGradedPage() {
               {/* Age */}
               <div className="space-y-2">
                 <label htmlFor="age" className="text-sm font-medium">
-                  {isEn ? "Age" : "Age"}
+                  {isEn ? "Age" : "Âge"}
                 </label>
                 <input
                   id="age"
@@ -369,7 +369,7 @@ export function AgeGradedPage() {
                     <span className="text-sm text-muted-foreground">
                       {isEn
                         ? "Age-adjusted record"
-                        : "Record ajuste pour ton age"}
+                        : "Record ajusté pour ton âge"}
                     </span>
                     <span className="text-sm font-medium tabular-nums">
                       {formatTime(result.ageGradedRecord)}
@@ -399,7 +399,7 @@ export function AgeGradedPage() {
             <p className="text-sm text-muted-foreground">
               {isEn
                 ? "The age-graded score compares your performance to the world record adjusted for your age and gender. A score of 70% means you run at 70% of the world record level for your category."
-                : "Le score age-graded compare ta performance au record mondial ajuste pour ton age et sexe. Un score de 70% signifie que tu cours a 70% du niveau record mondial pour ta categorie."}
+                : "Le score age-graded compare ta performance au record mondial ajusté pour ton âge et sexe. Un score de 70% signifie que tu cours à 70% du niveau record mondial pour ta catégorie."}
             </p>
           </div>
         )}

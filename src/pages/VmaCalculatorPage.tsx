@@ -67,7 +67,7 @@ export function VmaCalculatorPage() {
     toast.success(
       isEn
         ? `VMA saved: ${calculatedVma} km/h`
-        : `VMA enregistree : ${calculatedVma} km/h`
+        : `VMA enregistrée : ${calculatedVma} km/h`
     );
   };
 
@@ -103,7 +103,7 @@ export function VmaCalculatorPage() {
         description={
           isEn
             ? "Estimate your VMA (Maximal Aerobic Speed) from a recent race result. Enter your time for 5K, 10K, half marathon or marathon."
-            : "Estimez votre VMA a partir d'un resultat de course recent. Entrez votre chrono sur 5 km, 10 km, semi-marathon ou marathon."
+            : "Estimez votre VMA à partir d'un résultat de course récent. Entrez votre chrono sur 5 km, 10 km, semi-marathon ou marathon."
         }
         canonical="/calculateurs/vma"
         jsonLd={{
@@ -111,7 +111,7 @@ export function VmaCalculatorPage() {
           name: isEn ? "VMA Calculator from Race Time" : "Calculateur VMA depuis un Chrono",
           description: isEn
             ? "Estimate your VMA from a recent race result"
-            : "Estimez votre VMA a partir d'un resultat de course",
+            : "Estimez votre VMA à partir d'un résultat de course",
           url: "https://zoned.run/calculateurs/vma",
           applicationCategory: "SportsApplication",
         }}
@@ -153,7 +153,7 @@ export function VmaCalculatorPage() {
               <p className="text-xs text-muted-foreground">
                 {isEn
                   ? `VMA percentage used: ${selectedDistance.vmaPercentage}%`
-                  : `Pourcentage de VMA utilise : ${selectedDistance.vmaPercentage}%`}
+                  : `Pourcentage de VMA utilisé : ${selectedDistance.vmaPercentage}%`}
               </p>
             </div>
 
@@ -218,7 +218,7 @@ export function VmaCalculatorPage() {
             <Card>
               <CardContent className="py-8 flex flex-col items-center text-center">
                 <p className="text-sm font-medium text-muted-foreground mb-2">
-                  {isEn ? "Estimated VMA" : "VMA estimee"}
+                  {isEn ? "Estimated VMA" : "VMA estimée"}
                 </p>
                 <p className="text-5xl font-bold text-primary tabular-nums">
                   {calculatedVma.toFixed(1)}
@@ -231,7 +231,7 @@ export function VmaCalculatorPage() {
             <Card>
               <CardContent className="pt-6">
                 <h2 className="text-lg font-semibold mb-4">
-                  {isEn ? "Pace zones preview" : "Apercu des zones d'allure"}
+                  {isEn ? "Pace zones preview" : "Aperçu des zones d'allure"}
                 </h2>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
@@ -293,7 +293,7 @@ export function VmaCalculatorPage() {
               </Button>
               <Button onClick={handleCreatePlan} variant="outline" className="flex-1">
                 <ArrowRight className="size-4" />
-                {isEn ? "Create a plan" : "Creer un plan"}
+                {isEn ? "Create a plan" : "Créer un plan"}
               </Button>
             </div>
           </div>

@@ -158,7 +158,7 @@ export function exportPlanToICS(
               const zone = block.zone ? ` [${block.zone}]` : "";
               const reps = block.repetitions && block.repetitions > 1 ? `${block.repetitions}x ` : "";
               const rest = block.rest || block.recovery;
-              const restStr = rest ? ` — ${isEn ? "rest" : "recup"}: ${rest}` : "";
+              const restStr = rest ? ` — ${isEn ? "rest" : "récup"}: ${rest}` : "";
               descriptionLines.push(`• ${reps}${blockDesc}${dur}${zone}${restStr}`);
             }
           }

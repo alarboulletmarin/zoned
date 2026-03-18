@@ -4,31 +4,31 @@ import type { ArticleContent } from "../types";
 const content: ArticleContent = {
   content: `## Qu'est-ce que le taper ?
 
-Les semaines de preparation sont derriere toi. Tu as accumule les kilometres, les séances de seuil, les fractionnees. Maintenant vient la phase la plus contre-intuitive de l'entraînement : en faire moins pour performer plus.
+Les semaines de préparation sont derrière toi. Tu as accumulé les kilomètres, les séances de seuil, les fractionnées. Maintenant vient la phase la plus contre-intuitive de l'entraînement : en faire moins pour performer plus.
 
 Le [[taper]] (ou affutage) est une réduction contrôlée et progressive de la charge d'entraînement dans les semaines précédant une compétition majeure. L'objectif ? Dissiper la fatigue accumulée tout en maintenant - et même optimisant - ta forme.
 
 ---
 
-## La science derriere le taper
+## La science derrière le taper
 
 ### Pourquoi ça marche
 
 Ton corps fonctionne sur deux composantes antagonistes : la forme (fitness) et la fatigue. Pendant l'entraînement, les deux augmentent. Ta forme progresse, mais la fatigue masque une partie de cette progression.
 
-Le taper réduit la fatigue plus rapidement que la forme ne decline. Résultat : ta performance "nette" - forme moins fatigue - atteint un pic.
+Le taper réduit la fatigue plus rapidement que la forme ne décline. Résultat : ta performance "nette" - forme moins fatigue - atteint un pic.
 
-> 📊 Un taper bien exécuté peut améliorer la performance de 0.5% a 6%. Sur un marathon de 3h30, cela represente jusqu'a 12 minutes gagnees.
+> 📊 Un taper bien exécuté peut améliorer la performance de 0.5% à 6%. Sur un marathon de 3h30, cela représente jusqu'à 12 minutes gagnées.
 
-Les études de Mujika et Padilla (2003) montrent qu'un taper bien exécuté peut améliorer la performance de 0.5% a 6% selon les athletes. Sur un marathon de 3h30, ça represente jusqu'a 12 minutes.
+Les études de Mujika et Padilla (2003) montrent qu'un taper bien exécuté peut améliorer la performance de 0.5% à 6% selon les athlètes. Sur un marathon de 3h30, ça représente jusqu'à 12 minutes.
 
 ### Les adaptations pendant le taper
 
-Contrairement a ce qu'on pourrait croire, le corps ne fait pas que se reposer. Il continue de s'adapter :
+Contrairement à ce qu'on pourrait croire, le corps ne fait pas que se reposer. Il continue de s'adapter :
 
 - **Stockage de glycogène** : les réserves musculaires atteignent leur maximum (+20-25%)
 - **Réparation tissulaire** : muscles, tendons, et ligaments se régénèrent
-- **Restauration hormonale** : testosterone et hormone de croissance remontent
+- **Restauration hormonale** : testostérone et hormone de croissance remontent
 - **Amélioration neuromusculaire** : meilleur recrutement des fibres musculaires
 - **Réduction de l'inflammation** : les marqueurs inflammatoires chutent
 
@@ -38,28 +38,28 @@ Contrairement a ce qu'on pourrait croire, le corps ne fait pas que se reposer. I
 
 ### Règle 1 : Réduire le volume, maintenir l'intensité
 
-> 📌 Le principe clé du taper : réduire le volume de 40 a 60% tout en maintenant l'intensité des séances. C'est le volume qui génère la fatigue, pas l'intensité.
+> 📌 Le principe clé du taper : réduire le volume de 40 à 60% tout en maintenant l'intensité des séances. C'est le volume qui génère la fatigue, pas l'intensité.
 
 C'est le principe fondamental. Tu cours moins, mais tu gardes des séances avec de l'intensité.
 
-**Le volume** peut-être réduit de 40% a 60% selon la durée du taper.
+**Le volume** peut être réduit de 40% à 60% selon la durée du taper.
 
-**L'intensité** des séances cles est maintenue. Tu continues a faire des fractions a allure course ou des tempos au seuil - juste en quantite réduite.
+**L'intensité** des séances clés est maintenue. Tu continues à faire des fractions à allure course ou des tempos au seuil - juste en quantité réduite.
 
-Pourquoi ? L'intensité maintient les adaptations neuromusculaires et la "sensation" de l'allure cible. Le volume est le principal generateur de fatigue, donc c'est lui qu'on coupe.
+Pourquoi ? L'intensité maintient les adaptations neuromusculaires et la "sensation" de l'allure cible. Le volume est le principal générateur de fatigue, donc c'est lui qu'on coupe.
 
 **Exemple concret :**
 - Semaine normale : 6x1000m a allure 10km
 - Semaine de taper : 3x1000m a la même allure
 
-### Règle 2 : Réduire la fréquence avec moderation
+### Règle 2 : Réduire la fréquence avec modération
 
 La fréquence (nombre de séances) peut baisser légèrement, mais moins que le volume.
 
-- Si tu courais 6 fois/semaine, passe a 4-5
+- Si tu courais 6 fois/semaine, passe à 4-5
 - Si tu courais 4 fois/semaine, garde 3-4
 
-Maintenir une fréquence raisonnable preserve le rythme et les sensations.
+Maintenir une fréquence raisonnable préserve le rythme et les sensations.
 
 ### Règle 3 : Taper progressif, pas brutal
 
@@ -81,7 +81,7 @@ La durée optimale du taper varie selon ta course cible :
 | Marathon | 14-21 jours | 50-60% |
 | Ultra (>50 km) | 21-28 jours | 50-70% |
 
-Ces durees sont des moyennes. Les coureurs très entraînés peuvent avoir besoin d'un taper plus long pour éliminer toute la fatigue accumulée.
+Ces durées sont des moyennes. Les coureurs très entraînés peuvent avoir besoin d'un taper plus long pour éliminer toute la fatigue accumulée.
 
 ---
 
@@ -129,39 +129,39 @@ Supposons que ta semaine normale de pic soit a 70 km.
 
 ## Les pièges du taper
 
-> 💡 Les sensations "bizarres" pendant le taper sont normales : jambes lourdes, impression de perte de forme. Fais confiance au processus, ça disparait après les premiers kilometres de course.
+> 💡 Les sensations "bizarres" pendant le taper sont normales : jambes lourdes, impression de perte de forme. Fais confiance au processus, ça disparaît après les premiers kilomètres de course.
 
-### Piege 1 : La panique de dernière minute
+### Piège 1 : La panique de dernière minute
 
 Tu te sens soudain "lourd" ou "plat". Tes jambes sont bizarres. Tu paniques : "Je perds ma forme !" et tu rajoutes une séance.
 
-**La realite :** Ces sensations sont normales. Ton corps n'est plus habitue a autant de repos. La "panique du taper" est quasi universelle et ne predit rien de ta performance.
+**La réalité :** Ces sensations sont normales. Ton corps n'est plus habitué à autant de repos. La "panique du taper" est quasi universelle et ne prédit rien de ta performance.
 
-**Solution :** Fais confiance au processus. Ces sensations disparaissent généralement après les premiers kilometres de course.
+**Solution :** Fais confiance au processus. Ces sensations disparaissent généralement après les premiers kilomètres de course.
 
-### Piege 2 : Compenser par autre chose
+### Piège 2 : Compenser par autre chose
 
-Tu cours moins, alors tu remplis le vide : plus de musculation, du velo intensif, des randonnees...
+Tu cours moins, alors tu remplis le vide : plus de musculation, du vélo intensif, des randonnées...
 
-**La realite :** Toute cette activité ajoute de la fatigue. Le taper, c'est aussi mental : accepter de "ne rien faire".
+**La réalité :** Toute cette activité ajoute de la fatigue. Le taper, c'est aussi mental : accepter de "ne rien faire".
 
-**Solution :** Activites légères autorisees (marche, natation douce), mais rien qui génère de la fatigue.
+**Solution :** Activités légères autorisées (marche, natation douce), mais rien qui génère de la fatigue.
 
-### Piege 3 : Trop couper
+### Piège 3 : Trop couper
 
-> ⚠️ Couper totalement l'entraînement est aussi nefaste que ne pas taper du tout. Sans stimulus, tu perds les adaptations neuromusculaires et la "sensation" de tes allures.
+> ⚠️ Couper totalement l'entraînement est aussi néfaste que ne pas taper du tout. Sans stimulus, tu perds les adaptations neuromusculaires et la "sensation" de tes allures.
 
-A l'inverse, certains coupent totalement et passent une semaine sur le canape.
+À l'inverse, certains coupent totalement et passent une semaine sur le canapé.
 
-**La realite :** Sans stimulus, tu perds les adaptations neuromusculaires, les sensations, et parfois même de la confiance.
+**La réalité :** Sans stimulus, tu perds les adaptations neuromusculaires, les sensations, et parfois même de la confiance.
 
-**Solution :** Maintiens des séances courtes avec de l'intensité. Tu veux arriver frais, pas rouille.
+**Solution :** Maintiens des séances courtes avec de l'intensité. Tu veux arriver frais, pas rouillé.
 
-### Piege 4 : Ignorer la nutrition
+### Piège 4 : Ignorer la nutrition
 
-Moins de kilometres = moins de dépenses caloriques. Si tu manges autant, tu risques de prendre du poids (principalement de l'eau).
+Moins de kilomètres = moins de dépenses caloriques. Si tu manges autant, tu risques de prendre du poids (principalement de l'eau).
 
-**La realite :** Une légère prise de poids (1-2 kg) est normale et souvent benefique (réserves de glycogène + eau).
+**La réalité :** Une légère prise de poids (1-2 kg) est normale et souvent bénéfique (réserves de glycogène + eau).
 
 **Solution :** Mange normalement, ne te restreins pas, mais n'augmente pas non plus. Hydratation optimale.
 
@@ -169,21 +169,21 @@ Moins de kilometres = moins de dépenses caloriques. Si tu manges autant, tu ris
 
 ## Le taper mental
 
-Le taper n'est pas seulement physique. C'est aussi le moment de preparer ta course mentalement.
+Le taper n'est pas seulement physique. C'est aussi le moment de préparer ta course mentalement.
 
 ### Ce que tu peux faire
 
-- **Visualiser** : imagine ta course, ton allure, les moments difficiles et comment tu les geres
-- **Planifier** : prepare ta logistique (tenue, nutrition course, transport)
-- **Relire ton carnet** : rappelle-toi du chemin parcouru, des séances reussies
-- **Te reposer vraiment** : siestes, sommeil allonge, réduction du stress
+- **Visualiser** : imagine ta course, ton allure, les moments difficiles et comment tu les gères
+- **Planifier** : prépare ta logistique (tenue, nutrition course, transport)
+- **Relire ton carnet** : rappelle-toi du chemin parcouru, des séances réussies
+- **Te reposer vraiment** : siestes, sommeil allongé, réduction du stress
 
 ### Ce que tu dois éviter
 
 - Chercher des conseils de dernière minute sur internet
-- Analyser obsessionnellement tes donnees d'entraînement
+- Analyser obsessionnellement tes données d'entraînement
 - Te comparer aux autres
-- Experimenter quoi que ce soit de nouveau (materiel, nutrition, stratégie)
+- Expérimenter quoi que ce soit de nouveau (matériel, nutrition, stratégie)
 
 ---
 
@@ -193,21 +193,21 @@ Dans les derniers jours avant la course :
 
 - **Jambes légères** : tu as envie de courir, tu te retiens
 - **Énergie mentale** : impatience, excitation
-- **Sommeil améliore** : tu dors mieux, plus profondément
-- **Appetit modéré** : pas de fringales excessives
+- **Sommeil amélioré** : tu dors mieux, plus profondément
+- **Appétit modéré** : pas de fringales excessives
 - **Fréquence cardiaque** : FC de repos normale ou légèrement basse
 
-Si tu ressens tout ca, felicitations : ton affutage est reussi. Il ne reste plus qu'a profiter de ta course.
+Si tu ressens tout ça, félicitations : ton affûtage est réussi. Il ne reste plus qu'à profiter de ta course.
 
 ---
 
 ## L'art de l'affutage
 
-Le taper est peut-être la phase la plus difficile psychologiquement. Après des semaines a te battre contre toi-même, on te demande de lacher prise. De faire confiance a tout le travail accompli.
+Le taper est peut-être la phase la plus difficile psychologiquement. Après des semaines à te battre contre toi-même, on te demande de lâcher prise. De faire confiance à tout le travail accompli.
 
-Mais c'est aussi la ou se joue une part importante de la performance. Les études sont claires : un taper bien exécuté peut faire la difference entre un bon résultat et un résultat exceptionnel.
+Mais c'est aussi là où se joue une part importante de la performance. Les études sont claires : un taper bien exécuté peut faire la différence entre un bon résultat et un résultat exceptionnel.
 
-Alors resiste a la tentation d'en faire plus. Accepte l'inconfort du repos. Et presente-toi sur la ligne de départ avec des jambes fraîches et un esprit affute.`,
+Alors résiste à la tentation d'en faire plus. Accepte l'inconfort du repos. Et présente-toi sur la ligne de départ avec des jambes fraîches et un esprit affûté.`,
   contentEn: `## What is tapering?
 
 The preparation weeks are behind you. You've accumulated the kilometers, the threshold sessions, the intervals. Now comes the most counterintuitive phase of training: doing less to perform more.

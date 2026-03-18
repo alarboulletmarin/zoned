@@ -17,7 +17,7 @@ export function AboutPage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "About" : "A propos"}
+        title={isEn ? "About" : "À propos"}
         description={isEn
           ? "Learn about Zoned, an open-source running workout library with zone-based training."
           : "Découvrez Zoned, une bibliothèque open-source de séances de course à pied basée sur les zones."}

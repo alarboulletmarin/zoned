@@ -351,7 +351,7 @@ export function PlanViewPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <Card size="compact">
               <CardContent className="px-4">
-                <p className="text-xs text-muted-foreground">{isEn ? "Sessions" : "Seances"}</p>
+                <p className="text-xs text-muted-foreground">{isEn ? "Sessions" : "Séances"}</p>
                 <p className="text-2xl font-bold">{stats.totalSessions}</p>
               </CardContent>
             </Card>
@@ -369,7 +369,7 @@ export function PlanViewPage() {
             </Card>
             <Card size="compact">
               <CardContent className="px-4">
-                <p className="text-xs text-muted-foreground">{isEn ? "Key sessions" : "Seances cles"}</p>
+                <p className="text-xs text-muted-foreground">{isEn ? "Key sessions" : "Séances clés"}</p>
                 <p className="text-2xl font-bold">{stats.keySessionCount}</p>
               </CardContent>
             </Card>

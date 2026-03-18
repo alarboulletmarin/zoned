@@ -4,24 +4,24 @@ import type { ArticleContent } from "../types";
 const content: ArticleContent = {
   content: `## Le principe fondamental de la progression
 
-Pourquoi progressons-nous ? Parce que notre corps s'adapte aux contraintes qu'on lui impose. Mais il y a un hic : une fois adapte, il faut augmenter la contrainte pour continuer a progresser.
+Pourquoi progressons-nous ? Parce que notre corps s'adapte aux contraintes qu'on lui impose. Mais il y a un hic : une fois adapté, il faut augmenter la contrainte pour continuer à progresser.
 
-C'est le [[progressive-overload]] - la surcharge progressive. Un principe simple en apparence, mais dont la bonne application fait toute la difference entre progression constante et stagnation chronique.
+C'est le [[progressive-overload]] - la surcharge progressive. Un principe simple en apparence, mais dont la bonne application fait toute la différence entre progression constante et stagnation chronique.
 
 ---
 
 ## Comment fonctionne la surcharge progressive
 
-Ton corps est une machine d'adaptation remarquable. Quand tu lui imposes un stress (une séance d'entraînement), il repond en devenant plus fort pour mieux gerer ce stress la prochaine fois. C'est la [[surcompensation]].
+Ton corps est une machine d'adaptation remarquable. Quand tu lui imposes un stress (une séance d'entraînement), il répond en devenant plus fort pour mieux gérer ce stress la prochaine fois. C'est la [[surcompensation]].
 
-Mais cette adaptation a une limite : une fois que ton corps s'est adapte a un stimulus, ce même stimulus ne le fera plus progresser. Tu dois augmenter la difficulté.
+Mais cette adaptation a une limite : une fois que ton corps s'est adapté à un stimulus, ce même stimulus ne le fera plus progresser. Tu dois augmenter la difficulté.
 
 ### Le cycle vertueux
 
 1. **Tu imposes un stress** : séance d'entraînement
 2. **Ton corps s'adapte** : il devient plus fort/endurant
-3. **Le même stress devient insuffisant** : ton corps le gere facilement
-4. **Tu augmentes le stress** : retour a l'étape 1
+3. **Le même stress devient insuffisant** : ton corps le gère facilement
+4. **Tu augmentes le stress** : retour à l'étape 1
 
 C'est un escalier qu'on monte marche par marche, pas un ascenseur express.
 
@@ -29,54 +29,54 @@ C'est un escalier qu'on monte marche par marche, pas un ascenseur express.
 
 ## Les quatre dimensions de la surcharge
 
-La surcharge progressive ne se resume pas a "courir plus". Tu peux augmenter la difficulté sur quatre axes :
+La surcharge progressive ne se résume pas à "courir plus". Tu peux augmenter la difficulté sur quatre axes :
 
 ### 1. Le volume
 
-Le plus evident : courir plus de kilometres ou plus longtemps.
+Le plus évident : courir plus de kilomètres ou plus longtemps.
 
 **Exemples :**
 - Passer de 30 km/semaine a 35 km
 - Allonger la sortie longue de 1h30 a 1h45
-- Ajouter une séance supplementaire dans la semaine
+- Ajouter une séance supplémentaire dans la semaine
 
-**Avantages :** Developpe l'endurance fondamentale, renforce les structures
-**Limites :** Le plus risque pour les blessures si augmente trop vite
+**Avantages :** Développe l'endurance fondamentale, renforce les structures
+**Limites :** Le plus risqué pour les blessures si augmenté trop vite
 
 ### 2. L'intensité
 
-Courir plus vite ou a des pourcentages plus élevés de tes zones.
+Courir plus vite ou à des pourcentages plus élevés de tes zones.
 
 **Exemples :**
 - Passer les fractions de 90% VMA a 95% VMA
 - Augmenter l'allure du tempo de 4:30/km a 4:20/km
-- Ajouter une portion a allure course dans la sortie longue
+- Ajouter une portion à allure course dans la sortie longue
 
-**Avantages :** Developpe la vitesse, le seuil lactique
-**Limites :** Tres exigeant, nécessite plus de récupération
+**Avantages :** Développe la vitesse, le seuil lactique
+**Limites :** Très exigeant, nécessite plus de récupération
 
 ### 3. La fréquence
 
 S'entraîner plus souvent.
 
 **Exemples :**
-- Passer de 3 a 4 séances par semaine
+- Passer de 3 à 4 séances par semaine
 - Ajouter un footing de récupération le lendemain d'une séance dure
-- Introduire le "double" (deux séances dans la journee)
+- Introduire le "double" (deux séances dans la journée)
 
 **Avantages :** Augmente le temps total d'adaptation
 **Limites :** Moins de récupération entre les séances
 
 ### 4. La densité
 
-Réduire les temps de récupération ou augmenter le travail par unite de temps.
+Réduire les temps de récupération ou augmenter le travail par unité de temps.
 
 **Exemples :**
-- Fractionne : passer de 2min de recup entre les fractions a 1min30
+- Fractionné : passer de 2min de récup entre les fractions à 1min30
 - Tempo : enchaîner les blocs au lieu de récupérer entre
 - Séance : réduire l'échauffement/retour au calme pour plus de travail effectif
 
-**Avantages :** Ameliore la capacité de récupération pendant l'effort
+**Avantages :** Améliore la capacité de récupération pendant l'effort
 **Limites :** Augmente significativement la difficulté perceptuelle
 
 ---
@@ -95,22 +95,22 @@ Une recommandation classique : n'augmente pas ta charge de plus de 10% par semai
 
 ### Pourquoi 10% ?
 
-Ce seuil vient de l'observation que des augmentations plus importantes sont correlees avec un risque accru de blessure, notamment chez les coureurs recreatifs.
+Ce seuil vient de l'observation que des augmentations plus importantes sont corrélées avec un risque accru de blessure, notamment chez les coureurs récréatifs.
 
 ### Limites de la règle
 
-- Elle s'applique au volume, pas a l'intensité
-- Les coureurs experimentes peuvent parfois augmenter plus rapidement
-- A faible volume, 10% represente peu (4 km sur 40 km)
+- Elle s'applique au volume, pas à l'intensité
+- Les coureurs expérimentés peuvent parfois augmenter plus rapidement
+- À faible volume, 10% représente peu (4 km sur 40 km)
 - Elle ne tient pas compte des facteurs individuels
 
-**A retenir :** C'est une ligne directrice, pas une loi absolue.
+**À retenir :** C'est une ligne directrice, pas une loi absolue.
 
 ---
 
 ## Periodiser la surcharge
 
-La surcharge progressive ne signifie pas une augmentation lineaire infinie. Ton corps a besoin de pauses pour consolider les adaptations.
+La surcharge progressive ne signifie pas une augmentation linéaire infinie. Ton corps a besoin de pauses pour consolider les adaptations.
 
 ### Le pattern de charge classique
 
@@ -118,7 +118,7 @@ La plupart des plans suivent un pattern 3:1 ou 2:1 :
 
 **Pattern 3:1 :**
 - Semaine 1 : charge de base (100%)
-- Semaine 2 : charge augmentee (+5-10%)
+- Semaine 2 : charge augmentée (+5-10%)
 - Semaine 3 : charge maximale (+10-15%)
 - Semaine 4 : [[deload]] (-30-40%)
 
@@ -127,17 +127,17 @@ La plupart des plans suivent un pattern 3:1 ou 2:1 :
 - Semaine 2 : charge maximale
 - Semaine 3 : décharge
 
-Le pattern 2:1 convient mieux aux coureurs plus ages ou sujets aux blessures.
+Le pattern 2:1 convient mieux aux coureurs plus âgés ou sujets aux blessures.
 
 ### L'importance du deload
 
-> 💡 Programme tes semaines de deload a l'avance (toutes les 3-4 semaines). Elles ne sont pas négociables : c'est pendant le repos que les adaptations se consolident.
+> 💡 Programme tes semaines de deload à l'avance (toutes les 3-4 semaines). Elles ne sont pas négociables : c'est pendant le repos que les adaptations se consolident.
 
 La semaine de [[deload]] n'est pas une perte de temps. C'est pendant cette phase que :
 - Les tissus se réparent complètement
 - Les réserves se reconstituent
 - Les adaptations se consolident
-- Le système nerveux récupéré
+- Le système nerveux récupère
 
 Sans deload, tu accumules une dette de fatigue qui finit par te rattraper.
 
@@ -145,20 +145,20 @@ Sans deload, tu accumules une dette de fatigue qui finit par te rattraper.
 
 ## Signes qu'il faut augmenter la charge
 
-Comment savoir si tu es pret pour la prochaine marche ?
+Comment savoir si tu es prêt pour la prochaine marche ?
 
 ### Signaux positifs
 
-- Les séances te semblent faciles (même allure, moins d'effort percu)
-- Ta fréquence cardiaque a effort egal diminue
-- Tu recuperes plus vite entre les séances
+- Les séances te semblent faciles (même allure, moins d'effort perçu)
+- Ta fréquence cardiaque à effort égal diminue
+- Tu récupères plus vite entre les séances
 - Tu termines les séances sans être complètement épuisé
 - Tes temps sur des parcours de référence s'améliorent
 
-### Tu es pret pour une surcharge quand...
+### Tu es prêt pour une surcharge quand...
 
 Tu peux cocher plusieurs de ces cases :
-- [ ] Derniere semaine bien assimilee
+- [ ] Dernière semaine bien assimilée
 - [ ] Sommeil et énergie corrects
 - [ ] Pas de douleur persistante
 - [ ] Motivation intacte
@@ -168,21 +168,21 @@ Tu peux cocher plusieurs de ces cases :
 
 ## Signes d'alarme : trop, trop vite
 
-A l'inverse, certains signaux indiquent que tu forces trop :
+À l'inverse, certains signaux indiquent que tu forces trop :
 
 ### Signaux physiques
 
 - **Fatigue persistante** : même après une bonne nuit, tu es épuisé
 - **Douleurs articulaires ou tendineuses** : qui ne disparaissent pas après l'échauffement
-- **Performances en baisse** : malgre l'entraînement, tu ralentis
-- **Maladies fréquentes** : rhumes, infections a répétition
-- **Troubles du sommeil** : difficulté a s'endormir ou réveils nocturnes
+- **Performances en baisse** : malgré l'entraînement, tu ralentis
+- **Maladies fréquentes** : rhumes, infections à répétition
+- **Troubles du sommeil** : difficulté à s'endormir ou réveils nocturnes
 
 ### Signaux psychologiques
 
-- **Perte de motivation** : l'entraînement devient une corvee
-- **Irritabilite** : tu es a cran en permanence
-- **Apprehension** : tu redoutes les séances
+- **Perte de motivation** : l'entraînement devient une corvée
+- **Irritabilité** : tu es à cran en permanence
+- **Appréhension** : tu redoutes les séances
 - **Obsession** : tu ne penses qu'aux chiffres
 
 Si tu reconnais plusieurs de ces signes, tu es peut-être en [[overreaching-non-fonctionnel]] ou en route vers le [[overtraining]]. La solution : reculer d'un cran, pas forcer davantage.
@@ -191,7 +191,7 @@ Si tu reconnais plusieurs de ces signes, tu es peut-être en [[overreaching-non-
 
 ## Application pratique : progression sur 3 mois
 
-Voici un exemple de surcharge progressive pour un coureur intermédiaire visant a passer de 35 km/semaine a 50 km/semaine sur 12 semaines :
+Voici un exemple de surcharge progressive pour un coureur intermédiaire visant à passer de 35 km/semaine à 50 km/semaine sur 12 semaines :
 
 | Semaine | Volume | Séances | Note |
 |---------|--------|---------|------|
@@ -220,25 +220,25 @@ Remarque : les progressions ne sont pas parfaitement lineaires. On avance par pa
 
 Tu veux plus de volume ET plus d'intensité ET plus de fréquence. Trop de stress d'un coup = blessure ou épuisement.
 
-**Solution :** N'augmente qu'une dimension a la fois.
+**Solution :** N'augmente qu'une dimension à la fois.
 
 ### Erreur 2 : Ignorer les signaux de fatigue
 
 "J'ai mal mais le plan dit d'augmenter." Le plan ne connaît pas ton corps.
 
-**Solution :** Adapte le plan a tes sensations, pas l'inverse.
+**Solution :** Adapte le plan à tes sensations, pas l'inverse.
 
 ### Erreur 3 : Comparer avec les autres
 
 "Mon ami court 80 km/semaine, je devrais pouvoir aussi." Chaque corps est different.
 
-**Solution :** Ta seule référence, c'est ton toi du passe.
+**Solution :** Ta seule référence, c'est ton toi du passé.
 
-### Erreur 4 : Oublier de decharger
+### Erreur 4 : Oublier de décharger
 
 Semaine après semaine, tu augmentes sans jamais souffler.
 
-**Solution :** Programme tes semaines de deload a l'avance. Elles ne sont pas négociables.
+**Solution :** Programme tes semaines de deload à l'avance. Elles ne sont pas négociables.
 
 ---
 
@@ -247,11 +247,11 @@ Semaine après semaine, tu augmentes sans jamais souffler.
 La surcharge progressive est un marathon, pas un sprint (ironiquement). Les coureurs qui progressent le plus sur le long terme sont ceux qui acceptent une progression lente et régulière.
 
 **Quelques chiffres :**
-- Un coureur recreatif peut progresser de 5-10% par an sur ses temps de course
-- Il faut 2-3 ans pour atteindre un plateau de kilometrage "mature"
+- Un coureur récréatif peut progresser de 5-10% par an sur ses temps de course
+- Il faut 2-3 ans pour atteindre un plateau de kilométrage "mature"
 - Les adaptations structurelles (tendons, os) prennent plus de temps que les adaptations cardiovasculaires
 
-La tentation de forcer est forte. Mais chaque blessure te fait perdre des semaines, voire des mois. Mieux vaut progresser doucement et régulièrement que vite et par a-coups.`,
+La tentation de forcer est forte. Mais chaque blessure te fait perdre des semaines, voire des mois. Mieux vaut progresser doucement et régulièrement que vite et par à-coups.`,
   contentEn: `## The fundamental principle of progression
 
 Why do we progress? Because our body adapts to the constraints we impose on it. But there's a catch: once adapted, you need to increase the constraint to keep progressing.

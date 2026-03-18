@@ -268,7 +268,7 @@ export function PlanCreatePage() {
         <p className="text-muted-foreground mt-1">
           {isEn
             ? "Which race are you training for?"
-            : "Pour quelle course vous entrainez-vous ?"}
+            : "Pour quelle course vous entraînez-vous ?"}
         </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -328,7 +328,7 @@ export function PlanCreatePage() {
         <p className="text-muted-foreground mt-1">
           {isEn
             ? `At least ${minWeeksForDistance} weeks from now`
-            : `Au minimum ${minWeeksForDistance} semaines a partir d'aujourd'hui`}
+            : `Au minimum ${minWeeksForDistance} semaines à partir d'aujourd'hui`}
         </p>
       </div>
 
@@ -350,7 +350,7 @@ export function PlanCreatePage() {
           {form.raceDate && dateValid && (
             <p className="text-sm text-muted-foreground text-center">
               {weeksCount}{" "}
-              {isEn ? "weeks of preparation" : "semaines de preparation"}
+              {isEn ? "weeks of preparation" : "semaines de préparation"}
             </p>
           )}
 
@@ -471,7 +471,7 @@ export function PlanCreatePage() {
           <div className="rounded-lg border bg-primary/5 p-3 text-sm text-center">
             {isEn
               ? `Based on your VMA of ${userPrefs.vma} km/h, we suggest the `
-              : `Base sur votre VMA de ${userPrefs.vma} km/h, nous suggerons le niveau `}
+              : `Basé sur votre VMA de ${userPrefs.vma} km/h, nous suggérons le niveau `}
             <span className="font-semibold">
               {isEn
                 ? DIFFICULTY_META[suggestedLevel].labelEn
@@ -604,7 +604,7 @@ export function PlanCreatePage() {
             <Mountain className="size-8 text-primary" />
           </div>
           <h2 className="text-xl font-semibold">
-            {isEn ? "Pace & Elevation" : "Allure & Denivele"}
+            {isEn ? "Pace & Elevation" : "Allure & Dénivelé"}
           </h2>
           <p className="text-muted-foreground mt-1">
             {isEn
@@ -641,7 +641,7 @@ export function PlanCreatePage() {
               />
               {paceSeconds && distanceKm > 0 && (
                 <p className="text-sm text-muted-foreground mt-2">
-                  {isEn ? "Estimated finish: " : "Temps estime : "}
+                  {isEn ? "Estimated finish: " : "Temps estimé : "}
                   <span className="font-medium">
                     {estimateFinishTime(paceSeconds, distanceKm)}
                   </span>
@@ -659,7 +659,7 @@ export function PlanCreatePage() {
             {/* Elevation gain */}
             <div>
               <label className="text-sm font-medium mb-2 block">
-                {isEn ? "Elevation gain (m)" : "Denivele positif (m)"}
+                {isEn ? "Elevation gain (m)" : "Dénivelé positif (m)"}
               </label>
               <input
                 type="number"
@@ -718,7 +718,7 @@ export function PlanCreatePage() {
             <CheckIcon className="size-8 text-primary" />
           </div>
           <h2 className="text-xl font-semibold">
-            {isEn ? "Summary" : "Recapitulatif"}
+            {isEn ? "Summary" : "Récapitulatif"}
           </h2>
           <p className="text-muted-foreground mt-1">
             {isEn
@@ -787,7 +787,7 @@ export function PlanCreatePage() {
             {/* Elevation */}
             {form.elevationGain && (
               <SummaryRow
-                label={isEn ? "Elevation" : "Denivele"}
+                label={isEn ? "Elevation" : "Dénivelé"}
                 value={`${form.elevationGain} m D+`}
               />
             )}
@@ -819,11 +819,11 @@ export function PlanCreatePage() {
             {isGenerating ? (
               <>
                 <Loader2 className="size-4 animate-spin mr-2" />
-                {isEn ? "Generating..." : "Generation en cours..."}
+                {isEn ? "Generating..." : "Génération en cours..."}
               </>
             ) : (
               <>
-                {isEn ? "Generate plan" : "Generer le plan"}
+                {isEn ? "Generate plan" : "Générer le plan"}
               </>
             )}
           </Button>

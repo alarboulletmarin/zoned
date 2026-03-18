@@ -164,7 +164,7 @@ export const nutritionSections: NutritionSection[] = [
       },
       {
         type: "paragraph",
-        text: "Il est normal de prendre 1-2kg pendant la phase de surcharge. Ce n'est pas de la graisse mais du glycogène et de l'eau qui seront utilises pendant la course.",
+        text: "Il est normal de prendre 1-2kg pendant la phase de surcharge. Ce n'est pas de la graisse mais du glycogène et de l'eau qui seront utilisés pendant la course.",
         textEn: "It is normal to gain 1-2kg during the loading phase. This is not fat but glycogen and water that will be used during the race.",
       },
     ],
@@ -181,7 +181,7 @@ export const nutritionSections: NutritionSection[] = [
     content: [
       {
         type: "paragraph",
-        text: "Le repas d'avant-course complète les réserves de glycogène hepatique (foie) après le jeûne nocturne. Il doit être pris 3-4 heures avant le départ pour permettre une digestion complète (ACSM Position Stand 2016).",
+        text: "Le repas d'avant-course complète les réserves de glycogène hépatique (foie) après le jeûne nocturne. Il doit être pris 3-4 heures avant le départ pour permettre une digestion complète (ACSM Position Stand 2016).",
         textEn: "The pre-race meal tops off liver glycogen stores after the overnight fast. It should be eaten 3-4 hours before the start to allow complète digestion (ACSM Position Stand 2016).",
       },
       {
@@ -196,7 +196,7 @@ export const nutritionSections: NutritionSection[] = [
           {
             label: "Protéines",
             labelEn: "Protein",
-            value: "Modérées, 15-25g max (faciles a digerer)",
+            value: "Modérées, 15-25g max (faciles à digérer)",
             valueEn: "Moderate, 15-25g max (easy to digest)",
           },
           {
@@ -223,7 +223,7 @@ export const nutritionSections: NutritionSection[] = [
         type: "list",
         items: [
           {
-            text: "Option 1 : Toast pain blanc + confiture + banane + the ou cafe (léger en cafeine).",
+            text: "Option 1 : Toast pain blanc + confiture + banane + thé ou café (léger en caféine).",
             textEn: "Option 1: White toast + jam + banana + tea or coffee (light caffeine).",
           },
           {
@@ -235,14 +235,14 @@ export const nutritionSections: NutritionSection[] = [
             textEn: "Option 3: White rice + lean chicken + applesauce.",
           },
           {
-            text: "Option 4 : Pancakes + sirop d'erable + jus de fruit.",
+            text: "Option 4 : Pancakes + sirop d'érable + jus de fruit.",
             textEn: "Option 4: Pancakes + maple syrup + fruit juice.",
           },
         ],
       },
       {
         type: "warning",
-        text: "A éviter le matin de la course : produits laitiers lourds (fromage, lait entier), aliments épicés, excès de cafeine (> 3mg/kg), aliments riches en fibres (muesli complet, fruits secs en quantite), aliments que vous n'avez jamais testes.",
+        text: "À éviter le matin de la course : produits laitiers lourds (fromage, lait entier), aliments épicés, excès de caféine (> 3mg/kg), aliments riches en fibres (muesli complet, fruits secs en quantité), aliments que vous n'avez jamais testés.",
         textEn: "Avoid on race morning: heavy dairy (cheese, whole milk), spicy foods, excess caffeine (> 3mg/kg), high-fiber foods (whole muesli, large amounts of dried fruit), any food you have never tested.",
       },
       {
@@ -252,7 +252,7 @@ export const nutritionSections: NutritionSection[] = [
       },
       {
         type: "paragraph",
-        text: "Si vous courez tôt le matin et ne pouvez pas manger 3-4h avant, optez pour un petit dejeuner liquide (smoothie, boisson glucidique) 1-2h avant, avec 0.5-1g glucides/kg.",
+        text: "Si vous courez tôt le matin et ne pouvez pas manger 3-4h avant, optez pour un petit déjeuner liquide (smoothie, boisson glucidique) 1-2h avant, avec 0.5-1g glucides/kg.",
         textEn: "If you run early morning and cannot eat 3-4h before, opt for a liquid breakfast (smoothie, carb drink) 1-2h before, with 0.5-1g carbs/kg.",
       },
     ],
@@ -269,7 +269,7 @@ export const nutritionSections: NutritionSection[] = [
     content: [
       {
         type: "paragraph",
-        text: "Le ravitaillement pendant l'effort est déterminant pour les performances sur des distances superieures a 60 minutes. Les recommandations sont basees sur Jeukendrup (2014) et la position de l'ACSM.",
+        text: "Le ravitaillement pendant l'effort est déterminant pour les performances sur des distances supérieures à 60 minutes. Les recommandations sont basées sur Jeukendrup (2014) et la position de l'ACSM.",
         textEn: "Fueling during exercise is critical for performance in events lasting over 60 minutes. Recommendations are based on Jeukendrup (2014) and the ACSM Position Stand.",
       },
       {
@@ -290,13 +290,13 @@ export const nutritionSections: NutritionSection[] = [
           {
             label: "90-150 min (semi-marathon)",
             labelEn: "90-150 min (half-marathon)",
-            value: "60g glucides/h. Commencer des les 20 premières minutes.",
+            value: "60g glucides/h. Commencer dès les 20 premières minutes.",
             valueEn: "60g carbs/h. Start within the first 20 minutes.",
           },
           {
             label: "> 150 min (marathon+)",
             labelEn: "> 150 min (marathon+)",
-            value: "60-90g glucides/h. Ratio glucose:fructose 2:1 obligatoire au-dela de 60g/h.",
+            value: "60-90g glucides/h. Ratio glucose:fructose 2:1 obligatoire au-delà de 60g/h.",
             valueEn: "60-90g carbs/h. 2:1 glucose:fructose ratio mandatory above 60g/h.",
           },
         ],
@@ -309,11 +309,11 @@ export const nutritionSections: NutritionSection[] = [
             textEn: "Energy gels: ~25g carbs per gel. Take with 150-200ml water (never with a sports drink).",
           },
           {
-            text: "Boissons sport : 60-80g glucides/L est la concentration optimale. Au-dela, risque de troubles gastriques.",
+            text: "Boissons sport : 60-80g glucides/L est la concentration optimale. Au-delà, risque de troubles gastriques.",
             textEn: "Sports drinks: 60-80g carbs/L is the optimal concentration. Above this, risk of GI distress.",
           },
           {
-            text: "Barres et aliments solides : utiles pour l'ultra et le trail. Macher lentement, privilegier les aliments testes.",
+            text: "Barres et aliments solides : utiles pour l'ultra et le trail. Mâcher lentement, privilégier les aliments testés.",
             textEn: "Bars and solid food: useful for ultra and trail. Chew slowly, favor tested foods.",
           },
           {
@@ -329,12 +329,12 @@ export const nutritionSections: NutritionSection[] = [
       },
       {
         type: "warning",
-        text: "Les troubles gastro-intestinaux sont la première cause d'abandon en marathon et ultra. Les facteurs de risque : AINS (ibuprofene), fibres, fructose en exces, déshydratation, et aliments non testes. Évitez les AINS pendant l'effort.",
+        text: "Les troubles gastro-intestinaux sont la première cause d'abandon en marathon et ultra. Les facteurs de risque : AINS (ibuprofène), fibres, fructose en excès, déshydratation, et aliments non testés. Évitez les AINS pendant l'effort.",
         textEn: "Gastrointestinal issues are the leading cause of DNF in marathons and ultras. Risk factors: NSAIDs (ibuprofen), fiber, excess fructose, dehydration, and untested foods. Avoid NSAIDs during exercise.",
       },
       {
         type: "paragraph",
-        text: "Pour les trails et ultras (> 4h), integrez des aliments sales (bretzels, bouillon, chips) pour maintenir l'appetit et l'apport en sodium. Alternez sucre et sale pour éviter la saturation gustative.",
+        text: "Pour les trails et ultras (> 4h), intégrez des aliments salés (bretzels, bouillon, chips) pour maintenir l'appétit et l'apport en sodium. Alternez sucré et salé pour éviter la saturation gustative.",
         textEn: "For trails and ultras (> 4h), include salty foods (pretzels, broth, chips) to maintain appetite and sodium intake. Alternate sweet and salty to avoid palate fatigue.",
       },
     ],
@@ -351,7 +351,7 @@ export const nutritionSections: NutritionSection[] = [
     content: [
       {
         type: "paragraph",
-        text: "L'hydratation pendant l'effort est un équilibre délicat : la déshydratation dégrade la performance, mais la surhydratation (hyponatremie) peut-être mortelle. Les recommandations actuelles (Sawka et al. 2007, ACSM) privilégient un plan individualise.",
+        text: "L'hydratation pendant l'effort est un équilibre délicat : la déshydratation dégrade la performance, mais la surhydratation (hyponatrémie) peut être mortelle. Les recommandations actuelles (Sawka et al. 2007, ACSM) privilégient un plan individualisé.",
         textEn: "Hydration during exercise is a delicate balance: dehydration impairs performance, but overhydration (hyponatremia) can be fatal. Current recommendations (Sawka et al. 2007, ACSM) favor individualized plans.",
       },
       {
@@ -376,9 +376,9 @@ export const nutritionSections: NutritionSection[] = [
             valueEn: "300-600mg/hour in drink or capsules",
           },
           {
-            label: "Temperature de la boisson",
+            label: "Température de la boisson",
             labelEn: "Drink temperature",
-            value: "Fraiche (10-15°C) favorise la vidange gastrique",
+            value: "Fraîche (10-15°C) favorise la vidange gastrique",
             valueEn: "Cool (10-15°C/50-59°F) promotes gastric emptying",
           },
         ],
@@ -391,27 +391,27 @@ export const nutritionSections: NutritionSection[] = [
             textEn: "Estimate your sweat rate: weigh yourself before and after 1h of running. Each kg lost = 1L of sweat.",
           },
           {
-            text: "Buvez selon la soif ET le plan : la soif est un bon guide mais peut-être retardee par le froid ou l'intensité.",
+            text: "Buvez selon la soif ET le plan : la soif est un bon guide mais peut être retardée par le froid ou l'intensité.",
             textEn: "Drink to thirst AND to plan: thirst is a good guide but can be delayed by cold or intensity.",
           },
           {
-            text: "En conditions chaudes (> 25°C), augmentez de 25-50% votre apport hydrique et commencez a boire plus tôt.",
+            text: "En conditions chaudes (> 25°C), augmentez de 25-50% votre apport hydrique et commencez à boire plus tôt.",
             textEn: "In hot conditions (> 25°C/77°F), increase fluid intake by 25-50% and start drinking earlier.",
           },
           {
-            text: "Le potassium (bananes, eau de coco) et le magnesium soutiennent la fonction musculaire sur les efforts longs.",
+            text: "Le potassium (bananes, eau de coco) et le magnésium soutiennent la fonction musculaire sur les efforts longs.",
             textEn: "Potassium (bananas, coconut water) and magnesium support muscle function during long efforts.",
           },
         ],
       },
       {
         type: "warning",
-        text: "L'hyponatremie (sodium sanguin trop bas par surhydratation) est plus dangereuse que la déshydratation modérée. Symptomes : nausées, confusion, maux de tête, prise de poids pendant l'effort. Ne buvez JAMAIS plus que votre taux de sudation.",
+        text: "L'hyponatrémie (sodium sanguin trop bas par surhydratation) est plus dangereuse que la déshydratation modérée. Symptômes : nausées, confusion, maux de tête, prise de poids pendant l'effort. Ne buvez JAMAIS plus que votre taux de sudation.",
         textEn: "Hyponatremia (low blood sodium from overhydration) is more dangerous than moderate dehydration. Symptoms: nausea, confusion, headache, weight gain during exercise. NEVER drink more than your sweat rate.",
       },
       {
         type: "tip",
-        text: "Composition ideale d'une boisson sport maison : 500ml d'eau + 30-40g de maltodextrine + 1/4 cuillere a cafe de sel (500mg sodium) + un filet de jus de citron.",
+        text: "Composition idéale d'une boisson sport maison : 500ml d'eau + 30-40g de maltodextrine + 1/4 cuillère à café de sel (500mg sodium) + un filet de jus de citron.",
         textEn: "Ideal homemade sports drink: 500ml water + 30-40g maltodextrin + 1/4 teaspoon salt (500mg sodium) + a squeeze of lemon juice.",
       },
       {
