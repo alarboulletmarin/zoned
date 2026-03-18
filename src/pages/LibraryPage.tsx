@@ -307,11 +307,11 @@ export function LibraryPage() {
       />
       <div className="py-8">
         {/* Header */}
-      <div className="mb-6">
+      <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-bold">{t("title")}</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-2xl md:text-3xl font-bold">{t("title")}</h1>
+            <p className="text-muted-foreground mt-1">
               {t("subtitle", { count: filteredWorkouts.length })}
             </p>
           </div>

@@ -51,7 +51,7 @@ const SESSION_TYPE_COLORS: Record<string, string> = {
   fartlek: "bg-purple-400",
   hills: "bg-green-500",
   race_specific: "bg-amber-500",
-  recovery: "bg-slate-300",
+  recovery: "bg-slate-300 dark:bg-slate-700",
 };
 
 const SESSION_TYPE_LABELS: Record<string, { fr: string; en: string }> = {

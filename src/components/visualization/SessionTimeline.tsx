@@ -125,7 +125,7 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
         {/* Timeline bar container */}
         <div
           className="relative flex items-end h-40 md:h-56 rounded-xl overflow-hidden"
-          style={{ backgroundColor: "hsl(0 0% 85% / 0.3)" }}
+          style={{ backgroundColor: "color-mix(in srgb, var(--muted) 40%, transparent)" }}
           role="img"
           aria-label={t("visualization.timeline")}
         >
@@ -160,7 +160,7 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
                       height: `${heightPercent}%`,
                       backgroundColor: segment.zoneNumber
                         ? ZONE_COLORS[segment.zoneNumber]
-                        : "#9ca3af",
+                        : "var(--muted-foreground)",
                       marginLeft: index > 0 ? "2px" : undefined,
                       borderLeft: isTypeChange
                         ? "3px solid rgba(0,0,0,0.3)"

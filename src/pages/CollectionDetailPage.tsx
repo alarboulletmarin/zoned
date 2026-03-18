@@ -126,8 +126,9 @@ export function CollectionDetailPage() {
         {/* Hero Section */}
         <div
           className={cn(
-            "rounded-2xl border bg-card shadow-sm",
+            "rounded-2xl border border-t-4 bg-card shadow-sm",
             `zone-${getCollectionZone(collection.slug)}`,
+            `border-t-zone-${getCollectionZone(collection.slug)}`,
             "p-8 md:p-10"
           )}
         >
