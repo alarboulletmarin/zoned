@@ -14,6 +14,12 @@ interface TopBarProps {
   sidebarCollapsed?: boolean;
 }
 
+// Ensures 44px minimum touch target without increasing visual size.
+// The button stays 32px visually, but a transparent ::after pseudo-element
+// extends the tappable area to 44px.
+const touchTarget =
+  "relative after:absolute after:inset-[-6px] after:content-['']";
+
 export function TopBar({ theme, onThemeToggle, onMobileMenuOpen }: TopBarProps) {
   const { t } = useTranslation("common");
   const { openPalette } = useCommandPalette();
@@ -24,13 +30,14 @@ export function TopBar({ theme, onThemeToggle, onMobileMenuOpen }: TopBarProps) 
     <header className="sticky top-0 z-50 h-12 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="relative flex h-full items-center px-4">
         {isMobile ? (
-          /* Mobile: absolute center for logo+title regardless of left/right asymmetry */
+          /* Mobile */
           <div className="flex h-full w-full items-center">
             <Button
               variant="ghost"
               size="icon-sm"
               onClick={onMobileMenuOpen}
               aria-label={t("actions.menu")}
+              className={touchTarget}
             >
               <Menu className="size-5" />
             </Button>
@@ -52,6 +59,7 @@ export function TopBar({ theme, onThemeToggle, onMobileMenuOpen }: TopBarProps) 
                 size="icon-sm"
                 onClick={openPalette}
                 aria-label={t("actions.search")}
+                className={touchTarget}
               >
                 <Search className="size-4" />
               </Button>
@@ -60,6 +68,7 @@ export function TopBar({ theme, onThemeToggle, onMobileMenuOpen }: TopBarProps) 
                 size="icon-sm"
                 onClick={() => changeLanguage(currentLang === "fr" ? "en" : "fr")}
                 aria-label={currentLang === "fr" ? "English" : "Français"}
+                className={touchTarget}
               >
                 <span className="text-xs font-semibold">{currentLang.toUpperCase()}</span>
               </Button>
@@ -68,6 +77,7 @@ export function TopBar({ theme, onThemeToggle, onMobileMenuOpen }: TopBarProps) 
                 size="icon-sm"
                 onClick={onThemeToggle}
                 aria-label={theme === "light" ? t("theme.dark") : t("theme.light")}
+                className={touchTarget}
               >
                 {theme === "light" ? <Moon className="size-4" /> : <Sun className="size-4" />}
               </Button>
@@ -86,7 +96,7 @@ export function TopBar({ theme, onThemeToggle, onMobileMenuOpen }: TopBarProps) 
               <span className="font-bold text-sm whitespace-nowrap">{t("app.name")}</span>
             </Link>
 
-            {/* Centered search - absolute positioning for true center regardless of logo/actions width */}
+            {/* Centered search */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <Button
                 variant="outline"
