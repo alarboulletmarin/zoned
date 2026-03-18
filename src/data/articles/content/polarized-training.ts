@@ -26,6 +26,8 @@ En analysant les carnets d'entrainement de skieurs de fond, cyclistes, et rameur
 
 Le 80/20 n'est pas une invention theorique. C'est l'observation de ce que font naturellement les meilleurs.
 
+> 📊 Les etudes de Stephen Seiler montrent que 75 a 85% du temps d'entrainement des athletes d'elite se fait a faible intensite. Ce ratio est remarquablement constant d'un sport d'endurance a l'autre.
+
 ---
 
 ## Les trois zones du modele polarise
@@ -45,6 +47,8 @@ C'est la [[zone-3]] - l'allure tempo, moderement difficile. Tu sens que tu trava
 
 **Perception** : RPE 5-7 sur 10
 **Test de la parole** : phrases courtes, conversation decousue
+
+> 📌 Le principe fondamental du polarise : soit tu cours facile (conversation aisee), soit tu cours dur (impossible de parler). Evite le milieu.
 
 ### Zone 3 : Au-dessus du seuil lactique
 
@@ -162,6 +166,8 @@ Pour un coureur qui s'entraine 5 fois par semaine (environ 5-6h) :
 
 ## Les pieges a eviter
 
+> ⚠️ L'erreur la plus courante : courir les jours faciles trop vite et les jours durs pas assez fort. Le resultat est un entrainement mediocre qui ne produit ni recuperation ni adaptation.
+
 ### Piege 1 : "Facile" n'est pas assez facile
 
 La plupart des coureurs sous-estiment a quel point leurs footings devraient etre lents. Si tu regardes ta montre et que tu penses "c'est trop lent", tu es probablement au bon rythme.
@@ -235,6 +241,8 @@ By analyzing training logs of cross-country skiers, cyclists, and Olympic rowers
 
 The 80/20 isn't a theoretical invention. It's the observation of what the best naturally do.
 
+> 📊 Stephen Seiler's studies show that 75 to 85% of elite athletes' training time is spent at low intensity. This ratio is remarkably consistent across endurance sports.
+
 ---
 
 ## The three zones of the polarized model
@@ -254,6 +262,8 @@ This is [[zone-3]] - tempo pace, moderately difficult. You feel like you're work
 
 **Perception**: RPE 5-7 out of 10
 **Talk test**: short sentences, choppy conversation
+
+> 📌 The fundamental principle of polarized training: either run easy (can chat freely), or run hard (can't talk). Avoid the middle ground.
 
 ### Zone 3: Above the lactate threshold
 
@@ -370,6 +380,8 @@ For a runner training 5 times per week (about 5-6h):
 ---
 
 ## Pitfalls to avoid
+
+> ⚠️ The most common mistake: running easy days too fast and hard days not hard enough. The result is mediocre training that produces neither recovery nor adaptation.
 
 ### Pitfall 1: "Easy" isn't easy enough
 

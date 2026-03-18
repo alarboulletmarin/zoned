@@ -18,6 +18,8 @@ Ton corps fonctionne sur deux composantes antagonistes : la forme (fitness) et l
 
 Le taper reduit la fatigue plus rapidement que la forme ne decline. Resultat : ta performance "nette" - forme moins fatigue - atteint un pic.
 
+> 📊 Un taper bien execute peut ameliorer la performance de 0.5% a 6%. Sur un marathon de 3h30, cela represente jusqu'a 12 minutes gagnees.
+
 Les etudes de Mujika et Padilla (2003) montrent qu'un taper bien execute peut ameliorer la performance de 0.5% a 6% selon les athletes. Sur un marathon de 3h30, ca represente jusqu'a 12 minutes.
 
 ### Les adaptations pendant le taper
@@ -35,6 +37,8 @@ Contrairement a ce qu'on pourrait croire, le corps ne fait pas que se reposer. I
 ## Les regles d'or du taper
 
 ### Regle 1 : Reduire le volume, maintenir l'intensite
+
+> 📌 Le principe cle du taper : reduire le volume de 40 a 60% tout en maintenant l'intensite des seances. C'est le volume qui genere la fatigue, pas l'intensite.
 
 C'est le principe fondamental. Tu cours moins, mais tu gardes des seances avec de l'intensite.
 
@@ -125,6 +129,8 @@ Supposons que ta semaine normale de pic soit a 70 km.
 
 ## Les pieges du taper
 
+> 💡 Les sensations "bizarres" pendant le taper sont normales : jambes lourdes, impression de perte de forme. Fais confiance au processus, ca disparait apres les premiers kilometres de course.
+
 ### Piege 1 : La panique de derniere minute
 
 Tu te sens soudain "lourd" ou "plat". Tes jambes sont bizarres. Tu paniques : "Je perds ma forme !" et tu rajoutes une seance.
@@ -142,6 +148,8 @@ Tu cours moins, alors tu remplis le vide : plus de musculation, du velo intensif
 **Solution :** Activites legeres autorisees (marche, natation douce), mais rien qui genere de la fatigue.
 
 ### Piege 3 : Trop couper
+
+> ⚠️ Couper totalement l'entrainement est aussi nefaste que ne pas taper du tout. Sans stimulus, tu perds les adaptations neuromusculaires et la "sensation" de tes allures.
 
 A l'inverse, certains coupent totalement et passent une semaine sur le canape.
 
@@ -216,6 +224,8 @@ Your body operates on two opposing components: fitness and fatigue. During train
 
 Tapering reduces fatigue faster than fitness declines. Result: your "net" performance - fitness minus fatigue - reaches a peak.
 
+> 📊 A well-executed taper can improve performance by 0.5% to 6%. For a 3h30 marathon, that's up to 12 minutes gained.
+
 Studies by Mujika and Padilla (2003) show that a well-executed taper can improve performance by 0.5% to 6% depending on the athlete. For a 3h30 marathon, that's up to 12 minutes.
 
 ### Adaptations during taper
@@ -233,6 +243,8 @@ Contrary to what one might think, the body doesn't just rest. It continues to ad
 ## The golden rules of tapering
 
 ### Rule 1: Reduce volume, maintain intensity
+
+> 📌 The key taper principle: reduce volume by 40 to 60% while maintaining session intensity. Volume generates fatigue, not intensity.
 
 This is the fundamental principle. You run less, but you keep sessions with intensity.
 
@@ -323,6 +335,8 @@ Suppose your normal peak week is 70 km.
 
 ## Taper pitfalls
 
+> 💡 "Weird" sensations during the taper are normal: heavy legs, feeling of losing fitness. Trust the process, it disappears after the first kilometers of the race.
+
 ### Pitfall 1: Last-minute panic
 
 You suddenly feel "heavy" or "flat." Your legs are weird. You panic: "I'm losing fitness!" and add a session.
@@ -340,6 +354,8 @@ You're running less, so you fill the void: more strength training, intense cycli
 **Solution:** Light activities allowed (walking, gentle swimming), but nothing that generates fatigue.
 
 ### Pitfall 3: Cutting too much
+
+> ⚠️ Cutting training completely is just as harmful as not tapering at all. Without stimulus, you lose neuromuscular adaptations and the "feel" of your paces.
 
 Conversely, some cut completely and spend a week on the couch.
 

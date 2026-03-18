@@ -8,6 +8,8 @@ const content: ArticleContent = {
 
 Faites confiance a vos sensations. La frequence cardiaque peut etre faussee par de nombreux facteurs : chaleur, stress, fatigue, cafeine, position du capteur. Un capteur optique de poignet est particulierement sujet aux erreurs lors des mouvements repetitifs de la course.
 
+> 💡 La regle d'or pour la Zone 2 : si vous pouvez tenir une conversation normale sans effort, vous etes dans la bonne zone, peu importe ce qu'affiche votre montre.
+
 La regle d'or pour la Zone 2 : vous devez pouvoir tenir une conversation normale. Si vous pouvez parler sans effort, vous etes dans la bonne zone - peu importe ce qu'affiche votre montre.
 
 Avec l'experience, vous apprendrez a calibrer vos sensations avec vos donnees. Mais en cas de doute, l'intention de la seance prime sur le chiffre affiche.
@@ -57,6 +59,8 @@ Les premiers changements cardiovasculaires apparaissent des 2-3 semaines d'entra
 
 Les progres mesurables sur un test ou une course arrivent generalement apres 6-12 semaines de travail coherent. C'est le temps necessaire aux adaptations musculaires, metaboliques et neuromusculaires.
 
+> 💡 Les progres mesurables arrivent apres 6 a 12 semaines de travail coherent. Changer de programme toutes les 3 semaines ne laisse jamais le temps aux adaptations de s'installer.
+
 La patience est cruciale. Les coureurs qui changent de programme toutes les 3 semaines ne laissent jamais le temps aux adaptations de s'installer.
 
 ---
@@ -68,6 +72,8 @@ La patience est cruciale. Les coureurs qui changent de programme toutes les 3 se
 Distinguez l'inconfort de la douleur :
 
 **Inconfort** (lourdeur, legere raideur, courbatures) : souvent normal, surtout en debut de seance. Continuez en surveillant - ca passe generalement apres 10-15 minutes.
+
+> 💡 Dans le doute entre inconfort et douleur, arretez-vous. Une seance manquee par prudence vaut mieux que des semaines d'arret force.
 
 **Douleur** (aigue, localisee, qui augmente ou qui fait boiter) : arretez immediatement. Forcer sur une vraie douleur transforme une blessure legere en blessure grave.
 
@@ -147,6 +153,8 @@ Le froid est moins problematique que la chaleur, mais demande une adaptation ves
 
 Trust your sensations. Heart rate can be skewed by many factors: heat, stress, fatigue, caffeine, sensor position. A wrist optical sensor is particularly prone to errors during the repetitive movements of running.
 
+> 💡 The golden rule for Zone 2: if you can hold a normal conversation without effort, you're in the right zone, regardless of what your watch displays.
+
 The golden rule for Zone 2: you should be able to hold a normal conversation. If you can talk effortlessly, you're in the right zone - regardless of what your watch displays.
 
 With experience, you'll learn to calibrate your sensations with your data. But when in doubt, the session's intention takes precedence over the displayed number.
@@ -196,6 +204,8 @@ The first cardiovascular changes appear as early as 2-3 weeks of regular trainin
 
 Measurable progress on a test or race generally arrives after 6-12 weeks of consistent work. That's the time needed for muscular, metabolic, and neuromuscular adaptations.
 
+> 💡 Measurable progress arrives after 6 to 12 weeks of consistent work. Changing programs every 3 weeks never lets adaptations settle.
+
 Patience is crucial. Runners who change programs every 3 weeks never let adaptations settle.
 
 ---
@@ -207,6 +217,8 @@ Patience is crucial. Runners who change programs every 3 weeks never let adaptat
 Distinguish discomfort from pain:
 
 **Discomfort** (heaviness, slight stiffness, soreness): often normal, especially early in a session. Continue while monitoring - it usually passes after 10-15 minutes.
+
+> 💡 When in doubt between discomfort and pain, stop. A session missed out of caution is better than weeks of forced rest.
 
 **Pain** (sharp, localized, increasing or causing limping): stop immediately. Forcing through real pain transforms a minor injury into a serious one.
 

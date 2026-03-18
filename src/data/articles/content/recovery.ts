@@ -10,6 +10,8 @@ L'entrainement est un stress. Chaque seance inflige a votre corps des micro-trau
 
 Ce phenomene s'appelle la supercompensation. Mais il ne fonctionne qu'a une condition : laisser au corps le temps de completer son travail de reconstruction. Couper ce processus par une nouvelle seance trop precoce, c'est construire sur des fondations inachevees.
 
+> 📌 Vous ne progressez pas pendant l'effort, mais pendant la recuperation qui suit. Sans repos adequat, pas de supercompensation.
+
 ---
 
 ## Les deux types de recuperation
@@ -43,6 +45,8 @@ Le systeme immunitaire aussi travaille la nuit. Les cellules de defense se multi
 ### Les besoins du coureur
 
 La recommandation standard de 7-8 heures s'applique aux sedentaires. Un coureur qui s'entraine regulierement a besoin de davantage : 8-9 heures pour recuperer de maniere optimale. Les athletes d'elite dorment souvent 9-10 heures, siestes comprises.
+
+> 💡 Visez 8 a 9 heures de sommeil par nuit. Ajoutez une sieste de 20 minutes apres une seance intense pour accelerer la recuperation.
 
 Au-dela de la duree, la regularite compte. Se coucher et se lever a heures fixes synchronise votre horloge biologique, ameliorant la qualite du sommeil meme a duree egale.
 
@@ -126,6 +130,8 @@ Cette coupure regenere le mental autant que le physique. Elle previent l'usure p
 
 Le surentrainement n'est pas de la simple fatigue. C'est un etat pathologique ou votre corps n'arrive plus a recuperer, meme avec du repos. En arriver la demande des mois d'erreurs - et en sortir peut prendre des mois egalement.
 
+> ⚠️ Si votre frequence cardiaque au repos augmente de 5+ battements et que vos performances chutent malgre l'entrainement, arretez-vous. Ce sont des signaux serieux de surentrainement.
+
 ### Les signes physiques
 
 - Performances qui stagnent ou regressent malgre l'entrainement
@@ -167,6 +173,8 @@ Training is stress. Each session inflicts micro-trauma on your body: damaged mus
 
 This phenomenon is called supercompensation. But it only works under one condition: giving the body time to complete its rebuilding work. Cutting this process short with a premature new session is building on unfinished foundations.
 
+> 📌 You don't improve during effort, but during the recovery that follows. Without adequate rest, there is no supercompensation.
+
 ---
 
 ## The two types of recovery
@@ -200,6 +208,8 @@ The immune system also works at night. Defense cells multiply, inflammation subs
 ### The runner's needs
 
 The standard recommendation of 7-8 hours applies to sedentary people. A runner who trains regularly needs more: 8-9 hours to recover optimally. Elite athletes often sleep 9-10 hours, including naps.
+
+> 💡 Aim for 8 to 9 hours of sleep per night. Add a 20-minute nap after an intense session to accelerate recovery.
 
 Beyond duration, regularity matters. Going to bed and waking up at fixed times synchronizes your biological clock, improving sleep quality even at equal duration.
 
@@ -282,6 +292,8 @@ This break regenerates the mind as much as the body. It prevents the psychologic
 ## Recognizing overtraining
 
 Overtraining isn't simple fatigue. It's a pathological state where your body can no longer recover, even with rest. Getting there takes months of mistakes - and getting out can take months too.
+
+> ⚠️ If your resting heart rate rises by 5+ beats and your performance drops despite training, stop. These are serious signs of overtraining.
 
 ### Physical signs
 

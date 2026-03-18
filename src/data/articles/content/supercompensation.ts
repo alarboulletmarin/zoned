@@ -16,6 +16,8 @@ Imagine ta forme physique comme un niveau d'eau dans un reservoir. Chaque seance
 
 C'est ca, la surcompensation : ton corps ne se contente pas de reparer les degats, il se prepare a mieux encaisser la prochaine fois.
 
+> 📌 Tu ne progresses pas pendant l'effort, mais apres. La seance cree le stress, le repos cree l'adaptation. Sans repos adequat, pas de progression.
+
 ### Phase 1 : Le stimulus (la seance)
 
 Tu cours ta seance de fractionne. Tes fibres musculaires subissent des micro-lesions. Tes reserves de glycogene s'epuisent. Ton systeme nerveux fatigue. Sur le moment, tu es plus faible qu'avant la seance.
@@ -48,11 +50,15 @@ C'est la phase magique. Ton corps, anticipant un nouveau stress, ne se contente 
 
 ### Phase 4 : Le retour a la normale
 
+> ⚠️ Relancer un stimulus trop tot accumule la fatigue sans jamais atteindre la surcompensation. Trop tard, et les gains se dissipent. Le timing est tout.
+
 Si tu ne relances pas un nouveau stimulus, la surcompensation s'estompe. Ton corps ne maintient pas indefiniment ces adaptations "couteuses". Utilise-les ou perds-les.
 
 ---
 
 ## La fenetre optimale : timing is everything
+
+> 📊 La fenetre de surcompensation optimale se situe entre 36 et 96 heures apres une seance intense, selon le type d'effort et ta capacite de recuperation.
 
 Le timing de ta prochaine seance est crucial. Trop tot, tu cumules les fatigues. Trop tard, tu rates la fenetre de surcompensation.
 
@@ -205,6 +211,8 @@ Imagine your fitness level as water in a reservoir. Each training session lowers
 
 That's supercompensation: your body doesn't just repair the damage, it prepares to handle the next challenge better.
 
+> 📌 You don't progress during effort, but after. The session creates stress, rest creates adaptation. Without adequate rest, no progression.
+
 ### Phase 1: The stimulus (the session)
 
 You run your interval session. Your muscle fibers suffer micro-damage. Your glycogen reserves deplete. Your nervous system fatigues. At that moment, you're weaker than before the session.
@@ -237,11 +245,15 @@ This is the magic phase. Your body, anticipating new stress, doesn't just return
 
 ### Phase 4: Return to baseline
 
+> ⚠️ Triggering a new stimulus too early accumulates fatigue without ever reaching supercompensation. Too late, and the gains dissipate. Timing is everything.
+
 If you don't trigger a new stimulus, supercompensation fades. Your body doesn't indefinitely maintain these "expensive" adaptations. Use them or lose them.
 
 ---
 
 ## The optimal window: timing is everything
+
+> 📊 The optimal supercompensation window falls between 36 and 96 hours after an intense session, depending on effort type and your recovery capacity.
 
 The timing of your next session is crucial. Too early, you accumulate fatigue. Too late, you miss the supercompensation window.
 

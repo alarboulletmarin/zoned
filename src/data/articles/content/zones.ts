@@ -20,6 +20,8 @@ C'est le systeme principal pour les efforts prolonges. Il utilise l'oxygene pour
 
 La filiere aerobie se developpe en Zone 1 et Zone 2, la ou l'intensite reste moderee. C'est pourquoi les marathoniens passent 80% de leur temps d'entrainement a ces allures "faciles". Ils construisent leur moteur d'endurance.
 
+> 📊 Les marathoniens d'elite passent 80% de leur entrainement en Zone 1-2. Ce n'est pas un manque d'ambition, c'est de la science.
+
 ### La filiere anaerobie lactique : le turbo
 
 Quand l'intensite augmente, le systeme aerobie ne suffit plus. Votre corps active alors la filiere anaerobie lactique, capable de produire de l'energie sans oxygene. C'est rapide et puissant, mais il y a un prix : la production d'acide lactique.
@@ -52,6 +54,8 @@ A cette intensite, vos cellules musculaires developpent davantage de mitochondri
 
 La conversation reste aisee, meme si vous preferez peut-etre des phrases plus courtes. Vous transpirez, la respiration est presente mais controlee. Beaucoup de coureurs commettent l'erreur de negliger cette zone, la jugeant "trop facile". C'est pourtant la que se forge l'endurance qui vous portera sur vos plus longues distances.
 
+> 📌 La Zone 2 est la zone la plus importante pour progresser a long terme. Ne la negligez jamais sous pretexte qu'elle semble "trop facile".
+
 **Sensation typique** : effort confortable mais reel, vous sentez que vous courez.
 
 ### Zone 3 - Tempo (70-80% FCmax)
@@ -82,6 +86,8 @@ Le travail en Zone 5 se fait par intervalles : 30 secondes a 3 minutes d'effort 
 
 Mais attention : ce type d'entrainement est tres sollicitant. Deux seances par semaine maximum, avec au moins 48 heures de recuperation entre chaque.
 
+> ⚠️ Ne depassez jamais deux seances de VMA par semaine. Le risque de blessure et de surentrainement augmente fortement au-dela.
+
 **Sensation typique** : respiration maximale, impossible de parler, duree limitee.
 
 ### Zone 6 - Sprint (95-100% FCmax)
@@ -107,6 +113,8 @@ La methode la plus fiable reste le test. Apres un echauffement complet de 15-20 
 ### Les formules
 
 La formule classique "220 - age" est simple mais imprecise, avec un ecart-type de 10-12 battements. La formule de Tanaka (208 - 0.7 x age) est legerement plus fiable. Mais gardez en tete qu'aucune formule ne remplace une mesure directe.
+
+> 💡 Si vous n'avez pas de cardiofrequencemetre, utilisez le "test de la parole" : en Zone 2, vous devez pouvoir parler en phrases completes sans essoufflement.
 
 ### L'echelle de perception
 
@@ -158,6 +166,8 @@ This is the main system for prolonged efforts. It uses oxygen to transform fats 
 
 The aerobic pathway develops in Zone 1 and Zone 2, where intensity remains moderate. This is why marathon runners spend 80% of their training time at these "easy" paces. They're building their endurance engine.
 
+> 📊 Elite marathon runners spend 80% of their training in Zone 1-2. It's not a lack of ambition - it's science.
+
 ### The anaerobic lactic pathway: the turbo
 
 When intensity increases, the aerobic system isn't enough. Your body then activates the anaerobic lactic pathway, capable of producing energy without oxygen. It's fast and powerful, but there's a price: lactic acid production.
@@ -190,6 +200,8 @@ At this intensity, your muscle cells develop more mitochondria - the energy powe
 
 Conversation remains easy, though you might prefer shorter sentences. You're sweating, breathing is present but controlled. Many runners make the mistake of neglecting this zone, judging it "too easy." Yet this is where the endurance that will carry you through your longest distances is forged.
 
+> 📌 Zone 2 is the most important zone for long-term progress. Never neglect it just because it feels "too easy."
+
 **Typical sensation**: comfortable but real effort, you feel like you're running.
 
 ### Zone 3 - Tempo (70-80% HRmax)
@@ -220,6 +232,8 @@ Zone 5 work is done through intervals: 30 seconds to 3 minutes of intense effort
 
 But beware: this type of training is very demanding. Two sessions per week maximum, with at least 48 hours of recovery between each.
 
+> ⚠️ Never exceed two VO2max sessions per week. The risk of injury and overtraining increases sharply beyond that.
+
 **Typical sensation**: maximal breathing, impossible to talk, limited duration.
 
 ### Zone 6 - Sprint (95-100% HRmax)
@@ -245,6 +259,8 @@ The most reliable method remains testing. After a complete warm-up of 15-20 minu
 ### The formulas
 
 The classic "220 - age" formula is simple but imprecise, with a standard deviation of 10-12 beats. The Tanaka formula (208 - 0.7 x age) is slightly more reliable. But keep in mind that no formula replaces direct measurement.
+
+> 💡 If you don't have a heart rate monitor, use the "talk test": in Zone 2, you should be able to speak in complete sentences without breathlessness.
 
 ### The perception scale
 

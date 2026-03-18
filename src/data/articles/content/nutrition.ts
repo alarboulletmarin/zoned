@@ -14,6 +14,8 @@ Mal vous alimenter, c'est comme partir en roadtrip avec un reservoir a moitie vi
 
 ### Le timing est crucial
 
+> 📌 Le timing nutritionnel autour de l'entrainement est aussi important que le contenu de l'assiette : mangez trop tot et l'energie n'est pas disponible, trop tard et la digestion gene l'effort.
+
 Votre systeme digestif et votre systeme musculaire sont en competition pour le flux sanguin. Pendant la digestion, le sang afflue vers l'estomac et les intestins. Pendant l'effort, il file vers les muscles. Manger trop pres d'une seance cree un conflit : crampes, nausees, inconfort.
 
 La regle generale : plus le repas est copieux, plus il doit etre eloigne de l'effort.
@@ -123,6 +125,8 @@ Avant meme de penser a l'effort, assurez-vous d'etre correctement hydrate au quo
 
 ### L'indicateur le plus fiable
 
+> 💡 Verifiez la couleur de vos urines avant chaque seance : jaune pale = bien hydrate, jaune fonce = buvez avant de partir.
+
 Oubliez les calculs complexes. La couleur de vos urines vous dit tout ce que vous avez besoin de savoir :
 
 | Couleur | Interpretation |
@@ -146,6 +150,8 @@ Une boisson sportive, un comprime d'electrolytes dans votre gourde, ou simplemen
 
 ### Manger trop juste avant
 
+> ⚠️ Ce que vous mangez 30 minutes avant la course ne sera pas digere a temps pour fournir de l'energie - ca ne fera que creer de l'inconfort.
+
 L'estomac plein qui fait "splash" a chaque foulee, c'est non seulement inconfortable mais aussi inefficace. Ce que vous mangez 30 minutes avant ne sera pas digere a temps pour fournir de l'energie.
 
 ### Tester en competition
@@ -153,6 +159,8 @@ L'estomac plein qui fait "splash" a chaque foulee, c'est non seulement inconfort
 Nouveau gel, nouvelle marque, nouvelle strategie - testez toujours a l'entrainement d'abord. Les troubles digestifs en course transforment une belle journee en calvaire.
 
 ### Sous-estimer l'hydratation
+
+> 📊 Une deshydratation de seulement 2% du poids corporel diminue les performances de 10 a 20%. Sur un semi-marathon, c'est 5 a 10 minutes de perdues.
 
 Une perte hydrique de seulement 2% du poids corporel diminue les performances de 10-20%. Sur un semi-marathon par temps chaud, c'est la difference entre votre objectif et dix minutes de plus.
 
@@ -190,6 +198,8 @@ Poor nutrition is like starting a road trip with a half-empty tank: you won't ge
 ## Before effort: load without weighing down
 
 ### Timing is crucial
+
+> 📌 Nutrition timing around training is as important as what's on your plate: eat too early and the energy isn't available, too late and digestion hinders effort.
 
 Your digestive system and muscular system compete for blood flow. During digestion, blood flows to the stomach and intestines. During effort, it rushes to the muscles. Eating too close to a session creates a conflict: cramps, nausea, discomfort.
 
@@ -300,6 +310,8 @@ Before even thinking about effort, make sure you're properly hydrated daily. A r
 
 ### The most reliable indicator
 
+> 💡 Check your urine color before each session: pale yellow = well hydrated, dark yellow = drink before heading out.
+
 Forget complex calculations. Your urine color tells you everything you need to know:
 
 | Color | Interpretation |
@@ -323,6 +335,8 @@ A sports drink, an electrolyte tablet in your bottle, or simply slightly salty f
 
 ### Eating too much right before
 
+> ⚠️ What you eat 30 minutes before a run won't be digested in time to provide energy - it will only create discomfort.
+
 A full stomach that goes "splash" with every stride is not only uncomfortable but also ineffective. What you eat 30 minutes before won't be digested in time to provide energy.
 
 ### Testing in competition
@@ -330,6 +344,8 @@ A full stomach that goes "splash" with every stride is not only uncomfortable bu
 New gel, new brand, new strategy - always test in training first. Digestive troubles during a race transform a beautiful day into an ordeal.
 
 ### Underestimating hydration
+
+> 📊 A dehydration of just 2% of body weight decreases performance by 10 to 20%. In a half-marathon, that's 5 to 10 minutes lost.
 
 A fluid loss of only 2% of body weight decreases performance by 10-20%. In a half-marathon in hot weather, that's the difference between your goal and ten extra minutes.
 

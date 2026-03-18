@@ -46,6 +46,8 @@ Augmentez progressivement l'allure au fil des minutes, sans jamais depasser la Z
 
 L'objectif n'est pas de "se preparer a etre fatigue". C'est de preparer tous les systemes a fonctionner ensemble efficacement.
 
+> 💡 Commencez toujours ridiculement lent. Si les premieres minutes ne vous semblent pas "trop faciles", vous allez probablement trop vite.
+
 ### Phase 2 : Gammes athletiques (5-8 minutes)
 
 Sur une ligne droite de 30-40 metres, enchainez ces exercices avec retour en trottinant :
@@ -90,6 +92,8 @@ C'est la que l'echauffement est le plus crucial. Les efforts tres intenses solli
 
 Prevoyez 20-25 minutes : footing progressif de 15 minutes, gammes completes, et 3-4 accelerations dont la derniere proche de votre allure VMA.
 
+> 📌 Plus la seance est intense, plus l'echauffement doit etre long et complet. Pour du fractionne VMA, prevoyez au minimum 20 minutes de preparation.
+
 ### Avant une competition
 
 L'echauffement pre-course est un art en soi. Il doit etre complet sans etre fatigant, et se terminer juste avant le depart (5-10 minutes maximum).
@@ -105,6 +109,8 @@ Sur un marathon, l'echauffement peut etre plus leger : 10-15 minutes de trot et 
 ### Les etirements statiques avant l'effort
 
 Pendant des decennies, on a conseille de s'etirer avant de courir. Les etudes recentes montrent l'inverse : les etirements statiques (maintenir une position 20-30 secondes) reduisent temporairement la force et la puissance musculaire de 5 a 10%.
+
+> ⚠️ Les etirements statiques avant l'effort reduisent votre force musculaire de 5 a 10%. Gardez-les pour apres la seance et privilegiez les gammes dynamiques avant de courir.
 
 Reservez les etirements statiques pour apres la seance, quand les muscles sont chauds et que la recuperation commence. Avant l'effort, preferez les mouvements dynamiques des gammes athletiques.
 
@@ -187,6 +193,8 @@ Gradually increase the pace over the minutes, never exceeding Zone 2. By the end
 
 The goal isn't to "prepare to be tired." It's to prepare all systems to work together efficiently.
 
+> 💡 Always start ridiculously slow. If the first few minutes don't feel "too easy," you're probably going too fast.
+
 ### Phase 2: Athletic drills (5-8 minutes)
 
 On a straight line of 30-40 meters, chain these exercises with a jogging return:
@@ -231,6 +239,8 @@ This is where warm-up is most crucial. Very intense efforts brutally stress musc
 
 Plan 20-25 minutes: 15 minutes of progressive jogging, complete drills, and 3-4 accelerations with the last one close to your VO2max pace.
 
+> 📌 The more intense the session, the longer and more complete the warm-up should be. For VO2max intervals, plan at least 20 minutes of preparation.
+
 ### Before competition
 
 Pre-race warm-up is an art in itself. It must be complete without being tiring, and end just before the start (5-10 minutes maximum).
@@ -246,6 +256,8 @@ On a marathon, warm-up can be lighter: 10-15 minutes of jogging and some drills 
 ### Static stretching before effort
 
 For decades, people advised stretching before running. Recent studies show the opposite: static stretches (holding a position 20-30 seconds) temporarily reduce muscle strength and power by 5 to 10%.
+
+> ⚠️ Static stretching before effort reduces your muscle strength by 5 to 10%. Save it for after the session and favor dynamic drills before running.
 
 Save static stretches for after the session, when muscles are warm and recovery begins. Before effort, prefer the dynamic movements of athletic drills.
 

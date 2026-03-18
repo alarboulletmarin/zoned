@@ -8,6 +8,8 @@ Courir au feeling, ca marche... un temps. Tu progresses pendant quelques mois, p
 
 Le principe est simple : ton corps ne peut pas tout developper en meme temps. Si tu travailles l'endurance, la vitesse, et la force simultanement avec la meme intensite, tu dilues tes efforts. La periodisation consiste a concentrer tes ressources sur des qualites specifiques, dans un ordre logique, pour construire une performance solide.
 
+> 📌 La periodisation repose sur un principe cle : concentrer ses efforts sur une qualite a la fois, dans un ordre logique, plutot que tout travailler en meme temps.
+
 ---
 
 ## Les trois cycles de la planification
@@ -35,6 +37,8 @@ La structure classique d'un mesocycle suit un pattern de charge progressive :
 - **Pattern 2:1** : 2 semaines de charge + 1 semaine de decharge (pour coureurs plus ages ou sujet aux blessures)
 
 Cette alternance charge/recuperation est essentielle. C'est pendant les semaines de [[deload]] que ton corps consolide les adaptations.
+
+> 💡 Adopte le pattern 3:1 pour commencer : 3 semaines de charge progressive suivies d'1 semaine de decharge. C'est le format le plus eprouve et le plus simple a suivre.
 
 ### Le microcycle : la semaine type
 
@@ -185,6 +189,8 @@ Tout le monde veut faire du fractionne. Mais sans fondation aerobie solide, les 
 
 "Je me sens bien, je continue". Mauvaise idee. C'est pendant les semaines de recuperation que se produisent les adaptations. Les supprimer, c'est compromettre ta progression.
 
+> ⚠️ Ne supprime jamais les semaines de decharge, meme quand tu te sens en forme. C'est la que les adaptations se consolident. Les ignorer mene a la stagnation ou la blessure.
+
 ### 3. Multiplier les objectifs
 
 Vouloir etre au top sur un 10 km en mars, un semi en avril, et un marathon en mai est une recette pour l'echec. Choisis un objectif principal par macrocycle.
@@ -209,6 +215,8 @@ Le meilleur plan est celui que tu arrives a suivre. Commence par une structure s
 Running by feel works... for a while. You progress for a few months, then you plateau. You get injured. You lose motivation. Periodization is exactly the opposite: a structured approach that organizes your training over time to maximize adaptations and arrive at peak form on race day.
 
 The principle is simple: your body can't develop everything at once. If you work on endurance, speed, and strength simultaneously with the same intensity, you dilute your efforts. Periodization means concentrating your resources on specific qualities, in a logical order, to build solid performance.
+
+> 📌 Periodization rests on a key principle: focus your efforts on one quality at a time, in a logical order, rather than working everything simultaneously.
 
 ---
 
@@ -237,6 +245,8 @@ The classic mesocycle structure follows a progressive load pattern:
 - **2:1 pattern**: 2 weeks of load + 1 recovery week (for older runners or those prone to injury)
 
 This load/recovery alternation is essential. It's during [[deload]] weeks that your body consolidates adaptations.
+
+> 💡 Start with the 3:1 pattern: 3 weeks of progressive load followed by 1 recovery week. It's the most proven and simplest format to follow.
 
 ### The microcycle: the weekly template
 
@@ -386,6 +396,8 @@ Everyone wants to do intervals. But without a solid aerobic foundation, intense 
 ### 2. Ignoring recovery weeks
 
 "I feel good, I'll keep going." Bad idea. It's during recovery weeks that adaptations occur. Removing them compromises your progress.
+
+> ⚠️ Never skip recovery weeks, even when you feel great. That's when adaptations consolidate. Ignoring them leads to stagnation or injury.
 
 ### 3. Multiplying goals
 

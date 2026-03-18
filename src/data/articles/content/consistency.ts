@@ -8,6 +8,8 @@ Tu as peut-être déjà vécu ça : une semaine où tu t'entraînes comme un pro
 
 La vérité que les coureurs expérimentés connaissent bien : **ce n'est pas la séance exceptionnelle qui te fait progresser, c'est l'accumulation de séances régulières sur des mois et des années.**
 
+> 📌 La régularité bat toujours l'intensité sur le long terme. Trois séances modestes par semaine pendant un an produisent plus de résultats que des blocs intenses suivis de longues pauses.
+
 ---
 
 ## L'effet cumulé : la magie des petits pas
@@ -22,6 +24,8 @@ Imagine deux coureurs :
 |---------|----------|----------|
 | A | 3 grosses séances/semaine pendant 1 mois, puis arrêt 2 mois, reprise... | ~40 séances |
 | B | 3 séances modestes/semaine, 50 semaines sur 52 | ~150 séances |
+
+> 📊 En un an, un coureur régulier (3 séances/semaine, 50 semaines) accumule environ 150 séances contre seulement 40 pour un coureur en dents de scie. Presque 4 fois plus d'occasions de progresser.
 
 Le coureur B a accumulé presque 4 fois plus de stress d'adaptation. Même si chaque séance était moins intense, son corps a eu beaucoup plus d'occasions de s'adapter et de progresser.
 
@@ -91,6 +95,8 @@ Plus c'est facile de commencer, plus tu le feras :
 - **Aie un plan B** : pas le temps pour 45 min ? Fais 20 min
 
 ### Règle 4 : La règle des 10 minutes
+
+> 💡 Les jours sans motivation, engage-toi juste pour 10 minutes. Dans 90% des cas, une fois parti, tu continueras. Et les 10% restants ? Tu as quand même bougé.
 
 Les jours où tu n'as vraiment pas envie : engage-toi juste à faire 10 minutes. Sors, cours 10 minutes, et si tu veux rentrer après, tu rentres.
 
@@ -219,6 +225,8 @@ You've probably experienced this: a week where you train like a pro, followed by
 
 The truth that experienced runners know well: **it's not the exceptional session that makes you progress, it's the accumulation of regular sessions over months and years.**
 
+> 📌 Consistency always beats intensity over the long term. Three modest sessions per week for a year produce more results than intense blocks followed by long breaks.
+
 ---
 
 ## The compound effect: the magic of small steps
@@ -233,6 +241,8 @@ Imagine two runners:
 |--------|----------|-------------|
 | A | 3 big sessions/week for 1 month, then 2 months off, restart... | ~40 sessions |
 | B | 3 modest sessions/week, 50 weeks out of 52 | ~150 sessions |
+
+> 📊 Over one year, a consistent runner (3 sessions/week, 50 weeks) accumulates about 150 sessions versus only 40 for a stop-and-start runner. Nearly 4 times more opportunities to progress.
 
 Runner B accumulated almost 4 times more adaptation stress. Even if each session was less intense, their body had many more opportunities to adapt and progress.
 
@@ -302,6 +312,8 @@ The easier it is to start, the more you'll do it:
 - **Have a plan B**: no time for 45 min? Do 20 min
 
 ### Rule 4: The 10-minute rule
+
+> 💡 On zero-motivation days, commit to just 10 minutes. In 90% of cases, once you're out, you'll keep going. And the other 10%? You still moved.
 
 On days when you really don't feel like it: commit to just 10 minutes. Go out, run 10 minutes, and if you want to go back after, go back.
 

@@ -22,6 +22,8 @@ Concretement, la VMA est la vitesse maximale que vous pouvez maintenir environ 4
 
 ### Pourquoi c'est fondamental
 
+> 📌 Connaitre sa VMA est indispensable : toutes vos allures d'entrainement en decoulent, du footing de recuperation au fractionne a haute intensite.
+
 Toutes les allures d'entrainement decoulent de la VMA. Une seance de seuil se court autour de 85% de VMA. Un 30/30 se fait a 100-105% de VMA. Votre allure marathon tourne autour de 75-80% de VMA.
 
 Sans connaitre votre VMA, vous ne pouvez que deviner ces allures. Et les estimations sont souvent fausses : soit vous vous sous-estimez et stagnez, soit vous vous surestimez et accumulez la fatigue.
@@ -36,6 +38,8 @@ C'est le test le plus simple et le plus repandu. Le protocole est elementaire : 
 
 **Preparation :**
 Echauffez-vous pendant 15 a 20 minutes avec un footing progressif, quelques gammes (montees de genoux, talons-fesses), et 2-3 accelerations progressives. Vous devez arriver au depart du test avec les muscles chauds et le cardio active, mais sans fatigue.
+
+> 💡 Prevoyez 48 heures de repos avant le test, mangez leger 2-3 heures avant, et choisissez un jour tempere sans vent pour des resultats fiables.
 
 **Execution :**
 Lancez votre chronometre et partez. Le piege classique est de partir trop vite - les premieres minutes semblent faciles, puis la dette d'oxygene se paie cash. Visez un effort regulier, difficile des le depart mais soutenable. Les deux dernieres minutes doivent etre une lutte.
@@ -145,6 +149,8 @@ Attention : testez-vous dans de bonnes conditions (repose, pas trop chaud, surfa
 
 ## Les pieges a eviter
 
+> ⚠️ L'erreur numero un : partir trop vite. Les premieres secondes semblent faciles, mais un depart rapide se paie toujours dans les dernieres minutes du test.
+
 **Partir trop vite.** C'est l'erreur numero un sur les tests chronometres. Les premieres secondes semblent faciles, mais le depart rapide se paie toujours dans les dernieres minutes.
 
 **Tester fatigue.** Un test apres une semaine chargee sous-estimera vos capacites reelles. Prevoyez 48 heures de repos relatif avant.
@@ -178,6 +184,8 @@ Concretely, MAS is the maximum speed you can maintain for about 4 to 7 minutes. 
 
 ### Why it's fundamental
 
+> 📌 Knowing your MAS is essential: all your training paces derive from it, from recovery jogs to high-intensity intervals.
+
 All training paces derive from MAS. A threshold session runs at around 85% of MAS. A 30/30 workout is done at 100-105% of MAS. Your marathon pace hovers around 75-80% of MAS.
 
 Without knowing your MAS, you can only guess these paces. And guesses are often wrong: either you underestimate yourself and stagnate, or you overestimate and accumulate fatigue.
@@ -192,6 +200,8 @@ This is the simplest and most common test. The protocol is elementary: after a c
 
 **Preparation:**
 Warm up for 15 to 20 minutes with progressive jogging, some drills (high knees, butt kicks), and 2-3 progressive accelerations. You should arrive at the test start with warm muscles and activated cardio, but without fatigue.
+
+> 💡 Plan 48 hours of rest before the test, eat light 2-3 hours prior, and choose a temperate, windless day for reliable results.
 
 **Execution:**
 Start your timer and go. The classic trap is starting too fast - the first minutes seem easy, then the oxygen debt is paid in full. Aim for a steady effort, difficult from the start but sustainable. The last two minutes should be a struggle.
@@ -300,6 +310,8 @@ Note: test yourself in good conditions (rested, not too hot, suitable surface) t
 ---
 
 ## Pitfalls to avoid
+
+> ⚠️ The number one mistake: starting too fast. The first seconds feel easy, but a fast start always costs you in the final minutes of the test.
 
 **Starting too fast.** This is the number one error on timed tests. The first seconds seem easy, but a fast start always costs you in the final minutes.
 

@@ -83,6 +83,8 @@ Reduire les temps de recuperation ou augmenter le travail par unite de temps.
 
 ## La regle des 10%
 
+> 📌 La regle des 10% : n'augmente pas ton volume hebdomadaire de plus de 10% par semaine. C'est un garde-fou simple et efficace pour eviter les blessures de surcharge.
+
 Une recommandation classique : n'augmente pas ta charge de plus de 10% par semaine. Cette regle concerne principalement le volume.
 
 **Exemple :**
@@ -128,6 +130,8 @@ La plupart des plans suivent un pattern 3:1 ou 2:1 :
 Le pattern 2:1 convient mieux aux coureurs plus ages ou sujets aux blessures.
 
 ### L'importance du deload
+
+> 💡 Programme tes semaines de deload a l'avance (toutes les 3-4 semaines). Elles ne sont pas negociables : c'est pendant le repos que les adaptations se consolident.
 
 La semaine de [[deload]] n'est pas une perte de temps. C'est pendant cette phase que :
 - Les tissus se reparent completement
@@ -211,6 +215,8 @@ Remarque : les progressions ne sont pas parfaitement lineaires. On avance par pa
 ## Erreurs frequentes
 
 ### Erreur 1 : Tout augmenter en meme temps
+
+> ⚠️ Augmenter volume, intensite et frequence en meme temps est la recette garantie pour la blessure ou l'epuisement. N'augmente qu'une dimension a la fois.
 
 Tu veux plus de volume ET plus d'intensite ET plus de frequence. Trop de stress d'un coup = blessure ou epuisement.
 
@@ -327,6 +333,8 @@ Reducing recovery times or increasing work per unit of time.
 
 ## The 10% rule
 
+> 📌 The 10% rule: don't increase your weekly volume by more than 10% per week. It's a simple and effective guardrail to prevent overuse injuries.
+
 A classic recommendation: don't increase your load by more than 10% per week. This rule primarily concerns volume.
 
 **Example:**
@@ -372,6 +380,8 @@ Most plans follow a 3:1 or 2:1 pattern:
 The 2:1 pattern suits older runners or those prone to injury better.
 
 ### The importance of deloading
+
+> 💡 Schedule your deload weeks in advance (every 3-4 weeks). They're non-negotiable: it's during rest that adaptations consolidate.
 
 The [[deload]] week isn't wasted time. During this phase:
 - Tissues fully repair
@@ -455,6 +465,8 @@ Note: progressions aren't perfectly linear. You advance in steps with consolidat
 ## Common mistakes
 
 ### Mistake 1: Increasing everything at once
+
+> ⚠️ Increasing volume, intensity, and frequency at the same time is a guaranteed recipe for injury or exhaustion. Only increase one dimension at a time.
 
 You want more volume AND more intensity AND more frequency. Too much stress at once = injury or exhaustion.
 

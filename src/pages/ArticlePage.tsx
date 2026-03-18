@@ -1,10 +1,12 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChevronLeft, ChevronRight, Clock, BookOpen, Home, Loader2 } from "@/components/icons";
+import { ChevronLeft, ChevronRight, Clock, BookOpen, Home, Loader2, Lightbulb, AlertTriangle, Info, Activity } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
 import { useArticle, useAdjacentArticles } from "@/hooks/useArticles";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
+import { ReadingProgress } from "@/components/domain/ReadingProgress";
+import { TableOfContents } from "@/components/domain/TableOfContents";
 import { cn } from "@/lib/utils";
 
 /**
@@ -115,8 +117,120 @@ function renderMarkdown(content: string): React.ReactNode {
     return <>{parts}</>;
   };
 
+  const renderCallout = (type: "tip" | "warning" | "key" | "stat", text: string, calloutKey: number): React.ReactNode => {
+    const config = {
+      tip: {
+        icon: Lightbulb,
+        bg: "bg-emerald-50 dark:bg-emerald-950/30",
+        border: "border-emerald-200 dark:border-emerald-800",
+        iconColor: "text-emerald-600 dark:text-emerald-400",
+        title: "Conseil",
+      },
+      warning: {
+        icon: AlertTriangle,
+        bg: "bg-amber-50 dark:bg-amber-950/30",
+        border: "border-amber-200 dark:border-amber-800",
+        iconColor: "text-amber-600 dark:text-amber-400",
+        title: "Attention",
+      },
+      key: {
+        icon: Info,
+        bg: "bg-blue-50 dark:bg-blue-950/30",
+        border: "border-blue-200 dark:border-blue-800",
+        iconColor: "text-blue-600 dark:text-blue-400",
+        title: "À retenir",
+      },
+      stat: {
+        icon: Activity,
+        bg: "bg-purple-50 dark:bg-purple-950/30",
+        border: "border-purple-200 dark:border-purple-800",
+        iconColor: "text-purple-600 dark:text-purple-400",
+        title: "Chiffre clé",
+      },
+    };
+
+    const { icon: Icon, bg, border, iconColor, title } = config[type];
+
+    return (
+      <div key={calloutKey} className={`my-6 rounded-lg border ${border} ${bg} p-4`}>
+        <div className="flex gap-3">
+          <Icon className={`size-5 shrink-0 mt-0.5 ${iconColor}`} />
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-sm mb-1">{title}</p>
+            <div className="text-sm text-muted-foreground leading-relaxed">{parseInline(text)}</div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
+
+    // Blockquote / Callout blocks
+    if (line.startsWith("> ") || line === ">") {
+      flushList();
+      flushTable();
+
+      // Collect consecutive blockquote lines
+      const blockLines: string[] = [];
+      while (i < lines.length && (lines[i].startsWith("> ") || lines[i] === ">")) {
+        blockLines.push(lines[i].startsWith("> ") ? lines[i].slice(2) : "");
+        i++;
+      }
+      i--; // Back up since the for loop will increment
+
+      const firstLine = blockLines[0];
+
+      // Detect callout type from first line
+      let calloutType: "tip" | "warning" | "key" | "stat" | null = null;
+      let markerLength = 0;
+
+      if (firstLine.startsWith("\u{1F4A1}")) {
+        calloutType = "tip";
+        markerLength = "\u{1F4A1}".length;
+      } else if (firstLine.startsWith("TIP:")) {
+        calloutType = "tip";
+        markerLength = 4;
+      } else if (firstLine.startsWith("\u{26A0}\u{FE0F}")) {
+        calloutType = "warning";
+        markerLength = "\u{26A0}\u{FE0F}".length;
+      } else if (firstLine.startsWith("WARNING:")) {
+        calloutType = "warning";
+        markerLength = 8;
+      } else if (firstLine.startsWith("\u{1F4CC}")) {
+        calloutType = "key";
+        markerLength = "\u{1F4CC}".length;
+      } else if (firstLine.startsWith("KEY:")) {
+        calloutType = "key";
+        markerLength = 4;
+      } else if (firstLine.startsWith("\u{1F4CA}")) {
+        calloutType = "stat";
+        markerLength = "\u{1F4CA}".length;
+      } else if (firstLine.startsWith("STAT:")) {
+        calloutType = "stat";
+        markerLength = 5;
+      }
+
+      if (calloutType) {
+        // Strip marker from first line and join all lines
+        blockLines[0] = firstLine.slice(markerLength).trimStart();
+        const text = blockLines.join(" ").trim();
+        elements.push(renderCallout(calloutType, text, key++));
+      } else {
+        // Regular blockquote (no recognized marker)
+        const text = blockLines.join(" ").trim();
+        elements.push(
+          <blockquote
+            key={key++}
+            className="my-6 border-l-4 border-border pl-4 italic text-muted-foreground"
+          >
+            {parseInline(text)}
+          </blockquote>
+        );
+      }
+      continue;
+    }
 
     // Horizontal rule
     if (line.trim() === "---") {
@@ -148,9 +262,16 @@ function renderMarkdown(content: string): React.ReactNode {
     // Headers
     if (line.startsWith("## ")) {
       flushList();
+      const headerText = line.slice(3).trim();
+      const headerId = headerText
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-");
       elements.push(
-        <h2 key={key++} className="text-xl font-bold mt-8 mb-4">
-          {line.slice(3)}
+        <h2 key={key++} id={headerId} className="text-xl font-bold mt-8 mb-4 scroll-mt-16">
+          {headerText}
         </h2>
       );
       continue;
@@ -252,7 +373,8 @@ export function ArticlePage() {
           description: truncatedDescription,
         }}
       />
-      <div className="py-8 max-w-3xl mx-auto">
+      <ReadingProgress />
+      <div className="py-8 max-w-3xl mx-auto xl:max-w-5xl">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
         <Link to="/" className="hover:text-foreground transition-colors">
@@ -267,7 +389,7 @@ export function ArticlePage() {
       </nav>
 
       {/* Header */}
-      <header className="mb-8">
+      <header className="mb-8 max-w-3xl">
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
           <BookOpen className="size-4" />
           <span>{t(`learn.categories.${article.category}`)}</span>
@@ -279,10 +401,24 @@ export function ArticlePage() {
         <p className="text-lg text-muted-foreground"><GlossaryLinkedText text={description} /></p>
       </header>
 
-      {/* Content */}
-      <article className="prose prose-neutral dark:prose-invert max-w-none">
-        {renderMarkdown(content)}
-      </article>
+      {/* Mobile TOC */}
+      <div className="xl:hidden">
+        <TableOfContents content={content} />
+      </div>
+
+      {/* Content + Desktop TOC sidebar */}
+      <div className="xl:flex xl:gap-10">
+        <article className="prose prose-neutral dark:prose-invert max-w-3xl flex-1 min-w-0">
+          {renderMarkdown(content)}
+        </article>
+
+        {/* Desktop sticky TOC */}
+        <aside className="hidden xl:block w-56 shrink-0">
+          <div className="sticky top-20">
+            <TableOfContents content={content} />
+          </div>
+        </aside>
+      </div>
 
       {/* CTA to My Zones (for zones article) */}
       {article.slug === "zones" && (
