@@ -99,7 +99,7 @@ export function HomePage() {
           },
         }}
       />
-      <div className="space-y-14 md:space-y-20 py-10 md:py-14">
+      <div className="space-y-10 md:space-y-16 py-10 md:py-14">
         {/* Hero Section - Left-aligned, editorial */}
         <section className="pt-8 md:pt-16">
           <div className="max-w-3xl">

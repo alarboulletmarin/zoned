@@ -197,8 +197,9 @@ function PlanCard({
           </Link>
         </Button>
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
+          className="text-muted-foreground hover:text-destructive"
           onClick={(e) => {
             e.stopPropagation();
             onDelete(plan.id);

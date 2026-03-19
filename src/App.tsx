@@ -5,7 +5,6 @@ import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "sonner";
 import { Sidebar, MobileSidebar, TopBar, Footer } from "@/components/layout";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { PageLoader } from "@/components/ui/page-loader";
 import { FavoritesProvider } from "@/hooks";
 import { SettingsProvider } from "@/hooks/useSettings";
 import { CommandPaletteProvider, CommandPalette } from "@/components/search";
@@ -50,6 +49,23 @@ const PaceTablePage = lazy(() => import("@/pages/PaceTablePage").then(m => ({ de
 const AgeGradedPage = lazy(() => import("@/pages/AgeGradedPage").then(m => ({ default: m.AgeGradedPage })));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
 
+// Preload sidebar pages after initial render to eliminate navigation latency
+function preloadSidebarPages() {
+  const pages = [
+    () => import("@/pages/HomePage"),
+    () => import("@/pages/LibraryPage"),
+    () => import("@/pages/PlansPage"),
+    () => import("@/pages/FavoritesPage"),
+    () => import("@/pages/CalculateursPage"),
+    () => import("@/pages/CollectionsPage"),
+    () => import("@/pages/LearnPage"),
+    () => import("@/pages/GlossaryPage"),
+    () => import("@/pages/MethodologyPage"),
+  ];
+  // Stagger preloads to not block the main thread
+  pages.forEach((load, i) => setTimeout(load, 1000 + i * 200));
+}
+
 function ScrollToTopOnNavigate() {
   const { pathname } = useLocation();
 
@@ -61,6 +77,9 @@ function ScrollToTopOnNavigate() {
 }
 
 function App() {
+  // Preload main pages in background after first render
+  useEffect(() => { preloadSidebarPages(); }, []);
+
   // Track if user has manually set theme preference
   const userHasSetTheme = useRef(
     typeof window !== "undefined" && localStorage.getItem("zoned-theme") !== null
@@ -160,7 +179,7 @@ function App() {
                 <main className="flex-1 px-4 md:px-6 lg:px-8 py-4">
                   <div className="mx-auto max-w-6xl">
                     <ErrorBoundary>
-                      <Suspense fallback={<PageLoader />}>
+                      <Suspense fallback={<div className="min-h-screen" />}>
                         <Routes>
                           <Route path="/" element={<HomePage />} />
                           <Route path="/library" element={<LibraryPage />} />

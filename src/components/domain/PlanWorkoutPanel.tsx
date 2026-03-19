@@ -195,34 +195,19 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
         </div>
       </div>
 
-      {/* Filter pills */}
-      <div className="px-4 py-2 border-b shrink-0 overflow-x-auto">
-        <div className="flex gap-1.5 min-w-max">
-          {FILTERS.map((filter) => {
-            const isActive = activeFilter === filter.key;
-            return (
-              <button
-                key={filter.key}
-                type="button"
-                onClick={() => setActiveFilter(filter.key)}
-                className={cn(
-                  "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors whitespace-nowrap",
-                  isActive
-                    ? "bg-foreground text-background"
-                    : "bg-muted text-muted-foreground hover:bg-muted/80",
-                )}
-              >
-                {filter.dotColor && (
-                  <span
-                    className="size-2 rounded-full shrink-0"
-                    style={{ backgroundColor: filter.dotColor }}
-                  />
-                )}
-                {isEn ? filter.labelEn : filter.labelFr}
-              </button>
-            );
-          })}
-        </div>
+      {/* Category filter */}
+      <div className="px-4 py-2 border-b shrink-0">
+        <select
+          value={activeFilter}
+          onChange={(e) => setActiveFilter(e.target.value)}
+          className="w-full h-9 rounded-md border border-input bg-transparent px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          {FILTERS.map((f) => (
+            <option key={f.key} value={f.key}>
+              {isEn ? f.labelEn : f.labelFr}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Results list */}

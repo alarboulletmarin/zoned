@@ -334,9 +334,9 @@ export function PlanCalendar({
                           <button
                             type="button"
                             onClick={() => onAddToDay(mobileWeek, dayIndex)}
-                            className="w-full mt-3 flex items-center justify-center text-muted-foreground/40 active:text-primary transition-colors"
+                            className="w-full rounded bg-card/50 border border-dashed border-muted-foreground/30 p-3 flex items-center justify-center gap-1 text-muted-foreground/40 active:text-primary"
                           >
-                            <span className="size-8 rounded-full border-2 border-dashed border-current flex items-center justify-center text-sm font-bold">+</span>
+                            <span className="text-sm font-medium">+</span>
                           </button>
                         ) : (
                           <span className="text-[10px] text-muted-foreground/30 block text-center mt-4">—</span>
@@ -412,9 +412,9 @@ export function PlanCalendar({
                         <button
                           type="button"
                           onClick={() => onAddToDay(mobileWeek, dayIndex)}
-                          className="w-full mt-1 py-1 flex items-center justify-center text-muted-foreground/30 active:text-primary transition-colors"
+                          className="w-full mt-1 rounded bg-card/50 border border-dashed border-muted-foreground/30 p-1.5 flex items-center justify-center gap-1 text-muted-foreground/40 active:text-primary"
                         >
-                          <span className="size-5 rounded-full border border-dashed border-current flex items-center justify-center text-[10px] font-bold">+</span>
+                          <span className="text-sm font-medium">+</span>
                         </button>
                       )}
                     </div>

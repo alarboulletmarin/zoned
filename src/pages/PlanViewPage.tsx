@@ -15,6 +15,7 @@ import {
   Download,
   List,
   Plus,
+  MoreHorizontal,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,12 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { usePlan } from "@/hooks/usePlans";
@@ -216,6 +223,19 @@ export function PlanViewPage() {
     }
   }, [plan, workoutNames, workoutTemplates, isEn, isExporting]);
 
+  const handleExportPlanJSON = useCallback(() => {
+    if (!plan) return;
+    const json = JSON.stringify(plan, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `plan-${plan.name || plan.id}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success(isEn ? "Plan exported" : "Plan export\u00e9");
+  }, [plan, isEn]);
+
   const handleSwapSession = useCallback((workout: WorkoutTemplate) => {
     if (!plan || !swapTarget) return;
 
@@ -354,14 +374,26 @@ export function PlanViewPage() {
               )}
             </div>
           </div>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => setShowDeleteDialog(true)}
-          >
-            <Trash2 className="size-4" />
-            {isEn ? "Delete" : "Supprimer"}
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="rounded-full">
+                <MoreHorizontal className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={handleExportPlanJSON}>
+                <Download className="size-4" />
+                {isEn ? "Export plan (JSON)" : "Exporter le plan (JSON)"}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setShowDeleteDialog(true)}
+                className="text-destructive focus:text-destructive"
+              >
+                <Trash2 className="size-4" />
+                {isEn ? "Delete plan" : "Supprimer le plan"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* Phase Timeline */}
@@ -490,18 +522,15 @@ export function PlanViewPage() {
             {isEn ? "Schedule" : "Programme"}
           </h2>
           <div className="flex items-center gap-2">
-          {planView === "calendar" && (
             <Button
-              variant={showWorkoutPanel ? "default" : "outline"}
+              variant="default"
               size="sm"
               onClick={() => setShowWorkoutPanel(v => !v)}
               className="rounded-full"
-              title={isEn ? "Add a workout" : "Ajouter une s\u00e9ance"}
             >
               <Plus className="size-4" />
-              <span className="hidden sm:inline ml-1">{isEn ? "Add" : "Ajouter"}</span>
+              <span className="ml-1">{isEn ? "Add workout" : "Ajouter une s\u00e9ance"}</span>
             </Button>
-          )}
           <div
             className="inline-flex items-center gap-0.5 rounded-lg bg-muted p-1"
             role="radiogroup"
