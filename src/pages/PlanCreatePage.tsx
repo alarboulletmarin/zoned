@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
+  ArrowRight,
   Zap,
   Timer,
   Route,
@@ -36,13 +37,13 @@ const WARN_WEEKS = 24;
 const DAYS_PER_WEEK_OPTIONS = [3, 4, 5, 6] as const;
 
 const RACE_DISTANCE_ICONS: Record<RaceDistance, React.ReactNode> = {
-  "5K": <Zap className="size-6 text-primary" />,
-  "10K": <Timer className="size-6 text-primary" />,
-  semi: <Route className="size-6 text-primary" />,
-  marathon: <Flag className="size-6 text-primary" />,
-  trail_short: <Mountain className="size-6 text-primary" />,
-  trail: <Mountain className="size-6 text-primary" />,
-  ultra: <Mountain className="size-6 text-primary" />,
+  "5K": <Zap className="size-5 md:size-6 text-primary" />,
+  "10K": <Timer className="size-5 md:size-6 text-primary" />,
+  semi: <Route className="size-5 md:size-6 text-primary" />,
+  marathon: <Flag className="size-5 md:size-6 text-primary" />,
+  trail_short: <Mountain className="size-5 md:size-6 text-primary" />,
+  trail: <Mountain className="size-5 md:size-6 text-primary" />,
+  ultra: <Mountain className="size-5 md:size-6 text-primary" />,
 };
 
 // ── Helpers ──────────────────────────────────────────────────────────
@@ -208,41 +209,49 @@ export function PlanCreatePage() {
     }
   }, [form, userPrefs, paceSeconds, createPlan, navigate]);
 
-  // ── Step indicator ───────────────────────────────────────────────
+  // ── Step indicator (dots + step number) ────────────────────────
 
   const renderStepIndicator = () => (
-    <div className="mb-8">
-      <div className="flex items-center justify-between text-sm text-muted-foreground mb-3">
-        <span>
-          {isEn ? "Step" : "Étape"} {step}/{TOTAL_STEPS}
-        </span>
-        {step > 1 && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={goBack}
-            className="h-auto p-0 hover:bg-transparent"
-          >
-            <ArrowLeft className="size-4 mr-1" />
-            {isEn ? "Back" : "Retour"}
+    <div className="flex items-center justify-center gap-2 py-4">
+      <span className="text-xs text-muted-foreground mr-1">{step}/{TOTAL_STEPS}</span>
+      {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((s) => (
+        <div
+          key={s}
+          className={cn(
+            "size-2 rounded-full transition-all duration-300",
+            s === step
+              ? "bg-primary scale-125"
+              : s < step
+                ? "bg-primary/50"
+                : "bg-muted-foreground/25"
+          )}
+        />
+      ))}
+    </div>
+  );
+
+  // ── Navigation buttons ────────────────────────────────────────
+
+  const renderNavButtons = (
+    canProceed: boolean,
+    nextLabel?: string,
+    showSkip?: boolean,
+  ) => (
+    <div className="py-4 flex justify-between gap-3">
+      <Button variant="ghost" size="sm" onClick={goBack} disabled={step === 1}>
+        <ArrowLeft className="size-4 mr-1" />
+        {isEn ? "Back" : "Retour"}
+      </Button>
+      <div className="flex gap-2">
+        {showSkip && (
+          <Button variant="ghost" size="sm" onClick={goForward}>
+            {isEn ? "Skip" : "Passer"}
           </Button>
         )}
-      </div>
-      {/* Dot indicators */}
-      <div className="flex items-center gap-2 justify-center">
-        {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((s) => (
-          <div
-            key={s}
-            className={cn(
-              "size-2.5 rounded-full transition-all duration-300",
-              s === step
-                ? "bg-primary scale-125"
-                : s < step
-                  ? "bg-primary/50"
-                  : "bg-muted-foreground/25"
-            )}
-          />
-        ))}
+        <Button size="sm" onClick={goForward} disabled={!canProceed}>
+          {nextLabel ?? (isEn ? "Next" : "Suivant")}
+          <ArrowRight className="size-4 ml-1" />
+        </Button>
       </div>
     </div>
   );
@@ -252,57 +261,57 @@ export function PlanCreatePage() {
   const renderStep1 = () => (
     <div
       className={cn(
-        "space-y-4",
+        "flex-1 flex flex-col",
         direction === "forward"
           ? "animate-slide-in-right"
           : "animate-slide-in-left"
       )}
     >
-      <div className="text-center mb-6">
-        <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-          <Target className="size-8 text-primary" />
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
+        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+          <Target className="size-6 md:size-8 text-primary" />
         </div>
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-lg md:text-xl font-semibold text-center">
           {isEn ? "Choose your distance" : "Choisissez votre distance"}
         </h2>
-        <p className="text-muted-foreground mt-1">
+        <p className="text-sm text-muted-foreground mt-1 text-center">
           {isEn
             ? "Which race are you training for?"
             : "Pour quelle course vous entraînez-vous ?"}
         </p>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {(Object.keys(RACE_DISTANCE_META) as RaceDistance[]).map((dist) => {
-          const meta = RACE_DISTANCE_META[dist];
-          return (
-            <Card
-              key={dist}
-              interactive
-              className={cn(
-                "cursor-pointer transition-all duration-200",
-                form.raceDistance === dist && "ring-2 ring-primary"
-              )}
-              onClick={() => {
-                setForm((f) => ({ ...f, raceDistance: dist }));
-                goForward();
-              }}
-            >
-              <CardContent className="p-6 flex items-center gap-4">
-                <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                  {RACE_DISTANCE_ICONS[dist]}
-                </div>
-                <div>
-                  <div className="font-medium text-lg">
-                    {isEn ? meta.labelEn : meta.label}
+        <div className="w-full max-w-md grid grid-cols-2 gap-2 mt-6">
+          {(Object.keys(RACE_DISTANCE_META) as RaceDistance[]).map((dist) => {
+            const meta = RACE_DISTANCE_META[dist];
+            return (
+              <Card
+                key={dist}
+                interactive
+                className={cn(
+                  "cursor-pointer transition-all duration-200",
+                  form.raceDistance === dist && "ring-2 ring-primary"
+                )}
+                onClick={() => {
+                  setForm((f) => ({ ...f, raceDistance: dist }));
+                  goForward();
+                }}
+              >
+                <CardContent className="p-3 md:p-4 flex items-center gap-3">
+                  <div className="size-9 md:size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                    {RACE_DISTANCE_ICONS[dist]}
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    {meta.distanceKm} km
+                  <div className="min-w-0">
+                    <div className="font-medium text-sm md:text-base leading-tight">
+                      {isEn ? meta.labelEn : meta.label}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {meta.distanceKm} km
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
@@ -312,28 +321,26 @@ export function PlanCreatePage() {
   const renderStep2 = () => (
     <div
       className={cn(
-        "space-y-4",
+        "flex-1 flex flex-col",
         direction === "forward"
           ? "animate-slide-in-right"
           : "animate-slide-in-left"
       )}
     >
-      <div className="text-center mb-6">
-        <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-          <Calendar className="size-8 text-primary" />
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
+        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+          <Calendar className="size-6 md:size-8 text-primary" />
         </div>
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-lg md:text-xl font-semibold text-center">
           {isEn ? "When is the race?" : "Quand a lieu la course ?"}
         </h2>
-        <p className="text-muted-foreground mt-1">
+        <p className="text-sm text-muted-foreground mt-1 text-center">
           {isEn
             ? `At least ${minWeeksForDistance} weeks from now`
             : `Au minimum ${minWeeksForDistance} semaines à partir d'aujourd'hui`}
         </p>
-      </div>
 
-      <Card>
-        <CardContent className="p-6 space-y-4">
+        <div className="w-full max-w-sm mt-6 space-y-3">
           <input
             type="date"
             min={minDate}
@@ -369,14 +376,9 @@ export function PlanCreatePage() {
                 : "Plus de 24 semaines n'est pas possible. Choisissez une date plus proche."}
             </p>
           )}
-        </CardContent>
-      </Card>
-
-      <div className="flex justify-end">
-        <Button onClick={goForward} disabled={!dateValid}>
-          {isEn ? "Continue" : "Continuer"}
-        </Button>
+        </div>
       </div>
+      {renderNavButtons(dateValid, isEn ? "Continue" : "Continuer")}
     </div>
   );
 
@@ -385,26 +387,24 @@ export function PlanCreatePage() {
   const renderStep3 = () => (
     <div
       className={cn(
-        "space-y-4",
+        "flex-1 flex flex-col",
         direction === "forward"
           ? "animate-slide-in-right"
           : "animate-slide-in-left"
       )}
     >
-      <div className="text-center mb-6">
-        <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-          <Flag className="size-8 text-primary" />
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
+        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+          <Flag className="size-6 md:size-8 text-primary" />
         </div>
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-lg md:text-xl font-semibold text-center">
           {isEn ? "Name your race" : "Nom de la course"}
         </h2>
-        <p className="text-muted-foreground mt-1">
+        <p className="text-sm text-muted-foreground mt-1 text-center">
           {isEn ? "Optional - you can skip this step" : "Optionnel - vous pouvez passer cette étape"}
         </p>
-      </div>
 
-      <Card>
-        <CardContent className="p-6">
+        <div className="w-full max-w-sm mt-6">
           <input
             type="text"
             value={form.raceName}
@@ -420,17 +420,9 @@ export function PlanCreatePage() {
             className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             maxLength={100}
           />
-        </CardContent>
-      </Card>
-
-      <div className="flex justify-between">
-        <Button variant="ghost" onClick={goForward}>
-          {isEn ? "Skip" : "Passer"}
-        </Button>
-        <Button onClick={goForward}>
-          {isEn ? "Continue" : "Continuer"}
-        </Button>
+        </div>
       </div>
+      {renderNavButtons(true, isEn ? "Continue" : "Continuer", true)}
     </div>
   );
 
@@ -447,80 +439,86 @@ export function PlanCreatePage() {
     return (
       <div
         className={cn(
-          "space-y-4",
+          "flex-1 flex flex-col",
           direction === "forward"
             ? "animate-slide-in-right"
             : "animate-slide-in-left"
         )}
       >
-        <div className="text-center mb-6">
-          <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-            <Target className="size-8 text-primary" />
+        <div className="flex-1 flex flex-col items-center justify-center px-4">
+          <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+            <Target className="size-6 md:size-8 text-primary" />
           </div>
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-lg md:text-xl font-semibold text-center">
             {isEn ? "Your running level" : "Votre niveau de course"}
           </h2>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground mt-1 text-center">
             {isEn
               ? "This determines workout intensity"
               : "Cela détermine l'intensité des séances"}
           </p>
-        </div>
 
-        {userPrefs?.vma && suggestedLevel && (
-          <div className="rounded-lg border bg-primary/5 p-3 text-sm text-center">
-            {isEn
-              ? `Based on your VMA of ${userPrefs.vma} km/h, we suggest the `
-              : `Basé sur votre VMA de ${userPrefs.vma} km/h, nous suggérons le niveau `}
-            <span className="font-semibold">
+          {userPrefs?.vma && suggestedLevel && (
+            <div className="rounded-lg border bg-primary/5 p-2 text-xs text-center mt-3 max-w-sm w-full">
               {isEn
-                ? DIFFICULTY_META[suggestedLevel].labelEn
-                : DIFFICULTY_META[suggestedLevel].label}
-            </span>
-            {isEn ? " level" : ""}
-          </div>
-        )}
+                ? `Based on your VMA of ${userPrefs.vma} km/h, we suggest the `
+                : `Basé sur votre VMA de ${userPrefs.vma} km/h, nous suggérons le niveau `}
+              <span className="font-semibold">
+                {isEn
+                  ? DIFFICULTY_META[suggestedLevel].labelEn
+                  : DIFFICULTY_META[suggestedLevel].label}
+              </span>
+              {isEn ? " level" : ""}
+            </div>
+          )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {levels.map((level) => {
-            const meta = DIFFICULTY_META[level];
-            const isSuggested = level === suggestedLevel;
-            return (
-              <Card
-                key={level}
-                interactive
-                className={cn(
-                  "cursor-pointer transition-all duration-200",
-                  form.runnerLevel === level && "ring-2 ring-primary",
-                  isSuggested &&
-                    form.runnerLevel !== level &&
-                    "border-primary/40"
-                )}
-                onClick={() => {
-                  setForm((f) => ({ ...f, runnerLevel: level }));
-                  goForward();
-                }}
-              >
-                <CardContent className="p-6 flex items-center gap-4">
-                  <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                    <span className="text-lg font-bold text-primary">
-                      {meta.level}
-                    </span>
-                  </div>
-                  <div>
-                    <div className="font-medium text-lg">
-                      {isEn ? meta.labelEn : meta.label}
+          <div className="w-full max-w-md grid grid-cols-2 gap-2 mt-6">
+            {levels.map((level) => {
+              const meta = DIFFICULTY_META[level];
+              const isSuggested = level === suggestedLevel;
+              return (
+                <Card
+                  key={level}
+                  interactive
+                  className={cn(
+                    "cursor-pointer transition-all duration-200",
+                    form.runnerLevel === level && "ring-2 ring-primary",
+                    isSuggested &&
+                      form.runnerLevel !== level &&
+                      "border-primary/40"
+                  )}
+                  onClick={() => {
+                    setForm((f) => ({ ...f, runnerLevel: level }));
+                    goForward();
+                  }}
+                >
+                  <CardContent className="p-3 md:p-4 flex items-center gap-3">
+                    <div className="size-9 md:size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                      <span className="text-base md:text-lg font-bold text-primary">
+                        {meta.level}
+                      </span>
                     </div>
-                    {isSuggested && (
-                      <div className="text-xs text-primary">
-                        {isEn ? "Suggested" : "Suggéré"}
+                    <div className="min-w-0">
+                      <div className="font-medium text-sm md:text-base leading-tight">
+                        {isEn ? meta.labelEn : meta.label}
                       </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+                      {isSuggested && (
+                        <div className="text-xs text-primary">
+                          {isEn ? "Suggested" : "Suggéré"}
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+        <div className="py-4 flex justify-center">
+          <Button variant="ghost" size="sm" onClick={goBack}>
+            <ArrowLeft className="size-4 mr-1" />
+            {isEn ? "Back" : "Retour"}
+          </Button>
         </div>
       </div>
     );
@@ -531,55 +529,44 @@ export function PlanCreatePage() {
   const renderStep5 = () => (
     <div
       className={cn(
-        "space-y-4",
+        "flex-1 flex flex-col",
         direction === "forward"
           ? "animate-slide-in-right"
           : "animate-slide-in-left"
       )}
     >
-      <div className="text-center mb-6">
-        <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-          <Calendar className="size-8 text-primary" />
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
+        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+          <Calendar className="size-6 md:size-8 text-primary" />
         </div>
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-lg md:text-xl font-semibold text-center">
           {isEn ? "Training schedule" : "Planning d'entraînement"}
         </h2>
-        <p className="text-muted-foreground mt-1">
+        <p className="text-sm text-muted-foreground mt-1 text-center">
           {isEn
             ? "How many sessions per week?"
             : "Combien de séances par semaine ?"}
         </p>
-      </div>
 
-      <Card>
-        <CardContent className="p-6 space-y-6">
-          {/* Days per week */}
-          <div>
-            <label className="text-sm font-medium mb-3 block">
-              {isEn ? "Sessions per week" : "Séances par semaine"}
-            </label>
-            <div className="flex gap-2">
-              {DAYS_PER_WEEK_OPTIONS.map((n) => (
-                <Button
-                  key={n}
-                  variant={form.daysPerWeek === n ? "default" : "outline"}
-                  className="flex-1"
-                  onClick={() => setForm((f) => ({ ...f, daysPerWeek: n }))}
-                >
-                  {n}
-                </Button>
-              ))}
-            </div>
+        <div className="w-full max-w-sm mt-6">
+          <label className="text-sm font-medium mb-3 block text-center">
+            {isEn ? "Sessions per week" : "Séances par semaine"}
+          </label>
+          <div className="flex gap-2">
+            {DAYS_PER_WEEK_OPTIONS.map((n) => (
+              <Button
+                key={n}
+                variant={form.daysPerWeek === n ? "default" : "outline"}
+                className="flex-1"
+                onClick={() => setForm((f) => ({ ...f, daysPerWeek: n }))}
+              >
+                {n}
+              </Button>
+            ))}
           </div>
-
-        </CardContent>
-      </Card>
-
-      <div className="flex justify-end">
-        <Button onClick={goForward}>
-          {isEn ? "Continue" : "Continuer"}
-        </Button>
+        </div>
       </div>
+      {renderNavButtons(true, isEn ? "Continue" : "Continuer")}
     </div>
   );
 
@@ -593,35 +580,33 @@ export function PlanCreatePage() {
     return (
       <div
         className={cn(
-          "space-y-4",
+          "flex-1 flex flex-col",
           direction === "forward"
             ? "animate-slide-in-right"
             : "animate-slide-in-left"
         )}
       >
-        <div className="text-center mb-6">
-          <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-            <Mountain className="size-8 text-primary" />
+        <div className="flex-1 flex flex-col items-center justify-center px-4">
+          <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+            <Mountain className="size-6 md:size-8 text-primary" />
           </div>
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-lg md:text-xl font-semibold text-center">
             {isEn ? "Pace & Elevation" : "Allure & Dénivelé"}
           </h2>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground mt-1 text-center">
             {isEn
               ? "Optional - you can skip this step"
               : "Optionnel - vous pouvez passer cette étape"}
           </p>
           {(form.raceDistance === "trail_short" || form.raceDistance === "trail" || form.raceDistance === "ultra") && (
-            <p className="text-sm text-primary text-center mt-2">
+            <p className="text-xs text-primary text-center mt-1">
               {isEn
                 ? "Elevation data is important for trail-specific training"
                 : "Le dénivelé est important pour un entraînement trail adapté"}
             </p>
           )}
-        </div>
 
-        <Card>
-          <CardContent className="p-6 space-y-6">
+          <div className="w-full max-w-sm mt-6 space-y-4">
             {/* Target pace */}
             <div>
               <label className="text-sm font-medium mb-2 block">
@@ -640,7 +625,7 @@ export function PlanCreatePage() {
                 className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
               {paceSeconds && distanceKm > 0 && (
-                <p className="text-sm text-muted-foreground mt-2">
+                <p className="text-xs text-muted-foreground mt-1">
                   {isEn ? "Estimated finish: " : "Temps estimé : "}
                   <span className="font-medium">
                     {estimateFinishTime(paceSeconds, distanceKm)}
@@ -648,7 +633,7 @@ export function PlanCreatePage() {
                 </p>
               )}
               {form.targetPace && !paceSeconds && (
-                <p className="text-sm text-destructive mt-2">
+                <p className="text-xs text-destructive mt-1">
                   {isEn
                     ? "Format: MM:SS (e.g. 5:30)"
                     : "Format : MM:SS (ex. 5:30)"}
@@ -673,22 +658,13 @@ export function PlanCreatePage() {
                 className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
-          </CardContent>
-        </Card>
-
-        <div className="flex justify-between">
-          <Button variant="ghost" onClick={goForward}>
-            {isEn ? "Skip" : "Passer"}
-          </Button>
-          <Button
-            onClick={goForward}
-            disabled={
-              form.targetPace !== "" && !paceSeconds
-            }
-          >
-            {isEn ? "Continue" : "Continuer"}
-          </Button>
+          </div>
         </div>
+        {renderNavButtons(
+          form.targetPace === "" || !!paceSeconds,
+          isEn ? "Continue" : "Continuer",
+          true
+        )}
       </div>
     );
   };
@@ -713,14 +689,14 @@ export function PlanCreatePage() {
             : "animate-slide-in-left"
         )}
       >
-        <div className="text-center mb-6">
-          <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-            <CheckIcon className="size-8 text-primary" />
+        <div className="text-center mb-4">
+          <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
+            <CheckIcon className="size-6 md:size-8 text-primary" />
           </div>
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-lg md:text-xl font-semibold">
             {isEn ? "Summary" : "Récapitulatif"}
           </h2>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             {isEn
               ? "Review your selections before generating"
               : "Vérifiez vos choix avant de générer le plan"}
@@ -728,7 +704,7 @@ export function PlanCreatePage() {
         </div>
 
         <Card>
-          <CardContent className="p-6 space-y-3">
+          <CardContent className="p-4 md:p-6 space-y-2">
             {/* Distance */}
             <SummaryRow
               label={isEn ? "Distance" : "Distance"}
@@ -809,17 +785,19 @@ export function PlanCreatePage() {
           </div>
         )}
 
-        <div className="flex justify-center">
+        <div className="flex justify-between gap-3">
+          <Button variant="ghost" size="sm" onClick={goBack}>
+            <ArrowLeft className="size-4 mr-1" />
+            {isEn ? "Back" : "Retour"}
+          </Button>
           <Button
-            size="lg"
             onClick={handleGenerate}
             disabled={isGenerating || !canCreate}
-            className="w-full sm:w-auto"
           >
             {isGenerating ? (
               <>
                 <Loader2 className="size-4 animate-spin mr-2" />
-                {isEn ? "Generating..." : "Génération en cours..."}
+                {isEn ? "Generating..." : "Génération..."}
               </>
             ) : (
               <>
@@ -834,6 +812,9 @@ export function PlanCreatePage() {
 
   // ── Render ───────────────────────────────────────────────────────
 
+  // Step 7 (summary) can scroll; other steps use full viewport layout
+  const isFullViewportStep = step < 7;
+
   return (
     <>
       <SEOHead
@@ -845,17 +826,20 @@ export function PlanCreatePage() {
         }
         canonical="/plan/create"
       />
-      <div className="py-8">
-        <div className="max-w-2xl mx-auto">
-          {renderStepIndicator()}
-          {step === 1 && renderStep1()}
-          {step === 2 && renderStep2()}
-          {step === 3 && renderStep3()}
-          {step === 4 && renderStep4()}
-          {step === 5 && renderStep5()}
-          {step === 6 && renderStep6()}
-          {step === 7 && renderStep7()}
-        </div>
+      <div className={cn(
+        "max-w-2xl mx-auto",
+        isFullViewportStep
+          ? "flex flex-col min-h-[calc(100dvh-8rem)] md:min-h-0 md:py-8"
+          : "py-8"
+      )}>
+        {renderStepIndicator()}
+        {step === 1 && renderStep1()}
+        {step === 2 && renderStep2()}
+        {step === 3 && renderStep3()}
+        {step === 4 && renderStep4()}
+        {step === 5 && renderStep5()}
+        {step === 6 && renderStep6()}
+        {step === 7 && renderStep7()}
       </div>
     </>
   );

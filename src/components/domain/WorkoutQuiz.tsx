@@ -197,30 +197,17 @@ export function WorkoutQuiz() {
     return step;
   };
 
-  const renderProgressBar = () => (
-    <div className="mb-8">
-      <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
-        <span>
-          {t("quiz.step")} {getStepNumber()}/3
-        </span>
-        {step !== 1 && step !== "results" && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleBack}
-            className="h-auto p-0 hover:bg-transparent"
-          >
-            <ArrowLeft className="size-4 mr-1" />
-            {t("quiz.back")}
-          </Button>
-        )}
-      </div>
-      <div className="h-2 bg-muted rounded-full overflow-hidden">
+  const renderProgressDots = () => (
+    <div className="flex items-center justify-center gap-2 py-4">
+      {[1, 2, 3].map((s) => (
         <div
-          className="h-full bg-primary transition-all duration-300 ease-out rounded-full"
-          style={{ width: `${(getStepNumber() / 3) * 100}%` }}
+          key={s}
+          className={cn(
+            "size-2.5 rounded-full transition-colors",
+            getStepNumber() >= s ? "bg-primary" : "bg-muted"
+          )}
         />
-      </div>
+      ))}
     </div>
   );
 
@@ -239,13 +226,13 @@ export function WorkoutQuiz() {
       )}
       onClick={onClick}
     >
-      <CardContent className="p-6 flex items-center gap-4">
+      <CardContent className="p-3 md:p-5 flex items-center gap-3 md:gap-4">
         {icon && (
-          <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+          <div className="size-9 md:size-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
             {icon}
           </div>
         )}
-        <span className="font-medium text-lg">{t(option.labelKey)}</span>
+        <span className="font-medium text-base md:text-lg">{t(option.labelKey)}</span>
       </CardContent>
     </Card>
   );
@@ -253,66 +240,84 @@ export function WorkoutQuiz() {
   const renderStep1 = () => (
     <div
       className={cn(
-        "space-y-4",
+        "flex-1 flex flex-col",
         direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
       )}
     >
-      <div className="text-center mb-6">
-        <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-          <Target className="size-8 text-primary" />
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
+        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+          <Target className="size-6 md:size-8 text-primary" />
         </div>
-        <h2 className="text-xl font-semibold">{t("quiz.goalQuestion")}</h2>
-        <p className="text-muted-foreground mt-1">{t("quiz.goalHint")}</p>
+        <h2 className="text-lg md:text-xl font-semibold text-center">{t("quiz.goalQuestion")}</h2>
+        <p className="text-sm text-muted-foreground mt-1 text-center">{t("quiz.goalHint")}</p>
+        <div className="w-full max-w-sm space-y-2 mt-6">
+          {GOAL_OPTIONS.map((option) =>
+            renderOptionCard(option, answers.goal === option.value, () =>
+              handleGoalSelect(option.value)
+            )
+          )}
+        </div>
       </div>
-      {GOAL_OPTIONS.map((option) =>
-        renderOptionCard(option, answers.goal === option.value, () =>
-          handleGoalSelect(option.value)
-        )
-      )}
     </div>
   );
 
   const renderStep2 = () => (
     <div
       className={cn(
-        "space-y-4",
+        "flex-1 flex flex-col",
         direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
       )}
     >
-      <div className="text-center mb-6">
-        <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-          <Clock className="size-8 text-primary" />
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
+        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+          <Clock className="size-6 md:size-8 text-primary" />
         </div>
-        <h2 className="text-xl font-semibold">{t("quiz.timeQuestion")}</h2>
-        <p className="text-muted-foreground mt-1">{t("quiz.timeHint")}</p>
+        <h2 className="text-lg md:text-xl font-semibold text-center">{t("quiz.timeQuestion")}</h2>
+        <p className="text-sm text-muted-foreground mt-1 text-center">{t("quiz.timeHint")}</p>
+        <div className="w-full max-w-sm space-y-2 mt-6">
+          {TIME_OPTIONS.map((option) =>
+            renderOptionCard(option, answers.time === option.value, () =>
+              handleTimeSelect(option.value)
+            )
+          )}
+        </div>
       </div>
-      {TIME_OPTIONS.map((option) =>
-        renderOptionCard(option, answers.time === option.value, () =>
-          handleTimeSelect(option.value)
-        )
-      )}
+      <div className="py-3 flex justify-center">
+        <Button variant="ghost" size="sm" onClick={handleBack}>
+          <ArrowLeft className="size-4 mr-1" />
+          {t("quiz.back")}
+        </Button>
+      </div>
     </div>
   );
 
   const renderStep3 = () => (
     <div
       className={cn(
-        "space-y-4",
+        "flex-1 flex flex-col",
         direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
       )}
     >
-      <div className="text-center mb-6">
-        <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-          <MapPin className="size-8 text-primary" />
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
+        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+          <MapPin className="size-6 md:size-8 text-primary" />
         </div>
-        <h2 className="text-xl font-semibold">{t("quiz.environmentQuestion")}</h2>
-        <p className="text-muted-foreground mt-1">{t("quiz.environmentHint")}</p>
+        <h2 className="text-lg md:text-xl font-semibold text-center">{t("quiz.environmentQuestion")}</h2>
+        <p className="text-sm text-muted-foreground mt-1 text-center">{t("quiz.environmentHint")}</p>
+        <div className="w-full max-w-sm space-y-2 mt-6">
+          {ENVIRONMENT_OPTIONS.map((option) =>
+            renderOptionCard(option, answers.environment === option.value, () =>
+              handleEnvironmentSelect(option.value)
+            )
+          )}
+        </div>
       </div>
-      {ENVIRONMENT_OPTIONS.map((option) =>
-        renderOptionCard(option, answers.environment === option.value, () =>
-          handleEnvironmentSelect(option.value)
-        )
-      )}
+      <div className="py-3 flex justify-center">
+        <Button variant="ghost" size="sm" onClick={handleBack}>
+          <ArrowLeft className="size-4 mr-1" />
+          {t("quiz.back")}
+        </Button>
+      </div>
     </div>
   );
 
@@ -350,14 +355,22 @@ export function WorkoutQuiz() {
     </div>
   );
 
+  // Results page scrolls normally; quiz steps use full viewport
+  if (step === "results") {
+    return (
+      <div className="max-w-2xl mx-auto py-8">
+        {renderResults()}
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-2xl mx-auto">
-      {step !== "results" && renderProgressBar()}
+    <div className="flex flex-col min-h-[calc(100dvh-8rem)] md:min-h-0 md:py-8 max-w-2xl mx-auto">
+      {renderProgressDots()}
 
       {step === 1 && renderStep1()}
       {step === 2 && renderStep2()}
       {step === 3 && renderStep3()}
-      {step === "results" && renderResults()}
     </div>
   );
 }

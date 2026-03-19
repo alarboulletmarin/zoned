@@ -526,10 +526,10 @@ export function PlanViewPage() {
               variant="default"
               size="sm"
               onClick={() => setShowWorkoutPanel(v => !v)}
-              className="rounded-full"
+              className="rounded-full hidden md:inline-flex"
             >
               <Plus className="size-4" />
-              <span className="ml-1">{isEn ? "Add workout" : "Ajouter une s\u00e9ance"}</span>
+              <span className="ml-1">{isEn ? "Add workout" : "Ajouter une séance"}</span>
             </Button>
           <div
             className="inline-flex items-center gap-0.5 rounded-lg bg-muted p-1"
@@ -643,7 +643,9 @@ export function PlanViewPage() {
         )}
 
         {/* Week List */}
-        {planView === "list" && <div className="space-y-2">
+        {planView === "list" && (
+          <div className="flex gap-4">
+          <div className="flex-1 min-w-0 space-y-2">
           {plan.weeks.map((week) => {
             const isExpanded = expandedWeeks.has(week.weekNumber);
             const isCurrent =
@@ -725,15 +727,16 @@ export function PlanViewPage() {
                           };
                           return priority(a) - priority(b);
                         });
-                        return sortedSessions.map((session, idx) => {
+                        return sortedSessions.map((session) => {
                           const isRaceDay =
                             session.workoutId === "__race_day__";
                           const sessionLabel =
                             SESSION_TYPE_LABELS[session.sessionType];
+                          const originalIndex = week.sessions.indexOf(session);
 
                           return (
                             <div
-                              key={idx}
+                              key={originalIndex}
                               className={cn(
                                 "flex items-center gap-3 rounded-lg p-3",
                                 isRaceDay
@@ -802,23 +805,37 @@ export function PlanViewPage() {
                                   </span>
                                 )}
                                 {!isRaceDay && (
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="h-6 w-6 p-0"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setSwapTarget({
-                                        weekNumber: week.weekNumber,
-                                        sessionIndex: idx,
-                                        workoutId: session.workoutId,
-                                        sessionType: session.sessionType,
-                                      });
-                                    }}
-                                    title={isEn ? "Replace session" : "Remplacer la séance"}
-                                  >
-                                    <span className="text-xs">{"\u21c4"}</span>
-                                  </Button>
+                                  <>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="h-6 w-6 p-0"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setSwapTarget({
+                                          weekNumber: week.weekNumber,
+                                          sessionIndex: originalIndex,
+                                          workoutId: session.workoutId,
+                                          sessionType: session.sessionType,
+                                        });
+                                      }}
+                                      title={isEn ? "Replace session" : "Remplacer la séance"}
+                                    >
+                                      <span className="text-xs">{"\u21c4"}</span>
+                                    </Button>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleSessionDelete(week.weekNumber, originalIndex);
+                                      }}
+                                      title={isEn ? "Remove session" : "Retirer la séance"}
+                                    >
+                                      <Trash2 className="size-3.5" />
+                                    </Button>
+                                  </>
                                 )}
                               </div>
                             </div>
@@ -826,12 +843,44 @@ export function PlanViewPage() {
                         });
                       })()
                     )}
+                    {/* Mobile: add session button */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAddTarget({ weekNumber: week.weekNumber, day: 0 });
+                        setShowWorkoutPanel(true);
+                      }}
+                      className="md:hidden w-full mt-1 rounded-lg border border-dashed border-muted-foreground/30 p-2.5 flex items-center justify-center gap-2 text-muted-foreground/50 active:text-primary transition-colors"
+                    >
+                      <Plus className="size-4" />
+                      <span className="text-sm">{isEn ? "Add" : "Ajouter"}</span>
+                    </button>
                   </div>
                 )}
               </Card>
             );
           })}
-        </div>}
+        </div>
+          {/* List view inline panel (tap to add, no drag) */}
+          {showWorkoutPanel && (
+            <div className="hidden md:block w-[280px] lg:w-[320px] shrink-0">
+              <div className="sticky top-20">
+                <PlanWorkoutPanel
+                  isOpen={showWorkoutPanel}
+                  onClose={() => setShowWorkoutPanel(false)}
+                  isEn={isEn}
+                  inline
+                  onSelectWorkout={(workoutId) => {
+                    // Add to current week, first available day
+                    const targetWeek = Math.max(1, currentWeek);
+                    handleWorkoutAdd(workoutId, targetWeek, 0);
+                  }}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+        )}
 
 
         {/* Delete Confirmation Dialog */}

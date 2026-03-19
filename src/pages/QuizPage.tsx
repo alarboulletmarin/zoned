@@ -3,7 +3,7 @@ import { WorkoutQuiz } from "@/components/domain/WorkoutQuiz";
 import { SEOHead } from "@/components/seo";
 
 export function QuizPage() {
-  const { t, i18n } = useTranslation("common");
+  const { i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
 
   return (
@@ -15,16 +15,7 @@ export function QuizPage() {
           : "Répondez à quelques questions pour trouver la séance de course parfaite pour vos objectifs."}
         canonical="/quiz"
       />
-      <div className="py-8">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold">{t("quiz.title")}</h1>
-          <p className="text-muted-foreground mt-1">{t("quiz.subtitle")}</p>
-        </div>
-
-        {/* Quiz Component */}
-        <WorkoutQuiz />
-      </div>
+      <WorkoutQuiz />
     </>
   );
 }

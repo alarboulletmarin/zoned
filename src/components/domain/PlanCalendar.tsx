@@ -524,9 +524,7 @@ export function PlanCalendar({
                         )}
                       >
                         {sessions.length === 0 ? (
-                          <span className="text-xs text-muted-foreground/40 block text-center">
-                            —
-                          </span>
+                          <span className="text-xs text-muted-foreground/40 block text-center">—</span>
                         ) : (
                           <div className="space-y-0.5">
                             {sessions.map((session, sIdx) => {

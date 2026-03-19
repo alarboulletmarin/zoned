@@ -181,6 +181,17 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
         </button>
       </div>
 
+      {/* Hint */}
+      <div className="px-4 py-2 border-b shrink-0 bg-primary/5">
+        <p className="text-xs text-muted-foreground text-center">
+          {inline
+            ? onSelectWorkout
+              ? (isEn ? "Click a workout to add it to your plan" : "Cliquez sur une séance pour l'ajouter à votre plan")
+              : (isEn ? "Drag a workout onto the calendar to add it" : "Glissez une séance sur le calendrier pour l'ajouter")
+            : (isEn ? "Tap a workout to add it" : "Appuyez sur une séance pour l'ajouter")}
+        </p>
+      </div>
+
       {/* Search */}
       <div className="px-4 py-2 border-b shrink-0">
         <div className="relative">
@@ -285,16 +296,6 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
         )}
       </div>
 
-      {/* Hint footer */}
-      {!isLoading && filteredWorkouts.length > 0 && (
-        <div className="px-4 py-2 border-t shrink-0">
-          <p className="text-[10px] text-muted-foreground text-center">
-            {isEn
-              ? "Drag a workout onto the calendar to add it"
-              : "Glissez une s\u00e9ance sur le calendrier pour l\u2019ajouter"}
-          </p>
-        </div>
-      )}
     </div>
   );
 
@@ -309,8 +310,6 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
 
   return (
     <>
-      {/* Desktop + Tablet (md+) are handled inline via the `inline` prop */}
-
       {/* ── Mobile (<md): Bottom sheet ── */}
       <>
         {/* Backdrop */}
