@@ -1,4 +1,6 @@
 import type { TrainingPlan, PlanSession, PlanWeek } from "@/types/plan";
+import type { TrainingPhase, WorkoutTemplate } from "@/types";
+import { getWorkoutById } from "@/data/workouts";
 
 export interface PlanStats {
   totalSessions: number;
@@ -6,6 +8,17 @@ export interface PlanStats {
   avgDurationPerWeekMin: number;
   keySessionCount: number;
   sessionsByType: Record<string, number>;
+  totalEstimatedKm: number;
+  peakVolumeWeek: number;
+  peakVolumeMin: number;
+  longestSessionMin: number;
+  recoveryWeekCount: number;
+  weeklyVolumes: {
+    weekNumber: number;
+    durationMin: number;
+    phase: TrainingPhase;
+    isRecovery: boolean;
+  }[];
 }
 
 /**
@@ -46,13 +59,41 @@ export function computePlanStats(plan: TrainingPlan): PlanStats {
   let totalSessions = 0;
   let totalDurationMin = 0;
   let keySessionCount = 0;
+  let totalEstimatedKm = 0;
+  let longestSessionMin = 0;
+  let recoveryWeekCount = 0;
+  let peakVolumeWeek = 0;
+  let peakVolumeMin = 0;
   const sessionsByType: Record<string, number> = {};
+  const weeklyVolumes: PlanStats["weeklyVolumes"] = [];
 
   for (const week of plan.weeks) {
+    const weekDuration = computeWeekDuration(week);
+    const weekKm = computeWeekKm(week);
+
+    weeklyVolumes.push({
+      weekNumber: week.weekNumber,
+      durationMin: weekDuration,
+      phase: week.phase,
+      isRecovery: week.isRecoveryWeek,
+    });
+
+    if (weekDuration > peakVolumeMin) {
+      peakVolumeMin = weekDuration;
+      peakVolumeWeek = week.weekNumber;
+    }
+
+    if (week.isRecoveryWeek) recoveryWeekCount++;
+
+    totalEstimatedKm += weekKm;
+
     for (const session of week.sessions) {
       if (session.workoutId === "__race_day__") continue;
       totalSessions++;
       totalDurationMin += session.estimatedDurationMin;
+      if (session.estimatedDurationMin > longestSessionMin) {
+        longestSessionMin = session.estimatedDurationMin;
+      }
       if (session.isKeySession) keySessionCount++;
       sessionsByType[session.sessionType] = (sessionsByType[session.sessionType] || 0) + 1;
     }
@@ -64,5 +105,164 @@ export function computePlanStats(plan: TrainingPlan): PlanStats {
     avgDurationPerWeekMin: plan.totalWeeks > 0 ? Math.round(totalDurationMin / plan.totalWeeks) : 0,
     keySessionCount,
     sessionsByType,
+    totalEstimatedKm,
+    peakVolumeWeek,
+    peakVolumeMin,
+    longestSessionMin,
+    recoveryWeekCount,
+    weeklyVolumes,
   };
+}
+
+// ── Enhanced plan analysis (async, workout-level) ───────────────────
+
+export interface ZoneDistribution {
+  zone: string;
+  minutes: number;
+  percent: number;
+}
+
+export interface TargetSystemBreakdown {
+  system: string;
+  count: number;
+  percent: number;
+}
+
+export interface EnhancedPlanAnalysis {
+  zoneDistribution: ZoneDistribution[];
+  targetSystemBreakdown: TargetSystemBreakdown[];
+}
+
+/** Default rep duration in minutes when only repetitions are specified */
+const DEFAULT_REP_MIN = 1;
+
+/**
+ * Estimate the time in minutes for a single workout block.
+ */
+function estimateBlockMinutes(block: { durationMin?: number; repetitions?: number }): number {
+  if (block.durationMin && block.durationMin > 0) return block.durationMin;
+  if (block.repetitions && block.repetitions > 0) return block.repetitions * DEFAULT_REP_MIN;
+  return 0;
+}
+
+/**
+ * Compute zone-level and target-system-level analysis for a training plan.
+ *
+ * Loads each unique workout template to inspect block zones and target systems.
+ */
+export async function computeEnhancedPlanAnalysis(plan: TrainingPlan): Promise<EnhancedPlanAnalysis> {
+  // ── 1. Collect unique workout IDs and load templates ─────────────
+  const workoutIds = new Set<string>();
+  for (const week of plan.weeks) {
+    for (const session of week.sessions) {
+      if (session.workoutId !== "__race_day__") {
+        workoutIds.add(session.workoutId);
+      }
+    }
+  }
+
+  const workoutMap = new Map<string, WorkoutTemplate>();
+  await Promise.all(
+    Array.from(workoutIds).map(async (id) => {
+      const w = await getWorkoutById(id);
+      if (w) workoutMap.set(id, w);
+    }),
+  );
+
+  // ── 2. Zone distribution ─────────────────────────────────────────
+  const zoneMinutes: Record<string, number> = {};
+
+  for (const week of plan.weeks) {
+    for (const session of week.sessions) {
+      if (session.workoutId === "__race_day__") continue;
+
+      const workout = workoutMap.get(session.workoutId);
+      if (!workout) continue;
+
+      const sessionTotal = session.estimatedDurationMin;
+
+      // Compute raw block durations for warmup, main, cooldown
+      let warmupRaw = 0;
+      for (const block of workout.warmupTemplate) {
+        warmupRaw += estimateBlockMinutes(block);
+      }
+
+      let mainRaw = 0;
+      for (const block of workout.mainSetTemplate) {
+        mainRaw += estimateBlockMinutes(block);
+      }
+
+      let cooldownRaw = 0;
+      for (const block of workout.cooldownTemplate) {
+        cooldownRaw += estimateBlockMinutes(block);
+      }
+
+      const totalRaw = warmupRaw + mainRaw + cooldownRaw;
+      // Scale factor so block durations sum to session estimated duration
+      const scale = totalRaw > 0 ? sessionTotal / totalRaw : 1;
+
+      // Warmup: split evenly between Z1 and Z2
+      const warmupMin = warmupRaw * scale;
+      zoneMinutes["Z1"] = (zoneMinutes["Z1"] || 0) + warmupMin / 2;
+      zoneMinutes["Z2"] = (zoneMinutes["Z2"] || 0) + warmupMin / 2;
+
+      // Main set: distribute by block zone
+      for (const block of workout.mainSetTemplate) {
+        const blockMin = estimateBlockMinutes(block) * scale;
+        if (!block.zone) {
+          // No zone specified — default to Z2
+          zoneMinutes["Z2"] = (zoneMinutes["Z2"] || 0) + blockMin;
+        } else if (block.zone.includes("-")) {
+          // Range like "Z1-Z2": split evenly
+          const parts = block.zone.split("-");
+          const perPart = blockMin / parts.length;
+          for (const part of parts) {
+            const z = part.startsWith("Z") ? part : `Z${part}`;
+            zoneMinutes[z] = (zoneMinutes[z] || 0) + perPart;
+          }
+        } else {
+          zoneMinutes[block.zone] = (zoneMinutes[block.zone] || 0) + blockMin;
+        }
+      }
+
+      // Cooldown: assign to Z1
+      const cooldownMin = cooldownRaw * scale;
+      zoneMinutes["Z1"] = (zoneMinutes["Z1"] || 0) + cooldownMin;
+    }
+  }
+
+  const totalZoneMinutes = Object.values(zoneMinutes).reduce((a, b) => a + b, 0);
+  const allZones = ["Z1", "Z2", "Z3", "Z4", "Z5", "Z6"];
+  const zoneDistribution: ZoneDistribution[] = allZones.map((zone) => {
+    const minutes = Math.round((zoneMinutes[zone] || 0) * 10) / 10;
+    return {
+      zone,
+      minutes,
+      percent: totalZoneMinutes > 0 ? Math.round((minutes / totalZoneMinutes) * 1000) / 10 : 0,
+    };
+  });
+
+  // ── 3. Target system breakdown ───────────────────────────────────
+  const systemCounts: Record<string, number> = {};
+  let totalSessionsWithSystem = 0;
+
+  for (const week of plan.weeks) {
+    for (const session of week.sessions) {
+      if (session.workoutId === "__race_day__") continue;
+      const workout = workoutMap.get(session.workoutId);
+      if (!workout) continue;
+      systemCounts[workout.targetSystem] = (systemCounts[workout.targetSystem] || 0) + 1;
+      totalSessionsWithSystem++;
+    }
+  }
+
+  const targetSystemBreakdown: TargetSystemBreakdown[] = Object.entries(systemCounts)
+    .map(([system, count]) => ({
+      system,
+      count,
+      percent: totalSessionsWithSystem > 0 ? Math.round((count / totalSessionsWithSystem) * 1000) / 10 : 0,
+    }))
+    .sort((a, b) => b.count - a.count);
+
+  return { zoneDistribution, targetSystemBreakdown };
 }

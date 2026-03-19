@@ -67,6 +67,24 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "Glossary",
         },
         {
+          text: "8 plans pré-construits prêt-à-l'emploi : 5K débutant/intermédiaire, 10K débutant/intermédiaire, semi-marathon, marathon, construction de base, retour de blessure",
+          textEn: "8 pre-built ready-to-use plans: 5K beginner/intermediate, 10K beginner/intermediate, half-marathon, marathon, base building, return from injury",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Dates de début/fin optionnelles sur les plans libres et pré-construits, modifiables à la création et après coup",
+          textEn: "Optional start/end dates on free and pre-built plans, editable at creation and afterwards",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Section statistiques enrichie avec 8 métriques, graphique de volume par semaine, distribution par zone (Z1-Z6), répartition des systèmes ciblés, et accordéon repliable",
+          textEn: "Enhanced statistics section with 8 metrics, weekly volume chart, zone distribution (Z1-Z6), target system breakdown, and collapsible accordion",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
           text: "Filtre favoris dans le panel bibliothèque des plans avec message d'état vide adapté",
           textEn: "Favorites filter in plan workout library panel with adapted empty state message",
           category: "Plans",

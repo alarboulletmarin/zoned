@@ -22,10 +22,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Free plan mode: create a blank plan (name + week count) and place workouts manually
 - Plan import/export as JSON to share or backup your plans
 - Delete sessions from both calendar and list views with trash button
+- 8 pre-built ready-to-use plans: 5K beginner/intermediate, 10K beginner/intermediate, half-marathon, marathon, base building, return from injury
+- Optional start/end dates on free and pre-built plans, editable at creation and afterwards
+- Enhanced statistics section with 8 metrics, weekly volume chart, zone distribution (Z1-Z6), target system breakdown, and collapsible accordion
 
 #### UX
 - Inline "+" buttons in each day cell (mobile) and each week (list) to quickly add sessions
 - Contextual hints in library panel: drag, click or tap depending on display mode
+- Click on a session in calendar view navigates to workout detail (with "Back to plan" link)
+- Compact mobile layout for plan creation cards (no scroll) and prebuilt plan grid (2×4)
 
 ### Changed
 

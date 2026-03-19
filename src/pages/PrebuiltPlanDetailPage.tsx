@@ -26,6 +26,7 @@ import type { TrainingPlan } from "@/types/plan";
 import type { WorkoutTemplate } from "@/types";
 import { toast } from "sonner";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
+import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 
 const DIFFICULTY_LABELS: Record<string, { fr: string; en: string }> = {
   beginner: { fr: "D\u00e9butant", en: "Beginner" },
@@ -286,6 +287,11 @@ export function PrebuiltPlanDetailPage() {
               </div>
             </CardContent>
           </Card>
+        )}
+
+        {/* Stats */}
+        {previewPlan && (
+          <PlanStatsSection plan={previewPlan} isEn={isEn} />
         )}
 
         {/* View toggle + content */}

@@ -42,7 +42,8 @@ import { usePlan } from "@/hooks/usePlans";
 import { deletePlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan } from "@/lib/planStorage";
 import { getWorkoutById } from "@/data/workouts";
 import { exportPlanToICS, exportPlanToPDF } from "@/lib/export";
-import { computePlanStats, computeWeekKm, computeWeekDuration } from "@/lib/planStats";
+import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
+import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import {
   PHASE_META,
   RACE_DISTANCE_META,
@@ -53,19 +54,6 @@ import { IcsExportDialog } from "@/components/domain/IcsExportDialog";
 import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
-
-const SESSION_TYPE_COLORS: Record<string, string> = {
-  endurance: "bg-blue-400",
-  long_run: "bg-blue-600",
-  tempo: "bg-yellow-400",
-  threshold: "bg-orange-400",
-  vo2max: "bg-red-500",
-  speed: "bg-red-400",
-  fartlek: "bg-purple-400",
-  hills: "bg-green-500",
-  race_specific: "bg-amber-500",
-  recovery: "bg-slate-300 dark:bg-slate-700",
-};
 
 const SESSION_TYPE_LABELS: Record<string, { fr: string; en: string }> = {
   recovery: { fr: "Récupération", en: "Recovery" },
@@ -125,11 +113,6 @@ export function PlanViewPage() {
     if (!plan) return 0;
     const referenceDate = plan.config.startDate || plan.config.createdAt;
     return getCurrentWeek(referenceDate);
-  }, [plan]);
-
-  const stats = useMemo(() => {
-    if (!plan) return null;
-    return computePlanStats(plan);
   }, [plan]);
 
   // Auto-expand current week
@@ -496,71 +479,7 @@ export function PlanViewPage() {
         )}
 
         {/* Plan Stats */}
-        {stats && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <Card size="compact">
-              <CardContent className="px-4">
-                <p className="text-xs text-muted-foreground">{isEn ? "Sessions" : "Séances"}</p>
-                <p className="text-2xl font-bold">{stats.totalSessions}</p>
-              </CardContent>
-            </Card>
-            <Card size="compact">
-              <CardContent className="px-4">
-                <p className="text-xs text-muted-foreground">{isEn ? "Total hours" : "Heures totales"}</p>
-                <p className="text-2xl font-bold">{Math.round(stats.totalDurationMin / 60)}<span className="text-sm font-normal text-muted-foreground">h</span></p>
-              </CardContent>
-            </Card>
-            <Card size="compact">
-              <CardContent className="px-4">
-                <p className="text-xs text-muted-foreground">{isEn ? "Avg/week" : "Moy./semaine"}</p>
-                <p className="text-2xl font-bold">{Math.round(stats.avgDurationPerWeekMin)}<span className="text-sm font-normal text-muted-foreground">min</span></p>
-              </CardContent>
-            </Card>
-            <Card size="compact">
-              <CardContent className="px-4">
-                <p className="text-xs text-muted-foreground">{isEn ? "Key sessions" : "Séances clés"}</p>
-                <p className="text-2xl font-bold">{stats.keySessionCount}</p>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {/* Session type distribution bar */}
-        {stats && (
-          <Card size="compact">
-            <CardContent className="px-4">
-              <p className="text-sm font-medium mb-2">{isEn ? "Session types" : "Types de séances"}</p>
-              <div className="flex rounded-full overflow-hidden h-3">
-                {Object.entries(stats.sessionsByType)
-                  .sort(([,a], [,b]) => b - a)
-                  .map(([type, count]) => {
-                    const sessionLabel = SESSION_TYPE_LABELS[type];
-                    return (
-                      <div
-                        key={type}
-                        className={SESSION_TYPE_COLORS[type] || "bg-gray-300"}
-                        style={{ width: `${(count / stats.totalSessions) * 100}%` }}
-                        title={`${sessionLabel ? (isEn ? sessionLabel.en : sessionLabel.fr) : type}: ${count}`}
-                      />
-                    );
-                  })}
-              </div>
-              <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2">
-                {Object.entries(stats.sessionsByType)
-                  .sort(([,a], [,b]) => b - a)
-                  .map(([type, count]) => {
-                    const sessionLabel = SESSION_TYPE_LABELS[type];
-                    return (
-                      <div key={type} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <div className={`size-2.5 rounded-full ${SESSION_TYPE_COLORS[type] || "bg-gray-300"}`} />
-                        <span>{sessionLabel ? (isEn ? sessionLabel.en : sessionLabel.fr) : type} ({count})</span>
-                      </div>
-                    );
-                  })}
-              </div>
-            </CardContent>
-          </Card>
-        )}
+        <PlanStatsSection plan={plan} currentWeek={currentWeek} isEn={isEn} />
 
         {/* View mode toggle + export */}
         <div className="flex items-center justify-between gap-3">
