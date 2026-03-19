@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { Star, Flag, Clock, Trash2 } from "@/components/icons";
 import { PHASE_META } from "@/types/plan";
 import type { TrainingPlan, PlanSession } from "@/types/plan";
+import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 
 // ── Color maps ──────────────────────────────────────────────────────
 
@@ -286,9 +287,16 @@ export function PlanCalendar({
               {isEn ? `Week ${mobileWeek}` : `Semaine ${mobileWeek}`}
             </span>
             {mobileWeekData && (
-              <span className="text-xs text-muted-foreground ml-2">
-                {isEn ? PHASE_META[mobileWeekData.phase].labelEn : PHASE_META[mobileWeekData.phase].label}
-              </span>
+              <>
+                <span className="text-xs text-muted-foreground ml-2">
+                  {isEn ? PHASE_META[mobileWeekData.phase].labelEn : PHASE_META[mobileWeekData.phase].label}
+                </span>
+                {mobileWeekData.sessions.length > 0 && (
+                  <span className="block text-[10px] text-muted-foreground/70 tabular-nums">
+                    ~{Math.round(computeWeekKm(mobileWeekData))}km · {computeWeekDuration(mobileWeekData)}min
+                  </span>
+                )}
+              </>
             )}
           </div>
           <button
@@ -498,6 +506,11 @@ export function PlanCalendar({
                     <span className="text-[10px] text-muted-foreground leading-none">
                       {isEn ? phaseMeta.labelEn : phaseMeta.label}
                     </span>
+                    {week.sessions.length > 0 && (
+                      <span className="text-[9px] text-muted-foreground/70 tabular-nums">
+                        ~{Math.round(computeWeekKm(week))}km · {computeWeekDuration(week)}min
+                      </span>
+                    )}
                     {isCurrent && (
                       <div className="text-[9px] font-semibold text-primary mt-0.5">
                         {isEn ? "NOW" : "ACTUEL"}

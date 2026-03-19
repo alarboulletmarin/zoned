@@ -16,6 +16,7 @@ import {
   List,
   Plus,
   MoreHorizontal,
+  Pencil,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -38,10 +39,10 @@ import {
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { usePlan } from "@/hooks/usePlans";
-import { deletePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan } from "@/lib/planStorage";
+import { deletePlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan } from "@/lib/planStorage";
 import { getWorkoutById } from "@/data/workouts";
 import { exportPlanToICS, exportPlanToPDF } from "@/lib/export";
-import { computePlanStats } from "@/lib/planStats";
+import { computePlanStats, computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import {
   PHASE_META,
   RACE_DISTANCE_META,
@@ -117,10 +118,13 @@ export function PlanViewPage() {
   } | null>(null);
   const [showWorkoutPanel, setShowWorkoutPanel] = useState(false);
   const [addTarget, setAddTarget] = useState<{ weekNumber: number; day: number } | null>(null);
+  const [showDateDialog, setShowDateDialog] = useState(false);
+  const [editStartDate, setEditStartDate] = useState("");
 
   const currentWeek = useMemo(() => {
     if (!plan) return 0;
-    return getCurrentWeek(plan.config.createdAt);
+    const referenceDate = plan.config.startDate || plan.config.createdAt;
+    return getCurrentWeek(referenceDate);
   }, [plan]);
 
   const stats = useMemo(() => {
@@ -357,6 +361,11 @@ export function PlanViewPage() {
                   {isEn ? "Free plan" : "Plan libre"}
                 </Badge>
               )}
+              {plan.config.planMode === "prebuilt" && (
+                <Badge variant="secondary">
+                  {isEn ? "Pre-built" : "Pr\u00e9-construit"}
+                </Badge>
+              )}
               {raceDate && (
                 <div className="flex items-center gap-1 text-sm text-muted-foreground">
                   <Calendar className="size-3.5" />
@@ -371,6 +380,43 @@ export function PlanViewPage() {
                   <Clock className="size-3 mr-1" />
                   {plan.raceTimePrediction}
                 </Badge>
+              )}
+              {plan.config.startDate && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Calendar className="size-4" />
+                  <span>
+                    {new Date(plan.config.startDate).toLocaleDateString(isEn ? "en-US" : "fr-FR")}
+                    {plan.config.endDate && (
+                      <>{" "}&rarr; {new Date(plan.config.endDate).toLocaleDateString(isEn ? "en-US" : "fr-FR")}</>
+                    )}
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 w-6 p-0"
+                    onClick={() => {
+                      setEditStartDate(plan.config.startDate || "");
+                      setShowDateDialog(true);
+                    }}
+                    title={isEn ? "Edit dates" : "Modifier les dates"}
+                  >
+                    <Pencil className="size-3.5" />
+                  </Button>
+                </div>
+              )}
+              {!plan.config.startDate && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-muted-foreground text-sm"
+                  onClick={() => {
+                    setEditStartDate("");
+                    setShowDateDialog(true);
+                  }}
+                >
+                  <Plus className="size-3.5 mr-1" />
+                  {isEn ? "Add dates" : "Ajouter des dates"}
+                </Button>
               )}
             </div>
           </div>
@@ -692,6 +738,11 @@ export function PlanViewPage() {
                     )}
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
+                    {week.sessions.length > 0 && (
+                      <span className="text-xs text-muted-foreground/70 tabular-nums hidden sm:inline">
+                        ~{Math.round(computeWeekKm(week))}km · {computeWeekDuration(week)}min
+                      </span>
+                    )}
                     <span
                       className="text-sm text-muted-foreground"
                       title={isEn ? "Training volume relative to plan peak" : "Volume d'entraînement relatif au pic du plan"}
@@ -905,6 +956,72 @@ export function PlanViewPage() {
               <Button variant="destructive" onClick={handleDelete}>
                 <Trash2 className="size-4" />
                 {isEn ? "Delete" : "Supprimer"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Date Edit Dialog */}
+        <Dialog open={showDateDialog} onOpenChange={setShowDateDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>
+                {isEn ? "Edit dates" : "Modifier les dates"}
+              </DialogTitle>
+              <DialogDescription>
+                {isEn
+                  ? "Set a start date for your plan. The end date is calculated automatically."
+                  : "D\u00e9finissez une date de d\u00e9but pour votre plan. La date de fin est calcul\u00e9e automatiquement."}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-2">
+              <div>
+                <label htmlFor="edit-start-date" className="text-sm font-medium mb-2 block">
+                  {isEn ? "Start date" : "Date de d\u00e9but"}
+                </label>
+                <input
+                  id="edit-start-date"
+                  type="date"
+                  value={editStartDate}
+                  onChange={(e) => setEditStartDate(e.target.value)}
+                  className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+              {editStartDate && (
+                <p className="text-sm text-muted-foreground">
+                  {isEn ? "End date" : "Date de fin"} :{" "}
+                  {(() => {
+                    const d = new Date(editStartDate);
+                    d.setDate(d.getDate() + plan.totalWeeks * 7);
+                    return d.toLocaleDateString(isEn ? "en-US" : "fr-FR");
+                  })()}
+                </p>
+              )}
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">
+                  {isEn ? "Cancel" : "Annuler"}
+                </Button>
+              </DialogClose>
+              <Button
+                onClick={() => {
+                  if (editStartDate) {
+                    const endD = new Date(editStartDate);
+                    endD.setDate(endD.getDate() + plan.totalWeeks * 7);
+                    plan.config.startDate = editStartDate;
+                    plan.config.endDate = endD.toISOString().split("T")[0];
+                  } else {
+                    delete plan.config.startDate;
+                    delete plan.config.endDate;
+                  }
+                  savePlan(plan);
+                  reloadPlan();
+                  setShowDateDialog(false);
+                  toast.success(isEn ? "Dates updated" : "Dates mises \u00e0 jour");
+                }}
+              >
+                {isEn ? "Save" : "Enregistrer"}
               </Button>
             </DialogFooter>
           </DialogContent>
