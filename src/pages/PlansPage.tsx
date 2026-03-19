@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -8,6 +8,7 @@ import {
   Loader2,
   ArrowRight,
   Trash2,
+  Download,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,8 @@ import {
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { usePlans } from "@/hooks/usePlans";
+import { importPlan, getPlanCount } from "@/lib/planStorage";
+import { toast } from "sonner";
 import {
   PHASE_META,
   RACE_DISTANCE_META,
@@ -69,10 +72,12 @@ function PlanCard({
   plan,
   isEn,
   onDelete,
+  onExport,
 }: {
   plan: TrainingPlan;
   isEn: boolean;
   onDelete: (id: string) => void;
+  onExport: (plan: TrainingPlan) => void;
 }) {
   const navigate = useNavigate();
   const isFreePlan = plan.config.planMode === "free";
@@ -199,6 +204,18 @@ function PlanCard({
         <Button
           variant="ghost"
           size="sm"
+          className="text-muted-foreground"
+          onClick={(e) => {
+            e.stopPropagation();
+            onExport(plan);
+          }}
+          title={isEn ? "Export JSON" : "Exporter JSON"}
+        >
+          <Download className="size-3.5" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
           className="text-muted-foreground hover:text-destructive"
           onClick={(e) => {
             e.stopPropagation();
@@ -215,8 +232,39 @@ function PlanCard({
 export function PlansPage() {
   const { i18n } = useTranslation("plan");
   const isEn = i18n.language?.startsWith("en") ?? false;
-  const { plans, isLoading, remove } = usePlans();
+  const navigate = useNavigate();
+  const { plans, isLoading, remove, reload } = usePlans();
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+
+  const handleImport = useCallback(() => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+
+      if (getPlanCount() >= 5) {
+        toast.error(isEn ? "Maximum 5 plans. Delete one first." : "Maximum 5 plans. Supprimez-en un d'abord.");
+        return;
+      }
+
+      try {
+        const text = await file.text();
+        const newId = importPlan(text);
+        if (newId) {
+          reload();
+          toast.success(isEn ? "Plan imported!" : "Plan importé !");
+          navigate(`/plan/${newId}`);
+        } else {
+          toast.error(isEn ? "Invalid plan file" : "Fichier de plan invalide");
+        }
+      } catch {
+        toast.error(isEn ? "Failed to read file" : "Impossible de lire le fichier");
+      }
+    };
+    input.click();
+  }, [isEn, reload, navigate]);
   const deleteTargetPlan = plans.find((p) => p.id === deleteTarget);
 
   // Sort plans by creation date (newest first)
@@ -250,12 +298,24 @@ export function PlansPage() {
                 : "Des plans structurés pour atteindre vos objectifs"}
             </p>
           </div>
-          <Button asChild>
-            <Link to="/plan/new">
-              <Plus className="size-4" />
-              {isEn ? "Create a plan" : "Créer un plan"}
-            </Link>
-          </Button>
+          {plans.length >= 5 ? (
+            <p className="text-sm text-muted-foreground">
+              {isEn ? "Maximum 5 plans reached" : "Limite de 5 plans atteinte"}
+            </p>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" onClick={handleImport} className="rounded-full">
+                <Download className="size-4 rotate-180" />
+                <span className="hidden sm:inline ml-1">{isEn ? "Import" : "Importer"}</span>
+              </Button>
+              <Button asChild>
+                <Link to="/plan/new">
+                  <Plus className="size-4" />
+                  {isEn ? "Create a plan" : "Créer un plan"}
+                </Link>
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Content */}
@@ -272,7 +332,23 @@ export function PlansPage() {
               )}
             >
               {sortedPlans.map((plan) => (
-                <PlanCard key={plan.id} plan={plan} isEn={isEn} onDelete={setDeleteTarget} />
+                <PlanCard
+                  key={plan.id}
+                  plan={plan}
+                  isEn={isEn}
+                  onDelete={setDeleteTarget}
+                  onExport={(p) => {
+                    const json = JSON.stringify(p, null, 2);
+                    const blob = new Blob([json], { type: "application/json" });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = `plan-${p.name || p.id}.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    toast.success(isEn ? "Plan exported" : "Plan exporté");
+                  }}
+                />
               ))}
             </div>
 

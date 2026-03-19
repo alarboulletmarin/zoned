@@ -36,6 +36,44 @@ export function getPlan(id: string): TrainingPlan | undefined {
   return getAllPlans().find(p => p.id === id);
 }
 
+export function getPlanCount(): number {
+  return getAllPlans().length;
+}
+
+/**
+ * Import a plan from JSON. Generates a new ID to avoid conflicts.
+ * Returns the new plan ID on success, null on failure.
+ */
+export function importPlan(json: string): string | null {
+  try {
+    const plan = JSON.parse(json) as TrainingPlan;
+
+    // Basic validation
+    if (
+      !plan.weeks || !Array.isArray(plan.weeks) || plan.weeks.length === 0 ||
+      !plan.config || typeof plan.totalWeeks !== "number"
+    ) {
+      return null;
+    }
+
+    // Check plan limit
+    if (getPlanCount() >= MAX_PLANS) {
+      return null;
+    }
+
+    // Generate new ID to avoid conflicts
+    const newId = crypto.randomUUID();
+    plan.id = newId;
+    plan.config.id = newId;
+    plan.config.createdAt = new Date().toISOString();
+
+    savePlan(plan);
+    return newId;
+  } catch {
+    return null;
+  }
+}
+
 export function savePlan(plan: TrainingPlan): void {
   const plans = getAllPlans();
   const existing = plans.findIndex(p => p.id === plan.id);
@@ -53,10 +91,6 @@ export function savePlan(plan: TrainingPlan): void {
 export function deletePlan(id: string): void {
   const plans = getAllPlans().filter(p => p.id !== id);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
-}
-
-export function getPlanCount(): number {
-  return getAllPlans().length;
 }
 
 export function moveSession(
