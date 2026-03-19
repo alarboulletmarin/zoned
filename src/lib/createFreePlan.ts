@@ -1,5 +1,51 @@
-import type { TrainingPlan, PlanWeek, PlanConfig } from "@/types/plan";
+import type { TrainingPlan, PlanWeek, PlanConfig, PhaseRange } from "@/types/plan";
 import type { TrainingPhase } from "@/types";
+
+const RECOVERY_WEEK_FREQUENCY = 4;
+const RECOVERY_WEEK_VOLUME_PCT = 60;
+
+/**
+ * Calculate phase distribution for a free plan (no race distance).
+ * Uses a standard periodization: ~40% base, ~30% build, ~15% peak, ~15% taper.
+ */
+function calculateFreePhases(totalWeeks: number): PhaseRange[] {
+  if (totalWeeks < 4) {
+    return [{ phase: "base", startWeek: 1, endWeek: totalWeeks }];
+  }
+
+  const taperWeeks = Math.max(1, Math.round(totalWeeks * 0.12));
+  const available = totalWeeks - taperWeeks;
+
+  const baseWeeks = Math.max(1, Math.round(available * 0.45));
+  const buildWeeks = Math.max(1, Math.round(available * 0.30));
+  let peakWeeks = Math.max(1, available - baseWeeks - buildWeeks);
+
+  // Adjust if rounding doesn't add up
+  const total = baseWeeks + buildWeeks + peakWeeks + taperWeeks;
+  if (total < totalWeeks) peakWeeks += totalWeeks - total;
+
+  const phases: PhaseRange[] = [];
+  let w = 1;
+
+  phases.push({ phase: "base", startWeek: w, endWeek: w + baseWeeks - 1 });
+  w += baseWeeks;
+  phases.push({ phase: "build", startWeek: w, endWeek: w + buildWeeks - 1 });
+  w += buildWeeks;
+  phases.push({ phase: "peak", startWeek: w, endWeek: w + peakWeeks - 1 });
+  w += peakWeeks;
+  phases.push({ phase: "taper", startWeek: w, endWeek: w + taperWeeks - 1 });
+
+  return phases;
+}
+
+function getPhaseForWeek(weekNumber: number, phases: PhaseRange[]): TrainingPhase {
+  for (const range of phases) {
+    if (weekNumber >= range.startWeek && weekNumber <= range.endWeek) {
+      return range.phase;
+    }
+  }
+  return "base";
+}
 
 export function createFreePlan(name: string, totalWeeks: number): TrainingPlan {
   const id = crypto.randomUUID();
@@ -11,13 +57,21 @@ export function createFreePlan(name: string, totalWeeks: number): TrainingPlan {
     createdAt: new Date().toISOString(),
   };
 
-  const weeks: PlanWeek[] = Array.from({ length: totalWeeks }, (_, i) => ({
-    weekNumber: i + 1,
-    phase: "base" as TrainingPhase,
-    isRecoveryWeek: false,
-    volumePercent: 100,
-    sessions: [],
-  }));
+  const phases = calculateFreePhases(totalWeeks);
 
-  return { id, config, weeks, totalWeeks, phases: [], name, nameEn: name };
+  const weeks: PlanWeek[] = Array.from({ length: totalWeeks }, (_, i) => {
+    const weekNumber = i + 1;
+    const phase = getPhaseForWeek(weekNumber, phases);
+    const isRecoveryWeek = weekNumber > 1 && weekNumber % RECOVERY_WEEK_FREQUENCY === 0 && phase !== "taper";
+
+    return {
+      weekNumber,
+      phase,
+      isRecoveryWeek,
+      volumePercent: isRecoveryWeek ? RECOVERY_WEEK_VOLUME_PCT : 100,
+      sessions: [],
+    };
+  });
+
+  return { id, config, weeks, totalWeeks, phases, name, nameEn: name };
 }
