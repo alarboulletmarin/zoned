@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { X, Search, Clock, Loader2 } from "@/components/icons";
+import { X, Search, Clock, Loader2, Heart } from "@/components/icons";
 import { loadAllWorkouts } from "@/data/workouts";
+import { useFavorites } from "@/hooks";
 import type { WorkoutTemplate, WorkoutCategory, SessionType } from "@/types";
 
 // ── Color map (same as PlanCalendar) ──────────────────────────────
@@ -78,6 +79,8 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
+  const [favoritesOnly, setFavoritesOnly] = useState(false);
+  const { favorites } = useFavorites();
 
   // Touch drag refs for mobile
 
@@ -101,6 +104,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
     const filterDef = FILTERS.find(f => f.key === activeFilter);
     return allWorkouts
       .filter(w => {
+        if (favoritesOnly && !favorites.includes(w.id)) return false;
         if (activeFilter === "all") return true;
         return filterDef?.categories.includes(w.category) ?? true;
       })
@@ -112,7 +116,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
         return name.toLowerCase().includes(q) || desc.toLowerCase().includes(q);
       })
       .slice(0, 20);
-  }, [allWorkouts, activeFilter, search, isEn]);
+  }, [allWorkouts, activeFilter, search, isEn, favoritesOnly, favorites]);
 
   // ── Desktop drag handlers ────────────────────────────────────
 
@@ -206,8 +210,8 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
         </div>
       </div>
 
-      {/* Category filter */}
-      <div className="px-4 py-2 border-b shrink-0">
+      {/* Category filter + favorites toggle */}
+      <div className="px-4 py-2 border-b shrink-0 flex items-center gap-2">
         <select
           value={activeFilter}
           onChange={(e) => setActiveFilter(e.target.value)}
@@ -219,6 +223,19 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
             </option>
           ))}
         </select>
+        <button
+          type="button"
+          onClick={() => setFavoritesOnly(v => !v)}
+          className={cn(
+            "shrink-0 size-9 rounded-md border flex items-center justify-center transition-colors",
+            favoritesOnly
+              ? "bg-primary/10 border-primary text-primary"
+              : "border-input text-muted-foreground hover:text-foreground"
+          )}
+          title={isEn ? "Favorites only" : "Favoris uniquement"}
+        >
+          <Heart className={cn("size-4", favoritesOnly && "fill-primary")} />
+        </button>
       </div>
 
       {/* Results list */}
@@ -228,9 +245,20 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
             <Loader2 className="size-6 animate-spin text-muted-foreground" />
           </div>
         ) : filteredWorkouts.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-8">
-            {isEn ? "No matching workouts" : "Aucune s\u00e9ance correspondante"}
-          </p>
+          <div className="text-center py-8 space-y-2">
+            <p className="text-sm text-muted-foreground">
+              {favoritesOnly
+                ? (isEn ? "No favorite workouts yet" : "Aucune séance en favoris")
+                : (isEn ? "No matching workouts" : "Aucune séance correspondante")}
+            </p>
+            {favoritesOnly && (
+              <p className="text-xs text-muted-foreground/60">
+                {isEn
+                  ? "Add workouts to favorites from the library first"
+                  : "Ajoutez d'abord des séances en favoris depuis la bibliothèque"}
+              </p>
+            )}
+          </div>
         ) : (
           filteredWorkouts.map((workout) => {
             const sessionType = CATEGORY_SESSION_TYPE[workout.category] || "endurance";
