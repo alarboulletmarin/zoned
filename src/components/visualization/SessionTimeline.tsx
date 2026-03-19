@@ -121,7 +121,7 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
 
   return (
     <TooltipProvider delayDuration={100}>
-      <div className={cn("w-full pt-6", className)}>
+      <div className={cn("w-full pt-3", className)}>
         {/* Timeline bar container */}
         <div
           className="relative flex items-end h-40 md:h-56 rounded-xl overflow-hidden"
