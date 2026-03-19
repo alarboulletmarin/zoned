@@ -329,7 +329,6 @@ export function MobileSidebar({
         <div className="h-full">
           <SidebarContent
             collapsed={false}
-            onLinkClick={() => onOpenChange(false)}
           />
         </div>
       </SheetContent>
