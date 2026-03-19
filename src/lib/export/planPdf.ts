@@ -77,37 +77,42 @@ export async function exportPlanToPDF(
   const pdfMake = pdfMakeModule.default;
   pdfMake.vfs = pdfFontsModule.default.vfs;
 
-  const raceMeta = RACE_DISTANCE_META[plan.config.raceDistance];
-  const planName = isEn ? plan.nameEn : plan.name;
+  const raceMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
+  const isFreePlan = plan.config.planMode === "free";
+  const planName = isFreePlan
+    ? (plan.config.planName || plan.name)
+    : (isEn ? plan.nameEn : plan.name);
   const content: Content = [];
 
   // ── Title Page ──────────────────────────────────────────────────────
 
+  const titlePageStack: Content[] = [];
+  titlePageStack.push(
+    { text: `${isEn ? "Start" : "D\u00e9but"}: ${formatDate(plan.config.createdAt, isEn)}`, style: "metadata" },
+  );
+  if (plan.config.raceDate) {
+    titlePageStack.push(
+      { text: `${isEn ? "Race" : "Course"}: ${formatDate(plan.config.raceDate, isEn)}`, style: "metadata" },
+    );
+  }
+  titlePageStack.push(
+    { text: `${isEn ? "Duration" : "Dur\u00e9e"}: ${plan.totalWeeks} ${isEn ? "weeks" : "semaines"}`, style: "metadata" },
+  );
+
   content.push(
     { text: planName, style: "header", margin: [0, 60, 0, 10] },
-    {
-      text: isEn ? raceMeta.labelEn : raceMeta.label,
-      style: "subheader",
-      margin: [0, 0, 0, 20],
-    },
+    ...(raceMeta
+      ? [{
+          text: isEn ? raceMeta.labelEn : raceMeta.label,
+          style: "subheader",
+          margin: [0, 0, 0, 20] as [number, number, number, number],
+        }]
+      : [{ text: isFreePlan ? (isEn ? "Free plan" : "Plan libre") : "", style: "subheader", margin: [0, 0, 0, 20] as [number, number, number, number] }]),
     {
       columns: [
         {
           width: "*",
-          stack: [
-            {
-              text: `${isEn ? "Start" : "Début"}: ${formatDate(plan.config.createdAt, isEn)}`,
-              style: "metadata",
-            },
-            {
-              text: `${isEn ? "Race" : "Course"}: ${formatDate(plan.config.raceDate, isEn)}`,
-              style: "metadata",
-            },
-            {
-              text: `${isEn ? "Duration" : "Durée"}: ${plan.totalWeeks} ${isEn ? "weeks" : "semaines"}`,
-              style: "metadata",
-            },
-          ],
+          stack: titlePageStack,
         },
         {
           width: "*",
@@ -429,7 +434,7 @@ export async function exportPlanToPDF(
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `plan-${plan.config.raceDistance}-${plan.name}.pdf`;
+  link.download = `plan-${plan.config.raceDistance ?? "free"}-${plan.name}.pdf`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

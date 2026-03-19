@@ -1,4 +1,4 @@
-import type { TrainingPlan, PlanConfig, PlanWeek, PlanSession, RaceDistance } from "@/types/plan";
+import type { TrainingPlan, AssistedPlanConfig, PlanWeek, PlanSession, RaceDistance } from "@/types/plan";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import { loadAllWorkouts } from "@/data/workouts";
 import { calculateRaceTimes } from "@/lib/paceCalculator";
@@ -54,7 +54,7 @@ function predictRaceTime(
 /**
  * Generate plan name from config.
  */
-function generatePlanName(config: PlanConfig): { name: string; nameEn: string } {
+function generatePlanName(config: AssistedPlanConfig): { name: string; nameEn: string } {
   const distMeta = RACE_DISTANCE_META[config.raceDistance];
   const dateStr = new Date(config.raceDate).toLocaleDateString("fr-FR", {
     day: "numeric",
@@ -117,7 +117,7 @@ function getWeekLabel(
  * 7. Race time prediction if VMA available
  * 8. Return complete TrainingPlan
  */
-export async function generatePlan(config: PlanConfig): Promise<TrainingPlan> {
+export async function generatePlan(config: AssistedPlanConfig): Promise<TrainingPlan> {
   // Step 1: Calculate total weeks
   const totalWeeks = calculateTotalWeeks(config.raceDate);
 

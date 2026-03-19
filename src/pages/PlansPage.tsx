@@ -75,8 +75,11 @@ function PlanCard({
   onDelete: (id: string) => void;
 }) {
   const navigate = useNavigate();
-  const raceMeta = RACE_DISTANCE_META[plan.config.raceDistance];
-  const planName = isEn ? plan.nameEn : plan.name;
+  const isFreePlan = plan.config.planMode === "free";
+  const raceMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
+  const planName = isFreePlan
+    ? (plan.config.planName || plan.name)
+    : (isEn ? plan.nameEn : plan.name);
   const currentWeek = getCurrentWeek(plan.config.createdAt);
   const currentPhase = getCurrentPhase(currentWeek, plan.phases);
   const progressPercent = Math.min(
@@ -84,6 +87,7 @@ function PlanCard({
     100
   );
   const weeksElapsed = Math.min(Math.max(currentWeek, 0), plan.totalWeeks);
+  const totalSessions = plan.weeks.reduce((sum, w) => sum + w.sessions.length, 0);
 
   return (
     <Card interactive className="h-full">
@@ -95,16 +99,37 @@ function PlanCard({
           <CardTitle className="text-lg line-clamp-1 flex-1">
             {planName}
           </CardTitle>
-          <Badge variant="default" className="shrink-0">
-            {isEn ? raceMeta.labelEn : raceMeta.label}
-          </Badge>
+          {raceMeta ? (
+            <Badge variant="default" className="shrink-0">
+              {isEn ? raceMeta.labelEn : raceMeta.label}
+            </Badge>
+          ) : (
+            <Badge variant="secondary" className="shrink-0">
+              {isEn ? "Free plan" : "Plan libre"}
+            </Badge>
+          )}
         </div>
         <CardDescription>
-          <span className="flex items-center gap-1">
-            <Calendar className="size-3.5" />
-            {formatDate(plan.config.createdAt, isEn)} →{" "}
-            {formatDate(plan.config.raceDate, isEn)}
-          </span>
+          {isFreePlan ? (
+            <span className="flex items-center gap-1">
+              <Calendar className="size-3.5" />
+              {totalSessions}{" "}
+              {isEn
+                ? `session${totalSessions !== 1 ? "s" : ""}`
+                : `s\u00e9ance${totalSessions !== 1 ? "s" : ""}`}
+            </span>
+          ) : plan.config.raceDate ? (
+            <span className="flex items-center gap-1">
+              <Calendar className="size-3.5" />
+              {formatDate(plan.config.createdAt, isEn)} →{" "}
+              {formatDate(plan.config.raceDate, isEn)}
+            </span>
+          ) : (
+            <span className="flex items-center gap-1">
+              <Calendar className="size-3.5" />
+              {formatDate(plan.config.createdAt, isEn)}
+            </span>
+          )}
         </CardDescription>
       </CardHeader>
       <CardContent

@@ -128,6 +128,17 @@ export function PlanViewPage() {
     }
   }, [currentWeek]);
 
+  // Auto-open workout panel for empty free plans
+  useEffect(() => {
+    if (
+      plan &&
+      plan.config.planMode === "free" &&
+      plan.weeks.every((w) => w.sessions.length === 0)
+    ) {
+      setShowWorkoutPanel(true);
+    }
+  }, [plan]);
+
   // Load workout names
   useEffect(() => {
     if (!plan) return;
@@ -288,8 +299,11 @@ export function PlanViewPage() {
     );
   }
 
-  const raceMeta = RACE_DISTANCE_META[plan.config.raceDistance];
-  const planName = isEn ? plan.nameEn : plan.name;
+  const isFreePlan = plan.config.planMode === "free";
+  const raceMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
+  const planName = isFreePlan
+    ? (plan.config.planName || plan.name)
+    : (isEn ? plan.nameEn : plan.name);
   const raceDate = plan.config.raceDate;
 
   return (
@@ -313,16 +327,25 @@ export function PlanViewPage() {
           <div className="space-y-3">
             <h1 className="text-3xl font-bold">{planName}</h1>
             <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="default">
-                {isEn ? raceMeta.labelEn : raceMeta.label}
-              </Badge>
-              <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                <Calendar className="size-3.5" />
-                <span>
-                  {formatDate(plan.config.createdAt, isEn)} →{" "}
-                  {formatDate(raceDate, isEn)}
-                </span>
-              </div>
+              {raceMeta && (
+                <Badge variant="default">
+                  {isEn ? raceMeta.labelEn : raceMeta.label}
+                </Badge>
+              )}
+              {isFreePlan && (
+                <Badge variant="secondary">
+                  {isEn ? "Free plan" : "Plan libre"}
+                </Badge>
+              )}
+              {raceDate && (
+                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <Calendar className="size-3.5" />
+                  <span>
+                    {formatDate(plan.config.createdAt, isEn)} →{" "}
+                    {formatDate(raceDate, isEn)}
+                  </span>
+                </div>
+              )}
               {plan.raceTimePrediction && (
                 <Badge variant="secondary">
                   <Clock className="size-3 mr-1" />
@@ -342,55 +365,57 @@ export function PlanViewPage() {
         </div>
 
         {/* Phase Timeline */}
-        <Card size="compact">
-          <CardContent className="px-4">
-            <p className="text-sm font-medium mb-2">
-              {isEn ? "Training phases" : "Phases d'entraînement"}
-            </p>
-            <div className="flex rounded-full overflow-hidden h-3">
-              {plan.phases.map((phaseRange) => {
-                const meta = PHASE_META[phaseRange.phase];
-                const widthPercent =
-                  ((phaseRange.endWeek - phaseRange.startWeek + 1) /
-                    plan.totalWeeks) *
-                  100;
-                return (
-                  <div
-                    key={`${phaseRange.phase}-${phaseRange.startWeek}`}
-                    className={cn(meta.color, "relative")}
-                    style={{ width: `${widthPercent}%` }}
-                    title={`${isEn ? meta.labelEn : meta.label} (S${phaseRange.startWeek}-S${phaseRange.endWeek})`}
-                  >
-                    {/* Current week marker */}
-                    {currentWeek >= phaseRange.startWeek &&
-                      currentWeek <= phaseRange.endWeek && (
-                        <div
-                          className="absolute top-0 bottom-0 w-0.5 bg-foreground"
-                          style={{
-                            left: `${((currentWeek - phaseRange.startWeek) / (phaseRange.endWeek - phaseRange.startWeek + 1)) * 100}%`,
-                          }}
-                        />
-                      )}
-                  </div>
-                );
-              })}
-            </div>
-            <div className="flex flex-wrap gap-3 mt-2">
-              {plan.phases.map((phaseRange) => {
-                const meta = PHASE_META[phaseRange.phase];
-                return (
-                  <div
-                    key={`legend-${phaseRange.phase}-${phaseRange.startWeek}`}
-                    className="flex items-center gap-1.5 text-xs text-muted-foreground"
-                  >
-                    <div className={cn("size-2.5 rounded-full", meta.color)} />
-                    <span>{isEn ? meta.labelEn : meta.label}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </CardContent>
-        </Card>
+        {plan.phases.length > 0 && (
+          <Card size="compact">
+            <CardContent className="px-4">
+              <p className="text-sm font-medium mb-2">
+                {isEn ? "Training phases" : "Phases d'entra\u00eenement"}
+              </p>
+              <div className="flex rounded-full overflow-hidden h-3">
+                {plan.phases.map((phaseRange) => {
+                  const meta = PHASE_META[phaseRange.phase];
+                  const widthPercent =
+                    ((phaseRange.endWeek - phaseRange.startWeek + 1) /
+                      plan.totalWeeks) *
+                    100;
+                  return (
+                    <div
+                      key={`${phaseRange.phase}-${phaseRange.startWeek}`}
+                      className={cn(meta.color, "relative")}
+                      style={{ width: `${widthPercent}%` }}
+                      title={`${isEn ? meta.labelEn : meta.label} (S${phaseRange.startWeek}-S${phaseRange.endWeek})`}
+                    >
+                      {/* Current week marker */}
+                      {currentWeek >= phaseRange.startWeek &&
+                        currentWeek <= phaseRange.endWeek && (
+                          <div
+                            className="absolute top-0 bottom-0 w-0.5 bg-foreground"
+                            style={{
+                              left: `${((currentWeek - phaseRange.startWeek) / (phaseRange.endWeek - phaseRange.startWeek + 1)) * 100}%`,
+                            }}
+                          />
+                        )}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="flex flex-wrap gap-3 mt-2">
+                {plan.phases.map((phaseRange) => {
+                  const meta = PHASE_META[phaseRange.phase];
+                  return (
+                    <div
+                      key={`legend-${phaseRange.phase}-${phaseRange.startWeek}`}
+                      className="flex items-center gap-1.5 text-xs text-muted-foreground"
+                    >
+                      <div className={cn("size-2.5 rounded-full", meta.color)} />
+                      <span>{isEn ? meta.labelEn : meta.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Plan Stats */}
         {stats && (
@@ -528,9 +553,9 @@ export function PlanViewPage() {
             className="rounded-full"
             onClick={() => {
               if (planView === "calendar" && plan) {
-                // In calendar mode, days are already assigned — export directly
+                // In calendar mode, days are already assigned -- export directly
                 const usedDays = [...new Set(plan.weeks.flatMap(w => w.sessions.map(s => s.dayOfWeek)))].sort();
-                handleIcsExport(usedDays, plan.config.longRunDay);
+                handleIcsExport(usedDays, plan.config.longRunDay ?? 6);
               } else {
                 setShowIcsDialog(true);
               }

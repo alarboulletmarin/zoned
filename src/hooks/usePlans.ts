@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import type { TrainingPlan, PlanConfig } from "@/types/plan";
+import type { TrainingPlan, AssistedPlanConfig } from "@/types/plan";
 import { getAllPlans, getPlan, savePlan, deletePlan, getPlanCount } from "@/lib/planStorage";
 import { generatePlan } from "@/lib/planGenerator";
 
@@ -59,7 +59,7 @@ export function useCreatePlan() {
   const [error, setError] = useState<string | null>(null);
   const canCreate = getPlanCount() < 5;
 
-  const createPlan = useCallback(async (config: PlanConfig): Promise<TrainingPlan> => {
+  const createPlan = useCallback(async (config: AssistedPlanConfig): Promise<TrainingPlan> => {
     if (!canCreate) {
       const message = "Limite de 5 plans atteinte. Supprimez un plan existant.";
       setError(message);

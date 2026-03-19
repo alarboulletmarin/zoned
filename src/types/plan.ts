@@ -8,16 +8,27 @@ export type RaceDistance = "5K" | "10K" | "semi" | "marathon" | "trail_short" | 
 
 export interface PlanConfig {
   id: string;
-  raceDistance: RaceDistance;
-  raceDate: string; // ISO date
+  planMode?: "assisted" | "free"; // undefined = "assisted" for backward compat
+  planName?: string; // user-given name for free plans
+  raceDistance?: RaceDistance;
+  raceDate?: string; // ISO date
   raceName?: string;
   targetPaceMinKm?: number;
   elevationGain?: number;
-  runnerLevel: Difficulty;
-  daysPerWeek: number; // 3-6
-  longRunDay: number; // 0=Mon ... 6=Sun
+  runnerLevel?: Difficulty;
+  daysPerWeek: number; // 3-7
+  longRunDay?: number; // 0=Mon ... 6=Sun
   vma?: number;
   createdAt: string;
+}
+
+// ── Assisted plan config (all race fields required) ─────────────────
+
+export interface AssistedPlanConfig extends PlanConfig {
+  raceDistance: RaceDistance;
+  raceDate: string;
+  runnerLevel: Difficulty;
+  longRunDay: number;
 }
 
 // ── Plan session (single scheduled workout) ────────────────────────

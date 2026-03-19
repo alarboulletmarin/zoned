@@ -30,7 +30,9 @@ const CollectionsPage = lazy(() => import("@/pages/CollectionsPage").then(m => (
 const CollectionDetailPage = lazy(() => import("@/pages/CollectionDetailPage").then(m => ({ default: m.CollectionDetailPage })));
 const ChangelogPage = lazy(() => import("@/pages/ChangelogPage").then(m => ({ default: m.ChangelogPage })));
 const PlansPage = lazy(() => import("@/pages/PlansPage").then(m => ({ default: m.PlansPage })));
+const PlanNewPage = lazy(() => import("@/pages/PlanNewPage").then(m => ({ default: m.PlanNewPage })));
 const PlanCreatePage = lazy(() => import("@/pages/PlanCreatePage").then(m => ({ default: m.PlanCreatePage })));
+const FreePlanCreatePage = lazy(() => import("@/pages/FreePlanCreatePage").then(m => ({ default: m.FreePlanCreatePage })));
 const PlanViewPage = lazy(() => import("@/pages/PlanViewPage").then(m => ({ default: m.PlanViewPage })));
 const NutritionGuidePage = lazy(() => import("@/pages/NutritionGuidePage").then(m => ({ default: m.NutritionGuidePage })));
 const GuidesPage = lazy(() => import("@/pages/GuidesPage").then(m => ({ default: m.GuidesPage })));
@@ -193,7 +195,9 @@ function App() {
                           <Route path="/guides/warmup" element={<WarmupGuidePage />} />
                           <Route path="/nutrition" element={<NutritionGuidePage />} />
                           <Route path="/plans" element={<PlansPage />} />
-                          <Route path="/plan/new" element={<PlanCreatePage />} />
+                          <Route path="/plan/new" element={<PlanNewPage />} />
+                          <Route path="/plan/new/assisted" element={<PlanCreatePage />} />
+                          <Route path="/plan/new/free" element={<FreePlanCreatePage />} />
                           <Route path="/plan/:id" element={<PlanViewPage />} />
                           <Route path="*" element={<NotFoundPage />} />
                         </Routes>

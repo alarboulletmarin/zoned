@@ -86,8 +86,9 @@ export function exportPlanToICS(
 
       if (isRaceDay) {
         // Race day: all-day event
+        const raceDistMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
         const raceName = plan.config.raceName
-          || (isEn ? RACE_DISTANCE_META[plan.config.raceDistance].labelEn : RACE_DISTANCE_META[plan.config.raceDistance].label);
+          || (raceDistMeta ? (isEn ? raceDistMeta.labelEn : raceDistMeta.label) : (isEn ? "Race" : "Course"));
 
         events.push({
           start: [
@@ -222,7 +223,7 @@ export function exportPlanToICS(
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `plan-${plan.config.raceDistance}-${plan.id}.ics`;
+  link.download = `plan-${plan.config.raceDistance ?? "free"}-${plan.id}.ics`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

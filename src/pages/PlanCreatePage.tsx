@@ -22,7 +22,7 @@ import { loadUserZonePrefs } from "@/lib/zones";
 import {
   RACE_DISTANCE_META,
   type RaceDistance,
-  type PlanConfig,
+  type AssistedPlanConfig,
 } from "@/types/plan";
 import type { Difficulty, UserZonePreferences } from "@/types";
 import { DIFFICULTY_META } from "@/types";
@@ -184,7 +184,7 @@ export function PlanCreatePage() {
   const handleGenerate = useCallback(async () => {
     if (!form.raceDistance || !form.runnerLevel || !form.raceDate) return;
 
-    const config: PlanConfig = {
+    const config: AssistedPlanConfig = {
       id: generateId(),
       raceDistance: form.raceDistance,
       raceDate: form.raceDate,
