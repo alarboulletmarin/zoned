@@ -1,7 +1,26 @@
-import type { TrainingPlan } from "@/types/plan";
+import type { TrainingPlan, PlanSession } from "@/types/plan";
+import type { SessionType, WorkoutCategory } from "@/types";
+import { getWorkoutById } from "@/data/workouts";
 
 const STORAGE_KEY = "zoned-plans";
 const MAX_PLANS = 5;
+
+function mapCategoryToSessionType(category: WorkoutCategory): SessionType {
+  const map: Record<string, SessionType> = {
+    recovery: "recovery",
+    endurance: "endurance",
+    tempo: "tempo",
+    threshold: "threshold",
+    vma_intervals: "vo2max",
+    long_run: "long_run",
+    hills: "hills",
+    fartlek: "fartlek",
+    race_pace: "race_specific",
+    mixed: "endurance",
+    assessment: "endurance",
+  };
+  return map[category] || "endurance";
+}
 
 export function getAllPlans(): TrainingPlan[] {
   try {
@@ -120,4 +139,38 @@ export function updatePlanSession(
   } catch {
     return false;
   }
+}
+
+export async function addSessionToPlan(
+  planId: string,
+  weekNumber: number,
+  workoutId: string,
+  dayOfWeek: number,
+): Promise<boolean> {
+  const plans = getAllPlans();
+  const plan = plans.find(p => p.id === planId);
+  if (!plan) return false;
+
+  const week = plan.weeks.find(w => w.weekNumber === weekNumber);
+  if (!week) return false;
+
+  const newSession: PlanSession = {
+    dayOfWeek,
+    workoutId,
+    sessionType: "endurance",
+    isKeySession: false,
+    estimatedDurationMin: 45,
+  };
+
+  const workout = await getWorkoutById(workoutId);
+  if (workout) {
+    newSession.sessionType = mapCategoryToSessionType(workout.category);
+    newSession.estimatedDurationMin = workout.typicalDuration?.min || 45;
+    newSession.isKeySession = ["threshold", "vma_intervals", "tempo"].includes(workout.category);
+  }
+
+  week.sessions.push(newSession);
+  week.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+  savePlan(plan);
+  return true;
 }

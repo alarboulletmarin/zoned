@@ -14,6 +14,7 @@ import {
   ChevronUp,
   Download,
   List,
+  Plus,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,7 +31,7 @@ import {
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { usePlan } from "@/hooks/usePlans";
-import { deletePlan, updatePlanSession, moveSession, deleteSessionFromPlan } from "@/lib/planStorage";
+import { deletePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan } from "@/lib/planStorage";
 import { getWorkoutById } from "@/data/workouts";
 import { exportPlanToICS, exportPlanToPDF } from "@/lib/export";
 import { computePlanStats } from "@/lib/planStats";
@@ -43,6 +44,7 @@ import { toast } from "sonner";
 import { IcsExportDialog } from "@/components/domain/IcsExportDialog";
 import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
+import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
 
 const SESSION_TYPE_COLORS: Record<string, string> = {
   endurance: "bg-blue-400",
@@ -106,6 +108,8 @@ export function PlanViewPage() {
     workoutId: string;
     sessionType: string;
   } | null>(null);
+  const [showWorkoutPanel, setShowWorkoutPanel] = useState(false);
+  const [addTarget, setAddTarget] = useState<{ weekNumber: number; day: number } | null>(null);
 
   const currentWeek = useMemo(() => {
     if (!plan) return 0;
@@ -244,6 +248,17 @@ export function PlanViewPage() {
       toast.success(isEn ? "Session deleted" : "Séance supprimée");
     } else {
       toast.error(isEn ? "Failed to delete session" : "Échec de la suppression");
+    }
+  }, [plan, isEn, reloadPlan]);
+
+  const handleWorkoutAdd = useCallback(async (workoutId: string, weekNumber: number, day: number) => {
+    if (!plan) return;
+    const success = await addSessionToPlan(plan.id, weekNumber, workoutId, day);
+    if (success) {
+      reloadPlan();
+      toast.success(isEn ? "Workout added" : "S\u00e9ance ajout\u00e9e");
+    } else {
+      toast.error(isEn ? "Failed to add workout" : "\u00c9chec de l\u2019ajout");
     }
   }, [plan, isEn, reloadPlan]);
 
@@ -450,6 +465,18 @@ export function PlanViewPage() {
             {isEn ? "Schedule" : "Programme"}
           </h2>
           <div className="flex items-center gap-2">
+          {planView === "calendar" && (
+            <Button
+              variant={showWorkoutPanel ? "default" : "outline"}
+              size="sm"
+              onClick={() => setShowWorkoutPanel(v => !v)}
+              className="rounded-full"
+              title={isEn ? "Add a workout" : "Ajouter une s\u00e9ance"}
+            >
+              <Plus className="size-4" />
+              <span className="hidden sm:inline ml-1">{isEn ? "Add" : "Ajouter"}</span>
+            </Button>
+          )}
           <div
             className="inline-flex items-center gap-0.5 rounded-lg bg-muted p-1"
             role="radiogroup"
@@ -517,26 +544,48 @@ export function PlanViewPage() {
 
         {/* Calendar View */}
         {planView === "calendar" && (
-          <PlanCalendar
-            plan={plan}
-            workoutNames={workoutNames}
-            currentWeek={currentWeek}
-            isEn={isEn}
-            onSessionClick={(weekNumber, sessionIndex, workoutId) => {
-              const week = plan.weeks.find(w => w.weekNumber === weekNumber);
-              if (!week) return;
-              const session = week.sessions[sessionIndex];
-              if (!session) return;
-              setSwapTarget({
-                weekNumber,
-                sessionIndex,
-                workoutId,
-                sessionType: session.sessionType,
-              });
-            }}
-            onSessionMove={handleSessionMove}
-            onSessionDelete={handleSessionDelete}
-          />
+          <div className="flex gap-4">
+            <div className="flex-1 min-w-0">
+              <PlanCalendar
+                plan={plan}
+                workoutNames={workoutNames}
+                currentWeek={currentWeek}
+                isEn={isEn}
+                onSessionClick={(weekNumber, sessionIndex, workoutId) => {
+                  const week = plan.weeks.find(w => w.weekNumber === weekNumber);
+                  if (!week) return;
+                  const session = week.sessions[sessionIndex];
+                  if (!session) return;
+                  setSwapTarget({
+                    weekNumber,
+                    sessionIndex,
+                    workoutId,
+                    sessionType: session.sessionType,
+                  });
+                }}
+                onSessionMove={handleSessionMove}
+                onSessionDelete={handleSessionDelete}
+                onWorkoutAdd={handleWorkoutAdd}
+                onAddToDay={(weekNumber, day) => {
+                  setAddTarget({ weekNumber, day });
+                  setShowWorkoutPanel(true);
+                }}
+              />
+            </div>
+            {/* Desktop/tablet inline panel */}
+            {showWorkoutPanel && (
+              <div className="hidden md:block w-[280px] lg:w-[320px] shrink-0">
+                <div className="sticky top-20">
+                  <PlanWorkoutPanel
+                    isOpen={showWorkoutPanel}
+                    onClose={() => setShowWorkoutPanel(false)}
+                    isEn={isEn}
+                    inline
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         )}
 
         {/* Week List */}
@@ -765,6 +814,17 @@ export function PlanViewPage() {
           daysPerWeek={plan.config.daysPerWeek}
           onExport={handleIcsExport}
           isEn={isEn}
+        />
+
+        {/* Workout Library Panel (mobile bottom sheet) */}
+        <PlanWorkoutPanel
+          isOpen={showWorkoutPanel}
+          onClose={() => { setShowWorkoutPanel(false); setAddTarget(null); }}
+          isEn={isEn}
+          onSelectWorkout={addTarget ? (workoutId) => {
+            handleWorkoutAdd(workoutId, addTarget.weekNumber, addTarget.day);
+            setAddTarget(null);
+          } : undefined}
         />
 
         {/* Swap Session Dialog */}

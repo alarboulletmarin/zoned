@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useCallback } from "react";
+import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Star, Flag, Clock, Trash2 } from "@/components/icons";
 import { PHASE_META } from "@/types/plan";
@@ -47,6 +47,9 @@ interface PlanCalendarProps {
     toDay: number,
   ) => void;
   onSessionDelete?: (weekNumber: number, sessionIndex: number) => void;
+  onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
+  /** Mobile: open the workout panel for a specific day */
+  onAddToDay?: (weekNumber: number, day: number) => void;
 }
 
 // ── Component ───────────────────────────────────────────────────────
@@ -59,6 +62,8 @@ export function PlanCalendar({
   onSessionClick,
   onSessionMove,
   onSessionDelete,
+  onWorkoutAdd,
+  onAddToDay,
 }: PlanCalendarProps) {
   const dayHeaders = isEn ? DAY_HEADERS_EN : DAY_HEADERS_FR;
 
@@ -135,6 +140,15 @@ export function PlanCalendar({
     (e: React.DragEvent, weekNumber: number, day: number) => {
       e.preventDefault();
       setDropTarget(null);
+
+      // Check if this is a drop from the workout library panel
+      const workoutId = e.dataTransfer.getData("workout-id");
+      if (workoutId && onWorkoutAdd) {
+        onWorkoutAdd(workoutId, weekNumber, day);
+        setDraggedSession(null);
+        return;
+      }
+
       if (!draggedSession || !onSessionMove) return;
 
       // Don't move to same position
@@ -145,7 +159,7 @@ export function PlanCalendar({
       onSessionMove(draggedSession.weekNumber, draggedSession.sessionIndex, weekNumber, day);
       setDraggedSession(null);
     },
-    [draggedSession, onSessionMove, plan.weeks],
+    [draggedSession, onSessionMove, onWorkoutAdd, plan.weeks],
   );
 
   const handleDragEnd = useCallback(() => {
@@ -237,6 +251,17 @@ export function PlanCalendar({
     onSessionMove(dragState.weekNumber, dragState.sessionIndex, target.weekNumber, target.day);
   }, [onSessionMove, plan.weeks]);
 
+  // ── Listen for mobile touch drops from the workout panel ────
+  useEffect(() => {
+    if (!onWorkoutAdd) return;
+    const handler = (e: Event) => {
+      const { workoutId, weekNumber, day } = (e as CustomEvent).detail;
+      onWorkoutAdd(workoutId, weekNumber, day);
+    };
+    document.addEventListener("panel-workout-drop", handler);
+    return () => document.removeEventListener("panel-workout-drop", handler);
+  }, [onWorkoutAdd]);
+
   // Mobile: week selector state
   const [mobileWeek, setMobileWeek] = useState(Math.max(1, currentWeek));
 
@@ -304,9 +329,19 @@ export function PlanCalendar({
                       <span className="text-[10px] font-semibold text-muted-foreground block mb-1">
                         {dayHeaders[dayIndex]}
                       </span>
-                      {sessions.length === 0 && (
-                        <span className="text-[10px] text-muted-foreground/30 block text-center mt-4">—</span>
-                      )}
+                      {sessions.length === 0 ? (
+                        onAddToDay ? (
+                          <button
+                            type="button"
+                            onClick={() => onAddToDay(mobileWeek, dayIndex)}
+                            className="w-full mt-3 flex items-center justify-center text-muted-foreground/40 active:text-primary transition-colors"
+                          >
+                            <span className="size-8 rounded-full border-2 border-dashed border-current flex items-center justify-center text-sm font-bold">+</span>
+                          </button>
+                        ) : (
+                          <span className="text-[10px] text-muted-foreground/30 block text-center mt-4">—</span>
+                        )
+                      ) : null}
                       {sessions.map((session, sIdx) => {
                         const isRaceDay = session.workoutId === "__race_day__";
                         const originalIndex = mobileWeekData.sessions.indexOf(session);
@@ -373,6 +408,15 @@ export function PlanCalendar({
                           </div>
                         );
                       })}
+                      {sessions.length > 0 && onAddToDay && (
+                        <button
+                          type="button"
+                          onClick={() => onAddToDay(mobileWeek, dayIndex)}
+                          className="w-full mt-1 py-1 flex items-center justify-center text-muted-foreground/30 active:text-primary transition-colors"
+                        >
+                          <span className="size-5 rounded-full border border-dashed border-current flex items-center justify-center text-[10px] font-bold">+</span>
+                        </button>
+                      )}
                     </div>
                   );
                 })}
