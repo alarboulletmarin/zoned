@@ -5,6 +5,7 @@ import {
   ArrowLeft,
   Loader2,
   Calendar,
+  CalendarRange,
   Clock,
   Star,
   Trash2,
@@ -12,6 +13,7 @@ import {
   ChevronDown,
   ChevronUp,
   Download,
+  List,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,7 +30,7 @@ import {
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { usePlan } from "@/hooks/usePlans";
-import { deletePlan, updatePlanSession } from "@/lib/planStorage";
+import { deletePlan, updatePlanSession, moveSession, deleteSessionFromPlan } from "@/lib/planStorage";
 import { getWorkoutById } from "@/data/workouts";
 import { exportPlanToICS, exportPlanToPDF } from "@/lib/export";
 import { computePlanStats } from "@/lib/planStats";
@@ -40,6 +42,7 @@ import type { WorkoutTemplate } from "@/types";
 import { toast } from "sonner";
 import { IcsExportDialog } from "@/components/domain/IcsExportDialog";
 import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
+import { PlanCalendar } from "@/components/domain/PlanCalendar";
 
 const SESSION_TYPE_COLORS: Record<string, string> = {
   endurance: "bg-blue-400",
@@ -91,6 +94,7 @@ export function PlanViewPage() {
   const isEn = i18n.language?.startsWith("en") ?? false;
 
   const { plan, isLoading, reload: reloadPlan } = usePlan(id);
+  const [planView, setPlanView] = useState<"calendar" | "list">("calendar");
   const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set());
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showIcsDialog, setShowIcsDialog] = useState(false);
@@ -215,6 +219,33 @@ export function PlanViewPage() {
     }
     setSwapTarget(null);
   }, [plan, swapTarget, isEn, reloadPlan]);
+
+  const handleSessionMove = useCallback((
+    fromWeek: number,
+    fromSessionIndex: number,
+    toWeek: number,
+    toDay: number,
+  ) => {
+    if (!plan) return;
+    const success = moveSession(plan.id, fromWeek, fromSessionIndex, toWeek, toDay);
+    if (success) {
+      reloadPlan();
+      toast.success(isEn ? "Session moved" : "Séance déplacée");
+    } else {
+      toast.error(isEn ? "Failed to move session" : "Échec du déplacement");
+    }
+  }, [plan, isEn, reloadPlan]);
+
+  const handleSessionDelete = useCallback((weekNumber: number, sessionIndex: number) => {
+    if (!plan) return;
+    const success = deleteSessionFromPlan(plan.id, weekNumber, sessionIndex);
+    if (success) {
+      reloadPlan();
+      toast.success(isEn ? "Session deleted" : "Séance supprimée");
+    } else {
+      toast.error(isEn ? "Failed to delete session" : "Échec de la suppression");
+    }
+  }, [plan, isEn, reloadPlan]);
 
   // Loading state
   if (isLoading) {
@@ -413,8 +444,103 @@ export function PlanViewPage() {
           </Card>
         )}
 
+        {/* View mode toggle + export */}
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="text-lg font-semibold shrink-0">
+            {isEn ? "Schedule" : "Programme"}
+          </h2>
+          <div className="flex items-center gap-2">
+          <div
+            className="inline-flex items-center gap-0.5 rounded-lg bg-muted p-1"
+            role="radiogroup"
+            aria-label={isEn ? "View mode" : "Mode d'affichage"}
+          >
+            <button
+              type="button"
+              role="radio"
+              aria-checked={planView === "calendar"}
+              aria-label={isEn ? "Calendar" : "Calendrier"}
+              onClick={() => setPlanView("calendar")}
+              className={cn(
+                "inline-flex items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                planView === "calendar"
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+              )}
+            >
+              <CalendarRange size={16} />
+              <span className="hidden sm:inline">{isEn ? "Calendar" : "Calendrier"}</span>
+            </button>
+            <button
+              type="button"
+              role="radio"
+              aria-checked={planView === "list"}
+              aria-label={isEn ? "List" : "Liste"}
+              onClick={() => setPlanView("list")}
+              className={cn(
+                "inline-flex items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                planView === "list"
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+              )}
+            >
+              <List size={16} />
+              <span className="hidden sm:inline">{isEn ? "List" : "Liste"}</span>
+            </button>
+          </div>
+          <Button variant="outline" size="sm" onClick={handleExportPDF} disabled={isExporting} className="rounded-full">
+            {isExporting ? <Loader2 className="size-4 animate-spin" /> : <Download className="size-4" />}
+            <span className="hidden sm:inline ml-1">{isEn ? "PDF" : "PDF"}</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={isExporting}
+            className="rounded-full"
+            onClick={() => {
+              if (planView === "calendar" && plan) {
+                // In calendar mode, days are already assigned — export directly
+                const usedDays = [...new Set(plan.weeks.flatMap(w => w.sessions.map(s => s.dayOfWeek)))].sort();
+                handleIcsExport(usedDays, plan.config.longRunDay);
+              } else {
+                setShowIcsDialog(true);
+              }
+            }}
+          >
+            <Calendar className="size-4" />
+            <span className="hidden sm:inline ml-1">{isEn ? "ICS" : "ICS"}</span>
+          </Button>
+          </div>
+        </div>
+
+        {/* Calendar View */}
+        {planView === "calendar" && (
+          <PlanCalendar
+            plan={plan}
+            workoutNames={workoutNames}
+            currentWeek={currentWeek}
+            isEn={isEn}
+            onSessionClick={(weekNumber, sessionIndex, workoutId) => {
+              const week = plan.weeks.find(w => w.weekNumber === weekNumber);
+              if (!week) return;
+              const session = week.sessions[sessionIndex];
+              if (!session) return;
+              setSwapTarget({
+                weekNumber,
+                sessionIndex,
+                workoutId,
+                sessionType: session.sessionType,
+              });
+            }}
+            onSessionMove={handleSessionMove}
+            onSessionDelete={handleSessionDelete}
+          />
+        )}
+
         {/* Week List */}
-        <div className="space-y-2">
+        {planView === "list" && <div className="space-y-2">
           {plan.weeks.map((week) => {
             const isExpanded = expandedWeeks.has(week.weekNumber);
             const isCurrent =
@@ -602,19 +728,8 @@ export function PlanViewPage() {
               </Card>
             );
           })}
-        </div>
+        </div>}
 
-        {/* Export Buttons */}
-        <div className="flex gap-3">
-          <Button variant="outline" onClick={handleExportPDF} disabled={isExporting}>
-            {isExporting ? <Loader2 className="size-4 animate-spin" /> : <Download className="size-4" />}
-            {isEn ? "Export PDF" : "Exporter PDF"}
-          </Button>
-          <Button variant="outline" onClick={() => setShowIcsDialog(true)} disabled={isExporting}>
-            {isExporting ? <Loader2 className="size-4 animate-spin" /> : <Calendar className="size-4" />}
-            {isEn ? "Export ICS" : "Exporter ICS"}
-          </Button>
-        </div>
 
         {/* Delete Confirmation Dialog */}
         <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>

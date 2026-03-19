@@ -213,9 +213,9 @@ export function PlansPage() {
       />
       <div className="py-8 space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h1 className="text-3xl font-bold">
+            <h1 className="text-2xl md:text-3xl font-bold">
               {isEn ? "My Training Plans" : "Mes Plans d'Entraînement"}
             </h1>
             <p className="text-muted-foreground mt-1">

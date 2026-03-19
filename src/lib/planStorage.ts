@@ -40,6 +40,63 @@ export function getPlanCount(): number {
   return getAllPlans().length;
 }
 
+export function moveSession(
+  planId: string,
+  fromWeekNumber: number,
+  fromSessionIndex: number,
+  toWeekNumber: number,
+  toDay: number,
+): boolean {
+  const plans = getAllPlans();
+  const plan = plans.find(p => p.id === planId);
+  if (!plan) return false;
+
+  const fromWeek = plan.weeks.find(w => w.weekNumber === fromWeekNumber);
+  if (!fromWeek) return false;
+
+  const session = fromWeek.sessions[fromSessionIndex];
+  if (!session) return false;
+
+  // Remove from source week
+  fromWeek.sessions.splice(fromSessionIndex, 1);
+
+  // Update day
+  session.dayOfWeek = toDay;
+
+  // Add to target week
+  if (toWeekNumber === fromWeekNumber) {
+    fromWeek.sessions.push(session);
+    fromWeek.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+  } else {
+    const toWeek = plan.weeks.find(w => w.weekNumber === toWeekNumber);
+    if (!toWeek) return false;
+    toWeek.sessions.push(session);
+    toWeek.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+  }
+
+  savePlan(plan);
+  return true;
+}
+
+export function deleteSessionFromPlan(
+  planId: string,
+  weekNumber: number,
+  sessionIndex: number,
+): boolean {
+  const plans = getAllPlans();
+  const plan = plans.find(p => p.id === planId);
+  if (!plan) return false;
+
+  const week = plan.weeks.find(w => w.weekNumber === weekNumber);
+  if (!week) return false;
+
+  if (sessionIndex < 0 || sessionIndex >= week.sessions.length) return false;
+
+  week.sessions.splice(sessionIndex, 1);
+  savePlan(plan);
+  return true;
+}
+
 export function updatePlanSession(
   planId: string,
   weekNumber: number,
