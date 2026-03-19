@@ -2,6 +2,114 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.2.1",
+    date: "2026-03-19",
+    changes: {
+      added: [
+        {
+          text: "Vue calendrier interactive pour les plans d'entraînement avec grille semaine × 7 jours, navigation par semaine sur mobile, et phases colorées",
+          textEn: "Interactive calendar view for training plans with week × 7 days grid, mobile week navigation, and colored phases",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Drag & drop natif pour déplacer les séances entre jours (desktop et mobile avec ghost visuel)",
+          textEn: "Native drag & drop to move sessions between days (desktop and mobile with visual ghost)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Panel bibliothèque latéral pour ajouter des séances par drag (desktop/tablette) ou tap (mobile) avec recherche et filtres par catégorie",
+          textEn: "Workout library side panel to add sessions via drag (desktop/tablet) or tap (mobile) with search and category filters",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Mode plan libre : créez un plan vierge (nom + nombre de semaines) et placez vos séances manuellement",
+          textEn: "Free plan mode: create a blank plan (name + week count) and place workouts manually",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Import/export de plans en JSON pour partager ou sauvegarder ses plans",
+          textEn: "Plan import/export as JSON to share or backup your plans",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Suppression de séances depuis les vues calendrier et liste avec bouton corbeille",
+          textEn: "Delete sessions from both calendar and list views with trash button",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Boutons \"+\" intégrés dans chaque cellule jour (mobile) et chaque semaine (liste) pour ajouter des séances rapidement",
+          textEn: "Inline \"+\" buttons in each day cell (mobile) and each week (list) to quickly add sessions",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Indices contextuels dans le panel bibliothèque : drag, clic ou tap selon le mode d'affichage",
+          textEn: "Contextual hints in library panel: drag, click or tap depending on display mode",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      changed: [
+        {
+          text: "Quiz et création de plan refactorés en étapes plein écran (une question par vue, pas de scroll sur mobile)",
+          textEn: "Quiz and plan creation refactored to full-viewport steps (one question per view, no scrolling on mobile)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Bouton supprimer le plan remplacé par un menu d'actions (export JSON + supprimer)",
+          textEn: "Delete plan button replaced by action menu (export JSON + delete)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Espacement des sections de la page d'accueil réduit pour un meilleur rythme visuel",
+          textEn: "Homepage section spacing reduced for better visual rhythm",
+          category: "Design",
+          categoryEn: "Design",
+        },
+        {
+          text: "Préchargement des pages du sidebar en arrière-plan pour une navigation instantanée",
+          textEn: "Background preloading of sidebar pages for instant navigation",
+          category: "Performance",
+          categoryEn: "Performance",
+        },
+        {
+          text: "Indicateur de limite de 5 plans avec masquage des boutons de création quand la limite est atteinte",
+          textEn: "5-plan limit indicator with hidden creation buttons when limit is reached",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      fixed: [
+        {
+          text: "Compatibilité dark mode : couleurs de la timeline, segments sans zone, et sessions de récupération",
+          textEn: "Dark mode compatibility: timeline colors, segments without zones, and recovery sessions",
+          category: "Bug",
+          categoryEn: "Bug",
+        },
+        {
+          text: "Flash de navigation mobile éliminé en différant la fermeture du sidebar après le rendu de la page",
+          textEn: "Mobile navigation flash eliminated by deferring sidebar close to after page render",
+          category: "Bug",
+          categoryEn: "Bug",
+        },
+        {
+          text: "Correction de l'index de session en vue liste triée (supprimer/remplacer ciblait le mauvais élément)",
+          textEn: "Fixed session index in sorted list view (delete/replace targeted the wrong element)",
+          category: "Bug",
+          categoryEn: "Bug",
+        },
+      ],
+    },
+  },
+  {
     version: "0.2.0",
     date: "2026-03-19",
     changes: {
