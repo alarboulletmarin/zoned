@@ -734,6 +734,186 @@
         ],
         "priorityScore": 85
       }
+    },
+    {
+      "id": "ASS-009",
+      "name": "Test 3 minutes all-out",
+      "nameEn": "3-Minute All-Out Test",
+      "description": "Test maximal de 3 minutes sur piste pour déterminer la vitesse critique (CS) et la réserve anaérobie (D') en un seul effort. L'allure des 30 dernières secondes correspond à la vitesse critique.",
+      "descriptionEn": "Maximal 3-minute test on track to determine critical speed (CS) and anaerobic reserve (D') in a single effort. The pace of the last 30 seconds corresponds to critical speed.",
+      "category": "assessment",
+      "sessionType": "vo2max",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 30,
+        "max": 40
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": true,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 10,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes et 3× accélérations progressives",
+          "descriptionEn": "Drills and 3× progressive accelerations",
+          "durationMin": 5
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3 minutes d'effort maximal soutenu sur piste. Notez la distance totale et l'allure des 30 dernières secondes",
+          "descriptionEn": "3 minutes of sustained maximal effort on track. Record total distance and pace of the last 30 seconds",
+          "durationMin": 3,
+          "zone": "Z5"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Marche puis footing très lent",
+          "descriptionEn": "Walking then very slow jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Partez vite dès le départ — l'objectif est d'épuiser la réserve anaérobie (D') dans les 150 premières secondes",
+        "Vitesse critique (CS) = allure moyenne des 30 dernières secondes",
+        "D' = distance totale − (CS en m/s × 180 secondes)",
+        "Utilisez un GPS ou des repères sur piste pour mesurer précisément"
+      ],
+      "coachingTipsEn": [
+        "Start fast from the beginning — the goal is to deplete the anaerobic reserve (D') within the first 150 seconds",
+        "Critical speed (CS) = average pace of the last 30 seconds",
+        "D' = total distance − (CS in m/s × 180 seconds)",
+        "Use GPS or track markers for precise measurement"
+      ],
+      "commonMistakes": [
+        "Gérer l'effort comme un 1 000 m au lieu de partir à fond",
+        "Ne pas maintenir un effort maximal sur la totalité des 3 minutes",
+        "Oublier de noter l'allure des 30 dernières secondes séparément"
+      ],
+      "commonMistakesEn": [
+        "Pacing the effort like a 1,000m instead of going all-out",
+        "Not maintaining maximal effort for the full 3 minutes",
+        "Forgetting to record the pace of the last 30 seconds separately"
+      ],
+      "variationIds": [
+        "ASS-002",
+        "ASS-001"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "early"
+        ],
+        "relativeLoad": "key",
+        "tags": [
+          "all-out",
+          "critical-speed",
+          "d-prime",
+          "assessment",
+          "track"
+        ],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "ASS-010",
+      "name": "Test par paliers (profil lactate terrain)",
+      "nameEn": "Lactate Step Test (Field Protocol)",
+      "description": "Test incrémental par paliers de 4-5 minutes sur piste avec augmentation progressive de la vitesse. Permet d'identifier les deux seuils lactiques (LT1 et LT2) et de définir précisément toutes les zones d'entraînement.",
+      "descriptionEn": "Incremental step test with 4-5 minute stages on track with progressive speed increases. Identifies both lactate thresholds (LT1 and LT2) and precisely defines all training zones.",
+      "category": "assessment",
+      "sessionType": "vo2max",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 40,
+        "max": 50
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": true,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing lent",
+          "descriptionEn": "Slow jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "Paliers de 4-5min à vitesse croissante (+0,5 km/h par palier). Départ à ~60% VMA. À chaque fin de palier : noter FC, RPE, lactate si disponible. Continuer jusqu'à épuisement",
+          "descriptionEn": "4-5min stages at increasing speed (+0.5 km/h per stage). Start at ~60% vVO2max. At end of each stage: record HR, RPE, lactate if available. Continue until exhaustion",
+          "zone": "Z2"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Marche puis footing très lent",
+          "descriptionEn": "Walking then very slow jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "LT1 (seuil aérobie) ≈ palier où la FC augmente plus que la tendance linéaire (~2 mmol/L)",
+        "LT2 (seuil anaérobie) ≈ palier où l'effort devient très difficile à maintenir (~4 mmol/L)",
+        "Même sans lactomètre, la combinaison FC + RPE par palier permet d'estimer les seuils",
+        "Réalisez ce test en début de cycle pour calibrer vos zones d'entraînement"
+      ],
+      "coachingTipsEn": [
+        "LT1 (aerobic threshold) ≈ stage where HR increases beyond linear trend (~2 mmol/L)",
+        "LT2 (anaerobic threshold) ≈ stage where effort becomes very hard to maintain (~4 mmol/L)",
+        "Even without a lactate meter, the HR + RPE combination per stage allows threshold estimation",
+        "Perform this test at the beginning of a cycle to calibrate your training zones"
+      ],
+      "commonMistakes": [
+        "Augmenter la vitesse trop rapidement entre les paliers",
+        "Ne pas respecter la durée de chaque palier (4-5 minutes complètes)",
+        "Oublier de noter les données à la fin de chaque palier"
+      ],
+      "commonMistakesEn": [
+        "Increasing speed too quickly between stages",
+        "Not respecting the duration of each stage (full 4-5 minutes)",
+        "Forgetting to record data at the end of each stage"
+      ],
+      "variationIds": [
+        "ASS-006",
+        "ASS-008"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base"
+        ],
+        "weekPositions": [
+          "early"
+        ],
+        "relativeLoad": "key",
+        "tags": [
+          "step-test",
+          "lactate-profile",
+          "lt1",
+          "lt2",
+          "zones",
+          "assessment"
+        ],
+        "priorityScore": 85
+      }
     }
   ]
 }

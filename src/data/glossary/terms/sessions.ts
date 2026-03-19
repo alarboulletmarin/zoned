@@ -289,6 +289,27 @@ export const sessionsTerms: GlossaryTerm[] = [
     keywords: ["seuil", "alternance", "lactate", "cyclisme"],
   },
   {
+    id: "surge",
+    term: "Surge",
+    termEn: "Surge",
+    category: "sessions",
+    shortDefinition:
+      "Accélération brève et franche insérée dans un effort continu, généralement 20-40 secondes.",
+    shortDefinitionEn:
+      "Brief, sharp acceleration inserted within a continuous effort, typically 20-40 seconds.",
+    fullDefinition:
+      "Un surge est une accélération brève (20-40 secondes) à haute intensité insérée au sein d'un effort continu (tempo, sortie longue, course). Contrairement à un intervalle classique, le surge ne s'accompagne pas d'une récupération facile : le coureur revient immédiatement à l'allure de base. Les surges entraînent le cycle production-résorption du lactate en charge et simulent les changements de rythme en course (relances après virage, accélérations tactiques, montées).",
+    fullDefinitionEn:
+      "A surge is a brief (20-40 second) high-intensity acceleration inserted within a continuous effort (tempo, long run, race). Unlike a classic interval, a surge is not followed by easy recovery: the runner immediately returns to base pace. Surges train the lactate production-clearance cycle under load and simulate race pace changes (accelerations after turns, tactical surges, climbs).",
+    example:
+      "Tempo avec surges : pendant un tempo de 25 min en Z3, insérer un surge de 30s à allure 5K toutes les 5 minutes, puis revenir immédiatement au tempo.",
+    exampleEn:
+      "Tempo with surges: during a 25 min Z3 tempo, insert a 30s surge at 5K pace every 5 minutes, then immediately return to tempo pace.",
+    relatedTerms: ["tempo-run", "fartlek", "intervals"],
+    zone: 5,
+    keywords: ["surge", "accélération", "relance", "lactate", "changement de rythme"],
+  },
+  {
     id: "sprint",
     term: "Sprint",
     termEn: "Sprint",

@@ -109,14 +109,14 @@ export function HomePage() {
             <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-4 md:mb-6 leading-[1.1]">
               {isEn ? (
                 <>
-                  {workoutCount || 118}+ science-based running{" "}
+                  {workoutCount || 200} science-based running{" "}
                   <span className="text-muted-foreground italic font-light">
                     workouts
                   </span>
                 </>
               ) : (
                 <>
-                  {workoutCount || 118}+ séances de course{" "}
+                  {workoutCount || 200} séances de course{" "}
                   <span className="text-muted-foreground italic font-light">
                     scientifiques
                   </span>

@@ -1842,6 +1842,127 @@
         "tags": ["marathon", "specific", "introduction"],
         "priorityScore": 75
       }
+    },
+    {
+      "id": "RP-021",
+      "name": "Course brisée (Broken Race)",
+      "nameEn": "Broken Race",
+      "description": "Distance cible de course (ex : 10 km) courue à allure course, découpée en 3 segments égaux avec 3-4 minutes de récupération en trot entre chaque segment. Permet de pratiquer l'allure spécifique sur la distance complète avec moins de stress qu'un time trial.",
+      "descriptionEn": "Target race distance (e.g. 10K) run at race pace, split into 3 equal segments with 3-4 minutes jog recovery between each segment. Allows practicing specific pace over the full distance with less stress than a time trial.",
+      "category": "race_pace",
+      "sessionType": "race_specific",
+      "targetSystem": "race_specific",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et 3× accélérations progressives", "descriptionEn": "Drills and 3× progressive accelerations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3 × 3,3 km à allure 10K (ou 3 × 7 km à allure semi), récup 3-4min trot entre chaque segment",
+          "descriptionEn": "3 × 3.3km at 10K pace (or 3 × 7km at half-marathon pace), 3-4min jog recovery between each segment",
+          "zone": "Z4",
+          "repetitions": 3,
+          "durationMin": 15,
+          "distanceM": 3300,
+          "recovery": "3-4min trot Z1"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "L'allure de chaque segment doit correspondre exactement à votre allure cible de course",
+        "Les courtes récupérations permettent de maintenir la qualité sur la distance totale",
+        "Adaptez la distance à votre objectif : 10 km en 3×3,3 km, semi en 3×7 km, 5 km en 3×1,7 km",
+        "Idéale 2-3 semaines avant la course cible comme répétition générale à moindre stress"
+      ],
+      "coachingTipsEn": [
+        "The pace of each segment must match exactly your target race pace",
+        "Short recoveries allow maintaining quality over the total distance",
+        "Adapt the distance to your goal: 10K as 3×3.3km, half as 3×7km, 5K as 3×1.7km",
+        "Ideal 2-3 weeks before the target race as a lower-stress dress rehearsal"
+      ],
+      "commonMistakes": [
+        "Courir les segments plus vite que l'allure cible en profitant des récupérations",
+        "Prendre trop de récupération (>5 minutes) entre les segments",
+        "Programmer cette séance trop loin de la compétition pour qu'elle ait un impact spécifique"
+      ],
+      "commonMistakesEn": [
+        "Running segments faster than target pace by taking advantage of recoveries",
+        "Taking too much recovery (>5 minutes) between segments",
+        "Scheduling this session too far from competition for it to have specific impact"
+      ],
+      "variationIds": ["RP-002", "RP-004", "ASS-003"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["late"],
+        "relativeLoad": "key",
+        "tags": ["broken-race", "race-simulation", "race-pace", "dress-rehearsal"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "RP-022",
+      "name": "Intervalles spécifiques extensifs (Canova)",
+      "nameEn": "Extensive Specific Intervals (Canova)",
+      "description": "4 répétitions de 5 km à allure marathon (100-103%) avec 1 km de « récupération » à 85-90% de l'allure marathon entre chaque. Volume total de qualité : environ 24 km. Développe la résistance à la fatigue à allure spécifique marathon avec récupération insuffisante.",
+      "descriptionEn": "4 repetitions of 5km at marathon pace (100-103%) with 1km 'recovery' at 85-90% of marathon pace between each. Total quality volume: approximately 24km. Develops fatigue resistance at marathon-specific pace with insufficient recovery.",
+      "category": "race_pace",
+      "sessionType": "race_specific",
+      "targetSystem": "race_specific",
+      "difficulty": "elite",
+      "typicalDuration": { "min": 100, "max": 130 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "4 × 5 km à 100-103% allure marathon (Z3), avec 1 km « récup » à 85-90% allure marathon entre chaque (jamais en dessous de Z2 haut)",
+          "descriptionEn": "4 × 5km at 100-103% marathon pace (Z3), with 1km 'recovery' at 85-90% marathon pace between each (never below upper Z2)",
+          "zone": "Z3",
+          "repetitions": 4,
+          "durationMin": 23,
+          "distanceM": 5000,
+          "recovery": "1km à 85-90% allure marathon (~4-5min)"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing lent de récupération", "descriptionEn": "Slow recovery jog", "durationMin": 15, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Les kilomètres de « récupération » restent à 85-90% allure marathon — ce n'est pas du footing facile",
+        "Le volume total (~30 km avec échauffement et retour au calme) en fait une séance clé de la préparation marathon",
+        "Programmez cette séance 6-10 semaines avant le marathon, suivie de 5-7 jours faciles",
+        "Si vous ne pouvez pas maintenir l'allure sur le 4e bloc, la séance est trop ambitieuse : réduisez à 3 × 5 km"
+      ],
+      "coachingTipsEn": [
+        "Recovery kilometers stay at 85-90% marathon pace — this is not easy jogging",
+        "Total volume (~30km including warm-up and cool-down) makes this a key marathon preparation session",
+        "Schedule this session 6-10 weeks before the marathon, followed by 5-7 easy days",
+        "If you cannot maintain pace on the 4th block, the session is too ambitious: reduce to 3 × 5km"
+      ],
+      "commonMistakes": [
+        "Transformer les km de récupération en footing facile au lieu de rester à 85-90% allure marathon",
+        "Courir les blocs de 5 km trop vite (au-dessus de 103% allure marathon) en début de séance",
+        "Programmer cette séance sans prévoir une récupération suffisante les jours suivants"
+      ],
+      "commonMistakesEn": [
+        "Turning recovery kilometers into easy jogging instead of staying at 85-90% marathon pace",
+        "Running the 5km blocks too fast (above 103% marathon pace) at the start of the session",
+        "Scheduling this session without planning sufficient recovery in the following days"
+      ],
+      "variationIds": ["RP-007", "RP-001", "TMP-008"],
+      "selectionCriteria": {
+        "phases": ["peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["canova", "extensive-specific", "marathon", "high-volume", "elite"],
+        "priorityScore": 90
+      }
     }
   ]
 }

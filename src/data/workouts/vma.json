@@ -2744,6 +2744,308 @@
         ],
         "priorityScore": 80
       }
+    },
+    {
+      "id": "VMA-031",
+      "name": "Norvégien 4×4 (Helgerud)",
+      "nameEn": "Norwegian 4×4 (Helgerud Protocol)",
+      "description": "Protocole VO2max norvégien : 4 intervalles de 4 minutes à 90-95% de la fréquence cardiaque maximale avec 3 minutes de récupération active à 70% FCmax. Méthode Helgerud validée pour des gains significatifs de VO2max.",
+      "descriptionEn": "Norwegian VO2max protocol: 4 intervals of 4 minutes at 90-95% of maximum heart rate with 3 minutes of active recovery at 70% HRmax. Helgerud method validated for significant VO2max gains.",
+      "category": "vma_intervals",
+      "sessionType": "vo2max",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 50,
+        "max": 60
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes et 4× accélérations progressives",
+          "descriptionEn": "Drills and 4× progressive accelerations",
+          "durationMin": 5
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "4 × 4min à 90-95% FCmax (Z5), récup 3min footing à 70% FCmax",
+          "descriptionEn": "4 × 4min at 90-95% HRmax (Z5), recovery 3min jog at 70% HRmax",
+          "zone": "Z5",
+          "repetitions": 4,
+          "durationMin": 4,
+          "recovery": "3min footing Z2 bas (70% FCmax)"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Ciblez 90-95% FCmax dès la deuxième minute de chaque intervalle",
+        "La récupération active doit rester à 70% FCmax, pas plus bas",
+        "Utilisez un cardiofréquencemètre pour respecter les intensités",
+        "Augmentez progressivement l'allure au fil des semaines, pas des répétitions"
+      ],
+      "coachingTipsEn": [
+        "Target 90-95% HRmax from the second minute of each interval",
+        "Active recovery must stay at 70% HRmax, not lower",
+        "Use a heart rate monitor to respect the intensities",
+        "Progressively increase pace over weeks, not within repetitions"
+      ],
+      "commonMistakes": [
+        "Partir trop vite et ne pas tenir les 4 minutes complètes",
+        "Récupérer trop lentement (marche) au lieu de maintenir 70% FCmax",
+        "Programmer cette séance plus d'une fois par semaine"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast and not holding the full 4 minutes",
+        "Recovering too slowly (walking) instead of maintaining 70% HRmax",
+        "Scheduling this session more than once per week"
+      ],
+      "variationIds": [
+        "VMA-009",
+        "VMA-013"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "key",
+        "tags": [
+          "norwegian",
+          "helgerud",
+          "4x4",
+          "vo2max",
+          "hr-guided"
+        ],
+        "priorityScore": 85
+      }
+    },
+    {
+      "id": "VMA-032",
+      "name": "Protocole Tabata",
+      "nameEn": "Tabata Protocol",
+      "description": "Protocole d'intervalles supramaximaux : 7-8 répétitions de 20 secondes à effort maximal (~170% vVMA) avec 10 secondes de repos complet. Unique séance améliorant simultanément la VO2max et la capacité anaérobie.",
+      "descriptionEn": "Supramaximal interval protocol: 7-8 repetitions of 20 seconds at maximal effort (~170% vVO2max) with 10 seconds complete rest. Unique session improving both VO2max and anaerobic capacity simultaneously.",
+      "category": "vma_intervals",
+      "sessionType": "speed",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 30,
+        "max": 40
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": true,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes, éducatifs et 4× accélérations courtes",
+          "descriptionEn": "Drills, technique work and 4× short accelerations",
+          "durationMin": 5
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "8 × (20s sprint maximal / 10s repos complet)",
+          "descriptionEn": "8 × (20s maximal sprint / 10s complete rest)",
+          "zone": "Z6",
+          "repetitions": 8,
+          "recovery": "10s repos complet (arrêt)"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Marche 5min puis footing très lent",
+          "descriptionEn": "Walk 5min then very slow jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "L'effort doit être véritablement maximal sur chaque répétition de 20 secondes",
+        "Le repos de 10 secondes est complet : arrêt total, pas de trot",
+        "Un seul set suffit — la qualité prime sur le volume",
+        "Échauffement rigoureux indispensable vu l'intensité supramaximale"
+      ],
+      "coachingTipsEn": [
+        "Effort must be truly maximal on each 20-second repetition",
+        "The 10-second rest is complete: full stop, no jogging",
+        "A single set is enough — quality over volume",
+        "Thorough warm-up is essential given the supramaximal intensity"
+      ],
+      "commonMistakes": [
+        "Gérer l'effort au lieu de sprinter à 100% sur chaque répétition",
+        "Trotter pendant les 10 secondes de repos au lieu de s'arrêter",
+        "Enchaîner plusieurs sets sans être prêt pour cette intensité"
+      ],
+      "commonMistakesEn": [
+        "Pacing effort instead of sprinting at 100% on each repetition",
+        "Jogging during the 10-second rest instead of stopping",
+        "Doing multiple sets without being ready for this intensity"
+      ],
+      "variationIds": [
+        "VMA-022",
+        "VMA-004"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "key",
+        "tags": [
+          "tabata",
+          "supramaximal",
+          "anaerobic",
+          "sprint",
+          "short"
+        ],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "VMA-033",
+      "name": "Répétitions R-Pace (Daniels)",
+      "nameEn": "R-Pace Repetitions (Daniels)",
+      "description": "Répétitions au rythme R selon Jack Daniels : 200m et 400m à allure mile avec récupération complète. Développe l'économie de course et la coordination neuromusculaire par des efforts rapides exécutés sans fatigue.",
+      "descriptionEn": "R-pace repetitions per Jack Daniels: 200m and 400m at mile pace with full recovery. Develops running economy and neuromuscular coordination through fast efforts executed without fatigue.",
+      "category": "vma_intervals",
+      "sessionType": "speed",
+      "targetSystem": "speed",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 45,
+        "max": 55
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": true,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes techniques et 3× lignes droites progressives",
+          "descriptionEn": "Technical drills and 3× progressive strides",
+          "durationMin": 5
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "8 × 200m au rythme R (allure mile), récup 200m marche/trot",
+          "descriptionEn": "8 × 200m at R-pace (mile pace), 200m walk/jog recovery",
+          "zone": "Z5",
+          "repetitions": 8,
+          "distanceM": 200,
+          "recovery": "200m marche/trot (récupération complète)"
+        },
+        {
+          "description": "Repos 3-4 min entre les deux séries (marche ou trot très lent)",
+          "descriptionEn": "3-4 min rest between the two series (walk or very slow jog)",
+          "durationMin": 4,
+          "zone": "Z1"
+        },
+        {
+          "description": "4 × 400m au rythme R (allure mile), récup 400m marche/trot",
+          "descriptionEn": "4 × 400m at R-pace (mile pace), 400m walk/jog recovery",
+          "zone": "Z5",
+          "repetitions": 4,
+          "distanceM": 400,
+          "recovery": "400m marche/trot (récupération complète)"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "La récupération complète est essentielle : chaque répétition doit être exécutée avec une foulée parfaite",
+        "L'allure R correspond environ à votre rythme de course sur 1 mile (1 609 m)",
+        "Concentrez-vous sur la fluidité et le relâchement, pas sur la puissance brute",
+        "Si votre forme se dégrade, la récupération est trop courte"
+      ],
+      "coachingTipsEn": [
+        "Full recovery is essential: each repetition must be executed with perfect form",
+        "R-pace corresponds roughly to your mile race pace (1,609m)",
+        "Focus on fluidity and relaxation, not raw power",
+        "If your form deteriorates, recovery is too short"
+      ],
+      "commonMistakes": [
+        "Écourter la récupération pour « gagner du temps »",
+        "Sprinter au lieu de courir au rythme R contrôlé",
+        "Négliger la qualité de la foulée en fin de séance"
+      ],
+      "commonMistakesEn": [
+        "Shortening recovery to 'save time'",
+        "Sprinting instead of running at controlled R-pace",
+        "Neglecting stride quality at the end of the session"
+      ],
+      "variationIds": [
+        "VMA-027",
+        "VMA-023",
+        "VMA-004"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid",
+          "late"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "daniels",
+          "r-pace",
+          "economy",
+          "repetitions",
+          "mile-pace",
+          "track"
+        ],
+        "priorityScore": 80
+      }
     }
   ]
 }

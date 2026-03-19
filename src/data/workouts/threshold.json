@@ -1724,6 +1724,126 @@
         "tags": ["introduction", "threshold"],
         "priorityScore": 70
       }
+    },
+    {
+      "id": "THR-020",
+      "name": "Intervalles vitesse critique (CV Tinman)",
+      "nameEn": "Critical Velocity Intervals (Tinman)",
+      "description": "5-6 répétitions de 1 000 m à l'allure de vitesse critique (environ allure de course sur 30 minutes) avec 60-90 secondes de récupération en trot. Développe spécifiquement les fibres musculaires de Type IIa.",
+      "descriptionEn": "5-6 repetitions of 1,000m at critical velocity pace (roughly 30-minute race pace) with 60-90 seconds jog recovery. Specifically develops Type IIa muscle fibers.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "lactate_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et 3× accélérations progressives", "descriptionEn": "Drills and 3× progressive accelerations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "6 × 1 000 m à l'allure CV (allure course ~30min), récup 60-90s trot",
+          "descriptionEn": "6 × 1,000m at CV pace (~30min race pace), 60-90s jog recovery",
+          "zone": "Z4",
+          "repetitions": 6,
+          "distanceM": 1000,
+          "recovery": "60-90s trot léger"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "L'allure CV se situe entre le seuil et la VMA — approximativement votre allure de course sur 30 minutes",
+        "La récupération courte (60-90s) est volontairement insuffisante pour accumuler la déplétion de D'",
+        "Toutes les répétitions doivent être au même rythme — pas de progression d'allure",
+        "Si vous ne connaissez pas votre CV, utilisez votre allure 8-10 km comme approximation"
+      ],
+      "coachingTipsEn": [
+        "CV pace sits between threshold and VO2max — approximately your 30-minute race pace",
+        "Short recovery (60-90s) is deliberately insufficient to accumulate D' depletion",
+        "All repetitions should be at the same pace — no pace progression",
+        "If you don't know your CV, use your 8-10K pace as an approximation"
+      ],
+      "commonMistakes": [
+        "Courir les répétitions à allure VMA au lieu de l'allure CV, plus modérée",
+        "Allonger la récupération au-delà de 90 secondes",
+        "Accélérer sur les dernières répétitions au lieu de maintenir un rythme constant"
+      ],
+      "commonMistakesEn": [
+        "Running repetitions at VO2max pace instead of the more moderate CV pace",
+        "Extending recovery beyond 90 seconds",
+        "Accelerating on the last repetitions instead of maintaining a constant pace"
+      ],
+      "variationIds": ["THR-010", "ASS-002"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["tinman", "critical-velocity", "type-iia", "cv-pace", "track"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "THR-021",
+      "name": "Sur/sous-seuil (Over/Under)",
+      "nameEn": "Over/Under Threshold Intervals",
+      "description": "3 blocs de 12 minutes alternant 2 minutes à 105% de l'allure seuil et 2 minutes à 95% de l'allure seuil, avec 3 minutes de récupération entre les blocs. Entraîne le cycle production-résorption du lactate sans jamais descendre sous le seuil.",
+      "descriptionEn": "3 blocks of 12 minutes alternating 2 minutes at 105% of threshold pace and 2 minutes at 95% of threshold pace, with 3 minutes recovery between blocks. Trains the lactate production-clearance cycle without ever dropping below threshold.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "lactate_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
+        { "description": "Gammes et 3× accélérations", "descriptionEn": "Drills and 3× accelerations", "durationMin": 5 }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3 × 12min : alternance 2min à 105% allure seuil (Z4 haut) / 2min à 95% allure seuil (Z4 bas). Récup 3min trot Z1 entre les blocs",
+          "descriptionEn": "3 × 12min: alternating 2min at 105% threshold pace (high Z4) / 2min at 95% threshold pace (low Z4). 3min jog Z1 recovery between blocks",
+          "zone": "Z4",
+          "repetitions": 3,
+          "durationMin": 12,
+          "recovery": "3min trot Z1"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Les phases « sous » à 95% du seuil ne sont PAS de la récupération — vous restez en charge",
+        "Les phases « sur » à 105% du seuil doivent inonder le système de lactate que les phases « sous » résorberont",
+        "Utilisez un GPS ou une montre pour contrôler précisément les allures ±5%",
+        "La difficulté augmente bloc après bloc — c'est normal et voulu"
+      ],
+      "coachingTipsEn": [
+        "The 'under' phases at 95% threshold are NOT recovery — you stay under load",
+        "The 'over' phases at 105% threshold should flood the system with lactate that 'under' phases will clear",
+        "Use GPS or a watch to precisely control paces ±5%",
+        "Difficulty increases block after block — this is normal and intentional"
+      ],
+      "commonMistakes": [
+        "Ralentir trop pendant les phases « sous » en les traitant comme de la récupération",
+        "Dépasser 110% du seuil pendant les phases « sur », transformant la séance en VMA",
+        "Ne pas respecter les transitions rapides entre phases « sur » et « sous »"
+      ],
+      "commonMistakesEn": [
+        "Slowing too much during 'under' phases by treating them as recovery",
+        "Exceeding 110% of threshold during 'over' phases, turning the session into VO2max work",
+        "Not respecting the quick transitions between 'over' and 'under' phases"
+      ],
+      "variationIds": ["THR-008", "THR-001"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["over-under", "lactate-clearance", "threshold-oscillation", "advanced"],
+        "priorityScore": 80
+      }
     }
   ]
 }

@@ -1459,6 +1459,175 @@
         "tags": ["introduction", "sustained"],
         "priorityScore": 70
       }
+    },
+    {
+      "id": "TMP-018",
+      "name": "Course progressive générale (Canova)",
+      "nameEn": "General Progressive Run (Canova)",
+      "description": "Course continue de 60-90 minutes divisée en 3-4 fractions à allure constante mais croissante : de 85% à 100% de l'allure marathon. Méthode Canova pour développer la gestion de la fatigue sur effort prolongé.",
+      "descriptionEn": "Continuous 60-90 minute run divided into 3-4 fractions at constant but increasing pace: from 85% to 100% of marathon pace. Canova method for developing fatigue management during prolonged effort.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "race_specific",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 70, "max": 100 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing lent", "descriptionEn": "Slow jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Fraction 1 : 20min à 85% allure marathon (enchaînement direct avec la fraction suivante)", "descriptionEn": "Fraction 1: 20min at 85% marathon pace (direct transition to next fraction)", "durationMin": 20, "zone": "Z2" },
+        { "description": "Fraction 2 : 20min à 90% allure marathon (enchaînement direct)", "descriptionEn": "Fraction 2: 20min at 90% marathon pace (direct transition)", "durationMin": 20, "zone": "Z3" },
+        { "description": "Fraction 3 : 15min à 95% allure marathon (enchaînement direct)", "descriptionEn": "Fraction 3: 15min at 95% marathon pace (direct transition)", "durationMin": 15, "zone": "Z3" },
+        { "description": "Fraction 4 : 10min à 100% allure marathon", "descriptionEn": "Fraction 4: 10min at 100% marathon pace", "durationMin": 10, "zone": "Z3" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour au calme progressif", "descriptionEn": "Progressive cool-down", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Chaque fraction est à allure constante — pas de variation au sein d'une fraction",
+        "Ne dépassez jamais l'allure marathon, même en fin de séance",
+        "Les transitions entre fractions doivent être fluides, sans accélération brutale",
+        "Adaptez la durée totale à votre niveau : 60min pour les intermédiaires, 90min pour les avancés"
+      ],
+      "coachingTipsEn": [
+        "Each fraction is at constant pace — no variation within a fraction",
+        "Never exceed marathon pace, even at the end of the session",
+        "Transitions between fractions should be smooth, without abrupt acceleration",
+        "Adapt total duration to your level: 60min for intermediate, 90min for advanced"
+      ],
+      "commonMistakes": [
+        "Démarrer la première fraction trop vite, au-dessus de 85% allure marathon",
+        "Accélérer progressivement au sein d'une fraction au lieu de tenir l'allure constante",
+        "Confondre cette séance avec un tempo classique en forçant dès le début"
+      ],
+      "commonMistakesEn": [
+        "Starting the first fraction too fast, above 85% marathon pace",
+        "Progressively accelerating within a fraction instead of holding constant pace",
+        "Confusing this session with a classic tempo by pushing from the start"
+      ],
+      "variationIds": ["TMP-005", "TMP-008"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["mid", "late"],
+        "relativeLoad": "hard",
+        "tags": ["canova", "progressive", "marathon-specific", "fractions"],
+        "priorityScore": 80
+      }
+    },
+    {
+      "id": "TMP-019",
+      "name": "Tempo force Hanson (Strength Run)",
+      "nameEn": "Hanson Strength Run",
+      "description": "10-13 km à allure marathon moins 5-10 secondes par kilomètre, idéalement effectué sur jambes fatiguées (lendemain d'une séance de qualité). Méthode Hanson basée sur la fatigue cumulée pour simuler les derniers kilomètres du marathon.",
+      "descriptionEn": "10-13 km at marathon pace minus 5-10 seconds per kilometer, ideally performed on tired legs (day after a quality session). Hanson method based on cumulative fatigue to simulate the final kilometers of a marathon.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "race_specific",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 10, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "10-13 km à allure marathon −5 à −10s/km (entre Z3 et Z4 bas)",
+          "descriptionEn": "10-13 km at marathon pace −5 to −10s/km (between Z3 and low Z4)",
+          "durationMin": 40,
+          "zone": "Z3"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Cette séance prend tout son sens sur jambes fatiguées — programmez-la le lendemain d'un entraînement de qualité",
+        "L'allure cible se situe entre le tempo marathon et le seuil lactique : un effort soutenu mais contrôlable",
+        "Commencez à 10 km et progressez vers 13 km au fil des semaines",
+        "La fatigue cumulée simule les sensations des km 30-42 en marathon"
+      ],
+      "coachingTipsEn": [
+        "This session is most effective on tired legs — schedule it the day after a quality workout",
+        "Target pace sits between marathon tempo and lactate threshold: sustained but controllable effort",
+        "Start at 10 km and progress toward 13 km over weeks",
+        "Cumulative fatigue simulates the sensations of km 30-42 in a marathon"
+      ],
+      "commonMistakes": [
+        "Courir cette séance sur jambes fraîches, ce qui en réduit l'intérêt spécifique",
+        "Dépasser l'allure seuil au lieu de rester à marathon −5/10s",
+        "Programmer cette séance trop souvent dans la semaine"
+      ],
+      "commonMistakesEn": [
+        "Running this session on fresh legs, which reduces its specific benefit",
+        "Exceeding threshold pace instead of staying at marathon −5/10s",
+        "Scheduling this session too often in the week"
+      ],
+      "variationIds": ["TMP-008", "RP-001"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid", "late"],
+        "relativeLoad": "hard",
+        "tags": ["hanson", "strength-run", "cumulative-fatigue", "marathon", "mp-minus"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "TMP-020",
+      "name": "Tempo avec surges",
+      "nameEn": "Tempo with Surges (Lactate Clearing)",
+      "description": "25-30 minutes de tempo continu en Zone 3 avec insertion d'un surge de 30-40 secondes à allure 5K toutes les 5 minutes. Entraîne la capacité à produire et résorber le lactate sous effort soutenu.",
+      "descriptionEn": "25-30 minutes of continuous tempo in Zone 3 with a 30-40 second surge at 5K pace every 5 minutes. Trains the ability to produce and clear lactate under sustained effort.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "lactate_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 50, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "25-30min tempo continu Z3. Toutes les 5min : surge 30-40s à allure 5K (Z5), puis retour immédiat au tempo. 5-6 surges au total",
+          "descriptionEn": "25-30min continuous tempo Z3. Every 5min: 30-40s surge at 5K pace (Z5), then immediate return to tempo. 5-6 surges total",
+          "durationMin": 28,
+          "zone": "Z3"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Le retour au tempo après chaque surge est le moment clé : maintenez l'allure Z3 immédiatement",
+        "Les surges doivent être francs mais contrôlés — allure 5K, pas sprint maximal",
+        "Surveillez votre capacité à retrouver une respiration de tempo entre les surges",
+        "Si vous ne parvenez plus à revenir au tempo, arrêtez les surges et terminez en tempo continu"
+      ],
+      "coachingTipsEn": [
+        "Returning to tempo after each surge is the key moment: maintain Z3 pace immediately",
+        "Surges should be sharp but controlled — 5K pace, not maximal sprint",
+        "Monitor your ability to return to tempo breathing between surges",
+        "If you can no longer return to tempo, stop the surges and finish with continuous tempo"
+      ],
+      "commonMistakes": [
+        "Ralentir sous l'allure tempo après un surge au lieu de revenir immédiatement à Z3",
+        "Sprinter au maximum au lieu de courir à allure 5K contrôlée",
+        "Réduire la durée du tempo entre les surges pour se « reposer »"
+      ],
+      "commonMistakesEn": [
+        "Slowing below tempo pace after a surge instead of immediately returning to Z3",
+        "Sprinting at maximum instead of running at controlled 5K pace",
+        "Reducing tempo duration between surges to 'rest'"
+      ],
+      "variationIds": ["TMP-011", "MIX-009"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["surges", "lactate-clearing", "tempo", "5k-pace", "mixed-intensity"],
+        "priorityScore": 75
+      }
     }
   ]
 }

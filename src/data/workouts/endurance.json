@@ -679,6 +679,177 @@
         "tags": ["easy", "maintenance", "taper"],
         "priorityScore": 70
       }
+    },
+    {
+      "id": "END-015",
+      "name": "Acclimatation à la chaleur",
+      "nameEn": "Heat Acclimatization Run",
+      "description": "Footing de 60 minutes en Zone 1-2 en conditions chaudes (>25°C) ou avec couches supplémentaires pour induire un stress thermique. Provoque des adaptations thermorégulatrices : expansion du volume plasmatique, transpiration plus précoce et fréquence cardiaque réduite à effort donné.",
+      "descriptionEn": "60-minute jog in Zone 1-2 in hot conditions (>25°C) or with extra layers to induce heat stress. Triggers thermoregulatory adaptations: plasma volume expansion, earlier sweating onset and reduced heart rate at a given effort.",
+      "category": "endurance",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 70 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Marche rapide puis footing très lent", "descriptionEn": "Brisk walk then very slow jog", "durationMin": 5, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "60min footing Z1-Z2 en conditions chaudes. Dérive cardiaque naturelle de 10-15% attendue. Hydratation régulière indispensable",
+          "descriptionEn": "60min jog Z1-Z2 in hot conditions. Natural cardiac drift of 10-15% expected. Regular hydration essential",
+          "durationMin": 60,
+          "zone": "Z2"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Marche à l'ombre et hydratation", "descriptionEn": "Walk in shade and hydration", "durationMin": 5, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Courez aux heures chaudes (début d'après-midi) ou ajoutez des couches si les conditions sont tempérées",
+        "La fréquence cardiaque sera naturellement plus élevée — ne forcez pas pour maintenir votre allure habituelle",
+        "Hydratez-vous toutes les 15-20 minutes avec de l'eau et des électrolytes",
+        "Planifiez 5-8 sessions sur 2 semaines pour une acclimatation complète avant une course en chaleur"
+      ],
+      "coachingTipsEn": [
+        "Run during hot hours (early afternoon) or add layers if conditions are temperate",
+        "Heart rate will naturally be higher — don't force to maintain your usual pace",
+        "Hydrate every 15-20 minutes with water and electrolytes",
+        "Plan 5-8 sessions over 2 weeks for complete acclimatization before a race in heat"
+      ],
+      "commonMistakes": [
+        "Maintenir l'allure habituelle malgré la chaleur, au risque de surchauffe",
+        "Négliger l'hydratation pendant et après la séance",
+        "Programmer une séance intense le lendemain sans tenir compte du stress thermique subi"
+      ],
+      "commonMistakesEn": [
+        "Maintaining usual pace despite the heat, risking overheating",
+        "Neglecting hydration during and after the session",
+        "Scheduling an intense session the next day without accounting for the heat stress"
+      ],
+      "variationIds": ["END-001", "END-006"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["early", "mid"],
+        "relativeLoad": "moderate",
+        "tags": ["heat", "acclimatization", "plasma-volume", "thermoregulation"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "END-016",
+      "name": "Train Low (déplétion glycogène)",
+      "nameEn": "Train Low (Glycogen Depletion)",
+      "description": "Footing de 60-75 minutes en Zone 2 à jeun, effectué le matin après une séance intense la veille au soir et un sommeil sans recharge glucidique. Amplifie la biogenèse mitochondriale et l'oxydation des graisses par rapport à un simple footing à jeun.",
+      "descriptionEn": "60-75 minute jog in Zone 2 while fasted, performed in the morning after an intense session the previous evening and sleep without carbohydrate reload. Amplifies mitochondrial biogenesis and fat oxidation compared to a simple fasted jog.",
+      "category": "endurance",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 60, "max": 80 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "warmupTemplate": [
+        { "description": "Marche rapide 5min", "descriptionEn": "Brisk walk 5min", "durationMin": 5, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "60-75min footing Z2 à jeun sur glycogène partiellement déplété (séance intense la veille + nuit sans glucides). RPE sera plus élevé que d'habitude",
+          "descriptionEn": "60-75min jog Z2 fasted on partially depleted glycogen (intense session previous evening + night without carbs). RPE will be higher than usual",
+          "durationMin": 65,
+          "zone": "Z2"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour au calme puis petit-déjeuner riche en glucides et protéines dans les 30 minutes", "descriptionEn": "Cool-down then carb and protein-rich breakfast within 30 minutes", "durationMin": 5, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "La veille au soir : séance de seuil ou VMA pour dépléter le glycogène musculaire",
+        "Dîner léger en protéines et lipides, sans glucides après l'entraînement du soir",
+        "Le matin : eau et café sont autorisés, mais aucun apport glucidique avant la course",
+        "Limitez cette séance à 1 fois par semaine maximum — le stress métabolique est important"
+      ],
+      "coachingTipsEn": [
+        "Previous evening: threshold or VO2max session to deplete muscle glycogen",
+        "Light dinner with protein and fat, no carbs after the evening workout",
+        "Morning: water and coffee are allowed, but no carbohydrate intake before the run",
+        "Limit this session to maximum once per week — the metabolic stress is significant"
+      ],
+      "commonMistakes": [
+        "Confondre avec un simple footing à jeun — la déplétion préalable est essentielle",
+        "Courir en Z3 ou plus au lieu de rester strictement en Z2",
+        "Ne pas se réalimenter correctement après la séance (fenêtre de 30 minutes)"
+      ],
+      "commonMistakesEn": [
+        "Confusing with a simple fasted jog — prior depletion is essential",
+        "Running in Z3 or above instead of staying strictly in Z2",
+        "Not refueling properly after the session (30-minute window)"
+      ],
+      "variationIds": ["END-006", "SL-009"],
+      "selectionCriteria": {
+        "phases": ["base"],
+        "weekPositions": ["mid", "late"],
+        "relativeLoad": "moderate",
+        "tags": ["train-low", "sleep-low", "glycogen-depletion", "metabolic", "fasted"],
+        "priorityScore": 65
+      }
+    },
+    {
+      "id": "END-017",
+      "name": "Seuil aérobie guidé DFA alpha1",
+      "nameEn": "DFA Alpha1 Aerobic Threshold Run",
+      "description": "45-60 minutes de course continue en maintenant l'indice DFA alpha1 à 0,75 (±0,05) via une ceinture cardio compatible HRV. Permet un entraînement polarisé précis au seuil aérobie (LT1) sans lactomètre, validé scientifiquement contre les seuils lactate et ventilatoires.",
+      "descriptionEn": "45-60 minutes of continuous running maintaining the DFA alpha1 index at 0.75 (±0.05) via an HRV-compatible chest strap. Enables precise polarized training at aerobic threshold (LT1) without a lactate meter, scientifically validated against lactate and ventilatory thresholds.",
+      "category": "endurance",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing très lent pour stabiliser le signal HRV", "descriptionEn": "Very slow jog to stabilize HRV signal", "durationMin": 10, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "45-60min course continue en maintenant DFA alpha1 = 0,75 (±0,05). Ralentir si alpha1 < 0,70. Accélérer légèrement si alpha1 > 0,80. Noter l'allure moyenne à alpha1 = 0,75 comme allure LT1",
+          "descriptionEn": "45-60min continuous run maintaining DFA alpha1 = 0.75 (±0.05). Slow down if alpha1 < 0.70. Speed up slightly if alpha1 > 0.80. Record average pace at alpha1 = 0.75 as LT1 pace",
+          "durationMin": 50,
+          "zone": "Z2"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour au calme progressif", "descriptionEn": "Progressive cool-down", "durationMin": 5, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Nécessite une ceinture cardio HRV compatible (Polar H10, Garmin HRM-Pro) et une application DFA alpha1 (HRV Logger, RUNALYZE)",
+        "DFA alpha1 = 0,75 correspond au seuil aérobie (LT1) — la frontière entre Z1-Z2 et Z3",
+        "Cette séance est idéale pour calibrer votre allure Z2 sans test en laboratoire",
+        "Effectuez-la régulièrement (toutes les 4-6 semaines) pour suivre la progression de votre seuil aérobie"
+      ],
+      "coachingTipsEn": [
+        "Requires an HRV-compatible chest strap (Polar H10, Garmin HRM-Pro) and a DFA alpha1 app (HRV Logger, RUNALYZE)",
+        "DFA alpha1 = 0.75 corresponds to the aerobic threshold (LT1) — the boundary between Z1-Z2 and Z3",
+        "This session is ideal for calibrating your Z2 pace without a lab test",
+        "Perform regularly (every 4-6 weeks) to track your aerobic threshold progression"
+      ],
+      "commonMistakes": [
+        "Utiliser un capteur optique de poignet au lieu d'une ceinture thoracique (signal HRV insuffisant)",
+        "Ignorer les variations d'alpha1 et courir à allure fixe sans ajustement",
+        "Courir sur un parcours trop vallonné qui perturbe la stabilité du signal"
+      ],
+      "commonMistakesEn": [
+        "Using an optical wrist sensor instead of a chest strap (insufficient HRV signal)",
+        "Ignoring alpha1 variations and running at a fixed pace without adjustment",
+        "Running on a course that is too hilly, disrupting signal stability"
+      ],
+      "variationIds": ["ASS-008", "END-001"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["early", "mid"],
+        "relativeLoad": "moderate",
+        "tags": ["dfa-alpha1", "hrv", "aerobic-threshold", "polarized", "lt1", "biofeedback"],
+        "priorityScore": 70
+      }
     }
   ]
 }

@@ -1299,6 +1299,108 @@
         ],
         "priorityScore": 70
       }
+    },
+    {
+      "id": "MIX-014",
+      "name": "Circuit pliométrique économie de course",
+      "nameEn": "Plyometric Running Economy Circuit",
+      "description": "Circuit combinant exercices pliométriques ciblés (sauts unipodaux, bonds, drop jumps) et répétitions rapides courtes. Améliore l'économie de course en augmentant la rigidité tendineuse et l'efficacité du cycle étirement-raccourcissement.",
+      "descriptionEn": "Circuit combining targeted plyometric exercises (single-leg hops, bounds, drop jumps) and short fast repetitions. Improves running economy by increasing tendon stiffness and stretch-shortening cycle efficiency.",
+      "category": "mixed",
+      "sessionType": "speed",
+      "targetSystem": "strength",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 45,
+        "max": 55
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true,
+        "prefersSoft": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 10,
+          "zone": "Z1-Z2"
+        },
+        {
+          "description": "Gammes dynamiques : montées de genoux, talons-fesses, pas chassés",
+          "descriptionEn": "Dynamic drills: high knees, butt kicks, side shuffles",
+          "durationMin": 5
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3 tours : 10 sauts unipodaux par côté + 10 foulées bondissantes + 8 drop jumps (banc/marche) + 10 A-skip par côté. 2min récup entre les tours",
+          "descriptionEn": "3 rounds: 10 single-leg hops per side + 10 bounding strides + 8 drop jumps (bench/step) + 10 A-skips per side. 2min recovery between rounds",
+          "repetitions": 3,
+          "recovery": "2min marche"
+        },
+        {
+          "description": "4 × 150m à 85% avec focus sur le rebond élastique et la fréquence",
+          "descriptionEn": "4 × 150m at 85% focusing on elastic rebound and cadence",
+          "zone": "Z4",
+          "repetitions": 4,
+          "distanceM": 150,
+          "recovery": "150m marche retour"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Footing de récupération et étirements dynamiques",
+          "descriptionEn": "Recovery jog and dynamic stretches",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Privilégiez la réactivité au sol plutôt que la hauteur des sauts",
+        "Atterrissez sur l'avant-pied avec un temps de contact minimal",
+        "Les 150m finaux servent à intégrer le travail pliométrique dans la foulée de course",
+        "Commencez sur surface souple (herbe) pour limiter l'impact articulaire"
+      ],
+      "coachingTipsEn": [
+        "Prioritize ground reactivity over jump height",
+        "Land on the forefoot with minimal ground contact time",
+        "The final 150m serve to integrate plyometric work into running stride",
+        "Start on soft surface (grass) to limit joint impact"
+      ],
+      "commonMistakes": [
+        "Sauter trop haut au lieu de chercher la rapidité du rebond",
+        "Négliger la récupération entre les tours du circuit",
+        "Faire cette séance sur jambes fatiguées ou sur surface dure"
+      ],
+      "commonMistakesEn": [
+        "Jumping too high instead of seeking rebound speed",
+        "Neglecting recovery between circuit rounds",
+        "Doing this session on tired legs or hard surface"
+      ],
+      "variationIds": [
+        "HIL-004",
+        "END-005"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "plyometric",
+          "running-economy",
+          "tendon-stiffness",
+          "neuromuscular",
+          "circuit"
+        ],
+        "priorityScore": 70
+      }
     }
   ]
 }

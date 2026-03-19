@@ -1109,6 +1109,120 @@
         "tags": ["taper", "short"],
         "priorityScore": 70
       }
+    },
+    {
+      "id": "LR-015",
+      "name": "Sortie longue durabilité (dérive cardiaque)",
+      "nameEn": "Durability Long Run (Cardiac Drift Test)",
+      "description": "90-120 minutes de course à effort constant (Z2, guidé par l'allure ou la puissance) avec monitoring de la fréquence cardiaque toutes les 30 minutes. Mesure la « durabilité » aérobie : la résistance à la dégradation des réponses physiologiques sur la durée.",
+      "descriptionEn": "90-120 minutes of running at constant effort (Z2, guided by pace or power) with heart rate monitoring every 30 minutes. Measures aerobic 'durability': resistance to degradation of physiological responses over time.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 100, "max": 150 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing très lent", "descriptionEn": "Very slow jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "90-120min à allure Z2 constante (guidé par la pace ou la puissance, PAS par la FC). Relevez la FC à 30min, 60min, 90min et 120min. Score de durabilité = % de dérive cardiaque. Objectif : dérive < 10%. Arrêter si > 15%",
+          "descriptionEn": "90-120min at constant Z2 pace (guided by pace or power, NOT by HR). Record HR at 30min, 60min, 90min and 120min. Durability score = % cardiac drift. Target: drift < 10%. Stop if > 15%",
+          "durationMin": 105,
+          "zone": "Z2"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Retour au calme progressif", "descriptionEn": "Progressive cool-down", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Courez à allure ou puissance CONSTANTE — ne vous ajustez PAS à la fréquence cardiaque",
+        "La dérive cardiaque est normale : +5-10% sur 2 heures est un bon score de durabilité",
+        "Notez les conditions (chaleur, vent, terrain) qui influencent la dérive",
+        "Répétez ce test toutes les 4-6 semaines pour mesurer la progression de votre durabilité"
+      ],
+      "coachingTipsEn": [
+        "Run at CONSTANT pace or power — do NOT adjust to heart rate",
+        "Cardiac drift is normal: +5-10% over 2 hours is a good durability score",
+        "Note conditions (heat, wind, terrain) that influence drift",
+        "Repeat this test every 4-6 weeks to measure durability progression"
+      ],
+      "commonMistakes": [
+        "Ralentir quand la FC monte au lieu de maintenir l'allure constante",
+        "Courir en Z3 dès le départ, faussant la mesure de dérive",
+        "Ne pas noter les données de FC aux intervalles prévus"
+      ],
+      "commonMistakesEn": [
+        "Slowing down when HR rises instead of maintaining constant pace",
+        "Running in Z3 from the start, skewing the drift measurement",
+        "Not recording HR data at the planned intervals"
+      ],
+      "variationIds": ["SL-003", "SL-001"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["late"],
+        "relativeLoad": "hard",
+        "tags": ["durability", "cardiac-drift", "monitoring", "marathon-predictor", "long-run"],
+        "priorityScore": 75
+      }
+    },
+    {
+      "id": "LR-016",
+      "name": "Ultra time-on-feet (marche-course)",
+      "nameEn": "Ultra Time-on-Feet (Run-Hike)",
+      "description": "3-5 heures de mouvement continu en Zone 1 strict, alternant 20-30 minutes de course facile et 10-15 minutes de marche active (power hike). Pratique nutritionnelle intégrée toutes les 30-45 minutes. Développe les adaptations spécifiques à l'ultra-endurance.",
+      "descriptionEn": "3-5 hours of continuous movement in strict Zone 1, alternating 20-30 minutes of easy running and 10-15 minutes of active walking (power hike). Integrated nutrition practice every 30-45 minutes. Develops ultra-endurance specific adaptations.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 180, "max": 300 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false, "prefersSoft": true },
+      "warmupTemplate": [
+        { "description": "Marche progressive 10min", "descriptionEn": "Progressive walk 10min", "durationMin": 10, "zone": "Z1" }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3-5h en Z1 strict (< 70% FCmax). Alternance : 20-30min course facile / 10-15min marche active (power hike, bras actifs). Ravitaillement toutes les 30-45min (gels, barres, eau + électrolytes). Sur sentier si possible",
+          "descriptionEn": "3-5h in strict Z1 (< 70% HRmax). Alternating: 20-30min easy run / 10-15min active walk (power hike, arms engaged). Fueling every 30-45min (gels, bars, water + electrolytes). On trails if possible",
+          "durationMin": 210,
+          "zone": "Z1"
+        }
+      ],
+      "cooldownTemplate": [
+        { "description": "Marche de récupération et étirements doux", "descriptionEn": "Recovery walk and gentle stretches", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "L'objectif est le temps sur les pieds, PAS la distance ni l'allure",
+        "La marche active (power hike) est une compétence de course en ultra — entraînez-la sérieusement",
+        "Testez votre stratégie nutritionnelle de course : trouvez ce que votre estomac tolère sur la durée",
+        "Restez strictement en Z1 — toute dérive en Z2 sur cette durée entraîne une fatigue disproportionnée"
+      ],
+      "coachingTipsEn": [
+        "The goal is time on feet, NOT distance or pace",
+        "Active walking (power hike) is an ultra racing skill — train it seriously",
+        "Test your race nutrition strategy: find what your stomach tolerates over time",
+        "Stay strictly in Z1 — any drift into Z2 over this duration causes disproportionate fatigue"
+      ],
+      "commonMistakes": [
+        "Courir en Z2 au lieu de Z1, ce qui rend la séance trop éprouvante sur 3-5 heures",
+        "Ne pas pratiquer la nutrition en course (attendre la compétition pour tester)",
+        "Considérer les phases de marche comme un échec au lieu d'une stratégie d'ultra"
+      ],
+      "commonMistakesEn": [
+        "Running in Z2 instead of Z1, which makes the session too demanding over 3-5 hours",
+        "Not practicing race nutrition (waiting for competition to test)",
+        "Considering walking phases as failure instead of an ultra strategy"
+      ],
+      "variationIds": ["SL-006", "SL-011"],
+      "selectionCriteria": {
+        "phases": ["build"],
+        "weekPositions": ["late"],
+        "relativeLoad": "hard",
+        "tags": ["ultra", "time-on-feet", "power-hike", "nutrition-practice", "trail", "long-run"],
+        "priorityScore": 70
+      }
     }
   ]
 }

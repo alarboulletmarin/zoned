@@ -421,4 +421,34 @@ export const metricsTerms: GlossaryTerm[] = [
     relatedTerms: ["fc-max", "hrv", "overtraining"],
     keywords: ["cardiaque", "repos", "récupération", "Karvonen"],
   },
+  {
+    id: "vitesse-critique",
+    term: "Vitesse Critique",
+    termEn: "Critical Velocity",
+    acronym: "CV",
+    category: "metrics",
+    shortDefinition:
+      "Vitesse maximale soutenable sans accumulation continue de fatigue, frontière entre les domaines lourd et sévère.",
+    shortDefinitionEn:
+      "Maximum sustainable speed without continuous fatigue accumulation, boundary between heavy and severe exercise domains.",
+    fullDefinition:
+      "La vitesse critique (CV) représente la frontière entre le domaine d'exercice « lourd » et « sévère ». C'est l'allure maximale à laquelle la consommation d'oxygène et le lactate sanguin se stabilisent. Au-dessus de la CV, les réserves anaérobies (D') sont progressivement épuisées et l'arrêt devient inévitable. En pratique, la CV correspond approximativement à l'allure de course sur 30-40 minutes. Elle est un prédicteur de performance en endurance plus précis que la VO2max seule.",
+    fullDefinitionEn:
+      "Critical velocity (CV) represents the boundary between the 'heavy' and 'severe' exercise domains. It is the maximum pace at which oxygen consumption and blood lactate stabilize. Above CV, anaerobic reserves (D') are progressively depleted and cessation becomes inevitable. In practice, CV roughly corresponds to 30-40 minute race pace. It is a more precise endurance performance predictor than VO2max alone.",
+    example:
+      "Si ta CV est de 15 km/h, tu peux théoriquement maintenir cette allure (4:00/km) pendant 30-40 min. Les entraînements à allure CV développent spécifiquement les fibres musculaires de Type IIa.",
+    exampleEn:
+      "If your CV is 15 km/h, you can theoretically sustain this pace (4:00/km) for 30-40 min. Training at CV pace specifically develops Type IIa muscle fibers.",
+    formula: "CV = (Distance longue - Distance courte) / (Temps long - Temps court)",
+    relatedTerms: ["vma", "lactate-threshold", "vo2max"],
+    zone: 4,
+    keywords: ["vitesse", "critique", "CV", "seuil", "domaine", "sévère", "Tinman", "D'"],
+    externalLinks: [
+      {
+        label: "Critical Speed and its Implications for Exercise Physiology",
+        url: "https://pubmed.ncbi.nlm.nih.gov/27480763/",
+        author: "Jones et al.",
+      },
+    ],
+  },
 ];

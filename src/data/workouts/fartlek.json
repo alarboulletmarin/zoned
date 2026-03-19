@@ -1402,6 +1402,68 @@
         ],
         "priorityScore": 75
       }
+    },
+    {
+      "id": "FAR-016",
+      "name": "Fartlek multi-allures Hudson (1-2-3-2-1)",
+      "nameEn": "Hudson Multi-Pace Fartlek (1-2-3-2-1)",
+      "description": "Fartlek pyramidal en allures de course : 1 minute à allure 5K, 2 minutes à allure 10K, 3 minutes à allure semi-marathon, puis redescente. Chaque palier à une allure spécifique différente. Développe la flexibilité neuromusculaire et métabolique.",
+      "descriptionEn": "Pyramid fartlek at race paces: 1 minute at 5K pace, 2 minutes at 10K pace, 3 minutes at half-marathon pace, then descending. Each level at a different specific pace. Develops neuromuscular and metabolic flexibility.",
+      "category": "fartlek",
+      "sessionType": "fartlek",
+      "targetSystem": "aerobic_power",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
+      ],
+      "mainSetTemplate": [
+        { "description": "Série 1 — 1min allure 5K / 1min trot", "descriptionEn": "Set 1 — 1min at 5K pace / 1min jog", "durationMin": 2, "zone": "Z5" },
+        { "description": "2min allure 10K / 1min trot", "descriptionEn": "2min at 10K pace / 1min jog", "durationMin": 3, "zone": "Z4" },
+        { "description": "3min allure semi-marathon / 1min trot", "descriptionEn": "3min at half-marathon pace / 1min jog", "durationMin": 4, "zone": "Z3" },
+        { "description": "2min allure 10K / 1min trot", "descriptionEn": "2min at 10K pace / 1min jog", "durationMin": 3, "zone": "Z4" },
+        { "description": "1min allure 5K / 1min trot", "descriptionEn": "1min at 5K pace / 1min jog", "durationMin": 2, "zone": "Z5" },
+        { "description": "Repos 2-3 min trot léger entre les séries", "descriptionEn": "2-3 min easy jog rest between sets", "durationMin": 3, "zone": "Z1" },
+        { "description": "Série 2 — 1min allure 5K / 1min trot", "descriptionEn": "Set 2 — 1min at 5K pace / 1min jog", "durationMin": 2, "zone": "Z5" },
+        { "description": "2min allure 10K / 1min trot", "descriptionEn": "2min at 10K pace / 1min jog", "durationMin": 3, "zone": "Z4" },
+        { "description": "3min allure semi-marathon / 1min trot", "descriptionEn": "3min at half-marathon pace / 1min jog", "durationMin": 4, "zone": "Z3" },
+        { "description": "2min allure 10K / 1min trot", "descriptionEn": "2min at 10K pace / 1min jog", "durationMin": 3, "zone": "Z4" },
+        { "description": "1min allure 5K / 1min trot", "descriptionEn": "1min at 5K pace / 1min jog", "durationMin": 2, "zone": "Z5" }
+      ],
+      "cooldownTemplate": [
+        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+      ],
+      "coachingTips": [
+        "Chaque palier doit être couru à une allure de course SPÉCIFIQUE, pas simplement « rapide » ou « modéré »",
+        "Le passage d'une allure à l'autre entraîne le système nerveux à changer de « vitesse » rapidement",
+        "Restez relâché sur les portions 5K — la vitesse vient de la fluidité, pas de la crispation",
+        "Utilisez les portions à allure semi comme récupération active relative"
+      ],
+      "coachingTipsEn": [
+        "Each level must be run at a SPECIFIC race pace, not simply 'fast' or 'moderate'",
+        "Switching between paces trains the nervous system to change 'gears' quickly",
+        "Stay relaxed on the 5K portions — speed comes from fluidity, not tension",
+        "Use the half-marathon pace portions as relative active recovery"
+      ],
+      "commonMistakes": [
+        "Courir toutes les portions « vite » au lieu de différencier les allures 5K, 10K et semi",
+        "Sprinter sur les portions 5K au lieu de respecter l'allure spécifique",
+        "Trotter trop lentement entre les portions au lieu de maintenir un trot actif"
+      ],
+      "commonMistakesEn": [
+        "Running all portions 'fast' instead of differentiating 5K, 10K and half-marathon paces",
+        "Sprinting on the 5K portions instead of respecting specific pace",
+        "Jogging too slowly between portions instead of maintaining active jog"
+      ],
+      "variationIds": ["FAR-009", "FAR-014"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid", "late"],
+        "relativeLoad": "hard",
+        "tags": ["hudson", "multi-pace", "gear-changing", "5k", "10k", "half-marathon", "pyramid"],
+        "priorityScore": 80
+      }
     }
   ]
 }
