@@ -41,6 +41,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mobile navigation flash eliminated by deferring sidebar close to after page render
 - Fixed session index in sorted list view (delete/replace targeted the wrong element)
 
+## [0.2.0] - 2026-03-19
+
+### Added
+
+- Methodology page: scientific foundations of the 6-zone system with 8 researchers, 6 studies (PubMed links), reference books, blogs and podcasts
+- New editorial design inspired by Google Stitch: homepage with asymmetric hero, bento grid stats, cards with zone-colored top border
+- Workout detail page: bento header with metrics grid (duration, difficulty, target system, environment), prominent export buttons, favorite in top right
+- Redesigned Workout of the Day: bento layout with large duration, coaching tips in right column, fully clickable card
+- Enlarged session timeline visualization (h-40/h-56) with zone labels on hover and better segment contrast
+
+### Changed
+
+- Replaced zone-stripe (left colored border) with colored top borders on all cards (workouts, collections, articles)
+- Mobile responsive: reduced sizes on mobile for hero, stats, buttons and workout of the day
+- Removed redundant Details card from workout page sidebar
+
+### Fixed
+
+- Display recovery between repetitions in phase details (3x30s, fartlek, etc.) without redundancy with description
+- Inter-series rest indication for multi-set blocks (e.g. 2x(10x 45s VO2max / 15s recovery) → ~3 min jog between sets)
+- Missing 'Mythic Workouts' collection on homepage (missing accent in slug)
+- Segments without zone (drills, transitions) invisible in timeline — fallback color fixed
+
+## [0.1.7] - 2026-03-18
+
+### Added
+
+- Wikipedia-style auto-linking: all 200+ glossary terms and 12 articles become clickable throughout the entire app with hover previews
+- Automatic links to learning articles (periodization, supercompensation, warm-up…) with inline preview
+- Unified preview popover for desktop and mobile: close button, link to full page
+- Callout blocks in all 12 articles: tips, warnings, key takeaways and statistics
+- Reading progress bar and table of contents (desktop sidebar, mobile dropdown) in articles
+
+### Changed
+
+- Replaced dangerouslySetInnerHTML in articles with secure React components
+
+### Fixed
+
+- Back button on glossary pages now returns to the previous page (not always to the glossary)
+- Mobile button touch targets enlarged to 44px (Apple HIG standard) without visual overflow
+- Comprehensive French accent and spelling corrections across the entire application
+- Improved footer and sidebar layout (alignment, responsive)
+
 ## [0.1.6] - 2026-03-17
 
 ### Added
