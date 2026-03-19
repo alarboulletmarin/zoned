@@ -54,6 +54,18 @@ export const changelogVersions: ChangelogVersion[] = [
           category: "UX",
           categoryEn: "UX",
         },
+        {
+          text: "19 nouvelles séances scientifiques pour atteindre 200 au total : Norvégien 4×4 (Helgerud), Tabata, R-Pace (Daniels), CV Tinman, Over/Under, Canova Progressive, Hanson Strength Run, Tempo avec surges, acclimatation chaleur, Train Low, DFA alpha1, durabilité cardiaque, ultra time-on-feet, broken race, Canova extensif, circuit pliométrique, Hudson 1-2-3-2-1, test 3min all-out, test par paliers",
+          textEn: "19 new science-based workouts to reach 200 total: Norwegian 4×4 (Helgerud), Tabata, R-Pace (Daniels), CV Tinman, Over/Under, Canova Progressive, Hanson Strength Run, Tempo with surges, heat acclimatization, Train Low, DFA alpha1, cardiac drift durability, ultra time-on-feet, broken race, Canova extensive, plyometric circuit, Hudson 1-2-3-2-1, 3-min all-out test, lactate step test",
+          category: "Séances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "2 nouveaux termes au glossaire : Vitesse Critique (CV) et Surge, avec auto-linking dans les descriptions de séances",
+          textEn: "2 new glossary terms: Critical Velocity (CV) and Surge, with auto-linking in workout descriptions",
+          category: "Glossaire",
+          categoryEn: "Glossary",
+        },
       ],
       changed: [
         {

@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-03-19
+
+### Added
+
+#### Workouts
+- 19 new science-based workouts to reach 200 total: Norwegian 4×4 (Helgerud), Tabata, R-Pace (Daniels), CV Tinman, Over/Under, Canova Progressive, Hanson Strength Run, Tempo with surges, heat acclimatization, Train Low, DFA alpha1, cardiac drift durability, ultra time-on-feet, broken race, Canova extensive, plyometric circuit, Hudson 1-2-3-2-1, 3-min all-out test, lactate step test
+
+#### Glossary
+- 2 new glossary terms: Critical Velocity (CV) and Surge, with auto-linking in workout descriptions
+
+#### Plans
+- Interactive calendar view for training plans with week × 7 days grid, mobile week navigation, and colored phases
+- Native drag & drop to move sessions between days (desktop and mobile with visual ghost)
+- Workout library side panel to add sessions via drag (desktop/tablet) or tap (mobile) with search and category filters
+- Free plan mode: create a blank plan (name + week count) and place workouts manually
+- Plan import/export as JSON to share or backup your plans
+- Delete sessions from both calendar and list views with trash button
+
+#### UX
+- Inline "+" buttons in each day cell (mobile) and each week (list) to quickly add sessions
+- Contextual hints in library panel: drag, click or tap depending on display mode
+
+### Changed
+
+- Quiz and plan creation refactored to full-viewport steps (one question per view, no scrolling on mobile)
+- Delete plan button replaced by action menu (export JSON + delete)
+- Homepage section spacing reduced for better visual rhythm
+- Background preloading of sidebar pages for instant navigation
+- 5-plan limit indicator with hidden creation buttons when limit is reached
+
+### Fixed
+
+- Dark mode compatibility: timeline colors, segments without zones, and recovery sessions
+- Mobile navigation flash eliminated by deferring sidebar close to after page render
+- Fixed session index in sorted list view (delete/replace targeted the wrong element)
+
 ## [0.1.6] - 2026-03-17
 
 ### Added
