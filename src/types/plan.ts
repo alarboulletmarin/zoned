@@ -8,7 +8,7 @@ export type RaceDistance = "5K" | "10K" | "semi" | "marathon" | "trail_short" | 
 
 export interface PlanConfig {
   id: string;
-  planMode?: "assisted" | "free"; // undefined = "assisted" for backward compat
+  planMode?: "assisted" | "free" | "prebuilt"; // undefined = "assisted" for backward compat
   planName?: string; // user-given name for free plans
   raceDistance?: RaceDistance;
   raceDate?: string; // ISO date
@@ -20,6 +20,8 @@ export interface PlanConfig {
   longRunDay?: number; // 0=Mon ... 6=Sun
   vma?: number;
   createdAt: string;
+  startDate?: string; // ISO date, optional
+  endDate?: string;   // ISO date, optional (auto-calculated from startDate + totalWeeks)
 }
 
 // ── Assisted plan config (all race fields required) ─────────────────

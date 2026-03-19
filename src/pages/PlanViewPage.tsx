@@ -651,17 +651,12 @@ export function PlanViewPage() {
                 workoutNames={workoutNames}
                 currentWeek={currentWeek}
                 isEn={isEn}
-                onSessionClick={(weekNumber, sessionIndex, workoutId) => {
-                  const week = plan.weeks.find(w => w.weekNumber === weekNumber);
-                  if (!week) return;
-                  const session = week.sessions[sessionIndex];
-                  if (!session) return;
-                  setSwapTarget({
-                    weekNumber,
-                    sessionIndex,
-                    workoutId,
-                    sessionType: session.sessionType,
-                  });
+                onSessionClick={(_weekNumber, _sessionIndex, workoutId) => {
+                  if (workoutId && workoutId !== "__race_day__") {
+                    navigate(`/workout/${workoutId}`, {
+                      state: { from: "plan", planId: plan.id, planName: isEn ? plan.nameEn : plan.name },
+                    });
+                  }
                 }}
                 onSessionMove={handleSessionMove}
                 onSessionDelete={handleSessionDelete}

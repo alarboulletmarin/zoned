@@ -19,6 +19,7 @@ export function FreePlanCreatePage() {
 
   const [name, setName] = useState("");
   const [weeks, setWeeks] = useState(DEFAULT_WEEKS);
+  const [startDate, setStartDate] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const canCreate = getAllPlans().length < 5;
@@ -36,7 +37,7 @@ export function FreePlanCreatePage() {
       return;
     }
 
-    const plan = createFreePlan(name.trim(), weeks);
+    const plan = createFreePlan(name.trim(), weeks, startDate || undefined);
     savePlan(plan);
     navigate(`/plan/${plan.id}`);
   };
@@ -139,6 +140,30 @@ export function FreePlanCreatePage() {
                   {MIN_WEEKS} - {MAX_WEEKS}{" "}
                   {isEn ? "weeks" : "semaines"}
                 </p>
+              </div>
+
+              {/* Optional dates */}
+              <div>
+                <label htmlFor="plan-start" className="text-sm font-medium mb-2 block">
+                  {isEn ? "Start date (optional)" : "Date de d\u00e9but (optionnel)"}
+                </label>
+                <input
+                  id="plan-start"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                {startDate && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {isEn ? "End date" : "Date de fin"} :{" "}
+                    {(() => {
+                      const d = new Date(startDate);
+                      d.setDate(d.getDate() + weeks * 7);
+                      return d.toLocaleDateString(isEn ? "en-US" : "fr-FR");
+                    })()}
+                  </p>
+                )}
               </div>
             </CardContent>
           </Card>

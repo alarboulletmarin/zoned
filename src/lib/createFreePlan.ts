@@ -47,7 +47,7 @@ function getPhaseForWeek(weekNumber: number, phases: PhaseRange[]): TrainingPhas
   return "base";
 }
 
-export function createFreePlan(name: string, totalWeeks: number): TrainingPlan {
+export function createFreePlan(name: string, totalWeeks: number, startDate?: string): TrainingPlan {
   const id = crypto.randomUUID();
   const config: PlanConfig = {
     id,
@@ -55,6 +55,14 @@ export function createFreePlan(name: string, totalWeeks: number): TrainingPlan {
     daysPerWeek: 7,
     planName: name,
     createdAt: new Date().toISOString(),
+    ...(startDate && {
+      startDate,
+      endDate: (() => {
+        const d = new Date(startDate);
+        d.setDate(d.getDate() + totalWeeks * 7);
+        return d.toISOString().split("T")[0];
+      })(),
+    }),
   };
 
   const phases = calculateFreePhases(totalWeeks);

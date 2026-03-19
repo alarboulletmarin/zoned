@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, Zap, CalendarRange } from "@/components/icons";
+import { ArrowLeft, Zap, CalendarRange, BookOpen } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
@@ -21,7 +21,7 @@ export function PlanNewPage() {
         canonical="/plan/new"
       />
       <div className="py-8">
-        <div className="max-w-2xl mx-auto space-y-6">
+        <div className="max-w-4xl mx-auto space-y-6">
           {/* Back */}
           <Button variant="ghost" size="sm" asChild>
             <Link to="/plans">
@@ -43,22 +43,22 @@ export function PlanNewPage() {
           </div>
 
           {/* Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
             {/* Assisted plan */}
             <Link to="/plan/new/assisted" className="block">
               <Card interactive className="h-full cursor-pointer transition-all duration-200 hover:ring-2 hover:ring-primary">
-                <CardContent className="p-6 flex flex-col items-center text-center gap-4">
-                  <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Zap className="size-8 text-primary" />
+                <CardContent className="p-4 sm:p-6 flex items-center gap-4 sm:flex-col sm:text-center">
+                  <div className="size-10 sm:size-16 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                    <Zap className="size-5 sm:size-8 text-primary" />
                   </div>
-                  <div className="space-y-2">
-                    <h2 className="text-lg font-semibold">
-                      {isEn ? "Assisted plan" : "Plan assist\u00e9"}
+                  <div className="space-y-1 sm:space-y-2 min-w-0">
+                    <h2 className="text-base sm:text-lg font-semibold">
+                      {isEn ? "Assisted plan" : "Plan assisté"}
                     </h2>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       {isEn
-                        ? "Answer a few questions and a plan is generated automatically for your goal"
-                        : "R\u00e9pondez \u00e0 quelques questions et un plan est g\u00e9n\u00e9r\u00e9 automatiquement pour votre objectif"}
+                        ? "Answer a few questions and get an auto-generated plan"
+                        : "Répondez à quelques questions et obtenez un plan généré automatiquement"}
                     </p>
                   </div>
                 </CardContent>
@@ -68,18 +68,39 @@ export function PlanNewPage() {
             {/* Free plan */}
             <Link to="/plan/new/free" className="block">
               <Card interactive className="h-full cursor-pointer transition-all duration-200 hover:ring-2 hover:ring-primary">
-                <CardContent className="p-6 flex flex-col items-center text-center gap-4">
-                  <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center">
-                    <CalendarRange className="size-8 text-primary" />
+                <CardContent className="p-4 sm:p-6 flex items-center gap-4 sm:flex-col sm:text-center">
+                  <div className="size-10 sm:size-16 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                    <CalendarRange className="size-5 sm:size-8 text-primary" />
                   </div>
-                  <div className="space-y-2">
-                    <h2 className="text-lg font-semibold">
+                  <div className="space-y-1 sm:space-y-2 min-w-0">
+                    <h2 className="text-base sm:text-lg font-semibold">
                       {isEn ? "Free plan" : "Plan libre"}
                     </h2>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       {isEn
-                        ? "Create a blank plan and place your workouts manually on a calendar"
-                        : "Cr\u00e9ez un plan vierge et placez vos s\u00e9ances manuellement sur un calendrier"}
+                        ? "Create a blank plan and place workouts manually"
+                        : "Créez un plan vierge et placez vos séances manuellement"}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
+            {/* Pre-built plans */}
+            <Link to="/plan/new/prebuilt" className="block">
+              <Card interactive className="h-full cursor-pointer transition-all duration-200 hover:ring-2 hover:ring-primary">
+                <CardContent className="p-4 sm:p-6 flex items-center gap-4 sm:flex-col sm:text-center">
+                  <div className="size-10 sm:size-16 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                    <BookOpen className="size-5 sm:size-8 text-primary" />
+                  </div>
+                  <div className="space-y-1 sm:space-y-2 min-w-0">
+                    <h2 className="text-base sm:text-lg font-semibold">
+                      {isEn ? "Pre-built plans" : "Plans prêt-à-l'emploi"}
+                    </h2>
+                    <p className="text-xs sm:text-sm text-muted-foreground">
+                      {isEn
+                        ? "Choose a structured plan and start immediately"
+                        : "Choisissez un plan structuré et commencez immédiatement"}
                     </p>
                   </div>
                 </CardContent>

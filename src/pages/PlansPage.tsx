@@ -85,7 +85,7 @@ function PlanCard({
   const planName = isFreePlan
     ? (plan.config.planName || plan.name)
     : (isEn ? plan.nameEn : plan.name);
-  const currentWeek = getCurrentWeek(plan.config.createdAt);
+  const currentWeek = getCurrentWeek(plan.config.startDate || plan.config.createdAt);
   const currentPhase = getCurrentPhase(currentWeek, plan.phases);
   const progressPercent = Math.min(
     Math.max((currentWeek / plan.totalWeeks) * 100, 0),
@@ -107,6 +107,10 @@ function PlanCard({
           {raceMeta ? (
             <Badge variant="default" className="shrink-0">
               {isEn ? raceMeta.labelEn : raceMeta.label}
+            </Badge>
+          ) : plan.config.planMode === "prebuilt" ? (
+            <Badge variant="secondary" className="shrink-0">
+              {isEn ? "Pre-built" : "Pr\u00e9-construit"}
             </Badge>
           ) : (
             <Badge variant="secondary" className="shrink-0">
@@ -133,6 +137,12 @@ function PlanCard({
             <span className="flex items-center gap-1">
               <Calendar className="size-3.5" />
               {formatDate(plan.config.createdAt, isEn)}
+            </span>
+          )}
+          {plan.config.startDate && (
+            <span className="text-xs text-muted-foreground">
+              {new Date(plan.config.startDate).toLocaleDateString(isEn ? "en-US" : "fr-FR", { day: "numeric", month: "short" })}
+              {plan.config.endDate && ` \u2192 ${new Date(plan.config.endDate).toLocaleDateString(isEn ? "en-US" : "fr-FR", { day: "numeric", month: "short" })}`}
             </span>
           )}
         </CardDescription>
