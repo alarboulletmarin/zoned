@@ -66,6 +66,18 @@ export const changelogVersions: ChangelogVersion[] = [
           category: "Glossaire",
           categoryEn: "Glossary",
         },
+        {
+          text: "Filtre favoris dans le panel bibliothèque des plans avec message d'état vide adapté",
+          textEn: "Favorites filter in plan workout library panel with adapted empty state message",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Phases d'entraînement et semaines de récupération dans les plans libres (Base, Build, Peak, Taper)",
+          textEn: "Training phases and recovery weeks in free plans (Base, Build, Peak, Taper)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
       ],
       changed: [
         {
