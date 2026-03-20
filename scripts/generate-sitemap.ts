@@ -64,10 +64,37 @@ async function getGlossaryTermIds(): Promise<string[]> {
   return ids;
 }
 
+function getCollectionSlugs(): string[] {
+  return [
+    "debuter-le-running", "anti-stress", "retour-de-blessure", "post-course",
+    "pre-course", "séances-mythiques", "objectif-5k", "objectif-10k",
+    "objectif-semi", "objectif-marathon", "objectif-ultra", "progresser-vma",
+  ];
+}
+
+function getPrebuiltPlanSlugs(): string[] {
+  return [
+    "5k-debutant", "5k-intermediaire", "10k-debutant", "10k-intermediaire",
+    "semi-marathon", "marathon", "construction-base", "retour-de-blessure",
+  ];
+}
+
+function getCalculatorPaths(): string[] {
+  return [
+    "/calculateurs/zones", "/calculateurs/allures", "/calculateurs/vma",
+    "/calculateurs/convertisseur", "/calculateurs/table-allures",
+    "/calculateurs/tapis-roulant", "/calculateurs/splits",
+    "/calculateurs/equivalence", "/calculateurs/age-graded",
+  ];
+}
+
 async function generateSitemap(): Promise<string> {
   const workoutIds = getWorkoutIds();
   const articleSlugs = getArticleSlugs();
   const glossaryTermIds = await getGlossaryTermIds();
+  const collectionSlugs = getCollectionSlugs();
+  const prebuiltPlanSlugs = getPrebuiltPlanSlugs();
+  const calculatorPaths = getCalculatorPaths();
   const today = new Date().toISOString().split("T")[0];
 
   const urls: { loc: string; priority: string; changefreq: string }[] = [
@@ -80,11 +107,29 @@ async function generateSitemap(): Promise<string> {
     { loc: "/about", priority: "0.5", changefreq: "monthly" },
     { loc: "/collections", priority: "0.6", changefreq: "monthly" },
     { loc: "/calculateurs", priority: "0.6", changefreq: "monthly" },
+    { loc: "/methodology", priority: "0.7", changefreq: "monthly" },
+    { loc: "/guides", priority: "0.7", changefreq: "monthly" },
+    { loc: "/plan/new/prebuilt", priority: "0.6", changefreq: "monthly" },
     // Guide pages
     { loc: "/guides/nutrition", priority: "0.7", changefreq: "monthly" },
     { loc: "/guides/race-prep", priority: "0.7", changefreq: "monthly" },
     { loc: "/guides/warmup", priority: "0.7", changefreq: "monthly" },
   ];
+
+  // Calculators
+  for (const path of calculatorPaths) {
+    urls.push({ loc: path, priority: "0.7", changefreq: "monthly" });
+  }
+
+  // Collections
+  for (const slug of collectionSlugs) {
+    urls.push({ loc: `/collections/${slug}`, priority: "0.6", changefreq: "monthly" });
+  }
+
+  // Prebuilt plans
+  for (const slug of prebuiltPlanSlugs) {
+    urls.push({ loc: `/plan/prebuilt/${slug}`, priority: "0.6", changefreq: "monthly" });
+  }
 
   // Articles
   for (const slug of articleSlugs) {
