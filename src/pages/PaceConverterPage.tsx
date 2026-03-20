@@ -205,6 +205,15 @@ export function PaceConverterPage() {
             : "Convertissez entre min/km, km/h et min/mile en temps réel. Voyez dans quelle zone d'entraînement tombe votre allure."
         }
         canonical="/calculateurs/convertisseur"
+        jsonLd={{
+          "@type": "WebApplication",
+          name: isEn ? "Pace Converter" : "Convertisseur d'allures",
+          description: isEn
+            ? "Convert between min/km, km/h and min/mile in real time"
+            : "Convertissez entre min/km, km/h et min/mile en temps réel",
+          url: "https://zoned.run/calculateurs/convertisseur",
+          applicationCategory: "SportsApplication",
+        }}
       />
       <div className="py-8">
         {/* Header */}

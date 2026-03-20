@@ -155,6 +155,15 @@ export function SplitGeneratorPage() {
             : "Générez vos temps de passage par km pour votre objectif chrono avec des stratégies de splits réguliers, négatifs ou positifs."
         }
         canonical="/calculateurs/splits"
+        jsonLd={{
+          "@type": "WebApplication",
+          name: isEn ? "Split Generator" : "Générateur de Splits",
+          description: isEn
+            ? "Generate per-km splits for your target race time with even, negative, or positive split strategies"
+            : "Générez vos temps de passage par km avec des stratégies de splits réguliers, négatifs ou positifs",
+          url: "https://zoned.run/calculateurs/splits",
+          applicationCategory: "SportsApplication",
+        }}
       />
       <div className="py-8 max-w-2xl mx-auto space-y-6">
         {/* Header */}
