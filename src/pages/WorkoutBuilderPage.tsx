@@ -1,14 +1,16 @@
 import { useState, useCallback, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight, MoreHorizontal } from "@/components/icons";
+import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { SEOHead } from "@/components/seo";
 import { BlockEditor } from "@/components/domain/contribute/BlockEditor";
 import { SessionTimeline } from "@/components/visualization/SessionTimeline";
@@ -121,6 +123,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
     main: false,
     cooldown: false,
   });
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const canSave = workout.name.trim().length > 0;
 
@@ -136,8 +139,8 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
         typicalDuration: { min: Math.max(totalMin - 5, 0), max: totalMin + 5 },
       };
       saveCustomWorkout(updated);
+      setWorkout(updated);
       toast.success(isEn ? "Workout saved" : "Séance sauvegardée");
-      navigate("/workout/builder");
     } catch {
       toast.error(isEn ? "Maximum 20 custom workouts reached" : "Maximum de 20 séances personnalisées atteint");
     }
@@ -238,22 +241,14 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
             </Button>
             {isSaved && <ExportMenu workout={workout} />}
             {isSaved && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="rounded-full">
-                    <MoreHorizontal className="size-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem
-                    onClick={handleDelete}
-                    className="text-destructive focus:text-destructive"
-                  >
-                    <Trash2 className="size-4" />
-                    {isEn ? "Delete workout" : "Supprimer la séance"}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Button
+                variant="destructive"
+                className="rounded-full px-5 py-2.5 h-auto font-bold"
+                onClick={() => setShowDeleteConfirm(true)}
+              >
+                <Trash2 className="size-4 mr-2" />
+                {isEn ? "Delete" : "Supprimer"}
+              </Button>
             )}
           </div>
         </div>
@@ -312,6 +307,31 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
           );
         })}
       </div>
+
+      {/* Delete Confirmation */}
+      <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {isEn ? "Delete this workout?" : "Supprimer cette séance ?"}
+            </DialogTitle>
+            <DialogDescription>
+              {isEn
+                ? "This action cannot be undone. The workout will be permanently deleted."
+                : "Cette action est irréversible. La séance sera définitivement supprimée."}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDeleteConfirm(false)}>
+              {isEn ? "Cancel" : "Annuler"}
+            </Button>
+            <Button variant="destructive" onClick={handleDelete}>
+              <Trash2 className="size-4" />
+              {isEn ? "Delete" : "Supprimer"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
