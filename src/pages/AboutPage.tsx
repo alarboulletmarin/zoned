@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { GitlabIcon, Shield, Code, Sparkles, ExternalLink, Mail } from "@/components/icons";
+import { GitlabIcon, Shield, Code, Sparkles, ExternalLink } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
 
 export function AboutPage() {
@@ -75,14 +75,6 @@ export function AboutPage() {
                 </p>
               </div>
               <div className="flex flex-row md:flex-col gap-4 md:gap-3 md:justify-center shrink-0">
-                <a
-                  href="mailto:contact@zoned.run"
-                  className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <Mail className="size-4" />
-                  <span className="hidden sm:inline">contact@zoned.run</span>
-                  <span className="sm:hidden">Email</span>
-                </a>
                 <a
                   href="https://www.strava.com/athletes/115001213"
                   target="_blank"
