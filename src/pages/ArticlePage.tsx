@@ -372,6 +372,10 @@ export function ArticlePage() {
             "@type": "Article",
             headline: title,
             description: truncatedDescription,
+            author: { "@type": "Person", name: "Andrea Larboullet-Marin" },
+            publisher: { "@type": "Organization", name: "Zoned", url: "https://zoned.run" },
+            datePublished: "2026-03-01",
+            dateModified: "2026-03-20",
           },
           {
             "@type": "BreadcrumbList",
