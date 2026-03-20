@@ -58,6 +58,7 @@ interface PlanCalendarProps {
   ) => void;
   onSessionDelete?: (weekNumber: number, sessionIndex: number) => void;
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
+  onCrossTrainingAdd?: (type: string, label: string, weekNumber: number, day: number) => void;
   /** Mobile: open the workout panel for a specific day */
   onAddToDay?: (weekNumber: number, day: number) => void;
 }
@@ -73,6 +74,7 @@ export function PlanCalendar({
   onSessionMove,
   onSessionDelete,
   onWorkoutAdd,
+  onCrossTrainingAdd,
   onAddToDay,
 }: PlanCalendarProps) {
   const dayHeaders = isEn ? DAY_HEADERS_EN : DAY_HEADERS_FR;
@@ -151,6 +153,15 @@ export function PlanCalendar({
       e.preventDefault();
       setDropTarget(null);
 
+      // Check if this is a cross-training drop
+      const ctType = e.dataTransfer.getData("cross-training-type");
+      if (ctType && onCrossTrainingAdd) {
+        const ctLabel = e.dataTransfer.getData("cross-training-label") || ctType;
+        onCrossTrainingAdd(ctType, ctLabel, weekNumber, day);
+        setDraggedSession(null);
+        return;
+      }
+
       // Check if this is a drop from the workout library panel
       const workoutId = e.dataTransfer.getData("workout-id");
       if (workoutId && onWorkoutAdd) {
@@ -169,7 +180,7 @@ export function PlanCalendar({
       onSessionMove(draggedSession.weekNumber, draggedSession.sessionIndex, weekNumber, day);
       setDraggedSession(null);
     },
-    [draggedSession, onSessionMove, onWorkoutAdd, plan.weeks],
+    [draggedSession, onSessionMove, onWorkoutAdd, onCrossTrainingAdd, plan.weeks],
   );
 
   const handleDragEnd = useCallback(() => {

@@ -264,11 +264,20 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
             {CROSS_TRAINING_ITEMS.map((item) => (
               <div
                 key={item.id}
+                draggable={!!inline}
+                onDragStart={inline ? (e) => {
+                  e.dataTransfer.effectAllowed = "copyMove";
+                  e.dataTransfer.setData("cross-training-type", item.type);
+                  e.dataTransfer.setData("cross-training-label", isEn ? item.labelEn : item.labelFr);
+                } : undefined}
                 onClick={() => {
                   onSelectCrossTraining?.(item.type, item.defaultDuration);
                   if (!inline) onClose();
                 }}
-                className="cursor-pointer rounded-lg border bg-card p-2.5 hover:bg-accent/50 transition-all select-none"
+                className={cn(
+                  inline ? "cursor-grab active:cursor-grabbing" : "cursor-pointer active:scale-95",
+                  "rounded-lg border bg-card p-2.5 hover:bg-accent/50 transition-all select-none"
+                )}
               >
                 <div className="flex items-center gap-2">
                   <span className="size-2 rounded-full shrink-0 bg-muted-foreground/40" />

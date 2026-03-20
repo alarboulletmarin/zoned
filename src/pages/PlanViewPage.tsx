@@ -39,7 +39,7 @@ import {
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { usePlan } from "@/hooks/usePlans";
-import { deletePlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan } from "@/lib/planStorage";
+import { deletePlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan, addCrossTraining } from "@/lib/planStorage";
 import { getWorkoutById } from "@/data/workouts";
 import { exportPlanToICS, exportPlanToPDF } from "@/lib/export";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
@@ -580,6 +580,19 @@ export function PlanViewPage() {
                 onSessionMove={handleSessionMove}
                 onSessionDelete={handleSessionDelete}
                 onWorkoutAdd={handleWorkoutAdd}
+                onCrossTrainingAdd={(type, label, weekNumber, day) => {
+                  if (!plan) return;
+                  addCrossTraining(plan.id, weekNumber, {
+                    id: `ct-${Date.now().toString(36)}`,
+                    dayOfWeek: day,
+                    activityType: type as import("@/types/plan").CrossTrainingType,
+                    durationMin: 0,
+                    description: label,
+                    intensity: "moderate",
+                  });
+                  reloadPlan();
+                  toast.success(isEn ? "Activity added" : "Activité ajoutée");
+                }}
                 onAddToDay={(weekNumber, day) => {
                   setAddTarget({ weekNumber, day });
                   setShowWorkoutPanel(true);
