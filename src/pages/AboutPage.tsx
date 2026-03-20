@@ -155,18 +155,17 @@ export function AboutPage() {
           <CardDescription>{t("donate.description")}</CardDescription>
         </CardHeader>
         <CardContent>
-          <Button variant="outline" size="sm" asChild>
-            <a
-              href="https://ko-fi.com/T6T01WC5ZC"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2"
-            >
-              <Heart className="size-4" />
-              {t("donate.button")}
-              <ExternalLink className="size-3" />
-            </a>
-          </Button>
+          <a
+            href="https://ko-fi.com/T6T01WC5ZC"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="https://storage.ko-fi.com/cdn/kofi6.png?v=6"
+              alt="Buy Me a Coffee at ko-fi.com"
+              className="h-9 border-0"
+            />
+          </a>
         </CardContent>
       </Card>
     </div>
