@@ -87,13 +87,11 @@ interface PlanWorkoutPanelProps {
   inline?: boolean;
   /** Mobile: tap a workout to select it, then tap a calendar cell to place it */
   onSelectWorkout?: (workoutId: string) => void;
-  /** Called when a cross-training activity is selected */
-  onSelectCrossTraining?: (type: string, durationMin: number) => void;
 }
 
 // ── Component ─────────────────────────────────────────────────────
 
-export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkout, onSelectCrossTraining }: PlanWorkoutPanelProps) {
+export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkout }: PlanWorkoutPanelProps) {
   const [allWorkouts, setAllWorkouts] = useState<WorkoutTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -267,11 +265,12 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
                 draggable={!!inline}
                 onDragStart={inline ? (e) => {
                   e.dataTransfer.effectAllowed = "copyMove";
-                  e.dataTransfer.setData("cross-training-type", item.type);
-                  e.dataTransfer.setData("cross-training-label", isEn ? item.labelEn : item.labelFr);
+                  e.dataTransfer.setData("workout-id", `__activity_${item.type}__`);
                 } : undefined}
                 onClick={() => {
-                  onSelectCrossTraining?.(item.type, item.defaultDuration);
+                  if (onSelectWorkout) {
+                    onSelectWorkout(`__activity_${item.type}__`);
+                  }
                   if (!inline) onClose();
                 }}
                 className={cn(

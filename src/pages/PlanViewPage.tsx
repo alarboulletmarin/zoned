@@ -39,7 +39,7 @@ import {
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { usePlan } from "@/hooks/usePlans";
-import { deletePlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan, addCrossTraining } from "@/lib/planStorage";
+import { deletePlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan } from "@/lib/planStorage";
 import { getWorkoutById } from "@/data/workouts";
 import { exportPlanToICS, exportPlanToPDF } from "@/lib/export";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
@@ -158,6 +158,18 @@ export function PlanViewPage() {
           templates[wid] = workout;
         }
       }
+      // Add activity labels
+      const activityLabels: Record<string, { fr: string; en: string }> = {
+        __activity_strength__: { fr: "Renforcement", en: "Strength" },
+        __activity_cycling__: { fr: "Vélo", en: "Cycling" },
+        __activity_swimming__: { fr: "Natation", en: "Swimming" },
+        __activity_yoga__: { fr: "Yoga", en: "Yoga" },
+        __activity_rest_day__: { fr: "Repos actif", en: "Active Rest" },
+        __activity_cross_training__: { fr: "Autre activité", en: "Other Activity" },
+      };
+      for (const [aid, labels] of Object.entries(activityLabels)) {
+        names[aid] = isEn ? labels.en : labels.fr;
+      }
       setWorkoutNames(names);
       setWorkoutTemplates(templates);
     });
@@ -271,6 +283,26 @@ export function PlanViewPage() {
 
   const handleWorkoutAdd = useCallback(async (workoutId: string, weekNumber: number, day: number) => {
     if (!plan) return;
+    // Handle cross-training activities (__activity_strength__, etc.)
+    const activityMatch = workoutId.match(/^__activity_(\w+)__$/);
+    if (activityMatch) {
+      const activityType = activityMatch[1];
+      const week = plan.weeks.find((w) => w.weekNumber === weekNumber);
+      if (!week) return;
+      week.sessions.push({
+        dayOfWeek: day,
+        workoutId,
+        sessionType: activityType as import("@/types").SessionType,
+        isKeySession: false,
+        estimatedDurationMin: 0,
+      });
+      week.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+      savePlan(plan);
+      reloadPlan();
+      toast.success(isEn ? "Activity added" : "Activit\u00e9 ajout\u00e9e");
+      return;
+    }
+
     const success = await addSessionToPlan(plan.id, weekNumber, workoutId, day);
     if (success) {
       reloadPlan();
@@ -571,7 +603,7 @@ export function PlanViewPage() {
                 currentWeek={currentWeek}
                 isEn={isEn}
                 onSessionClick={(_weekNumber, _sessionIndex, workoutId) => {
-                  if (workoutId && workoutId !== "__race_day__") {
+                  if (workoutId && workoutId !== "__race_day__" && !workoutId.startsWith("__activity_")) {
                     navigate(`/workout/${workoutId}`, {
                       state: { from: "plan", planId: plan.id, planName: isEn ? plan.nameEn : plan.name },
                     });
@@ -580,19 +612,6 @@ export function PlanViewPage() {
                 onSessionMove={handleSessionMove}
                 onSessionDelete={handleSessionDelete}
                 onWorkoutAdd={handleWorkoutAdd}
-                onCrossTrainingAdd={(type, label, weekNumber, day) => {
-                  if (!plan) return;
-                  addCrossTraining(plan.id, weekNumber, {
-                    id: `ct-${Date.now().toString(36)}`,
-                    dayOfWeek: day,
-                    activityType: type as import("@/types/plan").CrossTrainingType,
-                    durationMin: 0,
-                    description: label,
-                    intensity: "moderate",
-                  });
-                  reloadPlan();
-                  toast.success(isEn ? "Activity added" : "Activité ajoutée");
-                }}
                 onAddToDay={(weekNumber, day) => {
                   setAddTarget({ weekNumber, day });
                   setShowWorkoutPanel(true);
@@ -733,6 +752,10 @@ export function PlanViewPage() {
                                       {isEn ? "Race Day!" : "Jour de course !"}
                                     </span>
                                   </div>
+                                ) : session.workoutId.startsWith("__activity_") ? (
+                                  <span className="text-sm font-medium text-muted-foreground">
+                                    {workoutNames[session.workoutId] || session.workoutId}
+                                  </span>
                                 ) : (
                                   <>
                                     <Link
@@ -762,7 +785,7 @@ export function PlanViewPage() {
                                     {isEn ? sessionLabel.en : sessionLabel.fr}
                                   </Badge>
                                 )}
-                                {!isRaceDay && (
+                                {!isRaceDay && !session.workoutId.startsWith("__activity_") && (
                                   <span
                                     className="text-xs text-muted-foreground flex items-center gap-1"
                                     title={
@@ -821,24 +844,6 @@ export function PlanViewPage() {
                         });
                       })()
                     )}
-                    {/* Cross-training activities */}
-                    {(week.crossTraining || []).map((ct) => (
-                      <div
-                        key={ct.id}
-                        className="flex items-center gap-3 rounded-lg p-3 bg-muted/50"
-                      >
-                        <div className="flex-1 min-w-0">
-                          <span className="text-sm font-medium text-muted-foreground">
-                            {ct.description}
-                          </span>
-                        </div>
-                        <Badge variant="outline" className="text-xs text-muted-foreground">
-                          {isEn
-                            ? (ct.activityType === "strength" ? "Strength" : ct.activityType === "cycling" ? "Cycling" : ct.activityType === "swimming" ? "Swimming" : ct.activityType === "yoga" ? "Yoga" : ct.activityType === "rest" ? "Rest" : "Other")
-                            : (ct.activityType === "strength" ? "Renfo" : ct.activityType === "cycling" ? "Vélo" : ct.activityType === "swimming" ? "Natation" : ct.activityType === "yoga" ? "Yoga" : ct.activityType === "rest" ? "Repos" : "Autre")}
-                        </Badge>
-                      </div>
-                    ))}
                     {/* Mobile: add session button */}
                     <button
                       type="button"

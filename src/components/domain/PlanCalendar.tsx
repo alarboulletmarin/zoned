@@ -2,7 +2,7 @@ import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Star, Flag, Clock, Trash2 } from "@/components/icons";
 import { PHASE_META } from "@/types/plan";
-import type { TrainingPlan, PlanSession, CrossTrainingSession } from "@/types/plan";
+import type { TrainingPlan, PlanSession } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 
 // ── Color maps ──────────────────────────────────────────────────────
@@ -18,15 +18,12 @@ const SESSION_COLORS: Record<string, string> = {
   fartlek: "#a855f7",
   hills: "#22c55e",
   race_specific: "#f59e0b",
-};
-
-const CROSS_TRAINING_LABELS: Record<string, { fr: string; en: string }> = {
-  strength: { fr: "Renfo", en: "Strength" },
-  cycling: { fr: "Vélo", en: "Cycling" },
-  swimming: { fr: "Natation", en: "Swimming" },
-  yoga: { fr: "Yoga", en: "Yoga" },
-  rest: { fr: "Repos", en: "Rest" },
-  other: { fr: "Autre", en: "Other" },
+  strength: "#78716c",
+  cycling: "#06b6d4",
+  swimming: "#0ea5e9",
+  yoga: "#d946ef",
+  rest_day: "#a1a1aa",
+  cross_training: "#6b7280",
 };
 
 const PHASE_BG: Record<string, string> = {
@@ -58,7 +55,6 @@ interface PlanCalendarProps {
   ) => void;
   onSessionDelete?: (weekNumber: number, sessionIndex: number) => void;
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
-  onCrossTrainingAdd?: (type: string, label: string, weekNumber: number, day: number) => void;
   /** Mobile: open the workout panel for a specific day */
   onAddToDay?: (weekNumber: number, day: number) => void;
 }
@@ -74,7 +70,6 @@ export function PlanCalendar({
   onSessionMove,
   onSessionDelete,
   onWorkoutAdd,
-  onCrossTrainingAdd,
   onAddToDay,
 }: PlanCalendarProps) {
   const dayHeaders = isEn ? DAY_HEADERS_EN : DAY_HEADERS_FR;
@@ -153,15 +148,6 @@ export function PlanCalendar({
       e.preventDefault();
       setDropTarget(null);
 
-      // Check if this is a cross-training drop
-      const ctType = e.dataTransfer.getData("cross-training-type");
-      if (ctType && onCrossTrainingAdd) {
-        const ctLabel = e.dataTransfer.getData("cross-training-label") || ctType;
-        onCrossTrainingAdd(ctType, ctLabel, weekNumber, day);
-        setDraggedSession(null);
-        return;
-      }
-
       // Check if this is a drop from the workout library panel
       const workoutId = e.dataTransfer.getData("workout-id");
       if (workoutId && onWorkoutAdd) {
@@ -180,7 +166,7 @@ export function PlanCalendar({
       onSessionMove(draggedSession.weekNumber, draggedSession.sessionIndex, weekNumber, day);
       setDraggedSession(null);
     },
-    [draggedSession, onSessionMove, onWorkoutAdd, onCrossTrainingAdd, plan.weeks],
+    [draggedSession, onSessionMove, onWorkoutAdd, plan.weeks],
   );
 
   const handleDragEnd = useCallback(() => {
@@ -419,7 +405,9 @@ export function PlanCalendar({
                                   <span className="text-[10px] leading-tight font-medium line-clamp-2 block">
                                     {sessionName}
                                   </span>
-                                  <span className="text-[9px] text-muted-foreground">{session.estimatedDurationMin}min</span>
+                                  {session.estimatedDurationMin > 0 && (
+                                    <span className="text-[9px] text-muted-foreground">{session.estimatedDurationMin}min</span>
+                                  )}
                                   {onSessionDelete && (
                                     <button
                                       type="button"
@@ -436,16 +424,6 @@ export function PlanCalendar({
                           </div>
                         );
                       })}
-                      {/* Cross-training activities */}
-                      {(mobileWeekData.crossTraining || [])
-                        .filter((ct: CrossTrainingSession) => ct.dayOfWeek === dayIndex)
-                        .map((ct: CrossTrainingSession) => (
-                          <div key={ct.id} className="rounded bg-muted/50 border border-border/30 p-1.5 mb-1">
-                            <span className="text-[10px] leading-tight font-medium line-clamp-1 block text-muted-foreground">
-                              {isEn ? CROSS_TRAINING_LABELS[ct.activityType]?.en : CROSS_TRAINING_LABELS[ct.activityType]?.fr}
-                            </span>
-                          </div>
-                        ))}
                       {sessions.length > 0 && onAddToDay && (
                         <button
                           type="button"
@@ -630,16 +608,6 @@ export function PlanCalendar({
                                 </div>
                               );
                             })}
-                            {/* Cross-training */}
-                            {(week.crossTraining || [])
-                              .filter((ct: CrossTrainingSession) => ct.dayOfWeek === dayIndex)
-                              .map((ct: CrossTrainingSession) => (
-                                <div key={ct.id} className="rounded bg-muted/50 border border-border/30 px-1.5 py-1 text-[10px]">
-                                  <span className="text-muted-foreground font-medium">
-                                    {isEn ? CROSS_TRAINING_LABELS[ct.activityType]?.en : CROSS_TRAINING_LABELS[ct.activityType]?.fr}
-                                  </span>
-                                </div>
-                              ))}
                           </div>
                         )}
                       </td>
@@ -735,10 +703,12 @@ function SessionCell({
         >
           {displayName}
         </span>
-        <span className="text-[10px] text-muted-foreground flex items-center gap-0.5 mt-0.5">
-          <Clock className="size-2.5" />
-          {session.estimatedDurationMin}min
-        </span>
+        {session.estimatedDurationMin > 0 && (
+          <span className="text-[10px] text-muted-foreground flex items-center gap-0.5 mt-0.5">
+            <Clock className="size-2.5" />
+            {session.estimatedDurationMin}min
+          </span>
+        )}
       </button>
     </div>
   );

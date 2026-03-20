@@ -72,6 +72,12 @@ const SESSION_TYPE_LABELS: Record<SessionType, { fr: string; en: string }> = {
   hills: { fr: "Côtes", en: "Hills" },
   fartlek: { fr: "Fartlek", en: "Fartlek" },
   race_specific: { fr: "Spécifique course", en: "Race Specific" },
+  strength: { fr: "Renforcement", en: "Strength" },
+  cycling: { fr: "Vélo", en: "Cycling" },
+  swimming: { fr: "Natation", en: "Swimming" },
+  yoga: { fr: "Yoga", en: "Yoga" },
+  rest_day: { fr: "Repos actif", en: "Active Rest" },
+  cross_training: { fr: "Cross-training", en: "Cross-training" },
 };
 
 const TARGET_SYSTEM_LABELS: Record<TargetSystem, { fr: string; en: string }> = {

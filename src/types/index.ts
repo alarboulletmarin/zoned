@@ -27,7 +27,13 @@ export type SessionType =
   | "long_run"
   | "hills"
   | "fartlek"
-  | "race_specific";
+  | "race_specific"
+  | "strength"
+  | "cycling"
+  | "swimming"
+  | "yoga"
+  | "rest_day"
+  | "cross_training";
 
 // Target System
 export type TargetSystem =
