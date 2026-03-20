@@ -47,15 +47,17 @@ async function generateOgImage() {
       <text x="600" y="320" font-family="system-ui, sans-serif" font-size="72" font-weight="bold" fill="white" text-anchor="middle">Zoned</text>
 
       <!-- Subtitle -->
-      <text x="600" y="400" font-family="system-ui, sans-serif" font-size="32" fill="#94a3b8" text-anchor="middle">Scientific Running Workouts</text>
+      <text x="600" y="400" font-family="system-ui, sans-serif" font-size="32" fill="#94a3b8" text-anchor="middle">Free Structured Running Workouts</text>
 
       <!-- Stats -->
-      <text x="400" y="500" font-family="system-ui, sans-serif" font-size="24" fill="#64748b" text-anchor="middle">140+ Workouts</text>
-      <text x="600" y="500" font-family="system-ui, sans-serif" font-size="24" fill="#64748b" text-anchor="middle">•</text>
-      <text x="800" y="500" font-family="system-ui, sans-serif" font-size="24" fill="#64748b" text-anchor="middle">6 Training Zones</text>
+      <text x="300" y="500" font-family="system-ui, sans-serif" font-size="22" fill="#64748b" text-anchor="middle">200 Workouts</text>
+      <text x="480" y="500" font-family="system-ui, sans-serif" font-size="22" fill="#64748b" text-anchor="middle">•</text>
+      <text x="600" y="500" font-family="system-ui, sans-serif" font-size="22" fill="#64748b" text-anchor="middle">9 Calculators</text>
+      <text x="720" y="500" font-family="system-ui, sans-serif" font-size="22" fill="#64748b" text-anchor="middle">•</text>
+      <text x="900" y="500" font-family="system-ui, sans-serif" font-size="22" fill="#64748b" text-anchor="middle">No Account Needed</text>
 
       <!-- URL -->
-      <text x="600" y="580" font-family="system-ui, sans-serif" font-size="20" fill="#475569" text-anchor="middle">zoned.run</text>
+      <text x="600" y="580" font-family="system-ui, sans-serif" font-size="24" font-weight="bold" fill="#94a3b8" text-anchor="middle">zoned.run</text>
     </svg>
   `;
 
