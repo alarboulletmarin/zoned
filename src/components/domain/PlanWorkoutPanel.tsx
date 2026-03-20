@@ -58,6 +58,23 @@ const FILTERS: FilterDef[] = [
   { key: "race_pace", labelFr: "Allure course", labelEn: "Race Pace", categories: ["race_pace"], dotColor: SESSION_COLORS.race_specific },
   { key: "recovery", labelFr: "R\u00e9cup\u00e9ration", labelEn: "Recovery", categories: ["recovery"], dotColor: SESSION_COLORS.recovery },
   { key: "mixed", labelFr: "Mixte", labelEn: "Mixed", categories: ["mixed", "assessment"], dotColor: "#9ca3af" },
+  { key: "cross_training", labelFr: "Activités", labelEn: "Activities", categories: [], dotColor: "#6b7280" },
+];
+
+interface CrossTrainingItem {
+  id: string;
+  type: string;
+  labelFr: string;
+  labelEn: string;
+  defaultDuration: number;
+}
+
+const CROSS_TRAINING_ITEMS: CrossTrainingItem[] = [
+  { id: "ct-strength", type: "strength", labelFr: "Renforcement musculaire", labelEn: "Strength Training", defaultDuration: 0 },
+  { id: "ct-cycling", type: "cycling", labelFr: "Vélo", labelEn: "Cycling", defaultDuration: 0 },
+  { id: "ct-swimming", type: "swimming", labelFr: "Natation", labelEn: "Swimming", defaultDuration: 0 },
+  { id: "ct-yoga", type: "yoga", labelFr: "Yoga / Stretching", labelEn: "Yoga / Stretching", defaultDuration: 0 },
+  { id: "ct-rest", type: "rest", labelFr: "Repos actif", labelEn: "Active Rest", defaultDuration: 0 },
 ];
 
 // ── Props ─────────────────────────────────────────────────────────
@@ -70,11 +87,13 @@ interface PlanWorkoutPanelProps {
   inline?: boolean;
   /** Mobile: tap a workout to select it, then tap a calendar cell to place it */
   onSelectWorkout?: (workoutId: string) => void;
+  /** Called when a cross-training activity is selected */
+  onSelectCrossTraining?: (type: string, durationMin: number) => void;
 }
 
 // ── Component ─────────────────────────────────────────────────────
 
-export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkout }: PlanWorkoutPanelProps) {
+export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkout, onSelectCrossTraining }: PlanWorkoutPanelProps) {
   const [allWorkouts, setAllWorkouts] = useState<WorkoutTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -240,7 +259,27 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
 
       {/* Results list */}
       <div className="flex-1 overflow-y-auto min-h-0 px-3 py-2 space-y-1.5">
-        {isLoading ? (
+        {activeFilter === "cross_training" ? (
+          <div className="space-y-1.5">
+            {CROSS_TRAINING_ITEMS.map((item) => (
+              <div
+                key={item.id}
+                onClick={() => {
+                  onSelectCrossTraining?.(item.type, item.defaultDuration);
+                  if (!inline) onClose();
+                }}
+                className="cursor-pointer rounded-lg border bg-card p-2.5 hover:bg-accent/50 transition-all select-none"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="size-2 rounded-full shrink-0 bg-muted-foreground/40" />
+                  <span className="text-xs font-medium">
+                    {isEn ? item.labelEn : item.labelFr}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : isLoading ? (
           <div className="flex items-center justify-center py-8">
             <Loader2 className="size-6 animate-spin text-muted-foreground" />
           </div>

@@ -433,7 +433,6 @@ export function PlanCalendar({
                             <span className="text-[10px] leading-tight font-medium line-clamp-1 block text-muted-foreground">
                               {isEn ? CROSS_TRAINING_LABELS[ct.activityType]?.en : CROSS_TRAINING_LABELS[ct.activityType]?.fr}
                             </span>
-                            <span className="text-[9px] text-muted-foreground/70">{ct.durationMin}min</span>
                           </div>
                         ))}
                       {sessions.length > 0 && onAddToDay && (
