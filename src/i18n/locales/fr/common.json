@@ -32,7 +32,7 @@
       "analytics": "Pas de tracking invasif (juste Vercel Analytics anonymisé)"
     },
     "credits": {
-      "title": "Crédits",
+      "title": "Stack technique",
       "description": "Technologies utilisées",
       "framework": "React + Vite + TypeScript",
       "ui": "shadcn/ui + Tailwind CSS",
