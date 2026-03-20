@@ -821,6 +821,24 @@ export function PlanViewPage() {
                         });
                       })()
                     )}
+                    {/* Cross-training activities */}
+                    {(week.crossTraining || []).map((ct) => (
+                      <div
+                        key={ct.id}
+                        className="flex items-center gap-3 rounded-lg p-3 bg-muted/50"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <span className="text-sm font-medium text-muted-foreground">
+                            {ct.description}
+                          </span>
+                        </div>
+                        <Badge variant="outline" className="text-xs text-muted-foreground">
+                          {isEn
+                            ? (ct.activityType === "strength" ? "Strength" : ct.activityType === "cycling" ? "Cycling" : ct.activityType === "swimming" ? "Swimming" : ct.activityType === "yoga" ? "Yoga" : ct.activityType === "rest" ? "Rest" : "Other")
+                            : (ct.activityType === "strength" ? "Renfo" : ct.activityType === "cycling" ? "Vélo" : ct.activityType === "swimming" ? "Natation" : ct.activityType === "yoga" ? "Yoga" : ct.activityType === "rest" ? "Repos" : "Autre")}
+                        </Badge>
+                      </div>
+                    ))}
                     {/* Mobile: add session button */}
                     <button
                       type="button"

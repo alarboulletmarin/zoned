@@ -638,7 +638,6 @@ export function PlanCalendar({
                                   <span className="text-muted-foreground font-medium">
                                     {isEn ? CROSS_TRAINING_LABELS[ct.activityType]?.en : CROSS_TRAINING_LABELS[ct.activityType]?.fr}
                                   </span>
-                                  <span className="text-muted-foreground/70 ml-1">{ct.durationMin}min</span>
                                 </div>
                               ))}
                           </div>
