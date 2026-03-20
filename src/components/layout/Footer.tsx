@@ -26,11 +26,8 @@ export function Footer() {
               {workouts.length} {t("units.workouts")} · {categories.length}{" "}
               {t("units.categories")} · 6 {t("units.zones")}
             </span>
-            <span className="text-xs text-muted-foreground hidden md:inline">
-              {t("privacy.footerNote")}{" · "}
-              <Link to="/about" className="hover:text-foreground transition-colors underline-offset-2 hover:underline">
-                {t("nav.about")}
-              </Link>
+            <span className="text-xs text-muted-foreground hidden lg:inline">
+              {t("privacy.footerNote")}
             </span>
           </div>
 
@@ -52,14 +49,6 @@ export function Footer() {
                 <span className="absolute -top-1 -right-2 size-1.5 bg-primary rounded-full" />
               )}
             </Link>
-            <a
-              href="https://ko-fi.com/T6T01WC5ZC"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors hidden sm:inline"
-            >
-              {t("donate.footerLink")}
-            </a>
             <a
               href="https://gitlab.com/alarboulletmarin-oss/zoned"
               target="_blank"
