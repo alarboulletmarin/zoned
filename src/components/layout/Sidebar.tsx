@@ -17,6 +17,7 @@ import {
   Sparkles,
   PanelLeftClose,
   PanelLeftOpen,
+  Plus,
 } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -62,6 +63,7 @@ const navGroups: NavGroup[] = [
     labelKey: "nav.training",
     items: [
       { href: "/library", icon: BookOpen, labelKey: "nav.library" },
+      { href: "/workout/builder", icon: Plus, labelKey: "nav.builder" },
       { href: "/plans", icon: CalendarRange, labelKey: "nav.plans" },
       { href: "/favorites", icon: Heart, labelKey: "nav.favorites" },
       { href: "/calculateurs", icon: Calculator, labelKey: "calculateurs.title" },

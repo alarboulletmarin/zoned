@@ -33,6 +33,7 @@ const STORAGE_KEYS = [
   "zoned-theme",
   "zoned-sidebar-collapsed",
   "zoned-language",
+  "zoned-custom-workouts",
 ] as const;
 
 interface BackupData {

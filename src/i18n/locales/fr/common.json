@@ -121,7 +121,8 @@
     "plans": "Plans",
     "discover": "Découvrir",
     "training": "Entraînement",
-    "methodology": "Méthodologie"
+    "methodology": "Méthodologie",
+    "builder": "Créer une séance"
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",

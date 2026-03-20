@@ -121,7 +121,8 @@
     "plans": "Plans",
     "discover": "Discover",
     "training": "Training",
-    "methodology": "Methodology"
+    "methodology": "Methodology",
+    "builder": "Create Workout"
   },
   "errors": {
     "workoutNotFound": "Workout not found",

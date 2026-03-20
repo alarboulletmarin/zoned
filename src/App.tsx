@@ -50,6 +50,7 @@ const WarmupGuidePage = lazy(() => import("@/pages/WarmupGuidePage").then(m => (
 const PaceConverterPage = lazy(() => import("@/pages/PaceConverterPage").then(m => ({ default: m.PaceConverterPage })));
 const PaceTablePage = lazy(() => import("@/pages/PaceTablePage").then(m => ({ default: m.PaceTablePage })));
 const AgeGradedPage = lazy(() => import("@/pages/AgeGradedPage").then(m => ({ default: m.AgeGradedPage })));
+const WorkoutBuilderPage = lazy(() => import("@/pages/WorkoutBuilderPage").then(m => ({ default: m.WorkoutBuilderPage })));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
 
 // Preload sidebar pages after initial render to eliminate navigation latency
@@ -186,6 +187,8 @@ function App() {
                         <Routes>
                           <Route path="/" element={<HomePage />} />
                           <Route path="/library" element={<LibraryPage />} />
+                          <Route path="/workout/builder" element={<WorkoutBuilderPage />} />
+                          <Route path="/workout/builder/:id" element={<WorkoutBuilderPage />} />
                           <Route path="/workout/:id" element={<WorkoutDetailPage />} />
                           <Route path="/my-zones" element={<MyZonesPage />} />
                           <Route path="/calculateurs" element={<CalculateursPage />} />
