@@ -147,11 +147,14 @@ async function generateSitemap(): Promise<string> {
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${urls
   .map(
     (url) => `  <url>
     <loc>${SITE_URL}${url.loc}</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="${SITE_URL}${url.loc}" />
+    <xhtml:link rel="alternate" hreflang="en" href="${SITE_URL}${url.loc}?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}${url.loc}" />
     <lastmod>${today}</lastmod>
     <changefreq>${url.changefreq}</changefreq>
     <priority>${url.priority}</priority>

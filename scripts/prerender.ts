@@ -64,9 +64,10 @@ function startServer(): Promise<ReturnType<typeof createServer>> {
   });
 }
 
-// Process routes in batches
+// Process routes in batches for a given language
 async function processInBatches(
   routes: string[],
+  lang: "fr" | "en",
   browser: Awaited<ReturnType<typeof puppeteer.launch>>,
   batchSize: number
 ): Promise<{ success: number; failed: number }> {
@@ -76,7 +77,7 @@ async function processInBatches(
   for (let i = 0; i < routes.length; i += batchSize) {
     const batch = routes.slice(i, i + batchSize);
     const results = await Promise.allSettled(
-      batch.map((route) => prerenderRoute(route, browser))
+      batch.map((route) => prerenderRoute(route, lang, browser))
     );
 
     for (const result of results) {
@@ -89,23 +90,24 @@ async function processInBatches(
     }
 
     const progress = Math.min(i + batchSize, routes.length);
-    process.stdout.write(`\r  Progress: ${progress}/${routes.length} routes`);
+    process.stdout.write(`\r  [${lang.toUpperCase()}] Progress: ${progress}/${routes.length} routes`);
   }
 
   console.log();
   return { success, failed };
 }
 
-// Prerender a single route
+// Prerender a single route in a given language
 async function prerenderRoute(
   route: string,
+  lang: "fr" | "en",
   browser: Awaited<ReturnType<typeof puppeteer.launch>>
 ): Promise<void> {
   const page = await browser.newPage();
 
   try {
-    // Set French locale for i18n detection
-    await page.setExtraHTTPHeaders({ "Accept-Language": "fr-FR,fr;q=0.9" });
+    const acceptLang = lang === "fr" ? "fr-FR,fr;q=0.9" : "en-US,en;q=0.9";
+    await page.setExtraHTTPHeaders({ "Accept-Language": acceptLang });
 
     // Block unnecessary resources for speed
     await page.setRequestInterception(true);
@@ -118,7 +120,6 @@ async function prerenderRoute(
       }
     });
 
-    // Set French language in localStorage before page loads
     // i18n detection order: localStorage("zoned-language") → navigator → htmlTag
     await page.evaluateOnNewDocument(() => {
       Object.defineProperty(window, "__prerender_localStorage", { value: {} });
@@ -130,9 +131,9 @@ async function prerenderRoute(
     });
 
     // Set localStorage on the correct origin, then reload
-    await page.evaluate(() => {
-      localStorage.setItem("zoned-language", "fr");
-    });
+    await page.evaluate((l: string) => {
+      localStorage.setItem("zoned-language", l);
+    }, lang);
     await page.goto(`${SITE_URL}${route}`, {
       waitUntil: "networkidle0",
       timeout: 15000,
@@ -141,10 +142,8 @@ async function prerenderRoute(
     // Wait for React lazy-loading, data fetching, and react-helmet-async to flush
     await page.waitForFunction(
       () => {
-        // Check that react-helmet-async has updated the title (not default)
         const title = document.title;
         const hasHelmet = title !== "Zoned - Scientific Running Workouts" || document.querySelector('[data-rh]');
-        // Check that the main content has rendered (no spinner)
         const noSpinner = !document.querySelector('.spinner');
         return hasHelmet || noSpinner;
       },
@@ -154,12 +153,14 @@ async function prerenderRoute(
     });
     await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 300)));
 
-    // Get the full rendered HTML
     const html = await page.content();
 
-    // Write to dist/<route>/index.html
+    // FR: dist/<route>/index.html — EN: dist/<route>/index.en.html
     const outputDir = join(DIST_DIR, route);
-    const outputPath = route === "/" ? join(DIST_DIR, "index.html") : join(outputDir, "index.html");
+    const fileName = lang === "fr" ? "index.html" : "index.en.html";
+    const outputPath = route === "/"
+      ? join(DIST_DIR, fileName)
+      : join(outputDir, fileName);
 
     if (route !== "/") {
       mkdirSync(dirname(outputPath), { recursive: true });
@@ -197,8 +198,17 @@ async function main() {
   console.log(`  Puppeteer launched (concurrency: ${CONCURRENCY})\n`);
 
   try {
-    const { success, failed } = await processInBatches(routes, browser, CONCURRENCY);
-    console.log(`\n✅ Prerendering complete: ${success} success, ${failed} failed`);
+    // Pass 1: French (default)
+    console.log("  Pass 1: French\n");
+    const fr = await processInBatches(routes, "fr", browser, CONCURRENCY);
+
+    // Pass 2: English
+    console.log("\n  Pass 2: English\n");
+    const en = await processInBatches(routes, "en", browser, CONCURRENCY);
+
+    const success = fr.success + en.success;
+    const failed = fr.failed + en.failed;
+    console.log(`\n✅ Prerendering complete: ${success} success, ${failed} failed (${routes.length} FR + ${routes.length} EN)`);
   } finally {
     await browser.close();
     server.close();
