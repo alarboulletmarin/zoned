@@ -108,6 +108,12 @@ export const changelogVersions: ChangelogVersion[] = [
           category: "Fonctionnalité",
           categoryEn: "Feature",
         },
+        {
+          text: "Onboarding première visite : 3 bulles guidées mettant en avant la bibliothèque, le quiz et les plans",
+          textEn: "First-visit onboarding: 3-step guided bubbles highlighting library, quiz, and plans",
+          category: "UX",
+          categoryEn: "UX",
+        },
       ],
       changed: [
         {
@@ -121,6 +127,18 @@ export const changelogVersions: ChangelogVersion[] = [
         {
           text: "Champs de date sur mobile : cibles tactiles de 44px, police text-base pour éviter le zoom iOS, option « Commencer maintenant »",
           textEn: "Date inputs on mobile: adequate touch targets (44px), text-base font to prevent iOS zoom, 'Start now' option for plan dates",
+          category: "Bug",
+          categoryEn: "Bug",
+        },
+        {
+          text: "Filtre de durée étendu à 0-240min pour inclure toutes les séances (les ultra étaient exclues)",
+          textEn: "Duration filter range extended to 0-240min to include all workouts (ultra sessions were excluded)",
+          category: "Bug",
+          categoryEn: "Bug",
+        },
+        {
+          text: "Éditeur de séances : les boutons exporter et supprimer apparaissent immédiatement après la première sauvegarde",
+          textEn: "Workout builder: export and delete buttons now appear immediately after first save",
           category: "Bug",
           categoryEn: "Bug",
         },

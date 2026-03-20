@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - FIT export guide: step-by-step transfer instructions modal after Garmin export, with OS detection and non-Garmin alternatives
 - Quiz improved from 3 to 5 questions: added experience level and weakness, now shows 6 results
 - Cross-training activities (strength, cycling, swimming, yoga, rest) available in plan workout panel as regular sessions
+- First-visit onboarding: 3-step guided bubbles highlighting library, quiz, and plans with progress indicator
 
 ### Changed
 
@@ -34,6 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Date inputs on mobile: larger touch targets (44px minimum), text-base font to prevent iOS zoom, locale-aware lang attribute, "Start now" / "Choose a date" toggle on free plan creation
+- Duration filter range extended to 0-240min to include all workouts (previously 10-180min excluded ultra sessions)
+- Workout builder: export and delete buttons now appear immediately after first save
 
 ## [0.2.1] - 2026-03-19
 
