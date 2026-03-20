@@ -405,7 +405,7 @@ export function PlanCalendar({
                                   <span className="text-[10px] leading-tight font-medium line-clamp-2 block">
                                     {sessionName}
                                   </span>
-                                  {session.estimatedDurationMin > 0 && (
+                                  {session.estimatedDurationMin > 0 && !session.workoutId.startsWith("__activity_") && (
                                     <span className="text-[9px] text-muted-foreground">{session.estimatedDurationMin}min</span>
                                   )}
                                   {onSessionDelete && (
@@ -703,7 +703,7 @@ function SessionCell({
         >
           {displayName}
         </span>
-        {session.estimatedDurationMin > 0 && (
+        {session.estimatedDurationMin > 0 && !session.workoutId.startsWith("__activity_") && (
           <span className="text-[10px] text-muted-foreground flex items-center gap-0.5 mt-0.5">
             <Clock className="size-2.5" />
             {session.estimatedDurationMin}min
