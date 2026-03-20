@@ -20,7 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SEO: enriched Article JSON-LD with author, publisher, datePublished and dateModified
 - SEO: updated default OG image with current stats (200 workouts, 9 calculators, "No Account Needed")
 - SEO: prerender English pages and hreflang alternate links in sitemap
-- About page redesigned with personal section, updated stats (200 workouts, 9 calculators, 8 plans, 16 collections), contact links (email, Strava, GitLab)
+- About page redesigned with personal section, updated stats, contact links (Strava, GitLab)
+- Custom workout builder: create, edit, save and export your own workouts with warm-up, main set and cool-down blocks
+- Custom workouts integrated into library, search, favorites and training plans
+- FIT export guide: step-by-step transfer instructions modal after Garmin export, with OS detection and non-Garmin alternatives
+- Quiz improved from 3 to 5 questions: added experience level and weakness, now shows 6 results
+- Cross-training activities (strength, cycling, swimming, yoga, rest) available in plan workout panel as regular sessions
 
 ### Changed
 

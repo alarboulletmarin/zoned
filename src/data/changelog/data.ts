@@ -74,9 +74,39 @@ export const changelogVersions: ChangelogVersion[] = [
         },
         {
           text: "Page À propos repensée avec section personnelle, stats à jour et liens de contact (email, Strava, GitLab)",
-          textEn: "About page redesigned with personal section, updated stats and contact links (email, Strava, GitLab)",
+          textEn: "About page redesigned with personal section, updated stats and contact links (Strava, GitLab)",
           category: "UX",
           categoryEn: "UX",
+        },
+        {
+          text: "Éditeur de séances personnalisées : créez, modifiez, sauvegardez et exportez vos propres séances",
+          textEn: "Custom workout builder: create, edit, save and export your own workouts",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Séances personnalisées intégrées dans la bibliothèque, la recherche, les favoris et les plans",
+          textEn: "Custom workouts integrated into library, search, favorites and training plans",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Guide de transfert FIT : instructions pas à pas après l'export Garmin, avec détection OS et alternatives non-Garmin",
+          textEn: "FIT export guide: step-by-step transfer instructions after Garmin export with OS detection",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Quiz amélioré de 3 à 5 questions : niveau d'expérience et point faible, 6 résultats affichés",
+          textEn: "Quiz improved from 3 to 5 questions: experience level and weakness, 6 results shown",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Activités cross-training (renforcement, vélo, natation, yoga, repos) dans le panel d'ajout de séances des plans",
+          textEn: "Cross-training activities (strength, cycling, swimming, yoga, rest) available in plan workout panel",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
         },
       ],
       changed: [

@@ -19,6 +19,7 @@ A library of **200 structured running workouts** based on the 6-zone training sy
 - **200 sessions** across 11 categories: recovery, endurance, tempo, threshold, VMA, long run, hills, fartlek, race pace, mixed, assessment
 - **Specialized methods**: Norwegian double threshold, Bangsbo 10-20-30, Billat 30/30, Yasso 800s, Cooper/VAMEVAL tests
 - **Personalized zones**: Based on your FCmax and VMA
+- **Custom workout builder**: Create your own workouts with warm-up, main set, cool-down blocks
 
 ### Calculators
 - **Zone calculator**: HR and pace zones from FCmax or VMA
@@ -36,10 +37,11 @@ A library of **200 structured running workouts** based on the 6-zone training sy
 - **8 prebuilt plans**: Ready-to-use plans for common goals
 - **Free plan mode**: Build your own plan from scratch
 - **Drag-and-drop calendar**: Reorganize sessions visually
+- **Cross-training**: Add strength, cycling, swimming, yoga or rest activities to your plan
 - **Plan export**: PDF and ICS (calendar) formats
 
 ### Discovery & Tools
-- **Quiz**: Find the right workout for your goals and schedule
+- **Quiz**: Find the right workout in 5 questions (goal, time, terrain, experience, weakness)
 - **Random workout**: Discover new sessions with one click
 - **Workout of the Day**: Daily curated workout
 - **Command palette**: Quick search with Cmd+K / Ctrl+K
