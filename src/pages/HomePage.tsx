@@ -19,6 +19,7 @@ import {
 import { WorkoutOfTheDay } from "@/components/domain/WorkoutOfTheDay";
 import { getCollectionBySlug } from "@/data/collections";
 import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
+import { OnboardingCard } from "@/components/domain/OnboardingCard";
 import { SEOHead } from "@/components/seo";
 import { categories, getRandomWorkout } from "@/data/workouts";
 import { useWorkouts, useTips } from "@/hooks";
@@ -101,6 +102,9 @@ export function HomePage() {
         }}
       />
       <div className="space-y-10 md:space-y-16 py-10 md:py-14">
+        {/* Onboarding (first visit only) */}
+        <OnboardingCard />
+
         {/* Hero Section - Left-aligned, editorial */}
         <section className="pt-8 md:pt-16">
           <div className="max-w-3xl">
