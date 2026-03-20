@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight } from "@/components/icons";
@@ -145,6 +145,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
       };
       saveCustomWorkout(updated);
       setWorkout(updated);
+      setIsSaved(true);
       toast.success(isEn ? "Workout saved" : "Séance sauvegardée");
     } catch {
       toast.error(isEn ? "Maximum 20 custom workouts reached" : "Maximum de 20 séances personnalisées atteint");
@@ -193,7 +194,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
     setCollapsed((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  const isSaved = useMemo(() => getCustomWorkouts().some((w) => w.id === workout.id), [workout.id]);
+  const [isSaved, setIsSaved] = useState(() => getCustomWorkouts().some((w) => w.id === workout.id));
 
   const totalMin =
     (workout.warmupTemplate?.reduce((s, b) => s + (b.durationMin || 0), 0) || 0) +
