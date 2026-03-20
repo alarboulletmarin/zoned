@@ -142,6 +142,33 @@ export function AboutPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Support */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-yellow-500/10">
+              <Heart className="size-5 text-yellow-500" />
+            </div>
+            <CardTitle>{t("donate.title")}</CardTitle>
+          </div>
+          <CardDescription>{t("donate.description")}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button variant="outline" size="sm" asChild>
+            <a
+              href="https://ko-fi.com/T6T01WC5ZC"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2"
+            >
+              <Heart className="size-4" />
+              {t("donate.button")}
+              <ExternalLink className="size-3" />
+            </a>
+          </Button>
+        </CardContent>
+      </Card>
     </div>
     </>
   );

@@ -53,6 +53,14 @@ export function Footer() {
               )}
             </Link>
             <a
+              href="https://ko-fi.com/T6T01WC5ZC"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-foreground transition-colors hidden sm:inline"
+            >
+              {t("donate.footerLink")}
+            </a>
+            <a
               href="https://gitlab.com/alarboulletmarin-oss/zoned"
               target="_blank"
               rel="noopener noreferrer"

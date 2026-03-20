@@ -273,6 +273,12 @@
     "explore": "Ouvrir",
     "comingSoon": "Bientôt"
   },
+  "donate": {
+    "title": "Soutenir le projet",
+    "description": "Zoned est 100% gratuit et open source. Si vous trouvez l'application utile, vous pouvez soutenir son développement.",
+    "button": "Soutenir le projet",
+    "footerLink": "Soutenir"
+  },
   "privacy": {
     "free": "100% gratuit",
     "noAccount": "Aucun compte requis",

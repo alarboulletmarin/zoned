@@ -273,6 +273,12 @@
     "explore": "Open",
     "comingSoon": "Coming soon"
   },
+  "donate": {
+    "title": "Support the project",
+    "description": "Zoned is 100% free and open source. If you find the app useful, you can support its development.",
+    "button": "Support the project",
+    "footerLink": "Support"
+  },
   "privacy": {
     "free": "100% free",
     "noAccount": "No account required",
