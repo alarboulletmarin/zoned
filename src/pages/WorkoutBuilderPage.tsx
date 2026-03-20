@@ -1,8 +1,14 @@
 import { useState, useCallback, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight } from "@/components/icons";
+import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight, MoreHorizontal } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { SEOHead } from "@/components/seo";
 import { BlockEditor } from "@/components/domain/contribute/BlockEditor";
 import { SessionTimeline } from "@/components/visualization/SessionTimeline";
@@ -221,18 +227,33 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
             placeholder={isEn ? "Workout name..." : "Nom de la séance..."}
             className="block w-full text-2xl font-bold bg-transparent border-none focus:outline-none placeholder:text-muted-foreground/40"
           />
-          <div className="flex items-center gap-2">
-            <Button onClick={handleSave} disabled={!canSave} size="sm">
-              <Save className="size-4" />
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              onClick={handleSave}
+              disabled={!canSave}
+              className="rounded-full px-5 py-2.5 h-auto font-bold"
+            >
+              <Save className="size-4 mr-2" />
               {isEn ? "Save" : "Enregistrer"}
             </Button>
             {isSaved && <ExportMenu workout={workout} />}
-            <div className="flex-1" />
             {isSaved && (
-              <Button variant="outline" size="sm" onClick={handleDelete} className="text-destructive hover:text-destructive hover:bg-destructive/10">
-                <Trash2 className="size-4" />
-                {isEn ? "Delete" : "Supprimer"}
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="rounded-full">
+                    <MoreHorizontal className="size-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onClick={handleDelete}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    <Trash2 className="size-4" />
+                    {isEn ? "Delete workout" : "Supprimer la séance"}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
           </div>
         </div>
