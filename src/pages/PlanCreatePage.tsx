@@ -345,6 +345,7 @@ export function PlanCreatePage() {
         <div className="w-full max-w-sm mt-6 space-y-3">
           <input
             type="date"
+            lang={isEn ? "en" : "fr"}
             min={minDate}
             value={form.raceDate}
             onChange={(e) =>
@@ -353,7 +354,7 @@ export function PlanCreatePage() {
             onKeyDown={(e) => {
               if (e.key === "Enter" && dateValid) goForward();
             }}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full rounded-md border bg-background px-4 py-3 min-h-[44px] text-base focus:outline-none focus:ring-2 focus:ring-primary"
           />
 
           {form.raceDate && dateValid && (

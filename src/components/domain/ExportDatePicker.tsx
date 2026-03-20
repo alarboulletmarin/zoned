@@ -58,7 +58,7 @@ export function ExportDatePicker({ onSelect, onCancel }: ExportDatePickerProps) 
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              className="w-full px-4 py-3 min-h-[44px] text-base border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
               required
             />
           </div>
@@ -73,7 +73,7 @@ export function ExportDatePicker({ onSelect, onCancel }: ExportDatePickerProps) 
               type="time"
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              className="w-full px-4 py-3 min-h-[44px] text-base border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
               required
             />
           </div>

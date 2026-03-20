@@ -8,6 +8,7 @@ import { SEOHead } from "@/components/seo";
 import { getAllPlans, savePlan } from "@/lib/planStorage";
 import { createFreePlan } from "@/lib/createFreePlan";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
+import { cn } from "@/lib/utils";
 
 const MIN_WEEKS = 4;
 const MAX_WEEKS = 52;
@@ -21,6 +22,7 @@ export function FreePlanCreatePage() {
   const [name, setName] = useState("");
   const [weeks, setWeeks] = useState(DEFAULT_WEEKS);
   const [startDate, setStartDate] = useState("");
+  const [useCustomDate, setUseCustomDate] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const canCreate = getAllPlans().length < 5;
@@ -146,16 +148,41 @@ export function FreePlanCreatePage() {
 
               {/* Optional dates */}
               <div>
-                <label htmlFor="plan-start" className="text-sm font-medium mb-2 block">
-                  {isEn ? "Start date (optional)" : "Date de d\u00e9but (optionnel)"}
+                <label className="text-sm font-medium mb-2 block">
+                  {isEn ? "Start date" : "Date de début"}
                 </label>
-                <input
-                  id="plan-start"
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                />
+                <div className="flex gap-2 mb-3">
+                  <button
+                    type="button"
+                    onClick={() => { setUseCustomDate(false); setStartDate(""); }}
+                    className={cn(
+                      "flex-1 rounded-lg border p-3 text-sm transition-colors",
+                      !useCustomDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
+                    )}
+                  >
+                    {isEn ? "Start now" : "Commencer maintenant"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setUseCustomDate(true); setStartDate(new Date().toISOString().split("T")[0]); }}
+                    className={cn(
+                      "flex-1 rounded-lg border p-3 text-sm transition-colors",
+                      useCustomDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
+                    )}
+                  >
+                    {isEn ? "Choose a date" : "Choisir une date"}
+                  </button>
+                </div>
+                {useCustomDate && (
+                  <input
+                    id="plan-start"
+                    type="date"
+                    lang={isEn ? "en" : "fr"}
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="w-full rounded-md border bg-background px-4 py-3 min-h-[44px] text-base focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                )}
                 {startDate && (
                   <p className="text-xs text-muted-foreground mt-1">
                     {isEn ? "End date" : "Date de fin"} :{" "}
