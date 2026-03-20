@@ -283,15 +283,19 @@
     "released": "Released {{date}}"
   },
   "onboarding": {
-    "title": "Welcome to Zoned",
-    "description": "200 free running workouts, no account, no tracking. Where to start?",
-    "quiz": "Find my workout",
-    "quizHint": "5 questions to the perfect session",
-    "library": "Browse the library",
-    "libraryHint": "200 structured workouts to explore",
-    "plan": "Create a plan",
-    "planHint": "From 5K to marathon, 8 to 24 weeks",
-    "zones": "Configure my training zones",
+    "step1Title": "Welcome to Zoned",
+    "step1Desc": "200 structured running workouts, 9 calculators and training plans — all free, no account, no tracking.",
+    "step2Title": "Find your workout",
+    "step2Desc": "Answer 5 questions to get personalized recommendations based on your goal, experience and available time.",
+    "step2Action": "Take the quiz",
+    "step3Title": "Browse the library",
+    "step3Desc": "200 workouts organized by category: recovery, endurance, threshold, VO2max, hills, fartlek... Filter, search, save to favorites.",
+    "step3Action": "View library",
+    "step4Title": "Create your plan",
+    "step4Desc": "Generate a personalized training plan from 5K to marathon, or build your own with the drag-and-drop calendar.",
+    "step4Action": "Create a plan",
+    "skipAll": "Skip",
+    "next": "Next",
     "dismiss": "Let's go!"
   },
   "calculateurs": {

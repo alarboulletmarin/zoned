@@ -283,15 +283,19 @@
     "released": "Publié le {{date}}"
   },
   "onboarding": {
-    "title": "Bienvenue sur Zoned",
-    "description": "200 séances de course gratuites, sans compte, sans tracking. Par où commencer ?",
-    "quiz": "Trouver ma séance",
-    "quizHint": "5 questions pour la séance idéale",
-    "library": "Explorer la bibliothèque",
-    "libraryHint": "200 séances structurées à découvrir",
-    "plan": "Créer un plan",
-    "planHint": "Du 5K au marathon, 8 à 24 semaines",
-    "zones": "Configurer mes zones d'entraînement",
+    "step1Title": "Bienvenue sur Zoned",
+    "step1Desc": "200 séances de course structurées, 9 calculateurs et des plans d'entraînement — le tout gratuit, sans compte et sans tracking.",
+    "step2Title": "Trouvez votre séance",
+    "step2Desc": "Répondez à 5 questions pour obtenir des recommandations personnalisées selon votre objectif, votre niveau et le temps disponible.",
+    "step2Action": "Faire le quiz",
+    "step3Title": "Explorez la bibliothèque",
+    "step3Desc": "200 séances organisées par catégorie : récupération, endurance, seuil, VMA, côtes, fartlek... Filtrez, cherchez, sauvegardez en favoris.",
+    "step3Action": "Voir la bibliothèque",
+    "step4Title": "Créez votre plan",
+    "step4Desc": "Générez un plan d'entraînement personnalisé du 5K au marathon, ou construisez le vôtre librement avec le calendrier.",
+    "step4Action": "Créer un plan",
+    "skipAll": "Passer",
+    "next": "Suivant",
     "dismiss": "C'est parti !"
   },
   "calculateurs": {
