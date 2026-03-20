@@ -202,6 +202,14 @@ export function PrebuiltPlanDetailPage() {
         title={name}
         description={description}
         canonical={`/plan/prebuilt/${prebuilt.slug}`}
+        jsonLd={{
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+            { "@type": "ListItem", position: 2, name: "Plans", item: "https://zoned.run/plan/new/prebuilt" },
+            { "@type": "ListItem", position: 3, name },
+          ],
+        }}
       />
       <div className="py-8 space-y-6">
         {/* Back */}

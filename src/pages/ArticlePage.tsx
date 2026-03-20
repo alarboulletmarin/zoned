@@ -367,11 +367,21 @@ export function ArticlePage() {
         description={truncatedDescription}
         canonical={`/learn/${slug}`}
         ogType="article"
-        jsonLd={{
-          "@type": "Article",
-          headline: title,
-          description: truncatedDescription,
-        }}
+        jsonLd={[
+          {
+            "@type": "Article",
+            headline: title,
+            description: truncatedDescription,
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: isEn ? "Learn" : "Apprendre", item: "https://zoned.run/learn" },
+              { "@type": "ListItem", position: 3, name: title },
+            ],
+          },
+        ]}
       />
       <ReadingProgress />
       <div className="py-8 max-w-3xl mx-auto xl:max-w-5xl">
