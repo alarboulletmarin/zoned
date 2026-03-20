@@ -122,6 +122,11 @@ export async function getWorkoutsByCategory(
 export async function getWorkoutById(
   id: string
 ): Promise<WorkoutTemplate | undefined> {
+  // Check custom workouts first for CUSTOM- prefixed IDs
+  if (id.startsWith("CUSTOM-")) {
+    const { getCustomWorkout } = await import("@/lib/customWorkoutStorage");
+    return getCustomWorkout(id);
+  }
   const workouts = await loadAllWorkouts();
   return workouts.find((w) => w.id === id);
 }

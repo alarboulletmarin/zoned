@@ -9,6 +9,7 @@ import {
   getAllWorkoutsSync,
   isAllWorkoutsLoaded,
 } from "@/data/workouts";
+import { getCustomWorkouts } from "@/lib/customWorkoutStorage";
 
 interface UseWorkoutsResult {
   workouts: WorkoutTemplate[];
@@ -44,16 +45,22 @@ interface UseRelatedWorkoutsResult {
  * Hook to load all workouts lazily
  * Returns workouts from cache immediately if available, otherwise loads asynchronously
  */
+function mergeWithCustom(workouts: WorkoutTemplate[]): WorkoutTemplate[] {
+  const custom = getCustomWorkouts();
+  if (custom.length === 0) return workouts;
+  return [...workouts, ...custom];
+}
+
 export function useWorkouts(): UseWorkoutsResult {
   const [workouts, setWorkouts] = useState<WorkoutTemplate[]>(() =>
-    getAllWorkoutsSync()
+    mergeWithCustom(getAllWorkoutsSync())
   );
   const [isLoading, setIsLoading] = useState(!isAllWorkoutsLoaded());
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     if (isAllWorkoutsLoaded()) {
-      setWorkouts(getAllWorkoutsSync());
+      setWorkouts(mergeWithCustom(getAllWorkoutsSync()));
       setIsLoading(false);
       return;
     }
@@ -63,7 +70,7 @@ export function useWorkouts(): UseWorkoutsResult {
     loadAllWorkouts()
       .then((data) => {
         if (!cancelled) {
-          setWorkouts(data);
+          setWorkouts(mergeWithCustom(data));
           setIsLoading(false);
         }
       })
