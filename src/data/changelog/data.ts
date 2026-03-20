@@ -2,6 +2,54 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.2.2",
+    date: "2026-03-20",
+    changes: {
+      added: [
+        {
+          text: "Export et import de données : sauvegardez tous vos favoris, plans et paramètres en JSON, restaurez depuis un fichier",
+          textEn: "Data export and import: backup all your data (favorites, plans, settings) as JSON, restore from backup file",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Avertissement de persistance : dialogue explicatif lors de la première sauvegarde de favori ou de plan",
+          textEn: "Storage persistence warning: first-time dialog when saving favorites or plans explaining local-only storage",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Positionnement vie privée : badges sur la page d'accueil, mention dans le footer, section dédiée dans les paramètres",
+          textEn: "Privacy positioning: visible badges on homepage hero, privacy note in footer, and privacy section in settings",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Bouton de soutien Ko-fi dans le footer et la page À propos",
+          textEn: "Ko-fi support link in footer and about page",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+      ],
+      changed: [
+        {
+          text: "README mis à jour avec 200 séances, nouvelles fonctionnalités et philosophie de confidentialité",
+          textEn: "README updated to reflect 200 workouts, new features, and privacy-first philosophy",
+          category: "Documentation",
+          categoryEn: "Documentation",
+        },
+      ],
+      fixed: [
+        {
+          text: "Champs de date sur mobile : cibles tactiles de 44px, police text-base pour éviter le zoom iOS, option « Commencer maintenant »",
+          textEn: "Date inputs on mobile: adequate touch targets (44px), text-base font to prevent iOS zoom, 'Start now' option for plan dates",
+          category: "Bug",
+          categoryEn: "Bug",
+        },
+      ],
+    },
+  },
+  {
     version: "0.2.1",
     date: "2026-03-19",
     changes: {

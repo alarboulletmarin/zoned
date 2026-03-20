@@ -107,6 +107,12 @@ Open [http://localhost:8080](http://localhost:8080)
 - Vercel Analytics
 - i18next (FR/EN)
 
+## Support
+
+If you find Zoned useful, you can support the project on [Ko-fi](https://ko-fi.com/T6T01WC5ZC).
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/T6T01WC5ZC)
+
 ## Contributing
 
 This project is developed in collaboration with AI (Claude Code).

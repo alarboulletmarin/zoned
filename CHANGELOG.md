@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] - 2026-03-20
+
+### Added
+
+- Data export and import in settings: backup all your data (favorites, plans, settings, zones) as JSON, restore from a backup file
+- Storage persistence warning: first-time dialog when saving favorites or creating a plan, explaining that data is stored locally
+- Privacy-first positioning: visible badges on homepage hero, privacy note in footer, dedicated privacy section in settings
+- Ko-fi support link in footer and about page
+
+### Changed
+
+- README updated to reflect 200 workouts, 9 calculators, privacy-first philosophy, and current feature set
+
+### Fixed
+
+- Date inputs on mobile: larger touch targets (44px minimum), text-base font to prevent iOS zoom, locale-aware lang attribute, "Start now" / "Choose a date" toggle on free plan creation
+
 ## [0.2.1] - 2026-03-19
 
 ### Added
