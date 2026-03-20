@@ -49,22 +49,27 @@ function WorkoutListView() {
         canonical="/workout/builder"
       />
       <div className="py-8 max-w-3xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold">{isEn ? "My Workouts" : "Mes séances"}</h1>
-            <p className="text-muted-foreground text-sm mt-1">
-              {isEn
-                ? "Custom workouts are stored locally in your browser."
-                : "Les séances personnalisées sont stockées dans votre navigateur."}
-            </p>
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold">{isEn ? "My Workouts" : "Mes séances"}</h1>
+              <p className="text-muted-foreground mt-1">
+                {isEn
+                  ? "Custom workouts stored locally in your browser"
+                  : "Séances personnalisées stockées dans votre navigateur"}
+              </p>
+            </div>
+            <Button
+              className="rounded-full px-5 py-2.5 h-auto font-bold"
+              onClick={() => {
+                const w = createEmptyWorkout();
+                navigate(`/workout/builder/${w.id}`, { state: { fresh: true } });
+              }}
+            >
+              <Plus className="size-4 mr-2" />
+              {isEn ? "New" : "Nouvelle"}
+            </Button>
           </div>
-          <Button onClick={() => {
-            const w = createEmptyWorkout();
-            navigate(`/workout/builder/${w.id}`, { state: { fresh: true } });
-          }}>
-            <Plus className="size-4" />
-            {isEn ? "New workout" : "Nouvelle séance"}
-          </Button>
         </div>
 
         {workouts.length === 0 ? (
@@ -216,10 +221,10 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
 
       <div className="py-8 max-w-3xl mx-auto space-y-6">
         {/* Header */}
-        <div className="space-y-4">
+        <div className="mb-8">
           <Link
             to="/workout/builder"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-block mb-4"
           >
             {isEn ? "← My workouts" : "← Mes séances"}
           </Link>
@@ -228,8 +233,11 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
             value={workout.name}
             onChange={(e) => setWorkout((prev) => ({ ...prev, name: e.target.value, nameEn: e.target.value }))}
             placeholder={isEn ? "Workout name..." : "Nom de la séance..."}
-            className="block w-full text-2xl font-bold bg-transparent border-none focus:outline-none placeholder:text-muted-foreground/40"
+            className="block w-full text-2xl md:text-3xl font-bold bg-transparent border-none focus:outline-none placeholder:text-muted-foreground/40 mb-1"
           />
+          <p className="text-muted-foreground mb-6">
+            ~{totalMin} min · {blockCount} {isEn ? "blocks" : "blocs"}
+          </p>
           <div className="flex flex-wrap items-center gap-3">
             <Button
               onClick={handleSave}
@@ -242,8 +250,8 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
             {isSaved && <ExportMenu workout={workout} />}
             {isSaved && (
               <Button
-                variant="destructive"
-                className="rounded-full px-5 py-2.5 h-auto font-bold"
+                variant="secondary"
+                className="rounded-full px-5 py-2.5 h-auto font-bold text-destructive hover:text-destructive"
                 onClick={() => setShowDeleteConfirm(true)}
               >
                 <Trash2 className="size-4 mr-2" />
@@ -251,13 +259,6 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
               </Button>
             )}
           </div>
-        </div>
-
-        {/* Stats */}
-        <div className="flex gap-4 text-sm text-muted-foreground">
-          <span>~{totalMin} min</span>
-          <span>{blockCount} {isEn ? "blocks" : "blocs"}</span>
-          <span>{workout.mainSetTemplate.length} {isEn ? "in main set" : "dans le corps"}</span>
         </div>
 
         {/* Preview */}
