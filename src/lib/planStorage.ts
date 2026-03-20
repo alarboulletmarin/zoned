@@ -208,3 +208,37 @@ export async function addSessionToPlan(
   savePlan(plan);
   return true;
 }
+
+// ── Cross-training ──────────────────────────────────────────────────
+
+import type { CrossTrainingSession } from "@/types/plan";
+
+export function addCrossTraining(
+  planId: string,
+  weekNumber: number,
+  session: CrossTrainingSession
+): boolean {
+  const plan = getPlan(planId);
+  if (!plan) return false;
+  const week = plan.weeks.find((w) => w.weekNumber === weekNumber);
+  if (!week) return false;
+  if (!week.crossTraining) week.crossTraining = [];
+  week.crossTraining.push(session);
+  week.crossTraining.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+  savePlan(plan);
+  return true;
+}
+
+export function deleteCrossTraining(
+  planId: string,
+  weekNumber: number,
+  sessionId: string
+): boolean {
+  const plan = getPlan(planId);
+  if (!plan) return false;
+  const week = plan.weeks.find((w) => w.weekNumber === weekNumber);
+  if (!week?.crossTraining) return false;
+  week.crossTraining = week.crossTraining.filter((s) => s.id !== sessionId);
+  savePlan(plan);
+  return true;
+}

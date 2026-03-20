@@ -2,7 +2,7 @@ import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Star, Flag, Clock, Trash2 } from "@/components/icons";
 import { PHASE_META } from "@/types/plan";
-import type { TrainingPlan, PlanSession } from "@/types/plan";
+import type { TrainingPlan, PlanSession, CrossTrainingSession } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 
 // ── Color maps ──────────────────────────────────────────────────────
@@ -18,6 +18,15 @@ const SESSION_COLORS: Record<string, string> = {
   fartlek: "#a855f7",
   hills: "#22c55e",
   race_specific: "#f59e0b",
+};
+
+const CROSS_TRAINING_LABELS: Record<string, { fr: string; en: string }> = {
+  strength: { fr: "Renfo", en: "Strength" },
+  cycling: { fr: "Vélo", en: "Cycling" },
+  swimming: { fr: "Natation", en: "Swimming" },
+  yoga: { fr: "Yoga", en: "Yoga" },
+  rest: { fr: "Repos", en: "Rest" },
+  other: { fr: "Autre", en: "Other" },
 };
 
 const PHASE_BG: Record<string, string> = {
@@ -416,6 +425,17 @@ export function PlanCalendar({
                           </div>
                         );
                       })}
+                      {/* Cross-training activities */}
+                      {(mobileWeekData.crossTraining || [])
+                        .filter((ct: CrossTrainingSession) => ct.dayOfWeek === dayIndex)
+                        .map((ct: CrossTrainingSession) => (
+                          <div key={ct.id} className="rounded bg-muted/50 border border-border/30 p-1.5 mb-1">
+                            <span className="text-[10px] leading-tight font-medium line-clamp-1 block text-muted-foreground">
+                              {isEn ? CROSS_TRAINING_LABELS[ct.activityType]?.en : CROSS_TRAINING_LABELS[ct.activityType]?.fr}
+                            </span>
+                            <span className="text-[9px] text-muted-foreground/70">{ct.durationMin}min</span>
+                          </div>
+                        ))}
                       {sessions.length > 0 && onAddToDay && (
                         <button
                           type="button"
@@ -600,6 +620,17 @@ export function PlanCalendar({
                                 </div>
                               );
                             })}
+                            {/* Cross-training */}
+                            {(week.crossTraining || [])
+                              .filter((ct: CrossTrainingSession) => ct.dayOfWeek === dayIndex)
+                              .map((ct: CrossTrainingSession) => (
+                                <div key={ct.id} className="rounded bg-muted/50 border border-border/30 px-1.5 py-1 text-[10px]">
+                                  <span className="text-muted-foreground font-medium">
+                                    {isEn ? CROSS_TRAINING_LABELS[ct.activityType]?.en : CROSS_TRAINING_LABELS[ct.activityType]?.fr}
+                                  </span>
+                                  <span className="text-muted-foreground/70 ml-1">{ct.durationMin}min</span>
+                                </div>
+                              ))}
                           </div>
                         )}
                       </td>

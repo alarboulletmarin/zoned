@@ -45,6 +45,20 @@ export interface PlanSession {
   notesEn?: string;
 }
 
+// ── Cross-training session (non-running activity) ──────────────────
+
+export type CrossTrainingType = "strength" | "cycling" | "swimming" | "yoga" | "rest" | "other";
+export type CrossTrainingIntensity = "easy" | "moderate" | "hard";
+
+export interface CrossTrainingSession {
+  id: string;
+  dayOfWeek: number; // 0=Mon ... 6=Sun
+  activityType: CrossTrainingType;
+  durationMin: number;
+  description: string;
+  intensity: CrossTrainingIntensity;
+}
+
 // ── Plan week ──────────────────────────────────────────────────────
 
 export interface PlanWeek {
@@ -53,6 +67,7 @@ export interface PlanWeek {
   isRecoveryWeek: boolean;
   volumePercent: number;
   sessions: PlanSession[];
+  crossTraining?: CrossTrainingSession[];
   weekLabel?: string;
   weekLabelEn?: string;
 }

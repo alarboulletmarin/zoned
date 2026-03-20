@@ -39,7 +39,8 @@ import {
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { usePlan } from "@/hooks/usePlans";
-import { deletePlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan } from "@/lib/planStorage";
+import { deletePlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan, addCrossTraining } from "@/lib/planStorage";
+import type { CrossTrainingType, CrossTrainingIntensity } from "@/types/plan";
 import { getWorkoutById } from "@/data/workouts";
 import { exportPlanToICS, exportPlanToPDF } from "@/lib/export";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
@@ -108,6 +109,15 @@ export function PlanViewPage() {
   const [addTarget, setAddTarget] = useState<{ weekNumber: number; day: number } | null>(null);
   const [showDateDialog, setShowDateDialog] = useState(false);
   const [editStartDate, setEditStartDate] = useState("");
+  const [showCrossTraining, setShowCrossTraining] = useState(false);
+  const [ctForm, setCtForm] = useState({
+    weekNumber: 1,
+    dayOfWeek: 0,
+    activityType: "strength" as CrossTrainingType,
+    durationMin: 30,
+    description: "",
+    intensity: "moderate" as CrossTrainingIntensity,
+  });
 
   const currentWeek = useMemo(() => {
     if (!plan) return 0;
@@ -496,6 +506,15 @@ export function PlanViewPage() {
               <Plus className="size-4" />
               <span className="ml-1">{isEn ? "Add workout" : "Ajouter une séance"}</span>
             </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowCrossTraining(true)}
+              className="rounded-full hidden md:inline-flex"
+            >
+              <Plus className="size-4" />
+              <span className="ml-1">{isEn ? "Add activity" : "Ajouter une activité"}</span>
+            </Button>
           <div
             className="inline-flex items-center gap-0.5 rounded-lg bg-muted p-1"
             role="radiogroup"
@@ -847,6 +866,132 @@ export function PlanViewPage() {
         </div>
         )}
 
+
+        {/* Cross-Training Dialog */}
+        <Dialog open={showCrossTraining} onOpenChange={setShowCrossTraining}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{isEn ? "Add an activity" : "Ajouter une activité"}</DialogTitle>
+              <DialogDescription>
+                {isEn ? "Add a non-running activity to your plan." : "Ajoutez une activité complémentaire à votre plan."}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-sm font-medium">{isEn ? "Week" : "Semaine"}</label>
+                  <select
+                    value={ctForm.weekNumber}
+                    onChange={(e) => setCtForm((f) => ({ ...f, weekNumber: Number(e.target.value) }))}
+                    className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                  >
+                    {plan?.weeks.map((w) => (
+                      <option key={w.weekNumber} value={w.weekNumber}>
+                        {isEn ? `Week ${w.weekNumber}` : `Semaine ${w.weekNumber}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-sm font-medium">{isEn ? "Day" : "Jour"}</label>
+                  <select
+                    value={ctForm.dayOfWeek}
+                    onChange={(e) => setCtForm((f) => ({ ...f, dayOfWeek: Number(e.target.value) }))}
+                    className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                  >
+                    {(isEn
+                      ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+                      : ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
+                    ).map((d, i) => (
+                      <option key={i} value={i}>{d}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-sm font-medium">{isEn ? "Activity" : "Activité"}</label>
+                  <select
+                    value={ctForm.activityType}
+                    onChange={(e) => setCtForm((f) => ({ ...f, activityType: e.target.value as CrossTrainingType }))}
+                    className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                  >
+                    <option value="strength">{isEn ? "Strength" : "Renforcement"}</option>
+                    <option value="cycling">{isEn ? "Cycling" : "Vélo"}</option>
+                    <option value="swimming">{isEn ? "Swimming" : "Natation"}</option>
+                    <option value="yoga">Yoga / Stretching</option>
+                    <option value="rest">{isEn ? "Active rest" : "Repos actif"}</option>
+                    <option value="other">{isEn ? "Other" : "Autre"}</option>
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-sm font-medium">{isEn ? "Duration (min)" : "Durée (min)"}</label>
+                  <input
+                    type="number"
+                    min={5}
+                    max={180}
+                    value={ctForm.durationMin}
+                    onChange={(e) => setCtForm((f) => ({ ...f, durationMin: Number(e.target.value) }))}
+                    className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                  />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Description</label>
+                <input
+                  type="text"
+                  value={ctForm.description}
+                  onChange={(e) => setCtForm((f) => ({ ...f, description: e.target.value }))}
+                  placeholder={isEn ? "e.g., 30min core + squats" : "ex : 30min gainage + squats"}
+                  className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-sm font-medium">{isEn ? "Intensity" : "Intensité"}</label>
+                <div className="flex gap-2">
+                  {(["easy", "moderate", "hard"] as const).map((level) => (
+                    <button
+                      key={level}
+                      type="button"
+                      onClick={() => setCtForm((f) => ({ ...f, intensity: level }))}
+                      className={cn(
+                        "flex-1 rounded-lg border p-2 text-sm transition-colors",
+                        ctForm.intensity === level
+                          ? "border-primary bg-primary/10 font-medium"
+                          : "hover:bg-accent/50"
+                      )}
+                    >
+                      {level === "easy" ? (isEn ? "Easy" : "Facile") : level === "moderate" ? (isEn ? "Moderate" : "Modéré") : (isEn ? "Hard" : "Difficile")}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">{isEn ? "Cancel" : "Annuler"}</Button>
+              </DialogClose>
+              <Button
+                onClick={() => {
+                  if (!plan) return;
+                  addCrossTraining(plan.id, ctForm.weekNumber, {
+                    id: `ct-${Date.now().toString(36)}`,
+                    dayOfWeek: ctForm.dayOfWeek,
+                    activityType: ctForm.activityType,
+                    durationMin: ctForm.durationMin,
+                    description: ctForm.description,
+                    intensity: ctForm.intensity,
+                  });
+                  reloadPlan();
+                  setShowCrossTraining(false);
+                  toast.success(isEn ? "Activity added" : "Activité ajoutée");
+                }}
+              >
+                {isEn ? "Add" : "Ajouter"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         {/* Delete Confirmation Dialog */}
         <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
