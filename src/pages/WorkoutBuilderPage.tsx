@@ -1,7 +1,7 @@
-import { useState, useCallback, useMemo, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useState, useCallback, useMemo } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Save, Trash2, Plus, ChevronDown, ChevronUp } from "@/components/icons";
+import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
 import { BlockEditor } from "@/components/domain/contribute/BlockEditor";
@@ -25,18 +25,89 @@ const EMPTY_BLOCK: WorkoutBlock = {
   zone: "Z2",
 };
 
-export function WorkoutBuilderPage() {
-  const { id } = useParams<{ id: string }>();
+// ── List view (no id param) ──────────────────────────────────────────
+
+function WorkoutListView() {
+  const { i18n } = useTranslation("common");
+  const isEn = i18n.language?.startsWith("en") ?? false;
+  const navigate = useNavigate();
+  const workouts = getCustomWorkouts();
+
+  return (
+    <>
+      <SEOHead
+        noindex
+        title={isEn ? "My Workouts" : "Mes séances"}
+        canonical="/workout/builder"
+      />
+      <div className="py-8 max-w-3xl mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold">{isEn ? "My Workouts" : "Mes séances"}</h1>
+            <p className="text-muted-foreground text-sm mt-1">
+              {isEn
+                ? "Custom workouts are stored locally in your browser."
+                : "Les séances personnalisées sont stockées dans votre navigateur."}
+            </p>
+          </div>
+          <Button onClick={() => {
+            const w = createEmptyWorkout();
+            navigate(`/workout/builder/${w.id}`, { state: { fresh: true } });
+          }}>
+            <Plus className="size-4" />
+            {isEn ? "New workout" : "Nouvelle séance"}
+          </Button>
+        </div>
+
+        {workouts.length === 0 ? (
+          <div className="text-center py-16 text-muted-foreground">
+            <p className="text-lg mb-2">{isEn ? "No custom workouts yet" : "Aucune séance personnalisée"}</p>
+            <p className="text-sm">{isEn ? "Create your first workout above" : "Créez votre première séance ci-dessus"}</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {workouts.map((w) => {
+              const totalMin =
+                (w.warmupTemplate?.reduce((s, b) => s + (b.durationMin || 0), 0) || 0) +
+                w.mainSetTemplate.reduce((s, b) => s + (b.durationMin || 0) * (b.repetitions || 1), 0) +
+                (w.cooldownTemplate?.reduce((s, b) => s + (b.durationMin || 0), 0) || 0);
+              return (
+                <Link
+                  key={w.id}
+                  to={`/workout/builder/${w.id}`}
+                  className="block rounded-lg border bg-card p-4 hover:bg-accent/50 transition-colors"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-medium">{w.name || (isEn ? "Untitled" : "Sans titre")}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        ~{totalMin}min · {w.mainSetTemplate.length} {isEn ? "blocks" : "blocs"}
+                      </p>
+                    </div>
+                    <ArrowRight className="size-4 text-muted-foreground" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+// ── Editor view (with id param) ──────────────────────────────────────
+
+function WorkoutEditorView({ workoutId }: { workoutId: string }) {
   const navigate = useNavigate();
   const { i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
 
   const [workout, setWorkout] = useState<WorkoutTemplate>(() => {
-    if (id) {
-      const existing = getCustomWorkout(id);
-      if (existing) return existing;
-    }
-    return createEmptyWorkout();
+    const existing = getCustomWorkout(workoutId);
+    if (existing) return existing;
+    const fresh = createEmptyWorkout();
+    return { ...fresh, id: workoutId };
   });
 
   const [collapsed, setCollapsed] = useState<Record<SectionKey, boolean>>({
@@ -45,19 +116,11 @@ export function WorkoutBuilderPage() {
     cooldown: false,
   });
 
-  // Redirect to the correct URL if creating a new workout
-  useEffect(() => {
-    if (!id && workout.id) {
-      navigate(`/workout/builder/${workout.id}`, { replace: true });
-    }
-  }, [id, workout.id, navigate]);
-
   const canSave = workout.name.trim().length > 0;
 
   const handleSave = useCallback(() => {
     if (!canSave) return;
     try {
-      // Update duration estimate
       const totalMin =
         (workout.warmupTemplate?.reduce((s, b) => s + (b.durationMin || 0), 0) || 0) +
         workout.mainSetTemplate.reduce((s, b) => s + (b.durationMin || 0) * (b.repetitions || 1), 0) +
@@ -67,23 +130,18 @@ export function WorkoutBuilderPage() {
         typicalDuration: { min: Math.max(totalMin - 5, 0), max: totalMin + 5 },
       };
       saveCustomWorkout(updated);
-      setWorkout(updated);
       toast.success(isEn ? "Workout saved" : "Séance sauvegardée");
+      navigate("/workout/builder");
     } catch {
       toast.error(isEn ? "Maximum 20 custom workouts reached" : "Maximum de 20 séances personnalisées atteint");
     }
-  }, [workout, canSave, isEn]);
+  }, [workout, canSave, isEn, navigate]);
 
   const handleDelete = useCallback(() => {
     deleteCustomWorkout(workout.id);
     toast.success(isEn ? "Workout deleted" : "Séance supprimée");
-    navigate("/library");
+    navigate("/workout/builder");
   }, [workout.id, isEn, navigate]);
-
-  const updateBlocks = useCallback((section: SectionKey, blocks: WorkoutBlock[]) => {
-    const key = section === "warmup" ? "warmupTemplate" : section === "main" ? "mainSetTemplate" : "cooldownTemplate";
-    setWorkout((prev) => ({ ...prev, [key]: blocks }));
-  }, []);
 
   const getBlocks = (section: SectionKey): WorkoutBlock[] => {
     if (section === "warmup") return workout.warmupTemplate || [];
@@ -91,37 +149,47 @@ export function WorkoutBuilderPage() {
     return workout.cooldownTemplate || [];
   };
 
-  const addBlock = useCallback((section: SectionKey) => {
-    const blocks = getBlocks(section);
-    updateBlocks(section, [...blocks, { ...EMPTY_BLOCK }]);
-  }, [workout]);
+  const updateBlocks = useCallback((section: SectionKey, blocks: WorkoutBlock[]) => {
+    const key = section === "warmup" ? "warmupTemplate" : section === "main" ? "mainSetTemplate" : "cooldownTemplate";
+    setWorkout((prev) => ({ ...prev, [key]: blocks }));
+  }, []);
 
-  const removeBlock = useCallback((section: SectionKey, index: number) => {
-    const blocks = getBlocks(section);
-    updateBlocks(section, blocks.filter((_, i) => i !== index));
-  }, [workout]);
+  const addBlock = (section: SectionKey) => {
+    updateBlocks(section, [...getBlocks(section), { ...EMPTY_BLOCK }]);
+  };
 
-  const updateBlock = useCallback((section: SectionKey, index: number, block: WorkoutBlock) => {
+  const removeBlock = (section: SectionKey, index: number) => {
+    updateBlocks(section, getBlocks(section).filter((_, i) => i !== index));
+  };
+
+  const updateBlock = (section: SectionKey, index: number, block: WorkoutBlock) => {
     const blocks = [...getBlocks(section)];
     blocks[index] = block;
     updateBlocks(section, blocks);
-  }, [workout]);
+  };
 
-  const moveBlock = useCallback((section: SectionKey, from: number, to: number) => {
+  const moveBlock = (section: SectionKey, from: number, to: number) => {
     const blocks = [...getBlocks(section)];
     const [moved] = blocks.splice(from, 1);
     blocks.splice(to, 0, moved);
     updateBlocks(section, blocks);
-  }, [workout]);
+  };
 
   const toggleCollapse = (key: SectionKey) => {
     setCollapsed((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  // Check if this workout is already saved
-  const isSaved = useMemo(() => {
-    return getCustomWorkouts().some((w) => w.id === workout.id);
-  }, [workout.id]);
+  const isSaved = useMemo(() => getCustomWorkouts().some((w) => w.id === workout.id), [workout.id]);
+
+  const totalMin =
+    (workout.warmupTemplate?.reduce((s, b) => s + (b.durationMin || 0), 0) || 0) +
+    workout.mainSetTemplate.reduce((s, b) => s + (b.durationMin || 0) * (b.repetitions || 1), 0) +
+    (workout.cooldownTemplate?.reduce((s, b) => s + (b.durationMin || 0), 0) || 0);
+
+  const blockCount =
+    (workout.warmupTemplate?.length || 0) +
+    workout.mainSetTemplate.length +
+    (workout.cooldownTemplate?.length || 0);
 
   const sections: { key: SectionKey; label: string; color: string }[] = [
     { key: "warmup", label: isEn ? "Warm-up" : "Échauffement", color: "text-zone-2" },
@@ -140,17 +208,24 @@ export function WorkoutBuilderPage() {
       <div className="py-8 max-w-3xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
-          <input
-            type="text"
-            value={workout.name}
-            onChange={(e) => setWorkout((prev) => ({ ...prev, name: e.target.value, nameEn: e.target.value }))}
-            placeholder={isEn ? "Workout name..." : "Nom de la séance..."}
-            className="text-2xl font-bold bg-transparent border-b border-transparent hover:border-border focus:border-primary focus:outline-none pb-1 transition-colors w-full"
-          />
+          <div className="flex-1">
+            <Button variant="ghost" size="sm" asChild className="mb-2 -ml-2">
+              <Link to="/workout/builder">
+                {isEn ? "← My workouts" : "← Mes séances"}
+              </Link>
+            </Button>
+            <input
+              type="text"
+              value={workout.name}
+              onChange={(e) => setWorkout((prev) => ({ ...prev, name: e.target.value, nameEn: e.target.value }))}
+              placeholder={isEn ? "Workout name..." : "Nom de la séance..."}
+              className="text-2xl font-bold bg-transparent border-b border-transparent hover:border-border focus:border-primary focus:outline-none pb-1 transition-colors w-full"
+            />
+          </div>
           <div className="flex gap-2 shrink-0">
             <Button onClick={handleSave} disabled={!canSave} size="sm">
               <Save className="size-4" />
-              {isEn ? "Save" : "Sauvegarder"}
+              {isEn ? "Save" : "Enregistrer"}
             </Button>
             {isSaved && <ExportMenu workout={workout} />}
             {isSaved && (
@@ -161,12 +236,12 @@ export function WorkoutBuilderPage() {
           </div>
         </div>
 
-        {/* Warning */}
-        <p className="text-xs text-muted-foreground">
-          {isEn
-            ? "Custom workouts are stored locally in your browser. Export your data regularly from Settings."
-            : "Les séances personnalisées sont stockées dans votre navigateur. Exportez vos données régulièrement depuis les Paramètres."}
-        </p>
+        {/* Stats */}
+        <div className="flex gap-4 text-sm text-muted-foreground">
+          <span>~{totalMin} min</span>
+          <span>{blockCount} {isEn ? "blocks" : "blocs"}</span>
+          <span>{workout.mainSetTemplate.length} {isEn ? "in main set" : "dans le corps"}</span>
+        </div>
 
         {/* Preview */}
         <div className="rounded-lg border p-4 bg-card">
@@ -217,4 +292,16 @@ export function WorkoutBuilderPage() {
       </div>
     </>
   );
+}
+
+// ── Route dispatcher ─────────────────────────────────────────────────
+
+export function WorkoutBuilderPage() {
+  const { id } = useParams<{ id: string }>();
+
+  if (!id) {
+    return <WorkoutListView />;
+  }
+
+  return <WorkoutEditorView workoutId={id} />;
 }
