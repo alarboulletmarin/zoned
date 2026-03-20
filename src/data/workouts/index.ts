@@ -156,8 +156,10 @@ export async function searchWorkouts(
   query: string
 ): Promise<WorkoutTemplate[]> {
   const workouts = await loadAllWorkouts();
+  const { getCustomWorkouts } = await import("@/lib/customWorkoutStorage");
+  const all = [...workouts, ...getCustomWorkouts()];
   const lowerQuery = query.toLowerCase();
-  return workouts.filter(
+  return all.filter(
     (w) =>
       w.name.toLowerCase().includes(lowerQuery) ||
       w.nameEn.toLowerCase().includes(lowerQuery) ||

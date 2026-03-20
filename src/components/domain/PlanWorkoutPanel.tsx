@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { X, Search, Clock, Loader2, Heart } from "@/components/icons";
 import { loadAllWorkouts } from "@/data/workouts";
+import { getCustomWorkouts } from "@/lib/customWorkoutStorage";
 import { useFavorites } from "@/hooks";
 import type { WorkoutTemplate, WorkoutCategory, SessionType } from "@/types";
 
@@ -111,7 +112,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
     if (!isOpen) return;
     setIsLoading(true);
     loadAllWorkouts().then((workouts) => {
-      setAllWorkouts(workouts);
+      setAllWorkouts([...workouts, ...getCustomWorkouts()]);
       setIsLoading(false);
     });
   }, [isOpen]);
