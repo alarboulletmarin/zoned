@@ -207,32 +207,33 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
 
       <div className="py-8 max-w-3xl mx-auto space-y-6">
         {/* Header */}
-        <div>
-          <Button variant="ghost" size="sm" asChild className="mb-3 -ml-2">
-            <Link to="/workout/builder">
-              {isEn ? "← My workouts" : "← Mes séances"}
-            </Link>
-          </Button>
-          <div className="flex items-center gap-3">
-            <input
-              type="text"
-              value={workout.name}
-              onChange={(e) => setWorkout((prev) => ({ ...prev, name: e.target.value, nameEn: e.target.value }))}
-              placeholder={isEn ? "Workout name..." : "Nom de la séance..."}
-              className="flex-1 text-2xl font-bold bg-transparent border-b border-transparent hover:border-border focus:border-primary focus:outline-none pb-1 transition-colors"
-            />
-            {isSaved && (
-              <Button variant="ghost" size="icon-sm" onClick={handleDelete} className="text-destructive hover:text-destructive shrink-0">
-                <Trash2 className="size-4" />
-              </Button>
-            )}
-          </div>
-          <div className="flex items-center gap-3 mt-4">
-            <Button onClick={handleSave} disabled={!canSave}>
+        <div className="space-y-4">
+          <Link
+            to="/workout/builder"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {isEn ? "← My workouts" : "← Mes séances"}
+          </Link>
+          <input
+            type="text"
+            value={workout.name}
+            onChange={(e) => setWorkout((prev) => ({ ...prev, name: e.target.value, nameEn: e.target.value }))}
+            placeholder={isEn ? "Workout name..." : "Nom de la séance..."}
+            className="block w-full text-2xl font-bold bg-transparent border-none focus:outline-none placeholder:text-muted-foreground/40"
+          />
+          <div className="flex items-center gap-2">
+            <Button onClick={handleSave} disabled={!canSave} size="sm">
               <Save className="size-4" />
               {isEn ? "Save" : "Enregistrer"}
             </Button>
             {isSaved && <ExportMenu workout={workout} />}
+            <div className="flex-1" />
+            {isSaved && (
+              <Button variant="outline" size="sm" onClick={handleDelete} className="text-destructive hover:text-destructive hover:bg-destructive/10">
+                <Trash2 className="size-4" />
+                {isEn ? "Delete" : "Supprimer"}
+              </Button>
+            )}
           </div>
         </div>
 
