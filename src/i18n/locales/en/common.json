@@ -214,6 +214,14 @@
       "metric": "Metric (km)",
       "imperial": "Imperial (miles)"
     },
+    "privacy": {
+      "title": "Privacy",
+      "description": "What Zoned collects",
+      "noServer": "No personal data is sent to any server",
+      "noAccount": "No user account required",
+      "localStorage": "All your data stays in your browser (localStorage)",
+      "analytics": "Vercel Analytics only measures page views anonymously (no cookies, no identification)"
+    },
     "data": {
       "title": "Your data",
       "description": "Export or restore your data (favorites, plans, zones, settings)",
@@ -264,6 +272,12 @@
     "description": "All the calculation tools for your training",
     "explore": "Open",
     "comingSoon": "Coming soon"
+  },
+  "privacy": {
+    "free": "100% free",
+    "noAccount": "No account required",
+    "localData": "Your data stays on your device",
+    "footerNote": "No tracking. No cookies."
   },
   "storageWarning": {
     "title": "Your data is stored locally",

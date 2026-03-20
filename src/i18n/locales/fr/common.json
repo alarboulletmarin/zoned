@@ -214,6 +214,14 @@
       "metric": "Métrique (km)",
       "imperial": "Impérial (miles)"
     },
+    "privacy": {
+      "title": "Vie privée",
+      "description": "Ce que Zoned collecte",
+      "noServer": "Aucune donnée personnelle n'est envoyée à un serveur",
+      "noAccount": "Aucun compte utilisateur n'est requis",
+      "localStorage": "Toutes vos données restent dans votre navigateur (localStorage)",
+      "analytics": "Vercel Analytics mesure uniquement les pages vues de manière anonyme (pas de cookies, pas d'identification)"
+    },
     "data": {
       "title": "Vos données",
       "description": "Exportez ou restaurez vos données (favoris, plans, zones, paramètres)",
@@ -264,6 +272,12 @@
     "description": "Tous les outils de calcul pour vos entraînements",
     "explore": "Ouvrir",
     "comingSoon": "Bientôt"
+  },
+  "privacy": {
+    "free": "100% gratuit",
+    "noAccount": "Aucun compte requis",
+    "localData": "Vos données restent sur votre appareil",
+    "footerNote": "Pas de tracking. Pas de cookies."
   },
   "storageWarning": {
     "title": "Vos données sont stockées localement",

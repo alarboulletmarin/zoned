@@ -131,6 +131,24 @@ export function SettingsPage() {
             </CardContent>
           </Card>
 
+          {/* Privacy */}
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("settings.privacy.title")}</CardTitle>
+              <CardDescription>
+                {t("settings.privacy.description")}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="text-sm text-muted-foreground space-y-2">
+                <li>{t("settings.privacy.noServer")}</li>
+                <li>{t("settings.privacy.noAccount")}</li>
+                <li>{t("settings.privacy.localStorage")}</li>
+                <li>{t("settings.privacy.analytics")}</li>
+              </ul>
+            </CardContent>
+          </Card>
+
           {/* Data Export/Import */}
           <DataExportImport />
         </div>

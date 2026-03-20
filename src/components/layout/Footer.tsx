@@ -26,6 +26,12 @@ export function Footer() {
               {workouts.length} {t("units.workouts")} · {categories.length}{" "}
               {t("units.categories")} · 6 {t("units.zones")}
             </span>
+            <span className="text-xs text-muted-foreground hidden md:inline">
+              {t("privacy.footerNote")}{" · "}
+              <Link to="/about" className="hover:text-foreground transition-colors underline-offset-2 hover:underline">
+                {t("nav.about")}
+              </Link>
+            </span>
           </div>
 
           {/* Right: links */}

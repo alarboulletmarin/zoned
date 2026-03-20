@@ -6,6 +6,7 @@ import {
   Dices,
   ClipboardCheck,
   CalendarRange,
+  Shield,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -123,9 +124,21 @@ export function HomePage() {
                 </>
               )}
             </h1>
-            <p className="text-base md:text-xl text-muted-foreground max-w-xl mb-8 md:mb-10 leading-relaxed">
+            <p className="text-base md:text-xl text-muted-foreground max-w-xl mb-6 md:mb-8 leading-relaxed">
               {t("common:app.tagline")}
             </p>
+            <div className="flex flex-wrap gap-2 mb-6 md:mb-8">
+              <span className="inline-flex items-center gap-1.5 text-xs md:text-sm text-muted-foreground bg-muted/50 rounded-full px-3 py-1">
+                {t("common:privacy.free")}
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-xs md:text-sm text-muted-foreground bg-muted/50 rounded-full px-3 py-1">
+                {t("common:privacy.noAccount")}
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-xs md:text-sm text-muted-foreground bg-muted/50 rounded-full px-3 py-1">
+                <Shield className="size-3 md:size-3.5" />
+                {t("common:privacy.localData")}
+              </span>
+            </div>
             <div className="flex flex-wrap gap-3 md:gap-4">
               <Button
                 asChild
