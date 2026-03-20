@@ -17,6 +17,7 @@ const STEPS: Step[] = [
     titleKey: "onboarding.step1Title",
     descKey: "onboarding.step1Desc",
     target: "library",
+    action: { labelKey: "onboarding.step1Action", to: "/library" },
   },
   {
     titleKey: "onboarding.step2Title",
@@ -27,14 +28,8 @@ const STEPS: Step[] = [
   {
     titleKey: "onboarding.step3Title",
     descKey: "onboarding.step3Desc",
-    target: "library",
-    action: { labelKey: "onboarding.step3Action", to: "/library" },
-  },
-  {
-    titleKey: "onboarding.step4Title",
-    descKey: "onboarding.step4Desc",
     target: "plans",
-    action: { labelKey: "onboarding.step4Action", to: "/plan/new" },
+    action: { labelKey: "onboarding.step3Action", to: "/plan/new" },
   },
 ];
 
