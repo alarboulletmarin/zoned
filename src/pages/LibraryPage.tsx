@@ -20,8 +20,8 @@ import { getWorkoutDuration } from "@/components/visualization";
 import type { WorkoutCategory } from "@/types";
 
 // Duration constants (same as in WorkoutFilters)
-const DURATION_MIN = 10;
-const DURATION_MAX = 180;
+const DURATION_MIN = 0;
+const DURATION_MAX = 240;
 
 /**
  * Parses URL search params into filter state
