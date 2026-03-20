@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { GitlabIcon, Shield, Heart, Code, Sparkles, ExternalLink } from "@/components/icons";
+import { GitlabIcon, Shield, Heart, Code, Sparkles, ExternalLink, Mail } from "@/components/icons";
 import {
   Card,
   CardContent,
@@ -39,6 +39,47 @@ export function AboutPage() {
           {t("about.description")}
         </p>
       </div>
+
+      {/* Personal Section */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex flex-col sm:flex-row gap-6">
+            <div className="flex-1 space-y-3">
+              <h2 className="text-lg font-semibold">{t("about.personal.title")}</h2>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {t("about.personal.bio")}
+              </p>
+              <div className="flex flex-wrap gap-3 pt-1">
+                <a
+                  href="mailto:contact@zoned.run"
+                  className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <Mail className="size-4" />
+                  contact@zoned.run
+                </a>
+                <a
+                  href="https://www.strava.com/athletes/115001213"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <ExternalLink className="size-3.5" />
+                  Strava
+                </a>
+                <a
+                  href="https://gitlab.com/alarboulletmarin-oss/zoned"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <GitlabIcon className="size-4" />
+                  GitLab
+                </a>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Cards Grid */}
       <div className="grid gap-6 md:grid-cols-2">

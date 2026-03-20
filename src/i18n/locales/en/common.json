@@ -5,7 +5,11 @@
   },
   "about": {
     "title": "About Zoned",
-    "description": "Zoned is a running workout library based on a 6-zone scientific training system. The goal is to make structured training accessible to all runners, from beginners to competitors.",
+    "description": "200 structured workouts, 9 calculators, 8 training plans, 16 collections and 12 articles — all free, no account, no tracking. Zoned makes zone-based training accessible to every runner.",
+    "personal": {
+      "title": "Who am I",
+      "bio": "Runner and developer, I created Zoned to make structured zone-based training accessible to everyone — for free, with no account and no tracking. Every workout, calculator and plan is grounded in training science (Seiler, Billat, Daniels)."
+    },
     "openSource": {
       "title": "Open Source",
       "description": "A free and open project",

@@ -5,7 +5,11 @@
   },
   "about": {
     "title": "À propos de Zoned",
-    "description": "Zoned est une bibliothèque de séances de course à pied basée sur un système de 6 zones d'entraînement scientifique. L'objectif est de rendre l'entraînement structuré accessible à tous les coureurs, du débutant au compétiteur.",
+    "description": "200 séances structurées, 9 calculateurs, 8 plans d'entraînement, 16 collections et 12 articles — le tout gratuit, sans compte et sans tracking. Zoned rend l'entraînement par zones accessible à tous les coureurs.",
+    "personal": {
+      "title": "Qui suis-je",
+      "bio": "Coureur et développeur passionné, j'ai créé Zoned pour rendre l'entraînement structuré par zones accessible à tous — gratuitement, sans compte et sans tracking. Chaque séance, chaque calculateur et chaque plan est basé sur la science de l'entraînement (Seiler, Billat, Daniels)."
+    },
     "openSource": {
       "title": "Open Source",
       "description": "Un projet libre et ouvert",
