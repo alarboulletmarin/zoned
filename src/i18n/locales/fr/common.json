@@ -265,6 +265,13 @@
     "explore": "Ouvrir",
     "comingSoon": "Bientôt"
   },
+  "storageWarning": {
+    "title": "Vos données sont stockées localement",
+    "description": "Zoned n'utilise aucun serveur. Vos favoris, plans et paramètres sont enregistrés uniquement dans votre navigateur.",
+    "warning": "Si vous videz le cache de votre navigateur, toutes vos données seront perdues.",
+    "exportButton": "Exporter mes données",
+    "understand": "J'ai compris"
+  },
   "collections": {
     "title": "Collections",
     "subtitle": "Des parcours thématiques pour chaque objectif",

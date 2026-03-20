@@ -27,6 +27,7 @@ import {
 } from "@/types/plan";
 import type { Difficulty, UserZonePreferences } from "@/types";
 import { DIFFICULTY_META } from "@/types";
+import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 
 // ── Constants ────────────────────────────────────────────────────────
 
@@ -203,6 +204,7 @@ export function PlanCreatePage() {
 
     try {
       const plan = await createPlan(config);
+      triggerStorageWarning();
       navigate(`/plan/${plan.id}`);
     } catch {
       // Error is exposed via the hook's error state

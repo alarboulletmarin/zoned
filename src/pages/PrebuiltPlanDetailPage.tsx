@@ -27,6 +27,7 @@ import type { WorkoutTemplate } from "@/types";
 import { toast } from "sonner";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
+import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 
 const DIFFICULTY_LABELS: Record<string, { fr: string; en: string }> = {
   beginner: { fr: "D\u00e9butant", en: "Beginner" },
@@ -158,6 +159,7 @@ export function PrebuiltPlanDetailPage() {
     }
     const plan = convertPrebuiltToPlan(prebuilt, isEn);
     savePlan(plan);
+    triggerStorageWarning();
     toast.success(isEn ? "Plan added!" : "Plan ajout\u00e9 !");
     navigate(`/plan/${plan.id}`);
   };

@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
 import { getAllPlans, savePlan } from "@/lib/planStorage";
 import { createFreePlan } from "@/lib/createFreePlan";
+import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 
 const MIN_WEEKS = 4;
 const MAX_WEEKS = 52;
@@ -39,6 +40,7 @@ export function FreePlanCreatePage() {
 
     const plan = createFreePlan(name.trim(), weeks, startDate || undefined);
     savePlan(plan);
+    triggerStorageWarning();
     navigate(`/plan/${plan.id}`);
   };
 

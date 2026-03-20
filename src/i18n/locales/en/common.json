@@ -265,6 +265,13 @@
     "explore": "Open",
     "comingSoon": "Coming soon"
   },
+  "storageWarning": {
+    "title": "Your data is stored locally",
+    "description": "Zoned uses no server. Your favorites, plans and settings are saved only in your browser.",
+    "warning": "If you clear your browser cache, all your data will be lost.",
+    "exportButton": "Export my data",
+    "understand": "I understand"
+  },
   "collections": {
     "title": "Collections",
     "subtitle": "Themed workout paths for every goal",

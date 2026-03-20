@@ -9,6 +9,7 @@ import { FavoritesProvider } from "@/hooks";
 import { SettingsProvider } from "@/hooks/useSettings";
 import { CommandPaletteProvider, CommandPalette } from "@/components/search";
 import { GlossaryMatcherProvider } from "@/contexts/GlossaryMatcherContext";
+import { StorageWarning } from "@/components/domain/StorageWarning";
 
 // All pages lazy loaded for optimal code-splitting
 const HomePage = lazy(() => import("@/pages/HomePage").then(m => ({ default: m.HomePage })));
@@ -236,6 +237,7 @@ function App() {
           </CommandPaletteProvider>
           </GlossaryMatcherProvider>
           <Analytics />
+          <StorageWarning />
           <Toaster richColors position="bottom-right" />
           </BrowserRouter>
         </FavoritesProvider>

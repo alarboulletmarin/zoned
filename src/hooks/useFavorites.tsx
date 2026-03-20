@@ -6,6 +6,7 @@ import {
   createContext,
   type ReactNode,
 } from "react";
+import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 
 const STORAGE_KEY = "zoned-favorites";
 
@@ -42,6 +43,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
       if (prev.includes(id)) return prev;
       return [...prev, id];
     });
+    triggerStorageWarning();
   }, []);
 
   const removeFavorite = useCallback((id: string) => {
