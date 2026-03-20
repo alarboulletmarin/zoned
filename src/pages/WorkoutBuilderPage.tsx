@@ -207,32 +207,32 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
 
       <div className="py-8 max-w-3xl mx-auto space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
-          <div className="flex-1">
-            <Button variant="ghost" size="sm" asChild className="mb-2 -ml-2">
-              <Link to="/workout/builder">
-                {isEn ? "← My workouts" : "← Mes séances"}
-              </Link>
-            </Button>
+        <div>
+          <Button variant="ghost" size="sm" asChild className="mb-3 -ml-2">
+            <Link to="/workout/builder">
+              {isEn ? "← My workouts" : "← Mes séances"}
+            </Link>
+          </Button>
+          <div className="flex items-center gap-3">
             <input
               type="text"
               value={workout.name}
               onChange={(e) => setWorkout((prev) => ({ ...prev, name: e.target.value, nameEn: e.target.value }))}
               placeholder={isEn ? "Workout name..." : "Nom de la séance..."}
-              className="text-2xl font-bold bg-transparent border-b border-transparent hover:border-border focus:border-primary focus:outline-none pb-1 transition-colors w-full"
+              className="flex-1 text-2xl font-bold bg-transparent border-b border-transparent hover:border-border focus:border-primary focus:outline-none pb-1 transition-colors"
             />
+            {isSaved && (
+              <Button variant="ghost" size="icon-sm" onClick={handleDelete} className="text-destructive hover:text-destructive shrink-0">
+                <Trash2 className="size-4" />
+              </Button>
+            )}
           </div>
-          <div className="flex gap-2 shrink-0">
-            <Button onClick={handleSave} disabled={!canSave} size="sm">
+          <div className="flex items-center gap-3 mt-4">
+            <Button onClick={handleSave} disabled={!canSave}>
               <Save className="size-4" />
               {isEn ? "Save" : "Enregistrer"}
             </Button>
             {isSaved && <ExportMenu workout={workout} />}
-            {isSaved && (
-              <Button variant="ghost" size="icon-sm" onClick={handleDelete} className="text-destructive">
-                <Trash2 className="size-4" />
-              </Button>
-            )}
           </div>
         </div>
 
