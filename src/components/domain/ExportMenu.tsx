@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ExportDatePicker } from "./ExportDatePicker";
 import { ExportableWorkoutCard } from "./ExportableWorkoutCard";
+import { FitTransferGuide } from "./FitTransferGuide";
 import { exportToICS, exportToPNG, exportToPDF, exportToFIT } from "@/lib/export";
 import { toast } from "sonner";
 import type { WorkoutTemplate } from "@/types";
@@ -32,6 +33,7 @@ export function ExportMenu({ workout }: ExportMenuProps) {
   const { t, i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showFitGuide, setShowFitGuide] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [renderForExport, setRenderForExport] = useState(false);
   const exportCardRef = useRef<HTMLDivElement>(null);
@@ -94,6 +96,7 @@ export function ExportMenu({ workout }: ExportMenuProps) {
     try {
       await exportToFIT(workout);
       toast.success(t("export.success.garmin"));
+      setShowFitGuide(true);
     } catch (error) {
       toast.error(t("export.error.garmin"));
     } finally {
@@ -140,6 +143,12 @@ export function ExportMenu({ workout }: ExportMenuProps) {
           onCancel={() => setShowDatePicker(false)}
         />
       )}
+
+      <FitTransferGuide
+        open={showFitGuide}
+        onOpenChange={setShowFitGuide}
+        workout={workout}
+      />
 
       {/* Hidden export card for PNG capture */}
       {renderForExport && (
