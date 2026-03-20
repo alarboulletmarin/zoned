@@ -62,7 +62,7 @@
   },
   "quiz": {
     "title": "Quick Quiz",
-    "subtitle": "Find your ideal workout in 3 questions",
+    "subtitle": "Find your ideal workout in 5 questions",
     "step": "Step",
     "back": "Back",
     "restart": "Start over",
@@ -85,6 +85,16 @@
     "anywhere": "Anywhere",
     "track": "Track available",
     "hills": "Hills available",
+    "experienceQuestion": "What is your level?",
+    "experienceHint": "Your running experience",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "weaknessQuestion": "What is your weakness?",
+    "weaknessHint": "What you'd like to improve",
+    "speed": "Speed",
+    "enduranceWeakness": "Endurance",
+    "both": "Both",
     "seeMore": "See more in library"
   },
   "workoutOfTheDay": {

@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, RotateCcw, Target, Clock, MapPin, Library } from "@/components/icons";
+import { ArrowLeft, RotateCcw, Target, Clock, MapPin, Library, Users, Zap } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { WorkoutCard } from "./WorkoutCard";
@@ -13,17 +13,18 @@ import {
   type Goal,
   type TimeAvailable,
   type Environment,
+  type Experience,
+  type Weakness,
   type QuizAnswers,
 } from "@/lib/quizLogic";
 import type { WorkoutTemplate } from "@/types";
 
-// Quiz step definition
-type QuizStep = 1 | 2 | 3 | "results";
+const TOTAL_STEPS = 5;
+type QuizStep = 1 | 2 | 3 | 4 | 5 | "results";
 
 interface QuizOption<T extends string> {
   value: T;
   labelKey: string;
-  icon?: React.ReactNode;
 }
 
 const GOAL_OPTIONS: QuizOption<Goal>[] = [
@@ -44,6 +45,18 @@ const ENVIRONMENT_OPTIONS: QuizOption<Environment>[] = [
   { value: "hills", labelKey: "quiz.hills" },
 ];
 
+const EXPERIENCE_OPTIONS: QuizOption<Experience>[] = [
+  { value: "beginner", labelKey: "quiz.beginner" },
+  { value: "intermediate", labelKey: "quiz.intermediate" },
+  { value: "advanced", labelKey: "quiz.advanced" },
+];
+
+const WEAKNESS_OPTIONS: QuizOption<Weakness>[] = [
+  { value: "speed", labelKey: "quiz.speed" },
+  { value: "endurance", labelKey: "quiz.enduranceWeakness" },
+  { value: "both", labelKey: "quiz.both" },
+];
+
 const QUIZ_STORAGE_KEY = "zoned-quiz-results";
 
 interface StoredQuizState {
@@ -52,18 +65,17 @@ interface StoredQuizState {
   isExactMatch: boolean;
 }
 
-/**
- * Maps quiz answers to Library URL parameters
- */
 function buildLibraryParams(answers: QuizAnswers): URLSearchParams {
   const params = new URLSearchParams();
 
-  // Map goal to category
-  // Based on quizLogic.ts getTargetCategories()
   if (answers.goal === "recover") {
     params.set("category", "recovery");
   } else if (answers.goal === "progress") {
-    if (answers.time === "short" || answers.time === "medium") {
+    if (answers.weakness === "speed") {
+      params.set("category", "tempo");
+    } else if (answers.weakness === "endurance") {
+      params.set("category", "long_run");
+    } else if (answers.time === "short" || answers.time === "medium") {
       params.set("category", "tempo");
     } else {
       params.set("category", "long_run");
@@ -78,21 +90,17 @@ function buildLibraryParams(answers: QuizAnswers): URLSearchParams {
     }
   }
 
-  // Map time to maxDuration
   if (answers.time === "short") {
     params.set("maxDuration", "30");
   } else if (answers.time === "medium") {
     params.set("maxDuration", "60");
   }
-  // "long" = no max duration limit
 
-  // Map environment to terrain
   if (answers.environment === "track") {
     params.set("terrain", "track");
   } else if (answers.environment === "hills") {
     params.set("terrain", "hills");
   }
-  // "anywhere" = no terrain filter
 
   return params;
 }
@@ -129,51 +137,37 @@ export function WorkoutQuiz() {
     }
   }, []);
 
-  const handleGoalSelect = useCallback((goal: Goal) => {
-    setAnswers((prev) => ({ ...prev, goal }));
+  const goForward = useCallback((nextStep: QuizStep) => {
     setDirection("forward");
-    setStep(2);
+    setStep(nextStep);
   }, []);
 
-  const handleTimeSelect = useCallback((time: TimeAvailable) => {
-    setAnswers((prev) => ({ ...prev, time }));
-    setDirection("forward");
-    setStep(3);
-  }, []);
+  const handleSelect = useCallback(<K extends keyof QuizAnswers>(key: K, value: QuizAnswers[K], nextStep: QuizStep | "compute") => {
+    const newAnswers = { ...answers, [key]: value };
+    setAnswers(newAnswers);
 
-  const handleEnvironmentSelect = useCallback(
-    (environment: Environment) => {
-      const newAnswers = { ...answers, environment };
-      setAnswers(newAnswers);
+    if (nextStep === "compute" && isQuizComplete(newAnswers)) {
+      const { workouts, isExactMatch: exact } = getRecommendedWorkouts(newAnswers, allWorkouts, 6);
+      setResults(workouts);
+      setIsExactMatch(exact);
       setDirection("forward");
+      setStep("results");
 
-      if (isQuizComplete(newAnswers)) {
-        const { workouts, isExactMatch: exact } = getRecommendedWorkouts(newAnswers, allWorkouts, 3);
-        setResults(workouts);
-        setIsExactMatch(exact);
-        setStep("results");
-
-        // Save to sessionStorage for back navigation
-        const toStore: StoredQuizState = {
-          answers: newAnswers as QuizAnswers,
-          resultIds: workouts.map((w) => w.id),
-          isExactMatch: exact,
-        };
-        sessionStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(toStore));
-      }
-    },
-    [answers]
-  );
+      const toStore: StoredQuizState = {
+        answers: newAnswers as QuizAnswers,
+        resultIds: workouts.map((w) => w.id),
+        isExactMatch: exact,
+      };
+      sessionStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(toStore));
+    } else if (nextStep !== "compute") {
+      goForward(nextStep);
+    }
+  }, [answers, allWorkouts, goForward]);
 
   const handleBack = useCallback(() => {
     setDirection("backward");
-    if (step === 2) {
-      setStep(1);
-    } else if (step === 3) {
-      setStep(2);
-    } else if (step === "results") {
-      setStep(3);
-    }
+    if (step === "results") setStep(5);
+    else if (typeof step === "number" && step > 1) setStep((step - 1) as QuizStep);
   }, [step]);
 
   const handleRestart = useCallback(() => {
@@ -193,13 +187,13 @@ export function WorkoutQuiz() {
   }, [answers, navigate]);
 
   const getStepNumber = (): number => {
-    if (step === "results") return 3;
+    if (step === "results") return TOTAL_STEPS;
     return step;
   };
 
   const renderProgressDots = () => (
     <div className="flex items-center justify-center gap-2 py-4">
-      {[1, 2, 3].map((s) => (
+      {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((s) => (
         <div
           key={s}
           className={cn(
@@ -237,7 +231,15 @@ export function WorkoutQuiz() {
     </Card>
   );
 
-  const renderStep1 = () => (
+  const renderQuestionStep = (
+    stepNumber: number,
+    icon: React.ReactNode,
+    questionKey: string,
+    hintKey: string,
+    options: QuizOption<string>[],
+    selectedValue: string | undefined,
+    onSelect: (value: string) => void
+  ) => (
     <div
       className={cn(
         "flex-1 flex flex-col",
@@ -246,78 +248,24 @@ export function WorkoutQuiz() {
     >
       <div className="flex-1 flex flex-col items-center justify-center px-4">
         <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-          <Target className="size-6 md:size-8 text-primary" />
+          {icon}
         </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">{t("quiz.goalQuestion")}</h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">{t("quiz.goalHint")}</p>
+        <h2 className="text-lg md:text-xl font-semibold text-center">{t(questionKey)}</h2>
+        <p className="text-sm text-muted-foreground mt-1 text-center">{t(hintKey)}</p>
         <div className="w-full max-w-sm space-y-2 mt-6">
-          {GOAL_OPTIONS.map((option) =>
-            renderOptionCard(option, answers.goal === option.value, () =>
-              handleGoalSelect(option.value)
-            )
+          {options.map((option) =>
+            renderOptionCard(option, selectedValue === option.value, () => onSelect(option.value))
           )}
         </div>
       </div>
-    </div>
-  );
-
-  const renderStep2 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
+      {stepNumber > 1 && (
+        <div className="py-3 flex justify-center">
+          <Button variant="ghost" size="sm" onClick={handleBack}>
+            <ArrowLeft className="size-4 mr-1" />
+            {t("quiz.back")}
+          </Button>
+        </div>
       )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-          <Clock className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">{t("quiz.timeQuestion")}</h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">{t("quiz.timeHint")}</p>
-        <div className="w-full max-w-sm space-y-2 mt-6">
-          {TIME_OPTIONS.map((option) =>
-            renderOptionCard(option, answers.time === option.value, () =>
-              handleTimeSelect(option.value)
-            )
-          )}
-        </div>
-      </div>
-      <div className="py-3 flex justify-center">
-        <Button variant="ghost" size="sm" onClick={handleBack}>
-          <ArrowLeft className="size-4 mr-1" />
-          {t("quiz.back")}
-        </Button>
-      </div>
-    </div>
-  );
-
-  const renderStep3 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-          <MapPin className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">{t("quiz.environmentQuestion")}</h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">{t("quiz.environmentHint")}</p>
-        <div className="w-full max-w-sm space-y-2 mt-6">
-          {ENVIRONMENT_OPTIONS.map((option) =>
-            renderOptionCard(option, answers.environment === option.value, () =>
-              handleEnvironmentSelect(option.value)
-            )
-          )}
-        </div>
-      </div>
-      <div className="py-3 flex justify-center">
-        <Button variant="ghost" size="sm" onClick={handleBack}>
-          <ArrowLeft className="size-4 mr-1" />
-          {t("quiz.back")}
-        </Button>
-      </div>
     </div>
   );
 
@@ -358,7 +306,7 @@ export function WorkoutQuiz() {
   // Results page scrolls normally; quiz steps use full viewport
   if (step === "results") {
     return (
-      <div className="max-w-2xl mx-auto py-8">
+      <div className="max-w-3xl mx-auto py-8">
         {renderResults()}
       </div>
     );
@@ -368,9 +316,36 @@ export function WorkoutQuiz() {
     <div className="flex flex-col min-h-[calc(100dvh-8rem)] md:min-h-0 md:py-8 max-w-2xl mx-auto">
       {renderProgressDots()}
 
-      {step === 1 && renderStep1()}
-      {step === 2 && renderStep2()}
-      {step === 3 && renderStep3()}
+      {step === 1 && renderQuestionStep(1,
+        <Target className="size-6 md:size-8 text-primary" />,
+        "quiz.goalQuestion", "quiz.goalHint",
+        GOAL_OPTIONS, answers.goal,
+        (v) => handleSelect("goal", v as Goal, 2)
+      )}
+      {step === 2 && renderQuestionStep(2,
+        <Clock className="size-6 md:size-8 text-primary" />,
+        "quiz.timeQuestion", "quiz.timeHint",
+        TIME_OPTIONS, answers.time,
+        (v) => handleSelect("time", v as TimeAvailable, 3)
+      )}
+      {step === 3 && renderQuestionStep(3,
+        <MapPin className="size-6 md:size-8 text-primary" />,
+        "quiz.environmentQuestion", "quiz.environmentHint",
+        ENVIRONMENT_OPTIONS, answers.environment,
+        (v) => handleSelect("environment", v as Environment, 4)
+      )}
+      {step === 4 && renderQuestionStep(4,
+        <Users className="size-6 md:size-8 text-primary" />,
+        "quiz.experienceQuestion", "quiz.experienceHint",
+        EXPERIENCE_OPTIONS, answers.experience,
+        (v) => handleSelect("experience", v as Experience, 5)
+      )}
+      {step === 5 && renderQuestionStep(5,
+        <Zap className="size-6 md:size-8 text-primary" />,
+        "quiz.weaknessQuestion", "quiz.weaknessHint",
+        WEAKNESS_OPTIONS, answers.weakness,
+        (v) => handleSelect("weakness", v as Weakness, "compute")
+      )}
     </div>
   );
 }

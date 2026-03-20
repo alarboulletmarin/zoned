@@ -62,7 +62,7 @@
   },
   "quiz": {
     "title": "Quiz Rapide",
-    "subtitle": "Trouvez la séance idéale en 3 questions",
+    "subtitle": "Trouvez la séance idéale en 5 questions",
     "step": "Étape",
     "back": "Retour",
     "restart": "Recommencer",
@@ -85,6 +85,16 @@
     "anywhere": "N'importe où",
     "track": "Piste disponible",
     "hills": "Côtes disponibles",
+    "experienceQuestion": "Quel est votre niveau ?",
+    "experienceHint": "Votre expérience en course à pied",
+    "beginner": "Débutant",
+    "intermediate": "Intermédiaire",
+    "advanced": "Avancé",
+    "weaknessQuestion": "Quel est votre point faible ?",
+    "weaknessHint": "Ce que vous aimeriez améliorer",
+    "speed": "Vitesse",
+    "enduranceWeakness": "Endurance",
+    "both": "Les deux",
     "seeMore": "Voir plus dans la bibliothèque"
   },
   "workoutOfTheDay": {

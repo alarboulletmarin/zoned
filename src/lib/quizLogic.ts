@@ -5,11 +5,15 @@ import { getWorkoutDuration } from "@/components/visualization";
 export type Goal = "recover" | "progress" | "perform";
 export type TimeAvailable = "short" | "medium" | "long";
 export type Environment = "anywhere" | "track" | "hills";
+export type Experience = "beginner" | "intermediate" | "advanced";
+export type Weakness = "speed" | "endurance" | "both";
 
 export interface QuizAnswers {
   goal: Goal;
   time: TimeAvailable;
   environment: Environment;
+  experience: Experience;
+  weakness: Weakness;
 }
 
 // Time ranges in minutes
@@ -23,32 +27,64 @@ const TIME_RANGES: Record<TimeAvailable, { min: number; max: number }> = {
  * Maps quiz answers to recommended workout categories
  */
 function getTargetCategories(answers: QuizAnswers): WorkoutCategory[] {
-  const { goal, time, environment } = answers;
+  const { goal, time, environment, experience, weakness } = answers;
 
   // Recovery goal: recovery and endurance regardless of time/env
   if (goal === "recover") {
     return ["recovery", "endurance"];
   }
 
-  // Progress goal
+  // Progress goal — modulated by experience and weakness
   if (goal === "progress") {
-    if (time === "short" || time === "medium") {
-      return ["tempo", "threshold"];
+    const categories: WorkoutCategory[] = [];
+
+    if (weakness === "speed") {
+      categories.push("tempo", "vma_intervals");
+    } else if (weakness === "endurance") {
+      categories.push("long_run", "endurance");
+    } else {
+      // "both"
+      if (time === "short" || time === "medium") {
+        categories.push("tempo", "threshold");
+      } else {
+        categories.push("long_run", "fartlek");
+      }
     }
-    // Long time
-    return ["long_run", "fartlek"];
+
+    // Beginners get simpler workouts added
+    if (experience === "beginner" && !categories.includes("endurance")) {
+      categories.push("endurance");
+    }
+    // Advanced get more intense options
+    if (experience === "advanced" && !categories.includes("threshold")) {
+      categories.push("threshold");
+    }
+
+    return categories;
   }
 
   // Perform goal
   if (goal === "perform") {
+    const categories: WorkoutCategory[] = [];
+
     if (environment === "track") {
-      return ["vma_intervals"];
+      categories.push("vma_intervals");
+    } else if (environment === "hills") {
+      categories.push("hills");
+    } else {
+      categories.push("tempo", "threshold", "fartlek");
     }
-    if (environment === "hills") {
-      return ["hills"];
+
+    // Advanced: add race_pace and mixed
+    if (experience === "advanced") {
+      categories.push("race_pace");
     }
-    // Anywhere
-    return ["tempo", "threshold", "fartlek"];
+    // Beginners: soften with fartlek
+    if (experience === "beginner" && !categories.includes("fartlek")) {
+      categories.push("fartlek");
+    }
+
+    return categories;
   }
 
   return ["endurance"];
@@ -61,15 +97,9 @@ function matchesEnvironment(
   workout: WorkoutTemplate,
   environment: Environment
 ): boolean {
-  if (environment === "track") {
-    // When track is available, prefer track workouts but allow others
+  if (environment === "track" || environment === "hills") {
     return true;
   }
-  if (environment === "hills") {
-    // When hills are available, prefer hills workouts but allow others
-    return true;
-  }
-  // Anywhere: exclude workouts that require specific terrain
   return !workout.environment.requiresTrack && !workout.environment.requiresHills;
 }
 
@@ -82,12 +112,26 @@ function matchesDuration(
 ): boolean {
   const duration = getWorkoutDuration(workout);
   const range = TIME_RANGES[time];
-
-  // Allow some flexibility on boundaries
   const minWithBuffer = range.min * 0.8;
   const maxWithBuffer = range.max * 1.2;
-
   return duration >= minWithBuffer && duration <= maxWithBuffer;
+}
+
+/**
+ * Filters by difficulty based on experience
+ */
+function matchesExperience(
+  workout: WorkoutTemplate,
+  experience: Experience
+): boolean {
+  if (experience === "beginner") {
+    return workout.difficulty === "beginner" || workout.difficulty === "intermediate";
+  }
+  if (experience === "advanced") {
+    return workout.difficulty === "intermediate" || workout.difficulty === "advanced";
+  }
+  // Intermediate: all difficulties
+  return true;
 }
 
 export interface QuizResult {
@@ -97,81 +141,65 @@ export interface QuizResult {
 
 /**
  * Returns recommended workouts based on quiz answers
- * @param answers - The user's quiz answers
- * @param allWorkouts - All available workouts
- * @param maxResults - Maximum number of results to return (default: 3)
  */
 export function getRecommendedWorkouts(
   answers: QuizAnswers,
   allWorkouts: WorkoutTemplate[],
-  maxResults: number = 3
+  maxResults: number = 6
 ): QuizResult {
   const targetCategories = getTargetCategories(answers);
 
-  // Filter workouts by category, environment, and duration
+  // Full filter: category + environment + duration + experience
   const matchingWorkouts = allWorkouts.filter((workout) => {
-    // Must be in target categories
-    if (!targetCategories.includes(workout.category)) {
-      return false;
-    }
-
-    // Must match environment constraints
-    if (!matchesEnvironment(workout, answers.environment)) {
-      return false;
-    }
-
-    // Must match duration
-    if (!matchesDuration(workout, answers.time)) {
-      return false;
-    }
-
+    if (!targetCategories.includes(workout.category)) return false;
+    if (!matchesEnvironment(workout, answers.environment)) return false;
+    if (!matchesDuration(workout, answers.time)) return false;
+    if (!matchesExperience(workout, answers.experience)) return false;
     return true;
   });
 
-  // If no exact matches, relax duration constraint but sort by closest duration
-  if (matchingWorkouts.length === 0) {
-    const relaxedWorkouts = allWorkouts.filter((workout) => {
-      if (!targetCategories.includes(workout.category)) {
-        return false;
-      }
-      if (!matchesEnvironment(workout, answers.environment)) {
-        return false;
-      }
-      return true;
-    });
-
-    if (relaxedWorkouts.length > 0) {
-      // Sort by duration to show closest matches first
-      const targetDuration = (TIME_RANGES[answers.time].min + TIME_RANGES[answers.time].max) / 2;
-      const sorted = relaxedWorkouts.sort((a, b) => {
-        const durationA = getWorkoutDuration(a);
-        const durationB = getWorkoutDuration(b);
-        return Math.abs(durationA - targetDuration) - Math.abs(durationB - targetDuration);
-      });
-      return { workouts: sorted.slice(0, maxResults), isExactMatch: false };
-    }
+  if (matchingWorkouts.length > 0) {
+    return { workouts: shuffleAndPick(matchingWorkouts, maxResults), isExactMatch: true };
   }
 
-  // If still no matches, just filter by category and sort by duration
-  if (matchingWorkouts.length === 0) {
-    const categoryOnly = allWorkouts.filter((workout) =>
-      targetCategories.includes(workout.category)
-    );
+  // Relax experience constraint
+  const relaxedExp = allWorkouts.filter((workout) => {
+    if (!targetCategories.includes(workout.category)) return false;
+    if (!matchesEnvironment(workout, answers.environment)) return false;
+    if (!matchesDuration(workout, answers.time)) return false;
+    return true;
+  });
+
+  if (relaxedExp.length > 0) {
+    return { workouts: shuffleAndPick(relaxedExp, maxResults), isExactMatch: true };
+  }
+
+  // Relax duration constraint, sort by closest
+  const relaxedDuration = allWorkouts.filter((workout) => {
+    if (!targetCategories.includes(workout.category)) return false;
+    if (!matchesEnvironment(workout, answers.environment)) return false;
+    return true;
+  });
+
+  if (relaxedDuration.length > 0) {
     const targetDuration = (TIME_RANGES[answers.time].min + TIME_RANGES[answers.time].max) / 2;
-    const sorted = categoryOnly.sort((a, b) => {
-      const durationA = getWorkoutDuration(a);
-      const durationB = getWorkoutDuration(b);
-      return Math.abs(durationA - targetDuration) - Math.abs(durationB - targetDuration);
+    const sorted = relaxedDuration.sort((a, b) => {
+      return Math.abs(getWorkoutDuration(a) - targetDuration) - Math.abs(getWorkoutDuration(b) - targetDuration);
     });
     return { workouts: sorted.slice(0, maxResults), isExactMatch: false };
   }
 
-  return { workouts: shuffleAndPick(matchingWorkouts, maxResults), isExactMatch: true };
+  // Last resort: category only
+  const categoryOnly = allWorkouts.filter((workout) =>
+    targetCategories.includes(workout.category)
+  );
+  const targetDuration = (TIME_RANGES[answers.time].min + TIME_RANGES[answers.time].max) / 2;
+  const sorted = categoryOnly.sort((a, b) => {
+    return Math.abs(getWorkoutDuration(a) - targetDuration) - Math.abs(getWorkoutDuration(b) - targetDuration);
+  });
+  return { workouts: sorted.slice(0, maxResults), isExactMatch: false };
 }
 
-/**
- * Shuffles array and picks first n elements
- */
 function shuffleAndPick<T>(array: T[], n: number): T[] {
   const shuffled = [...array].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, n);
@@ -186,6 +214,8 @@ export function isQuizComplete(
   return (
     answers.goal !== undefined &&
     answers.time !== undefined &&
-    answers.environment !== undefined
+    answers.environment !== undefined &&
+    answers.experience !== undefined &&
+    answers.weakness !== undefined
   );
 }
