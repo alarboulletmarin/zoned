@@ -23,6 +23,7 @@ const SESSION_COLORS: Record<string, string> = {
   swimming: "#0ea5e9",
   yoga: "#d946ef",
   rest_day: "#a1a1aa",
+  rest: "#a1a1aa",
   cross_training: "#6b7280",
 };
 

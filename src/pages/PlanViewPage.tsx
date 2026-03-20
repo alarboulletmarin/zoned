@@ -164,7 +164,7 @@ export function PlanViewPage() {
         __activity_cycling__: { fr: "Vélo", en: "Cycling" },
         __activity_swimming__: { fr: "Natation", en: "Swimming" },
         __activity_yoga__: { fr: "Yoga", en: "Yoga" },
-        __activity_rest_day__: { fr: "Repos actif", en: "Active Rest" },
+        __activity_rest__: { fr: "Repos actif", en: "Active Rest" },
         __activity_cross_training__: { fr: "Autre activité", en: "Other Activity" },
       };
       for (const [aid, labels] of Object.entries(activityLabels)) {

@@ -32,6 +32,7 @@ export type SessionType =
   | "cycling"
   | "swimming"
   | "yoga"
+  | "rest"
   | "rest_day"
   | "cross_training";
 
