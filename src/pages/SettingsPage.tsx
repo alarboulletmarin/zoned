@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { DataExportImport } from "@/components/domain/DataExportImport";
 import type { ColorPalette } from "@/types/settings";
 
 const ZONE_NUMBERS = [1, 2, 3, 4, 5, 6] as const;
@@ -129,6 +130,9 @@ export function SettingsPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Data Export/Import */}
+          <DataExportImport />
         </div>
       </div>
     </>

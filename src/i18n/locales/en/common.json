@@ -213,6 +213,18 @@
       "description": "Metric or imperial",
       "metric": "Metric (km)",
       "imperial": "Imperial (miles)"
+    },
+    "data": {
+      "title": "Your data",
+      "description": "Export or restore your data (favorites, plans, zones, settings)",
+      "exportButton": "Export my data",
+      "importButton": "Restore my data",
+      "exportSuccess": "Data exported successfully",
+      "importSuccess": "Data restored successfully. The page will reload.",
+      "invalidFile": "Invalid file. Use a file exported by Zoned.",
+      "confirmTitle": "Restore data?",
+      "confirmDescription": "This will replace all your current data (favorites, plans, settings) with the backup file.",
+      "confirmButton": "Restore"
     }
   },
   "tips": {
