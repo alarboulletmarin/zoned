@@ -174,6 +174,13 @@ function SidebarNavItem({
       onClick={onClick}
       className={classes}
       aria-label={collapsed ? label : undefined}
+      data-onboarding={
+        item.href === "/library" ? "library" :
+        item.href === "/quiz" ? "quiz" :
+        item.href === "/plans" ? "plans" :
+        item.href === "/workout/builder" ? "builder" :
+        undefined
+      }
     >
       {content}
     </Link>
