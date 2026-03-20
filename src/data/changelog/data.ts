@@ -60,6 +60,24 @@ export const changelogVersions: ChangelogVersion[] = [
           category: "SEO",
           categoryEn: "SEO",
         },
+        {
+          text: "SEO : image OG par défaut mise à jour (200 séances, 9 calculateurs, « No Account Needed »)",
+          textEn: "SEO: updated default OG image with current stats (200 workouts, 9 calculators, 'No Account Needed')",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
+        {
+          text: "SEO : pré-rendu des pages anglaises et liens hreflang dans le sitemap",
+          textEn: "SEO: prerender English pages and hreflang alternate links in sitemap",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
+        {
+          text: "Page À propos repensée avec section personnelle, stats à jour et liens de contact (email, Strava, GitLab)",
+          textEn: "About page redesigned with personal section, updated stats and contact links (email, Strava, GitLab)",
+          category: "UX",
+          categoryEn: "UX",
+        },
       ],
       changed: [
         {

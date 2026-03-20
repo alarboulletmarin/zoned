@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SEO: JSON-LD WebApplication schema on all 9 calculator pages
 - SEO: BreadcrumbList JSON-LD on Article, Collection and Prebuilt Plan detail pages
 - SEO: enriched Article JSON-LD with author, publisher, datePublished and dateModified
+- SEO: updated default OG image with current stats (200 workouts, 9 calculators, "No Account Needed")
+- SEO: prerender English pages and hreflang alternate links in sitemap
+- About page redesigned with personal section, updated stats (200 workouts, 9 calculators, 8 plans, 16 collections), contact links (email, Strava, GitLab)
 
 ### Changed
 
