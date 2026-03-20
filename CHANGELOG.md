@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Storage persistence warning: first-time dialog when saving favorites or creating a plan, explaining that data is stored locally
 - Privacy-first positioning: visible badges on homepage hero, privacy note in footer, dedicated privacy section in settings
 - Ko-fi support link in footer and about page
+- SEO: H1 heading, intro text and JSON-LD WebApplication schema on Zones and Pace calculator pages
+- SEO: 53 new routes in sitemap — collections, prebuilt plans, calculators, methodology, guides (318 → 371 URLs)
+- SEO: JSON-LD WebApplication schema on all 9 calculator pages
+- SEO: BreadcrumbList JSON-LD on Article, Collection and Prebuilt Plan detail pages
+- SEO: enriched Article JSON-LD with author, publisher, datePublished and dateModified
 
 ### Changed
 

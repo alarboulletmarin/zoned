@@ -30,6 +30,36 @@ export const changelogVersions: ChangelogVersion[] = [
           category: "Fonctionnalité",
           categoryEn: "Feature",
         },
+        {
+          text: "SEO : contenu textuel et JSON-LD WebApplication sur les pages Zones et Allures",
+          textEn: "SEO: H1 heading, intro text and JSON-LD WebApplication schema on Zones and Pace calculator pages",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
+        {
+          text: "SEO : 53 nouvelles routes dans le sitemap (collections, plans pré-construits, calculateurs) — 318 → 371 URLs",
+          textEn: "SEO: 53 new routes in sitemap — collections, prebuilt plans, calculators (318 → 371 URLs)",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
+        {
+          text: "SEO : JSON-LD WebApplication sur les 9 pages calculateurs",
+          textEn: "SEO: JSON-LD WebApplication schema on all 9 calculator pages",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
+        {
+          text: "SEO : fil d'Ariane JSON-LD sur les pages Article, Collection et Plan pré-construit",
+          textEn: "SEO: BreadcrumbList JSON-LD on Article, Collection and Prebuilt Plan detail pages",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
+        {
+          text: "SEO : schema Article enrichi avec auteur, éditeur et dates de publication",
+          textEn: "SEO: enriched Article JSON-LD with author, publisher, datePublished and dateModified",
+          category: "SEO",
+          categoryEn: "SEO",
+        },
       ],
       changed: [
         {
