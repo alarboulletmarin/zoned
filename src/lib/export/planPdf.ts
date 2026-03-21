@@ -9,22 +9,8 @@ import type { TDocumentDefinitions, Content, TableCell } from "pdfmake/interface
 import type { TrainingPlan } from "@/types/plan";
 import type { WorkoutTemplate, WorkoutBlock } from "@/types";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
-
-/**
- * Format workout blocks into a readable text string for PDF.
- */
-function formatWorkoutBlocks(blocks: WorkoutBlock[], isEn: boolean): string {
-  return blocks
-    .map((block) => {
-      const desc = isEn ? (block.descriptionEn || block.description) : block.description;
-      const duration = block.durationMin ? ` (${block.durationMin}min)` : "";
-      const zone = block.zone ? ` [${block.zone}]` : "";
-      const reps = block.repetitions && block.repetitions > 1 ? `${block.repetitions}x ` : "";
-      const rest = block.rest ? ` — ${isEn ? "rest" : "récup"}: ${block.rest}` : "";
-      return `${reps}${desc}${duration}${zone}${rest}`;
-    })
-    .join("\n");
-}
+import { computePlanStats, computeWeekKm, computeWeekDuration } from "@/lib/planStats";
+import { calculatePaceZones, formatPace } from "@/lib/zones";
 
 /**
  * Phase colors for PDF backgrounds (light versions for row fills)
@@ -35,6 +21,15 @@ const PHASE_COLORS: Record<string, { bg: string; text: string }> = {
   peak: { bg: "#ffedd5", text: "#9a3412" },        // orange-100 / orange-800
   taper: { bg: "#dcfce7", text: "#166534" },       // green-100 / green-800
   recovery: { bg: "#f1f5f9", text: "#475569" },    // slate-100 / slate-600
+};
+
+const ZONE_COLORS: Record<string, string> = {
+  Z1: "#22c55e",
+  Z2: "#3b82f6",
+  Z3: "#eab308",
+  Z4: "#f97316",
+  Z5: "#ef4444",
+  Z6: "#a855f7",
 };
 
 /**
@@ -59,6 +54,39 @@ function formatDate(isoDate: string, isEn: boolean): string {
     day: "numeric",
     month: "long",
     year: "numeric",
+  });
+}
+
+/**
+ * Format workout blocks into rich Content[] with colored zone tags.
+ */
+function formatWorkoutBlocksRich(blocks: WorkoutBlock[], isEn: boolean): Content[] {
+  return blocks.map((block) => {
+    const desc = isEn ? (block.descriptionEn || block.description) : block.description;
+    const duration = block.durationMin ? ` (${block.durationMin}min)` : "";
+    const reps = block.repetitions && block.repetitions > 1 ? `${block.repetitions}x ` : "";
+    const rest = block.rest ? ` — ${isEn ? "rest" : "récup"}: ${block.rest}` : "";
+
+    const textParts: Array<{ text: string; color?: string; bold?: boolean }> = [
+      { text: `${reps}${desc}${duration}` },
+    ];
+    if (block.zone) {
+      textParts.push({
+        text: ` [${block.zone}]`,
+        color: ZONE_COLORS[block.zone] || "#555",
+        bold: true,
+      });
+    }
+    if (rest) {
+      textParts.push({ text: rest });
+    }
+
+    return {
+      text: textParts,
+      fontSize: 8,
+      color: "#555",
+      margin: [8, 0, 0, 2] as [number, number, number, number],
+    };
   });
 }
 
@@ -134,6 +162,117 @@ export async function exportPlanToPDF(
     },
   );
 
+  // Stats summary
+  const stats = computePlanStats(plan);
+  content.push({
+    columns: [
+      {
+        width: "*",
+        stack: [
+          { text: `${stats.totalSessions} ${isEn ? "sessions" : "séances"}`, style: "metadata", bold: true },
+          { text: `${Math.round(stats.totalDurationMin / 60)}h ${isEn ? "total" : "au total"}`, style: "metadata" },
+        ],
+      },
+      {
+        width: "*",
+        stack: [
+          { text: `~${Math.round(stats.totalEstimatedKm)} km`, style: "metadata", bold: true },
+          { text: `${stats.keySessionCount} ${isEn ? "key sessions" : "séances clés"}`, style: "metadata" },
+        ],
+      },
+      {
+        width: "*",
+        stack: [
+          { text: `${isEn ? "Peak" : "Pic"}: S${stats.peakVolumeWeek}`, style: "metadata", bold: true },
+          { text: `${stats.avgDurationPerWeekMin}min/${isEn ? "week" : "sem"}`, style: "metadata" },
+        ],
+      },
+    ],
+    margin: [0, 0, 0, 20],
+  });
+
+  // Session type pace table (if targetPaceMinKm is set)
+  if (plan.config.targetPaceMinKm) {
+    const pace = plan.config.targetPaceMinKm;
+    const paceStr = (p: number) => {
+      const m = Math.floor(p);
+      const s = Math.round((p - m) * 60);
+      return `${m}:${s.toString().padStart(2, "0")}/km`;
+    };
+
+    const paceRows = [
+      [isEn ? "Race / Threshold" : "Course / Seuil", paceStr(pace)],
+      ["Tempo", paceStr(pace + 0.25)],
+      [isEn ? "Easy / Long Run" : "Endurance / SL", paceStr(pace + 1)],
+      ["VO2max", paceStr(pace - 0.5)],
+    ];
+
+    content.push(
+      { text: isEn ? "Target Paces" : "Allures cibles", style: "sectionHeader" },
+      {
+        table: {
+          headerRows: 1,
+          widths: ["*", "auto"],
+          body: [
+            [
+              { text: isEn ? "Session Type" : "Type de séance", style: "tableHeader" },
+              { text: isEn ? "Pace" : "Allure", style: "tableHeader" },
+            ],
+            ...paceRows.map(([type, paceVal]) => [
+              { text: type, margin: [4, 3, 4, 3] as [number, number, number, number] },
+              { text: paceVal, alignment: "center" as const, bold: true, margin: [4, 3, 4, 3] as [number, number, number, number] },
+            ] as TableCell[]),
+          ],
+        },
+        layout: "lightHorizontalLines",
+        margin: [0, 0, 0, 20],
+      },
+    );
+  }
+
+  // Zone pace table (if VMA is set)
+  if (plan.config.vma) {
+    const paceZones = calculatePaceZones(plan.config.vma);
+
+    content.push(
+      { text: isEn ? "Zone Paces (from VMA)" : "Allures par zone (VMA)", style: "sectionHeader" },
+      {
+        table: {
+          headerRows: 1,
+          widths: [40, "*", "auto"],
+          body: [
+            [
+              { text: "Zone", style: "tableHeader" },
+              { text: isEn ? "Range" : "Plage", style: "tableHeader" },
+              { text: isEn ? "Pace" : "Allure", style: "tableHeader" },
+            ],
+            ...paceZones.map((z) => [
+              {
+                text: `Z${z.zone}`,
+                bold: true,
+                color: ZONE_COLORS[`Z${z.zone}`] || "#333",
+                margin: [4, 2, 4, 2] as [number, number, number, number],
+              },
+              {
+                text: `${z.paceMaxPerKm ? formatPace(z.paceMaxPerKm) : "?"} - ${z.paceMinPerKm ? formatPace(z.paceMinPerKm) : "?"}`,
+                margin: [4, 2, 4, 2] as [number, number, number, number],
+              },
+              {
+                text: z.paceMinPerKm && z.paceMaxPerKm
+                  ? formatPace((z.paceMinPerKm + z.paceMaxPerKm) / 2)
+                  : "-",
+                alignment: "center" as const,
+                margin: [4, 2, 4, 2] as [number, number, number, number],
+              },
+            ] as TableCell[]),
+          ],
+        },
+        layout: "lightHorizontalLines",
+        margin: [0, 0, 0, 20],
+      },
+    );
+  }
+
   // Phase overview
   content.push(
     { text: isEn ? "Training Phases" : "Phases d'entraînement", style: "sectionHeader" },
@@ -180,6 +319,8 @@ export async function exportPlanToPDF(
 
   // ── Weekly Session Tables ──────────────────────────────────────────
 
+  let currentPhase = "";
+
   for (const week of plan.weeks) {
     const phaseMeta = PHASE_META[week.phase];
     const phaseColors = PHASE_COLORS[week.phase] || PHASE_COLORS.recovery;
@@ -187,11 +328,45 @@ export async function exportPlanToPDF(
       ? (week.weekLabelEn || `Week ${week.weekNumber}`)
       : (week.weekLabel || `Semaine ${week.weekNumber}`);
 
+    // Phase transition banner
+    const isPhaseTransition = week.phase !== currentPhase;
+    if (isPhaseTransition) {
+      currentPhase = week.phase;
+      const pMeta = PHASE_META[week.phase];
+      const pColors = PHASE_COLORS[week.phase] || PHASE_COLORS.recovery;
+
+      if (week.weekNumber > 1) {
+        content.push({
+          table: {
+            widths: ["*"],
+            body: [[{
+              text: `${(isEn ? pMeta.labelEn : pMeta.label).toUpperCase()} — ${isEn ? pMeta.descriptionEn : pMeta.description}`,
+              bold: true,
+              fontSize: 11,
+              color: pColors.text,
+              fillColor: pColors.bg,
+              margin: [8, 6, 8, 6],
+            }]],
+          },
+          layout: "noBorders",
+          margin: [0, 4, 0, 8],
+          pageBreak: "before" as const,
+        });
+      }
+    }
+
+    // Weekly volume stats
+    const weekDuration = computeWeekDuration(week);
+    const weekKm = Math.round(computeWeekKm(week));
+    const weekDurationStr = weekDuration >= 60
+      ? `${Math.floor(weekDuration / 60)}h${(weekDuration % 60).toString().padStart(2, "0")}`
+      : `${weekDuration}min`;
+
     // Week header with phase info
     content.push({
-      text: `${weekLabel} — ${isEn ? phaseMeta.labelEn : phaseMeta.label} (${week.volumePercent}%)${week.isRecoveryWeek ? (isEn ? " [Recovery]" : " [Recup]") : ""}`,
+      text: `${weekLabel} — ${isEn ? phaseMeta.labelEn : phaseMeta.label} · ${weekDurationStr} · ~${weekKm}km${week.isRecoveryWeek ? (isEn ? " [Recovery]" : " [Récup]") : ""}`,
       style: "weekHeader",
-      pageBreak: week.weekNumber > 1 ? "before" as const : undefined,
+      pageBreak: (week.weekNumber > 1 && !isPhaseTransition) ? "before" as const : undefined,
     });
 
     if (week.sessions.length === 0) {
@@ -245,10 +420,12 @@ export async function exportPlanToPDF(
           margin: [4, 3, 4, 3],
         },
         {
-          text: session.isKeySession ? "*" : "",
+          text: session.isKeySession ? "\u2605" : "",
           alignment: "center" as const,
           bold: true,
-          color: session.isKeySession ? "#eab308" : undefined,
+          fontSize: session.isKeySession ? 11 : 9,
+          color: session.isKeySession ? "#854d0e" : undefined,
+          fillColor: session.isKeySession ? "#fef9c3" : undefined,
           margin: [4, 3, 4, 3],
         },
       ] as TableCell[];
@@ -305,12 +482,7 @@ export async function exportPlanToPDF(
           color: "#555",
           margin: [0, 2, 0, 1],
         });
-        detailStack.push({
-          text: formatWorkoutBlocks(template.warmupTemplate, isEn),
-          fontSize: 8,
-          color: "#555",
-          margin: [8, 0, 0, 2],
-        });
+        detailStack.push(...formatWorkoutBlocksRich(template.warmupTemplate, isEn));
       }
 
       if (template.mainSetTemplate?.length) {
@@ -321,12 +493,7 @@ export async function exportPlanToPDF(
           color: "#555",
           margin: [0, 2, 0, 1],
         });
-        detailStack.push({
-          text: formatWorkoutBlocks(template.mainSetTemplate, isEn),
-          fontSize: 8,
-          color: "#555",
-          margin: [8, 0, 0, 2],
-        });
+        detailStack.push(...formatWorkoutBlocksRich(template.mainSetTemplate, isEn));
       }
 
       if (template.cooldownTemplate?.length) {
@@ -337,12 +504,7 @@ export async function exportPlanToPDF(
           color: "#555",
           margin: [0, 2, 0, 1],
         });
-        detailStack.push({
-          text: formatWorkoutBlocks(template.cooldownTemplate, isEn),
-          fontSize: 8,
-          color: "#555",
-          margin: [8, 0, 0, 2],
-        });
+        detailStack.push(...formatWorkoutBlocksRich(template.cooldownTemplate, isEn));
       }
 
       // Add pace note from config
@@ -367,18 +529,28 @@ export async function exportPlanToPDF(
     }
   }
 
-  // ── Footer ─────────────────────────────────────────────────────────
-
-  content.push({
-    text: `${isEn ? "Generated by" : "Généré par"} Zoned - ${new Date().toLocaleDateString(isEn ? "en-US" : "fr-FR")}`,
-    style: "footer",
-    margin: [0, 20, 0, 0],
-  });
-
   // ── Document Definition ────────────────────────────────────────────
 
   const docDefinition: TDocumentDefinitions = {
     content,
+    footer: (currentPage: number, pageCount: number) => ({
+      columns: [
+        { text: planName, fontSize: 7, color: "#aaa", margin: [30, 0, 0, 0] },
+        {
+          text: `${isEn ? "Generated by" : "Généré par"} Zoned`,
+          fontSize: 7,
+          color: "#aaa",
+          alignment: "center" as const,
+        },
+        {
+          text: `${currentPage} / ${pageCount}`,
+          fontSize: 7,
+          color: "#aaa",
+          alignment: "right" as const,
+          margin: [0, 0, 30, 0],
+        },
+      ],
+    }),
     styles: {
       header: {
         fontSize: 24,
@@ -423,7 +595,7 @@ export async function exportPlanToPDF(
     defaultStyle: {
       fontSize: 9,
     },
-    pageMargins: [30, 30, 30, 30],
+    pageMargins: [30, 30, 30, 45],
   };
 
   // pdfmake types are outdated - getBlob() returns Promise<Blob> in recent versions

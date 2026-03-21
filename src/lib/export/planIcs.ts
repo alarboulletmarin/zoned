@@ -7,6 +7,7 @@
 import { createEvents, type EventAttributes } from "ics";
 import type { TrainingPlan } from "@/types/plan";
 import type { WorkoutTemplate } from "@/types";
+import { getDominantZone } from "@/types";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import { DAY_LABELS } from "@/lib/planGenerator/constants";
 
@@ -101,17 +102,17 @@ export function exportPlanToICS(
             sessionDate.getMonth() + 1,
             sessionDate.getDate(),
           ],
-          title: `[Zoned] ${isEn ? "Race Day" : "Jour de course"} - ${raceName}`,
+          title: `${isEn ? "Race Day" : "Jour de course"} - ${raceName}`,
           description: plan.raceTimePrediction
             ? `${isEn ? "Target time" : "Temps cible"}: ${plan.raceTimePrediction}`
             : "",
           categories: ["Running", "Race"],
           status: "CONFIRMED" as const,
-          busyStatus: "BUSY" as const,
+          transp: "TRANSPARENT" as const,
           productId: "zoned-app",
         });
       } else {
-        // Regular training session: timed event at 07:00
+        // Regular training session: all-day event
         const workoutName = workoutNames[session.workoutId] || session.workoutId;
         const dayLabel = dayLabels[mappedDay];
         const weekLabel = isEn
@@ -132,6 +133,9 @@ export function exportPlanToICS(
         }
 
         const template = workoutTemplates[session.workoutId];
+        const primaryZone = template ? `Z${getDominantZone(template)}` : "";
+        const zoneTag = primaryZone ? ` [${primaryZone}]` : "";
+
         if (template) {
           const desc = isEn ? (template.descriptionEn || template.description) : template.description;
           descriptionLines.push("");
@@ -187,23 +191,22 @@ export function exportPlanToICS(
           }
         }
 
-        const hours = Math.floor(session.estimatedDurationMin / 60);
-        const minutes = session.estimatedDurationMin % 60;
-
         events.push({
           start: [
             sessionDate.getFullYear(),
             sessionDate.getMonth() + 1,
             sessionDate.getDate(),
-            7, // Default 07:00
-            0,
           ],
-          duration: { hours, minutes },
-          title: `[Zoned] ${workoutName}`,
+          end: [
+            sessionDate.getFullYear(),
+            sessionDate.getMonth() + 1,
+            sessionDate.getDate(),
+          ],
+          title: `${workoutName} - ${session.estimatedDurationMin}min${zoneTag}`,
           description: descriptionLines.join("\n"),
           categories: ["Running", "Workout", session.sessionType],
           status: "CONFIRMED" as const,
-          busyStatus: "BUSY" as const,
+          transp: "TRANSPARENT" as const,
           productId: "zoned-app",
         });
       }
