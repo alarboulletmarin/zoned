@@ -5,6 +5,7 @@ import { Utensils, Droplets, Heart } from "@/components/icons";
 import { getRecommendations } from "@/data/recommendations";
 import type { PhaseRecommendations, RecommendationItem } from "@/data/recommendations";
 import type { WorkoutTemplate } from "@/types";
+import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 
 interface NutritionRecoverySectionProps {
   workout: WorkoutTemplate;
@@ -32,7 +33,7 @@ function DomainBlock({
       <ul className="space-y-1.5 ml-6">
         {items.map((item, i) => (
           <li key={i} className="text-sm text-muted-foreground list-disc">
-            {isEn ? item.textEn : item.text}
+            <GlossaryLinkedText text={isEn ? item.textEn : item.text} />
           </li>
         ))}
       </ul>

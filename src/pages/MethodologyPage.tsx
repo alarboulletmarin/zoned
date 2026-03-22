@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
+import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 
 // ---------------------------------------------------------------------------
 // Zone data
@@ -351,21 +352,25 @@ export function MethodologyPage() {
             </h2>
           </div>
           <div className="text-muted-foreground space-y-3 pl-12">
-            <p>
-              {isEn
+            <GlossaryLinkedText
+              as="p"
+              text={isEn
                 ? "All workouts in Zoned are based on established sports science. The intensity zones are not arbitrary: they correspond to real physiological thresholds that can be measured in a lab or estimated from field tests."
                 : "Toutes les séances de Zoned sont basées sur les sciences du sport établies. Les zones d'intensité ne sont pas arbitraires : elles correspondent à des seuils physiologiques réels, mesurables en laboratoire ou estimables à partir de tests de terrain."}
-            </p>
-            <p>
-              {isEn
+            />
+            <GlossaryLinkedText
+              as="p"
+              text={isEn
                 ? "Our 6-zone model is derived from key physiological markers: the first ventilatory threshold (VT1), the second ventilatory threshold (VT2, also called the lactate turn point), and maximal oxygen uptake (VO2max). These thresholds define distinct metabolic states that require specific training stimuli."
                 : "Notre modèle à 6 zones est dérivé de marqueurs physiologiques clés : le premier seuil ventilatoire (VT1), le second seuil ventilatoire (VT2, aussi appelé seuil lactique), et la consommation maximale d'oxygène (VO2max). Ces seuils définissent des états métaboliques distincts qui nécessitent des stimuli d'entraînement spécifiques."}
-            </p>
-            <p className="text-sm italic border-l-2 border-primary/30 pl-4">
-              {isEn
+            />
+            <GlossaryLinkedText
+              as="p"
+              className="text-sm italic border-l-2 border-primary/30 pl-4"
+              text={isEn
                 ? "Important: The percentage-based zones presented here are approximations. Heart rate at LT1 and LT2 varies significantly between individuals. Lab testing provides the most accurate boundaries for your personal zones."
                 : "Important : les zones en pourcentage présentées ici sont des approximations. La fréquence cardiaque aux seuils LT1 et LT2 varie considérablement d'un individu à l'autre. Un test en laboratoire fournit les limites les plus précises pour vos zones personnelles."}
-            </p>
+            />
           </div>
         </section>
 
@@ -401,17 +406,19 @@ export function MethodologyPage() {
                     <span className="font-medium text-foreground">
                       {isEn ? "Marker:" : "Marqueur :"}
                     </span>{" "}
-                    <span className="text-muted-foreground">
-                      {isEn ? z.markerEn : z.marker}
-                    </span>
+                    <GlossaryLinkedText
+                      className="text-muted-foreground"
+                      text={isEn ? z.markerEn : z.marker}
+                    />
                   </div>
                   <div>
                     <span className="font-medium text-foreground">
                       {isEn ? "Develops:" : "Développe :"}
                     </span>{" "}
-                    <span className="text-muted-foreground">
-                      {isEn ? z.developsEn : z.developsFr}
-                    </span>
+                    <GlossaryLinkedText
+                      className="text-muted-foreground"
+                      text={isEn ? z.developsEn : z.developsFr}
+                    />
                   </div>
                 </div>
               </div>
@@ -438,7 +445,7 @@ export function MethodologyPage() {
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base">{r.name}</CardTitle>
                   <CardDescription>
-                    {isEn ? r.contributionEn : r.contributionFr}
+                    <GlossaryLinkedText text={isEn ? r.contributionEn : r.contributionFr} />
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
