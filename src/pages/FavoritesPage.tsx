@@ -33,10 +33,10 @@ export function FavoritesPage() {
       <div className="flex items-center gap-3">
         <Heart className="size-6 text-red-500 fill-red-500" />
         <div>
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-2xl md:text-3xl font-bold">
             {isEn ? "My Favorites" : "Mes Favoris"}
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground mt-1">
             {isEn
               ? `${favoriteWorkouts.length} saved workout${favoriteWorkouts.length !== 1 ? "s" : ""}`
               : `${favoriteWorkouts.length} séance${favoriteWorkouts.length !== 1 ? "s" : ""} sauvegardée${favoriteWorkouts.length !== 1 ? "s" : ""}`}
