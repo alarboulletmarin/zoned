@@ -19,9 +19,14 @@ createRoot(document.getElementById("root")!).render(
 // Hide shell after first paint
 requestAnimationFrame(hideLoadingShell);
 
-// PWA service worker registration
+// PWA service worker registration — force reload on update
 if ("serviceWorker" in navigator && import.meta.env.PROD) {
   import("virtual:pwa-register").then(({ registerSW }) => {
-    registerSW({ immediate: true });
+    registerSW({
+      immediate: true,
+      onNeedRefresh() {
+        window.location.reload();
+      },
+    });
   });
 }
