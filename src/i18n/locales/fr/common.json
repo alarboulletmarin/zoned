@@ -125,8 +125,7 @@
     "plan": "Planifier",
     "quickActions": "Actions rapides",
     "methodology": "Méthodologie",
-    "builder": "Créer",
-    "routePlanner": "Traceur d'itinéraire"
+    "builder": "Créer"
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",

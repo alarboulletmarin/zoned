@@ -125,8 +125,7 @@
     "plan": "Plan",
     "quickActions": "Quick actions",
     "methodology": "Methodology",
-    "builder": "Create",
-    "routePlanner": "Route Planner"
+    "builder": "Create"
   },
   "errors": {
     "workoutNotFound": "Workout not found",

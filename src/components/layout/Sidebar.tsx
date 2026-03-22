@@ -19,7 +19,6 @@ import {
   PanelLeftOpen,
   Plus,
   Flag,
-  MapPin,
 } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -75,7 +74,6 @@ const navGroups: NavGroup[] = [
     items: [
       { href: "/plans", icon: CalendarRange, labelKey: "nav.plans" },
       { href: "/race-simulator", icon: Flag, labelKey: "simulator.title" },
-      { href: "/route-planner", icon: MapPin, labelKey: "nav.routePlanner" },
     ],
   },
   {
@@ -107,7 +105,7 @@ const footerItems: NavItem[] = [
   { href: "/changelog", icon: Sparkles, labelKey: "nav.changelog" },
 ];
 
-const prefixRoutes = ["/learn", "/collections", "/glossary", "/plan", "/calculateurs", "/route-planner"];
+const prefixRoutes = ["/learn", "/collections", "/glossary", "/plan", "/calculateurs"];
 
 function isActive(pathname: string, href: string): boolean {
   if (pathname === href) return true;
