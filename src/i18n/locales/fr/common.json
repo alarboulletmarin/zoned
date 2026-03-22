@@ -121,8 +121,12 @@
     "plans": "Plans",
     "discover": "Découvrir",
     "training": "Entraînement",
+    "sessions": "Séances",
+    "plan": "Planifier",
+    "quickActions": "Actions rapides",
     "methodology": "Méthodologie",
-    "builder": "Créer une séance"
+    "builder": "Créer",
+    "routePlanner": "Traceur d'itinéraire"
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",
@@ -304,6 +308,9 @@
     "plan": "Plan d'entraînement",
     "planHint": "Du 5K au marathon, exportez vers Garmin",
     "zones": "Configurer mes zones"
+  },
+  "simulator": {
+    "title": "Simulateur course"
   },
   "calculateurs": {
     "title": "Calculateurs",

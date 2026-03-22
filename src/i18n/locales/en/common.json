@@ -121,8 +121,12 @@
     "plans": "Plans",
     "discover": "Discover",
     "training": "Training",
+    "sessions": "Sessions",
+    "plan": "Plan",
+    "quickActions": "Quick actions",
     "methodology": "Methodology",
-    "builder": "Create Workout"
+    "builder": "Create",
+    "routePlanner": "Route Planner"
   },
   "errors": {
     "workoutNotFound": "Workout not found",
@@ -304,6 +308,9 @@
     "plan": "Training plan",
     "planHint": "5K to marathon, export to Garmin",
     "zones": "Configure my zones"
+  },
+  "simulator": {
+    "title": "Race Simulator"
   },
   "calculateurs": {
     "title": "Calculators",

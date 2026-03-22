@@ -19,6 +19,7 @@ import {
   PanelLeftOpen,
   Plus,
   Flag,
+  MapPin,
 } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -61,41 +62,52 @@ interface NavGroup {
 
 const navGroups: NavGroup[] = [
   {
-    labelKey: "nav.training",
+    labelKey: "nav.sessions",
     items: [
       { href: "/library", icon: BookOpen, labelKey: "nav.library" },
-      { href: "/workout/builder", icon: Plus, labelKey: "nav.builder" },
-      { href: "/plans", icon: CalendarRange, labelKey: "nav.plans" },
+      { href: "/collections", icon: Library, labelKey: "collections.title" },
       { href: "/favorites", icon: Heart, labelKey: "nav.favorites" },
-      { href: "/race-simulator", icon: Flag, labelKey: "simulator.title" },
-      { href: "/calculateurs", icon: Calculator, labelKey: "calculateurs.title" },
+      { href: "/workout/builder", icon: Plus, labelKey: "nav.builder" },
     ],
   },
   {
-    labelKey: "nav.discover",
+    labelKey: "nav.plan",
     items: [
-      { href: "/collections", icon: Library, labelKey: "collections.title" },
-      { href: "/learn", icon: GraduationCap, labelKey: "nav.learn" },
-      { href: "/glossary", icon: Book, labelKey: "nav.glossary" },
-      { href: "/methodology", icon: FlaskConical, labelKey: "nav.methodology" },
+      { href: "/plans", icon: CalendarRange, labelKey: "nav.plans" },
+      { href: "/race-simulator", icon: Flag, labelKey: "simulator.title" },
+      { href: "/route-planner", icon: MapPin, labelKey: "nav.routePlanner" },
     ],
   },
   {
     labelKey: "actions.tools",
     items: [
+      { href: "/calculateurs", icon: Calculator, labelKey: "calculateurs.title" },
+    ],
+  },
+  {
+    labelKey: "nav.learn",
+    items: [
+      { href: "/learn", icon: GraduationCap, labelKey: "nav.learn" },
+      { href: "/methodology", icon: FlaskConical, labelKey: "nav.methodology" },
+      { href: "/glossary", icon: Book, labelKey: "nav.glossary" },
+    ],
+  },
+  {
+    labelKey: "nav.quickActions",
+    items: [
       { href: "/quiz", icon: ClipboardCheck, labelKey: "quiz.title" },
       { action: "random", icon: Dices, labelKey: "randomWorkout.title" },
-      { href: "/contribute", icon: Send, labelKey: "nav.contribute" },
     ],
   },
 ];
 
 const footerItems: NavItem[] = [
+  { href: "/contribute", icon: Send, labelKey: "nav.contribute" },
   { href: "/settings", icon: Settings, labelKey: "nav.settings" },
   { href: "/changelog", icon: Sparkles, labelKey: "nav.changelog" },
 ];
 
-const prefixRoutes = ["/learn", "/collections", "/glossary", "/plan", "/calculateurs"];
+const prefixRoutes = ["/learn", "/collections", "/glossary", "/plan", "/calculateurs", "/route-planner"];
 
 function isActive(pathname: string, href: string): boolean {
   if (pathname === href) return true;
