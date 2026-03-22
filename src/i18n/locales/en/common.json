@@ -294,7 +294,16 @@
     "step3Action": "Create a plan",
     "skipAll": "Skip",
     "next": "Next",
-    "dismiss": "Let's go!"
+    "dismiss": "Let's go!",
+    "title": "Welcome to Zoned",
+    "description": "Where to start?",
+    "quiz": "Quick quiz",
+    "quizHint": "5 questions to find the perfect workout",
+    "library": "Library",
+    "libraryHint": "200+ workouts by zone, duration and difficulty",
+    "plan": "Training plan",
+    "planHint": "5K to marathon, export to Garmin",
+    "zones": "Configure my zones"
   },
   "calculateurs": {
     "title": "Calculators",
@@ -336,6 +345,20 @@
       "beginner": "Beginner",
       "intermediate": "Intermediate",
       "advanced": "Advanced"
+    }
+  },
+  "hints": {
+    "planCalendar": {
+      "title": "Organize your plan",
+      "description": "Drag a session to another day. Long press or right-click to view, delete or reorder."
+    },
+    "workoutBuilder": {
+      "title": "Build block by block",
+      "description": "Add warmup, main set, and cooldown. Reorder blocks with the arrows."
+    },
+    "library": {
+      "title": "Filter to find",
+      "description": "Use category, duration, and difficulty filters to find the perfect workout."
     }
   }
 }

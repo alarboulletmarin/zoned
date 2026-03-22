@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { usePageHint } from "@/hooks/usePageHint";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight } from "@/components/icons";
@@ -112,6 +113,7 @@ function WorkoutListView() {
 // ── Editor view (with id param) ──────────────────────────────────────
 
 function WorkoutEditorView({ workoutId }: { workoutId: string }) {
+  usePageHint("workout-builder", "hints.workoutBuilder.title", "hints.workoutBuilder.description");
   const navigate = useNavigate();
   const { i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;

@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect, useRef, useCallback } from "react";
+import { usePageHint } from "@/hooks/usePageHint";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Filter, Search, Heart, Loader2 } from "@/components/icons";
@@ -60,6 +61,7 @@ function parseFiltersFromParams(searchParams: URLSearchParams): Partial<WorkoutF
 }
 
 export function LibraryPage() {
+  usePageHint("library", "hints.library.title", "hints.library.description");
   const { t, i18n } = useTranslation(["library", "common"]);
   const isEn = i18n.language?.startsWith("en") ?? false;
   const [searchParams, setSearchParams] = useSearchParams();

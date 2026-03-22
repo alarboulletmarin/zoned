@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { OnboardingCard } from "./OnboardingCard";
 
 const STORAGE_KEY = "zoned-onboarding-seen";
 
@@ -34,6 +36,7 @@ const STEPS: Step[] = [
 ];
 
 export function OnboardingBubbles() {
+  const isMobile = useIsMobile();
   const { t } = useTranslation("common");
   const navigate = useNavigate();
   const bubbleRef = useRef<HTMLDivElement>(null);
@@ -42,6 +45,9 @@ export function OnboardingBubbles() {
     () => localStorage.getItem(STORAGE_KEY) !== "true"
   );
   const [pos, setPos] = useState<{ top: number; left: number; arrowLeft: number } | null>(null);
+
+  // On mobile, sidebar targets don't exist — render inline card instead
+  if (isMobile) return visible ? <OnboardingCard /> : null;
 
   const dismiss = useCallback(() => {
     localStorage.setItem(STORAGE_KEY, "true");

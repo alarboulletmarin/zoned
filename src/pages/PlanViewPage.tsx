@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { usePageHint } from "@/hooks/usePageHint";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -86,6 +87,7 @@ function getCurrentWeek(createdAt: string): number {
 }
 
 export function PlanViewPage() {
+  usePageHint("plan-calendar", "hints.planCalendar.title", "hints.planCalendar.description");
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { i18n } = useTranslation("plan");

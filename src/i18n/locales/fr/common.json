@@ -294,7 +294,16 @@
     "step3Action": "Créer un plan",
     "skipAll": "Passer",
     "next": "Suivant",
-    "dismiss": "C'est parti !"
+    "dismiss": "C'est parti !",
+    "title": "Bienvenue sur Zoned",
+    "description": "Par où commencer ?",
+    "quiz": "Quiz rapide",
+    "quizHint": "5 questions pour trouver la séance idéale",
+    "library": "Bibliothèque",
+    "libraryHint": "200+ séances par zone, durée et difficulté",
+    "plan": "Plan d'entraînement",
+    "planHint": "Du 5K au marathon, exportez vers Garmin",
+    "zones": "Configurer mes zones"
   },
   "calculateurs": {
     "title": "Calculateurs",
@@ -336,6 +345,20 @@
       "beginner": "Débutant",
       "intermediate": "Intermédiaire",
       "advanced": "Avancé"
+    }
+  },
+  "hints": {
+    "planCalendar": {
+      "title": "Organisez votre plan",
+      "description": "Glissez une séance vers un autre jour. Appui long ou clic droit pour voir, supprimer ou réordonner."
+    },
+    "workoutBuilder": {
+      "title": "Construisez bloc par bloc",
+      "description": "Ajoutez échauffement, corps de séance et retour au calme. Réordonnez les blocs avec les flèches."
+    },
+    "library": {
+      "title": "Filtrez pour trouver",
+      "description": "Utilisez les filtres par catégorie, durée et difficulté pour trouver la séance parfaite."
     }
   }
 }
