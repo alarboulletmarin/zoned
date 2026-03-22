@@ -778,7 +778,7 @@ export function RaceSimulatorPage() {
               id="recovery"
               icon={<Heart className="size-5" />}
               title={t("sections.recovery")}
-              defaultOpen={false}
+              defaultOpen
               expanded={expandedSections}
               onToggle={toggleSection}
             >
