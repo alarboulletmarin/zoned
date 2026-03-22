@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.3] - 2026-03-22
+
+### Added
+
+- Race day simulator: enter distance, target time and start time to get a complete race day plan (wake-up, breakfast, warmup, km-by-km pacing, nutrition, checklists) with PDF export
+- Mobile onboarding reworked: inline card replaces broken positioned bubbles, contextual toast hints on first visit to library, plan calendar and workout builder
+- Long press (mobile) and right-click (desktop) context menu on plan calendar sessions with "View session" and "Delete" actions, haptic vibration on mobile
+- Glossary terms auto-linked (clickable) in methodology page and nutrition recommendation sections
+- Delete button with confirmation dialog on workout list view in builder
+- Import/export custom workouts as JSON files, "Create" button renamed for clarity
+- App automatically reloads when a new version is available (PWA service worker update)
+
+### Changed
+
+- Sidebar navigation restructured into task-oriented groups: Discover, Training, Sessions, Plan
+
+### Fixed
+
+- Recovery section open by default in race simulator
+- Favorites page header size aligned with other listing pages
+- Improved plan PDF and ICS export quality
+
 ## [0.2.2] - 2026-03-20
 
 ### Added

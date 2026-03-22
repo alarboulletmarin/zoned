@@ -2,6 +2,84 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.2.3",
+    date: "2026-03-22",
+    changes: {
+      added: [
+        {
+          text: "Simulateur jour de course : distance, temps cible et heure de départ pour un plan complet (réveil, petit-déjeuner, échauffement, allure km par km, nutrition, checklists) avec export PDF",
+          textEn: "Race day simulator: enter distance, target time and start time to get a complete race day plan (wake-up, breakfast, warmup, km-by-km pacing, nutrition, checklists) with PDF export",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Onboarding mobile repensé : carte inline au lieu de bulles positionnées, indices contextuels à la première visite de la bibliothèque, du calendrier de plan et de l'éditeur de séances",
+          textEn: "Mobile onboarding reworked: inline card replaces broken positioned bubbles, contextual toast hints on first visit to library, plan calendar and workout builder",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Appui long (mobile) et clic droit (desktop) sur les séances du calendrier de plan : menu contextuel « Voir la séance » et « Supprimer » avec vibration haptique",
+          textEn: "Long press (mobile) and right-click (desktop) context menu on plan calendar sessions with 'View session' and 'Delete' actions, haptic vibration on mobile",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Termes du glossaire auto-liés (cliquables) dans la page méthodologie et les recommandations nutritionnelles",
+          textEn: "Glossary terms auto-linked (clickable) in methodology page and nutrition recommendation sections",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Bouton de suppression avec dialogue de confirmation dans la liste des séances de l'éditeur",
+          textEn: "Delete button with confirmation dialog on workout list view in builder",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Import/export de séances personnalisées en JSON, bouton « Créer » renommé pour plus de clarté",
+          textEn: "Import/export custom workouts as JSON files, 'Create' button renamed for clarity",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Rechargement automatique de l'app lors d'une mise à jour du service worker PWA",
+          textEn: "App automatically reloads when a new version is available (PWA service worker update)",
+          category: "Performance",
+          categoryEn: "Performance",
+        },
+      ],
+      changed: [
+        {
+          text: "Navigation latérale réorganisée en groupes orientés tâches : Découvrir, Entraînement, Séances, Plan",
+          textEn: "Sidebar navigation restructured into task-oriented groups: Discover, Training, Sessions, Plan",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      fixed: [
+        {
+          text: "Section récupération ouverte par défaut dans le simulateur de course",
+          textEn: "Recovery section open by default in race simulator",
+          category: "Bug",
+          categoryEn: "Bug",
+        },
+        {
+          text: "Taille de l'en-tête de la page favoris alignée avec les autres pages de liste",
+          textEn: "Favorites page header size aligned with other listing pages",
+          category: "Bug",
+          categoryEn: "Bug",
+        },
+        {
+          text: "Amélioration de la qualité des exports PDF et ICS des plans",
+          textEn: "Improved plan PDF and ICS export quality",
+          category: "Bug",
+          categoryEn: "Bug",
+        },
+      ],
+    },
+  },
+  {
     version: "0.2.2",
     date: "2026-03-20",
     changes: {

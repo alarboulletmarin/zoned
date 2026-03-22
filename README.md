@@ -39,6 +39,7 @@ A library of **200 structured running workouts** based on the 6-zone training sy
 - **Drag-and-drop calendar**: Reorganize sessions visually
 - **Cross-training**: Add strength, cycling, swimming, yoga or rest activities to your plan
 - **Plan export**: PDF and ICS (calendar) formats
+- **Race day simulator**: Complete race day plan with km-by-km pacing, nutrition timing, and checklists
 
 ### Discovery & Tools
 - **Quiz**: Find the right workout in 5 questions (goal, time, terrain, experience, weakness)
@@ -46,6 +47,7 @@ A library of **200 structured running workouts** based on the 6-zone training sy
 - **Workout of the Day**: Daily curated workout
 - **Command palette**: Quick search with Cmd+K / Ctrl+K
 - **16 collections**: Curated thematic workout paths
+- **Contextual hints**: First-visit tips on each page to discover features
 
 ### Library
 - **Filters**: Duration, category, difficulty, terrain, target system
@@ -71,6 +73,7 @@ A library of **200 structured running workouts** based on the 6-zone training sy
 - **Data backup**: Export and import all your data as JSON
 - **Offline-ready**: Everything stays on your device
 - **Bilingual**: French and English
+- **Auto-update**: App reloads automatically when a new version is available
 
 ## Installation
 
