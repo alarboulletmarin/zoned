@@ -20,6 +20,9 @@ import enPlan from "./locales/en/plan.json";
 import frGuides from "./locales/fr/guides.json";
 import enGuides from "./locales/en/guides.json";
 
+import frSimulator from "./locales/fr/simulator.json";
+import enSimulator from "./locales/en/simulator.json";
+
 // Resources object
 const resources = {
   fr: {
@@ -30,6 +33,7 @@ const resources = {
     contribute: frContribute,
     plan: frPlan,
     guides: frGuides,
+    simulator: frSimulator,
   },
   en: {
     common: enCommon,
@@ -39,6 +43,7 @@ const resources = {
     contribute: enContribute,
     plan: enPlan,
     guides: enGuides,
+    simulator: enSimulator,
   },
 };
 
@@ -52,7 +57,7 @@ i18n
     resources,
     fallbackLng: "fr",
     defaultNS: "common",
-    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides"],
+    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides", "simulator"],
 
     // Detection options
     detection: {

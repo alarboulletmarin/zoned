@@ -1,0 +1,70 @@
+{
+  "title": "Race Day Simulator",
+  "description": "Generate your complete race day plan: per-kilometer pacing, nutrition, warm-up, timeline and checklist.",
+  "inputs": {
+    "distance": "Distance",
+    "targetTime": "Target Time",
+    "startTime": "Start Time",
+    "strategy": "Pacing Strategy",
+    "weight": "Weight (optional)",
+    "weightUnit": "kg",
+    "generate": "Generate my race plan",
+    "custom": "Custom",
+    "even": "Even",
+    "negative": "Negative",
+    "positive": "Positive",
+    "evenDesc": "All splits at the same pace.",
+    "negativeDesc": "Start slower, finish faster.",
+    "positiveDesc": "Start faster, finish slower."
+  },
+  "sections": {
+    "dayBefore": "Day Before (D-1)",
+    "morning": "Morning",
+    "warmup": "Warm-up",
+    "race": "The Race — Pacing Strategy",
+    "nutrition": "Race Nutrition",
+    "mental": "Mental Cues",
+    "recovery": "After the Race",
+    "timeline": "Day Schedule",
+    "checklist": "Checklist",
+    "splits": "Split Table"
+  },
+  "labels": {
+    "wakeUp": "Wake up",
+    "breakfast": "Breakfast",
+    "warmupStart": "Warm-up start",
+    "raceStart": "Start",
+    "estimatedFinish": "Estimated finish",
+    "targetPace": "Target pace",
+    "perKm": "/km",
+    "km": "km",
+    "total": "Total",
+    "split": "Split",
+    "pace": "Pace",
+    "cumulative": "Cumul.",
+    "dist": "Dist."
+  },
+  "actions": {
+    "save": "Save",
+    "exportPdf": "Export PDF",
+    "delete": "Delete",
+    "load": "Load",
+    "newSimulation": "New simulation"
+  },
+  "saved": {
+    "title": "Saved simulations",
+    "empty": "No saved simulations",
+    "savedSuccess": "Simulation saved",
+    "deletedSuccess": "Simulation deleted",
+    "maxReached": "Maximum of 10 simulations reached"
+  },
+  "nutrition": {
+    "carbsPerHour": "Carbs/hour",
+    "fluidPerHour": "Fluids/hour",
+    "gelCount": "Gel count",
+    "gelFrequency": "Gel frequency",
+    "everyMin": "every {{min}} min",
+    "tips": "Nutrition tips"
+  },
+  "empty": "Enter your race parameters to generate your plan."
+}

@@ -1,0 +1,70 @@
+{
+  "title": "Simulateur jour de course",
+  "description": "Générez votre plan complet pour le jour de la course : allures par kilomètre, nutrition, échauffement, timeline et checklist.",
+  "inputs": {
+    "distance": "Distance",
+    "targetTime": "Temps objectif",
+    "startTime": "Heure de départ",
+    "strategy": "Stratégie d'allure",
+    "weight": "Poids (optionnel)",
+    "weightUnit": "kg",
+    "generate": "Générer mon plan de course",
+    "custom": "Personnalisé",
+    "even": "Régulier",
+    "negative": "Négatif",
+    "positive": "Positif",
+    "evenDesc": "Tous les splits à la même allure.",
+    "negativeDesc": "Départ plus lent, arrivée plus rapide.",
+    "positiveDesc": "Départ plus rapide, arrivée plus lente."
+  },
+  "sections": {
+    "dayBefore": "La veille (J-1)",
+    "morning": "Le matin",
+    "warmup": "Échauffement",
+    "race": "La course — Stratégie d'allure",
+    "nutrition": "Nutrition pendant la course",
+    "mental": "Cues mentaux",
+    "recovery": "Après la course",
+    "timeline": "Planning de la journée",
+    "checklist": "Checklist",
+    "splits": "Tableau des splits"
+  },
+  "labels": {
+    "wakeUp": "Réveil",
+    "breakfast": "Petit-déjeuner",
+    "warmupStart": "Début échauffement",
+    "raceStart": "Départ",
+    "estimatedFinish": "Arrivée estimée",
+    "targetPace": "Allure cible",
+    "perKm": "/km",
+    "km": "km",
+    "total": "Total",
+    "split": "Split",
+    "pace": "Allure",
+    "cumulative": "Cumul.",
+    "dist": "Dist."
+  },
+  "actions": {
+    "save": "Sauvegarder",
+    "exportPdf": "Exporter en PDF",
+    "delete": "Supprimer",
+    "load": "Charger",
+    "newSimulation": "Nouvelle simulation"
+  },
+  "saved": {
+    "title": "Simulations sauvegardées",
+    "empty": "Aucune simulation sauvegardée",
+    "savedSuccess": "Simulation sauvegardée",
+    "deletedSuccess": "Simulation supprimée",
+    "maxReached": "Maximum de 10 simulations atteint"
+  },
+  "nutrition": {
+    "carbsPerHour": "Glucides/heure",
+    "fluidPerHour": "Liquides/heure",
+    "gelCount": "Nombre de gels",
+    "gelFrequency": "Fréquence des gels",
+    "everyMin": "toutes les {{min}} min",
+    "tips": "Conseils nutrition"
+  },
+  "empty": "Entrez vos paramètres de course pour générer votre plan."
+}

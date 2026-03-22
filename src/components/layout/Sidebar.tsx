@@ -18,6 +18,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Plus,
+  Flag,
 } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -66,6 +67,7 @@ const navGroups: NavGroup[] = [
       { href: "/workout/builder", icon: Plus, labelKey: "nav.builder" },
       { href: "/plans", icon: CalendarRange, labelKey: "nav.plans" },
       { href: "/favorites", icon: Heart, labelKey: "nav.favorites" },
+      { href: "/race-simulator", icon: Flag, labelKey: "simulator.title" },
       { href: "/calculateurs", icon: Calculator, labelKey: "calculateurs.title" },
     ],
   },

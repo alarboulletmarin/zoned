@@ -51,6 +51,7 @@ const PaceConverterPage = lazy(() => import("@/pages/PaceConverterPage").then(m 
 const PaceTablePage = lazy(() => import("@/pages/PaceTablePage").then(m => ({ default: m.PaceTablePage })));
 const AgeGradedPage = lazy(() => import("@/pages/AgeGradedPage").then(m => ({ default: m.AgeGradedPage })));
 const WorkoutBuilderPage = lazy(() => import("@/pages/WorkoutBuilderPage").then(m => ({ default: m.WorkoutBuilderPage })));
+const RaceSimulatorPage = lazy(() => import("@/pages/RaceSimulatorPage").then(m => ({ default: m.RaceSimulatorPage })));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
 
 // Preload sidebar pages after initial render to eliminate navigation latency
@@ -226,6 +227,7 @@ function App() {
                           <Route path="/plan/new/prebuilt" element={<PrebuiltPlansPage />} />
                           <Route path="/plan/prebuilt/:slug" element={<PrebuiltPlanDetailPage />} />
                           <Route path="/plan/:id" element={<PlanViewPage />} />
+                          <Route path="/race-simulator" element={<RaceSimulatorPage />} />
                           <Route path="*" element={<NotFoundPage />} />
                         </Routes>
                       </Suspense>
