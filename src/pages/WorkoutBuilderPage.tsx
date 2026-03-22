@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useReducer } from "react";
 import { usePageHint } from "@/hooks/usePageHint";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -40,7 +40,16 @@ function WorkoutListView() {
   const { i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const navigate = useNavigate();
+  const [, forceUpdate] = useReducer((x: number) => x + 1, 0);
   const workouts = getCustomWorkouts();
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+
+  const handleDelete = useCallback((id: string) => {
+    deleteCustomWorkout(id);
+    setDeleteTarget(null);
+    forceUpdate();
+    toast.success(isEn ? "Workout deleted" : "Séance supprimée");
+  }, [isEn]);
 
   return (
     <>
@@ -86,26 +95,63 @@ function WorkoutListView() {
                 w.mainSetTemplate.reduce((s, b) => s + (b.durationMin || 0) * (b.repetitions || 1), 0) +
                 (w.cooldownTemplate?.reduce((s, b) => s + (b.durationMin || 0), 0) || 0);
               return (
-                <Link
+                <div
                   key={w.id}
-                  to={`/workout/builder/${w.id}`}
-                  className="block rounded-lg border bg-card p-4 hover:bg-accent/50 transition-colors"
+                  className="group relative rounded-lg border bg-card hover:bg-accent/50 transition-colors"
                 >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-medium">{w.name || (isEn ? "Untitled" : "Sans titre")}</h3>
-                      <p className="text-sm text-muted-foreground">
-                        ~{totalMin}min · {w.mainSetTemplate.length} {isEn ? "blocks" : "blocs"}
-                      </p>
+                  <Link
+                    to={`/workout/builder/${w.id}`}
+                    className="block p-4 pr-12"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="font-medium">{w.name || (isEn ? "Untitled" : "Sans titre")}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          ~{totalMin}min · {w.mainSetTemplate.length} {isEn ? "blocks" : "blocs"}
+                        </p>
+                      </div>
+                      <ArrowRight className="size-4 text-muted-foreground" />
                     </div>
-                    <ArrowRight className="size-4 text-muted-foreground" />
-                  </div>
-                </Link>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => setDeleteTarget(w.id)}
+                    className="absolute top-1/2 right-3 -translate-y-1/2 p-1.5 rounded-md text-destructive/70 hover:text-destructive hover:bg-destructive/10 active:text-destructive transition-colors"
+                    aria-label={isEn ? "Delete" : "Supprimer"}
+                  >
+                    <Trash2 className="size-4" />
+                  </button>
+                </div>
               );
             })}
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation */}
+      <Dialog open={deleteTarget !== null} onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {isEn ? "Delete this workout?" : "Supprimer cette séance ?"}
+            </DialogTitle>
+            <DialogDescription>
+              {isEn
+                ? "This action cannot be undone. The workout will be permanently deleted."
+                : "Cette action est irréversible. La séance sera définitivement supprimée."}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteTarget(null)}>
+              {isEn ? "Cancel" : "Annuler"}
+            </Button>
+            <Button variant="destructive" onClick={() => deleteTarget && handleDelete(deleteTarget)}>
+              <Trash2 className="size-4" />
+              {isEn ? "Delete" : "Supprimer"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
