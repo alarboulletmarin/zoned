@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { Star, Flag, Clock, Trash2 } from "@/components/icons";
+import { Star, Flag, Clock, Trash2, Eye } from "@/components/icons";
 import { PHASE_META } from "@/types/plan";
 import type { TrainingPlan, PlanSession } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
@@ -90,6 +90,41 @@ export function PlanCalendar({
   const touchGhostRef = useRef<HTMLElement | null>(null);
   const dropTargetRef = useRef<{ weekNumber: number; day: number } | null>(null);
 
+  // Long-press / context menu state
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+    weekNumber: number;
+    sessionIndex: number;
+    workoutId: string;
+  } | null>(null);
+  const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touchStartPosRef = useRef<{ x: number; y: number } | null>(null);
+  const isDraggingRef = useRef(false);
+  const longPressFiredRef = useRef(false);
+  // Store session info for touchend tap detection
+  const touchSessionRef = useRef<{
+    weekNumber: number;
+    sessionIndex: number;
+    workoutId: string;
+    target: HTMLElement | null;
+  } | null>(null);
+
+  // Close context menu on outside click or Escape
+  useEffect(() => {
+    if (!contextMenu) return;
+    const handleClick = () => setContextMenu(null);
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setContextMenu(null);
+    };
+    document.addEventListener("pointerdown", handleClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("pointerdown", handleClick);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [contextMenu]);
+
   // Pre-compute which weeks start a new phase (for top-border marking)
   const phaseStartWeeks = useMemo(() => {
     const starts = new Set<number>();
@@ -175,14 +210,11 @@ export function PlanCalendar({
     setDropTarget(null);
   }, []);
 
-  // ── Mobile touch handlers ───────────────────────────────────────
+  // ── Mobile touch handlers (long press + drag) ──────────────────
 
-  const handleTouchStart = useCallback(
-    (e: React.TouchEvent, weekNumber: number, sessionIndex: number) => {
-      e.stopPropagation();
-      const touch = e.touches[0];
-      const target = (e.target as HTMLElement).closest("[draggable]") as HTMLElement | null;
-
+  const startDrag = useCallback(
+    (touch: React.Touch, weekNumber: number, sessionIndex: number, target: HTMLElement | null) => {
+      isDraggingRef.current = true;
       touchDragRef.current = { weekNumber, sessionIndex };
       setDraggedSession({ weekNumber, sessionIndex });
 
@@ -206,58 +238,140 @@ export function PlanCalendar({
     [],
   );
 
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    if (!touchDragRef.current || !touchGhostRef.current) return;
-    e.preventDefault();
-    const touch = e.touches[0];
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent, weekNumber: number, sessionIndex: number, workoutId: string) => {
+      e.stopPropagation();
+      const touch = e.touches[0];
+      const target = (e.target as HTMLElement).closest("[draggable]") as HTMLElement | null;
 
-    // Move ghost centered on finger
-    touchGhostRef.current.style.left = `${touch.clientX}px`;
-    touchGhostRef.current.style.top = `${touch.clientY}px`;
+      // Reset state
+      isDraggingRef.current = false;
+      longPressFiredRef.current = false;
+      touchStartPosRef.current = { x: touch.clientX, y: touch.clientY };
+      touchSessionRef.current = { weekNumber, sessionIndex, workoutId, target };
 
-    // Find drop target using document.elementsFromPoint
-    const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
-    const dropCell = elements.find(el => el.hasAttribute("data-drop-id"));
+      // Start long-press timer (400ms)
+      longPressTimerRef.current = setTimeout(() => {
+        if (!isDraggingRef.current) {
+          longPressFiredRef.current = true;
+          // Haptic feedback
+          if (navigator.vibrate) navigator.vibrate(50);
+          setContextMenu({
+            x: touch.clientX,
+            y: touch.clientY,
+            weekNumber,
+            sessionIndex,
+            workoutId,
+          });
+        }
+      }, 400);
+    },
+    [],
+  );
 
-    if (dropCell) {
-      const [weekStr, dayStr] = (dropCell.getAttribute("data-drop-id") || "").split("-");
-      const newTarget = { weekNumber: Number(weekStr), day: Number(dayStr) };
-      if (
-        !dropTargetRef.current ||
-        dropTargetRef.current.weekNumber !== newTarget.weekNumber ||
-        dropTargetRef.current.day !== newTarget.day
-      ) {
-        dropTargetRef.current = newTarget;
-        setDropTarget(newTarget);
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      const touch = e.touches[0];
+      const startPos = touchStartPosRef.current;
+
+      // If long press already fired (context menu open), ignore movement
+      if (longPressFiredRef.current) {
+        e.preventDefault();
+        return;
       }
-    } else {
-      dropTargetRef.current = null;
-      setDropTarget(null);
-    }
-  }, []);
+
+      // Check if we've moved enough to start a drag (>10px)
+      if (!isDraggingRef.current && startPos) {
+        const dx = touch.clientX - startPos.x;
+        const dy = touch.clientY - startPos.y;
+        if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+          // Cancel long-press timer, start drag
+          if (longPressTimerRef.current) {
+            clearTimeout(longPressTimerRef.current);
+            longPressTimerRef.current = null;
+          }
+          const sessionInfo = touchSessionRef.current;
+          if (sessionInfo) {
+            startDrag(touch, sessionInfo.weekNumber, sessionInfo.sessionIndex, sessionInfo.target);
+          }
+        }
+      }
+
+      // If dragging, move the ghost
+      if (isDraggingRef.current && touchGhostRef.current) {
+        e.preventDefault();
+        touchGhostRef.current.style.left = `${touch.clientX}px`;
+        touchGhostRef.current.style.top = `${touch.clientY}px`;
+
+        // Find drop target using document.elementsFromPoint
+        const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
+        const dropCell = elements.find(el => el.hasAttribute("data-drop-id"));
+
+        if (dropCell) {
+          const [weekStr, dayStr] = (dropCell.getAttribute("data-drop-id") || "").split("-");
+          const newTarget = { weekNumber: Number(weekStr), day: Number(dayStr) };
+          if (
+            !dropTargetRef.current ||
+            dropTargetRef.current.weekNumber !== newTarget.weekNumber ||
+            dropTargetRef.current.day !== newTarget.day
+          ) {
+            dropTargetRef.current = newTarget;
+            setDropTarget(newTarget);
+          }
+        } else {
+          dropTargetRef.current = null;
+          setDropTarget(null);
+        }
+      }
+    },
+    [startDrag],
+  );
 
   const handleTouchEnd = useCallback(() => {
-    // Clean up ghost
+    // Cancel long-press timer
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+
+    const wasDragging = isDraggingRef.current;
+    const wasLongPress = longPressFiredRef.current;
+    const sessionInfo = touchSessionRef.current;
+
+    // Clean up ghost if dragging
     if (touchGhostRef.current) {
       document.body.removeChild(touchGhostRef.current);
       touchGhostRef.current = null;
     }
 
-    const dragState = touchDragRef.current;
-    const target = dropTargetRef.current;
-    touchDragRef.current = null;
-    dropTargetRef.current = null;
-    setDraggedSession(null);
-    setDropTarget(null);
+    if (wasDragging) {
+      // Handle drop
+      const dragState = touchDragRef.current;
+      const target = dropTargetRef.current;
+      touchDragRef.current = null;
+      dropTargetRef.current = null;
+      setDraggedSession(null);
+      setDropTarget(null);
 
-    if (!dragState || !target || !onSessionMove) return;
+      if (dragState && target && onSessionMove) {
+        const week = plan.weeks.find(w => w.weekNumber === dragState.weekNumber);
+        const session = week?.sessions[dragState.sessionIndex];
+        if (!(session && session.dayOfWeek === target.day && dragState.weekNumber === target.weekNumber)) {
+          onSessionMove(dragState.weekNumber, dragState.sessionIndex, target.weekNumber, target.day);
+        }
+      }
+    } else if (!wasLongPress && sessionInfo) {
+      // Short tap: navigate to session
+      onSessionClick?.(sessionInfo.weekNumber, sessionInfo.sessionIndex, sessionInfo.workoutId);
+    }
+    // If wasLongPress: context menu is already open, do nothing
 
-    const week = plan.weeks.find(w => w.weekNumber === dragState.weekNumber);
-    const session = week?.sessions[dragState.sessionIndex];
-    if (session && session.dayOfWeek === target.day && dragState.weekNumber === target.weekNumber) return;
-
-    onSessionMove(dragState.weekNumber, dragState.sessionIndex, target.weekNumber, target.day);
-  }, [onSessionMove, plan.weeks]);
+    // Reset refs
+    isDraggingRef.current = false;
+    longPressFiredRef.current = false;
+    touchStartPosRef.current = null;
+    touchSessionRef.current = null;
+  }, [onSessionMove, onSessionClick, plan.weeks]);
 
   // ── Listen for mobile touch drops from the workout panel ────
   useEffect(() => {
@@ -378,7 +492,7 @@ export function PlanCalendar({
                             onTouchStart={
                               isRaceDay
                                 ? undefined
-                                : (e) => handleTouchStart(e, mobileWeek, originalIndex)
+                                : (e) => handleTouchStart(e, mobileWeek, originalIndex, session.workoutId)
                             }
                             onTouchMove={isRaceDay ? undefined : handleTouchMove}
                             onTouchEnd={isRaceDay ? undefined : handleTouchEnd}
@@ -389,8 +503,7 @@ export function PlanCalendar({
                             )}
                           >
                             <div
-                              className="rounded bg-card border border-border/50 p-1.5 mb-1 cursor-pointer relative"
-                              onClick={() => !isRaceDay && onSessionClick?.(mobileWeek, originalIndex, session.workoutId)}
+                              className="rounded bg-card border border-border/50 p-1.5 mb-1 relative"
                             >
                               {isRaceDay ? (
                                 <div className="text-center py-1">
@@ -408,16 +521,6 @@ export function PlanCalendar({
                                   </span>
                                   {session.estimatedDurationMin > 0 && !session.workoutId.startsWith("__activity_") && (
                                     <span className="text-[9px] text-muted-foreground">{session.estimatedDurationMin}min</span>
-                                  )}
-                                  {onSessionDelete && (
-                                    <button
-                                      type="button"
-                                      onClick={(e) => { e.stopPropagation(); onSessionDelete(mobileWeek, originalIndex); }}
-                                      onPointerDown={(e) => e.stopPropagation()}
-                                      className="absolute top-0.5 right-0.5 text-muted-foreground/50 active:text-destructive"
-                                    >
-                                      <Trash2 className="size-3" />
-                                    </button>
                                   )}
                                 </>
                               )}
@@ -575,6 +678,7 @@ export function PlanCalendar({
                                             e,
                                             week.weekNumber,
                                             originalIndex,
+                                            session.workoutId,
                                           )
                                   }
                                   onTouchMove={isRaceDay ? undefined : handleTouchMove}
@@ -605,6 +709,20 @@ export function PlanCalendar({
                                         ? () => onSessionDelete(week.weekNumber, originalIndex)
                                         : undefined
                                     }
+                                    onContextMenu={
+                                      !isRaceDay
+                                        ? (e: React.MouseEvent) => {
+                                            e.preventDefault();
+                                            setContextMenu({
+                                              x: e.clientX,
+                                              y: e.clientY,
+                                              weekNumber: week.weekNumber,
+                                              sessionIndex: originalIndex,
+                                              workoutId: session.workoutId,
+                                            });
+                                          }
+                                        : undefined
+                                    }
                                   />
                                 </div>
                               );
@@ -620,6 +738,51 @@ export function PlanCalendar({
           </tbody>
         </table>
       </div>
+
+      {/* ── Context menu (long press mobile / right-click desktop) ── */}
+      {contextMenu && (
+        <div
+          className="fixed inset-0 z-50"
+          onPointerDown={() => setContextMenu(null)}
+        >
+          <div
+            className="fixed bg-card border rounded-lg shadow-lg py-1 min-w-[160px] z-50"
+            style={{
+              left: contextMenu.x,
+              top: contextMenu.y,
+              transform: "translate(-50%, 4px)",
+            }}
+            onPointerDown={(e) => e.stopPropagation()}
+          >
+            {onSessionClick && (
+              <button
+                type="button"
+                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors text-left"
+                onClick={() => {
+                  onSessionClick(contextMenu.weekNumber, contextMenu.sessionIndex, contextMenu.workoutId);
+                  setContextMenu(null);
+                }}
+              >
+                <Eye className="size-4 text-muted-foreground shrink-0" />
+                {isEn ? "View session" : "Voir la s\u00e9ance"}
+              </button>
+            )}
+            {onSessionDelete && (
+              <button
+                type="button"
+                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors text-left"
+                onClick={() => {
+                  onSessionDelete(contextMenu.weekNumber, contextMenu.sessionIndex);
+                  setContextMenu(null);
+                }}
+              >
+                <Trash2 className="size-4 shrink-0" />
+                {isEn ? "Delete" : "Supprimer"}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 }
@@ -633,6 +796,7 @@ function SessionCell({
   isEn,
   onClick,
   onDelete,
+  onContextMenu,
 }: {
   session: PlanSession;
   isRaceDay: boolean;
@@ -640,6 +804,7 @@ function SessionCell({
   isEn: boolean;
   onClick?: () => void;
   onDelete?: () => void;
+  onContextMenu?: (e: React.MouseEvent) => void;
 }) {
   if (isRaceDay) {
     return (
@@ -656,7 +821,7 @@ function SessionCell({
   const displayName = workoutName || session.workoutId;
 
   return (
-    <div className="relative group">
+    <div className="relative group" onContextMenu={onContextMenu}>
       {/* Delete button */}
       {onDelete && (
         <button
