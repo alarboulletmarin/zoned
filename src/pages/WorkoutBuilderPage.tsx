@@ -1,8 +1,8 @@
-import { useState, useCallback, useReducer } from "react";
+import { useState, useCallback, useReducer, useRef } from "react";
 import { usePageHint } from "@/hooks/usePageHint";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight } from "@/components/icons";
+import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight, Download, Upload } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,6 +23,8 @@ import {
   saveCustomWorkout,
   deleteCustomWorkout,
   createEmptyWorkout,
+  exportWorkoutsToJSON,
+  importWorkoutsFromJSON,
 } from "@/lib/customWorkoutStorage";
 import type { WorkoutTemplate, WorkoutBlock } from "@/types";
 
@@ -43,12 +45,38 @@ function WorkoutListView() {
   const [, forceUpdate] = useReducer((x: number) => x + 1, 0);
   const workouts = getCustomWorkouts();
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDelete = useCallback((id: string) => {
     deleteCustomWorkout(id);
     setDeleteTarget(null);
     forceUpdate();
     toast.success(isEn ? "Workout deleted" : "Séance supprimée");
+  }, [isEn]);
+
+  const handleExportAll = useCallback(() => {
+    if (workouts.length === 0) return;
+    exportWorkoutsToJSON(workouts);
+    toast.success(isEn ? `${workouts.length} workout(s) exported` : `${workouts.length} séance(s) exportée(s)`);
+  }, [workouts, isEn]);
+
+  const handleExportOne = useCallback((workout: WorkoutTemplate) => {
+    exportWorkoutsToJSON([workout]);
+    toast.success(isEn ? "Workout exported" : "Séance exportée");
+  }, [isEn]);
+
+  const handleImport = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const count = await importWorkoutsFromJSON(file);
+      forceUpdate();
+      toast.success(isEn ? `${count} workout(s) imported` : `${count} séance(s) importée(s)`);
+    } catch {
+      toast.error(isEn ? "Invalid file" : "Fichier invalide");
+    }
+    // Reset input so same file can be re-imported
+    e.target.value = "";
   }, [isEn]);
 
   return (
@@ -76,9 +104,40 @@ function WorkoutListView() {
                 navigate(`/workout/builder/${w.id}`, { state: { fresh: true } });
               }}
             >
-              <Plus className="size-4 mr-2" />
-              {isEn ? "New" : "Nouvelle"}
+              <Plus className="size-4 mr-1" />
+              {isEn ? "Create" : "Créer"}
             </Button>
+          </div>
+
+          {/* Import / Export all actions */}
+          <div className="flex items-center gap-2">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json"
+              onChange={handleImport}
+              className="hidden"
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => fileInputRef.current?.click()}
+              className="rounded-full"
+            >
+              <Upload className="size-4 mr-1.5" />
+              {isEn ? "Import" : "Importer"}
+            </Button>
+            {workouts.length > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExportAll}
+                className="rounded-full"
+              >
+                <Download className="size-4 mr-1.5" />
+                {isEn ? "Export all" : "Tout exporter"}
+              </Button>
+            )}
           </div>
         </div>
 
@@ -101,7 +160,7 @@ function WorkoutListView() {
                 >
                   <Link
                     to={`/workout/builder/${w.id}`}
-                    className="block p-4 pr-12"
+                    className="block p-4 pr-20"
                   >
                     <div className="flex items-center justify-between">
                       <div>
@@ -113,14 +172,24 @@ function WorkoutListView() {
                       <ArrowRight className="size-4 text-muted-foreground" />
                     </div>
                   </Link>
-                  <button
-                    type="button"
-                    onClick={() => setDeleteTarget(w.id)}
-                    className="absolute top-1/2 right-3 -translate-y-1/2 p-1.5 rounded-md text-destructive/70 hover:text-destructive hover:bg-destructive/10 active:text-destructive transition-colors"
-                    aria-label={isEn ? "Delete" : "Supprimer"}
-                  >
-                    <Trash2 className="size-4" />
-                  </button>
+                  <div className="absolute top-1/2 right-3 -translate-y-1/2 flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => handleExportOne(w)}
+                      className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                      aria-label={isEn ? "Export" : "Exporter"}
+                    >
+                      <Download className="size-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeleteTarget(w.id)}
+                      className="p-1.5 rounded-md text-destructive/70 hover:text-destructive hover:bg-destructive/10 active:text-destructive transition-colors"
+                      aria-label={isEn ? "Delete" : "Supprimer"}
+                    >
+                      <Trash2 className="size-4" />
+                    </button>
+                  </div>
                 </div>
               );
             })}
@@ -297,6 +366,19 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
               {isEn ? "Save" : "Enregistrer"}
             </Button>
             {isSaved && <ExportMenu workout={workout} />}
+            {isSaved && (
+              <Button
+                variant="outline"
+                className="rounded-full px-5 py-2.5 h-auto font-bold"
+                onClick={() => {
+                  exportWorkoutsToJSON([workout]);
+                  toast.success(isEn ? "Workout exported" : "Séance exportée");
+                }}
+              >
+                <Download className="size-4 mr-2" />
+                JSON
+              </Button>
+            )}
             {isSaved && (
               <Button
                 variant="secondary"
