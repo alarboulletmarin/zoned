@@ -27,7 +27,7 @@ const CALCULATEURS: CalculateurEntry[] = [
     titleEn: "Training Zones",
     description: "Calculez vos zones FC et allures depuis votre VMA ou FCmax",
     descriptionEn: "Calculate your HR and pace zones from VMA or max HR",
-    href: "/calculateurs/zones",
+    href: "/calculators/zones",
     gradient: "from-primary/10 dark:from-primary/20",
     iconBg: "bg-primary/15",
     iconColor: "text-primary",
@@ -39,7 +39,7 @@ const CALCULATEURS: CalculateurEntry[] = [
     titleEn: "Pace Converter",
     description: "Convertissez entre min/km, km/h et min/mile en temps réel",
     descriptionEn: "Convert between min/km, km/h and min/mile in real time",
-    href: "/calculateurs/convertisseur",
+    href: "/calculators/convertisseur",
     gradient: "from-zone-2/10 dark:from-zone-2/20",
     iconBg: "bg-zone-2/15",
     iconColor: "text-zone-2",
@@ -51,7 +51,7 @@ const CALCULATEURS: CalculateurEntry[] = [
     titleEn: "Pace Reference Table",
     description: "Toutes les allures de 3:00 à 10:00/km avec temps estimés",
     descriptionEn: "All paces from 3:00 to 10:00/km with estimated times",
-    href: "/calculateurs/table-allures",
+    href: "/calculators/table-allures",
     gradient: "from-zone-3/10 dark:from-zone-3/20",
     iconBg: "bg-zone-3/15",
     iconColor: "text-zone-3",
@@ -63,7 +63,7 @@ const CALCULATEURS: CalculateurEntry[] = [
     titleEn: "Treadmill Converter",
     description: "Convertissez vitesse et inclinaison en allure équivalente",
     descriptionEn: "Convert speed and incline to equivalent pace",
-    href: "/calculateurs/tapis-roulant",
+    href: "/calculators/tapis-roulant",
     gradient: "from-zone-4/10 dark:from-zone-4/20",
     iconBg: "bg-zone-4/15",
     iconColor: "text-zone-4",
@@ -75,7 +75,7 @@ const CALCULATEURS: CalculateurEntry[] = [
     titleEn: "Split Generator",
     description: "Planifiez vos passages pour atteindre votre objectif chrono",
     descriptionEn: "Plan your splits to reach your target time",
-    href: "/calculateurs/splits",
+    href: "/calculators/splits",
     gradient: "from-zone-5/10 dark:from-zone-5/20",
     iconBg: "bg-zone-5/15",
     iconColor: "text-zone-5",
@@ -87,7 +87,7 @@ const CALCULATEURS: CalculateurEntry[] = [
     titleEn: "VMA from Race Time",
     description: "Estimez votre VMA à partir d'un résultat de course",
     descriptionEn: "Estimate your VMA from a race result",
-    href: "/calculateurs/vma",
+    href: "/calculators/vma",
     gradient: "from-zone-6/10 dark:from-zone-6/20",
     iconBg: "bg-zone-6/15",
     iconColor: "text-zone-6",
@@ -99,7 +99,7 @@ const CALCULATEURS: CalculateurEntry[] = [
     titleEn: "Race Equivalence",
     description: "Prédisez vos temps sur toutes les distances depuis un résultat",
     descriptionEn: "Predict your times across all distances from one result",
-    href: "/calculateurs/equivalence",
+    href: "/calculators/equivalence",
     gradient: "from-zone-3/10 dark:from-zone-3/20",
     iconBg: "bg-zone-3/15",
     iconColor: "text-zone-3",
@@ -111,7 +111,7 @@ const CALCULATEURS: CalculateurEntry[] = [
     titleEn: "Age-Graded Performance",
     description: "Comparez votre performance au record mondial de votre catégorie",
     descriptionEn: "Compare your performance to the world record for your category",
-    href: "/calculateurs/age-graded",
+    href: "/calculators/age-graded",
     gradient: "from-zone-2/10 dark:from-zone-2/20",
     iconBg: "bg-zone-2/15",
     iconColor: "text-zone-2",
@@ -143,14 +143,14 @@ export function CalculateursPage() {
             ? "Running calculators: training zones, race paces, treadmill converter, split generator, VMA estimation."
             : "Calculateurs de course à pied : zones d'entraînement, allures, convertisseur tapis roulant, splits, estimation VMA."
         }
-        canonical="/calculateurs"
+        canonical="/calculators"
         jsonLd={{
           "@type": "CollectionPage",
           name: isEn ? "Running Calculators" : "Calculateurs Course à Pied",
           description: isEn
             ? "Running calculators: training zones, race paces, treadmill converter, split generator, VMA estimation."
             : "Calculateurs de course à pied : zones d'entraînement, allures, convertisseur tapis roulant, splits, estimation VMA.",
-          url: "https://zoned.run/calculateurs",
+          url: "https://zoned.run/calculators",
         }}
       />
       <div className="py-8">

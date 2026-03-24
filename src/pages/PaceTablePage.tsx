@@ -135,14 +135,14 @@ export function PaceTablePage() {
             ? "Complete pace reference table from 3:00 to 10:00/km with estimated race times for 5K, 10K, half-marathon and marathon."
             : "Table de référence complète des allures de 3:00 à 10:00/km avec temps estimés pour 5K, 10K, semi-marathon et marathon."
         }
-        canonical="/calculateurs/table-allures"
+        canonical="/calculators/table-allures"
         jsonLd={{
           "@type": "WebApplication",
           name: isEn ? "Pace Reference Table" : "Table de référence des allures",
           description: isEn
             ? "Complete pace reference table from 3:00 to 10:00/km with estimated race times"
             : "Table de référence complète des allures de 3:00 à 10:00/km avec temps estimés",
-          url: "https://zoned.run/calculateurs/table-allures",
+          url: "https://zoned.run/calculators/table-allures",
           applicationCategory: "SportsApplication",
         }}
       />

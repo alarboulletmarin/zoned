@@ -547,8 +547,8 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "Glossary",
         },
         {
-          text: "Page hub /calculateurs avec 7 outils de calcul pour coureurs",
-          textEn: "Calculator hub page /calculateurs with 7 running calculator tools",
+          text: "Page hub /calculators avec 7 outils de calcul pour coureurs",
+          textEn: "Calculator hub page /calculators with 7 running calculator tools",
           category: "Calculateurs",
           categoryEn: "Calculators",
         },

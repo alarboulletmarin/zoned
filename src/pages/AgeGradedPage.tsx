@@ -172,7 +172,7 @@ export function AgeGradedPage() {
             ? "Compare your performance to the age and gender adjusted world record. Discover your level."
             : "Comparez votre performance au record mondial ajusté pour votre âge et sexe. Découvrez votre niveau."
         }
-        canonical="/calculateurs/age-graded"
+        canonical="/calculators/age-graded"
         jsonLd={{
           "@type": "WebApplication",
           name: isEn
@@ -181,7 +181,7 @@ export function AgeGradedPage() {
           description: isEn
             ? "Compare your performance to the age and gender adjusted world record"
             : "Comparez votre performance au record mondial ajusté pour votre âge et sexe",
-          url: "https://zoned.run/calculateurs/age-graded",
+          url: "https://zoned.run/calculators/age-graded",
           applicationCategory: "SportsApplication",
         }}
       />

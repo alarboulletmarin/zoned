@@ -192,16 +192,16 @@ function App() {
                           <Route path="/workout/builder/:id" element={<WorkoutBuilderPage />} />
                           <Route path="/workout/:id" element={<WorkoutDetailPage />} />
                           <Route path="/my-zones" element={<MyZonesPage />} />
-                          <Route path="/calculateurs" element={<CalculateursPage />} />
-                          <Route path="/calculateurs/zones" element={<ZonesCalculatorPage />} />
-                          <Route path="/calculateurs/allures" element={<PaceCalculatorPage />} />
-                          <Route path="/calculateurs/convertisseur" element={<PaceConverterPage />} />
-                          <Route path="/calculateurs/table-allures" element={<PaceTablePage />} />
-                          <Route path="/calculateurs/tapis-roulant" element={<TreadmillConverterPage />} />
-                          <Route path="/calculateurs/splits" element={<SplitGeneratorPage />} />
-                          <Route path="/calculateurs/vma" element={<VmaCalculatorPage />} />
-                          <Route path="/calculateurs/equivalence" element={<RaceEquivalencePage />} />
-                          <Route path="/calculateurs/age-graded" element={<AgeGradedPage />} />
+                          <Route path="/calculators" element={<CalculateursPage />} />
+                          <Route path="/calculators/zones" element={<ZonesCalculatorPage />} />
+                          <Route path="/calculators/allures" element={<PaceCalculatorPage />} />
+                          <Route path="/calculators/convertisseur" element={<PaceConverterPage />} />
+                          <Route path="/calculators/table-allures" element={<PaceTablePage />} />
+                          <Route path="/calculators/tapis-roulant" element={<TreadmillConverterPage />} />
+                          <Route path="/calculators/splits" element={<SplitGeneratorPage />} />
+                          <Route path="/calculators/vma" element={<VmaCalculatorPage />} />
+                          <Route path="/calculators/equivalence" element={<RaceEquivalencePage />} />
+                          <Route path="/calculators/age-graded" element={<AgeGradedPage />} />
                           <Route path="/settings" element={<SettingsPage />} />
                           <Route path="/favorites" element={<FavoritesPage />} />
                           <Route path="/quiz" element={<QuizPage />} />

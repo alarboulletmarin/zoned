@@ -194,68 +194,45 @@ export function HomePage() {
           </div>
         </section>
 
-        {/* Bento Tools Section */}
+        {/* Bento Tools Section — no duplicates with hero CTAs */}
         <section className="space-y-3 md:space-y-4">
-          {/* Primary row: Library (hero card) + Plan (secondary hero) */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
-            <Link to="/library" className="col-span-1 md:col-span-3 group">
-              <div className="bg-gradient-to-br from-primary/15 dark:from-primary/25 to-zone-5/5 dark:to-zone-5/10 rounded-xl border border-primary/20 dark:border-primary/30 p-4 md:p-8 h-full flex flex-col transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-1">
-                <Activity className="size-6 md:size-10 text-primary mb-2 md:mb-4" />
+          {/* Row 1: Quiz (2/3) + Simulator (1/3) */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+            <Link to="/quiz" className="col-span-1 md:col-span-2 group">
+              <div className="bg-gradient-to-br from-primary/15 dark:from-primary/25 to-zone-5/5 dark:to-zone-5/10 rounded-xl border border-primary/20 dark:border-primary/30 p-5 md:p-8 h-full flex flex-col transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-1">
+                <ClipboardCheck className="size-6 md:size-10 text-primary mb-2 md:mb-4" />
                 <p className="font-bold text-base md:text-2xl">
-                  {workoutCount || 200}+ {isEn ? "workouts" : "séances"}
+                  {isEn ? "Find your workout" : "Trouve ta séance"}
                 </p>
-                <p className="text-sm text-muted-foreground mt-1 hidden md:block">
+                <p className="text-sm text-muted-foreground mt-1">
                   {isEn
-                    ? "Recovery, endurance, threshold, VO2max, hills, fartlek..."
-                    : "Récupération, endurance, seuil, VMA, côtes, fartlek..."}
+                    ? "5 questions to find the perfect session"
+                    : "5 questions pour trouver la séance parfaite"}
                 </p>
                 <span className="inline-flex items-center text-xs text-primary/70 mt-auto pt-2 md:pt-3 font-medium">
-                  {isEn ? "Browse" : "Explorer"}
+                  {workoutCount || 200}+ {t("common:units.workouts")}
                   <ArrowRight className="size-3 ml-1" />
                 </span>
               </div>
             </Link>
-            <Link to={planLink} className="col-span-1 md:col-span-2 group">
-              <div className="bg-gradient-to-br from-zone-2/15 dark:from-zone-2/25 to-zone-3/5 dark:to-zone-3/10 rounded-xl border border-zone-2/20 dark:border-zone-2/30 p-4 md:p-8 h-full flex flex-col transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-1">
-                <CalendarRange className="size-6 md:size-10 text-zone-2 mb-2 md:mb-4" />
+            <Link to="/race-simulator" className="group">
+              <div className="bg-gradient-to-br from-zone-4/15 dark:from-zone-4/25 to-zone-5/5 dark:to-zone-5/10 rounded-xl border border-zone-4/20 dark:border-zone-4/30 p-5 md:p-8 h-full flex flex-col transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-1">
+                <Flag className="size-6 md:size-10 text-zone-4 mb-2 md:mb-4" />
                 <p className="font-bold text-base md:text-2xl">
-                  {hasPlans
-                    ? isEn
-                      ? "My plans"
-                      : "Mes plans"
-                    : isEn
-                      ? "Training plan"
-                      : "Plan"}
+                  {isEn ? "Race simulator" : "Simulateur"}
                 </p>
-                <p className="text-sm text-muted-foreground mt-1 hidden md:block">
-                  {hasPlans
-                    ? `${plans.length} plan${plans.length > 1 ? "s" : ""}`
-                    : isEn
-                      ? "5K to Marathon · 8-24 weeks"
-                      : "5K au Marathon · 8-24 sem."}
+                <p className="text-sm text-muted-foreground mt-1">
+                  {isEn ? "Splits, nutrition, race day" : "Splits, nutrition, jour-J"}
                 </p>
-                <span className="inline-flex items-center text-xs text-zone-2/70 mt-auto pt-2 md:pt-3 font-medium">
-                  {hasPlans
-                    ? isEn ? "View my plans" : "Voir mes plans"
-                    : isEn ? "Assisted, free or pre-built" : "Assisté, libre ou prêt-à-l'emploi"}
+                <span className="inline-flex items-center text-xs text-zone-4/70 mt-auto pt-2 md:pt-3 font-medium">
+                  {isEn ? "Plan your race" : "Planifier ta course"}
                   <ArrowRight className="size-3 ml-1" />
                 </span>
               </div>
             </Link>
           </div>
-          {/* Secondary row: Quiz, Random, Simulator */}
+          {/* Row 2: Random + Calculators + My Zones */}
           <div className="grid grid-cols-3 gap-3 md:gap-4">
-            <Link to="/quiz" className="group">
-              <div className="bg-muted/30 dark:bg-muted/20 rounded-xl border border-border/50 p-4 md:p-5 h-full flex flex-col items-center text-center transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1 group-hover:bg-primary/10 dark:group-hover:bg-primary/15">
-                <ClipboardCheck className="size-5 md:size-6 text-primary mb-2" />
-                <p className="font-bold text-xs sm:text-sm">
-                  {isEn ? "Quiz" : "Quiz"}
-                </p>
-                <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 hidden sm:block">
-                  {isEn ? "5 quick questions" : "5 questions rapides"}
-                </p>
-              </div>
-            </Link>
             <div
               className="group cursor-pointer"
               onClick={handleRandomWorkout}
@@ -272,14 +249,25 @@ export function HomePage() {
                 </p>
               </div>
             </div>
-            <Link to="/race-simulator" className="group">
-              <div className="bg-muted/30 dark:bg-muted/20 rounded-xl border border-border/50 p-4 md:p-5 h-full flex flex-col items-center text-center transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1 group-hover:bg-zone-4/10 dark:group-hover:bg-zone-4/15">
-                <Flag className="size-5 md:size-6 text-zone-4 mb-2" />
+            <Link to="/calculators" className="group">
+              <div className="bg-muted/30 dark:bg-muted/20 rounded-xl border border-border/50 p-4 md:p-5 h-full flex flex-col items-center text-center transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1 group-hover:bg-zone-3/10 dark:group-hover:bg-zone-3/15">
+                <Activity className="size-5 md:size-6 text-zone-3 mb-2" />
                 <p className="font-bold text-xs sm:text-sm">
-                  {isEn ? "Simulator" : "Simulateur"}
+                  {isEn ? "Calculators" : "Calculateurs"}
                 </p>
                 <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 hidden sm:block">
-                  {isEn ? "Race day plan" : "Plan jour-J"}
+                  {isEn ? "9 tools" : "9 outils"}
+                </p>
+              </div>
+            </Link>
+            <Link to="/my-zones" className="group">
+              <div className="bg-muted/30 dark:bg-muted/20 rounded-xl border border-border/50 p-4 md:p-5 h-full flex flex-col items-center text-center transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1 group-hover:bg-zone-2/10 dark:group-hover:bg-zone-2/15">
+                <Shield className="size-5 md:size-6 text-zone-2 mb-2" />
+                <p className="font-bold text-xs sm:text-sm">
+                  {isEn ? "My Zones" : "Mes Zones"}
+                </p>
+                <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 hidden sm:block">
+                  {isEn ? "HR & pace zones" : "FC & allures"}
                 </p>
               </div>
             </Link>

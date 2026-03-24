@@ -102,14 +102,14 @@ export function TreadmillConverterPage() {
             ? "Convert treadmill speed and incline to equivalent outdoor pace and training zone."
             : "Convertissez la vitesse et l'inclinaison du tapis roulant en allure extérieure équivalente et zone d'entraînement."
         }
-        canonical="/calculateurs/tapis-roulant"
+        canonical="/calculators/tapis-roulant"
         jsonLd={{
           "@type": "WebApplication",
           name: isEn ? "Treadmill Converter" : "Convertisseur Tapis Roulant",
           description: isEn
             ? "Convert treadmill speed and incline to equivalent outdoor pace"
             : "Convertissez la vitesse et l'inclinaison du tapis en allure extérieure équivalente",
-          url: "https://zoned.run/calculateurs/tapis-roulant",
+          url: "https://zoned.run/calculators/tapis-roulant",
           applicationCategory: "SportsApplication",
         }}
       />

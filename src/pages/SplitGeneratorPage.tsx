@@ -77,14 +77,14 @@ export function SplitGeneratorPage() {
             ? "Generate per-km or per-mile splits for your target race time with even, negative, or positive split strategies."
             : "Générez vos temps de passage par km pour votre objectif chrono avec des stratégies de splits réguliers, négatifs ou positifs."
         }
-        canonical="/calculateurs/splits"
+        canonical="/calculators/splits"
         jsonLd={{
           "@type": "WebApplication",
           name: isEn ? "Split Generator" : "Générateur de Splits",
           description: isEn
             ? "Generate per-km splits for your target race time with even, negative, or positive split strategies"
             : "Générez vos temps de passage par km avec des stratégies de splits réguliers, négatifs ou positifs",
-          url: "https://zoned.run/calculateurs/splits",
+          url: "https://zoned.run/calculators/splits",
           applicationCategory: "SportsApplication",
         }}
       />

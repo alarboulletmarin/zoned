@@ -79,7 +79,7 @@ const navGroups: NavGroup[] = [
   {
     labelKey: "actions.tools",
     items: [
-      { href: "/calculateurs", icon: Calculator, labelKey: "calculateurs.title" },
+      { href: "/calculators", icon: Calculator, labelKey: "calculateurs.title" },
     ],
   },
   {
@@ -105,7 +105,7 @@ const footerItems: NavItem[] = [
   { href: "/changelog", icon: Sparkles, labelKey: "nav.changelog" },
 ];
 
-const prefixRoutes = ["/learn", "/collections", "/glossary", "/plan", "/calculateurs"];
+const prefixRoutes = ["/learn", "/collections", "/glossary", "/plan", "/calculators"];
 
 function isActive(pathname: string, href: string): boolean {
   if (pathname === href) return true;

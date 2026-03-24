@@ -105,14 +105,14 @@ export function VmaCalculatorPage() {
             ? "Estimate your VMA (Maximal Aerobic Speed) from a recent race result. Enter your time for 5K, 10K, half marathon or marathon."
             : "Estimez votre VMA à partir d'un résultat de course récent. Entrez votre chrono sur 5 km, 10 km, semi-marathon ou marathon."
         }
-        canonical="/calculateurs/vma"
+        canonical="/calculators/vma"
         jsonLd={{
           "@type": "WebApplication",
           name: isEn ? "VMA Calculator from Race Time" : "Calculateur VMA depuis un Chrono",
           description: isEn
             ? "Estimate your VMA from a recent race result"
             : "Estimez votre VMA à partir d'un résultat de course",
-          url: "https://zoned.run/calculateurs/vma",
+          url: "https://zoned.run/calculators/vma",
           applicationCategory: "SportsApplication",
         }}
       />

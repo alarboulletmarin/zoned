@@ -16,7 +16,7 @@ export function ZonesCalculatorPage() {
             ? "Calculate your heart rate and pace training zones from your VMA or max HR."
             : "Calculez vos zones de fréquence cardiaque et d'allure depuis votre VMA ou FCmax."
         }
-        canonical="/calculateurs/zones"
+        canonical="/calculators/zones"
         jsonLd={{
           "@type": "WebApplication",
           name: isEn
@@ -25,7 +25,7 @@ export function ZonesCalculatorPage() {
           description: isEn
             ? "Calculate your 6 heart rate and pace training zones from your VMA or max HR"
             : "Calculez vos 6 zones de fréquence cardiaque et d'allure depuis votre VMA ou FCmax",
-          url: "https://zoned.run/calculateurs/zones",
+          url: "https://zoned.run/calculators/zones",
           applicationCategory: "SportsApplication",
         }}
       />

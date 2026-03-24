@@ -160,7 +160,7 @@ export function RaceEquivalencePage() {
             ? "Predict your race times across all distances from a recent result. Riegel formula."
             : "Pr\u00e9disez vos temps de course sur toutes les distances \u00e0 partir d'un r\u00e9sultat r\u00e9cent. Formule de Riegel."
         }
-        canonical="/calculateurs/equivalence"
+        canonical="/calculators/equivalence"
         jsonLd={{
           "@type": "WebApplication",
           name: isEn
@@ -169,7 +169,7 @@ export function RaceEquivalencePage() {
           description: isEn
             ? "Predict your race times across all distances from a recent result"
             : "Pr\u00e9disez vos temps de course sur toutes les distances",
-          url: "https://zoned.run/calculateurs/equivalence",
+          url: "https://zoned.run/calculators/equivalence",
           applicationCategory: "SportsApplication",
         }}
       />

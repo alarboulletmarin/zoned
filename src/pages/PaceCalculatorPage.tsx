@@ -16,7 +16,7 @@ export function PaceCalculatorPage() {
             ? "Estimate your race times from 5K to marathon based on your VMA."
             : "Estimez vos temps de course du 5K au marathon à partir de votre VMA."
         }
-        canonical="/calculateurs/allures"
+        canonical="/calculators/allures"
         jsonLd={{
           "@type": "WebApplication",
           name: isEn
@@ -25,7 +25,7 @@ export function PaceCalculatorPage() {
           description: isEn
             ? "Estimate your race times from 5K to marathon based on your VMA"
             : "Estimez vos temps de course du 5K au marathon à partir de votre VMA",
-          url: "https://zoned.run/calculateurs/allures",
+          url: "https://zoned.run/calculators/allures",
           applicationCategory: "SportsApplication",
         }}
       />
