@@ -101,12 +101,12 @@ export function HomePage() {
           },
         }}
       />
-      <div className="space-y-10 md:space-y-16 py-10 md:py-14">
+      <div className="space-y-10 md:space-y-16 py-4 md:py-14">
         {/* Onboarding bubbles (first visit only) */}
         <OnboardingBubbles />
 
         {/* Hero Section - Left-aligned, editorial */}
-        <section className="pt-8 md:pt-16">
+        <section className="pt-2 md:pt-16">
           <div className="max-w-3xl">
             <span className="text-primary font-bold tracking-widest text-sm uppercase mb-4 block">
               {isEn ? "Performance Lab" : "Laboratoire de Performance"}

@@ -35,8 +35,7 @@ export function WorkoutOfTheDay() {
   const duration = Math.round(sessionData.totalDurationMin);
 
   return (
-    <Link to={`/workout/${workout.id}`} className="block group">
-    <Card className="rounded-xl overflow-hidden transition-shadow group-hover:shadow-lg">
+    <Card className="rounded-xl overflow-hidden transition-shadow hover:shadow-lg group relative">
       {/* Bento header: content left + duration & tips right */}
       <div className="grid grid-cols-1 md:grid-cols-12">
         {/* Left: identity */}
@@ -60,7 +59,7 @@ export function WorkoutOfTheDay() {
             <span className="font-bold text-foreground md:hidden">{duration} {t("common:units.minutes")}</span>
           </div>
 
-          <p className="text-sm md:text-base text-muted-foreground leading-relaxed line-clamp-2 max-w-2xl">
+          <p className="text-sm md:text-base text-muted-foreground leading-relaxed line-clamp-2 max-w-2xl relative z-10">
             <GlossaryLinkedText text={description} />
           </p>
         </div>
@@ -111,13 +110,15 @@ export function WorkoutOfTheDay() {
         )}
 
         <div className="flex justify-end">
-          <span className="text-sm font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
+          <Link
+            to={`/workout/${workout.id}`}
+            className="text-sm font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all after:absolute after:inset-0"
+          >
             {t("common:workoutOfTheDay.seeDetails")}
             <ArrowRight className="size-4" />
-          </span>
+          </Link>
         </div>
       </div>
     </Card>
-    </Link>
   );
 }

@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { OnboardingCard } from "./OnboardingCard";
 
 const STORAGE_KEY = "zoned-onboarding-seen";
 
@@ -46,8 +45,8 @@ export function OnboardingBubbles() {
   );
   const [pos, setPos] = useState<{ top: number; left: number; arrowLeft: number } | null>(null);
 
-  // On mobile, sidebar targets don't exist — render inline card instead
-  if (isMobile) return visible ? <OnboardingCard /> : null;
+  // No onboarding on mobile — the hero CTAs are self-explanatory
+  if (isMobile) return null;
 
   const dismiss = useCallback(() => {
     localStorage.setItem(STORAGE_KEY, "true");
