@@ -10,7 +10,7 @@
     "generate:og": "bun run scripts/generate-og-image.ts",
     "preview": "vite preview",
     "prerender": "bun run scripts/prerender.ts",
-    "build:seo": "tsc && vite build && bun run scripts/generate-sitemap.ts && bun run scripts/prerender.ts"
+    "build:seo": "bun run scripts/generate-og-image.ts && tsc && vite build && bun run scripts/generate-sitemap.ts && bun run scripts/prerender.ts"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.18",

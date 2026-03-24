@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      background: #0a0a0a;
+      color: #fafafa;
+    }
+
+    .frame {
+      width: 1200px;
+      height: 630px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Zone gradient bar at top */
+    .zone-bar {
+      height: 6px;
+      flex-shrink: 0;
+      background: linear-gradient(
+        to right,
+        #94a3b8 0%,
+        #22c55e 20%,
+        #eab308 40%,
+        #f97316 60%,
+        #ef4444 80%,
+        #7c3aed 100%
+      );
+    }
+
+    /* Content */
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 80px;
+      gap: 28px;
+      position: relative;
+    }
+
+    /* Ambient glows */
+    .glow-1 {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(249, 115, 22, 0.07) 0%, transparent 70%);
+      top: -100px;
+      left: 100px;
+      pointer-events: none;
+    }
+    .glow-2 {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.05) 0%, transparent 70%);
+      bottom: -50px;
+      right: 150px;
+      pointer-events: none;
+    }
+
+    /* Logo */
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-row svg {
+      width: 72px;
+      height: 36px;
+    }
+
+    .superheading {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #f97316;
+    }
+
+    /* Title */
+    .title {
+      font-size: 88px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    /* Tagline */
+    .tagline {
+      font-size: 28px;
+      color: #a3a3a3;
+      line-height: 1.3;
+      max-width: 700px;
+      font-weight: 400;
+    }
+
+    /* Stats row */
+    .stats {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      margin-top: 4px;
+    }
+
+    .stat {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .stat-label {
+      font-size: 18px;
+      color: #737373;
+      font-weight: 500;
+    }
+
+    .stat-dot {
+      color: #404040;
+      font-size: 20px;
+    }
+
+    /* URL */
+    .url {
+      font-size: 18px;
+      color: #525252;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <!-- Zone gradient bar -->
+    <div class="zone-bar"></div>
+
+    <!-- Content -->
+    <div class="content">
+      <div class="glow-1"></div>
+      <div class="glow-2"></div>
+
+      <div class="logo-row">
+        {{LOGO_SVG}}
+        <span class="superheading">Performance Lab</span>
+      </div>
+
+      <div class="title">Zoned</div>
+
+      <div class="tagline">Science-based running workouts,<br>organized by training zones.</div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-number" style="color: #f97316;">{{WORKOUT_COUNT}}</span>
+          <span class="stat-label">Workouts</span>
+        </div>
+        <span class="stat-dot">&middot;</span>
+        <div class="stat">
+          <span class="stat-number" style="color: #eab308;">{{CALCULATOR_COUNT}}</span>
+          <span class="stat-label">Calculators</span>
+        </div>
+        <span class="stat-dot">&middot;</span>
+        <div class="stat">
+          <span class="stat-number" style="color: #22c55e;">{{PLAN_COUNT}}</span>
+          <span class="stat-label">Plans</span>
+        </div>
+      </div>
+
+      <div class="url">Start training free &mdash; zoned.run</div>
+    </div>
+
+    <!-- Zone gradient bar -->
+    <div class="zone-bar"></div>
+  </div>
+</body>
+</html>

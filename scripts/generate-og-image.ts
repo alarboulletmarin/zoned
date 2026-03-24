@@ -1,71 +1,115 @@
-import sharp from "sharp";
+/**
+ * USAGE: bun run scripts/generate-og-image.ts
+ *
+ * Generates a professional OG image (1200x630 PNG) for social sharing.
+ * Reads actual app data to display accurate stats, renders an HTML
+ * template with Puppeteer, and saves to public/og-image.png.
+ */
+
+import { readFileSync, readdirSync, writeFileSync } from "fs";
 import { join } from "path";
+import puppeteer from "puppeteer";
 
-const OUTPUT_PATH = join(import.meta.dirname, "../public/og-image.png");
+const ROOT = join(import.meta.dirname, "..");
+const TEMPLATE_PATH = join(import.meta.dirname, "og-template.html");
+const OUTPUT_PATH = join(ROOT, "public/og-image.png");
 
-// OG image dimensions (recommended: 1200x630)
-const WIDTH = 1200;
-const HEIGHT = 630;
+// --- Data collection ---
 
-// Zone colors from the app
-const ZONE_COLORS = [
-  "#22c55e", // Z1 - green
-  "#3b82f6", // Z2 - blue
-  "#eab308", // Z3 - yellow
-  "#f97316", // Z4 - orange
-  "#ef4444", // Z5 - red
-  "#a855f7", // Z6 - purple
-];
-
-async function generateOgImage() {
-  // Create SVG with gradient background and text
-  const svg = `
-    <svg width="${WIDTH}" height="${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#0f172a"/>
-          <stop offset="100%" style="stop-color:#1e293b"/>
-        </linearGradient>
-        <linearGradient id="zones" x1="0%" y1="0%" x2="100%" y2="0%">
-          ${ZONE_COLORS.map((color, i) => `<stop offset="${(i / 5) * 100}%" style="stop-color:${color}"/>`).join("")}
-        </linearGradient>
-      </defs>
-
-      <!-- Background -->
-      <rect width="100%" height="100%" fill="url(#bg)"/>
-
-      <!-- Zone stripe at top -->
-      <rect x="0" y="0" width="100%" height="8" fill="url(#zones)"/>
-
-      <!-- Zone badges -->
-      ${ZONE_COLORS.map((color, i) => `
-        <rect x="${180 + i * 150}" y="180" width="60" height="36" rx="6" fill="${color}" opacity="0.9"/>
-        <text x="${210 + i * 150}" y="205" font-family="system-ui, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">Z${i + 1}</text>
-      `).join("")}
-
-      <!-- Title -->
-      <text x="600" y="320" font-family="system-ui, sans-serif" font-size="72" font-weight="bold" fill="white" text-anchor="middle">Zoned</text>
-
-      <!-- Subtitle -->
-      <text x="600" y="400" font-family="system-ui, sans-serif" font-size="32" fill="#94a3b8" text-anchor="middle">Free Structured Running Workouts</text>
-
-      <!-- Stats -->
-      <text x="300" y="500" font-family="system-ui, sans-serif" font-size="22" fill="#64748b" text-anchor="middle">200 Workouts</text>
-      <text x="480" y="500" font-family="system-ui, sans-serif" font-size="22" fill="#64748b" text-anchor="middle">•</text>
-      <text x="600" y="500" font-family="system-ui, sans-serif" font-size="22" fill="#64748b" text-anchor="middle">9 Calculators</text>
-      <text x="720" y="500" font-family="system-ui, sans-serif" font-size="22" fill="#64748b" text-anchor="middle">•</text>
-      <text x="900" y="500" font-family="system-ui, sans-serif" font-size="22" fill="#64748b" text-anchor="middle">No Account Needed</text>
-
-      <!-- URL -->
-      <text x="600" y="580" font-family="system-ui, sans-serif" font-size="24" font-weight="bold" fill="#94a3b8" text-anchor="middle">zoned.run</text>
-    </svg>
-  `;
-
-  await sharp(Buffer.from(svg))
-    .png()
-    .toFile(OUTPUT_PATH);
-
-  console.log(`OG image generated at ${OUTPUT_PATH}`);
+function countWorkouts(): number {
+  const dir = join(ROOT, "src/data/workouts");
+  const files = readdirSync(dir).filter((f) => f.endsWith(".json"));
+  let total = 0;
+  for (const file of files) {
+    const data = JSON.parse(readFileSync(join(dir, file), "utf-8"));
+    if (data.templates && Array.isArray(data.templates)) {
+      total += data.templates.length;
+    }
+  }
+  return total;
 }
 
-generateOgImage();
+function countCalculators(): number {
+  return 9;
+}
+
+function countGlossaryTerms(): number {
+  const dir = join(ROOT, "src/data/glossary/terms");
+  const files = readdirSync(dir).filter((f) => f.endsWith(".ts"));
+  let total = 0;
+  for (const file of files) {
+    const content = readFileSync(join(dir, file), "utf-8");
+    const matches = content.match(/^\s+id:\s/gm);
+    if (matches) total += matches.length;
+  }
+  return total;
+}
+
+function countPlans(): number {
+  const dir = join(ROOT, "src/data/prebuilt-plans/plans");
+  return readdirSync(dir).filter((f) => f.endsWith(".ts")).length;
+}
+
+function loadLogoSvg(): string {
+  return readFileSync(join(ROOT, "src/assets/logo.svg"), "utf-8");
+}
+
+// --- Template rendering ---
+
+function buildHtml(): string {
+  const stats = {
+    workouts: countWorkouts(),
+    calculators: countCalculators(),
+    glossary: countGlossaryTerms(),
+    plans: countPlans(),
+  };
+
+  console.log("Stats:", stats);
+
+  let html = readFileSync(TEMPLATE_PATH, "utf-8");
+  html = html.replace(/\{\{WORKOUT_COUNT\}\}/g, String(stats.workouts));
+  html = html.replace(/\{\{CALCULATOR_COUNT\}\}/g, String(stats.calculators));
+  html = html.replace(/\{\{GLOSSARY_COUNT\}\}/g, String(stats.glossary));
+  html = html.replace(/\{\{PLAN_COUNT\}\}/g, String(stats.plans));
+  html = html.replace(/\{\{LOGO_SVG\}\}/g, loadLogoSvg());
+
+  return html;
+}
+
+// --- Screenshot ---
+
+async function captureScreenshot(html: string): Promise<Buffer> {
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+  });
+
+  const page = await browser.newPage();
+  await page.setViewport({ width: 1200, height: 630, deviceScaleFactor: 1 });
+  await page.setContent(html, { waitUntil: "networkidle0", timeout: 15000 });
+
+  const screenshot = await page.screenshot({
+    type: "png",
+    clip: { x: 0, y: 0, width: 1200, height: 630 },
+  });
+
+  await browser.close();
+  return Buffer.from(screenshot);
+}
+
+// --- Main ---
+
+async function main() {
+  console.log("Generating OG image...");
+
+  const html = buildHtml();
+  const png = await captureScreenshot(html);
+  writeFileSync(OUTPUT_PATH, png);
+
+  console.log(`OG image saved to ${OUTPUT_PATH}`);
+}
+
+main().catch((err) => {
+  console.error("Failed to generate OG image:", err);
+  process.exit(1);
+});
