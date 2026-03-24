@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   ArrowRight,
+  Activity,
   Dices,
   ClipboardCheck,
   CalendarRange,
   Shield,
   Flag,
-  Calculator,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,6 +39,24 @@ export function HomePage() {
   const { plans } = usePlans();
   const hasPlans = plans.length > 0;
   const planLink = hasPlans ? "/plans" : "/plan/new";
+  // Rotating hero accent word — Sprint animation
+  const accentWords = useMemo(() => isEn
+    ? ["5K", "10K", "half-marathon", "marathon", "trail", "ultra"]
+    : ["5K", "10K", "semi", "marathon", "trail", "ultra"], [isEn]);
+  const [accentIndex, setAccentIndex] = useState(0);
+  const [animState, setAnimState] = useState<"visible" | "exit" | "enter">("visible");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAnimState("exit");
+      setTimeout(() => {
+        setAccentIndex((prev) => (prev + 1) % accentWords.length);
+        setAnimState("enter");
+        setTimeout(() => setAnimState("visible"), 50);
+      }, 300);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, [accentWords.length]);
 
   const handleRandomWorkout = async () => {
     if (isLoadingRandom) return;
@@ -126,11 +144,18 @@ export function HomePage() {
         <section className="pt-0 md:pt-4">
           <div className="max-w-3xl">
             <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-4 md:mb-6 leading-[1.1]">
-              {t("common:app.heroTitle")
-                .replace(t("common:app.heroTitleAccent"), "")
-                .trim()}{" "}
-              <span className="text-muted-foreground italic font-light">
-                {t("common:app.heroTitleAccent")}
+              {t("common:app.heroTitle")}
+              <br className="md:hidden" />{" "}
+              <span
+                className={`inline-block text-primary italic font-light pr-1 pt-0.5 transition-all duration-300 ${
+                  animState === "exit"
+                    ? "translate-x-6 md:translate-x-16 opacity-0 md:blur-[2px] [transition-timing-function:cubic-bezier(0.55,0,1,0.45)]"
+                    : animState === "enter"
+                      ? "-translate-x-6 md:-translate-x-16 opacity-0 md:blur-[2px]"
+                      : "translate-x-0 opacity-100 blur-0 [transition-timing-function:cubic-bezier(0,0,0.2,1)]"
+                }`}
+              >
+                {accentWords[accentIndex]}
               </span>
             </h1>
             <p className="text-base md:text-xl text-muted-foreground max-w-xl mb-6 md:mb-8 leading-relaxed">
@@ -170,89 +195,95 @@ export function HomePage() {
         </section>
 
         {/* Bento Tools Section */}
-        <section className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-          {/* Row 1: Quiz (col-span-2) + Library (col-span-1) */}
-          <Link to="/quiz" className="col-span-2 md:col-span-2 group">
-            <div className="bg-gradient-to-br from-primary/10 dark:from-primary/20 to-transparent rounded-xl border border-border/50 p-5 md:p-6 h-full flex flex-col transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
-              <ClipboardCheck className="size-6 md:size-8 text-primary mb-3" />
-              <p className="font-bold text-sm sm:text-base md:text-lg">
-                {isEn ? "Find your workout" : "Trouve ta séance"}
-              </p>
-              <p className="text-xs md:text-sm text-muted-foreground mt-1">
-                {isEn ? "5 quick questions" : "5 questions rapides"}
-              </p>
-              <span className="inline-flex items-center text-xs text-muted-foreground mt-auto pt-2 bg-muted/50 rounded-full px-2 py-0.5 w-fit">
-                {workoutCount || 200}+ {t("common:units.workouts")}
-              </span>
-            </div>
-          </Link>
-          <Link to="/library" className="col-span-2 md:col-span-1 group">
-            <div className="bg-gradient-to-br from-zone-2/10 dark:from-zone-2/20 to-transparent rounded-xl border border-border/50 p-5 md:p-6 h-full flex flex-col transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
-              <ArrowRight className="size-6 md:size-8 text-zone-2 mb-3" />
-              <p className="font-bold text-sm sm:text-base">
-                {t("library:title")}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                {isEn ? "Browse all" : "Tout parcourir"}
-              </p>
-              <span className="inline-flex items-center text-xs text-muted-foreground mt-auto pt-2 bg-muted/50 rounded-full px-2 py-0.5 w-fit">
-                {workoutCount || 200}+ {t("common:units.workouts")}
-              </span>
-            </div>
-          </Link>
-          {/* Row 2: Random + Plan + Simulator */}
-          <div
-            className="col-span-1 group cursor-pointer"
-            onClick={handleRandomWorkout}
-          >
-            <div className="bg-gradient-to-br from-zone-5/10 dark:from-zone-5/20 to-transparent rounded-xl border border-border/50 p-5 md:p-6 h-full flex flex-col transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
-              <Dices
-                className={`size-6 text-zone-5 mb-3 ${isLoadingRandom ? "animate-spin" : ""}`}
-              />
-              <p className="font-bold text-sm sm:text-base">
-                {isEn ? "Random workout" : "Séance aléatoire"}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                {isEn ? "Surprise me!" : "Surprends-moi !"}
-              </p>
-            </div>
+        <section className="space-y-3 md:space-y-4">
+          {/* Primary row: Library (hero card) + Plan (secondary hero) */}
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
+            <Link to="/library" className="col-span-1 md:col-span-3 group">
+              <div className="bg-gradient-to-br from-primary/15 dark:from-primary/25 to-zone-5/5 dark:to-zone-5/10 rounded-xl border border-primary/20 dark:border-primary/30 p-4 md:p-8 h-full flex flex-col transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-1">
+                <Activity className="size-6 md:size-10 text-primary mb-2 md:mb-4" />
+                <p className="font-bold text-base md:text-2xl">
+                  {workoutCount || 200}+ {isEn ? "workouts" : "séances"}
+                </p>
+                <p className="text-sm text-muted-foreground mt-1 hidden md:block">
+                  {isEn
+                    ? "Recovery, endurance, threshold, VO2max, hills, fartlek..."
+                    : "Récupération, endurance, seuil, VMA, côtes, fartlek..."}
+                </p>
+                <span className="inline-flex items-center text-xs text-primary/70 mt-auto pt-2 md:pt-3 font-medium">
+                  {isEn ? "Browse" : "Explorer"}
+                  <ArrowRight className="size-3 ml-1" />
+                </span>
+              </div>
+            </Link>
+            <Link to={planLink} className="col-span-1 md:col-span-2 group">
+              <div className="bg-gradient-to-br from-zone-2/15 dark:from-zone-2/25 to-zone-3/5 dark:to-zone-3/10 rounded-xl border border-zone-2/20 dark:border-zone-2/30 p-4 md:p-8 h-full flex flex-col transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-1">
+                <CalendarRange className="size-6 md:size-10 text-zone-2 mb-2 md:mb-4" />
+                <p className="font-bold text-base md:text-2xl">
+                  {hasPlans
+                    ? isEn
+                      ? "My plans"
+                      : "Mes plans"
+                    : isEn
+                      ? "Training plan"
+                      : "Plan"}
+                </p>
+                <p className="text-sm text-muted-foreground mt-1 hidden md:block">
+                  {hasPlans
+                    ? `${plans.length} plan${plans.length > 1 ? "s" : ""}`
+                    : isEn
+                      ? "5K to Marathon · 8-24 weeks"
+                      : "5K au Marathon · 8-24 sem."}
+                </p>
+                <span className="inline-flex items-center text-xs text-zone-2/70 mt-auto pt-2 md:pt-3 font-medium">
+                  {hasPlans
+                    ? isEn ? "View my plans" : "Voir mes plans"
+                    : isEn ? "Assisted, free or pre-built" : "Assisté, libre ou prêt-à-l'emploi"}
+                  <ArrowRight className="size-3 ml-1" />
+                </span>
+              </div>
+            </Link>
           </div>
-          <Link to={planLink} className="col-span-1 group">
-            <div className="bg-gradient-to-br from-zone-3/10 dark:from-zone-3/20 to-transparent rounded-xl border border-border/50 p-5 md:p-6 h-full flex flex-col transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
-              <CalendarRange className="size-6 text-zone-3 mb-3" />
-              <p className="font-bold text-sm sm:text-base">
-                {hasPlans
-                  ? isEn
-                    ? "My plans"
-                    : "Mes plans"
-                  : isEn
-                    ? "Training plan"
-                    : "Plan d'entraînement"}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                {hasPlans
-                  ? `${plans.length} plan${plans.length > 1 ? "s" : ""}`
-                  : isEn
-                    ? "5K to Marathon"
-                    : "5K au Marathon"}
-              </p>
-              <span className="inline-flex items-center text-xs text-muted-foreground mt-auto pt-2 bg-muted/50 rounded-full px-2 py-0.5 w-fit">
-                <Calculator className="size-3 mr-1" />
-                {isEn ? "9 calculators" : "9 calculateurs"}
-              </span>
+          {/* Secondary row: Quiz, Random, Simulator */}
+          <div className="grid grid-cols-3 gap-3 md:gap-4">
+            <Link to="/quiz" className="group">
+              <div className="bg-muted/30 dark:bg-muted/20 rounded-xl border border-border/50 p-4 md:p-5 h-full flex flex-col items-center text-center transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1 group-hover:bg-primary/10 dark:group-hover:bg-primary/15">
+                <ClipboardCheck className="size-5 md:size-6 text-primary mb-2" />
+                <p className="font-bold text-xs sm:text-sm">
+                  {isEn ? "Quiz" : "Quiz"}
+                </p>
+                <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 hidden sm:block">
+                  {isEn ? "5 quick questions" : "5 questions rapides"}
+                </p>
+              </div>
+            </Link>
+            <div
+              className="group cursor-pointer"
+              onClick={handleRandomWorkout}
+            >
+              <div className="bg-muted/30 dark:bg-muted/20 rounded-xl border border-border/50 p-4 md:p-5 h-full flex flex-col items-center text-center transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1 group-hover:bg-zone-5/10 dark:group-hover:bg-zone-5/15">
+                <Dices
+                  className={`size-5 md:size-6 text-zone-5 mb-2 ${isLoadingRandom ? "animate-spin" : ""}`}
+                />
+                <p className="font-bold text-xs sm:text-sm">
+                  {isEn ? "Random" : "Aléatoire"}
+                </p>
+                <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 hidden sm:block">
+                  {isEn ? "Surprise me!" : "Surprends-moi !"}
+                </p>
+              </div>
             </div>
-          </Link>
-          <Link to="/race-simulator" className="col-span-2 md:col-span-1 group">
-            <div className="bg-gradient-to-br from-zone-4/10 dark:from-zone-4/20 to-transparent rounded-xl border border-border/50 p-5 md:p-6 h-full flex flex-col transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
-              <Flag className="size-6 text-zone-4 mb-3" />
-              <p className="font-bold text-sm sm:text-base">
-                {t("common:simulator.ctaTitle")}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                {t("common:simulator.ctaSubtitle")}
-              </p>
-            </div>
-          </Link>
+            <Link to="/race-simulator" className="group">
+              <div className="bg-muted/30 dark:bg-muted/20 rounded-xl border border-border/50 p-4 md:p-5 h-full flex flex-col items-center text-center transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1 group-hover:bg-zone-4/10 dark:group-hover:bg-zone-4/15">
+                <Flag className="size-5 md:size-6 text-zone-4 mb-2" />
+                <p className="font-bold text-xs sm:text-sm">
+                  {isEn ? "Simulator" : "Simulateur"}
+                </p>
+                <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 hidden sm:block">
+                  {isEn ? "Race day plan" : "Plan jour-J"}
+                </p>
+              </div>
+            </Link>
+          </div>
         </section>
 
         {/* Workout of the Day */}
@@ -399,6 +430,7 @@ export function HomePage() {
           </div>
         </section>
       </div>
+
     </>
   );
 }

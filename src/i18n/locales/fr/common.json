@@ -2,8 +2,8 @@
   "app": {
     "name": "Zoned",
     "tagline": "Plan personnalisé, séances structurées, simulateur jour-J, export montre. Gratuit, sans compte.",
-    "heroTitle": "Prépare ta prochaine course",
-    "heroTitleAccent": "course"
+    "heroTitle": "Prépare ton prochain",
+    "heroTitleAccent": "objectif"
   },
   "about": {
     "title": "À propos de Zoned",

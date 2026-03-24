@@ -596,6 +596,12 @@
   animation: heart-bounce 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
+/* Typewriter cursor blink */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 /* Animated underline for navigation links */
 .nav-link-animated {
   position: relative;

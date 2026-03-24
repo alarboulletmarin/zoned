@@ -45,9 +45,6 @@ export function OnboardingBubbles() {
   );
   const [pos, setPos] = useState<{ top: number; left: number; arrowLeft: number } | null>(null);
 
-  // No onboarding on mobile — the hero CTAs are self-explanatory
-  if (isMobile) return null;
-
   const dismiss = useCallback(() => {
     localStorage.setItem(STORAGE_KEY, "true");
     setVisible(false);
@@ -145,7 +142,8 @@ export function OnboardingBubbles() {
     return () => window.removeEventListener("keydown", handler);
   }, [visible, dismiss]);
 
-  if (!visible || !pos) return null;
+  // No onboarding on mobile — the hero CTAs are self-explanatory
+  if (isMobile || !visible || !pos) return null;
 
   const current = STEPS[step];
 
