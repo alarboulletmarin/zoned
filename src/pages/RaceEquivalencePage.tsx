@@ -283,7 +283,7 @@ export function RaceEquivalencePage() {
 
         {/* Results Table */}
         {predictions && (
-          <Card className="mb-6">
+          <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50 mb-6">
             <CardContent className="pt-6">
               <h2 className="text-lg font-semibold mb-4">
                 {isEn ? "Predicted times" : "Temps pr\u00e9dits"}
@@ -368,7 +368,7 @@ export function RaceEquivalencePage() {
         )}
 
         {/* Explanation Card */}
-        <Card className="border-dashed">
+        <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
           <CardContent className="pt-6">
             <div className="flex gap-3">
               <Info className="size-5 text-muted-foreground shrink-0 mt-0.5" />

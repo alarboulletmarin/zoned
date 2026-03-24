@@ -35,7 +35,10 @@ export const GlossaryCard = memo(function GlossaryCard({
       <Card
         interactive
         size="compact"
-        className={cn("h-full", className)}
+        className={cn(
+          "h-full bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent border-border/50",
+          className,
+        )}
       >
         <CardContent className="p-4">
           <div className="flex items-start justify-between gap-2">

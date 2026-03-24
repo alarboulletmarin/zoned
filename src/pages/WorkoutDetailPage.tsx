@@ -202,7 +202,7 @@ export function WorkoutDetailPage() {
         {/* Bento Header */}
         <header className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Session Identity Card */}
-          <div className="lg:col-span-8 bg-card border rounded-xl p-8 md:p-10 flex flex-col justify-between min-h-[240px]">
+          <div className={`lg:col-span-8 bg-gradient-to-br from-zone-${dominantZone}/10 dark:from-zone-${dominantZone}/20 to-transparent border border-border/50 rounded-xl p-8 md:p-10 flex flex-col justify-between min-h-[240px]`}>
             <div>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">

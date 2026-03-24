@@ -7,11 +7,11 @@ import { cn } from "@/lib/utils";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import type { PrebuiltPlan } from "@/data/prebuilt-plans/types";
 
-const DIFFICULTY_COLORS: Record<string, string> = {
-  beginner: "border-t-green-500",
-  intermediate: "border-t-yellow-500",
-  advanced: "border-t-orange-500",
-  elite: "border-t-red-500",
+const DIFFICULTY_GRADIENT: Record<string, string> = {
+  beginner: "bg-gradient-to-br from-green-500/10 dark:from-green-500/20 to-transparent",
+  intermediate: "bg-gradient-to-br from-yellow-500/10 dark:from-yellow-500/20 to-transparent",
+  advanced: "bg-gradient-to-br from-orange-500/10 dark:from-orange-500/20 to-transparent",
+  elite: "bg-gradient-to-br from-red-500/10 dark:from-red-500/20 to-transparent",
 };
 
 const DIFFICULTY_LABELS: Record<string, { fr: string; en: string }> = {
@@ -41,8 +41,8 @@ export function PrebuiltPlanCard({ plan }: PrebuiltPlanCardProps) {
       <Card
         interactive
         className={cn(
-          "h-full border-t-4",
-          DIFFICULTY_COLORS[plan.difficulty] ?? "border-t-gray-400",
+          "h-full border-border/50",
+          DIFFICULTY_GRADIENT[plan.difficulty] ?? "bg-gradient-to-br from-gray-400/10 dark:from-gray-400/20 to-transparent",
         )}
       >
         <CardContent className="p-3 sm:p-4 flex flex-col gap-2 sm:gap-3 h-full">

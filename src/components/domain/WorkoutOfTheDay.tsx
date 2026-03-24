@@ -35,7 +35,7 @@ export function WorkoutOfTheDay() {
   const duration = Math.round(sessionData.totalDurationMin);
 
   return (
-    <Card className="rounded-xl overflow-hidden transition-shadow hover:shadow-lg group relative">
+    <Card className={`zone-${dominantZone} bg-gradient-to-br from-zone-${dominantZone}/10 dark:from-zone-${dominantZone}/20 to-transparent rounded-xl overflow-hidden hover:shadow-md hover:-translate-y-1 transition-all duration-200 group relative`}>
       {/* Bento header: content left + duration & tips right */}
       <div className="grid grid-cols-1 md:grid-cols-12">
         {/* Left: identity */}

@@ -137,7 +137,7 @@ export function WarmupGuidePage() {
         return (
           <div
             key={blockIdx}
-            className="flex gap-3 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4"
+            className="flex gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4"
           >
             <Info className="size-5 shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
             <p className="text-sm text-emerald-800 dark:text-emerald-200"><GlossaryLinkedText text={text ?? ""} /></p>
@@ -148,7 +148,7 @@ export function WarmupGuidePage() {
         return (
           <div
             key={blockIdx}
-            className="flex gap-3 rounded-lg border border-amber-500/20 bg-amber-500/5 p-4"
+            className="flex gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4"
           >
             <AlertTriangle className="size-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
             <p className="text-sm text-amber-800 dark:text-amber-200"><GlossaryLinkedText text={text ?? ""} /></p>
@@ -239,7 +239,7 @@ export function WarmupGuidePage() {
 
           {/* Selected routine detail */}
           {activeRoutine && (
-            <Card>
+            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
               <CardContent className="pt-6 space-y-1">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold">

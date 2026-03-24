@@ -342,7 +342,7 @@ export function AgeGradedPage() {
         {result && performanceLevel && (
           <div className="space-y-6">
             {/* Big percentage display */}
-            <Card>
+            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
               <CardContent className="py-8 flex flex-col items-center text-center">
                 <p className="text-5xl font-bold tabular-nums">
                   {result.percentage.toFixed(1)}%
@@ -354,7 +354,7 @@ export function AgeGradedPage() {
             </Card>
 
             {/* Context card */}
-            <Card>
+            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
               <CardContent className="pt-6">
                 <div className="space-y-3">
                   <div className="flex justify-between items-center py-2 border-b">

@@ -84,7 +84,7 @@ export function GuidesPage() {
             const Icon = guide.icon;
             return (
               <Link key={guide.id} to={guide.href} className="group">
-                <Card interactive className="h-full">
+                <Card interactive className="h-full bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent">
                   <CardContent className="flex flex-col items-center text-center gap-4 pt-8 pb-6">
                     <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                       <Icon className="size-7 text-primary" />

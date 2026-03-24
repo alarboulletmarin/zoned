@@ -91,7 +91,7 @@ function renderBlock(block: NutritionBlock, isEn: boolean, index: number) {
       return (
         <div
           key={index}
-          className="flex gap-3 rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950/20"
+          className="flex gap-3 rounded-xl border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950/20"
         >
           <Lightbulb className="size-5 shrink-0 text-green-600 dark:text-green-400 mt-0.5" />
           <p className="text-sm text-green-800 dark:text-green-200">
@@ -104,7 +104,7 @@ function renderBlock(block: NutritionBlock, isEn: boolean, index: number) {
       return (
         <div
           key={index}
-          className="flex gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-950/20"
+          className="flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-950/20"
         >
           <AlertTriangle className="size-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
           <p className="text-sm text-amber-800 dark:text-amber-200">
@@ -426,7 +426,7 @@ function SummaryCard({
   sub: string;
 }) {
   return (
-    <div className="rounded-lg border bg-muted/30 p-3 space-y-1">
+    <div className="rounded-xl bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent border border-border/50 p-3 space-y-1">
       <p className="text-xs text-muted-foreground">{label}</p>
       <p className="text-xl font-bold text-foreground">{value}</p>
       <p className="text-xs text-muted-foreground">{sub}</p>
@@ -515,7 +515,7 @@ export function NutritionGuidePage() {
 
           {nutritionSections.map((section) => (
             <TabsContent key={section.id} value={section.id}>
-              <Card>
+              <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
                 <CardHeader>
                   <CardTitle>
                     {isEn ? section.titleEn : section.title}

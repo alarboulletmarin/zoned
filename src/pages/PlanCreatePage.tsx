@@ -289,8 +289,10 @@ export function PlanCreatePage() {
                 key={dist}
                 interactive
                 className={cn(
-                  "cursor-pointer transition-all duration-200",
-                  form.raceDistance === dist && "ring-2 ring-primary"
+                  "cursor-pointer border-border/50 hover:shadow-md hover:-translate-y-1 transition-all duration-200",
+                  form.raceDistance === dist
+                    ? "bg-gradient-to-br from-primary/10 dark:from-primary/20 to-transparent ring-2 ring-primary"
+                    : "hover:bg-gradient-to-br hover:from-primary/5 dark:hover:from-primary/10 hover:to-transparent"
                 )}
                 onClick={() => {
                   setForm((f) => ({ ...f, raceDistance: dist }));
@@ -484,8 +486,10 @@ export function PlanCreatePage() {
                   key={level}
                   interactive
                   className={cn(
-                    "cursor-pointer transition-all duration-200",
-                    form.runnerLevel === level && "ring-2 ring-primary",
+                    "cursor-pointer border-border/50 hover:shadow-md hover:-translate-y-1 transition-all duration-200",
+                    form.runnerLevel === level
+                      ? "bg-gradient-to-br from-primary/10 dark:from-primary/20 to-transparent ring-2 ring-primary"
+                      : "hover:bg-gradient-to-br hover:from-primary/5 dark:hover:from-primary/10 hover:to-transparent",
                     isSuggested &&
                       form.runnerLevel !== level &&
                       "border-primary/40"

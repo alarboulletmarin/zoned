@@ -215,7 +215,7 @@ export function VmaCalculatorPage() {
         {calculatedVma && paceZones && (
           <div className="space-y-6">
             {/* VMA Display */}
-            <Card>
+            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
               <CardContent className="py-8 flex flex-col items-center text-center">
                 <p className="text-sm font-medium text-muted-foreground mb-2">
                   {isEn ? "Estimated VMA" : "VMA estimée"}
@@ -228,7 +228,7 @@ export function VmaCalculatorPage() {
             </Card>
 
             {/* Zones Preview Table */}
-            <Card>
+            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
               <CardContent className="pt-6">
                 <h2 className="text-lg font-semibold mb-4">
                   {isEn ? "Pace zones preview" : "Aperçu des zones d'allure"}

@@ -95,7 +95,7 @@ function PlanCard({
   const totalSessions = plan.weeks.reduce((sum, w) => sum + w.sessions.length, 0);
 
   return (
-    <Card interactive className="h-full">
+    <Card interactive className="h-full bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent">
       <CardHeader
         className="cursor-pointer"
         onClick={() => navigate(`/plan/${plan.id}`)}

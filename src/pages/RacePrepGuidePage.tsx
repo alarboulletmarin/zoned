@@ -138,7 +138,7 @@ export function RacePrepGuidePage() {
         return (
           <div key={blockIdx} className="space-y-2">
             {text && <h4 className="font-medium text-sm">{text}</h4>}
-            <div className="overflow-x-auto rounded-lg border">
+            <div className="overflow-x-auto rounded-xl border">
               <table className="w-full text-sm">
                 <tbody>
                   {block.rows?.map((row, i) => (
@@ -161,7 +161,7 @@ export function RacePrepGuidePage() {
         return (
           <div
             key={blockIdx}
-            className="flex gap-3 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4"
+            className="flex gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4"
           >
             <Info className="size-5 shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
             <p className="text-sm text-emerald-800 dark:text-emerald-200"><GlossaryLinkedText text={text ?? ""} /></p>
@@ -172,7 +172,7 @@ export function RacePrepGuidePage() {
         return (
           <div
             key={blockIdx}
-            className="flex gap-3 rounded-lg border border-amber-500/20 bg-amber-500/5 p-4"
+            className="flex gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4"
           >
             <AlertTriangle className="size-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
             <p className="text-sm text-amber-800 dark:text-amber-200"><GlossaryLinkedText text={text ?? ""} /></p>
@@ -187,7 +187,7 @@ export function RacePrepGuidePage() {
   function renderRecoveryTimeline(timeline: RecoveryTimeline) {
     const distance = isEn ? timeline.distanceEn : timeline.distance;
     return (
-      <Card key={timeline.distance} size="compact">
+      <Card key={timeline.distance} size="compact" className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span>{distance}</span>

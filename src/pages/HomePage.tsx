@@ -173,7 +173,7 @@ export function HomePage() {
         <section className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
           {/* Row 1: Quiz (col-span-2) + Library (col-span-1) */}
           <Link to="/quiz" className="col-span-2 md:col-span-2 group">
-            <div className="bg-gradient-to-br from-primary/10 to-transparent rounded-xl border border-border/50 p-5 md:p-6 h-full flex flex-col transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
+            <div className="bg-gradient-to-br from-primary/10 dark:from-primary/20 to-transparent rounded-xl border border-border/50 p-5 md:p-6 h-full flex flex-col transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
               <ClipboardCheck className="size-6 md:size-8 text-primary mb-3" />
               <p className="font-bold text-sm sm:text-base md:text-lg">
                 {isEn ? "Find your workout" : "Trouve ta séance"}
@@ -187,7 +187,7 @@ export function HomePage() {
             </div>
           </Link>
           <Link to="/library" className="col-span-2 md:col-span-1 group">
-            <div className="bg-gradient-to-br from-zone-2/10 to-transparent rounded-xl border border-border/50 p-5 md:p-6 h-full flex flex-col transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
+            <div className="bg-gradient-to-br from-zone-2/10 dark:from-zone-2/20 to-transparent rounded-xl border border-border/50 p-5 md:p-6 h-full flex flex-col transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
               <ArrowRight className="size-6 md:size-8 text-zone-2 mb-3" />
               <p className="font-bold text-sm sm:text-base">
                 {t("library:title")}
@@ -205,7 +205,7 @@ export function HomePage() {
             className="col-span-1 group cursor-pointer"
             onClick={handleRandomWorkout}
           >
-            <div className="bg-gradient-to-br from-zone-5/10 to-transparent rounded-xl border border-border/50 p-5 md:p-6 h-full flex flex-col transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
+            <div className="bg-gradient-to-br from-zone-5/10 dark:from-zone-5/20 to-transparent rounded-xl border border-border/50 p-5 md:p-6 h-full flex flex-col transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
               <Dices
                 className={`size-6 text-zone-5 mb-3 ${isLoadingRandom ? "animate-spin" : ""}`}
               />
@@ -218,7 +218,7 @@ export function HomePage() {
             </div>
           </div>
           <Link to={planLink} className="col-span-1 group">
-            <div className="bg-gradient-to-br from-zone-3/10 to-transparent rounded-xl border border-border/50 p-5 md:p-6 h-full flex flex-col transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
+            <div className="bg-gradient-to-br from-zone-3/10 dark:from-zone-3/20 to-transparent rounded-xl border border-border/50 p-5 md:p-6 h-full flex flex-col transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
               <CalendarRange className="size-6 text-zone-3 mb-3" />
               <p className="font-bold text-sm sm:text-base">
                 {hasPlans
@@ -243,7 +243,7 @@ export function HomePage() {
             </div>
           </Link>
           <Link to="/race-simulator" className="col-span-2 md:col-span-1 group">
-            <div className="bg-gradient-to-br from-zone-4/10 to-transparent rounded-xl border border-border/50 p-5 md:p-6 h-full flex flex-col transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
+            <div className="bg-gradient-to-br from-zone-4/10 dark:from-zone-4/20 to-transparent rounded-xl border border-border/50 p-5 md:p-6 h-full flex flex-col transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
               <Flag className="size-6 text-zone-4 mb-3" />
               <p className="font-bold text-sm sm:text-base">
                 {t("common:simulator.ctaTitle")}
@@ -309,7 +309,7 @@ export function HomePage() {
                   onClick={() => setSelectedZone(zone)}
                 >
                   <div
-                    className={`bg-gradient-to-br from-zone-${zone}/10 to-transparent rounded-xl border border-border/50 p-6 h-full transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1`}
+                    className={`bg-gradient-to-br from-zone-${zone}/10 dark:from-zone-${zone}/20 to-transparent rounded-xl border border-border/50 p-6 h-full transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1`}
                   >
                     <span
                       className={`font-black text-2xl text-zone-${zone} block mb-2`}
@@ -378,7 +378,7 @@ export function HomePage() {
                   to={`/library?category=${cat}`}
                   className="group"
                 >
-                  <div className="bg-gradient-to-br from-muted/50 to-transparent rounded-xl border border-border/50 text-center h-full p-4 transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
+                  <div className="bg-gradient-to-br from-muted/50 dark:from-muted/70 to-transparent rounded-xl border border-border/50 text-center h-full p-4 transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1">
                     <CategoryIcon
                       category={cat}
                       size="lg"

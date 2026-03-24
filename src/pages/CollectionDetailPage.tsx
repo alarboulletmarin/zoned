@@ -136,9 +136,9 @@ export function CollectionDetailPage() {
         {/* Hero Section */}
         <div
           className={cn(
-            "rounded-2xl border border-t-4 bg-card shadow-sm",
+            "rounded-xl border border-border/50 shadow-sm",
             `zone-${getCollectionZone(collection.slug)}`,
-            `border-t-zone-${getCollectionZone(collection.slug)}`,
+            `bg-gradient-to-br from-zone-${getCollectionZone(collection.slug)}/10 dark:from-zone-${getCollectionZone(collection.slug)}/20 to-transparent`,
             "p-8 md:p-10"
           )}
         >

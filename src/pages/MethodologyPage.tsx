@@ -268,15 +268,6 @@ const resources: ResourceGroup[] = [
 // Zone border color mapping (Tailwind can't generate dynamic class names)
 // ---------------------------------------------------------------------------
 
-const zoneBorderClasses: Record<number, string> = {
-  1: "border-t-zone-1",
-  2: "border-t-zone-2",
-  3: "border-t-zone-3",
-  4: "border-t-zone-4",
-  5: "border-t-zone-5",
-  6: "border-t-zone-6",
-};
-
 const zoneTextClasses: Record<number, string> = {
   1: "text-zone-1",
   2: "text-zone-2",
@@ -389,7 +380,7 @@ export function MethodologyPage() {
             {zones.map((z) => (
               <div
                 key={z.zone}
-                className={`rounded-lg border border-border/50 bg-card border-t-4 ${zoneBorderClasses[z.zone]} p-5 space-y-3`}
+                className={`rounded-xl border border-border/50 bg-gradient-to-br from-zone-${z.zone}/10 dark:from-zone-${z.zone}/20 to-transparent p-5 space-y-3`}
               >
                 <div className="flex items-center gap-2">
                   <span
@@ -441,7 +432,7 @@ export function MethodologyPage() {
 
           <div className="grid gap-4 sm:grid-cols-2">
             {researchers.map((r) => (
-              <Card key={r.name}>
+              <Card key={r.name} className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base">{r.name}</CardTitle>
                   <CardDescription>
@@ -484,7 +475,7 @@ export function MethodologyPage() {
             {studies.map((s, i) => (
               <div
                 key={i}
-                className="rounded-lg border border-border/50 bg-card p-4 flex flex-col sm:flex-row sm:items-start gap-3"
+                className="rounded-lg border border-border/50 bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent p-4 flex flex-col sm:flex-row sm:items-start gap-3"
               >
                 <span className="shrink-0 inline-flex items-center justify-center size-8 rounded-full bg-muted text-sm font-semibold text-muted-foreground">
                   {s.year}

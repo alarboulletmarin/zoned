@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Target, Gauge, RefreshCw, Route, Timer, ArrowRight, List, Shuffle, Star, Flag } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
-import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 
@@ -15,6 +14,9 @@ interface CalculateurEntry {
   descriptionEn: string;
   href: string;
   comingSoon?: boolean;
+  gradient: string;
+  iconBg: string;
+  iconColor: string;
 }
 
 const CALCULATEURS: CalculateurEntry[] = [
@@ -26,6 +28,9 @@ const CALCULATEURS: CalculateurEntry[] = [
     description: "Calculez vos zones FC et allures depuis votre VMA ou FCmax",
     descriptionEn: "Calculate your HR and pace zones from VMA or max HR",
     href: "/calculateurs/zones",
+    gradient: "from-primary/10 dark:from-primary/20",
+    iconBg: "bg-primary/15",
+    iconColor: "text-primary",
   },
   {
     id: "allures",
@@ -35,6 +40,9 @@ const CALCULATEURS: CalculateurEntry[] = [
     description: "Convertissez entre min/km, km/h et min/mile en temps réel",
     descriptionEn: "Convert between min/km, km/h and min/mile in real time",
     href: "/calculateurs/convertisseur",
+    gradient: "from-zone-2/10 dark:from-zone-2/20",
+    iconBg: "bg-zone-2/15",
+    iconColor: "text-zone-2",
   },
   {
     id: "table-allures",
@@ -44,6 +52,9 @@ const CALCULATEURS: CalculateurEntry[] = [
     description: "Toutes les allures de 3:00 à 10:00/km avec temps estimés",
     descriptionEn: "All paces from 3:00 to 10:00/km with estimated times",
     href: "/calculateurs/table-allures",
+    gradient: "from-zone-3/10 dark:from-zone-3/20",
+    iconBg: "bg-zone-3/15",
+    iconColor: "text-zone-3",
   },
   {
     id: "tapis-roulant",
@@ -53,6 +64,9 @@ const CALCULATEURS: CalculateurEntry[] = [
     description: "Convertissez vitesse et inclinaison en allure équivalente",
     descriptionEn: "Convert speed and incline to equivalent pace",
     href: "/calculateurs/tapis-roulant",
+    gradient: "from-zone-4/10 dark:from-zone-4/20",
+    iconBg: "bg-zone-4/15",
+    iconColor: "text-zone-4",
   },
   {
     id: "splits",
@@ -62,6 +76,9 @@ const CALCULATEURS: CalculateurEntry[] = [
     description: "Planifiez vos passages pour atteindre votre objectif chrono",
     descriptionEn: "Plan your splits to reach your target time",
     href: "/calculateurs/splits",
+    gradient: "from-zone-5/10 dark:from-zone-5/20",
+    iconBg: "bg-zone-5/15",
+    iconColor: "text-zone-5",
   },
   {
     id: "vma",
@@ -71,6 +88,9 @@ const CALCULATEURS: CalculateurEntry[] = [
     description: "Estimez votre VMA à partir d'un résultat de course",
     descriptionEn: "Estimate your VMA from a race result",
     href: "/calculateurs/vma",
+    gradient: "from-zone-6/10 dark:from-zone-6/20",
+    iconBg: "bg-zone-6/15",
+    iconColor: "text-zone-6",
   },
   {
     id: "equivalence",
@@ -80,6 +100,9 @@ const CALCULATEURS: CalculateurEntry[] = [
     description: "Prédisez vos temps sur toutes les distances depuis un résultat",
     descriptionEn: "Predict your times across all distances from one result",
     href: "/calculateurs/equivalence",
+    gradient: "from-zone-3/10 dark:from-zone-3/20",
+    iconBg: "bg-zone-3/15",
+    iconColor: "text-zone-3",
   },
   {
     id: "age-graded",
@@ -89,6 +112,9 @@ const CALCULATEURS: CalculateurEntry[] = [
     description: "Comparez votre performance au record mondial de votre catégorie",
     descriptionEn: "Compare your performance to the world record for your category",
     href: "/calculateurs/age-graded",
+    gradient: "from-zone-2/10 dark:from-zone-2/20",
+    iconBg: "bg-zone-2/15",
+    iconColor: "text-zone-2",
   },
   {
     id: "race-simulator",
@@ -98,6 +124,9 @@ const CALCULATEURS: CalculateurEntry[] = [
     description: "Générez un plan complet pour votre journée de course : horaires, allures, nutrition, mental",
     descriptionEn: "Generate a complete race day plan: schedule, pacing, nutrition, mental cues",
     href: "/race-simulator",
+    gradient: "from-zone-4/10 dark:from-zone-4/20",
+    iconBg: "bg-zone-4/15",
+    iconColor: "text-zone-4",
   },
 ];
 
@@ -141,10 +170,10 @@ export function CalculateursPage() {
             if (item.comingSoon) {
               return (
                 <div key={item.id}>
-                  <Card className="h-full opacity-60">
-                    <CardContent className="flex flex-col items-center text-center gap-4 pt-8 pb-6">
-                      <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center">
-                        <Icon className="size-7 text-primary" />
+                  <div className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50 h-full opacity-60 p-6">
+                    <div className="flex flex-col items-center text-center gap-4">
+                      <div className={cn("size-14 rounded-2xl flex items-center justify-center", `bg-muted/20`)}>
+                        <Icon className="size-7 text-muted-foreground" />
                       </div>
                       <div className="space-y-1">
                         <div className="flex items-center justify-center gap-2">
@@ -159,18 +188,22 @@ export function CalculateursPage() {
                           {isEn ? item.descriptionEn : item.description}
                         </p>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 </div>
               );
             }
 
             return (
               <Link key={item.id} to={item.href} className="group">
-                <Card interactive className="h-full">
-                  <CardContent className="flex flex-col items-center text-center gap-4 pt-8 pb-6">
-                    <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                      <Icon className="size-7 text-primary" />
+                <div className={cn(
+                  "bg-gradient-to-br to-transparent rounded-xl border border-border/50 h-full p-6",
+                  "hover:shadow-md hover:-translate-y-1 transition-all duration-200",
+                  item.gradient,
+                )}>
+                  <div className="flex flex-col items-center text-center gap-4">
+                    <div className={cn("size-14 rounded-2xl flex items-center justify-center", item.iconBg)}>
+                      <Icon className={cn("size-7", item.iconColor)} />
                     </div>
                     <div className="space-y-1">
                       <h2 className="text-lg font-semibold">
@@ -180,12 +213,12 @@ export function CalculateursPage() {
                         {isEn ? item.descriptionEn : item.description}
                       </p>
                     </div>
-                    <div className="flex items-center gap-1 text-sm text-primary font-medium">
+                    <div className={cn("flex items-center gap-1 text-sm font-medium", item.iconColor)}>
                       {t("calculateurs.explore")}
                       <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </Link>
             );
           })}

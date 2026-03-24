@@ -43,16 +43,16 @@ export function AboutPage() {
         {/* Stats Bento Grid */}
         <section className="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
           {[
-            { value: "200", label: isEn ? "Workouts" : "Séances", color: "primary" },
-            { value: "9", label: isEn ? "Calculators" : "Calculateurs", color: "zone-3" },
-            { value: "8", label: "Plans", color: "zone-2" },
-            { value: "16", label: "Collections", color: "zone-5" },
-            { value: "12", label: "Articles", color: "zone-4" },
-            { value: "6", label: "Zones", color: "zone-6" },
+            { value: "200", label: isEn ? "Workouts" : "Séances", color: "primary", gradient: "from-primary/10 dark:from-primary/20" },
+            { value: "9", label: isEn ? "Calculators" : "Calculateurs", color: "zone-3", gradient: "from-zone-3/10 dark:from-zone-3/20" },
+            { value: "8", label: "Plans", color: "zone-2", gradient: "from-zone-2/10 dark:from-zone-2/20" },
+            { value: "16", label: "Collections", color: "zone-5", gradient: "from-zone-5/10 dark:from-zone-5/20" },
+            { value: "12", label: "Articles", color: "zone-4", gradient: "from-zone-4/10 dark:from-zone-4/20" },
+            { value: "6", label: "Zones", color: "zone-6", gradient: "from-zone-6/10 dark:from-zone-6/20" },
           ].map((stat) => (
             <div
               key={stat.label}
-              className="bg-card p-4 md:p-5 rounded-lg border border-border/10 text-center"
+              className={`bg-gradient-to-br ${stat.gradient} to-transparent p-4 md:p-5 rounded-xl border border-border/50 text-center`}
             >
               <span className={`text-${stat.color} font-bold text-2xl md:text-3xl block`}>
                 {stat.value}
@@ -66,7 +66,7 @@ export function AboutPage() {
 
         {/* Personal + Links */}
         <section>
-          <div className="rounded-2xl border bg-card p-6 md:p-10">
+          <div className="rounded-2xl border border-border/50 bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent p-6 md:p-10">
             <div className="flex flex-col md:flex-row gap-6 md:gap-10">
               <div className="flex-1 space-y-4">
                 <h2 className="text-xl md:text-2xl font-bold">{t("about.personal.title")}</h2>
@@ -101,8 +101,8 @@ export function AboutPage() {
         {/* Feature cards */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {/* Open Source */}
-          <div className="bg-card rounded-lg border border-border/10 p-6 space-y-3 border-t-4 border-t-orange-500">
-            <div className="p-2 rounded-lg bg-orange-500/10 w-fit">
+          <div className="bg-gradient-to-br from-orange-500/10 dark:from-orange-500/20 to-transparent rounded-xl border border-border/50 p-6 space-y-3">
+            <div className="p-2 rounded-lg bg-orange-500/15 w-fit">
               <GitlabIcon className="size-5 text-orange-500" />
             </div>
             <h3 className="font-bold">{t("about.openSource.title")}</h3>
@@ -112,8 +112,8 @@ export function AboutPage() {
           </div>
 
           {/* Vibe Coded */}
-          <div className="bg-card rounded-lg border border-border/10 p-6 space-y-3 border-t-4 border-t-purple-500">
-            <div className="p-2 rounded-lg bg-purple-500/10 w-fit">
+          <div className="bg-gradient-to-br from-purple-500/10 dark:from-purple-500/20 to-transparent rounded-xl border border-border/50 p-6 space-y-3">
+            <div className="p-2 rounded-lg bg-purple-500/15 w-fit">
               <Sparkles className="size-5 text-purple-500" />
             </div>
             <h3 className="font-bold">{t("about.vibeCoded.title")}</h3>
@@ -123,8 +123,8 @@ export function AboutPage() {
           </div>
 
           {/* Privacy */}
-          <div className="bg-card rounded-lg border border-border/10 p-6 space-y-3 border-t-4 border-t-green-500">
-            <div className="p-2 rounded-lg bg-green-500/10 w-fit">
+          <div className="bg-gradient-to-br from-green-500/10 dark:from-green-500/20 to-transparent rounded-xl border border-border/50 p-6 space-y-3">
+            <div className="p-2 rounded-lg bg-green-500/15 w-fit">
               <Shield className="size-5 text-green-500" />
             </div>
             <h3 className="font-bold">{t("about.privacy.title")}</h3>
@@ -134,8 +134,8 @@ export function AboutPage() {
           </div>
 
           {/* Credits */}
-          <div className="bg-card rounded-lg border border-border/10 p-6 space-y-3 border-t-4 border-t-red-500">
-            <div className="p-2 rounded-lg bg-red-500/10 w-fit">
+          <div className="bg-gradient-to-br from-red-500/10 dark:from-red-500/20 to-transparent rounded-xl border border-border/50 p-6 space-y-3">
+            <div className="p-2 rounded-lg bg-red-500/15 w-fit">
               <Code className="size-5 text-red-500" />
             </div>
             <h3 className="font-bold">{t("about.credits.title")}</h3>

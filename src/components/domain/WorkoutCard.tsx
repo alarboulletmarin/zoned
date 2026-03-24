@@ -60,7 +60,8 @@ export function WorkoutCard({ workout, className }: WorkoutCardProps) {
         interactive
         size="compact"
         className={cn(
-          `zone-${dominantZone} border-t-4 border-t-zone-${dominantZone}`,
+          `zone-${dominantZone} bg-gradient-to-br from-zone-${dominantZone}/10 dark:from-zone-${dominantZone}/20 to-transparent`,
+          "border-border/50",
           "overflow-hidden",
           className
         )}
@@ -137,8 +138,9 @@ export function WorkoutCardCompact({
     <Link
       to={`/workout/${workout.id}`}
       className={cn(
-        `zone-${dominantZone} border-t-2 border-t-zone-${dominantZone}`,
-        "block p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors",
+        `zone-${dominantZone} bg-gradient-to-br from-zone-${dominantZone}/10 dark:from-zone-${dominantZone}/20 to-transparent`,
+        "border-border/50",
+        "block p-3 rounded-xl border hover:bg-accent/50 transition-colors",
         className
       )}
     >

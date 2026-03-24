@@ -213,9 +213,9 @@ export function WorkoutQuiz() {
   ) => (
     <Card
       key={option.value}
-      interactive
+      size="flush"
       className={cn(
-        "cursor-pointer transition-all duration-200",
+        "cursor-pointer bg-gradient-to-br from-primary/5 dark:from-primary/10 to-transparent border border-border/50 hover:shadow-md hover:-translate-y-1 transition-all duration-200",
         isSelected && "ring-2 ring-primary"
       )}
       onClick={onClick}

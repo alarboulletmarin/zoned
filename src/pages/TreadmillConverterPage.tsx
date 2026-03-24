@@ -189,7 +189,7 @@ export function TreadmillConverterPage() {
 
         {/* Results */}
         {hasValidInput && (
-          <Card>
+          <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Gauge className="size-5" />
@@ -248,7 +248,7 @@ export function TreadmillConverterPage() {
         )}
 
         {/* Explanation */}
-        <Card>
+        <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground italic">
               {isEn
