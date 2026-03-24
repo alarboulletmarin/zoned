@@ -1,7 +1,9 @@
 {
   "app": {
     "name": "Zoned",
-    "tagline": "Scientific running workouts for runners"
+    "tagline": "Personalized plan, structured workouts, race day simulator, watch export. Free, no account.",
+    "heroTitle": "Prepare your next race",
+    "heroTitleAccent": "race"
   },
   "about": {
     "title": "About Zoned",
@@ -309,7 +311,17 @@
     "zones": "Configure my zones"
   },
   "simulator": {
-    "title": "Race Simulator"
+    "title": "Race Simulator",
+    "ctaTitle": "Simulate your race",
+    "ctaSubtitle": "Splits, nutrition, race day"
+  },
+  "stats": {
+    "workoutsTitle": "workouts",
+    "workoutsSubtitle": "One-click Garmin FIT export",
+    "calculatorsTitle": "9 calculators",
+    "calculatorsSubtitle": "VMA, zones, splits, equivalences...",
+    "simulatorTitle": "Race simulator",
+    "simulatorSubtitle": "Splits, nutrition, warm-up, race day"
   },
   "calculateurs": {
     "title": "Calculators",

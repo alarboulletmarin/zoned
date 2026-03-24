@@ -1,7 +1,9 @@
 {
   "app": {
     "name": "Zoned",
-    "tagline": "Séances d'entraînement scientifiques pour coureurs"
+    "tagline": "Plan personnalisé, séances structurées, simulateur jour-J, export montre. Gratuit, sans compte.",
+    "heroTitle": "Prépare ta prochaine course",
+    "heroTitleAccent": "course"
   },
   "about": {
     "title": "À propos de Zoned",
@@ -309,7 +311,17 @@
     "zones": "Configurer mes zones"
   },
   "simulator": {
-    "title": "Simulateur course"
+    "title": "Simulateur course",
+    "ctaTitle": "Simule ta course",
+    "ctaSubtitle": "Splits, nutrition, jour-J"
+  },
+  "stats": {
+    "workoutsTitle": "séances",
+    "workoutsSubtitle": "Export Garmin FIT en 1 clic",
+    "calculatorsTitle": "9 calculateurs",
+    "calculatorsSubtitle": "VMA, zones, splits, équivalences...",
+    "simulatorTitle": "Simulateur de course",
+    "simulatorSubtitle": "Splits, nutrition, échauffement, jour-J"
   },
   "calculateurs": {
     "title": "Calculateurs",
