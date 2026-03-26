@@ -223,6 +223,10 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent, weekNumber: number, sessionIndex: number, workoutId: string) => {
+      // If the tap is on a button (checkbox, delete), let it handle itself
+      const tappedEl = e.target as HTMLElement;
+      if (tappedEl.closest("button")) return;
+
       e.stopPropagation();
       const touch = e.touches[0];
       const target = (e.target as HTMLElement).closest("[draggable]") as HTMLElement | null;
@@ -350,8 +354,14 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
         }
       }
     } else if (!wasLongPress && sessionInfo) {
-      // Short tap: navigate to session
-      onSessionClick?.(sessionInfo.weekNumber, sessionInfo.sessionIndex, sessionInfo.workoutId);
+      // Short tap: open context menu (easier than hitting the small checkbox)
+      setContextMenu({
+        x: touchStartPosRef.current?.x ?? 0,
+        y: touchStartPosRef.current?.y ?? 0,
+        weekNumber: sessionInfo.weekNumber,
+        sessionIndex: sessionInfo.sessionIndex,
+        workoutId: sessionInfo.workoutId,
+      });
     }
     // If wasLongPress: context menu is already open, do nothing
 
@@ -767,7 +777,7 @@ const DayCell = memo(function DayCell({
                     });
                   }
             }
-            style={isRaceDay ? undefined : { touchAction: "none" }}
+            style={isRaceDay ? undefined : { touchAction: "none", WebkitUserSelect: "none", userSelect: "none" }}
             className={cn(
               !isRaceDay && "cursor-grab active:cursor-grabbing",
               isDragging && "opacity-40",
@@ -883,6 +893,9 @@ const DayCell = memo(function DayCell({
                       <span className="text-[9px] text-muted-foreground flex items-center gap-0.5 mt-0.5">
                         <Clock className="size-2.5" />
                         {session.estimatedDurationMin}min
+                        {session.rpe && (
+                          <span className="ml-1 text-[9px] font-medium text-amber-600">RPE {session.rpe}</span>
+                        )}
                       </span>
                     )}
                 </>

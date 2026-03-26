@@ -266,6 +266,10 @@ export const PlanCalendar = memo(function PlanCalendar({
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent, weekNumber: number, sessionIndex: number, workoutId: string) => {
+      // If the tap is on a button (checkbox, delete), let it handle itself
+      const tappedEl = e.target as HTMLElement;
+      if (tappedEl.closest("button")) return;
+
       e.stopPropagation();
       const touch = e.touches[0];
       const target = (e.target as HTMLElement).closest("[draggable]") as HTMLElement | null;
@@ -387,8 +391,14 @@ export const PlanCalendar = memo(function PlanCalendar({
         }
       }
     } else if (!wasLongPress && sessionInfo) {
-      // Short tap: navigate to session
-      onSessionClick?.(sessionInfo.weekNumber, sessionInfo.sessionIndex, sessionInfo.workoutId);
+      // Short tap: open context menu (easier than hitting the small checkbox)
+      setContextMenu({
+        x: touchStartPosRef.current?.x ?? 0,
+        y: touchStartPosRef.current?.y ?? 0,
+        weekNumber: sessionInfo.weekNumber,
+        sessionIndex: sessionInfo.sessionIndex,
+        workoutId: sessionInfo.workoutId,
+      });
     }
     // If wasLongPress: context menu is already open, do nothing
 
@@ -632,7 +642,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                                   }
                                   onTouchMove={isRaceDay ? undefined : handleTouchMove}
                                   onTouchEnd={isRaceDay ? undefined : handleTouchEnd}
-                                  style={isRaceDay ? undefined : { touchAction: "none" }}
+                                  style={isRaceDay ? undefined : { touchAction: "none", WebkitUserSelect: "none", userSelect: "none" }}
                                   className={cn(
                                     !isRaceDay && "cursor-grab active:cursor-grabbing",
                                     isDragging && "opacity-40",
