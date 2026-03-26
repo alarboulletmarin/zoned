@@ -25,47 +25,11 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "Plans",
         },
         {
-          text: "Numéros de jours affichés dans toutes les vues calendrier avec mise en évidence du jour actuel",
-          textEn: "Day-of-month numbers shown in all calendar views with current day highlighting",
+          text: "Numéros de jours et marqueur de mois inline dans les cellules du calendrier avec mise en évidence du jour actuel",
+          textEn: "Day-of-month numbers and inline month marker in calendar cells with current day highlighting",
           category: "Plans",
           categoryEn: "Plans",
         },
-        {
-          text: "Marqueur de changement de mois inline : bordure gauche et label abrégé (ex: \"1 Avr\") au lieu d'un séparateur horizontal",
-          textEn: "Inline month boundary marker: left border and short label (e.g. \"1 Apr\") instead of a horizontal separator",
-          category: "Plans",
-          categoryEn: "Plans",
-        },
-      ],
-      changed: [
-        {
-          text: "Le sélecteur de vue est persisté en localStorage et adapté au responsive (Calendrier et Mois desktop uniquement)",
-          textEn: "View mode selector persisted in localStorage and responsive-aware (Calendar and Monthly desktop only)",
-          category: "Plans",
-          categoryEn: "Plans",
-        },
-      ],
-      fixed: [
-        {
-          text: "Le kilométrage hebdomadaire se met désormais à jour dynamiquement à l'ajout, suppression ou déplacement de séances",
-          textEn: "Weekly km now updates dynamically when sessions are added, deleted or moved",
-          category: "Plans",
-          categoryEn: "Plans",
-        },
-        {
-          text: "Correction de l'ancrage des dates : les jours du calendrier sont alignés sur le lundi de la semaine de début du plan",
-          textEn: "Fixed date anchoring: calendar days now align to the Monday of the plan start week",
-          category: "Plans",
-          categoryEn: "Plans",
-        },
-      ],
-    },
-  },
-  {
-    version: "0.3.0",
-    date: "2026-03-26",
-    changes: {
-      added: [
         {
           text: "Générateur de plan v2 : moteur d'allures basé sur Daniels, progression sortie longue Pfitzinger, taper exponentiel Mujika",
           textEn: "Plan generator v2: Daniels-based pace engine, Pfitzinger long run progression, Mujika exponential taper model",
@@ -128,6 +92,12 @@ export const changelogVersions: ChangelogVersion[] = [
           category: "Performance",
           categoryEn: "Performance",
         },
+        {
+          text: "Le sélecteur de vue est persisté en localStorage et adapté au responsive (Calendrier et Mois desktop uniquement)",
+          textEn: "View mode selector persisted in localStorage and responsive-aware (Calendar and Monthly desktop only)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
       ],
       fixed: [
         {
@@ -135,6 +105,18 @@ export const changelogVersions: ChangelogVersion[] = [
           textEn: "Fixed invalid sessionType values in workout data (vma, mixed, hills, race_pace)",
           category: "Bug",
           categoryEn: "Bug",
+        },
+        {
+          text: "Le kilométrage hebdomadaire se met désormais à jour dynamiquement à l'ajout, suppression ou déplacement de séances",
+          textEn: "Weekly km now updates dynamically when sessions are added, deleted or moved",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Correction de l'ancrage des dates : les jours du calendrier sont alignés sur le lundi de la semaine de début du plan",
+          textEn: "Fixed date anchoring: calendar days now align to the Monday of the plan start week",
+          category: "Plans",
+          categoryEn: "Plans",
         },
       ],
     },

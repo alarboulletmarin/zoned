@@ -36,6 +36,7 @@ A library of **200 structured running workouts** based on the 6-zone training sy
 - **Plan generator**: Create personalized multi-week training plans (5K to marathon)
 - **8 prebuilt plans**: Ready-to-use plans for common goals
 - **Free plan mode**: Build your own plan from scratch
+- **4 view modes**: Calendar (full table), Weekly (navigable agenda), Monthly (by-month calendar with real dates) and List
 - **Drag-and-drop calendar**: Reorganize sessions visually
 - **Cross-training**: Add strength, cycling, swimming, yoga or rest activities to your plan
 - **Plan export**: PDF and ICS (calendar) formats

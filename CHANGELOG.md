@@ -16,16 +16,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced statistics: weekly distance chart, 80/20 easy/hard split, training load, long run progression, completion rate
 - Pace annotations (paceNotes) on each session with Daniels zones and min/max ranges in min/km
 - Progressive scaling (intensityType, weeklyFrequencyMax, minimumRecoveryDays) across all 200 workout templates
+- 4 plan view modes: Calendar (full table), Weekly (navigable agenda), Monthly (real-date calendar) and List
+- Day-of-month numbers and inline month boundary markers in calendar cells with current day highlighting
 
 ### Changed
 
 - Plan creation wizard redesigned with dynamic steps based on goal (race, base building, injury return, beginner)
 - Marathon, half-marathon and base building prebuilt plans enriched with paces, load scores and distance targets
 - Performance optimization: memo() on heavy components, theme managed via ref + custom event
+- View mode selector persisted in localStorage and responsive-aware (Calendar and Monthly desktop only)
 
 ### Fixed
 
 - Fixed invalid sessionType values in workout data (vma, mixed, hills, race_pace)
+- Weekly km now updates dynamically when sessions are added, deleted or moved
+- Fixed date anchoring: calendar days align to the Monday of the plan start week
 
 ## [0.2.3] - 2026-03-22
 
