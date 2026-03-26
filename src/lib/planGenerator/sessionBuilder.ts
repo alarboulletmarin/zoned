@@ -274,7 +274,9 @@ function estimateSingleBlockDuration(
   paces: TrainingPaces,
   scaledReps: number | null,
 ): number {
-  const reps = scaledReps ?? block.repetitions ?? 1;
+  // Only apply scaledReps to blocks that already have repetitions defined
+  // (scaledReps overrides the rep count for the scaled block, not all blocks)
+  const reps = (block.repetitions && scaledReps) ? scaledReps : (block.repetitions ?? 1);
   const sets = block.sets ?? 1;
 
   // Duration-based blocks (steady-state efforts)
