@@ -41,6 +41,48 @@ export function calculatePhases(
   const taperWeeks = TAPER_WEEKS[raceDistance];
   const availableWeeks = totalWeeks - taperWeeks;
 
+  // Guard: if fewer than 3 available weeks, force 1 week per phase
+  // and give any remaining room to the first phase that can use it
+  if (availableWeeks < 3) {
+    const phases: PhaseRange[] = [];
+    let baseWeeks = 1;
+    let buildWeeks = 1;
+    let peakWeeks = 1;
+
+    // Clamp total to availableWeeks — give everything to base first
+    const total = baseWeeks + buildWeeks + peakWeeks;
+    if (total > availableWeeks) {
+      // Remove phases from the end until it fits
+      peakWeeks = Math.max(0, availableWeeks - 2);
+      buildWeeks = Math.max(0, availableWeeks - 1 - (peakWeeks > 0 ? peakWeeks : 0));
+      // Recalculate: base gets whatever is left
+      baseWeeks = availableWeeks - buildWeeks - peakWeeks;
+      if (baseWeeks < 1) baseWeeks = 1;
+      // Final clamp
+      const finalTotal = baseWeeks + buildWeeks + peakWeeks;
+      if (finalTotal > availableWeeks) {
+        buildWeeks = Math.max(0, availableWeeks - baseWeeks);
+        peakWeeks = 0;
+      }
+    }
+
+    let currentWeek = 1;
+    if (baseWeeks > 0) {
+      phases.push({ phase: "base", startWeek: currentWeek, endWeek: currentWeek + baseWeeks - 1 });
+      currentWeek += baseWeeks;
+    }
+    if (buildWeeks > 0) {
+      phases.push({ phase: "build", startWeek: currentWeek, endWeek: currentWeek + buildWeeks - 1 });
+      currentWeek += buildWeeks;
+    }
+    if (peakWeeks > 0) {
+      phases.push({ phase: "peak", startWeek: currentWeek, endWeek: currentWeek + peakWeeks - 1 });
+      currentWeek += peakWeeks;
+    }
+    phases.push({ phase: "taper", startWeek: currentWeek, endWeek: currentWeek + taperWeeks - 1 });
+    return phases;
+  }
+
   // Get base distribution for this race distance
   const dist = PHASE_DISTRIBUTION[raceDistance];
   const goalMods = getGoalModifiers(trainingGoal);

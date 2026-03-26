@@ -84,7 +84,11 @@ const SESSION_TYPE_LABELS: Record<SessionType, { fr: string; en: string }> = {
 const TARGET_SYSTEM_LABELS: Record<TargetSystem, { fr: string; en: string }> = {
   aerobic_base: { fr: "Base aérobie", en: "Aerobic Base" },
   aerobic_power: { fr: "Puissance aérobie", en: "Aerobic Power" },
+  aerobic_threshold: { fr: "Seuil aérobie", en: "Aerobic Threshold" },
   lactate_threshold: { fr: "Seuil lactique", en: "Lactate Threshold" },
+  lactate_tolerance: { fr: "Tolérance au lactate", en: "Lactate Tolerance" },
+  mixed: { fr: "Mixte", en: "Mixed" },
+  neuromuscular: { fr: "Neuromusculaire", en: "Neuromuscular" },
   vo2max: { fr: "VO2max", en: "VO2max" },
   speed: { fr: "Vitesse", en: "Speed" },
   strength: { fr: "Force", en: "Strength" },

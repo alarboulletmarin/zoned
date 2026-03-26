@@ -40,7 +40,11 @@ export type SessionType =
 export type TargetSystem =
   | "aerobic_base"
   | "aerobic_power"
+  | "aerobic_threshold"
   | "lactate_threshold"
+  | "lactate_tolerance"
+  | "mixed"
+  | "neuromuscular"
   | "vo2max"
   | "speed"
   | "strength"

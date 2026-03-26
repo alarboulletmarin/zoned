@@ -669,7 +669,7 @@
         "priorityScore": 70
       },
       "weeklyFrequencyMax": 2,
-      "minimumRecoveryDays": 0
+      "minimumRecoveryDays": 2
     },
     {
       "id": "RP-008",
@@ -2292,7 +2292,7 @@
         "priorityScore": 90
       },
       "weeklyFrequencyMax": 2,
-      "minimumRecoveryDays": 0
+      "minimumRecoveryDays": 3
     }
   ]
 }

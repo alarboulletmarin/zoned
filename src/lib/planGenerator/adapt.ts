@@ -128,26 +128,24 @@ export function adaptPlan(
   const nextWeek = futureWeeks[0];
 
   // Save original values before any modification (for undo/recalculation)
-  // Use a hidden field pattern — stored in the plan JSON but not in the TS type
-  const nw = nextWeek as PlanWeek & { _originalVolumePercent?: number; _originalTargetKm?: number; _originalIsRecovery?: boolean };
-  if (nw._originalVolumePercent === undefined) {
-    nw._originalVolumePercent = nextWeek.volumePercent;
-    nw._originalTargetKm = nextWeek.targetKm;
-    nw._originalIsRecovery = nextWeek.isRecoveryWeek;
+  if (nextWeek._originalVolumePercent === undefined) {
+    nextWeek._originalVolumePercent = nextWeek.volumePercent;
+    nextWeek._originalTargetKm = nextWeek.targetKm;
+    nextWeek._originalIsRecovery = nextWeek.isRecoveryWeek;
   }
 
   // Always reset to original before applying new adaptation
   // This prevents stacking reductions on recalculation
-  nextWeek.volumePercent = nw._originalVolumePercent;
-  nextWeek.targetKm = nw._originalTargetKm;
-  nextWeek.isRecoveryWeek = nw._originalIsRecovery ?? false;
+  nextWeek.volumePercent = nextWeek._originalVolumePercent;
+  nextWeek.targetKm = nextWeek._originalTargetKm;
+  nextWeek.isRecoveryWeek = nextWeek._originalIsRecovery ?? false;
 
   // ── Rule 1: >50% sessions skipped → convert next week to recovery
   if (stats.completionRate < 0.5 && stats.totalSessions >= 2) {
     nextWeek.isRecoveryWeek = true;
-    nextWeek.volumePercent = Math.round(nw._originalVolumePercent * 0.65);
-    if (nw._originalTargetKm) {
-      nextWeek.targetKm = Math.round(nw._originalTargetKm * 0.65);
+    nextWeek.volumePercent = Math.round(nextWeek._originalVolumePercent * 0.65);
+    if (nextWeek._originalTargetKm) {
+      nextWeek.targetKm = Math.round(nextWeek._originalTargetKm * 0.65);
     }
     changes.push({
       weekNumber: nextWeek.weekNumber,
@@ -160,9 +158,9 @@ export function adaptPlan(
   // ── Rule 2: High RPE (>8 average) → reduce next week volume by 10%
   else if (stats.avgRpe !== null && stats.avgRpe > 8) {
     const reduction = 0.90;
-    nextWeek.volumePercent = Math.round(nw._originalVolumePercent * reduction);
-    if (nw._originalTargetKm) {
-      nextWeek.targetKm = Math.round(nw._originalTargetKm * reduction);
+    nextWeek.volumePercent = Math.round(nextWeek._originalVolumePercent * reduction);
+    if (nextWeek._originalTargetKm) {
+      nextWeek.targetKm = Math.round(nextWeek._originalTargetKm * reduction);
     }
     changes.push({
       weekNumber: nextWeek.weekNumber,
@@ -175,9 +173,9 @@ export function adaptPlan(
   // ── Rule 3: Low RPE (<5 average) on completed sessions → slight increase
   else if (stats.avgRpe !== null && stats.avgRpe < 5 && stats.completionRate >= 0.8) {
     const increase = 1.05;
-    nextWeek.volumePercent = Math.min(100, Math.round(nw._originalVolumePercent * increase));
-    if (nw._originalTargetKm) {
-      nextWeek.targetKm = Math.round(nw._originalTargetKm * increase);
+    nextWeek.volumePercent = Math.min(100, Math.round(nextWeek._originalVolumePercent * increase));
+    if (nextWeek._originalTargetKm) {
+      nextWeek.targetKm = Math.round(nextWeek._originalTargetKm * increase);
     }
     changes.push({
       weekNumber: nextWeek.weekNumber,

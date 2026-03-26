@@ -118,6 +118,10 @@ export interface PlanWeek {
   targetKm?: number;             // Weekly km target
   targetLongRunKm?: number;      // Long run distance target
   weeklyLoadScore?: number;      // Sum of session load scores
+  // ── Adaptation tracking (used by adapt.ts to avoid stacking adjustments) ──
+  _originalVolumePercent?: number;
+  _originalTargetKm?: number;
+  _originalIsRecovery?: boolean;
 }
 
 // ── Phase range (start/end weeks for a phase) ──────────────────────

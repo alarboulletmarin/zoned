@@ -139,7 +139,7 @@ export function calculateLongRunProgression(
 
   // 2. Calculate the ideal increment to reach peak exactly on time
   // Available build weeks = total - taper - peakWeeksBeforeRace
-  const buildEndWeek = totalWeeks - taperWeeks - config.peakWeeksBeforeRace;
+  const buildEndWeek = Math.max(1, totalWeeks - taperWeeks - config.peakWeeksBeforeRace);
   // Count how many build weeks we have (excluding step-back weeks)
   const totalBuildWeeks = buildEndWeek;
   const buildWeeksWithStepBacks = totalBuildWeeks;

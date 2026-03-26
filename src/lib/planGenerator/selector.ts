@@ -15,8 +15,8 @@ import { DISTANCE_TAGS } from "./constants";
 // Maps SessionType to the WorkoutCategory(ies) that contain matching workouts
 
 const SESSION_TO_CATEGORY: Partial<Record<SessionType, WorkoutCategory[]>> = {
-  recovery: ["recovery", "endurance"],           // Recovery can pull from endurance pool too
-  endurance: ["endurance", "recovery", "fartlek"], // Endurance pulls from wider pool for variety
+  recovery: ["recovery"],                         // Recovery searches only recovery workouts
+  endurance: ["endurance", "recovery"],            // Endurance falls back to recovery (not fartlek)
   tempo: ["tempo"],
   threshold: ["threshold"],
   vo2max: ["vma_intervals"],

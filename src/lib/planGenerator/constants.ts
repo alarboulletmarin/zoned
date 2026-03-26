@@ -32,7 +32,7 @@ export const PHASE_DISTRIBUTION: Record<RaceDistance, PhaseDistribution> = {
 // For short plans (<12 weeks), compress base and favor build/peak.
 // For long plans (>18 weeks), extend base for deeper aerobic foundation.
 export const SHORT_PLAN_BASE_ADJUSTMENT = -0.08; // reduce base by 8%
-export const LONG_PLAN_BASE_ADJUSTMENT = 0.05;   // increase base by 5%
+// LONG_PLAN_BASE_ADJUSTMENT removed (unused — long plans use absolute cap logic)
 export const SHORT_PLAN_THRESHOLD = 12;
 export const LONG_PLAN_THRESHOLD = 18;
 

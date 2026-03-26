@@ -8,7 +8,7 @@
       "description": "Bloc tempo suivi d'intervalles VMA. Développe plusieurs qualités en une séance.",
       "descriptionEn": "Tempo block followed by VO2max intervals. Develops multiple qualities in one session.",
       "category": "mixed",
-      "sessionType": "tempo",
+      "sessionType": "vo2max",
       "targetSystem": "mixed",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -109,7 +109,7 @@
       "description": "Sortie endurance avec séquence de côtes intégrée.",
       "descriptionEn": "Endurance run with integrated hill sequence.",
       "category": "mixed",
-      "sessionType": "tempo",
+      "sessionType": "hills",
       "targetSystem": "mixed",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -204,7 +204,7 @@
       "description": "Séance pyramidale couvrant toutes les zones : 1-2-3-4-3-2-1 min.",
       "descriptionEn": "Pyramid session covering all zones: 1-2-3-4-3-2-1 min.",
       "category": "mixed",
-      "sessionType": "tempo",
+      "sessionType": "threshold",
       "targetSystem": "mixed",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -421,7 +421,7 @@
       "description": "Intervalles décroissants suivis d'un bloc tempo.",
       "descriptionEn": "Descending intervals followed by a tempo block.",
       "category": "mixed",
-      "sessionType": "tempo",
+      "sessionType": "threshold",
       "targetSystem": "mixed",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -626,7 +626,7 @@
       "description": "Fartlek libre suivi d'un bloc tempo structuré.",
       "descriptionEn": "Free fartlek followed by a structured tempo block.",
       "category": "mixed",
-      "sessionType": "tempo",
+      "sessionType": "fartlek",
       "targetSystem": "mixed",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -721,7 +721,7 @@
       "description": "Court test d'effort suivi d'une séance adaptée au résultat.",
       "descriptionEn": "Short fitness test followed by a session adapted to the result.",
       "category": "mixed",
-      "sessionType": "tempo",
+      "sessionType": "vo2max",
       "targetSystem": "mixed",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -820,7 +820,7 @@
       "description": "Sortie longue ponctuée d'accélérations brèves.",
       "descriptionEn": "Long run punctuated with brief surges.",
       "category": "mixed",
-      "sessionType": "tempo",
+      "sessionType": "long_run",
       "targetSystem": "mixed",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -902,7 +902,7 @@
       "description": "Rappel multi-allures avant une course. Touche à tout sans fatiguer.",
       "descriptionEn": "Multi-pace reminder before a race. Touches all speeds without fatigue.",
       "category": "mixed",
-      "sessionType": "tempo",
+      "sessionType": "race_specific",
       "targetSystem": "mixed",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -998,7 +998,7 @@
       "description": "Méthode Bangsbo originale : 30s Z1 / 20s Z3 / 10s sprint x 5 reps x 3-4 blocs. Améliore VO2max et performance avec moins de volume (Gunnarsson & Bangsbo, 2012).",
       "descriptionEn": "Original Bangsbo method: 30s Z1 / 20s Z3 / 10s sprint x 5 reps x 3-4 blocks. Improves VO2max and performance with less volume (Gunnarsson & Bangsbo, 2012).",
       "category": "mixed",
-      "sessionType": "tempo",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -1116,7 +1116,7 @@
       "description": "Version modérée du 10-20-30 : sprint à 80% au lieu de maximal. Idéal pour l'introduction au protocole ou en période de charge modérée.",
       "descriptionEn": "Moderate version of 10-20-30: sprint at 80% instead of maximal. Ideal for introduction to the protocol or during moderate load periods.",
       "category": "mixed",
-      "sessionType": "tempo",
+      "sessionType": "speed",
       "targetSystem": "aerobic_power",
       "difficulty": "beginner",
       "typicalDuration": {
@@ -1227,7 +1227,7 @@
       "description": "Version progressive : 2 blocs la première semaine, puis 3, puis 4 blocs. Plan de progression sur 4-6 semaines selon Bangsbo.",
       "descriptionEn": "Progressive version: 2 blocks the first week, then 3, then 4 blocks. 4-6 week progression plan according to Bangsbo.",
       "category": "mixed",
-      "sessionType": "tempo",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {

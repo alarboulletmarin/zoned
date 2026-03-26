@@ -205,16 +205,12 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
 
   // Step 6: Calculate volume progression
   const volumeMultiplier = purposeConfig?.volumeMultiplier ?? 1;
-  const adjustedCurrentKm = config.currentWeeklyKm
-    ? config.currentWeeklyKm
-    : undefined;
-
   const volumeProgression = calculateVolumeProgression(
     totalWeeks,
     phases,
     effectiveDistance,
     config.runnerLevel,
-    adjustedCurrentKm,
+    config.currentWeeklyKm,
     trainingGoal,
   );
 
@@ -225,7 +221,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     }
   }
 
-  // Step 7: Calculate long run progression
+  // Step 7: Calculate training paces (already done above)
   const taperPhase = phases.find(p => p.phase === "taper");
   const taperWeekCount = taperPhase
     ? (taperPhase.endWeek - taperPhase.startWeek + 1)
@@ -241,10 +237,10 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     trainingGoal,
   );
 
-  // Step 7: Load all workouts
+  // Step 8: Load all workouts
   const allWorkouts = await loadAllWorkouts();
 
-  // Step 8: Build weeks
+  // Step 9: Build weeks
   const weeks: PlanWeek[] = [];
   const usedWorkoutIds: string[] = [];
   let peakWeeklyKm = 0;
@@ -358,17 +354,17 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
   // Recalculate peak metrics from actual week data
   peakWeeklyKm = Math.max(...weeks.map(w => w.targetKm ?? 0));
 
-  // Step 9: Race time prediction (only for race plans)
+  // Step 10: Race time prediction (only for race plans)
   const raceTimePrediction = (isRacePlan && config.vma)
     ? predictRaceTime(config.vma, effectiveDistance)
     : undefined;
 
-  // Step 10: Generate plan name
+  // Step 11: Generate plan name
   const { name, nameEn } = isRacePlan
     ? generatePlanName(config)
     : generateNonRacePlanName(purpose, totalWeeks);
 
-  // Step 11: Return complete plan
+  // Step 12: Return complete plan
   return {
     id: crypto.randomUUID(),
     config,
