@@ -9,7 +9,6 @@ import Logo from "@/assets/logo.svg?react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface TopBarProps {
-  theme: "light" | "dark";
   onThemeToggle: () => void;
   onMobileMenuOpen: () => void;
   sidebarCollapsed?: boolean;

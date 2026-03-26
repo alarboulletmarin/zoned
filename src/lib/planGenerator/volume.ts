@@ -84,8 +84,8 @@ export function calculateVolumeProgression(
   for (let w = 1; w <= totalWeeks; w++) {
     const phase = getPhaseForWeek(w, phases);
 
-    // ── Race week (last week) ──
-    if (w === totalWeeks) {
+    // ── Race week (last week, only for race plans with taper) ──
+    if (w === totalWeeks && taperPhase) {
       const raceKm = Math.round(peakKm * RACE_WEEK_VOLUME_PCT);
       weeks.push({
         weekNumber: w,

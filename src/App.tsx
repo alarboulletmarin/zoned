@@ -172,7 +172,6 @@ function App() {
               {/* Right column: TopBar + content */}
               <div className="flex flex-1 min-w-0 flex-col">
                 <TopBar
-                  theme={themeRef.current}
                   onThemeToggle={toggleTheme}
                   onMobileMenuOpen={() => setMobileSidebarOpen(true)}
                   sidebarCollapsed={sidebarCollapsed}

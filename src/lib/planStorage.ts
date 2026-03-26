@@ -204,7 +204,10 @@ export function updateSessionCompletion(
   session.completedAt = completion.completedAt;
   session.actualDurationMin = completion.actualDurationMin;
   session.actualDistanceKm = completion.actualDistanceKm;
-  session.rpe = completion.rpe;
+  // Preserve existing RPE when cycling status (only overwrite if explicitly provided)
+  if (completion.rpe !== undefined) {
+    session.rpe = completion.rpe;
+  }
 
   plans[planIdx] = plan;
 

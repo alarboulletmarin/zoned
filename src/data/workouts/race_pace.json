@@ -1620,7 +1620,7 @@
           "description": "5min de repos avant le départ simulé",
           "descriptionEn": "5min rest before simulated start",
           "durationMin": 5,
-          "zone": "repos"
+          "zone": "Z1"
         }
       ],
       "cooldownTemplate": [

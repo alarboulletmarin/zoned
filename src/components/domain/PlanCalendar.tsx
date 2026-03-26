@@ -75,7 +75,6 @@ export const PlanCalendar = memo(function PlanCalendar({
   onToggleComplete,
   onValidateWeek,
   onWorkoutAdd,
-  onAddToDay,
 }: PlanCalendarProps) {
   const dayHeaders = isEn ? DAY_HEADERS_EN : DAY_HEADERS_FR;
 
@@ -388,194 +387,10 @@ export const PlanCalendar = memo(function PlanCalendar({
     return () => document.removeEventListener("panel-workout-drop", handler);
   }, [onWorkoutAdd]);
 
-  // Mobile: week selector state
-  const [mobileWeek, setMobileWeek] = useState(Math.max(1, currentWeek));
-
-  const mobileWeekData = plan.weeks.find(w => w.weekNumber === mobileWeek);
-
   return (
     <>
-      {/* ── Mobile: agenda view ── */}
-      <div className="md:hidden space-y-4">
-        {/* Week navigation */}
-        <div className="flex items-center justify-between gap-2">
-          <button
-            type="button"
-            onClick={() => setMobileWeek(w => Math.max(1, w - 1))}
-            disabled={mobileWeek <= 1}
-            className="px-3 py-1.5 rounded-lg bg-muted text-sm font-medium disabled:opacity-30"
-          >
-            ←
-          </button>
-          <div className="text-center">
-            <span className="font-semibold text-sm">
-              {isEn ? `Week ${mobileWeek}` : `Semaine ${mobileWeek}`}
-            </span>
-            {mobileWeekData && (
-              <>
-                <span className="text-xs text-muted-foreground ml-2">
-                  {isEn ? PHASE_META[mobileWeekData.phase].labelEn : PHASE_META[mobileWeekData.phase].label}
-                </span>
-                {mobileWeekData.sessions.length > 0 && (
-                  <span className="block text-[10px] text-muted-foreground/70 tabular-nums">
-                    ~{Math.round(computeWeekKm(mobileWeekData))}km · {computeWeekDuration(mobileWeekData)}min
-                  </span>
-                )}
-              </>
-            )}
-          </div>
-          <button
-            type="button"
-            onClick={() => setMobileWeek(w => Math.min(plan.totalWeeks, w + 1))}
-            disabled={mobileWeek >= plan.totalWeeks}
-            className="px-3 py-1.5 rounded-lg bg-muted text-sm font-medium disabled:opacity-30"
-          >
-            →
-          </button>
-        </div>
-
-        {/* Week grid: 4 cols top row, 3 cols bottom row */}
-        {mobileWeekData && (
-          <div className="space-y-1.5">
-            {[
-              [0, 1, 2, 3],
-              [4, 5, 6],
-            ].map((row, rowIdx) => (
-              <div key={rowIdx} className={cn("grid gap-1.5", row.length === 4 ? "grid-cols-4" : "grid-cols-3")}>
-                {row.map((dayIndex) => {
-                  const sessions = mobileWeekData.sessions.filter(s => s.dayOfWeek === dayIndex);
-                  const isDropHere =
-                    dropTarget?.weekNumber === mobileWeek && dropTarget?.day === dayIndex;
-
-                  return (
-                    <div
-                      key={dayIndex}
-                      data-drop-id={`${mobileWeek}-${dayIndex}`}
-                      onDragOver={(e) => handleDragOver(e, mobileWeek, dayIndex)}
-                      onDragLeave={handleDragLeave}
-                      onDrop={(e) => handleDrop(e, mobileWeek, dayIndex)}
-                      className={cn(
-                        "min-h-[80px] rounded-lg bg-secondary/30 p-1.5 transition-colors",
-                        isDropHere && "ring-2 ring-primary/50 bg-primary/5",
-                      )}
-                    >
-                      <span className="text-[10px] font-semibold text-muted-foreground block mb-1">
-                        {dayHeaders[dayIndex]}
-                      </span>
-                      {sessions.length === 0 ? (
-                        onAddToDay ? (
-                          <button
-                            type="button"
-                            onClick={() => onAddToDay(mobileWeek, dayIndex)}
-                            className="w-full rounded bg-card/50 border border-dashed border-muted-foreground/30 p-3 flex items-center justify-center gap-1 text-muted-foreground/40 active:text-primary"
-                          >
-                            <span className="text-sm font-medium">+</span>
-                          </button>
-                        ) : (
-                          <span className="text-[10px] text-muted-foreground/30 block text-center mt-4">—</span>
-                        )
-                      ) : null}
-                      {sessions.map((session, sIdx) => {
-                        const isRaceDay = session.workoutId === "__race_day__";
-                        const originalIndex = mobileWeekData.sessions.indexOf(session);
-                        const isDragging =
-                          draggedSession?.weekNumber === mobileWeek &&
-                          draggedSession?.sessionIndex === originalIndex;
-                        const sessionName = workoutNames[session.workoutId] || session.workoutId;
-
-                        return (
-                          <div
-                            key={sIdx}
-                            draggable={!isRaceDay}
-                            onDragStart={
-                              isRaceDay
-                                ? undefined
-                                : (e) => handleDragStart(e, mobileWeek, originalIndex)
-                            }
-                            onDragEnd={isRaceDay ? undefined : handleDragEnd}
-                            onTouchStart={
-                              isRaceDay
-                                ? undefined
-                                : (e) => handleTouchStart(e, mobileWeek, originalIndex, session.workoutId)
-                            }
-                            onTouchMove={isRaceDay ? undefined : handleTouchMove}
-                            onTouchEnd={isRaceDay ? undefined : handleTouchEnd}
-                            style={isRaceDay ? undefined : { touchAction: "none" }}
-                            className={cn(
-                              !isRaceDay && "cursor-grab active:cursor-grabbing",
-                              isDragging && "opacity-40",
-                            )}
-                          >
-                            <div
-                              className="rounded bg-card border border-border/50 p-1.5 mb-1 relative"
-                            >
-                              {isRaceDay ? (
-                                <div className="text-center py-1">
-                                  <Flag className="size-3.5 text-primary mx-auto" />
-                                  <span className="text-[10px] font-bold text-primary block">{isEn ? "Race" : "Course"}</span>
-                                </div>
-                              ) : (
-                                <>
-                                  <div className="flex items-center gap-1 mb-0.5">
-                                    {onToggleComplete && (
-                                      <button
-                                        type="button"
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          onToggleComplete(mobileWeek, originalIndex);
-                                        }}
-                                        className={cn(
-                                          "size-3.5 rounded-sm border shrink-0 flex items-center justify-center transition-colors",
-                                          session.status === "completed"
-                                            ? "bg-green-500 border-green-500 text-white"
-                                            : "border-muted-foreground/40"
-                                        )}
-                                      >
-                                        {session.status === "completed" && (
-                                          <svg viewBox="0 0 12 12" className="size-2.5" fill="none" stroke="currentColor" strokeWidth="2">
-                                            <path d="M2 6l3 3 5-5" />
-                                          </svg>
-                                        )}
-                                      </button>
-                                    )}
-                                    <span className="size-2 rounded-full shrink-0" style={{ backgroundColor: SESSION_COLORS[session.sessionType] || "#9ca3af" }} />
-                                    {session.isKeySession && <Star className="size-2.5 text-yellow-500 fill-yellow-500 shrink-0" />}
-                                  </div>
-                                  <span className={cn(
-                                    "text-[10px] leading-tight font-medium line-clamp-2 block",
-                                    session.status === "skipped" && "line-through text-muted-foreground"
-                                  )}>
-                                    {sessionName}
-                                  </span>
-                                  {session.estimatedDurationMin > 0 && !session.workoutId.startsWith("__activity_") && (
-                                    <span className="text-[9px] text-muted-foreground">{session.estimatedDurationMin}min</span>
-                                  )}
-                                </>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
-                      {sessions.length > 0 && onAddToDay && (
-                        <button
-                          type="button"
-                          onClick={() => onAddToDay(mobileWeek, dayIndex)}
-                          className="w-full mt-1 rounded bg-card/50 border border-dashed border-muted-foreground/30 p-1.5 flex items-center justify-center gap-1 text-muted-foreground/40 active:text-primary"
-                        >
-                          <span className="text-sm font-medium">+</span>
-                        </button>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* ── Desktop: calendar grid ── */}
-      <div className="hidden md:block overflow-x-auto">
+      {/* ── Calendar grid ── */}
+      <div className="overflow-x-auto">
         <table className="w-full border-collapse text-sm table-fixed">
           <colgroup>
             <col className="w-[90px] md:w-[110px]" />
@@ -845,21 +660,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                   type="button"
                   className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors text-left"
                   onClick={() => {
-                    // Find the session to determine current state
-                    const week = plan.weeks.find(w => w.weekNumber === contextMenu.weekNumber);
-                    const session = week?.sessions[contextMenu.sessionIndex];
-                    if (session?.status === "completed") {
-                      // Already completed, toggle back to planned
-                      onToggleComplete(contextMenu.weekNumber, contextMenu.sessionIndex);
-                    } else {
-                      // Mark as completed (might go planned→completed or skipped→planned→completed)
-                      // Toggle cycles, so call once or twice
-                      if (session?.status === "skipped") {
-                        // skipped → planned (one toggle), then we need another to get completed
-                        // Simpler: just toggle once to go to next state
-                      }
-                      onToggleComplete(contextMenu.weekNumber, contextMenu.sessionIndex);
-                    }
+                    onToggleComplete(contextMenu.weekNumber, contextMenu.sessionIndex);
                     setContextMenu(null);
                   }}
                 >
