@@ -626,11 +626,11 @@ export function PlanViewPage() {
         <PlanStatsSection plan={plan} currentWeek={currentWeek} isEn={isEn} />
 
         {/* View mode toggle + export */}
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-lg font-semibold shrink-0">
             {isEn ? "Schedule" : "Programme"}
           </h2>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Button
               variant="default"
               size="sm"
