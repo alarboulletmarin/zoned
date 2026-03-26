@@ -2,6 +2,66 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "3.0.0",
+    date: "2026-03-26",
+    changes: {
+      added: [
+        {
+          text: "4 modes de vue pour les plans : Calendrier (table complète), Semaine (agenda navigable), Mois (calendrier mensuel avec dates réelles) et Liste",
+          textEn: "4 plan view modes: Calendar (full table), Weekly (navigable agenda), Monthly (real-date calendar) and List",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Vue Semaine : agenda navigable semaine par semaine avec grille 7 colonnes sur desktop et 4+3 sur mobile, drag-and-drop et context menu",
+          textEn: "Weekly view: navigable week-by-week agenda with 7-column grid on desktop and 4+3 on mobile, drag-and-drop and context menu",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Vue Mois : même rendu que le calendrier complet mais filtré par mois avec navigation, jours hors-mois grisés",
+          textEn: "Monthly view: same rendering as full calendar but filtered by month with navigation, out-of-month days grayed out",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Numéros de jours affichés dans toutes les vues calendrier avec mise en évidence du jour actuel",
+          textEn: "Day-of-month numbers shown in all calendar views with current day highlighting",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Marqueur de changement de mois inline : bordure gauche et label abrégé (ex: \"1 Avr\") au lieu d'un séparateur horizontal",
+          textEn: "Inline month boundary marker: left border and short label (e.g. \"1 Apr\") instead of a horizontal separator",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+      changed: [
+        {
+          text: "Le sélecteur de vue est persisté en localStorage et adapté au responsive (Calendrier et Mois desktop uniquement)",
+          textEn: "View mode selector persisted in localStorage and responsive-aware (Calendar and Monthly desktop only)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+      fixed: [
+        {
+          text: "Le kilométrage hebdomadaire se met désormais à jour dynamiquement à l'ajout, suppression ou déplacement de séances",
+          textEn: "Weekly km now updates dynamically when sessions are added, deleted or moved",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Correction de l'ancrage des dates : les jours du calendrier sont alignés sur le lundi de la semaine de début du plan",
+          textEn: "Fixed date anchoring: calendar days now align to the Monday of the plan start week",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+    },
+  },
+  {
     version: "0.3.0",
     date: "2026-03-26",
     changes: {

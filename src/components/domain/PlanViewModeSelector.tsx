@@ -9,10 +9,10 @@ interface PlanViewModeSelectorProps {
   className?: string;
 }
 
-const modes: { value: PlanViewMode; icon: typeof CalendarRange; labelKey: string }[] = [
-  { value: "calendar", icon: CalendarRange, labelKey: "viewMode.calendar" },
+const modes: { value: PlanViewMode; icon: typeof CalendarRange; labelKey: string; desktopOnly?: boolean }[] = [
+  { value: "calendar", icon: CalendarRange, labelKey: "viewMode.calendar", desktopOnly: true },
   { value: "weekly", icon: Calendar, labelKey: "viewMode.weekly" },
-  { value: "monthly", icon: CalendarDays, labelKey: "viewMode.monthly" },
+  { value: "monthly", icon: CalendarDays, labelKey: "viewMode.monthly", desktopOnly: true },
   { value: "list", icon: List, labelKey: "viewMode.list" },
 ];
 
@@ -32,7 +32,7 @@ export function PlanViewModeSelector({
       role="radiogroup"
       aria-label={t("viewMode.label")}
     >
-      {modes.map(({ value: mode, icon: Icon, labelKey }) => {
+      {modes.map(({ value: mode, icon: Icon, labelKey, desktopOnly }) => {
         const isActive = value === mode;
         return (
           <button
@@ -43,8 +43,9 @@ export function PlanViewModeSelector({
             aria-label={t(labelKey)}
             onClick={() => onChange(mode)}
             className={cn(
-              "inline-flex items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
+              "items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              desktopOnly ? "hidden md:inline-flex" : "inline-flex",
               isActive
                 ? "bg-background text-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground hover:bg-background/50"

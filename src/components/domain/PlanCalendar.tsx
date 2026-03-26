@@ -60,6 +60,12 @@ interface PlanCalendarProps {
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
   /** Mobile: open the workout panel for a specific day */
   onAddToDay?: (weekNumber: number, day: number) => void;
+  /** If provided, only render these week numbers (used by monthly view) */
+  filteredWeekNumbers?: Set<number>;
+  /** If provided, show day-of-month numbers in cells (ISO date or datetime string) */
+  planStartDate?: string;
+  /** If provided, gray out cells outside this month (used by monthly view) */
+  visibleMonth?: { year: number; month: number };
 }
 
 // ── Component ───────────────────────────────────────────────────────
@@ -75,8 +81,25 @@ export const PlanCalendar = memo(function PlanCalendar({
   onToggleComplete,
   onValidateWeek,
   onWorkoutAdd,
+  filteredWeekNumbers,
+  planStartDate,
+  visibleMonth,
 }: PlanCalendarProps) {
   const dayHeaders = isEn ? DAY_HEADERS_EN : DAY_HEADERS_FR;
+
+  // Parse planStartDate and find the Monday of week 1
+  // dayOfWeek in sessions is 0=Mon...6=Sun, so we anchor to the Monday of the start week
+  const parsedStartDate = useMemo(() => {
+    if (!planStartDate) return null;
+    const dateOnly = planStartDate.split("T")[0];
+    const [y, m, d] = dateOnly.split("-").map(Number);
+    const date = new Date(y, m - 1, d);
+    // Find the Monday of this week (JS getDay: 0=Sun...6=Sat)
+    const jsDay = date.getDay();
+    const offset = jsDay === 0 ? -6 : 1 - jsDay; // Monday offset
+    date.setDate(date.getDate() + offset);
+    return date;
+  }, [planStartDate]);
 
   // ── Native drag state ───────────────────────────────────────────
   const [draggedSession, setDraggedSession] = useState<{
@@ -417,7 +440,7 @@ export const PlanCalendar = memo(function PlanCalendar({
 
           {/* Week rows */}
           <tbody>
-            {plan.weeks.map((week) => {
+            {plan.weeks.filter(week => !filteredWeekNumbers || filteredWeekNumbers.has(week.weekNumber)).map((week) => {
               const isCurrent =
                 currentWeek === week.weekNumber &&
                 currentWeek >= 1 &&
@@ -425,6 +448,8 @@ export const PlanCalendar = memo(function PlanCalendar({
               const phaseMeta = PHASE_META[week.phase];
               const isPhaseStart = phaseStartWeeks.has(week.weekNumber);
               const dayMap = sessionsByWeekDay.get(week.weekNumber);
+
+              // No separator rows — month labels appear inline in cells (on the 1st of each month)
 
               // Short label for calendar column (avoid overflow)
               let weekLabel: string;
@@ -469,7 +494,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                     </span>
                     {week.sessions.length > 0 && (
                       <span className="text-[9px] text-muted-foreground/70 tabular-nums">
-                        ~{week.targetKm ? `${week.targetKm}km` : `${Math.round(computeWeekKm(week))}km`} · {computeWeekDuration(week)}min
+                        ~{Math.round(computeWeekKm(week))}km · {computeWeekDuration(week)}min
                       </span>
                     )}
                     {isCurrent && (
@@ -518,20 +543,62 @@ export const PlanCalendar = memo(function PlanCalendar({
                     const isDropHere =
                       dropTarget?.weekNumber === week.weekNumber && dropTarget?.day === dayIndex;
 
+                    // Compute actual date for this cell
+                    let dayOfMonth: number | null = null;
+                    let isToday = false;
+                    let isOutsideMonth = false;
+                    let isFirstOfMonth = false;
+                    let monthLabel = "";
+                    if (parsedStartDate) {
+                      const cellDate = new Date(parsedStartDate);
+                      cellDate.setDate(cellDate.getDate() + (week.weekNumber - 1) * 7 + dayIndex);
+                      dayOfMonth = cellDate.getDate();
+                      const now = new Date();
+                      isToday = cellDate.getFullYear() === now.getFullYear() &&
+                        cellDate.getMonth() === now.getMonth() &&
+                        cellDate.getDate() === now.getDate();
+                      if (visibleMonth) {
+                        isOutsideMonth = cellDate.getFullYear() !== visibleMonth.year ||
+                          cellDate.getMonth() !== visibleMonth.month;
+                      }
+                      // Detect first of month for inline month label
+                      isFirstOfMonth = dayOfMonth === 1 && dayIndex > 0; // dayIndex > 0 to skip Monday (already a new row)
+                      if (dayOfMonth === 1) {
+                        const shortMonths = isEn
+                          ? ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+                          : ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
+                        monthLabel = shortMonths[cellDate.getMonth()];
+                      }
+                    }
+
                     return (
                       <td
                         key={dayIndex}
                         data-drop-id={`${week.weekNumber}-${dayIndex}`}
-                        onDragOver={(e) => handleDragOver(e, week.weekNumber, dayIndex)}
-                        onDragLeave={handleDragLeave}
-                        onDrop={(e) => handleDrop(e, week.weekNumber, dayIndex)}
+                        onDragOver={isOutsideMonth ? undefined : (e) => handleDragOver(e, week.weekNumber, dayIndex)}
+                        onDragLeave={isOutsideMonth ? undefined : handleDragLeave}
+                        onDrop={isOutsideMonth ? undefined : (e) => handleDrop(e, week.weekNumber, dayIndex)}
                         className={cn(
                           "px-0.5 py-1 align-top transition-colors",
-                          isDropHere && "ring-2 ring-primary/50 bg-primary/5 rounded",
+                          isDropHere && !isOutsideMonth && "ring-2 ring-primary/50 bg-primary/5 rounded",
+                          isOutsideMonth && "opacity-25",
+                          isFirstOfMonth && "border-l-2 border-l-primary/40",
                         )}
                       >
+                        {dayOfMonth !== null && (
+                          <span className={cn(
+                            "text-[10px] tabular-nums block text-center mb-0.5",
+                            isToday
+                              ? "font-bold text-primary"
+                              : monthLabel
+                                ? "font-semibold text-primary/70"
+                                : "text-muted-foreground/60"
+                          )}>
+                            {monthLabel ? `${dayOfMonth} ${monthLabel}` : dayOfMonth}
+                          </span>
+                        )}
                         {sessions.length === 0 ? (
-                          <span className="text-xs text-muted-foreground/40 block text-center">—</span>
+                          !dayOfMonth && <span className="text-xs text-muted-foreground/40 block text-center">—</span>
                         ) : (
                           <div className="space-y-0.5">
                             {sessions.map((session, sIdx) => {
