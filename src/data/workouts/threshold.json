@@ -25,7 +25,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "3x30s accélérations progressives",
@@ -38,7 +39,8 @@
           "description": "Course au seuil",
           "descriptionEn": "Threshold run",
           "durationMin": 20,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -46,7 +48,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 15,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -86,7 +89,15 @@
           "quality"
         ],
         "priorityScore": 85
-      }
+      },
+      "scaling": {
+        "progressionType": "duration",
+        "minValue": 15,
+        "maxValue": 25,
+        "stepSize": 5
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "THR-002",
@@ -112,7 +123,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et accélérations",
@@ -127,7 +139,8 @@
           "durationMin": 8,
           "zone": "Z4",
           "repetitions": 3,
-          "recovery": "2min footing Z1"
+          "recovery": "2min footing Z1",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -135,7 +148,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -174,7 +188,15 @@
           "intervals"
         ],
         "priorityScore": 80
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 2,
+        "maxValue": 4,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "THR-003",
@@ -200,7 +222,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -210,7 +233,8 @@
           "durationMin": 4,
           "zone": "Z4",
           "repetitions": 4,
-          "recovery": "2min footing Z1"
+          "recovery": "2min footing Z1",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -218,7 +242,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -256,7 +281,15 @@
           "beginner"
         ],
         "priorityScore": 75
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 3,
+        "maxValue": 5,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "THR-004",
@@ -282,7 +315,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Accélérations",
@@ -295,19 +329,22 @@
           "description": "15min seuil",
           "descriptionEn": "15min threshold",
           "durationMin": 15,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "Récupération",
           "descriptionEn": "Recovery",
           "durationMin": 3,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         },
         {
           "description": "15min seuil",
           "descriptionEn": "15min threshold",
           "durationMin": 15,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -315,7 +352,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -355,7 +393,9 @@
           "half-marathon"
         ],
         "priorityScore": 75
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "THR-005",
@@ -381,7 +421,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -389,55 +430,64 @@
           "description": "4min seuil",
           "descriptionEn": "4min threshold",
           "durationMin": 4,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "Récup",
           "descriptionEn": "Recovery",
           "durationMin": 2,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         },
         {
           "description": "6min seuil",
           "descriptionEn": "6min threshold",
           "durationMin": 6,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "Récup",
           "descriptionEn": "Recovery",
           "durationMin": 2,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         },
         {
           "description": "8min seuil",
           "descriptionEn": "8min threshold",
           "durationMin": 8,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "Récup",
           "descriptionEn": "Recovery",
           "durationMin": 2,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         },
         {
           "description": "6min seuil",
           "descriptionEn": "6min threshold",
           "durationMin": 6,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "Récup",
           "descriptionEn": "Recovery",
           "durationMin": 2,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         },
         {
           "description": "4min seuil",
           "descriptionEn": "4min threshold",
           "durationMin": 4,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -445,7 +495,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -483,7 +534,9 @@
           "variety"
         ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "THR-006",
@@ -509,7 +562,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -517,7 +571,8 @@
           "description": "Seuil progressif : bas Z4 vers haut Z4",
           "descriptionEn": "Progressive threshold: low Z4 to high Z4",
           "durationMin": 20,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -525,7 +580,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 15,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -563,7 +619,15 @@
           "finish"
         ],
         "priorityScore": 65
-      }
+      },
+      "scaling": {
+        "progressionType": "duration",
+        "minValue": 15,
+        "maxValue": 25,
+        "stepSize": 5
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "THR-007",
@@ -589,7 +653,8 @@
           "description": "Footing autour de la piste",
           "descriptionEn": "Jog around the track",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Lignes droites",
@@ -604,7 +669,8 @@
           "distanceM": 2000,
           "zone": "Z4",
           "repetitions": 3,
-          "recovery": "400m footing Z1"
+          "recovery": "400m footing Z1",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -612,7 +678,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -652,7 +719,15 @@
           "precision"
         ],
         "priorityScore": 70
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 2,
+        "maxValue": 4,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "THR-008",
@@ -678,7 +753,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -688,7 +764,8 @@
           "durationMin": 3,
           "zone": "Z4",
           "repetitions": 6,
-          "recovery": "2min footing Z2"
+          "recovery": "2min footing Z2",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -696,7 +773,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -734,7 +812,15 @@
           "metabolic"
         ],
         "priorityScore": 60
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 4,
+        "maxValue": 8,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "THR-009",
@@ -760,7 +846,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -768,19 +855,22 @@
           "description": "15min tempo Z3",
           "descriptionEn": "15min tempo Z3",
           "durationMin": 15,
-          "zone": "Z3"
+          "zone": "Z3",
+          "intensityType": "M"
         },
         {
           "description": "Transition",
           "descriptionEn": "Transition",
           "durationMin": 2,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "10min seuil Z4",
           "descriptionEn": "10min threshold Z4",
           "durationMin": 10,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -788,7 +878,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 15,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -828,7 +919,9 @@
           "combined"
         ],
         "priorityScore": 65
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "THR-010",
@@ -854,7 +947,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Accélérations",
@@ -870,7 +964,8 @@
           "zone": "Z4",
           "pace": "Allure 10K",
           "repetitions": 3,
-          "recovery": "500m footing Z1"
+          "recovery": "500m footing Z1",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -878,7 +973,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -916,7 +1012,15 @@
           "specific"
         ],
         "priorityScore": 80
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 2,
+        "maxValue": 4,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "THR-011",
@@ -942,7 +1046,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -950,7 +1055,8 @@
           "description": "Seuil sur parcours vallonné, effort constant",
           "descriptionEn": "Threshold on hilly course, constant effort",
           "durationMin": 20,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -958,7 +1064,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 15,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -996,7 +1103,15 @@
           "strength"
         ],
         "priorityScore": 55
-      }
+      },
+      "scaling": {
+        "progressionType": "duration",
+        "minValue": 15,
+        "maxValue": 25,
+        "stepSize": 5
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "THR-012",
@@ -1022,7 +1137,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 10,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -1030,19 +1146,22 @@
           "description": "Endurance Z2",
           "descriptionEn": "Endurance Z2",
           "durationMin": 25,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "Seuil Z4",
           "descriptionEn": "Threshold Z4",
           "durationMin": 15,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "Endurance Z2",
           "descriptionEn": "Endurance Z2",
           "durationMin": 20,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         }
       ],
       "cooldownTemplate": [
@@ -1050,7 +1169,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1090,7 +1210,9 @@
           "marathon"
         ],
         "priorityScore": 60
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "THR-013",
@@ -1116,7 +1238,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -1124,43 +1247,50 @@
           "description": "10min seuil",
           "descriptionEn": "10min threshold",
           "durationMin": 10,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "Récup",
           "descriptionEn": "Recovery",
           "durationMin": 2,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         },
         {
           "description": "8min seuil",
           "descriptionEn": "8min threshold",
           "durationMin": 8,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "Récup",
           "descriptionEn": "Recovery",
           "durationMin": 2,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         },
         {
           "description": "6min seuil",
           "descriptionEn": "6min threshold",
           "durationMin": 6,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "Récup",
           "descriptionEn": "Recovery",
           "durationMin": 2,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         },
         {
           "description": "4min seuil",
           "descriptionEn": "4min threshold",
           "durationMin": 4,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -1168,7 +1298,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1207,7 +1338,9 @@
           "speed"
         ],
         "priorityScore": 65
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "THR-014",
@@ -1233,7 +1366,8 @@
           "description": "Footing ensemble",
           "descriptionEn": "Jog together",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -1241,7 +1375,8 @@
           "description": "Seuil en relais (2min devant chacun)",
           "descriptionEn": "Threshold relay (2min leading each)",
           "durationMin": 20,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -1249,7 +1384,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1288,7 +1424,9 @@
           "social"
         ],
         "priorityScore": 55
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "THR-015",
@@ -1314,7 +1452,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -1324,7 +1463,8 @@
           "durationMin": 10,
           "zone": "Z4",
           "repetitions": 2,
-          "recovery": "2min footing Z1"
+          "recovery": "2min footing Z1",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -1332,7 +1472,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1370,7 +1511,15 @@
           "pre-race"
         ],
         "priorityScore": 85
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 2,
+        "maxValue": 3,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "THR-016",
@@ -1396,7 +1545,8 @@
           "description": "Session matin: footing + gammes",
           "descriptionEn": "Morning session: jog + drills",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -1406,7 +1556,8 @@
           "durationMin": 6,
           "zone": "Z4",
           "repetitions": 5,
-          "recovery": "60s footing Z1"
+          "recovery": "60s footing Z1",
+          "intensityType": "T"
         },
         {
           "description": "--- 6-8h de repos ---",
@@ -1418,7 +1569,8 @@
           "durationMin": 6,
           "zone": "Z4",
           "repetitions": 5,
-          "recovery": "60s footing Z1"
+          "recovery": "60s footing Z1",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -1426,7 +1578,8 @@
           "description": "Footing de récupération (chaque session)",
           "descriptionEn": "Recovery jog (each session)",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1471,7 +1624,9 @@
           "ingebrigtsen"
         ],
         "priorityScore": 60
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 0
     },
     {
       "id": "THR-017",
@@ -1497,7 +1652,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et accélérations",
@@ -1511,7 +1667,8 @@
           "descriptionEn": "25x 50s at 10K pace with 15s recovery",
           "zone": "Z4",
           "repetitions": 25,
-          "recovery": "15s footing très lent"
+          "recovery": "15s footing très lent",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -1519,7 +1676,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1564,7 +1722,9 @@
           "10k"
         ],
         "priorityScore": 75
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "THR-018",
@@ -1590,7 +1750,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Test lactate de base",
@@ -1605,7 +1766,8 @@
           "durationMin": 6,
           "zone": "Z4",
           "repetitions": 5,
-          "recovery": "60s + mesure lactate"
+          "recovery": "60s + mesure lactate",
+          "intensityType": "T"
         },
         {
           "description": "Ajustez l'allure selon les mesures",
@@ -1617,7 +1779,8 @@
           "description": "Footing de récupération + mesure finale",
           "descriptionEn": "Recovery jog + final measurement",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1663,7 +1826,9 @@
           "elite"
         ],
         "priorityScore": 55
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 0
     },
     {
       "id": "THR-019",
@@ -1675,11 +1840,28 @@
       "sessionType": "threshold",
       "targetSystem": "lactate_threshold",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 40, "max": 50 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 40,
+        "max": 50
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing lent progressif", "descriptionEn": "Slow progressive jog", "durationMin": 10, "zone": "Z1-Z2" },
-        { "description": "Étirements dynamiques et 3x accélérations progressives", "descriptionEn": "Dynamic stretches and 3x progressive accelerations", "durationMin": 5 }
+        {
+          "description": "Footing lent progressif",
+          "descriptionEn": "Slow progressive jog",
+          "durationMin": 10,
+          "zone": "Z1-Z2",
+          "intensityType": "E"
+        },
+        {
+          "description": "Étirements dynamiques et 3x accélérations progressives",
+          "descriptionEn": "Dynamic stretches and 3x progressive accelerations",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
         {
@@ -1688,11 +1870,18 @@
           "durationMin": 5,
           "zone": "Z4",
           "repetitions": 3,
-          "recovery": "3min footing Z1"
+          "recovery": "3min footing Z1",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération et étirements", "descriptionEn": "Recovery jog and stretching", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération et étirements",
+          "descriptionEn": "Recovery jog and stretching",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "coachingTips": [
         "Z4 = effort intense mais tenable sur 5 minutes",
@@ -1716,14 +1905,27 @@
         "Starting too fast on the first repetition",
         "Shortening the recovery"
       ],
-      "variationIds": ["THR-001", "THR-002"],
+      "variationIds": [
+        "THR-001",
+        "THR-002"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "hard",
-        "tags": ["introduction", "threshold"],
+        "tags": [
+          "introduction",
+          "threshold"
+        ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "THR-020",
@@ -1735,11 +1937,28 @@
       "sessionType": "threshold",
       "targetSystem": "lactate_threshold",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 50, "max": 60 },
-      "environment": { "requiresHills": false, "requiresTrack": true, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 50,
+        "max": 60
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": true,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Gammes et 3× accélérations progressives", "descriptionEn": "Drills and 3× progressive accelerations", "durationMin": 5 }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2",
+          "intensityType": "E"
+        },
+        {
+          "description": "Gammes et 3× accélérations progressives",
+          "descriptionEn": "Drills and 3× progressive accelerations",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
         {
@@ -1748,11 +1967,18 @@
           "zone": "Z4",
           "repetitions": 6,
           "distanceM": 1000,
-          "recovery": "60-90s trot léger"
+          "recovery": "60-90s trot léger",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "coachingTips": [
         "L'allure CV se situe entre le seuil et la VMA — approximativement votre allure de course sur 30 minutes",
@@ -1776,14 +2002,30 @@
         "Extending recovery beyond 90 seconds",
         "Accelerating on the last repetitions instead of maintaining a constant pace"
       ],
-      "variationIds": ["THR-010", "ASS-002"],
+      "variationIds": [
+        "THR-010",
+        "ASS-002"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "key",
-        "tags": ["tinman", "critical-velocity", "type-iia", "cv-pace", "track"],
+        "tags": [
+          "tinman",
+          "critical-velocity",
+          "type-iia",
+          "cv-pace",
+          "track"
+        ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "THR-021",
@@ -1795,11 +2037,28 @@
       "sessionType": "threshold",
       "targetSystem": "lactate_threshold",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 55, "max": 65 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 55,
+        "max": 65
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" },
-        { "description": "Gammes et 3× accélérations", "descriptionEn": "Drills and 3× accelerations", "durationMin": 5 }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2",
+          "intensityType": "E"
+        },
+        {
+          "description": "Gammes et 3× accélérations",
+          "descriptionEn": "Drills and 3× accelerations",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
         {
@@ -1808,11 +2067,18 @@
           "zone": "Z4",
           "repetitions": 3,
           "durationMin": 12,
-          "recovery": "3min trot Z1"
+          "recovery": "3min trot Z1",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "coachingTips": [
         "Les phases « sous » à 95% du seuil ne sont PAS de la récupération — vous restez en charge",
@@ -1836,14 +2102,29 @@
         "Exceeding 110% of threshold during 'over' phases, turning the session into VO2max work",
         "Not respecting the quick transitions between 'over' and 'under' phases"
       ],
-      "variationIds": ["THR-008", "THR-001"],
+      "variationIds": [
+        "THR-008",
+        "THR-001"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "key",
-        "tags": ["over-under", "lactate-clearance", "threshold-oscillation", "advanced"],
+        "tags": [
+          "over-under",
+          "lactate-clearance",
+          "threshold-oscillation",
+          "advanced"
+        ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     }
   ]
 }

@@ -13,6 +13,9 @@ import {
   Mountain,
   CheckIcon,
   Loader2,
+  Heart,
+  Footprints,
+  TrendingUp,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,6 +27,8 @@ import {
   RACE_DISTANCE_META,
   type RaceDistance,
   type AssistedPlanConfig,
+  type PlanPurpose,
+  type TrainingGoal,
 } from "@/types/plan";
 import type { Difficulty, UserZonePreferences } from "@/types";
 import { DIFFICULTY_META } from "@/types";
@@ -31,11 +36,24 @@ import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 
 // ── Constants ────────────────────────────────────────────────────────
 
-const TOTAL_STEPS = 7;
-const MIN_WEEKS = 8;
-const WARN_WEEKS = 24;
+// Steps are dynamic based on plan purpose
+type StepId = "purpose" | "distance" | "date" | "duration" | "race_name" | "level" | "goal" | "fitness" | "schedule" | "pace" | "summary";
 
-const DAYS_PER_WEEK_OPTIONS = [3, 4, 5, 6] as const;
+const RACE_STEPS: StepId[] = ["purpose", "distance", "date", "race_name", "level", "goal", "fitness", "schedule", "pace", "summary"];
+const NON_RACE_STEPS: StepId[] = ["purpose", "duration", "level", "goal", "fitness", "schedule", "summary"];
+
+const DAYS_PER_WEEK_OPTIONS = [3, 4, 5, 6, 7] as const;
+
+/** Recommended week ranges per distance — warnings, not hard blocks */
+const RECOMMENDED_WEEKS: Record<string, { min: number; max: number }> = {
+  "5K":         { min: 4,  max: 16 },
+  "10K":        { min: 6,  max: 20 },
+  semi:         { min: 8,  max: 24 },
+  marathon:     { min: 12, max: 30 },
+  trail_short:  { min: 8,  max: 24 },
+  trail:        { min: 12, max: 36 },
+  ultra:        { min: 14, max: 52 },
+};
 
 const RACE_DISTANCE_ICONS: Record<RaceDistance, React.ReactNode> = {
   "5K": <Zap className="size-5 md:size-6 text-primary" />,
@@ -100,6 +118,8 @@ function generateId(): string {
 // ── Form state type ──────────────────────────────────────────────────
 
 interface FormState {
+  planPurpose: PlanPurpose;
+  trainingGoal: TrainingGoal;
   raceDistance: RaceDistance | null;
   raceDate: string;
   raceName: string;
@@ -108,6 +128,9 @@ interface FormState {
   longRunDay: number;
   targetPace: string;
   elevationGain: string;
+  totalWeeksOverride: number;
+  currentWeeklyKm: string;   // User's current weekly volume
+  currentLongRunKm: string;  // User's current longest run
 }
 
 // ── Component ────────────────────────────────────────────────────────
@@ -118,9 +141,11 @@ export function PlanCreatePage() {
   const navigate = useNavigate();
   const { createPlan, isGenerating, error, canCreate } = useCreatePlan();
 
-  const [step, setStep] = useState(1);
+  const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
   const [form, setForm] = useState<FormState>({
+    planPurpose: "race",
+    trainingGoal: "time",
     raceDistance: null,
     raceDate: "",
     raceName: "",
@@ -129,6 +154,9 @@ export function PlanCreatePage() {
     longRunDay: 6,
     targetPace: "",
     elevationGain: "",
+    totalWeeksOverride: 0,
+    currentWeeklyKm: "",
+    currentLongRunKm: "",
   });
 
   // Load user zone preferences for VMA suggestion
@@ -137,16 +165,23 @@ export function PlanCreatePage() {
     []
   );
 
+  // ── Dynamic step flow ────────────────────────────────────────────
+
+  const isRacePlan = form.planPurpose === "race";
+  const steps = isRacePlan ? RACE_STEPS : NON_RACE_STEPS;
+  const currentStep = steps[stepIndex] ?? "purpose";
+  const totalSteps = steps.length;
+
   // ── Navigation ───────────────────────────────────────────────────
 
   const goForward = useCallback(() => {
     setDirection("forward");
-    setStep((s) => Math.min(s + 1, TOTAL_STEPS));
-  }, []);
+    setStepIndex((s) => Math.min(s + 1, steps.length - 1));
+  }, [steps.length]);
 
   const goBack = useCallback(() => {
     setDirection("backward");
-    setStep((s) => Math.max(s - 1, 1));
+    setStepIndex((s) => Math.max(s - 1, 0));
   }, []);
 
   // ── Derived values ───────────────────────────────────────────────
@@ -156,14 +191,15 @@ export function PlanCreatePage() {
     [form.raceDate]
   );
 
-  const minWeeksForDistance = useMemo(() => {
-    if (form.raceDistance === "ultra") return 12;
-    if (form.raceDistance === "trail" || form.raceDistance === "trail_short") return 10;
-    return MIN_WEEKS; // 8
+  const recommendedWeeks = useMemo(() => {
+    return RECOMMENDED_WEEKS[form.raceDistance ?? "10K"] ?? RECOMMENDED_WEEKS["10K"];
   }, [form.raceDistance]);
 
-  const dateValid = weeksCount >= minWeeksForDistance && weeksCount <= WARN_WEEKS;
-  const dateTooLong = weeksCount > WARN_WEEKS;
+  const minWeeksForDistance = recommendedWeeks.min;
+
+  // Valid if enough weeks (min is a hard constraint, max is just a warning)
+  const dateValid = weeksCount >= minWeeksForDistance;
+  const dateTooLong = weeksCount > recommendedWeeks.max;
 
   const minDate = useMemo(() => {
     const d = new Date();
@@ -184,12 +220,13 @@ export function PlanCreatePage() {
   // ── Submit handler ───────────────────────────────────────────────
 
   const handleGenerate = useCallback(async () => {
-    if (!form.raceDistance || !form.runnerLevel || !form.raceDate) return;
+    if (!form.runnerLevel) return;
+    if (isRacePlan && (!form.raceDistance || !form.raceDate)) return;
 
     const config: AssistedPlanConfig = {
       id: generateId(),
-      raceDistance: form.raceDistance,
-      raceDate: form.raceDate,
+      raceDistance: form.raceDistance ?? "10K",
+      raceDate: form.raceDate || new Date(Date.now() + 86400000 * 7 * (form.totalWeeksOverride || 12)).toISOString(),
       raceName: form.raceName || undefined,
       runnerLevel: form.runnerLevel,
       daysPerWeek: form.daysPerWeek,
@@ -200,6 +237,11 @@ export function PlanCreatePage() {
         ? parseInt(form.elevationGain, 10)
         : undefined,
       createdAt: new Date().toISOString(),
+      planPurpose: form.planPurpose,
+      trainingGoal: form.trainingGoal,
+      totalWeeksOverride: !isRacePlan ? form.totalWeeksOverride : undefined,
+      currentWeeklyKm: form.currentWeeklyKm ? parseInt(form.currentWeeklyKm, 10) : undefined,
+      currentLongRunKm: form.currentLongRunKm ? parseInt(form.currentLongRunKm, 10) : undefined,
     };
 
     try {
@@ -215,15 +257,14 @@ export function PlanCreatePage() {
 
   const renderStepIndicator = () => (
     <div className="flex items-center justify-center gap-2 py-4">
-      <span className="text-xs text-muted-foreground mr-1">{step}/{TOTAL_STEPS}</span>
-      {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((s) => (
+      {Array.from({ length: totalSteps }, (_, i) => (
         <div
-          key={s}
+          key={i}
           className={cn(
             "size-2 rounded-full transition-all duration-300",
-            s === step
+            i === stepIndex
               ? "bg-primary scale-125"
-              : s < step
+              : i < stepIndex
                 ? "bg-primary/50"
                 : "bg-muted-foreground/25"
           )}
@@ -240,7 +281,7 @@ export function PlanCreatePage() {
     showSkip?: boolean,
   ) => (
     <div className="py-4 flex justify-between gap-3">
-      <Button variant="ghost" size="sm" onClick={goBack} disabled={step === 1}>
+      <Button variant="ghost" size="sm" onClick={goBack} disabled={stepIndex === 0}>
         <ArrowLeft className="size-4 mr-1" />
         {isEn ? "Back" : "Retour"}
       </Button>
@@ -258,9 +299,112 @@ export function PlanCreatePage() {
     </div>
   );
 
-  // ── Step 1: Race Distance ────────────────────────────────────────
+  // ── Purpose options for Step 1 ────────────────────────────────────
+  const PURPOSE_OPTIONS: { value: PlanPurpose; icon: React.ReactNode; color: string; label: string; labelEn: string; desc: string; descEn: string }[] = [
+    {
+      value: "race",
+      icon: <Target className="size-5 sm:size-6 text-primary" />,
+      color: "primary",
+      label: "Préparer une course",
+      labelEn: "Prepare for a race",
+      desc: "Plan personnalisé pour un objectif précis (5K au marathon)",
+      descEn: "Personalized plan for a specific race goal (5K to marathon)",
+    },
+    {
+      value: "base_building",
+      icon: <TrendingUp className="size-5 sm:size-6 text-zone-2" />,
+      color: "zone-2",
+      label: "Construire ma base",
+      labelEn: "Build my base",
+      desc: "Développer l'endurance fondamentale sans course en vue",
+      descEn: "Build fundamental endurance with no specific race target",
+    },
+    {
+      value: "return_from_injury",
+      icon: <Heart className="size-5 sm:size-6 text-zone-1" />,
+      color: "zone-1",
+      label: "Reprendre après une pause",
+      labelEn: "Return after a break",
+      desc: "Reprise progressive et sécurisée après blessure ou arrêt",
+      descEn: "Safe progressive return after injury or break",
+    },
+    {
+      value: "beginner_start",
+      icon: <Footprints className="size-5 sm:size-6 text-zone-3" />,
+      color: "zone-3",
+      label: "Débuter la course à pied",
+      labelEn: "Start running",
+      desc: "Programme progressif pour se lancer en courant",
+      descEn: "Progressive program to start running from scratch",
+    },
+  ];
+
+  // ── Step 1: Plan Purpose ────────────────────────────────────────
 
   const renderStep1 = () => (
+    <div
+      className={cn(
+        "flex-1 flex flex-col",
+        direction === "forward"
+          ? "animate-slide-in-right"
+          : "animate-slide-in-left"
+      )}
+    >
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
+        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+          <Zap className="size-6 md:size-8 text-primary" />
+        </div>
+        <h2 className="text-lg md:text-xl font-semibold text-center">
+          {isEn ? "What's your goal?" : "Quel est votre objectif ?"}
+        </h2>
+        <p className="text-sm text-muted-foreground mt-1 text-center">
+          {isEn
+            ? "We'll adapt the plan to your situation"
+            : "On adapte le plan à votre situation"}
+        </p>
+        <div className="w-full max-w-md grid grid-cols-1 gap-2 mt-6">
+          {PURPOSE_OPTIONS.map((opt) => (
+            <Card
+              key={opt.value}
+              interactive
+              className={cn(
+                "cursor-pointer border-border/50 transition-all duration-200",
+                form.planPurpose === opt.value
+                  ? `ring-2 ring-${opt.color} bg-${opt.color}/5`
+                  : "hover:bg-muted/50"
+              )}
+              onClick={() => {
+                setForm((f) => ({
+                  ...f,
+                  planPurpose: opt.value,
+                  // Set defaults for non-race plans
+                  ...(opt.value === "beginner_start" ? { daysPerWeek: 3, totalWeeksOverride: 8, trainingGoal: "finish" as TrainingGoal } : {}),
+                  ...(opt.value === "return_from_injury" ? { daysPerWeek: 3, totalWeeksOverride: 10, trainingGoal: "finish" as TrainingGoal } : {}),
+                  ...(opt.value === "base_building" ? { totalWeeksOverride: 12, trainingGoal: "time" as TrainingGoal } : {}),
+                }));
+                goForward();
+              }}
+            >
+              <CardContent className="p-3 flex items-center gap-3">
+                <div className={cn("size-10 rounded-full flex items-center justify-center shrink-0", `bg-${opt.color}/10`)}>
+                  {opt.icon}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold">{isEn ? opt.labelEn : opt.label}</p>
+                  <p className="text-xs text-muted-foreground">{isEn ? opt.descEn : opt.desc}</p>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+      {renderNavButtons(!!form.planPurpose)}
+    </div>
+  );
+
+  // ── Step 2: Race Distance (or Duration for non-race) ───────────
+
+  const renderStep2 = () => (
     <div
       className={cn(
         "flex-1 flex flex-col",
@@ -317,12 +461,75 @@ export function PlanCreatePage() {
           })}
         </div>
       </div>
+      {renderNavButtons(!!form.raceDistance)}
     </div>
   );
 
-  // ── Step 2: Race Date ────────────────────────────────────────────
+  // ── Step Duration: Choose plan length (non-race plans) ──────────
 
-  const renderStep2 = () => (
+  const DURATION_OPTIONS = [
+    { weeks: 4, label: "4 sem", labelEn: "4 wks" },
+    { weeks: 6, label: "6 sem", labelEn: "6 wks" },
+    { weeks: 8, label: "8 sem", labelEn: "8 wks" },
+    { weeks: 10, label: "10 sem", labelEn: "10 wks" },
+    { weeks: 12, label: "12 sem", labelEn: "12 wks" },
+    { weeks: 16, label: "16 sem", labelEn: "16 wks" },
+  ];
+
+  const renderStepDuration = () => (
+    <div
+      className={cn(
+        "flex-1 flex flex-col",
+        direction === "forward"
+          ? "animate-slide-in-right"
+          : "animate-slide-in-left"
+      )}
+    >
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
+        <div className="size-12 md:size-16 rounded-full bg-zone-2/10 flex items-center justify-center mb-4">
+          <Calendar className="size-6 md:size-8 text-zone-2" />
+        </div>
+        <h2 className="text-lg md:text-xl font-semibold text-center">
+          {isEn ? "How long?" : "Combien de temps ?"}
+        </h2>
+        <p className="text-sm text-muted-foreground mt-1 text-center">
+          {isEn
+            ? "Choose the duration of your plan"
+            : "Choisissez la durée de votre plan"}
+        </p>
+        <div className="w-full max-w-xs grid grid-cols-3 gap-2 mt-6">
+          {DURATION_OPTIONS.map((opt) => (
+            <Card
+              key={opt.weeks}
+              interactive
+              className={cn(
+                "cursor-pointer border-border/50 transition-all duration-200",
+                form.totalWeeksOverride === opt.weeks
+                  ? "ring-2 ring-primary bg-primary/5"
+                  : "hover:bg-muted/50"
+              )}
+              onClick={() => {
+                setForm((f) => ({ ...f, totalWeeksOverride: opt.weeks }));
+                goForward();
+              }}
+            >
+              <CardContent className="p-3 flex flex-col items-center justify-center">
+                <span className="text-lg font-bold">{opt.weeks}</span>
+                <span className="text-xs text-muted-foreground">
+                  {isEn ? "weeks" : "semaines"}
+                </span>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+      {renderNavButtons(form.totalWeeksOverride > 0)}
+    </div>
+  );
+
+  // ── Step 3: Race Date (or Duration for non-race) ────────────────
+
+  const renderStep3 = () => (
     <div
       className={cn(
         "flex-1 flex flex-col",
@@ -375,10 +582,10 @@ export function PlanCreatePage() {
           )}
 
           {form.raceDate && dateTooLong && (
-            <p className="text-sm text-destructive text-center">
+            <p className="text-sm text-amber-600 dark:text-amber-400 text-center">
               {isEn
-                ? "Over 24 weeks is not supported. Choose a closer date."
-                : "Plus de 24 semaines n'est pas possible. Choisissez une date plus proche."}
+                ? `Over ${recommendedWeeks.max} weeks is not recommended for this distance, but it's possible.`
+                : `Plus de ${recommendedWeeks.max} semaines n'est pas recommandé pour cette distance, mais c'est possible.`}
             </p>
           )}
         </div>
@@ -387,9 +594,9 @@ export function PlanCreatePage() {
     </div>
   );
 
-  // ── Step 3: Race Name (optional) ─────────────────────────────────
+  // ── Step 4: Race Name (optional) ─────────────────────────────────
 
-  const renderStep3 = () => (
+  const renderStep4 = () => (
     <div
       className={cn(
         "flex-1 flex flex-col",
@@ -431,9 +638,9 @@ export function PlanCreatePage() {
     </div>
   );
 
-  // ── Step 4: Runner Level ─────────────────────────────────────────
+  // ── Step 5: Runner Level ─────────────────────────────────────────
 
-  const renderStep4 = () => {
+  const renderStep5 = () => {
     const levels: Difficulty[] = [
       "beginner",
       "intermediate",
@@ -531,9 +738,157 @@ export function PlanCreatePage() {
     );
   };
 
-  // ── Step 5: Training Configuration ───────────────────────────────
+  // ── Step Goal: Training mindset (finish/time/compete) ────────────
 
-  const renderStep5 = () => (
+  const GOAL_OPTIONS: { value: TrainingGoal; icon: React.ReactNode; label: string; labelEn: string; desc: string; descEn: string }[] = [
+    {
+      value: "finish",
+      icon: <Flag className="size-5 text-zone-2" />,
+      label: "Finir la course",
+      labelEn: "Finish the race",
+      desc: "Plan conservateur, plus de volume facile, progression douce",
+      descEn: "Conservative plan, more easy volume, gentle progression",
+    },
+    {
+      value: "time",
+      icon: <Timer className="size-5 text-primary" />,
+      label: "Objectif temps",
+      labelEn: "Target a time",
+      desc: "Plan équilibré avec séances qualité et endurance",
+      descEn: "Balanced plan with quality sessions and endurance",
+    },
+    {
+      value: "compete",
+      icon: <TrendingUp className="size-5 text-zone-5" />,
+      label: "Performer",
+      labelEn: "Compete",
+      desc: "Plan ambitieux, plus d'intensité, volume élevé",
+      descEn: "Ambitious plan, more intensity, higher volume",
+    },
+  ];
+
+  const renderStepGoal = () => (
+    <div
+      className={cn(
+        "flex-1 flex flex-col",
+        direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
+      )}
+    >
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
+        <h2 className="text-lg md:text-xl font-semibold text-center">
+          {isEn ? "What's your mindset?" : "Dans quel état d'esprit êtes-vous ?"}
+        </h2>
+        <p className="text-sm text-muted-foreground mt-1 text-center">
+          {isEn
+            ? "This adjusts intensity and volume of the plan"
+            : "Cela ajuste l'intensité et le volume du plan"}
+        </p>
+        <div className="w-full max-w-sm grid grid-cols-1 gap-2 mt-6">
+          {GOAL_OPTIONS.map((opt) => (
+            <Card
+              key={opt.value}
+              interactive
+              className={cn(
+                "cursor-pointer border-border/50 transition-all duration-200",
+                form.trainingGoal === opt.value
+                  ? "ring-2 ring-primary bg-primary/5"
+                  : "hover:bg-muted/50"
+              )}
+              onClick={() => {
+                setForm((f) => ({ ...f, trainingGoal: opt.value }));
+                goForward();
+              }}
+            >
+              <CardContent className="p-3 flex items-center gap-3">
+                <div className="size-9 rounded-full bg-secondary/80 flex items-center justify-center shrink-0">
+                  {opt.icon}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold">{isEn ? opt.labelEn : opt.label}</p>
+                  <p className="text-xs text-muted-foreground">{isEn ? opt.descEn : opt.desc}</p>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+      {renderNavButtons(!!form.trainingGoal)}
+    </div>
+  );
+
+  // ── Step Fitness: Current fitness evaluation ───────────────────────
+
+  const renderStepFitness = () => (
+    <div
+      className={cn(
+        "flex-1 flex flex-col",
+        direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
+      )}
+    >
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
+        <h2 className="text-lg md:text-xl font-semibold text-center">
+          {isEn ? "Your current fitness" : "Votre forme actuelle"}
+        </h2>
+        <p className="text-sm text-muted-foreground mt-1 text-center max-w-md">
+          {isEn
+            ? "This helps us set the right starting volume. Skip if unsure."
+            : "Ça nous aide à définir le bon volume de départ. Passez si vous n'êtes pas sûr."}
+        </p>
+        <div className="w-full max-w-sm space-y-4 mt-6">
+          {/* Current weekly km */}
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium" htmlFor="weeklyKm">
+              {isEn ? "Weekly volume (km)" : "Volume hebdomadaire (km)"}
+            </label>
+            <p className="text-xs text-muted-foreground">
+              {isEn
+                ? "How many km do you currently run per week?"
+                : "Combien de km courez-vous par semaine actuellement ?"}
+            </p>
+            <input
+              id="weeklyKm"
+              type="number"
+              inputMode="numeric"
+              min={0}
+              max={300}
+              placeholder={isEn ? "e.g. 30" : "ex. 30"}
+              value={form.currentWeeklyKm}
+              onChange={(e) => setForm((f) => ({ ...f, currentWeeklyKm: e.target.value }))}
+              className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
+            />
+          </div>
+
+          {/* Current long run */}
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium" htmlFor="longRunKm">
+              {isEn ? "Longest recent run (km)" : "Plus longue sortie récente (km)"}
+            </label>
+            <p className="text-xs text-muted-foreground">
+              {isEn
+                ? "Your longest run in the past 2-3 weeks"
+                : "Votre plus longue course des 2-3 dernières semaines"}
+            </p>
+            <input
+              id="longRunKm"
+              type="number"
+              inputMode="numeric"
+              min={0}
+              max={100}
+              placeholder={isEn ? "e.g. 12" : "ex. 12"}
+              value={form.currentLongRunKm}
+              onChange={(e) => setForm((f) => ({ ...f, currentLongRunKm: e.target.value }))}
+              className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
+            />
+          </div>
+        </div>
+      </div>
+      {renderNavButtons(true, isEn ? "Continue" : "Continuer", true)}
+    </div>
+  );
+
+  // ── Step 6: Training Configuration ───────────────────────────────
+
+  const renderStep6 = () => (
     <div
       className={cn(
         "flex-1 flex flex-col",
@@ -555,21 +910,51 @@ export function PlanCreatePage() {
             : "Combien de séances par semaine ?"}
         </p>
 
-        <div className="w-full max-w-sm mt-6">
-          <label className="text-sm font-medium mb-3 block text-center">
-            {isEn ? "Sessions per week" : "Séances par semaine"}
-          </label>
-          <div className="flex gap-2">
-            {DAYS_PER_WEEK_OPTIONS.map((n) => (
-              <Button
-                key={n}
-                variant={form.daysPerWeek === n ? "default" : "outline"}
-                className="flex-1"
-                onClick={() => setForm((f) => ({ ...f, daysPerWeek: n }))}
-              >
-                {n}
-              </Button>
-            ))}
+        <div className="w-full max-w-sm mt-6 space-y-6">
+          <div>
+            <label className="text-sm font-medium mb-3 block text-center">
+              {isEn ? "Sessions per week" : "Séances par semaine"}
+            </label>
+            <div className="flex gap-2">
+              {DAYS_PER_WEEK_OPTIONS.map((n) => (
+                <Button
+                  key={n}
+                  variant={form.daysPerWeek === n ? "default" : "outline"}
+                  className="flex-1"
+                  onClick={() => setForm((f) => ({ ...f, daysPerWeek: n }))}
+                >
+                  {n}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {/* Long run day picker */}
+          <div>
+            <label className="text-sm font-medium mb-2 block text-center">
+              {isEn ? "Long run day" : "Jour de la sortie longue"}
+            </label>
+            <p className="text-xs text-muted-foreground text-center mb-3">
+              {isEn
+                ? "Your weekly long run — the key endurance session"
+                : "Votre sortie longue hebdomadaire — la séance clé d'endurance"}
+            </p>
+            <div className="grid grid-cols-7 gap-1">
+              {(isEn
+                ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+                : ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
+              ).map((label, idx) => (
+                <Button
+                  key={idx}
+                  variant={form.longRunDay === idx ? "default" : "outline"}
+                  size="sm"
+                  className="text-xs px-0"
+                  onClick={() => setForm((f) => ({ ...f, longRunDay: idx }))}
+                >
+                  {label}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -577,9 +962,9 @@ export function PlanCreatePage() {
     </div>
   );
 
-  // ── Step 6: Pace & Elevation (optional) ──────────────────────────
+  // ── Step 7: Pace & Elevation (optional) ──────────────────────────
 
-  const renderStep6 = () => {
+  const renderStep7 = () => {
     const distanceKm = form.raceDistance
       ? RACE_DISTANCE_META[form.raceDistance].distanceKm
       : 0;
@@ -676,9 +1061,9 @@ export function PlanCreatePage() {
     );
   };
 
-  // ── Step 7: Summary & Generate ───────────────────────────────────
+  // ── Step 8: Summary & Generate ───────────────────────────────────
 
-  const renderStep7 = () => {
+  const renderStep8 = () => {
     const distMeta = form.raceDistance
       ? RACE_DISTANCE_META[form.raceDistance]
       : null;
@@ -774,6 +1159,48 @@ export function PlanCreatePage() {
                 value={`${form.elevationGain} m D+`}
               />
             )}
+            {/* v2: Goal */}
+            <SummaryRow
+              label={isEn ? "Mindset" : "Objectif"}
+              value={
+                form.trainingGoal === "finish" ? (isEn ? "Finish the race" : "Finir la course")
+                  : form.trainingGoal === "compete" ? (isEn ? "Compete" : "Performer")
+                    : (isEn ? "Target a time" : "Objectif temps")
+              }
+            />
+            {/* v2: Purpose (non-race only) */}
+            {form.planPurpose !== "race" && (
+              <SummaryRow
+                label={isEn ? "Plan type" : "Type de plan"}
+                value={
+                  form.planPurpose === "base_building" ? (isEn ? "Base Building" : "Construction de base")
+                    : form.planPurpose === "return_from_injury" ? (isEn ? "Return from Injury" : "Retour de blessure")
+                      : (isEn ? "Beginner Start" : "Débuter")
+                }
+              />
+            )}
+            {/* v2: Duration (non-race) */}
+            {form.planPurpose !== "race" && form.totalWeeksOverride > 0 && (
+              <SummaryRow
+                label={isEn ? "Duration" : "Durée"}
+                value={`${form.totalWeeksOverride} ${isEn ? "weeks" : "semaines"}`}
+              />
+            )}
+            {/* v2: Fitness */}
+            {form.currentWeeklyKm && (
+              <SummaryRow
+                label={isEn ? "Current volume" : "Volume actuel"}
+                value={`${form.currentWeeklyKm} km/${isEn ? "week" : "sem"}`}
+              />
+            )}
+            {/* v2: Long run day */}
+            <SummaryRow
+              label={isEn ? "Long run day" : "Jour sortie longue"}
+              value={isEn
+                ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][form.longRunDay]
+                : ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"][form.longRunDay]
+              }
+            />
           </CardContent>
         </Card>
 
@@ -819,8 +1246,8 @@ export function PlanCreatePage() {
 
   // ── Render ───────────────────────────────────────────────────────
 
-  // Step 7 (summary) can scroll; other steps use full viewport layout
-  const isFullViewportStep = step < 7;
+  // Summary step can scroll; other steps use full viewport layout
+  const isFullViewportStep = currentStep !== "summary";
 
   return (
     <>
@@ -839,14 +1266,29 @@ export function PlanCreatePage() {
           ? "flex flex-col min-h-[calc(100dvh-8rem)] md:min-h-0 md:py-8"
           : "py-8"
       )}>
+        {/* Back to plan selection */}
+        {stepIndex === 0 && (
+          <div className="pt-1 pb-2">
+            <Button variant="ghost" size="sm" asChild>
+              <Link to="/plan/new">
+                <ArrowLeft className="mr-1 size-4" />
+                {isEn ? "Back" : "Retour"}
+              </Link>
+            </Button>
+          </div>
+        )}
         {renderStepIndicator()}
-        {step === 1 && renderStep1()}
-        {step === 2 && renderStep2()}
-        {step === 3 && renderStep3()}
-        {step === 4 && renderStep4()}
-        {step === 5 && renderStep5()}
-        {step === 6 && renderStep6()}
-        {step === 7 && renderStep7()}
+        {currentStep === "purpose" && renderStep1()}
+        {currentStep === "distance" && renderStep2()}
+        {currentStep === "date" && renderStep3()}
+        {currentStep === "duration" && renderStepDuration()}
+        {currentStep === "race_name" && renderStep4()}
+        {currentStep === "level" && renderStep5()}
+        {currentStep === "goal" && renderStepGoal()}
+        {currentStep === "fitness" && renderStepFitness()}
+        {currentStep === "schedule" && renderStep6()}
+        {currentStep === "pace" && renderStep7()}
+        {currentStep === "summary" && renderStep8()}
       </div>
     </>
   );

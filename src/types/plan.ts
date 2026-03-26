@@ -4,6 +4,23 @@ import type { Difficulty, TrainingPhase, SessionType } from "@/types";
 
 export type RaceDistance = "5K" | "10K" | "semi" | "marathon" | "trail_short" | "trail" | "ultra";
 
+// ── Training goal (mentalité) ──────────────────────────────────────
+// Influences volume, intensity distribution, and session types.
+//   - finish:  Conservative plan focused on finishing. More Z1-Z2, fewer quality sessions.
+//   - time:    Standard plan with balanced build/peak. The default.
+//   - compete: Ambitious plan for experienced runners. More quality, higher volume.
+
+export type TrainingGoal = "finish" | "time" | "compete";
+
+// ── Plan purpose (objectif du plan) ────────────────────────────────
+// Determines whether the plan targets a race or is a general training cycle.
+//   - race:              Prepare for a specific race (default, requires raceDate)
+//   - base_building:     Build aerobic base, no specific race
+//   - return_from_injury: Progressive return after injury/break
+//   - beginner_start:    Complete beginner starting from scratch
+
+export type PlanPurpose = "race" | "base_building" | "return_from_injury" | "beginner_start";
+
 // ── Plan configuration (user inputs) ───────────────────────────────
 
 export interface PlanConfig {
@@ -22,6 +39,11 @@ export interface PlanConfig {
   createdAt: string;
   startDate?: string; // ISO date, optional
   endDate?: string;   // ISO date, optional (auto-calculated from startDate + totalWeeks)
+  trainingGoal?: TrainingGoal;   // v2: training mindset (default: "time")
+  planPurpose?: PlanPurpose;     // v2: plan purpose (default: "race")
+  totalWeeksOverride?: number;   // v2: manual week count (for non-race plans)
+  currentWeeklyKm?: number;     // v2: user's current weekly volume for smarter starting point
+  currentLongRunKm?: number;    // v2: user's current longest run
 }
 
 // ── Assisted plan config (all race fields required) ─────────────────
@@ -31,6 +53,16 @@ export interface AssistedPlanConfig extends PlanConfig {
   raceDate: string;
   runnerLevel: Difficulty;
   longRunDay: number;
+}
+
+// ── Pace note for structured pace annotations ──────────────────────
+
+export interface PaceNote {
+  zone: string;           // "Z1", "Z2", etc. or "E", "M", "T", "I", "R"
+  paceMinKm: number;      // Faster end of range (min/km)
+  paceMaxKm: number;      // Slower end of range (min/km)
+  description: string;    // e.g., "Allure seuil"
+  descriptionEn: string;  // e.g., "Threshold pace"
 }
 
 // ── Plan session (single scheduled workout) ────────────────────────
@@ -43,6 +75,18 @@ export interface PlanSession {
   estimatedDurationMin: number;
   notes?: string;
   notesEn?: string;
+  // ── New fields (v2, all optional for backward compat) ──
+  targetDistanceKm?: number;     // Target distance for this session
+  targetDurationMin?: number;    // Refined duration from pace engine
+  loadScore?: number;            // TRIMP-like load score
+  scaledRepetitions?: number;    // Scaled reps (from workout scaling)
+  paceNotes?: PaceNote[];        // Structured pace annotations
+  // ── Completion tracking (Phase 4) ──
+  status?: "planned" | "completed" | "skipped" | "modified";
+  completedAt?: string;          // ISO date
+  actualDurationMin?: number;
+  actualDistanceKm?: number;
+  rpe?: number;                  // 1-10 Rate of Perceived Effort
 }
 
 // ── Cross-training session (non-running activity) ──────────────────
@@ -70,6 +114,10 @@ export interface PlanWeek {
   crossTraining?: CrossTrainingSession[];
   weekLabel?: string;
   weekLabelEn?: string;
+  // ── New fields (v2, all optional) ──
+  targetKm?: number;             // Weekly km target
+  targetLongRunKm?: number;      // Long run distance target
+  weeklyLoadScore?: number;      // Sum of session load scores
 }
 
 // ── Phase range (start/end weeks for a phase) ──────────────────────
@@ -91,6 +139,10 @@ export interface TrainingPlan {
   raceTimePrediction?: string;
   name: string;
   nameEn: string;
+  // ── New fields (v2) ──
+  version?: number;              // 1 = legacy, 2 = evidence-based engine
+  peakWeeklyKm?: number;         // Peak weekly volume
+  peakLongRunKm?: number;        // Peak long run distance
 }
 
 // ── Display metadata ───────────────────────────────────────────────

@@ -1,10 +1,11 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, memo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { computePlanStats, computeEnhancedPlanAnalysis } from "@/lib/planStats";
 import { PHASE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import type { EnhancedPlanAnalysis } from "@/lib/planStats";
+import { getPlanCompletionStats } from "@/lib/planGenerator/adapt";
 import {
   Calendar,
   Clock,
@@ -84,7 +85,7 @@ interface PlanStatsSectionProps {
 
 // ── Component ────────────────────────────────────────────────────────
 
-export function PlanStatsSection({ plan, currentWeek, isEn }: PlanStatsSectionProps) {
+export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWeek, isEn }: PlanStatsSectionProps) {
   const stats = useMemo(() => computePlanStats(plan), [plan]);
   const [analysis, setAnalysis] = useState<EnhancedPlanAnalysis | null>(null);
   const [analysisLoading, setAnalysisLoading] = useState(true);
@@ -116,6 +117,54 @@ export function PlanStatsSection({ plan, currentWeek, isEn }: PlanStatsSectionPr
     () => Math.max(...stats.weeklyVolumes.map((w) => w.durationMin), 0),
     [stats.weeklyVolumes],
   );
+
+  // ── v2 derived data ────────────────────────────────────────────
+
+  // Weekly km data
+  const weeklyKmData = useMemo(() => {
+    return plan.weeks.map(w => ({
+      weekNumber: w.weekNumber,
+      km: w.targetKm ?? 0,
+      phase: w.phase,
+      isRecovery: w.isRecoveryWeek,
+    }));
+  }, [plan.weeks]);
+  const maxWeeklyKm = Math.max(...weeklyKmData.map(w => w.km), 1);
+
+  // Current week data
+  const currentWeekData = useMemo(() => {
+    if (!currentWeek) return null;
+    const week = plan.weeks.find(w => w.weekNumber === currentWeek);
+    if (!week) return null;
+    const keySession = week.sessions.find(s => s.isKeySession);
+    const longRun = week.sessions.find(s => s.sessionType === "long_run");
+    return { week, keySession, longRun };
+  }, [plan.weeks, currentWeek]);
+
+  // 80/20 per week
+  const easyHardPerWeek = useMemo(() => {
+    const easyTypes = new Set(["endurance", "recovery", "long_run"]);
+    return plan.weeks.map(w => {
+      const total = w.sessions.length;
+      if (total === 0) return { weekNumber: w.weekNumber, easyPct: 100, hardPct: 0 };
+      const easy = w.sessions.filter(s => easyTypes.has(s.sessionType)).length;
+      return {
+        weekNumber: w.weekNumber,
+        easyPct: Math.round((easy / total) * 100),
+        hardPct: Math.round(((total - easy) / total) * 100),
+      };
+    });
+  }, [plan.weeks]);
+
+  // Weekly load scores
+  const weeklyLoads = useMemo(() => {
+    return plan.weeks.map(w => ({
+      weekNumber: w.weekNumber,
+      load: w.weeklyLoadScore ?? 0,
+      phase: w.phase,
+    }));
+  }, [plan.weeks]);
+  const maxLoad = Math.max(...weeklyLoads.map(w => w.load), 1);
 
   return (
     <Card>
@@ -207,7 +256,103 @@ export function PlanStatsSection({ plan, currentWeek, isEn }: PlanStatsSectionPr
           />
         </div>
 
-        {/* ── Section 2: Weekly Volume Chart ────────────────────────── */}
+        {/* ── Race time prediction ─────────────────────────────────── */}
+        {plan.raceTimePrediction && (
+          <div className="rounded-lg bg-primary/5 border border-primary/20 p-3 flex items-center gap-3">
+            <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+              <Timer className="size-5 text-primary" />
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">
+                {isEn ? "Predicted finish time" : "Temps de course estimé"}
+              </p>
+              <p className="text-xl font-bold text-primary">{plan.raceTimePrediction}</p>
+            </div>
+          </div>
+        )}
+
+        {/* ── Current week summary ────────────────────────────────── */}
+        {currentWeekData && (
+          <div className="rounded-lg bg-secondary/50 border border-border/50 p-3 space-y-1.5">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold">
+                {isEn ? "This week" : "Cette semaine"}
+              </h3>
+              <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full",
+                PHASE_META[currentWeekData.week.phase]?.color, "text-white"
+              )}>
+                S{currentWeekData.week.weekNumber} · {isEn ? PHASE_META[currentWeekData.week.phase]?.labelEn : PHASE_META[currentWeekData.week.phase]?.label}
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+              {currentWeekData.week.targetKm && currentWeekData.week.targetKm > 0 && (
+                <span className="flex items-center gap-1.5">
+                  <Route className="size-3.5 text-muted-foreground" />
+                  <span className="font-medium">~{currentWeekData.week.targetKm} km</span>
+                </span>
+              )}
+              <span className="flex items-center gap-1.5">
+                <Calendar className="size-3.5 text-muted-foreground" />
+                <span>{currentWeekData.week.sessions.length} {isEn ? "sessions" : "séances"}</span>
+              </span>
+              {currentWeekData.longRun && currentWeekData.week.targetLongRunKm && (
+                <span className="flex items-center gap-1.5">
+                  <TrendingUp className="size-3.5 text-muted-foreground" />
+                  <span>{isEn ? "Long run" : "SL"} {currentWeekData.week.targetLongRunKm} km</span>
+                </span>
+              )}
+              {currentWeekData.keySession && (
+                <span className="flex items-center gap-1.5">
+                  <Star className="size-3.5 text-yellow-500" />
+                  <span className="capitalize">{currentWeekData.keySession.sessionType.replace("_", " ")}</span>
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ── Section 2: Weekly km Chart ───────────────────────────── */}
+        {weeklyKmData.some(w => w.km > 0) && (
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium">
+              {isEn ? "Weekly distance (km)" : "Distance par semaine (km)"}
+            </h3>
+            <div className="flex items-end gap-[2px] h-28">
+              {weeklyKmData.map((week) => {
+                const heightPct = maxWeeklyKm > 0 ? (week.km / maxWeeklyKm) * 100 : 0;
+                const phaseColor = PHASE_META[week.phase]?.color || "bg-gray-400";
+                const isCurrent = currentWeek === week.weekNumber;
+                return (
+                  <div key={week.weekNumber} className="flex-1 flex flex-col items-center justify-end h-full relative">
+                    <div
+                      className={cn(phaseColor, week.isRecovery && "opacity-50", "w-full rounded-t-sm min-h-[2px]")}
+                      style={{ height: `${heightPct}%` }}
+                      title={`S${week.weekNumber}: ${week.km}km`}
+                    />
+                    {isCurrent && (
+                      <div className="absolute -bottom-4 size-1.5 rounded-full bg-primary" />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex gap-[2px]">
+              {weeklyKmData.map((week, i) => (
+                <div
+                  key={week.weekNumber}
+                  className={cn(
+                    "flex-1 text-center text-[9px] text-muted-foreground",
+                    i % 2 !== 0 && weeklyKmData.length > 10 && "hidden sm:block",
+                  )}
+                >
+                  {week.km > 0 ? week.km : ""}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ── Section 2b: Weekly Volume (minutes) Chart ───────────── */}
         <div className="space-y-2">
           <h3 className="text-sm font-medium">
             {isEn ? "Weekly volume" : "Volume par semaine"}
@@ -374,11 +519,199 @@ export function PlanStatsSection({ plan, currentWeek, isEn }: PlanStatsSectionPr
             </div>
           )
         )}
+        {/* ── 80/20 Intensity Distribution per week ──────────────── */}
+        <div className="space-y-2">
+          <h3 className="text-sm font-medium">
+            {isEn ? "Easy / Hard split per week" : "Répartition facile / dur par semaine"}
+          </h3>
+          <div className="flex items-end gap-[2px] h-16">
+            {easyHardPerWeek.map((week) => {
+              const isCurrent = currentWeek === week.weekNumber;
+              return (
+                <div
+                  key={week.weekNumber}
+                  className="flex-1 flex flex-col h-full rounded-t-sm overflow-hidden relative"
+                  title={`S${week.weekNumber}: ${week.easyPct}% easy / ${week.hardPct}% hard`}
+                >
+                  <div
+                    className="bg-red-400/70 w-full"
+                    style={{ height: `${week.hardPct}%` }}
+                  />
+                  <div
+                    className="bg-green-400/50 w-full flex-1"
+                  />
+                  {isCurrent && (
+                    <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 size-1.5 rounded-full bg-primary" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <span className="size-2.5 rounded-full bg-green-400/50" />
+              {isEn ? "Easy (Z1-Z2)" : "Facile (Z1-Z2)"}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="size-2.5 rounded-full bg-red-400/70" />
+              {isEn ? "Hard (Z3+)" : "Dur (Z3+)"}
+            </span>
+            <span className="text-muted-foreground/50">
+              {isEn ? "Target: 80% easy / 20% hard" : "Objectif : 80% facile / 20% dur"}
+            </span>
+          </div>
+        </div>
+
+        {/* ── Training load per week ──────────────────────────────── */}
+        {weeklyLoads.some(w => w.load > 0) && (
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium">
+              {isEn ? "Training load" : "Charge d'entraînement"}
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              {isEn
+                ? "Load score = duration × intensity factor (higher = harder week)"
+                : "Score de charge = durée × facteur d'intensité (plus haut = semaine plus dure)"}
+            </p>
+            <div className="flex items-end gap-[2px] h-24">
+              {weeklyLoads.map((week) => {
+                const heightPct = maxLoad > 0 ? (week.load / maxLoad) * 100 : 0;
+                const phaseColor = PHASE_META[week.phase]?.color || "bg-gray-400";
+                const isCurrent = currentWeek === week.weekNumber;
+                return (
+                  <div key={week.weekNumber} className="flex-1 flex flex-col items-center justify-end h-full relative">
+                    <div
+                      className={cn(phaseColor, "w-full rounded-t-sm min-h-[2px]")}
+                      style={{ height: `${heightPct}%` }}
+                      title={`S${week.weekNumber}: ${week.load}`}
+                    />
+                    {isCurrent && (
+                      <div className="absolute -bottom-4 size-1.5 rounded-full bg-primary" />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* ── Section 5: Long Run Progression (v2) ─────────────────── */}
+        {plan.weeks.some(w => w.targetLongRunKm && w.targetLongRunKm > 0) && (
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium">
+              {isEn ? "Long run progression" : "Progression sortie longue"}
+            </h3>
+            {(() => {
+              const lrWeeks = plan.weeks
+                .filter(w => w.targetLongRunKm && w.targetLongRunKm > 0)
+                .map(w => ({ weekNumber: w.weekNumber, km: w.targetLongRunKm!, phase: w.phase }));
+              const maxLr = Math.max(...lrWeeks.map(w => w.km), 1);
+              return (
+                <>
+                  <div className="flex items-end gap-[2px] h-24">
+                    {lrWeeks.map((w) => {
+                      const heightPct = (w.km / maxLr) * 100;
+                      const phaseColor = PHASE_META[w.phase]?.color || "bg-gray-400";
+                      return (
+                        <div
+                          key={w.weekNumber}
+                          className="flex-1 flex flex-col items-center justify-end h-full"
+                        >
+                          <div
+                            className={cn(phaseColor, "w-full rounded-t-sm min-h-[2px]")}
+                            style={{ height: `${heightPct}%` }}
+                            title={`S${w.weekNumber}: ${w.km}km`}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="flex gap-[2px]">
+                    {lrWeeks.map((w, i) => (
+                      <div
+                        key={w.weekNumber}
+                        className={cn(
+                          "flex-1 text-center text-[9px] text-muted-foreground",
+                          i % 2 !== 0 && lrWeeks.length > 10 && "hidden sm:block",
+                        )}
+                      >
+                        {w.km}
+                      </div>
+                    ))}
+                  </div>
+                  {plan.peakLongRunKm && (
+                    <p className="text-xs text-muted-foreground">
+                      {isEn ? "Peak" : "Pic"}: <span className="font-medium text-foreground">{plan.peakLongRunKm} km</span>
+                    </p>
+                  )}
+                </>
+              );
+            })()}
+          </div>
+        )}
+
+        {/* ── Section 6: Completion stats (v2) ─────────────────────── */}
+        {(() => {
+          const cs = getPlanCompletionStats(plan);
+          if (cs.completed + cs.skipped === 0) return null;
+          return (
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium">
+                {isEn ? "Completion" : "Complétion"}
+              </h3>
+              <div className="flex items-center gap-3">
+                {/* Progress bar */}
+                <div className="flex-1 h-3 bg-secondary rounded-full overflow-hidden flex">
+                  <div
+                    className="h-full bg-green-500 transition-all"
+                    style={{ width: `${(cs.completed / cs.totalSessions) * 100}%` }}
+                  />
+                  <div
+                    className="h-full bg-muted-foreground/20 transition-all"
+                    style={{ width: `${(cs.skipped / cs.totalSessions) * 100}%` }}
+                  />
+                </div>
+                <span className="text-sm font-medium tabular-nums shrink-0">
+                  {Math.round(cs.completionRate * 100)}%
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <span className="size-2 rounded-full bg-green-500" />
+                  {cs.completed} {isEn ? "done" : "faites"}
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="size-2 rounded-full bg-muted-foreground/20" />
+                  {cs.skipped} {isEn ? "skipped" : "passées"}
+                </span>
+                <span>{cs.planned} {isEn ? "remaining" : "restantes"}</span>
+                {cs.avgRpe !== null && (
+                  <span>RPE {isEn ? "avg" : "moy"}: {cs.avgRpe.toFixed(1)}</span>
+                )}
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* ── Section 7: Plan metadata (v2) ────────────────────────── */}
+        {(plan.peakWeeklyKm || plan.version) && (
+          <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground pt-2 border-t">
+            {plan.peakWeeklyKm && (
+              <span>{isEn ? "Peak volume" : "Volume pic"}: <span className="font-medium text-foreground">{plan.peakWeeklyKm} km/{isEn ? "wk" : "sem"}</span></span>
+            )}
+            {plan.peakLongRunKm && (
+              <span>{isEn ? "Peak long run" : "Pic sortie longue"}: <span className="font-medium text-foreground">{plan.peakLongRunKm} km</span></span>
+            )}
+            {plan.version && (
+              <span className="opacity-50">v{plan.version}</span>
+            )}
+          </div>
+        )}
       </CardContent>
       )}
     </Card>
   );
-}
+});
 
 // ── StatCard sub-component ───────────────────────────────────────────
 

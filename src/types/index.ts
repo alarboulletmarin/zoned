@@ -66,9 +66,15 @@ export interface WorkoutBlock {
   repetitions?: number;
   distance?: string;
   distanceM?: number; // Distance in meters (used in interval workouts)
+  distanceKm?: number; // Distance in km (for steady-state runs like long runs/footings)
   zone?: Zone;
   rest?: string;
   recovery?: string; // Recovery description (e.g., "200m footing")
+  // ── New fields (v2) ──
+  sets?: number;               // Number of series (e.g., 2 series of 12 reps)
+  restBetweenSets?: string;    // Rest between series (e.g., "3min footing")
+  vmaPercent?: number;         // % VMA target (alternative to zone)
+  intensityType?: "E" | "M" | "T" | "I" | "R"; // Daniels intensity reference
 }
 
 // Environment Requirements
@@ -94,6 +100,20 @@ export interface SelectionCriteria {
   priorityScore: number;
 }
 
+// Scaling rules for progressive workout adaptation
+export type ScalingType = "reps" | "duration" | "distance" | "sets";
+
+export interface WorkoutScaling {
+  /** What parameter scales with progression */
+  progressionType: ScalingType;
+  /** Value at start of phase (progression = 0) */
+  minValue: number;
+  /** Value at end of phase (progression = 1) */
+  maxValue: number;
+  /** Optional step size (e.g., +2 reps at a time) */
+  stepSize?: number;
+}
+
 // Main Workout Template Type
 export interface WorkoutTemplate {
   id: string;
@@ -116,6 +136,11 @@ export interface WorkoutTemplate {
   commonMistakesEn: string[];
   variationIds: string[];
   selectionCriteria: SelectionCriteria;
+  // ── New fields (v2, optional for backward compat) ──
+  scaling?: WorkoutScaling;
+  estimatedDistanceKm?: DurationRange; // { min, max } distance range
+  weeklyFrequencyMax?: number;         // Max times per week
+  minimumRecoveryDays?: number;        // Min rest days after this workout
 }
 
 // Category File Structure

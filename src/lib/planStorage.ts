@@ -175,6 +175,47 @@ export function updatePlanSession(
   }
 }
 
+// ── Session completion tracking ───────────────────────────────────
+
+export interface SessionCompletionData {
+  status: "planned" | "completed" | "skipped";
+  completedAt?: string;
+  actualDurationMin?: number;
+  actualDistanceKm?: number;
+  rpe?: number; // 1-10
+}
+
+export function updateSessionCompletion(
+  planId: string,
+  weekNumber: number,
+  sessionIndex: number,
+  completion: SessionCompletionData,
+): boolean {
+  const plans = getAllPlans();
+  const planIdx = plans.findIndex(p => p.id === planId);
+  if (planIdx === -1) return false;
+
+  const plan = plans[planIdx];
+  const week = plan.weeks.find(w => w.weekNumber === weekNumber);
+  if (!week || sessionIndex < 0 || sessionIndex >= week.sessions.length) return false;
+
+  const session = week.sessions[sessionIndex];
+  session.status = completion.status;
+  session.completedAt = completion.completedAt;
+  session.actualDurationMin = completion.actualDurationMin;
+  session.actualDistanceKm = completion.actualDistanceKm;
+  session.rpe = completion.rpe;
+
+  plans[planIdx] = plan;
+
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export async function addSessionToPlan(
   planId: string,
   weekNumber: number,

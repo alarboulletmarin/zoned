@@ -11,11 +11,24 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 25, "max": 35 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 25,
+        "max": 35
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [],
       "mainSetTemplate": [
-        { "description": "Footing très lent en Z1", "descriptionEn": "Very slow jog in Z1", "durationMin": 30, "zone": "Z1" }
+        {
+          "description": "Footing très lent en Z1",
+          "descriptionEn": "Very slow jog in Z1",
+          "durationMin": 30,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "cooldownTemplate": [],
       "coachingTips": [
@@ -36,14 +49,30 @@
         "Running too fast - this is the easiest session of the week",
         "Skipping this session when it's crucial for recovery"
       ],
-      "variationIds": ["REC-002"],
+      "variationIds": [
+        "REC-002"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build", "peak", "taper", "recovery"],
-        "weekPositions": ["early", "late"],
+        "phases": [
+          "base",
+          "build",
+          "peak",
+          "taper",
+          "recovery"
+        ],
+        "weekPositions": [
+          "early",
+          "late"
+        ],
         "relativeLoad": "light",
-        "tags": ["recovery", "easy"],
+        "tags": [
+          "recovery",
+          "easy"
+        ],
         "priorityScore": 90
-      }
+      },
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "REC-002",
@@ -55,16 +84,37 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 25, "max": 35 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 25,
+        "max": 35
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Marche rapide", "descriptionEn": "Brisk walking", "durationMin": 5 }
+        {
+          "description": "Marche rapide",
+          "descriptionEn": "Brisk walking",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Alternance 3min footing Z1 / 2min marche", "descriptionEn": "Alternating 3min Z1 jog / 2min walk", "durationMin": 20, "zone": "Z1" }
+        {
+          "description": "Alternance 3min footing Z1 / 2min marche",
+          "descriptionEn": "Alternating 3min Z1 jog / 2min walk",
+          "durationMin": 20,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Marche tranquille", "descriptionEn": "Easy walking", "durationMin": 5 }
+        {
+          "description": "Marche tranquille",
+          "descriptionEn": "Easy walking",
+          "durationMin": 5
+        }
       ],
       "coachingTips": [
         "Ne culpabilisez pas de marcher, c'est le but",
@@ -84,14 +134,29 @@
         "Turning running phases into actual jogging",
         "Ignoring fatigue signals"
       ],
-      "variationIds": ["REC-001", "REC-003"],
+      "variationIds": [
+        "REC-001",
+        "REC-003"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "taper", "recovery"],
-        "weekPositions": ["early"],
+        "phases": [
+          "base",
+          "taper",
+          "recovery"
+        ],
+        "weekPositions": [
+          "early"
+        ],
         "relativeLoad": "light",
-        "tags": ["recovery", "beginner", "post-race"],
+        "tags": [
+          "recovery",
+          "beginner",
+          "post-race"
+        ],
         "priorityScore": 85
-      }
+      },
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "REC-003",
@@ -103,14 +168,31 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 20, "max": 30 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 20,
+        "max": 30
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [],
       "mainSetTemplate": [
-        { "description": "Footing ultra-lent Z1 bas", "descriptionEn": "Ultra-slow jog in low Z1", "durationMin": 20, "zone": "Z1" }
+        {
+          "description": "Footing ultra-lent Z1 bas",
+          "descriptionEn": "Ultra-slow jog in low Z1",
+          "durationMin": 20,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Étirements légers", "descriptionEn": "Light stretching", "durationMin": 5 }
+        {
+          "description": "Étirements légers",
+          "descriptionEn": "Light stretching",
+          "durationMin": 5
+        }
       ],
       "coachingTips": [
         "À faire 24-48h après la course, pas le jour même",
@@ -130,14 +212,26 @@
         "Doing this jog on race day itself",
         "Running too long thinking it will improve recovery"
       ],
-      "variationIds": ["REC-001", "REC-002"],
+      "variationIds": [
+        "REC-001",
+        "REC-002"
+      ],
       "selectionCriteria": {
         "phases": [],
-        "weekPositions": ["early"],
+        "weekPositions": [
+          "early"
+        ],
         "relativeLoad": "light",
-        "tags": ["recovery", "post-race", "decrassage", "manual"],
+        "tags": [
+          "recovery",
+          "post-race",
+          "decrassage",
+          "manual"
+        ],
         "priorityScore": 95
-      }
+      },
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "REC-004",
@@ -149,11 +243,24 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 35, "max": 50 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 35,
+        "max": 50
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [],
       "mainSetTemplate": [
-        { "description": "Footing nature en Z1, terrain varié", "descriptionEn": "Nature jog in Z1, varied terrain", "durationMin": 40, "zone": "Z1" }
+        {
+          "description": "Footing nature en Z1, terrain varié",
+          "descriptionEn": "Nature jog in Z1, varied terrain",
+          "durationMin": 40,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "cooldownTemplate": [],
       "coachingTips": [
@@ -174,14 +281,28 @@
         "Choosing a route that's too technical",
         "Putting pressure on yourself about pace"
       ],
-      "variationIds": ["REC-001"],
+      "variationIds": [
+        "REC-001"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build", "peak"],
-        "weekPositions": ["late"],
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "light",
-        "tags": ["recovery", "nature", "mental"],
+        "tags": [
+          "recovery",
+          "nature",
+          "mental"
+        ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "REC-005",
@@ -193,16 +314,37 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 25, "max": 35 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 25,
+        "max": 35
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Mobilité articulaire", "descriptionEn": "Joint mobility", "durationMin": 5 }
+        {
+          "description": "Mobilité articulaire",
+          "descriptionEn": "Joint mobility",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Footing très lent", "descriptionEn": "Very slow jog", "durationMin": 15, "zone": "Z1" }
+        {
+          "description": "Footing très lent",
+          "descriptionEn": "Very slow jog",
+          "durationMin": 15,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Étirements et automassage", "descriptionEn": "Stretching and self-massage", "durationMin": 10 }
+        {
+          "description": "Étirements et automassage",
+          "descriptionEn": "Stretching and self-massage",
+          "durationMin": 10
+        }
       ],
       "coachingTips": [
         "Les étirements post-course sont importants ici",
@@ -222,14 +364,28 @@
         "Neglecting the mobility/stretching portion",
         "Extending the jogging duration"
       ],
-      "variationIds": ["REC-001", "REC-006"],
+      "variationIds": [
+        "REC-001",
+        "REC-006"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["late"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "light",
-        "tags": ["recovery", "mobility", "regeneration"],
+        "tags": [
+          "recovery",
+          "mobility",
+          "regeneration"
+        ],
         "priorityScore": 75
-      }
+      },
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "REC-006",
@@ -241,11 +397,24 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 20, "max": 25 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 20,
+        "max": 25
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [],
       "mainSetTemplate": [
-        { "description": "Footing réveil en Z1", "descriptionEn": "Wake-up jog in Z1", "durationMin": 20, "zone": "Z1" }
+        {
+          "description": "Footing réveil en Z1",
+          "descriptionEn": "Wake-up jog in Z1",
+          "durationMin": 20,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "cooldownTemplate": [],
       "coachingTips": [
@@ -266,14 +435,28 @@
         "Trying to do too much on this jog",
         "Not eating/recovering enough before the main session"
       ],
-      "variationIds": ["REC-001"],
+      "variationIds": [
+        "REC-001"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["early", "mid"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "early",
+          "mid"
+        ],
         "relativeLoad": "light",
-        "tags": ["recovery", "double", "activation"],
+        "tags": [
+          "recovery",
+          "double",
+          "activation"
+        ],
         "priorityScore": 60
-      }
+      },
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 0
     },
     {
       "id": "REC-007",
@@ -285,15 +468,40 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 25, "max": 35 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 25,
+        "max": 35
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [],
       "mainSetTemplate": [
-        { "description": "Footing tranquille Z1", "descriptionEn": "Easy jog Z1", "durationMin": 15, "zone": "Z1" },
-        { "description": "3-4 accélérations progressives de 20s", "descriptionEn": "3-4 progressive 20s strides", "durationMin": 5, "zone": "Z3-Z4" }
+        {
+          "description": "Footing tranquille Z1",
+          "descriptionEn": "Easy jog Z1",
+          "durationMin": 15,
+          "zone": "Z1",
+          "intensityType": "E"
+        },
+        {
+          "description": "3-4 accélérations progressives de 20s",
+          "descriptionEn": "3-4 progressive 20s strides",
+          "durationMin": 5,
+          "zone": "Z3-Z4",
+          "intensityType": "T"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing retour au calme", "descriptionEn": "Cool-down jog", "durationMin": 5, "zone": "Z1" }
+        {
+          "description": "Footing retour au calme",
+          "descriptionEn": "Cool-down jog",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "coachingTips": [
         "Les accélérations activent les fibres rapides sans fatiguer",
@@ -313,14 +521,27 @@
         "Doing too many strides",
         "Strides that are too long or intense"
       ],
-      "variationIds": ["REC-001", "REC-008"],
+      "variationIds": [
+        "REC-001",
+        "REC-008"
+      ],
       "selectionCriteria": {
-        "phases": ["taper"],
-        "weekPositions": ["late"],
+        "phases": [
+          "taper"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "light",
-        "tags": ["recovery", "pre-race", "activation"],
+        "tags": [
+          "recovery",
+          "pre-race",
+          "activation"
+        ],
         "priorityScore": 90
-      }
+      },
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 0
     },
     {
       "id": "REC-008",
@@ -332,12 +553,29 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 10, "max": 15 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 10,
+        "max": 15
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [],
       "mainSetTemplate": [
-        { "description": "Footing très léger", "descriptionEn": "Very light jog", "durationMin": 10, "zone": "Z1" },
-        { "description": "2-3 foulées bondissantes", "descriptionEn": "2-3 bounding strides", "durationMin": 2 }
+        {
+          "description": "Footing très léger",
+          "descriptionEn": "Very light jog",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        },
+        {
+          "description": "2-3 foulées bondissantes",
+          "descriptionEn": "2-3 bounding strides",
+          "durationMin": 2
+        }
       ],
       "cooldownTemplate": [],
       "coachingTips": [
@@ -358,14 +596,26 @@
         "Doing this shakeout without having tested it before",
         "Doing it too close to race start"
       ],
-      "variationIds": ["REC-007"],
+      "variationIds": [
+        "REC-007"
+      ],
       "selectionCriteria": {
-        "phases": ["taper"],
-        "weekPositions": ["late"],
+        "phases": [
+          "taper"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "light",
-        "tags": ["recovery", "race-day", "shakeout"],
+        "tags": [
+          "recovery",
+          "race-day",
+          "shakeout"
+        ],
         "priorityScore": 50
-      }
+      },
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 0
     },
     {
       "id": "REC-009",
@@ -377,14 +627,32 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 90, "max": 120 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true, "prefersSoft": true },
+      "typicalDuration": {
+        "min": 90,
+        "max": 120
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true,
+        "prefersSoft": true
+      },
       "warmupTemplate": [],
       "mainSetTemplate": [
-        { "description": "Footing ultra-lent en Z1 strict (FC < 70% FCmax)", "descriptionEn": "Ultra-slow jog in strict Z1 (HR < 70% HRmax)", "durationMin": 100, "zone": "Z1" }
+        {
+          "description": "Footing ultra-lent en Z1 strict (FC < 70% FCmax)",
+          "descriptionEn": "Ultra-slow jog in strict Z1 (HR < 70% HRmax)",
+          "durationMin": 100,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Marche et étirements légers", "descriptionEn": "Walking and light stretching", "durationMin": 10 }
+        {
+          "description": "Marche et étirements légers",
+          "descriptionEn": "Walking and light stretching",
+          "durationMin": 10
+        }
       ],
       "coachingTips": [
         "Inspirée de l'approche kenyane : volume élevé, intensité très basse",
@@ -408,14 +676,30 @@
         "Neglecting hydration and nutrition during",
         "Doing this session while fatigued"
       ],
-      "variationIds": ["REC-001", "REC-004"],
+      "variationIds": [
+        "REC-001",
+        "REC-004"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["late"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "moderate",
-        "tags": ["recovery", "long", "kenyan", "aerobic", "regeneration"],
+        "tags": [
+          "recovery",
+          "long",
+          "kenyan",
+          "aerobic",
+          "regeneration"
+        ],
         "priorityScore": 65
-      }
+      },
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 0
     },
     {
       "id": "REC-010",
@@ -427,15 +711,36 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 40, "max": 50 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 40,
+        "max": 50
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [],
       "mainSetTemplate": [
-        { "description": "Footing léger Z1", "descriptionEn": "Light jog Z1", "durationMin": 20, "zone": "Z1" },
-        { "description": "Séquence yoga/stretching (sun salutations, postures de récupération)", "descriptionEn": "Yoga/stretching sequence (sun salutations, recovery poses)", "durationMin": 20 }
+        {
+          "description": "Footing léger Z1",
+          "descriptionEn": "Light jog Z1",
+          "durationMin": 20,
+          "zone": "Z1",
+          "intensityType": "E"
+        },
+        {
+          "description": "Séquence yoga/stretching (sun salutations, postures de récupération)",
+          "descriptionEn": "Yoga/stretching sequence (sun salutations, recovery poses)",
+          "durationMin": 20
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Relaxation et respiration profonde", "descriptionEn": "Relaxation and deep breathing", "durationMin": 5 }
+        {
+          "description": "Relaxation et respiration profonde",
+          "descriptionEn": "Relaxation and deep breathing",
+          "durationMin": 5
+        }
       ],
       "coachingTips": [
         "Le yoga après la course améliore la flexibilité et la récupération",
@@ -459,14 +764,31 @@
         "Doing too intense stretches after running",
         "Not having a suitable space for yoga"
       ],
-      "variationIds": ["REC-005", "REC-001"],
+      "variationIds": [
+        "REC-005",
+        "REC-001"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build", "recovery"],
-        "weekPositions": ["late"],
+        "phases": [
+          "base",
+          "build",
+          "recovery"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "light",
-        "tags": ["recovery", "yoga", "stretching", "holistic", "flexibility"],
+        "tags": [
+          "recovery",
+          "yoga",
+          "stretching",
+          "holistic",
+          "flexibility"
+        ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "REC-011",
@@ -478,16 +800,37 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 20, "max": 25 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 20,
+        "max": 25
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Marche rapide 2-3 minutes", "descriptionEn": "Brisk walk 2-3 minutes", "durationMin": 3 }
+        {
+          "description": "Marche rapide 2-3 minutes",
+          "descriptionEn": "Brisk walk 2-3 minutes",
+          "durationMin": 3
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Footing très facile en Z1", "descriptionEn": "Very easy jog in Z1", "durationMin": 17, "zone": "Z1" }
+        {
+          "description": "Footing très facile en Z1",
+          "descriptionEn": "Very easy jog in Z1",
+          "durationMin": 17,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Marche et étirements légers", "descriptionEn": "Walk and light stretching", "durationMin": 5 }
+        {
+          "description": "Marche et étirements légers",
+          "descriptionEn": "Walk and light stretching",
+          "durationMin": 5
+        }
       ],
       "coachingTips": [
         "Aucun effort, juste bouger les jambes",
@@ -509,14 +852,27 @@
         "Running too fast due to pre-race nerves",
         "Extending the duration out of anxiety"
       ],
-      "variationIds": ["REC-007", "REC-008"],
+      "variationIds": [
+        "REC-007",
+        "REC-008"
+      ],
       "selectionCriteria": {
-        "phases": ["taper"],
-        "weekPositions": ["late"],
+        "phases": [
+          "taper"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "light",
-        "tags": ["race-prep", "shakeout", "taper"],
+        "tags": [
+          "race-prep",
+          "shakeout",
+          "taper"
+        ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "REC-012",
@@ -528,23 +884,47 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 25, "max": 30 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 25,
+        "max": 30
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Marche rapide 2 minutes", "descriptionEn": "Brisk walk 2 minutes", "durationMin": 2 }
+        {
+          "description": "Marche rapide 2 minutes",
+          "descriptionEn": "Brisk walk 2 minutes",
+          "durationMin": 2
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Footing facile en Z1", "descriptionEn": "Easy jog in Z1", "durationMin": 15, "zone": "Z1" },
+        {
+          "description": "Footing facile en Z1",
+          "descriptionEn": "Easy jog in Z1",
+          "durationMin": 15,
+          "zone": "Z1",
+          "intensityType": "E"
+        },
         {
           "description": "4x 20s accélérations progressives en Z4 / 60s récup footing",
           "descriptionEn": "4x 20s progressive strides at Z4 / 60s jog recovery",
           "zone": "Z4",
           "repetitions": 4,
-          "recovery": "60s footing Z1"
+          "recovery": "60s footing Z1",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
-        { "description": "Footing retour au calme et étirements légers", "descriptionEn": "Cool-down jog and light stretching", "durationMin": 5, "zone": "Z1" }
+        {
+          "description": "Footing retour au calme et étirements légers",
+          "descriptionEn": "Cool-down jog and light stretching",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "coachingTips": [
         "Les accélérations réveillent les fibres rapides sans fatiguer",
@@ -568,14 +948,27 @@
         "Running the strides too fast, at sprint effort",
         "Doing this session too far from the race"
       ],
-      "variationIds": ["REC-007", "REC-011"],
+      "variationIds": [
+        "REC-007",
+        "REC-011"
+      ],
       "selectionCriteria": {
-        "phases": ["taper"],
-        "weekPositions": ["late"],
+        "phases": [
+          "taper"
+        ],
+        "weekPositions": [
+          "late"
+        ],
         "relativeLoad": "light",
-        "tags": ["race-prep", "opener", "taper"],
+        "tags": [
+          "race-prep",
+          "opener",
+          "taper"
+        ],
         "priorityScore": 85
-      }
+      },
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 0
     },
     {
       "id": "REC-013",
@@ -587,16 +980,48 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 20, "max": 30 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true, "prefersSoft": true },
+      "typicalDuration": {
+        "min": 20,
+        "max": 30
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true,
+        "prefersSoft": true
+      },
       "warmupTemplate": [],
       "mainSetTemplate": [
-        { "description": "5min marche pieds nus sur herbe", "descriptionEn": "5min barefoot walking on grass", "durationMin": 5, "zone": "Z1" },
-        { "description": "10min footing très lent pieds nus sur herbe", "descriptionEn": "10min very slow barefoot jog on grass", "durationMin": 10, "zone": "Z1" },
-        { "description": "5min marche avec exercices d'équilibre (se tenir sur un pied, marche talon-pointe)", "descriptionEn": "5min walking with balance exercises (single-leg stance, heel-to-toe walk)", "durationMin": 5, "zone": "Z1" }
+        {
+          "description": "5min marche pieds nus sur herbe",
+          "descriptionEn": "5min barefoot walking on grass",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        },
+        {
+          "description": "10min footing très lent pieds nus sur herbe",
+          "descriptionEn": "10min very slow barefoot jog on grass",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        },
+        {
+          "description": "5min marche avec exercices d'équilibre (se tenir sur un pied, marche talon-pointe)",
+          "descriptionEn": "5min walking with balance exercises (single-leg stance, heel-to-toe walk)",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Marche tranquille et étirements des pieds et mollets", "descriptionEn": "Easy walking and foot/calf stretches", "durationMin": 5, "zone": "Z1" }
+        {
+          "description": "Marche tranquille et étirements des pieds et mollets",
+          "descriptionEn": "Easy walking and foot/calf stretches",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "coachingTips": [
         "Commencez par 10-15 minutes si vous n'avez jamais couru pieds nus — augmentez progressivement",
@@ -618,14 +1043,30 @@
         "Choosing a poorly maintained area with stones or debris",
         "Running too fast: this is a recovery session, not training"
       ],
-      "variationIds": ["REC-001"],
+      "variationIds": [
+        "REC-001"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build", "recovery"],
-        "weekPositions": ["early", "late"],
+        "phases": [
+          "base",
+          "build",
+          "recovery"
+        ],
+        "weekPositions": [
+          "early",
+          "late"
+        ],
         "relativeLoad": "light",
-        "tags": ["recovery", "barefoot", "proprioception", "grounding"],
+        "tags": [
+          "recovery",
+          "barefoot",
+          "proprioception",
+          "grounding"
+        ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "REC-014",
@@ -637,16 +1078,40 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 30, "max": 45 },
-      "environment": { "requiresHills": false, "requiresTrack": false },
+      "typicalDuration": {
+        "min": 30,
+        "max": 45
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false
+      },
       "warmupTemplate": [
-        { "description": "5min aqua jogging très lent pour s'adapter à l'eau", "descriptionEn": "5min very slow aqua jogging to adapt to water", "durationMin": 5, "zone": "Z1" }
+        {
+          "description": "5min aqua jogging très lent pour s'adapter à l'eau",
+          "descriptionEn": "5min very slow aqua jogging to adapt to water",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "25-35min aqua jogging à FC 65-75% FCmax. Pieds ne touchent pas le fond. Cadence cible : 70-80 enjambées/min.", "descriptionEn": "25-35min aqua jogging at HR 65-75% HRmax. Feet don't touch the bottom. Target cadence: 70-80 strides/min.", "durationMin": 30, "zone": "Z2" }
+        {
+          "description": "25-35min aqua jogging à FC 65-75% FCmax. Pieds ne touchent pas le fond. Cadence cible : 70-80 enjambées/min.",
+          "descriptionEn": "25-35min aqua jogging at HR 65-75% HRmax. Feet don't touch the bottom. Target cadence: 70-80 strides/min.",
+          "durationMin": 30,
+          "zone": "Z2",
+          "intensityType": "E"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "5min aqua jogging très lent puis étirements dans l'eau", "descriptionEn": "5min very slow aqua jogging then stretches in water", "durationMin": 5, "zone": "Z1" }
+        {
+          "description": "5min aqua jogging très lent puis étirements dans l'eau",
+          "descriptionEn": "5min very slow aqua jogging then stretches in water",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "coachingTips": [
         "Utilisez une ceinture de flottaison pour maintenir une posture verticale correcte",
@@ -668,14 +1133,32 @@
         "Leaning the torso forward instead of maintaining vertical posture",
         "Returning to land running too quickly after an exclusive aqua jogging period"
       ],
-      "variationIds": ["REC-005"],
+      "variationIds": [
+        "REC-005"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build", "peak", "recovery"],
-        "weekPositions": ["early", "late"],
+        "phases": [
+          "base",
+          "build",
+          "peak",
+          "recovery"
+        ],
+        "weekPositions": [
+          "early",
+          "late"
+        ],
         "relativeLoad": "light",
-        "tags": ["recovery", "aqua", "cross-training", "zero-impact", "injury-prevention"],
+        "tags": [
+          "recovery",
+          "aqua",
+          "cross-training",
+          "zero-impact",
+          "injury-prevention"
+        ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "REC-015",
@@ -687,21 +1170,76 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 30, "max": 40 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 30,
+        "max": 40
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Marche avec rotations des bras et du buste", "descriptionEn": "Walking with arm and torso rotations", "durationMin": 5, "zone": "Z1" }
+        {
+          "description": "Marche avec rotations des bras et du buste",
+          "descriptionEn": "Walking with arm and torso rotations",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "5min footing Z1", "descriptionEn": "5min jog Z1", "durationMin": 5, "zone": "Z1" },
-        { "description": "3min exercices de mobilité : cercles de hanches, flexions chevilles, rotations colonne", "descriptionEn": "3min mobility exercises: hip circles, ankle flexions, spine rotations", "durationMin": 3, "zone": "Z1" },
-        { "description": "5min footing Z1", "descriptionEn": "5min jog Z1", "durationMin": 5, "zone": "Z1" },
-        { "description": "3min exercices de mobilité : fentes dynamiques, balanciers de jambe, ouverture thoracique", "descriptionEn": "3min mobility: dynamic lunges, leg swings, thoracic openers", "durationMin": 3, "zone": "Z1" },
-        { "description": "5min footing Z1", "descriptionEn": "5min jog Z1", "durationMin": 5, "zone": "Z1" },
-        { "description": "3min exercices de mobilité : squats profonds, rotations de cheville, étirements quadriceps", "descriptionEn": "3min mobility: deep squats, ankle rotations, quad stretches", "durationMin": 3, "zone": "Z1" }
+        {
+          "description": "5min footing Z1",
+          "descriptionEn": "5min jog Z1",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        },
+        {
+          "description": "3min exercices de mobilité : cercles de hanches, flexions chevilles, rotations colonne",
+          "descriptionEn": "3min mobility exercises: hip circles, ankle flexions, spine rotations",
+          "durationMin": 3,
+          "zone": "Z1",
+          "intensityType": "E"
+        },
+        {
+          "description": "5min footing Z1",
+          "descriptionEn": "5min jog Z1",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        },
+        {
+          "description": "3min exercices de mobilité : fentes dynamiques, balanciers de jambe, ouverture thoracique",
+          "descriptionEn": "3min mobility: dynamic lunges, leg swings, thoracic openers",
+          "durationMin": 3,
+          "zone": "Z1",
+          "intensityType": "E"
+        },
+        {
+          "description": "5min footing Z1",
+          "descriptionEn": "5min jog Z1",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        },
+        {
+          "description": "3min exercices de mobilité : squats profonds, rotations de cheville, étirements quadriceps",
+          "descriptionEn": "3min mobility: deep squats, ankle rotations, quad stretches",
+          "durationMin": 3,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Marche et étirements statiques 5min", "descriptionEn": "Walking and static stretching 5min", "durationMin": 5, "zone": "Z1" }
+        {
+          "description": "Marche et étirements statiques 5min",
+          "descriptionEn": "Walking and static stretching 5min",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "coachingTips": [
         "Le footing doit rester très lent : l'objectif principal est la mobilité, pas le cardio",
@@ -723,14 +1261,32 @@
         "Doing mobility exercises too fast without controlling the movement",
         "Neglecting upper body mobility exercises (shoulders, thorax)"
       ],
-      "variationIds": ["REC-001", "REC-011"],
+      "variationIds": [
+        "REC-001",
+        "REC-011"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build", "peak", "recovery"],
-        "weekPositions": ["early", "late"],
+        "phases": [
+          "base",
+          "build",
+          "peak",
+          "recovery"
+        ],
+        "weekPositions": [
+          "early",
+          "late"
+        ],
         "relativeLoad": "light",
-        "tags": ["recovery", "mobility", "flexibility", "post-race"],
+        "tags": [
+          "recovery",
+          "mobility",
+          "flexibility",
+          "post-race"
+        ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "REC-016",
@@ -742,14 +1298,33 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 45, "max": 60 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersSoft": true },
+      "typicalDuration": {
+        "min": 45,
+        "max": 60
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersSoft": true
+      },
       "warmupTemplate": [],
       "mainSetTemplate": [
-        { "description": "45-60min footing très lent en nature (forêt, parc, sentier). Z1 stricte. Aucun objectif d'allure. Marchez dans les côtes si nécessaire.", "descriptionEn": "45-60min very slow jog in nature (forest, park, trail). Strict Z1. No pace objective. Walk uphills if needed.", "durationMin": 50, "zone": "Z1" }
+        {
+          "description": "45-60min footing très lent en nature (forêt, parc, sentier). Z1 stricte. Aucun objectif d'allure. Marchez dans les côtes si nécessaire.",
+          "descriptionEn": "45-60min very slow jog in nature (forest, park, trail). Strict Z1. No pace objective. Walk uphills if needed.",
+          "durationMin": 50,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Étirements légers en plein air", "descriptionEn": "Light stretching outdoors", "durationMin": 5, "zone": "Z1" }
+        {
+          "description": "Étirements légers en plein air",
+          "descriptionEn": "Light stretching outdoors",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "coachingTips": [
         "Laissez votre montre à la maison ou cachez l'écran : courez sans aucune donnée",
@@ -771,14 +1346,32 @@
         "Running on road and concrete instead of natural soft terrain",
         "Feeling guilty about running so slowly: slowness is the goal"
       ],
-      "variationIds": ["REC-004", "REC-010"],
+      "variationIds": [
+        "REC-004",
+        "REC-010"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build", "recovery"],
-        "weekPositions": ["early", "late"],
+        "phases": [
+          "base",
+          "build",
+          "recovery"
+        ],
+        "weekPositions": [
+          "early",
+          "late"
+        ],
         "relativeLoad": "light",
-        "tags": ["recovery", "nature", "mental", "regeneration", "slow"],
+        "tags": [
+          "recovery",
+          "nature",
+          "mental",
+          "regeneration",
+          "slow"
+        ],
         "priorityScore": 85
-      }
+      },
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 1
     }
   ]
 }

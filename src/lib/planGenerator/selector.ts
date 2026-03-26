@@ -15,16 +15,16 @@ import { DISTANCE_TAGS } from "./constants";
 // Maps SessionType to the WorkoutCategory(ies) that contain matching workouts
 
 const SESSION_TO_CATEGORY: Partial<Record<SessionType, WorkoutCategory[]>> = {
-  recovery: ["recovery"],
-  endurance: ["endurance"],
+  recovery: ["recovery", "endurance"],           // Recovery can pull from endurance pool too
+  endurance: ["endurance", "recovery", "fartlek"], // Endurance pulls from wider pool for variety
   tempo: ["tempo"],
   threshold: ["threshold"],
   vo2max: ["vma_intervals"],
   speed: ["vma_intervals"],
-  long_run: ["long_run"],
+  long_run: ["long_run", "endurance"],           // Long run can also use endurance workouts
   hills: ["hills"],
   fartlek: ["fartlek"],
-  race_specific: ["race_pace"],
+  race_specific: ["race_pace", "tempo"],         // Race specific can fall back to tempo
 };
 
 const DIFFICULTY_LEVELS: Record<Difficulty, number> = {
@@ -207,26 +207,35 @@ function findBestWorkout(
       b.selectionCriteria.priorityScore - a.selectionCriteria.priorityScore,
   );
 
-  // Step 7: Prefer workouts not used recently (variety)
-  const unused = candidates.filter((w) => !usedWorkoutIds.includes(w.id));
-  let finalList = unused.length > 0 ? unused : candidates;
+  // Step 7: Variety — sort by least-used first, then by priority within tier
+  // Count how many times each candidate has been used in the plan so far
+  const usageCounts = new Map<string, number>();
+  for (const id of usedWorkoutIds) {
+    usageCounts.set(id, (usageCounts.get(id) ?? 0) + 1);
+  }
 
-  // Step 8: Add randomization within priority tiers for variety
-  // Group by similar priority (within 10 points) and pick randomly within top tier
+  // Sort candidates: least-used first, then by priority score
+  candidates.sort((a, b) => {
+    const usageA = usageCounts.get(a.id) ?? 0;
+    const usageB = usageCounts.get(b.id) ?? 0;
+    // Primary: least used first
+    if (usageA !== usageB) return usageA - usageB;
+    // Secondary: higher priority first
+    return b.selectionCriteria.priorityScore - a.selectionCriteria.priorityScore;
+  });
+
+  // Step 8: Randomize among the least-used candidates for freshness
+  let finalList = candidates;
   if (finalList.length > 1) {
-    const topPriority = finalList[0].selectionCriteria.priorityScore;
-    const topTier = finalList.filter(
-      (w) => topPriority - w.selectionCriteria.priorityScore <= 15,
-    );
-    if (topTier.length > 1) {
-      // Shuffle top tier using Fisher-Yates
-      for (let i = topTier.length - 1; i > 0; i--) {
+    const minUsage = usageCounts.get(finalList[0].id) ?? 0;
+    const leastUsed = finalList.filter(w => (usageCounts.get(w.id) ?? 0) <= minUsage + 1);
+    if (leastUsed.length > 1) {
+      // Shuffle among least-used
+      for (let i = leastUsed.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [topTier[i], topTier[j]] = [topTier[j], topTier[i]];
+        [leastUsed[i], leastUsed[j]] = [leastUsed[j], leastUsed[i]];
       }
-      finalList = [...topTier, ...finalList.filter(
-        (w) => topPriority - w.selectionCriteria.priorityScore > 15,
-      )];
+      finalList = [...leastUsed, ...finalList.filter(w => (usageCounts.get(w.id) ?? 0) > minUsage + 1)];
     }
   }
 

@@ -17,16 +17,60 @@
     "pace": "Allure & Dénivelé",
     "summary": "Récapitulatif"
   },
+  "purpose": {
+    "title": "Quel est votre objectif ?",
+    "subtitle": "On adapte le plan à votre situation",
+    "race": "Préparer une course",
+    "raceDesc": "Plan personnalisé pour un objectif précis (5K au marathon)",
+    "baseBuilding": "Construire ma base",
+    "baseBuildingDesc": "Développer l'endurance fondamentale sans course en vue",
+    "returnFromInjury": "Reprendre après une pause",
+    "returnFromInjuryDesc": "Reprise progressive et sécurisée après blessure ou arrêt",
+    "beginnerStart": "Débuter la course à pied",
+    "beginnerStartDesc": "Programme progressif pour se lancer en courant"
+  },
+  "goal": {
+    "title": "Dans quel état d'esprit êtes-vous ?",
+    "subtitle": "Cela ajuste l'intensité et le volume du plan",
+    "finish": "Finir la course",
+    "finishDesc": "Plan conservateur, plus de volume facile, progression douce",
+    "time": "Objectif temps",
+    "timeDesc": "Plan équilibré avec séances qualité et endurance",
+    "compete": "Performer",
+    "competeDesc": "Plan ambitieux, plus d'intensité, volume élevé"
+  },
+  "fitness": {
+    "title": "Votre forme actuelle",
+    "subtitle": "Ça nous aide à définir le bon volume de départ. Passez si vous n'êtes pas sûr.",
+    "weeklyKm": "Volume hebdomadaire (km)",
+    "weeklyKmDesc": "Combien de km courez-vous par semaine actuellement ?",
+    "weeklyKmPlaceholder": "ex. 30",
+    "longRunKm": "Plus longue sortie récente (km)",
+    "longRunKmDesc": "Votre plus longue course des 2-3 dernières semaines",
+    "longRunKmPlaceholder": "ex. 12"
+  },
+  "duration": {
+    "title": "Combien de temps ?",
+    "subtitle": "Choisissez la durée de votre plan",
+    "weeks": "semaines"
+  },
+  "schedule": {
+    "title": "Planning d'entraînement",
+    "subtitle": "Combien de séances par semaine ?",
+    "sessionsPerWeek": "Séances par semaine",
+    "longRunDay": "Jour de la sortie longue",
+    "longRunDayDesc": "Votre sortie longue hebdomadaire — la séance clé d'endurance"
+  },
   "distance": {
     "title": "Choisissez votre distance",
-    "subtitle": "Sélectionnez la distance de votre objectif"
+    "subtitle": "Pour quelle course vous entraînez-vous ?"
   },
   "date": {
     "title": "Date de votre course",
-    "subtitle": "Quand est votre course ?",
+    "subtitle": "Au minimum {{min}} semaines à partir d'aujourd'hui",
     "weeks": "{{count}} semaines de préparation",
-    "tooSoon": "La date doit être dans au moins 8 semaines",
-    "tooFar": "La date ne peut pas dépasser 24 semaines"
+    "tooSoon": "Trop proche ! Il faut au moins {{min}} semaines.",
+    "tooLong": "Plus de {{max}} semaines n'est pas recommandé pour cette distance, mais c'est possible."
   },
   "raceName": {
     "title": "Nom de la course",
@@ -70,6 +114,11 @@
     "longRun": "Sortie longue",
     "pace": "Allure cible",
     "elevation": "Dénivelé",
+    "goal": "Objectif",
+    "purpose": "Type de plan",
+    "weeklyKm": "Volume actuel",
+    "peakKm": "Volume pic estimé",
+    "peakLongRun": "Sortie longue pic",
     "generate": "Générer le plan",
     "generating": "Génération en cours..."
   },
@@ -88,6 +137,66 @@
     "exportPdf": "Exporter en PDF",
     "exportIcs": "Ajouter au calendrier"
   },
+  "completion": {
+    "planned": "Planifié",
+    "completed": "Fait",
+    "skipped": "Passé",
+    "hint": "Cliquez sur la case : planifié → fait → passé",
+    "validate": "Valider la semaine ({{done}}/{{total}} faites)",
+    "validated": "Semaine validée",
+    "weekValidated": "Semaine {{week}} validée !",
+    "markDone": "Marquer comme fait",
+    "toggleDone": "Fait / pas fait"
+  },
+  "rpe": {
+    "title": "RPE · Effort ressenti",
+    "subtitle": "Rate of Perceived Effort",
+    "easy": "Facile",
+    "moderate": "Modéré",
+    "hard": "Dur",
+    "max": "Max",
+    "skip": "Passer",
+    "saved": "RPE {{value}} enregistré"
+  },
+  "stats": {
+    "title": "Statistiques",
+    "sessions": "Séances",
+    "total": "Total",
+    "estKm": "Km estimés",
+    "keySessions": "Séances clés",
+    "avgWeek": "Moy./semaine",
+    "peakWeek": "Semaine pic",
+    "longestSession": "Session max",
+    "recoveryWeeks": "Sem. récup",
+    "weeklyVolume": "Volume par semaine",
+    "weeklyKm": "Distance par semaine (km)",
+    "sessionTypes": "Types de séance",
+    "zoneDistribution": "Répartition par zone",
+    "targetSystems": "Systèmes ciblés",
+    "longRunProgression": "Progression sortie longue",
+    "peak": "Pic",
+    "easyHardSplit": "Répartition facile / dur par semaine",
+    "easyZ12": "Facile (Z1-Z2)",
+    "hardZ3": "Dur (Z3+)",
+    "target8020": "Objectif : 80% facile / 20% dur",
+    "trainingLoad": "Charge d'entraînement",
+    "trainingLoadDesc": "Score de charge = durée × facteur d'intensité (plus haut = semaine plus dure)",
+    "thisWeek": "Cette semaine",
+    "predictedTime": "Temps de course estimé",
+    "completion": "Complétion",
+    "done": "faites",
+    "skipped": "passées",
+    "remaining": "restantes",
+    "rpeAvg": "RPE moy",
+    "peakVolume": "Volume pic",
+    "peakLongRun": "Pic sortie longue"
+  },
+  "calendar": {
+    "now": "ACTUEL",
+    "race": "Course",
+    "raceWeek": "Course",
+    "recoveryWeek": "Récup"
+  },
   "card": {
     "weeks": "{{current}}/{{total}} semaines",
     "phase": "Phase : {{phase}}"
@@ -101,9 +210,20 @@
     "5": "Samedi",
     "6": "Dimanche"
   },
+  "daysShort": {
+    "0": "Lun",
+    "1": "Mar",
+    "2": "Mer",
+    "3": "Jeu",
+    "4": "Ven",
+    "5": "Sam",
+    "6": "Dim"
+  },
   "nav": {
     "back": "Retour",
     "next": "Suivant",
+    "continue": "Continuer",
+    "skip": "Passer",
     "step": "Étape {{current}} sur {{total}}"
   }
 }

@@ -17,16 +17,60 @@
     "pace": "Pace & Elevation",
     "summary": "Summary"
   },
+  "purpose": {
+    "title": "What's your goal?",
+    "subtitle": "We'll adapt the plan to your situation",
+    "race": "Prepare for a race",
+    "raceDesc": "Personalized plan for a specific race goal (5K to marathon)",
+    "baseBuilding": "Build my base",
+    "baseBuildingDesc": "Build fundamental endurance with no specific race target",
+    "returnFromInjury": "Return after a break",
+    "returnFromInjuryDesc": "Safe progressive return after injury or break",
+    "beginnerStart": "Start running",
+    "beginnerStartDesc": "Progressive program to start running from scratch"
+  },
+  "goal": {
+    "title": "What's your mindset?",
+    "subtitle": "This adjusts intensity and volume of the plan",
+    "finish": "Finish the race",
+    "finishDesc": "Conservative plan, more easy volume, gentle progression",
+    "time": "Target a time",
+    "timeDesc": "Balanced plan with quality sessions and endurance",
+    "compete": "Compete",
+    "competeDesc": "Ambitious plan, more intensity, higher volume"
+  },
+  "fitness": {
+    "title": "Your current fitness",
+    "subtitle": "This helps us set the right starting volume. Skip if unsure.",
+    "weeklyKm": "Weekly volume (km)",
+    "weeklyKmDesc": "How many km do you currently run per week?",
+    "weeklyKmPlaceholder": "e.g. 30",
+    "longRunKm": "Longest recent run (km)",
+    "longRunKmDesc": "Your longest run in the past 2-3 weeks",
+    "longRunKmPlaceholder": "e.g. 12"
+  },
+  "duration": {
+    "title": "How long?",
+    "subtitle": "Choose the duration of your plan",
+    "weeks": "weeks"
+  },
+  "schedule": {
+    "title": "Training schedule",
+    "subtitle": "How many sessions per week?",
+    "sessionsPerWeek": "Sessions per week",
+    "longRunDay": "Long run day",
+    "longRunDayDesc": "Your weekly long run — the key endurance session"
+  },
   "distance": {
     "title": "Choose your distance",
-    "subtitle": "Select your goal distance"
+    "subtitle": "Which race are you training for?"
   },
   "date": {
     "title": "Your race date",
-    "subtitle": "When is your race?",
+    "subtitle": "At least {{min}} weeks from today",
     "weeks": "{{count}} weeks of preparation",
-    "tooSoon": "The date must be at least 8 weeks away",
-    "tooFar": "The date cannot exceed 24 weeks"
+    "tooSoon": "Too close! You need at least {{min}} weeks.",
+    "tooLong": "Over {{max}} weeks is not recommended for this distance, but it's possible."
   },
   "raceName": {
     "title": "Race name",
@@ -70,6 +114,11 @@
     "longRun": "Long run",
     "pace": "Target pace",
     "elevation": "Elevation",
+    "goal": "Goal",
+    "purpose": "Plan type",
+    "weeklyKm": "Current volume",
+    "peakKm": "Estimated peak volume",
+    "peakLongRun": "Peak long run",
     "generate": "Generate plan",
     "generating": "Generating..."
   },
@@ -88,6 +137,66 @@
     "exportPdf": "Export as PDF",
     "exportIcs": "Add to calendar"
   },
+  "completion": {
+    "planned": "Planned",
+    "completed": "Completed",
+    "skipped": "Skipped",
+    "hint": "Click checkbox to cycle: planned → done → skipped",
+    "validate": "Validate week ({{done}}/{{total}} done)",
+    "validated": "Week validated",
+    "weekValidated": "Week {{week}} validated!",
+    "markDone": "Mark as done",
+    "toggleDone": "Toggle done"
+  },
+  "rpe": {
+    "title": "RPE · Rate of Perceived Effort",
+    "subtitle": "How hard was it?",
+    "easy": "Easy",
+    "moderate": "Moderate",
+    "hard": "Hard",
+    "max": "Max",
+    "skip": "Skip",
+    "saved": "RPE {{value}} saved"
+  },
+  "stats": {
+    "title": "Statistics",
+    "sessions": "Sessions",
+    "total": "Total",
+    "estKm": "Est. km",
+    "keySessions": "Key sessions",
+    "avgWeek": "Avg/week",
+    "peakWeek": "Peak week",
+    "longestSession": "Longest",
+    "recoveryWeeks": "Recovery wk",
+    "weeklyVolume": "Weekly volume",
+    "weeklyKm": "Weekly distance (km)",
+    "sessionTypes": "Session types",
+    "zoneDistribution": "Zone distribution",
+    "targetSystems": "Target systems",
+    "longRunProgression": "Long run progression",
+    "peak": "Peak",
+    "easyHardSplit": "Easy / Hard split per week",
+    "easyZ12": "Easy (Z1-Z2)",
+    "hardZ3": "Hard (Z3+)",
+    "target8020": "Target: 80% easy / 20% hard",
+    "trainingLoad": "Training load",
+    "trainingLoadDesc": "Load score = duration × intensity factor (higher = harder week)",
+    "thisWeek": "This week",
+    "predictedTime": "Predicted finish time",
+    "completion": "Completion",
+    "done": "done",
+    "skipped": "skipped",
+    "remaining": "remaining",
+    "rpeAvg": "RPE avg",
+    "peakVolume": "Peak volume",
+    "peakLongRun": "Peak long run"
+  },
+  "calendar": {
+    "now": "NOW",
+    "race": "Race",
+    "raceWeek": "Race",
+    "recoveryWeek": "Recovery"
+  },
   "card": {
     "weeks": "{{current}}/{{total}} weeks",
     "phase": "Phase: {{phase}}"
@@ -101,9 +210,20 @@
     "5": "Saturday",
     "6": "Sunday"
   },
+  "daysShort": {
+    "0": "Mon",
+    "1": "Tue",
+    "2": "Wed",
+    "3": "Thu",
+    "4": "Fri",
+    "5": "Sat",
+    "6": "Sun"
+  },
   "nav": {
     "back": "Back",
     "next": "Next",
+    "continue": "Continue",
+    "skip": "Skip",
     "step": "Step {{current}} of {{total}}"
   }
 }

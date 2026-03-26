@@ -1,15 +1,52 @@
-import type { TrainingPlan, AssistedPlanConfig, PlanWeek, PlanSession, RaceDistance } from "@/types/plan";
+/**
+ * Plan Generator — Main orchestrator
+ *
+ * Generates complete evidence-based training plans from user configuration.
+ * Integrates pace engine (Daniels), long run progression (Pfitzinger),
+ * km-based volume with exponential taper (Mujika), and 80/20 validation (Seiler).
+ *
+ * Architecture:
+ *   UserProfile → MacroCycle (phases) → WeekPlanner (volume, slots)
+ *   → SessionBuilder (select + annotate) → Validator (80/20, load)
+ */
+
+import type { TrainingPlan, AssistedPlanConfig, PlanWeek, PlanSession } from "@/types/plan";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import { loadAllWorkouts } from "@/data/workouts";
-import { calculateRaceTimes } from "@/lib/paceCalculator";
-import { calculatePhases, getPhaseForWeek } from "./phases";
+import { calculatePhases, getPhaseForWeek, getWeekInPhase } from "./phases";
 import { calculateVolumeProgression } from "./volume";
 import { buildWeekTemplate } from "./weekTemplate";
-import { selectWorkout } from "./selector";
 import { generateRaceWeek } from "./raceWeek";
-import { MIN_PLAN_WEEKS, MAX_PLAN_WEEKS } from "./constants";
+import { MIN_PLAN_WEEKS, MAX_PLAN_WEEKS, PURPOSE_CONFIGS } from "./constants";
+import {
+  calculateTrainingPaces,
+  predictRaceTime,
+  sessionTypeToIntensity,
+} from "./paceEngine";
+import { calculateLongRunProgression } from "./longRunProgression";
+import { buildSession } from "./sessionBuilder";
 
 // ── Helpers ────────────────────────────────────────────────────────
+
+/**
+ * Generate plan name for non-race plans.
+ */
+function generateNonRacePlanName(
+  purpose: string,
+  totalWeeks: number,
+): { name: string; nameEn: string } {
+  const purposeConfig = PURPOSE_CONFIGS[purpose as keyof typeof PURPOSE_CONFIGS];
+  if (purposeConfig) {
+    return {
+      name: `${purposeConfig.label} — ${totalWeeks} semaines`,
+      nameEn: `${purposeConfig.labelEn} — ${totalWeeks} weeks`,
+    };
+  }
+  return {
+    name: `Plan ${totalWeeks} semaines`,
+    nameEn: `${totalWeeks}-week Plan`,
+  };
+}
 
 /**
  * Calculate total weeks between today and race date.
@@ -20,35 +57,6 @@ function calculateTotalWeeks(raceDate: string): number {
   const diffMs = race.getTime() - now.getTime();
   const diffWeeks = Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000));
   return diffWeeks;
-}
-
-/**
- * Generate a race time prediction string from VMA.
- */
-function predictRaceTime(
-  vma: number,
-  raceDistance: RaceDistance
-): string | undefined {
-  if (!vma || vma <= 0) return undefined;
-
-  // No reliable time prediction for trail races (too terrain-dependent)
-  if (raceDistance === "trail_short" || raceDistance === "trail" || raceDistance === "ultra") {
-    return undefined;
-  }
-
-  const estimates = calculateRaceTimes(vma);
-  // Map our RaceDistance to paceCalculator distance labels
-  const distanceMap: Record<string, string> = {
-    "5K": "5K",
-    "10K": "10K",
-    semi: "Semi",
-    marathon: "Marathon",
-  };
-
-  const match = estimates.find(
-    (e) => e.distance === distanceMap[raceDistance]
-  );
-  return match?.estimatedTime;
 }
 
 /**
@@ -107,155 +115,221 @@ function getWeekLabel(
 /**
  * Generate a complete training plan from user configuration.
  *
- * Algorithm:
- * 1. Calculate total weeks from today to race date
- * 2. Validate: 8 <= totalWeeks <= 24
- * 3. Calculate phases
- * 4. Calculate volume progression
- * 5. Load all workouts
- * 6. For each week: build template, select workouts
- * 7. Race time prediction if VMA available
- * 8. Return complete TrainingPlan
+ * Supports both race-targeted plans and non-race plans (base building,
+ * return from injury, beginner start).
+ *
+ * v2 Algorithm:
+ * 1. Determine total weeks (from race date or manual override)
+ * 2. Validate week count
+ * 3. Resolve plan purpose and effective race distance
+ * 4. Calculate training paces, phases, volume, long run progression
+ * 5. Build weeks with session builder
+ * 6. Return complete plan with v2 metadata
  */
 export async function generatePlan(config: AssistedPlanConfig): Promise<TrainingPlan> {
+  const purpose = config.planPurpose ?? "race";
+  const isRacePlan = purpose === "race";
+  const purposeConfig = !isRacePlan ? PURPOSE_CONFIGS[purpose] : null;
+
   // Step 1: Calculate total weeks
-  const totalWeeks = calculateTotalWeeks(config.raceDate);
+  let totalWeeks: number;
+  if (config.totalWeeksOverride && config.totalWeeksOverride > 0) {
+    // Manual override (non-race plans or user preference)
+    totalWeeks = config.totalWeeksOverride;
+  } else if (config.raceDate) {
+    totalWeeks = calculateTotalWeeks(config.raceDate);
+  } else if (purposeConfig) {
+    totalWeeks = purposeConfig.defaultWeeks;
+  } else {
+    throw new Error("Date de course ou durée du plan requise.");
+  }
 
   // Step 2: Validate
-  if (totalWeeks < MIN_PLAN_WEEKS) {
+  const minWeeks = purposeConfig?.minWeeks ?? MIN_PLAN_WEEKS;
+  const maxWeeks = purposeConfig?.maxWeeks ?? MAX_PLAN_WEEKS;
+  if (totalWeeks < minWeeks) {
     throw new Error(
-      `Le plan nécessite au moins ${MIN_PLAN_WEEKS} semaines. Date de course trop proche (${totalWeeks} semaines).`
+      `Le plan nécessite au moins ${minWeeks} semaines (${totalWeeks} disponibles).`
     );
   }
-  if (totalWeeks > MAX_PLAN_WEEKS) {
+  if (totalWeeks > maxWeeks) {
     throw new Error(
-      `Le plan est limité à ${MAX_PLAN_WEEKS} semaines. Date de course trop éloignée (${totalWeeks} semaines).`
+      `Le plan est limité à ${maxWeeks} semaines (${totalWeeks} demandées).`
     );
   }
 
-  // Step 3: Calculate phases
-  const phases = calculatePhases(totalWeeks, config.raceDistance);
+  // Step 3: Resolve effective race distance (non-race plans use a fallback)
+  const effectiveDistance = config.raceDistance
+    ?? purposeConfig?.fallbackDistance
+    ?? "10K";
 
-  // Step 4: Calculate volume progression
+  // Step 4: Calculate training paces (Daniels-based)
+  const paces = calculateTrainingPaces(config.vma, config.runnerLevel);
+
+  // Step 5: Calculate phases
+  const trainingGoal = config.trainingGoal;
+
+  let phases;
+  if (purposeConfig) {
+    // Non-race plans: use purpose-specific phase distribution (no taper)
+    const pc = purposeConfig.phases;
+    const availableWeeks = totalWeeks;
+    const baseWeeks = Math.max(1, Math.round(availableWeeks * pc.base));
+    const buildWeeks = Math.max(1, Math.round(availableWeeks * pc.build));
+    let peakWeeks = Math.max(1, Math.round(availableWeeks * pc.peak));
+    // Adjust to fit
+    peakWeeks = availableWeeks - baseWeeks - buildWeeks;
+    if (peakWeeks < 1) peakWeeks = 1;
+
+    phases = [];
+    let w = 1;
+    phases.push({ phase: "base" as const, startWeek: w, endWeek: w + baseWeeks - 1 });
+    w += baseWeeks;
+    phases.push({ phase: "build" as const, startWeek: w, endWeek: w + buildWeeks - 1 });
+    w += buildWeeks;
+    if (peakWeeks > 0) {
+      phases.push({ phase: "peak" as const, startWeek: w, endWeek: w + peakWeeks - 1 });
+    }
+  } else {
+    phases = calculatePhases(totalWeeks, effectiveDistance, trainingGoal);
+  }
+
+  // Step 6: Calculate volume progression
+  const volumeMultiplier = purposeConfig?.volumeMultiplier ?? 1;
+  const adjustedCurrentKm = config.currentWeeklyKm
+    ? config.currentWeeklyKm
+    : undefined;
+
   const volumeProgression = calculateVolumeProgression(
     totalWeeks,
     phases,
-    config.raceDistance
+    effectiveDistance,
+    config.runnerLevel,
+    adjustedCurrentKm,
+    trainingGoal,
   );
 
-  // Step 5: Load all workouts
+  // Apply purpose volume multiplier
+  if (volumeMultiplier !== 1) {
+    for (const wv of volumeProgression) {
+      wv.targetKm = Math.round(wv.targetKm * volumeMultiplier);
+    }
+  }
+
+  // Step 7: Calculate long run progression
+  const taperPhase = phases.find(p => p.phase === "taper");
+  const taperWeekCount = taperPhase
+    ? (taperPhase.endWeek - taperPhase.startWeek + 1)
+    : 0;
+
+  const longRunTargets = calculateLongRunProgression(
+    totalWeeks,
+    effectiveDistance,
+    config.runnerLevel,
+    taperWeekCount,
+    paces,
+    config.currentLongRunKm,
+    trainingGoal,
+  );
+
+  // Step 7: Load all workouts
   const allWorkouts = await loadAllWorkouts();
 
-  // Step 6: Build weeks
+  // Step 8: Build weeks
   const weeks: PlanWeek[] = [];
-  // Track used workout IDs for variety (rolling window of 3 weeks)
   const usedWorkoutIds: string[] = [];
+  let peakWeeklyKm = 0;
+  let peakLongRunKm = 0;
 
   for (let weekNum = 1; weekNum <= totalWeeks; weekNum++) {
     const phase = getPhaseForWeek(weekNum, phases);
-    const volumeInfo = volumeProgression.find(
-      (v) => v.weekNumber === weekNum
-    );
-    const volumePercent = volumeInfo?.volumePercent ?? 0.8;
+    const volumeInfo = volumeProgression.find(v => v.weekNumber === weekNum);
+    const volumePercent = volumeInfo?.volumePercent ?? 80;
+    const targetKm = volumeInfo?.targetKm ?? 0;
     const isRecoveryWeek = volumeInfo?.isRecoveryWeek ?? false;
+    const longRunTarget = longRunTargets.find(lr => lr.weekNumber === weekNum);
 
-    // Race week (last week)
-    if (weekNum === totalWeeks) {
+    // Track peaks (will be recalculated from actual sessions below)
+    if (longRunTarget && longRunTarget.distanceKm > peakLongRunKm) {
+      peakLongRunKm = longRunTarget.distanceKm;
+    }
+
+    // Race week (last week) — only for race plans
+    if (weekNum === totalWeeks && isRacePlan) {
       const raceWeek = generateRaceWeek(
         weekNum,
-        config.raceDistance,
+        effectiveDistance,
         config.daysPerWeek,
         config.longRunDay,
         config.runnerLevel,
         allWorkouts
       );
+      raceWeek.targetKm = targetKm;
       weeks.push(raceWeek);
       continue;
     }
 
-    // Build week template
+    // Build week template (slot distribution, goal-adjusted)
     const slots = buildWeekTemplate(
       config.daysPerWeek,
       config.longRunDay,
       phase,
-      isRecoveryWeek
+      isRecoveryWeek,
+      trainingGoal,
     );
 
-    // Select workouts for each slot
+    // Get intra-phase progression info (for workout scaling)
+    const { weekInPhase, totalPhaseWeeks } = getWeekInPhase(weekNum, phases);
+
+    // Build sessions using the session builder (select + scale + annotate)
     const sessions: PlanSession[] = [];
     const weekUsedIds: string[] = [];
+    let weeklyLoadScore = 0;
 
     for (const slot of slots) {
-      const selection = selectWorkout(
+      const result = buildSession({
         slot,
         phase,
-        config.runnerLevel,
-        config.raceDistance,
+        weekInPhase,
+        totalPhaseWeeks,
+        volumePercent,
+        difficulty: config.runnerLevel,
+        raceDistance: effectiveDistance,
         allWorkouts,
         usedWorkoutIds,
-        volumePercent,
-        config.elevationGain,
-      );
+        paces,
+        elevationGain: config.elevationGain,
+        targetLongRunKm: longRunTarget?.distanceKm,
+        targetLongRunMin: longRunTarget?.durationMin,
+      });
 
-      if (selection) {
-        const session: PlanSession = {
-          dayOfWeek: slot.dayOfWeek,
-          workoutId: selection.workoutId,
-          sessionType: slot.sessionTypes[0],
-          isKeySession: slot.slotType === "key_quality",
-          estimatedDurationMin: selection.estimatedDurationMin,
-        };
-
-        // Add pace-based notes if target pace is defined
-        if (config.targetPaceMinKm) {
-          const paceMin = Math.floor(config.targetPaceMinKm);
-          const paceSec = Math.round((config.targetPaceMinKm - paceMin) * 60);
-          const paceStr = `${paceMin}:${paceSec.toString().padStart(2, "0")}`;
-
-          // Easy pace is roughly target + 1:00/km
-          const easyPaceMin = Math.floor(config.targetPaceMinKm + 1);
-          const easyPaceSec = Math.round(((config.targetPaceMinKm + 1) - easyPaceMin) * 60);
-          const easyPaceStr = `${easyPaceMin}:${easyPaceSec.toString().padStart(2, "0")}`;
-
-          const st = slot.sessionTypes[0];
-          if (st === "tempo" || st === "threshold" || st === "race_specific") {
-            session.notes = `Allure cible : ${paceStr}/km`;
-            session.notesEn = `Target pace: ${paceStr}/km`;
-          } else if (st === "long_run") {
-            session.notes = `Allure endurance : ~${easyPaceStr}/km`;
-            session.notesEn = `Easy pace: ~${easyPaceStr}/km`;
-          } else if (st === "vo2max" || st === "speed") {
-            // VO2max pace is roughly target - 0:30/km
-            const vmaPace = config.targetPaceMinKm - 0.5;
-            const vmaPaceMin = Math.floor(vmaPace);
-            const vmaPaceSec = Math.round((vmaPace - vmaPaceMin) * 60);
-            const vmaPaceStr = `${vmaPaceMin}:${vmaPaceSec.toString().padStart(2, "0")}`;
-            session.notes = `Allure VMA : ~${vmaPaceStr}/km`;
-            session.notesEn = `VO2max pace: ~${vmaPaceStr}/km`;
-          }
-        }
-
-        // Add elevation note if present
-        if (config.elevationGain && config.elevationGain > 0 && slot.sessionTypes[0] === "long_run") {
-          const elevNote = `Course avec ${config.elevationGain}m D+ — intégrez du dénivelé`;
-          const elevNoteEn = `Race has ${config.elevationGain}m elevation — include hills`;
-          session.notes = session.notes ? `${session.notes}\n${elevNote}` : elevNote;
-          session.notesEn = session.notesEn ? `${session.notesEn}\n${elevNoteEn}` : elevNoteEn;
-        }
-
-        sessions.push(session);
-        weekUsedIds.push(selection.workoutId);
+      if (result) {
+        sessions.push(result.session);
+        weekUsedIds.push(result.workout.id);
+        weeklyLoadScore += result.session.loadScore ?? 0;
       }
     }
 
-    // Update rolling used IDs (keep last 3 weeks worth)
+    // Update rolling used IDs (keep last 6 weeks worth for better variety)
     usedWorkoutIds.push(...weekUsedIds);
-    const maxHistory = config.daysPerWeek * 3;
+    const maxHistory = config.daysPerWeek * 6;
     while (usedWorkoutIds.length > maxHistory) {
       usedWorkoutIds.shift();
     }
 
     const labels = getWeekLabel(weekNum, totalWeeks, phase, isRecoveryWeek);
+
+    // Compute weekly km from sessions using pace-aware estimation
+    const weeklyKmFromSessions = sessions.reduce((sum, s) => {
+      // Use explicit distance if set (long runs)
+      if (s.targetDistanceKm && s.targetDistanceKm > 0) return sum + s.targetDistanceKm;
+      // Estimate from duration using the session's intensity-specific pace
+      const intensity = sessionTypeToIntensity(s.sessionType);
+      const paceRange = paces[intensity];
+      const avgPaceMinKm = (paceRange.min + paceRange.max) / 2;
+      return sum + (s.estimatedDurationMin / avgPaceMinKm);
+    }, 0);
+    const actualKm = Math.round(weeklyKmFromSessions);
 
     weeks.push({
       weekNumber: weekNum,
@@ -265,18 +339,27 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
       sessions,
       weekLabel: labels.weekLabel,
       weekLabelEn: labels.weekLabelEn,
+      // v2 fields — targetKm based on actual session content, not theoretical model
+      targetKm: actualKm,
+      targetLongRunKm: longRunTarget?.distanceKm,
+      weeklyLoadScore: Math.round(weeklyLoadScore),
     });
   }
 
-  // Step 7: Race time prediction
-  const raceTimePrediction = config.vma
-    ? predictRaceTime(config.vma, config.raceDistance)
+  // Recalculate peak metrics from actual week data
+  peakWeeklyKm = Math.max(...weeks.map(w => w.targetKm ?? 0));
+
+  // Step 9: Race time prediction (only for race plans)
+  const raceTimePrediction = (isRacePlan && config.vma)
+    ? predictRaceTime(config.vma, effectiveDistance)
     : undefined;
 
-  // Step 8: Generate plan name
-  const { name, nameEn } = generatePlanName(config);
+  // Step 10: Generate plan name
+  const { name, nameEn } = isRacePlan
+    ? generatePlanName(config)
+    : generateNonRacePlanName(purpose, totalWeeks);
 
-  // Step 9: Return complete plan
+  // Step 11: Return complete plan
   return {
     id: crypto.randomUUID(),
     config,
@@ -286,13 +369,20 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     raceTimePrediction,
     name,
     nameEn,
+    // v2 metadata
+    version: 2,
+    peakWeeklyKm: peakWeeklyKm,
+    peakLongRunKm: peakLongRunKm,
   };
 }
 
 // Re-export sub-modules for direct access
-export { calculatePhases, getPhaseForWeek } from "./phases";
+export { calculatePhases, getPhaseForWeek, getWeekInPhase } from "./phases";
 export { calculateVolumeProgression } from "./volume";
 export { buildWeekTemplate } from "./weekTemplate";
 export type { WeekSlot, SlotType } from "./weekTemplate";
 export { selectWorkout } from "./selector";
 export { generateRaceWeek } from "./raceWeek";
+export { calculateTrainingPaces, formatPaceRange, predictRaceTime } from "./paceEngine";
+export { calculateLongRunProgression } from "./longRunProgression";
+export { buildSession } from "./sessionBuilder";

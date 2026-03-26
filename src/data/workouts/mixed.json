@@ -8,7 +8,7 @@
       "description": "Bloc tempo suivi d'intervalles VMA. Développe plusieurs qualités en une séance.",
       "descriptionEn": "Tempo block followed by VO2max intervals. Develops multiple qualities in one session.",
       "category": "mixed",
-      "sessionType": "mixed",
+      "sessionType": "tempo",
       "targetSystem": "mixed",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -98,7 +98,9 @@
           "intervals"
         ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "MIX-002",
@@ -107,7 +109,7 @@
       "description": "Sortie endurance avec séquence de côtes intégrée.",
       "descriptionEn": "Endurance run with integrated hill sequence.",
       "category": "mixed",
-      "sessionType": "mixed",
+      "sessionType": "tempo",
       "targetSystem": "mixed",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -191,7 +193,9 @@
           "endurance"
         ],
         "priorityScore": 65
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "MIX-003",
@@ -200,7 +204,7 @@
       "description": "Séance pyramidale couvrant toutes les zones : 1-2-3-4-3-2-1 min.",
       "descriptionEn": "Pyramid session covering all zones: 1-2-3-4-3-2-1 min.",
       "category": "mixed",
-      "sessionType": "mixed",
+      "sessionType": "tempo",
       "targetSystem": "mixed",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -312,7 +316,9 @@
           "pyramid"
         ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "MIX-004",
@@ -321,7 +327,7 @@
       "description": "Endurance - Qualité - Endurance. Format polyvalent.",
       "descriptionEn": "Endurance - Quality - Endurance. Versatile format.",
       "category": "mixed",
-      "sessionType": "mixed",
+      "sessionType": "tempo",
       "targetSystem": "mixed",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -404,7 +410,9 @@
           "flexible"
         ],
         "priorityScore": 65
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "MIX-005",
@@ -413,7 +421,7 @@
       "description": "Intervalles décroissants suivis d'un bloc tempo.",
       "descriptionEn": "Descending intervals followed by a tempo block.",
       "category": "mixed",
-      "sessionType": "mixed",
+      "sessionType": "tempo",
       "targetSystem": "mixed",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -518,7 +526,9 @@
           "tempo"
         ],
         "priorityScore": 60
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "MIX-006",
@@ -527,7 +537,7 @@
       "description": "Deux mini-séances dans la journée. Matin récup, soir qualité.",
       "descriptionEn": "Two mini-sessions in one day. Morning recovery, evening quality.",
       "category": "mixed",
-      "sessionType": "mixed",
+      "sessionType": "tempo",
       "targetSystem": "mixed",
       "difficulty": "elite",
       "typicalDuration": {
@@ -605,7 +615,9 @@
           "elite"
         ],
         "priorityScore": 45
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 0
     },
     {
       "id": "MIX-007",
@@ -614,7 +626,7 @@
       "description": "Fartlek libre suivi d'un bloc tempo structuré.",
       "descriptionEn": "Free fartlek followed by a structured tempo block.",
       "category": "mixed",
-      "sessionType": "mixed",
+      "sessionType": "tempo",
       "targetSystem": "mixed",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -698,7 +710,9 @@
           "tempo"
         ],
         "priorityScore": 60
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "MIX-008",
@@ -707,7 +721,7 @@
       "description": "Court test d'effort suivi d'une séance adaptée au résultat.",
       "descriptionEn": "Short fitness test followed by a session adapted to the result.",
       "category": "mixed",
-      "sessionType": "mixed",
+      "sessionType": "tempo",
       "targetSystem": "mixed",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -795,7 +809,9 @@
           "adaptive"
         ],
         "priorityScore": 55
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "MIX-009",
@@ -804,7 +820,7 @@
       "description": "Sortie longue ponctuée d'accélérations brèves.",
       "descriptionEn": "Long run punctuated with brief surges.",
       "category": "mixed",
-      "sessionType": "mixed",
+      "sessionType": "tempo",
       "targetSystem": "mixed",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -875,7 +891,9 @@
           "strides"
         ],
         "priorityScore": 60
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "MIX-010",
@@ -884,7 +902,7 @@
       "description": "Rappel multi-allures avant une course. Touche à tout sans fatiguer.",
       "descriptionEn": "Multi-pace reminder before a race. Touches all speeds without fatigue.",
       "category": "mixed",
-      "sessionType": "mixed",
+      "sessionType": "tempo",
       "targetSystem": "mixed",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -969,7 +987,9 @@
           "pre-race"
         ],
         "priorityScore": 85
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "MIX-011",
@@ -978,7 +998,7 @@
       "description": "Méthode Bangsbo originale : 30s Z1 / 20s Z3 / 10s sprint x 5 reps x 3-4 blocs. Améliore VO2max et performance avec moins de volume (Gunnarsson & Bangsbo, 2012).",
       "descriptionEn": "Original Bangsbo method: 30s Z1 / 20s Z3 / 10s sprint x 5 reps x 3-4 blocks. Improves VO2max and performance with less volume (Gunnarsson & Bangsbo, 2012).",
       "category": "mixed",
-      "sessionType": "intervals",
+      "sessionType": "tempo",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -1085,7 +1105,9 @@
           "scientific"
         ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "MIX-012",
@@ -1094,7 +1116,7 @@
       "description": "Version modérée du 10-20-30 : sprint à 80% au lieu de maximal. Idéal pour l'introduction au protocole ou en période de charge modérée.",
       "descriptionEn": "Moderate version of 10-20-30: sprint at 80% instead of maximal. Ideal for introduction to the protocol or during moderate load periods.",
       "category": "mixed",
-      "sessionType": "intervals",
+      "sessionType": "tempo",
       "targetSystem": "aerobic_power",
       "difficulty": "beginner",
       "typicalDuration": {
@@ -1194,7 +1216,9 @@
           "beginner"
         ],
         "priorityScore": 75
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "MIX-013",
@@ -1203,7 +1227,7 @@
       "description": "Version progressive : 2 blocs la première semaine, puis 3, puis 4 blocs. Plan de progression sur 4-6 semaines selon Bangsbo.",
       "descriptionEn": "Progressive version: 2 blocks the first week, then 3, then 4 blocks. 4-6 week progression plan according to Bangsbo.",
       "category": "mixed",
-      "sessionType": "intervals",
+      "sessionType": "tempo",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -1298,7 +1322,9 @@
           "progression"
         ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "MIX-014",
@@ -1400,7 +1426,9 @@
           "circuit"
         ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     }
   ]
 }

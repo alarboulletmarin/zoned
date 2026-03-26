@@ -1,22 +1,22 @@
 import type { PrebuiltPlan } from "./types";
-import { plan5kBeginner } from "./plans/5k-beginner";
-import { plan5kIntermediate } from "./plans/5k-intermediate";
-import { plan10kBeginner } from "./plans/10k-beginner";
-import { plan10kIntermediate } from "./plans/10k-intermediate";
+import { plan5kDebutant } from "./plans/5k-debutant";
+import { plan5kIntermediaire } from "./plans/5k-intermediaire";
+import { plan10kDebutant } from "./plans/10k-debutant";
+import { plan10kIntermediaire } from "./plans/10k-intermediaire";
 import { planSemiMarathon } from "./plans/semi-marathon";
 import { planMarathon } from "./plans/marathon";
 import { planBaseBuilding } from "./plans/base-building";
-import { planReturnFromInjury } from "./plans/return-from-injury";
+import { planRetourBlessure } from "./plans/retour-blessure";
 
 const allPlans: PrebuiltPlan[] = [
-  plan5kBeginner,
-  plan5kIntermediate,
-  plan10kBeginner,
-  plan10kIntermediate,
+  plan5kDebutant,
+  plan5kIntermediaire,
+  plan10kDebutant,
+  plan10kIntermediaire,
   planSemiMarathon,
   planMarathon,
   planBaseBuilding,
-  planReturnFromInjury,
+  planRetourBlessure,
 ];
 
 const bySlug = new Map(allPlans.map((p) => [p.slug, p]));

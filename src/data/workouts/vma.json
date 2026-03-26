@@ -8,7 +8,7 @@
       "description": "Séance VMA en intervalles courts 30 secondes vite / 30 secondes lent. Format de base pour développer la VO2max.",
       "descriptionEn": "VO2max session with short intervals: 30 seconds fast / 30 seconds slow. Foundational format for developing VO2max.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -25,7 +25,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et 4x accélérations progressives",
@@ -39,7 +40,9 @@
           "descriptionEn": "2x(12x 30s VO2max / 30s recovery)",
           "zone": "Z5",
           "repetitions": 12,
-          "recovery": "30s footing Z1"
+          "recovery": "30s footing Z1",
+          "intensityType": "I",
+          "sets": 2
         }
       ],
       "cooldownTemplate": [
@@ -47,7 +50,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -88,7 +92,15 @@
           "speed"
         ],
         "priorityScore": 90
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 8,
+        "maxValue": 14,
+        "stepSize": 2
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-002",
@@ -97,7 +109,7 @@
       "description": "Répétitions de 400m à allure VMA sur piste. Format idéal pour la régularité d'allure.",
       "descriptionEn": "400m repeats at VO2max pace on track. Ideal format for pace consistency.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -114,7 +126,8 @@
           "description": "Footing autour de la piste",
           "descriptionEn": "Jog around the track",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et lignes droites",
@@ -129,7 +142,8 @@
           "distanceM": 400,
           "zone": "Z5",
           "repetitions": 10,
-          "recovery": "200m footing"
+          "recovery": "200m footing",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -137,7 +151,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -178,7 +193,15 @@
           "intervals"
         ],
         "priorityScore": 85
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 6,
+        "maxValue": 12,
+        "stepSize": 2
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-003",
@@ -187,7 +210,7 @@
       "description": "Intervalles longs de 1000m à allure VMA. Développe l'endurance à haute intensité.",
       "descriptionEn": "Long 1000m intervals at VO2max pace. Develops high-intensity endurance.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -204,7 +227,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et accélérations",
@@ -219,7 +243,8 @@
           "distanceM": 1000,
           "zone": "Z5",
           "repetitions": 5,
-          "recovery": "400m footing Z1"
+          "recovery": "400m footing Z1",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -227,7 +252,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -266,7 +292,15 @@
           "5k"
         ],
         "priorityScore": 80
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 3,
+        "maxValue": 6,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-004",
@@ -275,7 +309,7 @@
       "description": "Répétitions courtes de 200m à 105% VMA. Développe la puissance et la vitesse.",
       "descriptionEn": "Short 200m repeats at 105% VO2max. Develops power and speed.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -292,7 +326,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes complètes et lignes droites",
@@ -315,7 +350,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -353,7 +389,15 @@
           "power"
         ],
         "priorityScore": 70
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 8,
+        "maxValue": 15,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-005",
@@ -362,7 +406,7 @@
       "description": "Format 45 secondes vite / 15 secondes lent. Plus exigeant que le 30/30.",
       "descriptionEn": "45 seconds fast / 15 seconds slow format. More demanding than 30/30.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -379,7 +423,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et accélérations",
@@ -393,7 +438,9 @@
           "descriptionEn": "2x(10x 45s VO2max / 15s recovery)",
           "zone": "Z5",
           "repetitions": 10,
-          "recovery": "15s footing très lent"
+          "recovery": "15s footing très lent",
+          "intensityType": "I",
+          "sets": 2
         }
       ],
       "cooldownTemplate": [
@@ -401,7 +448,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -440,7 +488,15 @@
           "demanding"
         ],
         "priorityScore": 75
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 8,
+        "maxValue": 12,
+        "stepSize": 2
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-006",
@@ -449,7 +505,7 @@
       "description": "Alternance 1 minute vite / 1 minute lent. Excellent compromis intensité/volume.",
       "descriptionEn": "Alternating 1 minute fast / 1 minute slow. Excellent intensity/volume balance.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -466,7 +522,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes",
@@ -480,7 +537,8 @@
           "descriptionEn": "12x(1min VO2max / 1min recovery)",
           "zone": "Z5",
           "repetitions": 12,
-          "recovery": "1min footing Z1"
+          "recovery": "1min footing Z1",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -488,7 +546,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -527,7 +586,15 @@
           "balanced"
         ],
         "priorityScore": 80
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 8,
+        "maxValue": 14,
+        "stepSize": 2
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-007",
@@ -536,7 +603,7 @@
       "description": "Introduction à la VMA avec des intervalles courts et beaucoup de récup.",
       "descriptionEn": "Introduction to VO2max with short intervals and plenty of recovery.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "beginner",
       "typicalDuration": {
@@ -553,7 +620,8 @@
           "description": "Footing très progressif",
           "descriptionEn": "Very progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Marche rapide et accélérations douces",
@@ -567,7 +635,8 @@
           "descriptionEn": "8x(30s fast / 1min recovery)",
           "zone": "Z4-Z5",
           "repetitions": 8,
-          "recovery": "1min footing lent"
+          "recovery": "1min footing lent",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -575,7 +644,8 @@
           "description": "Footing très lent",
           "descriptionEn": "Very slow jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -613,7 +683,15 @@
           "introduction"
         ],
         "priorityScore": 85
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 6,
+        "maxValue": 10,
+        "stepSize": 2
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 3
     },
     {
       "id": "VMA-008",
@@ -622,7 +700,7 @@
       "description": "Intervalles en pyramide : 200-400-600-400-200m.",
       "descriptionEn": "Pyramid intervals: 200-400-600-400-200m.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -639,7 +717,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et lignes droites",
@@ -653,34 +732,39 @@
           "descriptionEn": "200m VO2max",
           "distanceM": 200,
           "zone": "Z5",
-          "recovery": "200m récup"
+          "recovery": "200m récup",
+          "intensityType": "I"
         },
         {
           "description": "400m VMA",
           "descriptionEn": "400m VO2max",
           "distanceM": 400,
           "zone": "Z5",
-          "recovery": "200m récup"
+          "recovery": "200m récup",
+          "intensityType": "I"
         },
         {
           "description": "600m VMA",
           "descriptionEn": "600m VO2max",
           "distanceM": 600,
           "zone": "Z5",
-          "recovery": "400m récup"
+          "recovery": "400m récup",
+          "intensityType": "I"
         },
         {
           "description": "400m VMA",
           "descriptionEn": "400m VO2max",
           "distanceM": 400,
           "zone": "Z5",
-          "recovery": "200m récup"
+          "recovery": "200m récup",
+          "intensityType": "I"
         },
         {
           "description": "200m VMA",
           "descriptionEn": "200m VO2max",
           "distanceM": 200,
-          "zone": "Z5"
+          "zone": "Z5",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -688,7 +772,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -726,7 +811,9 @@
           "variety"
         ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-009",
@@ -735,7 +822,7 @@
       "description": "Intervalles longs de 3 minutes à allure VMA. Très exigeant.",
       "descriptionEn": "Long 3-minute intervals at VO2max pace. Very demanding.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "elite",
       "typicalDuration": {
@@ -752,7 +839,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et accélérations",
@@ -767,7 +855,8 @@
           "durationMin": 3,
           "zone": "Z5",
           "repetitions": 5,
-          "recovery": "2min footing Z1"
+          "recovery": "2min footing Z1",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -775,7 +864,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 15,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -813,7 +903,15 @@
           "demanding"
         ],
         "priorityScore": 65
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 3,
+        "maxValue": 6,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "VMA-010",
@@ -822,7 +920,7 @@
       "description": "Répétitions de 500m à allure VMA. Entre le 400 et le 1000m.",
       "descriptionEn": "500m repeats at VO2max pace. Between 400m and 1000m intervals.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -839,7 +937,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes",
@@ -854,7 +953,8 @@
           "distanceM": 500,
           "zone": "Z5",
           "repetitions": 8,
-          "recovery": "200m footing Z1"
+          "recovery": "200m footing Z1",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -862,7 +962,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -901,7 +1002,15 @@
           "track"
         ],
         "priorityScore": 75
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 6,
+        "maxValue": 10,
+        "stepSize": 2
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-011",
@@ -910,7 +1019,7 @@
       "description": "Fractionné VMA sur chemin ou sentier. Alternative à la piste.",
       "descriptionEn": "VO2max intervals on path or trail. Alternative to track work.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -927,7 +1036,8 @@
           "description": "Footing sur sentier",
           "descriptionEn": "Trail jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Accélérations progressives",
@@ -941,7 +1051,8 @@
           "descriptionEn": "10x1min VO2max / 1min recovery on path",
           "zone": "Z5",
           "repetitions": 10,
-          "recovery": "1min footing Z1"
+          "recovery": "1min footing Z1",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -949,7 +1060,8 @@
           "description": "Footing retour",
           "descriptionEn": "Return jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -987,7 +1099,15 @@
           "trail"
         ],
         "priorityScore": 60
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 8,
+        "maxValue": 12,
+        "stepSize": 2
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-012",
@@ -996,7 +1116,7 @@
       "description": "Format ultra-court : 20 secondes vite / 20 secondes lent. Très dynamique.",
       "descriptionEn": "Ultra-short format: 20 seconds fast / 20 seconds slow. Very dynamic.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -1013,7 +1133,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et sprints courts",
@@ -1027,7 +1148,8 @@
           "descriptionEn": "3x(15x 20s VO2max / 20s recovery)",
           "zone": "Z5+",
           "repetitions": 15,
-          "recovery": "20s footing très lent"
+          "recovery": "20s footing très lent",
+          "sets": 3
         }
       ],
       "cooldownTemplate": [
@@ -1035,7 +1157,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1074,7 +1197,15 @@
           "dynamic"
         ],
         "priorityScore": 65
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 10,
+        "maxValue": 20,
+        "stepSize": 2
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-013",
@@ -1083,7 +1214,7 @@
       "description": "Intervalles de 2 minutes à VMA. Bon compromis entre court et long.",
       "descriptionEn": "2-minute intervals at VO2max. Good balance between short and long.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -1100,7 +1231,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes",
@@ -1115,7 +1247,8 @@
           "durationMin": 2,
           "zone": "Z5",
           "repetitions": 6,
-          "recovery": "2min footing Z1"
+          "recovery": "2min footing Z1",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -1123,7 +1256,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1162,7 +1296,15 @@
           "medium"
         ],
         "priorityScore": 75
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 4,
+        "maxValue": 8,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-014",
@@ -1171,7 +1313,7 @@
       "description": "Répétitions de 800m à allure VMA. Classic de l'entraînement demi-fond.",
       "descriptionEn": "800m repeats at VO2max pace. Classic middle-distance training.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -1188,7 +1330,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et lignes droites",
@@ -1203,7 +1346,8 @@
           "distanceM": 800,
           "zone": "Z5",
           "repetitions": 6,
-          "recovery": "400m footing Z1"
+          "recovery": "400m footing Z1",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -1211,7 +1355,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1251,7 +1396,15 @@
           "800m"
         ],
         "priorityScore": 80
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 4,
+        "maxValue": 8,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-015",
@@ -1260,7 +1413,7 @@
       "description": "Fartlek structuré avec efforts à intensité VMA. Plus ludique que la piste.",
       "descriptionEn": "Structured fartlek with VO2max intensity efforts. More playful than track work.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -1277,7 +1430,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -1286,7 +1440,8 @@
           "descriptionEn": "Fartlek: 8x(1min VO2max + 2min Z2)",
           "zone": "Z5",
           "repetitions": 8,
-          "recovery": "2min footing Z2"
+          "recovery": "2min footing Z2",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -1294,7 +1449,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1333,7 +1489,15 @@
           "fun"
         ],
         "priorityScore": 70
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 6,
+        "maxValue": 10,
+        "stepSize": 2
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-016",
@@ -1342,7 +1506,7 @@
       "description": "Intervalles décroissants : 1000-800-600-400-200m.",
       "descriptionEn": "Descending intervals: 1000-800-600-400-200m.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -1359,7 +1523,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et accélérations",
@@ -1373,34 +1538,39 @@
           "descriptionEn": "1000m VO2max",
           "distanceM": 1000,
           "zone": "Z5",
-          "recovery": "400m récup"
+          "recovery": "400m récup",
+          "intensityType": "I"
         },
         {
           "description": "800m VMA",
           "descriptionEn": "800m VO2max",
           "distanceM": 800,
           "zone": "Z5",
-          "recovery": "300m récup"
+          "recovery": "300m récup",
+          "intensityType": "I"
         },
         {
           "description": "600m VMA",
           "descriptionEn": "600m VO2max",
           "distanceM": 600,
           "zone": "Z5",
-          "recovery": "200m récup"
+          "recovery": "200m récup",
+          "intensityType": "I"
         },
         {
           "description": "400m VMA",
           "descriptionEn": "400m VO2max",
           "distanceM": 400,
           "zone": "Z5",
-          "recovery": "200m récup"
+          "recovery": "200m récup",
+          "intensityType": "I"
         },
         {
           "description": "200m VMA",
           "descriptionEn": "200m VO2max",
           "distanceM": 200,
-          "zone": "Z5"
+          "zone": "Z5",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -1408,7 +1578,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1446,7 +1617,9 @@
           "speed"
         ],
         "priorityScore": 65
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-017",
@@ -1455,7 +1628,7 @@
       "description": "Deux ou trois séries de répétitions avec récup longue entre séries.",
       "descriptionEn": "Two or three sets of repetitions with long recovery between sets.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -1472,7 +1645,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes",
@@ -1487,13 +1661,15 @@
           "distanceM": 400,
           "zone": "Z5",
           "repetitions": 5,
-          "recovery": "200m footing"
+          "recovery": "200m footing",
+          "intensityType": "I"
         },
         {
           "description": "Récup longue",
           "descriptionEn": "Long recovery",
           "durationMin": 5,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         },
         {
           "description": "Série 2: 5x400m VMA",
@@ -1501,7 +1677,8 @@
           "distanceM": 400,
           "zone": "Z5",
           "repetitions": 5,
-          "recovery": "200m footing"
+          "recovery": "200m footing",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -1509,7 +1686,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1548,7 +1726,9 @@
           "sets"
         ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-018",
@@ -1557,7 +1737,7 @@
       "description": "Séance VMA orientée préparation 5km. Intervalles proches de l'allure course.",
       "descriptionEn": "VO2max session targeting 5K preparation. Intervals close to race pace.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -1574,7 +1754,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et accélérations",
@@ -1590,7 +1771,8 @@
           "zone": "Z5",
           "pace": "Allure 5K",
           "repetitions": 5,
-          "recovery": "400m footing Z1"
+          "recovery": "400m footing Z1",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -1598,7 +1780,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1636,7 +1819,15 @@
           "specific"
         ],
         "priorityScore": 85
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 3,
+        "maxValue": 6,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-019",
@@ -1645,7 +1836,7 @@
       "description": "Séance VMA en binôme avec relais.",
       "descriptionEn": "VO2max session with a partner using relay format.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -1662,7 +1853,8 @@
           "description": "Footing ensemble",
           "descriptionEn": "Jog together",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes",
@@ -1677,7 +1869,8 @@
           "distanceM": 400,
           "zone": "Z5",
           "repetitions": 10,
-          "recovery": "Temps du partenaire"
+          "recovery": "Temps du partenaire",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -1685,7 +1878,8 @@
           "description": "Footing de récupération ensemble",
           "descriptionEn": "Recovery jog together",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1724,7 +1918,15 @@
           "social"
         ],
         "priorityScore": 60
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 6,
+        "maxValue": 12,
+        "stepSize": 2
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-020",
@@ -1733,7 +1935,7 @@
       "description": "Rappel VMA en semaine de compétition. Court et intense.",
       "descriptionEn": "VO2max tune-up during race week. Short and intense.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -1750,7 +1952,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -1759,7 +1962,8 @@
           "descriptionEn": "5x(30s VO2max / 30s recovery)",
           "zone": "Z5",
           "repetitions": 5,
-          "recovery": "30s footing Z1"
+          "recovery": "30s footing Z1",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -1767,7 +1971,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1805,7 +2010,15 @@
           "pre-race"
         ],
         "priorityScore": 85
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 3,
+        "maxValue": 6,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-021",
@@ -1831,7 +2044,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et 4x accélérations progressives",
@@ -1845,7 +2059,9 @@
           "descriptionEn": "2x(15x 30s at 100% vVO2max / 30s at 50% vVO2max) with 5min between sets",
           "zone": "Z5",
           "repetitions": 15,
-          "recovery": "30s footing à 50% VMA"
+          "recovery": "30s footing à 50% VMA",
+          "intensityType": "I",
+          "sets": 2
         }
       ],
       "cooldownTemplate": [
@@ -1853,7 +2069,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1898,7 +2115,15 @@
           "vo2max"
         ],
         "priorityScore": 90
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 10,
+        "maxValue": 20,
+        "stepSize": 2
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-022",
@@ -1924,7 +2149,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes complètes et 5x accélérations",
@@ -1946,7 +2172,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1990,7 +2217,15 @@
           "elite"
         ],
         "priorityScore": 70
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 6,
+        "maxValue": 12,
+        "stepSize": 2
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "VMA-023",
@@ -2016,7 +2251,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes dynamiques et éducatifs de sprint",
@@ -2031,7 +2267,8 @@
           "distanceM": 80,
           "zone": "Z6",
           "repetitions": 12,
-          "recovery": "Marche retour ~2min"
+          "recovery": "Marche retour ~2min",
+          "intensityType": "R"
         }
       ],
       "cooldownTemplate": [
@@ -2039,7 +2276,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -2083,7 +2321,15 @@
           "hudson"
         ],
         "priorityScore": 65
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 8,
+        "maxValue": 15,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-024",
@@ -2092,7 +2338,7 @@
       "description": "Format 45 secondes à VMA / 45 secondes récup active. Développe l'endurance à haute intensité. Plus exigeant que le 30/30, basé sur les principes Billat.",
       "descriptionEn": "45 seconds at VO2max / 45 seconds active recovery format. Develops high-intensity endurance. More demanding than 30/30, based on Billat principles.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -2109,7 +2355,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et 4x accélérations progressives",
@@ -2123,7 +2370,9 @@
           "descriptionEn": "2x(10x 45s VO2max / 45s active recovery) with 4min between sets",
           "zone": "Z5",
           "repetitions": 10,
-          "recovery": "45s footing à 50-55% VMA"
+          "recovery": "45s footing à 50-55% VMA",
+          "intensityType": "I",
+          "sets": 2
         }
       ],
       "cooldownTemplate": [
@@ -2131,7 +2380,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -2177,7 +2427,15 @@
           "endurance-vitesse"
         ],
         "priorityScore": 80
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 6,
+        "maxValue": 12,
+        "stepSize": 2
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-025",
@@ -2186,7 +2444,7 @@
       "description": "Intervalles VMA avec récupération 'flottante' en Z3 au lieu de Z1. Maintient le métabolisme élevé tout au long de la séance. Méthode moderne d'entraînement.",
       "descriptionEn": "VO2max intervals with 'float' recovery in Z3 instead of Z1. Maintains elevated metabolism throughout the session. Modern training method.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
@@ -2203,7 +2461,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et accélérations",
@@ -2217,7 +2476,8 @@
           "descriptionEn": "6x(2min VO2max / 2min float Z3)",
           "zone": "Z5",
           "repetitions": 6,
-          "recovery": "2min en Z3 (pas Z1)"
+          "recovery": "2min en Z3 (pas Z1)",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -2225,7 +2485,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -2269,7 +2530,15 @@
           "advanced"
         ],
         "priorityScore": 75
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 4,
+        "maxValue": 8,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-026",
@@ -2295,7 +2564,8 @@
           "description": "Footing progressif autour du terrain",
           "descriptionEn": "Progressive jog around the pitch",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes dynamiques",
@@ -2309,7 +2579,8 @@
           "descriptionEn": "10-12x diagonal sprint (corner to corner) + jog recovery on short side",
           "zone": "Z5-Z6",
           "repetitions": 12,
-          "recovery": "Trot sur le petit côté (~30s)"
+          "recovery": "Trot sur le petit côté (~30s)",
+          "intensityType": "R"
         }
       ],
       "cooldownTemplate": [
@@ -2317,7 +2588,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -2362,7 +2634,15 @@
           "technique"
         ],
         "priorityScore": 65
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 8,
+        "maxValue": 15,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-027",
@@ -2388,7 +2668,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et mobilité",
@@ -2403,7 +2684,8 @@
           "distanceM": 100,
           "zone": "Z5",
           "repetitions": 10,
-          "recovery": "Marche retour ~90s"
+          "recovery": "Marche retour ~90s",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -2411,7 +2693,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -2459,7 +2742,15 @@
           "beginner-friendly"
         ],
         "priorityScore": 85
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 6,
+        "maxValue": 12,
+        "stepSize": 2
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 3
     },
     {
       "id": "VMA-028",
@@ -2468,7 +2759,7 @@
       "description": "6x1000m avec seulement 90s de récupération. Format exigeant populaire en Australie et Nouvelle-Zélande. Développe l'endurance à haute intensité.",
       "descriptionEn": "6x1000m with only 90s recovery. Demanding format popular in Australia and New Zealand. Develops high-intensity endurance.",
       "category": "vma_intervals",
-      "sessionType": "intervals",
+      "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "elite",
       "typicalDuration": {
@@ -2485,7 +2776,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et accélérations",
@@ -2500,7 +2792,8 @@
           "distanceM": 1000,
           "zone": "Z5",
           "repetitions": 6,
-          "recovery": "90s footing Z1 (récup courte)"
+          "recovery": "90s footing Z1 (récup courte)",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -2508,7 +2801,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -2554,7 +2848,15 @@
           "elite"
         ],
         "priorityScore": 75
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 4,
+        "maxValue": 7,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "VMA-029",
@@ -2580,7 +2882,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et accélérations",
@@ -2602,7 +2905,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -2650,7 +2954,9 @@
           "race-simulation"
         ],
         "priorityScore": 85
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-030",
@@ -2676,7 +2982,8 @@
           "description": "Footing lent avec éducatifs",
           "descriptionEn": "Slow jog with running drills",
           "durationMin": 10,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Étirements dynamiques et 3x accélérations progressives",
@@ -2690,7 +2997,8 @@
           "descriptionEn": "8x 30s VO2max / 30s recovery jog",
           "zone": "Z5",
           "repetitions": 8,
-          "recovery": "30s footing Z1"
+          "recovery": "30s footing Z1",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -2698,7 +3006,8 @@
           "description": "Footing de récupération et étirements",
           "descriptionEn": "Recovery jog and stretching",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -2743,7 +3052,15 @@
           "30/30"
         ],
         "priorityScore": 80
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 6,
+        "maxValue": 10,
+        "stepSize": 2
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 3
     },
     {
       "id": "VMA-031",
@@ -2769,7 +3086,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et 4× accélérations progressives",
@@ -2784,7 +3102,8 @@
           "zone": "Z5",
           "repetitions": 4,
           "durationMin": 4,
-          "recovery": "3min footing Z2 bas (70% FCmax)"
+          "recovery": "3min footing Z2 bas (70% FCmax)",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -2792,7 +3111,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -2838,7 +3158,15 @@
           "hr-guided"
         ],
         "priorityScore": 85
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 3,
+        "maxValue": 5,
+        "stepSize": 1
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-032",
@@ -2864,7 +3192,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes, éducatifs et 4× accélérations courtes",
@@ -2878,7 +3207,8 @@
           "descriptionEn": "8 × (20s maximal sprint / 10s complete rest)",
           "zone": "Z6",
           "repetitions": 8,
-          "recovery": "10s repos complet (arrêt)"
+          "recovery": "10s repos complet (arrêt)",
+          "intensityType": "R"
         }
       ],
       "cooldownTemplate": [
@@ -2886,7 +3216,8 @@
           "description": "Marche 5min puis footing très lent",
           "descriptionEn": "Walk 5min then very slow jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -2932,7 +3263,15 @@
           "short"
         ],
         "priorityScore": 75
-      }
+      },
+      "scaling": {
+        "progressionType": "reps",
+        "minValue": 6,
+        "maxValue": 10,
+        "stepSize": 2
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "VMA-033",
@@ -2958,7 +3297,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes techniques et 3× lignes droites progressives",
@@ -2973,13 +3313,15 @@
           "zone": "Z5",
           "repetitions": 8,
           "distanceM": 200,
-          "recovery": "200m marche/trot (récupération complète)"
+          "recovery": "200m marche/trot (récupération complète)",
+          "intensityType": "I"
         },
         {
           "description": "Repos 3-4 min entre les deux séries (marche ou trot très lent)",
           "descriptionEn": "3-4 min rest between the two series (walk or very slow jog)",
           "durationMin": 4,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         },
         {
           "description": "4 × 400m au rythme R (allure mile), récup 400m marche/trot",
@@ -2987,7 +3329,8 @@
           "zone": "Z5",
           "repetitions": 4,
           "distanceM": 400,
-          "recovery": "400m marche/trot (récupération complète)"
+          "recovery": "400m marche/trot (récupération complète)",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -2995,7 +3338,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -3045,7 +3389,9 @@
           "track"
         ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     }
   ]
 }

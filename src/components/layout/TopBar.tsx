@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Search, Moon, Sun, Menu } from "@/components/icons";
@@ -14,17 +15,32 @@ interface TopBarProps {
   sidebarCollapsed?: boolean;
 }
 
+/** Hook to track theme without causing parent re-renders */
+function useThemeIcon() {
+  const [isDark, setIsDark] = useState(() =>
+    typeof document !== "undefined" && document.documentElement.classList.contains("dark")
+  );
+  useEffect(() => {
+    const handler = (e: Event) => setIsDark((e as CustomEvent).detail === "dark");
+    window.addEventListener("zoned-theme-change", handler);
+    return () => window.removeEventListener("zoned-theme-change", handler);
+  }, []);
+  return isDark;
+}
+
 // Ensures 44px minimum touch target without increasing visual size.
 // The button stays 32px visually, but a transparent ::after pseudo-element
 // extends the tappable area to 44px.
 const touchTarget =
   "relative after:absolute after:inset-[-6px] after:content-['']";
 
-export function TopBar({ theme, onThemeToggle, onMobileMenuOpen }: TopBarProps) {
+export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
   const { t } = useTranslation("common");
   const { openPalette } = useCommandPalette();
   const currentLang = getCurrentLanguage();
   const isMobile = useIsMobile();
+  const isDark = useThemeIcon();
+  const theme = isDark ? "dark" : "light";
 
   return (
     <header className="sticky top-0 z-50 h-12 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

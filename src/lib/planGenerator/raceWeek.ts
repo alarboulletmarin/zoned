@@ -53,11 +53,10 @@ export function generateRaceWeek(
     });
   }
 
-  // Fill 1-2 more easy days earlier in the week if daysPerWeek > 2
+  // Fill easy days earlier in the week (avoid the day before race = rest day)
   const usedDays = new Set([longRunDay, openerDay]);
-  const easyDays = getAvailableDays(longRunDay, daysPerWeek)
-    .filter(d => !usedDays.has(d))
-    .slice(0, Math.max(0, daysPerWeek - 2));
+  const dayBeforeRace = (longRunDay - 1 + 7) % 7;
+  usedDays.add(dayBeforeRace); // Keep day before race free (rest)
 
   const recoveryWorkouts = allWorkouts.filter(
     w => w.category === "recovery" &&
@@ -65,22 +64,33 @@ export function generateRaceWeek(
     getDifficultyLevel(w.difficulty) <= getDifficultyLevel(difficulty)
   );
 
-  for (const day of easyDays) {
-    // Only add easy sessions for days well before the race
-    const daysBeforeRace = (longRunDay - day + 7) % 7;
-    if (daysBeforeRace >= 3 || day < longRunDay) {
-      const workout = recoveryWorkouts[0]; // Simple selection for race week
-      if (workout) {
-        sessions.push({
-          dayOfWeek: day,
-          workoutId: workout.id,
-          sessionType: "recovery",
-          isKeySession: false,
-          estimatedDurationMin: Math.round(workout.typicalDuration.min * RACE_WEEK_VOLUME_PCT),
-          notes: "Footing de récupération - semaine de course",
-          notesEn: "Recovery jog - race week",
-        });
-      }
+  // Only add easy runs on non-consecutive days, well before the race
+  const candidateDays = [0, 1, 2, 3, 4, 5, 6]
+    .filter(d => !usedDays.has(d))
+    .filter(d => {
+      // At least 3 days before race (circular)
+      const daysBeforeRace = (longRunDay - d + 7) % 7;
+      return daysBeforeRace >= 3;
+    })
+    .filter(d => {
+      // Not adjacent to opener day (ensure rest between)
+      const distToOpener = Math.min(Math.abs(d - openerDay), 7 - Math.abs(d - openerDay));
+      return distToOpener >= 2;
+    });
+
+  const maxExtraSessions = Math.max(0, daysPerWeek - 2);
+  for (const day of candidateDays.slice(0, maxExtraSessions)) {
+    const workout = recoveryWorkouts[0];
+    if (workout) {
+      sessions.push({
+        dayOfWeek: day,
+        workoutId: workout.id,
+        sessionType: "recovery",
+        isKeySession: false,
+        estimatedDurationMin: Math.round(workout.typicalDuration.min * RACE_WEEK_VOLUME_PCT),
+        notes: "Footing léger - semaine de course",
+        notesEn: "Easy jog - race week",
+      });
     }
   }
 
@@ -119,26 +129,4 @@ function getDifficultyLevel(d: Difficulty): number {
   return levels[d];
 }
 
-function getAvailableDays(longRunDay: number, daysPerWeek: number): number[] {
-  // Distribute days evenly across the week, avoiding consecutive days when possible
-  const allDays = [0, 1, 2, 3, 4, 5, 6];
-  const spacing = Math.floor(7 / daysPerWeek);
-  const days: number[] = [longRunDay];
-
-  for (let i = 1; i < daysPerWeek; i++) {
-    const candidate = (longRunDay - i * spacing + 7) % 7;
-    if (!days.includes(candidate)) {
-      days.push(candidate);
-    }
-  }
-
-  // Fill remaining if needed
-  if (days.length < daysPerWeek) {
-    for (const d of allDays) {
-      if (days.length >= daysPerWeek) break;
-      if (!days.includes(d)) days.push(d);
-    }
-  }
-
-  return days.sort((a, b) => a - b);
-}
+// getAvailableDays removed — race week uses inline day selection logic

@@ -40,7 +40,8 @@ import {
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { usePlan } from "@/hooks/usePlans";
-import { deletePlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan } from "@/lib/planStorage";
+import { deletePlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan, updateSessionCompletion } from "@/lib/planStorage";
+import { adaptPlan } from "@/lib/planGenerator/adapt";
 import { getWorkoutById } from "@/data/workouts";
 import { exportPlanToICS, exportPlanToPDF } from "@/lib/export";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
@@ -48,6 +49,7 @@ import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import {
   PHASE_META,
   RACE_DISTANCE_META,
+  type TrainingPlan,
 } from "@/types/plan";
 import type { WorkoutTemplate } from "@/types";
 import { toast } from "sonner";
@@ -110,6 +112,7 @@ export function PlanViewPage() {
   const [addTarget, setAddTarget] = useState<{ weekNumber: number; day: number } | null>(null);
   const [showDateDialog, setShowDateDialog] = useState(false);
   const [editStartDate, setEditStartDate] = useState("");
+  const [rpePrompt, setRpePrompt] = useState<{ weekNumber: number; sessionIndex: number } | null>(null);
 
   const currentWeek = useMemo(() => {
     if (!plan) return 0;
@@ -282,6 +285,104 @@ export function PlanViewPage() {
       toast.error(isEn ? "Failed to delete session" : "Échec de la suppression");
     }
   }, [plan, isEn, reloadPlan]);
+
+  // Run adaptation on a week if all sessions are resolved
+  const runAdaptationIfReady = useCallback((weekNumber: number, showToast: boolean) => {
+    if (!plan) return;
+
+    // Re-read fresh data from storage
+    const freshPlans = JSON.parse(localStorage.getItem("zoned-plans") || "[]");
+    const freshPlan = freshPlans.find((p: TrainingPlan) => p.id === plan.id);
+    if (!freshPlan) return;
+
+    const freshWeek = freshPlan.weeks.find((w: { weekNumber: number }) => w.weekNumber === weekNumber);
+    if (!freshWeek) return;
+
+    // Check if all sessions are resolved
+    const allResolved = freshWeek.sessions.every(
+      (s: { status?: string }) => s.status === "completed" || s.status === "skipped"
+    );
+    if (!allResolved) return;
+
+    const result = adaptPlan(freshPlan, weekNumber);
+    if (result.adapted) {
+      savePlan(freshPlan);
+      reloadPlan();
+      for (const change of result.changes) {
+        toast.info(isEn ? change.descriptionEn : change.description, { duration: 5000 });
+      }
+    } else if (showToast) {
+      toast.success(isEn ? `Week ${weekNumber} validated!` : `Semaine ${weekNumber} validée !`);
+    }
+  }, [plan, isEn, reloadPlan]);
+
+  const handleToggleComplete = useCallback((weekNumber: number, sessionIndex: number) => {
+    if (!plan) return;
+
+    const week = plan.weeks.find(w => w.weekNumber === weekNumber);
+    if (!week) return;
+    const session = week.sessions[sessionIndex];
+    if (!session) return;
+
+    // Cycle: planned → completed → skipped → planned
+    const nextStatus = session.status === "completed"
+      ? "skipped" as const
+      : session.status === "skipped"
+        ? "planned" as const
+        : "completed" as const;
+
+    const success = updateSessionCompletion(plan.id, weekNumber, sessionIndex, {
+      status: nextStatus,
+      completedAt: nextStatus === "completed" ? new Date().toISOString() : undefined,
+      rpe: undefined,
+    });
+
+    if (success) {
+      reloadPlan();
+
+      // When marking as completed, show RPE selector inline
+      if (nextStatus === "completed") {
+        setRpePrompt({ weekNumber, sessionIndex });
+      }
+
+      // Auto-trigger adaptation if all sessions in the week are now resolved
+      runAdaptationIfReady(weekNumber, false);
+    }
+  }, [plan, isEn, reloadPlan, runAdaptationIfReady]);
+
+  // Validate an entire week: mark unresolved sessions as "skipped", then run adaptation
+  const handleValidateWeek = useCallback((weekNumber: number) => {
+    if (!plan) return;
+    const week = plan.weeks.find(w => w.weekNumber === weekNumber);
+    if (!week) return;
+
+    // Mark all unresolved sessions as skipped
+    week.sessions.forEach((session, idx) => {
+      if (!session.status || session.status === "planned") {
+        updateSessionCompletion(plan.id, weekNumber, idx, {
+          status: "skipped",
+        });
+      }
+    });
+
+    reloadPlan();
+
+    // Run adaptation (all sessions are now resolved)
+    runAdaptationIfReady(weekNumber, true);
+  }, [plan, reloadPlan, runAdaptationIfReady]);
+
+  const handleSessionClick = useCallback((_weekNumber: number, _sessionIndex: number, workoutId: string) => {
+    if (workoutId && workoutId !== "__race_day__" && !workoutId.startsWith("__activity_")) {
+      navigate(`/workout/${workoutId}`, {
+        state: { from: "plan", planId: plan?.id, planName: plan ? (isEn ? plan.nameEn : plan.name) : "" },
+      });
+    }
+  }, [plan, isEn, navigate]);
+
+  const handleAddToDay = useCallback((weekNumber: number, day: number) => {
+    setAddTarget({ weekNumber, day });
+    setShowWorkoutPanel(true);
+  }, []);
 
   const handleWorkoutAdd = useCallback(async (workoutId: string, weekNumber: number, day: number) => {
     if (!plan) return;
@@ -595,6 +696,33 @@ export function PlanViewPage() {
           </div>
         </div>
 
+        {/* RPE picker is rendered as a fixed bottom bar (see end of component) */}
+
+        {/* Completion legend */}
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground mb-2 px-1">
+          <span className="flex items-center gap-1.5">
+            <span className="size-3 rounded-sm border-2 border-muted-foreground/30 inline-block" />
+            {isEn ? "Planned" : "Planifié"}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="size-3 rounded-sm bg-green-500 inline-block" />
+            {isEn ? "Completed" : "Fait"}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="size-3 rounded-sm bg-muted border border-muted-foreground/30 inline-flex items-center justify-center">
+              <svg viewBox="0 0 12 12" className="size-2" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M3 3l6 6M9 3l-6 6" />
+              </svg>
+            </span>
+            {isEn ? "Skipped" : "Passé"}
+          </span>
+          <span className="text-muted-foreground/50">
+            {isEn
+              ? "Click checkbox to cycle: planned → done → skipped"
+              : "Cliquez sur la case : planifié → fait → passé"}
+          </span>
+        </div>
+
         {/* Calendar View */}
         {planView === "calendar" && (
           <div className="flex gap-4">
@@ -604,20 +732,13 @@ export function PlanViewPage() {
                 workoutNames={workoutNames}
                 currentWeek={currentWeek}
                 isEn={isEn}
-                onSessionClick={(_weekNumber, _sessionIndex, workoutId) => {
-                  if (workoutId && workoutId !== "__race_day__" && !workoutId.startsWith("__activity_")) {
-                    navigate(`/workout/${workoutId}`, {
-                      state: { from: "plan", planId: plan.id, planName: isEn ? plan.nameEn : plan.name },
-                    });
-                  }
-                }}
+                onSessionClick={handleSessionClick}
                 onSessionMove={handleSessionMove}
                 onSessionDelete={handleSessionDelete}
+                onToggleComplete={handleToggleComplete}
+                onValidateWeek={handleValidateWeek}
                 onWorkoutAdd={handleWorkoutAdd}
-                onAddToDay={(weekNumber, day) => {
-                  setAddTarget({ weekNumber, day });
-                  setShowWorkoutPanel(true);
-                }}
+                onAddToDay={handleAddToDay}
               />
             </div>
             {/* Desktop/tablet inline panel */}
@@ -737,15 +858,44 @@ export function PlanViewPage() {
                             <div
                               key={originalIndex}
                               className={cn(
-                                "flex items-center gap-3 rounded-lg p-3",
+                                "flex items-start gap-2 sm:gap-3 rounded-lg p-2.5 sm:p-3",
                                 isRaceDay
                                   ? "bg-primary/10 border border-primary/20"
-                                  : "bg-secondary/50"
+                                  : session.status === "completed"
+                                    ? "bg-green-500/5 ring-1 ring-green-500/20"
+                                    : session.status === "skipped"
+                                      ? "bg-secondary/30 opacity-60"
+                                      : "bg-secondary/50"
                               )}
                             >
+                              {/* Completion toggle */}
+                              {!isRaceDay && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleToggleComplete(week.weekNumber, originalIndex)}
+                                  className={cn(
+                                    "size-5 mt-0.5 rounded border-2 shrink-0 flex items-center justify-center transition-colors",
+                                    session.status === "completed"
+                                      ? "bg-green-500 border-green-500 text-white"
+                                      : session.status === "skipped"
+                                        ? "bg-muted border-muted-foreground/30 text-muted-foreground"
+                                        : "border-muted-foreground/30 hover:border-primary"
+                                  )}
+                                >
+                                  {session.status === "completed" && (
+                                    <svg viewBox="0 0 12 12" className="size-3" fill="none" stroke="currentColor" strokeWidth="2">
+                                      <path d="M2 6l3 3 5-5" />
+                                    </svg>
+                                  )}
+                                  {session.status === "skipped" && (
+                                    <svg viewBox="0 0 12 12" className="size-3" fill="none" stroke="currentColor" strokeWidth="2">
+                                      <path d="M3 3l6 6M9 3l-6 6" />
+                                    </svg>
+                                  )}
+                                </button>
+                              )}
 
-
-                              {/* Content */}
+                              {/* Content — stacks on mobile */}
                               <div className="flex-1 min-w-0">
                                 {isRaceDay ? (
                                   <div className="flex items-center gap-2">
@@ -777,13 +927,13 @@ export function PlanViewPage() {
                                 )}
                               </div>
 
-                              {/* Badges */}
-                              <div className="flex items-center gap-2 shrink-0">
+                              {/* Badges — wraps on mobile */}
+                              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 shrink-0">
                                 {session.isKeySession && (
-                                  <Star className="size-4 text-yellow-500 fill-yellow-500" />
+                                  <Star className="size-3.5 sm:size-4 text-yellow-500 fill-yellow-500" />
                                 )}
                                 {!isRaceDay && sessionLabel && (
-                                  <Badge variant="outline" className="text-xs">
+                                  <Badge variant="outline" className="text-[10px] sm:text-xs hidden sm:inline-flex">
                                     {isEn ? sessionLabel.en : sessionLabel.fr}
                                   </Badge>
                                 )}
@@ -846,6 +996,44 @@ export function PlanViewPage() {
                         });
                       })()
                     )}
+                    {/* Validate week button — shown when some sessions are resolved but not all */}
+                    {(() => {
+                      const resolved = week.sessions.filter(s => s.status === "completed" || s.status === "skipped").length;
+                      const total = week.sessions.length;
+                      const allDone = resolved === total;
+                      const hasResolved = resolved > 0;
+
+                      if (allDone && hasResolved) {
+                        return (
+                          <div className="mt-2 text-center text-xs text-green-600 dark:text-green-400 flex items-center justify-center gap-1.5">
+                            <svg viewBox="0 0 12 12" className="size-3" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M2 6l3 3 5-5" />
+                            </svg>
+                            {isEn ? "Week validated" : "Semaine validée"}
+                          </div>
+                        );
+                      }
+
+                      if (hasResolved && !allDone) {
+                        return (
+                          <button
+                            type="button"
+                            onClick={() => handleValidateWeek(week.weekNumber)}
+                            className="mt-2 w-full rounded-lg bg-primary/10 hover:bg-primary/20 border border-primary/20 p-2 flex items-center justify-center gap-2 text-primary text-sm font-medium transition-colors"
+                          >
+                            <svg viewBox="0 0 12 12" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M2 6l3 3 5-5" />
+                            </svg>
+                            {isEn
+                              ? `Validate week (${resolved}/${total} done)`
+                              : `Valider la semaine (${resolved}/${total} faites)`}
+                          </button>
+                        );
+                      }
+
+                      return null;
+                    })()}
+
                     {/* Mobile: add session button */}
                     <button
                       type="button"
@@ -1009,6 +1197,76 @@ export function PlanViewPage() {
           isEn={isEn}
         />
       </div>
+
+      {/* RPE picker — fixed bottom bar, always visible above content */}
+      {rpePrompt && (() => {
+        const rpeWeek = plan.weeks.find(w => w.weekNumber === rpePrompt.weekNumber);
+        const rpeSession = rpeWeek?.sessions[rpePrompt.sessionIndex];
+        const rpeName = rpeSession ? (workoutNames[rpeSession.workoutId] || rpeSession.workoutId) : "";
+
+        return (
+          <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-4 px-4 pointer-events-none">
+            <div className="pointer-events-auto w-full max-w-md rounded-xl bg-card/95 backdrop-blur-sm border border-border shadow-lg p-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
+              {/* Session info */}
+              <div className="text-center mb-2">
+                <p className="text-xs text-muted-foreground">
+                  RPE · {isEn ? "Rate of Perceived Effort" : "Effort ressenti"}
+                </p>
+                <p className="text-sm font-medium truncate">
+                  <span className="text-muted-foreground font-normal">S{rpePrompt.weekNumber}</span>
+                  {" · "}
+                  {rpeName}
+                </p>
+              </div>
+
+              {/* RPE buttons */}
+              <div className="flex gap-1 justify-center">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((rpe) => (
+                  <button
+                    key={rpe}
+                    type="button"
+                    onClick={() => {
+                      updateSessionCompletion(plan.id, rpePrompt.weekNumber, rpePrompt.sessionIndex, {
+                        status: "completed",
+                        completedAt: new Date().toISOString(),
+                        rpe,
+                      });
+                      reloadPlan();
+                      setRpePrompt(null);
+                    }}
+                    className={cn(
+                      "size-8 sm:size-9 rounded-lg text-sm font-semibold transition-all active:scale-95",
+                      rpe <= 3 && "bg-green-500/15 hover:bg-green-500/25 text-green-700 dark:text-green-400",
+                      rpe >= 4 && rpe <= 6 && "bg-yellow-500/15 hover:bg-yellow-500/25 text-yellow-700 dark:text-yellow-400",
+                      rpe >= 7 && rpe <= 8 && "bg-orange-500/15 hover:bg-orange-500/25 text-orange-700 dark:text-orange-400",
+                      rpe >= 9 && "bg-red-500/15 hover:bg-red-500/25 text-red-700 dark:text-red-400",
+                    )}
+                  >
+                    {rpe}
+                  </button>
+                ))}
+              </div>
+
+              {/* RPE scale legend */}
+              <div className="flex justify-between px-1 mt-1">
+                <span className="text-[10px] text-green-600 dark:text-green-400">{isEn ? "Easy" : "Facile"}</span>
+                <span className="text-[10px] text-yellow-600 dark:text-yellow-400">{isEn ? "Moderate" : "Modéré"}</span>
+                <span className="text-[10px] text-orange-600 dark:text-orange-400">{isEn ? "Hard" : "Dur"}</span>
+                <span className="text-[10px] text-red-600 dark:text-red-400">Max</span>
+              </div>
+
+              {/* Skip button */}
+              <button
+                type="button"
+                onClick={() => setRpePrompt(null)}
+                className="w-full mt-1.5 text-xs text-muted-foreground hover:text-foreground text-center py-1 transition-colors"
+              >
+                {isEn ? "Skip" : "Passer"}
+              </button>
+            </div>
+          </div>
+        );
+      })()}
     </>
   );
 }

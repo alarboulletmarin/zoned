@@ -90,50 +90,47 @@ function App() {
     typeof window !== "undefined" && localStorage.getItem("zoned-theme") !== null
   );
 
-  // Theme state with localStorage persistence
-  const [theme, setTheme] = useState<"light" | "dark">(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("zoned-theme");
-      if (stored === "dark" || stored === "light") return stored;
-      // Check system preference
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        return "dark";
+  // Theme — managed via ref + DOM to avoid re-rendering the entire app tree.
+  // Only the TopBar icon needs to know the current theme (handled via its own state).
+  const themeRef = useRef<"light" | "dark">(
+    (() => {
+      if (typeof window !== "undefined") {
+        const stored = localStorage.getItem("zoned-theme");
+        if (stored === "dark" || stored === "light") return stored;
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
       }
-    }
-    return "light";
-  });
+      return "light" as const;
+    })()
+  );
 
-  // Apply theme to document (only save to localStorage if user explicitly set it)
+  // Apply initial theme (no state involved)
   useEffect(() => {
-    const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-    if (userHasSetTheme.current) {
-      localStorage.setItem("zoned-theme", theme);
-    }
-  }, [theme]);
+    document.documentElement.classList.toggle("dark", themeRef.current === "dark");
+  }, []);
 
-  // Listen for system theme changes (only when no user preference)
+  // Listen for system theme changes
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
     const handleChange = (e: MediaQueryListEvent) => {
       if (!userHasSetTheme.current) {
-        setTheme(e.matches ? "dark" : "light");
+        themeRef.current = e.matches ? "dark" : "light";
+        document.documentElement.classList.toggle("dark", themeRef.current === "dark");
       }
     };
-
     mediaQuery.addEventListener("change", handleChange);
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
-  const toggleTheme = () => {
+  // Toggle theme — NO setState, NO App re-render. Just DOM class + localStorage.
+  const toggleTheme = useCallback(() => {
     userHasSetTheme.current = true;
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
-  };
+    const next = themeRef.current === "dark" ? "light" : "dark";
+    themeRef.current = next;
+    document.documentElement.classList.toggle("dark", next === "dark");
+    localStorage.setItem("zoned-theme", next);
+    // Dispatch custom event so TopBar can update its icon
+    window.dispatchEvent(new CustomEvent("zoned-theme-change", { detail: next }));
+  }, []);
 
   // Sidebar state with localStorage persistence
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
@@ -175,7 +172,7 @@ function App() {
               {/* Right column: TopBar + content */}
               <div className="flex flex-1 min-w-0 flex-col">
                 <TopBar
-                  theme={theme}
+                  theme={themeRef.current}
                   onThemeToggle={toggleTheme}
                   onMobileMenuOpen={() => setMobileSidebarOpen(true)}
                   sidebarCollapsed={sidebarCollapsed}

@@ -155,6 +155,12 @@ export async function exportPlanToPDF(
               text: `${isEn ? "Sessions/week" : "Séances/sem"}: ${plan.config.daysPerWeek}`,
               style: "metadata",
             },
+            ...(plan.peakWeeklyKm
+              ? [{ text: `${isEn ? "Peak volume" : "Volume pic"}: ${plan.peakWeeklyKm} km/${isEn ? "wk" : "sem"}`, style: "metadata" as const }]
+              : []),
+            ...(plan.peakLongRunKm
+              ? [{ text: `${isEn ? "Peak long run" : "Pic sortie longue"}: ${plan.peakLongRunKm} km`, style: "metadata" as const }]
+              : []),
           ],
         },
       ],
@@ -362,9 +368,12 @@ export async function exportPlanToPDF(
       ? `${Math.floor(weekDuration / 60)}h${(weekDuration % 60).toString().padStart(2, "0")}`
       : `${weekDuration}min`;
 
-    // Week header with phase info
+    // Week header with phase info + v2 data
+    const actualKm = week.targetKm ?? weekKm;
+    const longRunInfo = week.targetLongRunKm ? ` · SL ${week.targetLongRunKm}km` : "";
+    const recoveryTag = week.isRecoveryWeek ? (isEn ? " [Recovery]" : " [Récup]") : "";
     content.push({
-      text: `${weekLabel} — ${isEn ? phaseMeta.labelEn : phaseMeta.label} · ${weekDurationStr} · ~${weekKm}km${week.isRecoveryWeek ? (isEn ? " [Recovery]" : " [Récup]") : ""}`,
+      text: `${weekLabel} — ${isEn ? phaseMeta.labelEn : phaseMeta.label} · ${weekDurationStr} · ~${actualKm}km${longRunInfo}${recoveryTag}`,
       style: "weekHeader",
       pageBreak: (week.weekNumber > 1 && !isPhaseTransition) ? "before" as const : undefined,
     });

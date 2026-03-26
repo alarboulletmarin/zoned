@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useCallback, useEffect } from "react";
+import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
 import { cn } from "@/lib/utils";
 import { Star, Flag, Clock, Trash2, Eye } from "@/components/icons";
 import { PHASE_META } from "@/types/plan";
@@ -55,6 +55,8 @@ interface PlanCalendarProps {
     toDay: number,
   ) => void;
   onSessionDelete?: (weekNumber: number, sessionIndex: number) => void;
+  onToggleComplete?: (weekNumber: number, sessionIndex: number) => void;
+  onValidateWeek?: (weekNumber: number) => void;
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
   /** Mobile: open the workout panel for a specific day */
   onAddToDay?: (weekNumber: number, day: number) => void;
@@ -62,7 +64,7 @@ interface PlanCalendarProps {
 
 // ── Component ───────────────────────────────────────────────────────
 
-export function PlanCalendar({
+export const PlanCalendar = memo(function PlanCalendar({
   plan,
   workoutNames,
   currentWeek,
@@ -70,6 +72,8 @@ export function PlanCalendar({
   onSessionClick,
   onSessionMove,
   onSessionDelete,
+  onToggleComplete,
+  onValidateWeek,
   onWorkoutAdd,
   onAddToDay,
 }: PlanCalendarProps) {
@@ -513,10 +517,34 @@ export function PlanCalendar({
                               ) : (
                                 <>
                                   <div className="flex items-center gap-1 mb-0.5">
+                                    {onToggleComplete && (
+                                      <button
+                                        type="button"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          onToggleComplete(mobileWeek, originalIndex);
+                                        }}
+                                        className={cn(
+                                          "size-3.5 rounded-sm border shrink-0 flex items-center justify-center transition-colors",
+                                          session.status === "completed"
+                                            ? "bg-green-500 border-green-500 text-white"
+                                            : "border-muted-foreground/40"
+                                        )}
+                                      >
+                                        {session.status === "completed" && (
+                                          <svg viewBox="0 0 12 12" className="size-2.5" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <path d="M2 6l3 3 5-5" />
+                                          </svg>
+                                        )}
+                                      </button>
+                                    )}
                                     <span className="size-2 rounded-full shrink-0" style={{ backgroundColor: SESSION_COLORS[session.sessionType] || "#9ca3af" }} />
                                     {session.isKeySession && <Star className="size-2.5 text-yellow-500 fill-yellow-500 shrink-0" />}
                                   </div>
-                                  <span className="text-[10px] leading-tight font-medium line-clamp-2 block">
+                                  <span className={cn(
+                                    "text-[10px] leading-tight font-medium line-clamp-2 block",
+                                    session.status === "skipped" && "line-through text-muted-foreground"
+                                  )}>
                                     {sessionName}
                                   </span>
                                   {session.estimatedDurationMin > 0 && !session.workoutId.startsWith("__activity_") && (
@@ -583,9 +611,15 @@ export function PlanCalendar({
               const isPhaseStart = phaseStartWeeks.has(week.weekNumber);
               const dayMap = sessionsByWeekDay.get(week.weekNumber);
 
-              const weekLabel = isEn
-                ? week.weekLabelEn || `W${week.weekNumber}`
-                : week.weekLabel || `S${week.weekNumber}`;
+              // Short label for calendar column (avoid overflow)
+              let weekLabel: string;
+              if (week.weekNumber === plan.totalWeeks && week.sessions.some(s => s.workoutId === "__race_day__")) {
+                weekLabel = isEn ? "Race" : "Course";
+              } else if (week.isRecoveryWeek) {
+                weekLabel = isEn ? "Recovery" : "Récup";
+              } else {
+                weekLabel = `${isEn ? "W" : "S"}${week.weekNumber}`;
+              }
 
               return (
                 <tr
@@ -620,7 +654,7 @@ export function PlanCalendar({
                     </span>
                     {week.sessions.length > 0 && (
                       <span className="text-[9px] text-muted-foreground/70 tabular-nums">
-                        ~{Math.round(computeWeekKm(week))}km · {computeWeekDuration(week)}min
+                        ~{week.targetKm ? `${week.targetKm}km` : `${Math.round(computeWeekKm(week))}km`} · {computeWeekDuration(week)}min
                       </span>
                     )}
                     {isCurrent && (
@@ -628,6 +662,39 @@ export function PlanCalendar({
                         {isEn ? "NOW" : "ACTUEL"}
                       </div>
                     )}
+                    {/* Completion stats + validate button */}
+                    {(() => {
+                      const total = week.sessions.length;
+                      if (total === 0) return null;
+                      const done = week.sessions.filter(s => s.status === "completed").length;
+                      const skipped = week.sessions.filter(s => s.status === "skipped").length;
+                      const resolved = done + skipped;
+                      const allResolved = resolved === total;
+
+                      if (allResolved && resolved > 0) {
+                        return (
+                          <div className="text-[9px] text-green-600 dark:text-green-400 font-medium mt-0.5 flex items-center gap-0.5">
+                            <svg viewBox="0 0 12 12" className="size-2.5" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 6l3 3 5-5" /></svg>
+                            {done}/{total}
+                          </div>
+                        );
+                      }
+
+                      if (resolved > 0 && !allResolved && onValidateWeek) {
+                        return (
+                          <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); onValidateWeek(week.weekNumber); }}
+                            className="text-[9px] mt-0.5 px-1 py-0.5 rounded bg-primary/10 hover:bg-primary/20 text-primary font-medium transition-colors"
+                            title={isEn ? "Validate week" : "Valider la semaine"}
+                          >
+                            {isEn ? `Validate ${done}/${total}` : `Valider ${done}/${total}`}
+                          </button>
+                        );
+                      }
+
+                      return null;
+                    })()}
                   </td>
 
                   {/* Day cells (0=Mon to 6=Sun) */}
@@ -709,6 +776,11 @@ export function PlanCalendar({
                                         ? () => onSessionDelete(week.weekNumber, originalIndex)
                                         : undefined
                                     }
+                                    onToggleComplete={
+                                      onToggleComplete && !isRaceDay
+                                        ? () => onToggleComplete(week.weekNumber, originalIndex)
+                                        : undefined
+                                    }
                                     onContextMenu={
                                       !isRaceDay
                                         ? (e: React.MouseEvent) => {
@@ -767,6 +839,37 @@ export function PlanCalendar({
                 {isEn ? "View session" : "Voir la s\u00e9ance"}
               </button>
             )}
+            {onToggleComplete && (
+              <>
+                <button
+                  type="button"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors text-left"
+                  onClick={() => {
+                    // Find the session to determine current state
+                    const week = plan.weeks.find(w => w.weekNumber === contextMenu.weekNumber);
+                    const session = week?.sessions[contextMenu.sessionIndex];
+                    if (session?.status === "completed") {
+                      // Already completed, toggle back to planned
+                      onToggleComplete(contextMenu.weekNumber, contextMenu.sessionIndex);
+                    } else {
+                      // Mark as completed (might go planned→completed or skipped→planned→completed)
+                      // Toggle cycles, so call once or twice
+                      if (session?.status === "skipped") {
+                        // skipped → planned (one toggle), then we need another to get completed
+                        // Simpler: just toggle once to go to next state
+                      }
+                      onToggleComplete(contextMenu.weekNumber, contextMenu.sessionIndex);
+                    }
+                    setContextMenu(null);
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" className="size-4 text-green-500 shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M5 12l5 5 9-9" />
+                  </svg>
+                  {isEn ? "Toggle done" : "Fait / pas fait"}
+                </button>
+              </>
+            )}
             {onSessionDelete && (
               <button
                 type="button"
@@ -785,17 +888,18 @@ export function PlanCalendar({
       )}
     </>
   );
-}
+});
 
 // ── Session cell sub-component ──────────────────────────────────────
 
-function SessionCell({
+const SessionCell = memo(function SessionCell({
   session,
   isRaceDay,
   workoutName,
   isEn,
   onClick,
   onDelete,
+  onToggleComplete,
   onContextMenu,
 }: {
   session: PlanSession;
@@ -804,6 +908,7 @@ function SessionCell({
   isEn: boolean;
   onClick?: () => void;
   onDelete?: () => void;
+  onToggleComplete?: () => void;
   onContextMenu?: (e: React.MouseEvent) => void;
 }) {
   if (isRaceDay) {
@@ -819,6 +924,8 @@ function SessionCell({
 
   const dotColor = SESSION_COLORS[session.sessionType] || "#9ca3af";
   const displayName = workoutName || session.workoutId;
+  const isCompleted = session.status === "completed";
+  const isSkipped = session.status === "skipped";
 
   return (
     <div className="relative group" onContextMenu={onContextMenu}>
@@ -844,38 +951,88 @@ function SessionCell({
         </button>
       )}
 
-      <button
-        type="button"
-        onClick={onClick}
-        disabled={!onClick}
-        className={cn(
-          "w-full rounded px-1 py-1 text-left transition-colors",
-          "bg-secondary/60 hover:bg-secondary",
-          !onClick && "cursor-default"
+      <div className="flex items-start gap-0.5">
+        {/* Completion checkbox — outside the clickable area */}
+        {onToggleComplete && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              onToggleComplete();
+            }}
+            onPointerDown={(e) => e.stopPropagation()}
+            className={cn(
+              "size-3.5 rounded-sm border shrink-0 flex items-center justify-center transition-colors mt-1",
+              isCompleted
+                ? "bg-green-500 border-green-500 text-white"
+                : isSkipped
+                  ? "bg-muted border-muted-foreground/30"
+                  : "border-muted-foreground/40 hover:border-primary"
+            )}
+            title={
+              isCompleted ? (isEn ? "Completed" : "Fait")
+                : isSkipped ? (isEn ? "Skipped" : "Passé")
+                  : (isEn ? "Mark as done" : "Marquer comme fait")
+            }
+          >
+            {isCompleted && (
+              <svg viewBox="0 0 12 12" className="size-2.5" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M2 6l3 3 5-5" />
+              </svg>
+            )}
+            {isSkipped && (
+              <svg viewBox="0 0 12 12" className="size-2" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M3 3l6 6M9 3l-6 6" />
+              </svg>
+            )}
+          </button>
         )}
-      >
-        <div className="flex items-center gap-1">
-          <span
-            className="size-1.5 rounded-full shrink-0"
-            style={{ backgroundColor: dotColor }}
-          />
-          {session.isKeySession && (
-            <Star className="size-2.5 text-yellow-500 fill-yellow-500 shrink-0" />
+
+        {/* Session content — clickable */}
+        <div
+          role="button"
+          tabIndex={onClick ? 0 : undefined}
+          onClick={onClick}
+          onKeyDown={onClick ? (e) => { if (e.key === "Enter") onClick(); } : undefined}
+          className={cn(
+            "flex-1 min-w-0 rounded px-1 py-1 text-left transition-colors",
+            "bg-secondary/60 hover:bg-secondary",
+            isCompleted && "bg-green-500/10 hover:bg-green-500/15 ring-1 ring-green-500/30",
+            isSkipped && "opacity-50",
+            !onClick && "cursor-default",
+            onClick && "cursor-pointer"
           )}
-        </div>
-        <span
-          className="text-[11px] leading-tight font-medium line-clamp-2 mt-0.5 block"
-          title={displayName}
         >
+          <div className="flex items-center gap-1">
+            <span
+              className="size-1.5 rounded-full shrink-0"
+              style={{ backgroundColor: dotColor }}
+            />
+            {session.isKeySession && (
+              <Star className="size-2.5 text-yellow-500 fill-yellow-500 shrink-0" />
+            )}
+          </div>
+          <span
+            className={cn(
+              "text-[11px] leading-tight font-medium line-clamp-2 mt-0.5 block",
+              isSkipped && "line-through text-muted-foreground"
+            )}
+            title={displayName}
+          >
           {displayName}
         </span>
         {session.estimatedDurationMin > 0 && !session.workoutId.startsWith("__activity_") && (
           <span className="text-[10px] text-muted-foreground flex items-center gap-0.5 mt-0.5">
             <Clock className="size-2.5" />
             {session.estimatedDurationMin}min
+            {session.rpe && (
+              <span className="ml-1 text-[9px] font-medium text-amber-600">RPE {session.rpe}</span>
+            )}
           </span>
         )}
-      </button>
+        </div>
+      </div>
     </div>
   );
-}
+});

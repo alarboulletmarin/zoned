@@ -147,6 +147,24 @@
 }
 
 /* ==========================================================================
+   THEME TRANSITION — smooth color change on dark/light toggle
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  transition-property: background-color, color, border-color, outline-color, fill, stroke, box-shadow;
+  transition-duration: 0.15s;
+  transition-timing-function: ease;
+}
+
+/* Disable transition on elements that animate their own properties */
+[class*="animate-"],
+[class*="transition-"],
+.no-theme-transition {
+  transition-property: none;
+}
+
+/* ==========================================================================
    DARK MODE
    ========================================================================== */
 .dark {

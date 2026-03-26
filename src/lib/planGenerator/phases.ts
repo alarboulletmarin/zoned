@@ -1,39 +1,99 @@
-import type { RaceDistance, PhaseRange } from "@/types/plan";
+/**
+ * Phase Distribution — Evidence-based training phase calculation
+ *
+ * Distributes plan weeks across Base/Build/Peak/Taper phases
+ * with ratios adapted to race distance and plan duration.
+ *
+ * References:
+ * - Daniels, J. (2014). Phases I-IV model
+ * - Pfitzinger, P. (2009). Mesocycle structure
+ * - Lydiard, A. (1962). Sequential periodization
+ */
+
+import type { RaceDistance, PhaseRange, TrainingGoal } from "@/types/plan";
 import type { TrainingPhase } from "@/types";
 import {
-  BASE_PHASE_PCT, BUILD_PHASE_PCT, PEAK_PHASE_PCT,
-  TAPER_WEEKS, MIN_PHASE_WEEKS,
+  PHASE_DISTRIBUTION,
+  SHORT_PLAN_BASE_ADJUSTMENT,
+  SHORT_PLAN_THRESHOLD,
+  LONG_PLAN_THRESHOLD,
+  TAPER_WEEKS,
+  MIN_PHASE_WEEKS,
+  getGoalModifiers,
 } from "./constants";
 
 /**
  * Calculate phase distribution from total weeks and race distance.
- * Returns array of PhaseRange with 1-indexed week numbers.
+ *
+ * Improvements over previous version:
+ * - Per-distance ratios instead of fixed 40/35/15
+ * - Duration-aware adjustments (short plans compress base, long plans extend it)
+ * - Training goal shifts phase distribution (finish=more base, compete=more peak)
+ * - Ensures minimum 1 week per phase
+ *
+ * @returns Array of PhaseRange with 1-indexed week numbers.
  */
-export function calculatePhases(totalWeeks: number, raceDistance: RaceDistance): PhaseRange[] {
+export function calculatePhases(
+  totalWeeks: number,
+  raceDistance: RaceDistance,
+  trainingGoal?: TrainingGoal,
+): PhaseRange[] {
   const taperWeeks = TAPER_WEEKS[raceDistance];
   const availableWeeks = totalWeeks - taperWeeks;
 
-  const isTrailRace = raceDistance === "trail_short" || raceDistance === "trail" || raceDistance === "ultra";
+  // Get base distribution for this race distance
+  const dist = PHASE_DISTRIBUTION[raceDistance];
+  const goalMods = getGoalModifiers(trainingGoal);
 
-  // Distribute available weeks across base/build/peak
-  let baseWeeks: number;
-  let buildWeeks: number;
-  let peakWeeks: number;
+  let basePct = dist.base + goalMods.basePhaseShift;
+  let buildPct = dist.build;
+  let peakPct = dist.peak;
 
-  if (isTrailRace) {
-    // Trail: more base (50%), less peak (10%), build stays same
-    baseWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * 0.50));
-    buildWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * 0.30));
-    peakWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * 0.10));
-  } else {
-    baseWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * BASE_PHASE_PCT));
-    buildWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * BUILD_PHASE_PCT));
-    peakWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * PEAK_PHASE_PCT));
+  // Rebalance after goal shift (take/give from peak)
+  if (goalMods.basePhaseShift !== 0) {
+    peakPct = Math.max(0.10, peakPct - goalMods.basePhaseShift);
   }
+
+  // Adjust for plan duration
+  if (totalWeeks < SHORT_PLAN_THRESHOLD) {
+    // Short plans: compress base, expand build/peak for more quality work
+    basePct = Math.max(0.15, basePct + SHORT_PLAN_BASE_ADJUSTMENT);
+    const freed = dist.base + goalMods.basePhaseShift - basePct;
+    if (freed > 0) {
+      buildPct += freed * 0.5;
+      peakPct += freed * 0.5;
+    }
+  } else if (totalWeeks > LONG_PLAN_THRESHOLD) {
+    // Long plans (>18 weeks): cap base at ~12 weeks absolute max
+    // Extra weeks go to build and peak (more quality time)
+    const maxBaseWeeks = 12;
+    const baseWeeksFromPct = Math.round(availableWeeks * basePct);
+    if (baseWeeksFromPct > maxBaseWeeks) {
+      const excessWeeks = baseWeeksFromPct - maxBaseWeeks;
+      const excessPct = excessWeeks / availableWeeks;
+      basePct -= excessPct;
+      // Distribute excess 60% to build, 40% to peak
+      buildPct += excessPct * 0.6;
+      peakPct += excessPct * 0.4;
+    }
+  }
+
+  // Calculate week counts
+  let baseWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * basePct));
+  let buildWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * buildPct));
+  let peakWeeks = Math.max(MIN_PHASE_WEEKS, Math.round(availableWeeks * peakPct));
 
   // Adjust to fit exactly (give/take from base which is the largest)
   const assigned = baseWeeks + buildWeeks + peakWeeks;
   baseWeeks += availableWeeks - assigned;
+
+  // Safety: ensure base is at least 1 after adjustment
+  if (baseWeeks < MIN_PHASE_WEEKS) {
+    baseWeeks = MIN_PHASE_WEEKS;
+    // Steal from build if needed
+    const overflow = (baseWeeks + buildWeeks + peakWeeks) - availableWeeks;
+    if (overflow > 0) buildWeeks = Math.max(MIN_PHASE_WEEKS, buildWeeks - overflow);
+  }
 
   // Build ranges (1-indexed)
   const phases: PhaseRange[] = [];
@@ -63,4 +123,20 @@ export function getPhaseForWeek(weekNumber: number, phases: PhaseRange[]): Train
     }
   }
   return "base"; // fallback
+}
+
+/**
+ * Get the week index within the current phase (0-based).
+ * Useful for intra-phase progression.
+ */
+export function getWeekInPhase(weekNumber: number, phases: PhaseRange[]): { weekInPhase: number; totalPhaseWeeks: number } {
+  for (const range of phases) {
+    if (weekNumber >= range.startWeek && weekNumber <= range.endWeek) {
+      return {
+        weekInPhase: weekNumber - range.startWeek,
+        totalPhaseWeeks: range.endWeek - range.startWeek + 1,
+      };
+    }
+  }
+  return { weekInPhase: 0, totalPhaseWeeks: 1 };
 }

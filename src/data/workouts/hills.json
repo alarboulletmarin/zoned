@@ -25,7 +25,8 @@
           "description": "Footing avec activation progressive",
           "descriptionEn": "Jog with progressive activation",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et 2-3 côtes d'échauffement",
@@ -47,7 +48,8 @@
           "description": "Footing de récupération sur le plat",
           "descriptionEn": "Recovery jog on flat terrain",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -88,7 +90,9 @@
           "power"
         ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "HIL-002",
@@ -114,7 +118,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et côtes d'échauffement",
@@ -129,7 +134,8 @@
           "distanceM": 250,
           "zone": "Z4-Z5",
           "repetitions": 6,
-          "recovery": "Descente en trottinant"
+          "recovery": "Descente en trottinant",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -137,7 +143,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -175,7 +182,9 @@
           "strength"
         ],
         "priorityScore": 75
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "HIL-003",
@@ -201,7 +210,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes",
@@ -216,7 +226,8 @@
           "distanceM": 500,
           "zone": "Z4",
           "repetitions": 5,
-          "recovery": "Descente + 1min récup"
+          "recovery": "Descente + 1min récup",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -224,7 +235,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -263,7 +275,9 @@
           "endurance"
         ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "HIL-004",
@@ -289,7 +303,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes avec bonds",
@@ -311,7 +326,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -350,7 +366,9 @@
           "technique"
         ],
         "priorityScore": 65
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "HIL-005",
@@ -376,7 +394,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes",
@@ -391,7 +410,9 @@
           "distanceM": 100,
           "zone": "Z5",
           "repetitions": 5,
-          "recovery": "Footing descente, 3min entre séries"
+          "recovery": "Footing descente, 3min entre séries",
+          "intensityType": "I",
+          "sets": 3
         }
       ],
       "cooldownTemplate": [
@@ -399,7 +420,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -437,7 +459,9 @@
           "kenyan"
         ],
         "priorityScore": 55
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 0
     },
     {
       "id": "HIL-006",
@@ -463,7 +487,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -472,28 +497,32 @@
           "descriptionEn": "2x slow hill Z2",
           "distanceM": 200,
           "zone": "Z2",
-          "recovery": "Descente"
+          "recovery": "Descente",
+          "intensityType": "E"
         },
         {
           "description": "2x côte tempo Z3",
           "descriptionEn": "2x tempo hill Z3",
           "distanceM": 200,
           "zone": "Z3",
-          "recovery": "Descente"
+          "recovery": "Descente",
+          "intensityType": "M"
         },
         {
           "description": "2x côte seuil Z4",
           "descriptionEn": "2x threshold hill Z4",
           "distanceM": 200,
           "zone": "Z4",
-          "recovery": "Descente"
+          "recovery": "Descente",
+          "intensityType": "T"
         },
         {
           "description": "2x côte VMA Z5",
           "descriptionEn": "2x VO2max hill Z5",
           "distanceM": 150,
           "zone": "Z5",
-          "recovery": "Descente"
+          "recovery": "Descente",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -501,7 +530,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -539,7 +569,9 @@
           "variety"
         ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "HIL-007",
@@ -565,7 +597,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -575,7 +608,8 @@
           "distanceM": 200,
           "zone": "Z4",
           "repetitions": 6,
-          "recovery": "30s en bas"
+          "recovery": "30s en bas",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -583,7 +617,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -621,7 +656,9 @@
           "trail"
         ],
         "priorityScore": 60
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "HIL-008",
@@ -647,7 +684,8 @@
           "description": "Footing très progressif",
           "descriptionEn": "Very progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -657,7 +695,8 @@
           "distanceM": 60,
           "zone": "Z3-Z4",
           "repetitions": 5,
-          "recovery": "Marche descente + 1min"
+          "recovery": "Marche descente + 1min",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -665,7 +704,8 @@
           "description": "Footing lent",
           "descriptionEn": "Slow jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -702,7 +742,9 @@
           "beginner"
         ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "HIL-009",
@@ -728,7 +770,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -736,7 +779,8 @@
           "description": "3 boucles d'un circuit vallonné, effort soutenu",
           "descriptionEn": "3 loops of a hilly circuit, sustained effort",
           "durationMin": 35,
-          "zone": "Z3-Z4"
+          "zone": "Z3-Z4",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -744,7 +788,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -783,7 +828,9 @@
           "race-simulation"
         ],
         "priorityScore": 65
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "HIL-010",
@@ -809,7 +856,8 @@
           "description": "Footing sur sentier",
           "descriptionEn": "Trail jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -825,7 +873,8 @@
           "description": "Footing retour",
           "descriptionEn": "Jog back",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -863,7 +912,9 @@
           "specific"
         ],
         "priorityScore": 60
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "HIL-011",
@@ -872,7 +923,7 @@
       "description": "Travail spécifique en descente : technique de pied, relâchement, fréquence. Essentiel pour le trail et la prévention des blessures.",
       "descriptionEn": "Specific downhill training: foot technique, relaxation, cadence. Essential for trail running and injury prevention.",
       "category": "hills",
-      "sessionType": "technique",
+      "sessionType": "hills",
       "targetSystem": "neuromuscular",
       "difficulty": "intermediate",
       "typicalDuration": {
@@ -889,7 +940,8 @@
           "description": "Footing progressif sur terrain vallonné",
           "descriptionEn": "Progressive jog on rolling terrain",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et mobilité chevilles",
@@ -903,7 +955,8 @@
           "descriptionEn": "6-8x downhill 200-300m (8-12% grade) controlled",
           "zone": "Z3",
           "repetitions": 7,
-          "recovery": "Remontée en marchant"
+          "recovery": "Remontée en marchant",
+          "intensityType": "M"
         }
       ],
       "cooldownTemplate": [
@@ -911,7 +964,8 @@
           "description": "Footing plat de récupération",
           "descriptionEn": "Flat recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -961,7 +1015,9 @@
           "injury-prevention"
         ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "HIL-012",
@@ -987,13 +1043,15 @@
           "description": "Footing avec activation progressive incluant la côte",
           "descriptionEn": "Jog with progressive activation including the hill",
           "durationMin": 15,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes : montées de genoux, talon-fesses, griffes, plus 2 côtes à 70% d'effort",
           "descriptionEn": "Drills: high knees, butt kicks, pawing, plus 2 hills at 70% effort",
           "durationMin": 5,
-          "zone": "Z3"
+          "zone": "Z3",
+          "intensityType": "M"
         }
       ],
       "mainSetTemplate": [
@@ -1002,7 +1060,8 @@
           "descriptionEn": "6-8x maximal hill sprint of 8-10 seconds. Gradient 8-12%. 100% effort.",
           "repetitions": 8,
           "zone": "Z6",
-          "recovery": "Descente en marchant + 2-3 min repos complet"
+          "recovery": "Descente en marchant + 2-3 min repos complet",
+          "intensityType": "R"
         }
       ],
       "cooldownTemplate": [
@@ -1010,7 +1069,8 @@
           "description": "Footing de récupération sur plat",
           "descriptionEn": "Recovery jog on flat",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1054,7 +1114,9 @@
           "power"
         ],
         "priorityScore": 85
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "HIL-013",
@@ -1080,7 +1142,8 @@
           "description": "Footing progressif sur le plat et début de côte",
           "descriptionEn": "Progressive jog on flat and start of hill",
           "durationMin": 15,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -1090,7 +1153,8 @@
           "distanceM": 200,
           "repetitions": 3,
           "zone": "Z3",
-          "recovery": "Descente en trottinant"
+          "recovery": "Descente en trottinant",
+          "intensityType": "M"
         },
         {
           "description": "3x200m côte moyenne (6-8% pente)",
@@ -1098,7 +1162,8 @@
           "distanceM": 200,
           "repetitions": 3,
           "zone": "Z4",
-          "recovery": "Descente en trottinant"
+          "recovery": "Descente en trottinant",
+          "intensityType": "T"
         },
         {
           "description": "3x150m côte raide (8-12% pente)",
@@ -1106,7 +1171,8 @@
           "distanceM": 150,
           "repetitions": 3,
           "zone": "Z5",
-          "recovery": "Descente en marchant"
+          "recovery": "Descente en marchant",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -1114,7 +1180,8 @@
           "description": "Footing de récupération sur terrain plat",
           "descriptionEn": "Recovery jog on flat terrain",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1158,7 +1225,9 @@
           "strength"
         ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "HIL-014",
@@ -1184,7 +1253,8 @@
           "description": "Footing progressif sur les premiers vallonnements",
           "descriptionEn": "Progressive jog on the first rolling sections",
           "durationMin": 10,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -1192,7 +1262,8 @@
           "description": "35-45min course continue sur terrain vallonné. Effort constant (Z2-Z3). Pousser dans les montées sans exploser. Relâcher dans les descentes sans sprinter.",
           "descriptionEn": "35-45min continuous run on undulating terrain. Constant effort (Z2-Z3). Push on uphills without blowing up. Ease on downhills without sprinting.",
           "durationMin": 40,
-          "zone": "Z3"
+          "zone": "Z3",
+          "intensityType": "M"
         }
       ],
       "cooldownTemplate": [
@@ -1200,7 +1271,8 @@
           "description": "Footing de récupération sur terrain plat",
           "descriptionEn": "Recovery jog on flat terrain",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1244,7 +1316,9 @@
           "endurance"
         ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "HIL-015",
@@ -1270,13 +1344,15 @@
           "description": "Footing progressif sur terrain mixte",
           "descriptionEn": "Progressive jog on mixed terrain",
           "durationMin": 15,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "Montée et descente douce en trottinant x2 pour échauffer les quadriceps",
           "descriptionEn": "Gentle uphill and downhill jog x2 to warm up quadriceps",
           "durationMin": 5,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -1285,14 +1361,16 @@
           "descriptionEn": "6x jog uphill (active recovery)",
           "durationMin": 3,
           "zone": "Z3",
-          "repetitions": 6
+          "repetitions": 6,
+          "intensityType": "M"
         },
         {
           "description": "6x descente de 200-300m à allure modérée (pente 5-8%). Focus technique : cadence haute (>180 spm), posture droite, pas de freinage, atterrissage médiopied",
           "descriptionEn": "6x 200-300m descent at moderate pace (5-8% grade). Technique focus: high cadence (>180 spm), upright posture, no braking, midfoot landing",
           "distanceM": 250,
           "repetitions": 6,
-          "zone": "Z3"
+          "zone": "Z3",
+          "intensityType": "M"
         }
       ],
       "cooldownTemplate": [
@@ -1300,7 +1378,8 @@
           "description": "Footing de récupération sur plat",
           "descriptionEn": "Recovery jog on flat",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1343,7 +1422,9 @@
           "trail"
         ],
         "priorityScore": 75
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     }
   ]
 }

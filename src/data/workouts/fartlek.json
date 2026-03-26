@@ -25,7 +25,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 10,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -41,7 +42,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -83,7 +85,9 @@
           "varied"
         ],
         "priorityScore": 75
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "FAR-002",
@@ -109,7 +113,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 10,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -125,7 +130,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -164,7 +170,9 @@
           "terrain"
         ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "FAR-003",
@@ -190,7 +198,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -198,55 +207,64 @@
           "description": "1min rapide",
           "descriptionEn": "1min fast",
           "durationMin": 1,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "1min récup",
           "descriptionEn": "1min recovery",
           "durationMin": 1,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "2min rapide",
           "descriptionEn": "2min fast",
           "durationMin": 2,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "2min récup",
           "descriptionEn": "2min recovery",
           "durationMin": 2,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "3min rapide",
           "descriptionEn": "3min fast",
           "durationMin": 3,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "3min récup",
           "descriptionEn": "3min recovery",
           "durationMin": 3,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "2min rapide",
           "descriptionEn": "2min fast",
           "durationMin": 2,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "2min récup",
           "descriptionEn": "2min recovery",
           "durationMin": 2,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "1min rapide",
           "descriptionEn": "1min fast",
           "durationMin": 1,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -254,7 +272,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -292,7 +311,9 @@
           "pyramid"
         ],
         "priorityScore": 75
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "FAR-004",
@@ -318,7 +339,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         },
         {
           "description": "Accélérations",
@@ -332,7 +354,8 @@
           "descriptionEn": "10x(30s very fast + 90s active recovery)",
           "zone": "Z5",
           "repetitions": 10,
-          "recovery": "90s footing Z2"
+          "recovery": "90s footing Z2",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -340,7 +363,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -378,7 +402,9 @@
           "speed"
         ],
         "priorityScore": 65
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "FAR-005",
@@ -404,7 +430,8 @@
           "description": "Footing sur chemin",
           "descriptionEn": "Jog on path",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -420,7 +447,8 @@
           "description": "Retour tranquille",
           "descriptionEn": "Easy return",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -460,7 +488,9 @@
           "trail"
         ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "FAR-006",
@@ -486,7 +516,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -496,7 +527,8 @@
           "durationMin": 3,
           "zone": "Z3",
           "repetitions": 6,
-          "recovery": "2min footing Z2"
+          "recovery": "2min footing Z2",
+          "intensityType": "M"
         }
       ],
       "cooldownTemplate": [
@@ -504,7 +536,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -542,7 +575,9 @@
           "tempo"
         ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "FAR-007",
@@ -568,7 +603,8 @@
           "description": "Footing de groupe",
           "descriptionEn": "Group jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -584,7 +620,8 @@
           "description": "Footing ensemble",
           "descriptionEn": "Jog together",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -623,7 +660,9 @@
           "social"
         ],
         "priorityScore": 65
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "FAR-008",
@@ -649,7 +688,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 10,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -657,7 +697,8 @@
           "description": "4-5 accélérations de 30s-1min à allure course",
           "descriptionEn": "4-5 accelerations of 30s-1min at race pace",
           "durationMin": 15,
-          "zone": "Z3-Z4"
+          "zone": "Z3-Z4",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -665,7 +706,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -703,7 +745,9 @@
           "pre-race"
         ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "FAR-009",
@@ -729,7 +773,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z1-Z2"
+          "zone": "Z1-Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -738,21 +783,24 @@
           "descriptionEn": "2x(90s fast / 90s recovery)",
           "zone": "Z4-Z5",
           "repetitions": 2,
-          "recovery": "90s footing Z2"
+          "recovery": "90s footing Z2",
+          "intensityType": "I"
         },
         {
           "description": "4x(60s rapide / 60s récup)",
           "descriptionEn": "4x(60s fast / 60s recovery)",
           "zone": "Z4-Z5",
           "repetitions": 4,
-          "recovery": "60s footing Z2"
+          "recovery": "60s footing Z2",
+          "intensityType": "I"
         },
         {
           "description": "4x(30s rapide / 30s récup)",
           "descriptionEn": "4x(30s fast / 30s recovery)",
           "zone": "Z5",
           "repetitions": 4,
-          "recovery": "30s footing Z2"
+          "recovery": "30s footing Z2",
+          "intensityType": "I"
         },
         {
           "description": "4x(15s sprint / 15s récup)",
@@ -767,7 +815,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -812,7 +861,9 @@
           "pyramid"
         ],
         "priorityScore": 85
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "FAR-010",
@@ -824,11 +875,28 @@
       "sessionType": "fartlek",
       "targetSystem": "aerobic_power",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 35, "max": 45 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": false },
+      "typicalDuration": {
+        "min": 35,
+        "max": 45
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
       "warmupTemplate": [
-        { "description": "Footing lent progressif", "descriptionEn": "Slow progressive jog", "durationMin": 10, "zone": "Z1-Z2" },
-        { "description": "Étirements dynamiques", "descriptionEn": "Dynamic stretches", "durationMin": 5 }
+        {
+          "description": "Footing lent progressif",
+          "descriptionEn": "Slow progressive jog",
+          "durationMin": 10,
+          "zone": "Z1-Z2",
+          "intensityType": "E"
+        },
+        {
+          "description": "Étirements dynamiques",
+          "descriptionEn": "Dynamic stretches",
+          "durationMin": 5
+        }
       ],
       "mainSetTemplate": [
         {
@@ -836,11 +904,18 @@
           "descriptionEn": "8x 30s faster (Z3-Z4) / 90s easy recovery jog (Z1-Z2)",
           "zone": "Z3-Z4",
           "repetitions": 8,
-          "recovery": "90s footing Z1-Z2"
+          "recovery": "90s footing Z1-Z2",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération et étirements", "descriptionEn": "Recovery jog and stretching", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération et étirements",
+          "descriptionEn": "Recovery jog and stretching",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "coachingTips": [
         "Les accélérations sont modérées, pas des sprints",
@@ -864,14 +939,27 @@
         "Walking during recovery instead of jogging",
         "Not having fun: fartlek is speed play"
       ],
-      "variationIds": ["FAR-001", "FAR-003"],
+      "variationIds": [
+        "FAR-001",
+        "FAR-003"
+      ],
       "selectionCriteria": {
-        "phases": ["base", "build"],
-        "weekPositions": ["mid"],
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid"
+        ],
         "relativeLoad": "moderate",
-        "tags": ["speed-play", "introduction"],
+        "tags": [
+          "speed-play",
+          "introduction"
+        ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "FAR-011",
@@ -896,7 +984,8 @@
           "description": "Footing progressif sur chemin",
           "descriptionEn": "Progressive jog on path",
           "durationMin": 15,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -906,7 +995,8 @@
           "durationMin": 1,
           "zone": "Z5",
           "repetitions": 20,
-          "recovery": "1min footing soutenu Z2-Z3"
+          "recovery": "1min footing soutenu Z2-Z3",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -914,7 +1004,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -957,7 +1048,9 @@
           "effort-based"
         ],
         "priorityScore": 85
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "FAR-012",
@@ -983,13 +1076,15 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "Gammes et 3x accélérations",
           "descriptionEn": "Drills and 3x accelerations",
           "durationMin": 5,
-          "zone": "Z3"
+          "zone": "Z3",
+          "intensityType": "M"
         }
       ],
       "mainSetTemplate": [
@@ -997,55 +1092,64 @@
           "description": "5min à allure tempo",
           "descriptionEn": "5min at tempo pace",
           "durationMin": 5,
-          "zone": "Z3"
+          "zone": "Z3",
+          "intensityType": "M"
         },
         {
           "description": "90s récupération footing",
           "descriptionEn": "90s recovery jog",
           "durationMin": 1.5,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "4min à allure seuil",
           "descriptionEn": "4min at threshold pace",
           "durationMin": 4,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "90s récupération footing",
           "descriptionEn": "90s recovery jog",
           "durationMin": 1.5,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "3min à allure 10K",
           "descriptionEn": "3min at 10K pace",
           "durationMin": 3,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "90s récupération footing",
           "descriptionEn": "90s recovery jog",
           "durationMin": 1.5,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "2min à allure 5K",
           "descriptionEn": "2min at 5K pace",
           "durationMin": 2,
-          "zone": "Z5"
+          "zone": "Z5",
+          "intensityType": "I"
         },
         {
           "description": "90s récupération footing",
           "descriptionEn": "90s recovery jog",
           "durationMin": 1.5,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "1min à effort maximal",
           "descriptionEn": "1min at near max effort",
           "durationMin": 1,
-          "zone": "Z5"
+          "zone": "Z5",
+          "intensityType": "I"
         }
       ],
       "cooldownTemplate": [
@@ -1053,7 +1157,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1095,7 +1200,9 @@
           "race-finish"
         ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "FAR-013",
@@ -1120,7 +1227,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -1130,7 +1238,8 @@
           "durationMin": 2,
           "zone": "Z4",
           "repetitions": 14,
-          "recovery": "1min footing Z2-Z3"
+          "recovery": "1min footing Z2-Z3",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -1138,7 +1247,8 @@
           "description": "Footing de récupération progressif",
           "descriptionEn": "Progressive recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1182,7 +1292,9 @@
           "threshold"
         ],
         "priorityScore": 85
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "FAR-014",
@@ -1208,7 +1320,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -1216,55 +1329,64 @@
           "description": "1min rapide (allure 5K)",
           "descriptionEn": "1min fast (5K pace)",
           "durationMin": 1,
-          "zone": "Z5"
+          "zone": "Z5",
+          "intensityType": "I"
         },
         {
           "description": "30s récupération footing",
           "descriptionEn": "30s recovery jog",
           "durationMin": 0.5,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "2min rapide (allure 10K)",
           "descriptionEn": "2min fast (10K pace)",
           "durationMin": 2,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "1min récupération footing",
           "descriptionEn": "1min recovery jog",
           "durationMin": 1,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "3min soutenu (allure seuil)",
           "descriptionEn": "3min sustained (threshold pace)",
           "durationMin": 3,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         },
         {
           "description": "90s récupération footing",
           "descriptionEn": "90s recovery jog",
           "durationMin": 1.5,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "4min soutenu (allure tempo)",
           "descriptionEn": "4min sustained (tempo pace)",
           "durationMin": 4,
-          "zone": "Z3"
+          "zone": "Z3",
+          "intensityType": "M"
         },
         {
           "description": "2min récupération footing",
           "descriptionEn": "2min recovery jog",
           "durationMin": 2,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         },
         {
           "description": "5min soutenu (allure marathon-semi)",
           "descriptionEn": "5min sustained (marathon-half pace)",
           "durationMin": 5,
-          "zone": "Z3"
+          "zone": "Z3",
+          "intensityType": "M"
         }
       ],
       "cooldownTemplate": [
@@ -1272,7 +1394,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1316,7 +1439,9 @@
           "mental"
         ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "FAR-015",
@@ -1341,7 +1466,8 @@
           "description": "Footing progressif",
           "descriptionEn": "Progressive jog",
           "durationMin": 15,
-          "zone": "Z2"
+          "zone": "Z2",
+          "intensityType": "E"
         }
       ],
       "mainSetTemplate": [
@@ -1349,7 +1475,8 @@
           "description": "25 minutes de fartlek à intervalles aléatoires : au signal, alternez effort rapide (Z4-Z5) et footing (Z2). Efforts de 15s à 3min, décidés par un partenaire ou une application.",
           "descriptionEn": "25 minutes of random interval fartlek: on the signal, alternate between fast effort (Z4-Z5) and jog (Z2). Efforts from 15s to 3min, decided by a partner or app.",
           "durationMin": 25,
-          "zone": "Z4"
+          "zone": "Z4",
+          "intensityType": "T"
         }
       ],
       "cooldownTemplate": [
@@ -1357,7 +1484,8 @@
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
-          "zone": "Z1"
+          "zone": "Z1",
+          "intensityType": "E"
         }
       ],
       "coachingTips": [
@@ -1401,7 +1529,9 @@
           "fun"
         ],
         "priorityScore": 75
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     },
     {
       "id": "FAR-016",
@@ -1413,26 +1543,111 @@
       "sessionType": "fartlek",
       "targetSystem": "aerobic_power",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 50, "max": 60 },
-      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "typicalDuration": {
+        "min": 50,
+        "max": 60
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
       "warmupTemplate": [
-        { "description": "Footing progressif", "descriptionEn": "Progressive jog", "durationMin": 15, "zone": "Z1-Z2" }
+        {
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationMin": 15,
+          "zone": "Z1-Z2",
+          "intensityType": "E"
+        }
       ],
       "mainSetTemplate": [
-        { "description": "Série 1 — 1min allure 5K / 1min trot", "descriptionEn": "Set 1 — 1min at 5K pace / 1min jog", "durationMin": 2, "zone": "Z5" },
-        { "description": "2min allure 10K / 1min trot", "descriptionEn": "2min at 10K pace / 1min jog", "durationMin": 3, "zone": "Z4" },
-        { "description": "3min allure semi-marathon / 1min trot", "descriptionEn": "3min at half-marathon pace / 1min jog", "durationMin": 4, "zone": "Z3" },
-        { "description": "2min allure 10K / 1min trot", "descriptionEn": "2min at 10K pace / 1min jog", "durationMin": 3, "zone": "Z4" },
-        { "description": "1min allure 5K / 1min trot", "descriptionEn": "1min at 5K pace / 1min jog", "durationMin": 2, "zone": "Z5" },
-        { "description": "Repos 2-3 min trot léger entre les séries", "descriptionEn": "2-3 min easy jog rest between sets", "durationMin": 3, "zone": "Z1" },
-        { "description": "Série 2 — 1min allure 5K / 1min trot", "descriptionEn": "Set 2 — 1min at 5K pace / 1min jog", "durationMin": 2, "zone": "Z5" },
-        { "description": "2min allure 10K / 1min trot", "descriptionEn": "2min at 10K pace / 1min jog", "durationMin": 3, "zone": "Z4" },
-        { "description": "3min allure semi-marathon / 1min trot", "descriptionEn": "3min at half-marathon pace / 1min jog", "durationMin": 4, "zone": "Z3" },
-        { "description": "2min allure 10K / 1min trot", "descriptionEn": "2min at 10K pace / 1min jog", "durationMin": 3, "zone": "Z4" },
-        { "description": "1min allure 5K / 1min trot", "descriptionEn": "1min at 5K pace / 1min jog", "durationMin": 2, "zone": "Z5" }
+        {
+          "description": "Série 1 — 1min allure 5K / 1min trot",
+          "descriptionEn": "Set 1 — 1min at 5K pace / 1min jog",
+          "durationMin": 2,
+          "zone": "Z5",
+          "intensityType": "I"
+        },
+        {
+          "description": "2min allure 10K / 1min trot",
+          "descriptionEn": "2min at 10K pace / 1min jog",
+          "durationMin": 3,
+          "zone": "Z4",
+          "intensityType": "T"
+        },
+        {
+          "description": "3min allure semi-marathon / 1min trot",
+          "descriptionEn": "3min at half-marathon pace / 1min jog",
+          "durationMin": 4,
+          "zone": "Z3",
+          "intensityType": "M"
+        },
+        {
+          "description": "2min allure 10K / 1min trot",
+          "descriptionEn": "2min at 10K pace / 1min jog",
+          "durationMin": 3,
+          "zone": "Z4",
+          "intensityType": "T"
+        },
+        {
+          "description": "1min allure 5K / 1min trot",
+          "descriptionEn": "1min at 5K pace / 1min jog",
+          "durationMin": 2,
+          "zone": "Z5",
+          "intensityType": "I"
+        },
+        {
+          "description": "Repos 2-3 min trot léger entre les séries",
+          "descriptionEn": "2-3 min easy jog rest between sets",
+          "durationMin": 3,
+          "zone": "Z1",
+          "intensityType": "E"
+        },
+        {
+          "description": "Série 2 — 1min allure 5K / 1min trot",
+          "descriptionEn": "Set 2 — 1min at 5K pace / 1min jog",
+          "durationMin": 2,
+          "zone": "Z5",
+          "intensityType": "I"
+        },
+        {
+          "description": "2min allure 10K / 1min trot",
+          "descriptionEn": "2min at 10K pace / 1min jog",
+          "durationMin": 3,
+          "zone": "Z4",
+          "intensityType": "T"
+        },
+        {
+          "description": "3min allure semi-marathon / 1min trot",
+          "descriptionEn": "3min at half-marathon pace / 1min jog",
+          "durationMin": 4,
+          "zone": "Z3",
+          "intensityType": "M"
+        },
+        {
+          "description": "2min allure 10K / 1min trot",
+          "descriptionEn": "2min at 10K pace / 1min jog",
+          "durationMin": 3,
+          "zone": "Z4",
+          "intensityType": "T"
+        },
+        {
+          "description": "1min allure 5K / 1min trot",
+          "descriptionEn": "1min at 5K pace / 1min jog",
+          "durationMin": 2,
+          "zone": "Z5",
+          "intensityType": "I"
+        }
       ],
       "cooldownTemplate": [
-        { "description": "Footing de récupération", "descriptionEn": "Recovery jog", "durationMin": 10, "zone": "Z1" }
+        {
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
       ],
       "coachingTips": [
         "Chaque palier doit être couru à une allure de course SPÉCIFIQUE, pas simplement « rapide » ou « modéré »",
@@ -1456,14 +1671,33 @@
         "Sprinting on the 5K portions instead of respecting specific pace",
         "Jogging too slowly between portions instead of maintaining active jog"
       ],
-      "variationIds": ["FAR-009", "FAR-014"],
+      "variationIds": [
+        "FAR-009",
+        "FAR-014"
+      ],
       "selectionCriteria": {
-        "phases": ["build", "peak"],
-        "weekPositions": ["mid", "late"],
+        "phases": [
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid",
+          "late"
+        ],
         "relativeLoad": "hard",
-        "tags": ["hudson", "multi-pace", "gear-changing", "5k", "10k", "half-marathon", "pyramid"],
+        "tags": [
+          "hudson",
+          "multi-pace",
+          "gear-changing",
+          "5k",
+          "10k",
+          "half-marathon",
+          "pyramid"
+        ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
     }
   ]
 }

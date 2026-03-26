@@ -91,7 +91,9 @@
           "cooper"
         ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "ASS-002",
@@ -195,7 +197,9 @@
           "billat"
         ],
         "priorityScore": 75
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "ASS-003",
@@ -287,7 +291,9 @@
           "benchmark"
         ],
         "priorityScore": 85
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "ASS-004",
@@ -378,7 +384,9 @@
           "leger"
         ],
         "priorityScore": 70
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "ASS-005",
@@ -467,7 +475,9 @@
           "cooper"
         ],
         "priorityScore": 85
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "ASS-006",
@@ -557,7 +567,9 @@
           "heart-rate"
         ],
         "priorityScore": 75
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "ASS-007",
@@ -649,7 +661,9 @@
           "predictor"
         ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "ASS-008",
@@ -733,7 +747,9 @@
           "monthly"
         ],
         "priorityScore": 85
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 3
     },
     {
       "id": "ASS-009",
@@ -826,7 +842,9 @@
           "track"
         ],
         "priorityScore": 80
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     },
     {
       "id": "ASS-010",
@@ -913,7 +931,9 @@
           "assessment"
         ],
         "priorityScore": 85
-      }
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
     }
   ]
 }

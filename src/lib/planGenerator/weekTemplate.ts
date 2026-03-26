@@ -1,5 +1,6 @@
 import type { SessionType, TrainingPhase } from "@/types";
-import { PHASE_SESSION_TYPES, KEY_SESSION_TYPES } from "./constants";
+import type { TrainingGoal } from "@/types/plan";
+import { PHASE_SESSION_TYPES, KEY_SESSION_TYPES, getGoalModifiers } from "./constants";
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -51,13 +52,18 @@ function distributeDays(daysPerWeek: number, longRunDay: number): number[] {
  * maximizing circular distance from the long run day and any
  * existing key_quality slots.
  */
+/**
+ * Pick the best available day that maximizes circular distance
+ * from heavy days (long run + key sessions).
+ * Searches ALL available days, not just from startIndex.
+ */
 function pickBestDay(
   availableDays: number[],
-  startIndex: number,
   longRunDay: number,
   existingSlots: WeekSlot[],
 ): number {
   const totalDays = 7;
+  const usedDays = new Set(existingSlots.map(s => s.dayOfWeek));
 
   // Collect days that are "heavy" — long run + existing key sessions
   const heavyDays = [longRunDay];
@@ -67,15 +73,12 @@ function pickBestDay(
     }
   }
 
-  let bestDay = availableDays[startIndex] ?? availableDays[0];
+  let bestDay = availableDays.find(d => !usedDays.has(d)) ?? availableDays[0];
   let bestMinDist = -1;
 
-  // Search from startIndex onwards for the day that maximizes
-  // minimum circular distance to any heavy day
-  for (let i = startIndex; i < availableDays.length; i++) {
-    const day = availableDays[i];
-    // Already used in a slot?
-    if (existingSlots.some((s) => s.dayOfWeek === day)) continue;
+  // Search ALL available days (not just from startIndex)
+  for (const day of availableDays) {
+    if (usedDays.has(day)) continue;
 
     let minDist = totalDays;
     for (const hd of heavyDays) {
@@ -109,32 +112,52 @@ function pickBestDay(
  * - Key sessions spaced away from long run and each other
  * - Recovery weeks: key sessions replaced with easy
  *
- * @param daysPerWeek - Number of training days (3-6)
+ * @param daysPerWeek - Number of training days (3-7)
  * @param longRunDay - Day of week for long run (0=Mon...6=Sun)
  * @param phase - Current training phase
  * @param isRecoveryWeek - If true, replace key sessions with easy
+ * @param trainingGoal - Optional: adjusts quality session count
  */
 export function buildWeekTemplate(
   daysPerWeek: number,
   longRunDay: number,
   phase: TrainingPhase,
   isRecoveryWeek: boolean,
+  trainingGoal?: TrainingGoal,
 ): WeekSlot[] {
   // Determine slot distribution by days per week
   // Format: { key count, easy count, recovery count } — long_run is always 1
+  // Designed to respect ~80/20 polarized distribution:
+  //   3j: 1 key + 1 SL + 1 easy     = 33% hard (acceptable for low volume)
+  //   4j: 1 key + 1 SL + 2 easy     = 25% hard (good 80/20)
+  //   5j: 2 key + 1 SL + 2 easy     = 40% hard sessions but key≠all-out → ~25% hard time
+  //   6j: 2 key + 1 SL + 2 easy + 1 recovery
+  //   7j: 2 key + 1 SL + 3 easy + 1 recovery
   const slotDistribution: Record<number, { key: number; easy: number; recovery: number }> = {
     3: { key: 1, easy: 1, recovery: 0 },
-    4: { key: 2, easy: 1, recovery: 0 },
+    4: { key: 1, easy: 2, recovery: 0 },
     5: { key: 2, easy: 2, recovery: 0 },
     6: { key: 2, easy: 2, recovery: 1 },
+    7: { key: 2, easy: 3, recovery: 1 },
   };
 
   const dist = slotDistribution[daysPerWeek] ?? slotDistribution[4];
 
+  // Apply training goal modifier to key sessions
+  const goalMods = getGoalModifiers(trainingGoal);
+  let maxKey = dist.key;
+  if (goalMods.maxQualitySessions > 0) {
+    // Goal overrides: cap or boost quality sessions
+    maxKey = Math.min(goalMods.maxQualitySessions, daysPerWeek - 1); // Always need at least 1 non-key day
+  }
+  const adjustedKey = Math.min(maxKey, dist.key + (goalMods.maxQualitySessions > dist.key ? 1 : 0));
+  const adjustedEasy = dist.easy + (dist.key - adjustedKey); // Reassign reduced key → easy
+  const adjustedRecovery = dist.recovery;
+
   // Recovery weeks: replace key with easy
-  const keyCount = isRecoveryWeek ? 0 : dist.key;
-  const easyCount = isRecoveryWeek ? dist.key + dist.easy : dist.easy;
-  const recoveryCount = dist.recovery;
+  const keyCount = isRecoveryWeek ? 0 : adjustedKey;
+  const easyCount = isRecoveryWeek ? adjustedKey + adjustedEasy : adjustedEasy;
+  const recoveryCount = adjustedRecovery;
 
   // Get available days (ensure long run day is included)
   const trainingDays = distributeDays(daysPerWeek, longRunDay);
@@ -158,39 +181,40 @@ export function buildWeekTemplate(
   });
 
   // 2. Key quality sessions (spaced apart from long run and each other)
-  let dayIndex = 0;
-  for (let i = 0; i < keyCount && dayIndex < otherDays.length; i++) {
-    // Pick the day that maximizes distance from long run and other key sessions
-    const day = pickBestDay(otherDays, dayIndex, longRunDay, slots);
+  for (let i = 0; i < keyCount; i++) {
+    const day = pickBestDay(otherDays, longRunDay, slots);
     slots.push({
       dayOfWeek: day,
       slotType: "key_quality",
-      // Rotate through key types so variety emerges across the week
       sessionTypes: i === 0 ? keyTypes : [...keyTypes].reverse(),
     });
-    dayIndex++;
   }
 
-  // 3. Easy sessions
-  for (let i = 0; i < easyCount && dayIndex < otherDays.length; i++) {
-    const day = otherDays[dayIndex] ?? otherDays[dayIndex % otherDays.length];
+  // 3. Easy sessions — pick from remaining unused days
+  for (let i = 0; i < easyCount; i++) {
+    const usedDays = new Set(slots.map(s => s.dayOfWeek));
+    const available = otherDays.filter(d => !usedDays.has(d));
+    if (available.length === 0) break;
+    // Pick the day closest to midweek for easy runs (spread evenly)
+    const day = available[0];
     slots.push({
       dayOfWeek: day,
       slotType: "easy",
       sessionTypes: easyTypes,
     });
-    dayIndex++;
   }
 
-  // 4. Recovery sessions
-  for (let i = 0; i < recoveryCount && dayIndex < otherDays.length; i++) {
-    const day = otherDays[dayIndex] ?? otherDays[dayIndex % otherDays.length];
+  // 4. Recovery sessions — fill remaining unused days
+  for (let i = 0; i < recoveryCount; i++) {
+    const usedDays = new Set(slots.map(s => s.dayOfWeek));
+    const available = otherDays.filter(d => !usedDays.has(d));
+    if (available.length === 0) break;
+    const day = available[0];
     slots.push({
       dayOfWeek: day,
       slotType: "recovery",
       sessionTypes: ["recovery"],
     });
-    dayIndex++;
   }
 
   return slots.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
