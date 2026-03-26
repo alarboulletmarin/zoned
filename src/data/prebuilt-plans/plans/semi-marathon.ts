@@ -407,7 +407,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
       "targetKm": 31,
-      "targetLongRunKm": 12.5,
+      "targetLongRunKm": 0,
       "weeklyLoadScore": 144
     },
     {
@@ -783,7 +783,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
       "targetKm": 28,
-      "targetLongRunKm": 17.5,
+      "targetLongRunKm": 0,
       "weeklyLoadScore": 125
     },
     {
@@ -1167,7 +1167,7 @@ export const planSemiMarathon: PrebuiltPlan = {
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
       "targetKm": 23,
-      "targetLongRunKm": 16,
+      "targetLongRunKm": 0,
       "weeklyLoadScore": 106
     },
     {

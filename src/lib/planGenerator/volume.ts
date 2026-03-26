@@ -79,6 +79,7 @@ export function calculateVolumeProgression(
 
   const weeks: WeekVolume[] = [];
   let currentKm = startKm;
+  let actualPeakKm = startKm; // Track actual highest volume achieved
   let consecutiveLoadWeeks = 0;
 
   for (let w = 1; w <= totalWeeks; w++) {
@@ -86,7 +87,7 @@ export function calculateVolumeProgression(
 
     // ── Race week (last week, only for race plans with taper) ──
     if (w === totalWeeks && taperPhase) {
-      const raceKm = Math.round(peakKm * RACE_WEEK_VOLUME_PCT);
+      const raceKm = Math.round(actualPeakKm * RACE_WEEK_VOLUME_PCT);
       weeks.push({
         weekNumber: w,
         volumePercent: Math.round(RACE_WEEK_VOLUME_PCT * 100),
@@ -100,7 +101,7 @@ export function calculateVolumeProgression(
     if (phase === "taper") {
       const taperWeekIndex = w - taperStart + 1; // 1-based
       const fraction = Math.exp(-TAPER_DECAY_RATE * taperWeekIndex);
-      const taperKm = Math.round(peakKm * fraction);
+      const taperKm = Math.round(actualPeakKm * fraction);
 
       weeks.push({
         weekNumber: w,
@@ -160,6 +161,7 @@ export function calculateVolumeProgression(
       isRecoveryWeek: false,
     });
 
+    actualPeakKm = Math.max(actualPeakKm, weekKm);
     consecutiveLoadWeeks++;
   }
 

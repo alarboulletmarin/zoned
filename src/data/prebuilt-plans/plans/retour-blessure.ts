@@ -38,21 +38,21 @@ export const planRetourBlessure: PrebuiltPlan = {
       "sessions": [
         {
           "dayOfWeek": 1,
-          "workoutId": "FAR-010",
-          "sessionType": "fartlek",
-          "isKeySession": true,
-          "estimatedDurationMin": 35,
-          "notes": "Allure VMA : 5:43 - 6:01/km",
-          "notesEn": "VO2max pace: 5:43 - 6:01/km",
-          "targetDurationMin": 35,
-          "loadScore": 59.5,
+          "workoutId": "REC-001",
+          "sessionType": "recovery",
+          "isKeySession": false,
+          "estimatedDurationMin": 30,
+          "notes": "Allure récupération : Z1, 30 min",
+          "notesEn": "Recovery pace: Z1, 30 min",
+          "targetDurationMin": 30,
+          "loadScore": 20,
           "paceNotes": [
             {
-              "zone": "T",
-              "paceMinKm": 6.49,
-              "paceMaxKm": 6.72,
-              "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "zone": "E",
+              "paceMinKm": 8.0,
+              "paceMaxKm": 9.5,
+              "description": "Allure récupération",
+              "descriptionEn": "Recovery pace"
             }
           ]
         },
@@ -102,7 +102,7 @@ export const planRetourBlessure: PrebuiltPlan = {
       "weekLabelEn": "W1",
       "targetKm": 16,
       "targetLongRunKm": 7,
-      "weeklyLoadScore": 103
+      "weeklyLoadScore": 63
     },
     {
       "weekNumber": 2,
@@ -112,21 +112,21 @@ export const planRetourBlessure: PrebuiltPlan = {
       "sessions": [
         {
           "dayOfWeek": 1,
-          "workoutId": "FAR-010",
-          "sessionType": "fartlek",
-          "isKeySession": true,
-          "estimatedDurationMin": 37,
-          "notes": "Allure VMA : 5:43 - 6:01/km",
-          "notesEn": "VO2max pace: 5:43 - 6:01/km",
-          "targetDurationMin": 37,
-          "loadScore": 62.9,
+          "workoutId": "END-001",
+          "sessionType": "endurance",
+          "isKeySession": false,
+          "estimatedDurationMin": 35,
+          "notes": "Allure endurance : 7:37 - 8:47/km",
+          "notesEn": "Easy pace: 7:37 - 8:47/km",
+          "targetDurationMin": 35,
+          "loadScore": 24.5,
           "paceNotes": [
             {
-              "zone": "T",
-              "paceMinKm": 6.49,
-              "paceMaxKm": 6.72,
-              "description": "Allure seuil",
-              "descriptionEn": "Threshold pace"
+              "zone": "E",
+              "paceMinKm": 7.62,
+              "paceMaxKm": 8.79,
+              "description": "Allure endurance",
+              "descriptionEn": "Easy pace"
             }
           ]
         },
@@ -176,7 +176,7 @@ export const planRetourBlessure: PrebuiltPlan = {
       "weekLabelEn": "W2",
       "targetKm": 17,
       "targetLongRunKm": 7.5,
-      "weeklyLoadScore": 130
+      "weeklyLoadScore": 92
     },
     {
       "weekNumber": 3,
@@ -186,14 +186,14 @@ export const planRetourBlessure: PrebuiltPlan = {
       "sessions": [
         {
           "dayOfWeek": 1,
-          "workoutId": "FAR-001",
-          "sessionType": "fartlek",
-          "isKeySession": true,
+          "workoutId": "END-002",
+          "sessionType": "endurance",
+          "isKeySession": false,
           "estimatedDurationMin": 40,
-          "notes": "Allure VMA : 5:43 - 6:01/km",
-          "notesEn": "VO2max pace: 5:43 - 6:01/km",
+          "notes": "Allure endurance : 7:37 - 8:47/km",
+          "notesEn": "Easy pace: 7:37 - 8:47/km",
           "targetDurationMin": 40,
-          "loadScore": 68,
+          "loadScore": 28,
           "paceNotes": [
             {
               "zone": "E",
@@ -250,7 +250,7 @@ export const planRetourBlessure: PrebuiltPlan = {
       "weekLabelEn": "W3",
       "targetKm": 17,
       "targetLongRunKm": 6.5,
-      "weeklyLoadScore": 143
+      "weeklyLoadScore": 103
     },
     {
       "weekNumber": 4,
@@ -322,7 +322,7 @@ export const planRetourBlessure: PrebuiltPlan = {
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
       "targetKm": 10,
-      "targetLongRunKm": 8.5,
+      "targetLongRunKm": 0,
       "weeklyLoadScore": 55
     },
     {
@@ -544,7 +544,7 @@ export const planRetourBlessure: PrebuiltPlan = {
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
       "targetKm": 14,
-      "targetLongRunKm": 10,
+      "targetLongRunKm": 0,
       "weeklyLoadScore": 78
     },
     {

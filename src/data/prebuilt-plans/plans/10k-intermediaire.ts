@@ -407,7 +407,7 @@ export const plan10kIntermediaire: PrebuiltPlan = {
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
       "targetKm": 28,
-      "targetLongRunKm": 12.5,
+      "targetLongRunKm": 0,
       "weeklyLoadScore": 130
     },
     {
@@ -784,7 +784,7 @@ export const plan10kIntermediaire: PrebuiltPlan = {
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
       "targetKm": 29,
-      "targetLongRunKm": 17.5,
+      "targetLongRunKm": 0,
       "weeklyLoadScore": 133
     },
     {

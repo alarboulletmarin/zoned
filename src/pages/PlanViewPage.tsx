@@ -38,7 +38,7 @@ import {
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { usePlan } from "@/hooks/usePlans";
-import { deletePlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan, updateSessionCompletion } from "@/lib/planStorage";
+import { deletePlan, getPlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan, updateSessionCompletion } from "@/lib/planStorage";
 import { adaptPlan } from "@/lib/planGenerator/adapt";
 import { getWorkoutById } from "@/data/workouts";
 import { exportPlanToICS, exportPlanToPDF } from "@/lib/export";
@@ -47,7 +47,6 @@ import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import {
   PHASE_META,
   RACE_DISTANCE_META,
-  type TrainingPlan,
 } from "@/types/plan";
 import type { WorkoutTemplate } from "@/types";
 import { toast } from "sonner";
@@ -99,6 +98,15 @@ export function PlanViewPage() {
 
   const { plan, isLoading, reload: reloadPlan } = usePlan(id);
   const { planViewMode, setPlanViewMode } = usePlanViewMode();
+
+  // On mobile, only "weekly" and "list" are available
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    if (mq.matches && (planViewMode === "calendar" || planViewMode === "monthly")) {
+      setPlanViewMode("weekly");
+    }
+  }, [planViewMode, setPlanViewMode]);
+
   const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set());
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showIcsDialog, setShowIcsDialog] = useState(false);
@@ -292,9 +300,8 @@ export function PlanViewPage() {
   const runAdaptationIfReady = useCallback((weekNumber: number, showToast: boolean) => {
     if (!plan) return;
 
-    // Re-read fresh data from storage
-    const freshPlans = JSON.parse(localStorage.getItem("zoned-plans") || "[]");
-    const freshPlan = freshPlans.find((p: TrainingPlan) => p.id === plan.id);
+    // Re-read fresh data from storage via getPlan (not raw localStorage)
+    const freshPlan = getPlan(plan.id);
     if (!freshPlan) return;
 
     const freshWeek = freshPlan.weeks.find((w: { weekNumber: number }) => w.weekNumber === weekNumber);
@@ -350,7 +357,7 @@ export function PlanViewPage() {
       // Auto-trigger adaptation if all sessions in the week are now resolved
       runAdaptationIfReady(weekNumber, false);
     }
-  }, [plan, isEn, reloadPlan, runAdaptationIfReady]);
+  }, [plan, reloadPlan, runAdaptationIfReady]);
 
   // Validate an entire week: mark unresolved sessions as "skipped", then run adaptation
   const handleValidateWeek = useCallback((weekNumber: number) => {
@@ -702,6 +709,7 @@ export function PlanViewPage() {
                 onValidateWeek={handleValidateWeek}
                 onWorkoutAdd={handleWorkoutAdd}
                 onAddToDay={handleAddToDay}
+                planStartDate={plan.config.startDate || plan.config.createdAt}
               />
             </div>
             {/* Desktop/tablet inline panel */}
@@ -755,16 +763,36 @@ export function PlanViewPage() {
 
         {/* Monthly View */}
         {planViewMode === "monthly" && (
-          <PlanMonthlyView
-            plan={plan}
-            workoutNames={workoutNames}
-            currentWeek={currentWeek}
-            isEn={isEn}
-            startDate={plan.config.startDate || plan.config.createdAt}
-            onSessionClick={handleSessionClick}
-            onToggleComplete={handleToggleComplete}
-            onAddToDay={handleAddToDay}
-          />
+          <div className="flex gap-4">
+            <div className="flex-1 min-w-0">
+              <PlanMonthlyView
+                plan={plan}
+                workoutNames={workoutNames}
+                currentWeek={currentWeek}
+                isEn={isEn}
+                startDate={plan.config.startDate || plan.config.createdAt}
+                onSessionClick={handleSessionClick}
+                onSessionMove={handleSessionMove}
+                onSessionDelete={handleSessionDelete}
+                onToggleComplete={handleToggleComplete}
+                onValidateWeek={handleValidateWeek}
+                onWorkoutAdd={handleWorkoutAdd}
+                onAddToDay={handleAddToDay}
+              />
+            </div>
+            {showWorkoutPanel && (
+              <div className="hidden md:block w-[280px] lg:w-[320px] shrink-0">
+                <div className="sticky top-20">
+                  <PlanWorkoutPanel
+                    isOpen={showWorkoutPanel}
+                    onClose={() => setShowWorkoutPanel(false)}
+                    isEn={isEn}
+                    inline
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         )}
 
         {/* Week List */}

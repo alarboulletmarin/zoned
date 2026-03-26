@@ -416,7 +416,7 @@ export const planBaseBuilding: PrebuiltPlan = {
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
       "targetKm": 25,
-      "targetLongRunKm": 12.5,
+      "targetLongRunKm": 0,
       "weeklyLoadScore": 116
     },
     {
@@ -791,7 +791,7 @@ export const planBaseBuilding: PrebuiltPlan = {
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
       "targetKm": 29,
-      "targetLongRunKm": 16.5,
+      "targetLongRunKm": 0,
       "weeklyLoadScore": 134
     },
     {
@@ -1073,7 +1073,7 @@ export const planBaseBuilding: PrebuiltPlan = {
       "weekLabel": "Semaine de récupération",
       "weekLabelEn": "Recovery Week",
       "targetKm": 23,
-      "targetLongRunKm": 18,
+      "targetLongRunKm": 0,
       "weeklyLoadScore": 100
     },
     {
