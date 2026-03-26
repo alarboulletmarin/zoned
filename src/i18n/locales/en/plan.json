@@ -225,5 +225,16 @@
     "continue": "Continue",
     "skip": "Skip",
     "step": "Step {{current}} of {{total}}"
+  },
+  "viewMode": {
+    "label": "View mode",
+    "calendar": "Calendar",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "list": "List"
+  },
+  "monthlyView": {
+    "noStartDate": "Set a start date to display the monthly view",
+    "setStartDate": "Set date"
   }
 }

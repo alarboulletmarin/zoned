@@ -6,7 +6,6 @@ import {
   ArrowLeft,
   Loader2,
   Calendar,
-  CalendarRange,
   Clock,
   Star,
   Trash2,
@@ -14,7 +13,6 @@ import {
   ChevronDown,
   ChevronUp,
   Download,
-  List,
   Plus,
   MoreHorizontal,
   Pencil,
@@ -56,7 +54,11 @@ import { toast } from "sonner";
 import { IcsExportDialog } from "@/components/domain/IcsExportDialog";
 import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
+import { PlanWeeklyView } from "@/components/domain/PlanWeeklyView";
+import { PlanMonthlyView } from "@/components/domain/PlanMonthlyView";
 import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
+import { PlanViewModeSelector } from "@/components/domain/PlanViewModeSelector";
+import { usePlanViewMode } from "@/hooks/usePlanViewMode";
 
 const SESSION_TYPE_LABELS: Record<string, { fr: string; en: string }> = {
   recovery: { fr: "Récupération", en: "Recovery" },
@@ -96,7 +98,7 @@ export function PlanViewPage() {
   const isEn = i18n.language?.startsWith("en") ?? false;
 
   const { plan, isLoading, reload: reloadPlan } = usePlan(id);
-  const [planView, setPlanView] = useState<"calendar" | "list">("calendar");
+  const { planViewMode, setPlanViewMode } = usePlanViewMode();
   const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set());
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showIcsDialog, setShowIcsDialog] = useState(false);
@@ -631,46 +633,7 @@ export function PlanViewPage() {
               <Plus className="size-4" />
               <span className="ml-1">{isEn ? "Add workout" : "Ajouter une séance"}</span>
             </Button>
-          <div
-            className="inline-flex items-center gap-0.5 rounded-lg bg-muted p-1"
-            role="radiogroup"
-            aria-label={isEn ? "View mode" : "Mode d'affichage"}
-          >
-            <button
-              type="button"
-              role="radio"
-              aria-checked={planView === "calendar"}
-              aria-label={isEn ? "Calendar" : "Calendrier"}
-              onClick={() => setPlanView("calendar")}
-              className={cn(
-                "inline-flex items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                planView === "calendar"
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-              )}
-            >
-              <CalendarRange size={16} />
-              <span className="hidden sm:inline">{isEn ? "Calendar" : "Calendrier"}</span>
-            </button>
-            <button
-              type="button"
-              role="radio"
-              aria-checked={planView === "list"}
-              aria-label={isEn ? "List" : "Liste"}
-              onClick={() => setPlanView("list")}
-              className={cn(
-                "inline-flex items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                planView === "list"
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-              )}
-            >
-              <List size={16} />
-              <span className="hidden sm:inline">{isEn ? "List" : "Liste"}</span>
-            </button>
-          </div>
+          <PlanViewModeSelector value={planViewMode} onChange={setPlanViewMode} />
           <Button variant="outline" size="sm" onClick={handleExportPDF} disabled={isExporting} className="rounded-full">
             {isExporting ? <Loader2 className="size-4 animate-spin" /> : <Download className="size-4" />}
             <span className="hidden sm:inline ml-1">{isEn ? "PDF" : "PDF"}</span>
@@ -681,8 +644,8 @@ export function PlanViewPage() {
             disabled={isExporting}
             className="rounded-full"
             onClick={() => {
-              if (planView === "calendar" && plan) {
-                // In calendar mode, days are already assigned -- export directly
+              if (planViewMode !== "list" && plan) {
+                // In calendar/weekly/monthly mode, days are already assigned -- export directly
                 const usedDays = [...new Set(plan.weeks.flatMap(w => w.sessions.map(s => s.dayOfWeek)))].sort();
                 handleIcsExport(usedDays, plan.config.longRunDay ?? 6);
               } else {
@@ -724,7 +687,7 @@ export function PlanViewPage() {
         </div>
 
         {/* Calendar View */}
-        {planView === "calendar" && (
+        {planViewMode === "calendar" && (
           <div className="flex gap-4">
             <div className="flex-1 min-w-0">
               <PlanCalendar
@@ -757,8 +720,55 @@ export function PlanViewPage() {
           </div>
         )}
 
+        {/* Weekly View */}
+        {planViewMode === "weekly" && (
+          <div className="flex gap-4">
+            <div className="flex-1 min-w-0">
+              <PlanWeeklyView
+                plan={plan}
+                workoutNames={workoutNames}
+                currentWeek={currentWeek}
+                isEn={isEn}
+                onSessionClick={handleSessionClick}
+                onSessionMove={handleSessionMove}
+                onSessionDelete={handleSessionDelete}
+                onToggleComplete={handleToggleComplete}
+                onValidateWeek={handleValidateWeek}
+                onWorkoutAdd={handleWorkoutAdd}
+                onAddToDay={handleAddToDay}
+              />
+            </div>
+            {showWorkoutPanel && (
+              <div className="hidden md:block w-[280px] lg:w-[320px] shrink-0">
+                <div className="sticky top-20">
+                  <PlanWorkoutPanel
+                    isOpen={showWorkoutPanel}
+                    onClose={() => setShowWorkoutPanel(false)}
+                    isEn={isEn}
+                    inline
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Monthly View */}
+        {planViewMode === "monthly" && (
+          <PlanMonthlyView
+            plan={plan}
+            workoutNames={workoutNames}
+            currentWeek={currentWeek}
+            isEn={isEn}
+            startDate={plan.config.startDate || plan.config.createdAt}
+            onSessionClick={handleSessionClick}
+            onToggleComplete={handleToggleComplete}
+            onAddToDay={handleAddToDay}
+          />
+        )}
+
         {/* Week List */}
-        {planView === "list" && (
+        {planViewMode === "list" && (
           <div className="flex gap-4">
           <div className="flex-1 min-w-0 space-y-2">
           {plan.weeks.map((week) => {
