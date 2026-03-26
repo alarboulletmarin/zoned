@@ -300,11 +300,13 @@ export function PlanCreatePage() {
   );
 
   // ── Purpose options for Step 1 ────────────────────────────────────
-  const PURPOSE_OPTIONS: { value: PlanPurpose; icon: React.ReactNode; color: string; label: string; labelEn: string; desc: string; descEn: string }[] = [
+  const PURPOSE_OPTIONS: { value: PlanPurpose; icon: React.ReactNode; ringClass: string; bgClass: string; iconBgClass: string; label: string; labelEn: string; desc: string; descEn: string }[] = [
     {
       value: "race",
       icon: <Target className="size-5 sm:size-6 text-primary" />,
-      color: "primary",
+      ringClass: "ring-primary bg-primary/5",
+      bgClass: "hover:bg-muted/50",
+      iconBgClass: "bg-primary/10",
       label: "Préparer une course",
       labelEn: "Prepare for a race",
       desc: "Plan personnalisé pour un objectif précis (5K au marathon)",
@@ -313,7 +315,9 @@ export function PlanCreatePage() {
     {
       value: "base_building",
       icon: <TrendingUp className="size-5 sm:size-6 text-zone-2" />,
-      color: "zone-2",
+      ringClass: "ring-zone-2 bg-zone-2/5",
+      bgClass: "hover:bg-muted/50",
+      iconBgClass: "bg-zone-2/10",
       label: "Construire ma base",
       labelEn: "Build my base",
       desc: "Développer l'endurance fondamentale sans course en vue",
@@ -322,7 +326,9 @@ export function PlanCreatePage() {
     {
       value: "return_from_injury",
       icon: <Heart className="size-5 sm:size-6 text-zone-1" />,
-      color: "zone-1",
+      ringClass: "ring-zone-1 bg-zone-1/5",
+      bgClass: "hover:bg-muted/50",
+      iconBgClass: "bg-zone-1/10",
       label: "Reprendre après une pause",
       labelEn: "Return after a break",
       desc: "Reprise progressive et sécurisée après blessure ou arrêt",
@@ -331,7 +337,9 @@ export function PlanCreatePage() {
     {
       value: "beginner_start",
       icon: <Footprints className="size-5 sm:size-6 text-zone-3" />,
-      color: "zone-3",
+      ringClass: "ring-zone-3 bg-zone-3/5",
+      bgClass: "hover:bg-muted/50",
+      iconBgClass: "bg-zone-3/10",
       label: "Débuter la course à pied",
       labelEn: "Start running",
       desc: "Programme progressif pour se lancer en courant",
@@ -370,8 +378,8 @@ export function PlanCreatePage() {
               className={cn(
                 "cursor-pointer border-border/50 transition-all duration-200",
                 form.planPurpose === opt.value
-                  ? `ring-2 ring-${opt.color} bg-${opt.color}/5`
-                  : "hover:bg-muted/50"
+                  ? `ring-2 ${opt.ringClass}`
+                  : opt.bgClass
               )}
               onClick={() => {
                 setForm((f) => ({
@@ -386,7 +394,7 @@ export function PlanCreatePage() {
               }}
             >
               <CardContent className="p-3 flex items-center gap-3">
-                <div className={cn("size-10 rounded-full flex items-center justify-center shrink-0", `bg-${opt.color}/10`)}>
+                <div className={cn("size-10 rounded-full flex items-center justify-center shrink-0", opt.iconBgClass)}>
                   {opt.icon}
                 </div>
                 <div className="min-w-0">

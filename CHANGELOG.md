@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-03-26
+
+### Added
+
+- Plan generator v2: Daniels-based pace engine, Pfitzinger long run progression, Mujika exponential taper model
+- Session completion tracking: planned/completed/skipped cycle with RPE input, week validation and automatic volume adaptation
+- 5 new prebuilt plans: 5K beginner, 5K intermediate, 10K beginner, 10K intermediate, return from injury
+- Non-race plans: base building, return from injury and beginner start with adapted goals
+- Enhanced statistics: weekly distance chart, 80/20 easy/hard split, training load, long run progression, completion rate
+- Pace annotations (paceNotes) on each session with Daniels zones and min/max ranges in min/km
+- Progressive scaling (intensityType, weeklyFrequencyMax, minimumRecoveryDays) across all 200 workout templates
+
+### Changed
+
+- Plan creation wizard redesigned with dynamic steps based on goal (race, base building, injury return, beginner)
+- Marathon, half-marathon and base building prebuilt plans enriched with paces, load scores and distance targets
+- Performance optimization: memo() on heavy components, theme managed via ref + custom event
+
+### Fixed
+
+- Fixed invalid sessionType values in workout data (vma, mixed, hills, race_pace)
+
 ## [0.2.3] - 2026-03-22
 
 ### Added

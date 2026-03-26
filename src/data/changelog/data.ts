@@ -2,6 +2,84 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.3.0",
+    date: "2026-03-26",
+    changes: {
+      added: [
+        {
+          text: "Générateur de plan v2 : moteur d'allures basé sur Daniels, progression sortie longue Pfitzinger, taper exponentiel Mujika",
+          textEn: "Plan generator v2: Daniels-based pace engine, Pfitzinger long run progression, Mujika exponential taper model",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Suivi de complétion des séances : cycle planned/completed/skipped avec saisie RPE, validation de semaine et adaptation automatique du volume",
+          textEn: "Session completion tracking: planned/completed/skipped cycle with RPE input, week validation and automatic volume adaptation",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "5 nouveaux plans pré-construits : 5K débutant, 5K intermédiaire, 10K débutant, 10K intermédiaire, retour de blessure",
+          textEn: "5 new prebuilt plans: 5K beginner, 5K intermediate, 10K beginner, 10K intermediate, return from injury",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Plans non-course : construction de base, retour de blessure et démarrage débutant avec objectifs adaptés",
+          textEn: "Non-race plans: base building, return from injury and beginner start with adapted goals",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Statistiques enrichies : distance hebdomadaire, répartition easy/hard 80/20, charge d'entraînement, progression sortie longue, taux de complétion",
+          textEn: "Enhanced statistics: weekly distance chart, 80/20 easy/hard split, training load, long run progression, completion rate",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Annotations d'allure (paceNotes) sur chaque séance avec zones Daniels et plages min/max en min/km",
+          textEn: "Pace annotations (paceNotes) on each session with Daniels zones and min/max ranges in min/km",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Scaling progressif (intensityType, weeklyFrequencyMax, minimumRecoveryDays) sur les 200 séances d'entraînement",
+          textEn: "Progressive scaling (intensityType, weeklyFrequencyMax, minimumRecoveryDays) across all 200 workout templates",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+      ],
+      changed: [
+        {
+          text: "Wizard de création de plan repensé avec étapes dynamiques selon l'objectif (course, base, blessure, débutant)",
+          textEn: "Plan creation wizard redesigned with dynamic steps based on goal (race, base building, injury return, beginner)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Plans pré-construits marathon, semi-marathon et base building enrichis avec allures, load scores et distances cibles",
+          textEn: "Marathon, half-marathon and base building prebuilt plans enriched with paces, load scores and distance targets",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Optimisation des performances : memo() sur les composants lourds, thème géré par ref + custom event",
+          textEn: "Performance optimization: memo() on heavy components, theme managed via ref + custom event",
+          category: "Performance",
+          categoryEn: "Performance",
+        },
+      ],
+      fixed: [
+        {
+          text: "Correction des sessionType invalides dans les données (vma, mixed, hills, race_pace)",
+          textEn: "Fixed invalid sessionType values in workout data (vma, mixed, hills, race_pace)",
+          category: "Bug",
+          categoryEn: "Bug",
+        },
+      ],
+    },
+  },
+  {
     version: "0.2.3",
     date: "2026-03-22",
     changes: {

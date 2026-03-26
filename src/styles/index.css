@@ -148,6 +148,8 @@
 
 /* ==========================================================================
    THEME TRANSITION — smooth color change on dark/light toggle
+   Tailwind utility classes (transition-colors, etc.) override this via
+   higher specificity, so interactive hover/focus transitions are preserved.
    ========================================================================== */
 *,
 *::before,
@@ -157,9 +159,8 @@
   transition-timing-function: ease;
 }
 
-/* Disable transition on elements that animate their own properties */
+/* Disable theme transition on elements with CSS keyframe animations */
 [class*="animate-"],
-[class*="transition-"],
 .no-theme-transition {
   transition-property: none;
 }

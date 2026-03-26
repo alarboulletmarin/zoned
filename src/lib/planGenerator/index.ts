@@ -174,12 +174,21 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     // Non-race plans: use purpose-specific phase distribution (no taper)
     const pc = purposeConfig.phases;
     const availableWeeks = totalWeeks;
-    const baseWeeks = Math.max(1, Math.round(availableWeeks * pc.base));
-    const buildWeeks = Math.max(1, Math.round(availableWeeks * pc.build));
-    let peakWeeks = Math.max(1, Math.round(availableWeeks * pc.peak));
-    // Adjust to fit
-    peakWeeks = availableWeeks - baseWeeks - buildWeeks;
-    if (peakWeeks < 1) peakWeeks = 1;
+    let baseWeeks = Math.max(1, Math.round(availableWeeks * pc.base));
+    let buildWeeks = Math.max(1, Math.round(availableWeeks * pc.build));
+    let peakWeeks = availableWeeks - baseWeeks - buildWeeks;
+    // Ensure all phases have at least 1 week and total equals availableWeeks
+    if (peakWeeks < 1) {
+      peakWeeks = 1;
+      const excess = baseWeeks + buildWeeks + peakWeeks - availableWeeks;
+      if (excess > 0) {
+        if (baseWeeks >= buildWeeks && baseWeeks > 1) {
+          baseWeeks = Math.max(1, baseWeeks - excess);
+        } else if (buildWeeks > 1) {
+          buildWeeks = Math.max(1, buildWeeks - excess);
+        }
+      }
+    }
 
     phases = [];
     let w = 1;
