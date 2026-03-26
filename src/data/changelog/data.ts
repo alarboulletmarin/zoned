@@ -2,7 +2,7 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
-    version: "3.0.0",
+    version: "0.3.0",
     date: "2026-03-26",
     changes: {
       added: [

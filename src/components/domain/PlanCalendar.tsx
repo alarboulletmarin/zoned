@@ -824,6 +824,13 @@ const SessionCell = memo(function SessionCell({
         {onToggleComplete && (
           <button
             type="button"
+            role="checkbox"
+            aria-checked={isCompleted}
+            aria-label={
+              isCompleted ? (isEn ? "Completed" : "Fait")
+                : isSkipped ? (isEn ? "Skipped" : "Passé")
+                  : (isEn ? "Mark as done" : "Marquer comme fait")
+            }
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
@@ -862,14 +869,14 @@ const SessionCell = memo(function SessionCell({
           role="button"
           tabIndex={onClick ? 0 : undefined}
           onClick={onClick}
-          onKeyDown={onClick ? (e) => { if (e.key === "Enter") onClick(); } : undefined}
+          onKeyDown={onClick ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } } : undefined}
           className={cn(
             "flex-1 min-w-0 rounded px-1 py-1 text-left transition-colors",
             "bg-secondary/60 hover:bg-secondary",
             isCompleted && "bg-green-500/10 hover:bg-green-500/15 ring-1 ring-green-500/30",
             isSkipped && "opacity-50",
             !onClick && "cursor-default",
-            onClick && "cursor-pointer"
+            onClick && "cursor-pointer focus-visible:ring-2 focus-visible:ring-ring"
           )}
         >
           <div className="flex items-center gap-1">

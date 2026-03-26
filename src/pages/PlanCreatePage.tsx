@@ -65,6 +65,42 @@ const RACE_DISTANCE_ICONS: Record<RaceDistance, React.ReactNode> = {
   ultra: <Mountain className="size-5 md:size-6 text-primary" />,
 };
 
+const DURATION_OPTIONS = [
+  { weeks: 4, label: "4 sem", labelEn: "4 wks" },
+  { weeks: 6, label: "6 sem", labelEn: "6 wks" },
+  { weeks: 8, label: "8 sem", labelEn: "8 wks" },
+  { weeks: 10, label: "10 sem", labelEn: "10 wks" },
+  { weeks: 12, label: "12 sem", labelEn: "12 wks" },
+  { weeks: 16, label: "16 sem", labelEn: "16 wks" },
+];
+
+const GOAL_OPTIONS: { value: TrainingGoal; icon: React.ReactNode; label: string; labelEn: string; desc: string; descEn: string }[] = [
+  {
+    value: "finish",
+    icon: <Flag className="size-5 text-zone-2" />,
+    label: "Finir la course",
+    labelEn: "Finish the race",
+    desc: "Plan conservateur, plus de volume facile, progression douce",
+    descEn: "Conservative plan, more easy volume, gentle progression",
+  },
+  {
+    value: "time",
+    icon: <Timer className="size-5 text-primary" />,
+    label: "Objectif temps",
+    labelEn: "Target a time",
+    desc: "Plan équilibré avec séances qualité et endurance",
+    descEn: "Balanced plan with quality sessions and endurance",
+  },
+  {
+    value: "compete",
+    icon: <TrendingUp className="size-5 text-zone-5" />,
+    label: "Performer",
+    labelEn: "Compete",
+    desc: "Plan ambitieux, plus d'intensité, volume élevé",
+    descEn: "Ambitious plan, more intensity, higher volume",
+  },
+];
+
 // ── Helpers ──────────────────────────────────────────────────────────
 
 function calculateWeeks(raceDate: string): number {
@@ -475,15 +511,6 @@ export function PlanCreatePage() {
 
   // ── Step Duration: Choose plan length (non-race plans) ──────────
 
-  const DURATION_OPTIONS = [
-    { weeks: 4, label: "4 sem", labelEn: "4 wks" },
-    { weeks: 6, label: "6 sem", labelEn: "6 wks" },
-    { weeks: 8, label: "8 sem", labelEn: "8 wks" },
-    { weeks: 10, label: "10 sem", labelEn: "10 wks" },
-    { weeks: 12, label: "12 sem", labelEn: "12 wks" },
-    { weeks: 16, label: "16 sem", labelEn: "16 wks" },
-  ];
-
   const renderStepDuration = () => (
     <div
       className={cn(
@@ -748,33 +775,6 @@ export function PlanCreatePage() {
 
   // ── Step Goal: Training mindset (finish/time/compete) ────────────
 
-  const GOAL_OPTIONS: { value: TrainingGoal; icon: React.ReactNode; label: string; labelEn: string; desc: string; descEn: string }[] = [
-    {
-      value: "finish",
-      icon: <Flag className="size-5 text-zone-2" />,
-      label: "Finir la course",
-      labelEn: "Finish the race",
-      desc: "Plan conservateur, plus de volume facile, progression douce",
-      descEn: "Conservative plan, more easy volume, gentle progression",
-    },
-    {
-      value: "time",
-      icon: <Timer className="size-5 text-primary" />,
-      label: "Objectif temps",
-      labelEn: "Target a time",
-      desc: "Plan équilibré avec séances qualité et endurance",
-      descEn: "Balanced plan with quality sessions and endurance",
-    },
-    {
-      value: "compete",
-      icon: <TrendingUp className="size-5 text-zone-5" />,
-      label: "Performer",
-      labelEn: "Compete",
-      desc: "Plan ambitieux, plus d'intensité, volume élevé",
-      descEn: "Ambitious plan, more intensity, higher volume",
-    },
-  ];
-
   const renderStepGoal = () => (
     <div
       className={cn(
@@ -924,7 +924,11 @@ export function PlanCreatePage() {
               {isEn ? "Sessions per week" : "Séances par semaine"}
             </label>
             <div className="flex gap-2">
-              {DAYS_PER_WEEK_OPTIONS.map((n) => (
+              {DAYS_PER_WEEK_OPTIONS.filter((n) =>
+                form.planPurpose === "return_from_injury" ? n <= 4
+                  : form.planPurpose === "beginner_start" ? n <= 5
+                    : true
+              ).map((n) => (
                 <Button
                   key={n}
                   variant={form.daysPerWeek === n ? "default" : "outline"}

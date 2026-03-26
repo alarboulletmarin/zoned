@@ -691,6 +691,16 @@ export function PlanViewPage() {
               ? "Click checkbox to cycle: planned → done → skipped"
               : "Cliquez sur la case : planifié → fait → passé"}
           </span>
+          <span className="text-muted-foreground/50 hidden md:inline">
+            {isEn
+              ? "· Right-click for options · Drag to move"
+              : "· Clic droit pour les options · Glisser pour déplacer"}
+          </span>
+          <span className="text-muted-foreground/50 md:hidden">
+            {isEn
+              ? "· Long-press for options · Swipe to move"
+              : "· Appui long pour les options · Glisser pour déplacer"}
+          </span>
         </div>
 
         {/* Calendar View */}
