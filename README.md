@@ -1,130 +1,162 @@
-# Zoned
+<div align="center">
+  <img src="src/assets/logo.svg" alt="Zoned" width="120" />
 
-A library of **200 structured running workouts** based on the 6-zone training system.
+  # Zoned
 
-**Live**: [zoned.run](https://zoned.run)
+  **200+ structured running workouts · 5K to marathon plans · 9 calculators**
 
-## Philosophy
+  *Free. No account. No tracking.*
 
-- **Zero tracking**: No cookies, no user accounts, no server-side data
-- **Local-first**: All your data stays in your browser
-- **Privacy by design**: Only anonymous page views via Vercel Analytics
-- **100% free**: No premium tier, no paywall
+  [![Live](https://img.shields.io/badge/live-zoned.run-4CAF50?style=flat-square)](https://zoned.run)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
+  [![Version](https://img.shields.io/badge/version-v0.3.0-orange?style=flat-square)](https://github.com/alarboulletmarin/zoned/releases)
+  [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md)
+  [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev)
+  [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+  [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-000?style=flat-square&logo=vercel)](https://vercel.com)
+</div>
+
+---
+
+## What is Zoned?
+
+Zoned is a free, open-source web app for structured running training. It brings together 200+ science-based workouts, personalized training plans from 5K to marathon, and 9 calculators — all running in your browser, with no account and no data sent anywhere.
+
+Built on training science from **Seiler**, **Billat**, and **Daniels**. Developed in collaboration with [Claude Code](https://claude.ai/code) (Anthropic).
+
+---
+
+## Screenshots
+
+<div align="center">
+  <img src="assets/home_fr_light.png" alt="Home — Light mode" width="600" />
+  <p><em>Home — Light mode</em></p>
+
+  <img src="assets/home_fr_dark.png" alt="Home — Dark mode" width="600" />
+  <p><em>Home — Dark mode</em></p>
+
+  <img src="assets/libray_fr_light.png" alt="Library" width="600" />
+  <p><em>Library</em></p>
+
+  <img src="assets/workout_fr_light.png" alt="Workout detail" width="600" />
+  <p><em>Workout detail</em></p>
+
+  <img src="assets/plan_with_stats_fr_light.png" alt="Training plan" width="600" />
+  <p><em>Training plan</em></p>
+</div>
+
+---
 
 ## Features
 
 ### Workouts
-- **Structured workouts**: Warm-up, main set, cool-down, coaching tips, and common mistakes
-- **6 training zones**: From Z1 (recovery) to Z6 (sprint)
-- **200 sessions** across 11 categories: recovery, endurance, tempo, threshold, VMA, long run, hills, fartlek, race pace, mixed, assessment
+- **200+ sessions** across 11 categories: recovery, endurance, tempo, threshold, VMA, long run, hills, fartlek, race pace, mixed, assessment
+- **6 training zones**: Z1 (recovery) → Z6 (sprint)
 - **Specialized methods**: Norwegian double threshold, Bangsbo 10-20-30, Billat 30/30, Yasso 800s, Cooper/VAMEVAL tests
-- **Personalized zones**: Based on your FCmax and VMA
-- **Custom workout builder**: Create your own workouts with warm-up, main set, cool-down blocks
+- **Personalized zones**: Based on your max HR and VMA
+- **Custom workout builder**: Create your own sessions block by block (warm-up, main set, cool-down)
 
-### Calculators
-- **Zone calculator**: HR and pace zones from FCmax or VMA
-- **Pace calculator**: Target time predictions
-- **Pace converter**: min/km to km/h and vice versa
-- **Pace table**: Complete pace reference table
-- **Treadmill converter**: Speed to pace conversion
-- **Split generator**: Custom splits for race distances
-- **VMA calculator**: Estimate VMA from race times
-- **Race equivalence**: Predict times across distances
-- **Age-graded calculator**: Performance adjusted for age
+### Calculators (9)
+Zone calculator · Pace calculator · Pace converter · Pace table · Treadmill converter · Split generator · VMA calculator · Race equivalence · Age-graded calculator
 
 ### Training Plans
-- **Plan generator**: Create personalized multi-week training plans (5K to marathon)
-- **8 prebuilt plans**: Ready-to-use plans for common goals
-- **Free plan mode**: Build your own plan from scratch
-- **4 view modes**: Calendar (full table), Weekly (navigable agenda), Monthly (by-month calendar with real dates) and List
-- **Drag-and-drop calendar**: Reorganize sessions visually
-- **Cross-training**: Add strength, cycling, swimming, yoga or rest activities to your plan
-- **Plan export**: PDF and ICS (calendar) formats
-- **Race day simulator**: Complete race day plan with km-by-km pacing, nutrition timing, and checklists
+- **Plan generator**: Personalized multi-week plans (5K to marathon)
+- **8 prebuilt plans** + free mode to build from scratch
+- **4 view modes**: Calendar, Weekly, Monthly, List
+- **Drag-and-drop** calendar, cross-training support (strength, cycling, swimming, yoga)
+- **Export**: PDF, ICS (Google/Apple/Outlook Calendar)
+- **Race day simulator**: km-by-km pacing, nutrition timing, checklists
 
-### Discovery & Tools
-- **Quiz**: Find the right workout in 5 questions (goal, time, terrain, experience, weakness)
-- **Random workout**: Discover new sessions with one click
-- **Workout of the Day**: Daily curated workout
-- **Command palette**: Quick search with Cmd+K / Ctrl+K
-- **16 collections**: Curated thematic workout paths
-- **Contextual hints**: First-visit tips on each page to discover features
-
-### Library
-- **Filters**: Duration, category, difficulty, terrain, target system
-- **View modes**: Grid and list views
+### Discovery
+- **Quiz**: Find the right workout in 5 questions (goal, time, terrain, level, weakness)
+- **Workout of the Day** · Random workout
+- **16 curated collections** · Command palette (Cmd+K)
 - **Favorites**: Save and organize preferred workouts
-- **Infinite scroll**: Smooth browsing with auto-loading
 
 ### Export
-- **ICS**: Add to Google Calendar, Apple Calendar, Outlook
-- **PNG**: High-resolution workout image
-- **PDF**: Printable document
-- **Garmin FIT**: Native workout file for Garmin devices
+ICS · PNG · PDF · **Garmin FIT** (native workout file for Garmin devices)
 
-### Educational Content
-- **12 articles**: Bilingual guides on training principles
-- **3 practical guides**: Nutrition, race prep, warm-up
-- **Glossary**: 50+ technical terms with definitions (9 categories)
-- **69 tips**: Contextual training advice
+### Learn
+- **12 bilingual articles** on training principles (Seiler, polarized, threshold...)
+- **3 practical guides**: nutrition, race prep, warm-up
+- **Methodology** page: the science behind zone-based training
+- **Glossary**: 50+ technical terms across 9 categories
+- **69 contextual tips** throughout the app
 
-### Settings & Accessibility
-- **Themes**: Light/dark mode with color blind palettes (deuteranopia, protanopia, tritanopia)
-- **Units**: Metric (km/h, min/km) and Imperial (mph, min/mi)
-- **Data backup**: Export and import all your data as JSON
-- **Offline-ready**: Everything stays on your device
-- **Bilingual**: French and English
-- **Auto-update**: App reloads automatically when a new version is available
+---
 
-## Installation
+## Philosophy
+
+| | |
+|---|---|
+| **Zero tracking** | No cookies, no user accounts, no server-side data |
+| **Local-first** | Everything stays in your browser |
+| **Privacy by design** | Only anonymous page views via Vercel Analytics |
+| **100% free** | No premium tier, no paywall, ever |
+
+---
+
+## About the author
+
+Runner and developer. I created Zoned to make structured zone-based training accessible to everyone — for free, with no account and no tracking. Every workout, calculator and plan is grounded in training science.
+
+[![Strava](https://img.shields.io/badge/Strava-FC4C02?style=flat-square&logo=strava&logoColor=white)](https://www.strava.com/athletes/alarboulletmarin)
+
+---
+
+## Getting started
 
 ```bash
 bun install
-bun run dev
+bun run dev       # http://localhost:5173
 ```
-
-Open [http://localhost:5173](http://localhost:5173)
-
-## Build
 
 ```bash
-bun run build    # Build to dist/
-bun run preview  # Preview production build
+bun run build     # TypeScript check + build to dist/
+bun run preview   # Preview production build
 ```
 
-## Docker
-
+**Docker:**
 ```bash
-docker compose up -d
+docker compose up -d   # http://localhost:8080
 ```
 
-Open [http://localhost:8080](http://localhost:8080)
+---
 
-## Stack
+## Tech stack
 
-- React 19
-- Vite 7
-- Tailwind CSS 4
-- TypeScript
-- Recharts
-- Radix UI (shadcn/ui)
-- Sonner
-- Workbox (PWA)
-- Vercel Analytics
-- i18next (FR/EN)
+| Layer | Tech |
+|-------|------|
+| Framework | React 19 + Vite 7 |
+| Language | TypeScript 5 |
+| Styling | Tailwind CSS 4 + shadcn/ui (Radix UI) |
+| Charts | Recharts |
+| i18n | i18next (FR/EN) |
+| PWA | Workbox |
+| Analytics | Vercel Analytics (anonymous) |
+| Runtime | Bun |
 
-## Support
-
-If you find Zoned useful, you can support the project on [Ko-fi](https://ko-fi.com/T6T01WC5ZC).
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/T6T01WC5ZC)
+---
 
 ## Contributing
 
-This project is developed in collaboration with AI (Claude Code).
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for how to:
+- Submit a workout idea via GitHub issue
+- Open a pull request with a new workout (JSON)
+- Use the in-app form at [zoned.run/contribute](https://zoned.run/contribute)
 
-Issues and suggestions welcome on [GitHub](https://github.com/alarboulletmarin/zoned/issues).
+---
+
+## Support
+
+If you find Zoned useful, you can support the project on Ko-fi.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/T6T01WC5ZC)
+
+---
 
 ## License
 
-MIT
+[MIT](LICENSE)
