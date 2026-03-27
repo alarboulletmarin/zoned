@@ -7,15 +7,17 @@
 
   *Free. No account. No tracking.*
 
-  [![Live](https://img.shields.io/badge/live-zoned.run-4CAF50?style=flat-square)](https://zoned.run)
+  ### [→ zoned.run](https://zoned.run)
+
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
   [![Version](https://img.shields.io/badge/version-v0.3.0-orange?style=flat-square)](https://github.com/alarboulletmarin/zoned/releases)
   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md)
+  [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-000?style=flat-square&logo=vercel)](https://vercel.com)
   [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
   [![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev)
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-  [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-000?style=flat-square&logo=vercel)](https://vercel.com)
 </div>
 
 ---
