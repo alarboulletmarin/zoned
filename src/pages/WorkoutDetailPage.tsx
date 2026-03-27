@@ -202,7 +202,7 @@ export function WorkoutDetailPage() {
         {/* Bento Header */}
         <header className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Session Identity Card */}
-          <div className={`lg:col-span-8 bg-gradient-to-br from-zone-${dominantZone}/10 dark:from-zone-${dominantZone}/20 to-transparent border border-border/50 rounded-xl p-8 md:p-10 flex flex-col justify-between min-h-[240px]`}>
+          <div className={`lg:col-span-8 bg-gradient-to-br from-zone-${dominantZone}/10 dark:from-zone-${dominantZone}/20 to-transparent border border-border/50 rounded-xl p-5 sm:p-8 md:p-10 flex flex-col justify-between lg:min-h-[240px]`}>
             <div>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
@@ -214,7 +214,7 @@ export function WorkoutDetailPage() {
                 </div>
                 <FavoriteButton workoutId={workout.id} />
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold leading-tight mb-4">
                 {isEn ? workout.nameEn : workout.name}
               </h1>
               <p className="text-muted-foreground max-w-2xl leading-relaxed text-lg">
@@ -240,28 +240,28 @@ export function WorkoutDetailPage() {
 
           {/* Summary Metrics */}
           <div className="lg:col-span-4">
-            <div className="grid grid-cols-2 gap-2 lg:gap-4">
-              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-4 lg:p-6 flex flex-col items-center justify-center text-center">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
+              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
                 <Clock className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
                 <span className="text-lg lg:text-2xl font-bold">{duration}</span>
-                <span className="text-[10px] lg:text-xs text-muted-foreground">{t("common:units.minutes")}</span>
+                <span className="text-xs text-muted-foreground">{t("common:units.minutes")}</span>
               </div>
-              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-4 lg:p-6 flex flex-col items-center justify-center text-center">
+              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
                 <Dumbbell className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
                 <span className="text-sm lg:text-lg font-bold">{t(`library:difficulty.${workout.difficulty}`)}</span>
-                <span className="text-[10px] lg:text-xs text-muted-foreground">{t("details.difficulty")}</span>
+                <span className="text-xs text-muted-foreground">{t("details.difficulty")}</span>
               </div>
-              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-4 lg:p-6 flex flex-col items-center justify-center text-center">
+              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
                 <Target className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
                 <span className="text-sm font-bold">{t(`targetSystems.${workout.targetSystem}`)}</span>
-                <span className="text-[10px] lg:text-xs text-muted-foreground">{t("details.targetSystem")}</span>
+                <span className="text-xs text-muted-foreground">{t("details.targetSystem")}</span>
               </div>
-              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-4 lg:p-6 flex flex-col items-center justify-center text-center">
+              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
                 <MapPin className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
                 <span className="text-sm font-bold">
                   {envRequirements.length > 0 ? envLabel : (isEn ? "Any" : "Tous")}
                 </span>
-                <span className="text-[10px] lg:text-xs text-muted-foreground">{t("details.environment")}</span>
+                <span className="text-xs text-muted-foreground">{t("details.environment")}</span>
               </div>
             </div>
           </div>
@@ -341,7 +341,7 @@ export function WorkoutDetailPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  {relatedWorkouts.map((related) => (
+                  {relatedWorkouts.slice(0, 5).map((related) => (
                     <WorkoutCardCompact key={related.id} workout={related} />
                   ))}
                 </CardContent>

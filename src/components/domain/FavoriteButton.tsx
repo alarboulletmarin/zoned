@@ -36,7 +36,7 @@ export function FavoriteButton({
       variant="ghost"
       size={size === "sm" ? "icon-sm" : "icon"}
       className={cn(
-        "shrink-0",
+        "shrink-0 relative after:absolute after:inset-[-6px] after:content-['']",
         favorited && "text-red-500 hover:text-red-600",
         className
       )}

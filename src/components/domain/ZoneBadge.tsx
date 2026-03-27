@@ -22,7 +22,7 @@ export function ZoneBadge({
   const isEn = i18n.language?.startsWith("en") ?? false;
 
   const sizeClasses = {
-    sm: "text-[10px] px-1.5 py-0.5",
+    sm: "text-xs px-2 py-0.5",
     md: "text-xs px-2 py-0.5",
     lg: "text-sm px-3 py-1",
   };
@@ -35,10 +35,11 @@ export function ZoneBadge({
         sizeClasses[size],
         className
       )}
+      aria-label={`Zone ${zoneNum} - ${isEn ? meta.labelEn : meta.label}`}
     >
       Z{zoneNum}
       {showLabel && (
-        <span className="ml-1 opacity-80">
+        <span className="ml-1">
           {isEn ? meta.labelEn : meta.label}
         </span>
       )}

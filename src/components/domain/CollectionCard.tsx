@@ -70,7 +70,8 @@ export function CollectionCard({ collection, featured = false }: CollectionCardP
           "rounded-xl border border-border/50 shadow-sm h-full flex flex-col",
           `zone-${getCollectionZone(collection.slug)}`,
           `bg-gradient-to-br from-zone-${getCollectionZone(collection.slug)}/10 dark:from-zone-${getCollectionZone(collection.slug)}/20 to-transparent`,
-          "hover:shadow-md hover:-translate-y-1 transition-all duration-200",
+          "hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl",
           featured ? "p-6" : "p-4"
         )}
       >
