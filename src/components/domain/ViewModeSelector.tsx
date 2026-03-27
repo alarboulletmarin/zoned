@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
-import { LayoutGrid, List } from "@/components/icons";
+import { LayoutGrid, Grid3x3, List, Rows3 } from "@/components/icons";
 import type { ViewMode } from "@/hooks/useViewMode";
 
 interface ViewModeSelectorProps {
@@ -11,7 +11,9 @@ interface ViewModeSelectorProps {
 
 const modes: { value: ViewMode; icon: typeof LayoutGrid; labelKey: string }[] =
   [
+    { value: "compact", icon: Grid3x3, labelKey: "viewMode.compact" },
     { value: "grid", icon: LayoutGrid, labelKey: "viewMode.grid" },
+    { value: "focus", icon: Rows3, labelKey: "viewMode.focus" },
     { value: "list", icon: List, labelKey: "viewMode.list" },
   ];
 

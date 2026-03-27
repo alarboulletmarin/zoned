@@ -4,6 +4,8 @@
   "viewMode": {
     "label": "Affichage",
     "grid": "Grille",
+    "compact": "Compact",
+    "focus": "Focus",
     "list": "Liste"
   },
   "filters": {

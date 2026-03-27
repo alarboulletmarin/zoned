@@ -1,10 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 
-export type ViewMode = "grid" | "list";
+export type ViewMode = "grid" | "list" | "compact" | "focus";
 
 const STORAGE_KEY = "zoned-viewMode";
-const DEFAULT_VIEW_MODE: ViewMode = "grid";
-const VALID_MODES: ViewMode[] = ["grid", "list"];
+const VALID_MODES: ViewMode[] = ["grid", "list", "compact", "focus"];
+
+function getDefaultViewMode(): ViewMode {
+  // sm breakpoint = 640px
+  return window.matchMedia("(min-width: 640px)").matches ? "grid" : "compact";
+}
 
 /**
  * Hook to manage library view mode preference with localStorage persistence
@@ -19,7 +23,7 @@ export function useViewMode() {
     } catch {
       // localStorage not available
     }
-    return DEFAULT_VIEW_MODE;
+    return getDefaultViewMode();
   });
 
   useEffect(() => {

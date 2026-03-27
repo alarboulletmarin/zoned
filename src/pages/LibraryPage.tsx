@@ -9,6 +9,7 @@ import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { EmptyState } from "@/components/ui/empty-state";
 import {
   WorkoutCard,
+  WorkoutCardCompact,
   WorkoutFilters,
   WorkoutListItem,
   ViewModeSelector,
@@ -18,6 +19,7 @@ import {
 import { SEOHead } from "@/components/seo";
 import { useFavorites, useKeyboardShortcuts, useWorkouts, useViewMode } from "@/hooks";
 import { getWorkoutDuration } from "@/components/visualization";
+import { categories } from "@/data/workouts";
 import type { WorkoutCategory } from "@/types";
 
 // Duration constants (same as in WorkoutFilters)
@@ -356,6 +358,31 @@ export function LibraryPage() {
             className="w-full h-10 pl-9 pr-3 rounded-md border border-input bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
         </div>
+
+        {/* Category quick filters - mobile only */}
+        <div className="lg:hidden mt-3">
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant={filters.category === "all" ? "default" : "outline"}
+              size="sm"
+              className="shrink-0 text-xs h-7 rounded-full"
+              onClick={() => setFilters({ ...filters, category: "all" })}
+            >
+              {t("filters.allCategories")}
+            </Button>
+            {categories.map((cat) => (
+              <Button
+                key={cat}
+                variant={filters.category === cat ? "default" : "outline"}
+                size="sm"
+                className="shrink-0 text-xs h-7 rounded-full"
+                onClick={() => setFilters({ ...filters, category: cat as WorkoutCategory })}
+              >
+                {t(`categories.${cat}`)}
+              </Button>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="flex gap-8">
@@ -430,7 +457,7 @@ export function LibraryPage() {
           {filteredWorkouts.length > 0 ? (
             <>
               {viewMode === "grid" && (
-                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
                   {visibleWorkouts.map((workout) => (
                     <WorkoutCard key={workout.id} workout={workout} />
                   ))}
@@ -441,6 +468,22 @@ export function LibraryPage() {
                 <div className="space-y-2">
                   {visibleWorkouts.map((workout) => (
                     <WorkoutListItem key={workout.id} workout={workout} />
+                  ))}
+                </div>
+              )}
+
+              {viewMode === "compact" && (
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                  {visibleWorkouts.map((workout) => (
+                    <WorkoutCardCompact key={workout.id} workout={workout} />
+                  ))}
+                </div>
+              )}
+
+              {viewMode === "focus" && (
+                <div className="space-y-4 max-w-2xl mx-auto">
+                  {visibleWorkouts.map((workout) => (
+                    <WorkoutCard key={workout.id} workout={workout} expanded />
                   ))}
                 </div>
               )}
