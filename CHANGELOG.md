@@ -69,7 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SEO: enriched Article JSON-LD with author, publisher, datePublished and dateModified
 - SEO: updated default OG image with current stats (200 workouts, 9 calculators, "No Account Needed")
 - SEO: prerender English pages and hreflang alternate links in sitemap
-- About page redesigned with personal section, updated stats, contact links (Strava, GitLab)
+- About page redesigned with personal section, updated stats, contact links (Strava, GitHub)
 - Custom workout builder: create, edit, save and export your own workouts with warm-up, main set and cool-down blocks
 - Custom workouts integrated into library, search, favorites and training plans
 - FIT export guide: step-by-step transfer instructions modal after Garmin export, with OS detection and non-Garmin alternatives
@@ -220,8 +220,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Community Contribution
 - Community contribution form with two modes (quick idea / full workout)
 - 4-step wizard to create detailed workouts with real-time preview
-- Automatic generation of pre-filled GitLab issues from the form
-- GitLab issue templates for workout submissions (quick idea and detailed)
+- Automatic generation of pre-filled GitHub issues from the form
+- GitHub issue templates for workout submissions (quick idea and detailed)
 - Contribution guide (CONTRIBUTING.md) with conventions and instructions
 
 #### Training Plans
@@ -440,7 +440,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Footer now displays dynamic workout and category counts
-- Added GitLab repository link in footer
+- Added GitHub repository link in footer
 
 ### Chores
 

@@ -74,9 +74,9 @@
     "emptyState": "Fill in the information above to see a preview of your workout"
   },
   "submit": {
-    "generateIssue": "Submit on GitLab",
+    "generateIssue": "Submit on GitHub",
     "copyDescription": "Copy description",
-    "openGitlab": "Open GitLab",
+    "openGithub": "Open GitHub",
     "urlTooLong": "The description is too long for a direct link. It has been copied to your clipboard.",
     "copied": "Copied to clipboard!",
     "success": "Thank you for your contribution!",

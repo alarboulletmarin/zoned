@@ -15,7 +15,7 @@
     "openSource": {
       "title": "Open Source",
       "description": "A free and open project",
-      "contributions": "This project is open source and available on GitLab. Contributions are welcome!",
+      "contributions": "This project is open source and available on GitHub. Contributions are welcome!",
       "viewRepo": "View repository"
     },
     "vibeCoded": {
@@ -158,7 +158,7 @@
     "scrollToTop": "Scroll to top",
     "addToFavorites": "Add to favorites",
     "removeFromFavorites": "Remove from favorites",
-    "viewRepo": "GitLab repository",
+    "viewRepo": "GitHub repository",
     "copyLink": "Copy link",
     "linkCopied": "Link copied!"
   },

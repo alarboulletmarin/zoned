@@ -26,7 +26,7 @@ export interface IssueSubmission {
 // Constants
 // ---------------------------------------------------------------------------
 
-const GITLAB_REPO_URL = "https://gitlab.com/alarboulletmarin-oss/zoned";
+const GITHUB_REPO_URL = "https://github.com/alarboulletmarin/zoned";
 const MAX_URL_LENGTH = 2000;
 
 // ---------------------------------------------------------------------------
@@ -187,21 +187,21 @@ export function buildFullWorkoutMarkdown(
 }
 
 /**
- * Build a GitLab "New Issue" URL with pre-filled template, title, and body.
+ * Build a GitHub "New Issue" URL with pre-filled template, title, and body.
  *
  * Returns `null` when the resulting URL exceeds `MAX_URL_LENGTH`, signaling
  * the caller to fall back to clipboard.
  */
-export function buildGitlabIssueUrl(
+export function buildGithubIssueUrl(
   template: "workout_idea" | "workout_detailed",
   title: string,
   body: string,
 ): string | null {
   const url =
-    `${GITLAB_REPO_URL}/-/issues/new` +
-    `?issuable_template=${template}` +
-    `&issue[title]=${encodeURIComponent(title)}` +
-    `&issue[description]=${encodeURIComponent(body)}`;
+    `${GITHUB_REPO_URL}/issues/new` +
+    `?template=${template}.md` +
+    `&title=${encodeURIComponent(title)}` +
+    `&body=${encodeURIComponent(body)}`;
 
   if (url.length > MAX_URL_LENGTH) {
     return null;
@@ -226,18 +226,18 @@ export async function copyToClipboard(text: string): Promise<boolean> {
 }
 
 /**
- * Convenience wrapper: build markdown and attempt to create a GitLab URL for
+ * Convenience wrapper: build markdown and attempt to create a GitHub URL for
  * a quick idea. The caller should open the URL when non-null, or fall back to
  * copying the markdown to the clipboard.
  */
 export function submitQuickIdea(data: QuickIdeaData): IssueSubmission {
   const markdown = buildQuickIdeaMarkdown(data);
-  const url = buildGitlabIssueUrl("workout_idea", data.name, markdown);
+  const url = buildGithubIssueUrl("workout_idea", data.name, markdown);
   return { url, markdown };
 }
 
 /**
- * Convenience wrapper: build markdown and attempt to create a GitLab URL for
+ * Convenience wrapper: build markdown and attempt to create a GitHub URL for
  * a full workout contribution.
  */
 export function submitFullWorkout(
@@ -245,6 +245,6 @@ export function submitFullWorkout(
 ): IssueSubmission {
   const markdown = buildFullWorkoutMarkdown(data);
   const title = data.name ?? "New workout contribution";
-  const url = buildGitlabIssueUrl("workout_detailed", title, markdown);
+  const url = buildGithubIssueUrl("workout_detailed", title, markdown);
   return { url, markdown };
 }

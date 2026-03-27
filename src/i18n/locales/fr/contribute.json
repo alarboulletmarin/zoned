@@ -74,9 +74,9 @@
     "emptyState": "Complétez les informations ci-dessus pour voir un aperçu de votre séance"
   },
   "submit": {
-    "generateIssue": "Soumettre sur GitLab",
+    "generateIssue": "Soumettre sur GitHub",
     "copyDescription": "Copier la description",
-    "openGitlab": "Ouvrir GitLab",
+    "openGithub": "Ouvrir GitHub",
     "urlTooLong": "La description est trop longue pour un lien direct. Elle a été copiée dans votre presse-papiers.",
     "copied": "Copié dans le presse-papiers !",
     "success": "Merci pour votre contribution !",

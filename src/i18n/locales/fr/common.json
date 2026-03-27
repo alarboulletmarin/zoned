@@ -15,7 +15,7 @@
     "openSource": {
       "title": "Open Source",
       "description": "Un projet libre et ouvert",
-      "contributions": "Ce projet est open source et disponible sur GitLab. Les contributions sont les bienvenues !",
+      "contributions": "Ce projet est open source et disponible sur GitHub. Les contributions sont les bienvenues !",
       "viewRepo": "Voir le dépôt"
     },
     "vibeCoded": {
@@ -158,7 +158,7 @@
     "scrollToTop": "Retour en haut",
     "addToFavorites": "Ajouter aux favoris",
     "removeFromFavorites": "Retirer des favoris",
-    "viewRepo": "Dépôt GitLab",
+    "viewRepo": "Dépôt GitHub",
     "copyLink": "Copier le lien",
     "linkCopied": "Lien copié !"
   },

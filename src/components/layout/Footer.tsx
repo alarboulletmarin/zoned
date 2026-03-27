@@ -1,4 +1,4 @@
-import { GitlabIcon } from "@/components/icons";
+import { GithubIcon } from "@/components/icons";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { categories } from "@/data/workouts";
@@ -50,13 +50,13 @@ export function Footer() {
               )}
             </Link>
             <a
-              href="https://gitlab.com/alarboulletmarin-oss/zoned"
+              href="https://github.com/alarboulletmarin/zoned"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-foreground transition-colors"
               aria-label={t("actions.viewRepo")}
             >
-              <GitlabIcon className="w-4 h-4" />
+              <GithubIcon className="w-4 h-4" />
             </a>
           </div>
         </div>

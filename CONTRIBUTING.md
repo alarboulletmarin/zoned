@@ -6,25 +6,25 @@ Merci de votre interet pour Zoned ! Ce projet est une bibliotheque open-source d
 
 Il y a trois facons de proposer une nouvelle seance :
 
-### 1. Via les modeles d'issue GitLab
+### 1. Via les templates d'issue GitHub
 
 La methode la plus simple pour proposer une seance.
 
-- **[Idee de seance](../../-/issues/new?issuable_template=workout_idea)** : pour partager une idee rapide sans details techniques.
-- **[Soumission detaillee](../../-/issues/new?issuable_template=workout_detailed)** : pour soumettre une seance complete avec blocs, zones et conseils, alignee sur le format `WorkoutTemplate`.
+- **[Idee de seance](https://github.com/alarboulletmarin/zoned/issues/new?template=workout_idea.md)** : pour partager une idee rapide sans details techniques.
+- **[Soumission detaillee](https://github.com/alarboulletmarin/zoned/issues/new?template=workout_detailed.md)** : pour soumettre une seance complete avec blocs, zones et conseils, alignee sur le format `WorkoutTemplate`.
 
-### 2. Via une Merge Request avec les donnees JSON
+### 2. Via une Pull Request avec les donnees JSON
 
 Pour les contributeurs techniques, vous pouvez directement proposer le fichier JSON.
 
 1. Forkez le depot.
 2. Ajoutez votre seance dans le fichier JSON correspondant a la categorie dans `src/data/workouts/`.
 3. Respectez les conventions (voir ci-dessous).
-4. Ouvrez une Merge Request.
+4. Ouvrez une Pull Request.
 
-### 3. Via le formulaire integre (a venir)
+### 3. Via le formulaire integre
 
-Un formulaire de contribution directement dans l'application, accessible a `/contribute`, est en cours de developpement.
+Un formulaire de contribution directement dans l'application est accessible a `/contribute`.
 
 ## Conventions
 
@@ -99,25 +99,25 @@ Thank you for your interest in Zoned! This project is an open-source running wor
 
 ## How to contribute
 
-### 1. Via GitLab issue templates
+### 1. Via GitHub issue templates
 
 The simplest way to suggest a workout.
 
-- **[Workout idea](../../-/issues/new?issuable_template=workout_idea)**: share a quick idea without technical details.
-- **[Detailed submission](../../-/issues/new?issuable_template=workout_detailed)**: submit a complete workout with blocks, zones and tips, aligned with the `WorkoutTemplate` format.
+- **[Workout idea](https://github.com/alarboulletmarin/zoned/issues/new?template=workout_idea.md)**: share a quick idea without technical details.
+- **[Detailed submission](https://github.com/alarboulletmarin/zoned/issues/new?template=workout_detailed.md)**: submit a complete workout with blocks, zones and tips, aligned with the `WorkoutTemplate` format.
 
-### 2. Via a Merge Request with JSON data
+### 2. Via a Pull Request with JSON data
 
 For technical contributors, you can directly propose the JSON file.
 
 1. Fork the repository.
 2. Add your workout to the appropriate category file in `src/data/workouts/`.
 3. Follow the conventions described above (IDs, bilingual fields, WorkoutTemplate structure).
-4. Open a Merge Request.
+4. Open a Pull Request.
 
-### 3. Via the in-app form (coming soon)
+### 3. Via the in-app form
 
-A built-in contribution form at `/contribute` is under development.
+A built-in contribution form is available at `/contribute`.
 
 ## Local testing
 

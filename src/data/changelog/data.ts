@@ -271,8 +271,8 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "SEO",
         },
         {
-          text: "Page À propos repensée avec section personnelle, stats à jour et liens de contact (email, Strava, GitLab)",
-          textEn: "About page redesigned with personal section, updated stats and contact links (Strava, GitLab)",
+          text: "Page À propos repensée avec section personnelle, stats à jour et liens de contact (email, Strava, GitHub)",
+          textEn: "About page redesigned with personal section, updated stats and contact links (Strava, GitHub)",
           category: "UX",
           categoryEn: "UX",
         },
@@ -777,16 +777,16 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "Contribution",
         },
         {
-          text: "Génération automatique d'issues GitLab pré-remplies depuis le formulaire",
+          text: "Génération automatique d'issues GitHub pré-remplies depuis le formulaire",
           textEn:
-            "Automatic generation of pre-filled GitLab issues from the form",
+            "Automatic generation of pre-filled GitHub issues from the form",
           category: "Contribution",
           categoryEn: "Contribution",
         },
         {
-          text: "Templates d'issues GitLab pour les soumissions de séances (idée rapide et détaillée)",
+          text: "Templates d'issues GitHub pour les soumissions de séances (idée rapide et détaillée)",
           textEn:
-            "GitLab issue templates for workout submissions (quick idea and detailed)",
+            "GitHub issue templates for workout submissions (quick idea and detailed)",
           category: "Contribution",
           categoryEn: "Contribution",
         },
@@ -1603,8 +1603,8 @@ export const changelogVersions: ChangelogVersion[] = [
             "Footer now displays dynamic workout and category counts",
         },
         {
-          text: "Ajout du lien vers le dépôt GitLab dans le pied de page",
-          textEn: "Added GitLab repository link in footer",
+          text: "Ajout du lien vers le dépôt GitHub dans le pied de page",
+          textEn: "Added GitHub repository link in footer",
         },
       ],
     },

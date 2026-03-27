@@ -123,7 +123,7 @@ If you find Zoned useful, you can support the project on [Ko-fi](https://ko-fi.c
 
 This project is developed in collaboration with AI (Claude Code).
 
-Issues and suggestions welcome on [GitLab](https://gitlab.com/alarboulletmarin-oss/zoned/-/issues).
+Issues and suggestions welcome on [GitHub](https://github.com/alarboulletmarin/zoned/issues).
 
 ## License
 

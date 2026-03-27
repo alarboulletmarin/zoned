@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { GitlabIcon, Shield, Code, Sparkles, ExternalLink } from "@/components/icons";
+import { GithubIcon, Shield, Code, Sparkles, ExternalLink } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
 
 export function AboutPage() {
@@ -85,13 +85,13 @@ export function AboutPage() {
                   Strava
                 </a>
                 <a
-                  href="https://gitlab.com/alarboulletmarin-oss/zoned"
+                  href="https://github.com/alarboulletmarin/zoned"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  <GitlabIcon className="size-4" />
-                  GitLab
+                  <GithubIcon className="size-4" />
+                  GitHub
                 </a>
               </div>
             </div>
@@ -103,7 +103,7 @@ export function AboutPage() {
           {/* Open Source */}
           <div className="bg-gradient-to-br from-orange-500/10 dark:from-orange-500/20 to-transparent rounded-xl border border-border/50 p-6 space-y-3">
             <div className="p-2 rounded-lg bg-orange-500/15 w-fit">
-              <GitlabIcon className="size-5 text-orange-500" />
+              <GithubIcon className="size-5 text-orange-500" />
             </div>
             <h3 className="font-bold">{t("about.openSource.title")}</h3>
             <p className="text-sm text-muted-foreground">
