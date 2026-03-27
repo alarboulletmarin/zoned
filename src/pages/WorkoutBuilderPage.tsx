@@ -1,4 +1,4 @@
-import { useState, useCallback, useReducer, useRef } from "react";
+import { useState, useCallback, useReducer, useRef, useEffect } from "react";
 import { usePageHint } from "@/hooks/usePageHint";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -233,12 +233,16 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
   const { i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
 
-  const [workout, setWorkout] = useState<WorkoutTemplate>(() => {
+  const [workout, setWorkoutRaw] = useState<WorkoutTemplate>(() => {
     const existing = getCustomWorkout(workoutId);
     if (existing) return existing;
     const fresh = createEmptyWorkout();
     return { ...fresh, id: workoutId };
   });
+  const setWorkout: typeof setWorkoutRaw = useCallback((action) => {
+    isDirtyRef.current = true;
+    setWorkoutRaw(action);
+  }, []);
 
   const [collapsed, setCollapsed] = useState<Record<SectionKey, boolean>>({
     warmup: false,
@@ -246,6 +250,18 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
     cooldown: false,
   });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const isDirtyRef = useRef(false);
+
+  // Warn before leaving with unsaved changes
+  useEffect(() => {
+    const handler = (e: BeforeUnloadEvent) => {
+      if (isDirtyRef.current) {
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, []);
 
   const canSave = workout.name.trim().length > 0;
 
@@ -261,7 +277,8 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
         typicalDuration: { min: Math.max(totalMin - 5, 0), max: totalMin + 5 },
       };
       saveCustomWorkout(updated);
-      setWorkout(updated);
+      setWorkoutRaw(updated);
+      isDirtyRef.current = false;
       setIsSaved(true);
       toast.success(isEn ? "Workout saved" : "Séance sauvegardée");
     } catch {
@@ -284,7 +301,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
   const updateBlocks = useCallback((section: SectionKey, blocks: WorkoutBlock[]) => {
     const key = section === "warmup" ? "warmupTemplate" : section === "main" ? "mainSetTemplate" : "cooldownTemplate";
     setWorkout((prev) => ({ ...prev, [key]: blocks }));
-  }, []);
+  }, [setWorkout]);
 
   const addBlock = (section: SectionKey) => {
     updateBlocks(section, [...getBlocks(section), { ...EMPTY_BLOCK }]);
