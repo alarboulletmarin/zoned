@@ -16,6 +16,7 @@ import {
   Heart,
   Footprints,
   TrendingUp,
+  AlertTriangle,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -646,10 +647,11 @@ export function PlanCreatePage() {
 
           {form.raceDate && dateTooLong && (
             <div className="rounded-lg border border-amber-300 dark:border-amber-600 bg-amber-50 dark:bg-amber-950/30 p-3 text-sm text-amber-800 dark:text-amber-300 text-center space-y-1">
-              <p className="font-semibold">
+              <p className="font-semibold flex items-center justify-center gap-1.5">
+                <AlertTriangle className="size-4 shrink-0" />
                 {isEn
-                  ? `⚠️ ${weeksCount} weeks is a long cycle`
-                  : `⚠️ ${weeksCount} semaines, c'est un cycle long`}
+                  ? `${weeksCount} weeks is a long cycle`
+                  : `${weeksCount} semaines, c'est un cycle long`}
               </p>
               <p className="text-xs">
                 {isEn
