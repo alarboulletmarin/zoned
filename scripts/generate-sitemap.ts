@@ -146,6 +146,12 @@ async function generateSitemap(): Promise<string> {
     urls.push({ loc: `/glossary/${id}`, priority: "0.6", changefreq: "monthly" });
   }
 
+  // Compare pages
+  urls.push({ loc: "/compare", priority: "0.7", changefreq: "monthly" });
+  for (const slug of ["runna", "kiprun-pacer", "campus-coach"]) {
+    urls.push({ loc: `/compare/${slug}`, priority: "0.7", changefreq: "monthly" });
+  }
+
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${urls
