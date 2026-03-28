@@ -72,11 +72,14 @@ function preloadSidebarPages() {
 }
 
 function ScrollToTopOnNavigate() {
-  const { pathname } = useLocation();
+  const location = useLocation();
 
   useEffect(() => {
+    // Skip scroll-to-top when returning to a plan from workout detail
+    const state = location.state as { returnToWeek?: number } | null;
+    if (state?.returnToWeek) return;
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [location.pathname, location.state]);
 
   return null;
 }
