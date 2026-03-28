@@ -2,6 +2,28 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.3.1",
+    date: "2026-03-28",
+    changes: {
+      added: [
+        {
+          text: "Section « Pourquoi ça marche » sur chaque fiche séance : explication physiologique, rôle de chaque zone, adaptations attendues et références scientifiques (Billat, Seiler, Daniels...)",
+          textEn: "\"Why it works\" science section on each workout detail page: physiological rationale, zone explanations, expected adaptations and scientific references (Billat, Seiler, Daniels...)",
+          category: "Séances",
+          categoryEn: "Workouts",
+        },
+      ],
+      changed: [
+        {
+          text: "Conseils d'entraînement déplacés dans la barre latérale pour une meilleure hiérarchie du contenu",
+          textEn: "Coaching tips moved to sidebar for better content hierarchy",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+    },
+  },
+  {
     version: "0.3.0",
     date: "2026-03-26",
     changes: {
