@@ -242,6 +242,12 @@
       "localStorage": "All your data stays in your browser (localStorage)",
       "analytics": "Vercel Analytics only measures page views anonymously (no cookies, no identification)"
     },
+    "scienceMode": {
+      "title": "Science Mode",
+      "description": "Show scientific explanations on workout pages",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    },
     "data": {
       "title": "Your data",
       "description": "Export or restore your data (favorites, plans, zones, settings)",
@@ -377,6 +383,50 @@
     "library": {
       "title": "Filter to find",
       "description": "Use category, duration, and difficulty filters to find the perfect workout."
+    }
+  },
+  "compare": {
+    "title": "Comparisons",
+    "subtitle": "Zoned vs alternatives",
+    "backToCompare": "Back to comparisons",
+    "tableHeader": {
+      "criterion": "Criterion",
+      "zoned": "Zoned",
+      "competitor": "Competitor"
+    },
+    "values": {
+      "yes": "Yes",
+      "no": "No",
+      "partial": "Partial"
+    },
+    "advantages": {
+      "title": "Why choose Zoned",
+      "free": {
+        "title": "100% free",
+        "description": "No subscription, no trial period. All features, forever."
+      },
+      "noAccount": {
+        "title": "No sign-up",
+        "description": "No form, no password. Open the app and start running."
+      },
+      "noData": {
+        "title": "Zero data collected",
+        "description": "Everything stays in your browser. No server, no tracking."
+      },
+      "openSource": {
+        "title": "Open Source",
+        "description": "Source code available on GitHub. Auditable, modifiable, trustworthy."
+      }
+    },
+    "cta": {
+      "title": "Try Zoned for free",
+      "subtitle": "No account. No credit card. Right now.",
+      "button": "Get started"
+    },
+    "hub": {
+      "title": "Alternatives to Runna, Kiprun Pacer & Campus Coach",
+      "description": "Compare Zoned with the main running apps. Pricing, privacy, features.",
+      "compareWith": "Compare with {{name}}"
     }
   }
 }

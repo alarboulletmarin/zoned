@@ -25,7 +25,7 @@ export function WorkoutListItem({ workout, className }: WorkoutListItemProps) {
       to={`/workout/${workout.id}`}
       className={cn(
         `zone-${dominantZone} bg-gradient-to-r from-zone-${dominantZone}/10 dark:from-zone-${dominantZone}/20 to-transparent`,
-        "flex items-center gap-3 p-3 rounded-xl border border-border/50 hover:shadow-md hover:-translate-y-1 transition-all duration-200",
+        "flex items-center gap-3 p-3 rounded-xl border border-border/50 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         className
       )}
     >

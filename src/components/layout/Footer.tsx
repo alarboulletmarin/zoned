@@ -40,6 +40,9 @@ export function Footer() {
             <Link to="/contribute" className="hover:text-foreground transition-colors hidden sm:inline">
               {t("nav.contribute")}
             </Link>
+            <Link to="/compare" className="hover:text-foreground transition-colors hidden sm:inline">
+              {t("compare.title")}
+            </Link>
             <Link
               to="/changelog"
               className="hover:text-foreground transition-colors relative"

@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book, Search, MoreHorizontal, ClipboardCheck, Settings, Library, Sparkles, Send, CalendarRange, Compass } from "@/components/icons";
+import { Moon, Sun, Languages, Menu, X, Target, Heart, Dices, Home, BookOpen, GraduationCap, Book, Search, MoreHorizontal, ClipboardCheck, Settings, Library, Sparkles, Send, CalendarRange, Compass, Calculator } from "@/components/icons";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/logo.svg?react";
@@ -63,6 +63,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
 
   const discoverLinks = [
     { href: "/collections", label: t("collections.title") },
+    { href: "/calculators", label: t("calculateurs.title") },
     { href: "/learn", label: t("nav.learn") },
     { href: "/glossary", label: t("nav.glossary") },
   ];
@@ -379,6 +380,22 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
             >
               <Book className="size-4" />
               {t("nav.glossary")}
+            </Link>
+
+            {/* Calculators */}
+            <Link
+              to="/calculators"
+              viewTransition
+              onClick={() => setMobileMenuOpen(false)}
+              className={cn(
+                "flex items-center gap-2 py-2 text-sm font-medium transition-colors",
+                location.pathname === "/calculators" || location.pathname.startsWith("/calculators/")
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Calculator className="size-4" />
+              {t("calculateurs.title")}
             </Link>
 
             {/* Tools separator */}

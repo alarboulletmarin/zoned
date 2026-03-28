@@ -207,7 +207,7 @@ export function GlossaryPage() {
                 .sort()
                 .map((letter) => (
                   <div key={letter}>
-                    <h2 className="text-lg font-semibold text-primary mb-4 sticky top-14 bg-background py-2 z-10 border-b">
+                    <h2 className="text-lg font-semibold text-primary mb-4 sticky top-14 bg-background/95 backdrop-blur-sm py-2 z-10 border-b shadow-sm">
                       {letter}
                     </h2>
                     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

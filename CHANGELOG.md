@@ -23,6 +23,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Navigating back from a workout detail page now returns to the correct week in the weekly plan view instead of resetting to week 1 (#31)
 - Workout detail page now displays the plan-scaled duration when accessed from a plan, instead of always showing the base session duration (#32)
 
+## [0.3.1] - 2026-03-28
+
+### Added
+
+- "Why it works" science section on each workout detail page showing physiological rationale, zone explanations, expected adaptations and scientific references (Billat, Seiler, Daniels, etc.)
+- Coaching tips moved to sidebar for better content hierarchy
+- SEO comparison pages (Zoned vs Runna, Kiprun Pacer, Campus Coach)
+- Calculators added to header navigation and mobile menu
+- Library page: responsive grid, compact/focus view modes and quick filters
+- Unsaved changes warning before leaving workout builder
+
+### Fixed
+
+- Improved touch targets, mobile responsiveness and interaction consistency
+- scaledReps only applies to blocks with repetitions, prevents duration explosion
+- Mobile tap opens context menu correctly, prevented text selection on long-press, show RPE in weekly view
+
 ## [0.3.0] - 2026-03-26
 
 ### Added

@@ -4,6 +4,8 @@
   "viewMode": {
     "label": "View",
     "grid": "Grid",
+    "compact": "Compact",
+    "focus": "Focus",
     "list": "List"
   },
   "filters": {

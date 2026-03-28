@@ -50,6 +50,7 @@ interface PlanWeeklyViewProps {
   currentWeek: number;
   initialWeek?: number;
   isEn: boolean;
+  planStartDate?: string;
   onSessionClick?: (weekNumber: number, sessionIndex: number, workoutId: string) => void;
   onSessionMove?: (
     fromWeek: number,
@@ -72,6 +73,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   currentWeek,
   initialWeek,
   isEn,
+  planStartDate,
   onSessionClick,
   onSessionMove,
   onSessionDelete,
@@ -87,6 +89,18 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
     () => plan.weeks.find((w) => w.weekNumber === selectedWeek),
     [plan.weeks, selectedWeek],
   );
+
+  const parsedStartDate = useMemo(() => {
+    if (!planStartDate) return null;
+    const dateOnly = planStartDate.split("T")[0];
+    const [y, m, d] = dateOnly.split("-").map(Number);
+    const date = new Date(y, m - 1, d);
+    // Normalize to Monday of that week (same logic as PlanCalendar)
+    const jsDay = date.getDay();
+    const offset = jsDay === 0 ? -6 : 1 - jsDay;
+    date.setDate(date.getDate() + offset);
+    return date;
+  }, [planStartDate]);
 
   // ── Native drag state ─────────────────────────────────────────
   const [draggedSession, setDraggedSession] = useState<{
@@ -416,6 +430,19 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                 <span className="text-xs text-muted-foreground">
                   {isEn ? phaseMeta.labelEn : phaseMeta.label}
                 </span>
+                {parsedStartDate && (() => {
+                  const shortMonths = isEn
+                    ? ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+                    : ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
+                  const weekStart = new Date(parsedStartDate);
+                  weekStart.setDate(weekStart.getDate() + (selectedWeek - 1) * 7);
+                  const weekEnd = new Date(parsedStartDate);
+                  weekEnd.setDate(weekEnd.getDate() + (selectedWeek - 1) * 7 + 6);
+                  const label = weekStart.getMonth() === weekEnd.getMonth()
+                    ? `${weekStart.getDate()} - ${weekEnd.getDate()} ${shortMonths[weekStart.getMonth()]}`
+                    : `${weekStart.getDate()} ${shortMonths[weekStart.getMonth()]} - ${weekEnd.getDate()} ${shortMonths[weekEnd.getMonth()]}`;
+                  return <span className="block text-[10px] text-muted-foreground/70">{label}</span>;
+                })()}
                 {weekData.sessions.length > 0 && (
                   <span className="block text-[10px] text-muted-foreground/70 tabular-nums">
                     ~{Math.round(computeWeekKm(weekData))}km ·{" "}
@@ -505,63 +532,109 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                     row.length === 4 ? "grid-cols-4" : "grid-cols-3",
                   )}
                 >
-                  {row.map((dayIndex) => (
-                    <DayCell
-                      key={dayIndex}
-                      dayIndex={dayIndex}
-                      weekData={weekData}
-                      selectedWeek={selectedWeek}
-                      dayLabel={dayHeadersShort[dayIndex]}
-                      workoutNames={workoutNames}
-                      isEn={isEn}
-                      dropTarget={dropTarget}
-                      draggedSession={draggedSession}
-                      onDragOver={handleDragOver}
-                      onDragLeave={handleDragLeave}
-                      onDrop={handleDrop}
-                      onDragStart={handleDragStart}
-                      onDragEnd={handleDragEnd}
-                      onTouchStart={handleTouchStart}
-                      onTouchMove={handleTouchMove}
-                      onTouchEnd={handleTouchEnd}
-                      onSessionClick={onSessionClick}
-                      onToggleComplete={onToggleComplete}
-                      onAddToDay={onAddToDay}
-                      setContextMenu={setContextMenu}
-                    />
-                  ))}
+                  {row.map((dayIndex) => {
+                    let dayOfMonth: number | null = null;
+                    let monthLabel = "";
+                    let isToday = false;
+                    if (parsedStartDate) {
+                      const cellDate = new Date(parsedStartDate);
+                      cellDate.setDate(cellDate.getDate() + (selectedWeek - 1) * 7 + dayIndex);
+                      dayOfMonth = cellDate.getDate();
+                      const now = new Date();
+                      isToday = cellDate.getFullYear() === now.getFullYear()
+                        && cellDate.getMonth() === now.getMonth()
+                        && cellDate.getDate() === now.getDate();
+                      if (dayOfMonth === 1) {
+                        const shortMonths = isEn
+                          ? ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+                          : ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
+                        monthLabel = shortMonths[cellDate.getMonth()];
+                      }
+                    }
+                    return (
+                      <DayCell
+                        key={dayIndex}
+                        dayIndex={dayIndex}
+                        weekData={weekData}
+                        selectedWeek={selectedWeek}
+                        dayLabel={dayHeadersShort[dayIndex]}
+                        dayOfMonth={dayOfMonth}
+                        monthLabel={monthLabel}
+                        isToday={isToday}
+                        workoutNames={workoutNames}
+                        isEn={isEn}
+                        dropTarget={dropTarget}
+                        draggedSession={draggedSession}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
+                        onDragStart={handleDragStart}
+                        onDragEnd={handleDragEnd}
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
+                        onSessionClick={onSessionClick}
+                        onToggleComplete={onToggleComplete}
+                        onAddToDay={onAddToDay}
+                        setContextMenu={setContextMenu}
+                      />
+                    );
+                  })}
                 </div>
               ))}
             </div>
 
             {/* Desktop: single 7-column row */}
             <div className="hidden md:grid md:grid-cols-7 md:gap-2">
-              {Array.from({ length: 7 }, (_, dayIndex) => (
-                <DayCell
-                  key={dayIndex}
-                  dayIndex={dayIndex}
-                  weekData={weekData}
-                  selectedWeek={selectedWeek}
-                  dayLabel={dayHeadersFull[dayIndex]}
-                  workoutNames={workoutNames}
-                  isEn={isEn}
-                  dropTarget={dropTarget}
-                  draggedSession={draggedSession}
-                  isDesktop
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  onDragStart={handleDragStart}
-                  onDragEnd={handleDragEnd}
-                  onTouchStart={handleTouchStart}
-                  onTouchMove={handleTouchMove}
-                  onTouchEnd={handleTouchEnd}
-                  onSessionClick={onSessionClick}
-                  onToggleComplete={onToggleComplete}
-                  onAddToDay={onAddToDay}
-                  setContextMenu={setContextMenu}
-                />
-              ))}
+              {Array.from({ length: 7 }, (_, dayIndex) => {
+                let dayOfMonth: number | null = null;
+                let monthLabel = "";
+                let isToday = false;
+                if (parsedStartDate) {
+                  const cellDate = new Date(parsedStartDate);
+                  cellDate.setDate(cellDate.getDate() + (selectedWeek - 1) * 7 + dayIndex);
+                  dayOfMonth = cellDate.getDate();
+                  const now = new Date();
+                  isToday = cellDate.getFullYear() === now.getFullYear()
+                    && cellDate.getMonth() === now.getMonth()
+                    && cellDate.getDate() === now.getDate();
+                  if (dayOfMonth === 1) {
+                    const shortMonths = isEn
+                      ? ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+                      : ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
+                    monthLabel = shortMonths[cellDate.getMonth()];
+                  }
+                }
+                return (
+                  <DayCell
+                    key={dayIndex}
+                    dayIndex={dayIndex}
+                    weekData={weekData}
+                    selectedWeek={selectedWeek}
+                    dayLabel={dayHeadersFull[dayIndex]}
+                    dayOfMonth={dayOfMonth}
+                    monthLabel={monthLabel}
+                    isToday={isToday}
+                    workoutNames={workoutNames}
+                    isEn={isEn}
+                    dropTarget={dropTarget}
+                    draggedSession={draggedSession}
+                    isDesktop
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    onDragStart={handleDragStart}
+                    onDragEnd={handleDragEnd}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    onSessionClick={onSessionClick}
+                    onToggleComplete={onToggleComplete}
+                    onAddToDay={onAddToDay}
+                    setContextMenu={setContextMenu}
+                  />
+                );
+              })}
             </div>
           </div>
         )}
@@ -644,6 +717,9 @@ interface DayCellProps {
   weekData: TrainingPlan["weeks"][number];
   selectedWeek: number;
   dayLabel: string;
+  dayOfMonth?: number | null;
+  monthLabel?: string;
+  isToday?: boolean;
   workoutNames: Record<string, string>;
   isEn: boolean;
   dropTarget: { weekNumber: number; day: number } | null;
@@ -681,6 +757,9 @@ const DayCell = memo(function DayCell({
   weekData,
   selectedWeek,
   dayLabel,
+  dayOfMonth,
+  monthLabel,
+  isToday,
   workoutNames,
   isEn,
   dropTarget,
@@ -716,12 +795,25 @@ const DayCell = memo(function DayCell({
     >
       <span
         className={cn(
-          "font-semibold text-muted-foreground block mb-1",
+          "font-semibold text-muted-foreground block",
           isDesktop ? "text-xs" : "text-[10px]",
+          dayOfMonth != null ? "mb-0" : "mb-1",
         )}
       >
         {dayLabel}
       </span>
+      {dayOfMonth != null && (
+        <span className={cn(
+          "text-[10px] tabular-nums block text-center mb-1",
+          isToday
+            ? "font-bold text-primary"
+            : monthLabel
+              ? "font-semibold text-primary/70"
+              : "text-muted-foreground/60",
+        )}>
+          {monthLabel ? `${dayOfMonth} ${monthLabel}` : dayOfMonth}
+        </span>
+      )}
 
       {sessions.length === 0 ? (
         onAddToDay ? (

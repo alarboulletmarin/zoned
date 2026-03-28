@@ -41,7 +41,8 @@
     "zoneDistribution": "Répartition des zones",
     "details": "Détails",
     "relatedWorkouts": "Séances similaires",
-    "nutritionRecovery": "Nutrition & Récupération"
+    "nutritionRecovery": "Nutrition & Récupération",
+    "scienceMode": "Pourquoi ça marche"
   },
   "targetSystems": {
     "aerobic_base": "Base aérobie",
@@ -89,5 +90,13 @@
   "planContext": {
     "banner": "Dans votre plan (semaine {{week}}, {{volume}}% volume) : ~{{duration}} min",
     "fullSession": "(séance complète : {{duration}} min)"
+  },
+  "science": {
+    "toggle": "Activer",
+    "rationale": "Pourquoi ce format",
+    "zonesSolicited": "Zones sollicitées",
+    "adaptations": "Adaptations attendues",
+    "references": "Références scientifiques",
+    "viewStudy": "Voir l'étude"
   }
 }

@@ -2,6 +2,70 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.3.1",
+    date: "2026-03-28",
+    changes: {
+      added: [
+        {
+          text: "Section « Pourquoi ça marche » sur chaque fiche séance : explication physiologique, rôle de chaque zone, adaptations attendues et références scientifiques (Billat, Seiler, Daniels...)",
+          textEn: "\"Why it works\" science section on each workout detail page: physiological rationale, zone explanations, expected adaptations and scientific references (Billat, Seiler, Daniels...)",
+          category: "Séances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Conseils d'entraînement déplacés dans la barre latérale pour une meilleure hiérarchie du contenu",
+          textEn: "Coaching tips moved to sidebar for better content hierarchy",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Pages de comparaison SEO (Zoned vs Runna, Kiprun Pacer, Campus Coach)",
+          textEn: "SEO comparison pages (Zoned vs Runna, Kiprun Pacer, Campus Coach)",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Calculateurs ajoutés dans la navigation header et le menu mobile",
+          textEn: "Calculators added to header navigation and mobile menu",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Page bibliothèque : grille responsive, modes compact/focus et filtres rapides",
+          textEn: "Library page: responsive grid, compact/focus view modes and quick filters",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Avertissement avant de quitter le workout builder avec des modifications non sauvegardées",
+          textEn: "Unsaved changes warning before leaving workout builder",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      fixed: [
+        {
+          text: "Amélioration des zones de touch, de la responsivité mobile et de la cohérence des interactions",
+          textEn: "Improved touch targets, mobile responsiveness and interaction consistency",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "scaledReps ne s'applique qu'aux blocs avec répétitions, évite l'explosion de durée",
+          textEn: "scaledReps only applies to blocks with repetitions, prevents duration explosion",
+          category: "Séances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Le tap mobile ouvre correctement le menu contextuel, correction de la sélection de texte au long-press, RPE visible en vue semaine",
+          textEn: "Mobile tap opens context menu correctly, prevented text selection on long-press, show RPE in weekly view",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+    },
+  },
+  {
     version: "0.3.0",
     date: "2026-03-26",
     changes: {

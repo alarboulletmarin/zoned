@@ -242,6 +242,12 @@
       "localStorage": "Toutes vos données restent dans votre navigateur (localStorage)",
       "analytics": "Vercel Analytics mesure uniquement les pages vues de manière anonyme (pas de cookies, pas d'identification)"
     },
+    "scienceMode": {
+      "title": "Mode Science",
+      "description": "Afficher les explications scientifiques sur les fiches séances",
+      "enabled": "Activé",
+      "disabled": "Désactivé"
+    },
     "data": {
       "title": "Vos données",
       "description": "Exportez ou restaurez vos données (favoris, plans, zones, paramètres)",
@@ -377,6 +383,50 @@
     "library": {
       "title": "Filtrez pour trouver",
       "description": "Utilisez les filtres par catégorie, durée et difficulté pour trouver la séance parfaite."
+    }
+  },
+  "compare": {
+    "title": "Comparaisons",
+    "subtitle": "Zoned face aux alternatives",
+    "backToCompare": "Retour aux comparaisons",
+    "tableHeader": {
+      "criterion": "Critère",
+      "zoned": "Zoned",
+      "competitor": "Concurrent"
+    },
+    "values": {
+      "yes": "Oui",
+      "no": "Non",
+      "partial": "Partiel"
+    },
+    "advantages": {
+      "title": "Pourquoi choisir Zoned",
+      "free": {
+        "title": "100% gratuit",
+        "description": "Aucun abonnement, aucune période d'essai. Toutes les fonctionnalités, pour toujours."
+      },
+      "noAccount": {
+        "title": "Sans inscription",
+        "description": "Pas de formulaire, pas de mot de passe. Ouvrez l'app et commencez à courir."
+      },
+      "noData": {
+        "title": "Zéro donnée collectée",
+        "description": "Tout reste dans votre navigateur. Pas de serveur, pas de tracking."
+      },
+      "openSource": {
+        "title": "Open Source",
+        "description": "Code source disponible sur GitHub. Auditable, modifiable, de confiance."
+      }
+    },
+    "cta": {
+      "title": "Essayez Zoned gratuitement",
+      "subtitle": "Sans compte. Sans carte bancaire. Maintenant.",
+      "button": "Commencer"
+    },
+    "hub": {
+      "title": "Alternatives à Runna, Kiprun Pacer & Campus Coach",
+      "description": "Comparez Zoned avec les principales apps de running. Prix, confidentialité, fonctionnalités.",
+      "compareWith": "Comparer avec {{name}}"
     }
   }
 }

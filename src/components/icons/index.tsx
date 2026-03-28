@@ -157,6 +157,32 @@ export function LayoutGrid({ className, size = 24 }: IconProps) {
   );
 }
 
+export function Rows3({ className, size = 24 }: IconProps) {
+  return (
+    <svg {...defaultProps} width={size} height={size} className={className}>
+      <rect width="18" height="4" x="3" y="3" rx="1" />
+      <rect width="18" height="4" x="3" y="10" rx="1" />
+      <rect width="18" height="4" x="3" y="17" rx="1" />
+    </svg>
+  );
+}
+
+export function Grid3x3({ className, size = 24 }: IconProps) {
+  return (
+    <svg {...defaultProps} width={size} height={size} className={className}>
+      <rect width="5" height="5" x="2" y="2" rx="0.5" />
+      <rect width="5" height="5" x="9.5" y="2" rx="0.5" />
+      <rect width="5" height="5" x="17" y="2" rx="0.5" />
+      <rect width="5" height="5" x="2" y="9.5" rx="0.5" />
+      <rect width="5" height="5" x="9.5" y="9.5" rx="0.5" />
+      <rect width="5" height="5" x="17" y="9.5" rx="0.5" />
+      <rect width="5" height="5" x="2" y="17" rx="0.5" />
+      <rect width="5" height="5" x="9.5" y="17" rx="0.5" />
+      <rect width="5" height="5" x="17" y="17" rx="0.5" />
+    </svg>
+  );
+}
+
 export function List({ className, size = 24 }: IconProps) {
   return (
     <svg {...defaultProps} width={size} height={size} className={className}>
