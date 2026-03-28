@@ -87,6 +87,10 @@
       "recovery": "Guide récupération complet"
     }
   },
+  "planContext": {
+    "banner": "Dans votre plan (semaine {{week}}, {{volume}}% volume) : ~{{duration}} min",
+    "fullSession": "(séance complète : {{duration}} min)"
+  },
   "science": {
     "toggle": "Activer",
     "rationale": "Pourquoi ce format",

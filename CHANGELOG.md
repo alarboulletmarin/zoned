@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2026-03-28
+
+### Added
+
+- Finish time input mode in plan creation: toggle between target pace (min/km) and target finish time (H:MM:SS), with automatic conversion (#29)
+- Level descriptions across the app: each difficulty level (beginner, intermediate, advanced, elite) now shows concrete frequency and weekly volume expectations (#28)
+- Plan context banner on workout detail page: when viewing a session from a plan, shows the scaled duration based on the week's volume percentage (#32)
+
+### Changed
+
+- Plan duration warning redesigned: now shows specific risks (mental fatigue, overtraining) and suggests alternatives instead of a vague "not recommended" message (#27)
+- Stats section: "Distance par semaine" renamed to "Kilométrage hebdomadaire" and "Volume par semaine" renamed to "Temps d'entraînement hebdomadaire" with descriptive subtitles (#30)
+
+### Fixed
+
+- Navigating back from a workout detail page now returns to the correct week in the weekly plan view instead of resetting to week 1 (#31)
+- Workout detail page now displays the plan-scaled duration when accessed from a plan, instead of always showing the base session duration (#32)
+
 ## [0.3.1] - 2026-03-28
 
 ### Added

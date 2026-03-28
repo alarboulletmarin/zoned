@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { usePageHint } from "@/hooks/usePageHint";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
@@ -93,8 +93,23 @@ export function PlanViewPage() {
   usePageHint("plan-calendar", "hints.planCalendar.title", "hints.planCalendar.description");
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { i18n } = useTranslation("plan");
   const isEn = i18n.language?.startsWith("en") ?? false;
+
+  // Read return state from navigation (coming back from workout detail page)
+  const returnState = location.state as { returnToWeek?: number; returnScrollY?: number } | null;
+  const returnedWeek = returnState?.returnToWeek;
+
+  // Restore scroll position when returning from workout detail
+  useEffect(() => {
+    if (returnState?.returnScrollY != null) {
+      // Defer to allow the page to render first
+      requestAnimationFrame(() => {
+        window.scrollTo(0, returnState.returnScrollY!);
+      });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { plan, isLoading, reload: reloadPlan } = usePlan(id);
   const { planViewMode, setPlanViewMode } = usePlanViewMode();
@@ -394,10 +409,21 @@ export function PlanViewPage() {
     runAdaptationIfReady(weekNumber, true);
   }, [plan, reloadPlan, runAdaptationIfReady]);
 
-  const handleSessionClick = useCallback((_weekNumber: number, _sessionIndex: number, workoutId: string) => {
+  const handleSessionClick = useCallback((weekNumber: number, sessionIndex: number, workoutId: string) => {
     if (workoutId && workoutId !== "__race_day__" && !workoutId.startsWith("__activity_")) {
+      // Find the session to pass volume info for scaled duration display (#32)
+      const week = plan?.weeks.find((w) => w.weekNumber === weekNumber);
+      const session = week?.sessions[sessionIndex];
       navigate(`/workout/${workoutId}`, {
-        state: { from: "plan", planId: plan?.id, planName: plan ? (isEn ? plan.nameEn : plan.name) : "" },
+        state: {
+          from: "plan",
+          planId: plan?.id,
+          planName: plan ? (isEn ? plan.nameEn : plan.name) : "",
+          weekNumber,
+          volumePercent: week?.volumePercent,
+          estimatedDurationMin: session?.estimatedDurationMin,
+          scrollY: window.scrollY,
+        },
       });
     }
   }, [plan, isEn, navigate]);
@@ -760,6 +786,7 @@ export function PlanViewPage() {
                 plan={plan}
                 workoutNames={workoutNames}
                 currentWeek={currentWeek}
+                initialWeek={returnedWeek}
                 isEn={isEn}
                 planStartDate={plan.config.startDate || plan.config.createdAt}
                 onSessionClick={handleSessionClick}

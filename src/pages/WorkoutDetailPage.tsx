@@ -44,7 +44,6 @@ import { useWorkout, useRelatedWorkouts, useTips } from "@/hooks";
 import type { WorkoutCategory, ZoneRange } from "@/types";
 import {
   getDominantZone,
-  DIFFICULTY_META,
 } from "@/types";
 import { loadUserZonePrefs, calculateAllZones } from "@/lib/zones";
 
@@ -69,10 +68,22 @@ export function WorkoutDetailPage() {
   const { t, i18n } = useTranslation(["session", "library", "common"]);
   const isEn = i18n.language?.startsWith("en") ?? false;
 
-  const locationState = location.state as { from?: string; planId?: string; planName?: string } | null;
+  const locationState = location.state as {
+    from?: string;
+    planId?: string;
+    planName?: string;
+    weekNumber?: number;
+    volumePercent?: number;
+    estimatedDurationMin?: number;
+    scrollY?: number;
+  } | null;
   const backTo = locationState?.from === "plan" && locationState.planId
-    ? { path: `/plan/${locationState.planId}`, label: isEn ? `Back to ${locationState.planName || "plan"}` : `Retour au plan` }
-    : { path: "/library", label: t("common:actions.backToLibrary") };
+    ? {
+        path: `/plan/${locationState.planId}`,
+        label: isEn ? `Back to ${locationState.planName || "plan"}` : `Retour au plan`,
+        state: { returnToWeek: locationState.weekNumber, returnScrollY: locationState.scrollY },
+      }
+    : { path: "/library", label: t("common:actions.backToLibrary"), state: undefined };
 
   const { workout, isLoading } = useWorkout(id);
   const { workouts: relatedWorkouts } = useRelatedWorkouts(workout);
@@ -113,7 +124,7 @@ export function WorkoutDetailPage() {
       <div className="py-12 text-center">
         <p className="text-muted-foreground">{t("common:errors.workoutNotFound")}</p>
         <Button variant="link" asChild className="mt-4">
-          <Link to={backTo.path}>
+          <Link to={backTo.path} state={backTo.state}>
             <ArrowLeft className="mr-2 size-4" />
             {backTo.label}
           </Link>
@@ -123,7 +134,13 @@ export function WorkoutDetailPage() {
   }
 
   const dominantZone = getDominantZone(workout);
-  const sessionData = transformSessionBlocks(
+  // Plan context: scaled duration when coming from a plan
+  const planVolumePercent = locationState?.volumePercent;
+  const planWeekNumber = locationState?.weekNumber;
+  const hasPlanContext = locationState?.from === "plan" && planVolumePercent != null && planVolumePercent !== 100;
+
+  // Base (unscaled) session data
+  const baseSessionData = transformSessionBlocks(
     {
       warmup: workout.warmupTemplate,
       mainSet: workout.mainSetTemplate,
@@ -131,9 +148,23 @@ export function WorkoutDetailPage() {
     },
     isEn
   );
+  const baseDuration = Math.round(baseSessionData.totalDurationMin);
+
+  // Scaled session data when coming from a plan
+  const sessionData = hasPlanContext
+    ? transformSessionBlocks(
+        {
+          warmup: workout.warmupTemplate,
+          mainSet: workout.mainSetTemplate,
+          cooldown: workout.cooldownTemplate,
+        },
+        isEn,
+        planVolumePercent
+      )
+    : baseSessionData;
   const duration = Math.round(sessionData.totalDurationMin);
+
   const CategoryIcon = CATEGORY_ICONS[workout.category];
-  void DIFFICULTY_META[workout.difficulty];
 
   // Environment requirements
   const envRequirements: { icon: React.ComponentType<{ className?: string }>; text: string }[] = [];
@@ -194,11 +225,24 @@ export function WorkoutDetailPage() {
       <div className={`zone-${dominantZone} py-8 space-y-8`}>
         {/* Back Button */}
         <Button variant="ghost" size="sm" asChild>
-          <Link to={backTo.path}>
+          <Link to={backTo.path} state={backTo.state}>
             <ArrowLeft className="mr-2 size-4" />
             {backTo.label}
           </Link>
         </Button>
+
+        {/* Plan context banner */}
+        {hasPlanContext && (
+          <div className="rounded-lg border border-primary/20 bg-primary/5 px-4 py-2.5 text-sm flex items-center gap-2">
+            <Clock className="size-4 text-primary shrink-0" />
+            <span>
+              {t("session:planContext.banner", { week: planWeekNumber, volume: planVolumePercent, duration })}
+              <span className="text-muted-foreground ml-1">
+                {t("session:planContext.fullSession", { duration: baseDuration })}
+              </span>
+            </span>
+          </div>
+        )}
 
         {/* Bento Header */}
         <header className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -245,7 +289,10 @@ export function WorkoutDetailPage() {
               <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
                 <Clock className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
                 <span className="text-lg lg:text-2xl font-bold">{duration}</span>
-                <span className="text-xs text-muted-foreground">{t("common:units.minutes")}</span>
+                <span className="text-[10px] lg:text-xs text-muted-foreground">{t("common:units.minutes")}</span>
+                {hasPlanContext && (
+                  <span className="text-[9px] text-muted-foreground line-through">{baseDuration}</span>
+                )}
               </div>
               <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
                 <Dumbbell className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
@@ -282,7 +329,7 @@ export function WorkoutDetailPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <SessionTimeline workout={workout} />
+                <SessionTimeline workout={workout} volumePercent={hasPlanContext ? planVolumePercent : undefined} />
               </CardContent>
             </Card>
 
@@ -294,7 +341,7 @@ export function WorkoutDetailPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <WorkoutStructure workout={workout} userZones={hasUserZones ? userZones : undefined} />
+                <WorkoutStructure workout={workout} userZones={hasUserZones ? userZones : undefined} volumePercent={hasPlanContext ? planVolumePercent : undefined} />
               </CardContent>
             </Card>
 
@@ -315,7 +362,7 @@ export function WorkoutDetailPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ZoneDistribution workout={workout} />
+                <ZoneDistribution workout={workout} volumePercent={hasPlanContext ? planVolumePercent : undefined} />
               </CardContent>
             </Card>
 
