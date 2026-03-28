@@ -36,6 +36,7 @@ import { ExportMenu } from "@/components/domain/ExportMenu";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/issueBuilder";
 import { NutritionRecoverySection } from "@/components/domain/NutritionRecoverySection";
+import { ScienceSection } from "@/components/domain/ScienceSection";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { SEOHead } from "@/components/seo";
 import { SessionTimeline, ZoneDistribution, transformSessionBlocks } from "@/components/visualization";
@@ -297,20 +298,11 @@ export function WorkoutDetailPage() {
               </CardContent>
             </Card>
 
-            {/* Coaching Tips */}
-            <Card className="rounded-xl">
-              <CardHeader>
-                <CardTitle className="text-lg">
-                  {t("titles.coachingTips")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CoachingTips workout={workout} />
-              </CardContent>
-            </Card>
-
             {/* Nutrition & Recovery */}
             <NutritionRecoverySection workout={workout} />
+
+            {/* Science Mode */}
+            <ScienceSection workout={workout} />
           </div>
 
           {/* Sidebar */}
@@ -347,6 +339,18 @@ export function WorkoutDetailPage() {
                 </CardContent>
               </Card>
             )}
+
+            {/* Coaching Tips */}
+            <Card className="rounded-xl">
+              <CardHeader>
+                <CardTitle className="text-sm font-medium">
+                  {t("titles.coachingTips")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CoachingTips workout={workout} />
+              </CardContent>
+            </Card>
           </aside>
         </div>
       </div>

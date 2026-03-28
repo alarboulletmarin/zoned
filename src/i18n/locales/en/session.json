@@ -41,7 +41,8 @@
     "zoneDistribution": "Zone Distribution",
     "details": "Details",
     "relatedWorkouts": "Similar Workouts",
-    "nutritionRecovery": "Nutrition & Recovery"
+    "nutritionRecovery": "Nutrition & Recovery",
+    "scienceMode": "Why it works"
   },
   "targetSystems": {
     "aerobic_base": "Aerobic Base",
@@ -85,5 +86,13 @@
       "nutrition": "Complete nutrition guide",
       "recovery": "Complete recovery guide"
     }
+  },
+  "science": {
+    "toggle": "Enable",
+    "rationale": "Why this format",
+    "zonesSolicited": "Zones solicited",
+    "adaptations": "Expected adaptations",
+    "references": "Scientific references",
+    "viewStudy": "View study"
   }
 }
