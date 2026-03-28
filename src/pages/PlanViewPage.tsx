@@ -130,6 +130,20 @@ export function PlanViewPage() {
     return getCurrentWeek(referenceDate);
   }, [plan]);
 
+  const parsedPlanStart = useMemo(() => {
+    if (!plan) return null;
+    const raw = plan.config.startDate || plan.config.createdAt;
+    if (!raw) return null;
+    const dateOnly = raw.split("T")[0];
+    const [y, m, d] = dateOnly.split("-").map(Number);
+    const date = new Date(y, m - 1, d);
+    // Normalize to Monday of that week (same logic as PlanCalendar)
+    const jsDay = date.getDay();
+    const offset = jsDay === 0 ? -6 : 1 - jsDay;
+    date.setDate(date.getDate() + offset);
+    return date;
+  }, [plan]);
+
   // Auto-expand current week
   useEffect(() => {
     if (currentWeek > 0) {
@@ -747,6 +761,7 @@ export function PlanViewPage() {
                 workoutNames={workoutNames}
                 currentWeek={currentWeek}
                 isEn={isEn}
+                planStartDate={plan.config.startDate || plan.config.createdAt}
                 onSessionClick={handleSessionClick}
                 onSessionMove={handleSessionMove}
                 onSessionDelete={handleSessionDelete}
@@ -820,6 +835,20 @@ export function PlanViewPage() {
               ? week.weekLabelEn || `W${week.weekNumber}`
               : week.weekLabel || `S${week.weekNumber}`;
 
+            let weekDateRange = "";
+            if (parsedPlanStart) {
+              const shortMonths = isEn
+                ? ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+                : ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
+              const weekStart = new Date(parsedPlanStart);
+              weekStart.setDate(weekStart.getDate() + (week.weekNumber - 1) * 7);
+              const weekEnd = new Date(parsedPlanStart);
+              weekEnd.setDate(weekEnd.getDate() + (week.weekNumber - 1) * 7 + 6);
+              weekDateRange = weekStart.getMonth() === weekEnd.getMonth()
+                ? `${weekStart.getDate()}-${weekEnd.getDate()} ${shortMonths[weekStart.getMonth()]}`
+                : `${weekStart.getDate()} ${shortMonths[weekStart.getMonth()]} - ${weekEnd.getDate()} ${shortMonths[weekEnd.getMonth()]}`;
+            }
+
             return (
               <Card
                 key={week.weekNumber}
@@ -840,9 +869,16 @@ export function PlanViewPage() {
                         phaseMeta.color
                       )}
                     />
-                    <span className="font-medium truncate">
-                      {weekLabel} — {isEn ? phaseMeta.labelEn : phaseMeta.label}
-                    </span>
+                    <div className="min-w-0">
+                      <span className="font-medium truncate block">
+                        {weekLabel} — {isEn ? phaseMeta.labelEn : phaseMeta.label}
+                      </span>
+                      {weekDateRange && (
+                        <span className="text-xs text-muted-foreground/60 tabular-nums">
+                          {weekDateRange}
+                        </span>
+                      )}
+                    </div>
                     {isCurrent && (
                       <Badge variant="default" className="shrink-0">
                         {isEn ? "Current week" : "Semaine en cours"}
