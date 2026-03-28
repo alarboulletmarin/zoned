@@ -315,8 +315,13 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         {weeklyKmData.some(w => w.km > 0) && (
           <div className="space-y-2">
             <h3 className="text-sm font-medium">
-              {isEn ? "Weekly distance (km)" : "Distance par semaine (km)"}
+              {isEn ? "Weekly mileage (km)" : "Kilométrage hebdomadaire (km)"}
             </h3>
+            <p className="text-xs text-muted-foreground">
+              {isEn
+                ? "Planned kilometers for each week"
+                : "Kilomètres planifiés pour chaque semaine"}
+            </p>
             <div className="flex items-end gap-[2px] h-28">
               {weeklyKmData.map((week) => {
                 const heightPct = maxWeeklyKm > 0 ? (week.km / maxWeeklyKm) * 100 : 0;
@@ -355,8 +360,13 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         {/* ── Section 2b: Weekly Volume (minutes) Chart ───────────── */}
         <div className="space-y-2">
           <h3 className="text-sm font-medium">
-            {isEn ? "Weekly volume" : "Volume par semaine"}
+            {isEn ? "Weekly training time (min)" : "Temps d'entraînement hebdomadaire (min)"}
           </h3>
+          <p className="text-xs text-muted-foreground">
+            {isEn
+              ? "Total estimated duration per week (warmup + workout + cooldown)"
+              : "Durée totale estimée par semaine (échauffement + séance + retour au calme)"}
+          </p>
           <div className="flex items-end gap-[2px] h-32">
             {stats.weeklyVolumes.map((week) => {
               const heightPercent =

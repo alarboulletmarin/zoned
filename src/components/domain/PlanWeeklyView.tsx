@@ -48,6 +48,7 @@ interface PlanWeeklyViewProps {
   plan: TrainingPlan;
   workoutNames: Record<string, string>;
   currentWeek: number;
+  initialWeek?: number;
   isEn: boolean;
   onSessionClick?: (weekNumber: number, sessionIndex: number, workoutId: string) => void;
   onSessionMove?: (
@@ -69,6 +70,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   plan,
   workoutNames,
   currentWeek,
+  initialWeek,
   isEn,
   onSessionClick,
   onSessionMove,
@@ -79,7 +81,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   onAddToDay,
 }: PlanWeeklyViewProps) {
   // ── Week navigation state ──────────────────────────────────────
-  const [selectedWeek, setSelectedWeek] = useState(Math.max(1, currentWeek));
+  const [selectedWeek, setSelectedWeek] = useState(Math.max(1, initialWeek ?? currentWeek));
 
   const weekData = useMemo(
     () => plan.weeks.find((w) => w.weekNumber === selectedWeek),

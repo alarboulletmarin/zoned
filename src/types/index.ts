@@ -307,12 +307,12 @@ export const CATEGORY_META: Record<
 // Difficulty Display Metadata
 export const DIFFICULTY_META: Record<
   Difficulty,
-  { label: string; labelEn: string; level: number }
+  { label: string; labelEn: string; level: number; desc: string; descEn: string }
 > = {
-  beginner: { label: "Débutant", labelEn: "Beginner", level: 1 },
-  intermediate: { label: "Intermédiaire", labelEn: "Intermediate", level: 2 },
-  advanced: { label: "Avancé", labelEn: "Advanced", level: 3 },
-  elite: { label: "Élite", labelEn: "Elite", level: 4 },
+  beginner: { label: "Débutant", labelEn: "Beginner", level: 1, desc: "1 à 2 sorties/semaine · moins de 15 km/semaine", descEn: "1–2 runs/week · less than 15 km/week" },
+  intermediate: { label: "Intermédiaire", labelEn: "Intermediate", level: 2, desc: "3 à 4 sorties/semaine · 20–40 km/semaine", descEn: "3–4 runs/week · 20–40 km/week" },
+  advanced: { label: "Avancé", labelEn: "Advanced", level: 3, desc: "4 à 5 sorties/semaine · 40–70 km/semaine", descEn: "4–5 runs/week · 40–70 km/week" },
+  elite: { label: "Élite", labelEn: "Elite", level: 4, desc: "5 à 7 sorties/semaine · 70+ km/semaine", descEn: "5–7 runs/week · 70+ km/week" },
 };
 
 // Helper to extract zone number from zone string

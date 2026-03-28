@@ -147,6 +147,32 @@ function estimateFinishTime(
   return `${minutes}min${seconds.toString().padStart(2, "0")}s`;
 }
 
+function parseFinishTimeToSeconds(timeStr: string): number | null {
+  // Supports H:MM:SS, H:MM, HH:MM:SS, HH:MM, MM:SS (if no hours)
+  const full = timeStr.match(/^(\d{1,2}):(\d{2}):(\d{2})$/);
+  if (full) {
+    const h = parseInt(full[1], 10);
+    const m = parseInt(full[2], 10);
+    const s = parseInt(full[3], 10);
+    if (m >= 60 || s >= 60) return null;
+    return h * 3600 + m * 60 + s;
+  }
+  const short = timeStr.match(/^(\d{1,2}):(\d{2})$/);
+  if (short) {
+    const a = parseInt(short[1], 10);
+    const b = parseInt(short[2], 10);
+    if (b >= 60) return null;
+    // If a >= 1 and context suggests hours (for marathon-type distances), treat as H:MM
+    // We always treat as H:MM if a < 60
+    return a * 3600 + b * 60;
+  }
+  return null;
+}
+
+function finishTimeToPaceSeconds(finishTimeSeconds: number, distanceKm: number): number {
+  return finishTimeSeconds / distanceKm;
+}
+
 function generateId(): string {
   return `plan-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
@@ -179,6 +205,8 @@ export function PlanCreatePage() {
 
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
+  const [paceInputMode, setPaceInputMode] = useState<"pace" | "time">("pace");
+  const [targetFinishTime, setTargetFinishTime] = useState("");
   const [form, setForm] = useState<FormState>({
     planPurpose: "race",
     trainingGoal: "time",
@@ -617,11 +645,18 @@ export function PlanCreatePage() {
           )}
 
           {form.raceDate && dateTooLong && (
-            <p className="text-sm text-amber-600 dark:text-amber-400 text-center">
-              {isEn
-                ? `Over ${recommendedWeeks.max} weeks is not recommended for this distance, but it's possible.`
-                : `Plus de ${recommendedWeeks.max} semaines n'est pas recommandé pour cette distance, mais c'est possible.`}
-            </p>
+            <div className="rounded-lg border border-amber-300 dark:border-amber-600 bg-amber-50 dark:bg-amber-950/30 p-3 text-sm text-amber-800 dark:text-amber-300 text-center space-y-1">
+              <p className="font-semibold">
+                {isEn
+                  ? `⚠️ ${weeksCount} weeks is a long cycle`
+                  : `⚠️ ${weeksCount} semaines, c'est un cycle long`}
+              </p>
+              <p className="text-xs">
+                {isEn
+                  ? `For this distance, ${recommendedWeeks.min}–${recommendedWeeks.max} weeks is ideal. Beyond that, you risk mental fatigue and overtraining. Consider a base building block before your specific preparation.`
+                  : `Pour cette distance, ${recommendedWeeks.min}–${recommendedWeeks.max} semaines est idéal. Au-delà, tu risques la fatigue mentale et le surentraînement. Envisage un bloc de base building avant ta préparation spécifique.`}
+              </p>
+            </div>
           )}
         </div>
       </div>
@@ -750,6 +785,9 @@ export function PlanCreatePage() {
                     <div className="min-w-0">
                       <div className="font-medium text-sm md:text-base leading-tight">
                         {isEn ? meta.labelEn : meta.label}
+                      </div>
+                      <div className="text-[11px] text-muted-foreground leading-tight mt-0.5">
+                        {isEn ? meta.descEn : meta.desc}
                       </div>
                       {isSuggested && (
                         <div className="text-xs text-primary">
@@ -1011,39 +1049,117 @@ export function PlanCreatePage() {
           )}
 
           <div className="w-full max-w-sm mt-6 space-y-4">
-            {/* Target pace */}
-            <div>
-              <label className="text-sm font-medium mb-2 block">
-                {isEn ? "Target pace (min/km)" : "Allure cible (min/km)"}
-              </label>
-              <input
-                type="text"
-                value={form.targetPace}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, targetPace: e.target.value }))
-                }
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && (paceSeconds || !form.targetPace)) goForward();
-                }}
-                placeholder="5:30"
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              {paceSeconds && distanceKm > 0 && (
-                <p className="text-xs text-muted-foreground mt-1">
-                  {isEn ? "Estimated finish: " : "Temps estimé : "}
-                  <span className="font-medium">
-                    {estimateFinishTime(paceSeconds, distanceKm)}
-                  </span>
-                </p>
-              )}
-              {form.targetPace && !paceSeconds && (
-                <p className="text-xs text-destructive mt-1">
-                  {isEn
-                    ? "Format: MM:SS (e.g. 5:30)"
-                    : "Format : MM:SS (ex. 5:30)"}
-                </p>
-              )}
+            {/* Pace input mode toggle */}
+            <div className="flex rounded-lg border overflow-hidden">
+              <button
+                type="button"
+                className={cn(
+                  "flex-1 px-3 py-1.5 text-xs font-medium transition-colors",
+                  paceInputMode === "pace" ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
+                )}
+                onClick={() => setPaceInputMode("pace")}
+              >
+                {isEn ? "Target pace" : "Allure cible"}
+              </button>
+              <button
+                type="button"
+                className={cn(
+                  "flex-1 px-3 py-1.5 text-xs font-medium transition-colors",
+                  paceInputMode === "time" ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
+                )}
+                onClick={() => setPaceInputMode("time")}
+              >
+                {isEn ? "Finish time" : "Temps cible"}
+              </button>
             </div>
+
+            {/* Target pace or finish time */}
+            {paceInputMode === "pace" ? (
+              <div>
+                <label className="text-sm font-medium mb-2 block">
+                  {isEn ? "Target pace (min/km)" : "Allure cible (min/km)"}
+                </label>
+                <input
+                  type="text"
+                  value={form.targetPace}
+                  onChange={(e) => {
+                    setForm((f) => ({ ...f, targetPace: e.target.value }));
+                    setTargetFinishTime("");
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && (paceSeconds || !form.targetPace)) goForward();
+                  }}
+                  placeholder="5:30"
+                  className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                {paceSeconds && distanceKm > 0 && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {isEn ? "Estimated finish: " : "Temps estimé : "}
+                    <span className="font-medium">
+                      {estimateFinishTime(paceSeconds, distanceKm)}
+                    </span>
+                  </p>
+                )}
+                {form.targetPace && !paceSeconds && (
+                  <p className="text-xs text-destructive mt-1">
+                    {isEn
+                      ? "Format: MM:SS (e.g. 5:30)"
+                      : "Format : MM:SS (ex. 5:30)"}
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div>
+                <label className="text-sm font-medium mb-2 block">
+                  {isEn ? "Target finish time" : "Temps d'arrivée visé"}
+                </label>
+                <input
+                  type="text"
+                  value={targetFinishTime}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setTargetFinishTime(val);
+                    const totalSec = parseFinishTimeToSeconds(val);
+                    if (totalSec && distanceKm > 0) {
+                      const paceSec = finishTimeToPaceSeconds(totalSec, distanceKm);
+                      setForm((f) => ({ ...f, targetPace: formatPace(paceSec) }));
+                    } else {
+                      setForm((f) => ({ ...f, targetPace: "" }));
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      const totalSec = parseFinishTimeToSeconds(targetFinishTime);
+                      if (totalSec || !targetFinishTime) goForward();
+                    }
+                  }}
+                  placeholder={isEn ? "e.g. 3:30 or 3:30:00" : "ex. 3:30 ou 3:30:00"}
+                  className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                {(() => {
+                  const totalSec = parseFinishTimeToSeconds(targetFinishTime);
+                  if (totalSec && distanceKm > 0) {
+                    const paceSec = finishTimeToPaceSeconds(totalSec, distanceKm);
+                    return (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {isEn ? "Required pace: " : "Allure nécessaire : "}
+                        <span className="font-medium">{formatPace(paceSec)} min/km</span>
+                      </p>
+                    );
+                  }
+                  if (targetFinishTime && !totalSec) {
+                    return (
+                      <p className="text-xs text-destructive mt-1">
+                        {isEn
+                          ? "Format: H:MM or H:MM:SS (e.g. 3:30 or 3:30:00)"
+                          : "Format : H:MM ou H:MM:SS (ex. 3:30 ou 3:30:00)"}
+                      </p>
+                    );
+                  }
+                  return null;
+                })()}
+              </div>
+            )}
 
             {/* Elevation gain */}
             <div>

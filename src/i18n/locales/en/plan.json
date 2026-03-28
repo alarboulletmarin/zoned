@@ -70,7 +70,8 @@
     "subtitle": "At least {{min}} weeks from today",
     "weeks": "{{count}} weeks of preparation",
     "tooSoon": "Too close! You need at least {{min}} weeks.",
-    "tooLong": "Over {{max}} weeks is not recommended for this distance, but it's possible."
+    "tooLong": "{{weeks}} weeks is a long cycle",
+    "tooLongDetail": "For this distance, {{min}}–{{max}} weeks is ideal. Beyond that, you risk mental fatigue and overtraining. Consider a base building block before your specific preparation."
   },
   "raceName": {
     "title": "Race name",
@@ -83,9 +84,13 @@
     "subtitle": "Select your current level",
     "vmaSuggestion": "Based on your VMA of {{vma}} km/h, we suggest:",
     "beginner": "Beginner",
+    "beginnerDesc": "1–2 runs/week · less than 15 km/week",
     "intermediate": "Intermediate",
+    "intermediateDesc": "3–4 runs/week · 20–40 km/week",
     "advanced": "Advanced",
-    "elite": "Elite"
+    "advancedDesc": "4–5 runs/week · 40–70 km/week",
+    "elite": "Elite",
+    "eliteDesc": "5–7 runs/week · 70+ km/week"
   },
   "config": {
     "title": "Configuration",
@@ -97,8 +102,14 @@
     "title": "Pace & Elevation",
     "subtitle": "Optional - specify your goals",
     "targetPace": "Target pace (min/km)",
+    "targetTime": "Finish time",
+    "targetPaceTab": "Target pace",
+    "targetTimeTab": "Finish time",
     "pacePlaceholder": "E.g.: 5:30",
+    "timePlaceholder": "E.g.: 3:30 or 3:30:00",
     "estimatedTime": "Estimated time: {{time}}",
+    "requiredPace": "Required pace: {{pace}} min/km",
+    "timeFormatHint": "Format: H:MM or H:MM:SS (e.g. 3:30 or 3:30:00)",
     "elevation": "Elevation gain (m)",
     "elevationPlaceholder": "E.g.: 500",
     "skip": "Skip this step"
@@ -168,8 +179,10 @@
     "peakWeek": "Peak week",
     "longestSession": "Longest",
     "recoveryWeeks": "Recovery wk",
-    "weeklyVolume": "Weekly volume",
-    "weeklyKm": "Weekly distance (km)",
+    "weeklyVolume": "Weekly training time (min)",
+    "weeklyVolumeDesc": "Total estimated duration per week (warmup + workout + cooldown)",
+    "weeklyKm": "Weekly mileage (km)",
+    "weeklyKmDesc": "Planned kilometers for each week",
     "sessionTypes": "Session types",
     "zoneDistribution": "Zone distribution",
     "targetSystems": "Target systems",

@@ -68,10 +68,21 @@ export function WorkoutDetailPage() {
   const { t, i18n } = useTranslation(["session", "library", "common"]);
   const isEn = i18n.language?.startsWith("en") ?? false;
 
-  const locationState = location.state as { from?: string; planId?: string; planName?: string } | null;
+  const locationState = location.state as {
+    from?: string;
+    planId?: string;
+    planName?: string;
+    weekNumber?: number;
+    volumePercent?: number;
+    estimatedDurationMin?: number;
+  } | null;
   const backTo = locationState?.from === "plan" && locationState.planId
-    ? { path: `/plan/${locationState.planId}`, label: isEn ? `Back to ${locationState.planName || "plan"}` : `Retour au plan` }
-    : { path: "/library", label: t("common:actions.backToLibrary") };
+    ? {
+        path: `/plan/${locationState.planId}`,
+        label: isEn ? `Back to ${locationState.planName || "plan"}` : `Retour au plan`,
+        state: { returnToWeek: locationState.weekNumber },
+      }
+    : { path: "/library", label: t("common:actions.backToLibrary"), state: undefined };
 
   const { workout, isLoading } = useWorkout(id);
   const { workouts: relatedWorkouts } = useRelatedWorkouts(workout);
@@ -112,7 +123,7 @@ export function WorkoutDetailPage() {
       <div className="py-12 text-center">
         <p className="text-muted-foreground">{t("common:errors.workoutNotFound")}</p>
         <Button variant="link" asChild className="mt-4">
-          <Link to={backTo.path}>
+          <Link to={backTo.path} state={backTo.state}>
             <ArrowLeft className="mr-2 size-4" />
             {backTo.label}
           </Link>
@@ -133,6 +144,13 @@ export function WorkoutDetailPage() {
   const duration = Math.round(sessionData.totalDurationMin);
   const CategoryIcon = CATEGORY_ICONS[workout.category];
   void DIFFICULTY_META[workout.difficulty];
+
+  // Plan context: scaled duration when coming from a plan
+  const planVolumePercent = locationState?.volumePercent;
+  const planEstimatedDuration = locationState?.estimatedDurationMin;
+  const planWeekNumber = locationState?.weekNumber;
+  const hasPlanContext = locationState?.from === "plan" && planEstimatedDuration && planEstimatedDuration !== duration;
+  const displayDuration = hasPlanContext ? Math.round(planEstimatedDuration) : duration;
 
   // Environment requirements
   const envRequirements: { icon: React.ComponentType<{ className?: string }>; text: string }[] = [];
@@ -193,11 +211,26 @@ export function WorkoutDetailPage() {
       <div className={`zone-${dominantZone} py-8 space-y-8`}>
         {/* Back Button */}
         <Button variant="ghost" size="sm" asChild>
-          <Link to={backTo.path}>
+          <Link to={backTo.path} state={backTo.state}>
             <ArrowLeft className="mr-2 size-4" />
             {backTo.label}
           </Link>
         </Button>
+
+        {/* Plan context banner */}
+        {hasPlanContext && (
+          <div className="rounded-lg border border-primary/20 bg-primary/5 px-4 py-2.5 text-sm flex items-center gap-2">
+            <Clock className="size-4 text-primary shrink-0" />
+            <span>
+              {isEn
+                ? `In your plan (week ${planWeekNumber}, ${planVolumePercent}% volume): ~${Math.round(planEstimatedDuration)} min`
+                : `Dans votre plan (semaine ${planWeekNumber}, ${planVolumePercent}% volume) : ~${Math.round(planEstimatedDuration)} min`}
+              <span className="text-muted-foreground ml-1">
+                {isEn ? `(full session: ${duration} min)` : `(séance complète : ${duration} min)`}
+              </span>
+            </span>
+          </div>
+        )}
 
         {/* Bento Header */}
         <header className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -243,8 +276,11 @@ export function WorkoutDetailPage() {
             <div className="grid grid-cols-2 gap-2 lg:gap-4">
               <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-4 lg:p-6 flex flex-col items-center justify-center text-center">
                 <Clock className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
-                <span className="text-lg lg:text-2xl font-bold">{duration}</span>
+                <span className="text-lg lg:text-2xl font-bold">{displayDuration}</span>
                 <span className="text-[10px] lg:text-xs text-muted-foreground">{t("common:units.minutes")}</span>
+                {hasPlanContext && (
+                  <span className="text-[9px] text-muted-foreground line-through">{duration}</span>
+                )}
               </div>
               <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-4 lg:p-6 flex flex-col items-center justify-center text-center">
                 <Dumbbell className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />

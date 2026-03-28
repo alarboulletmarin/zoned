@@ -70,7 +70,8 @@
     "subtitle": "Au minimum {{min}} semaines à partir d'aujourd'hui",
     "weeks": "{{count}} semaines de préparation",
     "tooSoon": "Trop proche ! Il faut au moins {{min}} semaines.",
-    "tooLong": "Plus de {{max}} semaines n'est pas recommandé pour cette distance, mais c'est possible."
+    "tooLong": "{{weeks}} semaines, c'est un cycle long",
+    "tooLongDetail": "Pour cette distance, {{min}}–{{max}} semaines est idéal. Au-delà, tu risques la fatigue mentale et le surentraînement. Envisage un bloc de base building avant ta préparation spécifique."
   },
   "raceName": {
     "title": "Nom de la course",
@@ -83,9 +84,13 @@
     "subtitle": "Sélectionnez votre niveau actuel",
     "vmaSuggestion": "Basé sur votre VMA de {{vma}} km/h, nous suggérons :",
     "beginner": "Débutant",
+    "beginnerDesc": "1 à 2 sorties/semaine · moins de 15 km/semaine",
     "intermediate": "Intermédiaire",
+    "intermediateDesc": "3 à 4 sorties/semaine · 20–40 km/semaine",
     "advanced": "Avancé",
-    "elite": "Élite"
+    "advancedDesc": "4 à 5 sorties/semaine · 40–70 km/semaine",
+    "elite": "Élite",
+    "eliteDesc": "5 à 7 sorties/semaine · 70+ km/semaine"
   },
   "config": {
     "title": "Configuration",
@@ -97,8 +102,14 @@
     "title": "Allure & Dénivelé",
     "subtitle": "Optionnel - précisez vos objectifs",
     "targetPace": "Allure cible (min/km)",
+    "targetTime": "Temps cible",
+    "targetPaceTab": "Allure cible",
+    "targetTimeTab": "Temps cible",
     "pacePlaceholder": "Ex: 5:30",
+    "timePlaceholder": "Ex: 3:30 ou 3:30:00",
     "estimatedTime": "Temps estimé : {{time}}",
+    "requiredPace": "Allure nécessaire : {{pace}} min/km",
+    "timeFormatHint": "Format : H:MM ou H:MM:SS (ex. 3:30 ou 3:30:00)",
     "elevation": "Dénivelé positif (m)",
     "elevationPlaceholder": "Ex: 500",
     "skip": "Passer cette étape"
@@ -168,8 +179,10 @@
     "peakWeek": "Semaine pic",
     "longestSession": "Session max",
     "recoveryWeeks": "Sem. récup",
-    "weeklyVolume": "Volume par semaine",
-    "weeklyKm": "Distance par semaine (km)",
+    "weeklyVolume": "Temps d'entraînement hebdomadaire (min)",
+    "weeklyVolumeDesc": "Durée totale estimée par semaine (échauffement + séance + retour au calme)",
+    "weeklyKm": "Kilométrage hebdomadaire (km)",
+    "weeklyKmDesc": "Kilomètres planifiés pour chaque semaine",
     "sessionTypes": "Types de séance",
     "zoneDistribution": "Répartition par zone",
     "targetSystems": "Systèmes ciblés",
