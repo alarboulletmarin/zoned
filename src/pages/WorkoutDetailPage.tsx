@@ -74,12 +74,13 @@ export function WorkoutDetailPage() {
     weekNumber?: number;
     volumePercent?: number;
     estimatedDurationMin?: number;
+    scrollY?: number;
   } | null;
   const backTo = locationState?.from === "plan" && locationState.planId
     ? {
         path: `/plan/${locationState.planId}`,
         label: isEn ? `Back to ${locationState.planName || "plan"}` : `Retour au plan`,
-        state: { returnToWeek: locationState.weekNumber },
+        state: { returnToWeek: locationState.weekNumber, returnScrollY: locationState.scrollY },
       }
     : { path: "/library", label: t("common:actions.backToLibrary"), state: undefined };
 

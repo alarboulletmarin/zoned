@@ -97,8 +97,19 @@ export function PlanViewPage() {
   const { i18n } = useTranslation("plan");
   const isEn = i18n.language?.startsWith("en") ?? false;
 
-  // Read weekNumber from navigation state (returned from workout detail page)
-  const returnedWeek = (location.state as { returnToWeek?: number } | null)?.returnToWeek;
+  // Read return state from navigation (coming back from workout detail page)
+  const returnState = location.state as { returnToWeek?: number; returnScrollY?: number } | null;
+  const returnedWeek = returnState?.returnToWeek;
+
+  // Restore scroll position when returning from workout detail
+  useEffect(() => {
+    if (returnState?.returnScrollY != null) {
+      // Defer to allow the page to render first
+      requestAnimationFrame(() => {
+        window.scrollTo(0, returnState.returnScrollY!);
+      });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { plan, isLoading, reload: reloadPlan } = usePlan(id);
   const { planViewMode, setPlanViewMode } = usePlanViewMode();
@@ -397,6 +408,7 @@ export function PlanViewPage() {
           weekNumber,
           volumePercent: week?.volumePercent,
           estimatedDurationMin: session?.estimatedDurationMin,
+          scrollY: window.scrollY,
         },
       });
     }
