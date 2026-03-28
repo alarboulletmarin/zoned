@@ -43,7 +43,6 @@ import { useWorkout, useRelatedWorkouts, useTips } from "@/hooks";
 import type { WorkoutCategory, ZoneRange } from "@/types";
 import {
   getDominantZone,
-  DIFFICULTY_META,
 } from "@/types";
 import { loadUserZonePrefs, calculateAllZones } from "@/lib/zones";
 
@@ -133,7 +132,13 @@ export function WorkoutDetailPage() {
   }
 
   const dominantZone = getDominantZone(workout);
-  const sessionData = transformSessionBlocks(
+  // Plan context: scaled duration when coming from a plan
+  const planVolumePercent = locationState?.volumePercent;
+  const planWeekNumber = locationState?.weekNumber;
+  const hasPlanContext = locationState?.from === "plan" && planVolumePercent != null && planVolumePercent !== 100;
+
+  // Base (unscaled) session data
+  const baseSessionData = transformSessionBlocks(
     {
       warmup: workout.warmupTemplate,
       mainSet: workout.mainSetTemplate,
@@ -141,16 +146,23 @@ export function WorkoutDetailPage() {
     },
     isEn
   );
-  const duration = Math.round(sessionData.totalDurationMin);
-  const CategoryIcon = CATEGORY_ICONS[workout.category];
-  void DIFFICULTY_META[workout.difficulty];
+  const baseDuration = Math.round(baseSessionData.totalDurationMin);
 
-  // Plan context: scaled duration when coming from a plan
-  const planVolumePercent = locationState?.volumePercent;
-  const planEstimatedDuration = locationState?.estimatedDurationMin;
-  const planWeekNumber = locationState?.weekNumber;
-  const hasPlanContext = locationState?.from === "plan" && planEstimatedDuration && planEstimatedDuration !== duration;
-  const displayDuration = hasPlanContext ? Math.round(planEstimatedDuration) : duration;
+  // Scaled session data when coming from a plan
+  const sessionData = hasPlanContext
+    ? transformSessionBlocks(
+        {
+          warmup: workout.warmupTemplate,
+          mainSet: workout.mainSetTemplate,
+          cooldown: workout.cooldownTemplate,
+        },
+        isEn,
+        planVolumePercent
+      )
+    : baseSessionData;
+  const duration = Math.round(sessionData.totalDurationMin);
+
+  const CategoryIcon = CATEGORY_ICONS[workout.category];
 
   // Environment requirements
   const envRequirements: { icon: React.ComponentType<{ className?: string }>; text: string }[] = [];
@@ -222,9 +234,9 @@ export function WorkoutDetailPage() {
           <div className="rounded-lg border border-primary/20 bg-primary/5 px-4 py-2.5 text-sm flex items-center gap-2">
             <Clock className="size-4 text-primary shrink-0" />
             <span>
-              {t("session:planContext.banner", { week: planWeekNumber, volume: planVolumePercent, duration: Math.round(planEstimatedDuration) })}
+              {t("session:planContext.banner", { week: planWeekNumber, volume: planVolumePercent, duration })}
               <span className="text-muted-foreground ml-1">
-                {t("session:planContext.fullSession", { duration })}
+                {t("session:planContext.fullSession", { duration: baseDuration })}
               </span>
             </span>
           </div>
@@ -274,10 +286,10 @@ export function WorkoutDetailPage() {
             <div className="grid grid-cols-2 gap-2 lg:gap-4">
               <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-4 lg:p-6 flex flex-col items-center justify-center text-center">
                 <Clock className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
-                <span className="text-lg lg:text-2xl font-bold">{displayDuration}</span>
+                <span className="text-lg lg:text-2xl font-bold">{duration}</span>
                 <span className="text-[10px] lg:text-xs text-muted-foreground">{t("common:units.minutes")}</span>
                 {hasPlanContext && (
-                  <span className="text-[9px] text-muted-foreground line-through">{duration}</span>
+                  <span className="text-[9px] text-muted-foreground line-through">{baseDuration}</span>
                 )}
               </div>
               <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-4 lg:p-6 flex flex-col items-center justify-center text-center">
@@ -315,7 +327,7 @@ export function WorkoutDetailPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <SessionTimeline workout={workout} />
+                <SessionTimeline workout={workout} volumePercent={hasPlanContext ? planVolumePercent : undefined} />
               </CardContent>
             </Card>
 
@@ -327,7 +339,7 @@ export function WorkoutDetailPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <WorkoutStructure workout={workout} userZones={hasUserZones ? userZones : undefined} />
+                <WorkoutStructure workout={workout} userZones={hasUserZones ? userZones : undefined} volumePercent={hasPlanContext ? planVolumePercent : undefined} />
               </CardContent>
             </Card>
 
@@ -357,7 +369,7 @@ export function WorkoutDetailPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ZoneDistribution workout={workout} />
+                <ZoneDistribution workout={workout} volumePercent={hasPlanContext ? planVolumePercent : undefined} />
               </CardContent>
             </Card>
 

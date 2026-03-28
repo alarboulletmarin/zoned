@@ -11,27 +11,33 @@ interface WorkoutStructureProps {
   workout: WorkoutTemplate;
   userZones?: ZoneRange[];
   className?: string;
+  /** Volume scaling (0-100) from plan context. Scales main set durations. */
+  volumePercent?: number;
 }
 
-export function WorkoutStructure({ workout, userZones, className }: WorkoutStructureProps) {
+export function WorkoutStructure({ workout, userZones, className, volumePercent }: WorkoutStructureProps) {
   const { t, i18n } = useTranslation("session");
   const isEn = i18n.language?.startsWith("en") ?? false;
+  const scale = volumePercent != null && volumePercent !== 100 ? volumePercent / 100 : null;
 
   const phases = [
     {
       key: "warmup",
       label: t("structure.warmup"),
       blocks: workout.warmupTemplate,
+      scale: null,
     },
     {
       key: "main",
       label: t("structure.main"),
       blocks: workout.mainSetTemplate,
+      scale, // only scale main set
     },
     {
       key: "cooldown",
       label: t("structure.cooldown"),
       blocks: workout.cooldownTemplate,
+      scale: null,
     },
   ].filter((phase) => phase.blocks.length > 0);
 
@@ -44,7 +50,7 @@ export function WorkoutStructure({ workout, userZones, className }: WorkoutStruc
           </h4>
           <div className="space-y-2">
             {phase.blocks.map((block, index) => (
-              <BlockItem key={index} block={block} isEn={isEn} userZones={userZones} />
+              <BlockItem key={index} block={block} isEn={isEn} userZones={userZones} durationScale={phase.scale} />
             ))}
           </div>
         </div>
@@ -57,6 +63,7 @@ interface BlockItemProps {
   block: WorkoutBlock;
   isEn: boolean;
   userZones?: ZoneRange[];
+  durationScale?: number | null;
 }
 
 /**
@@ -81,7 +88,7 @@ function formatPersonalizedZone(zoneNumber: ZoneNumber, userZones: ZoneRange[]):
   return parts.length > 0 ? parts.join(" · ") : null;
 }
 
-function BlockItem({ block, isEn, userZones }: BlockItemProps) {
+function BlockItem({ block, isEn, userZones, durationScale }: BlockItemProps) {
   const description = isEn && block.descriptionEn
     ? block.descriptionEn
     : block.description;
@@ -91,9 +98,12 @@ function BlockItem({ block, isEn, userZones }: BlockItemProps) {
     ? formatPersonalizedZone(zoneNumber, userZones)
     : null;
 
-  // Build duration/meta string
+  // Build duration/meta string (scale if from plan)
   const metaParts: string[] = [];
-  if (block.durationMin) metaParts.push(`${block.durationMin} min`);
+  if (block.durationMin) {
+    const scaledDuration = durationScale ? Math.round(block.durationMin * durationScale) : block.durationMin;
+    metaParts.push(`${scaledDuration} min`);
+  }
   if (block.repetitions && block.repetitions > 1) metaParts.push(`${block.repetitions}x`);
   if (block.distance) metaParts.push(block.distance);
   const metaString = metaParts.join(" · ");
