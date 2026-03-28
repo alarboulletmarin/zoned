@@ -85,5 +85,9 @@
       "nutrition": "Guide nutrition complet",
       "recovery": "Guide récupération complet"
     }
+  },
+  "planContext": {
+    "banner": "Dans votre plan (semaine {{week}}, {{volume}}% volume) : ~{{duration}} min",
+    "fullSession": "(séance complète : {{duration}} min)"
   }
 }

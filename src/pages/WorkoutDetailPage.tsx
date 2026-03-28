@@ -222,11 +222,9 @@ export function WorkoutDetailPage() {
           <div className="rounded-lg border border-primary/20 bg-primary/5 px-4 py-2.5 text-sm flex items-center gap-2">
             <Clock className="size-4 text-primary shrink-0" />
             <span>
-              {isEn
-                ? `In your plan (week ${planWeekNumber}, ${planVolumePercent}% volume): ~${Math.round(planEstimatedDuration)} min`
-                : `Dans votre plan (semaine ${planWeekNumber}, ${planVolumePercent}% volume) : ~${Math.round(planEstimatedDuration)} min`}
+              {t("session:planContext.banner", { week: planWeekNumber, volume: planVolumePercent, duration: Math.round(planEstimatedDuration) })}
               <span className="text-muted-foreground ml-1">
-                {isEn ? `(full session: ${duration} min)` : `(séance complète : ${duration} min)`}
+                {t("session:planContext.fullSession", { duration })}
               </span>
             </span>
           </div>
