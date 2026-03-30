@@ -137,7 +137,7 @@ export function PlanExportMenu({
           ) : (
             <Download className="size-4" />
           )}
-          <span className={isSmall ? "hidden sm:inline ml-1" : "ml-2"}>
+          <span className={isSmall ? "ml-1" : "ml-2"}>
             {t("export.title")}
           </span>
         </Button>
