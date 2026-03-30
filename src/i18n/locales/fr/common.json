@@ -46,6 +46,7 @@
     "calendar": "Calendrier (ICS)",
     "image": "Image (PNG)",
     "pdf": "Document (PDF)",
+    "json": "Donn\u00e9es (JSON)",
     "garmin": "Garmin (FIT)",
     "selectDateTime": "Choisir date et heure",
     "download": "Télécharger",

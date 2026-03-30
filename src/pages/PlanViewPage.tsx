@@ -12,10 +12,9 @@ import {
   Flag,
   ChevronDown,
   ChevronUp,
-  Download,
   Plus,
-  MoreHorizontal,
   Pencil,
+  AlertTriangle,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -29,19 +28,13 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { usePlan } from "@/hooks/usePlans";
 import { deletePlan, getPlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan, updateSessionCompletion } from "@/lib/planStorage";
 import { adaptPlan } from "@/lib/planGenerator/adapt";
 import { getWorkoutById } from "@/data/workouts";
-import { exportPlanToICS, exportPlanToPDF } from "@/lib/export";
+import { exportPlanToICS } from "@/lib/export";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import {
@@ -57,7 +50,9 @@ import { PlanWeeklyView } from "@/components/domain/PlanWeeklyView";
 import { PlanMonthlyView } from "@/components/domain/PlanMonthlyView";
 import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
 import { PlanViewModeSelector } from "@/components/domain/PlanViewModeSelector";
+import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { usePlanViewMode } from "@/hooks/usePlanViewMode";
+import { getCurrentWeek } from "@/lib/planUtils";
 
 const SESSION_TYPE_LABELS: Record<string, { fr: string; en: string }> = {
   recovery: { fr: "Récupération", en: "Recovery" },
@@ -79,14 +74,6 @@ function formatDate(isoDate: string, isEn: boolean): string {
     month: "short",
     year: "numeric",
   });
-}
-
-function getCurrentWeek(createdAt: string): number {
-  const start = new Date(createdAt);
-  const now = new Date();
-  const diffMs = now.getTime() - start.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  return Math.floor(diffDays / 7) + 1;
 }
 
 export function PlanViewPage() {
@@ -138,6 +125,8 @@ export function PlanViewPage() {
   const [showDateDialog, setShowDateDialog] = useState(false);
   const [editStartDate, setEditStartDate] = useState("");
   const [rpePrompt, setRpePrompt] = useState<{ weekNumber: number; sessionIndex: number } | null>(null);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editName, setEditName] = useState("");
 
   const currentWeek = useMemo(() => {
     if (!plan) return 0;
@@ -252,32 +241,6 @@ export function PlanViewPage() {
       setIsExporting(false);
     }
   }, [plan, workoutNames, workoutTemplates, isEn, isExporting]);
-
-  const handleExportPDF = useCallback(async () => {
-    if (!plan || isExporting) return;
-    setIsExporting(true);
-    try {
-      await exportPlanToPDF(plan, workoutNames, workoutTemplates, isEn);
-      toast.success(isEn ? "PDF exported" : "PDF exporté");
-    } catch {
-      toast.error(isEn ? "Export failed" : "Échec de l'export");
-    } finally {
-      setIsExporting(false);
-    }
-  }, [plan, workoutNames, workoutTemplates, isEn, isExporting]);
-
-  const handleExportPlanJSON = useCallback(() => {
-    if (!plan) return;
-    const json = JSON.stringify(plan, null, 2);
-    const blob = new Blob([json], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `plan-${plan.name || plan.id}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    toast.success(isEn ? "Plan exported" : "Plan export\u00e9");
-  }, [plan, isEn]);
 
   const handleSwapSession = useCallback((workout: WorkoutTemplate) => {
     if (!plan || !swapTarget) return;
@@ -492,9 +455,9 @@ export function PlanViewPage() {
 
   const isFreePlan = plan.config.planMode === "free";
   const raceMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
-  const planName = isFreePlan
-    ? (plan.config.planName || plan.name)
-    : (isEn ? plan.nameEn : plan.name);
+  const planName = plan.config.planName || (isFreePlan
+    ? plan.name
+    : (isEn ? plan.nameEn : plan.name));
   const raceDate = plan.config.raceDate;
 
   return (
@@ -516,7 +479,37 @@ export function PlanViewPage() {
         {/* Header Section */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-3">
-            <h1 className="text-3xl font-bold">{planName}</h1>
+            {isEditingName ? (
+              <input
+                autoFocus
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                onBlur={() => {
+                  const trimmed = editName.trim();
+                  if (trimmed && trimmed !== planName) {
+                    plan.config.planName = trimmed;
+                    savePlan(plan);
+                    reloadPlan();
+                    toast.success(isEn ? "Name updated" : "Nom mis à jour");
+                  }
+                  setIsEditingName(false);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") e.currentTarget.blur();
+                  if (e.key === "Escape") setIsEditingName(false);
+                }}
+                className="text-3xl font-bold bg-transparent border-b-2 border-primary outline-none w-full"
+              />
+            ) : (
+              <h1
+                className="text-3xl font-bold cursor-pointer group flex items-center gap-2"
+                onClick={() => { setEditName(planName); setIsEditingName(true); }}
+                title={isEn ? "Click to rename" : "Cliquer pour renommer"}
+              >
+                {planName}
+                <Pencil className="size-4 opacity-0 group-hover:opacity-50 transition-opacity" />
+              </h1>
+            )}
             <div className="flex flex-wrap items-center gap-2">
               {raceMeta && (
                 <Badge variant="default">
@@ -587,26 +580,26 @@ export function PlanViewPage() {
               )}
             </div>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="rounded-full">
-                <MoreHorizontal className="size-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleExportPlanJSON}>
-                <Download className="size-4" />
-                {isEn ? "Export plan (JSON)" : "Exporter le plan (JSON)"}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setShowDeleteDialog(true)}
-                className="text-destructive focus:text-destructive"
-              >
-                <Trash2 className="size-4" />
-                {isEn ? "Delete plan" : "Supprimer le plan"}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex items-center gap-2">
+            <PlanExportMenu
+              plan={plan}
+              workoutNames={workoutNames}
+              workoutTemplates={workoutTemplates}
+              isEn={isEn}
+              size="sm"
+              planViewMode={planViewMode}
+              onIcsDialogOpen={() => setShowIcsDialog(true)}
+            />
+            <Button
+              variant="destructive"
+              size="sm"
+              className="rounded-full"
+              onClick={() => setShowDeleteDialog(true)}
+              title={isEn ? "Delete plan" : "Supprimer le plan"}
+            >
+              <Trash2 className="size-4" />
+            </Button>
+          </div>
         </div>
 
         {/* Phase Timeline */}
@@ -680,29 +673,7 @@ export function PlanViewPage() {
               <Plus className="size-4" />
               <span className="ml-1">{isEn ? "Add workout" : "Ajouter une séance"}</span>
             </Button>
-          <PlanViewModeSelector value={planViewMode} onChange={setPlanViewMode} />
-          <Button variant="outline" size="sm" onClick={handleExportPDF} disabled={isExporting} className="rounded-full">
-            {isExporting ? <Loader2 className="size-4 animate-spin" /> : <Download className="size-4" />}
-            <span className="hidden sm:inline ml-1">{isEn ? "PDF" : "PDF"}</span>
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={isExporting}
-            className="rounded-full"
-            onClick={() => {
-              if (planViewMode !== "list" && plan) {
-                // In calendar/weekly/monthly mode, days are already assigned -- export directly
-                const usedDays = [...new Set(plan.weeks.flatMap(w => w.sessions.map(s => s.dayOfWeek)))].sort();
-                handleIcsExport(usedDays, plan.config.longRunDay ?? 6);
-              } else {
-                setShowIcsDialog(true);
-              }
-            }}
-          >
-            <Calendar className="size-4" />
-            <span className="hidden sm:inline ml-1">{isEn ? "ICS" : "ICS"}</span>
-          </Button>
+            <PlanViewModeSelector value={planViewMode} onChange={setPlanViewMode} />
           </div>
         </div>
 
@@ -1238,16 +1209,71 @@ export function PlanViewPage() {
                   className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
-              {editStartDate && (
-                <p className="text-sm text-muted-foreground">
-                  {isEn ? "End date" : "Date de fin"} :{" "}
-                  {(() => {
-                    const d = new Date(editStartDate);
-                    d.setDate(d.getDate() + plan.totalWeeks * 7);
-                    return d.toLocaleDateString(isEn ? "en-US" : "fr-FR");
-                  })()}
-                </p>
-              )}
+
+              {/* Quick action: next Monday */}
+              {(() => {
+                const now = new Date();
+                const dayOfWeek = now.getDay();
+                const daysUntilMonday = dayOfWeek === 0 ? 1 : dayOfWeek === 1 ? 7 : 8 - dayOfWeek;
+                const nextMonday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysUntilMonday);
+                const nextMondayStr = nextMonday.toISOString().split("T")[0];
+                return (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs text-muted-foreground"
+                    onClick={() => setEditStartDate(nextMondayStr)}
+                  >
+                    <Calendar className="size-3.5" />
+                    {isEn ? "Start next Monday" : "Commencer lundi prochain"}
+                    {" "}({nextMonday.toLocaleDateString(isEn ? "en-US" : "fr-FR", { day: "numeric", month: "short" })})
+                  </Button>
+                );
+              })()}
+
+              {/* Summary */}
+              {editStartDate && (() => {
+                const [y, m, d] = editStartDate.split("-").map(Number);
+                const startD = new Date(y, m - 1, d);
+                const endD = new Date(y, m - 1, d + plan.totalWeeks * 7);
+                const weekdayStr = startD.toLocaleDateString(isEn ? "en-US" : "fr-FR", { weekday: "long" });
+                const isPast = startD < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+
+                return (
+                  <div className="space-y-3 rounded-lg border bg-muted/30 p-3">
+                    <div className="space-y-1.5 text-sm">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="size-4 text-muted-foreground shrink-0" />
+                        <span>
+                          {isEn ? "Start" : "D\u00e9but"} : {startD.toLocaleDateString(isEn ? "en-US" : "fr-FR", { day: "numeric", month: "long", year: "numeric" })}
+                          {" "}
+                          <span className="text-muted-foreground">({weekdayStr})</span>
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Flag className="size-4 text-muted-foreground shrink-0" />
+                        <span>
+                          {isEn ? "End" : "Fin"} : {endD.toLocaleDateString(isEn ? "en-US" : "fr-FR", { day: "numeric", month: "long", year: "numeric" })}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="size-4 text-muted-foreground shrink-0" />
+                        <span>{plan.totalWeeks} {isEn ? "weeks" : "semaines"}</span>
+                      </div>
+                    </div>
+                    {isPast && (
+                      <div className="flex items-center gap-2 text-sm text-amber-600 dark:text-amber-400">
+                        <AlertTriangle className="size-4 shrink-0" />
+                        <span>
+                          {isEn
+                            ? "This date is in the past. The first weeks will already be elapsed."
+                            : "Cette date est dans le pass\u00e9. Les premi\u00e8res semaines seront d\u00e9j\u00e0 \u00e9coul\u00e9es."}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
             <DialogFooter>
               <DialogClose asChild>
@@ -1258,8 +1284,8 @@ export function PlanViewPage() {
               <Button
                 onClick={() => {
                   if (editStartDate) {
-                    const endD = new Date(editStartDate);
-                    endD.setDate(endD.getDate() + plan.totalWeeks * 7);
+                    const [y, m, d] = editStartDate.split("-").map(Number);
+                    const endD = new Date(y, m - 1, d + plan.totalWeeks * 7);
                     plan.config.startDate = editStartDate;
                     plan.config.endDate = endD.toISOString().split("T")[0];
                   } else {
