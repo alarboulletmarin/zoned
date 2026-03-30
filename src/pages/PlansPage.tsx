@@ -213,9 +213,8 @@ function PlanCard({
           onIcsDialogOpen={() => onIcsDialogOpen(plan)}
         />
         <Button
-          variant="ghost"
+          variant="destructive"
           size="sm"
-          className="text-muted-foreground hover:text-destructive"
           onClick={(e) => {
             e.stopPropagation();
             onDelete(plan.id);

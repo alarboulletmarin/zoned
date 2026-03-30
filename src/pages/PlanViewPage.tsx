@@ -591,9 +591,9 @@ export function PlanViewPage() {
               onIcsDialogOpen={() => setShowIcsDialog(true)}
             />
             <Button
-              variant="outline"
+              variant="destructive"
               size="sm"
-              className="rounded-full text-destructive hover:text-destructive"
+              className="rounded-full"
               onClick={() => setShowDeleteDialog(true)}
               title={isEn ? "Delete plan" : "Supprimer le plan"}
             >

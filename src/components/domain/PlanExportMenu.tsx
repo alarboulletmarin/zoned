@@ -127,10 +127,10 @@ export function PlanExportMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant={isSmall ? "outline" : "default"}
+          variant="default"
           size={isSmall ? "sm" : "default"}
           disabled={isExporting}
-          className={isSmall ? "rounded-full" : "rounded-full px-5 py-2.5 h-auto font-bold"}
+          className={isSmall ? "rounded-full font-semibold" : "rounded-full px-5 py-2.5 h-auto font-bold"}
         >
           {isExporting ? (
             <Loader2 className="size-4 animate-spin" />
