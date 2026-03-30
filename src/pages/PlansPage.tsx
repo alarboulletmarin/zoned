@@ -416,27 +416,25 @@ export function PlansPage() {
         open={icsExportPlan !== null}
         onOpenChange={(open) => !open && setIcsExportPlan(null)}
         daysPerWeek={icsExportPlan?.config.daysPerWeek ?? 3}
-        onExport={(selectedDays, longRunDay) => {
+        onExport={async (selectedDays, longRunDay) => {
           if (!icsExportPlan) return;
-          import("@/lib/export").then(({ exportPlanToICS }) => {
-            import("@/data/workouts").then(({ getWorkoutById }) => {
-              const names: Record<string, string> = {};
-              const templates: Record<string, import("@/types").WorkoutTemplate> = {};
-              for (const week of icsExportPlan.weeks) {
-                for (const s of week.sessions) {
-                  if (s.workoutId && !s.workoutId.startsWith("__") && !names[s.workoutId]) {
-                    const w = getWorkoutById(s.workoutId);
-                    if (w) {
-                      names[s.workoutId] = isEn ? (w.nameEn || w.name) : w.name;
-                      templates[s.workoutId] = w;
-                    }
-                  }
+          const { exportPlanToICS } = await import("@/lib/export");
+          const { getWorkoutById } = await import("@/data/workouts");
+          const names: Record<string, string> = {};
+          const templates: Record<string, import("@/types").WorkoutTemplate> = {};
+          for (const week of icsExportPlan.weeks) {
+            for (const s of week.sessions) {
+              if (s.workoutId && !s.workoutId.startsWith("__") && !names[s.workoutId]) {
+                const w = await getWorkoutById(s.workoutId);
+                if (w) {
+                  names[s.workoutId] = isEn ? (w.nameEn || w.name) : w.name;
+                  templates[s.workoutId] = w;
                 }
               }
-              exportPlanToICS(icsExportPlan, names, templates, isEn, selectedDays, longRunDay);
-              toast.success(isEn ? "Calendar exported" : "Calendrier exporté");
-            });
-          });
+            }
+          }
+          exportPlanToICS(icsExportPlan, names, templates, isEn, selectedDays, longRunDay);
+          toast.success(isEn ? "Calendar exported" : "Calendrier export\u00e9");
           setIcsExportPlan(null);
         }}
         isEn={isEn}

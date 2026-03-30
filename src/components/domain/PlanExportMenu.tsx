@@ -31,7 +31,7 @@ interface PlanExportMenuProps {
 /**
  * Collects all unique workout IDs from a plan and resolves names + templates.
  */
-function resolvePlanWorkouts(plan: TrainingPlan, isEn: boolean) {
+async function resolvePlanWorkouts(plan: TrainingPlan, isEn: boolean) {
   const names: Record<string, string> = {};
   const templates: Record<string, WorkoutTemplate> = {};
 
@@ -45,7 +45,7 @@ function resolvePlanWorkouts(plan: TrainingPlan, isEn: boolean) {
   }
 
   for (const id of ids) {
-    const w = getWorkoutById(id);
+    const w = await getWorkoutById(id);
     if (w) {
       names[id] = isEn ? (w.nameEn || w.name) : w.name;
       templates[id] = w;
@@ -67,7 +67,7 @@ export function PlanExportMenu({
   const { t } = useTranslation("common");
   const [isExporting, setIsExporting] = useState(false);
 
-  const getWorkoutData = useCallback(() => {
+  const getWorkoutData = useCallback(async () => {
     if (preloadedNames && preloadedTemplates && Object.keys(preloadedNames).length > 0) {
       return { names: preloadedNames, templates: preloadedTemplates };
     }
@@ -78,7 +78,7 @@ export function PlanExportMenu({
     if (isExporting) return;
     setIsExporting(true);
     try {
-      const { names, templates } = getWorkoutData();
+      const { names, templates } = await getWorkoutData();
       await exportPlanToPDF(plan, names, templates, isEn);
       toast.success(t("export.success.pdf"));
     } catch {
@@ -88,14 +88,14 @@ export function PlanExportMenu({
     }
   }, [plan, isEn, isExporting, getWorkoutData, t]);
 
-  const handleExportICS = useCallback(() => {
+  const handleExportICS = useCallback(async () => {
     // If days are already assigned (calendar/weekly/monthly mode), export directly
     if (planViewMode && planViewMode !== "list") {
       const usedDays = [...new Set(plan.weeks.flatMap(w => w.sessions.map(s => s.dayOfWeek)))].sort();
       const longRunDay = plan.config.longRunDay ?? 6;
       setIsExporting(true);
       try {
-        const { names, templates } = getWorkoutData();
+        const { names, templates } = await getWorkoutData();
         exportPlanToICS(plan, names, templates, isEn, usedDays, longRunDay);
         toast.success(t("export.success.calendar"));
       } catch {
