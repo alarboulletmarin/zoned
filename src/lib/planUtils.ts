@@ -10,10 +10,15 @@ export function getCurrentWeek(dateStr: string): number {
   // Parse as local date components to avoid UTC offset issues
   const dateOnly = dateStr.split("T")[0];
   const [y, m, d] = dateOnly.split("-").map(Number);
-  const start = new Date(y, m - 1, d); // local midnight
+  const start = new Date(y, m - 1, d);
+
+  // Normalize to Monday of that week (same as PlanViewPage parsedPlanStart)
+  const jsDay = start.getDay();
+  const offset = jsDay === 0 ? -6 : 1 - jsDay;
+  start.setDate(start.getDate() + offset);
 
   const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // local midnight
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   const diffMs = today.getTime() - start.getTime();
   // Math.round absorbs potential DST transitions (±1 h)
