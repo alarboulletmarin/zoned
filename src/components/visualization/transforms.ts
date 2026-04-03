@@ -95,6 +95,23 @@ function parseDuration(text: string | undefined, defaultMin: number = 1): number
 }
 
 /**
+ * Estimate duration from distance (meters) and zone.
+ * Uses zone-appropriate pace: easy zones are slower, intense zones faster.
+ */
+function estimateMinutesFromDistance(
+  distanceM: number | undefined,
+  zone: ZoneNumber | null,
+): number {
+  if (!distanceM) return 5; // fallback default
+  // Pace in min/km by zone
+  const paceByZone: Record<number, number> = {
+    1: 6.5, 2: 6.0, 3: 5.5, 4: 5.0, 5: 4.0, 6: 3.5,
+  };
+  const pace = paceByZone[zone ?? 3] ?? 5.0;
+  return (distanceM / 1000) * pace;
+}
+
+/**
  * Parse interval pattern from description
  * Handles: "2x(12x 30s VMA / 30s récup)", "3x(8x 400m / 200m récup)"
  * Returns: { sets, repsPerSet, workDuration, recoveryDuration }
@@ -188,8 +205,10 @@ function parseIntervalPattern(description: string, block: WorkoutBlock): Interva
 
   // Fallback: use block.repetitions if present
   if (block.repetitions && block.repetitions > 1) {
-    // Try to extract duration from description, fallback to block.durationMin or 1
-    const workDuration = block.durationMin ?? parseDurationFromDescription(description);
+    // Try to extract duration from distance, then description, fallback to 1
+    const workDuration = block.durationMin
+      ?? (block.distanceM ? estimateMinutesFromDistance(block.distanceM, parseZoneNumber(block.zone)) : null)
+      ?? parseDurationFromDescription(description);
     // Use recovery field (or rest for backwards compatibility)
     const recoveryText = block.recovery ?? block.rest;
     const recoveryDuration = parseDuration(recoveryText);
@@ -286,7 +305,7 @@ function blockToSegments(
   }
 
   // Simple block without interval pattern
-  const baseDuration = block.durationMin ?? 5;
+  const baseDuration = block.durationMin ?? estimateMinutesFromDistance(block.distanceM, zoneNumber);
   const repetitions = block.repetitions ?? 1;
   const recoveryText = block.recovery ?? block.rest;
   const recoveryDuration = parseDuration(recoveryText);
