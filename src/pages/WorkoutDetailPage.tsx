@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -40,7 +40,9 @@ import { ScienceSection } from "@/components/domain/ScienceSection";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { SEOHead } from "@/components/seo";
 import { SessionTimeline, ZoneDistribution, transformSessionBlocks } from "@/components/visualization";
+import { MiniSessionTimeline } from "@/components/visualization/MiniSessionTimeline";
 import { useWorkout, useRelatedWorkouts, useTips } from "@/hooks";
+import { useScrolledPast } from "@/hooks/useScrolledPast";
 import type { WorkoutCategory, ZoneRange } from "@/types";
 import {
   getDominantZone,
@@ -110,6 +112,9 @@ export function WorkoutDetailPage() {
       setHasUserZones(false);
     }
   }, []);
+
+  const timelineCardRef = useRef<HTMLDivElement>(null);
+  const timelineScrolledPast = useScrolledPast(timelineCardRef);
 
   if (isLoading) {
     return (
@@ -318,20 +323,34 @@ export function WorkoutDetailPage() {
         {/* Zone Personalization CTA - show only if user has no zones configured */}
         {!hasUserZones && <ZonePersonalizationCTA />}
 
+        {timelineScrolledPast && (
+          <div className="sticky top-12 z-40 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 bg-background/90 backdrop-blur-md shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_6px_12px_-4px_rgba(0,0,0,0.15)] dark:shadow-[0_1px_3px_0_rgba(0,0,0,0.3),0_6px_12px_-4px_rgba(0,0,0,0.4)] border-b border-border/30 animate-in slide-in-from-top-2 fade-in duration-200 print:hidden">
+            <MiniSessionTimeline
+              workout={workout}
+              volumePercent={hasPlanContext ? planVolumePercent : undefined}
+              onClickScrollBack={() => {
+                timelineCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+            />
+          </div>
+        )}
+
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Timeline Visualization */}
-            <Card className="rounded-xl">
-              <CardHeader>
-                <CardTitle className="text-lg">
-                  {t("titles.sessionTimeline")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <SessionTimeline workout={workout} volumePercent={hasPlanContext ? planVolumePercent : undefined} />
-              </CardContent>
-            </Card>
+            <div ref={timelineCardRef}>
+              <Card className="rounded-xl">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    {t("titles.sessionTimeline")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <SessionTimeline workout={workout} volumePercent={hasPlanContext ? planVolumePercent : undefined} />
+                </CardContent>
+              </Card>
+            </div>
 
             {/* Structure */}
             <Card className="rounded-xl">
