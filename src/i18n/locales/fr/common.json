@@ -128,7 +128,8 @@
     "plan": "Planifier",
     "quickActions": "Actions rapides",
     "methodology": "Méthodologie",
-    "builder": "Créer"
+    "builder": "Créer",
+    "planMethodology": "Méthodologie des plans"
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",

@@ -74,6 +74,7 @@ const navGroups: NavGroup[] = [
     items: [
       { href: "/plans", icon: CalendarRange, labelKey: "nav.plans" },
       { href: "/race-simulator", icon: Flag, labelKey: "simulator.title" },
+      { href: "/plans/methodology", icon: FlaskConical, labelKey: "nav.planMethodology" },
     ],
   },
   {
