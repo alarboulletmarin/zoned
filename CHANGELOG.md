@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.3] - 2026-04-03
+
+### Added
+
+- Plan methodology page: explains the 7 evidence-based principles behind plan generation (periodization, 80/20, recovery weeks, volume progression, long run, session types, taper)
+- What-if training scenario simulator: compare two training scenarios side by side with volume, zone distribution, and qualitative insights
+- Inline plan name editing and refactored plan export menu (#39)
+
+### Fixed
+
+- Session timeline visualization now correctly estimates duration from distance-based blocks (distanceM), fixing 69 blocks across 6 workout files
+- Normalize plan start date to Monday in getCurrentWeek
+
 ## [0.3.2] - 2026-03-28
 
 ### Added

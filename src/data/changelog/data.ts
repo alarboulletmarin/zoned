@@ -2,6 +2,100 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.3.3",
+    date: "2026-04-03",
+    changes: {
+      added: [
+        {
+          text: "Page méthodologie des plans : explique les 7 principes scientifiques derrière la génération de plans (périodisation, 80/20, semaines de récupération, progression du volume, sortie longue, types de séances, affûtage)",
+          textEn: "Plan methodology page: explains the 7 evidence-based principles behind plan generation (periodization, 80/20, recovery weeks, volume progression, long run, session types, taper)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Simulateur what-if : comparez deux scénarios d'entraînement côte à côte avec volume, répartition des zones et insights qualitatifs",
+          textEn: "What-if training scenario simulator: compare two training scenarios side by side with volume, zone distribution, and qualitative insights",
+          category: "Calculateurs",
+          categoryEn: "Calculators",
+        },
+        {
+          text: "Édition inline du nom de plan et refonte du menu d'export (#39)",
+          textEn: "Inline plan name editing and refactored plan export menu (#39)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+      fixed: [
+        {
+          text: "La visualisation de la timeline de séance estime correctement la durée des blocs basés sur la distance (distanceM), corrigeant 69 blocs dans 6 fichiers de séances",
+          textEn: "Session timeline visualization now correctly estimates duration from distance-based blocks (distanceM), fixing 69 blocks across 6 workout files",
+          category: "Séances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Normalisation de la date de début de plan au lundi dans getCurrentWeek",
+          textEn: "Normalize plan start date to Monday in getCurrentWeek",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+    },
+  },
+  {
+    version: "0.3.2",
+    date: "2026-03-28",
+    changes: {
+      added: [
+        {
+          text: "Mode de saisie du temps visé dans la création de plan : basculer entre allure cible (min/km) et temps d'arrivée (H:MM:SS), avec conversion automatique (#29)",
+          textEn: "Finish time input mode in plan creation: toggle between target pace and target finish time with automatic conversion (#29)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Descriptions de niveau à travers l'app : chaque niveau (débutant, intermédiaire, avancé, élite) affiche la fréquence et le volume hebdomadaire attendus (#28)",
+          textEn: "Level descriptions across the app: each difficulty level now shows concrete frequency and weekly volume expectations (#28)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Bandeau de contexte plan sur la fiche séance : affiche la durée adaptée selon le pourcentage de volume de la semaine (#32)",
+          textEn: "Plan context banner on workout detail page: shows scaled duration based on the week's volume percentage (#32)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+      changed: [
+        {
+          text: "Avertissement de durée de plan redesigné : affiche les risques spécifiques et suggère des alternatives (#27)",
+          textEn: "Plan duration warning redesigned: shows specific risks and suggests alternatives (#27)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Section stats renommée : « Kilométrage hebdomadaire » et « Temps d'entraînement hebdomadaire » avec sous-titres descriptifs (#30)",
+          textEn: "Stats section renamed with descriptive subtitles (#30)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      fixed: [
+        {
+          text: "Le retour depuis une fiche séance revient à la bonne semaine dans la vue plan (#31)",
+          textEn: "Navigating back from workout detail now returns to the correct week in weekly plan view (#31)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "La fiche séance affiche la durée adaptée au plan au lieu de la durée de base (#32)",
+          textEn: "Workout detail page displays plan-scaled duration instead of base duration (#32)",
+          category: "Séances",
+          categoryEn: "Workouts",
+        },
+      ],
+    },
+  },
+  {
     version: "0.3.1",
     date: "2026-03-28",
     changes: {
