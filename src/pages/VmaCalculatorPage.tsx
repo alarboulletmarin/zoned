@@ -102,19 +102,29 @@ export function VmaCalculatorPage() {
         title={isEn ? "VMA from Race Time" : "VMA depuis un Chrono"}
         description={
           isEn
-            ? "Estimate your VMA (Maximal Aerobic Speed) from a recent race result. Enter your time for 5K, 10K, half marathon or marathon."
-            : "Estimez votre VMA à partir d'un résultat de course récent. Entrez votre chrono sur 5 km, 10 km, semi-marathon ou marathon."
+            ? "Calculate your VMA (Maximal Aerobic Speed) free from a race result. Enter your 5K, 10K, half marathon or marathon time to estimate VMA and pace zones."
+            : "Calculer sa VMA gratuitement depuis un chrono de course (5K, 10K, semi, marathon). Test VMA en ligne avec calcul instantané et zones d'entraînement."
         }
         canonical="/calculators/vma"
-        jsonLd={{
-          "@type": "WebApplication",
-          name: isEn ? "VMA Calculator from Race Time" : "Calculateur VMA depuis un Chrono",
-          description: isEn
-            ? "Estimate your VMA from a recent race result"
-            : "Estimez votre VMA à partir d'un résultat de course",
-          url: "https://zoned.run/calculators/vma",
-          applicationCategory: "SportsApplication",
-        }}
+        jsonLd={[
+          {
+            "@type": "WebApplication",
+            name: isEn ? "VMA Calculator from Race Time" : "Calculateur VMA depuis un Chrono",
+            description: isEn
+              ? "Estimate your VMA from a recent race result"
+              : "Estimez votre VMA à partir d'un résultat de course",
+            url: "https://zoned.run/calculators/vma",
+            applicationCategory: "SportsApplication",
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: isEn ? "VMA from Race Time" : "VMA depuis un chrono" },
+            ],
+          },
+        ]}
       />
       <div className="py-8 max-w-2xl mx-auto">
         {/* Header */}

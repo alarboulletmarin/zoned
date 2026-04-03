@@ -169,21 +169,31 @@ export function AgeGradedPage() {
         }
         description={
           isEn
-            ? "Compare your performance to the age and gender adjusted world record. Discover your level."
-            : "Comparez votre performance au record mondial ajusté pour votre âge et sexe. Découvrez votre niveau."
+            ? "Age-graded performance calculator for runners. Compare your race time to the age and gender adjusted world record and discover your performance level."
+            : "Calculez votre performance ajustée à l'âge en course à pied (age grading). Comparez votre chrono au record mondial de votre catégorie d'âge et sexe."
         }
         canonical="/calculators/age-graded"
-        jsonLd={{
-          "@type": "WebApplication",
-          name: isEn
-            ? "Age-Graded Performance Calculator"
-            : "Calculateur Performance Age-Graded",
-          description: isEn
-            ? "Compare your performance to the age and gender adjusted world record"
-            : "Comparez votre performance au record mondial ajusté pour votre âge et sexe",
-          url: "https://zoned.run/calculators/age-graded",
-          applicationCategory: "SportsApplication",
-        }}
+        jsonLd={[
+          {
+            "@type": "WebApplication",
+            name: isEn
+              ? "Age-Graded Performance Calculator"
+              : "Calculateur Performance Age-Graded",
+            description: isEn
+              ? "Compare your performance to the age and gender adjusted world record"
+              : "Comparez votre performance au record mondial ajusté pour votre âge et sexe",
+            url: "https://zoned.run/calculators/age-graded",
+            applicationCategory: "SportsApplication",
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: isEn ? "Age-Graded Performance" : "Performance age-graded" },
+            ],
+          },
+        ]}
       />
       <div className="py-8 max-w-2xl mx-auto">
         {/* Header */}

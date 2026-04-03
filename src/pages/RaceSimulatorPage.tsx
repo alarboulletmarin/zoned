@@ -254,13 +254,22 @@ export function RaceSimulatorPage() {
         title={t("title")}
         description={t("description")}
         canonical="/race-simulator"
-        jsonLd={{
-          "@type": "WebApplication",
-          name: t("title"),
-          description: t("description"),
-          url: "https://zoned.run/race-simulator",
-          applicationCategory: "SportsApplication",
-        }}
+        jsonLd={[
+          {
+            "@type": "WebApplication",
+            name: t("title"),
+            description: t("description"),
+            url: "https://zoned.run/race-simulator",
+            applicationCategory: "SportsApplication",
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: isEn ? "Race Simulator" : "Simulateur de course" },
+            ],
+          },
+        ]}
       />
       <div className="py-8 max-w-2xl mx-auto space-y-6">
         {/* Header */}

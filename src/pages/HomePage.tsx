@@ -124,17 +124,41 @@ export function HomePage() {
         }
         description={seoDescription}
         canonical="/"
-        jsonLd={{
-          "@type": "WebSite",
-          name: "Zoned",
-          url: "https://zoned.run",
-          description: seoDescription,
-          potentialAction: {
-            "@type": "SearchAction",
-            target: "https://zoned.run/library?q={search_term_string}",
-            "query-input": "required name=search_term_string",
+        jsonLd={[
+          {
+            "@type": "WebSite",
+            name: "Zoned",
+            url: "https://zoned.run",
+            description: seoDescription,
+            potentialAction: {
+              "@type": "SearchAction",
+              target: "https://zoned.run/library?q={search_term_string}",
+              "query-input": "required name=search_term_string",
+            },
           },
-        }}
+          {
+            "@type": "Organization",
+            name: "Zoned",
+            url: "https://zoned.run",
+            logo: "https://zoned.run/og-image.png",
+            description:
+              "Application gratuite de séances de course à pied scientifiques et génération de plans d'entraînement",
+            sameAs: ["https://github.com/alarboulletmarin/zoned"],
+          },
+          {
+            "@type": "SoftwareApplication",
+            name: "Zoned",
+            operatingSystem: "Web",
+            applicationCategory: "HealthApplication",
+            url: "https://zoned.run",
+            offers: {
+              "@type": "Offer",
+              price: "0",
+              priceCurrency: "EUR",
+            },
+            inLanguage: ["fr", "en"],
+          },
+        ]}
       />
       <div className="space-y-10 md:space-y-16 py-4 md:py-8">
         {/* Onboarding bubbles (first visit only) */}

@@ -602,6 +602,14 @@ export function WhatIfPage() {
             : "Comparez deux sc\u00e9narios d'entra\u00eenement c\u00f4te \u00e0 c\u00f4te. Visualisez l'impact de la fr\u00e9quence, de l'objectif et de la dur\u00e9e sur votre plan."
         }
         canonical="/calculators/what-if"
+        jsonLd={{
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+            { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
+            { "@type": "ListItem", position: 3, name: isEn ? "What-If Simulator" : "Simulateur What-If" },
+          ],
+        }}
       />
       <div className="py-8 max-w-4xl mx-auto space-y-6">
         {/* Header */}

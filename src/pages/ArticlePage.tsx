@@ -380,11 +380,128 @@ export function ArticlePage() {
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 1, name: isEn ? "Home" : "Accueil", item: "https://zoned.run/" },
               { "@type": "ListItem", position: 2, name: isEn ? "Learn" : "Apprendre", item: "https://zoned.run/learn" },
               { "@type": "ListItem", position: 3, name: title },
             ],
           },
+          ...(slug === "faq"
+            ? [
+                {
+                  "@type": "FAQPage" as const,
+                  mainEntity: [
+                    {
+                      "@type": "Question",
+                      name: isEn
+                        ? "My watch shows Zone 4 but I feel like I'm in Zone 2. Who should I trust?"
+                        : "Ma montre indique Zone 4 mais je me sens en Zone 2. Qui croire ?",
+                      acceptedAnswer: {
+                        "@type": "Answer",
+                        text: isEn
+                          ? "Trust your sensations. Heart rate can be skewed by heat, stress, fatigue, caffeine, and sensor position. The golden rule for Zone 2: if you can hold a normal conversation without effort, you're in the right zone regardless of what your watch displays."
+                          : "Faites confiance à vos sensations. La fréquence cardiaque peut être faussée par la chaleur, le stress, la fatigue, la caféine et la position du capteur. La règle d'or pour la Zone 2 : si vous pouvez tenir une conversation normale sans effort, vous êtes dans la bonne zone, peu importe ce qu'affiche votre montre.",
+                      },
+                    },
+                    {
+                      "@type": "Question",
+                      name: isEn
+                        ? "Should I stay exactly in my zone?"
+                        : "Dois-je rester exactement dans ma zone ?",
+                      acceptedAnswer: {
+                        "@type": "Answer",
+                        text: isEn
+                          ? "No, zones are indicative ranges, not beat-precise targets. Being 3-5 bpm above or below the limit has no significant physiological importance. What matters is respecting the session's objective."
+                          : "Non, les zones sont des plages indicatives, pas des cibles au battement près. Être à 3-5 bpm au-dessus ou en-dessous de la limite n'a aucune importance physiologique significative. Ce qui compte, c'est de respecter l'objectif de la séance.",
+                      },
+                    },
+                    {
+                      "@type": "Question",
+                      name: isEn
+                        ? "How many times per week should I run?"
+                        : "Combien de fois par semaine dois-je courir ?",
+                      acceptedAnswer: {
+                        "@type": "Answer",
+                        text: isEn
+                          ? "Beginners (< 1 year): 2-3 outings per week. Regular runners: 3-5 outings covering most goals from 10K to marathon, alternating hard and easy days. Advanced runners: 5-7 outings, sometimes doubles, requiring years of gradual progression."
+                          : "Débutants (< 1 an) : 2-3 sorties par semaine. Coureurs réguliers : 3-5 sorties couvrent la plupart des objectifs du 10 km au marathon, en alternant jours durs et faciles. Coureurs avancés : 5-7 sorties, parfois en biquotidien, nécessitant des années de progression graduelle.",
+                      },
+                    },
+                    {
+                      "@type": "Question",
+                      name: isEn
+                        ? "Is the 10% rule a myth or reality?"
+                        : "La règle des 10%, c'est un mythe ou une réalité ?",
+                      acceptedAnswer: {
+                        "@type": "Answer",
+                        text: isEn
+                          ? "The 10% rule (don't increase weekly volume by more than 10%) is a useful guardrail, not an absolute physiological law. It forces progressivity, but doesn't account for training history. Use it as a guiding principle, not a rigid rule."
+                          : "La règle des 10% (ne pas augmenter le volume hebdomadaire de plus de 10%) est un garde-fou utile, pas une loi physiologique absolue. Elle force la progressivité mais ne tient pas compte de l'historique. Utilisez-la comme principe directeur, pas comme règle rigide.",
+                      },
+                    },
+                    {
+                      "@type": "Question",
+                      name: isEn
+                        ? "When will I see progress?"
+                        : "Quand vais-je voir des progrès ?",
+                      acceptedAnswer: {
+                        "@type": "Answer",
+                        text: isEn
+                          ? "First cardiovascular changes appear as early as 2-3 weeks of regular training. Measurable progress on a test or race generally arrives after 6-12 weeks of consistent work. Patience is crucial - changing programs every 3 weeks never lets adaptations settle."
+                          : "Les premiers changements cardiovasculaires apparaissent dès 2-3 semaines d'entraînement régulier. Les progrès mesurables sur un test ou une course arrivent généralement après 6-12 semaines de travail cohérent. La patience est cruciale - changer de programme toutes les 3 semaines ne laisse jamais le temps aux adaptations de s'installer.",
+                      },
+                    },
+                    {
+                      "@type": "Question",
+                      name: isEn
+                        ? "I'm in pain during the run. Continue or stop?"
+                        : "J'ai mal pendant la course. Je continue ou j'arrête ?",
+                      acceptedAnswer: {
+                        "@type": "Answer",
+                        text: isEn
+                          ? "Distinguish discomfort from pain. Discomfort (heaviness, slight stiffness, soreness) is often normal and usually passes after 10-15 minutes. Pain (sharp, localized, increasing or causing limping): stop immediately. When in doubt, a session missed out of caution is always preferable to weeks of forced rest."
+                          : "Distinguez l'inconfort de la douleur. L'inconfort (lourdeur, légère raideur, courbatures) est souvent normal et passe généralement après 10-15 minutes. La douleur (aiguë, localisée, qui augmente ou fait boiter) : arrêtez immédiatement. Dans le doute, une séance manquée par prudence est toujours préférable à des semaines d'arrêt forcé.",
+                      },
+                    },
+                    {
+                      "@type": "Question",
+                      name: isEn
+                        ? "How do I prevent running injuries?"
+                        : "Comment éviter les blessures ?",
+                      acceptedAnswer: {
+                        "@type": "Answer",
+                        text: isEn
+                          ? "Progress gradually (most injuries come from increasing volume or intensity too quickly). Vary stimuli (different terrains, shoes in rotation, different paces). Do strength training 15-20 minutes twice a week for hamstrings, quads, calves and glutes. Listen to warning signals early."
+                          : "Progresser graduellement (la majorité des blessures viennent d'un volume ou intensité augmentés trop vite). Varier les stimuli (terrains, chaussures en rotation, allures différentes). Faire du renforcement musculaire 15-20 min 2 fois par semaine pour ischio-jambiers, quadriceps, mollets et fessiers. Écouter les signaux d'alerte tôt.",
+                      },
+                    },
+                    {
+                      "@type": "Question",
+                      name: isEn
+                        ? "Morning or evening, what's better for running?"
+                        : "Matin ou soir, qu'est-ce qui est mieux ?",
+                      acceptedAnswer: {
+                        "@type": "Answer",
+                        text: isEn
+                          ? "Physiologically, evening has a slight advantage: higher body temperature, more mobile joints, better reaction time. But the best time is when you actually run. Consistency beats theoretical optimization."
+                          : "Physiologiquement, le soir a un léger avantage : température corporelle plus élevée, articulations plus mobiles, meilleur temps de réaction. Mais le meilleur moment est celui où vous courez réellement. La constance bat l'optimisation théorique.",
+                      },
+                    },
+                    {
+                      "@type": "Question",
+                      name: isEn
+                        ? "Can I run every day?"
+                        : "Puis-je courir tous les jours ?",
+                      acceptedAnswer: {
+                        "@type": "Answer",
+                        text: isEn
+                          ? "It's possible but with precautions: alternate easy and hard days, keep at least 1-2 days per week very light or cross-training (cycling, swimming), and listen to your body. Many runners thrive with 5-6 days per week and 1-2 days of complete rest. Rest is part of training."
+                          : "C'est possible mais avec des précautions : alterner impérativement jours faciles et durs, garder au moins 1-2 jours par semaine très légers ou en cross-training (vélo, natation), et écouter son corps. Beaucoup de coureurs prospèrent avec 5-6 jours par semaine et 1-2 jours de repos complet. Le repos fait partie de l'entraînement.",
+                      },
+                    },
+                  ],
+                },
+              ]
+            : []),
         ]}
       />
       <ReadingProgress />

@@ -156,14 +156,23 @@ export function CalculateursPage() {
             : "Calculateurs de course à pied : zones d'entraînement, allures, convertisseur tapis roulant, splits, estimation VMA."
         }
         canonical="/calculators"
-        jsonLd={{
-          "@type": "CollectionPage",
-          name: isEn ? "Running Calculators" : "Calculateurs Course à Pied",
-          description: isEn
-            ? "Running calculators: training zones, race paces, treadmill converter, split generator, VMA estimation."
-            : "Calculateurs de course à pied : zones d'entraînement, allures, convertisseur tapis roulant, splits, estimation VMA.",
-          url: "https://zoned.run/calculators",
-        }}
+        jsonLd={[
+          {
+            "@type": "CollectionPage",
+            name: isEn ? "Running Calculators" : "Calculateurs Course à Pied",
+            description: isEn
+              ? "Running calculators: training zones, race paces, treadmill converter, split generator, VMA estimation."
+              : "Calculateurs de course à pied : zones d'entraînement, allures, convertisseur tapis roulant, splits, estimation VMA.",
+            url: "https://zoned.run/calculators",
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs" },
+            ],
+          },
+        ]}
       />
       <div className="py-8">
         {/* Header */}

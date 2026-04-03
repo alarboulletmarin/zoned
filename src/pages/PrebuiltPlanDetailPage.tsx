@@ -196,20 +196,46 @@ export function PrebuiltPlanDetailPage() {
     ? RACE_DISTANCE_META[prebuilt.raceDistance]
     : null;
 
+  const seoDescription = (
+    isEn
+      ? `Free ${name} training plan: ${prebuilt.totalWeeks} weeks, ${prebuilt.sessionsPerWeek} sessions/week. ${description}`
+      : `Plan d'entra\u00eenement ${name} gratuit : ${prebuilt.totalWeeks} semaines, ${prebuilt.sessionsPerWeek} s\u00e9ances/semaine. ${description}`
+  ).slice(0, 160);
+
   return (
     <>
       <SEOHead
         title={name}
-        description={description}
+        description={seoDescription}
         canonical={`/plan/prebuilt/${prebuilt.slug}`}
-        jsonLd={{
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-            { "@type": "ListItem", position: 2, name: "Plans", item: "https://zoned.run/plan/new/prebuilt" },
-            { "@type": "ListItem", position: 3, name },
-          ],
-        }}
+        jsonLd={[
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: "Plans", item: "https://zoned.run/plan/new/prebuilt" },
+              { "@type": "ListItem", position: 3, name },
+            ],
+          },
+          {
+            "@type": "ExercisePlan",
+            name,
+            description,
+            exerciseType: "RunningEvent",
+            activityDuration: `P${prebuilt.totalWeeks}W`,
+            activityFrequency: `${prebuilt.sessionsPerWeek} sessions per week`,
+            audience: {
+              "@type": "Audience",
+              audienceType: prebuilt.difficulty,
+            },
+            isAccessibleForFree: true,
+            provider: {
+              "@type": "Organization",
+              name: "Zoned",
+              url: "https://zoned.run",
+            },
+          },
+        ]}
       />
       <div className="py-8 space-y-6">
         {/* Back */}

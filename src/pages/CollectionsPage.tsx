@@ -19,14 +19,23 @@ export function CollectionsPage() {
           ? "Themed workout paths for every goal. Browse curated running collections."
           : "Des parcours thématiques pour chaque objectif. Parcourez les collections de course à pied."}
         canonical="/collections"
-        jsonLd={{
-          "@type": "CollectionPage",
-          name: "Collections",
-          description: isEn
-            ? "Themed workout paths for every goal. Browse curated running collections."
-            : "Des parcours thématiques pour chaque objectif. Parcourez les collections de course à pied.",
-          url: "https://zoned.run/collections",
-        }}
+        jsonLd={[
+          {
+            "@type": "CollectionPage",
+            name: "Collections",
+            description: isEn
+              ? "Themed workout paths for every goal. Browse curated running collections."
+              : "Des parcours thématiques pour chaque objectif. Parcourez les collections de course à pied.",
+            url: "https://zoned.run/collections",
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: "Collections" },
+            ],
+          },
+        ]}
       />
       <div className="py-8">
         {/* Header */}

@@ -74,19 +74,29 @@ export function SplitGeneratorPage() {
         }
         description={
           isEn
-            ? "Generate per-km or per-mile splits for your target race time with even, negative, or positive split strategies."
-            : "Générez vos temps de passage par km pour votre objectif chrono avec des stratégies de splits réguliers, négatifs ou positifs."
+            ? "Split generator for runners: plan per-km race splits for your target time. Even, negative, or positive split strategies from 5K to marathon distances."
+            : "Générateur de splits et temps de passage course à pied par km pour votre objectif chrono. Stratégies régulier, négatif ou positif du 5K au marathon."
         }
         canonical="/calculators/splits"
-        jsonLd={{
-          "@type": "WebApplication",
-          name: isEn ? "Split Generator" : "Générateur de Splits",
-          description: isEn
-            ? "Generate per-km splits for your target race time with even, negative, or positive split strategies"
-            : "Générez vos temps de passage par km avec des stratégies de splits réguliers, négatifs ou positifs",
-          url: "https://zoned.run/calculators/splits",
-          applicationCategory: "SportsApplication",
-        }}
+        jsonLd={[
+          {
+            "@type": "WebApplication",
+            name: isEn ? "Split Generator" : "Générateur de Splits",
+            description: isEn
+              ? "Generate per-km splits for your target race time with even, negative, or positive split strategies"
+              : "Générez vos temps de passage par km avec des stratégies de splits réguliers, négatifs ou positifs",
+            url: "https://zoned.run/calculators/splits",
+            applicationCategory: "SportsApplication",
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: isEn ? "Split Generator" : "Générateur de splits" },
+            ],
+          },
+        ]}
       />
       <div className="py-8 max-w-2xl mx-auto space-y-6">
         {/* Header */}

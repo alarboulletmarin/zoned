@@ -471,14 +471,89 @@ export function NutritionGuidePage() {
             : "Guide nutrition complet pour coureurs : alimentation quotidienne, surcharge glucidique, ravitaillement en course, hydratation, récupération et calculateur interactif."
         }
         canonical="/nutrition"
-        jsonLd={{
-          "@type": "Article",
-          name: isEn ? "Runner's Nutrition Guide" : "Guide Nutrition du Coureur",
-          description: isEn
-            ? "Complete nutrition guide for runners with interactive fueling calculator."
-            : "Guide nutrition complet pour coureurs avec calculateur de ravitaillement interactif.",
-          url: "https://zoned.run/nutrition",
-        }}
+        jsonLd={[
+          {
+            "@type": "Article",
+            name: isEn ? "Runner's Nutrition Guide" : "Guide Nutrition du Coureur",
+            description: isEn
+              ? "Complete nutrition guide for runners with interactive fueling calculator."
+              : "Guide nutrition complet pour coureurs avec calculateur de ravitaillement interactif.",
+            url: "https://zoned.run/guides/nutrition",
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: isEn ? "Home" : "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: "Guides", item: "https://zoned.run/guides" },
+              { "@type": "ListItem", position: 3, name: isEn ? "Runner's Nutrition" : "Nutrition du Coureur" },
+            ],
+          },
+          {
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: isEn
+                  ? "How many carbs should a runner eat per day?"
+                  : "Combien de glucides un coureur doit-il consommer par jour ?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: isEn
+                    ? "It depends on training volume: 3-5g/kg for light training (30-60 min/day), 5-7g/kg for moderate (60-90 min/day), 7-10g/kg for heavy (90-120+ min/day), and 10-12g/kg for double sessions or ultra. Based on IOC consensus and Burke et al. (2011)."
+                    : "Cela dépend du volume d'entraînement : 3-5g/kg pour un entraînement léger (30-60 min/jour), 5-7g/kg pour modéré (60-90 min/jour), 7-10g/kg pour intensif (90-120+ min/jour), et 10-12g/kg pour les doubles séances ou ultra. Basé sur le consensus IOC et Burke et al. (2011).",
+                },
+              },
+              {
+                "@type": "Question",
+                name: isEn
+                  ? "What is carbohydrate loading and when should I do it?"
+                  : "Qu'est-ce que la surcharge glucidique et quand la pratiquer ?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: isEn
+                    ? "Carbohydrate loading maximizes muscle glycogen stores before competitions lasting over 90 minutes. The modern protocol involves consuming 8-12g carbs/kg/day for 3 days before the race while reducing training volume to 30-50%. It is only useful for half-marathon distance and above."
+                    : "La surcharge glucidique maximise les réserves de glycogène musculaire avant une compétition de plus de 90 minutes. Le protocole moderne consiste à consommer 8-12g de glucides/kg/jour pendant les 3 jours avant la course tout en réduisant le volume d'entraînement à 30-50%. Elle n'est utile qu'à partir du semi-marathon.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: isEn
+                  ? "How much should I eat and drink during a race?"
+                  : "Combien dois-je manger et boire pendant une course ?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: isEn
+                    ? "For races under 60 min: water only. 60-90 min: 30-60g carbs/hour. 90-150 min (half-marathon): 60g carbs/hour. Over 150 min (marathon+): 60-90g carbs/hour with a 2:1 glucose:fructose ratio above 60g/h. Hydration: 400-800ml/hour individualized to your sweat rate. Start fueling within the first 20 minutes."
+                    : "Pour les courses de moins de 60 min : eau uniquement. 60-90 min : 30-60g de glucides/h. 90-150 min (semi-marathon) : 60g de glucides/h. Plus de 150 min (marathon+) : 60-90g de glucides/h avec un ratio glucose:fructose 2:1 au-delà de 60g/h. Hydratation : 400-800ml/h individualisée selon votre taux de sudation. Commencer le ravitaillement dans les 20 premières minutes.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: isEn
+                  ? "What should I eat before a race?"
+                  : "Que dois-je manger avant une course ?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: isEn
+                    ? "Eat 3-4 hours before start: 1-4g carbs/kg, moderate protein (15-25g), low fat (<15g), low fiber (<10g). Good options: white toast with jam and banana, porridge with honey, or white rice with lean chicken. Hydrate with 5-7ml/kg 4 hours before. Avoid heavy dairy, spicy foods, excess caffeine, and untested foods."
+                    : "Manger 3-4 heures avant le départ : 1-4g de glucides/kg, protéines modérées (15-25g), faibles lipides (<15g), faibles fibres (<10g). Options : toast pain blanc avec confiture et banane, porridge au miel, ou riz blanc avec poulet maigre. S'hydrater avec 5-7ml/kg 4 heures avant. Éviter les produits laitiers lourds, les aliments épicés, l'excès de caféine et les aliments non testés.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: isEn
+                  ? "What should I eat after a race for recovery?"
+                  : "Que dois-je manger après une course pour récupérer ?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: isEn
+                    ? "Within 30 minutes: 1-1.2g carbs/kg + 0.3-0.4g protein/kg (e.g., chocolate milk or banana with protein shake). Then 1g carbs/kg every 2 hours for 6 hours. Rehydrate with 1.5x the weight lost, including sodium. Avoid alcohol for 4-6 hours post-race."
+                    : "Dans les 30 minutes : 1-1,2g de glucides/kg + 0,3-0,4g de protéines/kg (ex : lait chocolaté ou banane avec shaker protéine). Puis 1g de glucides/kg toutes les 2 heures pendant 6 heures. Réhydrater avec 1,5x le poids perdu, avec sodium. Éviter l'alcool pendant 4-6 heures après la course.",
+                },
+              },
+            ],
+          },
+        ]}
       />
 
       <div className="py-8 space-y-8">

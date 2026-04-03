@@ -23,6 +23,14 @@ export function PrebuiltPlansPage() {
             : "Des plans structur\u00e9s, pr\u00eats \u00e0 utiliser imm\u00e9diatement."
         }
         canonical="/plan/new/prebuilt"
+        jsonLd={{
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+            { "@type": "ListItem", position: 2, name: "Plans", item: "https://zoned.run/plans" },
+            { "@type": "ListItem", position: 3, name: isEn ? "Pre-built plans" : "Plans pr\u00eat-\u00e0-l'emploi" },
+          ],
+        }}
       />
       <div className="py-8">
         {/* Back */}

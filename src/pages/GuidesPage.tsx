@@ -60,14 +60,23 @@ export function GuidesPage() {
             : "Guides de course : nutrition, préparation course, routines d'échauffement et plus."
         }
         canonical="/guides"
-        jsonLd={{
-          "@type": "CollectionPage",
-          name: "Guides",
-          description: isEn
-            ? "Running guides: nutrition, race preparation, warm-up routines and more."
-            : "Guides de course : nutrition, préparation course, routines d'échauffement et plus.",
-          url: "https://zoned.run/guides",
-        }}
+        jsonLd={[
+          {
+            "@type": "CollectionPage",
+            name: "Guides",
+            description: isEn
+              ? "Running guides: nutrition, race preparation, warm-up routines and more."
+              : "Guides de course : nutrition, préparation course, routines d'échauffement et plus.",
+            url: "https://zoned.run/guides",
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: "Guides" },
+            ],
+          },
+        ]}
       />
       <div className="py-8">
         {/* Header */}

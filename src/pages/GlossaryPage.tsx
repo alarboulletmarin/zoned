@@ -110,12 +110,21 @@ export function GlossaryPage() {
           ? "Running terminology explained: training zones, workout types, and key concepts for runners."
           : "Terminologie de la course à pied expliquée: zones d'entraînement, types de séances et concepts clés."}
         canonical="/glossary"
-        jsonLd={{
-          "@type": "DefinedTermSet",
-          name: isEn ? "Zoned Running Glossary" : "Glossaire Zoned Running",
-          description: isEn ? "Complete glossary of running training terms" : "Glossaire complet des termes d'entraînement running",
-          url: "https://zoned.run/glossary",
-        }}
+        jsonLd={[
+          {
+            "@type": "DefinedTermSet",
+            name: isEn ? "Zoned Running Glossary" : "Glossaire Zoned Running",
+            description: isEn ? "Complete glossary of running training terms" : "Glossaire complet des termes d'entraînement running",
+            url: "https://zoned.run/glossary",
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: isEn ? "Glossary" : "Glossaire" },
+            ],
+          },
+        ]}
       />
       <div className="py-8">
       {/* Page Header */}

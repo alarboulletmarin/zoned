@@ -16,6 +16,13 @@ export function ContributePage() {
             : "Partagez vos séances d'entraînement préférées avec la communauté Zoned"
         }
         canonical="/contribute"
+        jsonLd={{
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+            { "@type": "ListItem", position: 2, name: isEn ? "Contribute" : "Contribuer" },
+          ],
+        }}
       />
       <div className="py-8">
         {/* Header */}

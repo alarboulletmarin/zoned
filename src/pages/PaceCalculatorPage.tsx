@@ -13,21 +13,31 @@ export function PaceCalculatorPage() {
         title={isEn ? "Race Pace Calculator" : "Calculateur d'Allures de Course"}
         description={
           isEn
-            ? "Estimate your race times from 5K to marathon based on your VMA."
-            : "Estimez vos temps de course du 5K au marathon à partir de votre VMA."
+            ? "Race pace calculator: estimate your finish times from 5K to marathon based on VMA. Convert speed to pace with predicted race times for every distance."
+            : "Calculateur d'allure course à pied : estimez vos temps du 5K au marathon depuis votre VMA. Convertir vitesse en allure avec prédictions de chronos."
         }
         canonical="/calculators/allures"
-        jsonLd={{
-          "@type": "WebApplication",
-          name: isEn
-            ? "Race Pace Calculator"
-            : "Calculateur d'Allures de Course",
-          description: isEn
-            ? "Estimate your race times from 5K to marathon based on your VMA"
-            : "Estimez vos temps de course du 5K au marathon à partir de votre VMA",
-          url: "https://zoned.run/calculators/allures",
-          applicationCategory: "SportsApplication",
-        }}
+        jsonLd={[
+          {
+            "@type": "WebApplication",
+            name: isEn
+              ? "Race Pace Calculator"
+              : "Calculateur d'Allures de Course",
+            description: isEn
+              ? "Estimate your race times from 5K to marathon based on your VMA"
+              : "Estimez vos temps de course du 5K au marathon à partir de votre VMA",
+            url: "https://zoned.run/calculators/allures",
+            applicationCategory: "SportsApplication",
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: isEn ? "Race Pace Calculator" : "Calculateur d'allures" },
+            ],
+          },
+        ]}
       />
       <div className="py-8 max-w-2xl mx-auto">
         <div className="mb-8">

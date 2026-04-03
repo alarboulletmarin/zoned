@@ -64,6 +64,13 @@ export function ChangelogPage() {
             : "Découvrez les nouveautés de Zoned - tous les changements notables de la bibliothèque de séances."
         }
         canonical="/changelog"
+        jsonLd={{
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+            { "@type": "ListItem", position: 2, name: "Changelog" },
+          ],
+        }}
       />
       <div className="py-8 space-y-8 max-w-4xl mx-auto">
         {/* Header */}

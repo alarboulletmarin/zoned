@@ -99,19 +99,29 @@ export function TreadmillConverterPage() {
         }
         description={
           isEn
-            ? "Convert treadmill speed and incline to equivalent outdoor pace and training zone."
-            : "Convertissez la vitesse et l'inclinaison du tapis roulant en allure extérieure équivalente et zone d'entraînement."
+            ? "Treadmill pace converter: calculate equivalent outdoor pace from treadmill speed and incline. Includes training zone detection for your running effort."
+            : "Convertisseur tapis de course : calculez l'allure extérieure équivalente selon la vitesse et l'inclinaison du tapis roulant. Zone d'entraînement incluse."
         }
         canonical="/calculators/tapis-roulant"
-        jsonLd={{
-          "@type": "WebApplication",
-          name: isEn ? "Treadmill Converter" : "Convertisseur Tapis Roulant",
-          description: isEn
-            ? "Convert treadmill speed and incline to equivalent outdoor pace"
-            : "Convertissez la vitesse et l'inclinaison du tapis en allure extérieure équivalente",
-          url: "https://zoned.run/calculators/tapis-roulant",
-          applicationCategory: "SportsApplication",
-        }}
+        jsonLd={[
+          {
+            "@type": "WebApplication",
+            name: isEn ? "Treadmill Converter" : "Convertisseur Tapis Roulant",
+            description: isEn
+              ? "Convert treadmill speed and incline to equivalent outdoor pace"
+              : "Convertissez la vitesse et l'inclinaison du tapis en allure extérieure équivalente",
+            url: "https://zoned.run/calculators/tapis-roulant",
+            applicationCategory: "SportsApplication",
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: isEn ? "Treadmill Converter" : "Convertisseur tapis roulant" },
+            ],
+          },
+        ]}
       />
       <div className="py-8 max-w-2xl mx-auto space-y-6">
         {/* Header */}

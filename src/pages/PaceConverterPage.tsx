@@ -201,19 +201,29 @@ export function PaceConverterPage() {
         }
         description={
           isEn
-            ? "Convert between min/km, km/h and min/mile in real time. See which training zone your pace falls in."
-            : "Convertissez entre min/km, km/h et min/mile en temps réel. Voyez dans quelle zone d'entraînement tombe votre allure."
+            ? "Free pace converter for runners. Convert between min/km, km/h and min/mile in real time with automatic training zone detection based on your VMA."
+            : "Convertisseur km/h min/km gratuit pour la course à pied. Convertissez vitesse et allure en temps réel avec détection automatique de zone d'entraînement."
         }
         canonical="/calculators/convertisseur"
-        jsonLd={{
-          "@type": "WebApplication",
-          name: isEn ? "Pace Converter" : "Convertisseur d'allures",
-          description: isEn
-            ? "Convert between min/km, km/h and min/mile in real time"
-            : "Convertissez entre min/km, km/h et min/mile en temps réel",
-          url: "https://zoned.run/calculators/convertisseur",
-          applicationCategory: "SportsApplication",
-        }}
+        jsonLd={[
+          {
+            "@type": "WebApplication",
+            name: isEn ? "Pace Converter" : "Convertisseur d'allures",
+            description: isEn
+              ? "Convert between min/km, km/h and min/mile in real time"
+              : "Convertissez entre min/km, km/h et min/mile en temps réel",
+            url: "https://zoned.run/calculators/convertisseur",
+            applicationCategory: "SportsApplication",
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: isEn ? "Pace Converter" : "Convertisseur d'allures" },
+            ],
+          },
+        ]}
       />
       <div className="py-8">
         {/* Header */}

@@ -132,19 +132,29 @@ export function PaceTablePage() {
         }
         description={
           isEn
-            ? "Complete pace reference table from 3:00 to 10:00/km with estimated race times for 5K, 10K, half-marathon and marathon."
-            : "Table de référence complète des allures de 3:00 à 10:00/km avec temps estimés pour 5K, 10K, semi-marathon et marathon."
+            ? "Complete pace reference table from 3:00 to 10:00/km with speed zones and estimated race times for 5K, 10K, half-marathon and marathon distances."
+            : "Tableau d'allures VMA complet de 3:00 à 10:00/km avec vitesse par zone et temps estimés pour 5K, 10K, semi-marathon et marathon. Référence coureur."
         }
         canonical="/calculators/table-allures"
-        jsonLd={{
-          "@type": "WebApplication",
-          name: isEn ? "Pace Reference Table" : "Table de référence des allures",
-          description: isEn
-            ? "Complete pace reference table from 3:00 to 10:00/km with estimated race times"
-            : "Table de référence complète des allures de 3:00 à 10:00/km avec temps estimés",
-          url: "https://zoned.run/calculators/table-allures",
-          applicationCategory: "SportsApplication",
-        }}
+        jsonLd={[
+          {
+            "@type": "WebApplication",
+            name: isEn ? "Pace Reference Table" : "Table de référence des allures",
+            description: isEn
+              ? "Complete pace reference table from 3:00 to 10:00/km with estimated race times"
+              : "Table de référence complète des allures de 3:00 à 10:00/km avec temps estimés",
+            url: "https://zoned.run/calculators/table-allures",
+            applicationCategory: "SportsApplication",
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: isEn ? "Pace Reference Table" : "Table de référence" },
+            ],
+          },
+        ]}
       />
       <div className="py-8">
         {/* Header */}

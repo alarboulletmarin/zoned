@@ -157,21 +157,31 @@ export function RaceEquivalencePage() {
         }
         description={
           isEn
-            ? "Predict your race times across all distances from a recent result. Riegel formula."
-            : "Pr\u00e9disez vos temps de course sur toutes les distances \u00e0 partir d'un r\u00e9sultat r\u00e9cent. Formule de Riegel."
+            ? "Race time equivalence calculator using the Riegel formula. Predict your finish times across 5K, 10K, half marathon, and marathon from one race result."
+            : "Équivalence temps de course entre distances avec la formule de Riegel. Prédiction de chronos du 5K au marathon à partir d'un résultat récent. Gratuit."
         }
         canonical="/calculators/equivalence"
-        jsonLd={{
-          "@type": "WebApplication",
-          name: isEn
-            ? "Race Equivalence Calculator"
-            : "Calculateur d'\u00e9quivalence de course",
-          description: isEn
-            ? "Predict your race times across all distances from a recent result"
-            : "Pr\u00e9disez vos temps de course sur toutes les distances",
-          url: "https://zoned.run/calculators/equivalence",
-          applicationCategory: "SportsApplication",
-        }}
+        jsonLd={[
+          {
+            "@type": "WebApplication",
+            name: isEn
+              ? "Race Equivalence Calculator"
+              : "Calculateur d'\u00e9quivalence de course",
+            description: isEn
+              ? "Predict your race times across all distances from a recent result"
+              : "Pr\u00e9disez vos temps de course sur toutes les distances",
+            url: "https://zoned.run/calculators/equivalence",
+            applicationCategory: "SportsApplication",
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: isEn ? "Race Equivalence" : "\u00c9quivalence entre distances" },
+            ],
+          },
+        ]}
       />
       <div className="py-8 max-w-2xl mx-auto">
         {/* Header */}

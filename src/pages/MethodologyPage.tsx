@@ -304,14 +304,23 @@ export function MethodologyPage() {
             : "Les fondements scientifiques du système d'entraînement à 6 zones de Zoned. Basé sur la recherche en sciences du sport."
         }
         canonical="/methodology"
-        jsonLd={{
-          "@type": "WebPage",
-          name: isEn ? "Methodology" : "Méthodologie",
-          url: "https://zoned.run/methodology",
-          description: isEn
-            ? "The scientific foundations behind Zoned's 6-zone training system."
-            : "Les fondements scientifiques du système d'entraînement à 6 zones de Zoned.",
-        }}
+        jsonLd={[
+          {
+            "@type": "WebPage",
+            name: isEn ? "Methodology" : "Méthodologie",
+            url: "https://zoned.run/methodology",
+            description: isEn
+              ? "The scientific foundations behind Zoned's 6-zone training system."
+              : "Les fondements scientifiques du système d'entraînement à 6 zones de Zoned.",
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: isEn ? "Methodology" : "Méthodologie" },
+            ],
+          },
+        ]}
       />
 
       <div className="py-8 space-y-12 max-w-4xl mx-auto">

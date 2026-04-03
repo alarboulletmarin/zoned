@@ -14,14 +14,23 @@ export function AboutPage() {
           ? "Learn about Zoned, an open-source running workout library with zone-based training."
           : "Découvrez Zoned, une bibliothèque open-source de séances de course à pied basée sur les zones."}
         canonical="/about"
-        jsonLd={{
-          "@type": "Organization",
-          name: "Zoned",
-          url: "https://zoned.run",
-          description: isEn
-            ? "An open-source running workout library with zone-based training."
-            : "Une bibliothèque open-source de séances de course à pied basée sur les zones.",
-        }}
+        jsonLd={[
+          {
+            "@type": "Organization",
+            name: "Zoned",
+            url: "https://zoned.run",
+            description: isEn
+              ? "An open-source running workout library with zone-based training."
+              : "Une bibliothèque open-source de séances de course à pied basée sur les zones.",
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: isEn ? "About" : "À propos" },
+            ],
+          },
+        ]}
       />
 
       <div className="space-y-12 md:space-y-16 py-10 md:py-14">
