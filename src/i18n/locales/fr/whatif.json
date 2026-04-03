@@ -1,0 +1,79 @@
+{
+  "title": "Simulateur What-If",
+  "subtitle": "Comparez deux scénarios d'entraînement et visualisez les différences",
+  "shared": {
+    "title": "Profil coureur",
+    "distance": "Distance de course",
+    "level": "Niveau",
+    "currentKm": "Volume actuel (km/sem)",
+    "currentKmHelp": "Combien de km cours-tu par semaine actuellement ?",
+    "currentLongRun": "Sortie longue actuelle (km)",
+    "currentLongRunHelp": "Ta plus longue sortie des 2-3 dernières semaines"
+  },
+  "scenario": {
+    "a": "Scénario A",
+    "b": "Scénario B",
+    "daysPerWeek": "Séances par semaine",
+    "goal": "Objectif",
+    "goalFinish": "Finir",
+    "goalTime": "Temps",
+    "goalCompete": "Performer",
+    "weeks": "Durée du plan (semaines)"
+  },
+  "presets": {
+    "title": "Comparaisons rapides",
+    "frequency": "3× vs 5×/sem",
+    "goal": "Finir vs Performer",
+    "duration": "10 vs 16 semaines"
+  },
+  "actions": {
+    "compare": "Comparer les scénarios",
+    "comparing": "Génération en cours...",
+    "save": "Sauvegarder",
+    "load": "Charger",
+    "delete": "Supprimer",
+    "savedScenarios": "Scénarios sauvegardés",
+    "noSaved": "Aucun scénario sauvegardé",
+    "scenarioName": "Nom du scénario"
+  },
+  "results": {
+    "title": "Comparaison",
+    "metric": "Métrique",
+    "delta": "Différence",
+    "peakVolume": "Volume pic (km/sem)",
+    "totalKm": "Km totaux",
+    "avgTimePerWeek": "Temps moyen/semaine",
+    "keySessions": "Séances clés",
+    "peakLongRun": "Sortie longue pic",
+    "recoveryWeeks": "Semaines de récupération",
+    "totalSessions": "Nombre total de séances",
+    "volumeProgression": "Progression du volume",
+    "zoneDistribution": "Répartition des zones",
+    "week": "Sem."
+  },
+  "insights": {
+    "title": "Ce que ça change concrètement",
+    "moreAerobicStimulus": "Stimulus aérobie plus élevé (+{{minutes}} min/sem en Z1-Z2)",
+    "moreIntensity": "Plus de travail d'intensité (+{{minutes}} min/sem en zones hautes)",
+    "moreKeySessions": "+{{count}} séances clés sur l'ensemble du plan (tempo, seuil, VMA)",
+    "moreTimeCommitment": "+{{hours}}h/semaine d'entraînement en moyenne",
+    "lessTimeCommitment": "{{hours}}h/semaine d'entraînement en moins",
+    "moreRecovery": "{{count}} semaines de récupération supplémentaires",
+    "lessRecovery": "{{count}} semaines de récupération en moins",
+    "higherPeakVolume": "Volume pic plus élevé : {{km}} km/sem (vs {{kmA}} km/sem)",
+    "volumeJumpWarning": "Attention : le pic de volume du scénario B est {{percent}}% plus élevé. Assure-toi que la progression est réaliste.",
+    "longerLongRun": "Sortie longue pic : {{km}} km (vs {{kmA}} km)",
+    "sameLongRun": "Sortie longue pic identique dans les deux scénarios"
+  },
+  "disclaimer": {
+    "title": "Limites du modèle",
+    "text": "Ce simulateur compare les structures de plan, pas les performances. Les différences montrées sont basées sur les paramètres d'entrée et les règles du générateur de plans. Elles ne prédisent pas de résultat de course ni de gain de temps. Chaque coureur est unique — ces données sont un outil d'aide à la décision, pas une garantie.",
+    "variability": "Les séances spécifiques sont choisies avec une part d'aléatoire pour la variété. Les valeurs peuvent légèrement varier entre deux comparaisons, mais les tendances restent les mêmes."
+  },
+  "levels": {
+    "beginner": "Débutant",
+    "intermediate": "Intermédiaire",
+    "advanced": "Avancé",
+    "elite": "Élite"
+  }
+}

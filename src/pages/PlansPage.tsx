@@ -10,6 +10,7 @@ import {
   Trash2,
   Download,
   FlaskConical,
+  Scale,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -297,16 +298,28 @@ export function PlansPage() {
                 ? "Structured plans to reach your race goals"
                 : "Des plans structurés pour atteindre vos objectifs"}
             </p>
-            <Link
-              to="/plans/methodology"
-              className="mt-2 inline-flex items-center gap-2 rounded-lg border border-border/60 bg-muted/40 px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted/70 hover:text-foreground transition-colors"
-            >
-              <FlaskConical className="size-3.5 text-primary" />
-              {isEn
-                ? "Discover the science behind your plans"
-                : "Découvrir la science derrière vos plans"}
-              <ArrowRight className="size-3.5" />
-            </Link>
+            <div className="flex flex-wrap gap-2 mt-2">
+              <Link
+                to="/plans/methodology"
+                className="inline-flex items-center gap-2 rounded-lg border border-border/60 bg-muted/40 px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted/70 hover:text-foreground transition-colors"
+              >
+                <FlaskConical className="size-3.5 text-primary" />
+                {isEn
+                  ? "The science behind your plans"
+                  : "La science derrière vos plans"}
+                <ArrowRight className="size-3.5" />
+              </Link>
+              <Link
+                to="/calculators/what-if"
+                className="inline-flex items-center gap-2 rounded-lg border border-border/60 bg-muted/40 px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted/70 hover:text-foreground transition-colors"
+              >
+                <Scale className="size-3.5 text-primary" />
+                {isEn
+                  ? "What-if simulator"
+                  : "Simulateur what-if"}
+                <ArrowRight className="size-3.5" />
+              </Link>
+            </div>
           </div>
           {plans.length >= 5 ? (
             <p className="text-sm text-muted-foreground">

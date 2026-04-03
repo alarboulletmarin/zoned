@@ -1,0 +1,79 @@
+{
+  "title": "What-If Simulator",
+  "subtitle": "Compare two training scenarios and visualize the differences",
+  "shared": {
+    "title": "Runner Profile",
+    "distance": "Race distance",
+    "level": "Level",
+    "currentKm": "Current volume (km/week)",
+    "currentKmHelp": "How many km do you currently run per week?",
+    "currentLongRun": "Current long run (km)",
+    "currentLongRunHelp": "Your longest run in the last 2-3 weeks"
+  },
+  "scenario": {
+    "a": "Scenario A",
+    "b": "Scenario B",
+    "daysPerWeek": "Sessions per week",
+    "goal": "Goal",
+    "goalFinish": "Finish",
+    "goalTime": "Time",
+    "goalCompete": "Compete",
+    "weeks": "Plan duration (weeks)"
+  },
+  "presets": {
+    "title": "Quick comparisons",
+    "frequency": "3x vs 5x/week",
+    "goal": "Finish vs Compete",
+    "duration": "10 vs 16 weeks"
+  },
+  "actions": {
+    "compare": "Compare scenarios",
+    "comparing": "Generating...",
+    "save": "Save",
+    "load": "Load",
+    "delete": "Delete",
+    "savedScenarios": "Saved scenarios",
+    "noSaved": "No saved scenarios",
+    "scenarioName": "Scenario name"
+  },
+  "results": {
+    "title": "Comparison",
+    "metric": "Metric",
+    "delta": "Difference",
+    "peakVolume": "Peak volume (km/week)",
+    "totalKm": "Total km",
+    "avgTimePerWeek": "Avg. time/week",
+    "keySessions": "Key sessions",
+    "peakLongRun": "Peak long run",
+    "recoveryWeeks": "Recovery weeks",
+    "totalSessions": "Total sessions",
+    "volumeProgression": "Volume progression",
+    "zoneDistribution": "Zone distribution",
+    "week": "Wk."
+  },
+  "insights": {
+    "title": "What it actually changes",
+    "moreAerobicStimulus": "Higher aerobic stimulus (+{{minutes}} min/week in Z1-Z2)",
+    "moreIntensity": "More intensity work (+{{minutes}} min/week in higher zones)",
+    "moreKeySessions": "+{{count}} key sessions across the plan (tempo, threshold, VO2max)",
+    "moreTimeCommitment": "+{{hours}}h/week of training on average",
+    "lessTimeCommitment": "{{hours}}h/week less training",
+    "moreRecovery": "{{count}} additional recovery weeks",
+    "lessRecovery": "{{count}} fewer recovery weeks",
+    "higherPeakVolume": "Higher peak volume: {{km}} km/week (vs {{kmA}} km/week)",
+    "volumeJumpWarning": "Warning: scenario B peak volume is {{percent}}% higher. Make sure the progression is realistic.",
+    "longerLongRun": "Peak long run: {{km}} km (vs {{kmA}} km)",
+    "sameLongRun": "Peak long run is the same in both scenarios"
+  },
+  "disclaimer": {
+    "title": "Model limitations",
+    "text": "This simulator compares plan structures, not performance. The differences shown are based on input parameters and plan generator rules. They do not predict race results or time gains. Every runner is unique — this data is a decision-making tool, not a guarantee.",
+    "variability": "Specific workouts are selected with some randomness for variety. Values may vary slightly between comparisons, but trends remain the same."
+  },
+  "levels": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "elite": "Elite"
+  }
+}

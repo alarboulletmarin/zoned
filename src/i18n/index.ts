@@ -23,6 +23,9 @@ import enGuides from "./locales/en/guides.json";
 import frSimulator from "./locales/fr/simulator.json";
 import enSimulator from "./locales/en/simulator.json";
 
+import frWhatif from "./locales/fr/whatif.json";
+import enWhatif from "./locales/en/whatif.json";
+
 // Resources object
 const resources = {
   fr: {
@@ -34,6 +37,7 @@ const resources = {
     plan: frPlan,
     guides: frGuides,
     simulator: frSimulator,
+    whatif: frWhatif,
   },
   en: {
     common: enCommon,
@@ -44,6 +48,7 @@ const resources = {
     plan: enPlan,
     guides: enGuides,
     simulator: enSimulator,
+    whatif: enWhatif,
   },
 };
 
@@ -57,7 +62,7 @@ i18n
     resources,
     fallbackLng: "fr",
     defaultNS: "common",
-    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides", "simulator"],
+    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "whatif"],
 
     // Detection options
     detection: {

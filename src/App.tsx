@@ -51,6 +51,7 @@ const WarmupGuidePage = lazy(() => import("@/pages/WarmupGuidePage").then(m => (
 const PaceConverterPage = lazy(() => import("@/pages/PaceConverterPage").then(m => ({ default: m.PaceConverterPage })));
 const PaceTablePage = lazy(() => import("@/pages/PaceTablePage").then(m => ({ default: m.PaceTablePage })));
 const AgeGradedPage = lazy(() => import("@/pages/AgeGradedPage").then(m => ({ default: m.AgeGradedPage })));
+const WhatIfPage = lazy(() => import("@/pages/WhatIfPage").then(m => ({ default: m.WhatIfPage })));
 const WorkoutBuilderPage = lazy(() => import("@/pages/WorkoutBuilderPage").then(m => ({ default: m.WorkoutBuilderPage })));
 const RaceSimulatorPage = lazy(() => import("@/pages/RaceSimulatorPage").then(m => ({ default: m.RaceSimulatorPage })));
 const CompareHubPage = lazy(() => import("@/pages/CompareHubPage").then(m => ({ default: m.CompareHubPage })));
@@ -204,6 +205,7 @@ function App() {
                           <Route path="/calculators/vma" element={<VmaCalculatorPage />} />
                           <Route path="/calculators/equivalence" element={<RaceEquivalencePage />} />
                           <Route path="/calculators/age-graded" element={<AgeGradedPage />} />
+                          <Route path="/calculators/what-if" element={<WhatIfPage />} />
                           <Route path="/settings" element={<SettingsPage />} />
                           <Route path="/favorites" element={<FavoritesPage />} />
                           <Route path="/quiz" element={<QuizPage />} />

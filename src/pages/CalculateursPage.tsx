@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Target, Gauge, RefreshCw, Route, Timer, ArrowRight, List, Shuffle, Star, Flag } from "@/components/icons";
+import { Target, Gauge, RefreshCw, Route, Timer, ArrowRight, List, Shuffle, Star, Flag, Scale } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
@@ -127,6 +127,18 @@ const CALCULATEURS: CalculateurEntry[] = [
     gradient: "from-zone-4/10 dark:from-zone-4/20",
     iconBg: "bg-zone-4/15",
     iconColor: "text-zone-4",
+  },
+  {
+    id: "what-if",
+    icon: Scale,
+    title: "Simulateur What-If",
+    titleEn: "What-If Simulator",
+    description: "Comparez deux scénarios d'entraînement et visualisez les différences",
+    descriptionEn: "Compare two training scenarios and visualize the differences",
+    href: "/calculators/what-if",
+    gradient: "from-primary/10 dark:from-primary/20",
+    iconBg: "bg-primary/15",
+    iconColor: "text-primary",
   },
 ];
 
