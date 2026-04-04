@@ -200,7 +200,10 @@
       "saved": "Saved",
       "clear": "Clear",
       "invalidFcMax": "Max HR must be between 100 and 250 bpm",
-      "invalidVma": "VMA must be between 8 and 30 km/h"
+      "invalidVma": "VMA must be between 8 and 30 km/h",
+      "sensation": "Sensation",
+      "benefit": "Benefit",
+      "exampleWorkouts": "Example workouts"
     },
     "paceCalculator": {
       "title": "Pace Calculator",

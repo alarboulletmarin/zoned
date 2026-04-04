@@ -57,7 +57,50 @@ export function FavoritesPage() {
         </div>
       ) : (
         <div className="text-center py-16 space-y-4">
-          <Heart className="size-16 mx-auto text-muted-foreground/30" />
+          {/* Animated beating heart SVG */}
+          <div className="mx-auto w-16 h-16">
+            <svg
+              viewBox="0 0 64 64"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-full h-full"
+              aria-hidden="true"
+            >
+              <defs>
+                <style>{`
+                  @keyframes fav-heartbeat {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.08); }
+                  }
+                  @media (prefers-reduced-motion: reduce) {
+                    .fav-heart-group { animation: none !important; }
+                  }
+                `}</style>
+              </defs>
+              <g
+                className="fav-heart-group"
+                style={{
+                  transformOrigin: "32px 30px",
+                  animation: "fav-heartbeat 3s ease-in-out infinite",
+                }}
+              >
+                <path
+                  d="M32 50 C32 50, 12 36, 12 22 C12 16, 17 10, 23 10 C27 10, 30 12, 32 16 C34 12, 37 10, 41 10 C47 10, 52 16, 52 22 C52 36, 32 50, 32 50Z"
+                  fill="var(--zone-5)"
+                  opacity="0.3"
+                />
+                <path
+                  d="M32 50 C32 50, 12 36, 12 22 C12 16, 17 10, 23 10 C27 10, 30 12, 32 16 C34 12, 37 10, 41 10 C47 10, 52 16, 52 22 C52 36, 32 50, 32 50Z"
+                  fill="none"
+                  stroke="var(--zone-5)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  opacity="0.5"
+                />
+              </g>
+            </svg>
+          </div>
           <div className="space-y-2">
             <p className="text-lg font-medium">
               {isEn ? "No favorites yet" : "Pas encore de favoris"}
@@ -65,7 +108,7 @@ export function FavoritesPage() {
             <p className="text-muted-foreground max-w-md mx-auto">
               {isEn
                 ? "Browse the library and tap the heart icon to save your favorite workouts here."
-                : "Parcourez la bibliothèque et appuyez sur l'icône cœur pour sauvegarder vos séances préférées ici."}
+                : "Parcourez la biblioth\u00e8que et appuyez sur l'ic\u00f4ne c\u0153ur pour sauvegarder vos s\u00e9ances pr\u00e9f\u00e9r\u00e9es ici."}
             </p>
           </div>
           <Button asChild className="mt-4">

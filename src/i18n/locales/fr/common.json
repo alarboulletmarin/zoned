@@ -200,7 +200,10 @@
       "saved": "Sauvegardé",
       "clear": "Effacer",
       "invalidFcMax": "FCmax doit être entre 100 et 250 bpm",
-      "invalidVma": "VMA doit être entre 8 et 30 km/h"
+      "invalidVma": "VMA doit être entre 8 et 30 km/h",
+      "sensation": "Sensation",
+      "benefit": "Bénéfice",
+      "exampleWorkouts": "Exemples de séances"
     },
     "paceCalculator": {
       "title": "Calculateur d'Allures",

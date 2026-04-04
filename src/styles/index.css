@@ -500,6 +500,7 @@
   transform: scale(1.05);
 }
 
+
 /* Intensity accent bar - gradient of all zones */
 .intensity-bar {
   height: 3px;
@@ -658,5 +659,39 @@
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none;
+  }
+}
+
+/* ==========================================================================
+   SKELETON LOADING — zone-shimmer variant
+   ========================================================================== */
+
+@keyframes zone-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.zone-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--zone-1),
+    var(--zone-2),
+    var(--zone-3),
+    var(--zone-4),
+    var(--zone-5),
+    var(--zone-6),
+    var(--zone-1)
+  );
+  background-size: 600% 100%;
+  opacity: 0.35;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .zone-shimmer {
+    animation: zone-shimmer 3s ease-in-out infinite alternate;
   }
 }

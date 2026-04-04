@@ -45,6 +45,7 @@ import type { WorkoutTemplate } from "@/types";
 import { toast } from "sonner";
 import { IcsExportDialog } from "@/components/domain/IcsExportDialog";
 import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
+import { CompletionFeedbackCard } from "@/components/domain/CompletionFeedbackCard";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanWeeklyView } from "@/components/domain/PlanWeeklyView";
 import { PlanMonthlyView } from "@/components/domain/PlanMonthlyView";
@@ -1335,7 +1336,7 @@ export function PlanViewPage() {
         />
       </div>
 
-      {/* RPE picker — fixed bottom bar, always visible above content */}
+      {/* Post-completion feedback overlay */}
       {rpePrompt && (() => {
         const rpeWeek = plan.weeks.find(w => w.weekNumber === rpePrompt.weekNumber);
         const rpeSession = rpeWeek?.sessions[rpePrompt.sessionIndex];
@@ -1343,63 +1344,23 @@ export function PlanViewPage() {
 
         return (
           <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-4 px-4 pointer-events-none">
-            <div className="pointer-events-auto w-full max-w-md rounded-xl bg-card/95 backdrop-blur-sm border border-border shadow-lg p-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
-              {/* Session info */}
-              <div className="text-center mb-2">
-                <p className="text-xs text-muted-foreground">
-                  RPE · {isEn ? "Rate of Perceived Effort" : "Effort ressenti"}
-                </p>
-                <p className="text-sm font-medium truncate">
-                  <span className="text-muted-foreground font-normal">S{rpePrompt.weekNumber}</span>
-                  {" · "}
-                  {rpeName}
-                </p>
-              </div>
-
-              {/* RPE buttons */}
-              <div className="flex gap-1 justify-center">
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((rpe) => (
-                  <button
-                    key={rpe}
-                    type="button"
-                    onClick={() => {
-                      updateSessionCompletion(plan.id, rpePrompt.weekNumber, rpePrompt.sessionIndex, {
-                        status: "completed",
-                        completedAt: new Date().toISOString(),
-                        rpe,
-                      });
-                      reloadPlan();
-                      setRpePrompt(null);
-                    }}
-                    className={cn(
-                      "size-8 sm:size-9 rounded-lg text-sm font-semibold transition-all active:scale-95",
-                      rpe <= 3 && "bg-green-500/15 hover:bg-green-500/25 text-green-700 dark:text-green-400",
-                      rpe >= 4 && rpe <= 6 && "bg-yellow-500/15 hover:bg-yellow-500/25 text-yellow-700 dark:text-yellow-400",
-                      rpe >= 7 && rpe <= 8 && "bg-orange-500/15 hover:bg-orange-500/25 text-orange-700 dark:text-orange-400",
-                      rpe >= 9 && "bg-red-500/15 hover:bg-red-500/25 text-red-700 dark:text-red-400",
-                    )}
-                  >
-                    {rpe}
-                  </button>
-                ))}
-              </div>
-
-              {/* RPE scale legend */}
-              <div className="flex justify-between px-1 mt-1">
-                <span className="text-[10px] text-green-600 dark:text-green-400">{isEn ? "Easy" : "Facile"}</span>
-                <span className="text-[10px] text-yellow-600 dark:text-yellow-400">{isEn ? "Moderate" : "Modéré"}</span>
-                <span className="text-[10px] text-orange-600 dark:text-orange-400">{isEn ? "Hard" : "Dur"}</span>
-                <span className="text-[10px] text-red-600 dark:text-red-400">Max</span>
-              </div>
-
-              {/* Skip button */}
-              <button
-                type="button"
-                onClick={() => setRpePrompt(null)}
-                className="w-full mt-1.5 text-xs text-muted-foreground hover:text-foreground text-center py-1 transition-colors"
-              >
-                {isEn ? "Skip" : "Passer"}
-              </button>
+            <div className="pointer-events-auto w-full max-w-sm">
+              <CompletionFeedbackCard
+                sessionType={rpeSession?.sessionType ?? "endurance"}
+                sessionName={rpeName}
+                weekNumber={rpePrompt.weekNumber}
+                isEn={isEn}
+                onSave={(rpe) => {
+                  updateSessionCompletion(plan.id, rpePrompt.weekNumber, rpePrompt.sessionIndex, {
+                    status: "completed",
+                    completedAt: new Date().toISOString(),
+                    rpe,
+                  });
+                  reloadPlan();
+                  setRpePrompt(null);
+                }}
+                onSkip={() => setRpePrompt(null)}
+              />
             </div>
           </div>
         );

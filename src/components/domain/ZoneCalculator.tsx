@@ -1,6 +1,7 @@
-import { useState, useEffect, type ChangeEvent } from "react";
+import { useState, useEffect, useMemo, useCallback, type ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { Save, Trash2, Heart, Gauge } from "@/components/icons";
+import { Link } from "react-router-dom";
+import { Save, Trash2, Heart, Gauge, ChevronDown, Dumbbell } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,7 +11,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { ZONE_META, type ZoneNumber, type UserZonePreferences } from "@/types";
+import {
+  ZONE_META,
+  getDominantZone,
+  type ZoneNumber,
+  type UserZonePreferences,
+  type WorkoutTemplate,
+} from "@/types";
 import {
   calculateAllZones,
   formatPace,
@@ -20,16 +27,57 @@ import {
 } from "@/lib/zones";
 import { useSettings } from "@/hooks/useSettings";
 import { convertPace, getSpeedUnit, getPaceUnit } from "@/lib/units";
+import { useWorkouts } from "@/hooks/useWorkouts";
+import { useIsMobile } from "@/hooks/useIsMobile";
+
+/** Max example workouts shown per zone (desktop / mobile) */
+const MAX_EXAMPLES = 3;
+const MAX_EXAMPLES_MOBILE = 2;
+
+/**
+ * Build a map from ZoneNumber to up to MAX_EXAMPLES workout examples.
+ * Uses getDominantZone to classify each workout, then picks the first
+ * MAX_EXAMPLES per zone (deterministic order from data files).
+ */
+function buildZoneWorkoutMap(
+  workouts: WorkoutTemplate[]
+): Record<ZoneNumber, WorkoutTemplate[]> {
+  const map: Record<ZoneNumber, WorkoutTemplate[]> = {
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: [],
+    6: [],
+  };
+
+  for (const w of workouts) {
+    // Skip custom workouts (no stable route)
+    if (w.id.startsWith("CUSTOM-")) continue;
+    const zone = getDominantZone(w);
+    if (map[zone].length < MAX_EXAMPLES) {
+      map[zone].push(w);
+    }
+  }
+
+  return map;
+}
 
 export function ZoneCalculator() {
   const { t, i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const { settings } = useSettings();
   const unit = settings.unitSystem;
+  const isMobile = useIsMobile();
 
   const [fcMax, setFcMax] = useState<string>("");
   const [vma, setVma] = useState<string>("");
   const [saved, setSaved] = useState(false);
+  const [expandedZone, setExpandedZone] = useState<ZoneNumber | null>(null);
+
+  // Load workouts for example links
+  const { workouts } = useWorkouts();
+  const zoneWorkouts = useMemo(() => buildZoneWorkoutMap(workouts), [workouts]);
 
   // Validation helpers
   const parsedFcMax = fcMax ? parseFloat(fcMax) : undefined;
@@ -80,6 +128,10 @@ export function ZoneCalculator() {
     setVma("");
     setSaved(false);
   };
+
+  const toggleZone = useCallback((zone: ZoneNumber) => {
+    setExpandedZone((prev) => (prev === zone ? null : zone));
+  }, []);
 
   return (
     <Card>
@@ -163,70 +215,175 @@ export function ZoneCalculator() {
           </div>
         </div>
 
-        {/* Zone Table */}
+        {/* Zone Table with Accordion Panels */}
         {hasValues && (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b">
-                  <th className="py-2 px-3 text-left font-medium">
-                    {t("myZones.zoneCalculator.zone")}
-                  </th>
-                  {prefs.fcMax && (
-                    <th className="py-2 px-3 text-left font-medium">
-                      {t("myZones.zoneCalculator.heartRate")}
-                    </th>
-                  )}
-                  {prefs.vma && (
-                    <th className="py-2 px-3 text-left font-medium">
-                      {t("myZones.zoneCalculator.pace")}
-                    </th>
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {zones.map((z) => {
-                  const meta = ZONE_META[z.zone as ZoneNumber];
-                  return (
-                    <tr
-                      key={z.zone}
-                      className={cn(
-                        "border-b last:border-b-0",
-                        `bg-${meta.color}/10`
-                      )}
-                    >
-                      <td className="py-2 px-3">
+          <div className="space-y-0 overflow-hidden">
+            {/* Header row -- hidden on mobile where zone rows stack vertically */}
+            <div className="hidden sm:grid grid-cols-[1fr_auto_auto_32px] items-center border-b px-3 py-2 text-sm font-medium">
+              <span>{t("myZones.zoneCalculator.zone")}</span>
+              {prefs.fcMax && (
+                <span className="min-w-[110px] text-left">
+                  {t("myZones.zoneCalculator.heartRate")}
+                </span>
+              )}
+              {prefs.vma && (
+                <span className="min-w-[130px] text-left">
+                  {t("myZones.zoneCalculator.pace")}
+                </span>
+              )}
+              {/* Spacer for chevron column */}
+              <span />
+            </div>
+
+            {zones.map((z) => {
+              const meta = ZONE_META[z.zone as ZoneNumber];
+              const zoneNum = z.zone as ZoneNumber;
+              const isExpanded = expandedZone === zoneNum;
+              const examples = zoneWorkouts[zoneNum];
+
+              return (
+                <div key={z.zone} className="border-b last:border-b-0">
+                  {/* Zone row (clickable) */}
+                  <button
+                    type="button"
+                    onClick={() => toggleZone(zoneNum)}
+                    aria-expanded={isExpanded}
+                    aria-controls={`zone-panel-${zoneNum}`}
+                    className={cn(
+                      // Mobile: flex column with chevron in top-right corner
+                      // Desktop: 4-column grid
+                      "w-full px-3 py-2 text-left text-xs sm:text-sm transition-colors duration-150",
+                      "hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset",
+                      "flex flex-col gap-1 sm:grid sm:grid-cols-[1fr_auto_auto_32px] sm:items-center sm:gap-0",
+                      `bg-${meta.color}/10`
+                    )}
+                  >
+                    {/* Zone label + chevron row */}
+                    <span className="flex items-center justify-between min-w-0">
+                      <span
+                        className={cn(
+                          "inline-flex items-center gap-2 font-medium min-w-0",
+                          `text-${meta.color}`
+                        )}
+                      >
                         <span
                           className={cn(
-                            "inline-flex items-center gap-2 font-medium",
-                            `text-${meta.color}`
+                            "size-3 shrink-0 rounded-full",
+                            `bg-${meta.color}`
                           )}
-                        >
-                          <span
-                            className={cn(
-                              "size-3 rounded-full",
-                              `bg-${meta.color}`
-                            )}
-                          />
+                        />
+                        <span className="truncate">
                           Z{z.zone} - {isEn ? meta.labelEn : meta.label}
                         </span>
-                      </td>
-                      {prefs.fcMax && (
-                        <td className="py-2 px-3 tabular-nums">
-                          {z.hrMin}-{z.hrMax} bpm
-                        </td>
-                      )}
-                      {prefs.vma && (
-                        <td className="py-2 px-3 tabular-nums">
-                          {formatPace(convertPace(z.paceMinPerKm!, unit))}-
-                          {formatPace(convertPace(z.paceMaxPerKm!, unit))} {getPaceUnit(unit)}
-                        </td>
-                      )}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                      </span>
+                      {/* Chevron visible only on mobile (inline with label) */}
+                      <span className="flex items-center justify-center sm:hidden">
+                        <ChevronDown
+                          className={cn(
+                            "size-4 text-muted-foreground transition-transform duration-300",
+                            isExpanded && "rotate-180"
+                          )}
+                        />
+                      </span>
+                    </span>
+
+                    {/* HR & pace values -- stacked on mobile, inline on desktop */}
+                    {(prefs.fcMax || prefs.vma) && (
+                      <span className="flex flex-wrap gap-x-3 gap-y-0.5 pl-5 sm:contents sm:pl-0">
+                        {prefs.fcMax && (
+                          <span className="tabular-nums text-foreground sm:min-w-[110px]">
+                            {z.hrMin}-{z.hrMax} bpm
+                          </span>
+                        )}
+                        {prefs.vma && (
+                          <span className="tabular-nums text-foreground sm:min-w-[130px]">
+                            {formatPace(convertPace(z.paceMinPerKm!, unit))}-
+                            {formatPace(convertPace(z.paceMaxPerKm!, unit))} {getPaceUnit(unit)}
+                          </span>
+                        )}
+                      </span>
+                    )}
+
+                    {/* Chevron visible only on desktop (grid column) */}
+                    <span className="hidden sm:flex items-center justify-center">
+                      <ChevronDown
+                        className={cn(
+                          "size-4 text-muted-foreground transition-transform duration-300",
+                          isExpanded && "rotate-180"
+                        )}
+                      />
+                    </span>
+                  </button>
+
+                  {/* Expandable panel */}
+                  <div
+                    id={`zone-panel-${zoneNum}`}
+                    role="region"
+                    aria-labelledby={`zone-row-${zoneNum}`}
+                    className="grid transition-[grid-template-rows] duration-300 ease-in-out"
+                    style={{
+                      gridTemplateRows: isExpanded ? "1fr" : "0fr",
+                    }}
+                  >
+                    <div className="overflow-hidden">
+                      <div
+                        className={cn(
+                          "border-l-4 px-3 sm:px-4 py-3 space-y-2",
+                          `border-${meta.color}`
+                        )}
+                      >
+                        {/* Sensation */}
+                        <div>
+                          <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                            {t("myZones.zoneCalculator.sensation")}
+                          </span>
+                          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+                            {isEn ? meta.sensationEn : meta.sensation}
+                          </p>
+                        </div>
+
+                        {/* Benefit */}
+                        <div>
+                          <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                            {t("myZones.zoneCalculator.benefit")}
+                          </span>
+                          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+                            {isEn ? meta.benefitEn : meta.benefit}
+                          </p>
+                        </div>
+
+                        {/* Example workouts */}
+                        {examples.length > 0 && (
+                          <div>
+                            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-1.5">
+                              <Dumbbell className="size-3" />
+                              {t("myZones.zoneCalculator.exampleWorkouts")}
+                            </span>
+                            <ul className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 sm:flex-col sm:gap-x-0 sm:space-y-0.5">
+                              {examples
+                                .slice(0, isMobile ? MAX_EXAMPLES_MOBILE : MAX_EXAMPLES)
+                                .map((w) => (
+                                <li key={w.id}>
+                                  <Link
+                                    to={`/workout/${w.id}`}
+                                    className={cn(
+                                      "text-xs sm:text-sm underline-offset-2 hover:underline",
+                                      `text-${meta.color}`
+                                    )}
+                                  >
+                                    {isEn ? w.nameEn : w.name}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
 

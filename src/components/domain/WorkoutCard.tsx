@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -20,11 +21,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ZoneBadge } from "./ZoneBadge";
 import { FavoriteButton } from "./FavoriteButton";
-import { SessionIntensityBar } from "@/components/visualization";
+import {
+  SessionIntensityBar,
+  transformSessionBlocks,
+  getWorkoutDuration,
+} from "@/components/visualization";
+import type { ZoneNumber } from "@/components/visualization";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import type { WorkoutTemplate, WorkoutCategory } from "@/types";
 import { getDominantZone, DIFFICULTY_META } from "@/types";
-import { getWorkoutDuration } from "@/components/visualization";
 
 /** Category icons using Lucide */
 const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: string }>> = {
@@ -41,6 +47,15 @@ const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: 
   assessment: ClipboardCheck,
 };
 
+const ZONE_COLORS: Record<ZoneNumber, string> = {
+  1: "var(--zone-1)",
+  2: "var(--zone-2)",
+  3: "var(--zone-3)",
+  4: "var(--zone-4)",
+  5: "var(--zone-5)",
+  6: "var(--zone-6)",
+};
+
 interface WorkoutCardProps {
   workout: WorkoutTemplate;
   className?: string;
@@ -55,6 +70,26 @@ export function WorkoutCard({ workout, className, expanded }: WorkoutCardProps) 
   const CategoryIcon = CATEGORY_ICONS[workout.category];
   void DIFFICULTY_META[workout.difficulty];
 
+  const isMobile = useIsMobile();
+
+  // Compute segments for the peek preview (only when visible, but memoised for stability)
+  const peekData = useMemo(() => {
+    const { segments } = transformSessionBlocks(
+      {
+        warmup: workout.warmupTemplate ?? [],
+        mainSet: workout.mainSetTemplate,
+        cooldown: workout.cooldownTemplate ?? [],
+      },
+      isEn,
+    );
+    // First main-set block description for the one-line summary
+    const firstMain = workout.mainSetTemplate[0];
+    const summary = firstMain
+      ? (isEn ? (firstMain.descriptionEn ?? firstMain.description) : firstMain.description)
+      : null;
+    return { segments, summary };
+  }, [workout, isEn]);
+
   return (
     <Link to={`/workout/${workout.id}`}>
       <Card
@@ -63,7 +98,7 @@ export function WorkoutCard({ workout, className, expanded }: WorkoutCardProps) 
         className={cn(
           `zone-${dominantZone} bg-gradient-to-br from-zone-${dominantZone}/10 dark:from-zone-${dominantZone}/20 to-transparent`,
           "border-border/50",
-          "overflow-hidden",
+          "overflow-hidden h-full flex flex-col",
           className
         )}
       >
@@ -82,7 +117,7 @@ export function WorkoutCard({ workout, className, expanded }: WorkoutCardProps) 
           </p>
         </CardHeader>
 
-        <CardContent className={cn("px-3 sm:px-4 pt-0 space-y-2 sm:space-y-3", expanded && "px-4 space-y-3")}>
+        <CardContent className={cn("px-3 sm:px-4 pt-0 mt-auto space-y-2 sm:space-y-3", expanded && "px-4 space-y-3")}>
           {/* Intensity bar showing zone distribution */}
           <SessionIntensityBar workout={workout} />
 
@@ -115,6 +150,44 @@ export function WorkoutCard({ workout, className, expanded }: WorkoutCardProps) 
               </Badge>
             )}
           </div>
+
+          {/* Always-visible peek preview */}
+          {peekData.segments.length > 0 && (
+            <div className="border-t border-border/30 pt-2 mt-1 space-y-1.5">
+              {/* Compact session timeline bar */}
+              <div className={cn("flex items-end rounded-md overflow-hidden", isMobile ? "h-4" : "h-6")}>
+                {peekData.segments.map((seg, i) => {
+                  const zoneColor = seg.zoneNumber
+                    ? ZONE_COLORS[seg.zoneNumber]
+                    : "var(--muted-foreground)";
+                  const heightPct = seg.zoneNumber
+                    ? 30 + (seg.zoneNumber - 1) * 14
+                    : 40;
+                  return (
+                    <div
+                      key={seg.id}
+                      className={cn(
+                        "relative",
+                        seg.isRecovery && "opacity-50",
+                      )}
+                      style={{
+                        width: `${seg.widthPercent}%`,
+                        height: `${heightPct}%`,
+                        backgroundColor: zoneColor,
+                        marginLeft: i > 0 ? "1px" : undefined,
+                      }}
+                    />
+                  );
+                })}
+              </div>
+              {/* One-line summary of main set */}
+              {!isMobile && peekData.summary && (
+                <p className="text-xs text-muted-foreground truncate">
+                  {peekData.summary}
+                </p>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
     </Link>

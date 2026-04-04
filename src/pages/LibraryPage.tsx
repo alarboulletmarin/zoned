@@ -2,11 +2,13 @@ import { useMemo, useState, useEffect, useRef, useCallback } from "react";
 import { usePageHint } from "@/hooks/usePageHint";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Filter, Search, Heart, Loader2 } from "@/components/icons";
+import { Filter, Search, Loader2 } from "@/components/icons";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { useScrolledPast } from "@/hooks/useScrolledPast";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
-import { EmptyState } from "@/components/ui/empty-state";
 import {
   WorkoutCard,
   WorkoutCardCompact,
@@ -69,9 +71,11 @@ export function LibraryPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const { favorites } = useFavorites();
-  const { workouts: allWorkouts } = useWorkouts();
+  const { workouts: allWorkouts, isLoading } = useWorkouts();
   const { viewMode, setViewMode } = useViewMode();
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const filterSectionRef = useRef<HTMLDivElement>(null);
+  const filtersScrolledPast = useScrolledPast(filterSectionRef);
   const PAGE_SIZE = 24;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
@@ -311,7 +315,7 @@ export function LibraryPage() {
       />
       <div className="py-8">
         {/* Header */}
-      <div className="mb-8">
+      <div ref={filterSectionRef} className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold">{t("title")}</h1>
@@ -385,6 +389,70 @@ export function LibraryPage() {
         </div>
       </div>
 
+      {/* Sticky filter summary bar - appears when filters scroll out of view */}
+      {filtersScrolledPast && (
+        <div className="sticky top-12 z-40 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 py-2 bg-background/90 backdrop-blur-md border-b border-border/30 shadow-[0_1px_3px_rgba(0,0,0,0.1)] animate-in slide-in-from-top-2 fade-in duration-200">
+          <div className="flex items-center justify-between gap-3">
+            {/* Left: result count + active category badge */}
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="text-sm font-medium text-muted-foreground whitespace-nowrap">
+                {filteredWorkouts.length < allWorkouts.length
+                  ? `${filteredWorkouts.length} / ${allWorkouts.length}`
+                  : allWorkouts.length}{" "}
+                <span className="hidden sm:inline">
+                  {isEn ? "workouts" : "séances"}
+                </span>
+              </span>
+              {filters.category !== "all" && (
+                <Badge variant="secondary" className="text-xs hidden sm:inline-flex">
+                  {t(`categories.${filters.category}`)}
+                </Badge>
+              )}
+              {activeFiltersCount > 0 && (
+                <Badge variant="outline" className="text-xs hidden sm:inline-flex">
+                  {activeFiltersCount} {t("filters.activeFilters")}
+                </Badge>
+              )}
+            </div>
+
+            {/* Right: scroll-back button + filter button (mobile) + view mode */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={() =>
+                  filterSectionRef.current?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  })
+                }
+                aria-label={t("filters.searchLabel")}
+              >
+                <Search className="size-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={openMobileFilters}
+                className="lg:hidden relative"
+              >
+                <Filter className="size-4" />
+                {activeFiltersCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 size-4 rounded-full bg-primary text-primary-foreground text-[10px] flex items-center justify-center">
+                    {activeFiltersCount}
+                  </span>
+                )}
+              </Button>
+              <ViewModeSelector
+                value={viewMode}
+                onChange={setViewMode}
+                className="hidden sm:inline-flex"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex gap-8">
         {/* Sidebar Filters - Desktop */}
         <aside className="hidden lg:block w-64 shrink-0">
@@ -454,7 +522,34 @@ export function LibraryPage() {
 
         {/* Workout Display */}
         <div className="flex-1">
-          {filteredWorkouts.length > 0 ? (
+          {isLoading ? (
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div key={i} className="rounded-xl border border-border/50 p-3 sm:p-4 space-y-3">
+                  {/* Title row */}
+                  <div className="flex items-start justify-between gap-2">
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="size-6 rounded-full" />
+                  </div>
+                  {/* Description (hidden on mobile, matching WorkoutCard) */}
+                  <Skeleton className="hidden sm:block h-3 w-full" />
+                  <Skeleton className="hidden sm:block h-3 w-2/3" />
+                  {/* Intensity bar */}
+                  <Skeleton variant="zone-shimmer" className="h-[3px] w-full rounded-full" />
+                  {/* Meta row: duration + category */}
+                  <div className="flex items-center gap-3">
+                    <Skeleton className="h-3 w-16" />
+                    <Skeleton className="h-3 w-20" />
+                  </div>
+                  {/* Badge pills */}
+                  <div className="hidden sm:flex items-center gap-2">
+                    <Skeleton className="h-5 w-20 rounded-full" />
+                    <Skeleton className="h-5 w-14 rounded-full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredWorkouts.length > 0 ? (
             <>
               {viewMode === "grid" && (
                 <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
@@ -507,24 +602,48 @@ export function LibraryPage() {
               </div>
             </>
           ) : (
-            <EmptyState
-              icon={filters.favoritesOnly ? Heart : Search}
-              title={
-                filters.favoritesOnly
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              {/* Animated search icon with scan line */}
+              <svg
+                width="64"
+                height="64"
+                viewBox="0 0 64 64"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="mb-4 motion-safe:animate-pulse"
+                aria-hidden="true"
+              >
+                <style>{`
+                  @keyframes lib-scan {
+                    0%, 100% { transform: translateY(12px); opacity: 0; }
+                    20% { opacity: 0.6; }
+                    80% { opacity: 0.6; }
+                    50% { transform: translateY(36px); }
+                  }
+                `}</style>
+                <circle cx="28" cy="28" r="16" stroke="currentColor" strokeWidth="2" strokeOpacity="0.3" fill="none" />
+                <line x1="40" y1="40" x2="52" y2="52" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeOpacity="0.3" />
+                {/* Scan line */}
+                <line
+                  x1="16" y1="28" x2="40" y2="28"
+                  stroke="var(--zone-3)" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.6"
+                  style={{ animation: "lib-scan 2.5s ease-in-out infinite" }}
+                />
+              </svg>
+              <h3 className="text-lg font-medium text-foreground mb-1">
+                {filters.favoritesOnly
                   ? t("emptyState.noFavorites")
-                  : t("emptyState.noResults")
-              }
-              description={
-                filters.favoritesOnly
+                  : t("emptyState.noResults")}
+              </h3>
+              <p className="text-sm text-muted-foreground max-w-sm mb-4">
+                {filters.favoritesOnly
                   ? t("emptyState.noFavoritesDescription")
-                  : t("emptyState.noResultsDescription")
-              }
-              action={
-                <Button variant="link" onClick={() => setFilters(defaultFilters)}>
-                  {t("clearFilters")}
-                </Button>
-              }
-            />
+                  : t("emptyState.noResultsDescription")}
+              </p>
+              <Button variant="link" onClick={() => setFilters(defaultFilters)}>
+                {t("clearFilters")}
+              </Button>
+            </div>
           )}
         </div>
       </div>

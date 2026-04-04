@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams, Link, useLocation } from "react-router-dom";
+import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
@@ -18,10 +18,10 @@ import {
   Timer,
   Shuffle,
   ClipboardCheck,
-  Loader2,
   Link2,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -67,6 +67,7 @@ const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: 
 export function WorkoutDetailPage() {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
+  const navigate = useNavigate();
   const { t, i18n } = useTranslation(["session", "library", "common"]);
   const isEn = i18n.language?.startsWith("en") ?? false;
 
@@ -78,14 +79,9 @@ export function WorkoutDetailPage() {
     volumePercent?: number;
     estimatedDurationMin?: number;
     scrollY?: number;
+    collectionSlug?: string;
+    collectionName?: string;
   } | null;
-  const backTo = locationState?.from === "plan" && locationState.planId
-    ? {
-        path: `/plan/${locationState.planId}`,
-        label: isEn ? `Back to ${locationState.planName || "plan"}` : `Retour au plan`,
-        state: { returnToWeek: locationState.weekNumber, returnScrollY: locationState.scrollY },
-      }
-    : { path: "/library", label: t("common:actions.backToLibrary"), state: undefined };
 
   const { workout, isLoading } = useWorkout(id);
   const { workouts: relatedWorkouts } = useRelatedWorkouts(workout);
@@ -118,8 +114,37 @@ export function WorkoutDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="py-12 flex items-center justify-center">
-        <Loader2 className="size-8 animate-spin text-muted-foreground" />
+      <div className="py-8 space-y-8">
+        {/* Back button skeleton */}
+        <Skeleton className="h-9 w-40 rounded-md" />
+
+        {/* Bento header skeleton */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Session identity card skeleton */}
+          <Skeleton className="lg:col-span-8 h-48 lg:h-60 rounded-xl" />
+
+          {/* Summary metrics skeleton (2x2 grid) */}
+          <div className="lg:col-span-4 grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
+            <Skeleton className="h-20 lg:h-28 rounded-lg lg:rounded-xl" />
+            <Skeleton className="h-20 lg:h-28 rounded-lg lg:rounded-xl" />
+            <Skeleton className="h-20 lg:h-28 rounded-lg lg:rounded-xl" />
+            <Skeleton className="h-20 lg:h-28 rounded-lg lg:rounded-xl" />
+          </div>
+        </div>
+
+        {/* Content area skeleton */}
+        <div className="grid gap-8 lg:grid-cols-3">
+          <div className="lg:col-span-2 space-y-8">
+            {/* Timeline skeleton with zone shimmer */}
+            <Skeleton variant="zone-shimmer" className="h-40 rounded-xl" />
+            {/* Structure skeleton */}
+            <Skeleton className="h-64 rounded-xl" />
+          </div>
+          <div className="space-y-6">
+            <Skeleton className="h-48 rounded-xl" />
+            <Skeleton className="h-32 rounded-xl" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -129,9 +154,9 @@ export function WorkoutDetailPage() {
       <div className="py-12 text-center">
         <p className="text-muted-foreground">{t("common:errors.workoutNotFound")}</p>
         <Button variant="link" asChild className="mt-4">
-          <Link to={backTo.path} state={backTo.state}>
+          <Link to="/library">
             <ArrowLeft className="mr-2 size-4" />
-            {backTo.label}
+            {t("common:actions.backToLibrary")}
           </Link>
         </Button>
       </div>
@@ -170,6 +195,40 @@ export function WorkoutDetailPage() {
   const duration = Math.round(sessionData.totalDurationMin);
 
   const CategoryIcon = CATEGORY_ICONS[workout.category];
+
+  // Breadcrumb trail
+  const workoutName = isEn ? workout.nameEn : workout.name;
+  const categoryLabel = t(`library:categories.${workout.category}`);
+  type BreadcrumbItem = { label: string; to?: string; state?: Record<string, unknown> };
+  const breadcrumbs: BreadcrumbItem[] = [{ label: t("common:nav.home"), to: "/" }];
+
+  if (locationState?.from === "plan" && locationState.planId) {
+    breadcrumbs.push({ label: t("common:nav.plans"), to: "/plans" });
+    breadcrumbs.push({
+      label: locationState.planName || (isEn ? "Plan" : "Plan"),
+      to: `/plan/${locationState.planId}`,
+      state: { returnToWeek: locationState.weekNumber, returnScrollY: locationState.scrollY },
+    });
+  } else if (locationState?.from === "collection" && locationState.collectionSlug) {
+    breadcrumbs.push({ label: t("common:collections.title"), to: "/collections" });
+    breadcrumbs.push({
+      label: locationState.collectionName || (isEn ? "Collection" : "Collection"),
+      to: `/collections/${locationState.collectionSlug}`,
+    });
+  } else if (locationState?.from === "quiz") {
+    breadcrumbs.push({ label: t("common:nav.library"), to: "/library" });
+    breadcrumbs.push({ label: "Quiz", to: "/quiz" });
+  } else {
+    breadcrumbs.push({ label: t("common:nav.library"), to: "/library" });
+    breadcrumbs.push({
+      label: categoryLabel,
+      to: `/library?category=${workout.category}`,
+    });
+  }
+  breadcrumbs.push({ label: workoutName });
+
+  // The immediate parent is the second-to-last breadcrumb (for mobile)
+  const parentCrumb = breadcrumbs[breadcrumbs.length - 2];
 
   // Environment requirements
   const envRequirements: { icon: React.ComponentType<{ className?: string }>; text: string }[] = [];
@@ -229,12 +288,55 @@ export function WorkoutDetailPage() {
       />
       <div className={`zone-${dominantZone} py-8 space-y-8`}>
         {/* Back Button */}
-        <Button variant="ghost" size="sm" asChild>
-          <Link to={backTo.path} state={backTo.state}>
-            <ArrowLeft className="mr-2 size-4" />
-            {backTo.label}
-          </Link>
+        <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="mb-1">
+          <ArrowLeft className="mr-2 size-4" />
+          {isEn ? "Back" : "Retour"}
         </Button>
+
+        {/* Breadcrumb Trail */}
+        <nav
+          aria-label="Breadcrumb"
+          className="border-l-2 pl-3"
+          style={{ borderColor: `var(--zone-${dominantZone})` }}
+        >
+          {/* Desktop: full breadcrumb */}
+          <ol className="hidden sm:flex items-center flex-wrap">
+            {breadcrumbs.map((crumb, i) => {
+              const isLast = i === breadcrumbs.length - 1;
+              return (
+                <li key={i} className="flex items-center">
+                  {i > 0 && (
+                    <span className="text-muted-foreground/50 mx-1.5 text-sm">/</span>
+                  )}
+                  {isLast ? (
+                    <span className="text-foreground text-sm font-medium">{crumb.label}</span>
+                  ) : (
+                    <Link
+                      to={crumb.to!}
+                      state={crumb.state}
+                      className="text-muted-foreground text-sm hover:text-foreground transition-colors"
+                    >
+                      {crumb.label}
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+          {/* Mobile: immediate parent + current name */}
+          <div className="flex sm:hidden items-center text-sm">
+            <Link
+              to={parentCrumb.to!}
+              state={parentCrumb.state}
+              className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+            >
+              <ArrowLeft className="size-3.5" />
+              {parentCrumb.label}
+            </Link>
+            <span className="text-muted-foreground/50 mx-1.5">/</span>
+            <span className="text-foreground font-medium truncate">{workoutName}</span>
+          </div>
+        </nav>
 
         {/* Plan context banner */}
         {hasPlanContext && (

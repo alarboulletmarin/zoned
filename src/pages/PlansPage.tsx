@@ -43,6 +43,7 @@ import type { TrainingPlan, PhaseRange } from "@/types/plan";
 import type { TrainingPhase } from "@/types";
 import { getCurrentWeek } from "@/lib/planUtils";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
+import { PlanSparkline } from "@/components/domain/PlanSparkline";
 import { IcsExportDialog } from "@/components/domain/IcsExportDialog";
 
 function formatDate(isoDate: string, isEn: boolean): string {
@@ -165,22 +166,21 @@ function PlanCard({
           </div>
         )}
 
-        {/* Progress Bar */}
-        <div className="space-y-1">
-          <div className="flex justify-between text-xs text-muted-foreground">
-            <span>
-              {isEn
-                ? `Week ${weeksElapsed} / ${plan.totalWeeks}`
-                : `Semaine ${weeksElapsed} / ${plan.totalWeeks}`}
-            </span>
-            <span>{Math.round(progressPercent)}%</span>
-          </div>
-          <div className="h-2 rounded-full bg-secondary overflow-hidden">
-            <div
-              className="h-full rounded-full bg-primary transition-all"
-              style={{ width: `${progressPercent}%` }}
-            />
-          </div>
+        {/* Volume Sparkline */}
+        <PlanSparkline
+          plan={plan}
+          currentWeek={currentWeek}
+          isEn={isEn}
+        />
+
+        {/* Progress */}
+        <div className="flex justify-between text-xs text-muted-foreground">
+          <span>
+            {isEn
+              ? `Week ${weeksElapsed} / ${plan.totalWeeks}`
+              : `Semaine ${weeksElapsed} / ${plan.totalWeeks}`}
+          </span>
+          <span>{Math.round(progressPercent)}%</span>
         </div>
 
         {/* Race Time Prediction */}
@@ -374,22 +374,80 @@ export function PlansPage() {
           </>
         ) : (
           <div className="text-center py-16 space-y-4">
-            <Calendar className="size-16 mx-auto text-muted-foreground/30" />
+            {/* Animated calendar grid SVG */}
+            <div className="mx-auto w-[36px] h-[44px]">
+              <svg
+                viewBox="0 0 36 44"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-full h-full"
+                aria-hidden="true"
+              >
+                <defs>
+                  <style>{`
+                    @keyframes plans-cell-fill {
+                      0% { opacity: 0.1; }
+                      100% { opacity: 0.7; }
+                    }
+                    @media (prefers-reduced-motion: reduce) {
+                      .plans-cell { animation: none !important; opacity: 0.7; }
+                    }
+                  `}</style>
+                </defs>
+                {/* 3x4 grid of rounded squares - each 8x8 with 3px gap */}
+                {/* Row-by-row, left-to-right: base -> build -> peak -> taper */}
+                {[
+                  /* Row 1 - Base (Z1 blue, Z2 green) */
+                  { x: 0,  y: 0,  color: "var(--zone-1)", delay: 0 },
+                  { x: 11, y: 0,  color: "var(--zone-1)", delay: 1 },
+                  { x: 22, y: 0,  color: "var(--zone-2)", delay: 2 },
+                  /* Row 2 - Build (Z2 green, Z3 yellow) */
+                  { x: 0,  y: 11, color: "var(--zone-2)", delay: 3 },
+                  { x: 11, y: 11, color: "var(--zone-3)", delay: 4 },
+                  { x: 22, y: 11, color: "var(--zone-3)", delay: 5 },
+                  /* Row 3 - Peak (Z4 orange, Z5 red) */
+                  { x: 0,  y: 22, color: "var(--zone-4)", delay: 6 },
+                  { x: 11, y: 22, color: "var(--zone-4)", delay: 7 },
+                  { x: 22, y: 22, color: "var(--zone-5)", delay: 8 },
+                  /* Row 4 - Taper (Z5 red, back to Z2 green) */
+                  { x: 0,  y: 33, color: "var(--zone-5)", delay: 9 },
+                  { x: 11, y: 33, color: "var(--zone-2)", delay: 10 },
+                  { x: 22, y: 33, color: "var(--zone-2)", delay: 11 },
+                ].map((cell, i) => (
+                  <rect
+                    key={i}
+                    className="plans-cell"
+                    x={cell.x}
+                    y={cell.y}
+                    width="8"
+                    height="8"
+                    rx="2"
+                    fill={cell.color}
+                    opacity="0.1"
+                    style={{
+                      animation: `plans-cell-fill 0.3s ease-out ${cell.delay * 0.25}s forwards`,
+                    }}
+                  />
+                ))}
+              </svg>
+            </div>
             <div className="space-y-2">
               <p className="text-lg font-medium">
-                {isEn ? "No plans yet" : "Pas encore de plan"}
+                {isEn
+                  ? "Build your training arc"
+                  : "Construisez votre progression"}
               </p>
               <p className="text-muted-foreground max-w-md mx-auto">
                 {isEn
-                  ? "Create your first training plan to prepare for your next race."
-                  : "Créez votre premier plan d'entraînement pour préparer votre prochaine course."}
+                  ? "Set a goal, pick your race, and we'll structure the path."
+                  : "D\u00e9finissez un objectif, choisissez votre course, et on structure le chemin."}
               </p>
             </div>
             <Button asChild className="mt-4">
               <Link to="/plan/new">
                 {isEn
                   ? "Create your first plan"
-                  : "Créer votre premier plan"}
+                  : "Cr\u00e9er votre premier plan"}
                 <ArrowRight className="ml-2 size-4" />
               </Link>
             </Button>
