@@ -2,6 +2,74 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.3.4",
+    date: "2026-04-04",
+    changes: {
+      added: [
+        {
+          text: "SEO : données structurées (Organization, FAQPage, HowTo, ExercisePlan), meta descriptions enrichies, BreadcrumbList sur toutes les pages, prerendering nginx pour les bots",
+          textEn: "SEO: structured data (Organization, FAQPage, HowTo, ExercisePlan), enriched meta descriptions, BreadcrumbList on all pages, nginx bot prerendering",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Mini-timeline sticky sur la page détail de séance : barre compacte avec nom, zone dominante et durée qui suit le scroll",
+          textEn: "Sticky mini-timeline on workout detail page: compact zone bar follows scroll with workout name and duration",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Barre de filtres sticky dans la bibliothèque : affiche les filtres actifs et le nombre de résultats pendant le scroll",
+          textEn: "Sticky filter summary bar on library page: shows active filters and result count while scrolling",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Sparkline de progression des plans : mini-graphique SVG du volume hebdomadaire coloré par phase d'entraînement",
+          textEn: "Plan progress sparkline: SVG weekly volume chart colored by training phase on plan cards",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Légende interactive des zones dans le calculateur : accordéon avec sensations, bénéfices et exemples de séances par zone",
+          textEn: "Interactive zone legend on calculator: expandable accordion with sensations, benefits, and example workouts per zone",
+          category: "Calculateurs",
+          categoryEn: "Calculators",
+        },
+        {
+          text: "Fil d'Ariane contextuel sur la page détail de séance avec accent coloré par zone et conscience du parcours",
+          textEn: "Contextual breadcrumb trail on workout detail page with zone-colored accent and journey awareness",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Aperçu des cartes : mini-timeline toujours visible sur les cartes de séances",
+          textEn: "Card peek preview: always-visible compact session timeline on workout cards",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Feedback RPE post-complétion avec barre dégradée colorée par zones (échelle 1-10)",
+          textEn: "Post-completion RPE feedback with zone-colored gradient bar (1-10 scale)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Skeleton loading avec animation shimmer aux couleurs des zones",
+          textEn: "Skeleton loading states with zone-shimmer animation",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Empty states animés pour les pages Plans, Favoris et Bibliothèque",
+          textEn: "Animated empty states for Plans, Favorites, and Library pages",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+    },
+  },
+  {
     version: "0.3.3",
     date: "2026-04-03",
     changes: {

@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.4] - 2026-04-04
+
+### Added
+
+- SEO: structured data (Organization, FAQPage, HowTo, ExercisePlan), enriched meta descriptions, BreadcrumbList on all pages, nginx bot prerendering
+- Sticky mini-timeline on workout detail page: compact zone bar follows scroll with workout name and duration
+- Sticky filter summary bar on library page: shows active filters and result count while scrolling
+- Plan progress sparkline: SVG weekly volume chart colored by training phase on plan cards
+- Interactive zone legend on calculator: expandable accordion with sensations, benefits, and example workouts per zone
+- Contextual breadcrumb trail on workout detail page with zone-colored accent and journey awareness
+- Card peek preview: always-visible compact session timeline on workout cards
+- Post-completion RPE feedback with zone-colored gradient bar (1-10 scale)
+- Skeleton loading states with zone-shimmer animation
+- Animated empty states for Plans, Favorites, and Library pages
+
 ## [0.3.3] - 2026-04-03
 
 ### Added
