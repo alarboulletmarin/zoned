@@ -4,9 +4,9 @@ import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Filter, Search, Loader2 } from "@/components/icons";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
-import { useScrolledPast } from "@/hooks/useScrolledPast";
+
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import {
@@ -75,7 +75,7 @@ export function LibraryPage() {
   const { viewMode, setViewMode } = useViewMode();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const filterSectionRef = useRef<HTMLDivElement>(null);
-  const filtersScrolledPast = useScrolledPast(filterSectionRef);
+
   const PAGE_SIZE = 24;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
@@ -389,69 +389,6 @@ export function LibraryPage() {
         </div>
       </div>
 
-      {/* Sticky filter summary bar - appears when filters scroll out of view */}
-      {filtersScrolledPast && (
-        <div className="sticky top-12 z-40 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 py-2 bg-background/90 backdrop-blur-md border-b border-border/30 shadow-[0_1px_3px_rgba(0,0,0,0.1)] animate-in slide-in-from-top-2 fade-in duration-200">
-          <div className="flex items-center justify-between gap-3">
-            {/* Left: result count + active category badge */}
-            <div className="flex items-center gap-2 min-w-0">
-              <span className="text-sm font-medium text-muted-foreground whitespace-nowrap">
-                {filteredWorkouts.length < allWorkouts.length
-                  ? `${filteredWorkouts.length} / ${allWorkouts.length}`
-                  : allWorkouts.length}{" "}
-                <span className="hidden sm:inline">
-                  {isEn ? "workouts" : "séances"}
-                </span>
-              </span>
-              {filters.category !== "all" && (
-                <Badge variant="secondary" className="text-xs hidden sm:inline-flex">
-                  {t(`categories.${filters.category}`)}
-                </Badge>
-              )}
-              {activeFiltersCount > 0 && (
-                <Badge variant="outline" className="text-xs hidden sm:inline-flex">
-                  {activeFiltersCount} {t("filters.activeFilters")}
-                </Badge>
-              )}
-            </div>
-
-            {/* Right: scroll-back button + filter button (mobile) + view mode */}
-            <div className="flex items-center gap-1.5 shrink-0">
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={() =>
-                  filterSectionRef.current?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                  })
-                }
-                aria-label={t("filters.searchLabel")}
-              >
-                <Search className="size-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                onClick={openMobileFilters}
-                className="lg:hidden relative"
-              >
-                <Filter className="size-4" />
-                {activeFiltersCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 size-4 rounded-full bg-primary text-primary-foreground text-[10px] flex items-center justify-center">
-                    {activeFiltersCount}
-                  </span>
-                )}
-              </Button>
-              <ViewModeSelector
-                value={viewMode}
-                onChange={setViewMode}
-                className="hidden sm:inline-flex"
-              />
-            </div>
-          </div>
-        </div>
-      )}
 
       <div className="flex gap-8">
         {/* Sidebar Filters - Desktop */}
