@@ -216,10 +216,21 @@
     }
   },
   "search": {
-    "placeholder": "Rechercher des séances...",
+    "placeholder": "Rechercher séances, articles, glossaire...",
     "shortcut": "Cmd+K",
-    "noResults": "Aucune séance trouvée",
-    "viewAll": "Voir tout dans la bibliothèque"
+    "noResults": "Aucun résultat trouvé",
+    "viewAll": "Voir tout dans la bibliothèque",
+    "sections": {
+      "workouts": "Séances",
+      "articles": "Articles",
+      "glossary": "Glossaire"
+    }
+  },
+  "relatedContent": {
+    "title": "Contenu lié",
+    "articles": "Articles",
+    "workouts": "Séances",
+    "glossary": "Glossaire"
   },
   "settings": {
     "title": "Paramètres",

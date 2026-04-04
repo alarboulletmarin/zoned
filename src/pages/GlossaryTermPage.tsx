@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { SEOHead } from "@/components/seo";
 import { GlossaryDetail } from "@/components/domain/GlossaryDetail";
 import { useGlossaryTerm } from "@/hooks/useGlossary";
+import { RelatedContent } from "@/components/domain/RelatedContent";
 
 export function GlossaryTermPage() {
   const { id } = useParams<{ id: string }>();
@@ -107,6 +108,11 @@ export function GlossaryTermPage() {
       {/* Term Detail */}
       <div className="max-w-3xl">
         <GlossaryDetail term={term} />
+      </div>
+
+      {/* Related Content */}
+      <div className="max-w-3xl mt-8">
+        <RelatedContent source={{ type: "glossary", id: term.id }} />
       </div>
     </div>
     </>

@@ -8,6 +8,7 @@ import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { ReadingProgress } from "@/components/domain/ReadingProgress";
 import { TableOfContents } from "@/components/domain/TableOfContents";
 import { cn } from "@/lib/utils";
+import { RelatedContent } from "@/components/domain/RelatedContent";
 
 /**
  * Simple Markdown renderer
@@ -562,6 +563,11 @@ export function ArticlePage() {
           </Button>
         </div>
       )}
+
+      {/* Related Content */}
+      <div className="mt-10 max-w-3xl">
+        <RelatedContent source={{ type: "article", id: article.slug }} />
+      </div>
 
       {/* Navigation */}
       <nav className="mt-12 pt-8 border-t flex justify-between gap-4">

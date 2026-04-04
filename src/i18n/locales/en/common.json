@@ -216,10 +216,21 @@
     }
   },
   "search": {
-    "placeholder": "Search workouts...",
+    "placeholder": "Search workouts, articles, glossary...",
     "shortcut": "Cmd+K",
-    "noResults": "No workouts found",
-    "viewAll": "View all in Library"
+    "noResults": "No results found",
+    "viewAll": "View all in Library",
+    "sections": {
+      "workouts": "Workouts",
+      "articles": "Articles",
+      "glossary": "Glossary"
+    }
+  },
+  "relatedContent": {
+    "title": "Related Content",
+    "articles": "Articles",
+    "workouts": "Workouts",
+    "glossary": "Glossary"
   },
   "settings": {
     "title": "Settings",

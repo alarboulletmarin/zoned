@@ -1,28 +1,34 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Search, X, Loader2, ArrowRight } from "@/components/icons";
+import { Search, X, Loader2, ArrowRight, BookOpen, Book, Dumbbell } from "@/components/icons";
 import { Dialog, DialogPortal, DialogOverlay, DialogTitle } from "@/components/ui/dialog";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { useCommandPalette } from "./CommandPaletteProvider";
 import { SearchResultItem } from "./SearchResultItem";
-import { searchWorkouts } from "@/data/workouts";
+import { unifiedSearch, type UnifiedSearchResult, type UnifiedSearchResults } from "@/lib/unified-search";
+import { getWorkoutById } from "@/data/workouts";
 import type { WorkoutTemplate } from "@/types";
 import { cn } from "@/lib/utils";
 
-const MAX_RESULTS = 8;
 const DEBOUNCE_MS = 150;
+const MAX_PER_TYPE = 5;
+
+type FlatItem =
+  | { kind: "header"; label: string; icon: React.ComponentType<{ className?: string }> }
+  | { kind: "workout"; workout: WorkoutTemplate; result: UnifiedSearchResult }
+  | { kind: "generic"; result: UnifiedSearchResult };
 
 export function CommandPalette() {
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const { isOpen, closePalette } = useCommandPalette();
   const navigate = useNavigate();
 
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<WorkoutTemplate[]>([]);
+  const [searchResults, setSearchResults] = useState<UnifiedSearchResults | null>(null);
+  const [workoutCache, setWorkoutCache] = useState<Map<string, WorkoutTemplate>>(new Map());
   const [isLoading, setIsLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [hasMore, setHasMore] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
@@ -31,16 +37,15 @@ export function CommandPalette() {
   useEffect(() => {
     if (!isOpen) {
       setQuery("");
-      setResults([]);
+      setSearchResults(null);
       setSelectedIndex(0);
-      setHasMore(false);
+      setWorkoutCache(new Map());
     }
   }, [isOpen]);
 
   // Focus input when opening
   useEffect(() => {
     if (isOpen) {
-      // Small delay to ensure dialog is mounted
       const timeout = setTimeout(() => {
         inputRef.current?.focus();
       }, 50);
@@ -51,35 +56,76 @@ export function CommandPalette() {
   // Search with debounce
   useEffect(() => {
     if (!query.trim()) {
-      setResults([]);
-      setHasMore(false);
+      setSearchResults(null);
       setIsLoading(false);
       return;
     }
 
     setIsLoading(true);
     const timeout = setTimeout(async () => {
-      const allResults = await searchWorkouts(query);
-      setResults(allResults.slice(0, MAX_RESULTS));
-      setHasMore(allResults.length > MAX_RESULTS);
+      const results = await unifiedSearch(query, i18n.language, MAX_PER_TYPE);
+      // Resolve workout templates for the SearchResultItem component
+      const cache = new Map<string, WorkoutTemplate>();
+      await Promise.all(
+        results.workouts.map(async (r) => {
+          const w = await getWorkoutById(r.id);
+          if (w) cache.set(r.id, w);
+        })
+      );
+      setWorkoutCache(cache);
+      setSearchResults(results);
       setSelectedIndex(0);
       setIsLoading(false);
     }, DEBOUNCE_MS);
 
     return () => clearTimeout(timeout);
-  }, [query]);
+  }, [query, i18n.language]);
+
+  // Build flat list of selectable items (skip headers for navigation)
+  const { flatItems, selectableItems } = useMemo(() => {
+    if (!searchResults) return { flatItems: [] as FlatItem[], selectableItems: [] as FlatItem[] };
+
+    const items: FlatItem[] = [];
+
+    if (searchResults.workouts.length > 0) {
+      items.push({ kind: "header", label: t("search.sections.workouts"), icon: Dumbbell });
+      for (const r of searchResults.workouts) {
+        const workout = workoutCache.get(r.id);
+        if (workout) items.push({ kind: "workout", workout, result: r });
+      }
+    }
+
+    if (searchResults.articles.length > 0) {
+      items.push({ kind: "header", label: t("search.sections.articles"), icon: BookOpen });
+      for (const r of searchResults.articles) {
+        items.push({ kind: "generic", result: r });
+      }
+    }
+
+    if (searchResults.glossary.length > 0) {
+      items.push({ kind: "header", label: t("search.sections.glossary"), icon: Book });
+      for (const r of searchResults.glossary) {
+        items.push({ kind: "generic", result: r });
+      }
+    }
+
+    const selectable = items.filter((i) => i.kind !== "header");
+    return { flatItems: items, selectableItems: selectable };
+  }, [searchResults, workoutCache, t]);
 
   // Scroll selected item into view
   useEffect(() => {
-    if (results.length > 0 && resultsRef.current) {
-      const selectedElement = resultsRef.current.children[selectedIndex] as HTMLElement;
-      selectedElement?.scrollIntoView({ block: "nearest" });
+    if (selectableItems.length > 0 && resultsRef.current) {
+      // Find the actual DOM element for the selected item
+      const selectableElements = resultsRef.current.querySelectorAll("[data-selectable]");
+      const el = selectableElements[selectedIndex] as HTMLElement;
+      el?.scrollIntoView({ block: "nearest" });
     }
-  }, [selectedIndex, results.length]);
+  }, [selectedIndex, selectableItems.length]);
 
-  const handleSelect = useCallback(
-    (workout: WorkoutTemplate) => {
-      navigate(`/workout/${workout.id}`);
+  const handleNavigate = useCallback(
+    (url: string) => {
+      navigate(url);
       closePalette();
     },
     [navigate, closePalette]
@@ -95,7 +141,7 @@ export function CommandPalette() {
       switch (e.key) {
         case "ArrowDown":
           e.preventDefault();
-          setSelectedIndex((i) => Math.min(i + 1, results.length - 1));
+          setSelectedIndex((i) => Math.min(i + 1, selectableItems.length - 1));
           break;
         case "ArrowUp":
           e.preventDefault();
@@ -103,8 +149,11 @@ export function CommandPalette() {
           break;
         case "Enter":
           e.preventDefault();
-          if (results[selectedIndex]) {
-            handleSelect(results[selectedIndex]);
+          {
+            const item = selectableItems[selectedIndex];
+            if (item && item.kind !== "header") {
+              handleNavigate(item.result.url);
+            }
           }
           break;
         case "Escape":
@@ -113,12 +162,15 @@ export function CommandPalette() {
           break;
       }
     },
-    [results, selectedIndex, handleSelect, closePalette]
+    [selectableItems, selectedIndex, handleNavigate, closePalette]
   );
 
   // Detect OS for shortcut display
   const isMac = typeof navigator !== "undefined" && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
   const shortcutKey = isMac ? "⌘K" : "Ctrl+K";
+
+  // Track which selectable index each item maps to
+  let selectableIdx = -1;
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && closePalette()}>
@@ -188,26 +240,73 @@ export function CommandPalette() {
             )}
 
             {/* No results */}
-            {query.trim() && !isLoading && results.length === 0 && (
+            {query.trim() && !isLoading && searchResults && searchResults.total === 0 && (
               <div className="px-3 py-8 text-center text-sm text-muted-foreground">
                 {t("search.noResults")}
               </div>
             )}
 
-            {/* Results list */}
+            {/* Results list with section headers */}
             {!isLoading &&
-              results.map((workout, index) => (
-                <SearchResultItem
-                  key={workout.id}
-                  workout={workout}
-                  isSelected={index === selectedIndex}
-                  onClick={() => handleSelect(workout)}
-                />
-              ))}
+              flatItems.map((item, i) => {
+                if (item.kind === "header") {
+                  const Icon = item.icon;
+                  return (
+                    <div
+                      key={`header-${i}`}
+                      className="px-3 pt-3 pb-1 text-xs font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"
+                    >
+                      <Icon className="size-3" />
+                      {item.label}
+                    </div>
+                  );
+                }
+
+                selectableIdx++;
+                const currentIdx = selectableIdx;
+
+                if (item.kind === "workout") {
+                  return (
+                    <div key={item.result.id} data-selectable>
+                      <SearchResultItem
+                        workout={item.workout}
+                        isSelected={currentIdx === selectedIndex}
+                        onClick={() => handleNavigate(item.result.url)}
+                      />
+                    </div>
+                  );
+                }
+
+                // Generic result (article or glossary)
+                const Icon = item.result.type === "article" ? BookOpen : Book;
+                return (
+                  <button
+                    key={item.result.id}
+                    type="button"
+                    data-selectable
+                    onClick={() => handleNavigate(item.result.url)}
+                    className={cn(
+                      "w-full flex items-center gap-3 px-3 py-2.5 text-left rounded-md transition-colors",
+                      "hover:bg-accent focus:outline-none focus:bg-accent",
+                      currentIdx === selectedIndex && "bg-accent"
+                    )}
+                  >
+                    <Icon className="size-4 text-muted-foreground flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-sm truncate">{item.result.title}</div>
+                      {item.result.subtitle && (
+                        <div className="text-xs text-muted-foreground truncate mt-0.5">
+                          {item.result.subtitle}
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
           </div>
 
           {/* Footer with "View all" link */}
-          {hasMore && !isLoading && (
+          {searchResults && searchResults.workouts.length > 0 && !isLoading && (
             <div className="border-t p-2">
               <button
                 type="button"

@@ -42,6 +42,7 @@ import { SEOHead } from "@/components/seo";
 import { SessionTimeline, ZoneDistribution, transformSessionBlocks } from "@/components/visualization";
 import { MiniSessionTimeline } from "@/components/visualization/MiniSessionTimeline";
 import { useWorkout, useRelatedWorkouts, useTips } from "@/hooks";
+import { RelatedContent } from "@/components/domain/RelatedContent";
 import { useScrolledPast } from "@/hooks/useScrolledPast";
 import type { WorkoutCategory, ZoneRange } from "@/types";
 import {
@@ -492,7 +493,10 @@ export function WorkoutDetailPage() {
               <TipCard tip={tip} variant="card" />
             )}
 
-            {/* Related Workouts */}
+            {/* Related Content (cross-links to articles, workouts, glossary) */}
+            <RelatedContent source={{ type: "workout", id: workout.id }} />
+
+            {/* Related Workouts (same category) */}
             {relatedWorkouts.length > 0 && (
               <Card className="rounded-xl">
                 <CardHeader>
