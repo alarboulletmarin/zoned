@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - SEO: structured data (Organization, FAQPage, HowTo, ExercisePlan), enriched meta descriptions, BreadcrumbList on all pages, nginx bot prerendering
 - Sticky mini-timeline on workout detail page: compact zone bar follows scroll with workout name and duration
-- Sticky filter summary bar on library page: shows active filters and result count while scrolling
+- Prebuilt plan "Reprise après longue pause": 10-week progressive plan for returning after months off
+- Cross-content links on workout, article, and glossary detail pages (related articles, workouts, glossary terms)
+- Unified search in command palette: search workouts, articles, and glossary terms with section headers
 - Plan progress sparkline: SVG weekly volume chart colored by training phase on plan cards
 - Interactive zone legend on calculator: expandable accordion with sensations, benefits, and example workouts per zone
 - Contextual breadcrumb trail on workout detail page with zone-colored accent and journey awareness

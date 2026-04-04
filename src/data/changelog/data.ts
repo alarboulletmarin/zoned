@@ -19,8 +19,20 @@ export const changelogVersions: ChangelogVersion[] = [
           categoryEn: "UX",
         },
         {
-          text: "Barre de filtres sticky dans la bibliothèque : affiche les filtres actifs et le nombre de résultats pendant le scroll",
-          textEn: "Sticky filter summary bar on library page: shows active filters and result count while scrolling",
+          text: "Plan prébuilt « Reprise après longue pause » : 10 semaines de reconstruction progressive après plusieurs mois d'arrêt",
+          textEn: "Prebuilt plan \"Return After Long Break\": 10-week progressive plan for returning after months off",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Liens croisés entre contenus : articles, séances et termes glossaire liés sur chaque page détail",
+          textEn: "Cross-content links on workout, article, and glossary detail pages",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Recherche unifiée dans la palette de commandes : séances, articles et glossaire avec headers de section",
+          textEn: "Unified search in command palette: workouts, articles, and glossary with section headers",
           category: "UX",
           categoryEn: "UX",
         },
