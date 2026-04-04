@@ -7,6 +7,7 @@ import { planSemiMarathon } from "./plans/semi-marathon";
 import { planMarathon } from "./plans/marathon";
 import { planBaseBuilding } from "./plans/base-building";
 import { planRetourBlessure } from "./plans/retour-blessure";
+import { planRepriseLonguePause } from "./plans/reprise-longue-pause";
 
 const allPlans: PrebuiltPlan[] = [
   plan5kDebutant,
@@ -17,6 +18,7 @@ const allPlans: PrebuiltPlan[] = [
   planMarathon,
   planBaseBuilding,
   planRetourBlessure,
+  planRepriseLonguePause,
 ];
 
 const bySlug = new Map(allPlans.map((p) => [p.slug, p]));
