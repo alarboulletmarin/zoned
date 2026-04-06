@@ -427,7 +427,7 @@ export function WorkoutDetailPage() {
         {!hasUserZones && <ZonePersonalizationCTA />}
 
         {timelineScrolledPast && (
-          <div className="sticky top-12 z-40 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 bg-background/90 backdrop-blur-md shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_6px_12px_-4px_rgba(0,0,0,0.15)] dark:shadow-[0_1px_3px_0_rgba(0,0,0,0.3),0_6px_12px_-4px_rgba(0,0,0,0.4)] border-b border-border/30 animate-in slide-in-from-top-2 fade-in duration-200 print:hidden">
+          <div className="sticky top-12 z-40 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 bg-background/90 backdrop-blur-sm md:backdrop-blur-md shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_6px_12px_-4px_rgba(0,0,0,0.15)] dark:shadow-[0_1px_3px_0_rgba(0,0,0,0.3),0_6px_12px_-4px_rgba(0,0,0,0.4)] border-b border-border/30 will-change-[transform,opacity] animate-slide-in-top print:hidden">
             <MiniSessionTimeline
               workout={workout}
               volumePercent={hasPlanContext ? planVolumePercent : undefined}

@@ -1,33 +1,41 @@
-import { useState, useEffect, useCallback, type RefObject } from "react";
+import { useState, useEffect, useCallback, useRef, type RefObject } from "react";
 
+/**
+ * Scroll listener with hysteresis — two different thresholds prevent oscillation
+ * caused by layout shifts (sticky bar mounting) and mobile address bar resizing.
+ *
+ * Show: element bottom goes above viewport (bottom < 0)
+ * Hide: element bottom returns well into viewport (bottom > 150px)
+ * Dead zone (0–150px): no state change — absorbs layout shift (~50px) + address bar (~85px)
+ */
 export function useScrolledPast(ref: RefObject<HTMLElement | null>): boolean {
   const [scrolledPast, setScrolledPast] = useState(false);
-  const [el, setEl] = useState<HTMLElement | null>(null);
+  const rafId = useRef(0);
 
-  // Sync ref.current into state so the observer effect re-runs when the element mounts
-  const syncRef = useCallback(() => {
-    setEl(ref.current);
+  const handleScroll = useCallback(() => {
+    cancelAnimationFrame(rafId.current);
+    rafId.current = requestAnimationFrame(() => {
+      const el = ref.current;
+      if (!el) return;
+
+      const { bottom } = el.getBoundingClientRect();
+
+      setScrolledPast((prev) => {
+        if (!prev && bottom < 0) return true;
+        if (prev && bottom > 150) return false;
+        return prev;
+      });
+    });
   }, [ref]);
 
-  // Re-sync after each render to catch when ref.current becomes available
   useEffect(() => {
-    syncRef();
-  });
-
-  useEffect(() => {
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // Element is "scrolled past" when not intersecting AND scrolled above viewport (top < 0)
-        setScrolledPast(!entry.isIntersecting && entry.boundingClientRect.top < 0);
-      },
-      { threshold: 0 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [el]);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(rafId.current);
+    };
+  }, [handleScroll]);
 
   return scrolledPast;
 }
