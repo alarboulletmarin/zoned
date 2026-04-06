@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
 import { cn } from "@/lib/utils";
-import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight } from "@/components/icons";
+import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, Dumbbell } from "@/components/icons";
 import { PHASE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
@@ -841,6 +841,7 @@ const DayCell = memo(function DayCell({
           draggedSession?.weekNumber === selectedWeek &&
           draggedSession?.sessionIndex === originalIndex;
         const sessionName = workoutNames[session.workoutId] || session.workoutId;
+        const isStrength = session.sessionType === "strength" || session.workoutId?.startsWith("STR-");
 
         return (
           <div
@@ -879,8 +880,11 @@ const DayCell = memo(function DayCell({
           >
             <div
               className={cn(
-                "rounded bg-card border border-border/50 mb-1 relative",
+                "rounded mb-1 relative",
                 isDesktop ? "p-2" : "p-1.5",
+                isStrength
+                  ? "bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700"
+                  : "bg-card border border-border/50",
               )}
             >
               {isRaceDay ? (
@@ -946,12 +950,16 @@ const DayCell = memo(function DayCell({
                         )}
                       </button>
                     )}
-                    <span
-                      className="size-2 rounded-full shrink-0"
-                      style={{
-                        backgroundColor: SESSION_COLORS[session.sessionType] || "#9ca3af",
-                      }}
-                    />
+                    {isStrength ? (
+                      <Dumbbell className="size-3 text-amber-600 dark:text-amber-400 shrink-0" />
+                    ) : (
+                      <span
+                        className="size-2 rounded-full shrink-0"
+                        style={{
+                          backgroundColor: SESSION_COLORS[session.sessionType] || "#9ca3af",
+                        }}
+                      />
+                    )}
                     {session.isKeySession && (
                       <Star className="size-2.5 text-yellow-500 fill-yellow-500 shrink-0" />
                     )}
@@ -976,6 +984,7 @@ const DayCell = memo(function DayCell({
                       "text-[10px] leading-tight font-medium line-clamp-2 block",
                       isDesktop && "text-[11px]",
                       session.status === "skipped" && "line-through text-muted-foreground",
+                      isStrength && session.status !== "skipped" && "text-amber-900 dark:text-amber-100",
                       onSessionClick && "cursor-pointer hover:text-primary transition-colors",
                     )}
                     title={sessionName}

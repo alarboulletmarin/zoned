@@ -32,6 +32,11 @@ const SESSION_TYPE_COLORS: Record<string, string> = {
   hills: "bg-green-500",
   race_specific: "bg-amber-500",
   recovery: "bg-slate-300 dark:bg-slate-600",
+  strength: "bg-indigo-400",
+  cycling: "bg-cyan-400",
+  swimming: "bg-teal-400",
+  yoga: "bg-pink-300",
+  cross_training: "bg-gray-400",
 };
 
 const SESSION_TYPE_LABELS: Record<string, { fr: string; en: string }> = {
@@ -45,6 +50,11 @@ const SESSION_TYPE_LABELS: Record<string, { fr: string; en: string }> = {
   hills: { fr: "C\u00f4tes", en: "Hills" },
   fartlek: { fr: "Fartlek", en: "Fartlek" },
   race_specific: { fr: "Allure course", en: "Race Specific" },
+  strength: { fr: "Renforcement", en: "Strength" },
+  cycling: { fr: "V\u00e9lo", en: "Cycling" },
+  swimming: { fr: "Natation", en: "Swimming" },
+  yoga: { fr: "Yoga", en: "Yoga" },
+  cross_training: { fr: "Autre activit\u00e9", en: "Cross Training" },
 };
 
 const ZONE_COLORS: Record<string, string> = {
@@ -59,10 +69,14 @@ const ZONE_COLORS: Record<string, string> = {
 const TARGET_LABELS: Record<string, Record<string, string>> = {
   aerobic_base: { fr: "Base a\u00e9robie", en: "Aerobic base" },
   aerobic_power: { fr: "Puissance a\u00e9robie", en: "Aerobic power" },
+  aerobic_threshold: { fr: "Seuil a\u00e9robie", en: "Aerobic threshold" },
   lactate_threshold: { fr: "Seuil lactique", en: "Lactate threshold" },
+  lactate_tolerance: { fr: "Tol\u00e9rance lactique", en: "Lactate tolerance" },
   vo2max: { fr: "VO2max", en: "VO2max" },
   speed: { fr: "Vitesse", en: "Speed" },
   strength: { fr: "Force", en: "Strength" },
+  mixed: { fr: "Mixte", en: "Mixed" },
+  neuromuscular: { fr: "Neuromusculaire", en: "Neuromuscular" },
   race_specific: { fr: "Allure course", en: "Race specific" },
 };
 
@@ -94,12 +108,20 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
   useEffect(() => {
     let cancelled = false;
     setAnalysisLoading(true);
-    computeEnhancedPlanAnalysis(plan).then((result) => {
-      if (!cancelled) {
-        setAnalysis(result);
-        setAnalysisLoading(false);
-      }
-    });
+    computeEnhancedPlanAnalysis(plan)
+      .then((result) => {
+        if (!cancelled) {
+          setAnalysis(result);
+          setAnalysisLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.error("[PlanStatsSection] Failed to compute enhanced analysis:", err);
+        if (!cancelled) {
+          setAnalysis(null);
+          setAnalysisLoading(false);
+        }
+      });
     return () => {
       cancelled = true;
     };
@@ -141,13 +163,17 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
     return { week, keySession, longRun };
   }, [plan.weeks, currentWeek]);
 
-  // 80/20 per week
+  // 80/20 per week (running sessions only)
+  const NON_RUNNING_TYPES = new Set(["strength", "cycling", "swimming", "yoga", "rest", "rest_day", "cross_training"]);
   const easyHardPerWeek = useMemo(() => {
     const easyTypes = new Set(["endurance", "recovery", "long_run"]);
     return plan.weeks.map(w => {
-      const total = w.sessions.length;
+      const runningSessions = w.sessions.filter(
+        s => !NON_RUNNING_TYPES.has(s.sessionType) && !s.workoutId.startsWith("STR-") && !s.workoutId.startsWith("__activity_")
+      );
+      const total = runningSessions.length;
       if (total === 0) return { weekNumber: w.weekNumber, easyPct: 100, hardPct: 0 };
-      const easy = w.sessions.filter(s => easyTypes.has(s.sessionType)).length;
+      const easy = runningSessions.filter(s => easyTypes.has(s.sessionType)).length;
       return {
         weekNumber: w.weekNumber,
         easyPct: Math.round((easy / total) * 100),

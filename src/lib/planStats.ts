@@ -2,6 +2,25 @@ import type { TrainingPlan, PlanSession, PlanWeek } from "@/types/plan";
 import type { TrainingPhase, WorkoutTemplate } from "@/types";
 import { getWorkoutById } from "@/data/workouts";
 
+// ── Helpers for identifying non-running sessions ──────────────────
+const NON_RUNNING_SESSION_TYPES = new Set([
+  "strength", "cycling", "swimming", "yoga", "rest", "rest_day", "cross_training",
+]);
+
+function isNonRunningSession(session: PlanSession): boolean {
+  return (
+    NON_RUNNING_SESSION_TYPES.has(session.sessionType) ||
+    session.workoutId.startsWith("STR-") ||
+    session.workoutId.startsWith("__activity_")
+  );
+}
+
+function isRunningWorkoutTemplate(w: WorkoutTemplate): boolean {
+  // StrengthWorkoutTemplate cast as WorkoutTemplate will have kind === "strength"
+  // and will lack warmupTemplate / mainSetTemplate / cooldownTemplate
+  return (w as unknown as { kind?: string }).kind !== "strength";
+}
+
 export interface PlanStats {
   totalSessions: number;
   totalDurationMin: number;
@@ -41,6 +60,8 @@ const PACE_BY_TYPE: Record<string, number> = {
 /** Estimate distance in km for a session based on duration and type */
 function estimateSessionKm(session: PlanSession): number {
   if (session.workoutId === "__race_day__") return 0;
+  // Non-running sessions (strength, cycling, etc.) don't contribute running km
+  if (isNonRunningSession(session)) return 0;
   const pace = PACE_BY_TYPE[session.sessionType] || 5.5;
   return session.estimatedDurationMin / pace;
 }
@@ -151,11 +172,11 @@ function estimateBlockMinutes(block: { durationMin?: number; repetitions?: numbe
  * Loads each unique workout template to inspect block zones and target systems.
  */
 export async function computeEnhancedPlanAnalysis(plan: TrainingPlan): Promise<EnhancedPlanAnalysis> {
-  // ── 1. Collect unique workout IDs and load templates ─────────────
+  // ── 1. Collect unique running workout IDs and load templates ─────
   const workoutIds = new Set<string>();
   for (const week of plan.weeks) {
     for (const session of week.sessions) {
-      if (session.workoutId !== "__race_day__") {
+      if (session.workoutId !== "__race_day__" && !isNonRunningSession(session)) {
         workoutIds.add(session.workoutId);
       }
     }
@@ -165,7 +186,7 @@ export async function computeEnhancedPlanAnalysis(plan: TrainingPlan): Promise<E
   await Promise.all(
     Array.from(workoutIds).map(async (id) => {
       const w = await getWorkoutById(id);
-      if (w) workoutMap.set(id, w);
+      if (w && isRunningWorkoutTemplate(w)) workoutMap.set(id, w);
     }),
   );
 
@@ -175,9 +196,14 @@ export async function computeEnhancedPlanAnalysis(plan: TrainingPlan): Promise<E
   for (const week of plan.weeks) {
     for (const session of week.sessions) {
       if (session.workoutId === "__race_day__") continue;
+      // Skip non-running sessions (strength, cross-training, etc.)
+      if (isNonRunningSession(session)) continue;
 
       const workout = workoutMap.get(session.workoutId);
       if (!workout) continue;
+
+      // Safety guard: skip if this workout lacks running block arrays
+      if (!workout.warmupTemplate || !workout.mainSetTemplate || !workout.cooldownTemplate) continue;
 
       const sessionTotal = session.estimatedDurationMin;
 
@@ -249,8 +275,9 @@ export async function computeEnhancedPlanAnalysis(plan: TrainingPlan): Promise<E
   for (const week of plan.weeks) {
     for (const session of week.sessions) {
       if (session.workoutId === "__race_day__") continue;
+      if (isNonRunningSession(session)) continue;
       const workout = workoutMap.get(session.workoutId);
-      if (!workout) continue;
+      if (!workout || !workout.targetSystem) continue;
       systemCounts[workout.targetSystem] = (systemCounts[workout.targetSystem] || 0) + 1;
       totalSessionsWithSystem++;
     }

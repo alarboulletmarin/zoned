@@ -17,9 +17,11 @@ import {
   Footprints,
   TrendingUp,
   AlertTriangle,
+  Dumbbell,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { useCreatePlan } from "@/hooks/usePlans";
@@ -194,6 +196,8 @@ interface FormState {
   totalWeeksOverride: number;
   currentWeeklyKm: string;   // User's current weekly volume
   currentLongRunKm: string;  // User's current longest run
+  includeStrength: boolean;
+  strengthFrequency: 1 | 2 | 3;
 }
 
 // ── Component ────────────────────────────────────────────────────────
@@ -222,6 +226,8 @@ export function PlanCreatePage() {
     totalWeeksOverride: 0,
     currentWeeklyKm: "",
     currentLongRunKm: "",
+    includeStrength: false,
+    strengthFrequency: 2,
   });
 
   // Load user zone preferences for VMA suggestion
@@ -307,6 +313,8 @@ export function PlanCreatePage() {
       totalWeeksOverride: !isRacePlan ? form.totalWeeksOverride : undefined,
       currentWeeklyKm: form.currentWeeklyKm ? parseInt(form.currentWeeklyKm, 10) : undefined,
       currentLongRunKm: form.currentLongRunKm ? parseInt(form.currentLongRunKm, 10) : undefined,
+      includeStrength: form.includeStrength || undefined,
+      strengthFrequency: form.includeStrength ? form.strengthFrequency : undefined,
     };
 
     try {
@@ -1008,6 +1016,55 @@ export function PlanCreatePage() {
               ))}
             </div>
           </div>
+
+          {/* Strength training toggle */}
+          <div className="border-t pt-4">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="size-8 rounded-full bg-orange-500/10 flex items-center justify-center shrink-0">
+                  <Dumbbell className="size-4 text-orange-500" />
+                </div>
+                <div className="min-w-0">
+                  <label htmlFor="includeStrength" className="text-sm font-medium cursor-pointer">
+                    {isEn ? "Include Strength Training" : "Inclure le renforcement"}
+                  </label>
+                  <p className="text-xs text-muted-foreground leading-tight">
+                    {isEn
+                      ? "Add strength sessions adapted to each phase"
+                      : "Ajouter des séances adaptées à chaque phase"}
+                  </p>
+                </div>
+              </div>
+              <Switch
+                id="includeStrength"
+                checked={form.includeStrength}
+                onCheckedChange={(checked) =>
+                  setForm((f) => ({ ...f, includeStrength: !!checked }))
+                }
+              />
+            </div>
+
+            {form.includeStrength && (
+              <div className="mt-3 ml-10">
+                <label className="text-xs font-medium text-muted-foreground mb-2 block">
+                  {isEn ? "Strength Frequency" : "Fréquence renforcement"}
+                </label>
+                <div className="flex gap-2">
+                  {([1, 2, 3] as const).map((n) => (
+                    <Button
+                      key={n}
+                      variant={form.strengthFrequency === n ? "default" : "outline"}
+                      size="sm"
+                      className="flex-1 text-xs"
+                      onClick={() => setForm((f) => ({ ...f, strengthFrequency: n }))}
+                    >
+                      {n}x / {isEn ? "week" : "sem"}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       {renderNavButtons(true, isEn ? "Continue" : "Continuer")}
@@ -1331,6 +1388,13 @@ export function PlanCreatePage() {
                 : ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"][form.longRunDay]
               }
             />
+            {/* v2: Strength training */}
+            {form.includeStrength && (
+              <SummaryRow
+                label={isEn ? "Strength training" : "Renforcement"}
+                value={`${form.strengthFrequency}x / ${isEn ? "week" : "sem"}`}
+              />
+            )}
           </CardContent>
         </Card>
 

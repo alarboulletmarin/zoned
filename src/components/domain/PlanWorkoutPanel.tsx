@@ -1,10 +1,14 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
-import { X, Search, Clock, Loader2, Heart } from "@/components/icons";
+import { X, Search, Clock, Loader2, Heart, Dumbbell } from "@/components/icons";
 import { loadAllWorkouts } from "@/data/workouts";
+import { loadAllStrengthSessions } from "@/data/strength";
 import { getCustomWorkouts } from "@/lib/customWorkoutStorage";
 import { useFavorites } from "@/hooks";
+import { IntensityBadge } from "@/components/domain/IntensityBadge";
 import type { WorkoutTemplate, WorkoutCategory, SessionType } from "@/types";
+import type { StrengthWorkoutTemplate } from "@/types/strength";
 
 // ── Color map (same as PlanCalendar) ──────────────────────────────
 
@@ -59,6 +63,7 @@ const FILTERS: FilterDef[] = [
   { key: "race_pace", labelFr: "Allure course", labelEn: "Race Pace", categories: ["race_pace"], dotColor: SESSION_COLORS.race_specific },
   { key: "recovery", labelFr: "R\u00e9cup\u00e9ration", labelEn: "Recovery", categories: ["recovery"], dotColor: SESSION_COLORS.recovery },
   { key: "mixed", labelFr: "Mixte", labelEn: "Mixed", categories: ["mixed", "assessment"], dotColor: "#9ca3af" },
+  { key: "strength", labelFr: "Renforcement", labelEn: "Strength", categories: [], dotColor: "#8b5cf6" },
   { key: "cross_training", labelFr: "Activités", labelEn: "Activities", categories: [], dotColor: "#6b7280" },
 ];
 
@@ -71,7 +76,6 @@ interface CrossTrainingItem {
 }
 
 const CROSS_TRAINING_ITEMS: CrossTrainingItem[] = [
-  { id: "ct-strength", type: "strength", labelFr: "Renforcement musculaire", labelEn: "Strength Training", defaultDuration: 0 },
   { id: "ct-cycling", type: "cycling", labelFr: "Vélo", labelEn: "Cycling", defaultDuration: 0 },
   { id: "ct-swimming", type: "swimming", labelFr: "Natation", labelEn: "Swimming", defaultDuration: 0 },
   { id: "ct-yoga", type: "yoga", labelFr: "Yoga / Stretching", labelEn: "Yoga / Stretching", defaultDuration: 0 },
@@ -93,7 +97,9 @@ interface PlanWorkoutPanelProps {
 // ── Component ─────────────────────────────────────────────────────
 
 export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkout }: PlanWorkoutPanelProps) {
+  const { t: tStrength } = useTranslation("strength");
   const [allWorkouts, setAllWorkouts] = useState<WorkoutTemplate[]>([]);
+  const [strengthSessions, setStrengthSessions] = useState<StrengthWorkoutTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
@@ -107,12 +113,16 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
   const sheetDragStartY = useRef<number | null>(null);
   const sheetDragCurrentY = useRef<number | null>(null);
 
-  // Load workouts when panel opens
+  // Load workouts and strength sessions when panel opens
   useEffect(() => {
     if (!isOpen) return;
     setIsLoading(true);
-    loadAllWorkouts().then((workouts) => {
+    Promise.all([
+      loadAllWorkouts(),
+      loadAllStrengthSessions(),
+    ]).then(([workouts, strength]) => {
       setAllWorkouts([...workouts, ...getCustomWorkouts()]);
+      setStrengthSessions(strength);
       setIsLoading(false);
     });
   }, [isOpen]);
@@ -135,6 +145,24 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
       })
       .slice(0, 20);
   }, [allWorkouts, activeFilter, search, isEn, favoritesOnly, favorites]);
+
+  // Filter strength sessions by search and favorites
+  const filteredStrength = useMemo(() => {
+    if (activeFilter !== "strength") return [];
+    return strengthSessions
+      .filter(s => {
+        if (favoritesOnly && !favorites.includes(s.id)) return false;
+        return true;
+      })
+      .filter(s => {
+        if (!search) return true;
+        const name = isEn ? s.nameEn : s.name;
+        const desc = isEn ? s.descriptionEn : s.description;
+        const q = search.toLowerCase();
+        return name.toLowerCase().includes(q) || desc.toLowerCase().includes(q);
+      })
+      .slice(0, 20);
+  }, [strengthSessions, activeFilter, search, isEn, favoritesOnly, favorites]);
 
   // ── Desktop drag handlers ────────────────────────────────────
 
@@ -258,7 +286,91 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
 
       {/* Results list */}
       <div className="flex-1 overflow-y-auto min-h-0 px-3 py-2 space-y-1.5">
-        {activeFilter === "cross_training" ? (
+        {activeFilter === "strength" ? (
+          isLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="size-6 animate-spin text-muted-foreground" />
+            </div>
+          ) : filteredStrength.length === 0 ? (
+            <div className="text-center py-8 space-y-2">
+              <p className="text-sm text-muted-foreground">
+                {favoritesOnly
+                  ? (isEn ? "No favorite strength sessions" : "Aucune séance de renfo en favoris")
+                  : (isEn ? "No matching strength sessions" : "Aucune séance de renfo correspondante")}
+              </p>
+            </div>
+          ) : (
+            filteredStrength.map((session) => {
+              const name = isEn ? session.nameEn : session.name;
+              const muscles = session.primaryMuscleGroups
+                .slice(0, 3)
+                .map(m => tStrength(`muscles.${m}`))
+                .join(", ");
+
+              return (
+                <div
+                  key={session.id}
+                  data-workout-id={session.id}
+                  draggable={!!inline}
+                  onDragStart={inline ? (e) => {
+                    e.dataTransfer.effectAllowed = "copyMove";
+                    e.dataTransfer.setData("workout-id", session.id);
+                  } : undefined}
+                  onClick={() => {
+                    if (onSelectWorkout) {
+                      onSelectWorkout(session.id);
+                    }
+                    if (!inline) onClose();
+                  }}
+                  className={cn(
+                    inline
+                      ? "cursor-grab active:cursor-grabbing"
+                      : "cursor-pointer active:scale-95",
+                    "rounded-lg border bg-card p-2.5",
+                    "hover:bg-accent/50 transition-all select-none",
+                  )}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <Dumbbell className="size-3 shrink-0 text-violet-500" />
+                        <span className="text-xs font-medium truncate block">
+                          {name}
+                        </span>
+                        <span className="shrink-0 flex items-center gap-0.5 text-[10px] text-muted-foreground">
+                          <Clock className="size-2.5" />
+                          {session.typicalDuration.min}min
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <IntensityBadge intensity={session.intensity} size="sm" />
+                        <span className="text-[10px] text-muted-foreground capitalize">
+                          {tStrength(`categories.${session.category}`)}
+                        </span>
+                      </div>
+                      {muscles && (
+                        <p className="text-[10px] text-muted-foreground/70 truncate">
+                          {muscles}
+                        </p>
+                      )}
+                    </div>
+                    {/* Drag hint */}
+                    <div className="text-muted-foreground/40 shrink-0 mt-1">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                        <circle cx="9" cy="5" r="2" />
+                        <circle cx="15" cy="5" r="2" />
+                        <circle cx="9" cy="12" r="2" />
+                        <circle cx="15" cy="12" r="2" />
+                        <circle cx="9" cy="19" r="2" />
+                        <circle cx="15" cy="19" r="2" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          )
+        ) : activeFilter === "cross_training" ? (
           <div className="space-y-1.5">
             {CROSS_TRAINING_ITEMS.map((item) => (
               <div

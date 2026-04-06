@@ -364,6 +364,14 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     ? generatePlanName(config)
     : generateNonRacePlanName(purpose, totalWeeks);
 
+  // Step 12b: Add strength training suggestions (if enabled)
+  // Evidence: Ronnestad et al. (2014) — periodized strength training alongside
+  // endurance improves performance more than endurance alone.
+  if (config.includeStrength) {
+    const { addStrengthSuggestions } = await import("./strengthIntegration");
+    await addStrengthSuggestions(weeks, config.strengthFrequency ?? 2);
+  }
+
   // Step 12: Return complete plan
   return {
     id: crypto.randomUUID(),

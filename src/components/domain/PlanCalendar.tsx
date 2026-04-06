@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
 import { cn } from "@/lib/utils";
-import { Star, Flag, Clock, Trash2, Eye } from "@/components/icons";
+import { Star, Flag, Clock, Trash2, Eye, Dumbbell } from "@/components/icons";
 import { PHASE_META } from "@/types/plan";
 import type { TrainingPlan, PlanSession } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
@@ -800,6 +800,7 @@ const SessionCell = memo(function SessionCell({
     );
   }
 
+  const isStrength = session.sessionType === "strength" || session.workoutId?.startsWith("STR-");
   const dotColor = SESSION_COLORS[session.sessionType] || "#9ca3af";
   const displayName = workoutName || session.workoutId;
   const isCompleted = session.status === "completed";
@@ -882,18 +883,25 @@ const SessionCell = memo(function SessionCell({
           onKeyDown={onClick ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } } : undefined}
           className={cn(
             "flex-1 min-w-0 rounded px-1 py-1 text-left transition-colors",
-            "bg-secondary/60 hover:bg-secondary",
-            isCompleted && "bg-green-500/10 hover:bg-green-500/15 ring-1 ring-green-500/30",
+            isStrength
+              ? "bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/30 dark:hover:bg-amber-950/50 border border-amber-300 dark:border-amber-700"
+              : "bg-secondary/60 hover:bg-secondary",
+            isCompleted && !isStrength && "bg-green-500/10 hover:bg-green-500/15 ring-1 ring-green-500/30",
+            isCompleted && isStrength && "ring-1 ring-green-500/30",
             isSkipped && "opacity-50",
             !onClick && "cursor-default",
             onClick && "cursor-pointer focus-visible:ring-2 focus-visible:ring-ring"
           )}
         >
           <div className="flex items-center gap-1">
-            <span
-              className="size-1.5 rounded-full shrink-0"
-              style={{ backgroundColor: dotColor }}
-            />
+            {isStrength ? (
+              <Dumbbell className="size-3 text-amber-600 dark:text-amber-400 shrink-0" />
+            ) : (
+              <span
+                className="size-1.5 rounded-full shrink-0"
+                style={{ backgroundColor: dotColor }}
+              />
+            )}
             {session.isKeySession && (
               <Star className="size-2.5 text-yellow-500 fill-yellow-500 shrink-0" />
             )}
@@ -901,7 +909,8 @@ const SessionCell = memo(function SessionCell({
           <span
             className={cn(
               "text-[11px] leading-tight font-medium line-clamp-2 mt-0.5 block",
-              isSkipped && "line-through text-muted-foreground"
+              isSkipped && "line-through text-muted-foreground",
+              isStrength && !isSkipped && "text-amber-900 dark:text-amber-100"
             )}
             title={displayName}
           >
