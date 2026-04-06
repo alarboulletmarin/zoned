@@ -2,6 +2,88 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.4.0",
+    date: "2026-04-06",
+    changes: {
+      added: [
+        {
+          text: "Renforcement musculaire pour coureurs : 46 exercices (5 catégories) avec images, carte musculaire et points clés de forme",
+          textEn: "Strength training for runners: 46 exercises (5 categories) with A/B images, muscle maps, and form cues",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "17 séances de renforcement structurées : full body, jambes, core, pliométrie, mobilité et prévention blessures",
+          textEn: "17 structured strength sessions: full body, legs, core, plyometrics, mobility, and injury prevention",
+          category: "Séances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Toggle Course / Renforcement / Tout dans la bibliothèque avec filtres adaptatifs par type d'activité",
+          textEn: "Running / Strength / All toggle in library with adaptive filters per activity type",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Page de détail des séances de renforcement : timeline musculaire, carte anatomique interactive, images d'exercices, badges d'intensité",
+          textEn: "Strength workout detail page: muscle timeline, interactive body map, exercise images, intensity badges",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Intégration du renforcement dans le générateur de plans avec périodisation scientifique (Rønnestad 2014, Beattie 2017)",
+          textEn: "Strength integration in plan generator with scientific periodization (Rønnestad 2014, Beattie 2017)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Séances de renforcement dans les 9 plans prêts à l'emploi (143 séances au total)",
+          textEn: "Strength sessions added to all 9 prebuilt plans (143 sessions total)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "3 collections de renforcement : Force pour coureurs, Core stability, Prévention blessures",
+          textEn: "3 strength collections: Strength for Runners, Core Stability, Injury Prevention",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Section renforcement sur la page d'accueil avec 3 séances en vedette",
+          textEn: "Strength section on homepage with 3 featured sessions",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Onglet Renforcement dans le panel d'ajout de séances des plans",
+          textEn: "Strength tab in plan workout addition panel",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Modal d'agrandissement des images d'exercices au clic",
+          textEn: "Click-to-zoom modal for exercise images",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      fixed: [
+        {
+          text: "Correction du loader infini dans les statistiques de plan contenant des séances de renforcement",
+          textEn: "Fixed infinite loader in plan stats when plan contains strength sessions",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Correction de la barre de filtre sticky sur la page bibliothèque",
+          textEn: "Fixed sticky filter bar on library page",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+    },
+  },
+  {
     version: "0.3.4",
     date: "2026-04-04",
     changes: {

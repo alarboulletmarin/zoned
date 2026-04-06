@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-04-06
+
+### Added
+
+- **Strength training for runners**: 46 exercises across 5 categories (lower body, core, plyometrics, mobility, upper body) with A/B position images, muscle group maps, and form cues
+- **17 structured strength sessions**: full body, legs, core, plyometrics, mobility, and prehab — science-based periodization (Beattie 2017, Rønnestad 2014, Lauersen 2014)
+- **Library toggle**: Course / Renforcement / Tout filter with adaptive sidebar filters per activity type
+- **Strength workout detail page**: exercise list with images, muscle timeline visualization, interactive body muscle map, intensity badges, and scientific references
+- **Plan integration**: auto-suggested strength sessions with phase-appropriate periodization (opt-in toggle + frequency selector in plan creation wizard)
+- **Prebuilt plans**: all 9 plans now include periodized strength sessions (143 sessions total)
+- **3 strength collections**: Force pour coureurs, Core stability, Prévention blessures
+- **Strength section on homepage** with 3 featured sessions
+- **Strength in plan panel**: dedicated "Renforcement" tab with all 17 sessions for manual addition
+- **Favorites support** for strength sessions
+- **Exercise image zoom**: click-to-enlarge modal with keyboard navigation
+- Exercise illustrations credited to free-exercise-db (Public Domain / Unlicense)
+
+### Fixed
+
+- Scrollbar styling
+- Sticky filter bar removed on library page
+- Plan stats infinite loader when plan contains strength sessions
+- Zone distribution computation skips non-running sessions
+
 ## [0.3.4] - 2026-04-04
 
 ### Added

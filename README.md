@@ -3,14 +3,14 @@
 
   # Zoned
 
-  **200+ structured running workouts · 5K to marathon plans · 9 calculators**
+  **200+ running workouts · 17 strength sessions · 5K to marathon plans · 9 calculators**
 
   *Free. No account. No tracking.*
 
   ### [→ zoned.run](https://zoned.run)
 
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
-  [![Version](https://img.shields.io/badge/version-v0.3.4-orange?style=flat-square)](https://github.com/alarboulletmarin/zoned/releases)
+  [![Version](https://img.shields.io/badge/version-v0.4.0-orange?style=flat-square)](https://github.com/alarboulletmarin/zoned/releases)
   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md)
   [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-000?style=flat-square&logo=vercel)](https://vercel.com)
   [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
@@ -23,7 +23,7 @@
 
 ## What is Zoned?
 
-Zoned is a free, open-source web app for structured running training. It brings together 200+ science-based workouts, personalized training plans from 5K to marathon, and 9 calculators — all running in your browser, with no account and no data sent anywhere.
+Zoned is a free, open-source web app for structured running training. It brings together 200+ science-based running workouts, 17 strength training sessions for runners, personalized training plans from 5K to marathon with integrated strength periodization, and 9 calculators — all running in your browser, with no account and no data sent anywhere.
 
 Built on training science from **Seiler**, **Billat**, and **Daniels**. Developed in collaboration with [Claude Code](https://claude.ai/code) (Anthropic).
 
@@ -53,7 +53,9 @@ Built on training science from **Seiler**, **Billat**, and **Daniels**. Develope
 ## Features
 
 ### Workouts
-- **200+ sessions** across 11 categories: recovery, endurance, tempo, threshold, VMA, long run, hills, fartlek, race pace, mixed, assessment
+- **200+ running sessions** across 11 categories: recovery, endurance, tempo, threshold, VMA, long run, hills, fartlek, race pace, mixed, assessment
+- **17 strength sessions** for runners: full body, legs, core, plyometrics, mobility, prehab — science-based (Beattie 2017, Rønnestad 2014, Lauersen 2014)
+- **46 exercises** with A/B position images, muscle maps, form cues, and progression/regression chains
 - **6 training zones**: Z1 (recovery) → Z6 (sprint)
 - **Specialized methods**: Norwegian double threshold, Bangsbo 10-20-30, Billat 30/30, Yasso 800s, Cooper/VAMEVAL tests
 - **Personalized zones**: Based on your max HR and VMA
@@ -64,7 +66,8 @@ Zone calculator · Pace calculator · Pace converter · Pace table · Treadmill 
 
 ### Training Plans
 - **Plan generator**: Personalized multi-week plans (5K to marathon)
-- **8 prebuilt plans** + free mode to build from scratch
+- **9 prebuilt plans** with integrated strength training + free mode to build from scratch
+- **Strength periodization**: auto-suggested strength sessions adapted to each training phase
 - **4 view modes**: Calendar, Weekly, Monthly, List
 - **Drag-and-drop** calendar, cross-training support (strength, cycling, swimming, yoga)
 - **Export**: PDF, ICS (Google/Apple/Outlook Calendar)
@@ -73,7 +76,7 @@ Zone calculator · Pace calculator · Pace converter · Pace table · Treadmill 
 ### Discovery
 - **Quiz**: Find the right workout in 5 questions (goal, time, terrain, level, weakness)
 - **Workout of the Day** · Random workout
-- **16 curated collections** · Command palette (Cmd+K)
+- **19 curated collections** (including 3 strength) · Command palette (Cmd+K)
 - **Favorites**: Save and organize preferred workouts
 
 ### Export
