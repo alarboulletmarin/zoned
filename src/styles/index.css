@@ -64,6 +64,27 @@
   --color-zone-6-bg: var(--zone-6-bg);
   --color-zone-6-text: var(--zone-6-text);
 
+  /* Strength muscle group colors */
+  --color-muscle-quadriceps: var(--muscle-quadriceps);
+  --color-muscle-hamstrings: var(--muscle-hamstrings);
+  --color-muscle-calves: var(--muscle-calves);
+  --color-muscle-glutes: var(--muscle-glutes);
+  --color-muscle-hip_flexors: var(--muscle-hip_flexors);
+  --color-muscle-adductors: var(--muscle-adductors);
+  --color-muscle-core_anterior: var(--muscle-core_anterior);
+  --color-muscle-core_lateral: var(--muscle-core_lateral);
+  --color-muscle-core_posterior: var(--muscle-core_posterior);
+  --color-muscle-upper_back: var(--muscle-upper_back);
+  --color-muscle-shoulders: var(--muscle-shoulders);
+  --color-muscle-chest: var(--muscle-chest);
+
+  /* Strength intensity colors */
+  --color-intensity-mobility: var(--intensity-mobility);
+  --color-intensity-endurance: var(--intensity-endurance);
+  --color-intensity-hypertrophy: var(--intensity-hypertrophy);
+  --color-intensity-strength: var(--intensity-strength);
+  --color-intensity-power: var(--intensity-power);
+
   /* Typography */
   --font-sans: "Space Grotesk", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
@@ -144,6 +165,37 @@
   --zone-6: #7c3aed;
   --zone-6-bg: #ede9fe;
   --zone-6-text: #5b21b6;
+
+  /* ==========================================================================
+     STRENGTH - Muscle group colors
+     ========================================================================== */
+
+  /* Legs - Blue shades */
+  --muscle-quadriceps: #3b82f6;
+  --muscle-hamstrings: #2563eb;
+  --muscle-calves: #60a5fa;
+
+  /* Hips - Orange shades */
+  --muscle-glutes: #f97316;
+  --muscle-hip_flexors: #fb923c;
+  --muscle-adductors: #ea580c;
+
+  /* Core - Purple shades */
+  --muscle-core_anterior: #a855f7;
+  --muscle-core_lateral: #8b5cf6;
+  --muscle-core_posterior: #c084fc;
+
+  /* Upper body - Cyan shades */
+  --muscle-upper_back: #06b6d4;
+  --muscle-shoulders: #0891b2;
+  --muscle-chest: #22d3ee;
+
+  /* Strength intensity colors */
+  --intensity-mobility: #22c55e;
+  --intensity-endurance: #3b82f6;
+  --intensity-hypertrophy: #f59e0b;
+  --intensity-strength: #ef4444;
+  --intensity-power: #a855f7;
 }
 
 /* ==========================================================================
@@ -236,6 +288,29 @@
   --zone-6: #7c3aed;
   --zone-6-bg: #2e1065;
   --zone-6-text: #c4b5fd;
+
+  /* Strength - Muscle group colors (dark mode) */
+  --muscle-quadriceps: #60a5fa;
+  --muscle-hamstrings: #3b82f6;
+  --muscle-calves: #93c5fd;
+
+  --muscle-glutes: #fb923c;
+  --muscle-hip_flexors: #fdba74;
+  --muscle-adductors: #f97316;
+
+  --muscle-core_anterior: #c084fc;
+  --muscle-core_lateral: #a78bfa;
+  --muscle-core_posterior: #d8b4fe;
+
+  --muscle-upper_back: #22d3ee;
+  --muscle-shoulders: #06b6d4;
+  --muscle-chest: #67e8f9;
+
+  --intensity-mobility: #4ade80;
+  --intensity-endurance: #60a5fa;
+  --intensity-hypertrophy: #fbbf24;
+  --intensity-strength: #f87171;
+  --intensity-power: #c084fc;
 }
 
 /* ==========================================================================
@@ -540,6 +615,40 @@
 
 .border-zone {
   border-color: var(--zone-color);
+}
+
+/* ==========================================================================
+   STRENGTH - Muscle & Intensity badge styles
+   ========================================================================== */
+
+.muscle-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm, 0.375rem);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-out;
+}
+
+.muscle-badge:hover {
+  transform: scale(1.05);
+}
+
+.intensity-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm, 0.375rem);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.15s ease-out;
+}
+
+.intensity-badge:hover {
+  transform: scale(1.05);
 }
 
 /* ==========================================================================

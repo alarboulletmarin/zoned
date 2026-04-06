@@ -117,7 +117,8 @@ export async function getWorkoutsByCategory(
 
 /**
  * Get workout by ID (async)
- * Loads all workouts if not cached
+ * Loads all workouts if not cached.
+ * Checks strength sessions for STR- prefixed IDs.
  */
 export async function getWorkoutById(
   id: string
@@ -126,6 +127,13 @@ export async function getWorkoutById(
   if (id.startsWith("CUSTOM-")) {
     const { getCustomWorkout } = await import("@/lib/customWorkoutStorage");
     return getCustomWorkout(id);
+  }
+  // Check strength sessions for STR- prefixed IDs
+  if (id.startsWith("STR-")) {
+    const { getStrengthSessionById } = await import("@/data/strength");
+    const session = await getStrengthSessionById(id);
+    // Return as WorkoutTemplate union — callers should use isStrengthWorkout() guard
+    return session as unknown as WorkoutTemplate | undefined;
   }
   const workouts = await loadAllWorkouts();
   return workouts.find((w) => w.id === id);

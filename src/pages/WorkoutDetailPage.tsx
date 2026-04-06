@@ -19,6 +19,9 @@ import {
   Shuffle,
   ClipboardCheck,
   Link2,
+  Shield,
+  BookOpen,
+  Sparkles,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -40,14 +43,22 @@ import { ScienceSection } from "@/components/domain/ScienceSection";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { SEOHead } from "@/components/seo";
 import { SessionTimeline, ZoneDistribution, transformSessionBlocks } from "@/components/visualization";
+import { StrengthSessionTimeline } from "@/components/visualization/StrengthSessionTimeline";
+import { MuscleDistribution } from "@/components/visualization/MuscleDistribution";
+import { MuscleMap } from "@/components/visualization/MuscleMap";
 import { MiniSessionTimeline } from "@/components/visualization/MiniSessionTimeline";
 import { useWorkout, useRelatedWorkouts, useTips } from "@/hooks";
 import { RelatedContent } from "@/components/domain/RelatedContent";
 import { useScrolledPast } from "@/hooks/useScrolledPast";
-import type { WorkoutCategory, ZoneRange } from "@/types";
+import type { WorkoutCategory, ZoneRange, AnyWorkoutTemplate } from "@/types";
 import {
   getDominantZone,
+  isStrengthWorkout,
 } from "@/types";
+import type { StrengthWorkoutTemplate } from "@/types/strength";
+import { IntensityBadge, INTENSITY_COLORS } from "@/components/domain/IntensityBadge";
+import { MuscleGroupBadges } from "@/components/domain/MuscleGroupBadge";
+import { StrengthExerciseList } from "@/components/domain/StrengthExerciseList";
 import { loadUserZonePrefs, calculateAllZones } from "@/lib/zones";
 
 /** Category icons using Lucide */
@@ -85,13 +96,14 @@ export function WorkoutDetailPage() {
   } | null;
 
   const { workout, isLoading } = useWorkout(id);
-  const { workouts: relatedWorkouts } = useRelatedWorkouts(workout);
+  const isStrength = workout ? isStrengthWorkout(workout as AnyWorkoutTemplate) : false;
+  const { workouts: relatedWorkouts } = useRelatedWorkouts(isStrength ? null : workout);
 
-  // Get contextual tip based on dominant zone
-  const dominantZoneForTip = workout ? getDominantZone(workout) : undefined;
+  // Get contextual tip based on dominant zone (running workouts only)
+  const dominantZoneForTip = workout && !isStrength ? getDominantZone(workout) : undefined;
   const { tip } = useTips({
     filters: dominantZoneForTip ? { zones: [dominantZoneForTip] } : undefined,
-    autoLoad: !!workout,
+    autoLoad: !!workout && !isStrength,
   });
 
   // Load user zones from localStorage
@@ -161,6 +173,17 @@ export function WorkoutDetailPage() {
           </Link>
         </Button>
       </div>
+    );
+  }
+
+  // ── Strength workout branch ─────────────────────────────────────
+  if (isStrengthWorkout(workout as AnyWorkoutTemplate)) {
+    return (
+      <StrengthWorkoutDetail
+        workout={workout as unknown as StrengthWorkoutTemplate}
+        locationState={locationState}
+        isEn={isEn}
+      />
     );
   }
 
@@ -288,56 +311,52 @@ export function WorkoutDetailPage() {
         ]}
       />
       <div className={`zone-${dominantZone} py-8 space-y-8`}>
-        {/* Back Button */}
-        <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="mb-1">
-          <ArrowLeft className="mr-2 size-4" />
-          {isEn ? "Back" : "Retour"}
-        </Button>
+        {/* Back + Breadcrumb */}
+        <div className="flex flex-col gap-2">
+          <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="self-start">
+            <ArrowLeft className="mr-2 size-4" />
+            {isEn ? "Back" : "Retour"}
+          </Button>
 
-        {/* Breadcrumb Trail */}
-        <nav
-          aria-label="Breadcrumb"
-          className="border-l-2 pl-3"
-          style={{ borderColor: `var(--zone-${dominantZone})` }}
-        >
-          {/* Desktop: full breadcrumb */}
-          <ol className="hidden sm:flex items-center flex-wrap">
-            {breadcrumbs.map((crumb, i) => {
-              const isLast = i === breadcrumbs.length - 1;
-              return (
-                <li key={i} className="flex items-center">
-                  {i > 0 && (
-                    <span className="text-muted-foreground/50 mx-1.5 text-sm">/</span>
-                  )}
-                  {isLast ? (
-                    <span className="text-foreground text-sm font-medium">{crumb.label}</span>
-                  ) : (
-                    <Link
-                      to={crumb.to!}
-                      state={crumb.state}
-                      className="text-muted-foreground text-sm hover:text-foreground transition-colors"
-                    >
-                      {crumb.label}
-                    </Link>
-                  )}
-                </li>
-              );
-            })}
-          </ol>
-          {/* Mobile: immediate parent + current name */}
-          <div className="flex sm:hidden items-center text-sm">
-            <Link
-              to={parentCrumb.to!}
-              state={parentCrumb.state}
-              className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
-            >
-              <ArrowLeft className="size-3.5" />
-              {parentCrumb.label}
-            </Link>
-            <span className="text-muted-foreground/50 mx-1.5">/</span>
-            <span className="text-foreground font-medium truncate">{workoutName}</span>
-          </div>
-        </nav>
+          <nav aria-label="Breadcrumb">
+            {/* Desktop: full breadcrumb */}
+            <ol className="hidden sm:flex items-center flex-wrap">
+              {breadcrumbs.map((crumb, i) => {
+                const isLast = i === breadcrumbs.length - 1;
+                return (
+                  <li key={i} className="flex items-center">
+                    {i > 0 && (
+                      <span className="text-muted-foreground/50 mx-1.5 text-sm">/</span>
+                    )}
+                    {isLast ? (
+                      <span className="text-foreground text-sm font-medium">{crumb.label}</span>
+                    ) : (
+                      <Link
+                        to={crumb.to!}
+                        state={crumb.state}
+                        className="text-muted-foreground text-sm hover:text-foreground transition-colors"
+                      >
+                        {crumb.label}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+            {/* Mobile: immediate parent + current name */}
+            <div className="flex sm:hidden items-center text-sm">
+              <Link
+                to={parentCrumb.to!}
+                state={parentCrumb.state}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {parentCrumb.label}
+              </Link>
+              <span className="text-muted-foreground/50 mx-1.5">/</span>
+              <span className="text-foreground font-medium truncate">{workoutName}</span>
+            </div>
+          </nav>
+        </div>
 
         {/* Plan context banner */}
         {hasPlanContext && (
@@ -527,5 +546,454 @@ export function WorkoutDetailPage() {
         </div>
       </div>
     </>
+  );
+}
+
+// ============================================================================
+// Strength Workout Detail
+// ============================================================================
+
+interface StrengthWorkoutDetailProps {
+  workout: StrengthWorkoutTemplate;
+  locationState: {
+    from?: string;
+    planId?: string;
+    planName?: string;
+    weekNumber?: number;
+    volumePercent?: number;
+    estimatedDurationMin?: number;
+    scrollY?: number;
+    collectionSlug?: string;
+    collectionName?: string;
+  } | null;
+  isEn: boolean;
+}
+
+function StrengthWorkoutDetail({ workout, locationState, isEn }: StrengthWorkoutDetailProps) {
+  const navigate = useNavigate();
+  const { t: tSession } = useTranslation("session");
+  const { t: tStrength } = useTranslation("strength");
+  const { t: tCommon } = useTranslation("common");
+  const { t: tLib } = useTranslation("library");
+
+  const workoutName = isEn ? workout.nameEn : workout.name;
+  const description = isEn ? workout.descriptionEn : workout.description;
+  const intensityColor = INTENSITY_COLORS[workout.intensity];
+
+  // Estimate total duration from typical range
+  const duration = Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2);
+
+  // Breadcrumbs
+  type BreadcrumbItem = { label: string; to?: string; state?: Record<string, unknown> };
+  const breadcrumbs: BreadcrumbItem[] = [{ label: tCommon("nav.home"), to: "/" }];
+
+  if (locationState?.from === "plan" && locationState.planId) {
+    breadcrumbs.push({ label: tCommon("nav.plans"), to: "/plans" });
+    breadcrumbs.push({
+      label: locationState.planName || "Plan",
+      to: `/plan/${locationState.planId}`,
+      state: { returnToWeek: locationState.weekNumber, returnScrollY: locationState.scrollY },
+    });
+  } else {
+    breadcrumbs.push({ label: tCommon("nav.library"), to: "/library" });
+    breadcrumbs.push({
+      label: tStrength("categories." + workout.category),
+      to: `/library?activity=strength&category=${workout.category}`,
+    });
+  }
+  breadcrumbs.push({ label: workoutName });
+
+  const parentCrumb = breadcrumbs[breadcrumbs.length - 2];
+
+  // Coaching tips (shared shape with running)
+  const tips = isEn ? workout.coachingTipsEn : workout.coachingTips;
+  const mistakes = isEn ? workout.commonMistakesEn : workout.commonMistakes;
+
+  // Equipment display
+  const equipmentList = workout.equipment.filter((e) => e !== "none");
+  const hasEquipment = equipmentList.length > 0;
+
+  const seoTitle = workoutName;
+  const seoDescription = description.slice(0, 155);
+
+  return (
+    <>
+      <SEOHead
+        title={seoTitle}
+        description={seoDescription}
+        canonical={`/workout/${workout.id}`}
+        ogType="article"
+        jsonLd={[
+          {
+            "@type": "ExercisePlan",
+            name: seoTitle,
+            description: seoDescription,
+            exerciseType: "Strength Training",
+            activityDuration: `PT${duration}M`,
+            intensity: workout.difficulty,
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: "Bibliothèque", item: "https://zoned.run/library" },
+              { "@type": "ListItem", position: 3, name: seoTitle },
+            ],
+          },
+        ]}
+      />
+      <div className="py-8 space-y-8">
+        {/* Back + Breadcrumbs */}
+        <div className="flex flex-col gap-2">
+          <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="self-start">
+            <ArrowLeft className="mr-2 size-4" />
+            {isEn ? "Back" : "Retour"}
+          </Button>
+
+          <nav aria-label="Breadcrumb">
+            <ol className="hidden sm:flex items-center flex-wrap">
+              {breadcrumbs.map((crumb, i) => {
+                const isLast = i === breadcrumbs.length - 1;
+                return (
+                  <li key={i} className="flex items-center">
+                    {i > 0 && (
+                      <span className="text-muted-foreground/50 mx-1.5 text-sm">/</span>
+                    )}
+                    {isLast ? (
+                      <span className="text-foreground text-sm font-medium">{crumb.label}</span>
+                    ) : (
+                      <Link
+                        to={crumb.to!}
+                        state={crumb.state}
+                        className="text-muted-foreground text-sm hover:text-foreground transition-colors"
+                      >
+                        {crumb.label}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+            <div className="flex sm:hidden items-center text-sm">
+              <Link
+                to={parentCrumb.to!}
+                state={parentCrumb.state}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {parentCrumb.label}
+              </Link>
+              <span className="text-muted-foreground/50 mx-1.5">/</span>
+              <span className="text-foreground font-medium truncate">{workoutName}</span>
+            </div>
+          </nav>
+        </div>
+
+        {/* Bento Header */}
+        <header className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Session Identity Card */}
+          <div
+            className="lg:col-span-8 border border-border/50 rounded-xl p-5 sm:p-8 md:p-10 flex flex-col justify-between lg:min-h-[240px]"
+            style={{
+              background: `linear-gradient(135deg, color-mix(in srgb, ${intensityColor} 10%, transparent), transparent)`,
+            }}
+          >
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <IntensityBadge intensity={workout.intensity} size="lg" />
+                  <Badge variant="outline" className="gap-1.5 text-muted-foreground">
+                    <Dumbbell className="size-3.5" />
+                    {tStrength(`categories.${workout.category}`)}
+                  </Badge>
+                </div>
+                <FavoriteButton workoutId={workout.id} />
+              </div>
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold leading-tight mb-4">
+                {workoutName}
+              </h1>
+              <p className="text-muted-foreground max-w-2xl leading-relaxed text-lg">
+                <GlossaryLinkedText text={description} />
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-8">
+              <Button
+                variant="secondary"
+                className="rounded-full px-5 py-2.5 h-auto font-bold"
+                onClick={async () => {
+                  const ok = await copyToClipboard(window.location.href);
+                  if (ok) toast.success(tCommon("actions.linkCopied"));
+                  else toast.error(tCommon("errors.generic"));
+                }}
+              >
+                <Link2 className="size-4 mr-2" />
+                {tCommon("actions.copyLink")}
+              </Button>
+            </div>
+          </div>
+
+          {/* Summary Metrics */}
+          <div className="lg:col-span-4">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
+              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
+                <Clock className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
+                <span className="text-lg lg:text-2xl font-bold">
+                  {workout.typicalDuration.min}-{workout.typicalDuration.max}
+                </span>
+                <span className="text-[10px] lg:text-xs text-muted-foreground">
+                  {tCommon("units.minutes")}
+                </span>
+              </div>
+              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
+                <Dumbbell className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
+                <span className="text-sm lg:text-lg font-bold">
+                  {tLib(`difficulty.${workout.difficulty}`)}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {tSession("details.difficulty")}
+                </span>
+              </div>
+              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
+                <Target className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
+                <span className="text-sm font-bold">
+                  {tStrength(`intensity.${workout.intensity}`)}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {tStrength("detail.intensity")}
+                </span>
+              </div>
+              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
+                <Shield className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
+                <span className="text-sm font-bold">
+                  {tStrength("detail.weeklyMax", { count: workout.weeklyFrequencyMax })}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {tStrength("detail.minRecovery", { days: workout.minimumRecoveryDays })}
+                </span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Primary muscle groups */}
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className="text-sm font-medium text-muted-foreground">
+            {tStrength("detail.targetMuscles")}:
+          </span>
+          <MuscleGroupBadges muscles={workout.primaryMuscleGroups} size="md" />
+        </div>
+
+        <div className="grid gap-8 lg:grid-cols-3">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Timeline Visualization */}
+            <Card className="rounded-xl">
+              <CardHeader>
+                <CardTitle className="text-lg">
+                  {tStrength("detail.sessionTimeline")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <StrengthSessionTimeline workout={workout} />
+              </CardContent>
+            </Card>
+
+            {/* Exercise Detail */}
+            <Card className="rounded-xl">
+              <CardHeader>
+                <CardTitle className="text-lg">
+                  {tStrength("detail.exerciseDetail")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <StrengthExerciseList blocks={workout.warmupBlocks} phase="warmup" />
+                <StrengthExerciseList blocks={workout.mainBlocks} phase="main" />
+                <StrengthExerciseList blocks={workout.cooldownBlocks} phase="cooldown" />
+              </CardContent>
+            </Card>
+
+            {/* Scientific References */}
+            {workout.references && workout.references.length > 0 && (
+              <Card className="rounded-xl">
+                <CardHeader>
+                  <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <BookOpen className="size-4" />
+                    {tStrength("detail.references")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2">
+                    {workout.references.map((ref, i) => (
+                      <li key={i} className="text-sm text-muted-foreground">
+                        {ref.startsWith("http") ? (
+                          <a
+                            href={ref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-foreground underline underline-offset-2 transition-colors"
+                          >
+                            {ref}
+                          </a>
+                        ) : (
+                          ref
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+
+          {/* Sidebar */}
+          <aside className="space-y-6">
+            {/* Muscle Distribution */}
+            <Card className="rounded-xl">
+              <CardHeader>
+                <CardTitle className="text-sm font-medium">
+                  {tStrength("detail.muscleDistribution")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <MuscleDistribution workout={workout} />
+              </CardContent>
+            </Card>
+
+            {/* Muscle Map (body visualization) */}
+            <Card className="rounded-xl">
+              <CardHeader>
+                <CardTitle className="text-sm font-medium">
+                  {tStrength("detail.muscleMap")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <MuscleMap workout={workout} />
+              </CardContent>
+            </Card>
+
+            {/* Equipment */}
+            <Card className="rounded-xl">
+              <CardHeader>
+                <CardTitle className="text-sm font-medium">
+                  {tStrength("detail.equipmentNeeded")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {hasEquipment ? (
+                  <div className="flex flex-wrap gap-2">
+                    {equipmentList.map((eq) => (
+                      <Badge key={eq} variant="secondary" className="text-xs">
+                        {tStrength(`equipment.${eq}`)}
+                      </Badge>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    {tStrength("detail.noEquipment")}
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Suitable Training Phases */}
+            {workout.suitablePhases.length > 0 && (
+              <Card className="rounded-xl">
+                <CardHeader>
+                  <CardTitle className="text-sm font-medium">
+                    {tStrength("detail.suitablePhases")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {workout.suitablePhases.map((phase) => (
+                      <Badge key={phase} variant="outline" className="text-xs capitalize">
+                        {tStrength(`trainingPhases.${phase}`)}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Related Content */}
+            <RelatedContent source={{ type: "workout", id: workout.id }} />
+
+            {/* Coaching Tips & Common Mistakes */}
+            {(tips.length > 0 || mistakes.length > 0) && (
+              <Card className="rounded-xl">
+                <CardHeader>
+                  <CardTitle className="text-sm font-medium">
+                    {tSession("titles.coachingTips")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <StrengthCoachingTips tips={tips} mistakes={mistakes} />
+                </CardContent>
+              </Card>
+            )}
+          </aside>
+        </div>
+
+        {/* Image source credit */}
+        <p className="text-xs text-muted-foreground/60 mt-8">
+          {isEn
+            ? "Exercise illustrations from free-exercise-db (Public Domain)."
+            : "Illustrations des exercices issues de free-exercise-db (Domaine Public)."}
+        </p>
+      </div>
+    </>
+  );
+}
+
+// ── Strength Coaching Tips (reused shape) ──────────────────────────
+
+function StrengthCoachingTips({
+  tips,
+  mistakes,
+}: {
+  tips: string[];
+  mistakes: string[];
+}) {
+  const { t } = useTranslation("session");
+
+  return (
+    <div className="space-y-6">
+      {tips.length > 0 && (
+        <div className="space-y-2">
+          <h4 className="text-sm font-semibold flex items-center gap-2">
+            <Sparkles className="size-4 text-success" />
+            {t("coaching.tips")}
+          </h4>
+          <ul className="space-y-1.5">
+            {tips.map((tip, i) => (
+              <li
+                key={i}
+                className="text-sm text-muted-foreground pl-5 relative before:content-[''] before:absolute before:left-0 before:top-[7px] before:w-1.5 before:h-1.5 before:rounded-full before:bg-success/60"
+              >
+                <GlossaryLinkedText text={tip} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {mistakes.length > 0 && (
+        <div className="space-y-2">
+          <h4 className="text-sm font-semibold flex items-center gap-2">
+            <Shield className="size-4 text-destructive" />
+            {t("coaching.mistakes")}
+          </h4>
+          <ul className="space-y-1.5">
+            {mistakes.map((mistake, i) => (
+              <li
+                key={i}
+                className="text-sm text-muted-foreground pl-5 relative before:content-[''] before:absolute before:left-0 before:top-[7px] before:w-1.5 before:h-1.5 before:rounded-full before:bg-destructive/60"
+              >
+                <GlossaryLinkedText text={mistake} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   );
 }
