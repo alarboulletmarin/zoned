@@ -5,16 +5,27 @@ import { Badge } from "@/components/ui/badge";
 import { ZoneBadge } from "./ZoneBadge";
 import { FavoriteButton } from "./FavoriteButton";
 import { cn } from "@/lib/utils";
-import type { WorkoutTemplate } from "@/types";
-import { getDominantZone } from "@/types";
+import type { WorkoutTemplate, AnyWorkoutTemplate } from "@/types";
+import { getDominantZone, isStrengthWorkout } from "@/types";
 import { getWorkoutDuration } from "@/components/visualization";
+import { StrengthWorkoutListItem } from "./StrengthWorkoutCard";
 
 interface WorkoutListItemProps {
-  workout: WorkoutTemplate;
+  workout: AnyWorkoutTemplate;
   className?: string;
 }
 
 export function WorkoutListItem({ workout, className }: WorkoutListItemProps) {
+  // Branch to strength list item if this is a strength workout
+  if (isStrengthWorkout(workout)) {
+    return <StrengthWorkoutListItem workout={workout} className={className} />;
+  }
+
+  return <RunningWorkoutListItem workout={workout} className={className} />;
+}
+
+/** Internal running-only list item */
+function RunningWorkoutListItem({ workout, className }: { workout: WorkoutTemplate; className?: string }) {
   const { t, i18n } = useTranslation(["library", "common"]);
   const isEn = i18n.language?.startsWith("en") ?? false;
   const dominantZone = getDominantZone(workout);

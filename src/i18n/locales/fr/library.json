@@ -1,6 +1,13 @@
 {
   "title": "Bibliothèque de séances",
   "subtitle": "{{count}} séances d'entraînement scientifiques",
+  "subtitleStrength": "{{count}} séances de renforcement",
+  "subtitleAll": "{{count}} séances au total",
+  "activityToggle": {
+    "all": "Tout",
+    "running": "Course",
+    "strength": "Renforcement"
+  },
   "viewMode": {
     "label": "Affichage",
     "grid": "Grille",

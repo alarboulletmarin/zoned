@@ -29,8 +29,9 @@ import {
 import type { ZoneNumber } from "@/components/visualization";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import type { WorkoutTemplate, WorkoutCategory } from "@/types";
-import { getDominantZone, DIFFICULTY_META } from "@/types";
+import type { WorkoutTemplate, WorkoutCategory, AnyWorkoutTemplate } from "@/types";
+import { getDominantZone, DIFFICULTY_META, isStrengthWorkout } from "@/types";
+import { StrengthWorkoutCard, StrengthWorkoutCardCompact } from "./StrengthWorkoutCard";
 
 /** Category icons using Lucide */
 const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: string }>> = {
@@ -57,12 +58,22 @@ const ZONE_COLORS: Record<ZoneNumber, string> = {
 };
 
 interface WorkoutCardProps {
-  workout: WorkoutTemplate;
+  workout: AnyWorkoutTemplate;
   className?: string;
   expanded?: boolean;
 }
 
 export function WorkoutCard({ workout, className, expanded }: WorkoutCardProps) {
+  // Branch to strength card if this is a strength workout
+  if (isStrengthWorkout(workout)) {
+    return <StrengthWorkoutCard workout={workout} className={className} expanded={expanded} />;
+  }
+
+  return <RunningWorkoutCard workout={workout} className={className} expanded={expanded} />;
+}
+
+/** Internal running-only card with properly typed props */
+function RunningWorkoutCard({ workout, className, expanded }: { workout: WorkoutTemplate; className?: string; expanded?: boolean }) {
   const { t, i18n } = useTranslation(["library", "common"]);
   const isEn = i18n.language?.startsWith("en") ?? false;
   const dominantZone = getDominantZone(workout);
@@ -196,7 +207,7 @@ export function WorkoutCard({ workout, className, expanded }: WorkoutCardProps) 
 
 // Compact version for related workouts
 interface WorkoutCardCompactProps {
-  workout: WorkoutTemplate;
+  workout: AnyWorkoutTemplate;
   className?: string;
 }
 
@@ -204,6 +215,16 @@ export function WorkoutCardCompact({
   workout,
   className,
 }: WorkoutCardCompactProps) {
+  // Branch to strength compact card if this is a strength workout
+  if (isStrengthWorkout(workout)) {
+    return <StrengthWorkoutCardCompact workout={workout} className={className} />;
+  }
+
+  return <RunningWorkoutCardCompact workout={workout} className={className} />;
+}
+
+/** Internal running-only compact card */
+function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTemplate; className?: string }) {
   const { t, i18n } = useTranslation(["library", "common"]);
   const isEn = i18n.language?.startsWith("en") ?? false;
   const dominantZone = getDominantZone(workout);

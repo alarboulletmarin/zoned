@@ -2,7 +2,7 @@ import { useMemo, useState, useEffect, useRef, useCallback } from "react";
 import { usePageHint } from "@/hooks/usePageHint";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Filter, Search, Loader2 } from "@/components/icons";
+import { Filter, Search, Loader2, Dumbbell, Footprints, X } from "@/components/icons";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 import { Button } from "@/components/ui/button";
@@ -18,15 +18,36 @@ import {
   defaultFilters,
   type WorkoutFiltersState,
 } from "@/components/domain";
+import type { ActivityType, TerrainFilter } from "@/components/domain/WorkoutFilters";
 import { SEOHead } from "@/components/seo";
 import { useFavorites, useKeyboardShortcuts, useWorkouts, useViewMode } from "@/hooks";
+import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { getWorkoutDuration } from "@/components/visualization";
 import { categories } from "@/data/workouts";
-import type { WorkoutCategory } from "@/types";
+import { strengthCategories } from "@/data/strength";
+import type { WorkoutCategory, AnyWorkoutTemplate, TargetSystem } from "@/types";
+import { isStrengthWorkout, isRunningWorkout } from "@/types";
+import type { StrengthCategory, StrengthWorkoutTemplate, StrengthEquipment, MuscleGroup } from "@/types/strength";
+import { cn } from "@/lib/utils";
 
 // Duration constants (same as in WorkoutFilters)
 const DURATION_MIN = 0;
 const DURATION_MAX = 240;
+
+/**
+ * Get average duration for a strength workout
+ */
+function getStrengthDuration(w: StrengthWorkoutTemplate): number {
+  return Math.round((w.typicalDuration.min + w.typicalDuration.max) / 2);
+}
+
+/**
+ * Get duration for any workout type
+ */
+function getAnyWorkoutDuration(w: AnyWorkoutTemplate): number {
+  if (isStrengthWorkout(w)) return getStrengthDuration(w);
+  return getWorkoutDuration(w);
+}
 
 /**
  * Parses URL search params into filter state
@@ -34,22 +55,26 @@ const DURATION_MAX = 240;
 function parseFiltersFromParams(searchParams: URLSearchParams): Partial<WorkoutFiltersState> {
   const filters: Partial<WorkoutFiltersState> = {};
 
-  // Category
+  // Category (comma-separated)
   const category = searchParams.get("category");
   if (category) {
-    filters.category = category as WorkoutCategory;
+    filters.category = category.split(",") as WorkoutCategory[];
   }
 
-  // Difficulty
+  // Difficulty (comma-separated)
   const difficulty = searchParams.get("difficulty");
-  if (difficulty && ["beginner", "intermediate", "advanced", "elite"].includes(difficulty)) {
-    filters.difficulty = difficulty as WorkoutFiltersState["difficulty"];
+  if (difficulty) {
+    filters.difficulty = difficulty.split(",").filter(d =>
+      ["beginner", "intermediate", "advanced", "elite"].includes(d)
+    ) as WorkoutFiltersState["difficulty"];
   }
 
-  // Terrain
+  // Terrain (comma-separated)
   const terrain = searchParams.get("terrain");
-  if (terrain && ["flat", "hills", "track"].includes(terrain)) {
-    filters.terrain = terrain as WorkoutFiltersState["terrain"];
+  if (terrain) {
+    filters.terrain = terrain.split(",").filter(t =>
+      ["flat", "hills", "track"].includes(t)
+    ) as WorkoutFiltersState["terrain"];
   }
 
   // Max duration - sets the upper bound of duration range
@@ -61,23 +86,57 @@ function parseFiltersFromParams(searchParams: URLSearchParams): Partial<WorkoutF
     }
   }
 
+  // Strength category (comma-separated)
+  const strengthCategory = searchParams.get("strengthCategory");
+  if (strengthCategory) {
+    filters.strengthCategory = strengthCategory.split(",") as StrengthCategory[];
+  }
+
+  // Equipment (comma-separated)
+  const equipment = searchParams.get("equipment");
+  if (equipment) {
+    filters.equipment = equipment.split(",") as WorkoutFiltersState["equipment"];
+  }
+
+  // Muscle group (comma-separated)
+  const muscleGroup = searchParams.get("muscleGroup");
+  if (muscleGroup) {
+    filters.muscleGroup = muscleGroup.split(",") as WorkoutFiltersState["muscleGroup"];
+  }
+
   return filters;
+}
+
+/**
+ * Parse activity type from URL params
+ */
+function parseActivityType(searchParams: URLSearchParams): ActivityType {
+  const type = searchParams.get("type");
+  if (type === "running" || type === "strength") return type;
+  return "all";
 }
 
 export function LibraryPage() {
   usePageHint("library", "hints.library.title", "hints.library.description");
   const { t, i18n } = useTranslation(["library", "common"]);
+  const { t: tStrength } = useTranslation("strength");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const [searchParams, setSearchParams] = useSearchParams();
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const { favorites } = useFavorites();
-  const { workouts: allWorkouts, isLoading } = useWorkouts();
+  const { workouts: runningWorkouts, isLoading: isLoadingRunning } = useWorkouts();
+  const { workouts: strengthWorkouts, isLoading: isLoadingStrength } = useStrengthWorkouts();
   const { viewMode, setViewMode } = useViewMode();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const filterSectionRef = useRef<HTMLDivElement>(null);
 
   const PAGE_SIZE = 24;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  // Activity type from URL
+  const [activityType, setActivityType] = useState<ActivityType>(() =>
+    parseActivityType(searchParams)
+  );
 
   // Temporary filters for mobile (apply/cancel behavior)
   const [tempFilters, setTempFilters] = useState<WorkoutFiltersState>(defaultFilters);
@@ -91,15 +150,36 @@ export function LibraryPage() {
     onCloseMobileFilters: closeMobileFilters,
   });
 
+  // Build merged workout list based on activity type
+  const allWorkouts: AnyWorkoutTemplate[] = useMemo(() => {
+    switch (activityType) {
+      case "running":
+        return runningWorkouts;
+      case "strength":
+        return strengthWorkouts;
+      case "all":
+        return [...runningWorkouts, ...strengthWorkouts];
+    }
+  }, [activityType, runningWorkouts, strengthWorkouts]);
+
+  const isLoading = activityType === "running"
+    ? isLoadingRunning
+    : activityType === "strength"
+      ? isLoadingStrength
+      : isLoadingRunning || isLoadingStrength;
+
   // Count active filters (excluding searchQuery which is visible separately)
   const getActiveFiltersCount = (f: WorkoutFiltersState) => {
     let count = 0;
-    if (f.category !== "all") count++;
-    if (f.difficulty !== "all") count++;
+    count += f.category.length;
+    count += f.difficulty.length;
     if (f.durationRange[0] !== DURATION_MIN || f.durationRange[1] !== DURATION_MAX) count++;
-    if (f.terrain !== "all") count++;
-    if (f.targetSystem !== "all") count++;
+    count += f.terrain.length;
+    count += f.targetSystem.length;
     if (f.favoritesOnly) count++;
+    count += f.strengthCategory.length;
+    count += f.equipment.length;
+    count += f.muscleGroup.length;
     return count;
   };
 
@@ -129,155 +209,161 @@ export function LibraryPage() {
     };
   });
 
-  // Update URL when filters change
+  // Handle activity type change
+  const handleActivityTypeChange = useCallback((newType: ActivityType) => {
+    setActivityType(newType);
+    // Reset type-specific filters when switching
+    setFilters((prev) => ({
+      ...prev,
+      // Reset running filters when switching to strength-only
+      ...(newType === "strength" ? { category: [] as WorkoutCategory[], terrain: [] as TerrainFilter[], targetSystem: [] as TargetSystem[] } : {}),
+      // Reset strength filters when switching to running-only
+      ...(newType === "running" ? { strengthCategory: [] as StrengthCategory[], equipment: [] as StrengthEquipment[], muscleGroup: [] as MuscleGroup[] } : {}),
+    }));
+  }, []);
+
+  // Update URL when filters or activity type change
   useEffect(() => {
     const params = new URLSearchParams();
 
-    if (filters.category !== "all") {
-      params.set("category", filters.category);
+    if (activityType !== "all") {
+      params.set("type", activityType);
     }
-    if (filters.difficulty !== "all") {
-      params.set("difficulty", filters.difficulty);
+
+    if (filters.category.length > 0) {
+      params.set("category", filters.category.join(","));
     }
-    if (filters.terrain !== "all") {
-      params.set("terrain", filters.terrain);
+    if (filters.difficulty.length > 0) {
+      params.set("difficulty", filters.difficulty.join(","));
+    }
+    if (filters.terrain.length > 0) {
+      params.set("terrain", filters.terrain.join(","));
     }
     if (filters.durationRange[1] !== DURATION_MAX) {
       params.set("maxDuration", filters.durationRange[1].toString());
     }
+    if (filters.strengthCategory.length > 0) {
+      params.set("strengthCategory", filters.strengthCategory.join(","));
+    }
+    if (filters.equipment.length > 0) {
+      params.set("equipment", filters.equipment.join(","));
+    }
+    if (filters.muscleGroup.length > 0) {
+      params.set("muscleGroup", filters.muscleGroup.join(","));
+    }
 
-    setSearchParams(params);
-  }, [filters.category, filters.difficulty, filters.terrain, filters.durationRange, setSearchParams]);
+    setSearchParams(params, { replace: true });
+  }, [activityType, filters.category, filters.difficulty, filters.terrain, filters.durationRange, filters.strengthCategory, filters.equipment, filters.muscleGroup, setSearchParams]);
 
   // Reset visible count when filters change
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [filters]);
+  }, [filters, activityType]);
 
-  // Filter workouts
-  const filteredWorkouts = useMemo(() => {
-    return allWorkouts.filter((workout) => {
-      // Favorites filter
-      if (filters.favoritesOnly && !favorites.includes(workout.id)) {
-        return false;
-      }
+  // Shared filter logic
+  const applyFiltersToWorkout = useCallback((workout: AnyWorkoutTemplate, f: WorkoutFiltersState): boolean => {
+    // Favorites filter
+    if (f.favoritesOnly && !favorites.includes(workout.id)) {
+      return false;
+    }
 
+    // Difficulty filter (shared)
+    if (f.difficulty.length > 0 && !f.difficulty.includes(workout.difficulty)) {
+      return false;
+    }
+
+    // Duration filter
+    const duration = getAnyWorkoutDuration(workout);
+    if (duration < f.durationRange[0] || duration > f.durationRange[1]) {
+      return false;
+    }
+
+    // Search filter
+    if (f.searchQuery) {
+      const query = f.searchQuery.toLowerCase();
+      const matchesName =
+        workout.name.toLowerCase().includes(query) ||
+        workout.nameEn.toLowerCase().includes(query);
+      const matchesDesc =
+        workout.description.toLowerCase().includes(query) ||
+        workout.descriptionEn.toLowerCase().includes(query);
+      if (!matchesName && !matchesDesc) return false;
+    }
+
+    // --- Cross-type exclusion in "all" mode ---
+    // When a strength-specific filter is active, exclude running workouts (and vice versa)
+    const hasStrengthFilter = f.strengthCategory.length > 0 || f.equipment.length > 0 || f.muscleGroup.length > 0;
+    const hasRunningFilter = f.category.length > 0 || f.terrain.length > 0 || f.targetSystem.length > 0;
+
+    if (isRunningWorkout(workout) && hasStrengthFilter) {
+      return false;
+    }
+    if (isStrengthWorkout(workout) && hasRunningFilter) {
+      return false;
+    }
+
+    // --- Running-specific filters ---
+    if (isRunningWorkout(workout)) {
       // Category filter
-      if (filters.category !== "all" && workout.category !== filters.category) {
+      if (f.category.length > 0 && !f.category.includes(workout.category)) {
         return false;
       }
 
-      // Difficulty filter
-      if (
-        filters.difficulty !== "all" &&
-        workout.difficulty !== filters.difficulty
-      ) {
-        return false;
-      }
-
-      // Terrain filter - matches the availability-based logic from Quiz
-      // "track" = user has access to track, show track workouts + general workouts
-      // "hills" = user has access to hills, show hills workouts + general workouts
-      // "flat" = user only has flat terrain, exclude workouts requiring hills/track
-      if (filters.terrain !== "all") {
+      // Terrain filter
+      if (f.terrain.length > 0) {
         const env = workout.environment;
-        if (filters.terrain === "flat" && (env.requiresHills || env.requiresTrack)) return false;
-        // For track/hills: allow workouts that match OR don't have terrain requirements
-        if (filters.terrain === "track" && env.requiresHills) return false;
-        if (filters.terrain === "hills" && env.requiresTrack) return false;
+        const matchesTerrain = f.terrain.some((ter) => {
+          if (ter === "flat") return !env.requiresHills && !env.requiresTrack;
+          if (ter === "track") return !env.requiresHills;
+          if (ter === "hills") return !env.requiresTrack;
+          return true;
+        });
+        if (!matchesTerrain) return false;
       }
 
       // Target system filter
-      if (filters.targetSystem !== "all" && workout.targetSystem !== filters.targetSystem) {
+      if (f.targetSystem.length > 0 && !f.targetSystem.includes(workout.targetSystem)) {
+        return false;
+      }
+    }
+
+    // --- Strength-specific filters ---
+    if (isStrengthWorkout(workout)) {
+      // Strength category filter
+      if (f.strengthCategory.length > 0 && !f.strengthCategory.includes(workout.category)) {
         return false;
       }
 
-      // Duration filter
-      const duration = getWorkoutDuration(workout);
-      if (
-        duration < filters.durationRange[0] ||
-        duration > filters.durationRange[1]
-      ) {
-        return false;
+      // Equipment filter
+      if (f.equipment.length > 0) {
+        const matchesEquipment = f.equipment.some((eq) => {
+          if (eq === "none") return workout.equipment.length === 0 || workout.equipment.every((e) => e === "none");
+          return workout.equipment.includes(eq);
+        });
+        if (!matchesEquipment) return false;
       }
 
-      // Search filter
-      if (filters.searchQuery) {
-        const query = filters.searchQuery.toLowerCase();
-        return (
-          workout.name.toLowerCase().includes(query) ||
-          workout.nameEn.toLowerCase().includes(query) ||
-          workout.description.toLowerCase().includes(query) ||
-          workout.descriptionEn.toLowerCase().includes(query)
-        );
+      // Muscle group filter
+      if (f.muscleGroup.length > 0) {
+        if (!f.muscleGroup.some((m) => workout.primaryMuscleGroups.includes(m))) {
+          return false;
+        }
       }
+    }
 
-      return true;
-    });
-  }, [filters, favorites]);
+    return true;
+  }, [favorites]);
+
+  // Filter workouts
+  const filteredWorkouts = useMemo(() => {
+    return allWorkouts.filter((workout) => applyFiltersToWorkout(workout, filters));
+  }, [allWorkouts, filters, applyFiltersToWorkout]);
 
   // Calculate temp filtered count for Apply button
   const tempFilteredCount = useMemo(() => {
     if (!showMobileFilters) return 0;
-    return allWorkouts.filter((workout) => {
-      // Favorites filter
-      if (tempFilters.favoritesOnly && !favorites.includes(workout.id)) {
-        return false;
-      }
-
-      // Category filter
-      if (tempFilters.category !== "all" && workout.category !== tempFilters.category) {
-        return false;
-      }
-
-      // Difficulty filter
-      if (
-        tempFilters.difficulty !== "all" &&
-        workout.difficulty !== tempFilters.difficulty
-      ) {
-        return false;
-      }
-
-      // Terrain filter - matches the availability-based logic from Quiz
-      // "track" = user has access to track, show track workouts + general workouts
-      // "hills" = user has access to hills, show hills workouts + general workouts
-      // "flat" = user only has flat terrain, exclude workouts requiring hills/track
-      if (tempFilters.terrain !== "all") {
-        const env = workout.environment;
-        if (tempFilters.terrain === "flat" && (env.requiresHills || env.requiresTrack)) return false;
-        // For track/hills: allow workouts that match OR don't have terrain requirements
-        if (tempFilters.terrain === "track" && env.requiresHills) return false;
-        if (tempFilters.terrain === "hills" && env.requiresTrack) return false;
-      }
-
-      // Target system filter
-      if (tempFilters.targetSystem !== "all" && workout.targetSystem !== tempFilters.targetSystem) {
-        return false;
-      }
-
-      // Duration filter
-      const duration = getWorkoutDuration(workout);
-      if (
-        duration < tempFilters.durationRange[0] ||
-        duration > tempFilters.durationRange[1]
-      ) {
-        return false;
-      }
-
-      // Search filter
-      if (tempFilters.searchQuery) {
-        const query = tempFilters.searchQuery.toLowerCase();
-        return (
-          workout.name.toLowerCase().includes(query) ||
-          workout.nameEn.toLowerCase().includes(query) ||
-          workout.description.toLowerCase().includes(query) ||
-          workout.descriptionEn.toLowerCase().includes(query)
-        );
-      }
-
-      return true;
-    }).length;
-  }, [tempFilters, showMobileFilters, favorites]);
+    return allWorkouts.filter((workout) => applyFiltersToWorkout(workout, tempFilters)).length;
+  }, [allWorkouts, tempFilters, showMobileFilters, applyFiltersToWorkout]);
 
   // Count active filters
   const activeFiltersCount = useMemo(() => {
@@ -296,9 +382,16 @@ export function LibraryPage() {
     onLoadMore: handleLoadMore,
   });
 
+  // Dynamic subtitle based on activity type
+  const subtitleKey = activityType === "strength"
+    ? "subtitleStrength"
+    : activityType === "all"
+      ? "subtitleAll"
+      : "subtitle";
+
   const seoDescription = isEn
-    ? `Browse ${allWorkouts.length} science-based running workouts. Filter by category, difficulty, duration, and terrain.`
-    : `Parcourez ${allWorkouts.length} séances de course scientifiques. Filtrez par catégorie, difficulté, durée et terrain.`;
+    ? `Browse ${allWorkouts.length} science-based training sessions. Filter by category, difficulty, duration, and more.`
+    : `Parcourez ${allWorkouts.length} séances d'entraînement scientifiques. Filtrez par catégorie, difficulté, durée et plus.`;
 
   return (
     <>
@@ -320,7 +413,7 @@ export function LibraryPage() {
           <div>
             <h1 className="text-2xl md:text-3xl font-bold">{t("title")}</h1>
             <p className="text-muted-foreground mt-1">
-              {t("subtitle", { count: filteredWorkouts.length })}
+              {t(subtitleKey, { count: filteredWorkouts.length })}
             </p>
           </div>
 
@@ -349,6 +442,28 @@ export function LibraryPage() {
           </div>
         </div>
 
+        {/* Activity type toggle */}
+        <div className="mb-4">
+          <div className="inline-flex items-center rounded-lg border border-border bg-muted/50 p-0.5">
+            {(["all", "running", "strength"] as const).map((type) => (
+              <button
+                key={type}
+                onClick={() => handleActivityTypeChange(type)}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+                  activityType === type
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {type === "running" && <Footprints className="size-3.5" />}
+                {type === "strength" && <Dumbbell className="size-3.5" />}
+                {t(`activityToggle.${type}`)}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Mobile search bar */}
         <div className="lg:hidden relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
@@ -366,25 +481,54 @@ export function LibraryPage() {
         {/* Category quick filters - mobile only */}
         <div className="lg:hidden mt-3">
           <div className="flex flex-wrap gap-2">
-            <Button
-              variant={filters.category === "all" ? "default" : "outline"}
-              size="sm"
-              className="shrink-0 text-xs h-7 rounded-full"
-              onClick={() => setFilters({ ...filters, category: "all" })}
-            >
-              {t("filters.allCategories")}
-            </Button>
-            {categories.map((cat) => (
-              <Button
-                key={cat}
-                variant={filters.category === cat ? "default" : "outline"}
-                size="sm"
-                className="shrink-0 text-xs h-7 rounded-full"
-                onClick={() => setFilters({ ...filters, category: cat as WorkoutCategory })}
-              >
-                {t(`categories.${cat}`)}
-              </Button>
-            ))}
+            {/* Running categories */}
+            {(activityType === "running" || activityType === "all") &&
+              categories.map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setFilters({
+                    ...filters,
+                    category: filters.category.includes(cat as WorkoutCategory)
+                      ? filters.category.filter((c) => c !== cat)
+                      : [...filters.category, cat as WorkoutCategory],
+                    strengthCategory: [],
+                  })}
+                  className={cn(
+                    "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                    filters.category.includes(cat as WorkoutCategory)
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
+                  )}
+                >
+                  {t(`categories.${cat}`)}
+                </button>
+              ))
+            }
+            {/* Strength categories */}
+            {(activityType === "strength" || activityType === "all") &&
+              strengthCategories.map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setFilters({
+                    ...filters,
+                    category: [],
+                    strengthCategory: filters.strengthCategory.includes(cat as StrengthCategory)
+                      ? filters.strengthCategory.filter((c) => c !== cat)
+                      : [...filters.strengthCategory, cat as StrengthCategory],
+                  })}
+                  className={cn(
+                    "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                    filters.strengthCategory.includes(cat as StrengthCategory)
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
+                  )}
+                >
+                  {tStrength(`categories.${cat}`)}
+                </button>
+              ))
+            }
           </div>
         </div>
       </div>
@@ -398,6 +542,7 @@ export function LibraryPage() {
               filters={filters}
               onFiltersChange={setFilters}
               searchInputRef={searchInputRef}
+              activityType={activityType}
             />
           </div>
         </aside>
@@ -434,24 +579,47 @@ export function LibraryPage() {
                   filters={tempFilters}
                   onFiltersChange={setTempFilters}
                   hideSearch
+                  activityType={activityType}
                 />
               </div>
 
-              {/* Footer with Apply/Cancel */}
-              <div className="border-t p-4 flex gap-2 shrink-0">
-                <Button
-                  variant="outline"
-                  onClick={cancelFilters}
-                  className="flex-1"
-                >
-                  {t("common:actions.cancel")}
-                </Button>
-                <Button
-                  onClick={applyFilters}
-                  className="flex-1"
-                >
-                  {t("filters.apply")} ({tempFilteredCount})
-                </Button>
+              {/* Footer with Clear / Cancel / Apply */}
+              <div className="border-t p-4 flex flex-col gap-2 shrink-0">
+                {(tempFilters.category.length > 0 ||
+                  tempFilters.difficulty.length > 0 ||
+                  tempFilters.durationRange[0] !== 0 ||
+                  tempFilters.durationRange[1] !== 240 ||
+                  tempFilters.terrain.length > 0 ||
+                  tempFilters.targetSystem.length > 0 ||
+                  tempFilters.favoritesOnly ||
+                  tempFilters.strengthCategory.length > 0 ||
+                  tempFilters.equipment.length > 0 ||
+                  tempFilters.muscleGroup.length > 0) && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setTempFilters(defaultFilters)}
+                    className="w-full"
+                  >
+                    <X className="size-4 mr-1" />
+                    {t("clearFilters")}
+                  </Button>
+                )}
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={cancelFilters}
+                    className="flex-1"
+                  >
+                    {t("common:actions.cancel")}
+                  </Button>
+                  <Button
+                    onClick={applyFilters}
+                    className="flex-1"
+                  >
+                    {t("filters.apply")} ({tempFilteredCount})
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

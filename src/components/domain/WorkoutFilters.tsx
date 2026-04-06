@@ -1,22 +1,18 @@
 import { useTranslation } from "react-i18next";
 import type { RefObject } from "react";
-import { X, Search, Heart } from "@/components/icons";
-import { Button } from "@/components/ui/button";
+import { Search, Heart } from "@/components/icons";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import type { WorkoutCategory, Difficulty, TargetSystem } from "@/types";
+import type { StrengthCategory, StrengthEquipment, MuscleGroup } from "@/types/strength";
 import { categories } from "@/data/workouts";
+import { strengthCategories } from "@/data/strength";
+
+export type ActivityType = "running" | "strength" | "all";
 
 // Terrain filter options
-export type TerrainFilter = "all" | "flat" | "hills" | "track";
+export type TerrainFilter = "flat" | "hills" | "track";
 
 // Target system options for filter
 const targetSystems: TargetSystem[] = [
@@ -28,14 +24,51 @@ const targetSystems: TargetSystem[] = [
   "strength",
 ];
 
+// Equipment options for strength filter
+const strengthEquipmentOptions: StrengthEquipment[] = [
+  "none",
+  "resistance_band",
+  "dumbbells",
+  "kettlebell",
+  "barbell",
+  "pull_up_bar",
+  "box",
+  "foam_roller",
+  "medicine_ball",
+];
+
+// Muscle group options for strength filter
+const muscleGroupOptions: MuscleGroup[] = [
+  "quadriceps",
+  "hamstrings",
+  "glutes",
+  "calves",
+  "hip_flexors",
+  "adductors",
+  "core_anterior",
+  "core_lateral",
+  "core_posterior",
+  "upper_back",
+  "shoulders",
+  "chest",
+];
+
+const terrainOptions: TerrainFilter[] = ["flat", "hills", "track"];
+
+const difficultyOptions: Difficulty[] = ["beginner", "intermediate", "advanced", "elite"];
+
 export interface WorkoutFiltersState {
-  category: WorkoutCategory | "all";
-  difficulty: Difficulty | "all";
+  category: WorkoutCategory[];
+  difficulty: Difficulty[];
   durationRange: [number, number];
   searchQuery: string;
-  terrain: TerrainFilter;
-  targetSystem: TargetSystem | "all";
+  terrain: TerrainFilter[];
+  targetSystem: TargetSystem[];
   favoritesOnly: boolean;
+  // Strength-specific filters
+  strengthCategory: StrengthCategory[];
+  equipment: StrengthEquipment[];
+  muscleGroup: MuscleGroup[];
 }
 
 interface WorkoutFiltersProps {
@@ -44,10 +77,46 @@ interface WorkoutFiltersProps {
   className?: string;
   searchInputRef?: RefObject<HTMLInputElement | null>;
   hideSearch?: boolean;
+  activityType?: ActivityType;
 }
 
 const DURATION_MIN = 0;
 const DURATION_MAX = 240;
+
+/* ── Chip / tag button ── */
+function FilterChip({
+  label,
+  selected,
+  onClick,
+}: {
+  label: string;
+  selected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+        selected
+          ? "border-primary bg-primary/10 text-primary"
+          : "border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground",
+      )}
+    >
+      {label}
+    </button>
+  );
+}
+
+/* ── Group heading ── */
+function FilterGroupLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
+      {children}
+    </span>
+  );
+}
 
 export function WorkoutFilters({
   filters,
@@ -55,8 +124,10 @@ export function WorkoutFilters({
   className,
   searchInputRef,
   hideSearch = false,
+  activityType = "all",
 }: WorkoutFiltersProps) {
   const { t } = useTranslation("library");
+  const { t: tStrength } = useTranslation("strength");
 
   const updateFilter = <K extends keyof WorkoutFiltersState>(
     key: K,
@@ -65,30 +136,22 @@ export function WorkoutFilters({
     onFiltersChange({ ...filters, [key]: value });
   };
 
-  const hasActiveFilters =
-    filters.category !== "all" ||
-    filters.difficulty !== "all" ||
-    filters.durationRange[0] !== DURATION_MIN ||
-    filters.durationRange[1] !== DURATION_MAX ||
-    filters.searchQuery !== "" ||
-    filters.terrain !== "all" ||
-    filters.targetSystem !== "all" ||
-    filters.favoritesOnly;
-
-  const clearFilters = () => {
-    onFiltersChange({
-      category: "all",
-      difficulty: "all",
-      durationRange: [DURATION_MIN, DURATION_MAX],
-      searchQuery: "",
-      terrain: "all",
-      targetSystem: "all",
-      favoritesOnly: false,
-    });
+  const toggleFilter = <K extends keyof WorkoutFiltersState>(
+    key: K,
+    value: WorkoutFiltersState[K] extends (infer T)[] ? T : never
+  ) => {
+    const current = filters[key] as unknown[];
+    const next = current.includes(value)
+      ? current.filter((v) => v !== value)
+      : [...current, value];
+    onFiltersChange({ ...filters, [key]: next });
   };
 
+  const showRunningFilters = activityType === "running" || activityType === "all";
+  const showStrengthFilters = activityType === "strength" || activityType === "all";
+
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn("space-y-5", className)}>
       {/* Search */}
       {!hideSearch && (
         <div className="relative">
@@ -105,100 +168,126 @@ export function WorkoutFilters({
         </div>
       )}
 
-      {/* Category */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">{t("filters.category")}</label>
-        <Select
-          value={filters.category}
-          onValueChange={(value) =>
-            updateFilter("category", value as WorkoutCategory | "all")
-          }
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder={t("filters.allCategories")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("filters.allCategories")}</SelectItem>
+      {/* Running: Category */}
+      {showRunningFilters && (
+        <div className="space-y-2">
+          <FilterGroupLabel>{t("filters.category")}</FilterGroupLabel>
+          <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
-              <SelectItem key={cat} value={cat}>
-                {t(`categories.${cat}`)}
-              </SelectItem>
+              <FilterChip
+                key={cat}
+                label={t(`categories.${cat}`)}
+                selected={filters.category.includes(cat as WorkoutCategory)}
+                onClick={() => toggleFilter("category", cat as WorkoutCategory)}
+              />
             ))}
-          </SelectContent>
-        </Select>
+          </div>
+        </div>
+      )}
+
+      {/* Strength: Category */}
+      {showStrengthFilters && (
+        <div className="space-y-2">
+          <FilterGroupLabel>{tStrength("title")}</FilterGroupLabel>
+          <div className="flex flex-wrap gap-2">
+            {strengthCategories.map((cat) => (
+              <FilterChip
+                key={cat}
+                label={tStrength(`categories.${cat}`)}
+                selected={filters.strengthCategory.includes(cat as StrengthCategory)}
+                onClick={() => toggleFilter("strengthCategory", cat as StrengthCategory)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Difficulty (shared) */}
+      <div className="space-y-2">
+        <FilterGroupLabel>{t("filters.difficulty")}</FilterGroupLabel>
+        <div className="flex flex-wrap gap-2">
+          {difficultyOptions.map((d) => (
+            <FilterChip
+              key={d}
+              label={t(`difficulty.${d}`)}
+              selected={filters.difficulty.includes(d)}
+              onClick={() => toggleFilter("difficulty", d)}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* Difficulty */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">{t("filters.difficulty")}</label>
-        <Select
-          value={filters.difficulty}
-          onValueChange={(value) =>
-            updateFilter("difficulty", value as Difficulty | "all")
-          }
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder={t("filters.allDifficulties")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("filters.allDifficulties")}</SelectItem>
-            <SelectItem value="beginner">{t("difficulty.beginner")}</SelectItem>
-            <SelectItem value="intermediate">
-              {t("difficulty.intermediate")}
-            </SelectItem>
-            <SelectItem value="advanced">{t("difficulty.advanced")}</SelectItem>
-            <SelectItem value="elite">{t("difficulty.elite")}</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      {/* Running: Terrain */}
+      {showRunningFilters && (
+        <div className="space-y-2">
+          <FilterGroupLabel>{t("filters.terrain")}</FilterGroupLabel>
+          <div className="flex flex-wrap gap-2">
+            {terrainOptions.map((ter) => (
+              <FilterChip
+                key={ter}
+                label={t(`terrain.${ter}`)}
+                selected={filters.terrain.includes(ter)}
+                onClick={() => toggleFilter("terrain", ter)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
-      {/* Terrain */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">{t("filters.terrain")}</label>
-        <Select
-          value={filters.terrain}
-          onValueChange={(value) =>
-            updateFilter("terrain", value as TerrainFilter)
-          }
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder={t("filters.allTerrains")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("filters.allTerrains")}</SelectItem>
-            <SelectItem value="flat">{t("terrain.flat")}</SelectItem>
-            <SelectItem value="hills">{t("terrain.hills")}</SelectItem>
-            <SelectItem value="track">{t("terrain.track")}</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Target System */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">{t("filters.targetSystem")}</label>
-        <Select
-          value={filters.targetSystem}
-          onValueChange={(value) =>
-            updateFilter("targetSystem", value as TargetSystem | "all")
-          }
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder={t("filters.allSystems")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("filters.allSystems")}</SelectItem>
+      {/* Running: Target System */}
+      {showRunningFilters && (
+        <div className="space-y-2">
+          <FilterGroupLabel>{t("filters.targetSystem")}</FilterGroupLabel>
+          <div className="flex flex-wrap gap-2">
             {targetSystems.map((sys) => (
-              <SelectItem key={sys} value={sys}>
-                {t(`targetSystem.${sys}`)}
-              </SelectItem>
+              <FilterChip
+                key={sys}
+                label={t(`targetSystem.${sys}`)}
+                selected={filters.targetSystem.includes(sys)}
+                onClick={() => toggleFilter("targetSystem", sys)}
+              />
             ))}
-          </SelectContent>
-        </Select>
-      </div>
+          </div>
+        </div>
+      )}
+
+      {/* Strength: Equipment */}
+      {showStrengthFilters && (
+        <div className="space-y-2">
+          <FilterGroupLabel>{tStrength("detail.equipmentNeeded")}</FilterGroupLabel>
+          <div className="flex flex-wrap gap-2">
+            {strengthEquipmentOptions.map((eq) => (
+              <FilterChip
+                key={eq}
+                label={tStrength(`equipment.${eq}`)}
+                selected={filters.equipment.includes(eq)}
+                onClick={() => toggleFilter("equipment", eq)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Strength: Muscle Group */}
+      {showStrengthFilters && (
+        <div className="space-y-2">
+          <FilterGroupLabel>{tStrength("detail.targetMuscles")}</FilterGroupLabel>
+          <div className="flex flex-wrap gap-2">
+            {muscleGroupOptions.map((m) => (
+              <FilterChip
+                key={m}
+                label={tStrength(`muscles.${m}`)}
+                selected={filters.muscleGroup.includes(m)}
+                onClick={() => toggleFilter("muscleGroup", m)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Duration Range */}
       <div className="space-y-3">
-        <label className="text-sm font-medium">{t("filters.duration")}</label>
+        <FilterGroupLabel>{t("filters.duration")}</FilterGroupLabel>
         <Slider
           value={filters.durationRange}
           min={DURATION_MIN}
@@ -227,29 +316,20 @@ export function WorkoutFilters({
         />
       </div>
 
-      {/* Clear Filters */}
-      {hasActiveFilters && (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={clearFilters}
-          className="w-full"
-        >
-          <X className="size-4 mr-1" />
-          {t("clearFilters")}
-        </Button>
-      )}
     </div>
   );
 }
 
 // Default filter state
 export const defaultFilters: WorkoutFiltersState = {
-  category: "all",
-  difficulty: "all",
+  category: [],
+  difficulty: [],
   durationRange: [DURATION_MIN, DURATION_MAX],
   searchQuery: "",
-  terrain: "all",
-  targetSystem: "all",
+  terrain: [],
+  targetSystem: [],
   favoritesOnly: false,
+  strengthCategory: [],
+  equipment: [],
+  muscleGroup: [],
 };

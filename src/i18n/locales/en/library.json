@@ -1,6 +1,13 @@
 {
   "title": "Workout Library",
   "subtitle": "{{count}} scientific training sessions",
+  "subtitleStrength": "{{count}} strength sessions",
+  "subtitleAll": "{{count}} total sessions",
+  "activityToggle": {
+    "all": "All",
+    "running": "Running",
+    "strength": "Strength"
+  },
   "viewMode": {
     "label": "View",
     "grid": "Grid",
