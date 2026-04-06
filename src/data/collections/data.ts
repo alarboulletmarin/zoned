@@ -395,4 +395,69 @@ export const collections: Collection[] = [
       "progression",
     ],
   },
+
+  // ── Strength & Prevention ─────────────────────────────────
+  {
+    id: "force-pour-coureurs",
+    slug: "force-pour-coureurs",
+    name: "Force pour coureurs",
+    nameEn: "Strength for Runners",
+    description:
+      "Programme progressif de renforcement musculaire spécifique à la course à pied. De l'adaptation anatomique à la force maximale, en suivant les protocoles validés par la science (Beattie 2017, Rønnestad 2014).",
+    descriptionEn:
+      "Progressive strength training program specific to running. From anatomical adaptation to maximal strength, following science-validated protocols (Beattie 2017, Rønnestad 2014).",
+    icon: "Dumbbell",
+    gradient: "from-amber-500/20 to-orange-500/20",
+    difficulty: "intermediate",
+    isProgression: true,
+    workoutIds: [
+      "STR-001",  // Full body débutant
+      "STR-002",  // Full body intermédiaire
+      "STR-005",  // Jambes force
+      "STR-003",  // Full body avancé
+      "STR-007",  // Jambes puissance
+    ],
+    tags: ["strength", "runner", "progression", "science"],
+  },
+  {
+    id: "core-stability-coureur",
+    slug: "core-stability-coureur",
+    name: "Core stability coureur",
+    nameEn: "Runner Core Stability",
+    description:
+      "Gainage et stabilité du tronc pour une meilleure posture en course. Anti-extension, anti-rotation, anti-flexion latérale : les trois piliers du core pour le coureur.",
+    descriptionEn:
+      "Core stability and trunk control for better running posture. Anti-extension, anti-rotation, anti-lateral flexion: the three pillars of runner's core.",
+    icon: "Shield",
+    gradient: "from-purple-500/20 to-violet-500/20",
+    difficulty: "beginner",
+    isProgression: true,
+    workoutIds: [
+      "STR-008",  // Core débutant
+      "STR-010",  // Core spécifique course
+      "STR-009",  // Core avancé
+    ],
+    tags: ["core", "stability", "posture", "strength"],
+  },
+  {
+    id: "prevention-blessures",
+    slug: "prevention-blessures",
+    name: "Prévention blessures",
+    nameEn: "Injury Prevention",
+    description:
+      "Renforcement ciblé des zones sensibles du coureur : genoux, chevilles, hanches. Basé sur la méta-analyse de Lauersen (2014) qui montre une réduction de 50% du risque de blessure par le renforcement.",
+    descriptionEn:
+      "Targeted strengthening of runner's vulnerable areas: knees, ankles, hips. Based on Lauersen (2014) meta-analysis showing 50% injury risk reduction through strength training.",
+    icon: "HeartPulse",
+    gradient: "from-emerald-500/20 to-teal-500/20",
+    isProgression: false,
+    workoutIds: [
+      "STR-017",  // Prehab coureur
+      "STR-014",  // Mobilité hanches
+      "STR-015",  // Foam roller récupération
+      "STR-006",  // Jambes poids de corps
+      "STR-016",  // Mobilité complète
+    ],
+    tags: ["prevention", "injury", "prehab", "mobility", "strength"],
+  },
 ];

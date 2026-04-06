@@ -13,6 +13,8 @@ import {
   Route,
   Mountain,
   Rocket,
+  Dumbbell,
+  HeartPulse,
 } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
@@ -35,6 +37,8 @@ const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
   Route,
   Mountain,
   Rocket,
+  Dumbbell,
+  HeartPulse,
 };
 
 const ZONE_MAP: Record<string, number> = {

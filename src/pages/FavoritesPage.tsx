@@ -6,20 +6,25 @@ import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
 import { WorkoutCard } from "@/components/domain";
 import { useFavorites, useWorkouts } from "@/hooks";
+import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
+import type { AnyWorkoutTemplate } from "@/types";
 
 export function FavoritesPage() {
   const { t, i18n } = useTranslation(["common", "library"]);
   const isEn = i18n.language?.startsWith("en") ?? false;
   const { favorites } = useFavorites();
-  const { workouts, isLoading } = useWorkouts();
+  const { workouts, isLoading: isLoadingRunning } = useWorkouts();
+  const { workouts: strengthWorkouts, isLoading: isLoadingStrength } = useStrengthWorkouts();
+  const isLoading = isLoadingRunning || isLoadingStrength;
 
-  // Get workout objects for all favorites
+  // Get workout objects for all favorites (running + strength)
   const favoriteWorkouts = useMemo(() => {
     if (isLoading) return [];
+    const allWorkouts: AnyWorkoutTemplate[] = [...workouts, ...strengthWorkouts as AnyWorkoutTemplate[]];
     return favorites
-      .map((id) => workouts.find((w) => w.id === id))
+      .map((id) => allWorkouts.find((w) => w.id === id))
       .filter((w) => w !== undefined);
-  }, [favorites, workouts, isLoading]);
+  }, [favorites, workouts, strengthWorkouts, isLoading]);
 
   return (
     <>

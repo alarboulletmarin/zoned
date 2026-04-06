@@ -2,15 +2,21 @@ import { GithubIcon } from "@/components/icons";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { categories } from "@/data/workouts";
+import { strengthCategories } from "@/data/strength";
 import { useWorkouts } from "@/hooks";
+import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useWhatsNew } from "@/hooks/useWhatsNew";
 import Logo from "@/assets/logo.svg?react";
 
 export function Footer() {
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
+  const isEn = i18n.language?.startsWith("en") ?? false;
   const currentYear = new Date().getFullYear();
   const { workouts } = useWorkouts();
+  const { workouts: strengthWorkouts } = useStrengthWorkouts();
   const { hasNewVersion } = useWhatsNew();
+  const totalSessions = workouts.length + strengthWorkouts.length;
+  const totalCategories = categories.length + strengthCategories.length;
 
   return (
     <footer className="border-t py-4 md:py-5">
@@ -23,8 +29,11 @@ export function Footer() {
               <span className="font-semibold text-sm hidden md:inline">{t("app.name")}</span>
             </Link>
             <span className="text-xs text-muted-foreground whitespace-nowrap hidden sm:inline">
-              {workouts.length} {t("units.workouts")} · {categories.length}{" "}
+              {totalSessions} {t("units.workouts")} · {totalCategories}{" "}
               {t("units.categories")} · 6 {t("units.zones")}
+              {strengthWorkouts.length > 0 && (
+                <> · {strengthWorkouts.length} {isEn ? "strength" : "renforcement"}</>
+              )}
             </span>
             <span className="text-xs text-muted-foreground hidden lg:inline">
               {t("privacy.footerNote")}

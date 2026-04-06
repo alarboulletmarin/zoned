@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import type { Collection } from "@/data/collections/types";
-import type { WorkoutTemplate } from "@/types";
+import type { AnyWorkoutTemplate } from "@/types";
 import { getAllCollections, getCollectionBySlug } from "@/data/collections";
 import { loadAllWorkouts } from "@/data/workouts";
+import { loadAllStrengthSessions } from "@/data/strength";
 
 // ============================================================
 // Hook Interfaces
@@ -10,7 +11,7 @@ import { loadAllWorkouts } from "@/data/workouts";
 
 interface UseCollectionResult {
   collection: Collection | null;
-  workouts: WorkoutTemplate[];
+  workouts: AnyWorkoutTemplate[];
   isLoading: boolean;
   error: Error | null;
 }
@@ -33,7 +34,7 @@ export function useCollections(): Collection[] {
  * Preserves the order of workoutIds (important for progression collections)
  */
 export function useCollection(slug: string | undefined): UseCollectionResult {
-  const [workouts, setWorkouts] = useState<WorkoutTemplate[]>([]);
+  const [workouts, setWorkouts] = useState<AnyWorkoutTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -50,18 +51,30 @@ export function useCollection(slug: string | undefined): UseCollectionResult {
     let cancelled = false;
     setIsLoading(true);
 
-    loadAllWorkouts()
-      .then((allWorkouts) => {
+    // Check if this collection has strength sessions (STR- prefixed IDs)
+    const hasStrength = collection.workoutIds.some((id) => id.startsWith("STR-"));
+
+    // Load running workouts, and strength sessions if needed
+    const loaders: Promise<AnyWorkoutTemplate[]>[] = [loadAllWorkouts()];
+    if (hasStrength) {
+      loaders.push(loadAllStrengthSessions());
+    }
+
+    Promise.all(loaders)
+      .then((results) => {
         if (!cancelled) {
-          // Build a lookup map for O(1) access
-          const workoutMap = new Map<string, WorkoutTemplate>(
-            allWorkouts.map((w) => [w.id, w])
-          );
+          // Build a unified lookup map for O(1) access
+          const workoutMap = new Map<string, AnyWorkoutTemplate>();
+          for (const list of results) {
+            for (const w of list) {
+              workoutMap.set(w.id, w);
+            }
+          }
 
           // Resolve workouts in the order defined by workoutIds
           const resolved = collection.workoutIds
             .map((id) => workoutMap.get(id))
-            .filter((w): w is WorkoutTemplate => w !== undefined);
+            .filter((w): w is AnyWorkoutTemplate => w !== undefined);
 
           setWorkouts(resolved);
           setIsLoading(false);

@@ -9,6 +9,7 @@ import {
   CalendarRange,
   Shield,
   Flag,
+  Dumbbell,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +17,7 @@ import {
   CategoryIcon,
   TipCard,
   CollectionCard,
+  StrengthWorkoutCard,
 } from "@/components/domain";
 import { WorkoutOfTheDay } from "@/components/domain/WorkoutOfTheDay";
 import { getCollectionBySlug } from "@/data/collections";
@@ -24,6 +26,7 @@ import { OnboardingBubbles } from "@/components/domain/OnboardingBubbles";
 import { SEOHead } from "@/components/seo";
 import { categories, getRandomWorkout } from "@/data/workouts";
 import { useWorkouts, useTips } from "@/hooks";
+import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { usePlans } from "@/hooks/usePlans";
 import { ZONE_META, type ZoneNumber, type WorkoutCategory } from "@/types";
 
@@ -36,6 +39,7 @@ export function HomePage() {
   const { workouts, isLoading } = useWorkouts();
   const workoutCount = workouts.length;
   const { tip } = useTips();
+  const { workouts: strengthWorkouts } = useStrengthWorkouts();
   const { plans } = usePlans();
   const hasPlans = plans.length > 0;
   const planLink = hasPlans ? "/plans" : "/plan/new";
@@ -93,6 +97,17 @@ export function HomePage() {
   ]
     .map((slug) => getCollectionBySlug(slug))
     .filter((c): c is NonNullable<typeof c> => c !== undefined);
+
+  // Pick 3 diverse strength sessions: full body, core, plyometrics/mobility
+  const featuredStrength = useMemo(() => {
+    if (strengthWorkouts.length === 0) return [];
+    return [
+      strengthWorkouts.find((s) => s.category === "runner_full_body"),
+      strengthWorkouts.find((s) => s.category === "runner_core"),
+      strengthWorkouts.find((s) => s.category === "plyometrics") ??
+        strengthWorkouts.find((s) => s.category === "mobility"),
+    ].filter((s): s is NonNullable<typeof s> => s !== undefined);
+  }, [strengthWorkouts]);
 
   const seoDescription = isEn
     ? `${workoutCount || 118} science-based running workouts organized by training zones. Free workout library for runners of all levels.`
@@ -406,6 +421,36 @@ export function HomePage() {
             ))}
           </div>
         </section>
+
+        {/* Strength Training Section */}
+        {featuredStrength.length > 0 && (
+          <section className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Dumbbell className="size-5 text-amber-500" />
+                <h2 className="text-xl md:text-2xl font-bold">
+                  {isEn ? "Strength for Runners" : "Renforcement pour coureurs"}
+                </h2>
+              </div>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/library?type=strength">
+                  {isEn ? "See all" : "Voir tout"}
+                  <ArrowRight className="size-4 ml-1" />
+                </Link>
+              </Button>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {isEn
+                ? "Science-based strength sessions to improve running economy and prevent injuries."
+                : "Séances de renforcement basées sur la science pour améliorer votre économie de course et prévenir les blessures."}
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {featuredStrength.map((session) => (
+                <StrengthWorkoutCard key={session.id} workout={session} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Categories Overview */}
         <section>
