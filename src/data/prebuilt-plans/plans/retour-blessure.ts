@@ -57,6 +57,16 @@ export const planRetourBlessure: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 3,
+          "workoutId": "STR-014",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Mobilite hanches coureur",
+          "notesEn": "Strength: Runner Hip Mobility",
+          "loadScore": 10
+        },
+        {
           "dayOfWeek": 4,
           "workoutId": "REC-015",
           "sessionType": "endurance",
@@ -129,6 +139,16 @@ export const planRetourBlessure: PrebuiltPlan = {
               "descriptionEn": "Easy pace"
             }
           ]
+        },
+        {
+          "dayOfWeek": 3,
+          "workoutId": "STR-017",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 28,
+          "notes": "Renforcement : Prehab coureur",
+          "notesEn": "Strength: Runner Prehab",
+          "loadScore": 10
         },
         {
           "dayOfWeek": 4,
@@ -205,6 +225,16 @@ export const planRetourBlessure: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 3,
+          "workoutId": "STR-015",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 25,
+          "notes": "Renforcement : Recup foam roller",
+          "notesEn": "Strength: Foam Roller Recovery",
+          "loadScore": 10
+        },
+        {
           "dayOfWeek": 4,
           "workoutId": "END-013",
           "sessionType": "endurance",
@@ -279,6 +309,16 @@ export const planRetourBlessure: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 3,
+          "workoutId": "STR-015",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 25,
+          "notes": "Renforcement : Recup foam roller",
+          "notesEn": "Strength: Foam Roller Recovery",
+          "loadScore": 8
+        },
+        {
           "dayOfWeek": 4,
           "workoutId": "REC-004",
           "sessionType": "endurance",
@@ -350,6 +390,16 @@ export const planRetourBlessure: PrebuiltPlan = {
               "descriptionEn": "Threshold pace"
             }
           ]
+        },
+        {
+          "dayOfWeek": 3,
+          "workoutId": "STR-016",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 33,
+          "notes": "Renforcement : Mobilite complete",
+          "notesEn": "Strength: Full Mobility",
+          "loadScore": 10
         },
         {
           "dayOfWeek": 4,
@@ -427,6 +477,16 @@ export const planRetourBlessure: PrebuiltPlan = {
           "scaledRepetitions": 6
         },
         {
+          "dayOfWeek": 3,
+          "workoutId": "STR-014",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Mobilite hanches coureur",
+          "notesEn": "Strength: Runner Hip Mobility",
+          "loadScore": 10
+        },
+        {
           "dayOfWeek": 4,
           "workoutId": "FAR-001",
           "sessionType": "endurance",
@@ -501,6 +561,16 @@ export const planRetourBlessure: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 3,
+          "workoutId": "STR-015",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 25,
+          "notes": "Renforcement : Recup foam roller",
+          "notesEn": "Strength: Foam Roller Recovery",
+          "loadScore": 8
+        },
+        {
           "dayOfWeek": 4,
           "workoutId": "REC-005",
           "sessionType": "endurance",
@@ -572,6 +642,16 @@ export const planRetourBlessure: PrebuiltPlan = {
               "descriptionEn": "Threshold pace"
             }
           ]
+        },
+        {
+          "dayOfWeek": 3,
+          "workoutId": "STR-017",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 28,
+          "notes": "Renforcement : Prehab coureur",
+          "notesEn": "Strength: Runner Prehab",
+          "loadScore": 10
         },
         {
           "dayOfWeek": 4,

@@ -62,6 +62,16 @@ export const plan10kDebutant: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 3,
+          "workoutId": "STR-008",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 28,
+          "notes": "Renforcement : Core stability coureur",
+          "notesEn": "Strength: Runner Core Stability",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 4,
           "workoutId": "REC-015",
           "sessionType": "endurance",
@@ -136,6 +146,16 @@ export const plan10kDebutant: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 3,
+          "workoutId": "STR-008",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 28,
+          "notes": "Renforcement : Core stability coureur",
+          "notesEn": "Strength: Runner Core Stability",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 4,
           "workoutId": "REC-001",
           "sessionType": "endurance",
@@ -154,6 +174,16 @@ export const plan10kDebutant: PrebuiltPlan = {
               "descriptionEn": "Easy pace"
             }
           ]
+        },
+        {
+          "dayOfWeek": 5,
+          "workoutId": "STR-001",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 35,
+          "notes": "Renforcement : Renfo full body debutant",
+          "notesEn": "Strength: Full Body Beginner",
+          "loadScore": 15
         },
         {
           "dayOfWeek": 6,
@@ -208,6 +238,16 @@ export const plan10kDebutant: PrebuiltPlan = {
               "descriptionEn": "Threshold pace"
             }
           ]
+        },
+        {
+          "dayOfWeek": 3,
+          "workoutId": "STR-008",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 28,
+          "notes": "Renforcement : Core stability coureur",
+          "notesEn": "Strength: Runner Core Stability",
+          "loadScore": 12
         },
         {
           "dayOfWeek": 4,
@@ -284,6 +324,16 @@ export const plan10kDebutant: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 3,
+          "workoutId": "STR-015",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 25,
+          "notes": "Renforcement : Recup foam roller",
+          "notesEn": "Strength: Foam Roller Recovery",
+          "loadScore": 10
+        },
+        {
           "dayOfWeek": 4,
           "workoutId": "END-007",
           "sessionType": "endurance",
@@ -356,6 +406,16 @@ export const plan10kDebutant: PrebuiltPlan = {
             }
           ],
           "scaledRepetitions": 10
+        },
+        {
+          "dayOfWeek": 3,
+          "workoutId": "STR-010",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Core running-specific",
+          "notesEn": "Strength: Running-Specific Core",
+          "loadScore": 12
         },
         {
           "dayOfWeek": 4,
@@ -433,6 +493,16 @@ export const plan10kDebutant: PrebuiltPlan = {
           "scaledRepetitions": 10
         },
         {
+          "dayOfWeek": 3,
+          "workoutId": "STR-008",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 28,
+          "notes": "Renforcement : Core stability coureur",
+          "notesEn": "Strength: Runner Core Stability",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 4,
           "workoutId": "REC-004",
           "sessionType": "endurance",
@@ -507,6 +577,16 @@ export const plan10kDebutant: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 3,
+          "workoutId": "STR-010",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Core running-specific",
+          "notesEn": "Strength: Running-Specific Core",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 4,
           "workoutId": "REC-001",
           "sessionType": "endurance",
@@ -579,6 +659,16 @@ export const plan10kDebutant: PrebuiltPlan = {
               "descriptionEn": "Easy pace"
             }
           ]
+        },
+        {
+          "dayOfWeek": 3,
+          "workoutId": "STR-016",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 33,
+          "notes": "Renforcement : Mobilite complete",
+          "notesEn": "Strength: Full Mobility",
+          "loadScore": 10
         },
         {
           "dayOfWeek": 4,
@@ -668,6 +758,16 @@ export const plan10kDebutant: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 3,
+          "workoutId": "STR-015",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 25,
+          "notes": "Renforcement : Recup foam roller",
+          "notesEn": "Strength: Foam Roller Recovery",
+          "loadScore": 8
+        },
+        {
           "dayOfWeek": 4,
           "workoutId": "END-013",
           "sessionType": "recovery",
@@ -729,6 +829,16 @@ export const plan10kDebutant: PrebuiltPlan = {
           "estimatedDurationMin": 9,
           "notes": "Footing léger - semaine de course",
           "notesEn": "Easy jog - race week"
+        },
+        {
+          "dayOfWeek": 3,
+          "workoutId": "STR-014",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Mobilite hanches coureur",
+          "notesEn": "Strength: Runner Hip Mobility",
+          "loadScore": 8
         },
         {
           "dayOfWeek": 4,

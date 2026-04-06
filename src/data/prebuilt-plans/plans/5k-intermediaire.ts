@@ -42,6 +42,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       "volumePercent": 60,
       "sessions": [
         {
+          "dayOfWeek": 0,
+          "workoutId": "STR-002",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 45,
+          "notes": "Renforcement : Renfo full body intermediaire",
+          "notesEn": "Strength: Full Body Intermediate",
+          "loadScore": 18
+        },
+        {
           "dayOfWeek": 1,
           "workoutId": "END-015",
           "sessionType": "endurance",
@@ -102,6 +112,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 5,
+          "workoutId": "STR-009",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 35,
+          "notes": "Renforcement : Core avance",
+          "notesEn": "Strength: Advanced Core",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 6,
           "workoutId": "END-017",
           "sessionType": "long_run",
@@ -135,6 +155,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       "isRecoveryWeek": false,
       "volumePercent": 66,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-002",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 45,
+          "notes": "Renforcement : Renfo full body intermediaire",
+          "notesEn": "Strength: Full Body Intermediate",
+          "loadScore": 18
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "END-010",
@@ -196,6 +226,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 5,
+          "workoutId": "STR-008",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 28,
+          "notes": "Renforcement : Core stability coureur",
+          "notesEn": "Strength: Runner Core Stability",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 6,
           "workoutId": "END-010",
           "sessionType": "long_run",
@@ -229,6 +269,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       "isRecoveryWeek": false,
       "volumePercent": 72,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-002",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 45,
+          "notes": "Renforcement : Renfo full body intermediaire",
+          "notesEn": "Strength: Full Body Intermediate",
+          "loadScore": 18
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "END-004",
@@ -290,6 +340,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 5,
+          "workoutId": "STR-009",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 35,
+          "notes": "Renforcement : Core avance",
+          "notesEn": "Strength: Advanced Core",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 6,
           "workoutId": "END-002",
           "sessionType": "long_run",
@@ -323,6 +383,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       "isRecoveryWeek": true,
       "volumePercent": 65,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-014",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Mobilite hanches coureur",
+          "notesEn": "Strength: Runner Hip Mobility",
+          "loadScore": 8
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "END-005",
@@ -417,6 +487,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       "volumePercent": 80,
       "sessions": [
         {
+          "dayOfWeek": 0,
+          "workoutId": "STR-002",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 45,
+          "notes": "Renforcement : Renfo full body intermediaire",
+          "notesEn": "Strength: Full Body Intermediate",
+          "loadScore": 18
+        },
+        {
           "dayOfWeek": 1,
           "workoutId": "END-002",
           "sessionType": "endurance",
@@ -478,6 +558,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 5,
+          "workoutId": "STR-010",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Core running-specific",
+          "notesEn": "Strength: Running-Specific Core",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 6,
           "workoutId": "END-017",
           "sessionType": "long_run",
@@ -511,6 +601,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       "isRecoveryWeek": false,
       "volumePercent": 88,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-005",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 45,
+          "notes": "Renforcement : Force jambes coureur",
+          "notesEn": "Strength: Runner Leg Strength",
+          "loadScore": 18
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "FAR-002",
@@ -573,6 +673,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 5,
+          "workoutId": "STR-010",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Core running-specific",
+          "notesEn": "Strength: Running-Specific Core",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 6,
           "workoutId": "SL-001",
           "sessionType": "long_run",
@@ -613,6 +723,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       "isRecoveryWeek": false,
       "volumePercent": 100,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-010",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Core running-specific",
+          "notesEn": "Strength: Running-Specific Core",
+          "loadScore": 15
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "REC-006",
@@ -709,6 +829,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       "volumePercent": 65,
       "sessions": [
         {
+          "dayOfWeek": 0,
+          "workoutId": "STR-016",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 33,
+          "notes": "Renforcement : Mobilite complete",
+          "notesEn": "Strength: Full Mobility",
+          "loadScore": 8
+        },
+        {
           "dayOfWeek": 1,
           "workoutId": "END-012",
           "sessionType": "endurance",
@@ -801,6 +931,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
       "isRecoveryWeek": false,
       "volumePercent": 100,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-011",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 33,
+          "notes": "Renforcement : Intro plyometrie",
+          "notesEn": "Strength: Intro Plyometrics",
+          "loadScore": 15
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "END-012",
@@ -920,6 +1060,16 @@ export const plan5kIntermediaire: PrebuiltPlan = {
           "estimatedDurationMin": 9,
           "notes": "Footing léger - semaine de course",
           "notesEn": "Easy jog - race week"
+        },
+        {
+          "dayOfWeek": 2,
+          "workoutId": "STR-014",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Mobilite hanches coureur",
+          "notesEn": "Strength: Runner Hip Mobility",
+          "loadScore": 8
         },
         {
           "dayOfWeek": 4,

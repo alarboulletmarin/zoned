@@ -42,6 +42,16 @@ export const planMarathon: PrebuiltPlan = {
       "volumePercent": 61,
       "sessions": [
         {
+          "dayOfWeek": 0,
+          "workoutId": "STR-002",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 45,
+          "notes": "Renforcement : Renfo full body intermediaire",
+          "notesEn": "Strength: Full Body Intermediate",
+          "loadScore": 18
+        },
+        {
           "dayOfWeek": 1,
           "workoutId": "FAR-015",
           "sessionType": "endurance",
@@ -102,6 +112,16 @@ export const planMarathon: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 5,
+          "workoutId": "STR-009",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 35,
+          "notes": "Renforcement : Core avance",
+          "notesEn": "Strength: Advanced Core",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 6,
           "workoutId": "END-012",
           "sessionType": "long_run",
@@ -135,6 +155,16 @@ export const planMarathon: PrebuiltPlan = {
       "isRecoveryWeek": false,
       "volumePercent": 68,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-002",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 45,
+          "notes": "Renforcement : Renfo full body intermediaire",
+          "notesEn": "Strength: Full Body Intermediate",
+          "loadScore": 18
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "END-005",
@@ -196,6 +226,16 @@ export const planMarathon: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 5,
+          "workoutId": "STR-008",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 28,
+          "notes": "Renforcement : Core stability coureur",
+          "notesEn": "Strength: Runner Core Stability",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 6,
           "workoutId": "END-004",
           "sessionType": "long_run",
@@ -229,6 +269,16 @@ export const planMarathon: PrebuiltPlan = {
       "isRecoveryWeek": false,
       "volumePercent": 74,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-002",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 45,
+          "notes": "Renforcement : Renfo full body intermediaire",
+          "notesEn": "Strength: Full Body Intermediate",
+          "loadScore": 18
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "END-002",
@@ -290,6 +340,16 @@ export const planMarathon: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 5,
+          "workoutId": "STR-009",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 35,
+          "notes": "Renforcement : Core avance",
+          "notesEn": "Strength: Advanced Core",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 6,
           "workoutId": "SL-005",
           "sessionType": "long_run",
@@ -323,6 +383,16 @@ export const planMarathon: PrebuiltPlan = {
       "isRecoveryWeek": true,
       "volumePercent": 65,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-014",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Mobilite hanches coureur",
+          "notesEn": "Strength: Runner Hip Mobility",
+          "loadScore": 8
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "END-015",
@@ -417,6 +487,16 @@ export const planMarathon: PrebuiltPlan = {
       "volumePercent": 82,
       "sessions": [
         {
+          "dayOfWeek": 0,
+          "workoutId": "STR-002",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 45,
+          "notes": "Renforcement : Renfo full body intermediaire",
+          "notesEn": "Strength: Full Body Intermediate",
+          "loadScore": 18
+        },
+        {
           "dayOfWeek": 1,
           "workoutId": "END-012",
           "sessionType": "endurance",
@@ -477,6 +557,16 @@ export const planMarathon: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 5,
+          "workoutId": "STR-009",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 35,
+          "notes": "Renforcement : Core avance",
+          "notesEn": "Strength: Advanced Core",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 6,
           "workoutId": "SL-005",
           "sessionType": "long_run",
@@ -510,6 +600,16 @@ export const planMarathon: PrebuiltPlan = {
       "isRecoveryWeek": false,
       "volumePercent": 90,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-002",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 45,
+          "notes": "Renforcement : Renfo full body intermediaire",
+          "notesEn": "Strength: Full Body Intermediate",
+          "loadScore": 18
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "END-004",
@@ -571,6 +671,16 @@ export const planMarathon: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 5,
+          "workoutId": "STR-008",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 28,
+          "notes": "Renforcement : Core stability coureur",
+          "notesEn": "Strength: Runner Core Stability",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 6,
           "workoutId": "END-011",
           "sessionType": "long_run",
@@ -604,6 +714,16 @@ export const planMarathon: PrebuiltPlan = {
       "isRecoveryWeek": false,
       "volumePercent": 100,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-002",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 45,
+          "notes": "Renforcement : Renfo full body intermediaire",
+          "notesEn": "Strength: Full Body Intermediate",
+          "loadScore": 18
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "END-015",
@@ -665,6 +785,16 @@ export const planMarathon: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 5,
+          "workoutId": "STR-009",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 35,
+          "notes": "Renforcement : Core avance",
+          "notesEn": "Strength: Advanced Core",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 6,
           "workoutId": "END-011",
           "sessionType": "long_run",
@@ -698,6 +828,16 @@ export const planMarathon: PrebuiltPlan = {
       "isRecoveryWeek": true,
       "volumePercent": 65,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-016",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 33,
+          "notes": "Renforcement : Mobilite complete",
+          "notesEn": "Strength: Full Mobility",
+          "loadScore": 8
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "END-017",
@@ -792,6 +932,16 @@ export const planMarathon: PrebuiltPlan = {
       "volumePercent": 100,
       "sessions": [
         {
+          "dayOfWeek": 0,
+          "workoutId": "STR-002",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 45,
+          "notes": "Renforcement : Renfo full body intermediaire",
+          "notesEn": "Strength: Full Body Intermediate",
+          "loadScore": 18
+        },
+        {
           "dayOfWeek": 1,
           "workoutId": "FAR-015",
           "sessionType": "endurance",
@@ -853,6 +1003,16 @@ export const planMarathon: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 5,
+          "workoutId": "STR-010",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Core running-specific",
+          "notesEn": "Strength: Running-Specific Core",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 6,
           "workoutId": "END-005",
           "sessionType": "long_run",
@@ -886,6 +1046,16 @@ export const planMarathon: PrebuiltPlan = {
       "isRecoveryWeek": false,
       "volumePercent": 93,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-005",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 45,
+          "notes": "Renforcement : Force jambes coureur",
+          "notesEn": "Strength: Runner Leg Strength",
+          "loadScore": 18
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "END-012",
@@ -948,6 +1118,16 @@ export const planMarathon: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 5,
+          "workoutId": "STR-010",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Core running-specific",
+          "notesEn": "Strength: Running-Specific Core",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 6,
           "workoutId": "END-012",
           "sessionType": "long_run",
@@ -981,6 +1161,16 @@ export const planMarathon: PrebuiltPlan = {
       "isRecoveryWeek": false,
       "volumePercent": 100,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-002",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 45,
+          "notes": "Renforcement : Renfo full body intermediaire",
+          "notesEn": "Strength: Full Body Intermediate",
+          "loadScore": 18
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "REC-006",
@@ -1043,6 +1233,16 @@ export const planMarathon: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 5,
+          "workoutId": "STR-010",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Core running-specific",
+          "notesEn": "Strength: Running-Specific Core",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 6,
           "workoutId": "END-015",
           "sessionType": "long_run",
@@ -1076,6 +1276,16 @@ export const planMarathon: PrebuiltPlan = {
       "isRecoveryWeek": true,
       "volumePercent": 65,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-015",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 25,
+          "notes": "Renforcement : Recup foam roller",
+          "notesEn": "Strength: Foam Roller Recovery",
+          "loadScore": 8
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "REC-009",
@@ -1170,6 +1380,16 @@ export const planMarathon: PrebuiltPlan = {
       "volumePercent": 100,
       "sessions": [
         {
+          "dayOfWeek": 0,
+          "workoutId": "STR-002",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 45,
+          "notes": "Renforcement : Renfo full body intermediaire",
+          "notesEn": "Strength: Full Body Intermediate",
+          "loadScore": 18
+        },
+        {
           "dayOfWeek": 1,
           "workoutId": "FAR-007",
           "sessionType": "endurance",
@@ -1231,6 +1451,16 @@ export const planMarathon: PrebuiltPlan = {
           ]
         },
         {
+          "dayOfWeek": 5,
+          "workoutId": "STR-010",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Core running-specific",
+          "notesEn": "Strength: Running-Specific Core",
+          "loadScore": 12
+        },
+        {
           "dayOfWeek": 6,
           "workoutId": "SL-001",
           "sessionType": "long_run",
@@ -1271,6 +1501,16 @@ export const planMarathon: PrebuiltPlan = {
       "isRecoveryWeek": false,
       "volumePercent": 93,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-013",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 28,
+          "notes": "Renforcement : Sprint et bonds",
+          "notesEn": "Strength: Sprints & Bounds",
+          "loadScore": 15
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "END-012",
@@ -1373,6 +1613,16 @@ export const planMarathon: PrebuiltPlan = {
       "volumePercent": 100,
       "sessions": [
         {
+          "dayOfWeek": 0,
+          "workoutId": "STR-010",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Core running-specific",
+          "notesEn": "Strength: Running-Specific Core",
+          "loadScore": 15
+        },
+        {
           "dayOfWeek": 1,
           "workoutId": "REC-006",
           "sessionType": "endurance",
@@ -1474,6 +1724,16 @@ export const planMarathon: PrebuiltPlan = {
       "isRecoveryWeek": false,
       "volumePercent": 64,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-014",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 23,
+          "notes": "Renforcement : Mobilite hanches coureur",
+          "notesEn": "Strength: Runner Hip Mobility",
+          "loadScore": 8
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "REC-007",
@@ -1582,6 +1842,16 @@ export const planMarathon: PrebuiltPlan = {
       "isRecoveryWeek": false,
       "volumePercent": 41,
       "sessions": [
+        {
+          "dayOfWeek": 0,
+          "workoutId": "STR-015",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 25,
+          "notes": "Renforcement : Recup foam roller",
+          "notesEn": "Strength: Foam Roller Recovery",
+          "loadScore": 8
+        },
         {
           "dayOfWeek": 1,
           "workoutId": "END-014",
@@ -1693,6 +1963,16 @@ export const planMarathon: PrebuiltPlan = {
           "estimatedDurationMin": 9,
           "notes": "Footing léger - semaine de course",
           "notesEn": "Easy jog - race week"
+        },
+        {
+          "dayOfWeek": 2,
+          "workoutId": "STR-004",
+          "sessionType": "strength",
+          "isKeySession": false,
+          "estimatedDurationMin": 30,
+          "notes": "Renforcement : Renfo maintenance",
+          "notesEn": "Strength: Maintenance Strength",
+          "loadScore": 8
         },
         {
           "dayOfWeek": 4,
