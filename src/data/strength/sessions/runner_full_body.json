@@ -1,0 +1,548 @@
+{
+  "category": "runner_full_body",
+  "templates": [
+    {
+      "id": "STR-001",
+      "kind": "strength",
+      "name": "Renfo full body débutant",
+      "nameEn": "Beginner Full Body",
+      "description": "Séance de renforcement musculaire complète adaptée aux coureurs débutants. Exercices fondamentaux à haute répétition et charge légère pour développer l'endurance musculaire et la proprioception sans fatigue excessive.",
+      "descriptionEn": "Complete strength training session designed for beginner runners. Foundational exercises at high répétitions and light load to develop muscular endurance and proprioception without excessive fatigue.",
+      "category": "runner_full_body",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 30, "max": 40 },
+      "equipment": ["dumbbells"],
+      "primaryMuscleGroups": ["quadriceps", "glutes", "core_anterior"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-LB-012",
+          "sets": 2,
+          "reps": 12,
+          "restBetweenSets": "30s",
+          "intensity": "mobility",
+          "notes": "Activation des fessiers, mouvement contrôlé sans bande",
+          "notesEn": "Glute activation, controlled movement without band",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-CO-003",
+          "sets": 2,
+          "reps": 8,
+          "restBetweenSets": "30s",
+          "intensity": "mobility",
+          "notes": "Étendre bras et jambe opposés lentement, maintenir le bassin stable",
+          "notesEn": "Extend opposite arm and leg slowly, keep pelvis stable",
+          "rpe": 3
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-LB-001",
+          "sets": 3,
+          "reps": 12,
+          "restBetweenSets": "60s",
+          "intensity": "endurance",
+          "notes": "Haltère contre la poitrine, descendre jusqu'à ce que les cuisses soient parallèles",
+          "notesEn": "Dumbbell held at chest, lower until thighs are parallel",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-LB-004",
+          "sets": 3,
+          "reps": 10,
+          "restBetweenSets": "60s",
+          "intensity": "endurance",
+          "notes": "10 répétitions par jambe, genou arrière frôle le sol, tronc droit",
+          "notesEn": "10 reps per leg, back knee grazes the floor, torso upright",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-CO-001",
+          "sets": 3,
+          "reps": "30s",
+          "restBetweenSets": "45s",
+          "intensity": "endurance",
+          "notes": "Corps aligné de la tête aux talons, engager les abdominaux et les fessiers",
+          "notesEn": "Body aligned from head to heels, engage abs and glutes",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-UB-001",
+          "sets": 3,
+          "reps": 10,
+          "restBetweenSets": "60s",
+          "intensity": "endurance",
+          "notes": "Amplitude complète, poitrine frôle le sol. Variante sur les genoux si nécessaire",
+          "notesEn": "Full range, chest grazes the floor. Knee variation if needed",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-LB-010",
+          "sets": 3,
+          "reps": 15,
+          "restBetweenSets": "45s",
+          "intensity": "endurance",
+          "notes": "Pieds à largeur de hanches, serrer les fessiers en haut, pause 1 seconde",
+          "notesEn": "Feet hip-width apart, squeeze glutes at top, 1 second pause",
+          "rpe": 5
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-003",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "30 secondes par côté, étirement doux du psoas",
+          "notesEn": "30 seconds per side, gentle hip flexor stretch",
+          "rpe": 2
+        },
+        {
+          "exerciseId": "EX-MO-008",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "30 secondes par côté, relâcher la tension dans les fessiers profonds",
+          "notesEn": "30 seconds per side, release deep glute tension",
+          "rpe": 2
+        }
+      ],
+      "intensity": "endurance",
+      "coachingTips": [
+        "Privilégiez la qualité du mouvement à la charge : commencez léger et augmentez progressivement",
+        "Respirez naturellement, expirez pendant l'effort concentrique",
+        "Réalisez cette séance au moins 48h avant une séance de course intense",
+        "Gardez un rythme contrôlé : 2 secondes pour monter, 2 secondes pour descendre"
+      ],
+      "coachingTipsEn": [
+        "Prioritize movement quality over load: start light and increase progressively",
+        "Breathe naturally, exhale during the concentric effort",
+        "Schedule this session at least 48h before an intense running session",
+        "Keep a controlled tempo: 2 seconds up, 2 seconds down"
+      ],
+      "commonMistakes": [
+        "Charger trop lourd dès le début, ce qui dégrade la technique",
+        "Négliger l'échauffement et passer directement aux exercices principaux",
+        "Verrouiller les genoux en hyperextension lors du pont fessier"
+      ],
+      "commonMistakesEn": [
+        "Loading too heavy from the start, which degrades technique",
+        "Skipping the warmup and jumping straight to main exercises",
+        "Locking knees in hyperextension during the glute bridge"
+      ],
+      "variationIds": ["STR-002", "STR-004"],
+      "suitablePhases": ["base", "build", "recovery"],
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1,
+      "references": [
+        "Beattie et al. (2017) - The Effect of Strength Training on Performance Indicators in Distance Runners",
+        "Lauersen et al. (2014) - Strength training as superior injury prévention"
+      ]
+    },
+    {
+      "id": "STR-002",
+      "kind": "strength",
+      "name": "Renfo full body intermédiaire",
+      "nameEn": "Intermediate Full Body",
+      "description": "Séance de renforcement complet pour coureurs intermédiaires. Charges modérées et exercices bilatéraux et unilatéraux pour corriger les déséquilibres musculaires et améliorer l'économie de course.",
+      "descriptionEn": "Complete strength session for intermediate runners. Moderate loads with bilateral and unilateral exercises to correct muscle imbalances and improve running economy.",
+      "category": "runner_full_body",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "equipment": ["barbell", "dumbbells", "resistance_band", "box"],
+      "primaryMuscleGroups": ["quadriceps", "hamstrings", "glutes", "core_anterior", "upper_back"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-LB-013",
+          "sets": 2,
+          "reps": 12,
+          "restBetweenSets": "30s",
+          "intensity": "mobility",
+          "notes": "Avec bande élastique au-dessus des genoux, pas latéraux contrôlés",
+          "notesEn": "With resistance band above knees, controlled lateral steps",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-CO-004",
+          "sets": 2,
+          "reps": 8,
+          "restBetweenSets": "30s",
+          "intensity": "mobility",
+          "notes": "Garder le bas du dos plaqué au sol, étendre lentement",
+          "notesEn": "Keep lower back pressed to floor, extend slowly",
+          "rpe": 3
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-LB-003",
+          "sets": 3,
+          "reps": 8,
+          "restBetweenSets": "90s",
+          "intensity": "hypertrophy",
+          "notes": "Descente contrôlée, cuisses parallèles au sol minimum. Charge modérée, technique prioritaire",
+          "notesEn": "Controlled descent, thighs at least parallel to floor. Moderate load, technique first",
+          "rpe": 7
+        },
+        {
+          "exerciseId": "EX-LB-007",
+          "sets": 3,
+          "reps": 10,
+          "restBetweenSets": "75s",
+          "intensity": "hypertrophy",
+          "notes": "Charnière de hanche, haltères le long des jambes, sentir l'étirement des ischio-jambiers",
+          "notesEn": "Hip hinge, dumbbells along legs, feel hamstring stretch",
+          "rpe": 6
+        },
+        {
+          "exerciseId": "EX-LB-006",
+          "sets": 3,
+          "reps": 8,
+          "restBetweenSets": "60s",
+          "intensity": "hypertrophy",
+          "notes": "8 répétitions par jambe, monter en poussant par le talon, hauteur de box 40-50 cm",
+          "notesEn": "8 reps per leg, push through the heel, box height 40-50 cm",
+          "rpe": 6
+        },
+        {
+          "exerciseId": "EX-CO-005",
+          "sets": 3,
+          "reps": 10,
+          "restBetweenSets": "45s",
+          "intensity": "hypertrophy",
+          "notes": "Résister à la rotation, bras tendus devant, bande ou câble à hauteur de poitrine",
+          "notesEn": "Resist rotation, arms extended in front, band or cable at chest height",
+          "rpe": 6
+        },
+        {
+          "exerciseId": "EX-UB-002",
+          "sets": 3,
+          "reps": 10,
+          "restBetweenSets": "60s",
+          "intensity": "hypertrophy",
+          "notes": "Tirer les coudes vers l'arriere, serrer les omoplates, tronc stable",
+          "notesEn": "Pull elbows back, squeeze shoulder blades, stable torso",
+          "rpe": 6
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-005",
+          "sets": 1,
+          "reps": "60s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Rouler lentement sur les ischio-jambiers, insister sur les points sensibles",
+          "notesEn": "Roll slowly on hamstrings, focus on tender spots",
+          "rpe": 2
+        },
+        {
+          "exerciseId": "EX-MO-006",
+          "sets": 1,
+          "reps": "60s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Rouler sur les quadriceps, eviter de rouler directement sur le genou",
+          "notesEn": "Roll on quadriceps, avoid rolling directly on the knee",
+          "rpe": 2
+        }
+      ],
+      "intensity": "hypertrophy",
+      "coachingTips": [
+        "Augmentez les charges de 5% quand vous complétez toutes les répétitions avec une bonne technique",
+        "Le back squat et le RDL sont les piliers de cette séance : concentrez votre énergie dessus",
+        "Planifiez cette séance à distance d'une séance de fractionné (48-72h idéalement)",
+        "Hydratez-vous entre les séries, gardez de l'eau à portée"
+      ],
+      "coachingTipsEn": [
+        "Increase loads by 5% when you complete all reps with good technique",
+        "Back squat and RDL are the pillars of this session: focus your energy there",
+        "Schedule this session away from interval sessions (48-72h ideally)",
+        "Hydrate between sets, keep water nearby"
+      ],
+      "commonMistakes": [
+        "Arrondir le dos pendant le Romanian deadlift : maintenir la colonne neutre",
+        "Pousser avec l'avant du pied lors du step-up au lieu de pousser par le talon",
+        "Réduire l'amplitude des squats pour compensér une charge trop lourde"
+      ],
+      "commonMistakesEn": [
+        "Rounding the back during Romanian deadlift: maintain neutral spine",
+        "Pushing with the forefoot during step-up instead of driving through the heel",
+        "Reducing squat depth to compensate for too heavy a load"
+      ],
+      "variationIds": ["STR-001", "STR-003"],
+      "suitablePhases": ["base", "build"],
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 2,
+      "references": [
+        "Beattie et al. (2017) - The Effect of Strength Training on Performance Indicators in Distance Runners",
+        "Ronnestad et al. (2014) - In-season strength maintenance training increases well-trained cyclists' performance"
+      ]
+    },
+    {
+      "id": "STR-003",
+      "kind": "strength",
+      "name": "Renfo full body avancé",
+      "nameEn": "Advanced Full Body",
+      "description": "Séance de force maximale pour coureurs expérimentés. Charges lourdes et faibles répétitions pour maximiser le recrutement neuromusculaire et l'économie de course, selon le protocole de Beattie et al. (2017).",
+      "descriptionEn": "Maximal strength session for experienced runners. Heavy loads and low répétitions to maximize neuromuscular recruitment and running economy, following the Beattie et al. (2017) protocol.",
+      "category": "runner_full_body",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 45, "max": 55 },
+      "equipment": ["barbell", "dumbbells"],
+      "primaryMuscleGroups": ["quadriceps", "glutes", "hamstrings", "core_lateral", "upper_back"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-LB-012",
+          "sets": 2,
+          "reps": 15,
+          "restBetweenSets": "30s",
+          "intensity": "mobility",
+          "notes": "Activation progressive des fessiers, amplitude complète",
+          "notesEn": "Progressive glute activation, full range of motion",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-CO-001",
+          "sets": 2,
+          "reps": "30s",
+          "restBetweenSets": "30s",
+          "intensity": "mobility",
+          "notes": "Activation du core avant les charges lourdes, gainage strict",
+          "notesEn": "Core activation before heavy loads, strict plank form",
+          "rpe": 4
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-LB-003",
+          "sets": 4,
+          "reps": 5,
+          "restBetweenSets": "120s",
+          "intensity": "strength",
+          "notes": "Charge lourde, 4-5 RM. Technique irréprochable, arrêt immédiat si la forme se dégrade",
+          "notesEn": "Heavy load, 4-5 RM. Flawless technique, stop immediately if form degrades",
+          "rpe": 8,
+          "percentRM": 85
+        },
+        {
+          "exerciseId": "EX-LB-009",
+          "sets": 4,
+          "reps": 6,
+          "restBetweenSets": "90s",
+          "intensity": "strength",
+          "notes": "Appui complet du dos sur le banc, serrer les fessiers 2 secondes en haut",
+          "notesEn": "Full back support on bench, squeeze glutes for 2 seconds at top",
+          "rpe": 8,
+          "percentRM": 80
+        },
+        {
+          "exerciseId": "EX-LB-005",
+          "sets": 3,
+          "reps": 6,
+          "restBetweenSets": "90s",
+          "intensity": "strength",
+          "notes": "6 répétitions par jambe, pied arrière sur le banc, descente contrôlée 3 secondes",
+          "notesEn": "6 reps per leg, rear foot on bench, 3-second controlled descent",
+          "rpe": 8
+        },
+        {
+          "exerciseId": "EX-UB-004",
+          "sets": 3,
+          "reps": 12,
+          "restBetweenSets": "60s",
+          "intensity": "hypertrophy",
+          "notes": "Allongé face au sol, lever les bras en Y, serrer les omoplates",
+          "notesEn": "Prone position, raise arms in Y shape, squeeze shoulder blades",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-CO-002",
+          "sets": 3,
+          "reps": "30s",
+          "restBetweenSets": "45s",
+          "intensity": "strength",
+          "notes": "30 secondes par côté, corps parfaitement aligné, pas de rotation du bassin",
+          "notesEn": "30 seconds per side, perfectly aligned body, no pelvic rotation",
+          "rpe": 7
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-005",
+          "sets": 1,
+          "reps": "60s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Foam roller sur les ischio-jambiers après les charges lourdes",
+          "notesEn": "Foam roller on hamstrings after heavy loading",
+          "rpe": 2
+        },
+        {
+          "exerciseId": "EX-MO-003",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Étirement du psoas, 30 secondes par côté",
+          "notesEn": "Hip flexor stretch, 30 seconds per side",
+          "rpe": 2
+        }
+      ],
+      "intensity": "strength",
+      "coachingTips": [
+        "Les séries de squats à RPE 8 signifient qu'il vous reste environ 2 répétitions en réserve",
+        "Échauffez-vous progressivement : barre à vide, puis 50%, 70%, 85% de votre charge cible",
+        "Cette séance doit être placée à 72h minimum d'une séance de course clé",
+        "Si la technique se dégrade avant la 5e rep, réduisez la charge de 5%"
+      ],
+      "coachingTipsEn": [
+        "Squat sets at RPE 8 mean you have about 2 reps in reserve",
+        "Warm up progressively: empty bar, then 50%, 70%, 85% of your target load",
+        "Schedule this session at least 72h from a key running session",
+        "If technique degrades before rep 5, reduce the load by 5%"
+      ],
+      "commonMistakes": [
+        "Ne pas s'échauffer suffisamment avant les charges lourdes : risque de blessure",
+        "Placer cette séance la veille d'un fractionné VMA",
+        "Compenser une mauvaise mobilité de cheville par une flexion excessive du tronc au squat"
+      ],
+      "commonMistakesEn": [
+        "Not warming up enough before heavy loads: injury risk",
+        "Scheduling this session the day before a VO2max interval session",
+        "Compensating poor ankle mobility with excessive trunk lean during squat"
+      ],
+      "variationIds": ["STR-002"],
+      "suitablePhases": ["build", "peak"],
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 2,
+      "references": [
+        "Beattie et al. (2017) - The Effect of Strength Training on Performance Indicators in Distance Runners",
+        "Storen et al. (2008) - Maximal strength training improves running economy in distance runners",
+        "Aagaard et al. (2002) - Increased rate of force development and neural drive after heavy resistance training"
+      ]
+    },
+    {
+      "id": "STR-004",
+      "kind": "strength",
+      "name": "Renfo maintenance",
+      "nameEn": "Maintenance Full Body",
+      "description": "Séance réduite de maintien des acquis pour les périodes d'affûtage ou de récupération. Volume minimal pour conserver la force sans générer de fatigue supplémentaire avant une compétition.",
+      "descriptionEn": "Reduced maintenance session to preserve strength gains during taper or recovery periods. Minimal volume to retain strength without generating additional fatigue before competition.",
+      "category": "runner_full_body",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 25, "max": 35 },
+      "equipment": ["dumbbells"],
+      "primaryMuscleGroups": ["quadriceps", "glutes", "hamstrings", "core_anterior"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-MO-001",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Mobilité rapide des hanches en 90/90 pour préparer les mouvements",
+          "notesEn": "Quick 90/90 hip mobility to prepare for movements",
+          "rpe": 2
+        },
+        {
+          "exerciseId": "EX-MO-002",
+          "sets": 1,
+          "reps": 8,
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Mobilité de cheville, genou vers l'avant au-dessus des orteils",
+          "notesEn": "Ankle mobility, drive knee forward over toes",
+          "rpe": 2
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-LB-001",
+          "sets": 2,
+          "reps": 8,
+          "restBetweenSets": "60s",
+          "intensity": "endurance",
+          "notes": "Charge modérée, maintenir la qualité. Pas besoin de chercher la fatigue",
+          "notesEn": "Moderate load, maintain quality. No need to chase fatigue",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-LB-008",
+          "sets": 2,
+          "reps": 8,
+          "restBetweenSets": "60s",
+          "intensity": "endurance",
+          "notes": "8 répétitions par jambe, haltère optionnel, équilibre et contrôle prioritaires",
+          "notesEn": "8 reps per leg, dumbbell optional, balance and control are priorities",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-CO-001",
+          "sets": 2,
+          "reps": "30s",
+          "restBetweenSets": "30s",
+          "intensity": "endurance",
+          "notes": "Maintien strict, corps aligné",
+          "notesEn": "Strict hold, aligned body",
+          "rpe": 4
+        },
+        {
+          "exerciseId": "EX-UB-001",
+          "sets": 2,
+          "reps": 10,
+          "restBetweenSets": "45s",
+          "intensity": "endurance",
+          "notes": "Pompes standard ou sur les genoux, mouvement complet",
+          "notesEn": "Standard or knee push-ups, full range of motion",
+          "rpe": 4
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-008",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Étirement léger du piriforme, 30 secondes par côté",
+          "notesEn": "Light piriformis stretch, 30 seconds per side",
+          "rpe": 2
+        }
+      ],
+      "intensity": "endurance",
+      "coachingTips": [
+        "L'objectif est le maintien, pas la progression : gardez 70-80% de votre charge habituelle",
+        "Idéale 3-5 jours avant une compétition pour entretenir le tonus musculaire",
+        "Durée courte pour minimiser les courbatures pendant l'affûtage",
+        "Écoutez votre corps : réduisez encore si vous sentez de la fatigue résiduelle"
+      ],
+      "coachingTipsEn": [
+        "The goal is maintenance, not progression: keep 70-80% of your usual load",
+        "Ideal 3-5 days before competition to maintain muscle tone",
+        "Short duration to minimize soreness during taper",
+        "Listen to your body: reduce further if you feel residual fatigue"
+      ],
+      "commonMistakes": [
+        "Augmenter les charges pendant l'affûtage au lieu de les réduire",
+        "Supprimer complètement le renforcement en période de taper, perdant ainsi les adaptations",
+        "Ajouter des exercices supplémentaires par habitude"
+      ],
+      "commonMistakesEn": [
+        "Increasing loads during taper instead of reducing them",
+        "Completely dropping strength work during taper, thus losing adaptations",
+        "Adding extra exercises out of habit"
+      ],
+      "variationIds": ["STR-001"],
+      "suitablePhases": ["taper", "recovery"],
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1,
+      "references": [
+        "Ronnestad et al. (2014) - In-season strength maintenance training increases well-trained cyclists' performance",
+        "Beattie et al. (2017) - The Effect of Strength Training on Performance Indicators in Distance Runners"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,417 @@
+{
+  "category": "plyometrics",
+  "templates": [
+    {
+      "id": "STR-011",
+      "kind": "strength",
+      "name": "Intro pliométrie",
+      "nameEn": "Plyometric Introduction",
+      "description": "Introduction progressive à la pliométrie pour coureurs. Exercices à faible impact pour développer la réactivité musculaire et préparer les tendons aux contraintes explosives. Prérequis : au moins 3 mois de renforcement régulier.",
+      "descriptionEn": "Progressive introduction to plyometrics for runners. Low-impact exercises to develop muscle reactivity and prepare tendons for explosive demands. Prérequisite: at least 3 months of regular strength training.",
+      "category": "plyometrics",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 30, "max": 35 },
+      "equipment": ["box"],
+      "primaryMuscleGroups": ["quadriceps", "glutes", "calves"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-LB-002",
+          "sets": 2,
+          "reps": 10,
+          "restBetweenSets": "30s",
+          "intensity": "mobility",
+          "notes": "Squats poids du corps comme échauffement articulaire des membres inférieurs",
+          "notesEn": "Bodyweight squats as lower body joint warmup",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-MO-002",
+          "sets": 2,
+          "reps": 10,
+          "restBetweenSets": "30s",
+          "intensity": "mobility",
+          "notes": "Mobilité des chevilles essentielles pour les réceptions de sauts",
+          "notesEn": "Ankle mobility essential for jump landings",
+          "rpe": 2
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-PL-008",
+          "sets": 3,
+          "reps": 6,
+          "restBetweenSets": "90s",
+          "intensity": "power",
+          "notes": "Squat complet suivi d'un saut vertical maximal, atterrir en douceur genoux fléchis",
+          "notesEn": "Full squat followed by maximal vertical jump, land softly with bent knees",
+          "rpe": 6
+        },
+        {
+          "exerciseId": "EX-PL-001",
+          "sets": 3,
+          "reps": 5,
+          "restBetweenSets": "90s",
+          "intensity": "power",
+          "notes": "Sauter sur une box de 40-50 cm, réceptionner pieds à plat, redescendre en marchant",
+          "notesEn": "Jump onto a 40-50 cm box, land with flat feet, step down",
+          "rpe": 6
+        },
+        {
+          "exerciseId": "EX-PL-006",
+          "sets": 3,
+          "reps": "20m",
+          "restBetweenSets": "90s",
+          "intensity": "power",
+          "notes": "Skippings hauts sur 20 metres, rechercher l'elevation maximale des genoux",
+          "notesEn": "High skips over 20 meters, seek maximum knee elevation",
+          "rpe": 6
+        },
+        {
+          "exerciseId": "EX-PL-007",
+          "sets": 3,
+          "reps": 8,
+          "restBetweenSets": "75s",
+          "intensity": "power",
+          "notes": "Sauts latéraux par-dessus une ligne, rechercher la stabilité à la reception",
+          "notesEn": "Lateral jumps over a line, focus on landing stability",
+          "rpe": 6
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-005",
+          "sets": 1,
+          "reps": "60s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Foam roller ischio-jambiers pour commencer la récupération",
+          "notesEn": "Foam roller hamstrings to start recovery",
+          "rpe": 2
+        },
+        {
+          "exerciseId": "EX-MO-006",
+          "sets": 1,
+          "reps": "60s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Foam roller quadriceps, mouvements lents",
+          "notesEn": "Foam roller quadriceps, slow movements",
+          "rpe": 2
+        }
+      ],
+      "intensity": "power",
+      "coachingTips": [
+        "La qualité prime sur la quantité : chaque saut doit être maximal et bien réceptionné",
+        "Si la qualité de saut diminue, arrêtez la série même avant d'atteindre le nombre de répétitions cible",
+        "Repos complet entre les séries : au moins 90 secondes pour permettre la récupération du système nerveux",
+        "Commencez par une box basse (30 cm) et augmentez progressivement la hauteur sur plusieurs semaines"
+      ],
+      "coachingTipsEn": [
+        "Quality over quantity: each jump should be maximal and well-landed",
+        "If jump quality decreases, stop the set even before reaching target reps",
+        "Full rest between sets: at least 90 seconds to allow nervous system recovery",
+        "Start with a low box (30 cm) and progressively increase height over several weeks"
+      ],
+      "commonMistakes": [
+        "Enchainer les sauts trop rapidement sans récupération complète entre les séries",
+        "Réceptionner les sauts genoux raides au lieu de fléchir pour absorber l'impact",
+        "Tenter des hauteurs de box trop élevées avant de maîtriser la technique de reception"
+      ],
+      "commonMistakesEn": [
+        "Chaining jumps too quickly without full recovery between sets",
+        "Landing with stiff knees instead of flexing to absorb impact",
+        "Attempting box heights that are too high before mastering landing technique"
+      ],
+      "variationIds": ["STR-012", "STR-013"],
+      "suitablePhases": ["build"],
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2,
+      "references": [
+        "Paavolainen et al. (1999) - Explosive-strength training improves 5-km running time",
+        "Spurrs et al. (2003) - The effect of plyometric training on distance running performance",
+        "Saez de Villarreal et al. (2012) - Does plyometric training improve strength performance?"
+      ]
+    },
+    {
+      "id": "STR-012",
+      "kind": "strength",
+      "name": "Pliométrie running avancée",
+      "nameEn": "Advanced Running Plyometrics",
+      "description": "Séance de pliométrie avancée pour coureurs expérimentés visant le pic de performance. Inclut des sauts en profondeur et des bonds unilatéraux pour maximiser la raideur musculo-tendineuse et le taux de développement de la force.",
+      "descriptionEn": "Advanced plyometric session for experienced runners targeting peak performance. Includes depth jumps and unilateral bounds to maximize musculotendinous stiffness and rate of force development.",
+      "category": "plyometrics",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 35, "max": 40 },
+      "equipment": ["box"],
+      "primaryMuscleGroups": ["quadriceps", "glutes", "calves", "hamstrings"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-LB-002",
+          "sets": 2,
+          "reps": 10,
+          "restBetweenSets": "30s",
+          "intensity": "mobility",
+          "notes": "Squats dynamiques pour activer les membres inférieurs",
+          "notesEn": "Dynamic squats to activate lower limbs",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-PL-008",
+          "sets": 2,
+          "reps": 3,
+          "restBetweenSets": "60s",
+          "intensity": "power",
+          "notes": "Squat jumps sous-maximaux comme échauffement spécifique",
+          "notesEn": "Submaximal squat jumps as specific warmup",
+          "rpe": 4
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-PL-005",
+          "sets": 3,
+          "reps": 5,
+          "restBetweenSets": "120s",
+          "intensity": "power",
+          "notes": "Chute d'une box de 30-40 cm, reception et saut immédiat. Minimiser le temps au sol",
+          "notesEn": "Drop from a 30-40 cm box, land and immediately jump. Minimize ground contact time",
+          "rpe": 8
+        },
+        {
+          "exerciseId": "EX-PL-003",
+          "sets": 4,
+          "reps": 8,
+          "restBetweenSets": "120s",
+          "intensity": "power",
+          "notes": "8 bonds alternant jambe gauche et droite sur 30 metres, rechercher l'amplitude et le temps de vol",
+          "notesEn": "8 bounds alternating left and right leg over 30 meters, seek amplitude and flight time",
+          "rpe": 8
+        },
+        {
+          "exerciseId": "EX-PL-004",
+          "sets": 3,
+          "reps": 6,
+          "restBetweenSets": "120s",
+          "intensity": "power",
+          "notes": "6 sauts par jambe, reception stable sur une jambe avant le saut suivant",
+          "notesEn": "6 hops per leg, stable single-leg landing before the next hop",
+          "rpe": 8
+        },
+        {
+          "exerciseId": "EX-PL-002",
+          "sets": 3,
+          "reps": 6,
+          "restBetweenSets": "90s",
+          "intensity": "power",
+          "notes": "Saut vertical en ramenant les genoux vers la poitrine, atterrir en position athlétique",
+          "notesEn": "Vertical jump bringing knees to chest, land in athletic position",
+          "rpe": 7
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-005",
+          "sets": 1,
+          "reps": "60s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Foam roller complet sur les ischio-jambiers",
+          "notesEn": "Complete foam roller on hamstrings",
+          "rpe": 2
+        },
+        {
+          "exerciseId": "EX-MO-006",
+          "sets": 1,
+          "reps": "60s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Foam roller complet sur les quadriceps",
+          "notesEn": "Complete foam roller on quadriceps",
+          "rpe": 2
+        },
+        {
+          "exerciseId": "EX-MO-003",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Étirement psoas, 30 secondes par côté",
+          "notesEn": "Hip flexor stretch, 30 seconds per side",
+          "rpe": 2
+        }
+      ],
+      "intensity": "power",
+      "coachingTips": [
+        "Les depth jumps sont l'exercice le plus exigeant : hauteur de box de 30 cm maximum pour commencer",
+        "Le temps de contact au sol doit être minimal (<200ms) pour les depth jumps : si vous ne rebondissez pas immédiatement, la box est trop haute",
+        "Séance à réaliser uniquement quand vous êtes frais : jamais après un fractionne ou une sortie longue",
+        "Espacez d'au moins 72h avec toute séance de course intense"
+      ],
+      "coachingTipsEn": [
+        "Depth jumps are the most demanding exercise: start with a 30 cm box maximum",
+        "Ground contact time should be minimal (<200ms) for depth jumps: if you don't rebound immediately, the box is too high",
+        "Only perform this session when fresh: never after intervals or a long run",
+        "Allow at least 72h between this and any intense running session"
+      ],
+      "commonMistakes": [
+        "Utiliser une box trop haute pour les depth jumps, transformant un exercice reactif en exercice de force",
+        "Ne pas récupérer suffisamment entre les séries, dégradant la qualité des sauts",
+        "Réaliser cette séance le lendemain d'une séance de course intense"
+      ],
+      "commonMistakesEn": [
+        "Using a box that is too high for depth jumps, turning a reactive exercise into a strength exercise",
+        "Not recovering enough between sets, degrading jump quality",
+        "Performing this session the day after an intense running session"
+      ],
+      "variationIds": ["STR-011", "STR-013"],
+      "suitablePhases": ["peak"],
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 3,
+      "references": [
+        "Paavolainen et al. (1999) - Explosive-strength training improves 5-km running time",
+        "Komi (2000) - Stretch-shortening cycle: a powerful model to study normal and fatigued muscle",
+        "Turner & Jeffreys (2010) - A brief review of the literature regarding depth jumps"
+      ]
+    },
+    {
+      "id": "STR-013",
+      "kind": "strength",
+      "name": "Sprint et bonds",
+      "nameEn": "Sprint & Bounds",
+      "description": "Séance axée sur les gammes athlétiques et les bonds pour développer la puissance horizontale du coureur. Combine skippings hauts, bonds et sauts unilatéraux pour améliorer la foulée et la fréquence de pas.",
+      "descriptionEn": "Session focused on athletic drills and bounds to develop horizontal power for runners. Combines high skips, bounds, and single-leg hops to improve stride and step frequency.",
+      "category": "plyometrics",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 25, "max": 30 },
+      "equipment": ["none"],
+      "primaryMuscleGroups": ["quadriceps", "glutes", "calves", "hip_flexors"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-LB-002",
+          "sets": 1,
+          "reps": 10,
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Squats dynamiques poids du corps",
+          "notesEn": "Dynamic bodyweight squats",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-MO-004",
+          "sets": 1,
+          "reps": 6,
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Fentes avec rotation pour ouvrir les hanches et activer la chaine posterieure",
+          "notesEn": "Lunges with rotation to open hips and activate posterior chain",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-MO-002",
+          "sets": 1,
+          "reps": 8,
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Mobilité chevilles avant les sauts et bonds",
+          "notesEn": "Ankle mobility before jumps and bounds",
+          "rpe": 2
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-PL-006",
+          "sets": 4,
+          "reps": "30m",
+          "restBetweenSets": "90s",
+          "intensity": "power",
+          "notes": "Skippings hauts sur 30 metres, monter les genoux le plus haut possible avec un bras dynamique",
+          "notesEn": "High skips over 30 meters, drive knees as high as possible with dynamic arm action",
+          "rpe": 7
+        },
+        {
+          "exerciseId": "EX-PL-003",
+          "sets": 4,
+          "reps": "30m",
+          "restBetweenSets": "90s",
+          "intensity": "power",
+          "notes": "Bonds alternants sur 30 metres, rechercher l'amplitude et la puissance horizontale",
+          "notesEn": "Alternating bounds over 30 meters, seek amplitude and horizontal power",
+          "rpe": 7
+        },
+        {
+          "exerciseId": "EX-PL-004",
+          "sets": 3,
+          "reps": 6,
+          "restBetweenSets": "90s",
+          "intensity": "power",
+          "notes": "6 sauts consecutifs par jambe, reception stable avant chaque impulsion",
+          "notesEn": "6 consecutive hops per leg, stable landing before each takeoff",
+          "rpe": 7
+        },
+        {
+          "exerciseId": "EX-PL-008",
+          "sets": 3,
+          "reps": 8,
+          "restBetweenSets": "75s",
+          "intensity": "power",
+          "notes": "Squat jumps reactifs, minimiser le temps au sol entre chaque saut",
+          "notesEn": "Reactive squat jumps, minimize ground contact time between jumps",
+          "rpe": 7
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-005",
+          "sets": 1,
+          "reps": "45s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Foam roller ischio-jambiers",
+          "notesEn": "Foam roller hamstrings",
+          "rpe": 2
+        },
+        {
+          "exerciseId": "EX-MO-003",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Étirement psoas, 30 secondes par côté",
+          "notesEn": "Hip flexor stretch, 30 seconds per side",
+          "rpe": 2
+        }
+      ],
+      "intensity": "power",
+      "coachingTips": [
+        "Cette séance peut être réalisée sur une piste d'athlétisme ou un terrain plat en herbe",
+        "Pensez à la course : les bonds imitent la phase de propulsion de la foulée en l'amplifiant",
+        "Gardez le buste droit et les bras dynamiques pendant les bonds et skippings",
+        "Si vous ressentez une douleur au tendon d'Achille, arretez immédiatement les bonds"
+      ],
+      "coachingTipsEn": [
+        "This session can be performed on a track or flat grass field",
+        "Think about running: bounds mimic the propulsion phase of the stride with amplification",
+        "Keep upright posture and dynamic arms during bounds and skips",
+        "If you feel Achilles tendon pain, stop bounds immediately"
+      ],
+      "commonMistakes": [
+        "Se pencher en avant pendant les bonds au lieu de rester droit",
+        "Négliger le travail des bras : les bras génèrent une part significative de la puissance",
+        "Enchaîner les répétitions sans récupération suffisante, transformant un exercice de puissance en endurance"
+      ],
+      "commonMistakesEn": [
+        "Leaning forward during bounds instead of staying upright",
+        "Neglecting arm work: arms generate a significant portion of power",
+        "Chaining reps without sufficient recovery, turning a power exercise into endurance"
+      ],
+      "variationIds": ["STR-011", "STR-012"],
+      "suitablePhases": ["build", "peak"],
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 2,
+      "references": [
+        "Paavolainen et al. (1999) - Explosive-strength training improves 5-km running time",
+        "Spurrs et al. (2003) - The effect of plyometric training on distance running performance"
+      ]
+    }
+  ]
+}

@@ -44,6 +44,8 @@ export interface PlanConfig {
   totalWeeksOverride?: number;   // v2: manual week count (for non-race plans)
   currentWeeklyKm?: number;     // v2: user's current weekly volume for smarter starting point
   currentLongRunKm?: number;    // v2: user's current longest run
+  includeStrength?: boolean;       // v2: include strength suggestions (Ronnestad 2014)
+  strengthFrequency?: 1 | 2 | 3;  // v2: strength sessions per week (default: 2)
 }
 
 // ── Assisted plan config (all race fields required) ─────────────────
@@ -87,6 +89,7 @@ export interface PlanSession {
   actualDurationMin?: number;
   actualDistanceKm?: number;
   rpe?: number;                  // 1-10 Rate of Perceived Effort
+  isSuggestion?: boolean;          // v2: true if auto-suggested (user can dismiss)
 }
 
 // ── Cross-training session (non-running activity) ──────────────────

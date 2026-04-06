@@ -1,0 +1,375 @@
+{
+  "category": "runner_core",
+  "templates": [
+    {
+      "id": "STR-008",
+      "kind": "strength",
+      "name": "Core stability coureur",
+      "nameEn": "Runner Core Stability",
+      "description": "Séance de gainage fondamentale pour coureurs, basée sur les trois piliers anti-mouvement : anti-extension, anti-rotation et anti-flexion latérale. Renforce la stabilité du tronc pour un meilleur transfert d'energie à chaque foulée.",
+      "descriptionEn": "Foundational core stability session for runners, based on the three anti-movement pillars: anti-extension, anti-rotation, and anti-lateral flexion. Strengthens trunk stability for better energy transfer at each stride.",
+      "category": "runner_core",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 25, "max": 30 },
+      "equipment": ["none"],
+      "primaryMuscleGroups": ["core_anterior", "core_lateral", "core_posterior"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-CO-003",
+          "sets": 1,
+          "reps": 6,
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Échauffement articulaire, mouvement lent et contrôle, 6 répétitions par côté",
+          "notesEn": "Joint warmup, slow and controlled movement, 6 reps per side",
+          "rpe": 2
+        },
+        {
+          "exerciseId": "EX-CO-004",
+          "sets": 1,
+          "reps": 6,
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Activation progressive du core, bas du dos plaque au sol",
+          "notesEn": "Progressive core activation, lower back pressed to floor",
+          "rpe": 2
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-CO-001",
+          "sets": 3,
+          "reps": "30s",
+          "restBetweenSets": "30s",
+          "intensity": "endurance",
+          "notes": "Anti-extension : corps droit de la tete aux talons, contracter fessiers et abdominaux",
+          "notesEn": "Anti-extension: straight body from head to heels, contract glutes and abs",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-CO-002",
+          "sets": 3,
+          "reps": "20s",
+          "restBetweenSets": "30s",
+          "intensity": "endurance",
+          "notes": "Anti-flexion latérale : 20 secondes par côté, hanches empilees, corps aligne",
+          "notesEn": "Anti-lateral flexion: 20 seconds per side, stacked hips, aligned body",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-CO-003",
+          "sets": 3,
+          "reps": 8,
+          "restBetweenSets": "30s",
+          "intensity": "endurance",
+          "notes": "Anti-rotation : etendre le bras et la jambe opposes sans que le bassin ne bouge",
+          "notesEn": "Anti-rotation: extend opposite arm and leg without pelvis movement",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-CO-004",
+          "sets": 3,
+          "reps": 10,
+          "restBetweenSets": "30s",
+          "intensity": "endurance",
+          "notes": "Anti-extension dynamique : maintenir le bas du dos au sol tout au long du mouvement",
+          "notesEn": "Dynamic anti-extension: keep lower back on the floor throughout the movement",
+          "rpe": 5
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-003",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Étirement du psoas, 30 secondes par côté pour detendre les fléchisseurs de hanche",
+          "notesEn": "Hip flexor stretch, 30 seconds per side to release hip flexors",
+          "rpe": 2
+        }
+      ],
+      "intensity": "endurance",
+      "coachingTips": [
+        "Le gainage du coureur est anti-mouvement : le but est de resister au mouvement, pas de le creer",
+        "Privilegiez la qualité : arretez des que vous perdez l'alignement plutôt que de tenir plus longtemps",
+        "Séance idéale avant ou après un footing facile, ou en routine matinale",
+        "Progressez en augmentant la durée (planche) ou les répétitions (bird-dog, dead bug) de 10% par semaine"
+      ],
+      "coachingTipsEn": [
+        "Runner core work is anti-movement: the goal is to resist movement, not create it",
+        "Prioritize quality: stop when you lose alignment rather than holding longer",
+        "Ideal session before or after an easy run, or as a morning routine",
+        "Progress by increasing duration (plank) or répétitions (bird-dog, dead bug) by 10% per week"
+      ],
+      "commonMistakes": [
+        "Laisser les hanches s'affaisser pendant la planche au lieu de maintenir l'alignement",
+        "Compenser le manque de force du core par un mouvement excessif du bassin au bird-dog",
+        "Retenir sa respiration : respirez normalement pendant tous les exercices de gainage"
+      ],
+      "commonMistakesEn": [
+        "Letting hips sag during the plank instead of maintaining alignment",
+        "Compensating for core weakness with excessive pelvic movement during bird-dog",
+        "Holding your breath: breathe normally during all core exercises"
+      ],
+      "variationIds": ["STR-009", "STR-010"],
+      "suitablePhases": ["base", "build", "peak", "taper", "recovery"],
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 0,
+      "references": [
+        "McGill (2010) - Core Training: Evidence Translating to Better Performance and Injury Prevention",
+        "Fredericson & Moore (2005) - Muscular balance, core stability, and injury prévention for middle- and long-distance runners"
+      ]
+    },
+    {
+      "id": "STR-009",
+      "kind": "strength",
+      "name": "Core avance",
+      "nameEn": "Advanced Core",
+      "description": "Séance de core avancée avec exercices dynamiques et charges anti-rotation. Développe la force rotationnelle et la stabilité en mouvement, essentielles pour les changements de direction et les terrains techniques.",
+      "descriptionEn": "Advanced core session with dynamic exercises and anti-rotation loads. Develops rotational strength and stability in movement, essential for direction changes and technical terrain.",
+      "category": "runner_core",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 30, "max": 40 },
+      "equipment": ["resistance_band"],
+      "primaryMuscleGroups": ["core_anterior", "core_lateral", "core_posterior"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-CO-001",
+          "sets": 1,
+          "reps": "20s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Planche d'activation rapide pour reveiller le core",
+          "notesEn": "Quick activation plank to wake up the core",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-CO-003",
+          "sets": 1,
+          "reps": 6,
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Bird-dog lent pour préparer les rotations",
+          "notesEn": "Slow bird-dog to prepare for rotations",
+          "rpe": 3
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-CO-005",
+          "sets": 3,
+          "reps": 10,
+          "restBetweenSets": "45s",
+          "intensity": "hypertrophy",
+          "notes": "10 répétitions par côté avec bande ou cable, resister à la rotation du tronc",
+          "notesEn": "10 reps per side with band or cable, resist trunk rotation",
+          "rpe": 6
+        },
+        {
+          "exerciseId": "EX-CO-008",
+          "sets": 3,
+          "reps": 10,
+          "restBetweenSets": "45s",
+          "intensity": "hypertrophy",
+          "notes": "10 répétitions par côté en planche, tirer le genou vers le coude oppose",
+          "notesEn": "10 reps per side in plank, drive knee toward opposite elbow",
+          "rpe": 7
+        },
+        {
+          "exerciseId": "EX-CO-006",
+          "sets": 3,
+          "reps": 12,
+          "restBetweenSets": "45s",
+          "intensity": "hypertrophy",
+          "notes": "Assis, pieds légèrement décollés du sol, rotation contrôlée avec ou sans poids",
+          "notesEn": "Seated, feet slightly off floor, controlled rotation with or without weight",
+          "rpe": 6
+        },
+        {
+          "exerciseId": "EX-CO-007",
+          "sets": 3,
+          "reps": 12,
+          "restBetweenSets": "45s",
+          "intensity": "hypertrophy",
+          "notes": "Allongé sur le ventre, lever bras et jambes simultanémentent, maintenir 1 seconde en haut",
+          "notesEn": "Prone, lift arms and legs simultaneously, hold 1 second at top",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-CO-009",
+          "sets": 3,
+          "reps": 12,
+          "restBetweenSets": "45s",
+          "intensity": "hypertrophy",
+          "notes": "12 répétitions par côté, coude vers genou oppose, jambe tendue ne touche pas le sol",
+          "notesEn": "12 reps per side, elbow to opposite knee, extended leg doesn't touch the floor",
+          "rpe": 6
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-001",
+          "sets": 1,
+          "reps": "45s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "90/90 pour relâcher les hanches après le travail de core intense",
+          "notesEn": "90/90 to release hips after intense core work",
+          "rpe": 2
+        },
+        {
+          "exerciseId": "EX-MO-003",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Étirement du psoas, 30 secondes par côté",
+          "notesEn": "Hip flexor stretch, 30 seconds per side",
+          "rpe": 2
+        }
+      ],
+      "intensity": "hypertrophy",
+      "coachingTips": [
+        "Le pallof press est l'exercice roi de l'anti-rotation pour les coureurs : maitrisez-le",
+        "La rotation russe doit être un mouvement contrôlé, pas un mouvement balistique",
+        "Si vous courez en trail, cette séance est particulièrement bénéfique pour la stabilité en terrain instable",
+        "Gardez le transverse actif (nombril rentré) pendant toute la séance"
+      ],
+      "coachingTipsEn": [
+        "The Pallof press is the king of anti-rotation exercises for runners: master it",
+        "Russian twist should be a controlled movement, not a ballistic one",
+        "If you trail run, this session is particularly bénéficial for stability on uneven terrain",
+        "Keep the transversus active (belly button in) throughout the session"
+      ],
+      "commonMistakes": [
+        "Utiliser l'elan au lieu de la force du core pour les rotations russes",
+        "Laisser le bassin tourner pendant le pallof press au lieu de le stabiliser",
+        "Faire les crunchs velo trop vite en perdant le contrôle du mouvement"
+      ],
+      "commonMistakesEn": [
+        "Using momentum instead of core strength for Russian twists",
+        "Letting the pelvis rotate during the Pallof press instead of stabilizing it",
+        "Performing bicycle crunches too fast, losing movement control"
+      ],
+      "variationIds": ["STR-008", "STR-010"],
+      "suitablePhases": ["base", "build"],
+      "weeklyFrequencyMax": 3,
+      "minimumRecoveryDays": 1,
+      "references": [
+        "McGill (2010) - Core Training: Evidence Translating to Better Performance and Injury Prevention",
+        "Fredericson & Moore (2005) - Muscular balance, core stability, and injury prévention for middle- and long-distance runners"
+      ]
+    },
+    {
+      "id": "STR-010",
+      "kind": "strength",
+      "name": "Core running-specific",
+      "nameEn": "Running Core",
+      "description": "Séance courte et ciblée de gainage spécifique à la course. Exercices anti-mouvement minimalistes conçus pour être combinés avec un footing facile. Maintient la posture de course sans générer de fatigue significative.",
+      "descriptionEn": "Short, targeted core session specific to running. Minimalist anti-movement exercises designed to be paired with an easy run. Maintains running posture without generating significant fatigue.",
+      "category": "runner_core",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 20, "max": 25 },
+      "equipment": ["none"],
+      "primaryMuscleGroups": ["core_anterior", "core_lateral", "core_posterior"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-MO-004",
+          "sets": 1,
+          "reps": 5,
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Fentes avec rotation pour ouvrir les hanches et mobiliser la colonne thoracique",
+          "notesEn": "Lunges with rotation to open hips and mobilize thoracic spine",
+          "rpe": 2
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-CO-003",
+          "sets": 3,
+          "reps": 10,
+          "restBetweenSets": "30s",
+          "intensity": "endurance",
+          "notes": "10 répétitions par côté, mouvement lent et parfaitement contrôle",
+          "notesEn": "10 reps per side, slow and perfectly controlled movement",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-CO-004",
+          "sets": 3,
+          "reps": 10,
+          "restBetweenSets": "30s",
+          "intensity": "endurance",
+          "notes": "10 répétitions par côté, bas du dos immobile contre le sol",
+          "notesEn": "10 reps per side, lower back motionless against the floor",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-CO-001",
+          "sets": 2,
+          "reps": "45s",
+          "restBetweenSets": "30s",
+          "intensity": "endurance",
+          "notes": "Gainage strict 45 secondes, rechercher la qualité plutôt que la durée",
+          "notesEn": "Strict 45-second plank, prioritize quality over duration",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-CO-002",
+          "sets": 2,
+          "reps": "30s",
+          "restBetweenSets": "30s",
+          "intensity": "endurance",
+          "notes": "30 secondes par côté, corps parfaitement aligne en position latérale",
+          "notesEn": "30 seconds per side, perfectly aligned body in lateral position",
+          "rpe": 5
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-003",
+          "sets": 1,
+          "reps": "20s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Étirement rapide du psoas, 20 secondes par côté",
+          "notesEn": "Quick hip flexor stretch, 20 seconds per side",
+          "rpe": 2
+        }
+      ],
+      "intensity": "endurance",
+      "coachingTips": [
+        "Séance idéale à réaliser juste avant ou juste après un footing facile",
+        "La cohérence est plus importante que l'intensité : 4 fois par semaine vaut mieux qu'une seule fois intense",
+        "Pensez à votre posture de course pendant les exercices : même engagement du core",
+        "20 minutes suffisent pour maintenir les adaptations de gainage"
+      ],
+      "coachingTipsEn": [
+        "Ideal session to do just before or just after an easy run",
+        "Consistency is more important than intensity: 4 times per week beats one intense session",
+        "Think about your running posture during exercises: same core engagement",
+        "20 minutes is enough to maintain core adaptations"
+      ],
+      "commonMistakes": [
+        "Zapper cette séance parce qu'elle semble trop courte pour être utile",
+        "Ajouter des exercices supplémentaires qui dénaturent l'aspect minimaliste et spécifique",
+        "Faire les planches en apnée : respirer normalement est essentiel"
+      ],
+      "commonMistakesEn": [
+        "Skipping this session because it seems too short to be useful",
+        "Adding extra exercises that defeat the minimalist and specific purpose",
+        "Doing planks while holding breath: breathing normally is essential"
+      ],
+      "variationIds": ["STR-008"],
+      "suitablePhases": ["base", "build", "peak", "taper", "recovery"],
+      "weeklyFrequencyMax": 5,
+      "minimumRecoveryDays": 0,
+      "references": [
+        "McGill (2010) - Core Training: Evidence Translating to Better Performance and Injury Prevention",
+        "Sato & Mokha (2009) - Does core strength training influence running kinetics, lower-extremity stability, and 5000-m performance in runners?"
+      ]
+    }
+  ]
+}

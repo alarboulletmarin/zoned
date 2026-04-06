@@ -1,0 +1,285 @@
+{
+  "category": "runner_core",
+  "exercises": [
+    {
+      "id": "EX-CO-001",
+      "name": "Planche frontale",
+      "nameEn": "Front Plank",
+      "description": "Gainage en position de planche sur les avant-bras. Exercice anti-extension fondamental qui renforce la ceinture abdominale dans sa fonction première : stabiliser le tronc pendant la course. Un core solide empêche les fuites d'énergie latérales et rotationnelles à chaque foulée.",
+      "descriptionEn": "Forearm plank hold. A fundamental anti-extension exercise that strengthens the abdominal wall in its primary function: stabilizing the trunk during running. A solid core prevents lateral and rotational energy leaks with each stride.",
+      "primaryMuscles": ["core_anterior"],
+      "secondaryMuscles": ["shoulders", "core_lateral"],
+      "equipment": ["none"],
+      "isUnilateral": false,
+      "formCues": [
+        "Avant-bras au sol, coudes sous les épaules",
+        "Corps en ligne droite de la tête aux talons",
+        "Serrer les fessiers et rentrer légèrement le bassin",
+        "Ne pas laisser les hanches s'affaisser ou monter en pic",
+        "Respirer normalement, ne pas bloquer la respiration"
+      ],
+      "formCuesEn": [
+        "Forearms on the ground, elbows under shoulders",
+        "Body in a straight line from head to heels",
+        "Squeeze glutes and slightly tuck pelvis under",
+        "Do not let hips sag or pike up",
+        "Breathe normally, do not hold your breath"
+      ],
+      "regressionId": null,
+      "progressionId": "EX-CO-004",
+      "imageSlug": "front-plank"
+    },
+    {
+      "id": "EX-CO-002",
+      "name": "Planche latérale",
+      "nameEn": "Side Plank",
+      "description": "Gainage latéral sur un avant-bras. Exercice anti-flexion latérale qui renforce les obliques et le carré des lombes. Essentiel pour les coureurs car il prévient la chute du bassin (signe de Trendelenburg) lors de l'appui unipodal en course.",
+      "descriptionEn": "Lateral forearm plank hold. An anti-lateral flexion exercise that strengthens the obliques and quadratus lumborum. Essential for runners as it prevents pelvic drop (Trendelenburg sign) during single-leg stance in running.",
+      "primaryMuscles": ["core_lateral"],
+      "secondaryMuscles": ["glutes", "shoulders"],
+      "equipment": ["none"],
+      "isUnilateral": true,
+      "formCues": [
+        "Avant-bras au sol, coude sous l'épaule",
+        "Corps en ligne droite, hanches empilées",
+        "Pousser le sol avec l'avant-bras pour ne pas s'affaisser",
+        "Pied du dessus devant ou empilé sur celui du dessous",
+        "Garder le bassin haut, ne pas laisser les hanches descendre"
+      ],
+      "formCuesEn": [
+        "Forearm on the ground, elbow under shoulder",
+        "Body in a straight line, hips stacked",
+        "Push the floor away with forearm to avoid sagging",
+        "Top foot in front or stacked on the bottom foot",
+        "Keep hips high, do not let them drop"
+      ],
+      "regressionId": null,
+      "progressionId": "EX-CO-008",
+      "imageSlug": "side-plank"
+    },
+    {
+      "id": "EX-CO-003",
+      "name": "Bird-dog",
+      "nameEn": "Bird-Dog",
+      "description": "Extension contralatérale bras-jambe à quatre pattes. Exercice très spécifique à la course qui reproduit le schéma croisé bras-jambe de la foulée. Renforce la stabilité lombo-pelvienne tout en travaillant la coordination contralatérale, fondamentale en course à pied.",
+      "descriptionEn": "Contralateral arm-leg extension on all fours. A highly running-specific exercise that reproduces the cross-body arm-leg pattern of the stride. Strengthens lumbopelvic stability while working contralateral coordination, fundamental in running.",
+      "primaryMuscles": ["core_posterior", "core_anterior"],
+      "secondaryMuscles": ["glutes", "shoulders"],
+      "equipment": ["none"],
+      "isUnilateral": true,
+      "formCues": [
+        "À quatre pattes, mains sous les épaules, genoux sous les hanches",
+        "Étendre simultanément le bras droit et la jambe gauche",
+        "Garder le dos plat, ne pas creuser les lombaires",
+        "Maintenir les hanches de niveau (ne pas tourner le bassin)",
+        "Revenir lentement et contrôler, puis alterner"
+      ],
+      "formCuesEn": [
+        "On all fours, hands under shoulders, knees under hips",
+        "Simultaneously extend right arm and left leg",
+        "Keep back flat, do not arch the lower back",
+        "Maintain level hips (do not rotate the pelvis)",
+        "Return slowly and controlled, then alternate"
+      ],
+      "regressionId": null,
+      "progressionId": null,
+      "imageSlug": "bird-dog"
+    },
+    {
+      "id": "EX-CO-004",
+      "name": "Dead bug",
+      "nameEn": "Dead Bug",
+      "description": "Allongé sur le dos, bras et jambes en l'air, extension alternée d'un bras et de la jambe opposée. Exercice anti-extension avec mouvement qui enseigne au core à rester stable pendant que les membres bougent, exactement comme en course à pied.",
+      "descriptionEn": "Lying on back with arms and legs in the air, alternating extension of opposite arm and leg. Anti-extension exercise with movement that teaches the core to stay stable while limbs move, exactly like during running.",
+      "primaryMuscles": ["core_anterior"],
+      "secondaryMuscles": ["hip_flexors", "core_lateral"],
+      "equipment": ["none"],
+      "isUnilateral": true,
+      "formCues": [
+        "Allongé sur le dos, bras tendus vers le plafond",
+        "Genoux à 90 degrés au-dessus des hanches",
+        "Plaquer le bas du dos au sol (empreinte lombaire)",
+        "Descendre un bras et la jambe opposée lentement",
+        "Le bas du dos ne doit JAMAIS décoller du sol"
+      ],
+      "formCuesEn": [
+        "Lying on back, arms extended toward the ceiling",
+        "Knees at 90 degrees above hips",
+        "Press lower back into the floor (flatten lumbar spine)",
+        "Lower one arm and the opposite leg slowly",
+        "Lower back must NEVER lift off the ground"
+      ],
+      "regressionId": "EX-CO-001",
+      "progressionId": null,
+      "imageSlug": "dead-bug"
+    },
+    {
+      "id": "EX-CO-005",
+      "name": "Pallof press",
+      "nameEn": "Pallof Press",
+      "description": "Exercice anti-rotation avec bande de résistance ou câble. Résiste à la rotation du tronc, ce qui est exactement le rôle du core pendant la course : empêcher les rotations excessives du bassin et des épaules. Renforce les obliques et le transverse de manière fonctionnelle.",
+      "descriptionEn": "Anti-rotation exercise with resistance band or cable. Resists trunk rotation, which is exactly the role of the core during running: preventing excessive rotation of the pelvis and shoulders. Strengthens obliques and transverse abdominis functionally.",
+      "primaryMuscles": ["core_anterior", "core_lateral"],
+      "secondaryMuscles": ["shoulders", "chest"],
+      "equipment": ["resistance_band"],
+      "isUnilateral": false,
+      "formCues": [
+        "Bande fixée à hauteur de poitrine, se mettre perpendiculaire",
+        "Tenir la bande à deux mains contre la poitrine",
+        "Pousser les mains devant soi en tendant les bras",
+        "Résister à la traction de la bande qui veut vous faire tourner",
+        "Garder les hanches et les épaules de face tout le mouvement"
+      ],
+      "formCuesEn": [
+        "Band anchored at chest height, stand perpendicular to it",
+        "Hold band with both hands against the chest",
+        "Push hands forward by extending arms",
+        "Resist the pull of the band trying to rotate you",
+        "Keep hips and shoulders facing forward throughout"
+      ],
+      "regressionId": null,
+      "progressionId": null,
+      "imageSlug": "pallof-press"
+    },
+    {
+      "id": "EX-CO-006",
+      "name": "Rotation russe",
+      "nameEn": "Russian Twist",
+      "description": "Rotation du tronc assis avec ou sans charge. Renforce les obliques en rotation, utile pour le balancement des bras et la dissociation haut-bas du corps en course. À pratiquer avec contrôle pour éviter les contraintes excessives sur la colonne lombaire.",
+      "descriptionEn": "Seated trunk rotation with or without load. Strengthens obliques in rotation, useful for arm swing and upper-lower body dissociation during running. Perform with control to avoid excessive stress on the lumbar spine.",
+      "primaryMuscles": ["core_lateral"],
+      "secondaryMuscles": ["core_anterior", "hip_flexors"],
+      "equipment": ["none"],
+      "isUnilateral": false,
+      "formCues": [
+        "Assis au sol, genoux fléchis, pieds légèrement décollés du sol",
+        "Buste incliné en arrière à environ 45 degrés",
+        "Tourner le buste d'un côté puis de l'autre",
+        "Le mouvement vient de la rotation du tronc, pas des bras",
+        "Garder le dos droit, ne pas s'arrondir"
+      ],
+      "formCuesEn": [
+        "Seated on floor, knees bent, feet slightly off the ground",
+        "Torso leaned back at approximately 45 degrees",
+        "Rotate torso to one side then the other",
+        "Movement comes from trunk rotation, not the arms",
+        "Keep back straight, do not round"
+      ],
+      "regressionId": null,
+      "progressionId": null,
+      "imageSlug": "russian-twist"
+    },
+    {
+      "id": "EX-CO-007",
+      "name": "Gainage superman",
+      "nameEn": "Superman Hold",
+      "description": "Allongé sur le ventre, lever simultanément bras et jambes du sol. Renforce la chaîne postérieure du tronc (erectors, multifides) souvent négligée. Crucial pour maintenir une posture droite en course, surtout en fin de séance quand la fatigue s'installe.",
+      "descriptionEn": "Lying face down, simultaneously lift arms and legs off the ground. Strengthens the posterior trunk chain (erectors, multifidus) often neglected. Crucial for maintaining upright running posture, especially late in a session when fatigue sets in.",
+      "primaryMuscles": ["core_posterior"],
+      "secondaryMuscles": ["glutes", "upper_back"],
+      "equipment": ["none"],
+      "isUnilateral": false,
+      "formCues": [
+        "Allongé face contre sol, bras tendus devant",
+        "Décoller simultanément les bras, la poitrine et les jambes du sol",
+        "Serrer les fessiers pour protéger les lombaires",
+        "Garder le regard vers le sol (ne pas relever la tête)",
+        "Maintenir la position ou effectuer des répétitions lentes"
+      ],
+      "formCuesEn": [
+        "Lying face down, arms extended overhead",
+        "Simultaneously lift arms, chest and legs off the ground",
+        "Squeeze glutes to protect the lower back",
+        "Keep gaze toward the floor (do not lift the head)",
+        "Hold the position or perform slow répétitions"
+      ],
+      "regressionId": null,
+      "progressionId": null,
+      "imageSlug": "superman-hold"
+    },
+    {
+      "id": "EX-CO-008",
+      "name": "Pont latéral dynamique",
+      "nameEn": "Dynamic Side Plank",
+      "description": "Planche latérale avec mouvement de montée-descente des hanches. Progression de la planche latérale statique qui ajoute un composant dynamique. Renforce les obliques et le moyen fessier en mouvement, plus transférable à la course que le gainage statique seul.",
+      "descriptionEn": "Side plank with hip rise-and-lower movement. Progression from the static side plank that adds a dynamic component. Strengthens obliques and glute medius through movement, more transferable to running than static holds alone.",
+      "primaryMuscles": ["core_lateral"],
+      "secondaryMuscles": ["glutes", "shoulders"],
+      "equipment": ["none"],
+      "isUnilateral": true,
+      "formCues": [
+        "Position de planche latérale sur l'avant-bras",
+        "Descendre la hanche vers le sol sans le toucher",
+        "Remonter la hanche au-dessus de la ligne du corps",
+        "Mouvement lent et contrôlé sur toute l'amplitude",
+        "Garder l'empilement épaule-coude et les pieds stables"
+      ],
+      "formCuesEn": [
+        "Side plank position on forearm",
+        "Lower hip toward the floor without touching it",
+        "Raise hip above the line of the body",
+        "Slow and controlled movement through full range",
+        "Maintain shoulder-elbow stack and keep feet stable"
+      ],
+      "regressionId": "EX-CO-002",
+      "progressionId": null,
+      "imageSlug": "dynamic-side-plank"
+    },
+    {
+      "id": "EX-CO-009",
+      "name": "Crunch vélo",
+      "nameEn": "Bicycle Crunch",
+      "description": "Crunch avec rotation alternée du coude vers le genou opposé. Combine flexion et rotation du tronc pour solliciter grand droit et obliques. Le mouvement de pédalage des jambes renforce également les fléchisseurs de hanches, actifs pendant la phase de rappel de la foulée.",
+      "descriptionEn": "Crunch with alternating elbow-to-opposite-knee rotation. Combines trunk flexion and rotation to engage rectus abdominis and obliques. The pedaling leg movement also strengthens hip flexors, active during the swing phase of the stride.",
+      "primaryMuscles": ["core_anterior", "core_lateral"],
+      "secondaryMuscles": ["hip_flexors"],
+      "equipment": ["none"],
+      "isUnilateral": false,
+      "formCues": [
+        "Allongé sur le dos, mains derrière la tête (sans tirer sur la nuque)",
+        "Décoller les épaules du sol et maintenir la position",
+        "Amener le coude droit vers le genou gauche en tournant le tronc",
+        "Tendre la jambe opposée sans toucher le sol",
+        "Alterner de façon fluide, comme si vous pédaliez"
+      ],
+      "formCuesEn": [
+        "Lying on back, hands behind head (without pulling on neck)",
+        "Lift shoulders off the ground and maintain",
+        "Bring right elbow toward left knee by rotating the trunk",
+        "Extend the opposite leg without touching the ground",
+        "Alternate fluidly, as if pedaling"
+      ],
+      "regressionId": null,
+      "progressionId": null,
+      "imageSlug": "bicycle-crunch"
+    },
+    {
+      "id": "EX-CO-010",
+      "name": "Relevé de bassin suspendu",
+      "nameEn": "Hanging Knee Raise",
+      "description": "Relevé de genoux suspendu à une barre. Exercice avancé de renforcement du grand droit de l'abdomen et des fléchisseurs de hanches. La suspension décompresse également la colonne vertébrale, bénéfique pour les coureurs accumulant les impacts.",
+      "descriptionEn": "Knee raise while hanging from a bar. Advanced exercise for strengthening the rectus abdominis and hip flexors. The hanging position also decompresses the spine, bénéficial for runners accumulating impact forces.",
+      "primaryMuscles": ["core_anterior", "hip_flexors"],
+      "secondaryMuscles": ["core_lateral"],
+      "equipment": ["pull_up_bar"],
+      "isUnilateral": false,
+      "formCues": [
+        "Suspendu à une barre, prise largeur d'épaules",
+        "Monter les genoux vers la poitrine en enroulant le bassin",
+        "Éviter le balancement : initier le mouvement avec les abdominaux",
+        "Descendre lentement les jambes (phase excentrique contrôlée)",
+        "Pour augmenter la difficulté, tendre les jambes au lieu de plier"
+      ],
+      "formCuesEn": [
+        "Hanging from a bar, shoulder-width grip",
+        "Raise knees toward chest by curling the pelvis",
+        "Avoid swinging: initiate the movement with abs",
+        "Lower legs slowly (controlled eccentric phase)",
+        "To increase difficulty, keep legs straight instead of bent"
+      ],
+      "regressionId": "EX-CO-009",
+      "progressionId": null,
+      "imageSlug": "hanging-knee-raise"
+    }
+  ]
+}

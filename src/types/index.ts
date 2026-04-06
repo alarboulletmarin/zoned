@@ -120,6 +120,7 @@ export interface WorkoutScaling {
 
 // Main Workout Template Type
 export interface WorkoutTemplate {
+  kind?: "running";
   id: string;
   name: string;
   nameEn: string;
@@ -351,5 +352,21 @@ export interface ZoneRange {
   hrMax?: number;
   paceMinPerKm?: number; // min/km (lower = faster)
   paceMaxPerKm?: number; // min/km (higher = slower)
+}
+
+// ── Strength training types ──────────────────────────────────────
+export * from "./strength";
+
+// ── Unified workout type (running + strength) ────────────────────
+import type { StrengthWorkoutTemplate } from "./strength";
+
+export type AnyWorkoutTemplate = WorkoutTemplate | StrengthWorkoutTemplate;
+
+export function isStrengthWorkout(w: AnyWorkoutTemplate): w is StrengthWorkoutTemplate {
+  return w.kind === "strength";
+}
+
+export function isRunningWorkout(w: AnyWorkoutTemplate): w is WorkoutTemplate {
+  return w.kind !== "strength";
 }
 

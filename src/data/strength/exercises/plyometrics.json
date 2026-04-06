@@ -1,0 +1,229 @@
+{
+  "category": "plyometrics",
+  "exercises": [
+    {
+      "id": "EX-PL-001",
+      "name": "Box jump",
+      "nameEn": "Box Jump",
+      "description": "Saut vertical sur une box. Développe la puissance explosive des membres inférieurs en combinant force et vitesse. Améliore le recrutement des fibres musculaires rapides et l'économie de course grâce à une meilleure utilisation du cycle étirement-détente (Beattie 2017).",
+      "descriptionEn": "Vertical jump onto a box. Develops explosive lower body power by combining strength and speed. Improves fast-twitch muscle fiber recruitment and running economy through better utilization of the stretch-shortening cycle (Beattie 2017).",
+      "primaryMuscles": ["quadriceps", "glutes"],
+      "secondaryMuscles": ["calves", "hamstrings", "core_anterior"],
+      "equipment": ["box"],
+      "isUnilateral": false,
+      "formCues": [
+        "Debout face à la box, pieds largeur d'épaules",
+        "Balancer les bras et fléchir les hanches pour préparer le saut",
+        "Exploser vers le haut en poussant avec les deux pieds",
+        "Atterrir en douceur sur la box avec les deux pieds à plat",
+        "Se relever complètement en haut, puis redescendre en contrôlant"
+      ],
+      "formCuesEn": [
+        "Stand facing the box, feet shoulder-width apart",
+        "Swing arms and hinge hips to prepare for the jump",
+        "Explode upward by pushing through both feet",
+        "Land softly on the box with both feet flat",
+        "Stand fully upright on top, then step down with control"
+      ],
+      "regressionId": "EX-PL-008",
+      "progressionId": "EX-PL-005",
+      "imageSlug": "box-jump"
+    },
+    {
+      "id": "EX-PL-002",
+      "name": "Sauts groupés",
+      "nameEn": "Tuck Jumps",
+      "description": "Sauts verticaux avec genoux ramenés vers la poitrine en l'air. Exercice de force réactive qui améliore la puissance du cycle étirement-détente. Développe la capacité à produire de la force rapidement, directement transférable à la vitesse de course.",
+      "descriptionEn": "Vertical jumps bringing knees to chest in the air. A reactive strength exercise that improves stretch-shortening cycle power. Develops the ability to produce force quickly, directly transferable to running speed.",
+      "primaryMuscles": ["quadriceps", "calves"],
+      "secondaryMuscles": ["glutes", "hip_flexors", "core_anterior"],
+      "equipment": ["none"],
+      "isUnilateral": false,
+      "formCues": [
+        "Debout, pieds largeur d'épaules",
+        "Sauter verticalement le plus haut possible",
+        "Ramener les genoux vers la poitrine au sommet du saut",
+        "Atterrir en douceur sur l'avant des pieds, genoux fléchis",
+        "Enchaîner immédiatement le saut suivant (temps de contact minimal)"
+      ],
+      "formCuesEn": [
+        "Stand with feet shoulder-width apart",
+        "Jump vertically as high as possible",
+        "Bring knees toward chest at the peak of the jump",
+        "Land softly on the balls of the feet, knees bent",
+        "Immediately chain the next jump (minimal ground contact time)"
+      ],
+      "regressionId": "EX-PL-008",
+      "progressionId": null,
+      "imageSlug": "tuck-jump"
+    },
+    {
+      "id": "EX-PL-003",
+      "name": "Foulees bondissantes",
+      "nameEn": "Bounding",
+      "description": "Course en exagérant l'amplitude de chaque foulée avec une phase aérienne prolongée. Exercice plyométrique le plus spécifique à la course : développe la puissance horizontale, la coordination bras-jambes et le stockage d'énergie élastique dans les tendons. Utilisé en préparation par les sprinters et les fondeurs.",
+      "descriptionEn": "Running while exaggerating each stride with extended flight phase. The most running-specific plyometric exercise: develops horizontal power, arm-leg coordination and elastic energy storage in tendons. Used in preparation by sprinters and distance runners alike.",
+      "primaryMuscles": ["glutes", "quadriceps"],
+      "secondaryMuscles": ["calves", "hamstrings", "hip_flexors"],
+      "equipment": ["none"],
+      "isUnilateral": true,
+      "formCues": [
+        "Commencer par un léger jogging pour prendre de l'élan",
+        "Exagérer chaque foulée : pousser fort avec la jambe arrière",
+        "Monter le genou haut et loin devant",
+        "Utiliser les bras de façon synchronisée et ample",
+        "Chercher l'amplitude et la hauteur, pas la vitesse"
+      ],
+      "formCuesEn": [
+        "Start with a light jog to build momentum",
+        "Exaggerate each stride: push hard with the back leg",
+        "Drive the knee high and far forward",
+        "Use arms in a synchronized, exaggerated fashion",
+        "Aim for amplitude and height, not speed"
+      ],
+      "regressionId": "EX-PL-006",
+      "progressionId": null,
+      "imageSlug": "bounding"
+    },
+    {
+      "id": "EX-PL-004",
+      "name": "Sauts a cloche-pied",
+      "nameEn": "Single-Leg Hops",
+      "description": "Sauts répétés sur une seule jambe vers l'avant. Exercice unilatéral qui développe la force réactive et la stabilité de cheville spécifiques à l'appui en course. Chaque foulée est un mini-saut unipodal, ce qui rend cet exercice directement transférable.",
+      "descriptionEn": "Repeated forward hops on one leg. A unilateral exercise that develops reactive strength and ankle stability specific to the running stance. Each stride is a mini single-leg hop, making this exercise directly transferable.",
+      "primaryMuscles": ["calves", "quadriceps"],
+      "secondaryMuscles": ["glutes", "core_lateral"],
+      "equipment": ["none"],
+      "isUnilateral": true,
+      "formCues": [
+        "Debout sur une jambe, genou légèrement fléchi",
+        "Sauter vers l'avant en poussant avec la cheville et le genou",
+        "Atterrir sur le même pied, en douceur, genou fléchi",
+        "Enchaîner les sauts de manière rythmée",
+        "Garder le buste droit et les hanches stables"
+      ],
+      "formCuesEn": [
+        "Stand on one leg, knee slightly bent",
+        "Hop forward by pushing through ankle and knee",
+        "Land on the same foot, softly, knee bent",
+        "Chain hops in a rhythmic fashion",
+        "Keep torso upright and hips stable"
+      ],
+      "regressionId": "EX-PL-003",
+      "progressionId": null,
+      "imageSlug": "single-leg-hop"
+    },
+    {
+      "id": "EX-PL-005",
+      "name": "Drop jump",
+      "nameEn": "Depth Jump",
+      "description": "Saut de profondeur depuis une box suivi d'un saut vertical immédiat. Exercice plyométrique avancé qui maximise la force réactive du cycle étirement-détente. Réservé aux coureurs ayant déjà une base solide en force et en pliométrie. Améliore significativement l'économie de course (Beattie 2017).",
+      "descriptionEn": "Drop from a box followed by an immediate vertical jump. Advanced plyometric exercise that maximizes reactive strength of the stretch-shortening cycle. Reserved for runners with a solid base in strength and plyometrics. Significantly improves running economy (Beattie 2017).",
+      "primaryMuscles": ["quadriceps", "calves"],
+      "secondaryMuscles": ["glutes", "hamstrings", "core_anterior"],
+      "equipment": ["box"],
+      "isUnilateral": false,
+      "formCues": [
+        "Debout sur une box (30-50 cm), pas trop haute pour commencer",
+        "Se laisser tomber de la box (ne pas sauter), atterrir sur les deux pieds",
+        "Au contact du sol, sauter immédiatement le plus haut possible",
+        "Minimiser le temps de contact au sol (rebondir comme une balle)",
+        "Atterrir en douceur après le saut final, amortir avec les jambes"
+      ],
+      "formCuesEn": [
+        "Stand on a box (30-50 cm), not too high to start",
+        "Step off the box (do not jump off), land on both feet",
+        "On ground contact, immediately jump as high as possible",
+        "Minimize ground contact time (bounce like a ball)",
+        "Land softly after the final jump, absorb with the legs"
+      ],
+      "regressionId": "EX-PL-001",
+      "progressionId": null,
+      "imageSlug": "depth-jump"
+    },
+    {
+      "id": "EX-PL-006",
+      "name": "Skipping haut",
+      "nameEn": "High Skips",
+      "description": "Skipping (pas chassés) en montant les genoux le plus haut possible. Exercice de coordination et de puissance qui reproduit la phase de propulsion de la foulée avec une emphasis sur le drive du genou. Excellent échauffement plyométrique et éducatif de course.",
+      "descriptionEn": "Skipping while driving knees as high as possible. A coordination and power exercise that reproduces the propulsion phase of the stride with emphasis on knee drive. Excellent plyometric warm-up and running drill.",
+      "primaryMuscles": ["hip_flexors", "calves"],
+      "secondaryMuscles": ["glutes", "quadriceps", "core_anterior"],
+      "equipment": ["none"],
+      "isUnilateral": true,
+      "formCues": [
+        "Commencer par un skipping normal puis augmenter la hauteur",
+        "Pousser fort sur la jambe d'appui pour monter le genou opposé",
+        "Le genou monte au moins à hauteur de hanche",
+        "Utiliser les bras de façon coordonnée (bras opposé au genou)",
+        "Garder le rythme et la fluidité du mouvement"
+      ],
+      "formCuesEn": [
+        "Start with a normal skip then increase the height",
+        "Push hard on the support leg to drive the opposite knee up",
+        "Knee rises at least to hip height",
+        "Use arms in coordinated fashion (opposite arm to knee)",
+        "Maintain rhythm and fluidity of movement"
+      ],
+      "regressionId": null,
+      "progressionId": "EX-PL-003",
+      "imageSlug": "high-skip"
+    },
+    {
+      "id": "EX-PL-007",
+      "name": "Sauts latéraux",
+      "nameEn": "Lateral Jumps",
+      "description": "Sauts d'un côté à l'autre dans le plan frontal. Renforce les adducteurs, abducteurs et la stabilité latérale de cheville et de genou. Important pour les coureurs de trail et de cross-country, et pour prévenir les entorses de cheville sur terrain irrégulier.",
+      "descriptionEn": "Side-to-side jumps in the frontal plane. Strengthens adductors, abductors and lateral ankle and knee stability. Important for trail and cross-country runners, and for preventing ankle sprains on uneven terrain.",
+      "primaryMuscles": ["glutes", "adductors"],
+      "secondaryMuscles": ["quadriceps", "calves", "core_lateral"],
+      "equipment": ["none"],
+      "isUnilateral": false,
+      "formCues": [
+        "Debout, pieds joints ou légèrement écartés",
+        "Sauter latéralement d'un côté (environ 50-80 cm)",
+        "Atterrir en douceur sur les deux pieds, genoux fléchis",
+        "Stabiliser brièvement puis sauter de l'autre côté",
+        "Garder le buste droit et les hanches de niveau"
+      ],
+      "formCuesEn": [
+        "Stand with feet together or slightly apart",
+        "Jump laterally to one side (about 50-80 cm)",
+        "Land softly on both feet, knees bent",
+        "Briefly stabilize then jump to the other side",
+        "Keep torso upright and hips level"
+      ],
+      "regressionId": null,
+      "progressionId": null,
+      "imageSlug": "lateral-jump"
+    },
+    {
+      "id": "EX-PL-008",
+      "name": "Squat jump",
+      "nameEn": "Squat Jump",
+      "description": "Saut vertical depuis une position de squat. Exercice plyométrique d'introduction idéal pour les coureurs débutant la pliométrie. Développe la puissance explosive des quadriceps et des fessiers sans le stress d'impact élevé des exercices plus avancés.",
+      "descriptionEn": "Vertical jump from a squat position. An introductory plyometric exercise ideal for runners new to plyometrics. Develops explosive quad and glute power without the high impact stress of more advanced exercises.",
+      "primaryMuscles": ["quadriceps", "glutes"],
+      "secondaryMuscles": ["calves", "hamstrings", "core_anterior"],
+      "equipment": ["none"],
+      "isUnilateral": false,
+      "formCues": [
+        "Position de squat, pieds largeur d'épaules",
+        "Descendre en position basse du squat (cuisses parallèles)",
+        "Exploser vers le haut en étendant complètement hanches et genoux",
+        "Utiliser les bras pour augmenter l'impulsion vers le haut",
+        "Atterrir en douceur en revenant directement en position squat"
+      ],
+      "formCuesEn": [
+        "Squat position, feet shoulder-width apart",
+        "Lower to the bottom of the squat (thighs parallel)",
+        "Explode upward by fully extending hips and knees",
+        "Use arms to increase upward momentum",
+        "Land softly returning directly to squat position"
+      ],
+      "regressionId": null,
+      "progressionId": "EX-PL-001",
+      "imageSlug": "squat-jump"
+    }
+  ]
+}

@@ -1,0 +1,229 @@
+{
+  "category": "mobility",
+  "exercises": [
+    {
+      "id": "EX-MO-001",
+      "name": "Ouverture de hanches 90/90",
+      "nameEn": "90/90 Hip Opener",
+      "description": "Position assise avec les deux jambes à 90 degrés, rotation interne et externe de hanche alternée. Exercice de mobilité fondamental qui cible la rotation des hanches, souvent limitée chez les coureurs. Une bonne rotation de hanche est essentielle pour une foulée fluide et sans compensation.",
+      "descriptionEn": "Seated position with both legs at 90 degrees, alternating internal and external hip rotation. A fundamental mobility exercise targeting hip rotation, often restricted in runners. Good hip rotation is essential for a fluid stride without compensation.",
+      "primaryMuscles": ["glutes", "hip_flexors"],
+      "secondaryMuscles": ["adductors"],
+      "equipment": ["none"],
+      "isUnilateral": true,
+      "formCues": [
+        "Assis au sol, jambe avant à 90 degrés devant, jambe arrière à 90 degrés sur le côté",
+        "Genou avant et cheville avant au sol (rotation externe)",
+        "Genou arrière et cheville arrière au sol (rotation interne)",
+        "Garder le buste droit, se pencher doucement vers le genou avant",
+        "Alterner les côtés en pivotant les deux jambes simultanément"
+      ],
+      "formCuesEn": [
+        "Seated on the floor, front leg at 90 degrees ahead, back leg at 90 degrees to the side",
+        "Front knee and ankle on the floor (external rotation)",
+        "Back knee and ankle on the floor (internal rotation)",
+        "Keep torso upright, gently lean toward the front knee",
+        "Alternate sides by pivoting both legs simultaneously"
+      ],
+      "regressionId": null,
+      "progressionId": null,
+      "imageSlug": "90-90-hip-opener"
+    },
+    {
+      "id": "EX-MO-002",
+      "name": "Mobilité cheville",
+      "nameEn": "Ankle Mobility",
+      "description": "Mobilisation de la dorsiflexion de cheville contre un mur. Une dorsiflexion limitée est une cause fréquente de blessures chez le coureur (fasciite plantaire, tendinopathie d'Achille, douleurs de genou). Cet exercice améliore progressivement l'amplitude de mouvement de la cheville.",
+      "descriptionEn": "Wall-based ankle dorsiflexion mobilization. Limited dorsiflexion is a frequent cause of injury in runners (plantar fasciitis, Achilles tendinopathy, knee pain). This exercise progressively improves ankle range of motion.",
+      "primaryMuscles": ["calves"],
+      "secondaryMuscles": [],
+      "equipment": ["none"],
+      "isUnilateral": true,
+      "formCues": [
+        "Face au mur, un pied en avant, orteil à quelques centimètres du mur",
+        "Pousser le genou vers l'avant en direction du mur",
+        "Le talon doit rester au sol pendant tout le mouvement",
+        "Augmenter la distance pied-mur pour progresser",
+        "Effectuer des micro-mouvements d'avant en arriere (oscillations)"
+      ],
+      "formCuesEn": [
+        "Facing a wall, one foot forward, toes a few inches from the wall",
+        "Push knee forward toward the wall",
+        "Heel must stay on the ground throughout the movement",
+        "Increase foot-to-wall distance to progress",
+        "Perform small back-and-forth movements (oscillations)"
+      ],
+      "regressionId": null,
+      "progressionId": null,
+      "imageSlug": "ankle-mobility"
+    },
+    {
+      "id": "EX-MO-003",
+      "name": "Étirement psoas à genoux",
+      "nameEn": "Kneeling Hip Flexor Stretch",
+      "description": "Étirement du psoas et du droit fémoral en position de fente au sol. Les fléchisseurs de hanches sont souvent raccourcis chez les coureurs et les personnes sédentaires. Un psoas raccourci limite l'extension de hanche, réduisant la longueur de foulée et l'efficacité de course.",
+      "descriptionEn": "Psoas and rectus femoris stretch in a kneeling lunge position. Hip flexors are often shortened in runners and sedentary individuals. A shortened psoas limits hip extension, reducing stride length and running efficiency.",
+      "primaryMuscles": ["hip_flexors"],
+      "secondaryMuscles": ["quadriceps"],
+      "equipment": ["none"],
+      "isUnilateral": true,
+      "formCues": [
+        "Un genou au sol, l'autre pied à plat devant (position de chevalier servant)",
+        "Garder le buste droit, rentrer légèrement le bassin (rétroversion)",
+        "Avancer les hanches doucement vers l'avant",
+        "Sentir l'étirement à l'avant de la hanche de la jambe arrière",
+        "Ne pas cambrer le dos, garder le core engagé"
+      ],
+      "formCuesEn": [
+        "One knee on the ground, other foot flat in front (half-kneeling position)",
+        "Keep torso upright, slightly tuck the pelvis (posterior tilt)",
+        "Gently shift hips forward",
+        "Feel the stretch at the front of the back leg's hip",
+        "Do not arch the back, keep core engaged"
+      ],
+      "regressionId": null,
+      "progressionId": "EX-MO-004",
+      "imageSlug": "kneeling-hip-flexor-stretch"
+    },
+    {
+      "id": "EX-MO-004",
+      "name": "Fente avec rotation",
+      "nameEn": "Lunge with Rotation",
+      "description": "Fente avant avec rotation du tronc vers la jambe avant. Combine mobilité de hanche, étirement du psoas et mobilité thoracique en un seul mouvement. La rotation thoracique est souvent limitée chez les coureurs, ce qui réduit l'efficacité du balancement des bras.",
+      "descriptionEn": "Forward lunge with trunk rotation toward the front leg. Combines hip mobility, psoas stretch and thoracic mobility in one movement. Thoracic rotation is often limited in runners, reducing arm swing efficiency.",
+      "primaryMuscles": ["hip_flexors", "core_lateral"],
+      "secondaryMuscles": ["glutes", "quadriceps", "upper_back"],
+      "equipment": ["none"],
+      "isUnilateral": true,
+      "formCues": [
+        "Faire un grand pas en avant en position de fente",
+        "Descendre le genou arriere vers le sol",
+        "Tourner le buste vers la jambe avant, bras tendus ou mains jointes",
+        "Garder les hanches de face, seul le tronc tourne",
+        "Revenir au centre puis alterner de côté"
+      ],
+      "formCuesEn": [
+        "Take a big step forward into a lunge position",
+        "Lower back knee toward the ground",
+        "Rotate torso toward the front leg, arms extended or hands together",
+        "Keep hips facing forward, only the trunk rotates",
+        "Return to center then alternate sides"
+      ],
+      "regressionId": "EX-MO-003",
+      "progressionId": null,
+      "imageSlug": "lunge-rotation"
+    },
+    {
+      "id": "EX-MO-005",
+      "name": "Rouleau ischio-jambiers",
+      "nameEn": "Foam Roll Hamstrings",
+      "description": "Auto-massage des ischio-jambiers avec rouleau de mousse. Réduit les tensions musculaires et les adhésions fasciales accumulées par les entraînements répétés. Améliore la qualité tissulaire et la tolérance à l'étirement des ischio-jambiers, souvent raides chez les coureurs.",
+      "descriptionEn": "Self-massage of hamstrings with a foam roller. Reduces muscular tension and fascial adhesions accumulated from repeated training. Improves tissue quality and stretch tolerance of the hamstrings, often tight in runners.",
+      "primaryMuscles": ["hamstrings"],
+      "secondaryMuscles": [],
+      "equipment": ["foam_roller"],
+      "isUnilateral": false,
+      "formCues": [
+        "Assis au sol, rouleau sous les ischio-jambiers",
+        "Mains au sol derriere pour se soutenir",
+        "Rouler lentement de juste au-dessus du genou jusqu'aux fessiers",
+        "S'arrêter sur les points sensibles (trigger points) 20-30 secondes",
+        "Tourner légèrement la jambe pour cibler l'intérieur et l'extérieur"
+      ],
+      "formCuesEn": [
+        "Seated on the floor, roller under hamstrings",
+        "Hands on the floor behind for support",
+        "Roll slowly from just above the knee to the glutes",
+        "Pause on tender spots (trigger points) for 20-30 seconds",
+        "Slightly rotate the leg to target inner and outer hamstrings"
+      ],
+      "regressionId": null,
+      "progressionId": null,
+      "imageSlug": "foam-roll-hamstrings"
+    },
+    {
+      "id": "EX-MO-006",
+      "name": "Rouleau quadriceps",
+      "nameEn": "Foam Roll Quads",
+      "description": "Auto-massage des quadriceps avec rouleau de mousse. Libère les tensions accumulées dans les quadriceps, sollicités lors de chaque phase d'amortissement en course. Cible particulièrement le vaste externe et le droit fémoral, souvent surchargés chez les coureurs.",
+      "descriptionEn": "Self-massage of quadriceps with a foam roller. Releases tension accumulated in the quads, loaded during every landing phase in running. Particularly targets the vastus lateralis and rectus femoris, often overloaded in runners.",
+      "primaryMuscles": ["quadriceps"],
+      "secondaryMuscles": ["hip_flexors"],
+      "equipment": ["foam_roller"],
+      "isUnilateral": false,
+      "formCues": [
+        "En appui sur les avant-bras, face vers le sol, rouleau sous les cuisses",
+        "Rouler lentement du haut du genou jusqu'a la hanche",
+        "S'arrêter sur les points sensibles 20-30 secondes",
+        "Plier et tendre le genou sur un point sensible pour plus d'effet",
+        "Tourner légèrement le corps pour cibler l'intérieur et l'extérieur de la cuisse"
+      ],
+      "formCuesEn": [
+        "Forearm plank position face down, roller under thighs",
+        "Roll slowly from the top of the knee to the hip",
+        "Pause on tender spots for 20-30 seconds",
+        "Bend and straighten the knee on a tender spot for extra release",
+        "Slightly rotate the body to target inner and outer thigh"
+      ],
+      "regressionId": null,
+      "progressionId": null,
+      "imageSlug": "foam-roll-quads"
+    },
+    {
+      "id": "EX-MO-007",
+      "name": "Rouleau ITB",
+      "nameEn": "Foam Roll IT Band",
+      "description": "Auto-massage de la bandelette iliotibiale avec rouleau de mousse. La bandelette IT est fréquemment source de douleurs latérales de genou chez les coureurs (syndrome de l'essuie-glace). Le rouleau cible les tensions du vaste externe et du TFL qui tirent sur la bandelette.",
+      "descriptionEn": "Self-massage of the iliotibial band with a foam roller. The IT band is frequently a source of lateral knee pain in runners (IT band syndrome). The roller targets tensions in the vastus lateralis and TFL that pull on the band.",
+      "primaryMuscles": ["quadriceps"],
+      "secondaryMuscles": ["glutes"],
+      "equipment": ["foam_roller"],
+      "isUnilateral": true,
+      "formCues": [
+        "Sur le côté, rouleau sous l'extérieur de la cuisse",
+        "Bras d'appui au sol, jambe supérieure posée devant pour contrôle",
+        "Rouler lentement de la hanche jusqu'au-dessus du genou",
+        "S'arrêter sur les points sensibles 20-30 secondes",
+        "Intensité modérée : cet exercice peut être douloureux, ne pas forcer"
+      ],
+      "formCuesEn": [
+        "On your side, roller under the outer thigh",
+        "Support arm on the ground, top leg placed in front for control",
+        "Roll slowly from the hip to just above the knee",
+        "Pause on tender spots for 20-30 seconds",
+        "Moderate intensity: this can be painful, do not force"
+      ],
+      "regressionId": null,
+      "progressionId": null,
+      "imageSlug": "foam-roll-itb"
+    },
+    {
+      "id": "EX-MO-008",
+      "name": "Pigeon stretch",
+      "nameEn": "Pigeon Stretch",
+      "description": "Étirement profond de la hanche en position du pigeon. Cible le piriforme et les rotateurs externes de hanche, souvent tendus chez les coureurs. Soulage les tensions profondes de la hanche et peut aider à prévenir le syndrome du piriforme, cause fréquente de douleurs sciatiques chez les coureurs.",
+      "descriptionEn": "Deep hip stretch in pigeon position. Targets the piriformis and external hip rotators, often tight in runners. Relieves deep hip tension and can help prevent piriformis syndrome, a common cause of sciatic pain in runners.",
+      "primaryMuscles": ["glutes"],
+      "secondaryMuscles": ["hip_flexors", "adductors"],
+      "equipment": ["none"],
+      "isUnilateral": true,
+      "formCues": [
+        "Depuis la position a quatre pattes, amener un genou vers l'avant",
+        "Le tibia avant est incline (pas forcement parallele au bord du tapis)",
+        "La jambe arrière est étendue droit derrière, dessus du pied au sol",
+        "Se pencher doucement vers l'avant au-dessus de la jambe avant",
+        "Respirer profondement et tenir 30-60 secondes de chaque cote"
+      ],
+      "formCuesEn": [
+        "From all fours, bring one knee forward",
+        "Front shin is angled (not necessarily parallel to the mat edge)",
+        "Back leg is extended straight behind, top of foot on the floor",
+        "Gently lean forward over the front leg",
+        "Breathe deeply and hold 30-60 seconds on each side"
+      ],
+      "regressionId": null,
+      "progressionId": null,
+      "imageSlug": "pigeon-stretch"
+    }
+  ]
+}

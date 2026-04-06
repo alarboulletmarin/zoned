@@ -1,0 +1,145 @@
+{
+  "category": "runner_upper",
+  "exercises": [
+    {
+      "id": "EX-UB-001",
+      "name": "Pompes",
+      "nameEn": "Push-Ups",
+      "description": "Exercice de poussée au poids du corps. Renforce la poitrine, les épaules et les triceps. Pour les coureurs, les pompes améliorent la stabilité du haut du corps et la puissance du balancement des bras, contribuant à une foulée plus efficace, surtout en montée.",
+      "descriptionEn": "Bodyweight pushing exercise. Strengthens chest, shoulders and triceps. For runners, push-ups improve upper body stability and arm swing power, contributing to a more efficient stride, especially uphill.",
+      "primaryMuscles": ["chest", "shoulders"],
+      "secondaryMuscles": ["core_anterior"],
+      "equipment": ["none"],
+      "isUnilateral": false,
+      "formCues": [
+        "Mains au sol, légèrement plus larges que les épaules",
+        "Corps en ligne droite de la tête aux talons (comme une planche)",
+        "Descendre en fléchissant les coudes jusqu'à ce que la poitrine frôle le sol",
+        "Coudes à 45 degrés du corps (pas collés ni écartés à 90 degrés)",
+        "Pousser le sol pour remonter en gardant le core engagé"
+      ],
+      "formCuesEn": [
+        "Hands on the ground, slightly wider than shoulders",
+        "Body in a straight line from head to heels (like a plank)",
+        "Lower by bending elbows until chest nearly touches the ground",
+        "Elbows at 45 degrees from the body (not tucked or flared to 90)",
+        "Push the floor away to rise while keeping core engaged"
+      ],
+      "regressionId": null,
+      "progressionId": null,
+      "imageSlug": "push-ups"
+    },
+    {
+      "id": "EX-UB-002",
+      "name": "Rowing haltère",
+      "nameEn": "Dumbbell Row",
+      "description": "Tirage horizontal avec haltère, un bras à la fois. Renforce le haut du dos et les rhomboïdes, essentiels pour maintenir une bonne posture de course. Une posture droite avec les épaules en arrière optimise la capacité respiratoire et l'efficacité biomécanique en course.",
+      "descriptionEn": "Horizontal pull with a dumbbell, one arm at a time. Strengthens the upper back and rhomboids, essential for maintaining good running posture. An upright posture with shoulders back optimizes breathing capacity and biomechanical efficiency during running.",
+      "primaryMuscles": ["upper_back"],
+      "secondaryMuscles": ["shoulders", "core_anterior"],
+      "equipment": ["dumbbells"],
+      "isUnilateral": true,
+      "formCues": [
+        "Un genou et une main sur un banc, dos plat et parallèle au sol",
+        "Haltère dans la main libre, bras tendu vers le sol",
+        "Tirer le coude vers le plafond en serrant l'omoplate",
+        "L'haltère monte le long des côtes, coude près du corps",
+        "Descendre lentement en contrôlant, sans rotation du tronc"
+      ],
+      "formCuesEn": [
+        "One knee and hand on a bench, back flat and parallel to the floor",
+        "Dumbbell in the free hand, arm hanging straight down",
+        "Pull elbow toward the ceiling by squeezing the shoulder blade",
+        "Dumbbell travels along the ribs, elbow close to the body",
+        "Lower slowly with control, without trunk rotation"
+      ],
+      "regressionId": "EX-UB-003",
+      "progressionId": null,
+      "imageSlug": "dumbbell-row"
+    },
+    {
+      "id": "EX-UB-003",
+      "name": "Tirage bande",
+      "nameEn": "Band Pull-Apart",
+      "description": "Écartement d'une bande de résistance à hauteur de poitrine. Cible les rétracteurs de l'omoplate (rhomboïdes, trapèzes moyens) pour corriger la posture en cyphose. Les coureurs passant de longues heures penchés en avant bénéficient énormément de cet exercice simple et efficace.",
+      "descriptionEn": "Pulling a resistance band apart at chest height. Targets the scapular retractors (rhomboids, mid-trapezius) to correct kyphotic posture. Runners spending long hours hunched forward bénéfit greatly from this simple and effective exercise.",
+      "primaryMuscles": ["upper_back"],
+      "secondaryMuscles": ["shoulders"],
+      "equipment": ["resistance_band"],
+      "isUnilateral": false,
+      "formCues": [
+        "Bande tenue à deux mains devant soi, bras tendus à hauteur de poitrine",
+        "Écarter les mains en tirant la bande vers la poitrine",
+        "Serrer les omoplates l'une vers l'autre en fin de mouvement",
+        "Garder les épaules basses (ne pas hausser les épaules)",
+        "Revenir lentement à la position de départ, contrôler le retour"
+      ],
+      "formCuesEn": [
+        "Band held with both hands in front, arms extended at chest height",
+        "Pull hands apart by pulling band toward the chest",
+        "Squeeze shoulder blades together at the end of the movement",
+        "Keep shoulders down (do not shrug)",
+        "Return slowly to starting position, control the release"
+      ],
+      "regressionId": null,
+      "progressionId": "EX-UB-002",
+      "imageSlug": "band-pull-apart"
+    },
+    {
+      "id": "EX-UB-004",
+      "name": "Superman Y-raise",
+      "nameEn": "Y-Raise",
+      "description": "Allongé face contre sol, lever les bras en forme de Y au-dessus de la tête. Renforce le haut du dos, les trapèzes inférieurs et les muscles stabilisateurs de l'épaule. Corrige la posture du haut du corps et combat le déséquilibre musculaire antérieur/postérieur fréquent chez les coureurs.",
+      "descriptionEn": "Lying face down, raise arms in a Y shape overhead. Strengthens the upper back, lower trapezius and shoulder stabilizer muscles. Corrects upper body posture and combats the anterior/posterior muscular imbalance common in runners.",
+      "primaryMuscles": ["upper_back", "shoulders"],
+      "secondaryMuscles": ["core_posterior"],
+      "equipment": ["none"],
+      "isUnilateral": false,
+      "formCues": [
+        "Allongé face contre sol, bras tendus en forme de Y (45 degrés)",
+        "Pouces vers le plafond pour engager les rotateurs externes",
+        "Décoller les bras du sol en serrant les omoplates vers le bas et l'arrière",
+        "Garder le front au sol, ne pas relever la tête",
+        "Maintenir 2-3 secondes en haut puis redescendre lentement"
+      ],
+      "formCuesEn": [
+        "Lying face down, arms extended in a Y shape (45 degrees)",
+        "Thumbs pointing up to engage external rotators",
+        "Lift arms off the ground by squeezing shoulder blades down and back",
+        "Keep forehead on the floor, do not lift the head",
+        "Hold 2-3 seconds at the top then lower slowly"
+      ],
+      "regressionId": null,
+      "progressionId": null,
+      "imageSlug": "y-raise"
+    },
+    {
+      "id": "EX-UB-005",
+      "name": "Dips sur banc",
+      "nameEn": "Bench Dips",
+      "description": "Flexion-extension des bras en appui arrière sur une box ou un banc. Renforce les triceps et la stabilité des épaules. Pour les coureurs, des bras forts et endurants soutiennent un balancement efficace sur les longues distances, surtout lors des phases de fatigue en fin de course.",
+      "descriptionEn": "Arm flexion-extension with hands behind on a box or bench. Strengthens triceps and shoulder stability. For runners, strong and enduring arms support efficient arm swing over long distances, especially during fatigue phases late in a race.",
+      "primaryMuscles": ["chest", "shoulders"],
+      "secondaryMuscles": ["core_anterior"],
+      "equipment": ["box"],
+      "isUnilateral": false,
+      "formCues": [
+        "Mains sur le bord d'une box ou d'un banc, doigts vers l'avant",
+        "Pieds au sol, jambes tendues ou fléchies (plus facile)",
+        "Descendre en fléchissant les coudes jusqu'à 90 degrés",
+        "Garder le dos proche de la box, ne pas s'en éloigner",
+        "Pousser pour remonter, coudes ne se verrouillent pas complètement"
+      ],
+      "formCuesEn": [
+        "Hands on the edge of a box or bench, fingers pointing forward",
+        "Feet on the ground, legs straight or bent (easier)",
+        "Lower by bending elbows to about 90 degrees",
+        "Keep back close to the box, do not drift away",
+        "Push to rise, do not fully lock out elbows"
+      ],
+      "regressionId": null,
+      "progressionId": null,
+      "imageSlug": "bench-dips"
+    }
+  ]
+}

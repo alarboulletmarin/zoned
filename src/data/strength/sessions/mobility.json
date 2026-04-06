@@ -1,0 +1,506 @@
+{
+  "category": "mobility",
+  "templates": [
+    {
+      "id": "STR-014",
+      "kind": "strength",
+      "name": "Mobilité hanches coureur",
+      "nameEn": "Runner Hip Mobility",
+      "description": "Séance ciblée sur la mobilité des hanches, articulation clé du coureur. Améliore l'amplitude de la foulée, réduit la raideur après les séances de course et prévient les compensations posturales liées à la position assise prolongée.",
+      "descriptionEn": "Targeted session for hip mobility, the runner's key joint. Improves stride amplitude, reduces stiffness after running sessions, and prevents postural compensations linked to prolonged sitting.",
+      "category": "mobility",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 20, "max": 25 },
+      "equipment": ["none"],
+      "primaryMuscleGroups": ["hip_flexors", "glutes", "adductors"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-MO-004",
+          "sets": 1,
+          "reps": 5,
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Fentes avec rotation pour echauffer progressivement les hanches",
+          "notesEn": "Lunges with rotation to progressively warm up hips",
+          "rpe": 2
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-MO-001",
+          "sets": 2,
+          "reps": "45s",
+          "restBetweenSets": "15s",
+          "intensity": "mobility",
+          "notes": "45 secondes par position, transition douce entre rotation interne et externe",
+          "notesEn": "45 seconds per position, smooth transition between internal and external rotation",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-MO-003",
+          "sets": 2,
+          "reps": "30s",
+          "restBetweenSets": "15s",
+          "intensity": "mobility",
+          "notes": "30 secondes par côté, avancer le genou doucement, sentir l'étirement du psoas",
+          "notesEn": "30 seconds per side, gently push knee forward, feel the hip flexor stretch",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-MO-008",
+          "sets": 2,
+          "reps": "45s",
+          "restBetweenSets": "15s",
+          "intensity": "mobility",
+          "notes": "45 secondes par côté, garder le dos droit, relâcher progressivement dans la posture",
+          "notesEn": "45 seconds per side, keep back straight, progressively release into the posture",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-MO-004",
+          "sets": 2,
+          "reps": 8,
+          "restBetweenSets": "15s",
+          "intensity": "mobility",
+          "notes": "8 répétitions par côté, fente profonde avec rotation thoracique vers le genou avant",
+          "notesEn": "8 reps per side, deep lunge with thoracic rotation toward front knee",
+          "rpe": 3
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-001",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Retour en 90/90 detendu, respiration profonde pour finir la séance en relachement",
+          "notesEn": "Return to relaxed 90/90, deep breathing to end the session in release",
+          "rpe": 2
+        }
+      ],
+      "intensity": "mobility",
+      "coachingTips": [
+        "Respirez profondement dans chaque position : l'expiration favorise le relachement musculaire",
+        "Ne forcez jamais un étirement : la douleur est un signal d'arret, pas de progression",
+        "Séance idéale le matin pour contrer la raideur nocturne, ou le soir après une journée assise",
+        "Les coureurs qui courent plus de 40 km/semaine devraient faire cette séance au moins 2 fois par semaine"
+      ],
+      "coachingTipsEn": [
+        "Breathe deeply in each position: exhaling promotes muscle release",
+        "Never force a stretch: pain is a stop signal, not a sign of progress",
+        "Ideal session in the morning to counter overnight stiffness, or in the evening after a day of sitting",
+        "Runners logging more than 40 km/week should do this session at least twice per week"
+      ],
+      "commonMistakes": [
+        "Forcer les étirements en rebondissant au lieu de maintenir une position stable",
+        "Retenir sa respiration pendant les positions tenues, ce qui augmente la tension musculaire",
+        "Négliger la mobilité des hanches en pensant que seuls les étirements des jambes comptent"
+      ],
+      "commonMistakesEn": [
+        "Forcing stretches by bouncing instead of holding a stable position",
+        "Holding breath during held positions, which increases muscle tension",
+        "Neglecting hip mobility thinking only leg stretches matter"
+      ],
+      "variationIds": ["STR-015", "STR-016"],
+      "suitablePhases": ["base", "build", "peak", "taper", "recovery"],
+      "weeklyFrequencyMax": 7,
+      "minimumRecoveryDays": 0,
+      "references": [
+        "Behm et al. (2016) - Acute effects of muscle stretching on physical performance, range of motion, and injury incidence in healthy active individuals",
+        "Opplert & Babault (2018) - Acute effects of dynamic stretching on muscle flexibility and performance"
+      ]
+    },
+    {
+      "id": "STR-015",
+      "kind": "strength",
+      "name": "Recup foam roller",
+      "nameEn": "Foam Roller Recovery",
+      "description": "Séance de récupération par auto-massage au foam roller ciblée sur les muscles les plus sollicites en course a pied. Réduit les tensions musculaires, améliore la circulation sanguine et accelere la récupération entre les seances.",
+      "descriptionEn": "Recovery session using foam roller self-massage targeting the most stressed muscles in running. Reduces muscle tension, improves blood circulation, and accelerates recovery between sessions.",
+      "category": "mobility",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 20, "max": 30 },
+      "equipment": ["foam_roller"],
+      "primaryMuscleGroups": ["quadriceps", "hamstrings", "calves", "glutes"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-MO-002",
+          "sets": 1,
+          "reps": 8,
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Mobilité de cheville douce avant le travail de foam roller",
+          "notesEn": "Gentle ankle mobility before foam roller work",
+          "rpe": 2
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-MO-005",
+          "sets": 2,
+          "reps": "60s",
+          "restBetweenSets": "15s",
+          "intensity": "mobility",
+          "notes": "Rouler lentement de l'attache proximale a distale, insister 10 secondes sur les points sensibles",
+          "notesEn": "Roll slowly from proximal to distal attachment, hold 10 seconds on tender spots",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-MO-006",
+          "sets": 2,
+          "reps": "60s",
+          "restBetweenSets": "15s",
+          "intensity": "mobility",
+          "notes": "Rouler sur les quadriceps, tourner légèrement pour atteindre le vaste interne et externe",
+          "notesEn": "Roll on quadriceps, turn slightly to reach vastus medialis and lateralis",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-MO-007",
+          "sets": 2,
+          "reps": "60s",
+          "restBetweenSets": "15s",
+          "intensity": "mobility",
+          "notes": "Rouler sur le côté de la cuisse, du genou à la hanche. Zone souvent sensible chez les coureurs",
+          "notesEn": "Roll on the side of the thigh, from knee to hip. Often a tender area for runners",
+          "rpe": 4
+        },
+        {
+          "exerciseId": "EX-MO-002",
+          "sets": 2,
+          "reps": 10,
+          "restBetweenSets": "15s",
+          "intensity": "mobility",
+          "notes": "Mobilité de cheville après le foam roller pour tester l'amélioration de l'amplitude",
+          "notesEn": "Ankle mobility after foam roller to test range of motion improvement",
+          "rpe": 2
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-003",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Étirement doux du psoas pour finir, 30 secondes par côté",
+          "notesEn": "Gentle hip flexor stretch to finish, 30 seconds per side",
+          "rpe": 2
+        },
+        {
+          "exerciseId": "EX-MO-008",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Étirement piriforme, 30 secondes par côté",
+          "notesEn": "Piriformis stretch, 30 seconds per side",
+          "rpe": 2
+        }
+      ],
+      "intensity": "mobility",
+      "coachingTips": [
+        "Roulez lentement : 2-3 cm par seconde, pas de mouvements rapides de va-et-vient",
+        "Insistez 10-15 secondes sur les points sensibles jusqu'a sentir le relachement",
+        "Idéale le soir après une séance de course ou le lendemain d'un fractionne",
+        "Evitez de rouler directement sur les os (rotule, tibia) et les articulations"
+      ],
+      "coachingTipsEn": [
+        "Roll slowly: 2-3 cm per second, no fast back-and-forth movements",
+        "Spend 10-15 seconds on tender spots until you feel release",
+        "Ideal in the evening after a running session or the day after intervals",
+        "Avoid rolling directly on bones (kneecap, shin) and joints"
+      ],
+      "commonMistakes": [
+        "Rouler trop vite sans laisser le temps aux tissus de se relâcher",
+        "Rouler directement sur la bandelette ilio-tibiale avec trop de pression d'emblée",
+        "Utiliser le foam roller sur une blessure aiguë ou une zone enflammée"
+      ],
+      "commonMistakesEn": [
+        "Rolling too fast without giving tissues time to release",
+        "Rolling directly on the IT band with too much pressure from the start",
+        "Using the foam roller on an acute injury or inflamed area"
+      ],
+      "variationIds": ["STR-014", "STR-016"],
+      "suitablePhases": ["base", "build", "peak", "taper", "recovery"],
+      "weeklyFrequencyMax": 7,
+      "minimumRecoveryDays": 0,
+      "references": [
+        "Cheatham et al. (2015) - The effects of self-myofascial release using a foam roll or roller massager on joint range of motion, muscle recovery, and performance",
+        "Wiewelhove et al. (2019) - A meta-analysis of the effects of foam rolling on performance and recovery"
+      ]
+    },
+    {
+      "id": "STR-016",
+      "kind": "strength",
+      "name": "Mobilité complète",
+      "nameEn": "Full Mobility Session",
+      "description": "Séance de mobilité complète combinant travail de hanches, chevilles et auto-massage au foam roller. Couvre l'ensemble des zones à risque du coureur pour une récupération optimale et une prévention globale des blessures.",
+      "descriptionEn": "Complete mobility session combining hip work, ankle mobility, and foam roller self-massage. Covers all risk areas for runners for optimal recovery and comprehensive injury prévention.",
+      "category": "mobility",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 30, "max": 35 },
+      "equipment": ["foam_roller"],
+      "primaryMuscleGroups": ["hip_flexors", "glutes", "quadriceps", "hamstrings", "calves", "adductors"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-MO-004",
+          "sets": 1,
+          "reps": 6,
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Fentes marchées avec rotation thoracique pour echauffer tout le corps",
+          "notesEn": "Walking lunges with thoracic rotation to warm up the whole body",
+          "rpe": 2
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-MO-005",
+          "sets": 1,
+          "reps": "60s",
+          "restBetweenSets": "15s",
+          "intensity": "mobility",
+          "notes": "Foam roller ischio-jambiers, mouvements lents et progressifs",
+          "notesEn": "Foam roller hamstrings, slow and progressive movements",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-MO-006",
+          "sets": 1,
+          "reps": "60s",
+          "restBetweenSets": "15s",
+          "intensity": "mobility",
+          "notes": "Foam roller quadriceps, attention a ne pas rouler sur la rotule",
+          "notesEn": "Foam roller quadriceps, be careful not to roll over the kneecap",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-MO-007",
+          "sets": 1,
+          "reps": "60s",
+          "restBetweenSets": "15s",
+          "intensity": "mobility",
+          "notes": "Foam roller face latérale de la cuisse, du genou à la hanche",
+          "notesEn": "Foam roller on lateral thigh, from knee to hip",
+          "rpe": 4
+        },
+        {
+          "exerciseId": "EX-MO-001",
+          "sets": 2,
+          "reps": "45s",
+          "restBetweenSets": "15s",
+          "intensity": "mobility",
+          "notes": "Transition 90/90 pour la mobilité globale des hanches",
+          "notesEn": "90/90 transitions for overall hip mobility",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-MO-003",
+          "sets": 2,
+          "reps": "30s",
+          "restBetweenSets": "15s",
+          "intensity": "mobility",
+          "notes": "Étirement du psoas, 30 secondes par côté, respirer profondement",
+          "notesEn": "Hip flexor stretch, 30 seconds per side, breathe deeply",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-MO-008",
+          "sets": 2,
+          "reps": "45s",
+          "restBetweenSets": "15s",
+          "intensity": "mobility",
+          "notes": "Pigeon, 45 secondes par côté, laisser la gravite faire le travail",
+          "notesEn": "Pigeon, 45 seconds per side, let gravity do the work",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-MO-002",
+          "sets": 2,
+          "reps": 10,
+          "restBetweenSets": "15s",
+          "intensity": "mobility",
+          "notes": "Mobilité de cheville face au mur, 10 répétitions par côté",
+          "notesEn": "Wall ankle mobility, 10 reps per side",
+          "rpe": 2
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-001",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "90/90 final en relachement complet, respiration abdominale profonde",
+          "notesEn": "Final 90/90 in complete release, deep abdominal breathing",
+          "rpe": 1
+        }
+      ],
+      "intensity": "mobility",
+      "coachingTips": [
+        "Suivez l'ordre proposé : foam roller d'abord pour relâcher les tensions, puis mobilité articulaire",
+        "Cette séance complète remplace la combinaison des séances STR-014 et STR-015 quand le temps manque",
+        "Utilisez cette séance le jour de repos ou en soirée après une journée de course",
+        "Respirez par le ventre dans chaque posture : 4 secondes d'inspiration, 6 secondes d'expiration"
+      ],
+      "coachingTipsEn": [
+        "Follow the suggested order: foam roller first to release tension, then joint mobility",
+        "This complete session replaces combining STR-014 and STR-015 when time is short",
+        "Use this session on rest day or in the evening after a running day",
+        "Breathe through the belly in each posture: 4 seconds inhale, 6 seconds exhale"
+      ],
+      "commonMistakes": [
+        "Essayer de faire tous les exercices trop vite pour tenir dans le temps imparti",
+        "Sauter le foam roller et passer directement aux étirements statiques sur des muscles froids",
+        "Ne pas adapter la pression du foam roller a sa propre sensibilite"
+      ],
+      "commonMistakesEn": [
+        "Trying to rush through all exercises to fit the time limit",
+        "Skipping foam roller and going straight to static stretches on cold muscles",
+        "Not adjusting foam roller pressure to your own sensitivity"
+      ],
+      "variationIds": ["STR-014", "STR-015"],
+      "suitablePhases": ["base", "build", "peak", "taper", "recovery"],
+      "weeklyFrequencyMax": 5,
+      "minimumRecoveryDays": 0,
+      "references": [
+        "Cheatham et al. (2015) - The effects of self-myofascial release using a foam roll or roller massager on joint range of motion, muscle recovery, and performance",
+        "Behm et al. (2016) - Acute effects of muscle stretching on physical performance, range of motion, and injury incidence in healthy active individuals"
+      ]
+    },
+    {
+      "id": "STR-017",
+      "kind": "strength",
+      "name": "Prehab coureur",
+      "nameEn": "Runner Prehab",
+      "description": "Routine de prévention des blessures ciblée sur les zones à risque du coureur : chevilles, genoux et hanches. Combine mobilité articulaire et renforcement léger des stabilisateurs pour réduire le risque de blessures de surcharge.",
+      "descriptionEn": "Injury prévention routine targeting runner risk areas: ankles, knees, and hips. Combines joint mobility and light stabilizer strengthening to reduce overuse injury risk.",
+      "category": "prehab",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 25, "max": 30 },
+      "equipment": ["resistance_band"],
+      "primaryMuscleGroups": ["calves", "glutes", "hip_flexors", "adductors"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-MO-004",
+          "sets": 1,
+          "reps": 5,
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Fentes avec rotation pour echauffer hanches et colonne thoracique",
+          "notesEn": "Lunges with rotation to warm up hips and thoracic spine",
+          "rpe": 2
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-MO-002",
+          "sets": 2,
+          "reps": 10,
+          "restBetweenSets": "30s",
+          "intensity": "mobility",
+          "notes": "10 répétitions par côté, genou pousse au-delà des orteils face au mur. Previent les entorses",
+          "notesEn": "10 reps per side, knee pushes past toes facing wall. Prevents sprains",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-LB-012",
+          "sets": 2,
+          "reps": 15,
+          "restBetweenSets": "30s",
+          "intensity": "endurance",
+          "notes": "15 répétitions par côté, activation du moyen fessier pour stabiliser le bassin en course",
+          "notesEn": "15 reps per side, gluteus medius activation to stabilize pelvis during running",
+          "rpe": 4
+        },
+        {
+          "exerciseId": "EX-LB-013",
+          "sets": 2,
+          "reps": 12,
+          "restBetweenSets": "30s",
+          "intensity": "endurance",
+          "notes": "Avec bande elastique au-dessus des genoux, pas latéraux en position de demi-squat",
+          "notesEn": "With resistance band above knees, lateral steps in half-squat position",
+          "rpe": 4
+        },
+        {
+          "exerciseId": "EX-LB-015",
+          "sets": 3,
+          "reps": 15,
+          "restBetweenSets": "30s",
+          "intensity": "endurance",
+          "notes": "15 répétitions par jambe, montée complète et descente excentrique de 3 secondes. Protège le tendon d'Achille",
+          "notesEn": "15 reps per leg, full rise and 3-second eccentric descent. Protects the Achilles tendon",
+          "rpe": 4
+        },
+        {
+          "exerciseId": "EX-LB-011",
+          "sets": 2,
+          "reps": 12,
+          "restBetweenSets": "30s",
+          "intensity": "endurance",
+          "notes": "12 répétitions par jambe, renforce les fessiers et la stabilité du bassin unilatéral",
+          "notesEn": "12 reps per leg, strengthens glutes and unilateral pelvic stability",
+          "rpe": 4
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-003",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Étirement du psoas, 30 secondes par côté",
+          "notesEn": "Hip flexor stretch, 30 seconds per side",
+          "rpe": 2
+        },
+        {
+          "exerciseId": "EX-MO-008",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Étirement piriforme, 30 secondes par côté",
+          "notesEn": "Piriformis stretch, 30 seconds per side",
+          "rpe": 2
+        }
+      ],
+      "intensity": "endurance",
+      "coachingTips": [
+        "Cette routine est un investissement : 25 minutes de prehab peuvent eviter des semaines d'arret",
+        "Les calf raises excentriques sont le meilleur exercice préventif pour les tendinopathies d'Achille",
+        "Les clamshells et band walks renforcent le moyen fessier, stabilisateur clé du bassin en course",
+        "Intégrez cette séance 2-3 fois par semaine pendant la montée en charge d'entraînement"
+      ],
+      "coachingTipsEn": [
+        "This routine is an investment: 25 minutes of prehab can prevent weeks of missed training",
+        "Eccentric calf raises are the best preventive exercise for Achilles tendinopathy",
+        "Clamshells and band walks strengthen the gluteus medius, a key pelvic stabilizer in running",
+        "Integrate this session 2-3 times per week during training volume increases"
+      ],
+      "commonMistakes": [
+        "Abandonner le prehab quand on se sent bien : la prévention doit être constante",
+        "Faire les calf raises trop vite sans phase excentrique lente",
+        "Négliger le travail de mobilité de cheville en pensant que seules les hanches comptent"
+      ],
+      "commonMistakesEn": [
+        "Dropping prehab when feeling good: prévention must be consistent",
+        "Performing calf raises too fast without a slow eccentric phase",
+        "Neglecting ankle mobility work thinking only hips matter"
+      ],
+      "variationIds": ["STR-014", "STR-006"],
+      "suitablePhases": ["base", "build", "peak", "taper", "recovery"],
+      "weeklyFrequencyMax": 4,
+      "minimumRecoveryDays": 0,
+      "references": [
+        "Lauersen et al. (2014) - Strength training as superior injury prévention",
+        "Alfredson et al. (1998) - Heavy-load eccentric calf muscle training for the treatment of chronic Achilles tendinosis",
+        "Fredericson et al. (2000) - Hip abductor weakness in distance runners with iliotibial band syndrome"
+      ]
+    }
+  ]
+}

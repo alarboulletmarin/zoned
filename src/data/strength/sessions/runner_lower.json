@@ -1,0 +1,420 @@
+{
+  "category": "runner_lower",
+  "templates": [
+    {
+      "id": "STR-005",
+      "kind": "strength",
+      "name": "Force jambes coureur",
+      "nameEn": "Runner Leg Strength",
+      "description": "Séance dédiée au renforcement des membres inférieurs pour améliorer l'économie de course. Cible les quadriceps, ischio-jambiers et fessiers avec des charges modérées a lourdes, en accord avec les protocoles de Storen et al. (2008).",
+      "descriptionEn": "Session dedicated to lower limb strengthening to improve running economy. Targets quadriceps, hamstrings and glutes with moderate to heavy loads, in line with Storen et al. (2008) protocols.",
+      "category": "runner_lower",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 40, "max": 50 },
+      "equipment": ["barbell", "dumbbells", "box"],
+      "primaryMuscleGroups": ["quadriceps", "hamstrings", "glutes", "calves"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-LB-012",
+          "sets": 2,
+          "reps": 15,
+          "restBetweenSets": "30s",
+          "intensity": "mobility",
+          "notes": "Activation fessiers, amplitude complète sans bande",
+          "notesEn": "Glute activation, full range without band",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-MO-002",
+          "sets": 2,
+          "reps": 10,
+          "restBetweenSets": "30s",
+          "intensity": "mobility",
+          "notes": "Mobilité de cheville face au mur, genou pousse au-delà des orteils",
+          "notesEn": "Wall ankle mobility, push knee past toes",
+          "rpe": 2
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-LB-003",
+          "sets": 4,
+          "reps": 6,
+          "restBetweenSets": "120s",
+          "intensity": "strength",
+          "notes": "Exercice principal, charge progressive. Cuisses parallèles minimum, poitrine haute",
+          "notesEn": "Main lift, progressive loading. Thighs at least parallel, chest up",
+          "rpe": 8,
+          "percentRM": 80
+        },
+        {
+          "exerciseId": "EX-LB-007",
+          "sets": 4,
+          "reps": 8,
+          "restBetweenSets": "90s",
+          "intensity": "strength",
+          "notes": "Charnière de hanche stricte, barre ou haltères le long des jambes, étirement ischio-jambiers perceptible",
+          "notesEn": "Strict hip hinge, bar or dumbbells along legs, hamstring stretch should be felt",
+          "rpe": 7,
+          "percentRM": 70
+        },
+        {
+          "exerciseId": "EX-LB-005",
+          "sets": 3,
+          "reps": 8,
+          "restBetweenSets": "75s",
+          "intensity": "hypertrophy",
+          "notes": "8 répétitions par jambe, pied arrière surélevé, descente de 3 secondes",
+          "notesEn": "8 reps per leg, rear foot elevated, 3-second descent",
+          "rpe": 7
+        },
+        {
+          "exerciseId": "EX-LB-006",
+          "sets": 3,
+          "reps": 8,
+          "restBetweenSets": "60s",
+          "intensity": "hypertrophy",
+          "notes": "8 répétitions par jambe, pousser par le talon, eviter de pousser avec la jambe arrière",
+          "notesEn": "8 reps per leg, push through the heel, avoid pushing off with the back leg",
+          "rpe": 6
+        },
+        {
+          "exerciseId": "EX-LB-015",
+          "sets": 3,
+          "reps": 12,
+          "restBetweenSets": "45s",
+          "intensity": "endurance",
+          "notes": "12 répétitions par jambe, montée complète sur la pointe, descente lente de 3 secondes",
+          "notesEn": "12 reps per leg, full rise to tiptoe, slow 3-second descent",
+          "rpe": 5
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-006",
+          "sets": 1,
+          "reps": "60s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Foam roller sur les quadriceps, mouvements lents",
+          "notesEn": "Foam roller on quadriceps, slow movements",
+          "rpe": 2
+        },
+        {
+          "exerciseId": "EX-MO-005",
+          "sets": 1,
+          "reps": "60s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Foam roller sur les ischio-jambiers",
+          "notesEn": "Foam roller on hamstrings",
+          "rpe": 2
+        },
+        {
+          "exerciseId": "EX-MO-003",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Étirement psoas, 30 secondes par côté",
+          "notesEn": "Hip flexor stretch, 30 seconds per side",
+          "rpe": 2
+        }
+      ],
+      "intensity": "strength",
+      "coachingTips": [
+        "Le squat et le RDL sont les exercices clés : montez en charge progressivement sur ceux-ci",
+        "Le travail unilatéral (Bulgarian, step-up) corrige les asymetries de force entre les jambes",
+        "Les mollets sont souvent negliges chez les coureurs : ne sautez pas les calf raises",
+        "Planifiez cette séance en début de semaine, loin de vos séances de course clés"
+      ],
+      "coachingTipsEn": [
+        "Squat and RDL are the key exercises: progressively increase load on these",
+        "Unilateral work (Bulgarian, step-up) corrects strength asymmetries between legs",
+        "Calves are often neglected in runners: don't skip calf raises",
+        "Schedule this session early in the week, away from your key running sessions"
+      ],
+      "commonMistakes": [
+        "Négliger les exercices unilatéraux au profit des bilatéraux uniquement",
+        "Descente trop rapide au squat sans contrôle excentrique",
+        "Faire rebondir la barre en bas du RDL au lieu de contrôler l'inversion"
+      ],
+      "commonMistakesEn": [
+        "Neglecting unilateral exercises in favor of bilateral-only work",
+        "Descending too fast in the squat without eccentric control",
+        "Bouncing the bar at the bottom of the RDL instead of controlling the reversal"
+      ],
+      "variationIds": ["STR-006", "STR-007"],
+      "suitablePhases": ["build", "peak"],
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 2,
+      "references": [
+        "Storen et al. (2008) - Maximal strength training improves running economy in distance runners",
+        "Beattie et al. (2017) - The Effect of Strength Training on Performance Indicators in Distance Runners",
+        "Denadai et al. (2017) - Explosive training and heavy weight training are effective for improving running economy"
+      ]
+    },
+    {
+      "id": "STR-006",
+      "kind": "strength",
+      "name": "Jambes sans materiel",
+      "nameEn": "Bodyweight Leg Session",
+      "description": "Séance de renforcement des jambes sans aucun équipement. Idéale en déplacement, en complément de la course ou pour les débutants. Focus sur les mouvements unilatéraux pour la proprioception et l'équilibre.",
+      "descriptionEn": "Leg strengthening session with no equipment needed. Ideal while traveling, as a complement to running, or for beginners. Focus on unilateral movements for proprioception and balance.",
+      "category": "runner_lower",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 30, "max": 40 },
+      "equipment": ["none"],
+      "primaryMuscleGroups": ["quadriceps", "glutes", "hamstrings", "calves"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-LB-012",
+          "sets": 2,
+          "reps": 12,
+          "restBetweenSets": "30s",
+          "intensity": "mobility",
+          "notes": "Activation des fessiers, allongé sur le côté",
+          "notesEn": "Glute activation, lying on side",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-MO-004",
+          "sets": 2,
+          "reps": 6,
+          "restBetweenSets": "30s",
+          "intensity": "mobility",
+          "notes": "Fente avant avec rotation du tronc vers le genou avant pour ouvrir les hanches",
+          "notesEn": "Forward lunge with trunk rotation toward front knee to open hips",
+          "rpe": 3
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-LB-002",
+          "sets": 3,
+          "reps": 15,
+          "restBetweenSets": "45s",
+          "intensity": "endurance",
+          "notes": "Poids du corps, descente contrôlée, cuisses parallèles. Tempo 2-0-1-0",
+          "notesEn": "Bodyweight, controlled descent, thighs parallel. Tempo 2-0-1-0",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-LB-004",
+          "sets": 3,
+          "reps": 12,
+          "restBetweenSets": "45s",
+          "intensity": "endurance",
+          "notes": "12 répétitions par jambe, fentes marchées ou alternées sur place",
+          "notesEn": "12 reps per leg, walking lunges or alternating in place",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-LB-011",
+          "sets": 3,
+          "reps": 12,
+          "restBetweenSets": "45s",
+          "intensity": "endurance",
+          "notes": "12 répétitions par jambe, serrer les fessiers en haut, pied opposé décolle du sol",
+          "notesEn": "12 reps per leg, squeeze glutes at top, opposite foot off the floor",
+          "rpe": 5
+        },
+        {
+          "exerciseId": "EX-LB-015",
+          "sets": 3,
+          "reps": 15,
+          "restBetweenSets": "30s",
+          "intensity": "endurance",
+          "notes": "15 répétitions par jambe, montée maximale et descente lente de 3 secondes",
+          "notesEn": "15 reps per leg, maximum rise and slow 3-second descent",
+          "rpe": 5
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-003",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Étirement psoas, 30 secondes par côté",
+          "notesEn": "Hip flexor stretch, 30 seconds per side",
+          "rpe": 2
+        },
+        {
+          "exerciseId": "EX-MO-008",
+          "sets": 1,
+          "reps": "30s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Étirement piriforme, 30 secondes par côté",
+          "notesEn": "Piriformis stretch, 30 seconds per side",
+          "rpe": 2
+        }
+      ],
+      "intensity": "endurance",
+      "coachingTips": [
+        "Parfaite comme séance de complément après un footing facile",
+        "Le travail unilatéral améliore l'équilibre et la stabilité articulaire du coureur",
+        "Augmentez la difficulté en ralentissant le tempo plutôt qu'en ajoutant de la charge",
+        "Peut être faite pieds nus pour renforcer la proprioception du pied"
+      ],
+      "coachingTipsEn": [
+        "Perfect as a complement session after an easy run",
+        "Unilateral work improves balance and joint stability for runners",
+        "Increase difficulty by slowing tempo rather than adding load",
+        "Can be done barefoot to strengthen foot proprioception"
+      ],
+      "commonMistakes": [
+        "Effectuer les mouvements trop rapidement en négligeant le contrôle excentrique",
+        "Laisser le genou s'effondrer vers l'intérieur lors des fentes et squats unipodaux",
+        "Oublier de travailler les deux côtés de manière équilibree"
+      ],
+      "commonMistakesEn": [
+        "Performing movements too quickly, neglecting eccentric control",
+        "Letting the knee collapse inward during lunges and single-leg squats",
+        "Forgetting to work both sides evenly"
+      ],
+      "variationIds": ["STR-005"],
+      "suitablePhases": ["base", "recovery", "taper"],
+      "weeklyFrequencyMax": 3,
+      "minimumRecoveryDays": 1,
+      "references": [
+        "Beattie et al. (2017) - The Effect of Strength Training on Performance Indicators in Distance Runners",
+        "Lauersen et al. (2014) - Strength training as superior injury prévention"
+      ]
+    },
+    {
+      "id": "STR-007",
+      "kind": "strength",
+      "name": "Puissance jambes",
+      "nameEn": "Leg Power Session",
+      "description": "Séance combinant charges lourdes et mouvements explosifs pour développer la puissance musculaire spécifique au coureur. Améliore le taux de développement de la force (RFD) et la réactivité au sol.",
+      "descriptionEn": "Session combining heavy loads and explosive movements to develop runner-specific muscular power. Improves rate of force development (RFD) and ground reactivity.",
+      "category": "runner_lower",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 35, "max": 45 },
+      "equipment": ["barbell", "box"],
+      "primaryMuscleGroups": ["quadriceps", "glutes", "hamstrings", "calves"],
+      "warmupBlocks": [
+        {
+          "exerciseId": "EX-LB-012",
+          "sets": 2,
+          "reps": 15,
+          "restBetweenSets": "30s",
+          "intensity": "mobility",
+          "notes": "Activation fessiers progressive",
+          "notesEn": "Progressive glute activation",
+          "rpe": 3
+        },
+        {
+          "exerciseId": "EX-LB-002",
+          "sets": 2,
+          "reps": 10,
+          "restBetweenSets": "30s",
+          "intensity": "mobility",
+          "notes": "Squats poids du corps comme échauffement articulaire",
+          "notesEn": "Bodyweight squats as joint warmup",
+          "rpe": 3
+        }
+      ],
+      "mainBlocks": [
+        {
+          "exerciseId": "EX-LB-003",
+          "sets": 3,
+          "reps": 5,
+          "restBetweenSets": "150s",
+          "intensity": "strength",
+          "notes": "Charge lourde, phase concentrique explosive. Montée la plus rapide possible avec contrôle",
+          "notesEn": "Heavy load, explosive concentric phase. Fastest possible ascent with control",
+          "rpe": 8,
+          "percentRM": 85
+        },
+        {
+          "exerciseId": "EX-PL-008",
+          "sets": 3,
+          "reps": 6,
+          "restBetweenSets": "90s",
+          "intensity": "power",
+          "notes": "Squat complet suivi d'un saut maximal, réceptionner en douceur en fléchissant les genoux",
+          "notesEn": "Full squat followed by maximal jump, land softly by bending knees",
+          "rpe": 7
+        },
+        {
+          "exerciseId": "EX-LB-006",
+          "sets": 3,
+          "reps": 6,
+          "restBetweenSets": "75s",
+          "intensity": "strength",
+          "notes": "6 répétitions par jambe, montée explosive, hauteur de box 40-50 cm",
+          "notesEn": "6 reps per leg, explosive step-up, box height 40-50 cm",
+          "rpe": 7
+        },
+        {
+          "exerciseId": "EX-PL-003",
+          "sets": 4,
+          "reps": 8,
+          "restBetweenSets": "90s",
+          "intensity": "power",
+          "notes": "8 bonds sur 20-30 metres, rechercher l'amplitude et le temps de vol",
+          "notesEn": "8 bounds over 20-30 meters, seek amplitude and flight time",
+          "rpe": 7
+        }
+      ],
+      "cooldownBlocks": [
+        {
+          "exerciseId": "EX-MO-005",
+          "sets": 1,
+          "reps": "60s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Foam roller ischio-jambiers, insister sur les points sensibles",
+          "notesEn": "Foam roller hamstrings, focus on tender spots",
+          "rpe": 2
+        },
+        {
+          "exerciseId": "EX-MO-006",
+          "sets": 1,
+          "reps": "60s",
+          "restBetweenSets": "0s",
+          "intensity": "mobility",
+          "notes": "Foam roller quadriceps",
+          "notesEn": "Foam roller quadriceps",
+          "rpe": 2
+        }
+      ],
+      "intensity": "power",
+      "coachingTips": [
+        "L'ordre est intentionnel : la force maximale avant l'explosivite optimise la potentiation post-activation (PAP)",
+        "Récupération complète entre les séries de squat lourd : au moins 2 minutes 30",
+        "Les mouvements plyométriques doivent être réalisés frais, jamais en état de fatigue",
+        "Séance réservée aux coureurs ayant au moins 6 mois de renforcement régulier"
+      ],
+      "coachingTipsEn": [
+        "Order is intentional: maximal strength before explosiveness optimizes post-activation potentiation (PAP)",
+        "Full recovery between heavy squat sets: at least 2 minutes 30 seconds",
+        "Plyometric movements must be performed fresh, never in a fatigued state",
+        "Session reserved for runners with at least 6 months of regular strength training"
+      ],
+      "commonMistakes": [
+        "Faire des sauts en etat de fatigue : risque de blessure tendineuse",
+        "Réduire les temps de repos pour aller plus vite : la puissance nécessite une récupération complète",
+        "Tenter cette séance sans expérience préalable de renforcement"
+      ],
+      "commonMistakesEn": [
+        "Performing jumps while fatigued: risk of tendon injury",
+        "Reducing rest times to go faster: power requires full recovery",
+        "Attempting this session without prior strength training experience"
+      ],
+      "variationIds": ["STR-005", "STR-012"],
+      "suitablePhases": ["peak"],
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 3,
+      "references": [
+        "Paavolainen et al. (1999) - Explosive-strength training improves 5-km running time",
+        "Aagaard et al. (2002) - Increased rate of force development and neural drive after heavy resistance training",
+        "Beattie et al. (2017) - The Effect of Strength Training on Performance Indicators in Distance Runners"
+      ]
+    }
+  ]
+}
