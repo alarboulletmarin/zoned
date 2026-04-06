@@ -1,0 +1,128 @@
+{
+  "title": "Renforcement",
+  "subtitle": "Séances de renforcement musculaire pour coureurs",
+  "description": "Séances scientifiques de renforcement musculaire, conçues spécifiquement pour améliorer vos performances en course et prévenir les blessures.",
+  "activityToggle": {
+    "all": "Tout",
+    "running": "Course",
+    "strength": "Renforcement"
+  },
+  "categories": {
+    "runner_full_body": "Full body coureur",
+    "runner_lower": "Jambes",
+    "runner_core": "Core / Gainage",
+    "runner_upper": "Haut du corps",
+    "plyometrics": "Pliométrie",
+    "mobility": "Mobilité",
+    "prehab": "Prévention blessures"
+  },
+  "intensity": {
+    "mobility": "Mobilité",
+    "endurance": "Endurance musculaire",
+    "hypertrophy": "Hypertrophie",
+    "strength": "Force",
+    "power": "Puissance"
+  },
+  "intensityDescription": {
+    "mobility": "RPE 2-3 · Mouvements doux, préparation articulaire",
+    "endurance": "RPE 4-5 · Séries longues, charge légère (12-15 reps)",
+    "hypertrophy": "RPE 6-7 · Volume modéré, charge moyenne (8-12 reps)",
+    "strength": "RPE 8-9 · Séries courtes, charge lourde (3-6 reps)",
+    "power": "RPE 7-8 · Mouvements explosifs (4-6 reps)"
+  },
+  "muscles": {
+    "quadriceps": "Quadriceps",
+    "hamstrings": "Ischio-jambiers",
+    "glutes": "Fessiers",
+    "calves": "Mollets",
+    "hip_flexors": "Fléchisseurs de hanche",
+    "adductors": "Adducteurs",
+    "core_anterior": "Abdominaux",
+    "core_lateral": "Obliques",
+    "core_posterior": "Lombaires",
+    "upper_back": "Haut du dos",
+    "shoulders": "Épaules",
+    "chest": "Pectoraux"
+  },
+  "equipment": {
+    "none": "Sans matériel",
+    "resistance_band": "Bande élastique",
+    "dumbbells": "Haltères",
+    "kettlebell": "Kettlebell",
+    "barbell": "Barre",
+    "pull_up_bar": "Barre de traction",
+    "box": "Box / Banc",
+    "foam_roller": "Rouleau de massage",
+    "medicine_ball": "Médecine ball"
+  },
+  "detail": {
+    "exercises": "Exercices",
+    "sets": "séries",
+    "reps": "répétitions",
+    "rest": "Repos",
+    "formCues": "Points clés de forme",
+    "targetMuscles": "Muscles ciblés",
+    "primaryMuscles": "Muscles principaux",
+    "secondaryMuscles": "Muscles secondaires",
+    "equipmentNeeded": "Matériel nécessaire",
+    "noEquipment": "Aucun matériel requis",
+    "suitablePhases": "Phases d'entraînement adaptées",
+    "warmup": "Échauffement",
+    "mainSet": "Corps de séance",
+    "cooldown": "Retour au calme",
+    "superset": "Superset",
+    "perSide": "par côté",
+    "hold": "maintien",
+    "rpe": "RPE",
+    "intensity": "Intensité",
+    "sessionTimeline": "Structure de la séance",
+    "muscleDistribution": "Répartition musculaire",
+    "exerciseDetail": "Détail des exercices",
+    "totalSets": "séries au total",
+    "totalExercises": "exercices",
+    "estimatedDuration": "~{{minutes}} min",
+    "recovery": "Récupération",
+    "weeklyMax": "Max {{count}}x / semaine",
+    "minRecovery": "{{days}}j de repos min.",
+    "references": "Références scientifiques",
+    "viewStudy": "Voir l'étude",
+    "loadingExercises": "Chargement des exercices...",
+    "muscleMap": "Carte musculaire",
+    "front": "Avant",
+    "back": "Arrière",
+    "lowIntensity": "Faible",
+    "mediumIntensity": "Moyen",
+    "highIntensity": "Intense"
+  },
+  "trainingPhases": {
+    "base": "Construction",
+    "build": "Développement",
+    "peak": "Pic",
+    "taper": "Affûtage",
+    "recovery": "Récupération"
+  },
+  "plan": {
+    "includeStrength": "Inclure le renforcement",
+    "includeStrengthDescription": "Ajouter des séances de renforcement musculaire adaptées à chaque phase de votre plan",
+    "strengthFrequency": "Fréquence renforcement",
+    "strengthFrequencyDescription": "Nombre de séances de renforcement par semaine",
+    "perWeek": "{{count}}x / semaine",
+    "suggested": "Suggéré",
+    "suggestedTooltip": "Séance suggérée par le générateur. Cliquez pour l'accepter ou la supprimer."
+  },
+  "science": {
+    "title": "Pourquoi le renforcement pour les coureurs ?",
+    "economy": "Améliore l'économie de course de 2-8% (Denadai 2017)",
+    "injury": "Réduit le risque de blessure de ~50% (Lauersen 2014)",
+    "performance": "La force lourde est plus efficace que l'endurance musculaire pour les coureurs (Beattie 2017)",
+    "periodization": "La périodisation force → puissance → maintenance optimise les gains (Rønnestad 2014)"
+  },
+  "collections": {
+    "strengthForRunners": "Force pour coureurs",
+    "strengthForRunnersDesc": "Programme progressif de renforcement musculaire spécifique à la course à pied",
+    "coreStability": "Core stability",
+    "coreStabilityDesc": "Gainage et stabilité du tronc pour une meilleure posture en course",
+    "injuryPrevention": "Prévention blessures",
+    "injuryPreventionDesc": "Renforcement ciblé des zones sensibles : genoux, chevilles, hanches"
+  }
+}

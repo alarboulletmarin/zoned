@@ -1,0 +1,128 @@
+{
+  "title": "Strength",
+  "subtitle": "Strength training sessions for runners",
+  "description": "Science-based strength training sessions designed to improve your running performance and prevent injuries.",
+  "activityToggle": {
+    "all": "All",
+    "running": "Running",
+    "strength": "Strength"
+  },
+  "categories": {
+    "runner_full_body": "Runner Full Body",
+    "runner_lower": "Legs",
+    "runner_core": "Core",
+    "runner_upper": "Upper Body",
+    "plyometrics": "Plyometrics",
+    "mobility": "Mobility",
+    "prehab": "Injury Prevention"
+  },
+  "intensity": {
+    "mobility": "Mobility",
+    "endurance": "Muscular Endurance",
+    "hypertrophy": "Hypertrophy",
+    "strength": "Strength",
+    "power": "Power"
+  },
+  "intensityDescription": {
+    "mobility": "RPE 2-3 · Gentle movements, joint preparation",
+    "endurance": "RPE 4-5 · Long sets, light load (12-15 reps)",
+    "hypertrophy": "RPE 6-7 · Moderate volume, medium load (8-12 reps)",
+    "strength": "RPE 8-9 · Short sets, heavy load (3-6 reps)",
+    "power": "RPE 7-8 · Explosive movements (4-6 reps)"
+  },
+  "muscles": {
+    "quadriceps": "Quadriceps",
+    "hamstrings": "Hamstrings",
+    "glutes": "Glutes",
+    "calves": "Calves",
+    "hip_flexors": "Hip Flexors",
+    "adductors": "Adductors",
+    "core_anterior": "Abs",
+    "core_lateral": "Obliques",
+    "core_posterior": "Lower Back",
+    "upper_back": "Upper Back",
+    "shoulders": "Shoulders",
+    "chest": "Chest"
+  },
+  "equipment": {
+    "none": "No equipment",
+    "resistance_band": "Resistance Band",
+    "dumbbells": "Dumbbells",
+    "kettlebell": "Kettlebell",
+    "barbell": "Barbell",
+    "pull_up_bar": "Pull-Up Bar",
+    "box": "Box / Bench",
+    "foam_roller": "Foam Roller",
+    "medicine_ball": "Medicine Ball"
+  },
+  "detail": {
+    "exercises": "Exercises",
+    "sets": "sets",
+    "reps": "reps",
+    "rest": "Rest",
+    "formCues": "Form Cues",
+    "targetMuscles": "Target Muscles",
+    "primaryMuscles": "Primary Muscles",
+    "secondaryMuscles": "Secondary Muscles",
+    "equipmentNeeded": "Equipment Needed",
+    "noEquipment": "No equipment required",
+    "suitablePhases": "Suitable Training Phases",
+    "warmup": "Warm-Up",
+    "mainSet": "Main Set",
+    "cooldown": "Cool-Down",
+    "superset": "Superset",
+    "perSide": "per side",
+    "hold": "hold",
+    "rpe": "RPE",
+    "intensity": "Intensity",
+    "sessionTimeline": "Session Structure",
+    "muscleDistribution": "Muscle Distribution",
+    "exerciseDetail": "Exercise Detail",
+    "totalSets": "total sets",
+    "totalExercises": "exercises",
+    "estimatedDuration": "~{{minutes}} min",
+    "recovery": "Recovery",
+    "weeklyMax": "Max {{count}}x / week",
+    "minRecovery": "{{days}}d min. recovery",
+    "references": "Scientific References",
+    "viewStudy": "View study",
+    "loadingExercises": "Loading exercises...",
+    "muscleMap": "Muscle Map",
+    "front": "Front",
+    "back": "Back",
+    "lowIntensity": "Low",
+    "mediumIntensity": "Medium",
+    "highIntensity": "High"
+  },
+  "trainingPhases": {
+    "base": "Base Building",
+    "build": "Build",
+    "peak": "Peak",
+    "taper": "Taper",
+    "recovery": "Recovery"
+  },
+  "plan": {
+    "includeStrength": "Include Strength Training",
+    "includeStrengthDescription": "Add strength training sessions adapted to each phase of your plan",
+    "strengthFrequency": "Strength Frequency",
+    "strengthFrequencyDescription": "Number of strength sessions per week",
+    "perWeek": "{{count}}x / week",
+    "suggested": "Suggested",
+    "suggestedTooltip": "Session suggested by the generator. Click to accept or remove."
+  },
+  "science": {
+    "title": "Why Strength Training for Runners?",
+    "economy": "Improves running economy by 2-8% (Denadai 2017)",
+    "injury": "Reduces injury risk by ~50% (Lauersen 2014)",
+    "performance": "Heavy strength training is more effective than muscular endurance for runners (Beattie 2017)",
+    "periodization": "Periodized strength → power → maintenance optimizes gains (Rønnestad 2014)"
+  },
+  "collections": {
+    "strengthForRunners": "Strength for Runners",
+    "strengthForRunnersDesc": "Progressive strength training program specific to running",
+    "coreStability": "Core Stability",
+    "coreStabilityDesc": "Core stability and trunk control for better running posture",
+    "injuryPrevention": "Injury Prevention",
+    "injuryPreventionDesc": "Targeted strengthening of vulnerable areas: knees, ankles, hips"
+  }
+}

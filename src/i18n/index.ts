@@ -26,6 +26,9 @@ import enSimulator from "./locales/en/simulator.json";
 import frWhatif from "./locales/fr/whatif.json";
 import enWhatif from "./locales/en/whatif.json";
 
+import frStrength from "./locales/fr/strength.json";
+import enStrength from "./locales/en/strength.json";
+
 // Resources object
 const resources = {
   fr: {
@@ -38,6 +41,7 @@ const resources = {
     guides: frGuides,
     simulator: frSimulator,
     whatif: frWhatif,
+    strength: frStrength,
   },
   en: {
     common: enCommon,
@@ -49,6 +53,7 @@ const resources = {
     guides: enGuides,
     simulator: enSimulator,
     whatif: enWhatif,
+    strength: enStrength,
   },
 };
 
@@ -62,7 +67,7 @@ i18n
     resources,
     fallbackLng: "fr",
     defaultNS: "common",
-    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "whatif"],
+    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "whatif", "strength"],
 
     // Detection options
     detection: {
