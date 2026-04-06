@@ -125,7 +125,7 @@ export function PlanMethodologyPage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "Plan Methodology" : "Méthodologie des plans"}
+        title={isEn ? "Plan Guide" : "Guide des plans"}
         description={
           isEn
             ? "The 7 evidence-based principles behind Zoned's training plan generation. Understand how your plan is built."
@@ -134,7 +134,7 @@ export function PlanMethodologyPage() {
         canonical="/plans/methodology"
         jsonLd={{
           "@type": "WebPage",
-          name: isEn ? "Plan Methodology" : "Méthodologie des plans",
+          name: isEn ? "Plan Guide" : "Guide des plans",
           url: "https://zoned.run/plans/methodology",
           description: isEn
             ? "The 7 evidence-based principles behind Zoned's training plan generation."

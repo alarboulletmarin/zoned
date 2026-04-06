@@ -258,8 +258,8 @@ function SidebarContent({
       </nav>
 
       {/* Footer */}
-      <div className="shrink-0 px-2 py-2">
-        <div className="flex flex-col gap-0.5">
+      <div className="shrink-0 px-2 py-2 border-t border-border/40">
+        <div className="flex flex-col gap-0.5 pt-1">
           {footerItems.map((item) => (
             <SidebarNavItem
               key={item.labelKey}
