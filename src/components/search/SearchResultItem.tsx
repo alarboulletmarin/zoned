@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { Clock } from "@/components/icons";
+import { Clock, Dumbbell } from "@/components/icons";
 import { ZoneBadge } from "@/components/domain/ZoneBadge";
-import type { WorkoutTemplate } from "@/types";
-import { getDominantZone, CATEGORY_META } from "@/types";
+import type { WorkoutTemplate, AnyWorkoutTemplate } from "@/types";
+import { getDominantZone, CATEGORY_META, isStrengthWorkout } from "@/types";
 import { getWorkoutDuration } from "@/components/visualization";
 import { cn } from "@/lib/utils";
 
@@ -14,13 +14,19 @@ interface SearchResultItemProps {
 
 export function SearchResultItem({ workout, isSelected, onClick }: SearchResultItemProps) {
   const { i18n } = useTranslation();
+  const { t: tStrength } = useTranslation("strength");
   const isEn = i18n.language?.startsWith("en") ?? false;
 
+  const isStrength = isStrengthWorkout(workout as AnyWorkoutTemplate);
   const name = isEn ? workout.nameEn : workout.name;
-  const categoryMeta = CATEGORY_META[workout.category];
-  const categoryLabel = isEn ? categoryMeta.labelEn : categoryMeta.label;
-  const dominantZone = getDominantZone(workout);
-  const duration = `${getWorkoutDuration(workout)} min`;
+  const categoryMeta = isStrength ? null : CATEGORY_META[workout.category];
+  const categoryLabel = isStrength
+    ? tStrength(`categories.${(workout as any).category}`)
+    : isEn ? categoryMeta!.labelEn : categoryMeta!.label;
+  const dominantZone = isStrength ? null : getDominantZone(workout);
+  const duration = isStrength
+    ? `${Math.round(((workout as any).typicalDuration?.min + (workout as any).typicalDuration?.max) / 2)} min`
+    : `${getWorkoutDuration(workout)} min`;
 
   return (
     <button
@@ -32,11 +38,11 @@ export function SearchResultItem({ workout, isSelected, onClick }: SearchResultI
         isSelected && "bg-accent"
       )}
     >
-      {/* Zone color bar */}
+      {/* Color bar */}
       <div
         className={cn(
           "w-1 h-10 rounded-full flex-shrink-0",
-          `bg-zone-${dominantZone}`
+          isStrength ? "bg-amber-500" : `bg-zone-${dominantZone}`
         )}
       />
 
@@ -53,8 +59,12 @@ export function SearchResultItem({ workout, isSelected, onClick }: SearchResultI
         </div>
       </div>
 
-      {/* Zone badge */}
-      <ZoneBadge zone={dominantZone} size="sm" />
+      {/* Badge */}
+      {isStrength ? (
+        <Dumbbell className="size-4 text-amber-500" />
+      ) : (
+        <ZoneBadge zone={dominantZone!} size="sm" />
+      )}
     </button>
   );
 }

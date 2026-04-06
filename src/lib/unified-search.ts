@@ -2,6 +2,7 @@
 // Unified search across workouts, articles, and glossary terms
 
 import { searchWorkouts } from "@/data/workouts";
+import { searchStrengthSessions } from "@/data/strength";
 import { getAllArticleMeta } from "@/data/articles/metadata";
 import { loadAllTerms } from "@/data/glossary";
 
@@ -38,13 +39,31 @@ export async function unifiedSearch(
   const en = isEn(lang);
 
   // Run all searches in parallel
-  const [workoutResults, glossaryTerms] = await Promise.all([
+  const [workoutResults, strengthResults, glossaryTerms] = await Promise.all([
     searchWorkouts(trimmed),
+    searchStrengthSessions(trimmed),
     loadAllTerms(),
   ]);
 
-  // --- Workouts ---
-  const workouts: UnifiedSearchResult[] = workoutResults
+  // --- Workouts (running + strength merged) ---
+  const allWorkoutResults = [
+    ...workoutResults.map((w) => ({
+      id: w.id,
+      name: w.name,
+      nameEn: w.nameEn,
+      description: w.description,
+      descriptionEn: w.descriptionEn,
+    })),
+    ...strengthResults.map((s) => ({
+      id: s.id,
+      name: s.name,
+      nameEn: s.nameEn,
+      description: s.description,
+      descriptionEn: s.descriptionEn,
+    })),
+  ];
+
+  const workouts: UnifiedSearchResult[] = allWorkoutResults
     .slice(0, maxPerType)
     .map((w) => ({
       type: "workout" as const,
