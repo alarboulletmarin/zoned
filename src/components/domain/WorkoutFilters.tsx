@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
-import type { RefObject } from "react";
-import { Search, Heart } from "@/components/icons";
+import { useState, type RefObject } from "react";
+import { X, Search, Heart } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
@@ -98,7 +99,7 @@ function FilterChip({
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors",
         selected
           ? "border-primary bg-primary/10 text-primary"
           : "border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -115,6 +116,40 @@ function FilterGroupLabel({ children }: { children: React.ReactNode }) {
     <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
       {children}
     </span>
+  );
+}
+
+/* ── Expandable chip group — progressive disclosure ── */
+function ExpandableChipGroup({
+  items,
+  initialCount = 4,
+  renderChip,
+  hasSelected,
+}: {
+  items: readonly string[];
+  initialCount?: number;
+  renderChip: (item: string) => React.ReactNode;
+  hasSelected?: (item: string) => boolean;
+}) {
+  const [expanded, setExpanded] = useState(() =>
+    hasSelected ? items.slice(initialCount).some(hasSelected) : false
+  );
+  const visible = expanded ? items : items.slice(0, initialCount);
+  const hiddenCount = items.length - initialCount;
+
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {visible.map((item) => renderChip(item))}
+      {!expanded && hiddenCount > 0 && (
+        <button
+          type="button"
+          onClick={() => setExpanded(true)}
+          className="inline-flex items-center rounded-full border border-dashed border-border px-2.5 py-0.5 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+        >
+          +{hiddenCount}
+        </button>
+      )}
+    </div>
   );
 }
 
@@ -147,11 +182,43 @@ export function WorkoutFilters({
     onFiltersChange({ ...filters, [key]: next });
   };
 
-  const showRunningFilters = activityType === "running" || activityType === "all";
-  const showStrengthFilters = activityType === "strength" || activityType === "all";
+  const hasActiveFilters =
+    filters.category.length > 0 ||
+    filters.difficulty.length > 0 ||
+    filters.durationRange[0] !== DURATION_MIN ||
+    filters.durationRange[1] !== DURATION_MAX ||
+    filters.searchQuery !== "" ||
+    filters.terrain.length > 0 ||
+    filters.targetSystem.length > 0 ||
+    filters.favoritesOnly ||
+    filters.strengthCategory.length > 0 ||
+    filters.equipment.length > 0 ||
+    filters.muscleGroup.length > 0;
+
+  const clearFilters = () => {
+    onFiltersChange({
+      category: [],
+      difficulty: [],
+      durationRange: [DURATION_MIN, DURATION_MAX],
+      searchQuery: "",
+      terrain: [],
+      targetSystem: [],
+      favoritesOnly: false,
+      strengthCategory: [],
+      equipment: [],
+      muscleGroup: [],
+    });
+  };
+
+  // Categories always shown when the type matches (including "all")
+  const showRunningCategories = activityType === "running" || activityType === "all";
+  const showStrengthCategories = activityType === "strength" || activityType === "all";
+  // Specific filters only shown when a type is explicitly selected (not "all")
+  const showRunningFilters = activityType === "running";
+  const showStrengthFilters = activityType === "strength";
 
   return (
-    <div className={cn("space-y-5", className)}>
+    <div className={cn("space-y-4", className)}>
       {/* Search */}
       {!hideSearch && (
         <div className="relative">
@@ -169,10 +236,10 @@ export function WorkoutFilters({
       )}
 
       {/* Running: Category */}
-      {showRunningFilters && (
-        <div className="space-y-2">
+      {showRunningCategories && (
+        <div className="space-y-1.5">
           <FilterGroupLabel>{t("filters.category")}</FilterGroupLabel>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {categories.map((cat) => (
               <FilterChip
                 key={cat}
@@ -186,10 +253,10 @@ export function WorkoutFilters({
       )}
 
       {/* Strength: Category */}
-      {showStrengthFilters && (
-        <div className="space-y-2">
+      {showStrengthCategories && (
+        <div className="space-y-1.5">
           <FilterGroupLabel>{tStrength("title")}</FilterGroupLabel>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {strengthCategories.map((cat) => (
               <FilterChip
                 key={cat}
@@ -203,9 +270,9 @@ export function WorkoutFilters({
       )}
 
       {/* Difficulty (shared) */}
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <FilterGroupLabel>{t("filters.difficulty")}</FilterGroupLabel>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5">
           {difficultyOptions.map((d) => (
             <FilterChip
               key={d}
@@ -219,9 +286,9 @@ export function WorkoutFilters({
 
       {/* Running: Terrain */}
       {showRunningFilters && (
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <FilterGroupLabel>{t("filters.terrain")}</FilterGroupLabel>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {terrainOptions.map((ter) => (
               <FilterChip
                 key={ter}
@@ -236,9 +303,9 @@ export function WorkoutFilters({
 
       {/* Running: Target System */}
       {showRunningFilters && (
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <FilterGroupLabel>{t("filters.targetSystem")}</FilterGroupLabel>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {targetSystems.map((sys) => (
               <FilterChip
                 key={sys}
@@ -253,35 +320,41 @@ export function WorkoutFilters({
 
       {/* Strength: Equipment */}
       {showStrengthFilters && (
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <FilterGroupLabel>{tStrength("detail.equipmentNeeded")}</FilterGroupLabel>
-          <div className="flex flex-wrap gap-2">
-            {strengthEquipmentOptions.map((eq) => (
+          <ExpandableChipGroup
+            items={strengthEquipmentOptions}
+            initialCount={4}
+            hasSelected={(eq) => filters.equipment.includes(eq as StrengthEquipment)}
+            renderChip={(eq) => (
               <FilterChip
                 key={eq}
                 label={tStrength(`equipment.${eq}`)}
-                selected={filters.equipment.includes(eq)}
-                onClick={() => toggleFilter("equipment", eq)}
+                selected={filters.equipment.includes(eq as StrengthEquipment)}
+                onClick={() => toggleFilter("equipment", eq as StrengthEquipment)}
               />
-            ))}
-          </div>
+            )}
+          />
         </div>
       )}
 
       {/* Strength: Muscle Group */}
       {showStrengthFilters && (
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <FilterGroupLabel>{tStrength("detail.targetMuscles")}</FilterGroupLabel>
-          <div className="flex flex-wrap gap-2">
-            {muscleGroupOptions.map((m) => (
+          <ExpandableChipGroup
+            items={muscleGroupOptions}
+            initialCount={4}
+            hasSelected={(m) => filters.muscleGroup.includes(m as MuscleGroup)}
+            renderChip={(m) => (
               <FilterChip
                 key={m}
                 label={tStrength(`muscles.${m}`)}
-                selected={filters.muscleGroup.includes(m)}
-                onClick={() => toggleFilter("muscleGroup", m)}
+                selected={filters.muscleGroup.includes(m as MuscleGroup)}
+                onClick={() => toggleFilter("muscleGroup", m as MuscleGroup)}
               />
-            ))}
-          </div>
+            )}
+          />
         </div>
       )}
 
@@ -316,6 +389,18 @@ export function WorkoutFilters({
         />
       </div>
 
+      {/* Clear Filters — desktop only (mobile has it in the drawer footer) */}
+      {!hideSearch && hasActiveFilters && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={clearFilters}
+          className="w-full"
+        >
+          <X className="size-4 mr-1" />
+          {t("clearFilters")}
+        </Button>
+      )}
     </div>
   );
 }
