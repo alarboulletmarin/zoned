@@ -21,6 +21,7 @@ interface PlanMonthlyViewProps {
   plan: TrainingPlan;
   workoutNames: Record<string, string>;
   currentWeek: number;
+  initialWeek?: number;
   isEn: boolean;
   startDate: string | undefined;
   onSessionClick?: (weekNumber: number, sessionIndex: number, workoutId: string) => void;
@@ -30,6 +31,7 @@ interface PlanMonthlyViewProps {
   onValidateWeek?: (weekNumber: number) => void;
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
   onAddToDay?: (weekNumber: number, day: number) => void;
+  onWeekChange?: (week: number) => void;
 }
 
 // ── Component ───────────────────────────────────────────────────────
@@ -38,6 +40,7 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
   plan,
   workoutNames,
   currentWeek,
+  initialWeek,
   isEn,
   startDate,
   onSessionClick,
@@ -47,6 +50,7 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
   onValidateWeek,
   onWorkoutAdd,
   onAddToDay,
+  onWeekChange,
 }: PlanMonthlyViewProps) {
   // ── No start date fallback ──────────────────────────────────────
   if (!startDate) {
@@ -93,16 +97,17 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
     return map;
   }, [plan.weeks, planStart]);
 
-  // ── Initial month: month containing the current training week ──
+  // ── Initial month: month containing the target training week ──
   const initialMonth = useMemo(() => {
-    if (currentWeek >= 1 && currentWeek <= plan.totalWeeks) {
-      const range = weekDateRanges.get(currentWeek);
+    const targetWeek = initialWeek ?? currentWeek;
+    if (targetWeek >= 1 && targetWeek <= plan.totalWeeks) {
+      const range = weekDateRanges.get(targetWeek);
       if (range) {
         return { year: range.start.getFullYear(), month: range.start.getMonth() };
       }
     }
     return { year: planStart.getFullYear(), month: planStart.getMonth() };
-  }, [planStart, currentWeek, plan.totalWeeks, weekDateRanges]);
+  }, [planStart, initialWeek, currentWeek, plan.totalWeeks, weekDateRanges]);
 
   const [selectedMonth, setSelectedMonth] = useState(initialMonth);
 
@@ -115,21 +120,38 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
   const canGoNext = selectedMonth.year < maxMonth.year ||
     (selectedMonth.year === maxMonth.year && selectedMonth.month < maxMonth.month);
 
+  // Find the first week number visible in a given month
+  const firstWeekInMonth = useCallback((year: number, month: number): number | null => {
+    const monthStart = new Date(year, month, 1);
+    const monthEnd = new Date(year, month + 1, 0);
+    let first: number | null = null;
+    for (const [weekNumber, range] of weekDateRanges) {
+      if (range.start <= monthEnd && range.end >= monthStart) {
+        if (first === null || weekNumber < first) first = weekNumber;
+      }
+    }
+    return first;
+  }, [weekDateRanges]);
+
   const goToPrevMonth = useCallback(() => {
     if (!canGoPrev) return;
-    setSelectedMonth((prev) => {
-      if (prev.month === 0) return { year: prev.year - 1, month: 11 };
-      return { year: prev.year, month: prev.month - 1 };
-    });
-  }, [canGoPrev]);
+    const newMonth = selectedMonth.month === 0
+      ? { year: selectedMonth.year - 1, month: 11 }
+      : { year: selectedMonth.year, month: selectedMonth.month - 1 };
+    setSelectedMonth(newMonth);
+    const week = firstWeekInMonth(newMonth.year, newMonth.month);
+    if (week != null) onWeekChange?.(week);
+  }, [canGoPrev, selectedMonth, firstWeekInMonth, onWeekChange]);
 
   const goToNextMonth = useCallback(() => {
     if (!canGoNext) return;
-    setSelectedMonth((prev) => {
-      if (prev.month === 11) return { year: prev.year + 1, month: 0 };
-      return { year: prev.year, month: prev.month + 1 };
-    });
-  }, [canGoNext]);
+    const newMonth = selectedMonth.month === 11
+      ? { year: selectedMonth.year + 1, month: 0 }
+      : { year: selectedMonth.year, month: selectedMonth.month + 1 };
+    setSelectedMonth(newMonth);
+    const week = firstWeekInMonth(newMonth.year, newMonth.month);
+    if (week != null) onWeekChange?.(week);
+  }, [canGoNext, selectedMonth, firstWeekInMonth, onWeekChange]);
 
   // ── Filter weeks that have at least one day in the selected month ──
   const filteredWeekNumbers = useMemo(() => {

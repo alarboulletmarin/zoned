@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { usePageHint } from "@/hooks/usePageHint";
-import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
+import { useParams, useNavigate, useLocation, useSearchParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
@@ -37,6 +37,7 @@ import { getWorkoutById } from "@/data/workouts";
 import { exportPlanToICS } from "@/lib/export";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   PHASE_META,
   RACE_DISTANCE_META,
@@ -90,14 +91,22 @@ export function PlanViewPage() {
   const { i18n } = useTranslation("plan");
   const isEn = i18n.language?.startsWith("en") ?? false;
 
-  // Read return state from navigation (coming back from workout detail page)
-  const returnState = location.state as { returnToWeek?: number; returnScrollY?: number } | null;
-  const returnedWeek = returnState?.returnToWeek;
+  // Week persistence via URL search params (?week=N)
+  const [searchParams, setSearchParams] = useSearchParams();
+  const weekParam = searchParams.get("week");
+  const weekFromUrl = weekParam ? parseInt(weekParam, 10) : null;
+
+  const setWeekParam = useCallback((week: number) => {
+    setSearchParams((prev) => {
+      prev.set("week", String(week));
+      return prev;
+    }, { replace: true });
+  }, [setSearchParams]);
 
   // Restore scroll position when returning from workout detail
+  const returnState = location.state as { returnScrollY?: number } | null;
   useEffect(() => {
     if (returnState?.returnScrollY != null) {
-      // Defer to allow the page to render first
       requestAnimationFrame(() => {
         window.scrollTo(0, returnState.returnScrollY!);
       });
@@ -106,14 +115,6 @@ export function PlanViewPage() {
 
   const { plan, isLoading, reload: reloadPlan } = usePlan(id);
   const { planViewMode, setPlanViewMode } = usePlanViewMode();
-
-  // On mobile, only "weekly" and "list" are available
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767px)");
-    if (mq.matches && (planViewMode === "calendar" || planViewMode === "monthly")) {
-      setPlanViewMode("weekly");
-    }
-  }, [planViewMode, setPlanViewMode]);
 
   const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set());
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -139,6 +140,14 @@ export function PlanViewPage() {
     const referenceDate = plan.config.startDate || plan.config.createdAt;
     return getCurrentWeek(referenceDate);
   }, [plan]);
+
+  // Effective initial week: URL param (clamped) > current training week
+  const initialWeek = useMemo(() => {
+    if (weekFromUrl != null && plan) {
+      return Math.max(1, Math.min(weekFromUrl, plan.totalWeeks));
+    }
+    return currentWeek;
+  }, [weekFromUrl, currentWeek, plan]);
 
   const parsedPlanStart = useMemo(() => {
     if (!plan) return null;
@@ -380,6 +389,11 @@ export function PlanViewPage() {
 
   const handleSessionClick = useCallback((weekNumber: number, sessionIndex: number, workoutId: string) => {
     if (workoutId && workoutId !== "__race_day__" && !workoutId.startsWith("__activity_")) {
+      // Persist current week in URL before navigating away so browser back restores it
+      const url = new URL(window.location.href);
+      url.searchParams.set("week", String(weekNumber));
+      window.history.replaceState(window.history.state, "", url.toString());
+
       // Find the session to pass volume info for scaled duration display (#32)
       const week = plan?.weeks.find((w) => w.weekNumber === weekNumber);
       const session = week?.sessions[sessionIndex];
@@ -661,14 +675,21 @@ export function PlanViewPage() {
           </Card>
         )}
 
-        {/* Plan Stats */}
-        <PlanStatsSection plan={plan} currentWeek={currentWeek} isEn={isEn} />
+        {/* Programme / Statistiques toggle */}
+        <Tabs defaultValue="programme">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="programme">{isEn ? "Schedule" : "Programme"}</TabsTrigger>
+            <TabsTrigger value="stats">{isEn ? "Statistics" : "Statistiques"}</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="stats" className="mt-4">
+            <PlanStatsSection plan={plan} currentWeek={currentWeek} isEn={isEn} />
+          </TabsContent>
+
+          <TabsContent value="programme" className="mt-4 space-y-4">
 
         {/* View mode toggle + export */}
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-lg font-semibold shrink-0">
-            {isEn ? "Schedule" : "Programme"}
-          </h2>
           <div className="flex flex-wrap items-center gap-2">
             <Button
               variant="default"
@@ -682,8 +703,6 @@ export function PlanViewPage() {
             <PlanViewModeSelector value={planViewMode} onChange={setPlanViewMode} />
           </div>
         </div>
-
-        {/* RPE picker is rendered as a fixed bottom bar (see end of component) */}
 
         {/* Completion legend */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground mb-2 px-1">
@@ -728,6 +747,7 @@ export function PlanViewPage() {
                 plan={plan}
                 workoutNames={workoutNames}
                 currentWeek={currentWeek}
+                initialWeek={initialWeek}
                 isEn={isEn}
                 onSessionClick={handleSessionClick}
                 onSessionMove={handleSessionMove}
@@ -763,8 +783,9 @@ export function PlanViewPage() {
                 plan={plan}
                 workoutNames={workoutNames}
                 currentWeek={currentWeek}
-                initialWeek={returnedWeek}
+                initialWeek={initialWeek}
                 isEn={isEn}
+                onWeekChange={setWeekParam}
                 planStartDate={plan.config.startDate || plan.config.createdAt}
                 onSessionClick={handleSessionClick}
                 onSessionMove={handleSessionMove}
@@ -798,6 +819,7 @@ export function PlanViewPage() {
                 plan={plan}
                 workoutNames={workoutNames}
                 currentWeek={currentWeek}
+                initialWeek={initialWeek}
                 isEn={isEn}
                 startDate={plan.config.startDate || plan.config.createdAt}
                 onSessionClick={handleSessionClick}
@@ -807,6 +829,7 @@ export function PlanViewPage() {
                 onValidateWeek={handleValidateWeek}
                 onWorkoutAdd={handleWorkoutAdd}
                 onAddToDay={handleAddToDay}
+                onWeekChange={setWeekParam}
               />
             </div>
             {showWorkoutPanel && (
@@ -1161,6 +1184,8 @@ export function PlanViewPage() {
         </div>
         )}
 
+          </TabsContent>
+        </Tabs>
 
         {/* Delete Confirmation Dialog */}
         <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>

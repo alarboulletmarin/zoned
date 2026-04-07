@@ -191,7 +191,8 @@ export function WorkoutDetailPage() {
   // Plan context: scaled duration when coming from a plan
   const planVolumePercent = locationState?.volumePercent;
   const planWeekNumber = locationState?.weekNumber;
-  const hasPlanContext = locationState?.from === "plan" && planVolumePercent != null && planVolumePercent !== 100;
+  const planEstimatedDuration = locationState?.estimatedDurationMin;
+  const hasPlanContext = locationState?.from === "plan" && (planEstimatedDuration != null || (planVolumePercent != null && planVolumePercent !== 100));
 
   // Base (unscaled) session data
   const baseSessionData = transformSessionBlocks(
@@ -216,7 +217,9 @@ export function WorkoutDetailPage() {
         planVolumePercent
       )
     : baseSessionData;
-  const duration = Math.round(sessionData.totalDurationMin);
+  const duration = (locationState?.from === "plan" && planEstimatedDuration != null)
+    ? Math.round(planEstimatedDuration)
+    : Math.round(sessionData.totalDurationMin);
 
   const CategoryIcon = CATEGORY_ICONS[workout.category];
 
@@ -230,8 +233,8 @@ export function WorkoutDetailPage() {
     breadcrumbs.push({ label: t("common:nav.plans"), to: "/plans" });
     breadcrumbs.push({
       label: locationState.planName || (isEn ? "Plan" : "Plan"),
-      to: `/plan/${locationState.planId}`,
-      state: { returnToWeek: locationState.weekNumber, returnScrollY: locationState.scrollY },
+      to: `/plan/${locationState.planId}?week=${locationState.weekNumber}`,
+      state: { returnScrollY: locationState.scrollY },
     });
   } else if (locationState?.from === "collection" && locationState.collectionSlug) {
     breadcrumbs.push({ label: t("common:collections.title"), to: "/collections" });

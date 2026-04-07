@@ -66,6 +66,8 @@ interface PlanCalendarProps {
   planStartDate?: string;
   /** If provided, gray out cells outside this month (used by monthly view) */
   visibleMonth?: { year: number; month: number };
+  /** If provided, scroll this week row into view on mount */
+  initialWeek?: number;
 }
 
 // ── Component ───────────────────────────────────────────────────────
@@ -84,8 +86,19 @@ export const PlanCalendar = memo(function PlanCalendar({
   filteredWeekNumbers,
   planStartDate,
   visibleMonth,
+  initialWeek,
 }: PlanCalendarProps) {
   const dayHeaders = isEn ? DAY_HEADERS_EN : DAY_HEADERS_FR;
+
+  // ── Scroll-to-week ref ────────────────────────────────────────────
+  const initialWeekRowRef = useRef<HTMLTableRowElement>(null);
+
+  useEffect(() => {
+    if (initialWeek == null || !initialWeekRowRef.current) return;
+    requestAnimationFrame(() => {
+      initialWeekRowRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  }, [initialWeek]);
 
   // Parse planStartDate and find the Monday of week 1
   // dayOfWeek in sessions is 0=Mon...6=Sun, so we anchor to the Monday of the start week
@@ -474,6 +487,7 @@ export const PlanCalendar = memo(function PlanCalendar({
               return (
                 <tr
                   key={week.weekNumber}
+                  ref={week.weekNumber === initialWeek ? initialWeekRowRef : undefined}
                   className={cn(
                     "border-b border-border/40",
                     isPhaseStart && "border-t-2 border-t-border",

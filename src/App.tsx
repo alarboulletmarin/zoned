@@ -79,11 +79,12 @@ function ScrollToTopOnNavigate() {
   const location = useLocation();
 
   useEffect(() => {
-    // Skip scroll-to-top when returning to a plan from workout detail
-    const state = location.state as { returnToWeek?: number } | null;
-    if (state?.returnToWeek) return;
+    // Skip scroll-to-top when returning to a plan with a specific week
+    if (location.pathname.startsWith("/plan/") && location.search.includes("week=")) return;
+    const state = location.state as { returnScrollY?: number } | null;
+    if (state?.returnScrollY != null) return;
     window.scrollTo(0, 0);
-  }, [location.pathname, location.state]);
+  }, [location.pathname, location.search, location.state]);
 
   return null;
 }

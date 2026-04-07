@@ -63,6 +63,7 @@ interface PlanWeeklyViewProps {
   onValidateWeek?: (weekNumber: number) => void;
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
   onAddToDay?: (weekNumber: number, day: number) => void;
+  onWeekChange?: (week: number) => void;
 }
 
 // ── Component ───────────────────────────────────────────────────────
@@ -81,6 +82,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   onValidateWeek,
   onWorkoutAdd,
   onAddToDay,
+  onWeekChange,
 }: PlanWeeklyViewProps) {
   // ── Week navigation state ──────────────────────────────────────
   const [selectedWeek, setSelectedWeek] = useState(Math.max(1, initialWeek ?? currentWeek));
@@ -407,7 +409,11 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
         <div className="flex items-center justify-between gap-2">
           <button
             type="button"
-            onClick={() => setSelectedWeek((w) => Math.max(1, w - 1))}
+            onClick={() => {
+              const newWeek = Math.max(1, selectedWeek - 1);
+              setSelectedWeek(newWeek);
+              onWeekChange?.(newWeek);
+            }}
             disabled={selectedWeek <= 1}
             className="px-3 py-1.5 rounded-lg bg-muted text-sm font-medium disabled:opacity-30 transition-colors hover:bg-muted/80"
           >
@@ -455,7 +461,11 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
 
           <button
             type="button"
-            onClick={() => setSelectedWeek((w) => Math.min(plan.totalWeeks, w + 1))}
+            onClick={() => {
+              const newWeek = Math.min(plan.totalWeeks, selectedWeek + 1);
+              setSelectedWeek(newWeek);
+              onWeekChange?.(newWeek);
+            }}
             disabled={selectedWeek >= plan.totalWeeks}
             className="px-3 py-1.5 rounded-lg bg-muted text-sm font-medium disabled:opacity-30 transition-colors hover:bg-muted/80"
           >
