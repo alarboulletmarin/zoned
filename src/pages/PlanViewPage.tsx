@@ -1053,6 +1053,9 @@ export function PlanViewPage() {
                                   <span className="text-xs text-muted-foreground flex items-center gap-1">
                                     <Clock className="size-3" />
                                     {session.estimatedDurationMin}min
+                                    {session.targetDistanceKm != null && session.targetDistanceKm > 0 && (
+                                      <span> · {session.sessionType !== "long_run" && "~"}{session.targetDistanceKm}km</span>
+                                    )}
                                   </span>
                                 )}
                                 {!isRaceDay && (

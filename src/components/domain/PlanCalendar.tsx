@@ -934,6 +934,9 @@ const SessionCell = memo(function SessionCell({
           <span className="text-[10px] text-muted-foreground flex items-center gap-0.5 mt-0.5">
             <Clock className="size-2.5" />
             {session.estimatedDurationMin}min
+            {session.targetDistanceKm != null && session.targetDistanceKm > 0 && (
+              <span> · {session.sessionType !== "long_run" && "~"}{session.targetDistanceKm}km</span>
+            )}
             {session.rpe && (
               <span className="ml-1 text-[9px] font-medium text-amber-600">RPE {session.rpe}</span>
             )}

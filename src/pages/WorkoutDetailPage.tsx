@@ -424,10 +424,19 @@ export function WorkoutDetailPage() {
                 <Clock className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
                 <span className="text-lg lg:text-2xl font-bold">{duration}</span>
                 <span className="text-[10px] lg:text-xs text-muted-foreground">{t("common:units.minutes")}</span>
-                {hasPlanContext && (
+                {hasPlanContext && duration < baseDuration - 3 && (
                   <span className="text-[9px] text-muted-foreground line-through">{baseDuration}</span>
                 )}
               </div>
+              {planTargetDistanceKm != null && planTargetDistanceKm > 0 && (
+                <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
+                  <Route className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
+                  <span className="text-lg lg:text-2xl font-bold">
+                    {workout.category !== "long_run" && "~"}{planTargetDistanceKm}
+                  </span>
+                  <span className="text-[10px] lg:text-xs text-muted-foreground">km</span>
+                </div>
+              )}
               <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
                 <Dumbbell className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
                 <span className="text-sm lg:text-lg font-bold">{t(`library:difficulty.${workout.difficulty}`)}</span>

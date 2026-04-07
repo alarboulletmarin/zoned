@@ -159,6 +159,14 @@ export function buildSession(ctx: SessionBuildContext): SessionBuildResult | nul
     session.estimatedDurationMin = Math.max(session.estimatedDurationMin, longRunDurationFromTarget);
   }
 
+  // Estimate distance for all running sessions that don't already have it
+  const NON_RUNNING_TYPES = new Set(["strength", "cycling", "swimming", "yoga", "cross_training"]);
+  if (!session.targetDistanceKm && !NON_RUNNING_TYPES.has(session.sessionType)) {
+    const paceRange = ctx.paces[intensity];
+    const avgPaceMinKm = (paceRange.min + paceRange.max) / 2;
+    session.targetDistanceKm = Math.round((session.estimatedDurationMin / avgPaceMinKm) * 2) / 2; // round to 0.5km
+  }
+
   return { session, workout };
 }
 
