@@ -107,20 +107,20 @@ export function buildSession(ctx: SessionBuildContext): SessionBuildResult | nul
   // Step 3: Scale the workout (reps, duration, distance)
   const scaledReps = scaleWorkout(workout, progression);
 
-  // Step 4: Compute pace-aware duration
-  const duration = estimatePaceAwareDuration(
-    workout,
-    ctx.paces,
-    scaledReps,
-  );
+  // Step 4: Compute pace-aware duration (breakdown for volume scaling)
+  const dur = estimatePaceAwareDuration(workout, ctx.paces, scaledReps);
+
+  // Apply volume scaling to main set only (warmup/cooldown unchanged)
+  const volumeScale = ctx.volumePercent / 100;
+  const scaledTotal = Math.round(dur.warmupMin + dur.mainMin * volumeScale + dur.cooldownMin);
 
   // Step 5: Build pace notes
   const paceNotes = buildPaceNotes(workout, ctx.paces);
 
-  // Step 6: Compute load score
+  // Step 6: Compute load score (based on full duration, not volume-scaled)
   const intensity = sessionTypeToIntensity(ctx.slot.sessionTypes[0]);
   const zone = INTENSITY_TO_ZONE[intensity];
-  const loadScore = computeBlockLoad(duration, zone);
+  const loadScore = computeBlockLoad(dur.totalMin, zone);
 
   // Step 7: Build session notes
   const notesParts = buildSessionNotes(
@@ -139,11 +139,11 @@ export function buildSession(ctx: SessionBuildContext): SessionBuildResult | nul
     workoutId: workout.id,
     sessionType: ctx.slot.sessionTypes[0],
     isKeySession: ctx.slot.slotType === "key_quality",
-    estimatedDurationMin: Math.max(20, duration),
+    estimatedDurationMin: Math.max(20, scaledTotal),
     notes: notesParts.notes,
     notesEn: notesParts.notesEn,
     // v2 fields
-    targetDurationMin: Math.max(20, duration),
+    targetDurationMin: Math.max(20, dur.totalMin),
     loadScore: Math.round(loadScore * 10) / 10,
     paceNotes,
     scaledRepetitions: scaledReps ?? undefined,
@@ -193,11 +193,18 @@ function scaleWorkout(workout: WorkoutTemplate, progression: number): number | n
  * Estimate workout duration using actual user paces instead of hardcoded 5min/km.
  * Falls back to the old approach for workouts without distance data.
  */
+interface DurationBreakdown {
+  warmupMin: number;
+  mainMin: number;
+  cooldownMin: number;
+  totalMin: number;
+}
+
 function estimatePaceAwareDuration(
   workout: WorkoutTemplate,
   paces: TrainingPaces,
   scaledReps: number | null,
-): number {
+): DurationBreakdown {
   const warmup = estimateBlocksDurationWithPaces(workout.warmupTemplate || [], paces);
   const cooldown = estimateBlocksDurationWithPaces(workout.cooldownTemplate || [], paces);
 
@@ -210,16 +217,21 @@ function estimatePaceAwareDuration(
     mainDuration = -1;
   }
 
-  const warmupMin = warmup >= 0 ? warmup : 0;
-  const cooldownMin = cooldown >= 0 ? cooldown : 0;
+  const wMin = warmup >= 0 ? warmup : 0;
+  const cMin = cooldown >= 0 ? cooldown : 0;
 
   if (mainDuration >= 0) {
-    return Math.round(warmupMin + mainDuration + cooldownMin);
+    return {
+      warmupMin: wMin,
+      mainMin: mainDuration,
+      cooldownMin: cMin,
+      totalMin: Math.round(wMin + mainDuration + cMin),
+    };
   }
 
   // Fallback to typicalDuration
   const avg = (workout.typicalDuration.min + workout.typicalDuration.max) / 2;
-  return Math.round(avg);
+  return { warmupMin: 0, mainMin: avg, cooldownMin: 0, totalMin: Math.round(avg) };
 }
 
 /**

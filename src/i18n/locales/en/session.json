@@ -88,8 +88,10 @@
     }
   },
   "planContext": {
-    "banner": "In your plan (week {{week}}): ~{{duration}} min",
-    "fullSession": "(full session: {{duration}} min)"
+    "banner": "Week {{week}} · Adapted to volume ({{volume}}%): ~{{duration}} min",
+    "fullSession": "(full version: {{duration}} min)",
+    "longRunBanner": "Week {{week}} · Long run target: {{distance}} km (~{{duration}} min at your pace)",
+    "longRunStructure": "The structure below is the base guide ({{duration}} min)"
   },
   "science": {
     "toggle": "Enable",

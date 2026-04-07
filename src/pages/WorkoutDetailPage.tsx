@@ -90,6 +90,7 @@ export function WorkoutDetailPage() {
     weekNumber?: number;
     volumePercent?: number;
     estimatedDurationMin?: number;
+    targetDistanceKm?: number;
     scrollY?: number;
     collectionSlug?: string;
     collectionName?: string;
@@ -188,9 +189,11 @@ export function WorkoutDetailPage() {
   }
 
   const dominantZone = getDominantZone(workout);
-  // Plan context: duration from plan generation (may differ from template for long runs)
+  // Plan context: duration from plan generation (volume-scaled, may differ for long runs)
   const planWeekNumber = locationState?.weekNumber;
+  const planVolumePercent = locationState?.volumePercent;
   const planEstimatedDuration = locationState?.estimatedDurationMin;
+  const planTargetDistanceKm = locationState?.targetDistanceKm;
   const hasPlanContext = locationState?.from === "plan" && planEstimatedDuration != null;
 
   // Base session data from workout template
@@ -204,8 +207,11 @@ export function WorkoutDetailPage() {
   );
   const baseDuration = Math.round(baseSessionData.totalDurationMin);
 
-  const duration = (locationState?.from === "plan" && planEstimatedDuration != null)
-    ? Math.round(planEstimatedDuration)
+  // Always use plan duration when coming from a plan — it's the authoritative value
+  // that matches what the calendar shows.
+  const planDuration = planEstimatedDuration != null ? Math.round(planEstimatedDuration) : null;
+  const duration = (locationState?.from === "plan" && planDuration != null)
+    ? planDuration
     : baseDuration;
 
   const CategoryIcon = CATEGORY_ICONS[workout.category];
@@ -348,15 +354,26 @@ export function WorkoutDetailPage() {
           </nav>
         </div>
 
-        {/* Plan context banner */}
-        {hasPlanContext && duration !== baseDuration && (
+        {/* Plan context banner — volume reduction or long run target */}
+        {hasPlanContext && Math.abs(duration - baseDuration) > 3 && (
           <div className="rounded-lg border border-primary/20 bg-primary/5 px-4 py-2.5 text-sm flex items-center gap-2">
             <Clock className="size-4 text-primary shrink-0" />
             <span>
-              {t("session:planContext.banner", { week: planWeekNumber, duration })}
-              <span className="text-muted-foreground ml-1">
-                {t("session:planContext.fullSession", { duration: baseDuration })}
-              </span>
+              {duration > baseDuration && planTargetDistanceKm ? (
+                <>
+                  {t("session:planContext.longRunBanner", { week: planWeekNumber, distance: planTargetDistanceKm, duration })}
+                  <span className="text-muted-foreground ml-1">
+                    {t("session:planContext.longRunStructure", { duration: baseDuration })}
+                  </span>
+                </>
+              ) : (
+                <>
+                  {t("session:planContext.banner", { week: planWeekNumber, volume: planVolumePercent, duration })}
+                  <span className="text-muted-foreground ml-1">
+                    {t("session:planContext.fullSession", { duration: baseDuration })}
+                  </span>
+                </>
+              )}
             </span>
           </div>
         )}

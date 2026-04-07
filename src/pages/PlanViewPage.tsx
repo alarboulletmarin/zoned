@@ -405,6 +405,7 @@ export function PlanViewPage() {
           weekNumber,
           volumePercent: week?.volumePercent,
           estimatedDurationMin: session?.estimatedDurationMin,
+          targetDistanceKm: session?.targetDistanceKm,
           scrollY: window.scrollY,
         },
       });
