@@ -9,7 +9,6 @@ import { transformSessionBlocks, formatDurationMinutes } from "./transforms";
 
 interface MiniSessionTimelineProps {
   workout: WorkoutTemplate;
-  volumePercent?: number;
   onClickScrollBack: () => void;
 }
 
@@ -30,7 +29,6 @@ function getHeightPercent(zone: ZoneNumber | null): number {
 
 export function MiniSessionTimeline({
   workout,
-  volumePercent,
   onClickScrollBack,
 }: MiniSessionTimelineProps) {
   const { i18n } = useTranslation("session");
@@ -45,9 +43,8 @@ export function MiniSessionTimeline({
         cooldown: workout.cooldownTemplate,
       },
       isEn,
-      volumePercent
     );
-  }, [workout, isEn, volumePercent]);
+  }, [workout, isEn]);
 
   if (data.segments.length === 0 || !data.hasZoneData) return null;
 

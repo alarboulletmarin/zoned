@@ -96,11 +96,10 @@ function estimateBlocksDuration(blocks: WorkoutBlock[]): number {
 }
 
 /**
- * Estimate workout duration with volume scaling.
- * Warmup and cooldown keep their full duration.
- * Only the main set is scaled by volume percentage.
+ * Estimate workout duration from template blocks.
+ * Returns the base (unscaled) duration: warmup + main + cooldown.
  */
-function estimateWorkoutDuration(workout: WorkoutTemplate, volumePercent: number): number {
+function estimateWorkoutDuration(workout: WorkoutTemplate): number {
   const warmupMin = estimateBlocksDuration(workout.warmupTemplate || []);
   const mainMin = estimateBlocksDuration(workout.mainSetTemplate || []);
   const cooldownMin = estimateBlocksDuration(workout.cooldownTemplate || []);
@@ -111,14 +110,12 @@ function estimateWorkoutDuration(workout: WorkoutTemplate, volumePercent: number
     const warmup = Math.max(0, warmupMin);
     const main = Math.max(0, mainMin);
     const cooldown = Math.max(0, cooldownMin);
-    // Scale only the main set by volume %
-    const scaledMain = Math.round(main * (volumePercent / 100));
-    return Math.round(warmup + scaledMain + cooldown);
+    return Math.round(warmup + main + cooldown);
   }
 
-  // Fallback to typicalDuration scaled by volume
+  // Fallback to typicalDuration average
   const avg = (workout.typicalDuration.min + workout.typicalDuration.max) / 2;
-  return Math.round(avg * (volumePercent / 100));
+  return Math.round(avg);
 }
 
 // ── Internal selector ──────────────────────────────────────────────
@@ -130,7 +127,6 @@ function findBestWorkout(
   raceDistance: RaceDistance,
   allWorkouts: WorkoutTemplate[],
   usedWorkoutIds: string[],
-  _volumePercent: number,
   slotType: string,
   _elevationGain?: number,
 ): WorkoutSelection | null {
@@ -243,8 +239,7 @@ function findBestWorkout(
 
   const workout = finalList[0];
 
-  // Scale only the main set by volume %, keep warmup/cooldown full duration
-  const estimatedDurationMin = estimateWorkoutDuration(workout, _volumePercent);
+  const estimatedDurationMin = estimateWorkoutDuration(workout);
 
   return {
     workoutId: workout.id,
@@ -262,7 +257,7 @@ function findBestWorkout(
  * 1. For each preferred session type in the slot, try to find a match
  * 2. Filter by category, phase, difficulty, load, and distance tags
  * 3. Sort by priority score, prefer unused workouts for variety
- * 4. Calculate estimated duration adjusted by volume percentage
+ * 4. Calculate estimated duration from template blocks
  */
 export function selectWorkout(
   slot: WeekSlot,
@@ -271,7 +266,7 @@ export function selectWorkout(
   raceDistance: RaceDistance,
   allWorkouts: WorkoutTemplate[],
   usedWorkoutIds: string[], // IDs used in last 3 weeks
-  volumePercent: number,
+  _volumePercent: number,
   elevationGain?: number,
 ): WorkoutSelection | null {
   // Try each preferred session type in order
@@ -283,7 +278,6 @@ export function selectWorkout(
       raceDistance,
       allWorkouts,
       usedWorkoutIds,
-      volumePercent,
       slot.slotType,
       elevationGain,
     );
