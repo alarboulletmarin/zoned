@@ -343,14 +343,17 @@ function blockToSegments(
 }
 
 /**
- * Transform session blocks into complete visualization data.
+ * Transform session blocks into complete visualization data
+ * @param volumePercent - optional volume scaling (0-100) from plan context. Only scales main set segments.
  */
 export function transformSessionBlocks(
   blocks: SessionBlocks,
   isEn: boolean = false,
+  volumePercent?: number
 ): SessionVisualizationData {
   const allSegments: TimelineSegment[] = [];
   let segmentIndex = 0;
+  const scale = volumePercent != null ? volumePercent / 100 : 1;
 
   // Process each block type in order
   const blockTypes: Array<{ type: BlockType; blocks: WorkoutBlock[] }> = [
@@ -362,6 +365,12 @@ export function transformSessionBlocks(
   for (const { type, blocks: typeBlocks } of blockTypes) {
     for (const block of typeBlocks) {
       const segments = blockToSegments(block, type, segmentIndex);
+      // Scale main set durations when volumePercent is provided
+      if (type === "main" && scale !== 1) {
+        for (const seg of segments) {
+          seg.durationMin = seg.durationMin * scale;
+        }
+      }
       allSegments.push(...segments);
       segmentIndex++;
     }

@@ -110,6 +110,7 @@ export function buildSession(ctx: SessionBuildContext): SessionBuildResult | nul
   // Step 4: Compute pace-aware duration
   const duration = estimatePaceAwareDuration(
     workout,
+    ctx.volumePercent,
     ctx.paces,
     scaledReps,
   );
@@ -149,14 +150,13 @@ export function buildSession(ctx: SessionBuildContext): SessionBuildResult | nul
     scaledRepetitions: scaledReps ?? undefined,
   };
 
-  // Long run: override duration with targetLongRunKm-based estimate
-  // The workout template duration is often too short for the actual target distance
+  // Long run: store target distance/duration for reference
+  // but don't override estimatedDurationMin — it already reflects volume scaling
   if (ctx.slot.slotType === "long_run" && ctx.targetLongRunKm && ctx.targetLongRunKm > 0) {
     session.targetDistanceKm = ctx.targetLongRunKm;
     const longRunDurationFromTarget = ctx.targetLongRunMin
       ?? Math.round(ctx.targetLongRunKm * ((ctx.paces.E.min + ctx.paces.E.max) / 2));
     session.targetDurationMin = longRunDurationFromTarget;
-    session.estimatedDurationMin = Math.max(session.estimatedDurationMin, longRunDurationFromTarget);
   }
 
   return { session, workout };
@@ -195,6 +195,7 @@ function scaleWorkout(workout: WorkoutTemplate, progression: number): number | n
  */
 function estimatePaceAwareDuration(
   workout: WorkoutTemplate,
+  volumePercent: number,
   paces: TrainingPaces,
   scaledReps: number | null,
 ): number {
@@ -214,12 +215,14 @@ function estimatePaceAwareDuration(
   const cooldownMin = cooldown >= 0 ? cooldown : 0;
 
   if (mainDuration >= 0) {
-    return Math.round(warmupMin + mainDuration + cooldownMin);
+    // Scale only main set by volume %
+    const scaledMain = Math.round(mainDuration * (volumePercent / 100));
+    return Math.round(warmupMin + scaledMain + cooldownMin);
   }
 
   // Fallback to typicalDuration
   const avg = (workout.typicalDuration.min + workout.typicalDuration.max) / 2;
-  return Math.round(avg);
+  return Math.round(avg * (volumePercent / 100));
 }
 
 /**

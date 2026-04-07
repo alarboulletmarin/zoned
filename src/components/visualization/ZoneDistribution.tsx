@@ -12,9 +12,11 @@ import { cn } from "@/lib/utils";
 interface ZoneDistributionProps {
   workout: WorkoutTemplate;
   className?: string;
+  /** Volume scaling (0-100) from plan context. Scales main set durations. */
+  volumePercent?: number;
 }
 
-export function ZoneDistribution({ workout, className }: ZoneDistributionProps) {
+export function ZoneDistribution({ workout, className, volumePercent }: ZoneDistributionProps) {
   const { i18n } = useTranslation();
   const isEn = i18n.language?.startsWith("en") ?? false;
 
@@ -26,8 +28,9 @@ export function ZoneDistribution({ workout, className }: ZoneDistributionProps) 
         cooldown: workout.cooldownTemplate,
       },
       isEn,
+      volumePercent
     );
-  }, [workout, isEn]);
+  }, [workout, isEn, volumePercent]);
 
   if (zoneBreakdown.length === 0) {
     return null;
