@@ -129,6 +129,7 @@ function findBestWorkout(
   usedWorkoutIds: string[],
   slotType: string,
   _elevationGain?: number,
+  daysPerWeek: number = 5,
 ): WorkoutSelection | null {
   const categories = SESSION_TO_CATEGORY[sessionType] ?? [];
   const diffLevel = DIFFICULTY_LEVELS[difficulty];
@@ -187,6 +188,16 @@ function findBestWorkout(
     loadFilter.includes(w.selectionCriteria.relativeLoad),
   );
   if (filtered.length > 0) candidates = filtered;
+
+  // Step 4b: Cap duration for easy/recovery slots on low-day plans
+  if ((slotType === "easy" || slotType === "recovery") && daysPerWeek <= 4) {
+    const maxEasyDuration = daysPerWeek <= 3 ? 50 : 60; // minutes
+    filtered = candidates.filter(w => {
+      const avgDuration = (w.typicalDuration.min + w.typicalDuration.max) / 2;
+      return avgDuration <= maxEasyDuration;
+    });
+    if (filtered.length > 0) candidates = filtered;
+  }
 
   // Step 5: For race_specific, filter by distance tags
   if (sessionType === "race_specific") {
@@ -268,6 +279,7 @@ export function selectWorkout(
   usedWorkoutIds: string[], // IDs used in last 3 weeks
   _volumePercent: number,
   elevationGain?: number,
+  daysPerWeek: number = 5,
 ): WorkoutSelection | null {
   // Try each preferred session type in order
   for (const sessionType of slot.sessionTypes) {
@@ -280,6 +292,7 @@ export function selectWorkout(
       usedWorkoutIds,
       slot.slotType,
       elevationGain,
+      daysPerWeek,
     );
     if (result) return result;
   }

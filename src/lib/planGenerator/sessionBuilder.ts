@@ -53,6 +53,7 @@ export interface SessionBuildContext {
   elevationGain?: number;
   targetLongRunKm?: number;   // From longRunProgression
   targetLongRunMin?: number;
+  daysPerWeek?: number;
 }
 
 // ── Zone mapping ────────────────────────────────────────────────
@@ -91,6 +92,7 @@ export function buildSession(ctx: SessionBuildContext): SessionBuildResult | nul
     ctx.usedWorkoutIds,
     ctx.volumePercent,
     ctx.elevationGain,
+    ctx.daysPerWeek ?? 5,
   );
 
   if (!selection) return null;

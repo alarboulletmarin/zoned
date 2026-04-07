@@ -63,6 +63,7 @@ export function calculateVolumeProgression(
   difficulty: Difficulty = "intermediate",
   currentWeeklyKm?: number,
   trainingGoal?: TrainingGoal,
+  daysPerWeek: number = 5,
 ): WeekVolume[] {
   const goalMods = getGoalModifiers(trainingGoal);
 
@@ -71,6 +72,10 @@ export function calculateVolumeProgression(
 
   const startKm = currentWeeklyKm ?? Math.round(defaultStartKm * goalMods.volumeMultiplier);
   const peakKm = Math.round(defaultPeakKm * goalMods.volumeMultiplier);
+
+  // Scale peak km for fewer training days — 4 days can't sustain same weekly volume as 6 days
+  const daysAdjustment = Math.min(1, 0.7 + (daysPerWeek * 0.06)); // 3d=0.88, 4d=0.94, 5d=1.0, 6+=1.0
+  const adjustedPeakKm = Math.round(peakKm * daysAdjustment);
 
   const taperPhase = phases.find(p => p.phase === "taper");
   const taperStart = taperPhase?.startWeek ?? totalWeeks;
@@ -139,20 +144,22 @@ export function calculateVolumeProgression(
     if (w > 1) {
       const prevNonRecovery = weeks.filter(wk => !wk.isRecoveryWeek).at(-1);
       const prevKm = prevNonRecovery?.targetKm ?? startKm;
-      const maxIncrease = prevKm * MAX_WEEKLY_VOLUME_INCREASE;
-      currentKm = Math.min(peakKm, prevKm + maxIncrease);
+      // For longer plans, use gentler progression to avoid peaking too early
+      const maxIncreaseRate = totalWeeks > 20 ? 0.07 : MAX_WEEKLY_VOLUME_INCREASE;
+      const maxIncrease = prevKm * maxIncreaseRate;
+      currentKm = Math.min(adjustedPeakKm, prevKm + maxIncrease);
     }
 
     // Micro-undulation at plateau: alternate ±5% to avoid monotony
     // This simulates natural training periodization (harder/easier weeks)
     let weekKm = Math.round(currentKm);
-    if (currentKm >= peakKm * 0.95) {
+    if (currentKm >= adjustedPeakKm * 0.95) {
       // At plateau — undulate between 95% and 100%
       const isHighWeek = consecutiveLoadWeeks % 2 === 0;
-      weekKm = Math.round(peakKm * (isHighWeek ? 1.0 : 0.93));
+      weekKm = Math.round(adjustedPeakKm * (isHighWeek ? 1.0 : 0.93));
     }
 
-    const volumePct = peakKm > 0 ? Math.round((weekKm / peakKm) * 100) : 80;
+    const volumePct = adjustedPeakKm > 0 ? Math.round((weekKm / adjustedPeakKm) * 100) : 80;
 
     weeks.push({
       weekNumber: w,

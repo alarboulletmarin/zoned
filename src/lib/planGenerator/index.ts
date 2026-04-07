@@ -212,6 +212,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     config.runnerLevel,
     config.currentWeeklyKm,
     trainingGoal,
+    config.daysPerWeek,
   );
 
   // Apply purpose volume multiplier
@@ -306,6 +307,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
         elevationGain: config.elevationGain,
         targetLongRunKm: longRunTarget?.distanceKm,
         targetLongRunMin: longRunTarget?.durationMin,
+        daysPerWeek: config.daysPerWeek,
       });
 
       if (result) {
