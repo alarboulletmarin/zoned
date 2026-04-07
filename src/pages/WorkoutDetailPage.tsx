@@ -188,13 +188,12 @@ export function WorkoutDetailPage() {
   }
 
   const dominantZone = getDominantZone(workout);
-  // Plan context: scaled duration when coming from a plan
-  const planVolumePercent = locationState?.volumePercent;
+  // Plan context: duration from plan generation (may differ from template for long runs)
   const planWeekNumber = locationState?.weekNumber;
   const planEstimatedDuration = locationState?.estimatedDurationMin;
-  const hasPlanContext = locationState?.from === "plan" && (planEstimatedDuration != null || (planVolumePercent != null && planVolumePercent !== 100));
+  const hasPlanContext = locationState?.from === "plan" && planEstimatedDuration != null;
 
-  // Base (unscaled) session data
+  // Base session data from workout template
   const baseSessionData = transformSessionBlocks(
     {
       warmup: workout.warmupTemplate,
@@ -205,21 +204,9 @@ export function WorkoutDetailPage() {
   );
   const baseDuration = Math.round(baseSessionData.totalDurationMin);
 
-  // Scaled session data when coming from a plan
-  const sessionData = hasPlanContext
-    ? transformSessionBlocks(
-        {
-          warmup: workout.warmupTemplate,
-          mainSet: workout.mainSetTemplate,
-          cooldown: workout.cooldownTemplate,
-        },
-        isEn,
-        planVolumePercent
-      )
-    : baseSessionData;
   const duration = (locationState?.from === "plan" && planEstimatedDuration != null)
     ? Math.round(planEstimatedDuration)
-    : Math.round(sessionData.totalDurationMin);
+    : baseDuration;
 
   const CategoryIcon = CATEGORY_ICONS[workout.category];
 
@@ -362,11 +349,11 @@ export function WorkoutDetailPage() {
         </div>
 
         {/* Plan context banner */}
-        {hasPlanContext && (
+        {hasPlanContext && duration !== baseDuration && (
           <div className="rounded-lg border border-primary/20 bg-primary/5 px-4 py-2.5 text-sm flex items-center gap-2">
             <Clock className="size-4 text-primary shrink-0" />
             <span>
-              {t("session:planContext.banner", { week: planWeekNumber, volume: planVolumePercent, duration })}
+              {t("session:planContext.banner", { week: planWeekNumber, duration })}
               <span className="text-muted-foreground ml-1">
                 {t("session:planContext.fullSession", { duration: baseDuration })}
               </span>
@@ -452,7 +439,6 @@ export function WorkoutDetailPage() {
           <div className="sticky top-12 z-40 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 bg-background/90 backdrop-blur-sm md:backdrop-blur-md shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_6px_12px_-4px_rgba(0,0,0,0.15)] dark:shadow-[0_1px_3px_0_rgba(0,0,0,0.3),0_6px_12px_-4px_rgba(0,0,0,0.4)] border-b border-border/30 will-change-[transform,opacity] animate-slide-in-top print:hidden">
             <MiniSessionTimeline
               workout={workout}
-              volumePercent={hasPlanContext ? planVolumePercent : undefined}
               onClickScrollBack={() => {
                 timelineCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
@@ -472,7 +458,7 @@ export function WorkoutDetailPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <SessionTimeline workout={workout} volumePercent={hasPlanContext ? planVolumePercent : undefined} />
+                  <SessionTimeline workout={workout} />
                 </CardContent>
               </Card>
             </div>
@@ -485,7 +471,7 @@ export function WorkoutDetailPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <WorkoutStructure workout={workout} userZones={hasUserZones ? userZones : undefined} volumePercent={hasPlanContext ? planVolumePercent : undefined} />
+                <WorkoutStructure workout={workout} userZones={hasUserZones ? userZones : undefined} />
               </CardContent>
             </Card>
 
@@ -506,7 +492,7 @@ export function WorkoutDetailPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ZoneDistribution workout={workout} volumePercent={hasPlanContext ? planVolumePercent : undefined} />
+                <ZoneDistribution workout={workout} />
               </CardContent>
             </Card>
 

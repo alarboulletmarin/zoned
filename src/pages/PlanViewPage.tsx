@@ -1049,23 +1049,9 @@ export function PlanViewPage() {
                                   </Badge>
                                 )}
                                 {!isRaceDay && !session.workoutId.startsWith("__activity_") && (
-                                  <span
-                                    className="text-xs text-muted-foreground flex items-center gap-1"
-                                    title={
-                                      week.volumePercent < 100
-                                        ? (isEn
-                                            ? `Duration adjusted to ${week.volumePercent}% volume (main set scaled, warm-up/cool-down unchanged)`
-                                            : `Durée ajustée au volume ${week.volumePercent}% (corps de séance réduit, échauffement/retour au calme inchangés)`)
-                                        : ""
-                                    }
-                                  >
+                                  <span className="text-xs text-muted-foreground flex items-center gap-1">
                                     <Clock className="size-3" />
                                     {session.estimatedDurationMin}min
-                                    {week.volumePercent < 100 && (
-                                      <span className="text-[10px] opacity-60">
-                                        ({week.volumePercent}%)
-                                      </span>
-                                    )}
                                   </span>
                                 )}
                                 {!isRaceDay && (

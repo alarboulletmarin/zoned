@@ -24,8 +24,6 @@ import {
 interface SessionTimelineProps {
   workout: WorkoutTemplate;
   className?: string;
-  /** Volume scaling (0-100) from plan context. Scales main set durations. */
-  volumePercent?: number;
 }
 
 /**
@@ -94,7 +92,7 @@ function SegmentTooltipContent({ segment, t }: SegmentTooltipContentProps) {
   );
 }
 
-export function SessionTimeline({ workout, className, volumePercent }: SessionTimelineProps) {
+export function SessionTimeline({ workout, className }: SessionTimelineProps) {
   const { t, i18n } = useTranslation("session");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -108,9 +106,8 @@ export function SessionTimeline({ workout, className, volumePercent }: SessionTi
         cooldown: workout.cooldownTemplate,
       },
       isEn,
-      volumePercent
     );
-  }, [workout, isEn, volumePercent]);
+  }, [workout, isEn]);
 
   if (segments.length === 0) {
     return (

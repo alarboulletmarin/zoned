@@ -88,7 +88,7 @@
     }
   },
   "planContext": {
-    "banner": "Dans votre plan (semaine {{week}}, {{volume}}% volume) : ~{{duration}} min",
+    "banner": "Dans votre plan (semaine {{week}}) : ~{{duration}} min",
     "fullSession": "(séance complète : {{duration}} min)"
   },
   "science": {

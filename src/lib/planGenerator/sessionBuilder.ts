@@ -110,7 +110,6 @@ export function buildSession(ctx: SessionBuildContext): SessionBuildResult | nul
   // Step 4: Compute pace-aware duration
   const duration = estimatePaceAwareDuration(
     workout,
-    ctx.volumePercent,
     ctx.paces,
     scaledReps,
   );
@@ -196,7 +195,6 @@ function scaleWorkout(workout: WorkoutTemplate, progression: number): number | n
  */
 function estimatePaceAwareDuration(
   workout: WorkoutTemplate,
-  volumePercent: number,
   paces: TrainingPaces,
   scaledReps: number | null,
 ): number {
@@ -216,14 +214,12 @@ function estimatePaceAwareDuration(
   const cooldownMin = cooldown >= 0 ? cooldown : 0;
 
   if (mainDuration >= 0) {
-    // Scale only main set by volume %
-    const scaledMain = Math.round(mainDuration * (volumePercent / 100));
-    return Math.round(warmupMin + scaledMain + cooldownMin);
+    return Math.round(warmupMin + mainDuration + cooldownMin);
   }
 
   // Fallback to typicalDuration
   const avg = (workout.typicalDuration.min + workout.typicalDuration.max) / 2;
-  return Math.round(avg * (volumePercent / 100));
+  return Math.round(avg);
 }
 
 /**
