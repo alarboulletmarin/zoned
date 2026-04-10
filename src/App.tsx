@@ -78,6 +78,7 @@ function preloadSidebarPages() {
 
 function ScrollToTopOnNavigate() {
   const location = useLocation();
+  const [announcement, setAnnouncement] = useState("");
 
   useEffect(() => {
     // Skip scroll-to-top when returning to a plan with a specific week
@@ -87,7 +88,17 @@ function ScrollToTopOnNavigate() {
     window.scrollTo(0, 0);
   }, [location.pathname, location.search, location.state]);
 
-  return null;
+  // Announce page change for screen readers
+  useEffect(() => {
+    const title = document.title || location.pathname;
+    setAnnouncement(title);
+  }, [location.pathname]);
+
+  return (
+    <div aria-live="polite" aria-atomic="true" className="sr-only">
+      {announcement}
+    </div>
+  );
 }
 
 function App() {
@@ -133,14 +144,21 @@ function App() {
   }, []);
 
   // Toggle theme — NO setState, NO App re-render. Just DOM class + localStorage.
+  // Transitions are disabled during the switch to avoid border/background flash.
   const toggleTheme = useCallback(() => {
     userHasSetTheme.current = true;
+    document.documentElement.setAttribute("data-switching-theme", "");
     const next = themeRef.current === "dark" ? "light" : "dark";
     themeRef.current = next;
     document.documentElement.classList.toggle("dark", next === "dark");
     localStorage.setItem("zoned-theme", next);
     // Dispatch custom event so TopBar can update its icon
     window.dispatchEvent(new CustomEvent("zoned-theme-change", { detail: next }));
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.documentElement.removeAttribute("data-switching-theme");
+      });
+    });
   }, []);
 
   // Sidebar state with localStorage persistence
@@ -194,6 +212,7 @@ function App() {
                   sidebarCollapsed={sidebarCollapsed}
                 />
 
+                <ErrorBoundary>
                 <main id="main-content" className="flex-1 px-4 md:px-6 lg:px-8 py-4">
                   <div className="mx-auto max-w-6xl">
                     <ErrorBoundary>
@@ -253,6 +272,7 @@ function App() {
                 </main>
 
                 <Footer />
+                </ErrorBoundary>
               </div>
             </div>
             <CommandPalette />

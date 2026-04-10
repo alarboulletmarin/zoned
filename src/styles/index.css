@@ -199,22 +199,15 @@
 }
 
 /* ==========================================================================
-   THEME TRANSITION — smooth color change on dark/light toggle
-   Tailwind utility classes (transition-colors, etc.) override this via
-   higher specificity, so interactive hover/focus transitions are preserved.
+   THEME SWITCH — instant toggle, no flash
+   During theme switch, all transitions are disabled via data attribute.
+   Hover/focus transitions on components (Tailwind classes) are unaffected.
    ========================================================================== */
-*,
-*::before,
-*::after {
-  transition-property: background-color, color, border-color, outline-color, fill, stroke, box-shadow;
-  transition-duration: 0.15s;
-  transition-timing-function: ease;
-}
-
-/* Disable theme transition on elements with CSS keyframe animations */
-[class*="animate-"],
-.no-theme-transition {
-  transition-property: none;
+[data-switching-theme],
+[data-switching-theme] *,
+[data-switching-theme] *::before,
+[data-switching-theme] *::after {
+  transition-duration: 0s !important;
 }
 
 /* ==========================================================================
