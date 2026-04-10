@@ -44,7 +44,6 @@ import type { TrainingPhase } from "@/types";
 import { getCurrentWeek } from "@/lib/planUtils";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { PlanSparkline } from "@/components/domain/PlanSparkline";
-import { IcsExportDialog } from "@/components/domain/IcsExportDialog";
 
 function formatDate(isoDate: string, isEn: boolean): string {
   const date = new Date(isoDate);
@@ -70,12 +69,10 @@ function PlanCard({
   plan,
   isEn,
   onDelete,
-  onIcsDialogOpen,
 }: {
   plan: TrainingPlan;
   isEn: boolean;
   onDelete: (id: string) => void;
-  onIcsDialogOpen: (plan: TrainingPlan) => void;
 }) {
   const navigate = useNavigate();
   const isFreePlan = plan.config.planMode === "free";
@@ -212,7 +209,6 @@ function PlanCard({
           plan={plan}
           isEn={isEn}
           size="sm"
-          onIcsDialogOpen={() => onIcsDialogOpen(plan)}
         />
         <Button
           variant="destructive"
@@ -235,7 +231,6 @@ export function PlansPage() {
   const navigate = useNavigate();
   const { plans, isLoading, remove, reload } = usePlans();
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
-  const [icsExportPlan, setIcsExportPlan] = useState<TrainingPlan | null>(null);
 
   const handleImport = useCallback(() => {
     const input = document.createElement("input");
@@ -360,7 +355,6 @@ export function PlansPage() {
                   plan={plan}
                   isEn={isEn}
                   onDelete={setDeleteTarget}
-                  onIcsDialogOpen={setIcsExportPlan}
                 />
               ))}
             </div>
@@ -492,34 +486,6 @@ export function PlansPage() {
         </DialogContent>
       </Dialog>
 
-      {/* ICS Export Dialog (for plans without assigned days) */}
-      <IcsExportDialog
-        open={icsExportPlan !== null}
-        onOpenChange={(open) => !open && setIcsExportPlan(null)}
-        daysPerWeek={icsExportPlan?.config.daysPerWeek ?? 3}
-        onExport={async (selectedDays, longRunDay) => {
-          if (!icsExportPlan) return;
-          const { exportPlanToICS } = await import("@/lib/export");
-          const { getWorkoutById } = await import("@/data/workouts");
-          const names: Record<string, string> = {};
-          const templates: Record<string, import("@/types").WorkoutTemplate> = {};
-          for (const week of icsExportPlan.weeks) {
-            for (const s of week.sessions) {
-              if (s.workoutId && !s.workoutId.startsWith("__") && !names[s.workoutId]) {
-                const w = await getWorkoutById(s.workoutId);
-                if (w) {
-                  names[s.workoutId] = isEn ? (w.nameEn || w.name) : w.name;
-                  templates[s.workoutId] = w;
-                }
-              }
-            }
-          }
-          exportPlanToICS(icsExportPlan, names, templates, isEn, selectedDays, longRunDay);
-          toast.success(isEn ? "Calendar exported" : "Calendrier export\u00e9");
-          setIcsExportPlan(null);
-        }}
-        isEn={isEn}
-      />
     </>
   );
 }

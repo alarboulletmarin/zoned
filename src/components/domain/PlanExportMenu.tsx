@@ -22,10 +22,6 @@ interface PlanExportMenuProps {
   workoutTemplates?: Record<string, WorkoutTemplate>;
   isEn: boolean;
   size?: "sm" | "default";
-  /** Called when ICS export needs user to pick training days (list mode) */
-  onIcsDialogOpen?: () => void;
-  /** When provided, used to determine if days are already assigned (non-list mode) */
-  planViewMode?: string;
 }
 
 /**
@@ -61,8 +57,6 @@ export function PlanExportMenu({
   workoutTemplates: preloadedTemplates,
   isEn,
   size = "default",
-  onIcsDialogOpen,
-  planViewMode,
 }: PlanExportMenuProps) {
   const { t } = useTranslation("common");
   const [isExporting, setIsExporting] = useState(false);
@@ -89,25 +83,17 @@ export function PlanExportMenu({
   }, [plan, isEn, isExporting, getWorkoutData, t]);
 
   const handleExportICS = useCallback(async () => {
-    // If days are already assigned (calendar/weekly/monthly mode), export directly
-    if (planViewMode && planViewMode !== "list") {
-      const usedDays = [...new Set(plan.weeks.flatMap(w => w.sessions.map(s => s.dayOfWeek)))].sort();
-      const longRunDay = plan.config.longRunDay ?? 6;
-      setIsExporting(true);
-      try {
-        const { names, templates } = await getWorkoutData();
-        exportPlanToICS(plan, names, templates, isEn, usedDays, longRunDay);
-        toast.success(t("export.success.calendar"));
-      } catch {
-        toast.error(t("export.error.calendar"));
-      } finally {
-        setIsExporting(false);
-      }
-      return;
+    setIsExporting(true);
+    try {
+      const { names, templates } = await getWorkoutData();
+      exportPlanToICS(plan, names, templates, isEn);
+      toast.success(t("export.success.calendar"));
+    } catch {
+      toast.error(t("export.error.calendar"));
+    } finally {
+      setIsExporting(false);
     }
-    // Otherwise open the dialog for day selection
-    onIcsDialogOpen?.();
-  }, [plan, isEn, planViewMode, onIcsDialogOpen, getWorkoutData, t, isExporting]);
+  }, [plan, isEn, getWorkoutData, t, isExporting]);
 
   const handleExportJSON = useCallback(() => {
     const json = JSON.stringify(plan, null, 2);

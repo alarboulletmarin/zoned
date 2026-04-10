@@ -34,7 +34,6 @@ import { usePlan } from "@/hooks/usePlans";
 import { deletePlan, getPlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan, updateSessionCompletion } from "@/lib/planStorage";
 import { adaptPlan } from "@/lib/planGenerator/adapt";
 import { getWorkoutById } from "@/data/workouts";
-import { exportPlanToICS } from "@/lib/export";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -44,7 +43,6 @@ import {
 } from "@/types/plan";
 import type { WorkoutTemplate } from "@/types";
 import { toast } from "sonner";
-import { IcsExportDialog } from "@/components/domain/IcsExportDialog";
 import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
 import { CompletionFeedbackCard } from "@/components/domain/CompletionFeedbackCard";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
@@ -118,7 +116,7 @@ export function PlanViewPage() {
 
   const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set());
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [showIcsDialog, setShowIcsDialog] = useState(false);
+
   const [workoutNames, setWorkoutNames] = useState<Record<string, string>>({});
   const [workoutTemplates, setWorkoutTemplates] = useState<Record<string, WorkoutTemplate>>({});
   const [swapTarget, setSwapTarget] = useState<{
@@ -241,21 +239,7 @@ export function PlanViewPage() {
     navigate("/plans");
   };
 
-  const [isExporting, setIsExporting] = useState(false);
 
-  const handleIcsExport = useCallback(async (selectedDays: number[], longRunDay: number) => {
-    if (!plan || isExporting) return;
-    setIsExporting(true);
-    setShowIcsDialog(false);
-    try {
-      exportPlanToICS(plan, workoutNames, workoutTemplates, isEn, selectedDays, longRunDay);
-      toast.success(isEn ? "Calendar exported" : "Calendrier exporté");
-    } catch {
-      toast.error(isEn ? "Export failed" : "Échec de l'export");
-    } finally {
-      setIsExporting(false);
-    }
-  }, [plan, workoutNames, workoutTemplates, isEn, isExporting]);
 
   const handleSwapSession = useCallback((workout: WorkoutTemplate) => {
     if (!plan || !swapTarget) return;
@@ -608,8 +592,6 @@ export function PlanViewPage() {
               workoutTemplates={workoutTemplates}
               isEn={isEn}
               size="sm"
-              planViewMode={planViewMode}
-              onIcsDialogOpen={() => setShowIcsDialog(true)}
             />
             <Button
               variant="destructive"
@@ -1324,15 +1306,6 @@ export function PlanViewPage() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-
-        {/* ICS Export Dialog */}
-        <IcsExportDialog
-          open={showIcsDialog}
-          onOpenChange={setShowIcsDialog}
-          daysPerWeek={plan.config.daysPerWeek}
-          onExport={handleIcsExport}
-          isEn={isEn}
-        />
 
         {/* Workout Library Panel (mobile bottom sheet) */}
         <PlanWorkoutPanel

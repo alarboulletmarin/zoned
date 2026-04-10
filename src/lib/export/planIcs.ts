@@ -6,8 +6,9 @@
 
 import { createEvents, type EventAttributes } from "ics";
 import type { TrainingPlan } from "@/types/plan";
-import type { WorkoutTemplate } from "@/types";
-import { getDominantZone } from "@/types";
+import type { WorkoutTemplate, AnyWorkoutTemplate } from "@/types";
+import { getDominantZone, isStrengthWorkout } from "@/types";
+import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import { DAY_LABELS } from "@/lib/planGenerator/constants";
 
@@ -37,52 +38,22 @@ function getSessionDate(planMonday: Date, weekNumber: number, dayOfWeek: number)
 /**
  * Export a training plan as ICS calendar file.
  * Creates one event per training session across all weeks.
- *
- * @param selectedDays - Array of day indices (0=Mon..6=Sun) chosen by the user
- * @param longRunDay - Which of the selected days is the long run day
+ * Uses each session's dayOfWeek directly for calendar placement.
  */
 export function exportPlanToICS(
   plan: TrainingPlan,
   workoutNames: Record<string, string>,
   workoutTemplates: Record<string, WorkoutTemplate>,
   isEn: boolean,
-  selectedDays: number[],
-  longRunDay: number,
 ): void {
-  const planMonday = getMondayOfWeek(new Date(plan.config.createdAt));
+  const planMonday = getMondayOfWeek(new Date(plan.config.startDate || plan.config.createdAt));
   const dayLabels = isEn ? DAY_LABELS.en : DAY_LABELS.fr;
 
   const events: EventAttributes[] = [];
 
   for (const week of plan.weeks) {
-    // Sort sessions by priority: race_day first, then long_run, key, endurance, others
-    const sortedSessions = [...week.sessions].sort((a, b) => {
-      const priority = (s: typeof a) => {
-        if (s.workoutId === "__race_day__") return 0;
-        if (s.sessionType === "long_run") return 1;
-        if (s.isKeySession) return 2;
-        if (s.sessionType === "endurance") return 3;
-        return 4;
-      };
-      return priority(a) - priority(b);
-    });
-
-    // Map sessions to the user-selected days
-    const otherDays = selectedDays.filter(d => d !== longRunDay);
-    let otherDayIdx = 0;
-
-    for (const session of sortedSessions) {
-      let mappedDay: number;
-      if (session.workoutId === "__race_day__") {
-        mappedDay = longRunDay;
-      } else if (session.sessionType === "long_run") {
-        mappedDay = longRunDay;
-      } else {
-        mappedDay = otherDays[otherDayIdx % otherDays.length];
-        otherDayIdx++;
-      }
-
-      const sessionDate = getSessionDate(planMonday, week.weekNumber, mappedDay);
+    for (const session of week.sessions) {
+      const sessionDate = getSessionDate(planMonday, week.weekNumber, session.dayOfWeek);
       const isRaceDay = session.workoutId === "__race_day__";
 
       if (isRaceDay) {
@@ -114,7 +85,7 @@ export function exportPlanToICS(
       } else {
         // Regular training session: all-day event
         const workoutName = workoutNames[session.workoutId] || session.workoutId;
-        const dayLabel = dayLabels[mappedDay];
+        const dayLabel = dayLabels[session.dayOfWeek];
         const weekLabel = isEn
           ? (week.weekLabelEn || `W${week.weekNumber}`)
           : (week.weekLabel || `S${week.weekNumber}`);
@@ -132,20 +103,37 @@ export function exportPlanToICS(
           descriptionLines.push(notes);
         }
 
-        const template = workoutTemplates[session.workoutId];
-        const primaryZone = template ? `Z${getDominantZone(template)}` : "";
-        const zoneTag = primaryZone ? ` [${primaryZone}]` : "";
+        const template = workoutTemplates[session.workoutId] as AnyWorkoutTemplate | undefined;
+        const isStrength = template ? isStrengthWorkout(template) : false;
+        const primaryZone = template && !isStrength ? `Z${getDominantZone(template as WorkoutTemplate)}` : "";
+        const zoneTag = primaryZone ? ` [${primaryZone}]` : isStrength ? " [Renfo]" : "";
 
-        if (template) {
-          const desc = isEn ? (template.descriptionEn || template.description) : template.description;
+        if (template && isStrength) {
+          const str = template as StrengthWorkoutTemplate;
+          const desc = isEn ? (str.descriptionEn || str.description) : str.description;
+          descriptionLines.push("");
+          descriptionLines.push(desc);
+
+          // Coaching tips
+          const tips = isEn ? str.coachingTipsEn : str.coachingTips;
+          if (tips?.length) {
+            descriptionLines.push("");
+            descriptionLines.push(isEn ? "--- Tips ---" : "--- Conseils ---");
+            for (const tip of tips) {
+              descriptionLines.push(`• ${tip}`);
+            }
+          }
+        } else if (template && !isStrength) {
+          const running = template as WorkoutTemplate;
+          const desc = isEn ? (running.descriptionEn || running.description) : running.description;
           descriptionLines.push("");
           descriptionLines.push(desc);
 
           // Warmup
-          if (template.warmupTemplate?.length) {
+          if (running.warmupTemplate?.length) {
             descriptionLines.push("");
             descriptionLines.push(isEn ? "--- Warm-up ---" : "--- Échauffement ---");
-            for (const block of template.warmupTemplate) {
+            for (const block of running.warmupTemplate) {
               const blockDesc = isEn ? (block.descriptionEn || block.description) : block.description;
               const dur = block.durationMin ? ` (${block.durationMin}min)` : "";
               const zone = block.zone ? ` [${block.zone}]` : "";
@@ -154,10 +142,10 @@ export function exportPlanToICS(
           }
 
           // Main set
-          if (template.mainSetTemplate?.length) {
+          if (running.mainSetTemplate?.length) {
             descriptionLines.push("");
             descriptionLines.push(isEn ? "--- Main set ---" : "--- Corps de séance ---");
-            for (const block of template.mainSetTemplate) {
+            for (const block of running.mainSetTemplate) {
               const blockDesc = isEn ? (block.descriptionEn || block.description) : block.description;
               const dur = block.durationMin ? ` (${block.durationMin}min)` : "";
               const zone = block.zone ? ` [${block.zone}]` : "";
@@ -169,10 +157,10 @@ export function exportPlanToICS(
           }
 
           // Cooldown
-          if (template.cooldownTemplate?.length) {
+          if (running.cooldownTemplate?.length) {
             descriptionLines.push("");
             descriptionLines.push(isEn ? "--- Cool-down ---" : "--- Retour au calme ---");
-            for (const block of template.cooldownTemplate) {
+            for (const block of running.cooldownTemplate) {
               const blockDesc = isEn ? (block.descriptionEn || block.description) : block.description;
               const dur = block.durationMin ? ` (${block.durationMin}min)` : "";
               const zone = block.zone ? ` [${block.zone}]` : "";
@@ -181,7 +169,7 @@ export function exportPlanToICS(
           }
 
           // Coaching tips
-          const tips = isEn ? template.coachingTipsEn : template.coachingTips;
+          const tips = isEn ? running.coachingTipsEn : running.coachingTips;
           if (tips?.length) {
             descriptionLines.push("");
             descriptionLines.push(isEn ? "--- Tips ---" : "--- Conseils ---");
@@ -204,7 +192,7 @@ export function exportPlanToICS(
           ],
           title: `${workoutName} - ${session.estimatedDurationMin}min${zoneTag}`,
           description: descriptionLines.join("\n"),
-          categories: ["Running", "Workout", session.sessionType],
+          categories: [isStrength ? "Strength" : "Running", "Workout", session.sessionType],
           status: "CONFIRMED" as const,
           transp: "TRANSPARENT" as const,
           productId: "zoned-app",
