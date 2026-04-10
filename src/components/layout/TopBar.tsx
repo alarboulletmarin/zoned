@@ -82,7 +82,7 @@ export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
                 variant="ghost"
                 size="icon-sm"
                 onClick={() => changeLanguage(currentLang === "fr" ? "en" : "fr")}
-                aria-label={currentLang === "fr" ? "English" : "Français"}
+                title={currentLang === "fr" ? "Switch to English" : "Passer en français"}
                 className={touchTarget}
               >
                 <span className="text-xs font-semibold">{currentLang.toUpperCase()}</span>
@@ -141,7 +141,7 @@ export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
                 variant="ghost"
                 size="sm"
                 onClick={() => changeLanguage(currentLang === "fr" ? "en" : "fr")}
-                aria-label={currentLang === "fr" ? "English" : "Français"}
+                title={currentLang === "fr" ? "Switch to English" : "Passer en français"}
                 className="h-8 px-2 text-xs font-semibold"
               >
                 {currentLang === "fr" ? "EN" : "FR"}

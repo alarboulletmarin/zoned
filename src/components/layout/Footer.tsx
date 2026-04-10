@@ -24,8 +24,8 @@ export function Footer() {
         <div className="flex items-center justify-between gap-4">
           {/* Left: branding + stats */}
           <div className="flex items-center gap-4 min-w-0">
-            <Link to="/" className="flex items-center gap-2 shrink-0">
-              <Logo className="w-12 h-6" />
+            <Link to="/" className="flex items-center gap-2 shrink-0" aria-label="Zoned — Accueil">
+              <Logo className="w-12 h-6" aria-hidden="true" />
               <span className="font-semibold text-sm hidden md:inline">{t("app.name")}</span>
             </Link>
             <span className="text-xs text-muted-foreground whitespace-nowrap hidden sm:inline">

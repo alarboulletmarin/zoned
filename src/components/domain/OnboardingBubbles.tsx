@@ -153,6 +153,8 @@ export function OnboardingBubbles() {
       <div
         className="fixed inset-0 z-40 bg-black/30"
         onClick={dismiss}
+        role="presentation"
+        aria-hidden="true"
       />
 
       {/* Bubble */}

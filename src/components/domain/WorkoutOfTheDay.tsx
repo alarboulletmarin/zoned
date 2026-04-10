@@ -40,13 +40,13 @@ export function WorkoutOfTheDay() {
       <div className="grid grid-cols-1 md:grid-cols-12">
         {/* Left: identity */}
         <div className="md:col-span-8 p-5 md:p-10 space-y-3 md:space-y-4">
-          <p className="text-sm md:text-base font-bold text-primary uppercase tracking-widest">
+          <h2 className="text-sm md:text-base font-bold text-primary uppercase tracking-widest">
             {t("common:workoutOfTheDay.title")}
-          </p>
+          </h2>
 
-          <h3 className="text-xl md:text-3xl font-bold leading-tight">
+          <p className="text-xl md:text-3xl font-bold leading-tight">
             {name}
-          </h3>
+          </p>
 
           <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
             <ZoneBadge zone={`Z${dominantZone}`} size="sm" showLabel />

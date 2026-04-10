@@ -272,8 +272,9 @@ export function HomePage() {
           </div>
           {/* Row 2: Random + Calculators + My Zones */}
           <div className="grid grid-cols-3 gap-3 md:gap-4">
-            <div
-              className="group cursor-pointer"
+            <button
+              type="button"
+              className="group cursor-pointer text-left"
               onClick={handleRandomWorkout}
             >
               <div className="bg-muted/30 dark:bg-muted/20 rounded-xl border border-border/50 p-4 md:p-5 h-full flex flex-col items-center text-center transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1 group-hover:bg-zone-5/10 dark:group-hover:bg-zone-5/15">
@@ -287,7 +288,7 @@ export function HomePage() {
                   {isEn ? "Surprise me!" : "Surprends-moi !"}
                 </p>
               </div>
-            </div>
+            </button>
             <Link to="/calculators" className="group">
               <div className="bg-muted/30 dark:bg-muted/20 rounded-xl border border-border/50 p-4 md:p-5 h-full flex flex-col items-center text-center transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1 group-hover:bg-zone-3/10 dark:group-hover:bg-zone-3/15">
                 <Activity className="size-5 md:size-6 text-zone-3 mb-2" />
@@ -361,9 +362,10 @@ export function HomePage() {
             {([1, 2, 3, 4, 5, 6] as const).map((zone) => {
               const meta = ZONE_META[zone];
               return (
-                <div
+                <button
+                  type="button"
                   key={zone}
-                  className="group cursor-pointer"
+                  className="group cursor-pointer text-left w-full"
                   onClick={() => setSelectedZone(zone)}
                 >
                   <div
@@ -374,14 +376,14 @@ export function HomePage() {
                     >
                       Z{zone}
                     </span>
-                    <h4 className="font-bold text-sm uppercase tracking-wide mb-3">
+                    <h3 className="font-bold text-sm uppercase tracking-wide mb-3">
                       {isEn ? meta.labelEn : meta.label}
-                    </h4>
+                    </h3>
                     <p className="text-xs text-muted-foreground leading-relaxed">
                       {isEn ? meta.descriptionEn : meta.description}
                     </p>
                   </div>
-                </div>
+                </button>
               );
             })}
           </div>

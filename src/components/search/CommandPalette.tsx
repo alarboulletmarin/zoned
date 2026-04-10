@@ -8,7 +8,7 @@ import { useCommandPalette } from "./CommandPaletteProvider";
 import { SearchResultItem } from "./SearchResultItem";
 import { unifiedSearch, type UnifiedSearchResult, type UnifiedSearchResults } from "@/lib/unified-search";
 import { getWorkoutById } from "@/data/workouts";
-import type { WorkoutTemplate } from "@/types";
+import type { AnyWorkoutTemplate } from "@/types";
 import { cn } from "@/lib/utils";
 
 const DEBOUNCE_MS = 150;
@@ -16,7 +16,7 @@ const MAX_PER_TYPE = 5;
 
 type FlatItem =
   | { kind: "header"; label: string; icon: React.ComponentType<{ className?: string }> }
-  | { kind: "workout"; workout: WorkoutTemplate; result: UnifiedSearchResult }
+  | { kind: "workout"; workout: AnyWorkoutTemplate; result: UnifiedSearchResult }
   | { kind: "generic"; result: UnifiedSearchResult };
 
 export function CommandPalette() {
@@ -26,7 +26,7 @@ export function CommandPalette() {
 
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState<UnifiedSearchResults | null>(null);
-  const [workoutCache, setWorkoutCache] = useState<Map<string, WorkoutTemplate>>(new Map());
+  const [workoutCache, setWorkoutCache] = useState<Map<string, AnyWorkoutTemplate>>(new Map());
   const [isLoading, setIsLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -65,7 +65,7 @@ export function CommandPalette() {
     const timeout = setTimeout(async () => {
       const results = await unifiedSearch(query, i18n.language, MAX_PER_TYPE);
       // Resolve workout templates for the SearchResultItem component
-      const cache = new Map<string, WorkoutTemplate>();
+      const cache = new Map<string, AnyWorkoutTemplate>();
       await Promise.all(
         results.workouts.map(async (r) => {
           const w = await getWorkoutById(r.id);
@@ -213,6 +213,7 @@ export function CommandPalette() {
                 type="button"
                 onClick={() => setQuery("")}
                 className="p-1 rounded hover:bg-accent"
+                aria-label="Effacer la recherche"
               >
                 <X className="size-4 text-muted-foreground" />
               </button>
@@ -224,7 +225,7 @@ export function CommandPalette() {
           </div>
 
           {/* Results */}
-          <div className="flex-1 overflow-y-auto p-2" ref={resultsRef}>
+          <div className="flex-1 overflow-y-auto p-2" ref={resultsRef} aria-live="polite" aria-atomic="false">
             {/* No query - hint */}
             {!query.trim() && (
               <div className="px-3 py-8 text-center text-sm text-muted-foreground">
@@ -241,7 +242,7 @@ export function CommandPalette() {
 
             {/* No results */}
             {query.trim() && !isLoading && searchResults && searchResults.total === 0 && (
-              <div className="px-3 py-8 text-center text-sm text-muted-foreground">
+              <div className="px-3 py-8 text-center text-sm text-muted-foreground" role="status">
                 {t("search.noResults")}
               </div>
             )}

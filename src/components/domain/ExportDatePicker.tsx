@@ -35,8 +35,8 @@ export function ExportDatePicker({ onSelect, onCancel }: ExportDatePickerProps) 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-background border rounded-lg shadow-lg p-6 w-full max-w-sm mx-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" role="presentation">
+      <div className="bg-background border rounded-lg shadow-lg p-6 w-full max-w-sm mx-4" role="dialog" aria-modal="true" aria-label={t("export.selectDateTime")}>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold flex items-center gap-2">
             <Calendar className="size-5" />

@@ -635,6 +635,7 @@ export function PlanCreatePage() {
             onKeyDown={(e) => {
               if (e.key === "Enter" && dateValid) goForward();
             }}
+            aria-label={isEn ? "Race date" : "Date de la course"}
             className="w-full rounded-md border bg-background px-4 py-3 min-h-[44px] text-base focus:outline-none focus:ring-2 focus:ring-primary"
           />
 
@@ -709,6 +710,7 @@ export function PlanCreatePage() {
             placeholder={
               isEn ? "e.g. Paris Marathon" : "ex. Marathon de Paris"
             }
+            aria-label={isEn ? "Race name" : "Nom de la course"}
             className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             maxLength={100}
           />

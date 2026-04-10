@@ -256,17 +256,17 @@ export function SplitGeneratorPage() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b">
-                      <th className="py-2 px-2 text-left font-medium">#</th>
-                      <th className="py-2 px-2 text-left font-medium">
+                      <th scope="col" className="py-2 px-2 text-left font-medium">#</th>
+                      <th scope="col" className="py-2 px-2 text-left font-medium">
                         {isEn ? "Dist." : "Dist."}
                       </th>
-                      <th className="py-2 px-2 text-left font-medium">
+                      <th scope="col" className="py-2 px-2 text-left font-medium">
                         {isEn ? "Split" : "Split"}
                       </th>
-                      <th className="py-2 px-2 text-left font-medium">
+                      <th scope="col" className="py-2 px-2 text-left font-medium">
                         {isEn ? "Pace" : "Allure"}
                       </th>
-                      <th className="py-2 px-2 text-left font-medium">
+                      <th scope="col" className="py-2 px-2 text-left font-medium">
                         {isEn ? "Cumul." : "Cumul."}
                       </th>
                     </tr>

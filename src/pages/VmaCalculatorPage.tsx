@@ -247,10 +247,10 @@ export function VmaCalculatorPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b">
-                        <th className="py-2 px-3 text-left font-medium">
+                        <th scope="col" className="py-2 px-3 text-left font-medium">
                           {isEn ? "Zone" : "Zone"}
                         </th>
-                        <th className="py-2 px-3 text-left font-medium">
+                        <th scope="col" className="py-2 px-3 text-left font-medium">
                           {isEn ? "Pace" : "Allure"}
                         </th>
                       </tr>

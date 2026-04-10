@@ -174,29 +174,29 @@ export function PaceTablePage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="sticky top-0 bg-background border-b">
-                <th className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
+                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
                   min/km
                 </th>
-                <th className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
+                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
                   km/h
                 </th>
-                <th className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
+                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
                   min/mi
                 </th>
-                <th className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
+                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
                   5K
                 </th>
-                <th className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
+                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
                   10K
                 </th>
-                <th className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
+                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
                   {isEn ? "Half" : "Semi"}
                 </th>
-                <th className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
+                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
                   Marathon
                 </th>
                 {hasZones && (
-                  <th className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
+                  <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
                     {isEn ? "Your zone" : "Ta zone"}
                   </th>
                 )}

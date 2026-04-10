@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react";
+import { useTranslation } from "react-i18next";
 import { HelmetProvider } from "react-helmet-async";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "sonner";
@@ -90,6 +91,8 @@ function ScrollToTopOnNavigate() {
 }
 
 function App() {
+  const { t } = useTranslation("common");
+
   // Preload main pages in background after first render
   useEffect(() => { preloadSidebarPages(); }, []);
 
@@ -164,6 +167,12 @@ function App() {
           <BrowserRouter>
           <GlossaryMatcherProvider>
           <CommandPaletteProvider>
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:outline-none"
+            >
+              {t("accessibility.skipToContent", "Aller au contenu")}
+            </a>
             <ScrollToTopOnNavigate />
             <div className="min-h-screen bg-background text-foreground flex">
               {/* Sidebar - fixed left column */}
@@ -185,7 +194,7 @@ function App() {
                   sidebarCollapsed={sidebarCollapsed}
                 />
 
-                <main className="flex-1 px-4 md:px-6 lg:px-8 py-4">
+                <main id="main-content" className="flex-1 px-4 md:px-6 lg:px-8 py-4">
                   <div className="mx-auto max-w-6xl">
                     <ErrorBoundary>
                       <Suspense fallback={<div className="min-h-screen" />}>
