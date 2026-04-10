@@ -6,9 +6,9 @@
  * Primary muscles are highlighted in a strong color, secondary in a lighter shade.
  */
 
-import { useMemo, useEffect, useState, useSyncExternalStore } from "react";
+import { lazy, Suspense, useMemo, useEffect, useState, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
-import Model from "react-body-highlighter";
+const Model = lazy(() => import("react-body-highlighter"));
 import type { IExerciseData } from "react-body-highlighter";
 import type { StrengthWorkoutTemplate, StrengthExercise, MuscleGroup } from "@/types/strength";
 import { loadAllExercises } from "@/data/strength";
@@ -125,52 +125,54 @@ export function MuscleMap({ workout, className }: MuscleMapProps) {
   }
 
   return (
-    <div className={cn("space-y-2", className)}>
-      <div className="flex items-center justify-center gap-2">
-        {/* Anterior (front) view */}
-        <div className="flex-1 max-w-[140px]">
-          <Model
-            data={modelData}
-            style={{ width: "100%", padding: "0" }}
-            highlightedColors={["#fbbf24", "#f97316", "#ef4444"]}
-            bodyColor={isDark ? "#404040" : "#d1d5db"}
-            type="anterior"
-          />
-          <p className="text-[10px] text-muted-foreground text-center mt-1">
-            {t("detail.front")}
-          </p>
+    <Suspense fallback={<div className="h-64 animate-pulse bg-muted rounded" />}>
+      <div className={cn("space-y-2", className)}>
+        <div className="flex items-center justify-center gap-2">
+          {/* Anterior (front) view */}
+          <div className="flex-1 max-w-[140px]">
+            <Model
+              data={modelData}
+              style={{ width: "100%", padding: "0" }}
+              highlightedColors={["#fbbf24", "#f97316", "#ef4444"]}
+              bodyColor={isDark ? "#404040" : "#d1d5db"}
+              type="anterior"
+            />
+            <p className="text-[10px] text-muted-foreground text-center mt-1">
+              {t("detail.front")}
+            </p>
+          </div>
+
+          {/* Posterior (back) view */}
+          <div className="flex-1 max-w-[140px]">
+            <Model
+              data={modelData}
+              style={{ width: "100%", padding: "0" }}
+              highlightedColors={["#fbbf24", "#f97316", "#ef4444"]}
+              bodyColor={isDark ? "#404040" : "#d1d5db"}
+              type="posterior"
+            />
+            <p className="text-[10px] text-muted-foreground text-center mt-1">
+              {t("detail.back")}
+            </p>
+          </div>
         </div>
 
-        {/* Posterior (back) view */}
-        <div className="flex-1 max-w-[140px]">
-          <Model
-            data={modelData}
-            style={{ width: "100%", padding: "0" }}
-            highlightedColors={["#fbbf24", "#f97316", "#ef4444"]}
-            bodyColor={isDark ? "#404040" : "#d1d5db"}
-            type="posterior"
-          />
-          <p className="text-[10px] text-muted-foreground text-center mt-1">
-            {t("detail.back")}
-          </p>
+        {/* Legend */}
+        <div className="flex items-center justify-center gap-3 text-[10px] text-muted-foreground">
+          <span className="flex items-center gap-1">
+            <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: "#fbbf24" }} />
+            {t("detail.lowIntensity")}
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: "#f97316" }} />
+            {t("detail.mediumIntensity")}
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: "#ef4444" }} />
+            {t("detail.highIntensity")}
+          </span>
         </div>
       </div>
-
-      {/* Legend */}
-      <div className="flex items-center justify-center gap-3 text-[10px] text-muted-foreground">
-        <span className="flex items-center gap-1">
-          <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: "#fbbf24" }} />
-          {t("detail.lowIntensity")}
-        </span>
-        <span className="flex items-center gap-1">
-          <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: "#f97316" }} />
-          {t("detail.mediumIntensity")}
-        </span>
-        <span className="flex items-center gap-1">
-          <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: "#ef4444" }} />
-          {t("detail.highIntensity")}
-        </span>
-      </div>
-    </div>
+    </Suspense>
   );
 }

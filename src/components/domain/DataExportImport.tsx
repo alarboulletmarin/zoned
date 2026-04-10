@@ -112,6 +112,7 @@ export function DataExportImport() {
     if (!pendingImport) return;
 
     for (const [key, value] of Object.entries(pendingImport.localStorage)) {
+      if (!(STORAGE_KEYS as readonly string[]).includes(key)) continue;
       localStorage.setItem(
         key,
         typeof value === "string" ? value : JSON.stringify(value)
