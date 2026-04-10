@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import {
   BookOpen,
   CalendarRange,
+  Gauge,
   Heart,
   Calculator,
   Library,
@@ -66,6 +67,7 @@ const navGroups: NavGroup[] = [
       { href: "/library", icon: BookOpen, labelKey: "nav.library" },
       { href: "/collections", icon: Library, labelKey: "collections.title" },
       { href: "/favorites", icon: Heart, labelKey: "nav.favorites" },
+      { href: "/my-zones", icon: Gauge, labelKey: "nav.myZones" },
       { href: "/workout/builder", icon: Plus, labelKey: "nav.builder" },
     ],
   },

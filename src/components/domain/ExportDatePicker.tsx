@@ -6,8 +6,14 @@
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Calendar, Clock, X } from "@/components/icons";
+import { Calendar, Clock } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface ExportDatePickerProps {
   onSelect: (dateTime: Date) => void;
@@ -35,17 +41,14 @@ export function ExportDatePicker({ onSelect, onCancel }: ExportDatePickerProps) 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" role="presentation">
-      <div className="bg-background border rounded-lg shadow-lg p-6 w-full max-w-sm mx-4" role="dialog" aria-modal="true" aria-label={t("export.selectDateTime")}>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold flex items-center gap-2">
+    <Dialog open={true} onOpenChange={(open) => !open && onCancel()}>
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
             <Calendar className="size-5" />
             {t("export.selectDateTime")}
-          </h3>
-          <Button variant="ghost" size="icon-sm" onClick={onCancel} aria-label={t("actions.close")}>
-            <X className="size-4" />
-          </Button>
-        </div>
+          </DialogTitle>
+        </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -87,7 +90,7 @@ export function ExportDatePicker({ onSelect, onCancel }: ExportDatePickerProps) 
             </Button>
           </div>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

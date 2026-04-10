@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useIsMobile } from "@/hooks/useIsMobile";
+
 
 const STORAGE_KEY = "zoned-onboarding-seen";
 
@@ -35,7 +35,6 @@ const STEPS: Step[] = [
 ];
 
 export function OnboardingBubbles() {
-  const isMobile = useIsMobile();
   const { t } = useTranslation("common");
   const navigate = useNavigate();
   const bubbleRef = useRef<HTMLDivElement>(null);
@@ -142,8 +141,7 @@ export function OnboardingBubbles() {
     return () => window.removeEventListener("keydown", handler);
   }, [visible, dismiss]);
 
-  // No onboarding on mobile — the hero CTAs are self-explanatory
-  if (isMobile || !visible || !pos) return null;
+  if (!visible || !pos) return null;
 
   const current = STEPS[step];
 
