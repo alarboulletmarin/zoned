@@ -2,6 +2,72 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.4.1",
+    date: "2026-04-10",
+    changes: {
+      added: [
+        {
+          text: "Export PDF professionnel des plans : tableaux compacts 6 colonnes avec zones colorées, appendice dédupliqué avec liens cliquables, bannière titre et métadonnées structurées",
+          textEn: "Professional plan PDF export: compact 6-column weekly tables with colored zone cells, deduplication appendix with clickable internal links, dark title banner, and structured metadata",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Affichage de la distance (km) à côté de la durée dans les séances de plan",
+          textEn: "Display distance (km) alongside duration in plan sessions",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+      changed: [
+        {
+          text: "Format de durée h:mm (ex: 1h59) pour les valeurs >= 60 minutes dans toute l'application",
+          textEn: "Use h:mm duration format (e.g., 1h59) for values >= 60 minutes across the entire app",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Filtres à puces multi-sélection avec affichage progressif dans la bibliothèque",
+          textEn: "Multi-select chip filters with progressive disclosure in library",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      fixed: [
+        {
+          text: "Calcul incorrect du volumePercent dans les durées de séances",
+          textEn: "Incorrect volumePercent scaling in workout duration calculations",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Ajustement du volume du générateur de plans pour les jours/semaine et réduction du taux de progression",
+          textEn: "Plan generator volume adjustment for days/week and reduced progression rate",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Mapping des jours dans l'export ICS et gestion des séances de renforcement",
+          textEn: "ICS plan export day mapping and strength session handling",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Bug d'interaction toggle + changement de semaine",
+          textEn: "Toggle + week change interaction bug",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Séparateur de sidebar et renommage de la page méthodologie en guide",
+          textEn: "Sidebar separator and plan methodology page renamed to guide",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+    },
+  },
+  {
     version: "0.4.0",
     date: "2026-04-06",
     changes: {

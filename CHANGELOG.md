@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2026-04-10
+
+### Added
+
+- **Professional plan PDF export**: compact 6-column weekly tables with colored zone cells, workout deduplication appendix with clickable internal links, dark title banner, and structured metadata
+- Display distance (km) alongside duration in plan sessions
+
+### Changed
+
+- Use h:mm duration format (e.g., "1h59") for durations >= 60 minutes across the entire app (plan views, workout cards, stats, search results, PDF export)
+- Multi-select chip filters with progressive disclosure in library
+
+### Fixed
+
+- Incorrect volumePercent scaling in workout duration calculations
+- Plan generator volume adjustment for days/week and reduced progression rate
+- ICS plan export day mapping and strength session handling
+- Toggle + week change interaction bug
+- Sidebar separator and plan methodology page renamed to guide
+
 ## [0.4.0] - 2026-04-06
 
 ### Added

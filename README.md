@@ -10,7 +10,7 @@
   ### [→ zoned.run](https://zoned.run)
 
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
-  [![Version](https://img.shields.io/badge/version-v0.4.0-orange?style=flat-square)](https://github.com/alarboulletmarin/zoned/releases)
+  [![Version](https://img.shields.io/badge/version-v0.4.1-orange?style=flat-square)](https://github.com/alarboulletmarin/zoned/releases)
   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md)
   [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-000?style=flat-square&logo=vercel)](https://vercel.com)
   [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
