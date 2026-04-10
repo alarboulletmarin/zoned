@@ -1,4 +1,4 @@
-import type { TrainingPlan, PlanSession } from "@/types/plan";
+import type { TrainingPlan, PlanSession, CrossTrainingSession } from "@/types/plan";
 import type { SessionType, WorkoutCategory } from "@/types";
 import { getWorkoutById } from "@/data/workouts";
 
@@ -254,8 +254,6 @@ export async function addSessionToPlan(
 }
 
 // ── Cross-training ──────────────────────────────────────────────────
-
-import type { CrossTrainingSession } from "@/types/plan";
 
 export function addCrossTraining(
   planId: string,

@@ -2,13 +2,14 @@ import { useTranslation } from "react-i18next";
 import { Clock, Dumbbell } from "@/components/icons";
 import { ZoneBadge } from "@/components/domain/ZoneBadge";
 import type { WorkoutTemplate, AnyWorkoutTemplate } from "@/types";
+import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { getDominantZone, CATEGORY_META, isStrengthWorkout } from "@/types";
 import { getWorkoutDuration } from "@/components/visualization";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { cn } from "@/lib/utils";
 
 interface SearchResultItemProps {
-  workout: WorkoutTemplate;
+  workout: AnyWorkoutTemplate;
   isSelected: boolean;
   onClick: () => void;
 }
@@ -18,16 +19,16 @@ export function SearchResultItem({ workout, isSelected, onClick }: SearchResultI
   const { t: tStrength } = useTranslation("strength");
   const isEn = i18n.language?.startsWith("en") ?? false;
 
-  const isStrength = isStrengthWorkout(workout as AnyWorkoutTemplate);
+  const isStrength = isStrengthWorkout(workout);
   const name = isEn ? workout.nameEn : workout.name;
   const categoryMeta = isStrength ? null : CATEGORY_META[workout.category];
   const categoryLabel = isStrength
-    ? tStrength(`categories.${(workout as any).category}`)
+    ? tStrength(`categories.${(workout as StrengthWorkoutTemplate).category}`)
     : isEn ? categoryMeta!.labelEn : categoryMeta!.label;
-  const dominantZone = isStrength ? null : getDominantZone(workout);
+  const dominantZone = isStrength ? null : getDominantZone(workout as WorkoutTemplate);
   const duration = isStrength
-    ? formatDurationMinutes(Math.round(((workout as any).typicalDuration?.min + (workout as any).typicalDuration?.max) / 2))
-    : formatDurationMinutes(getWorkoutDuration(workout));
+    ? formatDurationMinutes(Math.round(((workout as StrengthWorkoutTemplate).typicalDuration.min + (workout as StrengthWorkoutTemplate).typicalDuration.max) / 2))
+    : formatDurationMinutes(getWorkoutDuration(workout as WorkoutTemplate));
 
   return (
     <button

@@ -72,7 +72,9 @@ i18n
     // Detection options
     detection: {
       // Order of detection
-      order: ["localStorage", "navigator", "htmlTag"],
+      order: ["querystring", "localStorage", "navigator", "htmlTag"],
+      // Read ?lang= query parameter (default is ?lng=)
+      lookupQuerystring: "lang",
       // Key to store in localStorage
       lookupLocalStorage: "zoned-language",
       // Cache user language

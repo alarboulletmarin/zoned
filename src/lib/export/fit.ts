@@ -60,65 +60,70 @@ function getIntensity(type: BlockType, isRecovery: boolean): number {
  * @returns Promise that resolves when download is triggered
  */
 export async function exportToFIT(workout: WorkoutTemplate): Promise<void> {
-  // @ts-expect-error - @garmin/fitsdk doesn't ship type definitions
-  const { Encoder } = await import("@garmin/fitsdk");
+  try {
+    // @ts-expect-error - @garmin/fitsdk doesn't ship type definitions
+    const { Encoder } = await import("@garmin/fitsdk");
 
-  // Transform workout into segments using existing logic
-  const { segments } = transformSessionBlocks({
-    warmup: workout.warmupTemplate,
-    mainSet: workout.mainSetTemplate,
-    cooldown: workout.cooldownTemplate,
-  });
-
-  // Create FIT encoder
-  const encoder = new Encoder();
-
-  // Write file ID message (required first message)
-  encoder.onMesg(0, {
-    // fileId message number = 0
-    type: FIT_FILE_WORKOUT,
-    manufacturer: 1, // Garmin
-    product: 0,
-    serialNumber: Date.now(),
-    timeCreated: new Date(),
-  });
-
-  // Write workout message (message number = 26)
-  encoder.onMesg(26, {
-    sport: FIT_SPORT_RUNNING,
-    numValidSteps: segments.length,
-    wktName: (workout.nameEn || workout.name).substring(0, 64), // FIT string limit
-  });
-
-  // Write workout steps (message number = 27)
-  segments.forEach((segment: TimelineSegment, index: number) => {
-    const intensity = getIntensity(segment.type, segment.isRecovery);
-    const targetHrZone = segment.zoneNumber || 2;
-    // Duration in milliseconds (scale 1000 for seconds)
-    const durationValue = Math.round(segment.durationMin * 60 * 1000);
-
-    encoder.onMesg(27, {
-      messageIndex: index,
-      wktStepName: segment.description.substring(0, 32),
-      durationType: FIT_WKT_STEP_DURATION_TIME,
-      durationValue: durationValue, // milliseconds, will be scaled to seconds
-      targetType: FIT_WKT_STEP_TARGET_HEART_RATE,
-      targetHrZone,
-      intensity,
+    // Transform workout into segments using existing logic
+    const { segments } = transformSessionBlocks({
+      warmup: workout.warmupTemplate,
+      mainSet: workout.mainSetTemplate,
+      cooldown: workout.cooldownTemplate,
     });
-  });
 
-  // Finish encoding and get file data
-  const fitData = encoder.close();
+    // Create FIT encoder
+    const encoder = new Encoder();
 
-  // Trigger download
-  const blob = new Blob([fitData], { type: "application/octet-stream" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `${workout.id}.fit`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+    // Write file ID message (required first message)
+    encoder.onMesg(0, {
+      // fileId message number = 0
+      type: FIT_FILE_WORKOUT,
+      manufacturer: 1, // Garmin
+      product: 0,
+      serialNumber: Date.now(),
+      timeCreated: new Date(),
+    });
+
+    // Write workout message (message number = 26)
+    encoder.onMesg(26, {
+      sport: FIT_SPORT_RUNNING,
+      numValidSteps: segments.length,
+      wktName: (workout.nameEn || workout.name).substring(0, 64), // FIT string limit
+    });
+
+    // Write workout steps (message number = 27)
+    segments.forEach((segment: TimelineSegment, index: number) => {
+      const intensity = getIntensity(segment.type, segment.isRecovery);
+      const targetHrZone = segment.zoneNumber || 2;
+      // Duration in milliseconds (scale 1000 for seconds)
+      const durationValue = Math.round(segment.durationMin * 60 * 1000);
+
+      encoder.onMesg(27, {
+        messageIndex: index,
+        wktStepName: segment.description.substring(0, 32),
+        durationType: FIT_WKT_STEP_DURATION_TIME,
+        durationValue: durationValue, // milliseconds, will be scaled to seconds
+        targetType: FIT_WKT_STEP_TARGET_HEART_RATE,
+        targetHrZone,
+        intensity,
+      });
+    });
+
+    // Finish encoding and get file data
+    const fitData = encoder.close();
+
+    // Trigger download
+    const blob = new Blob([fitData], { type: "application/octet-stream" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${workout.id}.fit`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Export failed:", error);
+    throw error;
+  }
 }

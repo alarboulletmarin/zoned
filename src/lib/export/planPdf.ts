@@ -36,7 +36,8 @@ const ZONE_COLORS: Record<string, string> = {
   Z6: "#a855f7",
 };
 
-const SESSION_TYPE_LABELS: Record<string, { fr: string; en: string }> = {
+/** Shortened labels for compact PDF tables. */
+const SESSION_TYPE_LABELS_SHORT: Record<string, { fr: string; en: string }> = {
   recovery: { fr: "Récup", en: "Recovery" },
   endurance: { fr: "Endurance", en: "Endurance" },
   tempo: { fr: "Tempo", en: "Tempo" },
@@ -127,7 +128,7 @@ function typeLabel(sessionType: string, template: WorkoutTemplate | undefined, i
     const label = STRENGTH_CAT_LABELS[cat];
     return label ? (isEn ? label.en : label.fr) : (isEn ? "Strength" : "Renfo");
   }
-  const label = SESSION_TYPE_LABELS[sessionType];
+  const label = SESSION_TYPE_LABELS_SHORT[sessionType];
   return label ? (isEn ? label.en : label.fr) : sessionType;
 }
 
@@ -299,7 +300,7 @@ function renderRunningAppendixEntry(
     ? `${template.typicalDuration.min}-${template.typicalDuration.max}min`
     : "";
 
-  const catLabel = SESSION_TYPE_LABELS[template.sessionType];
+  const catLabel = SESSION_TYPE_LABELS_SHORT[template.sessionType];
   const catStr = catLabel ? (isEn ? catLabel.en : catLabel.fr) : template.sessionType;
 
   const result: Content[] = [];
@@ -517,549 +518,146 @@ export async function exportPlanToPDF(
   workoutTemplates: Record<string, WorkoutTemplate>,
   isEn: boolean,
 ): Promise<void> {
-  // Dynamic import pdfmake (code-split)
-  const pdfMakeModule = await import("pdfmake/build/pdfmake");
-  const pdfFontsModule = await import("pdfmake/build/vfs_fonts");
-  const pdfMake = pdfMakeModule.default;
-  pdfMake.vfs = pdfFontsModule.default.vfs;
+  try {
+      // Dynamic import pdfmake (code-split)
+      const pdfMakeModule = await import("pdfmake/build/pdfmake");
+    const pdfFontsModule = await import("pdfmake/build/vfs_fonts");
+    const pdfMake = pdfMakeModule.default;
+    pdfMake.vfs = pdfFontsModule.default.vfs;
 
-  // Resolve exercise names for strength workouts
-  const exerciseNames = await resolveExerciseNames(workoutTemplates);
+    // Resolve exercise names for strength workouts
+    const exerciseNames = await resolveExerciseNames(workoutTemplates);
 
-  // Build workout index for appendix references
-  const workoutIndex = buildWorkoutIndex(plan);
+    // Build workout index for appendix references
+    const workoutIndex = buildWorkoutIndex(plan);
 
-  const raceMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
-  const isFreePlan = plan.config.planMode === "free";
-  const planName = isFreePlan
-    ? (plan.config.planName || plan.name)
-    : (isEn ? plan.nameEn : plan.name);
-  const content: Content[] = [];
+    const raceMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
+    const isFreePlan = plan.config.planMode === "free";
+    const planName = isFreePlan
+      ? (plan.config.planName || plan.name)
+      : (isEn ? plan.nameEn : plan.name);
+    const content: Content[] = [];
 
-  // ── PAGE 1: Title + Overview ──────────────────────────────────────
+    // ── PAGE 1: Title + Overview ──────────────────────────────────────
 
-  // 1A. Title banner
-  const subtitleText = raceMeta
-    ? (isEn ? raceMeta.labelEn : raceMeta.label)
-    : (isFreePlan ? (isEn ? "Free plan" : "Plan libre") : "");
+    // 1A. Title banner
+    const subtitleText = raceMeta
+      ? (isEn ? raceMeta.labelEn : raceMeta.label)
+      : (isFreePlan ? (isEn ? "Free plan" : "Plan libre") : "");
 
-  content.push({
-    table: {
-      widths: ["*", "auto"],
-      body: [[
-        {
-          stack: [
-            { text: planName, fontSize: 18, bold: true, color: "#fff" },
-            ...(subtitleText ? [{ text: subtitleText, fontSize: 11, color: "#94a3b8", margin: [0, 2, 0, 0] as [number, number, number, number] }] : []),
-          ],
-          margin: [10, 8, 0, 8] as [number, number, number, number],
-        },
-        {
-          text: "zoned.run",
-          fontSize: 9,
-          color: "#94a3b8",
-          alignment: "right" as const,
-          margin: [0, 10, 10, 0] as [number, number, number, number],
-        },
-      ]],
-    },
-    layout: {
-      fillColor: () => "#1e293b",
-      hLineWidth: () => 0,
-      vLineWidth: () => 0,
-    },
-    margin: [0, 0, 0, 12] as [number, number, number, number],
-  });
-
-  // 1B. Metadata table (2 columns)
-  const metaLeft: string[] = [];
-  const metaRight: string[] = [];
-
-  metaLeft.push(`${isEn ? "Start" : "Début"}: ${formatDate(plan.config.createdAt, isEn)}`);
-  if (plan.config.raceDate) {
-    metaLeft.push(`${isEn ? "Race" : "Course"}: ${formatDate(plan.config.raceDate, isEn)}`);
-  }
-  metaLeft.push(`${isEn ? "Duration" : "Durée"}: ${plan.totalWeeks} ${isEn ? "weeks" : "semaines"}`);
-  if (plan.peakWeeklyKm) {
-    metaLeft.push(`${isEn ? "Peak volume" : "Volume pic"}: ${plan.peakWeeklyKm} km/${isEn ? "wk" : "sem"}`);
-  }
-
-  if (plan.config.raceName) {
-    metaRight.push(`${isEn ? "Race name" : "Nom"}: ${plan.config.raceName}`);
-  }
-  if (plan.raceTimePrediction) {
-    metaRight.push(`${isEn ? "Target" : "Objectif"}: ${plan.raceTimePrediction}`);
-  }
-  metaRight.push(`${isEn ? "Sessions/week" : "Séances/sem"}: ${plan.config.daysPerWeek}`);
-  if (plan.peakLongRunKm) {
-    metaRight.push(`${isEn ? "Peak long run" : "Pic SL"}: ${plan.peakLongRunKm} km`);
-  }
-
-  content.push({
-    table: {
-      widths: ["*", "*"],
-      body: [[
-        {
-          stack: metaLeft.map((t) => ({ text: t, fontSize: 8, color: "#555", margin: [4, 2, 4, 2] as [number, number, number, number] })),
-          fillColor: "#f8fafc",
-        },
-        {
-          stack: metaRight.map((t) => ({ text: t, fontSize: 8, color: "#555", margin: [4, 2, 4, 2] as [number, number, number, number] })),
-          fillColor: "#f8fafc",
-        },
-      ]],
-    },
-    layout: {
-      hLineWidth: () => 0.5,
-      vLineWidth: () => 0.5,
-      hLineColor: () => "#e2e8f0",
-      vLineColor: () => "#e2e8f0",
-    },
-    margin: [0, 0, 0, 10] as [number, number, number, number],
-  });
-
-  // 1C. Stats summary (3 columns)
-  const stats = computePlanStats(plan);
-  const totalHours = Math.round(stats.totalDurationMin / 60);
-
-  content.push({
-    table: {
-      widths: ["*", "*", "*"],
-      body: [[
-        {
-          stack: [
-            { text: `${stats.totalSessions}`, fontSize: 14, bold: true, color: "#1e293b", alignment: "center" as const },
-            { text: isEn ? "sessions" : "séances", fontSize: 7, color: "#888", alignment: "center" as const },
-            { text: `~${Math.round(stats.totalEstimatedKm)} km`, fontSize: 9, bold: true, color: "#3b82f6", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
-          ],
-          fillColor: "#f0f9ff",
-          margin: [4, 6, 4, 6] as [number, number, number, number],
-        },
-        {
-          stack: [
-            { text: `${totalHours}h`, fontSize: 14, bold: true, color: "#1e293b", alignment: "center" as const },
-            { text: "total", fontSize: 7, color: "#888", alignment: "center" as const },
-            { text: `${stats.keySessionCount} ${isEn ? "key" : "clés"}`, fontSize: 9, bold: true, color: "#854d0e", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
-          ],
-          fillColor: "#f0f9ff",
-          margin: [4, 6, 4, 6] as [number, number, number, number],
-        },
-        {
-          stack: [
-            { text: `S${stats.peakVolumeWeek}`, fontSize: 14, bold: true, color: "#1e293b", alignment: "center" as const },
-            { text: isEn ? "peak week" : "semaine pic", fontSize: 7, color: "#888", alignment: "center" as const },
-            { text: `${stats.avgDurationPerWeekMin}min/${isEn ? "wk" : "sem"}`, fontSize: 9, bold: true, color: "#666", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
-          ],
-          fillColor: "#f0f9ff",
-          margin: [4, 6, 4, 6] as [number, number, number, number],
-        },
-      ]],
-    },
-    layout: {
-      hLineWidth: () => 0.5,
-      vLineWidth: () => 0.5,
-      hLineColor: () => "#e2e8f0",
-      vLineColor: () => "#e2e8f0",
-    },
-    margin: [0, 0, 0, 6] as [number, number, number, number],
-  });
-
-  // Note about appendix reference numbers
-  const totalUniqueWorkouts = workoutIndex.size;
-  content.push({
-    text: isEn
-      ? `Superscript numbers (e.g. \u00b9\u00b2\u00b3) refer to the Workout Reference at the end of this document (${totalUniqueWorkouts} unique workouts).`
-      : `Les exposants (ex: \u00b9\u00b2\u00b3) renvoient au Lexique des séances en fin de document (${totalUniqueWorkouts} séances uniques).`,
-    italics: true,
-    fontSize: 7,
-    color: "#888",
-    margin: [0, 0, 0, 10] as [number, number, number, number],
-  });
-
-  // 1D. Target paces table (if targetPaceMinKm)
-  if (plan.config.targetPaceMinKm) {
-    const pace = plan.config.targetPaceMinKm;
-    const paceRows = [
-      [isEn ? "Race / Threshold" : "Course / Seuil", paceStr(pace)],
-      ["Tempo", paceStr(pace + 0.25)],
-      [isEn ? "Easy / Long Run" : "Endurance / SL", paceStr(pace + 1)],
-      ["VO2max", paceStr(pace - 0.5)],
-    ];
-
-    content.push(
-      { text: isEn ? "Target Paces" : "Allures cibles", fontSize: 10, bold: true, color: "#333", margin: [0, 0, 0, 4] as [number, number, number, number] },
-      {
-        table: {
-          headerRows: 1,
-          widths: ["*", "auto"],
-          body: [
-            [
-              { text: isEn ? "Session Type" : "Type de séance", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
-              { text: isEn ? "Pace" : "Allure", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
-            ],
-            ...paceRows.map(([type, paceVal]) => [
-              { text: type, fontSize: 8, margin: [4, 2, 4, 2] as [number, number, number, number] },
-              { text: paceVal, fontSize: 8, alignment: "center" as const, bold: true, margin: [4, 2, 4, 2] as [number, number, number, number] },
-            ] as TableCell[]),
-          ],
-        },
-        layout: "lightHorizontalLines",
-        margin: [0, 0, 0, 10] as [number, number, number, number],
-      },
-    );
-  }
-
-  // 1E. Zone paces table (if VMA)
-  if (plan.config.vma) {
-    const paceZones = calculatePaceZones(plan.config.vma);
-
-    content.push(
-      { text: isEn ? "Zone Paces (from VMA)" : "Allures par zone (VMA)", fontSize: 10, bold: true, color: "#333", margin: [0, 0, 0, 4] as [number, number, number, number] },
-      {
-        table: {
-          headerRows: 1,
-          widths: [35, "*", "auto"],
-          body: [
-            [
-              { text: "Zone", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
-              { text: isEn ? "Range" : "Plage", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
-              { text: isEn ? "Pace" : "Allure", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
-            ],
-            ...paceZones.map((z) => [
-              {
-                text: `Z${z.zone}`,
-                bold: true,
-                fontSize: 8,
-                color: "#fff",
-                fillColor: ZONE_COLORS[`Z${z.zone}`] || "#555",
-                alignment: "center" as const,
-                margin: [4, 2, 4, 2] as [number, number, number, number],
-              },
-              {
-                text: `${z.paceMaxPerKm ? formatPace(z.paceMaxPerKm) : "?"} - ${z.paceMinPerKm ? formatPace(z.paceMinPerKm) : "?"}`,
-                fontSize: 8,
-                margin: [4, 2, 4, 2] as [number, number, number, number],
-              },
-              {
-                text: z.paceMinPerKm && z.paceMaxPerKm
-                  ? formatPace((z.paceMinPerKm + z.paceMaxPerKm) / 2)
-                  : "-",
-                fontSize: 8,
-                alignment: "center" as const,
-                margin: [4, 2, 4, 2] as [number, number, number, number],
-              },
-            ] as TableCell[]),
-          ],
-        },
-        layout: "lightHorizontalLines",
-        margin: [0, 0, 0, 10] as [number, number, number, number],
-      },
-    );
-  }
-
-  // 1F. Training phases overview
-  content.push(
-    { text: isEn ? "Training Phases" : "Phases d'entraînement", fontSize: 10, bold: true, color: "#333", margin: [0, 0, 0, 4] as [number, number, number, number] },
-    {
-      table: {
-        headerRows: 1,
-        widths: ["*", "auto", "auto"],
-        body: [
-          [
-            { text: "Phase", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
-            { text: isEn ? "Weeks" : "Semaines", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
-            { text: "Description", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
-          ],
-          ...plan.phases.map((phaseRange) => {
-            const meta = PHASE_META[phaseRange.phase];
-            const colors = PHASE_COLORS[phaseRange.phase] || PHASE_COLORS.recovery;
-            return [
-              {
-                text: isEn ? meta.labelEn : meta.label,
-                bold: true,
-                fontSize: 8,
-                color: colors.text,
-                fillColor: colors.bg,
-                margin: [4, 3, 4, 3],
-              },
-              {
-                text: `S${phaseRange.startWeek}-S${phaseRange.endWeek}`,
-                fontSize: 8,
-                alignment: "center" as const,
-                fillColor: colors.bg,
-                margin: [4, 3, 4, 3],
-              },
-              {
-                text: isEn ? meta.descriptionEn : meta.description,
-                fontSize: 8,
-                fillColor: colors.bg,
-                margin: [4, 3, 4, 3],
-              },
-            ] as TableCell[];
-          }),
-        ],
-      },
-      layout: "lightHorizontalLines",
-      margin: [0, 0, 0, 10] as [number, number, number, number],
-    },
-  );
-
-  // ── PAGES 2-N: Weekly Session Tables ──────────────────────────────
-
-  let currentPhase = "";
-  // Track accumulated session rows to decide page breaks based on content, not fixed week count.
-  // A4 usable height ~750pt. Each row ~16pt, header ~20pt, week header ~24pt, notes ~14pt.
-  // Safe threshold: ~40 rows worth of content before breaking.
-  let accumulatedRows = 0;
-  const PAGE_ROW_LIMIT = 40;
-
-  for (const week of plan.weeks) {
-    const phaseMeta = PHASE_META[week.phase];
-    const phaseColors = PHASE_COLORS[week.phase] || PHASE_COLORS.recovery;
-
-    // Phase transition banner
-    const isPhaseTransition = week.phase !== currentPhase;
-    if (isPhaseTransition) {
-      currentPhase = week.phase;
-      const pMeta = PHASE_META[week.phase];
-      const pColors = PHASE_COLORS[week.phase] || PHASE_COLORS.recovery;
-
-      // First week of plan or phase transition
-      if (week.weekNumber > 1) {
-        content.push({
-          table: {
-            widths: ["*"],
-            body: [[{
-              text: `${(isEn ? pMeta.labelEn : pMeta.label).toUpperCase()} \u2014 ${isEn ? pMeta.descriptionEn : pMeta.description}`,
-              bold: true,
-              fontSize: 10,
-              color: pColors.text,
-              fillColor: pColors.bg,
-              margin: [8, 5, 8, 5],
-            }]],
-          },
-          layout: "noBorders",
-          margin: [0, 2, 0, 6] as [number, number, number, number],
-          pageBreak: "before" as const,
-        });
-        accumulatedRows = 0;
-      }
-    }
-
-    // Weekly volume stats
-    const weekDuration = computeWeekDuration(week);
-    const weekKm = Math.round(computeWeekKm(week));
-    const weekDurationStr = formatDuration(weekDuration);
-    const weekLabel = isEn
-      ? (week.weekLabelEn || `Week ${week.weekNumber}`)
-      : (week.weekLabel || `Semaine ${week.weekNumber}`);
-    const actualKm = week.targetKm ?? weekKm;
-    const longRunInfo = week.targetLongRunKm ? ` \u00b7 SL ${week.targetLongRunKm}km` : "";
-    const recoveryTag = week.isRecoveryWeek ? (isEn ? " [Recovery]" : " [Récup]") : "";
-
-    // Estimate how many rows this week will add (sessions + header + possible notes)
-    const weekSessionCount = week.sessions.length;
-    const estimatedNoteRows = week.sessions.filter((s) => s.isKeySession && (s.notes || s.notesEn || s.paceNotes?.length)).length;
-    const weekRows = weekSessionCount + estimatedNoteRows + 2; // +2 for header row + table header
-
-    // Break when accumulated content would overflow the page
-    const needsBreak = !isPhaseTransition && accumulatedRows > 0 && (accumulatedRows + weekRows) > PAGE_ROW_LIMIT;
-
-    // Week header row
     content.push({
       table: {
         widths: ["*", "auto"],
         body: [[
           {
-            text: `${weekLabel} \u2014 ${isEn ? phaseMeta.labelEn : phaseMeta.label} \u00b7 ${weekDurationStr} \u00b7 ~${actualKm}km${longRunInfo}`,
-            fontSize: 8,
-            bold: true,
-            color: phaseColors.text,
+            stack: [
+              { text: planName, fontSize: 18, bold: true, color: "#fff" },
+              ...(subtitleText ? [{ text: subtitleText, fontSize: 11, color: "#94a3b8", margin: [0, 2, 0, 0] as [number, number, number, number] }] : []),
+            ],
+            margin: [10, 8, 0, 8] as [number, number, number, number],
           },
           {
-            text: recoveryTag,
-            fontSize: 8,
-            bold: true,
-            color: phaseColors.text,
+            text: "zoned.run",
+            fontSize: 9,
+            color: "#94a3b8",
             alignment: "right" as const,
+            margin: [0, 10, 10, 0] as [number, number, number, number],
           },
         ]],
       },
       layout: {
-        fillColor: () => phaseColors.bg,
+        fillColor: () => "#1e293b",
         hLineWidth: () => 0,
         vLineWidth: () => 0,
       },
-      margin: [0, 4, 0, 2] as [number, number, number, number],
-      ...(needsBreak ? { pageBreak: "before" as const } : {}),
+      margin: [0, 0, 0, 12] as [number, number, number, number],
     });
 
-    if (needsBreak) accumulatedRows = 0;
-    accumulatedRows += weekRows;
+    // 1B. Metadata table (2 columns)
+    const metaLeft: string[] = [];
+    const metaRight: string[] = [];
 
-    if (week.sessions.length === 0) {
-      content.push({
-        text: isEn ? "No sessions this week" : "Aucune séance cette semaine",
-        italics: true,
-        fontSize: 7,
-        color: "#888",
-        margin: [0, 2, 0, 8] as [number, number, number, number],
-      });
-      continue;
+    metaLeft.push(`${isEn ? "Start" : "Début"}: ${formatDate(plan.config.createdAt, isEn)}`);
+    if (plan.config.raceDate) {
+      metaLeft.push(`${isEn ? "Race" : "Course"}: ${formatDate(plan.config.raceDate, isEn)}`);
+    }
+    metaLeft.push(`${isEn ? "Duration" : "Durée"}: ${plan.totalWeeks} ${isEn ? "weeks" : "semaines"}`);
+    if (plan.peakWeeklyKm) {
+      metaLeft.push(`${isEn ? "Peak volume" : "Volume pic"}: ${plan.peakWeeklyKm} km/${isEn ? "wk" : "sem"}`);
     }
 
-    // Session table: Jour | Seance | Type | Zone | Duree | Resume
-    const tableHeader: TableCell[] = [
-      { text: isEn ? "Day" : "Jour", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
-      { text: isEn ? "Workout" : "Séance", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [2, 3, 2, 3] as [number, number, number, number] },
-      { text: "Type", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
-      { text: "Zone", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
-      { text: isEn ? "Dur." : "Durée", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "right" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
-      { text: isEn ? "Summary" : "Résumé", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [2, 3, 2, 3] as [number, number, number, number] },
-    ];
-
-    const rows: TableCell[][] = [];
-    const paceNoteRows: { afterIndex: number; text: string }[] = [];
-
-    for (let i = 0; i < week.sessions.length; i++) {
-      const session = week.sessions[i];
-      const isRaceDay = session.workoutId === "__race_day__";
-
-      if (isRaceDay) {
-        rows.push([
-          { text: dayLabel(session.dayOfWeek, isEn), fontSize: 7, alignment: "center" as const, margin: [2, 2, 2, 2] },
-          {
-            text: isEn ? "RACE DAY" : "JOUR DE COURSE",
-            bold: true,
-            fontSize: 7,
-            color: phaseColors.text,
-            colSpan: 4,
-            margin: [2, 2, 2, 2],
-          },
-          {}, {}, {},
-          { text: "", fontSize: 7, margin: [2, 2, 2, 2] },
-        ] as TableCell[]);
-        continue;
-      }
-
-      const template = workoutTemplates[session.workoutId];
-      const refNum = workoutIndex.get(session.workoutId);
-      const wName = workoutNames[session.workoutId] || session.workoutId;
-      const isKey = session.isKeySession;
-      const isStr = template ? isStrength(template) : session.workoutId.startsWith("STR-");
-
-      // Name with key star + ref superscript
-      const nameText: Content = {
-        text: [
-          ...(isKey ? [{ text: "\u2605 ", color: "#854d0e", bold: true, fontSize: 8 }] : []),
-          { text: wName },
-          ...(refNum ? [{ text: ` ${toSuperscript(refNum)}`, fontSize: 6, color: "#3b82f6", decoration: "underline" as const, linkToDestination: `ref-${refNum}` }] : []),
-        ],
-        fontSize: 7,
-      };
-
-      // Type
-      const tLabel = typeLabel(session.sessionType, template, isEn);
-
-      // Zone cell
-      let zoneCell: TableCell;
-      if (isStr) {
-        zoneCell = {
-          text: "\u2014",
-          fontSize: 7,
-          color: "#fff",
-          fillColor: "#94a3b8",
-          alignment: "center" as const,
-          bold: true,
-          margin: [2, 2, 2, 2],
-        };
-      } else if (template && !isStr) {
-        const dominantZone = getDominantZone(template);
-        const zStr = `Z${dominantZone}`;
-        zoneCell = {
-          text: zStr,
-          fontSize: 7,
-          color: "#fff",
-          fillColor: ZONE_COLORS[zStr] || "#555",
-          alignment: "center" as const,
-          bold: true,
-          margin: [2, 2, 2, 2],
-        };
-      } else {
-        zoneCell = {
-          text: "\u2014",
-          fontSize: 7,
-          color: "#aaa",
-          alignment: "center" as const,
-          margin: [2, 2, 2, 2],
-        };
-      }
-
-      // Duration
-      const durStr = formatDuration(session.estimatedDurationMin);
-
-      // Summary
-      let summary = "";
-      if (isStr && template) {
-        summary = buildStrengthSummary(asStrength(template), exerciseNames, isEn);
-      } else if (template && !isStr) {
-        summary = buildCompactSummary(template, session.estimatedDurationMin);
-      }
-
-      rows.push([
-        { text: dayLabel(session.dayOfWeek, isEn), fontSize: 7, alignment: "center" as const, margin: [2, 2, 2, 2] },
-        { ...nameText as object, margin: [2, 2, 2, 2] } as TableCell,
-        { text: tLabel, fontSize: 7, alignment: "center" as const, margin: [2, 2, 2, 2] },
-        zoneCell,
-        { text: durStr, fontSize: 7, alignment: "right" as const, margin: [2, 2, 2, 2] },
-        { text: summary, fontSize: 7, color: "#555", margin: [2, 2, 2, 2] },
-      ] as TableCell[]);
-
-      // Collect pace notes for key sessions
-      if (isKey) {
-        const notes = isEn ? session.notesEn : session.notes;
-        if (notes) {
-          paceNoteRows.push({ afterIndex: rows.length - 1, text: notes });
-        } else if (session.paceNotes?.length) {
-          const paceText = session.paceNotes
-            .map((pn) => {
-              const desc = isEn ? pn.descriptionEn : pn.description;
-              return `${desc}: ${formatPace(pn.paceMinKm)} - ${formatPace(pn.paceMaxKm)}`;
-            })
-            .join(" | ");
-          paceNoteRows.push({ afterIndex: rows.length - 1, text: paceText });
-        }
-      }
+    if (plan.config.raceName) {
+      metaRight.push(`${isEn ? "Race name" : "Nom"}: ${plan.config.raceName}`);
     }
-
-    // Insert pace note sub-rows (iterate in reverse to preserve indices)
-    for (let j = paceNoteRows.length - 1; j >= 0; j--) {
-      const { afterIndex, text } = paceNoteRows[j];
-      const noteRow: TableCell[] = [
-        {
-          text,
-          colSpan: 6,
-          fontSize: 7,
-          italics: true,
-          color: "#666",
-          margin: [22, 0, 2, 1] as [number, number, number, number],
-        },
-        {}, {}, {}, {}, {},
-      ];
-      rows.splice(afterIndex + 1, 0, noteRow);
+    if (plan.raceTimePrediction) {
+      metaRight.push(`${isEn ? "Target" : "Objectif"}: ${plan.raceTimePrediction}`);
+    }
+    metaRight.push(`${isEn ? "Sessions/week" : "Séances/sem"}: ${plan.config.daysPerWeek}`);
+    if (plan.peakLongRunKm) {
+      metaRight.push(`${isEn ? "Peak long run" : "Pic SL"}: ${plan.peakLongRunKm} km`);
     }
 
     content.push({
       table: {
-        headerRows: 1,
-        widths: [26, "*", 48, 26, 30, "*"],
-        body: [tableHeader, ...rows],
+        widths: ["*", "*"],
+        body: [[
+          {
+            stack: metaLeft.map((t) => ({ text: t, fontSize: 8, color: "#555", margin: [4, 2, 4, 2] as [number, number, number, number] })),
+            fillColor: "#f8fafc",
+          },
+          {
+            stack: metaRight.map((t) => ({ text: t, fontSize: 8, color: "#555", margin: [4, 2, 4, 2] as [number, number, number, number] })),
+            fillColor: "#f8fafc",
+          },
+        ]],
       },
       layout: {
-        fillColor: (rowIndex: number) => {
-          if (rowIndex === 0) return "#333";
-          return rowIndex % 2 === 0 ? phaseColors.bg : null;
-        },
+        hLineWidth: () => 0.5,
+        vLineWidth: () => 0.5,
+        hLineColor: () => "#e2e8f0",
+        vLineColor: () => "#e2e8f0",
+      },
+      margin: [0, 0, 0, 10] as [number, number, number, number],
+    });
+
+    // 1C. Stats summary (3 columns)
+    const stats = computePlanStats(plan);
+    const totalHours = Math.round(stats.totalDurationMin / 60);
+
+    content.push({
+      table: {
+        widths: ["*", "*", "*"],
+        body: [[
+          {
+            stack: [
+              { text: `${stats.totalSessions}`, fontSize: 14, bold: true, color: "#1e293b", alignment: "center" as const },
+              { text: isEn ? "sessions" : "séances", fontSize: 7, color: "#888", alignment: "center" as const },
+              { text: `~${Math.round(stats.totalEstimatedKm)} km`, fontSize: 9, bold: true, color: "#3b82f6", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
+            ],
+            fillColor: "#f0f9ff",
+            margin: [4, 6, 4, 6] as [number, number, number, number],
+          },
+          {
+            stack: [
+              { text: `${totalHours}h`, fontSize: 14, bold: true, color: "#1e293b", alignment: "center" as const },
+              { text: "total", fontSize: 7, color: "#888", alignment: "center" as const },
+              { text: `${stats.keySessionCount} ${isEn ? "key" : "clés"}`, fontSize: 9, bold: true, color: "#854d0e", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
+            ],
+            fillColor: "#f0f9ff",
+            margin: [4, 6, 4, 6] as [number, number, number, number],
+          },
+          {
+            stack: [
+              { text: `S${stats.peakVolumeWeek}`, fontSize: 14, bold: true, color: "#1e293b", alignment: "center" as const },
+              { text: isEn ? "peak week" : "semaine pic", fontSize: 7, color: "#888", alignment: "center" as const },
+              { text: `${stats.avgDurationPerWeekMin}min/${isEn ? "wk" : "sem"}`, fontSize: 9, bold: true, color: "#666", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
+            ],
+            fillColor: "#f0f9ff",
+            margin: [4, 6, 4, 6] as [number, number, number, number],
+          },
+        ]],
+      },
+      layout: {
         hLineWidth: () => 0.5,
         vLineWidth: () => 0.5,
         hLineColor: () => "#e2e8f0",
@@ -1067,82 +665,490 @@ export async function exportPlanToPDF(
       },
       margin: [0, 0, 0, 6] as [number, number, number, number],
     });
-  }
 
-  // ── APPENDIX: Lexique des seances ─────────────────────────────────
+    // Note about appendix reference numbers
+    const totalUniqueWorkouts = workoutIndex.size;
+    content.push({
+      text: isEn
+        ? `Superscript numbers (e.g. \u00b9\u00b2\u00b3) refer to the Workout Reference at the end of this document (${totalUniqueWorkouts} unique workouts).`
+        : `Les exposants (ex: \u00b9\u00b2\u00b3) renvoient au Lexique des séances en fin de document (${totalUniqueWorkouts} séances uniques).`,
+      italics: true,
+      fontSize: 7,
+      color: "#888",
+      margin: [0, 0, 0, 10] as [number, number, number, number],
+    });
 
-  content.push({
-    text: isEn ? "WORKOUT REFERENCE" : "LEXIQUE DES SÉANCES",
-    fontSize: 13,
-    bold: true,
-    color: "#1e293b",
-    margin: [0, 0, 0, 8] as [number, number, number, number],
-    pageBreak: "before" as const,
-  });
+    // 1D. Target paces table (if targetPaceMinKm)
+    if (plan.config.targetPaceMinKm) {
+      const pace = plan.config.targetPaceMinKm;
+      const paceRows = [
+        [isEn ? "Race / Threshold" : "Course / Seuil", paceStr(pace)],
+        ["Tempo", paceStr(pace + 0.25)],
+        [isEn ? "Easy / Long Run" : "Endurance / SL", paceStr(pace + 1)],
+        ["VO2max", paceStr(pace - 0.5)],
+      ];
 
-  // Sort entries by reference number
-  const sortedEntries = Array.from(workoutIndex.entries()).sort((a, b) => a[1] - b[1]);
-
-  for (const [workoutId, refNum] of sortedEntries) {
-    const template = workoutTemplates[workoutId];
-    if (!template) continue;
-
-    if (isStrength(template)) {
-      const entries = renderStrengthAppendixEntry(refNum, asStrength(template), exerciseNames, isEn);
-      content.push(...entries);
-    } else {
-      const entries = renderRunningAppendixEntry(refNum, template, isEn);
-      content.push(...entries);
+      content.push(
+        { text: isEn ? "Target Paces" : "Allures cibles", fontSize: 10, bold: true, color: "#333", margin: [0, 0, 0, 4] as [number, number, number, number] },
+        {
+          table: {
+            headerRows: 1,
+            widths: ["*", "auto"],
+            body: [
+              [
+                { text: isEn ? "Session Type" : "Type de séance", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
+                { text: isEn ? "Pace" : "Allure", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
+              ],
+              ...paceRows.map(([type, paceVal]) => [
+                { text: type, fontSize: 8, margin: [4, 2, 4, 2] as [number, number, number, number] },
+                { text: paceVal, fontSize: 8, alignment: "center" as const, bold: true, margin: [4, 2, 4, 2] as [number, number, number, number] },
+              ] as TableCell[]),
+            ],
+          },
+          layout: "lightHorizontalLines",
+          margin: [0, 0, 0, 10] as [number, number, number, number],
+        },
+      );
     }
-  }
 
-  // ── Document Definition ───────────────────────────────────────────
+    // 1E. Zone paces table (if VMA)
+    if (plan.config.vma) {
+      const paceZones = calculatePaceZones(plan.config.vma);
 
-  const docDefinition: TDocumentDefinitions = {
-    content,
-    footer: (currentPage: number, pageCount: number) => ({
-      columns: [
-        { text: planName, fontSize: 7, color: "#aaa", margin: [25, 0, 0, 0] },
+      content.push(
+        { text: isEn ? "Zone Paces (from VMA)" : "Allures par zone (VMA)", fontSize: 10, bold: true, color: "#333", margin: [0, 0, 0, 4] as [number, number, number, number] },
         {
-          text: `${isEn ? "Generated by" : "Généré par"} Zoned \u00b7 zoned.run`,
-          fontSize: 7,
-          color: "#aaa",
-          alignment: "center" as const,
+          table: {
+            headerRows: 1,
+            widths: [35, "*", "auto"],
+            body: [
+              [
+                { text: "Zone", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
+                { text: isEn ? "Range" : "Plage", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
+                { text: isEn ? "Pace" : "Allure", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
+              ],
+              ...paceZones.map((z) => [
+                {
+                  text: `Z${z.zone}`,
+                  bold: true,
+                  fontSize: 8,
+                  color: "#fff",
+                  fillColor: ZONE_COLORS[`Z${z.zone}`] || "#555",
+                  alignment: "center" as const,
+                  margin: [4, 2, 4, 2] as [number, number, number, number],
+                },
+                {
+                  text: `${z.paceMaxPerKm ? formatPace(z.paceMaxPerKm) : "?"} - ${z.paceMinPerKm ? formatPace(z.paceMinPerKm) : "?"}`,
+                  fontSize: 8,
+                  margin: [4, 2, 4, 2] as [number, number, number, number],
+                },
+                {
+                  text: z.paceMinPerKm && z.paceMaxPerKm
+                    ? formatPace((z.paceMinPerKm + z.paceMaxPerKm) / 2)
+                    : "-",
+                  fontSize: 8,
+                  alignment: "center" as const,
+                  margin: [4, 2, 4, 2] as [number, number, number, number],
+                },
+              ] as TableCell[]),
+            ],
+          },
+          layout: "lightHorizontalLines",
+          margin: [0, 0, 0, 10] as [number, number, number, number],
         },
-        {
-          text: `${currentPage} / ${pageCount}`,
-          fontSize: 7,
-          color: "#aaa",
-          alignment: "right" as const,
-          margin: [0, 0, 25, 0],
+      );
+    }
+
+    // 1F. Training phases overview
+    content.push(
+      { text: isEn ? "Training Phases" : "Phases d'entraînement", fontSize: 10, bold: true, color: "#333", margin: [0, 0, 0, 4] as [number, number, number, number] },
+      {
+        table: {
+          headerRows: 1,
+          widths: ["*", "auto", "auto"],
+          body: [
+            [
+              { text: "Phase", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
+              { text: isEn ? "Weeks" : "Semaines", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
+              { text: "Description", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
+            ],
+            ...plan.phases.map((phaseRange) => {
+              const meta = PHASE_META[phaseRange.phase];
+              const colors = PHASE_COLORS[phaseRange.phase] || PHASE_COLORS.recovery;
+              return [
+                {
+                  text: isEn ? meta.labelEn : meta.label,
+                  bold: true,
+                  fontSize: 8,
+                  color: colors.text,
+                  fillColor: colors.bg,
+                  margin: [4, 3, 4, 3],
+                },
+                {
+                  text: `S${phaseRange.startWeek}-S${phaseRange.endWeek}`,
+                  fontSize: 8,
+                  alignment: "center" as const,
+                  fillColor: colors.bg,
+                  margin: [4, 3, 4, 3],
+                },
+                {
+                  text: isEn ? meta.descriptionEn : meta.description,
+                  fontSize: 8,
+                  fillColor: colors.bg,
+                  margin: [4, 3, 4, 3],
+                },
+              ] as TableCell[];
+            }),
+          ],
         },
-      ],
-    }),
-    styles: {
-      tinyHeader: {
-        bold: true,
-        fontSize: 7,
-        color: "#666",
-        margin: [2, 2, 2, 2],
+        layout: "lightHorizontalLines",
+        margin: [0, 0, 0, 10] as [number, number, number, number],
       },
-    },
-    defaultStyle: {
-      fontSize: 8,
-    },
-    pageMargins: [25, 25, 25, 40] as [number, number, number, number],
-  };
+    );
 
-  // pdfmake types are outdated - getBlob() returns Promise<Blob> in recent versions
-  const pdf = pdfMake.createPdf(docDefinition) as unknown as { getBlob: () => Promise<Blob> };
-  const blob = await pdf.getBlob();
+    // ── PAGES 2-N: Weekly Session Tables ──────────────────────────────
 
-  // Trigger download
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `plan-${plan.config.raceDistance ?? "free"}-${plan.name}.pdf`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+    let currentPhase = "";
+    // Track accumulated session rows to decide page breaks based on content, not fixed week count.
+    // A4 usable height ~750pt. Each row ~16pt, header ~20pt, week header ~24pt, notes ~14pt.
+    // Safe threshold: ~40 rows worth of content before breaking.
+    let accumulatedRows = 0;
+    const PAGE_ROW_LIMIT = 40;
+
+    for (const week of plan.weeks) {
+      const phaseMeta = PHASE_META[week.phase];
+      const phaseColors = PHASE_COLORS[week.phase] || PHASE_COLORS.recovery;
+
+      // Phase transition banner
+      const isPhaseTransition = week.phase !== currentPhase;
+      if (isPhaseTransition) {
+        currentPhase = week.phase;
+        const pMeta = PHASE_META[week.phase];
+        const pColors = PHASE_COLORS[week.phase] || PHASE_COLORS.recovery;
+
+        // First week of plan or phase transition
+        if (week.weekNumber > 1) {
+          content.push({
+            table: {
+              widths: ["*"],
+              body: [[{
+                text: `${(isEn ? pMeta.labelEn : pMeta.label).toUpperCase()} \u2014 ${isEn ? pMeta.descriptionEn : pMeta.description}`,
+                bold: true,
+                fontSize: 10,
+                color: pColors.text,
+                fillColor: pColors.bg,
+                margin: [8, 5, 8, 5],
+              }]],
+            },
+            layout: "noBorders",
+            margin: [0, 2, 0, 6] as [number, number, number, number],
+            pageBreak: "before" as const,
+          });
+          accumulatedRows = 0;
+        }
+      }
+
+      // Weekly volume stats
+      const weekDuration = computeWeekDuration(week);
+      const weekKm = Math.round(computeWeekKm(week));
+      const weekDurationStr = formatDuration(weekDuration);
+      const weekLabel = isEn
+        ? (week.weekLabelEn || `Week ${week.weekNumber}`)
+        : (week.weekLabel || `Semaine ${week.weekNumber}`);
+      const actualKm = week.targetKm ?? weekKm;
+      const longRunInfo = week.targetLongRunKm ? ` \u00b7 SL ${week.targetLongRunKm}km` : "";
+      const recoveryTag = week.isRecoveryWeek ? (isEn ? " [Recovery]" : " [Récup]") : "";
+
+      // Estimate how many rows this week will add (sessions + header + possible notes)
+      const weekSessionCount = week.sessions.length;
+      const estimatedNoteRows = week.sessions.filter((s) => s.isKeySession && (s.notes || s.notesEn || s.paceNotes?.length)).length;
+      const weekRows = weekSessionCount + estimatedNoteRows + 2; // +2 for header row + table header
+
+      // Break when accumulated content would overflow the page
+      const needsBreak = !isPhaseTransition && accumulatedRows > 0 && (accumulatedRows + weekRows) > PAGE_ROW_LIMIT;
+
+      // Week header row
+      content.push({
+        table: {
+          widths: ["*", "auto"],
+          body: [[
+            {
+              text: `${weekLabel} \u2014 ${isEn ? phaseMeta.labelEn : phaseMeta.label} \u00b7 ${weekDurationStr} \u00b7 ~${actualKm}km${longRunInfo}`,
+              fontSize: 8,
+              bold: true,
+              color: phaseColors.text,
+            },
+            {
+              text: recoveryTag,
+              fontSize: 8,
+              bold: true,
+              color: phaseColors.text,
+              alignment: "right" as const,
+            },
+          ]],
+        },
+        layout: {
+          fillColor: () => phaseColors.bg,
+          hLineWidth: () => 0,
+          vLineWidth: () => 0,
+        },
+        margin: [0, 4, 0, 2] as [number, number, number, number],
+        ...(needsBreak ? { pageBreak: "before" as const } : {}),
+      });
+
+      if (needsBreak) accumulatedRows = 0;
+      accumulatedRows += weekRows;
+
+      if (week.sessions.length === 0) {
+        content.push({
+          text: isEn ? "No sessions this week" : "Aucune séance cette semaine",
+          italics: true,
+          fontSize: 7,
+          color: "#888",
+          margin: [0, 2, 0, 8] as [number, number, number, number],
+        });
+        continue;
+      }
+
+      // Session table: Jour | Seance | Type | Zone | Duree | Resume
+      const tableHeader: TableCell[] = [
+        { text: isEn ? "Day" : "Jour", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
+        { text: isEn ? "Workout" : "Séance", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [2, 3, 2, 3] as [number, number, number, number] },
+        { text: "Type", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
+        { text: "Zone", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
+        { text: isEn ? "Dur." : "Durée", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "right" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
+        { text: isEn ? "Summary" : "Résumé", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [2, 3, 2, 3] as [number, number, number, number] },
+      ];
+
+      const rows: TableCell[][] = [];
+      const paceNoteRows: { afterIndex: number; text: string }[] = [];
+
+      for (let i = 0; i < week.sessions.length; i++) {
+        const session = week.sessions[i];
+        const isRaceDay = session.workoutId === "__race_day__";
+
+        if (isRaceDay) {
+          rows.push([
+            { text: dayLabel(session.dayOfWeek, isEn), fontSize: 7, alignment: "center" as const, margin: [2, 2, 2, 2] },
+            {
+              text: isEn ? "RACE DAY" : "JOUR DE COURSE",
+              bold: true,
+              fontSize: 7,
+              color: phaseColors.text,
+              colSpan: 4,
+              margin: [2, 2, 2, 2],
+            },
+            {}, {}, {},
+            { text: "", fontSize: 7, margin: [2, 2, 2, 2] },
+          ] as TableCell[]);
+          continue;
+        }
+
+        const template = workoutTemplates[session.workoutId];
+        const refNum = workoutIndex.get(session.workoutId);
+        const wName = workoutNames[session.workoutId] || session.workoutId;
+        const isKey = session.isKeySession;
+        const isStr = template ? isStrength(template) : session.workoutId.startsWith("STR-");
+
+        // Name with key star + ref superscript
+        const nameText: Content = {
+          text: [
+            ...(isKey ? [{ text: "\u2605 ", color: "#854d0e", bold: true, fontSize: 8 }] : []),
+            { text: wName },
+            ...(refNum ? [{ text: ` ${toSuperscript(refNum)}`, fontSize: 6, color: "#3b82f6", decoration: "underline" as const, linkToDestination: `ref-${refNum}` }] : []),
+          ],
+          fontSize: 7,
+        };
+
+        // Type
+        const tLabel = typeLabel(session.sessionType, template, isEn);
+
+        // Zone cell
+        let zoneCell: TableCell;
+        if (isStr) {
+          zoneCell = {
+            text: "\u2014",
+            fontSize: 7,
+            color: "#fff",
+            fillColor: "#94a3b8",
+            alignment: "center" as const,
+            bold: true,
+            margin: [2, 2, 2, 2],
+          };
+        } else if (template && !isStr) {
+          const dominantZone = getDominantZone(template);
+          const zStr = `Z${dominantZone}`;
+          zoneCell = {
+            text: zStr,
+            fontSize: 7,
+            color: "#fff",
+            fillColor: ZONE_COLORS[zStr] || "#555",
+            alignment: "center" as const,
+            bold: true,
+            margin: [2, 2, 2, 2],
+          };
+        } else {
+          zoneCell = {
+            text: "\u2014",
+            fontSize: 7,
+            color: "#aaa",
+            alignment: "center" as const,
+            margin: [2, 2, 2, 2],
+          };
+        }
+
+        // Duration
+        const durStr = formatDuration(session.estimatedDurationMin);
+
+        // Summary
+        let summary = "";
+        if (isStr && template) {
+          summary = buildStrengthSummary(asStrength(template), exerciseNames, isEn);
+        } else if (template && !isStr) {
+          summary = buildCompactSummary(template, session.estimatedDurationMin);
+        }
+
+        rows.push([
+          { text: dayLabel(session.dayOfWeek, isEn), fontSize: 7, alignment: "center" as const, margin: [2, 2, 2, 2] },
+          { ...nameText as object, margin: [2, 2, 2, 2] } as TableCell,
+          { text: tLabel, fontSize: 7, alignment: "center" as const, margin: [2, 2, 2, 2] },
+          zoneCell,
+          { text: durStr, fontSize: 7, alignment: "right" as const, margin: [2, 2, 2, 2] },
+          { text: summary, fontSize: 7, color: "#555", margin: [2, 2, 2, 2] },
+        ] as TableCell[]);
+
+        // Collect pace notes for key sessions
+        if (isKey) {
+          const notes = isEn ? session.notesEn : session.notes;
+          if (notes) {
+            paceNoteRows.push({ afterIndex: rows.length - 1, text: notes });
+          } else if (session.paceNotes?.length) {
+            const paceText = session.paceNotes
+              .map((pn) => {
+                const desc = isEn ? pn.descriptionEn : pn.description;
+                return `${desc}: ${formatPace(pn.paceMinKm)} - ${formatPace(pn.paceMaxKm)}`;
+              })
+              .join(" | ");
+            paceNoteRows.push({ afterIndex: rows.length - 1, text: paceText });
+          }
+        }
+      }
+
+      // Insert pace note sub-rows (iterate in reverse to preserve indices)
+      for (let j = paceNoteRows.length - 1; j >= 0; j--) {
+        const { afterIndex, text } = paceNoteRows[j];
+        const noteRow: TableCell[] = [
+          {
+            text,
+            colSpan: 6,
+            fontSize: 7,
+            italics: true,
+            color: "#666",
+            margin: [22, 0, 2, 1] as [number, number, number, number],
+          },
+          {}, {}, {}, {}, {},
+        ];
+        rows.splice(afterIndex + 1, 0, noteRow);
+      }
+
+      content.push({
+        table: {
+          headerRows: 1,
+          widths: [26, "*", 48, 26, 30, "*"],
+          body: [tableHeader, ...rows],
+        },
+        layout: {
+          fillColor: (rowIndex: number) => {
+            if (rowIndex === 0) return "#333";
+            return rowIndex % 2 === 0 ? phaseColors.bg : null;
+          },
+          hLineWidth: () => 0.5,
+          vLineWidth: () => 0.5,
+          hLineColor: () => "#e2e8f0",
+          vLineColor: () => "#e2e8f0",
+        },
+        margin: [0, 0, 0, 6] as [number, number, number, number],
+      });
+    }
+
+    // ── APPENDIX: Lexique des seances ─────────────────────────────────
+
+    content.push({
+      text: isEn ? "WORKOUT REFERENCE" : "LEXIQUE DES SÉANCES",
+      fontSize: 13,
+      bold: true,
+      color: "#1e293b",
+      margin: [0, 0, 0, 8] as [number, number, number, number],
+      pageBreak: "before" as const,
+    });
+
+    // Sort entries by reference number
+    const sortedEntries = Array.from(workoutIndex.entries()).sort((a, b) => a[1] - b[1]);
+
+    for (const [workoutId, refNum] of sortedEntries) {
+      const template = workoutTemplates[workoutId];
+      if (!template) continue;
+
+      if (isStrength(template)) {
+        const entries = renderStrengthAppendixEntry(refNum, asStrength(template), exerciseNames, isEn);
+        content.push(...entries);
+      } else {
+        const entries = renderRunningAppendixEntry(refNum, template, isEn);
+        content.push(...entries);
+      }
+    }
+
+    // ── Document Definition ───────────────────────────────────────────
+
+    const docDefinition: TDocumentDefinitions = {
+      content,
+      footer: (currentPage: number, pageCount: number) => ({
+        columns: [
+          { text: planName, fontSize: 7, color: "#aaa", margin: [25, 0, 0, 0] },
+          {
+            text: `${isEn ? "Generated by" : "Généré par"} Zoned \u00b7 zoned.run`,
+            fontSize: 7,
+            color: "#aaa",
+            alignment: "center" as const,
+          },
+          {
+            text: `${currentPage} / ${pageCount}`,
+            fontSize: 7,
+            color: "#aaa",
+            alignment: "right" as const,
+            margin: [0, 0, 25, 0],
+          },
+        ],
+      }),
+      styles: {
+        tinyHeader: {
+          bold: true,
+          fontSize: 7,
+          color: "#666",
+          margin: [2, 2, 2, 2],
+        },
+      },
+      defaultStyle: {
+        fontSize: 8,
+      },
+      pageMargins: [25, 25, 25, 40] as [number, number, number, number],
+    };
+
+    // pdfmake types are outdated - getBlob() returns Promise<Blob> in recent versions
+    const pdf = pdfMake.createPdf(docDefinition) as unknown as { getBlob: () => Promise<Blob> };
+    const blob = await pdf.getBlob();
+
+    // Trigger download
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `plan-${plan.config.raceDistance ?? "free"}-${plan.name}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Export failed:", error);
+    throw error;
+  }
 }

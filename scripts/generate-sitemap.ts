@@ -81,10 +81,10 @@ function getPrebuiltPlanSlugs(): string[] {
 
 function getCalculatorPaths(): string[] {
   return [
-    "/calculateurs/zones", "/calculateurs/allures", "/calculateurs/vma",
-    "/calculateurs/convertisseur", "/calculateurs/table-allures",
-    "/calculateurs/tapis-roulant", "/calculateurs/splits",
-    "/calculateurs/equivalence", "/calculateurs/age-graded",
+    "/calculators/zones", "/calculators/allures", "/calculators/vma",
+    "/calculators/convertisseur", "/calculators/table-allures",
+    "/calculators/tapis-roulant", "/calculators/splits",
+    "/calculators/equivalence", "/calculators/age-graded",
   ];
 }
 
@@ -106,7 +106,7 @@ async function generateSitemap(): Promise<string> {
     { loc: "/quiz", priority: "0.6", changefreq: "monthly" },
     { loc: "/about", priority: "0.5", changefreq: "monthly" },
     { loc: "/collections", priority: "0.6", changefreq: "monthly" },
-    { loc: "/calculateurs", priority: "0.6", changefreq: "monthly" },
+    { loc: "/calculators", priority: "0.6", changefreq: "monthly" },
     { loc: "/methodology", priority: "0.7", changefreq: "monthly" },
     { loc: "/guides", priority: "0.7", changefreq: "monthly" },
     { loc: "/plan/new/prebuilt", priority: "0.6", changefreq: "monthly" },

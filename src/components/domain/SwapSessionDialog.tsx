@@ -12,6 +12,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Loader2 } from "@/components/icons";
 import { loadAllWorkouts } from "@/data/workouts";
 import type { WorkoutTemplate } from "@/types";
+import { SESSION_TYPE_LABELS } from "@/lib/labels";
 
 interface SwapSessionDialogProps {
   open: boolean;
@@ -21,23 +22,6 @@ interface SwapSessionDialogProps {
   onSelect: (workout: WorkoutTemplate) => void;
   isEn: boolean;
 }
-
-const SESSION_TYPE_LABELS: Record<string, { fr: string; en: string }> = {
-  recovery: { fr: "R\u00e9cup\u00e9ration", en: "Recovery" },
-  endurance: { fr: "Endurance", en: "Endurance" },
-  tempo: { fr: "Tempo", en: "Tempo" },
-  threshold: { fr: "Seuil", en: "Threshold" },
-  vo2max: { fr: "VO2max", en: "VO2max" },
-  speed: { fr: "Vitesse", en: "Speed" },
-  long_run: { fr: "Sortie longue", en: "Long Run" },
-  hills: { fr: "C\u00f4tes", en: "Hills" },
-  fartlek: { fr: "Fartlek", en: "Fartlek" },
-  race_specific: { fr: "Allure course", en: "Race Specific" },
-  intervals: { fr: "Intervalles", en: "Intervals" },
-  mixed: { fr: "Mixte", en: "Mixed" },
-  technique: { fr: "Technique", en: "Technique" },
-  "warm-up": { fr: "\u00c9chauffement", en: "Warm-up" },
-};
 
 export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessionType, onSelect, isEn }: SwapSessionDialogProps) {
   const [allWorkouts, setAllWorkouts] = useState<WorkoutTemplate[]>([]);

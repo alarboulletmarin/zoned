@@ -29,6 +29,7 @@ import { toast } from "sonner";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
+import { SESSION_TYPE_LABELS } from "@/lib/labels";
 
 const DIFFICULTY_LABELS: Record<string, { fr: string; en: string }> = {
   beginner: { fr: "D\u00e9butant", en: "Beginner" },
@@ -48,19 +49,6 @@ const SESSION_TYPE_COLORS: Record<string, string> = {
   hills: "bg-green-500",
   race_specific: "bg-amber-500",
   recovery: "bg-slate-300 dark:bg-slate-700",
-};
-
-const SESSION_TYPE_LABELS: Record<string, { fr: string; en: string }> = {
-  recovery: { fr: "R\u00e9cup\u00e9ration", en: "Recovery" },
-  endurance: { fr: "Endurance", en: "Endurance" },
-  tempo: { fr: "Tempo", en: "Tempo" },
-  threshold: { fr: "Seuil", en: "Threshold" },
-  vo2max: { fr: "VO2max", en: "VO2max" },
-  speed: { fr: "Vitesse", en: "Speed" },
-  long_run: { fr: "Sortie longue", en: "Long Run" },
-  hills: { fr: "C\u00f4tes", en: "Hills" },
-  fartlek: { fr: "Fartlek", en: "Fartlek" },
-  race_specific: { fr: "Allure course", en: "Race Specific" },
 };
 
 const DAY_LABELS: Record<number, { fr: string; en: string }> = {

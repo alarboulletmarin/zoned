@@ -25,6 +25,7 @@ import type {
   Difficulty,
 } from "@/types";
 import { CATEGORY_META, DIFFICULTY_META } from "@/types";
+import { SESSION_TYPE_LABELS } from "@/lib/labels";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -59,27 +60,6 @@ const TARGET_SYSTEMS: TargetSystem[] = [
   "strength",
   "race_specific",
 ];
-
-// Simple display labels (no extra i18n needed - these are technical terms)
-const SESSION_TYPE_LABELS: Record<SessionType, { fr: string; en: string }> = {
-  recovery: { fr: "Récupération", en: "Recovery" },
-  endurance: { fr: "Endurance", en: "Endurance" },
-  tempo: { fr: "Tempo", en: "Tempo" },
-  threshold: { fr: "Seuil", en: "Threshold" },
-  vo2max: { fr: "VO2max", en: "VO2max" },
-  speed: { fr: "Vitesse", en: "Speed" },
-  long_run: { fr: "Sortie longue", en: "Long Run" },
-  hills: { fr: "Côtes", en: "Hills" },
-  fartlek: { fr: "Fartlek", en: "Fartlek" },
-  race_specific: { fr: "Spécifique course", en: "Race Specific" },
-  strength: { fr: "Renforcement", en: "Strength" },
-  cycling: { fr: "Vélo", en: "Cycling" },
-  swimming: { fr: "Natation", en: "Swimming" },
-  yoga: { fr: "Yoga", en: "Yoga" },
-  rest: { fr: "Repos", en: "Rest" },
-  rest_day: { fr: "Repos actif", en: "Active Rest" },
-  cross_training: { fr: "Cross-training", en: "Cross-training" },
-};
 
 const TARGET_SYSTEM_LABELS: Record<TargetSystem, { fr: string; en: string }> = {
   aerobic_base: { fr: "Base aérobie", en: "Aerobic Base" },

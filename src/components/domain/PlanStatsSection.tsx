@@ -18,6 +18,7 @@ import {
   Loader2,
   ChevronDown,
 } from "@/components/icons";
+import { SESSION_TYPE_LABELS } from "@/lib/labels";
 
 // ── Constants ────────────────────────────────────────────────────────
 
@@ -37,24 +38,6 @@ const SESSION_TYPE_COLORS: Record<string, string> = {
   swimming: "bg-teal-400",
   yoga: "bg-pink-300",
   cross_training: "bg-gray-400",
-};
-
-const SESSION_TYPE_LABELS: Record<string, { fr: string; en: string }> = {
-  recovery: { fr: "R\u00e9cup\u00e9ration", en: "Recovery" },
-  endurance: { fr: "Endurance", en: "Endurance" },
-  tempo: { fr: "Tempo", en: "Tempo" },
-  threshold: { fr: "Seuil", en: "Threshold" },
-  vo2max: { fr: "VO2max", en: "VO2max" },
-  speed: { fr: "Vitesse", en: "Speed" },
-  long_run: { fr: "Sortie longue", en: "Long Run" },
-  hills: { fr: "C\u00f4tes", en: "Hills" },
-  fartlek: { fr: "Fartlek", en: "Fartlek" },
-  race_specific: { fr: "Allure course", en: "Race Specific" },
-  strength: { fr: "Renforcement", en: "Strength" },
-  cycling: { fr: "V\u00e9lo", en: "Cycling" },
-  swimming: { fr: "Natation", en: "Swimming" },
-  yoga: { fr: "Yoga", en: "Yoga" },
-  cross_training: { fr: "Autre activit\u00e9", en: "Cross Training" },
 };
 
 const ZONE_COLORS: Record<string, string> = {
