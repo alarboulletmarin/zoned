@@ -3,6 +3,7 @@ import { usePageHint } from "@/hooks/usePageHint";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight, Download, Upload } from "@/components/icons";
+import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -166,7 +167,7 @@ function WorkoutListView() {
                       <div>
                         <h3 className="font-medium">{w.name || (isEn ? "Untitled" : "Sans titre")}</h3>
                         <p className="text-sm text-muted-foreground">
-                          ~{totalMin}min · {w.mainSetTemplate.length} {isEn ? "blocks" : "blocs"}
+                          ~{formatDurationMinutes(totalMin)} · {w.mainSetTemplate.length} {isEn ? "blocks" : "blocs"}
                         </p>
                       </div>
                       <ArrowRight className="size-4 text-muted-foreground" />

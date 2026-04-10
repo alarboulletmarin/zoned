@@ -25,6 +25,7 @@ import {
   SessionIntensityBar,
   transformSessionBlocks,
   getWorkoutDuration,
+  formatDurationMinutes,
 } from "@/components/visualization";
 import type { ZoneNumber } from "@/components/visualization";
 import { cn } from "@/lib/utils";
@@ -135,7 +136,7 @@ function RunningWorkoutCard({ workout, className, expanded }: { workout: Workout
           <div className={cn("flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground", expanded && "gap-3 text-sm")}>
             <div className="flex items-center gap-1">
               <Clock className="size-3.5" />
-              <span>{duration} {t("common:units.minutes")}</span>
+              <span>{formatDurationMinutes(duration)}</span>
             </div>
             <div className="flex items-center gap-1">
               <CategoryIcon className="size-3.5" />
@@ -225,7 +226,7 @@ export function WorkoutCardCompact({
 
 /** Internal running-only compact card */
 function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTemplate; className?: string }) {
-  const { t, i18n } = useTranslation(["library", "common"]);
+  const { i18n } = useTranslation(["library", "common"]);
   const isEn = i18n.language?.startsWith("en") ?? false;
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);
@@ -249,7 +250,7 @@ function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTem
       <div className="flex items-center justify-between mt-1.5 text-xs text-muted-foreground">
         <span className="flex items-center gap-1">
           <Clock className="size-3" />
-          {duration} {t("common:units.minutes")}
+          {formatDurationMinutes(duration)}
         </span>
         <FavoriteButton workoutId={workout.id} size="sm" />
       </div>

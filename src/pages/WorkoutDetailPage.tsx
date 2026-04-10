@@ -57,6 +57,7 @@ import {
 } from "@/types";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { IntensityBadge, INTENSITY_COLORS } from "@/components/domain/IntensityBadge";
+import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { MuscleGroupBadges } from "@/components/domain/MuscleGroupBadge";
 import { StrengthExerciseList } from "@/components/domain/StrengthExerciseList";
 import { loadUserZonePrefs, calculateAllZones } from "@/lib/zones";
@@ -422,10 +423,9 @@ export function WorkoutDetailPage() {
             <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
               <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
                 <Clock className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
-                <span className="text-lg lg:text-2xl font-bold">{duration}</span>
-                <span className="text-[10px] lg:text-xs text-muted-foreground">{t("common:units.minutes")}</span>
+                <span className="text-lg lg:text-2xl font-bold">{formatDurationMinutes(duration)}</span>
                 {hasPlanContext && duration < baseDuration - 3 && (
-                  <span className="text-[9px] text-muted-foreground line-through">{baseDuration}</span>
+                  <span className="text-[9px] text-muted-foreground line-through">{formatDurationMinutes(baseDuration)}</span>
                 )}
               </div>
               {planTargetDistanceKm != null && planTargetDistanceKm > 0 && (
@@ -752,10 +752,7 @@ function StrengthWorkoutDetail({ workout, locationState, isEn }: StrengthWorkout
               <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
                 <Clock className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
                 <span className="text-lg lg:text-2xl font-bold">
-                  {workout.typicalDuration.min}-{workout.typicalDuration.max}
-                </span>
-                <span className="text-[10px] lg:text-xs text-muted-foreground">
-                  {tCommon("units.minutes")}
+                  {formatDurationMinutes(workout.typicalDuration.min)}-{formatDurationMinutes(workout.typicalDuration.max)}
                 </span>
               </div>
               <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">

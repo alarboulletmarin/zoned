@@ -35,6 +35,7 @@ import { deletePlan, getPlan, savePlan, updatePlanSession, moveSession, deleteSe
 import { adaptPlan } from "@/lib/planGenerator/adapt";
 import { getWorkoutById } from "@/data/workouts";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
+import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
@@ -903,7 +904,7 @@ export function PlanViewPage() {
                   <div className="flex items-center gap-3 shrink-0">
                     {week.sessions.length > 0 && (
                       <span className="text-xs text-muted-foreground/70 tabular-nums hidden sm:inline">
-                        ~{Math.round(computeWeekKm(week))}km · {computeWeekDuration(week)}min
+                        ~{Math.round(computeWeekKm(week))}km · {formatDurationMinutes(computeWeekDuration(week))}
                       </span>
                     )}
                     <span
@@ -1034,7 +1035,7 @@ export function PlanViewPage() {
                                 {!isRaceDay && !session.workoutId.startsWith("__activity_") && (
                                   <span className="text-xs text-muted-foreground flex items-center gap-1">
                                     <Clock className="size-3" />
-                                    {session.estimatedDurationMin}min
+                                    {formatDurationMinutes(session.estimatedDurationMin)}
                                     {session.targetDistanceKm != null && session.targetDistanceKm > 0 && (
                                       <span> · {session.sessionType !== "long_run" && "~"}{session.targetDistanceKm}km</span>
                                     )}

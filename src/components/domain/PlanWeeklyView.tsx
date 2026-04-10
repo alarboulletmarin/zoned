@@ -4,6 +4,7 @@ import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, Dumbbell } f
 import { PHASE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
+import { formatDurationMinutes } from "@/components/visualization/transforms";
 
 // ── Color maps ──────────────────────────────────────────────────────
 
@@ -452,7 +453,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                 {weekData.sessions.length > 0 && (
                   <span className="block text-[10px] text-muted-foreground/70 tabular-nums">
                     ~{Math.round(computeWeekKm(weekData))}km ·{" "}
-                    {computeWeekDuration(weekData)}min
+                    {formatDurationMinutes(computeWeekDuration(weekData))}
                   </span>
                 )}
               </>
@@ -1005,7 +1006,7 @@ const DayCell = memo(function DayCell({
                     !session.workoutId.startsWith("__activity_") && (
                       <span className="text-[9px] text-muted-foreground flex items-center gap-0.5 mt-0.5">
                         <Clock className="size-2.5" />
-                        {session.estimatedDurationMin}min
+                        {formatDurationMinutes(session.estimatedDurationMin)}
                         {session.targetDistanceKm != null && session.targetDistanceKm > 0 && (
                           <span> · {session.sessionType !== "long_run" && "~"}{session.targetDistanceKm}km</span>
                         )}

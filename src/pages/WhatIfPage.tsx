@@ -928,14 +928,14 @@ export function WhatIfPage() {
                             style={{
                               height: `${(durA / volumeData.maxDuration) * 100}%`,
                             }}
-                            title={`A S${i + 1}: ${durA}min`}
+                            title={`A S${i + 1}: ${formatMinutes(durA)}`}
                           />
                           <div
                             className="flex-1 bg-orange-500/60 rounded-t-sm min-h-[1px]"
                             style={{
                               height: `${(durB / volumeData.maxDuration) * 100}%`,
                             }}
-                            title={`B S${i + 1}: ${durB}min`}
+                            title={`B S${i + 1}: ${formatMinutes(durB)}`}
                           />
                         </div>
                       );

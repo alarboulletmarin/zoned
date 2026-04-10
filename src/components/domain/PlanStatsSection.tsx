@@ -261,18 +261,18 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
           />
           <StatCard
             icon={TrendingUp}
-            value={`${stats.avgDurationPerWeekMin} min`}
+            value={formatMinutes(stats.avgDurationPerWeekMin)}
             label={isEn ? "Avg/week" : "Moy./semaine"}
           />
           <StatCard
             icon={Mountain}
             value={`S${stats.peakVolumeWeek}`}
-            sublabel={`${stats.peakVolumeMin}min`}
+            sublabel={formatMinutes(stats.peakVolumeMin)}
             label={isEn ? "Peak week" : "Semaine pic"}
           />
           <StatCard
             icon={Timer}
-            value={`${stats.longestSessionMin} min`}
+            value={formatMinutes(stats.longestSessionMin)}
             label={isEn ? "Longest" : "Session max"}
           />
           <StatCard
@@ -412,7 +412,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                       "w-full rounded-t-sm min-h-[2px]",
                     )}
                     style={{ height: `${heightPercent}%` }}
-                    title={`S${week.weekNumber}: ${week.durationMin}min`}
+                    title={`S${week.weekNumber}: ${formatMinutes(week.durationMin)}`}
                   />
                   {isCurrentWeek && (
                     <div className="absolute -bottom-4 size-1.5 rounded-full bg-primary" />

@@ -6,7 +6,7 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { WorkoutTemplate } from "@/types";
-import { transformSessionBlocks } from "./transforms";
+import { transformSessionBlocks, formatDurationMinutes } from "./transforms";
 import { cn } from "@/lib/utils";
 
 interface ZoneDistributionProps {
@@ -42,7 +42,7 @@ export function ZoneDistribution({ workout, className }: ZoneDistributionProps) 
             <div className="flex items-center justify-between text-xs">
               <span className="font-medium">Z{item.zone} - {item.label}</span>
               <span className="text-muted-foreground">
-                {Math.round(item.percent)}% ({Math.round(item.durationMin)}min)
+                {Math.round(item.percent)}% ({formatDurationMinutes(item.durationMin)})
               </span>
             </div>
             <div className="h-2 rounded-full bg-muted overflow-hidden">
@@ -60,7 +60,7 @@ export function ZoneDistribution({ workout, className }: ZoneDistributionProps) 
 
       {/* Total duration */}
       <div className="text-xs text-muted-foreground text-center pt-2 border-t">
-        {isEn ? "Total" : "Total"}: {Math.round(totalDurationMin)} min
+        {isEn ? "Total" : "Total"}: {formatDurationMinutes(totalDurationMin)}
       </div>
     </div>
   );

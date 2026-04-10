@@ -4,6 +4,7 @@ import { ZoneBadge } from "@/components/domain/ZoneBadge";
 import type { WorkoutTemplate, AnyWorkoutTemplate } from "@/types";
 import { getDominantZone, CATEGORY_META, isStrengthWorkout } from "@/types";
 import { getWorkoutDuration } from "@/components/visualization";
+import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { cn } from "@/lib/utils";
 
 interface SearchResultItemProps {
@@ -25,8 +26,8 @@ export function SearchResultItem({ workout, isSelected, onClick }: SearchResultI
     : isEn ? categoryMeta!.labelEn : categoryMeta!.label;
   const dominantZone = isStrength ? null : getDominantZone(workout);
   const duration = isStrength
-    ? `${Math.round(((workout as any).typicalDuration?.min + (workout as any).typicalDuration?.max) / 2)} min`
-    : `${getWorkoutDuration(workout)} min`;
+    ? formatDurationMinutes(Math.round(((workout as any).typicalDuration?.min + (workout as any).typicalDuration?.max) / 2))
+    : formatDurationMinutes(getWorkoutDuration(workout));
 
   return (
     <button

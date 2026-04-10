@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { X, Search, Clock, Loader2, Heart, Dumbbell } from "@/components/icons";
+import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { loadAllWorkouts } from "@/data/workouts";
 import { loadAllStrengthSessions } from "@/data/strength";
 import { getCustomWorkouts } from "@/lib/customWorkoutStorage";
@@ -339,7 +340,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
                         </span>
                         <span className="shrink-0 flex items-center gap-0.5 text-[10px] text-muted-foreground">
                           <Clock className="size-2.5" />
-                          {session.typicalDuration.min}min
+                          {formatDurationMinutes(session.typicalDuration.min)}
                         </span>
                       </div>
                       <div className="flex items-center gap-1.5 mb-0.5">
@@ -462,7 +463,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
                       </span>
                       <span className="flex items-center gap-0.5">
                         <Clock className="size-2.5" />
-                        {workout.typicalDuration.min}-{workout.typicalDuration.max}min
+                        {formatDurationMinutes(workout.typicalDuration.min)}-{formatDurationMinutes(workout.typicalDuration.max)}
                       </span>
                     </div>
                   </div>

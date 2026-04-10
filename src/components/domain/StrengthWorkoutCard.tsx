@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { FavoriteButton } from "./FavoriteButton";
 import { CategoryIcon } from "./CategoryIcon";
 import { cn } from "@/lib/utils";
+import { formatDurationMinutes } from "@/components/visualization/transforms";
 import type { StrengthWorkoutTemplate, StrengthIntensity, MuscleGroup } from "@/types/strength";
 import { DIFFICULTY_META } from "@/types";
 
@@ -118,7 +119,7 @@ export function StrengthWorkoutCard({ workout, className, expanded }: StrengthWo
           <div className={cn("flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground", expanded && "gap-3 text-sm")}>
             <div className="flex items-center gap-1">
               <Clock className="size-3.5" />
-              <span>{avgDuration} min</span>
+              <span>{formatDurationMinutes(avgDuration)}</span>
             </div>
             <div className="flex items-center gap-1">
               <CategoryIcon category={workout.category} size="sm" />
@@ -231,7 +232,7 @@ export function StrengthWorkoutCardCompact({
       <div className="flex items-center justify-between mt-1.5 text-xs text-muted-foreground">
         <span className="flex items-center gap-1">
           <Clock className="size-3" />
-          {avgDuration} min
+          {formatDurationMinutes(avgDuration)}
         </span>
         <span className="flex items-center gap-1">
           {needsEquipment ? (
@@ -276,7 +277,7 @@ export function StrengthWorkoutListItem({ workout, className }: StrengthWorkoutL
         {/* Mobile: show duration below title */}
         <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5 sm:hidden">
           <Clock className="size-3" />
-          <span>{avgDuration} min</span>
+          <span>{formatDurationMinutes(avgDuration)}</span>
         </div>
       </div>
 

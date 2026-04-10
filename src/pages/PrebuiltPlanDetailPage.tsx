@@ -23,6 +23,7 @@ import { convertPrebuiltToPlan } from "@/lib/prebuiltPlanConverter";
 import { savePlan, getPlanCount } from "@/lib/planStorage";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
+import { formatDurationMinutes } from "@/components/visualization/transforms";
 import type { WorkoutTemplate } from "@/types";
 import { toast } from "sonner";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
@@ -512,7 +513,7 @@ export function PrebuiltPlanDetailPage() {
                               {!isRaceDay && (
                                 <span className="text-xs text-muted-foreground flex items-center gap-1">
                                   <Clock className="size-3" />
-                                  {session.estimatedDurationMin}min
+                                  {formatDurationMinutes(session.estimatedDurationMin)}
                                 </span>
                               )}
                             </div>
