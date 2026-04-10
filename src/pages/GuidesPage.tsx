@@ -9,10 +9,8 @@ import { cn } from "@/lib/utils";
 interface GuideEntry {
   id: string;
   icon: React.ComponentType<IconProps>;
-  title: string;
-  titleEn: string;
-  description: string;
-  descriptionEn: string;
+  titleKey: string;
+  descriptionKey: string;
   href: string;
 }
 
@@ -20,59 +18,46 @@ const GUIDES: GuideEntry[] = [
   {
     id: "nutrition",
     icon: Utensils,
-    title: "Nutrition",
-    titleEn: "Nutrition",
-    description: "Alimentation, hydratation et ravitaillement en course",
-    descriptionEn: "Nutrition, hydration and race fueling",
+    titleKey: "nutrition.title",
+    descriptionKey: "nutrition.description",
     href: "/guides/nutrition",
   },
   {
     id: "race-prep",
     icon: Target,
-    title: "Préparation Course",
-    titleEn: "Race Preparation",
-    description: "Checklist, stratégie, récupération",
-    descriptionEn: "Checklist, strategy, recovery",
+    titleKey: "racePrep.title",
+    descriptionKey: "racePrep.description",
     href: "/guides/race-prep",
   },
   {
     id: "warmup",
     icon: Flame,
-    title: "Échauffement",
-    titleEn: "Warm-up",
-    description: "Routines d'échauffement et étirements",
-    descriptionEn: "Warm-up routines and stretching",
+    titleKey: "warmup.title",
+    descriptionKey: "warmup.description",
     href: "/guides/warmup",
   },
 ];
 
 export function GuidesPage() {
-  const { i18n } = useTranslation("guides");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("guides");
 
   return (
     <>
       <SEOHead
         title="Guides"
-        description={
-          isEn
-            ? "Running guides: nutrition, race preparation, warm-up routines and more."
-            : "Guides de course : nutrition, préparation course, routines d'échauffement et plus."
-        }
+        description={t("guides.seoDescription")}
         canonical="/guides"
         jsonLd={[
           {
             "@type": "CollectionPage",
             name: "Guides",
-            description: isEn
-              ? "Running guides: nutrition, race preparation, warm-up routines and more."
-              : "Guides de course : nutrition, préparation course, routines d'échauffement et plus.",
+            description: t("guides.seoCollectionDescription"),
             url: "https://zoned.run/guides",
           },
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 1, name: t("home"), item: "https://zoned.run/" },
               { "@type": "ListItem", position: 2, name: "Guides" },
             ],
           },
@@ -83,7 +68,7 @@ export function GuidesPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Guides</h1>
           <p className="text-muted-foreground text-lg">
-            {isEn ? "Resources to improve" : "Ressources pour progresser"}
+            {t("guides.subtitle")}
           </p>
         </div>
 
@@ -100,14 +85,14 @@ export function GuidesPage() {
                     </div>
                     <div className="space-y-1">
                       <h2 className="text-lg font-semibold">
-                        {isEn ? guide.titleEn : guide.title}
+                        {t(guide.titleKey)}
                       </h2>
                       <p className="text-sm text-muted-foreground">
-                        {isEn ? guide.descriptionEn : guide.description}
+                        {t(guide.descriptionKey)}
                       </p>
                     </div>
                     <div className="flex items-center gap-1 text-sm text-primary font-medium">
-                      {isEn ? "Explore" : "Explorer"}
+                      {t("explore")}
                       <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
                     </div>
                   </CardContent>

@@ -41,8 +41,7 @@ function ZonePreview() {
 }
 
 export function SettingsPage() {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
   const { settings, setColorPalette, setUnitSystem } = useSettings();
 
   const paletteOptions: { value: ColorPalette; label: string }[] = [
@@ -64,7 +63,7 @@ export function SettingsPage() {
     <>
       <SEOHead
         noindex={true}
-        title={isEn ? "Settings" : "Paramètres"}
+        title={t("seo.settings")}
         canonical="/settings"
       />
       <div className="py-8 max-w-2xl mx-auto">

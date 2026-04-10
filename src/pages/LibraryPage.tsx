@@ -491,7 +491,7 @@ export function LibraryPage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "Workout Library" : "Bibliothèque"}
+        title={t("common:seo.libraryTitle")}
         description={seoDescription}
         canonical="/library"
         jsonLd={{

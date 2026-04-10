@@ -28,7 +28,7 @@ import { PLAN_PRINCIPLES } from "@/data/plan-methodology";
 import { cn } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
-// Icon resolver — maps icon string name to component
+// Icon resolver -- maps icon string name to component
 // ---------------------------------------------------------------------------
 
 const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
@@ -113,7 +113,7 @@ const SCIENTIFIC_REFERENCES: Reference[] = [
 // ---------------------------------------------------------------------------
 
 export function PlanMethodologyPage() {
-  const { i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
 
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -125,20 +125,14 @@ export function PlanMethodologyPage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "Plan Guide" : "Guide des plans"}
-        description={
-          isEn
-            ? "The 7 evidence-based principles behind Zoned's training plan generation. Understand how your plan is built."
-            : "Les 7 principes scientifiques derrière la génération des plans d'entraînement Zoned. Comprenez comment votre plan est construit."
-        }
+        title={t("planMethodology.title")}
+        description={t("planMethodology.seoDescription")}
         canonical="/plans/methodology"
         jsonLd={{
           "@type": "WebPage",
-          name: isEn ? "Plan Guide" : "Guide des plans",
+          name: t("planMethodology.title"),
           url: "https://zoned.run/plans/methodology",
-          description: isEn
-            ? "The 7 evidence-based principles behind Zoned's training plan generation."
-            : "Les 7 principes scientifiques derrière la génération des plans d'entraînement Zoned.",
+          description: t("planMethodology.seoDescription"),
         }}
       />
 
@@ -151,14 +145,10 @@ export function PlanMethodologyPage() {
             </div>
           </div>
           <h1 className="text-3xl font-bold">
-            {isEn
-              ? "How Zoned Builds Your Plan"
-              : "Comment Zoned construit ton plan"}
+            {t("planMethodology.heading")}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {isEn
-              ? "Every training plan in Zoned is generated from 7 evidence-based principles. No black box: here is exactly how your plan is built, and why."
-              : "Chaque plan d'entraînement dans Zoned est généré à partir de 7 principes fondés sur la recherche. Pas de boîte noire : voici exactement comment ton plan est construit, et pourquoi."}
+            {t("planMethodology.intro")}
           </p>
         </div>
 
@@ -167,20 +157,12 @@ export function PlanMethodologyPage() {
           <div className="text-muted-foreground space-y-3 pl-0">
             <GlossaryLinkedText
               as="p"
-              text={
-                isEn
-                  ? "The plan generator combines periodization models from Daniels and Lydiard, the polarized training distribution validated by Seiler, volume progression rules derived from Gabbett's acute:chronic workload research, and the exponential taper model of Mujika & Padilla. Each parameter is adapted to your race distance, fitness level, and training goal."
-                  : "Le générateur de plans combine les modèles de périodisation de Daniels et Lydiard, la distribution d'entraînement polarisé validée par Seiler, les règles de progression de volume issues des recherches de Gabbett sur le ratio charge aiguë/chronique, et le modèle de taper exponentiel de Mujika & Padilla. Chaque paramètre est adapté à ta distance de course, ton niveau et ton objectif."
-              }
+              text={t("planMethodology.introText")}
             />
             <GlossaryLinkedText
               as="p"
               className="text-sm italic border-l-2 border-primary/30 pl-4"
-              text={
-                isEn
-                  ? "These are the same principles used by professional coaches. The difference is that Zoned applies them automatically based on your profile."
-                  : "Ce sont les mêmes principes utilisés par les entraîneurs professionnels. La différence, c'est que Zoned les applique automatiquement en fonction de ton profil."
-              }
+              text={t("planMethodology.introDisclaimer")}
             />
           </div>
         </section>
@@ -258,7 +240,7 @@ export function PlanMethodologyPage() {
                     {principle.references && principle.references.length > 0 && (
                       <div className="pl-12 space-y-1">
                         <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                          {isEn ? "Sources" : "Sources"}
+                          Sources
                         </p>
                         <ul className="space-y-0.5">
                           {principle.references.map((ref, refIndex) => (
@@ -280,7 +262,7 @@ export function PlanMethodologyPage() {
                           to={`/learn/${principle.relatedArticle}`}
                           className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
                         >
-                          {isEn ? "Learn more" : "En savoir plus"}
+                          {t("planMethodology.learnMore")}
                           <ArrowRight className="size-3.5" />
                         </Link>
                       </div>
@@ -299,7 +281,7 @@ export function PlanMethodologyPage() {
               <BookOpen className="size-5 text-green-500" />
             </div>
             <h2 className="text-2xl font-semibold">
-              {isEn ? "Scientific References" : "Références scientifiques"}
+              {t("planMethodology.scientificReferences")}
             </h2>
           </div>
 
@@ -325,7 +307,7 @@ export function PlanMethodologyPage() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
                     >
-                      {isEn ? "View study" : "Voir l'étude"}
+                      {t("planMethodology.viewStudy")}
                       <ArrowRight className="size-3" />
                     </a>
                   )}

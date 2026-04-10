@@ -4,7 +4,6 @@
  */
 
 import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import type { WorkoutTemplate } from "@/types";
 import { transformSessionBlocks, formatDurationMinutes } from "./transforms";
 import { cn } from "@/lib/utils";
@@ -15,19 +14,13 @@ interface ZoneDistributionProps {
 }
 
 export function ZoneDistribution({ workout, className }: ZoneDistributionProps) {
-  const { i18n } = useTranslation();
-  const isEn = i18n.language?.startsWith("en") ?? false;
-
   const { zoneBreakdown, totalDurationMin } = useMemo(() => {
-    return transformSessionBlocks(
-      {
-        warmup: workout.warmupTemplate,
-        mainSet: workout.mainSetTemplate,
-        cooldown: workout.cooldownTemplate,
-      },
-      isEn,
-    );
-  }, [workout, isEn]);
+    return transformSessionBlocks({
+      warmup: workout.warmupTemplate,
+      mainSet: workout.mainSetTemplate,
+      cooldown: workout.cooldownTemplate,
+    });
+  }, [workout]);
 
   if (zoneBreakdown.length === 0) {
     return null;
@@ -60,7 +53,7 @@ export function ZoneDistribution({ workout, className }: ZoneDistributionProps) 
 
       {/* Total duration */}
       <div className="text-xs text-muted-foreground text-center pt-2 border-t">
-        {isEn ? "Total" : "Total"}: {formatDurationMinutes(totalDurationMin)}
+        Total: {formatDurationMinutes(totalDurationMin)}
       </div>
     </div>
   );

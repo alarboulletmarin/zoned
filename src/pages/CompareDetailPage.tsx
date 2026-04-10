@@ -124,10 +124,7 @@ export function CompareDetailPage() {
           </h1>
           <p className="text-muted-foreground max-w-xl">{tagline}</p>
           <div className="flex flex-wrap gap-2">
-            {(isEn
-              ? ["Free forever", "No account", "Open Source"]
-              : ["Gratuit", "Sans compte", "Open Source"]
-            ).map((badge) => (
+            {[t("comparePage.badgeFree"), t("comparePage.badgeNoAccount"), "Open Source"].map((badge) => (
               <span
                 key={badge}
                 className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-0.5 text-xs font-medium text-primary"
@@ -141,7 +138,7 @@ export function CompareDetailPage() {
         {/* Comparison table */}
         <section className="space-y-4">
           <h2 className="text-xl font-semibold">
-            {isEn ? "Feature comparison" : "Comparaison des fonctionnalités"}
+            {t("comparePage.featureComparison")}
           </h2>
           <div className="overflow-x-auto rounded-xl border border-border">
             <table className="w-full text-sm">

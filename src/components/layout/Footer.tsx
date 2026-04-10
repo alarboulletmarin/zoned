@@ -9,8 +9,7 @@ import { useWhatsNew } from "@/hooks/useWhatsNew";
 import Logo from "@/assets/logo.svg?react";
 
 export function Footer() {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
   const currentYear = new Date().getFullYear();
   const { workouts } = useWorkouts();
   const { workouts: strengthWorkouts } = useStrengthWorkouts();
@@ -32,7 +31,7 @@ export function Footer() {
               {totalSessions} {t("units.workouts")} · {totalCategories}{" "}
               {t("units.categories")} · 6 {t("units.zones")}
               {strengthWorkouts.length > 0 && (
-                <> · {strengthWorkouts.length} {isEn ? "strength" : "renforcement"}</>
+                <> · {strengthWorkouts.length} {t("footer.strength")}</>
               )}
             </span>
             <span className="text-xs text-muted-foreground hidden lg:inline">

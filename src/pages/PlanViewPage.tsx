@@ -70,7 +70,7 @@ export function PlanViewPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { i18n } = useTranslation("plan");
+  const { t, i18n } = useTranslation("plan");
   const isEn = i18n.language?.startsWith("en") ?? false;
 
   // Week persistence via URL search params (?week=N)
@@ -237,9 +237,9 @@ export function PlanViewPage() {
     const success = updatePlanSession(plan.id, swapTarget.weekNumber, originalIndex, workout.id);
     if (success) {
       reloadPlan();
-      toast.success(isEn ? "Session replaced" : "Séance remplacée");
+      toast.success(t("view.sessionReplaced"));
     } else {
-      toast.error(isEn ? "Failed to update session" : "Échec de la mise à jour");
+      toast.error(t("view.sessionUpdateFailed"));
     }
     setSwapTarget(null);
   }, [plan, swapTarget, isEn, reloadPlan]);
@@ -254,9 +254,9 @@ export function PlanViewPage() {
     const success = moveSession(plan.id, fromWeek, fromSessionIndex, toWeek, toDay);
     if (success) {
       reloadPlan();
-      toast.success(isEn ? "Session moved" : "Séance déplacée");
+      toast.success(t("view.sessionMoved"));
     } else {
-      toast.error(isEn ? "Failed to move session" : "Échec du déplacement");
+      toast.error(t("view.sessionMoveFailed"));
     }
   }, [plan, isEn, reloadPlan]);
 
@@ -265,9 +265,9 @@ export function PlanViewPage() {
     const success = deleteSessionFromPlan(plan.id, weekNumber, sessionIndex);
     if (success) {
       reloadPlan();
-      toast.success(isEn ? "Session deleted" : "Séance supprimée");
+      toast.success(t("view.sessionDeleted"));
     } else {
-      toast.error(isEn ? "Failed to delete session" : "Échec de la suppression");
+      toast.error(t("view.sessionDeleteFailed"));
     }
   }, [plan, isEn, reloadPlan]);
 
@@ -296,7 +296,7 @@ export function PlanViewPage() {
         toast.info(isEn ? change.descriptionEn : change.description, { duration: 5000 });
       }
     } else if (showToast) {
-      toast.success(isEn ? `Week ${weekNumber} validated!` : `Semaine ${weekNumber} validée !`);
+      toast.success(t("view.weekValidated", { week: weekNumber }));
     }
   }, [plan, isEn, reloadPlan]);
 
@@ -403,16 +403,16 @@ export function PlanViewPage() {
       week.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
       savePlan(plan);
       reloadPlan();
-      toast.success(isEn ? "Activity added" : "Activit\u00e9 ajout\u00e9e");
+      toast.success(t("view.activityAdded"));
       return;
     }
 
     const success = await addSessionToPlan(plan.id, weekNumber, workoutId, day);
     if (success) {
       reloadPlan();
-      toast.success(isEn ? "Workout added" : "S\u00e9ance ajout\u00e9e");
+      toast.success(t("view.workoutAdded"));
     } else {
-      toast.error(isEn ? "Failed to add workout" : "\u00c9chec de l\u2019ajout");
+      toast.error(t("view.workoutAddFailed"));
     }
   }, [plan, isEn, reloadPlan]);
 
@@ -430,12 +430,12 @@ export function PlanViewPage() {
     return (
       <div className="py-12 text-center">
         <p className="text-muted-foreground">
-          {isEn ? "Plan not found" : "Plan introuvable"}
+          {t("view.notFound")}
         </p>
         <Button variant="link" asChild className="mt-4">
           <Link to="/plans">
             <ArrowLeft className="mr-2 size-4" />
-            {isEn ? "Back to plans" : "Retour aux plans"}
+            {t("view.backToPlans")}
           </Link>
         </Button>
       </div>
@@ -461,7 +461,7 @@ export function PlanViewPage() {
         <Button variant="ghost" size="sm" asChild>
           <Link to="/plans">
             <ArrowLeft className="mr-2 size-4" />
-            {isEn ? "Back to plans" : "Retour aux plans"}
+            {t("view.backToPlans")}
           </Link>
         </Button>
 
@@ -479,7 +479,7 @@ export function PlanViewPage() {
                     plan.config.planName = trimmed;
                     savePlan(plan);
                     reloadPlan();
-                    toast.success(isEn ? "Name updated" : "Nom mis à jour");
+                    toast.success(t("view.nameUpdated"));
                   }
                   setIsEditingName(false);
                 }}
@@ -493,7 +493,7 @@ export function PlanViewPage() {
               <h1
                 className="text-3xl font-bold cursor-pointer group flex items-center gap-2"
                 onClick={() => { setEditName(planName); setIsEditingName(true); }}
-                title={isEn ? "Click to rename" : "Cliquer pour renommer"}
+                title={t("view.clickToRename")}
               >
                 {planName}
                 <Pencil className="size-4 opacity-0 group-hover:opacity-50 transition-opacity" />
@@ -507,12 +507,12 @@ export function PlanViewPage() {
               )}
               {isFreePlan && (
                 <Badge variant="secondary">
-                  {isEn ? "Free plan" : "Plan libre"}
+                  {t("view.freePlan")}
                 </Badge>
               )}
               {plan.config.planMode === "prebuilt" && (
                 <Badge variant="secondary">
-                  {isEn ? "Pre-built" : "Pr\u00e9-construit"}
+                  {t("view.prebuilt")}
                 </Badge>
               )}
               {raceDate && (
@@ -547,7 +547,7 @@ export function PlanViewPage() {
                       setEditStartDate(plan.config.startDate || "");
                       setShowDateDialog(true);
                     }}
-                    title={isEn ? "Edit dates" : "Modifier les dates"}
+                    title={t("view.editDates")}
                   >
                     <Pencil className="size-3.5" />
                   </Button>
@@ -564,7 +564,7 @@ export function PlanViewPage() {
                   }}
                 >
                   <Plus className="size-3.5 mr-1" />
-                  {isEn ? "Add dates" : "Ajouter des dates"}
+                  {t("view.addDates")}
                 </Button>
               )}
             </div>
@@ -582,7 +582,7 @@ export function PlanViewPage() {
               size="sm"
               className="rounded-full"
               onClick={() => setShowDeleteDialog(true)}
-              title={isEn ? "Delete plan" : "Supprimer le plan"}
+              title={t("view.delete")}
             >
               <Trash2 className="size-4" />
             </Button>
@@ -594,7 +594,7 @@ export function PlanViewPage() {
           <Card size="compact">
             <CardContent className="px-4">
               <p className="text-sm font-medium mb-2">
-                {isEn ? "Training phases" : "Phases d'entra\u00eenement"}
+                {t("view.phases")}
               </p>
               <div className="flex rounded-full overflow-hidden h-3">
                 {plan.phases.map((phaseRange) => {
@@ -645,8 +645,8 @@ export function PlanViewPage() {
         {/* Programme / Statistiques toggle */}
         <Tabs defaultValue="programme">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="programme">{isEn ? "Schedule" : "Programme"}</TabsTrigger>
-            <TabsTrigger value="stats">{isEn ? "Statistics" : "Statistiques"}</TabsTrigger>
+            <TabsTrigger value="programme">{t("view.schedule")}</TabsTrigger>
+            <TabsTrigger value="stats">{t("view.statistics")}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="stats" className="mt-4">
@@ -665,7 +665,7 @@ export function PlanViewPage() {
               className="rounded-full hidden md:inline-flex"
             >
               <Plus className="size-4" />
-              <span className="ml-1">{isEn ? "Add workout" : "Ajouter une séance"}</span>
+              <span className="ml-1">{t("view.addWorkout")}</span>
             </Button>
             <PlanViewModeSelector value={planViewMode} onChange={setPlanViewMode} />
           </div>
@@ -675,11 +675,11 @@ export function PlanViewPage() {
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground mb-2 px-1">
           <span className="flex items-center gap-1.5">
             <span className="size-3 rounded-sm border-2 border-muted-foreground/30 inline-block" />
-            {isEn ? "Planned" : "Planifié"}
+            {t("completion.planned")}
           </span>
           <span className="flex items-center gap-1.5">
             <span className="size-3 rounded-sm bg-green-500 inline-block" />
-            {isEn ? "Completed" : "Fait"}
+            {t("completion.completed")}
           </span>
           <span className="flex items-center gap-1.5">
             <span className="size-3 rounded-sm bg-muted border border-muted-foreground/30 inline-flex items-center justify-center">
@@ -687,22 +687,16 @@ export function PlanViewPage() {
                 <path d="M3 3l6 6M9 3l-6 6" />
               </svg>
             </span>
-            {isEn ? "Skipped" : "Passé"}
+            {t("completion.skipped")}
           </span>
           <span className="text-muted-foreground/50">
-            {isEn
-              ? "Click checkbox to cycle: planned → done → skipped"
-              : "Cliquez sur la case : planifié → fait → passé"}
+            {t("completion.hint")}
           </span>
           <span className="text-muted-foreground/50 hidden md:inline">
-            {isEn
-              ? "· Right-click for options · Drag to move"
-              : "· Clic droit pour les options · Glisser pour déplacer"}
+            {"· "}{t("view.rightClickOptions")}
           </span>
           <span className="text-muted-foreground/50 md:hidden">
-            {isEn
-              ? "· Long-press for options · Swipe to move"
-              : "· Appui long pour les options · Glisser pour déplacer"}
+            {"· "}{t("view.longPressOptions")}
           </span>
         </div>
 
@@ -875,12 +869,12 @@ export function PlanViewPage() {
                     </div>
                     {isCurrent && (
                       <Badge variant="default" className="shrink-0">
-                        {isEn ? "Current week" : "Semaine en cours"}
+                        {t("view.currentWeek")}
                       </Badge>
                     )}
                     {week.isRecoveryWeek && (
                       <Badge variant="secondary" className="shrink-0">
-                        {isEn ? "Recovery" : "Récup"}
+                        {t("calendar.recoveryWeek")}
                       </Badge>
                     )}
                   </div>
@@ -892,7 +886,7 @@ export function PlanViewPage() {
                     )}
                     <span
                       className="text-sm text-muted-foreground"
-                      title={isEn ? "Training volume relative to plan peak" : "Volume d'entraînement relatif au pic du plan"}
+                      title={t("view.trainingVolume")}
                     >
                       Vol. {week.volumePercent}%
                     </span>
@@ -909,9 +903,7 @@ export function PlanViewPage() {
                   <div className="border-t px-4 py-4 space-y-2">
                     {week.sessions.length === 0 ? (
                       <p className="text-sm text-muted-foreground py-3">
-                        {isEn
-                          ? "No sessions this week"
-                          : "Aucune séance cette semaine"}
+                        {t("view.noSessionsThisWeek")}
                       </p>
                     ) : (
                       (() => {
@@ -979,7 +971,7 @@ export function PlanViewPage() {
                                   <div className="flex items-center gap-2">
                                     <Flag className="size-4 text-primary" />
                                     <span className="font-semibold text-primary">
-                                      {isEn ? "Race Day!" : "Jour de course !"}
+                                      {t("view.raceDay")}
                                     </span>
                                   </div>
                                 ) : session.workoutId.startsWith("__activity_") ? (
@@ -1039,7 +1031,7 @@ export function PlanViewPage() {
                                           sessionType: session.sessionType,
                                         });
                                       }}
-                                      title={isEn ? "Replace session" : "Remplacer la séance"}
+                                      title={t("view.replaceSession")}
                                     >
                                       <span className="text-xs">{"\u21c4"}</span>
                                     </Button>
@@ -1051,7 +1043,7 @@ export function PlanViewPage() {
                                         e.stopPropagation();
                                         handleSessionDelete(week.weekNumber, originalIndex);
                                       }}
-                                      title={isEn ? "Remove session" : "Retirer la séance"}
+                                      title={t("view.removeSession")}
                                     >
                                       <Trash2 className="size-3.5" />
                                     </Button>
@@ -1076,7 +1068,7 @@ export function PlanViewPage() {
                             <svg viewBox="0 0 12 12" className="size-3" fill="none" stroke="currentColor" strokeWidth="2">
                               <path d="M2 6l3 3 5-5" />
                             </svg>
-                            {isEn ? "Week validated" : "Semaine validée"}
+                            {t("completion.validated")}
                           </div>
                         );
                       }
@@ -1091,9 +1083,7 @@ export function PlanViewPage() {
                             <svg viewBox="0 0 12 12" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="2">
                               <path d="M2 6l3 3 5-5" />
                             </svg>
-                            {isEn
-                              ? `Validate week (${resolved}/${total} done)`
-                              : `Valider la semaine (${resolved}/${total} faites)`}
+                            {t("completion.validate", { done: resolved, total })}
                           </button>
                         );
                       }
@@ -1111,7 +1101,7 @@ export function PlanViewPage() {
                       className="md:hidden w-full mt-1 rounded-lg border border-dashed border-muted-foreground/30 p-2.5 flex items-center justify-center gap-2 text-muted-foreground/50 active:text-primary transition-colors"
                     >
                       <Plus className="size-4" />
-                      <span className="text-sm">{isEn ? "Add" : "Ajouter"}</span>
+                      <span className="text-sm">{t("view.add")}</span>
                     </button>
                   </div>
                 )}
@@ -1148,23 +1138,21 @@ export function PlanViewPage() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                {isEn ? "Delete this plan?" : "Supprimer ce plan ?"}
+                {t("view.deleteTitle")}
               </DialogTitle>
               <DialogDescription>
-                {isEn
-                  ? `"${planName}" will be permanently deleted. This action cannot be undone.`
-                  : `"${planName}" sera définitivement supprimé. Cette action est irréversible.`}
+                {t("view.deleteConfirm", { name: planName })}
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline">
-                  {isEn ? "Cancel" : "Annuler"}
+                  {t("view.cancel")}
                 </Button>
               </DialogClose>
               <Button variant="destructive" onClick={handleDelete}>
                 <Trash2 className="size-4" />
-                {isEn ? "Delete" : "Supprimer"}
+                {t("view.delete")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -1175,18 +1163,16 @@ export function PlanViewPage() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                {isEn ? "Edit dates" : "Modifier les dates"}
+                {t("view.editDatesTitle")}
               </DialogTitle>
               <DialogDescription>
-                {isEn
-                  ? "Set a start date for your plan. The end date is calculated automatically."
-                  : "D\u00e9finissez une date de d\u00e9but pour votre plan. La date de fin est calcul\u00e9e automatiquement."}
+                {t("view.editDatesDescription")}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-2">
               <div>
                 <label htmlFor="edit-start-date" className="text-sm font-medium mb-2 block">
-                  {isEn ? "Start date" : "Date de d\u00e9but"}
+                  {t("view.startDate")}
                 </label>
                 <input
                   id="edit-start-date"
@@ -1212,7 +1198,7 @@ export function PlanViewPage() {
                     onClick={() => setEditStartDate(nextMondayStr)}
                   >
                     <Calendar className="size-3.5" />
-                    {isEn ? "Start next Monday" : "Commencer lundi prochain"}
+                    {t("view.startNextMonday")}
                     {" "}({nextMonday.toLocaleDateString(isEn ? "en-US" : "fr-FR", { day: "numeric", month: "short" })})
                   </Button>
                 );
@@ -1232,7 +1218,7 @@ export function PlanViewPage() {
                       <div className="flex items-center gap-2">
                         <Calendar className="size-4 text-muted-foreground shrink-0" />
                         <span>
-                          {isEn ? "Start" : "D\u00e9but"} : {startD.toLocaleDateString(isEn ? "en-US" : "fr-FR", { day: "numeric", month: "long", year: "numeric" })}
+                          {t("view.startLabel")} : {startD.toLocaleDateString(isEn ? "en-US" : "fr-FR", { day: "numeric", month: "long", year: "numeric" })}
                           {" "}
                           <span className="text-muted-foreground">({weekdayStr})</span>
                         </span>
@@ -1240,21 +1226,19 @@ export function PlanViewPage() {
                       <div className="flex items-center gap-2">
                         <Flag className="size-4 text-muted-foreground shrink-0" />
                         <span>
-                          {isEn ? "End" : "Fin"} : {endD.toLocaleDateString(isEn ? "en-US" : "fr-FR", { day: "numeric", month: "long", year: "numeric" })}
+                          {t("view.endLabel")} : {endD.toLocaleDateString(isEn ? "en-US" : "fr-FR", { day: "numeric", month: "long", year: "numeric" })}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Clock className="size-4 text-muted-foreground shrink-0" />
-                        <span>{plan.totalWeeks} {isEn ? "weeks" : "semaines"}</span>
+                        <span>{plan.totalWeeks} {t("duration.weeks")}</span>
                       </div>
                     </div>
                     {isPast && (
                       <div className="flex items-center gap-2 text-sm text-amber-600 dark:text-amber-400">
                         <AlertTriangle className="size-4 shrink-0" />
                         <span>
-                          {isEn
-                            ? "This date is in the past. The first weeks will already be elapsed."
-                            : "Cette date est dans le pass\u00e9. Les premi\u00e8res semaines seront d\u00e9j\u00e0 \u00e9coul\u00e9es."}
+                          {t("view.pastDateWarning")}
                         </span>
                       </div>
                     )}
@@ -1265,7 +1249,7 @@ export function PlanViewPage() {
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline">
-                  {isEn ? "Cancel" : "Annuler"}
+                  {t("view.cancel")}
                 </Button>
               </DialogClose>
               <Button
@@ -1282,10 +1266,10 @@ export function PlanViewPage() {
                   savePlan(plan);
                   reloadPlan();
                   setShowDateDialog(false);
-                  toast.success(isEn ? "Dates updated" : "Dates mises \u00e0 jour");
+                  toast.success(t("view.datesUpdated"));
                 }}
               >
-                {isEn ? "Save" : "Enregistrer"}
+                {t("view.save")}
               </Button>
             </DialogFooter>
           </DialogContent>

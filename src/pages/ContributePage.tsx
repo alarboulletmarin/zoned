@@ -3,24 +3,19 @@ import { SEOHead } from "@/components/seo";
 import { ContributeForm } from "@/components/domain/contribute/ContributeForm";
 
 export function ContributePage() {
-  const { t, i18n } = useTranslation("contribute");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation(["contribute", "common"]);
 
   return (
     <>
       <SEOHead
-        title={isEn ? "Contribute" : "Contribuer"}
-        description={
-          isEn
-            ? "Share your favorite training sessions with the Zoned community"
-            : "Partagez vos séances d'entraînement préférées avec la communauté Zoned"
-        }
+        title={t("common:seo.contribute")}
+        description={t("common:seo.contributeDesc")}
         canonical="/contribute"
         jsonLd={{
           "@type": "BreadcrumbList",
           itemListElement: [
             { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-            { "@type": "ListItem", position: 2, name: isEn ? "Contribute" : "Contribuer" },
+            { "@type": "ListItem", position: 2, name: t("common:seo.contribute") },
           ],
         }}
       />

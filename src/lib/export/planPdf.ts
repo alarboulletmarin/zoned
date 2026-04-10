@@ -16,6 +16,7 @@ import { getDominantZone } from "@/types";
 import { computePlanStats, computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { calculatePaceZones, formatPace } from "@/lib/zones";
 import { getExerciseById } from "@/data/strength";
+import i18n from "@/i18n";
 
 // ── Constants ──────────────────────────────────────────────────────
 
@@ -76,9 +77,17 @@ const SUPERSCRIPT_DIGITS = ["\u2070", "\u00b9", "\u00b2", "\u00b3", "\u2074", "\
 
 // ── Helpers ────────────────────────────────────────────────────────
 
-function formatDate(isoDate: string, isEn: boolean): string {
+function isEn(): boolean {
+  return i18n.language?.startsWith("en") ?? false;
+}
+
+function t(key: string, opts?: Record<string, unknown>): string {
+  return i18n.t(`common:export.planPdf.${key}`, opts);
+}
+
+function formatDate(isoDate: string): string {
   const date = new Date(isoDate);
-  return date.toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
+  return date.toLocaleDateString(isEn() ? "en-GB" : "fr-FR", {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -116,20 +125,20 @@ function paceStr(p: number): string {
 }
 
 /** Day abbreviation from dayOfWeek (0=Mon...6=Sun) */
-function dayLabel(dayOfWeek: number, isEn: boolean): string {
-  const days = isEn ? DAY_SHORT.en : DAY_SHORT.fr;
+function dayLabel(dayOfWeek: number): string {
+  const days = isEn() ? DAY_SHORT.en : DAY_SHORT.fr;
   return days[dayOfWeek] ?? "?";
 }
 
 /** Get session type label (short) */
-function typeLabel(sessionType: string, template: WorkoutTemplate | undefined, isEn: boolean): string {
+function typeLabel(sessionType: string, template: WorkoutTemplate | undefined): string {
   if (template && isStrength(template)) {
     const cat = asStrength(template).category;
     const label = STRENGTH_CAT_LABELS[cat];
-    return label ? (isEn ? label.en : label.fr) : (isEn ? "Strength" : "Renfo");
+    return label ? (isEn() ? label.en : label.fr) : (isEn() ? "Strength" : "Renfo");
   }
   const label = SESSION_TYPE_LABELS_SHORT[sessionType];
-  return label ? (isEn ? label.en : label.fr) : sessionType;
+  return label ? (isEn() ? label.en : label.fr) : sessionType;
 }
 
 // ── Compact summary builders ───────────────────────────────────────
@@ -223,7 +232,6 @@ function buildCompactSummary(template: WorkoutTemplate, actualDurationMin?: numb
 function buildStrengthSummary(
   template: StrengthWorkoutTemplate,
   exerciseNames: Record<string, string>,
-  isEn: boolean,
 ): string {
   const allBlocks = [
     ...template.warmupBlocks,
@@ -236,7 +244,7 @@ function buildStrengthSummary(
     .map((b) => exerciseNames[b.exerciseId] || b.exerciseId)
     .join(", ");
   const suffix = count > 3 ? "..." : "";
-  return `${count} ${isEn ? "exercises" : "exercices"} \u00b7 ${names}${suffix}`;
+  return `${count} ${t("exercises")} \u00b7 ${names}${suffix}`;
 }
 
 // ── Workout index for appendix ──────────────────────────────────────
@@ -291,9 +299,8 @@ async function resolveExerciseNames(
 function renderRunningAppendixEntry(
   refNum: number,
   template: WorkoutTemplate,
-  isEn: boolean,
 ): Content[] {
-  const name = isEn ? template.nameEn : template.name;
+  const name = isEn() ? template.nameEn : template.name;
   const zone = `Z${getDominantZone(template)}`;
   const zoneColor = ZONE_COLORS[zone] || "#555";
   const dur = template.typicalDuration
@@ -301,7 +308,7 @@ function renderRunningAppendixEntry(
     : "";
 
   const catLabel = SESSION_TYPE_LABELS_SHORT[template.sessionType];
-  const catStr = catLabel ? (isEn ? catLabel.en : catLabel.fr) : template.sessionType;
+  const catStr = catLabel ? (isEn() ? catLabel.en : catLabel.fr) : template.sessionType;
 
   const result: Content[] = [];
 
@@ -321,19 +328,19 @@ function renderRunningAppendixEntry(
   // Blocks table
   const allBlocks: { phase: string; blocks: WorkoutBlock[] }[] = [];
   if (template.warmupTemplate?.length) {
-    allBlocks.push({ phase: isEn ? "Warm-up" : "Echauf.", blocks: template.warmupTemplate });
+    allBlocks.push({ phase: t("warmup"), blocks: template.warmupTemplate });
   }
   if (template.mainSetTemplate?.length) {
-    allBlocks.push({ phase: isEn ? "Main" : "Corps", blocks: template.mainSetTemplate });
+    allBlocks.push({ phase: t("mainSet"), blocks: template.mainSetTemplate });
   }
   if (template.cooldownTemplate?.length) {
-    allBlocks.push({ phase: isEn ? "Cooldown" : "Retour", blocks: template.cooldownTemplate });
+    allBlocks.push({ phase: t("cooldown"), blocks: template.cooldownTemplate });
   }
 
   const rows: TableCell[][] = [];
   for (const { phase, blocks } of allBlocks) {
     for (const block of blocks) {
-      const desc = isEn ? (block.descriptionEn || block.description) : block.description;
+      const desc = isEn() ? (block.descriptionEn || block.description) : block.description;
       const dur = block.durationMin ? `${block.durationMin}min` : "";
       const blockZone = block.zone || "";
       const blockZoneColor = blockZone ? (ZONE_COLORS[blockZone.split("-")[0]] || "#555") : "";
@@ -370,7 +377,7 @@ function renderRunningAppendixEntry(
     const headerRow: TableCell[] = [
       { text: "Phase", style: "tinyHeader" },
       { text: "Description", style: "tinyHeader" },
-      { text: isEn ? "Duration" : "Durée", style: "tinyHeader" },
+      { text: t("durationCol"), style: "tinyHeader" },
       { text: "Zone", style: "tinyHeader" },
       { text: "Reps", style: "tinyHeader" },
     ];
@@ -395,9 +402,9 @@ function renderRunningAppendixEntry(
   // Coaching tips (max 2, only for complex workouts)
   const complexTypes = ["threshold", "vo2max", "tempo", "race_pace", "fartlek", "hills"];
   if (complexTypes.includes(template.sessionType)) {
-    const tips = isEn ? template.coachingTipsEn : template.coachingTips;
+    const tips = isEn() ? template.coachingTipsEn : template.coachingTips;
     if (tips?.length) {
-      const tipTexts = tips.slice(0, 2).map((t) => `\u2022 ${t}`).join("  ");
+      const tipTexts = tips.slice(0, 2).map((tip) => `\u2022 ${tip}`).join("  ");
       result.push({
         text: tipTexts,
         italics: true,
@@ -415,11 +422,10 @@ function renderStrengthAppendixEntry(
   refNum: number,
   template: StrengthWorkoutTemplate,
   exerciseNames: Record<string, string>,
-  isEn: boolean,
 ): Content[] {
-  const name = isEn ? template.nameEn : template.name;
+  const name = isEn() ? template.nameEn : template.name;
   const catLabel = STRENGTH_CAT_LABELS[template.category];
-  const catStr = catLabel ? (isEn ? catLabel.en : catLabel.fr) : template.category;
+  const catStr = catLabel ? (isEn() ? catLabel.en : catLabel.fr) : template.category;
   const intensityStr = template.intensity;
   const dur = template.typicalDuration
     ? `${template.typicalDuration.min}-${template.typicalDuration.max}min`
@@ -441,19 +447,19 @@ function renderStrengthAppendixEntry(
   // Blocks table
   const allBlockSections: { phase: string; blocks: StrengthBlock[] }[] = [];
   if (template.warmupBlocks?.length) {
-    allBlockSections.push({ phase: isEn ? "Warm-up" : "Echauf.", blocks: template.warmupBlocks });
+    allBlockSections.push({ phase: t("warmup"), blocks: template.warmupBlocks });
   }
   if (template.mainBlocks?.length) {
-    allBlockSections.push({ phase: isEn ? "Main" : "Corps", blocks: template.mainBlocks });
+    allBlockSections.push({ phase: t("mainSet"), blocks: template.mainBlocks });
   }
   if (template.cooldownBlocks?.length) {
-    allBlockSections.push({ phase: isEn ? "Cooldown" : "Retour", blocks: template.cooldownBlocks });
+    allBlockSections.push({ phase: t("cooldown"), blocks: template.cooldownBlocks });
   }
 
   const rows: TableCell[][] = [];
   for (const { phase, blocks } of allBlockSections) {
     for (const block of blocks) {
-      const exName = isEn
+      const exName = isEn()
         ? (exerciseNames[`${block.exerciseId}__en`] || exerciseNames[block.exerciseId] || block.exerciseId)
         : (exerciseNames[block.exerciseId] || block.exerciseId);
       const setsReps = `${block.sets}\u00d7${block.reps}`;
@@ -471,10 +477,10 @@ function renderStrengthAppendixEntry(
   if (rows.length > 0) {
     const headerRow: TableCell[] = [
       { text: "Phase", style: "tinyHeader" },
-      { text: isEn ? "Exercise" : "Exercice", style: "tinyHeader" },
-      { text: isEn ? "Sets" : "Series", style: "tinyHeader" },
-      { text: isEn ? "Rest" : "Repos", style: "tinyHeader" },
-      { text: isEn ? "Intensity" : "Intensité", style: "tinyHeader" },
+      { text: t("exercise"), style: "tinyHeader" },
+      { text: t("sets"), style: "tinyHeader" },
+      { text: t("rest"), style: "tinyHeader" },
+      { text: t("intensity"), style: "tinyHeader" },
     ];
 
     result.push({
@@ -495,9 +501,9 @@ function renderStrengthAppendixEntry(
   }
 
   // Coaching tips (max 2)
-  const tips = isEn ? template.coachingTipsEn : template.coachingTips;
+  const tips = isEn() ? template.coachingTipsEn : template.coachingTips;
   if (tips?.length) {
-    const tipTexts = tips.slice(0, 2).map((t) => `\u2022 ${t}`).join("  ");
+    const tipTexts = tips.slice(0, 2).map((tip) => `\u2022 ${tip}`).join("  ");
     result.push({
       text: tipTexts,
       italics: true,
@@ -516,7 +522,6 @@ export async function exportPlanToPDF(
   plan: TrainingPlan,
   workoutNames: Record<string, string>,
   workoutTemplates: Record<string, WorkoutTemplate>,
-  isEn: boolean,
 ): Promise<void> {
   try {
       // Dynamic import pdfmake (code-split)
@@ -535,15 +540,15 @@ export async function exportPlanToPDF(
     const isFreePlan = plan.config.planMode === "free";
     const planName = isFreePlan
       ? (plan.config.planName || plan.name)
-      : (isEn ? plan.nameEn : plan.name);
+      : (isEn() ? plan.nameEn : plan.name);
     const content: Content[] = [];
 
     // ── PAGE 1: Title + Overview ──────────────────────────────────────
 
     // 1A. Title banner
     const subtitleText = raceMeta
-      ? (isEn ? raceMeta.labelEn : raceMeta.label)
-      : (isFreePlan ? (isEn ? "Free plan" : "Plan libre") : "");
+      ? (isEn() ? raceMeta.labelEn : raceMeta.label)
+      : (isFreePlan ? t("freePlan") : "");
 
     content.push({
       table: {
@@ -577,24 +582,24 @@ export async function exportPlanToPDF(
     const metaLeft: string[] = [];
     const metaRight: string[] = [];
 
-    metaLeft.push(`${isEn ? "Start" : "Début"}: ${formatDate(plan.config.createdAt, isEn)}`);
+    metaLeft.push(`${t("start")}: ${formatDate(plan.config.createdAt)}`);
     if (plan.config.raceDate) {
-      metaLeft.push(`${isEn ? "Race" : "Course"}: ${formatDate(plan.config.raceDate, isEn)}`);
+      metaLeft.push(`${t("race")}: ${formatDate(plan.config.raceDate)}`);
     }
-    metaLeft.push(`${isEn ? "Duration" : "Durée"}: ${plan.totalWeeks} ${isEn ? "weeks" : "semaines"}`);
+    metaLeft.push(`${t("duration")}: ${plan.totalWeeks} ${t("weeks")}`);
     if (plan.peakWeeklyKm) {
-      metaLeft.push(`${isEn ? "Peak volume" : "Volume pic"}: ${plan.peakWeeklyKm} km/${isEn ? "wk" : "sem"}`);
+      metaLeft.push(`${t("peakVolume")}: ${plan.peakWeeklyKm} km/${t("wk")}`);
     }
 
     if (plan.config.raceName) {
-      metaRight.push(`${isEn ? "Race name" : "Nom"}: ${plan.config.raceName}`);
+      metaRight.push(`${t("raceName")}: ${plan.config.raceName}`);
     }
     if (plan.raceTimePrediction) {
-      metaRight.push(`${isEn ? "Target" : "Objectif"}: ${plan.raceTimePrediction}`);
+      metaRight.push(`${t("target")}: ${plan.raceTimePrediction}`);
     }
-    metaRight.push(`${isEn ? "Sessions/week" : "Séances/sem"}: ${plan.config.daysPerWeek}`);
+    metaRight.push(`${t("sessionsPerWeek")}: ${plan.config.daysPerWeek}`);
     if (plan.peakLongRunKm) {
-      metaRight.push(`${isEn ? "Peak long run" : "Pic SL"}: ${plan.peakLongRunKm} km`);
+      metaRight.push(`${t("peakLongRun")}: ${plan.peakLongRunKm} km`);
     }
 
     content.push({
@@ -631,7 +636,7 @@ export async function exportPlanToPDF(
           {
             stack: [
               { text: `${stats.totalSessions}`, fontSize: 14, bold: true, color: "#1e293b", alignment: "center" as const },
-              { text: isEn ? "sessions" : "séances", fontSize: 7, color: "#888", alignment: "center" as const },
+              { text: t("sessions"), fontSize: 7, color: "#888", alignment: "center" as const },
               { text: `~${Math.round(stats.totalEstimatedKm)} km`, fontSize: 9, bold: true, color: "#3b82f6", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
             ],
             fillColor: "#f0f9ff",
@@ -641,7 +646,7 @@ export async function exportPlanToPDF(
             stack: [
               { text: `${totalHours}h`, fontSize: 14, bold: true, color: "#1e293b", alignment: "center" as const },
               { text: "total", fontSize: 7, color: "#888", alignment: "center" as const },
-              { text: `${stats.keySessionCount} ${isEn ? "key" : "clés"}`, fontSize: 9, bold: true, color: "#854d0e", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
+              { text: `${stats.keySessionCount} ${t("key")}`, fontSize: 9, bold: true, color: "#854d0e", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
             ],
             fillColor: "#f0f9ff",
             margin: [4, 6, 4, 6] as [number, number, number, number],
@@ -649,8 +654,8 @@ export async function exportPlanToPDF(
           {
             stack: [
               { text: `S${stats.peakVolumeWeek}`, fontSize: 14, bold: true, color: "#1e293b", alignment: "center" as const },
-              { text: isEn ? "peak week" : "semaine pic", fontSize: 7, color: "#888", alignment: "center" as const },
-              { text: `${stats.avgDurationPerWeekMin}min/${isEn ? "wk" : "sem"}`, fontSize: 9, bold: true, color: "#666", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
+              { text: t("peakWeek"), fontSize: 7, color: "#888", alignment: "center" as const },
+              { text: `${stats.avgDurationPerWeekMin}min/${t("wk")}`, fontSize: 9, bold: true, color: "#666", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
             ],
             fillColor: "#f0f9ff",
             margin: [4, 6, 4, 6] as [number, number, number, number],
@@ -669,9 +674,7 @@ export async function exportPlanToPDF(
     // Note about appendix reference numbers
     const totalUniqueWorkouts = workoutIndex.size;
     content.push({
-      text: isEn
-        ? `Superscript numbers (e.g. \u00b9\u00b2\u00b3) refer to the Workout Reference at the end of this document (${totalUniqueWorkouts} unique workouts).`
-        : `Les exposants (ex: \u00b9\u00b2\u00b3) renvoient au Lexique des séances en fin de document (${totalUniqueWorkouts} séances uniques).`,
+      text: t("appendixNote", { count: totalUniqueWorkouts }),
       italics: true,
       fontSize: 7,
       color: "#888",
@@ -682,22 +685,22 @@ export async function exportPlanToPDF(
     if (plan.config.targetPaceMinKm) {
       const pace = plan.config.targetPaceMinKm;
       const paceRows = [
-        [isEn ? "Race / Threshold" : "Course / Seuil", paceStr(pace)],
+        [t("raceThreshold"), paceStr(pace)],
         ["Tempo", paceStr(pace + 0.25)],
-        [isEn ? "Easy / Long Run" : "Endurance / SL", paceStr(pace + 1)],
+        [t("easyLongRun"), paceStr(pace + 1)],
         ["VO2max", paceStr(pace - 0.5)],
       ];
 
       content.push(
-        { text: isEn ? "Target Paces" : "Allures cibles", fontSize: 10, bold: true, color: "#333", margin: [0, 0, 0, 4] as [number, number, number, number] },
+        { text: t("targetPaces"), fontSize: 10, bold: true, color: "#333", margin: [0, 0, 0, 4] as [number, number, number, number] },
         {
           table: {
             headerRows: 1,
             widths: ["*", "auto"],
             body: [
               [
-                { text: isEn ? "Session Type" : "Type de séance", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
-                { text: isEn ? "Pace" : "Allure", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
+                { text: t("sessionType"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
+                { text: t("paceCol"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
               ],
               ...paceRows.map(([type, paceVal]) => [
                 { text: type, fontSize: 8, margin: [4, 2, 4, 2] as [number, number, number, number] },
@@ -716,7 +719,7 @@ export async function exportPlanToPDF(
       const paceZones = calculatePaceZones(plan.config.vma);
 
       content.push(
-        { text: isEn ? "Zone Paces (from VMA)" : "Allures par zone (VMA)", fontSize: 10, bold: true, color: "#333", margin: [0, 0, 0, 4] as [number, number, number, number] },
+        { text: t("zonePaces"), fontSize: 10, bold: true, color: "#333", margin: [0, 0, 0, 4] as [number, number, number, number] },
         {
           table: {
             headerRows: 1,
@@ -724,8 +727,8 @@ export async function exportPlanToPDF(
             body: [
               [
                 { text: "Zone", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
-                { text: isEn ? "Range" : "Plage", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
-                { text: isEn ? "Pace" : "Allure", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
+                { text: t("range"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
+                { text: t("paceCol"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
               ],
               ...paceZones.map((z) => [
                 {
@@ -761,7 +764,7 @@ export async function exportPlanToPDF(
 
     // 1F. Training phases overview
     content.push(
-      { text: isEn ? "Training Phases" : "Phases d'entraînement", fontSize: 10, bold: true, color: "#333", margin: [0, 0, 0, 4] as [number, number, number, number] },
+      { text: t("trainingPhases"), fontSize: 10, bold: true, color: "#333", margin: [0, 0, 0, 4] as [number, number, number, number] },
       {
         table: {
           headerRows: 1,
@@ -769,7 +772,7 @@ export async function exportPlanToPDF(
           body: [
             [
               { text: "Phase", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
-              { text: isEn ? "Weeks" : "Semaines", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
+              { text: t("phasesWeeks"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
               { text: "Description", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
             ],
             ...plan.phases.map((phaseRange) => {
@@ -777,7 +780,7 @@ export async function exportPlanToPDF(
               const colors = PHASE_COLORS[phaseRange.phase] || PHASE_COLORS.recovery;
               return [
                 {
-                  text: isEn ? meta.labelEn : meta.label,
+                  text: isEn() ? meta.labelEn : meta.label,
                   bold: true,
                   fontSize: 8,
                   color: colors.text,
@@ -792,7 +795,7 @@ export async function exportPlanToPDF(
                   margin: [4, 3, 4, 3],
                 },
                 {
-                  text: isEn ? meta.descriptionEn : meta.description,
+                  text: isEn() ? meta.descriptionEn : meta.description,
                   fontSize: 8,
                   fillColor: colors.bg,
                   margin: [4, 3, 4, 3],
@@ -832,7 +835,7 @@ export async function exportPlanToPDF(
             table: {
               widths: ["*"],
               body: [[{
-                text: `${(isEn ? pMeta.labelEn : pMeta.label).toUpperCase()} \u2014 ${isEn ? pMeta.descriptionEn : pMeta.description}`,
+                text: `${(isEn() ? pMeta.labelEn : pMeta.label).toUpperCase()} \u2014 ${isEn() ? pMeta.descriptionEn : pMeta.description}`,
                 bold: true,
                 fontSize: 10,
                 color: pColors.text,
@@ -852,12 +855,12 @@ export async function exportPlanToPDF(
       const weekDuration = computeWeekDuration(week);
       const weekKm = Math.round(computeWeekKm(week));
       const weekDurationStr = formatDuration(weekDuration);
-      const weekLabel = isEn
+      const weekLabel = isEn()
         ? (week.weekLabelEn || `Week ${week.weekNumber}`)
         : (week.weekLabel || `Semaine ${week.weekNumber}`);
       const actualKm = week.targetKm ?? weekKm;
       const longRunInfo = week.targetLongRunKm ? ` \u00b7 SL ${week.targetLongRunKm}km` : "";
-      const recoveryTag = week.isRecoveryWeek ? (isEn ? " [Recovery]" : " [Récup]") : "";
+      const recoveryTag = week.isRecoveryWeek ? ` [${t("recovery")}]` : "";
 
       // Estimate how many rows this week will add (sessions + header + possible notes)
       const weekSessionCount = week.sessions.length;
@@ -873,7 +876,7 @@ export async function exportPlanToPDF(
           widths: ["*", "auto"],
           body: [[
             {
-              text: `${weekLabel} \u2014 ${isEn ? phaseMeta.labelEn : phaseMeta.label} \u00b7 ${weekDurationStr} \u00b7 ~${actualKm}km${longRunInfo}`,
+              text: `${weekLabel} \u2014 ${isEn() ? phaseMeta.labelEn : phaseMeta.label} \u00b7 ${weekDurationStr} \u00b7 ~${actualKm}km${longRunInfo}`,
               fontSize: 8,
               bold: true,
               color: phaseColors.text,
@@ -901,7 +904,7 @@ export async function exportPlanToPDF(
 
       if (week.sessions.length === 0) {
         content.push({
-          text: isEn ? "No sessions this week" : "Aucune séance cette semaine",
+          text: t("noSessions"),
           italics: true,
           fontSize: 7,
           color: "#888",
@@ -912,12 +915,12 @@ export async function exportPlanToPDF(
 
       // Session table: Jour | Seance | Type | Zone | Duree | Resume
       const tableHeader: TableCell[] = [
-        { text: isEn ? "Day" : "Jour", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
-        { text: isEn ? "Workout" : "Séance", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [2, 3, 2, 3] as [number, number, number, number] },
+        { text: t("day"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
+        { text: t("workout"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [2, 3, 2, 3] as [number, number, number, number] },
         { text: "Type", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
         { text: "Zone", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
-        { text: isEn ? "Dur." : "Durée", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "right" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
-        { text: isEn ? "Summary" : "Résumé", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [2, 3, 2, 3] as [number, number, number, number] },
+        { text: t("dur"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "right" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
+        { text: t("summary"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [2, 3, 2, 3] as [number, number, number, number] },
       ];
 
       const rows: TableCell[][] = [];
@@ -929,9 +932,9 @@ export async function exportPlanToPDF(
 
         if (isRaceDay) {
           rows.push([
-            { text: dayLabel(session.dayOfWeek, isEn), fontSize: 7, alignment: "center" as const, margin: [2, 2, 2, 2] },
+            { text: dayLabel(session.dayOfWeek), fontSize: 7, alignment: "center" as const, margin: [2, 2, 2, 2] },
             {
-              text: isEn ? "RACE DAY" : "JOUR DE COURSE",
+              text: t("raceDay"),
               bold: true,
               fontSize: 7,
               color: phaseColors.text,
@@ -961,7 +964,7 @@ export async function exportPlanToPDF(
         };
 
         // Type
-        const tLabel = typeLabel(session.sessionType, template, isEn);
+        const tLabel = typeLabel(session.sessionType, template);
 
         // Zone cell
         let zoneCell: TableCell;
@@ -1003,13 +1006,13 @@ export async function exportPlanToPDF(
         // Summary
         let summary = "";
         if (isStr && template) {
-          summary = buildStrengthSummary(asStrength(template), exerciseNames, isEn);
+          summary = buildStrengthSummary(asStrength(template), exerciseNames);
         } else if (template && !isStr) {
           summary = buildCompactSummary(template, session.estimatedDurationMin);
         }
 
         rows.push([
-          { text: dayLabel(session.dayOfWeek, isEn), fontSize: 7, alignment: "center" as const, margin: [2, 2, 2, 2] },
+          { text: dayLabel(session.dayOfWeek), fontSize: 7, alignment: "center" as const, margin: [2, 2, 2, 2] },
           { ...nameText as object, margin: [2, 2, 2, 2] } as TableCell,
           { text: tLabel, fontSize: 7, alignment: "center" as const, margin: [2, 2, 2, 2] },
           zoneCell,
@@ -1019,13 +1022,13 @@ export async function exportPlanToPDF(
 
         // Collect pace notes for key sessions
         if (isKey) {
-          const notes = isEn ? session.notesEn : session.notes;
+          const notes = isEn() ? session.notesEn : session.notes;
           if (notes) {
             paceNoteRows.push({ afterIndex: rows.length - 1, text: notes });
           } else if (session.paceNotes?.length) {
             const paceText = session.paceNotes
               .map((pn) => {
-                const desc = isEn ? pn.descriptionEn : pn.description;
+                const desc = isEn() ? pn.descriptionEn : pn.description;
                 return `${desc}: ${formatPace(pn.paceMinKm)} - ${formatPace(pn.paceMaxKm)}`;
               })
               .join(" | ");
@@ -1074,7 +1077,7 @@ export async function exportPlanToPDF(
     // ── APPENDIX: Lexique des seances ─────────────────────────────────
 
     content.push({
-      text: isEn ? "WORKOUT REFERENCE" : "LEXIQUE DES SÉANCES",
+      text: t("workoutReference"),
       fontSize: 13,
       bold: true,
       color: "#1e293b",
@@ -1090,10 +1093,10 @@ export async function exportPlanToPDF(
       if (!template) continue;
 
       if (isStrength(template)) {
-        const entries = renderStrengthAppendixEntry(refNum, asStrength(template), exerciseNames, isEn);
+        const entries = renderStrengthAppendixEntry(refNum, asStrength(template), exerciseNames);
         content.push(...entries);
       } else {
-        const entries = renderRunningAppendixEntry(refNum, template, isEn);
+        const entries = renderRunningAppendixEntry(refNum, template);
         content.push(...entries);
       }
     }
@@ -1106,7 +1109,7 @@ export async function exportPlanToPDF(
         columns: [
           { text: planName, fontSize: 7, color: "#aaa", margin: [25, 0, 0, 0] },
           {
-            text: `${isEn ? "Generated by" : "Généré par"} Zoned \u00b7 zoned.run`,
+            text: `${t("generatedBy")} Zoned \u00b7 zoned.run`,
             fontSize: 7,
             color: "#aaa",
             alignment: "center" as const,

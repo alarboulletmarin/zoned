@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, memo } from "react";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { computePlanStats, computeEnhancedPlanAnalysis } from "@/lib/planStats";
@@ -83,6 +84,7 @@ interface PlanStatsSectionProps {
 // ── Component ────────────────────────────────────────────────────────
 
 export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWeek, isEn }: PlanStatsSectionProps) {
+  const { t } = useTranslation("plan");
   const stats = useMemo(() => computePlanStats(plan), [plan]);
   const [analysis, setAnalysis] = useState<EnhancedPlanAnalysis | null>(null);
   const [analysisLoading, setAnalysisLoading] = useState(true);
@@ -189,13 +191,13 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
       >
         <div className="flex items-center gap-3">
           <h2 className="text-lg font-semibold">
-            {isEn ? "Statistics" : "Statistiques"}
+            {t("stats.title")}
           </h2>
           {/* Summary badges when collapsed */}
           {!isOpen && (
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span className="hidden sm:inline">
-                {stats.totalSessions} {isEn ? "sessions" : "séances"}
+                {stats.totalSessions} {t("stats.sessions").toLowerCase()}
               </span>
               <span className="hidden sm:inline">·</span>
               <span className="hidden sm:inline">
@@ -225,7 +227,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
           <StatCard
             icon={Calendar}
             value={String(stats.totalSessions)}
-            label={isEn ? "Sessions" : "S\u00e9ances"}
+            label={t("stats.sessions")}
           />
           <StatCard
             icon={Clock}
@@ -235,33 +237,33 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
           <StatCard
             icon={Route}
             value={`${Math.round(stats.totalEstimatedKm)} km`}
-            label={isEn ? "Est. km" : "Km estim\u00e9s"}
+            label={t("stats.estKm")}
           />
           <StatCard
             icon={Star}
             value={String(stats.keySessionCount)}
-            label={isEn ? "Key sessions" : "S\u00e9ances cl\u00e9s"}
+            label={t("stats.keySessions")}
           />
           <StatCard
             icon={TrendingUp}
             value={formatMinutes(stats.avgDurationPerWeekMin)}
-            label={isEn ? "Avg/week" : "Moy./semaine"}
+            label={t("stats.avgWeek")}
           />
           <StatCard
             icon={Mountain}
             value={`S${stats.peakVolumeWeek}`}
             sublabel={formatMinutes(stats.peakVolumeMin)}
-            label={isEn ? "Peak week" : "Semaine pic"}
+            label={t("stats.peakWeek")}
           />
           <StatCard
             icon={Timer}
             value={formatMinutes(stats.longestSessionMin)}
-            label={isEn ? "Longest" : "Session max"}
+            label={t("stats.longestSession")}
           />
           <StatCard
             icon={Heart}
             value={String(stats.recoveryWeekCount)}
-            label={isEn ? "Recovery wk" : "Sem. r\u00e9cup"}
+            label={t("stats.recoveryWeeks")}
           />
         </div>
 
@@ -273,7 +275,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
             </div>
             <div>
               <p className="text-xs text-muted-foreground">
-                {isEn ? "Predicted finish time" : "Temps de course estimé"}
+                {t("stats.predictedTime")}
               </p>
               <p className="text-xl font-bold text-primary">{plan.raceTimePrediction}</p>
             </div>

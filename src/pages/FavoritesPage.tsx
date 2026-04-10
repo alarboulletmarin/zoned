@@ -10,8 +10,7 @@ import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import type { AnyWorkoutTemplate } from "@/types";
 
 export function FavoritesPage() {
-  const { t, i18n } = useTranslation(["common", "library"]);
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation(["common", "library"]);
   const { favorites } = useFavorites();
   const { workouts, isLoading: isLoadingRunning } = useWorkouts();
   const { workouts: strengthWorkouts, isLoading: isLoadingStrength } = useStrengthWorkouts();
@@ -30,7 +29,7 @@ export function FavoritesPage() {
     <>
       <SEOHead
         noindex={true}
-        title={isEn ? "My Favorites" : "Mes Favoris"}
+        title={t("common:favorites.title")}
         canonical="/favorites"
       />
       <div className="py-8 space-y-6">
@@ -39,12 +38,10 @@ export function FavoritesPage() {
         <Heart className="size-6 text-red-500 fill-red-500" />
         <div>
           <h1 className="text-2xl md:text-3xl font-bold">
-            {isEn ? "My Favorites" : "Mes Favoris"}
+            {t("common:favorites.title")}
           </h1>
           <p className="text-muted-foreground mt-1">
-            {isEn
-              ? `${favoriteWorkouts.length} saved workout${favoriteWorkouts.length !== 1 ? "s" : ""}`
-              : `${favoriteWorkouts.length} séance${favoriteWorkouts.length !== 1 ? "s" : ""} sauvegardée${favoriteWorkouts.length !== 1 ? "s" : ""}`}
+            {t("common:favorites.savedWorkouts", { count: favoriteWorkouts.length })}
           </p>
         </div>
       </div>
@@ -108,12 +105,10 @@ export function FavoritesPage() {
           </div>
           <div className="space-y-2">
             <p className="text-lg font-medium">
-              {isEn ? "No favorites yet" : "Pas encore de favoris"}
+              {t("common:favorites.noFavoritesYet")}
             </p>
             <p className="text-muted-foreground max-w-md mx-auto">
-              {isEn
-                ? "Browse the library and tap the heart icon to save your favorite workouts here."
-                : "Parcourez la biblioth\u00e8que et appuyez sur l'ic\u00f4ne c\u0153ur pour sauvegarder vos s\u00e9ances pr\u00e9f\u00e9r\u00e9es ici."}
+              {t("common:favorites.noFavoritesDesc")}
             </p>
           </div>
           <Button asChild className="mt-4">

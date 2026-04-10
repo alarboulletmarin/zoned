@@ -381,8 +381,8 @@ export function ArticlePage() {
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: isEn ? "Home" : "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: isEn ? "Learn" : "Apprendre", item: "https://zoned.run/learn" },
+              { "@type": "ListItem", position: 1, name: t("article.home"), item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: t("article.learn"), item: "https://zoned.run/learn" },
               { "@type": "ListItem", position: 3, name: title },
             ],
           },

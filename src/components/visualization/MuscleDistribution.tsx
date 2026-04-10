@@ -40,8 +40,7 @@ const MUSCLE_COLORS: Record<MuscleGroup, string> = {
 };
 
 export function MuscleDistribution({ workout, className }: MuscleDistributionProps) {
-  const { t, i18n } = useTranslation("strength");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("strength");
   const [exerciseMap, setExerciseMap] = useState<Map<string, StrengthExercise>>(new Map());
 
   useEffect(() => {
@@ -130,7 +129,7 @@ export function MuscleDistribution({ workout, className }: MuscleDistributionPro
                 {item.label}
                 {!item.isPrimary && (
                   <span className="ml-1 text-[10px] text-muted-foreground/70">
-                    ({isEn ? "secondary" : "secondaire"})
+                    ({t("detail.secondary")})
                   </span>
                 )}
               </span>

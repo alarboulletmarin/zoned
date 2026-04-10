@@ -11,7 +11,7 @@
   "step": {
     "distance": "Distance",
     "date": "Date de course",
-    "name": "Nom de la course",
+    "name": "Race name",
     "level": "Niveau",
     "config": "Configuration",
     "pace": "Allure & Dénivelé",
@@ -52,37 +52,45 @@
   "duration": {
     "title": "Combien de temps ?",
     "subtitle": "Choisissez la durée de votre plan",
-    "weeks": "semaines"
+    "weeks": "semaines",
+    "weeksShort": "sem"
   },
   "schedule": {
     "title": "Planning d'entraînement",
     "subtitle": "Combien de séances par semaine ?",
     "sessionsPerWeek": "Séances par semaine",
     "longRunDay": "Jour de la sortie longue",
-    "longRunDayDesc": "Votre sortie longue hebdomadaire — la séance clé d'endurance"
+    "longRunDayDesc": "Votre sortie longue hebdomadaire — la séance clé d'endurance",
+    "includeStrength": "Inclure le renforcement",
+    "includeStrengthDesc": "Ajouter des séances adaptées à chaque phase",
+    "strengthFrequency": "Fréquence renforcement",
+    "strengthPerWeek": "{{n}}x / sem"
   },
   "distance": {
     "title": "Choisissez votre distance",
     "subtitle": "Pour quelle course vous entraînez-vous ?"
   },
   "date": {
-    "title": "Date de votre course",
+    "title": "Quand a lieu la course ?",
     "subtitle": "Au minimum {{min}} semaines à partir d'aujourd'hui",
     "weeks": "{{count}} semaines de préparation",
     "tooSoon": "Trop proche ! Il faut au moins {{min}} semaines.",
     "tooLong": "{{weeks}} semaines, c'est un cycle long",
-    "tooLongDetail": "Pour cette distance, {{min}}–{{max}} semaines est idéal. Au-delà, tu risques la fatigue mentale et le surentraînement. Envisage un bloc de base building avant ta préparation spécifique."
+    "tooLongDetail": "Pour cette distance, {{min}}–{{max}} semaines est idéal. Au-delà, tu risques la fatigue mentale et le surentraînement. Envisage un bloc de base building avant ta préparation spécifique.",
+    "raceDate": "Date de la course"
   },
   "raceName": {
     "title": "Nom de la course",
-    "subtitle": "Optionnel - donnez un nom à votre objectif",
-    "placeholder": "Ex: Marathon de Paris",
-    "skip": "Passer"
+    "subtitle": "Optionnel - vous pouvez passer cette étape",
+    "placeholder": "ex. Marathon de Paris",
+    "skip": "Passer",
+    "label": "Nom de la course"
   },
   "level": {
-    "title": "Votre niveau",
-    "subtitle": "Sélectionnez votre niveau actuel",
-    "vmaSuggestion": "Basé sur votre VMA de {{vma}} km/h, nous suggérons :",
+    "title": "Votre niveau de course",
+    "subtitle": "Cela détermine l'intensité des séances",
+    "vmaSuggestion": "Basé sur votre VMA de {{vma}} km/h, nous suggérons le niveau ",
+    "vmaSuggestionSuffix": "",
     "beginner": "Débutant",
     "beginnerDesc": "1 à 2 sorties/semaine · moins de 15 km/semaine",
     "intermediate": "Intermédiaire",
@@ -90,7 +98,8 @@
     "advanced": "Avancé",
     "advancedDesc": "4 à 5 sorties/semaine · 40–70 km/semaine",
     "elite": "Élite",
-    "eliteDesc": "5 à 7 sorties/semaine · 70+ km/semaine"
+    "eliteDesc": "5 à 7 sorties/semaine · 70+ km/semaine",
+    "suggested": "Suggéré"
   },
   "config": {
     "title": "Configuration",
@@ -100,29 +109,33 @@
   },
   "pace": {
     "title": "Allure & Dénivelé",
-    "subtitle": "Optionnel - précisez vos objectifs",
-    "targetPace": "Allure cible (min/km)",
+    "subtitle": "Optionnel - vous pouvez passer cette étape",
+    "trailHint": "Le dénivelé est important pour un entraînement trail adapté",
+    "targetPace": "Allure cible",
     "targetTime": "Temps cible",
     "targetPaceTab": "Allure cible",
     "targetTimeTab": "Temps cible",
+    "targetPaceLabel": "Allure cible (min/km)",
+    "targetFinishTimeLabel": "Temps d'arrivée visé",
     "pacePlaceholder": "Ex: 5:30",
-    "timePlaceholder": "Ex: 3:30 ou 3:30:00",
-    "estimatedTime": "Temps estimé : {{time}}",
-    "requiredPace": "Allure nécessaire : {{pace}} min/km",
+    "timePlaceholder": "ex. 3:30 ou 3:30:00",
+    "estimatedFinish": "Temps estimé : ",
+    "requiredPace": "Allure nécessaire : ",
+    "paceFormatError": "Format : MM:SS (ex. 5:30)",
     "timeFormatHint": "Format : H:MM ou H:MM:SS (ex. 3:30 ou 3:30:00)",
     "elevation": "Dénivelé positif (m)",
-    "elevationPlaceholder": "Ex: 500",
+    "elevationPlaceholder": "ex. 350",
     "skip": "Passer cette étape"
   },
   "summary": {
     "title": "Récapitulatif",
-    "subtitle": "Vérifiez vos paramètres avant de générer",
+    "subtitle": "Vérifiez vos choix avant de générer le plan",
     "distance": "Distance",
-    "date": "Date",
-    "name": "Course",
+    "date": "Date de course",
+    "name": "Nom de la course",
     "level": "Niveau",
-    "days": "Jours/semaine",
-    "longRun": "Sortie longue",
+    "days": "Séances/semaine",
+    "longRun": "Jour sortie longue",
     "pace": "Allure cible",
     "elevation": "Dénivelé",
     "goal": "Objectif",
@@ -131,22 +144,75 @@
     "peakKm": "Volume pic estimé",
     "peakLongRun": "Sortie longue pic",
     "generate": "Générer le plan",
-    "generating": "Génération en cours..."
+    "generating": "Génération...",
+    "duration": "Durée",
+    "durationValue": "{{weeks}} semaines",
+    "currentVolume": "{{km}} km/sem",
+    "strengthTraining": "Renforcement",
+    "planLimitReached": "Limite de 5 plans atteinte. ",
+    "deletePlanLink": "Supprimer un plan existant",
+    "purposeBaseBuilding": "Construction de base",
+    "purposeReturnFromInjury": "Retour de blessure",
+    "purposeBeginnerStart": "Débuter",
+    "weeksShort": "sem."
+  },
+  "seo": {
+    "createTitle": "Créer un plan d'entraînement",
+    "createDescription": "Créez un plan d'entraînement personnalisé pour votre prochaine course."
   },
   "view": {
     "title": "Mon plan",
     "currentWeek": "Semaine en cours",
-    "phases": "Phases",
+    "phases": "Phases d'entraînement",
     "sessions": "séances",
     "duration": "{{min}} min",
     "keySession": "Séance clé",
-    "raceDay": "Jour de course",
+    "raceDay": "Jour de course !",
     "racePrediction": "Temps estimé",
     "delete": "Supprimer le plan",
-    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce plan ?",
+    "deleteTitle": "Supprimer ce plan ?",
+    "deleteConfirm": "\"{{name}}\" sera définitivement supprimé. Cette action est irréversible.",
     "export": "Exporter",
     "exportPdf": "Exporter en PDF",
-    "exportIcs": "Ajouter au calendrier"
+    "exportIcs": "Ajouter au calendrier",
+    "notFound": "Plan introuvable",
+    "backToPlans": "Retour aux plans",
+    "freePlan": "Plan libre",
+    "prebuilt": "Pré-construit",
+    "addDates": "Ajouter des dates",
+    "clickToRename": "Cliquer pour renommer",
+    "nameUpdated": "Nom mis à jour",
+    "sessionReplaced": "Séance remplacée",
+    "sessionUpdateFailed": "Échec de la mise à jour",
+    "sessionMoved": "Séance déplacée",
+    "sessionMoveFailed": "Échec du déplacement",
+    "sessionDeleted": "Séance supprimée",
+    "sessionDeleteFailed": "Échec de la suppression",
+    "weekValidated": "Semaine {{week}} validée !",
+    "addWorkout": "Ajouter une séance",
+    "activityAdded": "Activité ajoutée",
+    "workoutAdded": "Séance ajoutée",
+    "workoutAddFailed": "Échec de l'ajout",
+    "replaceSession": "Remplacer la séance",
+    "removeSession": "Retirer la séance",
+    "noSessionsThisWeek": "Aucune séance cette semaine",
+    "schedule": "Programme",
+    "statistics": "Statistiques",
+    "trainingVolume": "Volume d'entraînement relatif au pic du plan",
+    "add": "Ajouter",
+    "rightClickOptions": "Clic droit pour les options · Glisser pour déplacer",
+    "longPressOptions": "Appui long pour les options · Glisser pour déplacer",
+    "editDatesTitle": "Modifier les dates",
+    "editDatesDescription": "Définissez une date de début pour votre plan. La date de fin est calculée automatiquement.",
+    "startDate": "Date de début",
+    "startNextMonday": "Commencer lundi prochain",
+    "startLabel": "Début",
+    "endLabel": "Fin",
+    "pastDateWarning": "Cette date est dans le passé. Les premières semaines seront déjà écoulées.",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "datesUpdated": "Dates mises à jour",
+    "editDates": "Modifier les dates"
   },
   "completion": {
     "planned": "Planifié",
@@ -157,7 +223,8 @@
     "validated": "Semaine validée",
     "weekValidated": "Semaine {{week}} validée !",
     "markDone": "Marquer comme fait",
-    "toggleDone": "Fait / pas fait"
+    "toggleDone": "Fait / pas fait",
+    "completedCount": "{{done}}/{{total}} terminées"
   },
   "rpe": {
     "title": "RPE · Effort ressenti",
@@ -202,17 +269,27 @@
     "remaining": "restantes",
     "rpeAvg": "RPE moy",
     "peakVolume": "Volume pic",
-    "peakLongRun": "Pic sortie longue"
+    "peakLongRun": "Pic sortie longue",
+    "longRun": "SL"
   },
   "calendar": {
     "now": "ACTUEL",
     "race": "Course",
     "raceWeek": "Course",
-    "recoveryWeek": "Récup"
+    "recoveryWeek": "Récup",
+    "week": "Sem.",
+    "weekPrefix": "S",
+    "viewSession": "Voir la séance",
+    "deleteSession": "Supprimer",
+    "deleteSessionTitle": "Supprimer la séance",
+    "validateWeek": "Valider la semaine",
+    "validateCount": "Valider {{done}}/{{total}}"
   },
   "card": {
     "weeks": "{{current}}/{{total}} semaines",
-    "phase": "Phase : {{phase}}"
+    "phase": "Phase : {{phase}}",
+    "session": "séance",
+    "sessions": "séances"
   },
   "days": {
     "0": "Lundi",
@@ -248,6 +325,61 @@
   },
   "monthlyView": {
     "noStartDate": "Définissez une date de début pour afficher la vue mensuelle",
-    "setStartDate": "Définir la date"
+    "setStartDate": "Définir la date",
+    "previousMonth": "Mois précédent",
+    "nextMonth": "Mois suivant"
+  },
+  "weeklyView": {
+    "weekTitle": "Semaine {{week}}",
+    "completed": "terminées"
+  },
+  "workoutPanel": {
+    "title": "Ajouter une séance",
+    "close": "Fermer",
+    "hintClick": "Cliquez sur une séance pour l'ajouter à votre plan",
+    "hintDrag": "Glissez une séance sur le calendrier pour l'ajouter",
+    "hintTap": "Appuyez sur une séance pour l'ajouter",
+    "searchPlaceholder": "Rechercher une séance...",
+    "favoritesOnly": "Favoris uniquement",
+    "noFavoriteStrength": "Aucune séance de renfo en favoris",
+    "noMatchingStrength": "Aucune séance de renfo correspondante",
+    "noFavorites": "Aucune séance en favoris",
+    "noMatching": "Aucune séance correspondante"
+  },
+  "plansPage": {
+    "title": "Mes Plans d'Entraînement",
+    "subtitle": "Des plans structurés pour atteindre vos objectifs",
+    "science": "La science derrière vos plans",
+    "whatIf": "Simulateur what-if",
+    "maxReached": "Limite de 5 plans atteinte",
+    "import": "Importer",
+    "importMaxError": "Maximum 5 plans. Supprimez-en un d'abord.",
+    "importSuccess": "Plan importé !",
+    "importInvalid": "Fichier de plan invalide",
+    "importReadError": "Impossible de lire le fichier",
+    "view": "Voir",
+    "buildArc": "Construisez votre progression",
+    "buildArcDesc": "Définissez un objectif, choisissez votre course, et on structure le chemin.",
+    "createFirst": "Créer votre premier plan",
+    "deleteTitle": "Supprimer ce plan ?",
+    "deleteConfirm": "\"{{name}}\" sera définitivement supprimé. Cette action est irréversible.",
+    "deleteButton": "Supprimer",
+    "cancelButton": "Annuler",
+    "weekProgress": "Semaine {{current}} / {{total}}",
+    "target": "Objectif : "
+  },
+  "prebuilt": {
+    "notFound": "Plan introuvable",
+    "backToPlans": "Retour aux plans",
+    "useThisPlan": "Utiliser ce plan",
+    "limitReached": "Limite de 5 plans atteinte",
+    "planAdded": "Plan ajouté !",
+    "trainingPhases": "Phases d'entraînement",
+    "weekByWeek": "Programme semaine par semaine",
+    "recovery": "Récup",
+    "noSessions": "Aucune séance cette semaine",
+    "raceDay": "Jour de course !",
+    "seoFr": "Plan d'entraînement {{name}} gratuit : {{weeks}} semaines, {{sessions}} séances/semaine. {{desc}}",
+    "seoEn": "Free {{name}} training plan: {{weeks}} weeks, {{sessions}} sessions/week. {{desc}}"
   }
 }

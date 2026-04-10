@@ -69,38 +69,32 @@ const RACE_DISTANCE_ICONS: Record<RaceDistance, React.ReactNode> = {
 };
 
 const DURATION_OPTIONS = [
-  { weeks: 4, label: "4 sem", labelEn: "4 wks" },
-  { weeks: 6, label: "6 sem", labelEn: "6 wks" },
-  { weeks: 8, label: "8 sem", labelEn: "8 wks" },
-  { weeks: 10, label: "10 sem", labelEn: "10 wks" },
-  { weeks: 12, label: "12 sem", labelEn: "12 wks" },
-  { weeks: 16, label: "16 sem", labelEn: "16 wks" },
+  { weeks: 4 },
+  { weeks: 6 },
+  { weeks: 8 },
+  { weeks: 10 },
+  { weeks: 12 },
+  { weeks: 16 },
 ];
 
-const GOAL_OPTIONS: { value: TrainingGoal; icon: React.ReactNode; label: string; labelEn: string; desc: string; descEn: string }[] = [
+const GOAL_OPTION_KEYS: { value: TrainingGoal; icon: React.ReactNode; labelKey: string; descKey: string }[] = [
   {
     value: "finish",
     icon: <Flag className="size-5 text-zone-2" />,
-    label: "Finir la course",
-    labelEn: "Finish the race",
-    desc: "Plan conservateur, plus de volume facile, progression douce",
-    descEn: "Conservative plan, more easy volume, gentle progression",
+    labelKey: "goal.finish",
+    descKey: "goal.finishDesc",
   },
   {
     value: "time",
     icon: <Timer className="size-5 text-primary" />,
-    label: "Objectif temps",
-    labelEn: "Target a time",
-    desc: "Plan équilibré avec séances qualité et endurance",
-    descEn: "Balanced plan with quality sessions and endurance",
+    labelKey: "goal.time",
+    descKey: "goal.timeDesc",
   },
   {
     value: "compete",
     icon: <TrendingUp className="size-5 text-zone-5" />,
-    label: "Performer",
-    labelEn: "Compete",
-    desc: "Plan ambitieux, plus d'intensité, volume élevé",
-    descEn: "Ambitious plan, more intensity, higher volume",
+    labelKey: "goal.compete",
+    descKey: "goal.competeDesc",
   },
 ];
 
@@ -203,7 +197,7 @@ interface FormState {
 // ── Component ────────────────────────────────────────────────────────
 
 export function PlanCreatePage() {
-  const { i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("plan");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const navigate = useNavigate();
   const { createPlan, isGenerating, error, canCreate } = useCreatePlan();
@@ -356,16 +350,16 @@ export function PlanCreatePage() {
     <div className="py-4 flex justify-between gap-3">
       <Button variant="ghost" size="sm" onClick={goBack} disabled={stepIndex === 0}>
         <ArrowLeft className="size-4 mr-1" />
-        {isEn ? "Back" : "Retour"}
+        {t("nav.back")}
       </Button>
       <div className="flex gap-2">
         {showSkip && (
           <Button variant="ghost" size="sm" onClick={goForward}>
-            {isEn ? "Skip" : "Passer"}
+            {t("nav.skip")}
           </Button>
         )}
         <Button size="sm" onClick={goForward} disabled={!canProceed}>
-          {nextLabel ?? (isEn ? "Next" : "Suivant")}
+          {nextLabel ?? t("nav.next")}
           <ArrowRight className="size-4 ml-1" />
         </Button>
       </div>
@@ -373,17 +367,15 @@ export function PlanCreatePage() {
   );
 
   // ── Purpose options for Step 1 ────────────────────────────────────
-  const PURPOSE_OPTIONS: { value: PlanPurpose; icon: React.ReactNode; ringClass: string; bgClass: string; iconBgClass: string; label: string; labelEn: string; desc: string; descEn: string }[] = [
+  const PURPOSE_OPTIONS: { value: PlanPurpose; icon: React.ReactNode; ringClass: string; bgClass: string; iconBgClass: string; labelKey: string; descKey: string }[] = [
     {
       value: "race",
       icon: <Target className="size-5 sm:size-6 text-primary" />,
       ringClass: "ring-primary bg-primary/5",
       bgClass: "hover:bg-muted/50",
       iconBgClass: "bg-primary/10",
-      label: "Préparer une course",
-      labelEn: "Prepare for a race",
-      desc: "Plan personnalisé pour un objectif précis (5K au marathon)",
-      descEn: "Personalized plan for a specific race goal (5K to marathon)",
+      labelKey: "purpose.race",
+      descKey: "purpose.raceDesc",
     },
     {
       value: "base_building",
@@ -391,10 +383,8 @@ export function PlanCreatePage() {
       ringClass: "ring-zone-2 bg-zone-2/5",
       bgClass: "hover:bg-muted/50",
       iconBgClass: "bg-zone-2/10",
-      label: "Construire ma base",
-      labelEn: "Build my base",
-      desc: "Développer l'endurance fondamentale sans course en vue",
-      descEn: "Build fundamental endurance with no specific race target",
+      labelKey: "purpose.baseBuilding",
+      descKey: "purpose.baseBuildingDesc",
     },
     {
       value: "return_from_injury",
@@ -402,10 +392,8 @@ export function PlanCreatePage() {
       ringClass: "ring-zone-1 bg-zone-1/5",
       bgClass: "hover:bg-muted/50",
       iconBgClass: "bg-zone-1/10",
-      label: "Reprendre après une pause",
-      labelEn: "Return after a break",
-      desc: "Reprise progressive et sécurisée après blessure ou arrêt",
-      descEn: "Safe progressive return after injury or break",
+      labelKey: "purpose.returnFromInjury",
+      descKey: "purpose.returnFromInjuryDesc",
     },
     {
       value: "beginner_start",
@@ -413,10 +401,8 @@ export function PlanCreatePage() {
       ringClass: "ring-zone-3 bg-zone-3/5",
       bgClass: "hover:bg-muted/50",
       iconBgClass: "bg-zone-3/10",
-      label: "Débuter la course à pied",
-      labelEn: "Start running",
-      desc: "Programme progressif pour se lancer en courant",
-      descEn: "Progressive program to start running from scratch",
+      labelKey: "purpose.beginnerStart",
+      descKey: "purpose.beginnerStartDesc",
     },
   ];
 
@@ -436,13 +422,21 @@ export function PlanCreatePage() {
           <Zap className="size-6 md:size-8 text-primary" />
         </div>
         <h2 className="text-lg md:text-xl font-semibold text-center">
-          {isEn ? "What's your goal?" : "Quel est votre objectif ?"}
+          {t("purpose.title")}
         </h2>
         <p className="text-sm text-muted-foreground mt-1 text-center">
-          {isEn
-            ? "We'll adapt the plan to your situation"
-            : "On adapte le plan à votre situation"}
+          {t("purpose.subtitle")}
         </p>
+
+        {!canCreate && (
+          <div className="w-full max-w-md mt-4 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive text-center">
+            {t("summary.planLimitReached")}
+            <Link to="/plans" className="underline font-medium">
+              {t("summary.deletePlanLink")}
+            </Link>
+          </div>
+        )}
+
         <div className="w-full max-w-md grid grid-cols-1 gap-2 mt-6">
           {PURPOSE_OPTIONS.map((opt) => (
             <Card
@@ -471,8 +465,8 @@ export function PlanCreatePage() {
                   {opt.icon}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold">{isEn ? opt.labelEn : opt.label}</p>
-                  <p className="text-xs text-muted-foreground">{isEn ? opt.descEn : opt.desc}</p>
+                  <p className="text-sm font-semibold">{t(opt.labelKey)}</p>
+                  <p className="text-xs text-muted-foreground">{t(opt.descKey)}</p>
                 </div>
               </CardContent>
             </Card>
@@ -499,12 +493,10 @@ export function PlanCreatePage() {
           <Target className="size-6 md:size-8 text-primary" />
         </div>
         <h2 className="text-lg md:text-xl font-semibold text-center">
-          {isEn ? "Choose your distance" : "Choisissez votre distance"}
+          {t("distance.title")}
         </h2>
         <p className="text-sm text-muted-foreground mt-1 text-center">
-          {isEn
-            ? "Which race are you training for?"
-            : "Pour quelle course vous entraînez-vous ?"}
+          {t("distance.subtitle")}
         </p>
         <div className="w-full max-w-md grid grid-cols-2 gap-2 mt-6">
           {(Object.keys(RACE_DISTANCE_META) as RaceDistance[]).map((dist) => {
@@ -562,12 +554,10 @@ export function PlanCreatePage() {
           <Calendar className="size-6 md:size-8 text-zone-2" />
         </div>
         <h2 className="text-lg md:text-xl font-semibold text-center">
-          {isEn ? "How long?" : "Combien de temps ?"}
+          {t("duration.title")}
         </h2>
         <p className="text-sm text-muted-foreground mt-1 text-center">
-          {isEn
-            ? "Choose the duration of your plan"
-            : "Choisissez la durée de votre plan"}
+          {t("duration.subtitle")}
         </p>
         <div className="w-full max-w-xs grid grid-cols-3 gap-2 mt-6">
           {DURATION_OPTIONS.map((opt) => (
@@ -588,7 +578,7 @@ export function PlanCreatePage() {
               <CardContent className="p-3 flex flex-col items-center justify-center">
                 <span className="text-lg font-bold">{opt.weeks}</span>
                 <span className="text-xs text-muted-foreground">
-                  {isEn ? "weeks" : "semaines"}
+                  {t("duration.weeks")}
                 </span>
               </CardContent>
             </Card>
@@ -615,12 +605,10 @@ export function PlanCreatePage() {
           <Calendar className="size-6 md:size-8 text-primary" />
         </div>
         <h2 className="text-lg md:text-xl font-semibold text-center">
-          {isEn ? "When is the race?" : "Quand a lieu la course ?"}
+          {t("date.title")}
         </h2>
         <p className="text-sm text-muted-foreground mt-1 text-center">
-          {isEn
-            ? `At least ${minWeeksForDistance} weeks from now`
-            : `Au minimum ${minWeeksForDistance} semaines à partir d'aujourd'hui`}
+          {t("date.subtitle", { min: minWeeksForDistance })}
         </p>
 
         <div className="w-full max-w-sm mt-6 space-y-3">
@@ -635,22 +623,19 @@ export function PlanCreatePage() {
             onKeyDown={(e) => {
               if (e.key === "Enter" && dateValid) goForward();
             }}
-            aria-label={isEn ? "Race date" : "Date de la course"}
+            aria-label={t("date.raceDate")}
             className="w-full rounded-md border bg-background px-4 py-3 min-h-[44px] text-base focus:outline-none focus:ring-2 focus:ring-primary"
           />
 
           {form.raceDate && dateValid && (
             <p className="text-sm text-muted-foreground text-center">
-              {weeksCount}{" "}
-              {isEn ? "weeks of preparation" : "semaines de préparation"}
+              {t("date.weeks", { count: weeksCount })}
             </p>
           )}
 
           {form.raceDate && !dateValid && (
             <p className="text-sm text-destructive text-center">
-              {isEn
-                ? `Too close! You need at least ${minWeeksForDistance} weeks.`
-                : `Trop proche ! Il faut au moins ${minWeeksForDistance} semaines.`}
+              {t("date.tooSoon", { min: minWeeksForDistance })}
             </p>
           )}
 
@@ -658,20 +643,16 @@ export function PlanCreatePage() {
             <div className="rounded-lg border border-amber-300 dark:border-amber-600 bg-amber-50 dark:bg-amber-950/30 p-3 text-sm text-amber-800 dark:text-amber-300 text-center space-y-1">
               <p className="font-semibold flex items-center justify-center gap-1.5">
                 <AlertTriangle className="size-4 shrink-0" />
-                {isEn
-                  ? `${weeksCount} weeks is a long cycle`
-                  : `${weeksCount} semaines, c'est un cycle long`}
+                {t("date.tooLong", { weeks: weeksCount })}
               </p>
               <p className="text-xs">
-                {isEn
-                  ? `For this distance, ${recommendedWeeks.min}–${recommendedWeeks.max} weeks is ideal. Beyond that, you risk mental fatigue and overtraining. Consider a base building block before your specific preparation.`
-                  : `Pour cette distance, ${recommendedWeeks.min}–${recommendedWeeks.max} semaines est idéal. Au-delà, tu risques la fatigue mentale et le surentraînement. Envisage un bloc de base building avant ta préparation spécifique.`}
+                {t("date.tooLongDetail", { min: recommendedWeeks.min, max: recommendedWeeks.max })}
               </p>
             </div>
           )}
         </div>
       </div>
-      {renderNavButtons(dateValid, isEn ? "Continue" : "Continuer")}
+      {renderNavButtons(dateValid, t("nav.continue"))}
     </div>
   );
 
@@ -691,10 +672,10 @@ export function PlanCreatePage() {
           <Flag className="size-6 md:size-8 text-primary" />
         </div>
         <h2 className="text-lg md:text-xl font-semibold text-center">
-          {isEn ? "Name your race" : "Nom de la course"}
+          {t("raceName.title")}
         </h2>
         <p className="text-sm text-muted-foreground mt-1 text-center">
-          {isEn ? "Optional - you can skip this step" : "Optionnel - vous pouvez passer cette étape"}
+          {t("raceName.subtitle")}
         </p>
 
         <div className="w-full max-w-sm mt-6">
@@ -707,16 +688,14 @@ export function PlanCreatePage() {
             onKeyDown={(e) => {
               if (e.key === "Enter") goForward();
             }}
-            placeholder={
-              isEn ? "e.g. Paris Marathon" : "ex. Marathon de Paris"
-            }
-            aria-label={isEn ? "Race name" : "Nom de la course"}
+            placeholder={t("raceName.placeholder")}
+            aria-label={t("raceName.label")}
             className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             maxLength={100}
           />
         </div>
       </div>
-      {renderNavButtons(true, isEn ? "Continue" : "Continuer", true)}
+      {renderNavButtons(true, t("nav.continue"), true)}
     </div>
   );
 
@@ -744,25 +723,21 @@ export function PlanCreatePage() {
             <Target className="size-6 md:size-8 text-primary" />
           </div>
           <h2 className="text-lg md:text-xl font-semibold text-center">
-            {isEn ? "Your running level" : "Votre niveau de course"}
+            {t("level.title")}
           </h2>
           <p className="text-sm text-muted-foreground mt-1 text-center">
-            {isEn
-              ? "This determines workout intensity"
-              : "Cela détermine l'intensité des séances"}
+            {t("level.subtitle")}
           </p>
 
           {userPrefs?.vma && suggestedLevel && (
             <div className="rounded-lg border bg-primary/5 p-2 text-xs text-center mt-3 max-w-sm w-full">
-              {isEn
-                ? `Based on your VMA of ${userPrefs.vma} km/h, we suggest the `
-                : `Basé sur votre VMA de ${userPrefs.vma} km/h, nous suggérons le niveau `}
+              {t("level.vmaSuggestion", { vma: userPrefs.vma })}
               <span className="font-semibold">
                 {isEn
                   ? DIFFICULTY_META[suggestedLevel].labelEn
                   : DIFFICULTY_META[suggestedLevel].label}
               </span>
-              {isEn ? " level" : ""}
+              {t("level.vmaSuggestionSuffix")}
             </div>
           )}
 
@@ -803,7 +778,7 @@ export function PlanCreatePage() {
                       </div>
                       {isSuggested && (
                         <div className="text-xs text-primary">
-                          {isEn ? "Suggested" : "Suggéré"}
+                          {t("level.suggested")}
                         </div>
                       )}
                     </div>
@@ -816,7 +791,7 @@ export function PlanCreatePage() {
         <div className="py-4 flex justify-center">
           <Button variant="ghost" size="sm" onClick={goBack}>
             <ArrowLeft className="size-4 mr-1" />
-            {isEn ? "Back" : "Retour"}
+            {t("nav.back")}
           </Button>
         </div>
       </div>
@@ -834,15 +809,13 @@ export function PlanCreatePage() {
     >
       <div className="flex-1 flex flex-col items-center justify-center px-4">
         <h2 className="text-lg md:text-xl font-semibold text-center">
-          {isEn ? "What's your mindset?" : "Dans quel état d'esprit êtes-vous ?"}
+          {t("goal.title")}
         </h2>
         <p className="text-sm text-muted-foreground mt-1 text-center">
-          {isEn
-            ? "This adjusts intensity and volume of the plan"
-            : "Cela ajuste l'intensité et le volume du plan"}
+          {t("goal.subtitle")}
         </p>
         <div className="w-full max-w-sm grid grid-cols-1 gap-2 mt-6">
-          {GOAL_OPTIONS.map((opt) => (
+          {GOAL_OPTION_KEYS.map((opt) => (
             <Card
               key={opt.value}
               interactive
@@ -862,8 +835,8 @@ export function PlanCreatePage() {
                   {opt.icon}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold">{isEn ? opt.labelEn : opt.label}</p>
-                  <p className="text-xs text-muted-foreground">{isEn ? opt.descEn : opt.desc}</p>
+                  <p className="text-sm font-semibold">{t(opt.labelKey)}</p>
+                  <p className="text-xs text-muted-foreground">{t(opt.descKey)}</p>
                 </div>
               </CardContent>
             </Card>
@@ -885,23 +858,19 @@ export function PlanCreatePage() {
     >
       <div className="flex-1 flex flex-col items-center justify-center px-4">
         <h2 className="text-lg md:text-xl font-semibold text-center">
-          {isEn ? "Your current fitness" : "Votre forme actuelle"}
+          {t("fitness.title")}
         </h2>
         <p className="text-sm text-muted-foreground mt-1 text-center max-w-md">
-          {isEn
-            ? "This helps us set the right starting volume. Skip if unsure."
-            : "Ça nous aide à définir le bon volume de départ. Passez si vous n'êtes pas sûr."}
+          {t("fitness.subtitle")}
         </p>
         <div className="w-full max-w-sm space-y-4 mt-6">
           {/* Current weekly km */}
           <div className="space-y-1.5">
             <label className="text-sm font-medium" htmlFor="weeklyKm">
-              {isEn ? "Weekly volume (km)" : "Volume hebdomadaire (km)"}
+              {t("fitness.weeklyKm")}
             </label>
             <p className="text-xs text-muted-foreground">
-              {isEn
-                ? "How many km do you currently run per week?"
-                : "Combien de km courez-vous par semaine actuellement ?"}
+              {t("fitness.weeklyKmDesc")}
             </p>
             <input
               id="weeklyKm"
@@ -909,7 +878,7 @@ export function PlanCreatePage() {
               inputMode="numeric"
               min={0}
               max={300}
-              placeholder={isEn ? "e.g. 30" : "ex. 30"}
+              placeholder={t("fitness.weeklyKmPlaceholder")}
               value={form.currentWeeklyKm}
               onChange={(e) => setForm((f) => ({ ...f, currentWeeklyKm: e.target.value }))}
               className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
@@ -919,12 +888,10 @@ export function PlanCreatePage() {
           {/* Current long run */}
           <div className="space-y-1.5">
             <label className="text-sm font-medium" htmlFor="longRunKm">
-              {isEn ? "Longest recent run (km)" : "Plus longue sortie récente (km)"}
+              {t("fitness.longRunKm")}
             </label>
             <p className="text-xs text-muted-foreground">
-              {isEn
-                ? "Your longest run in the past 2-3 weeks"
-                : "Votre plus longue course des 2-3 dernières semaines"}
+              {t("fitness.longRunKmDesc")}
             </p>
             <input
               id="longRunKm"
@@ -932,7 +899,7 @@ export function PlanCreatePage() {
               inputMode="numeric"
               min={0}
               max={100}
-              placeholder={isEn ? "e.g. 12" : "ex. 12"}
+              placeholder={t("fitness.longRunKmPlaceholder")}
               value={form.currentLongRunKm}
               onChange={(e) => setForm((f) => ({ ...f, currentLongRunKm: e.target.value }))}
               className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
@@ -940,7 +907,7 @@ export function PlanCreatePage() {
           </div>
         </div>
       </div>
-      {renderNavButtons(true, isEn ? "Continue" : "Continuer", true)}
+      {renderNavButtons(true, t("nav.continue"), true)}
     </div>
   );
 
@@ -960,18 +927,16 @@ export function PlanCreatePage() {
           <Calendar className="size-6 md:size-8 text-primary" />
         </div>
         <h2 className="text-lg md:text-xl font-semibold text-center">
-          {isEn ? "Training schedule" : "Planning d'entraînement"}
+          {t("schedule.title")}
         </h2>
         <p className="text-sm text-muted-foreground mt-1 text-center">
-          {isEn
-            ? "How many sessions per week?"
-            : "Combien de séances par semaine ?"}
+          {t("schedule.subtitle")}
         </p>
 
         <div className="w-full max-w-sm mt-6 space-y-6">
           <div>
             <label className="text-sm font-medium mb-3 block text-center">
-              {isEn ? "Sessions per week" : "Séances par semaine"}
+              {t("schedule.sessionsPerWeek")}
             </label>
             <div className="flex gap-2">
               {DAYS_PER_WEEK_OPTIONS.filter((n) =>
@@ -994,18 +959,13 @@ export function PlanCreatePage() {
           {/* Long run day picker */}
           <div>
             <label className="text-sm font-medium mb-2 block text-center">
-              {isEn ? "Long run day" : "Jour de la sortie longue"}
+              {t("schedule.longRunDay")}
             </label>
             <p className="text-xs text-muted-foreground text-center mb-3">
-              {isEn
-                ? "Your weekly long run — the key endurance session"
-                : "Votre sortie longue hebdomadaire — la séance clé d'endurance"}
+              {t("schedule.longRunDayDesc")}
             </p>
             <div className="grid grid-cols-7 gap-1">
-              {(isEn
-                ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-                : ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
-              ).map((label, idx) => (
+              {Array.from({ length: 7 }, (_, idx) => (
                 <Button
                   key={idx}
                   variant={form.longRunDay === idx ? "default" : "outline"}
@@ -1013,7 +973,7 @@ export function PlanCreatePage() {
                   className="text-xs px-0"
                   onClick={() => setForm((f) => ({ ...f, longRunDay: idx }))}
                 >
-                  {label}
+                  {t(`daysShort.${idx}`)}
                 </Button>
               ))}
             </div>
@@ -1028,12 +988,10 @@ export function PlanCreatePage() {
                 </div>
                 <div className="min-w-0">
                   <label htmlFor="includeStrength" className="text-sm font-medium cursor-pointer">
-                    {isEn ? "Include Strength Training" : "Inclure le renforcement"}
+                    {t("schedule.includeStrength")}
                   </label>
                   <p className="text-xs text-muted-foreground leading-tight">
-                    {isEn
-                      ? "Add strength sessions adapted to each phase"
-                      : "Ajouter des séances adaptées à chaque phase"}
+                    {t("schedule.includeStrengthDesc")}
                   </p>
                 </div>
               </div>
@@ -1049,7 +1007,7 @@ export function PlanCreatePage() {
             {form.includeStrength && (
               <div className="mt-3 ml-10">
                 <label className="text-xs font-medium text-muted-foreground mb-2 block">
-                  {isEn ? "Strength Frequency" : "Fréquence renforcement"}
+                  {t("schedule.strengthFrequency")}
                 </label>
                 <div className="flex gap-2">
                   {([1, 2, 3] as const).map((n) => (
@@ -1060,7 +1018,7 @@ export function PlanCreatePage() {
                       className="flex-1 text-xs"
                       onClick={() => setForm((f) => ({ ...f, strengthFrequency: n }))}
                     >
-                      {n}x / {isEn ? "week" : "sem"}
+                      {t("schedule.strengthPerWeek", { n })}
                     </Button>
                   ))}
                 </div>
@@ -1069,7 +1027,7 @@ export function PlanCreatePage() {
           </div>
         </div>
       </div>
-      {renderNavButtons(true, isEn ? "Continue" : "Continuer")}
+      {renderNavButtons(true, t("nav.continue"))}
     </div>
   );
 
@@ -1094,18 +1052,14 @@ export function PlanCreatePage() {
             <Mountain className="size-6 md:size-8 text-primary" />
           </div>
           <h2 className="text-lg md:text-xl font-semibold text-center">
-            {isEn ? "Pace & Elevation" : "Allure & Dénivelé"}
+            {t("pace.title")}
           </h2>
           <p className="text-sm text-muted-foreground mt-1 text-center">
-            {isEn
-              ? "Optional - you can skip this step"
-              : "Optionnel - vous pouvez passer cette étape"}
+            {t("pace.subtitle")}
           </p>
           {(form.raceDistance === "trail_short" || form.raceDistance === "trail" || form.raceDistance === "ultra") && (
             <p className="text-xs text-primary text-center mt-1">
-              {isEn
-                ? "Elevation data is important for trail-specific training"
-                : "Le dénivelé est important pour un entraînement trail adapté"}
+              {t("pace.trailHint")}
             </p>
           )}
 
@@ -1120,7 +1074,7 @@ export function PlanCreatePage() {
                 )}
                 onClick={() => setPaceInputMode("pace")}
               >
-                {isEn ? "Target pace" : "Allure cible"}
+                {t("pace.targetPaceTab")}
               </button>
               <button
                 type="button"
@@ -1130,7 +1084,7 @@ export function PlanCreatePage() {
                 )}
                 onClick={() => setPaceInputMode("time")}
               >
-                {isEn ? "Finish time" : "Temps cible"}
+                {t("pace.targetTimeTab")}
               </button>
             </div>
 
@@ -1138,7 +1092,7 @@ export function PlanCreatePage() {
             {paceInputMode === "pace" ? (
               <div>
                 <label className="text-sm font-medium mb-2 block">
-                  {isEn ? "Target pace (min/km)" : "Allure cible (min/km)"}
+                  {t("pace.targetPaceLabel")}
                 </label>
                 <input
                   type="text"
@@ -1155,7 +1109,7 @@ export function PlanCreatePage() {
                 />
                 {paceSeconds && distanceKm > 0 && (
                   <p className="text-xs text-muted-foreground mt-1">
-                    {isEn ? "Estimated finish: " : "Temps estimé : "}
+                    {t("pace.estimatedFinish")}
                     <span className="font-medium">
                       {estimateFinishTime(paceSeconds, distanceKm)}
                     </span>
@@ -1163,16 +1117,14 @@ export function PlanCreatePage() {
                 )}
                 {form.targetPace && !paceSeconds && (
                   <p className="text-xs text-destructive mt-1">
-                    {isEn
-                      ? "Format: MM:SS (e.g. 5:30)"
-                      : "Format : MM:SS (ex. 5:30)"}
+                    {t("pace.paceFormatError")}
                   </p>
                 )}
               </div>
             ) : (
               <div>
                 <label className="text-sm font-medium mb-2 block">
-                  {isEn ? "Target finish time" : "Temps d'arrivée visé"}
+                  {t("pace.targetFinishTimeLabel")}
                 </label>
                 <input
                   type="text"
@@ -1194,7 +1146,7 @@ export function PlanCreatePage() {
                       if (totalSec || !targetFinishTime) goForward();
                     }
                   }}
-                  placeholder={isEn ? "e.g. 3:30 or 3:30:00" : "ex. 3:30 ou 3:30:00"}
+                  placeholder={t("pace.timePlaceholder")}
                   className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
                 {(() => {
@@ -1203,7 +1155,7 @@ export function PlanCreatePage() {
                     const paceSec = finishTimeToPaceSeconds(totalSec, distanceKm);
                     return (
                       <p className="text-xs text-muted-foreground mt-1">
-                        {isEn ? "Required pace: " : "Allure nécessaire : "}
+                        {t("pace.requiredPace")}
                         <span className="font-medium">{formatPace(paceSec)} min/km</span>
                       </p>
                     );
@@ -1211,9 +1163,7 @@ export function PlanCreatePage() {
                   if (targetFinishTime && !totalSec) {
                     return (
                       <p className="text-xs text-destructive mt-1">
-                        {isEn
-                          ? "Format: H:MM or H:MM:SS (e.g. 3:30 or 3:30:00)"
-                          : "Format : H:MM ou H:MM:SS (ex. 3:30 ou 3:30:00)"}
+                        {t("pace.timeFormatHint")}
                       </p>
                     );
                   }
@@ -1225,7 +1175,7 @@ export function PlanCreatePage() {
             {/* Elevation gain */}
             <div>
               <label className="text-sm font-medium mb-2 block">
-                {isEn ? "Elevation gain (m)" : "Dénivelé positif (m)"}
+                {t("pace.elevation")}
               </label>
               <input
                 type="number"
@@ -1233,7 +1183,7 @@ export function PlanCreatePage() {
                 onChange={(e) =>
                   setForm((f) => ({ ...f, elevationGain: e.target.value }))
                 }
-                placeholder={isEn ? "e.g. 350" : "ex. 350"}
+                placeholder={t("pace.elevationPlaceholder")}
                 min={0}
                 max={10000}
                 className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -1243,7 +1193,7 @@ export function PlanCreatePage() {
         </div>
         {renderNavButtons(
           form.targetPace === "" || !!paceSeconds,
-          isEn ? "Continue" : "Continuer",
+          t("nav.continue"),
           true
         )}
       </div>
@@ -1275,12 +1225,10 @@ export function PlanCreatePage() {
             <CheckIcon className="size-6 md:size-8 text-primary" />
           </div>
           <h2 className="text-lg md:text-xl font-semibold">
-            {isEn ? "Summary" : "Récapitulatif"}
+            {t("summary.title")}
           </h2>
           <p className="text-sm text-muted-foreground mt-1">
-            {isEn
-              ? "Review your selections before generating"
-              : "Vérifiez vos choix avant de générer le plan"}
+            {t("summary.subtitle")}
           </p>
         </div>
 
@@ -1288,7 +1236,7 @@ export function PlanCreatePage() {
           <CardContent className="p-4 md:p-6 space-y-2">
             {/* Distance */}
             <SummaryRow
-              label={isEn ? "Distance" : "Distance"}
+              label={t("summary.distance")}
               value={
                 distMeta
                   ? `${isEn ? distMeta.labelEn : distMeta.label} (${distMeta.distanceKm} km)`
@@ -1297,7 +1245,7 @@ export function PlanCreatePage() {
             />
             {/* Race date */}
             <SummaryRow
-              label={isEn ? "Race date" : "Date de course"}
+              label={t("summary.date")}
               value={
                 form.raceDate
                   ? `${new Date(form.raceDate).toLocaleDateString(
@@ -1307,20 +1255,20 @@ export function PlanCreatePage() {
                         month: "long",
                         day: "numeric",
                       }
-                    )} (${weeksCount} ${isEn ? "weeks" : "sem."})`
+                    )} (${weeksCount} ${t("summary.weeksShort")})`
                   : "-"
               }
             />
             {/* Race name */}
             {form.raceName && (
               <SummaryRow
-                label={isEn ? "Race name" : "Nom de la course"}
+                label={t("summary.name")}
                 value={form.raceName}
               />
             )}
             {/* Level */}
             <SummaryRow
-              label={isEn ? "Level" : "Niveau"}
+              label={t("summary.level")}
               value={
                 levelMeta
                   ? isEn
@@ -1331,70 +1279,67 @@ export function PlanCreatePage() {
             />
             {/* Days */}
             <SummaryRow
-              label={isEn ? "Sessions/week" : "Séances/semaine"}
+              label={t("summary.days")}
               value={`${form.daysPerWeek}`}
             />
             {/* Pace */}
             {paceSeconds && (
               <SummaryRow
-                label={isEn ? "Target pace" : "Allure cible"}
+                label={t("summary.pace")}
                 value={`${formatPace(paceSeconds)}/km → ${estimateFinishTime(paceSeconds, distanceKm)}`}
               />
             )}
             {/* Elevation */}
             {form.elevationGain && (
               <SummaryRow
-                label={isEn ? "Elevation" : "Dénivelé"}
+                label={t("summary.elevation")}
                 value={`${form.elevationGain} m D+`}
               />
             )}
             {/* v2: Goal */}
             <SummaryRow
-              label={isEn ? "Mindset" : "Objectif"}
+              label={t("summary.goal")}
               value={
-                form.trainingGoal === "finish" ? (isEn ? "Finish the race" : "Finir la course")
-                  : form.trainingGoal === "compete" ? (isEn ? "Compete" : "Performer")
-                    : (isEn ? "Target a time" : "Objectif temps")
+                form.trainingGoal === "finish" ? t("goal.finish")
+                  : form.trainingGoal === "compete" ? t("goal.compete")
+                    : t("goal.time")
               }
             />
             {/* v2: Purpose (non-race only) */}
             {form.planPurpose !== "race" && (
               <SummaryRow
-                label={isEn ? "Plan type" : "Type de plan"}
+                label={t("summary.purpose")}
                 value={
-                  form.planPurpose === "base_building" ? (isEn ? "Base Building" : "Construction de base")
-                    : form.planPurpose === "return_from_injury" ? (isEn ? "Return from Injury" : "Retour de blessure")
-                      : (isEn ? "Beginner Start" : "Débuter")
+                  form.planPurpose === "base_building" ? t("summary.purposeBaseBuilding")
+                    : form.planPurpose === "return_from_injury" ? t("summary.purposeReturnFromInjury")
+                      : t("summary.purposeBeginnerStart")
                 }
               />
             )}
             {/* v2: Duration (non-race) */}
             {form.planPurpose !== "race" && form.totalWeeksOverride > 0 && (
               <SummaryRow
-                label={isEn ? "Duration" : "Durée"}
-                value={`${form.totalWeeksOverride} ${isEn ? "weeks" : "semaines"}`}
+                label={t("summary.duration")}
+                value={t("summary.durationValue", { weeks: form.totalWeeksOverride })}
               />
             )}
             {/* v2: Fitness */}
             {form.currentWeeklyKm && (
               <SummaryRow
-                label={isEn ? "Current volume" : "Volume actuel"}
-                value={`${form.currentWeeklyKm} km/${isEn ? "week" : "sem"}`}
+                label={t("summary.weeklyKm")}
+                value={t("summary.currentVolume", { km: form.currentWeeklyKm })}
               />
             )}
             {/* v2: Long run day */}
             <SummaryRow
-              label={isEn ? "Long run day" : "Jour sortie longue"}
-              value={isEn
-                ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][form.longRunDay]
-                : ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"][form.longRunDay]
-              }
+              label={t("summary.longRun")}
+              value={t(`days.${form.longRunDay}`)}
             />
             {/* v2: Strength training */}
             {form.includeStrength && (
               <SummaryRow
-                label={isEn ? "Strength training" : "Renforcement"}
-                value={`${form.strengthFrequency}x / ${isEn ? "week" : "sem"}`}
+                label={t("summary.strengthTraining")}
+                value={t("schedule.strengthPerWeek", { n: form.strengthFrequency })}
               />
             )}
           </CardContent>
@@ -1402,9 +1347,9 @@ export function PlanCreatePage() {
 
         {!canCreate && (
           <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive text-center">
-            {isEn ? "You've reached the limit of 5 plans. " : "Limite de 5 plans atteinte. "}
+            {t("summary.planLimitReached")}
             <Link to="/plans" className="underline font-medium">
-              {isEn ? "Delete an existing plan" : "Supprimer un plan existant"}
+              {t("summary.deletePlanLink")}
             </Link>
           </div>
         )}
@@ -1418,7 +1363,7 @@ export function PlanCreatePage() {
         <div className="flex justify-between gap-3">
           <Button variant="ghost" size="sm" onClick={goBack}>
             <ArrowLeft className="size-4 mr-1" />
-            {isEn ? "Back" : "Retour"}
+            {t("nav.back")}
           </Button>
           <Button
             onClick={handleGenerate}
@@ -1427,11 +1372,11 @@ export function PlanCreatePage() {
             {isGenerating ? (
               <>
                 <Loader2 className="size-4 animate-spin mr-2" />
-                {isEn ? "Generating..." : "Génération..."}
+                {t("summary.generating")}
               </>
             ) : (
               <>
-                {isEn ? "Generate plan" : "Générer le plan"}
+                {t("summary.generate")}
               </>
             )}
           </Button>
@@ -1448,12 +1393,8 @@ export function PlanCreatePage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "Create Training Plan" : "Créer un plan d'entraînement"}
-        description={
-          isEn
-            ? "Create a personalized running training plan for your next race."
-            : "Créez un plan d'entraînement personnalisé pour votre prochaine course."
-        }
+        title={t("seo.createTitle")}
+        description={t("seo.createDescription")}
         canonical="/plan/create"
       />
       <div className={cn(
@@ -1468,7 +1409,7 @@ export function PlanCreatePage() {
             <Button variant="ghost" size="sm" asChild>
               <Link to="/plan/new">
                 <ArrowLeft className="mr-1 size-4" />
-                {isEn ? "Back" : "Retour"}
+                {t("nav.back")}
               </Link>
             </Button>
           </div>

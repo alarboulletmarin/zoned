@@ -92,7 +92,8 @@
     "back": "Arrière",
     "lowIntensity": "Faible",
     "mediumIntensity": "Moyen",
-    "highIntensity": "Intense"
+    "highIntensity": "Intense",
+    "secondary": "secondaire"
   },
   "trainingPhases": {
     "base": "Construction",

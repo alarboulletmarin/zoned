@@ -9,7 +9,7 @@ export function AboutPage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "About" : "À propos"}
+        title={t("about.seoHeroLabel")}
         description={isEn
           ? "Learn about Zoned, an open-source running workout library with zone-based training."
           : "Découvrez Zoned, une bibliothèque open-source de séances de course à pied basée sur les zones."}
@@ -38,7 +38,7 @@ export function AboutPage() {
         <section>
           <div className="max-w-3xl">
             <span className="text-primary font-bold tracking-widest text-sm uppercase mb-4 block">
-              {isEn ? "About" : "À propos"}
+              {t("about.seoHeroLabel")}
             </span>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4 leading-[1.1]">
               {t("about.title")}
@@ -52,8 +52,8 @@ export function AboutPage() {
         {/* Stats Bento Grid */}
         <section className="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
           {[
-            { value: "200", label: isEn ? "Workouts" : "Séances", color: "primary", gradient: "from-primary/10 dark:from-primary/20" },
-            { value: "9", label: isEn ? "Calculators" : "Calculateurs", color: "zone-3", gradient: "from-zone-3/10 dark:from-zone-3/20" },
+            { value: "200", label: t("about.statsWorkouts"), color: "primary", gradient: "from-primary/10 dark:from-primary/20" },
+            { value: "9", label: t("about.statsCalculators"), color: "zone-3", gradient: "from-zone-3/10 dark:from-zone-3/20" },
             { value: "8", label: "Plans", color: "zone-2", gradient: "from-zone-2/10 dark:from-zone-2/20" },
             { value: "16", label: "Collections", color: "zone-5", gradient: "from-zone-5/10 dark:from-zone-5/20" },
             { value: "12", label: "Articles", color: "zone-4", gradient: "from-zone-4/10 dark:from-zone-4/20" },

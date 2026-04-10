@@ -52,37 +52,45 @@
   "duration": {
     "title": "How long?",
     "subtitle": "Choose the duration of your plan",
-    "weeks": "weeks"
+    "weeks": "weeks",
+    "weeksShort": "wks"
   },
   "schedule": {
     "title": "Training schedule",
     "subtitle": "How many sessions per week?",
     "sessionsPerWeek": "Sessions per week",
     "longRunDay": "Long run day",
-    "longRunDayDesc": "Your weekly long run — the key endurance session"
+    "longRunDayDesc": "Your weekly long run — the key endurance session",
+    "includeStrength": "Include Strength Training",
+    "includeStrengthDesc": "Add strength sessions adapted to each phase",
+    "strengthFrequency": "Strength Frequency",
+    "strengthPerWeek": "{{n}}x / week"
   },
   "distance": {
     "title": "Choose your distance",
     "subtitle": "Which race are you training for?"
   },
   "date": {
-    "title": "Your race date",
+    "title": "When is the race?",
     "subtitle": "At least {{min}} weeks from today",
     "weeks": "{{count}} weeks of preparation",
     "tooSoon": "Too close! You need at least {{min}} weeks.",
     "tooLong": "{{weeks}} weeks is a long cycle",
-    "tooLongDetail": "For this distance, {{min}}–{{max}} weeks is ideal. Beyond that, you risk mental fatigue and overtraining. Consider a base building block before your specific preparation."
+    "tooLongDetail": "For this distance, {{min}}–{{max}} weeks is ideal. Beyond that, you risk mental fatigue and overtraining. Consider a base building block before your specific preparation.",
+    "raceDate": "Race date"
   },
   "raceName": {
-    "title": "Race name",
-    "subtitle": "Optional - give your goal a name",
-    "placeholder": "E.g.: Boston Marathon",
-    "skip": "Skip"
+    "title": "Name your race",
+    "subtitle": "Optional - you can skip this step",
+    "placeholder": "e.g. Paris Marathon",
+    "skip": "Skip",
+    "label": "Race name"
   },
   "level": {
-    "title": "Your level",
-    "subtitle": "Select your current level",
-    "vmaSuggestion": "Based on your VMA of {{vma}} km/h, we suggest:",
+    "title": "Your running level",
+    "subtitle": "This determines workout intensity",
+    "vmaSuggestion": "Based on your VMA of {{vma}} km/h, we suggest the ",
+    "vmaSuggestionSuffix": " level",
     "beginner": "Beginner",
     "beginnerDesc": "1–2 runs/week · less than 15 km/week",
     "intermediate": "Intermediate",
@@ -90,7 +98,8 @@
     "advanced": "Advanced",
     "advancedDesc": "4–5 runs/week · 40–70 km/week",
     "elite": "Elite",
-    "eliteDesc": "5–7 runs/week · 70+ km/week"
+    "eliteDesc": "5–7 runs/week · 70+ km/week",
+    "suggested": "Suggested"
   },
   "config": {
     "title": "Configuration",
@@ -100,53 +109,110 @@
   },
   "pace": {
     "title": "Pace & Elevation",
-    "subtitle": "Optional - specify your goals",
-    "targetPace": "Target pace (min/km)",
+    "subtitle": "Optional - you can skip this step",
+    "trailHint": "Elevation data is important for trail-specific training",
+    "targetPace": "Target pace",
     "targetTime": "Finish time",
     "targetPaceTab": "Target pace",
     "targetTimeTab": "Finish time",
+    "targetPaceLabel": "Target pace (min/km)",
+    "targetFinishTimeLabel": "Target finish time",
     "pacePlaceholder": "E.g.: 5:30",
-    "timePlaceholder": "E.g.: 3:30 or 3:30:00",
-    "estimatedTime": "Estimated time: {{time}}",
-    "requiredPace": "Required pace: {{pace}} min/km",
+    "timePlaceholder": "e.g. 3:30 or 3:30:00",
+    "estimatedFinish": "Estimated finish: ",
+    "requiredPace": "Required pace: ",
+    "paceFormatError": "Format: MM:SS (e.g. 5:30)",
     "timeFormatHint": "Format: H:MM or H:MM:SS (e.g. 3:30 or 3:30:00)",
     "elevation": "Elevation gain (m)",
-    "elevationPlaceholder": "E.g.: 500",
+    "elevationPlaceholder": "e.g. 350",
     "skip": "Skip this step"
   },
   "summary": {
     "title": "Summary",
-    "subtitle": "Review your settings before generating",
+    "subtitle": "Review your selections before generating",
     "distance": "Distance",
-    "date": "Date",
-    "name": "Race",
+    "date": "Race date",
+    "name": "Race name",
     "level": "Level",
-    "days": "Days/week",
-    "longRun": "Long run",
+    "days": "Sessions/week",
+    "longRun": "Long run day",
     "pace": "Target pace",
     "elevation": "Elevation",
-    "goal": "Goal",
+    "goal": "Mindset",
     "purpose": "Plan type",
     "weeklyKm": "Current volume",
     "peakKm": "Estimated peak volume",
     "peakLongRun": "Peak long run",
     "generate": "Generate plan",
-    "generating": "Generating..."
+    "generating": "Generating...",
+    "duration": "Duration",
+    "durationValue": "{{weeks}} weeks",
+    "currentVolume": "{{km}} km/week",
+    "strengthTraining": "Strength training",
+    "planLimitReached": "You've reached the limit of 5 plans. ",
+    "deletePlanLink": "Delete an existing plan",
+    "purposeBaseBuilding": "Base Building",
+    "purposeReturnFromInjury": "Return from Injury",
+    "purposeBeginnerStart": "Beginner Start",
+    "weeksShort": "weeks"
+  },
+  "seo": {
+    "createTitle": "Create Training Plan",
+    "createDescription": "Create a personalized running training plan for your next race."
   },
   "view": {
     "title": "My plan",
     "currentWeek": "Current week",
-    "phases": "Phases",
+    "phases": "Training phases",
     "sessions": "sessions",
     "duration": "{{min}} min",
     "keySession": "Key session",
-    "raceDay": "Race day",
+    "raceDay": "Race Day!",
     "racePrediction": "Estimated time",
     "delete": "Delete plan",
-    "deleteConfirm": "Are you sure you want to delete this plan?",
+    "deleteTitle": "Delete this plan?",
+    "deleteConfirm": "\"{{name}}\" will be permanently deleted. This action cannot be undone.",
     "export": "Export",
     "exportPdf": "Export as PDF",
-    "exportIcs": "Add to calendar"
+    "exportIcs": "Add to calendar",
+    "notFound": "Plan not found",
+    "backToPlans": "Back to plans",
+    "freePlan": "Free plan",
+    "prebuilt": "Pre-built",
+    "addDates": "Add dates",
+    "clickToRename": "Click to rename",
+    "nameUpdated": "Name updated",
+    "sessionReplaced": "Session replaced",
+    "sessionUpdateFailed": "Failed to update session",
+    "sessionMoved": "Session moved",
+    "sessionMoveFailed": "Failed to move session",
+    "sessionDeleted": "Session deleted",
+    "sessionDeleteFailed": "Failed to delete session",
+    "weekValidated": "Week {{week}} validated!",
+    "addWorkout": "Add workout",
+    "activityAdded": "Activity added",
+    "workoutAdded": "Workout added",
+    "workoutAddFailed": "Failed to add workout",
+    "replaceSession": "Replace session",
+    "removeSession": "Remove session",
+    "noSessionsThisWeek": "No sessions this week",
+    "schedule": "Schedule",
+    "statistics": "Statistics",
+    "trainingVolume": "Training volume relative to plan peak",
+    "add": "Add",
+    "rightClickOptions": "Right-click for options · Drag to move",
+    "longPressOptions": "Long-press for options · Swipe to move",
+    "editDatesTitle": "Edit dates",
+    "editDatesDescription": "Set a start date for your plan. The end date is calculated automatically.",
+    "startDate": "Start date",
+    "startNextMonday": "Start next Monday",
+    "startLabel": "Start",
+    "endLabel": "End",
+    "pastDateWarning": "This date is in the past. The first weeks will already be elapsed.",
+    "cancel": "Cancel",
+    "save": "Save",
+    "datesUpdated": "Dates updated",
+    "editDates": "Edit dates"
   },
   "completion": {
     "planned": "Planned",
@@ -157,7 +223,8 @@
     "validated": "Week validated",
     "weekValidated": "Week {{week}} validated!",
     "markDone": "Mark as done",
-    "toggleDone": "Toggle done"
+    "toggleDone": "Toggle done",
+    "completedCount": "{{done}}/{{total}} completed"
   },
   "rpe": {
     "title": "RPE · Rate of Perceived Effort",
@@ -202,17 +269,27 @@
     "remaining": "remaining",
     "rpeAvg": "RPE avg",
     "peakVolume": "Peak volume",
-    "peakLongRun": "Peak long run"
+    "peakLongRun": "Peak long run",
+    "longRun": "Long run"
   },
   "calendar": {
     "now": "NOW",
     "race": "Race",
     "raceWeek": "Race",
-    "recoveryWeek": "Recovery"
+    "recoveryWeek": "Recovery",
+    "week": "Week",
+    "weekPrefix": "W",
+    "viewSession": "View session",
+    "deleteSession": "Delete",
+    "deleteSessionTitle": "Delete session",
+    "validateWeek": "Validate week",
+    "validateCount": "Validate {{done}}/{{total}}"
   },
   "card": {
     "weeks": "{{current}}/{{total}} weeks",
-    "phase": "Phase: {{phase}}"
+    "phase": "Phase: {{phase}}",
+    "session": "session",
+    "sessions": "sessions"
   },
   "days": {
     "0": "Monday",
@@ -248,6 +325,61 @@
   },
   "monthlyView": {
     "noStartDate": "Set a start date to display the monthly view",
-    "setStartDate": "Set date"
+    "setStartDate": "Set date",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month"
+  },
+  "weeklyView": {
+    "weekTitle": "Week {{week}}",
+    "completed": "completed"
+  },
+  "workoutPanel": {
+    "title": "Add a workout",
+    "close": "Close",
+    "hintClick": "Click a workout to add it to your plan",
+    "hintDrag": "Drag a workout onto the calendar to add it",
+    "hintTap": "Tap a workout to add it",
+    "searchPlaceholder": "Search workouts...",
+    "favoritesOnly": "Favorites only",
+    "noFavoriteStrength": "No favorite strength sessions",
+    "noMatchingStrength": "No matching strength sessions",
+    "noFavorites": "No favorite workouts yet",
+    "noMatching": "No matching workouts"
+  },
+  "plansPage": {
+    "title": "My Training Plans",
+    "subtitle": "Structured plans to reach your race goals",
+    "science": "The science behind your plans",
+    "whatIf": "What-if simulator",
+    "maxReached": "Maximum 5 plans reached",
+    "import": "Import",
+    "importMaxError": "Maximum 5 plans. Delete one first.",
+    "importSuccess": "Plan imported!",
+    "importInvalid": "Invalid plan file",
+    "importReadError": "Failed to read file",
+    "view": "View",
+    "buildArc": "Build your training arc",
+    "buildArcDesc": "Set a goal, pick your race, and we'll structure the path.",
+    "createFirst": "Create your first plan",
+    "deleteTitle": "Delete this plan?",
+    "deleteConfirm": "\"{{name}}\" will be permanently deleted. This action cannot be undone.",
+    "deleteButton": "Delete",
+    "cancelButton": "Cancel",
+    "weekProgress": "Week {{current}} / {{total}}",
+    "target": "Target: "
+  },
+  "prebuilt": {
+    "notFound": "Plan not found",
+    "backToPlans": "Back to plans",
+    "useThisPlan": "Use this plan",
+    "limitReached": "5-plan limit reached",
+    "planAdded": "Plan added!",
+    "trainingPhases": "Training phases",
+    "weekByWeek": "Week-by-week schedule",
+    "recovery": "Recovery",
+    "noSessions": "No sessions this week",
+    "raceDay": "Race Day!",
+    "seoFr": "Plan d'entraînement {{name}} gratuit : {{weeks}} semaines, {{sessions}} séances/semaine. {{desc}}",
+    "seoEn": "Free {{name}} training plan: {{weeks}} weeks, {{sessions}} sessions/week. {{desc}}"
   }
 }

@@ -11,6 +11,7 @@ import { getDominantZone, isStrengthWorkout } from "@/types";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import { DAY_LABELS } from "@/lib/planGenerator/constants";
+import i18n from "@/i18n";
 
 /**
  * Get the Monday of the week that contains the given date.
@@ -44,9 +45,10 @@ export function exportPlanToICS(
   plan: TrainingPlan,
   workoutNames: Record<string, string>,
   workoutTemplates: Record<string, WorkoutTemplate>,
-  isEn: boolean,
 ): void {
   try {
+    const isEn = i18n.language?.startsWith("en") ?? false;
+    const t = (key: string, opts?: Record<string, unknown>) => i18n.t(`common:export.planIcs.${key}`, opts);
     const planMonday = getMondayOfWeek(new Date(plan.config.startDate || plan.config.createdAt));
     const dayLabels = isEn ? DAY_LABELS.en : DAY_LABELS.fr;
 
@@ -74,9 +76,9 @@ export function exportPlanToICS(
               sessionDate.getMonth() + 1,
               sessionDate.getDate(),
             ],
-            title: `${isEn ? "Race Day" : "Jour de course"} - ${raceName}`,
+            title: `${t("raceDay")} - ${raceName}`,
             description: plan.raceTimePrediction
-              ? `${isEn ? "Target time" : "Temps cible"}: ${plan.raceTimePrediction}`
+              ? `${t("targetTime")}: ${plan.raceTimePrediction}`
               : "",
             categories: ["Running", "Race"],
             status: "CONFIRMED" as const,
@@ -92,11 +94,11 @@ export function exportPlanToICS(
             : (week.weekLabel || `S${week.weekNumber}`);
 
           const descriptionLines: string[] = [];
-          descriptionLines.push(`${isEn ? "Week" : "Semaine"}: ${weekLabel}`);
-          descriptionLines.push(`${isEn ? "Day" : "Jour"}: ${dayLabel}`);
-          descriptionLines.push(`${isEn ? "Duration" : "Durée"}: ${session.estimatedDurationMin} min`);
+          descriptionLines.push(`${t("week")}: ${weekLabel}`);
+          descriptionLines.push(`${t("dayLabel")}: ${dayLabel}`);
+          descriptionLines.push(`${t("durationLabel")}: ${session.estimatedDurationMin} min`);
           if (session.isKeySession) {
-            descriptionLines.push(isEn ? "Key session" : "Séance clé");
+            descriptionLines.push(t("keySession"));
           }
           const notes = isEn ? session.notesEn : session.notes;
           if (notes) {
@@ -119,7 +121,7 @@ export function exportPlanToICS(
             const tips = isEn ? str.coachingTipsEn : str.coachingTips;
             if (tips?.length) {
               descriptionLines.push("");
-              descriptionLines.push(isEn ? "--- Tips ---" : "--- Conseils ---");
+              descriptionLines.push(`--- ${t("tips")} ---`);
               for (const tip of tips) {
                 descriptionLines.push(`• ${tip}`);
               }
@@ -173,7 +175,7 @@ export function exportPlanToICS(
             const tips = isEn ? running.coachingTipsEn : running.coachingTips;
             if (tips?.length) {
               descriptionLines.push("");
-              descriptionLines.push(isEn ? "--- Tips ---" : "--- Conseils ---");
+              descriptionLines.push(`--- ${t("tips")} ---`);
               for (const tip of tips) {
                 descriptionLines.push(`• ${tip}`);
               }

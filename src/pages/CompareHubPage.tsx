@@ -68,12 +68,10 @@ export function CompareHubPage() {
         {/* Zoned pitch */}
         <div className="rounded-xl border bg-muted/30 p-6 space-y-2">
           <p className="font-semibold">
-            {isEn ? "Why these comparisons?" : "Pourquoi ces comparaisons ?"}
+            {t("comparePage.whyComparisons")}
           </p>
           <p className="text-sm text-muted-foreground">
-            {isEn
-              ? "Zoned is free, open source, requires no account and collects no data. We think those differences matter — these pages are here to help you decide."
-              : "Zoned est gratuit, open source, ne nécessite aucun compte et ne collecte aucune donnée. Ces différences comptent — ces pages sont là pour vous aider à choisir."}
+            {t("comparePage.whyComparisonsDesc")}
           </p>
         </div>
       </div>

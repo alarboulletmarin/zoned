@@ -105,23 +105,23 @@ export function GlossaryPage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "Glossary" : "Glossaire"}
-        description={isEn
+        title={t("title")}
+        description={t("seoDescription", { defaultValue: isEn
           ? "Running terminology explained: training zones, workout types, and key concepts for runners."
-          : "Terminologie de la course à pied expliquée: zones d'entraînement, types de séances et concepts clés."}
+          : "Terminologie de la course à pied expliquée: zones d'entraînement, types de séances et concepts clés." })}
         canonical="/glossary"
         jsonLd={[
           {
             "@type": "DefinedTermSet",
             name: isEn ? "Zoned Running Glossary" : "Glossaire Zoned Running",
-            description: isEn ? "Complete glossary of running training terms" : "Glossaire complet des termes d'entraînement running",
+            description: isEn ? "Complete glossary of running training terms" : "Glossaire complet des termes d'entra\u00eenement running",
             url: "https://zoned.run/glossary",
           },
           {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: isEn ? "Glossary" : "Glossaire" },
+              { "@type": "ListItem", position: 2, name: t("title") },
             ],
           },
         ]}

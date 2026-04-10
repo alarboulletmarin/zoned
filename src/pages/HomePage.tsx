@@ -132,11 +132,7 @@ export function HomePage() {
   return (
     <>
       <SEOHead
-        title={
-          isEn
-            ? "Scientific Running Workouts"
-            : "Séances de Course Scientifiques"
-        }
+        title={t("common:home.seoTitle")}
         description={seoDescription}
         canonical="/"
         jsonLd={[
@@ -210,12 +206,8 @@ export function HomePage() {
                 <Link to={planLink}>
                   <CalendarRange className="mr-2 size-4 md:size-5" />
                   {hasPlans
-                    ? isEn
-                      ? "My plans"
-                      : "Mes plans"
-                    : isEn
-                      ? "Create my plan"
-                      : "Créer mon plan"}
+                    ? t("common:plans.myPlans")
+                    : t("common:plans.createMyPlan")}
                 </Link>
               </Button>
               <Button
@@ -241,12 +233,10 @@ export function HomePage() {
               <div className="bg-gradient-to-br from-primary/15 dark:from-primary/25 to-zone-5/5 dark:to-zone-5/10 rounded-xl border border-primary/20 dark:border-primary/30 p-5 md:p-8 h-full flex flex-col transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-1">
                 <ClipboardCheck className="size-6 md:size-10 text-primary mb-2 md:mb-4" />
                 <p className="font-bold text-base md:text-2xl">
-                  {isEn ? "Find your workout" : "Trouve ta séance"}
+                  {t("common:home.findWorkout")}
                 </p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {isEn
-                    ? "5 questions to find the perfect session"
-                    : "5 questions pour trouver la séance parfaite"}
+                  {t("common:home.findWorkoutDesc")}
                 </p>
                 <span className="inline-flex items-center text-xs text-primary/70 mt-auto pt-2 md:pt-3 font-medium">
                   {workoutCount || 200}+ {t("common:units.workouts")}
@@ -258,13 +248,13 @@ export function HomePage() {
               <div className="bg-gradient-to-br from-zone-4/15 dark:from-zone-4/25 to-zone-5/5 dark:to-zone-5/10 rounded-xl border border-zone-4/20 dark:border-zone-4/30 p-5 md:p-8 h-full flex flex-col transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-1">
                 <Flag className="size-6 md:size-10 text-zone-4 mb-2 md:mb-4" />
                 <p className="font-bold text-base md:text-2xl">
-                  {isEn ? "Race simulator" : "Simulateur"}
+                  {t("common:home.raceSimulator")}
                 </p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {isEn ? "Splits, nutrition, race day" : "Splits, nutrition, jour-J"}
+                  {t("common:home.raceSimulatorSplits")}
                 </p>
                 <span className="inline-flex items-center text-xs text-zone-4/70 mt-auto pt-2 md:pt-3 font-medium">
-                  {isEn ? "Plan your race" : "Planifier ta course"}
+                  {t("common:home.planYourRace")}
                   <ArrowRight className="size-3 ml-1" />
                 </span>
               </div>
@@ -282,10 +272,10 @@ export function HomePage() {
                   className={`size-5 md:size-6 text-zone-5 mb-2 ${isLoadingRandom ? "animate-spin" : ""}`}
                 />
                 <p className="font-bold text-xs sm:text-sm">
-                  {isEn ? "Random" : "Aléatoire"}
+                  {t("common:home.random")}
                 </p>
                 <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 hidden sm:block">
-                  {isEn ? "Surprise me!" : "Surprends-moi !"}
+                  {t("common:home.surpriseMe")}
                 </p>
               </div>
             </button>
@@ -293,10 +283,10 @@ export function HomePage() {
               <div className="bg-muted/30 dark:bg-muted/20 rounded-xl border border-border/50 p-4 md:p-5 h-full flex flex-col items-center text-center transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1 group-hover:bg-zone-3/10 dark:group-hover:bg-zone-3/15">
                 <Activity className="size-5 md:size-6 text-zone-3 mb-2" />
                 <p className="font-bold text-xs sm:text-sm">
-                  {isEn ? "Calculators" : "Calculateurs"}
+                  {t("common:home.calculators")}
                 </p>
                 <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 hidden sm:block">
-                  {isEn ? "9 tools" : "9 outils"}
+                  {t("common:home.nineTools")}
                 </p>
               </div>
             </Link>
@@ -304,10 +294,10 @@ export function HomePage() {
               <div className="bg-muted/30 dark:bg-muted/20 rounded-xl border border-border/50 p-4 md:p-5 h-full flex flex-col items-center text-center transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1 group-hover:bg-zone-2/10 dark:group-hover:bg-zone-2/15">
                 <Shield className="size-5 md:size-6 text-zone-2 mb-2" />
                 <p className="font-bold text-xs sm:text-sm">
-                  {isEn ? "My Zones" : "Mes Zones"}
+                  {t("common:home.myZones")}
                 </p>
                 <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 hidden sm:block">
-                  {isEn ? "HR & pace zones" : "FC & allures"}
+                  {t("common:home.hrPaceZones")}
                 </p>
               </div>
             </Link>
@@ -350,12 +340,10 @@ export function HomePage() {
         <section>
           <div className="mb-10">
             <h2 className="text-2xl md:text-3xl font-bold">
-              {isEn ? "Training Zones" : "Zones d'entraînement"}
+              {t("common:zones.trainingZones")}
             </h2>
             <p className="text-sm text-muted-foreground mt-2">
-              {isEn
-                ? "Click a zone to learn more"
-                : "Cliquez sur une zone pour en savoir plus"}
+              {t("common:zones.clickZoneToLearn")}
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
@@ -401,11 +389,11 @@ export function HomePage() {
         <section>
           <div className="flex items-center justify-between mb-10">
             <h2 className="text-2xl md:text-3xl font-bold">
-              {isEn ? "Featured Workouts" : "Séances en vedette"}
+              {t("common:home.featuredWorkouts")}
             </h2>
             <Button variant="ghost" asChild>
               <Link to="/library">
-                {isEn ? "View all" : "Voir tout"}
+                {t("common:home.viewAll")}
                 <ArrowRight className="ml-1 size-4" />
               </Link>
             </Button>
@@ -431,20 +419,18 @@ export function HomePage() {
               <div className="flex items-center gap-2">
                 <Dumbbell className="size-5 text-amber-500" />
                 <h2 className="text-xl md:text-2xl font-bold">
-                  {isEn ? "Strength for Runners" : "Renforcement pour coureurs"}
+                  {t("common:home.strengthForRunners")}
                 </h2>
               </div>
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/library?type=strength">
-                  {isEn ? "See all" : "Voir tout"}
+                  {t("common:home.seeAll")}
                   <ArrowRight className="size-4 ml-1" />
                 </Link>
               </Button>
             </div>
             <p className="text-sm text-muted-foreground">
-              {isEn
-                ? "Science-based strength sessions to improve running economy and prevent injuries."
-                : "Séances de renforcement basées sur la science pour améliorer votre économie de course et prévenir les blessures."}
+              {t("common:home.strengthForRunnersDesc")}
             </p>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {featuredStrength.map((session) => (
@@ -457,7 +443,7 @@ export function HomePage() {
         {/* Categories Overview */}
         <section>
           <h2 className="text-2xl md:text-3xl font-bold mb-10">
-            {isEn ? "Browse by Category" : "Parcourir par catégorie"}
+            {t("common:home.browseByCategory")}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
             {categories.map((cat) => {

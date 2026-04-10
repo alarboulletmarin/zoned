@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import type { SessionType } from "@/types";
 
@@ -6,27 +7,28 @@ interface CompletionFeedbackCardProps {
   sessionType: SessionType;
   sessionName: string;
   weekNumber: number;
-  isEn: boolean;
+  /** @deprecated Use useTranslation internally instead */
+  isEn?: boolean;
   onSave: (rpe: number) => void;
   onSkip: () => void;
 }
 
-/** Maps session type to a contextual celebration message */
-function getCelebrationMessage(sessionType: SessionType, isEn: boolean): string {
+/** Maps session type to a translation key for celebration message */
+function getCelebrationKey(sessionType: SessionType): string {
   switch (sessionType) {
     case "endurance":
     case "long_run":
-      return isEn ? "Great endurance run!" : "Belle sortie endurance !";
+      return "feedback.enduranceRun";
     case "tempo":
     case "threshold":
-      return isEn ? "Solid tempo work!" : "Bon travail au seuil !";
+      return "feedback.tempoWork";
     case "vo2max":
     case "speed":
-      return isEn ? "Intense session done!" : "S\u00e9ance intense boucl\u00e9e !";
+      return "feedback.intenseSession";
     case "recovery":
-      return isEn ? "Well-earned recovery!" : "R\u00e9cup bien m\u00e9rit\u00e9e !";
+      return "feedback.recoverySession";
     default:
-      return isEn ? "Session completed!" : "S\u00e9ance compl\u00e9t\u00e9e !";
+      return "feedback.sessionCompleted";
   }
 }
 
@@ -53,18 +55,18 @@ function getDefaultRpe(sessionType: SessionType): number {
   }
 }
 
-const RPE_LABELS: { range: [number, number]; fr: string; en: string }[] = [
-  { range: [1, 2], fr: "Très facile", en: "Very easy" },
-  { range: [3, 4], fr: "Facile", en: "Easy" },
-  { range: [5, 6], fr: "Modéré", en: "Moderate" },
-  { range: [7, 8], fr: "Dur", en: "Hard" },
-  { range: [9, 9], fr: "Très dur", en: "Very hard" },
-  { range: [10, 10], fr: "Maximal", en: "Maximal" },
+const RPE_LABEL_KEYS: { range: [number, number]; key: string }[] = [
+  { range: [1, 2], key: "feedback.rpeVeryEasy" },
+  { range: [3, 4], key: "feedback.rpeEasy" },
+  { range: [5, 6], key: "feedback.rpeModerate" },
+  { range: [7, 8], key: "feedback.rpeHard" },
+  { range: [9, 9], key: "feedback.rpeVeryHard" },
+  { range: [10, 10], key: "feedback.rpeMaximal" },
 ];
 
-function getRpeLabel(value: number, isEn: boolean): string {
-  const entry = RPE_LABELS.find((l) => value >= l.range[0] && value <= l.range[1]);
-  return entry ? (isEn ? entry.en : entry.fr) : "";
+function getRpeLabelKey(value: number): string {
+  const entry = RPE_LABEL_KEYS.find((l) => value >= l.range[0] && value <= l.range[1]);
+  return entry ? entry.key : "";
 }
 
 function getRpeColor(value: number): string {
@@ -80,16 +82,16 @@ export function CompletionFeedbackCard({
   sessionType,
   sessionName,
   weekNumber,
-  isEn,
   onSave,
   onSkip,
 }: CompletionFeedbackCardProps) {
+  const { t } = useTranslation("common");
   const [selectedRpe, setSelectedRpe] = useState<number>(getDefaultRpe(sessionType));
   const [isFadingOut, setIsFadingOut] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const celebration = getCelebrationMessage(sessionType, isEn);
+  const celebration = t(getCelebrationKey(sessionType));
 
   const handleAutoClose = useCallback(() => {
     setIsFadingOut(true);
@@ -153,7 +155,7 @@ export function CompletionFeedbackCard({
 
       {/* RPE label */}
       <p className="text-xs text-muted-foreground text-center mb-2">
-        {isEn ? "How did it feel?" : "Comment c'\u00e9tait ?"}
+        {t("feedback.howDidItFeel")}
       </p>
 
       {/* RPE gradient bar */}
@@ -187,9 +189,9 @@ export function CompletionFeedbackCard({
         </div>
         {/* Label */}
         <div className="flex justify-between items-center text-xs">
-          <span className="text-muted-foreground/60">{isEn ? "Easy" : "Facile"}</span>
+          <span className="text-muted-foreground/60">{t("feedback.easy")}</span>
           <span className="font-medium" style={{ color: getRpeColor(selectedRpe) }}>
-            {selectedRpe}/10 — {getRpeLabel(selectedRpe, isEn)}
+            {selectedRpe}/10 — {t(getRpeLabelKey(selectedRpe))}
           </span>
           <span className="text-muted-foreground/60">Max</span>
         </div>
@@ -202,14 +204,14 @@ export function CompletionFeedbackCard({
           onClick={handleSkip}
           className="flex-1 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground hover:bg-accent transition-colors"
         >
-          {isEn ? "Skip" : "Passer"}
+          {t("feedback.skip")}
         </button>
         <button
           type="button"
           onClick={handleSave}
           className="flex-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
         >
-          {isEn ? "Save" : "Enregistrer"}
+          {t("feedback.save")}
         </button>
       </div>
     </div>

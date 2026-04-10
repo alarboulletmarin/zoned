@@ -192,7 +192,7 @@ export function RacePrepGuidePage() {
           <CardTitle className="flex items-center justify-between">
             <span>{distance}</span>
             <Badge variant="secondary">
-              {timeline.totalDays} {isEn ? "days" : "jours"}
+              {timeline.totalDays} {t("racePrep.days")}
             </Badge>
           </CardTitle>
         </CardHeader>
@@ -237,80 +237,58 @@ export function RacePrepGuidePage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "Race Preparation" : "Préparation Course"}
-        description={
-          isEn
-            ? "Complete race preparation guide: checklists, strategy, warm-up, pacing and recovery timelines."
-            : "Guide complet de préparation course : checklists, stratégie, échauffement, allure et timelines de récupération."
-        }
+        title={t("racePrep.title")}
+        description={t("racePrep.seoDescription")}
         canonical="/guides/race-prep"
         jsonLd={[
           {
             "@type": "Article",
-            name: isEn ? "Race Preparation Guide" : "Guide de Préparation Course",
-            description: isEn
-              ? "Complete race preparation guide for runners."
-              : "Guide complet de préparation course pour coureurs.",
+            name: t("racePrep.seoArticleName"),
+            description: t("racePrep.seoArticleDescription"),
             url: "https://zoned.run/guides/race-prep",
           },
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: isEn ? "Home" : "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 1, name: t("home"), item: "https://zoned.run/" },
               { "@type": "ListItem", position: 2, name: "Guides", item: "https://zoned.run/guides" },
-              { "@type": "ListItem", position: 3, name: isEn ? "Race Preparation" : "Préparation Course" },
+              { "@type": "ListItem", position: 3, name: t("racePrep.title") },
             ],
           },
           {
             "@type": "HowTo",
-            name: isEn
-              ? "How to Prepare for a Running Race"
-              : "Comment se préparer pour une course à pied",
-            description: isEn
-              ? "Complete pre-race preparation checklist and protocol: gear, nutrition, logistics, taper week, warm-up and pacing strategy."
-              : "Checklist et protocole complet de préparation course : équipement, nutrition, logistique, semaine d'affûtage, échauffement et stratégie d'allure.",
+            name: t("racePrep.seoHowToName"),
+            description: t("racePrep.seoHowToDescription"),
             step: [
               {
                 "@type": "HowToStep",
-                name: isEn ? "Prepare your gear" : "Préparer l'équipement",
-                text: isEn
-                  ? "Lay out all gear the evening before: broken-in running shoes (at least 50 km in them), tested race outfit, bib number with safety pins, timing chip, hat/sunglasses, and anti-chafe cream for armpits, thighs and nipples."
-                  : "Disposer tout l'équipement la veille au soir : chaussures de course rodées (au moins 50 km avec), tenue testée à l'entraînement, dossard et épingles, puce de chronométrage, casquette/lunettes, et crème anti-frottement pour aisselles, cuisses et mamelons.",
+                name: t("racePrep.seoSteps.gear"),
+                text: t("racePrep.seoSteps.gearText"),
               },
               {
                 "@type": "HowToStep",
-                name: isEn ? "Plan nutrition and hydration" : "Planifier nutrition et hydratation",
-                text: isEn
-                  ? "Count and pack tested gels and bars, prepare electrolyte powder or sports drink, fill water bottle or soft flask, and prepare your pre-race meal ingredients (tested and approved in training)."
-                  : "Compter et emballer gels et barres testés, préparer poudre d'électrolytes ou boisson de l'effort, remplir bouteille ou flasque, et préparer les ingrédients du repas d'avant-course (testé et approuvé à l'entraînement).",
+                name: t("racePrep.seoSteps.nutrition"),
+                text: t("racePrep.seoSteps.nutritionText"),
               },
               {
                 "@type": "HowToStep",
-                name: isEn ? "Handle logistics" : "Gérer la logistique",
-                text: isEn
-                  ? "Review the course map (elevation, aid stations, key turns), confirm start time, plan transport (parking, public transit), set alarm at least 3 hours before start for a marathon, and pack a drop bag with warm clothes and change of shoes."
-                  : "Étudier le parcours (dénivelé, ravitaillements, virages clés), confirmer l'heure de départ, planifier le transport (parking, transports en commun), programmer le réveil au moins 3h avant le départ pour un marathon, et préparer un sac de consigne avec vêtements chauds et chaussures de rechange.",
+                name: t("racePrep.seoSteps.logistics"),
+                text: t("racePrep.seoSteps.logisticsText"),
               },
               {
                 "@type": "HowToStep",
-                name: isEn ? "Taper during race week" : "Affûtage pendant la semaine de course",
-                text: isEn
-                  ? "Reduce training volume to 40-60% of peak, maintain intensity with a few short pickups. No new exercises or unfamiliar foods. Last hard session 5-7 days before for marathon, 3-4 days for 5K. Prioritize 8+ hours of sleep per night."
-                  : "Réduire le volume d'entraînement à 40-60% du volume de pointe, maintenir l'intensité sur quelques courtes accélérations. Aucun exercice nouveau ni aliment inconnu. Dernière séance dure 5-7 jours avant pour un marathon, 3-4 jours pour un 5 km. Viser 8+ heures de sommeil par nuit.",
+                name: t("racePrep.seoSteps.taper"),
+                text: t("racePrep.seoSteps.taperText"),
               },
               {
                 "@type": "HowToStep",
-                name: isEn ? "Warm up on race day" : "S'échauffer le jour de la course",
-                text: isEn
-                  ? "Adapt warm-up to race distance: 5K needs 15-20 min jog + strides + full drills; 10K needs 10-15 min jog + a few strides; half/marathon needs only 5-10 min easy jog + 2-3 short strides. Finish warm-up 5-10 minutes before start."
-                  : "Adapter l'échauffement à la distance : 5 km nécessite 15-20 min de footing + lignes droites + gammes complètes ; 10 km nécessite 10-15 min de footing + quelques lignes droites ; semi/marathon nécessite seulement 5-10 min de footing facile + 2-3 courtes lignes droites. Terminer 5-10 min avant le départ.",
+                name: t("racePrep.seoSteps.warmup"),
+                text: t("racePrep.seoSteps.warmupText"),
               },
               {
                 "@type": "HowToStep",
-                name: isEn ? "Execute your pacing strategy" : "Exécuter la stratégie d'allure",
-                text: isEn
-                  ? "Start the first kilometer ALWAYS slower than target pace to avoid the adrenaline trap. Aim for even pacing or negative splits. Break the race into thirds: settle in, work, push. Ease up on hills (constant effort, not constant pace), and have a mantra ready for tough moments."
-                  : "Le premier kilomètre TOUJOURS plus lent que l'allure cible pour éviter le piège de l'adrénaline. Viser une allure régulière ou des negative splits. Diviser la course en trois tiers : s'installer, travailler, pousser. Lever le pied dans les côtes (effort constant, pas allure constante), et préparer un mantra pour les moments difficiles.",
+                name: t("racePrep.seoSteps.pacing"),
+                text: t("racePrep.seoSteps.pacingText"),
               },
             ],
           },
@@ -329,12 +307,10 @@ export function RacePrepGuidePage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
-            {isEn ? "Race Preparation" : "Préparation Course"}
+            {t("racePrep.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {isEn
-              ? "Everything you need to perform on race day"
-              : "Tout ce qu'il faut pour performer le jour J"}
+            {t("racePrep.subtitle")}
           </p>
         </div>
 
@@ -369,12 +345,10 @@ export function RacePrepGuidePage() {
         {/* Recovery Timelines */}
         <div className="mt-12">
           <h2 className="text-xl font-semibold mb-2">
-            {isEn ? "Recovery Timelines" : "Timelines de récupération"}
+            {t("racePrep.recoveryTimelines")}
           </h2>
           <p className="text-muted-foreground text-sm mb-6">
-            {isEn
-              ? "Recommended recovery periods by race distance"
-              : "Périodes de récupération recommandées par distance de course"}
+            {t("racePrep.recoveryTimelinesDescription")}
           </p>
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
             {recoveryTimelines.map((tl) => renderRecoveryTimeline(tl))}

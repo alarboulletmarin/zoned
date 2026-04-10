@@ -149,7 +149,10 @@ function renderBlock(block: NutritionBlock, isEn: boolean, index: number) {
 // ---------------------------------------------------------------------------
 // Fueling Calculator Component
 // ---------------------------------------------------------------------------
-function FuelingCalculator({ isEn }: { isEn: boolean }) {
+function FuelingCalculator() {
+  const { t, i18n } = useTranslation("guides");
+  const isEn = i18n.language?.startsWith("en") ?? false;
+
   const [distanceKm, setDistanceKm] = useState("");
   const [durationMin, setDurationMin] = useState("");
   const [bodyWeightKg, setBodyWeightKg] = useState("");
@@ -185,12 +188,10 @@ function FuelingCalculator({ isEn }: { isEn: boolean }) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg">
           <Utensils className="size-5 text-primary" />
-          {isEn ? "Fueling Calculator" : "Calculateur de ravitaillement"}
+          {t("nutrition.calculatorTitle")}
         </CardTitle>
         <CardDescription>
-          {isEn
-            ? "Get a personalized fueling plan based on Jeukendrup 2014 and ACSM guidelines."
-            : "Obtenez un plan de ravitaillement personnalisé basé sur Jeukendrup 2014 et les recommandations ACSM."}
+          {t("nutrition.calculatorDescription")}
         </CardDescription>
       </CardHeader>
 
@@ -213,7 +214,7 @@ function FuelingCalculator({ isEn }: { isEn: boolean }) {
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="space-y-1.5">
             <label htmlFor="calc-distance" className="text-sm font-medium">
-              {isEn ? "Distance (km)" : "Distance (km)"}
+              {t("nutrition.distanceLabel")}
             </label>
             <input
               id="calc-distance"
@@ -233,7 +234,7 @@ function FuelingCalculator({ isEn }: { isEn: boolean }) {
 
           <div className="space-y-1.5">
             <label htmlFor="calc-duration" className="text-sm font-medium">
-              {isEn ? "Duration (min)" : "Durée (min)"}
+              {t("nutrition.durationLabel")}
             </label>
             <input
               id="calc-duration"
@@ -252,7 +253,7 @@ function FuelingCalculator({ isEn }: { isEn: boolean }) {
 
           <div className="space-y-1.5">
             <label htmlFor="calc-weight" className="text-sm font-medium">
-              {isEn ? "Weight (kg, optional)" : "Poids (kg, optionnel)"}
+              {t("nutrition.weightLabel")}
             </label>
             <input
               id="calc-weight"
@@ -277,7 +278,7 @@ function FuelingCalculator({ isEn }: { isEn: boolean }) {
           disabled={!canCalculate}
           className="w-full sm:w-auto"
         >
-          {isEn ? "Calculate" : "Calculer"}
+          {t("nutrition.calculate")}
         </Button>
 
         {/* Results */}
@@ -286,47 +287,31 @@ function FuelingCalculator({ isEn }: { isEn: boolean }) {
             {/* Summary cards */}
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <SummaryCard
-                label={isEn ? "Carbs / hour" : "Glucides / heure"}
+                label={t("nutrition.carbsPerHour")}
                 value={`${result.carbsPerHourG}g`}
-                sub={
-                  isEn
-                    ? `${result.totalCarbsG}g total`
-                    : `${result.totalCarbsG}g total`
-                }
+                sub={t("nutrition.totalLabel", { value: result.totalCarbsG })}
               />
               <SummaryCard
-                label={isEn ? "Gels needed" : "Gels nécessaires"}
+                label={t("nutrition.gelsNeeded")}
                 value={String(result.gelCount)}
                 sub={
                   result.gelFrequencyMin > 0
-                    ? isEn
-                      ? `every ${result.gelFrequencyMin} min`
-                      : `toutes les ${result.gelFrequencyMin} min`
-                    : isEn
-                      ? "not needed"
-                      : "non nécessaire"
+                    ? t("nutrition.gelFrequency", { min: result.gelFrequencyMin })
+                    : t("nutrition.gelNotNeeded")
                 }
               />
               <SummaryCard
-                label={isEn ? "Fluid / hour" : "Hydratation / heure"}
+                label={t("nutrition.fluidPerHour")}
                 value={`${result.fluidMlPerHour}ml`}
-                sub={
-                  isEn
-                    ? `${result.totalFluidMl}ml total`
-                    : `${result.totalFluidMl}ml total`
-                }
+                sub={t("nutrition.totalFluid", { value: result.totalFluidMl })}
               />
               <SummaryCard
-                label={isEn ? "Sodium / hour" : "Sodium / heure"}
+                label={t("nutrition.sodiumPerHour")}
                 value={`${result.sodiumMgPerHour}mg`}
                 sub={
                   result.electrolyteDrink
-                    ? isEn
-                      ? "electrolyte drink recommended"
-                      : "boisson électrolytes recommandée"
-                    : isEn
-                      ? "water sufficient"
-                      : "eau suffisante"
+                    ? t("nutrition.electrolyteDrinkRecommended")
+                    : t("nutrition.waterSufficient")
                 }
               />
             </div>
@@ -334,7 +319,7 @@ function FuelingCalculator({ isEn }: { isEn: boolean }) {
             {/* Timeline */}
             <div className="space-y-3">
               <h3 className="font-semibold text-sm">
-                {isEn ? "Fueling Timeline" : "Timeline de ravitaillement"}
+                {t("nutrition.fuelingTimeline")}
               </h3>
               <div className="relative space-y-0">
                 {result.timeline.map((cp, i) => {
@@ -375,7 +360,7 @@ function FuelingCalculator({ isEn }: { isEn: boolean }) {
                           variant="outline"
                           className="mb-1 text-xs font-mono"
                         >
-                          {formatTimeMin(cp.timeMin, isEn)}
+                          {formatTimeMin(cp.timeMin, t("nutrition.timeStart"))}
                         </Badge>
                         <p className="text-sm text-muted-foreground">
                           {isEn ? cp.actionEn : cp.action}
@@ -391,7 +376,7 @@ function FuelingCalculator({ isEn }: { isEn: boolean }) {
             {result.tips.length > 0 && (
               <div className="space-y-3">
                 <h3 className="font-semibold text-sm">
-                  {isEn ? "Tips" : "Conseils"}
+                  {t("nutrition.tips")}
                 </h3>
                 <ul className="space-y-2">
                   {result.tips.map((tip, i) => (
@@ -437,8 +422,8 @@ function SummaryCard({
 // ---------------------------------------------------------------------------
 // Format timeline minutes (e.g. -180 -> "T-3h", 25 -> "T+25min", 0 -> "Start")
 // ---------------------------------------------------------------------------
-function formatTimeMin(min: number, isEn: boolean): string {
-  if (min === 0) return isEn ? "Start" : "Départ";
+function formatTimeMin(min: number, startLabel: string): string {
+  if (min === 0) return startLabel;
 
   const abs = Math.abs(min);
   const sign = min < 0 ? "-" : "+";
@@ -458,34 +443,28 @@ function formatTimeMin(min: number, isEn: boolean): string {
 // Main page component
 // ---------------------------------------------------------------------------
 export function NutritionGuidePage() {
-  const { i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("guides");
   const isEn = i18n.language?.startsWith("en") ?? false;
 
   return (
     <>
       <SEOHead
-        title={isEn ? "Runner's Nutrition" : "Nutrition du Coureur"}
-        description={
-          isEn
-            ? "Complete nutrition guide for runners: daily nutrition, carb loading, race fueling, hydration, recovery and interactive fueling calculator."
-            : "Guide nutrition complet pour coureurs : alimentation quotidienne, surcharge glucidique, ravitaillement en course, hydratation, récupération et calculateur interactif."
-        }
+        title={t("nutrition.pageTitle")}
+        description={t("nutrition.seoDescription")}
         canonical="/nutrition"
         jsonLd={[
           {
             "@type": "Article",
-            name: isEn ? "Runner's Nutrition Guide" : "Guide Nutrition du Coureur",
-            description: isEn
-              ? "Complete nutrition guide for runners with interactive fueling calculator."
-              : "Guide nutrition complet pour coureurs avec calculateur de ravitaillement interactif.",
+            name: t("nutrition.seoArticleName"),
+            description: t("nutrition.seoArticleDescription"),
             url: "https://zoned.run/guides/nutrition",
           },
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: isEn ? "Home" : "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 1, name: t("home"), item: "https://zoned.run/" },
               { "@type": "ListItem", position: 2, name: "Guides", item: "https://zoned.run/guides" },
-              { "@type": "ListItem", position: 3, name: isEn ? "Runner's Nutrition" : "Nutrition du Coureur" },
+              { "@type": "ListItem", position: 3, name: t("nutrition.pageTitle") },
             ],
           },
           {
@@ -493,62 +472,42 @@ export function NutritionGuidePage() {
             mainEntity: [
               {
                 "@type": "Question",
-                name: isEn
-                  ? "How many carbs should a runner eat per day?"
-                  : "Combien de glucides un coureur doit-il consommer par jour ?",
+                name: t("nutrition.faq.carbsPerDay"),
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: isEn
-                    ? "It depends on training volume: 3-5g/kg for light training (30-60 min/day), 5-7g/kg for moderate (60-90 min/day), 7-10g/kg for heavy (90-120+ min/day), and 10-12g/kg for double sessions or ultra. Based on IOC consensus and Burke et al. (2011)."
-                    : "Cela dépend du volume d'entraînement : 3-5g/kg pour un entraînement léger (30-60 min/jour), 5-7g/kg pour modéré (60-90 min/jour), 7-10g/kg pour intensif (90-120+ min/jour), et 10-12g/kg pour les doubles séances ou ultra. Basé sur le consensus IOC et Burke et al. (2011).",
+                  text: t("nutrition.faq.carbsPerDayAnswer"),
                 },
               },
               {
                 "@type": "Question",
-                name: isEn
-                  ? "What is carbohydrate loading and when should I do it?"
-                  : "Qu'est-ce que la surcharge glucidique et quand la pratiquer ?",
+                name: t("nutrition.faq.carbLoading"),
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: isEn
-                    ? "Carbohydrate loading maximizes muscle glycogen stores before competitions lasting over 90 minutes. The modern protocol involves consuming 8-12g carbs/kg/day for 3 days before the race while reducing training volume to 30-50%. It is only useful for half-marathon distance and above."
-                    : "La surcharge glucidique maximise les réserves de glycogène musculaire avant une compétition de plus de 90 minutes. Le protocole moderne consiste à consommer 8-12g de glucides/kg/jour pendant les 3 jours avant la course tout en réduisant le volume d'entraînement à 30-50%. Elle n'est utile qu'à partir du semi-marathon.",
+                  text: t("nutrition.faq.carbLoadingAnswer"),
                 },
               },
               {
                 "@type": "Question",
-                name: isEn
-                  ? "How much should I eat and drink during a race?"
-                  : "Combien dois-je manger et boire pendant une course ?",
+                name: t("nutrition.faq.raceFueling"),
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: isEn
-                    ? "For races under 60 min: water only. 60-90 min: 30-60g carbs/hour. 90-150 min (half-marathon): 60g carbs/hour. Over 150 min (marathon+): 60-90g carbs/hour with a 2:1 glucose:fructose ratio above 60g/h. Hydration: 400-800ml/hour individualized to your sweat rate. Start fueling within the first 20 minutes."
-                    : "Pour les courses de moins de 60 min : eau uniquement. 60-90 min : 30-60g de glucides/h. 90-150 min (semi-marathon) : 60g de glucides/h. Plus de 150 min (marathon+) : 60-90g de glucides/h avec un ratio glucose:fructose 2:1 au-delà de 60g/h. Hydratation : 400-800ml/h individualisée selon votre taux de sudation. Commencer le ravitaillement dans les 20 premières minutes.",
+                  text: t("nutrition.faq.raceFuelingAnswer"),
                 },
               },
               {
                 "@type": "Question",
-                name: isEn
-                  ? "What should I eat before a race?"
-                  : "Que dois-je manger avant une course ?",
+                name: t("nutrition.faq.preRaceMeal"),
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: isEn
-                    ? "Eat 3-4 hours before start: 1-4g carbs/kg, moderate protein (15-25g), low fat (<15g), low fiber (<10g). Good options: white toast with jam and banana, porridge with honey, or white rice with lean chicken. Hydrate with 5-7ml/kg 4 hours before. Avoid heavy dairy, spicy foods, excess caffeine, and untested foods."
-                    : "Manger 3-4 heures avant le départ : 1-4g de glucides/kg, protéines modérées (15-25g), faibles lipides (<15g), faibles fibres (<10g). Options : toast pain blanc avec confiture et banane, porridge au miel, ou riz blanc avec poulet maigre. S'hydrater avec 5-7ml/kg 4 heures avant. Éviter les produits laitiers lourds, les aliments épicés, l'excès de caféine et les aliments non testés.",
+                  text: t("nutrition.faq.preRaceMealAnswer"),
                 },
               },
               {
                 "@type": "Question",
-                name: isEn
-                  ? "What should I eat after a race for recovery?"
-                  : "Que dois-je manger après une course pour récupérer ?",
+                name: t("nutrition.faq.recovery"),
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: isEn
-                    ? "Within 30 minutes: 1-1.2g carbs/kg + 0.3-0.4g protein/kg (e.g., chocolate milk or banana with protein shake). Then 1g carbs/kg every 2 hours for 6 hours. Rehydrate with 1.5x the weight lost, including sodium. Avoid alcohol for 4-6 hours post-race."
-                    : "Dans les 30 minutes : 1-1,2g de glucides/kg + 0,3-0,4g de protéines/kg (ex : lait chocolaté ou banane avec shaker protéine). Puis 1g de glucides/kg toutes les 2 heures pendant 6 heures. Réhydrater avec 1,5x le poids perdu, avec sodium. Éviter l'alcool pendant 4-6 heures après la course.",
+                  text: t("nutrition.faq.recoveryAnswer"),
                 },
               },
             ],
@@ -560,17 +519,15 @@ export function NutritionGuidePage() {
         {/* Page header */}
         <div>
           <h1 className="text-3xl font-bold mb-2">
-            {isEn ? "Runner's Nutrition" : "Nutrition du Coureur"}
+            {t("nutrition.pageTitle")}
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl">
-            {isEn
-              ? "Evidence-based nutrition strategies for training, racing and recovery. Use the calculator to build your personalized fueling plan."
-              : "Stratégies nutritionnelles basées sur la science pour l'entraînement, la compétition et la récupération. Utilisez le calculateur pour construire votre plan de ravitaillement personnalisé."}
+            {t("nutrition.subtitle")}
           </p>
         </div>
 
         {/* Fueling calculator */}
-        <FuelingCalculator isEn={isEn} />
+        <FuelingCalculator />
 
         {/* Content sections as tabs */}
         <Tabs defaultValue={nutritionSections[0].id}>

@@ -14,11 +14,11 @@ const DIFFICULTY_GRADIENT: Record<string, string> = {
   elite: "bg-gradient-to-br from-red-500/10 dark:from-red-500/20 to-transparent",
 };
 
-const DIFFICULTY_LABELS: Record<string, { fr: string; en: string }> = {
-  beginner: { fr: "D\u00e9butant", en: "Beginner" },
-  intermediate: { fr: "Interm\u00e9diaire", en: "Intermediate" },
-  advanced: { fr: "Avanc\u00e9", en: "Advanced" },
-  elite: { fr: "\u00c9lite", en: "Elite" },
+const DIFFICULTY_KEYS: Record<string, string> = {
+  beginner: "collections.difficulty.beginner",
+  intermediate: "collections.difficulty.intermediate",
+  advanced: "collections.difficulty.advanced",
+  elite: "collections.difficulty.advanced",
 };
 
 interface PrebuiltPlanCardProps {
@@ -26,12 +26,12 @@ interface PrebuiltPlanCardProps {
 }
 
 export function PrebuiltPlanCard({ plan }: PrebuiltPlanCardProps) {
-  const { i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
 
   const name = isEn ? plan.nameEn : plan.name;
   const description = isEn ? plan.descriptionEn : plan.description;
-  const difficultyLabel = DIFFICULTY_LABELS[plan.difficulty];
+  const difficultyKey = DIFFICULTY_KEYS[plan.difficulty];
   const raceMeta = plan.raceDistance
     ? RACE_DISTANCE_META[plan.raceDistance]
     : null;
@@ -56,13 +56,13 @@ export function PrebuiltPlanCard({ plan }: PrebuiltPlanCardProps) {
 
           {/* Badges */}
           <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 pt-1">
-            {difficultyLabel && (
+            {difficultyKey && (
               <Badge variant="secondary" className="text-[10px] sm:text-xs px-1.5 py-0">
-                {isEn ? difficultyLabel.en : difficultyLabel.fr}
+                {t(difficultyKey)}
               </Badge>
             )}
             <Badge variant="outline" className="text-[10px] sm:text-xs px-1.5 py-0">
-              {plan.totalWeeks} {isEn ? "wk" : "sem."}
+              {plan.totalWeeks} {t("plans.weeks")}
             </Badge>
             {raceMeta && (
               <Badge variant="default" className="text-[10px] sm:text-xs px-1.5 py-0">

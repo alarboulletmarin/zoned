@@ -57,18 +57,14 @@ export function ChangelogPage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "Changelog" : "Changelog"}
-        description={
-          isEn
-            ? "See what's new in Zoned - all notable changes and updates to the running workout library."
-            : "Découvrez les nouveautés de Zoned - tous les changements notables de la bibliothèque de séances."
-        }
+        title={t("changelog.title")}
+        description={t("changelog.subtitle")}
         canonical="/changelog"
         jsonLd={{
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-            { "@type": "ListItem", position: 2, name: "Changelog" },
+            { "@type": "ListItem", position: 1, name: t("article.home"), item: "https://zoned.run/" },
+            { "@type": "ListItem", position: 2, name: t("changelog.title") },
           ],
         }}
       />

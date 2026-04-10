@@ -14,10 +14,8 @@ export function CollectionsPage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "Collections" : "Collections"}
-        description={isEn
-          ? "Themed workout paths for every goal. Browse curated running collections."
-          : "Des parcours thématiques pour chaque objectif. Parcourez les collections de course à pied."}
+        title={t("collections.title")}
+        description={t("seo.collectionsDesc")}
         canonical="/collections"
         jsonLd={[
           {

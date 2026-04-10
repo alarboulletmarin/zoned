@@ -77,6 +77,7 @@ export function WorkoutCard({ workout, className, expanded }: WorkoutCardProps) 
 function RunningWorkoutCard({ workout, className, expanded }: { workout: WorkoutTemplate; className?: string; expanded?: boolean }) {
   const { t, i18n } = useTranslation(["library", "common"]);
   const isEn = i18n.language?.startsWith("en") ?? false;
+  // isEn kept for bilingual data fields (nameEn/name, descriptionEn/description)
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);
   const CategoryIcon = CATEGORY_ICONS[workout.category];
@@ -152,13 +153,13 @@ function RunningWorkoutCard({ workout, className, expanded }: { workout: Workout
             {workout.environment.requiresTrack && (
               <Badge variant="outline" className="text-xs gap-1">
                 <Circle className="size-3" />
-                {isEn ? "Track" : "Piste"}
+                {t("common:library.track")}
               </Badge>
             )}
             {workout.environment.requiresHills && (
               <Badge variant="outline" className="text-xs gap-1">
                 <Mountain className="size-3" />
-                {isEn ? "Hills" : "Côtes"}
+                {t("common:library.hills")}
               </Badge>
             )}
           </div>

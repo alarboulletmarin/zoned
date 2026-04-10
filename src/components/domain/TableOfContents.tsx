@@ -36,8 +36,7 @@ export function TableOfContents({
   const [activeId, setActiveId] = useState<string>("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const isMobile = useIsMobile();
-  const { i18n } = useTranslation();
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     if (headings.length === 0) return;
@@ -81,7 +80,7 @@ export function TableOfContents({
   };
 
   const activeHeading = headings.find((h) => h.id === activeId);
-  const tocLabel = isEn ? "Table of contents" : "Sommaire";
+  const tocLabel = t("toc.title");
 
   if (isMobile) {
     return (

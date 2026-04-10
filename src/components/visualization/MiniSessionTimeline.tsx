@@ -31,7 +31,7 @@ export function MiniSessionTimeline({
   workout,
   onClickScrollBack,
 }: MiniSessionTimelineProps) {
-  const { i18n } = useTranslation("session");
+  const { t, i18n } = useTranslation("session");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const isMobile = useIsMobile();
 
@@ -48,7 +48,7 @@ export function MiniSessionTimeline({
 
   if (data.segments.length === 0 || !data.hasZoneData) return null;
 
-  const title = isEn ? "Back to timeline" : "Retour à la timeline";
+  const title = t("visualization.backToTimeline");
   const segmentCount = data.segments.length;
   const workoutName = isEn ? (workout.nameEn || workout.name) : workout.name;
 

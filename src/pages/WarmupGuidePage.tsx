@@ -190,74 +190,54 @@ export function WarmupGuidePage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "Warm-up & Cool-down" : "Échauffement & Retour au Calme"}
-        description={
-          isEn
-            ? "Warm-up routines, cool-down protocols, dynamic stretching and activation drills for runners."
-            : "Routines d'échauffement, protocoles de retour au calme, étirements dynamiques et exercices d'activation pour coureurs."
-        }
+        title={t("warmup.title")}
+        description={t("warmup.seoDescription")}
         canonical="/guides/warmup"
         jsonLd={[
           {
             "@type": "Article",
-            name: isEn ? "Warm-up & Cool-down Guide" : "Guide Échauffement & Retour au Calme",
-            description: isEn
-              ? "Complete warm-up and cool-down guide for runners."
-              : "Guide complet d'échauffement et retour au calme pour coureurs.",
+            name: t("warmup.seoArticleName"),
+            description: t("warmup.seoArticleDescription"),
             url: "https://zoned.run/guides/warmup",
           },
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: isEn ? "Home" : "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 1, name: t("home"), item: "https://zoned.run/" },
               { "@type": "ListItem", position: 2, name: "Guides", item: "https://zoned.run/guides" },
-              { "@type": "ListItem", position: 3, name: isEn ? "Warm-up & Cool-down" : "Échauffement & Retour au Calme" },
+              { "@type": "ListItem", position: 3, name: t("warmup.title") },
             ],
           },
           {
             "@type": "HowTo",
-            name: isEn
-              ? "How to Warm Up Properly Before Running"
-              : "Comment bien s'échauffer avant une course",
-            description: isEn
-              ? "Complete warm-up protocol for runners: easy jog, dynamic drills, strides and mental preparation."
-              : "Protocole complet d'échauffement pour coureurs : footing, gammes dynamiques, lignes droites et préparation mentale.",
+            name: t("warmup.seoHowToName"),
+            description: t("warmup.seoHowToDescription"),
             totalTime: "PT18M",
             step: [
               {
                 "@type": "HowToStep",
-                name: isEn ? "Easy jog" : "Footing facile",
-                text: isEn
-                  ? "Start with 5-15 minutes of easy jogging (depending on race distance) to raise body temperature and increase blood flow to muscles. Start very slowly and progressively increase pace."
-                  : "Commencer par 5-15 minutes de footing facile (selon la distance de course) pour augmenter la température corporelle et le débit sanguin vers les muscles. Commencer très lentement et augmenter progressivement.",
+                name: t("warmup.seoSteps.jog"),
+                text: t("warmup.seoSteps.jogText"),
               },
               {
                 "@type": "HowToStep",
-                name: isEn ? "Dynamic drills" : "Gammes dynamiques",
-                text: isEn
-                  ? "Perform 3-5 minutes of dynamic drills: high knees, butt kicks, lateral shuffles, A-skip and B-skip. These activate the neuromuscular system and improve coordination."
-                  : "Effectuer 3-5 minutes de gammes dynamiques : montées de genoux, talons-fesses, pas chassés, A-skip et B-skip. Cela active le système neuromusculaire et améliore la coordination.",
+                name: t("warmup.seoSteps.drills"),
+                text: t("warmup.seoSteps.drillsText"),
               },
               {
                 "@type": "HowToStep",
-                name: isEn ? "Leg swings and hip circles" : "Balancements de jambes et cercles de hanches",
-                text: isEn
-                  ? "Perform 10 front-to-back leg swings and 10 lateral swings per leg, plus hip circles with raised knee, 8 per leg in each direction. This mobilizes joints and increases synovial fluid production."
-                  : "Effectuer 10 balancements avant-arrière et 10 balancements latéraux par jambe, plus des cercles de hanches avec le genou levé, 8 par jambe dans chaque sens. Cela mobilise les articulations et augmente la production de liquide synovial.",
+                name: t("warmup.seoSteps.swings"),
+                text: t("warmup.seoSteps.swingsText"),
               },
               {
                 "@type": "HowToStep",
-                name: isEn ? "Progressive strides" : "Lignes droites progressives",
-                text: isEn
-                  ? "Perform 4-6 progressive accelerations of 80-100m, building up to race pace. Walk recovery between each stride. This primes the neuromuscular system for faster running."
-                  : "Effectuer 4-6 accélérations progressives de 80-100 m, en montant jusqu'à l'allure de course. Récupération en marchant entre chaque. Cela prépare le système neuromusculaire pour la vitesse.",
+                name: t("warmup.seoSteps.strides"),
+                text: t("warmup.seoSteps.stridesText"),
               },
               {
                 "@type": "HowToStep",
-                name: isEn ? "Rest and mental preparation" : "Repos et préparation mentale",
-                text: isEn
-                  ? "Finish warm-up 5-10 minutes before the start. Use this time to position yourself, hydrate one last time, visualize your race and connect with your pacing plan."
-                  : "Terminer l'échauffement 5-10 minutes avant le départ. Profiter de ce temps pour se positionner, s'hydrater une dernière fois, visualiser sa course et revoir son plan d'allure.",
+                name: t("warmup.seoSteps.rest"),
+                text: t("warmup.seoSteps.restText"),
               },
             ],
           },
@@ -276,19 +256,17 @@ export function WarmupGuidePage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
-            {isEn ? "Warm-up & Cool-down" : "Échauffement & Retour au Calme"}
+            {t("warmup.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {isEn
-              ? "Routines, stretching and activation drills"
-              : "Routines, étirements et exercices d'activation"}
+            {t("warmup.subtitle")}
           </p>
         </div>
 
         {/* Routine Selector */}
         <section className="mb-10">
           <h2 className="text-xl font-semibold mb-4">
-            {isEn ? "Warm-up Routines" : "Routines d'échauffement"}
+            {t("warmup.routines")}
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
             {warmupRoutines.map((routine) => renderRoutineCard(routine))}

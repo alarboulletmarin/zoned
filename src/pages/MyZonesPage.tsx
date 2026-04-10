@@ -4,14 +4,13 @@ import { PaceCalculator } from "@/components/domain/PaceCalculator";
 import { SEOHead } from "@/components/seo";
 
 export function MyZonesPage() {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
 
   return (
     <>
       <SEOHead
         noindex={true}
-        title={isEn ? "My Zones" : "Mes Zones"}
+        title={t("seo.myZones")}
         canonical="/my-zones"
       />
       <div className="py-8 max-w-2xl mx-auto">

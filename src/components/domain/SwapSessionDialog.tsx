@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,7 +24,9 @@ interface SwapSessionDialogProps {
   isEn: boolean;
 }
 
-export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessionType, onSelect, isEn }: SwapSessionDialogProps) {
+export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessionType, onSelect }: SwapSessionDialogProps) {
+  const { t, i18n } = useTranslation("common");
+  const isEn = i18n.language?.startsWith("en") ?? false;
   const [allWorkouts, setAllWorkouts] = useState<WorkoutTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -60,10 +63,10 @@ export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessio
       <DialogContent className="max-w-lg max-h-[80vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>
-            {isEn ? "Replace session" : "Remplacer la s\u00e9ance"}
+            {t("plans.replaceSession")}
           </DialogTitle>
           <DialogDescription>
-            {isEn ? "Choose a workout from the library" : "Choisissez une s\u00e9ance dans la biblioth\u00e8que"}
+            {t("plans.chooseFromLibrary")}
           </DialogDescription>
         </DialogHeader>
 
@@ -73,7 +76,7 @@ export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessio
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={isEn ? "Search workouts..." : "Rechercher une s\u00e9ance..."}
+            placeholder={t("plans.searchWorkouts")}
             className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
 
@@ -84,7 +87,7 @@ export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessio
               size="sm"
               onClick={() => setFilterType("all")}
             >
-              {isEn ? "All" : "Tous"}
+              {t("plans.all")}
             </Button>
             {/* Show a "Same type" quick filter */}
             <Button
@@ -121,7 +124,7 @@ export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessio
             </div>
           ) : filteredWorkouts.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-8">
-              {isEn ? "No matching workouts" : "Aucune s\u00e9ance correspondante"}
+              {t("plans.noMatchingWorkouts")}
             </p>
           ) : (
             filteredWorkouts.map((workout) => {

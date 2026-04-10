@@ -73,27 +73,27 @@ export function PlanExportMenu({
     setIsExporting(true);
     try {
       const { names, templates } = await getWorkoutData();
-      await exportPlanToPDF(plan, names, templates, isEn);
+      await exportPlanToPDF(plan, names, templates);
       toast.success(t("export.success.pdf"));
     } catch {
       toast.error(t("export.error.pdf"));
     } finally {
       setIsExporting(false);
     }
-  }, [plan, isEn, isExporting, getWorkoutData, t]);
+  }, [plan, isExporting, getWorkoutData, t]);
 
   const handleExportICS = useCallback(async () => {
     setIsExporting(true);
     try {
       const { names, templates } = await getWorkoutData();
-      exportPlanToICS(plan, names, templates, isEn);
+      exportPlanToICS(plan, names, templates);
       toast.success(t("export.success.calendar"));
     } catch {
       toast.error(t("export.error.calendar"));
     } finally {
       setIsExporting(false);
     }
-  }, [plan, isEn, getWorkoutData, t, isExporting]);
+  }, [plan, getWorkoutData, t, isExporting]);
 
   const handleExportJSON = useCallback(() => {
     const json = JSON.stringify(plan, null, 2);
@@ -104,7 +104,7 @@ export function PlanExportMenu({
     a.download = `plan-${plan.name || plan.id}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success(isEn ? "Plan exported" : "Plan exporté");
+    toast.success(t("plans.planExported"));
   }, [plan, isEn]);
 
   const isSmall = size === "sm";

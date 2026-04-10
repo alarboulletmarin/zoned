@@ -28,34 +28,21 @@ interface FitTransferGuideProps {
 }
 
 export function FitTransferGuide({ open, onOpenChange, workout }: FitTransferGuideProps) {
-  const { i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const [showOtherBrands, setShowOtherBrands] = useState(false);
   const os = getOS();
   const filename = `${workout.id}.fit`;
 
-  const osPath = {
-    windows: isEn ? "File Explorer → This PC → GARMIN" : "Explorateur de fichiers → Ce PC → GARMIN",
-    macos: isEn ? "Finder → Sidebar → GARMIN" : "Finder → Barre latérale → GARMIN",
-    linux: isEn ? "File manager → /media/GARMIN" : "Gestionnaire de fichiers → /media/GARMIN",
-    other: isEn ? "Your file manager → GARMIN drive" : "Gestionnaire de fichiers → GARMIN",
-  }[os];
+  const osPath = t(`fitTransfer.osPath.${os}`);
 
-  const steps = isEn
-    ? [
-        "Connect your Garmin watch to your computer with the USB cable",
-        `Your watch appears as a USB drive: ${osPath}`,
-        "Open the watch folder and navigate to: GARMIN → NewFiles",
-        `Copy the file ${filename} into this folder`,
-        "Safely eject your watch — the workout will appear in Training → My Workouts",
-      ]
-    : [
-        "Branchez votre montre Garmin à votre ordinateur avec le câble USB",
-        `Votre montre apparaît comme un disque USB : ${osPath}`,
-        "Ouvrez le dossier de la montre et naviguez vers : GARMIN → NewFiles",
-        `Copiez le fichier ${filename} dans ce dossier`,
-        "Débranchez votre montre en toute sécurité — la séance apparaîtra dans Entraînement → Mes séances",
-      ];
+  const steps = [
+    t("fitTransfer.step1"),
+    t("fitTransfer.step2OsPath", { path: osPath }),
+    t("fitTransfer.step3"),
+    t("fitTransfer.step4", { filename }),
+    t("fitTransfer.step5"),
+  ];
 
   function formatWorkoutAsText(): string {
     const lines: string[] = [];
@@ -64,9 +51,9 @@ export function FitTransferGuide({ open, onOpenChange, workout }: FitTransferGui
     lines.push("");
 
     const sections = [
-      { label: isEn ? "Warm-up" : "Échauffement", blocks: workout.warmupTemplate },
-      { label: isEn ? "Main set" : "Corps de séance", blocks: workout.mainSetTemplate },
-      { label: isEn ? "Cool-down" : "Retour au calme", blocks: workout.cooldownTemplate },
+      { label: t("fitTransfer.warmup"), blocks: workout.warmupTemplate },
+      { label: t("fitTransfer.mainSet"), blocks: workout.mainSetTemplate },
+      { label: t("fitTransfer.cooldown"), blocks: workout.cooldownTemplate },
     ];
 
     for (const section of sections) {
@@ -86,9 +73,9 @@ export function FitTransferGuide({ open, onOpenChange, workout }: FitTransferGui
   async function copyInstructions() {
     try {
       await navigator.clipboard.writeText(formatWorkoutAsText());
-      toast.success(isEn ? "Instructions copied!" : "Instructions copiées !");
+      toast.success(t("fitTransfer.instructionsCopied"));
     } catch {
-      toast.error(isEn ? "Failed to copy" : "Erreur de copie");
+      toast.error(t("fitTransfer.copyFailed"));
     }
   }
 
@@ -97,12 +84,10 @@ export function FitTransferGuide({ open, onOpenChange, workout }: FitTransferGui
       <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {isEn ? "Workout downloaded!" : "Séance téléchargée !"}
+            {t("fitTransfer.workoutDownloaded")}
           </DialogTitle>
           <DialogDescription>
-            {isEn
-              ? `The file ${filename} has been downloaded.`
-              : `Le fichier ${filename} a été téléchargé.`}
+            {t("fitTransfer.fileDownloaded", { filename })}
           </DialogDescription>
         </DialogHeader>
 
@@ -118,9 +103,7 @@ export function FitTransferGuide({ open, onOpenChange, workout }: FitTransferGui
         </ol>
 
         <p className="text-xs text-muted-foreground">
-          {isEn
-            ? "Compatible with: Forerunner, Fenix, Enduro, Venu, Epix, Instinct, Vivoactive"
-            : "Compatible avec : Forerunner, Fenix, Enduro, Venu, Epix, Instinct, Vivoactive"}
+          {t("fitTransfer.compatible")}
         </p>
 
         {/* Other brands toggle */}
@@ -129,31 +112,29 @@ export function FitTransferGuide({ open, onOpenChange, workout }: FitTransferGui
           onClick={() => setShowOtherBrands(!showOtherBrands)}
           className="text-sm text-primary hover:underline text-left"
         >
-          {isEn ? "Don't have a Garmin watch?" : "Vous n'avez pas de montre Garmin ?"}
+          {t("fitTransfer.noGarmin")}
         </button>
 
         {showOtherBrands && (
           <div className="space-y-3 rounded-lg border p-4 text-sm">
             <p className="text-muted-foreground">
-              {isEn
-                ? "FIT export is compatible with Garmin watches only. For other brands, recreate this workout manually in your watch's companion app."
-                : "L'export FIT est compatible uniquement avec les montres Garmin. Pour les autres marques, recréez cette séance manuellement dans l'app de votre montre."}
+              {t("fitTransfer.fitGarminOnly")}
             </p>
             <Button variant="outline" size="sm" onClick={copyInstructions}>
-              {isEn ? "Copy workout instructions" : "Copier les instructions"}
+              {t("fitTransfer.copyInstructions")}
             </Button>
             <ul className="text-xs text-muted-foreground space-y-1">
-              <li>Polar : Polar Flow → {isEn ? "Favorites → Create" : "Favoris → Créer"}</li>
-              <li>Suunto : Suunto App → {isEn ? "Training → Create" : "Entraînement → Créer"}</li>
-              <li>COROS : COROS App → Workout → {isEn ? "Create" : "Créer"}</li>
-              <li>Apple Watch : {isEn ? "Workout → Create (watchOS 9+)" : "Exercice → Créer (watchOS 9+)"}</li>
+              <li>Polar : Polar Flow → {t("fitTransfer.polarPath", { defaultValue: isEn ? "Favorites → Create" : "Favoris → Créer" })}</li>
+              <li>Suunto : Suunto App → {t("fitTransfer.suuntoPath", { defaultValue: isEn ? "Training → Create" : "Entraînement → Créer" })}</li>
+              <li>COROS : COROS App → Workout → {t("fitTransfer.corosPath", { defaultValue: isEn ? "Create" : "Créer" })}</li>
+              <li>Apple Watch : {t("fitTransfer.applePath", { defaultValue: isEn ? "Workout → Create (watchOS 9+)" : "Exercice → Créer (watchOS 9+)" })}</li>
             </ul>
           </div>
         )}
 
         <DialogFooter>
           <Button onClick={() => onOpenChange(false)}>
-            {isEn ? "Got it" : "Compris"}
+            {t("fitTransfer.gotIt")}
           </Button>
         </DialogFooter>
       </DialogContent>

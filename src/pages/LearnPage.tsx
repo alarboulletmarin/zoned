@@ -21,8 +21,7 @@ const ARTICLE_CATEGORIES: ArticleCategory[] = [
 ];
 
 export function LearnPage() {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
   const [selectedCategory, setSelectedCategory] = useState<ArticleCategory | "all">("all");
 
   const { articles, isLoading } = useArticles();
@@ -34,25 +33,21 @@ export function LearnPage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "Learn" : "Apprendre"}
-        description={isEn
-          ? "Explore running guides, training fundamentals, and zone-based workout explanations."
-          : "Explorez les guides de course, les fondamentaux de l'entraînement et les explications des séances par zones."}
+        title={t("learn.title")}
+        description={t("learn.description")}
         canonical="/learn"
         jsonLd={[
           {
             "@type": "CollectionPage",
-            name: isEn ? "Learn" : "Apprendre",
-            description: isEn
-              ? "Explore running guides, training fundamentals, and zone-based workout explanations."
-              : "Explorez les guides de course, les fondamentaux de l'entraînement et les explications des séances par zones.",
+            name: t("learn.title"),
+            description: t("learn.description"),
             url: "https://zoned.run/learn",
           },
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: isEn ? "Learn" : "Apprendre" },
+              { "@type": "ListItem", position: 1, name: t("article.home"), item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: t("learn.title") },
             ],
           },
         ]}

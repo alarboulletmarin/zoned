@@ -2,7 +2,9 @@
   "structure": {
     "warmup": "Échauffement",
     "main": "Corps de séance",
-    "cooldown": "Retour au calme"
+    "cooldown": "Retour au calme",
+    "recovery": "Récupération",
+    "interSeries": "{{count}} séries — ~3 min footing entre les séries"
   },
   "zones": {
     "Z1": "Zone 1 - Récupération",
@@ -25,7 +27,8 @@
     "timeline": "Structure de la séance",
     "start": "Début",
     "end": "Fin",
-    "zoneDistribution": "Répartition des zones"
+    "zoneDistribution": "Répartition des zones",
+    "backToTimeline": "Retour à la timeline"
   },
   "details": {
     "duration": "Durée",

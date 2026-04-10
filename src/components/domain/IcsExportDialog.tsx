@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Calendar, Download } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +22,9 @@ interface IcsExportDialogProps {
   isEn: boolean;
 }
 
-export function IcsExportDialog({ open, onOpenChange, daysPerWeek, onExport, isEn }: IcsExportDialogProps) {
+export function IcsExportDialog({ open, onOpenChange, daysPerWeek, onExport }: IcsExportDialogProps) {
+  const { t, i18n } = useTranslation("common");
+  const isEn = i18n.language?.startsWith("en") ?? false;
   const [selectedDays, setSelectedDays] = useState<Set<number>>(new Set());
   const [longRunDay, setLongRunDay] = useState<number | null>(null);
   const dayNames = isEn ? DAY_NAMES_EN : DAY_NAMES_FR;
@@ -48,12 +51,10 @@ export function IcsExportDialog({ open, onOpenChange, daysPerWeek, onExport, isE
         <DialogHeader>
           <DialogTitle>
             <Calendar className="size-5 inline-block mr-2" />
-            {isEn ? "Choose your training days" : "Choisissez vos jours d'entra\u00eenement"}
+            {t("icsExport.chooseTrainingDays")}
           </DialogTitle>
           <DialogDescription>
-            {isEn
-              ? `Select ${daysPerWeek} days for your weekly sessions.`
-              : `S\u00e9lectionnez ${daysPerWeek} jours pour vos s\u00e9ances hebdomadaires.`}
+            {t("icsExport.selectDays", { count: daysPerWeek })}
           </DialogDescription>
         </DialogHeader>
 
@@ -91,7 +92,7 @@ export function IcsExportDialog({ open, onOpenChange, daysPerWeek, onExport, isE
           {selectedDays.size === daysPerWeek && (
             <div>
               <label className="text-sm font-medium mb-2 block">
-                {isEn ? "Long run day" : "Jour de la sortie longue"}
+                {t("icsExport.longRunDay")}
               </label>
               <select
                 value={longRunDay ?? ""}
@@ -99,7 +100,7 @@ export function IcsExportDialog({ open, onOpenChange, daysPerWeek, onExport, isE
                 className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="" disabled>
-                  {isEn ? "Select..." : "S\u00e9lectionner..."}
+                  {t("icsExport.select")}
                 </option>
                 {sortedDays.map((day) => (
                   <option key={day} value={day}>
@@ -113,11 +114,11 @@ export function IcsExportDialog({ open, onOpenChange, daysPerWeek, onExport, isE
 
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            {isEn ? "Cancel" : "Annuler"}
+            {t("icsExport.cancel")}
           </Button>
           <Button onClick={() => isValid && onExport(sortedDays, longRunDay!)} disabled={!isValid}>
             <Download className="size-4" />
-            {isEn ? "Export" : "Exporter"}
+            {t("icsExport.export")}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -291,33 +291,27 @@ const zoneBgClasses: Record<number, string> = {
 // ---------------------------------------------------------------------------
 
 export function MethodologyPage() {
-  const { i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
 
   return (
     <>
       <SEOHead
-        title={isEn ? "Methodology" : "Méthodologie"}
-        description={
-          isEn
-            ? "The scientific foundations behind Zoned's 6-zone training system. Based on established sports science research."
-            : "Les fondements scientifiques du système d'entraînement à 6 zones de Zoned. Basé sur la recherche en sciences du sport."
-        }
+        title={t("methodology.title")}
+        description={t("methodology.seoDescription")}
         canonical="/methodology"
         jsonLd={[
           {
             "@type": "WebPage",
-            name: isEn ? "Methodology" : "Méthodologie",
+            name: t("methodology.title"),
             url: "https://zoned.run/methodology",
-            description: isEn
-              ? "The scientific foundations behind Zoned's 6-zone training system."
-              : "Les fondements scientifiques du système d'entraînement à 6 zones de Zoned.",
+            description: t("methodology.seoDescription"),
           },
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: isEn ? "Methodology" : "Méthodologie" },
+              { "@type": "ListItem", position: 1, name: t("article.home"), item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: t("methodology.title") },
             ],
           },
         ]}
@@ -332,12 +326,10 @@ export function MethodologyPage() {
             </div>
           </div>
           <h1 className="text-3xl font-bold">
-            {isEn ? "The Science behind Zoned" : "La Science derrière Zoned"}
+            {t("methodology.heading")}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {isEn
-              ? "Every workout in Zoned is grounded in decades of sports science research. Here are the physiological principles and key studies that shape our training zones."
-              : "Chaque séance dans Zoned repose sur des décennies de recherche en sciences du sport. Voici les principes physiologiques et les études clés qui structurent nos zones d'entraînement."}
+            {t("methodology.intro")}
           </p>
         </div>
 
@@ -348,28 +340,22 @@ export function MethodologyPage() {
               <Activity className="size-5 text-blue-500" />
             </div>
             <h2 className="text-2xl font-semibold">
-              {isEn ? "Our Approach" : "Notre approche"}
+              {t("methodology.ourApproach")}
             </h2>
           </div>
           <div className="text-muted-foreground space-y-3 pl-12">
             <GlossaryLinkedText
               as="p"
-              text={isEn
-                ? "All workouts in Zoned are based on established sports science. The intensity zones are not arbitrary: they correspond to real physiological thresholds that can be measured in a lab or estimated from field tests."
-                : "Toutes les séances de Zoned sont basées sur les sciences du sport établies. Les zones d'intensité ne sont pas arbitraires : elles correspondent à des seuils physiologiques réels, mesurables en laboratoire ou estimables à partir de tests de terrain."}
+              text={t("methodology.ourApproachText1")}
             />
             <GlossaryLinkedText
               as="p"
-              text={isEn
-                ? "Our 6-zone model is derived from key physiological markers: the first ventilatory threshold (VT1), the second ventilatory threshold (VT2, also called the lactate turn point), and maximal oxygen uptake (VO2max). These thresholds define distinct metabolic states that require specific training stimuli."
-                : "Notre modèle à 6 zones est dérivé de marqueurs physiologiques clés : le premier seuil ventilatoire (VT1), le second seuil ventilatoire (VT2, aussi appelé seuil lactique), et la consommation maximale d'oxygène (VO2max). Ces seuils définissent des états métaboliques distincts qui nécessitent des stimuli d'entraînement spécifiques."}
+              text={t("methodology.ourApproachText2")}
             />
             <GlossaryLinkedText
               as="p"
               className="text-sm italic border-l-2 border-primary/30 pl-4"
-              text={isEn
-                ? "Important: The percentage-based zones presented here are approximations. Heart rate at LT1 and LT2 varies significantly between individuals. Lab testing provides the most accurate boundaries for your personal zones."
-                : "Important : les zones en pourcentage présentées ici sont des approximations. La fréquence cardiaque aux seuils LT1 et LT2 varie considérablement d'un individu à l'autre. Un test en laboratoire fournit les limites les plus précises pour vos zones personnelles."}
+              text={t("methodology.ourApproachDisclaimer")}
             />
           </div>
         </section>
@@ -381,7 +367,7 @@ export function MethodologyPage() {
               <Activity className="size-5 text-orange-500" />
             </div>
             <h2 className="text-2xl font-semibold">
-              {isEn ? "The 6 Zones" : "Les 6 Zones"}
+              {t("methodology.sixZones")}
             </h2>
           </div>
 
@@ -404,7 +390,7 @@ export function MethodologyPage() {
                 <div className="space-y-2 text-sm">
                   <div>
                     <span className="font-medium text-foreground">
-                      {isEn ? "Marker:" : "Marqueur :"}
+                      {t("methodology.marker")}
                     </span>{" "}
                     <GlossaryLinkedText
                       className="text-muted-foreground"
@@ -413,7 +399,7 @@ export function MethodologyPage() {
                   </div>
                   <div>
                     <span className="font-medium text-foreground">
-                      {isEn ? "Develops:" : "Développe :"}
+                      {t("methodology.develops")}
                     </span>{" "}
                     <GlossaryLinkedText
                       className="text-muted-foreground"
@@ -433,9 +419,7 @@ export function MethodologyPage() {
               <GraduationCap className="size-5 text-purple-500" />
             </div>
             <h2 className="text-2xl font-semibold">
-              {isEn
-                ? "Key Researchers & Methods"
-                : "Chercheurs & Méthodes de référence"}
+              {t("methodology.researchers")}
             </h2>
           </div>
 
@@ -459,7 +443,7 @@ export function MethodologyPage() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-2"
                     >
-                      {isEn ? "View publication" : "Voir la publication"}
+                      {t("methodology.viewPublication")}
                       <ExternalLink className="size-3" />
                     </a>
                   )}
@@ -476,7 +460,7 @@ export function MethodologyPage() {
               <BookOpen className="size-5 text-green-500" />
             </div>
             <h2 className="text-2xl font-semibold">
-              {isEn ? "Key Studies" : "Études fondamentales"}
+              {t("methodology.keyStudies")}
             </h2>
           </div>
 
@@ -503,7 +487,7 @@ export function MethodologyPage() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
                     >
-                      {isEn ? "View study" : "Voir l'étude"}
+                      {t("methodology.viewStudy")}
                       <ExternalLink className="size-3" />
                     </a>
                   )}
@@ -520,7 +504,7 @@ export function MethodologyPage() {
               <BookOpen className="size-5 text-amber-500" />
             </div>
             <h2 className="text-2xl font-semibold">
-              {isEn ? "Resources" : "Ressources"}
+              {t("methodology.resources")}
             </h2>
           </div>
 

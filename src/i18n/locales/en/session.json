@@ -2,7 +2,9 @@
   "structure": {
     "warmup": "Warm-up",
     "main": "Main Set",
-    "cooldown": "Cool-down"
+    "cooldown": "Cool-down",
+    "recovery": "Recovery",
+    "interSeries": "{{count}} sets — ~3 min jog between sets"
   },
   "zones": {
     "Z1": "Zone 1 - Recovery",
@@ -25,7 +27,8 @@
     "timeline": "Session Timeline",
     "start": "Start",
     "end": "End",
-    "zoneDistribution": "Zone Distribution"
+    "zoneDistribution": "Zone Distribution",
+    "backToTimeline": "Back to timeline"
   },
   "details": {
     "duration": "Duration",

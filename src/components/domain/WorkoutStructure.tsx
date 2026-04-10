@@ -44,7 +44,7 @@ export function WorkoutStructure({ workout, userZones, className }: WorkoutStruc
           </h4>
           <div className="space-y-2">
             {phase.blocks.map((block, index) => (
-              <BlockItem key={index} block={block} isEn={isEn} userZones={userZones} />
+              <BlockItem key={index} block={block} isEn={isEn} userZones={userZones} t={t} />
             ))}
           </div>
         </div>
@@ -81,7 +81,7 @@ function formatPersonalizedZone(zoneNumber: ZoneNumber, userZones: ZoneRange[]):
   return parts.length > 0 ? parts.join(" · ") : null;
 }
 
-function BlockItem({ block, isEn, userZones }: BlockItemProps) {
+function BlockItem({ block, isEn, userZones, t }: BlockItemProps & { t: (key: string, opts?: Record<string, unknown>) => string }) {
   const description = isEn && block.descriptionEn
     ? block.descriptionEn
     : block.description;
@@ -142,15 +142,13 @@ function BlockItem({ block, isEn, userZones }: BlockItemProps) {
       {/* Recovery between reps */}
       {recoveryText && (
         <p className="text-xs text-muted-foreground mt-1.5 italic">
-          {isEn ? "Recovery" : "Récupération"} : {recoveryText}
+          {t("structure.recovery")} : {recoveryText}
         </p>
       )}
       {/* Inter-series recovery for multi-set blocks */}
       {seriesCount && seriesCount > 1 && (
         <p className="text-xs text-muted-foreground mt-1 italic">
-          {isEn
-            ? `${seriesCount} sets — ~3 min jog between sets`
-            : `${seriesCount} séries — ~3 min footing entre les séries`}
+          {t("structure.interSeries", { count: seriesCount })}
         </p>
       )}
     </div>

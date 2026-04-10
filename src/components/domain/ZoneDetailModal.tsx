@@ -26,7 +26,7 @@ export function ZoneDetailModal({
   open,
   onOpenChange,
 }: ZoneDetailModalProps) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const { workouts: allWorkouts } = useWorkouts();
 
@@ -60,7 +60,7 @@ export function ZoneDetailModal({
           <section className="space-y-2">
             <h4 className="flex items-center gap-2 font-medium text-sm">
               <Brain className="size-4 text-muted-foreground" />
-              {isEn ? "Physiology" : "Physiologie"}
+              {t("zones.physiology")}
             </h4>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {physiology}
@@ -71,7 +71,7 @@ export function ZoneDetailModal({
           <section className="space-y-2">
             <h4 className="flex items-center gap-2 font-medium text-sm">
               <Heart className="size-4 text-muted-foreground" />
-              {isEn ? "How it feels" : "Ressenti"}
+              {t("zones.howItFeels")}
             </h4>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {sensation}
@@ -82,7 +82,7 @@ export function ZoneDetailModal({
           <section className="space-y-2">
             <h4 className="flex items-center gap-2 font-medium text-sm">
               <Sparkles className="size-4 text-muted-foreground" />
-              {isEn ? "Benefits" : "Benefices"}
+              {t("zones.benefits")}
             </h4>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {benefit}
@@ -93,7 +93,7 @@ export function ZoneDetailModal({
           <section className="space-y-3">
             <h4 className="flex items-center gap-2 font-medium text-sm">
               <Dumbbell className="size-4 text-muted-foreground" />
-              {isEn ? "Example workouts" : "Exemples de séances"}
+              {t("zones.exampleWorkouts")}
             </h4>
             <div className="space-y-2">
               {exampleWorkouts.map((workout) => (
@@ -110,7 +110,7 @@ export function ZoneDetailModal({
             </div>
             <Button variant="outline" size="sm" asChild className="w-full mt-2">
               <Link to="/library" onClick={() => onOpenChange(false)}>
-                {isEn ? "See all workouts" : "Voir toutes les séances"}
+                {t("zones.seeAllWorkouts")}
               </Link>
             </Button>
           </section>

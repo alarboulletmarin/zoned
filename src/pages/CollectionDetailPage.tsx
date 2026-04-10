@@ -81,7 +81,7 @@ export function CollectionDetailPage() {
     return (
       <div className="py-12 text-center">
         <p className="text-muted-foreground">
-          {isEn ? "Collection not found" : "Collection introuvable"}
+          {t("collectionsDetail.collectionNotFound")}
         </p>
         <Button variant="link" asChild className="mt-4">
           <Link to="/collections">
@@ -196,9 +196,7 @@ export function CollectionDetailPage() {
         {workouts.length === 0 && !isLoading && (
           <div className="text-center py-12">
             <p className="text-muted-foreground">
-              {isEn
-                ? "No workouts found for this collection."
-                : "Aucune séance trouvée pour cette collection."}
+              {t("collectionsDetail.noWorkoutsFound")}
             </p>
           </div>
         )}
