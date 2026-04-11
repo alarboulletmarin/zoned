@@ -37,7 +37,7 @@ import type { Difficulty, UserZonePreferences } from "@/types";
 import { DIFFICULTY_META } from "@/types";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
-import { buildRacePlanDateRange, calculateWeeksBetweenDates } from "@/lib/planDates";
+import { addWeeksToDate, buildRacePlanDateRange, calculateWeeksBetweenDates } from "@/lib/planDates";
 
 // ── Constants ────────────────────────────────────────────────────────
 
@@ -275,10 +275,8 @@ export function PlanCreatePage() {
   const dateTooLong = weeksCount > recommendedWeeks.max;
 
   const minDate = useMemo(() => {
-    const d = new Date();
-    d.setDate(d.getDate() + minWeeksForDistance * 7);
-    return d.toISOString().split("T")[0];
-  }, [minWeeksForDistance]);
+    return addWeeksToDate(form.startDate || todayDate, minWeeksForDistance);
+  }, [form.startDate, minWeeksForDistance, todayDate]);
 
   const paceSeconds = useMemo(
     () => parsePaceToSeconds(form.targetPace),

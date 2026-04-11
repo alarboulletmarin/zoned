@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { buildRacePlanDateRange, calculateWeeksBetweenDates } from "./planDates";
+import { addWeeksToDate, buildRacePlanDateRange, calculateWeeksBetweenDates } from "./planDates";
 
 describe("calculateWeeksBetweenDates", () => {
   test("calculates available weeks from the chosen start date", () => {
@@ -18,5 +18,11 @@ describe("buildRacePlanDateRange", () => {
 
   test("returns no explicit range when start date is missing", () => {
     expect(buildRacePlanDateRange(undefined, "2026-06-15")).toEqual({});
+  });
+});
+
+describe("addWeeksToDate", () => {
+  test("computes the earliest valid race date from the chosen start date", () => {
+    expect(addWeeksToDate("2026-03-10", 12)).toBe("2026-06-02");
   });
 });
