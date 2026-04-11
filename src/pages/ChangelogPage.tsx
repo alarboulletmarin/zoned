@@ -52,29 +52,29 @@ export function ChangelogPage() {
   };
 
   const getChangeTypeLabel = (type: ChangeType): string => {
-    return t(`changelog.${type}`);
+    return t(`content:changelog.${type}`);
   };
 
   return (
     <>
       <SEOHead
-        title={t("changelog.title")}
-        description={t("changelog.subtitle")}
+        title={t("content:changelog.title")}
+        description={t("content:changelog.subtitle")}
         canonical="/changelog"
         jsonLd={{
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: t("article.home"), item: "https://zoned.run/" },
-            { "@type": "ListItem", position: 2, name: t("changelog.title") },
+            { "@type": "ListItem", position: 1, name: t("content:article.home"), item: "https://zoned.run/" },
+            { "@type": "ListItem", position: 2, name: t("content:changelog.title") },
           ],
         }}
       />
       <div className="py-8 space-y-8 max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center space-y-4">
-          <h1 className="text-3xl font-bold">{t("changelog.title")}</h1>
+          <h1 className="text-3xl font-bold">{t("content:changelog.title")}</h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t("changelog.subtitle")}
+            {t("content:changelog.subtitle")}
           </p>
         </div>
 

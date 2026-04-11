@@ -8,7 +8,7 @@ export function AboutPage() {
   return (
     <>
       <SEOHead
-        title={t("about.seoHeroLabel")}
+        title={t("content:about.seoHeroLabel")}
         description={t("pages.about.seoDescription")}
         canonical="/about"
         jsonLd={[
@@ -33,13 +33,13 @@ export function AboutPage() {
         <section>
           <div className="max-w-3xl">
             <span className="text-primary font-bold tracking-widest text-sm uppercase mb-4 block">
-              {t("about.seoHeroLabel")}
+              {t("content:about.seoHeroLabel")}
             </span>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4 leading-[1.1]">
-              {t("about.title")}
+              {t("content:about.title")}
             </h1>
             <p className="text-base md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
-              {t("about.description")}
+              {t("content:about.description")}
             </p>
           </div>
         </section>
@@ -47,8 +47,8 @@ export function AboutPage() {
         {/* Stats Bento Grid */}
         <section className="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
           {[
-            { value: "200", label: t("about.statsWorkouts"), color: "primary", gradient: "from-primary/10 dark:from-primary/20" },
-            { value: "9", label: t("about.statsCalculators"), color: "zone-3", gradient: "from-zone-3/10 dark:from-zone-3/20" },
+            { value: "200", label: t("content:about.statsWorkouts"), color: "primary", gradient: "from-primary/10 dark:from-primary/20" },
+            { value: "9", label: t("content:about.statsCalculators"), color: "zone-3", gradient: "from-zone-3/10 dark:from-zone-3/20" },
             { value: "8", label: "Plans", color: "zone-2", gradient: "from-zone-2/10 dark:from-zone-2/20" },
             { value: "16", label: "Collections", color: "zone-5", gradient: "from-zone-5/10 dark:from-zone-5/20" },
             { value: "12", label: "Articles", color: "zone-4", gradient: "from-zone-4/10 dark:from-zone-4/20" },
@@ -73,9 +73,9 @@ export function AboutPage() {
           <div className="rounded-2xl border border-border/50 bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent p-6 md:p-10">
             <div className="flex flex-col md:flex-row gap-6 md:gap-10">
               <div className="flex-1 space-y-4">
-                <h2 className="text-xl md:text-2xl font-bold">{t("about.personal.title")}</h2>
+                <h2 className="text-xl md:text-2xl font-bold">{t("content:about.personal.title")}</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  {t("about.personal.bio")}
+                  {t("content:about.personal.bio")}
                 </p>
               </div>
               <div className="flex flex-row md:flex-col gap-4 md:gap-3 md:justify-center shrink-0">
@@ -109,9 +109,9 @@ export function AboutPage() {
             <div className="p-2 rounded-lg bg-orange-500/15 w-fit">
               <GithubIcon className="size-5 text-orange-500" />
             </div>
-            <h3 className="font-bold">{t("about.openSource.title")}</h3>
+            <h3 className="font-bold">{t("content:about.openSource.title")}</h3>
             <p className="text-sm text-muted-foreground">
-              {t("about.openSource.contributions")}
+              {t("content:about.openSource.contributions")}
             </p>
           </div>
 
@@ -120,9 +120,9 @@ export function AboutPage() {
             <div className="p-2 rounded-lg bg-purple-500/15 w-fit">
               <Sparkles className="size-5 text-purple-500" />
             </div>
-            <h3 className="font-bold">{t("about.vibeCoded.title")}</h3>
+            <h3 className="font-bold">{t("content:about.vibeCoded.title")}</h3>
             <p className="text-sm text-muted-foreground">
-              {t("about.vibeCoded.claude")}
+              {t("content:about.vibeCoded.claude")}
             </p>
           </div>
 
@@ -131,9 +131,9 @@ export function AboutPage() {
             <div className="p-2 rounded-lg bg-green-500/15 w-fit">
               <Shield className="size-5 text-green-500" />
             </div>
-            <h3 className="font-bold">{t("about.privacy.title")}</h3>
+            <h3 className="font-bold">{t("content:about.privacy.title")}</h3>
             <p className="text-sm text-muted-foreground">
-              {t("about.privacy.noServer")}
+              {t("content:about.privacy.noServer")}
             </p>
           </div>
 
@@ -142,9 +142,9 @@ export function AboutPage() {
             <div className="p-2 rounded-lg bg-red-500/15 w-fit">
               <Code className="size-5 text-red-500" />
             </div>
-            <h3 className="font-bold">{t("about.credits.title")}</h3>
+            <h3 className="font-bold">{t("content:about.credits.title")}</h3>
             <p className="text-sm text-muted-foreground">
-              {t("about.credits.framework")} · {t("about.credits.ui")}
+              {t("content:about.credits.framework")} · {t("content:about.credits.ui")}
             </p>
           </div>
         </section>

@@ -53,7 +53,7 @@ export function ArticleCard({ article, className }: ArticleCardProps) {
               className={cn("text-xs", CATEGORY_COLORS[article.category])}
             >
               <CategoryIcon className="size-3 mr-1" />
-              {t(`learn.categories.${article.category}`)}
+              {t(`content:learn.categories.${article.category}`)}
             </Badge>
             <div className="flex items-center gap-1 text-xs text-muted-foreground">
               <Clock className="size-3" />

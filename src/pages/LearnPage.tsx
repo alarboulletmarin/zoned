@@ -33,21 +33,21 @@ export function LearnPage() {
   return (
     <>
       <SEOHead
-        title={t("learn.title")}
-        description={t("learn.description")}
+        title={t("content:learn.title")}
+        description={t("content:learn.description")}
         canonical="/learn"
         jsonLd={[
           {
             "@type": "CollectionPage",
-            name: t("learn.title"),
-            description: t("learn.description"),
+            name: t("content:learn.title"),
+            description: t("content:learn.description"),
             url: "https://zoned.run/learn",
           },
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: t("article.home"), item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: t("learn.title") },
+              { "@type": "ListItem", position: 1, name: t("content:article.home"), item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: t("content:learn.title") },
             ],
           },
         ]}
@@ -55,9 +55,9 @@ export function LearnPage() {
       <div className="py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">{t("learn.title")}</h1>
+        <h1 className="text-3xl font-bold mb-2">{t("content:learn.title")}</h1>
         <p className="text-muted-foreground text-lg">
-          {t("learn.description")}
+          {t("content:learn.description")}
         </p>
       </div>
 
@@ -69,7 +69,7 @@ export function LearnPage() {
           size="sm"
           onClick={() => setSelectedCategory("all")}
         >
-          {t("learn.allCategories")}
+          {t("content:learn.allCategories")}
         </Button>
         {ARTICLE_CATEGORIES.map((category) => {
           const Icon = CATEGORY_ICONS[category];
@@ -82,7 +82,7 @@ export function LearnPage() {
               className="gap-1"
             >
               <Icon className="size-3.5" />
-              {t(`learn.categories.${category}`)}
+              {t(`content:learn.categories.${category}`)}
             </Button>
           );
         })}
@@ -107,7 +107,7 @@ export function LearnPage() {
 
           {/* Stats */}
           <div className="mt-8 text-center text-sm text-muted-foreground">
-            {t("learn.articleCount", { count: filteredArticles.length })}
+            {t("content:learn.articleCount", { count: filteredArticles.length })}
           </div>
         </>
       )}

@@ -35,7 +35,7 @@ export function Footer() {
               )}
             </span>
             <span className="text-xs text-muted-foreground hidden lg:inline">
-              {t("privacy.footerNote")}
+              {t("content:privacy.footerNote")}
             </span>
           </div>
 

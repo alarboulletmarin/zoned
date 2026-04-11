@@ -298,21 +298,21 @@ export function MethodologyPage() {
   return (
     <>
       <SEOHead
-        title={t("methodology.title")}
-        description={t("methodology.seoDescription")}
+        title={t("content:methodology.title")}
+        description={t("content:methodology.seoDescription")}
         canonical="/methodology"
         jsonLd={[
           {
             "@type": "WebPage",
-            name: t("methodology.title"),
+            name: t("content:methodology.title"),
             url: "https://zoned.run/methodology",
-            description: t("methodology.seoDescription"),
+            description: t("content:methodology.seoDescription"),
           },
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: t("article.home"), item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: t("methodology.title") },
+              { "@type": "ListItem", position: 1, name: t("content:article.home"), item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: t("content:methodology.title") },
             ],
           },
         ]}
@@ -327,10 +327,10 @@ export function MethodologyPage() {
             </div>
           </div>
           <h1 className="text-3xl font-bold">
-            {t("methodology.heading")}
+            {t("content:methodology.heading")}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t("methodology.intro")}
+            {t("content:methodology.intro")}
           </p>
         </div>
 
@@ -341,22 +341,22 @@ export function MethodologyPage() {
               <Activity className="size-5 text-blue-500" />
             </div>
             <h2 className="text-2xl font-semibold">
-              {t("methodology.ourApproach")}
+              {t("content:methodology.ourApproach")}
             </h2>
           </div>
           <div className="text-muted-foreground space-y-3 pl-12">
             <GlossaryLinkedText
               as="p"
-              text={t("methodology.ourApproachText1")}
+              text={t("content:methodology.ourApproachText1")}
             />
             <GlossaryLinkedText
               as="p"
-              text={t("methodology.ourApproachText2")}
+              text={t("content:methodology.ourApproachText2")}
             />
             <GlossaryLinkedText
               as="p"
               className="text-sm italic border-l-2 border-primary/30 pl-4"
-              text={t("methodology.ourApproachDisclaimer")}
+              text={t("content:methodology.ourApproachDisclaimer")}
             />
           </div>
         </section>
@@ -368,7 +368,7 @@ export function MethodologyPage() {
               <Activity className="size-5 text-orange-500" />
             </div>
             <h2 className="text-2xl font-semibold">
-              {t("methodology.sixZones")}
+              {t("content:methodology.sixZones")}
             </h2>
           </div>
 
@@ -391,7 +391,7 @@ export function MethodologyPage() {
                 <div className="space-y-2 text-sm">
                   <div>
                     <span className="font-medium text-foreground">
-                      {t("methodology.marker")}
+                      {t("content:methodology.marker")}
                     </span>{" "}
                     <GlossaryLinkedText
                       className="text-muted-foreground"
@@ -400,7 +400,7 @@ export function MethodologyPage() {
                   </div>
                   <div>
                     <span className="font-medium text-foreground">
-                      {t("methodology.develops")}
+                      {t("content:methodology.develops")}
                     </span>{" "}
                     <GlossaryLinkedText
                       className="text-muted-foreground"
@@ -420,7 +420,7 @@ export function MethodologyPage() {
               <GraduationCap className="size-5 text-purple-500" />
             </div>
             <h2 className="text-2xl font-semibold">
-              {t("methodology.researchers")}
+              {t("content:methodology.researchers")}
             </h2>
           </div>
 
@@ -444,7 +444,7 @@ export function MethodologyPage() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-2"
                     >
-                      {t("methodology.viewPublication")}
+                      {t("content:methodology.viewPublication")}
                       <ExternalLink className="size-3" />
                     </a>
                   )}
@@ -461,7 +461,7 @@ export function MethodologyPage() {
               <BookOpen className="size-5 text-green-500" />
             </div>
             <h2 className="text-2xl font-semibold">
-              {t("methodology.keyStudies")}
+              {t("content:methodology.keyStudies")}
             </h2>
           </div>
 
@@ -488,7 +488,7 @@ export function MethodologyPage() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
                     >
-                      {t("methodology.viewStudy")}
+                      {t("content:methodology.viewStudy")}
                       <ExternalLink className="size-3" />
                     </a>
                   )}
@@ -505,7 +505,7 @@ export function MethodologyPage() {
               <BookOpen className="size-5 text-amber-500" />
             </div>
             <h2 className="text-2xl font-semibold">
-              {t("methodology.resources")}
+              {t("content:methodology.resources")}
             </h2>
           </div>
 

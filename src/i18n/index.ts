@@ -32,6 +32,9 @@ import enStrength from "./locales/en/strength.json";
 import frCalculators from "./locales/fr/calculators.json";
 import enCalculators from "./locales/en/calculators.json";
 
+import frContent from "./locales/fr/content.json";
+import enContent from "./locales/en/content.json";
+
 // Resources object
 const resources = {
   fr: {
@@ -46,6 +49,7 @@ const resources = {
     whatif: frWhatif,
     strength: frStrength,
     calculators: frCalculators,
+    content: frContent,
   },
   en: {
     common: enCommon,
@@ -59,6 +63,7 @@ const resources = {
     whatif: enWhatif,
     strength: enStrength,
     calculators: enCalculators,
+    content: enContent,
   },
 };
 
@@ -73,7 +78,7 @@ i18n
     fallbackLng: "fr",
     defaultNS: "common",
     fallbackNS: "common",
-    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "whatif", "strength", "calculators"],
+    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "whatif", "strength", "calculators", "content"],
 
     // Detection options
     detection: {

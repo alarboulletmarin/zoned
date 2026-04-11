@@ -1,0 +1,77 @@
+{
+  "about": {
+    "seoHeroLabel": "À propos",
+    "statsWorkouts": "Séances",
+    "statsCalculators": "Calculateurs"
+  },
+  "methodology": {
+    "title": "Méthodologie",
+    "seoDescription": "Les fondements scientifiques du système d'entraînement à 6 zones de Zoned. Basé sur la recherche en sciences du sport.",
+    "heading": "La Science derrière Zoned",
+    "intro": "Chaque séance dans Zoned repose sur des décennies de recherche en sciences du sport. Voici les principes physiologiques et les études clés qui structurent nos zones d'entraînement.",
+    "ourApproach": "Notre approche",
+    "ourApproachText1": "Toutes les séances de Zoned sont basées sur les sciences du sport établies. Les zones d'intensité ne sont pas arbitraires : elles correspondent à des seuils physiologiques réels, mesurables en laboratoire ou estimables à partir de tests de terrain.",
+    "ourApproachText2": "Notre modèle à 6 zones est dérivé de marqueurs physiologiques clés : le premier seuil ventilatoire (VT1), le second seuil ventilatoire (VT2, aussi appelé seuil lactique), et la consommation maximale d'oxygène (VO2max). Ces seuils définissent des états métaboliques distincts qui nécessitent des stimuli d'entraînement spécifiques.",
+    "ourApproachDisclaimer": "Important : les zones en pourcentage présentées ici sont des approximations. La fréquence cardiaque aux seuils LT1 et LT2 varie considérablement d'un individu à l'autre. Un test en laboratoire fournit les limites les plus précises pour vos zones personnelles.",
+    "sixZones": "Les 6 Zones",
+    "marker": "Marqueur :",
+    "develops": "Développe :",
+    "researchers": "Chercheurs & Méthodes de référence",
+    "viewPublication": "Voir la publication",
+    "keyStudies": "Études fondamentales",
+    "viewStudy": "Voir l'étude",
+    "resources": "Ressources"
+  },
+  "planMethodology": {
+    "title": "Guide des plans",
+    "seoDescription": "Les 7 principes scientifiques derrière la génération des plans d'entraînement Zoned. Comprenez comment votre plan est construit.",
+    "heading": "Comment Zoned construit ton plan",
+    "intro": "Chaque plan d'entraînement dans Zoned est généré à partir de 7 principes fondés sur la recherche. Pas de boîte noire : voici exactement comment ton plan est construit, et pourquoi.",
+    "introText": "Le générateur de plans combine les modèles de périodisation de Daniels et Lydiard, la distribution d'entraînement polarisé validée par Seiler, les règles de progression de volume issues des recherches de Gabbett sur le ratio charge aiguë/chronique, et le modèle de taper exponentiel de Mujika & Padilla. Chaque paramètre est adapté à ta distance de course, ton niveau et ton objectif.",
+    "introDisclaimer": "Ce sont les mêmes principes utilisés par les entraîneurs professionnels. La différence, c'est que Zoned les applique automatiquement en fonction de ton profil.",
+    "learnMore": "En savoir plus",
+    "scientificReferences": "Références scientifiques",
+    "viewStudy": "Voir l'étude"
+  },
+  "article": {
+    "home": "Accueil",
+    "learn": "Apprendre"
+  },
+  "changelog": {
+    "title": "Nouveautés",
+    "subtitle": "Historique des mises à jour et nouvelles fonctionnalités",
+    "added": "Ajouté",
+    "changed": "Modifié",
+    "fixed": "Corrigé",
+    "performance": "Performance",
+    "version": "Version {{version}}",
+    "released": "Publié le {{date}}"
+  },
+  "glossaryPage": {
+    "seoTitle": "Glossaire",
+    "seoDescription": "Terminologie de la course à pied expliquée: zones d'entraînement, types de séances et concepts clés."
+  },
+  "learn": {
+    "title": "Apprendre",
+    "description": "Guides et articles pour progresser en course à pied",
+    "allCategories": "Tous",
+    "categories": {
+      "fundamentals": "Fondamentaux",
+      "training": "Entraînement",
+      "lifestyle": "Mode de vie"
+    },
+    "articleCount": "{{count}} article(s)",
+    "readTime": "de lecture",
+    "prevArticle": "Article précédent",
+    "nextArticle": "Article suivant",
+    "backToHub": "Retour aux articles",
+    "zonesCtaText": "Prêt à personnaliser vos zones d'entraînement ?",
+    "zonesCtaButton": "Configurer mes zones"
+  },
+  "privacy": {
+    "free": "100% gratuit",
+    "noAccount": "Aucun compte requis",
+    "localData": "Vos données restent sur votre appareil",
+    "footerNote": "Pas de tracking. Pas de cookies."
+  }
+}

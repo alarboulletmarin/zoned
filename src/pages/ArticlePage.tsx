@@ -382,8 +382,8 @@ export function ArticlePage() {
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: t("article.home"), item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: t("article.learn"), item: "https://zoned.run/learn" },
+              { "@type": "ListItem", position: 1, name: t("content:article.home"), item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: t("content:article.learn"), item: "https://zoned.run/learn" },
               { "@type": "ListItem", position: 3, name: title },
             ],
           },
@@ -479,7 +479,7 @@ export function ArticlePage() {
         </Link>
         <ChevronRight className="size-3" />
         <Link to="/learn" className="hover:text-foreground transition-colors">
-          {t("learn.title")}
+          {t("content:learn.title")}
         </Link>
         <ChevronRight className="size-3" />
         <span className="text-foreground truncate">{title}</span>
@@ -489,10 +489,10 @@ export function ArticlePage() {
       <header className="mb-8 max-w-3xl">
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
           <BookOpen className="size-4" />
-          <span>{t(`learn.categories.${article.category}`)}</span>
+          <span>{t(`content:learn.categories.${article.category}`)}</span>
           <span>-</span>
           <Clock className="size-3" />
-          <span>{article.readTime} min {t("learn.readTime")}</span>
+          <span>{article.readTime} min {t("content:learn.readTime")}</span>
         </div>
         <h1 className="text-3xl font-bold mb-3">{title}</h1>
         <p className="text-lg text-muted-foreground"><GlossaryLinkedText text={description} /></p>
@@ -521,10 +521,10 @@ export function ArticlePage() {
       {article.slug === "zones" && (
         <div className="mt-8 p-6 bg-muted rounded-lg text-center">
           <p className="text-muted-foreground mb-4">
-            {t("learn.zonesCtaText")}
+            {t("content:learn.zonesCtaText")}
           </p>
           <Button asChild>
-            <Link to="/my-zones">{t("learn.zonesCtaButton")}</Link>
+            <Link to="/my-zones">{t("content:learn.zonesCtaButton")}</Link>
           </Button>
         </div>
       )}
@@ -546,7 +546,7 @@ export function ArticlePage() {
           >
             <span className="text-xs text-muted-foreground flex items-center gap-1">
               <ChevronLeft className="size-3" />
-              {t("learn.prevArticle")}
+              {t("content:learn.prevArticle")}
             </span>
             <span className="font-medium group-hover:text-primary transition-colors">
               {pick(prev, "title")}
@@ -565,7 +565,7 @@ export function ArticlePage() {
             )}
           >
             <span className="text-xs text-muted-foreground flex items-center gap-1 justify-end">
-              {t("learn.nextArticle")}
+              {t("content:learn.nextArticle")}
               <ChevronRight className="size-3" />
             </span>
             <span className="font-medium group-hover:text-primary transition-colors">
@@ -582,7 +582,7 @@ export function ArticlePage() {
         <Button variant="outline" asChild>
           <Link to="/learn">
             <BookOpen className="size-4 mr-2" />
-            {t("learn.backToHub")}
+            {t("content:learn.backToHub")}
           </Link>
         </Button>
       </div>

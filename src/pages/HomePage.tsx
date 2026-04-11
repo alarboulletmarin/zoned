@@ -117,14 +117,14 @@ export function HomePage() {
   const trustBadges = (
     <div className="flex flex-wrap gap-2 mb-6 md:mb-8">
       <span className="inline-flex items-center gap-1.5 text-xs md:text-sm text-muted-foreground bg-muted/50 rounded-full px-3 py-1">
-        {t("common:privacy.free")}
+        {t("content:privacy.free")}
       </span>
       <span className="inline-flex items-center gap-1.5 text-xs md:text-sm text-muted-foreground bg-muted/50 rounded-full px-3 py-1">
-        {t("common:privacy.noAccount")}
+        {t("content:privacy.noAccount")}
       </span>
       <span className="inline-flex items-center gap-1.5 text-xs md:text-sm text-muted-foreground bg-muted/50 rounded-full px-3 py-1">
         <Shield className="size-3 md:size-3.5" />
-        {t("common:privacy.localData")}
+        {t("content:privacy.localData")}
       </span>
     </div>
   );

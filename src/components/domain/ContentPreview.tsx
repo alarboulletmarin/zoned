@@ -107,7 +107,7 @@ function ArticlePreview({ article, onNavigate, onClose }: ArticlePreviewProps) {
 
   const title = pickLang(article, "title");
   const description = pickLang(article, "description");
-  const categoryLabel = t(`common:learn.categories.${article.category}`);
+  const categoryLabel = t(`content:learn.categories.${article.category}`);
 
   return (
     <div className="relative space-y-1.5 pr-5">

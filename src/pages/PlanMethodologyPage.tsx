@@ -126,14 +126,14 @@ export function PlanMethodologyPage() {
   return (
     <>
       <SEOHead
-        title={t("planMethodology.title")}
-        description={t("planMethodology.seoDescription")}
+        title={t("content:planMethodology.title")}
+        description={t("content:planMethodology.seoDescription")}
         canonical="/plans/methodology"
         jsonLd={{
           "@type": "WebPage",
-          name: t("planMethodology.title"),
+          name: t("content:planMethodology.title"),
           url: "https://zoned.run/plans/methodology",
-          description: t("planMethodology.seoDescription"),
+          description: t("content:planMethodology.seoDescription"),
         }}
       />
 
@@ -146,10 +146,10 @@ export function PlanMethodologyPage() {
             </div>
           </div>
           <h1 className="text-3xl font-bold">
-            {t("planMethodology.heading")}
+            {t("content:planMethodology.heading")}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t("planMethodology.intro")}
+            {t("content:planMethodology.intro")}
           </p>
         </div>
 
@@ -158,12 +158,12 @@ export function PlanMethodologyPage() {
           <div className="text-muted-foreground space-y-3 pl-0">
             <GlossaryLinkedText
               as="p"
-              text={t("planMethodology.introText")}
+              text={t("content:planMethodology.introText")}
             />
             <GlossaryLinkedText
               as="p"
               className="text-sm italic border-l-2 border-primary/30 pl-4"
-              text={t("planMethodology.introDisclaimer")}
+              text={t("content:planMethodology.introDisclaimer")}
             />
           </div>
         </section>
@@ -263,7 +263,7 @@ export function PlanMethodologyPage() {
                           to={`/learn/${principle.relatedArticle}`}
                           className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
                         >
-                          {t("planMethodology.learnMore")}
+                          {t("content:planMethodology.learnMore")}
                           <ArrowRight className="size-3.5" />
                         </Link>
                       </div>
@@ -282,7 +282,7 @@ export function PlanMethodologyPage() {
               <BookOpen className="size-5 text-green-500" />
             </div>
             <h2 className="text-2xl font-semibold">
-              {t("planMethodology.scientificReferences")}
+              {t("content:planMethodology.scientificReferences")}
             </h2>
           </div>
 
@@ -308,7 +308,7 @@ export function PlanMethodologyPage() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
                     >
-                      {t("planMethodology.viewStudy")}
+                      {t("content:planMethodology.viewStudy")}
                       <ArrowRight className="size-3" />
                     </a>
                   )}

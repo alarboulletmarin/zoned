@@ -5,11 +5,6 @@
     "heroTitle": "Prepare your next",
     "heroTitleAccent": "race"
   },
-  "about": {
-    "seoHeroLabel": "About",
-    "statsWorkouts": "Workouts",
-    "statsCalculators": "Calculators"
-  },
   "export": {
     "title": "Export",
     "calendar": "Calendar (ICS)",
@@ -373,33 +368,6 @@
     "learnMore": "Learn more",
     "dismiss": "Dismiss"
   },
-  "learn": {
-    "title": "Learn",
-    "description": "Guides and articles to improve your running",
-    "allCategories": "All",
-    "categories": {
-      "fundamentals": "Fundamentals",
-      "training": "Training",
-      "lifestyle": "Lifestyle"
-    },
-    "articleCount": "{{count}} article(s)",
-    "readTime": "read",
-    "prevArticle": "Previous article",
-    "nextArticle": "Next article",
-    "backToHub": "Back to articles",
-    "zonesCtaText": "Ready to personalize your training zones?",
-    "zonesCtaButton": "Configure my zones"
-  },
-  "changelog": {
-    "title": "What's New",
-    "subtitle": "Update history and new features",
-    "added": "Added",
-    "changed": "Changed",
-    "fixed": "Fixed",
-    "performance": "Performance",
-    "version": "Version {{version}}",
-    "released": "Released {{date}}"
-  },
   "onboarding": {
     "step1Title": "200 structured workouts",
     "step1Desc": "Recovery, endurance, threshold, VO2max, hills, fartlek... Filter by duration, difficulty or zone. All free, no account needed.",
@@ -450,12 +418,6 @@
     "description": "Zoned is 100% free and open source. If you find the app useful, you can support its development.",
     "button": "Support the project",
     "footerLink": "Support"
-  },
-  "privacy": {
-    "free": "100% free",
-    "noAccount": "No account required",
-    "localData": "Your data stays on your device",
-    "footerNote": "No tracking. No cookies."
   },
   "storageWarning": {
     "title": "Your data is stored locally",
@@ -603,10 +565,6 @@
     "collectionNotFound": "Collection not found",
     "noWorkoutsFound": "No workouts found for this collection."
   },
-  "glossaryPage": {
-    "seoTitle": "Glossary",
-    "seoDescription": "Running terminology explained: training zones, workout types, and key concepts for runners."
-  },
   "favorites": {
     "title": "My Favorites",
     "savedWorkouts": "{{count}} saved workout",
@@ -681,39 +639,6 @@
       "description": "Compare Zoned with the main running apps. Pricing, privacy, features.",
       "compareWith": "Compare with {{name}}"
     }
-  },
-  "methodology": {
-    "title": "Methodology",
-    "seoDescription": "The scientific foundations behind Zoned's 6-zone training system. Based on established sports science research.",
-    "heading": "The Science behind Zoned",
-    "intro": "Every workout in Zoned is grounded in decades of sports science research. Here are the physiological principles and key studies that shape our training zones.",
-    "ourApproach": "Our Approach",
-    "ourApproachText1": "All workouts in Zoned are based on established sports science. The intensity zones are not arbitrary: they correspond to real physiological thresholds that can be measured in a lab or estimated from field tests.",
-    "ourApproachText2": "Our 6-zone model is derived from key physiological markers: the first ventilatory threshold (VT1), the second ventilatory threshold (VT2, also called the lactate turn point), and maximal oxygen uptake (VO2max). These thresholds define distinct metabolic states that require specific training stimuli.",
-    "ourApproachDisclaimer": "Important: The percentage-based zones presented here are approximations. Heart rate at LT1 and LT2 varies significantly between individuals. Lab testing provides the most accurate boundaries for your personal zones.",
-    "sixZones": "The 6 Zones",
-    "marker": "Marker:",
-    "develops": "Develops:",
-    "researchers": "Key Researchers & Methods",
-    "viewPublication": "View publication",
-    "keyStudies": "Key Studies",
-    "viewStudy": "View study",
-    "resources": "Resources"
-  },
-  "planMethodology": {
-    "title": "Plan Guide",
-    "seoDescription": "The 7 evidence-based principles behind Zoned's training plan generation. Understand how your plan is built.",
-    "heading": "How Zoned Builds Your Plan",
-    "intro": "Every training plan in Zoned is generated from 7 evidence-based principles. No black box: here is exactly how your plan is built, and why.",
-    "introText": "The plan generator combines periodization models from Daniels and Lydiard, the polarized training distribution validated by Seiler, volume progression rules derived from Gabbett's acute:chronic workload research, and the exponential taper model of Mujika & Padilla. Each parameter is adapted to your race distance, fitness level, and training goal.",
-    "introDisclaimer": "These are the same principles used by professional coaches. The difference is that Zoned applies them automatically based on your profile.",
-    "learnMore": "Learn more",
-    "scientificReferences": "Scientific References",
-    "viewStudy": "View study"
-  },
-  "article": {
-    "home": "Home",
-    "learn": "Learn"
   },
   "pages": {
     "workoutDetail": {
