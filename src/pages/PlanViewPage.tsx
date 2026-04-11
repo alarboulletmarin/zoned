@@ -56,6 +56,7 @@ import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { usePlanViewMode } from "@/hooks/usePlanViewMode";
 import { getCurrentWeek } from "@/lib/planUtils";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
+import { applyWeekValidationDecision, getWeekResolutionSummary } from "@/lib/weekValidation";
 
 function formatDate(isoDate: string, isEn: boolean): string {
   const date = new Date(isoDate);
@@ -118,6 +119,10 @@ export function PlanViewPage() {
   const [rpePrompt, setRpePrompt] = useState<{ weekNumber: number; sessionIndex: number } | null>(null);
   const [isEditingName, setIsEditingName] = useState(false);
   const [editName, setEditName] = useState("");
+  const [pendingWeekValidation, setPendingWeekValidation] = useState<{
+    weekNumber: number;
+    unresolved: number;
+  } | null>(null);
 
   const currentWeek = useMemo(() => {
     if (!plan) return 0;
@@ -334,26 +339,44 @@ export function PlanViewPage() {
       // Auto-trigger adaptation if all sessions in the week are now resolved
       runAdaptationIfReady(weekNumber, false);
     }
-  }, [plan, reloadPlan, runAdaptationIfReady]);
+  }, [plan, runAdaptationIfReady]);
 
-  // Validate an entire week: mark unresolved sessions as "skipped", then run adaptation
+  const handleWeekValidationDecision = useCallback((decision: "mark_skipped" | "keep_unresolved") => {
+    if (!plan || !pendingWeekValidation) return;
+
+    const week = plan.weeks.find((w) => w.weekNumber === pendingWeekValidation.weekNumber);
+    if (!week) return;
+
+    const result = applyWeekValidationDecision(week, decision);
+    for (const index of result.changedSessionIndexes) {
+      updateSessionCompletion(plan.id, pendingWeekValidation.weekNumber, index, {
+        status: "skipped",
+      });
+    }
+
+    setPendingWeekValidation(null);
+    reloadPlan();
+
+    if (decision === "mark_skipped") {
+      runAdaptationIfReady(week.weekNumber, true);
+      return;
+    }
+
+    toast.info(t("completion.keptForLater", { count: result.updatedSessions.filter((session) => !session.status || session.status === "planned").length }));
+  }, [plan, pendingWeekValidation, reloadPlan, runAdaptationIfReady, t]);
+
+  // Validate an entire week: if unresolved sessions remain, ask what to do instead of skipping silently
   const handleValidateWeek = useCallback((weekNumber: number) => {
     if (!plan) return;
     const week = plan.weeks.find(w => w.weekNumber === weekNumber);
     if (!week) return;
 
-    // Mark all unresolved sessions as skipped
-    week.sessions.forEach((session, idx) => {
-      if (!session.status || session.status === "planned") {
-        updateSessionCompletion(plan.id, weekNumber, idx, {
-          status: "skipped",
-        });
-      }
-    });
+    const summary = getWeekResolutionSummary(week);
+    if (summary.unresolved > 0) {
+      setPendingWeekValidation({ weekNumber, unresolved: summary.unresolved });
+      return;
+    }
 
-    reloadPlan();
-
-    // Run adaptation (all sessions are now resolved)
     runAdaptationIfReady(weekNumber, true);
   }, [plan, reloadPlan, runAdaptationIfReady]);
 
@@ -1151,6 +1174,33 @@ export function PlanViewPage() {
               <Button variant="destructive" onClick={handleDelete}>
                 <Trash2 className="size-4" />
                 {t("view.delete")}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog
+          open={pendingWeekValidation !== null}
+          onOpenChange={(open) => {
+            if (!open) setPendingWeekValidation(null);
+          }}
+        >
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t("completion.confirmTitle")}</DialogTitle>
+              <DialogDescription>
+                {t("completion.confirmDescription", {
+                  count: pendingWeekValidation?.unresolved ?? 0,
+                  week: pendingWeekValidation?.weekNumber ?? 0,
+                })}
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => handleWeekValidationDecision("keep_unresolved") }>
+                {t("completion.keepForLater")}
+              </Button>
+              <Button onClick={() => handleWeekValidationDecision("mark_skipped") }>
+                {t("completion.markRemainingSkipped")}
               </Button>
             </DialogFooter>
           </DialogContent>

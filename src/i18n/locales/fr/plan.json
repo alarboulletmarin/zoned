@@ -224,7 +224,12 @@
     "weekValidated": "Semaine {{week}} validée !",
     "markDone": "Marquer comme fait",
     "toggleDone": "Fait / pas fait",
-    "completedCount": "{{done}}/{{total}} terminées"
+    "completedCount": "{{done}}/{{total}} terminées",
+    "confirmTitle": "Finaliser cette semaine ?",
+    "confirmDescription": "La semaine {{week}} contient encore {{count}} séance(s) non renseignée(s). Choisissez si vous voulez les marquer explicitement comme passées ou y revenir plus tard.",
+    "markRemainingSkipped": "Marquer les restantes comme passées",
+    "keepForLater": "Laisser non renseignées",
+    "keptForLater": "{{count}} séance(s) restent non renseignée(s) pour plus tard"
   },
   "rpe": {
     "title": "RPE · Effort ressenti",

@@ -224,7 +224,12 @@
     "weekValidated": "Week {{week}} validated!",
     "markDone": "Mark as done",
     "toggleDone": "Toggle done",
-    "completedCount": "{{done}}/{{total}} completed"
+    "completedCount": "{{done}}/{{total}} completed",
+    "confirmTitle": "Finalize this week?",
+    "confirmDescription": "Week {{week}} still has {{count}} unresolved session(s). Choose whether to mark them explicitly as skipped or come back later.",
+    "markRemainingSkipped": "Mark remaining as skipped",
+    "keepForLater": "Leave unresolved",
+    "keptForLater": "{{count}} session(s) remain unresolved for later"
   },
   "rpe": {
     "title": "RPE · Rate of Perceived Effort",
