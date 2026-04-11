@@ -33,6 +33,7 @@ import type {
   NutritionBlock,
   FuelingResult,
 } from "@/data/guides/nutrition";
+import { pickLang } from "@/lib/i18n-utils";
 
 // ---------------------------------------------------------------------------
 // Icon mapping: section icon names -> components
@@ -66,12 +67,12 @@ const PRESETS = [
 // ---------------------------------------------------------------------------
 // Content block renderer
 // ---------------------------------------------------------------------------
-function renderBlock(block: NutritionBlock, isEn: boolean, index: number) {
+function renderBlock(block: NutritionBlock, index: number) {
   switch (block.type) {
     case "paragraph":
       return (
         <p key={index} className="text-muted-foreground leading-relaxed">
-          <GlossaryLinkedText text={(isEn ? block.textEn : block.text) ?? ""} />
+          <GlossaryLinkedText text={pickLang(block, "text")} />
         </p>
       );
 
@@ -81,7 +82,7 @@ function renderBlock(block: NutritionBlock, isEn: boolean, index: number) {
           {block.items?.map((item, i) => (
             <li key={i} className="flex gap-2 text-sm text-muted-foreground">
               <span className="text-primary mt-1 shrink-0">&#8226;</span>
-              <span>{isEn ? item.textEn : item.text}</span>
+              <span>{pickLang(item, "text")}</span>
             </li>
           ))}
         </ul>
@@ -95,7 +96,7 @@ function renderBlock(block: NutritionBlock, isEn: boolean, index: number) {
         >
           <Lightbulb className="size-5 shrink-0 text-green-600 dark:text-green-400 mt-0.5" />
           <p className="text-sm text-green-800 dark:text-green-200">
-            {isEn ? block.textEn : block.text}
+            {pickLang(block, "text")}
           </p>
         </div>
       );
@@ -108,7 +109,7 @@ function renderBlock(block: NutritionBlock, isEn: boolean, index: number) {
         >
           <AlertTriangle className="size-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
           <p className="text-sm text-amber-800 dark:text-amber-200">
-            {isEn ? block.textEn : block.text}
+            {pickLang(block, "text")}
           </p>
         </div>
       );
@@ -129,10 +130,10 @@ function renderBlock(block: NutritionBlock, isEn: boolean, index: number) {
                   )}
                 >
                   <td className="px-3 py-2.5 font-medium text-foreground whitespace-nowrap">
-                    {isEn ? row.labelEn : row.label}
+                    {pickLang(row, "label")}
                   </td>
                   <td className="px-3 py-2.5 text-muted-foreground">
-                    {isEn ? row.valueEn : row.value}
+                    {pickLang(row, "value")}
                   </td>
                 </tr>
               ))}
@@ -150,8 +151,7 @@ function renderBlock(block: NutritionBlock, isEn: boolean, index: number) {
 // Fueling Calculator Component
 // ---------------------------------------------------------------------------
 function FuelingCalculator() {
-  const { t, i18n } = useTranslation("guides");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("guides");
 
   const [distanceKm, setDistanceKm] = useState("");
   const [durationMin, setDurationMin] = useState("");
@@ -363,7 +363,7 @@ function FuelingCalculator() {
                           {formatTimeMin(cp.timeMin, t("nutrition.timeStart"))}
                         </Badge>
                         <p className="text-sm text-muted-foreground">
-                          {isEn ? cp.actionEn : cp.action}
+                          {pickLang(cp, "action")}
                         </p>
                       </div>
                     </div>
@@ -385,7 +385,7 @@ function FuelingCalculator() {
                       className="flex gap-2 text-sm text-muted-foreground"
                     >
                       <Lightbulb className="size-4 shrink-0 text-green-500 mt-0.5" />
-                      <span>{isEn ? tip.textEn : tip.text}</span>
+                      <span>{pickLang(tip, "text")}</span>
                     </li>
                   ))}
                 </ul>
@@ -443,8 +443,7 @@ function formatTimeMin(min: number, startLabel: string): string {
 // Main page component
 // ---------------------------------------------------------------------------
 export function NutritionGuidePage() {
-  const { t, i18n } = useTranslation("guides");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("guides");
 
   return (
     <>
@@ -538,7 +537,7 @@ export function NutritionGuidePage() {
                 <TabsTrigger key={section.id} value={section.id}>
                   <Icon className="size-4" />
                   <span className="hidden sm:inline">
-                    {isEn ? section.titleEn : section.title}
+                    {pickLang(section, "title")}
                   </span>
                 </TabsTrigger>
               );
@@ -550,12 +549,12 @@ export function NutritionGuidePage() {
               <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
                 <CardHeader>
                   <CardTitle>
-                    {isEn ? section.titleEn : section.title}
+                    {pickLang(section, "title")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-5">
                   {section.content.map((block, i) =>
-                    renderBlock(block, isEn, i)
+                    renderBlock(block, i)
                   )}
                 </CardContent>
               </Card>

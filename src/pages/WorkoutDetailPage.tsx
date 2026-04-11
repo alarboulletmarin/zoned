@@ -58,6 +58,7 @@ import {
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { IntensityBadge, INTENSITY_COLORS } from "@/components/domain/IntensityBadge";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
+import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
 import { MuscleGroupBadges } from "@/components/domain/MuscleGroupBadge";
 import { StrengthExerciseList } from "@/components/domain/StrengthExerciseList";
 import { loadUserZonePrefs, calculateAllZones } from "@/lib/zones";
@@ -81,8 +82,8 @@ export function WorkoutDetailPage() {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation(["session", "library", "common"]);
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation(["session", "library", "common"]);
+  const pick = usePickLang();
 
   const locationState = location.state as {
     from?: string;
@@ -184,7 +185,6 @@ export function WorkoutDetailPage() {
       <StrengthWorkoutDetail
         workout={workout as unknown as StrengthWorkoutTemplate}
         locationState={locationState}
-        isEn={isEn}
       />
     );
   }
@@ -198,14 +198,11 @@ export function WorkoutDetailPage() {
   const hasPlanContext = locationState?.from === "plan" && planEstimatedDuration != null;
 
   // Base session data from workout template
-  const baseSessionData = transformSessionBlocks(
-    {
-      warmup: workout.warmupTemplate,
-      mainSet: workout.mainSetTemplate,
-      cooldown: workout.cooldownTemplate,
-    },
-    isEn
-  );
+  const baseSessionData = transformSessionBlocks({
+    warmup: workout.warmupTemplate,
+    mainSet: workout.mainSetTemplate,
+    cooldown: workout.cooldownTemplate,
+  });
   const baseDuration = Math.round(baseSessionData.totalDurationMin);
 
   // Always use plan duration when coming from a plan — it's the authoritative value
@@ -218,7 +215,7 @@ export function WorkoutDetailPage() {
   const CategoryIcon = CATEGORY_ICONS[workout.category];
 
   // Breadcrumb trail
-  const workoutName = isEn ? workout.nameEn : workout.name;
+  const workoutName = pick(workout, "name");
   const categoryLabel = t(`library:categories.${workout.category}`);
   type BreadcrumbItem = { label: string; to?: string; state?: Record<string, unknown> };
   const breadcrumbs: BreadcrumbItem[] = [{ label: t("common:nav.home"), to: "/" }];
@@ -263,8 +260,8 @@ export function WorkoutDetailPage() {
     envRequirements.push({ icon: Route, text: t("environment.prefersFlat") });
   }
 
-  const seoTitle = isEn ? workout.nameEn : workout.name;
-  const seoDescription = (isEn ? workout.descriptionEn : workout.description).slice(0, 155);
+  const seoTitle = pick(workout, "name");
+  const seoDescription = pick(workout, "description").slice(0, 155);
 
   // Derive the environment label for the metric card
   const envLabel = envRequirements.length > 0
@@ -395,10 +392,10 @@ export function WorkoutDetailPage() {
                 <FavoriteButton workoutId={workout.id} />
               </div>
               <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold leading-tight mb-4">
-                {isEn ? workout.nameEn : workout.name}
+                {pick(workout, "name")}
               </h1>
               <p className="text-muted-foreground max-w-2xl leading-relaxed text-lg">
-                <GlossaryLinkedText text={isEn ? workout.descriptionEn : workout.description} />
+                <GlossaryLinkedText text={pick(workout, "description")} />
               </p>
             </div>
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-8">
@@ -581,18 +578,19 @@ interface StrengthWorkoutDetailProps {
     collectionSlug?: string;
     collectionName?: string;
   } | null;
-  isEn: boolean;
 }
 
-function StrengthWorkoutDetail({ workout, locationState, isEn }: StrengthWorkoutDetailProps) {
+function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetailProps) {
   const navigate = useNavigate();
   const { t: tSession } = useTranslation("session");
   const { t: tStrength } = useTranslation("strength");
   const { t: tCommon } = useTranslation("common");
   const { t: tLib } = useTranslation("library");
+  const isEn = useIsEnglish();
+  const pick = usePickLang();
 
-  const workoutName = isEn ? workout.nameEn : workout.name;
-  const description = isEn ? workout.descriptionEn : workout.description;
+  const workoutName = pick(workout, "name");
+  const description = pick(workout, "description");
   const intensityColor = INTENSITY_COLORS[workout.intensity];
 
   // Estimate total duration from typical range

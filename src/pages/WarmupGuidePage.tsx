@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { warmupSections, warmupRoutines } from "@/data/guides/warmup";
 import type { ContentBlock, Exercise, WarmupRoutine } from "@/data/guides/warmup";
+import { pickLang } from "@/lib/i18n-utils";
 
 const SECTION_ICONS: Record<string, React.ComponentType<IconProps>> = {
   Zap,
@@ -48,14 +49,12 @@ function formatDuration(seconds: number): string {
 function ExerciseItem({
   exercise,
   index,
-  isEn,
 }: {
   exercise: Exercise;
   index: number;
-  isEn: boolean;
 }) {
-  const name = isEn ? exercise.nameEn : exercise.name;
-  const description = isEn ? exercise.descriptionEn : exercise.description;
+  const name = pickLang(exercise, "name");
+  const description = pickLang(exercise, "description");
 
   return (
     <div className="flex gap-4 items-start">
@@ -88,15 +87,14 @@ function ExerciseItem({
 }
 
 export function WarmupGuidePage() {
-  const { t, i18n } = useTranslation("guides");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("guides");
 
   const [selectedRoutine, setSelectedRoutine] = useState<string | null>(null);
 
   const activeRoutine = warmupRoutines.find((r) => r.id === selectedRoutine) ?? null;
 
   function renderBlock(block: ContentBlock, blockIdx: number) {
-    const text = isEn ? (block.textEn ?? block.text) : block.text;
+    const text = pickLang(block, "text");
 
     switch (block.type) {
       case "paragraph":
@@ -114,7 +112,7 @@ export function WarmupGuidePage() {
               {block.items?.map((item, i) => (
                 <li key={i} className="flex gap-2 text-sm text-muted-foreground">
                   <span className="text-primary mt-1 shrink-0">&#8226;</span>
-                  <span>{isEn ? item.textEn : item.text}</span>
+                  <span>{pickLang(item, "text")}</span>
                 </li>
               ))}
             </ul>
@@ -127,7 +125,7 @@ export function WarmupGuidePage() {
             {text && <h4 className="font-medium text-sm">{text}</h4>}
             <div className="space-y-4 ml-1">
               {block.exercises?.map((ex, i) => (
-                <ExerciseItem key={i} exercise={ex} index={i} isEn={isEn} />
+                <ExerciseItem key={i} exercise={ex} index={i} />
               ))}
             </div>
           </div>
@@ -161,7 +159,7 @@ export function WarmupGuidePage() {
   }
 
   function renderRoutineCard(routine: WarmupRoutine) {
-    const name = isEn ? routine.nameEn : routine.name;
+    const name = pickLang(routine, "name");
     const isActive = selectedRoutine === routine.id;
     const Icon = ROUTINE_ICONS[routine.targetSessionType] ?? Activity;
 
@@ -278,7 +276,7 @@ export function WarmupGuidePage() {
               <CardContent className="pt-6 space-y-1">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold">
-                    {isEn ? activeRoutine.nameEn : activeRoutine.name}
+                    {pickLang(activeRoutine, "name")}
                   </h3>
                   <Badge>
                     {activeRoutine.totalDurationMin} min
@@ -286,7 +284,7 @@ export function WarmupGuidePage() {
                 </div>
                 <div className="space-y-4">
                   {activeRoutine.exercises.map((ex, i) => (
-                    <ExerciseItem key={i} exercise={ex} index={i} isEn={isEn} />
+                    <ExerciseItem key={i} exercise={ex} index={i} />
                   ))}
                 </div>
               </CardContent>
@@ -303,7 +301,7 @@ export function WarmupGuidePage() {
                 <TabsTrigger key={section.id} value={section.id} className="gap-1.5">
                   {Icon && <Icon className="size-3.5" />}
                   <span className="hidden sm:inline">
-                    {isEn ? section.titleEn : section.title}
+                    {pickLang(section, "title")}
                   </span>
                 </TabsTrigger>
               );
@@ -314,7 +312,7 @@ export function WarmupGuidePage() {
             <TabsContent key={section.id} value={section.id}>
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold">
-                  {isEn ? section.titleEn : section.title}
+                  {pickLang(section, "title")}
                 </h2>
                 {section.content.map((block, i) => renderBlock(block, i))}
               </div>

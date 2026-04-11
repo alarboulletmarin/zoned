@@ -7,6 +7,7 @@ import { TARGET_SYSTEM_SCIENCE } from "@/data/science";
 import type { TargetSystemScience, ScientificReference } from "@/data/science";
 import { ZONE_META } from "@/types";
 import type { WorkoutTemplate, ZoneNumber } from "@/types";
+import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
 
 interface ScienceSectionProps {
   workout: WorkoutTemplate;
@@ -37,8 +38,9 @@ function getWorkoutZones(workout: WorkoutTemplate): ZoneNumber[] {
 }
 
 export function ScienceSection({ workout }: ScienceSectionProps) {
-  const { t, i18n } = useTranslation("session");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("session");
+  const isEn = useIsEnglish();
+  const pick = usePickLang();
 
   const science: TargetSystemScience | undefined =
     TARGET_SYSTEM_SCIENCE[workout.targetSystem];
@@ -72,7 +74,7 @@ export function ScienceSection({ workout }: ScienceSectionProps) {
             </h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
               <GlossaryLinkedText
-                text={isEn ? science.rationaleEn : science.rationale}
+                text={pick(science, "rationale")}
               />
             </p>
           </div>
@@ -89,10 +91,10 @@ export function ScienceSection({ workout }: ScienceSectionProps) {
                   <ZoneBadge zone={zr.zone} size="sm" />
                   <div>
                     <span className="text-xs font-medium">
-                      {ZONE_META[zr.zone][isEn ? "labelEn" : "label"]}
+                      {pick(ZONE_META[zr.zone], "label")}
                     </span>
                     <p className="text-xs text-muted-foreground">
-                      {isEn ? zr.whyEn : zr.why}
+                      {pick(zr, "why")}
                     </p>
                   </div>
                 </div>

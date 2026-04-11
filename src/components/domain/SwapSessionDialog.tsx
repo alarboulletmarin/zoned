@@ -14,6 +14,7 @@ import { Loader2 } from "@/components/icons";
 import { loadAllWorkouts } from "@/data/workouts";
 import type { WorkoutTemplate } from "@/types";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
+import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
 
 interface SwapSessionDialogProps {
   open: boolean;
@@ -21,12 +22,12 @@ interface SwapSessionDialogProps {
   currentWorkoutId: string;
   sessionType: string;
   onSelect: (workout: WorkoutTemplate) => void;
-  isEn: boolean;
 }
 
 export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessionType, onSelect }: SwapSessionDialogProps) {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const isEn = useIsEnglish();
+  const pick = usePickLang();
   const [allWorkouts, setAllWorkouts] = useState<WorkoutTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -47,11 +48,12 @@ export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessio
       .filter(w => filterType === "all" || w.sessionType === filterType)
       .filter(w => {
         if (!search) return true;
-        const name = isEn ? w.nameEn : w.name;
+        const name = pick(w, "name");
         return name.toLowerCase().includes(search.toLowerCase());
       })
       .slice(0, 30);
-  }, [allWorkouts, currentWorkoutId, filterType, search, isEn]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allWorkouts, currentWorkoutId, filterType, search, pick]);
 
   const availableTypes = useMemo(() => {
     const types = new Set(allWorkouts.map(w => w.sessionType));
@@ -139,7 +141,7 @@ export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessio
                   <CardContent className="p-3 flex items-center justify-between gap-2">
                     <div className="min-w-0">
                       <p className="text-sm font-medium truncate">
-                        {isEn ? workout.nameEn : workout.name}
+                        {pick(workout, "name")}
                       </p>
                       <p className="text-xs text-muted-foreground truncate">
                         {workout.typicalDuration.min}-{workout.typicalDuration.max} min

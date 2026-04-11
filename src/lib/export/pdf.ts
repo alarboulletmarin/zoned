@@ -9,6 +9,7 @@ import type { WorkoutTemplate, WorkoutBlock } from "@/types";
 import { CATEGORY_META, DIFFICULTY_META } from "@/types";
 import { getWorkoutDuration } from "@/components/visualization";
 import i18n from "@/i18n";
+import { pickLang } from "@/lib/i18n-utils";
 
 /**
  * Zone colors for PDF (RGB values)
@@ -25,13 +26,13 @@ const ZONE_COLORS: Record<string, string> = {
 /**
  * Format blocks into table rows for PDF
  */
-function formatBlocksTable(blocks: WorkoutBlock[], isEn: boolean): TableCell[][] {
+function formatBlocksTable(blocks: WorkoutBlock[]): TableCell[][] {
   if (blocks.length === 0) {
     return [[{ text: i18n.t("common:export.workoutPdf.none"), italics: true, color: "#666" }]];
   }
 
   return blocks.map((block) => {
-    const desc = isEn && block.descriptionEn ? block.descriptionEn : block.description;
+    const desc = pickLang(block, "description");
     const duration = block.durationMin ? `${block.durationMin} min` : "";
     const zone = block.zone || "";
     const reps = block.repetitions && block.repetitions > 1 ? `x${block.repetitions}` : "";
@@ -64,8 +65,8 @@ function formatBlocksTable(blocks: WorkoutBlock[], isEn: boolean): TableCell[][]
  */
 export async function exportToPDF(
   workout: WorkoutTemplate,
-  isEn: boolean
 ): Promise<void> {
+  const isEn = i18n.language?.startsWith("en") ?? false;
   try {
     const pdfMakeModule = await import("pdfmake/build/pdfmake");
     const pdfFontsModule = await import("pdfmake/build/vfs_fonts");
@@ -76,15 +77,11 @@ export async function exportToPDF(
       i18n.t(`common:export.workoutPdf.${key}`, opts);
     const locale = i18n.language?.startsWith("en") ? "en-US" : "fr-FR";
 
-    const title = isEn ? workout.nameEn : workout.name;
-    const description = isEn ? workout.descriptionEn : workout.description;
+    const title = pickLang(workout, "name");
+    const description = pickLang(workout, "description");
     const duration = getWorkoutDuration(workout);
-    const category = isEn
-      ? CATEGORY_META[workout.category].labelEn
-      : CATEGORY_META[workout.category].label;
-    const difficulty = isEn
-      ? DIFFICULTY_META[workout.difficulty].labelEn
-      : DIFFICULTY_META[workout.difficulty].label;
+    const category = pickLang(CATEGORY_META[workout.category], "label");
+    const difficulty = pickLang(DIFFICULTY_META[workout.difficulty], "label");
     const tips = isEn ? workout.coachingTipsEn : workout.coachingTips;
     const mistakes = isEn ? workout.commonMistakesEn : workout.commonMistakes;
 
@@ -117,7 +114,7 @@ export async function exportToPDF(
         table: {
           headerRows: 1,
           widths: ["*", 50, 40, 35, 50],
-          body: [tableHeader, ...formatBlocksTable(workout.warmupTemplate, isEn)],
+          body: [tableHeader, ...formatBlocksTable(workout.warmupTemplate)],
         },
         layout: "lightHorizontalLines",
         margin: [0, 0, 0, 15],
@@ -129,7 +126,7 @@ export async function exportToPDF(
         table: {
           headerRows: 1,
           widths: ["*", 50, 40, 35, 50],
-          body: [tableHeader, ...formatBlocksTable(workout.mainSetTemplate, isEn)],
+          body: [tableHeader, ...formatBlocksTable(workout.mainSetTemplate)],
         },
         layout: "lightHorizontalLines",
         margin: [0, 0, 0, 15],
@@ -141,7 +138,7 @@ export async function exportToPDF(
         table: {
           headerRows: 1,
           widths: ["*", 50, 40, 35, 50],
-          body: [tableHeader, ...formatBlocksTable(workout.cooldownTemplate, isEn)],
+          body: [tableHeader, ...formatBlocksTable(workout.cooldownTemplate)],
         },
         layout: "lightHorizontalLines",
         margin: [0, 0, 0, 20],

@@ -14,6 +14,7 @@ import type {
   BlockType,
 } from "./types";
 import { ZONES } from "./types";
+import { pickLang } from "@/lib/i18n-utils";
 
 /**
  * Parse zone string to zone number
@@ -347,7 +348,6 @@ function blockToSegments(
  */
 export function transformSessionBlocks(
   blocks: SessionBlocks,
-  isEn: boolean = false,
 ): SessionVisualizationData {
   const allSegments: TimelineSegment[] = [];
   let segmentIndex = 0;
@@ -395,7 +395,7 @@ export function transformSessionBlocks(
       zone,
       durationMin: duration,
       percent: totalDurationMin > 0 ? (duration / totalDurationMin) * 100 : 0,
-      label: isEn ? zoneInfo.nameEn : zoneInfo.name,
+      label: pickLang(zoneInfo, "name"),
     });
   }
   // Sort by zone number
@@ -438,13 +438,10 @@ export function getWorkoutDuration(workout: {
   mainSetTemplate: WorkoutBlock[];
   cooldownTemplate?: WorkoutBlock[];
 }): number {
-  const { totalDurationMin } = transformSessionBlocks(
-    {
-      warmup: workout.warmupTemplate ?? [],
-      mainSet: workout.mainSetTemplate,
-      cooldown: workout.cooldownTemplate ?? [],
-    },
-    false // isEn doesn't matter for duration calculation
-  );
+  const { totalDurationMin } = transformSessionBlocks({
+    warmup: workout.warmupTemplate ?? [],
+    mainSet: workout.mainSetTemplate,
+    cooldown: workout.cooldownTemplate ?? [],
+  });
   return Math.round(totalDurationMin);
 }

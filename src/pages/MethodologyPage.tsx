@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
+import { useIsEnglish } from "@/lib/i18n-utils";
 
 // ---------------------------------------------------------------------------
 // Zone data
@@ -291,8 +292,8 @@ const zoneBgClasses: Record<number, string> = {
 // ---------------------------------------------------------------------------
 
 export function MethodologyPage() {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const isEn = useIsEnglish();
 
   return (
     <>

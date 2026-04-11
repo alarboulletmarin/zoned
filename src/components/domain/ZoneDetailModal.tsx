@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import type { ZoneNumber, ZoneMeta } from "@/types";
 import { useWorkouts } from "@/hooks";
 import { getDominantZone } from "@/types";
+import { usePickLang } from "@/lib/i18n-utils";
 
 interface ZoneDetailModalProps {
   zone: ZoneNumber | null;
@@ -26,16 +27,16 @@ export function ZoneDetailModal({
   open,
   onOpenChange,
 }: ZoneDetailModalProps) {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const pick = usePickLang();
   const { workouts: allWorkouts } = useWorkouts();
 
   // Derive display values only when zoneMeta is available
-  const label = zoneMeta ? (isEn ? zoneMeta.labelEn : zoneMeta.label) : "";
-  const description = zoneMeta ? (isEn ? zoneMeta.descriptionEn : zoneMeta.description) : "";
-  const physiology = zoneMeta ? (isEn ? zoneMeta.physiologyEn : zoneMeta.physiology) : "";
-  const sensation = zoneMeta ? (isEn ? zoneMeta.sensationEn : zoneMeta.sensation) : "";
-  const benefit = zoneMeta ? (isEn ? zoneMeta.benefitEn : zoneMeta.benefit) : "";
+  const label = pick(zoneMeta, "label");
+  const description = pick(zoneMeta, "description");
+  const physiology = pick(zoneMeta, "physiology");
+  const sensation = pick(zoneMeta, "sensation");
+  const benefit = pick(zoneMeta, "benefit");
 
   // Find 3 example workouts for this zone
   const exampleWorkouts = zone
@@ -103,7 +104,7 @@ export function ZoneDetailModal({
                   onClick={() => onOpenChange(false)}
                   className="flex items-center justify-between p-2 rounded-md hover:bg-muted transition-colors group"
                 >
-                  <span className="text-sm">{isEn ? workout.nameEn : workout.name}</span>
+                  <span className="text-sm">{pick(workout, "name")}</span>
                   <ArrowRight className="size-4 text-muted-foreground group-hover:text-foreground transition-colors" />
                 </Link>
               ))}

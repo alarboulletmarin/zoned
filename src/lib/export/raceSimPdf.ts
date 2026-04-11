@@ -10,6 +10,7 @@ import type { RacePlan } from "@/lib/raceSimulator";
 import { getDistanceLabelEn } from "@/lib/raceSimulator";
 import { formatSplitTime, formatPaceDisplay } from "@/lib/splits";
 import i18n from "@/i18n";
+import { pickLang } from "@/lib/i18n-utils";
 
 /**
  * Export a race simulation plan as a PDF document.
@@ -76,7 +77,7 @@ export async function exportRaceSimToPDF(
             { text: t("eventCol"), style: "tableHeader" },
           ],
           ...plan.timeline.map((event) => {
-            const label = isEn ? event.labelEn : event.label;
+            const label = pickLang(event, "label");
             const isRace = event.type === "race";
             return [
               {
@@ -211,7 +212,7 @@ export async function exportRaceSimToPDF(
                 margin: [4, 2, 4, 2] as [number, number, number, number],
               },
               {
-                text: isEn ? cp.actionEn : cp.action,
+                text: pickLang(cp, "action"),
                 margin: [4, 2, 4, 2] as [number, number, number, number],
               },
             ] as TableCell[]),
@@ -226,7 +227,7 @@ export async function exportRaceSimToPDF(
   // Nutrition tips
   if (fuelingPlan.tips.length > 0) {
     content.push({
-      ul: fuelingPlan.tips.map((tip) => (isEn ? tip.textEn : tip.text)),
+      ul: fuelingPlan.tips.map((tip) => pickLang(tip, "text")),
       fontSize: 9,
       color: "#666",
       margin: [0, 0, 0, 20] as [number, number, number, number],
@@ -243,7 +244,7 @@ export async function exportRaceSimToPDF(
     {
       text: t("breakfastLine", {
         time: plan.breakfast.time,
-        description: isEn ? plan.breakfast.descriptionEn : plan.breakfast.description,
+        description: pickLang(plan.breakfast, "description"),
       }),
       margin: [0, 0, 0, 20] as [number, number, number, number],
     },
@@ -272,7 +273,7 @@ export async function exportRaceSimToPDF(
               margin: [4, 3, 4, 3] as [number, number, number, number],
             },
             {
-              text: isEn ? cue.textEn : cue.text,
+              text: pickLang(cue, "text"),
               margin: [4, 3, 4, 3] as [number, number, number, number],
             },
           ] as TableCell[]),
@@ -292,9 +293,7 @@ export async function exportRaceSimToPDF(
         style: "sectionHeader",
       },
       {
-        ul: plan.dayBeforeChecklist.map((item) =>
-          isEn ? item.textEn : item.text,
-        ),
+        ul: plan.dayBeforeChecklist.map((item) => pickLang(item, "text")),
         margin: [0, 0, 0, 15] as [number, number, number, number],
       },
     );
@@ -309,9 +308,7 @@ export async function exportRaceSimToPDF(
         style: "sectionHeader",
       },
       {
-        ul: plan.raceDayChecklist.map((item) =>
-          isEn ? item.textEn : item.text,
-        ),
+        ul: plan.raceDayChecklist.map((item) => pickLang(item, "text")),
         margin: [0, 0, 0, 15] as [number, number, number, number],
       },
     );

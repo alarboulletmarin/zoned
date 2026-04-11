@@ -12,6 +12,7 @@ import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import { DAY_LABELS } from "@/lib/planGenerator/constants";
 import i18n from "@/i18n";
+import { isEnglish, pickLang } from "@/lib/i18n-utils";
 
 /**
  * Get the Monday of the week that contains the given date.
@@ -47,7 +48,7 @@ export function exportPlanToICS(
   workoutTemplates: Record<string, WorkoutTemplate>,
 ): void {
   try {
-    const isEn = i18n.language?.startsWith("en") ?? false;
+    const isEn = isEnglish();
     const t = (key: string, opts?: Record<string, unknown>) => i18n.t(`common:export.planIcs.${key}`, opts);
     const planMonday = getMondayOfWeek(new Date(plan.config.startDate || plan.config.createdAt));
     const dayLabels = isEn ? DAY_LABELS.en : DAY_LABELS.fr;
@@ -63,7 +64,7 @@ export function exportPlanToICS(
           // Race day: all-day event
           const raceDistMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
           const raceName = plan.config.raceName
-            || (raceDistMeta ? (isEn ? raceDistMeta.labelEn : raceDistMeta.label) : t("race"));
+            || (raceDistMeta ? pickLang(raceDistMeta, "label") : t("race"));
 
           events.push({
             start: [
@@ -100,7 +101,7 @@ export function exportPlanToICS(
           if (session.isKeySession) {
             descriptionLines.push(t("keySession"));
           }
-          const notes = isEn ? session.notesEn : session.notes;
+          const notes = pickLang(session, "notes");
           if (notes) {
             descriptionLines.push("");
             descriptionLines.push(notes);
@@ -113,7 +114,7 @@ export function exportPlanToICS(
 
           if (template && isStrength) {
             const str = template as StrengthWorkoutTemplate;
-            const desc = isEn ? (str.descriptionEn || str.description) : str.description;
+            const desc = pickLang(str, "description");
             descriptionLines.push("");
             descriptionLines.push(desc);
 
@@ -128,7 +129,7 @@ export function exportPlanToICS(
             }
           } else if (template && !isStrength) {
             const running = template as WorkoutTemplate;
-            const desc = isEn ? (running.descriptionEn || running.description) : running.description;
+            const desc = pickLang(running, "description");
             descriptionLines.push("");
             descriptionLines.push(desc);
 
@@ -137,7 +138,7 @@ export function exportPlanToICS(
               descriptionLines.push("");
               descriptionLines.push(t("warmupSep"));
               for (const block of running.warmupTemplate) {
-                const blockDesc = isEn ? (block.descriptionEn || block.description) : block.description;
+                const blockDesc = pickLang(block, "description");
                 const dur = block.durationMin ? ` (${block.durationMin}min)` : "";
                 const zone = block.zone ? ` [${block.zone}]` : "";
                 descriptionLines.push(`• ${blockDesc}${dur}${zone}`);
@@ -149,7 +150,7 @@ export function exportPlanToICS(
               descriptionLines.push("");
               descriptionLines.push(t("mainSetSep"));
               for (const block of running.mainSetTemplate) {
-                const blockDesc = isEn ? (block.descriptionEn || block.description) : block.description;
+                const blockDesc = pickLang(block, "description");
                 const dur = block.durationMin ? ` (${block.durationMin}min)` : "";
                 const zone = block.zone ? ` [${block.zone}]` : "";
                 const reps = block.repetitions && block.repetitions > 1 ? `${block.repetitions}x ` : "";
@@ -164,7 +165,7 @@ export function exportPlanToICS(
               descriptionLines.push("");
               descriptionLines.push(t("cooldownSep"));
               for (const block of running.cooldownTemplate) {
-                const blockDesc = isEn ? (block.descriptionEn || block.description) : block.description;
+                const blockDesc = pickLang(block, "description");
                 const dur = block.durationMin ? ` (${block.durationMin}min)` : "";
                 const zone = block.zone ? ` [${block.zone}]` : "";
                 descriptionLines.push(`• ${blockDesc}${dur}${zone}`);

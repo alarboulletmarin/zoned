@@ -8,6 +8,7 @@ import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { ReadingProgress } from "@/components/domain/ReadingProgress";
 import { TableOfContents } from "@/components/domain/TableOfContents";
 import { cn } from "@/lib/utils";
+import { usePickLang } from "@/lib/i18n-utils";
 import { RelatedContent } from "@/components/domain/RelatedContent";
 
 /**
@@ -335,8 +336,8 @@ function renderMarkdown(content: string): React.ReactNode {
 
 export function ArticlePage() {
   const { slug } = useParams<{ slug: string }>();
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const pick = usePickLang();
 
   const { article, isLoading } = useArticle(slug);
   const { prev, next } = useAdjacentArticles(slug);
@@ -356,9 +357,9 @@ export function ArticlePage() {
     return <Navigate to="/learn" replace />;
   }
 
-  const content = isEn ? article.contentEn : article.content;
-  const title = isEn ? article.titleEn : article.title;
-  const description = isEn ? article.descriptionEn : article.description;
+  const content = pick(article, "content");
+  const title = pick(article, "title");
+  const description = pick(article, "description");
   const truncatedDescription = description.length > 155 ? description.slice(0, 152) + "..." : description;
 
   return (
@@ -548,7 +549,7 @@ export function ArticlePage() {
               {t("learn.prevArticle")}
             </span>
             <span className="font-medium group-hover:text-primary transition-colors">
-              {isEn ? prev.titleEn : prev.title}
+              {pick(prev, "title")}
             </span>
           </Link>
         ) : (
@@ -568,7 +569,7 @@ export function ArticlePage() {
               <ChevronRight className="size-3" />
             </span>
             <span className="font-medium group-hover:text-primary transition-colors">
-              {isEn ? next.titleEn : next.title}
+              {pick(next, "title")}
             </span>
           </Link>
         ) : (

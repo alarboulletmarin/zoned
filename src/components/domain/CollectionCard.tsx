@@ -16,6 +16,7 @@ import type { IconProps } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { Collection } from "@/data/collections/types";
+import { usePickLang } from "@/lib/i18n-utils";
 
 const ZONE_MAP: Record<string, number> = {
   "debuter-le-running": 1,
@@ -55,12 +56,12 @@ interface CollectionCardProps {
 }
 
 export function CollectionCard({ collection, featured = false }: CollectionCardProps) {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const pick = usePickLang();
 
   const Icon = ICON_MAP[collection.icon] ?? Target;
-  const name = isEn ? collection.nameEn : collection.name;
-  const description = isEn ? collection.descriptionEn : collection.description;
+  const name = pick(collection, "name");
+  const description = pick(collection, "description");
   const workoutCount = collection.workoutIds.length;
 
   return (

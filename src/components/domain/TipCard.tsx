@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { Tip } from "@/data/tips";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
+import { usePickLang } from "@/lib/i18n-utils";
 
 export interface TipCardProps {
   tip: Tip;
@@ -18,10 +19,10 @@ export function TipCard({
   variant = "card",
   className,
 }: TipCardProps) {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language === "en";
+  const { t } = useTranslation("common");
+  const pick = usePickLang();
 
-  const text = isEn ? tip.textEn : tip.text;
+  const text = pick(tip, "text");
 
   // Determine link destination
   const hasLink = tip.relatedTermId || tip.articleId;

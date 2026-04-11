@@ -47,6 +47,7 @@ import {
 } from "@/lib/units";
 import { toast } from "sonner";
 import { exportRaceSimToPDF } from "@/lib/export/raceSimPdf";
+import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
 
 interface RaceOption {
   label: string;
@@ -115,9 +116,10 @@ function CollapsibleSection({
 }
 
 export function RaceSimulatorPage() {
-  const { t, i18n } = useTranslation("simulator");
+  const { t } = useTranslation("simulator");
   const { t: tCommon } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const isEn = useIsEnglish();
+  const pick = usePickLang();
   const { settings } = useSettings();
   const unit = settings.unitSystem;
 
@@ -301,7 +303,7 @@ export function RaceSimulatorPage() {
               >
                 {RACE_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
-                    {isEn ? opt.labelEn : opt.label}
+                    {pick(opt, "label")}
                   </option>
                 ))}
                 <option value="custom">{t("inputs.custom")}</option>
@@ -473,7 +475,7 @@ export function RaceSimulatorPage() {
                         TIMELINE_COLORS[event.type] ?? "text-foreground",
                       )}
                     >
-                      {isEn ? event.labelEn : event.label}
+                      {pick(event, "label")}
                     </span>
                   </div>
                 ))}
@@ -511,7 +513,7 @@ export function RaceSimulatorPage() {
                             "line-through text-muted-foreground",
                         )}
                       >
-                        {isEn ? item.textEn : item.text}
+                        {pick(item, "text")}
                       </span>
                     </li>
                   ))}
@@ -542,9 +544,7 @@ export function RaceSimulatorPage() {
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {isEn
-                    ? plan.breakfast.descriptionEn
-                    : plan.breakfast.description}
+                  {pick(plan.breakfast, "description")}
                 </p>
               </div>
             </CollapsibleSection>
@@ -571,11 +571,11 @@ export function RaceSimulatorPage() {
                     {plan.warmupExercises.map((ex, i) => (
                       <li key={i} className="text-sm">
                         <span className="font-medium">
-                          {isEn ? ex.nameEn : ex.name}
+                          {pick(ex, "name")}
                         </span>
                         <span className="text-muted-foreground">
                           {" "}
-                          &mdash; {isEn ? ex.descriptionEn : ex.description}
+                          &mdash; {pick(ex, "description")}
                         </span>
                       </li>
                     ))}
@@ -751,7 +751,7 @@ export function RaceSimulatorPage() {
                           className="text-sm text-muted-foreground flex items-start gap-2"
                         >
                           <Info className="size-3.5 mt-0.5 shrink-0" />
-                          {isEn ? tip.textEn : tip.text}
+                          {pick(tip, "text")}
                         </li>
                       ))}
                     </ul>
@@ -776,7 +776,7 @@ export function RaceSimulatorPage() {
                       {cue.fromKm}–{cue.toKm} {t("labels.km")}
                     </span>
                     <p className="text-sm">
-                      {isEn ? cue.textEn : cue.text}
+                      {pick(cue, "text")}
                     </p>
                   </div>
                 ))}
@@ -797,7 +797,7 @@ export function RaceSimulatorPage() {
                   .filter((cp) => cp.timeMin >= plan.targetTimeSeconds / 60)
                   .map((cp, i) => (
                     <p key={i} className="text-sm">
-                      {isEn ? cp.actionEn : cp.action}
+                      {pick(cp, "action")}
                     </p>
                   ))}
               </div>

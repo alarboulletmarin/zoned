@@ -33,6 +33,7 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import type { WorkoutTemplate, WorkoutCategory, AnyWorkoutTemplate } from "@/types";
 import { getDominantZone, DIFFICULTY_META, isStrengthWorkout } from "@/types";
 import { StrengthWorkoutCard, StrengthWorkoutCardCompact } from "./StrengthWorkoutCard";
+import { usePickLang } from "@/lib/i18n-utils";
 
 /** Category icons using Lucide */
 const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: string }>> = {
@@ -75,9 +76,8 @@ export function WorkoutCard({ workout, className, expanded }: WorkoutCardProps) 
 
 /** Internal running-only card with properly typed props */
 function RunningWorkoutCard({ workout, className, expanded }: { workout: WorkoutTemplate; className?: string; expanded?: boolean }) {
-  const { t, i18n } = useTranslation(["library", "common"]);
-  const isEn = i18n.language?.startsWith("en") ?? false;
-  // isEn kept for bilingual data fields (nameEn/name, descriptionEn/description)
+  const { t } = useTranslation(["library", "common"]);
+  const pick = usePickLang();
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);
   const CategoryIcon = CATEGORY_ICONS[workout.category];
@@ -87,21 +87,17 @@ function RunningWorkoutCard({ workout, className, expanded }: { workout: Workout
 
   // Compute segments for the peek preview (only when visible, but memoised for stability)
   const peekData = useMemo(() => {
-    const { segments } = transformSessionBlocks(
-      {
-        warmup: workout.warmupTemplate ?? [],
-        mainSet: workout.mainSetTemplate,
-        cooldown: workout.cooldownTemplate ?? [],
-      },
-      isEn,
-    );
+    const { segments } = transformSessionBlocks({
+      warmup: workout.warmupTemplate ?? [],
+      mainSet: workout.mainSetTemplate,
+      cooldown: workout.cooldownTemplate ?? [],
+    });
     // First main-set block description for the one-line summary
     const firstMain = workout.mainSetTemplate[0];
-    const summary = firstMain
-      ? (isEn ? (firstMain.descriptionEn ?? firstMain.description) : firstMain.description)
-      : null;
+    const summary = firstMain ? pick(firstMain, "description") : null;
     return { segments, summary };
-  }, [workout, isEn]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workout, pick]);
 
   return (
     <Link to={`/workout/${workout.id}`}>
@@ -118,7 +114,7 @@ function RunningWorkoutCard({ workout, className, expanded }: { workout: Workout
         <CardHeader className={cn("pb-1.5 sm:pb-2 px-3 sm:px-4", expanded && "pb-2 px-4")}>
           <div className="flex items-start justify-between gap-2">
             <CardTitle className={cn("text-sm sm:text-base line-clamp-2 sm:line-clamp-1 flex-1", expanded && "text-base line-clamp-none")}>
-              {isEn ? workout.nameEn : workout.name}
+              {pick(workout, "name")}
             </CardTitle>
             <div className="flex items-center gap-1">
               <FavoriteButton workoutId={workout.id} size="sm" />
@@ -126,7 +122,7 @@ function RunningWorkoutCard({ workout, className, expanded }: { workout: Workout
             </div>
           </div>
           <p className={cn("hidden sm:block text-muted-foreground text-sm line-clamp-2", expanded && "block")}>
-            {isEn ? workout.descriptionEn : workout.description}
+            {pick(workout, "description")}
           </p>
         </CardHeader>
 
@@ -227,8 +223,7 @@ export function WorkoutCardCompact({
 
 /** Internal running-only compact card */
 function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTemplate; className?: string }) {
-  const { i18n } = useTranslation(["library", "common"]);
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const pick = usePickLang();
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);
 
@@ -244,7 +239,7 @@ function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTem
     >
       <div className="flex items-center justify-between gap-2">
         <span className="font-medium text-sm line-clamp-1 flex-1">
-          {isEn ? workout.nameEn : workout.name}
+          {pick(workout, "name")}
         </span>
         <ZoneBadge zone={dominantZone} size="sm" />
       </div>

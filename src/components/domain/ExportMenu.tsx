@@ -30,8 +30,7 @@ interface ExportMenuProps {
 }
 
 export function ExportMenu({ workout }: ExportMenuProps) {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showFitGuide, setShowFitGuide] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
@@ -46,7 +45,7 @@ export function ExportMenu({ workout }: ExportMenuProps) {
     setShowDatePicker(false);
     setIsExporting(true);
     try {
-      await exportToICS(workout, dateTime, isEn);
+      await exportToICS(workout, dateTime);
       toast.success(t("export.success.calendar"));
     } catch (error) {
       toast.error(t("export.error.calendar"));
@@ -82,7 +81,7 @@ export function ExportMenu({ workout }: ExportMenuProps) {
   const handlePDFExport = async () => {
     setIsExporting(true);
     try {
-      await exportToPDF(workout, isEn);
+      await exportToPDF(workout);
       toast.success(t("export.success.pdf"));
     } catch (error) {
       toast.error(t("export.error.pdf"));

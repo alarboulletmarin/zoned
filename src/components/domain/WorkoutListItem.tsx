@@ -9,6 +9,7 @@ import type { WorkoutTemplate, AnyWorkoutTemplate } from "@/types";
 import { getDominantZone, isStrengthWorkout } from "@/types";
 import { getWorkoutDuration } from "@/components/visualization";
 import { StrengthWorkoutListItem } from "./StrengthWorkoutCard";
+import { usePickLang } from "@/lib/i18n-utils";
 
 interface WorkoutListItemProps {
   workout: AnyWorkoutTemplate;
@@ -26,8 +27,8 @@ export function WorkoutListItem({ workout, className }: WorkoutListItemProps) {
 
 /** Internal running-only list item */
 function RunningWorkoutListItem({ workout, className }: { workout: WorkoutTemplate; className?: string }) {
-  const { t, i18n } = useTranslation(["library", "common"]);
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation(["library", "common"]);
+  const pick = usePickLang();
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);
 
@@ -43,7 +44,7 @@ function RunningWorkoutListItem({ workout, className }: { workout: WorkoutTempla
       {/* Title and mobile duration */}
       <div className="flex-1 min-w-0">
         <span className="font-medium text-sm line-clamp-1">
-          {isEn ? workout.nameEn : workout.name}
+          {pick(workout, "name")}
         </span>
         {/* Mobile: show duration below title */}
         <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5 sm:hidden">

@@ -20,6 +20,7 @@ import {
   ChevronDown,
 } from "@/components/icons";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
+import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
 
 // ── Constants ────────────────────────────────────────────────────────
 
@@ -64,13 +65,14 @@ function formatMinutes(min: number): string {
 interface PlanStatsSectionProps {
   plan: TrainingPlan;
   currentWeek?: number;
-  isEn: boolean;
 }
 
 // ── Component ────────────────────────────────────────────────────────
 
-export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWeek, isEn }: PlanStatsSectionProps) {
+export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWeek }: PlanStatsSectionProps) {
   const { t } = useTranslation("plan");
+  const isEn = useIsEnglish();
+  const pick = usePickLang();
   const stats = useMemo(() => computePlanStats(plan), [plan]);
   const [analysis, setAnalysis] = useState<EnhancedPlanAnalysis | null>(null);
   const [analysisLoading, setAnalysisLoading] = useState(true);
@@ -278,7 +280,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
               <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full",
                 PHASE_META[currentWeekData.week.phase]?.color, "text-white"
               )}>
-                S{currentWeekData.week.weekNumber} · {isEn ? PHASE_META[currentWeekData.week.phase]?.labelEn : PHASE_META[currentWeekData.week.phase]?.label}
+                S{currentWeekData.week.weekNumber} · {pick(PHASE_META[currentWeekData.week.phase], "label")}
               </span>
             </div>
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
@@ -414,7 +416,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                   className="flex items-center gap-1.5 text-xs text-muted-foreground"
                 >
                   <div className={cn("size-2.5 rounded-full", meta.color)} />
-                  <span>{isEn ? meta.labelEn : meta.label}</span>
+                  <span>{pick(meta, "label")}</span>
                 </div>
               ))}
           </div>

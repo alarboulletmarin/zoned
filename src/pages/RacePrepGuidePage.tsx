@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { racePrepSections, recoveryTimelines } from "@/data/guides/race-prep";
 import type { ContentBlock, RecoveryTimeline } from "@/data/guides/race-prep";
+import { usePickLang } from "@/lib/i18n-utils";
 
 const SECTION_ICONS: Record<string, React.ComponentType<IconProps>> = {
   ClipboardCheck,
@@ -42,8 +43,8 @@ const PHASE_COLORS = [
 ];
 
 export function RacePrepGuidePage() {
-  const { t, i18n } = useTranslation("guides");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("guides");
+  const pick = usePickLang();
 
   const [checked, setChecked] = useState<Record<string, boolean>>(() => {
     try {
@@ -65,7 +66,7 @@ export function RacePrepGuidePage() {
   }, []);
 
   function renderBlock(block: ContentBlock, blockIdx: number) {
-    const text = isEn ? (block.textEn ?? block.text) : block.text;
+    const text = pick(block, "text");
 
     switch (block.type) {
       case "paragraph":
@@ -83,7 +84,7 @@ export function RacePrepGuidePage() {
               {block.items?.map((item, i) => (
                 <li key={i} className="flex gap-2 text-sm text-muted-foreground">
                   <span className="text-primary mt-1 shrink-0">&#8226;</span>
-                  <span>{isEn ? item.textEn : item.text}</span>
+                  <span>{pick(item, "text")}</span>
                 </li>
               ))}
             </ul>
@@ -125,7 +126,7 @@ export function RacePrepGuidePage() {
                           : "text-muted-foreground"
                       )}
                     >
-                      {isEn ? item.textEn : item.text}
+                      {pick(item, "text")}
                     </span>
                   </label>
                 );
@@ -144,10 +145,10 @@ export function RacePrepGuidePage() {
                   {block.rows?.map((row, i) => (
                     <tr key={i} className={cn(i % 2 === 0 ? "bg-muted/30" : "")}>
                       <td className="px-4 py-3 font-medium whitespace-nowrap">
-                        {isEn ? row.labelEn : row.label}
+                        {pick(row, "label")}
                       </td>
                       <td className="px-4 py-3 text-muted-foreground">
-                        {isEn ? row.valueEn : row.value}
+                        {pick(row, "value")}
                       </td>
                     </tr>
                   ))}
@@ -185,7 +186,7 @@ export function RacePrepGuidePage() {
   }
 
   function renderRecoveryTimeline(timeline: RecoveryTimeline) {
-    const distance = isEn ? timeline.distanceEn : timeline.distance;
+    const distance = pick(timeline, "distance");
     return (
       <Card key={timeline.distance} size="compact" className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
         <CardHeader>
@@ -210,7 +211,7 @@ export function RacePrepGuidePage() {
                   key={i}
                   className={cn(PHASE_COLORS[i % PHASE_COLORS.length], "transition-all")}
                   style={{ width: `${pct}%` }}
-                  title={`${phase.dayRange}: ${isEn ? phase.activityEn : phase.activity}`}
+                  title={`${phase.dayRange}: ${pick(phase, "activity")}`}
                 />
               );
             })}
@@ -223,7 +224,7 @@ export function RacePrepGuidePage() {
                 <div className="min-w-0">
                   <span className="text-xs font-medium">{phase.dayRange}</span>
                   <p className="text-xs text-muted-foreground">
-                    {isEn ? phase.activityEn : phase.activity}
+                    {pick(phase, "activity")}
                   </p>
                 </div>
               </div>
@@ -323,7 +324,7 @@ export function RacePrepGuidePage() {
                 <TabsTrigger key={section.id} value={section.id} className="gap-1.5">
                   {Icon && <Icon className="size-3.5" />}
                   <span className="hidden sm:inline">
-                    {isEn ? section.titleEn : section.title}
+                    {pick(section, "title")}
                   </span>
                 </TabsTrigger>
               );
@@ -334,7 +335,7 @@ export function RacePrepGuidePage() {
             <TabsContent key={section.id} value={section.id}>
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold">
-                  {isEn ? section.titleEn : section.title}
+                  {pick(section, "title")}
                 </h2>
                 {section.content.map((block, i) => renderBlock(block, i))}
               </div>

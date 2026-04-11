@@ -8,43 +8,41 @@ import { createEvent, type EventAttributes } from "ics";
 import type { WorkoutTemplate } from "@/types";
 import { getWorkoutDuration } from "@/components/visualization";
 import i18n from "@/i18n";
+import { isEnglish, pickLang } from "@/lib/i18n-utils";
 
 /**
  * Formats workout blocks into a readable description for calendar events
  */
-function formatWorkoutDescription(workout: WorkoutTemplate, isEn: boolean): string {
+function formatWorkoutDescription(workout: WorkoutTemplate): string {
   const lines: string[] = [];
   const t = (key: string) => i18n.t(`common:export.ics.${key}`);
 
   // Description
-  lines.push(isEn ? workout.descriptionEn : workout.description);
+  lines.push(pickLang(workout, "description"));
   lines.push("");
 
   // Structure
   lines.push(t("warmupSep"));
   for (const block of workout.warmupTemplate) {
-    const desc = isEn && block.descriptionEn ? block.descriptionEn : block.description;
-    lines.push(`- ${desc}`);
+    lines.push(`- ${pickLang(block, "description")}`);
   }
   lines.push("");
 
   lines.push(t("mainSetSep"));
   for (const block of workout.mainSetTemplate) {
-    const desc = isEn && block.descriptionEn ? block.descriptionEn : block.description;
     const zone = block.zone ? ` (${block.zone})` : "";
-    lines.push(`- ${desc}${zone}`);
+    lines.push(`- ${pickLang(block, "description")}${zone}`);
   }
   lines.push("");
 
   lines.push(t("cooldownSep"));
   for (const block of workout.cooldownTemplate) {
-    const desc = isEn && block.descriptionEn ? block.descriptionEn : block.description;
-    lines.push(`- ${desc}`);
+    lines.push(`- ${pickLang(block, "description")}`);
   }
   lines.push("");
 
-  // Tips
-  const tips = isEn ? workout.coachingTipsEn : workout.coachingTips;
+  // Tips (array, keep isEn)
+  const tips = isEnglish() ? workout.coachingTipsEn : workout.coachingTips;
   if (tips.length > 0) {
     lines.push(t("tipsSep"));
     for (const tip of tips) {
@@ -66,11 +64,10 @@ function formatWorkoutDescription(workout: WorkoutTemplate, isEn: boolean): stri
 export async function exportToICS(
   workout: WorkoutTemplate,
   startDateTime: Date,
-  isEn: boolean
 ): Promise<void> {
   const durationMinutes = getWorkoutDuration(workout);
-  const title = isEn ? workout.nameEn : workout.name;
-  const description = formatWorkoutDescription(workout, isEn);
+  const title = pickLang(workout, "name");
+  const description = formatWorkoutDescription(workout);
 
   const event: EventAttributes = {
     start: [

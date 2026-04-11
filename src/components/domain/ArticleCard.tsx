@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { ArticleMeta, ArticleCategory } from "@/data/articles";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
+import { usePickLang } from "@/lib/i18n-utils";
 
 const CATEGORY_ICONS: Record<ArticleCategory, React.ComponentType<{ className?: string }>> = {
   fundamentals: BookOpen,
@@ -31,8 +32,8 @@ interface ArticleCardProps {
 }
 
 export function ArticleCard({ article, className }: ArticleCardProps) {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const pick = usePickLang();
   const CategoryIcon = CATEGORY_ICONS[article.category];
 
   return (
@@ -60,13 +61,13 @@ export function ArticleCard({ article, className }: ArticleCardProps) {
             </div>
           </div>
           <CardTitle className="text-lg mt-2">
-            {isEn ? article.titleEn : article.title}
+            {pick(article, "title")}
           </CardTitle>
         </CardHeader>
 
         <CardContent>
           <p className="text-sm text-muted-foreground line-clamp-2">
-            <GlossaryLinkedText text={isEn ? article.descriptionEn : article.description} />
+            <GlossaryLinkedText text={pick(article, "description")} />
           </p>
         </CardContent>
       </Card>

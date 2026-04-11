@@ -3,12 +3,13 @@ import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
 import { competitors } from "@/data/competitors";
 import { ArrowRight } from "@/components/icons";
+import { useIsEnglish } from "@/lib/i18n-utils";
 
 const SITE_URL = "https://zoned.run";
 
 export function CompareHubPage() {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const isEn = useIsEnglish();
 
   const title = t("compare.hub.title");
   const description = t("compare.hub.description");

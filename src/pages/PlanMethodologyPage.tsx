@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { usePickLang } from "@/lib/i18n-utils";
 import { Link } from "react-router-dom";
 import {
   FlaskConical,
@@ -113,8 +114,8 @@ const SCIENTIFIC_REFERENCES: Reference[] = [
 // ---------------------------------------------------------------------------
 
 export function PlanMethodologyPage() {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const pick = usePickLang();
 
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -192,7 +193,7 @@ export function PlanMethodologyPage() {
                     <div className="flex-1 min-w-0 space-y-1">
                       <div className="flex items-center justify-between gap-2">
                         <CardTitle className="text-lg">
-                          {isEn ? principle.titleEn : principle.title}
+                          {pick(principle, "title")}
                         </CardTitle>
                         <ChevronDown
                           className={cn(
@@ -203,7 +204,7 @@ export function PlanMethodologyPage() {
                       </div>
                       <CardDescription className="text-sm">
                         <GlossaryLinkedText
-                          text={isEn ? principle.summaryEn : principle.summary}
+                          text={pick(principle, "summary")}
                         />
                       </CardDescription>
                     </div>
@@ -217,7 +218,7 @@ export function PlanMethodologyPage() {
                       <GlossaryLinkedText
                         as="p"
                         className="text-sm text-muted-foreground leading-relaxed"
-                        text={isEn ? principle.detailsEn : principle.details}
+                        text={pick(principle, "details")}
                       />
                     </div>
 
@@ -230,7 +231,7 @@ export function PlanMethodologyPage() {
                         >
                           <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary/60" />
                           <span className="text-muted-foreground">
-                            {isEn ? rule.textEn : rule.text}
+                            {pick(rule, "text")}
                           </span>
                         </li>
                       ))}

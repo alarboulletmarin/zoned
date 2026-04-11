@@ -36,6 +36,7 @@ import {
 import type { Difficulty, UserZonePreferences } from "@/types";
 import { DIFFICULTY_META } from "@/types";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
+import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
 
 // ── Constants ────────────────────────────────────────────────────────
 
@@ -197,8 +198,9 @@ interface FormState {
 // ── Component ────────────────────────────────────────────────────────
 
 export function PlanCreatePage() {
-  const { t, i18n } = useTranslation("plan");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("plan");
+  const isEn = useIsEnglish();
+  const pick = usePickLang();
   const navigate = useNavigate();
   const { createPlan, isGenerating, error, canCreate } = useCreatePlan();
 
@@ -522,7 +524,7 @@ export function PlanCreatePage() {
                   </div>
                   <div className="min-w-0">
                     <div className="font-medium text-sm md:text-base leading-tight">
-                      {isEn ? meta.labelEn : meta.label}
+                      {pick(meta, "label")}
                     </div>
                     <div className="text-xs text-muted-foreground">
                       {meta.distanceKm} km
@@ -733,9 +735,7 @@ export function PlanCreatePage() {
             <div className="rounded-lg border bg-primary/5 p-2 text-xs text-center mt-3 max-w-sm w-full">
               {t("level.vmaSuggestion", { vma: userPrefs.vma })}
               <span className="font-semibold">
-                {isEn
-                  ? DIFFICULTY_META[suggestedLevel].labelEn
-                  : DIFFICULTY_META[suggestedLevel].label}
+                {pick(DIFFICULTY_META[suggestedLevel], "label")}
               </span>
               {t("level.vmaSuggestionSuffix")}
             </div>
@@ -771,10 +771,10 @@ export function PlanCreatePage() {
                     </div>
                     <div className="min-w-0">
                       <div className="font-medium text-sm md:text-base leading-tight">
-                        {isEn ? meta.labelEn : meta.label}
+                        {pick(meta, "label")}
                       </div>
                       <div className="text-[11px] text-muted-foreground leading-tight mt-0.5">
-                        {isEn ? meta.descEn : meta.desc}
+                        {pick(meta, "desc")}
                       </div>
                       {isSuggested && (
                         <div className="text-xs text-primary">
@@ -1239,7 +1239,7 @@ export function PlanCreatePage() {
               label={t("summary.distance")}
               value={
                 distMeta
-                  ? `${isEn ? distMeta.labelEn : distMeta.label} (${distMeta.distanceKm} km)`
+                  ? `${pick(distMeta, "label")} (${distMeta.distanceKm} km)`
                   : "-"
               }
             />
@@ -1270,11 +1270,7 @@ export function PlanCreatePage() {
             <SummaryRow
               label={t("summary.level")}
               value={
-                levelMeta
-                  ? isEn
-                    ? levelMeta.labelEn
-                    : levelMeta.label
-                  : "-"
+                levelMeta ? pick(levelMeta, "label") : "-"
               }
             />
             {/* Days */}

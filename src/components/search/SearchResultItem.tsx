@@ -7,6 +7,7 @@ import { getDominantZone, CATEGORY_META, isStrengthWorkout } from "@/types";
 import { getWorkoutDuration } from "@/components/visualization";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { cn } from "@/lib/utils";
+import { usePickLang } from "@/lib/i18n-utils";
 
 interface SearchResultItemProps {
   workout: AnyWorkoutTemplate;
@@ -15,16 +16,15 @@ interface SearchResultItemProps {
 }
 
 export function SearchResultItem({ workout, isSelected, onClick }: SearchResultItemProps) {
-  const { i18n } = useTranslation();
   const { t: tStrength } = useTranslation("strength");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const pick = usePickLang();
 
   const isStrength = isStrengthWorkout(workout);
-  const name = isEn ? workout.nameEn : workout.name;
+  const name = pick(workout, "name");
   const categoryMeta = isStrength ? null : CATEGORY_META[workout.category];
   const categoryLabel = isStrength
     ? tStrength(`categories.${(workout as StrengthWorkoutTemplate).category}`)
-    : isEn ? categoryMeta!.labelEn : categoryMeta!.label;
+    : pick(categoryMeta!, "label");
   const dominantZone = isStrength ? null : getDominantZone(workout as WorkoutTemplate);
   const duration = isStrength
     ? formatDurationMinutes(Math.round(((workout as StrengthWorkoutTemplate).typicalDuration.min + (workout as StrengthWorkoutTemplate).typicalDuration.max) / 2))

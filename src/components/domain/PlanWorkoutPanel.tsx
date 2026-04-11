@@ -10,6 +10,7 @@ import { useFavorites } from "@/hooks";
 import { IntensityBadge } from "@/components/domain/IntensityBadge";
 import type { WorkoutTemplate, WorkoutCategory, SessionType } from "@/types";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
+import { usePickLang } from "@/lib/i18n-utils";
 
 // ── Color map (same as PlanCalendar) ──────────────────────────────
 
@@ -85,7 +86,6 @@ const CROSS_TRAINING_ITEMS: CrossTrainingItem[] = [
 interface PlanWorkoutPanelProps {
   isOpen: boolean;
   onClose: () => void;
-  isEn: boolean;
   /** Render as inline content (no fixed positioning) — used on desktop/tablet */
   inline?: boolean;
   /** Mobile: tap a workout to select it, then tap a calendar cell to place it */
@@ -94,9 +94,10 @@ interface PlanWorkoutPanelProps {
 
 // ── Component ─────────────────────────────────────────────────────
 
-export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkout }: PlanWorkoutPanelProps) {
+export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: PlanWorkoutPanelProps) {
   const { t } = useTranslation("plan");
   const { t: tStrength } = useTranslation("strength");
+  const pick = usePickLang();
   const [allWorkouts, setAllWorkouts] = useState<WorkoutTemplate[]>([]);
   const [strengthSessions, setStrengthSessions] = useState<StrengthWorkoutTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -137,13 +138,14 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
       })
       .filter(w => {
         if (!search) return true;
-        const name = isEn ? w.nameEn : w.name;
-        const desc = isEn ? w.descriptionEn : w.description;
+        const name = pick(w, "name");
+        const desc = pick(w, "description");
         const q = search.toLowerCase();
         return name.toLowerCase().includes(q) || desc.toLowerCase().includes(q);
       })
       .slice(0, 20);
-  }, [allWorkouts, activeFilter, search, isEn, favoritesOnly, favorites]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allWorkouts, activeFilter, search, pick, favoritesOnly, favorites]);
 
   // Filter strength sessions by search and favorites
   const filteredStrength = useMemo(() => {
@@ -155,13 +157,14 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
       })
       .filter(s => {
         if (!search) return true;
-        const name = isEn ? s.nameEn : s.name;
-        const desc = isEn ? s.descriptionEn : s.description;
+        const name = pick(s, "name");
+        const desc = pick(s, "description");
         const q = search.toLowerCase();
         return name.toLowerCase().includes(q) || desc.toLowerCase().includes(q);
       })
       .slice(0, 20);
-  }, [strengthSessions, activeFilter, search, isEn, favoritesOnly, favorites]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [strengthSessions, activeFilter, search, pick, favoritesOnly, favorites]);
 
   // ── Desktop drag handlers ────────────────────────────────────
 
@@ -300,7 +303,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
             </div>
           ) : (
             filteredStrength.map((session) => {
-              const name = isEn ? session.nameEn : session.name;
+              const name = pick(session, "name");
               const muscles = session.primaryMuscleGroups
                 .slice(0, 3)
                 .map(m => tStrength(`muscles.${m}`))
@@ -420,7 +423,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
           filteredWorkouts.map((workout) => {
             const sessionType = CATEGORY_SESSION_TYPE[workout.category] || "endurance";
             const dotColor = SESSION_COLORS[sessionType] || "#9ca3af";
-            const name = isEn ? workout.nameEn : workout.name;
+            const name = pick(workout, "name");
 
             return (
               <div

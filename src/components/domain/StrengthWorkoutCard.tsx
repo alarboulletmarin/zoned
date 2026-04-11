@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import type { StrengthWorkoutTemplate, StrengthIntensity, MuscleGroup } from "@/types/strength";
 import { DIFFICULTY_META } from "@/types";
+import { usePickLang } from "@/lib/i18n-utils";
 
 // Warm / earthy tones for strength intensity levels
 const INTENSITY_COLORS: Record<StrengthIntensity, { bg: string; text: string; bar: string }> = {
@@ -55,9 +56,9 @@ interface StrengthWorkoutCardProps {
 }
 
 export function StrengthWorkoutCard({ workout, className, expanded }: StrengthWorkoutCardProps) {
-  const { t: tStrength, i18n } = useTranslation("strength");
+  const { t: tStrength } = useTranslation("strength");
   const { t: tLib } = useTranslation("library");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const pick = usePickLang();
   const intensityStyle = INTENSITY_COLORS[workout.intensity];
   const intensityLevel = INTENSITY_LEVEL[workout.intensity];
   const avgDuration = Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2);
@@ -80,7 +81,7 @@ export function StrengthWorkoutCard({ workout, className, expanded }: StrengthWo
         <CardHeader className={cn("pb-1.5 sm:pb-2 px-3 sm:px-4", expanded && "pb-2 px-4")}>
           <div className="flex items-start justify-between gap-2">
             <CardTitle className={cn("text-sm sm:text-base line-clamp-2 sm:line-clamp-1 flex-1", expanded && "text-base line-clamp-none")}>
-              {isEn ? workout.nameEn : workout.name}
+              {pick(workout, "name")}
             </CardTitle>
             <div className="flex items-center gap-1">
               <FavoriteButton workoutId={workout.id} size="sm" />
@@ -97,7 +98,7 @@ export function StrengthWorkoutCard({ workout, className, expanded }: StrengthWo
             </div>
           </div>
           <p className={cn("hidden sm:block text-muted-foreground text-sm line-clamp-2", expanded && "block")}>
-            {isEn ? workout.descriptionEn : workout.description}
+            {pick(workout, "description")}
           </p>
         </CardHeader>
 
@@ -199,8 +200,7 @@ export function StrengthWorkoutCardCompact({
   workout,
   className,
 }: StrengthWorkoutCardCompactProps) {
-  const { i18n } = useTranslation("strength");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const pick = usePickLang();
   const intensityStyle = INTENSITY_COLORS[workout.intensity];
   const avgDuration = Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2);
   const needsEquipment = workout.equipment.length > 0 && !workout.equipment.every((e) => e === "none");
@@ -217,7 +217,7 @@ export function StrengthWorkoutCardCompact({
     >
       <div className="flex items-center justify-between gap-2">
         <span className="font-medium text-sm line-clamp-1 flex-1">
-          {isEn ? workout.nameEn : workout.name}
+          {pick(workout, "name")}
         </span>
         <span
           className={cn(
@@ -253,9 +253,9 @@ interface StrengthWorkoutListItemProps {
 }
 
 export function StrengthWorkoutListItem({ workout, className }: StrengthWorkoutListItemProps) {
-  const { t: tStrength, i18n } = useTranslation("strength");
+  const { t: tStrength } = useTranslation("strength");
   const { t: tLib } = useTranslation("library");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const pick = usePickLang();
   const intensityStyle = INTENSITY_COLORS[workout.intensity];
   const avgDuration = Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2);
   const needsEquipment = workout.equipment.length > 0 && !workout.equipment.every((e) => e === "none");
@@ -272,7 +272,7 @@ export function StrengthWorkoutListItem({ workout, className }: StrengthWorkoutL
       {/* Title and mobile duration */}
       <div className="flex-1 min-w-0">
         <span className="font-medium text-sm line-clamp-1">
-          {isEn ? workout.nameEn : workout.name}
+          {pick(workout, "name")}
         </span>
         {/* Mobile: show duration below title */}
         <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5 sm:hidden">

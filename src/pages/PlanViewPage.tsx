@@ -36,6 +36,7 @@ import { adaptPlan } from "@/lib/planGenerator/adapt";
 import { getWorkoutById } from "@/data/workouts";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
+import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
@@ -70,8 +71,9 @@ export function PlanViewPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { t, i18n } = useTranslation("plan");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("plan");
+  const isEn = useIsEnglish();
+  const pick = usePickLang();
 
   // Week persistence via URL search params (?week=N)
   const [searchParams, setSearchParams] = useSearchParams();
@@ -184,7 +186,7 @@ export function PlanViewPage() {
       const templates: Record<string, WorkoutTemplate> = {};
       for (const [wid, workout] of results) {
         if (workout) {
-          names[wid] = isEn ? workout.nameEn : workout.name;
+          names[wid] = pick(workout, "name");
           templates[wid] = workout;
         }
       }
@@ -293,7 +295,7 @@ export function PlanViewPage() {
       savePlan(freshPlan);
       reloadPlan();
       for (const change of result.changes) {
-        toast.info(isEn ? change.descriptionEn : change.description, { duration: 5000 });
+        toast.info(pick(change, "description"), { duration: 5000 });
       }
     } else if (showToast) {
       toast.success(t("view.weekValidated", { week: weekNumber }));
@@ -369,7 +371,7 @@ export function PlanViewPage() {
         state: {
           from: "plan",
           planId: plan?.id,
-          planName: plan ? (isEn ? plan.nameEn : plan.name) : "",
+          planName: plan ? pick(plan, "name") : "",
           weekNumber,
           volumePercent: week?.volumePercent,
           estimatedDurationMin: session?.estimatedDurationMin,
@@ -446,7 +448,7 @@ export function PlanViewPage() {
   const raceMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
   const planName = plan.config.planName || (isFreePlan
     ? plan.name
-    : (isEn ? plan.nameEn : plan.name));
+    : pick(plan, "name"));
   const raceDate = plan.config.raceDate;
 
   return (
@@ -502,7 +504,7 @@ export function PlanViewPage() {
             <div className="flex flex-wrap items-center gap-2">
               {raceMeta && (
                 <Badge variant="default">
-                  {isEn ? raceMeta.labelEn : raceMeta.label}
+                  {pick(raceMeta, "label")}
                 </Badge>
               )}
               {isFreePlan && (
@@ -608,7 +610,7 @@ export function PlanViewPage() {
                       key={`${phaseRange.phase}-${phaseRange.startWeek}`}
                       className={cn(meta.color, "relative")}
                       style={{ width: `${widthPercent}%` }}
-                      title={`${isEn ? meta.labelEn : meta.label} (S${phaseRange.startWeek}-S${phaseRange.endWeek})`}
+                      title={`${pick(meta, "label")} (S${phaseRange.startWeek}-S${phaseRange.endWeek})`}
                     >
                       {/* Current week marker */}
                       {currentWeek >= phaseRange.startWeek &&
@@ -633,7 +635,7 @@ export function PlanViewPage() {
                       className="flex items-center gap-1.5 text-xs text-muted-foreground"
                     >
                       <div className={cn("size-2.5 rounded-full", meta.color)} />
-                      <span>{isEn ? meta.labelEn : meta.label}</span>
+                      <span>{pick(meta, "label")}</span>
                     </div>
                   );
                 })}
@@ -650,7 +652,7 @@ export function PlanViewPage() {
           </TabsList>
 
           <TabsContent value="stats" className="mt-4">
-            <PlanStatsSection plan={plan} currentWeek={currentWeek} isEn={isEn} />
+            <PlanStatsSection plan={plan} currentWeek={currentWeek} />
           </TabsContent>
 
           <TabsContent value="programme" className="mt-4 space-y-4">
@@ -727,7 +729,6 @@ export function PlanViewPage() {
                   <PlanWorkoutPanel
                     isOpen={showWorkoutPanel}
                     onClose={() => setShowWorkoutPanel(false)}
-                    isEn={isEn}
                     inline
                   />
                 </div>
@@ -763,7 +764,6 @@ export function PlanViewPage() {
                   <PlanWorkoutPanel
                     isOpen={showWorkoutPanel}
                     onClose={() => setShowWorkoutPanel(false)}
-                    isEn={isEn}
                     inline
                   />
                 </div>
@@ -799,7 +799,6 @@ export function PlanViewPage() {
                   <PlanWorkoutPanel
                     isOpen={showWorkoutPanel}
                     onClose={() => setShowWorkoutPanel(false)}
-                    isEn={isEn}
                     inline
                   />
                 </div>
@@ -859,7 +858,7 @@ export function PlanViewPage() {
                     />
                     <div className="min-w-0">
                       <span className="font-medium truncate block">
-                        {weekLabel} — {isEn ? phaseMeta.labelEn : phaseMeta.label}
+                        {weekLabel} — {pick(phaseMeta, "label")}
                       </span>
                       {weekDateRange && (
                         <span className="text-xs text-muted-foreground/60 tabular-nums">
@@ -988,9 +987,9 @@ export function PlanViewPage() {
                                       {workoutNames[session.workoutId] ||
                                         session.workoutId}
                                     </Link>
-                                    {(isEn ? session.notesEn : session.notes) && (
+                                    {pick(session, "notes") && (
                                       <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
-                                        {isEn ? session.notesEn : session.notes}
+                                        {pick(session, "notes")}
                                       </p>
                                     )}
                                   </>
@@ -1116,7 +1115,6 @@ export function PlanViewPage() {
                 <PlanWorkoutPanel
                   isOpen={showWorkoutPanel}
                   onClose={() => setShowWorkoutPanel(false)}
-                  isEn={isEn}
                   inline
                   onSelectWorkout={(workoutId) => {
                     // Add to current week, first available day
@@ -1279,7 +1277,6 @@ export function PlanViewPage() {
         <PlanWorkoutPanel
           isOpen={showWorkoutPanel}
           onClose={() => { setShowWorkoutPanel(false); setAddTarget(null); }}
-          isEn={isEn}
           onSelectWorkout={addTarget ? (workoutId) => {
             handleWorkoutAdd(workoutId, addTarget.weekNumber, addTarget.day);
             setAddTarget(null);
@@ -1293,7 +1290,6 @@ export function PlanViewPage() {
           currentWorkoutId={swapTarget?.workoutId ?? ""}
           sessionType={swapTarget?.sessionType ?? ""}
           onSelect={handleSwapSession}
-          isEn={isEn}
         />
       </div>
 

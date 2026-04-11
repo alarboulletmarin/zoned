@@ -44,6 +44,7 @@ import type { TrainingPhase } from "@/types";
 import { getCurrentWeek } from "@/lib/planUtils";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { PlanSparkline } from "@/components/domain/PlanSparkline";
+import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
 
 function formatDate(isoDate: string, isEn: boolean): string {
   const date = new Date(isoDate);
@@ -67,20 +68,20 @@ function getCurrentPhase(
 
 function PlanCard({
   plan,
-  isEn,
   onDelete,
 }: {
   plan: TrainingPlan;
-  isEn: boolean;
   onDelete: (id: string) => void;
 }) {
   const { t } = useTranslation("plan");
   const navigate = useNavigate();
+  const isEn = useIsEnglish();
+  const pick = usePickLang();
   const isFreePlan = plan.config.planMode === "free";
   const raceMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
   const planName = isFreePlan
     ? (plan.config.planName || plan.name)
-    : (isEn ? plan.nameEn : plan.name);
+    : pick(plan, "name");
   const currentWeek = getCurrentWeek(plan.config.startDate || plan.config.createdAt);
   const currentPhase = getCurrentPhase(currentWeek, plan.phases);
   const progressPercent = Math.min(
@@ -102,7 +103,7 @@ function PlanCard({
           </CardTitle>
           {raceMeta ? (
             <Badge variant="default" className="shrink-0">
-              {isEn ? raceMeta.labelEn : raceMeta.label}
+              {pick(raceMeta, "label")}
             </Badge>
           ) : plan.config.planMode === "prebuilt" ? (
             <Badge variant="secondary" className="shrink-0">
@@ -154,9 +155,7 @@ function PlanCard({
               )}
             />
             <span className="text-sm">
-              {isEn
-                ? PHASE_META[currentPhase].labelEn
-                : PHASE_META[currentPhase].label}
+              {pick(PHASE_META[currentPhase], "label")}
             </span>
           </div>
         )}
@@ -222,8 +221,8 @@ function PlanCard({
 }
 
 export function PlansPage() {
-  const { t, i18n } = useTranslation("plan");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("plan");
+  const pick = usePickLang();
   const navigate = useNavigate();
   const { plans, isLoading, remove, reload } = usePlans();
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
@@ -343,7 +342,6 @@ export function PlansPage() {
                 <PlanCard
                   key={plan.id}
                   plan={plan}
-                  isEn={isEn}
                   onDelete={setDeleteTarget}
                 />
               ))}
@@ -440,7 +438,7 @@ export function PlansPage() {
             </DialogTitle>
             <DialogDescription>
               {deleteTargetPlan
-                ? t("plansPage.deleteConfirm", { name: isEn ? deleteTargetPlan.nameEn : deleteTargetPlan.name })
+                ? t("plansPage.deleteConfirm", { name: pick(deleteTargetPlan, "name") })
                 : ""}
             </DialogDescription>
           </DialogHeader>

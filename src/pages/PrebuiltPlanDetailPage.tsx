@@ -30,6 +30,7 @@ import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
+import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
 
 const SESSION_TYPE_COLORS: Record<string, string> = {
   endurance: "bg-blue-400",
@@ -47,8 +48,9 @@ const SESSION_TYPE_COLORS: Record<string, string> = {
 export function PrebuiltPlanDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation("plan");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("plan");
+  const isEn = useIsEnglish();
+  const pick = usePickLang();
 
   const prebuilt = slug ? getPrebuiltBySlug(slug) : undefined;
   const [workoutNames, setWorkoutNames] = useState<Record<string, string>>({});
@@ -63,7 +65,7 @@ export function PrebuiltPlanDetailPage() {
       config: {
         id: "preview",
         planMode: "prebuilt" as const,
-        planName: isEn ? prebuilt.nameEn : prebuilt.name,
+        planName: pick(prebuilt, "name"),
         daysPerWeek: prebuilt.sessionsPerWeek,
         createdAt: new Date().toISOString(),
       },
@@ -95,7 +97,7 @@ export function PrebuiltPlanDetailPage() {
       const names: Record<string, string> = {};
       for (const [wid, workout] of results) {
         if (workout) {
-          names[wid] = isEn ? workout.nameEn : workout.name;
+          names[wid] = pick(workout, "name");
         }
       }
       setWorkoutNames(names);
@@ -127,7 +129,7 @@ export function PrebuiltPlanDetailPage() {
       toast.error(t("prebuilt.limitReached"));
       return;
     }
-    const plan = convertPrebuiltToPlan(prebuilt, isEn);
+    const plan = convertPrebuiltToPlan(prebuilt);
     savePlan(plan);
     triggerStorageWarning();
     toast.success(t("prebuilt.planAdded"));
@@ -159,8 +161,8 @@ export function PrebuiltPlanDetailPage() {
     );
   }
 
-  const name = isEn ? prebuilt.nameEn : prebuilt.name;
-  const description = isEn ? prebuilt.descriptionEn : prebuilt.description;
+  const name = pick(prebuilt, "name");
+  const description = pick(prebuilt, "description");
   const difficultyLabel = t(`prebuilt.difficulty.${prebuilt.difficulty}`);
   const raceMeta = prebuilt.raceDistance
     ? RACE_DISTANCE_META[prebuilt.raceDistance]
@@ -239,7 +241,7 @@ export function PrebuiltPlanDetailPage() {
               </Badge>
               {raceMeta && (
                 <Badge variant="default">
-                  {isEn ? raceMeta.labelEn : raceMeta.label}
+                  {pick(raceMeta, "label")}
                 </Badge>
               )}
             </div>
@@ -268,7 +270,7 @@ export function PrebuiltPlanDetailPage() {
                       key={`${segment.phase}-${idx}`}
                       className={cn(meta.color)}
                       style={{ width: `${widthPercent}%` }}
-                      title={`${isEn ? meta.labelEn : meta.label} (${t("prebuilt.weeksCount", { count: segment.weeks })})`}
+                      title={`${pick(meta, "label")} (${t("prebuilt.weeksCount", { count: segment.weeks })})`}
                     />
                   );
                 })}
@@ -285,7 +287,7 @@ export function PrebuiltPlanDetailPage() {
                         className={cn("size-2.5 rounded-full", meta.color)}
                       />
                       <span>
-                        {isEn ? meta.labelEn : meta.label} ({segment.weeks}{" "}
+                        {pick(meta, "label")} ({segment.weeks}{" "}
                         {t("prebuilt.weeksShort")})
                       </span>
                     </div>
@@ -298,7 +300,7 @@ export function PrebuiltPlanDetailPage() {
 
         {/* Stats */}
         {previewPlan && (
-          <PlanStatsSection plan={previewPlan} isEn={isEn} />
+          <PlanStatsSection plan={previewPlan} />
         )}
 
         {/* View toggle + content */}
@@ -386,7 +388,7 @@ export function PrebuiltPlanDetailPage() {
                     />
                     <span className="font-medium truncate">
                       {weekLabel} &mdash;{" "}
-                      {isEn ? phaseMeta.labelEn : phaseMeta.label}
+                      {pick(phaseMeta, "label")}
                     </span>
                     {week.isRecoveryWeek && (
                       <Badge variant="secondary" className="shrink-0">

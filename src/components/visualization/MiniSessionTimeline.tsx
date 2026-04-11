@@ -6,6 +6,7 @@ import { ChevronUp } from "@/components/icons";
 import type { WorkoutTemplate } from "@/types";
 import type { ZoneNumber } from "./types";
 import { transformSessionBlocks, formatDurationMinutes } from "./transforms";
+import { usePickLang } from "@/lib/i18n-utils";
 
 interface MiniSessionTimelineProps {
   workout: WorkoutTemplate;
@@ -31,26 +32,23 @@ export function MiniSessionTimeline({
   workout,
   onClickScrollBack,
 }: MiniSessionTimelineProps) {
-  const { t, i18n } = useTranslation("session");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("session");
+  const pick = usePickLang();
   const isMobile = useIsMobile();
 
   const data = useMemo(() => {
-    return transformSessionBlocks(
-      {
-        warmup: workout.warmupTemplate,
-        mainSet: workout.mainSetTemplate,
-        cooldown: workout.cooldownTemplate,
-      },
-      isEn,
-    );
-  }, [workout, isEn]);
+    return transformSessionBlocks({
+      warmup: workout.warmupTemplate,
+      mainSet: workout.mainSetTemplate,
+      cooldown: workout.cooldownTemplate,
+    });
+  }, [workout]);
 
   if (data.segments.length === 0 || !data.hasZoneData) return null;
 
   const title = t("visualization.backToTimeline");
   const segmentCount = data.segments.length;
-  const workoutName = isEn ? (workout.nameEn || workout.name) : workout.name;
+  const workoutName = pick(workout, "name");
 
   // Find dominant zone (highest time share)
   const dominantZone = data.zoneBreakdown.length > 0

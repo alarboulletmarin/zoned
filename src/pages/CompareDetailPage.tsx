@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
 import { getCompetitorBySlug, type ComparisonValue } from "@/data/competitors";
 import { CheckIcon, X, Shield, EyeOff, GithubIcon, Sparkles, ArrowLeft, ArrowRight } from "@/components/icons";
+import { useIsEnglish } from "@/lib/i18n-utils";
 
 const SITE_URL = "https://zoned.run";
 
@@ -66,8 +67,8 @@ const advantageCards = [
 
 export function CompareDetailPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const isEn = useIsEnglish();
 
   const competitor = slug ? getCompetitorBySlug(slug) : undefined;
 
