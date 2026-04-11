@@ -13,13 +13,14 @@ import { ExternalLink, Copy } from "@/components/icons";
 import { submitQuickIdea, copyToClipboard } from "@/lib/issueBuilder";
 import type { WorkoutCategory, Difficulty } from "@/types";
 import { CATEGORY_META, DIFFICULTY_META } from "@/types";
+import { usePickLang } from "@/lib/i18n-utils";
 
 const CATEGORIES = Object.keys(CATEGORY_META) as WorkoutCategory[];
 const DIFFICULTIES = Object.keys(DIFFICULTY_META) as Difficulty[];
 
 export function QuickIdeaForm() {
-  const { t, i18n } = useTranslation("contribute");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("contribute");
+  const pickLang = usePickLang();
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -120,7 +121,7 @@ export function QuickIdeaForm() {
                 const meta = CATEGORY_META[cat];
                 return (
                   <SelectItem key={cat} value={cat}>
-                    {isEn ? meta.labelEn : meta.label}
+                    {pickLang(meta, "label")}
                   </SelectItem>
                 );
               })}
@@ -145,7 +146,7 @@ export function QuickIdeaForm() {
                 const meta = DIFFICULTY_META[diff];
                 return (
                   <SelectItem key={diff} value={diff}>
-                    {isEn ? meta.labelEn : meta.label}
+                    {pickLang(meta, "label")}
                   </SelectItem>
                 );
               })}

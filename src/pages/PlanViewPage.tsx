@@ -36,7 +36,7 @@ import { adaptPlan } from "@/lib/planGenerator/adapt";
 import { getWorkoutById } from "@/data/workouts";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
-import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+import { useIsEnglish, usePickLang, usePickLocale } from "@/lib/i18n-utils";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
@@ -75,6 +75,7 @@ export function PlanViewPage() {
   const { t } = useTranslation("plan");
   const isEn = useIsEnglish();
   const pick = usePickLang();
+  const pickLocale = usePickLocale();
 
   // Week persistence via URL search params (?week=N)
   const [searchParams, setSearchParams] = useSearchParams();
@@ -599,7 +600,6 @@ export function PlanViewPage() {
               plan={plan}
               workoutNames={workoutNames}
               workoutTemplates={workoutTemplates}
-              isEn={isEn}
               size="sm"
             />
             <Button
@@ -1026,7 +1026,7 @@ export function PlanViewPage() {
                                 )}
                                 {!isRaceDay && sessionLabel && (
                                   <Badge variant="outline" className="text-[10px] sm:text-xs hidden sm:inline-flex">
-                                    {isEn ? sessionLabel.en : sessionLabel.fr}
+                                    {pickLocale(sessionLabel)}
                                   </Badge>
                                 )}
                                 {!isRaceDay && !session.workoutId.startsWith("__activity_") && (

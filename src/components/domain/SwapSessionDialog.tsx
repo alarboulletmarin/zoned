@@ -14,7 +14,7 @@ import { Loader2 } from "@/components/icons";
 import { loadAllWorkouts } from "@/data/workouts";
 import type { WorkoutTemplate } from "@/types";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
-import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+import { usePickLang, usePickLocale } from "@/lib/i18n-utils";
 
 interface SwapSessionDialogProps {
   open: boolean;
@@ -26,8 +26,8 @@ interface SwapSessionDialogProps {
 
 export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessionType, onSelect }: SwapSessionDialogProps) {
   const { t } = useTranslation("common");
-  const isEn = useIsEnglish();
   const pick = usePickLang();
+  const pickLocale = usePickLocale();
   const [allWorkouts, setAllWorkouts] = useState<WorkoutTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -97,9 +97,7 @@ export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessio
               size="sm"
               onClick={() => setFilterType(sessionType)}
             >
-              {SESSION_TYPE_LABELS[sessionType]
-                ? (isEn ? SESSION_TYPE_LABELS[sessionType].en : SESSION_TYPE_LABELS[sessionType].fr)
-                : sessionType}
+              {pickLocale(SESSION_TYPE_LABELS[sessionType], sessionType)}
             </Button>
             {availableTypes
               .filter(t => t !== sessionType)
@@ -110,9 +108,7 @@ export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessio
                   size="sm"
                   onClick={() => setFilterType(type)}
                 >
-                  {SESSION_TYPE_LABELS[type]
-                    ? (isEn ? SESSION_TYPE_LABELS[type].en : SESSION_TYPE_LABELS[type].fr)
-                    : type}
+                  {pickLocale(SESSION_TYPE_LABELS[type], type)}
                 </Button>
               ))}
           </div>
@@ -148,7 +144,7 @@ export function SwapSessionDialog({ open, onOpenChange, currentWorkoutId, sessio
                       </p>
                     </div>
                     <Badge variant="outline" className="shrink-0 text-xs">
-                      {label ? (isEn ? label.en : label.fr) : workout.sessionType}
+                      {pickLocale(label, workout.sessionType)}
                     </Badge>
                   </CardContent>
                 </Card>

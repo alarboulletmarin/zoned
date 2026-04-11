@@ -9,6 +9,7 @@ import { convertPace, convertDistance, getPaceUnit, getDistanceUnit } from "@/li
 import { cn } from "@/lib/utils";
 import { generateSplits, formatSplitTime as formatTime, formatPaceDisplay } from "@/lib/splits";
 import type { SplitStrategy as Strategy } from "@/lib/splits";
+import { usePickLang } from "@/lib/i18n-utils";
 
 interface RaceOption {
   label: string;
@@ -24,8 +25,8 @@ const RACE_OPTIONS: RaceOption[] = [
 ];
 
 export function SplitGeneratorPage() {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const pickLang = usePickLang();
   const { settings } = useSettings();
   const unit = settings.unitSystem;
   const tableRef = useRef<HTMLDivElement>(null);
@@ -121,7 +122,7 @@ export function SplitGeneratorPage() {
               >
                 {RACE_OPTIONS.map((opt) => (
                   <option key={opt.distanceKm} value={opt.distanceKm.toString()}>
-                    {isEn ? opt.labelEn : opt.label}
+                    {pickLang(opt, "label")}
                   </option>
                 ))}
                 <option value="custom">

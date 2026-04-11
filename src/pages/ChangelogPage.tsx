@@ -6,6 +6,7 @@ import { SEOHead } from "@/components/seo";
 import { changelogVersions } from "@/data/changelog";
 import type { ChangeType, ChangelogItem } from "@/data/changelog";
 import { useWhatsNew } from "@/hooks/useWhatsNew";
+import { usePickLang } from "@/lib/i18n-utils";
 
 const changeTypeConfig: Record<
   ChangeType,
@@ -34,7 +35,7 @@ const changeTypeConfig: Record<
 
 export function ChangelogPage() {
   const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const pickLang = usePickLang();
   const { markAsSeen } = useWhatsNew();
 
   useEffect(() => {
@@ -124,15 +125,15 @@ export function ChangelogPage() {
                           >
                             <span className="mt-1.5 shrink-0 size-1.5 rounded-full bg-current opacity-40" />
                             <span>
-                              {(isEn ? item.categoryEn : item.category) && (
+                              {pickLang(item, "category") && (
                                 <Badge
                                   variant="outline"
                                   className="mr-2 text-[10px] px-1.5 py-0"
                                 >
-                                  {isEn ? item.categoryEn : item.category}
+                                  {pickLang(item, "category")}
                                 </Badge>
                               )}
-                              {isEn ? item.textEn : item.text}
+                              {pickLang(item, "text")}
                             </span>
                           </li>
                         ))}

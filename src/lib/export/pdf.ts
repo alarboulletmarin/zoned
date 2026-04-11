@@ -9,7 +9,7 @@ import type { WorkoutTemplate, WorkoutBlock } from "@/types";
 import { CATEGORY_META, DIFFICULTY_META } from "@/types";
 import { getWorkoutDuration } from "@/components/visualization";
 import i18n from "@/i18n";
-import { pickLang } from "@/lib/i18n-utils";
+import { pickLang, pickLangArray } from "@/lib/i18n-utils";
 
 /**
  * Zone colors for PDF (RGB values)
@@ -66,7 +66,6 @@ function formatBlocksTable(blocks: WorkoutBlock[]): TableCell[][] {
 export async function exportToPDF(
   workout: WorkoutTemplate,
 ): Promise<void> {
-  const isEn = i18n.language?.startsWith("en") ?? false;
   try {
     const pdfMakeModule = await import("pdfmake/build/pdfmake");
     const pdfFontsModule = await import("pdfmake/build/vfs_fonts");
@@ -82,8 +81,8 @@ export async function exportToPDF(
     const duration = getWorkoutDuration(workout);
     const category = pickLang(CATEGORY_META[workout.category], "label");
     const difficulty = pickLang(DIFFICULTY_META[workout.difficulty], "label");
-    const tips = isEn ? workout.coachingTipsEn : workout.coachingTips;
-    const mistakes = isEn ? workout.commonMistakesEn : workout.commonMistakes;
+    const tips = pickLangArray<string>(workout, "coachingTips");
+    const mistakes = pickLangArray<string>(workout, "commonMistakes");
 
     const tableHeader: TableCell[] = [
       { text: t("description"), style: "tableHeader" },

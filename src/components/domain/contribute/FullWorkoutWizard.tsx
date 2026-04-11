@@ -26,6 +26,7 @@ import type {
 } from "@/types";
 import { CATEGORY_META, DIFFICULTY_META } from "@/types";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
+import { usePickLang, usePickLocale } from "@/lib/i18n-utils";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -80,8 +81,9 @@ const TARGET_SYSTEM_LABELS: Record<TargetSystem, { fr: string; en: string }> = {
 // ---------------------------------------------------------------------------
 
 export function FullWorkoutWizard() {
-  const { t, i18n } = useTranslation("contribute");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("contribute");
+  const pickLang = usePickLang();
+  const pickLocale = usePickLocale();
 
   const [step, setStep] = useState<WizardStep>(1);
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
@@ -291,7 +293,7 @@ export function FullWorkoutWizard() {
                 const meta = CATEGORY_META[cat];
                 return (
                   <SelectItem key={cat} value={cat}>
-                    {isEn ? meta.labelEn : meta.label}
+                    {pickLang(meta, "label")}
                   </SelectItem>
                 );
               })}
@@ -315,7 +317,7 @@ export function FullWorkoutWizard() {
                 const meta = DIFFICULTY_META[diff];
                 return (
                   <SelectItem key={diff} value={diff}>
-                    {isEn ? meta.labelEn : meta.label}
+                    {pickLang(meta, "label")}
                   </SelectItem>
                 );
               })}
@@ -340,7 +342,7 @@ export function FullWorkoutWizard() {
             <SelectContent>
               {SESSION_TYPES.map((st) => (
                 <SelectItem key={st} value={st}>
-                  {isEn ? SESSION_TYPE_LABELS[st].en : SESSION_TYPE_LABELS[st].fr}
+                  {pickLocale(SESSION_TYPE_LABELS[st])}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -361,7 +363,7 @@ export function FullWorkoutWizard() {
             <SelectContent>
               {TARGET_SYSTEMS.map((ts) => (
                 <SelectItem key={ts} value={ts}>
-                  {isEn ? TARGET_SYSTEM_LABELS[ts].en : TARGET_SYSTEM_LABELS[ts].fr}
+                  {pickLocale(TARGET_SYSTEM_LABELS[ts])}
                 </SelectItem>
               ))}
             </SelectContent>

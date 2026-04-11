@@ -29,6 +29,7 @@ import { useSettings } from "@/hooks/useSettings";
 import { convertPace, getSpeedUnit, getPaceUnit } from "@/lib/units";
 import { useWorkouts } from "@/hooks/useWorkouts";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { usePickLang } from "@/lib/i18n-utils";
 
 /** Max example workouts shown per zone (desktop / mobile) */
 const MAX_EXAMPLES = 3;
@@ -64,8 +65,8 @@ function buildZoneWorkoutMap(
 }
 
 export function ZoneCalculator() {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const pickLang = usePickLang();
   const { settings } = useSettings();
   const unit = settings.unitSystem;
   const isMobile = useIsMobile();
@@ -273,7 +274,7 @@ export function ZoneCalculator() {
                           )}
                         />
                         <span className="truncate">
-                          Z{z.zone} - {isEn ? meta.labelEn : meta.label}
+                          Z{z.zone} - {pickLang(meta, "label")}
                         </span>
                       </span>
                       {/* Chevron visible only on mobile (inline with label) */}
@@ -338,7 +339,7 @@ export function ZoneCalculator() {
                             {t("myZones.zoneCalculator.sensation")}
                           </span>
                           <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-                            {isEn ? meta.sensationEn : meta.sensation}
+                            {pickLang(meta, "sensation")}
                           </p>
                         </div>
 
@@ -348,7 +349,7 @@ export function ZoneCalculator() {
                             {t("myZones.zoneCalculator.benefit")}
                           </span>
                           <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-                            {isEn ? meta.benefitEn : meta.benefit}
+                            {pickLang(meta, "benefit")}
                           </p>
                         </div>
 
@@ -371,7 +372,7 @@ export function ZoneCalculator() {
                                       `text-${meta.color}`
                                     )}
                                   >
-                                    {isEn ? w.nameEn : w.name}
+                                    {pickLang(w, "name")}
                                   </Link>
                                 </li>
                               ))}

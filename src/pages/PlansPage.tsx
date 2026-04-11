@@ -202,7 +202,6 @@ function PlanCard({
         </Button>
         <PlanExportMenu
           plan={plan}
-          isEn={isEn}
           size="sm"
         />
         <Button

@@ -11,6 +11,7 @@ import { ZONE_META, type ZoneNumber } from "@/types";
 import { calculatePaceZones, saveUserZonePrefs, formatPace } from "@/lib/zones";
 import { useSettings } from "@/hooks/useSettings";
 import { convertPace, getPaceUnit } from "@/lib/units";
+import { usePickLang } from "@/lib/i18n-utils";
 
 /**
  * Race distance configurations with VMA percentages.
@@ -24,8 +25,8 @@ const DISTANCES = [
 ] as const;
 
 export function VmaCalculatorPage() {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const pickLang = usePickLang();
   const navigate = useNavigate();
   const { settings } = useSettings();
   const unit = settings.unitSystem;
@@ -265,7 +266,7 @@ export function VmaCalculatorPage() {
                                     `bg-${meta.color}`
                                   )}
                                 />
-                                Z{z.zone} - {isEn ? meta.labelEn : meta.label}
+                                Z{z.zone} - {pickLang(meta, "label")}
                               </span>
                             </td>
                             <td className="py-2 px-3 tabular-nums">

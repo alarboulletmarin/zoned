@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
-import { useIsEnglish } from "@/lib/i18n-utils";
+import { usePickLang } from "@/lib/i18n-utils";
 
 // ---------------------------------------------------------------------------
 // Zone data
@@ -293,7 +293,7 @@ const zoneBgClasses: Record<number, string> = {
 
 export function MethodologyPage() {
   const { t } = useTranslation("common");
-  const isEn = useIsEnglish();
+  const pickLang = usePickLang();
 
   return (
     <>
@@ -385,7 +385,7 @@ export function MethodologyPage() {
                     Z{z.zone}
                   </span>
                   <h3 className="font-semibold">
-                    {isEn ? z.nameEn : z.nameFr}
+                    {pickLang(z, "name")}
                   </h3>
                 </div>
                 <div className="space-y-2 text-sm">
@@ -395,7 +395,7 @@ export function MethodologyPage() {
                     </span>{" "}
                     <GlossaryLinkedText
                       className="text-muted-foreground"
-                      text={isEn ? z.markerEn : z.marker}
+                      text={pickLang(z, "marker")}
                     />
                   </div>
                   <div>
@@ -404,7 +404,7 @@ export function MethodologyPage() {
                     </span>{" "}
                     <GlossaryLinkedText
                       className="text-muted-foreground"
-                      text={isEn ? z.developsEn : z.developsFr}
+                      text={pickLang(z, "develops")}
                     />
                   </div>
                 </div>
@@ -430,12 +430,12 @@ export function MethodologyPage() {
                 <CardHeader className="pb-2">
                   <CardTitle className="text-base">{r.name}</CardTitle>
                   <CardDescription>
-                    <GlossaryLinkedText text={isEn ? r.contributionEn : r.contributionFr} />
+                    <GlossaryLinkedText text={pickLang(r, "contribution")} />
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground">
-                    {isEn ? r.publicationEn : r.publicationFr}
+                    {pickLang(r, "publication")}
                   </p>
                   {r.link && (
                     <a
@@ -476,7 +476,7 @@ export function MethodologyPage() {
                 </span>
                 <div className="flex-1 min-w-0 space-y-1">
                   <p className="font-medium text-sm">
-                    {isEn ? s.titleEn : s.titleFr}
+                    {pickLang(s, "title")}
                   </p>
                   <p className="text-sm text-muted-foreground">
                     {s.authors} &mdash; {s.journal}
@@ -513,7 +513,7 @@ export function MethodologyPage() {
             {resources.map((group) => (
               <div key={group.labelFr} className="space-y-3">
                 <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">
-                  {isEn ? group.labelEn : group.labelFr}
+                  {pickLang(group, "label")}
                 </h3>
                 <ul className="space-y-2">
                   {group.items.map((item) => (
@@ -525,12 +525,12 @@ export function MethodologyPage() {
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 text-primary hover:underline"
                         >
-                          {isEn ? item.nameEn : item.nameFr}
+                          {pickLang(item, "name")}
                           <ExternalLink className="size-3" />
                         </a>
                       ) : (
                         <span className="text-muted-foreground">
-                          {isEn ? item.nameEn : item.nameFr}
+                          {pickLang(item, "name")}
                         </span>
                       )}
                     </li>

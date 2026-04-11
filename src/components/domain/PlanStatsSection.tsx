@@ -20,7 +20,7 @@ import {
   ChevronDown,
 } from "@/components/icons";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
-import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+import { usePickLang, usePickLocale } from "@/lib/i18n-utils";
 
 // ── Constants ────────────────────────────────────────────────────────
 
@@ -71,8 +71,8 @@ interface PlanStatsSectionProps {
 
 export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWeek }: PlanStatsSectionProps) {
   const { t } = useTranslation("plan");
-  const isEn = useIsEnglish();
   const pick = usePickLang();
+  const pickLocale = usePickLocale();
   const stats = useMemo(() => computePlanStats(plan), [plan]);
   const [analysis, setAnalysis] = useState<EnhancedPlanAnalysis | null>(null);
   const [analysisLoading, setAnalysisLoading] = useState(true);
@@ -437,7 +437,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                   style={{
                     width: `${(count / stats.totalSessions) * 100}%`,
                   }}
-                  title={`${SESSION_TYPE_LABELS[type]?.[isEn ? "en" : "fr"] || type}: ${count}`}
+                  title={`${pickLocale(SESSION_TYPE_LABELS[type], type)}: ${count}`}
                 />
               ))}
             </div>
@@ -455,7 +455,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                     )}
                   />
                   <span>
-                    {SESSION_TYPE_LABELS[type]?.[isEn ? "en" : "fr"] || type} (
+                    {pickLocale(SESSION_TYPE_LABELS[type], type)} (
                     {count})
                   </span>
                 </div>

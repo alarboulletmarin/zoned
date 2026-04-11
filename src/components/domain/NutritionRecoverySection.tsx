@@ -6,6 +6,7 @@ import { getRecommendations } from "@/data/recommendations";
 import type { PhaseRecommendations, RecommendationItem } from "@/data/recommendations";
 import type { WorkoutTemplate } from "@/types";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
+import { usePickLang } from "@/lib/i18n-utils";
 
 interface NutritionRecoverySectionProps {
   workout: WorkoutTemplate;
@@ -15,13 +16,12 @@ function DomainBlock({
   icon: Icon,
   label,
   items,
-  isEn,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   items: RecommendationItem[];
-  isEn: boolean;
 }) {
+  const pickLang = usePickLang();
   if (items.length === 0) return null;
 
   return (
@@ -33,7 +33,7 @@ function DomainBlock({
       <ul className="space-y-1.5 ml-6">
         {items.map((item, i) => (
           <li key={i} className="text-sm text-muted-foreground list-disc">
-            <GlossaryLinkedText text={isEn ? item.textEn : item.text} />
+            <GlossaryLinkedText text={pickLang(item, "text")} />
           </li>
         ))}
       </ul>
@@ -43,11 +43,9 @@ function DomainBlock({
 
 function PhaseContent({
   phase,
-  isEn,
   domainLabels,
 }: {
   phase: PhaseRecommendations;
-  isEn: boolean;
   domainLabels: { nutrition: string; hydration: string; recovery: string };
 }) {
   const hasNutrition = phase.nutrition.length > 0;
@@ -65,7 +63,6 @@ function PhaseContent({
           icon={Utensils}
           label={domainLabels.nutrition}
           items={phase.nutrition}
-          isEn={isEn}
         />
       )}
       {hasHydration && (
@@ -73,7 +70,6 @@ function PhaseContent({
           icon={Droplets}
           label={domainLabels.hydration}
           items={phase.hydration}
-          isEn={isEn}
         />
       )}
       {hasRecovery && (
@@ -81,7 +77,6 @@ function PhaseContent({
           icon={Heart}
           label={domainLabels.recovery}
           items={phase.recovery}
-          isEn={isEn}
         />
       )}
     </div>
@@ -89,8 +84,7 @@ function PhaseContent({
 }
 
 export function NutritionRecoverySection({ workout }: NutritionRecoverySectionProps) {
-  const { t, i18n } = useTranslation("session");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("session");
 
   const recommendations = getRecommendations(workout);
 
@@ -128,7 +122,6 @@ export function NutritionRecoverySection({ workout }: NutritionRecoverySectionPr
             <TabsContent key={phase.key} value={phase.key} className="pt-4">
               <PhaseContent
                 phase={phase.data}
-                isEn={isEn}
                 domainLabels={domainLabels}
               />
             </TabsContent>

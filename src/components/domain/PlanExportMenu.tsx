@@ -14,6 +14,7 @@ import { preparePlanForStorage } from "@/lib/planSchema";
 import { toast } from "sonner";
 import type { TrainingPlan } from "@/types/plan";
 import type { WorkoutTemplate } from "@/types";
+import { pickLang } from "@/lib/i18n-utils";
 
 interface PlanExportMenuProps {
   plan: TrainingPlan;
@@ -21,14 +22,13 @@ interface PlanExportMenuProps {
   workoutNames?: Record<string, string>;
   /** Pre-loaded workout templates (optional — loaded on demand if absent) */
   workoutTemplates?: Record<string, WorkoutTemplate>;
-  isEn: boolean;
   size?: "sm" | "default";
 }
 
 /**
  * Collects all unique workout IDs from a plan and resolves names + templates.
  */
-async function resolvePlanWorkouts(plan: TrainingPlan, isEn: boolean) {
+async function resolvePlanWorkouts(plan: TrainingPlan) {
   const names: Record<string, string> = {};
   const templates: Record<string, WorkoutTemplate> = {};
 
@@ -44,7 +44,7 @@ async function resolvePlanWorkouts(plan: TrainingPlan, isEn: boolean) {
   for (const id of ids) {
     const w = await getWorkoutById(id);
     if (w) {
-      names[id] = isEn ? (w.nameEn || w.name) : w.name;
+      names[id] = pickLang(w, "name");
       templates[id] = w;
     }
   }
@@ -56,7 +56,6 @@ export function PlanExportMenu({
   plan,
   workoutNames: preloadedNames,
   workoutTemplates: preloadedTemplates,
-  isEn,
   size = "default",
 }: PlanExportMenuProps) {
   const { t } = useTranslation("common");
@@ -66,8 +65,8 @@ export function PlanExportMenu({
     if (preloadedNames && preloadedTemplates && Object.keys(preloadedNames).length > 0) {
       return { names: preloadedNames, templates: preloadedTemplates };
     }
-    return resolvePlanWorkouts(plan, isEn);
-  }, [plan, isEn, preloadedNames, preloadedTemplates]);
+    return resolvePlanWorkouts(plan);
+  }, [plan, preloadedNames, preloadedTemplates]);
 
   const handleExportPDF = useCallback(async () => {
     if (isExporting) return;
@@ -106,7 +105,7 @@ export function PlanExportMenu({
     a.click();
     URL.revokeObjectURL(url);
     toast.success(t("plans.planExported"));
-  }, [plan, isEn]);
+  }, [plan, t]);
 
   const isSmall = size === "sm";
 

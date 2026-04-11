@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import type { Zone, ZoneNumber } from "@/types";
 import { getZoneNumber, ZONE_META } from "@/types";
-import { useTranslation } from "react-i18next";
+import { usePickLang } from "@/lib/i18n-utils";
 
 interface ZoneBadgeProps {
   zone: Zone | ZoneNumber;
@@ -16,10 +16,10 @@ export function ZoneBadge({
   size = "md",
   className,
 }: ZoneBadgeProps) {
-  const { i18n } = useTranslation();
+  const pickLang = usePickLang();
   const zoneNum = typeof zone === "number" ? zone : getZoneNumber(zone);
   const meta = ZONE_META[zoneNum];
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const label = pickLang(meta, "label");
 
   const sizeClasses = {
     sm: "text-xs px-2 py-0.5",
@@ -35,12 +35,12 @@ export function ZoneBadge({
         sizeClasses[size],
         className
       )}
-      aria-label={`Zone ${zoneNum} - ${isEn ? meta.labelEn : meta.label}`}
+      aria-label={`Zone ${zoneNum} - ${label}`}
     >
       Z{zoneNum}
       {showLabel && (
         <span className="ml-1">
-          {isEn ? meta.labelEn : meta.label}
+          {label}
         </span>
       )}
     </span>

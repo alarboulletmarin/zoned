@@ -8,6 +8,7 @@ import { ZONE_META, type ZoneNumber } from "@/types";
 import { calculatePaceZones, loadUserZonePrefs } from "@/lib/zones";
 import { useSettings } from "@/hooks/useSettings";
 import { convertPace, getPaceUnit } from "@/lib/units";
+import { usePickLang } from "@/lib/i18n-utils";
 
 /**
  * Standard race distances in km.
@@ -76,8 +77,8 @@ function findZoneForPace(
 }
 
 export function RaceEquivalencePage() {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const pickLang = usePickLang();
   const { settings } = useSettings();
   const unit = settings.unitSystem;
 
@@ -199,7 +200,7 @@ export function RaceEquivalencePage() {
               >
                 {DISTANCE_OPTIONS.map((d) => (
                   <option key={d.id} value={d.id}>
-                    {isEn ? d.labelEn : d.label}
+                    {pickLang(d, "label")}
                     {d.km > 0 ? ` (${d.km} km)` : ""}
                   </option>
                 ))}
@@ -316,7 +317,7 @@ export function RaceEquivalencePage() {
                           )}
                         >
                           <td className="py-2.5 px-3 font-medium">
-                            {isEn ? p.labelEn : p.label}
+                            {pickLang(p, "label")}
                             {p.isReference && (
                               <span className="ml-2 text-xs text-muted-foreground">
                                 ({t("calculateurs.equivalence.ref")})

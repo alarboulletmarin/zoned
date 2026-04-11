@@ -3,11 +3,12 @@ import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
 import { getCompetitorBySlug, type ComparisonValue } from "@/data/competitors";
 import { CheckIcon, X, Shield, EyeOff, GithubIcon, Sparkles, ArrowLeft, ArrowRight } from "@/components/icons";
-import { useIsEnglish } from "@/lib/i18n-utils";
+import { usePickLang } from "@/lib/i18n-utils";
 
 const SITE_URL = "https://zoned.run";
 
-function ComparisonBadge({ value, isEn, t }: { value: ComparisonValue; isEn: boolean; t: (key: string) => string }) {
+function ComparisonBadge({ value, t }: { value: ComparisonValue; t: (key: string) => string }) {
+  const pickLang = usePickLang();
   switch (value.type) {
     case "yes":
       return (
@@ -26,13 +27,13 @@ function ComparisonBadge({ value, isEn, t }: { value: ComparisonValue; isEn: boo
     case "partial":
       return (
         <span className="inline-flex items-center gap-1 text-amber-600 dark:text-amber-400 text-sm">
-          ~ {isEn ? value.labelEn : value.labelFr}
+          ~ {pickLang(value, "label")}
         </span>
       );
     case "text":
       return (
         <span className="text-sm text-foreground">
-          {isEn ? value.valueEn : value.valueFr}
+          {pickLang(value, "value")}
         </span>
       );
   }
@@ -68,7 +69,7 @@ const advantageCards = [
 export function CompareDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const { t } = useTranslation("common");
-  const isEn = useIsEnglish();
+  const pickLang = usePickLang();
 
   const competitor = slug ? getCompetitorBySlug(slug) : undefined;
 
@@ -76,9 +77,9 @@ export function CompareDetailPage() {
     return <Navigate to="/compare" replace />;
   }
 
-  const name = isEn ? competitor.nameEn : competitor.nameFr;
-  const tagline = isEn ? competitor.taglineEn : competitor.taglineFr;
-  const description = isEn ? competitor.descriptionEn : competitor.descriptionFr;
+  const name = pickLang(competitor, "name");
+  const tagline = pickLang(competitor, "tagline");
+  const description = pickLang(competitor, "description");
   const title = `Zoned vs ${name}`;
 
   return (
@@ -163,13 +164,13 @@ export function CompareDetailPage() {
                     className={`border-b border-border/50 last:border-0 ${i % 2 === 0 ? "" : "bg-muted/20"}`}
                   >
                     <td className="px-4 py-3 text-muted-foreground">
-                      {isEn ? criterion.labelEn : criterion.labelFr}
+                      {pickLang(criterion, "label")}
                     </td>
                     <td className="px-4 py-3">
-                      <ComparisonBadge value={criterion.zoned} isEn={isEn} t={t} />
+                      <ComparisonBadge value={criterion.zoned} t={t} />
                     </td>
                     <td className="px-4 py-3">
-                      <ComparisonBadge value={criterion.competitor} isEn={isEn} t={t} />
+                      <ComparisonBadge value={criterion.competitor} t={t} />
                     </td>
                   </tr>
                 ))}

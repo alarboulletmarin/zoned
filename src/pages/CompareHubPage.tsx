@@ -3,13 +3,13 @@ import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
 import { competitors } from "@/data/competitors";
 import { ArrowRight } from "@/components/icons";
-import { useIsEnglish } from "@/lib/i18n-utils";
+import { usePickLang } from "@/lib/i18n-utils";
 
 const SITE_URL = "https://zoned.run";
 
 export function CompareHubPage() {
   const { t } = useTranslation("common");
-  const isEn = useIsEnglish();
+  const pickLang = usePickLang();
 
   const title = t("compare.hub.title");
   const description = t("compare.hub.description");
@@ -41,8 +41,8 @@ export function CompareHubPage() {
         {/* Competitor cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {competitors.map((competitor) => {
-            const name = isEn ? competitor.nameEn : competitor.nameFr;
-            const tagline = isEn ? competitor.taglineEn : competitor.taglineFr;
+            const name = pickLang(competitor, "name");
+            const tagline = pickLang(competitor, "tagline");
             return (
               <Link
                 key={competitor.slug}
@@ -57,7 +57,7 @@ export function CompareHubPage() {
                 </div>
                 <div className="flex items-center justify-between mt-auto">
                   <span className="text-xs rounded-full border px-2 py-0.5 text-muted-foreground">
-                    {isEn ? competitor.priceEn : competitor.priceFr}
+                    {pickLang(competitor, "price")}
                   </span>
                   <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
                 </div>

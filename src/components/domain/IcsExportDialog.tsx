@@ -10,6 +10,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { useIsEnglish } from "@/lib/i18n-utils";
 
 const DAY_NAMES_FR = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
 const DAY_NAMES_EN = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -19,12 +20,11 @@ interface IcsExportDialogProps {
   onOpenChange: (open: boolean) => void;
   daysPerWeek: number;
   onExport: (selectedDays: number[], longRunDay: number) => void;
-  isEn: boolean;
 }
 
 export function IcsExportDialog({ open, onOpenChange, daysPerWeek, onExport }: IcsExportDialogProps) {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const isEn = useIsEnglish();
   const [selectedDays, setSelectedDays] = useState<Set<number>>(new Set());
   const [longRunDay, setLongRunDay] = useState<number | null>(null);
   const dayNames = isEn ? DAY_NAMES_EN : DAY_NAMES_FR;

@@ -30,7 +30,7 @@ import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
-import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+import { useIsEnglish, usePickLang, usePickLocale } from "@/lib/i18n-utils";
 
 const SESSION_TYPE_COLORS: Record<string, string> = {
   endurance: "bg-blue-400",
@@ -51,6 +51,7 @@ export function PrebuiltPlanDetailPage() {
   const { t } = useTranslation("plan");
   const isEn = useIsEnglish();
   const pick = usePickLang();
+  const pickLocale = usePickLocale();
 
   const prebuilt = slug ? getPrebuiltBySlug(slug) : undefined;
   const [workoutNames, setWorkoutNames] = useState<Record<string, string>>({});
@@ -468,7 +469,7 @@ export function PrebuiltPlanDetailPage() {
                                       ] || "bg-gray-300",
                                     )}
                                   />
-                                  {isEn ? sessionLabel.en : sessionLabel.fr}
+                                  {pickLocale(sessionLabel)}
                                 </Badge>
                               )}
                               {!isRaceDay && (

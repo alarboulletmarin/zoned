@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { WorkoutTemplate } from "@/types";
+import { usePickLang } from "@/lib/i18n-utils";
 
 function getOS(): "windows" | "macos" | "linux" | "other" {
   const ua = navigator.userAgent.toLowerCase();
@@ -28,8 +29,8 @@ interface FitTransferGuideProps {
 }
 
 export function FitTransferGuide({ open, onOpenChange, workout }: FitTransferGuideProps) {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const pickLang = usePickLang();
   const [showOtherBrands, setShowOtherBrands] = useState(false);
   const os = getOS();
   const filename = `${workout.id}.fit`;
@@ -46,7 +47,7 @@ export function FitTransferGuide({ open, onOpenChange, workout }: FitTransferGui
 
   function formatWorkoutAsText(): string {
     const lines: string[] = [];
-    const name = isEn ? (workout.nameEn || workout.name) : workout.name;
+    const name = pickLang(workout, "name");
     lines.push(name);
     lines.push("");
 
@@ -60,7 +61,7 @@ export function FitTransferGuide({ open, onOpenChange, workout }: FitTransferGui
       if (!section.blocks?.length) continue;
       lines.push(`${section.label} :`);
       for (const block of section.blocks) {
-        const desc = isEn ? (block.descriptionEn || block.description) : block.description;
+        const desc = pickLang(block, "description");
         const rep = block.repetitions ? `${block.repetitions}x ` : "";
         lines.push(`  ${rep}${desc} (${block.durationMin}min, ${block.zone})`);
       }

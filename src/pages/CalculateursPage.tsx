@@ -4,6 +4,7 @@ import { Target, Gauge, RefreshCw, Route, Timer, ArrowRight, List, Shuffle, Star
 import type { IconProps } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
+import { usePickLang } from "@/lib/i18n-utils";
 
 interface CalculateurEntry {
   id: string;
@@ -143,8 +144,8 @@ const CALCULATEURS: CalculateurEntry[] = [
 ];
 
 export function CalculateursPage() {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const pickLang = usePickLang();
 
   return (
     <>
@@ -193,14 +194,14 @@ export function CalculateursPage() {
                       <div className="space-y-1">
                         <div className="flex items-center justify-center gap-2">
                           <h2 className="text-lg font-semibold">
-                            {isEn ? item.titleEn : item.title}
+                            {pickLang(item, "title")}
                           </h2>
                           <span className="bg-muted text-muted-foreground text-xs px-2 py-0.5 rounded-full">
                             {t("calculateurs.comingSoon")}
                           </span>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                          {isEn ? item.descriptionEn : item.description}
+                          {pickLang(item, "description")}
                         </p>
                       </div>
                     </div>
@@ -222,10 +223,10 @@ export function CalculateursPage() {
                     </div>
                     <div className="space-y-1">
                       <h2 className="text-lg font-semibold">
-                        {isEn ? item.titleEn : item.title}
+                        {pickLang(item, "title")}
                       </h2>
                       <p className="text-sm text-muted-foreground">
-                        {isEn ? item.descriptionEn : item.description}
+                        {pickLang(item, "description")}
                       </p>
                     </div>
                     <div className={cn("flex items-center gap-1 text-sm font-medium", item.iconColor)}>

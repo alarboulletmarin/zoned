@@ -6,6 +6,7 @@ import { PHASE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
+import { usePickLang } from "@/lib/i18n-utils";
 
 // ── Color maps ──────────────────────────────────────────────────────
 
@@ -80,6 +81,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   onWeekChange,
 }: PlanWeeklyViewProps) {
   const { t } = useTranslation("plan");
+  const pickLang = usePickLang();
   // ── Week navigation state ──────────────────────────────────────
   const [selectedWeek, setSelectedWeek] = useState(Math.max(1, initialWeek ?? currentWeek));
 
@@ -436,7 +438,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
             {weekData && phaseMeta && (
               <>
                 <span className="text-xs text-muted-foreground">
-                  {isEn ? phaseMeta.labelEn : phaseMeta.label}
+                  {pickLang(phaseMeta, "label")}
                 </span>
                 {parsedStartDate && (() => {
                   const shortMonths = isEn

@@ -18,6 +18,7 @@ import { MuscleGroupBadges } from "./MuscleGroupBadge";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { StrengthBlock, StrengthExercise } from "@/types/strength";
 import { getExerciseById } from "@/data/strength";
+import { usePickLang, usePickLangArray } from "@/lib/i18n-utils";
 
 interface StrengthExerciseListProps {
   blocks: StrengthBlock[];
@@ -29,8 +30,7 @@ interface StrengthExerciseListProps {
 type ExerciseMap = Map<string, StrengthExercise>;
 
 export function StrengthExerciseList({ blocks, phase, className }: StrengthExerciseListProps) {
-  const { t, i18n } = useTranslation("strength");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("strength");
   const [exercises, setExercises] = useState<ExerciseMap>(new Map());
   const [isLoading, setIsLoading] = useState(true);
 
@@ -88,7 +88,6 @@ export function StrengthExerciseList({ blocks, phase, className }: StrengthExerc
                   key={`${phase}-${gi}`}
                   block={group[0]}
                   exercise={exercises.get(group[0].exerciseId)}
-                  isEn={isEn}
                   t={t}
                 />
               );
@@ -108,7 +107,6 @@ export function StrengthExerciseList({ blocks, phase, className }: StrengthExerc
                     key={`${phase}-${gi}-${bi}`}
                     block={block}
                     exercise={exercises.get(block.exerciseId)}
-                    isEn={isEn}
                     t={t}
                   />
                 ))}
@@ -150,16 +148,17 @@ function groupBySupersets(blocks: StrengthBlock[]): StrengthBlock[][] {
 interface ExerciseItemProps {
   block: StrengthBlock;
   exercise?: StrengthExercise;
-  isEn: boolean;
   t: (key: string, opts?: Record<string, unknown>) => string;
 }
 
-function ExerciseItem({ block, exercise, isEn, t }: ExerciseItemProps) {
+function ExerciseItem({ block, exercise, t }: ExerciseItemProps) {
   const [showFormCues, setShowFormCues] = useState(false);
   const toggleFormCues = useCallback(() => setShowFormCues((prev) => !prev), []);
+  const pickLang = usePickLang();
+  const pickLangArray = usePickLangArray();
 
   const name = exercise
-    ? (isEn ? exercise.nameEn : exercise.name)
+    ? pickLang(exercise, "name")
     : block.exerciseId;
 
   const repsDisplay = typeof block.reps === "string"
@@ -167,7 +166,7 @@ function ExerciseItem({ block, exercise, isEn, t }: ExerciseItemProps) {
     : block.reps;
 
   const formCues = exercise
-    ? (isEn ? exercise.formCuesEn : exercise.formCues)
+    ? pickLangArray<string>(exercise, "formCues")
     : [];
 
   return (
@@ -243,7 +242,7 @@ function ExerciseItem({ block, exercise, isEn, t }: ExerciseItemProps) {
       {/* Notes */}
       {block.notes && (
         <p className="text-xs text-muted-foreground italic">
-          {isEn ? (block.notesEn || block.notes) : block.notes}
+          {pickLang(block, "notes") || block.notes}
         </p>
       )}
 

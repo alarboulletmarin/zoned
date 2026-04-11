@@ -7,6 +7,7 @@ import { ZoneBadge } from "@/components/domain/ZoneBadge";
 import { Clock, BookOpen, X } from "@/components/icons";
 import type { GlossaryTerm } from "@/data/glossary/types";
 import type { ArticleMeta } from "@/data/articles/types";
+import { usePickLang } from "@/lib/i18n-utils";
 
 type ContentPreviewProps =
   | { type: "glossary"; data: GlossaryTerm; onNavigate?: () => void; onClose?: () => void }
@@ -51,14 +52,11 @@ interface GlossaryPreviewProps {
 }
 
 function GlossaryPreview({ term, onNavigate, onClose }: GlossaryPreviewProps) {
-  const { t, i18n } = useTranslation("glossary");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("glossary");
+  const pickLang = usePickLang();
 
-  const displayTerm = isEn && term.termEn ? term.termEn : term.term;
-  const shortDef =
-    isEn && term.shortDefinitionEn
-      ? term.shortDefinitionEn
-      : term.shortDefinition;
+  const displayTerm = pickLang(term, "term");
+  const shortDef = pickLang(term, "shortDefinition");
 
   return (
     <div className="relative space-y-1.5 pr-5">
@@ -104,11 +102,11 @@ interface ArticlePreviewProps {
 }
 
 function ArticlePreview({ article, onNavigate, onClose }: ArticlePreviewProps) {
-  const { t, i18n } = useTranslation(["glossary", "common"]);
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation(["glossary", "common"]);
+  const pickLang = usePickLang();
 
-  const title = isEn ? article.titleEn : article.title;
-  const description = isEn ? article.descriptionEn : article.description;
+  const title = pickLang(article, "title");
+  const description = pickLang(article, "description");
   const categoryLabel = t(`common:learn.categories.${article.category}`);
 
   return (

@@ -24,6 +24,7 @@ import { WorkoutCard } from "@/components/domain";
 import { useCollection } from "@/hooks/useCollections";
 import { cn } from "@/lib/utils";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
+import { usePickLang } from "@/lib/i18n-utils";
 
 /** Map collection icon strings to actual icon components (same as CollectionCard) */
 const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
@@ -62,8 +63,8 @@ function getCollectionZone(slug: string): number {
 
 export function CollectionDetailPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const pickLang = usePickLang();
 
   const { collection, workouts, isLoading } = useCollection(slug);
 
@@ -94,8 +95,8 @@ export function CollectionDetailPage() {
   }
 
   const Icon = ICON_MAP[collection.icon] ?? Target;
-  const name = isEn ? collection.nameEn : collection.name;
-  const description = isEn ? collection.descriptionEn : collection.description;
+  const name = pickLang(collection, "name");
+  const description = pickLang(collection, "description");
   const workoutCount = collection.workoutIds.length;
 
   return (
@@ -114,7 +115,7 @@ export function CollectionDetailPage() {
             itemListElement: workouts.map((w, i) => ({
               "@type": "ListItem",
               position: i + 1,
-              name: isEn ? w.nameEn : w.name,
+              name: pickLang(w, "name"),
               url: `https://zoned.run/workout/${w.id}`,
             })),
           },

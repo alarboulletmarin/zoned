@@ -7,12 +7,12 @@ import { SessionTimeline, transformSessionBlocks } from "@/components/visualizat
 import { useWorkoutOfTheDay } from "@/hooks";
 import { getDominantZone } from "@/types";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
-import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+import { usePickLang, usePickLangArray } from "@/lib/i18n-utils";
 
 export function WorkoutOfTheDay() {
   const { t } = useTranslation(["common", "session", "library"]);
   const pick = usePickLang();
-  const isEn = useIsEnglish();
+  const pickLangArray = usePickLangArray();
 
   const { workout, isLoading } = useWorkoutOfTheDay();
 
@@ -29,7 +29,7 @@ export function WorkoutOfTheDay() {
   const dominantZone = getDominantZone(workout);
   const name = pick(workout, "name");
   const description = pick(workout, "description");
-  const tips = isEn ? workout.coachingTipsEn : workout.coachingTips;
+  const tips = pickLangArray<string>(workout, "coachingTips");
   const sessionData = transformSessionBlocks(
     { warmup: workout.warmupTemplate, mainSet: workout.mainSetTemplate, cooldown: workout.cooldownTemplate },
   );

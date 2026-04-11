@@ -6,6 +6,7 @@ import type { WorkoutTemplate, WorkoutBlock, ZoneRange, ZoneNumber } from "@/typ
 import { getZoneNumber } from "@/types";
 import { formatPace } from "@/lib/zones";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
+import { usePickLang, usePickLangArray } from "@/lib/i18n-utils";
 
 interface WorkoutStructureProps {
   workout: WorkoutTemplate;
@@ -14,8 +15,7 @@ interface WorkoutStructureProps {
 }
 
 export function WorkoutStructure({ workout, userZones, className }: WorkoutStructureProps) {
-  const { t, i18n } = useTranslation("session");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("session");
 
   const phases = [
     {
@@ -44,7 +44,7 @@ export function WorkoutStructure({ workout, userZones, className }: WorkoutStruc
           </h4>
           <div className="space-y-2">
             {phase.blocks.map((block, index) => (
-              <BlockItem key={index} block={block} isEn={isEn} userZones={userZones} t={t} />
+              <BlockItem key={index} block={block} userZones={userZones} t={t} />
             ))}
           </div>
         </div>
@@ -55,7 +55,6 @@ export function WorkoutStructure({ workout, userZones, className }: WorkoutStruc
 
 interface BlockItemProps {
   block: WorkoutBlock;
-  isEn: boolean;
   userZones?: ZoneRange[];
 }
 
@@ -81,10 +80,9 @@ function formatPersonalizedZone(zoneNumber: ZoneNumber, userZones: ZoneRange[]):
   return parts.length > 0 ? parts.join(" · ") : null;
 }
 
-function BlockItem({ block, isEn, userZones, t }: BlockItemProps & { t: (key: string, opts?: Record<string, unknown>) => string }) {
-  const description = isEn && block.descriptionEn
-    ? block.descriptionEn
-    : block.description;
+function BlockItem({ block, userZones, t }: BlockItemProps & { t: (key: string, opts?: Record<string, unknown>) => string }) {
+  const pickLang = usePickLang();
+  const description = pickLang(block, "description");
 
   const zoneNumber = block.zone ? getZoneNumber(block.zone) : null;
   const personalizedInfo = zoneNumber && userZones && userZones.length > 0
@@ -162,11 +160,11 @@ interface CoachingTipsProps {
 }
 
 export function CoachingTips({ workout, className }: CoachingTipsProps) {
-  const { t, i18n } = useTranslation("session");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("session");
+  const pickLangArray = usePickLangArray();
 
-  const tips = isEn ? workout.coachingTipsEn : workout.coachingTips;
-  const mistakes = isEn ? workout.commonMistakesEn : workout.commonMistakes;
+  const tips = pickLangArray<string>(workout, "coachingTips");
+  const mistakes = pickLangArray<string>(workout, "commonMistakes");
 
   return (
     <div className={cn("space-y-6", className)}>

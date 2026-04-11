@@ -18,6 +18,7 @@ import { SessionTimeline, ZoneDistribution } from "@/components/visualization";
 import type { WorkoutTemplate } from "@/types";
 import { getDominantZone } from "@/types";
 import { getWorkoutDuration } from "@/components/visualization";
+import { usePickLang } from "@/lib/i18n-utils";
 
 interface ExportableWorkoutCardProps {
   workout: WorkoutTemplate;
@@ -27,8 +28,8 @@ export const ExportableWorkoutCard = forwardRef<
   HTMLDivElement,
   ExportableWorkoutCardProps
 >(function ExportableWorkoutCard({ workout }, ref) {
-  const { t, i18n } = useTranslation(["session", "library", "common"]);
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation(["session", "library", "common"]);
+  const pickLang = usePickLang();
 
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);
@@ -49,10 +50,10 @@ export const ExportableWorkoutCard = forwardRef<
         <div className="flex items-start justify-between gap-4 mb-3">
           <div className="flex-1">
             <h1 className="text-2xl font-bold text-gray-900 mb-1">
-              {isEn ? workout.nameEn : workout.name}
+              {pickLang(workout, "name")}
             </h1>
             <p className="text-sm text-gray-600 line-clamp-2">
-              {isEn ? workout.descriptionEn : workout.description}
+              {pickLang(workout, "description")}
             </p>
           </div>
           <ZoneBadge zone={dominantZone} size="lg" showLabel />
@@ -116,7 +117,7 @@ export const ExportableWorkoutCard = forwardRef<
             <ul className="space-y-0.5 text-gray-600">
               {workout.warmupTemplate.slice(0, 3).map((block, i) => (
                 <li key={i} className="truncate">
-                  • {isEn && block.descriptionEn ? block.descriptionEn : block.description}
+                  • {pickLang(block, "description")}
                 </li>
               ))}
               {workout.warmupTemplate.length > 3 && (
@@ -132,7 +133,7 @@ export const ExportableWorkoutCard = forwardRef<
           <ul className="space-y-0.5 text-gray-600">
             {workout.mainSetTemplate.slice(0, 3).map((block, i) => (
               <li key={i} className="truncate">
-                • {isEn && block.descriptionEn ? block.descriptionEn : block.description}
+                • {pickLang(block, "description")}
               </li>
             ))}
             {workout.mainSetTemplate.length > 3 && (
@@ -148,7 +149,7 @@ export const ExportableWorkoutCard = forwardRef<
             <ul className="space-y-0.5 text-gray-600">
               {workout.cooldownTemplate.slice(0, 3).map((block, i) => (
                 <li key={i} className="truncate">
-                  • {isEn && block.descriptionEn ? block.descriptionEn : block.description}
+                  • {pickLang(block, "description")}
                 </li>
               ))}
               {workout.cooldownTemplate.length > 3 && (

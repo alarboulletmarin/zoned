@@ -12,6 +12,7 @@ import { ChevronUp, ChevronDown, Trash2 } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import type { WorkoutBlock, Zone, ZoneNumber } from "@/types";
 import { ZONE_META, getZoneNumber } from "@/types";
+import { usePickLang } from "@/lib/i18n-utils";
 
 interface BlockEditorProps {
   block: WorkoutBlock;
@@ -36,8 +37,8 @@ export function BlockEditor({
   onMoveUp,
   onMoveDown,
 }: BlockEditorProps) {
-  const { t, i18n } = useTranslation("contribute");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("contribute");
+  const pickLang = usePickLang();
 
   const zoneNumber: ZoneNumber = block.zone ? getZoneNumber(block.zone) : 2;
 
@@ -157,7 +158,7 @@ export function BlockEditor({
                 {ZONES.map((zone) => {
                   const zn = getZoneNumber(zone);
                   const meta = ZONE_META[zn];
-                  const label = isEn ? meta.labelEn : meta.label;
+                  const label = pickLang(meta, "label");
                   return (
                     <SelectItem key={zone} value={zone}>
                       <span className="flex items-center gap-2">

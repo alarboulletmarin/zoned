@@ -29,10 +29,11 @@ import { useWorkouts, useTips } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { usePlans } from "@/hooks/usePlans";
 import { ZONE_META, type ZoneNumber, type WorkoutCategory } from "@/types";
+import { usePickLang } from "@/lib/i18n-utils";
 
 export function HomePage() {
-  const { t, i18n } = useTranslation(["common", "library"]);
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation(["common", "library"]);
+  const pickLang = usePickLang();
   const navigate = useNavigate();
   const [selectedZone, setSelectedZone] = useState<ZoneNumber | null>(null);
   const [isLoadingRandom, setIsLoadingRandom] = useState(false);
@@ -364,10 +365,10 @@ export function HomePage() {
                       Z{zone}
                     </span>
                     <h3 className="font-bold text-sm uppercase tracking-wide mb-3">
-                      {isEn ? meta.labelEn : meta.label}
+                      {pickLang(meta, "label")}
                     </h3>
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      {isEn ? meta.descriptionEn : meta.description}
+                      {pickLang(meta, "description")}
                     </p>
                   </div>
                 </button>

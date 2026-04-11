@@ -67,3 +67,69 @@ export function usePickLang() {
     return (value as string | undefined) ?? fallback ?? "";
   };
 }
+
+/**
+ * Pick the localized array field from a data object.
+ * Same fallback logic as `pickLang` but for array-typed fields.
+ *
+ * @example
+ *   pickLangArray<string>(workout, "coachingTips")  // workout.coachingTipsEn or workout.coachingTips
+ */
+export function pickLangArray<T = unknown>(
+  obj: object | null | undefined,
+  field: string,
+): T[] {
+  if (!obj) return [];
+  const record = obj as Record<string, unknown>;
+  const en = record[`${field}En`];
+  const fr = record[field] ?? record[`${field}Fr`];
+  const value = isEnglish() ? (en ?? fr) : (fr ?? en);
+  return Array.isArray(value) ? (value as T[]) : [];
+}
+
+/**
+ * React hook version of `pickLangArray` — reactive to language changes.
+ */
+export function usePickLangArray() {
+  const isEn = useIsEnglish();
+  return <T = unknown>(
+    obj: object | null | undefined,
+    field: string,
+  ): T[] => {
+    if (!obj) return [];
+    const record = obj as Record<string, unknown>;
+    const en = record[`${field}En`];
+    const fr = record[field] ?? record[`${field}Fr`];
+    const value = isEn ? (en ?? fr) : (fr ?? en);
+    return Array.isArray(value) ? (value as T[]) : [];
+  };
+}
+
+/**
+ * Pick the right string from a `{fr, en}` shaped locale object.
+ * Use for static label maps: `{sessionType: {fr: "…", en: "…"}}`.
+ *
+ * @example
+ *   pickLocale(SESSION_TYPE_LABELS[type])
+ */
+export function pickLocale(
+  obj: { fr: string; en: string } | null | undefined,
+  fallback: string = "",
+): string {
+  if (!obj) return fallback;
+  return isEnglish() ? obj.en : obj.fr;
+}
+
+/**
+ * React hook version of `pickLocale` — reactive to language changes.
+ */
+export function usePickLocale() {
+  const isEn = useIsEnglish();
+  return (
+    obj: { fr: string; en: string } | null | undefined,
+    fallback: string = "",
+  ): string => {
+    if (!obj) return fallback;
+    return isEn ? obj.en : obj.fr;
+  };
+}

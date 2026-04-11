@@ -7,7 +7,7 @@ import { TARGET_SYSTEM_SCIENCE } from "@/data/science";
 import type { TargetSystemScience, ScientificReference } from "@/data/science";
 import { ZONE_META } from "@/types";
 import type { WorkoutTemplate, ZoneNumber } from "@/types";
-import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+import { usePickLang, usePickLangArray } from "@/lib/i18n-utils";
 
 interface ScienceSectionProps {
   workout: WorkoutTemplate;
@@ -39,8 +39,8 @@ function getWorkoutZones(workout: WorkoutTemplate): ZoneNumber[] {
 
 export function ScienceSection({ workout }: ScienceSectionProps) {
   const { t } = useTranslation("session");
-  const isEn = useIsEnglish();
   const pick = usePickLang();
+  const pickLangArray = usePickLangArray();
 
   const science: TargetSystemScience | undefined =
     TARGET_SYSTEM_SCIENCE[workout.targetSystem];
@@ -109,7 +109,7 @@ export function ScienceSection({ workout }: ScienceSectionProps) {
               {t("science.adaptations")}
             </h3>
             <ul className="space-y-1 ml-6">
-              {(isEn ? science.adaptationsEn : science.adaptations).map(
+              {pickLangArray<string>(science, "adaptations").map(
                 (adaptation: string, i: number) => (
                   <li
                     key={i}

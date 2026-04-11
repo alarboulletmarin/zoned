@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
 import { useSettings } from "@/hooks/useSettings";
 import { formatPaceWithUnit } from "@/lib/units";
+import { usePickLang } from "@/lib/i18n-utils";
 
 // Open-class world records in seconds
 const WORLD_RECORDS = {
@@ -85,8 +86,8 @@ function getPerformanceLevel(
 }
 
 export function AgeGradedPage() {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const pickLang = usePickLang();
   const { settings } = useSettings();
   const unit = settings.unitSystem;
 
@@ -259,7 +260,7 @@ export function AgeGradedPage() {
                 >
                   {DISTANCES.map((d) => (
                     <option key={d.id} value={d.id}>
-                      {isEn ? d.labelEn : d.label}
+                      {pickLang(d, "label")}
                     </option>
                   ))}
                 </select>

@@ -58,7 +58,7 @@ import {
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { IntensityBadge, INTENSITY_COLORS } from "@/components/domain/IntensityBadge";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
-import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+import { usePickLang, usePickLangArray } from "@/lib/i18n-utils";
 import { MuscleGroupBadges } from "@/components/domain/MuscleGroupBadge";
 import { StrengthExerciseList } from "@/components/domain/StrengthExerciseList";
 import { loadUserZonePrefs, calculateAllZones } from "@/lib/zones";
@@ -586,8 +586,8 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
   const { t: tStrength } = useTranslation("strength");
   const { t: tCommon } = useTranslation("common");
   const { t: tLib } = useTranslation("library");
-  const isEn = useIsEnglish();
   const pick = usePickLang();
+  const pickLangArray = usePickLangArray();
 
   const workoutName = pick(workout, "name");
   const description = pick(workout, "description");
@@ -619,8 +619,8 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
   const parentCrumb = breadcrumbs[breadcrumbs.length - 2];
 
   // Coaching tips (shared shape with running)
-  const tips = isEn ? workout.coachingTipsEn : workout.coachingTips;
-  const mistakes = isEn ? workout.commonMistakesEn : workout.commonMistakes;
+  const tips = pickLangArray<string>(workout, "coachingTips");
+  const mistakes = pickLangArray<string>(workout, "commonMistakes");
 
   // Equipment display
   const equipmentList = workout.equipment.filter((e) => e !== "none");

@@ -6,6 +6,7 @@ import { PHASE_META } from "@/types/plan";
 import type { TrainingPlan, PlanSession } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
+import { usePickLang } from "@/lib/i18n-utils";
 
 // ── Color maps ──────────────────────────────────────────────────────
 
@@ -86,6 +87,7 @@ export const PlanCalendar = memo(function PlanCalendar({
   initialWeek,
 }: PlanCalendarProps) {
   const { t } = useTranslation("plan");
+  const pickLang = usePickLang();
   const dayHeaders = useMemo(
     () => [0, 1, 2, 3, 4, 5, 6].map((i) => t(`daysShort.${i}`)),
     [t],
@@ -515,7 +517,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                       </span>
                     </div>
                     <span className="text-[10px] text-muted-foreground leading-none">
-                      {isEn ? phaseMeta.labelEn : phaseMeta.label}
+                      {pickLang(phaseMeta, "label")}
                     </span>
                     {week.sessions.length > 0 && (
                       <span className="text-[9px] text-muted-foreground/70 tabular-nums">

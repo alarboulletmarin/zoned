@@ -9,14 +9,15 @@ import { savePlan } from "@/lib/planStorage";
 import { createFreePlan } from "@/lib/createFreePlan";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { cn } from "@/lib/utils";
+import { useIsEnglish } from "@/lib/i18n-utils";
 
 const MIN_WEEKS = 4;
 const MAX_WEEKS = 52;
 const DEFAULT_WEEKS = 12;
 
 export function FreePlanCreatePage() {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const isEn = useIsEnglish();
   const navigate = useNavigate();
 
   const [name, setName] = useState("");

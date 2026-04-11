@@ -12,7 +12,7 @@ import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import { DAY_LABELS } from "@/lib/planGenerator/constants";
 import i18n from "@/i18n";
-import { isEnglish, pickLang } from "@/lib/i18n-utils";
+import { isEnglish, pickLang, pickLangArray } from "@/lib/i18n-utils";
 
 /**
  * Get the Monday of the week that contains the given date.
@@ -119,7 +119,7 @@ export function exportPlanToICS(
             descriptionLines.push(desc);
 
             // Coaching tips
-            const tips = isEn ? str.coachingTipsEn : str.coachingTips;
+            const tips = pickLangArray<string>(str, "coachingTips");
             if (tips?.length) {
               descriptionLines.push("");
               descriptionLines.push(`--- ${t("tips")} ---`);
@@ -173,7 +173,7 @@ export function exportPlanToICS(
             }
 
             // Coaching tips
-            const tips = isEn ? running.coachingTipsEn : running.coachingTips;
+            const tips = pickLangArray<string>(running, "coachingTips");
             if (tips?.length) {
               descriptionLines.push("");
               descriptionLines.push(`--- ${t("tips")} ---`);

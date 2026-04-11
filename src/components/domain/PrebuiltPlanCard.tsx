@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import type { PrebuiltPlan } from "@/data/prebuilt-plans/types";
+import { usePickLang } from "@/lib/i18n-utils";
 
 const DIFFICULTY_GRADIENT: Record<string, string> = {
   beginner: "bg-gradient-to-br from-green-500/10 dark:from-green-500/20 to-transparent",
@@ -26,11 +27,11 @@ interface PrebuiltPlanCardProps {
 }
 
 export function PrebuiltPlanCard({ plan }: PrebuiltPlanCardProps) {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
+  const pickLang = usePickLang();
 
-  const name = isEn ? plan.nameEn : plan.name;
-  const description = isEn ? plan.descriptionEn : plan.description;
+  const name = pickLang(plan, "name");
+  const description = pickLang(plan, "description");
   const difficultyKey = DIFFICULTY_KEYS[plan.difficulty];
   const raceMeta = plan.raceDistance
     ? RACE_DISTANCE_META[plan.raceDistance]
@@ -66,7 +67,7 @@ export function PrebuiltPlanCard({ plan }: PrebuiltPlanCardProps) {
             </Badge>
             {raceMeta && (
               <Badge variant="default" className="text-[10px] sm:text-xs px-1.5 py-0">
-                {isEn ? raceMeta.labelEn : raceMeta.label}
+                {pickLang(raceMeta, "label")}
               </Badge>
             )}
           </div>

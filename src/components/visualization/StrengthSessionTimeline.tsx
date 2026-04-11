@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import type { StrengthWorkoutTemplate, StrengthBlock, StrengthExercise } from "@/types/strength";
 import { loadAllExercises } from "@/data/strength";
+import { useIsEnglish } from "@/lib/i18n-utils";
 import { MUSCLE_COLORS } from "@/components/domain/MuscleGroupBadge";
 import {
   Tooltip,
@@ -92,8 +93,8 @@ function getIntensityHeight(block: StrengthBlock): number {
 }
 
 export function StrengthSessionTimeline({ workout, className }: StrengthSessionTimelineProps) {
-  const { t, i18n } = useTranslation("strength");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("strength");
+  const isEn = useIsEnglish();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [openTooltipIndex, setOpenTooltipIndex] = useState<number | null>(null);
   const [exerciseMap, setExerciseMap] = useState<Map<string, StrengthExercise>>(new Map());
