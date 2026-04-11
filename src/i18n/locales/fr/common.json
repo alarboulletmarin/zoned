@@ -6,47 +6,16 @@
     "heroTitleAccent": "objectif"
   },
   "about": {
-    "title": "À propos de Zoned",
-    "description": "200 séances structurées, 9 calculateurs, 8 plans d'entraînement, 16 collections et 12 articles — le tout gratuit, sans compte et sans tracking. Zoned rend l'entraînement par zones accessible à tous les coureurs.",
-    "personal": {
-      "title": "Qui suis-je",
-      "bio": "Coureur et développeur passionné, j'ai créé Zoned pour rendre l'entraînement structuré par zones accessible à tous — gratuitement, sans compte et sans tracking. Chaque séance, chaque calculateur et chaque plan est basé sur la science de l'entraînement (Seiler, Billat, Daniels)."
-    },
-    "openSource": {
-      "title": "Open Source",
-      "description": "Un projet libre et ouvert",
-      "contributions": "Ce projet est open source et disponible sur GitHub. Les contributions sont les bienvenues !",
-      "viewRepo": "Voir le dépôt"
-    },
-    "vibeCoded": {
-      "title": "Vibe Coded",
-      "description": "Une expérience de développement assistée par IA",
-      "claude": "Développé avec Claude Code et le modèle Opus 4.5 d'Anthropic",
-      "human": "Guidé et vérifié par un développeur humain",
-      "experience": "Une expérience de 'vibe coding' où l'IA assiste la création"
-    },
-    "privacy": {
-      "title": "Vie privée",
-      "description": "Vos données restent les vôtres",
-      "noServer": "Aucune donnée n'est envoyée à un serveur",
-      "localStorage": "Tout est stocké localement dans votre navigateur (localStorage)",
-      "noAccount": "Pas de compte utilisateur requis",
-      "analytics": "Pas de tracking invasif (juste Vercel Analytics anonymisé)"
-    },
-    "credits": {
-      "title": "Stack technique",
-      "description": "Technologies utilisées",
-      "framework": "React + Vite + TypeScript",
-      "ui": "shadcn/ui + Tailwind CSS",
-      "icons": "Lucide React"
-    }
+    "seoHeroLabel": "À propos",
+    "statsWorkouts": "Séances",
+    "statsCalculators": "Calculateurs"
   },
   "export": {
     "title": "Exporter",
     "calendar": "Calendrier (ICS)",
     "image": "Image (PNG)",
     "pdf": "Document (PDF)",
-    "json": "Donn\u00e9es (JSON)",
+    "json": "Données (JSON)",
     "garmin": "Garmin (FIT)",
     "selectDateTime": "Choisir date et heure",
     "download": "Télécharger",
@@ -77,7 +46,7 @@
       "sessions": "séances",
       "key": "clés",
       "peakWeek": "semaine pic",
-      "appendixNote": "Les exposants (ex: \u00b9\u00b2\u00b3) renvoient au Lexique des séances en fin de document ({{count}} séances uniques).",
+      "appendixNote": "Les exposants (ex: ¹²³) renvoient au Lexique des séances en fin de document ({{count}} séances uniques).",
       "targetPaces": "Allures cibles",
       "raceThreshold": "Course / Seuil",
       "easyLongRun": "Endurance / SL",
@@ -109,11 +78,14 @@
     "workoutPdf": {
       "description": "Description",
       "durationCol": "Durée",
+      "zone": "Zone",
       "reps": "Reps",
       "rest": "Repos",
       "none": "Aucun",
       "category": "Catégorie",
       "difficulty": "Difficulté",
+      "durationLabel": "Durée",
+      "durationValue": "{{duration}} min",
       "warmup": "Échauffement",
       "mainSet": "Corps de séance",
       "cooldown": "Retour au calme",
@@ -131,14 +103,19 @@
       "eventCol": "Action",
       "splitTable": "Tableau des splits",
       "dist": "Dist",
+      "split": "Split",
       "paceCol": "Allure",
       "cumul": "Cumul",
+      "nutrition": "Nutrition",
       "carbsSummary": "Glucides: {{perHour}}g/h ({{total}}g total)",
       "fluidsSummary": "Hydratation: {{perHour}}ml/h ({{total}}ml total)",
       "sodiumSummary": "Sodium: {{perHour}}mg/h",
       "gelsSummary": "Gels: {{count}} au total, tous les ~{{frequency}} min",
       "fuelingTimeline": "Plan de ravitaillement",
+      "minCol": "Min",
+      "actionCol": "Action",
       "breakfast": "Petit-dejeuner d'avant-course",
+      "breakfastLine": "{{time}} - {{description}}",
       "mentalCues": "Cues mentaux",
       "segment": "Segment",
       "cue": "Cue",
@@ -149,6 +126,7 @@
     },
     "planIcs": {
       "raceDay": "Jour de course",
+      "race": "Course",
       "targetTime": "Temps cible",
       "week": "Semaine",
       "dayLabel": "Jour",
@@ -157,6 +135,9 @@
       "warmup": "Échauffement",
       "mainSet": "Corps de séance",
       "cooldown": "Retour au calme",
+      "warmupSep": "--- Échauffement ---",
+      "mainSetSep": "--- Corps de séance ---",
+      "cooldownSep": "--- Retour au calme ---",
       "tips": "Conseils",
       "rest": "récup"
     }
@@ -502,7 +483,11 @@
       "pace": "Allure",
       "useThisVma": "Utiliser cette VMA",
       "createPlan": "Créer un plan",
-      "vmaSaved": "VMA enregistrée : {{vma}} km/h"
+      "vmaSaved": "VMA enregistrée : {{vma}} km/h",
+      "hours": "Heures",
+      "minutes": "Minutes",
+      "seconds": "Secondes",
+      "hoursShort": "h"
     },
     "splits": {
       "seoTitle": "Générateur de Splits",
@@ -533,7 +518,8 @@
       "cumul": "Cumul.",
       "total": "Total",
       "downloadPng": "Télécharger en PNG",
-      "emptyState": "Entrez une distance et un temps cible pour générer vos splits."
+      "emptyState": "Entrez une distance et un temps cible pour générer vos splits.",
+      "customDistancePlaceholder": "15"
     },
     "equivalence": {
       "seoTitle": "Équivalence entre distances — Formule de Riegel",
@@ -552,7 +538,10 @@
       "paceCol": "Allure",
       "zoneCol": "Zone",
       "ref": "réf",
-      "riegelExplanation": "Basé sur la formule de Riegel (1977), utilisée par la plupart des calculateurs de course. Plus fiable entre distances proches (5K→10K) qu'entre distances éloignées (5K→Marathon)."
+      "riegelExplanation": "Basé sur la formule de Riegel (1977), utilisée par la plupart des calculateurs de course. Plus fiable entre distances proches (5K→10K) qu'entre distances éloignées (5K→Marathon).",
+      "hours": "Heures",
+      "minutes": "Minutes",
+      "seconds": "Secondes"
     },
     "ageGraded": {
       "seoTitle": "Performance Age-Graded — Score de niveau",
@@ -578,7 +567,10 @@
       "levelNational": "Niveau national",
       "levelRegional": "Niveau régional",
       "levelLocal": "Niveau local",
-      "levelRecreational": "Récréatif"
+      "levelRecreational": "Récréatif",
+      "hours": "Heures",
+      "minutes": "Minutes",
+      "seconds": "Secondes"
     },
     "treadmill": {
       "seoTitle": "Convertisseur Tapis Roulant",
@@ -604,7 +596,14 @@
       "scenarioSaved": "Scénario sauvegardé",
       "scenarioDeleted": "Scénario supprimé",
       "savePlaceholder": "ex. 10K : 3x vs 5x/sem",
-      "cancel": "Annuler"
+      "cancel": "Annuler",
+      "seoAppName": "Simulateur What-If",
+      "seoAppDescription": "Comparez deux scénarios d'entraînement côte à côte",
+      "seoBreadcrumb": "Simulateur What-If",
+      "title": "Simulateur What-If",
+      "saveDescription": "Donne un nom à ta comparaison pour la retrouver plus tard.",
+      "deleteTitle": "Supprimer ce scénario ?",
+      "deleteDescription": "Ce scénario sera définitivement supprimé. Cette action est irréversible."
     },
     "breadcrumb": "Calculateurs"
   },
@@ -621,7 +620,11 @@
     "create": "Créer",
     "managePlans": "Gérer les plans",
     "deleteExisting": "Supprimer un plan existant",
-    "limitReached": "Limite de 5 plans atteinte. Supprimez un plan existant."
+    "limitReached": "Limite de 5 plans atteinte. Supprimez un plan existant.",
+    "seoDescription": "Créez un plan d'entraînement vierge.",
+    "subtitle": "Créez un plan vierge et remplissez-le à votre rythme",
+    "namePlaceholder": "ex. Prépa marathon de printemps",
+    "limitReachedShort": "Limite de 5 plans atteinte. "
   },
   "workoutBuilder": {
     "myWorkouts": "Mes séances",
@@ -641,6 +644,7 @@
     "exportLabel": "Exporter",
     "deleteLabel": "Supprimer",
     "deleteConfirm": "Supprimer cette séance ?",
+    "deleteDescription": "Cette action est irréversible. La séance sera définitivement supprimée.",
     "cancel": "Annuler",
     "delete": "Supprimer",
     "workoutSaved": "Séance sauvegardée",
@@ -653,7 +657,9 @@
     "namePlaceholder": "Nom de la séance...",
     "save": "Enregistrer",
     "preview": "Aperçu",
-    "addBlock": "Ajouter un bloc"
+    "addBlock": "Ajouter un bloc",
+    "listSubtitle": "Séances personnalisées stockées dans votre navigateur",
+    "deleteDescription": "Cette action est irréversible. La séance sera définitivement supprimée."
   },
   "workoutDetail": {
     "back": "Retour",
@@ -666,7 +672,8 @@
     "pdfExported": "PDF exporté",
     "exportFailed": "Erreur d'export",
     "deleteConfirm": "Supprimer cette simulation ?",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "deleteDescription": "Cette simulation sera définitivement supprimée. Cette action est irréversible."
   },
   "footer": {
     "strength": "renforcement"
@@ -840,11 +847,6 @@
     "noFavoritesYet": "Pas encore de favoris",
     "noFavoritesDesc": "Parcourez la bibliothèque et appuyez sur l'icône cœur pour sauvegarder vos séances préférées ici."
   },
-  "about": {
-    "seoHeroLabel": "À propos",
-    "statsWorkouts": "Séances",
-    "statsCalculators": "Calculateurs"
-  },
   "comparePage": {
     "whyComparisons": "Pourquoi ces comparaisons ?",
     "whyComparisonsDesc": "Zoned est gratuit, open source, ne nécessite aucun compte et ne collecte aucune donnée. Ces différences comptent — ces pages sont là pour vous aider à choisir.",
@@ -945,5 +947,22 @@
   "article": {
     "home": "Accueil",
     "learn": "Apprendre"
+  },
+  "pages": {
+    "workoutDetail": {
+      "back": "Retour",
+      "planFallback": "Plan",
+      "collectionFallback": "Collection",
+      "envAny": "Tous",
+      "exerciseCredits": "Illustrations des exercices issues de free-exercise-db (Domaine Public)."
+    }
+  },
+  "domain": {
+    "fitTransfer": {
+      "polarPath": "Favoris → Créer",
+      "suuntoPath": "Entraînement → Créer",
+      "corosPath": "Créer",
+      "applePath": "Exercice → Créer (watchOS 9+)"
+    }
   }
 }

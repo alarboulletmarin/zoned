@@ -1,4 +1,5 @@
 import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { Star, Flag, Clock, Trash2, Eye, Dumbbell } from "@/components/icons";
 import { PHASE_META } from "@/types/plan";
@@ -35,11 +36,6 @@ const PHASE_BG: Record<string, string> = {
   taper: "bg-green-50/50 dark:bg-green-950/20",
   recovery: "bg-slate-50/50 dark:bg-slate-950/20",
 };
-
-// ── Day headers ─────────────────────────────────────────────────────
-
-const DAY_HEADERS_FR = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
-const DAY_HEADERS_EN = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 // ── Props ───────────────────────────────────────────────────────────
 
@@ -89,7 +85,11 @@ export const PlanCalendar = memo(function PlanCalendar({
   visibleMonth,
   initialWeek,
 }: PlanCalendarProps) {
-  const dayHeaders = isEn ? DAY_HEADERS_EN : DAY_HEADERS_FR;
+  const { t } = useTranslation("plan");
+  const dayHeaders = useMemo(
+    () => [0, 1, 2, 3, 4, 5, 6].map((i) => t(`daysShort.${i}`)),
+    [t],
+  );
 
   // ── Scroll-to-week ref ────────────────────────────────────────────
   const initialWeekRowRef = useRef<HTMLTableRowElement>(null);
@@ -449,7 +449,7 @@ export const PlanCalendar = memo(function PlanCalendar({
           <thead>
             <tr>
               <th className="sticky left-0 z-10 bg-background px-2 py-2 text-left text-xs font-medium text-muted-foreground">
-                {isEn ? "Week" : "Sem."}
+                {t("calendar.week")}
               </th>
               {dayHeaders.map((day, i) => (
                 <th
@@ -478,11 +478,11 @@ export const PlanCalendar = memo(function PlanCalendar({
               // Short label for calendar column (avoid overflow)
               let weekLabel: string;
               if (week.weekNumber === plan.totalWeeks && week.sessions.some(s => s.workoutId === "__race_day__")) {
-                weekLabel = isEn ? "Race" : "Course";
+                weekLabel = t("calendar.race");
               } else if (week.isRecoveryWeek) {
-                weekLabel = isEn ? "Recovery" : "Récup";
+                weekLabel = t("calendar.recoveryWeek");
               } else {
-                weekLabel = `${isEn ? "W" : "S"}${week.weekNumber}`;
+                weekLabel = `${t("calendar.weekPrefix")}${week.weekNumber}`;
               }
 
               return (
@@ -524,7 +524,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                     )}
                     {isCurrent && (
                       <div className="text-[9px] font-semibold text-primary mt-0.5">
-                        {isEn ? "NOW" : "ACTUEL"}
+                        {t("calendar.now")}
                       </div>
                     )}
                     {/* Completion stats + validate button */}
@@ -551,9 +551,9 @@ export const PlanCalendar = memo(function PlanCalendar({
                             type="button"
                             onClick={(e) => { e.stopPropagation(); onValidateWeek(week.weekNumber); }}
                             className="text-[9px] mt-0.5 px-1 py-0.5 rounded bg-primary/10 hover:bg-primary/20 text-primary font-medium transition-colors"
-                            title={isEn ? "Validate week" : "Valider la semaine"}
+                            title={t("calendar.validateWeek")}
                           >
-                            {isEn ? `Validate ${done}/${total}` : `Valider ${done}/${total}`}
+                            {t("calendar.validateCount", { done, total })}
                           </button>
                         );
                       }
@@ -667,7 +667,6 @@ export const PlanCalendar = memo(function PlanCalendar({
                                     session={session}
                                     isRaceDay={isRaceDay}
                                     workoutName={sessionName}
-                                    isEn={isEn}
                                     onClick={
                                       onSessionClick && !isRaceDay
                                         ? () =>
@@ -743,7 +742,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                 }}
               >
                 <Eye className="size-4 text-muted-foreground shrink-0" />
-                {isEn ? "View session" : "Voir la s\u00e9ance"}
+                {t("calendar.viewSession")}
               </button>
             )}
             {onToggleComplete && (
@@ -759,7 +758,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                   <svg viewBox="0 0 24 24" className="size-4 text-green-500 shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12l5 5 9-9" />
                   </svg>
-                  {isEn ? "Toggle done" : "Fait / pas fait"}
+                  {t("completion.toggleDone")}
                 </button>
               </>
             )}
@@ -773,7 +772,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                 }}
               >
                 <Trash2 className="size-4 shrink-0" />
-                {isEn ? "Delete" : "Supprimer"}
+                {t("calendar.deleteSession")}
               </button>
             )}
           </div>
@@ -789,7 +788,6 @@ const SessionCell = memo(function SessionCell({
   session,
   isRaceDay,
   workoutName,
-  isEn,
   onClick,
   onDelete,
   onToggleComplete,
@@ -798,18 +796,18 @@ const SessionCell = memo(function SessionCell({
   session: PlanSession;
   isRaceDay: boolean;
   workoutName?: string;
-  isEn: boolean;
   onClick?: () => void;
   onDelete?: () => void;
   onToggleComplete?: () => void;
   onContextMenu?: (e: React.MouseEvent) => void;
 }) {
+  const { t } = useTranslation("plan");
   if (isRaceDay) {
     return (
       <div className="rounded border border-primary/30 bg-primary/10 px-1 py-1 text-center">
         <Flag className="size-3 text-primary mx-auto" />
         <span className="text-[10px] font-semibold text-primary leading-tight block">
-          {isEn ? "Race" : "Course"}
+          {t("calendar.race")}
         </span>
       </div>
     );
@@ -839,7 +837,7 @@ const SessionCell = memo(function SessionCell({
             "hidden sm:group-hover:block",
             "transition-colors",
           )}
-          title={isEn ? "Delete session" : "Supprimer la séance"}
+          title={t("calendar.deleteSessionTitle")}
         >
           <Trash2 className="size-3" />
         </button>
@@ -853,9 +851,9 @@ const SessionCell = memo(function SessionCell({
             role="checkbox"
             aria-checked={isCompleted}
             aria-label={
-              isCompleted ? (isEn ? "Completed" : "Fait")
-                : isSkipped ? (isEn ? "Skipped" : "Passé")
-                  : (isEn ? "Mark as done" : "Marquer comme fait")
+              isCompleted ? t("completion.completed")
+                : isSkipped ? t("completion.skipped")
+                  : t("completion.markDone")
             }
             onClick={(e) => {
               e.stopPropagation();
@@ -872,9 +870,9 @@ const SessionCell = memo(function SessionCell({
                   : "border-muted-foreground/40 hover:border-primary"
             )}
             title={
-              isCompleted ? (isEn ? "Completed" : "Fait")
-                : isSkipped ? (isEn ? "Skipped" : "Passé")
-                  : (isEn ? "Mark as done" : "Marquer comme fait")
+              isCompleted ? t("completion.completed")
+                : isSkipped ? t("completion.skipped")
+                  : t("completion.markDone")
             }
           >
             {isCompleted && (

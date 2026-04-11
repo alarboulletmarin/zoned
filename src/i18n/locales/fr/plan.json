@@ -270,7 +270,9 @@
     "rpeAvg": "RPE moy",
     "peakVolume": "Volume pic",
     "peakLongRun": "Pic sortie longue",
-    "longRun": "SL"
+    "longRun": "SL",
+    "wk": "sem",
+    "sessionsLower": "séances"
   },
   "calendar": {
     "now": "ACTUEL",
@@ -344,7 +346,8 @@
     "noFavoriteStrength": "Aucune séance de renfo en favoris",
     "noMatchingStrength": "Aucune séance de renfo correspondante",
     "noFavorites": "Aucune séance en favoris",
-    "noMatching": "Aucune séance correspondante"
+    "noMatching": "Aucune séance correspondante",
+    "favoritesHint": "Ajoutez d'abord des séances en favoris depuis la bibliothèque"
   },
   "plansPage": {
     "title": "Mes Plans d'Entraînement",
@@ -366,7 +369,9 @@
     "deleteButton": "Supprimer",
     "cancelButton": "Annuler",
     "weekProgress": "Semaine {{current}} / {{total}}",
-    "target": "Objectif : "
+    "target": "Objectif : ",
+    "sessionsCount": "{{count}} séances",
+    "planCount": "{{count}} plans"
   },
   "prebuilt": {
     "notFound": "Plan introuvable",
@@ -380,6 +385,10 @@
     "noSessions": "Aucune séance cette semaine",
     "raceDay": "Jour de course !",
     "seoFr": "Plan d'entraînement {{name}} gratuit : {{weeks}} semaines, {{sessions}} séances/semaine. {{desc}}",
-    "seoEn": "Free {{name}} training plan: {{weeks}} weeks, {{sessions}} sessions/week. {{desc}}"
+    "seoEn": "Free {{name}} training plan: {{weeks}} weeks, {{sessions}} sessions/week. {{desc}}",
+    "weeksCount": "{{count}} semaines",
+    "weeksShort": "sem.",
+    "sessionsPerWeek": "séances/sem.",
+    "sessionsCount": "{{count}} séances"
   }
 }

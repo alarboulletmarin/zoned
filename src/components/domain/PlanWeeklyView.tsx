@@ -1,4 +1,5 @@
 import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, Dumbbell } from "@/components/icons";
 import { PHASE_META } from "@/types/plan";
@@ -35,13 +36,6 @@ const PHASE_BG: Record<string, string> = {
   taper: "bg-green-50/50 dark:bg-green-950/20",
   recovery: "bg-slate-50/50 dark:bg-slate-950/20",
 };
-
-// ── Day headers ─────────────────────────────────────────────────────
-
-const DAY_HEADERS_SHORT_FR = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
-const DAY_HEADERS_SHORT_EN = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-const DAY_HEADERS_FULL_FR = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
-const DAY_HEADERS_FULL_EN = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 // ── Props ───────────────────────────────────────────────────────────
 
@@ -85,6 +79,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   onAddToDay,
   onWeekChange,
 }: PlanWeeklyViewProps) {
+  const { t } = useTranslation("plan");
   // ── Week navigation state ──────────────────────────────────────
   const [selectedWeek, setSelectedWeek] = useState(Math.max(1, initialWeek ?? currentWeek));
 
@@ -398,8 +393,14 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
 
   const phaseMeta = weekData ? PHASE_META[weekData.phase] : null;
 
-  const dayHeadersShort = isEn ? DAY_HEADERS_SHORT_EN : DAY_HEADERS_SHORT_FR;
-  const dayHeadersFull = isEn ? DAY_HEADERS_FULL_EN : DAY_HEADERS_FULL_FR;
+  const dayHeadersShort = useMemo(
+    () => [0, 1, 2, 3, 4, 5, 6].map((i) => t(`daysShort.${i}`)),
+    [t],
+  );
+  const dayHeadersFull = useMemo(
+    () => [0, 1, 2, 3, 4, 5, 6].map((i) => t(`days.${i}`)),
+    [t],
+  );
 
   // ── Render ────────────────────────────────────────────────────
 
@@ -424,11 +425,11 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
           <div className="text-center">
             <div className="flex items-center justify-center gap-2">
               <span className="font-semibold text-sm md:text-base">
-                {isEn ? `Week ${selectedWeek}` : `Semaine ${selectedWeek}`}
+                {t("weeklyView.weekTitle", { week: selectedWeek })}
               </span>
               {isCurrent && (
                 <span className="text-[10px] md:text-xs font-semibold text-primary bg-primary/10 px-1.5 py-0.5 rounded">
-                  {isEn ? "NOW" : "ACTUEL"}
+                  {t("calendar.now")}
                 </span>
               )}
             </div>
@@ -495,7 +496,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                 >
                   <path d="M2 6l3 3 5-5" />
                 </svg>
-                {done}/{total} {isEn ? "completed" : "termin\u00e9es"}
+                {done}/{total} {t("weeklyView.completed")}
               </div>
             );
           }
@@ -510,9 +511,9 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                     onValidateWeek(selectedWeek);
                   }}
                   className="text-xs px-2 py-1 rounded bg-primary/10 hover:bg-primary/20 text-primary font-medium transition-colors"
-                  title={isEn ? "Validate week" : "Valider la semaine"}
+                  title={t("calendar.validateWeek")}
                 >
-                  {isEn ? `Validate ${done}/${total}` : `Valider ${done}/${total}`}
+                  {t("calendar.validateCount", { done, total })}
                 </button>
               </div>
             );
@@ -573,7 +574,6 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                         monthLabel={monthLabel}
                         isToday={isToday}
                         workoutNames={workoutNames}
-                        isEn={isEn}
                         dropTarget={dropTarget}
                         draggedSession={draggedSession}
                         onDragOver={handleDragOver}
@@ -627,7 +627,6 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                     monthLabel={monthLabel}
                     isToday={isToday}
                     workoutNames={workoutNames}
-                    isEn={isEn}
                     dropTarget={dropTarget}
                     draggedSession={draggedSession}
                     isDesktop
@@ -677,7 +676,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                 }}
               >
                 <Eye className="size-4 text-muted-foreground shrink-0" />
-                {isEn ? "View session" : "Voir la s\u00e9ance"}
+                {t("calendar.viewSession")}
               </button>
             )}
             {onToggleComplete && (
@@ -698,7 +697,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                 >
                   <path d="M5 12l5 5 9-9" />
                 </svg>
-                {isEn ? "Toggle done" : "Fait / pas fait"}
+                {t("completion.toggleDone")}
               </button>
             )}
             {onSessionDelete && (
@@ -711,7 +710,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                 }}
               >
                 <Trash2 className="size-4 shrink-0" />
-                {isEn ? "Delete" : "Supprimer"}
+                {t("calendar.deleteSession")}
               </button>
             )}
           </div>
@@ -732,7 +731,6 @@ interface DayCellProps {
   monthLabel?: string;
   isToday?: boolean;
   workoutNames: Record<string, string>;
-  isEn: boolean;
   dropTarget: { weekNumber: number; day: number } | null;
   draggedSession: { weekNumber: number; sessionIndex: number } | null;
   isDesktop?: boolean;
@@ -772,7 +770,6 @@ const DayCell = memo(function DayCell({
   monthLabel,
   isToday,
   workoutNames,
-  isEn,
   dropTarget,
   draggedSession,
   isDesktop,
@@ -789,6 +786,7 @@ const DayCell = memo(function DayCell({
   onAddToDay,
   setContextMenu,
 }: DayCellProps) {
+  const { t } = useTranslation("plan");
   const sessions = weekData.sessions.filter((s) => s.dayOfWeek === dayIndex);
   const isDropHere = dropTarget?.weekNumber === selectedWeek && dropTarget?.day === dayIndex;
 
@@ -902,7 +900,7 @@ const DayCell = memo(function DayCell({
                 <div className="text-center py-1">
                   <Flag className="size-3.5 text-primary mx-auto" />
                   <span className="text-[10px] font-bold text-primary block">
-                    {isEn ? "Race" : "Course"}
+                    {t("calendar.race")}
                   </span>
                 </div>
               ) : (
@@ -925,16 +923,10 @@ const DayCell = memo(function DayCell({
                         )}
                         title={
                           session.status === "completed"
-                            ? isEn
-                              ? "Completed"
-                              : "Fait"
+                            ? t("completion.completed")
                             : session.status === "skipped"
-                              ? isEn
-                                ? "Skipped"
-                                : "Pass\u00e9"
-                              : isEn
-                                ? "Mark as done"
-                                : "Marquer comme fait"
+                              ? t("completion.skipped")
+                              : t("completion.markDone")
                         }
                       >
                         {session.status === "completed" && (

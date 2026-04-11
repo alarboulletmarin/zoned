@@ -4,28 +4,19 @@ import { PaceCalculator } from "@/components/domain/PaceCalculator";
 import { SEOHead } from "@/components/seo";
 
 export function PaceCalculatorPage() {
-  const { i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
 
   return (
     <>
       <SEOHead
-        title={isEn ? "Race Pace Calculator" : "Calculateur d'Allures de Course"}
-        description={
-          isEn
-            ? "Race pace calculator: estimate your finish times from 5K to marathon based on VMA. Convert speed to pace with predicted race times for every distance."
-            : "Calculateur d'allure course à pied : estimez vos temps du 5K au marathon depuis votre VMA. Convertir vitesse en allure avec prédictions de chronos."
-        }
+        title={t("calculateurs.paces.seoTitle")}
+        description={t("calculateurs.paces.seoDescription")}
         canonical="/calculators/allures"
         jsonLd={[
           {
             "@type": "WebApplication",
-            name: isEn
-              ? "Race Pace Calculator"
-              : "Calculateur d'Allures de Course",
-            description: isEn
-              ? "Estimate your race times from 5K to marathon based on your VMA"
-              : "Estimez vos temps de course du 5K au marathon à partir de votre VMA",
+            name: t("calculateurs.paces.seoAppName"),
+            description: t("calculateurs.paces.seoAppDescription"),
             url: "https://zoned.run/calculators/allures",
             applicationCategory: "SportsApplication",
           },
@@ -33,8 +24,8 @@ export function PaceCalculatorPage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
-              { "@type": "ListItem", position: 3, name: isEn ? "Race Pace Calculator" : "Calculateur d'allures" },
+              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: t("calculateurs.paces.seoBreadcrumb") },
             ],
           },
         ]}
@@ -43,14 +34,10 @@ export function PaceCalculatorPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
             <Gauge className="size-8 text-primary" />
-            {isEn
-              ? "Race Pace Calculator"
-              : "Calculateur d'allures de course"}
+            {t("calculateurs.paces.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {isEn
-              ? "Enter your VMA to estimate your race paces and predicted finish times for distances from 5K to marathon."
-              : "Entrez votre VMA pour estimer vos allures de course et vos temps prévisionnels du 5 km au marathon."}
+            {t("calculateurs.paces.description")}
           </p>
         </div>
 

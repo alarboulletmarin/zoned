@@ -40,8 +40,7 @@ const EMPTY_BLOCK: WorkoutBlock = {
 // ── List view (no id param) ──────────────────────────────────────────
 
 function WorkoutListView() {
-  const { i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
   const navigate = useNavigate();
   const [, forceUpdate] = useReducer((x: number) => x + 1, 0);
   const workouts = getCustomWorkouts();
@@ -52,19 +51,19 @@ function WorkoutListView() {
     deleteCustomWorkout(id);
     setDeleteTarget(null);
     forceUpdate();
-    toast.success(isEn ? "Workout deleted" : "Séance supprimée");
-  }, [isEn]);
+    toast.success(t("workoutBuilder.workoutDeleted"));
+  }, [t]);
 
   const handleExportAll = useCallback(() => {
     if (workouts.length === 0) return;
     exportWorkoutsToJSON(workouts);
-    toast.success(isEn ? `${workouts.length} workout(s) exported` : `${workouts.length} séance(s) exportée(s)`);
-  }, [workouts, isEn]);
+    toast.success(t("workoutBuilder.workoutsExported", { count: workouts.length }));
+  }, [workouts, t]);
 
   const handleExportOne = useCallback((workout: WorkoutTemplate) => {
     exportWorkoutsToJSON([workout]);
-    toast.success(isEn ? "Workout exported" : "Séance exportée");
-  }, [isEn]);
+    toast.success(t("workoutBuilder.workoutExported"));
+  }, [t]);
 
   const handleImport = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -72,30 +71,28 @@ function WorkoutListView() {
     try {
       const count = await importWorkoutsFromJSON(file);
       forceUpdate();
-      toast.success(isEn ? `${count} workout(s) imported` : `${count} séance(s) importée(s)`);
+      toast.success(t("workoutBuilder.workoutsImported", { count }));
     } catch {
-      toast.error(isEn ? "Invalid file" : "Fichier invalide");
+      toast.error(t("workoutBuilder.invalidFile"));
     }
     // Reset input so same file can be re-imported
     e.target.value = "";
-  }, [isEn]);
+  }, [t]);
 
   return (
     <>
       <SEOHead
         noindex
-        title={isEn ? "My Workouts" : "Mes séances"}
+        title={t("workoutBuilder.myWorkouts")}
         canonical="/workout/builder"
       />
       <div className="py-8 max-w-3xl mx-auto space-y-6">
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold">{isEn ? "My Workouts" : "Mes séances"}</h1>
+              <h1 className="text-2xl md:text-3xl font-bold">{t("workoutBuilder.myWorkouts")}</h1>
               <p className="text-muted-foreground mt-1">
-                {isEn
-                  ? "Custom workouts stored locally in your browser"
-                  : "Séances personnalisées stockées dans votre navigateur"}
+                {t("workoutBuilder.listSubtitle")}
               </p>
             </div>
             <Button
@@ -106,7 +103,7 @@ function WorkoutListView() {
               }}
             >
               <Plus className="size-4 mr-1" />
-              {isEn ? "Create" : "Créer"}
+              {t("workoutBuilder.create")}
             </Button>
           </div>
 
@@ -126,7 +123,7 @@ function WorkoutListView() {
               className="rounded-full"
             >
               <Upload className="size-4 mr-1.5" />
-              {isEn ? "Import" : "Importer"}
+              {t("workoutBuilder.import")}
             </Button>
             {workouts.length > 0 && (
               <Button
@@ -136,7 +133,7 @@ function WorkoutListView() {
                 className="rounded-full"
               >
                 <Download className="size-4 mr-1.5" />
-                {isEn ? "Export all" : "Tout exporter"}
+                {t("workoutBuilder.exportAll")}
               </Button>
             )}
           </div>
@@ -144,8 +141,8 @@ function WorkoutListView() {
 
         {workouts.length === 0 ? (
           <div className="text-center py-16 text-muted-foreground">
-            <p className="text-lg mb-2">{isEn ? "No custom workouts yet" : "Aucune séance personnalisée"}</p>
-            <p className="text-sm">{isEn ? "Create your first workout above" : "Créez votre première séance ci-dessus"}</p>
+            <p className="text-lg mb-2">{t("workoutBuilder.noWorkoutsYet")}</p>
+            <p className="text-sm">{t("workoutBuilder.createFirst")}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -165,9 +162,9 @@ function WorkoutListView() {
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="font-medium">{w.name || (isEn ? "Untitled" : "Sans titre")}</h3>
+                        <h3 className="font-medium">{w.name || t("workoutBuilder.untitled")}</h3>
                         <p className="text-sm text-muted-foreground">
-                          ~{formatDurationMinutes(totalMin)} · {w.mainSetTemplate.length} {isEn ? "blocks" : "blocs"}
+                          ~{formatDurationMinutes(totalMin)} · {w.mainSetTemplate.length} {t("workoutBuilder.blocks")}
                         </p>
                       </div>
                       <ArrowRight className="size-4 text-muted-foreground" />
@@ -178,7 +175,7 @@ function WorkoutListView() {
                       type="button"
                       onClick={() => handleExportOne(w)}
                       className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-                      aria-label={isEn ? "Export" : "Exporter"}
+                      aria-label={t("workoutBuilder.exportLabel")}
                     >
                       <Download className="size-4" />
                     </button>
@@ -186,7 +183,7 @@ function WorkoutListView() {
                       type="button"
                       onClick={() => setDeleteTarget(w.id)}
                       className="p-1.5 rounded-md text-destructive/70 hover:text-destructive hover:bg-destructive/10 active:text-destructive transition-colors"
-                      aria-label={isEn ? "Delete" : "Supprimer"}
+                      aria-label={t("workoutBuilder.deleteLabel")}
                     >
                       <Trash2 className="size-4" />
                     </button>
@@ -203,21 +200,19 @@ function WorkoutListView() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {isEn ? "Delete this workout?" : "Supprimer cette séance ?"}
+              {t("workoutBuilder.deleteConfirm")}
             </DialogTitle>
             <DialogDescription>
-              {isEn
-                ? "This action cannot be undone. The workout will be permanently deleted."
-                : "Cette action est irréversible. La séance sera définitivement supprimée."}
+              {t("workoutBuilder.deleteDescription")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteTarget(null)}>
-              {isEn ? "Cancel" : "Annuler"}
+              {t("workoutBuilder.cancel")}
             </Button>
             <Button variant="destructive" onClick={() => deleteTarget && handleDelete(deleteTarget)}>
               <Trash2 className="size-4" />
-              {isEn ? "Delete" : "Supprimer"}
+              {t("workoutBuilder.delete")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -231,8 +226,7 @@ function WorkoutListView() {
 function WorkoutEditorView({ workoutId }: { workoutId: string }) {
   usePageHint("workout-builder", "hints.workoutBuilder.title", "hints.workoutBuilder.description");
   const navigate = useNavigate();
-  const { i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
 
   const [workout, setWorkoutRaw] = useState<WorkoutTemplate>(() => {
     const existing = getCustomWorkout(workoutId);
@@ -281,17 +275,17 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
       setWorkoutRaw(updated);
       isDirtyRef.current = false;
       setIsSaved(true);
-      toast.success(isEn ? "Workout saved" : "Séance sauvegardée");
+      toast.success(t("workoutBuilder.workoutSaved"));
     } catch {
-      toast.error(isEn ? "Maximum 20 custom workouts reached" : "Maximum de 20 séances personnalisées atteint");
+      toast.error(t("workoutBuilder.maxReached"));
     }
-  }, [workout, canSave, isEn, navigate]);
+  }, [workout, canSave, t, navigate]);
 
   const handleDelete = useCallback(() => {
     deleteCustomWorkout(workout.id);
-    toast.success(isEn ? "Workout deleted" : "Séance supprimée");
+    toast.success(t("workoutBuilder.workoutDeleted"));
     navigate("/workout/builder");
-  }, [workout.id, isEn, navigate]);
+  }, [workout.id, t, navigate]);
 
   const getBlocks = (section: SectionKey): WorkoutBlock[] => {
     if (section === "warmup") return workout.warmupTemplate || [];
@@ -342,16 +336,16 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
     (workout.cooldownTemplate?.length || 0);
 
   const sections: { key: SectionKey; label: string; color: string }[] = [
-    { key: "warmup", label: isEn ? "Warm-up" : "Échauffement", color: "text-zone-2" },
-    { key: "main", label: isEn ? "Main set" : "Corps de séance", color: "text-zone-5" },
-    { key: "cooldown", label: isEn ? "Cool-down" : "Retour au calme", color: "text-zone-1" },
+    { key: "warmup", label: t("workoutBuilder.warmup"), color: "text-zone-2" },
+    { key: "main", label: t("workoutBuilder.mainSet"), color: "text-zone-5" },
+    { key: "cooldown", label: t("workoutBuilder.cooldown"), color: "text-zone-1" },
   ];
 
   return (
     <>
       <SEOHead
         noindex
-        title={isEn ? "Workout Builder" : "Créer une séance"}
+        title={t("workoutBuilder.builderTitle")}
         canonical="/workout/builder"
       />
 
@@ -362,17 +356,17 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
             to="/workout/builder"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-block mb-4"
           >
-            {isEn ? "← My workouts" : "← Mes séances"}
+            {t("workoutBuilder.backToList")}
           </Link>
           <input
             type="text"
             value={workout.name}
             onChange={(e) => setWorkout((prev) => ({ ...prev, name: e.target.value, nameEn: e.target.value }))}
-            placeholder={isEn ? "Workout name..." : "Nom de la séance..."}
+            placeholder={t("workoutBuilder.namePlaceholder")}
             className="block w-full text-2xl md:text-3xl font-bold bg-transparent border-none focus:outline-none placeholder:text-muted-foreground/40 mb-1"
           />
           <p className="text-muted-foreground mb-6">
-            ~{totalMin} min · {blockCount} {isEn ? "blocks" : "blocs"}
+            ~{totalMin} min · {blockCount} {t("workoutBuilder.blocks")}
           </p>
           <div className="flex flex-wrap items-center gap-3">
             <Button
@@ -381,7 +375,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
               className="rounded-full px-5 py-2.5 h-auto font-bold"
             >
               <Save className="size-4 mr-2" />
-              {isEn ? "Save" : "Enregistrer"}
+              {t("workoutBuilder.save")}
             </Button>
             {isSaved && <ExportMenu workout={workout} />}
             {isSaved && (
@@ -390,7 +384,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
                 className="rounded-full px-5 py-2.5 h-auto font-bold"
                 onClick={() => {
                   exportWorkoutsToJSON([workout]);
-                  toast.success(isEn ? "Workout exported" : "Séance exportée");
+                  toast.success(t("workoutBuilder.workoutExported"));
                 }}
               >
                 <Download className="size-4 mr-2" />
@@ -404,7 +398,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
                 onClick={() => setShowDeleteConfirm(true)}
               >
                 <Trash2 className="size-4 mr-2" />
-                {isEn ? "Delete" : "Supprimer"}
+                {t("workoutBuilder.delete")}
               </Button>
             )}
           </div>
@@ -412,7 +406,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
 
         {/* Preview */}
         <div className="rounded-lg border p-4 bg-card">
-          <p className="text-xs text-muted-foreground mb-2">{isEn ? "Preview" : "Aperçu"}</p>
+          <p className="text-xs text-muted-foreground mb-2">{t("workoutBuilder.preview")}</p>
           <SessionTimeline workout={workout} />
         </div>
 
@@ -449,7 +443,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
                   ))}
                   <Button variant="outline" size="sm" onClick={() => addBlock(key)} className="w-full">
                     <Plus className="size-4" />
-                    {isEn ? "Add block" : "Ajouter un bloc"}
+                    {t("workoutBuilder.addBlock")}
                   </Button>
                 </div>
               )}
@@ -463,21 +457,19 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {isEn ? "Delete this workout?" : "Supprimer cette séance ?"}
+              {t("workoutBuilder.deleteConfirm")}
             </DialogTitle>
             <DialogDescription>
-              {isEn
-                ? "This action cannot be undone. The workout will be permanently deleted."
-                : "Cette action est irréversible. La séance sera définitivement supprimée."}
+              {t("workoutBuilder.deleteDescription")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowDeleteConfirm(false)}>
-              {isEn ? "Cancel" : "Annuler"}
+              {t("workoutBuilder.cancel")}
             </Button>
             <Button variant="destructive" onClick={handleDelete}>
               <Trash2 className="size-4" />
-              {isEn ? "Delete" : "Supprimer"}
+              {t("workoutBuilder.delete")}
             </Button>
           </DialogFooter>
         </DialogContent>

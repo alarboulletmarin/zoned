@@ -24,7 +24,7 @@ const DISTANCES = [
 ] as const;
 
 export function VmaCalculatorPage() {
-  const { i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const navigate = useNavigate();
   const { settings } = useSettings();
@@ -64,11 +64,7 @@ export function VmaCalculatorPage() {
   const handleUseVma = () => {
     if (!calculatedVma) return;
     saveUserZonePrefs({ vma: calculatedVma });
-    toast.success(
-      isEn
-        ? `VMA saved: ${calculatedVma} km/h`
-        : `VMA enregistrée : ${calculatedVma} km/h`
-    );
+    toast.success(t("calculateurs.vma.vmaSaved", { vma: calculatedVma }));
   };
 
   const handleCreatePlan = () => {
@@ -99,20 +95,14 @@ export function VmaCalculatorPage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "VMA from Race Time" : "VMA depuis un Chrono"}
-        description={
-          isEn
-            ? "Calculate your VMA (Maximal Aerobic Speed) free from a race result. Enter your 5K, 10K, half marathon or marathon time to estimate VMA and pace zones."
-            : "Calculer sa VMA gratuitement depuis un chrono de course (5K, 10K, semi, marathon). Test VMA en ligne avec calcul instantané et zones d'entraînement."
-        }
+        title={t("calculateurs.vma.seoTitle")}
+        description={t("calculateurs.vma.seoDescription")}
         canonical="/calculators/vma"
         jsonLd={[
           {
             "@type": "WebApplication",
-            name: isEn ? "VMA Calculator from Race Time" : "Calculateur VMA depuis un Chrono",
-            description: isEn
-              ? "Estimate your VMA from a recent race result"
-              : "Estimez votre VMA à partir d'un résultat de course",
+            name: t("calculateurs.vma.seoAppName"),
+            description: t("calculateurs.vma.seoAppDescription"),
             url: "https://zoned.run/calculators/vma",
             applicationCategory: "SportsApplication",
           },
@@ -120,8 +110,8 @@ export function VmaCalculatorPage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
-              { "@type": "ListItem", position: 3, name: isEn ? "VMA from Race Time" : "VMA depuis un chrono" },
+              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: t("calculateurs.vma.seoBreadcrumb") },
             ],
           },
         ]}
@@ -131,12 +121,10 @@ export function VmaCalculatorPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
             <Timer className="size-8 text-primary" />
-            {isEn ? "VMA from Race Time" : "VMA depuis un chrono"}
+            {t("calculateurs.vma.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {isEn
-              ? "Enter a recent race time to estimate your VMA (Maximal Aerobic Speed) and see your training zones."
-              : "Entrez un chrono récent pour estimer votre VMA (Vitesse Maximale Aérobie) et voir vos zones d'entraînement."}
+            {t("calculateurs.vma.description")}
           </p>
         </div>
 
@@ -146,7 +134,7 @@ export function VmaCalculatorPage() {
             {/* Distance Select */}
             <div className="space-y-2">
               <label htmlFor="distance" className="text-sm font-medium">
-                {isEn ? "Race distance" : "Distance de course"}
+                {t("calculateurs.vma.raceDistance")}
               </label>
               <select
                 id="distance"
@@ -161,16 +149,14 @@ export function VmaCalculatorPage() {
                 ))}
               </select>
               <p className="text-xs text-muted-foreground">
-                {isEn
-                  ? `VMA percentage used: ${selectedDistance.vmaPercentage}%`
-                  : `Pourcentage de VMA utilisé : ${selectedDistance.vmaPercentage}%`}
+                {t("calculateurs.vma.vmaPercentUsed", { percent: selectedDistance.vmaPercentage })}
               </p>
             </div>
 
             {/* Time Inputs */}
             <div className="space-y-2">
               <label className="text-sm font-medium">
-                {isEn ? "Race time" : "Temps de course"}
+                {t("calculateurs.vma.raceTime")}
               </label>
               <div className="flex items-center gap-2">
                 <div className="flex flex-col items-center">
@@ -182,10 +168,10 @@ export function VmaCalculatorPage() {
                     value={hours}
                     onChange={(e) => handleNumericInput(e.target.value, setHours, 9)}
                     className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={isEn ? "Hours" : "Heures"}
+                    aria-label={t("calculateurs.vma.hours")}
                   />
                   <span className="text-xs text-muted-foreground mt-1">
-                    {isEn ? "h" : "h"}
+                    {t("calculateurs.vma.hoursShort")}
                   </span>
                 </div>
                 <span className="text-xl font-bold text-muted-foreground pb-4">:</span>
@@ -198,7 +184,7 @@ export function VmaCalculatorPage() {
                     value={minutes}
                     onChange={(e) => handleNumericInput(e.target.value, setMinutes, 59)}
                     className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={isEn ? "Minutes" : "Minutes"}
+                    aria-label={t("calculateurs.vma.minutes")}
                   />
                   <span className="text-xs text-muted-foreground mt-1">min</span>
                 </div>
@@ -212,7 +198,7 @@ export function VmaCalculatorPage() {
                     value={seconds}
                     onChange={(e) => handleNumericInput(e.target.value, setSeconds, 59)}
                     className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={isEn ? "Seconds" : "Secondes"}
+                    aria-label={t("calculateurs.vma.seconds")}
                   />
                   <span className="text-xs text-muted-foreground mt-1">sec</span>
                 </div>
@@ -228,7 +214,7 @@ export function VmaCalculatorPage() {
             <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
               <CardContent className="py-8 flex flex-col items-center text-center">
                 <p className="text-sm font-medium text-muted-foreground mb-2">
-                  {isEn ? "Estimated VMA" : "VMA estimée"}
+                  {t("calculateurs.vma.estimatedVma")}
                 </p>
                 <p className="text-5xl font-bold text-primary tabular-nums">
                   {calculatedVma.toFixed(1)}
@@ -241,17 +227,17 @@ export function VmaCalculatorPage() {
             <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
               <CardContent className="pt-6">
                 <h2 className="text-lg font-semibold mb-4">
-                  {isEn ? "Pace zones preview" : "Aperçu des zones d'allure"}
+                  {t("calculateurs.vma.paceZonesPreview")}
                 </h2>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b">
                         <th scope="col" className="py-2 px-3 text-left font-medium">
-                          {isEn ? "Zone" : "Zone"}
+                          {t("calculateurs.vma.zone")}
                         </th>
                         <th scope="col" className="py-2 px-3 text-left font-medium">
-                          {isEn ? "Pace" : "Allure"}
+                          {t("calculateurs.vma.pace")}
                         </th>
                       </tr>
                     </thead>
@@ -299,11 +285,11 @@ export function VmaCalculatorPage() {
             <div className="flex flex-col sm:flex-row gap-3">
               <Button onClick={handleUseVma} className="flex-1">
                 <Save className="size-4" />
-                {isEn ? "Use this VMA" : "Utiliser cette VMA"}
+                {t("calculateurs.vma.useThisVma")}
               </Button>
               <Button onClick={handleCreatePlan} variant="outline" className="flex-1">
                 <ArrowRight className="size-4" />
-                {isEn ? "Create a plan" : "Créer un plan"}
+                {t("calculateurs.vma.createPlan")}
               </Button>
             </div>
           </div>

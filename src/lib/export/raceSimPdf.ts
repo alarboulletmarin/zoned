@@ -9,6 +9,7 @@ import type { TDocumentDefinitions, Content, TableCell } from "pdfmake/interface
 import type { RacePlan } from "@/lib/raceSimulator";
 import { getDistanceLabelEn } from "@/lib/raceSimulator";
 import { formatSplitTime, formatPaceDisplay } from "@/lib/splits";
+import i18n from "@/i18n";
 
 /**
  * Export a race simulation plan as a PDF document.
@@ -27,6 +28,10 @@ export async function exportRaceSimToPDF(
   const pdfMake = pdfMakeModule.default;
   pdfMake.vfs = pdfFontsModule.default.vfs;
 
+  const t = (key: string, opts?: Record<string, unknown>) =>
+    i18n.t(`common:export.raceSimPdf.${key}`, opts);
+  const locale = i18n.language?.startsWith("en") ? "en-US" : "fr-FR";
+
   const distanceLabel = isEn
     ? getDistanceLabelEn(plan.distanceKm)
     : plan.distanceLabel;
@@ -39,15 +44,16 @@ export async function exportRaceSimToPDF(
 
   content.push(
     {
-      text: isEn
-        ? `Race Plan - ${distanceLabel}`
-        : `Plan de course - ${distanceLabel}`,
+      text: t("racePlanTitle", { distance: distanceLabel }),
       style: "header",
     },
     {
-      text: isEn
-        ? `Target pace: ${plan.paceFormatted}/km | Start: ${plan.startTime} | Estimated finish: ${plan.estimatedFinishTime} | Total: ${totalTimeFormatted}`
-        : `Allure cible: ${plan.paceFormatted}/km | Depart: ${plan.startTime} | Arrivee estimee: ${plan.estimatedFinishTime} | Total: ${totalTimeFormatted}`,
+      text: t("targetPace", {
+        pace: plan.paceFormatted,
+        start: plan.startTime,
+        finish: plan.estimatedFinishTime,
+        total: totalTimeFormatted,
+      }),
       style: "subtitle",
       margin: [0, 0, 0, 20] as [number, number, number, number],
     },
@@ -57,7 +63,7 @@ export async function exportRaceSimToPDF(
 
   content.push(
     {
-      text: isEn ? "Race Day Timeline" : "Planning de la journee",
+      text: t("timeline"),
       style: "sectionHeader",
     },
     {
@@ -66,8 +72,8 @@ export async function exportRaceSimToPDF(
         widths: [45, "*"],
         body: [
           [
-            { text: isEn ? "Time" : "Heure", style: "tableHeader" },
-            { text: isEn ? "Event" : "Action", style: "tableHeader" },
+            { text: t("timeCol"), style: "tableHeader" },
+            { text: t("eventCol"), style: "tableHeader" },
           ],
           ...plan.timeline.map((event) => {
             const label = isEn ? event.labelEn : event.label;
@@ -97,7 +103,7 @@ export async function exportRaceSimToPDF(
 
   content.push(
     {
-      text: isEn ? "Split Table" : "Tableau des splits",
+      text: t("splitTable"),
       style: "sectionHeader",
     },
     {
@@ -107,10 +113,10 @@ export async function exportRaceSimToPDF(
         body: [
           [
             { text: "#", style: "tableHeader" },
-            { text: isEn ? "Dist" : "Dist", style: "tableHeader" },
-            { text: "Split", style: "tableHeader" },
-            { text: isEn ? "Pace" : "Allure", style: "tableHeader" },
-            { text: isEn ? "Cumul" : "Cumul", style: "tableHeader" },
+            { text: t("dist"), style: "tableHeader" },
+            { text: t("split"), style: "tableHeader" },
+            { text: t("paceCol"), style: "tableHeader" },
+            { text: t("cumul"), style: "tableHeader" },
           ],
           ...plan.splits.map((split) => [
             {
@@ -152,25 +158,27 @@ export async function exportRaceSimToPDF(
   // ── Nutrition ───────────────────────────────────────────────────────
 
   content.push({
-    text: "Nutrition",
+    text: t("nutrition"),
     style: "sectionHeader",
   });
 
   // Fueling summary
   const { fuelingPlan } = plan;
-  const nutritionSummary = isEn
-    ? [
-        `Carbs: ${fuelingPlan.carbsPerHourG}g/h (${fuelingPlan.totalCarbsG}g total)`,
-        `Fluids: ${fuelingPlan.fluidMlPerHour}ml/h (${fuelingPlan.totalFluidMl}ml total)`,
-        `Sodium: ${fuelingPlan.sodiumMgPerHour}mg/h`,
-        `Gels: ${fuelingPlan.gelCount} total, every ~${fuelingPlan.gelFrequencyMin} min`,
-      ]
-    : [
-        `Glucides: ${fuelingPlan.carbsPerHourG}g/h (${fuelingPlan.totalCarbsG}g total)`,
-        `Hydratation: ${fuelingPlan.fluidMlPerHour}ml/h (${fuelingPlan.totalFluidMl}ml total)`,
-        `Sodium: ${fuelingPlan.sodiumMgPerHour}mg/h`,
-        `Gels: ${fuelingPlan.gelCount} au total, tous les ~${fuelingPlan.gelFrequencyMin} min`,
-      ];
+  const nutritionSummary = [
+    t("carbsSummary", {
+      perHour: fuelingPlan.carbsPerHourG,
+      total: fuelingPlan.totalCarbsG,
+    }),
+    t("fluidsSummary", {
+      perHour: fuelingPlan.fluidMlPerHour,
+      total: fuelingPlan.totalFluidMl,
+    }),
+    t("sodiumSummary", { perHour: fuelingPlan.sodiumMgPerHour }),
+    t("gelsSummary", {
+      count: fuelingPlan.gelCount,
+      frequency: fuelingPlan.gelFrequencyMin,
+    }),
+  ];
 
   content.push({
     ul: nutritionSummary,
@@ -181,7 +189,7 @@ export async function exportRaceSimToPDF(
   if (fuelingPlan.timeline.length > 0) {
     content.push(
       {
-        text: isEn ? "Fueling Timeline" : "Plan de ravitaillement",
+        text: t("fuelingTimeline"),
         fontSize: 11,
         bold: true,
         margin: [0, 4, 0, 6] as [number, number, number, number],
@@ -193,8 +201,8 @@ export async function exportRaceSimToPDF(
           widths: [40, "*"],
           body: [
             [
-              { text: "Min", style: "tableHeader" },
-              { text: "Action", style: "tableHeader" },
+              { text: t("minCol"), style: "tableHeader" },
+              { text: t("actionCol"), style: "tableHeader" },
             ],
             ...fuelingPlan.timeline.map((cp) => [
               {
@@ -229,13 +237,14 @@ export async function exportRaceSimToPDF(
 
   content.push(
     {
-      text: isEn ? "Pre-Race Breakfast" : "Petit-dejeuner d'avant-course",
+      text: t("breakfast"),
       style: "sectionHeader",
     },
     {
-      text: isEn
-        ? `${plan.breakfast.time} - ${plan.breakfast.descriptionEn}`
-        : `${plan.breakfast.time} - ${plan.breakfast.description}`,
+      text: t("breakfastLine", {
+        time: plan.breakfast.time,
+        description: isEn ? plan.breakfast.descriptionEn : plan.breakfast.description,
+      }),
       margin: [0, 0, 0, 20] as [number, number, number, number],
     },
   );
@@ -244,7 +253,7 @@ export async function exportRaceSimToPDF(
 
   content.push(
     {
-      text: isEn ? "Mental Cues" : "Cues mentaux",
+      text: t("mentalCues"),
       style: "sectionHeader",
     },
     {
@@ -253,8 +262,8 @@ export async function exportRaceSimToPDF(
         widths: [55, "*"],
         body: [
           [
-            { text: isEn ? "Segment" : "Segment", style: "tableHeader" },
-            { text: isEn ? "Cue" : "Cue", style: "tableHeader" },
+            { text: t("segment"), style: "tableHeader" },
+            { text: t("cue"), style: "tableHeader" },
           ],
           ...plan.mentalCues.map((cue) => [
             {
@@ -279,7 +288,7 @@ export async function exportRaceSimToPDF(
   if (plan.dayBeforeChecklist.length > 0) {
     content.push(
       {
-        text: isEn ? "Day Before Checklist" : "Checklist J-1",
+        text: t("dayBeforeChecklist"),
         style: "sectionHeader",
       },
       {
@@ -296,7 +305,7 @@ export async function exportRaceSimToPDF(
   if (plan.raceDayChecklist.length > 0) {
     content.push(
       {
-        text: isEn ? "Race Day Checklist" : "Checklist jour de course",
+        text: t("raceDayChecklist"),
         style: "sectionHeader",
       },
       {
@@ -311,7 +320,7 @@ export async function exportRaceSimToPDF(
   // ── Footer ──────────────────────────────────────────────────────────
 
   content.push({
-    text: `${isEn ? "Generated by" : "Genere par"} Zoned - zoned.run - ${new Date().toLocaleDateString(isEn ? "en-US" : "fr-FR")}`,
+    text: `${t("generatedBy")} Zoned - zoned.run - ${new Date().toLocaleDateString(locale)}`,
     style: "footer",
     margin: [0, 20, 0, 0] as [number, number, number, number],
   });
@@ -365,7 +374,7 @@ export async function exportRaceSimToPDF(
 
   // Trigger download
   const slug = distanceLabel.toLowerCase().replace(/\s+/g, "-");
-  const filename = isEn ? `race-plan-${slug}.pdf` : `plan-course-${slug}.pdf`;
+  const filename = t("filename", { slug });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;

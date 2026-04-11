@@ -6,40 +6,9 @@
     "heroTitleAccent": "race"
   },
   "about": {
-    "title": "About Zoned",
-    "description": "200 structured workouts, 9 calculators, 8 training plans, 16 collections and 12 articles — all free, no account, no tracking. Zoned makes zone-based training accessible to every runner.",
-    "personal": {
-      "title": "Who am I",
-      "bio": "Runner and developer, I created Zoned to make structured zone-based training accessible to everyone — for free, with no account and no tracking. Every workout, calculator and plan is grounded in training science (Seiler, Billat, Daniels)."
-    },
-    "openSource": {
-      "title": "Open Source",
-      "description": "A free and open project",
-      "contributions": "This project is open source and available on GitHub. Contributions are welcome!",
-      "viewRepo": "View repository"
-    },
-    "vibeCoded": {
-      "title": "Vibe Coded",
-      "description": "An AI-assisted development experience",
-      "claude": "Developed with Claude Code and Anthropic's Opus 4.5 model",
-      "human": "Guided and verified by a human developer",
-      "experience": "A 'vibe coding' experience where AI assists creation"
-    },
-    "privacy": {
-      "title": "Privacy",
-      "description": "Your data stays yours",
-      "noServer": "No data is sent to any server",
-      "localStorage": "Everything is stored locally in your browser (localStorage)",
-      "noAccount": "No user account required",
-      "analytics": "No invasive tracking (just anonymized Vercel Analytics)"
-    },
-    "credits": {
-      "title": "Tech Stack",
-      "description": "Technologies used",
-      "framework": "React + Vite + TypeScript",
-      "ui": "shadcn/ui + Tailwind CSS",
-      "icons": "Lucide React"
-    }
+    "seoHeroLabel": "About",
+    "statsWorkouts": "Workouts",
+    "statsCalculators": "Calculators"
   },
   "export": {
     "title": "Export",
@@ -77,7 +46,7 @@
       "sessions": "sessions",
       "key": "key",
       "peakWeek": "peak week",
-      "appendixNote": "Superscript numbers (e.g. \u00b9\u00b2\u00b3) refer to the Workout Reference at the end of this document ({{count}} unique workouts).",
+      "appendixNote": "Superscript numbers (e.g. ¹²³) refer to the Workout Reference at the end of this document ({{count}} unique workouts).",
       "targetPaces": "Target Paces",
       "raceThreshold": "Race / Threshold",
       "easyLongRun": "Easy / Long Run",
@@ -109,11 +78,14 @@
     "workoutPdf": {
       "description": "Description",
       "durationCol": "Duration",
+      "zone": "Zone",
       "reps": "Reps",
       "rest": "Rest",
       "none": "None",
       "category": "Category",
       "difficulty": "Difficulty",
+      "durationLabel": "Duration",
+      "durationValue": "{{duration}} min",
       "warmup": "Warmup",
       "mainSet": "Main Set",
       "cooldown": "Cooldown",
@@ -131,14 +103,19 @@
       "eventCol": "Event",
       "splitTable": "Split Table",
       "dist": "Dist",
+      "split": "Split",
       "paceCol": "Pace",
       "cumul": "Cumul",
+      "nutrition": "Nutrition",
       "carbsSummary": "Carbs: {{perHour}}g/h ({{total}}g total)",
       "fluidsSummary": "Fluids: {{perHour}}ml/h ({{total}}ml total)",
       "sodiumSummary": "Sodium: {{perHour}}mg/h",
       "gelsSummary": "Gels: {{count}} total, every ~{{frequency}} min",
       "fuelingTimeline": "Fueling Timeline",
+      "minCol": "Min",
+      "actionCol": "Action",
       "breakfast": "Pre-Race Breakfast",
+      "breakfastLine": "{{time}} - {{description}}",
       "mentalCues": "Mental Cues",
       "segment": "Segment",
       "cue": "Cue",
@@ -149,6 +126,7 @@
     },
     "planIcs": {
       "raceDay": "Race Day",
+      "race": "Race",
       "targetTime": "Target time",
       "week": "Week",
       "dayLabel": "Day",
@@ -157,6 +135,9 @@
       "warmup": "Warm-up",
       "mainSet": "Main set",
       "cooldown": "Cool-down",
+      "warmupSep": "--- Warm-up ---",
+      "mainSetSep": "--- Main set ---",
+      "cooldownSep": "--- Cool-down ---",
       "tips": "Tips",
       "rest": "rest"
     }
@@ -502,7 +483,11 @@
       "pace": "Pace",
       "useThisVma": "Use this VMA",
       "createPlan": "Create a plan",
-      "vmaSaved": "VMA saved: {{vma}} km/h"
+      "vmaSaved": "VMA saved: {{vma}} km/h",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds",
+      "hoursShort": "h"
     },
     "splits": {
       "seoTitle": "Split Generator",
@@ -533,10 +518,11 @@
       "cumul": "Cumul.",
       "total": "Total",
       "downloadPng": "Download PNG",
-      "emptyState": "Enter a distance and target time to generate your splits."
+      "emptyState": "Enter a distance and target time to generate your splits.",
+      "customDistancePlaceholder": "15"
     },
     "equivalence": {
-      "seoTitle": "Race Equivalence \u2014 Riegel Formula",
+      "seoTitle": "Race Equivalence — Riegel Formula",
       "seoDescription": "Race time equivalence calculator using the Riegel formula. Predict your finish times across 5K, 10K, half marathon, and marathon from one race result.",
       "seoAppName": "Race Equivalence Calculator",
       "seoAppDescription": "Predict your race times across all distances from a recent result",
@@ -552,10 +538,13 @@
       "paceCol": "Pace",
       "zoneCol": "Zone",
       "ref": "ref",
-      "riegelExplanation": "Based on Riegel's formula (1977), used by most running calculators. More reliable between similar distances (5K\u219210K) than distant ones (5K\u2192Marathon)."
+      "riegelExplanation": "Based on Riegel's formula (1977), used by most running calculators. More reliable between similar distances (5K→10K) than distant ones (5K→Marathon).",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds"
     },
     "ageGraded": {
-      "seoTitle": "Age-Graded Performance \u2014 Level Score",
+      "seoTitle": "Age-Graded Performance — Level Score",
       "seoDescription": "Age-graded performance calculator for runners. Compare your race time to the age and gender adjusted world record and discover your performance level.",
       "seoAppName": "Age-Graded Performance Calculator",
       "seoAppDescription": "Compare your performance to the age and gender adjusted world record",
@@ -578,7 +567,10 @@
       "levelNational": "National level",
       "levelRegional": "Regional level",
       "levelLocal": "Local level",
-      "levelRecreational": "Recreational"
+      "levelRecreational": "Recreational",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds"
     },
     "treadmill": {
       "seoTitle": "Treadmill Converter",
@@ -604,7 +596,14 @@
       "scenarioSaved": "Scenario saved",
       "scenarioDeleted": "Scenario deleted",
       "savePlaceholder": "e.g. 10K: 3x vs 5x/week",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "seoAppName": "What-If Simulator",
+      "seoAppDescription": "Compare two training scenarios side by side",
+      "seoBreadcrumb": "What-If Simulator",
+      "title": "What-If Simulator",
+      "saveDescription": "Give your scenario comparison a name to find it later.",
+      "deleteTitle": "Delete this scenario?",
+      "deleteDescription": "This scenario will be permanently deleted. This action cannot be undone."
     },
     "breadcrumb": "Calculators"
   },
@@ -621,7 +620,11 @@
     "create": "Create",
     "managePlans": "Manage plans",
     "deleteExisting": "Delete an existing plan",
-    "limitReached": "You've reached the limit of 5 plans. Delete an existing plan."
+    "limitReached": "You've reached the limit of 5 plans. Delete an existing plan.",
+    "seoDescription": "Create a blank training plan.",
+    "subtitle": "Create a blank plan and fill it at your own pace",
+    "namePlaceholder": "e.g. Spring marathon prep",
+    "limitReachedShort": "You've reached the limit of 5 plans. "
   },
   "workoutBuilder": {
     "myWorkouts": "My Workouts",
@@ -641,6 +644,7 @@
     "exportLabel": "Export",
     "deleteLabel": "Delete",
     "deleteConfirm": "Delete this workout?",
+    "deleteDescription": "This action cannot be undone. The workout will be permanently deleted.",
     "cancel": "Cancel",
     "delete": "Delete",
     "workoutSaved": "Workout saved",
@@ -649,11 +653,13 @@
     "mainSet": "Main set",
     "cooldown": "Cool-down",
     "builderTitle": "Workout Builder",
-    "backToList": "\u2190 My workouts",
+    "backToList": "← My workouts",
     "namePlaceholder": "Workout name...",
     "save": "Save",
     "preview": "Preview",
-    "addBlock": "Add block"
+    "addBlock": "Add block",
+    "listSubtitle": "Custom workouts stored locally in your browser",
+    "deleteDescription": "This action cannot be undone. The workout will be permanently deleted."
   },
   "workoutDetail": {
     "back": "Back",
@@ -666,7 +672,8 @@
     "pdfExported": "PDF exported",
     "exportFailed": "Export failed",
     "deleteConfirm": "Delete this simulation?",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "deleteDescription": "This simulation will be permanently deleted. This action cannot be undone."
   },
   "footer": {
     "strength": "strength"
@@ -840,11 +847,6 @@
     "noFavoritesYet": "No favorites yet",
     "noFavoritesDesc": "Browse the library and tap the heart icon to save your favorite workouts here."
   },
-  "about": {
-    "seoHeroLabel": "About",
-    "statsWorkouts": "Workouts",
-    "statsCalculators": "Calculators"
-  },
   "comparePage": {
     "whyComparisons": "Why these comparisons?",
     "whyComparisonsDesc": "Zoned is free, open source, requires no account and collects no data. We think those differences matter — these pages are here to help you decide.",
@@ -945,5 +947,22 @@
   "article": {
     "home": "Home",
     "learn": "Learn"
+  },
+  "pages": {
+    "workoutDetail": {
+      "back": "Back",
+      "planFallback": "Plan",
+      "collectionFallback": "Collection",
+      "envAny": "Any",
+      "exerciseCredits": "Exercise illustrations from free-exercise-db (Public Domain)."
+    }
+  },
+  "domain": {
+    "fitTransfer": {
+      "polarPath": "Favorites → Create",
+      "suuntoPath": "Training → Create",
+      "corosPath": "Create",
+      "applePath": "Workout → Create (watchOS 9+)"
+    }
   }
 }

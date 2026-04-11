@@ -98,6 +98,7 @@ interface PlanWorkoutPanelProps {
 // ── Component ─────────────────────────────────────────────────────
 
 export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkout }: PlanWorkoutPanelProps) {
+  const { t } = useTranslation("plan");
   const { t: tStrength } = useTranslation("strength");
   const [allWorkouts, setAllWorkouts] = useState<WorkoutTemplate[]>([]);
   const [strengthSessions, setStrengthSessions] = useState<StrengthWorkoutTemplate[]>([]);
@@ -220,13 +221,13 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
         <h3 className="font-semibold text-sm">
-          {isEn ? "Add a workout" : "Ajouter une s\u00e9ance"}
+          {t("workoutPanel.title")}
         </h3>
         <button
           type="button"
           onClick={onClose}
           className="p-1 rounded-md hover:bg-muted transition-colors"
-          aria-label={isEn ? "Close" : "Fermer"}
+          aria-label={t("workoutPanel.close")}
         >
           <X className="size-4" />
         </button>
@@ -237,9 +238,9 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
         <p className="text-xs text-muted-foreground text-center">
           {inline
             ? onSelectWorkout
-              ? (isEn ? "Click a workout to add it to your plan" : "Cliquez sur une séance pour l'ajouter à votre plan")
-              : (isEn ? "Drag a workout onto the calendar to add it" : "Glissez une séance sur le calendrier pour l'ajouter")
-            : (isEn ? "Tap a workout to add it" : "Appuyez sur une séance pour l'ajouter")}
+              ? t("workoutPanel.hintClick")
+              : t("workoutPanel.hintDrag")
+            : t("workoutPanel.hintTap")}
         </p>
       </div>
 
@@ -251,7 +252,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={isEn ? "Search workouts..." : "Rechercher une s\u00e9ance..."}
+            placeholder={t("workoutPanel.searchPlaceholder")}
             className="w-full rounded-md border bg-background pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
@@ -279,7 +280,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
               ? "bg-primary/10 border-primary text-primary"
               : "border-input text-muted-foreground hover:text-foreground"
           )}
-          title={isEn ? "Favorites only" : "Favoris uniquement"}
+          title={t("workoutPanel.favoritesOnly")}
         >
           <Heart className={cn("size-4", favoritesOnly && "fill-primary")} />
         </button>
@@ -296,8 +297,8 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
             <div className="text-center py-8 space-y-2">
               <p className="text-sm text-muted-foreground">
                 {favoritesOnly
-                  ? (isEn ? "No favorite strength sessions" : "Aucune séance de renfo en favoris")
-                  : (isEn ? "No matching strength sessions" : "Aucune séance de renfo correspondante")}
+                  ? t("workoutPanel.noFavoriteStrength")
+                  : t("workoutPanel.noMatchingStrength")}
               </p>
             </div>
           ) : (
@@ -409,14 +410,12 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
           <div className="text-center py-8 space-y-2">
             <p className="text-sm text-muted-foreground">
               {favoritesOnly
-                ? (isEn ? "No favorite workouts yet" : "Aucune séance en favoris")
-                : (isEn ? "No matching workouts" : "Aucune séance correspondante")}
+                ? t("workoutPanel.noFavorites")
+                : t("workoutPanel.noMatching")}
             </p>
             {favoritesOnly && (
               <p className="text-xs text-muted-foreground/60">
-                {isEn
-                  ? "Add workouts to favorites from the library first"
-                  : "Ajoutez d'abord des séances en favoris depuis la bibliothèque"}
+                {t("workoutPanel.favoritesHint")}
               </p>
             )}
           </div>

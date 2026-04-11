@@ -76,7 +76,7 @@ function findZoneForPace(
 }
 
 export function RaceEquivalencePage() {
-  const { i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const { settings } = useSettings();
   const unit = settings.unitSystem;
@@ -150,26 +150,14 @@ export function RaceEquivalencePage() {
   return (
     <>
       <SEOHead
-        title={
-          isEn
-            ? "Race Equivalence \u2014 Riegel Formula"
-            : "\u00c9quivalence entre distances \u2014 Formule de Riegel"
-        }
-        description={
-          isEn
-            ? "Race time equivalence calculator using the Riegel formula. Predict your finish times across 5K, 10K, half marathon, and marathon from one race result."
-            : "Équivalence temps de course entre distances avec la formule de Riegel. Prédiction de chronos du 5K au marathon à partir d'un résultat récent. Gratuit."
-        }
+        title={t("calculateurs.equivalence.seoTitle")}
+        description={t("calculateurs.equivalence.seoDescription")}
         canonical="/calculators/equivalence"
         jsonLd={[
           {
             "@type": "WebApplication",
-            name: isEn
-              ? "Race Equivalence Calculator"
-              : "Calculateur d'\u00e9quivalence de course",
-            description: isEn
-              ? "Predict your race times across all distances from a recent result"
-              : "Pr\u00e9disez vos temps de course sur toutes les distances",
+            name: t("calculateurs.equivalence.seoAppName"),
+            description: t("calculateurs.equivalence.seoAppDescription"),
             url: "https://zoned.run/calculators/equivalence",
             applicationCategory: "SportsApplication",
           },
@@ -177,8 +165,8 @@ export function RaceEquivalencePage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
-              { "@type": "ListItem", position: 3, name: isEn ? "Race Equivalence" : "\u00c9quivalence entre distances" },
+              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: t("calculateurs.equivalence.seoBreadcrumb") },
             ],
           },
         ]}
@@ -188,14 +176,10 @@ export function RaceEquivalencePage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
             <Shuffle className="size-8 text-primary" />
-            {isEn
-              ? "Race Equivalence"
-              : "\u00c9quivalence entre distances"}
+            {t("calculateurs.equivalence.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {isEn
-              ? "Enter a race result to predict your times across all standard distances."
-              : "Entrez un r\u00e9sultat de course pour pr\u00e9dire vos temps sur toutes les distances standard."}
+            {t("calculateurs.equivalence.description")}
           </p>
         </div>
 
@@ -205,7 +189,7 @@ export function RaceEquivalencePage() {
             {/* Distance Select */}
             <div className="space-y-2">
               <label htmlFor="distance" className="text-sm font-medium">
-                {isEn ? "Race distance" : "Distance de course"}
+                {t("calculateurs.equivalence.raceDistance")}
               </label>
               <select
                 id="distance"
@@ -232,7 +216,7 @@ export function RaceEquivalencePage() {
                     value={customKm}
                     onChange={(e) => setCustomKm(e.target.value)}
                     className="flex h-10 w-28 rounded-md border border-input bg-transparent px-3 py-1 text-sm tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={isEn ? "Custom distance in km" : "Distance personnalis\u00e9e en km"}
+                    aria-label={t("calculateurs.equivalence.customDistanceLabel")}
                   />
                   <span className="text-sm text-muted-foreground">km</span>
                 </div>
@@ -242,7 +226,7 @@ export function RaceEquivalencePage() {
             {/* Time Inputs */}
             <div className="space-y-2">
               <label className="text-sm font-medium">
-                {isEn ? "Race time" : "Temps de course"}
+                {t("calculateurs.equivalence.raceTime")}
               </label>
               <div className="flex items-center gap-2">
                 <div className="flex flex-col items-center">
@@ -254,7 +238,7 @@ export function RaceEquivalencePage() {
                     value={hours}
                     onChange={(e) => handleNumericInput(e.target.value, setHours, 9)}
                     className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={isEn ? "Hours" : "Heures"}
+                    aria-label={t("calculateurs.equivalence.hours")}
                   />
                   <span className="text-xs text-muted-foreground mt-1">h</span>
                 </div>
@@ -282,7 +266,7 @@ export function RaceEquivalencePage() {
                     value={seconds}
                     onChange={(e) => handleNumericInput(e.target.value, setSeconds, 59)}
                     className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={isEn ? "Seconds" : "Secondes"}
+                    aria-label={t("calculateurs.equivalence.seconds")}
                   />
                   <span className="text-xs text-muted-foreground mt-1">sec</span>
                 </div>
@@ -296,24 +280,24 @@ export function RaceEquivalencePage() {
           <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50 mb-6">
             <CardContent className="pt-6">
               <h2 className="text-lg font-semibold mb-4">
-                {isEn ? "Predicted times" : "Temps pr\u00e9dits"}
+                {t("calculateurs.equivalence.predictedTimes")}
               </h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b">
                       <th className="py-2 px-3 text-left font-medium">
-                        {isEn ? "Distance" : "Distance"}
+                        {t("calculateurs.equivalence.distanceCol")}
                       </th>
                       <th className="py-2 px-3 text-left font-medium">
-                        {isEn ? "Time" : "Temps"}
+                        {t("calculateurs.equivalence.timeCol")}
                       </th>
                       <th className="py-2 px-3 text-left font-medium">
-                        {isEn ? "Pace" : "Allure"}
+                        {t("calculateurs.equivalence.paceCol")}
                       </th>
                       {paceZones && (
                         <th className="py-2 px-3 text-left font-medium">
-                          {isEn ? "Zone" : "Zone"}
+                          {t("calculateurs.equivalence.zoneCol")}
                         </th>
                       )}
                     </tr>
@@ -335,7 +319,7 @@ export function RaceEquivalencePage() {
                             {isEn ? p.labelEn : p.label}
                             {p.isReference && (
                               <span className="ml-2 text-xs text-muted-foreground">
-                                ({isEn ? "ref" : "r\u00e9f"})
+                                ({t("calculateurs.equivalence.ref")})
                               </span>
                             )}
                           </td>
@@ -383,9 +367,7 @@ export function RaceEquivalencePage() {
             <div className="flex gap-3">
               <Info className="size-5 text-muted-foreground shrink-0 mt-0.5" />
               <p className="text-sm text-muted-foreground">
-                {isEn
-                  ? "Based on Riegel's formula (1977), used by most running calculators. More reliable between similar distances (5K\u219210K) than distant ones (5K\u2192Marathon)."
-                  : "Bas\u00e9 sur la formule de Riegel (1977), utilis\u00e9e par la plupart des calculateurs de course. Plus fiable entre distances proches (5K\u219210K) qu'entre distances \u00e9loign\u00e9es (5K\u2192Marathon)."}
+                {t("calculateurs.equivalence.riegelExplanation")}
               </p>
             </div>
           </CardContent>

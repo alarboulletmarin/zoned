@@ -270,7 +270,9 @@
     "rpeAvg": "RPE avg",
     "peakVolume": "Peak volume",
     "peakLongRun": "Peak long run",
-    "longRun": "Long run"
+    "longRun": "Long run",
+    "wk": "wk",
+    "sessionsLower": "sessions"
   },
   "calendar": {
     "now": "NOW",
@@ -344,7 +346,8 @@
     "noFavoriteStrength": "No favorite strength sessions",
     "noMatchingStrength": "No matching strength sessions",
     "noFavorites": "No favorite workouts yet",
-    "noMatching": "No matching workouts"
+    "noMatching": "No matching workouts",
+    "favoritesHint": "Add workouts to favorites from the library first"
   },
   "plansPage": {
     "title": "My Training Plans",
@@ -366,7 +369,9 @@
     "deleteButton": "Delete",
     "cancelButton": "Cancel",
     "weekProgress": "Week {{current}} / {{total}}",
-    "target": "Target: "
+    "target": "Target: ",
+    "sessionsCount": "{{count}} sessions",
+    "planCount": "{{count}} plans"
   },
   "prebuilt": {
     "notFound": "Plan not found",
@@ -380,6 +385,10 @@
     "noSessions": "No sessions this week",
     "raceDay": "Race Day!",
     "seoFr": "Plan d'entraînement {{name}} gratuit : {{weeks}} semaines, {{sessions}} séances/semaine. {{desc}}",
-    "seoEn": "Free {{name}} training plan: {{weeks}} weeks, {{sessions}} sessions/week. {{desc}}"
+    "seoEn": "Free {{name}} training plan: {{weeks}} weeks, {{sessions}} sessions/week. {{desc}}",
+    "weeksCount": "{{count}} weeks",
+    "weeksShort": "wk",
+    "sessionsPerWeek": "sessions/wk",
+    "sessionsCount": "{{count}} sessions"
   }
 }

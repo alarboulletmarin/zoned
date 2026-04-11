@@ -64,7 +64,7 @@ const DAY_LABELS: Record<number, { fr: string; en: string }> = {
 export function PrebuiltPlanDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("plan");
   const isEn = i18n.language?.startsWith("en") ?? false;
 
   const prebuilt = slug ? getPrebuiltBySlug(slug) : undefined;
@@ -141,15 +141,13 @@ export function PrebuiltPlanDetailPage() {
   const handleUse = () => {
     if (!prebuilt) return;
     if (getPlanCount() >= 5) {
-      toast.error(
-        isEn ? "5-plan limit reached" : "Limite de 5 plans atteinte",
-      );
+      toast.error(t("prebuilt.limitReached"));
       return;
     }
     const plan = convertPrebuiltToPlan(prebuilt, isEn);
     savePlan(plan);
     triggerStorageWarning();
-    toast.success(isEn ? "Plan added!" : "Plan ajout\u00e9 !");
+    toast.success(t("prebuilt.planAdded"));
     navigate(`/plan/${plan.id}`);
   };
 
@@ -166,12 +164,12 @@ export function PrebuiltPlanDetailPage() {
     return (
       <div className="py-12 text-center">
         <p className="text-muted-foreground">
-          {isEn ? "Plan not found" : "Plan introuvable"}
+          {t("prebuilt.notFound")}
         </p>
         <Button variant="link" asChild className="mt-4">
           <Link to="/plan/new/prebuilt">
             <ArrowLeft className="mr-2 size-4" />
-            {isEn ? "Back to plans" : "Retour aux plans"}
+            {t("prebuilt.backToPlans")}
           </Link>
         </Button>
       </div>
@@ -185,11 +183,12 @@ export function PrebuiltPlanDetailPage() {
     ? RACE_DISTANCE_META[prebuilt.raceDistance]
     : null;
 
-  const seoDescription = (
-    isEn
-      ? `Free ${name} training plan: ${prebuilt.totalWeeks} weeks, ${prebuilt.sessionsPerWeek} sessions/week. ${description}`
-      : `Plan d'entra\u00eenement ${name} gratuit : ${prebuilt.totalWeeks} semaines, ${prebuilt.sessionsPerWeek} s\u00e9ances/semaine. ${description}`
-  ).slice(0, 160);
+  const seoDescription = t(isEn ? "prebuilt.seoEn" : "prebuilt.seoFr", {
+    name,
+    weeks: prebuilt.totalWeeks,
+    sessions: prebuilt.sessionsPerWeek,
+    desc: description,
+  }).slice(0, 160);
 
   return (
     <>
@@ -231,7 +230,7 @@ export function PrebuiltPlanDetailPage() {
         <Button variant="ghost" size="sm" asChild>
           <Link to="/plan/new/prebuilt">
             <ArrowLeft className="mr-2 size-4" />
-            {isEn ? "Back to plans" : "Retour aux plans"}
+            {t("prebuilt.backToPlans")}
           </Link>
         </Button>
 
@@ -248,12 +247,12 @@ export function PrebuiltPlanDetailPage() {
               )}
               <Badge variant="outline">
                 <Calendar className="size-3" />
-                {prebuilt.totalWeeks} {isEn ? "weeks" : "semaines"}
+                {t("prebuilt.weeksCount", { count: prebuilt.totalWeeks })}
               </Badge>
               <Badge variant="outline">
                 <Clock className="size-3" />
                 {prebuilt.sessionsPerWeek}{" "}
-                {isEn ? "sessions/wk" : "s\u00e9ances/sem."}
+                {t("prebuilt.sessionsPerWeek")}
               </Badge>
               {raceMeta && (
                 <Badge variant="default">
@@ -265,7 +264,7 @@ export function PrebuiltPlanDetailPage() {
 
           {/* CTA top */}
           <Button size="lg" onClick={handleUse} className="shrink-0">
-            {isEn ? "Use this plan" : "Utiliser ce plan"}
+            {t("prebuilt.useThisPlan")}
           </Button>
         </div>
 
@@ -274,7 +273,7 @@ export function PrebuiltPlanDetailPage() {
           <Card size="compact">
             <CardContent className="px-4">
               <p className="text-sm font-medium mb-2">
-                {isEn ? "Training phases" : "Phases d'entra\u00eenement"}
+                {t("prebuilt.trainingPhases")}
               </p>
               <div className="flex rounded-full overflow-hidden h-3">
                 {phaseSegments.map((segment, idx) => {
@@ -286,7 +285,7 @@ export function PrebuiltPlanDetailPage() {
                       key={`${segment.phase}-${idx}`}
                       className={cn(meta.color)}
                       style={{ width: `${widthPercent}%` }}
-                      title={`${isEn ? meta.labelEn : meta.label} (${segment.weeks} ${isEn ? "weeks" : "sem."})`}
+                      title={`${isEn ? meta.labelEn : meta.label} (${t("prebuilt.weeksCount", { count: segment.weeks })})`}
                     />
                   );
                 })}
@@ -304,7 +303,7 @@ export function PrebuiltPlanDetailPage() {
                       />
                       <span>
                         {isEn ? meta.labelEn : meta.label} ({segment.weeks}{" "}
-                        {isEn ? "wk" : "sem."})
+                        {t("prebuilt.weeksShort")})
                       </span>
                     </div>
                   );
@@ -323,12 +322,12 @@ export function PrebuiltPlanDetailPage() {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold">
-              {isEn ? "Week-by-week schedule" : "Programme semaine par semaine"}
+              {t("prebuilt.weekByWeek")}
             </h2>
             <div
               className="inline-flex items-center gap-0.5 rounded-lg bg-muted p-1"
               role="radiogroup"
-              aria-label={isEn ? "View mode" : "Mode d'affichage"}
+              aria-label={t("viewMode.label")}
             >
               <button
                 type="button"
@@ -344,7 +343,7 @@ export function PrebuiltPlanDetailPage() {
                 )}
               >
                 <CalendarRange size={16} />
-                <span className="hidden sm:inline">{isEn ? "Calendar" : "Calendrier"}</span>
+                <span className="hidden sm:inline">{t("viewMode.calendar")}</span>
               </button>
               <button
                 type="button"
@@ -360,7 +359,7 @@ export function PrebuiltPlanDetailPage() {
                 )}
               >
                 <List size={16} />
-                <span className="hidden sm:inline">{isEn ? "List" : "Liste"}</span>
+                <span className="hidden sm:inline">{t("viewMode.list")}</span>
               </button>
             </div>
           </div>
@@ -408,16 +407,13 @@ export function PrebuiltPlanDetailPage() {
                     </span>
                     {week.isRecoveryWeek && (
                       <Badge variant="secondary" className="shrink-0">
-                        {isEn ? "Recovery" : "R\u00e9cup"}
+                        {t("prebuilt.recovery")}
                       </Badge>
                     )}
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
                     <span className="text-sm text-muted-foreground">
-                      {week.sessions.length}{" "}
-                      {isEn
-                        ? `session${week.sessions.length !== 1 ? "s" : ""}`
-                        : `s\u00e9ance${week.sessions.length !== 1 ? "s" : ""}`}
+                      {t("prebuilt.sessionsCount", { count: week.sessions.length })}
                     </span>
                     {isExpanded ? (
                       <ChevronUp className="size-4 text-muted-foreground" />
@@ -432,9 +428,7 @@ export function PrebuiltPlanDetailPage() {
                   <div className="border-t px-4 py-4 space-y-2">
                     {week.sessions.length === 0 ? (
                       <p className="text-sm text-muted-foreground py-3">
-                        {isEn
-                          ? "No sessions this week"
-                          : "Aucune s\u00e9ance cette semaine"}
+                        {t("prebuilt.noSessions")}
                       </p>
                     ) : (
                       week.sessions.map((session, idx) => {
@@ -467,9 +461,7 @@ export function PrebuiltPlanDetailPage() {
                                 <div className="flex items-center gap-2">
                                   <Flag className="size-4 text-primary" />
                                   <span className="font-semibold text-primary">
-                                    {isEn
-                                      ? "Race Day!"
-                                      : "Jour de course !"}
+                                    {t("prebuilt.raceDay")}
                                   </span>
                                 </div>
                               ) : (
@@ -521,7 +513,7 @@ export function PrebuiltPlanDetailPage() {
         {/* CTA bottom */}
         <div className="flex justify-center pt-4">
           <Button size="lg" onClick={handleUse}>
-            {isEn ? "Use this plan" : "Utiliser ce plan"}
+            {t("prebuilt.useThisPlan")}
           </Button>
         </div>
       </div>

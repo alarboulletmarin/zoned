@@ -287,7 +287,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
           <div className="rounded-lg bg-secondary/50 border border-border/50 p-3 space-y-1.5">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold">
-                {isEn ? "This week" : "Cette semaine"}
+                {t("stats.thisWeek")}
               </h3>
               <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full",
                 PHASE_META[currentWeekData.week.phase]?.color, "text-white"
@@ -304,12 +304,12 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
               )}
               <span className="flex items-center gap-1.5">
                 <Calendar className="size-3.5 text-muted-foreground" />
-                <span>{currentWeekData.week.sessions.length} {isEn ? "sessions" : "séances"}</span>
+                <span>{currentWeekData.week.sessions.length} {t("stats.sessionsLower")}</span>
               </span>
               {currentWeekData.longRun && currentWeekData.week.targetLongRunKm && (
                 <span className="flex items-center gap-1.5">
                   <TrendingUp className="size-3.5 text-muted-foreground" />
-                  <span>{isEn ? "Long run" : "SL"} {currentWeekData.week.targetLongRunKm} km</span>
+                  <span>{t("stats.longRun")} {currentWeekData.week.targetLongRunKm} km</span>
                 </span>
               )}
               {currentWeekData.keySession && (
@@ -326,12 +326,10 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         {weeklyKmData.some(w => w.km > 0) && (
           <div className="space-y-2">
             <h3 className="text-sm font-medium">
-              {isEn ? "Weekly mileage (km)" : "Kilométrage hebdomadaire (km)"}
+              {t("stats.weeklyKm")}
             </h3>
             <p className="text-xs text-muted-foreground">
-              {isEn
-                ? "Planned kilometers for each week"
-                : "Kilomètres planifiés pour chaque semaine"}
+              {t("stats.weeklyKmDesc")}
             </p>
             <div className="flex items-end gap-[2px] h-28">
               {weeklyKmData.map((week) => {
@@ -371,12 +369,10 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         {/* ── Section 2b: Weekly Volume (minutes) Chart ───────────── */}
         <div className="space-y-2">
           <h3 className="text-sm font-medium">
-            {isEn ? "Weekly training time (min)" : "Temps d'entraînement hebdomadaire (min)"}
+            {t("stats.weeklyVolume")}
           </h3>
           <p className="text-xs text-muted-foreground">
-            {isEn
-              ? "Total estimated duration per week (warmup + workout + cooldown)"
-              : "Durée totale estimée par semaine (échauffement + séance + retour au calme)"}
+            {t("stats.weeklyVolumeDesc")}
           </p>
           <div className="flex items-end gap-[2px] h-32">
             {stats.weeklyVolumes.map((week) => {
@@ -442,7 +438,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         {sortedTypes.length > 0 && (
           <div className="space-y-2">
             <h3 className="text-sm font-medium">
-              {isEn ? "Session types" : "Types de s\u00e9ance"}
+              {t("stats.sessionTypes")}
             </h3>
             {/* Stacked bar */}
             <div className="flex rounded-full overflow-hidden h-3">
@@ -491,7 +487,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
               {/* Zone distribution */}
               <div className="space-y-2">
                 <h3 className="text-sm font-medium">
-                  {isEn ? "Zone distribution" : "R\u00e9partition par zone"}
+                  {t("stats.zoneDistribution")}
                 </h3>
                 <div className="space-y-1.5">
                   {analysis.zoneDistribution.map(({ zone, minutes, percent }) => (
@@ -514,7 +510,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
               {/* Target system */}
               <div className="space-y-2">
                 <h3 className="text-sm font-medium">
-                  {isEn ? "Target systems" : "Syst\u00e8mes cibl\u00e9s"}
+                  {t("stats.targetSystems")}
                 </h3>
                 <div className="space-y-1.5">
                   {analysis.targetSystemBreakdown.map(
@@ -543,7 +539,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         {/* ── 80/20 Intensity Distribution per week ──────────────── */}
         <div className="space-y-2">
           <h3 className="text-sm font-medium">
-            {isEn ? "Easy / Hard split per week" : "Répartition facile / dur par semaine"}
+            {t("stats.easyHardSplit")}
           </h3>
           <div className="flex items-end gap-[2px] h-16">
             {easyHardPerWeek.map((week) => {
@@ -571,14 +567,14 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span className="flex items-center gap-1.5">
               <span className="size-2.5 rounded-full bg-green-400/50" />
-              {isEn ? "Easy (Z1-Z2)" : "Facile (Z1-Z2)"}
+              {t("stats.easyZ12")}
             </span>
             <span className="flex items-center gap-1.5">
               <span className="size-2.5 rounded-full bg-red-400/70" />
-              {isEn ? "Hard (Z3+)" : "Dur (Z3+)"}
+              {t("stats.hardZ3")}
             </span>
             <span className="text-muted-foreground/50">
-              {isEn ? "Target: 80% easy / 20% hard" : "Objectif : 80% facile / 20% dur"}
+              {t("stats.target8020")}
             </span>
           </div>
         </div>
@@ -587,12 +583,10 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         {weeklyLoads.some(w => w.load > 0) && (
           <div className="space-y-2">
             <h3 className="text-sm font-medium">
-              {isEn ? "Training load" : "Charge d'entraînement"}
+              {t("stats.trainingLoad")}
             </h3>
             <p className="text-xs text-muted-foreground">
-              {isEn
-                ? "Load score = duration × intensity factor (higher = harder week)"
-                : "Score de charge = durée × facteur d'intensité (plus haut = semaine plus dure)"}
+              {t("stats.trainingLoadDesc")}
             </p>
             <div className="flex items-end gap-[2px] h-24">
               {weeklyLoads.map((week) => {
@@ -620,7 +614,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         {plan.weeks.some(w => w.targetLongRunKm && w.targetLongRunKm > 0) && (
           <div className="space-y-2">
             <h3 className="text-sm font-medium">
-              {isEn ? "Long run progression" : "Progression sortie longue"}
+              {t("stats.longRunProgression")}
             </h3>
             {(() => {
               const lrWeeks = plan.weeks
@@ -662,7 +656,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                   </div>
                   {plan.peakLongRunKm && (
                     <p className="text-xs text-muted-foreground">
-                      {isEn ? "Peak" : "Pic"}: <span className="font-medium text-foreground">{plan.peakLongRunKm} km</span>
+                      {t("stats.peak")}: <span className="font-medium text-foreground">{plan.peakLongRunKm} km</span>
                     </p>
                   )}
                 </>
@@ -678,7 +672,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
           return (
             <div className="space-y-2">
               <h3 className="text-sm font-medium">
-                {isEn ? "Completion" : "Complétion"}
+                {t("stats.completion")}
               </h3>
               <div className="flex items-center gap-3">
                 {/* Progress bar */}
@@ -699,15 +693,15 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
               <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <span className="size-2 rounded-full bg-green-500" />
-                  {cs.completed} {isEn ? "done" : "faites"}
+                  {cs.completed} {t("stats.done")}
                 </span>
                 <span className="flex items-center gap-1">
                   <span className="size-2 rounded-full bg-muted-foreground/20" />
-                  {cs.skipped} {isEn ? "skipped" : "passées"}
+                  {cs.skipped} {t("stats.skipped")}
                 </span>
-                <span>{cs.planned} {isEn ? "remaining" : "restantes"}</span>
+                <span>{cs.planned} {t("stats.remaining")}</span>
                 {cs.avgRpe !== null && (
-                  <span>RPE {isEn ? "avg" : "moy"}: {cs.avgRpe.toFixed(1)}</span>
+                  <span>{t("stats.rpeAvg")}: {cs.avgRpe.toFixed(1)}</span>
                 )}
               </div>
             </div>
@@ -718,10 +712,10 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         {(plan.peakWeeklyKm || plan.version) && (
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground pt-2 border-t">
             {plan.peakWeeklyKm && (
-              <span>{isEn ? "Peak volume" : "Volume pic"}: <span className="font-medium text-foreground">{plan.peakWeeklyKm} km/{isEn ? "wk" : "sem"}</span></span>
+              <span>{t("stats.peakVolume")}: <span className="font-medium text-foreground">{plan.peakWeeklyKm} km/{t("stats.wk")}</span></span>
             )}
             {plan.peakLongRunKm && (
-              <span>{isEn ? "Peak long run" : "Pic sortie longue"}: <span className="font-medium text-foreground">{plan.peakLongRunKm} km</span></span>
+              <span>{t("stats.peakLongRun")}: <span className="font-medium text-foreground">{plan.peakLongRunKm} km</span></span>
             )}
             {plan.version && (
               <span className="opacity-50">v{plan.version}</span>

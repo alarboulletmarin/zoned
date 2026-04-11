@@ -63,7 +63,7 @@ export function exportPlanToICS(
           // Race day: all-day event
           const raceDistMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
           const raceName = plan.config.raceName
-            || (raceDistMeta ? (isEn ? raceDistMeta.labelEn : raceDistMeta.label) : (isEn ? "Race" : "Course"));
+            || (raceDistMeta ? (isEn ? raceDistMeta.labelEn : raceDistMeta.label) : t("race"));
 
           events.push({
             start: [
@@ -135,7 +135,7 @@ export function exportPlanToICS(
             // Warmup
             if (running.warmupTemplate?.length) {
               descriptionLines.push("");
-              descriptionLines.push(isEn ? "--- Warm-up ---" : "--- Échauffement ---");
+              descriptionLines.push(t("warmupSep"));
               for (const block of running.warmupTemplate) {
                 const blockDesc = isEn ? (block.descriptionEn || block.description) : block.description;
                 const dur = block.durationMin ? ` (${block.durationMin}min)` : "";
@@ -147,14 +147,14 @@ export function exportPlanToICS(
             // Main set
             if (running.mainSetTemplate?.length) {
               descriptionLines.push("");
-              descriptionLines.push(isEn ? "--- Main set ---" : "--- Corps de séance ---");
+              descriptionLines.push(t("mainSetSep"));
               for (const block of running.mainSetTemplate) {
                 const blockDesc = isEn ? (block.descriptionEn || block.description) : block.description;
                 const dur = block.durationMin ? ` (${block.durationMin}min)` : "";
                 const zone = block.zone ? ` [${block.zone}]` : "";
                 const reps = block.repetitions && block.repetitions > 1 ? `${block.repetitions}x ` : "";
                 const rest = block.rest || block.recovery;
-                const restStr = rest ? ` — ${isEn ? "rest" : "récup"}: ${rest}` : "";
+                const restStr = rest ? ` — ${t("rest")}: ${rest}` : "";
                 descriptionLines.push(`• ${reps}${blockDesc}${dur}${zone}${restStr}`);
               }
             }
@@ -162,7 +162,7 @@ export function exportPlanToICS(
             // Cooldown
             if (running.cooldownTemplate?.length) {
               descriptionLines.push("");
-              descriptionLines.push(isEn ? "--- Cool-down ---" : "--- Retour au calme ---");
+              descriptionLines.push(t("cooldownSep"));
               for (const block of running.cooldownTemplate) {
                 const blockDesc = isEn ? (block.descriptionEn || block.description) : block.description;
                 const dur = block.durationMin ? ` (${block.durationMin}min)` : "";

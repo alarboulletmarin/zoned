@@ -124,10 +124,10 @@ export function FitTransferGuide({ open, onOpenChange, workout }: FitTransferGui
               {t("fitTransfer.copyInstructions")}
             </Button>
             <ul className="text-xs text-muted-foreground space-y-1">
-              <li>Polar : Polar Flow → {t("fitTransfer.polarPath", { defaultValue: isEn ? "Favorites → Create" : "Favoris → Créer" })}</li>
-              <li>Suunto : Suunto App → {t("fitTransfer.suuntoPath", { defaultValue: isEn ? "Training → Create" : "Entraînement → Créer" })}</li>
-              <li>COROS : COROS App → Workout → {t("fitTransfer.corosPath", { defaultValue: isEn ? "Create" : "Créer" })}</li>
-              <li>Apple Watch : {t("fitTransfer.applePath", { defaultValue: isEn ? "Workout → Create (watchOS 9+)" : "Exercice → Créer (watchOS 9+)" })}</li>
+              <li>Polar : Polar Flow → {t("domain.fitTransfer.polarPath")}</li>
+              <li>Suunto : Suunto App → {t("domain.fitTransfer.suuntoPath")}</li>
+              <li>COROS : COROS App → Workout → {t("domain.fitTransfer.corosPath")}</li>
+              <li>Apple Watch : {t("domain.fitTransfer.applePath")}</li>
             </ul>
           </div>
         )}

@@ -226,14 +226,14 @@ export function WorkoutDetailPage() {
   if (locationState?.from === "plan" && locationState.planId) {
     breadcrumbs.push({ label: t("common:nav.plans"), to: "/plans" });
     breadcrumbs.push({
-      label: locationState.planName || (isEn ? "Plan" : "Plan"),
+      label: locationState.planName || t("common:pages.workoutDetail.planFallback"),
       to: `/plan/${locationState.planId}?week=${locationState.weekNumber}`,
       state: { returnScrollY: locationState.scrollY },
     });
   } else if (locationState?.from === "collection" && locationState.collectionSlug) {
     breadcrumbs.push({ label: t("common:collections.title"), to: "/collections" });
     breadcrumbs.push({
-      label: locationState.collectionName || (isEn ? "Collection" : "Collection"),
+      label: locationState.collectionName || t("common:pages.workoutDetail.collectionFallback"),
       to: `/collections/${locationState.collectionSlug}`,
     });
   } else if (locationState?.from === "quiz") {
@@ -312,7 +312,7 @@ export function WorkoutDetailPage() {
         <div className="flex flex-col gap-2">
           <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="self-start">
             <ArrowLeft className="mr-2 size-4" />
-            {isEn ? "Back" : "Retour"}
+            {t("common:pages.workoutDetail.back")}
           </Button>
 
           <nav aria-label="Breadcrumb">
@@ -450,7 +450,7 @@ export function WorkoutDetailPage() {
               <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
                 <MapPin className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
                 <span className="text-sm font-bold">
-                  {envRequirements.length > 0 ? envLabel : (isEn ? "Any" : "Tous")}
+                  {envRequirements.length > 0 ? envLabel : t("common:pages.workoutDetail.envAny")}
                 </span>
                 <span className="text-xs text-muted-foreground">{t("details.environment")}</span>
               </div>
@@ -662,7 +662,7 @@ function StrengthWorkoutDetail({ workout, locationState, isEn }: StrengthWorkout
         <div className="flex flex-col gap-2">
           <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="self-start">
             <ArrowLeft className="mr-2 size-4" />
-            {isEn ? "Back" : "Retour"}
+            {tCommon("pages.workoutDetail.back")}
           </Button>
 
           <nav aria-label="Breadcrumb">
@@ -947,9 +947,7 @@ function StrengthWorkoutDetail({ workout, locationState, isEn }: StrengthWorkout
 
         {/* Image source credit */}
         <p className="text-xs text-muted-foreground/60 mt-8">
-          {isEn
-            ? "Exercise illustrations from free-exercise-db (Public Domain)."
-            : "Illustrations des exercices issues de free-exercise-db (Domaine Public)."}
+          {tCommon("pages.workoutDetail.exerciseCredits")}
         </p>
       </div>
     </>

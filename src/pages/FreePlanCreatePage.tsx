@@ -15,7 +15,7 @@ const MAX_WEEKS = 52;
 const DEFAULT_WEEKS = 12;
 
 export function FreePlanCreatePage() {
-  const { i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const navigate = useNavigate();
 
@@ -32,11 +32,7 @@ export function FreePlanCreatePage() {
     if (!isValid) return;
 
     if (!canCreate) {
-      setError(
-        isEn
-          ? "You've reached the limit of 5 plans. Delete an existing plan."
-          : "Limite de 5 plans atteinte. Supprimez un plan existant."
-      );
+      setError(t("freePlan.limitReached"));
       return;
     }
 
@@ -49,12 +45,8 @@ export function FreePlanCreatePage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "Free Plan" : "Plan libre"}
-        description={
-          isEn
-            ? "Create a blank training plan."
-            : "Cr\u00e9ez un plan d'entra\u00eenement vierge."
-        }
+        title={t("freePlan.title")}
+        description={t("freePlan.seoDescription")}
         canonical="/plan/new/free"
       />
       <div className="py-8">
@@ -63,7 +55,7 @@ export function FreePlanCreatePage() {
           <Button variant="ghost" size="sm" asChild>
             <Link to="/plan/new">
               <ArrowLeft className="mr-2 size-4" />
-              {isEn ? "Back" : "Retour"}
+              {t("freePlan.back")}
             </Link>
           </Button>
 
@@ -73,12 +65,10 @@ export function FreePlanCreatePage() {
               <CalendarRange className="size-8 text-primary" />
             </div>
             <h1 className="text-2xl font-bold">
-              {isEn ? "Free Plan" : "Plan libre"}
+              {t("freePlan.title")}
             </h1>
             <p className="text-muted-foreground">
-              {isEn
-                ? "Create a blank plan and fill it at your own pace"
-                : "Cr\u00e9ez un plan vierge et remplissez-le \u00e0 votre rythme"}
+              {t("freePlan.subtitle")}
             </p>
           </div>
 
@@ -88,7 +78,7 @@ export function FreePlanCreatePage() {
               {/* Plan name */}
               <div>
                 <label htmlFor="plan-name" className="text-sm font-medium mb-2 block">
-                  {isEn ? "Plan name" : "Nom du plan"}
+                  {t("freePlan.planName")}
                 </label>
                 <input
                   id="plan-name"
@@ -98,11 +88,7 @@ export function FreePlanCreatePage() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && isValid) handleSubmit();
                   }}
-                  placeholder={
-                    isEn
-                      ? "e.g. Spring marathon prep"
-                      : "ex. Pr\u00e9pa marathon de printemps"
-                  }
+                  placeholder={t("freePlan.namePlaceholder")}
                   className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   maxLength={100}
                   autoFocus
@@ -112,7 +98,7 @@ export function FreePlanCreatePage() {
               {/* Number of weeks */}
               <div>
                 <label htmlFor="plan-weeks" className="text-sm font-medium mb-2 block">
-                  {isEn ? "Number of weeks" : "Nombre de semaines"}
+                  {t("freePlan.numberOfWeeks")}
                 </label>
                 <div className="flex items-center gap-4">
                   <input
@@ -141,15 +127,14 @@ export function FreePlanCreatePage() {
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {MIN_WEEKS} - {MAX_WEEKS}{" "}
-                  {isEn ? "weeks" : "semaines"}
+                  {MIN_WEEKS} - {MAX_WEEKS} {t("freePlan.weeks")}
                 </p>
               </div>
 
               {/* Optional dates */}
               <div>
                 <label className="text-sm font-medium mb-2 block">
-                  {isEn ? "Start date" : "Date de début"}
+                  {t("freePlan.startDate")}
                 </label>
                 <div className="flex gap-2 mb-3">
                   <button
@@ -160,7 +145,7 @@ export function FreePlanCreatePage() {
                       !useCustomDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
                     )}
                   >
-                    {isEn ? "Start now" : "Commencer maintenant"}
+                    {t("freePlan.startNow")}
                   </button>
                   <button
                     type="button"
@@ -170,7 +155,7 @@ export function FreePlanCreatePage() {
                       useCustomDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
                     )}
                   >
-                    {isEn ? "Choose a date" : "Choisir une date"}
+                    {t("freePlan.chooseDate")}
                   </button>
                 </div>
                 {useCustomDate && (
@@ -185,7 +170,7 @@ export function FreePlanCreatePage() {
                 )}
                 {startDate && (
                   <p className="text-xs text-muted-foreground mt-1">
-                    {isEn ? "End date" : "Date de fin"} :{" "}
+                    {t("freePlan.endDate")} :{" "}
                     {(() => {
                       const d = new Date(startDate);
                       d.setDate(d.getDate() + weeks * 7);
@@ -202,18 +187,16 @@ export function FreePlanCreatePage() {
             <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive text-center">
               {error}{" "}
               <Link to="/plans" className="underline font-medium">
-                {isEn ? "Manage plans" : "G\u00e9rer les plans"}
+                {t("freePlan.managePlans")}
               </Link>
             </div>
           )}
 
           {!canCreate && !error && (
             <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive text-center">
-              {isEn
-                ? "You've reached the limit of 5 plans. "
-                : "Limite de 5 plans atteinte. "}
+              {t("freePlan.limitReachedShort")}
               <Link to="/plans" className="underline font-medium">
-                {isEn ? "Delete an existing plan" : "Supprimer un plan existant"}
+                {t("freePlan.deleteExisting")}
               </Link>
             </div>
           )}
@@ -225,7 +208,7 @@ export function FreePlanCreatePage() {
             onClick={handleSubmit}
             disabled={!isValid || !canCreate}
           >
-            {isEn ? "Create" : "Cr\u00e9er"}
+            {t("freePlan.create")}
           </Button>
         </div>
       </div>

@@ -74,6 +74,7 @@ function PlanCard({
   isEn: boolean;
   onDelete: (id: string) => void;
 }) {
+  const { t } = useTranslation("plan");
   const navigate = useNavigate();
   const isFreePlan = plan.config.planMode === "free";
   const raceMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
@@ -105,11 +106,11 @@ function PlanCard({
             </Badge>
           ) : plan.config.planMode === "prebuilt" ? (
             <Badge variant="secondary" className="shrink-0">
-              {isEn ? "Pre-built" : "Pr\u00e9-construit"}
+              {t("view.prebuilt")}
             </Badge>
           ) : (
             <Badge variant="secondary" className="shrink-0">
-              {isEn ? "Free plan" : "Plan libre"}
+              {t("view.freePlan")}
             </Badge>
           )}
         </div>
@@ -117,10 +118,7 @@ function PlanCard({
           {isFreePlan ? (
             <span className="flex items-center gap-1">
               <Calendar className="size-3.5" />
-              {totalSessions}{" "}
-              {isEn
-                ? `session${totalSessions !== 1 ? "s" : ""}`
-                : `s\u00e9ance${totalSessions !== 1 ? "s" : ""}`}
+              {t("plansPage.sessionsCount", { count: totalSessions })}
             </span>
           ) : plan.config.raceDate ? (
             <span className="flex items-center gap-1">
@@ -173,9 +171,7 @@ function PlanCard({
         {/* Progress */}
         <div className="flex justify-between text-xs text-muted-foreground">
           <span>
-            {isEn
-              ? `Week ${weeksElapsed} / ${plan.totalWeeks}`
-              : `Semaine ${weeksElapsed} / ${plan.totalWeeks}`}
+            {t("plansPage.weekProgress", { current: weeksElapsed, total: plan.totalWeeks })}
           </span>
           <span>{Math.round(progressPercent)}%</span>
         </div>
@@ -185,7 +181,7 @@ function PlanCard({
           <div className="flex items-center gap-1 text-sm text-muted-foreground">
             <Clock className="size-3.5" />
             <span>
-              {isEn ? "Target: " : "Objectif : "}
+              {t("plansPage.target")}
               {plan.raceTimePrediction}
             </span>
           </div>
@@ -202,7 +198,7 @@ function PlanCard({
         >
           <Link to={`/plan/${plan.id}`}>
             <ArrowRight className="size-3.5" />
-            {isEn ? "View" : "Voir"}
+            {t("plansPage.view")}
           </Link>
         </Button>
         <PlanExportMenu
@@ -226,7 +222,7 @@ function PlanCard({
 }
 
 export function PlansPage() {
-  const { i18n } = useTranslation("plan");
+  const { t, i18n } = useTranslation("plan");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const navigate = useNavigate();
   const { plans, isLoading, remove, reload } = usePlans();
@@ -241,7 +237,7 @@ export function PlansPage() {
       if (!file) return;
 
       if (getPlanCount() >= 5) {
-        toast.error(isEn ? "Maximum 5 plans. Delete one first." : "Maximum 5 plans. Supprimez-en un d'abord.");
+        toast.error(t("plansPage.importMaxError"));
         return;
       }
 
@@ -250,17 +246,17 @@ export function PlansPage() {
         const newId = importPlan(text);
         if (newId) {
           reload();
-          toast.success(isEn ? "Plan imported!" : "Plan importé !");
+          toast.success(t("plansPage.importSuccess"));
           navigate(`/plan/${newId}`);
         } else {
-          toast.error(isEn ? "Invalid plan file" : "Fichier de plan invalide");
+          toast.error(t("plansPage.importInvalid"));
         }
       } catch {
-        toast.error(isEn ? "Failed to read file" : "Impossible de lire le fichier");
+        toast.error(t("plansPage.importReadError"));
       }
     };
     input.click();
-  }, [isEn, reload, navigate]);
+  }, [t, reload, navigate]);
   const deleteTargetPlan = plans.find((p) => p.id === deleteTarget);
 
   // Sort plans by creation date (newest first)
@@ -278,7 +274,7 @@ export function PlansPage() {
     <>
       <SEOHead
         noindex={true}
-        title={isEn ? "My Training Plans" : "Mes Plans d'Entraînement"}
+        title={t("plansPage.title")}
         canonical="/plans"
       />
       <div className="py-8 space-y-6">
@@ -286,12 +282,10 @@ export function PlansPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold">
-              {isEn ? "My Training Plans" : "Mes Plans d'Entraînement"}
+              {t("plansPage.title")}
             </h1>
             <p className="text-muted-foreground mt-1">
-              {isEn
-                ? "Structured plans to reach your race goals"
-                : "Des plans structurés pour atteindre vos objectifs"}
+              {t("plansPage.subtitle")}
             </p>
             <div className="flex flex-wrap gap-2 mt-2">
               <Link
@@ -299,9 +293,7 @@ export function PlansPage() {
                 className="inline-flex items-center gap-2 rounded-lg border border-border/60 bg-muted/40 px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted/70 hover:text-foreground transition-colors"
               >
                 <FlaskConical className="size-3.5 text-primary" />
-                {isEn
-                  ? "The science behind your plans"
-                  : "La science derrière vos plans"}
+                {t("plansPage.science")}
                 <ArrowRight className="size-3.5" />
               </Link>
               <Link
@@ -309,27 +301,25 @@ export function PlansPage() {
                 className="inline-flex items-center gap-2 rounded-lg border border-border/60 bg-muted/40 px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted/70 hover:text-foreground transition-colors"
               >
                 <Scale className="size-3.5 text-primary" />
-                {isEn
-                  ? "What-if simulator"
-                  : "Simulateur what-if"}
+                {t("plansPage.whatIf")}
                 <ArrowRight className="size-3.5" />
               </Link>
             </div>
           </div>
           {plans.length >= 5 ? (
             <p className="text-sm text-muted-foreground">
-              {isEn ? "Maximum 5 plans reached" : "Limite de 5 plans atteinte"}
+              {t("plansPage.maxReached")}
             </p>
           ) : (
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={handleImport} className="rounded-full">
                 <Download className="size-4 rotate-180" />
-                <span className="hidden sm:inline ml-1">{isEn ? "Import" : "Importer"}</span>
+                <span className="hidden sm:inline ml-1">{t("plansPage.import")}</span>
               </Button>
               <Button asChild>
                 <Link to="/plan/new">
                   <Plus className="size-4" />
-                  {isEn ? "Create a plan" : "Créer un plan"}
+                  {t("create")}
                 </Link>
               </Button>
             </div>
@@ -361,9 +351,7 @@ export function PlansPage() {
 
             {/* Stats */}
             <div className="text-center text-sm text-muted-foreground">
-              {isEn
-                ? `${sortedPlans.length} plan${sortedPlans.length !== 1 ? "s" : ""}`
-                : `${sortedPlans.length} plan${sortedPlans.length !== 1 ? "s" : ""}`}
+              {t("plansPage.planCount", { count: sortedPlans.length })}
             </div>
           </>
         ) : (
@@ -427,21 +415,15 @@ export function PlansPage() {
             </div>
             <div className="space-y-2">
               <p className="text-lg font-medium">
-                {isEn
-                  ? "Build your training arc"
-                  : "Construisez votre progression"}
+                {t("plansPage.buildArc")}
               </p>
               <p className="text-muted-foreground max-w-md mx-auto">
-                {isEn
-                  ? "Set a goal, pick your race, and we'll structure the path."
-                  : "D\u00e9finissez un objectif, choisissez votre course, et on structure le chemin."}
+                {t("plansPage.buildArcDesc")}
               </p>
             </div>
             <Button asChild className="mt-4">
               <Link to="/plan/new">
-                {isEn
-                  ? "Create your first plan"
-                  : "Cr\u00e9er votre premier plan"}
+                {t("plansPage.createFirst")}
                 <ArrowRight className="ml-2 size-4" />
               </Link>
             </Button>
@@ -454,20 +436,18 @@ export function PlansPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {isEn ? "Delete this plan?" : "Supprimer ce plan ?"}
+              {t("plansPage.deleteTitle")}
             </DialogTitle>
             <DialogDescription>
               {deleteTargetPlan
-                ? (isEn
-                    ? `"${deleteTargetPlan.nameEn}" will be permanently deleted. This action cannot be undone.`
-                    : `"${deleteTargetPlan.name}" sera définitivement supprimé. Cette action est irréversible.`)
+                ? t("plansPage.deleteConfirm", { name: isEn ? deleteTargetPlan.nameEn : deleteTargetPlan.name })
                 : ""}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">
-                {isEn ? "Cancel" : "Annuler"}
+                {t("plansPage.cancelButton")}
               </Button>
             </DialogClose>
             <Button
@@ -480,7 +460,7 @@ export function PlansPage() {
               }}
             >
               <Trash2 className="size-4" />
-              {isEn ? "Delete" : "Supprimer"}
+              {t("plansPage.deleteButton")}
             </Button>
           </DialogFooter>
         </DialogContent>

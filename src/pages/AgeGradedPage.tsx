@@ -56,36 +56,36 @@ function formatTime(totalSeconds: number): string {
 
 function getPerformanceLevel(
   percentage: number,
-  isEn: boolean,
+  t: (key: string) => string,
 ): { label: string; colorClass: string } {
   if (percentage >= 90)
     return {
-      label: isEn ? "World class" : "Niveau mondial",
+      label: t("calculateurs.ageGraded.levelWorldClass"),
       colorClass: "text-zone-6",
     };
   if (percentage >= 80)
     return {
-      label: isEn ? "National level" : "Niveau national",
+      label: t("calculateurs.ageGraded.levelNational"),
       colorClass: "text-zone-5",
     };
   if (percentage >= 70)
     return {
-      label: isEn ? "Regional level" : "Niveau régional",
+      label: t("calculateurs.ageGraded.levelRegional"),
       colorClass: "text-zone-4",
     };
   if (percentage >= 60)
     return {
-      label: isEn ? "Local level" : "Niveau local",
+      label: t("calculateurs.ageGraded.levelLocal"),
       colorClass: "text-zone-3",
     };
   return {
-    label: isEn ? "Recreational" : "Récréatif",
+    label: t("calculateurs.ageGraded.levelRecreational"),
     colorClass: "text-zone-2",
   };
 }
 
 export function AgeGradedPage() {
-  const { i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const { settings } = useSettings();
   const unit = settings.unitSystem;
@@ -156,32 +156,20 @@ export function AgeGradedPage() {
   };
 
   const performanceLevel = result
-    ? getPerformanceLevel(result.percentage, isEn)
+    ? getPerformanceLevel(result.percentage, t)
     : null;
 
   return (
     <>
       <SEOHead
-        title={
-          isEn
-            ? "Age-Graded Performance — Level Score"
-            : "Performance Age-Graded — Score de niveau"
-        }
-        description={
-          isEn
-            ? "Age-graded performance calculator for runners. Compare your race time to the age and gender adjusted world record and discover your performance level."
-            : "Calculez votre performance ajustée à l'âge en course à pied (age grading). Comparez votre chrono au record mondial de votre catégorie d'âge et sexe."
-        }
+        title={t("calculateurs.ageGraded.seoTitle")}
+        description={t("calculateurs.ageGraded.seoDescription")}
         canonical="/calculators/age-graded"
         jsonLd={[
           {
             "@type": "WebApplication",
-            name: isEn
-              ? "Age-Graded Performance Calculator"
-              : "Calculateur Performance Age-Graded",
-            description: isEn
-              ? "Compare your performance to the age and gender adjusted world record"
-              : "Comparez votre performance au record mondial ajusté pour votre âge et sexe",
+            name: t("calculateurs.ageGraded.seoAppName"),
+            description: t("calculateurs.ageGraded.seoAppDescription"),
             url: "https://zoned.run/calculators/age-graded",
             applicationCategory: "SportsApplication",
           },
@@ -189,8 +177,8 @@ export function AgeGradedPage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
-              { "@type": "ListItem", position: 3, name: isEn ? "Age-Graded Performance" : "Performance age-graded" },
+              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: t("calculateurs.ageGraded.seoBreadcrumb") },
             ],
           },
         ]}
@@ -200,12 +188,10 @@ export function AgeGradedPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
             <Star className="size-8 text-primary" />
-            {isEn ? "Age-Graded Performance" : "Performance age-graded"}
+            {t("calculateurs.ageGraded.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {isEn
-              ? "Enter your age, gender, distance and time to see how your performance compares to the world record for your category."
-              : "Entrez votre âge, sexe, distance et temps pour voir comment votre performance se compare au record mondial de votre catégorie."}
+            {t("calculateurs.ageGraded.description")}
           </p>
         </div>
 
@@ -217,25 +203,25 @@ export function AgeGradedPage() {
               {/* Age */}
               <div className="space-y-2">
                 <label htmlFor="age" className="text-sm font-medium">
-                  {isEn ? "Age" : "Âge"}
+                  {t("calculateurs.ageGraded.age")}
                 </label>
                 <input
                   id="age"
                   type="number"
                   min={15}
                   max={99}
-                  placeholder={isEn ? "e.g. 35" : "ex. 35"}
+                  placeholder={t("calculateurs.ageGraded.agePlaceholder")}
                   value={age}
                   onChange={(e) => handleNumericInput(e.target.value, setAge, 99)}
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  aria-label={isEn ? "Age" : "Age"}
+                  aria-label={t("calculateurs.ageGraded.age")}
                 />
               </div>
 
               {/* Gender */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">
-                  {isEn ? "Gender" : "Sexe"}
+                  {t("calculateurs.ageGraded.gender")}
                 </label>
                 <div className="flex gap-2">
                   <Button
@@ -243,14 +229,14 @@ export function AgeGradedPage() {
                     onClick={() => setGender("male")}
                     className="flex-1"
                   >
-                    {isEn ? "Male" : "Homme"}
+                    {t("calculateurs.ageGraded.male")}
                   </Button>
                   <Button
                     variant={gender === "female" ? "default" : "outline"}
                     onClick={() => setGender("female")}
                     className="flex-1"
                   >
-                    {isEn ? "Female" : "Femme"}
+                    {t("calculateurs.ageGraded.female")}
                   </Button>
                 </div>
               </div>
@@ -261,7 +247,7 @@ export function AgeGradedPage() {
               {/* Distance */}
               <div className="space-y-2">
                 <label htmlFor="distance" className="text-sm font-medium">
-                  {isEn ? "Distance" : "Distance"}
+                  {t("calculateurs.ageGraded.distance")}
                 </label>
                 <select
                   id="distance"
@@ -282,7 +268,7 @@ export function AgeGradedPage() {
               {/* Time */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">
-                  {isEn ? "Time" : "Temps"}
+                  {t("calculateurs.ageGraded.time")}
                 </label>
                 <div className="flex items-center gap-2">
                   <div className="flex flex-col items-center">
@@ -296,7 +282,7 @@ export function AgeGradedPage() {
                         handleNumericInput(e.target.value, setHours, 9)
                       }
                       className="flex h-12 w-14 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      aria-label={isEn ? "Hours" : "Heures"}
+                      aria-label={t("calculateurs.ageGraded.hours")}
                     />
                     <span className="text-xs text-muted-foreground mt-1">
                       h
@@ -316,7 +302,7 @@ export function AgeGradedPage() {
                         handleNumericInput(e.target.value, setMinutes, 59)
                       }
                       className="flex h-12 w-14 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      aria-label={isEn ? "Minutes" : "Minutes"}
+                      aria-label={t("calculateurs.ageGraded.minutes")}
                     />
                     <span className="text-xs text-muted-foreground mt-1">
                       min
@@ -336,7 +322,7 @@ export function AgeGradedPage() {
                         handleNumericInput(e.target.value, setSeconds, 59)
                       }
                       className="flex h-12 w-14 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      aria-label={isEn ? "Seconds" : "Secondes"}
+                      aria-label={t("calculateurs.ageGraded.seconds")}
                     />
                     <span className="text-xs text-muted-foreground mt-1">
                       sec
@@ -369,7 +355,7 @@ export function AgeGradedPage() {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center py-2 border-b">
                     <span className="text-sm text-muted-foreground">
-                      {isEn ? "Open world record" : "Record mondial open"}
+                      {t("calculateurs.ageGraded.openWorldRecord")}
                     </span>
                     <span className="text-sm font-medium tabular-nums">
                       {formatTime(result.worldRecord)}
@@ -377,9 +363,7 @@ export function AgeGradedPage() {
                   </div>
                   <div className="flex justify-between items-center py-2 border-b">
                     <span className="text-sm text-muted-foreground">
-                      {isEn
-                        ? "Age-adjusted record"
-                        : "Record ajusté pour ton âge"}
+                      {t("calculateurs.ageGraded.ageAdjustedRecord")}
                     </span>
                     <span className="text-sm font-medium tabular-nums">
                       {formatTime(result.ageGradedRecord)}
@@ -387,7 +371,7 @@ export function AgeGradedPage() {
                   </div>
                   <div className="flex justify-between items-center py-2 border-b">
                     <span className="text-sm text-muted-foreground">
-                      {isEn ? "Your time" : "Ton temps"}
+                      {t("calculateurs.ageGraded.yourTime")}
                     </span>
                     <span className="text-sm font-medium tabular-nums">
                       {formatTime(totalTimeSeconds)}
@@ -395,7 +379,7 @@ export function AgeGradedPage() {
                   </div>
                   <div className="flex justify-between items-center py-2">
                     <span className="text-sm text-muted-foreground">
-                      {isEn ? "Pace" : "Allure"}
+                      {t("calculateurs.ageGraded.paceLabel")}
                     </span>
                     <span className="text-sm font-medium tabular-nums">
                       {formatPaceWithUnit(result.paceMinPerKm, unit)}
@@ -407,9 +391,7 @@ export function AgeGradedPage() {
 
             {/* Explanation */}
             <p className="text-sm text-muted-foreground">
-              {isEn
-                ? "The age-graded score compares your performance to the world record adjusted for your age and gender. A score of 70% means you run at 70% of the world record level for your category."
-                : "Le score age-graded compare ta performance au record mondial ajusté pour ton âge et sexe. Un score de 70% signifie que tu cours à 70% du niveau record mondial pour ta catégorie."}
+              {t("calculateurs.ageGraded.explanation")}
             </p>
           </div>
         )}

@@ -63,8 +63,7 @@ function findZoneForPace(
 }
 
 export function PaceConverterPage() {
-  const { i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
   const { settings } = useSettings();
   const isImperial = settings.unitSystem === "imperial";
 
@@ -196,22 +195,14 @@ export function PaceConverterPage() {
   return (
     <>
       <SEOHead
-        title={
-          isEn ? "Pace Converter" : "Convertisseur d'allures"
-        }
-        description={
-          isEn
-            ? "Free pace converter for runners. Convert between min/km, km/h and min/mile in real time with automatic training zone detection based on your VMA."
-            : "Convertisseur km/h min/km gratuit pour la course à pied. Convertissez vitesse et allure en temps réel avec détection automatique de zone d'entraînement."
-        }
+        title={t("calculateurs.converter.seoTitle")}
+        description={t("calculateurs.converter.seoDescription")}
         canonical="/calculators/convertisseur"
         jsonLd={[
           {
             "@type": "WebApplication",
-            name: isEn ? "Pace Converter" : "Convertisseur d'allures",
-            description: isEn
-              ? "Convert between min/km, km/h and min/mile in real time"
-              : "Convertissez entre min/km, km/h et min/mile en temps réel",
+            name: t("calculateurs.converter.seoAppName"),
+            description: t("calculateurs.converter.seoAppDescription"),
             url: "https://zoned.run/calculators/convertisseur",
             applicationCategory: "SportsApplication",
           },
@@ -219,8 +210,8 @@ export function PaceConverterPage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
-              { "@type": "ListItem", position: 3, name: isEn ? "Pace Converter" : "Convertisseur d'allures" },
+              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: t("calculateurs.converter.seoBreadcrumb") },
             ],
           },
         ]}
@@ -229,12 +220,10 @@ export function PaceConverterPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
-            {isEn ? "Pace Converter" : "Convertisseur d'allures"}
+            {t("calculateurs.converter.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {isEn
-              ? "Type in any field and the others update instantly."
-              : "Saisissez dans un champ et les autres se mettent à jour instantanément."}
+            {t("calculateurs.converter.description")}
           </p>
         </div>
 
@@ -298,18 +287,18 @@ export function PaceConverterPage() {
             <span
               className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium bg-zone-${currentZone}/10 text-zone-${currentZone}`}
             >
-              {isEn
-                ? `Zone ${currentZone} for you`
-                : `Zone ${currentZone} pour toi`}
+              {t("calculateurs.converter.zoneForYou", { zone: currentZone })}
             </span>
           </div>
         )}
 
         {/* Unit system note */}
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          {isEn
-            ? `Displaying in ${isImperial ? "imperial" : "metric"} units. Change in Settings.`
-            : `Affichage en unités ${isImperial ? "impériales" : "métriques"}. Modifier dans Paramètres.`}
+          {t("calculateurs.converter.displayingUnits", {
+            system: isImperial
+              ? t("calculateurs.converter.imperial")
+              : t("calculateurs.converter.metric"),
+          })}
         </p>
       </div>
     </>

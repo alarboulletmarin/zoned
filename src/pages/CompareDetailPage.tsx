@@ -6,20 +6,20 @@ import { CheckIcon, X, Shield, EyeOff, GithubIcon, Sparkles, ArrowLeft, ArrowRig
 
 const SITE_URL = "https://zoned.run";
 
-function ComparisonBadge({ value, isEn }: { value: ComparisonValue; isEn: boolean }) {
+function ComparisonBadge({ value, isEn, t }: { value: ComparisonValue; isEn: boolean; t: (key: string) => string }) {
   switch (value.type) {
     case "yes":
       return (
         <span className="inline-flex items-center gap-1 text-green-600 dark:text-green-400 font-medium text-sm">
           <CheckIcon className="w-3.5 h-3.5" />
-          {isEn ? "Yes" : "Oui"}
+          {t("compare.values.yes")}
         </span>
       );
     case "no":
       return (
         <span className="inline-flex items-center gap-1 text-red-500 dark:text-red-400 font-medium text-sm">
           <X className="w-3.5 h-3.5" />
-          {isEn ? "No" : "Non"}
+          {t("compare.values.no")}
         </span>
       );
     case "partial":
@@ -96,7 +96,7 @@ export function CompareDetailPage() {
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: isEn ? "Home" : "Accueil", item: SITE_URL },
+              { "@type": "ListItem", position: 1, name: t("nav.home"), item: SITE_URL },
               { "@type": "ListItem", position: 2, name: t("compare.title"), item: `${SITE_URL}/compare` },
               { "@type": "ListItem", position: 3, name: title },
             ],
@@ -165,10 +165,10 @@ export function CompareDetailPage() {
                       {isEn ? criterion.labelEn : criterion.labelFr}
                     </td>
                     <td className="px-4 py-3">
-                      <ComparisonBadge value={criterion.zoned} isEn={isEn} />
+                      <ComparisonBadge value={criterion.zoned} isEn={isEn} t={t} />
                     </td>
                     <td className="px-4 py-3">
-                      <ComparisonBadge value={criterion.competitor} isEn={isEn} />
+                      <ComparisonBadge value={criterion.competitor} isEn={isEn} t={t} />
                     </td>
                   </tr>
                 ))}

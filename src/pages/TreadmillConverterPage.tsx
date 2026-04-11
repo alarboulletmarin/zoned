@@ -36,8 +36,7 @@ function findZoneForPace(
 }
 
 export function TreadmillConverterPage() {
-  const { i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
   const { settings } = useSettings();
   const unit = settings.unitSystem;
 
@@ -92,24 +91,14 @@ export function TreadmillConverterPage() {
   return (
     <>
       <SEOHead
-        title={
-          isEn
-            ? "Treadmill Converter"
-            : "Convertisseur Tapis Roulant"
-        }
-        description={
-          isEn
-            ? "Treadmill pace converter: calculate equivalent outdoor pace from treadmill speed and incline. Includes training zone detection for your running effort."
-            : "Convertisseur tapis de course : calculez l'allure extérieure équivalente selon la vitesse et l'inclinaison du tapis roulant. Zone d'entraînement incluse."
-        }
+        title={t("calculateurs.treadmill.seoTitle")}
+        description={t("calculateurs.treadmill.seoDescription")}
         canonical="/calculators/tapis-roulant"
         jsonLd={[
           {
             "@type": "WebApplication",
-            name: isEn ? "Treadmill Converter" : "Convertisseur Tapis Roulant",
-            description: isEn
-              ? "Convert treadmill speed and incline to equivalent outdoor pace"
-              : "Convertissez la vitesse et l'inclinaison du tapis en allure extérieure équivalente",
+            name: t("calculateurs.treadmill.seoAppName"),
+            description: t("calculateurs.treadmill.seoAppDescription"),
             url: "https://zoned.run/calculators/tapis-roulant",
             applicationCategory: "SportsApplication",
           },
@@ -117,8 +106,8 @@ export function TreadmillConverterPage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
-              { "@type": "ListItem", position: 3, name: isEn ? "Treadmill Converter" : "Convertisseur tapis roulant" },
+              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: t("calculateurs.treadmill.seoBreadcrumb") },
             ],
           },
         ]}
@@ -127,12 +116,10 @@ export function TreadmillConverterPage() {
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold mb-2">
-            {isEn ? "Treadmill Converter" : "Convertisseur Tapis Roulant"}
+            {t("calculateurs.treadmill.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {isEn
-              ? "Convert treadmill speed and incline to equivalent outdoor pace."
-              : "Convertissez vitesse et inclinaison en allure de course équivalente."}
+            {t("calculateurs.treadmill.description")}
           </p>
         </div>
 
@@ -141,7 +128,7 @@ export function TreadmillConverterPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <RefreshCw className="size-5" />
-              {isEn ? "Treadmill Settings" : "Paramètres du tapis"}
+              {t("calculateurs.treadmill.settings")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -152,7 +139,7 @@ export function TreadmillConverterPage() {
                   htmlFor="treadmill-speed"
                   className="text-sm font-medium"
                 >
-                  {isEn ? "Speed" : "Vitesse"}
+                  {t("calculateurs.treadmill.speed")}
                 </label>
                 <div className="flex items-center gap-2">
                   <input
@@ -177,7 +164,7 @@ export function TreadmillConverterPage() {
                   htmlFor="treadmill-incline"
                   className="text-sm font-medium"
                 >
-                  {isEn ? "Incline" : "Inclinaison"}
+                  {t("calculateurs.treadmill.incline")}
                 </label>
                 <div className="flex items-center gap-2">
                   <input
@@ -203,7 +190,7 @@ export function TreadmillConverterPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Gauge className="size-5" />
-                {isEn ? "Equivalent Outdoor Effort" : "Effort extérieur équivalent"}
+                {t("calculateurs.treadmill.equivalentEffort")}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -211,7 +198,7 @@ export function TreadmillConverterPage() {
                 {/* Pace */}
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">
-                    {isEn ? "Pace" : "Allure"}
+                    {t("calculateurs.treadmill.pace")}
                   </p>
                   <p className="text-2xl font-bold tabular-nums">
                     {displayPace}
@@ -224,7 +211,7 @@ export function TreadmillConverterPage() {
                 {/* Speed */}
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">
-                    {isEn ? "Speed" : "Vitesse"}
+                    {t("calculateurs.treadmill.speed")}
                   </p>
                   <p className="text-2xl font-bold tabular-nums">
                     {displaySpeed}
@@ -239,7 +226,7 @@ export function TreadmillConverterPage() {
               {matchedZone && (
                 <div className="mt-4 pt-4 border-t flex items-center gap-2">
                   <span className="text-sm text-muted-foreground">
-                    {isEn ? "Training zone:" : "Zone d'entraînement :"}
+                    {t("calculateurs.treadmill.trainingZone")}
                   </span>
                   <ZoneBadge zone={matchedZone} showLabel size="md" />
                 </div>
@@ -248,9 +235,7 @@ export function TreadmillConverterPage() {
               {!vma && (
                 <div className="mt-4 pt-4 border-t flex items-center gap-2 text-sm text-muted-foreground">
                   <Info className="size-4 shrink-0" />
-                  {isEn
-                    ? "Configure your VMA in My Zones to see the training zone."
-                    : "Configurez votre VMA dans Mes Zones pour voir la zone d'entraînement."}
+                  {t("calculateurs.treadmill.configureVma")}
                 </div>
               )}
             </CardContent>
@@ -261,9 +246,7 @@ export function TreadmillConverterPage() {
         <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground italic">
-              {isEn
-                ? "The formula accounts for the lack of air resistance and incline effect. A 1% incline roughly compensates for indoor running. Each additional 1% incline adds approximately 3% to the effort."
-                : "La formule tient compte de l'absence de résistance de l'air et de l'effet de l'inclinaison. Une inclinaison de 1% compense approximativement la course en intérieur. Chaque 1% d'inclinaison supplémentaire ajoute environ 3% à l'effort."}
+              {t("calculateurs.treadmill.formula")}
             </p>
           </CardContent>
         </Card>

@@ -1,4 +1,5 @@
 import { useState, useMemo, memo, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { Calendar, ChevronLeft, ChevronRight } from "@/components/icons";
 import type { TrainingPlan } from "@/types/plan";
@@ -52,15 +53,14 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
   onAddToDay,
   onWeekChange,
 }: PlanMonthlyViewProps) {
+  const { t, i18n } = useTranslation("plan");
   // ── No start date fallback ──────────────────────────────────────
   if (!startDate) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <Calendar className="size-12 text-muted-foreground/50 mb-4" />
         <p className="text-muted-foreground">
-          {isEn
-            ? "Set a start date to display the monthly view"
-            : "Définissez une date de début pour afficher la vue mensuelle"}
+          {t("monthlyView.noStartDate")}
         </p>
       </div>
     );
@@ -166,7 +166,7 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
     return result;
   }, [selectedMonth, weekDateRanges]);
 
-  const monthNames = isEn ? MONTH_NAMES_EN : MONTH_NAMES_FR;
+  const monthNames = i18n.language?.startsWith("en") ? MONTH_NAMES_EN : MONTH_NAMES_FR;
 
   // ── Render ────────────────────────────────────────────────────────
   return (
@@ -183,7 +183,7 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
               ? "hover:bg-muted text-foreground"
               : "text-muted-foreground/30 cursor-not-allowed",
           )}
-          aria-label={isEn ? "Previous month" : "Mois précédent"}
+          aria-label={t("monthlyView.previousMonth")}
         >
           <ChevronLeft className="size-5" />
         </button>
@@ -202,7 +202,7 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
               ? "hover:bg-muted text-foreground"
               : "text-muted-foreground/30 cursor-not-allowed",
           )}
-          aria-label={isEn ? "Next month" : "Mois suivant"}
+          aria-label={t("monthlyView.nextMonth")}
         >
           <ChevronRight className="size-5" />
         </button>
