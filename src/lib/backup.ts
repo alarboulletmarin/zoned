@@ -3,6 +3,7 @@ export const BACKUP_STORAGE_KEYS = [
   "zoned-favorites",
   "zoned-settings",
   "zoned-last-seen-version",
+  "zoned-planViewMode",
   "zoned-viewMode",
   "zoned-dismissed-tips",
   "zoned-userZones",
@@ -14,6 +15,7 @@ export const BACKUP_STORAGE_KEYS = [
   "zoned-language",
   "zoned-custom-workouts",
   "zoned-race-simulations",
+  "zoned-whatif-scenarios",
 ] as const;
 
 export type BackupStorageKey = typeof BACKUP_STORAGE_KEYS[number];
