@@ -41,8 +41,9 @@ export function pickLang<T extends object, K extends string>(
   if (!obj) return fallback ?? "";
   const record = obj as Record<string, unknown>;
   const en = record[`${field}En`];
-  const fr = record[field];
-  const value = isEnglish() ? (en ?? fr) : fr;
+  // Try `field` first (e.g. `name`), then `${field}Fr` (e.g. `nameFr`)
+  const fr = record[field] ?? record[`${field}Fr`];
+  const value = isEnglish() ? (en ?? fr) : (fr ?? en);
   return (value as string | undefined) ?? fallback ?? "";
 }
 
@@ -60,8 +61,9 @@ export function usePickLang() {
     if (!obj) return fallback ?? "";
     const record = obj as Record<string, unknown>;
     const en = record[`${field}En`];
-    const fr = record[field];
-    const value = isEn ? (en ?? fr) : fr;
+    // Try `field` first (e.g. `name`), then `${field}Fr` (e.g. `nameFr`)
+    const fr = record[field] ?? record[`${field}Fr`];
+    const value = isEn ? (en ?? fr) : (fr ?? en);
     return (value as string | undefined) ?? fallback ?? "";
   };
 }
