@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { computePlanStats, computeEnhancedPlanAnalysis } from "@/lib/planStats";
+import { computePlanStats, computeEnhancedPlanAnalysis, computeWeekKm } from "@/lib/planStats";
 import { PHASE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import type { EnhancedPlanAnalysis } from "@/lib/planStats";
@@ -119,7 +119,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
   const weeklyKmData = useMemo(() => {
     return plan.weeks.map(w => ({
       weekNumber: w.weekNumber,
-      km: w.targetKm ?? 0,
+      km: computeWeekKm(w),
       phase: w.phase,
       isRecovery: w.isRecoveryWeek,
     }));
