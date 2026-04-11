@@ -491,26 +491,6 @@
     "trainingZones": "Zones d'entraînement",
     "clickZoneToLearn": "Cliquez sur une zone pour en savoir plus"
   },
-  "home": {
-    "seoTitle": "Séances de Course Scientifiques",
-    "findWorkout": "Trouve ta séance",
-    "findWorkoutDesc": "5 questions pour trouver la séance parfaite",
-    "raceSimulator": "Simulateur",
-    "raceSimulatorSplits": "Splits, nutrition, jour-J",
-    "planYourRace": "Planifier ta course",
-    "random": "Aléatoire",
-    "surpriseMe": "Surprends-moi !",
-    "calculators": "Calculateurs",
-    "nineTools": "9 outils",
-    "myZones": "Mes Zones",
-    "hrPaceZones": "FC & allures",
-    "featuredWorkouts": "Séances en vedette",
-    "viewAll": "Voir tout",
-    "strengthForRunners": "Renforcement pour coureurs",
-    "strengthForRunnersDesc": "Séances de renforcement basées sur la science pour améliorer votre économie de course et prévenir les blessures.",
-    "seeAll": "Voir tout",
-    "browseByCategory": "Parcourir par catégorie"
-  },
   "icsExport": {
     "chooseTrainingDays": "Choisissez vos jours d'entraînement",
     "selectDays": "Sélectionnez {{count}} jours pour vos séances hebdomadaires.",

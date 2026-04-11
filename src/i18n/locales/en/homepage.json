@@ -1,0 +1,22 @@
+{
+  "home": {
+    "seoTitle": "Scientific Running Workouts",
+    "findWorkout": "Find your workout",
+    "findWorkoutDesc": "5 questions to find the perfect session",
+    "raceSimulator": "Race simulator",
+    "raceSimulatorSplits": "Splits, nutrition, race day",
+    "planYourRace": "Plan your race",
+    "random": "Random",
+    "surpriseMe": "Surprise me!",
+    "calculators": "Calculators",
+    "nineTools": "9 tools",
+    "myZones": "My Zones",
+    "hrPaceZones": "HR & pace zones",
+    "featuredWorkouts": "Featured Workouts",
+    "viewAll": "View all",
+    "strengthForRunners": "Strength for Runners",
+    "strengthForRunnersDesc": "Science-based strength sessions to improve running economy and prevent injuries.",
+    "seeAll": "See all",
+    "browseByCategory": "Browse by Category"
+  }
+}

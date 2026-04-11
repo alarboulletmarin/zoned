@@ -132,7 +132,7 @@ export function HomePage() {
   return (
     <>
       <SEOHead
-        title={t("common:home.seoTitle")}
+        title={t("homepage:home.seoTitle")}
         description={seoDescription}
         canonical="/"
         jsonLd={[
@@ -233,10 +233,10 @@ export function HomePage() {
               <div className="bg-gradient-to-br from-primary/15 dark:from-primary/25 to-zone-5/5 dark:to-zone-5/10 rounded-xl border border-primary/20 dark:border-primary/30 p-5 md:p-8 h-full flex flex-col transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-1">
                 <ClipboardCheck className="size-6 md:size-10 text-primary mb-2 md:mb-4" />
                 <p className="font-bold text-base md:text-2xl">
-                  {t("common:home.findWorkout")}
+                  {t("homepage:home.findWorkout")}
                 </p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {t("common:home.findWorkoutDesc")}
+                  {t("homepage:home.findWorkoutDesc")}
                 </p>
                 <span className="inline-flex items-center text-xs text-primary/70 mt-auto pt-2 md:pt-3 font-medium">
                   {workoutCount || 200}+ {t("common:units.workouts")}
@@ -248,13 +248,13 @@ export function HomePage() {
               <div className="bg-gradient-to-br from-zone-4/15 dark:from-zone-4/25 to-zone-5/5 dark:to-zone-5/10 rounded-xl border border-zone-4/20 dark:border-zone-4/30 p-5 md:p-8 h-full flex flex-col transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-1">
                 <Flag className="size-6 md:size-10 text-zone-4 mb-2 md:mb-4" />
                 <p className="font-bold text-base md:text-2xl">
-                  {t("common:home.raceSimulator")}
+                  {t("homepage:home.raceSimulator")}
                 </p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {t("common:home.raceSimulatorSplits")}
+                  {t("homepage:home.raceSimulatorSplits")}
                 </p>
                 <span className="inline-flex items-center text-xs text-zone-4/70 mt-auto pt-2 md:pt-3 font-medium">
-                  {t("common:home.planYourRace")}
+                  {t("homepage:home.planYourRace")}
                   <ArrowRight className="size-3 ml-1" />
                 </span>
               </div>
@@ -272,10 +272,10 @@ export function HomePage() {
                   className={`size-5 md:size-6 text-zone-5 mb-2 ${isLoadingRandom ? "animate-spin" : ""}`}
                 />
                 <p className="font-bold text-xs sm:text-sm">
-                  {t("common:home.random")}
+                  {t("homepage:home.random")}
                 </p>
                 <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 hidden sm:block">
-                  {t("common:home.surpriseMe")}
+                  {t("homepage:home.surpriseMe")}
                 </p>
               </div>
             </button>
@@ -283,10 +283,10 @@ export function HomePage() {
               <div className="bg-muted/30 dark:bg-muted/20 rounded-xl border border-border/50 p-4 md:p-5 h-full flex flex-col items-center text-center transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1 group-hover:bg-zone-3/10 dark:group-hover:bg-zone-3/15">
                 <Activity className="size-5 md:size-6 text-zone-3 mb-2" />
                 <p className="font-bold text-xs sm:text-sm">
-                  {t("common:home.calculators")}
+                  {t("homepage:home.calculators")}
                 </p>
                 <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 hidden sm:block">
-                  {t("common:home.nineTools")}
+                  {t("homepage:home.nineTools")}
                 </p>
               </div>
             </Link>
@@ -294,10 +294,10 @@ export function HomePage() {
               <div className="bg-muted/30 dark:bg-muted/20 rounded-xl border border-border/50 p-4 md:p-5 h-full flex flex-col items-center text-center transition-all duration-200 group-hover:shadow-md group-hover:-translate-y-1 group-hover:bg-zone-2/10 dark:group-hover:bg-zone-2/15">
                 <Shield className="size-5 md:size-6 text-zone-2 mb-2" />
                 <p className="font-bold text-xs sm:text-sm">
-                  {t("common:home.myZones")}
+                  {t("homepage:home.myZones")}
                 </p>
                 <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 hidden sm:block">
-                  {t("common:home.hrPaceZones")}
+                  {t("homepage:home.hrPaceZones")}
                 </p>
               </div>
             </Link>
@@ -389,11 +389,11 @@ export function HomePage() {
         <section>
           <div className="flex items-center justify-between mb-10">
             <h2 className="text-2xl md:text-3xl font-bold">
-              {t("common:home.featuredWorkouts")}
+              {t("homepage:home.featuredWorkouts")}
             </h2>
             <Button variant="ghost" asChild>
               <Link to="/library">
-                {t("common:home.viewAll")}
+                {t("homepage:home.viewAll")}
                 <ArrowRight className="ml-1 size-4" />
               </Link>
             </Button>
@@ -419,18 +419,18 @@ export function HomePage() {
               <div className="flex items-center gap-2">
                 <Dumbbell className="size-5 text-amber-500" />
                 <h2 className="text-xl md:text-2xl font-bold">
-                  {t("common:home.strengthForRunners")}
+                  {t("homepage:home.strengthForRunners")}
                 </h2>
               </div>
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/library?type=strength">
-                  {t("common:home.seeAll")}
+                  {t("homepage:home.seeAll")}
                   <ArrowRight className="size-4 ml-1" />
                 </Link>
               </Button>
             </div>
             <p className="text-sm text-muted-foreground">
-              {t("common:home.strengthForRunnersDesc")}
+              {t("homepage:home.strengthForRunnersDesc")}
             </p>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {featuredStrength.map((session) => (
@@ -443,7 +443,7 @@ export function HomePage() {
         {/* Categories Overview */}
         <section>
           <h2 className="text-2xl md:text-3xl font-bold mb-10">
-            {t("common:home.browseByCategory")}
+            {t("homepage:home.browseByCategory")}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
             {categories.map((cat) => {
