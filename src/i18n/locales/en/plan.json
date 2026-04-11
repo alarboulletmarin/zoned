@@ -77,7 +77,11 @@
     "tooSoon": "Too close! You need at least {{min}} weeks.",
     "tooLong": "{{weeks}} weeks is a long cycle",
     "tooLongDetail": "For this distance, {{min}}–{{max}} weeks is ideal. Beyond that, you risk mental fatigue and overtraining. Consider a base building block before your specific preparation.",
-    "raceDate": "Race date"
+    "raceDate": "Race date",
+    "startLabel": "Plan start",
+    "startNow": "Start now",
+    "chooseStartDate": "Choose a date",
+    "startHint": "The preparation will start from {{date}}"
   },
   "raceName": {
     "title": "Name your race",
@@ -132,6 +136,7 @@
     "subtitle": "Review your selections before generating",
     "distance": "Distance",
     "date": "Race date",
+    "startDate": "Start",
     "name": "Race name",
     "level": "Level",
     "days": "Sessions/week",

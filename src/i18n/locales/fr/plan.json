@@ -77,7 +77,11 @@
     "tooSoon": "Trop proche ! Il faut au moins {{min}} semaines.",
     "tooLong": "{{weeks}} semaines, c'est un cycle long",
     "tooLongDetail": "Pour cette distance, {{min}}–{{max}} semaines est idéal. Au-delà, tu risques la fatigue mentale et le surentraînement. Envisage un bloc de base building avant ta préparation spécifique.",
-    "raceDate": "Date de la course"
+    "raceDate": "Date de la course",
+    "startLabel": "Début du plan",
+    "startNow": "Commencer maintenant",
+    "chooseStartDate": "Choisir une date",
+    "startHint": "La préparation sera ancrée à partir du {{date}}"
   },
   "raceName": {
     "title": "Nom de la course",
@@ -132,6 +136,7 @@
     "subtitle": "Vérifiez vos choix avant de générer le plan",
     "distance": "Distance",
     "date": "Date de course",
+    "startDate": "Début",
     "name": "Nom de la course",
     "level": "Niveau",
     "days": "Séances/semaine",

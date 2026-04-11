@@ -37,6 +37,7 @@ import type { Difficulty, UserZonePreferences } from "@/types";
 import { DIFFICULTY_META } from "@/types";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+import { buildRacePlanDateRange, calculateWeeksBetweenDates } from "@/lib/planDates";
 
 // ── Constants ────────────────────────────────────────────────────────
 
@@ -101,12 +102,12 @@ const GOAL_OPTION_KEYS: { value: TrainingGoal; icon: React.ReactNode; labelKey: 
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
-function calculateWeeks(raceDate: string): number {
+function getTodayDateInputValue(): string {
   const now = new Date();
-  now.setHours(0, 0, 0, 0);
-  const race = new Date(raceDate);
-  const diffMs = race.getTime() - now.getTime();
-  return Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000));
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 function suggestLevel(vma: number): Difficulty {
@@ -182,6 +183,8 @@ interface FormState {
   trainingGoal: TrainingGoal;
   raceDistance: RaceDistance | null;
   raceDate: string;
+  startDate: string;
+  useCustomStartDate: boolean;
   raceName: string;
   runnerLevel: Difficulty | null;
   daysPerWeek: number;
@@ -208,11 +211,14 @@ export function PlanCreatePage() {
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
   const [paceInputMode, setPaceInputMode] = useState<"pace" | "time">("pace");
   const [targetFinishTime, setTargetFinishTime] = useState("");
+  const todayDate = useMemo(() => getTodayDateInputValue(), []);
   const [form, setForm] = useState<FormState>({
     planPurpose: "race",
     trainingGoal: "time",
     raceDistance: null,
     raceDate: "",
+    startDate: todayDate,
+    useCustomStartDate: false,
     raceName: "",
     runnerLevel: null,
     daysPerWeek: 4,
@@ -254,8 +260,8 @@ export function PlanCreatePage() {
   // ── Derived values ───────────────────────────────────────────────
 
   const weeksCount = useMemo(
-    () => (form.raceDate ? calculateWeeks(form.raceDate) : 0),
-    [form.raceDate]
+    () => (form.raceDate ? calculateWeeksBetweenDates(form.startDate || todayDate, form.raceDate) : 0),
+    [form.raceDate, form.startDate, todayDate]
   );
 
   const recommendedWeeks = useMemo(() => {
@@ -290,10 +296,13 @@ export function PlanCreatePage() {
     if (!form.runnerLevel) return;
     if (isRacePlan && (!form.raceDistance || !form.raceDate)) return;
 
+    const effectiveRaceDate = form.raceDate
+      || new Date(Date.now() + 86400000 * 7 * (form.totalWeeksOverride || 12)).toISOString();
+
     const config: AssistedPlanConfig = {
       id: generateId(),
       raceDistance: form.raceDistance ?? "10K",
-      raceDate: form.raceDate || new Date(Date.now() + 86400000 * 7 * (form.totalWeeksOverride || 12)).toISOString(),
+      raceDate: effectiveRaceDate,
       raceName: form.raceName || undefined,
       runnerLevel: form.runnerLevel,
       daysPerWeek: form.daysPerWeek,
@@ -304,6 +313,7 @@ export function PlanCreatePage() {
         ? parseInt(form.elevationGain, 10)
         : undefined,
       createdAt: new Date().toISOString(),
+      ...buildRacePlanDateRange(form.startDate, effectiveRaceDate),
       planPurpose: form.planPurpose,
       trainingGoal: form.trainingGoal,
       totalWeeksOverride: !isRacePlan ? form.totalWeeksOverride : undefined,
@@ -620,6 +630,42 @@ export function PlanCreatePage() {
             className="w-full rounded-md border bg-background px-4 py-3 min-h-[44px] text-base focus:outline-none focus:ring-2 focus:ring-primary"
           />
 
+          <div className="space-y-2 pt-2">
+            <p className="text-sm font-medium text-center">{t("date.startLabel")}</p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setForm((f) => ({ ...f, useCustomStartDate: false, startDate: todayDate }))}
+                className={cn(
+                  "flex-1 rounded-lg border p-3 text-sm transition-colors",
+                  !form.useCustomStartDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
+                )}
+              >
+                {t("date.startNow")}
+              </button>
+              <button
+                type="button"
+                onClick={() => setForm((f) => ({ ...f, useCustomStartDate: true, startDate: f.startDate || todayDate }))}
+                className={cn(
+                  "flex-1 rounded-lg border p-3 text-sm transition-colors",
+                  form.useCustomStartDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
+                )}
+              >
+                {t("date.chooseStartDate")}
+              </button>
+            </div>
+            {form.useCustomStartDate && (
+              <input
+                type="date"
+                lang={isEn ? "en" : "fr"}
+                value={form.startDate}
+                max={form.raceDate || undefined}
+                onChange={(e) => setForm((f) => ({ ...f, startDate: e.target.value }))}
+                className="w-full rounded-md border bg-background px-4 py-3 min-h-[44px] text-base focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            )}
+          </div>
+
           {form.raceDate && dateValid && (
             <p className="text-sm text-muted-foreground text-center">
               {t("date.weeks", { count: weeksCount })}
@@ -629,6 +675,18 @@ export function PlanCreatePage() {
           {form.raceDate && !dateValid && (
             <p className="text-sm text-destructive text-center">
               {t("date.tooSoon", { min: minWeeksForDistance })}
+            </p>
+          )}
+
+          {form.raceDate && form.useCustomStartDate && (
+            <p className="text-xs text-muted-foreground text-center">
+              {t("date.startHint", {
+                date: new Date(form.startDate).toLocaleDateString(isEn ? "en-US" : "fr-FR", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                }),
+              })}
             </p>
           )}
 
@@ -1247,6 +1305,21 @@ export function PlanCreatePage() {
                         day: "numeric",
                       }
                     )} (${weeksCount} ${t("summary.weeksShort")})`
+                  : "-"
+              }
+            />
+            <SummaryRow
+              label={t("summary.startDate")}
+              value={
+                form.startDate
+                  ? new Date(form.startDate).toLocaleDateString(
+                      isEn ? "en-US" : "fr-FR",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )
                   : "-"
               }
             />
