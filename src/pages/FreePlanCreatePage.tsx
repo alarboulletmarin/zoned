@@ -5,7 +5,7 @@ import { ArrowLeft, CalendarRange } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import { getAllPlans, savePlan } from "@/lib/planStorage";
+import { savePlan } from "@/lib/planStorage";
 import { createFreePlan } from "@/lib/createFreePlan";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { cn } from "@/lib/utils";
@@ -23,18 +23,11 @@ export function FreePlanCreatePage() {
   const [weeks, setWeeks] = useState(DEFAULT_WEEKS);
   const [startDate, setStartDate] = useState("");
   const [useCustomDate, setUseCustomDate] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const canCreate = getAllPlans().length < 5;
   const isValid = name.trim().length > 0;
 
   const handleSubmit = () => {
     if (!isValid) return;
-
-    if (!canCreate) {
-      setError(t("freePlan.limitReached"));
-      return;
-    }
 
     const plan = createFreePlan(name.trim(), weeks, startDate || undefined);
     savePlan(plan);
@@ -182,31 +175,12 @@ export function FreePlanCreatePage() {
             </CardContent>
           </Card>
 
-          {/* Error */}
-          {error && (
-            <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive text-center">
-              {error}{" "}
-              <Link to="/plans" className="underline font-medium">
-                {t("freePlan.managePlans")}
-              </Link>
-            </div>
-          )}
-
-          {!canCreate && !error && (
-            <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive text-center">
-              {t("freePlan.limitReachedShort")}
-              <Link to="/plans" className="underline font-medium">
-                {t("freePlan.deleteExisting")}
-              </Link>
-            </div>
-          )}
-
           {/* Submit */}
           <Button
             size="lg"
             className="w-full"
             onClick={handleSubmit}
-            disabled={!isValid || !canCreate}
+            disabled={!isValid}
           >
             {t("freePlan.create")}
           </Button>

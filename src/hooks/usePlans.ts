@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import type { TrainingPlan, AssistedPlanConfig } from "@/types/plan";
-import { getAllPlans, getPlan, savePlan, deletePlan, getPlanCount } from "@/lib/planStorage";
+import { getAllPlans, getPlan, savePlan, deletePlan } from "@/lib/planStorage";
 import { generatePlan } from "@/lib/planGenerator";
 
 /**
@@ -57,14 +57,8 @@ export function usePlan(id: string | undefined) {
 export function useCreatePlan() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const canCreate = getPlanCount() < 5;
 
   const createPlan = useCallback(async (config: AssistedPlanConfig): Promise<TrainingPlan> => {
-    if (!canCreate) {
-      const message = "Limite de 5 plans atteinte. Supprimez un plan existant.";
-      setError(message);
-      throw new Error(message);
-    }
     setIsGenerating(true);
     setError(null);
     try {
@@ -78,7 +72,7 @@ export function useCreatePlan() {
     } finally {
       setIsGenerating(false);
     }
-  }, [canCreate]);
+  }, []);
 
-  return { createPlan, isGenerating, error, canCreate };
+  return { createPlan, isGenerating, error };
 }

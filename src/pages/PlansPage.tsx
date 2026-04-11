@@ -33,7 +33,7 @@ import {
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { usePlans } from "@/hooks/usePlans";
-import { importPlan, getPlanCount } from "@/lib/planStorage";
+import { importPlan } from "@/lib/planStorage";
 import { toast } from "sonner";
 import {
   PHASE_META,
@@ -235,11 +235,6 @@ export function PlansPage() {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
 
-      if (getPlanCount() >= 5) {
-        toast.error(t("plansPage.importMaxError"));
-        return;
-      }
-
       try {
         const text = await file.text();
         const newId = importPlan(text);
@@ -305,24 +300,18 @@ export function PlansPage() {
               </Link>
             </div>
           </div>
-          {plans.length >= 5 ? (
-            <p className="text-sm text-muted-foreground">
-              {t("plansPage.maxReached")}
-            </p>
-          ) : (
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={handleImport} className="rounded-full">
-                <Download className="size-4 rotate-180" />
-                <span className="hidden sm:inline ml-1">{t("plansPage.import")}</span>
-              </Button>
-              <Button asChild>
-                <Link to="/plan/new">
-                  <Plus className="size-4" />
-                  {t("create")}
-                </Link>
-              </Button>
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={handleImport} className="rounded-full">
+              <Download className="size-4 rotate-180" />
+              <span className="hidden sm:inline ml-1">{t("plansPage.import")}</span>
+            </Button>
+            <Button asChild>
+              <Link to="/plan/new">
+                <Plus className="size-4" />
+                {t("create")}
+              </Link>
+            </Button>
+          </div>
         </div>
 
         {/* Content */}

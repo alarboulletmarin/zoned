@@ -1,9 +1,9 @@
 import type { TrainingPlan, PlanSession, CrossTrainingSession } from "@/types/plan";
 import type { SessionType, WorkoutCategory } from "@/types";
 import { getWorkoutById } from "@/data/workouts";
+import { parseImportedPlanJson, preparePlanForStorage, normalizeStoredPlan } from "@/lib/planSchema";
 
 const STORAGE_KEY = "zoned-plans";
-const MAX_PLANS = 5;
 
 function mapCategoryToSessionType(category: WorkoutCategory): SessionType {
   const map: Record<string, SessionType> = {
@@ -26,7 +26,19 @@ export function getAllPlans(): TrainingPlan[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
-    return JSON.parse(raw) as TrainingPlan[];
+
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+
+    const normalizedPlans = parsed
+      .map(normalizeStoredPlan)
+      .filter((plan): plan is TrainingPlan => plan !== null);
+
+    if (normalizedPlans.length !== parsed.length || JSON.stringify(parsed) !== JSON.stringify(normalizedPlans)) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizedPlans));
+    }
+
+    return normalizedPlans;
   } catch {
     return [];
   }
@@ -45,45 +57,21 @@ export function getPlanCount(): number {
  * Returns the new plan ID on success, null on failure.
  */
 export function importPlan(json: string): string | null {
-  try {
-    const plan = JSON.parse(json) as TrainingPlan;
+  const importedPlan = parseImportedPlanJson(json);
+  if (!importedPlan) return null;
 
-    // Basic validation
-    if (
-      !plan.weeks || !Array.isArray(plan.weeks) || plan.weeks.length === 0 ||
-      !plan.config || typeof plan.totalWeeks !== "number"
-    ) {
-      return null;
-    }
-
-    // Check plan limit
-    if (getPlanCount() >= MAX_PLANS) {
-      return null;
-    }
-
-    // Generate new ID to avoid conflicts
-    const newId = crypto.randomUUID();
-    plan.id = newId;
-    plan.config.id = newId;
-    plan.config.createdAt = new Date().toISOString();
-
-    savePlan(plan);
-    return newId;
-  } catch {
-    return null;
-  }
+  savePlan(importedPlan);
+  return importedPlan.id;
 }
 
 export function savePlan(plan: TrainingPlan): void {
   const plans = getAllPlans();
-  const existing = plans.findIndex(p => p.id === plan.id);
+  const normalizedPlan = preparePlanForStorage(plan);
+  const existing = plans.findIndex(p => p.id === normalizedPlan.id);
   if (existing >= 0) {
-    plans[existing] = plan;
+    plans[existing] = normalizedPlan;
   } else {
-    if (plans.length >= MAX_PLANS) {
-      throw new Error(`Maximum ${MAX_PLANS} plans. Supprimez un plan existant.`);
-    }
-    plans.push(plan);
+    plans.push(normalizedPlan);
   }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
 }

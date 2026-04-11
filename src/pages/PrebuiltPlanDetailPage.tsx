@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils";
 import { getPrebuiltBySlug } from "@/data/prebuilt-plans";
 import { getWorkoutById } from "@/data/workouts";
 import { convertPrebuiltToPlan } from "@/lib/prebuiltPlanConverter";
-import { savePlan, getPlanCount } from "@/lib/planStorage";
+import { savePlan } from "@/lib/planStorage";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
@@ -125,10 +125,6 @@ export function PrebuiltPlanDetailPage() {
 
   const handleUse = () => {
     if (!prebuilt) return;
-    if (getPlanCount() >= 5) {
-      toast.error(t("prebuilt.limitReached"));
-      return;
-    }
     const plan = convertPrebuiltToPlan(prebuilt);
     savePlan(plan);
     triggerStorageWarning();

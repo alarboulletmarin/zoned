@@ -202,7 +202,7 @@ export function PlanCreatePage() {
   const isEn = useIsEnglish();
   const pick = usePickLang();
   const navigate = useNavigate();
-  const { createPlan, isGenerating, error, canCreate } = useCreatePlan();
+  const { createPlan, isGenerating, error } = useCreatePlan();
 
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
@@ -429,15 +429,6 @@ export function PlanCreatePage() {
         <p className="text-sm text-muted-foreground mt-1 text-center">
           {t("purpose.subtitle")}
         </p>
-
-        {!canCreate && (
-          <div className="w-full max-w-md mt-4 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive text-center">
-            {t("summary.planLimitReached")}
-            <Link to="/plans" className="underline font-medium">
-              {t("summary.deletePlanLink")}
-            </Link>
-          </div>
-        )}
 
         <div className="w-full max-w-md grid grid-cols-1 gap-2 mt-6">
           {PURPOSE_OPTIONS.map((opt) => (
@@ -1341,16 +1332,7 @@ export function PlanCreatePage() {
           </CardContent>
         </Card>
 
-        {!canCreate && (
-          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive text-center">
-            {t("summary.planLimitReached")}
-            <Link to="/plans" className="underline font-medium">
-              {t("summary.deletePlanLink")}
-            </Link>
-          </div>
-        )}
-
-        {error && canCreate && (
+        {error && (
           <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive text-center">
             {error}
           </div>
@@ -1363,7 +1345,7 @@ export function PlanCreatePage() {
           </Button>
           <Button
             onClick={handleGenerate}
-            disabled={isGenerating || !canCreate}
+            disabled={isGenerating}
           >
             {isGenerating ? (
               <>

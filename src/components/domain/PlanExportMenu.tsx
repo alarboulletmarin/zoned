@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { exportPlanToICS, exportPlanToPDF } from "@/lib/export";
 import { getWorkoutById } from "@/data/workouts";
+import { preparePlanForStorage } from "@/lib/planSchema";
 import { toast } from "sonner";
 import type { TrainingPlan } from "@/types/plan";
 import type { WorkoutTemplate } from "@/types";
@@ -96,7 +97,7 @@ export function PlanExportMenu({
   }, [plan, getWorkoutData, t, isExporting]);
 
   const handleExportJSON = useCallback(() => {
-    const json = JSON.stringify(plan, null, 2);
+    const json = JSON.stringify(preparePlanForStorage(plan), null, 2);
     const blob = new Blob([json], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");

@@ -148,6 +148,7 @@ export interface TrainingPlan {
   nameEn: string;
   // ── New fields (v2) ──
   version?: number;              // 1 = legacy, 2 = evidence-based engine
+  schemaVersion?: number;        // storage schema version for migrations/imports
   peakWeeklyKm?: number;         // Peak weekly volume
   peakLongRunKm?: number;        // Peak long run distance
 }
