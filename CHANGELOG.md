@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.2] - 2026-04-11
+
+### Added
+
+- **Explicit start date in assisted plan creation**: choose between "Start now" or a specific date, properly honored end-to-end from generation to exports
+- **Complete backup/restore** with explicit Merge/Replace choice, covering race simulations and what-if scenarios
+- **Unresolved sessions recap** when validating a week, with an explicit "Mark as skipped" / "Leave unresolved" choice (no more silent auto-skip)
+
+### Changed
+
+- Removed the 5-plan cap and tightened import validation with schema domain guards (volume percent bounds, max 104 weeks)
+- Weekly mileage stats now prefer the most reliable distance data available (actual > target > estimation)
+- **i18n architecture overhaul**: full migration from `isEn` ternaries to i18next `t()` / `pickLang` helpers, extraction of `homepage`, `content` and `calculators` namespaces from `common.json`, and a new FR/EN parity check script (`bun run check:i18n`)
+
+### Fixed
+
+- Assisted plan generator now respects the chosen start date when computing total weeks (previously used today's date)
+- Week validation modal is now responsive across mobile/tablet/desktop; buttons no longer overflow on narrow or medium viewports
+- Skipped sessions no longer inflate weekly mileage stats
+- Backup restore now rolls back atomically on failure (e.g. localStorage quota) instead of leaving a partial state and showing a misleading success toast
+- Plan save handles localStorage quota errors gracefully with a clear error toast instead of silently failing
+
 ## [0.4.1] - 2026-04-10
 
 ### Added

@@ -2,6 +2,84 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.4.2",
+    date: "2026-04-11",
+    changes: {
+      added: [
+        {
+          text: "Date de début explicite dans la création de plan assisté (Commencer maintenant / Choisir une date), réellement respectée de la génération aux exports",
+          textEn: "Explicit start date in assisted plan creation (Start now / Choose a date), properly honored end-to-end from generation to exports",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Backup/restore complet avec choix explicite Fusionner/Remplacer, couvrant les race simulations et les scénarios what-if",
+          textEn: "Full backup/restore with explicit Merge/Replace choice, covering race simulations and what-if scenarios",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Récapitulatif des séances non renseignées à la validation d'une semaine, avec choix explicite Marquer comme passées / Laisser non renseignées",
+          textEn: "Unresolved sessions recap when validating a week, with explicit Mark as skipped / Leave unresolved choice",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      changed: [
+        {
+          text: "Suppression de la limite de 5 plans et validation d'import renforcée avec bornes de domaine sur le schéma (volume, nombre de semaines)",
+          textEn: "Removed the 5-plan cap and tightened import validation with schema domain guards (volume percent, max weeks)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Les stats kilométriques hebdomadaires utilisent en priorité les données les plus fiables (réel > cible > estimation)",
+          textEn: "Weekly mileage stats now prefer the most reliable distance data available (actual > target > estimation)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Architecture i18n : migration complète des ternaires isEn vers i18next t()/pickLang, extraction des namespaces homepage, content et calculators, script de vérification de parité FR/EN",
+          textEn: "i18n architecture: full migration from isEn ternaries to i18next t()/pickLang, extraction of homepage, content and calculators namespaces, FR/EN parity check script",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+      ],
+      fixed: [
+        {
+          text: "Le générateur de plan assisté respecte désormais la date de début choisie pour calculer le nombre total de semaines (utilisait la date du jour avant)",
+          textEn: "The assisted plan generator now respects the chosen start date when computing total weeks (previously used today's date)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Modale de validation de semaine responsive sur mobile/tablette/desktop : les boutons ne débordent plus du cadre sur les écrans étroits ou moyens",
+          textEn: "Week validation modal responsive on mobile/tablet/desktop: buttons no longer overflow the container on narrow or medium viewports",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Les séances marquées comme passées ne gonflent plus les stats kilométriques hebdomadaires",
+          textEn: "Skipped sessions no longer inflate weekly mileage stats",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Restauration de sauvegarde : rollback atomique en cas d'échec (quota localStorage) au lieu d'un état partiel et d'un toast de succès trompeur",
+          textEn: "Backup restore: atomic rollback on failure (e.g. localStorage quota) instead of a partial state and misleading success toast",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Sauvegarde de plan : gestion gracieuse des erreurs de quota localStorage avec toast d'erreur clair au lieu d'un échec silencieux",
+          textEn: "Plan save: graceful handling of localStorage quota errors with a clear error toast instead of silent failure",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+    },
+  },
+  {
     version: "0.4.1",
     date: "2026-04-10",
     changes: {
