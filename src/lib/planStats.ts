@@ -62,12 +62,23 @@ function estimateSessionKm(session: PlanSession): number {
   if (session.workoutId === "__race_day__") return 0;
   // Non-running sessions (strength, cycling, etc.) don't contribute running km
   if (isNonRunningSession(session)) return 0;
+  if (session.actualDistanceKm && session.actualDistanceKm > 0) return session.actualDistanceKm;
+  if (session.targetDistanceKm && session.targetDistanceKm > 0) return session.targetDistanceKm;
   const pace = PACE_BY_TYPE[session.sessionType] || 5.5;
   return session.estimatedDurationMin / pace;
 }
 
 /** Compute total estimated km for a week */
 export function computeWeekKm(week: PlanWeek): number {
+  const hasSessionDistanceData = week.sessions.some((session) =>
+    (session.actualDistanceKm && session.actualDistanceKm > 0)
+    || (session.targetDistanceKm && session.targetDistanceKm > 0)
+  );
+
+  if (!hasSessionDistanceData && week.targetKm && week.targetKm > 0) {
+    return week.targetKm;
+  }
+
   return week.sessions.reduce((sum, s) => sum + estimateSessionKm(s), 0);
 }
 
