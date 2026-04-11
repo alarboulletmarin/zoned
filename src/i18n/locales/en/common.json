@@ -359,8 +359,13 @@
       "importSuccess": "Data restored successfully. The page will reload.",
       "invalidFile": "Invalid file. Use a file exported by Zoned.",
       "confirmTitle": "Restore data?",
-      "confirmDescription": "This will replace all your current data (favorites, plans, settings) with the backup file.",
-      "confirmButton": "Restore"
+      "confirmDescription": "Choose how to apply the backup before restoring your Zoned data.",
+      "confirmButton": "Restore",
+      "restoreModeLabel": "Restore mode",
+      "replaceModeTitle": "Replace",
+      "replaceModeDescription": "Clears local Zoned data first, then restores only what is present in the backup.",
+      "mergeModeTitle": "Merge",
+      "mergeModeDescription": "Keeps local Zoned data missing from the backup and only replaces keys present in the file."
     }
   },
   "tips": {

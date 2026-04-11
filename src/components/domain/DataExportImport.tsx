@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Download, Upload } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -18,56 +19,25 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-const STORAGE_KEYS = [
-  "zoned-plans",
-  "zoned-favorites",
-  "zoned-settings",
-  "zoned-last-seen-version",
-  "zoned-viewMode",
-  "zoned-dismissed-tips",
-  "zoned-userZones",
-  "zoned-quiz-results",
-  "zoned-zone-cta-dismissed",
-  "zoned-racechecklist",
-  "zoned-theme",
-  "zoned-sidebar-collapsed",
-  "zoned-language",
-  "zoned-custom-workouts",
-] as const;
-
-interface BackupData {
-  _meta: { version: number; app: string; exportedAt: string };
-  localStorage: Record<string, unknown>;
-}
+import {
+  BACKUP_STORAGE_KEYS,
+  buildBackupData,
+  buildManagedStorageSnapshot,
+  parseBackupData,
+  type BackupData,
+  type BackupStorageKey,
+  type RestoreMode,
+} from "@/lib/backup";
 
 export function DataExportImport() {
   const { t } = useTranslation("common");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [pendingImport, setPendingImport] = useState<BackupData | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [restoreMode, setRestoreMode] = useState<RestoreMode>("replace");
 
   function handleExport() {
-    const data: Record<string, unknown> = {};
-    for (const key of STORAGE_KEYS) {
-      const value = localStorage.getItem(key);
-      if (value !== null) {
-        try {
-          data[key] = JSON.parse(value);
-        } catch {
-          data[key] = value;
-        }
-      }
-    }
-
-    const backup: BackupData = {
-      _meta: {
-        version: 1,
-        app: "zoned",
-        exportedAt: new Date().toISOString(),
-      },
-      localStorage: data,
-    };
+    const backup = buildBackupData((key) => localStorage.getItem(key));
 
     const blob = new Blob([JSON.stringify(backup, null, 2)], {
       type: "application/json",
@@ -89,11 +59,8 @@ export function DataExportImport() {
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
-        const parsed = JSON.parse(event.target?.result as string);
-        if (
-          parsed?._meta?.app !== "zoned" ||
-          typeof parsed?.localStorage !== "object"
-        ) {
+        const parsed = parseBackupData(JSON.parse(event.target?.result as string));
+        if (!parsed) {
           toast.error(t("settings.data.invalidFile"));
           return;
         }
@@ -111,12 +78,28 @@ export function DataExportImport() {
   function confirmImport() {
     if (!pendingImport) return;
 
-    for (const [key, value] of Object.entries(pendingImport.localStorage)) {
-      if (!(STORAGE_KEYS as readonly string[]).includes(key)) continue;
-      localStorage.setItem(
-        key,
-        typeof value === "string" ? value : JSON.stringify(value)
-      );
+    const currentManagedEntries = Object.fromEntries(
+      BACKUP_STORAGE_KEYS.flatMap((key) => {
+        const value = localStorage.getItem(key);
+        return value === null ? [] : [[key, value]];
+      })
+    ) as Partial<Record<BackupStorageKey, string>>;
+
+    const snapshot = buildManagedStorageSnapshot(
+      currentManagedEntries,
+      pendingImport.localStorage,
+      restoreMode,
+    );
+
+    if (restoreMode === "replace") {
+      for (const key of BACKUP_STORAGE_KEYS) {
+        localStorage.removeItem(key);
+      }
+    }
+
+    for (const [key, value] of Object.entries(snapshot)) {
+      if (typeof value !== "string") continue;
+      localStorage.setItem(key, value);
     }
 
     setShowConfirm(false);
@@ -163,6 +146,37 @@ export function DataExportImport() {
               {t("settings.data.confirmDescription")}
             </DialogDescription>
           </DialogHeader>
+          <div className="space-y-3">
+            <p className="text-sm font-medium">{t("settings.data.restoreModeLabel")}</p>
+            <div className="grid gap-2 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={() => setRestoreMode("replace")}
+                className={cn(
+                  "rounded-lg border p-3 text-left transition-colors",
+                  restoreMode === "replace"
+                    ? "border-primary bg-primary/10"
+                    : "hover:bg-accent/50"
+                )}
+              >
+                <div className="font-medium text-sm">{t("settings.data.replaceModeTitle")}</div>
+                <div className="text-xs text-muted-foreground mt-1">{t("settings.data.replaceModeDescription")}</div>
+              </button>
+              <button
+                type="button"
+                onClick={() => setRestoreMode("merge")}
+                className={cn(
+                  "rounded-lg border p-3 text-left transition-colors",
+                  restoreMode === "merge"
+                    ? "border-primary bg-primary/10"
+                    : "hover:bg-accent/50"
+                )}
+              >
+                <div className="font-medium text-sm">{t("settings.data.mergeModeTitle")}</div>
+                <div className="text-xs text-muted-foreground mt-1">{t("settings.data.mergeModeDescription")}</div>
+              </button>
+            </div>
+          </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowConfirm(false)}>
               {t("actions.cancel")}

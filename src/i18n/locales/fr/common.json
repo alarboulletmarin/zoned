@@ -359,8 +359,13 @@
       "importSuccess": "Données restaurées avec succès. La page va se recharger.",
       "invalidFile": "Fichier invalide. Utilisez un fichier exporté par Zoned.",
       "confirmTitle": "Restaurer les données ?",
-      "confirmDescription": "Cela remplacera toutes vos données actuelles (favoris, plans, paramètres) par celles du fichier de sauvegarde.",
-      "confirmButton": "Restaurer"
+      "confirmDescription": "Choisissez comment appliquer la sauvegarde avant de restaurer vos données Zoned.",
+      "confirmButton": "Restaurer",
+      "restoreModeLabel": "Mode de restauration",
+      "replaceModeTitle": "Remplacer",
+      "replaceModeDescription": "Nettoie les données Zoned locales puis restaure uniquement le contenu de la sauvegarde.",
+      "mergeModeTitle": "Fusionner",
+      "mergeModeDescription": "Conserve les données Zoned locales absentes de la sauvegarde et remplace uniquement les clés présentes."
     }
   },
   "tips": {
