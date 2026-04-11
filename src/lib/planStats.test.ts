@@ -53,4 +53,89 @@ describe("computeWeekKm", () => {
 
     expect(computeWeekKm(week)).toBe(52);
   });
+
+  test("ignores skipped sessions so they do not inflate km stats", () => {
+    const week: PlanWeek = {
+      weekNumber: 3,
+      phase: "build",
+      isRecoveryWeek: false,
+      volumePercent: 100,
+      sessions: [
+        {
+          dayOfWeek: 1,
+          workoutId: "A",
+          sessionType: "endurance",
+          isKeySession: false,
+          estimatedDurationMin: 60,
+          targetDistanceKm: 10,
+          status: "completed",
+          actualDistanceKm: 10,
+        },
+        {
+          dayOfWeek: 3,
+          workoutId: "B",
+          sessionType: "tempo",
+          isKeySession: true,
+          estimatedDurationMin: 45,
+          targetDistanceKm: 8,
+          status: "skipped",
+        },
+      ],
+    };
+
+    // Only the completed 10km session contributes; the skipped one is 0.
+    expect(computeWeekKm(week)).toBeCloseTo(10, 5);
+  });
+
+  test("uses weekly targetKm when sessions have no distance data at all", () => {
+    const week: PlanWeek = {
+      weekNumber: 4,
+      phase: "base",
+      isRecoveryWeek: false,
+      volumePercent: 100,
+      targetKm: 40,
+      sessions: [
+        {
+          dayOfWeek: 1,
+          workoutId: "A",
+          sessionType: "endurance",
+          isKeySession: false,
+          estimatedDurationMin: 45,
+          status: "planned",
+        },
+        {
+          dayOfWeek: 3,
+          workoutId: "B",
+          sessionType: "recovery",
+          isKeySession: false,
+          estimatedDurationMin: 30,
+          status: "planned",
+        },
+      ],
+    };
+
+    expect(computeWeekKm(week)).toBe(40);
+  });
+
+  test("skipped non-race sessions with distance metadata still return 0", () => {
+    const week: PlanWeek = {
+      weekNumber: 5,
+      phase: "peak",
+      isRecoveryWeek: false,
+      volumePercent: 90,
+      sessions: [
+        {
+          dayOfWeek: 0,
+          workoutId: "skipped-long",
+          sessionType: "long_run",
+          isKeySession: true,
+          estimatedDurationMin: 120,
+          targetDistanceKm: 22,
+          status: "skipped",
+        },
+      ],
+    };
+
+    expect(computeWeekKm(week)).toBe(0);
+  });
 });

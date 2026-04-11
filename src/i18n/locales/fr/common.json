@@ -214,6 +214,7 @@
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",
+    "planSaveFailed": "Impossible d'enregistrer le plan (espace de stockage insuffisant).",
     "notFound": {
       "title": "Page introuvable",
       "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
@@ -352,6 +353,7 @@
       "importButton": "Restaurer mes données",
       "exportSuccess": "Données exportées avec succès",
       "importSuccess": "Données restaurées avec succès. La page va se recharger.",
+      "importError": "Impossible de restaurer les données (espace de stockage insuffisant ou sauvegarde corrompue). Aucune modification n'a été conservée.",
       "invalidFile": "Fichier invalide. Utilisez un fichier exporté par Zoned.",
       "confirmTitle": "Restaurer les données ?",
       "confirmDescription": "Choisissez comment appliquer la sauvegarde avant de restaurer vos données Zoned.",

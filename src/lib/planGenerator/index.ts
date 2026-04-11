@@ -25,6 +25,7 @@ import {
 } from "./paceEngine";
 import { calculateLongRunProgression } from "./longRunProgression";
 import { buildSession } from "./sessionBuilder";
+import { calculateWeeksBetweenDates } from "@/lib/planDates";
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -49,14 +50,11 @@ function generateNonRacePlanName(
 }
 
 /**
- * Calculate total weeks between today and race date.
+ * Calculate total weeks between plan start date and race date.
+ * Uses the user-chosen start date (falls back to today if absent).
  */
-function calculateTotalWeeks(raceDate: string): number {
-  const now = new Date();
-  const race = new Date(raceDate);
-  const diffMs = race.getTime() - now.getTime();
-  const diffWeeks = Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000));
-  return diffWeeks;
+function calculateTotalWeeks(startDate: string, raceDate: string): number {
+  return calculateWeeksBetweenDates(startDate, raceDate);
 }
 
 /**
@@ -137,7 +135,8 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     // Manual override (non-race plans or user preference)
     totalWeeks = config.totalWeeksOverride;
   } else if (config.raceDate) {
-    totalWeeks = calculateTotalWeeks(config.raceDate);
+    const todayIso = new Date().toISOString().split("T")[0];
+    totalWeeks = calculateTotalWeeks(config.startDate ?? todayIso, config.raceDate);
   } else if (purposeConfig) {
     totalWeeks = purposeConfig.defaultWeeks;
   } else {

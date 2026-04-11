@@ -8,6 +8,13 @@ export interface WeekResolutionSummary {
   unresolved: number;
 }
 
+export interface UnresolvedSessionPreview {
+  dayOfWeek: number;
+  sessionType: PlanSession["sessionType"];
+  workoutId: string;
+  estimatedDurationMin: number;
+}
+
 function isResolved(status: PlanSession["status"]): boolean {
   return status === "completed" || status === "skipped";
 }
@@ -23,6 +30,17 @@ export function getWeekResolutionSummary(week: PlanWeek): WeekResolutionSummary 
     }
     return summary;
   }, { completed: 0, skipped: 0, unresolved: 0 });
+}
+
+export function getUnresolvedSessions(week: PlanWeek): UnresolvedSessionPreview[] {
+  return week.sessions
+    .filter((s) => !isResolved(s.status))
+    .map((s) => ({
+      dayOfWeek: s.dayOfWeek,
+      sessionType: s.sessionType,
+      workoutId: s.workoutId,
+      estimatedDurationMin: s.estimatedDurationMin,
+    }));
 }
 
 export function applyWeekValidationDecision(

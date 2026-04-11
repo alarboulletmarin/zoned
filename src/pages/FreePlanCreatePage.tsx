@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { ArrowLeft, CalendarRange } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -31,7 +32,10 @@ export function FreePlanCreatePage() {
     if (!isValid) return;
 
     const plan = createFreePlan(name.trim(), weeks, startDate || undefined);
-    savePlan(plan);
+    if (!savePlan(plan)) {
+      toast.error(t("errors.planSaveFailed"));
+      return;
+    }
     triggerStorageWarning();
     navigate(`/plan/${plan.id}`);
   };

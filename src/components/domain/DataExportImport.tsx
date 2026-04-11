@@ -35,6 +35,7 @@ export function DataExportImport() {
   const [pendingImport, setPendingImport] = useState<BackupData | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [restoreMode, setRestoreMode] = useState<RestoreMode>("replace");
+  const [isRestoring, setIsRestoring] = useState(false);
 
   function handleExport() {
     const backup = buildBackupData((key) => localStorage.getItem(key));
@@ -76,11 +77,18 @@ export function DataExportImport() {
   }
 
   function confirmImport() {
-    if (!pendingImport) return;
+    if (!pendingImport || isRestoring) return;
+    setIsRestoring(true);
+
+    // Snapshot current state so we can roll back if writing fails partway.
+    const previousState = new Map<BackupStorageKey, string | null>();
+    for (const key of BACKUP_STORAGE_KEYS) {
+      previousState.set(key, localStorage.getItem(key));
+    }
 
     const currentManagedEntries = Object.fromEntries(
       BACKUP_STORAGE_KEYS.flatMap((key) => {
-        const value = localStorage.getItem(key);
+        const value = previousState.get(key) ?? null;
         return value === null ? [] : [[key, value]];
       })
     ) as Partial<Record<BackupStorageKey, string>>;
@@ -91,18 +99,38 @@ export function DataExportImport() {
       restoreMode,
     );
 
-    if (restoreMode === "replace") {
-      for (const key of BACKUP_STORAGE_KEYS) {
-        localStorage.removeItem(key);
+    try {
+      if (restoreMode === "replace") {
+        for (const key of BACKUP_STORAGE_KEYS) {
+          localStorage.removeItem(key);
+        }
       }
-    }
-
-    for (const [key, value] of Object.entries(snapshot)) {
-      if (typeof value !== "string") continue;
-      localStorage.setItem(key, value);
+      for (const [key, value] of Object.entries(snapshot)) {
+        if (typeof value !== "string") continue;
+        localStorage.setItem(key, value);
+      }
+    } catch (err) {
+      console.error("Restore failed, rolling back", err);
+      // Roll back: restore every managed key to its previous value.
+      for (const [key, prev] of previousState.entries()) {
+        try {
+          if (prev === null) {
+            localStorage.removeItem(key);
+          } else {
+            localStorage.setItem(key, prev);
+          }
+        } catch {
+          // best-effort rollback — keep going even if a single key fails
+        }
+      }
+      toast.error(t("settings.data.importError"));
+      setIsRestoring(false);
+      setShowConfirm(false);
+      return;
     }
 
     setShowConfirm(false);
+    setIsRestoring(false);
     toast.success(t("settings.data.importSuccess"));
     setTimeout(() => window.location.reload(), 1000);
   }
@@ -178,10 +206,14 @@ export function DataExportImport() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowConfirm(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowConfirm(false)}
+              disabled={isRestoring}
+            >
               {t("actions.cancel")}
             </Button>
-            <Button onClick={confirmImport}>
+            <Button onClick={confirmImport} disabled={isRestoring}>
               {t("settings.data.confirmButton")}
             </Button>
           </DialogFooter>

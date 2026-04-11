@@ -63,7 +63,9 @@ export function useCreatePlan() {
     setError(null);
     try {
       const plan = await generatePlan(config);
-      savePlan(plan);
+      if (!savePlan(plan)) {
+        throw new Error("Impossible d'enregistrer le plan (espace de stockage insuffisant).");
+      }
       return plan;
     } catch (err) {
       const message = err instanceof Error ? err.message : "Erreur lors de la génération du plan";

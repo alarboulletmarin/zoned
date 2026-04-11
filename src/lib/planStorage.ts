@@ -54,31 +54,53 @@ export function getPlanCount(): number {
 
 /**
  * Import a plan from JSON. Generates a new ID to avoid conflicts.
- * Returns the new plan ID on success, null on failure.
+ * Returns the new plan ID on success, null on failure (invalid JSON or storage quota).
  */
 export function importPlan(json: string): string | null {
   const importedPlan = parseImportedPlanJson(json);
   if (!importedPlan) return null;
 
-  savePlan(importedPlan);
+  if (!savePlan(importedPlan)) return null;
   return importedPlan.id;
 }
 
-export function savePlan(plan: TrainingPlan): void {
+/**
+ * Persist a plan to localStorage.
+ * Returns true on success, false on failure (invalid plan or storage quota exceeded).
+ */
+export function savePlan(plan: TrainingPlan): boolean {
+  let normalizedPlan: TrainingPlan;
+  try {
+    normalizedPlan = preparePlanForStorage(plan);
+  } catch (err) {
+    console.error("Invalid plan, cannot save", err);
+    return false;
+  }
   const plans = getAllPlans();
-  const normalizedPlan = preparePlanForStorage(plan);
   const existing = plans.findIndex(p => p.id === normalizedPlan.id);
   if (existing >= 0) {
     plans[existing] = normalizedPlan;
   } else {
     plans.push(normalizedPlan);
   }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
+    return true;
+  } catch (err) {
+    console.error("Failed to persist plan", err);
+    return false;
+  }
 }
 
-export function deletePlan(id: string): void {
+export function deletePlan(id: string): boolean {
   const plans = getAllPlans().filter(p => p.id !== id);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
+    return true;
+  } catch (err) {
+    console.error("Failed to delete plan", err);
+    return false;
+  }
 }
 
 export function moveSession(
@@ -115,8 +137,7 @@ export function moveSession(
     toWeek.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
   }
 
-  savePlan(plan);
-  return true;
+  return savePlan(plan);
 }
 
 export function deleteSessionFromPlan(
@@ -134,8 +155,7 @@ export function deleteSessionFromPlan(
   if (sessionIndex < 0 || sessionIndex >= week.sessions.length) return false;
 
   week.sessions.splice(sessionIndex, 1);
-  savePlan(plan);
-  return true;
+  return savePlan(plan);
 }
 
 export function updatePlanSession(
@@ -237,8 +257,7 @@ export async function addSessionToPlan(
 
   week.sessions.push(newSession);
   week.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-  savePlan(plan);
-  return true;
+  return savePlan(plan);
 }
 
 // ── Cross-training ──────────────────────────────────────────────────
@@ -255,8 +274,7 @@ export function addCrossTraining(
   if (!week.crossTraining) week.crossTraining = [];
   week.crossTraining.push(session);
   week.crossTraining.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-  savePlan(plan);
-  return true;
+  return savePlan(plan);
 }
 
 export function deleteCrossTraining(
@@ -269,6 +287,5 @@ export function deleteCrossTraining(
   const week = plan.weeks.find((w) => w.weekNumber === weekNumber);
   if (!week?.crossTraining) return false;
   week.crossTraining = week.crossTraining.filter((s) => s.id !== sessionId);
-  savePlan(plan);
-  return true;
+  return savePlan(plan);
 }

@@ -1,6 +1,8 @@
 import type { PhaseRange, PlanConfig, PlanSession, PlanWeek, TrainingPlan } from "@/types/plan";
 
-export const CURRENT_PLAN_SCHEMA_VERSION = 1;
+// Domain bounds — defensive guards against pathological imports.
+const MAX_WEEKS_PER_PLAN = 104; // 2 years is more than enough for any realistic plan
+const MAX_VOLUME_PERCENT = 200;
 
 function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -67,6 +69,7 @@ function normalizeWeek(raw: unknown): PlanWeek | null {
   if (!isFiniteNumber(raw.weekNumber) || raw.weekNumber < 1) return null;
   if (typeof raw.phase !== "string") return null;
   if (!isFiniteNumber(raw.volumePercent)) return null;
+  if (raw.volumePercent < 0 || raw.volumePercent > MAX_VOLUME_PERCENT) return null;
   if (!Array.isArray(raw.sessions)) return null;
 
   const sessions = raw.sessions
@@ -160,6 +163,7 @@ export function normalizeStoredPlan(raw: unknown): TrainingPlan | null {
     .sort((a, b) => a.weekNumber - b.weekNumber);
 
   if (weeks.length === 0) return null;
+  if (weeks.length > MAX_WEEKS_PER_PLAN) return null;
 
   const totalWeeks = weeks.length;
   const phases = normalizePhases(raw.phases);
@@ -179,7 +183,6 @@ export function normalizeStoredPlan(raw: unknown): TrainingPlan | null {
     version: isFiniteNumber(raw.version) ? raw.version : undefined,
     peakWeeklyKm: asOptionalNumber(raw.peakWeeklyKm),
     peakLongRunKm: asOptionalNumber(raw.peakLongRunKm),
-    schemaVersion: CURRENT_PLAN_SCHEMA_VERSION,
   };
 }
 

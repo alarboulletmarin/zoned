@@ -2,7 +2,6 @@ import { describe, expect, test } from "bun:test";
 
 import type { TrainingPlan } from "@/types/plan";
 import {
-  CURRENT_PLAN_SCHEMA_VERSION,
   normalizeStoredPlan,
   parseImportedPlanJson,
 } from "./planSchema";
@@ -43,17 +42,38 @@ function makeLegacyPlan(): TrainingPlan {
 }
 
 describe("normalizeStoredPlan", () => {
-  test("migrates legacy plans to the current schema and aligns identifiers", () => {
+  test("migrates legacy plans and aligns identifiers", () => {
     const normalized = normalizeStoredPlan(makeLegacyPlan());
 
     expect(normalized).not.toBeNull();
-    expect(normalized?.schemaVersion).toBe(CURRENT_PLAN_SCHEMA_VERSION);
     expect(normalized?.config.id).toBe("plan-1");
     expect(normalized?.totalWeeks).toBe(1);
   });
 
   test("rejects invalid plan payloads", () => {
     expect(normalizeStoredPlan({ id: "broken" })).toBeNull();
+  });
+
+  test("rejects plans with volumePercent out of the domain (0..200)", () => {
+    const legacy = makeLegacyPlan();
+    legacy.weeks[0].volumePercent = -10;
+    // Out-of-range week is dropped → no valid weeks → the whole plan is rejected.
+    expect(normalizeStoredPlan(legacy)).toBeNull();
+
+    legacy.weeks[0].volumePercent = 500;
+    expect(normalizeStoredPlan(legacy)).toBeNull();
+  });
+
+  test("rejects plans with more than 104 weeks (2 years cap)", () => {
+    const legacy = makeLegacyPlan();
+    legacy.weeks = Array.from({ length: 120 }, (_, i) => ({
+      weekNumber: i + 1,
+      phase: "base",
+      isRecoveryWeek: false,
+      volumePercent: 100,
+      sessions: legacy.weeks[0].sessions,
+    }));
+    expect(normalizeStoredPlan(legacy)).toBeNull();
   });
 });
 
@@ -65,7 +85,6 @@ describe("parseImportedPlanJson", () => {
     expect(imported?.id).not.toBe("plan-1");
     expect(imported?.config.id).toBe(imported?.id);
     expect(imported?.config.createdAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
-    expect(imported?.schemaVersion).toBe(CURRENT_PLAN_SCHEMA_VERSION);
     expect(imported?.totalWeeks).toBe(1);
   });
 

@@ -62,6 +62,8 @@ function estimateSessionKm(session: PlanSession): number {
   if (session.workoutId === "__race_day__") return 0;
   // Non-running sessions (strength, cycling, etc.) don't contribute running km
   if (isNonRunningSession(session)) return 0;
+  // Explicitly skipped sessions didn't happen — don't count them
+  if (session.status === "skipped") return 0;
   if (session.actualDistanceKm && session.actualDistanceKm > 0) return session.actualDistanceKm;
   if (session.targetDistanceKm && session.targetDistanceKm > 0) return session.targetDistanceKm;
   const pace = PACE_BY_TYPE[session.sessionType] || 5.5;

@@ -56,7 +56,7 @@ import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { usePlanViewMode } from "@/hooks/usePlanViewMode";
 import { getCurrentWeek } from "@/lib/planUtils";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
-import { applyWeekValidationDecision, getWeekResolutionSummary } from "@/lib/weekValidation";
+import { applyWeekValidationDecision, getUnresolvedSessions, getWeekResolutionSummary, type UnresolvedSessionPreview } from "@/lib/weekValidation";
 
 function formatDate(isoDate: string, isEn: boolean): string {
   const date = new Date(isoDate);
@@ -123,6 +123,7 @@ export function PlanViewPage() {
   const [pendingWeekValidation, setPendingWeekValidation] = useState<{
     weekNumber: number;
     unresolved: number;
+    unresolvedSessions: UnresolvedSessionPreview[];
   } | null>(null);
 
   const currentWeek = useMemo(() => {
@@ -298,7 +299,10 @@ export function PlanViewPage() {
 
     const result = adaptPlan(freshPlan, weekNumber);
     if (result.adapted) {
-      savePlan(freshPlan);
+      if (!savePlan(freshPlan)) {
+        toast.error(t("errors.planSaveFailed"));
+        return;
+      }
       reloadPlan();
       for (const change of result.changes) {
         toast.info(pick(change, "description"), { duration: 5000 });
@@ -374,7 +378,11 @@ export function PlanViewPage() {
 
     const summary = getWeekResolutionSummary(week);
     if (summary.unresolved > 0) {
-      setPendingWeekValidation({ weekNumber, unresolved: summary.unresolved });
+      setPendingWeekValidation({
+        weekNumber,
+        unresolved: summary.unresolved,
+        unresolvedSessions: getUnresolvedSessions(week),
+      });
       return;
     }
 
@@ -427,7 +435,10 @@ export function PlanViewPage() {
         estimatedDurationMin: 0,
       });
       week.sessions.sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-      savePlan(plan);
+      if (!savePlan(plan)) {
+        toast.error(t("errors.planSaveFailed"));
+        return;
+      }
       reloadPlan();
       toast.success(t("view.activityAdded"));
       return;
@@ -503,9 +514,12 @@ export function PlanViewPage() {
                   const trimmed = editName.trim();
                   if (trimmed && trimmed !== planName) {
                     plan.config.planName = trimmed;
-                    savePlan(plan);
-                    reloadPlan();
-                    toast.success(t("view.nameUpdated"));
+                    if (savePlan(plan)) {
+                      reloadPlan();
+                      toast.success(t("view.nameUpdated"));
+                    } else {
+                      toast.error(t("errors.planSaveFailed"));
+                    }
                   }
                   setIsEditingName(false);
                 }}
@@ -1185,7 +1199,7 @@ export function PlanViewPage() {
             if (!open) setPendingWeekValidation(null);
           }}
         >
-          <DialogContent>
+          <DialogContent className="max-h-[85vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{t("completion.confirmTitle")}</DialogTitle>
               <DialogDescription>
@@ -1195,12 +1209,36 @@ export function PlanViewPage() {
                 })}
               </DialogDescription>
             </DialogHeader>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => handleWeekValidationDecision("keep_unresolved") }>
-                {t("completion.keepForLater")}
-              </Button>
-              <Button onClick={() => handleWeekValidationDecision("mark_skipped") }>
+            {pendingWeekValidation && pendingWeekValidation.unresolvedSessions.length > 0 && (
+              <ul className="text-sm space-y-1 max-h-48 overflow-y-auto rounded-md border bg-muted/30 p-2">
+                {pendingWeekValidation.unresolvedSessions.map((s, i) => {
+                  const label = SESSION_TYPE_LABELS[s.sessionType];
+                  return (
+                    <li key={i} className="flex justify-between gap-2">
+                      <span className="truncate min-w-0">
+                        {t(`daysShort.${s.dayOfWeek}`)} — {label ? pickLocale(label) : s.sessionType}
+                      </span>
+                      <span className="text-muted-foreground shrink-0">
+                        {s.estimatedDurationMin} min
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+            <DialogFooter className="flex-col sm:flex-col gap-2">
+              <Button
+                className="w-full shrink min-w-0 whitespace-normal text-center h-auto min-h-10 py-2"
+                onClick={() => handleWeekValidationDecision("mark_skipped")}
+              >
                 {t("completion.markRemainingSkipped")}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full shrink min-w-0 whitespace-normal text-center h-auto min-h-10 py-2"
+                onClick={() => handleWeekValidationDecision("keep_unresolved")}
+              >
+                {t("completion.keepForLater")}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -1311,7 +1349,10 @@ export function PlanViewPage() {
                     delete plan.config.startDate;
                     delete plan.config.endDate;
                   }
-                  savePlan(plan);
+                  if (!savePlan(plan)) {
+                    toast.error(t("errors.planSaveFailed"));
+                    return;
+                  }
                   reloadPlan();
                   setShowDateDialog(false);
                   toast.success(t("view.datesUpdated"));

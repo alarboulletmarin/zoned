@@ -6,6 +6,19 @@ describe("calculateWeeksBetweenDates", () => {
   test("calculates available weeks from the chosen start date", () => {
     expect(calculateWeeksBetweenDates("2026-01-01", "2026-01-29")).toBe(4);
   });
+
+  test("is independent of the machine clock (start != today)", () => {
+    // 13 weeks exactly, regardless of when this test runs.
+    expect(calculateWeeksBetweenDates("2026-05-15", "2026-08-14")).toBe(13);
+  });
+
+  test("returns 0 when start and end dates are the same", () => {
+    expect(calculateWeeksBetweenDates("2026-01-01", "2026-01-01")).toBe(0);
+  });
+
+  test("accepts ISO datetime strings with a T suffix", () => {
+    expect(calculateWeeksBetweenDates("2026-01-01T00:00:00Z", "2026-01-29")).toBe(4);
+  });
 });
 
 describe("buildRacePlanDateRange", () => {

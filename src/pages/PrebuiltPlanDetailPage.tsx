@@ -127,7 +127,10 @@ export function PrebuiltPlanDetailPage() {
   const handleUse = () => {
     if (!prebuilt) return;
     const plan = convertPrebuiltToPlan(prebuilt);
-    savePlan(plan);
+    if (!savePlan(plan)) {
+      toast.error(t("errors.planSaveFailed"));
+      return;
+    }
     triggerStorageWarning();
     toast.success(t("prebuilt.planAdded"));
     navigate(`/plan/${plan.id}`);
