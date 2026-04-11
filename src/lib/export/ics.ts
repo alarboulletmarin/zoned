@@ -7,26 +7,28 @@
 import { createEvent, type EventAttributes } from "ics";
 import type { WorkoutTemplate } from "@/types";
 import { getWorkoutDuration } from "@/components/visualization";
+import i18n from "@/i18n";
 
 /**
  * Formats workout blocks into a readable description for calendar events
  */
 function formatWorkoutDescription(workout: WorkoutTemplate, isEn: boolean): string {
   const lines: string[] = [];
+  const t = (key: string) => i18n.t(`common:export.ics.${key}`);
 
   // Description
   lines.push(isEn ? workout.descriptionEn : workout.description);
   lines.push("");
 
   // Structure
-  lines.push(isEn ? "=== WARMUP ===" : "=== ÉCHAUFFEMENT ===");
+  lines.push(t("warmupSep"));
   for (const block of workout.warmupTemplate) {
     const desc = isEn && block.descriptionEn ? block.descriptionEn : block.description;
     lines.push(`- ${desc}`);
   }
   lines.push("");
 
-  lines.push(isEn ? "=== MAIN SET ===" : "=== CORPS DE SÉANCE ===");
+  lines.push(t("mainSetSep"));
   for (const block of workout.mainSetTemplate) {
     const desc = isEn && block.descriptionEn ? block.descriptionEn : block.description;
     const zone = block.zone ? ` (${block.zone})` : "";
@@ -34,7 +36,7 @@ function formatWorkoutDescription(workout: WorkoutTemplate, isEn: boolean): stri
   }
   lines.push("");
 
-  lines.push(isEn ? "=== COOLDOWN ===" : "=== RETOUR AU CALME ===");
+  lines.push(t("cooldownSep"));
   for (const block of workout.cooldownTemplate) {
     const desc = isEn && block.descriptionEn ? block.descriptionEn : block.description;
     lines.push(`- ${desc}`);
@@ -44,7 +46,7 @@ function formatWorkoutDescription(workout: WorkoutTemplate, isEn: boolean): stri
   // Tips
   const tips = isEn ? workout.coachingTipsEn : workout.coachingTips;
   if (tips.length > 0) {
-    lines.push(isEn ? "=== TIPS ===" : "=== CONSEILS ===");
+    lines.push(t("tipsSep"));
     for (const tip of tips) {
       lines.push(`- ${tip}`);
     }

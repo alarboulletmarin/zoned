@@ -116,6 +116,7 @@ function CollapsibleSection({
 
 export function RaceSimulatorPage() {
   const { t, i18n } = useTranslation("simulator");
+  const { t: tCommon } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const { settings } = useSettings();
   const unit = settings.unitSystem;
@@ -266,7 +267,7 @@ export function RaceSimulatorPage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: isEn ? "Race Simulator" : "Simulateur de course" },
+              { "@type": "ListItem", position: 2, name: tCommon("raceSimulator.seoBreadcrumb") },
             ],
           },
         ]}
@@ -813,9 +814,9 @@ export function RaceSimulatorPage() {
                   if (!plan) return;
                   try {
                     await exportRaceSimToPDF(plan, isEn);
-                    toast.success(isEn ? "PDF exported" : "PDF exporté");
+                    toast.success(tCommon("raceSimulator.pdfExported"));
                   } catch {
-                    toast.error(isEn ? "Export failed" : "Erreur d'export");
+                    toast.error(tCommon("raceSimulator.exportFailed"));
                   }
                 }}
                 variant="outline"
@@ -889,18 +890,16 @@ export function RaceSimulatorPage() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                {isEn ? "Delete this simulation?" : "Supprimer cette simulation ?"}
+                {tCommon("raceSimulator.deleteConfirm")}
               </DialogTitle>
               <DialogDescription>
-                {isEn
-                  ? "This simulation will be permanently deleted. This action cannot be undone."
-                  : "Cette simulation sera définitivement supprimée. Cette action est irréversible."}
+                {tCommon("raceSimulator.deleteDescription")}
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline">
-                  {isEn ? "Cancel" : "Annuler"}
+                  {tCommon("raceSimulator.cancel")}
                 </Button>
               </DialogClose>
               <Button variant="destructive" onClick={confirmDelete}>

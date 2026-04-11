@@ -43,7 +43,7 @@ export function ChangelogPage() {
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr + "T00:00:00");
-    return new Intl.DateTimeFormat(isEn ? "en-US" : "fr-FR", {
+    return new Intl.DateTimeFormat(i18n.language, {
       year: "numeric",
       month: "long",
       day: "numeric",

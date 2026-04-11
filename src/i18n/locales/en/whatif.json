@@ -48,6 +48,7 @@
     "recoveryWeeks": "Recovery weeks",
     "totalSessions": "Total sessions",
     "volumeProgression": "Volume progression",
+    "volumeProgressionDesc": "Weekly training time (min) for each scenario",
     "zoneDistribution": "Zone distribution",
     "week": "Wk."
   },
@@ -75,5 +76,26 @@
     "intermediate": "Intermediate",
     "advanced": "Advanced",
     "elite": "Elite"
+  },
+  "seo": {
+    "description": "Compare two training scenarios side by side. Visualize the impact of training frequency, goal, and duration on your plan.",
+    "breadcrumbCalculators": "Calculators"
+  },
+  "errors": {
+    "generic": "An error occurred"
+  },
+  "toast": {
+    "saved": "Scenario saved",
+    "deleted": "Scenario deleted"
+  },
+  "saveDialog": {
+    "description": "Give your scenario comparison a name to find it later.",
+    "placeholder": "e.g. 10K: 3x vs 5x/week",
+    "cancel": "Cancel"
+  },
+  "deleteDialog": {
+    "title": "Delete this scenario?",
+    "description": "This scenario will be permanently deleted. This action cannot be undone.",
+    "cancel": "Cancel"
   }
 }

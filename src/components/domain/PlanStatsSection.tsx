@@ -50,20 +50,6 @@ const ZONE_COLORS: Record<string, string> = {
   Z6: "#7c3aed",
 };
 
-const TARGET_LABELS: Record<string, Record<string, string>> = {
-  aerobic_base: { fr: "Base a\u00e9robie", en: "Aerobic base" },
-  aerobic_power: { fr: "Puissance a\u00e9robie", en: "Aerobic power" },
-  aerobic_threshold: { fr: "Seuil a\u00e9robie", en: "Aerobic threshold" },
-  lactate_threshold: { fr: "Seuil lactique", en: "Lactate threshold" },
-  lactate_tolerance: { fr: "Tol\u00e9rance lactique", en: "Lactate tolerance" },
-  vo2max: { fr: "VO2max", en: "VO2max" },
-  speed: { fr: "Vitesse", en: "Speed" },
-  strength: { fr: "Force", en: "Strength" },
-  mixed: { fr: "Mixte", en: "Mixed" },
-  neuromuscular: { fr: "Neuromusculaire", en: "Neuromuscular" },
-  race_specific: { fr: "Allure course", en: "Race specific" },
-};
-
 // ── Helpers ──────────────────────────────────────────────────────────
 
 function formatMinutes(min: number): string {
@@ -517,7 +503,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                     ({ system, count, percent }) => (
                       <div key={system} className="flex items-center gap-2">
                         <span className="text-xs w-28 truncate">
-                          {TARGET_LABELS[system]?.[isEn ? "en" : "fr"] || system}
+                          {t(`targetSystems.${system}`, { defaultValue: system })}
                         </span>
                         <div className="flex-1 h-2.5 bg-secondary rounded-full overflow-hidden">
                           <div

@@ -72,9 +72,9 @@ export function GlossaryPage() {
     return terms.sort((a, b) => {
       const aLabel = getTermDisplayLabel(a);
       const bLabel = getTermDisplayLabel(b);
-      return aLabel.localeCompare(bLabel, isEn ? "en" : "fr");
+      return aLabel.localeCompare(bLabel, i18n.language);
     });
-  }, [allTerms, searchQuery, selectedCategory, isEn]);
+  }, [allTerms, searchQuery, selectedCategory, isEn, i18n.language]);
 
   // Group terms by first letter (using localized label)
   const groupedTerms = useMemo(() => {
@@ -106,21 +106,19 @@ export function GlossaryPage() {
     <>
       <SEOHead
         title={t("title")}
-        description={t("seoDescription", { defaultValue: isEn
-          ? "Running terminology explained: training zones, workout types, and key concepts for runners."
-          : "Terminologie de la course à pied expliquée: zones d'entraînement, types de séances et concepts clés." })}
+        description={t("seoDescription")}
         canonical="/glossary"
         jsonLd={[
           {
             "@type": "DefinedTermSet",
-            name: isEn ? "Zoned Running Glossary" : "Glossaire Zoned Running",
-            description: isEn ? "Complete glossary of running training terms" : "Glossaire complet des termes d'entra\u00eenement running",
+            name: t("seoDefinedTermSetName"),
+            description: t("seoDefinedTermSetDescription"),
             url: "https://zoned.run/glossary",
           },
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 1, name: t("nav.home", { ns: "common" }), item: "https://zoned.run/" },
               { "@type": "ListItem", position: 2, name: t("title") },
             ],
           },

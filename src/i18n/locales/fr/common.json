@@ -124,6 +124,12 @@
       "generatedBy": "Genere par",
       "filename": "plan-course-{{slug}}.pdf"
     },
+    "ics": {
+      "warmupSep": "=== ÉCHAUFFEMENT ===",
+      "mainSetSep": "=== CORPS DE SÉANCE ===",
+      "cooldownSep": "=== RETOUR AU CALME ===",
+      "tipsSep": "=== CONSEILS ==="
+    },
     "planIcs": {
       "raceDay": "Jour de course",
       "race": "Course",
@@ -572,6 +578,18 @@
       "minutes": "Minutes",
       "seconds": "Secondes"
     },
+    "paceTable": {
+      "seoTitle": "Table de référence des allures",
+      "seoDescription": "Tableau d'allures VMA complet de 3:00 à 10:00/km avec vitesse par zone et temps estimés pour 5K, 10K, semi-marathon et marathon. Référence coureur.",
+      "seoAppName": "Table de référence des allures",
+      "seoAppDescription": "Table de référence complète des allures de 3:00 à 10:00/km avec temps estimés",
+      "seoBreadcrumb": "Table de référence",
+      "title": "Table de référence des allures",
+      "subtitle": "Toutes les allures de 3:00 à 10:00/km avec temps de course estimés.",
+      "halfLabel": "Semi",
+      "yourZone": "Ta zone",
+      "highlightNote": "La ligne surlignée correspond à votre allure à 100% VMA."
+    },
     "treadmill": {
       "seoTitle": "Convertisseur Tapis Roulant",
       "seoDescription": "Convertisseur tapis de course : calculez l'allure extérieure équivalente selon la vitesse et l'inclinaison du tapis roulant. Zone d'entraînement incluse.",
@@ -955,6 +973,34 @@
       "collectionFallback": "Collection",
       "envAny": "Tous",
       "exerciseCredits": "Illustrations des exercices issues de free-exercise-db (Domaine Public)."
+    },
+    "about": {
+      "seoDescription": "Découvrez Zoned, une bibliothèque open-source de séances de course à pied basée sur les zones.",
+      "seoOrgDescription": "Une bibliothèque open-source de séances de course à pied basée sur les zones."
+    },
+    "home": {
+      "seoDescription": "{{count}} séances de course à pied scientifiques organisées par zones d'entraînement. Bibliothèque gratuite pour coureurs de tous niveaux.",
+      "accentWords": ["5K", "10K", "semi", "marathon", "trail", "ultra"]
+    },
+    "articleFaq": {
+      "q1": "Ma montre indique Zone 4 mais je me sens en Zone 2. Qui croire ?",
+      "a1": "Faites confiance à vos sensations. La fréquence cardiaque peut être faussée par la chaleur, le stress, la fatigue, la caféine et la position du capteur. La règle d'or pour la Zone 2 : si vous pouvez tenir une conversation normale sans effort, vous êtes dans la bonne zone, peu importe ce qu'affiche votre montre.",
+      "q2": "Dois-je rester exactement dans ma zone ?",
+      "a2": "Non, les zones sont des plages indicatives, pas des cibles au battement près. Être à 3-5 bpm au-dessus ou en-dessous de la limite n'a aucune importance physiologique significative. Ce qui compte, c'est de respecter l'objectif de la séance.",
+      "q3": "Combien de fois par semaine dois-je courir ?",
+      "a3": "Débutants (< 1 an) : 2-3 sorties par semaine. Coureurs réguliers : 3-5 sorties couvrent la plupart des objectifs du 10 km au marathon, en alternant jours durs et faciles. Coureurs avancés : 5-7 sorties, parfois en biquotidien, nécessitant des années de progression graduelle.",
+      "q4": "La règle des 10%, c'est un mythe ou une réalité ?",
+      "a4": "La règle des 10% (ne pas augmenter le volume hebdomadaire de plus de 10%) est un garde-fou utile, pas une loi physiologique absolue. Elle force la progressivité mais ne tient pas compte de l'historique. Utilisez-la comme principe directeur, pas comme règle rigide.",
+      "q5": "Quand vais-je voir des progrès ?",
+      "a5": "Les premiers changements cardiovasculaires apparaissent dès 2-3 semaines d'entraînement régulier. Les progrès mesurables sur un test ou une course arrivent généralement après 6-12 semaines de travail cohérent. La patience est cruciale - changer de programme toutes les 3 semaines ne laisse jamais le temps aux adaptations de s'installer.",
+      "q6": "J'ai mal pendant la course. Je continue ou j'arrête ?",
+      "a6": "Distinguez l'inconfort de la douleur. L'inconfort (lourdeur, légère raideur, courbatures) est souvent normal et passe généralement après 10-15 minutes. La douleur (aiguë, localisée, qui augmente ou fait boiter) : arrêtez immédiatement. Dans le doute, une séance manquée par prudence est toujours préférable à des semaines d'arrêt forcé.",
+      "q7": "Comment éviter les blessures ?",
+      "a7": "Progresser graduellement (la majorité des blessures viennent d'un volume ou intensité augmentés trop vite). Varier les stimuli (terrains, chaussures en rotation, allures différentes). Faire du renforcement musculaire 15-20 min 2 fois par semaine pour ischio-jambiers, quadriceps, mollets et fessiers. Écouter les signaux d'alerte tôt.",
+      "q8": "Matin ou soir, qu'est-ce qui est mieux ?",
+      "a8": "Physiologiquement, le soir a un léger avantage : température corporelle plus élevée, articulations plus mobiles, meilleur temps de réaction. Mais le meilleur moment est celui où vous courez réellement. La constance bat l'optimisation théorique.",
+      "q9": "Puis-je courir tous les jours ?",
+      "a9": "C'est possible mais avec des précautions : alterner impérativement jours faciles et durs, garder au moins 1-2 jours par semaine très légers ou en cross-training (vélo, natation), et écouter son corps. Beaucoup de coureurs prospèrent avec 5-6 jours par semaine et 1-2 jours de repos complet. Le repos fait partie de l'entraînement."
     }
   },
   "domain": {

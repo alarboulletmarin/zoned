@@ -386,9 +386,75 @@
     "raceDay": "Jour de course !",
     "seoFr": "Plan d'entraînement {{name}} gratuit : {{weeks}} semaines, {{sessions}} séances/semaine. {{desc}}",
     "seoEn": "Free {{name}} training plan: {{weeks}} weeks, {{sessions}} sessions/week. {{desc}}",
+    "seoDescription": "Plan d'entraînement {{name}} gratuit : {{weeks}} semaines, {{sessions}} séances/semaine. {{desc}}",
     "weeksCount": "{{count}} semaines",
     "weeksShort": "sem.",
     "sessionsPerWeek": "séances/sem.",
-    "sessionsCount": "{{count}} séances"
+    "sessionsCount": "{{count}} séances",
+    "difficulty": {
+      "beginner": "Débutant",
+      "intermediate": "Intermédiaire",
+      "advanced": "Avancé",
+      "elite": "Élite"
+    },
+    "day": {
+      "0": "Lun",
+      "1": "Mar",
+      "2": "Mer",
+      "3": "Jeu",
+      "4": "Ven",
+      "5": "Sam",
+      "6": "Dim"
+    }
+  },
+  "prebuiltList": {
+    "title": "Plans prêt-à-l'emploi",
+    "description": "Des plans structurés, prêts à utiliser immédiatement.",
+    "subtitle": "Des plans structurés, prêts à utiliser immédiatement",
+    "back": "Retour",
+    "available_one": "{{count}} plan disponible",
+    "available_other": "{{count}} plans disponibles"
+  },
+  "activity": {
+    "strength": "Renforcement",
+    "cycling": "Vélo",
+    "swimming": "Natation",
+    "yoga": "Yoga",
+    "rest": "Repos actif",
+    "cross_training": "Autre activité"
+  },
+  "targetSystems": {
+    "aerobic_base": "Base aérobie",
+    "aerobic_power": "Puissance aérobie",
+    "aerobic_threshold": "Seuil aérobie",
+    "lactate_threshold": "Seuil lactique",
+    "lactate_tolerance": "Tolérance lactique",
+    "vo2max": "VO2max",
+    "speed": "Vitesse",
+    "strength": "Force",
+    "mixed": "Mixte",
+    "neuromuscular": "Neuromusculaire",
+    "race_specific": "Allure course"
+  },
+  "workoutFilter": {
+    "all": "Tous",
+    "endurance": "Endurance",
+    "long_run": "Sortie longue",
+    "tempo": "Tempo",
+    "threshold": "Seuil",
+    "vo2max": "VMA",
+    "fartlek": "Fartlek",
+    "hills": "Côtes",
+    "race_pace": "Allure course",
+    "recovery": "Récupération",
+    "mixed": "Mixte",
+    "strength": "Renforcement",
+    "cross_training": "Activités"
+  },
+  "crossTraining": {
+    "cycling": "Vélo",
+    "swimming": "Natation",
+    "yoga": "Yoga / Stretching",
+    "rest": "Repos actif"
   }
 }

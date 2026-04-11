@@ -3,31 +3,26 @@ import { GithubIcon, Shield, Code, Sparkles, ExternalLink } from "@/components/i
 import { SEOHead } from "@/components/seo";
 
 export function AboutPage() {
-  const { t, i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
 
   return (
     <>
       <SEOHead
         title={t("about.seoHeroLabel")}
-        description={isEn
-          ? "Learn about Zoned, an open-source running workout library with zone-based training."
-          : "Découvrez Zoned, une bibliothèque open-source de séances de course à pied basée sur les zones."}
+        description={t("pages.about.seoDescription")}
         canonical="/about"
         jsonLd={[
           {
             "@type": "Organization",
             name: "Zoned",
             url: "https://zoned.run",
-            description: isEn
-              ? "An open-source running workout library with zone-based training."
-              : "Une bibliothèque open-source de séances de course à pied basée sur les zones.",
+            description: t("pages.about.seoOrgDescription"),
           },
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: isEn ? "About" : "À propos" },
+              { "@type": "ListItem", position: 1, name: t("nav.home"), item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: t("nav.about") },
             ],
           },
         ]}

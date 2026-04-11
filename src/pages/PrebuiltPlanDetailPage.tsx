@@ -31,13 +31,6 @@ import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 
-const DIFFICULTY_LABELS: Record<string, { fr: string; en: string }> = {
-  beginner: { fr: "D\u00e9butant", en: "Beginner" },
-  intermediate: { fr: "Interm\u00e9diaire", en: "Intermediate" },
-  advanced: { fr: "Avanc\u00e9", en: "Advanced" },
-  elite: { fr: "\u00c9lite", en: "Elite" },
-};
-
 const SESSION_TYPE_COLORS: Record<string, string> = {
   endurance: "bg-blue-400",
   long_run: "bg-blue-600",
@@ -49,16 +42,6 @@ const SESSION_TYPE_COLORS: Record<string, string> = {
   hills: "bg-green-500",
   race_specific: "bg-amber-500",
   recovery: "bg-slate-300 dark:bg-slate-700",
-};
-
-const DAY_LABELS: Record<number, { fr: string; en: string }> = {
-  0: { fr: "Lun", en: "Mon" },
-  1: { fr: "Mar", en: "Tue" },
-  2: { fr: "Mer", en: "Wed" },
-  3: { fr: "Jeu", en: "Thu" },
-  4: { fr: "Ven", en: "Fri" },
-  5: { fr: "Sam", en: "Sat" },
-  6: { fr: "Dim", en: "Sun" },
 };
 
 export function PrebuiltPlanDetailPage() {
@@ -178,12 +161,12 @@ export function PrebuiltPlanDetailPage() {
 
   const name = isEn ? prebuilt.nameEn : prebuilt.name;
   const description = isEn ? prebuilt.descriptionEn : prebuilt.description;
-  const difficultyLabel = DIFFICULTY_LABELS[prebuilt.difficulty];
+  const difficultyLabel = t(`prebuilt.difficulty.${prebuilt.difficulty}`);
   const raceMeta = prebuilt.raceDistance
     ? RACE_DISTANCE_META[prebuilt.raceDistance]
     : null;
 
-  const seoDescription = t(isEn ? "prebuilt.seoEn" : "prebuilt.seoFr", {
+  const seoDescription = t("prebuilt.seoDescription", {
     name,
     weeks: prebuilt.totalWeeks,
     sessions: prebuilt.sessionsPerWeek,
@@ -242,7 +225,7 @@ export function PrebuiltPlanDetailPage() {
             <div className="flex flex-wrap items-center gap-2">
               {difficultyLabel && (
                 <Badge variant="secondary">
-                  {isEn ? difficultyLabel.en : difficultyLabel.fr}
+                  {difficultyLabel}
                 </Badge>
               )}
               <Badge variant="outline">
@@ -436,7 +419,7 @@ export function PrebuiltPlanDetailPage() {
                           session.workoutId === "__race_day__";
                         const sessionLabel =
                           SESSION_TYPE_LABELS[session.sessionType];
-                        const dayLabel = DAY_LABELS[session.dayOfWeek];
+                        const dayLabel = t(`prebuilt.day.${session.dayOfWeek}`);
 
                         return (
                           <div
@@ -451,7 +434,7 @@ export function PrebuiltPlanDetailPage() {
                             {/* Day badge */}
                             {dayLabel && (
                               <span className="text-xs font-medium text-muted-foreground w-8 shrink-0">
-                                {isEn ? dayLabel.en : dayLabel.fr}
+                                {dayLabel}
                               </span>
                             )}
 

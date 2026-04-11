@@ -8,27 +8,22 @@ import { PrebuiltPlanCard } from "@/components/domain/PrebuiltPlanCard";
 import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
 
 export function PrebuiltPlansPage() {
-  const { i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("plan");
 
   const plans = getAllPrebuiltPlans();
 
   return (
     <>
       <SEOHead
-        title={isEn ? "Pre-built plans" : "Plans pr\u00eat-\u00e0-l'emploi"}
-        description={
-          isEn
-            ? "Structured plans, ready to use immediately."
-            : "Des plans structur\u00e9s, pr\u00eats \u00e0 utiliser imm\u00e9diatement."
-        }
+        title={t("prebuiltList.title")}
+        description={t("prebuiltList.description")}
         canonical="/plan/new/prebuilt"
         jsonLd={{
           "@type": "BreadcrumbList",
           itemListElement: [
             { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
             { "@type": "ListItem", position: 2, name: "Plans", item: "https://zoned.run/plans" },
-            { "@type": "ListItem", position: 3, name: isEn ? "Pre-built plans" : "Plans pr\u00eat-\u00e0-l'emploi" },
+            { "@type": "ListItem", position: 3, name: t("prebuiltList.title") },
           ],
         }}
       />
@@ -37,19 +32,17 @@ export function PrebuiltPlansPage() {
         <Button variant="ghost" size="sm" asChild className="mb-6">
           <Link to="/plan/new">
             <ArrowLeft className="mr-2 size-4" />
-            {isEn ? "Back" : "Retour"}
+            {t("prebuiltList.back")}
           </Link>
         </Button>
 
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
-            {isEn ? "Pre-built plans" : "Plans pr\u00eat-\u00e0-l'emploi"}
+            {t("prebuiltList.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {isEn
-              ? "Structured plans, ready to use immediately"
-              : "Des plans structur\u00e9s, pr\u00eats \u00e0 utiliser imm\u00e9diatement"}
+            {t("prebuiltList.subtitle")}
           </p>
         </div>
 
@@ -67,9 +60,7 @@ export function PrebuiltPlansPage() {
 
         {/* Stats */}
         <div className="mt-8 text-center text-sm text-muted-foreground">
-          {isEn
-            ? `${plans.length} plan${plans.length !== 1 ? "s" : ""} available`
-            : `${plans.length} plan${plans.length !== 1 ? "s" : ""} disponible${plans.length !== 1 ? "s" : ""}`}
+          {t("prebuiltList.available", { count: plans.length })}
         </div>
       </div>
     </>

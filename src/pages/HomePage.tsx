@@ -44,9 +44,10 @@ export function HomePage() {
   const hasPlans = plans.length > 0;
   const planLink = hasPlans ? "/plans" : "/plan/new";
   // Rotating hero accent word — Sprint animation
-  const accentWords = useMemo(() => isEn
-    ? ["5K", "10K", "half-marathon", "marathon", "trail", "ultra"]
-    : ["5K", "10K", "semi", "marathon", "trail", "ultra"], [isEn]);
+  const accentWords = useMemo(
+    () => t("common:pages.home.accentWords", { returnObjects: true }) as string[],
+    [t]
+  );
   const [accentIndex, setAccentIndex] = useState(0);
   const [animState, setAnimState] = useState<"visible" | "exit" | "enter">("visible");
 
@@ -109,9 +110,7 @@ export function HomePage() {
     ].filter((s): s is NonNullable<typeof s> => s !== undefined);
   }, [strengthWorkouts]);
 
-  const seoDescription = isEn
-    ? `${workoutCount || 118} science-based running workouts organized by training zones. Free workout library for runners of all levels.`
-    : `${workoutCount || 118} séances de course à pied scientifiques organisées par zones d'entraînement. Bibliothèque gratuite pour coureurs de tous niveaux.`;
+  const seoDescription = t("common:pages.home.seoDescription", { count: workoutCount || 118 });
 
   // ─── Trust Badges ───
   const trustBadges = (

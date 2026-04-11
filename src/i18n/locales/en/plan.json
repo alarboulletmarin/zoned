@@ -386,9 +386,75 @@
     "raceDay": "Race Day!",
     "seoFr": "Plan d'entraînement {{name}} gratuit : {{weeks}} semaines, {{sessions}} séances/semaine. {{desc}}",
     "seoEn": "Free {{name}} training plan: {{weeks}} weeks, {{sessions}} sessions/week. {{desc}}",
+    "seoDescription": "Free {{name}} training plan: {{weeks}} weeks, {{sessions}} sessions/week. {{desc}}",
     "weeksCount": "{{count}} weeks",
     "weeksShort": "wk",
     "sessionsPerWeek": "sessions/wk",
-    "sessionsCount": "{{count}} sessions"
+    "sessionsCount": "{{count}} sessions",
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced",
+      "elite": "Elite"
+    },
+    "day": {
+      "0": "Mon",
+      "1": "Tue",
+      "2": "Wed",
+      "3": "Thu",
+      "4": "Fri",
+      "5": "Sat",
+      "6": "Sun"
+    }
+  },
+  "prebuiltList": {
+    "title": "Pre-built plans",
+    "description": "Structured plans, ready to use immediately.",
+    "subtitle": "Structured plans, ready to use immediately",
+    "back": "Back",
+    "available_one": "{{count}} plan available",
+    "available_other": "{{count}} plans available"
+  },
+  "activity": {
+    "strength": "Strength",
+    "cycling": "Cycling",
+    "swimming": "Swimming",
+    "yoga": "Yoga",
+    "rest": "Active Rest",
+    "cross_training": "Other Activity"
+  },
+  "targetSystems": {
+    "aerobic_base": "Aerobic base",
+    "aerobic_power": "Aerobic power",
+    "aerobic_threshold": "Aerobic threshold",
+    "lactate_threshold": "Lactate threshold",
+    "lactate_tolerance": "Lactate tolerance",
+    "vo2max": "VO2max",
+    "speed": "Speed",
+    "strength": "Strength",
+    "mixed": "Mixed",
+    "neuromuscular": "Neuromuscular",
+    "race_specific": "Race specific"
+  },
+  "workoutFilter": {
+    "all": "All",
+    "endurance": "Endurance",
+    "long_run": "Long Run",
+    "tempo": "Tempo",
+    "threshold": "Threshold",
+    "vo2max": "VO2max",
+    "fartlek": "Fartlek",
+    "hills": "Hills",
+    "race_pace": "Race Pace",
+    "recovery": "Recovery",
+    "mixed": "Mixed",
+    "strength": "Strength",
+    "cross_training": "Activities"
+  },
+  "crossTraining": {
+    "cycling": "Cycling",
+    "swimming": "Swimming",
+    "yoga": "Yoga / Stretching",
+    "rest": "Active Rest"
   }
 }

@@ -48,6 +48,7 @@
     "recoveryWeeks": "Semaines de récupération",
     "totalSessions": "Nombre total de séances",
     "volumeProgression": "Progression du volume",
+    "volumeProgressionDesc": "Temps d'entraînement hebdomadaire (min) pour chaque scénario",
     "zoneDistribution": "Répartition des zones",
     "week": "Sem."
   },
@@ -75,5 +76,26 @@
     "intermediate": "Intermédiaire",
     "advanced": "Avancé",
     "elite": "Élite"
+  },
+  "seo": {
+    "description": "Comparez deux scénarios d'entraînement côte à côte. Visualisez l'impact de la fréquence, de l'objectif et de la durée sur votre plan.",
+    "breadcrumbCalculators": "Calculateurs"
+  },
+  "errors": {
+    "generic": "Une erreur est survenue"
+  },
+  "toast": {
+    "saved": "Scénario sauvegardé",
+    "deleted": "Scénario supprimé"
+  },
+  "saveDialog": {
+    "description": "Donne un nom à ta comparaison pour la retrouver plus tard.",
+    "placeholder": "ex. 10K : 3x vs 5x/sem",
+    "cancel": "Annuler"
+  },
+  "deleteDialog": {
+    "title": "Supprimer ce scénario ?",
+    "description": "Ce scénario sera définitivement supprimé. Cette action est irréversible.",
+    "cancel": "Annuler"
   }
 }

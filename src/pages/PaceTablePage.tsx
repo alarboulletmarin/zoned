@@ -66,8 +66,7 @@ function findZoneForPace(
 }
 
 export function PaceTablePage() {
-  const { i18n } = useTranslation("common");
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation("common");
   const userPrefs = useMemo(() => loadUserZonePrefs(), []);
   const paceZones = useMemo(
     () => (userPrefs?.vma ? calculatePaceZones(userPrefs.vma) : null),
@@ -125,24 +124,14 @@ export function PaceTablePage() {
   return (
     <>
       <SEOHead
-        title={
-          isEn
-            ? "Pace Reference Table"
-            : "Table de référence des allures"
-        }
-        description={
-          isEn
-            ? "Complete pace reference table from 3:00 to 10:00/km with speed zones and estimated race times for 5K, 10K, half-marathon and marathon distances."
-            : "Tableau d'allures VMA complet de 3:00 à 10:00/km avec vitesse par zone et temps estimés pour 5K, 10K, semi-marathon et marathon. Référence coureur."
-        }
+        title={t("calculateurs.paceTable.seoTitle")}
+        description={t("calculateurs.paceTable.seoDescription")}
         canonical="/calculators/table-allures"
         jsonLd={[
           {
             "@type": "WebApplication",
-            name: isEn ? "Pace Reference Table" : "Table de référence des allures",
-            description: isEn
-              ? "Complete pace reference table from 3:00 to 10:00/km with estimated race times"
-              : "Table de référence complète des allures de 3:00 à 10:00/km avec temps estimés",
+            name: t("calculateurs.paceTable.seoAppName"),
+            description: t("calculateurs.paceTable.seoAppDescription"),
             url: "https://zoned.run/calculators/table-allures",
             applicationCategory: "SportsApplication",
           },
@@ -150,8 +139,8 @@ export function PaceTablePage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
-              { "@type": "ListItem", position: 3, name: isEn ? "Pace Reference Table" : "Table de référence" },
+              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: t("calculateurs.paceTable.seoBreadcrumb") },
             ],
           },
         ]}
@@ -160,12 +149,10 @@ export function PaceTablePage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
-            {isEn ? "Pace Reference Table" : "Table de référence des allures"}
+            {t("calculateurs.paceTable.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {isEn
-              ? "All paces from 3:00 to 10:00/km with estimated race times."
-              : "Toutes les allures de 3:00 à 10:00/km avec temps de course estimés."}
+            {t("calculateurs.paceTable.subtitle")}
           </p>
         </div>
 
@@ -190,14 +177,14 @@ export function PaceTablePage() {
                   10K
                 </th>
                 <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
-                  {isEn ? "Half" : "Semi"}
+                  {t("calculateurs.paceTable.halfLabel")}
                 </th>
                 <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
                   Marathon
                 </th>
                 {hasZones && (
                   <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
-                    {isEn ? "Your zone" : "Ta zone"}
+                    {t("calculateurs.paceTable.yourZone")}
                   </th>
                 )}
               </tr>
@@ -261,9 +248,7 @@ export function PaceTablePage() {
         {/* Footer notes */}
         {highlightSeconds != null && (
           <p className="mt-4 text-sm text-muted-foreground">
-            {isEn
-              ? "The highlighted row is closest to your 100% VMA pace."
-              : "La ligne surlignée correspond à votre allure à 100% VMA."}
+            {t("calculateurs.paceTable.highlightNote")}
           </p>
         )}
       </div>

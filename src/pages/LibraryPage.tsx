@@ -496,7 +496,7 @@ export function LibraryPage() {
         canonical="/library"
         jsonLd={{
           "@type": "CollectionPage",
-          name: isEn ? "Workout Library" : "Bibliothèque",
+          name: t("common:seo.libraryTitle"),
           description: seoDescription,
           url: "https://zoned.run/library",
         }}

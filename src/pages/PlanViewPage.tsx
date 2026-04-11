@@ -189,21 +189,21 @@ export function PlanViewPage() {
         }
       }
       // Add activity labels
-      const activityLabels: Record<string, { fr: string; en: string }> = {
-        __activity_strength__: { fr: "Renforcement", en: "Strength" },
-        __activity_cycling__: { fr: "Vélo", en: "Cycling" },
-        __activity_swimming__: { fr: "Natation", en: "Swimming" },
-        __activity_yoga__: { fr: "Yoga", en: "Yoga" },
-        __activity_rest__: { fr: "Repos actif", en: "Active Rest" },
-        __activity_cross_training__: { fr: "Autre activité", en: "Other Activity" },
+      const activityKeys: Record<string, string> = {
+        __activity_strength__: "strength",
+        __activity_cycling__: "cycling",
+        __activity_swimming__: "swimming",
+        __activity_yoga__: "yoga",
+        __activity_rest__: "rest",
+        __activity_cross_training__: "cross_training",
       };
-      for (const [aid, labels] of Object.entries(activityLabels)) {
-        names[aid] = isEn ? labels.en : labels.fr;
+      for (const [aid, key] of Object.entries(activityKeys)) {
+        names[aid] = t(`activity.${key}`);
       }
       setWorkoutNames(names);
       setWorkoutTemplates(templates);
     });
-  }, [plan, isEn]);
+  }, [plan, isEn, t]);
 
   const toggleWeek = (weekNumber: number) => {
     setExpandedWeeks((prev) => {

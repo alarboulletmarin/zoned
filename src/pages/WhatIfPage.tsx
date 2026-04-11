@@ -200,7 +200,6 @@ function ScenarioCard({
   label: string;
   scenario: ScenarioConfig;
   onChange: (s: ScenarioConfig) => void;
-  isEn?: boolean;
   t: (key: string) => string;
 }) {
   const goalLabels: Record<TrainingGoal, string> = {
@@ -400,12 +399,12 @@ export function WhatIfPage() {
       });
     } catch (err) {
       const message =
-        err instanceof Error ? err.message : isEn ? "An error occurred" : "Une erreur est survenue";
+        err instanceof Error ? err.message : t("errors.generic");
       toast.error(message);
     } finally {
       setIsGenerating(false);
     }
-  }, [shared, scenarioA, scenarioB, isEn]);
+  }, [shared, scenarioA, scenarioB, t]);
 
   const applyPreset = useCallback(
     (preset: (typeof PRESETS)[number]) => {
@@ -431,8 +430,8 @@ export function WhatIfPage() {
     setSavedScenarios(updated);
     setSaveName("");
     setSaveDialogOpen(false);
-    toast.success(isEn ? "Scenario saved" : "Sc\u00e9nario sauvegard\u00e9");
-  }, [saveName, shared, scenarioA, scenarioB, savedScenarios, isEn]);
+    toast.success(t("toast.saved"));
+  }, [saveName, shared, scenarioA, scenarioB, savedScenarios, t]);
 
   const handleLoad = useCallback((scenario: SavedScenario) => {
     setRaceDistance(scenario.shared.raceDistance);
@@ -451,8 +450,8 @@ export function WhatIfPage() {
     persistScenarios(updated);
     setSavedScenarios(updated);
     setDeleteTarget(null);
-    toast.success(isEn ? "Scenario deleted" : "Sc\u00e9nario supprim\u00e9");
-  }, [deleteTarget, savedScenarios, isEn]);
+    toast.success(t("toast.deleted"));
+  }, [deleteTarget, savedScenarios, t]);
 
   // ── Derived data for visualizations ────────────────────────────────
 
@@ -595,19 +594,15 @@ export function WhatIfPage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "What-If Simulator" : "Simulateur What-If"}
-        description={
-          isEn
-            ? "Compare two training scenarios side by side. Visualize the impact of training frequency, goal, and duration on your plan."
-            : "Comparez deux sc\u00e9narios d'entra\u00eenement c\u00f4te \u00e0 c\u00f4te. Visualisez l'impact de la fr\u00e9quence, de l'objectif et de la dur\u00e9e sur votre plan."
-        }
+        title={t("title")}
+        description={t("seo.description")}
         canonical="/calculators/what-if"
         jsonLd={{
           "@type": "BreadcrumbList",
           itemListElement: [
             { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-            { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs", item: "https://zoned.run/calculators" },
-            { "@type": "ListItem", position: 3, name: isEn ? "What-If Simulator" : "Simulateur What-If" },
+            { "@type": "ListItem", position: 2, name: t("seo.breadcrumbCalculators"), item: "https://zoned.run/calculators" },
+            { "@type": "ListItem", position: 3, name: t("title") },
           ],
         }}
       />
@@ -790,7 +785,6 @@ export function WhatIfPage() {
               setScenarioA(s);
               setResults(null);
             }}
-            isEn={isEn}
             t={t}
           />
           <ScenarioCard
@@ -800,7 +794,6 @@ export function WhatIfPage() {
               setScenarioB(s);
               setResults(null);
             }}
-            isEn={isEn}
             t={t}
           />
         </div>
@@ -820,7 +813,6 @@ export function WhatIfPage() {
                   setScenarioA(s);
                   setResults(null);
                 }}
-                isEn={isEn}
                 t={t}
               />
             </TabsContent>
@@ -832,7 +824,6 @@ export function WhatIfPage() {
                   setScenarioB(s);
                   setResults(null);
                 }}
-                isEn={isEn}
                 t={t}
               />
             </TabsContent>
@@ -906,9 +897,7 @@ export function WhatIfPage() {
                     {t("results.volumeProgression")}
                   </CardTitle>
                   <CardDescription>
-                    {isEn
-                      ? "Weekly training time (min) for each scenario"
-                      : "Temps d'entra\u00eenement hebdomadaire (min) pour chaque sc\u00e9nario"}
+                    {t("results.volumeProgressionDesc")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -1119,9 +1108,7 @@ export function WhatIfPage() {
                 {t("actions.save")}
               </DialogTitle>
               <DialogDescription>
-                {isEn
-                  ? "Give your scenario comparison a name to find it later."
-                  : "Donne un nom \u00e0 ta comparaison pour la retrouver plus tard."}
+                {t("saveDialog.description")}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-2">
@@ -1133,9 +1120,7 @@ export function WhatIfPage() {
                 value={saveName}
                 onChange={(e) => setSaveName(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSave()}
-                placeholder={
-                  isEn ? "e.g. 10K: 3x vs 5x/week" : "ex. 10K : 3x vs 5x/sem"
-                }
+                placeholder={t("saveDialog.placeholder")}
                 className={inputClassName}
                 autoFocus
               />
@@ -1143,7 +1128,7 @@ export function WhatIfPage() {
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline">
-                  {isEn ? "Cancel" : "Annuler"}
+                  {t("saveDialog.cancel")}
                 </Button>
               </DialogClose>
               <Button onClick={handleSave} disabled={!saveName.trim()}>
@@ -1179,7 +1164,7 @@ export function WhatIfPage() {
                       </p>
                       <p className="text-xs text-muted-foreground tabular-nums">
                         {new Date(scenario.savedAt).toLocaleDateString(
-                          isEn ? "en-US" : "fr-FR",
+                          i18n.language,
                         )}
                       </p>
                     </div>
@@ -1214,20 +1199,16 @@ export function WhatIfPage() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                {isEn
-                  ? "Delete this scenario?"
-                  : "Supprimer ce sc\u00e9nario ?"}
+                {t("deleteDialog.title")}
               </DialogTitle>
               <DialogDescription>
-                {isEn
-                  ? "This scenario will be permanently deleted. This action cannot be undone."
-                  : "Ce sc\u00e9nario sera d\u00e9finitivement supprim\u00e9. Cette action est irr\u00e9versible."}
+                {t("deleteDialog.description")}
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline">
-                  {isEn ? "Cancel" : "Annuler"}
+                  {t("deleteDialog.cancel")}
                 </Button>
               </DialogClose>
               <Button variant="destructive" onClick={confirmDelete}>

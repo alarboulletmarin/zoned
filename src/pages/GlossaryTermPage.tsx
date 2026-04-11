@@ -69,15 +69,15 @@ export function GlossaryTermPage() {
             ...(term.acronym && { termCode: term.acronym }),
             inDefinedTermSet: {
               "@type": "DefinedTermSet",
-              name: isEn ? "Zoned Running Glossary" : "Glossaire Zoned Running",
+              name: t("seoDefinedTermSetName"),
               url: "https://zoned.run/glossary",
             },
           },
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: isEn ? "Glossary" : "Glossaire", item: "https://zoned.run/glossary" },
+              { "@type": "ListItem", position: 1, name: t("nav.home", { ns: "common" }), item: "https://zoned.run/" },
+              { "@type": "ListItem", position: 2, name: t("title"), item: "https://zoned.run/glossary" },
               { "@type": "ListItem", position: 3, name: termName },
             ],
           },

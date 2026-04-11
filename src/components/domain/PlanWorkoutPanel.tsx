@@ -46,41 +46,38 @@ const CATEGORY_SESSION_TYPE: Record<string, SessionType> = {
 
 interface FilterDef {
   key: string;
-  labelFr: string;
-  labelEn: string;
   categories: WorkoutCategory[];
   dotColor: string;
 }
 
 const FILTERS: FilterDef[] = [
-  { key: "all", labelFr: "Tous", labelEn: "All", categories: [], dotColor: "" },
-  { key: "endurance", labelFr: "Endurance", labelEn: "Endurance", categories: ["endurance"], dotColor: SESSION_COLORS.endurance },
-  { key: "long_run", labelFr: "Sortie longue", labelEn: "Long Run", categories: ["long_run"], dotColor: SESSION_COLORS.long_run },
-  { key: "tempo", labelFr: "Tempo", labelEn: "Tempo", categories: ["tempo"], dotColor: SESSION_COLORS.tempo },
-  { key: "threshold", labelFr: "Seuil", labelEn: "Threshold", categories: ["threshold"], dotColor: SESSION_COLORS.threshold },
-  { key: "vo2max", labelFr: "VMA", labelEn: "VO2max", categories: ["vma_intervals"], dotColor: SESSION_COLORS.vo2max },
-  { key: "fartlek", labelFr: "Fartlek", labelEn: "Fartlek", categories: ["fartlek"], dotColor: SESSION_COLORS.fartlek },
-  { key: "hills", labelFr: "C\u00f4tes", labelEn: "Hills", categories: ["hills"], dotColor: SESSION_COLORS.hills },
-  { key: "race_pace", labelFr: "Allure course", labelEn: "Race Pace", categories: ["race_pace"], dotColor: SESSION_COLORS.race_specific },
-  { key: "recovery", labelFr: "R\u00e9cup\u00e9ration", labelEn: "Recovery", categories: ["recovery"], dotColor: SESSION_COLORS.recovery },
-  { key: "mixed", labelFr: "Mixte", labelEn: "Mixed", categories: ["mixed", "assessment"], dotColor: "#9ca3af" },
-  { key: "strength", labelFr: "Renforcement", labelEn: "Strength", categories: [], dotColor: "#8b5cf6" },
-  { key: "cross_training", labelFr: "Activités", labelEn: "Activities", categories: [], dotColor: "#6b7280" },
+  { key: "all", categories: [], dotColor: "" },
+  { key: "endurance", categories: ["endurance"], dotColor: SESSION_COLORS.endurance },
+  { key: "long_run", categories: ["long_run"], dotColor: SESSION_COLORS.long_run },
+  { key: "tempo", categories: ["tempo"], dotColor: SESSION_COLORS.tempo },
+  { key: "threshold", categories: ["threshold"], dotColor: SESSION_COLORS.threshold },
+  { key: "vo2max", categories: ["vma_intervals"], dotColor: SESSION_COLORS.vo2max },
+  { key: "fartlek", categories: ["fartlek"], dotColor: SESSION_COLORS.fartlek },
+  { key: "hills", categories: ["hills"], dotColor: SESSION_COLORS.hills },
+  { key: "race_pace", categories: ["race_pace"], dotColor: SESSION_COLORS.race_specific },
+  { key: "recovery", categories: ["recovery"], dotColor: SESSION_COLORS.recovery },
+  { key: "mixed", categories: ["mixed", "assessment"], dotColor: "#9ca3af" },
+  { key: "strength", categories: [], dotColor: "#8b5cf6" },
+  { key: "cross_training", categories: [], dotColor: "#6b7280" },
 ];
 
 interface CrossTrainingItem {
   id: string;
   type: string;
-  labelFr: string;
-  labelEn: string;
+  translationKey: string;
   defaultDuration: number;
 }
 
 const CROSS_TRAINING_ITEMS: CrossTrainingItem[] = [
-  { id: "ct-cycling", type: "cycling", labelFr: "Vélo", labelEn: "Cycling", defaultDuration: 0 },
-  { id: "ct-swimming", type: "swimming", labelFr: "Natation", labelEn: "Swimming", defaultDuration: 0 },
-  { id: "ct-yoga", type: "yoga", labelFr: "Yoga / Stretching", labelEn: "Yoga / Stretching", defaultDuration: 0 },
-  { id: "ct-rest", type: "rest", labelFr: "Repos actif", labelEn: "Active Rest", defaultDuration: 0 },
+  { id: "ct-cycling", type: "cycling", translationKey: "cycling", defaultDuration: 0 },
+  { id: "ct-swimming", type: "swimming", translationKey: "swimming", defaultDuration: 0 },
+  { id: "ct-yoga", type: "yoga", translationKey: "yoga", defaultDuration: 0 },
+  { id: "ct-rest", type: "rest", translationKey: "rest", defaultDuration: 0 },
 ];
 
 // ── Props ─────────────────────────────────────────────────────────
@@ -267,7 +264,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
         >
           {FILTERS.map((f) => (
             <option key={f.key} value={f.key}>
-              {isEn ? f.labelEn : f.labelFr}
+              {t(`workoutFilter.${f.key}`)}
             </option>
           ))}
         </select>
@@ -396,7 +393,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
                 <div className="flex items-center gap-2">
                   <span className="size-2 rounded-full shrink-0 bg-muted-foreground/40" />
                   <span className="text-xs font-medium">
-                    {isEn ? item.labelEn : item.labelFr}
+                    {t(`crossTraining.${item.translationKey}`)}
                   </span>
                 </div>
               </div>
@@ -456,9 +453,10 @@ export function PlanWorkoutPanel({ isOpen, onClose, isEn, inline, onSelectWorkou
                     </div>
                     <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
                       <span className="capitalize">
-                        {isEn
-                          ? (FILTERS.find(f => f.categories.includes(workout.category))?.labelEn || workout.category)
-                          : (FILTERS.find(f => f.categories.includes(workout.category))?.labelFr || workout.category)}
+                        {(() => {
+                          const filterKey = FILTERS.find(f => f.categories.includes(workout.category))?.key;
+                          return filterKey ? t(`workoutFilter.${filterKey}`) : workout.category;
+                        })()}
                       </span>
                       <span className="flex items-center gap-0.5">
                         <Clock className="size-2.5" />

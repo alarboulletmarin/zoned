@@ -149,27 +149,21 @@ export function CalculateursPage() {
   return (
     <>
       <SEOHead
-        title={isEn ? "Calculators — Running Tools" : "Calculateurs — Outils de Course"}
-        description={
-          isEn
-            ? "Running calculators: training zones, race paces, treadmill converter, split generator, VMA estimation."
-            : "Calculateurs de course à pied : zones d'entraînement, allures, convertisseur tapis roulant, splits, estimation VMA."
-        }
+        title={t("calculateurs.hub.seoTitle")}
+        description={t("calculateurs.hub.seoDescription")}
         canonical="/calculators"
         jsonLd={[
           {
             "@type": "CollectionPage",
-            name: isEn ? "Running Calculators" : "Calculateurs Course à Pied",
-            description: isEn
-              ? "Running calculators: training zones, race paces, treadmill converter, split generator, VMA estimation."
-              : "Calculateurs de course à pied : zones d'entraînement, allures, convertisseur tapis roulant, splits, estimation VMA.",
+            name: t("calculateurs.hub.seoCollectionName"),
+            description: t("calculateurs.hub.seoDescription"),
             url: "https://zoned.run/calculators",
           },
           {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: isEn ? "Calculators" : "Calculateurs" },
+              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb") },
             ],
           },
         ]}
