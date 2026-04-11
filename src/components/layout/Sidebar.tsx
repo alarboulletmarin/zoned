@@ -82,7 +82,7 @@ const navGroups: NavGroup[] = [
   {
     labelKey: "actions.tools",
     items: [
-      { href: "/calculators", icon: Calculator, labelKey: "calculateurs.title" },
+      { href: "/calculators", icon: Calculator, labelKey: "calculators:calculateurs.title" },
     ],
   },
   {

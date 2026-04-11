@@ -61,26 +61,26 @@ function getPerformanceLevel(
 ): { label: string; colorClass: string } {
   if (percentage >= 90)
     return {
-      label: t("calculateurs.ageGraded.levelWorldClass"),
+      label: t("calculators:calculateurs.ageGraded.levelWorldClass"),
       colorClass: "text-zone-6",
     };
   if (percentage >= 80)
     return {
-      label: t("calculateurs.ageGraded.levelNational"),
+      label: t("calculators:calculateurs.ageGraded.levelNational"),
       colorClass: "text-zone-5",
     };
   if (percentage >= 70)
     return {
-      label: t("calculateurs.ageGraded.levelRegional"),
+      label: t("calculators:calculateurs.ageGraded.levelRegional"),
       colorClass: "text-zone-4",
     };
   if (percentage >= 60)
     return {
-      label: t("calculateurs.ageGraded.levelLocal"),
+      label: t("calculators:calculateurs.ageGraded.levelLocal"),
       colorClass: "text-zone-3",
     };
   return {
-    label: t("calculateurs.ageGraded.levelRecreational"),
+    label: t("calculators:calculateurs.ageGraded.levelRecreational"),
     colorClass: "text-zone-2",
   };
 }
@@ -163,14 +163,14 @@ export function AgeGradedPage() {
   return (
     <>
       <SEOHead
-        title={t("calculateurs.ageGraded.seoTitle")}
-        description={t("calculateurs.ageGraded.seoDescription")}
+        title={t("calculators:calculateurs.ageGraded.seoTitle")}
+        description={t("calculators:calculateurs.ageGraded.seoDescription")}
         canonical="/calculators/age-graded"
         jsonLd={[
           {
             "@type": "WebApplication",
-            name: t("calculateurs.ageGraded.seoAppName"),
-            description: t("calculateurs.ageGraded.seoAppDescription"),
+            name: t("calculators:calculateurs.ageGraded.seoAppName"),
+            description: t("calculators:calculateurs.ageGraded.seoAppDescription"),
             url: "https://zoned.run/calculators/age-graded",
             applicationCategory: "SportsApplication",
           },
@@ -178,8 +178,8 @@ export function AgeGradedPage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
-              { "@type": "ListItem", position: 3, name: t("calculateurs.ageGraded.seoBreadcrumb") },
+              { "@type": "ListItem", position: 2, name: t("calculators:calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: t("calculators:calculateurs.ageGraded.seoBreadcrumb") },
             ],
           },
         ]}
@@ -189,10 +189,10 @@ export function AgeGradedPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
             <Star className="size-8 text-primary" />
-            {t("calculateurs.ageGraded.title")}
+            {t("calculators:calculateurs.ageGraded.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {t("calculateurs.ageGraded.description")}
+            {t("calculators:calculateurs.ageGraded.description")}
           </p>
         </div>
 
@@ -204,25 +204,25 @@ export function AgeGradedPage() {
               {/* Age */}
               <div className="space-y-2">
                 <label htmlFor="age" className="text-sm font-medium">
-                  {t("calculateurs.ageGraded.age")}
+                  {t("calculators:calculateurs.ageGraded.age")}
                 </label>
                 <input
                   id="age"
                   type="number"
                   min={15}
                   max={99}
-                  placeholder={t("calculateurs.ageGraded.agePlaceholder")}
+                  placeholder={t("calculators:calculateurs.ageGraded.agePlaceholder")}
                   value={age}
                   onChange={(e) => handleNumericInput(e.target.value, setAge, 99)}
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  aria-label={t("calculateurs.ageGraded.age")}
+                  aria-label={t("calculators:calculateurs.ageGraded.age")}
                 />
               </div>
 
               {/* Gender */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">
-                  {t("calculateurs.ageGraded.gender")}
+                  {t("calculators:calculateurs.ageGraded.gender")}
                 </label>
                 <div className="flex gap-2">
                   <Button
@@ -230,14 +230,14 @@ export function AgeGradedPage() {
                     onClick={() => setGender("male")}
                     className="flex-1"
                   >
-                    {t("calculateurs.ageGraded.male")}
+                    {t("calculators:calculateurs.ageGraded.male")}
                   </Button>
                   <Button
                     variant={gender === "female" ? "default" : "outline"}
                     onClick={() => setGender("female")}
                     className="flex-1"
                   >
-                    {t("calculateurs.ageGraded.female")}
+                    {t("calculators:calculateurs.ageGraded.female")}
                   </Button>
                 </div>
               </div>
@@ -248,7 +248,7 @@ export function AgeGradedPage() {
               {/* Distance */}
               <div className="space-y-2">
                 <label htmlFor="distance" className="text-sm font-medium">
-                  {t("calculateurs.ageGraded.distance")}
+                  {t("calculators:calculateurs.ageGraded.distance")}
                 </label>
                 <select
                   id="distance"
@@ -269,7 +269,7 @@ export function AgeGradedPage() {
               {/* Time */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">
-                  {t("calculateurs.ageGraded.time")}
+                  {t("calculators:calculateurs.ageGraded.time")}
                 </label>
                 <div className="flex items-center gap-2">
                   <div className="flex flex-col items-center">
@@ -283,7 +283,7 @@ export function AgeGradedPage() {
                         handleNumericInput(e.target.value, setHours, 9)
                       }
                       className="flex h-12 w-14 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      aria-label={t("calculateurs.ageGraded.hours")}
+                      aria-label={t("calculators:calculateurs.ageGraded.hours")}
                     />
                     <span className="text-xs text-muted-foreground mt-1">
                       h
@@ -303,7 +303,7 @@ export function AgeGradedPage() {
                         handleNumericInput(e.target.value, setMinutes, 59)
                       }
                       className="flex h-12 w-14 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      aria-label={t("calculateurs.ageGraded.minutes")}
+                      aria-label={t("calculators:calculateurs.ageGraded.minutes")}
                     />
                     <span className="text-xs text-muted-foreground mt-1">
                       min
@@ -323,7 +323,7 @@ export function AgeGradedPage() {
                         handleNumericInput(e.target.value, setSeconds, 59)
                       }
                       className="flex h-12 w-14 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      aria-label={t("calculateurs.ageGraded.seconds")}
+                      aria-label={t("calculators:calculateurs.ageGraded.seconds")}
                     />
                     <span className="text-xs text-muted-foreground mt-1">
                       sec
@@ -356,7 +356,7 @@ export function AgeGradedPage() {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center py-2 border-b">
                     <span className="text-sm text-muted-foreground">
-                      {t("calculateurs.ageGraded.openWorldRecord")}
+                      {t("calculators:calculateurs.ageGraded.openWorldRecord")}
                     </span>
                     <span className="text-sm font-medium tabular-nums">
                       {formatTime(result.worldRecord)}
@@ -364,7 +364,7 @@ export function AgeGradedPage() {
                   </div>
                   <div className="flex justify-between items-center py-2 border-b">
                     <span className="text-sm text-muted-foreground">
-                      {t("calculateurs.ageGraded.ageAdjustedRecord")}
+                      {t("calculators:calculateurs.ageGraded.ageAdjustedRecord")}
                     </span>
                     <span className="text-sm font-medium tabular-nums">
                       {formatTime(result.ageGradedRecord)}
@@ -372,7 +372,7 @@ export function AgeGradedPage() {
                   </div>
                   <div className="flex justify-between items-center py-2 border-b">
                     <span className="text-sm text-muted-foreground">
-                      {t("calculateurs.ageGraded.yourTime")}
+                      {t("calculators:calculateurs.ageGraded.yourTime")}
                     </span>
                     <span className="text-sm font-medium tabular-nums">
                       {formatTime(totalTimeSeconds)}
@@ -380,7 +380,7 @@ export function AgeGradedPage() {
                   </div>
                   <div className="flex justify-between items-center py-2">
                     <span className="text-sm text-muted-foreground">
-                      {t("calculateurs.ageGraded.paceLabel")}
+                      {t("calculators:calculateurs.ageGraded.paceLabel")}
                     </span>
                     <span className="text-sm font-medium tabular-nums">
                       {formatPaceWithUnit(result.paceMinPerKm, unit)}
@@ -392,7 +392,7 @@ export function AgeGradedPage() {
 
             {/* Explanation */}
             <p className="text-sm text-muted-foreground">
-              {t("calculateurs.ageGraded.explanation")}
+              {t("calculators:calculateurs.ageGraded.explanation")}
             </p>
           </div>
         )}

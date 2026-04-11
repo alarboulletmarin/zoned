@@ -9,14 +9,14 @@ export function ZonesCalculatorPage() {
   return (
     <>
       <SEOHead
-        title={t("calculateurs.zones.seoTitle")}
-        description={t("calculateurs.zones.seoDescription")}
+        title={t("calculators:calculateurs.zones.seoTitle")}
+        description={t("calculators:calculateurs.zones.seoDescription")}
         canonical="/calculators/zones"
         jsonLd={[
           {
             "@type": "WebApplication",
-            name: t("calculateurs.zones.seoAppName"),
-            description: t("calculateurs.zones.seoAppDescription"),
+            name: t("calculators:calculateurs.zones.seoAppName"),
+            description: t("calculators:calculateurs.zones.seoAppDescription"),
             url: "https://zoned.run/calculators/zones",
             applicationCategory: "SportsApplication",
           },
@@ -24,8 +24,8 @@ export function ZonesCalculatorPage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
-              { "@type": "ListItem", position: 3, name: t("calculateurs.zones.seoBreadcrumb") },
+              { "@type": "ListItem", position: 2, name: t("calculators:calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: t("calculators:calculateurs.zones.seoBreadcrumb") },
             ],
           },
         ]}
@@ -34,10 +34,10 @@ export function ZonesCalculatorPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
             <Activity className="size-8 text-primary" />
-            {t("calculateurs.zones.title")}
+            {t("calculators:calculateurs.zones.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {t("calculateurs.zones.description")}
+            {t("calculators:calculateurs.zones.description")}
           </p>
         </div>
 

@@ -195,14 +195,14 @@ export function PaceConverterPage() {
   return (
     <>
       <SEOHead
-        title={t("calculateurs.converter.seoTitle")}
-        description={t("calculateurs.converter.seoDescription")}
+        title={t("calculators:calculateurs.converter.seoTitle")}
+        description={t("calculators:calculateurs.converter.seoDescription")}
         canonical="/calculators/convertisseur"
         jsonLd={[
           {
             "@type": "WebApplication",
-            name: t("calculateurs.converter.seoAppName"),
-            description: t("calculateurs.converter.seoAppDescription"),
+            name: t("calculators:calculateurs.converter.seoAppName"),
+            description: t("calculators:calculateurs.converter.seoAppDescription"),
             url: "https://zoned.run/calculators/convertisseur",
             applicationCategory: "SportsApplication",
           },
@@ -210,8 +210,8 @@ export function PaceConverterPage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
-              { "@type": "ListItem", position: 3, name: t("calculateurs.converter.seoBreadcrumb") },
+              { "@type": "ListItem", position: 2, name: t("calculators:calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: t("calculators:calculateurs.converter.seoBreadcrumb") },
             ],
           },
         ]}
@@ -220,10 +220,10 @@ export function PaceConverterPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
-            {t("calculateurs.converter.title")}
+            {t("calculators:calculateurs.converter.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {t("calculateurs.converter.description")}
+            {t("calculators:calculateurs.converter.description")}
           </p>
         </div>
 
@@ -287,17 +287,17 @@ export function PaceConverterPage() {
             <span
               className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium bg-zone-${currentZone}/10 text-zone-${currentZone}`}
             >
-              {t("calculateurs.converter.zoneForYou", { zone: currentZone })}
+              {t("calculators:calculateurs.converter.zoneForYou", { zone: currentZone })}
             </span>
           </div>
         )}
 
         {/* Unit system note */}
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          {t("calculateurs.converter.displayingUnits", {
+          {t("calculators:calculateurs.converter.displayingUnits", {
             system: isImperial
-              ? t("calculateurs.converter.imperial")
-              : t("calculateurs.converter.metric"),
+              ? t("calculators:calculateurs.converter.imperial")
+              : t("calculators:calculateurs.converter.metric"),
           })}
         </p>
       </div>

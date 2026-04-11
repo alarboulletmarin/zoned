@@ -39,8 +39,8 @@ export function FreePlanCreatePage() {
   return (
     <>
       <SEOHead
-        title={t("freePlan.title")}
-        description={t("freePlan.seoDescription")}
+        title={t("calculators:freePlan.title")}
+        description={t("calculators:freePlan.seoDescription")}
         canonical="/plan/new/free"
       />
       <div className="py-8">
@@ -49,7 +49,7 @@ export function FreePlanCreatePage() {
           <Button variant="ghost" size="sm" asChild>
             <Link to="/plan/new">
               <ArrowLeft className="mr-2 size-4" />
-              {t("freePlan.back")}
+              {t("calculators:freePlan.back")}
             </Link>
           </Button>
 
@@ -59,10 +59,10 @@ export function FreePlanCreatePage() {
               <CalendarRange className="size-8 text-primary" />
             </div>
             <h1 className="text-2xl font-bold">
-              {t("freePlan.title")}
+              {t("calculators:freePlan.title")}
             </h1>
             <p className="text-muted-foreground">
-              {t("freePlan.subtitle")}
+              {t("calculators:freePlan.subtitle")}
             </p>
           </div>
 
@@ -72,7 +72,7 @@ export function FreePlanCreatePage() {
               {/* Plan name */}
               <div>
                 <label htmlFor="plan-name" className="text-sm font-medium mb-2 block">
-                  {t("freePlan.planName")}
+                  {t("calculators:freePlan.planName")}
                 </label>
                 <input
                   id="plan-name"
@@ -82,7 +82,7 @@ export function FreePlanCreatePage() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && isValid) handleSubmit();
                   }}
-                  placeholder={t("freePlan.namePlaceholder")}
+                  placeholder={t("calculators:freePlan.namePlaceholder")}
                   className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   maxLength={100}
                   autoFocus
@@ -92,7 +92,7 @@ export function FreePlanCreatePage() {
               {/* Number of weeks */}
               <div>
                 <label htmlFor="plan-weeks" className="text-sm font-medium mb-2 block">
-                  {t("freePlan.numberOfWeeks")}
+                  {t("calculators:freePlan.numberOfWeeks")}
                 </label>
                 <div className="flex items-center gap-4">
                   <input
@@ -121,14 +121,14 @@ export function FreePlanCreatePage() {
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {MIN_WEEKS} - {MAX_WEEKS} {t("freePlan.weeks")}
+                  {MIN_WEEKS} - {MAX_WEEKS} {t("calculators:freePlan.weeks")}
                 </p>
               </div>
 
               {/* Optional dates */}
               <div>
                 <label className="text-sm font-medium mb-2 block">
-                  {t("freePlan.startDate")}
+                  {t("calculators:freePlan.startDate")}
                 </label>
                 <div className="flex gap-2 mb-3">
                   <button
@@ -139,7 +139,7 @@ export function FreePlanCreatePage() {
                       !useCustomDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
                     )}
                   >
-                    {t("freePlan.startNow")}
+                    {t("calculators:freePlan.startNow")}
                   </button>
                   <button
                     type="button"
@@ -149,7 +149,7 @@ export function FreePlanCreatePage() {
                       useCustomDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
                     )}
                   >
-                    {t("freePlan.chooseDate")}
+                    {t("calculators:freePlan.chooseDate")}
                   </button>
                 </div>
                 {useCustomDate && (
@@ -164,7 +164,7 @@ export function FreePlanCreatePage() {
                 )}
                 {startDate && (
                   <p className="text-xs text-muted-foreground mt-1">
-                    {t("freePlan.endDate")} :{" "}
+                    {t("calculators:freePlan.endDate")} :{" "}
                     {(() => {
                       const d = new Date(startDate);
                       d.setDate(d.getDate() + weeks * 7);
@@ -183,7 +183,7 @@ export function FreePlanCreatePage() {
             onClick={handleSubmit}
             disabled={!isValid}
           >
-            {t("freePlan.create")}
+            {t("calculators:freePlan.create")}
           </Button>
         </div>
       </div>

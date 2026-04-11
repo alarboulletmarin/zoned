@@ -151,14 +151,14 @@ export function RaceEquivalencePage() {
   return (
     <>
       <SEOHead
-        title={t("calculateurs.equivalence.seoTitle")}
-        description={t("calculateurs.equivalence.seoDescription")}
+        title={t("calculators:calculateurs.equivalence.seoTitle")}
+        description={t("calculators:calculateurs.equivalence.seoDescription")}
         canonical="/calculators/equivalence"
         jsonLd={[
           {
             "@type": "WebApplication",
-            name: t("calculateurs.equivalence.seoAppName"),
-            description: t("calculateurs.equivalence.seoAppDescription"),
+            name: t("calculators:calculateurs.equivalence.seoAppName"),
+            description: t("calculators:calculateurs.equivalence.seoAppDescription"),
             url: "https://zoned.run/calculators/equivalence",
             applicationCategory: "SportsApplication",
           },
@@ -166,8 +166,8 @@ export function RaceEquivalencePage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
-              { "@type": "ListItem", position: 3, name: t("calculateurs.equivalence.seoBreadcrumb") },
+              { "@type": "ListItem", position: 2, name: t("calculators:calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: t("calculators:calculateurs.equivalence.seoBreadcrumb") },
             ],
           },
         ]}
@@ -177,10 +177,10 @@ export function RaceEquivalencePage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
             <Shuffle className="size-8 text-primary" />
-            {t("calculateurs.equivalence.title")}
+            {t("calculators:calculateurs.equivalence.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {t("calculateurs.equivalence.description")}
+            {t("calculators:calculateurs.equivalence.description")}
           </p>
         </div>
 
@@ -190,7 +190,7 @@ export function RaceEquivalencePage() {
             {/* Distance Select */}
             <div className="space-y-2">
               <label htmlFor="distance" className="text-sm font-medium">
-                {t("calculateurs.equivalence.raceDistance")}
+                {t("calculators:calculateurs.equivalence.raceDistance")}
               </label>
               <select
                 id="distance"
@@ -217,7 +217,7 @@ export function RaceEquivalencePage() {
                     value={customKm}
                     onChange={(e) => setCustomKm(e.target.value)}
                     className="flex h-10 w-28 rounded-md border border-input bg-transparent px-3 py-1 text-sm tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculateurs.equivalence.customDistanceLabel")}
+                    aria-label={t("calculators:calculateurs.equivalence.customDistanceLabel")}
                   />
                   <span className="text-sm text-muted-foreground">km</span>
                 </div>
@@ -227,7 +227,7 @@ export function RaceEquivalencePage() {
             {/* Time Inputs */}
             <div className="space-y-2">
               <label className="text-sm font-medium">
-                {t("calculateurs.equivalence.raceTime")}
+                {t("calculators:calculateurs.equivalence.raceTime")}
               </label>
               <div className="flex items-center gap-2">
                 <div className="flex flex-col items-center">
@@ -239,7 +239,7 @@ export function RaceEquivalencePage() {
                     value={hours}
                     onChange={(e) => handleNumericInput(e.target.value, setHours, 9)}
                     className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculateurs.equivalence.hours")}
+                    aria-label={t("calculators:calculateurs.equivalence.hours")}
                   />
                   <span className="text-xs text-muted-foreground mt-1">h</span>
                 </div>
@@ -267,7 +267,7 @@ export function RaceEquivalencePage() {
                     value={seconds}
                     onChange={(e) => handleNumericInput(e.target.value, setSeconds, 59)}
                     className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculateurs.equivalence.seconds")}
+                    aria-label={t("calculators:calculateurs.equivalence.seconds")}
                   />
                   <span className="text-xs text-muted-foreground mt-1">sec</span>
                 </div>
@@ -281,24 +281,24 @@ export function RaceEquivalencePage() {
           <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50 mb-6">
             <CardContent className="pt-6">
               <h2 className="text-lg font-semibold mb-4">
-                {t("calculateurs.equivalence.predictedTimes")}
+                {t("calculators:calculateurs.equivalence.predictedTimes")}
               </h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b">
                       <th className="py-2 px-3 text-left font-medium">
-                        {t("calculateurs.equivalence.distanceCol")}
+                        {t("calculators:calculateurs.equivalence.distanceCol")}
                       </th>
                       <th className="py-2 px-3 text-left font-medium">
-                        {t("calculateurs.equivalence.timeCol")}
+                        {t("calculators:calculateurs.equivalence.timeCol")}
                       </th>
                       <th className="py-2 px-3 text-left font-medium">
-                        {t("calculateurs.equivalence.paceCol")}
+                        {t("calculators:calculateurs.equivalence.paceCol")}
                       </th>
                       {paceZones && (
                         <th className="py-2 px-3 text-left font-medium">
-                          {t("calculateurs.equivalence.zoneCol")}
+                          {t("calculators:calculateurs.equivalence.zoneCol")}
                         </th>
                       )}
                     </tr>
@@ -320,7 +320,7 @@ export function RaceEquivalencePage() {
                             {pickLang(p, "label")}
                             {p.isReference && (
                               <span className="ml-2 text-xs text-muted-foreground">
-                                ({t("calculateurs.equivalence.ref")})
+                                ({t("calculators:calculateurs.equivalence.ref")})
                               </span>
                             )}
                           </td>
@@ -368,7 +368,7 @@ export function RaceEquivalencePage() {
             <div className="flex gap-3">
               <Info className="size-5 text-muted-foreground shrink-0 mt-0.5" />
               <p className="text-sm text-muted-foreground">
-                {t("calculateurs.equivalence.riegelExplanation")}
+                {t("calculators:calculateurs.equivalence.riegelExplanation")}
               </p>
             </div>
           </CardContent>

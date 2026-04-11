@@ -51,18 +51,18 @@ function WorkoutListView() {
     deleteCustomWorkout(id);
     setDeleteTarget(null);
     forceUpdate();
-    toast.success(t("workoutBuilder.workoutDeleted"));
+    toast.success(t("calculators:workoutBuilder.workoutDeleted"));
   }, [t]);
 
   const handleExportAll = useCallback(() => {
     if (workouts.length === 0) return;
     exportWorkoutsToJSON(workouts);
-    toast.success(t("workoutBuilder.workoutsExported", { count: workouts.length }));
+    toast.success(t("calculators:workoutBuilder.workoutsExported", { count: workouts.length }));
   }, [workouts, t]);
 
   const handleExportOne = useCallback((workout: WorkoutTemplate) => {
     exportWorkoutsToJSON([workout]);
-    toast.success(t("workoutBuilder.workoutExported"));
+    toast.success(t("calculators:workoutBuilder.workoutExported"));
   }, [t]);
 
   const handleImport = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,9 +71,9 @@ function WorkoutListView() {
     try {
       const count = await importWorkoutsFromJSON(file);
       forceUpdate();
-      toast.success(t("workoutBuilder.workoutsImported", { count }));
+      toast.success(t("calculators:workoutBuilder.workoutsImported", { count }));
     } catch {
-      toast.error(t("workoutBuilder.invalidFile"));
+      toast.error(t("calculators:workoutBuilder.invalidFile"));
     }
     // Reset input so same file can be re-imported
     e.target.value = "";
@@ -83,16 +83,16 @@ function WorkoutListView() {
     <>
       <SEOHead
         noindex
-        title={t("workoutBuilder.myWorkouts")}
+        title={t("calculators:workoutBuilder.myWorkouts")}
         canonical="/workout/builder"
       />
       <div className="py-8 max-w-3xl mx-auto space-y-6">
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold">{t("workoutBuilder.myWorkouts")}</h1>
+              <h1 className="text-2xl md:text-3xl font-bold">{t("calculators:workoutBuilder.myWorkouts")}</h1>
               <p className="text-muted-foreground mt-1">
-                {t("workoutBuilder.listSubtitle")}
+                {t("calculators:workoutBuilder.listSubtitle")}
               </p>
             </div>
             <Button
@@ -103,7 +103,7 @@ function WorkoutListView() {
               }}
             >
               <Plus className="size-4 mr-1" />
-              {t("workoutBuilder.create")}
+              {t("calculators:workoutBuilder.create")}
             </Button>
           </div>
 
@@ -123,7 +123,7 @@ function WorkoutListView() {
               className="rounded-full"
             >
               <Upload className="size-4 mr-1.5" />
-              {t("workoutBuilder.import")}
+              {t("calculators:workoutBuilder.import")}
             </Button>
             {workouts.length > 0 && (
               <Button
@@ -133,7 +133,7 @@ function WorkoutListView() {
                 className="rounded-full"
               >
                 <Download className="size-4 mr-1.5" />
-                {t("workoutBuilder.exportAll")}
+                {t("calculators:workoutBuilder.exportAll")}
               </Button>
             )}
           </div>
@@ -141,8 +141,8 @@ function WorkoutListView() {
 
         {workouts.length === 0 ? (
           <div className="text-center py-16 text-muted-foreground">
-            <p className="text-lg mb-2">{t("workoutBuilder.noWorkoutsYet")}</p>
-            <p className="text-sm">{t("workoutBuilder.createFirst")}</p>
+            <p className="text-lg mb-2">{t("calculators:workoutBuilder.noWorkoutsYet")}</p>
+            <p className="text-sm">{t("calculators:workoutBuilder.createFirst")}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -162,9 +162,9 @@ function WorkoutListView() {
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="font-medium">{w.name || t("workoutBuilder.untitled")}</h3>
+                        <h3 className="font-medium">{w.name || t("calculators:workoutBuilder.untitled")}</h3>
                         <p className="text-sm text-muted-foreground">
-                          ~{formatDurationMinutes(totalMin)} · {w.mainSetTemplate.length} {t("workoutBuilder.blocks")}
+                          ~{formatDurationMinutes(totalMin)} · {w.mainSetTemplate.length} {t("calculators:workoutBuilder.blocks")}
                         </p>
                       </div>
                       <ArrowRight className="size-4 text-muted-foreground" />
@@ -175,7 +175,7 @@ function WorkoutListView() {
                       type="button"
                       onClick={() => handleExportOne(w)}
                       className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-                      aria-label={t("workoutBuilder.exportLabel")}
+                      aria-label={t("calculators:workoutBuilder.exportLabel")}
                     >
                       <Download className="size-4" />
                     </button>
@@ -183,7 +183,7 @@ function WorkoutListView() {
                       type="button"
                       onClick={() => setDeleteTarget(w.id)}
                       className="p-1.5 rounded-md text-destructive/70 hover:text-destructive hover:bg-destructive/10 active:text-destructive transition-colors"
-                      aria-label={t("workoutBuilder.deleteLabel")}
+                      aria-label={t("calculators:workoutBuilder.deleteLabel")}
                     >
                       <Trash2 className="size-4" />
                     </button>
@@ -200,19 +200,19 @@ function WorkoutListView() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {t("workoutBuilder.deleteConfirm")}
+              {t("calculators:workoutBuilder.deleteConfirm")}
             </DialogTitle>
             <DialogDescription>
-              {t("workoutBuilder.deleteDescription")}
+              {t("calculators:workoutBuilder.deleteDescription")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteTarget(null)}>
-              {t("workoutBuilder.cancel")}
+              {t("calculators:workoutBuilder.cancel")}
             </Button>
             <Button variant="destructive" onClick={() => deleteTarget && handleDelete(deleteTarget)}>
               <Trash2 className="size-4" />
-              {t("workoutBuilder.delete")}
+              {t("calculators:workoutBuilder.delete")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -275,15 +275,15 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
       setWorkoutRaw(updated);
       isDirtyRef.current = false;
       setIsSaved(true);
-      toast.success(t("workoutBuilder.workoutSaved"));
+      toast.success(t("calculators:workoutBuilder.workoutSaved"));
     } catch {
-      toast.error(t("workoutBuilder.maxReached"));
+      toast.error(t("calculators:workoutBuilder.maxReached"));
     }
   }, [workout, canSave, t, navigate]);
 
   const handleDelete = useCallback(() => {
     deleteCustomWorkout(workout.id);
-    toast.success(t("workoutBuilder.workoutDeleted"));
+    toast.success(t("calculators:workoutBuilder.workoutDeleted"));
     navigate("/workout/builder");
   }, [workout.id, t, navigate]);
 
@@ -336,16 +336,16 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
     (workout.cooldownTemplate?.length || 0);
 
   const sections: { key: SectionKey; label: string; color: string }[] = [
-    { key: "warmup", label: t("workoutBuilder.warmup"), color: "text-zone-2" },
-    { key: "main", label: t("workoutBuilder.mainSet"), color: "text-zone-5" },
-    { key: "cooldown", label: t("workoutBuilder.cooldown"), color: "text-zone-1" },
+    { key: "warmup", label: t("calculators:workoutBuilder.warmup"), color: "text-zone-2" },
+    { key: "main", label: t("calculators:workoutBuilder.mainSet"), color: "text-zone-5" },
+    { key: "cooldown", label: t("calculators:workoutBuilder.cooldown"), color: "text-zone-1" },
   ];
 
   return (
     <>
       <SEOHead
         noindex
-        title={t("workoutBuilder.builderTitle")}
+        title={t("calculators:workoutBuilder.builderTitle")}
         canonical="/workout/builder"
       />
 
@@ -356,17 +356,17 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
             to="/workout/builder"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-block mb-4"
           >
-            {t("workoutBuilder.backToList")}
+            {t("calculators:workoutBuilder.backToList")}
           </Link>
           <input
             type="text"
             value={workout.name}
             onChange={(e) => setWorkout((prev) => ({ ...prev, name: e.target.value, nameEn: e.target.value }))}
-            placeholder={t("workoutBuilder.namePlaceholder")}
+            placeholder={t("calculators:workoutBuilder.namePlaceholder")}
             className="block w-full text-2xl md:text-3xl font-bold bg-transparent border-none focus:outline-none placeholder:text-muted-foreground/40 mb-1"
           />
           <p className="text-muted-foreground mb-6">
-            ~{totalMin} min · {blockCount} {t("workoutBuilder.blocks")}
+            ~{totalMin} min · {blockCount} {t("calculators:workoutBuilder.blocks")}
           </p>
           <div className="flex flex-wrap items-center gap-3">
             <Button
@@ -375,7 +375,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
               className="rounded-full px-5 py-2.5 h-auto font-bold"
             >
               <Save className="size-4 mr-2" />
-              {t("workoutBuilder.save")}
+              {t("calculators:workoutBuilder.save")}
             </Button>
             {isSaved && <ExportMenu workout={workout} />}
             {isSaved && (
@@ -384,7 +384,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
                 className="rounded-full px-5 py-2.5 h-auto font-bold"
                 onClick={() => {
                   exportWorkoutsToJSON([workout]);
-                  toast.success(t("workoutBuilder.workoutExported"));
+                  toast.success(t("calculators:workoutBuilder.workoutExported"));
                 }}
               >
                 <Download className="size-4 mr-2" />
@@ -398,7 +398,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
                 onClick={() => setShowDeleteConfirm(true)}
               >
                 <Trash2 className="size-4 mr-2" />
-                {t("workoutBuilder.delete")}
+                {t("calculators:workoutBuilder.delete")}
               </Button>
             )}
           </div>
@@ -406,7 +406,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
 
         {/* Preview */}
         <div className="rounded-lg border p-4 bg-card">
-          <p className="text-xs text-muted-foreground mb-2">{t("workoutBuilder.preview")}</p>
+          <p className="text-xs text-muted-foreground mb-2">{t("calculators:workoutBuilder.preview")}</p>
           <SessionTimeline workout={workout} />
         </div>
 
@@ -443,7 +443,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
                   ))}
                   <Button variant="outline" size="sm" onClick={() => addBlock(key)} className="w-full">
                     <Plus className="size-4" />
-                    {t("workoutBuilder.addBlock")}
+                    {t("calculators:workoutBuilder.addBlock")}
                   </Button>
                 </div>
               )}
@@ -457,19 +457,19 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {t("workoutBuilder.deleteConfirm")}
+              {t("calculators:workoutBuilder.deleteConfirm")}
             </DialogTitle>
             <DialogDescription>
-              {t("workoutBuilder.deleteDescription")}
+              {t("calculators:workoutBuilder.deleteDescription")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowDeleteConfirm(false)}>
-              {t("workoutBuilder.cancel")}
+              {t("calculators:workoutBuilder.cancel")}
             </Button>
             <Button variant="destructive" onClick={handleDelete}>
               <Trash2 className="size-4" />
-              {t("workoutBuilder.delete")}
+              {t("calculators:workoutBuilder.delete")}
             </Button>
           </DialogFooter>
         </DialogContent>

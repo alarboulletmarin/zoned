@@ -68,14 +68,14 @@ export function SplitGeneratorPage() {
   return (
     <>
       <SEOHead
-        title={t("calculateurs.splits.seoTitle")}
-        description={t("calculateurs.splits.seoDescription")}
+        title={t("calculators:calculateurs.splits.seoTitle")}
+        description={t("calculators:calculateurs.splits.seoDescription")}
         canonical="/calculators/splits"
         jsonLd={[
           {
             "@type": "WebApplication",
-            name: t("calculateurs.splits.seoAppName"),
-            description: t("calculateurs.splits.seoAppDescription"),
+            name: t("calculators:calculateurs.splits.seoAppName"),
+            description: t("calculators:calculateurs.splits.seoAppDescription"),
             url: "https://zoned.run/calculators/splits",
             applicationCategory: "SportsApplication",
           },
@@ -83,8 +83,8 @@ export function SplitGeneratorPage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
-              { "@type": "ListItem", position: 3, name: t("calculateurs.splits.seoBreadcrumb") },
+              { "@type": "ListItem", position: 2, name: t("calculators:calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: t("calculators:calculateurs.splits.seoBreadcrumb") },
             ],
           },
         ]}
@@ -93,10 +93,10 @@ export function SplitGeneratorPage() {
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold mb-2">
-            {t("calculateurs.splits.title")}
+            {t("calculators:calculateurs.splits.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {t("calculateurs.splits.description")}
+            {t("calculators:calculateurs.splits.description")}
           </p>
         </div>
 
@@ -105,14 +105,14 @@ export function SplitGeneratorPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Route className="size-5" />
-              {t("calculateurs.splits.raceParams")}
+              {t("calculators:calculateurs.splits.raceParams")}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Distance */}
             <div className="space-y-2">
               <label htmlFor="split-distance" className="text-sm font-medium">
-                {t("calculateurs.splits.distance")}
+                {t("calculators:calculateurs.splits.distance")}
               </label>
               <select
                 id="split-distance"
@@ -126,7 +126,7 @@ export function SplitGeneratorPage() {
                   </option>
                 ))}
                 <option value="custom">
-                  {t("calculateurs.splits.custom")}
+                  {t("calculators:calculateurs.splits.custom")}
                 </option>
               </select>
               {isCustom && (
@@ -149,7 +149,7 @@ export function SplitGeneratorPage() {
             {/* Target time */}
             <div className="space-y-2">
               <label className="text-sm font-medium">
-                {t("calculateurs.splits.targetTime")}
+                {t("calculators:calculateurs.splits.targetTime")}
               </label>
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1">
@@ -191,13 +191,13 @@ export function SplitGeneratorPage() {
             {/* Strategy */}
             <div className="space-y-2">
               <label className="text-sm font-medium">
-                {t("calculateurs.splits.strategy")}
+                {t("calculators:calculateurs.splits.strategy")}
               </label>
               <div className="flex gap-2">
                 {([
-                  { value: "even" as Strategy, label: t("calculateurs.splits.even"), labelLong: t("calculateurs.splits.evenSplits") },
-                  { value: "negative" as Strategy, label: t("calculateurs.splits.negative"), labelLong: t("calculateurs.splits.negativeSplits") },
-                  { value: "positive" as Strategy, label: t("calculateurs.splits.positive"), labelLong: t("calculateurs.splits.positiveSplits") },
+                  { value: "even" as Strategy, label: t("calculators:calculateurs.splits.even"), labelLong: t("calculators:calculateurs.splits.evenSplits") },
+                  { value: "negative" as Strategy, label: t("calculators:calculateurs.splits.negative"), labelLong: t("calculators:calculateurs.splits.negativeSplits") },
+                  { value: "positive" as Strategy, label: t("calculators:calculateurs.splits.positive"), labelLong: t("calculators:calculateurs.splits.positiveSplits") },
                 ] as const).map((s) => (
                   <button
                     key={s.value}
@@ -215,9 +215,9 @@ export function SplitGeneratorPage() {
                 ))}
               </div>
               <p className="text-xs text-muted-foreground">
-                {strategy === "even" && t("calculateurs.splits.evenDesc")}
-                {strategy === "negative" && t("calculateurs.splits.negativeDesc")}
-                {strategy === "positive" && t("calculateurs.splits.positiveDesc")}
+                {strategy === "even" && t("calculators:calculateurs.splits.evenDesc")}
+                {strategy === "negative" && t("calculators:calculateurs.splits.negativeDesc")}
+                {strategy === "positive" && t("calculators:calculateurs.splits.positiveDesc")}
               </p>
             </div>
           </CardContent>
@@ -229,7 +229,7 @@ export function SplitGeneratorPage() {
             <div ref={tableRef} className="bg-card rounded-xl border shadow-sm">
               <div className="px-6 pt-6 pb-2">
                 <h3 className="font-semibold">
-                  {t("calculateurs.splits.splitTable")}
+                  {t("calculators:calculateurs.splits.splitTable")}
                 </h3>
               </div>
               <div className="px-6 pb-6 overflow-x-auto">
@@ -238,16 +238,16 @@ export function SplitGeneratorPage() {
                     <tr className="border-b">
                       <th scope="col" className="py-2 px-2 text-left font-medium">#</th>
                       <th scope="col" className="py-2 px-2 text-left font-medium">
-                        {t("calculateurs.splits.dist")}
+                        {t("calculators:calculateurs.splits.dist")}
                       </th>
                       <th scope="col" className="py-2 px-2 text-left font-medium">
-                        {t("calculateurs.splits.split")}
+                        {t("calculators:calculateurs.splits.split")}
                       </th>
                       <th scope="col" className="py-2 px-2 text-left font-medium">
-                        {t("calculateurs.splits.paceLabel")}
+                        {t("calculators:calculateurs.splits.paceLabel")}
                       </th>
                       <th scope="col" className="py-2 px-2 text-left font-medium">
-                        {t("calculateurs.splits.cumul")}
+                        {t("calculators:calculateurs.splits.cumul")}
                       </th>
                     </tr>
                   </thead>
@@ -289,7 +289,7 @@ export function SplitGeneratorPage() {
                   <tfoot>
                     <tr className="border-t font-medium">
                       <td className="py-2 px-2">
-                        {t("calculateurs.splits.total")}
+                        {t("calculators:calculateurs.splits.total")}
                       </td>
                       <td className="py-2 px-2 tabular-nums">
                         {convertDistance(distanceKm, unit).toFixed(
@@ -319,7 +319,7 @@ export function SplitGeneratorPage() {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
             >
               <Download className="size-4" />
-              {t("calculateurs.splits.downloadPng")}
+              {t("calculators:calculateurs.splits.downloadPng")}
             </button>
           </>
         )}
@@ -328,7 +328,7 @@ export function SplitGeneratorPage() {
         {!hasValidInput && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground py-4">
             <Info className="size-4 shrink-0" />
-            {t("calculateurs.splits.emptyState")}
+            {t("calculators:calculateurs.splits.emptyState")}
           </div>
         )}
       </div>

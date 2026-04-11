@@ -9,14 +9,14 @@ export function PaceCalculatorPage() {
   return (
     <>
       <SEOHead
-        title={t("calculateurs.paces.seoTitle")}
-        description={t("calculateurs.paces.seoDescription")}
+        title={t("calculators:calculateurs.paces.seoTitle")}
+        description={t("calculators:calculateurs.paces.seoDescription")}
         canonical="/calculators/allures"
         jsonLd={[
           {
             "@type": "WebApplication",
-            name: t("calculateurs.paces.seoAppName"),
-            description: t("calculateurs.paces.seoAppDescription"),
+            name: t("calculators:calculateurs.paces.seoAppName"),
+            description: t("calculators:calculateurs.paces.seoAppDescription"),
             url: "https://zoned.run/calculators/allures",
             applicationCategory: "SportsApplication",
           },
@@ -24,8 +24,8 @@ export function PaceCalculatorPage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
-              { "@type": "ListItem", position: 3, name: t("calculateurs.paces.seoBreadcrumb") },
+              { "@type": "ListItem", position: 2, name: t("calculators:calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: t("calculators:calculateurs.paces.seoBreadcrumb") },
             ],
           },
         ]}
@@ -34,10 +34,10 @@ export function PaceCalculatorPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
             <Gauge className="size-8 text-primary" />
-            {t("calculateurs.paces.title")}
+            {t("calculators:calculateurs.paces.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {t("calculateurs.paces.description")}
+            {t("calculators:calculateurs.paces.description")}
           </p>
         </div>
 

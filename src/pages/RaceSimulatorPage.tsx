@@ -269,7 +269,7 @@ export function RaceSimulatorPage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: tCommon("raceSimulator.seoBreadcrumb") },
+              { "@type": "ListItem", position: 2, name: tCommon("calculators:raceSimulator.seoBreadcrumb") },
             ],
           },
         ]}
@@ -814,9 +814,9 @@ export function RaceSimulatorPage() {
                   if (!plan) return;
                   try {
                     await exportRaceSimToPDF(plan, isEn);
-                    toast.success(tCommon("raceSimulator.pdfExported"));
+                    toast.success(tCommon("calculators:raceSimulator.pdfExported"));
                   } catch {
-                    toast.error(tCommon("raceSimulator.exportFailed"));
+                    toast.error(tCommon("calculators:raceSimulator.exportFailed"));
                   }
                 }}
                 variant="outline"
@@ -890,16 +890,16 @@ export function RaceSimulatorPage() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                {tCommon("raceSimulator.deleteConfirm")}
+                {tCommon("calculators:raceSimulator.deleteConfirm")}
               </DialogTitle>
               <DialogDescription>
-                {tCommon("raceSimulator.deleteDescription")}
+                {tCommon("calculators:raceSimulator.deleteDescription")}
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline">
-                  {tCommon("raceSimulator.cancel")}
+                  {tCommon("calculators:raceSimulator.cancel")}
                 </Button>
               </DialogClose>
               <Button variant="destructive" onClick={confirmDelete}>

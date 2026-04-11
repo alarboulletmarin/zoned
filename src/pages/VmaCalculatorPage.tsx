@@ -65,7 +65,7 @@ export function VmaCalculatorPage() {
   const handleUseVma = () => {
     if (!calculatedVma) return;
     saveUserZonePrefs({ vma: calculatedVma });
-    toast.success(t("calculateurs.vma.vmaSaved", { vma: calculatedVma }));
+    toast.success(t("calculators:calculateurs.vma.vmaSaved", { vma: calculatedVma }));
   };
 
   const handleCreatePlan = () => {
@@ -96,14 +96,14 @@ export function VmaCalculatorPage() {
   return (
     <>
       <SEOHead
-        title={t("calculateurs.vma.seoTitle")}
-        description={t("calculateurs.vma.seoDescription")}
+        title={t("calculators:calculateurs.vma.seoTitle")}
+        description={t("calculators:calculateurs.vma.seoDescription")}
         canonical="/calculators/vma"
         jsonLd={[
           {
             "@type": "WebApplication",
-            name: t("calculateurs.vma.seoAppName"),
-            description: t("calculateurs.vma.seoAppDescription"),
+            name: t("calculators:calculateurs.vma.seoAppName"),
+            description: t("calculators:calculateurs.vma.seoAppDescription"),
             url: "https://zoned.run/calculators/vma",
             applicationCategory: "SportsApplication",
           },
@@ -111,8 +111,8 @@ export function VmaCalculatorPage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
-              { "@type": "ListItem", position: 3, name: t("calculateurs.vma.seoBreadcrumb") },
+              { "@type": "ListItem", position: 2, name: t("calculators:calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: t("calculators:calculateurs.vma.seoBreadcrumb") },
             ],
           },
         ]}
@@ -122,10 +122,10 @@ export function VmaCalculatorPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
             <Timer className="size-8 text-primary" />
-            {t("calculateurs.vma.title")}
+            {t("calculators:calculateurs.vma.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {t("calculateurs.vma.description")}
+            {t("calculators:calculateurs.vma.description")}
           </p>
         </div>
 
@@ -135,7 +135,7 @@ export function VmaCalculatorPage() {
             {/* Distance Select */}
             <div className="space-y-2">
               <label htmlFor="distance" className="text-sm font-medium">
-                {t("calculateurs.vma.raceDistance")}
+                {t("calculators:calculateurs.vma.raceDistance")}
               </label>
               <select
                 id="distance"
@@ -150,14 +150,14 @@ export function VmaCalculatorPage() {
                 ))}
               </select>
               <p className="text-xs text-muted-foreground">
-                {t("calculateurs.vma.vmaPercentUsed", { percent: selectedDistance.vmaPercentage })}
+                {t("calculators:calculateurs.vma.vmaPercentUsed", { percent: selectedDistance.vmaPercentage })}
               </p>
             </div>
 
             {/* Time Inputs */}
             <div className="space-y-2">
               <label className="text-sm font-medium">
-                {t("calculateurs.vma.raceTime")}
+                {t("calculators:calculateurs.vma.raceTime")}
               </label>
               <div className="flex items-center gap-2">
                 <div className="flex flex-col items-center">
@@ -169,10 +169,10 @@ export function VmaCalculatorPage() {
                     value={hours}
                     onChange={(e) => handleNumericInput(e.target.value, setHours, 9)}
                     className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculateurs.vma.hours")}
+                    aria-label={t("calculators:calculateurs.vma.hours")}
                   />
                   <span className="text-xs text-muted-foreground mt-1">
-                    {t("calculateurs.vma.hoursShort")}
+                    {t("calculators:calculateurs.vma.hoursShort")}
                   </span>
                 </div>
                 <span className="text-xl font-bold text-muted-foreground pb-4">:</span>
@@ -185,7 +185,7 @@ export function VmaCalculatorPage() {
                     value={minutes}
                     onChange={(e) => handleNumericInput(e.target.value, setMinutes, 59)}
                     className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculateurs.vma.minutes")}
+                    aria-label={t("calculators:calculateurs.vma.minutes")}
                   />
                   <span className="text-xs text-muted-foreground mt-1">min</span>
                 </div>
@@ -199,7 +199,7 @@ export function VmaCalculatorPage() {
                     value={seconds}
                     onChange={(e) => handleNumericInput(e.target.value, setSeconds, 59)}
                     className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculateurs.vma.seconds")}
+                    aria-label={t("calculators:calculateurs.vma.seconds")}
                   />
                   <span className="text-xs text-muted-foreground mt-1">sec</span>
                 </div>
@@ -215,7 +215,7 @@ export function VmaCalculatorPage() {
             <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
               <CardContent className="py-8 flex flex-col items-center text-center">
                 <p className="text-sm font-medium text-muted-foreground mb-2">
-                  {t("calculateurs.vma.estimatedVma")}
+                  {t("calculators:calculateurs.vma.estimatedVma")}
                 </p>
                 <p className="text-5xl font-bold text-primary tabular-nums">
                   {calculatedVma.toFixed(1)}
@@ -228,17 +228,17 @@ export function VmaCalculatorPage() {
             <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
               <CardContent className="pt-6">
                 <h2 className="text-lg font-semibold mb-4">
-                  {t("calculateurs.vma.paceZonesPreview")}
+                  {t("calculators:calculateurs.vma.paceZonesPreview")}
                 </h2>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b">
                         <th scope="col" className="py-2 px-3 text-left font-medium">
-                          {t("calculateurs.vma.zone")}
+                          {t("calculators:calculateurs.vma.zone")}
                         </th>
                         <th scope="col" className="py-2 px-3 text-left font-medium">
-                          {t("calculateurs.vma.pace")}
+                          {t("calculators:calculateurs.vma.pace")}
                         </th>
                       </tr>
                     </thead>
@@ -286,11 +286,11 @@ export function VmaCalculatorPage() {
             <div className="flex flex-col sm:flex-row gap-3">
               <Button onClick={handleUseVma} className="flex-1">
                 <Save className="size-4" />
-                {t("calculateurs.vma.useThisVma")}
+                {t("calculators:calculateurs.vma.useThisVma")}
               </Button>
               <Button onClick={handleCreatePlan} variant="outline" className="flex-1">
                 <ArrowRight className="size-4" />
-                {t("calculateurs.vma.createPlan")}
+                {t("calculators:calculateurs.vma.createPlan")}
               </Button>
             </div>
           </div>

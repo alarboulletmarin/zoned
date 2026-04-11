@@ -63,7 +63,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
 
   const discoverLinks = [
     { href: "/collections", label: t("collections.title") },
-    { href: "/calculators", label: t("calculateurs.title") },
+    { href: "/calculators", label: t("calculators:calculateurs.title") },
     { href: "/learn", label: t("nav.learn") },
     { href: "/glossary", label: t("nav.glossary") },
   ];
@@ -395,7 +395,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
               )}
             >
               <Calculator className="size-4" />
-              {t("calculateurs.title")}
+              {t("calculators:calculateurs.title")}
             </Link>
 
             {/* Tools separator */}

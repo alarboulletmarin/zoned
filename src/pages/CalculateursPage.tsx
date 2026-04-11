@@ -150,21 +150,21 @@ export function CalculateursPage() {
   return (
     <>
       <SEOHead
-        title={t("calculateurs.hub.seoTitle")}
-        description={t("calculateurs.hub.seoDescription")}
+        title={t("calculators:calculateurs.hub.seoTitle")}
+        description={t("calculators:calculateurs.hub.seoDescription")}
         canonical="/calculators"
         jsonLd={[
           {
             "@type": "CollectionPage",
-            name: t("calculateurs.hub.seoCollectionName"),
-            description: t("calculateurs.hub.seoDescription"),
+            name: t("calculators:calculateurs.hub.seoCollectionName"),
+            description: t("calculators:calculateurs.hub.seoDescription"),
             url: "https://zoned.run/calculators",
           },
           {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb") },
+              { "@type": "ListItem", position: 2, name: t("calculators:calculateurs.breadcrumb") },
             ],
           },
         ]}
@@ -172,9 +172,9 @@ export function CalculateursPage() {
       <div className="py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">{t("calculateurs.title")}</h1>
+          <h1 className="text-3xl font-bold mb-2">{t("calculators:calculateurs.title")}</h1>
           <p className="text-muted-foreground text-lg">
-            {t("calculateurs.description")}
+            {t("calculators:calculateurs.description")}
           </p>
         </div>
 
@@ -197,7 +197,7 @@ export function CalculateursPage() {
                             {pickLang(item, "title")}
                           </h2>
                           <span className="bg-muted text-muted-foreground text-xs px-2 py-0.5 rounded-full">
-                            {t("calculateurs.comingSoon")}
+                            {t("calculators:calculateurs.comingSoon")}
                           </span>
                         </div>
                         <p className="text-sm text-muted-foreground">
@@ -230,7 +230,7 @@ export function CalculateursPage() {
                       </p>
                     </div>
                     <div className={cn("flex items-center gap-1 text-sm font-medium", item.iconColor)}>
-                      {t("calculateurs.explore")}
+                      {t("calculators:calculateurs.explore")}
                       <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
                     </div>
                   </div>

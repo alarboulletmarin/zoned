@@ -91,14 +91,14 @@ export function TreadmillConverterPage() {
   return (
     <>
       <SEOHead
-        title={t("calculateurs.treadmill.seoTitle")}
-        description={t("calculateurs.treadmill.seoDescription")}
+        title={t("calculators:calculateurs.treadmill.seoTitle")}
+        description={t("calculators:calculateurs.treadmill.seoDescription")}
         canonical="/calculators/tapis-roulant"
         jsonLd={[
           {
             "@type": "WebApplication",
-            name: t("calculateurs.treadmill.seoAppName"),
-            description: t("calculateurs.treadmill.seoAppDescription"),
+            name: t("calculators:calculateurs.treadmill.seoAppName"),
+            description: t("calculators:calculateurs.treadmill.seoAppDescription"),
             url: "https://zoned.run/calculators/tapis-roulant",
             applicationCategory: "SportsApplication",
           },
@@ -106,8 +106,8 @@ export function TreadmillConverterPage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
-              { "@type": "ListItem", position: 3, name: t("calculateurs.treadmill.seoBreadcrumb") },
+              { "@type": "ListItem", position: 2, name: t("calculators:calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: t("calculators:calculateurs.treadmill.seoBreadcrumb") },
             ],
           },
         ]}
@@ -116,10 +116,10 @@ export function TreadmillConverterPage() {
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold mb-2">
-            {t("calculateurs.treadmill.title")}
+            {t("calculators:calculateurs.treadmill.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {t("calculateurs.treadmill.description")}
+            {t("calculators:calculateurs.treadmill.description")}
           </p>
         </div>
 
@@ -128,7 +128,7 @@ export function TreadmillConverterPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <RefreshCw className="size-5" />
-              {t("calculateurs.treadmill.settings")}
+              {t("calculators:calculateurs.treadmill.settings")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -139,7 +139,7 @@ export function TreadmillConverterPage() {
                   htmlFor="treadmill-speed"
                   className="text-sm font-medium"
                 >
-                  {t("calculateurs.treadmill.speed")}
+                  {t("calculators:calculateurs.treadmill.speed")}
                 </label>
                 <div className="flex items-center gap-2">
                   <input
@@ -164,7 +164,7 @@ export function TreadmillConverterPage() {
                   htmlFor="treadmill-incline"
                   className="text-sm font-medium"
                 >
-                  {t("calculateurs.treadmill.incline")}
+                  {t("calculators:calculateurs.treadmill.incline")}
                 </label>
                 <div className="flex items-center gap-2">
                   <input
@@ -190,7 +190,7 @@ export function TreadmillConverterPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Gauge className="size-5" />
-                {t("calculateurs.treadmill.equivalentEffort")}
+                {t("calculators:calculateurs.treadmill.equivalentEffort")}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -198,7 +198,7 @@ export function TreadmillConverterPage() {
                 {/* Pace */}
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">
-                    {t("calculateurs.treadmill.pace")}
+                    {t("calculators:calculateurs.treadmill.pace")}
                   </p>
                   <p className="text-2xl font-bold tabular-nums">
                     {displayPace}
@@ -211,7 +211,7 @@ export function TreadmillConverterPage() {
                 {/* Speed */}
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">
-                    {t("calculateurs.treadmill.speed")}
+                    {t("calculators:calculateurs.treadmill.speed")}
                   </p>
                   <p className="text-2xl font-bold tabular-nums">
                     {displaySpeed}
@@ -226,7 +226,7 @@ export function TreadmillConverterPage() {
               {matchedZone && (
                 <div className="mt-4 pt-4 border-t flex items-center gap-2">
                   <span className="text-sm text-muted-foreground">
-                    {t("calculateurs.treadmill.trainingZone")}
+                    {t("calculators:calculateurs.treadmill.trainingZone")}
                   </span>
                   <ZoneBadge zone={matchedZone} showLabel size="md" />
                 </div>
@@ -235,7 +235,7 @@ export function TreadmillConverterPage() {
               {!vma && (
                 <div className="mt-4 pt-4 border-t flex items-center gap-2 text-sm text-muted-foreground">
                   <Info className="size-4 shrink-0" />
-                  {t("calculateurs.treadmill.configureVma")}
+                  {t("calculators:calculateurs.treadmill.configureVma")}
                 </div>
               )}
             </CardContent>
@@ -246,7 +246,7 @@ export function TreadmillConverterPage() {
         <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground italic">
-              {t("calculateurs.treadmill.formula")}
+              {t("calculators:calculateurs.treadmill.formula")}
             </p>
           </CardContent>
         </Card>

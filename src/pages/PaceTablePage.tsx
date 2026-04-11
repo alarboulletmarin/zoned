@@ -124,14 +124,14 @@ export function PaceTablePage() {
   return (
     <>
       <SEOHead
-        title={t("calculateurs.paceTable.seoTitle")}
-        description={t("calculateurs.paceTable.seoDescription")}
+        title={t("calculators:calculateurs.paceTable.seoTitle")}
+        description={t("calculators:calculateurs.paceTable.seoDescription")}
         canonical="/calculators/table-allures"
         jsonLd={[
           {
             "@type": "WebApplication",
-            name: t("calculateurs.paceTable.seoAppName"),
-            description: t("calculateurs.paceTable.seoAppDescription"),
+            name: t("calculators:calculateurs.paceTable.seoAppName"),
+            description: t("calculators:calculateurs.paceTable.seoAppDescription"),
             url: "https://zoned.run/calculators/table-allures",
             applicationCategory: "SportsApplication",
           },
@@ -139,8 +139,8 @@ export function PaceTablePage() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: t("calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
-              { "@type": "ListItem", position: 3, name: t("calculateurs.paceTable.seoBreadcrumb") },
+              { "@type": "ListItem", position: 2, name: t("calculators:calculateurs.breadcrumb"), item: "https://zoned.run/calculators" },
+              { "@type": "ListItem", position: 3, name: t("calculators:calculateurs.paceTable.seoBreadcrumb") },
             ],
           },
         ]}
@@ -149,10 +149,10 @@ export function PaceTablePage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
-            {t("calculateurs.paceTable.title")}
+            {t("calculators:calculateurs.paceTable.title")}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {t("calculateurs.paceTable.subtitle")}
+            {t("calculators:calculateurs.paceTable.subtitle")}
           </p>
         </div>
 
@@ -177,14 +177,14 @@ export function PaceTablePage() {
                   10K
                 </th>
                 <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
-                  {t("calculateurs.paceTable.halfLabel")}
+                  {t("calculators:calculateurs.paceTable.halfLabel")}
                 </th>
                 <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
                   Marathon
                 </th>
                 {hasZones && (
                   <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
-                    {t("calculateurs.paceTable.yourZone")}
+                    {t("calculators:calculateurs.paceTable.yourZone")}
                   </th>
                 )}
               </tr>
@@ -248,7 +248,7 @@ export function PaceTablePage() {
         {/* Footer notes */}
         {highlightSeconds != null && (
           <p className="mt-4 text-sm text-muted-foreground">
-            {t("calculateurs.paceTable.highlightNote")}
+            {t("calculators:calculateurs.paceTable.highlightNote")}
           </p>
         )}
       </div>
