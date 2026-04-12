@@ -619,9 +619,6 @@ export function PlanCreatePage() {
             onChange={(e) =>
               setForm((f) => ({ ...f, raceDate: e.target.value }))
             }
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && dateValid) goForward();
-            }}
             aria-label={t("date.raceDate")}
             className="px-4 py-3 min-h-[44px] text-base"
           />

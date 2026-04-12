@@ -61,8 +61,7 @@ export function ExportDatePicker({ onSelect, onCancel }: ExportDatePickerProps) 
               id="export-date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="px-4 py-3 min-h-[44px] text-base border-input text-foreground focus:ring-ring"
-              required
+              className="px-4 py-3 min-h-[44px] text-base"
             />
           </div>
 
