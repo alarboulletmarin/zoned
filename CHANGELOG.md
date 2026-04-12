@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **One-click undo** for major plan changes via LastChangePanel banner and toast action (#57)
 - **Multi-week adaptation engine** with preview dialog and 3-week sliding window analysis (#48)
 - **Automatic plan coherence audit** with 8 checks: spacing, volume jumps, recovery/taper integrity (#58)
+- **Accent-insensitive search** across library and command palette (#62)
+- **Custom workouts in favorites** with add, display, and cleanup on delete (#59)
+- **PWA UX** install prompt, offline indicator, and update notification (#70)
 
 ### Changed
 
@@ -26,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Block add/move/drop on unavailable days across all plan views
 - French accents in unavailability/reschedule translations
 - Unavailabilities persisting correctly after rescheduling and undo
+- Race simulator timeline order for early morning or late-night race starts (#63)
+- Date display and input aligned with app language using custom DatePicker (#73)
 
 ## [0.4.2] - 2026-04-11
 

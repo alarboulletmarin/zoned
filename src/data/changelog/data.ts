@@ -36,6 +36,24 @@ export const changelogVersions: ChangelogVersion[] = [
           category: "Plans",
           categoryEn: "Plans",
         },
+        {
+          text: "Recherche insensible aux accents dans la bibliothèque et la palette de commandes",
+          textEn: "Accent-insensitive search across library and command palette",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Workouts custom intégrés dans les favoris (ajout, affichage, nettoyage à la suppression)",
+          textEn: "Custom workouts fully integrated into favorites (add, display, cleanup on delete)",
+          category: "Séances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "UX PWA : prompt d'installation, indicateur hors ligne, notification de mise à jour",
+          textEn: "PWA UX: install prompt, offline indicator, update notification",
+          category: "UX",
+          categoryEn: "UX",
+        },
       ],
       changed: [
         {
@@ -75,6 +93,18 @@ export const changelogVersions: ChangelogVersion[] = [
           textEn: "Unavailabilities persisting correctly after rescheduling and undo",
           category: "Plans",
           categoryEn: "Plans",
+        },
+        {
+          text: "Ordre chronologique de la timeline du simulateur pour les départs très tôt ou tard",
+          textEn: "Race simulator timeline order for early morning or late-night race starts",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Affichage et saisie des dates alignés sur la langue de l'app avec DatePicker custom",
+          textEn: "Date display and input aligned with app language using custom DatePicker",
+          category: "UX",
+          categoryEn: "UX",
         },
       ],
     },
