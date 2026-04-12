@@ -59,6 +59,7 @@ const WorkoutBuilderPage = lazy(() => import("@/pages/WorkoutBuilderPage").then(
 const RaceSimulatorPage = lazy(() => import("@/pages/RaceSimulatorPage").then(m => ({ default: m.RaceSimulatorPage })));
 const CompareHubPage = lazy(() => import("@/pages/CompareHubPage").then(m => ({ default: m.CompareHubPage })));
 const CompareDetailPage = lazy(() => import("@/pages/CompareDetailPage").then(m => ({ default: m.CompareDetailPage })));
+const RunnerProfilePage = lazy(() => import("@/pages/RunnerProfilePage").then(m => ({ default: m.RunnerProfilePage })));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
 
 // Preload sidebar pages after initial render to eliminate navigation latency
@@ -261,6 +262,7 @@ function App() {
                           <Route path="/calculators/age-graded" element={<AgeGradedPage />} />
                           <Route path="/calculators/what-if" element={<WhatIfPage />} />
                           <Route path="/settings" element={<SettingsPage />} />
+                          <Route path="/profile" element={<RunnerProfilePage />} />
                           <Route path="/favorites" element={<FavoritesPage />} />
                           <Route path="/quiz" element={<QuizPage />} />
                           <Route path="/contribute" element={<ContributePage />} />

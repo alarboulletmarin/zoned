@@ -49,6 +49,7 @@ import type { Difficulty } from "@/types";
 import type { WhatIfInsight } from "@/lib/whatIfInsights";
 import { toast } from "sonner";
 import { formatDate } from "@/lib/i18n-utils";
+import { loadRunnerProfile } from "@/lib/runnerProfile";
 
 // ── Constants ────────────────────────────────────────────────────────
 
@@ -324,11 +325,20 @@ export function WhatIfPage() {
   const { t, i18n } = useTranslation("whatif");
   const isEn = i18n.language?.startsWith("en") ?? false;
 
-  // ── Shared config ──────────────────────────────────────────────────
+  // ── Shared config (pre-filled from runner profile if available) ─────
   const [raceDistance, setRaceDistance] = useState<RaceDistance>("10K");
-  const [runnerLevel, setRunnerLevel] = useState<Difficulty>("intermediate");
-  const [currentWeeklyKm, setCurrentWeeklyKm] = useState(30);
-  const [currentLongRunKm, setCurrentLongRunKm] = useState(12);
+  const [runnerLevel, setRunnerLevel] = useState<Difficulty>(() => {
+    const rp = loadRunnerProfile();
+    return rp?.runnerLevel ?? "intermediate";
+  });
+  const [currentWeeklyKm, setCurrentWeeklyKm] = useState(() => {
+    const rp = loadRunnerProfile();
+    return rp?.currentWeeklyKm ?? 30;
+  });
+  const [currentLongRunKm, setCurrentLongRunKm] = useState(() => {
+    const rp = loadRunnerProfile();
+    return rp?.currentLongRunKm ?? 12;
+  });
 
   // ── Scenario A ─────────────────────────────────────────────────────
   const [scenarioA, setScenarioA] = useState<ScenarioConfig>({

@@ -210,7 +210,8 @@
     "methodology": "Méthodologie",
     "builder": "Créer",
     "planMethodology": "Guide des plans",
-    "myZones": "Mes Zones"
+    "myZones": "Mes Zones",
+    "profile": "Mon Profil"
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",

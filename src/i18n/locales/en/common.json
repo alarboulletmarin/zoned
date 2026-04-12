@@ -210,7 +210,8 @@
     "methodology": "Methodology",
     "builder": "Create",
     "planMethodology": "Plan guide",
-    "myZones": "My Zones"
+    "myZones": "My Zones",
+    "profile": "My Profile"
   },
   "errors": {
     "workoutNotFound": "Workout not found",

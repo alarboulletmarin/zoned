@@ -9,6 +9,7 @@ import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { ZONE_META, type ZoneNumber } from "@/types";
 import { calculatePaceZones, saveUserZonePrefs, formatPace } from "@/lib/zones";
+import { updateBaseData } from "@/lib/runnerProfile";
 import { useSettings } from "@/hooks/useSettings";
 import { convertPace, getPaceUnit } from "@/lib/units";
 import { usePickLang } from "@/lib/i18n-utils";
@@ -65,12 +66,14 @@ export function VmaCalculatorPage() {
   const handleUseVma = () => {
     if (!calculatedVma) return;
     saveUserZonePrefs({ vma: calculatedVma });
+    updateBaseData({ vma: calculatedVma });
     toast.success(t("calculators:calculateurs.vma.vmaSaved", { vma: calculatedVma }));
   };
 
   const handleCreatePlan = () => {
     if (!calculatedVma) return;
     saveUserZonePrefs({ vma: calculatedVma });
+    updateBaseData({ vma: calculatedVma });
     navigate("/plan/new");
   };
 

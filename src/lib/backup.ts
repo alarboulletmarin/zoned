@@ -18,6 +18,7 @@ export const BACKUP_STORAGE_KEYS = [
   "zoned-whatif-scenarios",
   "zoned-onboarding-seen",
   "zoned-storage-warning-seen",
+  "zoned-runner-profile",
 ] as const;
 
 export type BackupStorageKey = typeof BACKUP_STORAGE_KEYS[number];

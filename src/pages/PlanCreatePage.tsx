@@ -39,6 +39,7 @@ import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { usePickLang, formatDate } from "@/lib/i18n-utils";
 import { DateInput } from "@/components/ui/date-input";
 import { addWeeksToDate, buildRacePlanDateRange, calculateWeeksBetweenDates } from "@/lib/planDates";
+import { loadRunnerProfile } from "@/lib/runnerProfile";
 
 // ── Constants ────────────────────────────────────────────────────────
 
@@ -212,24 +213,27 @@ export function PlanCreatePage() {
   const [paceInputMode, setPaceInputMode] = useState<"pace" | "time">("pace");
   const [targetFinishTime, setTargetFinishTime] = useState("");
   const todayDate = useMemo(() => getTodayDateInputValue(), []);
-  const [form, setForm] = useState<FormState>({
-    planPurpose: "race",
-    trainingGoal: "time",
-    raceDistance: null,
-    raceDate: "",
-    startDate: todayDate,
-    useCustomStartDate: false,
-    raceName: "",
-    runnerLevel: null,
-    daysPerWeek: 4,
-    longRunDay: 6,
-    targetPace: "",
-    elevationGain: "",
-    totalWeeksOverride: 0,
-    currentWeeklyKm: "",
-    currentLongRunKm: "",
-    includeStrength: false,
-    strengthFrequency: 2,
+  const [form, setForm] = useState<FormState>(() => {
+    const rp = loadRunnerProfile();
+    return {
+      planPurpose: "race",
+      trainingGoal: "time",
+      raceDistance: null,
+      raceDate: "",
+      startDate: todayDate,
+      useCustomStartDate: false,
+      raceName: "",
+      runnerLevel: rp?.runnerLevel ?? null,
+      daysPerWeek: 4,
+      longRunDay: 6,
+      targetPace: "",
+      elevationGain: "",
+      totalWeeksOverride: 0,
+      currentWeeklyKm: rp?.currentWeeklyKm != null ? String(rp.currentWeeklyKm) : "",
+      currentLongRunKm: rp?.currentLongRunKm != null ? String(rp.currentLongRunKm) : "",
+      includeStrength: false,
+      strengthFrequency: 2,
+    };
   });
 
   // Load user zone preferences for VMA suggestion

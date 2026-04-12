@@ -38,6 +38,9 @@ import enContent from "./locales/en/content.json";
 import frHomepage from "./locales/fr/homepage.json";
 import enHomepage from "./locales/en/homepage.json";
 
+import frProfile from "./locales/fr/profile.json";
+import enProfile from "./locales/en/profile.json";
+
 // Resources object
 const resources = {
   fr: {
@@ -54,6 +57,7 @@ const resources = {
     calculators: frCalculators,
     content: frContent,
     homepage: frHomepage,
+    profile: frProfile,
   },
   en: {
     common: enCommon,
@@ -69,6 +73,7 @@ const resources = {
     calculators: enCalculators,
     content: enContent,
     homepage: enHomepage,
+    profile: enProfile,
   },
 };
 
@@ -83,7 +88,7 @@ i18n
     fallbackLng: "fr",
     defaultNS: "common",
     fallbackNS: "common",
-    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "whatif", "strength", "calculators", "content", "homepage"],
+    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "whatif", "strength", "calculators", "content", "homepage", "profile"],
 
     // Detection options
     detection: {

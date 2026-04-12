@@ -1,4 +1,5 @@
 import type { ZoneNumber, ZoneRange, UserZonePreferences } from "@/types";
+import { loadRunnerProfile, saveRunnerProfile } from "@/lib/runnerProfile";
 
 // HR Zone percentages (% of FCmax)
 const HR_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
@@ -121,19 +122,33 @@ export function calculateAllZones(prefs: UserZonePreferences): ZoneRange[] {
 const STORAGE_KEY = "zoned-userZones";
 
 /**
- * Save user zone preferences to localStorage
+ * Save user zone preferences to localStorage.
+ * Also syncs to runner profile if it exists (dual-write).
  */
 export function saveUserZonePrefs(prefs: UserZonePreferences): void {
   const validated = validateZonePrefs(prefs);
   const data = { ...validated, updatedAt: new Date().toISOString() };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+  // Dual-write: sync to runner profile if it exists
+  const profile = loadRunnerProfile();
+  if (profile) {
+    if (validated.fcMax !== undefined) profile.fcMax = validated.fcMax;
+    if (validated.vma !== undefined) profile.vma = validated.vma;
+    saveRunnerProfile(profile);
+  }
 }
 
 /**
- * Load user zone preferences from localStorage
+ * Load user zone preferences from localStorage.
+ * Checks runner profile first (source of truth), falls back to legacy key.
  */
 export function loadUserZonePrefs(): UserZonePreferences | null {
   try {
+    const profile = loadRunnerProfile();
+    if (profile && (profile.fcMax !== undefined || profile.vma !== undefined)) {
+      return validateZonePrefs({ fcMax: profile.fcMax, vma: profile.vma });
+    }
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) return null;
     const parsed = JSON.parse(stored) as UserZonePreferences;
