@@ -40,6 +40,7 @@ export interface MentalCue {
 
 export interface TimelineEvent {
   time: string; // "HH:mm"
+  relativeMin: number;
   label: string;
   labelEn: string;
   type: "prep" | "meal" | "warmup" | "race" | "nutrition" | "recovery";
@@ -224,6 +225,7 @@ export function generateRacePlan(input: RaceSimInput): RacePlan {
 
   timeline.push({
     time: wakeUpTime,
+    relativeMin: -210,
     label: "Réveil",
     labelEn: "Wake up",
     type: "prep",
@@ -231,6 +233,7 @@ export function generateRacePlan(input: RaceSimInput): RacePlan {
 
   timeline.push({
     time: breakfastTime,
+    relativeMin: -180,
     label: `Petit-déjeuner (${carbsMin}–${carbsMax}g glucides)`,
     labelEn: `Breakfast (${carbsMin}–${carbsMax}g carbs)`,
     type: "meal",
@@ -238,6 +241,7 @@ export function generateRacePlan(input: RaceSimInput): RacePlan {
 
   timeline.push({
     time: addMinutesToTime(startTime, -60),
+    relativeMin: -60,
     label: "Arrivée sur le site, retrait du dossard, repérage",
     labelEn: "Arrive at venue, pick up bib, scout the area",
     type: "prep",
@@ -245,6 +249,7 @@ export function generateRacePlan(input: RaceSimInput): RacePlan {
 
   timeline.push({
     time: addMinutesToTime(startTime, -15),
+    relativeMin: -15,
     label: "Dernière hydratation : 150-200ml d'eau",
     labelEn: "Final hydration: 150-200ml water",
     type: "meal",
@@ -252,6 +257,7 @@ export function generateRacePlan(input: RaceSimInput): RacePlan {
 
   timeline.push({
     time: warmupStartTime,
+    relativeMin: -warmupDurationMin,
     label: `Échauffement (${warmupDurationMin} min)`,
     labelEn: `Warm-up (${warmupDurationMin} min)`,
     type: "warmup",
@@ -259,16 +265,17 @@ export function generateRacePlan(input: RaceSimInput): RacePlan {
 
   timeline.push({
     time: startTime,
+    relativeMin: 0,
     label: "Départ !",
     labelEn: "Start!",
     type: "race",
   });
 
-  // Add fueling checkpoints during race
   for (const cp of fuelingPlan.timeline) {
     if (cp.timeMin > 0 && cp.timeMin < durationMin) {
       timeline.push({
         time: addMinutesToTime(startTime, Math.round(cp.timeMin)),
+        relativeMin: Math.round(cp.timeMin),
         label: cp.action,
         labelEn: cp.actionEn,
         type: "nutrition",
@@ -278,6 +285,7 @@ export function generateRacePlan(input: RaceSimInput): RacePlan {
 
   timeline.push({
     time: estimatedFinishTime,
+    relativeMin: Math.ceil(durationMin),
     label: "Arrivée estimée",
     labelEn: "Estimated finish",
     type: "race",
@@ -285,17 +293,13 @@ export function generateRacePlan(input: RaceSimInput): RacePlan {
 
   timeline.push({
     time: addMinutesToTime(startTime, Math.ceil(durationMin) + 10),
+    relativeMin: Math.ceil(durationMin) + 10,
     label: "Récupération : marcher, s'étirer légèrement, manger et boire dans les 30 min",
     labelEn: "Recovery: walk, light stretching, eat and drink within 30 min",
     type: "recovery",
   });
 
-  // Sort by time
-  timeline.sort((a, b) => {
-    const [ah, am] = a.time.split(":").map(Number);
-    const [bh, bm] = b.time.split(":").map(Number);
-    return ah * 60 + am - (bh * 60 + bm);
-  });
+  timeline.sort((a, b) => a.relativeMin - b.relativeMin);
 
   return {
     wakeUpTime,
