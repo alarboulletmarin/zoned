@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Sheet,
@@ -80,21 +80,17 @@ export function UnavailabilityManager({
   const [newReason, setNewReason] = useState<UnavailabilityReason | "">("");
   const [newNote, setNewNote] = useState("");
 
-  // Sync local state when the sheet opens
-  const handleOpenChange = useCallback(
-    (nextOpen: boolean) => {
-      if (nextOpen) {
-        setItems([...unavailabilities]);
-        setShowForm(false);
-        setNewFrom("");
-        setNewTo("");
-        setNewReason("");
-        setNewNote("");
-      }
-      onOpenChange(nextOpen);
-    },
-    [unavailabilities, onOpenChange],
-  );
+  // Sync local state from prop every time the sheet opens
+  useEffect(() => {
+    if (open) {
+      setItems([...unavailabilities]);
+      setShowForm(false);
+      setNewFrom("");
+      setNewTo("");
+      setNewReason("");
+      setNewNote("");
+    }
+  }, [open, unavailabilities]);
 
   const handleAdd = useCallback(() => {
     if (!newFrom) return;
@@ -127,7 +123,7 @@ export function UnavailabilityManager({
   }, [items, onSave]);
 
   return (
-    <Sheet open={open} onOpenChange={handleOpenChange}>
+    <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="max-h-[80vh] overflow-y-auto">
         <SheetHeader>
           <SheetTitle>{t("unavailability.title")}</SheetTitle>
