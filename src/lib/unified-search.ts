@@ -5,6 +5,7 @@ import { searchWorkouts } from "@/data/workouts";
 import { searchStrengthSessions } from "@/data/strength";
 import { getAllArticleMeta } from "@/data/articles/metadata";
 import { loadAllTerms } from "@/data/glossary";
+import { normalizeSearch } from "@/lib/search-utils";
 
 export type SearchResultType = "workout" | "article" | "glossary";
 
@@ -35,7 +36,7 @@ export async function unifiedSearch(
     return { workouts: [], articles: [], glossary: [], total: 0 };
   }
 
-  const lowerQuery = trimmed.toLowerCase();
+  const lowerQuery = normalizeSearch(trimmed);
   const en = isEn(lang);
 
   // Run all searches in parallel
@@ -76,9 +77,9 @@ export async function unifiedSearch(
   // --- Articles ---
   const allArticles = getAllArticleMeta();
   const matchingArticles = allArticles.filter((a) => {
-    const searchable = [a.title, a.titleEn, a.description, a.descriptionEn]
-      .join(" ")
-      .toLowerCase();
+    const searchable = normalizeSearch(
+      [a.title, a.titleEn, a.description, a.descriptionEn].join(" ")
+    );
     return searchable.includes(lowerQuery);
   });
 
@@ -94,16 +95,17 @@ export async function unifiedSearch(
 
   // --- Glossary ---
   const matchingTerms = glossaryTerms.filter((t) => {
-    const searchable = [
-      t.term,
-      t.termEn,
-      t.acronym,
-      t.shortDefinition,
-      ...(t.keywords ?? []),
-    ]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase();
+    const searchable = normalizeSearch(
+      [
+        t.term,
+        t.termEn,
+        t.acronym,
+        t.shortDefinition,
+        ...(t.keywords ?? []),
+      ]
+        .filter(Boolean)
+        .join(" ")
+    );
     return searchable.includes(lowerQuery);
   });
 

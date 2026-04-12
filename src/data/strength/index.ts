@@ -5,6 +5,7 @@ import type {
   StrengthCategoryFile,
   StrengthSessionFile,
 } from "@/types/strength";
+import { normalizeSearch } from "@/lib/search-utils";
 
 // ── Category lists ────────────────────────────────────────────────
 
@@ -140,13 +141,13 @@ export async function searchStrengthSessions(
   query: string
 ): Promise<StrengthWorkoutTemplate[]> {
   const sessions = await loadAllStrengthSessions();
-  const q = query.toLowerCase();
+  const q = normalizeSearch(query);
   return sessions.filter(
     (s) =>
-      s.name.toLowerCase().includes(q) ||
-      s.nameEn.toLowerCase().includes(q) ||
-      s.description.toLowerCase().includes(q) ||
-      s.descriptionEn.toLowerCase().includes(q)
+      normalizeSearch(s.name).includes(q) ||
+      normalizeSearch(s.nameEn).includes(q) ||
+      normalizeSearch(s.description).includes(q) ||
+      normalizeSearch(s.descriptionEn).includes(q)
   );
 }
 

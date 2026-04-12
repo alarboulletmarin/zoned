@@ -53,6 +53,7 @@ import type {
   MuscleGroup,
 } from "@/types/strength";
 import { cn } from "@/lib/utils";
+import { normalizeSearch } from "@/lib/search-utils";
 
 // Duration constants (same as in WorkoutFilters)
 const DURATION_MIN = 0;
@@ -350,13 +351,13 @@ export function LibraryPage() {
 
       // Search filter
       if (f.searchQuery) {
-        const query = f.searchQuery.toLowerCase();
+        const query = normalizeSearch(f.searchQuery);
         const matchesName =
-          workout.name.toLowerCase().includes(query) ||
-          workout.nameEn.toLowerCase().includes(query);
+          normalizeSearch(workout.name).includes(query) ||
+          normalizeSearch(workout.nameEn).includes(query);
         const matchesDesc =
-          workout.description.toLowerCase().includes(query) ||
-          workout.descriptionEn.toLowerCase().includes(query);
+          normalizeSearch(workout.description).includes(query) ||
+          normalizeSearch(workout.descriptionEn).includes(query);
         if (!matchesName && !matchesDesc) return false;
       }
 

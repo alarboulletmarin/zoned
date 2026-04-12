@@ -3,6 +3,7 @@ import type {
   WorkoutCategory,
   WorkoutCategoryFile,
 } from "@/types";
+import { normalizeSearch } from "@/lib/search-utils";
 
 // Export category list for iteration
 export const categories: WorkoutCategory[] = [
@@ -166,13 +167,13 @@ export async function searchWorkouts(
   const workouts = await loadAllWorkouts();
   const { getCustomWorkouts } = await import("@/lib/customWorkoutStorage");
   const all = [...workouts, ...getCustomWorkouts()];
-  const lowerQuery = query.toLowerCase();
+  const lowerQuery = normalizeSearch(query);
   return all.filter(
     (w) =>
-      w.name.toLowerCase().includes(lowerQuery) ||
-      w.nameEn.toLowerCase().includes(lowerQuery) ||
-      w.description.toLowerCase().includes(lowerQuery) ||
-      w.descriptionEn.toLowerCase().includes(lowerQuery)
+      normalizeSearch(w.name).includes(lowerQuery) ||
+      normalizeSearch(w.nameEn).includes(lowerQuery) ||
+      normalizeSearch(w.description).includes(lowerQuery) ||
+      normalizeSearch(w.descriptionEn).includes(lowerQuery)
   );
 }
 
