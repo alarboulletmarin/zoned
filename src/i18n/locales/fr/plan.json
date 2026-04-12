@@ -529,6 +529,15 @@
     "minutesAgo": "il y a {{count}} min",
     "hoursAgo": "il y a {{count}}h"
   },
+  "audit": {
+    "title": "Coh\u00e9rence du plan",
+    "check": "V\u00e9rifier la coh\u00e9rence",
+    "clean": "Plan coh\u00e9rent",
+    "errors": "{{count}} erreur(s)",
+    "warnings": "{{count}} avertissement(s)",
+    "infos": "{{count}} info(s)",
+    "goToWeek": "Voir la semaine {{week}}"
+  },
   "adaptation": {
     "title": "Adaptation du plan",
     "description": "Ajustements proposés pour les prochaines semaines",

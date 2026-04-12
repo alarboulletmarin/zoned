@@ -35,6 +35,8 @@ import { usePlan } from "@/hooks/usePlans";
 import { deletePlan, getPlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan, updateSessionCompletion } from "@/lib/planStorage";
 import { computeAdaptation, type AdaptationPreview } from "@/lib/planGenerator/adapt";
 import { AdaptationPreviewDialog } from "@/components/domain/AdaptationPreviewDialog";
+import { auditPlan } from "@/lib/planGenerator/audit";
+import { PlanAuditPanel } from "@/components/domain/PlanAuditPanel";
 import { getWorkoutById } from "@/data/workouts";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
@@ -179,6 +181,11 @@ export function PlanViewPage() {
       if (result) set.add(`${result.weekNumber}-${result.dayOfWeek}`);
     }
     return set;
+  }, [plan]);
+
+  const auditFindings = useMemo(() => {
+    if (!plan) return [];
+    return auditPlan(plan);
   }, [plan]);
 
   // Auto-expand current week
@@ -826,6 +833,19 @@ export function PlanViewPage() {
               if (undoLastChange(plan.id)) {
                 reloadPlan();
                 toast.info(t("lastChange.undone"));
+              }
+            }}
+          />
+        )}
+
+        {/* Plan audit panel */}
+        {auditFindings.length > 0 && (
+          <PlanAuditPanel
+            findings={auditFindings}
+            onGoToWeek={(weekNumber) => {
+              setWeekParam(weekNumber);
+              if (planViewMode === "list") {
+                setExpandedWeeks((prev) => new Set([...prev, weekNumber]));
               }
             }}
           />
