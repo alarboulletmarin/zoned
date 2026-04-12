@@ -162,20 +162,22 @@ function WorkoutListView() {
                 >
                   <Link
                     to={`/workout/builder/${w.id}`}
-                    className="block p-4 pr-28"
+                    className="block p-4 pr-20"
                   >
                     <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-medium">{w.name || t("calculators:workoutBuilder.untitled")}</h3>
-                        <p className="text-sm text-muted-foreground">
-                          ~{formatDurationMinutes(totalMin)} · {w.mainSetTemplate.length} {t("calculators:workoutBuilder.blocks")}
-                        </p>
+                      <div className="flex items-center gap-2">
+                        <FavoriteButton workoutId={w.id} size="sm" />
+                        <div>
+                          <h3 className="font-medium">{w.name || t("calculators:workoutBuilder.untitled")}</h3>
+                          <p className="text-sm text-muted-foreground">
+                            ~{formatDurationMinutes(totalMin)} · {w.mainSetTemplate.length} {t("calculators:workoutBuilder.blocks")}
+                          </p>
+                        </div>
                       </div>
                       <ArrowRight className="size-4 text-muted-foreground" />
                     </div>
                   </Link>
                   <div className="absolute top-1/2 right-3 -translate-y-1/2 flex items-center gap-1">
-                    <FavoriteButton workoutId={w.id} size="sm" />
                     <button
                       type="button"
                       onClick={() => handleExportOne(w)}
@@ -370,9 +372,10 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
             placeholder={t("calculators:workoutBuilder.namePlaceholder")}
             className="block w-full text-2xl md:text-3xl font-bold bg-transparent border-none focus:outline-none placeholder:text-muted-foreground/40 mb-1"
           />
-          <p className="text-muted-foreground mb-6">
-            ~{totalMin} min · {blockCount} {t("calculators:workoutBuilder.blocks")}
-          </p>
+          <div className="flex items-center gap-3 text-muted-foreground mb-6">
+            <span>~{totalMin} min · {blockCount} {t("calculators:workoutBuilder.blocks")}</span>
+            {isSaved && <FavoriteButton workoutId={workout.id} />}
+          </div>
           <div className="flex flex-wrap items-center gap-3">
             <Button
               onClick={handleSave}
@@ -382,7 +385,6 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
               <Save className="size-4 mr-2" />
               {t("calculators:workoutBuilder.save")}
             </Button>
-            {isSaved && <FavoriteButton workoutId={workout.id} />}
             {isSaved && <ExportMenu workout={workout} />}
             {isSaved && (
               <Button
