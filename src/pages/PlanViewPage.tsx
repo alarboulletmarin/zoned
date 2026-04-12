@@ -52,7 +52,7 @@ import {
 import type { WorkoutTemplate } from "@/types";
 import { toast } from "sonner";
 import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
-import { SessionCompletionSheet } from "@/components/domain/SessionCompletionSheet";
+import { SessionCompletionPanel } from "@/components/domain/SessionCompletionPanel";
 import { UnavailabilityManager } from "@/components/domain/UnavailabilityManager";
 import { ReschedulePreviewDialog } from "@/components/domain/ReschedulePreviewDialog";
 import { autoReschedule } from "@/lib/planGenerator/reschedule";
@@ -1185,6 +1185,7 @@ export function PlanViewPage() {
                               {!isRaceDay && (
                                 <button
                                   type="button"
+                                  data-completion-key={`${week.weekNumber}-${originalIndex}`}
                                   onClick={() => handleToggleComplete(week.weekNumber, originalIndex)}
                                   className={cn(
                                     "size-5 mt-0.5 rounded border-2 shrink-0 flex items-center justify-center transition-colors",
@@ -1624,11 +1625,11 @@ export function PlanViewPage() {
         />
       </div>
 
-      {/* Session completion sheet — opens on checkbox click */}
+      {/* Session completion panel — popover on desktop, sheet on mobile */}
       {(() => {
         if (!completionTarget) {
           return (
-            <SessionCompletionSheet
+            <SessionCompletionPanel
               open={false}
               onOpenChange={() => setCompletionTarget(null)}
               session={null}
@@ -1641,14 +1642,21 @@ export function PlanViewPage() {
         const targetWeek = plan.weeks.find(w => w.weekNumber === completionTarget.weekNumber);
         const targetSession = targetWeek?.sessions[completionTarget.sessionIndex] ?? null;
         const targetName = targetSession ? (workoutNames[targetSession.workoutId] || targetSession.workoutId) : "";
+        // Find the visible checkbox (mobile layout duplicates elements with display:none)
+        const anchorEl = Array.from(
+          document.querySelectorAll<HTMLElement>(
+            `[data-completion-key="${completionTarget.weekNumber}-${completionTarget.sessionIndex}"]`,
+          ),
+        ).find((el) => el.offsetWidth > 0) ?? null;
         return (
-          <SessionCompletionSheet
+          <SessionCompletionPanel
             open={true}
             onOpenChange={(open) => { if (!open) setCompletionTarget(null); }}
             session={targetSession}
             weekNumber={completionTarget.weekNumber}
             sessionName={targetName}
             onSave={handleCompletionSave}
+            anchorElement={anchorEl}
           />
         );
       })()}

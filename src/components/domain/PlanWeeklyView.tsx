@@ -945,6 +945,7 @@ const DayCell = memo(function DayCell({
                     {onToggleComplete && (
                       <button
                         type="button"
+                        data-completion-key={`${selectedWeek}-${originalIndex}`}
                         onClick={(e) => {
                           e.stopPropagation();
                           onToggleComplete(selectedWeek, originalIndex);
@@ -1047,14 +1048,16 @@ const DayCell = memo(function DayCell({
                   </span>
                   {session.estimatedDurationMin > 0 &&
                     !session.workoutId.startsWith("__activity_") && (
-                      <span className="text-[9px] text-muted-foreground flex items-center gap-0.5 mt-0.5">
-                        <Clock className="size-2.5" />
-                        {formatDurationMinutes(session.estimatedDurationMin)}
-                        {session.targetDistanceKm != null && session.targetDistanceKm > 0 && (
-                          <span> · {session.sessionType !== "long_run" && "~"}{session.targetDistanceKm}km</span>
-                        )}
+                      <span className="text-[9px] text-muted-foreground flex items-center gap-0.5 mt-0.5 overflow-hidden">
+                        <Clock className="size-2.5 shrink-0" />
+                        <span className="truncate">
+                          {formatDurationMinutes(session.estimatedDurationMin)}
+                          {session.targetDistanceKm != null && session.targetDistanceKm > 0 && (
+                            <span className="hidden md:inline"> · {session.sessionType !== "long_run" && "~"}{session.targetDistanceKm}km</span>
+                          )}
+                        </span>
                         {session.rpe && (
-                          <span className="ml-1 text-[9px] font-medium text-amber-600">RPE {session.rpe}</span>
+                          <span className="ml-0.5 text-[9px] font-medium text-amber-600 shrink-0 hidden md:inline">RPE {session.rpe}</span>
                         )}
                       </span>
                     )}

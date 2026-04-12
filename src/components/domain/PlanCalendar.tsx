@@ -712,6 +712,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                                         ? () => onToggleComplete(week.weekNumber, originalIndex)
                                         : undefined
                                     }
+                                    completionKey={`${week.weekNumber}-${originalIndex}`}
                                     onContextMenu={
                                       !isRaceDay
                                         ? (e: React.MouseEvent) => {
@@ -817,6 +818,7 @@ const SessionCell = memo(function SessionCell({
   onDelete,
   onToggleComplete,
   onContextMenu,
+  completionKey,
 }: {
   session: PlanSession;
   isRaceDay: boolean;
@@ -825,6 +827,7 @@ const SessionCell = memo(function SessionCell({
   onDelete?: () => void;
   onToggleComplete?: () => void;
   onContextMenu?: (e: React.MouseEvent) => void;
+  completionKey?: string;
 }) {
   const { t } = useTranslation("plan");
   if (isRaceDay) {
@@ -876,6 +879,7 @@ const SessionCell = memo(function SessionCell({
             type="button"
             role="checkbox"
             aria-checked={isCompleted || isModified}
+            data-completion-key={completionKey}
             aria-label={
               isCompleted ? t("completion.completed")
                 : isModified ? t("completion.modified")
