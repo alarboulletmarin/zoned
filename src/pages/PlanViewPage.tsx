@@ -285,6 +285,10 @@ export function PlanViewPage() {
     toDay: number,
   ) => {
     if (!plan) return;
+    if (blockedDaysSet.has(`${toWeek}-${toDay}`)) {
+      toast.error(t("reschedule.blockedDrop"));
+      return;
+    }
     const success = moveSession(plan.id, fromWeek, fromSessionIndex, toWeek, toDay);
     if (success) {
       reloadPlan();
@@ -292,7 +296,7 @@ export function PlanViewPage() {
     } else {
       toast.error(t("view.sessionMoveFailed"));
     }
-  }, [plan, isEn, reloadPlan]);
+  }, [plan, isEn, reloadPlan, blockedDaysSet, t]);
 
   const handleSessionDelete = useCallback((weekNumber: number, sessionIndex: number) => {
     if (!plan) return;
@@ -431,12 +435,20 @@ export function PlanViewPage() {
   }, [plan, isEn, navigate]);
 
   const handleAddToDay = useCallback((weekNumber: number, day: number) => {
+    if (blockedDaysSet.has(`${weekNumber}-${day}`)) {
+      toast.error(t("reschedule.blockedDrop"));
+      return;
+    }
     setAddTarget({ weekNumber, day });
     setShowWorkoutPanel(true);
-  }, []);
+  }, [blockedDaysSet, t]);
 
   const handleWorkoutAdd = useCallback(async (workoutId: string, weekNumber: number, day: number) => {
     if (!plan) return;
+    if (blockedDaysSet.has(`${weekNumber}-${day}`)) {
+      toast.error(t("reschedule.blockedDrop"));
+      return;
+    }
     // Handle cross-training activities (__activity_strength__, etc.)
     const activityMatch = workoutId.match(/^__activity_(\w+)__$/);
     if (activityMatch) {
@@ -1069,13 +1081,23 @@ export function PlanViewPage() {
                                 "flex items-start gap-2 sm:gap-3 rounded-lg p-2.5 sm:p-3",
                                 isRaceDay
                                   ? "bg-primary/10 border border-primary/20"
-                                  : session.status === "completed"
-                                    ? "bg-green-500/5 ring-1 ring-green-500/20"
-                                    : session.status === "skipped"
-                                      ? "bg-secondary/30 opacity-60"
-                                      : "bg-secondary/50"
+                                  : blockedDaysSet.has(`${week.weekNumber}-${session.dayOfWeek}`)
+                                    ? "bg-muted/50 bg-[repeating-linear-gradient(135deg,transparent,transparent_4px,rgba(0,0,0,0.04)_4px,rgba(0,0,0,0.04)_6px)]"
+                                    : session.status === "completed" || session.status === "modified"
+                                      ? session.status === "modified"
+                                        ? "bg-blue-500/5 ring-1 ring-blue-500/20"
+                                        : "bg-green-500/5 ring-1 ring-green-500/20"
+                                      : session.status === "skipped"
+                                        ? "bg-secondary/30 opacity-60"
+                                        : "bg-secondary/50"
                               )}
                             >
+                              {/* Blocked day badge */}
+                              {!isRaceDay && blockedDaysSet.has(`${week.weekNumber}-${session.dayOfWeek}`) && (
+                                <Badge variant="outline" className="text-[9px] shrink-0 border-muted-foreground/30 text-muted-foreground">
+                                  {t("unavailability.blocked")}
+                                </Badge>
+                              )}
                               {/* Completion toggle */}
                               {!isRaceDay && (
                                 <button
@@ -1085,14 +1107,21 @@ export function PlanViewPage() {
                                     "size-5 mt-0.5 rounded border-2 shrink-0 flex items-center justify-center transition-colors",
                                     session.status === "completed"
                                       ? "bg-green-500 border-green-500 text-white"
-                                      : session.status === "skipped"
-                                        ? "bg-muted border-muted-foreground/30 text-muted-foreground"
-                                        : "border-muted-foreground/30 hover:border-primary"
+                                      : session.status === "modified"
+                                        ? "bg-blue-500 border-blue-500 text-white"
+                                        : session.status === "skipped"
+                                          ? "bg-muted border-muted-foreground/30 text-muted-foreground"
+                                          : "border-muted-foreground/30 hover:border-primary"
                                   )}
                                 >
                                   {session.status === "completed" && (
                                     <svg viewBox="0 0 12 12" className="size-3" fill="none" stroke="currentColor" strokeWidth="2">
                                       <path d="M2 6l3 3 5-5" />
+                                    </svg>
+                                  )}
+                                  {session.status === "modified" && (
+                                    <svg viewBox="0 0 12 12" className="size-3" fill="none" stroke="currentColor" strokeWidth="2">
+                                      <path d="M9 2l1.5 1.5L5 9 2 9l0-3L7.5 0.5z" />
                                     </svg>
                                   )}
                                   {session.status === "skipped" && (
