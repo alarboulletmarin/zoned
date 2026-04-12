@@ -15,6 +15,7 @@ import {
   Plus,
   Pencil,
   AlertTriangle,
+  Shuffle,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -47,6 +48,12 @@ import type { WorkoutTemplate } from "@/types";
 import { toast } from "sonner";
 import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
 import { SessionCompletionSheet } from "@/components/domain/SessionCompletionSheet";
+import { UnavailabilityManager } from "@/components/domain/UnavailabilityManager";
+import { ReschedulePreviewDialog } from "@/components/domain/ReschedulePreviewDialog";
+import { autoReschedule } from "@/lib/planGenerator/reschedule";
+import { updateUnavailabilities, undoLastChange } from "@/lib/planStorage";
+import { getPlanMonday, dateToWeekAndDay } from "@/lib/planDates";
+import type { AutoChange, PlanSession as PlanSessionType, Unavailability } from "@/types/plan";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanWeeklyView } from "@/components/domain/PlanWeeklyView";
 import { PlanMonthlyView } from "@/components/domain/PlanMonthlyView";
@@ -125,6 +132,12 @@ export function PlanViewPage() {
     unresolved: number;
     unresolvedSessions: UnresolvedSessionPreview[];
   } | null>(null);
+  const [showUnavailabilityManager, setShowUnavailabilityManager] = useState(false);
+  const [reschedulePreview, setReschedulePreview] = useState<{
+    changes: AutoChange[];
+    unplaced: PlanSessionType[];
+    updatedPlan: import("@/types/plan").TrainingPlan;
+  } | null>(null);
 
   const currentWeek = useMemo(() => {
     if (!plan) return 0;
@@ -152,6 +165,21 @@ export function PlanViewPage() {
     const offset = jsDay === 0 ? -6 : 1 - jsDay;
     date.setDate(date.getDate() + offset);
     return date;
+  }, [plan]);
+
+  const blockedDaysSet = useMemo(() => {
+    if (!plan) return new Set<string>();
+    const set = new Set<string>();
+    const unavails = plan.config.unavailabilities ?? [];
+    if (unavails.length === 0) return set;
+    const monday = getPlanMonday(plan);
+    for (const u of unavails) {
+      const [y, m, d] = u.date.split("-").map(Number);
+      const dateObj = new Date(y, m - 1, d);
+      const result = dateToWeekAndDay(monday, dateObj);
+      if (result) set.add(`${result.weekNumber}-${result.dayOfWeek}`);
+    }
+    return set;
   }, [plan]);
 
   // Auto-expand current week
@@ -444,6 +472,56 @@ export function PlanViewPage() {
     }
   }, [plan, isEn, reloadPlan]);
 
+  const handleSaveUnavailabilities = useCallback((items: Unavailability[]) => {
+    if (!plan) return;
+    updateUnavailabilities(plan.id, items);
+    reloadPlan();
+    toast.success(t("unavailability.saved"));
+    setShowUnavailabilityManager(false);
+  }, [plan, reloadPlan, t]);
+
+  const handleReschedule = useCallback(() => {
+    if (!plan) return;
+    const result = autoReschedule(plan, currentWeek > 0 ? currentWeek : 1);
+    setReschedulePreview({
+      changes: result.changes,
+      unplaced: result.unplaced,
+      updatedPlan: result.updatedPlan,
+    });
+  }, [plan, currentWeek]);
+
+  const handleApplyReschedule = useCallback(() => {
+    if (!plan || !reschedulePreview) return;
+    const snapshot = structuredClone(plan);
+    const updatedPlan = reschedulePreview.updatedPlan;
+    updatedPlan._lastUndoableChange = {
+      at: new Date().toISOString(),
+      kind: "reschedule",
+      label: `Replanification a partir de la semaine ${currentWeek > 0 ? currentWeek : 1}`,
+      labelEn: `Rescheduling from week ${currentWeek > 0 ? currentWeek : 1}`,
+      before: snapshot,
+      changes: reschedulePreview.changes,
+    };
+    if (!savePlan(updatedPlan)) {
+      toast.error(t("errors.planSaveFailed"));
+      return;
+    }
+    reloadPlan();
+    setReschedulePreview(null);
+    toast.success(t("reschedule.applied"), {
+      action: {
+        label: t("reschedule.undo"),
+        onClick: () => {
+          if (undoLastChange(plan.id)) {
+            reloadPlan();
+            toast.info(t("reschedule.undone"));
+          }
+        },
+      },
+      duration: 10000,
+    });
+  }, [plan, reschedulePreview, currentWeek, reloadPlan, t]);
+
   // Loading state
   if (isLoading) {
     return (
@@ -600,7 +678,26 @@ export function PlanViewPage() {
               )}
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full"
+              onClick={() => setShowUnavailabilityManager(true)}
+            >
+              <Calendar className="size-4" />
+              <span className="ml-1 hidden sm:inline">{t("unavailability.title")}</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full"
+              disabled={(plan.config.unavailabilities ?? []).length === 0}
+              onClick={handleReschedule}
+            >
+              <Shuffle className="size-4" />
+              <span className="ml-1 hidden sm:inline">{t("reschedule.button")}</span>
+            </Button>
             <PlanExportMenu
               plan={plan}
               workoutNames={workoutNames}
@@ -748,6 +845,7 @@ export function PlanViewPage() {
                 onWorkoutAdd={handleWorkoutAdd}
                 onAddToDay={handleAddToDay}
                 planStartDate={plan.config.startDate || plan.config.createdAt}
+                blockedDays={blockedDaysSet}
               />
             </div>
             {/* Desktop/tablet inline panel */}
@@ -1158,6 +1256,24 @@ export function PlanViewPage() {
 
           </TabsContent>
         </Tabs>
+
+        {/* Unavailability Manager Sheet */}
+        <UnavailabilityManager
+          open={showUnavailabilityManager}
+          onOpenChange={setShowUnavailabilityManager}
+          planId={plan.id}
+          unavailabilities={plan.config.unavailabilities ?? []}
+          onSave={handleSaveUnavailabilities}
+        />
+
+        {/* Reschedule Preview Dialog */}
+        <ReschedulePreviewDialog
+          open={reschedulePreview !== null}
+          onOpenChange={(open) => { if (!open) setReschedulePreview(null); }}
+          changes={reschedulePreview?.changes ?? []}
+          unplaced={reschedulePreview?.unplaced ?? []}
+          onApply={handleApplyReschedule}
+        />
 
         {/* Delete Confirmation Dialog */}
         <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>

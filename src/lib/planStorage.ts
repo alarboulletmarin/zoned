@@ -296,3 +296,36 @@ export function deleteCrossTraining(
   week.crossTraining = week.crossTraining.filter((s) => s.id !== sessionId);
   return savePlan(plan);
 }
+
+// ── Unavailabilities ───────────────────────────────────────────────
+
+export function updateUnavailabilities(
+  planId: string,
+  unavailabilities: import("@/types/plan").Unavailability[],
+): boolean {
+  const plans = getAllPlans();
+  const plan = plans.find(p => p.id === planId);
+  if (!plan) return false;
+  plan.config.unavailabilities = unavailabilities;
+  return savePlan(plan);
+}
+
+// ── Undo last change ───────────────────────────────────────────────
+
+export function undoLastChange(planId: string): boolean {
+  const plans = getAllPlans();
+  const planIdx = plans.findIndex(p => p.id === planId);
+  if (planIdx === -1) return false;
+  const plan = plans[planIdx];
+  if (!plan._lastUndoableChange?.before) return false;
+  // Restore the snapshot but keep the same ID
+  const restored = plan._lastUndoableChange.before;
+  restored._lastUndoableChange = undefined;
+  plans[planIdx] = restored;
+  try {
+    localStorage.setItem("zoned-plans", JSON.stringify(plans));
+    return true;
+  } catch {
+    return false;
+  }
+}

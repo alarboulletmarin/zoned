@@ -7,6 +7,7 @@ import type { TrainingPlan, PlanSession } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { usePickLang } from "@/lib/i18n-utils";
+import { toast } from "sonner";
 
 // ── Color maps ──────────────────────────────────────────────────────
 
@@ -66,6 +67,8 @@ interface PlanCalendarProps {
   visibleMonth?: { year: number; month: number };
   /** If provided, scroll this week row into view on mount */
   initialWeek?: number;
+  /** Set of "weekNumber-dayOfWeek" strings marking blocked days */
+  blockedDays?: Set<string>;
 }
 
 // ── Component ───────────────────────────────────────────────────────
@@ -85,6 +88,7 @@ export const PlanCalendar = memo(function PlanCalendar({
   planStartDate,
   visibleMonth,
   initialWeek,
+  blockedDays,
 }: PlanCalendarProps) {
   const { t } = useTranslation("plan");
   const pickLang = usePickLang();
@@ -226,6 +230,13 @@ export const PlanCalendar = memo(function PlanCalendar({
       e.preventDefault();
       setDropTarget(null);
 
+      // Block drop on unavailable days
+      if (blockedDays?.has(`${weekNumber}-${day}`)) {
+        toast.error(t("reschedule.blockedDrop"));
+        setDraggedSession(null);
+        return;
+      }
+
       // Check if this is a drop from the workout library panel
       const workoutId = e.dataTransfer.getData("workout-id");
       if (workoutId && onWorkoutAdd) {
@@ -244,7 +255,7 @@ export const PlanCalendar = memo(function PlanCalendar({
       onSessionMove(draggedSession.weekNumber, draggedSession.sessionIndex, weekNumber, day);
       setDraggedSession(null);
     },
-    [draggedSession, onSessionMove, onWorkoutAdd, plan.weeks],
+    [draggedSession, onSessionMove, onWorkoutAdd, plan.weeks, blockedDays, t],
   );
 
   const handleDragEnd = useCallback(() => {
@@ -400,10 +411,14 @@ export const PlanCalendar = memo(function PlanCalendar({
       setDropTarget(null);
 
       if (dragState && target && onSessionMove) {
-        const week = plan.weeks.find(w => w.weekNumber === dragState.weekNumber);
-        const session = week?.sessions[dragState.sessionIndex];
-        if (!(session && session.dayOfWeek === target.day && dragState.weekNumber === target.weekNumber)) {
-          onSessionMove(dragState.weekNumber, dragState.sessionIndex, target.weekNumber, target.day);
+        if (blockedDays?.has(`${target.weekNumber}-${target.day}`)) {
+          toast.error(t("reschedule.blockedDrop"));
+        } else {
+          const week = plan.weeks.find(w => w.weekNumber === dragState.weekNumber);
+          const session = week?.sessions[dragState.sessionIndex];
+          if (!(session && session.dayOfWeek === target.day && dragState.weekNumber === target.weekNumber)) {
+            onSessionMove(dragState.weekNumber, dragState.sessionIndex, target.weekNumber, target.day);
+          }
         }
       }
     } else if (!wasLongPress && sessionInfo) {
@@ -598,6 +613,8 @@ export const PlanCalendar = memo(function PlanCalendar({
                       }
                     }
 
+                    const isBlockedDay = blockedDays?.has(`${week.weekNumber}-${dayIndex}`) ?? false;
+
                     return (
                       <td
                         key={dayIndex}
@@ -610,8 +627,14 @@ export const PlanCalendar = memo(function PlanCalendar({
                           isDropHere && !isOutsideMonth && "ring-2 ring-primary/50 bg-primary/5 rounded",
                           isOutsideMonth && "opacity-25",
                           isFirstOfMonth && "border-l-2 border-l-primary/40",
+                          isBlockedDay && !isOutsideMonth && "bg-muted/50 bg-[repeating-linear-gradient(135deg,transparent,transparent_4px,rgba(0,0,0,0.04)_4px,rgba(0,0,0,0.04)_6px)]",
                         )}
                       >
+                        {isBlockedDay && !isOutsideMonth && (
+                          <span className="text-[8px] font-medium text-muted-foreground/70 block text-center leading-none mb-0.5">
+                            {t("unavailability.blocked")}
+                          </span>
+                        )}
                         {dayOfMonth !== null && (
                           <span className={cn(
                             "text-[10px] tabular-nums block text-center mb-0.5",
@@ -625,7 +648,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                           </span>
                         )}
                         {sessions.length === 0 ? (
-                          !dayOfMonth && <span className="text-xs text-muted-foreground/40 block text-center">—</span>
+                          !dayOfMonth && !isBlockedDay && <span className="text-xs text-muted-foreground/40 block text-center">—</span>
                         ) : (
                           <div className="space-y-0.5">
                             {sessions.map((session, sIdx) => {

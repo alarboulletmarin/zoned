@@ -1,4 +1,4 @@
-import type { PhaseRange, PlanConfig, PlanSession, PlanWeek, TrainingPlan } from "@/types/plan";
+import type { PhaseRange, PlanConfig, PlanSession, PlanWeek, TrainingPlan, UnavailabilityReason } from "@/types/plan";
 
 // Domain bounds — defensive guards against pathological imports.
 const MAX_WEEKS_PER_PLAN = 104; // 2 years is more than enough for any realistic plan
@@ -127,6 +127,13 @@ function normalizeConfig(raw: unknown, fallbackId: string, fallbackCreatedAt: st
     strengthFrequency: raw.strengthFrequency === 1 || raw.strengthFrequency === 2 || raw.strengthFrequency === 3
       ? raw.strengthFrequency
       : undefined,
+    unavailabilities: Array.isArray(raw.unavailabilities)
+      ? (raw.unavailabilities as unknown[]).filter(isObject).map(item => ({
+          date: typeof item.date === "string" ? item.date : "",
+          reason: typeof item.reason === "string" ? item.reason as UnavailabilityReason : undefined,
+          note: typeof item.note === "string" ? item.note : undefined,
+        })).filter(item => /^\d{4}-\d{2}-\d{2}$/.test(item.date))
+      : undefined,
   };
 }
 
@@ -184,6 +191,7 @@ export function normalizeStoredPlan(raw: unknown): TrainingPlan | null {
     version: isFiniteNumber(raw.version) ? raw.version : undefined,
     peakWeeklyKm: asOptionalNumber(raw.peakWeeklyKm),
     peakLongRunKm: asOptionalNumber(raw.peakLongRunKm),
+    _lastUndoableChange: isObject(raw._lastUndoableChange) ? raw._lastUndoableChange as unknown as TrainingPlan["_lastUndoableChange"] : undefined,
   };
 }
 

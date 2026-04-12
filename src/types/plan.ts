@@ -46,6 +46,7 @@ export interface PlanConfig {
   currentLongRunKm?: number;    // v2: user's current longest run
   includeStrength?: boolean;       // v2: include strength suggestions (Ronnestad 2014)
   strengthFrequency?: 1 | 2 | 3;  // v2: strength sessions per week (default: 2)
+  unavailabilities?: Unavailability[];
 }
 
 // ── Assisted plan config (all race fields required) ─────────────────
@@ -93,6 +94,16 @@ export interface PlanSession {
   isSuggestion?: boolean;          // v2: true if auto-suggested (user can dismiss)
 }
 
+// ── Unavailability (blocked days) ─────────────────────────────────
+
+export type UnavailabilityReason = "travel" | "injury" | "work" | "weather" | "other";
+
+export interface Unavailability {
+  date: string; // "YYYY-MM-DD" date-only
+  reason?: UnavailabilityReason;
+  note?: string;
+}
+
 // ── Cross-training session (non-running activity) ──────────────────
 
 export type CrossTrainingType = "strength" | "cycling" | "swimming" | "yoga" | "rest" | "other";
@@ -136,6 +147,27 @@ export interface PhaseRange {
   endWeek: number;
 }
 
+// ── Auto-change tracking (shared by reschedule + adaptation) ──────
+
+export interface AutoChange {
+  kind: "moved" | "skipped" | "unplaced" | "volume_adjusted" | "recovery_inserted";
+  weekNumber: number;
+  fromDay?: number;
+  toWeekNumber?: number;
+  toDay?: number;
+  workoutId?: string;
+  reason: "unavailability" | "spacing" | "capacity" | "fatigue" | "missed_key";
+}
+
+export interface PlanUndoableChange {
+  at: string; // ISO datetime
+  kind: "reschedule" | "adaptation" | "bulk_move";
+  label: string;     // Human summary (FR)
+  labelEn: string;   // Human summary (EN)
+  before: TrainingPlan; // Full snapshot before change
+  changes: AutoChange[];
+}
+
 // ── Training plan (full generated plan) ────────────────────────────
 
 export interface TrainingPlan {
@@ -151,6 +183,7 @@ export interface TrainingPlan {
   version?: number;              // 1 = legacy, 2 = evidence-based engine
   peakWeeklyKm?: number;         // Peak weekly volume
   peakLongRunKm?: number;        // Peak long run distance
+  _lastUndoableChange?: PlanUndoableChange;
 }
 
 // ── Display metadata ───────────────────────────────────────────────
