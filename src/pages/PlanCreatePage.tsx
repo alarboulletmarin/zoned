@@ -36,7 +36,8 @@ import {
 import type { Difficulty, UserZonePreferences } from "@/types";
 import { DIFFICULTY_META } from "@/types";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
-import { usePickLang, formatDate, getDateInputLang } from "@/lib/i18n-utils";
+import { usePickLang, formatDate } from "@/lib/i18n-utils";
+import { DateInput } from "@/components/ui/date-input";
 import { addWeeksToDate, buildRacePlanDateRange, calculateWeeksBetweenDates } from "@/lib/planDates";
 
 // ── Constants ────────────────────────────────────────────────────────
@@ -612,9 +613,7 @@ export function PlanCreatePage() {
         </p>
 
         <div className="w-full max-w-sm mt-6 space-y-3">
-          <input
-            type="date"
-            lang={getDateInputLang()}
+          <DateInput
             min={minDate}
             value={form.raceDate}
             onChange={(e) =>
@@ -624,7 +623,7 @@ export function PlanCreatePage() {
               if (e.key === "Enter" && dateValid) goForward();
             }}
             aria-label={t("date.raceDate")}
-            className="w-full rounded-md border bg-background px-4 py-3 min-h-[44px] text-base focus:outline-none focus:ring-2 focus:ring-primary"
+            className="px-4 py-3 min-h-[44px] text-base"
           />
 
           <div className="space-y-2 pt-2">
@@ -652,13 +651,11 @@ export function PlanCreatePage() {
               </button>
             </div>
             {form.useCustomStartDate && (
-              <input
-                type="date"
-                lang={getDateInputLang()}
+              <DateInput
                 value={form.startDate}
                 max={form.raceDate || undefined}
                 onChange={(e) => setForm((f) => ({ ...f, startDate: e.target.value }))}
-                className="w-full rounded-md border bg-background px-4 py-3 min-h-[44px] text-base focus:outline-none focus:ring-2 focus:ring-primary"
+                className="px-4 py-3 min-h-[44px] text-base"
               />
             )}
           </div>

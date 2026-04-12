@@ -40,7 +40,8 @@ import { PlanAuditPanel } from "@/components/domain/PlanAuditPanel";
 import { getWorkoutById } from "@/data/workouts";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
-import { useIsEnglish, usePickLang, usePickLocale, formatDate, formatDateShort, formatDateMedium, formatWeekday, getDateInputLang } from "@/lib/i18n-utils";
+import { useIsEnglish, usePickLang, usePickLocale, formatDate, formatDateShort, formatDateMedium, formatWeekday } from "@/lib/i18n-utils";
+import { DateInput } from "@/components/ui/date-input";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
@@ -1476,13 +1477,10 @@ export function PlanViewPage() {
                 <label htmlFor="edit-start-date" className="text-sm font-medium mb-2 block">
                   {t("view.startDate")}
                 </label>
-                <input
+                <DateInput
                   id="edit-start-date"
-                  type="date"
-                  lang={getDateInputLang()}
                   value={editStartDate}
                   onChange={(e) => setEditStartDate(e.target.value)}
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
 

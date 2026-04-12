@@ -10,7 +10,8 @@ import { savePlan } from "@/lib/planStorage";
 import { createFreePlan } from "@/lib/createFreePlan";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { cn } from "@/lib/utils";
-import { formatDate, getDateInputLang } from "@/lib/i18n-utils";
+import { formatDate } from "@/lib/i18n-utils";
+import { DateInput } from "@/components/ui/date-input";
 
 const MIN_WEEKS = 4;
 const MAX_WEEKS = 52;
@@ -156,13 +157,11 @@ export function FreePlanCreatePage() {
                   </button>
                 </div>
                 {useCustomDate && (
-                  <input
+                  <DateInput
                     id="plan-start"
-                    type="date"
-                    lang={getDateInputLang()}
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full rounded-md border bg-background px-4 py-3 min-h-[44px] text-base focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="px-4 py-3 min-h-[44px] text-base"
                   />
                 )}
                 {startDate && (

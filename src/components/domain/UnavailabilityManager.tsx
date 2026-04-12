@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Trash2, Plus } from "@/components/icons";
 import { cn } from "@/lib/utils";
-import { getDateInputLang } from "@/lib/i18n-utils";
+import { DateInput } from "@/components/ui/date-input";
 import type { Unavailability, UnavailabilityReason } from "@/types/plan";
 
 interface UnavailabilityManagerProps {
@@ -183,31 +183,25 @@ export function UnavailabilityManager({
                   <label htmlFor="unavail-from" className="text-sm font-medium mb-1 block">
                     {t("unavailability.from")}
                   </label>
-                  <input
+                  <DateInput
                     id="unavail-from"
-                    type="date"
-                    lang={getDateInputLang()}
                     value={newFrom}
                     onChange={(e) => {
                       setNewFrom(e.target.value);
                       // Auto-set "to" if empty or before "from"
                       if (!newTo || e.target.value > newTo) setNewTo(e.target.value);
                     }}
-                    className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
                 <div>
                   <label htmlFor="unavail-to" className="text-sm font-medium mb-1 block">
                     {t("unavailability.to")}
                   </label>
-                  <input
+                  <DateInput
                     id="unavail-to"
-                    type="date"
-                    lang={getDateInputLang()}
                     value={newTo}
                     min={newFrom}
                     onChange={(e) => setNewTo(e.target.value)}
-                    className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
               </div>
