@@ -60,6 +60,7 @@ interface PlanWeeklyViewProps {
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
   onAddToDay?: (weekNumber: number, day: number) => void;
   onWeekChange?: (week: number) => void;
+  blockedDays?: Set<string>;
 }
 
 // ── Component ───────────────────────────────────────────────────────
@@ -79,6 +80,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   onWorkoutAdd,
   onAddToDay,
   onWeekChange,
+  blockedDays,
 }: PlanWeeklyViewProps) {
   const { t } = useTranslation("plan");
   const pickLang = usePickLang();
@@ -590,6 +592,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                         onToggleComplete={onToggleComplete}
                         onAddToDay={onAddToDay}
                         setContextMenu={setContextMenu}
+                        isBlockedDay={blockedDays?.has(`${selectedWeek}-${dayIndex}`) ?? false}
                       />
                     );
                   })}
@@ -644,6 +647,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                     onToggleComplete={onToggleComplete}
                     onAddToDay={onAddToDay}
                     setContextMenu={setContextMenu}
+                    isBlockedDay={blockedDays?.has(`${selectedWeek}-${dayIndex}`) ?? false}
                   />
                 );
               })}
@@ -761,6 +765,7 @@ interface DayCellProps {
       workoutId: string;
     } | null,
   ) => void;
+  isBlockedDay?: boolean;
 }
 
 const DayCell = memo(function DayCell({
@@ -787,6 +792,7 @@ const DayCell = memo(function DayCell({
   onToggleComplete,
   onAddToDay,
   setContextMenu,
+  isBlockedDay,
 }: DayCellProps) {
   const { t } = useTranslation("plan");
   const sessions = weekData.sessions.filter((s) => s.dayOfWeek === dayIndex);
@@ -802,8 +808,14 @@ const DayCell = memo(function DayCell({
         "rounded-lg bg-secondary/30 p-1.5 transition-colors",
         isDesktop ? "min-h-[120px]" : "min-h-[80px]",
         isDropHere && "ring-2 ring-primary/50 bg-primary/5",
+        isBlockedDay && "bg-muted/50 bg-[repeating-linear-gradient(135deg,transparent,transparent_4px,rgba(0,0,0,0.04)_4px,rgba(0,0,0,0.04)_6px)]",
       )}
     >
+      {isBlockedDay && (
+        <span className="text-[8px] font-medium text-muted-foreground/70 block text-center leading-none mb-0.5">
+          {t("unavailability.blocked")}
+        </span>
+      )}
       <span
         className={cn(
           "font-semibold text-muted-foreground block",

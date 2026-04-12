@@ -53,7 +53,7 @@ import { ReschedulePreviewDialog } from "@/components/domain/ReschedulePreviewDi
 import { autoReschedule } from "@/lib/planGenerator/reschedule";
 import { updateUnavailabilities, undoLastChange, withUndoSnapshot } from "@/lib/planStorage";
 import { getPlanMonday, dateToWeekAndDay } from "@/lib/planDates";
-import type { AutoChange, PlanSession as PlanSessionType, Unavailability } from "@/types/plan";
+import type { AutoChange, Unavailability } from "@/types/plan";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanWeeklyView } from "@/components/domain/PlanWeeklyView";
 import { PlanMonthlyView } from "@/components/domain/PlanMonthlyView";
@@ -134,11 +134,7 @@ export function PlanViewPage() {
     unresolvedSessions: UnresolvedSessionPreview[];
   } | null>(null);
   const [showUnavailabilityManager, setShowUnavailabilityManager] = useState(false);
-  const [reschedulePreview, setReschedulePreview] = useState<{
-    changes: AutoChange[];
-    unplaced: PlanSessionType[];
-    updatedPlan: import("@/types/plan").TrainingPlan;
-  } | null>(null);
+  const [reschedulePreview, setReschedulePreview] = useState<{ changes: AutoChange[]; updatedPlan: import("@/types/plan").TrainingPlan } | null>(null);
 
   const currentWeek = useMemo(() => {
     if (!plan) return 0;
@@ -484,11 +480,7 @@ export function PlanViewPage() {
   const handleReschedule = useCallback(() => {
     if (!plan) return;
     const result = autoReschedule(plan, currentWeek > 0 ? currentWeek : 1);
-    setReschedulePreview({
-      changes: result.changes,
-      unplaced: result.unplaced,
-      updatedPlan: result.updatedPlan,
-    });
+    setReschedulePreview({ changes: result.changes, updatedPlan: result.updatedPlan });
   }, [plan, currentWeek]);
 
   const handleApplyReschedule = useCallback(() => {
@@ -901,6 +893,7 @@ export function PlanViewPage() {
                 onValidateWeek={handleValidateWeek}
                 onWorkoutAdd={handleWorkoutAdd}
                 onAddToDay={handleAddToDay}
+                blockedDays={blockedDaysSet}
               />
             </div>
             {showWorkoutPanel && (
@@ -936,6 +929,7 @@ export function PlanViewPage() {
                 onWorkoutAdd={handleWorkoutAdd}
                 onAddToDay={handleAddToDay}
                 onWeekChange={setWeekParam}
+                blockedDays={blockedDaysSet}
               />
             </div>
             {showWorkoutPanel && (
@@ -1290,7 +1284,7 @@ export function PlanViewPage() {
           open={reschedulePreview !== null}
           onOpenChange={(open) => { if (!open) setReschedulePreview(null); }}
           changes={reschedulePreview?.changes ?? []}
-          unplaced={reschedulePreview?.unplaced ?? []}
+          workoutNames={workoutNames}
           onApply={handleApplyReschedule}
         />
 

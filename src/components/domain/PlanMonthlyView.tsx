@@ -33,6 +33,7 @@ interface PlanMonthlyViewProps {
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
   onAddToDay?: (weekNumber: number, day: number) => void;
   onWeekChange?: (week: number) => void;
+  blockedDays?: Set<string>;
 }
 
 // ── Component ───────────────────────────────────────────────────────
@@ -52,6 +53,7 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
   onWorkoutAdd,
   onAddToDay,
   onWeekChange,
+  blockedDays,
 }: PlanMonthlyViewProps) {
   const { t, i18n } = useTranslation("plan");
   // ── No start date fallback ──────────────────────────────────────
@@ -224,6 +226,7 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
         filteredWeekNumbers={filteredWeekNumbers}
         planStartDate={startDate}
         visibleMonth={selectedMonth}
+        blockedDays={blockedDays}
       />
     </div>
   );
