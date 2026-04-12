@@ -8,6 +8,7 @@ import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { usePickLang } from "@/lib/i18n-utils";
 import { toast } from "sonner";
+import { WeekGuidancePanel } from "@/components/domain/WeekGuidancePanel";
 
 // ── Color maps ──────────────────────────────────────────────────────
 
@@ -538,6 +539,14 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
 
           return null;
         })()}
+
+        {/* ── Week guidance (free plans only) ── */}
+        {weekData && plan.config.planMode === "free" && (
+          <WeekGuidancePanel
+            week={weekData}
+            daysPerWeek={plan.config.daysPerWeek}
+          />
+        )}
 
         {/* ── Day grid ── */}
         {weekData && (

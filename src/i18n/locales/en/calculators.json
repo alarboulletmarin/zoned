@@ -252,6 +252,10 @@
     "seoDescription": "Create a blank training plan.",
     "subtitle": "Create a blank plan and fill it at your own pace",
     "namePlaceholder": "e.g. Spring marathon prep",
-    "limitReachedShort": "You've reached the limit of 5 plans. "
+    "limitReachedShort": "You've reached the limit of 5 plans. ",
+    "daysPerWeek": "Training days per week",
+    "daysPerWeekHint": "How many days per week do you want to run?",
+    "advancedOptions": "Advanced options",
+    "noneSelected": "None"
   }
 }

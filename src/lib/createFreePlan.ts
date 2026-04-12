@@ -1,5 +1,11 @@
-import type { TrainingPlan, PlanWeek, PlanConfig, PhaseRange } from "@/types/plan";
+import type { TrainingPlan, PlanWeek, PlanConfig, PhaseRange, TrainingGoal, PlanPurpose } from "@/types/plan";
 import type { TrainingPhase } from "@/types";
+
+interface FreePlanOptions {
+  daysPerWeek?: number;
+  trainingGoal?: TrainingGoal;
+  planPurpose?: PlanPurpose;
+}
 
 const RECOVERY_WEEK_FREQUENCY = 4;
 const RECOVERY_WEEK_VOLUME_PCT = 60;
@@ -47,12 +53,12 @@ function getPhaseForWeek(weekNumber: number, phases: PhaseRange[]): TrainingPhas
   return "base";
 }
 
-export function createFreePlan(name: string, totalWeeks: number, startDate?: string): TrainingPlan {
+export function createFreePlan(name: string, totalWeeks: number, startDate?: string, options?: FreePlanOptions): TrainingPlan {
   const id = crypto.randomUUID();
   const config: PlanConfig = {
     id,
     planMode: "free",
-    daysPerWeek: 7,
+    daysPerWeek: options?.daysPerWeek ?? 4,
     planName: name,
     createdAt: new Date().toISOString(),
     ...(startDate && {
@@ -63,6 +69,8 @@ export function createFreePlan(name: string, totalWeeks: number, startDate?: str
         return d.toISOString().split("T")[0];
       })(),
     }),
+    ...(options?.trainingGoal && { trainingGoal: options.trainingGoal }),
+    ...(options?.planPurpose && { planPurpose: options.planPurpose }),
   };
 
   const phases = calculateFreePhases(totalWeeks);

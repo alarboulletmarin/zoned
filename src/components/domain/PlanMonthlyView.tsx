@@ -1,4 +1,4 @@
-import { useState, useMemo, memo, useCallback } from "react";
+import { useState, useMemo, memo, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { Calendar, ChevronLeft, ChevronRight } from "@/components/icons";
@@ -33,6 +33,7 @@ interface PlanMonthlyViewProps {
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
   onAddToDay?: (weekNumber: number, day: number) => void;
   onWeekChange?: (week: number) => void;
+  onVisibleWeeksChange?: (weekNumbers: number[]) => void;
   blockedDays?: Set<string>;
 }
 
@@ -53,6 +54,7 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
   onWorkoutAdd,
   onAddToDay,
   onWeekChange,
+  onVisibleWeeksChange,
   blockedDays,
 }: PlanMonthlyViewProps) {
   const { t, i18n } = useTranslation("plan");
@@ -167,6 +169,11 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
     }
     return result;
   }, [selectedMonth, weekDateRanges]);
+
+  // Notify parent of visible weeks for guidance panel navigation
+  useEffect(() => {
+    onVisibleWeeksChange?.([...filteredWeekNumbers].sort((a, b) => a - b));
+  }, [filteredWeekNumbers, onVisibleWeeksChange]);
 
   const monthNames = i18n.language?.startsWith("en") ? MONTH_NAMES_EN : MONTH_NAMES_FR;
 

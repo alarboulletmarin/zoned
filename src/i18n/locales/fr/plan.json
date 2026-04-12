@@ -553,5 +553,29 @@
     "weekN": "Semaine {{week}}",
     "fatigue": "Fatigue",
     "capacity": "Bonne forme"
+  },
+  "guidance": {
+    "title": "Guide de la semaine",
+    "tipLabel": "Conseil :",
+    "collapse": "Masquer le guide",
+    "expand": "Afficher le guide",
+    "restDay": "Garder au moins 1 jour de repos",
+    "longRun": "Placer une sortie longue",
+    "easyRun": "Ajouter une s\u00e9ance facile",
+    "easyRuns_one": "Ajouter {{count}} s\u00e9ance facile",
+    "easyRuns_other": "Ajouter {{count}} s\u00e9ances faciles",
+    "recoveryRun": "Ajouter une s\u00e9ance de r\u00e9cup\u00e9ration",
+    "qualityBase": "Ajouter un fartlek ou des c\u00f4tes",
+    "qualityBuild": "Ajouter une s\u00e9ance VO2max ou seuil",
+    "qualityBuild2": "Ajouter une 2e s\u00e9ance qualit\u00e9 (seuil, c\u00f4tes ou fartlek)",
+    "qualityPeak": "Ajouter une s\u00e9ance au seuil ou \u00e0 allure sp\u00e9cifique",
+    "qualityPeak2": "Ajouter une 2e s\u00e9ance qualit\u00e9 (tempo, VO2max)",
+    "qualityTaper": "Ajouter un rappel d'allure sp\u00e9cifique (court)",
+    "recoveryWeekNote": "Semaine all\u00e9g\u00e9e : privil\u00e9giez les s\u00e9ances faciles, pas d'intensit\u00e9",
+    "phaseBase": "Phase de base \u2014 Construisez votre endurance fondamentale avec du volume facile.",
+    "phaseBuild": "Phase de construction \u2014 Augmentez progressivement l'intensit\u00e9 avec des s\u00e9ances qualit\u00e9.",
+    "phasePeak": "Phase de pic \u2014 Aff\u00fbtez vos allures sp\u00e9cifiques, vous approchez de la forme maximale.",
+    "phaseTaper": "Phase d'aff\u00fbtage \u2014 R\u00e9duisez le volume, gardez un peu d'intensit\u00e9 pour rester frais.",
+    "phaseRecovery": "Semaine de r\u00e9cup\u00e9ration \u2014 Laissez votre corps absorber les adaptations."
   }
 }

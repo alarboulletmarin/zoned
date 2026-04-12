@@ -66,6 +66,7 @@ import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
 import { LastChangePanel } from "@/components/domain/LastChangePanel";
 import { PlanViewModeSelector } from "@/components/domain/PlanViewModeSelector";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
+import { WeekGuidancePanel } from "@/components/domain/WeekGuidancePanel";
 import { usePlanViewMode } from "@/hooks/usePlanViewMode";
 import { getCurrentWeek } from "@/lib/planUtils";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
@@ -109,6 +110,8 @@ export function PlanViewPage() {
 
   const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set());
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [guidanceWeekNum, setGuidanceWeekNum] = useState<number | null>(null);
+  const [monthlyVisibleWeeks, setMonthlyVisibleWeeks] = useState<number[]>([]);
 
   const [workoutNames, setWorkoutNames] = useState<Record<string, string>>({});
   const [workoutTemplates, setWorkoutTemplates] = useState<Record<string, WorkoutTemplate>>({});
@@ -909,6 +912,26 @@ export function PlanViewPage() {
           </span>
         </div>
 
+        {/* ── Week guidance for non-weekly views (free plans only) ── */}
+        {plan.config.planMode === "free" && planViewMode !== "weekly" && (() => {
+          const isMonthly = planViewMode === "monthly";
+          const visibleMin = isMonthly && monthlyVisibleWeeks.length > 0 ? monthlyVisibleWeeks[0] : 1;
+          const visibleMax = isMonthly && monthlyVisibleWeeks.length > 0 ? monthlyVisibleWeeks[monthlyVisibleWeeks.length - 1] : plan.totalWeeks;
+          const wn = Math.max(visibleMin, Math.min(visibleMax, guidanceWeekNum ?? initialWeek ?? 1));
+          const guidanceWeek = plan.weeks[wn - 1];
+          return guidanceWeek ? (
+            <WeekGuidancePanel
+              week={guidanceWeek}
+              daysPerWeek={plan.config.daysPerWeek}
+              showWeekNav
+              totalWeeks={plan.totalWeeks}
+              minWeek={visibleMin}
+              maxWeek={visibleMax}
+              onWeekChange={setGuidanceWeekNum}
+            />
+          ) : null;
+        })()}
+
         {/* Calendar View */}
         {planViewMode === "calendar" && (
           <div className="flex gap-4">
@@ -1000,6 +1023,7 @@ export function PlanViewPage() {
                 onWorkoutAdd={handleWorkoutAdd}
                 onAddToDay={handleAddToDay}
                 onWeekChange={setWeekParam}
+                onVisibleWeeksChange={setMonthlyVisibleWeeks}
                 blockedDays={blockedDaysSet}
               />
             </div>

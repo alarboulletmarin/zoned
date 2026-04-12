@@ -252,6 +252,10 @@
     "seoDescription": "Créez un plan d'entraînement vierge.",
     "subtitle": "Créez un plan vierge et remplissez-le à votre rythme",
     "namePlaceholder": "ex. Prépa marathon de printemps",
-    "limitReachedShort": "Limite de 5 plans atteinte. "
+    "limitReachedShort": "Limite de 5 plans atteinte. ",
+    "daysPerWeek": "Jours d'entraînement par semaine",
+    "daysPerWeekHint": "Combien de jours par semaine souhaitez-vous courir ?",
+    "advancedOptions": "Options avancées",
+    "noneSelected": "Aucun"
   }
 }

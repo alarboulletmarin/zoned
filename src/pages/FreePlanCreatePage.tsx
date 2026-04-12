@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { ArrowLeft, CalendarRange } from "@/components/icons";
+import { ArrowLeft, CalendarRange, ChevronDown } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
@@ -12,26 +12,38 @@ import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/i18n-utils";
 import { DateInput } from "@/components/ui/date-input";
+import type { TrainingGoal, PlanPurpose } from "@/types/plan";
 
 const MIN_WEEKS = 4;
 const MAX_WEEKS = 52;
 const DEFAULT_WEEKS = 12;
+const MIN_DAYS = 3;
+const MAX_DAYS = 7;
+const DEFAULT_DAYS = 4;
 
 export function FreePlanCreatePage() {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation(["calculators", "plan"]);
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [weeks, setWeeks] = useState(DEFAULT_WEEKS);
+  const [daysPerWeek, setDaysPerWeek] = useState(DEFAULT_DAYS);
   const [startDate, setStartDate] = useState("");
   const [useCustomDate, setUseCustomDate] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [trainingGoal, setTrainingGoal] = useState<TrainingGoal | undefined>();
+  const [planPurpose, setPlanPurpose] = useState<PlanPurpose | undefined>();
 
   const isValid = name.trim().length > 0;
 
   const handleSubmit = () => {
     if (!isValid) return;
 
-    const plan = createFreePlan(name.trim(), weeks, startDate || undefined);
+    const plan = createFreePlan(name.trim(), weeks, startDate || undefined, {
+      daysPerWeek,
+      trainingGoal,
+      planPurpose,
+    });
     if (!savePlan(plan)) {
       toast.error(t("errors.planSaveFailed"));
       return;
@@ -127,6 +139,143 @@ export function FreePlanCreatePage() {
                 <p className="text-xs text-muted-foreground mt-1">
                   {MIN_WEEKS} - {MAX_WEEKS} {t("calculators:freePlan.weeks")}
                 </p>
+              </div>
+
+              {/* Days per week */}
+              <div>
+                <label htmlFor="plan-days" className="text-sm font-medium mb-2 block">
+                  {t("calculators:freePlan.daysPerWeek")}
+                </label>
+                <div className="flex items-center gap-4">
+                  <input
+                    id="plan-days"
+                    type="range"
+                    min={MIN_DAYS}
+                    max={MAX_DAYS}
+                    value={daysPerWeek}
+                    onChange={(e) => setDaysPerWeek(parseInt(e.target.value, 10))}
+                    className="flex-1 accent-primary"
+                  />
+                  <div className="w-16 text-center">
+                    <input
+                      type="number"
+                      min={MIN_DAYS}
+                      max={MAX_DAYS}
+                      value={daysPerWeek}
+                      onChange={(e) => {
+                        const v = parseInt(e.target.value, 10);
+                        if (!isNaN(v) && v >= MIN_DAYS && v <= MAX_DAYS) {
+                          setDaysPerWeek(v);
+                        }
+                      }}
+                      className="w-full rounded-md border bg-background px-2 py-1 text-sm text-center focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {t("calculators:freePlan.daysPerWeekHint")}
+                </p>
+              </div>
+
+              {/* Advanced options */}
+              <div>
+                <button
+                  type="button"
+                  onClick={() => setShowAdvanced((v) => !v)}
+                  className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <ChevronDown
+                    className={cn(
+                      "size-4 transition-transform",
+                      showAdvanced && "rotate-180"
+                    )}
+                  />
+                  {t("calculators:freePlan.advancedOptions")}
+                </button>
+
+                {showAdvanced && (
+                  <div className="mt-4 space-y-5">
+                    {/* Training Goal */}
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">
+                        {t("plan:goal.title")}
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        {(["finish", "time", "compete"] as const).map((goal) => (
+                          <button
+                            key={goal}
+                            type="button"
+                            onClick={() => setTrainingGoal(trainingGoal === goal ? undefined : goal)}
+                            className={cn(
+                              "flex-1 rounded-lg border p-3 text-sm transition-colors",
+                              trainingGoal === goal
+                                ? "border-primary bg-primary/10 font-medium"
+                                : "hover:bg-accent/50"
+                            )}
+                          >
+                            {t(`plan:goal.${goal}`)}
+                          </button>
+                        ))}
+                        <button
+                          type="button"
+                          onClick={() => setTrainingGoal(undefined)}
+                          className={cn(
+                            "flex-1 rounded-lg border p-3 text-sm transition-colors",
+                            trainingGoal === undefined
+                              ? "border-primary bg-primary/10 font-medium"
+                              : "hover:bg-accent/50"
+                          )}
+                        >
+                          {t("calculators:freePlan.noneSelected")}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Plan Purpose */}
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">
+                        {t("plan:purpose.title")}
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        {(["race", "base_building", "return_from_injury", "beginner_start"] as const).map((purpose) => {
+                          const labelKey = {
+                            race: "race",
+                            base_building: "baseBuilding",
+                            return_from_injury: "returnFromInjury",
+                            beginner_start: "beginnerStart",
+                          }[purpose];
+                          return (
+                            <button
+                              key={purpose}
+                              type="button"
+                              onClick={() => setPlanPurpose(planPurpose === purpose ? undefined : purpose)}
+                              className={cn(
+                                "rounded-lg border p-3 text-sm transition-colors",
+                                planPurpose === purpose
+                                  ? "border-primary bg-primary/10 font-medium"
+                                  : "hover:bg-accent/50"
+                              )}
+                            >
+                              {t(`plan:purpose.${labelKey}`)}
+                            </button>
+                          );
+                        })}
+                        <button
+                          type="button"
+                          onClick={() => setPlanPurpose(undefined)}
+                          className={cn(
+                            "rounded-lg border p-3 text-sm transition-colors",
+                            planPurpose === undefined
+                              ? "border-primary bg-primary/10 font-medium"
+                              : "hover:bg-accent/50"
+                          )}
+                        >
+                          {t("calculators:freePlan.noneSelected")}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Optional dates */}

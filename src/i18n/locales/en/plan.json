@@ -553,5 +553,29 @@
     "weekN": "Week {{week}}",
     "fatigue": "Fatigue",
     "capacity": "Good fitness"
+  },
+  "guidance": {
+    "title": "Week Guide",
+    "tipLabel": "Tip:",
+    "collapse": "Hide guide",
+    "expand": "Show guide",
+    "restDay": "Keep at least 1 rest day",
+    "longRun": "Add a long run",
+    "easyRun": "Add an easy run",
+    "easyRuns_one": "Add {{count}} easy run",
+    "easyRuns_other": "Add {{count}} easy runs",
+    "recoveryRun": "Add a recovery run",
+    "qualityBase": "Add a fartlek or hill session",
+    "qualityBuild": "Add a VO2max or threshold session",
+    "qualityBuild2": "Add a 2nd quality session (threshold, hills or fartlek)",
+    "qualityPeak": "Add a threshold or race-pace session",
+    "qualityPeak2": "Add a 2nd quality session (tempo, VO2max)",
+    "qualityTaper": "Add a short race-pace reminder",
+    "recoveryWeekNote": "Easy week: focus on easy runs, skip intensity",
+    "phaseBase": "Base phase \u2014 Build your aerobic foundation with easy volume.",
+    "phaseBuild": "Build phase \u2014 Gradually increase intensity with quality sessions.",
+    "phasePeak": "Peak phase \u2014 Sharpen your race-specific paces, approaching top form.",
+    "phaseTaper": "Taper phase \u2014 Reduce volume, keep a touch of intensity to stay fresh.",
+    "phaseRecovery": "Recovery week \u2014 Let your body absorb the training adaptations."
   }
 }
