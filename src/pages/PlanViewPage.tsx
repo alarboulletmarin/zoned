@@ -46,7 +46,7 @@ import {
 import type { WorkoutTemplate } from "@/types";
 import { toast } from "sonner";
 import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
-import { CompletionFeedbackCard } from "@/components/domain/CompletionFeedbackCard";
+import { SessionCompletionSheet } from "@/components/domain/SessionCompletionSheet";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanWeeklyView } from "@/components/domain/PlanWeeklyView";
 import { PlanMonthlyView } from "@/components/domain/PlanMonthlyView";
@@ -117,7 +117,7 @@ export function PlanViewPage() {
   const [addTarget, setAddTarget] = useState<{ weekNumber: number; day: number } | null>(null);
   const [showDateDialog, setShowDateDialog] = useState(false);
   const [editStartDate, setEditStartDate] = useState("");
-  const [rpePrompt, setRpePrompt] = useState<{ weekNumber: number; sessionIndex: number } | null>(null);
+  const [completionTarget, setCompletionTarget] = useState<{ weekNumber: number; sessionIndex: number } | null>(null);
   const [isEditingName, setIsEditingName] = useState(false);
   const [editName, setEditName] = useState("");
   const [pendingWeekValidation, setPendingWeekValidation] = useState<{
@@ -291,9 +291,9 @@ export function PlanViewPage() {
     const freshWeek = freshPlan.weeks.find((w: { weekNumber: number }) => w.weekNumber === weekNumber);
     if (!freshWeek) return;
 
-    // Check if all sessions are resolved
+    // Check if all sessions are resolved (completed / modified / skipped)
     const allResolved = freshWeek.sessions.every(
-      (s: { status?: string }) => s.status === "completed" || s.status === "skipped"
+      (s: { status?: string }) => s.status === "completed" || s.status === "modified" || s.status === "skipped"
     );
     if (!allResolved) return;
 
@@ -314,37 +314,28 @@ export function PlanViewPage() {
 
   const handleToggleComplete = useCallback((weekNumber: number, sessionIndex: number) => {
     if (!plan) return;
-
     const week = plan.weeks.find(w => w.weekNumber === weekNumber);
     if (!week) return;
     const session = week.sessions[sessionIndex];
     if (!session) return;
+    // Open the completion sheet for this session
+    setCompletionTarget({ weekNumber, sessionIndex });
+  }, [plan]);
 
-    // Cycle: planned → completed → skipped → planned
-    const nextStatus = session.status === "completed"
-      ? "skipped" as const
-      : session.status === "skipped"
-        ? "planned" as const
-        : "completed" as const;
-
-    const success = updateSessionCompletion(plan.id, weekNumber, sessionIndex, {
-      status: nextStatus,
-      completedAt: nextStatus === "completed" ? new Date().toISOString() : undefined,
-      rpe: undefined,
-    });
-
-    if (success) {
-      reloadPlan();
-
-      // When marking as completed, show RPE selector inline
-      if (nextStatus === "completed") {
-        setRpePrompt({ weekNumber, sessionIndex });
-      }
-
-      // Auto-trigger adaptation if all sessions in the week are now resolved
-      runAdaptationIfReady(weekNumber, false);
+  const handleCompletionSave = useCallback((data: import("@/lib/planStorage").SessionCompletionData) => {
+    if (!plan || !completionTarget) return;
+    const { weekNumber, sessionIndex } = completionTarget;
+    const success = updateSessionCompletion(plan.id, weekNumber, sessionIndex, data);
+    if (!success) {
+      toast.error(t("errors.planSaveFailed"));
+      return;
     }
-  }, [plan, runAdaptationIfReady]);
+    reloadPlan();
+    toast.success(t("completion.saved"));
+    setCompletionTarget(null);
+    // Auto-trigger adaptation if all sessions in the week are now resolved
+    runAdaptationIfReady(weekNumber, false);
+  }, [plan, completionTarget, reloadPlan, runAdaptationIfReady, t]);
 
   const handleWeekValidationDecision = useCallback((decision: "mark_skipped" | "keep_unresolved") => {
     if (!plan || !pendingWeekValidation) return;
@@ -1384,33 +1375,32 @@ export function PlanViewPage() {
         />
       </div>
 
-      {/* Post-completion feedback overlay */}
-      {rpePrompt && (() => {
-        const rpeWeek = plan.weeks.find(w => w.weekNumber === rpePrompt.weekNumber);
-        const rpeSession = rpeWeek?.sessions[rpePrompt.sessionIndex];
-        const rpeName = rpeSession ? (workoutNames[rpeSession.workoutId] || rpeSession.workoutId) : "";
-
+      {/* Session completion sheet — opens on checkbox click */}
+      {(() => {
+        if (!completionTarget) {
+          return (
+            <SessionCompletionSheet
+              open={false}
+              onOpenChange={() => setCompletionTarget(null)}
+              session={null}
+              weekNumber={0}
+              sessionName=""
+              onSave={handleCompletionSave}
+            />
+          );
+        }
+        const targetWeek = plan.weeks.find(w => w.weekNumber === completionTarget.weekNumber);
+        const targetSession = targetWeek?.sessions[completionTarget.sessionIndex] ?? null;
+        const targetName = targetSession ? (workoutNames[targetSession.workoutId] || targetSession.workoutId) : "";
         return (
-          <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-4 px-4 pointer-events-none">
-            <div className="pointer-events-auto w-full max-w-sm">
-              <CompletionFeedbackCard
-                sessionType={rpeSession?.sessionType ?? "endurance"}
-                sessionName={rpeName}
-                weekNumber={rpePrompt.weekNumber}
-                isEn={isEn}
-                onSave={(rpe) => {
-                  updateSessionCompletion(plan.id, rpePrompt.weekNumber, rpePrompt.sessionIndex, {
-                    status: "completed",
-                    completedAt: new Date().toISOString(),
-                    rpe,
-                  });
-                  reloadPlan();
-                  setRpePrompt(null);
-                }}
-                onSkip={() => setRpePrompt(null)}
-              />
-            </div>
-          </div>
+          <SessionCompletionSheet
+            open={true}
+            onOpenChange={(open) => { if (!open) setCompletionTarget(null); }}
+            session={targetSession}
+            weekNumber={completionTarget.weekNumber}
+            sessionName={targetName}
+            onSave={handleCompletionSave}
+          />
         );
       })()}
     </>

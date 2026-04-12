@@ -89,6 +89,7 @@ export interface PlanSession {
   actualDurationMin?: number;
   actualDistanceKm?: number;
   rpe?: number;                  // 1-10 Rate of Perceived Effort
+  userNote?: string;             // Free-form note captured at completion (does not overwrite generated `notes`)
   isSuggestion?: boolean;          // v2: true if auto-suggested (user can dismiss)
 }
 

@@ -60,6 +60,7 @@ function normalizeSession(raw: unknown): PlanSession | null {
     actualDurationMin: asOptionalNumber(raw.actualDurationMin),
     actualDistanceKm: asOptionalNumber(raw.actualDistanceKm),
     rpe: asOptionalNumber(raw.rpe),
+    userNote: typeof raw.userNote === "string" ? raw.userNote : undefined,
     isSuggestion: typeof raw.isSuggestion === "boolean" ? raw.isSuggestion : undefined,
   };
 }

@@ -481,7 +481,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
         {weekData && (() => {
           const total = weekData.sessions.length;
           if (total === 0) return null;
-          const done = weekData.sessions.filter((s) => s.status === "completed").length;
+          const done = weekData.sessions.filter((s) => s.status === "completed" || s.status === "modified").length;
           const skipped = weekData.sessions.filter((s) => s.status === "skipped").length;
           const resolved = done + skipped;
           const allResolved = resolved === total;
@@ -919,16 +919,20 @@ const DayCell = memo(function DayCell({
                           "size-3.5 rounded-sm border shrink-0 flex items-center justify-center transition-colors",
                           session.status === "completed"
                             ? "bg-green-500 border-green-500 text-white"
-                            : session.status === "skipped"
-                              ? "bg-muted border-muted-foreground/30"
-                              : "border-muted-foreground/40 hover:border-primary",
+                            : session.status === "modified"
+                              ? "bg-blue-500 border-blue-500 text-white"
+                              : session.status === "skipped"
+                                ? "bg-muted border-muted-foreground/30"
+                                : "border-muted-foreground/40 hover:border-primary",
                         )}
                         title={
                           session.status === "completed"
                             ? t("completion.completed")
-                            : session.status === "skipped"
-                              ? t("completion.skipped")
-                              : t("completion.markDone")
+                            : session.status === "modified"
+                              ? t("completion.modified")
+                              : session.status === "skipped"
+                                ? t("completion.skipped")
+                                : t("completion.markDone")
                         }
                       >
                         {session.status === "completed" && (
@@ -940,6 +944,17 @@ const DayCell = memo(function DayCell({
                             strokeWidth="2"
                           >
                             <path d="M2 6l3 3 5-5" />
+                          </svg>
+                        )}
+                        {session.status === "modified" && (
+                          <svg
+                            viewBox="0 0 12 12"
+                            className="size-2.5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M9 2l1.5 1.5L5 9 2 9l0-3L7.5 0.5z" />
                           </svg>
                         )}
                         {session.status === "skipped" && (

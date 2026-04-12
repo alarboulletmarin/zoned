@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 
-import type { PlanWeek } from "@/types/plan";
-import { computeWeekKm } from "./planStats";
+import type { PlanSession, PlanWeek } from "@/types/plan";
+import { computeWeekDuration, computeWeekKm, estimateSessionDurationMin } from "./planStats";
 
 describe("computeWeekKm", () => {
   test("prefers actual and target distances over pace-based estimates", () => {
@@ -137,5 +137,103 @@ describe("computeWeekKm", () => {
     };
 
     expect(computeWeekKm(week)).toBe(0);
+  });
+
+  test("modified sessions contribute their actual distance, not the target", () => {
+    const week: PlanWeek = {
+      weekNumber: 6,
+      phase: "build",
+      isRecoveryWeek: false,
+      volumePercent: 100,
+      sessions: [
+        {
+          dayOfWeek: 1,
+          workoutId: "A",
+          sessionType: "endurance",
+          isKeySession: false,
+          estimatedDurationMin: 60,
+          targetDistanceKm: 10,
+          status: "modified",
+          actualDistanceKm: 6.5,
+        },
+      ],
+    };
+
+    expect(computeWeekKm(week)).toBeCloseTo(6.5, 5);
+  });
+});
+
+describe("estimateSessionDurationMin", () => {
+  const baseSession: PlanSession = {
+    dayOfWeek: 1,
+    workoutId: "A",
+    sessionType: "endurance",
+    isKeySession: false,
+    estimatedDurationMin: 60,
+  };
+
+  test("uses estimatedDurationMin when no status / no actuals", () => {
+    expect(estimateSessionDurationMin(baseSession)).toBe(60);
+  });
+
+  test("returns 0 for skipped sessions", () => {
+    expect(estimateSessionDurationMin({ ...baseSession, status: "skipped" })).toBe(0);
+  });
+
+  test("prefers actualDurationMin when session is modified", () => {
+    expect(
+      estimateSessionDurationMin({ ...baseSession, status: "modified", actualDurationMin: 45 }),
+    ).toBe(45);
+  });
+
+  test("prefers actualDurationMin when session is completed and has actual data", () => {
+    expect(
+      estimateSessionDurationMin({ ...baseSession, status: "completed", actualDurationMin: 52 }),
+    ).toBe(52);
+  });
+
+  test("falls back to planned duration when completed without actual", () => {
+    expect(estimateSessionDurationMin({ ...baseSession, status: "completed" })).toBe(60);
+  });
+
+  test("returns 0 for race day marker", () => {
+    expect(
+      estimateSessionDurationMin({ ...baseSession, workoutId: "__race_day__" }),
+    ).toBe(0);
+  });
+});
+
+describe("computeWeekDuration", () => {
+  test("sums planned durations when no actuals are present", () => {
+    const week: PlanWeek = {
+      weekNumber: 1,
+      phase: "base",
+      isRecoveryWeek: false,
+      volumePercent: 100,
+      sessions: [
+        { dayOfWeek: 1, workoutId: "A", sessionType: "endurance", isKeySession: false, estimatedDurationMin: 45 },
+        { dayOfWeek: 3, workoutId: "B", sessionType: "tempo", isKeySession: true, estimatedDurationMin: 50 },
+        { dayOfWeek: 5, workoutId: "C", sessionType: "long_run", isKeySession: true, estimatedDurationMin: 90 },
+      ],
+    };
+    expect(computeWeekDuration(week)).toBe(185);
+  });
+
+  test("blends actual + planned and excludes skipped sessions", () => {
+    const week: PlanWeek = {
+      weekNumber: 2,
+      phase: "build",
+      isRecoveryWeek: false,
+      volumePercent: 100,
+      sessions: [
+        // Completed as planned -> 45
+        { dayOfWeek: 1, workoutId: "A", sessionType: "endurance", isKeySession: false, estimatedDurationMin: 45, status: "completed" },
+        // Modified -> 30 (actual overrides planned 50)
+        { dayOfWeek: 3, workoutId: "B", sessionType: "tempo", isKeySession: true, estimatedDurationMin: 50, status: "modified", actualDurationMin: 30 },
+        // Skipped -> 0
+        { dayOfWeek: 5, workoutId: "C", sessionType: "long_run", isKeySession: true, estimatedDurationMin: 90, status: "skipped" },
+      ],
+    };
+    expect(computeWeekDuration(week)).toBe(75);
   });
 });

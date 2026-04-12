@@ -16,12 +16,12 @@ export interface UnresolvedSessionPreview {
 }
 
 function isResolved(status: PlanSession["status"]): boolean {
-  return status === "completed" || status === "skipped";
+  return status === "completed" || status === "modified" || status === "skipped";
 }
 
 export function getWeekResolutionSummary(week: PlanWeek): WeekResolutionSummary {
   return week.sessions.reduce<WeekResolutionSummary>((summary, session) => {
-    if (session.status === "completed") {
+    if (session.status === "completed" || session.status === "modified") {
       summary.completed += 1;
     } else if (session.status === "skipped") {
       summary.skipped += 1;

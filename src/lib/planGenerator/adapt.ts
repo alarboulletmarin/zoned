@@ -62,6 +62,11 @@ function analyzeWeekCompletion(week: PlanWeek): WeekCompletionStats & { allResol
     if (s.status === "completed") {
       completed++;
       if (s.rpe) rpeValues.push(s.rpe);
+    } else if (s.status === "modified") {
+      // A modified session still counts as completed for resolution purposes,
+      // but contributes to fatigue analysis via its RPE and actual load.
+      completed++;
+      if (s.rpe) rpeValues.push(s.rpe);
     } else if (s.status === "skipped") {
       skipped++;
       if (s.isKeySession) {
@@ -226,7 +231,7 @@ export function getPlanCompletionStats(plan: TrainingPlan): {
   for (const week of plan.weeks) {
     for (const session of week.sessions) {
       totalSessions++;
-      if (session.status === "completed") {
+      if (session.status === "completed" || session.status === "modified") {
         completed++;
         if (session.rpe) rpeValues.push(session.rpe);
       } else if (session.status === "skipped") {

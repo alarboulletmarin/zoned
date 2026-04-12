@@ -70,6 +70,19 @@ function estimateSessionKm(session: PlanSession): number {
   return session.estimatedDurationMin / pace;
 }
 
+/**
+ * Estimate duration in minutes for a session, favoring the actual value when present.
+ * - `skipped` sessions contribute 0.
+ * - `modified` / `completed` sessions with `actualDurationMin` use that value.
+ * - Otherwise the planned `estimatedDurationMin` is used.
+ */
+export function estimateSessionDurationMin(session: PlanSession): number {
+  if (session.workoutId === "__race_day__") return 0;
+  if (session.status === "skipped") return 0;
+  if (session.actualDurationMin && session.actualDurationMin > 0) return session.actualDurationMin;
+  return session.estimatedDurationMin;
+}
+
 /** Compute total estimated km for a week */
 export function computeWeekKm(week: PlanWeek): number {
   const hasSessionDistanceData = week.sessions.some((session) =>
@@ -84,9 +97,9 @@ export function computeWeekKm(week: PlanWeek): number {
   return week.sessions.reduce((sum, s) => sum + estimateSessionKm(s), 0);
 }
 
-/** Compute total duration in minutes for a week */
+/** Compute total duration in minutes for a week, using actual data when available */
 export function computeWeekDuration(week: PlanWeek): number {
-  return week.sessions.reduce((sum, s) => s.workoutId === "__race_day__" ? sum : sum + s.estimatedDurationMin, 0);
+  return week.sessions.reduce((sum, s) => sum + estimateSessionDurationMin(s), 0);
 }
 
 export function computePlanStats(plan: TrainingPlan): PlanStats {
@@ -124,9 +137,10 @@ export function computePlanStats(plan: TrainingPlan): PlanStats {
     for (const session of week.sessions) {
       if (session.workoutId === "__race_day__") continue;
       totalSessions++;
-      totalDurationMin += session.estimatedDurationMin;
-      if (session.estimatedDurationMin > longestSessionMin) {
-        longestSessionMin = session.estimatedDurationMin;
+      const sessionDuration = estimateSessionDurationMin(session);
+      totalDurationMin += sessionDuration;
+      if (sessionDuration > longestSessionMin) {
+        longestSessionMin = sessionDuration;
       }
       if (session.isKeySession) keySessionCount++;
       sessionsByType[session.sessionType] = (sessionsByType[session.sessionType] || 0) + 1;

@@ -186,11 +186,12 @@ export function updatePlanSession(
 // ── Session completion tracking ───────────────────────────────────
 
 export interface SessionCompletionData {
-  status: "planned" | "completed" | "skipped";
+  status: "planned" | "completed" | "skipped" | "modified";
   completedAt?: string;
   actualDurationMin?: number;
   actualDistanceKm?: number;
   rpe?: number; // 1-10
+  userNote?: string;
 }
 
 export function updateSessionCompletion(
@@ -215,6 +216,12 @@ export function updateSessionCompletion(
   // Preserve existing RPE when cycling status (only overwrite if explicitly provided)
   if (completion.rpe !== undefined) {
     session.rpe = completion.rpe;
+  }
+  // User note: write whenever caller passes the key (even as empty string clears it)
+  if (Object.prototype.hasOwnProperty.call(completion, "userNote")) {
+    session.userNote = completion.userNote && completion.userNote.trim().length > 0
+      ? completion.userNote.trim()
+      : undefined;
   }
 
   plans[planIdx] = plan;

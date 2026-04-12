@@ -533,7 +533,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                     {(() => {
                       const total = week.sessions.length;
                       if (total === 0) return null;
-                      const done = week.sessions.filter(s => s.status === "completed").length;
+                      const done = week.sessions.filter(s => s.status === "completed" || s.status === "modified").length;
                       const skipped = week.sessions.filter(s => s.status === "skipped").length;
                       const resolved = done + skipped;
                       const allResolved = resolved === total;
@@ -820,6 +820,7 @@ const SessionCell = memo(function SessionCell({
   const displayName = workoutName || session.workoutId;
   const isCompleted = session.status === "completed";
   const isSkipped = session.status === "skipped";
+  const isModified = session.status === "modified";
 
   return (
     <div className="relative group" onContextMenu={onContextMenu}>
@@ -851,11 +852,12 @@ const SessionCell = memo(function SessionCell({
           <button
             type="button"
             role="checkbox"
-            aria-checked={isCompleted}
+            aria-checked={isCompleted || isModified}
             aria-label={
               isCompleted ? t("completion.completed")
-                : isSkipped ? t("completion.skipped")
-                  : t("completion.markDone")
+                : isModified ? t("completion.modified")
+                  : isSkipped ? t("completion.skipped")
+                    : t("completion.markDone")
             }
             onClick={(e) => {
               e.stopPropagation();
@@ -867,19 +869,27 @@ const SessionCell = memo(function SessionCell({
               "size-3.5 rounded-sm border shrink-0 flex items-center justify-center transition-colors mt-1",
               isCompleted
                 ? "bg-green-500 border-green-500 text-white"
-                : isSkipped
-                  ? "bg-muted border-muted-foreground/30"
-                  : "border-muted-foreground/40 hover:border-primary"
+                : isModified
+                  ? "bg-blue-500 border-blue-500 text-white"
+                  : isSkipped
+                    ? "bg-muted border-muted-foreground/30"
+                    : "border-muted-foreground/40 hover:border-primary"
             )}
             title={
               isCompleted ? t("completion.completed")
-                : isSkipped ? t("completion.skipped")
-                  : t("completion.markDone")
+                : isModified ? t("completion.modified")
+                  : isSkipped ? t("completion.skipped")
+                    : t("completion.markDone")
             }
           >
             {isCompleted && (
               <svg viewBox="0 0 12 12" className="size-2.5" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M2 6l3 3 5-5" />
+              </svg>
+            )}
+            {isModified && (
+              <svg viewBox="0 0 12 12" className="size-2.5" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M9 2l1.5 1.5L5 9 2 9l0-3L7.5 0.5z" />
               </svg>
             )}
             {isSkipped && (
@@ -903,6 +913,8 @@ const SessionCell = memo(function SessionCell({
               : "bg-secondary/60 hover:bg-secondary",
             isCompleted && !isStrength && "bg-green-500/10 hover:bg-green-500/15 ring-1 ring-green-500/30",
             isCompleted && isStrength && "ring-1 ring-green-500/30",
+            isModified && !isStrength && "bg-blue-500/10 hover:bg-blue-500/15 ring-1 ring-blue-500/30",
+            isModified && isStrength && "ring-1 ring-blue-500/30",
             isSkipped && "opacity-50",
             !onClick && "cursor-default",
             onClick && "cursor-pointer focus-visible:ring-2 focus-visible:ring-ring"
