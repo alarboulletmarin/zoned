@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Guided free plans** with phase-aware checklist, contextual tips, and week navigation across all views (#52)
+- **Runner profile page** with unified training history, personal records, and fitness overview (#71)
 - **Session completion sheet** with 3 choices (as planned / modified / skipped), actual duration/distance/RPE tracking (#50)
 - **Unavailabilities** (blocked days) with date range picker and automatic skip-based rescheduling (#42)
 - **One-click undo** for major plan changes via LastChangePanel banner and toast action (#57)
@@ -20,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Session completion replaced with anchored popover (desktop/tablet) and compact bottom sheet (mobile) for less intrusive UX
+- RPE and distance badges hidden on mobile session cards to prevent overflow
 - Stats now use actual duration/distance when available instead of planned values
 - Blocked days visible across all views (calendar, weekly, monthly, list) with hatched background
 - Adaptation shows a preview dialog before applying instead of silent auto-apply

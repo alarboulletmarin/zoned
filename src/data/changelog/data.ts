@@ -7,6 +7,18 @@ export const changelogVersions: ChangelogVersion[] = [
     changes: {
       added: [
         {
+          text: "Plans libres guidés avec checklist par phase, conseils contextuels et navigation entre semaines sur toutes les vues",
+          textEn: "Guided free plans with phase-aware checklist, contextual tips, and week navigation across all views",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Page profil coureur unifiée avec historique d'entraînement, records personnels et aperçu forme",
+          textEn: "Runner profile page with unified training history, personal records, and fitness overview",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
           text: "Sheet de clôture de séance avec 3 choix (comme prévu / modifiée / sautée) et suivi durée/distance/RPE réels",
           textEn: "Session completion sheet with 3 choices (as planned / modified / skipped) and actual duration/distance/RPE tracking",
           category: "Plans",
@@ -56,6 +68,18 @@ export const changelogVersions: ChangelogVersion[] = [
         },
       ],
       changed: [
+        {
+          text: "Clôture de séance remplacée par un popover ancré (desktop/tablette) et mini sheet compact (mobile) pour une UX moins intrusive",
+          textEn: "Session completion replaced with anchored popover (desktop/tablet) and compact bottom sheet (mobile) for less intrusive UX",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Badges RPE et distance masqués sur les cartes de séance mobile pour éviter le débordement",
+          textEn: "RPE and distance badges hidden on mobile session cards to prevent overflow",
+          category: "UX",
+          categoryEn: "UX",
+        },
         {
           text: "Les statistiques utilisent la durée/distance réelle quand disponible au lieu des valeurs planifiées",
           textEn: "Stats now use actual duration/distance when available instead of planned values",
