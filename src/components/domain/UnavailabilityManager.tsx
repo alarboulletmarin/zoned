@@ -22,6 +22,38 @@ interface UnavailabilityManagerProps {
 
 const REASONS: UnavailabilityReason[] = ["travel", "injury", "work", "weather", "other"];
 
+interface UnavailGroup {
+  from: string;
+  to: string;
+  reason?: UnavailabilityReason;
+  note?: string;
+}
+
+/** Group consecutive days with the same reason into ranges for display */
+function groupConsecutive(items: Unavailability[]): UnavailGroup[] {
+  if (items.length === 0) return [];
+  const sorted = [...items].sort((a, b) => a.date.localeCompare(b.date));
+  const groups: UnavailGroup[] = [];
+  let current: UnavailGroup = { from: sorted[0].date, to: sorted[0].date, reason: sorted[0].reason, note: sorted[0].note };
+
+  for (let i = 1; i < sorted.length; i++) {
+    const prev = sorted[i - 1];
+    const curr = sorted[i];
+    // Check if consecutive (next day) and same reason
+    const prevDate = new Date(prev.date + "T00:00:00");
+    prevDate.setDate(prevDate.getDate() + 1);
+    const nextIso = `${prevDate.getFullYear()}-${String(prevDate.getMonth() + 1).padStart(2, "0")}-${String(prevDate.getDate()).padStart(2, "0")}`;
+    if (curr.date === nextIso && curr.reason === prev.reason) {
+      current.to = curr.date;
+    } else {
+      groups.push(current);
+      current = { from: curr.date, to: curr.date, reason: curr.reason, note: curr.note };
+    }
+  }
+  groups.push(current);
+  return groups;
+}
+
 function reasonLabel(reason: UnavailabilityReason, t: (key: string) => string): string {
   const map: Record<UnavailabilityReason, string> = {
     travel: t("unavailability.reasonTravel"),
@@ -43,7 +75,8 @@ export function UnavailabilityManager({
 
   const [items, setItems] = useState<Unavailability[]>([]);
   const [showForm, setShowForm] = useState(false);
-  const [newDate, setNewDate] = useState("");
+  const [newFrom, setNewFrom] = useState("");
+  const [newTo, setNewTo] = useState("");
   const [newReason, setNewReason] = useState<UnavailabilityReason | "">("");
   const [newNote, setNewNote] = useState("");
 
@@ -53,7 +86,8 @@ export function UnavailabilityManager({
       if (nextOpen) {
         setItems([...unavailabilities]);
         setShowForm(false);
-        setNewDate("");
+        setNewFrom("");
+        setNewTo("");
         setNewReason("");
         setNewNote("");
       }
@@ -63,20 +97,30 @@ export function UnavailabilityManager({
   );
 
   const handleAdd = useCallback(() => {
-    if (!newDate) return;
-    const item: Unavailability = { date: newDate };
-    if (newReason) item.reason = newReason;
-    if (newNote.trim()) item.note = newNote.trim();
-    setItems((prev) => [...prev, item].sort((a, b) => a.date.localeCompare(b.date)));
-    setNewDate("");
+    if (!newFrom) return;
+    const endDate = newTo && newTo >= newFrom ? newTo : newFrom;
+    // Expand range into individual day entries
+    const newItems: Unavailability[] = [];
+    const [sy, sm, sd] = newFrom.split("-").map(Number);
+    const [ey, em, ed] = endDate.split("-").map(Number);
+    const start = new Date(sy, sm - 1, sd);
+    const end = new Date(ey, em - 1, ed);
+    const existing = new Set(items.map((i) => i.date));
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+      const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      if (existing.has(iso)) continue; // skip duplicates
+      const item: Unavailability = { date: iso };
+      if (newReason) item.reason = newReason;
+      if (newNote.trim()) item.note = newNote.trim();
+      newItems.push(item);
+    }
+    setItems((prev) => [...prev, ...newItems].sort((a, b) => a.date.localeCompare(b.date)));
+    setNewFrom("");
+    setNewTo("");
     setNewReason("");
     setNewNote("");
     setShowForm(false);
-  }, [newDate, newReason, newNote]);
-
-  const handleRemove = useCallback((index: number) => {
-    setItems((prev) => prev.filter((_, i) => i !== index));
-  }, []);
+  }, [newFrom, newTo, newReason, newNote, items]);
 
   const handleSave = useCallback(() => {
     onSave(items);
@@ -100,20 +144,22 @@ export function UnavailabilityManager({
             </p>
           )}
 
-          {items.map((item, idx) => (
+          {groupConsecutive(items).map((group) => (
             <div
-              key={`${item.date}-${idx}`}
+              key={group.from}
               className="flex items-center gap-2 rounded-lg border bg-muted/30 px-3 py-2"
             >
-              <span className="text-sm font-medium tabular-nums">{item.date}</span>
-              {item.reason && (
+              <span className="text-sm font-medium tabular-nums">
+                {group.from === group.to ? group.from : `${group.from} → ${group.to}`}
+              </span>
+              {group.reason && (
                 <span className="text-xs text-muted-foreground">
-                  {reasonLabel(item.reason, t)}
+                  {reasonLabel(group.reason, t)}
                 </span>
               )}
-              {item.note && (
+              {group.note && (
                 <span className="text-xs text-muted-foreground truncate max-w-[120px]">
-                  {item.note}
+                  {group.note}
                 </span>
               )}
               <div className="flex-1" />
@@ -121,7 +167,10 @@ export function UnavailabilityManager({
                 variant="ghost"
                 size="sm"
                 className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive"
-                onClick={() => handleRemove(idx)}
+                onClick={() => {
+                  // Remove all days in this group
+                  setItems((prev) => prev.filter((i) => i.date < group.from || i.date > group.to));
+                }}
                 title={t("unavailability.delete")}
               >
                 <Trash2 className="size-4" />
@@ -132,17 +181,36 @@ export function UnavailabilityManager({
           {/* Add form */}
           {showForm && (
             <div className="space-y-3 rounded-lg border bg-muted/20 p-3">
-              <div>
-                <label htmlFor="unavail-date" className="text-sm font-medium mb-1 block">
-                  {t("unavailability.singleDay")}
-                </label>
-                <input
-                  id="unavail-date"
-                  type="date"
-                  value={newDate}
-                  onChange={(e) => setNewDate(e.target.value)}
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label htmlFor="unavail-from" className="text-sm font-medium mb-1 block">
+                    {t("unavailability.from")}
+                  </label>
+                  <input
+                    id="unavail-from"
+                    type="date"
+                    value={newFrom}
+                    onChange={(e) => {
+                      setNewFrom(e.target.value);
+                      // Auto-set "to" if empty or before "from"
+                      if (!newTo || e.target.value > newTo) setNewTo(e.target.value);
+                    }}
+                    className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="unavail-to" className="text-sm font-medium mb-1 block">
+                    {t("unavailability.to")}
+                  </label>
+                  <input
+                    id="unavail-to"
+                    type="date"
+                    value={newTo}
+                    min={newFrom}
+                    onChange={(e) => setNewTo(e.target.value)}
+                    className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
               </div>
               <div>
                 <label htmlFor="unavail-reason" className="text-sm font-medium mb-1 block">
@@ -185,7 +253,7 @@ export function UnavailabilityManager({
                 </Button>
                 <Button
                   size="sm"
-                  disabled={!newDate}
+                  disabled={!newFrom}
                   onClick={handleAdd}
                 >
                   {t("unavailability.add")}
