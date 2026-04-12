@@ -51,13 +51,14 @@ import { SessionCompletionSheet } from "@/components/domain/SessionCompletionShe
 import { UnavailabilityManager } from "@/components/domain/UnavailabilityManager";
 import { ReschedulePreviewDialog } from "@/components/domain/ReschedulePreviewDialog";
 import { autoReschedule } from "@/lib/planGenerator/reschedule";
-import { updateUnavailabilities, undoLastChange } from "@/lib/planStorage";
+import { updateUnavailabilities, undoLastChange, withUndoSnapshot } from "@/lib/planStorage";
 import { getPlanMonday, dateToWeekAndDay } from "@/lib/planDates";
 import type { AutoChange, PlanSession as PlanSessionType, Unavailability } from "@/types/plan";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanWeeklyView } from "@/components/domain/PlanWeeklyView";
 import { PlanMonthlyView } from "@/components/domain/PlanMonthlyView";
 import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
+import { LastChangePanel } from "@/components/domain/LastChangePanel";
 import { PlanViewModeSelector } from "@/components/domain/PlanViewModeSelector";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { usePlanViewMode } from "@/hooks/usePlanViewMode";
@@ -492,17 +493,20 @@ export function PlanViewPage() {
 
   const handleApplyReschedule = useCallback(() => {
     if (!plan || !reschedulePreview) return;
-    const snapshot = structuredClone(plan);
-    const updatedPlan = reschedulePreview.updatedPlan;
-    updatedPlan._lastUndoableChange = {
-      at: new Date().toISOString(),
-      kind: "reschedule",
-      label: `Replanification a partir de la semaine ${currentWeek > 0 ? currentWeek : 1}`,
-      labelEn: `Rescheduling from week ${currentWeek > 0 ? currentWeek : 1}`,
-      before: snapshot,
-      changes: reschedulePreview.changes,
-    };
-    if (!savePlan(updatedPlan)) {
+
+    const success = withUndoSnapshot(
+      plan.id,
+      "reschedule",
+      `Replanification a partir de la semaine ${currentWeek > 0 ? currentWeek : 1}`,
+      `Rescheduling from week ${currentWeek > 0 ? currentWeek : 1}`,
+      (mutablePlan) => {
+        mutablePlan.weeks = reschedulePreview.updatedPlan.weeks;
+        mutablePlan.config = reschedulePreview.updatedPlan.config;
+        return reschedulePreview.changes;
+      },
+    );
+
+    if (!success) {
       toast.error(t("errors.planSaveFailed"));
       return;
     }
@@ -767,6 +771,21 @@ export function PlanViewPage() {
               </div>
             </CardContent>
           </Card>
+        )}
+
+        {/* Undo last change panel */}
+        {plan._lastUndoableChange && (
+          <LastChangePanel
+            label={plan._lastUndoableChange.label}
+            labelEn={plan._lastUndoableChange.labelEn}
+            at={plan._lastUndoableChange.at}
+            onUndo={() => {
+              if (undoLastChange(plan.id)) {
+                reloadPlan();
+                toast.info(t("lastChange.undone"));
+              }
+            }}
+          />
         )}
 
         {/* Programme / Statistiques toggle */}

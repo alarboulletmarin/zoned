@@ -1,4 +1,4 @@
-import type { TrainingPlan, PlanSession, CrossTrainingSession } from "@/types/plan";
+import type { TrainingPlan, PlanSession, CrossTrainingSession, PlanUndoableChange, AutoChange } from "@/types/plan";
 import type { SessionType, WorkoutCategory } from "@/types";
 import { getWorkoutById } from "@/data/workouts";
 import { parseImportedPlanJson, preparePlanForStorage, normalizeStoredPlan } from "@/lib/planSchema";
@@ -322,6 +322,44 @@ export function undoLastChange(planId: string): boolean {
   const restored = plan._lastUndoableChange.before;
   restored._lastUndoableChange = undefined;
   plans[planIdx] = restored;
+  try {
+    localStorage.setItem("zoned-plans", JSON.stringify(plans));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Execute a plan mutation wrapped in an undo snapshot.
+ * Clones the plan before mutation, runs the mutator, stores the snapshot, and saves.
+ */
+export function withUndoSnapshot(
+  planId: string,
+  kind: PlanUndoableChange["kind"],
+  label: string,
+  labelEn: string,
+  mutator: (plan: TrainingPlan) => AutoChange[],
+): boolean {
+  const plans = getAllPlans();
+  const planIdx = plans.findIndex(p => p.id === planId);
+  if (planIdx === -1) return false;
+
+  const plan = plans[planIdx];
+  const before = structuredClone(plan);
+
+  const changes = mutator(plan);
+
+  plan._lastUndoableChange = {
+    at: new Date().toISOString(),
+    kind,
+    label,
+    labelEn,
+    before,
+    changes,
+  };
+
+  plans[planIdx] = plan;
   try {
     localStorage.setItem("zoned-plans", JSON.stringify(plans));
     return true;

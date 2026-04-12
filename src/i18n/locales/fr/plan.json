@@ -524,5 +524,13 @@
     "swimming": "Natation",
     "yoga": "Yoga / Stretching",
     "rest": "Repos actif"
+  },
+  "lastChange": {
+    "title": "Dernier changement",
+    "undo": "Annuler",
+    "undone": "Changement annulé",
+    "justNow": "à l'instant",
+    "minutesAgo": "il y a {{count}} min",
+    "hoursAgo": "il y a {{count}}h"
   }
 }
