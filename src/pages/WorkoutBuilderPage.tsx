@@ -162,7 +162,7 @@ function WorkoutListView() {
                 >
                   <Link
                     to={`/workout/builder/${w.id}`}
-                    className="block p-4 pr-20"
+                    className="block p-4 pr-28"
                   >
                     <div className="flex items-center justify-between">
                       <div>
@@ -382,6 +382,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
               <Save className="size-4 mr-2" />
               {t("calculators:workoutBuilder.save")}
             </Button>
+            {isSaved && <FavoriteButton workoutId={workout.id} />}
             {isSaved && <ExportMenu workout={workout} />}
             {isSaved && (
               <Button

@@ -6,6 +6,7 @@ import {
   ArrowLeft,
   Loader2,
   Calendar,
+  CalendarOff,
   Clock,
   Star,
   Trash2,
@@ -732,7 +733,7 @@ export function PlanViewPage() {
               className="rounded-full"
               onClick={() => setShowUnavailabilityManager(true)}
             >
-              <Calendar className="size-4" />
+              <CalendarOff className="size-4" />
               <span className="ml-1 hidden sm:inline">{t("unavailability.title")}</span>
             </Button>
             <Button

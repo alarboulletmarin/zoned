@@ -548,6 +548,18 @@ export function Calendar({ className, size = 24 }: IconProps) {
   );
 }
 
+export function CalendarOff({ className, size = 24 }: IconProps) {
+  return (
+    <svg {...defaultProps} width={size} height={size} className={className}>
+      <path d="M8 2v4" />
+      <path d="M16 2v4" />
+      <rect width="18" height="18" x="3" y="4" rx="2" />
+      <path d="M3 10h18" />
+      <path d="M4 3 21 22" />
+    </svg>
+  );
+}
+
 export function Image({ className, size = 24 }: IconProps) {
   return (
     <svg {...defaultProps} width={size} height={size} className={className}>
