@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.3] - 2026-04-12
+
+### Added
+
+- **Session completion sheet** with 3 choices (as planned / modified / skipped), actual duration/distance/RPE tracking (#50)
+- **Unavailabilities** (blocked days) with date range picker and automatic skip-based rescheduling (#42)
+- **One-click undo** for major plan changes via LastChangePanel banner and toast action (#57)
+- **Multi-week adaptation engine** with preview dialog and 3-week sliding window analysis (#48)
+- **Automatic plan coherence audit** with 8 checks: spacing, volume jumps, recovery/taper integrity (#58)
+
+### Changed
+
+- Stats now use actual duration/distance when available instead of planned values
+- Blocked days visible across all views (calendar, weekly, monthly, list) with hatched background
+- Adaptation shows a preview dialog before applying instead of silent auto-apply
+
+### Fixed
+
+- Block add/move/drop on unavailable days across all plan views
+- French accents in unavailability/reschedule translations
+- Unavailabilities persisting correctly after rescheduling and undo
+
 ## [0.4.2] - 2026-04-11
 
 ### Added

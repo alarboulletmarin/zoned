@@ -2,6 +2,84 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.4.3",
+    date: "2026-04-12",
+    changes: {
+      added: [
+        {
+          text: "Sheet de clôture de séance avec 3 choix (comme prévu / modifiée / sautée) et suivi durée/distance/RPE réels",
+          textEn: "Session completion sheet with 3 choices (as planned / modified / skipped) and actual duration/distance/RPE tracking",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Indisponibilités (jours bloqués) avec sélecteur de plage de dates et replanification automatique",
+          textEn: "Unavailabilities (blocked days) with date range picker and automatic skip-based rescheduling",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Annulation en un clic des changements majeurs du plan via bandeau LastChangePanel et toast",
+          textEn: "One-click undo for major plan changes via LastChangePanel banner and toast action",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Moteur d'adaptation multi-semaines avec dialog de prévisualisation et analyse sur 3 semaines glissantes",
+          textEn: "Multi-week adaptation engine with preview dialog and 3-week sliding window analysis",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Audit automatique de cohérence du plan avec 8 vérifications (espacement, sauts de volume, intégrité récup/affûtage)",
+          textEn: "Automatic plan coherence audit with 8 checks: spacing, volume jumps, recovery/taper integrity",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+      changed: [
+        {
+          text: "Les statistiques utilisent la durée/distance réelle quand disponible au lieu des valeurs planifiées",
+          textEn: "Stats now use actual duration/distance when available instead of planned values",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Jours bloqués visibles sur toutes les vues (calendrier, semaine, mois, liste) avec fond hachuré",
+          textEn: "Blocked days visible across all views (calendar, weekly, monthly, list) with hatched background",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "L'adaptation affiche un dialog de prévisualisation avant application au lieu d'un apply silencieux",
+          textEn: "Adaptation shows a preview dialog before applying instead of silent auto-apply",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      fixed: [
+        {
+          text: "Blocage de l'ajout/déplacement/drop sur les jours indisponibles sur toutes les vues du plan",
+          textEn: "Block add/move/drop on unavailable days across all plan views",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Accents français dans les traductions indisponibilité/replanification",
+          textEn: "French accents in unavailability/reschedule translations",
+          category: "Fonctionnalité",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Persistance correcte des indisponibilités après replanification et annulation",
+          textEn: "Unavailabilities persisting correctly after rescheduling and undo",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+    },
+  },
+  {
     version: "0.4.2",
     date: "2026-04-11",
     changes: {
