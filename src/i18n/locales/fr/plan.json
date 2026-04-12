@@ -528,5 +528,21 @@
     "justNow": "à l'instant",
     "minutesAgo": "il y a {{count}} min",
     "hoursAgo": "il y a {{count}}h"
+  },
+  "adaptation": {
+    "title": "Adaptation du plan",
+    "description": "Ajustements proposés pour les prochaines semaines",
+    "noChanges": "Aucune adaptation nécessaire",
+    "apply": "Appliquer l'adaptation",
+    "keep": "Garder le plan actuel",
+    "applied": "Adaptation appliquée",
+    "undone": "Adaptation annulée",
+    "volumeReduced": "Volume réduit",
+    "volumeIncreased": "Volume augmenté",
+    "recoveryInserted": "Semaine récup insérée",
+    "missedKey": "Séance clé manquée",
+    "weekN": "Semaine {{week}}",
+    "fatigue": "Fatigue",
+    "capacity": "Bonne forme"
   }
 }

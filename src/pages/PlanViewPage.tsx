@@ -33,7 +33,8 @@ import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { usePlan } from "@/hooks/usePlans";
 import { deletePlan, getPlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan, updateSessionCompletion } from "@/lib/planStorage";
-import { adaptPlan } from "@/lib/planGenerator/adapt";
+import { computeAdaptation, type AdaptationPreview } from "@/lib/planGenerator/adapt";
+import { AdaptationPreviewDialog } from "@/components/domain/AdaptationPreviewDialog";
 import { getWorkoutById } from "@/data/workouts";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
@@ -135,6 +136,7 @@ export function PlanViewPage() {
   } | null>(null);
   const [showUnavailabilityManager, setShowUnavailabilityManager] = useState(false);
   const [reschedulePreview, setReschedulePreview] = useState<{ changes: AutoChange[]; updatedPlan: import("@/types/plan").TrainingPlan } | null>(null);
+  const [adaptationPreview, setAdaptationPreview] = useState<AdaptationPreview | null>(null);
 
   const currentWeek = useMemo(() => {
     if (!plan) return 0;
@@ -313,7 +315,7 @@ export function PlanViewPage() {
   const runAdaptationIfReady = useCallback((weekNumber: number, showToast: boolean) => {
     if (!plan) return;
 
-    // Re-read fresh data from storage via getPlan (not raw localStorage)
+    // Re-read fresh data from storage
     const freshPlan = getPlan(plan.id);
     if (!freshPlan) return;
 
@@ -326,20 +328,57 @@ export function PlanViewPage() {
     );
     if (!allResolved) return;
 
-    const result = adaptPlan(freshPlan, weekNumber);
-    if (result.adapted) {
-      if (!savePlan(freshPlan)) {
-        toast.error(t("errors.planSaveFailed"));
-        return;
-      }
-      reloadPlan();
-      for (const change of result.changes) {
-        toast.info(pick(change, "description"), { duration: 5000 });
-      }
+    const preview = computeAdaptation(freshPlan, weekNumber);
+    if (preview.adapted) {
+      setAdaptationPreview(preview);
     } else if (showToast) {
       toast.success(t("view.weekValidated", { week: weekNumber }));
     }
-  }, [plan, isEn, reloadPlan]);
+  }, [plan, t]);
+
+  const handleApplyAdaptation = useCallback(() => {
+    if (!plan || !adaptationPreview) return;
+
+    const success = withUndoSnapshot(
+      plan.id,
+      "adaptation",
+      adaptationPreview.summary,
+      adaptationPreview.summaryEn,
+      (mutablePlan) => {
+        // Apply volume/recovery changes from the preview clone
+        for (const draftWeek of adaptationPreview.updatedPlan.weeks) {
+          const target = mutablePlan.weeks.find(w => w.weekNumber === draftWeek.weekNumber);
+          if (!target) continue;
+          target.volumePercent = draftWeek.volumePercent;
+          target.targetKm = draftWeek.targetKm;
+          target.isRecoveryWeek = draftWeek.isRecoveryWeek;
+          target._originalVolumePercent = draftWeek._originalVolumePercent;
+          target._originalTargetKm = draftWeek._originalTargetKm;
+          target._originalIsRecovery = draftWeek._originalIsRecovery;
+        }
+        return adaptationPreview.changes;
+      },
+    );
+
+    if (!success) {
+      toast.error(t("errors.planSaveFailed"));
+      return;
+    }
+    reloadPlan();
+    setAdaptationPreview(null);
+    toast.success(t("adaptation.applied"), {
+      action: {
+        label: t("adaptation.undone"),
+        onClick: () => {
+          if (undoLastChange(plan.id)) {
+            reloadPlan();
+            toast.info(t("adaptation.undone"));
+          }
+        },
+      },
+      duration: 10000,
+    });
+  }, [plan, adaptationPreview, reloadPlan, t]);
 
   const handleToggleComplete = useCallback((weekNumber: number, sessionIndex: number) => {
     if (!plan) return;
@@ -1315,6 +1354,16 @@ export function PlanViewPage() {
           changes={reschedulePreview?.changes ?? []}
           workoutNames={workoutNames}
           onApply={handleApplyReschedule}
+        />
+
+        {/* Adaptation Preview Dialog */}
+        <AdaptationPreviewDialog
+          open={adaptationPreview !== null}
+          onOpenChange={(open) => { if (!open) setAdaptationPreview(null); }}
+          changes={adaptationPreview?.changes ?? []}
+          summary={adaptationPreview?.summary ?? ""}
+          summaryEn={adaptationPreview?.summaryEn ?? ""}
+          onApply={handleApplyAdaptation}
         />
 
         {/* Delete Confirmation Dialog */}

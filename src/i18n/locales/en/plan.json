@@ -528,5 +528,21 @@
     "justNow": "just now",
     "minutesAgo": "{{count}} min ago",
     "hoursAgo": "{{count}}h ago"
+  },
+  "adaptation": {
+    "title": "Plan adaptation",
+    "description": "Proposed adjustments for upcoming weeks",
+    "noChanges": "No adaptation needed",
+    "apply": "Apply adaptation",
+    "keep": "Keep current plan",
+    "applied": "Adaptation applied",
+    "undone": "Adaptation undone",
+    "volumeReduced": "Volume reduced",
+    "volumeIncreased": "Volume increased",
+    "recoveryInserted": "Recovery week inserted",
+    "missedKey": "Missed key session",
+    "weekN": "Week {{week}}",
+    "fatigue": "Fatigue",
+    "capacity": "Good fitness"
   }
 }
