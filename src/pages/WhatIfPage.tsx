@@ -48,6 +48,7 @@ import type { PlanStats, EnhancedPlanAnalysis } from "@/lib/planStats";
 import type { Difficulty } from "@/types";
 import type { WhatIfInsight } from "@/lib/whatIfInsights";
 import { toast } from "sonner";
+import { formatDate } from "@/lib/i18n-utils";
 
 // ── Constants ────────────────────────────────────────────────────────
 
@@ -1163,9 +1164,7 @@ export function WhatIfPage() {
                         {scenario.name}
                       </p>
                       <p className="text-xs text-muted-foreground tabular-nums">
-                        {new Date(scenario.savedAt).toLocaleDateString(
-                          i18n.language,
-                        )}
+                        {formatDate(new Date(scenario.savedAt))}
                       </p>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">

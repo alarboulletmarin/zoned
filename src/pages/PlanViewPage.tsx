@@ -40,7 +40,7 @@ import { PlanAuditPanel } from "@/components/domain/PlanAuditPanel";
 import { getWorkoutById } from "@/data/workouts";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
-import { useIsEnglish, usePickLang, usePickLocale } from "@/lib/i18n-utils";
+import { useIsEnglish, usePickLang, usePickLocale, formatDate, formatDateShort, formatDateMedium, formatWeekday, getDateInputLang } from "@/lib/i18n-utils";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
@@ -69,14 +69,6 @@ import { getCurrentWeek } from "@/lib/planUtils";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { applyWeekValidationDecision, getUnresolvedSessions, getWeekResolutionSummary, type UnresolvedSessionPreview } from "@/lib/weekValidation";
 
-function formatDate(isoDate: string, isEn: boolean): string {
-  const date = new Date(isoDate);
-  return date.toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
 
 export function PlanViewPage() {
   usePageHint("plan-calendar", "hints.planCalendar.title", "hints.planCalendar.description");
@@ -682,8 +674,8 @@ export function PlanViewPage() {
                 <div className="flex items-center gap-1 text-sm text-muted-foreground">
                   <Calendar className="size-3.5" />
                   <span>
-                    {formatDate(plan.config.createdAt, isEn)} →{" "}
-                    {formatDate(raceDate, isEn)}
+                    {formatDate(plan.config.createdAt, { day: "numeric", month: "short", year: "numeric" })} →{" "}
+                    {formatDate(raceDate, { day: "numeric", month: "short", year: "numeric" })}
                   </span>
                 </div>
               )}
@@ -697,9 +689,9 @@ export function PlanViewPage() {
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Calendar className="size-4" />
                   <span>
-                    {new Date(plan.config.startDate).toLocaleDateString(isEn ? "en-US" : "fr-FR")}
+                    {formatDate(plan.config.startDate)}
                     {plan.config.endDate && (
-                      <>{" "}&rarr; {new Date(plan.config.endDate).toLocaleDateString(isEn ? "en-US" : "fr-FR")}</>
+                      <>{" "}&rarr; {formatDate(plan.config.endDate)}</>
                     )}
                   </span>
                   <Button
@@ -1487,6 +1479,7 @@ export function PlanViewPage() {
                 <input
                   id="edit-start-date"
                   type="date"
+                  lang={getDateInputLang()}
                   value={editStartDate}
                   onChange={(e) => setEditStartDate(e.target.value)}
                   className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -1509,7 +1502,7 @@ export function PlanViewPage() {
                   >
                     <Calendar className="size-3.5" />
                     {t("view.startNextMonday")}
-                    {" "}({nextMonday.toLocaleDateString(isEn ? "en-US" : "fr-FR", { day: "numeric", month: "short" })})
+                    {" "}({formatDateShort(nextMonday)})
                   </Button>
                 );
               })()}
@@ -1519,7 +1512,7 @@ export function PlanViewPage() {
                 const [y, m, d] = editStartDate.split("-").map(Number);
                 const startD = new Date(y, m - 1, d);
                 const endD = new Date(y, m - 1, d + plan.totalWeeks * 7);
-                const weekdayStr = startD.toLocaleDateString(isEn ? "en-US" : "fr-FR", { weekday: "long" });
+                const weekdayStr = formatWeekday(startD);
                 const isPast = startD < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
                 return (
@@ -1528,7 +1521,7 @@ export function PlanViewPage() {
                       <div className="flex items-center gap-2">
                         <Calendar className="size-4 text-muted-foreground shrink-0" />
                         <span>
-                          {t("view.startLabel")} : {startD.toLocaleDateString(isEn ? "en-US" : "fr-FR", { day: "numeric", month: "long", year: "numeric" })}
+                          {t("view.startLabel")} : {formatDateMedium(startD)}
                           {" "}
                           <span className="text-muted-foreground">({weekdayStr})</span>
                         </span>
@@ -1536,7 +1529,7 @@ export function PlanViewPage() {
                       <div className="flex items-center gap-2">
                         <Flag className="size-4 text-muted-foreground shrink-0" />
                         <span>
-                          {t("view.endLabel")} : {endD.toLocaleDateString(isEn ? "en-US" : "fr-FR", { day: "numeric", month: "long", year: "numeric" })}
+                          {t("view.endLabel")} : {formatDateMedium(endD)}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">

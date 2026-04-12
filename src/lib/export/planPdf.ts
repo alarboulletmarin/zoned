@@ -17,6 +17,7 @@ import { computePlanStats, computeWeekKm, computeWeekDuration } from "@/lib/plan
 import { calculatePaceZones, formatPace } from "@/lib/zones";
 import { getExerciseById } from "@/data/strength";
 import i18n from "@/i18n";
+import { formatDateMedium } from "@/lib/i18n-utils";
 
 // ── Constants ──────────────────────────────────────────────────────
 
@@ -85,14 +86,6 @@ function t(key: string, opts?: Record<string, unknown>): string {
   return i18n.t(`common:export.planPdf.${key}`, opts);
 }
 
-function formatDate(isoDate: string): string {
-  const date = new Date(isoDate);
-  return date.toLocaleDateString(isEn() ? "en-GB" : "fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
 
 function isStrength(template: WorkoutTemplate): boolean {
   return (template as unknown as { kind?: string }).kind === "strength";
@@ -582,9 +575,9 @@ export async function exportPlanToPDF(
     const metaLeft: string[] = [];
     const metaRight: string[] = [];
 
-    metaLeft.push(`${t("start")}: ${formatDate(plan.config.createdAt)}`);
+    metaLeft.push(`${t("start")}: ${formatDateMedium(plan.config.createdAt)}`);
     if (plan.config.raceDate) {
-      metaLeft.push(`${t("race")}: ${formatDate(plan.config.raceDate)}`);
+      metaLeft.push(`${t("race")}: ${formatDateMedium(plan.config.raceDate)}`);
     }
     metaLeft.push(`${t("duration")}: ${plan.totalWeeks} ${t("weeks")}`);
     if (plan.peakWeeklyKm) {

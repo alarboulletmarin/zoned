@@ -10,7 +10,7 @@ import type { RacePlan } from "@/lib/raceSimulator";
 import { getDistanceLabelEn } from "@/lib/raceSimulator";
 import { formatSplitTime, formatPaceDisplay } from "@/lib/splits";
 import i18n from "@/i18n";
-import { pickLang } from "@/lib/i18n-utils";
+import { pickLang, formatDate } from "@/lib/i18n-utils";
 
 /**
  * Export a race simulation plan as a PDF document.
@@ -31,7 +31,6 @@ export async function exportRaceSimToPDF(
 
   const t = (key: string, opts?: Record<string, unknown>) =>
     i18n.t(`common:export.raceSimPdf.${key}`, opts);
-  const locale = i18n.language?.startsWith("en") ? "en-US" : "fr-FR";
 
   const distanceLabel = isEn
     ? getDistanceLabelEn(plan.distanceKm)
@@ -317,7 +316,7 @@ export async function exportRaceSimToPDF(
   // ── Footer ──────────────────────────────────────────────────────────
 
   content.push({
-    text: `${t("generatedBy")} Zoned - zoned.run - ${new Date().toLocaleDateString(locale)}`,
+    text: `${t("generatedBy")} Zoned - zoned.run - ${formatDate(new Date())}`,
     style: "footer",
     margin: [0, 20, 0, 0] as [number, number, number, number],
   });

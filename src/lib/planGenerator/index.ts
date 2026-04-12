@@ -67,7 +67,7 @@ function generatePlanName(config: AssistedPlanConfig): { name: string; nameEn: s
     month: "long",
     year: "numeric",
   });
-  const dateStrEn = new Date(config.raceDate).toLocaleDateString("en-US", {
+  const dateStrEn = new Date(config.raceDate).toLocaleDateString("en-GB", {
     month: "long",
     day: "numeric",
     year: "numeric",

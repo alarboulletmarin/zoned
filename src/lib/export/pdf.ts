@@ -9,7 +9,7 @@ import type { WorkoutTemplate, WorkoutBlock } from "@/types";
 import { CATEGORY_META, DIFFICULTY_META } from "@/types";
 import { getWorkoutDuration } from "@/components/visualization";
 import i18n from "@/i18n";
-import { pickLang, pickLangArray } from "@/lib/i18n-utils";
+import { pickLang, pickLangArray, formatDate } from "@/lib/i18n-utils";
 
 /**
  * Zone colors for PDF (RGB values)
@@ -74,8 +74,6 @@ export async function exportToPDF(
 
     const t = (key: string, opts?: Record<string, unknown>) =>
       i18n.t(`common:export.workoutPdf.${key}`, opts);
-    const locale = i18n.language?.startsWith("en") ? "en-US" : "fr-FR";
-
     const title = pickLang(workout, "name");
     const description = pickLang(workout, "description");
     const duration = getWorkoutDuration(workout);
@@ -159,7 +157,7 @@ export async function exportToPDF(
 
       // Footer
       {
-        text: `${t("generatedBy")} Zoned - ${new Date().toLocaleDateString(locale)}`,
+        text: `${t("generatedBy")} Zoned - ${formatDate(new Date())}`,
         style: "footer",
         margin: [0, 20, 0, 0],
       },

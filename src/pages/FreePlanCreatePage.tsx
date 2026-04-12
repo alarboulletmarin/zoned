@@ -10,7 +10,7 @@ import { savePlan } from "@/lib/planStorage";
 import { createFreePlan } from "@/lib/createFreePlan";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { cn } from "@/lib/utils";
-import { useIsEnglish } from "@/lib/i18n-utils";
+import { formatDate, getDateInputLang } from "@/lib/i18n-utils";
 
 const MIN_WEEKS = 4;
 const MAX_WEEKS = 52;
@@ -18,7 +18,6 @@ const DEFAULT_WEEKS = 12;
 
 export function FreePlanCreatePage() {
   const { t } = useTranslation("common");
-  const isEn = useIsEnglish();
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
@@ -160,7 +159,7 @@ export function FreePlanCreatePage() {
                   <input
                     id="plan-start"
                     type="date"
-                    lang={isEn ? "en" : "fr"}
+                    lang={getDateInputLang()}
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
                     className="w-full rounded-md border bg-background px-4 py-3 min-h-[44px] text-base focus:outline-none focus:ring-2 focus:ring-primary"
@@ -172,7 +171,7 @@ export function FreePlanCreatePage() {
                     {(() => {
                       const d = new Date(startDate);
                       d.setDate(d.getDate() + weeks * 7);
-                      return d.toLocaleDateString(isEn ? "en-US" : "fr-FR");
+                      return formatDate(d);
                     })()}
                   </p>
                 )}

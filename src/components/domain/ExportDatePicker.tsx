@@ -7,6 +7,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Calendar, Clock } from "@/components/icons";
+import { getDateInputLang } from "@/lib/i18n-utils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -59,6 +60,7 @@ export function ExportDatePicker({ onSelect, onCancel }: ExportDatePickerProps) 
             <input
               id="export-date"
               type="date"
+              lang={getDateInputLang()}
               value={date}
               onChange={(e) => setDate(e.target.value)}
               className="w-full px-4 py-3 min-h-[44px] text-base border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"

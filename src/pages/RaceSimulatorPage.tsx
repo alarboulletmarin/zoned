@@ -47,7 +47,7 @@ import {
 } from "@/lib/units";
 import { toast } from "sonner";
 import { exportRaceSimToPDF } from "@/lib/export/raceSimPdf";
-import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+import { useIsEnglish, usePickLang, formatDate } from "@/lib/i18n-utils";
 
 interface RaceOption {
   label: string;
@@ -857,9 +857,7 @@ export function RaceSimulatorPage() {
                         {sim.label}
                       </p>
                       <p className="text-xs text-muted-foreground tabular-nums">
-                        {new Date(sim.createdAt).toLocaleDateString(
-                          isEn ? "en-US" : "fr-FR",
-                        )}
+                        {formatDate(new Date(sim.createdAt))}
                       </p>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">

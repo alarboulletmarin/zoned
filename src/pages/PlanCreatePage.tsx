@@ -36,7 +36,7 @@ import {
 import type { Difficulty, UserZonePreferences } from "@/types";
 import { DIFFICULTY_META } from "@/types";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
-import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+import { usePickLang, formatDate, getDateInputLang } from "@/lib/i18n-utils";
 import { addWeeksToDate, buildRacePlanDateRange, calculateWeeksBetweenDates } from "@/lib/planDates";
 
 // ── Constants ────────────────────────────────────────────────────────
@@ -202,7 +202,6 @@ interface FormState {
 
 export function PlanCreatePage() {
   const { t } = useTranslation("plan");
-  const isEn = useIsEnglish();
   const pick = usePickLang();
   const navigate = useNavigate();
   const { createPlan, isGenerating, error } = useCreatePlan();
@@ -615,7 +614,7 @@ export function PlanCreatePage() {
         <div className="w-full max-w-sm mt-6 space-y-3">
           <input
             type="date"
-            lang={isEn ? "en" : "fr"}
+            lang={getDateInputLang()}
             min={minDate}
             value={form.raceDate}
             onChange={(e) =>
@@ -655,7 +654,7 @@ export function PlanCreatePage() {
             {form.useCustomStartDate && (
               <input
                 type="date"
-                lang={isEn ? "en" : "fr"}
+                lang={getDateInputLang()}
                 value={form.startDate}
                 max={form.raceDate || undefined}
                 onChange={(e) => setForm((f) => ({ ...f, startDate: e.target.value }))}
@@ -679,11 +678,7 @@ export function PlanCreatePage() {
           {form.raceDate && form.useCustomStartDate && (
             <p className="text-xs text-muted-foreground text-center">
               {t("date.startHint", {
-                date: new Date(form.startDate).toLocaleDateString(isEn ? "en-US" : "fr-FR", {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                }),
+                date: formatDate(form.startDate, { year: "numeric", month: "short", day: "numeric" }),
               })}
             </p>
           )}
@@ -1295,14 +1290,7 @@ export function PlanCreatePage() {
               label={t("summary.date")}
               value={
                 form.raceDate
-                  ? `${new Date(form.raceDate).toLocaleDateString(
-                      isEn ? "en-US" : "fr-FR",
-                      {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      }
-                    )} (${weeksCount} ${t("summary.weeksShort")})`
+                  ? `${formatDate(form.raceDate)} (${weeksCount} ${t("summary.weeksShort")})`
                   : "-"
               }
             />
@@ -1310,14 +1298,7 @@ export function PlanCreatePage() {
               label={t("summary.startDate")}
               value={
                 form.startDate
-                  ? new Date(form.startDate).toLocaleDateString(
-                      isEn ? "en-US" : "fr-FR",
-                      {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      }
-                    )
+                  ? formatDate(form.startDate)
                   : "-"
               }
             />

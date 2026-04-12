@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Trash2, Plus } from "@/components/icons";
 import { cn } from "@/lib/utils";
+import { getDateInputLang } from "@/lib/i18n-utils";
 import type { Unavailability, UnavailabilityReason } from "@/types/plan";
 
 interface UnavailabilityManagerProps {
@@ -185,6 +186,7 @@ export function UnavailabilityManager({
                   <input
                     id="unavail-from"
                     type="date"
+                    lang={getDateInputLang()}
                     value={newFrom}
                     onChange={(e) => {
                       setNewFrom(e.target.value);
@@ -201,6 +203,7 @@ export function UnavailabilityManager({
                   <input
                     id="unavail-to"
                     type="date"
+                    lang={getDateInputLang()}
                     value={newTo}
                     min={newFrom}
                     onChange={(e) => setNewTo(e.target.value)}

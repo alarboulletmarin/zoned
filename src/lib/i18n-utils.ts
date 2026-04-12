@@ -133,3 +133,31 @@ export function usePickLocale() {
     return isEn ? obj.en : obj.fr;
   };
 }
+
+function getDateLocale(): string {
+  return isEnglish() ? "en-GB" : "fr-FR";
+}
+
+export function formatDate(
+  date: Date | string,
+  options: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" },
+): string {
+  const d = typeof date === "string" ? new Date(date + (date.length === 10 ? "T00:00:00" : "")) : date;
+  return d.toLocaleDateString(getDateLocale(), options);
+}
+
+export function formatDateShort(date: Date | string): string {
+  return formatDate(date, { day: "numeric", month: "short" });
+}
+
+export function formatDateMedium(date: Date | string): string {
+  return formatDate(date, { day: "numeric", month: "long", year: "numeric" });
+}
+
+export function formatWeekday(date: Date | string): string {
+  return formatDate(date, { weekday: "long" });
+}
+
+export function getDateInputLang(): string {
+  return isEnglish() ? "en" : "fr";
+}

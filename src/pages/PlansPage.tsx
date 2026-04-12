@@ -44,15 +44,8 @@ import type { TrainingPhase } from "@/types";
 import { getCurrentWeek } from "@/lib/planUtils";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { PlanSparkline } from "@/components/domain/PlanSparkline";
-import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+import { useIsEnglish, usePickLang, formatDateShort } from "@/lib/i18n-utils";
 
-function formatDate(isoDate: string, isEn: boolean): string {
-  const date = new Date(isoDate);
-  return date.toLocaleDateString(isEn ? "en-GB" : "fr-FR", {
-    day: "numeric",
-    month: "short",
-  });
-}
 
 function getCurrentPhase(
   currentWeek: number,
@@ -124,19 +117,19 @@ function PlanCard({
           ) : plan.config.raceDate ? (
             <span className="flex items-center gap-1">
               <Calendar className="size-3.5" />
-              {formatDate(plan.config.createdAt, isEn)} →{" "}
-              {formatDate(plan.config.raceDate, isEn)}
+              {formatDateShort(plan.config.createdAt)} →{" "}
+              {formatDateShort(plan.config.raceDate)}
             </span>
           ) : (
             <span className="flex items-center gap-1">
               <Calendar className="size-3.5" />
-              {formatDate(plan.config.createdAt, isEn)}
+              {formatDateShort(plan.config.createdAt)}
             </span>
           )}
           {plan.config.startDate && (
             <span className="text-xs text-muted-foreground">
-              {new Date(plan.config.startDate).toLocaleDateString(isEn ? "en-US" : "fr-FR", { day: "numeric", month: "short" })}
-              {plan.config.endDate && ` \u2192 ${new Date(plan.config.endDate).toLocaleDateString(isEn ? "en-US" : "fr-FR", { day: "numeric", month: "short" })}`}
+              {formatDateShort(plan.config.startDate)}
+              {plan.config.endDate && ` \u2192 ${formatDateShort(plan.config.endDate)}`}
             </span>
           )}
         </CardDescription>
