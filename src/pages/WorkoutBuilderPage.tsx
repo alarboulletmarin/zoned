@@ -17,6 +17,8 @@ import { SEOHead } from "@/components/seo";
 import { BlockEditor } from "@/components/domain/contribute/BlockEditor";
 import { SessionTimeline } from "@/components/visualization/SessionTimeline";
 import { ExportMenu } from "@/components/domain/ExportMenu";
+import { FavoriteButton } from "@/components/domain/FavoriteButton";
+import { useFavorites } from "@/hooks";
 import { toast } from "sonner";
 import {
   getCustomWorkout,
@@ -46,13 +48,15 @@ function WorkoutListView() {
   const workouts = getCustomWorkouts();
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { removeFavorite } = useFavorites();
 
   const handleDelete = useCallback((id: string) => {
     deleteCustomWorkout(id);
+    removeFavorite(id);
     setDeleteTarget(null);
     forceUpdate();
     toast.success(t("calculators:workoutBuilder.workoutDeleted"));
-  }, [t]);
+  }, [t, removeFavorite]);
 
   const handleExportAll = useCallback(() => {
     if (workouts.length === 0) return;
@@ -171,6 +175,7 @@ function WorkoutListView() {
                     </div>
                   </Link>
                   <div className="absolute top-1/2 right-3 -translate-y-1/2 flex items-center gap-1">
+                    <FavoriteButton workoutId={w.id} size="sm" />
                     <button
                       type="button"
                       onClick={() => handleExportOne(w)}
