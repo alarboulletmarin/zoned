@@ -547,8 +547,8 @@ export function PlanViewPage() {
     const success = withUndoSnapshot(
       plan.id,
       "reschedule",
-      `Replanification a partir de la semaine ${currentWeek > 0 ? currentWeek : 1}`,
-      `Rescheduling from week ${currentWeek > 0 ? currentWeek : 1}`,
+      `${reschedulePreview.changes.length} séance(s) marquée(s) comme sautée(s) (indisponibilité)`,
+      `${reschedulePreview.changes.length} session(s) marked as skipped (unavailability)`,
       (mutablePlan) => {
         mutablePlan.weeks = reschedulePreview.updatedPlan.weeks;
         mutablePlan.config = reschedulePreview.updatedPlan.config;
@@ -844,9 +844,15 @@ export function PlanViewPage() {
             findings={auditFindings}
             onGoToWeek={(weekNumber) => {
               setWeekParam(weekNumber);
+              // List view: expand the target week
               if (planViewMode === "list") {
                 setExpandedWeeks((prev) => new Set([...prev, weekNumber]));
               }
+              // Scroll to the week header in calendar/list views
+              requestAnimationFrame(() => {
+                const el = document.querySelector(`[data-week="${weekNumber}"]`);
+                el?.scrollIntoView({ behavior: "smooth", block: "center" });
+              });
             }}
           />
         )}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useIsEnglish } from "@/lib/i18n-utils";
+import { usePickLang } from "@/lib/i18n-utils";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, AlertTriangle } from "@/components/icons";
@@ -40,7 +40,7 @@ const SEVERITY_CONFIG: Record<
 
 export function PlanAuditPanel({ findings, onGoToWeek }: PlanAuditPanelProps) {
   const { t } = useTranslation("plan");
-  const isEn = useIsEnglish();
+  const pick = usePickLang();
   const [expanded, setExpanded] = useState(false);
 
   if (findings.length === 0) return null;
@@ -84,7 +84,7 @@ export function PlanAuditPanel({ findings, onGoToWeek }: PlanAuditPanelProps) {
               <div key={finding.id} className="flex items-start gap-2 text-sm">
                 <span className="shrink-0 text-xs mt-0.5">{fConfig.icon}</span>
                 <span className={cn("flex-1 min-w-0", fConfig.textColor)}>
-                  {isEn ? finding.messageEn : finding.message}
+                  {pick(finding, "message")}
                 </span>
                 {onGoToWeek && (
                   <Button

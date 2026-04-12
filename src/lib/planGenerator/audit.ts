@@ -37,8 +37,8 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
         severity: "error",
         code: "RACE_DAY_MISSING",
         weekNumber: plan.totalWeeks,
-        message: "Aucune session de course trouvee dans le plan",
-        messageEn: "No race day session found in the plan",
+        message: "Aucune séance de course trouvée dans le plan. La course est prévue mais n'apparaît pas dans le calendrier.",
+        messageEn: "No race day session found in the plan. The race is scheduled but doesn't appear in the calendar.",
       });
     }
   }
@@ -55,8 +55,8 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
           severity: "error",
           code: "RACE_DAY_NOT_LAST_WEEK",
           weekNumber: week.weekNumber,
-          message: `La course est en semaine ${week.weekNumber} au lieu de la derniere semaine (${plan.totalWeeks})`,
-          messageEn: `Race day is in week ${week.weekNumber} instead of the last week (${plan.totalWeeks})`,
+          message: `La course est placée en semaine ${week.weekNumber} au lieu de la dernière semaine (S${plan.totalWeeks}). L'affûtage risque d'être mal calibré.`,
+          messageEn: `Race day is in week ${week.weekNumber} instead of the last week (W${plan.totalWeeks}). The taper may not be properly calibrated.`,
         });
       }
     }
@@ -83,8 +83,8 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
             severity: "warning",
             code: "KEY_SESSIONS_TOO_CLOSE",
             weekNumber: week.weekNumber,
-            message: `Semaine ${week.weekNumber} : 2 seances cles sur des jours consecutifs (${DAY_NAMES_FR[keySessions[a].dayOfWeek]} et ${DAY_NAMES_FR[keySessions[b].dayOfWeek]})`,
-            messageEn: `Week ${week.weekNumber}: 2 key sessions on consecutive days (${DAY_NAMES_EN[keySessions[a].dayOfWeek]} and ${DAY_NAMES_EN[keySessions[b].dayOfWeek]})`,
+            message: `Semaine ${week.weekNumber} : 2 séances clés consécutives (${DAY_NAMES_FR[keySessions[a].dayOfWeek]} et ${DAY_NAMES_FR[keySessions[b].dayOfWeek]}). Prévoir au moins 1 jour de récupération entre deux séances intenses.`,
+            messageEn: `Week ${week.weekNumber}: 2 key sessions on consecutive days (${DAY_NAMES_EN[keySessions[a].dayOfWeek]} and ${DAY_NAMES_EN[keySessions[b].dayOfWeek]}). Allow at least 1 recovery day between intense sessions.`,
           });
         }
       }
@@ -100,8 +100,8 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
             severity: "warning",
             code: "KEY_SESSION_ADJACENT_LONG_RUN",
             weekNumber: week.weekNumber,
-            message: `Semaine ${week.weekNumber} : seance cle (${DAY_NAMES_FR[key.dayOfWeek]}) adjacente a la sortie longue (${DAY_NAMES_FR[lr.dayOfWeek]})`,
-            messageEn: `Week ${week.weekNumber}: key session (${DAY_NAMES_EN[key.dayOfWeek]}) adjacent to long run (${DAY_NAMES_EN[lr.dayOfWeek]})`,
+            message: `Semaine ${week.weekNumber} : séance clé (${DAY_NAMES_FR[key.dayOfWeek]}) collée à la sortie longue (${DAY_NAMES_FR[lr.dayOfWeek]}). Risque de fatigue accumulée — espacer d'au moins 1 jour.`,
+            messageEn: `Week ${week.weekNumber}: key session (${DAY_NAMES_EN[key.dayOfWeek]}) adjacent to long run (${DAY_NAMES_EN[lr.dayOfWeek]}). Risk of accumulated fatigue — space them at least 1 day apart.`,
           });
         }
       }
@@ -114,8 +114,8 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
         severity: "warning",
         code: "RECOVERY_WEEK_TOO_HARD",
         weekNumber: week.weekNumber,
-        message: `Semaine ${week.weekNumber} (recup) contient ${keySessions.length} seance(s) cle(s)`,
-        messageEn: `Week ${week.weekNumber} (recovery) contains ${keySessions.length} key session(s)`,
+        message: `Semaine ${week.weekNumber} (récupération) contient ${keySessions.length} séance(s) clé(s). Une semaine de récup devrait être allégée pour permettre la régénération.`,
+        messageEn: `Week ${week.weekNumber} (recovery) contains ${keySessions.length} key session(s). A recovery week should be lighter to allow regeneration.`,
       });
     }
 
@@ -126,8 +126,8 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
         severity: "warning",
         code: "TAPER_WEEK_HEAVY",
         weekNumber: week.weekNumber,
-        message: `Semaine ${week.weekNumber} (affutage) a un volume de ${week.volumePercent}% (> 70%)`,
-        messageEn: `Week ${week.weekNumber} (taper) has ${week.volumePercent}% volume (> 70%)`,
+        message: `Semaine ${week.weekNumber} (affûtage) : volume à ${week.volumePercent}%, trop élevé pour un affûtage efficace. Réduire sous 70% pour arriver frais le jour J.`,
+        messageEn: `Week ${week.weekNumber} (taper): volume at ${week.volumePercent}%, too high for effective tapering. Reduce below 70% to arrive fresh on race day.`,
       });
     }
 
@@ -142,8 +142,8 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
         severity: "warning",
         code: "VOLUME_JUMP_TOO_LARGE",
         weekNumber: week.weekNumber,
-        message: `Semaine ${week.weekNumber} : saut de volume de ${prevWeek.volumePercent}% a ${week.volumePercent}% (> +20%)`,
-        messageEn: `Week ${week.weekNumber}: volume jump from ${prevWeek.volumePercent}% to ${week.volumePercent}% (> +20%)`,
+        message: `Semaine ${week.weekNumber} : volume passe de ${prevWeek.volumePercent}% à ${week.volumePercent}% (+${Math.round((week.volumePercent / prevWeek.volumePercent - 1) * 100)}%). Une augmentation > 20% par semaine augmente le risque de blessure.`,
+        messageEn: `Week ${week.weekNumber}: volume jumps from ${prevWeek.volumePercent}% to ${week.volumePercent}% (+${Math.round((week.volumePercent / prevWeek.volumePercent - 1) * 100)}%). Increasing by more than 20% per week raises injury risk.`,
       });
     }
 
@@ -154,8 +154,8 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
         severity: "info",
         code: "EMPTY_WEEK",
         weekNumber: week.weekNumber,
-        message: `Semaine ${week.weekNumber} : aucune seance programmee`,
-        messageEn: `Week ${week.weekNumber}: no sessions scheduled`,
+        message: `Semaine ${week.weekNumber} : aucune séance programmée.`,
+        messageEn: `Week ${week.weekNumber}: no sessions scheduled.`,
       });
     }
   }
