@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react"
 import { useTranslation } from "react-i18next";
 import { HelmetProvider } from "react-helmet-async";
 import { Analytics } from "@vercel/analytics/react";
-import { Toaster } from "sonner";
+import { toast, Toaster } from "sonner";
 import { Sidebar, MobileSidebar, TopBar, Footer } from "@/components/layout";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { FavoritesProvider } from "@/hooks";
@@ -11,6 +11,8 @@ import { SettingsProvider } from "@/hooks/useSettings";
 import { CommandPaletteProvider, CommandPalette } from "@/components/search";
 import { GlossaryMatcherProvider } from "@/contexts/GlossaryMatcherContext";
 import { StorageWarning } from "@/components/domain/StorageWarning";
+import { PWAInstallPrompt } from "@/components/domain/PWAInstallPrompt";
+import { usePWA } from "@/hooks/usePWA";
 
 // All pages lazy loaded for optimal code-splitting
 const HomePage = lazy(() => import("@/pages/HomePage").then(m => ({ default: m.HomePage })));
@@ -103,6 +105,7 @@ function ScrollToTopOnNavigate() {
 
 function App() {
   const { t } = useTranslation("common");
+  const { canInstall, promptInstall, dismissInstall, isOnline, updateAvailable, applyUpdate } = usePWA();
 
   // Preload main pages in background after first render
   useEffect(() => { preloadSidebarPages(); }, []);
@@ -142,6 +145,28 @@ function App() {
     mediaQuery.addEventListener("change", handleChange);
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
+
+  // PWA: toast on update available
+  useEffect(() => {
+    if (updateAvailable) {
+      toast(t("pwa.updateAvailable"), {
+        action: { label: t("pwa.update"), onClick: applyUpdate },
+        duration: Infinity,
+      });
+    }
+  }, [updateAvailable]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // PWA: toast on offline / back-online
+  const prevOnline = useRef(true);
+  useEffect(() => {
+    if (!isOnline) {
+      toast.warning(t("pwa.offline"), { id: "offline", duration: Infinity });
+    } else if (!prevOnline.current) {
+      toast.dismiss("offline");
+      toast.success(t("pwa.backOnline"));
+    }
+    prevOnline.current = isOnline;
+  }, [isOnline]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Toggle theme — NO setState, NO App re-render. Just DOM class + localStorage.
   // Transitions are disabled during the switch to avoid border/background flash.
@@ -280,6 +305,7 @@ function App() {
           </GlossaryMatcherProvider>
           <Analytics />
           <StorageWarning />
+          {canInstall && <PWAInstallPrompt onInstall={promptInstall} onDismiss={dismissInstall} />}
           <Toaster richColors position="bottom-right" />
           </BrowserRouter>
         </FavoritesProvider>

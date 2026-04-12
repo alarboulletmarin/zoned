@@ -666,6 +666,16 @@
       "a9": "It's possible but with precautions: alternate easy and hard days, keep at least 1-2 days per week very light or cross-training (cycling, swimming), and listen to your body. Many runners thrive with 5-6 days per week and 1-2 days of complete rest. Rest is part of training."
     }
   },
+  "pwa": {
+    "installTitle": "Install Zoned",
+    "installDesc": "Access Zoned directly from your home screen, even offline.",
+    "install": "Install",
+    "dismiss": "Later",
+    "updateAvailable": "A new version of Zoned is available.",
+    "update": "Update",
+    "offline": "You are offline. Your data remains accessible.",
+    "backOnline": "Back online."
+  },
   "domain": {
     "fitTransfer": {
       "polarPath": "Favorites → Create",

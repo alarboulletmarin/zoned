@@ -666,6 +666,16 @@
       "a9": "C'est possible mais avec des précautions : alterner impérativement jours faciles et durs, garder au moins 1-2 jours par semaine très légers ou en cross-training (vélo, natation), et écouter son corps. Beaucoup de coureurs prospèrent avec 5-6 jours par semaine et 1-2 jours de repos complet. Le repos fait partie de l'entraînement."
     }
   },
+  "pwa": {
+    "installTitle": "Installer Zoned",
+    "installDesc": "Accédez à Zoned directement depuis votre écran d'accueil, même hors ligne.",
+    "install": "Installer",
+    "dismiss": "Plus tard",
+    "updateAvailable": "Une nouvelle version de Zoned est disponible.",
+    "update": "Mettre à jour",
+    "offline": "Vous êtes hors ligne. Vos données restent accessibles.",
+    "backOnline": "Connexion rétablie."
+  },
   "domain": {
     "fitTransfer": {
       "polarPath": "Favoris → Créer",

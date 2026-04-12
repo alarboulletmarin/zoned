@@ -19,13 +19,14 @@ createRoot(document.getElementById("root")!).render(
 // Hide shell after first paint
 requestAnimationFrame(hideLoadingShell);
 
-// PWA service worker registration — force reload on update
+// PWA service worker registration — dispatch event on update so UI can prompt
 if ("serviceWorker" in navigator && import.meta.env.PROD) {
   import("virtual:pwa-register").then(({ registerSW }) => {
-    registerSW({
+    const updateSW = registerSW({
       immediate: true,
       onNeedRefresh() {
-        window.location.reload();
+        window.dispatchEvent(new CustomEvent("zoned-sw-update"));
+        (window as any).__zonedApplyUpdate = () => updateSW(true);
       },
     });
   });
