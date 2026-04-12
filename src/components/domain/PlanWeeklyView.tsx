@@ -7,6 +7,7 @@ import type { TrainingPlan } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { usePickLang } from "@/lib/i18n-utils";
+import { toast } from "sonner";
 
 // ── Color maps ──────────────────────────────────────────────────────
 
@@ -185,6 +186,13 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
       e.preventDefault();
       setDropTarget(null);
 
+      // Block drop on unavailable days
+      if (blockedDays?.has(`${weekNumber}-${day}`)) {
+        toast.error(t("reschedule.blockedDrop"));
+        setDraggedSession(null);
+        return;
+      }
+
       // Check if this is a drop from the workout library panel
       const workoutId = e.dataTransfer.getData("workout-id");
       if (workoutId && onWorkoutAdd) {
@@ -203,7 +211,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
       onSessionMove(draggedSession.weekNumber, draggedSession.sessionIndex, weekNumber, day);
       setDraggedSession(null);
     },
-    [draggedSession, onSessionMove, onWorkoutAdd, plan.weeks],
+    [draggedSession, onSessionMove, onWorkoutAdd, plan.weeks, blockedDays, t],
   );
 
   const handleDragEnd = useCallback(() => {
@@ -359,16 +367,21 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
       setDropTarget(null);
 
       if (dragState && target && onSessionMove) {
-        const week = plan.weeks.find((w) => w.weekNumber === dragState.weekNumber);
-        const session = week?.sessions[dragState.sessionIndex];
-        if (
-          !(
-            session &&
-            session.dayOfWeek === target.day &&
-            dragState.weekNumber === target.weekNumber
-          )
-        ) {
-          onSessionMove(dragState.weekNumber, dragState.sessionIndex, target.weekNumber, target.day);
+        // Block drop on unavailable days
+        if (blockedDays?.has(`${target.weekNumber}-${target.day}`)) {
+          toast.error(t("reschedule.blockedDrop"));
+        } else {
+          const week = plan.weeks.find((w) => w.weekNumber === dragState.weekNumber);
+          const session = week?.sessions[dragState.sessionIndex];
+          if (
+            !(
+              session &&
+              session.dayOfWeek === target.day &&
+              dragState.weekNumber === target.weekNumber
+            )
+          ) {
+            onSessionMove(dragState.weekNumber, dragState.sessionIndex, target.weekNumber, target.day);
+          }
         }
       }
     } else if (!wasLongPress && sessionInfo) {
@@ -839,7 +852,7 @@ const DayCell = memo(function DayCell({
       )}
 
       {sessions.length === 0 ? (
-        onAddToDay ? (
+        onAddToDay && !isBlockedDay ? (
           <button
             type="button"
             onClick={() => onAddToDay(selectedWeek, dayIndex)}
@@ -1043,7 +1056,7 @@ const DayCell = memo(function DayCell({
         );
       })}
 
-      {sessions.length > 0 && onAddToDay && (
+      {sessions.length > 0 && onAddToDay && !isBlockedDay && (
         <button
           type="button"
           onClick={() => onAddToDay(selectedWeek, dayIndex)}
