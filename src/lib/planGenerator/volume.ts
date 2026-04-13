@@ -129,9 +129,14 @@ export function calculateVolumeProgression(
 
     if (isRecoveryWeek) {
       const recoveryKm = Math.round(currentKm * RECOVERY_WEEK_VOLUME_PCT);
+      // volumePercent = actual ratio to peak (not a fixed 65%)
+      // This prevents early recovery weeks from showing higher % than surrounding build weeks
+      const recoveryVolPct = adjustedPeakKm > 0
+        ? Math.round((recoveryKm / adjustedPeakKm) * 100)
+        : Math.round(RECOVERY_WEEK_VOLUME_PCT * 100);
       weeks.push({
         weekNumber: w,
-        volumePercent: Math.round(RECOVERY_WEEK_VOLUME_PCT * 100),
+        volumePercent: recoveryVolPct,
         targetKm: recoveryKm,
         isRecoveryWeek: true,
       });
