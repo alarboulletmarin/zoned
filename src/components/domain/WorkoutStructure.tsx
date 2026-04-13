@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Lightbulb, AlertTriangle } from "@/components/icons";
 import { ZoneBadge } from "./ZoneBadge";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { WorkoutTemplate, WorkoutStep, WorkoutStepRepeat, WorkoutStepSegment, ZoneRange, ZoneNumber } from "@/types";
 import { getZoneNumber } from "@/types";
@@ -97,6 +98,37 @@ function shouldShowPhaseSummary(steps: WorkoutStep[]): boolean {
   return hasNestedRepeat(steps);
 }
 
+function getPatternChipValue(step: WorkoutStepRepeat, isEnglish: boolean): string {
+  const summary = summarizeWorkoutSteps([step], isEnglish);
+  const prefix = `${step.count} x `;
+  return summary.startsWith(prefix) ? summary.slice(prefix.length) : summary;
+}
+
+function getRecoveryChipLabel(
+  step: WorkoutStepRepeat,
+  isEnglish: boolean,
+  t: StepItemProps["t"],
+): string | null {
+  if (!step.between || step.between.length === 0) return null;
+
+  const value = summarizeWorkoutSteps(step.between, isEnglish);
+  if (step.unit === "sets") return t("structure.chips.seriesRecovery", { value });
+  if (step.unit === "blocks") return t("structure.chips.blocksRecovery", { value });
+  return null;
+}
+
+function StructureChips({ items }: { items: string[] }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {items.map((item) => (
+        <Badge key={item} variant="secondary" className="rounded-full px-2.5 py-1 text-[11px] font-medium tracking-tight">
+          {item}
+        </Badge>
+      ))}
+    </div>
+  );
+}
+
 function areAllSegments(steps: WorkoutStep[]): steps is WorkoutStepSegment[] {
   return steps.every((step) => step.kind === "segment");
 }
@@ -118,7 +150,7 @@ function StepItem({ step, depth, userZones, t, isEnglish }: StepItemProps) {
   }
 
   if (isCompactNestedRepeat(step)) {
-    return <CompactNestedRepeatItem step={step} depth={depth} userZones={userZones} t={t} isEnglish={isEnglish} />;
+    return <CompactNestedRepeatItem step={step} depth={depth} userZones={userZones} t={t} />;
   }
 
   if (isCompactRepeat(step)) {
@@ -175,44 +207,43 @@ function CompactNestedRepeatItem({
   depth,
   userZones,
   t,
-  isEnglish,
-}: StepItemProps & { step: WorkoutStepRepeat & { steps: [WorkoutStepRepeat] } }) {
+}: Omit<StepItemProps, "isEnglish"> & { step: WorkoutStepRepeat & { steps: [WorkoutStepRepeat] } }) {
   const inner = step.steps[0];
   const innerSegments = inner.steps as WorkoutStepSegment[];
   const innerBetween = (inner.between ?? []) as WorkoutStepSegment[];
   const setBetween = (step.between ?? []) as WorkoutStepSegment[];
-  const repeatLabel = t(`structure.repeatUnits.${step.unit ?? "blocks"}`, { count: step.count });
-  const innerLabel = t(`structure.repeatUnits.${inner.unit ?? "blocks"}`, { count: inner.count });
-  const betweenLabel = t(`structure.between.${step.unit ?? "blocks"}`);
-  const innerSummary = summarizeWorkoutSteps([inner], isEnglish).replace(/^\d+x\(/, "").replace(/\)$/, "");
+
+  const setsLabel = t(`structure.repeatUnits.${step.unit ?? "blocks"}`, { count: step.count });
+  const repsLabel = t(`structure.repeatUnits.${inner.unit ?? "blocks"}`, { count: inner.count });
+  const betweenSetsLabel = t(`structure.between.${step.unit ?? "blocks"}`);
 
   return (
     <div className={cn("rounded-xl border border-border/60 bg-muted/20 p-3 sm:p-4 space-y-3", depth > 0 && "ml-4 sm:ml-6")}>
-      <div className="space-y-1">
-        <p className="text-sm font-semibold">{repeatLabel}</p>
-        {depth > 0 && <p className="text-sm text-muted-foreground">{innerSummary}</p>}
+      <div className="flex items-center gap-2 flex-wrap">
+        <Badge variant="secondary" className="rounded-full px-2.5 py-1 text-[11px] font-medium tracking-tight">
+          {setsLabel}
+        </Badge>
+        <span className="text-xs text-muted-foreground/60">×</span>
+        <Badge variant="secondary" className="rounded-full px-2.5 py-1 text-[11px] font-medium tracking-tight">
+          {repsLabel}
+        </Badge>
       </div>
 
-      <div className="rounded-lg border border-border/40 bg-background/80 p-3 space-y-2">
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{innerLabel}</p>
+      <div className="rounded-lg border border-border/40 bg-background/50 p-3 space-y-2">
         {innerSegments.map((segment, index) => (
           <SegmentSummaryRow key={`compact-inner-step-${index}`} step={segment} userZones={userZones} t={t} />
         ))}
-        {innerBetween.length > 0 && (
-          <div className="space-y-1.5 pt-1">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-              {t(`structure.between.${inner.unit ?? "blocks"}`)}
-            </p>
-            {innerBetween.map((segment, index) => (
-              <SegmentSummaryRow key={`compact-inner-between-${index}`} step={segment} userZones={userZones} t={t} muted />
-            ))}
-          </div>
-        )}
+        {innerBetween.map((segment, index) => (
+          <SegmentSummaryRow key={`compact-inner-between-${index}`} step={segment} userZones={userZones} t={t} dashed />
+        ))}
+        <p className="text-[11px] text-muted-foreground text-right tracking-tight">
+          × {inner.count}
+        </p>
       </div>
 
       {setBetween.length > 0 && (
         <div className="rounded-lg border border-dashed border-border/60 bg-background/70 p-3 space-y-2">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{betweenLabel}</p>
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{betweenSetsLabel}</p>
           {setBetween.map((segment, index) => (
             <SegmentSummaryRow key={`compact-between-${index}`} step={segment} userZones={userZones} t={t} muted />
           ))}
@@ -227,35 +258,37 @@ function CompactRepeatItem({
   depth,
   userZones,
   t,
+  isEnglish,
 }: StepItemProps & { step: WorkoutStepRepeat }) {
   const stepSegments = step.steps as WorkoutStepSegment[];
   const betweenSegments = (step.between ?? []) as WorkoutStepSegment[];
-  const repeatLabel = t(`structure.repeatUnits.${step.unit ?? "blocks"}`, { count: step.count });
+  const chips = [
+    t(`structure.repeatUnits.${step.unit ?? "blocks"}`, { count: step.count }),
+    getPatternChipValue(step, isEnglish),
+    getRecoveryChipLabel(step, isEnglish, t),
+  ].filter(Boolean) as string[];
   const betweenLabel = t(`structure.between.${step.unit ?? "blocks"}`);
-  const showBetweenPlaceholder = (step.unit === "sets" || step.unit === "blocks") && (!step.between || step.between.length === 0);
+  const showBetweenPlaceholder = (step.unit === "sets" || step.unit === "blocks") && betweenSegments.length === 0;
 
   return (
     <div className={cn("rounded-xl border border-border/60 bg-muted/20 p-3 sm:p-4 space-y-3", depth > 0 && "ml-4 sm:ml-6")}>
-      <p className="text-sm font-semibold">{repeatLabel}</p>
+      <StructureChips items={chips} />
 
       <div className="space-y-2">
         {stepSegments.map((segment, index) => (
           <SegmentSummaryRow key={`compact-step-${index}`} step={segment} userZones={userZones} t={t} />
         ))}
+        {betweenSegments.map((segment, index) => (
+          <SegmentSummaryRow key={`compact-between-${index}`} step={segment} userZones={userZones} t={t} dashed />
+        ))}
       </div>
 
-      {(step.between && step.between.length > 0) || showBetweenPlaceholder ? (
-        <div className="space-y-1.5 pt-1">
+      {showBetweenPlaceholder && (
+        <div className="rounded-lg border border-dashed border-border/60 bg-background/70 p-3 space-y-2">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{betweenLabel}</p>
-          {betweenSegments.length > 0 ? (
-            betweenSegments.map((segment, index) => (
-              <SegmentSummaryRow key={`compact-between-${index}`} step={segment} userZones={userZones} t={t} muted />
-            ))
-          ) : (
-            <p className="text-sm text-muted-foreground italic">{t("structure.notSpecified")}</p>
-          )}
+          <p className="text-sm text-muted-foreground italic">{t("structure.notSpecified")}</p>
         </div>
-      ) : null}
+      )}
     </div>
   );
 }
@@ -265,11 +298,13 @@ function SegmentSummaryRow({
   userZones,
   t,
   muted = false,
+  dashed = false,
 }: {
   step: WorkoutStepSegment;
   userZones?: ZoneRange[];
   t: StepItemProps["t"];
   muted?: boolean;
+  dashed?: boolean;
 }) {
   const pickLang = usePickLang();
   const description = pickLang(step, "description");
@@ -284,7 +319,11 @@ function SegmentSummaryRow({
   if (step.distanceM != null) metaParts.push(`${step.distanceM} m`);
 
   return (
-    <div className={cn("rounded-lg border border-border/40 bg-background/80 p-2.5 space-y-1.5", muted && "bg-muted/35")}>
+    <div className={cn(
+      "rounded-lg border border-border/40 bg-background/80 p-2.5 space-y-1.5",
+      muted && "bg-muted/35",
+      dashed && "border-dashed border-border/50 bg-muted/20",
+    )}>
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2 flex-wrap min-w-0">
           {step.zone ? (
@@ -331,7 +370,7 @@ function SegmentItem({
     <div
       className={cn(
         "rounded-lg border border-border/40 bg-background/80 p-3",
-        step.role === "recovery" && "bg-muted/35",
+        step.role === "recovery" && "border-dashed border-border/50 bg-muted/20",
         depth > 0 && "ml-4 sm:ml-6",
       )}
     >

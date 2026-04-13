@@ -569,6 +569,52 @@
           "intensityType": "I"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 2,
+          "unit": "reps",
+          "steps": [
+            { "kind": "segment", "description": "Côte lente", "descriptionEn": "Easy hill", "distanceM": 200, "zone": "Z2", "role": "effort" }
+          ],
+          "between": [
+            { "kind": "segment", "description": "Descente footing", "descriptionEn": "Jog down", "zone": "Z1", "role": "recovery" }
+          ]
+        },
+        {
+          "kind": "repeat",
+          "count": 2,
+          "unit": "reps",
+          "steps": [
+            { "kind": "segment", "description": "Côte tempo", "descriptionEn": "Tempo hill", "distanceM": 200, "zone": "Z3", "role": "effort" }
+          ],
+          "between": [
+            { "kind": "segment", "description": "Descente footing", "descriptionEn": "Jog down", "zone": "Z1", "role": "recovery" }
+          ]
+        },
+        {
+          "kind": "repeat",
+          "count": 2,
+          "unit": "reps",
+          "steps": [
+            { "kind": "segment", "description": "Côte seuil", "descriptionEn": "Threshold hill", "distanceM": 200, "zone": "Z4", "role": "effort" }
+          ],
+          "between": [
+            { "kind": "segment", "description": "Descente footing", "descriptionEn": "Jog down", "zone": "Z1", "role": "recovery" }
+          ]
+        },
+        {
+          "kind": "repeat",
+          "count": 2,
+          "unit": "reps",
+          "steps": [
+            { "kind": "segment", "description": "Côte VMA", "descriptionEn": "VO2max hill", "distanceM": 150, "zone": "Z5", "role": "effort" }
+          ],
+          "between": [
+            { "kind": "segment", "description": "Descente footing", "descriptionEn": "Jog down", "zone": "Z1", "role": "recovery" }
+          ]
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",

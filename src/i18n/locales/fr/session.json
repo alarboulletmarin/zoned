@@ -16,6 +16,10 @@
       "reps": "Entre les répétitions",
       "sets": "Entre les séries",
       "blocks": "Entre les blocs"
+    },
+    "chips": {
+      "seriesRecovery": "récup séries {{value}}",
+      "blocksRecovery": "récup blocs {{value}}"
     }
   },
   "zones": {

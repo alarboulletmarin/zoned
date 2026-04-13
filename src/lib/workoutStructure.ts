@@ -150,6 +150,14 @@ function convertLegacyBlockToStep(block: WorkoutBlock): WorkoutStep {
   const setBetween = buildTextSegment(block.restBetweenSets, "recovery")
     ?? buildBetweenSetsSegment(block.description, block.descriptionEn);
 
+  const hasRepeat = (block.repetitions && block.repetitions > 1) || (block.sets && block.sets > 1);
+  if (hasRepeat) {
+    effort.description = cleanRepeatDescription(effort.description);
+    if (effort.descriptionEn) {
+      effort.descriptionEn = cleanRepeatDescription(effort.descriptionEn);
+    }
+  }
+
   if (block.sets && block.sets > 1) {
     const perSetSteps: WorkoutStep[] = block.repetitions && block.repetitions > 1
       ? [{
@@ -275,12 +283,14 @@ function buildTextSegment(text: string | undefined, role: WorkoutStepRole): Work
   if (!text) return null;
 
   const durationSec = parseDurationToSeconds(text);
+  const distanceM = parseDistanceMeters(text);
   const zone = extractPrimaryZone(text) ?? (role === "recovery" ? "Z1" : undefined);
 
   return {
     kind: "segment",
     description: text,
     ...(durationSec ? { durationSec } : {}),
+    ...(distanceM && !durationSec ? { distanceM } : {}),
     ...(zone ? { zone } : {}),
     role,
   };
@@ -306,6 +316,30 @@ function buildBetweenSetsSegment(description: string, descriptionEn?: string): W
     zone: "Z1",
     role: "recovery",
   };
+}
+
+function cleanRepeatDescription(desc: string): string {
+  let cleaned = desc;
+  // Remove "10x", "8-10x", "4 × " prefix
+  cleaned = cleaned.replace(/^\d+(?:\s*-\s*\d+)?\s*[x×]\s*/i, "");
+  // Remove "(…)" wrapper
+  cleaned = cleaned.replace(/^\((.+)\)$/, "$1");
+  // Remove inner "Nx" prefix after unwrapping
+  cleaned = cleaned.replace(/^\d+(?:\s*-\s*\d+)?\s*[x×]\s*/i, "");
+  // Remove "avec/with …" suffix
+  cleaned = cleaned.replace(/\s+(?:avec|with)\s+.+$/i, "");
+  // Remove "/ Ns récup/footing/…" suffix (allows words between number and keyword)
+  cleaned = cleaned.replace(/\s*\/\s*\d+\S*\s+.*?(?:récup|recovery|repos|rest|footing|jog|marche|walk).*$/i, "");
+  // Remove ", récup/recovery …" suffix
+  cleaned = cleaned.replace(/,\s+(?:récup|recovery)\s+.+$/i, "");
+  return cleaned.trim();
+}
+
+function parseDistanceMeters(text: string): number | null {
+  const match = text.match(/(\d+)\s*m\b/i);
+  if (!match) return null;
+  const value = Number(match[1]);
+  return value >= 10 && value <= 5000 ? value : null;
 }
 
 function flattenSteps(
@@ -368,13 +402,89 @@ function flattenSteps(
 }
 
 function formatStepsInline(steps: WorkoutStep[], isEnglish: boolean): string {
-  return steps.map((step) => {
-    if (step.kind === "segment") return isEnglish && step.descriptionEn ? step.descriptionEn : step.description;
+  return steps.map((step) => formatStepInline(step, isEnglish)).join(" • ");
+}
 
-    const inner = formatStepsInline(step.steps, isEnglish);
-    const between = step.between?.length ? ` / ${formatStepsInline(step.between, isEnglish)}` : "";
-    return `${step.count}x(${inner}${between})`;
-  }).join(" + ");
+function formatStepInline(step: WorkoutStep, isEnglish: boolean): string {
+  if (step.kind === "segment") return formatSegmentToken(step, isEnglish);
+
+  const content = formatLoopContent(step.steps, isEnglish);
+  const betweenInline = formatBetweenInline(step.between, isEnglish, false);
+  const betweenRecovery = formatBetweenInline(step.between, isEnglish, true);
+
+  if (step.unit === "reps") {
+    return `${step.count} x ${content}${betweenInline ? `/${betweenInline}` : ""}`;
+  }
+
+  if (step.unit === "sets") {
+    return `${step.count} x (${content})${betweenRecovery ? ` + ${betweenRecovery}` : ""}`;
+  }
+
+  return `${step.count} ${isEnglish ? "blocks of" : "blocs de"} ${content}${betweenRecovery ? ` + ${betweenRecovery}` : ""}`;
+}
+
+function formatLoopContent(steps: WorkoutStep[], isEnglish: boolean): string {
+  if (steps.length === 1) {
+    const [onlyStep] = steps;
+    if (onlyStep.kind === "segment") return formatSegmentToken(onlyStep, isEnglish);
+    return formatStepInline(onlyStep, isEnglish);
+  }
+
+  return `(${steps.map((step) => formatStepInline(step, isEnglish)).join(" + ")})`;
+}
+
+function formatBetweenInline(
+  steps: WorkoutStep[] | undefined,
+  isEnglish: boolean,
+  includeRecoveryWord: boolean,
+): string {
+  if (!steps || steps.length === 0) return "";
+
+  if (steps.length === 1 && steps[0]?.kind === "segment") {
+    return formatRecoveryToken(steps[0], isEnglish, includeRecoveryWord);
+  }
+
+  const content = steps.map((step) => formatStepInline(step, isEnglish)).join(" + ");
+  return includeRecoveryWord ? `${content} ${isEnglish ? "recovery" : "récup"}` : content;
+}
+
+function formatRecoveryToken(
+  segment: WorkoutStepSegment,
+  isEnglish: boolean,
+  includeRecoveryWord: boolean,
+): string {
+  const base = formatSegmentToken(segment, isEnglish);
+  const zoneNumbers = extractZoneNumbers(segment.zone);
+  const zoneSuffix = zoneNumbers.length > 0 && !(zoneNumbers.length === 1 && zoneNumbers[0] === 1)
+    ? ` ${segment.zone}`
+    : "";
+  const recoveryWord = includeRecoveryWord ? ` ${isEnglish ? "recovery" : "récup"}` : "";
+
+  return `${base}${recoveryWord}${zoneSuffix}`;
+}
+
+function formatSegmentToken(segment: WorkoutStepSegment, isEnglish: boolean): string {
+  if (segment.distanceM != null) return `${segment.distanceM}m`;
+  if (segment.distanceKm != null) return `${segment.distanceKm}km`;
+  if (segment.durationSec != null) return formatDurationToken(segment.durationSec);
+  return isEnglish && segment.descriptionEn ? segment.descriptionEn : segment.description;
+}
+
+function formatDurationToken(durationSec: number): string {
+  if (durationSec < 60) return `${durationSec}"`;
+
+  const hours = Math.floor(durationSec / 3600);
+  const remainingAfterHours = durationSec % 3600;
+  const minutes = Math.floor(remainingAfterHours / 60);
+  const seconds = remainingAfterHours % 60;
+
+  if (hours > 0) {
+    if (minutes === 0 && seconds === 0) return `${hours}h`;
+    if (seconds === 0) return `${hours}h${minutes.toString().padStart(2, "0")}`;
+  }
+
+  if (seconds === 0) return `${Math.round(durationSec / 60)}'`;
+  return `${minutes}'${seconds.toString().padStart(2, "0")}`;
 }
 
 function getStepsDurationSeconds(steps: WorkoutStep[]): number {

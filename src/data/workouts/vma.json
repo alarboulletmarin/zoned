@@ -911,6 +911,17 @@
           "intensityType": "I"
         }
       ],
+      "mainSetStructure": [
+        { "kind": "segment", "description": "200m VMA", "descriptionEn": "200m VO2max", "distanceM": 200, "zone": "Z5", "role": "effort" },
+        { "kind": "segment", "description": "200m récup", "descriptionEn": "200m recovery", "distanceM": 200, "zone": "Z1", "role": "recovery" },
+        { "kind": "segment", "description": "400m VMA", "descriptionEn": "400m VO2max", "distanceM": 400, "zone": "Z5", "role": "effort" },
+        { "kind": "segment", "description": "200m récup", "descriptionEn": "200m recovery", "distanceM": 200, "zone": "Z1", "role": "recovery" },
+        { "kind": "segment", "description": "600m VMA", "descriptionEn": "600m VO2max", "distanceM": 600, "zone": "Z5", "role": "effort" },
+        { "kind": "segment", "description": "400m récup", "descriptionEn": "400m recovery", "distanceM": 400, "zone": "Z1", "role": "recovery" },
+        { "kind": "segment", "description": "400m VMA", "descriptionEn": "400m VO2max", "distanceM": 400, "zone": "Z5", "role": "effort" },
+        { "kind": "segment", "description": "200m récup", "descriptionEn": "200m recovery", "distanceM": 200, "zone": "Z1", "role": "recovery" },
+        { "kind": "segment", "description": "200m VMA", "descriptionEn": "200m VO2max", "distanceM": 200, "zone": "Z5", "role": "effort" }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -1789,6 +1800,17 @@
           "intensityType": "I"
         }
       ],
+      "mainSetStructure": [
+        { "kind": "segment", "description": "1000m VMA", "descriptionEn": "1000m VO2max", "distanceM": 1000, "zone": "Z5", "role": "effort" },
+        { "kind": "segment", "description": "400m récup", "descriptionEn": "400m recovery", "distanceM": 400, "zone": "Z1", "role": "recovery" },
+        { "kind": "segment", "description": "800m VMA", "descriptionEn": "800m VO2max", "distanceM": 800, "zone": "Z5", "role": "effort" },
+        { "kind": "segment", "description": "300m récup", "descriptionEn": "300m recovery", "distanceM": 300, "zone": "Z1", "role": "recovery" },
+        { "kind": "segment", "description": "600m VMA", "descriptionEn": "600m VO2max", "distanceM": 600, "zone": "Z5", "role": "effort" },
+        { "kind": "segment", "description": "200m récup", "descriptionEn": "200m recovery", "distanceM": 200, "zone": "Z1", "role": "recovery" },
+        { "kind": "segment", "description": "400m VMA", "descriptionEn": "400m VO2max", "distanceM": 400, "zone": "Z5", "role": "effort" },
+        { "kind": "segment", "description": "200m récup", "descriptionEn": "200m recovery", "distanceM": 200, "zone": "Z1", "role": "recovery" },
+        { "kind": "segment", "description": "200m VMA", "descriptionEn": "200m VO2max", "distanceM": 200, "zone": "Z5", "role": "effort" }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -1872,29 +1894,60 @@
       ],
       "mainSetTemplate": [
         {
-          "description": "Série 1: 5x400m VMA",
-          "descriptionEn": "Set 1: 5x400m VO2max",
+          "description": "2x(5x 400m VMA / 200m footing)",
+          "descriptionEn": "2x(5x 400m VO2max / 200m jog)",
           "distanceM": 400,
           "zone": "Z5",
           "repetitions": 5,
+          "sets": 2,
           "recovery": "200m footing",
+          "restBetweenSets": "5min récup longue",
           "intensityType": "I"
-        },
+        }
+      ],
+      "mainSetStructure": [
         {
-          "description": "Récup longue",
-          "descriptionEn": "Long recovery",
-          "durationMin": 5,
-          "zone": "Z1",
-          "intensityType": "E"
-        },
-        {
-          "description": "Série 2: 5x400m VMA",
-          "descriptionEn": "Set 2: 5x400m VO2max",
-          "distanceM": 400,
-          "zone": "Z5",
-          "repetitions": 5,
-          "recovery": "200m footing",
-          "intensityType": "I"
+          "kind": "repeat",
+          "count": 2,
+          "unit": "sets",
+          "steps": [
+            {
+              "kind": "repeat",
+              "count": 5,
+              "unit": "reps",
+              "steps": [
+                {
+                  "kind": "segment",
+                  "description": "400m VMA",
+                  "descriptionEn": "400m VO2max",
+                  "distanceM": 400,
+                  "zone": "Z5",
+                  "intensityType": "I",
+                  "role": "effort"
+                }
+              ],
+              "between": [
+                {
+                  "kind": "segment",
+                  "description": "200m footing",
+                  "descriptionEn": "200m jog",
+                  "distanceM": 200,
+                  "zone": "Z1",
+                  "role": "recovery"
+                }
+              ]
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "Récup longue",
+              "descriptionEn": "Long recovery",
+              "durationSec": 300,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [

@@ -10,6 +10,7 @@ import {
   getWorkoutZoneNumbers,
   normalizeWorkoutStructureSource,
   replaceWorkoutPhaseSteps,
+  summarizeWorkoutSteps,
 } from "./workoutStructure";
 
 function makeWorkout(overrides: Partial<WorkoutTemplate> = {}): WorkoutTemplate {
@@ -74,8 +75,8 @@ describe("getWorkoutPhaseSteps", () => {
             steps: [
               {
                 kind: "segment",
-                description: "2x(3x 1min VMA / 30s récup)",
-                descriptionEn: "2x(3x 1min VO2max / 30s recovery)",
+                description: "1min VMA",
+                descriptionEn: "1min VO2max",
                 durationSec: 60,
                 zone: "Z5",
                 role: "effort",
@@ -270,5 +271,60 @@ describe("structured workout helpers", () => {
     expect(updated.warmupTemplate).toEqual([
       { description: "12min easy", durationMin: 12, zone: "Z1" },
     ]);
+  });
+
+  test("formats nested repeats with natural macro notation", () => {
+    const steps: WorkoutStep[] = [
+      {
+        kind: "repeat",
+        count: 3,
+        unit: "sets",
+        steps: [
+          {
+            kind: "repeat",
+            count: 15,
+            unit: "reps",
+            steps: [
+              { kind: "segment", description: "20s VMA", durationSec: 20, zone: "Z5", role: "effort" },
+            ],
+            between: [
+              { kind: "segment", description: "20s footing très lent", durationSec: 20, zone: "Z1", role: "recovery" },
+            ],
+          },
+        ],
+        between: [
+          { kind: "segment", description: "3min footing Z1", durationSec: 180, zone: "Z1", role: "recovery" },
+        ],
+      },
+    ];
+
+    expect(summarizeWorkoutSteps(steps)).toBe(`3 x (15 x 20"/20") + 3' récup`);
+  });
+
+  test("formats compound repeats with concise macro notation", () => {
+    const steps: WorkoutStep[] = [
+      {
+        kind: "repeat",
+        count: 3,
+        unit: "blocks",
+        steps: [
+          {
+            kind: "repeat",
+            count: 5,
+            unit: "reps",
+            steps: [
+              { kind: "segment", description: "30s Z1", durationSec: 30, zone: "Z1", role: "effort" },
+              { kind: "segment", description: "20s Z3", durationSec: 20, zone: "Z3", role: "effort" },
+              { kind: "segment", description: "10s sprint", durationSec: 10, zone: "Z6", role: "effort" },
+            ],
+          },
+        ],
+        between: [
+          { kind: "segment", description: "2min footing Z1", durationSec: 120, zone: "Z1", role: "recovery" },
+        ],
+      },
+    ];
+
+    expect(summarizeWorkoutSteps(steps)).toBe(`3 blocs de 5 x (30" + 20" + 10") + 2' récup`);
   });
 });

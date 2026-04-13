@@ -16,6 +16,10 @@
       "reps": "Between repetitions",
       "sets": "Between sets",
       "blocks": "Between blocks"
+    },
+    "chips": {
+      "seriesRecovery": "sets recovery {{value}}",
+      "blocksRecovery": "blocks recovery {{value}}"
     }
   },
   "zones": {

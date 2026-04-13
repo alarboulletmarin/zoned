@@ -274,6 +274,21 @@
           "zone": "Z4"
         }
       ],
+      "mainSetStructure": [
+        { "kind": "segment", "description": "1min Z4", "descriptionEn": "1min Z4", "durationSec": 60, "zone": "Z4", "role": "effort" },
+        { "kind": "segment", "description": "1min Z2", "descriptionEn": "1min Z2", "durationSec": 60, "zone": "Z2", "role": "recovery" },
+        { "kind": "segment", "description": "2min Z4", "descriptionEn": "2min Z4", "durationSec": 120, "zone": "Z4", "role": "effort" },
+        { "kind": "segment", "description": "1min Z2", "descriptionEn": "1min Z2", "durationSec": 60, "zone": "Z2", "role": "recovery" },
+        { "kind": "segment", "description": "3min Z4", "descriptionEn": "3min Z4", "durationSec": 180, "zone": "Z4", "role": "effort" },
+        { "kind": "segment", "description": "2min Z2", "descriptionEn": "2min Z2", "durationSec": 120, "zone": "Z2", "role": "recovery" },
+        { "kind": "segment", "description": "4min Z4", "descriptionEn": "4min Z4", "durationSec": 240, "zone": "Z4", "role": "effort" },
+        { "kind": "segment", "description": "2min Z2", "descriptionEn": "2min Z2", "durationSec": 120, "zone": "Z2", "role": "recovery" },
+        { "kind": "segment", "description": "3min Z4", "descriptionEn": "3min Z4", "durationSec": 180, "zone": "Z4", "role": "effort" },
+        { "kind": "segment", "description": "2min Z2", "descriptionEn": "2min Z2", "durationSec": 120, "zone": "Z2", "role": "recovery" },
+        { "kind": "segment", "description": "2min Z4", "descriptionEn": "2min Z4", "durationSec": 120, "zone": "Z4", "role": "effort" },
+        { "kind": "segment", "description": "1min Z2", "descriptionEn": "1min Z2", "durationSec": 60, "zone": "Z2", "role": "recovery" },
+        { "kind": "segment", "description": "1min Z4", "descriptionEn": "1min Z4", "durationSec": 60, "zone": "Z4", "role": "effort" }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
