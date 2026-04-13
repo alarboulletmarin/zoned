@@ -20,6 +20,7 @@ export function applyAuditFix(plan: TrainingPlan, finding: PlanFinding): Trainin
     case "TAPER_WEEK_HEAVY":
       return fixTaperHeavy(draft, week);
     case "VOLUME_JUMP_TOO_LARGE":
+    case "VOLUME_JUMP_AFTER_RECOVERY":
       return fixVolumeJump(draft, week);
     default:
       return null;
@@ -133,9 +134,14 @@ function fixTaperHeavy(draft: TrainingPlan, week: PlanWeek): TrainingPlan {
 function fixVolumeJump(draft: TrainingPlan, week: PlanWeek): TrainingPlan | null {
   const weekIdx = draft.weeks.findIndex(w => w.weekNumber === week.weekNumber);
   if (weekIdx <= 0) return null;
-  const prevWeek = draft.weeks[weekIdx - 1];
 
-  const targetVol = Math.round(prevWeek.volumePercent * 1.15);
+  // For post-recovery jumps, compare to the last non-recovery week (not the recovery itself)
+  const prevWeek = draft.weeks[weekIdx - 1];
+  const refWeek = prevWeek.isRecoveryWeek
+    ? draft.weeks.slice(0, weekIdx).reverse().find(w => !w.isRecoveryWeek) ?? prevWeek
+    : prevWeek;
+
+  const targetVol = Math.round(refWeek.volumePercent * 1.15);
   if (targetVol >= week.volumePercent) return null; // no reduction needed
 
   const scale = targetVol / week.volumePercent;

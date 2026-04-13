@@ -222,6 +222,60 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
         messageEn: `Week ${week.weekNumber}: no sessions scheduled.`,
       });
     }
+
+    // ── Check 9: DUPLICATE_DAY_SESSIONS ─────────────────────────────
+    // Detect multiple running sessions on the same day (data corruption / accidental drag)
+    const runningSessions = week.sessions.filter(
+      (s) => s.workoutId !== "__race_day__" && s.workoutId !== "__intermediate_race__"
+        && !s.workoutId.startsWith("STR-") && !s.workoutId.startsWith("__activity_"),
+    );
+    const dayCount = new Map<number, number>();
+    for (const s of runningSessions) {
+      dayCount.set(s.dayOfWeek, (dayCount.get(s.dayOfWeek) ?? 0) + 1);
+    }
+    for (const [day, count] of dayCount) {
+      if (count > 1) {
+        findings.push({
+          id: nextId(),
+          severity: "warning",
+          code: "DUPLICATE_DAY_SESSIONS",
+          weekNumber: week.weekNumber,
+          message: `Semaine ${week.weekNumber} : ${count} séances de course le ${DAY_NAMES_FR[day]}. Une seule séance par jour est recommandée.`,
+          messageEn: `Week ${week.weekNumber}: ${count} running sessions on ${DAY_NAMES_EN[day]}. One session per day is recommended.`,
+          suggestion: `Supprimer les doublons ou déplacer les séances en trop sur d'autres jours.`,
+          suggestionEn: `Remove duplicates or move extra sessions to other days.`,
+        });
+      }
+    }
+
+    // ── Check 10: VOLUME_JUMP_AFTER_RECOVERY ────────────────────────
+    // Check volume jump across recovery weeks: compare to the last NON-recovery week
+    // to catch cases like S3=40% → S4(recovery) → S5=73% (+82% real jump)
+    if (
+      prevWeek?.isRecoveryWeek &&
+      i >= 2
+    ) {
+      const lastNonRecovery = plan.weeks.slice(0, i).reverse().find(w => !w.isRecoveryWeek);
+      if (
+        lastNonRecovery &&
+        lastNonRecovery.volumePercent > 0 &&
+        !(lastNonRecovery.volumePercent < 55 && week.volumePercent < 55) &&
+        week.volumePercent > lastNonRecovery.volumePercent * 1.30
+      ) {
+        const pctIncrease = Math.round((week.volumePercent / lastNonRecovery.volumePercent - 1) * 100);
+        findings.push({
+          id: nextId(),
+          severity: "warning",
+          code: "VOLUME_JUMP_AFTER_RECOVERY",
+          weekNumber: week.weekNumber,
+          message: `Semaine ${week.weekNumber} : volume passe de ${lastNonRecovery.volumePercent}% (S${lastNonRecovery.weekNumber}) à ${week.volumePercent}% (+${pctIncrease}% en comptant la récupération). Reprise trop agressive après récupération.`,
+          messageEn: `Week ${week.weekNumber}: volume jumps from ${lastNonRecovery.volumePercent}% (W${lastNonRecovery.weekNumber}) to ${week.volumePercent}% (+${pctIncrease}% across recovery). Too aggressive return after recovery.`,
+          suggestion: `Reprendre à ~${Math.round(lastNonRecovery.volumePercent * 1.15)}% maximum après la récupération.`,
+          suggestionEn: `Resume at ~${Math.round(lastNonRecovery.volumePercent * 1.15)}% maximum after recovery.`,
+          fixable: true,
+        });
+      }
+    }
   }
 
   return findings;
