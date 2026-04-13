@@ -536,7 +536,10 @@
     "errors": "{{count}} error(s)",
     "warnings": "{{count}} warning(s)",
     "infos": "{{count}} info(s)",
-    "goToWeek": "Go to week {{week}}"
+    "goToWeek": "Go to week {{week}}",
+    "fix": "Fix",
+    "fixApplied": "Fix applied",
+    "fixFailed": "Unable to apply automatic fix"
   },
   "adaptation": {
     "title": "Plan adaptation",

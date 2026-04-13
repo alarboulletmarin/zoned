@@ -536,7 +536,10 @@
     "errors": "{{count}} erreur(s)",
     "warnings": "{{count}} avertissement(s)",
     "infos": "{{count}} info(s)",
-    "goToWeek": "Voir la semaine {{week}}"
+    "goToWeek": "Voir la semaine {{week}}",
+    "fix": "Corriger",
+    "fixApplied": "Correction appliqu\u00e9e",
+    "fixFailed": "Impossible d'appliquer la correction automatique"
   },
   "adaptation": {
     "title": "Adaptation du plan",

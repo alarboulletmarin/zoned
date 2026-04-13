@@ -36,7 +36,8 @@ import { usePlan } from "@/hooks/usePlans";
 import { deletePlan, getPlan, savePlan, updatePlanSession, moveSession, deleteSessionFromPlan, addSessionToPlan, updateSessionCompletion } from "@/lib/planStorage";
 import { computeAdaptation, type AdaptationPreview } from "@/lib/planGenerator/adapt";
 import { AdaptationPreviewDialog } from "@/components/domain/AdaptationPreviewDialog";
-import { auditPlan } from "@/lib/planGenerator/audit";
+import { auditPlan, type PlanFinding } from "@/lib/planGenerator/audit";
+import { applyAuditFix } from "@/lib/planGenerator/auditFix";
 import { PlanAuditPanel } from "@/components/domain/PlanAuditPanel";
 import { getWorkoutById } from "@/data/workouts";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
@@ -184,6 +185,18 @@ export function PlanViewPage() {
     if (!plan) return [];
     return auditPlan(plan);
   }, [plan]);
+
+  const handleAuditFix = useCallback((finding: PlanFinding) => {
+    if (!plan) return;
+    const fixed = applyAuditFix(plan, finding);
+    if (fixed) {
+      savePlan(fixed);
+      reloadPlan();
+      toast.success(t("audit.fixApplied"));
+    } else {
+      toast.error(t("audit.fixFailed"));
+    }
+  }, [plan, reloadPlan, t]);
 
   // Auto-expand current week
   useEffect(() => {
@@ -839,6 +852,7 @@ export function PlanViewPage() {
         {auditFindings.length > 0 && (
           <PlanAuditPanel
             findings={auditFindings}
+            onFix={handleAuditFix}
             onGoToWeek={(weekNumber) => {
               setWeekParam(weekNumber);
               // List view: expand the target week

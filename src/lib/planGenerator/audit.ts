@@ -12,6 +12,9 @@ export interface PlanFinding {
   sessionIndex?: number;
   message: string;
   messageEn: string;
+  suggestion?: string;
+  suggestionEn?: string;
+  fixable?: boolean;
 }
 
 // ── Constants ────────────────────────────────────────────────────────
@@ -100,7 +103,11 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
     const week = plan.weeks[i];
     const prevWeek = i > 0 ? plan.weeks[i - 1] : null;
 
-    const keySessions = week.sessions.filter((s) => s.isKeySession);
+    // Exclude race-day markers from key session checks — races are "key" events
+    // but should not trigger training-specific warnings (spacing, recovery, etc.)
+    const keySessions = week.sessions.filter(
+      (s) => s.isKeySession && s.workoutId !== "__race_day__" && s.workoutId !== "__intermediate_race__",
+    );
     const longRuns = week.sessions.filter(
       (s) => s.sessionType === "long_run",
     );
@@ -118,6 +125,9 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
             weekNumber: week.weekNumber,
             message: `Semaine ${week.weekNumber} : 2 séances clés consécutives (${DAY_NAMES_FR[keySessions[a].dayOfWeek]} et ${DAY_NAMES_FR[keySessions[b].dayOfWeek]}). Prévoir au moins 1 jour de récupération entre deux séances intenses.`,
             messageEn: `Week ${week.weekNumber}: 2 key sessions on consecutive days (${DAY_NAMES_EN[keySessions[a].dayOfWeek]} and ${DAY_NAMES_EN[keySessions[b].dayOfWeek]}). Allow at least 1 recovery day between intense sessions.`,
+            suggestion: `Déplacer une des deux séances pour avoir au moins 1 jour de repos entre les deux.`,
+            suggestionEn: `Move one of the two sessions to have at least 1 rest day between them.`,
+            fixable: true,
           });
         }
       }
@@ -135,6 +145,9 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
             weekNumber: week.weekNumber,
             message: `Semaine ${week.weekNumber} : séance clé (${DAY_NAMES_FR[key.dayOfWeek]}) collée à la sortie longue (${DAY_NAMES_FR[lr.dayOfWeek]}). Risque de fatigue accumulée — espacer d'au moins 1 jour.`,
             messageEn: `Week ${week.weekNumber}: key session (${DAY_NAMES_EN[key.dayOfWeek]}) adjacent to long run (${DAY_NAMES_EN[lr.dayOfWeek]}). Risk of accumulated fatigue — space them at least 1 day apart.`,
+            suggestion: `Déplacer la séance clé ou la sortie longue pour les séparer d'au moins 1 jour.`,
+            suggestionEn: `Move the key session or long run to separate them by at least 1 day.`,
+            fixable: true,
           });
         }
       }
@@ -149,6 +162,9 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
         weekNumber: week.weekNumber,
         message: `Semaine ${week.weekNumber} (récupération) contient ${keySessions.length} séance(s) clé(s). Une semaine de récup devrait être allégée pour permettre la régénération.`,
         messageEn: `Week ${week.weekNumber} (recovery) contains ${keySessions.length} key session(s). A recovery week should be lighter to allow regeneration.`,
+        suggestion: `Remplacer la/les séance(s) clé(s) par de l'endurance facile ou du footing léger.`,
+        suggestionEn: `Replace key session(s) with easy endurance or light jogging.`,
+        fixable: true,
       });
     }
 
@@ -161,22 +177,33 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
         weekNumber: week.weekNumber,
         message: `Semaine ${week.weekNumber} (affûtage) : volume à ${week.volumePercent}%, trop élevé pour un affûtage efficace. Réduire sous 70% pour arriver frais le jour J.`,
         messageEn: `Week ${week.weekNumber} (taper): volume at ${week.volumePercent}%, too high for effective tapering. Reduce below 70% to arrive fresh on race day.`,
+        suggestion: `Supprimer une séance ou réduire les durées pour passer sous 70% de volume.`,
+        suggestionEn: `Remove a session or reduce durations to get below 70% volume.`,
+        fixable: true,
       });
     }
 
     // ── Check 7: VOLUME_JUMP_TOO_LARGE ───────────────────────────────
+    // Skip when previous week is recovery or has an intermediate race (expected volume dip).
+    // Threshold: 21% to absorb rounding artifacts on integer volumePercent values.
     if (
       prevWeek &&
       !prevWeek.isRecoveryWeek &&
-      week.volumePercent > prevWeek.volumePercent * 1.2
+      !prevWeek.intermediateRace &&
+      prevWeek.volumePercent > 0 &&
+      week.volumePercent > prevWeek.volumePercent * 1.21
     ) {
+      const pctIncrease = Math.round((week.volumePercent / prevWeek.volumePercent - 1) * 100);
       findings.push({
         id: nextId(),
         severity: "warning",
         code: "VOLUME_JUMP_TOO_LARGE",
         weekNumber: week.weekNumber,
-        message: `Semaine ${week.weekNumber} : volume passe de ${prevWeek.volumePercent}% à ${week.volumePercent}% (+${Math.round((week.volumePercent / prevWeek.volumePercent - 1) * 100)}%). Une augmentation > 20% par semaine augmente le risque de blessure.`,
-        messageEn: `Week ${week.weekNumber}: volume jumps from ${prevWeek.volumePercent}% to ${week.volumePercent}% (+${Math.round((week.volumePercent / prevWeek.volumePercent - 1) * 100)}%). Increasing by more than 20% per week raises injury risk.`,
+        fixable: true,
+        message: `Semaine ${week.weekNumber} : volume passe de ${prevWeek.volumePercent}% à ${week.volumePercent}% (+${pctIncrease}%). Une augmentation > 20% par semaine augmente le risque de blessure.`,
+        messageEn: `Week ${week.weekNumber}: volume jumps from ${prevWeek.volumePercent}% to ${week.volumePercent}% (+${pctIncrease}%). Increasing by more than 20% per week raises injury risk.`,
+        suggestion: `Réduire le volume de S${week.weekNumber} à ~${Math.round(prevWeek.volumePercent * 1.15)}% ou ajouter une semaine intermédiaire.`,
+        suggestionEn: `Reduce W${week.weekNumber} volume to ~${Math.round(prevWeek.volumePercent * 1.15)}% or add a transition week.`,
       });
     }
 

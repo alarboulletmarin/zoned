@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { usePickLang } from "@/lib/i18n-utils";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, AlertTriangle } from "@/components/icons";
+import { ChevronDown, ChevronUp, AlertTriangle, Lightbulb } from "@/components/icons";
 
 import type { FindingSeverity, PlanFinding } from "@/lib/planGenerator/audit";
 
@@ -12,6 +12,7 @@ export type { FindingSeverity, PlanFinding };
 interface PlanAuditPanelProps {
   findings: PlanFinding[];
   onGoToWeek?: (weekNumber: number) => void;
+  onFix?: (finding: PlanFinding) => void;
 }
 
 const SEVERITY_CONFIG: Record<
@@ -38,7 +39,7 @@ const SEVERITY_CONFIG: Record<
   },
 };
 
-export function PlanAuditPanel({ findings, onGoToWeek }: PlanAuditPanelProps) {
+export function PlanAuditPanel({ findings, onGoToWeek, onFix }: PlanAuditPanelProps) {
   const { t } = useTranslation("plan");
   const pick = usePickLang();
   const [expanded, setExpanded] = useState(false);
@@ -83,19 +84,39 @@ export function PlanAuditPanel({ findings, onGoToWeek }: PlanAuditPanelProps) {
             return (
               <div key={finding.id} className="flex items-start gap-2 text-sm">
                 <span className="shrink-0 text-xs mt-0.5">{fConfig.icon}</span>
-                <span className={cn("flex-1 min-w-0", fConfig.textColor)}>
-                  {pick(finding, "message")}
-                </span>
-                {onGoToWeek && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-6 text-xs shrink-0 px-2"
-                    onClick={() => onGoToWeek(finding.weekNumber)}
-                  >
-                    S{finding.weekNumber}
-                  </Button>
-                )}
+                <div className="flex-1 min-w-0">
+                  <span className={fConfig.textColor}>
+                    {pick(finding, "message")}
+                  </span>
+                  {finding.suggestion && (
+                    <p className="text-xs mt-0.5 text-muted-foreground italic flex items-center gap-1">
+                      <Lightbulb className="size-3 shrink-0" />
+                      {pick(finding, "suggestion")}
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  {onFix && finding.fixable && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-6 text-xs px-2 border-primary/30 text-primary hover:bg-primary/10"
+                      onClick={() => onFix(finding)}
+                    >
+                      {t("audit.fix")}
+                    </Button>
+                  )}
+                  {onGoToWeek && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 text-xs px-2"
+                      onClick={() => onGoToWeek(finding.weekNumber)}
+                    >
+                      S{finding.weekNumber}
+                    </Button>
+                  )}
+                </div>
               </div>
             );
           })}
