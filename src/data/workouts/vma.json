@@ -41,8 +41,53 @@
           "zone": "Z5",
           "repetitions": 12,
           "recovery": "30s footing Z1",
+          "restBetweenSets": "3min footing Z1",
           "intensityType": "I",
           "sets": 2
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 2,
+          "unit": "sets",
+          "steps": [
+            {
+              "kind": "repeat",
+              "count": 12,
+              "unit": "reps",
+              "steps": [
+                {
+                  "kind": "segment",
+                  "description": "30s VMA",
+                  "descriptionEn": "30s VO2max",
+                  "durationSec": 30,
+                  "zone": "Z5",
+                  "role": "effort"
+                }
+              ],
+              "between": [
+                {
+                  "kind": "segment",
+                  "description": "30s footing Z1",
+                  "descriptionEn": "30s jog Z1",
+                  "durationSec": 30,
+                  "zone": "Z1",
+                  "role": "recovery"
+                }
+              ]
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "3min footing Z1",
+              "descriptionEn": "3min jog Z1",
+              "durationSec": 180,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -439,8 +484,53 @@
           "zone": "Z5",
           "repetitions": 10,
           "recovery": "15s footing très lent",
+          "restBetweenSets": "3min footing Z1",
           "intensityType": "I",
           "sets": 2
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 2,
+          "unit": "sets",
+          "steps": [
+            {
+              "kind": "repeat",
+              "count": 10,
+              "unit": "reps",
+              "steps": [
+                {
+                  "kind": "segment",
+                  "description": "45s VMA",
+                  "descriptionEn": "45s VO2max",
+                  "durationSec": 45,
+                  "zone": "Z5",
+                  "role": "effort"
+                }
+              ],
+              "between": [
+                {
+                  "kind": "segment",
+                  "description": "15s footing très lent",
+                  "descriptionEn": "15s very easy jog",
+                  "durationSec": 15,
+                  "zone": "Z1",
+                  "role": "recovery"
+                }
+              ]
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "3min footing Z1",
+              "descriptionEn": "3min jog Z1",
+              "durationSec": 180,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -541,6 +631,33 @@
           "intensityType": "I"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 12,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "1min VMA",
+              "descriptionEn": "1min VO2max",
+              "durationSec": 60,
+              "zone": "Z5",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "1min footing Z1",
+              "descriptionEn": "1min jog Z1",
+              "durationSec": 60,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -637,6 +754,33 @@
           "repetitions": 8,
           "recovery": "1min footing lent",
           "intensityType": "I"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 8,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "30s rapide",
+              "descriptionEn": "30s fast",
+              "durationSec": 30,
+              "zone": "Z4-Z5",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "1min footing lent",
+              "descriptionEn": "1min easy jog",
+              "durationSec": 60,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -1149,7 +1293,52 @@
           "zone": "Z5+",
           "repetitions": 15,
           "recovery": "20s footing très lent",
+          "restBetweenSets": "3min footing Z1",
           "sets": 3
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 3,
+          "unit": "sets",
+          "steps": [
+            {
+              "kind": "repeat",
+              "count": 15,
+              "unit": "reps",
+              "steps": [
+                {
+                  "kind": "segment",
+                  "description": "20s VMA",
+                  "descriptionEn": "20s VO2max",
+                  "durationSec": 20,
+                  "zone": "Z5+",
+                  "role": "effort"
+                }
+              ],
+              "between": [
+                {
+                  "kind": "segment",
+                  "description": "20s footing très lent",
+                  "descriptionEn": "20s very easy jog",
+                  "durationSec": 20,
+                  "zone": "Z1",
+                  "role": "recovery"
+                }
+              ]
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "3min footing Z1",
+              "descriptionEn": "3min jog Z1",
+              "durationSec": 180,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -1442,6 +1631,33 @@
           "repetitions": 8,
           "recovery": "2min footing Z2",
           "intensityType": "I"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 8,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "1min VMA",
+              "descriptionEn": "1min VO2max",
+              "durationSec": 60,
+              "zone": "Z5",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "2min footing Z2",
+              "descriptionEn": "2min jog Z2",
+              "durationSec": 120,
+              "zone": "Z2",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -1966,6 +2182,33 @@
           "intensityType": "I"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 5,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "30s VMA",
+              "descriptionEn": "30s VO2max",
+              "durationSec": 30,
+              "zone": "Z5",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "30s footing Z1",
+              "descriptionEn": "30s jog Z1",
+              "durationSec": 30,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -2060,8 +2303,53 @@
           "zone": "Z5",
           "repetitions": 15,
           "recovery": "30s footing à 50% VMA",
+          "restBetweenSets": "5min footing Z1",
           "intensityType": "I",
           "sets": 2
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 2,
+          "unit": "sets",
+          "steps": [
+            {
+              "kind": "repeat",
+              "count": 15,
+              "unit": "reps",
+              "steps": [
+                {
+                  "kind": "segment",
+                  "description": "30s à 100% VMA",
+                  "descriptionEn": "30s at 100% vVO2max",
+                  "durationSec": 30,
+                  "zone": "Z5",
+                  "role": "effort"
+                }
+              ],
+              "between": [
+                {
+                  "kind": "segment",
+                  "description": "30s footing à 50% VMA",
+                  "descriptionEn": "30s jog at 50% vVO2max",
+                  "durationSec": 30,
+                  "zone": "Z1",
+                  "role": "recovery"
+                }
+              ]
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "5min footing Z1",
+              "descriptionEn": "5min jog Z1",
+              "durationSec": 300,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -2371,8 +2659,53 @@
           "zone": "Z5",
           "repetitions": 10,
           "recovery": "45s footing à 50-55% VMA",
+          "restBetweenSets": "4min footing Z1",
           "intensityType": "I",
           "sets": 2
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 2,
+          "unit": "sets",
+          "steps": [
+            {
+              "kind": "repeat",
+              "count": 10,
+              "unit": "reps",
+              "steps": [
+                {
+                  "kind": "segment",
+                  "description": "45s VMA",
+                  "descriptionEn": "45s VO2max",
+                  "durationSec": 45,
+                  "zone": "Z5",
+                  "role": "effort"
+                }
+              ],
+              "between": [
+                {
+                  "kind": "segment",
+                  "description": "45s footing à 50-55% VMA",
+                  "descriptionEn": "45s jog at 50-55% vVO2max",
+                  "durationSec": 45,
+                  "zone": "Z1",
+                  "role": "recovery"
+                }
+              ]
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "4min footing Z1",
+              "descriptionEn": "4min jog Z1",
+              "durationSec": 240,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -2480,6 +2813,33 @@
           "intensityType": "I"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 6,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "2min VMA",
+              "descriptionEn": "2min VO2max",
+              "durationSec": 120,
+              "zone": "Z5",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "2min en Z3 (pas Z1)",
+              "descriptionEn": "2min in Z3 (not Z1)",
+              "durationSec": 120,
+              "zone": "Z3",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -2581,6 +2941,33 @@
           "repetitions": 12,
           "recovery": "Trot sur le petit côté (~30s)",
           "intensityType": "R"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 12,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "Diagonale sprint (coin à coin)",
+              "descriptionEn": "Diagonal sprint (corner to corner)",
+              "zone": "Z5-Z6",
+              "role": "effort",
+              "intensityType": "R"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "Trot sur le petit côté (~30s)",
+              "descriptionEn": "Jog on the short side (~30s)",
+              "durationSec": 30,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -2898,6 +3285,41 @@
           "zone": "Z4→Z5+",
           "repetitions": 3,
           "recovery": "4min footing Z1"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 3,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "1200m allure 10K",
+              "descriptionEn": "1200m at 10K pace",
+              "distanceM": 1200,
+              "zone": "Z4",
+              "role": "effort"
+            },
+            {
+              "kind": "segment",
+              "description": "400m sprint finish",
+              "descriptionEn": "400m sprint finish",
+              "distanceM": 400,
+              "zone": "Z5+",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "4min footing Z1",
+              "descriptionEn": "4min jog Z1",
+              "durationSec": 240,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [

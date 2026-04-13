@@ -1,6 +1,34 @@
 // Zone System Types
 export type Zone = "Z1" | "Z2" | "Z3" | "Z4" | "Z5" | "Z6";
 export type ZoneNumber = 1 | 2 | 3 | 4 | 5 | 6;
+export type ZoneSpec = string;
+
+export type WorkoutPhaseKey = "warmup" | "main" | "cooldown";
+export type WorkoutStepRole = "effort" | "recovery" | "transition";
+export type WorkoutRepeatUnit = "reps" | "sets" | "blocks";
+
+export interface WorkoutStepSegment {
+  kind: "segment";
+  description: string;
+  descriptionEn?: string;
+  durationSec?: number;
+  distanceM?: number;
+  distanceKm?: number;
+  zone?: ZoneSpec;
+  vmaPercent?: number;
+  intensityType?: "E" | "M" | "T" | "I" | "R";
+  role?: WorkoutStepRole;
+}
+
+export interface WorkoutStepRepeat {
+  kind: "repeat";
+  count: number;
+  unit?: WorkoutRepeatUnit;
+  steps: WorkoutStep[];
+  between?: WorkoutStep[];
+}
+
+export type WorkoutStep = WorkoutStepSegment | WorkoutStepRepeat;
 
 // Workout Categories
 export type WorkoutCategory =
@@ -71,7 +99,7 @@ export interface WorkoutBlock {
   distance?: string;
   distanceM?: number; // Distance in meters (used in interval workouts)
   distanceKm?: number; // Distance in km (for steady-state runs like long runs/footings)
-  zone?: Zone;
+  zone?: ZoneSpec;
   rest?: string;
   recovery?: string; // Recovery description (e.g., "200m footing")
   // ── New fields (v2) ──
@@ -135,6 +163,9 @@ export interface WorkoutTemplate {
   warmupTemplate: WorkoutBlock[];
   mainSetTemplate: WorkoutBlock[];
   cooldownTemplate: WorkoutBlock[];
+  warmupStructure?: WorkoutStep[];
+  mainSetStructure?: WorkoutStep[];
+  cooldownStructure?: WorkoutStep[];
   coachingTips: string[];
   coachingTipsEn: string[];
   commonMistakes: string[];
@@ -322,13 +353,33 @@ export function getZoneNumber(zone: Zone | string): ZoneNumber {
   return (num >= 1 && num <= 6 ? num : 1) as ZoneNumber;
 }
 
+function collectStepZones(steps: WorkoutStep[], zones: ZoneNumber[]) {
+  for (const step of steps) {
+    if (step.kind === "segment") {
+      if (!step.zone) continue;
+      const matches = step.zone.match(/[1-6]/g) ?? [];
+      for (const match of matches) {
+        zones.push(Number(match) as ZoneNumber);
+      }
+      continue;
+    }
+
+    collectStepZones(step.steps, zones);
+    if (step.between) collectStepZones(step.between, zones);
+  }
+}
+
 // Helper to get dominant zone from workout
 export function getDominantZone(workout: WorkoutTemplate): ZoneNumber {
   const zones: ZoneNumber[] = [];
 
-  for (const block of workout.mainSetTemplate) {
-    if (block.zone) {
-      zones.push(getZoneNumber(block.zone));
+  if (workout.mainSetStructure?.length) {
+    collectStepZones(workout.mainSetStructure, zones);
+  } else {
+    for (const block of workout.mainSetTemplate) {
+      if (block.zone) {
+        zones.push(getZoneNumber(block.zone));
+      }
     }
   }
 
@@ -369,4 +420,3 @@ export function isStrengthWorkout(w: AnyWorkoutTemplate): w is StrengthWorkoutTe
 export function isRunningWorkout(w: AnyWorkoutTemplate): w is WorkoutTemplate {
   return w.kind !== "strength";
 }
-

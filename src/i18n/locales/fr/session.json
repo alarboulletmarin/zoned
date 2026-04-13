@@ -4,7 +4,19 @@
     "main": "Corps de séance",
     "cooldown": "Retour au calme",
     "recovery": "Récupération",
-    "interSeries": "{{count}} séries — ~3 min footing entre les séries"
+    "interSeries": "{{count}} séries — ~3 min footing entre les séries",
+    "loopTemplate": "Une itération est montrée ci-dessous",
+    "noZone": "Sans zone",
+    "repeatUnits": {
+      "reps": "{{count}} répétitions",
+      "sets": "{{count}} séries",
+      "blocks": "{{count}} blocs"
+    },
+    "between": {
+      "reps": "Entre les répétitions",
+      "sets": "Entre les séries",
+      "blocks": "Entre les blocs"
+    }
   },
   "zones": {
     "Z1": "Zone 1 - Récupération",

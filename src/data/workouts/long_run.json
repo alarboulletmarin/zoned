@@ -1383,6 +1383,17 @@
           "intensityType": "E"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "3-5h en Z1 strict (< 70% FCmax). Alternance : 20-30min course facile / 10-15min marche active (power hike, bras actifs). Ravitaillement toutes les 30-45min (gels, barres, eau + électrolytes). Sur sentier si possible",
+          "descriptionEn": "3-5h in strict Z1 (< 70% HRmax). Alternating: 20-30min easy run / 10-15min active walk (power hike, arms engaged). Fueling every 30-45min (gels, bars, water + electrolytes). On trails if possible",
+          "durationSec": 12600,
+          "zone": "Z1",
+          "role": "effort",
+          "intensityType": "E"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Marche de récupération et étirements doux",

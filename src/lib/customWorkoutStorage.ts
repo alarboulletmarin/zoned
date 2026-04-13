@@ -1,4 +1,5 @@
 import type { WorkoutTemplate, WorkoutBlock } from "@/types";
+import { normalizeWorkoutStructureSource } from "@/lib/workoutStructure";
 
 const STORAGE_KEY = "zoned-custom-workouts";
 const MAX_WORKOUTS = 20;
@@ -6,7 +7,8 @@ const MAX_WORKOUTS = 20;
 export function getCustomWorkouts(): WorkoutTemplate[] {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : [];
+    const workouts = stored ? JSON.parse(stored) as WorkoutTemplate[] : [];
+    return workouts.map((workout) => normalizeWorkoutStructureSource(workout));
   } catch {
     return [];
   }
@@ -18,14 +20,15 @@ export function getCustomWorkout(id: string): WorkoutTemplate | undefined {
 
 export function saveCustomWorkout(workout: WorkoutTemplate): void {
   const workouts = getCustomWorkouts();
+  const normalized = normalizeWorkoutStructureSource(workout);
   const index = workouts.findIndex((w) => w.id === workout.id);
   if (index >= 0) {
-    workouts[index] = workout;
+    workouts[index] = normalized;
   } else {
     if (workouts.length >= MAX_WORKOUTS) {
       throw new Error("Maximum custom workouts reached");
     }
-    workouts.push(workout);
+    workouts.push(normalized);
   }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(workouts));
 }
@@ -42,7 +45,7 @@ export function createEmptyWorkout(): WorkoutTemplate {
     durationMin: 10,
     zone: "Z2",
   };
-  return {
+  return normalizeWorkoutStructureSource({
     id,
     name: "",
     nameEn: "",
@@ -69,7 +72,7 @@ export function createEmptyWorkout(): WorkoutTemplate {
       tags: ["custom"],
       priorityScore: 0,
     },
-  };
+  });
 }
 
 /** Export workouts as JSON and trigger browser download */
@@ -111,13 +114,14 @@ export function importWorkoutsFromJSON(file: File): Promise<number> {
 
         for (const w of incoming) {
           if (existing.length + imported >= MAX_WORKOUTS) break;
+          const normalized = normalizeWorkoutStructureSource(w);
           // Re-ID to avoid collisions
-          const existingIndex = existing.findIndex((ex) => ex.id === w.id);
+          const existingIndex = existing.findIndex((ex) => ex.id === normalized.id);
           if (existingIndex >= 0) {
-            existing[existingIndex] = w; // overwrite
+            existing[existingIndex] = normalized; // overwrite
             imported++;
           } else {
-            existing.push(w);
+            existing.push(normalized);
             imported++;
           }
         }

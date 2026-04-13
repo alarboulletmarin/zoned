@@ -15,11 +15,7 @@ interface ZoneDistributionProps {
 
 export function ZoneDistribution({ workout, className }: ZoneDistributionProps) {
   const { zoneBreakdown, totalDurationMin } = useMemo(() => {
-    return transformSessionBlocks({
-      warmup: workout.warmupTemplate,
-      mainSet: workout.mainSetTemplate,
-      cooldown: workout.cooldownTemplate,
-    });
+    return transformSessionBlocks(workout);
   }, [workout]);
 
   if (zoneBreakdown.length === 0) {
@@ -69,11 +65,7 @@ interface SessionIntensityBarProps {
 
 export function SessionIntensityBar({ workout, className }: SessionIntensityBarProps) {
   const { zoneBreakdown } = useMemo(() => {
-    return transformSessionBlocks({
-      warmup: workout.warmupTemplate,
-      mainSet: workout.mainSetTemplate,
-      cooldown: workout.cooldownTemplate,
-    });
+    return transformSessionBlocks(workout);
   }, [workout]);
 
   if (zoneBreakdown.length === 0) {

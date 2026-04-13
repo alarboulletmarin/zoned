@@ -4,7 +4,19 @@
     "main": "Main Set",
     "cooldown": "Cool-down",
     "recovery": "Recovery",
-    "interSeries": "{{count}} sets — ~3 min jog between sets"
+    "interSeries": "{{count}} sets — ~3 min jog between sets",
+    "loopTemplate": "One iteration shown below",
+    "noZone": "No zone",
+    "repeatUnits": {
+      "reps": "{{count}} repetitions",
+      "sets": "{{count}} sets",
+      "blocks": "{{count}} blocks"
+    },
+    "between": {
+      "reps": "Between repetitions",
+      "sets": "Between sets",
+      "blocks": "Between blocks"
+    }
   },
   "zones": {
     "Z1": "Zone 1 - Recovery",

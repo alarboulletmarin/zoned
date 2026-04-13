@@ -199,9 +199,12 @@ export function WorkoutDetailPage() {
 
   // Base session data from workout template
   const baseSessionData = transformSessionBlocks({
-    warmup: workout.warmupTemplate,
-    mainSet: workout.mainSetTemplate,
-    cooldown: workout.cooldownTemplate,
+    warmupTemplate: workout.warmupTemplate,
+    mainSetTemplate: workout.mainSetTemplate,
+    cooldownTemplate: workout.cooldownTemplate,
+    warmupStructure: workout.warmupStructure,
+    mainSetStructure: workout.mainSetStructure,
+    cooldownStructure: workout.cooldownStructure,
   });
   const baseDuration = Math.round(baseSessionData.totalDurationMin);
 

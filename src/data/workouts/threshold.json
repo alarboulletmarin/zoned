@@ -768,6 +768,33 @@
           "intensityType": "T"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 6,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "3min seuil",
+              "descriptionEn": "3min threshold",
+              "durationSec": 180,
+              "zone": "Z4",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "2min footing Z2",
+              "descriptionEn": "2min jog Z2",
+              "durationSec": 120,
+              "zone": "Z2",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",

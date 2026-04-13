@@ -37,11 +37,7 @@ export function MiniSessionTimeline({
   const isMobile = useIsMobile();
 
   const data = useMemo(() => {
-    return transformSessionBlocks({
-      warmup: workout.warmupTemplate,
-      mainSet: workout.mainSetTemplate,
-      cooldown: workout.cooldownTemplate,
-    });
+    return transformSessionBlocks(workout);
   }, [workout]);
 
   if (data.segments.length === 0 || !data.hasZoneData) return null;

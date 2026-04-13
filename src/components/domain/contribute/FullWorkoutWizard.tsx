@@ -11,18 +11,19 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { ArrowLeft, ArrowRight, ExternalLink, Copy } from "@/components/icons";
-import { BlockListEditor } from "./BlockListEditor";
+import { WorkoutStepListEditor } from "./WorkoutStepListEditor";
 import { WorkoutPreview } from "./WorkoutPreview";
 import { StringListEditor } from "./StringListEditor";
 import { submitFullWorkout, copyToClipboard } from "@/lib/issueBuilder";
 import { cn } from "@/lib/utils";
+import { replaceWorkoutPhaseSteps } from "@/lib/workoutStructure";
 import type {
   WorkoutTemplate,
-  WorkoutBlock,
   WorkoutCategory,
   SessionType,
   TargetSystem,
   Difficulty,
+  WorkoutStep,
 } from "@/types";
 import { CATEGORY_META, DIFFICULTY_META } from "@/types";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
@@ -108,6 +109,9 @@ export function FullWorkoutWizard() {
     warmupTemplate: [],
     mainSetTemplate: [],
     cooldownTemplate: [],
+    warmupStructure: [],
+    mainSetStructure: [],
+    cooldownStructure: [],
     coachingTips: [],
     coachingTipsEn: [],
     commonMistakes: [],
@@ -121,6 +125,15 @@ export function FullWorkoutWizard() {
     []
   );
 
+  const updatePhaseSteps = useCallback((phase: "warmup" | "main" | "cooldown", steps: WorkoutStep[]) => {
+    setData((prev) => replaceWorkoutPhaseSteps({
+      ...prev,
+      warmupTemplate: prev.warmupTemplate ?? [],
+      mainSetTemplate: prev.mainSetTemplate ?? [],
+      cooldownTemplate: prev.cooldownTemplate ?? [],
+    } as WorkoutTemplate, phase, steps));
+  }, []);
+
   // ---------------------------------------------------------------------------
   // Validation
   // ---------------------------------------------------------------------------
@@ -129,7 +142,7 @@ export function FullWorkoutWizard() {
     (data.name?.trim().length ?? 0) > 0 &&
     (data.description?.trim().length ?? 0) > 0;
 
-  const step2Valid = (data.mainSetTemplate?.length ?? 0) > 0;
+  const step2Valid = (data.mainSetStructure?.length ?? data.mainSetTemplate?.length ?? 0) > 0;
 
   const canGoNext = (s: WizardStep): boolean => {
     if (s === 1) return step1Valid;
@@ -466,19 +479,19 @@ export function FullWorkoutWizard() {
         direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
       )}
     >
-      <BlockListEditor
-        blocks={data.warmupTemplate ?? []}
-        onChange={(blocks: WorkoutBlock[]) => update({ warmupTemplate: blocks })}
+      <WorkoutStepListEditor
+        steps={data.warmupStructure ?? []}
+        onChange={(steps) => updatePhaseSteps("warmup", steps)}
         label={t("blocks.warmup")}
       />
 
-      <BlockListEditor
-        blocks={data.mainSetTemplate ?? []}
-        onChange={(blocks: WorkoutBlock[]) => update({ mainSetTemplate: blocks })}
+      <WorkoutStepListEditor
+        steps={data.mainSetStructure ?? []}
+        onChange={(steps) => updatePhaseSteps("main", steps)}
         label={t("blocks.mainSet")}
       />
 
-      {!step2Valid && (data.mainSetTemplate?.length ?? 0) === 0 && (
+      {!step2Valid && (data.mainSetStructure?.length ?? 0) === 0 && (
         <p className="text-sm text-destructive text-center">
           {t("submit.atLeastOneBlock")}
         </p>
@@ -497,9 +510,9 @@ export function FullWorkoutWizard() {
         direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
       )}
     >
-      <BlockListEditor
-        blocks={data.cooldownTemplate ?? []}
-        onChange={(blocks: WorkoutBlock[]) => update({ cooldownTemplate: blocks })}
+      <WorkoutStepListEditor
+        steps={data.cooldownStructure ?? []}
+        onChange={(steps) => updatePhaseSteps("cooldown", steps)}
         label={t("blocks.cooldown")}
       />
 

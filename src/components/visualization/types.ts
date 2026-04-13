@@ -2,7 +2,7 @@
  * Types for session visualization components
  */
 
-import type { WorkoutBlock } from "@/types";
+import type { WorkoutBlock, WorkoutRepeatUnit } from "@/types";
 
 /**
  * Valid zone numbers (1-6)
@@ -31,6 +31,8 @@ export interface TimelineSegment {
   totalSets?: number;
   /** Is this a longer recovery between sets? */
   isSeriesRecovery?: boolean;
+  /** Unit of the loop this recovery belongs to */
+  betweenUnit?: WorkoutRepeatUnit;
 }
 
 /**

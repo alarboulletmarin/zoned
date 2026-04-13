@@ -65,11 +65,7 @@ export async function exportToFIT(workout: WorkoutTemplate): Promise<void> {
     const { Encoder } = await import("@garmin/fitsdk");
 
     // Transform workout into segments using existing logic
-    const { segments } = transformSessionBlocks({
-      warmup: workout.warmupTemplate,
-      mainSet: workout.mainSetTemplate,
-      cooldown: workout.cooldownTemplate,
-    });
+    const { segments } = transformSessionBlocks(workout);
 
     // Create FIT encoder
     const encoder = new Encoder();

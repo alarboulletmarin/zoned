@@ -98,11 +98,7 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
   const [openTooltipIndex, setOpenTooltipIndex] = useState<number | null>(null);
 
   const { segments, totalDurationMin } = useMemo(() => {
-    return transformSessionBlocks({
-      warmup: workout.warmupTemplate,
-      mainSet: workout.mainSetTemplate,
-      cooldown: workout.cooldownTemplate,
-    });
+    return transformSessionBlocks(workout);
   }, [workout]);
 
   if (segments.length === 0) {

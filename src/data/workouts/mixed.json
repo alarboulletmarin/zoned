@@ -482,6 +482,80 @@
           "zone": "Z3"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "4min Z4",
+          "descriptionEn": "4min Z4",
+          "durationSec": 240,
+          "zone": "Z4",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "2min Z1",
+          "descriptionEn": "2min Z1",
+          "durationSec": 120,
+          "zone": "Z1",
+          "role": "recovery"
+        },
+        {
+          "kind": "segment",
+          "description": "3min Z4",
+          "descriptionEn": "3min Z4",
+          "durationSec": 180,
+          "zone": "Z4",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "90s Z1",
+          "descriptionEn": "90s Z1",
+          "durationSec": 90,
+          "zone": "Z1",
+          "role": "recovery"
+        },
+        {
+          "kind": "segment",
+          "description": "2min Z4",
+          "descriptionEn": "2min Z4",
+          "durationSec": 120,
+          "zone": "Z4",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "1min Z1",
+          "descriptionEn": "1min Z1",
+          "durationSec": 60,
+          "zone": "Z1",
+          "role": "recovery"
+        },
+        {
+          "kind": "segment",
+          "description": "1min Z4+",
+          "descriptionEn": "1min Z4+",
+          "durationSec": 60,
+          "zone": "Z4-Z5",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Récupération",
+          "descriptionEn": "Recovery",
+          "durationSec": 300,
+          "zone": "Z1",
+          "role": "recovery"
+        },
+        {
+          "kind": "segment",
+          "description": "Tempo Z3",
+          "descriptionEn": "Z3 tempo",
+          "durationSec": 600,
+          "zone": "Z3",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -1055,6 +1129,56 @@
           "zone": "Z1-Z6"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 3,
+          "unit": "blocks",
+          "steps": [
+            {
+              "kind": "repeat",
+              "count": 5,
+              "unit": "reps",
+              "steps": [
+                {
+                  "kind": "segment",
+                  "description": "30s Z1",
+                  "descriptionEn": "30s Z1",
+                  "durationSec": 30,
+                  "zone": "Z1",
+                  "role": "effort"
+                },
+                {
+                  "kind": "segment",
+                  "description": "20s Z3",
+                  "descriptionEn": "20s Z3",
+                  "durationSec": 20,
+                  "zone": "Z3",
+                  "role": "effort"
+                },
+                {
+                  "kind": "segment",
+                  "description": "10s sprint",
+                  "descriptionEn": "10s sprint",
+                  "durationSec": 10,
+                  "zone": "Z6",
+                  "role": "effort"
+                }
+              ]
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "Récupération entre blocs",
+              "descriptionEn": "Recovery between blocks",
+              "durationSec": 120,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -1168,6 +1292,56 @@
           "zone": "Z1-Z5"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 3,
+          "unit": "blocks",
+          "steps": [
+            {
+              "kind": "repeat",
+              "count": 5,
+              "unit": "reps",
+              "steps": [
+                {
+                  "kind": "segment",
+                  "description": "30s Z1",
+                  "descriptionEn": "30s Z1",
+                  "durationSec": 30,
+                  "zone": "Z1",
+                  "role": "effort"
+                },
+                {
+                  "kind": "segment",
+                  "description": "20s Z3",
+                  "descriptionEn": "20s Z3",
+                  "durationSec": 20,
+                  "zone": "Z3",
+                  "role": "effort"
+                },
+                {
+                  "kind": "segment",
+                  "description": "10s rapide 80%",
+                  "descriptionEn": "10s fast 80%",
+                  "durationSec": 10,
+                  "zone": "Z5",
+                  "role": "effort"
+                }
+              ]
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "Récupération entre blocs",
+              "descriptionEn": "Recovery between blocks",
+              "durationSec": 120,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -1272,6 +1446,32 @@
           "zone": "Z1-Z6"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Semaine 1-2: 2 blocs de 5x(30s Z1 + 20s Z3 + 10s sprint)",
+          "descriptionEn": "Week 1-2: 2 blocks of 5x(30s Z1 + 20s Z3 + 10s sprint)",
+          "durationSec": 720,
+          "zone": "Z1-Z6",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "OU Semaine 3-4: 3 blocs",
+          "descriptionEn": "OR Week 3-4: 3 blocks",
+          "durationSec": 1140,
+          "zone": "Z1-Z6",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "OU Semaine 5-6: 4 blocs",
+          "descriptionEn": "OR Week 5-6: 4 blocks",
+          "durationSec": 1560,
+          "zone": "Z1-Z6",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -1373,6 +1573,56 @@
           "repetitions": 4,
           "distanceM": 150,
           "recovery": "150m marche retour"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 3,
+          "unit": "blocks",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "10 sauts unipodaux par côté + 10 foulées bondissantes + 8 drop jumps + 10 A-skip par côté",
+              "descriptionEn": "10 single-leg hops per side + 10 bounding strides + 8 drop jumps + 10 A-skips per side",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "2min marche",
+              "descriptionEn": "2min walk",
+              "durationSec": 120,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
+        },
+        {
+          "kind": "repeat",
+          "count": 4,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "150m à 85% avec focus sur le rebond élastique et la fréquence",
+              "descriptionEn": "150m at 85% focusing on elastic rebound and cadence",
+              "distanceM": 150,
+              "zone": "Z4",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "150m marche retour",
+              "descriptionEn": "150m walk back",
+              "distanceM": 150,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [

@@ -14,8 +14,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SEOHead } from "@/components/seo";
-import { BlockEditor } from "@/components/domain/contribute/BlockEditor";
+import { WorkoutStepListEditor } from "@/components/domain/contribute/WorkoutStepListEditor";
 import { SessionTimeline } from "@/components/visualization/SessionTimeline";
+import { getStructuredWorkoutDurationMinutes, getWorkoutPhaseSteps, normalizeWorkoutStructureSource, replaceWorkoutPhaseSteps } from "@/lib/workoutStructure";
 import { ExportMenu } from "@/components/domain/ExportMenu";
 import { FavoriteButton } from "@/components/domain/FavoriteButton";
 import { useFavorites } from "@/hooks";
@@ -29,15 +30,9 @@ import {
   exportWorkoutsToJSON,
   importWorkoutsFromJSON,
 } from "@/lib/customWorkoutStorage";
-import type { WorkoutTemplate, WorkoutBlock } from "@/types";
+import type { WorkoutTemplate, WorkoutStep } from "@/types";
 
 type SectionKey = "warmup" | "main" | "cooldown";
-
-const EMPTY_BLOCK: WorkoutBlock = {
-  description: "",
-  durationMin: 5,
-  zone: "Z2",
-};
 
 // ── List view (no id param) ──────────────────────────────────────────
 
@@ -151,10 +146,8 @@ function WorkoutListView() {
         ) : (
           <div className="space-y-3">
             {workouts.map((w) => {
-              const totalMin =
-                (w.warmupTemplate?.reduce((s, b) => s + (b.durationMin || 0), 0) || 0) +
-                w.mainSetTemplate.reduce((s, b) => s + (b.durationMin || 0) * (b.repetitions || 1), 0) +
-                (w.cooldownTemplate?.reduce((s, b) => s + (b.durationMin || 0), 0) || 0);
+              const totalMin = getStructuredWorkoutDurationMinutes(w);
+              const mainStepCount = getWorkoutPhaseSteps(w, "main").length;
               return (
                 <div
                   key={w.id}
@@ -170,7 +163,7 @@ function WorkoutListView() {
                         <div>
                           <h3 className="font-medium">{w.name || t("calculators:workoutBuilder.untitled")}</h3>
                           <p className="text-sm text-muted-foreground">
-                            ~{formatDurationMinutes(totalMin)} · {w.mainSetTemplate.length} {t("calculators:workoutBuilder.blocks")}
+                            ~{formatDurationMinutes(totalMin)} · {mainStepCount} {t("calculators:workoutBuilder.blocks")}
                           </p>
                         </div>
                       </div>
@@ -237,9 +230,9 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
 
   const [workout, setWorkoutRaw] = useState<WorkoutTemplate>(() => {
     const existing = getCustomWorkout(workoutId);
-    if (existing) return existing;
+    if (existing) return normalizeWorkoutStructureSource(existing);
     const fresh = createEmptyWorkout();
-    return { ...fresh, id: workoutId };
+    return normalizeWorkoutStructureSource({ ...fresh, id: workoutId });
   });
   const setWorkout: typeof setWorkoutRaw = useCallback((action) => {
     isDirtyRef.current = true;
@@ -270,10 +263,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
   const handleSave = useCallback(() => {
     if (!canSave) return;
     try {
-      const totalMin =
-        (workout.warmupTemplate?.reduce((s, b) => s + (b.durationMin || 0), 0) || 0) +
-        workout.mainSetTemplate.reduce((s, b) => s + (b.durationMin || 0) * (b.repetitions || 1), 0) +
-        (workout.cooldownTemplate?.reduce((s, b) => s + (b.durationMin || 0), 0) || 0);
+      const totalMin = getStructuredWorkoutDurationMinutes(workout);
       const updated = {
         ...workout,
         typicalDuration: { min: Math.max(totalMin - 5, 0), max: totalMin + 5 },
@@ -294,37 +284,13 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
     navigate("/workout/builder");
   }, [workout.id, t, navigate]);
 
-  const getBlocks = (section: SectionKey): WorkoutBlock[] => {
-    if (section === "warmup") return workout.warmupTemplate || [];
-    if (section === "main") return workout.mainSetTemplate;
-    return workout.cooldownTemplate || [];
+  const getSteps = (section: SectionKey): WorkoutStep[] => {
+    return getWorkoutPhaseSteps(workout, section);
   };
 
-  const updateBlocks = useCallback((section: SectionKey, blocks: WorkoutBlock[]) => {
-    const key = section === "warmup" ? "warmupTemplate" : section === "main" ? "mainSetTemplate" : "cooldownTemplate";
-    setWorkout((prev) => ({ ...prev, [key]: blocks }));
+  const updateSteps = useCallback((section: SectionKey, steps: WorkoutStep[]) => {
+    setWorkout((prev) => replaceWorkoutPhaseSteps(prev, section, steps));
   }, [setWorkout]);
-
-  const addBlock = (section: SectionKey) => {
-    updateBlocks(section, [...getBlocks(section), { ...EMPTY_BLOCK }]);
-  };
-
-  const removeBlock = (section: SectionKey, index: number) => {
-    updateBlocks(section, getBlocks(section).filter((_, i) => i !== index));
-  };
-
-  const updateBlock = (section: SectionKey, index: number, block: WorkoutBlock) => {
-    const blocks = [...getBlocks(section)];
-    blocks[index] = block;
-    updateBlocks(section, blocks);
-  };
-
-  const moveBlock = (section: SectionKey, from: number, to: number) => {
-    const blocks = [...getBlocks(section)];
-    const [moved] = blocks.splice(from, 1);
-    blocks.splice(to, 0, moved);
-    updateBlocks(section, blocks);
-  };
 
   const toggleCollapse = (key: SectionKey) => {
     setCollapsed((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -332,15 +298,12 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
 
   const [isSaved, setIsSaved] = useState(() => getCustomWorkouts().some((w) => w.id === workout.id));
 
-  const totalMin =
-    (workout.warmupTemplate?.reduce((s, b) => s + (b.durationMin || 0), 0) || 0) +
-    workout.mainSetTemplate.reduce((s, b) => s + (b.durationMin || 0) * (b.repetitions || 1), 0) +
-    (workout.cooldownTemplate?.reduce((s, b) => s + (b.durationMin || 0), 0) || 0);
+  const totalMin = getStructuredWorkoutDurationMinutes(workout);
 
   const blockCount =
-    (workout.warmupTemplate?.length || 0) +
-    workout.mainSetTemplate.length +
-    (workout.cooldownTemplate?.length || 0);
+    getSteps("warmup").length +
+    getSteps("main").length +
+    getSteps("cooldown").length;
 
   const sections: { key: SectionKey; label: string; color: string }[] = [
     { key: "warmup", label: t("calculators:workoutBuilder.warmup"), color: "text-zone-2" },
@@ -420,7 +383,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
 
         {/* Sections */}
         {sections.map(({ key, label, color }) => {
-          const blocks = getBlocks(key);
+          const steps = getSteps(key);
           const isCollapsed = collapsed[key];
           return (
             <div key={key} className="space-y-3">
@@ -431,28 +394,16 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
               >
                 {isCollapsed ? <ChevronDown className="size-4" /> : <ChevronUp className="size-4" />}
                 <h2 className={`text-lg font-semibold ${color}`}>{label}</h2>
-                <span className="text-xs text-muted-foreground">({blocks.length})</span>
+                <span className="text-xs text-muted-foreground">({steps.length})</span>
               </button>
 
               {!isCollapsed && (
                 <div className="space-y-3 pl-2">
-                  {blocks.map((block, i) => (
-                    <BlockEditor
-                      key={`${key}-${i}`}
-                      block={block}
-                      onChange={(b) => updateBlock(key, i, b)}
-                      onRemove={() => removeBlock(key, i)}
-                      index={i}
-                      canMoveUp={i > 0}
-                      canMoveDown={i < blocks.length - 1}
-                      onMoveUp={() => moveBlock(key, i, i - 1)}
-                      onMoveDown={() => moveBlock(key, i, i + 1)}
-                    />
-                  ))}
-                  <Button variant="outline" size="sm" onClick={() => addBlock(key)} className="w-full">
-                    <Plus className="size-4" />
-                    {t("calculators:workoutBuilder.addBlock")}
-                  </Button>
+                  <WorkoutStepListEditor
+                    steps={steps}
+                    onChange={(nextSteps) => updateSteps(key, nextSteps)}
+                    label={label}
+                  />
                 </div>
               )}
             </div>

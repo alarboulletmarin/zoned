@@ -410,9 +410,53 @@
           "distanceM": 100,
           "zone": "Z5",
           "repetitions": 5,
-          "recovery": "Footing descente, 3min entre séries",
+          "recovery": "Footing descente",
+          "restBetweenSets": "3min footing Z1",
           "intensityType": "I",
           "sets": 3
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 3,
+          "unit": "sets",
+          "steps": [
+            {
+              "kind": "repeat",
+              "count": 5,
+              "unit": "reps",
+              "steps": [
+                {
+                  "kind": "segment",
+                  "description": "100m côte",
+                  "descriptionEn": "100m hill",
+                  "distanceM": 100,
+                  "zone": "Z5",
+                  "role": "effort"
+                }
+              ],
+              "between": [
+                {
+                  "kind": "segment",
+                  "description": "Footing descente",
+                  "descriptionEn": "Jog down",
+                  "zone": "Z1",
+                  "role": "recovery"
+                }
+              ]
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "3min footing Z1",
+              "descriptionEn": "3min jog Z1",
+              "durationSec": 180,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -610,6 +654,33 @@
           "repetitions": 6,
           "recovery": "30s en bas",
           "intensityType": "T"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 6,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "Montée rapide + descente technique",
+              "descriptionEn": "Fast uphill + technical downhill",
+              "distanceM": 200,
+              "zone": "Z4",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "30s en bas",
+              "descriptionEn": "30s at the bottom",
+              "durationSec": 30,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -866,6 +937,16 @@
           "descriptionEn": "Varied climbs (3 short + 2 long) on trail",
           "durationMin": 40,
           "zone": "Z3-Z5"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Montées variées (3 courtes + 2 longues) sur sentier",
+          "descriptionEn": "Varied climbs (3 short + 2 long) on trail",
+          "durationSec": 2400,
+          "zone": "Z3-Z5",
+          "role": "effort"
         }
       ],
       "cooldownTemplate": [

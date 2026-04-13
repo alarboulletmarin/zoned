@@ -30,9 +30,7 @@ export function WorkoutOfTheDay() {
   const name = pick(workout, "name");
   const description = pick(workout, "description");
   const tips = pickLangArray<string>(workout, "coachingTips");
-  const sessionData = transformSessionBlocks(
-    { warmup: workout.warmupTemplate, mainSet: workout.mainSetTemplate, cooldown: workout.cooldownTemplate },
-  );
+  const sessionData = transformSessionBlocks(workout);
   const duration = Math.round(sessionData.totalDurationMin);
 
   return (

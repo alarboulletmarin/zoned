@@ -880,6 +880,15 @@
           "zone": "Z2"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Paliers de 4-5min à vitesse croissante (+0,5 km/h par palier). Départ à ~60% VMA. À chaque fin de palier : noter FC, RPE, lactate si disponible. Continuer jusqu'à épuisement",
+          "descriptionEn": "4-5min stages at increasing speed (+0.5 km/h per stage). Start at ~60% vVO2max. At end of each stage: record HR, RPE, lactate if available. Continue until exhaustion",
+          "zone": "Z2",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Marche puis footing très lent",

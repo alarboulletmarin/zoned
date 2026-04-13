@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
-import type { Zone, ZoneNumber } from "@/types";
+import type { ZoneSpec, ZoneNumber } from "@/types";
 import { getZoneNumber, ZONE_META } from "@/types";
 import { usePickLang } from "@/lib/i18n-utils";
 
 interface ZoneBadgeProps {
-  zone: Zone | ZoneNumber;
+  zone: ZoneSpec | ZoneNumber;
   showLabel?: boolean;
   size?: "sm" | "md" | "lg";
   className?: string;
@@ -49,7 +49,7 @@ export function ZoneBadge({
 
 // Multi-zone display (for workouts with multiple zones)
 interface ZoneBadgesProps {
-  zones: (Zone | ZoneNumber)[];
+  zones: (ZoneSpec | ZoneNumber)[];
   size?: "sm" | "md" | "lg";
   className?: string;
 }

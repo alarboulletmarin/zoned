@@ -8,33 +8,14 @@ import type { TargetSystemScience, ScientificReference } from "@/data/science";
 import { ZONE_META } from "@/types";
 import type { WorkoutTemplate, ZoneNumber } from "@/types";
 import { usePickLang, usePickLangArray } from "@/lib/i18n-utils";
+import { getWorkoutZoneNumbers } from "@/lib/workoutStructure";
 
 interface ScienceSectionProps {
   workout: WorkoutTemplate;
 }
 
 function getWorkoutZones(workout: WorkoutTemplate): ZoneNumber[] {
-  const zones = new Set<ZoneNumber>();
-  const allBlocks = [
-    ...workout.warmupTemplate,
-    ...workout.mainSetTemplate,
-    ...workout.cooldownTemplate,
-  ];
-  for (const block of allBlocks) {
-    if (block.zone) {
-      // Handle "Z3" format - extract number
-      const match = block.zone.match(/(\d)/);
-      if (match) zones.add(Number(match[1]) as ZoneNumber);
-      // Handle "Z2-Z4" range format
-      const rangeMatch = block.zone.match(/Z(\d)-Z(\d)/i);
-      if (rangeMatch) {
-        const start = Number(rangeMatch[1]);
-        const end = Number(rangeMatch[2]);
-        for (let i = start; i <= end; i++) zones.add(i as ZoneNumber);
-      }
-    }
-  }
-  return Array.from(zones).sort();
+  return getWorkoutZoneNumbers(workout);
 }
 
 export function ScienceSection({ workout }: ScienceSectionProps) {

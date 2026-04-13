@@ -358,6 +358,33 @@
           "intensityType": "I"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 10,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "30s très rapide",
+              "descriptionEn": "30s very fast",
+              "durationSec": 30,
+              "zone": "Z5",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "90s footing Z2",
+              "descriptionEn": "90s jog Z2",
+              "durationSec": 90,
+              "zone": "Z2",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -529,6 +556,33 @@
           "repetitions": 6,
           "recovery": "2min footing Z2",
           "intensityType": "M"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 6,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "3min tempo",
+              "descriptionEn": "3min tempo",
+              "durationSec": 180,
+              "zone": "Z3",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "2min footing Z2",
+              "descriptionEn": "2min jog Z2",
+              "durationSec": 120,
+              "zone": "Z2",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -810,6 +864,108 @@
           "recovery": "15s footing Z2"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 2,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "90s rapide",
+              "descriptionEn": "90s fast",
+              "durationSec": 90,
+              "zone": "Z4-Z5",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "90s footing Z2",
+              "descriptionEn": "90s jog Z2",
+              "durationSec": 90,
+              "zone": "Z2",
+              "role": "recovery"
+            }
+          ]
+        },
+        {
+          "kind": "repeat",
+          "count": 4,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "60s rapide",
+              "descriptionEn": "60s fast",
+              "durationSec": 60,
+              "zone": "Z4-Z5",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "60s footing Z2",
+              "descriptionEn": "60s jog Z2",
+              "durationSec": 60,
+              "zone": "Z2",
+              "role": "recovery"
+            }
+          ]
+        },
+        {
+          "kind": "repeat",
+          "count": 4,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "30s rapide",
+              "descriptionEn": "30s fast",
+              "durationSec": 30,
+              "zone": "Z5",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "30s footing Z2",
+              "descriptionEn": "30s jog Z2",
+              "durationSec": 30,
+              "zone": "Z2",
+              "role": "recovery"
+            }
+          ]
+        },
+        {
+          "kind": "repeat",
+          "count": 4,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "15s sprint",
+              "descriptionEn": "15s sprint",
+              "durationSec": 15,
+              "zone": "Z5+",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "15s footing Z2",
+              "descriptionEn": "15s jog Z2",
+              "durationSec": 15,
+              "zone": "Z2",
+              "role": "recovery"
+            }
+          ]
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -997,6 +1153,33 @@
           "repetitions": 20,
           "recovery": "1min footing soutenu Z2-Z3",
           "intensityType": "I"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 20,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "1min rapide effort 5K-10K",
+              "descriptionEn": "1min fast at 5K-10K effort",
+              "durationSec": 60,
+              "zone": "Z5",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "1min footing soutenu Z2-Z3",
+              "descriptionEn": "1min steady jog Z2-Z3",
+              "durationSec": 60,
+              "zone": "Z2-Z3",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -1240,6 +1423,33 @@
           "repetitions": 14,
           "recovery": "1min footing Z2-Z3",
           "intensityType": "T"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 14,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "2min à allure seuil",
+              "descriptionEn": "2min at threshold pace",
+              "durationSec": 120,
+              "zone": "Z4",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "1min footing Z2-Z3",
+              "descriptionEn": "1min jog Z2-Z3",
+              "durationSec": 60,
+              "zone": "Z2-Z3",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [

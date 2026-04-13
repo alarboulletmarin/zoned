@@ -87,11 +87,7 @@ function RunningWorkoutCard({ workout, className, expanded }: { workout: Workout
 
   // Compute segments for the peek preview (only when visible, but memoised for stability)
   const peekData = useMemo(() => {
-    const { segments } = transformSessionBlocks({
-      warmup: workout.warmupTemplate ?? [],
-      mainSet: workout.mainSetTemplate,
-      cooldown: workout.cooldownTemplate ?? [],
-    });
+    const { segments } = transformSessionBlocks(workout);
     // First main-set block description for the one-line summary
     const firstMain = workout.mainSetTemplate[0];
     const summary = firstMain ? pick(firstMain, "description") : null;

@@ -1379,6 +1379,17 @@
           "intensityType": "E"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "60-75min footing Z2 à jeun sur glycogène partiellement déplété (séance intense la veille + nuit sans glucides). RPE sera plus élevé que d'habitude",
+          "descriptionEn": "60-75min jog Z2 fasted on partially depleted glycogen (intense session previous evening + night without carbs). RPE will be higher than usual",
+          "durationSec": 3900,
+          "zone": "Z2",
+          "role": "effort",
+          "intensityType": "E"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Retour au calme puis petit-déjeuner riche en glucides et protéines dans les 30 minutes",
