@@ -1,4 +1,4 @@
-import type { PhaseRange, PlanConfig, PlanSession, PlanWeek, TrainingPlan, UnavailabilityReason } from "@/types/plan";
+import type { PhaseRange, PlanConfig, PlanSession, PlanWeek, RaceDistance, TrainingPlan, UnavailabilityReason } from "@/types/plan";
 
 // Domain bounds — defensive guards against pathological imports.
 const MAX_WEEKS_PER_PLAN = 104; // 2 years is more than enough for any realistic plan
@@ -93,6 +93,11 @@ function normalizeWeek(raw: unknown): PlanWeek | null {
     _originalVolumePercent: asOptionalNumber(raw._originalVolumePercent),
     _originalTargetKm: asOptionalNumber(raw._originalTargetKm),
     _originalIsRecovery: typeof raw._originalIsRecovery === "boolean" ? raw._originalIsRecovery : undefined,
+    intermediateRace: isObject(raw.intermediateRace) &&
+      typeof (raw.intermediateRace as Record<string, unknown>).raceDistance === "string" &&
+      typeof (raw.intermediateRace as Record<string, unknown>).raceDate === "string"
+      ? raw.intermediateRace as unknown as PlanWeek["intermediateRace"]
+      : undefined,
   };
 }
 
@@ -133,6 +138,24 @@ function normalizeConfig(raw: unknown, fallbackId: string, fallbackCreatedAt: st
           reason: typeof item.reason === "string" ? item.reason as UnavailabilityReason : undefined,
           note: typeof item.note === "string" ? item.note : undefined,
         })).filter(item => /^\d{4}-\d{2}-\d{2}$/.test(item.date))
+      : undefined,
+    intermediateGoals: Array.isArray(raw.intermediateGoals)
+      ? (raw.intermediateGoals as unknown[])
+          .filter(isObject)
+          .filter(item =>
+            typeof item.raceDistance === "string" &&
+            typeof item.raceDate === "string" &&
+            /^\d{4}-\d{2}-\d{2}$/.test(item.raceDate as string) &&
+            (item.priority === "A" || item.priority === "B" || item.priority === "C")
+          )
+          .map(item => ({
+            raceDistance: item.raceDistance as RaceDistance,
+            raceDate: item.raceDate as string,
+            raceName: typeof item.raceName === "string" ? item.raceName : undefined,
+            targetPaceMinKm: isFiniteNumber(item.targetPaceMinKm) ? item.targetPaceMinKm : undefined,
+            priority: item.priority as "A" | "B" | "C",
+          }))
+          .sort((a, b) => a.raceDate.localeCompare(b.raceDate))
       : undefined,
   };
 }

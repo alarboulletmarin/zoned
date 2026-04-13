@@ -60,6 +60,8 @@ export function exportPlanToICS(
         const sessionDate = getSessionDate(planMonday, week.weekNumber, session.dayOfWeek);
         const isRaceDay = session.workoutId === "__race_day__";
 
+        const isIntermediateRace = session.workoutId === "__intermediate_race__";
+
         if (isRaceDay) {
           // Race day: all-day event
           const raceDistMeta = plan.config.raceDistance ? RACE_DISTANCE_META[plan.config.raceDistance] : null;
@@ -81,6 +83,37 @@ export function exportPlanToICS(
             description: plan.raceTimePrediction
               ? `${t("targetTime")}: ${plan.raceTimePrediction}`
               : "",
+            categories: ["Running", "Race"],
+            status: "CONFIRMED" as const,
+            transp: "TRANSPARENT" as const,
+            productId: "zoned-app",
+          });
+        } else if (isIntermediateRace) {
+          // Intermediate race: all-day event
+          const ir = week.intermediateRace;
+          const distMeta = ir?.raceDistance ? RACE_DISTANCE_META[ir.raceDistance] : null;
+          const distLabel = distMeta ? pickLang(distMeta, "label") : ir?.raceDistance ?? "";
+          const raceName = ir?.raceName || distLabel;
+          const priorityLabel = ir?.priority
+            ? i18n.t(`plan:intermediateGoals.badge.${ir.priority}`)
+            : "";
+
+          events.push({
+            start: [
+              sessionDate.getFullYear(),
+              sessionDate.getMonth() + 1,
+              sessionDate.getDate(),
+            ],
+            end: [
+              sessionDate.getFullYear(),
+              sessionDate.getMonth() + 1,
+              sessionDate.getDate(),
+            ],
+            title: `${i18n.t("plan:intermediateGoals.raceDayLabel")} - ${raceName}`,
+            description: [
+              distLabel,
+              priorityLabel,
+            ].filter(Boolean).join(" — "),
             categories: ["Running", "Race"],
             status: "CONFIRMED" as const,
             transp: "TRANSPARENT" as const,

@@ -209,7 +209,7 @@ export function PlanViewPage() {
     const workoutIds = new Set<string>();
     for (const week of plan.weeks) {
       for (const session of week.sessions) {
-        if (session.workoutId && session.workoutId !== "__race_day__") {
+        if (session.workoutId && session.workoutId !== "__race_day__" && session.workoutId !== "__intermediate_race__") {
           workoutIds.add(session.workoutId);
         }
       }
@@ -453,7 +453,7 @@ export function PlanViewPage() {
   }, [plan, reloadPlan, runAdaptationIfReady]);
 
   const handleSessionClick = useCallback((weekNumber: number, sessionIndex: number, workoutId: string) => {
-    if (workoutId && workoutId !== "__race_day__" && !workoutId.startsWith("__activity_")) {
+    if (workoutId && workoutId !== "__race_day__" && workoutId !== "__intermediate_race__" && !workoutId.startsWith("__activity_")) {
       // Persist current week in URL before navigating away so browser back restores it
       const url = new URL(window.location.href);
       url.searchParams.set("week", String(weekNumber));
@@ -1110,6 +1110,11 @@ export function PlanViewPage() {
                         {t("calendar.recoveryWeek")}
                       </Badge>
                     )}
+                    {week.intermediateRace && (
+                      <Badge variant="outline" className="shrink-0 border-orange-300 text-orange-700 dark:border-orange-600 dark:text-orange-300">
+                        {t("intermediateGoals.weekLabel")}
+                      </Badge>
+                    )}
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
                     {week.sessions.length > 0 && (
@@ -1143,6 +1148,7 @@ export function PlanViewPage() {
                         const sortedSessions = [...week.sessions].sort((a, b) => {
                           const priority = (s: typeof a) => {
                             if (s.workoutId === "__race_day__") return 0;
+                            if (s.workoutId === "__intermediate_race__") return 0.5;
                             if (s.sessionType === "long_run") return 1;
                             if (s.isKeySession) return 2;
                             if (s.sessionType === "endurance") return 3;
@@ -1153,6 +1159,9 @@ export function PlanViewPage() {
                         return sortedSessions.map((session) => {
                           const isRaceDay =
                             session.workoutId === "__race_day__";
+                          const isIntermediateRace =
+                            session.workoutId === "__intermediate_race__";
+                          const isSpecialSession = isRaceDay || isIntermediateRace;
                           const sessionLabel =
                             SESSION_TYPE_LABELS[session.sessionType];
                           const originalIndex = week.sessions.indexOf(session);
@@ -1164,7 +1173,9 @@ export function PlanViewPage() {
                                 "flex items-start gap-2 sm:gap-3 rounded-lg p-2.5 sm:p-3",
                                 isRaceDay
                                   ? "bg-primary/10 border border-primary/20"
-                                  : blockedDaysSet.has(`${week.weekNumber}-${session.dayOfWeek}`)
+                                  : isIntermediateRace
+                                    ? "bg-orange-50 border border-orange-300 dark:bg-orange-900/30 dark:border-orange-700"
+                                    : blockedDaysSet.has(`${week.weekNumber}-${session.dayOfWeek}`)
                                     ? "bg-muted/50 bg-[repeating-linear-gradient(135deg,transparent,transparent_4px,rgba(0,0,0,0.04)_4px,rgba(0,0,0,0.04)_6px)]"
                                     : session.status === "completed" || session.status === "modified"
                                       ? session.status === "modified"
@@ -1176,13 +1187,13 @@ export function PlanViewPage() {
                               )}
                             >
                               {/* Blocked day badge */}
-                              {!isRaceDay && blockedDaysSet.has(`${week.weekNumber}-${session.dayOfWeek}`) && (
+                              {!isSpecialSession && blockedDaysSet.has(`${week.weekNumber}-${session.dayOfWeek}`) && (
                                 <Badge variant="outline" className="text-[9px] shrink-0 border-muted-foreground/30 text-muted-foreground">
                                   {t("unavailability.blocked")}
                                 </Badge>
                               )}
                               {/* Completion toggle */}
-                              {!isRaceDay && (
+                              {!isSpecialSession && (
                                 <button
                                   type="button"
                                   data-completion-key={`${week.weekNumber}-${originalIndex}`}
@@ -1225,6 +1236,35 @@ export function PlanViewPage() {
                                       {t("view.raceDay")}
                                     </span>
                                   </div>
+                                ) : isIntermediateRace ? (
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <Flag className="size-4 text-orange-500" />
+                                    <span className="font-semibold text-orange-700 dark:text-orange-300">
+                                      {t("intermediateGoals.raceDayLabel")}
+                                    </span>
+                                    {week.intermediateRace && (
+                                      <>
+                                        {week.intermediateRace.raceName && (
+                                          <span className="text-sm text-orange-600 dark:text-orange-400">
+                                            — {week.intermediateRace.raceName}
+                                          </span>
+                                        )}
+                                        <Badge variant="outline" className="text-[10px] border-orange-300 text-orange-700 dark:border-orange-600 dark:text-orange-300">
+                                          {RACE_DISTANCE_META[week.intermediateRace.raceDistance]
+                                            ? pick(RACE_DISTANCE_META[week.intermediateRace.raceDistance], "label")
+                                            : week.intermediateRace.raceDistance}
+                                        </Badge>
+                                        <Badge variant="outline" className={cn(
+                                          "text-[10px]",
+                                          week.intermediateRace.priority === "A" && "border-red-400 text-red-600 dark:border-red-500 dark:text-red-400",
+                                          week.intermediateRace.priority === "B" && "border-orange-400 text-orange-600 dark:border-orange-500 dark:text-orange-400",
+                                          week.intermediateRace.priority === "C" && "border-yellow-400 text-yellow-600 dark:border-yellow-500 dark:text-yellow-400",
+                                        )}>
+                                          {t(`intermediateGoals.badge.${week.intermediateRace.priority}`)}
+                                        </Badge>
+                                      </>
+                                    )}
+                                  </div>
                                 ) : session.workoutId.startsWith("__activity_") ? (
                                   <span className="text-sm font-medium text-muted-foreground">
                                     {workoutNames[session.workoutId] || session.workoutId}
@@ -1253,12 +1293,12 @@ export function PlanViewPage() {
                                 {session.isKeySession && (
                                   <Star className="size-3.5 sm:size-4 text-yellow-500 fill-yellow-500" />
                                 )}
-                                {!isRaceDay && sessionLabel && (
+                                {!isSpecialSession && sessionLabel && (
                                   <Badge variant="outline" className="text-[10px] sm:text-xs hidden sm:inline-flex">
                                     {pickLocale(sessionLabel)}
                                   </Badge>
                                 )}
-                                {!isRaceDay && !session.workoutId.startsWith("__activity_") && (
+                                {!isSpecialSession && !session.workoutId.startsWith("__activity_") && (
                                   <span className="text-xs text-muted-foreground flex items-center gap-1">
                                     <Clock className="size-3" />
                                     {formatDurationMinutes(session.estimatedDurationMin)}
@@ -1267,7 +1307,7 @@ export function PlanViewPage() {
                                     )}
                                   </span>
                                 )}
-                                {!isRaceDay && (
+                                {!isSpecialSession && (
                                   <>
                                     <Button
                                       variant="ghost"

@@ -17,7 +17,7 @@ import { computePlanStats, computeWeekKm, computeWeekDuration } from "@/lib/plan
 import { calculatePaceZones, formatPace } from "@/lib/zones";
 import { getExerciseById } from "@/data/strength";
 import i18n from "@/i18n";
-import { formatDateMedium } from "@/lib/i18n-utils";
+import { formatDateMedium, pickLang } from "@/lib/i18n-utils";
 
 // ── Constants ──────────────────────────────────────────────────────
 
@@ -248,7 +248,7 @@ function buildWorkoutIndex(plan: TrainingPlan): Map<string, number> {
   let counter = 1;
   for (const week of plan.weeks) {
     for (const session of week.sessions) {
-      if (session.workoutId === "__race_day__") continue;
+      if (session.workoutId === "__race_day__" || session.workoutId === "__intermediate_race__") continue;
       if (!index.has(session.workoutId)) {
         index.set(session.workoutId, counter++);
       }
@@ -922,6 +922,7 @@ export async function exportPlanToPDF(
       for (let i = 0; i < week.sessions.length; i++) {
         const session = week.sessions[i];
         const isRaceDay = session.workoutId === "__race_day__";
+        const isIntermediateRace = session.workoutId === "__intermediate_race__";
 
         if (isRaceDay) {
           rows.push([
@@ -931,6 +932,28 @@ export async function exportPlanToPDF(
               bold: true,
               fontSize: 7,
               color: phaseColors.text,
+              colSpan: 4,
+              margin: [2, 2, 2, 2],
+            },
+            {}, {}, {},
+            { text: "", fontSize: 7, margin: [2, 2, 2, 2] },
+          ] as TableCell[]);
+          continue;
+        }
+
+        if (isIntermediateRace) {
+          const ir = week.intermediateRace;
+          const distMeta = ir?.raceDistance ? RACE_DISTANCE_META[ir.raceDistance] : null;
+          const distLabel = distMeta ? pickLang(distMeta, "label") : ir?.raceDistance ?? "";
+          const raceName = ir?.raceName ? `${ir.raceName} (${distLabel})` : distLabel;
+          const priorityLabel = ir?.priority ? ` [${ir.priority}]` : "";
+          rows.push([
+            { text: dayLabel(session.dayOfWeek), fontSize: 7, alignment: "center" as const, margin: [2, 2, 2, 2] },
+            {
+              text: `${i18n.t("plan:intermediateGoals.raceDayLabel")} — ${raceName}${priorityLabel}`,
+              bold: true,
+              fontSize: 7,
+              color: "#c2410c",
               colSpan: 4,
               margin: [2, 2, 2, 2],
             },

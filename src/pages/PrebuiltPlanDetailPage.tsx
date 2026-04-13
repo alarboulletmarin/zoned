@@ -84,7 +84,7 @@ export function PrebuiltPlanDetailPage() {
     const workoutIds = new Set<string>();
     for (const week of prebuilt.weeks) {
       for (const session of week.sessions) {
-        if (session.workoutId && session.workoutId !== "__race_day__") {
+        if (session.workoutId && session.workoutId !== "__race_day__" && session.workoutId !== "__intermediate_race__") {
           workoutIds.add(session.workoutId);
         }
       }
@@ -419,6 +419,9 @@ export function PrebuiltPlanDetailPage() {
                       week.sessions.map((session, idx) => {
                         const isRaceDay =
                           session.workoutId === "__race_day__";
+                        const isIntermediateRace =
+                          session.workoutId === "__intermediate_race__";
+                        const isSpecialSession = isRaceDay || isIntermediateRace;
                         const sessionLabel =
                           SESSION_TYPE_LABELS[session.sessionType];
                         const dayLabel = t(`prebuilt.day.${session.dayOfWeek}`);
@@ -430,7 +433,9 @@ export function PrebuiltPlanDetailPage() {
                               "flex items-center gap-3 rounded-lg p-3",
                               isRaceDay
                                 ? "bg-primary/10 border border-primary/20"
-                                : "bg-secondary/50",
+                                : isIntermediateRace
+                                  ? "bg-orange-50 border border-orange-300 dark:bg-orange-900/30 dark:border-orange-700"
+                                  : "bg-secondary/50",
                             )}
                           >
                             {/* Day badge */}
@@ -449,6 +454,13 @@ export function PrebuiltPlanDetailPage() {
                                     {t("prebuilt.raceDay")}
                                   </span>
                                 </div>
+                              ) : isIntermediateRace ? (
+                                <div className="flex items-center gap-2">
+                                  <Flag className="size-4 text-orange-500" />
+                                  <span className="font-semibold text-orange-700 dark:text-orange-300">
+                                    {t("intermediateGoals.raceDayLabel")}
+                                  </span>
+                                </div>
                               ) : (
                                 <span className="text-sm font-medium line-clamp-1">
                                   {workoutNames[session.workoutId] ||
@@ -462,7 +474,7 @@ export function PrebuiltPlanDetailPage() {
                               {session.isKeySession && (
                                 <Star className="size-4 text-yellow-500 fill-yellow-500" />
                               )}
-                              {!isRaceDay && sessionLabel && (
+                              {!isSpecialSession && sessionLabel && (
                                 <Badge variant="outline" className="text-xs">
                                   <div
                                     className={cn(
@@ -475,7 +487,7 @@ export function PrebuiltPlanDetailPage() {
                                   {pickLocale(sessionLabel)}
                                 </Badge>
                               )}
-                              {!isRaceDay && (
+                              {!isSpecialSession && (
                                 <span className="text-xs text-muted-foreground flex items-center gap-1">
                                   <Clock className="size-3" />
                                   {formatDurationMinutes(session.estimatedDurationMin)}

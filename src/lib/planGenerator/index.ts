@@ -26,6 +26,7 @@ import {
 import { calculateLongRunProgression } from "./longRunProgression";
 import { buildSession } from "./sessionBuilder";
 import { calculateWeeksBetweenDates } from "@/lib/planDates";
+import { intermediateGoalToWeekNumber } from "@/lib/intermediateGoalValidation";
 
 // ── Helpers ────────────────────────────────────────────────────────
 
@@ -227,6 +228,17 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     ? (taperPhase.endWeek - taperPhase.startWeek + 1)
     : 0;
 
+  // Compute intermediate race week numbers for long run awareness
+  // For long races (>= semi / 21.1km), also include week+1 to force step-back
+  const intermediateRaceWeeks = isRacePlan && config.intermediateGoals?.length
+    ? config.intermediateGoals.flatMap(g => {
+        const wk = intermediateGoalToWeekNumber(g.raceDate, config.startDate ?? config.createdAt);
+        const distKm = RACE_DISTANCE_META[g.raceDistance]?.distanceKm ?? 10;
+        // For long races, also force step-back on the week after
+        return distKm >= 21.1 ? [wk, wk + 1] : [wk];
+      })
+    : undefined;
+
   const longRunTargets = calculateLongRunProgression(
     totalWeeks,
     effectiveDistance,
@@ -235,6 +247,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     paces,
     config.currentLongRunKm,
     trainingGoal,
+    intermediateRaceWeeks,
   );
 
   // Step 8: Load all workouts
@@ -350,6 +363,12 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
       targetLongRunKm: longRunTarget?.distanceKm,
       weeklyLoadScore: Math.round(weeklyLoadScore),
     });
+  }
+
+  // Step 9b: Apply intermediate race modifications (overlay model)
+  if (isRacePlan && config.intermediateGoals?.length) {
+    const { applyIntermediateRaces } = await import("./intermediateRaceWeek");
+    applyIntermediateRaces(weeks, config, allWorkouts);
   }
 
   // Recalculate peak metrics from actual week data

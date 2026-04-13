@@ -21,6 +21,23 @@ export type TrainingGoal = "finish" | "time" | "compete";
 
 export type PlanPurpose = "race" | "base_building" | "return_from_injury" | "beginner_start";
 
+// ── Race priority (for intermediate goals) ────────────────────────
+export type RacePriority = "A" | "B" | "C";
+
+// ── Intermediate race goal ────────────────────────────────────────
+// Represents a race during plan preparation (before the main race).
+//   - A: Important goal — mini-taper + real recovery
+//   - B: Preparation race — moderate lightening
+//   - C: Tune-up — treated as structured session
+
+export interface IntermediateGoal {
+  raceDistance: RaceDistance;
+  raceDate: string;            // ISO "YYYY-MM-DD"
+  raceName?: string;
+  targetPaceMinKm?: number;
+  priority: RacePriority;
+}
+
 // ── Plan configuration (user inputs) ───────────────────────────────
 
 export interface PlanConfig {
@@ -47,6 +64,7 @@ export interface PlanConfig {
   includeStrength?: boolean;       // v2: include strength suggestions (Ronnestad 2014)
   strengthFrequency?: 1 | 2 | 3;  // v2: strength sessions per week (default: 2)
   unavailabilities?: Unavailability[];
+  intermediateGoals?: IntermediateGoal[];
 }
 
 // ── Assisted plan config (all race fields required) ─────────────────
@@ -137,6 +155,7 @@ export interface PlanWeek {
   _originalVolumePercent?: number;
   _originalTargetKm?: number;
   _originalIsRecovery?: boolean;
+  intermediateRace?: IntermediateGoal;  // Present if this week has an intermediate race
 }
 
 // ── Phase range (start/end weeks for a phase) ──────────────────────

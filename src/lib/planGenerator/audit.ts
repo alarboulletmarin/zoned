@@ -62,6 +62,39 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
     }
   }
 
+  // ── Check 2b: INTERMEDIATE_RACE_ON_RECOVERY ──────────────────────
+  for (const week of plan.weeks) {
+    if (week.intermediateRace && week._originalIsRecovery) {
+      findings.push({
+        id: nextId(),
+        severity: "warning",
+        code: "INTERMEDIATE_RACE_ON_RECOVERY",
+        weekNumber: week.weekNumber,
+        message: `Semaine ${week.weekNumber} : course intermédiaire placée sur une semaine initialement prévue en récupération. La fatigue accumulée pourrait affecter la performance.`,
+        messageEn: `Week ${week.weekNumber}: intermediate race placed on a week originally planned as recovery. Accumulated fatigue may affect performance.`,
+      });
+    }
+  }
+
+  // ── Check 2c: PRIORITY_A_NEAR_TAPER ──────────────────────────────
+  if (plan.config.raceDate) {
+    const taperPhase = plan.phases.find(p => p.phase === "taper");
+    if (taperPhase) {
+      for (const week of plan.weeks) {
+        if (week.intermediateRace?.priority === "A" && taperPhase.startWeek - week.weekNumber <= 3) {
+          findings.push({
+            id: nextId(),
+            severity: "warning",
+            code: "PRIORITY_A_NEAR_TAPER",
+            weekNumber: week.weekNumber,
+            message: `Semaine ${week.weekNumber} : course priorité A à moins de 3 semaines de l'affûtage (S${taperPhase.startWeek}). La récupération pourrait empiéter sur la période d'affûtage.`,
+            messageEn: `Week ${week.weekNumber}: priority-A race within 3 weeks of taper start (W${taperPhase.startWeek}). Recovery may overlap with the taper period.`,
+          });
+        }
+      }
+    }
+  }
+
   // ── Per-week checks (3-8) ──────────────────────────────────────────
   for (let i = 0; i < plan.weeks.length; i++) {
     const week = plan.weeks[i];

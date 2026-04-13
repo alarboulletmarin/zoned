@@ -577,5 +577,41 @@
     "phasePeak": "Phase de pic \u2014 Aff\u00fbtez vos allures sp\u00e9cifiques, vous approchez de la forme maximale.",
     "phaseTaper": "Phase d'aff\u00fbtage \u2014 R\u00e9duisez le volume, gardez un peu d'intensit\u00e9 pour rester frais.",
     "phaseRecovery": "Semaine de r\u00e9cup\u00e9ration \u2014 Laissez votre corps absorber les adaptations."
+  },
+  "intermediateGoals": {
+    "title": "Courses interm\u00e9diaires",
+    "subtitle": "Ajoutez des courses de pr\u00e9paration avant votre objectif principal",
+    "add": "Ajouter une course",
+    "remove": "Retirer",
+    "skip": "Passer cette \u00e9tape",
+    "maxReached": "Maximum 5 courses interm\u00e9diaires",
+    "distance": "Distance",
+    "date": "Date de course",
+    "name": "Nom de la course",
+    "namePlaceholder": "Ex : 10K de Bordeaux",
+    "priority": "Priorit\u00e9",
+    "priorityA": "Objectif important",
+    "priorityADesc": "Mini-aff\u00fbtage + r\u00e9cup\u00e9ration r\u00e9elle",
+    "priorityB": "Course de pr\u00e9paration",
+    "priorityBDesc": "All\u00e8gement mod\u00e9r\u00e9, progression maintenue",
+    "priorityC": "Course d'entra\u00eenement",
+    "priorityCDesc": "Trait\u00e9e comme une s\u00e9ance structur\u00e9e",
+    "validation": {
+      "tooCloseToMain": "Trop proche de la course principale (min. 2 semaines)",
+      "tooCloseToOther": "Trop proche d'une autre course interm\u00e9diaire (min. 2 semaines)",
+      "afterMain": "La date doit \u00eatre avant la course principale",
+      "beforeStart": "La date doit \u00eatre apr\u00e8s le d\u00e9but du plan",
+      "priorityAInTaper": "Une course priorit\u00e9 A ne peut pas \u00eatre aussi proche de l'objectif principal",
+      "invalidDate": "Date invalide (format attendu : AAAA-MM-JJ)",
+      "distanceTooLongForPriority": "Une course de cette distance sera automatiquement trait\u00e9e comme un objectif important (A)",
+      "distanceLongerThanMain": "La distance de cette course d\u00e9passe celle de l'objectif principal"
+    },
+    "weekLabel": "Course interm\u00e9diaire",
+    "raceDayLabel": "Jour de course interm\u00e9diaire",
+    "badge": {
+      "A": "Objectif A",
+      "B": "Pr\u00e9pa B",
+      "C": "Test C"
+    }
   }
 }

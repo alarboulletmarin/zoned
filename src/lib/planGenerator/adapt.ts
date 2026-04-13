@@ -237,7 +237,7 @@ export function computeAdaptation(
   // ── Find modifiable future weeks ─────────────────────────────
 
   const futureWeeks = draft.weeks.filter(
-    w => w.weekNumber > currentWeekNumber && w.phase !== "taper" && w.weekNumber < draft.totalWeeks,
+    w => w.weekNumber > currentWeekNumber && w.phase !== "taper" && w.weekNumber < draft.totalWeeks && !w.intermediateRace,
   );
   if (futureWeeks.length === 0) return noChange;
 

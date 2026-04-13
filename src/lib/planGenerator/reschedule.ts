@@ -36,8 +36,8 @@ export function autoReschedule(
     if (week.weekNumber < fromWeekNumber || week.weekNumber > lastWeek) continue;
 
     for (const session of week.sessions) {
-      // Never touch race day
-      if (session.workoutId === "__race_day__") continue;
+      // Never touch race day or intermediate race
+      if (session.workoutId === "__race_day__" || session.workoutId === "__intermediate_race__") continue;
       // Never touch already-resolved sessions
       if (session.status === "completed" || session.status === "skipped" || session.status === "modified") continue;
       // Only skip if on a blocked day

@@ -577,5 +577,41 @@
     "phasePeak": "Peak phase \u2014 Sharpen your race-specific paces, approaching top form.",
     "phaseTaper": "Taper phase \u2014 Reduce volume, keep a touch of intensity to stay fresh.",
     "phaseRecovery": "Recovery week \u2014 Let your body absorb the training adaptations."
+  },
+  "intermediateGoals": {
+    "title": "Intermediate races",
+    "subtitle": "Add preparation races before your main goal",
+    "add": "Add a race",
+    "remove": "Remove",
+    "skip": "Skip this step",
+    "maxReached": "Maximum 5 intermediate races",
+    "distance": "Distance",
+    "date": "Race date",
+    "name": "Race name",
+    "namePlaceholder": "E.g.: Spring 10K",
+    "priority": "Priority",
+    "priorityA": "Important goal",
+    "priorityADesc": "Mini-taper + real recovery",
+    "priorityB": "Preparation race",
+    "priorityBDesc": "Moderate lightening, progression maintained",
+    "priorityC": "Training race",
+    "priorityCDesc": "Treated as a structured session",
+    "validation": {
+      "tooCloseToMain": "Too close to the main race (min. 2 weeks)",
+      "tooCloseToOther": "Too close to another intermediate race (min. 2 weeks)",
+      "afterMain": "Date must be before the main race",
+      "beforeStart": "Date must be after the plan start",
+      "priorityAInTaper": "A priority-A race cannot be this close to the main goal",
+      "invalidDate": "Invalid date (expected format: YYYY-MM-DD)",
+      "distanceTooLongForPriority": "A race of this distance will automatically be treated as an important goal (A)",
+      "distanceLongerThanMain": "This race distance exceeds the main goal distance"
+    },
+    "weekLabel": "Intermediate race",
+    "raceDayLabel": "Intermediate race day",
+    "badge": {
+      "A": "Goal A",
+      "B": "Prep B",
+      "C": "Test C"
+    }
   }
 }

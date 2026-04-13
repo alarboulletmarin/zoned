@@ -60,6 +60,8 @@ const PACE_BY_TYPE: Record<string, number> = {
 /** Estimate distance in km for a session based on duration and type */
 function estimateSessionKm(session: PlanSession): number {
   if (session.workoutId === "__race_day__") return 0;
+  // Intermediate races have explicit distance
+  if (session.workoutId === "__intermediate_race__") return session.targetDistanceKm ?? 0;
   // Non-running sessions (strength, cycling, etc.) don't contribute running km
   if (isNonRunningSession(session)) return 0;
   // Explicitly skipped sessions didn't happen — don't count them
@@ -78,6 +80,8 @@ function estimateSessionKm(session: PlanSession): number {
  */
 export function estimateSessionDurationMin(session: PlanSession): number {
   if (session.workoutId === "__race_day__") return 0;
+  // Intermediate races have estimated duration based on distance + runner level
+  if (session.workoutId === "__intermediate_race__") return session.estimatedDurationMin;
   if (session.status === "skipped") return 0;
   if (session.actualDurationMin && session.actualDurationMin > 0) return session.actualDurationMin;
   return session.estimatedDurationMin;
@@ -203,7 +207,7 @@ export async function computeEnhancedPlanAnalysis(plan: TrainingPlan): Promise<E
   const workoutIds = new Set<string>();
   for (const week of plan.weeks) {
     for (const session of week.sessions) {
-      if (session.workoutId !== "__race_day__" && !isNonRunningSession(session)) {
+      if (session.workoutId !== "__race_day__" && session.workoutId !== "__intermediate_race__" && !isNonRunningSession(session)) {
         workoutIds.add(session.workoutId);
       }
     }
@@ -222,7 +226,7 @@ export async function computeEnhancedPlanAnalysis(plan: TrainingPlan): Promise<E
 
   for (const week of plan.weeks) {
     for (const session of week.sessions) {
-      if (session.workoutId === "__race_day__") continue;
+      if (session.workoutId === "__race_day__" || session.workoutId === "__intermediate_race__") continue;
       // Skip non-running sessions (strength, cross-training, etc.)
       if (isNonRunningSession(session)) continue;
 
@@ -301,7 +305,7 @@ export async function computeEnhancedPlanAnalysis(plan: TrainingPlan): Promise<E
 
   for (const week of plan.weeks) {
     for (const session of week.sessions) {
-      if (session.workoutId === "__race_day__") continue;
+      if (session.workoutId === "__race_day__" || session.workoutId === "__intermediate_race__") continue;
       if (isNonRunningSession(session)) continue;
       const workout = workoutMap.get(session.workoutId);
       if (!workout || !workout.targetSystem) continue;

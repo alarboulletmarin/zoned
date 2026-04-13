@@ -1,4 +1,4 @@
-import type { RaceDistance, TrainingGoal, PlanPurpose } from "@/types/plan";
+import type { RaceDistance, RacePriority, TrainingGoal, PlanPurpose } from "@/types/plan";
 import type { Difficulty, SessionType, TrainingPhase } from "@/types";
 
 // ── Phase distribution percentages (of non-taper weeks) ────────────
@@ -351,4 +351,20 @@ export const DAY_LABELS = {
     "Saturday",
     "Sunday",
   ],
+};
+
+// ── Intermediate race volume adjustments ─────────────────────────
+// Priority-dependent volume reduction for intermediate race events.
+//   A: Real race event — mini-taper, recovery week after
+//   B: Preparation race — moderate lightening, no break in progression
+//   C: Tune-up — minimal disruption, race replaces a quality session
+
+export const INTERMEDIATE_RACE_VOLUME: Record<RacePriority, {
+  raceWeekPct: number;
+  preRaceWeekPct: number;
+  postRaceWeekPct: number;
+}> = {
+  A: { raceWeekPct: 0.50, preRaceWeekPct: 0.75, postRaceWeekPct: 0.65 },
+  B: { raceWeekPct: 0.70, preRaceWeekPct: 0.90, postRaceWeekPct: 0.80 },
+  C: { raceWeekPct: 0.85, preRaceWeekPct: 1.00, postRaceWeekPct: 0.90 },
 };

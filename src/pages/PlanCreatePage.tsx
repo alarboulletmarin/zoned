@@ -18,6 +18,8 @@ import {
   TrendingUp,
   AlertTriangle,
   Dumbbell,
+  Plus,
+  Trash2,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -32,6 +34,8 @@ import {
   type AssistedPlanConfig,
   type PlanPurpose,
   type TrainingGoal,
+  type IntermediateGoal,
+  type RacePriority,
 } from "@/types/plan";
 import type { Difficulty, UserZonePreferences } from "@/types";
 import { DIFFICULTY_META } from "@/types";
@@ -39,14 +43,15 @@ import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { usePickLang, formatDate } from "@/lib/i18n-utils";
 import { DateInput } from "@/components/ui/date-input";
 import { addWeeksToDate, buildRacePlanDateRange, calculateWeeksBetweenDates } from "@/lib/planDates";
+import { validateIntermediateGoals, sortIntermediateGoals } from "@/lib/intermediateGoalValidation";
 import { loadRunnerProfile } from "@/lib/runnerProfile";
 
 // ── Constants ────────────────────────────────────────────────────────
 
 // Steps are dynamic based on plan purpose
-type StepId = "purpose" | "distance" | "date" | "duration" | "race_name" | "level" | "goal" | "fitness" | "schedule" | "pace" | "summary";
+type StepId = "purpose" | "distance" | "date" | "duration" | "race_name" | "intermediate_goals" | "level" | "goal" | "fitness" | "schedule" | "pace" | "summary";
 
-const RACE_STEPS: StepId[] = ["purpose", "distance", "date", "race_name", "level", "goal", "fitness", "schedule", "pace", "summary"];
+const RACE_STEPS: StepId[] = ["purpose", "distance", "date", "race_name", "intermediate_goals", "level", "goal", "fitness", "schedule", "pace", "summary"];
 const NON_RACE_STEPS: StepId[] = ["purpose", "duration", "level", "goal", "fitness", "schedule", "summary"];
 
 const DAYS_PER_WEEK_OPTIONS = [3, 4, 5, 6, 7] as const;
@@ -198,6 +203,7 @@ interface FormState {
   currentLongRunKm: string;  // User's current longest run
   includeStrength: boolean;
   strengthFrequency: 1 | 2 | 3;
+  intermediateGoals: IntermediateGoal[];
 }
 
 // ── Component ────────────────────────────────────────────────────────
@@ -233,6 +239,7 @@ export function PlanCreatePage() {
       currentLongRunKm: rp?.currentLongRunKm != null ? String(rp.currentLongRunKm) : "",
       includeStrength: false,
       strengthFrequency: 2,
+      intermediateGoals: [],
     };
   });
 
@@ -323,6 +330,9 @@ export function PlanCreatePage() {
       currentLongRunKm: form.currentLongRunKm ? parseInt(form.currentLongRunKm, 10) : undefined,
       includeStrength: form.includeStrength || undefined,
       strengthFrequency: form.includeStrength ? form.strengthFrequency : undefined,
+      intermediateGoals: form.intermediateGoals.length > 0
+        ? sortIntermediateGoals(form.intermediateGoals)
+        : undefined,
     };
 
     try {
@@ -740,6 +750,252 @@ export function PlanCreatePage() {
       {renderNavButtons(true, t("nav.continue"), true)}
     </div>
   );
+
+  // ── Step Intermediate Goals: Optional prep races ──────────────────
+
+  const intermediateGoalValidation = useMemo(() => {
+    if (form.intermediateGoals.length === 0 || !form.raceDate) return { valid: true, errors: [] };
+    return validateIntermediateGoals(
+      form.intermediateGoals,
+      form.raceDate,
+      form.startDate || todayDate,
+      form.raceDistance ?? "10K",
+    );
+  }, [form.intermediateGoals, form.raceDate, form.startDate, form.raceDistance, todayDate]);
+
+  const addIntermediateGoal = useCallback(() => {
+    setForm((f) => {
+      if (f.intermediateGoals.length >= 5) return f;
+      const newGoal: IntermediateGoal = {
+        raceDistance: "10K",
+        raceDate: "",
+        raceName: "",
+        priority: "B",
+      };
+      return { ...f, intermediateGoals: [...f.intermediateGoals, newGoal] };
+    });
+  }, []);
+
+  const removeIntermediateGoal = useCallback((index: number) => {
+    setForm((f) => ({
+      ...f,
+      intermediateGoals: f.intermediateGoals.filter((_, i) => i !== index),
+    }));
+  }, []);
+
+  const updateIntermediateGoal = useCallback(
+    (index: number, patch: Partial<IntermediateGoal>) => {
+      setForm((f) => ({
+        ...f,
+        intermediateGoals: f.intermediateGoals.map((g, i) =>
+          i === index ? { ...g, ...patch } : g,
+        ),
+      }));
+    },
+    [],
+  );
+
+  const PRIORITY_OPTIONS: { value: RacePriority; labelKey: string; descKey: string; color: string }[] = [
+    { value: "A", labelKey: "intermediateGoals.priorityA", descKey: "intermediateGoals.priorityADesc", color: "text-zone-5" },
+    { value: "B", labelKey: "intermediateGoals.priorityB", descKey: "intermediateGoals.priorityBDesc", color: "text-primary" },
+    { value: "C", labelKey: "intermediateGoals.priorityC", descKey: "intermediateGoals.priorityCDesc", color: "text-zone-2" },
+  ];
+
+  const intermediateGoalMaxDate = useMemo(() => {
+    if (!form.raceDate) return undefined;
+    // 2 weeks before main race
+    const d = new Date(form.raceDate);
+    d.setDate(d.getDate() - 14);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }, [form.raceDate]);
+
+  const renderStepIntermediateGoals = () => {
+    const errorsForGoal = (idx: number) =>
+      intermediateGoalValidation.errors.filter((e) => e.goalIndex === idx);
+
+    return (
+      <div
+        className={cn(
+          "flex-1 flex flex-col",
+          direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
+        )}
+      >
+        <div className="flex-1 flex flex-col items-center justify-center px-4">
+          <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+            <Flag className="size-6 md:size-8 text-primary" />
+          </div>
+          <h2 className="text-lg md:text-xl font-semibold text-center">
+            {t("intermediateGoals.title")}
+          </h2>
+          <p className="text-sm text-muted-foreground mt-1 text-center max-w-md">
+            {t("intermediateGoals.subtitle")}
+          </p>
+
+          <div className="w-full max-w-lg mt-6 space-y-3">
+            {form.intermediateGoals.map((goal, idx) => {
+              const goalErrors = errorsForGoal(idx);
+              return (
+                <Card key={idx} className="border-border/50">
+                  <CardContent className="p-3 space-y-3">
+                    {/* Header with remove button */}
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-muted-foreground">
+                        #{idx + 1}
+                      </span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 px-2 text-xs text-destructive hover:text-destructive"
+                        onClick={() => removeIntermediateGoal(idx)}
+                      >
+                        <Trash2 className="size-3.5 mr-1" />
+                        {t("intermediateGoals.remove")}
+                      </Button>
+                    </div>
+
+                    {/* Distance selector (compact grid) */}
+                    <div>
+                      <label className="text-xs font-medium mb-1.5 block">
+                        {t("intermediateGoals.distance")}
+                      </label>
+                      <div className="grid grid-cols-4 sm:grid-cols-7 gap-1">
+                        {(Object.keys(RACE_DISTANCE_META) as RaceDistance[]).map((dist) => {
+                          const meta = RACE_DISTANCE_META[dist];
+                          return (
+                            <button
+                              key={dist}
+                              type="button"
+                              onClick={() => updateIntermediateGoal(idx, { raceDistance: dist })}
+                              className={cn(
+                                "rounded-md border px-1.5 py-1.5 text-xs text-center transition-colors",
+                                goal.raceDistance === dist
+                                  ? "border-primary bg-primary/10 font-medium"
+                                  : "hover:bg-accent/50"
+                              )}
+                            >
+                              {pick(meta, "label")}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Date picker */}
+                    <div>
+                      <label className="text-xs font-medium mb-1.5 block">
+                        {t("intermediateGoals.date")}
+                      </label>
+                      <DateInput
+                        min={form.startDate || todayDate}
+                        max={intermediateGoalMaxDate}
+                        value={goal.raceDate}
+                        onChange={(e) => updateIntermediateGoal(idx, { raceDate: e.target.value })}
+                        className="px-3 py-2 min-h-[40px] text-sm"
+                      />
+                    </div>
+
+                    {/* Race name (optional) */}
+                    <div>
+                      <label className="text-xs font-medium mb-1.5 block">
+                        {t("intermediateGoals.name")}
+                      </label>
+                      <input
+                        type="text"
+                        value={goal.raceName ?? ""}
+                        onChange={(e) => updateIntermediateGoal(idx, { raceName: e.target.value })}
+                        placeholder={t("intermediateGoals.namePlaceholder")}
+                        className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                        maxLength={100}
+                      />
+                    </div>
+
+                    {/* Priority selector */}
+                    <div>
+                      <label className="text-xs font-medium mb-1.5 block">
+                        {t("intermediateGoals.priority")}
+                      </label>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {PRIORITY_OPTIONS.map((opt) => (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => updateIntermediateGoal(idx, { priority: opt.value })}
+                            className={cn(
+                              "rounded-md border px-2 py-2 text-left transition-colors",
+                              goal.priority === opt.value
+                                ? "border-primary bg-primary/10"
+                                : "hover:bg-accent/50"
+                            )}
+                          >
+                            <span className={cn("text-xs font-semibold", opt.color)}>
+                              {t(opt.labelKey)}
+                            </span>
+                            <p className="text-[10px] text-muted-foreground leading-tight mt-0.5">
+                              {t(opt.descKey)}
+                            </p>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Inline validation errors */}
+                    {goalErrors.length > 0 && (
+                      <div className="space-y-1">
+                        {goalErrors.map((err, eIdx) => {
+                          const i18nMap: Record<string, string> = {
+                            BEFORE_START: "intermediateGoals.validation.beforeStart",
+                            AFTER_MAIN_RACE: "intermediateGoals.validation.afterMain",
+                            TOO_CLOSE_TO_MAIN: "intermediateGoals.validation.tooCloseToMain",
+                            TOO_CLOSE_TO_EACH_OTHER: "intermediateGoals.validation.tooCloseToOther",
+                            PRIORITY_A_IN_TAPER_ZONE: "intermediateGoals.validation.priorityAInTaper",
+                            INVALID_DATE: "intermediateGoals.validation.invalidDate",
+                            DISTANCE_TOO_LONG_FOR_PRIORITY: "intermediateGoals.validation.distanceTooLongForPriority",
+                            DISTANCE_LONGER_THAN_MAIN: "intermediateGoals.validation.distanceLongerThanMain",
+                          };
+                          const key = i18nMap[err.code];
+                          const isWarning = err.code === "DISTANCE_TOO_LONG_FOR_PRIORITY" || err.code === "DISTANCE_LONGER_THAN_MAIN";
+                          return (
+                            <p key={eIdx} className={`text-xs flex items-center gap-1 ${isWarning ? "text-amber-600 dark:text-amber-400" : "text-destructive"}`}>
+                              <AlertTriangle className="size-3 shrink-0" />
+                              {key ? t(key) : err.message}
+                            </p>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })}
+
+            {/* Add button or max reached */}
+            {form.intermediateGoals.length < 5 ? (
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={addIntermediateGoal}
+              >
+                <Plus className="size-4 mr-1.5" />
+                {t("intermediateGoals.add")}
+              </Button>
+            ) : (
+              <p className="text-xs text-muted-foreground text-center">
+                {t("intermediateGoals.maxReached")}
+              </p>
+            )}
+          </div>
+        </div>
+        {renderNavButtons(
+          form.intermediateGoals.length === 0 || intermediateGoalValidation.valid,
+          t("nav.continue"),
+          true,
+        )}
+      </div>
+    );
+  };
 
   // ── Step 5: Runner Level ─────────────────────────────────────────
 
@@ -1307,6 +1563,40 @@ export function PlanCreatePage() {
                 value={form.raceName}
               />
             )}
+            {/* Intermediate goals */}
+            {form.intermediateGoals.length > 0 && (
+              <div className="py-1.5 border-b space-y-1.5">
+                <span className="text-sm text-muted-foreground">
+                  {t("intermediateGoals.title")}
+                </span>
+                {sortIntermediateGoals(form.intermediateGoals).map((goal, idx) => {
+                  const distMeta2 = RACE_DISTANCE_META[goal.raceDistance];
+                  return (
+                    <div key={idx} className="flex items-center gap-2 pl-2 text-sm">
+                      <span className={cn(
+                        "inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-semibold leading-none",
+                        goal.priority === "A" ? "bg-zone-5/10 text-zone-5"
+                          : goal.priority === "B" ? "bg-primary/10 text-primary"
+                            : "bg-zone-2/10 text-zone-2"
+                      )}>
+                        {t(`intermediateGoals.badge.${goal.priority}`)}
+                      </span>
+                      <span className="font-medium">
+                        {pick(distMeta2, "label")}
+                      </span>
+                      {goal.raceName && (
+                        <span className="text-muted-foreground truncate">
+                          — {goal.raceName}
+                        </span>
+                      )}
+                      <span className="text-muted-foreground ml-auto shrink-0">
+                        {goal.raceDate ? formatDate(goal.raceDate) : "-"}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
             {/* Level */}
             <SummaryRow
               label={t("summary.level")}
@@ -1448,6 +1738,7 @@ export function PlanCreatePage() {
         {currentStep === "date" && renderStep3()}
         {currentStep === "duration" && renderStepDuration()}
         {currentStep === "race_name" && renderStep4()}
+        {currentStep === "intermediate_goals" && renderStepIntermediateGoals()}
         {currentStep === "level" && renderStep5()}
         {currentStep === "goal" && renderStepGoal()}
         {currentStep === "fitness" && renderStepFitness()}

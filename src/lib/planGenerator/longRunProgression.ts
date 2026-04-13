@@ -126,6 +126,7 @@ export function calculateLongRunProgression(
   paces: TrainingPaces,
   currentLongRunKm?: number,
   trainingGoal?: TrainingGoal,
+  intermediateRaceWeeks?: number[],
 ): LongRunTarget[] {
   const config = LONG_RUN_CONFIG[raceDistance];
   const raceDistanceKm = getRaceDistanceKm(raceDistance);
@@ -185,6 +186,20 @@ export function calculateLongRunProgression(
         durationMin: estimateDurationForDistance(Math.max(taperKm, 8), "E", paces),
         isStepBack: false,
       });
+      continue;
+    }
+
+    // Intermediate race week: force step-back to avoid peak long run on race week
+    if (intermediateRaceWeeks?.includes(week)) {
+      const stepBackKm = roundKm(currentKm * config.stepBackReduction);
+      targets.push({
+        weekNumber: week,
+        distanceKm: stepBackKm,
+        durationMin: estimateDurationForDistance(stepBackKm, "E", paces),
+        isStepBack: true,
+      });
+      // Reset cycle so next week resumes build
+      cycleWeek = 0;
       continue;
     }
 

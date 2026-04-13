@@ -2,8 +2,8 @@ import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { Star, Flag, Clock, Trash2, Eye, Dumbbell } from "@/components/icons";
-import { PHASE_META } from "@/types/plan";
-import type { TrainingPlan, PlanSession } from "@/types/plan";
+import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
+import type { TrainingPlan, PlanSession, IntermediateGoal } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { usePickLang } from "@/lib/i18n-utils";
@@ -496,6 +496,8 @@ export const PlanCalendar = memo(function PlanCalendar({
               let weekLabel: string;
               if (week.weekNumber === plan.totalWeeks && week.sessions.some(s => s.workoutId === "__race_day__")) {
                 weekLabel = t("calendar.race");
+              } else if (week.intermediateRace) {
+                weekLabel = t("intermediateGoals.weekLabel");
               } else if (week.isRecoveryWeek) {
                 weekLabel = t("calendar.recoveryWeek");
               } else {
@@ -653,6 +655,8 @@ export const PlanCalendar = memo(function PlanCalendar({
                           <div className="space-y-0.5">
                             {sessions.map((session, sIdx) => {
                               const isRaceDay = session.workoutId === "__race_day__";
+                              const isIntermediateRace = session.workoutId === "__intermediate_race__";
+                              const isSpecialSession = isRaceDay || isIntermediateRace;
                               const originalIndex = week.sessions.indexOf(session);
                               const isDragging =
                                 draggedSession?.weekNumber === week.weekNumber &&
@@ -662,15 +666,15 @@ export const PlanCalendar = memo(function PlanCalendar({
                               return (
                                 <div
                                   key={sIdx}
-                                  draggable={!isRaceDay}
+                                  draggable={!isSpecialSession}
                                   onDragStart={
-                                    isRaceDay
+                                    isSpecialSession
                                       ? undefined
                                       : (e) => handleDragStart(e, week.weekNumber, originalIndex)
                                   }
-                                  onDragEnd={isRaceDay ? undefined : handleDragEnd}
+                                  onDragEnd={isSpecialSession ? undefined : handleDragEnd}
                                   onTouchStart={
-                                    isRaceDay
+                                    isSpecialSession
                                       ? undefined
                                       : (e) =>
                                           handleTouchStart(
@@ -680,20 +684,22 @@ export const PlanCalendar = memo(function PlanCalendar({
                                             session.workoutId,
                                           )
                                   }
-                                  onTouchMove={isRaceDay ? undefined : handleTouchMove}
-                                  onTouchEnd={isRaceDay ? undefined : handleTouchEnd}
-                                  style={isRaceDay ? undefined : { touchAction: "none", WebkitUserSelect: "none", userSelect: "none" }}
+                                  onTouchMove={isSpecialSession ? undefined : handleTouchMove}
+                                  onTouchEnd={isSpecialSession ? undefined : handleTouchEnd}
+                                  style={isSpecialSession ? undefined : { touchAction: "none", WebkitUserSelect: "none", userSelect: "none" }}
                                   className={cn(
-                                    !isRaceDay && "cursor-grab active:cursor-grabbing",
+                                    !isSpecialSession && "cursor-grab active:cursor-grabbing",
                                     isDragging && "opacity-40",
                                   )}
                                 >
                                   <SessionCell
                                     session={session}
                                     isRaceDay={isRaceDay}
+                                    isIntermediateRace={isIntermediateRace}
+                                    intermediateRace={week.intermediateRace}
                                     workoutName={sessionName}
                                     onClick={
-                                      onSessionClick && !isRaceDay
+                                      onSessionClick && !isSpecialSession
                                         ? () =>
                                             onSessionClick(
                                               week.weekNumber,
@@ -703,18 +709,18 @@ export const PlanCalendar = memo(function PlanCalendar({
                                         : undefined
                                     }
                                     onDelete={
-                                      onSessionDelete && !isRaceDay
+                                      onSessionDelete && !isSpecialSession
                                         ? () => onSessionDelete(week.weekNumber, originalIndex)
                                         : undefined
                                     }
                                     onToggleComplete={
-                                      onToggleComplete && !isRaceDay
+                                      onToggleComplete && !isSpecialSession
                                         ? () => onToggleComplete(week.weekNumber, originalIndex)
                                         : undefined
                                     }
                                     completionKey={`${week.weekNumber}-${originalIndex}`}
                                     onContextMenu={
-                                      !isRaceDay
+                                      !isSpecialSession
                                         ? (e: React.MouseEvent) => {
                                             e.preventDefault();
                                             setContextMenu({
@@ -813,6 +819,8 @@ export const PlanCalendar = memo(function PlanCalendar({
 const SessionCell = memo(function SessionCell({
   session,
   isRaceDay,
+  isIntermediateRace,
+  intermediateRace,
   workoutName,
   onClick,
   onDelete,
@@ -822,6 +830,8 @@ const SessionCell = memo(function SessionCell({
 }: {
   session: PlanSession;
   isRaceDay: boolean;
+  isIntermediateRace?: boolean;
+  intermediateRace?: IntermediateGoal;
   workoutName?: string;
   onClick?: () => void;
   onDelete?: () => void;
@@ -830,6 +840,7 @@ const SessionCell = memo(function SessionCell({
   completionKey?: string;
 }) {
   const { t } = useTranslation("plan");
+  const pick = usePickLang();
   if (isRaceDay) {
     return (
       <div className="rounded border border-primary/30 bg-primary/10 px-1 py-1 text-center">
@@ -837,6 +848,29 @@ const SessionCell = memo(function SessionCell({
         <span className="text-[10px] font-semibold text-primary leading-tight block">
           {t("calendar.race")}
         </span>
+      </div>
+    );
+  }
+
+  if (isIntermediateRace) {
+    const distMeta = intermediateRace?.raceDistance ? RACE_DISTANCE_META[intermediateRace.raceDistance] : null;
+    const distLabel = distMeta ? pick(distMeta, "label") : intermediateRace?.raceDistance;
+    return (
+      <div className="rounded border border-orange-300 bg-orange-50 dark:border-orange-700 dark:bg-orange-900/30 px-1 py-1 text-center">
+        <Flag className="size-3 text-orange-500 mx-auto" />
+        <span className="text-[10px] font-semibold text-orange-700 dark:text-orange-300 leading-tight block">
+          {distLabel || t("intermediateGoals.raceDayLabel")}
+        </span>
+        {intermediateRace?.priority && (
+          <span className={cn(
+            "text-[8px] font-bold leading-tight block",
+            intermediateRace.priority === "A" && "text-red-600 dark:text-red-400",
+            intermediateRace.priority === "B" && "text-orange-600 dark:text-orange-400",
+            intermediateRace.priority === "C" && "text-yellow-600 dark:text-yellow-400",
+          )}>
+            {t(`intermediateGoals.badge.${intermediateRace.priority}`)}
+          </span>
+        )}
       </div>
     );
   }

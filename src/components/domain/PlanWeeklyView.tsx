@@ -2,7 +2,7 @@ import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, Dumbbell } from "@/components/icons";
-import { PHASE_META } from "@/types/plan";
+import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
@@ -817,6 +817,7 @@ const DayCell = memo(function DayCell({
   isBlockedDay,
 }: DayCellProps) {
   const { t } = useTranslation("plan");
+  const pickLang = usePickLang();
   const sessions = weekData.sessions.filter((s) => s.dayOfWeek === dayIndex);
   const isDropHere = dropTarget?.weekNumber === selectedWeek && dropTarget?.day === dayIndex;
 
@@ -881,6 +882,8 @@ const DayCell = memo(function DayCell({
 
       {sessions.map((session, sIdx) => {
         const isRaceDay = session.workoutId === "__race_day__";
+        const isIntermediateRace = session.workoutId === "__intermediate_race__";
+        const isSpecialSession = isRaceDay || isIntermediateRace;
         const originalIndex = weekData.sessions.indexOf(session);
         const isDragging =
           draggedSession?.weekNumber === selectedWeek &&
@@ -891,20 +894,20 @@ const DayCell = memo(function DayCell({
         return (
           <div
             key={sIdx}
-            draggable={!isRaceDay}
+            draggable={!isSpecialSession}
             onDragStart={
-              isRaceDay ? undefined : (e) => onDragStart(e, selectedWeek, originalIndex)
+              isSpecialSession ? undefined : (e) => onDragStart(e, selectedWeek, originalIndex)
             }
-            onDragEnd={isRaceDay ? undefined : onDragEnd}
+            onDragEnd={isSpecialSession ? undefined : onDragEnd}
             onTouchStart={
-              isRaceDay
+              isSpecialSession
                 ? undefined
                 : (e) => onTouchStart(e, selectedWeek, originalIndex, session.workoutId)
             }
-            onTouchMove={isRaceDay ? undefined : onTouchMove}
-            onTouchEnd={isRaceDay ? undefined : onTouchEnd}
+            onTouchMove={isSpecialSession ? undefined : onTouchMove}
+            onTouchEnd={isSpecialSession ? undefined : onTouchEnd}
             onContextMenu={
-              isRaceDay
+              isSpecialSession
                 ? undefined
                 : (e: React.MouseEvent) => {
                     e.preventDefault();
@@ -917,9 +920,9 @@ const DayCell = memo(function DayCell({
                     });
                   }
             }
-            style={isRaceDay ? undefined : { touchAction: "none", WebkitUserSelect: "none", userSelect: "none" }}
+            style={isSpecialSession ? undefined : { touchAction: "none", WebkitUserSelect: "none", userSelect: "none" }}
             className={cn(
-              !isRaceDay && "cursor-grab active:cursor-grabbing",
+              !isSpecialSession && "cursor-grab active:cursor-grabbing",
               isDragging && "opacity-40",
             )}
           >
@@ -927,9 +930,11 @@ const DayCell = memo(function DayCell({
               className={cn(
                 "rounded mb-1 relative",
                 isDesktop ? "p-2" : "p-1.5",
-                isStrength
-                  ? "bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700"
-                  : "bg-card border border-border/50",
+                isIntermediateRace
+                  ? "bg-orange-50 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700"
+                  : isStrength
+                    ? "bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700"
+                    : "bg-card border border-border/50",
               )}
             >
               {isRaceDay ? (
@@ -938,6 +943,25 @@ const DayCell = memo(function DayCell({
                   <span className="text-[10px] font-bold text-primary block">
                     {t("calendar.race")}
                   </span>
+                </div>
+              ) : isIntermediateRace ? (
+                <div className="text-center py-1">
+                  <Flag className="size-3.5 text-orange-500 mx-auto" />
+                  <span className="text-[10px] font-bold text-orange-700 dark:text-orange-300 block">
+                    {weekData?.intermediateRace?.raceDistance
+                      ? pickLang(RACE_DISTANCE_META[weekData.intermediateRace.raceDistance], "label")
+                      : t("intermediateGoals.raceDayLabel")}
+                  </span>
+                  {weekData?.intermediateRace?.priority && (
+                    <span className={cn(
+                      "text-[8px] font-bold leading-tight block",
+                      weekData.intermediateRace.priority === "A" && "text-red-600 dark:text-red-400",
+                      weekData.intermediateRace.priority === "B" && "text-orange-600 dark:text-orange-400",
+                      weekData.intermediateRace.priority === "C" && "text-yellow-600 dark:text-yellow-400",
+                    )}>
+                      {t(`intermediateGoals.badge.${weekData.intermediateRace.priority}`)}
+                    </span>
+                  )}
                 </div>
               ) : (
                 <>
