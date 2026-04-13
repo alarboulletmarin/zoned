@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.4] - 2026-04-13
+
+### Added
+- Intermediate race goals in training plans with priority A/B/C and distance-aware coaching (#44)
+- One-click auto-fix for audit warnings (key session spacing, volume jumps, recovery weeks, taper)
+- Duplicate day session detection in plan audit
+- Post-recovery volume jump detection (compares to last non-recovery week)
+- Structured workout phases with nested interval details in session view
+- Race duration estimation for intermediate races (distance + runner level + trail penalty)
+
+### Fixed
+- False positives in plan audit (race sessions counted as key sessions)
+- Recovery week volumePercent showing 65% regardless of progression (now relative to peak)
+- Volume jump threshold too strict due to integer rounding (20% -> 21%)
+- Volume jump warning on low-volume plans like return-from-injury (skip when both weeks < 55%)
+- Weekly km not rounded in stats chart (showed raw floats like 37.346...)
+- Emoji replaced with colored dot icons in audit panel
+
 ## [0.4.3] - 2026-04-12
 
 ### Added

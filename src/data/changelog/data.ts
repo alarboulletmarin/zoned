@@ -2,6 +2,76 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.4.4",
+    date: "2026-04-13",
+    changes: {
+      added: [
+        {
+          text: "Objectifs intermediaires dans les plans d'entrainement avec priorite A/B/C et coaching adapte a la distance (#44)",
+          textEn: "Intermediate race goals in training plans with priority A/B/C and distance-aware coaching (#44)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Auto-correction des avertissements du plan en un clic (espacement seances, volume, recuperation, affutage)",
+          textEn: "One-click auto-fix for plan audit warnings (session spacing, volume, recovery, taper)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Detection de sessions dupliquees sur le meme jour et saut de volume post-recuperation",
+          textEn: "Duplicate day session detection and post-recovery volume jump check",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Phases structurees dans le detail des seances (intervalles imbriques)",
+          textEn: "Structured workout phases with nested interval details in session view",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Estimation de la duree des courses intermediaires (distance + niveau + penalite trail)",
+          textEn: "Race duration estimation for intermediate races (distance + runner level + trail penalty)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+      fixed: [
+        {
+          text: "Faux positifs dans l'audit de coherence (sessions de course comptees comme seances cles)",
+          textEn: "False positives in plan audit (race sessions counted as key sessions)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Volume de recuperation affiche a 65% fixe au lieu du ratio reel vs peak",
+          textEn: "Recovery week volumePercent showing fixed 65% instead of actual ratio to peak",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Seuil de volume jump trop strict (arrondi, plans a faible volume)",
+          textEn: "Volume jump threshold too strict (rounding artifacts, low-volume plans)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Kilometrages hebdomadaires non arrondis dans les statistiques",
+          textEn: "Weekly km not rounded in stats chart",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Emoji remplaces par des icones dans le panneau de coherence",
+          textEn: "Emoji replaced with colored dot icons in audit panel",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+    },
+  },
+  {
     version: "0.4.3",
     date: "2026-04-12",
     changes: {
