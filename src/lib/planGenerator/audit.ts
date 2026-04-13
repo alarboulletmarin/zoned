@@ -185,12 +185,16 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
 
     // ── Check 7: VOLUME_JUMP_TOO_LARGE ───────────────────────────────
     // Skip when previous week is recovery or has an intermediate race (expected volume dip).
+    // Skip when both weeks are at low volume (< 55%) — at such low absolute volumes
+    // (e.g., return-from-injury plans), relative jumps of 25% represent tiny absolute
+    // km increases and pose negligible injury risk.
     // Threshold: 21% to absorb rounding artifacts on integer volumePercent values.
     if (
       prevWeek &&
       !prevWeek.isRecoveryWeek &&
       !prevWeek.intermediateRace &&
       prevWeek.volumePercent > 0 &&
+      !(prevWeek.volumePercent < 55 && week.volumePercent < 55) &&
       week.volumePercent > prevWeek.volumePercent * 1.21
     ) {
       const pctIncrease = Math.round((week.volumePercent / prevWeek.volumePercent - 1) * 100);
