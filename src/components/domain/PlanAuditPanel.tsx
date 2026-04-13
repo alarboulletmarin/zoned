@@ -17,25 +17,25 @@ interface PlanAuditPanelProps {
 
 const SEVERITY_CONFIG: Record<
   FindingSeverity,
-  { icon: string; textColor: string; bgColor: string; borderColor: string }
+  { textColor: string; bgColor: string; borderColor: string; dotColor: string }
 > = {
   error: {
-    icon: "\uD83D\uDD34",
     textColor: "text-red-700 dark:text-red-300",
     bgColor: "bg-red-50 dark:bg-red-950/30",
     borderColor: "border-red-200 dark:border-red-800",
+    dotColor: "bg-red-500",
   },
   warning: {
-    icon: "\uD83D\uDFE1",
     textColor: "text-amber-700 dark:text-amber-300",
     bgColor: "bg-amber-50 dark:bg-amber-950/30",
     borderColor: "border-amber-200 dark:border-amber-800",
+    dotColor: "bg-amber-500",
   },
   info: {
-    icon: "\uD83D\uDD35",
     textColor: "text-blue-700 dark:text-blue-300",
     bgColor: "bg-blue-50 dark:bg-blue-950/30",
     borderColor: "border-blue-200 dark:border-blue-800",
+    dotColor: "bg-blue-500",
   },
 };
 
@@ -83,7 +83,7 @@ export function PlanAuditPanel({ findings, onGoToWeek, onFix }: PlanAuditPanelPr
             const fConfig = SEVERITY_CONFIG[finding.severity];
             return (
               <div key={finding.id} className="flex items-start gap-2 text-sm">
-                <span className="shrink-0 text-xs mt-0.5">{fConfig.icon}</span>
+                <span className={cn("shrink-0 mt-1.5 size-2 rounded-full", fConfig.dotColor)} />
                 <div className="flex-1 min-w-0">
                   <span className={fConfig.textColor}>
                     {pick(finding, "message")}

@@ -329,7 +329,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                     <div
                       className={cn(phaseColor, week.isRecovery && "opacity-50", "w-full rounded-t-sm min-h-[2px]")}
                       style={{ height: `${heightPct}%` }}
-                      title={`S${week.weekNumber}: ${week.km}km`}
+                      title={`S${week.weekNumber}: ${Math.round(week.km)}km`}
                     />
                     {isCurrent && (
                       <div className="absolute -bottom-4 size-1.5 rounded-full bg-primary" />
@@ -347,7 +347,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                     i % 2 !== 0 && weeklyKmData.length > 10 && "hidden sm:block",
                   )}
                 >
-                  {week.km > 0 ? week.km : ""}
+                  {week.km > 0 ? Math.round(week.km) : ""}
                 </div>
               ))}
             </div>
