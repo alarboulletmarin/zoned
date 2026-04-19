@@ -1,8 +1,26 @@
-import type { Difficulty, TrainingPhase, SessionType } from "@/types";
+import type { Difficulty, TrainingPhase, SessionType, Discipline } from "@/types";
 
 // ── Race distance type ──────────────────────────────────────────────
 
 export type RaceDistance = "5K" | "10K" | "semi" | "marathon" | "trail_short" | "trail" | "ultra";
+
+// ── Plan type ──────────────────────────────────────────────────────
+// Determines which generator pipeline produces the plan and which profile
+// discipline(s) it reads from. Existing plans implicitly default to "running"
+// for backward compatibility (see PlanConfig.planType below).
+//   - running:         Pure running plan (existing behaviour)
+//   - running_cross:   Running plan with cross-training substitutions/complements
+//   - cycling:         Pure cycling plan (Coggan zones, hours-based volume)
+//   - triathlon:       Multi-discipline plan (swim + bike + run + bricks)
+export type PlanType = "running" | "running_cross" | "cycling" | "triathlon";
+
+/** Disciplines targeted by a plan type. Useful for profile gating and UI filters. */
+export const PLAN_TYPE_DISCIPLINES: Record<PlanType, readonly Discipline[]> = {
+  running: ["running"],
+  running_cross: ["running", "cycling", "swimming"],
+  cycling: ["cycling"],
+  triathlon: ["swimming", "cycling", "running"],
+};
 
 // ── Training goal (mentalité) ──────────────────────────────────────
 // Influences volume, intensity distribution, and session types.
@@ -43,6 +61,12 @@ export interface IntermediateGoal {
 export interface PlanConfig {
   id: string;
   planMode?: "assisted" | "free" | "prebuilt"; // undefined = "assisted" for backward compat
+  /**
+   * Target discipline(s) of the plan. When absent, the plan is treated as
+   * pure running (pre-foundation behaviour). Multi-discipline generators
+   * rely on this field to pick the right pipeline and profile sections.
+   */
+  planType?: PlanType;
   planName?: string; // user-given name for free plans
   raceDistance?: RaceDistance;
   raceDate?: string; // ISO date
@@ -91,6 +115,11 @@ export interface PaceNote {
 export interface PlanSession {
   dayOfWeek: number; // 0=Mon ... 6=Sun
   workoutId: string; // Reference to WorkoutTemplate.id
+  /**
+   * Primary discipline of this session. Absent = running (legacy default).
+   * Bricks expose their transitions via the referenced WorkoutTemplate.segments.
+   */
+  discipline?: Discipline;
   sessionType: SessionType;
   isKeySession: boolean;
   estimatedDurationMin: number;
