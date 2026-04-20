@@ -9,7 +9,32 @@
     "base": "Profil",
     "references": "Références",
     "benchmarks": "Tests",
-    "records": "Records"
+    "records": "Records",
+    "commute": "Vélotaf"
+  },
+  "commute": {
+    "title": "Vélotaf",
+    "description": "Si vous allez travailler à vélo (ou en trottinant), paramétrez le trajet ici pour que le générateur tienne compte de cette charge récurrente.",
+    "discipline": "Discipline",
+    "disciplineCycling": "Vélo",
+    "disciplineRunning": "Footing",
+    "daysOfWeek": "Jours concernés",
+    "durationMin": "Durée par trajet (minutes)",
+    "durationHint": "Durée aller simple. Multipliez par 2 si vous faites l'aller-retour.",
+    "includeInPlan": "Intégrer au plan",
+    "includeInPlanHint": "Si activé, le plan réduit les séances faciles pour éviter la surcharge. Sinon, le vélotaf reste un extra non comptabilisé.",
+    "monday": "Lun",
+    "tuesday": "Mar",
+    "wednesday": "Mer",
+    "thursday": "Jeu",
+    "friday": "Ven",
+    "saturday": "Sam",
+    "sunday": "Dim",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "saved": "Paramètres vélotaf enregistrés",
+    "deleted": "Paramètres vélotaf supprimés",
+    "invalid": "Choisissez au moins un jour et une durée valide"
   },
   "base": {
     "title": "Données de base",
