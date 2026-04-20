@@ -158,11 +158,22 @@ export function deleteSessionFromPlan(
   return savePlan(plan);
 }
 
+/**
+ * Fields a caller may overwrite alongside the workoutId when swapping a
+ * session. Used by cross-discipline substitution to carry over the new
+ * session's discipline + sessionType so the rest of the UI (icons,
+ * filtering, audit) sees the correct sport.
+ */
+export type PlanSessionSwapOverrides = Partial<
+  Pick<PlanSession, "sessionType" | "discipline" | "isKeySession" | "estimatedDurationMin">
+>;
+
 export function updatePlanSession(
   planId: string,
   weekNumber: number,
   sessionIndex: number,
   newWorkoutId: string,
+  overrides?: PlanSessionSwapOverrides,
 ): boolean {
   const plans = getAllPlans();
   const planIdx = plans.findIndex(p => p.id === planId);
@@ -172,7 +183,16 @@ export function updatePlanSession(
   const week = plan.weeks.find(w => w.weekNumber === weekNumber);
   if (!week || sessionIndex >= week.sessions.length) return false;
 
-  week.sessions[sessionIndex].workoutId = newWorkoutId;
+  const session = week.sessions[sessionIndex];
+  session.workoutId = newWorkoutId;
+  if (overrides) {
+    if (overrides.sessionType !== undefined) session.sessionType = overrides.sessionType;
+    if (overrides.discipline !== undefined) session.discipline = overrides.discipline;
+    if (overrides.isKeySession !== undefined) session.isKeySession = overrides.isKeySession;
+    if (overrides.estimatedDurationMin !== undefined) {
+      session.estimatedDurationMin = overrides.estimatedDurationMin;
+    }
+  }
   plans[planIdx] = plan;
 
   try {
