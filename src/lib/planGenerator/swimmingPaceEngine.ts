@@ -59,12 +59,15 @@ const FALLBACK_CSS_SEC_PER_100M: Record<Difficulty, number> = {
 };
 
 // ── Intensity factors per swim zone (for sTSS) ──────────────────────
-// Zone midpoints relative to CSS. Matches Coggan-style IF semantics.
+// Zone midpoints relative to CSS. Calibrated to align with the running and
+// cycling scales at Z2–Z4 so cross-discipline substitution produces
+// meaningful TSS matches. Z1 stays slightly higher than other disciplines
+// because swimming has an inherent buoyancy floor.
 
 export const SWIM_ZONE_INTENSITY_FACTORS: Record<SwimZone, number> = {
-  Z1: 0.70,
-  Z2: 0.80,
-  Z3: 0.90,
+  Z1: 0.55,
+  Z2: 0.75,
+  Z3: 0.88,
   Z4: 1.00,
   Z5: 1.08,
   Z6: 1.18,

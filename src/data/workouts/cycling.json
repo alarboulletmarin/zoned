@@ -1,0 +1,328 @@
+{
+  "discipline": "cycling",
+  "templates": [
+    {
+      "id": "CYC-001",
+      "discipline": "cycling",
+      "name": "Sortie récupération",
+      "nameEn": "Recovery Spin",
+      "description": "Sortie vélo très facile en Z1-Z2 pour activer la récupération, favoriser le retour veineux et dégourdir les jambes sans ajouter de fatigue.",
+      "descriptionEn": "Very easy bike spin in Z1-Z2 to flush the legs, promote venous return and aid recovery without adding fatigue.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 30, "max": 45 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [],
+      "mainSetTemplate": [
+        {
+          "description": "Pédalage souple en Z1, cadence 90-100 rpm",
+          "descriptionEn": "Easy spin in Z1, cadence 90-100 rpm",
+          "durationMin": 35,
+          "zone": "Z1"
+        }
+      ],
+      "cooldownTemplate": [],
+      "coachingTips": [
+        "Petit braquet, cadence haute, aucune pression dans les jambes",
+        "Respirez par le nez pour garder l'intensité minimale",
+        "Route plate, pas de relances"
+      ],
+      "coachingTipsEn": [
+        "Small gear, high cadence, zero leg pressure",
+        "Breathe through your nose to stay minimal",
+        "Flat roads, no surges"
+      ],
+      "commonMistakes": [
+        "Rouler trop fort dès que la route monte",
+        "Transformer la séance en Z3 sans s'en rendre compte"
+      ],
+      "commonMistakesEn": [
+        "Pushing too hard on any incline",
+        "Drifting into Z3 without noticing"
+      ],
+      "variationIds": [],
+      "selectionCriteria": {
+        "phases": ["base", "build", "peak", "taper", "recovery"],
+        "weekPositions": ["early", "late"],
+        "relativeLoad": "light",
+        "tags": ["recovery", "easy", "cycling"],
+        "priorityScore": 90
+      },
+      "weeklyFrequencyMax": 3,
+      "minimumRecoveryDays": 0
+    },
+    {
+      "id": "CYC-002",
+      "discipline": "cycling",
+      "name": "Endurance de base",
+      "nameEn": "Base Endurance",
+      "description": "Sortie aérobie continue en Z2. Développe la base aérobie, l'économie de pédalage et la capacité à oxyder les graisses. Cadence naturelle 85-95 rpm.",
+      "descriptionEn": "Continuous aerobic ride in Z2. Builds the aerobic base, pedalling economy and fat oxidation capacity. Natural cadence 85-95 rpm.",
+      "category": "endurance",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 60, "max": 120 },
+      "environment": { "requiresHills": false, "requiresTrack": false },
+      "warmupTemplate": [
+        {
+          "description": "Mise en route progressive",
+          "descriptionEn": "Progressive warm-up",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "Endurance continue en Z2, cadence 85-95 rpm",
+          "descriptionEn": "Continuous Z2 endurance, cadence 85-95 rpm",
+          "durationMin": 80,
+          "zone": "Z2"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Retour au calme en Z1",
+          "descriptionEn": "Cool-down in Z1",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Restez bas dans la zone — ne pas déborder en Z3",
+        "Cadence stable, allure régulière, vous pouvez tenir une conversation",
+        "Hydratation dès 45 minutes, ravitaillement après 90 minutes"
+      ],
+      "coachingTipsEn": [
+        "Stay low in the zone — do not drift into Z3",
+        "Steady cadence, steady effort, you can hold a conversation",
+        "Hydrate from 45 min, fuel after 90 min"
+      ],
+      "commonMistakes": [
+        "Partir trop vite et accumuler de la fatigue inutile",
+        "Négliger la cadence et mouliner en force"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast and accumulating useless fatigue",
+        "Neglecting cadence and mashing in big gears"
+      ],
+      "variationIds": ["CYC-005"],
+      "selectionCriteria": {
+        "phases": ["base", "build", "peak"],
+        "weekPositions": ["early", "mid", "late"],
+        "relativeLoad": "moderate",
+        "tags": ["endurance", "aerobic", "cycling", "base"],
+        "priorityScore": 85
+      },
+      "weeklyFrequencyMax": 3,
+      "minimumRecoveryDays": 0,
+      "estimatedDistanceKm": { "min": 25, "max": 60 }
+    },
+    {
+      "id": "CYC-003",
+      "discipline": "cycling",
+      "name": "Sweet Spot 2×15'",
+      "nameEn": "Sweet Spot 2×15'",
+      "description": "Séance de tempo haut / bas seuil. Deux blocs de 15 minutes à 88-94 % FTP, avec 8 minutes de récupération entre. Développe la puissance aérobie soutenable.",
+      "descriptionEn": "Upper-tempo / lower-threshold session. Two 15-minute blocks at 88-94 % FTP, 8 minutes recovery between. Builds sustainable aerobic power.",
+      "category": "tempo",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 60, "max": 75 },
+      "environment": { "requiresHills": false, "requiresTrack": false },
+      "warmupTemplate": [
+        {
+          "description": "Échauffement progressif + 3×1' en Z3 pour activer",
+          "descriptionEn": "Progressive warm-up + 3×1' in Z3 to activate",
+          "durationMin": 15,
+          "zone": "Z1-Z3"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "2×15' en sweet-spot (88-94 % FTP, Z3 haut / Z4 bas), récup 8' entre en Z1",
+          "descriptionEn": "2×15' sweet spot (88-94 % FTP, upper Z3 / lower Z4), 8' recovery between in Z1",
+          "durationMin": 38,
+          "repetitions": 2,
+          "zone": "Z3-Z4",
+          "rest": "8' Z1"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Retour au calme",
+          "descriptionEn": "Cool-down",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Visez une intensité \"confortablement difficile\", pas Z4 pur",
+        "Cadence 85-95 rpm, garder une respiration contrôlée",
+        "Si le deuxième bloc se délite, baissez la puissance plutôt que d'abandonner"
+      ],
+      "coachingTipsEn": [
+        "Aim for \"comfortably hard\", not full Z4",
+        "Cadence 85-95 rpm, keep breathing controlled",
+        "If the second block falls apart, lower the power rather than abandoning"
+      ],
+      "commonMistakes": [
+        "Partir trop fort sur le premier bloc",
+        "Confondre sweet-spot avec seuil — rester sous FTP"
+      ],
+      "commonMistakesEn": [
+        "Going too hard on the first block",
+        "Confusing sweet spot with threshold — stay below FTP"
+      ],
+      "variationIds": ["CYC-004"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["tempo", "sweet_spot", "threshold_support", "cycling"],
+        "priorityScore": 80
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 1
+    },
+    {
+      "id": "CYC-004",
+      "discipline": "cycling",
+      "name": "Seuil 4×8'",
+      "nameEn": "Threshold 4×8'",
+      "description": "Intervalles au seuil. Quatre blocs de 8 minutes à 95-102 % FTP, récupération 4 minutes entre. Classique pour repousser le seuil lactique.",
+      "descriptionEn": "Threshold intervals. Four 8-minute blocks at 95-102 % FTP, 4 minutes recovery between. A staple for lifting the lactate threshold.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "lactate_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 75, "max": 90 },
+      "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
+      "warmupTemplate": [
+        {
+          "description": "Échauffement + 3×30\" en Z5 pour ouvrir",
+          "descriptionEn": "Warm-up + 3×30\" Z5 openers",
+          "durationMin": 20,
+          "zone": "Z1-Z5"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "4×8' au seuil (95-102 % FTP), récup 4' en Z1",
+          "descriptionEn": "4×8' threshold (95-102 % FTP), 4' recovery in Z1",
+          "durationMin": 48,
+          "repetitions": 4,
+          "zone": "Z4",
+          "rest": "4' Z1"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Retour au calme",
+          "descriptionEn": "Cool-down",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Première minute au seuil bas, dernière minute au seuil haut",
+        "Si le dernier intervalle chute de plus de 5 % de puissance, la charge est trop haute",
+        "Pédalez rond : évitez de basculer en force sur les fins d'intervalles"
+      ],
+      "coachingTipsEn": [
+        "First minute at lower threshold, last minute at upper threshold",
+        "If the last rep drops more than 5 % power, the load was too high",
+        "Spin smooth — avoid mashing at the end of intervals"
+      ],
+      "commonMistakes": [
+        "Ouvrir au-dessus du seuil et exploser au troisième intervalle",
+        "Raccourcir les récupérations pour \"aller plus vite\""
+      ],
+      "commonMistakesEn": [
+        "Opening above threshold and blowing up on the third interval",
+        "Cutting recovery short to \"go faster\""
+      ],
+      "variationIds": ["CYC-003", "CYC-005"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["threshold", "ftp", "cycling"],
+        "priorityScore": 90
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
+    },
+    {
+      "id": "CYC-005",
+      "discipline": "cycling",
+      "name": "VO2max 5×3'",
+      "nameEn": "VO2max 5×3'",
+      "description": "Intervalles VO2max classiques. Cinq blocs de 3 minutes à 110-120 % FTP, récupération 3 minutes. Pousse la consommation maximale d'oxygène.",
+      "descriptionEn": "Classic VO2max intervals. Five 3-minute blocks at 110-120 % FTP, 3 minutes recovery. Pushes maximal oxygen uptake.",
+      "category": "vma_intervals",
+      "sessionType": "vo2max",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 60, "max": 75 },
+      "environment": { "requiresHills": false, "requiresTrack": false },
+      "warmupTemplate": [
+        {
+          "description": "Échauffement progressif + 2×1' Z4 + 2×30\" Z5",
+          "descriptionEn": "Progressive warm-up + 2×1' Z4 + 2×30\" Z5",
+          "durationMin": 20,
+          "zone": "Z1-Z5"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "5×3' en Z5 (110-120 % FTP), récup 3' en Z1",
+          "descriptionEn": "5×3' Z5 (110-120 % FTP), 3' recovery in Z1",
+          "durationMin": 30,
+          "repetitions": 5,
+          "zone": "Z5",
+          "rest": "3' Z1"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "Retour au calme",
+          "descriptionEn": "Cool-down",
+          "durationMin": 10,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Montée en puissance progressive sur les 45 premières secondes",
+        "Cadence haute (95-105 rpm) pour réduire la charge musculaire",
+        "Respiration maximale atteinte vers la 2e minute — c'est normal"
+      ],
+      "coachingTipsEn": [
+        "Build power progressively over the first 45 seconds",
+        "High cadence (95-105 rpm) to reduce muscular load",
+        "Maximal breathing peaks around minute 2 — that's expected"
+      ],
+      "commonMistakes": [
+        "Exploser sur le 1er intervalle et saboter les 4 suivants",
+        "Couper la récupération trop tôt"
+      ],
+      "commonMistakesEn": [
+        "Nuking the first interval and ruining the next four",
+        "Cutting the recovery short"
+      ],
+      "variationIds": ["CYC-004"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["vo2max", "intervals", "cycling"],
+        "priorityScore": 85
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 2
+    }
+  ]
+}

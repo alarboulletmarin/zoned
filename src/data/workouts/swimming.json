@@ -1,0 +1,299 @@
+{
+  "discipline": "swimming",
+  "templates": [
+    {
+      "id": "SWM-001",
+      "discipline": "swimming",
+      "name": "Technique & éducatifs",
+      "nameEn": "Technique & Drills",
+      "description": "Séance à faible intensité centrée sur la technique. Enchaîne éducatifs classiques (rattrapage, poings fermés, 6 battements-3 coups) avec nages complètes lentes pour ancrer les sensations.",
+      "descriptionEn": "Low-intensity technique session. Alternates classic drills (catch-up, fists, 6-kick-3-stroke) with easy full-stroke swimming to embed sensation.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 40, "max": 55 },
+      "environment": { "requiresHills": false, "requiresTrack": false },
+      "warmupTemplate": [
+        {
+          "description": "400m alterné : 100m nage complète, 100m éducatif, 100m nage complète, 100m dos",
+          "descriptionEn": "400m mixed: 100m full stroke, 100m drill, 100m full stroke, 100m backstroke",
+          "durationMin": 10,
+          "distanceM": 400,
+          "zone": "Z1"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "6×100m éducatif (rattrapage / poings fermés / 6-3) — repos 20\" entre",
+          "descriptionEn": "6×100m drills (catch-up / fists / 6-3) — 20\" rest between",
+          "durationMin": 18,
+          "repetitions": 6,
+          "distanceM": 100,
+          "zone": "Z1-Z2",
+          "rest": "20\""
+        },
+        {
+          "description": "4×50m sensation en glisse (peu de coups, long et lent)",
+          "descriptionEn": "4×50m gliding sensation (few strokes, long and slow)",
+          "durationMin": 6,
+          "repetitions": 4,
+          "distanceM": 50,
+          "zone": "Z1",
+          "rest": "15\""
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "200m nage complète très facile",
+          "descriptionEn": "200m very easy full stroke",
+          "durationMin": 5,
+          "distanceM": 200,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Comptez vos coups de bras par longueur — cherchez à diminuer progressivement",
+        "Respiration bilatérale si possible pour équilibrer la nage",
+        "Priorité à la sensation, pas au chronomètre"
+      ],
+      "coachingTipsEn": [
+        "Count strokes per length — aim to reduce them over the set",
+        "Breathe bilaterally if possible to balance the stroke",
+        "Sensation first, stopwatch never"
+      ],
+      "commonMistakes": [
+        "Pousser l'intensité pour \"ne pas perdre son temps\"",
+        "Négliger les éducatifs parce qu'ils sont ennuyeux"
+      ],
+      "commonMistakesEn": [
+        "Ramping intensity to \"not waste time\"",
+        "Skimping on drills because they're boring"
+      ],
+      "variationIds": [],
+      "selectionCriteria": {
+        "phases": ["base", "build", "peak", "taper", "recovery"],
+        "weekPositions": ["early", "late"],
+        "relativeLoad": "light",
+        "tags": ["technique", "recovery", "swimming"],
+        "priorityScore": 80
+      },
+      "weeklyFrequencyMax": 3,
+      "minimumRecoveryDays": 0
+    },
+    {
+      "id": "SWM-002",
+      "discipline": "swimming",
+      "name": "Endurance 2000m",
+      "nameEn": "Endurance 2000m",
+      "description": "Séance aérobie continue construite autour d'un bloc principal de 1500m en Z2. Développe l'endurance et l'efficacité en nage longue.",
+      "descriptionEn": "Continuous aerobic session built around a 1500m main set in Z2. Builds endurance and efficiency at long-swim pace.",
+      "category": "endurance",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 45, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": false },
+      "warmupTemplate": [
+        {
+          "description": "300m progressifs en Z1",
+          "descriptionEn": "300m progressive in Z1",
+          "durationMin": 8,
+          "distanceM": 300,
+          "zone": "Z1"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "3×500m en Z2 (CSS + 8s/100m), repos 30\" entre",
+          "descriptionEn": "3×500m in Z2 (CSS + 8s/100m), 30\" rest between",
+          "durationMin": 32,
+          "repetitions": 3,
+          "distanceM": 500,
+          "zone": "Z2",
+          "rest": "30\""
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "200m nage facile",
+          "descriptionEn": "200m easy",
+          "durationMin": 5,
+          "distanceM": 200,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Allure régulière — même temps au 100m sur les 3 blocs",
+        "Ne démarrez pas trop vite : la régularité prime",
+        "Respiration 3 temps si confortable"
+      ],
+      "coachingTipsEn": [
+        "Steady pace — same 100m split across all three blocks",
+        "Don't start too fast: consistency wins",
+        "Breathe every 3 strokes if comfortable"
+      ],
+      "commonMistakes": [
+        "Accélérer sur le dernier 500m et fausser la lecture",
+        "Raccourcir les repos pour finir plus vite"
+      ],
+      "commonMistakesEn": [
+        "Surging on the last 500m and blurring the data",
+        "Cutting rest to finish earlier"
+      ],
+      "variationIds": [],
+      "selectionCriteria": {
+        "phases": ["base", "build", "peak"],
+        "weekPositions": ["early", "mid", "late"],
+        "relativeLoad": "moderate",
+        "tags": ["endurance", "aerobic", "swimming"],
+        "priorityScore": 85
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 0,
+      "estimatedDistanceKm": { "min": 2, "max": 2.5 }
+    },
+    {
+      "id": "SWM-003",
+      "discipline": "swimming",
+      "name": "Seuil 8×200m @ CSS",
+      "nameEn": "Threshold 8×200m @ CSS",
+      "description": "Séance seuil classique : 8 intervalles de 200m à la vitesse critique (CSS), repos 20 secondes. Repousse le seuil anaérobie en natation.",
+      "descriptionEn": "Classic threshold session: 8 × 200m at critical swim speed (CSS), 20 second rest. Lifts the swimming anaerobic threshold.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "lactate_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 55, "max": 70 },
+      "environment": { "requiresHills": false, "requiresTrack": false },
+      "warmupTemplate": [
+        {
+          "description": "400m progressif + 4×50m accélérations",
+          "descriptionEn": "400m progressive + 4×50m build-ups",
+          "durationMin": 12,
+          "distanceM": 600,
+          "zone": "Z1-Z3"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "8×200m à CSS, repos 20\" entre",
+          "descriptionEn": "8×200m at CSS, 20\" rest between",
+          "durationMin": 35,
+          "repetitions": 8,
+          "distanceM": 200,
+          "zone": "Z4",
+          "rest": "20\""
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "300m décontraction",
+          "descriptionEn": "300m easy",
+          "durationMin": 8,
+          "distanceM": 300,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Temps cible = CSS (secondes/100m) × 2",
+        "Si le temps dérive de plus de 3s entre le 1er et le 8e, la CSS est trop ambitieuse",
+        "Gardez un rythme de respiration stable"
+      ],
+      "coachingTipsEn": [
+        "Target time = CSS (seconds/100m) × 2",
+        "If the split drifts more than 3s between reps 1 and 8, CSS was too ambitious",
+        "Keep breathing cadence steady"
+      ],
+      "commonMistakes": [
+        "Partir sous CSS et s'écrouler à mi-séance",
+        "Allonger les repos au fil de la séance"
+      ],
+      "commonMistakesEn": [
+        "Starting below CSS and crumbling at mid-set",
+        "Stretching the rest intervals as the set progresses"
+      ],
+      "variationIds": [],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["threshold", "css", "swimming"],
+        "priorityScore": 90
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
+    },
+    {
+      "id": "SWM-004",
+      "discipline": "swimming",
+      "name": "VO2max 16×50m",
+      "nameEn": "VO2max 16×50m",
+      "description": "Intervalles courts rapides. 16 × 50m en Z5 (CSS − 3s/100m), repos 30 secondes. Développe la capacité aérobie maximale en préservant la technique.",
+      "descriptionEn": "Short fast intervals. 16 × 50m in Z5 (CSS − 3s/100m), 30 second rest. Builds VO2max while preserving stroke technique.",
+      "category": "vma_intervals",
+      "sessionType": "vo2max",
+      "targetSystem": "vo2max",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 45, "max": 55 },
+      "environment": { "requiresHills": false, "requiresTrack": false },
+      "warmupTemplate": [
+        {
+          "description": "400m + 4×50m accélérations",
+          "descriptionEn": "400m + 4×50m build-ups",
+          "durationMin": 12,
+          "distanceM": 600,
+          "zone": "Z1-Z4"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "16×50m en Z5 (CSS − 3s/100m), repos 30\"",
+          "descriptionEn": "16×50m Z5 (CSS − 3s/100m), 30\" rest",
+          "durationMin": 22,
+          "repetitions": 16,
+          "distanceM": 50,
+          "zone": "Z5",
+          "rest": "30\""
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "200m récup",
+          "descriptionEn": "200m cool-down",
+          "durationMin": 5,
+          "distanceM": 200,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Privilégier la propulsion : longueur de coup, pas la fréquence",
+        "Virages propres — ils font la différence sur du 50",
+        "Si la technique craque, couper plus tôt plutôt qu'insister"
+      ],
+      "coachingTipsEn": [
+        "Focus on propulsion: stroke length, not rate",
+        "Clean turns — they matter on 50s",
+        "If technique breaks down, stop early rather than push on"
+      ],
+      "commonMistakes": [
+        "Surfréquencer pour accélérer — perte d'efficacité",
+        "Sauter le retour au calme"
+      ],
+      "commonMistakesEn": [
+        "Over-striding the stroke to go faster — efficiency loss",
+        "Skipping the cool-down"
+      ],
+      "variationIds": [],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["vo2max", "intervals", "swimming"],
+        "priorityScore": 80
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
+    }
+  ]
+}

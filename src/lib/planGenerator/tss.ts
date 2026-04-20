@@ -17,20 +17,21 @@
 import type { Discipline } from "@/types";
 import { COGGAN_ZONE_INTENSITY_FACTORS, type CogganZone } from "./cyclingPaceEngine";
 import { SWIM_ZONE_INTENSITY_FACTORS, type SwimZone } from "./swimmingPaceEngine";
-import { ZONE_INTENSITY_FACTORS } from "./paceEngine";
 
 // ── Running zone-based IF midpoints ────────────────────────────────
-// Running does not have a universal IF system; we approximate from the
-// Z1–Z6 intensity factors used for TRIMP scoring and normalise so Z4 ≈ 1.
-// Z4 (threshold) factor = 1.3; dividing by 1.3 gives IF ≈ 1.0 at threshold.
+// Running does not have a universal NP/FTP-style IF, so we approximate
+// zone midpoints relative to threshold (Z4 = IF 1.0 by definition).
+// Values are aligned with COGGAN_ZONE_INTENSITY_FACTORS and
+// SWIM_ZONE_INTENSITY_FACTORS at the same zone labels so cross-discipline
+// substitution produces meaningful TSS matches at aerobic zones.
 
 const RUNNING_IF_BY_ZONE: Record<number, number> = {
-  1: ZONE_INTENSITY_FACTORS[1] / 1.3, // ≈ 0.38
-  2: ZONE_INTENSITY_FACTORS[2] / 1.3, // ≈ 0.54
-  3: ZONE_INTENSITY_FACTORS[3] / 1.3, // ≈ 0.77
-  4: ZONE_INTENSITY_FACTORS[4] / 1.3, // ≈ 1.00
-  5: ZONE_INTENSITY_FACTORS[5] / 1.3, // ≈ 1.31
-  6: ZONE_INTENSITY_FACTORS[6] / 1.3, // ≈ 1.54
+  1: 0.50,
+  2: 0.70,
+  3: 0.85,
+  4: 1.00,
+  5: 1.13,
+  6: 1.30,
 };
 
 /** Core TSS formula. */

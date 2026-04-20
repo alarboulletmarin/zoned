@@ -101,16 +101,18 @@ const FALLBACK_FTP_WATTS: Record<Difficulty, number> = {
 
 // ── Intensity factor mapping per zone ──────────────────────────────
 // Used for TSS calculation and cross-discipline load equivalence.
-// IF is the power output normalized by FTP (NP/FTP); these are zone midpoints.
+// IF is the power output normalized by FTP (NP/FTP); these are zone midpoints
+// chosen to align with the running and swimming scales at Z1–Z4 so that
+// cross-discipline substitution at aerobic zones has a meaningful match.
 
 export const COGGAN_ZONE_INTENSITY_FACTORS: Record<CogganZone, number> = {
-  Z1: 0.45,
-  Z2: 0.65,
-  Z3: 0.83,
-  Z4: 0.97,
-  Z5: 1.10,
-  Z6: 1.30,
-  Z7: 1.60,
+  Z1: 0.50,
+  Z2: 0.70,
+  Z3: 0.85,
+  Z4: 1.00,
+  Z5: 1.12,
+  Z6: 1.25,
+  Z7: 1.50,
 };
 
 // ── Helpers ─────────────────────────────────────────────────────────
