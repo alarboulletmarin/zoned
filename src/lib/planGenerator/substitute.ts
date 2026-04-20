@@ -20,8 +20,8 @@ import type { Discipline, SessionType, WorkoutTemplate } from "@/types";
 import type { PlanSession } from "@/types/plan";
 import { getWorkoutDiscipline } from "@/types";
 import { crossDisciplineTss, tssMatchRatio } from "./tss";
-import { cyclingSessionTypeToZone } from "./cyclingPaceEngine";
-import { swimmingSessionTypeToZone } from "./swimmingPaceEngine";
+import { cyclingSessionTypeToZone, type CogganZone } from "./cyclingPaceEngine";
+import { swimmingSessionTypeToZone, type SwimZone } from "./swimmingPaceEngine";
 
 // ── Eligibility ────────────────────────────────────────────────────
 
@@ -77,7 +77,7 @@ function pickCandidateDuration(workout: WorkoutTemplate): number {
 function resolveCandidateZone(
   discipline: Discipline,
   sessionType: SessionType,
-): number | string {
+): number | CogganZone | SwimZone {
   if (discipline === "cycling") return cyclingSessionTypeToZone(sessionType);
   if (discipline === "swimming") return swimmingSessionTypeToZone(sessionType);
   // running fallback — map to a zone index
