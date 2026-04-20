@@ -10,7 +10,7 @@ import type { StrengthCategory, StrengthEquipment, MuscleGroup } from "@/types/s
 import { categories } from "@/data/workouts";
 import { strengthCategories } from "@/data/strength";
 
-export type ActivityType = "running" | "strength" | "all";
+export type ActivityType = "running" | "strength" | "cycling" | "swimming" | "all";
 
 // Terrain filter options
 export type TerrainFilter = "flat" | "hills" | "track";
@@ -210,8 +210,16 @@ export function WorkoutFilters({
     });
   };
 
-  // Categories always shown when the type matches (including "all")
-  const showRunningCategories = activityType === "running" || activityType === "all";
+  // Categories always shown when the type matches (including "all").
+  // Cycling and swimming workouts reuse the shared WorkoutCategory enum
+  // (endurance / tempo / threshold / vma_intervals / recovery) so the same
+  // running category chips apply when a discipline other than strength is
+  // selected.
+  const showRunningCategories =
+    activityType === "running" ||
+    activityType === "cycling" ||
+    activityType === "swimming" ||
+    activityType === "all";
   const showStrengthCategories = activityType === "strength" || activityType === "all";
   // Specific filters only shown when a type is explicitly selected (not "all")
   const showRunningFilters = activityType === "running";

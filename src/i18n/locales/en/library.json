@@ -6,6 +6,8 @@
   "activityToggle": {
     "all": "All",
     "running": "Running",
+    "cycling": "Cycling",
+    "swimming": "Swimming",
     "strength": "Strength"
   },
   "viewMode": {
