@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Target, Gauge, RefreshCw, Route, Timer, ArrowRight, List, Shuffle, Star, Flag, Scale } from "@/components/icons";
+import { Target, Gauge, RefreshCw, Route, Timer, ArrowRight, List, Shuffle, Star, Flag, Scale, Zap, Waves } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
@@ -92,6 +92,30 @@ const CALCULATEURS: CalculateurEntry[] = [
     gradient: "from-zone-6/10 dark:from-zone-6/20",
     iconBg: "bg-zone-6/15",
     iconColor: "text-zone-6",
+  },
+  {
+    id: "ftp",
+    icon: Zap,
+    title: "Test FTP vélo",
+    titleEn: "FTP Cycling Test",
+    description: "Estimez votre FTP depuis un test 20 minutes ou un ramp test",
+    descriptionEn: "Estimate your FTP from a 20-minute or ramp test",
+    href: "/calculators/ftp",
+    gradient: "from-zone-4/10 dark:from-zone-4/20",
+    iconBg: "bg-zone-4/15",
+    iconColor: "text-zone-4",
+  },
+  {
+    id: "css",
+    icon: Waves,
+    title: "Test CSS natation",
+    titleEn: "CSS Swimming Test",
+    description: "Estimez votre CSS depuis un test 400m + 200m",
+    descriptionEn: "Estimate your CSS from a 400m + 200m test",
+    href: "/calculators/css",
+    gradient: "from-zone-2/10 dark:from-zone-2/20",
+    iconBg: "bg-zone-2/15",
+    iconColor: "text-zone-2",
   },
   {
     id: "equivalence",

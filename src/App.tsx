@@ -48,6 +48,8 @@ const PaceCalculatorPage = lazy(() => import("@/pages/PaceCalculatorPage").then(
 const TreadmillConverterPage = lazy(() => import("@/pages/TreadmillConverterPage").then(m => ({ default: m.TreadmillConverterPage })));
 const SplitGeneratorPage = lazy(() => import("@/pages/SplitGeneratorPage").then(m => ({ default: m.SplitGeneratorPage })));
 const VmaCalculatorPage = lazy(() => import("@/pages/VmaCalculatorPage").then(m => ({ default: m.VmaCalculatorPage })));
+const FtpTestPage = lazy(() => import("@/pages/tests/FtpTestPage").then(m => ({ default: m.FtpTestPage })));
+const CssTestPage = lazy(() => import("@/pages/tests/CssTestPage").then(m => ({ default: m.CssTestPage })));
 const RaceEquivalencePage = lazy(() => import("@/pages/RaceEquivalencePage").then(m => ({ default: m.RaceEquivalencePage })));
 const RacePrepGuidePage = lazy(() => import("@/pages/RacePrepGuidePage").then(m => ({ default: m.RacePrepGuidePage })));
 const WarmupGuidePage = lazy(() => import("@/pages/WarmupGuidePage").then(m => ({ default: m.WarmupGuidePage })));
@@ -258,6 +260,8 @@ function App() {
                           <Route path="/calculators/tapis-roulant" element={<TreadmillConverterPage />} />
                           <Route path="/calculators/splits" element={<SplitGeneratorPage />} />
                           <Route path="/calculators/vma" element={<VmaCalculatorPage />} />
+                          <Route path="/calculators/ftp" element={<FtpTestPage />} />
+                          <Route path="/calculators/css" element={<CssTestPage />} />
                           <Route path="/calculators/equivalence" element={<RaceEquivalencePage />} />
                           <Route path="/calculators/age-graded" element={<AgeGradedPage />} />
                           <Route path="/calculators/what-if" element={<WhatIfPage />} />
