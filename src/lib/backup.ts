@@ -22,6 +22,7 @@ export const BACKUP_STORAGE_KEYS = [
   "zoned-cycling-profile",
   "zoned-swimming-profile",
   "zoned-commute-pattern",
+  "zoned-routes",
 ] as const;
 
 export type BackupStorageKey = typeof BACKUP_STORAGE_KEYS[number];
