@@ -27,20 +27,20 @@
         {
           "description": "6×100m éducatif (rattrapage / poings fermés / 6-3) — repos 20\" entre",
           "descriptionEn": "6×100m drills (catch-up / fists / 6-3) — 20\" rest between",
-          "durationMin": 18,
+          "durationMin": 3,
           "repetitions": 6,
           "distanceM": 100,
           "zone": "Z1-Z2",
-          "rest": "20\""
+          "recovery": "20s repos"
         },
         {
           "description": "4×50m sensation en glisse (peu de coups, long et lent)",
           "descriptionEn": "4×50m gliding sensation (few strokes, long and slow)",
-          "durationMin": 6,
+          "durationMin": 1.5,
           "repetitions": 4,
           "distanceM": 50,
           "zone": "Z1",
-          "rest": "15\""
+          "recovery": "15s repos"
         }
       ],
       "cooldownTemplate": [
@@ -107,11 +107,11 @@
         {
           "description": "3×500m en Z2 (CSS + 8s/100m), repos 30\" entre",
           "descriptionEn": "3×500m in Z2 (CSS + 8s/100m), 30\" rest between",
-          "durationMin": 32,
+          "durationMin": 10,
           "repetitions": 3,
           "distanceM": 500,
           "zone": "Z2",
-          "rest": "30\""
+          "recovery": "30s repos"
         }
       ],
       "cooldownTemplate": [
@@ -179,11 +179,11 @@
         {
           "description": "8×200m à CSS, repos 20\" entre",
           "descriptionEn": "8×200m at CSS, 20\" rest between",
-          "durationMin": 35,
+          "durationMin": 4,
           "repetitions": 8,
           "distanceM": 200,
           "zone": "Z4",
-          "rest": "20\""
+          "recovery": "20s repos"
         }
       ],
       "cooldownTemplate": [
@@ -250,11 +250,11 @@
         {
           "description": "16×50m en Z5 (CSS − 3s/100m), repos 30\"",
           "descriptionEn": "16×50m Z5 (CSS − 3s/100m), 30\" rest",
-          "durationMin": 22,
+          "durationMin": 1,
           "repetitions": 16,
           "distanceM": 50,
           "zone": "Z5",
-          "rest": "30\""
+          "recovery": "30s repos"
         }
       ],
       "cooldownTemplate": [

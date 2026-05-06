@@ -145,10 +145,10 @@
         {
           "description": "2×15' en sweet-spot (88-94 % FTP, Z3 haut / Z4 bas), récup 8' entre en Z1",
           "descriptionEn": "2×15' sweet spot (88-94 % FTP, upper Z3 / lower Z4), 8' recovery between in Z1",
-          "durationMin": 38,
+          "durationMin": 15,
           "repetitions": 2,
           "zone": "Z3-Z4",
-          "rest": "8' Z1"
+          "recovery": "8min Z1"
         }
       ],
       "cooldownTemplate": [
@@ -213,10 +213,10 @@
         {
           "description": "4×8' au seuil (95-102 % FTP), récup 4' en Z1",
           "descriptionEn": "4×8' threshold (95-102 % FTP), 4' recovery in Z1",
-          "durationMin": 48,
+          "durationMin": 8,
           "repetitions": 4,
           "zone": "Z4",
-          "rest": "4' Z1"
+          "recovery": "4min Z1"
         }
       ],
       "cooldownTemplate": [
@@ -281,10 +281,10 @@
         {
           "description": "5×3' en Z5 (110-120 % FTP), récup 3' en Z1",
           "descriptionEn": "5×3' Z5 (110-120 % FTP), 3' recovery in Z1",
-          "durationMin": 30,
+          "durationMin": 3,
           "repetitions": 5,
           "zone": "Z5",
-          "rest": "3' Z1"
+          "recovery": "3min Z1"
         }
       ],
       "cooldownTemplate": [
