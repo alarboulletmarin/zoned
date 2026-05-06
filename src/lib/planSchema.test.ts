@@ -75,6 +75,32 @@ describe("normalizeStoredPlan", () => {
     }));
     expect(normalizeStoredPlan(legacy)).toBeNull();
   });
+
+  test("preserves session.discipline through round-trip", () => {
+    const plan = makeLegacyPlan();
+    plan.weeks[0].sessions[0] = {
+      ...plan.weeks[0].sessions[0],
+      discipline: "cycling",
+    };
+
+    const normalized = normalizeStoredPlan(plan);
+    expect(normalized?.weeks[0].sessions[0].discipline).toBe("cycling");
+
+    // Mirror what localStorage does: serialize, parse, re-normalize.
+    const roundTripped = normalizeStoredPlan(JSON.parse(JSON.stringify(normalized)));
+    expect(roundTripped?.weeks[0].sessions[0].discipline).toBe("cycling");
+  });
+
+  test("ignores invalid discipline values", () => {
+    const plan = makeLegacyPlan();
+    plan.weeks[0].sessions[0] = {
+      ...plan.weeks[0].sessions[0],
+      // @ts-expect-error: testing runtime guard
+      discipline: "rowing",
+    };
+    const normalized = normalizeStoredPlan(plan);
+    expect(normalized?.weeks[0].sessions[0].discipline).toBeUndefined();
+  });
 });
 
 describe("parseImportedPlanJson", () => {

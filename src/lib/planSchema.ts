@@ -45,6 +45,10 @@ function normalizeSession(raw: unknown): PlanSession | null {
   return {
     dayOfWeek: raw.dayOfWeek,
     workoutId: raw.workoutId,
+    discipline:
+      raw.discipline === "running" || raw.discipline === "cycling" || raw.discipline === "swimming"
+        ? raw.discipline
+        : undefined,
     sessionType: raw.sessionType as PlanSession["sessionType"],
     isKeySession: asBoolean(raw.isKeySession, false),
     estimatedDurationMin: raw.estimatedDurationMin,
