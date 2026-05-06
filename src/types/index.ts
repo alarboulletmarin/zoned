@@ -10,15 +10,6 @@ export type Discipline = "running" | "cycling" | "swimming";
 
 export const DISCIPLINES: readonly Discipline[] = ["running", "cycling", "swimming"] as const;
 
-// Brick transition between two segments of different disciplines.
-// Typical triathlon transitions: T1 = swim→bike, T2 = bike→run. `swap` covers generic gym/setup transitions.
-export interface SegmentTransition {
-  type: "T1" | "T2" | "swap";
-  durationSec?: number;
-  notes?: string;
-  notesEn?: string;
-}
-
 export type WorkoutPhaseKey = "warmup" | "main" | "cooldown";
 export type WorkoutStepRole = "effort" | "recovery" | "transition";
 export type WorkoutRepeatUnit = "reps" | "sets" | "blocks";
@@ -162,23 +153,6 @@ export interface WorkoutScaling {
   stepSize?: number;
 }
 
-// Workout Segment — a single-discipline block of a workout.
-// Used by multi-discipline workouts (e.g. triathlon bricks) where each segment
-// carries its own discipline, warmup/main/cooldown, and intensity zones.
-// For single-discipline workouts, `segments` is optional; the legacy flat
-// warmupTemplate / mainSetTemplate / cooldownTemplate fields are still authoritative.
-export interface WorkoutSegment {
-  discipline: Discipline;
-  /** Transition from the previous segment (undefined on the first segment). */
-  transitionFromPrev?: SegmentTransition;
-  warmupTemplate: WorkoutBlock[];
-  mainSetTemplate: WorkoutBlock[];
-  cooldownTemplate: WorkoutBlock[];
-  warmupStructure?: WorkoutStep[];
-  mainSetStructure?: WorkoutStep[];
-  cooldownStructure?: WorkoutStep[];
-}
-
 // Main Workout Template Type
 export interface WorkoutTemplate {
   /**
@@ -210,12 +184,6 @@ export interface WorkoutTemplate {
   warmupStructure?: WorkoutStep[];
   mainSetStructure?: WorkoutStep[];
   cooldownStructure?: WorkoutStep[];
-  /**
-   * Optional multi-discipline segments. When present, this drives rendering
-   * and generation; the flat warmup/main/cooldown fields mirror the first
-   * segment for backward compatibility with running-only consumers.
-   */
-  segments?: WorkoutSegment[];
   coachingTips: string[];
   coachingTipsEn: string[];
   commonMistakes: string[];
@@ -232,13 +200,6 @@ export interface WorkoutTemplate {
 /** Resolves the discipline of a workout, defaulting to running for legacy entries. */
 export function getWorkoutDiscipline(workout: Pick<WorkoutTemplate, "discipline">): Discipline {
   return workout.discipline ?? "running";
-}
-
-/** True when the workout mixes more than one discipline (e.g. triathlon brick). */
-export function isMultiDisciplineWorkout(workout: Pick<WorkoutTemplate, "segments">): boolean {
-  if (!workout.segments || workout.segments.length < 2) return false;
-  const first = workout.segments[0].discipline;
-  return workout.segments.some((segment) => segment.discipline !== first);
 }
 
 // Category File Structure
