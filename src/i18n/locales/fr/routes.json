@@ -1,0 +1,64 @@
+{
+  "title": "Générateur de parcours",
+  "subtitle": "Créez une boucle ou un aller-retour réel depuis votre position.",
+  "myRoutes": "Mes parcours",
+  "newRoute": "Nouveau parcours",
+  "form": {
+    "shape": "Forme",
+    "shapeLoop": "Boucle",
+    "shapeOutAndBack": "Aller-retour",
+    "discipline": "Discipline",
+    "disciplineRunning": "Course",
+    "disciplineCycling": "Vélo",
+    "distance": "Distance cible",
+    "distanceKm": "{{value}} km",
+    "surface": "Surface",
+    "surfaceRoad": "Route",
+    "surfaceTrail": "Sentier",
+    "surfaceMixed": "Mixte",
+    "bearing": "Direction (°, 0 = nord)",
+    "start": "Point de départ",
+    "useGps": "Utiliser ma position",
+    "addressPlaceholder": "Adresse (ex : 12 rue de la Paix, Paris)",
+    "generate": "Générer un parcours",
+    "regenerate": "Régénérer",
+    "regenerateHint": "Génère une variante avec un autre tracé."
+  },
+  "result": {
+    "summary": "{{distance}} · D+ {{ascent}} m · ~{{duration}}",
+    "approximate": "Distance approximative",
+    "approximateExplain": "La distance générée s'écarte de la cible — régénérez pour essayer une autre orientation.",
+    "save": "Enregistrer le parcours",
+    "saved": "Parcours enregistré",
+    "saveFailed": "Échec de l'enregistrement",
+    "exportGpx": "Exporter en GPX",
+    "delete": "Supprimer",
+    "deleted": "Parcours supprimé",
+    "elevationProfile": "Profil de dénivelé",
+    "elevationGain": "D+ cumulé",
+    "estimatedDuration": "Durée estimée",
+    "actualDistance": "Distance réelle"
+  },
+  "list": {
+    "empty": "Vous n'avez pas encore enregistré de parcours.",
+    "emptyCta": "Créer un premier parcours",
+    "softLimitReached": "Vous approchez de la limite de {{limit}} parcours sauvegardés. Supprimez les plus anciens si besoin.",
+    "loops": "Boucles",
+    "outAndBacks": "Aller-retours",
+    "discipline": "Discipline",
+    "savedAt": "Enregistré le {{date}}"
+  },
+  "errors": {
+    "geolocationDenied": "Permission de géolocalisation refusée. Saisissez une adresse à la place.",
+    "geolocationUnavailable": "Géolocalisation indisponible sur cet appareil.",
+    "routingFailed": "Le service de routage est temporairement indisponible. Réessayez dans un instant.",
+    "noTrace": "Aucun tracé routable trouvé pour ces points.",
+    "disciplineUnsupported": "La natation n'est pas prise en charge par le générateur de parcours."
+  },
+  "privacy": {
+    "title": "Vie privée",
+    "body": "Votre position est envoyée à un service de routage public (Brouter) le temps d'une requête. Aucun identifiant n'est joint et aucune donnée n'est stockée côté serveur.",
+    "toggle": "Activer le générateur de parcours",
+    "toggleHint": "Désactivez pour ne plus envoyer aucune coordonnée à un service tiers."
+  }
+}
