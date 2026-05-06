@@ -48,10 +48,9 @@ describe("bike TSS", () => {
     ).toBe(56);
   });
 
-  test("zone-based endurance ride (Z2, 2h) lands in the expected band", () => {
-    const tss = bikeTssFromZone(120, "Z2");
-    expect(tss).toBeGreaterThan(70); // 2h × 0.65² × 100 ≈ 84.5
-    expect(tss).toBeLessThan(100);
+  test("zone-based endurance ride (Z2, 2h) matches Coggan Z2 IF (0.70)", () => {
+    // 2h × 0.70² × 100 = 98
+    expect(bikeTssFromZone(120, "Z2")).toBe(98);
   });
 
   test("returns 0 when FTP is missing", () => {
@@ -78,10 +77,56 @@ describe("swim TSS", () => {
     expect(fasterPace).toBeGreaterThan(atCss);
   });
 
-  test("zone-based endurance swim (Z2, 45min) lands in the expected band", () => {
-    const tss = swimTssFromZone(45, "Z2");
-    expect(tss).toBeGreaterThan(40); // 0.75h × 0.80² × 100 = 48
-    expect(tss).toBeLessThan(55);
+  test("zone-based endurance swim (Z2, 45min) matches CSS Z2 IF (0.75)", () => {
+    // 0.75h × 0.75² × 100 = 42.1875 → 42
+    expect(swimTssFromZone(45, "Z2")).toBe(42);
+  });
+});
+
+describe("cross-discipline TSS invariants", () => {
+  test("1h Z2 running and cycling produce identical TSS (same IF 0.70)", () => {
+    expect(runTssFromZone(60, 2)).toBe(bikeTssFromZone(60, "Z2"));
+  });
+
+  test("1h threshold (Z4) is anchored to 100 TSS in both running and cycling", () => {
+    expect(runTssFromZone(60, 4)).toBe(100);
+    expect(bikeTssFromZone(60, "Z4")).toBe(100);
+  });
+
+  test("1h Z2 swim is within ±20% of run Z2 (slightly higher due to CSS IF 0.75)", () => {
+    const runTss = runTssFromZone(60, 2);
+    const swimTss = swimTssFromZone(60, "Z2");
+    const ratio = swimTss / runTss;
+    expect(ratio).toBeGreaterThanOrEqual(0.85);
+    expect(ratio).toBeLessThanOrEqual(1.20);
+  });
+
+  test("substitution chain run → bike → swim → bike preserves intent within ±3 TSS", () => {
+    const originalRunTss = runTssFromZone(60, 2);
+
+    const bikeDuration = equivalentDurationMinForTss({
+      targetTss: originalRunTss,
+      discipline: "cycling",
+      zone: "Z2",
+    });
+    const bikeTss = bikeTssFromZone(bikeDuration, "Z2");
+
+    const swimDuration = equivalentDurationMinForTss({
+      targetTss: bikeTss,
+      discipline: "swimming",
+      zone: "Z2",
+    });
+    const swimTss = swimTssFromZone(swimDuration, "Z2");
+
+    const backToBikeDuration = equivalentDurationMinForTss({
+      targetTss: swimTss,
+      discipline: "cycling",
+      zone: "Z2",
+    });
+    const finalBikeTss = bikeTssFromZone(backToBikeDuration, "Z2");
+
+    // Cumulative rounding should stay tight; ±3 TSS keeps headroom for 4 round-trips.
+    expect(Math.abs(finalBikeTss - originalRunTss)).toBeLessThanOrEqual(3);
   });
 });
 
