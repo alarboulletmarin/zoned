@@ -15,6 +15,7 @@ import { generateLoop } from "./algorithms/loop";
 import { generateOutAndBack } from "./algorithms/outAndBack";
 import { buildElevationProfile, computeElevationGainM } from "./elevation";
 import { estimateDurationSec } from "./durationEstimate";
+import { routeViaBrouter as routeViaBrouterImpl } from "./routing";
 import { outAndBackReachedTurn } from "./sanity";
 
 export { generateLoop } from "./algorithms/loop";
@@ -253,5 +254,62 @@ function deriveElevationBounds(elevationGainTargetM?: number): Pick<RouteConstra
   return {
     elevationMinM: Math.max(0, elevationGainTargetM - tolerance),
     elevationMaxM: elevationGainTargetM + tolerance,
+  };
+}
+
+/**
+ * Re-route an arbitrary list of waypoints through Brouter and produce a
+ * fresh {@link Route}. Used by the in-app editor: when the user drags or
+ * inserts a waypoint, the new waypoint list is sent here and the resulting
+ * trace replaces the candidate on screen — no triangulation, no convergence
+ * loop, just whatever Brouter routes between the points.
+ *
+ * For loops, the caller is expected to pass the start as both the first and
+ * last waypoint.
+ */
+export async function routeFromWaypoints(args: {
+  waypoints: RouteCoordinate[];
+  discipline: Discipline;
+  shape: RouteShape;
+  surface?: RouteSurface;
+  /** Existing route id, when re-editing in place. A new id is minted otherwise. */
+  routeId?: string;
+  seed?: number;
+  name?: string;
+  signal?: AbortSignal;
+}): Promise<Route> {
+  const { waypoints, discipline, shape, surface = "mixed", routeId, seed, name, signal } = args;
+  if (waypoints.length < 2) {
+    throw new Error("routeFromWaypoints requires at least two waypoints");
+  }
+
+  const trace = await routeViaBrouterImpl({ waypoints, discipline, signal });
+  const elevation = buildElevationProfile(trace.points);
+  const elevationGainM =
+    trace.elevationGainM > 0 ? trace.elevationGainM : computeElevationGainM(elevation);
+  const distanceKm = trace.distanceM / 1000;
+
+  return {
+    id: routeId ?? crypto.randomUUID(),
+    name: name ?? defaultRouteName(shape, distanceKm),
+    discipline,
+    shape,
+    points: trace.points,
+    elevation,
+    distanceM: trace.distanceM,
+    elevationGainM,
+    estimatedDurationSec: estimateDurationSec({
+      distanceM: trace.distanceM,
+      elevationGainM,
+      discipline,
+    }),
+    constraints: {
+      shape,
+      discipline,
+      targetDistanceKm: Math.round(distanceKm * 10) / 10,
+      surface,
+      seed: seed ?? 0,
+    },
+    generatedAt: new Date().toISOString(),
   };
 }

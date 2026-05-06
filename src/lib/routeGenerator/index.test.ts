@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 
-import { generateRouteCandidates } from "./index";
+import { generateRouteCandidates, routeFromWaypoints } from "./index";
 import { __clearPoiCacheForTests } from "./poi/overpass";
 
 function makeBrouterPayload(distanceM: number) {
@@ -92,5 +92,39 @@ describe("generateRouteCandidates", () => {
       const ratio = c.distanceM / 10_000;
       expect(Math.abs(ratio - 1)).toBeLessThanOrEqual(0.05);
     }
+  });
+});
+
+describe("routeFromWaypoints", () => {
+  test("routes the supplied waypoints and returns a Route", async () => {
+    globalThis.fetch = (async () =>
+      new Response(JSON.stringify(makeBrouterPayload(4_321)), { status: 200 })
+    ) as unknown as typeof fetch;
+
+    const route = await routeFromWaypoints({
+      waypoints: [
+        [2.349, 48.8567],
+        [2.36, 48.87],
+        [2.349, 48.8567],
+      ],
+      discipline: "running",
+      shape: "loop",
+      routeId: "abc",
+    });
+
+    expect(route.id).toBe("abc");
+    expect(route.distanceM).toBe(4_321);
+    expect(route.shape).toBe("loop");
+    expect(route.points.length).toBeGreaterThanOrEqual(2);
+  });
+
+  test("rejects fewer than two waypoints", async () => {
+    await expect(
+      routeFromWaypoints({
+        waypoints: [[2.349, 48.8567]],
+        discipline: "running",
+        shape: "loop",
+      }),
+    ).rejects.toThrow();
   });
 });
