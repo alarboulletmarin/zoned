@@ -14,6 +14,7 @@ import type {
 import { generateLoop } from "./algorithms/loop";
 import { generateOutAndBack } from "./algorithms/outAndBack";
 import { buildElevationProfile, computeElevationGainM } from "./elevation";
+import { estimateDurationSec } from "./durationEstimate";
 
 export { generateLoop } from "./algorithms/loop";
 export { generateOutAndBack } from "./algorithms/outAndBack";
@@ -82,6 +83,15 @@ export async function generateRoute(args: {
       : {}),
   };
 
+  // Brouter's `total-time` is computed for its routing profile, not for a
+  // runner's actual pace, so we override it with a Zoned-side estimate that
+  // factors discipline and elevation.
+  const estimatedDurationSecValue = estimateDurationSec({
+    distanceM: trace.distanceM,
+    elevationGainM,
+    discipline,
+  });
+
   return {
     id: crypto.randomUUID(),
     name: name ?? defaultRouteName(shape, targetDistanceKm),
@@ -91,7 +101,7 @@ export async function generateRoute(args: {
     elevation,
     distanceM: trace.distanceM,
     elevationGainM,
-    estimatedDurationSec: trace.estimatedDurationSec,
+    estimatedDurationSec: estimatedDurationSecValue,
     constraints,
     generatedAt: new Date().toISOString(),
     pois: trace.pois.length > 0 ? trace.pois : undefined,
