@@ -34,6 +34,18 @@ export const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org";
 /** Nominatim public usage policy: maximum 1 request per second. */
 export const NOMINATIM_MIN_INTERVAL_MS = 1000;
 
+// ── POI lookup (Overpass) ─────────────────────────────────────────
+
+export const OVERPASS_BASE_URL = "https://overpass-api.de/api/interpreter";
+/** Embedded in the Overpass-QL `timeout:` directive — server-side cap. */
+export const OVERPASS_TIMEOUT_S = 25;
+/** When fetching POI for a loop, look this much wider than the loop radius
+ *  so candidates exist past the ideal half-radius distance. */
+export const POI_SEARCH_RADIUS_FACTOR = 1.5;
+/** Minimum number of distinct POI required to switch from triangulation to
+ *  the POI-aware algorithm. Below this we fall back. */
+export const POI_AWARE_MIN_COUNT = 3;
+
 // ── Generation tolerances ─────────────────────────────────────────
 
 /** Acceptable deviation from the target distance, ratio of target. */

@@ -12,6 +12,16 @@ import type { Discipline } from "@/types";
 /** GeoJSON-style coordinate: `[longitude, latitude, optional altitude in meters]`. */
 export type RouteCoordinate = [number, number, number?];
 
+/**
+ * POI traversed by a generated route. Embedded so the UI can render named
+ * markers without re-querying Overpass.
+ */
+export interface RoutePoiSummary {
+  type: "promenade" | "park" | "greenway" | "trail" | "beach";
+  point: RouteCoordinate;
+  name?: string;
+}
+
 /** Surface preference used as input to the routing engine. */
 export type RouteSurface = "road" | "trail" | "mixed";
 
@@ -78,4 +88,10 @@ export interface Route {
   };
   /** Optional free-form tags. */
   tags?: string[];
+  /**
+   * POI used as routing waypoints. Empty when the generation fell back to
+   * the blind algorithm (rural area, Overpass error). Persisted on the
+   * route so the saved view can render named markers without re-fetching.
+   */
+  pois?: RoutePoiSummary[];
 }

@@ -1,10 +1,20 @@
 /**
- * Loop generation algorithm — places three waypoints in a triangular pattern
- * around the start, routes them through Brouter, and iteratively adjusts the
- * search radius until the trace length lands within the requested tolerance.
+ * Loop generation algorithm. Two strategies, in order of preference:
  *
- * Triangle (rather than square or random) keeps the route convex and avoids
- * accidental self-crossings while staying simple to reason about.
+ *   1. POI-aware. Fetch parks, promenades, greenways and trails around the
+ *      start, pick three angularly-spread waypoints, route through them.
+ *      This is what makes Nice loops include the Promenade des Anglais
+ *      instead of bouncing off arbitrary points in the sea or in dodgy
+ *      neighbourhoods.
+ *
+ *   2. Blind triangulation. Fallback when Overpass times out or returns
+ *      too few POI (rural areas, sparsely tagged regions). Same code as
+ *      the original MVP — three waypoints in a triangle pattern, iterative
+ *      radius correction. Kept as a safety net so the feature degrades
+ *      gracefully instead of failing.
+ *
+ * Both strategies share the same convergence loop: ratio-based correction
+ * with a damping factor, capped at MAX_ADJUSTMENT_ATTEMPTS passes.
  */
 
 import type { Discipline } from "@/types";
@@ -14,19 +24,24 @@ import { routeViaBrouter, type BrouterTraceResult } from "../routing";
 import {
   DISTANCE_TOLERANCE,
   MAX_ADJUSTMENT_ATTEMPTS,
+  POI_AWARE_MIN_COUNT,
+  POI_SEARCH_RADIUS_FACTOR,
 } from "../constants";
+import { fetchPoiCandidates } from "../poi/overpass";
+import { selectDiverseWaypoints } from "../poi/poiSelector";
+import type { RoutePoi } from "../poi/poiTypes";
 
 export interface LoopGenerationResult extends BrouterTraceResult {
   /** Number of adjustment passes that ran (0 = first attempt was good). */
   attempts: number;
   /** True when the final distance is within {@link DISTANCE_TOLERANCE}. */
   withinTolerance: boolean;
+  /** POI selected as waypoints, attached so the UI can render named markers. */
+  pois: RoutePoi[];
+  /** Which strategy actually produced the trace. Useful for debugging. */
+  strategy: "poi-aware" | "triangulation";
 }
 
-/**
- * Deterministic pseudo-random based on the seed. Good enough to vary the
- * triangle orientation between regenerations without pulling a PRNG dep.
- */
 function seededAngleOffset(seed: number): number {
   // Hash the seed into a [0, 360) bearing offset.
   const x = Math.sin(seed * 9301 + 49297) * 233280;
@@ -46,8 +61,8 @@ function buildTriangleWaypoints(
 
 /**
  * Generate a loop starting and ending at `start` with a routed length close
- * to `targetDistanceKm`. Sends up to {@link MAX_ADJUSTMENT_ATTEMPTS} requests
- * to Brouter, halving the absolute correction each pass to converge quickly.
+ * to `targetDistanceKm`. Tries the POI-aware strategy first and falls back
+ * to blind triangulation on failure.
  */
 export async function generateLoop(args: {
   start: RouteCoordinate;
@@ -57,13 +72,124 @@ export async function generateLoop(args: {
   signal?: AbortSignal;
 }): Promise<LoopGenerationResult> {
   const { start, targetDistanceKm, discipline, seed, signal } = args;
-
   const targetM = targetDistanceKm * 1000;
-  // The triangle inscribes the loop; the routed path passes through three
-  // waypoints + return. Empirically the routed length is roughly π × radius
-  // for urban areas, so seed the radius from that approximation.
-  let radiusM = (targetM / Math.PI) * 0.5;
+  // The loop circumscribes a triangle of side ≈ π × radius in urban areas,
+  // so radius ≈ target / (π × 2) when each side is half the perimeter.
+  const baseRadiusM = (targetM / Math.PI) * 0.5;
 
+  // ── Strategy 1: POI-aware ─────────────────────────────────────
+  try {
+    const pois = await fetchPoiCandidates({
+      center: start,
+      radiusM: baseRadiusM * POI_SEARCH_RADIUS_FACTOR,
+      signal,
+    });
+
+    if (pois.length >= POI_AWARE_MIN_COUNT) {
+      const result = await iteratePoiLoop({
+        start,
+        targetM,
+        discipline,
+        pois,
+        seed,
+        signal,
+      });
+      if (result) return result;
+      // result === null means we couldn't converge on a POI loop —
+      // drop through to triangulation.
+    }
+  } catch {
+    // Network/Overpass error → fall back silently.
+  }
+
+  // ── Strategy 2: Blind triangulation fallback ──────────────────
+  return iterateTriangulation({
+    start,
+    targetM,
+    discipline,
+    seed,
+    signal,
+    initialRadiusM: baseRadiusM,
+  });
+}
+
+interface LoopAttemptArgs {
+  start: RouteCoordinate;
+  targetM: number;
+  discipline: Discipline;
+  seed: number;
+  signal?: AbortSignal;
+}
+
+/**
+ * Iterative POI-aware loop. Each pass selects three diverse POI, routes
+ * through them, and adjusts the *target distance window* used for selection
+ * — not the POI list — so we stay in the same neighbourhoods while
+ * re-tightening on the requested length.
+ */
+async function iteratePoiLoop(
+  args: LoopAttemptArgs & {
+    pois: NonNullable<Awaited<ReturnType<typeof fetchPoiCandidates>>>;
+  },
+): Promise<LoopGenerationResult | null> {
+  const { start, targetM, discipline, pois, seed, signal } = args;
+
+  let targetRadiusM = (targetM / Math.PI) * 0.5;
+  let trace: BrouterTraceResult | null = null;
+  let chosen: ReturnType<typeof selectDiverseWaypoints> = [];
+  let attempts = 0;
+
+  // Rotate the POI list deterministically per seed so successive candidates
+  // (which share parameters but differ by seed) explore different starting
+  // points in the greedy selection. Without this every candidate would pick
+  // the same top-scoring POI as its first waypoint.
+  const rotation = Math.floor(
+    (seededAngleOffset(seed) / 360) * Math.max(1, pois.length),
+  );
+  const rotatedPois = [...pois.slice(rotation), ...pois.slice(0, rotation)];
+
+  while (attempts < MAX_ADJUSTMENT_ATTEMPTS) {
+    chosen = selectDiverseWaypoints(start, rotatedPois, targetRadiusM, 3);
+    if (chosen.length === 0) return null;
+
+    trace = await routeViaBrouter({
+      waypoints: [start, ...chosen.map((p) => p.point), start],
+      discipline,
+      signal,
+    });
+
+    const ratio = trace.distanceM / targetM;
+    if (Math.abs(ratio - 1) <= DISTANCE_TOLERANCE) break;
+
+    // Same damped correction as triangulation but applied to the *selection*
+    // target, not a triangle radius. Damping 0.7 is empirically stable.
+    const correction = 1 + (1 / ratio - 1) * 0.7;
+    targetRadiusM = Math.max(50, targetRadiusM * correction);
+    attempts += 1;
+  }
+
+  if (!trace || chosen.length === 0) return null;
+
+  const finalRatio = trace.distanceM / targetM;
+  return {
+    ...trace,
+    attempts,
+    withinTolerance: Math.abs(finalRatio - 1) <= DISTANCE_TOLERANCE,
+    strategy: "poi-aware",
+    pois: chosen.map((p) => ({ type: p.type, point: p.point, name: p.name })),
+  };
+}
+
+/**
+ * Original blind-triangulation loop. Used as a fallback when no POI is
+ * available. Identical to the pre-refactor behaviour modulo the new return
+ * fields (`pois`, `strategy`).
+ */
+async function iterateTriangulation(
+  args: LoopAttemptArgs & { initialRadiusM: number },
+): Promise<LoopGenerationResult> {
+  const { start, targetM, discipline, seed, signal } = args;
+  let radiusM = args.initialRadiusM;
   let trace: BrouterTraceResult | null = null;
   let attempts = 0;
 
@@ -76,11 +202,8 @@ export async function generateLoop(args: {
     });
 
     const ratio = trace.distanceM / targetM;
-    const deviation = Math.abs(ratio - 1);
-    if (deviation <= DISTANCE_TOLERANCE) break;
+    if (Math.abs(ratio - 1) <= DISTANCE_TOLERANCE) break;
 
-    // Damp the correction to avoid oscillation. 0.7 converges faster than 1.0
-    // while staying stable on routes that compound (e.g. forced detours).
     const correction = 1 + (1 / ratio - 1) * 0.7;
     radiusM = Math.max(50, radiusM * correction);
     attempts += 1;
@@ -95,5 +218,7 @@ export async function generateLoop(args: {
     ...trace,
     attempts,
     withinTolerance: Math.abs(finalRatio - 1) <= DISTANCE_TOLERANCE,
+    strategy: "triangulation",
+    pois: [],
   };
 }

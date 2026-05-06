@@ -94,6 +94,7 @@ export async function generateRoute(args: {
     estimatedDurationSec: trace.estimatedDurationSec,
     constraints,
     generatedAt: new Date().toISOString(),
+    pois: trace.pois.length > 0 ? trace.pois : undefined,
   };
 }
 

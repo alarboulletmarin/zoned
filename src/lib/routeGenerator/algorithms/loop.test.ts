@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 
 import { generateLoop } from "./loop";
 import { DISTANCE_TOLERANCE, MAX_ADJUSTMENT_ATTEMPTS } from "../constants";
+import { __clearPoiCacheForTests } from "../poi/overpass";
 
 // Convert routed-distance assertions into the matching Brouter GeoJSON
 // payload. The `factor` lets a test pretend that Brouter returned a route
@@ -32,12 +33,47 @@ function makeBrouterPayload(distanceM: number) {
   };
 }
 
+/**
+ * Stub Overpass to return zero POI so the algorithm immediately falls back
+ * to the blind triangulation strategy. Tests in this file exercise that
+ * path; POI-aware behaviour is covered separately.
+ */
+function makeEmptyOverpassPayload() {
+  return { elements: [] };
+}
+
+interface MockArgs {
+  /** Distance returned by every Brouter call. Single number = constant; array = sequence. */
+  brouterDistanceM: number | number[];
+  brouterCalls?: string[];
+}
+
+function mockFetch({ brouterDistanceM, brouterCalls }: MockArgs) {
+  let brouterCallIndex = 0;
+  globalThis.fetch = (async (input: string | URL | Request) => {
+    const url = typeof input === "string" ? input : input.toString();
+    if (url.includes("overpass")) {
+      return new Response(JSON.stringify(makeEmptyOverpassPayload()), {
+        status: 200,
+      });
+    }
+    brouterCalls?.push(url);
+    const dm = Array.isArray(brouterDistanceM)
+      ? brouterDistanceM[Math.min(brouterCallIndex, brouterDistanceM.length - 1)]
+      : brouterDistanceM;
+    brouterCallIndex += 1;
+    return new Response(JSON.stringify(makeBrouterPayload(dm)), { status: 200 });
+  }) as unknown as typeof fetch;
+}
+
 let originalFetch: typeof fetch;
 let fetchCalls: string[] = [];
 
 beforeEach(() => {
   originalFetch = globalThis.fetch;
   fetchCalls = [];
+  // Clear the POI cache so each test starts from scratch.
+  __clearPoiCacheForTests();
 });
 
 afterEach(() => {
@@ -46,13 +82,7 @@ afterEach(() => {
 
 describe("generateLoop", () => {
   test("returns the trace on first attempt when distance is already in tolerance", async () => {
-    // Brouter returns exactly the requested distance → no correction loop.
-    globalThis.fetch = (async (url: string) => {
-      fetchCalls.push(url);
-      return new Response(JSON.stringify(makeBrouterPayload(10_000)), {
-        status: 200,
-      });
-    }) as unknown as typeof fetch;
+    mockFetch({ brouterDistanceM: 10_000, brouterCalls: fetchCalls });
 
     const result = await generateLoop({
       start: [2.349, 48.8567],
@@ -64,21 +94,14 @@ describe("generateLoop", () => {
     expect(result.attempts).toBe(0);
     expect(result.withinTolerance).toBe(true);
     expect(result.distanceM).toBe(10_000);
+    expect(result.strategy).toBe("triangulation");
     expect(fetchCalls).toHaveLength(1);
     expect(fetchCalls[0]).toContain("profile=trekking");
   });
 
   test("converges within MAX_ADJUSTMENT_ATTEMPTS when first attempt is short", async () => {
-    // Pretend Brouter undershoots by 30% on the first call, then returns
-    // exactly the target afterwards.
-    let call = 0;
-    globalThis.fetch = (async () => {
-      call += 1;
-      const distance = call === 1 ? 7_000 : 10_000;
-      return new Response(JSON.stringify(makeBrouterPayload(distance)), {
-        status: 200,
-      });
-    }) as unknown as typeof fetch;
+    // First call short, then exact.
+    mockFetch({ brouterDistanceM: [7_000, 10_000] });
 
     const result = await generateLoop({
       start: [2.349, 48.8567],
@@ -93,11 +116,7 @@ describe("generateLoop", () => {
   });
 
   test("flags out-of-tolerance when Brouter consistently misses the target", async () => {
-    // Always return half the target so the loop hits its budget.
-    globalThis.fetch = (async () =>
-      new Response(JSON.stringify(makeBrouterPayload(5_000)), {
-        status: 200,
-      })) as unknown as typeof fetch;
+    mockFetch({ brouterDistanceM: 5_000 });
 
     const result = await generateLoop({
       start: [2.349, 48.8567],
@@ -113,12 +132,7 @@ describe("generateLoop", () => {
   });
 
   test("uses fastbike profile for cycling", async () => {
-    globalThis.fetch = (async (url: string) => {
-      fetchCalls.push(url);
-      return new Response(JSON.stringify(makeBrouterPayload(10_000)), {
-        status: 200,
-      });
-    }) as unknown as typeof fetch;
+    mockFetch({ brouterDistanceM: 10_000, brouterCalls: fetchCalls });
 
     await generateLoop({
       start: [2.349, 48.8567],
@@ -132,13 +146,17 @@ describe("generateLoop", () => {
 
   test("seed determinism: same seed produces same waypoints", async () => {
     const seenLonlats: string[] = [];
-    globalThis.fetch = (async (url: string) => {
-      const params = new URL(url).searchParams;
-      seenLonlats.push(params.get("lonlats") ?? "");
+    function recordingMock(input: string | URL | Request) {
+      const url = typeof input === "string" ? input : input.toString();
+      if (url.includes("overpass")) {
+        return new Response(JSON.stringify({ elements: [] }), { status: 200 });
+      }
+      seenLonlats.push(new URL(url).searchParams.get("lonlats") ?? "");
       return new Response(JSON.stringify(makeBrouterPayload(10_000)), {
         status: 200,
       });
-    }) as unknown as typeof fetch;
+    }
+    globalThis.fetch = (async (input) => recordingMock(input)) as unknown as typeof fetch;
 
     await generateLoop({
       start: [2.349, 48.8567],
@@ -157,5 +175,55 @@ describe("generateLoop", () => {
     });
 
     expect(seenLonlats[0]).toBe(callsForSeed1234[0]);
+  });
+
+  test("falls back to triangulation when Overpass returns too few POI", async () => {
+    mockFetch({ brouterDistanceM: 10_000 });
+
+    const result = await generateLoop({
+      start: [2.349, 48.8567],
+      targetDistanceKm: 10,
+      discipline: "running",
+      seed: 1,
+    });
+
+    expect(result.strategy).toBe("triangulation");
+    expect(result.pois).toEqual([]);
+  });
+
+  test("uses POI-aware strategy when Overpass returns enough candidates", async () => {
+    // Three POIs spread around the start at roughly the right radius.
+    const overpassPayload = {
+      elements: [
+        { id: 1, type: "way", center: { lat: 48.8612, lon: 2.349 }, tags: { leisure: "park", name: "Parc Nord" } },
+        { id: 2, type: "way", center: { lat: 48.8567, lon: 2.36 }, tags: { leisure: "park", name: "Parc Est" } },
+        { id: 3, type: "way", center: { lat: 48.852, lon: 2.345 }, tags: { highway: "footway", name: "Promenade Sud" } },
+      ],
+    };
+
+    let brouterCallCount = 0;
+    globalThis.fetch = (async (input: string | URL | Request) => {
+      const url = typeof input === "string" ? input : input.toString();
+      if (url.includes("overpass")) {
+        return new Response(JSON.stringify(overpassPayload), { status: 200 });
+      }
+      brouterCallCount += 1;
+      return new Response(JSON.stringify(makeBrouterPayload(10_000)), {
+        status: 200,
+      });
+    }) as unknown as typeof fetch;
+
+    const result = await generateLoop({
+      start: [2.349, 48.8567],
+      targetDistanceKm: 10,
+      discipline: "running",
+      seed: 1,
+    });
+
+    expect(result.strategy).toBe("poi-aware");
+    expect(result.pois.length).toBeGreaterThan(0);
+    // Each POI should have a name from the Overpass tags.
+    expect(result.pois[0].name).toMatch(/Parc|Promenade/);
+    expect(brouterCallCount).toBeGreaterThan(0);
   });
 });
