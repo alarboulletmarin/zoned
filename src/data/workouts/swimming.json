@@ -294,6 +294,431 @@
       },
       "weeklyFrequencyMax": 1,
       "minimumRecoveryDays": 1
+    },
+    {
+      "id": "SWM-005",
+      "discipline": "swimming",
+      "name": "Bras seuls (pull) 5×200m",
+      "nameEn": "Pull Set 5×200m",
+      "description": "Séance bras seuls avec pull-buoy pour isoler le travail du haut du corps. Cinq blocs de 200m à allure CSS+5s/100m, repos 25 secondes. Renforce la propulsion des bras et améliore la sensation de l'eau.",
+      "descriptionEn": "Pull-buoy session isolating upper-body work. Five 200m blocks at CSS+5s/100m, 25 seconds rest. Strengthens arm propulsion and improves feel for the water.",
+      "category": "endurance",
+      "sessionType": "tempo",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 50, "max": 65 },
+      "environment": { "requiresHills": false, "requiresTrack": false },
+      "warmupTemplate": [
+        {
+          "description": "300m alterné nage / éducatifs",
+          "descriptionEn": "300m mixed swim / drills",
+          "durationMin": 8,
+          "distanceM": 300,
+          "zone": "Z1"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "5×200m pull-buoy à CSS+5s/100m, repos 25\"",
+          "descriptionEn": "5×200m pull-buoy at CSS+5s/100m, 25\" rest",
+          "durationMin": 4.5,
+          "repetitions": 5,
+          "distanceM": 200,
+          "zone": "Z3",
+          "recovery": "25s repos"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "200m décontraction",
+          "descriptionEn": "200m easy",
+          "durationMin": 5,
+          "distanceM": 200,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Pull-buoy haut entre les cuisses, pas de mouvement de jambes",
+        "Concentrez-vous sur l'amplitude du coup et la traction sous l'eau",
+        "Compter les coups de bras à chaque 50m"
+      ],
+      "coachingTipsEn": [
+        "Pull-buoy high between thighs, no leg movement",
+        "Focus on stroke length and underwater pull",
+        "Count strokes every 50m"
+      ],
+      "commonMistakes": [
+        "Battre des jambes avec le pull-buoy — défait l'objectif",
+        "Surfréquencer pour masquer le manque de traction"
+      ],
+      "commonMistakesEn": [
+        "Kicking even with the pull-buoy — defeats the purpose",
+        "Over-stroking to mask weak pull"
+      ],
+      "variationIds": ["SWM-002"],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["pull", "upper_body", "technique", "swimming"],
+        "priorityScore": 75
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 0
+    },
+    {
+      "id": "SWM-006",
+      "discipline": "swimming",
+      "name": "Battements (kick) 8×50m",
+      "nameEn": "Kick Set 8×50m",
+      "description": "Séance battements isolés. Huit blocs de 50m battements (planche ou bras tendus), repos 30 secondes. Améliore la position du corps, la propulsion des jambes et la souplesse des chevilles.",
+      "descriptionEn": "Kick-only session. Eight 50m blocks (with kickboard or arms extended), 30 seconds rest. Improves body position, leg propulsion and ankle flexibility.",
+      "category": "recovery",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": { "min": 35, "max": 45 },
+      "environment": { "requiresHills": false, "requiresTrack": false },
+      "warmupTemplate": [
+        {
+          "description": "200m nage facile",
+          "descriptionEn": "200m easy swim",
+          "durationMin": 5,
+          "distanceM": 200,
+          "zone": "Z1"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "8×50m battements (planche ou superman), repos 30\"",
+          "descriptionEn": "8×50m kick (kickboard or superman), 30\" rest",
+          "durationMin": 1.5,
+          "repetitions": 8,
+          "distanceM": 50,
+          "zone": "Z2",
+          "recovery": "30s repos"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "200m nage complète facile",
+          "descriptionEn": "200m easy full stroke",
+          "durationMin": 5,
+          "distanceM": 200,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Battement parti des hanches, jambes longues, chevilles relâchées",
+        "Tête dans l'eau, regard vers le fond",
+        "Si possible, alterner ventre / dos pour équilibrer"
+      ],
+      "coachingTipsEn": [
+        "Kick from the hips, long legs, relaxed ankles",
+        "Head in the water, eyes down",
+        "Alternate front / back if possible to balance"
+      ],
+      "commonMistakes": [
+        "Plier les genoux trop fort — pédalage inefficace",
+        "Sortir la tête sur la planche — casse l'alignement"
+      ],
+      "commonMistakesEn": [
+        "Bending knees too much — inefficient pedalling",
+        "Head out of the water on the board — breaks alignment"
+      ],
+      "variationIds": [],
+      "selectionCriteria": {
+        "phases": ["base", "build", "recovery"],
+        "weekPositions": ["early", "late"],
+        "relativeLoad": "light",
+        "tags": ["kick", "lower_body", "technique", "swimming"],
+        "priorityScore": 65
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 0
+    },
+    {
+      "id": "SWM-007",
+      "discipline": "swimming",
+      "name": "Endurance longue 4×400m",
+      "nameEn": "Long Endurance 4×400m",
+      "description": "Séance d'endurance longue. Quatre blocs de 400m en Z2 (CSS+10s/100m), repos 45 secondes. Construit la base aérobie et l'efficacité de nage en distance.",
+      "descriptionEn": "Long endurance session. Four 400m blocks in Z2 (CSS+10s/100m), 45 seconds rest. Builds aerobic base and stroke efficiency over distance.",
+      "category": "long_run",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 60, "max": 75 },
+      "environment": { "requiresHills": false, "requiresTrack": false },
+      "warmupTemplate": [
+        {
+          "description": "400m progressif",
+          "descriptionEn": "400m progressive",
+          "durationMin": 10,
+          "distanceM": 400,
+          "zone": "Z1"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "4×400m en Z2 (CSS+10s/100m), repos 45\"",
+          "descriptionEn": "4×400m in Z2 (CSS+10s/100m), 45\" rest",
+          "durationMin": 9,
+          "repetitions": 4,
+          "distanceM": 400,
+          "zone": "Z2",
+          "recovery": "45s repos"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "300m décontraction alternée",
+          "descriptionEn": "300m mixed cool-down",
+          "durationMin": 8,
+          "distanceM": 300,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Régularité maximale — même temps au 100m sur les 4 blocs",
+        "Respiration 3 temps si confortable, sinon 2 temps stable",
+        "Boire entre les blocs si la séance dépasse 60 minutes"
+      ],
+      "coachingTipsEn": [
+        "Maximum consistency — same 100m split across all 4 blocks",
+        "Breathe every 3 strokes if comfortable, else steady every 2",
+        "Drink between blocks if the session exceeds 60 minutes"
+      ],
+      "commonMistakes": [
+        "Partir trop vite et ralentir progressivement",
+        "Ignorer la technique sous prétexte de fatigue"
+      ],
+      "commonMistakesEn": [
+        "Starting too fast and slowing progressively",
+        "Letting technique slip under the guise of fatigue"
+      ],
+      "variationIds": ["SWM-002"],
+      "selectionCriteria": {
+        "phases": ["base", "build", "peak"],
+        "weekPositions": ["late"],
+        "relativeLoad": "moderate",
+        "tags": ["long_run", "endurance", "aerobic", "swimming"],
+        "priorityScore": 85
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 0,
+      "estimatedDistanceKm": { "min": 1.6, "max": 2.5 }
+    },
+    {
+      "id": "SWM-008",
+      "discipline": "swimming",
+      "name": "4 nages (IM) 8×100m",
+      "nameEn": "Individual Medley 8×100m",
+      "description": "Séance 4 nages style IM. Huit blocs de 100m alternant les 4 nages (papillon, dos, brasse, crawl) à allure modérée Z2-Z3, repos 20 secondes. Variétal pour casser la routine du crawl et travailler les chaînes musculaires.",
+      "descriptionEn": "Individual medley session. Eight 100m blocks rotating the 4 strokes (butterfly, backstroke, breaststroke, freestyle) at moderate Z2-Z3, 20 seconds rest. Variety to break crawl routine and work different muscle chains.",
+      "category": "mixed",
+      "sessionType": "fartlek",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": { "min": 45, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": false },
+      "warmupTemplate": [
+        {
+          "description": "300m crawl progressif + 100m éducatifs des 4 nages",
+          "descriptionEn": "300m progressive crawl + 100m drills across the 4 strokes",
+          "durationMin": 10,
+          "distanceM": 400,
+          "zone": "Z1"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "8×100m IM (2× chaque nage), repos 20\"",
+          "descriptionEn": "8×100m IM (2× each stroke), 20\" rest",
+          "durationMin": 2.5,
+          "repetitions": 8,
+          "distanceM": 100,
+          "zone": "Z2-Z3",
+          "recovery": "20s repos"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "200m crawl facile",
+          "descriptionEn": "200m easy crawl",
+          "durationMin": 5,
+          "distanceM": 200,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Si une nage n'est pas maîtrisée, utilisez un éducatif (battements dos, brasse coulée)",
+        "Respiration adaptée à chaque nage — pas de panique en papillon",
+        "Le rythme prime sur la vitesse"
+      ],
+      "coachingTipsEn": [
+        "If a stroke is shaky, use a drill (back kick, breaststroke pull)",
+        "Adapt breathing to each stroke — no panic in butterfly",
+        "Cadence over speed"
+      ],
+      "commonMistakes": [
+        "Sauter les nages mal maîtrisées — perte du bénéfice variétal",
+        "Tenter du papillon en force au début et exploser"
+      ],
+      "commonMistakesEn": [
+        "Skipping weaker strokes — kills the variety benefit",
+        "Forcing butterfly early and burning out"
+      ],
+      "variationIds": [],
+      "selectionCriteria": {
+        "phases": ["base", "build"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "moderate",
+        "tags": ["medley", "IM", "variety", "swimming"],
+        "priorityScore": 65
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 0
+    },
+    {
+      "id": "SWM-009",
+      "discipline": "swimming",
+      "name": "Sprints 12×25m all-out",
+      "nameEn": "All-out Sprints 12×25m",
+      "description": "Séance sprint anaérobie alactique. Douze blocs de 25m all-out (Z6, plus rapide que CSS−10s/100m), repos 1 minute complet. Travail de la vitesse pure et du recrutement neuromusculaire.",
+      "descriptionEn": "Anaerobic alactic sprint session. Twelve 25m all-out blocks (Z6, faster than CSS−10s/100m), 1 minute full rest. Pure speed and neuromuscular recruitment work.",
+      "category": "vma_intervals",
+      "sessionType": "speed",
+      "targetSystem": "neuromuscular",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 35, "max": 45 },
+      "environment": { "requiresHills": false, "requiresTrack": false },
+      "warmupTemplate": [
+        {
+          "description": "400m + 4×25m accélérations",
+          "descriptionEn": "400m + 4×25m build-ups",
+          "durationMin": 12,
+          "distanceM": 500,
+          "zone": "Z1-Z4"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "12×25m all-out, repos 1' complet",
+          "descriptionEn": "12×25m all-out, 1' full rest",
+          "durationMin": 0.4,
+          "repetitions": 12,
+          "distanceM": 25,
+          "zone": "Z6",
+          "recovery": "1min repos"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "200m décontraction",
+          "descriptionEn": "200m cool-down",
+          "durationMin": 5,
+          "distanceM": 200,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Récupération COMPLÈTE — pas de sprint à moitié",
+        "Plongeon ou départ poussé : utiliser le moment initial",
+        "Si le temps dérive de plus de 1s entre la 1re et la 12e, arrêtez plus tôt"
+      ],
+      "coachingTipsEn": [
+        "FULL recovery — no half-sprints",
+        "Use a dive or push start: leverage the initial momentum",
+        "If split drifts more than 1s between rep 1 and 12, stop early"
+      ],
+      "commonMistakes": [
+        "Réduire la récup pour gagner du temps — annule l'objectif vitesse",
+        "Tenter des sets continus sans repos — c'est une autre séance"
+      ],
+      "commonMistakesEn": [
+        "Cutting rest to save time — kills the speed focus",
+        "Doing continuous sets without rest — that's another session"
+      ],
+      "variationIds": [],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "hard",
+        "tags": ["sprint", "neuromuscular", "speed", "swimming"],
+        "priorityScore": 70
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
+    },
+    {
+      "id": "SWM-010",
+      "discipline": "swimming",
+      "name": "Pyramide CSS 100/200/400/200/100m",
+      "nameEn": "CSS Pyramid 100/200/400/200/100m",
+      "description": "Séance pyramide à allure CSS. Cinq blocs progressifs puis dégressifs (100, 200, 400, 200, 100m) à CSS, repos 30 secondes. Travaille la régularité d'allure sur des distances variées.",
+      "descriptionEn": "CSS pyramid session. Five blocks progressive then regressive (100, 200, 400, 200, 100m) at CSS, 30 seconds rest. Trains pace consistency over varied distances.",
+      "category": "threshold",
+      "sessionType": "threshold",
+      "targetSystem": "lactate_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": { "min": 50, "max": 60 },
+      "environment": { "requiresHills": false, "requiresTrack": false },
+      "warmupTemplate": [
+        {
+          "description": "400m progressif + 4×50m accélérations",
+          "descriptionEn": "400m progressive + 4×50m build-ups",
+          "durationMin": 12,
+          "distanceM": 600,
+          "zone": "Z1-Z3"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "Pyramide 100/200/400/200/100m à CSS, repos 30\" entre chaque",
+          "descriptionEn": "Pyramid 100/200/400/200/100m at CSS, 30\" rest between each",
+          "durationMin": 22,
+          "zone": "Z4",
+          "recovery": "30s repos"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "300m décontraction",
+          "descriptionEn": "300m easy",
+          "durationMin": 8,
+          "distanceM": 300,
+          "zone": "Z1"
+        }
+      ],
+      "coachingTips": [
+        "Garder le même temps au 100m sur tous les blocs (jusqu'à ±2s)",
+        "Le 400m est le plus dur mentalement — restez sur l'allure",
+        "Respiration stable, ne pas accélérer la fréquence des coups"
+      ],
+      "coachingTipsEn": [
+        "Hold the same 100m split across all blocks (within ±2s)",
+        "The 400m is the mentally hardest — keep the pace",
+        "Steady breathing, do not crank the stroke rate"
+      ],
+      "commonMistakes": [
+        "Partir trop vite sur le 100m initial et perdre le rythme",
+        "Accélérer sur le dernier 100m pour \"finir fort\""
+      ],
+      "commonMistakesEn": [
+        "Going too fast on the opening 100m and losing rhythm",
+        "Surging on the last 100m to \"finish strong\""
+      ],
+      "variationIds": ["SWM-003"],
+      "selectionCriteria": {
+        "phases": ["build", "peak"],
+        "weekPositions": ["mid"],
+        "relativeLoad": "key",
+        "tags": ["threshold", "css", "pyramid", "swimming"],
+        "priorityScore": 80
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     }
   ]
 }
