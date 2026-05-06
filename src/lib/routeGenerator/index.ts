@@ -103,3 +103,59 @@ function defaultRouteName(shape: RouteShape, distanceKm: number): string {
   if (shape === "out_and_back") return `Aller-retour ${km} km`;
   return `Parcours ${km} km`;
 }
+
+/**
+ * Generate {@link count} route candidates in parallel by varying the seed
+ * (loops) or the bearing (out-and-backs). Use this when the user wants to
+ * choose between several proposals — typical UC7 in the brief.
+ *
+ * Candidates are sorted by descending tolerance match (best first), so the
+ * UI can default-select index 0.
+ */
+export async function generateRouteCandidates(args: {
+  start: RouteCoordinate;
+  targetDistanceKm: number;
+  discipline: Discipline;
+  shape: Extract<RouteShape, "loop" | "out_and_back">;
+  surface: RouteSurface;
+  seed: number;
+  bearingDeg?: number;
+  count?: number;
+  signal?: AbortSignal;
+}): Promise<Route[]> {
+  const { count = 3, shape, bearingDeg, seed } = args;
+
+  // Build per-candidate overrides:
+  // - loops: same bearing slot is irrelevant, vary the seed so the triangle
+  //   rotates between candidates.
+  // - out-and-backs: spread bearings around the requested one (or evenly
+  //   around the compass when no bearing was supplied) so candidates explore
+  //   distinct neighbourhoods.
+  const overrides = Array.from({ length: count }, (_, i) => {
+    if (shape === "out_and_back") {
+      const baseBearing = bearingDeg ?? 0;
+      const spread = bearingDeg != null ? 60 : 360 / count;
+      const offset = bearingDeg != null
+        ? (i - Math.floor(count / 2)) * spread
+        : i * spread;
+      const bearing = ((baseBearing + offset) % 360 + 360) % 360;
+      return { seed: seed + i * 7, bearingDeg: bearing };
+    }
+    return { seed: seed + i * 7919 };
+  });
+
+  // Sequential rather than fully parallel: respects the public Brouter
+  // capacity and gives a predictable progression for the UI.
+  const candidates: Route[] = [];
+  for (const ov of overrides) {
+    const candidate = await generateRoute({
+      ...args,
+      seed: ov.seed,
+      bearingDeg: ov.bearingDeg,
+      name: undefined,
+    });
+    candidates.push(candidate);
+  }
+
+  return candidates;
+}

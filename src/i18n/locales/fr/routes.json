@@ -38,7 +38,9 @@
     "distanceMax": "50 km",
     "generate": "Générer un parcours",
     "regenerate": "Régénérer",
-    "regenerateHint": "Génère une variante avec un autre tracé."
+    "regenerateHint": "Génère une variante avec un autre tracé.",
+    "candidatesLabel": "Propositions",
+    "candidate": "Proposition {{index}}"
   },
   "result": {
     "summary": "{{distance}} · D+ {{ascent}} m · ~{{duration}}",

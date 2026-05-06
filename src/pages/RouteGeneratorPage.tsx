@@ -10,10 +10,11 @@ import {
   RouteParametersForm,
   type RouteFormSubmitPayload,
 } from "@/components/domain/RouteParametersForm";
-import { generateRoute } from "@/lib/routeGenerator";
+import { generateRouteCandidates } from "@/lib/routeGenerator";
 import { downloadRouteGpx } from "@/lib/export/gpx";
 import { useRoutes } from "@/hooks/useRoutes";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
+import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
 import type { Route, RouteCoordinate } from "@/types/route";
 
 const RouteMap = lazy(() =>
@@ -38,16 +39,19 @@ export function RouteGeneratorPage() {
   const navigate = useNavigate();
   const { saveRoute } = useRoutes();
 
-  const [route, setRoute] = useState<Route | null>(null);
+  const [candidates, setCandidates] = useState<Route[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [previewStart, setPreviewStart] = useState<RouteCoordinate | null>(null);
   const [lastPayload, setLastPayload] = useState<RouteFormSubmitPayload | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+
+  const route = candidates[selectedIndex] ?? null;
 
   const generate = useCallback(
     async (payload: RouteFormSubmitPayload, seed: number) => {
       setIsGenerating(true);
       try {
-        const result = await generateRoute({
+        const results = await generateRouteCandidates({
           start: payload.start,
           targetDistanceKm: payload.targetDistanceKm,
           discipline: payload.discipline,
@@ -55,8 +59,10 @@ export function RouteGeneratorPage() {
           surface: payload.surface,
           seed,
           bearingDeg: payload.bearingDeg,
+          count: 3,
         });
-        setRoute(result);
+        setCandidates(results);
+        setSelectedIndex(0);
         setLastPayload(payload);
       } catch (err) {
         console.warn("RouteGenerator: routing failed", err);
@@ -126,6 +132,18 @@ export function RouteGeneratorPage() {
                 start={route ? null : previewStart}
               />
             </Suspense>
+
+            {candidates.length > 1 && (
+              <Segmented
+                value={String(selectedIndex)}
+                onChange={(v) => setSelectedIndex(Number(v))}
+                label={t("candidatesLabel")}
+                options={candidates.map<SegmentedOption<string>>((c, i) => ({
+                  value: String(i),
+                  label: `${t("candidate", { index: i + 1 })} · ${(c.distanceM / 1000).toFixed(1)} km`,
+                }))}
+              />
+            )}
 
             {route && (
               <>

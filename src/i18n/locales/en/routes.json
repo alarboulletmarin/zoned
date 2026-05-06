@@ -38,7 +38,9 @@
     "distanceMax": "50 km",
     "generate": "Generate route",
     "regenerate": "Regenerate",
-    "regenerateHint": "Generate a variant with a different layout."
+    "regenerateHint": "Generate a variant with a different layout.",
+    "candidatesLabel": "Proposals",
+    "candidate": "Proposal {{index}}"
   },
   "result": {
     "summary": "{{distance}} · {{ascent}} m gain · ~{{duration}}",
