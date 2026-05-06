@@ -48,7 +48,7 @@ import type {
   AnyWorkoutTemplate,
   TargetSystem,
 } from "@/types";
-import { isStrengthWorkout, isRunningWorkout } from "@/types";
+import { isStrengthWorkout, isRunningWorkout, getWorkoutDiscipline } from "@/types";
 import type {
   StrengthCategory,
   StrengthWorkoutTemplate,
@@ -424,31 +424,32 @@ export function LibraryPage() {
         return false;
       }
 
-      // --- Running-specific filters ---
+      // --- Endurance filters (running, cycling, swimming) ---
       if (isRunningWorkout(workout)) {
-        // Category filter
+        // Category filter applies to all endurance disciplines
         if (f.category.length > 0 && !f.category.includes(workout.category)) {
           return false;
         }
 
-        // Terrain filter
-        if (f.terrain.length > 0) {
-          const env = workout.environment;
-          const matchesTerrain = f.terrain.some((ter) => {
-            if (ter === "flat") return !env.requiresHills && !env.requiresTrack;
-            if (ter === "track") return !env.requiresHills;
-            if (ter === "hills") return !env.requiresTrack;
-            return true;
-          });
-          if (!matchesTerrain) return false;
-        }
+        // Terrain and target-system are running-only attributes
+        if (getWorkoutDiscipline(workout) === "running") {
+          if (f.terrain.length > 0) {
+            const env = workout.environment;
+            const matchesTerrain = f.terrain.some((ter) => {
+              if (ter === "flat") return !env.requiresHills && !env.requiresTrack;
+              if (ter === "track") return !env.requiresHills;
+              if (ter === "hills") return !env.requiresTrack;
+              return true;
+            });
+            if (!matchesTerrain) return false;
+          }
 
-        // Target system filter
-        if (
-          f.targetSystem.length > 0 &&
-          !f.targetSystem.includes(workout.targetSystem)
-        ) {
-          return false;
+          if (
+            f.targetSystem.length > 0 &&
+            !f.targetSystem.includes(workout.targetSystem)
+          ) {
+            return false;
+          }
         }
       }
 

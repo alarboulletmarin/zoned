@@ -1,5 +1,11 @@
 import type { TrainingPlan, PlanSession, PlanWeek } from "@/types/plan";
-import type { TrainingPhase, WorkoutTemplate } from "@/types";
+import {
+  getWorkoutDiscipline,
+  isStrengthWorkout,
+  type AnyWorkoutTemplate,
+  type TrainingPhase,
+  type WorkoutTemplate,
+} from "@/types";
 import { getWorkoutById } from "@/data/workouts";
 
 // ── Helpers for identifying non-running sessions ──────────────────
@@ -8,17 +14,19 @@ const NON_RUNNING_SESSION_TYPES = new Set([
 ]);
 
 function isNonRunningSession(session: PlanSession): boolean {
+  if (session.discipline && session.discipline !== "running") return true;
   return (
     NON_RUNNING_SESSION_TYPES.has(session.sessionType) ||
     session.workoutId.startsWith("STR-") ||
+    session.workoutId.startsWith("CYC-") ||
+    session.workoutId.startsWith("SWM-") ||
     session.workoutId.startsWith("__activity_")
   );
 }
 
-function isRunningWorkoutTemplate(w: WorkoutTemplate): boolean {
-  // StrengthWorkoutTemplate cast as WorkoutTemplate will have kind === "strength"
-  // and will lack warmupTemplate / mainSetTemplate / cooldownTemplate
-  return (w as unknown as { kind?: string }).kind !== "strength";
+function isRunningWorkoutTemplate(w: AnyWorkoutTemplate): w is WorkoutTemplate {
+  if (isStrengthWorkout(w)) return false;
+  return getWorkoutDiscipline(w) === "running";
 }
 
 export interface PlanStats {
