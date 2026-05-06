@@ -17,6 +17,11 @@
     "strengthForRunners": "Strength for Runners",
     "strengthForRunnersDesc": "Science-based strength sessions to improve running economy and prevent injuries.",
     "seeAll": "See all",
-    "browseByCategory": "Browse by Category"
+    "browseByCategory": "Browse by Category",
+    "newBadge": "New",
+    "routesEyebrow": "Route Generator",
+    "routesTitle": "Build your route in one click",
+    "routesDesc": "Real-world loop or out-and-back from your position, routed through parks, promenades and greenways. Target distance, elevation, GPX export.",
+    "routesCta": "Generate a route"
   }
 }

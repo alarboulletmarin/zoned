@@ -10,6 +10,8 @@ import {
   Shield,
   Flag,
   Dumbbell,
+  Mountain,
+  Route as RouteIcon,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -174,6 +176,46 @@ export function HomePage() {
       <div className="space-y-10 md:space-y-16 py-4 md:py-8">
         {/* Onboarding bubbles (first visit only) */}
         <OnboardingBubbles />
+
+        {/* Route Generator Spotlight — full-width hero card highlighting the
+            new feature; placed before the bento grid so it's the first thing
+            visitors see after the title. */}
+        <section>
+          <Link to="/routes" className="group block">
+            <div className="relative overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/15 via-primary/5 to-zone-4/10 dark:from-primary/25 dark:via-primary/10 dark:to-zone-4/15 p-6 md:p-8 transition-all duration-200 group-hover:shadow-xl group-hover:-translate-y-1">
+              {/* Decorative mountain icon — large, low-opacity, right side. */}
+              <Mountain
+                className="pointer-events-none absolute -right-6 -bottom-6 size-32 md:size-48 text-primary/10 dark:text-primary/15"
+                size={192}
+              />
+              <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
+                <div className="flex size-12 md:size-16 items-center justify-center rounded-xl bg-primary/20 dark:bg-primary/30 text-primary">
+                  <RouteIcon className="size-7 md:size-9" />
+                </div>
+                <div className="flex-1 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center rounded-full bg-primary px-2.5 py-0.5 text-[10px] md:text-xs font-bold uppercase tracking-wider text-primary-foreground">
+                      {t("homepage:home.newBadge")}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {t("homepage:home.routesEyebrow")}
+                    </span>
+                  </div>
+                  <h2 className="text-xl md:text-3xl font-bold leading-tight">
+                    {t("homepage:home.routesTitle")}
+                  </h2>
+                  <p className="text-sm md:text-base text-muted-foreground max-w-2xl">
+                    {t("homepage:home.routesDesc")}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 text-primary font-semibold text-sm md:text-base whitespace-nowrap">
+                  {t("homepage:home.routesCta")}
+                  <ArrowRight className="size-4 md:size-5 transition-transform group-hover:translate-x-1" />
+                </div>
+              </div>
+            </div>
+          </Link>
+        </section>
 
         {/* Hero Section */}
         <section className="pt-0 md:pt-4">

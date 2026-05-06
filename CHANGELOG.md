@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-05-06
+
+### Added
+- **Route Generator**: build a real-world loop or out-and-back from your position with Brouter routing, GPX export, and locally saved routes
+- POI-aware routing: waypoints picked from parks, promenades, greenways, beaches and trails via Overpass API (with triangulation fallback for rural areas)
+- 3 route candidates per request: pick the trace you prefer with named POI markers and elevation profile
+- Privacy toggle in Settings to opt-out of the route generator entirely
+- Multi-discipline foundation: cycling and swimming workouts, FTP/CSS zones, cross-discipline substitution in plans
+- 10 cycling templates and 10 swimming templates spanning long endurance, sweet spot, threshold, intervals, technique work and pyramids
+- Cycling/swimming pace engines and cross-discipline TSS in plan generator
+- Discipline-aware filters and color palette in library and timeline
+- Commute (vélotaf) settings tab in profile
+- FTP and CSS guided test pages with Coggan / CSS zone previews
+
+### Changed
+- Multi-trace overlay on the route map: candidates render in distinct colours and dash patterns so they stay distinguishable when their tracks overlap
+- Route candidates sorted by distance accuracy (best match first); off-target results (>20% deviation) are rejected
+- Discipline filter tabs in library wrap on mobile to avoid horizontal scroll
+
+### Fixed
+- Route candidates were all falling on the same waypoints — diversification by seed now ensures distinct proposals
+- Geolocation errors surface clear messages when blocked, denied or timed out
+- Z>6 zones clamp to Z6 and use sport-specific paces for distance-only segments
+- Substitute session preserves discipline through localStorage round-trip
+- Running-only filters and stats scoped to running discipline
+- Hide running-pace footer on cycling/swimming sessions
+
 ## [0.4.4] - 2026-04-13
 
 ### Added

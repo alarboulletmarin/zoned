@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "Zoned",
-    "tagline": "200+ séances de course, renforcement musculaire, plans du 5K au marathon, 9 calculateurs et export Garmin. Gratuit, sans compte.",
+    "tagline": "200 séances course, 10 vélo, 10 natation, 17 renforcement, plans du 5K au marathon, générateur de parcours et 9 calculateurs. Gratuit, sans compte.",
     "heroTitle": "Prépare ton prochain",
     "heroTitleAccent": "objectif"
   },
@@ -389,7 +389,7 @@
     "quiz": "Quiz rapide",
     "quizHint": "5 questions pour trouver la séance idéale",
     "library": "Bibliothèque",
-    "libraryHint": "200+ séances par zone, durée et difficulté",
+    "libraryHint": "Course, vélo, natation : 220+ séances par zone, durée et difficulté",
     "plan": "Plan d'entraînement",
     "planHint": "Du 5K au marathon, exportez vers Garmin",
     "zones": "Configurer mes zones"

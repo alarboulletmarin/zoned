@@ -17,6 +17,11 @@
     "strengthForRunners": "Renforcement pour coureurs",
     "strengthForRunnersDesc": "Séances de renforcement basées sur la science pour améliorer votre économie de course et prévenir les blessures.",
     "seeAll": "Voir tout",
-    "browseByCategory": "Parcourir par catégorie"
+    "browseByCategory": "Parcourir par catégorie",
+    "newBadge": "Nouveau",
+    "routesEyebrow": "Générateur de parcours",
+    "routesTitle": "Crée ton parcours en un clic",
+    "routesDesc": "Boucle ou aller-retour réel depuis ta position, avec routage par parcs, promenades et voies vertes. Distance cible, dénivelé, export GPX.",
+    "routesCta": "Générer un parcours"
   }
 }
