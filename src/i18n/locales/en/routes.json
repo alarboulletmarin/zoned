@@ -37,6 +37,7 @@
     "distanceUnit": "km",
     "distanceMin": "1 km",
     "distanceMax": "50 km",
+    "distanceMaxValue": "{{max}} km",
     "generate": "Generate route",
     "regenerate": "Regenerate",
     "regenerateHint": "Generate a variant with a different layout.",

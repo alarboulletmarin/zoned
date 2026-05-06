@@ -23,12 +23,16 @@ const POI_QUERIES: Record<PoiType, string> = {
   park: 'way[leisure=park]',
   greenway: 'way[route=bicycle][name~"voie verte",i]',
   trail: 'way[route=hiking]',
+  // Athletics tracks only — soccer/cricket stadiums are filtered out via the
+  // sport regex so Allianz Riviera doesn't get suggested for a running loop.
+  track: 'way[leisure=track][sport~"running|athletics"]',
 };
 
 /**
  * Empirical running-friendliness weight per type. Tuned for urban Europe:
  * promenades and beaches dominate seafronts, parks fill suburban grids,
- * trails cover rural areas. Adjust if user feedback flags consistent issues.
+ * trails cover rural areas. Tracks are useful as targets but not as the
+ * dominant waypoint of a loop — most runners don't want to circle one.
  */
 const POI_WEIGHTS: Record<PoiType, number> = {
   promenade: 1.0,
@@ -36,6 +40,7 @@ const POI_WEIGHTS: Record<PoiType, number> = {
   park: 0.9,
   greenway: 0.85,
   trail: 0.7,
+  track: 0.6,
 };
 
 /** Inputs that uniquely identify a fetch — used as the cache key. */
@@ -70,6 +75,7 @@ interface OverpassElement {
     highway?: string;
     natural?: string;
     route?: string;
+    sport?: string;
   };
 }
 
@@ -84,8 +90,10 @@ interface OverpassResponse {
  */
 function inferType(tags: NonNullable<OverpassElement["tags"]>): PoiType | null {
   const name = tags.name ?? "";
+  const sport = tags.sport ?? "";
   if (tags.natural === "beach") return "beach";
   if (tags.leisure === "park") return "park";
+  if (tags.leisure === "track" && /running|athletics/.test(sport)) return "track";
   if (tags.route === "hiking") return "trail";
   if (tags.route === "bicycle" && /voie verte/i.test(name)) return "greenway";
   if (tags.highway && /promenade/i.test(name)) return "promenade";

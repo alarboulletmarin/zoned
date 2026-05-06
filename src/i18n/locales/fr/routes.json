@@ -37,6 +37,7 @@
     "distanceUnit": "km",
     "distanceMin": "1 km",
     "distanceMax": "50 km",
+    "distanceMaxValue": "{{max}} km",
     "generate": "Générer un parcours",
     "regenerate": "Régénérer",
     "regenerateHint": "Génère une variante avec un autre tracé.",

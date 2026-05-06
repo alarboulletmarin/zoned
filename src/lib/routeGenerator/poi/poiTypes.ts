@@ -12,7 +12,8 @@ export type PoiType =
   | "park"
   | "greenway"
   | "trail"
-  | "beach";
+  | "beach"
+  | "track";
 
 import type { RouteCoordinate } from "@/types/route";
 

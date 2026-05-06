@@ -17,7 +17,7 @@ export type RouteCoordinate = [number, number, number?];
  * markers without re-querying Overpass.
  */
 export interface RoutePoiSummary {
-  type: "promenade" | "park" | "greenway" | "trail" | "beach";
+  type: "promenade" | "park" | "greenway" | "trail" | "beach" | "track";
   point: RouteCoordinate;
   name?: string;
 }

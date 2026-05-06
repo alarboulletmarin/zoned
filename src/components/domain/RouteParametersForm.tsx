@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ArrowRight,
@@ -47,9 +47,21 @@ const CARDINAL_KEYS = [
   "directionNW",
 ] as const;
 
-function clampDistance(km: number): number {
+/**
+ * Discipline-aware distance ceiling. Cycling routinely covers 100+ km on a
+ * single ride while running tops out around an ultra distance, so a single
+ * 50 km cap was bottlenecking both ends. Swimming has no on-road routing,
+ * so its cap is irrelevant (the segmented control disables it elsewhere).
+ */
+const MAX_DISTANCE_KM_BY_DISCIPLINE: Record<Discipline, number> = {
+  running: 80,
+  cycling: 200,
+  swimming: 50,
+};
+
+function clampDistance(km: number, max: number): number {
   if (!Number.isFinite(km)) return 1;
-  return Math.min(50, Math.max(1, Math.round(km * 2) / 2));
+  return Math.min(max, Math.max(1, Math.round(km * 2) / 2));
 }
 
 export function RouteParametersForm({
@@ -69,6 +81,14 @@ export function RouteParametersForm({
   const [startLabel, setStartLabel] = useState<string | null>(null);
   const [editingDistance, setEditingDistance] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
+
+  const maxDistanceKm = MAX_DISTANCE_KM_BY_DISCIPLINE[discipline];
+
+  // When the user switches from cycling (200 km) to running (80 km), clamp
+  // the current distance back into range so the slider stays consistent.
+  useEffect(() => {
+    setDistanceKm((d) => Math.min(d, maxDistanceKm));
+  }, [maxDistanceKm]);
 
   const updateStart = (point: RouteCoordinate | null, label: string | null) => {
     setStart(point);
@@ -192,11 +212,11 @@ export function RouteParametersForm({
             <input
               type="number"
               min={1}
-              max={50}
+              max={maxDistanceKm}
               step={0.5}
               autoFocus
               value={distanceKm}
-              onChange={(e) => setDistanceKm(clampDistance(Number(e.target.value) || 1))}
+              onChange={(e) => setDistanceKm(clampDistance(Number(e.target.value) || 1, maxDistanceKm))}
               onBlur={() => setEditingDistance(false)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") setEditingDistance(false);
@@ -218,15 +238,15 @@ export function RouteParametersForm({
         </div>
         <Slider
           value={[distanceKm]}
-          onValueChange={([v]) => setDistanceKm(clampDistance(v))}
+          onValueChange={([v]) => setDistanceKm(clampDistance(v, maxDistanceKm))}
           min={1}
-          max={50}
+          max={maxDistanceKm}
           step={0.5}
           aria-label={t("form.distance")}
         />
         <div className="flex justify-between text-[11px] tabular-nums text-muted-foreground">
           <span>{t("form.distanceMin")}</span>
-          <span>{t("form.distanceMax")}</span>
+          <span>{t("form.distanceMaxValue", { max: maxDistanceKm })}</span>
         </div>
       </fieldset>
 
