@@ -25,6 +25,7 @@ export interface RouteFormSubmitPayload {
   discipline: Discipline;
   targetDistanceKm: number;
   surface: RouteSurface;
+  elevationGainTargetM?: number;
   bearingDeg?: number;
 }
 
@@ -34,6 +35,7 @@ interface RouteParametersFormProps {
   onError?: (message: string) => void;
   /** Notify parent when start point changes so it can preview on the map. */
   onStartChange?: (point: RouteCoordinate | null) => void;
+  initialValues?: Partial<Pick<RouteFormSubmitPayload, "shape" | "discipline" | "targetDistanceKm" | "surface" | "elevationGainTargetM" | "bearingDeg">>;
 }
 
 const CARDINAL_KEYS = [
@@ -64,31 +66,57 @@ function clampDistance(km: number, max: number): number {
   return Math.min(max, Math.max(1, Math.round(km * 2) / 2));
 }
 
+function maxAscentFor(discipline: Discipline, distanceKm: number): number {
+  if (discipline === "running") {
+    return Math.max(1000, Math.min(5000, Math.round(distanceKm * 80)));
+  }
+  if (discipline === "cycling") {
+    return Math.max(2000, Math.min(10000, Math.round(distanceKm * 120)));
+  }
+  return 0;
+}
+
+function clampAscent(meters: number, max: number): number {
+  if (!Number.isFinite(meters)) return 0;
+  return Math.min(max, Math.max(0, Math.round(meters / 10) * 10));
+}
+
 export function RouteParametersForm({
   isGenerating,
   onSubmit,
   onError,
   onStartChange,
+  initialValues,
 }: RouteParametersFormProps) {
   const { t } = useTranslation("routes");
 
-  const [shape, setShape] = useState<Extract<RouteShape, "loop" | "out_and_back">>("loop");
-  const [discipline, setDiscipline] = useState<Discipline>("running");
-  const [distanceKm, setDistanceKm] = useState<number>(8);
-  const [surface, setSurface] = useState<RouteSurface>("mixed");
-  const [bearingDeg, setBearingDeg] = useState<number>(0);
+  const [shape, setShape] = useState<Extract<RouteShape, "loop" | "out_and_back">>(initialValues?.shape ?? "loop");
+  const [discipline, setDiscipline] = useState<Discipline>(initialValues?.discipline ?? "running");
+  const [distanceKm, setDistanceKm] = useState<number>(initialValues?.targetDistanceKm ?? 8);
+  const [surface, setSurface] = useState<RouteSurface>(initialValues?.surface ?? "mixed");
+  const [useElevationTarget, setUseElevationTarget] = useState(initialValues?.elevationGainTargetM != null);
+  const [elevationGainTargetM, setElevationGainTargetM] = useState<number>(initialValues?.elevationGainTargetM ?? 0);
+  const [bearingDeg, setBearingDeg] = useState<number>(initialValues?.bearingDeg ?? 0);
   const [start, setStart] = useState<RouteCoordinate | null>(null);
   const [startLabel, setStartLabel] = useState<string | null>(null);
   const [editingDistance, setEditingDistance] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
 
   const maxDistanceKm = MAX_DISTANCE_KM_BY_DISCIPLINE[discipline];
+  const maxAscentM = maxAscentFor(discipline, distanceKm);
 
   // When the user switches from cycling (200 km) to running (80 km), clamp
   // the current distance back into range so the slider stays consistent.
   useEffect(() => {
     setDistanceKm((d) => Math.min(d, maxDistanceKm));
   }, [maxDistanceKm]);
+
+  useEffect(() => {
+    setElevationGainTargetM((m) => clampAscent(m, maxAscentM));
+    if (maxAscentM === 0) {
+      setUseElevationTarget(false);
+    }
+  }, [maxAscentM]);
 
   const updateStart = (point: RouteCoordinate | null, label: string | null) => {
     setStart(point);
@@ -145,6 +173,7 @@ export function RouteParametersForm({
       discipline,
       targetDistanceKm: distanceKm,
       surface,
+      elevationGainTargetM: useElevationTarget ? elevationGainTargetM : undefined,
       bearingDeg: shape === "out_and_back" ? bearingDeg : undefined,
     });
   };
@@ -249,6 +278,47 @@ export function RouteParametersForm({
           <span>{t("form.distanceMaxValue", { max: maxDistanceKm })}</span>
         </div>
       </fieldset>
+
+      {/* D+ */}
+      {maxAscentM > 0 && (
+        <fieldset className="space-y-3">
+          <div className="flex items-center justify-between gap-2">
+            <div>
+              <legend className="text-sm font-semibold">{t("form.elevationTarget")}</legend>
+              <p className="text-xs text-muted-foreground">{t("form.elevationTargetHint")}</p>
+            </div>
+            <Button
+              type="button"
+              variant={useElevationTarget ? "outline" : "ghost"}
+              size="sm"
+              onClick={() => setUseElevationTarget((prev) => !prev)}
+            >
+              {useElevationTarget ? t("form.elevationTargetDisable") : t("form.elevationTargetEnable")}
+            </Button>
+          </div>
+
+          {useElevationTarget && (
+            <>
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="text-sm text-muted-foreground">{t("form.elevationTargetValue")}</span>
+                <span className="text-base font-semibold tabular-nums">{elevationGainTargetM} {t("form.elevationUnit")}</span>
+              </div>
+              <Slider
+                value={[elevationGainTargetM]}
+                onValueChange={([v]) => setElevationGainTargetM(clampAscent(v, maxAscentM))}
+                min={0}
+                max={maxAscentM}
+                step={10}
+                aria-label={t("form.elevationTarget")}
+              />
+              <div className="flex justify-between text-[11px] tabular-nums text-muted-foreground">
+                <span>{t("form.elevationMin")}</span>
+                <span>{t("form.elevationMaxValue", { max: maxAscentM })}</span>
+              </div>
+            </>
+          )}
+        </fieldset>
+      )}
 
       {/* Bearing — only for out-and-back */}
       {shape === "out_and_back" && (

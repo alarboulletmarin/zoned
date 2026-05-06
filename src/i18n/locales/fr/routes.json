@@ -16,6 +16,14 @@
     "surfaceRoad": "Route",
     "surfaceTrail": "Sentier",
     "surfaceMixed": "Mixte",
+    "elevationTarget": "D+ cible",
+    "elevationTargetHint": "Optionnel - utile pour chercher du plat ou une séance vallonnée.",
+    "elevationTargetEnable": "Ajouter",
+    "elevationTargetDisable": "Ignorer",
+    "elevationTargetValue": "Objectif",
+    "elevationUnit": "m",
+    "elevationMin": "0 m",
+    "elevationMaxValue": "{{max}} m",
     "bearing": "Direction",
     "bearingValue": "{{cardinal}} · {{deg}}°",
     "directionN": "N",
@@ -57,7 +65,52 @@
     "elevationProfile": "Profil de dénivelé",
     "elevationGain": "D+ cumulé",
     "estimatedDuration": "Durée estimée",
-    "actualDistance": "Distance réelle"
+    "actualDistance": "Distance réelle",
+    "linkedToPlan": "Lié à une séance du plan",
+    "linkedToPlanBody": "Ce parcours a été sauvegardé pour la semaine {{week}} de votre plan d'entraînement.",
+    "backToPlan": "Retourner au plan"
+  },
+  "recommendation": {
+    "eyebrow": {
+      "plan": "Séance du plan",
+      "workout": "Séance de bibliothèque",
+      "manual": "Parcours ciblé"
+    },
+    "optimizedFor": "Optimisé pour {{session}}",
+    "optimizedForWorkout": "Optimisé pour {{session}} · {{workout}}",
+    "genericSession": "votre séance",
+    "genericWorkout": "cette séance",
+    "sessionSummary": "{{distance}} km cible · ~{{duration}} min planifiées",
+    "backToPlan": "Revenir à la semaine du plan",
+    "selected": "Actif",
+    "resultEyebrow": "Pourquoi ce parcours",
+    "scoreLabel": "Fit {{score}}",
+    "accents": {
+      "best_fit": "Meilleur fit séance",
+      "closest_to_target": "Le plus proche de la cible",
+      "gentlest_option": "Option la plus douce",
+      "best_for_steady_pacing": "Le plus régulier",
+      "best_for_hills": "Le plus utile pour les côtes"
+    },
+    "reasons": {
+      "closest_to_target_distance": "Distance très proche de la cible",
+      "matches_elevation_target": "D+ proche de l'objectif",
+      "matches_target_duration": "Durée cohérente avec la séance",
+      "keeps_climbing_low": "Peu de dénivelé à absorber",
+      "adds_useful_climbing": "Ajoute du dénivelé utile",
+      "supports_steady_pacing": "Rythme plus facile à tenir",
+      "stays_repeatable_for_repeats": "Tracé simple à répéter",
+      "respects_current_long_run": "Reste proche de votre sortie longue actuelle"
+    },
+    "preferences": {
+      "flat": "On privilégie le plat",
+      "rolling": "Relief modéré",
+      "climbing": "On cherche du D+",
+      "continuity_low": "Tolérance aux relances",
+      "continuity_medium": "Continuité moyenne",
+      "continuity_high": "Continuité prioritaire",
+      "repeatable": "Tracé répétable"
+    }
   },
   "list": {
     "empty": "Vous n'avez pas encore enregistré de parcours.",

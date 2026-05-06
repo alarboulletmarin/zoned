@@ -16,6 +16,14 @@
     "surfaceRoad": "Road",
     "surfaceTrail": "Trail",
     "surfaceMixed": "Mixed",
+    "elevationTarget": "Target ascent",
+    "elevationTargetHint": "Optional - useful when you want flat terrain or a hillier route.",
+    "elevationTargetEnable": "Add",
+    "elevationTargetDisable": "Ignore",
+    "elevationTargetValue": "Target",
+    "elevationUnit": "m",
+    "elevationMin": "0 m",
+    "elevationMaxValue": "{{max}} m",
     "bearing": "Direction",
     "bearingValue": "{{cardinal}} · {{deg}}°",
     "directionN": "N",
@@ -57,7 +65,52 @@
     "elevationProfile": "Elevation profile",
     "elevationGain": "Total ascent",
     "estimatedDuration": "Estimated duration",
-    "actualDistance": "Actual distance"
+    "actualDistance": "Actual distance",
+    "linkedToPlan": "Linked to a plan session",
+    "linkedToPlanBody": "This route was saved for week {{week}} of your training plan.",
+    "backToPlan": "Back to the plan"
+  },
+  "recommendation": {
+    "eyebrow": {
+      "plan": "Plan session",
+      "workout": "Library workout",
+      "manual": "Targeted route"
+    },
+    "optimizedFor": "Optimized for {{session}}",
+    "optimizedForWorkout": "Optimized for {{session}} · {{workout}}",
+    "genericSession": "your session",
+    "genericWorkout": "this workout",
+    "sessionSummary": "{{distance}} km target · ~{{duration}} min planned",
+    "backToPlan": "Back to plan week",
+    "selected": "Selected",
+    "resultEyebrow": "Why this route",
+    "scoreLabel": "Fit {{score}}",
+    "accents": {
+      "best_fit": "Best session fit",
+      "closest_to_target": "Closest to target",
+      "gentlest_option": "Gentlest option",
+      "best_for_steady_pacing": "Best for steady pacing",
+      "best_for_hills": "Best for hill work"
+    },
+    "reasons": {
+      "closest_to_target_distance": "Distance stays close to target",
+      "matches_elevation_target": "Ascent stays close to target",
+      "matches_target_duration": "Duration matches the planned session",
+      "keeps_climbing_low": "Keeps climbing under control",
+      "adds_useful_climbing": "Adds useful climbing",
+      "supports_steady_pacing": "Easier to hold a steady pace",
+      "stays_repeatable_for_repeats": "Simple to repeat for reps",
+      "respects_current_long_run": "Stays near your current long-run range"
+    },
+    "preferences": {
+      "flat": "Favor flatter terrain",
+      "rolling": "Moderate rolling terrain",
+      "climbing": "Look for climbing",
+      "continuity_low": "Accepts more stop-start",
+      "continuity_medium": "Balanced continuity",
+      "continuity_high": "Continuity first",
+      "repeatable": "Repeatable route"
+    }
   },
   "list": {
     "empty": "You haven't saved any route yet.",

@@ -49,12 +49,13 @@ export async function generateRoute(args: {
   discipline: Discipline;
   shape: Extract<RouteShape, "loop" | "out_and_back">;
   surface: RouteSurface;
+  elevationGainTargetM?: number;
   seed: number;
   bearingDeg?: number;
   signal?: AbortSignal;
   name?: string;
 }): Promise<Route> {
-  const { start, targetDistanceKm, discipline, shape, surface, seed, bearingDeg, signal, name } = args;
+  const { start, targetDistanceKm, discipline, shape, surface, elevationGainTargetM, seed, bearingDeg, signal, name } = args;
 
   const trace =
     shape === "loop"
@@ -78,6 +79,7 @@ export async function generateRoute(args: {
     targetDistanceKm,
     surface,
     seed,
+    ...(deriveElevationBounds(elevationGainTargetM)),
     ...(shape === "out_and_back" && "bearingDeg" in trace
       ? { bearingDeg: (trace as { bearingDeg: number }).bearingDeg }
       : {}),
@@ -136,14 +138,15 @@ export async function generateRouteCandidates(args: {
   discipline: Discipline;
   shape: Extract<RouteShape, "loop" | "out_and_back">;
   surface: RouteSurface;
+  elevationGainTargetM?: number;
   seed: number;
   bearingDeg?: number;
   count?: number;
   signal?: AbortSignal;
 }): Promise<Route[]> {
-  const { count = 3, shape, bearingDeg, seed, targetDistanceKm } = args;
+  const { count = 3, shape, bearingDeg, seed, targetDistanceKm, elevationGainTargetM } = args;
   const targetM = targetDistanceKm * 1000;
-  const maxAttempts = count * MAX_CANDIDATE_ATTEMPTS_FACTOR;
+  const maxAttempts = count * MAX_CANDIDATE_ATTEMPTS_FACTOR * (elevationGainTargetM != null ? 2 : 1);
 
   /** Build override seed/bearing for the i-th attempt. */
   const overrideFor = (i: number) => {
@@ -165,23 +168,46 @@ export async function generateRouteCandidates(args: {
   // Sequential rather than fully parallel: respects the public Brouter
   // capacity and gives a predictable progression for the UI.
   const accepted: Array<{ route: Route; deviation: number }> = [];
-  for (let i = 0; i < maxAttempts && accepted.length < count; i += 1) {
+  const rejected: Array<{ route: Route; deviation: number }> = [];
+  let lastError: unknown = null;
+  for (let i = 0; i < maxAttempts && (accepted.length < count || elevationGainTargetM != null); i += 1) {
     const ov = overrideFor(i);
-    const candidate = await generateRoute({
-      ...args,
-      seed: ov.seed,
-      bearingDeg: ov.bearingDeg,
-      name: undefined,
-    });
-    const deviation = Math.abs(candidate.distanceM / targetM - 1);
-    if (deviation <= CANDIDATE_DISTANCE_SLACK) {
-      accepted.push({ route: candidate, deviation });
+    try {
+      const candidate = await generateRoute({
+        ...args,
+        seed: ov.seed,
+        bearingDeg: ov.bearingDeg,
+        name: undefined,
+      });
+      const deviation = Math.abs(candidate.distanceM / targetM - 1);
+      if (deviation <= CANDIDATE_DISTANCE_SLACK) {
+        accepted.push({ route: candidate, deviation });
+      } else {
+        rejected.push({ route: candidate, deviation });
+      }
+    } catch (error) {
+      lastError = error;
     }
   }
 
+  if (accepted.length === 0 && rejected.length === 0 && lastError) {
+    throw lastError;
+  }
+
   // Sort best first so the UI's default selection is the closest match. If
-  // every attempt was off the target, return what we have anyway — the UI
-  // surfaces the deviation through the segmented control labels.
+  // nothing lands inside the strict slack, degrade gracefully to the closest
+  // routed attempts instead of returning an empty list.
   accepted.sort((a, b) => a.deviation - b.deviation);
-  return accepted.map((entry) => entry.route);
+  rejected.sort((a, b) => a.deviation - b.deviation);
+
+  return [...accepted, ...rejected].slice(0, count).map((entry) => entry.route);
+}
+
+function deriveElevationBounds(elevationGainTargetM?: number): Pick<RouteConstraints, "elevationMinM" | "elevationMaxM"> {
+  if (elevationGainTargetM == null) return {};
+  const tolerance = Math.max(60, Math.round(elevationGainTargetM * 0.3));
+  return {
+    elevationMinM: Math.max(0, elevationGainTargetM - tolerance),
+    elevationMaxM: elevationGainTargetM + tolerance,
+  };
 }
