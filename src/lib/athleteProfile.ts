@@ -101,7 +101,8 @@ export function loadCyclingProfile(): CyclingProfile | null {
     if (!stored) return null;
     const parsed = JSON.parse(stored) as CyclingProfile;
     return validateCyclingProfile(parsed);
-  } catch {
+  } catch (err) {
+    console.warn("athleteProfile: failed to load profile data", err);
     return null;
   }
 }
@@ -112,7 +113,8 @@ export function saveCyclingProfile(profile: CyclingProfile): boolean {
     validated.updatedAt = new Date().toISOString();
     localStorage.setItem(CYCLING_PROFILE_KEY, JSON.stringify(validated));
     return true;
-  } catch {
+  } catch (err) {
+    console.warn("athleteProfile: failed to persist profile data (storage quota or serialization)", err);
     return false;
   }
 }
@@ -232,7 +234,8 @@ export function loadSwimmingProfile(): SwimmingProfile | null {
     if (!stored) return null;
     const parsed = JSON.parse(stored) as SwimmingProfile;
     return validateSwimmingProfile(parsed);
-  } catch {
+  } catch (err) {
+    console.warn("athleteProfile: failed to load profile data", err);
     return null;
   }
 }
@@ -243,7 +246,8 @@ export function saveSwimmingProfile(profile: SwimmingProfile): boolean {
     validated.updatedAt = new Date().toISOString();
     localStorage.setItem(SWIMMING_PROFILE_KEY, JSON.stringify(validated));
     return true;
-  } catch {
+  } catch (err) {
+    console.warn("athleteProfile: failed to persist profile data (storage quota or serialization)", err);
     return false;
   }
 }
@@ -314,8 +318,15 @@ export function loadCommutePattern(): CommutePattern | null {
     const stored = localStorage.getItem(COMMUTE_PATTERN_KEY);
     if (!stored) return null;
     const parsed = JSON.parse(stored) as CommutePattern;
-    return validateCommutePattern(parsed);
-  } catch {
+    const validated = validateCommutePattern(parsed);
+    if (!validated) {
+      console.warn(
+        "athleteProfile: stored commute pattern was rejected by validation (likely empty daysOfWeek or out-of-range fields)",
+      );
+    }
+    return validated;
+  } catch (err) {
+    console.warn("athleteProfile: failed to load profile data", err);
     return null;
   }
 }
@@ -326,7 +337,8 @@ export function saveCommutePattern(pattern: CommutePattern): boolean {
   try {
     localStorage.setItem(COMMUTE_PATTERN_KEY, JSON.stringify(validated));
     return true;
-  } catch {
+  } catch (err) {
+    console.warn("athleteProfile: failed to persist profile data (storage quota or serialization)", err);
     return false;
   }
 }

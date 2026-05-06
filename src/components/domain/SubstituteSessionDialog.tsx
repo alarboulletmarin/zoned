@@ -11,7 +11,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertTriangle, Loader2 } from "@/components/icons";
-import { loadDisciplineWorkouts } from "@/data/workouts";
+import { getDisciplineWorkoutsCached, loadDisciplineWorkouts } from "@/data/workouts";
 import type { Discipline, WorkoutTemplate } from "@/types";
 import type { PlanSession } from "@/types/plan";
 import {
@@ -52,6 +52,13 @@ export function SubstituteSessionDialog({
 
   useEffect(() => {
     if (!open) return;
+    const cached = getDisciplineWorkoutsCached(discipline);
+    if (cached) {
+      // Already loaded once for this session: skip the loading flash.
+      setCandidates(cached);
+      setIsLoading(false);
+      return;
+    }
     setIsLoading(true);
     loadDisciplineWorkouts(discipline)
       .then((workouts) => {

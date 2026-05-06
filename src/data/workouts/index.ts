@@ -107,6 +107,30 @@ export async function loadDisciplineWorkouts(
 }
 
 /**
+ * Synchronous accessor for already-loaded discipline workouts. Returns
+ * undefined when the chunk has not been requested yet. Use this to skip a
+ * loading flash in UIs where the data is already in memory.
+ */
+export function getDisciplineWorkoutsCached(
+  discipline: CrossDiscipline,
+): WorkoutTemplate[] | undefined {
+  return disciplineCache[discipline];
+}
+
+/**
+ * Test-only helper to clear the per-discipline workout cache. Real callers
+ * should not need this because the cache is keyed by static JSON imports.
+ */
+export function _clearDisciplineWorkoutCache(): void {
+  for (const key of Object.keys(disciplineCache) as CrossDiscipline[]) {
+    delete disciplineCache[key];
+  }
+  for (const key of Object.keys(disciplineLoadingPromises) as CrossDiscipline[]) {
+    delete disciplineLoadingPromises[key];
+  }
+}
+
+/**
  * Load a single category lazily (with dynamic import for code-splitting)
  * Returns immediately from cache if available
  */
