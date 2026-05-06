@@ -34,6 +34,12 @@ export interface OutAndBackGenerationResult extends BrouterTraceResult {
   bearingDeg: number;
   pois: RoutePoi[];
   strategy: "poi-aware" | "blind";
+  /**
+   * Final waypoint requested from Brouter. Surfaced so callers can detect
+   * traces that didn't actually reach their target (e.g. turn point fell in
+   * the sea and Brouter only routed to the coast).
+   */
+  projectedTurn: RouteCoordinate;
 }
 
 function seededBearing(seed: number): number {
@@ -154,6 +160,7 @@ async function iteratePoiOutAndBack(
     bearingDeg,
     strategy: "poi-aware",
     pois: [{ type: poi.type, point: poi.point, name: poi.name }],
+    projectedTurn: waypoint,
   };
 }
 
@@ -164,10 +171,11 @@ async function iterateBlindOutAndBack(
 
   let waypointDistanceM = targetM / 2;
   let trace: BrouterTraceResult | null = null;
+  let turn: RouteCoordinate = destinationPoint(start, waypointDistanceM, bearingDeg);
   let attempts = 0;
 
   while (attempts < MAX_ADJUSTMENT_ATTEMPTS) {
-    const turn = destinationPoint(start, waypointDistanceM, bearingDeg);
+    turn = destinationPoint(start, waypointDistanceM, bearingDeg);
     trace = await routeViaBrouter({
       waypoints: [start, turn, start],
       discipline,
@@ -193,6 +201,7 @@ async function iterateBlindOutAndBack(
     bearingDeg,
     strategy: "blind",
     pois: [],
+    projectedTurn: turn,
   };
 }
 

@@ -15,6 +15,7 @@ import { generateLoop } from "./algorithms/loop";
 import { generateOutAndBack } from "./algorithms/outAndBack";
 import { buildElevationProfile, computeElevationGainM } from "./elevation";
 import { estimateDurationSec } from "./durationEstimate";
+import { outAndBackReachedTurn } from "./sanity";
 
 export { generateLoop } from "./algorithms/loop";
 export { generateOutAndBack } from "./algorithms/outAndBack";
@@ -43,6 +44,13 @@ export {
  * persistable {@link Route}. Useful from the UI where we want a single
  * call site that hides the shape-specific details.
  */
+export class UnreachableTurnError extends Error {
+  constructor() {
+    super("out-and-back turn point not reached (likely water or off-network)");
+    this.name = "UnreachableTurnError";
+  }
+}
+
 export async function generateRoute(args: {
   start: RouteCoordinate;
   targetDistanceKm: number;
@@ -68,6 +76,12 @@ export async function generateRoute(args: {
           bearingDeg,
           signal,
         });
+
+  if (shape === "out_and_back" && "projectedTurn" in trace) {
+    if (!outAndBackReachedTurn(trace.points, trace.projectedTurn)) {
+      throw new UnreachableTurnError();
+    }
+  }
 
   const elevation = buildElevationProfile(trace.points);
   const elevationGainM =
@@ -121,16 +135,24 @@ function defaultRouteName(shape: RouteShape, distanceKm: number): string {
 const CANDIDATE_DISTANCE_SLACK = 0.2;
 /** Maximum total attempts to find {@link count} valid candidates. */
 const MAX_CANDIDATE_ATTEMPTS_FACTOR = 2;
+/**
+ * When a target ascent is provided we widen the candidate pool so the
+ * scoring step has enough material to actually pick a route close to the
+ * D+ goal — without it the slot would be filled by the first three
+ * generations regardless of elevation.
+ */
+const ASCENT_AWARE_OVERSAMPLE = 2;
 
 /**
- * Generate {@link count} route candidates by varying the seed (loops) or
- * the bearing (out-and-backs). Each candidate is checked against a generous
- * distance window — generations that miss the target by more than 20% are
- * dropped and replaced with a fresh attempt (within a budget) so the UI
- * never proposes a 12 km route when the user asked for 8 km.
+ * Generate route candidates by varying the seed (loops) or the bearing
+ * (out-and-backs). Each candidate is checked against a generous distance
+ * window — generations that miss the target by more than 20% are dropped
+ * and replaced with a fresh attempt (within a budget) so the UI never
+ * proposes a 12 km route when the user asked for 8 km.
  *
- * Candidates are sorted by ascending distance error so index 0 is the best
- * match — the UI defaults to selecting it.
+ * When `elevationGainTargetM` is provided we oversample the pool and rank
+ * by a combined distance + ascent error before slicing the top {@link count}
+ * — distance stays the dominant criterion but ascent now actually filters.
  */
 export async function generateRouteCandidates(args: {
   start: RouteCoordinate;
@@ -146,18 +168,16 @@ export async function generateRouteCandidates(args: {
 }): Promise<Route[]> {
   const { count = 3, shape, bearingDeg, seed, targetDistanceKm, elevationGainTargetM } = args;
   const targetM = targetDistanceKm * 1000;
-  const maxAttempts = count * MAX_CANDIDATE_ATTEMPTS_FACTOR * (elevationGainTargetM != null ? 2 : 1);
+  const oversample = elevationGainTargetM != null ? ASCENT_AWARE_OVERSAMPLE : 1;
+  const generationTarget = count * oversample;
+  const maxAttempts = generationTarget * MAX_CANDIDATE_ATTEMPTS_FACTOR;
 
-  /** Build override seed/bearing for the i-th attempt. */
   const overrideFor = (i: number) => {
     if (shape === "out_and_back") {
       const baseBearing = bearingDeg ?? 0;
-      // Spread around the requested bearing for the first `count` attempts,
-      // then jitter further out for retries so we don't repeatedly pick the
-      // same neighbourhoods.
-      const spread = bearingDeg != null ? 60 : 360 / count;
+      const spread = bearingDeg != null ? 45 : 360 / generationTarget;
       const offset = bearingDeg != null
-        ? (i - Math.floor(count / 2)) * spread
+        ? (i - Math.floor(generationTarget / 2)) * spread
         : i * spread;
       const bearing = ((baseBearing + offset) % 360 + 360) % 360;
       return { seed: seed + i * 7, bearingDeg: bearing };
@@ -167,10 +187,10 @@ export async function generateRouteCandidates(args: {
 
   // Sequential rather than fully parallel: respects the public Brouter
   // capacity and gives a predictable progression for the UI.
-  const accepted: Array<{ route: Route; deviation: number }> = [];
-  const rejected: Array<{ route: Route; deviation: number }> = [];
+  const accepted: Array<{ route: Route; deviation: number; score: number }> = [];
+  const rejected: Array<{ route: Route; deviation: number; score: number }> = [];
   let lastError: unknown = null;
-  for (let i = 0; i < maxAttempts && (accepted.length < count || elevationGainTargetM != null); i += 1) {
+  for (let i = 0; i < maxAttempts && accepted.length < generationTarget; i += 1) {
     const ov = overrideFor(i);
     try {
       const candidate = await generateRoute({
@@ -180,12 +200,13 @@ export async function generateRouteCandidates(args: {
         name: undefined,
       });
       const deviation = Math.abs(candidate.distanceM / targetM - 1);
-      if (deviation <= CANDIDATE_DISTANCE_SLACK) {
-        accepted.push({ route: candidate, deviation });
-      } else {
-        rejected.push({ route: candidate, deviation });
-      }
+      const score = candidateError(candidate, targetM, elevationGainTargetM);
+      const entry = { route: candidate, deviation, score };
+      if (deviation <= CANDIDATE_DISTANCE_SLACK) accepted.push(entry);
+      else rejected.push(entry);
     } catch (error) {
+      // UnreachableTurnError and BrouterError are silenced here so a single
+      // bad bearing (e.g. into the sea) doesn't kill the whole generation.
       lastError = error;
     }
   }
@@ -194,13 +215,36 @@ export async function generateRouteCandidates(args: {
     throw lastError;
   }
 
-  // Sort best first so the UI's default selection is the closest match. If
-  // nothing lands inside the strict slack, degrade gracefully to the closest
-  // routed attempts instead of returning an empty list.
-  accepted.sort((a, b) => a.deviation - b.deviation);
-  rejected.sort((a, b) => a.deviation - b.deviation);
+  // Rank by combined error so D+ actually influences which routes survive.
+  // Ties on score fall back to the raw distance deviation.
+  const cmp = (
+    a: { score: number; deviation: number },
+    b: { score: number; deviation: number },
+  ) => a.score - b.score || a.deviation - b.deviation;
+  accepted.sort(cmp);
+  rejected.sort(cmp);
 
-  return [...accepted, ...rejected].slice(0, count).map((entry) => entry.route);
+  return [...accepted, ...rejected]
+    .slice(0, count)
+    .map((entry) => entry.route);
+}
+
+/**
+ * Combined cost used to rank candidates. Lower is better. The distance
+ * mismatch dominates by design — a beautiful 12 km loop is useless when the
+ * user asked for 8 km — but ascent error adds a soft secondary penalty so
+ * a target D+ stops being purely cosmetic.
+ */
+function candidateError(
+  route: Route,
+  targetM: number,
+  ascentTargetM: number | undefined,
+): number {
+  const distanceErr = Math.abs(route.distanceM - targetM) / targetM;
+  if (ascentTargetM == null) return distanceErr;
+  const denom = Math.max(ascentTargetM, 80);
+  const ascentErr = Math.abs(route.elevationGainM - ascentTargetM) / denom;
+  return distanceErr + ascentErr * 0.5;
 }
 
 function deriveElevationBounds(elevationGainTargetM?: number): Pick<RouteConstraints, "elevationMinM" | "elevationMaxM"> {
