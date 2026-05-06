@@ -814,3 +814,16 @@
     animation: zone-shimmer 3s ease-in-out infinite alternate;
   }
 }
+
+/* Tailwind preflight applies `img { max-width: 100% }` globally; Leaflet's
+   tile container collapses to width:0, which then clamps every tile image
+   down to 0px and the map renders blank. Restoring max-width:none on
+   anything Leaflet draws inside its panes keeps tiles, markers and overlays
+   at their declared sizes. */
+.leaflet-pane img,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+  max-width: none !important;
+  max-height: none !important;
+}
