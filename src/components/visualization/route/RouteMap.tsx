@@ -8,6 +8,12 @@ import { cn } from "@/lib/utils";
 interface RouteMapProps {
   /** Ordered points of the routed trace. Empty when no route has been generated yet. */
   points?: RouteCoordinate[];
+  /**
+   * Alternative candidates rendered behind the selected trace in a muted
+   * tone, so the user can compare proposals at a glance. Mutually used with
+   * `points` (which holds the selected one).
+   */
+  candidates?: RouteCoordinate[][];
   /** Optional start point shown as a marker even when no trace exists yet. */
   start?: RouteCoordinate | null;
   className?: string;
@@ -33,6 +39,7 @@ const START_ZOOM = 13;
  */
 export function RouteMap({
   points = [],
+  candidates,
   start = null,
   className,
   color = "#ea580c",
@@ -79,16 +86,37 @@ export function RouteMap({
     });
 
     if (points.length > 1) {
-      const latLngs: [number, number][] = points.map(([lon, lat]) => [lat, lon]);
-      const polyline = L.polyline(latLngs, { color, weight: 4, opacity: 0.9 }).addTo(map);
-      L.circleMarker(latLngs[0], {
+      const selectedLatLngs: [number, number][] = points.map(([lon, lat]) => [lat, lon]);
+
+      // Draw non-selected candidates first so the selected trace renders on
+      // top. Skip any candidate whose coordinates match the selected one.
+      const others = (candidates ?? []).filter((c) => c !== points && c.length > 1);
+      for (const cand of others) {
+        const latLngs: [number, number][] = cand.map(([lon, lat]) => [lat, lon]);
+        L.polyline(latLngs, {
+          color: "#94a3b8", // slate-400 — visibly muted on both light/dark tiles
+          weight: 3,
+          opacity: 0.55,
+          dashArray: "4 4",
+        }).addTo(map);
+      }
+
+      L.polyline(selectedLatLngs, { color, weight: 4, opacity: 0.9 }).addTo(map);
+      L.circleMarker(selectedLatLngs[0], {
         radius: 6,
         color: "#ffffff",
         weight: 2,
         fillColor: color,
         fillOpacity: 1,
       }).addTo(map);
-      map.fitBounds(polyline.getBounds(), { padding: [24, 24] });
+
+      // Fit to the union of all rendered traces so muted candidates remain
+      // visible even when they extend beyond the selected one.
+      const allBounds = L.latLngBounds(selectedLatLngs);
+      for (const cand of others) {
+        for (const [lon, lat] of cand) allBounds.extend([lat, lon]);
+      }
+      map.fitBounds(allBounds, { padding: [24, 24] });
       return;
     }
 
@@ -106,7 +134,7 @@ export function RouteMap({
     }
 
     map.setView(DEFAULT_CENTER, DEFAULT_ZOOM);
-  }, [points, start, color]);
+  }, [points, candidates, start, color]);
 
   return (
     <div

@@ -1,9 +1,9 @@
-import { lazy, Suspense, useCallback, useState } from "react";
+import { lazy, Suspense, useCallback, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
-import { ArrowRight, Download, RotateCcw, Save } from "@/components/icons";
+import { ArrowRight, Download, EyeOff, RotateCcw, Save } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
 import {
@@ -13,6 +13,7 @@ import {
 import { generateRouteCandidates } from "@/lib/routeGenerator";
 import { downloadRouteGpx } from "@/lib/export/gpx";
 import { useRoutes } from "@/hooks/useRoutes";
+import { useSettings } from "@/hooks/useSettings";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
 import type { Route, RouteCoordinate } from "@/types/route";
@@ -38,6 +39,7 @@ export function RouteGeneratorPage() {
   const { t } = useTranslation("routes");
   const navigate = useNavigate();
   const { saveRoute } = useRoutes();
+  const { settings } = useSettings();
 
   const [candidates, setCandidates] = useState<Route[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -46,6 +48,12 @@ export function RouteGeneratorPage() {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const route = candidates[selectedIndex] ?? null;
+  // Pre-compute the unselected traces once so RouteMap can render them in
+  // the muted background layer without re-deriving the array each render.
+  const candidateTraces = useMemo(
+    () => candidates.filter((_, i) => i !== selectedIndex).map((c) => c.points),
+    [candidates, selectedIndex],
+  );
 
   const generate = useCallback(
     async (payload: RouteFormSubmitPayload, seed: number) => {
@@ -100,6 +108,26 @@ export function RouteGeneratorPage() {
     toast.success(filename);
   };
 
+  if (!settings.routeGeneratorEnabled) {
+    return (
+      <>
+        <SEOHead title={t("title")} description={t("subtitle")} canonical="/routes" noindex />
+        <div className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
+          <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed border-border/60 bg-muted/10 p-10 text-center">
+            <EyeOff className="size-10 text-muted-foreground" />
+            <div className="space-y-1">
+              <h1 className="text-xl font-bold">{t("disabled.title")}</h1>
+              <p className="text-sm text-muted-foreground">{t("disabled.body")}</p>
+            </div>
+            <Button asChild>
+              <Link to="/settings">{t("disabled.cta")}</Link>
+            </Button>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <SEOHead title={t("title")} description={t("subtitle")} canonical="/routes" />
@@ -129,6 +157,7 @@ export function RouteGeneratorPage() {
             <Suspense fallback={<MapSkeleton />}>
               <RouteMap
                 points={route?.points ?? []}
+                candidates={candidateTraces}
                 start={route ? null : previewStart}
               />
             </Suspense>
@@ -137,10 +166,10 @@ export function RouteGeneratorPage() {
               <Segmented
                 value={String(selectedIndex)}
                 onChange={(v) => setSelectedIndex(Number(v))}
-                label={t("candidatesLabel")}
+                label={t("form.candidatesLabel")}
                 options={candidates.map<SegmentedOption<string>>((c, i) => ({
                   value: String(i),
-                  label: `${t("candidate", { index: i + 1 })} · ${(c.distanceM / 1000).toFixed(1)} km`,
+                  label: `${t("form.candidate", { index: i + 1 })} · ${(c.distanceM / 1000).toFixed(1)} km`,
                 }))}
               />
             )}

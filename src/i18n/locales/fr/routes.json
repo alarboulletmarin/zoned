@@ -81,5 +81,10 @@
     "body": "Votre position est envoyée à un service de routage public (Brouter) le temps d'une requête. Aucun identifiant n'est joint et aucune donnée n'est stockée côté serveur.",
     "toggle": "Activer le générateur de parcours",
     "toggleHint": "Désactivez pour ne plus envoyer aucune coordonnée à un service tiers."
+  },
+  "disabled": {
+    "title": "Le générateur de parcours est désactivé",
+    "body": "Pour générer un parcours, votre point de départ doit être envoyé à un service de routage public. Activez la fonctionnalité dans les Réglages si vous le souhaitez.",
+    "cta": "Aller dans les Réglages"
   }
 }

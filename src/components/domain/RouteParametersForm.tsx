@@ -153,7 +153,9 @@ export function RouteParametersForm({
 
   return (
     <form
-      className="space-y-5 rounded-xl border border-border/60 bg-background p-4 sm:p-5"
+      // pb-24 leaves room for the fixed CTA on mobile so the last fieldset
+      // never sits behind it. Reset on tablet+ where the CTA inlines.
+      className="space-y-5 rounded-xl border border-border/60 bg-background p-4 pb-24 sm:p-5 sm:pb-5"
       onSubmit={(e) => {
         e.preventDefault();
         submit();
@@ -275,11 +277,13 @@ export function RouteParametersForm({
         </div>
       </fieldset>
 
-      {/* CTA — sticky bottom on mobile, inline on tablet+ */}
+      {/* CTA — pinned to viewport bottom on mobile, inline on tablet+.
+          `fixed` (vs `sticky`) is required because the form's height is often
+          smaller than the viewport, so a sticky bottom never engages. */}
       <div
         className={cn(
-          "sticky bottom-0 -mx-4 mt-6 border-t border-border/60 bg-background/95 px-4 py-3 backdrop-blur",
-          "sm:static sm:mx-0 sm:mt-2 sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:backdrop-blur-none",
+          "fixed inset-x-0 bottom-0 z-30 border-t border-border/60 bg-background/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur",
+          "sm:static sm:mx-0 sm:mt-2 sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:backdrop-blur-none sm:z-auto",
         )}
       >
         <Button

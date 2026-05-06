@@ -41,8 +41,9 @@ function ZonePreview() {
 }
 
 export function SettingsPage() {
-  const { t } = useTranslation("common");
-  const { settings, setColorPalette, setUnitSystem } = useSettings();
+  const { t } = useTranslation(["common", "routes"]);
+  const { settings, setColorPalette, setUnitSystem, setRouteGeneratorEnabled } =
+    useSettings();
 
   const paletteOptions: { value: ColorPalette; label: string }[] = [
     {
@@ -138,13 +139,32 @@ export function SettingsPage() {
                 {t("settings.privacy.description")}
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <ul className="text-sm text-muted-foreground space-y-2">
                 <li>{t("settings.privacy.noServer")}</li>
                 <li>{t("settings.privacy.noAccount")}</li>
                 <li>{t("settings.privacy.localStorage")}</li>
                 <li>{t("settings.privacy.analytics")}</li>
               </ul>
+
+              {/* Route Generator opt-in: the only feature that emits the
+                  user's start coordinate to a public service, so it gets a
+                  dedicated toggle here rather than buried in the route page. */}
+              <div className="flex items-start justify-between gap-4 border-t border-border/60 pt-4">
+                <div className="min-w-0 space-y-1">
+                  <p className="text-sm font-medium">
+                    {t("routes:privacy.toggle")}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {t("routes:privacy.body")}
+                  </p>
+                </div>
+                <Switch
+                  checked={settings.routeGeneratorEnabled}
+                  onCheckedChange={setRouteGeneratorEnabled}
+                  aria-label={t("routes:privacy.toggle")}
+                />
+              </div>
             </CardContent>
           </Card>
 

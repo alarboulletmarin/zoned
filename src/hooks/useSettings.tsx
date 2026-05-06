@@ -19,6 +19,7 @@ interface SettingsContextValue {
   settings: UserSettings;
   setColorPalette: (palette: ColorPalette) => void;
   setUnitSystem: (unit: UnitSystem) => void;
+  setRouteGeneratorEnabled: (enabled: boolean) => void;
   resetSettings: () => void;
 }
 
@@ -65,6 +66,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     setSettings((prev) => ({ ...prev, unitSystem: unit }));
   }, []);
 
+  const setRouteGeneratorEnabled = useCallback((enabled: boolean) => {
+    setSettings((prev) => ({ ...prev, routeGeneratorEnabled: enabled }));
+  }, []);
+
   const resetSettings = useCallback(() => {
     setSettings(DEFAULT_SETTINGS);
   }, []);
@@ -75,6 +80,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         settings,
         setColorPalette,
         setUnitSystem,
+        setRouteGeneratorEnabled,
         resetSettings,
       }}
     >

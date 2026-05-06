@@ -81,5 +81,10 @@
     "body": "Your position is sent to a public routing service (Brouter) for the duration of a single request. No identifier is attached and no data is stored server-side.",
     "toggle": "Enable route generator",
     "toggleHint": "Disable to stop sending any coordinate to a third-party service."
+  },
+  "disabled": {
+    "title": "Route Generator is disabled",
+    "body": "Generating a route requires sending your starting point to a public routing service. Enable the feature in Settings if you want to.",
+    "cta": "Open Settings"
   }
 }
