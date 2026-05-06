@@ -262,6 +262,7 @@ export function RouteParametersForm({
               step={0.5}
               autoFocus
               value={distanceKm}
+              onFocus={(e) => e.currentTarget.select()}
               onChange={(e) => setDistanceKm(clampDistance(Number(e.target.value) || 1, maxDistanceKm))}
               onBlur={() => setEditingDistance(false)}
               onKeyDown={(e) => {
@@ -326,6 +327,7 @@ export function RouteParametersForm({
                     step={10}
                     autoFocus
                     value={elevationGainTargetM}
+                    onFocus={(e) => e.currentTarget.select()}
                     onChange={(e) => setElevationGainTargetM(clampAscent(Number(e.target.value) || 0, maxAscentM))}
                     onBlur={() => setEditingElevation(false)}
                     onKeyDown={(e) => {
