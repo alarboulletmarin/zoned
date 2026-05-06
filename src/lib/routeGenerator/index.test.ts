@@ -127,4 +127,28 @@ describe("routeFromWaypoints", () => {
       }),
     ).rejects.toThrow();
   });
+
+  test("surfaces Brouter 400 as a BrouterError with status 400", async () => {
+    globalThis.fetch = (async () =>
+      new Response("Bad Request", { status: 400, statusText: "Bad Request" })
+    ) as unknown as typeof fetch;
+
+    const { BrouterError } = await import("./routing");
+    let caught: unknown;
+    try {
+      await routeFromWaypoints({
+        waypoints: [
+          [7.285337, 43.711698],
+          [7.295436, 43.694066],
+          [7.285337, 43.711698],
+        ],
+        discipline: "running",
+        shape: "loop",
+      });
+    } catch (e) {
+      caught = e;
+    }
+    expect(caught).toBeInstanceOf(BrouterError);
+    expect((caught as InstanceType<typeof BrouterError>).status).toBe(400);
+  });
 });

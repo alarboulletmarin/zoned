@@ -10,7 +10,7 @@ import {
   RouteParametersForm,
   type RouteFormSubmitPayload,
 } from "@/components/domain/RouteParametersForm";
-import { generateRouteCandidates, routeFromWaypoints } from "@/lib/routeGenerator";
+import { BrouterError, generateRouteCandidates, routeFromWaypoints } from "@/lib/routeGenerator";
 import {
   buildManualRouteIntent,
   buildTrainingRoutePreset,
@@ -110,6 +110,7 @@ export function RouteGeneratorPage() {
   const [reversedIds, setReversedIds] = useState<Record<string, boolean>>({});
   const [isMapExpanded, setIsMapExpanded] = useState(false);
   const [editWaypoints, setEditWaypoints] = useState<RouteCoordinate[] | null>(null);
+  const [lastValidWaypoints, setLastValidWaypoints] = useState<RouteCoordinate[] | null>(null);
   const [editPreview, setEditPreview] = useState<Route | null>(null);
   const [isReRouting, setIsReRouting] = useState(false);
 
@@ -208,25 +209,38 @@ export function RouteGeneratorPage() {
           name: route.name,
         });
         setEditPreview(next);
+        setLastValidWaypoints(waypoints);
       } catch (err) {
         console.warn("RouteGenerator: re-route failed", err);
-        toast.error(t("errors.routingFailed"));
+        // Brouter answers 400 when one of the waypoints isn't on its routing
+        // graph — typically dragged into the sea, into a building, or onto a
+        // private road. Revert to the last accepted layout so the user sees
+        // their drag bounce back, and tell them why.
+        const isUnreachable = err instanceof BrouterError && (err.status === 400 || err.status === 0);
+        if (isUnreachable && lastValidWaypoints) {
+          setEditWaypoints(lastValidWaypoints);
+          toast.error(t("errors.unreachableWaypoint"));
+        } else {
+          toast.error(t("errors.routingFailed"));
+        }
       } finally {
         setIsReRouting(false);
       }
     },
-    [route, t],
+    [route, t, lastValidWaypoints],
   );
 
   const onEnterEdit = useCallback(() => {
     if (!route) return;
     const waypoints = deriveInitialWaypoints(route, displayPoints);
     setEditWaypoints(waypoints);
+    setLastValidWaypoints(waypoints);
     setEditPreview(null);
   }, [route, displayPoints]);
 
   const onExitEdit = useCallback(() => {
     setEditWaypoints(null);
+    setLastValidWaypoints(null);
     setEditPreview(null);
   }, []);
 
@@ -244,6 +258,7 @@ export function RouteGeneratorPage() {
     });
     setReversedIds((prev) => ({ ...prev, [editPreview.id]: false }));
     setEditWaypoints(null);
+    setLastValidWaypoints(null);
     setEditPreview(null);
     toast.success(t("edit.applied"));
   }, [editPreview, onExitEdit, t]);

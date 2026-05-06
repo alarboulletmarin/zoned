@@ -143,6 +143,7 @@
     "geolocationTimeout": "Pas de réponse du GPS après 10 s. Essayez à nouveau ou saisissez une adresse.",
     "geolocationUnavailable": "Géolocalisation indisponible sur cet appareil.",
     "routingFailed": "Le service de routage est temporairement indisponible. Réessayez dans un instant.",
+    "unreachableWaypoint": "Un point n'est pas routable (mer, voie privée, hors réseau). Le tracé revient à sa position précédente — déplacez le point sur une route ou supprimez-le.",
     "noConvergence": "Impossible de trouver un parcours proche de la distance demandée. Essayez une distance différente ou un autre point de départ.",
     "noTrace": "Aucun tracé routable trouvé pour ces points.",
     "disciplineUnsupported": "La natation n'est pas prise en charge par le générateur de parcours."
