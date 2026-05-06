@@ -1,6 +1,6 @@
-import { describe, expect, test } from "bun:test";
+import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 
-import { parseOverpassElements } from "./overpass";
+import { __clearPoiCacheForTests, findNearbyTracks, parseOverpassElements } from "./overpass";
 
 describe("parseOverpassElements", () => {
   test("infers park, beach, promenade and trail types from tags", () => {
@@ -89,5 +89,54 @@ describe("parseOverpassElements", () => {
       },
     ]);
     expect(result).toEqual([]);
+  });
+});
+
+describe("findNearbyTracks", () => {
+  let originalFetch: typeof fetch;
+  beforeEach(() => {
+    originalFetch = globalThis.fetch;
+    __clearPoiCacheForTests();
+  });
+  afterEach(() => {
+    globalThis.fetch = originalFetch;
+  });
+
+  test("returns tracks sorted by distance to the start", async () => {
+    globalThis.fetch = (async () =>
+      new Response(
+        JSON.stringify({
+          elements: [
+            {
+              id: 1,
+              type: "way",
+              center: { lat: 43.72, lon: 7.30 },
+              tags: { leisure: "track", sport: "athletics", name: "Stade Charles-Ehrmann" },
+            },
+            {
+              id: 2,
+              type: "way",
+              center: { lat: 43.705, lon: 7.275 },
+              tags: { leisure: "track", sport: "running", name: "Piste municipale" },
+            },
+          ],
+        }),
+        { status: 200 },
+      )
+    ) as unknown as typeof fetch;
+
+    const tracks = await findNearbyTracks({ center: [7.27, 43.70] });
+    expect(tracks).toHaveLength(2);
+    expect(tracks[0].name).toBe("Piste municipale");
+    expect(tracks[0].haversineDistanceM).toBeLessThan(tracks[1].haversineDistanceM);
+  });
+
+  test("returns an empty list when Overpass yields nothing", async () => {
+    globalThis.fetch = (async () =>
+      new Response(JSON.stringify({ elements: [] }), { status: 200 })
+    ) as unknown as typeof fetch;
+
+    const tracks = await findNearbyTracks({ center: [7.27, 43.70] });
+    expect(tracks).toEqual([]);
   });
 });

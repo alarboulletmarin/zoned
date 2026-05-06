@@ -428,12 +428,20 @@ export function RouteGeneratorPage() {
         <header className="mb-6 space-y-1">
           <h1 className="text-2xl font-bold sm:text-3xl">{t("title")}</h1>
           <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
-          <Link
-            to="/routes/mine"
-            className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
-          >
-            {t("myRoutes")} <ArrowRight className="size-3.5" />
-          </Link>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <Link
+              to="/routes/mine"
+              className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+            >
+              {t("myRoutes")} <ArrowRight className="size-3.5" />
+            </Link>
+            <Link
+              to="/routes/tracks"
+              className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+            >
+              {t("trackFinder.entry")} <ArrowRight className="size-3.5" />
+            </Link>
+          </div>
         </header>
 
         <div

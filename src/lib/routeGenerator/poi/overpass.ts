@@ -11,6 +11,7 @@
 import type { RouteCoordinate } from "@/types/route";
 import type { PoiCandidate, PoiType } from "./poiTypes";
 import { OVERPASS_BASE_URL, OVERPASS_TIMEOUT_S } from "../constants";
+import { haversineDistanceM } from "../elevation";
 
 /**
  * Overpass tag fragments per POI type. Keep them as Overpass-QL substrings
@@ -192,4 +193,49 @@ export function parseOverpassElements(
 /** Test/debug helper — clear the in-memory cache. */
 export function __clearPoiCacheForTests(): void {
   cache.clear();
+}
+
+/**
+ * Athletics track found near a starting point. Distance is straight-line
+ * (haversine) — the routed distance is computed downstream by the caller
+ * when the user picks a track to commit a route to.
+ */
+export interface NearbyTrack {
+  id: number;
+  name?: string;
+  point: RouteCoordinate;
+  haversineDistanceM: number;
+}
+
+/**
+ * Discover athletics tracks within `radiusM` of `center`. Distinct from
+ * {@link fetchPoiCandidates} in that it always returns the `track` type
+ * specifically and exposes the haversine distance pre-computed so the UI
+ * can sort results without re-deriving the geometry.
+ *
+ * Used by the dedicated "find a track" flow: the user lands on the page
+ * with no preset, picks one of the listed tracks, and only then the app
+ * reaches Brouter to route a there-and-back leg.
+ */
+export async function findNearbyTracks(args: {
+  center: RouteCoordinate;
+  radiusM?: number;
+  signal?: AbortSignal;
+}): Promise<NearbyTrack[]> {
+  const radiusM = args.radiusM ?? 15_000;
+  const candidates = await fetchPoiCandidates({
+    center: args.center,
+    radiusM,
+    types: ["track"],
+    signal: args.signal,
+  });
+
+  return candidates
+    .map((c) => ({
+      id: c.id,
+      name: c.name,
+      point: c.point,
+      haversineDistanceM: haversineDistanceM(args.center, c.point),
+    }))
+    .sort((a, b) => a.haversineDistanceM - b.haversineDistanceM);
 }

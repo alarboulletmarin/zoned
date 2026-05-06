@@ -68,6 +68,23 @@
     "hint": "Drag handles · click the trace to add · click a handle to remove",
     "rerouting": "Re-routing…"
   },
+  "trackFinder": {
+    "title": "Find an athletics track",
+    "subtitle": "Locate the closest track for your interval workouts, then generate a there-and-back route to get there.",
+    "entry": "Find a track",
+    "backToGenerator": "Back to route generator",
+    "search": "Search nearby tracks",
+    "searchHint": "We look for athletics tracks within a {{radius}} km radius of your start.",
+    "results": "{{count}} track(s) found",
+    "noResults": "No athletics track found nearby. Try a different starting point.",
+    "searchFailed": "Track search failed. Try again in a moment.",
+    "unnamedTrack": "Unnamed track",
+    "distance": "{{km}} km as the crow flies",
+    "pickHint": "Pick a track from the list to compute a there-and-back route.",
+    "routeName": "There-and-back to {{name}}",
+    "routeNameUnknown": "There-and-back to the track",
+    "routeUnreachable": "This track isn't reachable by road from your start. Try another one."
+  },
   "result": {
     "summary": "{{distance}} · {{ascent}} m gain · ~{{duration}}",
     "approximate": "Approximate distance",

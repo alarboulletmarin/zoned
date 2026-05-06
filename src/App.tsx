@@ -65,6 +65,7 @@ const RunnerProfilePage = lazy(() => import("@/pages/RunnerProfilePage").then(m 
 const RouteGeneratorPage = lazy(() => import("@/pages/RouteGeneratorPage").then(m => ({ default: m.RouteGeneratorPage })));
 const MyRoutesPage = lazy(() => import("@/pages/MyRoutesPage").then(m => ({ default: m.MyRoutesPage })));
 const RouteDetailPage = lazy(() => import("@/pages/RouteDetailPage").then(m => ({ default: m.RouteDetailPage })));
+const TrackFinderPage = lazy(() => import("@/pages/TrackFinderPage").then(m => ({ default: m.TrackFinderPage })));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
 
 // Preload sidebar pages after initial render to eliminate navigation latency
@@ -297,6 +298,7 @@ function App() {
                           <Route path="/plan/:id" element={<PlanViewPage />} />
                           <Route path="/race-simulator" element={<RaceSimulatorPage />} />
                           <Route path="/routes" element={<RouteGeneratorPage />} />
+                          <Route path="/routes/tracks" element={<TrackFinderPage />} />
                           <Route path="/routes/mine" element={<MyRoutesPage />} />
                           <Route path="/routes/:id" element={<RouteDetailPage />} />
                           <Route path="/compare" element={<CompareHubPage />} />

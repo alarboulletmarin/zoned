@@ -68,6 +68,23 @@
     "hint": "Glissez les points · cliquez le tracé pour ajouter · cliquez un point pour le retirer",
     "rerouting": "Recalcul du tracé…"
   },
+  "trackFinder": {
+    "title": "Trouver une piste d'athlétisme",
+    "subtitle": "Cherchez la piste la plus proche pour vos séances de fractionné, puis générez un trajet aller-retour pour y aller.",
+    "entry": "Trouver une piste",
+    "backToGenerator": "Revenir au générateur de parcours",
+    "search": "Chercher des pistes",
+    "searchHint": "On regarde les pistes d'athlé dans un rayon de {{radius}} km autour de votre départ.",
+    "results": "{{count}} piste(s) trouvée(s)",
+    "noResults": "Aucune piste d'athlétisme trouvée à proximité. Essayez un autre point de départ.",
+    "searchFailed": "La recherche de pistes a échoué. Réessayez dans un instant.",
+    "unnamedTrack": "Piste sans nom",
+    "distance": "{{km}} km à vol d'oiseau",
+    "pickHint": "Choisissez une piste dans la liste pour calculer un trajet aller-retour.",
+    "routeName": "Aller-retour vers {{name}}",
+    "routeNameUnknown": "Aller-retour vers la piste",
+    "routeUnreachable": "Cette piste n'est pas atteignable par la route depuis votre départ. Essayez-en une autre."
+  },
   "result": {
     "summary": "{{distance}} · D+ {{ascent}} m · ~{{duration}}",
     "approximate": "Distance approximative",
