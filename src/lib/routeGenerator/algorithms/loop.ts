@@ -28,7 +28,7 @@ import {
   POI_SEARCH_RADIUS_FACTOR,
 } from "../constants";
 import { fetchPoiCandidates } from "../poi/overpass";
-import { selectDiverseWaypoints } from "../poi/poiSelector";
+import { selectDiverseWaypoints, type PoiBoost } from "../poi/poiSelector";
 import type { RoutePoi } from "../poi/poiTypes";
 
 export interface LoopGenerationResult extends BrouterTraceResult {
@@ -70,8 +70,13 @@ export async function generateLoop(args: {
   discipline: Discipline;
   seed: number;
   signal?: AbortSignal;
+  /**
+   * Optional POI bias used for session-aware generation: e.g. nudge
+   * interval workouts onto an athletics track instead of a generic park.
+   */
+  poiBoost?: PoiBoost;
 }): Promise<LoopGenerationResult> {
-  const { start, targetDistanceKm, discipline, seed, signal } = args;
+  const { start, targetDistanceKm, discipline, seed, signal, poiBoost } = args;
   const targetM = targetDistanceKm * 1000;
   // The loop circumscribes a triangle of side ≈ π × radius in urban areas,
   // so radius ≈ target / (π × 2) when each side is half the perimeter.
@@ -93,6 +98,7 @@ export async function generateLoop(args: {
         pois,
         seed,
         signal,
+        poiBoost,
       });
       if (result) return result;
       // result === null means we couldn't converge on a POI loop —
@@ -130,9 +136,10 @@ interface LoopAttemptArgs {
 async function iteratePoiLoop(
   args: LoopAttemptArgs & {
     pois: NonNullable<Awaited<ReturnType<typeof fetchPoiCandidates>>>;
+    poiBoost?: PoiBoost;
   },
 ): Promise<LoopGenerationResult | null> {
-  const { start, targetM, discipline, pois, seed, signal } = args;
+  const { start, targetM, discipline, pois, seed, signal, poiBoost } = args;
 
   let targetRadiusM = (targetM / Math.PI) * 0.5;
   let trace: BrouterTraceResult | null = null;
@@ -151,6 +158,7 @@ async function iteratePoiLoop(
       targetRadiusM,
       3,
       seed + attempts * 1009,
+      poiBoost,
     );
     if (chosen.length === 0) return null;
 

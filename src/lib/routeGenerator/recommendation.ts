@@ -1,4 +1,5 @@
 import { calculateTrainingPaces, estimateDistanceForDuration, sessionTypeToIntensity } from "@/lib/planGenerator/paceEngine";
+import type { PoiBoost } from "@/lib/routeGenerator";
 import type { PlanSession, PlanWeek } from "@/types/plan";
 import type { RunnerProfile } from "@/types/runner-profile";
 import { getWorkoutDiscipline } from "@/types";
@@ -48,7 +49,8 @@ export type RouteRecommendationReason =
   | "adds_useful_climbing"
   | "supports_steady_pacing"
   | "stays_repeatable_for_repeats"
-  | "respects_current_long_run";
+  | "respects_current_long_run"
+  | "uses_athletics_track";
 
 export type RouteRecommendationAccent =
   | "best_fit"
@@ -325,6 +327,13 @@ function buildReasons(args: {
 }): RouteRecommendationReason[] {
   const reasons: RouteRecommendationReason[] = [];
 
+  // Athletics track surfaces first when the session is interval-shaped —
+  // it's the most concrete answer to "why this route" for fractionnés.
+  const hasTrack = !!args.route.pois?.some((p) => p.type === "track");
+  if (hasTrack && poiBoostForIntent(args.intent)?.type === "track") {
+    reasons.push("uses_athletics_track");
+  }
+
   if (args.intent.elevationGainTargetM != null && args.elevationErrorRatio <= 0.25) reasons.push("matches_elevation_target");
   if (args.intent.terrainPreference === "flat" && args.climbPerKm <= 12) reasons.push("keeps_climbing_low");
   if (args.intent.terrainPreference === "climbing" && args.climbPerKm >= 18) reasons.push("adds_useful_climbing");
@@ -487,6 +496,34 @@ function repeatabilityPriorityForSessionType(sessionType: SessionType): RouteInt
 
 function isWorkoutQualitySession(sessionType: SessionType): boolean {
   return new Set<SessionType | string>(["tempo", "threshold", "vo2max", "speed", "hills", "race_specific"]).has(sessionType);
+}
+
+const TRACK_FRIENDLY_SESSIONS = new Set<SessionType | string>([
+  "vo2max",
+  "speed",
+  "vma",
+  "intervals",
+  "fractionne",
+]);
+
+/**
+ * Bias the underlying generator towards an athletics track when the session
+ * is interval-shaped. Returns `undefined` for everything else so endurance,
+ * recovery and long runs keep getting parks/promenades as before.
+ */
+export function poiBoostForSession(sessionType?: SessionType): PoiBoost | undefined {
+  if (!sessionType) return undefined;
+  if (TRACK_FRIENDLY_SESSIONS.has(sessionType)) {
+    // Track weight is 0.6 in overpass.ts (lowest of the bunch); a 4× boost
+    // pushes it above promenades (1.0) and parks (0.9) without making it
+    // mandatory — if no track is in range we still fall back gracefully.
+    return { type: "track", factor: 4 };
+  }
+  return undefined;
+}
+
+export function poiBoostForIntent(intent: RouteIntent): PoiBoost | undefined {
+  return poiBoostForSession(intent.sessionType);
 }
 
 function defaultElevationTargetM(

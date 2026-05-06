@@ -15,8 +15,11 @@ import { generateLoop } from "./algorithms/loop";
 import { generateOutAndBack } from "./algorithms/outAndBack";
 import { buildElevationProfile, computeElevationGainM } from "./elevation";
 import { estimateDurationSec } from "./durationEstimate";
+import type { PoiBoost } from "./poi/poiSelector";
 import { routeViaBrouter as routeViaBrouterImpl } from "./routing";
 import { outAndBackReachedTurn } from "./sanity";
+
+export type { PoiBoost } from "./poi/poiSelector";
 
 export { generateLoop } from "./algorithms/loop";
 export { generateOutAndBack } from "./algorithms/outAndBack";
@@ -63,12 +66,13 @@ export async function generateRoute(args: {
   bearingDeg?: number;
   signal?: AbortSignal;
   name?: string;
+  poiBoost?: PoiBoost;
 }): Promise<Route> {
-  const { start, targetDistanceKm, discipline, shape, surface, elevationGainTargetM, seed, bearingDeg, signal, name } = args;
+  const { start, targetDistanceKm, discipline, shape, surface, elevationGainTargetM, seed, bearingDeg, signal, name, poiBoost } = args;
 
   const trace =
     shape === "loop"
-      ? await generateLoop({ start, targetDistanceKm, discipline, seed, signal })
+      ? await generateLoop({ start, targetDistanceKm, discipline, seed, signal, poiBoost })
       : await generateOutAndBack({
           start,
           targetDistanceKm,
@@ -76,6 +80,7 @@ export async function generateRoute(args: {
           seed,
           bearingDeg,
           signal,
+          poiBoost,
         });
 
   if (shape === "out_and_back" && "projectedTurn" in trace) {
@@ -166,6 +171,12 @@ export async function generateRouteCandidates(args: {
   bearingDeg?: number;
   count?: number;
   signal?: AbortSignal;
+  /**
+   * Per-session POI bias (e.g. boost athletics tracks for VO2max workouts).
+   * Pass through to {@link generateRoute} so the underlying algorithms can
+   * weight track waypoints higher than generic parks during selection.
+   */
+  poiBoost?: PoiBoost;
 }): Promise<Route[]> {
   const { count = 3, shape, bearingDeg, seed, targetDistanceKm, elevationGainTargetM } = args;
   const targetM = targetDistanceKm * 1000;

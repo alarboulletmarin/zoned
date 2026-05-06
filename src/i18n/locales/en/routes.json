@@ -116,7 +116,8 @@
       "adds_useful_climbing": "Adds useful climbing",
       "supports_steady_pacing": "Easier to hold a steady pace",
       "stays_repeatable_for_repeats": "Simple to repeat for reps",
-      "respects_current_long_run": "Stays near your current long-run range"
+      "respects_current_long_run": "Stays near your current long-run range",
+      "uses_athletics_track": "Routes via an athletics track"
     },
     "preferences": {
       "flat": "Favor flatter terrain",

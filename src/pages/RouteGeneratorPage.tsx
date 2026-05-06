@@ -15,6 +15,7 @@ import {
   buildManualRouteIntent,
   buildTrainingRoutePreset,
   buildWorkoutRoutePreset,
+  poiBoostForSession,
   rankRouteCandidates,
   type RankedRouteCandidate,
 } from "@/lib/routeGenerator/recommendation";
@@ -323,6 +324,7 @@ export function RouteGeneratorPage() {
           seed,
           bearingDeg: payload.bearingDeg,
           count: 3,
+          poiBoost: poiBoostForSession(trainingPreset?.intent.sessionType),
         });
         if (results.length === 0) {
           toast.error(t("errors.noConvergence"));

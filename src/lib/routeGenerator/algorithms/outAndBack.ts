@@ -24,7 +24,7 @@ import {
   POI_SEARCH_RADIUS_FACTOR,
 } from "../constants";
 import { fetchPoiCandidates } from "../poi/overpass";
-import { pickFurthestPoiInBearing } from "../poi/poiSelector";
+import { pickFurthestPoiInBearing, type PoiBoost } from "../poi/poiSelector";
 import type { RoutePoi } from "../poi/poiTypes";
 
 export interface OutAndBackGenerationResult extends BrouterTraceResult {
@@ -57,8 +57,9 @@ export async function generateOutAndBack(args: {
   seed: number;
   bearingDeg?: number;
   signal?: AbortSignal;
+  poiBoost?: PoiBoost;
 }): Promise<OutAndBackGenerationResult> {
-  const { start, targetDistanceKm, discipline, seed, signal } = args;
+  const { start, targetDistanceKm, discipline, seed, signal, poiBoost } = args;
   const bearingDeg = args.bearingDeg ?? seededBearing(seed);
   const targetM = targetDistanceKm * 1000;
   // Routed legs are typically 1.2-1.4× the great-circle distance in mixed
@@ -80,6 +81,7 @@ export async function generateOutAndBack(args: {
       BEARING_TOLERANCE_DEG,
       halfTargetM * 0.6,
       halfTargetM * 1.4,
+      poiBoost,
     );
 
     if (poi) {

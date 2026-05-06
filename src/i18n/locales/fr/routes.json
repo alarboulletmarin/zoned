@@ -116,7 +116,8 @@
       "adds_useful_climbing": "Ajoute du dénivelé utile",
       "supports_steady_pacing": "Rythme plus facile à tenir",
       "stays_repeatable_for_repeats": "Tracé simple à répéter",
-      "respects_current_long_run": "Reste proche de votre sortie longue actuelle"
+      "respects_current_long_run": "Reste proche de votre sortie longue actuelle",
+      "uses_athletics_track": "Passe par une piste d'athlétisme"
     },
     "preferences": {
       "flat": "On privilégie le plat",

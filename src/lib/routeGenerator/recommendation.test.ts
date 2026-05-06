@@ -10,6 +10,7 @@ import {
   buildManualRouteIntent,
   buildWorkoutRoutePreset,
   pickWeekRouteTarget,
+  poiBoostForSession,
   rankRouteCandidates,
 } from "./recommendation";
 
@@ -285,6 +286,68 @@ describe("rankRouteCandidates", () => {
 
     expect(ranked[0].route.id).toBe("medium");
     expect(ranked[0].reasons).toContain("matches_elevation_target");
+  });
+});
+
+describe("poiBoostForSession", () => {
+  test("boosts athletics tracks for interval-shaped sessions", () => {
+    expect(poiBoostForSession("vo2max")).toEqual({ type: "track", factor: 4 });
+    expect(poiBoostForSession("speed")).toEqual({ type: "track", factor: 4 });
+    expect(poiBoostForSession("vma")).toEqual({ type: "track", factor: 4 });
+  });
+
+  test("returns undefined for non-interval sessions", () => {
+    expect(poiBoostForSession("endurance")).toBeUndefined();
+    expect(poiBoostForSession("recovery")).toBeUndefined();
+    expect(poiBoostForSession("long_run")).toBeUndefined();
+    expect(poiBoostForSession(undefined)).toBeUndefined();
+  });
+});
+
+describe("rankRouteCandidates with track POI", () => {
+  test("surfaces the 'uses_athletics_track' reason on interval sessions when the trace passes a track", () => {
+    const preset = buildTrainingRoutePreset({
+      session: makeSession({
+        sessionType: "vo2max",
+        isKeySession: true,
+        estimatedDurationMin: 50,
+        targetDistanceKm: 8,
+      }),
+      runnerProfile: makeRunnerProfile(),
+    });
+
+    const trackRoute = makeRoute({
+      id: "with-track",
+      distanceM: 8_000,
+      elevationGainM: 30,
+      pois: [{ type: "track", point: [2.36, 48.86] }],
+    });
+
+    const [ranked] = rankRouteCandidates([trackRoute], {
+      intent: preset.intent,
+      athlete: preset.athlete,
+    });
+
+    expect(ranked.reasons).toContain("uses_athletics_track");
+  });
+
+  test("does not surface the track reason when the session isn't interval-shaped", () => {
+    const preset = buildTrainingRoutePreset({
+      session: makeSession({ sessionType: "endurance", estimatedDurationMin: 50 }),
+      runnerProfile: makeRunnerProfile(),
+    });
+
+    const trackRoute = makeRoute({
+      id: "with-track",
+      pois: [{ type: "track", point: [2.36, 48.86] }],
+    });
+
+    const [ranked] = rankRouteCandidates([trackRoute], {
+      intent: preset.intent,
+      athlete: preset.athlete,
+    });
+
+    expect(ranked.reasons).not.toContain("uses_athletics_track");
   });
 });
 

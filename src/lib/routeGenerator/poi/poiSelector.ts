@@ -62,6 +62,17 @@ function seededRandom(seed: number, salt: number): number {
  */
 const MIN_ANGULAR_GAP_DEG = 60;
 
+/**
+ * Optional bias applied during waypoint selection. When set, candidates of
+ * the matching POI type get their score multiplied so they outrank generic
+ * picks — used to nudge interval sessions onto an athletics track or hill
+ * sessions onto promenades, for example.
+ */
+export interface PoiBoost {
+  type: import("./poiTypes").PoiType;
+  factor: number;
+}
+
 export function selectDiverseWaypoints(
   start: RouteCoordinate,
   candidates: PoiCandidate[],
@@ -75,6 +86,7 @@ export function selectDiverseWaypoints(
    * scored candidates. Defaults to 0 (legacy deterministic behaviour).
    */
   seed = 0,
+  boost?: PoiBoost,
 ): PoiCandidate[] {
   if (candidates.length === 0 || count <= 0) return [];
 
@@ -88,7 +100,8 @@ export function selectDiverseWaypoints(
       // Anything more than 2x the target gets a near-zero contribution.
       const offset = Math.abs(distance - targetRadiusM) / targetRadiusM;
       const distanceFitness = Math.max(0, 1 - offset);
-      const baseScore = c.weight * distanceFitness;
+      const boostMultiplier = boost && c.type === boost.type ? boost.factor : 1;
+      const baseScore = c.weight * distanceFitness * boostMultiplier;
       const jitter = seed === 0 ? 1 : 0.85 + 0.3 * seededRandom(seed, c.id);
       return {
         candidate: c,
@@ -141,6 +154,7 @@ export function pickFurthestPoiInBearing(
   toleranceDeg: number,
   minDistanceM: number,
   maxDistanceM: number,
+  boost?: PoiBoost,
 ): PoiCandidate | null {
   let best: { candidate: PoiCandidate; score: number } | null = null;
 
@@ -157,7 +171,8 @@ export function pickFurthestPoiInBearing(
     const target = (minDistanceM + maxDistanceM) / 2;
     const distFitness = Math.max(0, 1 - Math.abs(dist - target) / target);
     const angleFitness = 1 - offset / toleranceDeg;
-    const score = c.weight * distFitness * (0.5 + 0.5 * angleFitness);
+    const boostMultiplier = boost && c.type === boost.type ? boost.factor : 1;
+    const score = c.weight * distFitness * (0.5 + 0.5 * angleFitness) * boostMultiplier;
 
     if (!best || score > best.score) best = { candidate: c, score };
   }
