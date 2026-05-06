@@ -1,4 +1,5 @@
 import type {
+  Discipline,
   WorkoutBlock,
   WorkoutPhaseKey,
   WorkoutRepeatUnit,
@@ -16,6 +17,12 @@ export interface WorkoutStructureSource {
   warmupStructure?: WorkoutStep[];
   mainSetStructure?: WorkoutStep[];
   cooldownStructure?: WorkoutStep[];
+  /**
+   * Optional discipline. When set, distance-only segments are scaled with the
+   * sport-specific pace table instead of the running default. Defaults to
+   * "running" when absent for backward compatibility.
+   */
+  discipline?: Discipline;
 }
 
 const PHASE_FIELDS = {
@@ -42,6 +49,16 @@ const PACE_MIN_PER_KM: Record<ZoneNumber, number> = {
   6: 3.5,
 };
 
+// Sport-specific pace tables used when a segment only carries a distance
+// (no explicit durationMin). Cycling figures are average speeds at zone
+// effort (~24-43 km/h); swimming figures correspond to ~2:00 to ~1:00 per
+// 100 m, which is the realistic spread for amateur swimmers.
+const PACE_MIN_PER_KM_BY_DISCIPLINE: Record<Discipline, Record<ZoneNumber, number>> = {
+  running: PACE_MIN_PER_KM,
+  cycling: { 1: 2.5, 2: 2.2, 3: 2.0, 4: 1.8, 5: 1.6, 6: 1.4 },
+  swimming: { 1: 28, 2: 25, 3: 22, 4: 20, 5: 18, 6: 16 },
+};
+
 export interface FlattenedWorkoutSegment {
   phase: WorkoutPhaseKey;
   description: string;
@@ -64,6 +81,7 @@ interface FlattenContext {
   totalRepetitions?: number;
   setIndex?: number;
   totalSets?: number;
+  discipline?: Discipline;
 }
 
 export function getWorkoutPhaseSteps(workout: WorkoutStructureSource, phase: WorkoutPhaseKey): WorkoutStep[] {
@@ -77,10 +95,11 @@ export function getWorkoutPhaseSteps(workout: WorkoutStructureSource, phase: Wor
 
 export function flattenWorkoutSegments(workout: WorkoutStructureSource): FlattenedWorkoutSegment[] {
   const segments: FlattenedWorkoutSegment[] = [];
+  const discipline = workout.discipline;
 
   for (const phase of Object.keys(PHASE_FIELDS) as WorkoutPhaseKey[]) {
     const steps = getWorkoutPhaseSteps(workout, phase);
-    segments.push(...flattenSteps(steps, phase, { depth: 0 }));
+    segments.push(...flattenSteps(steps, phase, { depth: 0, discipline }));
   }
 
   return segments;
@@ -353,7 +372,7 @@ function flattenSteps(
 
   for (const step of steps) {
     if (step.kind === "segment") {
-      const durationSec = getSegmentDurationSeconds(step);
+      const durationSec = getSegmentDurationSeconds(step, context.discipline);
       if (!durationSec || durationSec <= 0) continue;
 
       segments.push({
@@ -509,20 +528,28 @@ function findPrimaryZone(step: WorkoutStep): ZoneSpec | undefined {
   return undefined;
 }
 
-function getSegmentDurationSeconds(segment: WorkoutStepSegment): number {
+function getSegmentDurationSeconds(
+  segment: WorkoutStepSegment,
+  discipline?: Discipline,
+): number {
   if (segment.durationSec != null) return segment.durationSec;
   if (segment.distanceKm != null) {
-    return estimateSecondsFromDistance(segment.distanceKm, segment.zone);
+    return estimateSecondsFromDistance(segment.distanceKm, segment.zone, discipline);
   }
   if (segment.distanceM != null) {
-    return estimateSecondsFromDistance(segment.distanceM / 1000, segment.zone);
+    return estimateSecondsFromDistance(segment.distanceM / 1000, segment.zone, discipline);
   }
   return 0;
 }
 
-function estimateSecondsFromDistance(distanceKm: number, zone?: ZoneSpec): number {
+function estimateSecondsFromDistance(
+  distanceKm: number,
+  zone?: ZoneSpec,
+  discipline?: Discipline,
+): number {
   const zoneNumber = extractZoneNumbers(zone)[0] ?? 3;
-  return Math.round(distanceKm * PACE_MIN_PER_KM[zoneNumber] * 60);
+  const table = PACE_MIN_PER_KM_BY_DISCIPLINE[discipline ?? "running"];
+  return Math.round(distanceKm * table[zoneNumber] * 60);
 }
 
 function collectZoneNumbers(steps: WorkoutStep[], sink: Set<ZoneNumber>) {

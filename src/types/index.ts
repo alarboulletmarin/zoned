@@ -363,10 +363,14 @@ export const DIFFICULTY_META: Record<
   elite: { label: "Élite", labelEn: "Elite", level: 4, desc: "5 à 7 sorties/semaine · 70+ km/semaine", descEn: "5–7 runs/week · 70+ km/week" },
 };
 
-// Helper to extract zone number from zone string
+// Helper to extract zone number from zone string. Clamps zones above the
+// 6-zone Zoned model (e.g. Coggan Z7 cycling) to Z6 instead of falling back
+// to Z1, which would silently misclassify high-intensity work as recovery.
 export function getZoneNumber(zone: Zone | string): ZoneNumber {
   const num = parseInt(zone.replace("Z", ""), 10);
-  return (num >= 1 && num <= 6 ? num : 1) as ZoneNumber;
+  if (!Number.isFinite(num) || num < 1) return 1;
+  if (num > 6) return 6;
+  return num as ZoneNumber;
 }
 
 function collectStepZones(steps: WorkoutStep[], zones: ZoneNumber[]) {
