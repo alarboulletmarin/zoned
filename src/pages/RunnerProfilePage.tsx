@@ -54,6 +54,7 @@ import {
 } from "@/lib/runnerProfile";
 import { saveUserZonePrefs } from "@/lib/zones";
 import { usePickLang } from "@/lib/i18n-utils";
+import { CommuteSection } from "@/components/domain/CommuteSection";
 import type {
   RunnerProfile,
   BenchmarkType,
@@ -1188,11 +1189,12 @@ export function RunnerProfilePage() {
         </div>
 
         <Tabs defaultValue="base">
-          <TabsList className="w-full grid grid-cols-4 mb-6">
+          <TabsList className="w-full grid grid-cols-5 mb-6">
             <TabsTrigger value="base">{t("tabs.base")}</TabsTrigger>
             <TabsTrigger value="references">{t("tabs.references")}</TabsTrigger>
             <TabsTrigger value="benchmarks">{t("tabs.benchmarks")}</TabsTrigger>
             <TabsTrigger value="records">{t("tabs.records")}</TabsTrigger>
+            <TabsTrigger value="commute">{t("tabs.commute")}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="base">
@@ -1221,6 +1223,10 @@ export function RunnerProfilePage() {
               profile={profile}
               onUpdate={reloadProfile}
             />
+          </TabsContent>
+
+          <TabsContent value="commute">
+            <CommuteSection />
           </TabsContent>
         </Tabs>
       </div>

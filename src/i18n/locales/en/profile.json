@@ -9,7 +9,32 @@
     "base": "Profile",
     "references": "References",
     "benchmarks": "Tests",
-    "records": "Records"
+    "records": "Records",
+    "commute": "Commute"
+  },
+  "commute": {
+    "title": "Commute",
+    "description": "If you bike (or jog) to work, enter the commute here so the generator can account for the recurring load.",
+    "discipline": "Discipline",
+    "disciplineCycling": "Cycling",
+    "disciplineRunning": "Running",
+    "daysOfWeek": "Days of the week",
+    "durationMin": "Duration per trip (minutes)",
+    "durationHint": "One-way duration. Double it if you also commute back.",
+    "includeInPlan": "Include in the plan",
+    "includeInPlanHint": "When on, the plan reduces easy sessions to avoid overload. Otherwise, commute stays an untracked extra.",
+    "monday": "Mon",
+    "tuesday": "Tue",
+    "wednesday": "Wed",
+    "thursday": "Thu",
+    "friday": "Fri",
+    "saturday": "Sat",
+    "sunday": "Sun",
+    "save": "Save",
+    "delete": "Clear",
+    "saved": "Commute settings saved",
+    "deleted": "Commute settings cleared",
+    "invalid": "Pick at least one day and a valid duration"
   },
   "base": {
     "title": "Base Data",

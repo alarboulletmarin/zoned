@@ -104,7 +104,8 @@
     "learnMore": {
       "nutrition": "Complete nutrition guide",
       "recovery": "Complete recovery guide"
-    }
+    },
+    "crossDisciplineNote": "Recommendations written for running. Aerobic principles transfer to cycling and swimming, with sport-specific add-ons (long-ride fueling, pool hydration) still to come."
   },
   "planContext": {
     "banner": "Week {{week}} · Adapted to volume ({{volume}}%): ~{{duration}} min",
@@ -118,6 +119,7 @@
     "zonesSolicited": "Zones solicited",
     "adaptations": "Expected adaptations",
     "references": "Scientific references",
-    "viewStudy": "View study"
+    "viewStudy": "View study",
+    "crossDisciplineNote": "The science below is written for running. The principles (zones, metabolic adaptations) apply to cycling and swimming with sport-specific nuances."
   }
 }

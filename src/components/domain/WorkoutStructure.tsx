@@ -4,7 +4,7 @@ import { ZoneBadge } from "./ZoneBadge";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { WorkoutTemplate, WorkoutStep, WorkoutStepRepeat, WorkoutStepSegment, ZoneRange, ZoneNumber } from "@/types";
-import { getZoneNumber } from "@/types";
+import { getWorkoutDiscipline, getZoneNumber } from "@/types";
 import { formatPace } from "@/lib/zones";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { useIsEnglish, usePickLang, usePickLangArray } from "@/lib/i18n-utils";
@@ -28,6 +28,15 @@ interface StepItemProps {
 export function WorkoutStructure({ workout, userZones, className }: WorkoutStructureProps) {
   const { t } = useTranslation("session");
   const isEnglish = useIsEnglish();
+
+  // Personalized paces (min/km) only make sense for running. Strip them for
+  // cycling and swimming so the personalised footer falls back to HR alone
+  // until discipline-specific zone systems (FTP, CSS) are wired in.
+  const discipline = getWorkoutDiscipline(workout);
+  const effectiveUserZones =
+    discipline === "running"
+      ? userZones
+      : userZones?.map(({ paceMinPerKm: _paceMin, paceMaxPerKm: _paceMax, ...rest }) => rest);
 
   const phases = [
     {
@@ -66,7 +75,7 @@ export function WorkoutStructure({ workout, userZones, className }: WorkoutStruc
           </div>
           <div className="space-y-3">
             {phase.steps.map((step, index) => (
-              <StepItem key={`${phase.key}-${index}`} step={step} depth={0} userZones={userZones} t={t} isEnglish={isEnglish} />
+              <StepItem key={`${phase.key}-${index}`} step={step} depth={0} userZones={effectiveUserZones} t={t} isEnglish={isEnglish} />
             ))}
           </div>
         </section>

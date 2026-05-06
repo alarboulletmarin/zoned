@@ -12,6 +12,13 @@ describe("BACKUP_STORAGE_KEYS", () => {
     expect(BACKUP_STORAGE_KEYS).toContain("zoned-planViewMode");
     expect(BACKUP_STORAGE_KEYS).toContain("zoned-whatif-scenarios");
   });
+
+  test("includes multi-discipline profile keys", () => {
+    expect(BACKUP_STORAGE_KEYS).toContain("zoned-runner-profile");
+    expect(BACKUP_STORAGE_KEYS).toContain("zoned-cycling-profile");
+    expect(BACKUP_STORAGE_KEYS).toContain("zoned-swimming-profile");
+    expect(BACKUP_STORAGE_KEYS).toContain("zoned-commute-pattern");
+  });
 });
 
 describe("buildManagedStorageSnapshot", () => {

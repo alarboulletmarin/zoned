@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Utensils, Droplets, Heart } from "@/components/icons";
 import { getRecommendations } from "@/data/recommendations";
 import type { PhaseRecommendations, RecommendationItem } from "@/data/recommendations";
+import { getWorkoutDiscipline } from "@/types";
 import type { WorkoutTemplate } from "@/types";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { usePickLang } from "@/lib/i18n-utils";
@@ -109,7 +110,12 @@ export function NutritionRecoverySection({ workout }: NutritionRecoverySectionPr
           {t("titles.nutritionRecovery")}
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-3">
+        {getWorkoutDiscipline(workout) !== "running" && (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200">
+            {t("recommendations.crossDisciplineNote")}
+          </div>
+        )}
         <Tabs defaultValue="before">
           <TabsList className="w-full">
             {phases.map((phase) => (

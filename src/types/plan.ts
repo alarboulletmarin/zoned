@@ -1,4 +1,4 @@
-import type { Difficulty, TrainingPhase, SessionType } from "@/types";
+import type { Difficulty, TrainingPhase, SessionType, Discipline } from "@/types";
 
 // ── Race distance type ──────────────────────────────────────────────
 
@@ -91,6 +91,8 @@ export interface PaceNote {
 export interface PlanSession {
   dayOfWeek: number; // 0=Mon ... 6=Sun
   workoutId: string; // Reference to WorkoutTemplate.id
+  /** Primary discipline of this session. Absent = running (legacy default). */
+  discipline?: Discipline;
   sessionType: SessionType;
   isKeySession: boolean;
   estimatedDurationMin: number;

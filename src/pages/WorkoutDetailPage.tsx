@@ -205,6 +205,7 @@ export function WorkoutDetailPage() {
     warmupStructure: workout.warmupStructure,
     mainSetStructure: workout.mainSetStructure,
     cooldownStructure: workout.cooldownStructure,
+    discipline: workout.discipline,
   });
   const baseDuration = Math.round(baseSessionData.totalDurationMin);
 

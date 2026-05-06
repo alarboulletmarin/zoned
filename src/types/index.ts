@@ -3,6 +3,13 @@ export type Zone = "Z1" | "Z2" | "Z3" | "Z4" | "Z5" | "Z6";
 export type ZoneNumber = 1 | 2 | 3 | 4 | 5 | 6;
 export type ZoneSpec = string;
 
+// Discipline — the sport a workout segment belongs to.
+// Introduced for multi-discipline foundation (running + cycling + swimming + triathlon bricks).
+// Existing running-only content is treated as discipline = "running" by default.
+export type Discipline = "running" | "cycling" | "swimming";
+
+export const DISCIPLINES: readonly Discipline[] = ["running", "cycling", "swimming"] as const;
+
 export type WorkoutPhaseKey = "warmup" | "main" | "cooldown";
 export type WorkoutStepRole = "effort" | "recovery" | "transition";
 export type WorkoutRepeatUnit = "reps" | "sets" | "blocks";
@@ -148,7 +155,11 @@ export interface WorkoutScaling {
 
 // Main Workout Template Type
 export interface WorkoutTemplate {
-  kind?: "running";
+  /**
+   * Primary discipline. Defaults to "running" when absent so every existing
+   * template is treated as a running workout.
+   */
+  discipline?: Discipline;
   id: string;
   name: string;
   nameEn: string;
@@ -177,6 +188,11 @@ export interface WorkoutTemplate {
   estimatedDistanceKm?: DurationRange; // { min, max } distance range
   weeklyFrequencyMax?: number;         // Max times per week
   minimumRecoveryDays?: number;        // Min rest days after this workout
+}
+
+/** Resolves the discipline of a workout, defaulting to running for legacy entries. */
+export function getWorkoutDiscipline(workout: Pick<WorkoutTemplate, "discipline">): Discipline {
+  return workout.discipline ?? "running";
 }
 
 // Category File Structure
@@ -347,10 +363,14 @@ export const DIFFICULTY_META: Record<
   elite: { label: "Élite", labelEn: "Elite", level: 4, desc: "5 à 7 sorties/semaine · 70+ km/semaine", descEn: "5–7 runs/week · 70+ km/week" },
 };
 
-// Helper to extract zone number from zone string
+// Helper to extract zone number from zone string. Clamps zones above the
+// 6-zone Zoned model (e.g. Coggan Z7 cycling) to Z6 instead of falling back
+// to Z1, which would silently misclassify high-intensity work as recovery.
 export function getZoneNumber(zone: Zone | string): ZoneNumber {
   const num = parseInt(zone.replace("Z", ""), 10);
-  return (num >= 1 && num <= 6 ? num : 1) as ZoneNumber;
+  if (!Number.isFinite(num) || num < 1) return 1;
+  if (num > 6) return 6;
+  return num as ZoneNumber;
 }
 
 function collectStepZones(steps: WorkoutStep[], zones: ZoneNumber[]) {
@@ -414,9 +434,9 @@ import type { StrengthWorkoutTemplate } from "./strength";
 export type AnyWorkoutTemplate = WorkoutTemplate | StrengthWorkoutTemplate;
 
 export function isStrengthWorkout(w: AnyWorkoutTemplate): w is StrengthWorkoutTemplate {
-  return w.kind === "strength";
+  return "kind" in w && w.kind === "strength";
 }
 
 export function isRunningWorkout(w: AnyWorkoutTemplate): w is WorkoutTemplate {
-  return w.kind !== "strength";
+  return !isStrengthWorkout(w);
 }

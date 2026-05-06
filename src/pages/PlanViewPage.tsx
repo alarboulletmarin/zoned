@@ -53,6 +53,9 @@ import {
 import type { WorkoutTemplate } from "@/types";
 import { toast } from "sonner";
 import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
+import { SubstituteSessionDialog } from "@/components/domain/SubstituteSessionDialog";
+import { isSessionSubstitutable } from "@/lib/planGenerator/substitute";
+import type { Discipline } from "@/types";
 import { SessionCompletionPanel } from "@/components/domain/SessionCompletionPanel";
 import { UnavailabilityManager } from "@/components/domain/UnavailabilityManager";
 import { ReschedulePreviewDialog } from "@/components/domain/ReschedulePreviewDialog";
@@ -121,6 +124,10 @@ export function PlanViewPage() {
     sessionIndex: number;
     workoutId: string;
     sessionType: string;
+  } | null>(null);
+  const [substituteTarget, setSubstituteTarget] = useState<{
+    weekNumber: number;
+    sessionIndex: number;
   } | null>(null);
   const [showWorkoutPanel, setShowWorkoutPanel] = useState(false);
   const [addTarget, setAddTarget] = useState<{ weekNumber: number; day: number } | null>(null);
@@ -296,6 +303,46 @@ export function PlanViewPage() {
     }
     setSwapTarget(null);
   }, [plan, swapTarget, isEn, reloadPlan]);
+
+  const handleSubstituteSession = useCallback(
+    (workout: WorkoutTemplate, discipline: Discipline) => {
+      if (!plan || !substituteTarget) return;
+      const week = plan.weeks.find((w) => w.weekNumber === substituteTarget.weekNumber);
+      if (!week) return;
+      const session = week.sessions[substituteTarget.sessionIndex];
+      if (!session) return;
+
+      const avgDuration = Math.round(
+        (workout.typicalDuration.min + workout.typicalDuration.max) / 2,
+      );
+      const success = updatePlanSession(
+        plan.id,
+        substituteTarget.weekNumber,
+        substituteTarget.sessionIndex,
+        workout.id,
+        {
+          discipline,
+          sessionType: workout.sessionType,
+          estimatedDurationMin: avgDuration,
+          isKeySession: false,
+        },
+      );
+      if (success) {
+        reloadPlan();
+        toast.success(t("view.sessionSubstituted"));
+      } else {
+        toast.error(t("view.sessionUpdateFailed"));
+      }
+      setSubstituteTarget(null);
+    },
+    [plan, substituteTarget, reloadPlan, t],
+  );
+
+  const plannedSubstituteSession = useMemo(() => {
+    if (!plan || !substituteTarget) return null;
+    const week = plan.weeks.find((w) => w.weekNumber === substituteTarget.weekNumber);
+    return week?.sessions[substituteTarget.sessionIndex] ?? null;
+  }, [plan, substituteTarget]);
 
   const handleSessionMove = useCallback((
     fromWeek: number,
@@ -1340,6 +1387,23 @@ export function PlanViewPage() {
                                     >
                                       <span className="text-xs">{"\u21c4"}</span>
                                     </Button>
+                                    {isSessionSubstitutable(session) && (
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-6 w-6 p-0"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setSubstituteTarget({
+                                            weekNumber: week.weekNumber,
+                                            sessionIndex: originalIndex,
+                                          });
+                                        }}
+                                        title={t("view.substituteSession")}
+                                      >
+                                        <span className="text-xs">{"\u2194"}</span>
+                                      </Button>
+                                    )}
                                     <Button
                                       variant="ghost"
                                       size="sm"
@@ -1676,6 +1740,14 @@ export function PlanViewPage() {
           currentWorkoutId={swapTarget?.workoutId ?? ""}
           sessionType={swapTarget?.sessionType ?? ""}
           onSelect={handleSwapSession}
+        />
+
+        {/* Cross-discipline Substitution Dialog */}
+        <SubstituteSessionDialog
+          open={substituteTarget !== null}
+          onOpenChange={(open) => !open && setSubstituteTarget(null)}
+          plannedSession={plannedSubstituteSession}
+          onSelect={handleSubstituteSession}
         />
       </div>
 

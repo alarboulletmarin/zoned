@@ -2,8 +2,20 @@ import type {
   WorkoutTemplate,
   WorkoutCategory,
   WorkoutCategoryFile,
+  Discipline,
 } from "@/types";
 import { normalizeSearch } from "@/lib/search-utils";
+
+/**
+ * Cross-discipline file shape: one JSON per non-running discipline.
+ * Kept separate from WorkoutCategoryFile so the existing running category
+ * loader stays untouched and the new disciplines can use the
+ * "category-agnostic" bucket.
+ */
+interface DisciplineFile {
+  discipline: Discipline;
+  templates: WorkoutTemplate[];
+}
 
 // Export category list for iteration
 export const categories: WorkoutCategory[] = [
@@ -51,6 +63,72 @@ const categoryLoaders: Record<WorkoutCategory, () => Promise<WorkoutCategoryFile
   mixed: () => import("./mixed.json").then((m) => m.default as WorkoutCategoryFile),
   assessment: () => import("./assessment.json").then((m) => m.default as WorkoutCategoryFile),
 };
+
+// ============================================================
+// Discipline-scoped loaders (cycling, swimming)
+// Running stays on the per-category loaders above.
+// ============================================================
+
+type CrossDiscipline = Exclude<Discipline, "running">;
+
+const disciplineCache: Partial<Record<CrossDiscipline, WorkoutTemplate[]>> = {};
+const disciplineLoadingPromises: Partial<
+  Record<CrossDiscipline, Promise<WorkoutTemplate[]>>
+> = {};
+
+const disciplineLoaders: Record<CrossDiscipline, () => Promise<DisciplineFile>> = {
+  cycling: () => import("./cycling.json").then((m) => m.default as DisciplineFile),
+  swimming: () => import("./swimming.json").then((m) => m.default as DisciplineFile),
+};
+
+/**
+ * Load every workout for a non-running discipline lazily.
+ * Each discipline is a single JSON file (one chunk) for now; the folder
+ * structure of the plan can later split it further without touching the
+ * public API.
+ */
+export async function loadDisciplineWorkouts(
+  discipline: CrossDiscipline,
+): Promise<WorkoutTemplate[]> {
+  if (disciplineCache[discipline]) return disciplineCache[discipline]!;
+  if (disciplineLoadingPromises[discipline]) {
+    return disciplineLoadingPromises[discipline]!;
+  }
+
+  const promise = (async () => {
+    const data = await disciplineLoaders[discipline]();
+    disciplineCache[discipline] = data.templates;
+    delete disciplineLoadingPromises[discipline];
+    return data.templates;
+  })();
+
+  disciplineLoadingPromises[discipline] = promise;
+  return promise;
+}
+
+/**
+ * Synchronous accessor for already-loaded discipline workouts. Returns
+ * undefined when the chunk has not been requested yet. Use this to skip a
+ * loading flash in UIs where the data is already in memory.
+ */
+export function getDisciplineWorkoutsCached(
+  discipline: CrossDiscipline,
+): WorkoutTemplate[] | undefined {
+  return disciplineCache[discipline];
+}
+
+/**
+ * Test-only helper to clear the per-discipline workout cache. Real callers
+ * should not need this because the cache is keyed by static JSON imports.
+ */
+export function _clearDisciplineWorkoutCache(): void {
+  for (const key of Object.keys(disciplineCache) as CrossDiscipline[]) {
+    delete disciplineCache[key];
+  }
+  for (const key of Object.keys(disciplineLoadingPromises) as CrossDiscipline[]) {
+    delete disciplineLoadingPromises[key];
+  }
+}
 
 /**
  * Load a single category lazily (with dynamic import for code-splitting)
@@ -135,6 +213,15 @@ export async function getWorkoutById(
     const session = await getStrengthSessionById(id);
     // Return as WorkoutTemplate union — callers should use isStrengthWorkout() guard
     return session as unknown as WorkoutTemplate | undefined;
+  }
+  // Cycling and swimming are on their own discipline loaders.
+  if (id.startsWith("CYC-")) {
+    const cycling = await loadDisciplineWorkouts("cycling");
+    return cycling.find((w) => w.id === id);
+  }
+  if (id.startsWith("SWM-")) {
+    const swimming = await loadDisciplineWorkouts("swimming");
+    return swimming.find((w) => w.id === id);
   }
   const workouts = await loadAllWorkouts();
   return workouts.find((w) => w.id === id);

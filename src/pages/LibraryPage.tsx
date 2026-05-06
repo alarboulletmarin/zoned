@@ -8,6 +8,8 @@ import {
   Loader2,
   Dumbbell,
   Footprints,
+  Zap,
+  Waves,
   X,
 } from "@/components/icons";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
@@ -37,6 +39,7 @@ import {
   useViewMode,
 } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
+import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import { getWorkoutDuration } from "@/components/visualization";
 import { categories } from "@/data/workouts";
 import { strengthCategories } from "@/data/strength";
@@ -45,7 +48,7 @@ import type {
   AnyWorkoutTemplate,
   TargetSystem,
 } from "@/types";
-import { isStrengthWorkout, isRunningWorkout } from "@/types";
+import { isStrengthWorkout, isRunningWorkout, getWorkoutDiscipline } from "@/types";
 import type {
   StrengthCategory,
   StrengthWorkoutTemplate,
@@ -149,7 +152,14 @@ function parseFiltersFromParams(
  */
 function parseActivityType(searchParams: URLSearchParams): ActivityType {
   const type = searchParams.get("type");
-  if (type === "running" || type === "strength") return type;
+  if (
+    type === "running" ||
+    type === "strength" ||
+    type === "cycling" ||
+    type === "swimming"
+  ) {
+    return type;
+  }
   return "all";
 }
 
@@ -165,6 +175,10 @@ export function LibraryPage() {
     useWorkouts();
   const { workouts: strengthWorkouts, isLoading: isLoadingStrength } =
     useStrengthWorkouts();
+  const { workouts: cyclingWorkouts, isLoading: isLoadingCycling } =
+    useCrossDisciplineWorkouts("cycling");
+  const { workouts: swimmingWorkouts, isLoading: isLoadingSwimming } =
+    useCrossDisciplineWorkouts("swimming");
   const { viewMode, setViewMode } = useViewMode();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const filterSectionRef = useRef<HTMLDivElement>(null);
@@ -197,17 +211,39 @@ export function LibraryPage() {
         return runningWorkouts;
       case "strength":
         return strengthWorkouts;
+      case "cycling":
+        return cyclingWorkouts;
+      case "swimming":
+        return swimmingWorkouts;
       case "all":
-        return [...runningWorkouts, ...strengthWorkouts];
+        return [
+          ...runningWorkouts,
+          ...cyclingWorkouts,
+          ...swimmingWorkouts,
+          ...strengthWorkouts,
+        ];
     }
-  }, [activityType, runningWorkouts, strengthWorkouts]);
+  }, [
+    activityType,
+    runningWorkouts,
+    strengthWorkouts,
+    cyclingWorkouts,
+    swimmingWorkouts,
+  ]);
 
   const isLoading =
     activityType === "running"
       ? isLoadingRunning
       : activityType === "strength"
         ? isLoadingStrength
-        : isLoadingRunning || isLoadingStrength;
+        : activityType === "cycling"
+          ? isLoadingCycling
+          : activityType === "swimming"
+            ? isLoadingSwimming
+            : isLoadingRunning ||
+              isLoadingStrength ||
+              isLoadingCycling ||
+              isLoadingSwimming;
 
   // Count active filters (excluding searchQuery which is visible separately)
   const getActiveFiltersCount = (f: WorkoutFiltersState) => {
@@ -257,10 +293,11 @@ export function LibraryPage() {
   // Handle activity type change
   const handleActivityTypeChange = useCallback((newType: ActivityType) => {
     setActivityType(newType);
-    // Reset type-specific filters when switching
+    const isRunningFamily =
+      newType === "running" || newType === "cycling" || newType === "swimming";
     setFilters((prev) => ({
       ...prev,
-      // Reset running filters when switching to strength-only
+      // When switching to strength-only, drop the shared running-family filters
       ...(newType === "strength"
         ? {
             category: [] as WorkoutCategory[],
@@ -268,12 +305,20 @@ export function LibraryPage() {
             targetSystem: [] as TargetSystem[],
           }
         : {}),
-      // Reset strength filters when switching to running-only
-      ...(newType === "running"
+      // When switching to any endurance discipline, drop strength-specific state
+      ...(isRunningFamily
         ? {
             strengthCategory: [] as StrengthCategory[],
             equipment: [] as StrengthEquipment[],
             muscleGroup: [] as MuscleGroup[],
+          }
+        : {}),
+      // Terrain and targetSystem only make sense for running — drop them
+      // when the athlete picks cycling or swimming.
+      ...(newType === "cycling" || newType === "swimming"
+        ? {
+            terrain: [] as TerrainFilter[],
+            targetSystem: [] as TargetSystem[],
           }
         : {}),
     }));
@@ -379,31 +424,32 @@ export function LibraryPage() {
         return false;
       }
 
-      // --- Running-specific filters ---
+      // --- Endurance filters (running, cycling, swimming) ---
       if (isRunningWorkout(workout)) {
-        // Category filter
+        // Category filter applies to all endurance disciplines
         if (f.category.length > 0 && !f.category.includes(workout.category)) {
           return false;
         }
 
-        // Terrain filter
-        if (f.terrain.length > 0) {
-          const env = workout.environment;
-          const matchesTerrain = f.terrain.some((ter) => {
-            if (ter === "flat") return !env.requiresHills && !env.requiresTrack;
-            if (ter === "track") return !env.requiresHills;
-            if (ter === "hills") return !env.requiresTrack;
-            return true;
-          });
-          if (!matchesTerrain) return false;
-        }
+        // Terrain and target-system are running-only attributes
+        if (getWorkoutDiscipline(workout) === "running") {
+          if (f.terrain.length > 0) {
+            const env = workout.environment;
+            const matchesTerrain = f.terrain.some((ter) => {
+              if (ter === "flat") return !env.requiresHills && !env.requiresTrack;
+              if (ter === "track") return !env.requiresHills;
+              if (ter === "hills") return !env.requiresTrack;
+              return true;
+            });
+            if (!matchesTerrain) return false;
+          }
 
-        // Target system filter
-        if (
-          f.targetSystem.length > 0 &&
-          !f.targetSystem.includes(workout.targetSystem)
-        ) {
-          return false;
+          if (
+            f.targetSystem.length > 0 &&
+            !f.targetSystem.includes(workout.targetSystem)
+          ) {
+            return false;
+          }
         }
       }
 
@@ -540,22 +586,26 @@ export function LibraryPage() {
           {/* Activity type toggle */}
           <div className="mb-4">
             <div className="inline-flex items-center rounded-lg border border-border bg-muted/50 p-0.5">
-              {(["all", "running", "strength"] as const).map((type) => (
-                <button
-                  key={type}
-                  onClick={() => handleActivityTypeChange(type)}
-                  className={cn(
-                    "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
-                    activityType === type
-                      ? "bg-background text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  {type === "running" && <Footprints className="size-3.5" />}
-                  {type === "strength" && <Dumbbell className="size-3.5" />}
-                  {t(`activityToggle.${type}`)}
-                </button>
-              ))}
+              {(["all", "running", "cycling", "swimming", "strength"] as const).map(
+                (type) => (
+                  <button
+                    key={type}
+                    onClick={() => handleActivityTypeChange(type)}
+                    className={cn(
+                      "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+                      activityType === type
+                        ? "bg-background text-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    {type === "running" && <Footprints className="size-3.5" />}
+                    {type === "cycling" && <Zap className="size-3.5" />}
+                    {type === "swimming" && <Waves className="size-3.5" />}
+                    {type === "strength" && <Dumbbell className="size-3.5" />}
+                    {t(`activityToggle.${type}`)}
+                  </button>
+                ),
+              )}
             </div>
           </div>
 
@@ -578,8 +628,11 @@ export function LibraryPage() {
           {/* Category quick filters - mobile only */}
           <div className="lg:hidden mt-3">
             <div className="flex flex-wrap gap-2">
-              {/* Running categories */}
-              {(activityType === "running" || activityType === "all") &&
+              {/* Running / cycling / swimming categories (shared WorkoutCategory enum) */}
+              {(activityType === "running" ||
+                activityType === "cycling" ||
+                activityType === "swimming" ||
+                activityType === "all") &&
                 categories.map((cat) => (
                   <button
                     key={cat}
