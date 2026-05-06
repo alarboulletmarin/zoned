@@ -8,7 +8,7 @@ import {
   Loader2,
   Dumbbell,
   Footprints,
-  Zap,
+  Bike,
   Waves,
   X,
 } from "@/components/icons";
@@ -599,7 +599,7 @@ export function LibraryPage() {
                     )}
                   >
                     {type === "running" && <Footprints className="size-3.5" />}
-                    {type === "cycling" && <Zap className="size-3.5" />}
+                    {type === "cycling" && <Bike className="size-3.5" />}
                     {type === "swimming" && <Waves className="size-3.5" />}
                     {type === "strength" && <Dumbbell className="size-3.5" />}
                     {t(`activityToggle.${type}`)}

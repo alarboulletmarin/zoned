@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ArrowRight,
+  Bike,
   Footprints,
   Loader2,
   MapPin,
   Mountain,
   RefreshCw,
-  Zap,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -137,7 +137,7 @@ export function RouteParametersForm({
 
   const disciplineOptions: SegmentedOption<Discipline>[] = [
     { value: "running", label: t("form.disciplineRunning"), icon: <Footprints className="size-3.5" /> },
-    { value: "cycling", label: t("form.disciplineCycling"), icon: <Zap className="size-3.5" /> },
+    { value: "cycling", label: t("form.disciplineCycling"), icon: <Bike className="size-3.5" /> },
   ];
 
   const surfaceOptions: SegmentedOption<RouteSurface>[] = [
