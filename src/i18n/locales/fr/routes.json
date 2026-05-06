@@ -87,5 +87,23 @@
     "title": "Le générateur de parcours est désactivé",
     "body": "Pour générer un parcours, votre point de départ doit être envoyé à un service de routage public. Activez la fonctionnalité dans les Réglages si vous le souhaitez.",
     "cta": "Aller dans les Réglages"
+  },
+  "howItWorks": {
+    "title": "Comment ça marche ?",
+    "intro": "Tu donnes un point de départ et une distance, on construit un parcours réel routable jusqu'au mètre, en privilégiant les zones agréables à courir.",
+    "step1Title": "1. Tu choisis tes paramètres",
+    "step1Body": "Point de départ (GPS ou adresse), distance cible (1 à 50 km), forme (boucle ou aller-retour), surface (route, sentier ou mixte) et discipline (course ou vélo).",
+    "step2Title": "2. On cherche les bons waypoints",
+    "step2Body": "On interroge OpenStreetMap (via Overpass) pour trouver les parcs, promenades, voies vertes, plages et sentiers autour de toi. Trois POI sont sélectionnés en privilégiant la diversité d'orientation pour éviter qu'un parcours reste collé à un seul quartier.",
+    "step3Title": "3. On route via Brouter",
+    "step3Body": "Le service open source Brouter calcule le tracé réel en empruntant les chemins, trottoirs et pistes adaptés à ta discipline. La distance est ajustée par itérations successives pour coller à ta cible (±5%).",
+    "step4Title": "4. Tu compares 3 propositions",
+    "step4Body": "Trois variantes te sont proposées avec des POI et orientations différentes. Tu vois leur distance réelle, leur dénivelé, le profil altimétrique et tu peux exporter en GPX ou sauvegarder localement.",
+    "limitsTitle": "Limites",
+    "limitsBody": "La qualité dépend de la couverture OpenStreetMap dans ta région. En zone rurale peu cartographiée, l'algorithme bascule sur une triangulation aveugle avec un fallback de filtrage des points en eau. La natation n'est pas prise en charge (pas de routage sur l'eau).",
+    "privacyTitle": "Confidentialité",
+    "privacyBody": "Ta position de départ est envoyée à Brouter (routage), Nominatim (recherche d'adresses) et Overpass (POI) le temps des requêtes. Aucun identifiant n'est joint, rien n'est stocké côté serveur. Tu peux désactiver le générateur entièrement dans les Réglages.",
+    "sourcesTitle": "Sources",
+    "sourcesBody": "Données : © contributeurs OpenStreetMap. Routage : Brouter. Recherche d'adresses : Nominatim. POI : Overpass API."
   }
 }

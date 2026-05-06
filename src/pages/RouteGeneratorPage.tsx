@@ -237,6 +237,58 @@ export function RouteGeneratorPage() {
             )}
           </main>
         </div>
+
+        {/* "How it works" — collapsed by default to keep the page action-first.
+            Detailed enough to explain the routing pipeline, privacy posture
+            and known limits. Uses native <details> for zero-JS toggling. */}
+        <section className="mt-10">
+          <details className="group rounded-xl border border-border/60 bg-muted/10 p-4 sm:p-5 [&[open]>summary>span:last-child]:rotate-180">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-sm font-semibold sm:text-base">
+              <span className="flex items-center gap-2">
+                {t("howItWorks.title")}
+              </span>
+              <span className="inline-flex size-6 items-center justify-center rounded-full border border-border/60 text-xs transition-transform">
+                ▾
+              </span>
+            </summary>
+            <div className="mt-4 space-y-5 text-sm leading-relaxed text-muted-foreground">
+              <p className="text-foreground">{t("howItWorks.intro")}</p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {(["step1", "step2", "step3", "step4"] as const).map((step) => (
+                  <div
+                    key={step}
+                    className="rounded-lg border border-border/60 bg-background p-3"
+                  >
+                    <p className="mb-1 font-semibold text-foreground">
+                      {t(`howItWorks.${step}Title`)}
+                    </p>
+                    <p>{t(`howItWorks.${step}Body`)}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div>
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-foreground">
+                    {t("howItWorks.privacyTitle")}
+                  </p>
+                  <p className="text-xs">{t("howItWorks.privacyBody")}</p>
+                </div>
+                <div>
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-foreground">
+                    {t("howItWorks.limitsTitle")}
+                  </p>
+                  <p className="text-xs">{t("howItWorks.limitsBody")}</p>
+                </div>
+                <div>
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-foreground">
+                    {t("howItWorks.sourcesTitle")}
+                  </p>
+                  <p className="text-xs">{t("howItWorks.sourcesBody")}</p>
+                </div>
+              </div>
+            </div>
+          </details>
+        </section>
       </div>
     </>
   );

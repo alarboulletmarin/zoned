@@ -643,7 +643,9 @@
         "semi",
         "marathon",
         "trail",
-        "ultra"
+        "ultra",
+        "triathlon",
+        "ironman"
       ]
     },
     "articleFaq": {

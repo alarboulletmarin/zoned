@@ -19,9 +19,19 @@
     "seeAll": "See all",
     "browseByCategory": "Browse by Category",
     "newBadge": "New",
+    "spotlightLabel": "What's new",
+    "spotlightGoto": "Go to slide {{index}}",
     "routesEyebrow": "Route Generator",
     "routesTitle": "Build your route in one click",
-    "routesDesc": "Real-world loop or out-and-back from your position, routed through parks, promenades and greenways. Target distance, elevation, GPX export.",
-    "routesCta": "Generate a route"
+    "routesDesc": "Real-world loop or out-and-back from your position, with elevation and GPX export.",
+    "routesCta": "Generate a route",
+    "cyclingEyebrow": "Cycling",
+    "cyclingTitle": "Cycling lands on Zoned",
+    "cyclingDesc": "10 sessions: endurance, sweet spot, threshold, intervals. Built-in FTP zones.",
+    "cyclingCta": "See cycling sessions",
+    "swimmingEyebrow": "Swimming",
+    "swimmingTitle": "Dive into the pool",
+    "swimmingDesc": "10 sessions: technique, endurance, sprints, pyramids. Built-in CSS zones.",
+    "swimmingCta": "See swimming sessions"
   }
 }

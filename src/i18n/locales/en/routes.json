@@ -87,5 +87,23 @@
     "title": "Route Generator is disabled",
     "body": "Generating a route requires sending your starting point to a public routing service. Enable the feature in Settings if you want to.",
     "cta": "Open Settings"
+  },
+  "howItWorks": {
+    "title": "How does it work?",
+    "intro": "You give a starting point and a distance, we build a real-world routable path down to the metre, preferring runner-friendly areas.",
+    "step1Title": "1. Pick your parameters",
+    "step1Body": "Starting point (GPS or address), target distance (1 to 50 km), shape (loop or out-and-back), surface (road, trail, mixed) and discipline (running or cycling).",
+    "step2Title": "2. We pick the right waypoints",
+    "step2Body": "We query OpenStreetMap (via Overpass) for parks, promenades, greenways, beaches and trails around you. Three POI are selected with bearing diversity in mind so a route doesn't stay stuck in a single neighbourhood.",
+    "step3Title": "3. We route via Brouter",
+    "step3Body": "The open-source Brouter service computes the real-world trace using paths, sidewalks and tracks suited to your discipline. The distance is adjusted iteratively to land within ±5% of your target.",
+    "step4Title": "4. You compare 3 proposals",
+    "step4Body": "Three variants are offered with different POI and bearings. Each shows actual distance, elevation gain, profile chart and can be exported to GPX or saved locally.",
+    "limitsTitle": "Limits",
+    "limitsBody": "Quality depends on OpenStreetMap coverage in your area. In sparsely-mapped rural zones, the algorithm falls back to blind triangulation with water-point filtering. Swimming is not supported (no on-water routing).",
+    "privacyTitle": "Privacy",
+    "privacyBody": "Your starting position is sent to Brouter (routing), Nominatim (address search) and Overpass (POI) for the duration of the requests. No identifier is attached, nothing is stored server-side. You can disable the generator entirely in Settings.",
+    "sourcesTitle": "Sources",
+    "sourcesBody": "Data: © OpenStreetMap contributors. Routing: Brouter. Address search: Nominatim. POI: Overpass API."
   }
 }
