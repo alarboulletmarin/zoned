@@ -6,9 +6,12 @@ import type { RouteCoordinate } from "@/types/route";
 import { cn } from "@/lib/utils";
 
 interface RouteMapProps {
-  points: RouteCoordinate[];
+  /** Ordered points of the routed trace. Empty when no route has been generated yet. */
+  points?: RouteCoordinate[];
+  /** Optional start point shown as a marker even when no trace exists yet. */
+  start?: RouteCoordinate | null;
   className?: string;
-  /** Optional accent colour for the trace polyline. Defaults to a Zoned-aware orange. */
+  /** Trace stroke colour. Defaults to Zoned primary. */
   color?: string;
   /** Disable user interaction (drag, zoom) — useful for previews. */
   interactive?: boolean;
@@ -18,17 +21,29 @@ const TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 const TILE_ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors';
 
+const DEFAULT_CENTER: [number, number] = [46.7, 2.4]; // approx geographic centre of metropolitan France
+const DEFAULT_ZOOM = 5;
+const START_ZOOM = 13;
+
 /**
- * Leaflet wrapper that renders a routed trace. Imported lazily by route
- * pages to keep Leaflet (~40 KB gzip + CSS) out of the main bundle.
+ * Leaflet wrapper that renders an interactive map. When `points` are
+ * provided, the routed trace and a start marker are drawn and the map is
+ * fitted to the trace bounds. When only `start` is provided, a single marker
+ * is rendered at zoom 13. Without either, the map shows a default view.
  */
-export function RouteMap({ points, className, color = "#ea580c", interactive = true }: RouteMapProps) {
+export function RouteMap({
+  points = [],
+  start = null,
+  className,
+  color = "#ea580c",
+  interactive = true,
+}: RouteMapProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
-    if (mapRef.current) return; // Already initialised — useEffect with [] deps runs once
+    if (mapRef.current) return;
 
     const map = L.map(containerRef.current, {
       zoomControl: interactive,
@@ -37,7 +52,8 @@ export function RouteMap({ points, className, color = "#ea580c", interactive = t
       doubleClickZoom: interactive,
       touchZoom: interactive,
       keyboard: interactive,
-    });
+      attributionControl: true,
+    }).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
 
     L.tileLayer(TILE_URL, {
       attribution: TILE_ATTRIBUTION,
@@ -54,39 +70,49 @@ export function RouteMap({ points, className, color = "#ea580c", interactive = t
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || points.length === 0) return;
+    if (!map) return;
 
-    // Wipe any previous polyline / start marker before redrawing
     map.eachLayer((layer) => {
-      if (layer instanceof L.Polyline || layer instanceof L.Marker) {
+      if (layer instanceof L.Polyline || layer instanceof L.Marker || layer instanceof L.CircleMarker) {
         map.removeLayer(layer);
       }
     });
 
-    const latLngs: [number, number][] = points.map(([lon, lat]) => [lat, lon]);
+    if (points.length > 1) {
+      const latLngs: [number, number][] = points.map(([lon, lat]) => [lat, lon]);
+      const polyline = L.polyline(latLngs, { color, weight: 4, opacity: 0.9 }).addTo(map);
+      L.circleMarker(latLngs[0], {
+        radius: 6,
+        color: "#ffffff",
+        weight: 2,
+        fillColor: color,
+        fillOpacity: 1,
+      }).addTo(map);
+      map.fitBounds(polyline.getBounds(), { padding: [24, 24] });
+      return;
+    }
 
-    const polyline = L.polyline(latLngs, {
-      color,
-      weight: 4,
-      opacity: 0.9,
-    }).addTo(map);
+    if (start) {
+      const [lon, lat] = start;
+      L.circleMarker([lat, lon], {
+        radius: 7,
+        color: "#ffffff",
+        weight: 2,
+        fillColor: color,
+        fillOpacity: 1,
+      }).addTo(map);
+      map.setView([lat, lon], START_ZOOM, { animate: true });
+      return;
+    }
 
-    L.circleMarker(latLngs[0], {
-      radius: 6,
-      color: "#ffffff",
-      weight: 2,
-      fillColor: color,
-      fillOpacity: 1,
-    }).addTo(map);
-
-    map.fitBounds(polyline.getBounds(), { padding: [24, 24] });
-  }, [points, color]);
+    map.setView(DEFAULT_CENTER, DEFAULT_ZOOM);
+  }, [points, start, color]);
 
   return (
     <div
       ref={containerRef}
       className={cn(
-        "h-72 w-full overflow-hidden rounded-xl border border-border/60 bg-muted/30 sm:h-96",
+        "h-72 w-full overflow-hidden rounded-xl border border-border/60 bg-muted/30 sm:h-96 lg:h-[28rem]",
         className,
       )}
       role="region"

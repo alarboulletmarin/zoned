@@ -14,7 +14,7 @@ import { generateRoute } from "@/lib/routeGenerator";
 import { downloadRouteGpx } from "@/lib/export/gpx";
 import { useRoutes } from "@/hooks/useRoutes";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
-import type { Route } from "@/types/route";
+import type { Route, RouteCoordinate } from "@/types/route";
 
 const RouteMap = lazy(() =>
   import("@/components/visualization/route/RouteMap").then((m) => ({
@@ -27,9 +27,9 @@ const ElevationChart = lazy(() =>
   })),
 );
 
-function MapFallback() {
+function MapSkeleton() {
   return (
-    <div className="h-72 w-full animate-pulse rounded-xl border border-border/60 bg-muted/40 sm:h-96" />
+    <div className="h-72 w-full animate-pulse rounded-xl border border-border/60 bg-muted/40 sm:h-96 lg:h-[28rem]" />
   );
 }
 
@@ -39,6 +39,7 @@ export function RouteGeneratorPage() {
   const { saveRoute } = useRoutes();
 
   const [route, setRoute] = useState<Route | null>(null);
+  const [previewStart, setPreviewStart] = useState<RouteCoordinate | null>(null);
   const [lastPayload, setLastPayload] = useState<RouteFormSubmitPayload | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -96,8 +97,8 @@ export function RouteGeneratorPage() {
   return (
     <>
       <SEOHead title={t("title")} description={t("subtitle")} canonical="/routes" />
-      <div className="space-y-6 py-6">
-        <header className="space-y-1">
+      <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <header className="mb-6 space-y-1">
           <h1 className="text-2xl font-bold sm:text-3xl">{t("title")}</h1>
           <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
           <Link
@@ -108,34 +109,40 @@ export function RouteGeneratorPage() {
           </Link>
         </header>
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,360px)_1fr]">
-          <RouteParametersForm
-            isGenerating={isGenerating}
-            onSubmit={onSubmit}
-            onError={(msg) => toast.error(msg)}
-          />
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,360px)_1fr] xl:gap-8">
+          <aside className="min-w-0">
+            <RouteParametersForm
+              isGenerating={isGenerating}
+              onSubmit={onSubmit}
+              onError={(msg) => toast.error(msg)}
+              onStartChange={(point) => setPreviewStart(point)}
+            />
+          </aside>
 
-          <div className="space-y-4">
-            {route ? (
+          <main className="min-w-0 space-y-4 lg:sticky lg:top-20 lg:self-start">
+            <Suspense fallback={<MapSkeleton />}>
+              <RouteMap
+                points={route?.points ?? []}
+                start={route ? null : previewStart}
+              />
+            </Suspense>
+
+            {route && (
               <>
-                <Suspense fallback={<MapFallback />}>
-                  <RouteMap points={route.points} />
-                </Suspense>
-
                 <div className="grid grid-cols-3 gap-3 rounded-xl border border-border/60 bg-muted/20 p-4 text-sm">
                   <div>
                     <p className="text-xs text-muted-foreground">{t("result.actualDistance")}</p>
-                    <p className="text-lg font-semibold">
+                    <p className="text-lg font-semibold tabular-nums">
                       {(route.distanceM / 1000).toFixed(2)} km
                     </p>
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">{t("result.elevationGain")}</p>
-                    <p className="text-lg font-semibold">{route.elevationGainM} m</p>
+                    <p className="text-lg font-semibold tabular-nums">{route.elevationGainM} m</p>
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">{t("result.estimatedDuration")}</p>
-                    <p className="text-lg font-semibold">
+                    <p className="text-lg font-semibold tabular-nums">
                       {formatDurationMinutes(route.estimatedDurationSec / 60)}
                     </p>
                   </div>
@@ -157,7 +164,12 @@ export function RouteGeneratorPage() {
                     <Save className="size-4" />
                     {t("result.save")}
                   </Button>
-                  <Button variant="outline" onClick={onRegenerate} className="gap-2" disabled={isGenerating}>
+                  <Button
+                    variant="outline"
+                    onClick={onRegenerate}
+                    className="gap-2"
+                    disabled={isGenerating}
+                  >
                     <RotateCcw className="size-4" />
                     {t("form.regenerate")}
                   </Button>
@@ -167,12 +179,8 @@ export function RouteGeneratorPage() {
                   </Button>
                 </div>
               </>
-            ) : (
-              <div className="flex h-72 flex-col items-center justify-center rounded-xl border border-dashed border-border/60 bg-muted/10 p-6 text-center text-sm text-muted-foreground sm:h-96">
-                <p>{t("subtitle")}</p>
-              </div>
             )}
-          </div>
+          </main>
         </div>
       </div>
     </>
