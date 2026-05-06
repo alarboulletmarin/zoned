@@ -158,6 +158,7 @@ export function RouteGeneratorPage() {
               <RouteMap
                 points={route?.points ?? []}
                 candidates={candidateTraces}
+                pois={route?.pois}
                 start={route ? null : previewStart}
               />
             </Suspense>

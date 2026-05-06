@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-import type { RouteCoordinate } from "@/types/route";
+import type { RouteCoordinate, RoutePoiSummary } from "@/types/route";
 import { cn } from "@/lib/utils";
 
 interface RouteMapProps {
@@ -14,6 +14,11 @@ interface RouteMapProps {
    * `points` (which holds the selected one).
    */
   candidates?: RouteCoordinate[][];
+  /**
+   * POI traversed by the trace, rendered as small named markers so the user
+   * can recognise familiar places on the map.
+   */
+  pois?: RoutePoiSummary[];
   /** Optional start point shown as a marker even when no trace exists yet. */
   start?: RouteCoordinate | null;
   className?: string;
@@ -40,6 +45,7 @@ const START_ZOOM = 13;
 export function RouteMap({
   points = [],
   candidates,
+  pois,
   start = null,
   className,
   color = "#ea580c",
@@ -110,6 +116,27 @@ export function RouteMap({
         fillOpacity: 1,
       }).addTo(map);
 
+      // POI markers — small slate-coloured dots with a tooltip carrying the
+      // OSM name. Rendered after the trace so they sit on top.
+      for (const poi of pois ?? []) {
+        const [poiLon, poiLat] = poi.point;
+        const marker = L.circleMarker([poiLat, poiLon], {
+          radius: 5,
+          color: "#ffffff",
+          weight: 1.5,
+          fillColor: "#475569", // slate-600 — distinct from the orange trace
+          fillOpacity: 0.9,
+        }).addTo(map);
+        if (poi.name) {
+          marker.bindTooltip(poi.name, {
+            direction: "top",
+            offset: [0, -6],
+            opacity: 0.95,
+            className: "route-map-poi-tooltip",
+          });
+        }
+      }
+
       // Fit to the union of all rendered traces so muted candidates remain
       // visible even when they extend beyond the selected one.
       const allBounds = L.latLngBounds(selectedLatLngs);
@@ -134,7 +161,7 @@ export function RouteMap({
     }
 
     map.setView(DEFAULT_CENTER, DEFAULT_ZOOM);
-  }, [points, candidates, start, color]);
+  }, [points, candidates, pois, start, color]);
 
   return (
     <div

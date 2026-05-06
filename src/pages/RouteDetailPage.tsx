@@ -85,7 +85,7 @@ export function RouteDetailPage() {
         </header>
 
         <Suspense fallback={<MapFallback />}>
-          <RouteMap points={route.points} />
+          <RouteMap points={route.points} pois={route.pois} />
         </Suspense>
 
         {route.elevation.length > 1 && (
