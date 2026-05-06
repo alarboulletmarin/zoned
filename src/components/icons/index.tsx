@@ -1012,6 +1012,17 @@ export function Scale({ className, size = 24 }: IconProps) {
   );
 }
 
+export function Bike({ className, size = 24 }: IconProps) {
+  return (
+    <svg {...defaultProps} width={size} height={size} className={className}>
+      <circle cx="18.5" cy="17.5" r="3.5" />
+      <circle cx="5.5" cy="17.5" r="3.5" />
+      <circle cx="15" cy="5" r="1" />
+      <path d="M12 17.5V14l-3-3 4-3 2 3h2" />
+    </svg>
+  );
+}
+
 export function Waves({ className, size = 24 }: IconProps) {
   return (
     <svg {...defaultProps} width={size} height={size} className={className}>

@@ -4,11 +4,10 @@ import { useTranslation } from "react-i18next";
 
 import {
   ArrowRight,
-  Footprints,
+  Bike,
   Mountain,
   Route as RouteIcon,
   Waves,
-  Zap,
 } from "@/components/icons";
 
 /**
@@ -60,13 +59,13 @@ const SLIDES: SpotlightSlide[] = [
   },
   {
     key: "cycling",
-    to: "/library?discipline=cycling",
+    to: "/library?type=cycling",
     gradient:
       "from-zone-4/15 via-zone-4/5 to-zone-3/10 dark:from-zone-4/25 dark:via-zone-4/10 dark:to-zone-3/15 border-zone-4/30",
     iconBg: "bg-zone-4/20 dark:bg-zone-4/30",
     iconColor: "text-zone-4",
-    Icon: Zap,
-    DecorIcon: Footprints,
+    Icon: Bike,
+    DecorIcon: Bike,
     i18n: {
       eyebrow: "home.cyclingEyebrow",
       title: "home.cyclingTitle",
@@ -76,7 +75,7 @@ const SLIDES: SpotlightSlide[] = [
   },
   {
     key: "swimming",
-    to: "/library?discipline=swimming",
+    to: "/library?type=swimming",
     gradient:
       "from-zone-2/15 via-zone-2/5 to-zone-1/10 dark:from-zone-2/25 dark:via-zone-2/10 dark:to-zone-1/15 border-zone-2/30",
     iconBg: "bg-zone-2/20 dark:bg-zone-2/30",
