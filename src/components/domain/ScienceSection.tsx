@@ -5,7 +5,7 @@ import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { FlaskConical, Brain, Sparkles, BookOpen } from "@/components/icons";
 import { TARGET_SYSTEM_SCIENCE } from "@/data/science";
 import type { TargetSystemScience, ScientificReference } from "@/data/science";
-import { ZONE_META } from "@/types";
+import { getWorkoutDiscipline, ZONE_META } from "@/types";
 import type { WorkoutTemplate, ZoneNumber } from "@/types";
 import { usePickLang, usePickLangArray } from "@/lib/i18n-utils";
 import { getWorkoutZoneNumbers } from "@/lib/workoutStructure";
@@ -47,6 +47,11 @@ export function ScienceSection({ workout }: ScienceSectionProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
+        {getWorkoutDiscipline(workout) !== "running" && (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200">
+            {t("science.crossDisciplineNote")}
+          </div>
+        )}
         {/* Rationale */}
           <div className="space-y-2">
             <h3 className="text-sm font-semibold flex items-center gap-2">

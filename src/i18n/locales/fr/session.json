@@ -104,7 +104,8 @@
     "learnMore": {
       "nutrition": "Guide nutrition complet",
       "recovery": "Guide récupération complet"
-    }
+    },
+    "crossDisciplineNote": "Recommandations rédigées pour la course à pied. Les principes aérobies s'appliquent au vélo et à la natation, avec des spécificités (ravitaillement long ride, hydratation chlorée) à enrichir."
   },
   "planContext": {
     "banner": "Semaine {{week}} · Séance adaptée au volume ({{volume}}%) : ~{{duration}} min",
@@ -118,6 +119,7 @@
     "zonesSolicited": "Zones sollicitées",
     "adaptations": "Adaptations attendues",
     "references": "Références scientifiques",
-    "viewStudy": "Voir l'étude"
+    "viewStudy": "Voir l'étude",
+    "crossDisciplineNote": "Le contenu scientifique ci-dessous est rédigé pour la course à pied. Les principes (zones, adaptations métaboliques) s'appliquent au vélo et à la natation avec des nuances propres à chaque discipline."
   }
 }
