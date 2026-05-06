@@ -86,6 +86,9 @@
     "tips": "Tips",
     "mistakes": "Common Mistakes"
   },
+  "actions": {
+    "findRoute": "Find a matching route"
+  },
   "variations": {
     "title": "Variations",
     "related": "Similar Workouts"

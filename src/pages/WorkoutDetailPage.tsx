@@ -52,6 +52,7 @@ import { RelatedContent } from "@/components/domain/RelatedContent";
 import { useScrolledPast } from "@/hooks/useScrolledPast";
 import type { WorkoutCategory, ZoneRange, AnyWorkoutTemplate } from "@/types";
 import {
+  getWorkoutDiscipline,
   getDominantZone,
   isStrengthWorkout,
 } from "@/types";
@@ -190,6 +191,8 @@ export function WorkoutDetailPage() {
   }
 
   const dominantZone = getDominantZone(workout);
+  const workoutDiscipline = getWorkoutDiscipline(workout);
+  const canGenerateRoute = !workout.environment.requiresTrack && (workoutDiscipline === "running" || workoutDiscipline === "cycling");
   // Plan context: duration from plan generation (volume-scaled, may differ for long runs)
   const planWeekNumber = locationState?.weekNumber;
   const planVolumePercent = locationState?.volumePercent;
@@ -403,6 +406,17 @@ export function WorkoutDetailPage() {
               </p>
             </div>
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-8">
+              {canGenerateRoute && (
+                <Button asChild className="rounded-full px-5 py-2.5 h-auto font-bold">
+                  <Link
+                    to="/routes"
+                    state={{ workoutRouteWorkout: workout }}
+                  >
+                    <Route className="size-4 mr-2" />
+                    {t("session:actions.findRoute")}
+                  </Link>
+                </Button>
+              )}
               <ExportMenu workout={workout} />
               <Button
                 variant="secondary"

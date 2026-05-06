@@ -17,6 +17,7 @@ import {
   Pencil,
   AlertTriangle,
   Shuffle,
+  Route as RouteIcon,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -74,6 +75,7 @@ import { WeekGuidancePanel } from "@/components/domain/WeekGuidancePanel";
 import { usePlanViewMode } from "@/hooks/usePlanViewMode";
 import { getCurrentWeek } from "@/lib/planUtils";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
+import { pickWeekRouteTarget } from "@/lib/routeGenerator/recommendation";
 import { applyWeekValidationDecision, getUnresolvedSessions, getWeekResolutionSummary, type UnresolvedSessionPreview } from "@/lib/weekValidation";
 
 
@@ -537,6 +539,44 @@ export function PlanViewPage() {
     }
   }, [plan, isEn, navigate]);
 
+  const handleFindRoute = useCallback((weekNumber: number, sessionIndex: number) => {
+    if (!plan) return;
+    const week = plan.weeks.find((w) => w.weekNumber === weekNumber);
+    const session = week?.sessions[sessionIndex];
+    if (!session) return;
+    if (session.workoutId === "__race_day__" || session.workoutId === "__intermediate_race__" || session.workoutId.startsWith("__activity_")) {
+      toast.error(t("view.noRouteableSession"));
+      return;
+    }
+
+    navigate("/routes", {
+      state: {
+        planRouteSession: {
+          session,
+          planSessionRef: {
+            planId: plan.id,
+            weekNumber,
+            sessionIndex,
+          },
+        },
+      },
+    });
+  }, [plan, navigate, t]);
+
+  const handleFindWeekRoute = useCallback((weekNumber: number) => {
+    if (!plan) return;
+    const week = plan.weeks.find((w) => w.weekNumber === weekNumber);
+    if (!week) return;
+
+    const target = pickWeekRouteTarget(week);
+    if (!target) {
+      toast.error(t("view.noRouteableSession"));
+      return;
+    }
+
+    handleFindRoute(weekNumber, target.sessionIndex);
+  }, [plan, handleFindRoute, t]);
+
   const handleAddToDay = useCallback((weekNumber: number, day: number) => {
     if (blockedDaysSet.has(`${weekNumber}-${day}`)) {
       toast.error(t("reschedule.blockedDrop"));
@@ -989,6 +1029,7 @@ export function PlanViewPage() {
               minWeek={visibleMin}
               maxWeek={visibleMax}
               onWeekChange={setGuidanceWeekNum}
+              onGenerateRoute={() => handleFindWeekRoute(wn)}
             />
           ) : null;
         })()}
@@ -1006,6 +1047,7 @@ export function PlanViewPage() {
                 onSessionClick={handleSessionClick}
                 onSessionMove={handleSessionMove}
                 onSessionDelete={handleSessionDelete}
+                onFindRoute={handleFindRoute}
                 onToggleComplete={handleToggleComplete}
                 onValidateWeek={handleValidateWeek}
                 onWorkoutAdd={handleWorkoutAdd}
@@ -1044,10 +1086,12 @@ export function PlanViewPage() {
                 onSessionClick={handleSessionClick}
                 onSessionMove={handleSessionMove}
                 onSessionDelete={handleSessionDelete}
+                onFindRoute={handleFindRoute}
                 onToggleComplete={handleToggleComplete}
                 onValidateWeek={handleValidateWeek}
                 onWorkoutAdd={handleWorkoutAdd}
                 onAddToDay={handleAddToDay}
+                onFindWeekRoute={handleFindWeekRoute}
                 blockedDays={blockedDaysSet}
               />
             </div>
@@ -1079,6 +1123,7 @@ export function PlanViewPage() {
                 onSessionClick={handleSessionClick}
                 onSessionMove={handleSessionMove}
                 onSessionDelete={handleSessionDelete}
+                onFindRoute={handleFindRoute}
                 onToggleComplete={handleToggleComplete}
                 onValidateWeek={handleValidateWeek}
                 onWorkoutAdd={handleWorkoutAdd}
@@ -1404,6 +1449,24 @@ export function PlanViewPage() {
                                         <span className="text-xs">{"\u2194"}</span>
                                       </Button>
                                     )}
+                                    <Button asChild variant="ghost" size="sm" className="h-6 w-6 p-0" title={t("view.findRoute")}>
+                                      <Link
+                                        to="/routes"
+                                        state={{
+                                          planRouteSession: {
+                                            session,
+                                            planSessionRef: {
+                                              planId: plan.id,
+                                              weekNumber: week.weekNumber,
+                                              sessionIndex: originalIndex,
+                                            },
+                                          },
+                                        }}
+                                        onClick={(e) => e.stopPropagation()}
+                                      >
+                                        <RouteIcon className="size-3.5" />
+                                      </Link>
+                                    </Button>
                                     <Button
                                       variant="ghost"
                                       size="sm"

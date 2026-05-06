@@ -28,6 +28,7 @@ interface PlanMonthlyViewProps {
   onSessionClick?: (weekNumber: number, sessionIndex: number, workoutId: string) => void;
   onSessionMove?: (fromWeek: number, fromSessionIndex: number, toWeek: number, toDay: number) => void;
   onSessionDelete?: (weekNumber: number, sessionIndex: number) => void;
+  onFindRoute?: (weekNumber: number, sessionIndex: number) => void;
   onToggleComplete?: (weekNumber: number, sessionIndex: number) => void;
   onValidateWeek?: (weekNumber: number) => void;
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
@@ -49,6 +50,7 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
   onSessionClick,
   onSessionMove,
   onSessionDelete,
+  onFindRoute,
   onToggleComplete,
   onValidateWeek,
   onWorkoutAdd,
@@ -226,6 +228,7 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
         onSessionClick={onSessionClick}
         onSessionMove={onSessionMove}
         onSessionDelete={onSessionDelete}
+        onFindRoute={onFindRoute}
         onToggleComplete={onToggleComplete}
         onValidateWeek={onValidateWeek}
         onWorkoutAdd={onWorkoutAdd}

@@ -1,7 +1,7 @@
 import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
-import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, Dumbbell } from "@/components/icons";
+import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, Dumbbell, Route as RouteIcon } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
@@ -57,11 +57,13 @@ interface PlanWeeklyViewProps {
     toDay: number,
   ) => void;
   onSessionDelete?: (weekNumber: number, sessionIndex: number) => void;
+  onFindRoute?: (weekNumber: number, sessionIndex: number) => void;
   onToggleComplete?: (weekNumber: number, sessionIndex: number) => void;
   onValidateWeek?: (weekNumber: number) => void;
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
   onAddToDay?: (weekNumber: number, day: number) => void;
   onWeekChange?: (week: number) => void;
+  onFindWeekRoute?: (weekNumber: number) => void;
   blockedDays?: Set<string>;
 }
 
@@ -77,11 +79,13 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   onSessionClick,
   onSessionMove,
   onSessionDelete,
+  onFindRoute,
   onToggleComplete,
   onValidateWeek,
   onWorkoutAdd,
   onAddToDay,
   onWeekChange,
+  onFindWeekRoute,
   blockedDays,
 }: PlanWeeklyViewProps) {
   const { t } = useTranslation("plan");
@@ -540,6 +544,19 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
           return null;
         })()}
 
+        {weekData && onFindWeekRoute && (
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={() => onFindWeekRoute(selectedWeek)}
+              className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/10"
+            >
+              <RouteIcon className="size-3.5" />
+              {t("view.findWeekRoute")}
+            </button>
+          </div>
+        )}
+
         {/* ── Week guidance (free plans only) ── */}
         {weekData && plan.config.planMode === "free" && (
           <WeekGuidancePanel
@@ -611,6 +628,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                         onTouchMove={handleTouchMove}
                         onTouchEnd={handleTouchEnd}
                         onSessionClick={onSessionClick}
+                        onFindRoute={onFindRoute}
                         onToggleComplete={onToggleComplete}
                         onAddToDay={onAddToDay}
                         setContextMenu={setContextMenu}
@@ -666,6 +684,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
                     onSessionClick={onSessionClick}
+                    onFindRoute={onFindRoute}
                     onToggleComplete={onToggleComplete}
                     onAddToDay={onAddToDay}
                     setContextMenu={setContextMenu}
@@ -705,6 +724,19 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
               >
                 <Eye className="size-4 text-muted-foreground shrink-0" />
                 {t("calendar.viewSession")}
+              </button>
+            )}
+            {onFindRoute && (
+              <button
+                type="button"
+                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors text-left"
+                onClick={() => {
+                  onFindRoute(contextMenu.weekNumber, contextMenu.sessionIndex);
+                  setContextMenu(null);
+                }}
+              >
+                <RouteIcon className="size-4 text-muted-foreground shrink-0" />
+                {t("view.findRoute")}
               </button>
             )}
             {onToggleComplete && (
@@ -776,6 +808,7 @@ interface DayCellProps {
   onTouchMove: (e: React.TouchEvent) => void;
   onTouchEnd: () => void;
   onSessionClick?: (weekNumber: number, sessionIndex: number, workoutId: string) => void;
+  onFindRoute?: (weekNumber: number, sessionIndex: number) => void;
   onToggleComplete?: (weekNumber: number, sessionIndex: number) => void;
   onAddToDay?: (weekNumber: number, day: number) => void;
   setContextMenu: (
@@ -811,6 +844,7 @@ const DayCell = memo(function DayCell({
   onTouchMove,
   onTouchEnd,
   onSessionClick,
+  onFindRoute,
   onToggleComplete,
   onAddToDay,
   setContextMenu,
@@ -927,9 +961,9 @@ const DayCell = memo(function DayCell({
             )}
           >
             <div
-              className={cn(
-                "rounded mb-1 relative",
-                isDesktop ? "p-2" : "p-1.5",
+                    className={cn(
+                      "rounded mb-1 relative group",
+                      isDesktop ? "p-2" : "p-1.5",
                 isIntermediateRace
                   ? "bg-orange-50 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700"
                   : isStrength
@@ -965,6 +999,19 @@ const DayCell = memo(function DayCell({
                 </div>
               ) : (
                 <>
+                  {onFindRoute && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onFindRoute(selectedWeek, originalIndex);
+                      }}
+                      className="absolute right-1.5 top-1.5 z-10 hidden rounded text-muted-foreground transition-colors hover:text-primary md:group-hover:block"
+                      title={t("view.findRoute")}
+                    >
+                      <RouteIcon className="size-3.5" />
+                    </button>
+                  )}
                   <div className="flex items-center gap-1 mb-0.5">
                     {onToggleComplete && (
                       <button

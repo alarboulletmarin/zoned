@@ -99,6 +99,24 @@ export function RouteDetailPage() {
           </div>
         )}
 
+        {route.planSessionRef && (
+          <div className="flex flex-col gap-3 rounded-xl border border-primary/20 bg-primary/5 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">
+                {t("result.linkedToPlan")}
+              </p>
+              <p className="mt-1 text-sm text-foreground">
+                {t("result.linkedToPlanBody", { week: route.planSessionRef.weekNumber })}
+              </p>
+            </div>
+            <Button asChild variant="outline" size="sm">
+              <Link to={`/plan/${route.planSessionRef.planId}?week=${route.planSessionRef.weekNumber}`}>
+                {t("result.backToPlan")}
+              </Link>
+            </Button>
+          </div>
+        )}
+
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" onClick={onExport} className="gap-2">
             <Download className="size-4" />

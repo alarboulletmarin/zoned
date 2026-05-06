@@ -1,5 +1,5 @@
 import { lazy, Suspense, useCallback, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
@@ -11,12 +11,24 @@ import {
   type RouteFormSubmitPayload,
 } from "@/components/domain/RouteParametersForm";
 import { generateRouteCandidates } from "@/lib/routeGenerator";
+import {
+  buildManualRouteIntent,
+  buildTrainingRoutePreset,
+  buildWorkoutRoutePreset,
+  rankRouteCandidates,
+  type RankedRouteCandidate,
+} from "@/lib/routeGenerator/recommendation";
 import { downloadRouteGpx } from "@/lib/export/gpx";
 import { useRoutes } from "@/hooks/useRoutes";
 import { useSettings } from "@/hooks/useSettings";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
+import { usePickLang, usePickLocale } from "@/lib/i18n-utils";
+import { loadRunnerProfile } from "@/lib/runnerProfile";
+import { SESSION_TYPE_LABELS } from "@/lib/labels";
+import type { WorkoutTemplate } from "@/types";
 import type { Route, RouteCoordinate } from "@/types/route";
+import type { PlanSession } from "@/types/plan";
 
 const RouteMap = lazy(() =>
   import("@/components/visualization/route/RouteMap").then((m) => ({
@@ -35,25 +47,82 @@ function MapSkeleton() {
   );
 }
 
+interface DisplayCandidate {
+  route: Route;
+  recommendation: RankedRouteCandidate | null;
+}
+
+interface RouteGeneratorLocationState {
+  planRouteSession?: {
+    session: PlanSession;
+    planSessionRef: NonNullable<Route["planSessionRef"]>;
+  };
+  workoutRouteWorkout?: WorkoutTemplate;
+}
+
 export function RouteGeneratorPage() {
   const { t } = useTranslation("routes");
   const navigate = useNavigate();
+  const location = useLocation();
   const { saveRoute } = useRoutes();
   const { settings } = useSettings();
+  const pickLang = usePickLang();
+  const pickLocale = usePickLocale();
 
-  const [candidates, setCandidates] = useState<Route[]>([]);
+  const [candidates, setCandidates] = useState<DisplayCandidate[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [previewStart, setPreviewStart] = useState<RouteCoordinate | null>(null);
   const [lastPayload, setLastPayload] = useState<RouteFormSubmitPayload | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const route = candidates[selectedIndex] ?? null;
+  const routeState = location.state as RouteGeneratorLocationState | null;
+  const runnerProfile = useMemo(() => loadRunnerProfile(), []);
+  const trainingPreset = useMemo(() => {
+    const planRouteSession = routeState?.planRouteSession;
+    if (planRouteSession) {
+      return buildTrainingRoutePreset({
+        session: planRouteSession.session,
+        runnerProfile,
+        planSessionRef: planRouteSession.planSessionRef,
+      });
+    }
+
+    if (routeState?.workoutRouteWorkout) {
+      return buildWorkoutRoutePreset({
+        workout: routeState.workoutRouteWorkout,
+        runnerProfile,
+      });
+    }
+
+    return null;
+  }, [routeState, runnerProfile]);
+
+  const presetSession = routeState?.planRouteSession?.session ?? null;
+  const presetWorkout = routeState?.workoutRouteWorkout ?? null;
+  const presetSessionLabel = trainingPreset?.intent.sessionType
+    ? pickLocale(SESSION_TYPE_LABELS[trainingPreset.intent.sessionType], trainingPreset.intent.sessionType)
+    : null;
+  const presetSessionNotes = presetSession
+    ? pickLang(presetSession, "notes")
+    : presetWorkout
+      ? pickLang(presetWorkout, "description")
+      : "";
+  const presetTitle = presetWorkout ? pickLang(presetWorkout, "name") : null;
+
+  const selectedCandidate = candidates[selectedIndex] ?? null;
+  const route = selectedCandidate?.route ?? null;
+  const selectedRecommendation = selectedCandidate?.recommendation ?? null;
   // Pre-compute the unselected traces once so RouteMap can render them in
   // the muted background layer without re-deriving the array each render.
   const candidateTraces = useMemo(
-    () => candidates.filter((_, i) => i !== selectedIndex).map((c) => c.points),
+    () => candidates.filter((_, i) => i !== selectedIndex).map((c) => c.route.points),
     [candidates, selectedIndex],
   );
+
+  const displayDurationSec = selectedRecommendation?.predictedDurationSec ?? route?.estimatedDurationSec ?? 0;
+  const distanceDeviationRatio = route
+    ? Math.abs(route.distanceM / (route.constraints.targetDistanceKm * 1000) - 1)
+    : 0;
 
   const generate = useCallback(
     async (payload: RouteFormSubmitPayload, seed: number) => {
@@ -65,18 +134,38 @@ export function RouteGeneratorPage() {
           discipline: payload.discipline,
           shape: payload.shape,
           surface: payload.surface,
+          elevationGainTargetM: payload.elevationGainTargetM,
           seed,
           bearingDeg: payload.bearingDeg,
           count: 3,
         });
         if (results.length === 0) {
-          // generateRouteCandidates rejects every attempt that misses the
-          // target by more than 20% — when nothing survives, surface a
-          // dedicated error rather than show a blank state.
           toast.error(t("errors.noConvergence"));
           return;
         }
-        setCandidates(results);
+        const nextCandidates = trainingPreset
+          ? rankRouteCandidates(results, {
+              intent: trainingPreset.intent,
+              athlete: trainingPreset.athlete,
+            }).map((entry) => ({ route: entry.route, recommendation: entry }))
+          : rankRouteCandidates(results, {
+              intent: buildManualRouteIntent({
+                discipline: payload.discipline,
+                shape: payload.shape,
+                targetDistanceKm: payload.targetDistanceKm,
+                surface: payload.surface,
+                elevationGainTargetM: payload.elevationGainTargetM,
+              }),
+              athlete: runnerProfile
+                ? {
+                    vma: runnerProfile.vma,
+                    runnerLevel: runnerProfile.runnerLevel,
+                    currentWeeklyKm: runnerProfile.currentWeeklyKm,
+                    currentLongRunKm: runnerProfile.currentLongRunKm,
+                  }
+                : null,
+            }).map((entry) => ({ route: entry.route, recommendation: entry }));
+        setCandidates(nextCandidates);
         setSelectedIndex(0);
         setLastPayload(payload);
       } catch (err) {
@@ -86,7 +175,7 @@ export function RouteGeneratorPage() {
         setIsGenerating(false);
       }
     },
-    [t],
+    [runnerProfile, t, trainingPreset],
   );
 
   const onSubmit = (payload: RouteFormSubmitPayload) => {
@@ -101,9 +190,14 @@ export function RouteGeneratorPage() {
 
   const onSave = () => {
     if (!route) return;
-    if (saveRoute(route)) {
+    const routeToSave = {
+      ...route,
+      estimatedDurationSec: displayDurationSec || route.estimatedDurationSec,
+      ...(trainingPreset?.planSessionRef ? { planSessionRef: trainingPreset.planSessionRef } : {}),
+    };
+    if (saveRoute(routeToSave)) {
       toast.success(t("result.saved"));
-      navigate(`/routes/${route.id}`);
+      navigate(`/routes/${routeToSave.id}`);
     } else {
       toast.error(t("result.saveFailed"));
     }
@@ -152,11 +246,96 @@ export function RouteGeneratorPage() {
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,360px)_1fr] xl:gap-8">
           <aside className="min-w-0">
+            {trainingPreset && presetSession && (
+              <div className="mb-4 rounded-xl border border-primary/20 bg-primary/5 p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary/80">
+                  {t(`recommendation.eyebrow.${trainingPreset.intent.source}`)}
+                </p>
+                <div className="mt-2 space-y-1.5">
+                  <p className="text-sm font-semibold text-foreground">
+                    {t("recommendation.optimizedFor", { session: presetSessionLabel ?? t("recommendation.genericSession") })}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {t("recommendation.sessionSummary", {
+                      distance: trainingPreset.formDefaults.targetDistanceKm.toFixed(1),
+                      duration: presetSession.targetDurationMin ?? presetSession.estimatedDurationMin,
+                    })}
+                  </p>
+                  {presetSessionNotes && (
+                    <p className="text-xs leading-relaxed text-muted-foreground">
+                      {presetSessionNotes}
+                    </p>
+                  )}
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
+                    {t(`recommendation.preferences.${trainingPreset.intent.terrainPreference}`)}
+                  </span>
+                  <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
+                    {t(`recommendation.preferences.continuity_${trainingPreset.intent.continuityPriority}`)}
+                  </span>
+                  {trainingPreset.intent.repeatabilityPriority !== "low" && (
+                    <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
+                      {t("recommendation.preferences.repeatable")}
+                    </span>
+                  )}
+                </div>
+                <div className="mt-3">
+                  <Link
+                    to={`/plan/${trainingPreset.planSessionRef?.planId}?week=${trainingPreset.planSessionRef?.weekNumber}`}
+                    className="text-xs font-medium text-primary hover:underline"
+                  >
+                    {t("recommendation.backToPlan")}
+                  </Link>
+                </div>
+              </div>
+            )}
+            {trainingPreset && !presetSession && presetWorkout && (
+              <div className="mb-4 rounded-xl border border-primary/20 bg-primary/5 p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary/80">
+                  {t(`recommendation.eyebrow.${trainingPreset.intent.source}`)}
+                </p>
+                <div className="mt-2 space-y-1.5">
+                  <p className="text-sm font-semibold text-foreground">
+                    {t("recommendation.optimizedForWorkout", {
+                      session: presetSessionLabel ?? t("recommendation.genericSession"),
+                      workout: presetTitle ?? t("recommendation.genericWorkout"),
+                    })}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {t("recommendation.sessionSummary", {
+                      distance: trainingPreset.formDefaults.targetDistanceKm.toFixed(1),
+                      duration: trainingPreset.intent.targetDurationMin ?? 0,
+                    })}
+                  </p>
+                  {presetSessionNotes && (
+                    <p className="text-xs leading-relaxed text-muted-foreground">
+                      {presetSessionNotes}
+                    </p>
+                  )}
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
+                    {t(`recommendation.preferences.${trainingPreset.intent.terrainPreference}`)}
+                  </span>
+                  <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
+                    {t(`recommendation.preferences.continuity_${trainingPreset.intent.continuityPriority}`)}
+                  </span>
+                  {trainingPreset.intent.repeatabilityPriority !== "low" && (
+                    <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
+                      {t("recommendation.preferences.repeatable")}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
             <RouteParametersForm
+              key={trainingPreset ? `${trainingPreset.planSessionRef?.planId}-${trainingPreset.planSessionRef?.weekNumber}-${trainingPreset.planSessionRef?.sessionIndex}` : "manual-route-form"}
               isGenerating={isGenerating}
               onSubmit={onSubmit}
               onError={(msg) => toast.error(msg)}
               onStartChange={(point) => setPreviewStart(point)}
+              initialValues={trainingPreset?.formDefaults}
             />
           </aside>
 
@@ -170,20 +349,104 @@ export function RouteGeneratorPage() {
               />
             </Suspense>
 
-            {candidates.length > 1 && (
+            {!trainingPreset && candidates.length > 1 && (
               <Segmented
                 value={String(selectedIndex)}
                 onChange={(v) => setSelectedIndex(Number(v))}
                 label={t("form.candidatesLabel")}
                 options={candidates.map<SegmentedOption<string>>((c, i) => ({
                   value: String(i),
-                  label: `${t("form.candidate", { index: i + 1 })} · ${(c.distanceM / 1000).toFixed(1)} km`,
+                  label: `${t("form.candidate", { index: i + 1 })} · ${(c.route.distanceM / 1000).toFixed(1)} km`,
                 }))}
               />
             )}
 
+            {trainingPreset && candidates.length > 0 && (
+              <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                {candidates.map((candidate, index) => (
+                  <button
+                    key={candidate.route.id}
+                    type="button"
+                    onClick={() => setSelectedIndex(index)}
+                    className={`rounded-xl border p-3 text-left transition-colors ${
+                      index === selectedIndex
+                        ? "border-primary bg-primary/5 shadow-sm"
+                        : "border-border/60 bg-background hover:border-primary/40"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">
+                          {candidate.recommendation
+                            ? t(`recommendation.accents.${candidate.recommendation.accent}`)
+                            : t("recommendation.accents.closest_to_target")}
+                        </p>
+                        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                          {(candidate.recommendation?.reasons ?? ["closest_to_target_distance"])
+                            .slice(0, 2)
+                            .map((reason) => t(`recommendation.reasons.${reason}`))
+                            .join(" · ")}
+                        </p>
+                      </div>
+                      {index === selectedIndex && (
+                        <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary-foreground">
+                          {t("recommendation.selected")}
+                        </span>
+                      )}
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
+                      <span>{(candidate.route.distanceM / 1000).toFixed(1)} km</span>
+                      <span>D+ {candidate.route.elevationGainM} m</span>
+                      <span>
+                        {formatDurationMinutes(
+                          (candidate.recommendation?.predictedDurationSec ?? candidate.route.estimatedDurationSec) / 60,
+                        )}
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+
             {route && (
               <>
+                {selectedRecommendation && (
+                  <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">
+                          {t("recommendation.resultEyebrow")}
+                        </p>
+                        <p className="mt-1 text-sm font-semibold text-foreground">
+                          {t(`recommendation.accents.${selectedRecommendation.accent}`)}
+                        </p>
+                      </div>
+                      <span className="rounded-full border border-primary/20 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
+                        {t("recommendation.scoreLabel", { score: Math.round(selectedRecommendation.score * 100) })}
+                      </span>
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {selectedRecommendation.reasons.map((reason) => (
+                        <span
+                          key={reason}
+                          className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground"
+                        >
+                          {t(`recommendation.reasons.${reason}`)}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {distanceDeviationRatio > 0.05 && (
+                  <div className="rounded-xl border border-amber-300/60 bg-amber-50/80 p-4 text-sm text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/30 dark:text-amber-100">
+                    <p className="font-semibold">{t("result.approximate")}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-amber-800/90 dark:text-amber-200/90">
+                      {t("result.approximateExplain")}
+                    </p>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-3 gap-3 rounded-xl border border-border/60 bg-muted/20 p-4 text-sm">
                   <div>
                     <p className="text-xs text-muted-foreground">{t("result.actualDistance")}</p>
@@ -198,7 +461,7 @@ export function RouteGeneratorPage() {
                   <div>
                     <p className="text-xs text-muted-foreground">{t("result.estimatedDuration")}</p>
                     <p className="text-lg font-semibold tabular-nums">
-                      {formatDurationMinutes(route.estimatedDurationSec / 60)}
+                      {formatDurationMinutes(displayDurationSec / 60)}
                     </p>
                   </div>
                 </div>

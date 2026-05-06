@@ -2,7 +2,7 @@ import { memo, useMemo, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { usePickLang } from "@/lib/i18n-utils";
-import { Lightbulb, ChevronDown, ChevronLeft, ChevronRight } from "@/components/icons";
+import { Lightbulb, ChevronDown, ChevronLeft, ChevronRight, Route as RouteIcon } from "@/components/icons";
 import { PHASE_GUIDANCE } from "@/data/guidance/phaseGuidance";
 import { tips } from "@/data/tips/data";
 import type { PlanWeek } from "@/types/plan";
@@ -20,6 +20,7 @@ interface WeekGuidancePanelProps {
   /** Max navigable week (default totalWeeks). */
   maxWeek?: number;
   onWeekChange?: (weekNumber: number) => void;
+  onGenerateRoute?: () => void;
   className?: string;
 }
 
@@ -37,6 +38,7 @@ export const WeekGuidancePanel = memo(function WeekGuidancePanel({
   minWeek = 1,
   maxWeek,
   onWeekChange,
+  onGenerateRoute,
   className,
 }: WeekGuidancePanelProps) {
   const { t } = useTranslation("plan");
@@ -232,6 +234,17 @@ export const WeekGuidancePanel = memo(function WeekGuidancePanel({
                 {pickLang(tip, "text")}
               </span>
             </div>
+          )}
+
+          {onGenerateRoute && (
+            <button
+              type="button"
+              onClick={onGenerateRoute}
+              className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-background px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/10"
+            >
+              <RouteIcon className="size-3.5" />
+              {t("view.findWeekRoute")}
+            </button>
           )}
         </div>
       )}

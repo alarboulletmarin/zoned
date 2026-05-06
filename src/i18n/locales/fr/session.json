@@ -86,6 +86,9 @@
     "tips": "Conseils",
     "mistakes": "Erreurs courantes"
   },
+  "actions": {
+    "findRoute": "Trouver un parcours adapté"
+  },
   "variations": {
     "title": "Variantes",
     "related": "Séances similaires"
