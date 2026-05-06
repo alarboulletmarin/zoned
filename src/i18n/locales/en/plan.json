@@ -209,6 +209,8 @@
     "substituteTssLabel": "~{{tss}} TSS",
     "substituteMatchExact": "exact match",
     "substituteMatchDeviation": "±{{deviation}}%",
+    "substituteLongRunWarningTitle": "Long run: degraded substitution",
+    "substituteLongRunWarningBody": "The long run develops orthopedic adaptations (tendon capillarization, running economy, impact tolerance) that cycling or swimming cannot reproduce. Use this when running is impossible (injury, weather, travel), not as a regular alternative.",
     "sessionSubstituted": "Session swapped",
     "removeSession": "Remove session",
     "noSessionsThisWeek": "No sessions this week",

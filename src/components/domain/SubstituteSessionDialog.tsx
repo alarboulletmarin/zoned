@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Loader2 } from "@/components/icons";
+import { AlertTriangle, Loader2 } from "@/components/icons";
 import { loadDisciplineWorkouts } from "@/data/workouts";
 import type { Discipline, WorkoutTemplate } from "@/types";
 import type { PlanSession } from "@/types/plan";
@@ -82,6 +82,16 @@ export function SubstituteSessionDialog({
               : t("view.substituteDescriptionNoTss")}
           </DialogDescription>
         </DialogHeader>
+
+        {plannedSession?.sessionType === "long_run" && (
+          <div className="flex gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200">
+            <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+            <div className="space-y-1 text-xs">
+              <p className="font-semibold">{t("view.substituteLongRunWarningTitle")}</p>
+              <p className="opacity-90">{t("view.substituteLongRunWarningBody")}</p>
+            </div>
+          </div>
+        )}
 
         {/* Discipline tabs */}
         <div className="flex gap-2">

@@ -209,6 +209,8 @@
     "substituteTssLabel": "~{{tss}} TSS",
     "substituteMatchExact": "match exact",
     "substituteMatchDeviation": "±{{deviation}} %",
+    "substituteLongRunWarningTitle": "Sortie longue : substitution en mode dégradé",
+    "substituteLongRunWarningBody": "La sortie longue à pied développe des adaptations orthopédiques (capillarisation tendineuse, économie de course, tolérance à l'impact) que le vélo ou la natation ne reproduisent pas. À utiliser quand la course est impossible (blessure, météo, voyage), pas comme alternative régulière.",
     "sessionSubstituted": "Séance substituée",
     "removeSession": "Retirer la séance",
     "noSessionsThisWeek": "Aucune séance cette semaine",
