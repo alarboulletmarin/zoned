@@ -299,11 +299,17 @@ export function RouteParametersForm({
 
       {/* CTA — pinned to viewport bottom on mobile, inline on tablet+.
           `fixed` (vs `sticky`) is required because the form's height is often
-          smaller than the viewport, so a sticky bottom never engages. */}
+          smaller than the viewport, so a sticky bottom never engages.
+
+          z-[1100] sits above Leaflet's tallest pane (popup at 700, controls
+          at 1000) so the bar can't slip behind the map. Background is
+          fully opaque (no `backdrop-blur`) — combining `position: fixed`
+          with `backdrop-filter` triggers a known WebKit bug where the
+          element starts scrolling with the content on iOS Safari. */}
       <div
         className={cn(
-          "fixed inset-x-0 bottom-0 z-30 border-t border-border/60 bg-background/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur",
-          "sm:static sm:mx-0 sm:mt-2 sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:backdrop-blur-none sm:z-auto",
+          "fixed inset-x-0 bottom-0 z-[1100] border-t border-border/60 bg-background px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_12px_rgba(0,0,0,0.08)]",
+          "sm:static sm:mx-0 sm:mt-2 sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:shadow-none",
         )}
       >
         <Button
