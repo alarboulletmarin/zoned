@@ -76,11 +76,26 @@ export function RouteParametersForm({
     onStartChange?.(point);
   };
 
-  const requestGps = () => {
+  const requestGps = async () => {
     if (!("geolocation" in navigator)) {
       onError?.(t("errors.geolocationUnavailable"));
       return;
     }
+
+    // Detect a previously denied permission so the user gets an actionable
+    // message rather than a silent no-op when the browser caches the refusal.
+    if ("permissions" in navigator) {
+      try {
+        const status = await navigator.permissions.query({ name: "geolocation" as PermissionName });
+        if (status.state === "denied") {
+          onError?.(t("errors.geolocationBlocked"));
+          return;
+        }
+      } catch {
+        // Permissions API may not support `geolocation` in some browsers — skip gracefully.
+      }
+    }
+
     setIsLocating(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
@@ -88,8 +103,14 @@ export function RouteParametersForm({
         updateStart(point, t("form.gpsActive"));
         setIsLocating(false);
       },
-      () => {
-        onError?.(t("errors.geolocationDenied"));
+      (err) => {
+        const message =
+          err.code === err.PERMISSION_DENIED
+            ? t("errors.geolocationBlocked")
+            : err.code === err.TIMEOUT
+              ? t("errors.geolocationTimeout")
+              : t("errors.geolocationDenied");
+        onError?.(message);
         setIsLocating(false);
       },
       { enableHighAccuracy: false, timeout: 10_000, maximumAge: 60_000 },
@@ -244,7 +265,7 @@ export function RouteParametersForm({
             className="gap-2"
           >
             {isLocating ? <Loader2 className="size-4 animate-spin" /> : <MapPin className="size-4" />}
-            {t("form.useGps")}
+            {isLocating ? t("form.gpsLocating") : t("form.useGps")}
           </Button>
           {start && (
             <span className="text-[11px] tabular-nums text-muted-foreground">

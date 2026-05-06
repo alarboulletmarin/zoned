@@ -28,6 +28,7 @@
     "directionNW": "NW",
     "start": "Starting point",
     "useGps": "Use my location",
+    "gpsLocating": "Locating…",
     "gpsActive": "Position active",
     "addressPlaceholder": "Address (e.g. 12 rue de la Paix, Paris)",
     "addressSearching": "Searching…",
@@ -68,6 +69,8 @@
   },
   "errors": {
     "geolocationDenied": "Geolocation permission denied. Type an address instead.",
+    "geolocationBlocked": "Geolocation is blocked for this site. Click the padlock in the address bar to allow it, or type an address.",
+    "geolocationTimeout": "GPS did not respond within 10 s. Try again or type an address.",
     "geolocationUnavailable": "Geolocation unavailable on this device.",
     "routingFailed": "The routing service is temporarily unavailable. Try again in a moment.",
     "noTrace": "No routable trace found for these points.",

@@ -28,6 +28,7 @@
     "directionNW": "NO",
     "start": "Point de départ",
     "useGps": "Utiliser ma position",
+    "gpsLocating": "Localisation en cours…",
     "gpsActive": "Position active",
     "addressPlaceholder": "Adresse (ex : 12 rue de la Paix, Paris)",
     "addressSearching": "Recherche…",
@@ -68,6 +69,8 @@
   },
   "errors": {
     "geolocationDenied": "Permission de géolocalisation refusée. Saisissez une adresse à la place.",
+    "geolocationBlocked": "La géolocalisation est bloquée pour ce site. Cliquez sur le cadenas dans la barre d'adresse pour autoriser, ou saisissez une adresse.",
+    "geolocationTimeout": "Pas de réponse du GPS après 10 s. Essayez à nouveau ou saisissez une adresse.",
     "geolocationUnavailable": "Géolocalisation indisponible sur cet appareil.",
     "routingFailed": "Le service de routage est temporairement indisponible. Réessayez dans un instant.",
     "noTrace": "Aucun tracé routable trouvé pour ces points.",
