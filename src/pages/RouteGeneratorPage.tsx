@@ -49,11 +49,11 @@ function MapSkeleton() {
 }
 
 /**
- * Pick the editor's initial waypoint list from a generated route. We don't
- * know which Brouter nodes were the original "via points", so we approximate:
- * for an out-and-back the apex is the trace point furthest from the start;
- * for a loop we sample two intermediate points at 1/3 and 2/3 of the trace.
- * The user can always insert/move/remove waypoints from there.
+ * Pick the editor's initial waypoint list by sampling the trace at roughly
+ * one-kilometre intervals. The original Brouter "via points" aren't stored
+ * on the Route, so we approximate: a denser handle list lets the user grab
+ * the trace closer to the spot they want to move without having to insert
+ * a fresh waypoint first. Capped at 10 to keep the map readable.
  */
 function deriveInitialWaypoints(
   route: Route,
@@ -61,25 +61,23 @@ function deriveInitialWaypoints(
 ): RouteCoordinate[] {
   const pts = displayPoints.length > 0 ? displayPoints : route.points;
   if (pts.length < 3) return pts;
-  const start = pts[0];
-  const end = pts[pts.length - 1];
-  if (route.shape === "out_and_back") {
-    let apexIdx = Math.floor(pts.length / 2);
-    let bestDist = -1;
-    for (let i = 1; i < pts.length - 1; i += 1) {
-      const dx = pts[i][0] - start[0];
-      const dy = pts[i][1] - start[1];
-      const d = dx * dx + dy * dy;
-      if (d > bestDist) {
-        bestDist = d;
-        apexIdx = i;
-      }
-    }
-    return [start, pts[apexIdx], end];
+
+  const totalM = route.distanceM;
+  if (totalM <= 0) return [pts[0], pts[pts.length - 1]];
+
+  // ~1 mid-handle per km, clamped between 2 and 8 so a short loop stays
+  // editable and a long ride doesn't get cluttered.
+  const midCount = Math.max(2, Math.min(8, Math.round(totalM / 1_000)));
+  const stepCount = midCount + 1;
+
+  const waypoints: RouteCoordinate[] = [pts[0]];
+  for (let s = 1; s < stepCount; s += 1) {
+    const fraction = s / stepCount;
+    const idx = Math.max(1, Math.min(pts.length - 2, Math.round(fraction * (pts.length - 1))));
+    waypoints.push(pts[idx]);
   }
-  const a = pts[Math.floor(pts.length / 3)];
-  const b = pts[Math.floor((2 * pts.length) / 3)];
-  return [start, a, b, end];
+  waypoints.push(pts[pts.length - 1]);
+  return waypoints;
 }
 
 interface DisplayCandidate {
@@ -253,11 +251,22 @@ export function RouteGeneratorPage() {
   const onWaypointMove = useCallback(
     (index: number, point: RouteCoordinate) => {
       if (!editWaypoints) return;
-      const next = editWaypoints.map((wp, i) => (i === index ? point : wp));
+      const isLoop = route?.shape === "loop";
+      const lastIdx = editWaypoints.length - 1;
+      const next = editWaypoints.map((wp, i) => {
+        if (i === index) return point;
+        // Closed loops keep first and last in lockstep so the routing
+        // request still closes — otherwise dragging the start would leave
+        // the end stranded at the original location.
+        if (isLoop && (index === 0 || index === lastIdx)) {
+          if (i === 0 || i === lastIdx) return point;
+        }
+        return wp;
+      });
       setEditWaypoints(next);
       void reRoute(next);
     },
-    [editWaypoints, reRoute],
+    [editWaypoints, reRoute, route],
   );
 
   const onWaypointInsert = useCallback(
@@ -532,6 +541,7 @@ export function RouteGeneratorPage() {
                   showDirection={!!route && !isEditing}
                   onMapClick={!route ? onMapClick : undefined}
                   editableWaypoints={editWaypoints ?? undefined}
+                  editClosedLoop={isEditing && route?.shape === "loop"}
                   onWaypointMove={onWaypointMove}
                   onWaypointInsert={onWaypointInsert}
                   onWaypointRemove={onWaypointRemove}

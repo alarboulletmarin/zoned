@@ -39,6 +39,11 @@ interface RouteMapProps {
    * not removable; intermediate waypoints are removed by clicking them.
    */
   editableWaypoints?: RouteCoordinate[];
+  /**
+   * Hide the dedicated "end" marker because the trace is a closed loop
+   * (last waypoint == first). The visible "start" marker doubles as both.
+   */
+  editClosedLoop?: boolean;
   onWaypointMove?: (index: number, point: RouteCoordinate) => void;
   onWaypointRemove?: (index: number) => void;
   onWaypointInsert?: (insertIndex: number, point: RouteCoordinate) => void;
@@ -63,16 +68,36 @@ function chevronIcon(angleDeg: number, color: string): L.DivIcon {
   });
 }
 
-function waypointIcon(kind: "endpoint" | "mid", color: string): L.DivIcon {
-  const size = kind === "endpoint" ? 18 : 14;
-  const fill = kind === "endpoint" ? color : "#ffffff";
-  const stroke = color;
-  const ring = kind === "endpoint" ? "#ffffff" : color;
+type WaypointKind = "start" | "end" | "mid" | "loop";
+
+function waypointIcon(kind: WaypointKind, color: string): L.DivIcon {
+  const size = kind === "mid" ? 14 : 22;
+  const half = size / 2;
+  const filterShadow = "drop-shadow(0 1px 2px rgba(0,0,0,0.45))";
+
+  if (kind === "mid") {
+    const html = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="display:block;cursor:grab;filter:${filterShadow}"><circle cx="${half}" cy="${half}" r="${half - 2}" fill="#ffffff" stroke="${color}" stroke-width="2"/><circle cx="${half}" cy="${half}" r="${half - 4}" fill="none" stroke="${color}" stroke-width="1" stroke-opacity="0.4"/></svg>`;
+    return L.divIcon({
+      className: "route-map-waypoint route-map-waypoint--mid",
+      html,
+      iconSize: [size, size],
+      iconAnchor: [half, half],
+    });
+  }
+
+  // start: green flag, end: red flag, loop: dual flag (start/end combined)
+  const palette: Record<Exclude<WaypointKind, "mid">, { fill: string; label: string }> = {
+    start: { fill: "#16a34a", label: "S" },
+    end: { fill: "#dc2626", label: "F" },
+    loop: { fill: "#16a34a", label: "•" },
+  };
+  const { fill, label } = palette[kind];
+  const html = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="display:block;cursor:grab;filter:${filterShadow}"><circle cx="${half}" cy="${half}" r="${half - 2}" fill="${fill}" stroke="#ffffff" stroke-width="2.5"/><text x="${half}" y="${half + 4}" text-anchor="middle" font-family="-apple-system,system-ui,sans-serif" font-size="11" font-weight="700" fill="#ffffff">${label}</text></svg>`;
   return L.divIcon({
-    className: "route-map-waypoint",
-    html: `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="display:block;cursor:grab;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.35))"><circle cx="${size / 2}" cy="${size / 2}" r="${size / 2 - 2}" fill="${fill}" stroke="${ring}" stroke-width="2"/><circle cx="${size / 2}" cy="${size / 2}" r="${size / 2 - 4}" fill="none" stroke="${stroke}" stroke-width="1" stroke-opacity="0.4"/></svg>`,
+    className: `route-map-waypoint route-map-waypoint--${kind}`,
+    html,
     iconSize: [size, size],
-    iconAnchor: [size / 2, size / 2],
+    iconAnchor: [half, half],
   });
 }
 
@@ -160,6 +185,7 @@ export function RouteMap({
   onMapClick,
   showDirection = false,
   editableWaypoints,
+  editClosedLoop = false,
   onWaypointMove,
   onWaypointRemove,
   onWaypointInsert,
@@ -301,13 +327,26 @@ export function RouteMap({
       }
 
       if (editableWaypoints) {
+        const lastIdx = editableWaypoints.length - 1;
         editableWaypoints.forEach((wp, idx) => {
-          const isEndpoint = idx === 0 || idx === editableWaypoints.length - 1;
+          const isStart = idx === 0;
+          const isEnd = idx === lastIdx;
+          // For closed loops the end marker would sit on top of the start
+          // and confuse the user; we just hide it. Drags on the start
+          // implicitly carry the end with them (handled in the page).
+          if (editClosedLoop && isEnd) return;
+          const kind: WaypointKind = isStart
+            ? editClosedLoop
+              ? "loop"
+              : "start"
+            : isEnd
+              ? "end"
+              : "mid";
           const marker = L.marker([wp[1], wp[0]], {
             draggable: true,
-            icon: waypointIcon(isEndpoint ? "endpoint" : "mid", color),
+            icon: waypointIcon(kind, color),
             keyboard: false,
-            zIndexOffset: 1000,
+            zIndexOffset: kind === "mid" ? 1000 : 1100,
           }).addTo(map);
 
           let dragging = false;
@@ -317,8 +356,6 @@ export function RouteMap({
           marker.on("dragend", (e) => {
             const ll = (e.target as L.Marker).getLatLng();
             editCallbacksRef.current.onMove?.(idx, [ll.lng, ll.lat]);
-            // Defer the dragging flag reset so the synthetic click that
-            // some browsers fire after a drag doesn't trigger a removal.
             setTimeout(() => {
               dragging = false;
             }, 50);
@@ -326,7 +363,7 @@ export function RouteMap({
           marker.on("click", (e) => {
             L.DomEvent.stopPropagation(e);
             if (dragging) return;
-            if (isEndpoint) return;
+            if (isStart || isEnd) return;
             editCallbacksRef.current.onRemove?.(idx);
           });
         });
@@ -377,7 +414,7 @@ export function RouteMap({
     }
 
     map.setView(DEFAULT_CENTER, DEFAULT_ZOOM, { animate: false });
-  }, [points, candidates, pois, start, color, showDirection, editableWaypoints]);
+  }, [points, candidates, pois, start, color, showDirection, editableWaypoints, editClosedLoop]);
 
   // Leaflet caches the container size at init time, so any external resize
   // (e.g. wrapper toggling between collapsed/expanded heights) leaves the
