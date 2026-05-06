@@ -89,7 +89,7 @@ export function RouteDetailPage() {
         </Suspense>
 
         {route.elevation.length > 1 && (
-          <div className="rounded-xl border border-border/60 bg-background p-3">
+          <div className="rounded-xl border border-border/60 bg-background p-3 sm:p-4">
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               {t("result.elevationProfile")}
             </p>

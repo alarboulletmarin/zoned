@@ -6,7 +6,11 @@ import { cn } from "@/lib/utils";
 interface ElevationChartProps {
   profile: RouteElevationPoint[];
   className?: string;
-  /** Chart height in pixels. Defaults to 140. */
+  /**
+   * SVG `viewBox` height. Used as the *ratio reference* (with VIEW_WIDTH it
+   * defines the aspect ratio of the chart). The rendered height scales with
+   * the container width thanks to CSS `aspect-ratio`, capped via `max-h`.
+   */
   height?: number;
   /** Stroke / fill accent. */
   color?: string;
@@ -82,11 +86,17 @@ export function ElevationChart({
   if (!paths) return null;
 
   const baseY = height - PADDING.bottom;
+  // CSS aspect-ratio keeps the chart proportional to its container width
+  // instead of squashing the trace flat at large widths (the previous
+  // `height: 140px` + `preserveAspectRatio="none"` combo stretched a 600px
+  // viewBox onto whatever the parent provided, which on a wide detail page
+  // produced a wafer-thin profile). max-h caps the chart on ultra-wide
+  // screens so it doesn't dominate the layout.
   return (
     <svg
       viewBox={`0 0 ${VIEW_WIDTH} ${height}`}
-      className={cn("w-full text-muted-foreground", className)}
-      style={{ height }}
+      className={cn("block w-full max-h-72 text-muted-foreground", className)}
+      style={{ aspectRatio: `${VIEW_WIDTH} / ${height}` }}
       role="img"
       aria-label="Profil de dénivelé"
       preserveAspectRatio="none"
