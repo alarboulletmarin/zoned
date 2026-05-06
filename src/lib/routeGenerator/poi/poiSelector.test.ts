@@ -111,6 +111,40 @@ describe("selectDiverseWaypoints", () => {
     const picked = selectDiverseWaypoints(START, candidates, 2_000, 1);
     expect(picked[0].id).toBe(2);
   });
+
+  test("different seeds produce different selections when several candidates exist", () => {
+    // Eight POI of identical weight, spread around the start. Without a
+    // seed-driven jitter the greedy algorithm always picks the same 3 by
+    // bearing — that's the bug we're fixing. We test across many seeds and
+    // require at least 3 distinct sets to come out, which is statistically
+    // robust against unlucky jitter collisions.
+    const candidates = Array.from({ length: 8 }, (_, i) =>
+      placePoi(i + 1, i * 45, 2_000, 1),
+    );
+
+    const seeds = [1, 2, 3, 4, 5, 7, 11, 13, 17, 19];
+    const sets = new Set(
+      seeds.map((s) =>
+        selectDiverseWaypoints(START, candidates, 2_000, 3, s)
+          .map((p) => p.id)
+          .sort()
+          .join(","),
+      ),
+    );
+
+    expect(sets.size).toBeGreaterThanOrEqual(3);
+  });
+
+  test("same seed yields a deterministic selection", () => {
+    const candidates = Array.from({ length: 8 }, (_, i) =>
+      placePoi(i + 1, i * 45, 2_000, 1),
+    );
+
+    const a = selectDiverseWaypoints(START, candidates, 2_000, 3, 42);
+    const b = selectDiverseWaypoints(START, candidates, 2_000, 3, 42);
+
+    expect(a.map((p) => p.id)).toEqual(b.map((p) => p.id));
+  });
 });
 
 describe("pickFurthestPoiInBearing", () => {

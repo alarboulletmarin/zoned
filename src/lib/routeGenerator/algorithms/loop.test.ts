@@ -191,6 +191,51 @@ describe("generateLoop", () => {
     expect(result.pois).toEqual([]);
   });
 
+  test("different seeds produce different POI selections (multi-candidate diversity)", async () => {
+    // Eight POI at distinct bearings, all viable. Without seed-aware
+    // selection two consecutive generations would pick the same trio.
+    const overpassPayload = {
+      elements: Array.from({ length: 8 }, (_, i) => ({
+        id: i + 1,
+        type: "way" as const,
+        center: {
+          lat: 48.8567 + Math.cos((i * 45 * Math.PI) / 180) * 0.018,
+          lon: 2.349 + Math.sin((i * 45 * Math.PI) / 180) * 0.027,
+        },
+        tags: { leisure: "park", name: `Parc ${i + 1}` },
+      })),
+    };
+
+    globalThis.fetch = (async (input: string | URL | Request) => {
+      const url = typeof input === "string" ? input : input.toString();
+      if (url.includes("overpass")) {
+        return new Response(JSON.stringify(overpassPayload), { status: 200 });
+      }
+      return new Response(JSON.stringify(makeBrouterPayload(10_000)), {
+        status: 200,
+      });
+    }) as unknown as typeof fetch;
+
+    const sets = new Set<string>();
+    for (const seed of [1, 2, 3, 4, 5, 7, 11, 13, 17, 19]) {
+      __clearPoiCacheForTests();
+      const result = await generateLoop({
+        start: [2.349, 48.8567],
+        targetDistanceKm: 10,
+        discipline: "running",
+        seed,
+      });
+      sets.add(
+        result.pois
+          .map((p) => p.name ?? "?")
+          .sort()
+          .join("|"),
+      );
+    }
+    // At least 3 distinct POI sets among 10 seeds is the contract.
+    expect(sets.size).toBeGreaterThanOrEqual(3);
+  });
+
   test("uses POI-aware strategy when Overpass returns enough candidates", async () => {
     // Three POIs spread around the start at roughly the right radius.
     const overpassPayload = {

@@ -69,6 +69,13 @@ export function RouteGeneratorPage() {
           bearingDeg: payload.bearingDeg,
           count: 3,
         });
+        if (results.length === 0) {
+          // generateRouteCandidates rejects every attempt that misses the
+          // target by more than 20% — when nothing survives, surface a
+          // dedicated error rather than show a blank state.
+          toast.error(t("errors.noConvergence"));
+          return;
+        }
         setCandidates(results);
         setSelectedIndex(0);
         setLastPayload(payload);

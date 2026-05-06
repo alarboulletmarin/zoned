@@ -73,6 +73,7 @@
     "geolocationTimeout": "GPS did not respond within 10 s. Try again or type an address.",
     "geolocationUnavailable": "Geolocation unavailable on this device.",
     "routingFailed": "The routing service is temporarily unavailable. Try again in a moment.",
+    "noConvergence": "Couldn't find a route close to the requested distance. Try a different distance or starting point.",
     "noTrace": "No routable trace found for these points.",
     "disciplineUnsupported": "Swimming is not supported by the route generator."
   },

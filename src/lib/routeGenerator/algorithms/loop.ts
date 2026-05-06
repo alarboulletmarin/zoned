@@ -139,17 +139,19 @@ async function iteratePoiLoop(
   let chosen: ReturnType<typeof selectDiverseWaypoints> = [];
   let attempts = 0;
 
-  // Rotate the POI list deterministically per seed so successive candidates
-  // (which share parameters but differ by seed) explore different starting
-  // points in the greedy selection. Without this every candidate would pick
-  // the same top-scoring POI as its first waypoint.
-  const rotation = Math.floor(
-    (seededAngleOffset(seed) / 360) * Math.max(1, pois.length),
-  );
-  const rotatedPois = [...pois.slice(rotation), ...pois.slice(0, rotation)];
-
   while (attempts < MAX_ADJUSTMENT_ATTEMPTS) {
-    chosen = selectDiverseWaypoints(start, rotatedPois, targetRadiusM, 3);
+    // The seed is passed through to the selector so two candidates with
+    // different seeds explore different waypoint sets even when their POI
+    // pool is identical. We also re-derive a per-attempt seed so a failed
+    // first pass tries a different selection on retry instead of repeating
+    // the same trio that just over/undershot.
+    chosen = selectDiverseWaypoints(
+      start,
+      pois,
+      targetRadiusM,
+      3,
+      seed + attempts * 1009,
+    );
     if (chosen.length === 0) return null;
 
     trace = await routeViaBrouter({

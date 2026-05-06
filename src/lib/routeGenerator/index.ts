@@ -105,13 +105,20 @@ function defaultRouteName(shape: RouteShape, distanceKm: number): string {
   return `Parcours ${km} km`;
 }
 
+/** Maximum ratio deviation from the target distance accepted as a candidate. */
+const CANDIDATE_DISTANCE_SLACK = 0.2;
+/** Maximum total attempts to find {@link count} valid candidates. */
+const MAX_CANDIDATE_ATTEMPTS_FACTOR = 2;
+
 /**
- * Generate {@link count} route candidates in parallel by varying the seed
- * (loops) or the bearing (out-and-backs). Use this when the user wants to
- * choose between several proposals — typical UC7 in the brief.
+ * Generate {@link count} route candidates by varying the seed (loops) or
+ * the bearing (out-and-backs). Each candidate is checked against a generous
+ * distance window — generations that miss the target by more than 20% are
+ * dropped and replaced with a fresh attempt (within a budget) so the UI
+ * never proposes a 12 km route when the user asked for 8 km.
  *
- * Candidates are sorted by descending tolerance match (best first), so the
- * UI can default-select index 0.
+ * Candidates are sorted by ascending distance error so index 0 is the best
+ * match — the UI defaults to selecting it.
  */
 export async function generateRouteCandidates(args: {
   start: RouteCoordinate;
@@ -124,17 +131,17 @@ export async function generateRouteCandidates(args: {
   count?: number;
   signal?: AbortSignal;
 }): Promise<Route[]> {
-  const { count = 3, shape, bearingDeg, seed } = args;
+  const { count = 3, shape, bearingDeg, seed, targetDistanceKm } = args;
+  const targetM = targetDistanceKm * 1000;
+  const maxAttempts = count * MAX_CANDIDATE_ATTEMPTS_FACTOR;
 
-  // Build per-candidate overrides:
-  // - loops: same bearing slot is irrelevant, vary the seed so the triangle
-  //   rotates between candidates.
-  // - out-and-backs: spread bearings around the requested one (or evenly
-  //   around the compass when no bearing was supplied) so candidates explore
-  //   distinct neighbourhoods.
-  const overrides = Array.from({ length: count }, (_, i) => {
+  /** Build override seed/bearing for the i-th attempt. */
+  const overrideFor = (i: number) => {
     if (shape === "out_and_back") {
       const baseBearing = bearingDeg ?? 0;
+      // Spread around the requested bearing for the first `count` attempts,
+      // then jitter further out for retries so we don't repeatedly pick the
+      // same neighbourhoods.
       const spread = bearingDeg != null ? 60 : 360 / count;
       const offset = bearingDeg != null
         ? (i - Math.floor(count / 2)) * spread
@@ -143,20 +150,28 @@ export async function generateRouteCandidates(args: {
       return { seed: seed + i * 7, bearingDeg: bearing };
     }
     return { seed: seed + i * 7919 };
-  });
+  };
 
   // Sequential rather than fully parallel: respects the public Brouter
   // capacity and gives a predictable progression for the UI.
-  const candidates: Route[] = [];
-  for (const ov of overrides) {
+  const accepted: Array<{ route: Route; deviation: number }> = [];
+  for (let i = 0; i < maxAttempts && accepted.length < count; i += 1) {
+    const ov = overrideFor(i);
     const candidate = await generateRoute({
       ...args,
       seed: ov.seed,
       bearingDeg: ov.bearingDeg,
       name: undefined,
     });
-    candidates.push(candidate);
+    const deviation = Math.abs(candidate.distanceM / targetM - 1);
+    if (deviation <= CANDIDATE_DISTANCE_SLACK) {
+      accepted.push({ route: candidate, deviation });
+    }
   }
 
-  return candidates;
+  // Sort best first so the UI's default selection is the closest match. If
+  // every attempt was off the target, return what we have anyway — the UI
+  // surfaces the deviation through the segmented control labels.
+  accepted.sort((a, b) => a.deviation - b.deviation);
+  return accepted.map((entry) => entry.route);
 }

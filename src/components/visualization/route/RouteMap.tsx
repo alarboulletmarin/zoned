@@ -95,17 +95,25 @@ export function RouteMap({
       const selectedLatLngs: [number, number][] = points.map(([lon, lat]) => [lat, lon]);
 
       // Draw non-selected candidates first so the selected trace renders on
-      // top. Skip any candidate whose coordinates match the selected one.
+      // top. Each gets its own muted hue + dash pattern so two overlapping
+      // candidates remain visually distinguishable even when they share a
+      // significant portion of their tracks (common around the start).
       const others = (candidates ?? []).filter((c) => c !== points && c.length > 1);
-      for (const cand of others) {
+      const ALT_STYLES = [
+        { color: "#0ea5e9", dashArray: "6 6" }, // sky-500
+        { color: "#a855f7", dashArray: "2 6" }, // purple-500
+        { color: "#10b981", dashArray: "8 4" }, // emerald-500
+      ];
+      others.forEach((cand, idx) => {
         const latLngs: [number, number][] = cand.map(([lon, lat]) => [lat, lon]);
+        const style = ALT_STYLES[idx % ALT_STYLES.length];
         L.polyline(latLngs, {
-          color: "#94a3b8", // slate-400 — visibly muted on both light/dark tiles
+          color: style.color,
           weight: 3,
-          opacity: 0.55,
-          dashArray: "4 4",
+          opacity: 0.7,
+          dashArray: style.dashArray,
         }).addTo(map);
-      }
+      });
 
       L.polyline(selectedLatLngs, { color, weight: 4, opacity: 0.9 }).addTo(map);
       L.circleMarker(selectedLatLngs[0], {

@@ -41,6 +41,16 @@ export function angularDistance(a: number, b: number): number {
 }
 
 /**
+ * Deterministic pseudo-random in [0, 1) keyed by (seed, salt). Used to
+ * jitter selection scores so different generation seeds explore distinct
+ * subsets of POI rather than always picking the same top-scoring trio.
+ */
+function seededRandom(seed: number, salt: number): number {
+  const x = Math.sin(seed * 9301 + salt * 49297) * 233280;
+  return x - Math.floor(x);
+}
+
+/**
  * Greedy diverse subset of POI for a loop. Score each candidate by
  * `weight * distanceFitness(distance vs targetRadius)`, sort, then pick the
  * top-scoring entry whose bearing differs from already-picked entries by at
@@ -59,10 +69,18 @@ export function selectDiverseWaypoints(
   targetRadiusM: number,
   /** How many waypoints to return. */
   count: number,
+  /**
+   * Selection seed. Two calls with the same seed and inputs return the same
+   * selection; different seeds yield different subsets among similarly-
+   * scored candidates. Defaults to 0 (legacy deterministic behaviour).
+   */
+  seed = 0,
 ): PoiCandidate[] {
   if (candidates.length === 0 || count <= 0) return [];
 
   // Annotate each candidate with its score and bearing relative to start.
+  // The seed-driven jitter (±15%) reorders near-equal scorers between
+  // generations so successive candidates explore different waypoint sets.
   const annotated = candidates
     .map((c) => {
       const distance = haversineDistanceM(start, c.point);
@@ -70,9 +88,11 @@ export function selectDiverseWaypoints(
       // Anything more than 2x the target gets a near-zero contribution.
       const offset = Math.abs(distance - targetRadiusM) / targetRadiusM;
       const distanceFitness = Math.max(0, 1 - offset);
+      const baseScore = c.weight * distanceFitness;
+      const jitter = seed === 0 ? 1 : 0.85 + 0.3 * seededRandom(seed, c.id);
       return {
         candidate: c,
-        score: c.weight * distanceFitness,
+        score: baseScore * jitter,
         bearing: computeBearing(start, c.point),
       };
     })
