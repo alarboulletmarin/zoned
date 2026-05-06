@@ -185,6 +185,14 @@ export function updatePlanSession(
 
   const session = week.sessions[sessionIndex];
   session.workoutId = newWorkoutId;
+  // The fields below were computed from the previous workout (and possibly a
+  // different discipline). Reset them so any downstream reader recomputes from
+  // the new workout's structure and the substituted discipline's pace engine.
+  session.loadScore = undefined;
+  session.scaledRepetitions = undefined;
+  session.paceNotes = undefined;
+  session.targetDistanceKm = undefined;
+  session.targetDurationMin = undefined;
   if (overrides) {
     if (overrides.sessionType !== undefined) session.sessionType = overrides.sessionType;
     if (overrides.discipline !== undefined) session.discipline = overrides.discipline;
