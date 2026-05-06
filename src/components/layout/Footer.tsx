@@ -1,7 +1,8 @@
+import { useEffect, useState } from "react";
 import { GithubIcon } from "@/components/icons";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { categories } from "@/data/workouts";
+import { categories, loadDisciplineWorkouts } from "@/data/workouts";
 import { strengthCategories } from "@/data/strength";
 import { useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
@@ -14,7 +15,26 @@ export function Footer() {
   const { workouts } = useWorkouts();
   const { workouts: strengthWorkouts } = useStrengthWorkouts();
   const { hasNewVersion } = useWhatsNew();
-  const totalSessions = workouts.length + strengthWorkouts.length;
+
+  // Cycling and swimming live on dedicated discipline loaders, separate from
+  // the running category bucket. Pull their counts asynchronously so the
+  // footer total reflects every discipline shipped with the app.
+  const [crossDisciplineCount, setCrossDisciplineCount] = useState(0);
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([
+      loadDisciplineWorkouts("cycling"),
+      loadDisciplineWorkouts("swimming"),
+    ]).then(([cycling, swimming]) => {
+      if (!cancelled) setCrossDisciplineCount(cycling.length + swimming.length);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const totalSessions =
+    workouts.length + strengthWorkouts.length + crossDisciplineCount;
   const totalCategories = categories.length + strengthCategories.length;
 
   return (

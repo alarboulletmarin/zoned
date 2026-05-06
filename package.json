@@ -1,6 +1,6 @@
 {
   "name": "zoned",
-  "version": "0.4.4",
+  "version": "0.5.0",
   "type": "module",
   "private": true,
   "scripts": {
@@ -39,6 +39,7 @@
     "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.2.8",
+    "@types/leaflet": "^1.9.21",
     "@vercel/analytics": "^1.6.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -47,6 +48,7 @@
     "i18next": "^25.8.0",
     "i18next-browser-languagedetector": "^8.2.0",
     "ics": "^3.8.1",
+    "leaflet": "^1.9.4",
     "pdfmake": "^0.3.3",
     "react": "^19.2.3",
     "react-body-highlighter": "^2.0.5",

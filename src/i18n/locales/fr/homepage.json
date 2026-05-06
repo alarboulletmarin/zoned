@@ -17,6 +17,21 @@
     "strengthForRunners": "Renforcement pour coureurs",
     "strengthForRunnersDesc": "Séances de renforcement basées sur la science pour améliorer votre économie de course et prévenir les blessures.",
     "seeAll": "Voir tout",
-    "browseByCategory": "Parcourir par catégorie"
+    "browseByCategory": "Parcourir par catégorie",
+    "newBadge": "Nouveau",
+    "spotlightLabel": "Nouveautés",
+    "spotlightGoto": "Aller à la slide {{index}}",
+    "routesEyebrow": "Générateur de parcours",
+    "routesTitle": "Crée ton parcours en un clic",
+    "routesDesc": "Boucle ou aller-retour réel depuis ta position, avec dénivelé et export GPX.",
+    "routesCta": "Générer un parcours",
+    "cyclingEyebrow": "Cyclisme",
+    "cyclingTitle": "Le vélo arrive sur Zoned",
+    "cyclingDesc": "10 séances : endurance, sweet spot, seuil, intervalles. Zones FTP intégrées.",
+    "cyclingCta": "Voir les séances vélo",
+    "swimmingEyebrow": "Natation",
+    "swimmingTitle": "Plonge dans le bassin",
+    "swimmingDesc": "10 séances : technique, endurance, sprints, pyramides. Zones CSS intégrées.",
+    "swimmingCta": "Voir les séances natation"
   }
 }

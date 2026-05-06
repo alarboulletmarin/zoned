@@ -3,14 +3,14 @@
 
   # Zoned
 
-  **200+ running workouts · 17 strength sessions · 5K to marathon plans · 9 calculators**
+  **200 running · 10 cycling · 10 swimming · 17 strength · 5K → marathon plans · 9 calculators · route generator**
 
   *Free. No account. No tracking.*
 
   ### [→ zoned.run](https://zoned.run)
 
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
-  [![Version](https://img.shields.io/badge/version-v0.4.4-orange?style=flat-square)](https://github.com/alarboulletmarin/zoned/releases)
+  [![Version](https://img.shields.io/badge/version-v0.5.0-orange?style=flat-square)](https://github.com/alarboulletmarin/zoned/releases)
   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md)
   [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-000?style=flat-square&logo=vercel)](https://vercel.com)
   [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
@@ -23,7 +23,7 @@
 
 ## What is Zoned?
 
-Zoned is a free, open-source web app for structured running training. It brings together 200+ science-based running workouts, 17 strength training sessions for runners, personalized training plans from 5K to marathon with integrated strength periodization, and 9 calculators — all running in your browser, with no account and no data sent anywhere.
+Zoned is a free, open-source web app for structured endurance training. It brings together 200 science-based running workouts, 10 cycling and 10 swimming sessions, 17 strength training sessions for runners, personalized training plans from 5K to marathon with integrated strength periodization, 9 calculators and a real-world route generator — all running in your browser, with no account and no data sent anywhere.
 
 Built on training science from **Seiler**, **Billat**, and **Daniels**. Developed in collaboration with [Claude Code](https://claude.ai/code) (Anthropic).
 
@@ -53,7 +53,8 @@ Built on training science from **Seiler**, **Billat**, and **Daniels**. Develope
 ## Features
 
 ### Workouts
-- **200+ running sessions** across 11 categories: recovery, endurance, tempo, threshold, VMA, long run, hills, fartlek, race pace, mixed, assessment
+- **200 running sessions** across 11 categories: recovery, endurance, tempo, threshold, VMA, long run, hills, fartlek, race pace, mixed, assessment
+- **10 cycling + 10 swimming sessions** with discipline-aware zones (Coggan FTP, CSS) and cross-discipline substitution in plans
 - **17 strength sessions** for runners: full body, legs, core, plyometrics, mobility, prehab — science-based (Beattie 2017, Rønnestad 2014, Lauersen 2014)
 - **46 exercises** with A/B position images, muscle maps, form cues, and progression/regression chains
 - **6 training zones**: Z1 (recovery) → Z6 (sprint)
@@ -73,6 +74,19 @@ Zone calculator · Pace calculator · Pace converter · Pace table · Treadmill 
 - **Export**: PDF, ICS (Google/Apple/Outlook Calendar)
 - **Race day simulator**: km-by-km pacing, nutrition timing, checklists
 
+### Routes (new in 0.5.0)
+- **Route generator**: build a real-world loop or out-and-back from your position
+- **POI-aware routing**: waypoints picked from parks, promenades, greenways and beaches via Overpass — no more random points in the sea
+- **3 candidates per request**: pick the trace you prefer, each with elevation profile, estimated duration and named POI markers
+- **GPX export** + local saved routes
+- **Privacy toggle**: opt-out from Settings if you don't want to send coordinates to public services
+
+### Multi-discipline (new in 0.5.0)
+- **Cycling**: 5 templates (long ride, sweet spot, sprints, 30/30, hills) + Coggan FTP zones
+- **Swimming**: 6 templates (pull, kick, long endurance, IM, sprints, pyramid) + CSS zones
+- **Cross-discipline substitution** in plans (swap a long run for cycling/swimming)
+- **Vélotaf settings**: declare commute kilometers in your profile
+
 ### Discovery
 - **Quiz**: Find the right workout in 5 questions (goal, time, terrain, level, weakness)
 - **Workout of the Day** · Random workout
@@ -80,7 +94,7 @@ Zone calculator · Pace calculator · Pace converter · Pace table · Treadmill 
 - **Favorites**: Save and organize preferred workouts
 
 ### Export
-ICS · PNG · PDF · **Garmin FIT** (native workout file for Garmin devices)
+ICS · PNG · PDF · **Garmin FIT** (native workout file for Garmin devices) · **GPX** (routes)
 
 ### Learn
 - **12 bilingual articles** on training principles (Seiler, polarized, threshold...)

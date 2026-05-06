@@ -20,6 +20,7 @@ import {
   StrengthWorkoutCard,
 } from "@/components/domain";
 import { WorkoutOfTheDay } from "@/components/domain/WorkoutOfTheDay";
+import { NewsSpotlight } from "@/components/domain/NewsSpotlight";
 import { getCollectionBySlug } from "@/data/collections";
 import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
 import { OnboardingBubbles } from "@/components/domain/OnboardingBubbles";
@@ -174,6 +175,9 @@ export function HomePage() {
       <div className="space-y-10 md:space-y-16 py-4 md:py-8">
         {/* Onboarding bubbles (first visit only) */}
         <OnboardingBubbles />
+
+        {/* What's new — auto-rotating spotlight on routes, cycling, swimming. */}
+        <NewsSpotlight />
 
         {/* Hero Section */}
         <section className="pt-0 md:pt-4">

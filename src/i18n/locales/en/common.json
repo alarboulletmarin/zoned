@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "Zoned",
-    "tagline": "200+ running workouts, strength training, 5K to marathon plans, 9 calculators and Garmin export. Free, no account.",
+    "tagline": "200 running, 10 cycling, 10 swimming, 17 strength sessions, 5K-to-marathon plans, route generator and 9 calculators. Free, no account.",
     "heroTitle": "Prepare your next",
     "heroTitleAccent": "race"
   },
@@ -389,7 +389,7 @@
     "quiz": "Quick quiz",
     "quizHint": "5 questions to find the perfect workout",
     "library": "Library",
-    "libraryHint": "200+ workouts by zone, duration and difficulty",
+    "libraryHint": "Running, cycling, swimming: 220+ workouts by zone, duration and difficulty",
     "plan": "Training plan",
     "planHint": "5K to marathon, export to Garmin",
     "zones": "Configure my zones"
@@ -643,7 +643,9 @@
         "half-marathon",
         "marathon",
         "trail",
-        "ultra"
+        "ultra",
+        "triathlon",
+        "ironman"
       ]
     },
     "articleFaq": {

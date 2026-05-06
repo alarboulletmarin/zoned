@@ -2,6 +2,108 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.5.0",
+    date: "2026-05-06",
+    changes: {
+      added: [
+        {
+          text: "Generateur de parcours : creez une boucle ou un aller-retour reel depuis votre position avec routage Brouter, export GPX et sauvegarde locale",
+          textEn: "Route Generator: build a real-world loop or out-and-back from your position with Brouter routing, GPX export and local save",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Routage POI-aware : waypoints choisis depuis les parcs, promenades, voies vertes, plages et sentiers via Overpass (fallback triangulation en zone rurale)",
+          textEn: "POI-aware routing: waypoints picked from parks, promenades, greenways, beaches and trails via Overpass (triangulation fallback for rural areas)",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "3 propositions de parcours par generation avec markers POI nommes et profil altimetrique",
+          textEn: "3 route candidates per request with named POI markers and elevation profile",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Toggle 'Activer le generateur de parcours' dans les Reglages pour ne plus envoyer aucune coordonnee a un service tiers",
+          textEn: "Privacy toggle in Settings to opt-out of the route generator entirely",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Fondation multi-discipline : seances cyclisme et natation, zones FTP/CSS et substitution inter-discipline dans les plans",
+          textEn: "Multi-discipline foundation: cycling and swimming workouts, FTP/CSS zones and cross-discipline substitution in plans",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "10 seances cyclisme et 10 seances natation : endurance longue, sweet spot, seuil, intervalles, technique et pyramides",
+          textEn: "10 cycling templates and 10 swimming templates spanning long endurance, sweet spot, threshold, intervals, technique work and pyramids",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Pages de test guidees FTP et CSS avec apercu des zones Coggan / CSS",
+          textEn: "FTP and CSS guided test pages with Coggan / CSS zone previews",
+          category: "Calculateurs",
+          categoryEn: "Calculators",
+        },
+        {
+          text: "Onglet velotaf dans le profil pour declarer ses kilometres de domicile-travail",
+          textEn: "Vélotaf settings tab in profile for commute kilometres",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+      ],
+      changed: [
+        {
+          text: "Multi-trace overlay : les 3 candidats s'affichent dans des couleurs et motifs distincts pour rester lisibles quand les traces se chevauchent",
+          textEn: "Multi-trace overlay: candidates render in distinct colours and dash patterns to stay distinguishable when tracks overlap",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Tri des propositions par precision de distance (meilleure correspondance en premier), rejet automatique des candidats > 20% hors cible",
+          textEn: "Candidates sorted by distance accuracy (best match first); off-target results (>20%) are rejected",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Filtres discipline dans la bibliotheque qui passent a la ligne sur mobile au lieu de defiler horizontalement",
+          textEn: "Discipline filter tabs in library wrap on mobile to avoid horizontal scroll",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      fixed: [
+        {
+          text: "Propositions de parcours qui tombaient toutes sur les memes waypoints — diversification par seed pour garantir des tracés distincts",
+          textEn: "Route candidates were falling on the same waypoints — seed-driven diversification now ensures distinct proposals",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Messages d'erreur clairs quand la geolocalisation est bloquee, refusee ou en timeout",
+          textEn: "Geolocation errors surface clear messages when blocked, denied or timed out",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Zones Z>6 clampees a Z6 et allures sport-specifiques pour les segments distance-only",
+          textEn: "Z>6 zones clamp to Z6 and use sport-specific paces for distance-only segments",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Substitution de seance preserve la discipline a travers le round-trip localStorage",
+          textEn: "Substitute session preserves discipline through localStorage round-trip",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+    },
+  },
+  {
     version: "0.4.4",
     date: "2026-04-13",
     changes: {

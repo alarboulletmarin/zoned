@@ -21,6 +21,7 @@ import {
   Plus,
   Flag,
   UserRound,
+  Route as RouteIcon,
 } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -78,6 +79,7 @@ const navGroups: NavGroup[] = [
     items: [
       { href: "/plans", icon: CalendarRange, labelKey: "nav.plans" },
       { href: "/race-simulator", icon: Flag, labelKey: "simulator.title" },
+      { href: "/routes", icon: RouteIcon, labelKey: "routes:title" },
       { href: "/plans/methodology", icon: FlaskConical, labelKey: "nav.planMethodology" },
     ],
   },
@@ -110,7 +112,7 @@ const footerItems: NavItem[] = [
   { href: "/changelog", icon: Sparkles, labelKey: "nav.changelog" },
 ];
 
-const prefixRoutes = ["/learn", "/collections", "/glossary", "/plan", "/calculators"];
+const prefixRoutes = ["/learn", "/collections", "/glossary", "/plan", "/calculators", "/routes"];
 
 function isActive(pathname: string, href: string): boolean {
   if (pathname === href) return true;
