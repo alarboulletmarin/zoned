@@ -156,15 +156,8 @@ export interface WorkoutScaling {
 // Main Workout Template Type
 export interface WorkoutTemplate {
   /**
-   * Workout kind. Kept for backward compatibility with the running-only
-   * library. New multi-discipline content should set `discipline` instead.
-   */
-  kind?: "running";
-  /**
    * Primary discipline. Defaults to "running" when absent so every existing
-   * template is treated as a running workout. Brick workouts set this to the
-   * discipline of their first/dominant segment and must also populate
-   * `segments` to express the multi-discipline structure.
+   * template is treated as a running workout.
    */
   discipline?: Discipline;
   id: string;
@@ -437,9 +430,9 @@ import type { StrengthWorkoutTemplate } from "./strength";
 export type AnyWorkoutTemplate = WorkoutTemplate | StrengthWorkoutTemplate;
 
 export function isStrengthWorkout(w: AnyWorkoutTemplate): w is StrengthWorkoutTemplate {
-  return w.kind === "strength";
+  return "kind" in w && w.kind === "strength";
 }
 
 export function isRunningWorkout(w: AnyWorkoutTemplate): w is WorkoutTemplate {
-  return w.kind !== "strength";
+  return !isStrengthWorkout(w);
 }
