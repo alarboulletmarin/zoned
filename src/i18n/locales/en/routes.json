@@ -46,11 +46,19 @@
     "distanceMin": "1 km",
     "distanceMax": "50 km",
     "distanceMaxValue": "{{max}} km",
+    "elevationTargetEdit": "Edit elevation target",
     "generate": "Generate route",
     "regenerate": "Regenerate",
     "regenerateHint": "Generate a variant with a different layout.",
     "candidatesLabel": "Proposals",
-    "candidate": "Proposal {{index}}"
+    "candidate": "Proposal {{index}}",
+    "mapPickStartHint": "Tap the map to set your starting point",
+    "mapPickedHint": "Start pinned · tap elsewhere to move it",
+    "mapPickedStart": "Pinned on the map",
+    "mapExpand": "Expand map",
+    "mapShrink": "Collapse map",
+    "reverseDirection": "Reverse direction",
+    "reversedActive": "Reversed"
   },
   "result": {
     "summary": "{{distance}} · {{ascent}} m gain · ~{{duration}}",

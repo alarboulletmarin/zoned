@@ -46,11 +46,19 @@
     "distanceMin": "1 km",
     "distanceMax": "50 km",
     "distanceMaxValue": "{{max}} km",
+    "elevationTargetEdit": "Modifier le D+ cible",
     "generate": "Générer un parcours",
     "regenerate": "Régénérer",
     "regenerateHint": "Génère une variante avec un autre tracé.",
     "candidatesLabel": "Propositions",
-    "candidate": "Proposition {{index}}"
+    "candidate": "Proposition {{index}}",
+    "mapPickStartHint": "Cliquez sur la carte pour définir votre départ",
+    "mapPickedHint": "Départ posé · cliquez ailleurs pour le déplacer",
+    "mapPickedStart": "Point posé sur la carte",
+    "mapExpand": "Agrandir la carte",
+    "mapShrink": "Réduire la carte",
+    "reverseDirection": "Inverser le sens",
+    "reversedActive": "Sens inversé"
   },
   "result": {
     "summary": "{{distance}} · D+ {{ascent}} m · ~{{duration}}",

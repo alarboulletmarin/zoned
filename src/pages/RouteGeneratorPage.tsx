@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
-import { ArrowRight, Download, EyeOff, RotateCcw, Save } from "@/components/icons";
+import { ArrowLeftRight, ArrowRight, Download, EyeOff, Maximize2, Minimize2, RotateCcw, Save } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
 import {
@@ -23,6 +23,7 @@ import { useRoutes } from "@/hooks/useRoutes";
 import { useSettings } from "@/hooks/useSettings";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
+import { cn } from "@/lib/utils";
 import { usePickLang, usePickLocale } from "@/lib/i18n-utils";
 import { loadRunnerProfile } from "@/lib/runnerProfile";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
@@ -74,6 +75,8 @@ export function RouteGeneratorPage() {
   const [previewStart, setPreviewStart] = useState<RouteCoordinate | null>(null);
   const [lastPayload, setLastPayload] = useState<RouteFormSubmitPayload | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [reversedIds, setReversedIds] = useState<Record<string, boolean>>({});
+  const [isMapExpanded, setIsMapExpanded] = useState(false);
 
   const routeState = location.state as RouteGeneratorLocationState | null;
   const runnerProfile = useMemo(() => loadRunnerProfile(), []);
@@ -111,7 +114,23 @@ export function RouteGeneratorPage() {
 
   const selectedCandidate = candidates[selectedIndex] ?? null;
   const route = selectedCandidate?.route ?? null;
+  const isSelectedReversed = route ? !!reversedIds[route.id] : false;
   const selectedRecommendation = selectedCandidate?.recommendation ?? null;
+
+  const displayPoints = useMemo(() => {
+    if (!route) return [] as RouteCoordinate[];
+    return isSelectedReversed ? [...route.points].reverse() : route.points;
+  }, [route, isSelectedReversed]);
+
+  const displayElevation = useMemo(() => {
+    if (!route) return [] as Route["elevation"];
+    if (!isSelectedReversed) return route.elevation;
+    const total = route.elevation[route.elevation.length - 1]?.distanceM ?? 0;
+    return [...route.elevation]
+      .map((p) => ({ distanceM: total - p.distanceM, altitudeM: p.altitudeM }))
+      .reverse();
+  }, [route, isSelectedReversed]);
+
   // Pre-compute the unselected traces once so RouteMap can render them in
   // the muted background layer without re-deriving the array each render.
   const candidateTraces = useMemo(
@@ -123,6 +142,15 @@ export function RouteGeneratorPage() {
   const distanceDeviationRatio = route
     ? Math.abs(route.distanceM / (route.constraints.targetDistanceKm * 1000) - 1)
     : 0;
+
+  const onReverseTrace = useCallback(() => {
+    if (!route) return;
+    setReversedIds((prev) => ({ ...prev, [route.id]: !prev[route.id] }));
+  }, [route]);
+
+  const onMapClick = useCallback((point: RouteCoordinate) => {
+    setPreviewStart(point);
+  }, []);
 
   const generate = useCallback(
     async (payload: RouteFormSubmitPayload, seed: number) => {
@@ -190,8 +218,10 @@ export function RouteGeneratorPage() {
 
   const onSave = () => {
     if (!route) return;
-    const routeToSave = {
+    const routeToSave: Route = {
       ...route,
+      points: displayPoints,
+      elevation: displayElevation,
       estimatedDurationSec: displayDurationSec || route.estimatedDurationSec,
       ...(trainingPreset?.planSessionRef ? { planSessionRef: trainingPreset.planSessionRef } : {}),
     };
@@ -205,7 +235,10 @@ export function RouteGeneratorPage() {
 
   const onExport = () => {
     if (!route) return;
-    const filename = downloadRouteGpx(route);
+    const exported: Route = isSelectedReversed
+      ? { ...route, points: displayPoints, elevation: displayElevation }
+      : route;
+    const filename = downloadRouteGpx(exported);
     toast.success(filename);
   };
 
@@ -244,8 +277,13 @@ export function RouteGeneratorPage() {
           </Link>
         </header>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,360px)_1fr] xl:gap-8">
-          <aside className="min-w-0">
+        <div
+          className={cn(
+            "grid grid-cols-1 gap-6 xl:gap-8",
+            isMapExpanded ? "lg:grid-cols-1" : "lg:grid-cols-[minmax(0,360px)_1fr]",
+          )}
+        >
+          <aside className={cn("min-w-0", isMapExpanded && "lg:hidden")}>
             {trainingPreset && presetSession && (
               <div className="mb-4 rounded-xl border border-primary/20 bg-primary/5 p-4">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary/80">
@@ -335,19 +373,72 @@ export function RouteGeneratorPage() {
               onSubmit={onSubmit}
               onError={(msg) => toast.error(msg)}
               onStartChange={(point) => setPreviewStart(point)}
+              externalStart={previewStart}
               initialValues={trainingPreset?.formDefaults}
             />
           </aside>
 
-          <main className="min-w-0 space-y-4 lg:sticky lg:top-20 lg:self-start">
-            <Suspense fallback={<MapSkeleton />}>
-              <RouteMap
-                points={route?.points ?? []}
-                candidates={candidateTraces}
-                pois={route?.pois}
-                start={route ? null : previewStart}
-              />
-            </Suspense>
+          <main
+            className={cn(
+              "min-w-0 space-y-4",
+              !isMapExpanded && "lg:sticky lg:top-20 lg:self-start",
+            )}
+          >
+            <div className="relative">
+              {!route && (
+                <div className="pointer-events-none absolute left-1/2 top-3 z-[600] -translate-x-1/2 rounded-full border border-border/60 bg-background/95 px-3 py-1.5 text-[11px] font-medium text-muted-foreground shadow-sm backdrop-blur-sm">
+                  {previewStart ? t("form.mapPickedHint") : t("form.mapPickStartHint")}
+                </div>
+              )}
+              <Suspense fallback={<MapSkeleton />}>
+                <RouteMap
+                  points={displayPoints}
+                  candidates={candidateTraces}
+                  pois={route?.pois}
+                  start={route ? null : previewStart}
+                  showDirection={!!route}
+                  onMapClick={!route ? onMapClick : undefined}
+                  className={
+                    isMapExpanded
+                      ? "h-[calc(100vh-160px)] sm:h-[calc(100vh-160px)] lg:h-[calc(100vh-160px)]"
+                      : undefined
+                  }
+                />
+              </Suspense>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsMapExpanded((v) => !v);
+                }}
+                onPointerDownCapture={(e) => e.stopPropagation()}
+                className="absolute right-3 top-3 z-[1100] inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-background/95 px-2.5 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm hover:bg-background"
+                aria-label={isMapExpanded ? t("form.mapShrink") : t("form.mapExpand")}
+              >
+                {isMapExpanded ? <Minimize2 className="size-3.5" /> : <Maximize2 className="size-3.5" />}
+                <span className="hidden sm:inline">
+                  {isMapExpanded ? t("form.mapShrink") : t("form.mapExpand")}
+                </span>
+              </button>
+              {route && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onReverseTrace();
+                  }}
+                  onPointerDownCapture={(e) => e.stopPropagation()}
+                  className="absolute bottom-3 right-3 z-[1100] inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-background/95 px-2.5 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm hover:bg-background"
+                  aria-label={t("form.reverseDirection")}
+                  title={t("form.reverseDirection")}
+                >
+                  <ArrowLeftRight className="size-3.5" />
+                  <span className="hidden sm:inline">
+                    {isSelectedReversed ? t("form.reversedActive") : t("form.reverseDirection")}
+                  </span>
+                </button>
+              )}
+            </div>
 
             {!trainingPreset && candidates.length > 1 && (
               <Segmented
@@ -466,13 +557,13 @@ export function RouteGeneratorPage() {
                   </div>
                 </div>
 
-                {route.elevation.length > 1 && (
+                {displayElevation.length > 1 && (
                   <div className="rounded-xl border border-border/60 bg-background p-3">
                     <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                       {t("result.elevationProfile")}
                     </p>
                     <Suspense fallback={null}>
-                      <ElevationChart profile={route.elevation} />
+                      <ElevationChart profile={displayElevation} />
                     </Suspense>
                   </div>
                 )}

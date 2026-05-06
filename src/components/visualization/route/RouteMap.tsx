@@ -26,22 +26,80 @@ interface RouteMapProps {
   color?: string;
   /** Disable user interaction (drag, zoom) — useful for previews. */
   interactive?: boolean;
+  /**
+   * When provided, clicking the map calls this with `[lon, lat]`. Useful to
+   * let the user define a start point without typing or using GPS.
+   */
+  onMapClick?: (point: RouteCoordinate) => void;
+  /** Render directional chevrons along the trace. Off for static previews. */
+  showDirection?: boolean;
 }
 
 const TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 const TILE_ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors';
 
-const DEFAULT_CENTER: [number, number] = [46.7, 2.4]; // approx geographic centre of metropolitan France
+const DEFAULT_CENTER: [number, number] = [46.7, 2.4];
 const DEFAULT_ZOOM = 5;
 const START_ZOOM = 13;
 
+const DIRECTION_SPACING_M = 600;
+
+function chevronIcon(angleDeg: number, color: string): L.DivIcon {
+  return L.divIcon({
+    className: "route-map-chevron",
+    html: `<svg width="22" height="22" viewBox="0 0 22 22" style="display:block;transform:rotate(${angleDeg}deg);transform-origin:center;filter:drop-shadow(0 0 1px rgba(0,0,0,0.6))"><path d="M11 4 L18 14 L11 11 L4 14 Z" fill="${color}" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></svg>`,
+    iconSize: [22, 22],
+    iconAnchor: [11, 11],
+  });
+}
+
+function haversineMeters(a: [number, number], b: [number, number]): number {
+  const R = 6_371_000;
+  const phi1 = (a[0] * Math.PI) / 180;
+  const phi2 = (b[0] * Math.PI) / 180;
+  const dPhi = ((b[0] - a[0]) * Math.PI) / 180;
+  const dLambda = ((b[1] - a[1]) * Math.PI) / 180;
+  const x = Math.sin(dPhi / 2) ** 2 + Math.cos(phi1) * Math.cos(phi2) * Math.sin(dLambda / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(x));
+}
+
+function bearingDeg(a: [number, number], b: [number, number]): number {
+  const phi1 = (a[0] * Math.PI) / 180;
+  const phi2 = (b[0] * Math.PI) / 180;
+  const dLambda = ((b[1] - a[1]) * Math.PI) / 180;
+  const y = Math.sin(dLambda) * Math.cos(phi2);
+  const x = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(dLambda);
+  return ((Math.atan2(y, x) * 180) / Math.PI + 360) % 360;
+}
+
 /**
- * Leaflet wrapper that renders an interactive map. When `points` are
- * provided, the routed trace and a start marker are drawn and the map is
- * fitted to the trace bounds. When only `start` is provided, a single marker
- * is rendered at zoom 13. Without either, the map shows a default view.
+ * Sample chevron positions every ~DIRECTION_SPACING_M along the trace so the
+ * user can read the route's direction at a glance. Each chevron is oriented
+ * along the local segment.
  */
+function sampleChevrons(latLngs: [number, number][]): Array<{ pos: [number, number]; angle: number }> {
+  if (latLngs.length < 2) return [];
+  const chevrons: Array<{ pos: [number, number]; angle: number }> = [];
+  let traveled = 0;
+  let nextMark = DIRECTION_SPACING_M;
+  for (let i = 1; i < latLngs.length; i += 1) {
+    const a = latLngs[i - 1];
+    const b = latLngs[i];
+    const seg = haversineMeters(a, b);
+    if (seg <= 0) continue;
+    while (traveled + seg >= nextMark) {
+      const t = (nextMark - traveled) / seg;
+      const lat = a[0] + (b[0] - a[0]) * t;
+      const lon = a[1] + (b[1] - a[1]) * t;
+      chevrons.push({ pos: [lat, lon], angle: bearingDeg(a, b) });
+      nextMark += DIRECTION_SPACING_M;
+    }
+    traveled += seg;
+  }
+  return chevrons;
+}
+
 export function RouteMap({
   points = [],
   candidates,
@@ -50,9 +108,16 @@ export function RouteMap({
   className,
   color = "#ea580c",
   interactive = true,
+  onMapClick,
+  showDirection = false,
 }: RouteMapProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
+  const clickHandlerRef = useRef<typeof onMapClick>(onMapClick);
+
+  useEffect(() => {
+    clickHandlerRef.current = onMapClick;
+  }, [onMapClick]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -66,6 +131,14 @@ export function RouteMap({
       touchZoom: interactive,
       keyboard: interactive,
       attributionControl: true,
+      // Zoom animations interact badly with React-driven invalidateSize calls
+      // (the tile-container can stay stuck mid-transform — visible bug:
+      // blank/scaled tiles after generation). Disabling them removes the
+      // race entirely; we lose the ~150ms zoom ease but everything stays
+      // crisp.
+      zoomAnimation: false,
+      fadeAnimation: false,
+      markerZoomAnimation: false,
     }).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
 
     L.tileLayer(TILE_URL, {
@@ -73,9 +146,17 @@ export function RouteMap({
       maxZoom: 19,
     }).addTo(map);
 
+    const onClick = (e: L.LeafletMouseEvent) => {
+      const handler = clickHandlerRef.current;
+      if (!handler) return;
+      handler([e.latlng.lng, e.latlng.lat]);
+    };
+    map.on("click", onClick);
+
     mapRef.current = map;
 
     return () => {
+      map.off("click", onClick);
       map.remove();
       mapRef.current = null;
     };
@@ -84,6 +165,13 @@ export function RouteMap({
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
+
+    // Pin the map to the current container box before any geographic call
+    // (fitBounds, setView). Without this, layout changes that React just
+    // committed (e.g. expand/collapse toggle) wouldn't reach Leaflet until
+    // the next ResizeObserver tick — fitBounds would zoom on a stale size
+    // and the tile layer would render blank cells until a manual pan.
+    map.invalidateSize({ animate: false, pan: false });
 
     map.eachLayer((layer) => {
       if (layer instanceof L.Polyline || layer instanceof L.Marker || layer instanceof L.CircleMarker) {
@@ -94,15 +182,11 @@ export function RouteMap({
     if (points.length > 1) {
       const selectedLatLngs: [number, number][] = points.map(([lon, lat]) => [lat, lon]);
 
-      // Draw non-selected candidates first so the selected trace renders on
-      // top. Each gets its own muted hue + dash pattern so two overlapping
-      // candidates remain visually distinguishable even when they share a
-      // significant portion of their tracks (common around the start).
       const others = (candidates ?? []).filter((c) => c !== points && c.length > 1);
       const ALT_STYLES = [
-        { color: "#0ea5e9", dashArray: "6 6" }, // sky-500
-        { color: "#a855f7", dashArray: "2 6" }, // purple-500
-        { color: "#10b981", dashArray: "8 4" }, // emerald-500
+        { color: "#0ea5e9", dashArray: "6 6" },
+        { color: "#a855f7", dashArray: "2 6" },
+        { color: "#10b981", dashArray: "8 4" },
       ];
       others.forEach((cand, idx) => {
         const latLngs: [number, number][] = cand.map(([lon, lat]) => [lat, lon]);
@@ -116,6 +200,13 @@ export function RouteMap({
       });
 
       L.polyline(selectedLatLngs, { color, weight: 4, opacity: 0.9 }).addTo(map);
+
+      if (showDirection) {
+        for (const { pos, angle } of sampleChevrons(selectedLatLngs)) {
+          L.marker(pos, { icon: chevronIcon(angle, color), interactive: false }).addTo(map);
+        }
+      }
+
       L.circleMarker(selectedLatLngs[0], {
         radius: 6,
         color: "#ffffff",
@@ -124,15 +215,13 @@ export function RouteMap({
         fillOpacity: 1,
       }).addTo(map);
 
-      // POI markers — small slate-coloured dots with a tooltip carrying the
-      // OSM name. Rendered after the trace so they sit on top.
       for (const poi of pois ?? []) {
         const [poiLon, poiLat] = poi.point;
         const marker = L.circleMarker([poiLat, poiLon], {
           radius: 5,
           color: "#ffffff",
           weight: 1.5,
-          fillColor: "#475569", // slate-600 — distinct from the orange trace
+          fillColor: "#475569",
           fillOpacity: 0.9,
         }).addTo(map);
         if (poi.name) {
@@ -145,13 +234,15 @@ export function RouteMap({
         }
       }
 
-      // Fit to the union of all rendered traces so muted candidates remain
-      // visible even when they extend beyond the selected one.
       const allBounds = L.latLngBounds(selectedLatLngs);
       for (const cand of others) {
         for (const [lon, lat] of cand) allBounds.extend([lat, lon]);
       }
-      map.fitBounds(allBounds, { padding: [24, 24] });
+      // animate:false avoids leaving the tile-container stuck on a partial
+      // zoom transform if React triggers a downstream invalidateSize while
+      // the fit animation is mid-flight (visible bug: blank tiles around
+      // the trace).
+      map.fitBounds(allBounds, { padding: [24, 24], animate: false });
       return;
     }
 
@@ -164,18 +255,44 @@ export function RouteMap({
         fillColor: color,
         fillOpacity: 1,
       }).addTo(map);
-      map.setView([lat, lon], START_ZOOM, { animate: true });
+      map.setView([lat, lon], START_ZOOM, { animate: false });
       return;
     }
 
-    map.setView(DEFAULT_CENTER, DEFAULT_ZOOM);
-  }, [points, candidates, pois, start, color]);
+    map.setView(DEFAULT_CENTER, DEFAULT_ZOOM, { animate: false });
+  }, [points, candidates, pois, start, color, showDirection]);
+
+  // Leaflet caches the container size at init time, so any external resize
+  // (e.g. wrapper toggling between collapsed/expanded heights) leaves the
+  // tile layer painted onto stale dimensions — the visible result is a
+  // blank map until the user pans. ResizeObserver papers over that by
+  // calling invalidateSize as soon as our container's box changes.
+  useEffect(() => {
+    const map = mapRef.current;
+    const node = containerRef.current;
+    if (!map || !node || typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(() => map.invalidateSize());
+    observer.observe(node);
+    const raf = requestAnimationFrame(() => map.invalidateSize());
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const id = requestAnimationFrame(() => map.invalidateSize({ animate: false, pan: false }));
+    return () => cancelAnimationFrame(id);
+  }, [className]);
 
   return (
     <div
       ref={containerRef}
       className={cn(
         "h-72 w-full overflow-hidden rounded-xl border border-border/60 bg-muted/30 sm:h-96 lg:h-[28rem]",
+        onMapClick ? "cursor-crosshair" : undefined,
         className,
       )}
       role="region"

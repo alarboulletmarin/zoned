@@ -18,6 +18,7 @@ import type { Discipline } from "@/types";
 import type { RouteCoordinate, RouteShape, RouteSurface } from "@/types/route";
 
 import { AddressSearchInput } from "./AddressSearchInput";
+import { CompassInput } from "./CompassInput";
 
 export interface RouteFormSubmitPayload {
   start: RouteCoordinate;
@@ -35,6 +36,11 @@ interface RouteParametersFormProps {
   onError?: (message: string) => void;
   /** Notify parent when start point changes so it can preview on the map. */
   onStartChange?: (point: RouteCoordinate | null) => void;
+  /**
+   * External start updates pushed by the parent (e.g. user clicked the map).
+   * The form switches to "manual point" mode and clears any geocoded label.
+   */
+  externalStart?: RouteCoordinate | null;
   initialValues?: Partial<Pick<RouteFormSubmitPayload, "shape" | "discipline" | "targetDistanceKm" | "surface" | "elevationGainTargetM" | "bearingDeg">>;
 }
 
@@ -86,6 +92,7 @@ export function RouteParametersForm({
   onSubmit,
   onError,
   onStartChange,
+  externalStart,
   initialValues,
 }: RouteParametersFormProps) {
   const { t } = useTranslation("routes");
@@ -100,7 +107,17 @@ export function RouteParametersForm({
   const [start, setStart] = useState<RouteCoordinate | null>(null);
   const [startLabel, setStartLabel] = useState<string | null>(null);
   const [editingDistance, setEditingDistance] = useState(false);
+  const [editingElevation, setEditingElevation] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
+
+  useEffect(() => {
+    if (!externalStart) return;
+    const same = start && start[0] === externalStart[0] && start[1] === externalStart[1];
+    if (same) return;
+    setStart(externalStart);
+    setStartLabel(t("form.mapPickedStart"));
+    onStartChange?.(externalStart);
+  }, [externalStart, start, t, onStartChange]);
 
   const maxDistanceKm = MAX_DISTANCE_KM_BY_DISCIPLINE[discipline];
   const maxAscentM = maxAscentFor(discipline, distanceKm);
@@ -301,7 +318,32 @@ export function RouteParametersForm({
             <>
               <div className="flex items-baseline justify-between gap-2">
                 <span className="text-sm text-muted-foreground">{t("form.elevationTargetValue")}</span>
-                <span className="text-base font-semibold tabular-nums">{elevationGainTargetM} {t("form.elevationUnit")}</span>
+                {editingElevation ? (
+                  <input
+                    type="number"
+                    min={0}
+                    max={maxAscentM}
+                    step={10}
+                    autoFocus
+                    value={elevationGainTargetM}
+                    onChange={(e) => setElevationGainTargetM(clampAscent(Number(e.target.value) || 0, maxAscentM))}
+                    onBlur={() => setEditingElevation(false)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === "Escape") setEditingElevation(false);
+                    }}
+                    className="w-24 rounded-md border border-primary bg-background px-2 py-1 text-right text-base font-semibold tabular-nums focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    aria-label={t("form.elevationTargetEdit")}
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setEditingElevation(true)}
+                    className="rounded-md px-2 py-0.5 text-base font-semibold tabular-nums hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                    aria-label={t("form.elevationTargetEdit")}
+                  >
+                    {elevationGainTargetM} {t("form.elevationUnit")}
+                  </button>
+                )}
               </div>
               <Slider
                 value={[elevationGainTargetM]}
@@ -325,16 +367,16 @@ export function RouteParametersForm({
         <fieldset className="space-y-3">
           <div className="flex items-baseline justify-between gap-2">
             <legend className="text-sm font-semibold">{t("form.bearing")}</legend>
-            <span className="text-sm font-semibold tabular-nums">{bearingDisplay}</span>
+            <span className="sr-only">{bearingDisplay}</span>
           </div>
-          <Slider
-            value={[bearingDeg]}
-            onValueChange={([v]) => setBearingDeg(v)}
-            min={0}
-            max={359}
-            step={1}
-            aria-label={t("form.bearing")}
-          />
+          <div className="flex justify-center pt-1">
+            <CompassInput
+              value={bearingDeg}
+              onChange={(v) => setBearingDeg(((v % 360) + 360) % 360)}
+              cardinalLabel={cardinalLabel}
+              ariaLabel={t("form.bearing")}
+            />
+          </div>
         </fieldset>
       )}
 
