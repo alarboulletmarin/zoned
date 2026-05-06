@@ -585,14 +585,14 @@ export function LibraryPage() {
 
           {/* Activity type toggle */}
           <div className="mb-4">
-            <div className="inline-flex items-center rounded-lg border border-border bg-muted/50 p-0.5">
+            <div className="flex w-fit max-w-full flex-wrap items-center gap-0.5 rounded-lg border border-border bg-muted/50 p-0.5">
               {(["all", "running", "cycling", "swimming", "strength"] as const).map(
                 (type) => (
                   <button
                     key={type}
                     onClick={() => handleActivityTypeChange(type)}
                     className={cn(
-                      "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+                      "inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
                       activityType === type
                         ? "bg-background text-foreground shadow-sm"
                         : "text-muted-foreground hover:text-foreground",
