@@ -60,6 +60,14 @@
     "reverseDirection": "Inverser le sens",
     "reversedActive": "Sens inversé"
   },
+  "edit": {
+    "enter": "Modifier le tracé",
+    "cancel": "Annuler",
+    "apply": "Appliquer",
+    "applied": "Tracé mis à jour",
+    "hint": "Glissez les points · cliquez le tracé pour ajouter · cliquez un point pour le retirer",
+    "rerouting": "Recalcul du tracé…"
+  },
   "result": {
     "summary": "{{distance}} · D+ {{ascent}} m · ~{{duration}}",
     "approximate": "Distance approximative",

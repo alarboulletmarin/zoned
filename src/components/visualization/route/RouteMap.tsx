@@ -33,6 +33,15 @@ interface RouteMapProps {
   onMapClick?: (point: RouteCoordinate) => void;
   /** Render directional chevrons along the trace. Off for static previews. */
   showDirection?: boolean;
+  /**
+   * When set, the map enters edit mode: each entry becomes a draggable
+   * marker and the trace polyline accepts insertion clicks. Endpoints are
+   * not removable; intermediate waypoints are removed by clicking them.
+   */
+  editableWaypoints?: RouteCoordinate[];
+  onWaypointMove?: (index: number, point: RouteCoordinate) => void;
+  onWaypointRemove?: (index: number) => void;
+  onWaypointInsert?: (insertIndex: number, point: RouteCoordinate) => void;
 }
 
 const TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
@@ -52,6 +61,46 @@ function chevronIcon(angleDeg: number, color: string): L.DivIcon {
     iconSize: [22, 22],
     iconAnchor: [11, 11],
   });
+}
+
+function waypointIcon(kind: "endpoint" | "mid", color: string): L.DivIcon {
+  const size = kind === "endpoint" ? 18 : 14;
+  const fill = kind === "endpoint" ? color : "#ffffff";
+  const stroke = color;
+  const ring = kind === "endpoint" ? "#ffffff" : color;
+  return L.divIcon({
+    className: "route-map-waypoint",
+    html: `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="display:block;cursor:grab;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.35))"><circle cx="${size / 2}" cy="${size / 2}" r="${size / 2 - 2}" fill="${fill}" stroke="${ring}" stroke-width="2"/><circle cx="${size / 2}" cy="${size / 2}" r="${size / 2 - 4}" fill="none" stroke="${stroke}" stroke-width="1" stroke-opacity="0.4"/></svg>`,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
+  });
+}
+
+/**
+ * Decide where to splice a new waypoint into the user-facing waypoint list
+ * given the click coordinates. Picks the segment whose nearest endpoint is
+ * the closest to the click — good enough for short waypoint lists where a
+ * full point-to-segment projection would be overkill.
+ */
+function pickInsertionIndex(
+  click: RouteCoordinate,
+  waypoints: RouteCoordinate[],
+): number {
+  if (waypoints.length < 2) return 1;
+  let bestInsertAt = 1;
+  let bestScore = Infinity;
+  for (let i = 0; i < waypoints.length - 1; i += 1) {
+    const a = waypoints[i];
+    const b = waypoints[i + 1];
+    const da = haversineMeters([a[1], a[0]], [click[1], click[0]]);
+    const db = haversineMeters([b[1], b[0]], [click[1], click[0]]);
+    const score = Math.min(da, db);
+    if (score < bestScore) {
+      bestScore = score;
+      bestInsertAt = i + 1;
+    }
+  }
+  return bestInsertAt;
 }
 
 function haversineMeters(a: [number, number], b: [number, number]): number {
@@ -110,14 +159,31 @@ export function RouteMap({
   interactive = true,
   onMapClick,
   showDirection = false,
+  editableWaypoints,
+  onWaypointMove,
+  onWaypointRemove,
+  onWaypointInsert,
 }: RouteMapProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const clickHandlerRef = useRef<typeof onMapClick>(onMapClick);
+  const editCallbacksRef = useRef({
+    onMove: onWaypointMove,
+    onRemove: onWaypointRemove,
+    onInsert: onWaypointInsert,
+  });
 
   useEffect(() => {
     clickHandlerRef.current = onMapClick;
   }, [onMapClick]);
+
+  useEffect(() => {
+    editCallbacksRef.current = {
+      onMove: onWaypointMove,
+      onRemove: onWaypointRemove,
+      onInsert: onWaypointInsert,
+    };
+  }, [onWaypointMove, onWaypointRemove, onWaypointInsert]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -199,7 +265,24 @@ export function RouteMap({
         }).addTo(map);
       });
 
-      L.polyline(selectedLatLngs, { color, weight: 4, opacity: 0.9 }).addTo(map);
+      const trackLine = L.polyline(selectedLatLngs, {
+        color,
+        weight: editableWaypoints ? 5 : 4,
+        opacity: 0.9,
+      }).addTo(map);
+
+      if (editableWaypoints) {
+        // Insertion clicks travel through the polyline so we can put the new
+        // waypoint at the right index — Leaflet routes the click to whichever
+        // listener registered first, hence stopping propagation here so the
+        // ambient `onMapClick` (used outside edit mode) doesn't fire too.
+        trackLine.on("click", (e) => {
+          L.DomEvent.stopPropagation(e);
+          const click: RouteCoordinate = [e.latlng.lng, e.latlng.lat];
+          const insertAt = pickInsertionIndex(click, editableWaypoints);
+          editCallbacksRef.current.onInsert?.(insertAt, click);
+        });
+      }
 
       if (showDirection) {
         for (const { pos, angle } of sampleChevrons(selectedLatLngs)) {
@@ -207,13 +290,47 @@ export function RouteMap({
         }
       }
 
-      L.circleMarker(selectedLatLngs[0], {
-        radius: 6,
-        color: "#ffffff",
-        weight: 2,
-        fillColor: color,
-        fillOpacity: 1,
-      }).addTo(map);
+      if (!editableWaypoints) {
+        L.circleMarker(selectedLatLngs[0], {
+          radius: 6,
+          color: "#ffffff",
+          weight: 2,
+          fillColor: color,
+          fillOpacity: 1,
+        }).addTo(map);
+      }
+
+      if (editableWaypoints) {
+        editableWaypoints.forEach((wp, idx) => {
+          const isEndpoint = idx === 0 || idx === editableWaypoints.length - 1;
+          const marker = L.marker([wp[1], wp[0]], {
+            draggable: true,
+            icon: waypointIcon(isEndpoint ? "endpoint" : "mid", color),
+            keyboard: false,
+            zIndexOffset: 1000,
+          }).addTo(map);
+
+          let dragging = false;
+          marker.on("dragstart", () => {
+            dragging = true;
+          });
+          marker.on("dragend", (e) => {
+            const ll = (e.target as L.Marker).getLatLng();
+            editCallbacksRef.current.onMove?.(idx, [ll.lng, ll.lat]);
+            // Defer the dragging flag reset so the synthetic click that
+            // some browsers fire after a drag doesn't trigger a removal.
+            setTimeout(() => {
+              dragging = false;
+            }, 50);
+          });
+          marker.on("click", (e) => {
+            L.DomEvent.stopPropagation(e);
+            if (dragging) return;
+            if (isEndpoint) return;
+            editCallbacksRef.current.onRemove?.(idx);
+          });
+        });
+      }
 
       for (const poi of pois ?? []) {
         const [poiLon, poiLat] = poi.point;
@@ -260,7 +377,7 @@ export function RouteMap({
     }
 
     map.setView(DEFAULT_CENTER, DEFAULT_ZOOM, { animate: false });
-  }, [points, candidates, pois, start, color, showDirection]);
+  }, [points, candidates, pois, start, color, showDirection, editableWaypoints]);
 
   // Leaflet caches the container size at init time, so any external resize
   // (e.g. wrapper toggling between collapsed/expanded heights) leaves the

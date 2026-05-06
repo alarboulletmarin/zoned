@@ -3,14 +3,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
-import { ArrowLeftRight, ArrowRight, Download, EyeOff, Maximize2, Minimize2, RotateCcw, Save } from "@/components/icons";
+import { ArrowLeftRight, ArrowRight, Check, Download, EyeOff, Maximize2, Minimize2, Pencil, RotateCcw, Save, X } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
 import {
   RouteParametersForm,
   type RouteFormSubmitPayload,
 } from "@/components/domain/RouteParametersForm";
-import { generateRouteCandidates } from "@/lib/routeGenerator";
+import { generateRouteCandidates, routeFromWaypoints } from "@/lib/routeGenerator";
 import {
   buildManualRouteIntent,
   buildTrainingRoutePreset,
@@ -48,6 +48,40 @@ function MapSkeleton() {
   );
 }
 
+/**
+ * Pick the editor's initial waypoint list from a generated route. We don't
+ * know which Brouter nodes were the original "via points", so we approximate:
+ * for an out-and-back the apex is the trace point furthest from the start;
+ * for a loop we sample two intermediate points at 1/3 and 2/3 of the trace.
+ * The user can always insert/move/remove waypoints from there.
+ */
+function deriveInitialWaypoints(
+  route: Route,
+  displayPoints: RouteCoordinate[],
+): RouteCoordinate[] {
+  const pts = displayPoints.length > 0 ? displayPoints : route.points;
+  if (pts.length < 3) return pts;
+  const start = pts[0];
+  const end = pts[pts.length - 1];
+  if (route.shape === "out_and_back") {
+    let apexIdx = Math.floor(pts.length / 2);
+    let bestDist = -1;
+    for (let i = 1; i < pts.length - 1; i += 1) {
+      const dx = pts[i][0] - start[0];
+      const dy = pts[i][1] - start[1];
+      const d = dx * dx + dy * dy;
+      if (d > bestDist) {
+        bestDist = d;
+        apexIdx = i;
+      }
+    }
+    return [start, pts[apexIdx], end];
+  }
+  const a = pts[Math.floor(pts.length / 3)];
+  const b = pts[Math.floor((2 * pts.length) / 3)];
+  return [start, a, b, end];
+}
+
 interface DisplayCandidate {
   route: Route;
   recommendation: RankedRouteCandidate | null;
@@ -77,6 +111,9 @@ export function RouteGeneratorPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [reversedIds, setReversedIds] = useState<Record<string, boolean>>({});
   const [isMapExpanded, setIsMapExpanded] = useState(false);
+  const [editWaypoints, setEditWaypoints] = useState<RouteCoordinate[] | null>(null);
+  const [editPreview, setEditPreview] = useState<Route | null>(null);
+  const [isReRouting, setIsReRouting] = useState(false);
 
   const routeState = location.state as RouteGeneratorLocationState | null;
   const runnerProfile = useMemo(() => loadRunnerProfile(), []);
@@ -117,19 +154,23 @@ export function RouteGeneratorPage() {
   const isSelectedReversed = route ? !!reversedIds[route.id] : false;
   const selectedRecommendation = selectedCandidate?.recommendation ?? null;
 
+  const isEditing = editWaypoints != null;
+  const displayedRoute = editPreview ?? route;
+
   const displayPoints = useMemo(() => {
-    if (!route) return [] as RouteCoordinate[];
-    return isSelectedReversed ? [...route.points].reverse() : route.points;
-  }, [route, isSelectedReversed]);
+    if (!displayedRoute) return [] as RouteCoordinate[];
+    if (isEditing) return displayedRoute.points;
+    return isSelectedReversed ? [...displayedRoute.points].reverse() : displayedRoute.points;
+  }, [displayedRoute, isSelectedReversed, isEditing]);
 
   const displayElevation = useMemo(() => {
-    if (!route) return [] as Route["elevation"];
-    if (!isSelectedReversed) return route.elevation;
-    const total = route.elevation[route.elevation.length - 1]?.distanceM ?? 0;
-    return [...route.elevation]
+    if (!displayedRoute) return [] as Route["elevation"];
+    if (isEditing || !isSelectedReversed) return displayedRoute.elevation;
+    const total = displayedRoute.elevation[displayedRoute.elevation.length - 1]?.distanceM ?? 0;
+    return [...displayedRoute.elevation]
       .map((p) => ({ distanceM: total - p.distanceM, altitudeM: p.altitudeM }))
       .reverse();
-  }, [route, isSelectedReversed]);
+  }, [displayedRoute, isSelectedReversed, isEditing]);
 
   // Pre-compute the unselected traces once so RouteMap can render them in
   // the muted background layer without re-deriving the array each render.
@@ -138,9 +179,12 @@ export function RouteGeneratorPage() {
     [candidates, selectedIndex],
   );
 
-  const displayDurationSec = selectedRecommendation?.predictedDurationSec ?? route?.estimatedDurationSec ?? 0;
-  const distanceDeviationRatio = route
-    ? Math.abs(route.distanceM / (route.constraints.targetDistanceKm * 1000) - 1)
+  const displayDurationSec =
+    isEditing && displayedRoute
+      ? displayedRoute.estimatedDurationSec
+      : selectedRecommendation?.predictedDurationSec ?? route?.estimatedDurationSec ?? 0;
+  const distanceDeviationRatio = displayedRoute
+    ? Math.abs(displayedRoute.distanceM / (displayedRoute.constraints.targetDistanceKm * 1000) - 1)
     : 0;
 
   const onReverseTrace = useCallback(() => {
@@ -151,6 +195,95 @@ export function RouteGeneratorPage() {
   const onMapClick = useCallback((point: RouteCoordinate) => {
     setPreviewStart(point);
   }, []);
+
+  const reRoute = useCallback(
+    async (waypoints: RouteCoordinate[]) => {
+      if (!route) return;
+      setIsReRouting(true);
+      try {
+        const next = await routeFromWaypoints({
+          waypoints,
+          discipline: route.discipline,
+          shape: route.shape,
+          surface: route.constraints.surface,
+          routeId: route.id,
+          name: route.name,
+        });
+        setEditPreview(next);
+      } catch (err) {
+        console.warn("RouteGenerator: re-route failed", err);
+        toast.error(t("errors.routingFailed"));
+      } finally {
+        setIsReRouting(false);
+      }
+    },
+    [route, t],
+  );
+
+  const onEnterEdit = useCallback(() => {
+    if (!route) return;
+    const waypoints = deriveInitialWaypoints(route, displayPoints);
+    setEditWaypoints(waypoints);
+    setEditPreview(null);
+  }, [route, displayPoints]);
+
+  const onExitEdit = useCallback(() => {
+    setEditWaypoints(null);
+    setEditPreview(null);
+  }, []);
+
+  const onApplyEdit = useCallback(() => {
+    if (!editPreview) {
+      onExitEdit();
+      return;
+    }
+    setCandidates((prev) => {
+      const idx = prev.findIndex((c) => c.route.id === editPreview.id);
+      if (idx === -1) return prev;
+      const next = [...prev];
+      next[idx] = { ...next[idx], route: editPreview, recommendation: null };
+      return next;
+    });
+    setReversedIds((prev) => ({ ...prev, [editPreview.id]: false }));
+    setEditWaypoints(null);
+    setEditPreview(null);
+    toast.success(t("edit.applied"));
+  }, [editPreview, onExitEdit, t]);
+
+  const onWaypointMove = useCallback(
+    (index: number, point: RouteCoordinate) => {
+      if (!editWaypoints) return;
+      const next = editWaypoints.map((wp, i) => (i === index ? point : wp));
+      setEditWaypoints(next);
+      void reRoute(next);
+    },
+    [editWaypoints, reRoute],
+  );
+
+  const onWaypointInsert = useCallback(
+    (insertIndex: number, point: RouteCoordinate) => {
+      if (!editWaypoints) return;
+      const next = [
+        ...editWaypoints.slice(0, insertIndex),
+        point,
+        ...editWaypoints.slice(insertIndex),
+      ];
+      setEditWaypoints(next);
+      void reRoute(next);
+    },
+    [editWaypoints, reRoute],
+  );
+
+  const onWaypointRemove = useCallback(
+    (index: number) => {
+      if (!editWaypoints) return;
+      if (editWaypoints.length <= 2) return;
+      const next = editWaypoints.filter((_, i) => i !== index);
+      setEditWaypoints(next);
+      void reRoute(next);
+    },
+    [editWaypoints, reRoute],
+  );
 
   const generate = useCallback(
     async (payload: RouteFormSubmitPayload, seed: number) => {
@@ -393,11 +526,15 @@ export function RouteGeneratorPage() {
               <Suspense fallback={<MapSkeleton />}>
                 <RouteMap
                   points={displayPoints}
-                  candidates={candidateTraces}
-                  pois={route?.pois}
+                  candidates={isEditing ? [] : candidateTraces}
+                  pois={isEditing ? undefined : displayedRoute?.pois}
                   start={route ? null : previewStart}
-                  showDirection={!!route}
+                  showDirection={!!route && !isEditing}
                   onMapClick={!route ? onMapClick : undefined}
+                  editableWaypoints={editWaypoints ?? undefined}
+                  onWaypointMove={onWaypointMove}
+                  onWaypointInsert={onWaypointInsert}
+                  onWaypointRemove={onWaypointRemove}
                   className={
                     isMapExpanded
                       ? "h-[calc(100vh-160px)] sm:h-[calc(100vh-160px)] lg:h-[calc(100vh-160px)]"
@@ -405,6 +542,11 @@ export function RouteGeneratorPage() {
                   }
                 />
               </Suspense>
+              {isEditing && (
+                <div className="pointer-events-none absolute left-1/2 top-3 z-[600] -translate-x-1/2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-[11px] font-medium text-primary shadow-sm backdrop-blur-sm">
+                  {isReRouting ? t("edit.rerouting") : t("edit.hint")}
+                </div>
+              )}
               <button
                 type="button"
                 onClick={(e) => {
@@ -420,23 +562,68 @@ export function RouteGeneratorPage() {
                   {isMapExpanded ? t("form.mapShrink") : t("form.mapExpand")}
                 </span>
               </button>
-              {route && (
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onReverseTrace();
-                  }}
-                  onPointerDownCapture={(e) => e.stopPropagation()}
-                  className="absolute bottom-3 right-3 z-[1100] inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-background/95 px-2.5 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm hover:bg-background"
-                  aria-label={t("form.reverseDirection")}
-                  title={t("form.reverseDirection")}
-                >
-                  <ArrowLeftRight className="size-3.5" />
-                  <span className="hidden sm:inline">
-                    {isSelectedReversed ? t("form.reversedActive") : t("form.reverseDirection")}
-                  </span>
-                </button>
+              {route && !isEditing && (
+                <div className="absolute bottom-3 right-3 z-[1100] flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onReverseTrace();
+                    }}
+                    onPointerDownCapture={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-background/95 px-2.5 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm hover:bg-background"
+                    aria-label={t("form.reverseDirection")}
+                    title={t("form.reverseDirection")}
+                  >
+                    <ArrowLeftRight className="size-3.5" />
+                    <span className="hidden sm:inline">
+                      {isSelectedReversed ? t("form.reversedActive") : t("form.reverseDirection")}
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEnterEdit();
+                    }}
+                    onPointerDownCapture={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-primary/40 bg-primary px-2.5 py-1.5 text-xs font-medium text-primary-foreground shadow-sm hover:bg-primary/90"
+                    aria-label={t("edit.enter")}
+                    title={t("edit.enter")}
+                  >
+                    <Pencil className="size-3.5" />
+                    <span className="hidden sm:inline">{t("edit.enter")}</span>
+                  </button>
+                </div>
+              )}
+              {isEditing && (
+                <div className="absolute bottom-3 right-3 z-[1100] flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onExitEdit();
+                    }}
+                    onPointerDownCapture={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-background/95 px-2.5 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm hover:bg-background"
+                  >
+                    <X className="size-3.5" />
+                    <span className="hidden sm:inline">{t("edit.cancel")}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onApplyEdit();
+                    }}
+                    onPointerDownCapture={(e) => e.stopPropagation()}
+                    disabled={isReRouting || !editPreview}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-primary/40 bg-primary px-2.5 py-1.5 text-xs font-medium text-primary-foreground shadow-sm hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    <Check className="size-3.5" />
+                    <span className="hidden sm:inline">{t("edit.apply")}</span>
+                  </button>
+                </div>
               )}
             </div>
 
@@ -542,12 +729,12 @@ export function RouteGeneratorPage() {
                   <div>
                     <p className="text-xs text-muted-foreground">{t("result.actualDistance")}</p>
                     <p className="text-lg font-semibold tabular-nums">
-                      {(route.distanceM / 1000).toFixed(2)} km
+                      {((displayedRoute?.distanceM ?? 0) / 1000).toFixed(2)} km
                     </p>
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">{t("result.elevationGain")}</p>
-                    <p className="text-lg font-semibold tabular-nums">{route.elevationGainM} m</p>
+                    <p className="text-lg font-semibold tabular-nums">{displayedRoute?.elevationGainM ?? 0} m</p>
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">{t("result.estimatedDuration")}</p>

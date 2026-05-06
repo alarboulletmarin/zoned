@@ -60,6 +60,14 @@
     "reverseDirection": "Reverse direction",
     "reversedActive": "Reversed"
   },
+  "edit": {
+    "enter": "Edit trace",
+    "cancel": "Cancel",
+    "apply": "Apply",
+    "applied": "Trace updated",
+    "hint": "Drag handles · click the trace to add · click a handle to remove",
+    "rerouting": "Re-routing…"
+  },
   "result": {
     "summary": "{{distance}} · {{ascent}} m gain · ~{{duration}}",
     "approximate": "Approximate distance",

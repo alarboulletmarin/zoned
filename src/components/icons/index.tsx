@@ -1075,3 +1075,11 @@ export function ArrowLeftRight({ className, size = 24 }: IconProps) {
   );
 }
 
+export function Check({ className, size = 24 }: IconProps) {
+  return (
+    <svg {...defaultProps} width={size} height={size} className={className}>
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
