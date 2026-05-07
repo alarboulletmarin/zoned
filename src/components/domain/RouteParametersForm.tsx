@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import {
   ArrowRight,
   Bike,
+  ChevronDown,
   Footprints,
   Loader2,
   MapPin,
@@ -12,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 import type { Discipline } from "@/types";
 import type { RouteCoordinate, RouteShape, RouteSurface } from "@/types/route";
@@ -223,6 +225,128 @@ export function RouteParametersForm({
   const cardinalLabel = t(`form.${CARDINAL_KEYS[cardinalIndex]}`);
   const bearingDisplay = t("form.bearingValue", { cardinal: cardinalLabel, deg: bearingDeg });
 
+  // Selected option metadata for the compact chip popovers — chips show
+  // the active label + icon so the user knows the current value at a
+  // glance (Strava/Komoot 2025 pattern).
+  const selectedDiscipline = disciplineOptions.find((o) => o.value === discipline);
+  const selectedShape = shapeOptions.find((o) => o.value === shape);
+
+  if (compact) {
+    return (
+      <form
+        data-slot="route-form"
+        className="space-y-2.5 rounded-xl border border-border/60 bg-background p-3"
+        onSubmit={(e) => {
+          e.preventDefault();
+          submit();
+        }}
+      >
+        {/* Row 1 — chips. Each chip opens a Radix Popover with the
+            actual control (segmented or slider). Horizontal scroll
+            handles narrow viewports gracefully. */}
+        <div className="-mx-3 flex gap-2 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 text-sm font-medium hover:bg-accent"
+              >
+                {selectedDiscipline?.icon}
+                <span>{selectedDiscipline?.label}</span>
+                <ChevronDown className="size-3.5 opacity-60" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent align="start" sideOffset={6} className="w-auto p-2">
+              <Segmented value={discipline} onChange={setDiscipline} options={disciplineOptions} label={t("form.discipline")} />
+            </PopoverContent>
+          </Popover>
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 text-sm font-medium hover:bg-accent"
+              >
+                {selectedShape?.icon}
+                <span>{selectedShape?.label}</span>
+                <ChevronDown className="size-3.5 opacity-60" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent align="start" sideOffset={6} className="w-auto p-2">
+              <Segmented value={shape} onChange={setShape} options={shapeOptions} label={t("form.shape")} />
+            </PopoverContent>
+          </Popover>
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 text-sm font-medium tabular-nums hover:bg-accent"
+              >
+                <span>{distanceKm.toFixed(1)} {t("form.distanceUnit")}</span>
+                <ChevronDown className="size-3.5 opacity-60" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent align="start" sideOffset={6} className="w-64 space-y-2 p-3">
+              <div className="flex items-baseline justify-between">
+                <span className="text-xs font-medium text-muted-foreground">{t("form.distance")}</span>
+                <span className="text-sm font-semibold tabular-nums">{distanceKm.toFixed(1)} {t("form.distanceUnit")}</span>
+              </div>
+              <Slider
+                value={[distanceKm]}
+                onValueChange={([v]) => setDistanceKm(clampDistance(v, maxDistanceKm))}
+                min={1}
+                max={maxDistanceKm}
+                step={0.5}
+                aria-label={t("form.distance")}
+              />
+              <div className="flex justify-between text-[10px] tabular-nums text-muted-foreground">
+                <span>{t("form.distanceMin")}</span>
+                <span>{t("form.distanceMaxValue", { max: maxDistanceKm })}</span>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+
+        {/* Row 2 — address full-width with GPS as inline icon button. */}
+        <div className="flex items-center gap-2">
+          <div className="min-w-0 flex-1">
+            <AddressSearchInput
+              onSelect={(point, label) => updateStart(point, label)}
+              onClear={() => updateStart(null, null)}
+              selectedLabel={startLabel}
+              disabled={isLocating}
+            />
+          </div>
+          <Button
+            type="button"
+            variant={start ? "outline" : "secondary"}
+            size="icon"
+            onClick={requestGps}
+            disabled={isLocating}
+            aria-label={t("form.useGps")}
+            title={t("form.useGps")}
+            className="h-10 w-10 shrink-0"
+          >
+            {isLocating ? <Loader2 className="size-4 animate-spin" /> : <MapPin className="size-4" />}
+          </Button>
+        </div>
+
+        {/* Row 3 — primary CTA. */}
+        <Button
+          type="submit"
+          size="lg"
+          className="h-11 w-full text-base font-semibold"
+          disabled={isGenerating || !start}
+        >
+          {isGenerating && <Loader2 className="mr-2 size-4 animate-spin" />}
+          {t("form.generate")}
+        </Button>
+      </form>
+    );
+  }
+
+  // Desktop / tablet — full vertical form with all fieldsets visible.
   return (
     <form
       data-slot="route-form"
@@ -232,13 +356,11 @@ export function RouteParametersForm({
         submit();
       }}
     >
-      {/* Forme */}
       <fieldset className="space-y-2">
         <legend className="text-sm font-semibold">{t("form.shape")}</legend>
         <Segmented value={shape} onChange={setShape} options={shapeOptions} label={t("form.shape")} />
       </fieldset>
 
-      {/* Discipline */}
       <fieldset className="space-y-2">
         <legend className="text-sm font-semibold">{t("form.discipline")}</legend>
         <Segmented
@@ -249,15 +371,11 @@ export function RouteParametersForm({
         />
       </fieldset>
 
-      {/* Surface — niche on mobile, hidden in compact mode (defaults to mixed). */}
-      {!compact && (
-        <fieldset className="space-y-2">
-          <legend className="text-sm font-semibold">{t("form.surface")}</legend>
-          <Segmented value={surface} onChange={setSurface} options={surfaceOptions} label={t("form.surface")} />
-        </fieldset>
-      )}
+      <fieldset className="space-y-2">
+        <legend className="text-sm font-semibold">{t("form.surface")}</legend>
+        <Segmented value={surface} onChange={setSurface} options={surfaceOptions} label={t("form.surface")} />
+      </fieldset>
 
-      {/* Distance */}
       <fieldset className="space-y-3">
         <div className="flex items-baseline justify-between gap-2">
           <legend className="text-sm font-semibold">{t("form.distance")}</legend>
@@ -371,8 +489,8 @@ export function RouteParametersForm({
         </fieldset>
       )}
 
-      {/* Bearing — only for out-and-back, hidden in compact mode (mobile). */}
-      {!compact && shape === "out_and_back" && (
+      {/* Bearing — only for out-and-back. */}
+      {shape === "out_and_back" && (
         <fieldset className="space-y-3">
           <div className="flex items-baseline justify-between gap-2">
             <legend className="text-sm font-semibold">{t("form.bearing")}</legend>

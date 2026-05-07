@@ -901,9 +901,16 @@ export function RouteGeneratorPage() {
             fills the rest → optional bottom result strip when a route is
             active. No drawer / no sheet ceremony: the user wanted the
             classic "controls on top, map below, action at bottom"
-            pattern (cf. Komoot search header + map + result list). */}
-        <div className="fixed inset-x-0 top-14 bottom-0 z-0 flex flex-col bg-background">
-          <div className="max-h-[45svh] shrink-0 space-y-3 overflow-y-auto border-b border-border/60 px-3 py-3 [touch-action:pan-y]">
+            pattern (cf. Komoot search header + map + result list).
+            z-30 sits above the App-level <Footer /> (which renders as a
+            flow-normal sibling of <main>) so neither the "Nouveautés"
+            link nor the legal footer leak into the map area. */}
+        <div className="fixed inset-x-0 top-14 bottom-0 z-30 flex flex-col bg-background">
+          {/* Top filter bar — chip popovers + address + CTA. The compact
+              form keeps itself ~150-180px tall; cap at 240px to give room
+              for an optional plan-preset card without ever stealing more
+              than 30 % of the viewport. */}
+          <div className="max-h-[240px] shrink-0 space-y-3 overflow-y-auto border-b border-border/60 px-3 py-3 [touch-action:pan-y]">
             {presetNode}
             <RouteParametersForm
               key={trainingPreset ? `${trainingPreset.planSessionRef?.planId}-${trainingPreset.planSessionRef?.weekNumber}-${trainingPreset.planSessionRef?.sessionIndex}` : "manual-route-form"}
