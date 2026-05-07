@@ -41,6 +41,12 @@ interface RouteParametersFormProps {
    */
   externalStart?: RouteCoordinate | null;
   initialValues?: Partial<Pick<RouteFormSubmitPayload, "shape" | "discipline" | "targetDistanceKm" | "surface" | "elevationGainTargetM" | "bearingDeg">>;
+  /**
+   * Compact mode for the mobile top-bar layout: hides niche fields
+   * (Surface, Bearing) so the form fits in ~250px. Sensible defaults
+   * still apply (mixed surface, bearing 0). Desktop keeps the full set.
+   */
+  compact?: boolean;
 }
 
 const CARDINAL_KEYS = [
@@ -93,6 +99,7 @@ export function RouteParametersForm({
   onStartChange,
   externalStart,
   initialValues,
+  compact = false,
 }: RouteParametersFormProps) {
   const { t } = useTranslation("routes");
 
@@ -242,11 +249,13 @@ export function RouteParametersForm({
         />
       </fieldset>
 
-      {/* Surface */}
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-semibold">{t("form.surface")}</legend>
-        <Segmented value={surface} onChange={setSurface} options={surfaceOptions} label={t("form.surface")} />
-      </fieldset>
+      {/* Surface — niche on mobile, hidden in compact mode (defaults to mixed). */}
+      {!compact && (
+        <fieldset className="space-y-2">
+          <legend className="text-sm font-semibold">{t("form.surface")}</legend>
+          <Segmented value={surface} onChange={setSurface} options={surfaceOptions} label={t("form.surface")} />
+        </fieldset>
+      )}
 
       {/* Distance */}
       <fieldset className="space-y-3">
@@ -362,8 +371,8 @@ export function RouteParametersForm({
         </fieldset>
       )}
 
-      {/* Bearing — only for out-and-back */}
-      {shape === "out_and_back" && (
+      {/* Bearing — only for out-and-back, hidden in compact mode (mobile). */}
+      {!compact && shape === "out_and_back" && (
         <fieldset className="space-y-3">
           <div className="flex items-baseline justify-between gap-2">
             <legend className="text-sm font-semibold">{t("form.bearing")}</legend>

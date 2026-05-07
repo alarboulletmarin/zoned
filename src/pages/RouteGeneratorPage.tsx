@@ -1,13 +1,12 @@
-import { lazy, Suspense, useCallback, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
-import { ArrowLeftRight, ArrowRight, Check, Download, EyeOff, Loader2, Maximize2, Minimize2, Pencil, RotateCcw, Save, X } from "@/components/icons";
+import { ArrowLeftRight, ArrowRight, Check, Download, EyeOff, Maximize2, Minimize2, Pencil, RotateCcw, Save, X } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { Sheet } from "react-modal-sheet";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { RouteCandidateCard } from "@/components/domain/RouteCandidateCard";
+import { MiniRouteMap } from "@/components/visualization/route/MiniRouteMap";
 import { SEOHead } from "@/components/seo";
 import {
   RouteParametersForm,
@@ -45,18 +44,6 @@ const ElevationChart = lazy(() =>
     default: m.ElevationChart,
   })),
 );
-
-/**
- * Tiny bridge that pulls react-modal-sheet's `snapTo` out of the compound
- * context and forwards it to a parent-owned ref. Lets the page invoke
- * snap transitions imperatively (e.g., on map-tap or on generation) from
- * outside the sheet's own subtree.
- */
-function SheetSnapBridge({ sheetRef }: { sheetRef: React.MutableRefObject<{ snapTo: (i: number) => void } | null> }) {
-  const ctx = Sheet.useContext();
-  sheetRef.current = { snapTo: ctx.snapTo };
-  return null;
-}
 
 function MapSkeleton({ className }: { className?: string }) {
   return (
@@ -123,14 +110,6 @@ export function RouteGeneratorPage() {
   const pickLang = usePickLang();
   const pickLocale = usePickLocale();
   const isMobile = useIsMobile();
-  // Strava-style 2-state persistent card. react-modal-sheet expects snap
-  // points as fractions in [0..1], ascending, with 0 (fully closed) and
-  // 1 (fully open) as bookends. We pin them explicitly so the lib doesn't
-  // warn about missing endpoints. Indices: 0=closed, 1=peek (~22%),
-  // 2=expanded (~70%), 3=full. We only ever snap between 1 and 2.
-  const sheetRef = useRef<{ snapTo: (i: number) => void } | null>(null);
-  const SHEET_SNAP_PEEK = 1;
-  const sheetSnapPoints = useMemo(() => [0, 0.22, 0.7, 1], []);
 
   const [candidates, setCandidates] = useState<DisplayCandidate[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -235,7 +214,6 @@ export function RouteGeneratorPage() {
     // Drop the sheet to peek (snap index 1 = peek, 0 = expanded) so the
     // user sees the marker land where they tapped — Komoot/Strava
     // collapse on map tap to keep the cartography hero.
-    sheetRef.current?.snapTo(SHEET_SNAP_PEEK);
   }, []);
 
   const reRoute = useCallback(
@@ -401,8 +379,7 @@ export function RouteGeneratorPage() {
         // candidate card are already in the peek-visible header. The user
         // drags the sheet up only when they want to compare alternates or
         // re-tune the form.
-        sheetRef.current?.snapTo(SHEET_SNAP_PEEK);
-      } catch (err) {
+          } catch (err) {
         console.warn("RouteGenerator: routing failed", err);
         toast.error(t("errors.routingFailed"));
       } finally {
@@ -920,180 +897,132 @@ export function RouteGeneratorPage() {
     return (
       <>
         <SEOHead title={t("title")} description={t("subtitle")} canonical="/routes" />
-        {/* Map slots between the sticky topbar (h-14, z-50) and the
-            sheet (z-40). top-14 keeps Leaflet zoom controls visible. */}
-        <div className="fixed inset-x-0 top-14 bottom-0 z-0 bg-muted/30">{mapBlock}</div>
-
-        {/* Live distance badge top-right while a route is active —
-            Strava-style "always-on" KPI badge. */}
-        {displayedRoute && (
-          <div className="fixed right-3 top-[68px] z-30 rounded-full border border-border/60 bg-background/95 px-3 py-1.5 text-xs font-semibold tabular-nums shadow-md backdrop-blur">
-            {distanceKmDisplay} km · ↑ {elevationDisplay} m
+        {/* Mobile layout = top form (compact, scroll if too tall) → map
+            fills the rest → optional bottom result strip when a route is
+            active. No drawer / no sheet ceremony: the user wanted the
+            classic "controls on top, map below, action at bottom"
+            pattern (cf. Komoot search header + map + result list). */}
+        <div className="fixed inset-x-0 top-14 bottom-0 z-0 flex flex-col bg-background">
+          <div className="max-h-[45svh] shrink-0 space-y-3 overflow-y-auto border-b border-border/60 px-3 py-3 [touch-action:pan-y]">
+            {presetNode}
+            <RouteParametersForm
+              key={trainingPreset ? `${trainingPreset.planSessionRef?.planId}-${trainingPreset.planSessionRef?.weekNumber}-${trainingPreset.planSessionRef?.sessionIndex}` : "manual-route-form"}
+              isGenerating={isGenerating}
+              onSubmit={onSubmit}
+              onError={(msg) => toast.error(msg)}
+              onStartChange={(point) => setPreviewStart(point)}
+              externalStart={previewStart}
+              initialValues={trainingPreset?.formDefaults}
+              compact
+            />
           </div>
-        )}
 
-        <Sheet
-          isOpen
-          snapPoints={sheetSnapPoints}
-          initialSnap={SHEET_SNAP_PEEK}
-          disableDismiss
-          onClose={() => {}}
-        >
-          <Sheet.Container
-            style={{ borderTopLeftRadius: 16, borderTopRightRadius: 16 }}
-          >
-            <SheetSnapBridge sheetRef={sheetRef} />
-            <Sheet.Header />
-            <Sheet.Content
-              // Allow native scroll inside the sheet only when the user
-              // already scrolled past the top — solves the drag-vs-scroll
-              // conflict at intermediate snaps without user-facing tricks.
-              disableDrag={({ scrollPosition }) => scrollPosition !== "top"}
-              scrollClassName="overscroll-contain [touch-action:pan-y]"
-            >
-              <div className="space-y-4 px-4 pb-6 pt-2">
-                  {/* Stat strip OR prompt — visible even at peek snap */}
-                  {displayedRoute ? (
-                    <div className="flex items-baseline justify-between gap-3">
-                      <div className="space-y-0.5">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                          {selectedRecommendation
-                            ? t(`recommendation.accents.${selectedRecommendation.accent}`)
-                            : t("recommendation.accents.closest_to_target")}
-                        </p>
-                        <p className="text-lg font-semibold tabular-nums">
-                          {distanceKmDisplay} km
-                          <span className="ml-2 text-sm font-normal text-muted-foreground">
-                            ↑ {elevationDisplay} m · {durationDisplay}
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="space-y-0.5">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                        {t("title")}
-                      </p>
-                      <p className="text-base font-medium text-foreground">
-                        {previewStart ? t("form.mapPickedHint") : t("form.mapPickStartHint")}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Primary action row — sits right under the stat strip
-                      so it's always visible at peek snap (no floating
-                      overlay that fights z-index with the sheet). Pre-route:
-                      single "Générer" pill. Post-route: Save flex-1 +
-                      icon-only Régénérer/Export. */}
-                  {route ? (
-                    <div className="flex items-center gap-2">
-                      <Button onClick={onSave} className="h-11 flex-1 gap-2 text-sm font-semibold">
-                        <Save className="size-4" />
-                        {t("result.save")}
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={onRegenerate}
-                        disabled={isGenerating}
-                        aria-label={t("form.regenerate")}
-                        title={t("form.regenerate")}
-                        className="h-11 w-11 shrink-0"
-                      >
-                        <RotateCcw className="size-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={onExport}
-                        aria-label={t("result.exportGpx")}
-                        title={t("result.exportGpx")}
-                        className="h-11 w-11 shrink-0"
-                      >
-                        <Download className="size-4" />
-                      </Button>
-                    </div>
-                  ) : (
-                    <Button
-                      type="button"
-                      size="lg"
-                      className="h-11 w-full text-base font-semibold"
-                      disabled={isGenerating || !previewStart}
-                      onClick={() => {
-                        const form = document.querySelector<HTMLFormElement>(
-                          'form[data-slot="route-form"]',
-                        );
-                        form?.requestSubmit();
-                      }}
-                    >
-                      {isGenerating && <Loader2 className="mr-2 size-4 animate-spin" />}
-                      {t("form.generate")}
-                    </Button>
-                  )}
-
-                  {/* Candidate cards (Strava pattern: stacked rows with
-                      mini-map thumbnails) — replaces the segmented control
-                      at the half-snap entirely. */}
-                  {candidates.length > 0 && (
-                    <div className="space-y-2">
-                      {candidates.map((candidate, index) => (
-                        <RouteCandidateCard
-                          key={candidate.route.id}
-                          route={candidate.route}
-                          recommendation={candidate.recommendation}
-                          selected={index === selectedIndex}
-                          onSelect={() => setSelectedIndex(index)}
-                        />
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Quick links — only relevant when no route yet */}
-                  {!displayedRoute && (
-                    <div className="rounded-xl border border-border/60 bg-muted/10 p-3">
-                      <p className="mb-2 text-xs font-semibold text-muted-foreground">
-                        {t("subtitle")}
-                      </p>
-                      {headerLinks}
-                    </div>
-                  )}
-
-                  {/* Plan/workout preset card */}
-                  {presetNode}
-
-                  {/* Distance deviation warning */}
-                  {route && distanceDeviationRatio > 0.05 && (
-                    <div className="rounded-xl border border-amber-300/60 bg-amber-50/80 p-3 text-sm text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/30 dark:text-amber-100">
-                      <p className="font-semibold">{t("result.approximate")}</p>
-                      <p className="mt-1 text-xs leading-relaxed text-amber-800/90 dark:text-amber-200/90">
-                        {t("result.approximateExplain")}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Elevation chart */}
-                  {route && displayElevation.length > 1 && (
-                    <div className="rounded-xl border border-border/60 bg-background p-3">
-                      <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                        {t("result.elevationProfile")}
-                      </p>
-                      <Suspense fallback={null}>
-                        <ElevationChart profile={displayElevation} />
-                      </Suspense>
-                    </div>
-                  )}
-
-                  {/* The full configuration form lives lower in the
-                      sheet — visible only at the expanded snap. The user
-                      reaches it by dragging the sheet up; auto-regen
-                      handles the common case (changing a chip / slider
-                      and seeing a fresh result). */}
-                  {formNode}
+          {/* Map fills the remaining vertical space. min-h-0 is the
+              flexbox-on-mobile incantation that lets the child shrink
+              below its content height — without it the map would push
+              the result strip off-screen. */}
+          <div className="relative min-h-0 flex-1">
+            {mapBlock}
+            {displayedRoute && (
+              <div className="pointer-events-none absolute right-3 top-3 z-30 rounded-full border border-border/60 bg-background/95 px-3 py-1.5 text-xs font-semibold tabular-nums shadow-md backdrop-blur">
+                {distanceKmDisplay} km · ↑ {elevationDisplay} m
               </div>
-            </Sheet.Content>
-          </Sheet.Container>
-        </Sheet>
+            )}
+          </div>
 
+          {/* Result strip: only when a route exists. Stat line on top,
+              action buttons inline; horizontal candidate scroll below
+              when there are 2+ alternates to compare. Strava lays this
+              out vertically, but on a 100px strip we go horizontal so
+              the user can sweep through candidates without losing the
+              map. */}
+          {route && (
+            <div className="shrink-0 space-y-2 border-t border-border/60 bg-background px-3 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+              <div className="flex items-center justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                    {selectedRecommendation
+                      ? t(`recommendation.accents.${selectedRecommendation.accent}`)
+                      : t("recommendation.accents.closest_to_target")}
+                  </p>
+                  <p className="truncate text-sm font-semibold tabular-nums">
+                    {distanceKmDisplay} km
+                    <span className="ml-2 text-xs font-normal text-muted-foreground">
+                      ↑ {elevationDisplay} m · {durationDisplay}
+                    </span>
+                  </p>
+                </div>
+                <div className="flex shrink-0 items-center gap-1.5">
+                  <Button onClick={onSave} className="h-9 gap-1.5 text-xs font-semibold">
+                    <Save className="size-3.5" />
+                    {t("result.save")}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={onRegenerate}
+                    disabled={isGenerating}
+                    aria-label={t("form.regenerate")}
+                    title={t("form.regenerate")}
+                    className="h-9 w-9 shrink-0"
+                  >
+                    <RotateCcw className="size-3.5" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={onExport}
+                    aria-label={t("result.exportGpx")}
+                    title={t("result.exportGpx")}
+                    className="h-9 w-9 shrink-0"
+                  >
+                    <Download className="size-3.5" />
+                  </Button>
+                </div>
+              </div>
+              {candidates.length > 1 && (
+                <div className="-mx-3 flex gap-2 overflow-x-auto px-3 pb-1 [scrollbar-width:thin]">
+                  {candidates.map((c, i) => {
+                    const isSel = i === selectedIndex;
+                    return (
+                      <button
+                        key={c.route.id}
+                        type="button"
+                        onClick={() => setSelectedIndex(i)}
+                        className={cn(
+                          "flex shrink-0 items-center gap-2 rounded-lg border px-2 py-1.5 text-left transition-colors",
+                          isSel
+                            ? "border-primary bg-primary/5"
+                            : "border-border/60 bg-background",
+                        )}
+                        aria-pressed={isSel}
+                      >
+                        <MiniRouteMap
+                          points={c.route.points}
+                          color={isSel ? "#ea580c" : "#94a3b8"}
+                          className="h-8 w-12"
+                        />
+                        <div className="text-[11px] leading-tight">
+                          <p className="font-semibold tabular-nums text-foreground">
+                            {(c.route.distanceM / 1000).toFixed(1)} km
+                          </p>
+                          <p className="tabular-nums text-muted-foreground">
+                            ↑ {c.route.elevationGainM} m
+                          </p>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+              {distanceDeviationRatio > 0.05 && (
+                <p className="text-[11px] text-amber-700 dark:text-amber-300">
+                  {t("result.approximate")}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
       </>
     );
   }
