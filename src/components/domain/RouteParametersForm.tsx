@@ -232,6 +232,27 @@ export function RouteParametersForm({
   const selectedShape = shapeOptions.find((o) => o.value === shape);
 
   if (compact) {
+    // Two-option toggles flip directly on tap: a popover for a binary
+    // choice is one tap of friction too many (Linear / Strava / Spotify
+    // all use direct toggles). Distance, being continuous, keeps a
+    // popover Slider with quick-pick chips.
+    const toggleDiscipline = () =>
+      setDiscipline((d) => (d === "running" ? "cycling" : "running"));
+    const toggleShape = () =>
+      setShape((s) => (s === "loop" ? "out_and_back" : "loop"));
+
+    // Common chip class. `data-[state=open]` lets Radix flip the look
+    // when the linked Popover opens — no React mirror needed.
+    const chipBase =
+      "inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-background px-3.5 text-sm font-medium transition-colors active:scale-[0.97] active:bg-accent data-[state=open]:border-primary data-[state=open]:bg-primary/10";
+
+    // Curated quick-pick distances for the slider popover. Filter out
+    // values above the discipline ceiling so cycling-only marathons
+    // don't show up when the user is in running mode.
+    const DISTANCE_PRESETS = [5, 10, 21.1, 42.2, 80].filter(
+      (d) => d <= maxDistanceKm,
+    );
+
     return (
       <form
         data-slot="route-form"
@@ -241,56 +262,52 @@ export function RouteParametersForm({
           submit();
         }}
       >
-        {/* Row 1 — chips. Each chip opens a Radix Popover with the
-            actual control (segmented or slider). Horizontal scroll
-            handles narrow viewports gracefully. */}
+        {/* Row 1 — filter chips. Discipline + Shape are tap-to-flip
+            (binary toggles, role="switch" for AT). Distance opens a
+            polished slider popover with quick presets. */}
         <div className="-mx-3 flex gap-2 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <Popover>
-            <PopoverTrigger asChild>
-              <button
-                type="button"
-                className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 text-sm font-medium hover:bg-accent"
-              >
-                {selectedDiscipline?.icon}
-                <span>{selectedDiscipline?.label}</span>
-                <ChevronDown className="size-3.5 opacity-60" />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent align="start" sideOffset={6} className="w-auto p-2">
-              <Segmented value={discipline} onChange={setDiscipline} options={disciplineOptions} label={t("form.discipline")} />
-            </PopoverContent>
-          </Popover>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={discipline === "cycling"}
+            aria-label={`${t("form.discipline")} : ${selectedDiscipline?.label}`}
+            onClick={toggleDiscipline}
+            className={chipBase}
+          >
+            {selectedDiscipline?.icon}
+            <span>{selectedDiscipline?.label}</span>
+          </button>
+
+          <button
+            type="button"
+            role="switch"
+            aria-checked={shape === "out_and_back"}
+            aria-label={`${t("form.shape")} : ${selectedShape?.label}`}
+            onClick={toggleShape}
+            className={chipBase}
+          >
+            {selectedShape?.icon}
+            <span>{selectedShape?.label}</span>
+          </button>
 
           <Popover>
             <PopoverTrigger asChild>
               <button
                 type="button"
-                className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 text-sm font-medium hover:bg-accent"
-              >
-                {selectedShape?.icon}
-                <span>{selectedShape?.label}</span>
-                <ChevronDown className="size-3.5 opacity-60" />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent align="start" sideOffset={6} className="w-auto p-2">
-              <Segmented value={shape} onChange={setShape} options={shapeOptions} label={t("form.shape")} />
-            </PopoverContent>
-          </Popover>
-
-          <Popover>
-            <PopoverTrigger asChild>
-              <button
-                type="button"
-                className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 text-sm font-medium tabular-nums hover:bg-accent"
+                aria-label={t("form.distance")}
+                aria-haspopup="dialog"
+                className={`${chipBase} tabular-nums`}
               >
                 <span>{distanceKm.toFixed(1)} {t("form.distanceUnit")}</span>
                 <ChevronDown className="size-3.5 opacity-60" />
               </button>
             </PopoverTrigger>
-            <PopoverContent align="start" sideOffset={6} className="w-64 space-y-2 p-3">
+            <PopoverContent align="start" sideOffset={8} className="w-72 space-y-3 p-4">
               <div className="flex items-baseline justify-between">
                 <span className="text-xs font-medium text-muted-foreground">{t("form.distance")}</span>
-                <span className="text-sm font-semibold tabular-nums">{distanceKm.toFixed(1)} {t("form.distanceUnit")}</span>
+                <span className="text-base font-semibold tabular-nums">
+                  {distanceKm.toFixed(1)} {t("form.distanceUnit")}
+                </span>
               </div>
               <Slider
                 value={[distanceKm]}
@@ -299,10 +316,30 @@ export function RouteParametersForm({
                 max={maxDistanceKm}
                 step={0.5}
                 aria-label={t("form.distance")}
+                className="[&>span:first-child]:h-2 [&_[role=slider]]:size-5"
               />
-              <div className="flex justify-between text-[10px] tabular-nums text-muted-foreground">
-                <span>{t("form.distanceMin")}</span>
-                <span>{t("form.distanceMaxValue", { max: maxDistanceKm })}</span>
+              <div className="flex flex-wrap gap-1.5">
+                {DISTANCE_PRESETS.map((d) => {
+                  // Tight tolerance — only the preset itself counts as
+                  // active. Once the user drags the slider, the chip
+                  // releases (slider step = 0.5 km, presets like 21.1 km
+                  // and 42.2 km are no longer matched).
+                  const active = Math.abs(distanceKm - d) < 0.05;
+                  return (
+                    <button
+                      key={d}
+                      type="button"
+                      // Bypass clampDistance's 0.5 km rounding here so a
+                      // tap on "21.1 km" lands on exactly 21.1 km, not
+                      // 21.0 km. The slider still snaps elsewhere.
+                      onClick={() => setDistanceKm(Math.min(d, maxDistanceKm))}
+                      data-active={active}
+                      className="rounded-full border border-border/60 px-2.5 py-1 text-xs tabular-nums transition-colors hover:bg-accent data-[active=true]:border-primary data-[active=true]:bg-primary/10 data-[active=true]:text-primary"
+                    >
+                      {d} {t("form.distanceUnit")}
+                    </button>
+                  );
+                })}
               </div>
             </PopoverContent>
           </Popover>
