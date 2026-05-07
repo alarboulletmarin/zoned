@@ -12,7 +12,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
-import { cn } from "@/lib/utils";
 
 import type { Discipline } from "@/types";
 import type { RouteCoordinate, RouteShape, RouteSurface } from "@/types/route";
@@ -219,9 +218,8 @@ export function RouteParametersForm({
 
   return (
     <form
-      // pb-24 leaves room for the fixed CTA on mobile so the last fieldset
-      // never sits behind it. Reset on tablet+ where the CTA inlines.
-      className="space-y-5 rounded-xl border border-border/60 bg-background p-4 pb-24 sm:p-5 sm:pb-5"
+      data-slot="route-form"
+      className="space-y-5 rounded-xl border border-border/60 bg-background p-4 sm:p-5"
       onSubmit={(e) => {
         e.preventDefault();
         submit();
@@ -411,21 +409,13 @@ export function RouteParametersForm({
         </div>
       </fieldset>
 
-      {/* CTA — pinned to viewport bottom on mobile, inline on tablet+.
-          `fixed` (vs `sticky`) is required because the form's height is often
-          smaller than the viewport, so a sticky bottom never engages.
-
-          z-[1100] sits above Leaflet's tallest pane (popup at 700, controls
-          at 1000) so the bar can't slip behind the map. Background is
-          fully opaque (no `backdrop-blur`) — combining `position: fixed`
-          with `backdrop-filter` triggers a known WebKit bug where the
-          element starts scrolling with the content on iOS Safari. */}
-      <div
-        className={cn(
-          "fixed inset-x-0 bottom-0 z-[1100] border-t border-border/60 bg-background px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_12px_rgba(0,0,0,0.08)]",
-          "sm:static sm:mx-0 sm:mt-2 sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:shadow-none",
-        )}
-      >
+      {/* CTA stays inline at the end of the form — no fixed positioning.
+          Both desktop (in a sticky aside) and mobile (inside a bottom
+          sheet) flow naturally with this approach. The mobile sheet
+          renders the form deep enough that the CTA is reached by
+          dragging the sheet up; that's the same flow Strava uses for
+          "regenerate with these settings". */}
+      <div className="mt-2">
         <Button
           type="submit"
           size="lg"

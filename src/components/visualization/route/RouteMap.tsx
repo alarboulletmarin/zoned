@@ -10,10 +10,17 @@ interface RouteMapProps {
   points?: RouteCoordinate[];
   /**
    * Alternative candidates rendered behind the selected trace in a muted
-   * tone, so the user can compare proposals at a glance. Mutually used with
-   * `points` (which holds the selected one).
+   * tone, so the user can compare proposals at a glance. Each entry carries
+   * the original index in the parent's candidates array so a click on a
+   * muted trace can promote it as the new selection without a re-fetch.
    */
-  candidates?: RouteCoordinate[][];
+  candidates?: { index: number; points: RouteCoordinate[]; label?: string }[];
+  /**
+   * Fired when the user clicks a muted candidate trace on the map. Lets
+   * the parent flip selection without forcing the user to scroll back to
+   * the segmented control inside the drawer/sidebar.
+   */
+  onCandidateSelect?: (index: number) => void;
   /**
    * POI traversed by the trace, rendered as small named markers so the user
    * can recognise familiar places on the map.
@@ -177,6 +184,7 @@ function sampleChevrons(latLngs: [number, number][]): Array<{ pos: [number, numb
 export function RouteMap({
   points = [],
   candidates,
+  onCandidateSelect,
   pois,
   start = null,
   className,
@@ -190,6 +198,10 @@ export function RouteMap({
   onWaypointRemove,
   onWaypointInsert,
 }: RouteMapProps) {
+  const candidateSelectRef = useRef<typeof onCandidateSelect>(onCandidateSelect);
+  useEffect(() => {
+    candidateSelectRef.current = onCandidateSelect;
+  }, [onCandidateSelect]);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const clickHandlerRef = useRef<typeof onMapClick>(onMapClick);
@@ -274,21 +286,51 @@ export function RouteMap({
     if (points.length > 1) {
       const selectedLatLngs: [number, number][] = points.map(([lon, lat]) => [lat, lon]);
 
-      const others = (candidates ?? []).filter((c) => c !== points && c.length > 1);
+      const others = (candidates ?? []).filter((c) => c.points !== points && c.points.length > 1);
       const ALT_STYLES = [
         { color: "#0ea5e9", dashArray: "6 6" },
         { color: "#a855f7", dashArray: "2 6" },
         { color: "#10b981", dashArray: "8 4" },
       ];
-      others.forEach((cand, idx) => {
-        const latLngs: [number, number][] = cand.map(([lon, lat]) => [lat, lon]);
-        const style = ALT_STYLES[idx % ALT_STYLES.length];
-        L.polyline(latLngs, {
+      others.forEach((cand, displayIdx) => {
+        const latLngs: [number, number][] = cand.points.map(([lon, lat]) => [lat, lon]);
+        const style = ALT_STYLES[displayIdx % ALT_STYLES.length];
+        // Visible dashed trace.
+        const visible = L.polyline(latLngs, {
           color: style.color,
           weight: 3,
           opacity: 0.7,
           dashArray: style.dashArray,
+          interactive: false,
         }).addTo(map);
+        // Fat invisible hit target so taps on touch devices land easily on
+        // a 3px dashed line. Same path, no styling, generous weight.
+        const hit = L.polyline(latLngs, {
+          color: style.color,
+          weight: 18,
+          opacity: 0,
+          interactive: true,
+          bubblingMouseEvents: false,
+        }).addTo(map);
+        hit.on("mouseover", () => {
+          visible.setStyle({ opacity: 1, weight: 5 });
+          if (mapRef.current) {
+            mapRef.current.getContainer().style.cursor = "pointer";
+          }
+        });
+        hit.on("mouseout", () => {
+          visible.setStyle({ opacity: 0.7, weight: 3 });
+          if (mapRef.current) {
+            mapRef.current.getContainer().style.cursor = "";
+          }
+        });
+        if (cand.label) {
+          hit.bindTooltip(cand.label, { sticky: true, direction: "top", offset: [0, -4] });
+        }
+        hit.on("click", (e) => {
+          L.DomEvent.stopPropagation(e);
+          candidateSelectRef.current?.(cand.index);
+        });
       });
 
       const trackLine = L.polyline(selectedLatLngs, {
@@ -390,7 +432,7 @@ export function RouteMap({
 
       const allBounds = L.latLngBounds(selectedLatLngs);
       for (const cand of others) {
-        for (const [lon, lat] of cand) allBounds.extend([lat, lon]);
+        for (const [lon, lat] of cand.points) allBounds.extend([lat, lon]);
       }
       // animate:false avoids leaving the tile-container stuck on a partial
       // zoom transform if React triggers a downstream invalidateSize while
