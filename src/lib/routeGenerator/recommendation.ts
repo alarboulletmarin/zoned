@@ -4,7 +4,19 @@ import type { PlanSession, PlanWeek } from "@/types/plan";
 import type { RunnerProfile } from "@/types/runner-profile";
 import { getWorkoutDiscipline } from "@/types";
 import type { Difficulty, Discipline, SessionType, WorkoutTemplate } from "@/types";
-import type { Route, RouteCoordinate, RouteShape, RouteSurface } from "@/types/route";
+import type { Route, RouteShape, RouteSurface } from "@/types/route";
+import {
+  clamp01,
+  computeTurnDensityPerKm,
+  pickExtreme,
+  roundHalf,
+} from "./recommendation/math";
+import {
+  athleteFitScore,
+  estimatePredictedDurationSec,
+  scoreWeightsForIntent,
+  terrainScoreForIntent,
+} from "./recommendation/scoring-helpers";
 
 type SupportedRouteShape = Extract<RouteShape, "loop" | "out_and_back">;
 
@@ -536,134 +548,13 @@ function defaultElevationTargetM(
   return Math.max(120, Math.round(targetDistanceKm * 18));
 }
 
-function estimatePredictedDurationSec(
-  route: Route,
-  intent: RouteIntent,
-  athlete: RouteAthleteProfile | null,
-): number {
-  if (intent.discipline === "running") {
-    const paces = calculateTrainingPaces(athlete?.vma, athlete?.runnerLevel);
-    const intensity = intent.sessionType ? sessionTypeToIntensity(intent.sessionType) : "E";
-    const paceRange = paces[intensity];
-    const avgPaceMinKm = (paceRange.min + paceRange.max) / 2;
-    const horizontalSec = (route.distanceM / 1000) * avgPaceMinKm * 60;
-    const elevationPenaltySec = route.elevationGainM * 4;
-    return Math.round(horizontalSec + elevationPenaltySec);
-  }
+// Scoring sub-helpers (estimatePredictedDurationSec, terrainScoreForIntent,
+// athleteFitScore, scoreWeightsForIntent) live in
+// ./recommendation/scoring-helpers.ts so this file focuses on the
+// orchestration (rankRouteCandidates → scoreRoute → buildReasons) and
+// the preset builders.
 
-  return route.estimatedDurationSec;
-}
-
-function terrainScoreForIntent(
-  preference: RouteIntent["terrainPreference"],
-  climbPerKm: number,
-): number {
-  switch (preference) {
-    case "flat":
-      return clamp01(1 - climbPerKm / 22);
-    case "climbing":
-      return clamp01(climbPerKm / 28);
-    case "rolling":
-      return clamp01(1 - Math.abs(climbPerKm - 15) / 18);
-  }
-}
-
-function athleteFitScore(
-  intent: RouteIntent,
-  athlete: RouteAthleteProfile | null,
-  distanceKm: number,
-  climbPerKm: number,
-): number {
-  if (!athlete) return 0.9;
-
-  let score = 1;
-  if (
-    intent.sessionType === "long_run" &&
-    athlete.currentLongRunKm &&
-    distanceKm > athlete.currentLongRunKm * 1.1
-  ) {
-    score -= Math.min(0.35, (distanceKm - athlete.currentLongRunKm * 1.1) / 8);
-  }
-
-  if (athlete.runnerLevel === "beginner" && intent.terrainPreference !== "climbing" && climbPerKm > 14) {
-    score -= Math.min(0.3, (climbPerKm - 14) / 22);
-  }
-
-  if (athlete.currentWeeklyKm && athlete.currentWeeklyKm < 25 && distanceKm > intent.targetDistanceKm * 1.12) {
-    score -= 0.12;
-  }
-
-  return clamp01(score);
-}
-
-function scoreWeightsForIntent(sessionType?: SessionType): {
-  distance: number;
-  duration: number;
-  terrain: number;
-  continuity: number;
-  shape: number;
-  repeatability: number;
-  athlete: number;
-} {
-  switch (sessionType) {
-    case "recovery":
-      return { distance: 0.22, duration: 0.14, terrain: 0.28, continuity: 0.12, shape: 0.1, repeatability: 0.04, athlete: 0.1 };
-    case "threshold":
-    case "tempo":
-    case "race_specific":
-      return { distance: 0.2, duration: 0.18, terrain: 0.22, continuity: 0.18, shape: 0.08, repeatability: 0.04, athlete: 0.1 };
-    case "hills":
-      return { distance: 0.14, duration: 0.1, terrain: 0.28, continuity: 0.08, shape: 0.08, repeatability: 0.22, athlete: 0.1 };
-    case "long_run":
-      return { distance: 0.24, duration: 0.16, terrain: 0.12, continuity: 0.1, shape: 0.1, repeatability: 0.03, athlete: 0.15 };
-    default:
-      return { distance: 0.24, duration: 0.14, terrain: 0.18, continuity: 0.12, shape: 0.1, repeatability: 0.06, athlete: 0.16 };
-  }
-}
-
-function computeTurnDensityPerKm(points: RouteCoordinate[], distanceKm: number): number {
-  if (points.length < 3 || distanceKm <= 0) return 0;
-
-  let sharpTurns = 0;
-  for (let i = 1; i < points.length - 1; i += 1) {
-    const first = bearing(points[i - 1], points[i]);
-    const second = bearing(points[i], points[i + 1]);
-    const delta = angularDistance(first, second);
-    if (delta >= 45) sharpTurns += 1;
-  }
-  return sharpTurns / distanceKm;
-}
-
-function bearing(from: RouteCoordinate, to: RouteCoordinate): number {
-  const [lon1, lat1] = from;
-  const [lon2, lat2] = to;
-  const phi1 = toRad(lat1);
-  const phi2 = toRad(lat2);
-  const dLambda = toRad(lon2 - lon1);
-
-  const y = Math.sin(dLambda) * Math.cos(phi2);
-  const x = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(dLambda);
-  return ((Math.atan2(y, x) * 180) / Math.PI + 360) % 360;
-}
-
-function angularDistance(a: number, b: number): number {
-  const delta = Math.abs(a - b) % 360;
-  return delta > 180 ? 360 - delta : delta;
-}
-
-function toRad(deg: number): number {
-  return (deg * Math.PI) / 180;
-}
-
-function pickExtreme<T>(items: T[], selector: (item: T) => number): T | null {
-  if (items.length === 0) return null;
-  return items.reduce((best, current) => (selector(current) < selector(best) ? current : best));
-}
-
-function roundHalf(value: number): number {
-  return Math.max(1, Math.round(value * 2) / 2);
-}
-
-function clamp01(value: number): number {
-  return Math.max(0, Math.min(1, value));
-}
+// Math helpers (bearing, angularDistance, computeTurnDensityPerKm,
+// pickExtreme, roundHalf, clamp01) live in ./recommendation/math.ts —
+// imported above. Kept that way so this file focuses on the
+// recommendation domain rather than 3D geometry boilerplate.

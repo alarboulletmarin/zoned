@@ -23,13 +23,14 @@ import { destinationPoint } from "../elevation";
 import { routeViaBrouter, type BrouterTraceResult } from "../routing";
 import {
   DISTANCE_TOLERANCE,
-  MAX_ADJUSTMENT_ATTEMPTS,
   POI_AWARE_MIN_COUNT,
   POI_SEARCH_RADIUS_FACTOR,
 } from "../constants";
 import { fetchPoiCandidates } from "../poi/overpass";
 import { selectDiverseWaypoints, type PoiBoost } from "../poi/poiSelector";
 import type { RoutePoi } from "../poi/poiTypes";
+import { convergeWithCorrection, dampedRatioCorrection } from "./shared/convergence";
+import { seededBearing } from "./shared/rng";
 
 export interface LoopGenerationResult extends BrouterTraceResult {
   /** Number of adjustment passes that ran (0 = first attempt was good). */
@@ -42,18 +43,14 @@ export interface LoopGenerationResult extends BrouterTraceResult {
   strategy: "poi-aware" | "triangulation";
 }
 
-function seededAngleOffset(seed: number): number {
-  // Hash the seed into a [0, 360) bearing offset.
-  const x = Math.sin(seed * 9301 + 49297) * 233280;
-  return ((x - Math.floor(x)) * 360) % 360;
-}
-
 function buildTriangleWaypoints(
   start: RouteCoordinate,
   radiusM: number,
   seed: number,
 ): RouteCoordinate[] {
-  const offset = seededAngleOffset(seed);
+  // Bearing offset is derived from the seed so two candidates with
+  // different seeds explore different orientations of the triangle.
+  const offset = seededBearing(seed);
   return [0, 120, 240].map((step) =>
     destinationPoint(start, radiusM, (offset + step) % 360),
   );
@@ -141,54 +138,71 @@ async function iteratePoiLoop(
 ): Promise<LoopGenerationResult | null> {
   const { start, targetM, discipline, pois, seed, signal, poiBoost } = args;
 
-  let targetRadiusM = (targetM / Math.PI) * 0.5;
-  let trace: BrouterTraceResult | null = null;
-  let chosen: ReturnType<typeof selectDiverseWaypoints> = [];
-  let attempts = 0;
-
-  while (attempts < MAX_ADJUSTMENT_ATTEMPTS) {
-    // The seed is passed through to the selector so two candidates with
-    // different seeds explore different waypoint sets even when their POI
-    // pool is identical. We also re-derive a per-attempt seed so a failed
-    // first pass tries a different selection on retry instead of repeating
-    // the same trio that just over/undershot.
-    chosen = selectDiverseWaypoints(
-      start,
-      pois,
-      targetRadiusM,
-      3,
-      seed + attempts * 1009,
-      poiBoost,
-    );
-    if (chosen.length === 0) return null;
-
-    trace = await routeViaBrouter({
-      waypoints: [start, ...chosen.map((p) => p.point), start],
-      discipline,
-      signal,
-    });
-
-    const ratio = trace.distanceM / targetM;
-    if (Math.abs(ratio - 1) <= DISTANCE_TOLERANCE) break;
-
-    // Same damped correction as triangulation but applied to the *selection*
-    // target, not a triangle radius. Damping 0.7 is empirically stable.
-    const correction = 1 + (1 / ratio - 1) * 0.7;
-    targetRadiusM = Math.max(50, targetRadiusM * correction);
-    attempts += 1;
+  // The state we mutate across passes is the *selection radius*, not the
+  // POI list. A new attempt re-derives a per-pass seed so a missed first
+  // selection tries a different trio rather than re-picking the same one.
+  interface PoiState {
+    radiusM: number;
+    chosen: ReturnType<typeof selectDiverseWaypoints>;
+    attempts: number;
   }
 
-  if (!trace || chosen.length === 0) return null;
-
-  const finalRatio = trace.distanceM / targetM;
-  return {
-    ...trace,
-    attempts,
-    withinTolerance: Math.abs(finalRatio - 1) <= DISTANCE_TOLERANCE,
-    strategy: "poi-aware",
-    pois: chosen.map((p) => ({ type: p.type, point: p.point, name: p.name })),
-  };
+  let lastChosen: PoiState["chosen"] = [];
+  try {
+    const result = await convergeWithCorrection<PoiState>({
+      initial: {
+        radiusM: (targetM / Math.PI) * 0.5,
+        chosen: [],
+        attempts: 0,
+      },
+      routeOnce: async (state) => {
+        const chosen = selectDiverseWaypoints(
+          start,
+          pois,
+          state.radiusM,
+          3,
+          seed + state.attempts * 1009,
+          poiBoost,
+        );
+        if (chosen.length === 0) {
+          throw new EmptySelectionError();
+        }
+        state.chosen = chosen;
+        lastChosen = chosen;
+        return routeViaBrouter({
+          waypoints: [start, ...chosen.map((p) => p.point), start],
+          discipline,
+          signal,
+        });
+      },
+      refine: (state, ratio) => ({
+        radiusM: Math.max(50, state.radiusM * dampedRatioCorrection(ratio)),
+        chosen: state.chosen,
+        attempts: state.attempts + 1,
+      }),
+      targetM,
+    });
+    if (result.finalState.chosen.length === 0) return null;
+    return {
+      ...result.trace,
+      attempts: result.attempts,
+      withinTolerance: result.withinTolerance,
+      strategy: "poi-aware",
+      pois: result.finalState.chosen.map((p) => ({ type: p.type, point: p.point, name: p.name })),
+    };
+  } catch (err) {
+    if (err instanceof EmptySelectionError) {
+      // No diverse POI trio could be selected — caller falls back.
+      return lastChosen.length === 0 ? null : null;
+    }
+    throw err;
+  }
 }
+
+/** Internal sentinel: thrown by {@link iteratePoiLoop} when the diverse
+ *  selector returns nothing. Caught locally to convert into a `null`
+ *  return that signals "fall back to triangulation". */
+class EmptySelectionError extends Error {}
 
 /**
  * Original blind-triangulation loop. Used as a fallback when no POI is
@@ -199,35 +213,23 @@ async function iterateTriangulation(
   args: LoopAttemptArgs & { initialRadiusM: number },
 ): Promise<LoopGenerationResult> {
   const { start, targetM, discipline, seed, signal } = args;
-  let radiusM = args.initialRadiusM;
-  let trace: BrouterTraceResult | null = null;
-  let attempts = 0;
-
-  while (attempts < MAX_ADJUSTMENT_ATTEMPTS) {
-    const waypoints = buildTriangleWaypoints(start, radiusM, seed);
-    trace = await routeViaBrouter({
-      waypoints: [start, ...waypoints, start],
-      discipline,
-      signal,
-    });
-
-    const ratio = trace.distanceM / targetM;
-    if (Math.abs(ratio - 1) <= DISTANCE_TOLERANCE) break;
-
-    const correction = 1 + (1 / ratio - 1) * 0.7;
-    radiusM = Math.max(50, radiusM * correction);
-    attempts += 1;
-  }
-
-  if (!trace) {
-    throw new Error("loop generation produced no trace");
-  }
-
-  const finalRatio = trace.distanceM / targetM;
+  const result = await convergeWithCorrection<{ radiusM: number }>({
+    initial: { radiusM: args.initialRadiusM },
+    routeOnce: ({ radiusM }) =>
+      routeViaBrouter({
+        waypoints: [start, ...buildTriangleWaypoints(start, radiusM, seed), start],
+        discipline,
+        signal,
+      }),
+    refine: ({ radiusM }, ratio) => ({
+      radiusM: Math.max(50, radiusM * dampedRatioCorrection(ratio)),
+    }),
+    targetM,
+  });
   return {
-    ...trace,
-    attempts,
-    withinTolerance: Math.abs(finalRatio - 1) <= DISTANCE_TOLERANCE,
+    ...result.trace,
+    attempts: result.attempts,
+    withinTolerance: result.withinTolerance,
     strategy: "triangulation",
     pois: [],
   };

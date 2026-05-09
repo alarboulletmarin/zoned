@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -12,7 +12,8 @@ import {
   RouteParametersForm,
   type RouteFormSubmitPayload,
 } from "@/components/domain/RouteParametersForm";
-import { BrouterError, generateRouteCandidates, routeFromWaypoints } from "@/lib/routeGenerator";
+import { generateRouteCandidates } from "@/lib/routeGenerator";
+import { useRouteEditor } from "@/hooks/useRouteEditor";
 import {
   buildManualRouteIntent,
   buildTrainingRoutePreset,
@@ -62,31 +63,6 @@ function MapSkeleton({ className }: { className?: string }) {
  * the trace closer to the spot they want to move without having to insert
  * a fresh waypoint first. Capped at 10 to keep the map readable.
  */
-function deriveInitialWaypoints(
-  route: Route,
-  displayPoints: RouteCoordinate[],
-): RouteCoordinate[] {
-  const pts = displayPoints.length > 0 ? displayPoints : route.points;
-  if (pts.length < 3) return pts;
-
-  const totalM = route.distanceM;
-  if (totalM <= 0) return [pts[0], pts[pts.length - 1]];
-
-  // ~1 mid-handle per km, clamped between 2 and 8 so a short loop stays
-  // editable and a long ride doesn't get cluttered.
-  const midCount = Math.max(2, Math.min(8, Math.round(totalM / 1_000)));
-  const stepCount = midCount + 1;
-
-  const waypoints: RouteCoordinate[] = [pts[0]];
-  for (let s = 1; s < stepCount; s += 1) {
-    const fraction = s / stepCount;
-    const idx = Math.max(1, Math.min(pts.length - 2, Math.round(fraction * (pts.length - 1))));
-    waypoints.push(pts[idx]);
-  }
-  waypoints.push(pts[pts.length - 1]);
-  return waypoints;
-}
-
 interface DisplayCandidate {
   route: Route;
   recommendation: RankedRouteCandidate | null;
@@ -117,10 +93,6 @@ export function RouteGeneratorPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [reversedIds, setReversedIds] = useState<Record<string, boolean>>({});
   const [isMapExpanded, setIsMapExpanded] = useState(false);
-  const [editWaypoints, setEditWaypoints] = useState<RouteCoordinate[] | null>(null);
-  const [lastValidWaypoints, setLastValidWaypoints] = useState<RouteCoordinate[] | null>(null);
-  const [editPreview, setEditPreview] = useState<Route | null>(null);
-  const [isReRouting, setIsReRouting] = useState(false);
   // Desktop one-page layout: the "Pourquoi ce parcours" panel collapses
   // by default so the map keeps the maximum vertical room. Users only
   // pop it open when they want to compare the rationale or read the
@@ -166,6 +138,40 @@ export function RouteGeneratorPage() {
   const isSelectedReversed = route ? !!reversedIds[route.id] : false;
   const selectedRecommendation = selectedCandidate?.recommendation ?? null;
 
+  // Edit mode is entirely owned by useRouteEditor: state machine,
+  // debounced re-route with AbortController, waypoint mutators. The
+  // hook reads displayPoints lazily via a ref so the caller doesn't
+  // need to pre-compute it (it's actually derived *from* this hook's
+  // editPreview, which would otherwise create a circular dependency).
+  // `onApply` plugs the edited route back into the candidates array
+  // and clears the active reverse flag.
+  const editorOnApply = useCallback((next: Route) => {
+    setCandidates((prev) => {
+      const idx = prev.findIndex((c) => c.route.id === next.id);
+      if (idx === -1) return prev;
+      const updated = [...prev];
+      updated[idx] = { ...updated[idx], route: next, recommendation: null };
+      return updated;
+    });
+    setReversedIds((prev) => ({ ...prev, [next.id]: false }));
+  }, []);
+  const editorDisplayPointsRef = useRef<RouteCoordinate[]>([]);
+  const {
+    editWaypoints,
+    editPreview,
+    isReRouting,
+    onEnterEdit,
+    onExitEdit,
+    onApplyEdit,
+    onWaypointMove,
+    onWaypointInsert,
+    onWaypointRemove,
+  } = useRouteEditor({
+    route,
+    getDisplayPoints: useCallback(() => editorDisplayPointsRef.current, []),
+    onApply: editorOnApply,
+  });
+
   const isEditing = editWaypoints != null;
   const displayedRoute = editPreview ?? route;
 
@@ -174,6 +180,10 @@ export function RouteGeneratorPage() {
     if (isEditing) return displayedRoute.points;
     return isSelectedReversed ? [...displayedRoute.points].reverse() : displayedRoute.points;
   }, [displayedRoute, isSelectedReversed, isEditing]);
+  // Mirror displayPoints into the ref the editor reads via getDisplayPoints
+  // — refs don't trigger renders, so this assignment during the render
+  // pass is safe (and avoids the useEffect tick lag).
+  editorDisplayPointsRef.current = displayPoints;
 
   const displayElevation = useMemo(() => {
     if (!displayedRoute) return [] as Route["elevation"];
@@ -219,150 +229,6 @@ export function RouteGeneratorPage() {
     // user sees the marker land where they tapped — Komoot/Strava
     // collapse on map tap to keep the cartography hero.
   }, []);
-
-  // Re-route during edit is debounced so consecutive drags (drag-release-
-  // drag-release on the same waypoint, or a quick sweep across multiple
-  // waypoints) coalesce into a single Brouter call. Each new attempt also
-  // aborts the in-flight request so the UI never waits on a routing answer
-  // for a layout the user has already moved past.
-  const reRouteAbortRef = useRef<AbortController | null>(null);
-  const reRouteTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const REROUTE_DEBOUNCE_MS = 300;
-
-  // Cancel any pending debounce and in-flight request when the page goes
-  // away — otherwise a stale promise could call setIsReRouting on an
-  // unmounted component and leak the AbortController.
-  useEffect(
-    () => () => {
-      if (reRouteTimerRef.current) clearTimeout(reRouteTimerRef.current);
-      reRouteAbortRef.current?.abort();
-    },
-    [],
-  );
-
-  const reRoute = useCallback(
-    (waypoints: RouteCoordinate[]) => {
-      if (!route) return;
-      if (reRouteTimerRef.current) clearTimeout(reRouteTimerRef.current);
-      reRouteAbortRef.current?.abort();
-      const controller = new AbortController();
-      reRouteAbortRef.current = controller;
-      setIsReRouting(true);
-      reRouteTimerRef.current = setTimeout(async () => {
-        try {
-          const next = await routeFromWaypoints({
-            waypoints,
-            discipline: route.discipline,
-            shape: route.shape,
-            surface: route.constraints.surface,
-            routeId: route.id,
-            name: route.name,
-            signal: controller.signal,
-          });
-          if (controller.signal.aborted) return;
-          setEditPreview(next);
-          setLastValidWaypoints(waypoints);
-        } catch (err) {
-          if (controller.signal.aborted) return;
-          if (err instanceof DOMException && err.name === "AbortError") return;
-          console.warn("RouteGenerator: re-route failed", err);
-          // Brouter answers 400 when one of the waypoints isn't on its routing
-          // graph — typically dragged into the sea, into a building, or onto a
-          // private road. Revert to the last accepted layout so the user sees
-          // their drag bounce back, and tell them why.
-          const isUnreachable = err instanceof BrouterError && (err.status === 400 || err.status === 0);
-          if (isUnreachable && lastValidWaypoints) {
-            setEditWaypoints(lastValidWaypoints);
-            toast.error(t("errors.unreachableWaypoint"));
-          } else {
-            toast.error(t("errors.routingFailed"));
-          }
-        } finally {
-          if (!controller.signal.aborted) setIsReRouting(false);
-        }
-      }, REROUTE_DEBOUNCE_MS);
-    },
-    [route, t, lastValidWaypoints],
-  );
-
-  const onEnterEdit = useCallback(() => {
-    if (!route) return;
-    const waypoints = deriveInitialWaypoints(route, displayPoints);
-    setEditWaypoints(waypoints);
-    setLastValidWaypoints(waypoints);
-    setEditPreview(null);
-  }, [route, displayPoints]);
-
-  const onExitEdit = useCallback(() => {
-    setEditWaypoints(null);
-    setLastValidWaypoints(null);
-    setEditPreview(null);
-  }, []);
-
-  const onApplyEdit = useCallback(() => {
-    if (!editPreview) {
-      onExitEdit();
-      return;
-    }
-    setCandidates((prev) => {
-      const idx = prev.findIndex((c) => c.route.id === editPreview.id);
-      if (idx === -1) return prev;
-      const next = [...prev];
-      next[idx] = { ...next[idx], route: editPreview, recommendation: null };
-      return next;
-    });
-    setReversedIds((prev) => ({ ...prev, [editPreview.id]: false }));
-    setEditWaypoints(null);
-    setLastValidWaypoints(null);
-    setEditPreview(null);
-    toast.success(t("edit.applied"));
-  }, [editPreview, onExitEdit, t]);
-
-  const onWaypointMove = useCallback(
-    (index: number, point: RouteCoordinate) => {
-      if (!editWaypoints) return;
-      const isLoop = route?.shape === "loop";
-      const lastIdx = editWaypoints.length - 1;
-      const next = editWaypoints.map((wp, i) => {
-        if (i === index) return point;
-        // Closed loops keep first and last in lockstep so the routing
-        // request still closes — otherwise dragging the start would leave
-        // the end stranded at the original location.
-        if (isLoop && (index === 0 || index === lastIdx)) {
-          if (i === 0 || i === lastIdx) return point;
-        }
-        return wp;
-      });
-      setEditWaypoints(next);
-      void reRoute(next);
-    },
-    [editWaypoints, reRoute, route],
-  );
-
-  const onWaypointInsert = useCallback(
-    (insertIndex: number, point: RouteCoordinate) => {
-      if (!editWaypoints) return;
-      const next = [
-        ...editWaypoints.slice(0, insertIndex),
-        point,
-        ...editWaypoints.slice(insertIndex),
-      ];
-      setEditWaypoints(next);
-      void reRoute(next);
-    },
-    [editWaypoints, reRoute],
-  );
-
-  const onWaypointRemove = useCallback(
-    (index: number) => {
-      if (!editWaypoints) return;
-      if (editWaypoints.length <= 2) return;
-      const next = editWaypoints.filter((_, i) => i !== index);
-      setEditWaypoints(next);
-      void reRoute(next);
-    },
-    [editWaypoints, reRoute],
-  );
 
   const generate = useCallback(
     async (payload: RouteFormSubmitPayload, seed: number) => {

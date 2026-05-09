@@ -19,13 +19,13 @@ import type { RouteCoordinate } from "@/types/route";
 import { destinationPoint, haversineDistanceM } from "../elevation";
 import { routeViaBrouter, type BrouterTraceResult } from "../routing";
 import {
-  DISTANCE_TOLERANCE,
-  MAX_ADJUSTMENT_ATTEMPTS,
   POI_SEARCH_RADIUS_FACTOR,
 } from "../constants";
 import { fetchPoiCandidates } from "../poi/overpass";
 import { pickFurthestPoiInBearing, type PoiBoost } from "../poi/poiSelector";
 import type { RoutePoi } from "../poi/poiTypes";
+import { convergeWithCorrection, dampedRatioCorrection } from "./shared/convergence";
+import { seededBearing } from "./shared/rng";
 
 export interface OutAndBackGenerationResult extends BrouterTraceResult {
   attempts: number;
@@ -40,11 +40,6 @@ export interface OutAndBackGenerationResult extends BrouterTraceResult {
    * the sea and Brouter only routed to the coast).
    */
   projectedTurn: RouteCoordinate;
-}
-
-function seededBearing(seed: number): number {
-  const x = Math.sin(seed * 9301 + 49297) * 233280;
-  return ((x - Math.floor(x)) * 360) % 360;
 }
 
 /** Half-width of the directional slice when looking for a POI in a bearing. */
@@ -130,39 +125,31 @@ async function iteratePoiOutAndBack(
 ): Promise<OutAndBackGenerationResult | null> {
   const { start, targetM, discipline, signal, bearingDeg, poi } = args;
 
-  // First call: trip directly to the POI. Subsequent calls extend or
-  // contract along the same vector.
-  let trace: BrouterTraceResult | null = null;
-  let waypoint: RouteCoordinate = poi.point;
-  let waypointDistanceM = haversineDistanceM(start, poi.point);
-  let attempts = 0;
-
-  while (attempts < MAX_ADJUSTMENT_ATTEMPTS) {
-    trace = await routeViaBrouter({
-      waypoints: [start, waypoint, start],
-      discipline,
-      signal,
-    });
-
-    const ratio = trace.distanceM / targetM;
-    if (Math.abs(ratio - 1) <= DISTANCE_TOLERANCE) break;
-
-    const correction = 1 + (1 / ratio - 1) * 0.7;
-    waypointDistanceM = Math.max(50, waypointDistanceM * correction);
-    waypoint = destinationPoint(start, waypointDistanceM, bearingDeg);
-    attempts += 1;
-  }
-
-  if (!trace) return null;
+  // State: distance to the projected turn point along the bearing.
+  // The first attempt routes straight to the POI; subsequent attempts
+  // extend or contract along the same vector.
+  const result = await convergeWithCorrection<{ distanceM: number; turn: RouteCoordinate }>({
+    initial: {
+      distanceM: haversineDistanceM(start, poi.point),
+      turn: poi.point,
+    },
+    routeOnce: ({ turn }) =>
+      routeViaBrouter({ waypoints: [start, turn, start], discipline, signal }),
+    refine: ({ distanceM }, ratio) => {
+      const next = Math.max(50, distanceM * dampedRatioCorrection(ratio));
+      return { distanceM: next, turn: destinationPoint(start, next, bearingDeg) };
+    },
+    targetM,
+  });
 
   return {
-    ...trace,
-    attempts,
-    withinTolerance: Math.abs(trace.distanceM / targetM - 1) <= DISTANCE_TOLERANCE,
+    ...result.trace,
+    attempts: result.attempts,
+    withinTolerance: result.withinTolerance,
     bearingDeg,
     strategy: "poi-aware",
     pois: [{ type: poi.type, point: poi.point, name: poi.name }],
-    projectedTurn: waypoint,
+    projectedTurn: result.finalState.turn,
   };
 }
 
@@ -170,40 +157,29 @@ async function iterateBlindOutAndBack(
   args: BlindArgs,
 ): Promise<OutAndBackGenerationResult> {
   const { start, targetM, discipline, signal, bearingDeg } = args;
-
-  let waypointDistanceM = targetM / 2;
-  let trace: BrouterTraceResult | null = null;
-  let turn: RouteCoordinate = destinationPoint(start, waypointDistanceM, bearingDeg);
-  let attempts = 0;
-
-  while (attempts < MAX_ADJUSTMENT_ATTEMPTS) {
-    turn = destinationPoint(start, waypointDistanceM, bearingDeg);
-    trace = await routeViaBrouter({
-      waypoints: [start, turn, start],
-      discipline,
-      signal,
-    });
-
-    const ratio = trace.distanceM / targetM;
-    if (Math.abs(ratio - 1) <= DISTANCE_TOLERANCE) break;
-
-    const correction = 1 + (1 / ratio - 1) * 0.7;
-    waypointDistanceM = Math.max(50, waypointDistanceM * correction);
-    attempts += 1;
-  }
-
-  if (!trace) {
-    throw new Error("out-and-back generation produced no trace");
-  }
+  const initialDistance = targetM / 2;
+  const result = await convergeWithCorrection<{ distanceM: number; turn: RouteCoordinate }>({
+    initial: {
+      distanceM: initialDistance,
+      turn: destinationPoint(start, initialDistance, bearingDeg),
+    },
+    routeOnce: ({ turn }) =>
+      routeViaBrouter({ waypoints: [start, turn, start], discipline, signal }),
+    refine: ({ distanceM }, ratio) => {
+      const next = Math.max(50, distanceM * dampedRatioCorrection(ratio));
+      return { distanceM: next, turn: destinationPoint(start, next, bearingDeg) };
+    },
+    targetM,
+  });
 
   return {
-    ...trace,
-    attempts,
-    withinTolerance: Math.abs(trace.distanceM / targetM - 1) <= DISTANCE_TOLERANCE,
+    ...result.trace,
+    attempts: result.attempts,
+    withinTolerance: result.withinTolerance,
     bearingDeg,
     strategy: "blind",
     pois: [],
-    projectedTurn: turn,
+    projectedTurn: result.finalState.turn,
   };
 }
 
