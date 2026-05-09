@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useMemo, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -216,37 +216,67 @@ export function RouteGeneratorPage() {
     // collapse on map tap to keep the cartography hero.
   }, []);
 
+  // Re-route during edit is debounced so consecutive drags (drag-release-
+  // drag-release on the same waypoint, or a quick sweep across multiple
+  // waypoints) coalesce into a single Brouter call. Each new attempt also
+  // aborts the in-flight request so the UI never waits on a routing answer
+  // for a layout the user has already moved past.
+  const reRouteAbortRef = useRef<AbortController | null>(null);
+  const reRouteTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const REROUTE_DEBOUNCE_MS = 300;
+
+  // Cancel any pending debounce and in-flight request when the page goes
+  // away — otherwise a stale promise could call setIsReRouting on an
+  // unmounted component and leak the AbortController.
+  useEffect(
+    () => () => {
+      if (reRouteTimerRef.current) clearTimeout(reRouteTimerRef.current);
+      reRouteAbortRef.current?.abort();
+    },
+    [],
+  );
+
   const reRoute = useCallback(
-    async (waypoints: RouteCoordinate[]) => {
+    (waypoints: RouteCoordinate[]) => {
       if (!route) return;
+      if (reRouteTimerRef.current) clearTimeout(reRouteTimerRef.current);
+      reRouteAbortRef.current?.abort();
+      const controller = new AbortController();
+      reRouteAbortRef.current = controller;
       setIsReRouting(true);
-      try {
-        const next = await routeFromWaypoints({
-          waypoints,
-          discipline: route.discipline,
-          shape: route.shape,
-          surface: route.constraints.surface,
-          routeId: route.id,
-          name: route.name,
-        });
-        setEditPreview(next);
-        setLastValidWaypoints(waypoints);
-      } catch (err) {
-        console.warn("RouteGenerator: re-route failed", err);
-        // Brouter answers 400 when one of the waypoints isn't on its routing
-        // graph — typically dragged into the sea, into a building, or onto a
-        // private road. Revert to the last accepted layout so the user sees
-        // their drag bounce back, and tell them why.
-        const isUnreachable = err instanceof BrouterError && (err.status === 400 || err.status === 0);
-        if (isUnreachable && lastValidWaypoints) {
-          setEditWaypoints(lastValidWaypoints);
-          toast.error(t("errors.unreachableWaypoint"));
-        } else {
-          toast.error(t("errors.routingFailed"));
+      reRouteTimerRef.current = setTimeout(async () => {
+        try {
+          const next = await routeFromWaypoints({
+            waypoints,
+            discipline: route.discipline,
+            shape: route.shape,
+            surface: route.constraints.surface,
+            routeId: route.id,
+            name: route.name,
+            signal: controller.signal,
+          });
+          if (controller.signal.aborted) return;
+          setEditPreview(next);
+          setLastValidWaypoints(waypoints);
+        } catch (err) {
+          if (controller.signal.aborted) return;
+          if (err instanceof DOMException && err.name === "AbortError") return;
+          console.warn("RouteGenerator: re-route failed", err);
+          // Brouter answers 400 when one of the waypoints isn't on its routing
+          // graph — typically dragged into the sea, into a building, or onto a
+          // private road. Revert to the last accepted layout so the user sees
+          // their drag bounce back, and tell them why.
+          const isUnreachable = err instanceof BrouterError && (err.status === 400 || err.status === 0);
+          if (isUnreachable && lastValidWaypoints) {
+            setEditWaypoints(lastValidWaypoints);
+            toast.error(t("errors.unreachableWaypoint"));
+          } else {
+            toast.error(t("errors.routingFailed"));
+          }
+        } finally {
+          if (!controller.signal.aborted) setIsReRouting(false);
         }
-      } finally {
-        setIsReRouting(false);
-      }
+      }, REROUTE_DEBOUNCE_MS);
     },
     [route, t, lastValidWaypoints],
   );

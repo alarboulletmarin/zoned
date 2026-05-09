@@ -157,14 +157,25 @@ export async function fetchPoiCandidates(
   }
 
   const data = (await response.json()) as OverpassResponse;
+  if (!data || !Array.isArray(data.elements)) {
+    throw new Error("Overpass returned a malformed response");
+  }
   const candidates = parseOverpassElements(data.elements);
   cache.set(key, candidates);
   return candidates;
 }
 
+function isValidCoordValue(n: unknown): n is number {
+  return typeof n === "number" && Number.isFinite(n);
+}
+
 /**
  * Parse a list of Overpass elements into typed POI candidates. Exported
  * so unit tests can validate the parser without making network calls.
+ *
+ * Defensive against malformed entries: missing/invalid lat-lon, non-string
+ * tags, or unrecognized types are skipped silently rather than thrown so
+ * a single bad element from Overpass doesn't kill the whole generation.
  */
 export function parseOverpassElements(
   elements: OverpassElement[],
@@ -173,7 +184,8 @@ export function parseOverpassElements(
   for (const el of elements) {
     const lat = el.center?.lat ?? el.lat;
     const lon = el.center?.lon ?? el.lon;
-    if (lat == null || lon == null) continue;
+    if (!isValidCoordValue(lat) || !isValidCoordValue(lon)) continue;
+    if (lat < -90 || lat > 90 || lon < -180 || lon > 180) continue;
 
     const tags = el.tags ?? {};
     const type = inferType(tags);
@@ -183,7 +195,11 @@ export function parseOverpassElements(
       id: el.id,
       type,
       point: [lon, lat],
-      name: tags.name,
+      // Strip control chars and angle brackets — defensive for OSM edits
+      // we don't trust as plain text downstream.
+      name: typeof tags.name === "string"
+        ? tags.name.replace(/[\u0000-\u001f<>]/g, "").slice(0, 120) || undefined
+        : undefined,
       weight: POI_WEIGHTS[type],
     });
   }

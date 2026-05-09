@@ -197,29 +197,46 @@ export async function generateRouteCandidates(args: {
     return { seed: seed + i * 7919 };
   };
 
-  // Sequential rather than fully parallel: respects the public Brouter
-  // capacity and gives a predictable progression for the UI.
+  // Wave-based parallel generation. We launch `generationTarget` candidates
+  // at once so the user-perceived latency drops from N×(routing latency) to
+  // ~max(routing latency). If the first wave doesn't produce enough valid
+  // candidates (rejected by distance slack, killed by UnreachableTurnError),
+  // we launch a follow-up wave with the next seeds — up to `maxAttempts`
+  // total. The wave size is capped at `generationTarget` so we never run
+  // more than the public Brouter can handle in flight (≈3-6 concurrent).
   const accepted: Array<{ route: Route; deviation: number; score: number }> = [];
   const rejected: Array<{ route: Route; deviation: number; score: number }> = [];
   let lastError: unknown = null;
-  for (let i = 0; i < maxAttempts && accepted.length < generationTarget; i += 1) {
-    const ov = overrideFor(i);
-    try {
-      const candidate = await generateRoute({
+  let attemptsLaunched = 0;
+  while (accepted.length < generationTarget && attemptsLaunched < maxAttempts) {
+    const batchSize = Math.min(
+      generationTarget - accepted.length,
+      maxAttempts - attemptsLaunched,
+    );
+    const batch = Array.from({ length: batchSize }, (_, j) => {
+      const ov = overrideFor(attemptsLaunched + j);
+      return generateRoute({
         ...args,
         seed: ov.seed,
         bearingDeg: ov.bearingDeg,
         name: undefined,
       });
-      const deviation = Math.abs(candidate.distanceM / targetM - 1);
-      const score = candidateError(candidate, targetM, elevationGainTargetM);
-      const entry = { route: candidate, deviation, score };
-      if (deviation <= CANDIDATE_DISTANCE_SLACK) accepted.push(entry);
-      else rejected.push(entry);
-    } catch (error) {
-      // UnreachableTurnError and BrouterError are silenced here so a single
-      // bad bearing (e.g. into the sea) doesn't kill the whole generation.
-      lastError = error;
+    });
+    attemptsLaunched += batchSize;
+    const results = await Promise.allSettled(batch);
+    for (const result of results) {
+      if (result.status === "fulfilled") {
+        const candidate = result.value;
+        const deviation = Math.abs(candidate.distanceM / targetM - 1);
+        const score = candidateError(candidate, targetM, elevationGainTargetM);
+        const entry = { route: candidate, deviation, score };
+        if (deviation <= CANDIDATE_DISTANCE_SLACK) accepted.push(entry);
+        else rejected.push(entry);
+      } else {
+        // UnreachableTurnError and BrouterError are silenced so a single bad
+        // bearing (e.g. into the sea) doesn't kill the whole generation.
+        lastError = result.reason;
+      }
     }
   }
 

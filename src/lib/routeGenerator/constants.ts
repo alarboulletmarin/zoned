@@ -12,6 +12,15 @@ import type { RouteShape } from "@/types/route";
 // ── Routing engine (Brouter) ──────────────────────────────────────
 
 export const BROUTER_BASE_URL = "https://brouter.de/brouter";
+/** Per-request timeout: a hung Brouter call would otherwise stall the
+ *  whole generation indefinitely. */
+export const BROUTER_TIMEOUT_MS = 15_000;
+/** Number of retry attempts on 5xx/429/network errors (in addition to the
+ *  first try). Public Brouter occasionally returns 502/503 under load; a
+ *  short retry chain hides those without burdening the service. */
+export const BROUTER_MAX_RETRIES = 2;
+/** Base delay for exponential backoff between retries, milliseconds. */
+export const BROUTER_RETRY_BASE_MS = 500;
 
 /**
  * Brouter profile per Zoned discipline.

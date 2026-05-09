@@ -34,6 +34,39 @@ interface NominatimResponseItem {
   };
 }
 
+/** Maximum length kept from `display_name` (Nominatim labels can run long). */
+const MAX_LABEL_LENGTH = 200;
+
+/**
+ * Normalize the cache key so `"Paris"`, `" paris "` and `"PARIS"` all hit
+ * the same entry. Diacritics are stripped (NFKD) so accented vs unaccented
+ * spellings of the same query don't fragment the cache.
+ */
+function normalizeCacheKey(query: string): string {
+  // Strip combining diacritical marks (U+0300–U+036F) so "café" and "cafe"
+  // share the same cache entry.
+  return query.normalize("NFKD").replace(/[̀-ͯ]/g, "").toLowerCase();
+}
+
+/** Strip control characters and angle brackets from third-party text before
+ *  it lands in the UI / localStorage. React escapes by default but we do not
+ *  want `<script>` ever ending up in `route.name` or in a `title`. */
+function sanitizeLabel(s: string | undefined): string {
+  if (typeof s !== "string") return "";
+  return s
+    .replace(/[\u0000-\u001f<>]/g, "")
+    .slice(0, MAX_LABEL_LENGTH)
+    .trim();
+}
+
+function parseLatLon(item: NominatimResponseItem): RouteCoordinate | null {
+  const lon = Number.parseFloat(item.lon);
+  const lat = Number.parseFloat(item.lat);
+  if (!Number.isFinite(lon) || lon < -180 || lon > 180) return null;
+  if (!Number.isFinite(lat) || lat < -90 || lat > 90) return null;
+  return [lon, lat];
+}
+
 let lastRequestAt = 0;
 
 async function respectRateLimit(): Promise<void> {
@@ -46,7 +79,7 @@ async function respectRateLimit(): Promise<void> {
 
 function readCache(query: string): GeocodeResult[] | null {
   try {
-    const raw = sessionStorage.getItem(SESSION_CACHE_PREFIX + query);
+    const raw = sessionStorage.getItem(SESSION_CACHE_PREFIX + normalizeCacheKey(query));
     return raw ? (JSON.parse(raw) as GeocodeResult[]) : null;
   } catch {
     return null;
@@ -55,7 +88,10 @@ function readCache(query: string): GeocodeResult[] | null {
 
 function writeCache(query: string, results: GeocodeResult[]): void {
   try {
-    sessionStorage.setItem(SESSION_CACHE_PREFIX + query, JSON.stringify(results));
+    sessionStorage.setItem(
+      SESSION_CACHE_PREFIX + normalizeCacheKey(query),
+      JSON.stringify(results),
+    );
   } catch {
     // sessionStorage might be full or disabled — silently ignore
   }
@@ -90,13 +126,24 @@ export async function searchAddress(args: {
     throw new Error(`Nominatim request failed: ${response.status}`);
   }
 
-  const items = (await response.json()) as NominatimResponseItem[];
-  const results: GeocodeResult[] = items.map((item) => ({
-    label: item.display_name,
-    point: [parseFloat(item.lon), parseFloat(item.lat)],
-    city: item.address?.city ?? item.address?.town ?? item.address?.village,
-    country: item.address?.country,
-  }));
+  const raw = (await response.json()) as unknown;
+  if (!Array.isArray(raw)) {
+    throw new Error("Nominatim returned a non-array response");
+  }
+  const results: GeocodeResult[] = [];
+  for (const item of raw as NominatimResponseItem[]) {
+    if (!item || typeof item.lat !== "string" || typeof item.lon !== "string") continue;
+    const point = parseLatLon(item);
+    if (!point) continue;
+    const label = sanitizeLabel(item.display_name);
+    if (!label) continue;
+    results.push({
+      label,
+      point,
+      city: sanitizeLabel(item.address?.city ?? item.address?.town ?? item.address?.village) || undefined,
+      country: sanitizeLabel(item.address?.country) || undefined,
+    });
+  }
 
   writeCache(trimmed, results);
   return results;
