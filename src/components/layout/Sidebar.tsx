@@ -55,6 +55,13 @@ interface NavItem {
   action?: string;
   icon: (props: IconProps) => React.JSX.Element;
   labelKey: string;
+  /**
+   * Optional secondary entries that appear *only* when the parent route
+   * is active and the sidebar is expanded. Used for /routes today
+   * (Mes parcours, Trouver une piste). Collapsed mode hides them to
+   * avoid a hidden tree behind the icon rail.
+   */
+  subItems?: NavItem[];
 }
 
 interface NavGroup {
@@ -79,7 +86,15 @@ const navGroups: NavGroup[] = [
     items: [
       { href: "/plans", icon: CalendarRange, labelKey: "nav.plans" },
       { href: "/race-simulator", icon: Flag, labelKey: "simulator.title" },
-      { href: "/routes", icon: RouteIcon, labelKey: "routes:title" },
+      {
+        href: "/routes",
+        icon: RouteIcon,
+        labelKey: "routes:title",
+        subItems: [
+          { href: "/routes/mine", icon: Heart, labelKey: "routes:myRoutes" },
+          { href: "/routes/tracks", icon: Flag, labelKey: "routes:trackFinder.entry" },
+        ],
+      },
       { href: "/plans/methodology", icon: FlaskConical, labelKey: "nav.planMethodology" },
     ],
   },
@@ -218,6 +233,42 @@ function SidebarNavItem({
 }
 
 // ---------------------------------------------------------------------------
+// Sub-item — smaller variant rendered under an active parent. Always
+// uses the expanded layout (sub-items are hidden in collapsed mode).
+// ---------------------------------------------------------------------------
+
+function SidebarSubNavItem({
+  item,
+  pathname,
+  onClick,
+}: {
+  item: NavItem;
+  pathname: string;
+  onClick?: () => void;
+}) {
+  const { t } = useTranslation("common");
+  const label = t(item.labelKey);
+  const active = item.href ? pathname === item.href : false;
+
+  return (
+    <Link
+      to={item.href!}
+      viewTransition
+      onClick={onClick}
+      className={cn(
+        "flex items-center gap-2 rounded-md px-3 py-1.5 text-xs font-medium transition-colors",
+        active
+          ? "bg-accent/70 text-foreground"
+          : "text-muted-foreground hover:bg-accent/50 hover:text-foreground",
+      )}
+    >
+      <item.icon className="size-3.5 shrink-0" />
+      <span>{label}</span>
+    </Link>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Sidebar content (shared between desktop & mobile)
 // ---------------------------------------------------------------------------
 
@@ -249,15 +300,34 @@ function SidebarContent({
               {t(group.labelKey)}
             </div>
             <div className="flex flex-col gap-0.5">
-              {group.items.map((item) => (
-                <SidebarNavItem
-                  key={item.labelKey}
-                  item={item}
-                  pathname={location.pathname}
-                  collapsed={collapsed}
-                  onClick={onLinkClick}
-                />
-              ))}
+              {group.items.map((item) => {
+                const parentActive = item.href ? isActive(location.pathname, item.href) : false;
+                return (
+                  <div key={item.labelKey} className="flex flex-col gap-0.5">
+                    <SidebarNavItem
+                      item={item}
+                      pathname={location.pathname}
+                      collapsed={collapsed}
+                      onClick={onLinkClick}
+                    />
+                    {/* Sub-items only render when the parent route is
+                        active AND the sidebar is expanded — collapsed
+                        mode keeps the rail icon-only. */}
+                    {!collapsed && parentActive && item.subItems?.length ? (
+                      <div className="ml-3 flex flex-col gap-0.5 border-l border-border/40 pl-2">
+                        {item.subItems.map((sub) => (
+                          <SidebarSubNavItem
+                            key={sub.labelKey}
+                            item={sub}
+                            pathname={location.pathname}
+                            onClick={onLinkClick}
+                          />
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
             </div>
           </div>
         ))}
@@ -295,7 +365,11 @@ export function Sidebar({
   return (
     <aside
       className={cn(
-        "sticky top-0 hidden md:flex h-screen flex-col border-r bg-background overflow-hidden",
+        // The global TopBar is `fixed h-12 z-50` so anything sitting at
+        // top-0 ends up underneath it. We anchor the sidebar at top-12
+        // and shrink the height accordingly so the toggle button stays
+        // visible (was clipped by the TopBar before).
+        "sticky top-12 hidden md:flex h-[calc(100vh-3rem)] flex-col border-r bg-background overflow-hidden",
         "transition-[width] duration-300 ease-in-out",
         collapsed ? "w-[52px]" : "w-60",
         className

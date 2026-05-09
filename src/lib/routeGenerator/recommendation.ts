@@ -54,7 +54,6 @@ export interface TrainingRoutePreset {
 }
 
 export type RouteRecommendationReason =
-  | "closest_to_target_distance"
   | "matches_elevation_target"
   | "matches_target_duration"
   | "keeps_climbing_low"
@@ -63,6 +62,22 @@ export type RouteRecommendationReason =
   | "stays_repeatable_for_repeats"
   | "respects_current_long_run"
   | "uses_athletics_track";
+
+// Distance match is now a *single* descriptor with three mutually
+// exclusive levels — replaces the previous double-display where
+// `closest_to_target_distance` (≤10%) and the orange "approximate"
+// banner (>5%) could both fire in the 5–10% window.
+export type DistanceMatchLabel = "very_close" | "close" | "approximate";
+
+export function getDistanceMatchLabel(
+  targetKm: number,
+  actualKm: number,
+): DistanceMatchLabel {
+  const ratio = Math.abs(actualKm - targetKm) / Math.max(targetKm, 1);
+  if (ratio < 0.03) return "very_close";
+  if (ratio <= 0.1) return "close";
+  return "approximate";
+}
 
 export type RouteRecommendationAccent =
   | "best_fit"
@@ -352,7 +367,9 @@ function buildReasons(args: {
   if (args.intent.continuityPriority === "high" && args.continuityScore >= 0.65) reasons.push("supports_steady_pacing");
   if (args.intent.repeatabilityPriority === "high" && args.route.shape === "out_and_back") reasons.push("stays_repeatable_for_repeats");
   if (args.intent.targetDurationMin && args.durationErrorRatio <= 0.14) reasons.push("matches_target_duration");
-  if (args.distanceErrorRatio <= 0.1) reasons.push("closest_to_target_distance");
+  // Distance match is intentionally NOT a "reason" anymore — it's
+  // surfaced separately via getDistanceMatchLabel() so we can never
+  // produce a contradictory pairing (e.g. "very close" + amber warning).
   if (
     args.intent.sessionType === "long_run" &&
     args.athlete?.currentLongRunKm &&
@@ -361,7 +378,6 @@ function buildReasons(args: {
     reasons.push("respects_current_long_run");
   }
 
-  if (reasons.length === 0) reasons.push("closest_to_target_distance");
   return reasons.slice(0, 3);
 }
 

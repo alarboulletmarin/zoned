@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
-import { ArrowLeftRight, ArrowRight, Check, ChevronDown, ChevronLeft, ChevronRight, Download, EyeOff, Maximize2, Minimize2, Pencil, RotateCcw, Save, X } from "@/components/icons";
+import { Activity, ArrowLeftRight, Check, ChevronDown, ChevronLeft, ChevronRight, Clock, Download, EyeOff, Maximize2, Minimize2, Pencil, RotateCcw, Save, TrendingUp, X } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { MiniRouteMap } from "@/components/visualization/route/MiniRouteMap";
@@ -18,8 +18,10 @@ import {
   buildManualRouteIntent,
   buildTrainingRoutePreset,
   buildWorkoutRoutePreset,
+  getDistanceMatchLabel,
   poiBoostForSession,
   rankRouteCandidates,
+  type DistanceMatchLabel,
   type RankedRouteCandidate,
 } from "@/lib/routeGenerator/recommendation";
 import { downloadRouteGpx } from "@/lib/export/gpx";
@@ -75,6 +77,17 @@ interface RouteGeneratorLocationState {
   };
   workoutRouteWorkout?: WorkoutTemplate;
 }
+
+// Tailwind classes for the unique distance-match chip (replaces the
+// previous "closest_to_target_distance" reason + amber "approximate"
+// banner that could fire together in the 5–10 % window).
+const DISTANCE_MATCH_CLASSES: Record<DistanceMatchLabel, string> = {
+  very_close:
+    "border-emerald-300/60 bg-emerald-50/80 text-emerald-900 dark:border-emerald-700/60 dark:bg-emerald-950/30 dark:text-emerald-100",
+  close: "border-border/60 bg-background text-foreground",
+  approximate:
+    "border-amber-300/60 bg-amber-50/80 text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/30 dark:text-amber-100",
+};
 
 export function RouteGeneratorPage() {
   const { t } = useTranslation("routes");
@@ -214,9 +227,15 @@ export function RouteGeneratorPage() {
     isEditing && displayedRoute
       ? displayedRoute.estimatedDurationSec
       : selectedRecommendation?.predictedDurationSec ?? route?.estimatedDurationSec ?? 0;
-  const distanceDeviationRatio = displayedRoute
-    ? Math.abs(displayedRoute.distanceM / (displayedRoute.constraints.targetDistanceKm * 1000) - 1)
-    : 0;
+  // Single source of truth for the distance-vs-target descriptor —
+  // returns one of three mutually exclusive labels (very_close / close
+  // / approximate) so the UI never shows two contradictory chips.
+  const distanceMatchLabel: DistanceMatchLabel | null = displayedRoute
+    ? getDistanceMatchLabel(
+        displayedRoute.constraints.targetDistanceKm,
+        displayedRoute.distanceM / 1000,
+      )
+    : null;
 
   const onReverseTrace = useCallback(() => {
     if (!route) return;
@@ -347,22 +366,11 @@ export function RouteGeneratorPage() {
 
   // ─── Content blocks shared by mobile (drawer) and desktop (grid) ──
 
-  const headerLinks = (
-    <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-      <Link
-        to="/routes/mine"
-        className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
-      >
-        {t("myRoutes")} <ArrowRight className="size-3.5" />
-      </Link>
-      <Link
-        to="/routes/tracks"
-        className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
-      >
-        {t("trackFinder.entry")} <ArrowRight className="size-3.5" />
-      </Link>
-    </div>
-  );
+  // Note: secondary nav (Mes parcours / Trouver une piste) used to live
+  // in the page header on the right. Since they belong to the same
+  // navigation domain as /routes itself, they're now sub-items in the
+  // global Sidebar (cf. Sidebar.tsx). This keeps the page header to a
+  // single h1 and de-duplicates navigation entry points.
 
   // Map height: full-bleed inside the mobile drawer's fixed parent;
   // generous on tablet/desktop so the carto dominates the viewport instead
@@ -378,7 +386,10 @@ export function RouteGeneratorPage() {
     ? "h-full w-full sm:h-full rounded-none border-0"
     : isMapExpanded
       ? "h-[calc(100svh-10rem)] sm:h-[calc(100svh-10rem)] lg:h-[calc(100svh-10rem)]"
-      : "h-72 sm:h-96 md:h-full md:rounded-none md:border-0";
+      // RouteMap defaults to `lg:h-[28rem]` which would override
+      // `md:h-full` on large screens and leave blank space below the
+      // map. Re-assert h-full at lg/xl to keep the carto edge-to-edge.
+      : "h-72 sm:h-96 md:h-full lg:h-full xl:h-full md:rounded-none md:border-0";
 
   const presetNode = trainingPreset ? (
     <>
@@ -531,7 +542,11 @@ export function RouteGeneratorPage() {
           </span>
         </button>
       )}
-      {route && !isEditing && (
+      {/* Mobile keeps the floating action overlays — no horizontal
+          strip on phones so the user needs an in-map fallback. Desktop
+          has its dedicated action strip below the map (cf. desktopStrip)
+          so we hide these to keep the cartography clean. */}
+      {isMobile && route && !isEditing && (
         <div className="absolute bottom-3 right-3 z-[1100] flex flex-wrap items-center gap-2">
           <button
             type="button"
@@ -565,7 +580,7 @@ export function RouteGeneratorPage() {
           </button>
         </div>
       )}
-      {isEditing && (
+      {isMobile && isEditing && (
         <div className="absolute bottom-3 right-3 z-[1100] flex flex-wrap items-center gap-2">
           <button
             type="button"
@@ -597,56 +612,115 @@ export function RouteGeneratorPage() {
     </div>
   );
 
-  // ─── Desktop one-page strip (Strava Routes pattern) ──────────────
-  // A single dense bar under the map combines: candidate pager (left),
-  // route stats (centre), action buttons (right). Replaces the verbose
-  // resultsNode for the desktop layout — same data, ~3× more compact.
-  const desktopStrip = route ? (
-    <div className="flex h-14 items-center gap-3 border-t border-border/60 bg-background/95 px-3 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      {candidates.length > 1 && (
-        <>
-          <div className="flex items-center gap-1 text-xs">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-7"
-              onClick={() => setSelectedIndex((i) => (i - 1 + candidates.length) % candidates.length)}
-              aria-label={t("form.candidatesLabel")}
-              disabled={candidates.length <= 1}
-            >
-              <ChevronLeft className="size-4" />
-            </Button>
-            <span className="min-w-[5rem] text-center font-semibold tabular-nums">
-              {t("form.candidate", { index: selectedIndex + 1 })}
-              <span className="text-muted-foreground">{` / ${candidates.length}`}</span>
-            </span>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-7"
-              onClick={() => setSelectedIndex((i) => (i + 1) % candidates.length)}
-              aria-label={t("form.candidatesLabel")}
-              disabled={candidates.length <= 1}
-            >
-              <ChevronRight className="size-4" />
-            </Button>
-          </div>
-          <span className="h-6 w-px bg-border/60" aria-hidden />
-        </>
-      )}
-      <div className="flex items-baseline gap-3 text-sm tabular-nums">
-        <span className="font-semibold">
+  // ─── Desktop stats bar (route stats promoted to h3 + pager) ──────
+  // Sits *above* the action strip. Stats are the headline information
+  // for a generated route (km, m, duration) and deserve real visual
+  // weight; the pager "Proposition X/N" reads as a discreet caption to
+  // their right (Strava 2025 Routes pattern).
+  const desktopStatsBar = route ? (
+    <div className="flex items-center justify-between gap-3 border-t border-border/60 bg-background px-3 pt-2 pb-1.5">
+      <h3 className="flex items-baseline gap-4 text-lg font-semibold tabular-nums">
+        <span className="inline-flex items-baseline gap-1">
+          <Activity className="size-4 self-center text-primary" />
           {((displayedRoute?.distanceM ?? 0) / 1000).toFixed(1)}
-          <span className="ml-0.5 text-xs font-normal text-muted-foreground">km</span>
+          <span className="text-xs font-normal text-muted-foreground">km</span>
         </span>
-        <span className="font-semibold">
-          ↑{displayedRoute?.elevationGainM ?? 0}
-          <span className="ml-0.5 text-xs font-normal text-muted-foreground">m</span>
+        <span className="inline-flex items-baseline gap-1">
+          <TrendingUp className="size-4 self-center text-primary" />
+          {displayedRoute?.elevationGainM ?? 0}
+          <span className="text-xs font-normal text-muted-foreground">m</span>
         </span>
-        <span className="text-muted-foreground">
+        <span className="inline-flex items-baseline gap-1 font-medium text-muted-foreground">
+          <Clock className="size-4 self-center" />
           {formatDurationMinutes(displayDurationSec / 60)}
         </span>
+      </h3>
+      {candidates.length > 1 && (
+        <div className="flex items-center gap-0.5 rounded-full border border-border/60 bg-muted/40 p-0.5 text-sm">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-7 rounded-full"
+            onClick={() => setSelectedIndex((i) => (i - 1 + candidates.length) % candidates.length)}
+            aria-label={t("form.candidatesLabel")}
+          >
+            <ChevronLeft className="size-4" />
+          </Button>
+          <span className="min-w-[6rem] px-1 text-center font-semibold tabular-nums text-foreground">
+            {t("form.candidate", { index: selectedIndex + 1 })}
+            <span className="text-muted-foreground">{` / ${candidates.length}`}</span>
+          </span>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-7 rounded-full"
+            onClick={() => setSelectedIndex((i) => (i + 1) % candidates.length)}
+            aria-label={t("form.candidatesLabel")}
+          >
+            <ChevronRight className="size-4" />
+          </Button>
+        </div>
+      )}
+    </div>
+  ) : null;
+
+  // ─── Desktop action strip (refactor: edit | output) ──────────────
+  // Two clearly separated groups: editing actions on the left
+  // (Modifier le tracé, Inverser le sens), output actions on the right
+  // (Enregistrer, Régénérer, Télécharger), divided by a vertical rule.
+  // When the user is in edit mode, the left group flips to Cancel /
+  // Apply so all editing affordances live in one predictable location
+  // — no more buttons floating over the map.
+  const desktopStrip = route ? (
+    <div className="flex h-12 items-center gap-3 border-t border-border/60 bg-background/95 px-3 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      <div className="flex items-center gap-1.5">
+        {isEditing ? (
+          <>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 gap-1.5 px-3 text-xs"
+              onClick={onExitEdit}
+            >
+              <X className="size-3.5" />
+              {t("edit.cancel")}
+            </Button>
+            <Button
+              size="sm"
+              className="h-8 gap-1.5 px-3 text-xs"
+              onClick={onApplyEdit}
+              disabled={isReRouting || !editPreview}
+            >
+              <Check className="size-3.5" />
+              {t("edit.apply")}
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 gap-1.5 px-3 text-xs"
+              onClick={onEnterEdit}
+            >
+              <Pencil className="size-3.5" />
+              {t("edit.enter")}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 gap-1.5 px-3 text-xs"
+              onClick={onReverseTrace}
+              aria-label={t("form.reverseDirection")}
+              title={t("form.reverseDirection")}
+            >
+              <ArrowLeftRight className="size-3.5" />
+              {isSelectedReversed ? t("form.reversedActive") : t("form.reverseDirection")}
+            </Button>
+          </>
+        )}
       </div>
+      <span className="h-6 w-px bg-border/60" aria-hidden />
       <div className="ml-auto flex items-center gap-1.5">
         <Button onClick={onSave} size="sm" className="h-8 gap-1.5 px-3 text-xs">
           <Save className="size-3.5" />
@@ -705,23 +779,26 @@ export function RouteGeneratorPage() {
       </button>
       {detailsOpen && (
         <div className="max-h-[40svh] space-y-3 overflow-y-auto border-t border-border/60 px-3 py-3">
-          {selectedRecommendation && selectedRecommendation.reasons.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
-              {selectedRecommendation.reasons.map((reason) => (
-                <span
-                  key={reason}
-                  className="rounded-full border border-border/60 bg-background px-2 py-0.5 text-[11px] font-medium"
-                >
-                  {t(`recommendation.reasons.${reason}`)}
-                </span>
-              ))}
-            </div>
-          )}
-          {distanceDeviationRatio > 0.05 && (
-            <p className="rounded-lg border border-amber-300/60 bg-amber-50/80 px-3 py-2 text-xs text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/30 dark:text-amber-100">
-              {t("result.approximate")}
-            </p>
-          )}
+          <div className="flex flex-wrap gap-1.5">
+            {distanceMatchLabel && (
+              <span
+                className={cn(
+                  "rounded-full border px-2 py-0.5 text-[11px] font-medium",
+                  DISTANCE_MATCH_CLASSES[distanceMatchLabel],
+                )}
+              >
+                {t(`recommendation.distanceMatch.${distanceMatchLabel}`)}
+              </span>
+            )}
+            {selectedRecommendation?.reasons.map((reason) => (
+              <span
+                key={reason}
+                className="rounded-full border border-border/60 bg-background px-2 py-0.5 text-[11px] font-medium"
+              >
+                {t(`recommendation.reasons.${reason}`)}
+              </span>
+            ))}
+          </div>
           {displayElevation.length > 1 && (
             <Suspense fallback={null}>
               <ElevationChart profile={displayElevation} />
@@ -879,10 +956,15 @@ export function RouteGeneratorPage() {
                   })}
                 </div>
               )}
-              {distanceDeviationRatio > 0.05 && (
-                <p className="text-[11px] text-amber-700 dark:text-amber-300">
-                  {t("result.approximate")}
-                </p>
+              {distanceMatchLabel && (
+                <span
+                  className={cn(
+                    "inline-flex w-fit rounded-full border px-2 py-0.5 text-[11px] font-medium",
+                    DISTANCE_MATCH_CLASSES[distanceMatchLabel],
+                  )}
+                >
+                  {t(`recommendation.distanceMatch.${distanceMatchLabel}`)}
+                </span>
               )}
             </div>
           )}
@@ -900,7 +982,12 @@ export function RouteGeneratorPage() {
   return (
     <>
       <SEOHead title={t("title")} description={t("subtitle")} canonical="/routes" />
-      <div className="mx-auto w-full max-w-[1600px] px-4 py-3 sm:px-5 md:flex md:h-[calc(100svh-4rem)] md:flex-col">
+      {/* Total chrome above + below this page = pt-16 (TopBar offset)
+          + pb-4 (main bottom padding) = 5rem. Subtracting that here
+          keeps the page exactly viewport-sized — no scroll on the body
+          (the previous 4rem ignored the bottom padding and produced a
+          1rem overflow). */}
+      <div className="mx-auto w-full max-w-[1600px] px-4 py-3 sm:px-5 md:flex md:h-[calc(100svh-5rem)] md:flex-col md:overflow-hidden">
         {/* Mini-toolbar replacing the previous oversized hero banner.
             ~36 px of vertical space instead of 130 px, leaves the map
             room to dominate. Title is small and informative; secondary
@@ -910,13 +997,12 @@ export function RouteGeneratorPage() {
           <h1 className="text-base font-semibold tracking-tight sm:text-lg">
             {t("title")}
           </h1>
-          <div className="flex items-center gap-2 text-xs">{headerLinks}</div>
         </header>
 
         <div
           className={cn(
             "grid grid-cols-1 gap-4 md:flex-1 md:min-h-0",
-            isMapExpanded ? "md:grid-cols-1" : "md:grid-cols-[320px_1fr] xl:grid-cols-[340px_1fr]",
+            isMapExpanded ? "md:grid-cols-1" : "md:grid-cols-[360px_1fr] xl:grid-cols-[380px_1fr]",
           )}
         >
           {/* Left rail: form only. Scrolls internally if the form
@@ -940,6 +1026,7 @@ export function RouteGeneratorPage() {
               cohesive surface — no double borders, no orphan blocks. */}
           <main className="min-w-0 md:flex md:min-h-0 md:flex-col md:overflow-hidden md:rounded-xl md:border md:border-border/60 md:bg-background md:shadow-sm">
             <div className="relative md:flex-1 md:min-h-0">{mapBlock}</div>
+            {desktopStatsBar}
             {desktopStrip}
             {desktopDetails}
           </main>

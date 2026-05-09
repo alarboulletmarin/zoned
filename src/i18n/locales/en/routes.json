@@ -88,8 +88,6 @@
   },
   "result": {
     "summary": "{{distance}} · {{ascent}} m gain · ~{{duration}}",
-    "approximate": "Approximate distance",
-    "approximateExplain": "Generated distance deviates from target — regenerate for another orientation.",
     "save": "Save route",
     "saved": "Route saved",
     "saveFailed": "Failed to save",
@@ -127,7 +125,6 @@
       "best_for_hills": "Best for hill work"
     },
     "reasons": {
-      "closest_to_target_distance": "Distance stays close to target",
       "matches_elevation_target": "Ascent stays close to target",
       "matches_target_duration": "Duration matches the planned session",
       "keeps_climbing_low": "Keeps climbing under control",
@@ -136,6 +133,11 @@
       "stays_repeatable_for_repeats": "Simple to repeat for reps",
       "respects_current_long_run": "Stays near your current long-run range",
       "uses_athletics_track": "Routes via an athletics track"
+    },
+    "distanceMatch": {
+      "very_close": "Distance very close to target",
+      "close": "Distance close to target",
+      "approximate": "Distance approximate"
     },
     "preferences": {
       "flat": "Favor flatter terrain",

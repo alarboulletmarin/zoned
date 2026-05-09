@@ -88,8 +88,6 @@
   },
   "result": {
     "summary": "{{distance}} · D+ {{ascent}} m · ~{{duration}}",
-    "approximate": "Distance approximative",
-    "approximateExplain": "La distance générée s'écarte de la cible — régénérez pour essayer une autre orientation.",
     "save": "Enregistrer le parcours",
     "saved": "Parcours enregistré",
     "saveFailed": "Échec de l'enregistrement",
@@ -127,7 +125,6 @@
       "best_for_hills": "Le plus utile pour les côtes"
     },
     "reasons": {
-      "closest_to_target_distance": "Distance très proche de la cible",
       "matches_elevation_target": "D+ proche de l'objectif",
       "matches_target_duration": "Durée cohérente avec la séance",
       "keeps_climbing_low": "Peu de dénivelé à absorber",
@@ -136,6 +133,11 @@
       "stays_repeatable_for_repeats": "Tracé simple à répéter",
       "respects_current_long_run": "Reste proche de votre sortie longue actuelle",
       "uses_athletics_track": "Passe par une piste d'athlétisme"
+    },
+    "distanceMatch": {
+      "very_close": "Distance très proche de la cible",
+      "close": "Distance proche",
+      "approximate": "Distance approximative"
     },
     "preferences": {
       "flat": "On privilégie le plat",

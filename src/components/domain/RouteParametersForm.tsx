@@ -122,7 +122,6 @@ export function RouteParametersForm({
   const [bearingDeg, setBearingDeg] = useState<number>(initialValues?.bearingDeg ?? 0);
   const [start, setStart] = useState<RouteCoordinate | null>(null);
   const [startLabel, setStartLabel] = useState<string | null>(null);
-  const [editingDistance, setEditingDistance] = useState(false);
   const [editingElevation, setEditingElevation] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
 
@@ -519,36 +518,24 @@ export function RouteParametersForm({
       </fieldset>
 
       <fieldset className="space-y-3">
-        <div className="flex items-baseline justify-between gap-2">
+        <div className="flex items-center justify-between gap-2">
           <legend className="text-sm font-semibold">{t("form.distance")}</legend>
-          {editingDistance ? (
+          <div className="flex items-center gap-1.5">
             <input
               type="number"
               min={1}
               max={maxDistanceKm}
               step={0.5}
-              autoFocus
               value={distanceKm}
               onFocus={(e) => e.currentTarget.select()}
-              onChange={(e) => setDistanceKm(clampDistance(Number(e.target.value) || 1, maxDistanceKm))}
-              onBlur={() => setEditingDistance(false)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") setEditingDistance(false);
-                if (e.key === "Escape") setEditingDistance(false);
-              }}
-              className="w-24 rounded-md border border-primary bg-background px-2 py-1 text-right text-base font-semibold tabular-nums focus:outline-none focus:ring-2 focus:ring-primary/20"
+              onChange={(e) =>
+                setDistanceKm(clampDistance(Number(e.target.value) || 1, maxDistanceKm))
+              }
+              className="h-9 w-20 rounded-md border border-input bg-transparent px-2 text-right text-sm font-semibold tabular-nums shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               aria-label={t("form.distanceEdit")}
             />
-          ) : (
-            <button
-              type="button"
-              onClick={() => setEditingDistance(true)}
-              className="rounded-md px-2 py-0.5 text-base font-semibold tabular-nums hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
-              aria-label={t("form.distanceEdit")}
-            >
-              {distanceKm.toFixed(1)} {t("form.distanceUnit")}
-            </button>
-          )}
+            <span className="text-xs text-muted-foreground">{t("form.distanceUnit")}</span>
+          </div>
         </div>
         <Slider
           value={[distanceKm]}
@@ -558,6 +545,32 @@ export function RouteParametersForm({
           step={0.5}
           aria-label={t("form.distance")}
         />
+        {/* Presets — discipline-aware ceiling filters out anything beyond
+            the slider's max (e.g. Marathon on a 30 km running cap, all
+            three presets on a sub-21 km cycling cap). */}
+        <div className="flex flex-wrap gap-1.5">
+          {[
+            { label: "5K", km: 5 },
+            { label: "10K", km: 10 },
+            { label: "Semi", km: 21.1 },
+            { label: "Marathon", km: 42.2 },
+          ]
+            .filter((p) => p.km <= maxDistanceKm)
+            .map((p) => {
+              const active = Math.abs(distanceKm - p.km) < 0.05;
+              return (
+                <button
+                  key={p.label}
+                  type="button"
+                  onClick={() => setDistanceKm(clampDistance(p.km, maxDistanceKm))}
+                  data-active={active}
+                  className="rounded-full border border-border/60 px-2.5 py-0.5 text-xs font-medium tabular-nums transition-colors hover:bg-accent data-[active=true]:border-primary data-[active=true]:bg-primary/10 data-[active=true]:text-primary"
+                >
+                  {p.label}
+                </button>
+              );
+            })}
+        </div>
         <div className="flex justify-between text-[11px] tabular-nums text-muted-foreground">
           <span>{t("form.distanceMin")}</span>
           <span>{t("form.distanceMaxValue", { max: maxDistanceKm })}</span>
@@ -678,13 +691,12 @@ export function RouteParametersForm({
         </div>
       </fieldset>
 
-      {/* CTA stays inline at the end of the form — no fixed positioning.
-          Both desktop (in a sticky aside) and mobile (inside a bottom
-          sheet) flow naturally with this approach. The mobile sheet
-          renders the form deep enough that the CTA is reached by
-          dragging the sheet up; that's the same flow Strava uses for
-          "regenerate with these settings". */}
-      <div className="mt-2">
+      {/* Sticky CTA — pinned to the bottom of the scrollable aside so
+          the user always sees "Générer" regardless of scroll position
+          (long forms with elevation target + bearing can outgrow short
+          viewports). Negative margins extend the bar across the full
+          form padding so the bg fully covers content scrolled behind. */}
+      <div className="sticky bottom-0 -mx-4 -mb-4 mt-2 border-t border-border/60 bg-background/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/80 sm:-mx-5 sm:-mb-5 sm:px-5">
         <Button
           type="submit"
           size="lg"
