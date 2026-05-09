@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
-import { ArrowLeftRight, ArrowRight, Check, Download, EyeOff, Maximize2, Minimize2, Pencil, RotateCcw, Save, X } from "@/components/icons";
+import { ArrowLeftRight, ArrowRight, Check, ChevronDown, ChevronLeft, ChevronRight, Download, EyeOff, Maximize2, Minimize2, Pencil, RotateCcw, Save, X } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { MiniRouteMap } from "@/components/visualization/route/MiniRouteMap";
@@ -25,7 +25,6 @@ import { downloadRouteGpx } from "@/lib/export/gpx";
 import { useRoutes } from "@/hooks/useRoutes";
 import { useSettings } from "@/hooks/useSettings";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
-import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
 import { cn } from "@/lib/utils";
 import { usePickLang, usePickLocale } from "@/lib/i18n-utils";
 import { loadRunnerProfile } from "@/lib/runnerProfile";
@@ -122,6 +121,11 @@ export function RouteGeneratorPage() {
   const [lastValidWaypoints, setLastValidWaypoints] = useState<RouteCoordinate[] | null>(null);
   const [editPreview, setEditPreview] = useState<Route | null>(null);
   const [isReRouting, setIsReRouting] = useState(false);
+  // Desktop one-page layout: the "Pourquoi ce parcours" panel collapses
+  // by default so the map keeps the maximum vertical room. Users only
+  // pop it open when they want to compare the rationale or read the
+  // elevation profile in detail.
+  const [detailsOpen, setDetailsOpen] = useState(false);
 
   const routeState = location.state as RouteGeneratorLocationState | null;
   const runnerProfile = useMemo(() => loadRunnerProfile(), []);
@@ -498,15 +502,17 @@ export function RouteGeneratorPage() {
   // generous on tablet/desktop so the carto dominates the viewport instead
   // of being capped at 28rem like before. Override `sm:h-96` from the
   // RouteMap default so it doesn't kick in inside the mobile fixed wrapper.
-  // Komoot/AllTrails pattern on md+: the map fills its parent (which is
-  // a sticky full-height column right next to the params + results
-  // rail). On smaller screens we keep an explicit height so the map
-  // doesn't collapse to nothing.
+  // Komoot/AllTrails pattern on md+: the map fills its parent (which
+  // is a flex-1 cell inside the right-column card). On smaller
+  // screens we keep an explicit height so the map doesn't collapse.
+  // No `min-h` on md+: the parent already constrains the column to
+  // the viewport, and a `min-h` would push the strip down below the
+  // fold and leave a blank gap when the map fills less than min-h.
   const mapHeightClass = isMobile
     ? "h-full w-full sm:h-full rounded-none border-0"
     : isMapExpanded
       ? "h-[calc(100svh-10rem)] sm:h-[calc(100svh-10rem)] lg:h-[calc(100svh-10rem)]"
-      : "h-72 sm:h-96 md:h-full md:min-h-[480px]";
+      : "h-72 sm:h-96 md:h-full md:rounded-none md:border-0";
 
   const presetNode = trainingPreset ? (
     <>
@@ -605,10 +611,16 @@ export function RouteGeneratorPage() {
   );
 
   // Map + overlays. The map fills its parent (fixed-positioned on mobile,
-  // sticky main column on desktop). Hint banner sits above; action chips
-  // (reverse / edit / maximize) ride on top via absolute positioning.
+  // flex-1 inside the right-column card on desktop). Hint banner sits
+  // above; action chips (reverse / edit / maximize) ride on top via
+  // absolute positioning.
   const mapBlock = (
-    <div className={cn("relative", isMobile ? "h-full w-full" : undefined)}>
+    <div
+      className={cn(
+        "relative",
+        isMobile ? "h-full w-full" : "md:h-full",
+      )}
+    >
       {!route && (
         <div className="pointer-events-none absolute left-1/2 top-3 z-[600] -translate-x-1/2 rounded-full border border-border/60 bg-background/95 px-3 py-1.5 text-[11px] font-medium text-muted-foreground shadow-sm backdrop-blur-sm">
           {previewStart ? t("form.mapPickedHint") : t("form.mapPickStartHint")}
@@ -719,204 +731,143 @@ export function RouteGeneratorPage() {
     </div>
   );
 
-  const candidatesNode = (
-    <>
-      {!trainingPreset && candidates.length > 1 && (
-        <Segmented
-          value={String(selectedIndex)}
-          onChange={(v) => setSelectedIndex(Number(v))}
-          label={t("form.candidatesLabel")}
-          options={candidates.map<SegmentedOption<string>>((c, i) => ({
-            value: String(i),
-            label: `${t("form.candidate", { index: i + 1 })} · ${(c.route.distanceM / 1000).toFixed(1)} km`,
-          }))}
-        />
-      )}
-      {trainingPreset && candidates.length > 0 && (
-        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
-          {candidates.map((candidate, index) => (
-            <button
-              key={candidate.route.id}
-              type="button"
-              onClick={() => setSelectedIndex(index)}
-              className={`rounded-xl border p-3 text-left transition-colors ${
-                index === selectedIndex
-                  ? "border-primary bg-primary/5 shadow-sm"
-                  : "border-border/60 bg-background hover:border-primary/40"
-              }`}
+  // ─── Desktop one-page strip (Strava Routes pattern) ──────────────
+  // A single dense bar under the map combines: candidate pager (left),
+  // route stats (centre), action buttons (right). Replaces the verbose
+  // resultsNode for the desktop layout — same data, ~3× more compact.
+  const desktopStrip = route ? (
+    <div className="flex h-14 items-center gap-3 border-t border-border/60 bg-background/95 px-3 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      {candidates.length > 1 && (
+        <>
+          <div className="flex items-center gap-1 text-xs">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7"
+              onClick={() => setSelectedIndex((i) => (i - 1 + candidates.length) % candidates.length)}
+              aria-label={t("form.candidatesLabel")}
+              disabled={candidates.length <= 1}
             >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-sm font-semibold text-foreground">
-                    {candidate.recommendation
-                      ? t(`recommendation.accents.${candidate.recommendation.accent}`)
-                      : t("recommendation.accents.closest_to_target")}
-                  </p>
-                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                    {(candidate.recommendation?.reasons ?? ["closest_to_target_distance"])
-                      .slice(0, 2)
-                      .map((reason) => t(`recommendation.reasons.${reason}`))
-                      .join(" · ")}
-                  </p>
-                </div>
-                {index === selectedIndex && (
-                  <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary-foreground">
-                    {t("recommendation.selected")}
-                  </span>
-                )}
-              </div>
-              <div className="mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
-                <span>{(candidate.route.distanceM / 1000).toFixed(1)} km</span>
-                <span>D+ {candidate.route.elevationGainM} m</span>
-                <span>
-                  {formatDurationMinutes(
-                    (candidate.recommendation?.predictedDurationSec ?? candidate.route.estimatedDurationSec) / 60,
-                  )}
-                </span>
-              </div>
-            </button>
-          ))}
-        </div>
-      )}
-    </>
-  );
-
-  const resultsNode = route ? (
-    <>
-      {selectedRecommendation && (
-        <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">
-                {t("recommendation.resultEyebrow")}
-              </p>
-              <p className="mt-1 text-sm font-semibold text-foreground">
-                {t(`recommendation.accents.${selectedRecommendation.accent}`)}
-              </p>
-            </div>
-            <span className="rounded-full border border-primary/20 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
-              {t("recommendation.scoreLabel", { score: Math.round(selectedRecommendation.score * 100) })}
+              <ChevronLeft className="size-4" />
+            </Button>
+            <span className="min-w-[5rem] text-center font-semibold tabular-nums">
+              {t("form.candidate", { index: selectedIndex + 1 })}
+              <span className="text-muted-foreground">{` / ${candidates.length}`}</span>
             </span>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7"
+              onClick={() => setSelectedIndex((i) => (i + 1) % candidates.length)}
+              aria-label={t("form.candidatesLabel")}
+              disabled={candidates.length <= 1}
+            >
+              <ChevronRight className="size-4" />
+            </Button>
           </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {selectedRecommendation.reasons.map((reason) => (
-              <span
-                key={reason}
-                className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground"
-              >
-                {t(`recommendation.reasons.${reason}`)}
-              </span>
-            ))}
-          </div>
-        </div>
+          <span className="h-6 w-px bg-border/60" aria-hidden />
+        </>
       )}
-
-      {distanceDeviationRatio > 0.05 && (
-        <div className="rounded-xl border border-amber-300/60 bg-amber-50/80 p-4 text-sm text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/30 dark:text-amber-100">
-          <p className="font-semibold">{t("result.approximate")}</p>
-          <p className="mt-1 text-xs leading-relaxed text-amber-800/90 dark:text-amber-200/90">
-            {t("result.approximateExplain")}
-          </p>
-        </div>
-      )}
-
-      <div className="grid grid-cols-3 gap-3 rounded-xl border border-border/60 bg-muted/20 p-4 text-sm">
-        <div>
-          <p className="text-xs text-muted-foreground">{t("result.actualDistance")}</p>
-          <p className="text-lg font-semibold tabular-nums">
-            {((displayedRoute?.distanceM ?? 0) / 1000).toFixed(2)} km
-          </p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">{t("result.elevationGain")}</p>
-          <p className="text-lg font-semibold tabular-nums">{displayedRoute?.elevationGainM ?? 0} m</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">{t("result.estimatedDuration")}</p>
-          <p className="text-lg font-semibold tabular-nums">
-            {formatDurationMinutes(displayDurationSec / 60)}
-          </p>
-        </div>
+      <div className="flex items-baseline gap-3 text-sm tabular-nums">
+        <span className="font-semibold">
+          {((displayedRoute?.distanceM ?? 0) / 1000).toFixed(1)}
+          <span className="ml-0.5 text-xs font-normal text-muted-foreground">km</span>
+        </span>
+        <span className="font-semibold">
+          ↑{displayedRoute?.elevationGainM ?? 0}
+          <span className="ml-0.5 text-xs font-normal text-muted-foreground">m</span>
+        </span>
+        <span className="text-muted-foreground">
+          {formatDurationMinutes(displayDurationSec / 60)}
+        </span>
       </div>
-
-      {displayElevation.length > 1 && (
-        <div className="rounded-xl border border-border/60 bg-background p-3">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            {t("result.elevationProfile")}
-          </p>
-          <Suspense fallback={null}>
-            <ElevationChart profile={displayElevation} />
-          </Suspense>
-        </div>
-      )}
-
-      <div className="flex flex-wrap gap-2">
-        <Button onClick={onSave} className="gap-2">
-          <Save className="size-4" />
+      <div className="ml-auto flex items-center gap-1.5">
+        <Button onClick={onSave} size="sm" className="h-8 gap-1.5 px-3 text-xs">
+          <Save className="size-3.5" />
           {t("result.save")}
         </Button>
         <Button
           variant="outline"
+          size="icon"
+          className="size-8"
           onClick={onRegenerate}
-          className="gap-2"
           disabled={isGenerating}
+          aria-label={t("form.regenerate")}
+          title={t("form.regenerate")}
         >
-          <RotateCcw className="size-4" />
-          {t("form.regenerate")}
+          <RotateCcw className="size-3.5" />
         </Button>
-        <Button variant="outline" onClick={onExport} className="gap-2">
-          <Download className="size-4" />
-          {t("result.exportGpx")}
+        <Button
+          variant="outline"
+          size="icon"
+          className="size-8"
+          onClick={onExport}
+          aria-label={t("result.exportGpx")}
+          title={t("result.exportGpx")}
+        >
+          <Download className="size-3.5" />
         </Button>
       </div>
-    </>
+    </div>
+  ) : null;
+
+  // ─── Desktop collapsible "Pourquoi ce parcours" panel ────────────
+  // Closed by default — accent + reasons + elevation profile only get
+  // unfolded when the user explicitly asks. Keeps the map dominant.
+  const desktopDetails = route ? (
+    <div className="border-t border-border/60 bg-background">
+      <button
+        type="button"
+        onClick={() => setDetailsOpen((v) => !v)}
+        aria-expanded={detailsOpen}
+        className="flex h-9 w-full items-center justify-between px-3 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground"
+      >
+        <span className="flex items-center gap-2">
+          {t("recommendation.resultEyebrow")}
+          {selectedRecommendation && (
+            <span className="rounded-full border border-primary/20 bg-primary/5 px-2 py-0.5 text-[10px] font-medium tracking-normal normal-case text-primary">
+              {t(`recommendation.accents.${selectedRecommendation.accent}`)}
+            </span>
+          )}
+        </span>
+        <ChevronDown
+          className={cn(
+            "size-4 transition-transform duration-200",
+            detailsOpen && "rotate-180",
+          )}
+        />
+      </button>
+      {detailsOpen && (
+        <div className="max-h-[40svh] space-y-3 overflow-y-auto border-t border-border/60 px-3 py-3">
+          {selectedRecommendation && selectedRecommendation.reasons.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {selectedRecommendation.reasons.map((reason) => (
+                <span
+                  key={reason}
+                  className="rounded-full border border-border/60 bg-background px-2 py-0.5 text-[11px] font-medium"
+                >
+                  {t(`recommendation.reasons.${reason}`)}
+                </span>
+              ))}
+            </div>
+          )}
+          {distanceDeviationRatio > 0.05 && (
+            <p className="rounded-lg border border-amber-300/60 bg-amber-50/80 px-3 py-2 text-xs text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/30 dark:text-amber-100">
+              {t("result.approximate")}
+            </p>
+          )}
+          {displayElevation.length > 1 && (
+            <Suspense fallback={null}>
+              <ElevationChart profile={displayElevation} />
+            </Suspense>
+          )}
+        </div>
+      )}
+    </div>
   ) : null;
 
   // "How it works" — collapsed by default, action-first page. Native
   // <details> for zero-JS toggling.
-  const howItWorksNode = (
-    <section className={cn(isMobile ? "mt-4" : "mt-10")}>
-      <details className="group rounded-xl border border-border/60 bg-muted/10 p-4 sm:p-5 [&[open]>summary>span:last-child]:rotate-180">
-        <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-sm font-semibold sm:text-base">
-          <span className="flex items-center gap-2">{t("howItWorks.title")}</span>
-          <span className="inline-flex size-6 items-center justify-center rounded-full border border-border/60 text-xs transition-transform">
-            ▾
-          </span>
-        </summary>
-        <div className="mt-4 space-y-5 text-sm leading-relaxed text-muted-foreground">
-          <p className="text-foreground">{t("howItWorks.intro")}</p>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {(["step1", "step2", "step3", "step4"] as const).map((step) => (
-              <div key={step} className="rounded-lg border border-border/60 bg-background p-3">
-                <p className="mb-1 font-semibold text-foreground">{t(`howItWorks.${step}Title`)}</p>
-                <p>{t(`howItWorks.${step}Body`)}</p>
-              </div>
-            ))}
-          </div>
-          <div className="grid gap-3 sm:grid-cols-3">
-            <div>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-foreground">
-                {t("howItWorks.privacyTitle")}
-              </p>
-              <p className="text-xs">{t("howItWorks.privacyBody")}</p>
-            </div>
-            <div>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-foreground">
-                {t("howItWorks.limitsTitle")}
-              </p>
-              <p className="text-xs">{t("howItWorks.limitsBody")}</p>
-            </div>
-            <div>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-foreground">
-                {t("howItWorks.sourcesTitle")}
-              </p>
-              <p className="text-xs">{t("howItWorks.sourcesBody")}</p>
-            </div>
-          </div>
-        </div>
-      </details>
-    </section>
-  );
 
   // ─── Mobile: Strava-style persistent card over a full-bleed map ───
   // Pattern (Komoot / Strava / AllTrails 2024-2025): the sheet never
@@ -1074,34 +1025,38 @@ export function RouteGeneratorPage() {
     );
   }
 
-  // ─── Desktop / Tablet: 2-col one-page layout ─────────────────────
-  // The interactive zone (header + form + map + candidates) all fits
-  // in a single viewport with no page-level scroll. The left rail
-  // hosts form + result panel and scrolls internally if it overflows.
-  // The right column stacks map (flex-1, fills) + candidates strip
-  // (auto height, never grows). "Comment ça marche?" + Zoned footer
-  // are still rendered below for users who do want to scroll deeper —
-  // they're just not part of the always-visible workspace.
+  // ─── Desktop / Tablet: 2-col one-page layout (Strava Routes pattern) ─
+  // The whole interactive zone fits in a single viewport. The left rail
+  // hosts only the form (no embedded result panel). The right column
+  // stacks map (flex) + horizontal results strip + collapsible "why this
+  // route" details. The Zoned footer is hidden on this route via
+  // App.tsx so the page truly takes 100svh.
   return (
     <>
       <SEOHead title={t("title")} description={t("subtitle")} canonical="/routes" />
-      <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 lg:px-8 md:flex md:flex-col md:h-[calc(100svh-4rem)]">
-        <header className="mb-3 space-y-1 shrink-0">
-          <h1 className="text-2xl font-bold sm:text-3xl">{t("title")}</h1>
-          <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
-          {headerLinks}
+      <div className="mx-auto w-full max-w-[1600px] px-4 py-3 sm:px-5 md:flex md:h-[calc(100svh-4rem)] md:flex-col">
+        {/* Mini-toolbar replacing the previous oversized hero banner.
+            ~36 px of vertical space instead of 130 px, leaves the map
+            room to dominate. Title is small and informative; secondary
+            navigation links sit on the right where the user expects a
+            "more from this section" rail. */}
+        <header className="mb-3 flex shrink-0 items-center justify-between gap-3">
+          <h1 className="text-base font-semibold tracking-tight sm:text-lg">
+            {t("title")}
+          </h1>
+          <div className="flex items-center gap-2 text-xs">{headerLinks}</div>
         </header>
 
         <div
           className={cn(
-            "grid grid-cols-1 gap-4 md:flex-1 md:min-h-0 md:items-stretch xl:gap-6",
-            isMapExpanded ? "md:grid-cols-1" : "md:grid-cols-[380px_1fr]",
+            "grid grid-cols-1 gap-4 md:flex-1 md:min-h-0",
+            isMapExpanded ? "md:grid-cols-1" : "md:grid-cols-[320px_1fr] xl:grid-cols-[340px_1fr]",
           )}
         >
-          {/* Left rail: params on top, result panel below. Scrolls
-              internally on md+ when the form + result outgrow the
-              viewport (small laptops). overscroll-contain prevents the
-              scroll from leaking into the page. */}
+          {/* Left rail: form only. Scrolls internally if the form
+              outgrows the viewport (tablet, small laptops, training
+              presets with extra fields). overscroll-contain stops the
+              wheel from leaking into the page or the map. */}
           <aside
             className={cn(
               "min-w-0 space-y-3 md:flex md:flex-col md:min-h-0",
@@ -1111,26 +1066,18 @@ export function RouteGeneratorPage() {
           >
             {presetNode}
             {formNode}
-            {resultsNode}
           </aside>
 
-          {/* Right column: map (flex-1) + candidates strip stacked
-              vertically. Together they fill the column without any
-              scrollbar — the candidates row never grows past its
-              content height, the map absorbs the rest. */}
-          <main
-            className={cn(
-              "min-w-0 md:flex md:flex-col md:min-h-0 md:gap-3",
-            )}
-          >
-            <div className="md:flex-1 md:min-h-0">{mapBlock}</div>
-            {candidates.length > 0 && (
-              <div className="md:shrink-0">{candidatesNode}</div>
-            )}
+          {/* Right column: map (flex) + strip (auto) + collapsible
+              details (auto). The whole column lives inside a single
+              rounded card so the map, strip and details read as one
+              cohesive surface — no double borders, no orphan blocks. */}
+          <main className="min-w-0 md:flex md:min-h-0 md:flex-col md:overflow-hidden md:rounded-xl md:border md:border-border/60 md:bg-background md:shadow-sm">
+            <div className="relative md:flex-1 md:min-h-0">{mapBlock}</div>
+            {desktopStrip}
+            {desktopDetails}
           </main>
         </div>
-
-        {howItWorksNode}
       </div>
     </>
   );

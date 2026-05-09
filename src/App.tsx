@@ -85,6 +85,18 @@ function preloadSidebarPages() {
   pages.forEach((load, i) => setTimeout(load, 1000 + i * 200));
 }
 
+/** Routes that take over the full viewport (Strava-style map experiences,
+ *  immersive editors). The Zoned Footer is hidden so the page can claim
+ *  the entire vertical space without the user being pushed past the
+ *  fold to satisfy a footer below the map. */
+const FULLSCREEN_ROUTES = ["/routes"];
+
+function ConditionalFooter() {
+  const { pathname } = useLocation();
+  if (FULLSCREEN_ROUTES.includes(pathname)) return null;
+  return <Footer />;
+}
+
 function ScrollToTopOnNavigate() {
   const location = useLocation();
   const [announcement, setAnnouncement] = useState("");
@@ -310,7 +322,7 @@ function App() {
                   </div>
                 </main>
 
-                <Footer />
+                <ConditionalFooter />
                 </ErrorBoundary>
               </div>
             </div>
