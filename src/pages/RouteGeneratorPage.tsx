@@ -429,7 +429,7 @@ export function RouteGeneratorPage() {
     generate(lastPayload, Date.now());
   };
 
-  const onSave = () => {
+  const onSave = async () => {
     if (!route) return;
     const routeToSave: Route = {
       ...route,
@@ -438,7 +438,7 @@ export function RouteGeneratorPage() {
       estimatedDurationSec: displayDurationSec || route.estimatedDurationSec,
       ...(trainingPreset?.planSessionRef ? { planSessionRef: trainingPreset.planSessionRef } : {}),
     };
-    if (saveRoute(routeToSave)) {
+    if (await saveRoute(routeToSave)) {
       toast.success(t("result.saved"));
       navigate(`/routes/${routeToSave.id}`);
     } else {
@@ -498,11 +498,16 @@ export function RouteGeneratorPage() {
   // generous on tablet/desktop so the carto dominates the viewport instead
   // of being capped at 28rem like before. Override `sm:h-96` from the
   // RouteMap default so it doesn't kick in inside the mobile fixed wrapper.
+  // On md+ the map is expected to share the row height with the params
+  // sidebar — anything taller forces a page-level scroll past the form,
+  // which the user wants gone. The map shrinks slightly (-2rem) so the
+  // candidate strip + result panel still have room inside the same
+  // sticky column without the column overflowing the viewport.
   const mapHeightClass = isMobile
     ? "h-full w-full sm:h-full rounded-none border-0"
     : isMapExpanded
       ? "h-[calc(100svh-10rem)] sm:h-[calc(100svh-10rem)] lg:h-[calc(100svh-10rem)]"
-      : "h-72 sm:h-96 md:h-[calc(100svh-12rem)] lg:h-[calc(100svh-10rem)]";
+      : "h-72 sm:h-96 md:h-[calc(100svh-18rem)] lg:h-[calc(100svh-16rem)]";
 
   const presetNode = trainingPreset ? (
     <>
@@ -1089,7 +1094,12 @@ export function RouteGeneratorPage() {
           <main
             className={cn(
               "min-w-0 space-y-4",
-              !isMapExpanded && "md:sticky md:top-20 md:self-start",
+              // On md+ the column is capped at the viewport height (minus
+              // the topbar) and scrolls internally — the page itself
+              // never grows past one viewport, matching the user's
+              // request that the map column never trails past the form.
+              !isMapExpanded &&
+                "md:sticky md:top-20 md:self-start md:max-h-[calc(100svh-6rem)] md:overflow-y-auto md:pr-1",
             )}
           >
             {mapBlock}

@@ -38,7 +38,13 @@ export function RouteDetailPage() {
 
   useEffect(() => {
     if (!id) return;
-    setRoute(getRoute(id));
+    let cancelled = false;
+    void getRoute(id).then((found) => {
+      if (!cancelled) setRoute(found);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
   if (!route) {
@@ -59,8 +65,8 @@ export function RouteDetailPage() {
     toast.success(filename);
   };
 
-  const onDelete = () => {
-    if (deleteRoute(route.id)) {
+  const onDelete = async () => {
+    if (await deleteRoute(route.id)) {
       toast.success(t("result.deleted"));
       navigate("/routes/mine");
     }

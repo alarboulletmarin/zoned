@@ -8,10 +8,32 @@
  * (`out center N`) and rely on the in-memory cache below.
  */
 
+import { del as idbDel, get as idbGet, set as idbSet } from "idb-keyval";
 import type { RouteCoordinate } from "@/types/route";
 import type { PoiCandidate, PoiType } from "./poiTypes";
 import { OVERPASS_BASE_URL, OVERPASS_TIMEOUT_S } from "../constants";
 import { haversineDistanceM } from "../elevation";
+
+/** Soft cap on in-memory POI cache entries — beyond this we evict the
+ *  oldest entry on each new write. Map iteration order is insertion
+ *  order, so the first key is always the least-recently-written one. */
+const POI_MEMORY_CACHE_LIMIT = 50;
+/** TTL for the persistent IndexedDB cache layer. Parks, beaches and
+ *  promenades change very rarely on OSM, so a week is generous and
+ *  still bounds drift after a major map update. */
+const POI_PERSISTENT_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+/** Prefix for IndexedDB keys to avoid collisions with other features. */
+const POI_PERSISTENT_PREFIX = "zoned-poi:";
+
+interface PersistedPoi {
+  ts: number;
+  data: PoiCandidate[];
+}
+
+/** True when IndexedDB is available (browser DOM). False under Node/Bun
+ *  unit tests: in that case we degrade to in-memory-only and never touch
+ *  the persistent layer. */
+const HAS_IDB = typeof indexedDB !== "undefined";
 
 /**
  * Overpass tag fragments per POI type. Keep them as Overpass-QL substrings
@@ -52,8 +74,59 @@ interface FetchKey {
   types: PoiType[];
 }
 
-/** In-memory cache. Cleared on a hard reload — that's fine for this use case. */
-const cache = new Map<string, PoiCandidate[]>();
+/**
+ * Three-layer cache. Reads check (1) the in-memory result store, then
+ * (2) the in-flight promise map (so concurrent generations of three
+ * candidates dedup their identical Overpass call), and finally (3) the
+ * persistent IndexedDB layer with a 7-day TTL. Network is the last
+ * resort and its result is propagated to all three layers.
+ */
+const memoryCache = new Map<string, PoiCandidate[]>();
+const inFlight = new Map<string, Promise<PoiCandidate[]>>();
+
+function setMemoryCache(key: string, value: PoiCandidate[]): void {
+  // LRU: re-insert the key so it moves to the end of the iteration order,
+  // then evict the oldest entry if we're over capacity.
+  if (memoryCache.has(key)) memoryCache.delete(key);
+  memoryCache.set(key, value);
+  if (memoryCache.size > POI_MEMORY_CACHE_LIMIT) {
+    const firstKey = memoryCache.keys().next().value;
+    if (firstKey !== undefined) memoryCache.delete(firstKey);
+  }
+}
+
+async function readPersistentPoi(key: string): Promise<PoiCandidate[] | null> {
+  if (!HAS_IDB) return null;
+  try {
+    const entry = await idbGet<PersistedPoi>(POI_PERSISTENT_PREFIX + key);
+    if (!entry || typeof entry.ts !== "number" || !Array.isArray(entry.data)) return null;
+    if (Date.now() - entry.ts > POI_PERSISTENT_TTL_MS) {
+      try {
+        void idbDel(POI_PERSISTENT_PREFIX + key).catch(() => {});
+      } catch {
+        // Tolerate synchronous errors from the IDB layer (e.g. disabled).
+      }
+      return null;
+    }
+    return entry.data;
+  } catch {
+    return null;
+  }
+}
+
+function writePersistentPoi(key: string, data: PoiCandidate[]): void {
+  if (!HAS_IDB) return;
+  try {
+    void idbSet(POI_PERSISTENT_PREFIX + key, { ts: Date.now(), data } satisfies PersistedPoi).catch(
+      () => {
+        // IndexedDB might be disabled (private browsing, quota full) —
+        // we silently fall back to the in-memory layer.
+      },
+    );
+  } catch {
+    // Some browsers throw synchronously when IDB is blocked.
+  }
+}
 
 function cacheKey(k: FetchKey): string {
   // Round coordinates to 4 decimals (~11 m) and radius to the nearest 100 m
@@ -140,29 +213,55 @@ export async function fetchPoiCandidates(
   const [lon, lat] = args.center;
 
   const key = cacheKey({ lat, lon, radiusM: args.radiusM, types });
-  const cached = cache.get(key);
-  if (cached) return cached;
+
+  // Layer 1: synchronous in-memory hit — most common when the user
+  // regenerates or moves a candidate's waypoint without changing area.
+  const memHit = memoryCache.get(key);
+  if (memHit) return memHit;
+
+  // Layer 2: an identical request is already in flight. Three candidates
+  // generated in parallel from the same start would otherwise issue
+  // three identical Overpass POSTs and waste the public quota.
+  const inFlightHit = inFlight.get(key);
+  if (inFlightHit) return inFlightHit;
 
   const ql = buildQuery(lat, lon, args.radiusM, types);
+  const promise = (async () => {
+    // Layer 3: persistent (IndexedDB). Survives a hard reload, so a user
+    // returning to their usual neighborhood doesn't re-hit Overpass at all.
+    const persisted = await readPersistentPoi(key);
+    if (persisted) {
+      setMemoryCache(key, persisted);
+      return persisted;
+    }
 
-  const response = await fetch(OVERPASS_BASE_URL, {
-    method: "POST",
-    body: `data=${encodeURIComponent(ql)}`,
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    signal: args.signal,
-  });
+    const response = await fetch(OVERPASS_BASE_URL, {
+      method: "POST",
+      body: `data=${encodeURIComponent(ql)}`,
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      signal: args.signal,
+    });
 
-  if (!response.ok) {
-    throw new Error(`Overpass request failed: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`Overpass request failed: ${response.status}`);
+    }
+
+    const data = (await response.json()) as OverpassResponse;
+    if (!data || !Array.isArray(data.elements)) {
+      throw new Error("Overpass returned a malformed response");
+    }
+    const candidates = parseOverpassElements(data.elements);
+    setMemoryCache(key, candidates);
+    writePersistentPoi(key, candidates);
+    return candidates;
+  })();
+
+  inFlight.set(key, promise);
+  try {
+    return await promise;
+  } finally {
+    inFlight.delete(key);
   }
-
-  const data = (await response.json()) as OverpassResponse;
-  if (!data || !Array.isArray(data.elements)) {
-    throw new Error("Overpass returned a malformed response");
-  }
-  const candidates = parseOverpassElements(data.elements);
-  cache.set(key, candidates);
-  return candidates;
 }
 
 function isValidCoordValue(n: unknown): n is number {
@@ -206,9 +305,12 @@ export function parseOverpassElements(
   return out;
 }
 
-/** Test/debug helper — clear the in-memory cache. */
+/** Test/debug helper — clear the in-memory cache. The persistent layer
+ *  is left untouched: tests should mock idb-keyval if they need a
+ *  pristine state across the IndexedDB layer. */
 export function __clearPoiCacheForTests(): void {
-  cache.clear();
+  memoryCache.clear();
+  inFlight.clear();
 }
 
 /**

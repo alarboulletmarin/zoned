@@ -23,8 +23,8 @@ export function MyRoutesPage() {
     });
   };
 
-  const onDelete = (id: string) => {
-    if (deleteRoute(id)) {
+  const onDelete = async (id: string) => {
+    if (await deleteRoute(id)) {
       toast.success(t("result.deleted"));
     }
   };

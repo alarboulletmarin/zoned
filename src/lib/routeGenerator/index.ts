@@ -30,7 +30,7 @@ export {
   destinationPoint,
   haversineDistanceM,
 } from "./elevation";
-export { routeViaBrouter, BrouterError } from "./routing";
+export { routeViaBrouter, BrouterError, __clearBrouterCacheForTests } from "./routing";
 export type { BrouterTraceResult } from "./routing";
 export type { LoopGenerationResult } from "./algorithms/loop";
 export type { OutAndBackGenerationResult } from "./algorithms/outAndBack";

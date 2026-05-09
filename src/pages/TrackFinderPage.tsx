@@ -185,9 +185,9 @@ export function TrackFinderPage() {
     [buildRouteToTrack],
   );
 
-  const onSave = useCallback(() => {
+  const onSave = useCallback(async () => {
     if (!route) return;
-    if (saveRoute(route)) {
+    if (await saveRoute(route)) {
       toast.success(t("result.saved"));
       navigate(`/routes/${route.id}`);
     } else {

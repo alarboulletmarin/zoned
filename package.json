@@ -48,6 +48,7 @@
     "i18next": "^25.8.0",
     "i18next-browser-languagedetector": "^8.2.0",
     "ics": "^3.8.1",
+    "idb-keyval": "^6.2.2",
     "leaflet": "^1.9.4",
     "pdfmake": "^0.3.3",
     "react": "^19.2.3",

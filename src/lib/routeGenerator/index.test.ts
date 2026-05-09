@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 
 import { generateRouteCandidates, routeFromWaypoints } from "./index";
 import { __clearPoiCacheForTests } from "./poi/overpass";
+import { __clearBrouterCacheForTests } from "./routing";
 
 function makeBrouterPayload(distanceM: number) {
   return {
@@ -31,6 +32,7 @@ let originalFetch: typeof fetch;
 beforeEach(() => {
   originalFetch = globalThis.fetch;
   __clearPoiCacheForTests();
+  __clearBrouterCacheForTests();
 });
 
 afterEach(() => {

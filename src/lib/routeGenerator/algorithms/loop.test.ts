@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { generateLoop } from "./loop";
 import { DISTANCE_TOLERANCE, MAX_ADJUSTMENT_ATTEMPTS } from "../constants";
 import { __clearPoiCacheForTests } from "../poi/overpass";
+import { __clearBrouterCacheForTests } from "../routing";
 
 // Convert routed-distance assertions into the matching Brouter GeoJSON
 // payload. The `factor` lets a test pretend that Brouter returned a route
@@ -74,6 +75,9 @@ beforeEach(() => {
   fetchCalls = [];
   // Clear the POI cache so each test starts from scratch.
   __clearPoiCacheForTests();
+  // Clear the Brouter response cache so a `seed determinism` test that
+  // calls the same waypoints twice still re-issues the fetch mock.
+  __clearBrouterCacheForTests();
 });
 
 afterEach(() => {
@@ -166,6 +170,11 @@ describe("generateLoop", () => {
     });
     const callsForSeed1234 = [...seenLonlats];
     seenLonlats.length = 0;
+    // Both POI cache (centre identical) and Brouter cache (waypoints
+    // would be identical → cached) need to be cleared so the second run
+    // re-issues the same fetch sequence and we can compare them.
+    __clearPoiCacheForTests();
+    __clearBrouterCacheForTests();
 
     await generateLoop({
       start: [2.349, 48.8567],

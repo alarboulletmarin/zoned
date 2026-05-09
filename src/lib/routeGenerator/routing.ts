@@ -53,6 +53,43 @@ function formatLonLats(waypoints: RouteCoordinate[]): string {
   return waypoints.map(([lon, lat]) => `${lon},${lat}`).join("|");
 }
 
+/** Soft cap on cached Brouter answers — beyond this we evict the oldest
+ *  entry on each new write. 100 cached traces is enough for a session of
+ *  drag-edits + multiple regenerates without runaway memory growth. */
+const BROUTER_CACHE_LIMIT = 100;
+const brouterCache = new Map<string, BrouterTraceResult>();
+const brouterInFlight = new Map<string, Promise<BrouterTraceResult>>();
+
+/**
+ * Build a cache key that's stable across the convergence loop's tiny
+ * waypoint perturbations. Rounding to 5 decimals (~1.1 m) collapses the
+ * micro-jitter introduced by the damping factor (`0.7 × correction`) so
+ * pass 2 and pass 3 of a converging route hit the cache rather than
+ * issuing a fresh Brouter call. Profile is included because the same
+ * waypoints route differently for running vs cycling.
+ */
+function brouterCacheKey(waypoints: RouteCoordinate[], profile: string): string {
+  const rounded = waypoints
+    .map(([lon, lat]) => `${lon.toFixed(5)},${lat.toFixed(5)}`)
+    .join("|");
+  return `${profile}|${rounded}`;
+}
+
+function setBrouterCache(key: string, value: BrouterTraceResult): void {
+  if (brouterCache.has(key)) brouterCache.delete(key);
+  brouterCache.set(key, value);
+  if (brouterCache.size > BROUTER_CACHE_LIMIT) {
+    const firstKey = brouterCache.keys().next().value;
+    if (firstKey !== undefined) brouterCache.delete(firstKey);
+  }
+}
+
+/** Test/debug helper. */
+export function __clearBrouterCacheForTests(): void {
+  brouterCache.clear();
+  brouterInFlight.clear();
+}
+
 /**
  * Fetch with a timeout AbortController + automatic retry on transient
  * failures (5xx / 429 / network). Honors an externally provided abort
@@ -152,39 +189,62 @@ export async function routeViaBrouter(args: {
     );
   }
 
-  const url = new URL(BROUTER_BASE_URL);
-  url.searchParams.set("lonlats", formatLonLats(waypoints));
-  url.searchParams.set("profile", profile);
-  url.searchParams.set("alternativeidx", "0");
-  url.searchParams.set("format", "geojson");
-
-  const response = await fetchWithRetry(url.toString(), signal);
-
-  const data = (await response.json()) as BrouterGeoJSON;
-  const feature = data?.features?.[0];
-  if (!feature || !Array.isArray(feature.geometry?.coordinates) || feature.geometry.coordinates.length === 0) {
-    throw new BrouterError(0, "Brouter returned an empty trace");
+  const cacheKey = brouterCacheKey(waypoints, profile);
+  const cached = brouterCache.get(cacheKey);
+  if (cached) {
+    // Refresh LRU position so a frequently re-routed candidate stays warm.
+    setBrouterCache(cacheKey, cached);
+    return cached;
   }
+  // Coalesce concurrent identical requests — the parallel candidate
+  // generation might issue the same exact route twice in a single tick.
+  const inFlight = brouterInFlight.get(cacheKey);
+  if (inFlight) return inFlight;
 
-  const points: RouteCoordinate[] = [];
-  for (const c of feature.geometry.coordinates) {
-    if (!isValidCoord(c)) {
-      throw new BrouterError(0, "Brouter returned an invalid coordinate");
+  const promise = (async (): Promise<BrouterTraceResult> => {
+    const url = new URL(BROUTER_BASE_URL);
+    url.searchParams.set("lonlats", formatLonLats(waypoints));
+    url.searchParams.set("profile", profile);
+    url.searchParams.set("alternativeidx", "0");
+    url.searchParams.set("format", "geojson");
+
+    const response = await fetchWithRetry(url.toString(), signal);
+
+    const data = (await response.json()) as BrouterGeoJSON;
+    const feature = data?.features?.[0];
+    if (!feature || !Array.isArray(feature.geometry?.coordinates) || feature.geometry.coordinates.length === 0) {
+      throw new BrouterError(0, "Brouter returned an empty trace");
     }
-    const [lon, lat, alt] = c;
-    points.push(alt != null ? [lon, lat, alt] : [lon, lat]);
-  }
 
-  const distanceM = parsePositiveFloat(feature.properties["track-length"], "track-length");
-  if (distanceM <= 0) {
-    throw new BrouterError(0, "Brouter returned a zero-length trace");
-  }
+    const points: RouteCoordinate[] = [];
+    for (const c of feature.geometry.coordinates) {
+      if (!isValidCoord(c)) {
+        throw new BrouterError(0, "Brouter returned an invalid coordinate");
+      }
+      const [lon, lat, alt] = c;
+      points.push(alt != null ? [lon, lat, alt] : [lon, lat]);
+    }
 
-  return {
-    points,
-    distanceM,
-    // ascend / total-time may legitimately be 0 on flat or very short routes.
-    elevationGainM: parsePositiveFloat(feature.properties["filtered ascend"] ?? "0", "filtered ascend"),
-    estimatedDurationSec: parsePositiveFloat(feature.properties["total-time"] ?? "0", "total-time"),
-  };
+    const distanceM = parsePositiveFloat(feature.properties["track-length"], "track-length");
+    if (distanceM <= 0) {
+      throw new BrouterError(0, "Brouter returned a zero-length trace");
+    }
+
+    const result: BrouterTraceResult = {
+      points,
+      distanceM,
+      // ascend / total-time may legitimately be 0 on flat or very short routes.
+      elevationGainM: parsePositiveFloat(feature.properties["filtered ascend"] ?? "0", "filtered ascend"),
+      estimatedDurationSec: parsePositiveFloat(feature.properties["total-time"] ?? "0", "total-time"),
+    };
+    setBrouterCache(cacheKey, result);
+    return result;
+  })();
+
+  brouterInFlight.set(cacheKey, promise);
+  try {
+    return await promise;
+  } finally {
+    brouterInFlight.delete(cacheKey);
+  }
 }
