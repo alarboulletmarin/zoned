@@ -20,6 +20,7 @@
     "elevationTargetHint": "Optionnel - utile pour chercher du plat ou une séance vallonnée.",
     "elevationTargetEnable": "Ajouter",
     "elevationTargetDisable": "Ignorer",
+    "elevationFree": "Libre",
     "elevationTargetValue": "Objectif",
     "elevationUnit": "m",
     "elevationMin": "0 m",

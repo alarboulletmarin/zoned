@@ -905,12 +905,12 @@ export function RouteGeneratorPage() {
             z-30 sits above the App-level <Footer /> (which renders as a
             flow-normal sibling of <main>) so neither the "Nouveautés"
             link nor the legal footer leak into the map area. */}
-        <div className="fixed inset-x-0 top-14 bottom-0 z-30 flex flex-col bg-background">
+        <div className="fixed inset-x-0 top-12 bottom-0 z-30 flex flex-col bg-background">
           {/* Top filter bar — chip popovers + address + CTA. The compact
               form keeps itself ~150-180px tall; cap at 240px to give room
               for an optional plan-preset card without ever stealing more
               than 30 % of the viewport. */}
-          <div className="max-h-[240px] shrink-0 space-y-3 overflow-y-auto border-b border-border/60 px-3 py-3 [touch-action:pan-y]">
+          <div className="max-h-[200px] shrink-0 space-y-2 overflow-y-auto overscroll-contain border-b border-border/60 px-3 py-2 [touch-action:pan-y]">
             {presetNode}
             <RouteParametersForm
               key={trainingPreset ? `${trainingPreset.planSessionRef?.planId}-${trainingPreset.planSessionRef?.weekNumber}-${trainingPreset.planSessionRef?.sessionIndex}` : "manual-route-form"}

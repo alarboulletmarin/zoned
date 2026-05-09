@@ -245,7 +245,7 @@ function App() {
                 />
 
                 <ErrorBoundary>
-                <main id="main-content" className="flex-1 px-4 md:px-6 lg:px-8 py-4">
+                <main id="main-content" className="flex-1 px-4 md:px-6 lg:px-8 pt-16 pb-4">
                   <div className="mx-auto max-w-6xl">
                     <ErrorBoundary>
                       <Suspense fallback={<div className="min-h-screen" />}>

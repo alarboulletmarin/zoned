@@ -20,6 +20,7 @@
     "elevationTargetHint": "Optional - useful when you want flat terrain or a hillier route.",
     "elevationTargetEnable": "Add",
     "elevationTargetDisable": "Ignore",
+    "elevationFree": "Free",
     "elevationTargetValue": "Target",
     "elevationUnit": "m",
     "elevationMin": "0 m",

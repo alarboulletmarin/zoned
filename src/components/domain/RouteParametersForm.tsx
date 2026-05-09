@@ -74,6 +74,14 @@ const MAX_DISTANCE_KM_BY_DISCIPLINE: Record<Discipline, number> = {
   swimming: 50,
 };
 
+/**
+ * Quick-pick elevation targets for the compact mobile chip popover.
+ * Shared with the slider so a tap on a preset matches the snap step
+ * (10 m). Filtered by `maxAscentM` at render time so a 1000 m preset
+ * doesn't show on a 5 km running route capped at 400 m.
+ */
+const ELEVATION_PRESETS = [0, 100, 300, 600, 1000] as const;
+
 function clampDistance(km: number, max: number): number {
   if (!Number.isFinite(km)) return 1;
   return Math.min(max, Math.max(1, Math.round(km * 2) / 2));
@@ -232,23 +240,21 @@ export function RouteParametersForm({
   const selectedShape = shapeOptions.find((o) => o.value === shape);
 
   if (compact) {
-    // Two-option toggles flip directly on tap: a popover for a binary
-    // choice is one tap of friction too many (Linear / Strava / Spotify
-    // all use direct toggles). Distance, being continuous, keeps a
-    // popover Slider with quick-pick chips.
-    const toggleDiscipline = () =>
-      setDiscipline((d) => (d === "running" ? "cycling" : "running"));
-    const toggleShape = () =>
-      setShape((s) => (s === "loop" ? "out_and_back" : "loop"));
-
-    // Common chip class. `data-[state=open]` lets Radix flip the look
-    // when the linked Popover opens — no React mirror needed.
+    // Strava Routes 2025 mobile pattern:
+    //   • Row 1: sport pill (icon-only with chevron) + address field
+    //     + GPS + submit, all aligned in a single search-bar height.
+    //   • Row 2: 3 filter chips (shape, distance, elevation) — text
+    //     labels, no icons, in an explicit horizontal scroll. Letting
+    //     the right edge be cut signals "more on the right" rather
+    //     than wrapping into orphan rows.
+    //
+    // The previous icon-only attempt for shape (loop/out-and-back) was
+    // dropped per Nielsen Norman: those pictograms have no universal
+    // convention and cost the user a guess. Shape now opens a small
+    // popover list, mirroring distance/elevation.
     const chipBase =
-      "inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-background px-3.5 text-sm font-medium transition-colors active:scale-[0.97] active:bg-accent data-[state=open]:border-primary data-[state=open]:bg-primary/10";
+      "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-background px-3.5 text-sm font-medium transition-colors active:scale-[0.97] active:bg-accent data-[state=open]:border-primary data-[state=open]:bg-primary/10";
 
-    // Curated quick-pick distances for the slider popover. Filter out
-    // values above the discipline ceiling so cycling-only marathons
-    // don't show up when the user is in running mode.
     const DISTANCE_PRESETS = [5, 10, 21.1, 42.2, 80].filter(
       (d) => d <= maxDistanceKm,
     );
@@ -256,39 +262,109 @@ export function RouteParametersForm({
     return (
       <form
         data-slot="route-form"
-        className="space-y-2.5 rounded-xl border border-border/60 bg-background p-3"
+        className="space-y-2"
         onSubmit={(e) => {
           e.preventDefault();
           submit();
         }}
       >
-        {/* Row 1 — filter chips. Discipline + Shape are tap-to-flip
-            (binary toggles, role="switch" for AT). Distance opens a
-            polished slider popover with quick presets. */}
-        <div className="-mx-3 flex gap-2 overflow-x-auto px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <button
-            type="button"
-            role="switch"
-            aria-checked={discipline === "cycling"}
-            aria-label={`${t("form.discipline")} : ${selectedDiscipline?.label}`}
-            onClick={toggleDiscipline}
-            className={chipBase}
-          >
-            {selectedDiscipline?.icon}
-            <span>{selectedDiscipline?.label}</span>
-          </button>
+        {/* Row 1 — Strava-style search bar: sport picker on the left,
+            address in the middle (flex-1), GPS + submit icons on the
+            right. Single line, tap targets ≥44px (Apple HIG). */}
+        <div className="flex items-center gap-2">
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                aria-label={`${t("form.discipline")} : ${selectedDiscipline?.label}`}
+                aria-haspopup="dialog"
+                className="inline-flex h-11 shrink-0 items-center gap-1 rounded-full border border-border/60 bg-background pl-2.5 pr-2 text-foreground transition-colors active:scale-[0.97] active:bg-accent data-[state=open]:border-primary [&_svg]:size-[18px]"
+              >
+                {selectedDiscipline?.icon}
+                <ChevronDown className="!size-4 opacity-60" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent align="start" sideOffset={8} className="w-44 p-1">
+              {disciplineOptions.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setDiscipline(opt.value)}
+                  data-active={discipline === opt.value}
+                  className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-left transition-colors hover:bg-accent data-[active=true]:bg-primary/10 data-[active=true]:text-primary [&_svg]:size-4"
+                >
+                  {opt.icon}
+                  <span>{opt.label}</span>
+                </button>
+              ))}
+            </PopoverContent>
+          </Popover>
 
-          <button
+          <div className="min-w-0 flex-1">
+            <AddressSearchInput
+              onSelect={(point, label) => updateStart(point, label)}
+              onClear={() => updateStart(null, null)}
+              selectedLabel={startLabel}
+              disabled={isLocating}
+            />
+          </div>
+
+          <Button
             type="button"
-            role="switch"
-            aria-checked={shape === "out_and_back"}
-            aria-label={`${t("form.shape")} : ${selectedShape?.label}`}
-            onClick={toggleShape}
-            className={chipBase}
+            variant={start ? "outline" : "secondary"}
+            size="icon"
+            onClick={requestGps}
+            disabled={isLocating}
+            aria-label={t("form.useGps")}
+            title={t("form.useGps")}
+            className="h-11 w-11 shrink-0"
           >
-            {selectedShape?.icon}
-            <span>{selectedShape?.label}</span>
-          </button>
+            {isLocating ? <Loader2 className="size-4 animate-spin" /> : <MapPin className="size-4" />}
+          </Button>
+          <Button
+            type="submit"
+            size="icon"
+            disabled={isGenerating || !start}
+            aria-label={t("form.generate")}
+            title={t("form.generate")}
+            className="h-11 w-11 shrink-0"
+          >
+            {isGenerating ? <Loader2 className="size-4 animate-spin" /> : <ArrowRight className="size-4" />}
+          </Button>
+        </div>
+
+        {/* Row 2 — filter chips, labelled text only, horizontal scroll
+            assumed when chips don't fit (cf. Strava Routes filter row).
+            Hidden scrollbars; if the row overflows the right edge,
+            iOS rubber-banding makes the affordance discoverable. */}
+        <div className="flex gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                aria-label={`${t("form.shape")} : ${selectedShape?.label}`}
+                aria-haspopup="dialog"
+                className={chipBase}
+              >
+                <span>{selectedShape?.label}</span>
+                <ChevronDown className="size-3.5 opacity-60" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent align="start" sideOffset={8} className="w-44 p-1">
+              {shapeOptions.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setShape(opt.value)}
+                  data-active={shape === opt.value}
+                  className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-left transition-colors hover:bg-accent data-[active=true]:bg-primary/10 data-[active=true]:text-primary [&_svg]:size-4"
+                >
+                  {opt.icon}
+                  <span>{opt.label}</span>
+                </button>
+              ))}
+            </PopoverContent>
+          </Popover>
 
           <Popover>
             <PopoverTrigger asChild>
@@ -320,18 +396,11 @@ export function RouteParametersForm({
               />
               <div className="flex flex-wrap gap-1.5">
                 {DISTANCE_PRESETS.map((d) => {
-                  // Tight tolerance — only the preset itself counts as
-                  // active. Once the user drags the slider, the chip
-                  // releases (slider step = 0.5 km, presets like 21.1 km
-                  // and 42.2 km are no longer matched).
                   const active = Math.abs(distanceKm - d) < 0.05;
                   return (
                     <button
                       key={d}
                       type="button"
-                      // Bypass clampDistance's 0.5 km rounding here so a
-                      // tap on "21.1 km" lands on exactly 21.1 km, not
-                      // 21.0 km. The slider still snaps elsewhere.
                       onClick={() => setDistanceKm(Math.min(d, maxDistanceKm))}
                       data-active={active}
                       className="rounded-full border border-border/60 px-2.5 py-1 text-xs tabular-nums transition-colors hover:bg-accent data-[active=true]:border-primary data-[active=true]:bg-primary/10 data-[active=true]:text-primary"
@@ -343,42 +412,78 @@ export function RouteParametersForm({
               </div>
             </PopoverContent>
           </Popover>
-        </div>
 
-        {/* Row 2 — address full-width with GPS as inline icon button. */}
-        <div className="flex items-center gap-2">
-          <div className="min-w-0 flex-1">
-            <AddressSearchInput
-              onSelect={(point, label) => updateStart(point, label)}
-              onClear={() => updateStart(null, null)}
-              selectedLabel={startLabel}
-              disabled={isLocating}
-            />
-          </div>
-          <Button
-            type="button"
-            variant={start ? "outline" : "secondary"}
-            size="icon"
-            onClick={requestGps}
-            disabled={isLocating}
-            aria-label={t("form.useGps")}
-            title={t("form.useGps")}
-            className="h-10 w-10 shrink-0"
-          >
-            {isLocating ? <Loader2 className="size-4 animate-spin" /> : <MapPin className="size-4" />}
-          </Button>
+          {maxAscentM > 0 && (
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  aria-label={t("form.elevationTarget")}
+                  aria-haspopup="dialog"
+                  className={`${chipBase} tabular-nums`}
+                >
+                  <span>
+                    {useElevationTarget && elevationGainTargetM > 0
+                      ? `↑ ${elevationGainTargetM} ${t("form.elevationUnit")}`
+                      : `↑ ${t("form.elevationFree")}`}
+                  </span>
+                  <ChevronDown className="size-3.5 opacity-60" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent align="start" sideOffset={8} className="w-72 space-y-3 p-4">
+                {/* No on/off toggle on mobile: zero is "libre" (auto),
+                    any positive value is the explicit target. The
+                    slider is always visible — moving it past 0 turns
+                    the chip into a hard target without an extra tap. */}
+                <div className="flex items-baseline justify-between">
+                  <span className="text-xs font-medium text-muted-foreground">
+                    {t("form.elevationTarget")}
+                  </span>
+                  <span className="text-base font-semibold tabular-nums">
+                    {useElevationTarget && elevationGainTargetM > 0
+                      ? `${elevationGainTargetM} ${t("form.elevationUnit")}`
+                      : t("form.elevationFree")}
+                  </span>
+                </div>
+                <Slider
+                  value={[useElevationTarget ? elevationGainTargetM : 0]}
+                  onValueChange={([v]) => {
+                    const next = clampAscent(v, maxAscentM);
+                    setElevationGainTargetM(next);
+                    setUseElevationTarget(next > 0);
+                  }}
+                  min={0}
+                  max={maxAscentM}
+                  step={10}
+                  aria-label={t("form.elevationTarget")}
+                  className="[&>span:first-child]:h-2 [&_[role=slider]]:size-5"
+                />
+                <div className="flex flex-wrap gap-1.5">
+                  {ELEVATION_PRESETS.filter((m) => m <= maxAscentM).map((m) => {
+                    const active =
+                      m === 0
+                        ? !useElevationTarget || elevationGainTargetM === 0
+                        : useElevationTarget && elevationGainTargetM === m;
+                    return (
+                      <button
+                        key={m}
+                        type="button"
+                        onClick={() => {
+                          setElevationGainTargetM(clampAscent(m, maxAscentM));
+                          setUseElevationTarget(m > 0);
+                        }}
+                        data-active={active}
+                        className="rounded-full border border-border/60 px-2.5 py-1 text-xs tabular-nums transition-colors hover:bg-accent data-[active=true]:border-primary data-[active=true]:bg-primary/10 data-[active=true]:text-primary"
+                      >
+                        {m === 0 ? t("form.elevationFree") : `${m} ${t("form.elevationUnit")}`}
+                      </button>
+                    );
+                  })}
+                </div>
+              </PopoverContent>
+            </Popover>
+          )}
         </div>
-
-        {/* Row 3 — primary CTA. */}
-        <Button
-          type="submit"
-          size="lg"
-          className="h-11 w-full text-base font-semibold"
-          disabled={isGenerating || !start}
-        >
-          {isGenerating && <Loader2 className="mr-2 size-4 animate-spin" />}
-          {t("form.generate")}
-        </Button>
       </form>
     );
   }

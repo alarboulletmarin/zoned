@@ -108,7 +108,7 @@ export function AddressSearchInput({
           placeholder={t("form.addressPlaceholder")}
           disabled={disabled}
           className={cn(
-            "w-full rounded-md border border-input bg-background py-2 pl-9 pr-9 text-sm",
+            "w-full rounded-md border border-input bg-background py-2 pl-9 pr-9 text-base",
             "placeholder:text-muted-foreground",
             "focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20",
             "disabled:cursor-not-allowed disabled:opacity-50",

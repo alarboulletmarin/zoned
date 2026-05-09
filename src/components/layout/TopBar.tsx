@@ -42,7 +42,7 @@ export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
   const theme = isDark ? "dark" : "light";
 
   return (
-    <header className="sticky top-0 z-50 h-12 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="fixed inset-x-0 top-0 z-50 h-12 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="relative flex h-full items-center px-4">
         {isMobile ? (
           /* Mobile */
