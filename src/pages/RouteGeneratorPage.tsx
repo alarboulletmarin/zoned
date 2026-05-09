@@ -498,16 +498,15 @@ export function RouteGeneratorPage() {
   // generous on tablet/desktop so the carto dominates the viewport instead
   // of being capped at 28rem like before. Override `sm:h-96` from the
   // RouteMap default so it doesn't kick in inside the mobile fixed wrapper.
-  // On md+ the map is expected to share the row height with the params
-  // sidebar — anything taller forces a page-level scroll past the form,
-  // which the user wants gone. The map shrinks slightly (-2rem) so the
-  // candidate strip + result panel still have room inside the same
-  // sticky column without the column overflowing the viewport.
+  // Komoot/AllTrails pattern on md+: the map fills its parent (which is
+  // a sticky full-height column right next to the params + results
+  // rail). On smaller screens we keep an explicit height so the map
+  // doesn't collapse to nothing.
   const mapHeightClass = isMobile
     ? "h-full w-full sm:h-full rounded-none border-0"
     : isMapExpanded
       ? "h-[calc(100svh-10rem)] sm:h-[calc(100svh-10rem)] lg:h-[calc(100svh-10rem)]"
-      : "h-72 sm:h-96 md:h-[calc(100svh-18rem)] lg:h-[calc(100svh-16rem)]";
+      : "h-72 sm:h-96 md:h-full md:min-h-[480px]";
 
   const presetNode = trainingPreset ? (
     <>
@@ -945,7 +944,13 @@ export function RouteGeneratorPage() {
               form keeps itself ~150-180px tall; cap at 240px to give room
               for an optional plan-preset card without ever stealing more
               than 30 % of the viewport. */}
-          <div className="max-h-[200px] shrink-0 space-y-2 overflow-y-auto overscroll-contain border-b border-border/60 px-3 py-2 [touch-action:pan-y]">
+          {/* No max-h / overflow on the top form: an `overflow:auto`
+              parent clips the address autocomplete dropdown so the
+              Nominatim suggestions disappear behind the map. The form
+              already wraps tightly (~120 px) so letting it size to its
+              content is safe and the popover-based filters expand
+              outward via Radix Portal anyway. */}
+          <div className="shrink-0 space-y-2 border-b border-border/60 px-3 py-2">
             {presetNode}
             <RouteParametersForm
               key={trainingPreset ? `${trainingPreset.planSessionRef?.planId}-${trainingPreset.planSessionRef?.weekNumber}-${trainingPreset.planSessionRef?.sessionIndex}` : "manual-route-form"}
@@ -1069,12 +1074,19 @@ export function RouteGeneratorPage() {
     );
   }
 
-  // ─── Desktop / Tablet: 2-col grid (form + map+results) ────────────
+  // ─── Desktop / Tablet: 2-col one-page layout ─────────────────────
+  // The interactive zone (header + form + map + candidates) all fits
+  // in a single viewport with no page-level scroll. The left rail
+  // hosts form + result panel and scrolls internally if it overflows.
+  // The right column stacks map (flex-1, fills) + candidates strip
+  // (auto height, never grows). "Comment ça marche?" + Zoned footer
+  // are still rendered below for users who do want to scroll deeper —
+  // they're just not part of the always-visible workspace.
   return (
     <>
       <SEOHead title={t("title")} description={t("subtitle")} canonical="/routes" />
-      <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <header className="mb-6 space-y-1">
+      <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 lg:px-8 md:flex md:flex-col md:h-[calc(100svh-4rem)]">
+        <header className="mb-3 space-y-1 shrink-0">
           <h1 className="text-2xl font-bold sm:text-3xl">{t("title")}</h1>
           <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
           {headerLinks}
@@ -1082,29 +1094,39 @@ export function RouteGeneratorPage() {
 
         <div
           className={cn(
-            "grid grid-cols-1 gap-6 xl:gap-8",
-            isMapExpanded ? "md:grid-cols-1" : "md:grid-cols-[320px_1fr]",
+            "grid grid-cols-1 gap-4 md:flex-1 md:min-h-0 md:items-stretch xl:gap-6",
+            isMapExpanded ? "md:grid-cols-1" : "md:grid-cols-[380px_1fr]",
           )}
         >
-          <aside className={cn("min-w-0 space-y-4", isMapExpanded && "md:hidden")}>
-            {presetNode}
-            {formNode}
-          </aside>
-
-          <main
+          {/* Left rail: params on top, result panel below. Scrolls
+              internally on md+ when the form + result outgrow the
+              viewport (small laptops). overscroll-contain prevents the
+              scroll from leaking into the page. */}
+          <aside
             className={cn(
-              "min-w-0 space-y-4",
-              // On md+ the column is capped at the viewport height (minus
-              // the topbar) and scrolls internally — the page itself
-              // never grows past one viewport, matching the user's
-              // request that the map column never trails past the form.
-              !isMapExpanded &&
-                "md:sticky md:top-20 md:self-start md:max-h-[calc(100svh-6rem)] md:overflow-y-auto md:pr-1",
+              "min-w-0 space-y-3 md:flex md:flex-col md:min-h-0",
+              !isMapExpanded && "md:overflow-y-auto md:overscroll-contain md:pr-1",
+              isMapExpanded && "md:hidden",
             )}
           >
-            {mapBlock}
-            {candidatesNode}
+            {presetNode}
+            {formNode}
             {resultsNode}
+          </aside>
+
+          {/* Right column: map (flex-1) + candidates strip stacked
+              vertically. Together they fill the column without any
+              scrollbar — the candidates row never grows past its
+              content height, the map absorbs the rest. */}
+          <main
+            className={cn(
+              "min-w-0 md:flex md:flex-col md:min-h-0 md:gap-3",
+            )}
+          >
+            <div className="md:flex-1 md:min-h-0">{mapBlock}</div>
+            {candidates.length > 0 && (
+              <div className="md:shrink-0">{candidatesNode}</div>
+            )}
           </main>
         </div>
 

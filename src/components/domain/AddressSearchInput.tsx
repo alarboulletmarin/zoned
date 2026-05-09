@@ -136,7 +136,7 @@ export function AddressSearchInput({
         <ul
           id="address-suggestions"
           role="listbox"
-          className="absolute left-0 right-0 z-30 mt-1 max-h-64 overflow-y-auto rounded-md border border-border bg-popover shadow-lg"
+          className="absolute left-0 right-0 z-[1200] mt-1 max-h-64 overflow-y-auto rounded-md border border-border bg-popover shadow-lg"
         >
           {results.length === 0 ? (
             <li className="px-3 py-2 text-xs text-muted-foreground">

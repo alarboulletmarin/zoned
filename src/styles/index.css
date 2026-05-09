@@ -827,3 +827,18 @@
   max-width: none !important;
   max-height: none !important;
 }
+
+/* iOS Safari auto-zooms the viewport whenever a focused input has a
+   computed font-size below 16px. Tailwind's `text-base` gives 16px on a
+   default html root, but any per-page reset / scoped styling can drop it
+   below the threshold and trigger the zoom — and the user can't easily
+   zoom back out. Forcing a 16px minimum on every editable form control
+   under the tablet breakpoint kills the auto-zoom without disabling
+   pinch-to-zoom for accessibility. */
+@media (max-width: 767px) {
+  input,
+  textarea,
+  select {
+    font-size: max(16px, 1rem);
+  }
+}
