@@ -12,8 +12,8 @@ export const nutritionSections: NutritionSection[] = [
     content: [
       {
         type: "paragraph",
-        text: "L'alimentation quotidienne du coureur doit être adaptée au volume et à l'intensité de l'entraînement. Les recommandations suivantes sont basées sur le consensus IOC et les travaux de Burke et al. (2011).",
-        textEn: "A runner's daily nutrition should be tailored to training volume and intensity. The following recommendations are based on the IOC consensus and Burke et al. (2011).",
+        text: "L'alimentation quotidienne du coureur doit être adaptée au volume et à l'intensité de l'entraînement. Les recommandations suivantes sont basées sur le consensus IOC, Burke et al. (2011) et la mise à jour 2025 de Witard et al. (Sports Medicine) qui revoit à la hausse les besoins en protéines des coureurs.",
+        textEn: "A runner's daily nutrition should be tailored to training volume and intensity. The following recommendations are based on the IOC consensus, Burke et al. (2011) and the 2025 update by Witard et al. (Sports Medicine), which revises runner protein needs upward.",
       },
       {
         type: "table",
@@ -21,26 +21,32 @@ export const nutritionSections: NutritionSection[] = [
           {
             label: "Entraînement léger (30-60 min/jour)",
             labelEn: "Light training (30-60 min/day)",
-            value: "3-5g glucides/kg, 1.2-1.4g protéines/kg, 1g lipides/kg",
-            valueEn: "3-5g carbs/kg, 1.2-1.4g protein/kg, 1g fat/kg",
+            value: "3-5 g glucides/kg, 1,4-1,6 g protéines/kg, 1 g lipides/kg",
+            valueEn: "3-5 g carbs/kg, 1.4-1.6 g protein/kg, 1 g fat/kg",
           },
           {
             label: "Entraînement modéré (60-90 min/jour)",
             labelEn: "Moderate training (60-90 min/day)",
-            value: "5-7g glucides/kg, 1.4-1.6g protéines/kg, 1-1.2g lipides/kg",
-            valueEn: "5-7g carbs/kg, 1.4-1.6g protein/kg, 1-1.2g fat/kg",
+            value: "5-7 g glucides/kg, 1,6-1,8 g protéines/kg, 1-1,2 g lipides/kg",
+            valueEn: "5-7 g carbs/kg, 1.6-1.8 g protein/kg, 1-1.2 g fat/kg",
           },
           {
             label: "Entraînement intensif (90-120+ min/jour)",
             labelEn: "Heavy training (90-120+ min/day)",
-            value: "7-10g glucides/kg, 1.6-1.8g protéines/kg, 1-1.5g lipides/kg",
-            valueEn: "7-10g carbs/kg, 1.6-1.8g protein/kg, 1-1.5g fat/kg",
+            value: "7-10 g glucides/kg, 1,8-2,0 g protéines/kg, 1-1,5 g lipides/kg",
+            valueEn: "7-10 g carbs/kg, 1.8-2.0 g protein/kg, 1-1.5 g fat/kg",
           },
           {
             label: "Double séance ou ultra",
             labelEn: "Double session or ultra",
-            value: "10-12g glucides/kg, 1.8-2.0g protéines/kg, 1.5g lipides/kg",
-            valueEn: "10-12g carbs/kg, 1.8-2.0g protein/kg, 1.5g fat/kg",
+            value: "10-12 g glucides/kg, 2,0-2,2 g protéines/kg, 1,5 g lipides/kg",
+            valueEn: "10-12 g carbs/kg, 2.0-2.2 g protein/kg, 1.5 g fat/kg",
+          },
+          {
+            label: "Jours de repos",
+            labelEn: "Rest days",
+            value: "Garder les protéines à 2,0+ g/kg (la réparation continue)",
+            valueEn: "Keep protein at 2.0+ g/kg (repair continues)",
           },
         ],
       },
@@ -53,8 +59,12 @@ export const nutritionSections: NutritionSection[] = [
         type: "list",
         items: [
           {
-            text: "Répartir les protéines sur 4-5 prises de 0.3-0.4g/kg pour optimiser la synthèse protéique musculaire.",
-            textEn: "Spread protein across 4-5 servings of 0.3-0.4g/kg to optimize muscle protein synthesis.",
+            text: "Répartir les protéines sur 4 prises de 0,3-0,4 g/kg toutes les 3-4 h (Areta 2013) : la synthèse musculaire augmente de 31 à 48 % vs 1-2 grosses prises. 25-30 g par repas suffisent à atteindre le seuil de leucine.",
+            textEn: "Spread protein across 4 servings of 0.3-0.4 g/kg every 3-4 h (Areta 2013): muscle protein synthesis increases by 31 to 48% vs 1-2 large meals. 25-30 g per meal hits the leucine threshold.",
+          },
+          {
+            text: "Caséine avant le coucher (40 g de fromage blanc ou yaourt grec) : nourrit les muscles toute la nuit (Trommelen 2023).",
+            textEn: "Casein before bed (40 g cottage cheese or Greek yogurt): feeds muscles all night (Trommelen 2023).",
           },
           {
             text: "Privilégier les glucides complexes (riz, pâtes, patates douces, avoine) en dehors de la fenêtre péri-effort.",
@@ -296,8 +306,8 @@ export const nutritionSections: NutritionSection[] = [
           {
             label: "> 150 min (marathon+)",
             labelEn: "> 150 min (marathon+)",
-            value: "60-90g glucides/h. Ratio glucose:fructose 2:1 obligatoire au-delà de 60g/h.",
-            valueEn: "60-90g carbs/h. 2:1 glucose:fructose ratio mandatory above 60g/h.",
+            value: "60-120 g glucides/h. Ratio glucose:fructose 1:0.8 obligatoire au-delà de 90 g/h (Rowlands 2020). 120 g/h réservé aux coureurs avec estomac entraîné (8-12 sem).",
+            valueEn: "60-120 g carbs/h. 1:0.8 glucose:fructose ratio mandatory above 90 g/h (Rowlands 2020). 120 g/h reserved for runners with trained gut (8-12 wks).",
           },
         ],
       },
@@ -324,8 +334,8 @@ export const nutritionSections: NutritionSection[] = [
       },
       {
         type: "tip",
-        text: "Entraînement du système digestif (gut training) : consommer des glucides pendant les séances longues d'entraînement. Commencez par 30g/h et augmentez de 10g/h toutes les 2 semaines jusqu'à votre cible de course.",
-        textEn: "Gut training: consume carbs during long training sessions. Start at 30g/h and increase by 10g/h every 2 weeks up to your race target.",
+        text: "Habituer son estomac : consommer des glucides pendant les séances longues. Démarrer à 30 g/h, monter à 60 g/h en 4 semaines, puis 90 g/h voire 120 g/h sur 8-12 semaines. Marques utilisant le ratio 1:0.8 : Maurten, Precision Fuel, SiS Beta Fuel, Styrkr.",
+        textEn: "Train your gut: consume carbs during long sessions. Start at 30 g/h, build to 60 g/h over 4 weeks, then 90 g/h or even 120 g/h over 8-12 weeks. Brands using the 1:0.8 ratio: Maurten, Precision Fuel, SiS Beta Fuel, Styrkr.",
       },
       {
         type: "warning",
@@ -433,35 +443,41 @@ export const nutritionSections: NutritionSection[] = [
     content: [
       {
         type: "paragraph",
-        text: "La fenêtre de récupération dans les 30-60 minutes après l'effort est cruciale pour reconstituer le glycogène et initier la réparation musculaire. Les recommandations sont basées sur le consensus IOC (Maughan et al. 2018).",
-        textEn: "The recovery window within 30-60 minutes after exercise is crucial for glycogen replenishment and initiating muscle repair. Recommendations are based on the IOC consensus (Maughan et al. 2018).",
+        text: "Le mythe de la « fenêtre de 30 minutes » a été largement démonté (Aragon & Schoenfeld 2013, méta-analyse Margolis 2021). La vraie fenêtre est de 4-6 heures pour reconstituer le glycogène et 24-48 heures pour la réparation musculaire. La recharge rapide ne compte vraiment que si tu enchaînes une autre séance dans les 4 heures.",
+        textEn: "The 30-minute window myth has been largely debunked (Aragon & Schoenfeld 2013, Margolis 2021 meta-analysis). The real window is 4-6 hours for glycogen and 24-48 hours for muscle repair. Quick refill matters mainly if you have another session within 4 hours.",
       },
       {
         type: "table",
         rows: [
           {
-            label: "0-30 min après l'effort",
-            labelEn: "0-30 min post-exercise",
-            value: "1-1.2g glucides/kg + 0.3-0.4g protéines/kg",
-            valueEn: "1-1.2g carbs/kg + 0.3-0.4g protein/kg",
+            label: "0-30 min (si autre séance < 4 h)",
+            labelEn: "0-30 min (if another session < 4 h)",
+            value: "1-1,2 g glucides/kg + 0,3-0,4 g protéines/kg",
+            valueEn: "1-1.2 g carbs/kg + 0.3-0.4 g protein/kg",
           },
           {
-            label: "Toutes les 2h pendant 6h",
-            labelEn: "Every 2h for 6h",
-            value: "1g glucides/kg par prise",
-            valueEn: "1g carbs/kg per serving",
+            label: "Dans les 2 h (cas standard)",
+            labelEn: "Within 2 h (standard case)",
+            value: "Repas complet : glucides + protéines + légumes",
+            valueEn: "Full meal: carbs + protein + vegetables",
           },
           {
             label: "Réhydratation",
             labelEn: "Rehydration",
-            value: "1.5x le poids perdu, avec sodium",
+            value: "1,5x le poids perdu, avec sodium",
             valueEn: "1.5x weight lost, with sodium",
           },
           {
             label: "Protéines totales J+0",
             labelEn: "Total protein D+0",
-            value: "1.6-1.8g/kg réparties sur la journée",
-            valueEn: "1.6-1.8g/kg spread across the day",
+            value: "1,8-2,2 g/kg réparties sur 4 prises (Witard 2025)",
+            valueEn: "1.8-2.2 g/kg spread across 4 servings (Witard 2025)",
+          },
+          {
+            label: "Réparation profonde",
+            labelEn: "Deep repair",
+            value: "24-48 h. Casein 40 g avant coucher (Trommelen 2023)",
+            valueEn: "24-48 h. 40 g casein before bed (Trommelen 2023)",
           },
         ],
       },
@@ -469,8 +485,8 @@ export const nutritionSections: NutritionSection[] = [
         type: "list",
         items: [
           {
-            text: "Option rapide : lait chocolaté (ratio glucides:protéines 3-4:1 naturellement optimal). 500ml = ~50g glucides + 16g protéines.",
-            textEn: "Quick option: chocolate milk (naturally optimal 3-4:1 carb:protein ratio). 500ml = ~50g carbs + 16g protein.",
+            text: "Option rapide : lait chocolaté (validé scientifiquement, Pritchett 2012). 500 ml = ~50 g glucides + 16 g protéines. Note : le ratio « magique » 3:1 ou 4:1 est un mythe — l'effet vient des calories totales, pas du ratio (Margolis 2021).",
+            textEn: "Quick option: chocolate milk (scientifically validated, Pritchett 2012). 500 ml = ~50 g carbs + 16 g protein. Note: the 'magic' 3:1 or 4:1 ratio is a myth — the effect comes from total calories, not the ratio (Margolis 2021).",
           },
           {
             text: "Option complète : banane + shaker protéine (30g whey) + poignée de bretzels salés.",
@@ -530,8 +546,8 @@ export const nutritionSections: NutritionSection[] = [
           {
             label: "Protéines",
             labelEn: "Protein",
-            value: "Maintenir 1.6-1.8g/kg/jour (la réparation est en cours)",
-            valueEn: "Maintain 1.6-1.8g/kg/day (repair is ongoing)",
+            value: "Maintenir 1,8-2,2 g/kg/jour (Witard 2025, la réparation continue)",
+            valueEn: "Maintain 1.8-2.2 g/kg/day (Witard 2025, repair continues)",
           },
           {
             label: "Lipides",

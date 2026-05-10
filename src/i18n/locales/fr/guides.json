@@ -35,15 +35,15 @@
     "tips": "Conseils",
     "faq": {
       "carbsPerDay": "Combien de glucides un coureur doit-il consommer par jour ?",
-      "carbsPerDayAnswer": "Cela dépend du volume d'entraînement : 3-5g/kg pour un entraînement léger (30-60 min/jour), 5-7g/kg pour modéré (60-90 min/jour), 7-10g/kg pour intensif (90-120+ min/jour), et 10-12g/kg pour les doubles séances ou ultra. Basé sur le consensus IOC et Burke et al. (2011).",
+      "carbsPerDayAnswer": "Cela dépend du volume d'entraînement : 3-5 g/kg pour un entraînement léger (30-60 min/jour), 5-7 g/kg pour modéré (60-90 min/jour), 7-10 g/kg pour intensif (90-120+ min/jour), et 10-12 g/kg pour les doubles séances ou ultra. Pour les protéines, viser 1,8 g/kg/jour (Witard 2025), réparti sur 4 prises de 0,3-0,4 g/kg.",
       "carbLoading": "Qu'est-ce que la surcharge glucidique et quand la pratiquer ?",
       "carbLoadingAnswer": "La surcharge glucidique maximise les réserves de glycogène musculaire avant une compétition de plus de 90 minutes. Le protocole moderne consiste à consommer 8-12g de glucides/kg/jour pendant les 3 jours avant la course tout en réduisant le volume d'entraînement à 30-50%. Elle n'est utile qu'à partir du semi-marathon.",
       "raceFueling": "Combien dois-je manger et boire pendant une course ?",
-      "raceFuelingAnswer": "Pour les courses de moins de 60 min : eau uniquement. 60-90 min : 30-60g de glucides/h. 90-150 min (semi-marathon) : 60g de glucides/h. Plus de 150 min (marathon+) : 60-90g de glucides/h avec un ratio glucose:fructose 2:1 au-delà de 60g/h. Hydratation : 400-800ml/h individualisée selon votre taux de sudation. Commencer le ravitaillement dans les 20 premières minutes.",
+      "raceFuelingAnswer": "Pour les courses de moins de 60 min : eau uniquement. 60-90 min : 30-60 g de glucides/h. 90-150 min (semi-marathon) : 60-90 g de glucides/h. Plus de 150 min (marathon+) : 60-120 g de glucides/h avec un ratio glucose:fructose 1:0.8 obligatoire au-delà de 90 g/h (Rowlands 2020). Atteindre 120 g/h demande 8-12 semaines d'entraînement digestif. Hydratation : 500-800 ml/h selon ton taux de sudation. Commencer le ravitaillement dans les 20 premières minutes.",
       "preRaceMeal": "Que dois-je manger avant une course ?",
       "preRaceMealAnswer": "Manger 3-4 heures avant le départ : 1-4g de glucides/kg, protéines modérées (15-25g), faibles lipides (<15g), faibles fibres (<10g). Options : toast pain blanc avec confiture et banane, porridge au miel, ou riz blanc avec poulet maigre. S'hydrater avec 5-7ml/kg 4 heures avant. Éviter les produits laitiers lourds, les aliments épicés, l'excès de caféine et les aliments non testés.",
       "recovery": "Que dois-je manger après une course pour récupérer ?",
-      "recoveryAnswer": "Dans les 30 minutes : 1-1,2g de glucides/kg + 0,3-0,4g de protéines/kg (ex : lait chocolaté ou banane avec shaker protéine). Puis 1g de glucides/kg toutes les 2 heures pendant 6 heures. Réhydrater avec 1,5x le poids perdu, avec sodium. Éviter l'alcool pendant 4-6 heures après la course."
+      "recoveryAnswer": "La fameuse « fenêtre de 30 minutes » est un mythe : la vraie fenêtre est de 4-6 h pour le glycogène et 24-48 h pour les protéines (Aragon & Schoenfeld 2013, Margolis 2021). Le repas suivant suffit dans 9 cas sur 10. Si tu enchaînes une autre séance dans les 4 h : 1 à 1,2 g de glucides/kg + 0,3 g de protéines/kg (lait chocolaté validé). Sinon, repas complet dans les 2 h. Caséine 40 g avant le coucher (Trommelen 2023). Réhydrater à 1,5x le poids perdu, avec sodium. Éviter l'alcool 4-6 h après (-24 % de réparation musculaire)."
     }
   },
   "racePrep": {

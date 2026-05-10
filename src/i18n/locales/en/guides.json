@@ -35,15 +35,15 @@
     "tips": "Tips",
     "faq": {
       "carbsPerDay": "How many carbs should a runner eat per day?",
-      "carbsPerDayAnswer": "It depends on training volume: 3-5g/kg for light training (30-60 min/day), 5-7g/kg for moderate (60-90 min/day), 7-10g/kg for heavy (90-120+ min/day), and 10-12g/kg for double sessions or ultra. Based on IOC consensus and Burke et al. (2011).",
+      "carbsPerDayAnswer": "It depends on training volume: 3-5 g/kg for light training (30-60 min/day), 5-7 g/kg for moderate (60-90 min/day), 7-10 g/kg for heavy (90-120+ min/day), and 10-12 g/kg for double sessions or ultra. For protein, aim for 1.8 g/kg/day (Witard 2025), spread across 4 servings of 0.3-0.4 g/kg.",
       "carbLoading": "What is carbohydrate loading and when should I do it?",
       "carbLoadingAnswer": "Carbohydrate loading maximizes muscle glycogen stores before competitions lasting over 90 minutes. The modern protocol involves consuming 8-12g carbs/kg/day for 3 days before the race while reducing training volume to 30-50%. It is only useful for half-marathon distance and above.",
       "raceFueling": "How much should I eat and drink during a race?",
-      "raceFuelingAnswer": "For races under 60 min: water only. 60-90 min: 30-60g carbs/hour. 90-150 min (half-marathon): 60g carbs/hour. Over 150 min (marathon+): 60-90g carbs/hour with a 2:1 glucose:fructose ratio above 60g/h. Hydration: 400-800ml/hour individualized to your sweat rate. Start fueling within the first 20 minutes.",
+      "raceFuelingAnswer": "For races under 60 min: water only. 60-90 min: 30-60 g carbs/hour. 90-150 min (half-marathon): 60-90 g carbs/hour. Over 150 min (marathon+): 60-120 g carbs/hour with a 1:0.8 glucose:fructose ratio mandatory above 90 g/h (Rowlands 2020). Reaching 120 g/h requires 8-12 weeks of gut training. Hydration: 500-800 ml/hour based on your sweat rate. Start fueling within the first 20 minutes.",
       "preRaceMeal": "What should I eat before a race?",
       "preRaceMealAnswer": "Eat 3-4 hours before start: 1-4g carbs/kg, moderate protein (15-25g), low fat (<15g), low fiber (<10g). Good options: white toast with jam and banana, porridge with honey, or white rice with lean chicken. Hydrate with 5-7ml/kg 4 hours before. Avoid heavy dairy, spicy foods, excess caffeine, and untested foods.",
       "recovery": "What should I eat after a race for recovery?",
-      "recoveryAnswer": "Within 30 minutes: 1-1.2g carbs/kg + 0.3-0.4g protein/kg (e.g., chocolate milk or banana with protein shake). Then 1g carbs/kg every 2 hours for 6 hours. Rehydrate with 1.5x the weight lost, including sodium. Avoid alcohol for 4-6 hours post-race."
+      "recoveryAnswer": "The famous '30-minute window' is a myth: the real window is 4-6 h for glycogen and 24-48 h for protein (Aragon & Schoenfeld 2013, Margolis 2021). The next meal is enough in 9 cases out of 10. If you have another session within 4 h: 1 to 1.2 g carbs/kg + 0.3 g protein/kg (chocolate milk validated). Otherwise, full meal within 2 h. 40 g casein before sleep (Trommelen 2023). Rehydrate at 1.5x weight lost, with sodium. Avoid alcohol 4-6 h after (-24% muscle repair)."
     }
   },
   "racePrep": {

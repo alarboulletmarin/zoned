@@ -26,8 +26,14 @@ export interface FuelingCheckpoint {
 }
 
 /**
- * Fueling stratégies based on Jeukendrup 2014 and ACSM Position Stand.
- * Indexed by duration thresholds.
+ * Fueling strategies based on Jeukendrup 2014, Rowlands 2020,
+ * Viribay 2020 (120 g/h), and IOC consensus.
+ *
+ * Note on ratios:
+ *   - Below 90 g/h: glucose alone or 2:1 glucose:fructose works equally well.
+ *   - Above 90 g/h: 1:0.8 glucose:fructose ratio is optimal (Rowlands 2020,
+ *     +45% oxidation vs glucose alone, fewer GI symptoms).
+ *   - 120 g/h achievable only with 8-12 weeks of gut training (Viribay 2020).
  */
 const STRATEGIES: FuelingStrategy[] = [
   {
@@ -37,9 +43,9 @@ const STRATEGIES: FuelingStrategy[] = [
     sodiumMgPerHour: [0, 0],
     gelFrequencyMin: 0,
     notes:
-      "Eau uniquement. Un rinçage de bouche avec boisson glucidique peut améliorer la performance.",
+      "Eau uniquement. Un rinçage de bouche avec boisson glucidique peut donner un léger coup de boost (gain ~1-3 %).",
     notesEn:
-      "Water only. A carbohydrate mouth rinse can still improve performance.",
+      "Water only. A carb mouth rinse can give a small boost (~1-3% gain).",
   },
   {
     durationRange: [60, 90],
@@ -48,35 +54,37 @@ const STRATEGIES: FuelingStrategy[] = [
     sodiumMgPerHour: [0, 300],
     gelFrequencyMin: 30,
     notes:
-      "Début de l'apport glucidique. Glucides simples (glucose, maltodextrine) suffisants.",
+      "Début de l'apport glucidique. Glucose seul ou ratio 2:1 conviennent. Pas besoin de 1:0.8 à ce niveau.",
     notesEn:
-      "Start carbohydrate intake. Single transportable carbs (glucose, maltodextrin) are sufficient.",
+      "Start carb intake. Glucose alone or 2:1 ratio both work. No need for 1:0.8 at this level.",
   },
   {
     durationRange: [90, 150],
-    carbsPerHourG: [60, 60],
+    carbsPerHourG: [60, 90],
     fluidMlPerHour: [400, 800],
     sodiumMgPerHour: [300, 500],
     gelFrequencyMin: 25,
     notes:
-      "Apport régulier indispensable. Commencer tôt, ne pas attendre la faim.",
+      "Apport régulier indispensable. Au-delà de 60 g/h, ratio 1:0.8 glucose:fructose recommandé.",
     notesEn:
-      "Regular intake essential. Start early, do not wait until you feel hungry.",
+      "Regular intake essential. Above 60 g/h, 1:0.8 glucose:fructose ratio recommended.",
   },
   {
     durationRange: [150, Infinity],
     carbsPerHourG: [60, 90],
     fluidMlPerHour: [500, 800],
-    sodiumMgPerHour: [400, 600],
-    gelFrequencyMin: 20,
+    sodiumMgPerHour: [400, 800],
+    gelFrequencyMin: 25,
     notes:
-      "Utiliser un ratio glucose:fructose 2:1 pour maximiser l'absorption (jusqu'à 90g/h). Entraîner le système digestif.",
+      "Cible 60-90 g/h, à atteindre par mix gels + boisson énergétique. Ratio 1:0.8 recommandé au-delà de 60 g/h. Les coureurs élites peuvent monter à 120 g/h après 8-12 sem d'entraînement digestif.",
     notesEn:
-      "Use a 2:1 glucose:fructose ratio to maximize absorption (up to 90g/h). Train your gut.",
+      "Target 60-90 g/h, achieved via gels + sports drink mix. 1:0.8 ratio recommended above 60 g/h. Elite runners can reach 120 g/h after 8-12 wks of gut training.",
   },
 ];
 
 const CARBS_PER_GEL = 25; // grams, typical gel
+/** Realistic split: gels cover ~60% of carbs, sports drink the rest (~40%). */
+const CARBS_FROM_GELS_RATIO = 0.6;
 
 function findStrategy(durationMin: number): FuelingStrategy {
   for (const s of STRATEGIES) {
@@ -92,8 +100,9 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 /**
- * Calculate personalized fueling plan based on Jeukendrup 2014 guidelines,
- * ACSM Position Stand, and IOC Consensus on Sports Nutrition.
+ * Calculate personalized fueling plan based on Jeukendrup 2014, Rowlands 2020
+ * (1:0.8 ratio), Viribay 2020 (120 g/h ceiling), ACSM Position Stand, and
+ * IOC Consensus on Sports Nutrition (2018, 2023).
  */
 export function calculateFueling(input: FuelingInput): FuelingResult {
   const { durationMin, distanceKm, bodyWeightKg } = input;
@@ -130,11 +139,14 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
   );
 
   // --- Gel calculation ---
+  // Realistic: gels provide ~60% of carbs, the rest comes from sports drink.
+  // Without this, a 3h30 marathon at 80 g/h would compute as 14 gels — unrealistic.
   const gelFrequencyMin =
     carbsPerHourG > 0 ? strategy.gelFrequencyMin : 0;
+  const carbsFromGelsG = totalCarbsG * CARBS_FROM_GELS_RATIO;
   const gelCount =
     gelFrequencyMin > 0
-      ? Math.ceil(totalCarbsG / CARBS_PER_GEL)
+      ? Math.ceil(carbsFromGelsG / CARBS_PER_GEL)
       : 0;
 
   // Electrolyte drink recommended for > 90 min or significant sodium need
@@ -229,10 +241,13 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
   }
 
   // Post-race recovery checkpoint
+  // Note: the "30 min window" myth is largely debunked (Aragon & Schoenfeld 2013,
+  // Margolis 2021). Real glycogen window is 4-6h. Quick refill matters mainly if
+  // another session is planned within 4h. Otherwise, the next regular meal is fine.
   timeline.push({
     timeMin: durationMin,
-    action: `Arrivée ! Dans les 30min : ${Math.round(weight * 1)}–${Math.round(weight * 1.2)}g glucides + ${Math.round(weight * 0.3)}–${Math.round(weight * 0.4)}g protéines. Réhydrater : ${Math.round(totalFluidMl * 0.5)}ml minimum.`,
-    actionEn: `Finish! Within 30min: ${Math.round(weight * 1)}–${Math.round(weight * 1.2)}g carbs + ${Math.round(weight * 0.3)}–${Math.round(weight * 0.4)}g protein. Rehydrate: ${Math.round(totalFluidMl * 0.5)}ml minimum.`,
+    action: `Arrivée ! Dans les 2 h : ${Math.round(weight * 1)}–${Math.round(weight * 1.2)}g glucides + ${Math.round(weight * 0.3)}–${Math.round(weight * 0.4)}g protéines. Réhydrater : ${Math.round(totalFluidMl * 0.5)}ml minimum. La fenêtre 30 min n'est cruciale que si tu enchaînes une autre séance sous 4 h.`,
+    actionEn: `Finish! Within 2h: ${Math.round(weight * 1)}–${Math.round(weight * 1.2)}g carbs + ${Math.round(weight * 0.3)}–${Math.round(weight * 0.4)}g protein. Rehydrate: ${Math.round(totalFluidMl * 0.5)}ml minimum. The 30-min window matters mainly if another session is within 4h.`,
   });
 
   // Sort timeline by time
@@ -248,19 +263,29 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
 
   if (durationMin > 90) {
     tips.push({
-      text: "Entraînez votre système digestif : commencez par 30g/h et augmentez progressivement sur 4-6 semaines.",
-      textEn: "Train your gut: start at 30g/h and gradually increase over 4-6 weeks.",
+      text: "Habituez votre estomac : commencez par 30 g/h et augmentez progressivement sur 6-12 semaines pour atteindre votre cible.",
+      textEn: "Train your gut: start at 30 g/h and gradually increase over 6-12 weeks to reach your target.",
+    });
+  }
+
+  if (carbsPerHourG > 60) {
+    tips.push({
+      text: `Au-delà de 60 g/h, utilisez un ratio glucose:fructose 1:0.8 (Maurten, Precision Fuel, SiS Beta Fuel l'utilisent). Il améliore l'absorption de 45 % et réduit les troubles digestifs vs le ratio 2:1.`,
+      textEn: `Above 60 g/h, use a 1:0.8 glucose:fructose ratio (Maurten, Precision Fuel, SiS Beta Fuel use it). It improves absorption by 45% and reduces GI issues vs 2:1.`,
     });
   }
 
   if (durationMin > 150) {
     tips.push({
-      text: `Utilisez un ratio glucose:fructose 2:1 pour dépasser 60g/h. Les gels à base de fructose + maltodextrine sont idéaux.`,
-      textEn: `Use a 2:1 glucose:fructose ratio to exceed 60g/h. Gels with fructose + maltodextrin are idéal.`,
-    });
-    tips.push({
-      text: "Variez les textures : alterner gels, barres, et boissons pour éviter la lassitude et les nausées.",
+      text: "Variez les textures : alternez gels, barres, et boissons pour éviter la lassitude gustative et les nausées.",
       textEn: "Vary textures: alternate gels, bars, and drinks to avoid palate fatigue and nausea.",
+    });
+  }
+
+  if (carbsPerHourG >= 90) {
+    tips.push({
+      text: "Atteindre 90-120 g/h demande 8-12 semaines d'entraînement digestif progressif (Viribay 2020). Ne pas forcer le jour J.",
+      textEn: "Reaching 90-120 g/h requires 8-12 weeks of progressive gut training (Viribay 2020). Do not force on race day.",
     });
   }
 
