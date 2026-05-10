@@ -213,6 +213,7 @@
     "substituteLongRunWarningBody": "The long run develops orthopedic adaptations (tendon capillarization, running economy, impact tolerance) that cycling or swimming cannot reproduce. Use this when running is impossible (injury, weather, travel), not as a regular alternative.",
       "sessionSubstituted": "Session swapped",
       "findRoute": "Find a matching route",
+      "findWeekRoute": "Route for this week",
       "removeSession": "Remove session",
       "noSessionsThisWeek": "No sessions this week",
     "schedule": "Schedule",

@@ -2,7 +2,30 @@
   "about": {
     "seoHeroLabel": "About",
     "statsWorkouts": "Workouts",
-    "statsCalculators": "Calculators"
+    "statsCalculators": "Calculators",
+    "title": "A training library, built by a runner, for runners",
+    "description": "Zoned brings together zone-based workouts, training plans, and practical tools. The goal: make training science accessible — no subscription, no tracking, no fluff.",
+    "personal": {
+      "title": "The project",
+      "bio": "Zoned is built by a passionate runner, in the open. The project was born from the need for a simple, zone-based tool to structure training without depending on any proprietary platform."
+    },
+    "openSource": {
+      "title": "Open source",
+      "contributions": "The code is public on GitHub. Bugs, suggestions, and contributions are welcome."
+    },
+    "vibeCoded": {
+      "title": "Built with Claude",
+      "claude": "A large part of the code is co-written with Claude (Anthropic). AI is a tool, not a substitute for human judgement on athletic relevance."
+    },
+    "privacy": {
+      "title": "Privacy",
+      "noServer": "No server, no account, no tracker. Your data stays in your browser."
+    },
+    "credits": {
+      "title": "Tech stack",
+      "framework": "React + Vite",
+      "ui": "Tailwind + Radix UI"
+    }
   },
   "methodology": {
     "title": "Methodology",

@@ -2,7 +2,30 @@
   "about": {
     "seoHeroLabel": "À propos",
     "statsWorkouts": "Séances",
-    "statsCalculators": "Calculateurs"
+    "statsCalculators": "Calculateurs",
+    "title": "Une bibliothèque d'entraînement, faite par un coureur, pour les coureurs",
+    "description": "Zoned rassemble des séances structurées par zones, des plans d'entraînement et des outils pratiques. L'objectif : rendre la science de l'entraînement accessible, sans abonnement, sans suivi, sans superflu.",
+    "personal": {
+      "title": "Le projet",
+      "bio": "Zoned est développé par un coureur passionné, en open source. Le projet est né du besoin d'un outil simple, basé sur les zones, pour structurer l'entraînement sans dépendre d'une plateforme propriétaire."
+    },
+    "openSource": {
+      "title": "Open source",
+      "contributions": "Le code est public sur GitHub. Bugs, suggestions et contributions sont les bienvenus."
+    },
+    "vibeCoded": {
+      "title": "Construit avec Claude",
+      "claude": "Une grande partie du code est co-écrite avec Claude (Anthropic). L'IA est un outil, pas un substitut au regard humain sur la pertinence sportive."
+    },
+    "privacy": {
+      "title": "Vie privée",
+      "noServer": "Aucun serveur, aucun compte, aucun tracker. Vos données restent dans votre navigateur."
+    },
+    "credits": {
+      "title": "Stack technique",
+      "framework": "React + Vite",
+      "ui": "Tailwind + Radix UI"
+    }
   },
   "methodology": {
     "title": "Méthodologie",
