@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useRef, useCallback } from "react";
+import { useDeferredValue, useMemo, useState, useEffect, useRef, useCallback } from "react";
 import { usePageHint } from "@/hooks/usePageHint";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -491,12 +491,16 @@ export function LibraryPage() {
     [favorites],
   );
 
+  // Defer the filter object so a fast typist doesn't block paint while
+  // re-running the (otherwise pure) workout filter against ~200 entries.
+  const deferredFilters = useDeferredValue(filters);
+
   // Filter workouts
   const filteredWorkouts = useMemo(() => {
     return allWorkouts.filter((workout) =>
-      applyFiltersToWorkout(workout, filters),
+      applyFiltersToWorkout(workout, deferredFilters),
     );
-  }, [allWorkouts, filters, applyFiltersToWorkout]);
+  }, [allWorkouts, deferredFilters, applyFiltersToWorkout]);
 
   // Calculate temp filtered count for Apply button
   const tempFilteredCount = useMemo(() => {

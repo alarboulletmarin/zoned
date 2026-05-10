@@ -45,6 +45,7 @@ import { DateInput } from "@/components/ui/date-input";
 import { addWeeksToDate, buildRacePlanDateRange, calculateWeeksBetweenDates } from "@/lib/planDates";
 import { validateIntermediateGoals, sortIntermediateGoals } from "@/lib/intermediateGoalValidation";
 import { loadRunnerProfile } from "@/lib/runnerProfile";
+import { usePlanDraft } from "./plan-create/usePlanDraft";
 
 // ── Constants ────────────────────────────────────────────────────────
 
@@ -243,6 +244,16 @@ export function PlanCreatePage() {
     };
   });
 
+  // Auto-save the wizard so a closed tab / hard reload doesn't lose progress.
+  // Persistence stops when the plan is finalized; the banner appears on mount
+  // when a previous draft is found and lets the user resume or start fresh.
+  const { hasDraft, restoreDraft, clearDraft, finalize } = usePlanDraft<FormState>(
+    form,
+    setForm,
+    stepIndex,
+    setStepIndex,
+  );
+
   // Load user zone preferences for VMA suggestion
   const userPrefs: UserZonePreferences | null = useMemo(
     () => loadUserZonePrefs(),
@@ -337,12 +348,13 @@ export function PlanCreatePage() {
 
     try {
       const plan = await createPlan(config);
+      finalize();
       triggerStorageWarning();
       navigate(`/plan/${plan.id}`);
     } catch {
       // Error is exposed via the hook's error state
     }
-  }, [form, userPrefs, paceSeconds, createPlan, navigate]);
+  }, [form, userPrefs, paceSeconds, createPlan, navigate, finalize]);
 
   // ── Step indicator (dots + step number) ────────────────────────
 
@@ -1730,6 +1742,21 @@ export function PlanCreatePage() {
                 {t("nav.back")}
               </Link>
             </Button>
+          </div>
+        )}
+        {hasDraft && stepIndex === 0 && (
+          <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-sm">
+            <span className="flex-1 min-w-0 text-foreground">
+              {t("draft.found", "Un brouillon de plan a été retrouvé.")}
+            </span>
+            <div className="flex items-center gap-2">
+              <Button size="sm" variant="default" onClick={restoreDraft}>
+                {t("draft.restore", "Reprendre")}
+              </Button>
+              <Button size="sm" variant="ghost" onClick={clearDraft}>
+                {t("draft.discard", "Repartir de zéro")}
+              </Button>
+            </div>
           </div>
         )}
         {renderStepIndicator()}

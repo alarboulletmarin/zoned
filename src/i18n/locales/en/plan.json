@@ -3,6 +3,11 @@
   "create": "Create a plan",
   "createTitle": "New training plan",
   "myPlans": "My plans",
+  "draft": {
+    "found": "We found a saved plan draft.",
+    "restore": "Resume",
+    "discard": "Start fresh"
+  },
   "empty": {
     "title": "No plans yet",
     "description": "Create your first personalized training plan",

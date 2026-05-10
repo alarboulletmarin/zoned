@@ -26,6 +26,12 @@
       "pdf": "Erreur lors de l'export PDF",
       "garmin": "Erreur lors de l'export Garmin"
     },
+    "loading": {
+      "calendar": "Génération du calendrier…",
+      "image": "Génération de l'image…",
+      "pdf": "Génération du PDF…",
+      "garmin": "Génération du fichier Garmin…"
+    },
     "planPdf": {
       "freePlan": "Plan libre",
       "start": "Début",
@@ -208,7 +214,7 @@
     "plan": "Planifier",
     "quickActions": "Actions rapides",
     "methodology": "Méthodologie",
-    "builder": "Créer",
+    "builder": "Créer une séance",
     "planMethodology": "Guide des plans",
     "myZones": "Mes Zones",
     "profile": "Mon Profil",

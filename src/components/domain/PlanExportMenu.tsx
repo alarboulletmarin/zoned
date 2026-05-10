@@ -71,12 +71,13 @@ export function PlanExportMenu({
   const handleExportPDF = useCallback(async () => {
     if (isExporting) return;
     setIsExporting(true);
+    const toastId = toast.loading(t("export.loading.pdf", t("export.title")));
     try {
       const { names, templates } = await getWorkoutData();
       await exportPlanToPDF(plan, names, templates);
-      toast.success(t("export.success.pdf"));
+      toast.success(t("export.success.pdf"), { id: toastId });
     } catch {
-      toast.error(t("export.error.pdf"));
+      toast.error(t("export.error.pdf"), { id: toastId });
     } finally {
       setIsExporting(false);
     }
@@ -84,16 +85,17 @@ export function PlanExportMenu({
 
   const handleExportICS = useCallback(async () => {
     setIsExporting(true);
+    const toastId = toast.loading(t("export.loading.calendar", t("export.title")));
     try {
       const { names, templates } = await getWorkoutData();
       exportPlanToICS(plan, names, templates);
-      toast.success(t("export.success.calendar"));
+      toast.success(t("export.success.calendar"), { id: toastId });
     } catch {
-      toast.error(t("export.error.calendar"));
+      toast.error(t("export.error.calendar"), { id: toastId });
     } finally {
       setIsExporting(false);
     }
-  }, [plan, getWorkoutData, t, isExporting]);
+  }, [plan, getWorkoutData, t]);
 
   const handleExportJSON = useCallback(() => {
     const json = JSON.stringify(preparePlanForStorage(plan), null, 2);

@@ -1,8 +1,9 @@
-import { useState, useCallback, useReducer, useRef, useEffect } from "react";
+import { useState, useCallback, useReducer, useRef, useEffect, useMemo } from "react";
 import { usePageHint } from "@/hooks/usePageHint";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight, Download, Upload } from "@/components/icons";
+import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight, Download, Upload, Undo2, Redo2 } from "@/components/icons";
+import { useUndoRedo } from "@/hooks/useUndoRedo";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { Button } from "@/components/ui/button";
 import {
@@ -228,16 +229,33 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
   const navigate = useNavigate();
   const { t } = useTranslation("common");
 
-  const [workout, setWorkoutRaw] = useState<WorkoutTemplate>(() => {
+  const initialWorkout = useMemo<WorkoutTemplate>(() => {
     const existing = getCustomWorkout(workoutId);
     if (existing) return normalizeWorkoutStructureSource(existing);
     const fresh = createEmptyWorkout();
     return normalizeWorkoutStructureSource({ ...fresh, id: workoutId });
-  });
-  const setWorkout: typeof setWorkoutRaw = useCallback((action) => {
-    isDirtyRef.current = true;
-    setWorkoutRaw(action);
-  }, []);
+    // workoutId is the only effective input — re-evaluating on rerender would
+    // wipe in-flight edits.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workoutId]);
+
+  const {
+    present: workout,
+    set: setWorkoutHistory,
+    reset: resetWorkoutHistory,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+  } = useUndoRedo<WorkoutTemplate>(initialWorkout);
+
+  const setWorkout = useCallback(
+    (action: WorkoutTemplate | ((prev: WorkoutTemplate) => WorkoutTemplate)) => {
+      isDirtyRef.current = true;
+      setWorkoutHistory(action);
+    },
+    [setWorkoutHistory],
+  );
 
   const [collapsed, setCollapsed] = useState<Record<SectionKey, boolean>>({
     warmup: false,
@@ -269,7 +287,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
         typicalDuration: { min: Math.max(totalMin - 5, 0), max: totalMin + 5 },
       };
       saveCustomWorkout(updated);
-      setWorkoutRaw(updated);
+      resetWorkoutHistory(updated);
       isDirtyRef.current = false;
       setIsSaved(true);
       toast.success(t("calculators:workoutBuilder.workoutSaved"));
@@ -348,6 +366,28 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
               <Save className="size-4 mr-2" />
               {t("calculators:workoutBuilder.save")}
             </Button>
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={undo}
+                disabled={!canUndo}
+                aria-label={t("calculators:workoutBuilder.undo", "Annuler")}
+                title={t("calculators:workoutBuilder.undo", "Annuler") + " (⌘Z)"}
+              >
+                <Undo2 className="size-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={redo}
+                disabled={!canRedo}
+                aria-label={t("calculators:workoutBuilder.redo", "Rétablir")}
+                title={t("calculators:workoutBuilder.redo", "Rétablir") + " (⇧⌘Z)"}
+              >
+                <Redo2 className="size-4" />
+              </Button>
+            </div>
             {isSaved && <ExportMenu workout={workout} />}
             {isSaved && (
               <Button

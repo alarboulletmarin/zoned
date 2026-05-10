@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight,
   Activity,
@@ -51,16 +52,10 @@ export function HomePage() {
     [t]
   );
   const [accentIndex, setAccentIndex] = useState(0);
-  const [animState, setAnimState] = useState<"visible" | "exit" | "enter">("visible");
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setAnimState("exit");
-      setTimeout(() => {
-        setAccentIndex((prev) => (prev + 1) % accentWords.length);
-        setAnimState("enter");
-        setTimeout(() => setAnimState("visible"), 50);
-      }, 300);
+      setAccentIndex((prev) => (prev + 1) % accentWords.length);
     }, 3500);
     return () => clearInterval(interval);
   }, [accentWords.length]);
@@ -185,17 +180,18 @@ export function HomePage() {
             <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-4 md:mb-6 leading-[1.1]">
               {t("common:app.heroTitle")}
               <br className="md:hidden" />{" "}
-              <span
-                className={`inline-block text-primary italic font-light pr-1 pt-0.5 transition-all duration-300 ${
-                  animState === "exit"
-                    ? "translate-x-6 md:translate-x-16 opacity-0 md:blur-[2px] [transition-timing-function:cubic-bezier(0.55,0,1,0.45)]"
-                    : animState === "enter"
-                      ? "-translate-x-6 md:-translate-x-16 opacity-0 md:blur-[2px]"
-                      : "translate-x-0 opacity-100 blur-0 [transition-timing-function:cubic-bezier(0,0,0.2,1)]"
-                }`}
-              >
-                {accentWords[accentIndex]}
-              </span>
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={accentIndex}
+                  initial={{ x: -24, opacity: 0, filter: "blur(2px)" }}
+                  animate={{ x: 0, opacity: 1, filter: "blur(0px)" }}
+                  exit={{ x: 24, opacity: 0, filter: "blur(2px)" }}
+                  transition={{ duration: 0.3, ease: [0, 0, 0.2, 1] }}
+                  className="inline-block text-primary italic font-light pr-1 pt-0.5"
+                >
+                  {accentWords[accentIndex]}
+                </motion.span>
+              </AnimatePresence>
             </h1>
             <p className="text-base md:text-xl text-muted-foreground max-w-xl mb-6 md:mb-8 leading-relaxed">
               {t("common:app.tagline")}

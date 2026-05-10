@@ -1,7 +1,7 @@
 // src/pages/GlossaryPage.tsx
 // Full glossary page with search and category filtering
 
-import { useState, useMemo } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Search, Book, Filter, Loader2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,8 @@ export function GlossaryPage() {
   const { t, i18n } = useTranslation("glossary");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const [searchQuery, setSearchQuery] = useState("");
+  // Defer the heavy filtering so typing stays at 60fps even on 50+ terms.
+  const deferredSearchQuery = useDeferredValue(searchQuery);
   const [selectedCategory, setSelectedCategory] = useState<
     GlossaryCategory | "all"
   >("all");
@@ -49,8 +51,8 @@ export function GlossaryPage() {
         ? allTerms
         : allTerms.filter((t) => t.category === selectedCategory);
 
-    if (searchQuery.trim()) {
-      const normalizedQuery = searchQuery.toLowerCase().trim();
+    if (deferredSearchQuery.trim()) {
+      const normalizedQuery = deferredSearchQuery.toLowerCase().trim();
       terms = terms.filter((term) => {
         const searchableText = [
           term.term,
@@ -74,7 +76,7 @@ export function GlossaryPage() {
       const bLabel = getTermDisplayLabel(b);
       return aLabel.localeCompare(bLabel, i18n.language);
     });
-  }, [allTerms, searchQuery, selectedCategory, isEn, i18n.language]);
+  }, [allTerms, deferredSearchQuery, selectedCategory, isEn, i18n.language]);
 
   // Group terms by first letter (using localized label)
   const groupedTerms = useMemo(() => {

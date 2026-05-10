@@ -812,11 +812,12 @@ export function RaceSimulatorPage() {
               <Button
                 onClick={async () => {
                   if (!plan) return;
+                  const toastId = toast.loading(tCommon("export.loading.pdf", tCommon("export.title")));
                   try {
                     await exportRaceSimToPDF(plan, isEn);
-                    toast.success(tCommon("calculators:raceSimulator.pdfExported"));
+                    toast.success(tCommon("calculators:raceSimulator.pdfExported"), { id: toastId });
                   } catch {
-                    toast.error(tCommon("calculators:raceSimulator.exportFailed"));
+                    toast.error(tCommon("calculators:raceSimulator.exportFailed"), { id: toastId });
                   }
                 }}
                 variant="outline"

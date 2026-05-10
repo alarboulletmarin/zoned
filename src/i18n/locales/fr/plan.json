@@ -3,6 +3,11 @@
   "create": "Créer un plan",
   "createTitle": "Nouveau plan d'entraînement",
   "myPlans": "Mes plans",
+  "draft": {
+    "found": "Un brouillon de plan a été retrouvé.",
+    "restore": "Reprendre",
+    "discard": "Repartir de zéro"
+  },
   "empty": {
     "title": "Pas encore de plan",
     "description": "Créez votre premier plan d'entraînement personnalisé",

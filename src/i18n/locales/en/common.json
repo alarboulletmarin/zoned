@@ -26,6 +26,12 @@
       "pdf": "Failed to export PDF",
       "garmin": "Failed to export Garmin file"
     },
+    "loading": {
+      "calendar": "Generating calendar…",
+      "image": "Generating image…",
+      "pdf": "Generating PDF…",
+      "garmin": "Generating Garmin file…"
+    },
     "planPdf": {
       "freePlan": "Free plan",
       "start": "Start",
@@ -208,7 +214,7 @@
     "plan": "Plan",
     "quickActions": "Quick actions",
     "methodology": "Methodology",
-    "builder": "Create",
+    "builder": "Create workout",
     "planMethodology": "Plan guide",
     "myZones": "My Zones",
     "profile": "My Profile",

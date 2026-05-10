@@ -44,11 +44,12 @@ export function ExportMenu({ workout }: ExportMenuProps) {
   const handleICSExport = async (dateTime: Date) => {
     setShowDatePicker(false);
     setIsExporting(true);
+    const toastId = toast.loading(t("export.loading.calendar", t("export.title")));
     try {
       await exportToICS(workout, dateTime);
-      toast.success(t("export.success.calendar"));
+      toast.success(t("export.success.calendar"), { id: toastId });
     } catch (error) {
-      toast.error(t("export.error.calendar"));
+      toast.error(t("export.error.calendar"), { id: toastId });
     } finally {
       setIsExporting(false);
     }
@@ -57,6 +58,7 @@ export function ExportMenu({ workout }: ExportMenuProps) {
   const handlePNGExport = useCallback(async () => {
     setIsExporting(true);
     setRenderForExport(true);
+    const toastId = toast.loading(t("export.loading.image", t("export.title")));
 
     // Wait for next frame to ensure component is rendered
     await new Promise((resolve) => requestAnimationFrame(resolve));
@@ -66,25 +68,26 @@ export function ExportMenu({ workout }: ExportMenuProps) {
     try {
       if (exportCardRef.current) {
         await exportToPNG(exportCardRef.current, workout.id);
-        toast.success(t("export.success.image"));
+        toast.success(t("export.success.image"), { id: toastId });
       } else {
         throw new Error("Export card not rendered");
       }
     } catch (error) {
-      toast.error(t("export.error.image"));
+      toast.error(t("export.error.image"), { id: toastId });
     } finally {
       setRenderForExport(false);
       setIsExporting(false);
     }
-  }, [workout.id]);
+  }, [workout.id, t]);
 
   const handlePDFExport = async () => {
     setIsExporting(true);
+    const toastId = toast.loading(t("export.loading.pdf", t("export.title")));
     try {
       await exportToPDF(workout);
-      toast.success(t("export.success.pdf"));
+      toast.success(t("export.success.pdf"), { id: toastId });
     } catch (error) {
-      toast.error(t("export.error.pdf"));
+      toast.error(t("export.error.pdf"), { id: toastId });
     } finally {
       setIsExporting(false);
     }
@@ -92,12 +95,13 @@ export function ExportMenu({ workout }: ExportMenuProps) {
 
   const handleFITExport = async () => {
     setIsExporting(true);
+    const toastId = toast.loading(t("export.loading.garmin", t("export.title")));
     try {
       await exportToFIT(workout);
-      toast.success(t("export.success.garmin"));
+      toast.success(t("export.success.garmin"), { id: toastId });
       setShowFitGuide(true);
     } catch (error) {
-      toast.error(t("export.error.garmin"));
+      toast.error(t("export.error.garmin"), { id: toastId });
     } finally {
       setIsExporting(false);
     }
