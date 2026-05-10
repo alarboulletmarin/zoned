@@ -452,7 +452,7 @@ export function PlanCreatePage() {
           {t("purpose.subtitle")}
         </p>
 
-        <div className="w-full max-w-md grid grid-cols-1 gap-2 mt-6">
+        <div className="w-full max-w-md md:max-w-lg grid grid-cols-1 gap-2 mt-6">
           {PURPOSE_OPTIONS.map((opt) => (
             <Card
               key={opt.value}
@@ -513,7 +513,7 @@ export function PlanCreatePage() {
         <p className="text-sm text-muted-foreground mt-1 text-center">
           {t("distance.subtitle")}
         </p>
-        <div className="w-full max-w-md grid grid-cols-2 gap-2 mt-6">
+        <div className="w-full max-w-md md:max-w-xl lg:max-w-2xl grid grid-cols-2 gap-2 mt-6">
           {(Object.keys(RACE_DISTANCE_META) as RaceDistance[]).map((dist) => {
             const meta = RACE_DISTANCE_META[dist];
             return (
@@ -1037,7 +1037,7 @@ export function PlanCreatePage() {
             </div>
           )}
 
-          <div className="w-full max-w-md grid grid-cols-2 gap-2 mt-6">
+          <div className="w-full max-w-md md:max-w-xl lg:max-w-2xl grid grid-cols-2 gap-2 mt-6">
             {levels.map((level) => {
               const meta = DIFFICULTY_META[level];
               const isSuggested = level === suggestedLevel;

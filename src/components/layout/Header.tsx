@@ -74,7 +74,7 @@ export function Header({ theme, onThemeToggle }: HeaderProps) {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <Logo className="w-16 h-8" />
-          <span className="font-bold text-lg hidden lg:inline">{t("app.name")}</span>
+          <span className="font-bold text-lg hidden md:inline">{t("app.name")}</span>
         </Link>
 
         {/* Desktop Navigation */}

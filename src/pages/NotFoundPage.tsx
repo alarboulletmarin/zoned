@@ -13,7 +13,7 @@ export function NotFoundPage() {
         description={t("errors.notFound.description")}
         noindex
       />
-      <div className="py-16 flex flex-col items-center justify-center text-center space-y-6 max-w-md mx-auto">
+      <div className="py-16 flex flex-col items-center justify-center text-center space-y-6 max-w-md md:max-w-lg mx-auto">
         <span className="text-8xl font-bold text-muted-foreground/50">404</span>
         <h1 className="text-2xl font-bold">{t("errors.notFound.title")}</h1>
         <p className="text-muted-foreground">

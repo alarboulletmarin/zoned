@@ -608,7 +608,7 @@ export function RaceSimulatorPage() {
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
-                    <thead>
+                    <thead className="sticky top-0 bg-background z-10">
                       <tr className="border-b">
                         <th className="py-2 px-2 text-left font-medium">#</th>
                         <th className="py-2 px-2 text-left font-medium">
