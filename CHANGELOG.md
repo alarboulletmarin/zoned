@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2026-05-10
+
+### Added
+- On-line trace editor: drag waypoints, click to insert/remove, denser handles and distinct start/end markers for out-and-back vs loop
+- Track Finder page: lists nearby athletics tracks and routes a there-and-back leg, with VMA-aware boost in the recommendation engine
+- Map editing affordances: direction chevrons, click-to-pick start, compass bearing, expand and reverse
+- Elevation target with discipline-aware recommendation engine and athletics tracks as POI for VO2max/VMA sessions
+- Launch the route generator from a planned session or workout with the discipline preset already filled
+- Swipeable news spotlight on the homepage (touch + mouse drag, sliding strip, pointer events)
+- How-it-works details on the route generator page
+
+### Changed
+- Premium desktop one-page layout for routes (Strava-style strip, collapsible details, sticky CTA, dense top toolbar) — no scroll, footer hidden
+- Mobile UX rebuilt around a map-first persistent card with candidate cards, slim 3-row top bar (chips + address + CTA) and Strava-style search row
+- Discipline-aware duration estimate replaces Brouter total-time, with a 200 km cap on cycling
+- Single distance chip, action bar split, h3 stats, elevation tooltip and sidebar sub-items in the route generator UI
+
+### Fixed
+- Reject sea-bound legs and surface a specific error when Brouter returns 400 on an unreachable waypoint
+- Restore Leaflet tile sizing under Tailwind v4 preflight
+- iOS input zoom hardened across mobile route forms; address dropdown lifted above the map
+- Exact preset distance on tap so 21.1 km and 42.2 km stay marked active
+- Select-all on focus for distance and elevation inputs
+- Elevation chart stays proportional via CSS aspect-ratio instead of stretching flat on wide containers
+- Missing i18n keys on the about page and `view.findWeekRoute`
+- Bike icon used consistently for cycling tabs and slides; `?type=` filter routing fixed
+
+### Performance
+- Parallelize route candidates with Brouter timeout/retry and runtime validation; debounce drag re-route (123 s → 10 s)
+- Brouter LRU cache and Overpass dedup with `idb-keyval` persistence (TTL 7 days)
+- Routes storage migrated to IndexedDB; desktop map column capped to viewport
+- Extract convergence/PRNG/scoring helpers and `useRouteEditor` hook (RouteGeneratorPage 1100 → 952, recommendation 669 → 560)
+
 ## [0.5.0] - 2026-05-06
 
 ### Added

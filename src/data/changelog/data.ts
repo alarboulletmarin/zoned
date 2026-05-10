@@ -2,6 +2,158 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.5.1",
+    date: "2026-05-10",
+    changes: {
+      added: [
+        {
+          text: "Editeur de trace en ligne : waypoints draggables, clic pour inserer/supprimer, poignees plus denses et marqueurs distincts depart/arrivee pour aller-retour vs boucle",
+          textEn: "On-line trace editor: draggable waypoints, click to insert/remove, denser handles and distinct start/end markers for out-and-back vs loop",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Page Track Finder : liste les pistes d'athletisme a proximite et propose un aller-retour, avec boost VMA dans le moteur de recommandation",
+          textEn: "Track Finder page: lists nearby athletics tracks and routes a there-and-back leg, with VMA-aware boost in the recommendation engine",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Affordances carte : chevrons de direction, clic pour choisir le point de depart, cap boussole, expand et reverse",
+          textEn: "Map editing affordances: direction chevrons, click-to-pick start, compass bearing, expand and reverse",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Cible de denivele avec moteur de recommandation par discipline et pistes d'athletisme comme POI pour les seances VO2max/VMA",
+          textEn: "Elevation target with discipline-aware recommendation engine and athletics tracks as POI for VO2max/VMA sessions",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Lancement du generateur de parcours depuis une seance planifiee ou un workout, avec le preset discipline pre-rempli",
+          textEn: "Launch the route generator from a planned session or workout with the discipline preset already filled",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Spotlight d'actualites swipeable sur la home (tactile + drag souris, strip glissant, pointer events)",
+          textEn: "Swipeable news spotlight on the homepage (touch + mouse drag, sliding strip, pointer events)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Section 'Comment ca marche' detaillee sur la page du generateur de parcours",
+          textEn: "How-it-works details on the route generator page",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+      ],
+      changed: [
+        {
+          text: "Layout desktop one-page premium pour les parcours (strip Strava-style, details repliables, CTA sticky, toolbar dense) — sans scroll, footer masque",
+          textEn: "Premium desktop one-page layout for routes (Strava-style strip, collapsible details, sticky CTA, dense top toolbar) — no scroll, footer hidden",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "UX mobile reconstruite autour d'une carte persistante avec cartes candidats, top bar slim 3 lignes (chips + adresse + CTA) et search row Strava-style",
+          textEn: "Mobile UX rebuilt around a map-first persistent card with candidate cards, slim 3-row top bar (chips + address + CTA) and Strava-style search row",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Estimation de duree par discipline a la place du total Brouter, avec un cap a 200 km en cyclisme",
+          textEn: "Discipline-aware duration estimate replaces Brouter total-time, with a 200 km cap on cycling",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Chip de distance unique, action bar separee, stats h3, tooltip d'altitude et sous-items dans la sidebar du generateur",
+          textEn: "Single distance chip, action bar split, h3 stats, elevation tooltip and sidebar sub-items in the route generator UI",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      fixed: [
+        {
+          text: "Rejet des trajets traversant la mer et message d'erreur specifique quand Brouter renvoie 400 sur un waypoint inaccessible",
+          textEn: "Reject sea-bound legs and surface a specific error when Brouter returns 400 on an unreachable waypoint",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Restauration du sizing des tuiles Leaflet sous le preflight Tailwind v4",
+          textEn: "Restore Leaflet tile sizing under Tailwind v4 preflight",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Anti-zoom iOS renforce sur les formulaires mobiles, dropdown d'adresse remontee au-dessus de la carte",
+          textEn: "iOS input zoom hardened across mobile route forms; address dropdown lifted above the map",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Distance preset exacte au tap pour que 21.1 km et 42.2 km restent marques actifs",
+          textEn: "Exact preset distance on tap so 21.1 km and 42.2 km stay marked active",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Select-all au focus sur les inputs distance et denivele",
+          textEn: "Select-all on focus for distance and elevation inputs",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Profil d'altitude reste proportionnel via aspect-ratio CSS au lieu de s'etirer plat sur les containers larges",
+          textEn: "Elevation chart stays proportional via CSS aspect-ratio instead of stretching flat on wide containers",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Cles i18n manquantes sur la page about et view.findWeekRoute",
+          textEn: "Missing i18n keys on the about page and view.findWeekRoute",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Icone velo coherent pour les onglets et slides cyclisme, routage du filtre ?type= corrige",
+          textEn: "Bike icon used consistently for cycling tabs and slides; ?type= filter routing fixed",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      performance: [
+        {
+          text: "Parallelisation des candidats avec timeout/retry Brouter et validation runtime, debounce du re-routage au drag (123 s -> 10 s)",
+          textEn: "Parallelize route candidates with Brouter timeout/retry and runtime validation; debounce drag re-route (123 s -> 10 s)",
+          category: "Performance",
+          categoryEn: "Performance",
+        },
+        {
+          text: "Cache LRU Brouter et dedup Overpass avec persistance idb-keyval (TTL 7 jours)",
+          textEn: "Brouter LRU cache and Overpass dedup with idb-keyval persistence (TTL 7 days)",
+          category: "Performance",
+          categoryEn: "Performance",
+        },
+        {
+          text: "Stockage des parcours migre vers IndexedDB, colonne carte desktop bornee au viewport",
+          textEn: "Routes storage migrated to IndexedDB; desktop map column capped to viewport",
+          category: "Performance",
+          categoryEn: "Performance",
+        },
+        {
+          text: "Extraction des helpers convergence/PRNG/scoring et hook useRouteEditor (RouteGeneratorPage 1100 -> 952, recommendation 669 -> 560)",
+          textEn: "Extract convergence/PRNG/scoring helpers and useRouteEditor hook (RouteGeneratorPage 1100 -> 952, recommendation 669 -> 560)",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+      ],
+    },
+  },
+  {
     version: "0.5.0",
     date: "2026-05-06",
     changes: {
