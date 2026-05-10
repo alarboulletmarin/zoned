@@ -48,12 +48,28 @@ export function usePlanDraft<F>(
   // paint (no flash of "no draft" while we read storage in an effect).
   const [hasDraft, setHasDraft] = useState<boolean>(() => readDraft<F>() != null);
   const finalizedRef = useRef(false);
+  // Snapshot the initial inputs so we can detect whether the effect is firing
+  // for the *initial* state (no real user change yet) or after a setter has
+  // produced a fresh reference. Persisting the initial state would overwrite
+  // a saved draft before the user has had a chance to click "Reprendre" —
+  // a silent data-loss bug that surfaced under React Strict Mode in dev,
+  // where the effect fires twice on mount.
+  const initialFormRef = useRef(form);
+  const initialStepRef = useRef(stepIndex);
 
   // Persist every meaningful change. localStorage writes are ~µs on modern
   // hardware so we don't bother debouncing — and the synchronous write means
   // beforeunload / pagehide always sees the latest snapshot.
   useEffect(() => {
     if (finalizedRef.current) return;
+    // Skip while the inputs are still the *initial* references — that
+    // covers both first effect run and Strict Mode's second pass.
+    if (
+      form === initialFormRef.current &&
+      stepIndex === initialStepRef.current
+    ) {
+      return;
+    }
     const payload: DraftPayload<F> = {
       version: DRAFT_VERSION,
       ts: Date.now(),
