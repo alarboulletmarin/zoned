@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Shuffle, Info } from "@/components/icons";
 import { Card, CardContent } from "@/components/ui/card";
+import { ResponsiveTable } from "@/components/ui/responsive-table";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { ZONE_META, type ZoneNumber } from "@/types";
@@ -283,81 +284,80 @@ export function RaceEquivalencePage() {
               <h2 className="text-lg font-semibold mb-4">
                 {t("calculators:calculateurs.equivalence.predictedTimes")}
               </h2>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead className="sticky top-0 bg-background z-10">
-                    <tr className="border-b">
-                      <th className="py-2 px-3 text-left font-medium">
-                        {t("calculators:calculateurs.equivalence.distanceCol")}
-                      </th>
-                      <th className="py-2 px-3 text-left font-medium">
-                        {t("calculators:calculateurs.equivalence.timeCol")}
-                      </th>
-                      <th className="py-2 px-3 text-left font-medium">
-                        {t("calculators:calculateurs.equivalence.paceCol")}
-                      </th>
-                      {paceZones && (
-                        <th className="py-2 px-3 text-left font-medium">
-                          {t("calculators:calculateurs.equivalence.zoneCol")}
-                        </th>
-                      )}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {predictions.map((p) => {
-                      const displayPace = convertPace(p.paceMinPerKm, unit);
-                      const zoneMeta = p.zone ? ZONE_META[p.zone] : null;
-
-                      return (
-                        <tr
-                          key={p.id}
-                          className={cn(
-                            "border-b last:border-b-0",
-                            p.isReference && "bg-primary/5",
-                          )}
-                        >
-                          <td className="py-2.5 px-3 font-medium">
-                            {pickLang(p, "label")}
-                            {p.isReference && (
-                              <span className="ml-2 text-xs text-muted-foreground">
-                                ({t("calculators:calculateurs.equivalence.ref")})
-                              </span>
-                            )}
-                          </td>
-                          <td className="py-2.5 px-3 tabular-nums font-medium">
-                            {formatTime(p.predictedSeconds)}
-                          </td>
-                          <td className="py-2.5 px-3 tabular-nums text-muted-foreground">
-                            {formatPaceValue(displayPace)} {getPaceUnit(unit)}
-                          </td>
-                          {paceZones && (
-                            <td className="py-2.5 px-3">
-                              {zoneMeta ? (
+              <ResponsiveTable
+                data={predictions}
+                rowKey="id"
+                stickyHeader
+                mobileCardTitle={(p) => (
+                  <span className="flex items-center gap-2">
+                    {pickLang(p, "label")}
+                    {p.isReference && (
+                      <span className="text-xs font-normal text-muted-foreground">
+                        ({t("calculators:calculateurs.equivalence.ref")})
+                      </span>
+                    )}
+                  </span>
+                )}
+                columns={[
+                  {
+                    key: "distance",
+                    header: t("calculators:calculateurs.equivalence.distanceCol"),
+                    className: "font-medium",
+                    hideOnMobile: true,
+                    cell: (p) => (
+                      <>
+                        {pickLang(p, "label")}
+                        {p.isReference && (
+                          <span className="ml-2 text-xs text-muted-foreground">
+                            ({t("calculators:calculateurs.equivalence.ref")})
+                          </span>
+                        )}
+                      </>
+                    ),
+                  },
+                  {
+                    key: "time",
+                    header: t("calculators:calculateurs.equivalence.timeCol"),
+                    className: "tabular-nums font-medium",
+                    cell: (p) => formatTime(p.predictedSeconds),
+                  },
+                  {
+                    key: "pace",
+                    header: t("calculators:calculateurs.equivalence.paceCol"),
+                    className: "tabular-nums text-muted-foreground",
+                    cell: (p) => `${formatPaceValue(convertPace(p.paceMinPerKm, unit))} ${getPaceUnit(unit)}`,
+                  },
+                  ...(paceZones
+                    ? [
+                        {
+                          key: "zone",
+                          header: t("calculators:calculateurs.equivalence.zoneCol"),
+                          cell: (p: typeof predictions[number]) => {
+                            const zoneMeta = p.zone ? ZONE_META[p.zone] : null;
+                            return zoneMeta ? (
+                              <span
+                                className={cn(
+                                  "inline-flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded-full",
+                                  `bg-${zoneMeta.color}/10 text-${zoneMeta.color}`,
+                                )}
+                              >
                                 <span
                                   className={cn(
-                                    "inline-flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded-full",
-                                    `bg-${zoneMeta.color}/10 text-${zoneMeta.color}`,
+                                    "size-2 rounded-full",
+                                    `bg-${zoneMeta.color}`,
                                   )}
-                                >
-                                  <span
-                                    className={cn(
-                                      "size-2 rounded-full",
-                                      `bg-${zoneMeta.color}`,
-                                    )}
-                                  />
-                                  Z{p.zone}
-                                </span>
-                              ) : (
-                                <span className="text-xs text-muted-foreground">-</span>
-                              )}
-                            </td>
-                          )}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
+                                />
+                                Z{p.zone}
+                              </span>
+                            ) : (
+                              <span className="text-xs text-muted-foreground">-</span>
+                            );
+                          },
+                        },
+                      ]
+                    : []),
+                ]}
+              />
             </CardContent>
           </Card>
         )}

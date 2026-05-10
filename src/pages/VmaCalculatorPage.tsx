@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Timer, Save, ArrowRight } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ResponsiveTable } from "@/components/ui/responsive-table";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { ZONE_META, type ZoneNumber } from "@/types";
@@ -233,55 +234,40 @@ export function VmaCalculatorPage() {
                 <h2 className="text-lg font-semibold mb-4">
                   {t("calculators:calculateurs.vma.paceZonesPreview")}
                 </h2>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead className="sticky top-0 bg-background z-10">
-                      <tr className="border-b">
-                        <th scope="col" className="py-2 px-3 text-left font-medium">
-                          {t("calculators:calculateurs.vma.zone")}
-                        </th>
-                        <th scope="col" className="py-2 px-3 text-left font-medium">
-                          {t("calculators:calculateurs.vma.pace")}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {paceZones.map((z) => {
+                <ResponsiveTable
+                  data={paceZones}
+                  rowKey="zone"
+                  stickyHeader
+                  columns={[
+                    {
+                      key: "zone",
+                      header: t("calculators:calculateurs.vma.zone"),
+                      cell: (z) => {
                         const meta = ZONE_META[z.zone as ZoneNumber];
                         return (
-                          <tr
-                            key={z.zone}
+                          <span
                             className={cn(
-                              "border-b last:border-b-0",
-                              `bg-${meta.color}/10`
+                              "inline-flex items-center gap-2 font-medium",
+                              `text-${meta.color}`,
                             )}
                           >
-                            <td className="py-2 px-3">
-                              <span
-                                className={cn(
-                                  "inline-flex items-center gap-2 font-medium",
-                                  `text-${meta.color}`
-                                )}
-                              >
-                                <span
-                                  className={cn(
-                                    "size-3 rounded-full",
-                                    `bg-${meta.color}`
-                                  )}
-                                />
-                                Z{z.zone} - {pickLang(meta, "label")}
-                              </span>
-                            </td>
-                            <td className="py-2 px-3 tabular-nums">
-                              {formatPace(convertPace(z.paceMinPerKm!, unit))}-
-                              {formatPace(convertPace(z.paceMaxPerKm!, unit))} {getPaceUnit(unit)}
-                            </td>
-                          </tr>
+                            <span
+                              className={cn("size-3 rounded-full", `bg-${meta.color}`)}
+                            />
+                            Z{z.zone} - {pickLang(meta, "label")}
+                          </span>
                         );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
+                      },
+                    },
+                    {
+                      key: "pace",
+                      header: t("calculators:calculateurs.vma.pace"),
+                      className: "tabular-nums",
+                      cell: (z) =>
+                        `${formatPace(convertPace(z.paceMinPerKm!, unit))}-${formatPace(convertPace(z.paceMaxPerKm!, unit))} ${getPaceUnit(unit)}`,
+                    },
+                  ]}
+                />
               </CardContent>
             </Card>
 
