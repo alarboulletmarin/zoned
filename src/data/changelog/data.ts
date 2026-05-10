@@ -2,6 +2,90 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.5.2",
+    date: "2026-05-10",
+    changes: {
+      added: [
+        {
+          text: "Hub nutrition sur /nutrition avec 14 sections vulgarisees (ratio 1:0.8, proteines 1,8 g/kg, supplements classes AIS A-D, crampes, chaleur, coureuses, 10 idees recues, FAQ)",
+          textEn: "Nutrition hub at /nutrition with 14 beginner-friendly sections (1:0.8 carb ratio, protein 1.8 g/kg, AIS-classified supplements, cramps science, heat, female runners, 10 debunked myths, FAQ)",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "17 supplements classes selon le framework de l'Institut Australien du Sport (niveaux A a D) avec dose, timing et explication",
+          textEn: "17 supplements ranked by Australian Institute of Sport framework (A through D) with dose, timing and rationale",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "10 idees recues demontees dans un accordeon interactif (fenetre 30 min, ratio 4:1, magnesium-crampes, cafe deshydrate, etc.)",
+          textEn: "10 false beliefs dismantled in an interactive accordion (30-min window, 4:1 ratio, magnesium for cramps, coffee dehydrates, etc.)",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Entree 'Nutrition' dans la sidebar Apprendre, entre Articles et Glossaire",
+          textEn: "'Nutrition' sidebar entry under Learn, between Articles and Glossary",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Nouveaux composants visuels : RatioGauge, MythBuster, ProteinTimingChart, GutTrainingTimeline, SupplementGrid avec badges AIS, CrampsScience, WomenInsightGrid, HeatGrid",
+          textEn: "New visual primitives: RatioGauge, MythBuster, ProteinTimingChart, GutTrainingTimeline, SupplementGrid with AIS badges, CrampsScience, WomenInsightGrid, HeatGrid",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      changed: [
+        {
+          text: "Recommandations proteines mises a jour : 1,4-2,2 g/kg/jour selon le volume d'entrainement (Witard 2025, Sports Medicine) — anciennement 1,2-1,8",
+          textEn: "Protein recommendations updated: 1.4-2.2 g/kg/day based on training volume (Witard 2025, Sports Medicine) — previously 1.2-1.8",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Ratio glucose:fructose modernise : 1:0.8 au-dela de 60 g/h (Rowlands 2020) — anciennement 2:1",
+          textEn: "Glucose:fructose ratio modernized: 1:0.8 above 60 g/h (Rowlands 2020) — previously 2:1",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Charge glucidique : 36-48 h a 10-12 g/kg (protocole moderne) — la methode 3 jours est obsolete",
+          textEn: "Carb loading: 36-48 h at 10-12 g/kg (modern protocol) — 3-day method obsolete",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Demythification de la fenetre 30 min post-effort dans le calculator et le guide : vraie fenetre 4-6 h glycogene / 24-48 h proteines",
+          textEn: "Post-effort recovery window debunked in calculator and guide: real window is 4-6 h glycogen / 24-48 h protein, not 30 min",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Le ratio 4:1 glucides:proteines en recuperation est un mythe (Margolis 2021) : l'effet apparent vient des calories ajoutees",
+          textEn: "4:1 carb:protein recovery ratio noted as myth (Margolis 2021): the apparent benefit comes from added calories",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+      ],
+      fixed: [
+        {
+          text: "Calculateur de ravitaillement : nombre de gels desormais realiste via un split 60 % gels / 40 % boisson energetique (avant : 14 gels comptes pour un marathon a 80 g/h, desormais 7)",
+          textEn: "Fueling calculator gel count now realistic: split 60% gels / 40% sports drink (previously counted 14 gels for a 3h30 marathon at 80 g/h, now 7)",
+          category: "Calculateurs",
+          categoryEn: "Calculators",
+        },
+        {
+          text: "Sources mises a jour dans le guide et la FAQ : Rowlands 2020, Witard 2025, Aragon 2013, Margolis 2021, Schwellnus, Paulsen, Trommelen 2023",
+          textEn: "Sources updated across guide and FAQ to cite Rowlands 2020, Witard 2025, Aragon 2013, Margolis 2021, Schwellnus, Paulsen, Trommelen 2023",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+      ],
+    },
+  },
+  {
     version: "0.5.1",
     date: "2026-05-10",
     changes: {

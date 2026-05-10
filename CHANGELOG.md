@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.2] - 2026-05-10
+
+### Added
+- Nutrition hub at `/nutrition` with 14 beginner-friendly sections (1:0.8 carb ratio, protein 1.8 g/kg, AIS-classified supplements, cramps science, heat acclimation, female-specific needs, 10 debunked myths, FAQ)
+- 17 supplements ranked by Australian Institute of Sport framework (A through D) with dose, timing and rationale
+- 10 false beliefs dismantled in an interactive accordion (30-min window, 4:1 ratio, magnesium for cramps, coffee dehydrates, etc.)
+- "Nutrition" sidebar entry under Learn, between Articles and Glossary
+- New visual primitives: RatioGauge, MythBuster, ProteinTimingChart, GutTrainingTimeline, SupplementGrid with AIS badges, CrampsScience, WomenInsightGrid, HeatGrid
+- Coffee, Pill, Wheat, Snowflake icons added to inline icon library
+
+### Changed
+- Protein recommendations updated: 1.4-2.2 g/kg/day based on training volume (Witard 2025, Sports Medicine) — previously 1.2-1.8
+- Glucose:fructose ratio modernized: 1:0.8 above 60 g/h (Rowlands 2020) — previously 2:1
+- Carb loading: 36-48 h at 10-12 g/kg (modern protocol) — 3-day method obsolete
+- Post-effort recovery window debunked in calculator and guide: real window is 4-6 h glycogen / 24-48 h protein, not 30 min
+- 4:1 carb:protein recovery ratio noted as myth (Margolis 2021): the apparent benefit comes from added calories
+- Calculator caffeine guidance: cite genotype CYP1A2 sensitivity
+
+### Fixed
+- Fueling calculator gel count now realistic: split 60% gels / 40% sports drink (previously counted 14 gels for a 3h30 marathon at 80 g/h, now 7)
+- Sources updated across guide and FAQ to cite Rowlands 2020, Witard 2025, Aragon 2013, Margolis 2021, Schwellnus, Paulsen, Trommelen 2023
+
 ## [0.5.1] - 2026-05-10
 
 ### Added
