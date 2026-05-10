@@ -85,7 +85,7 @@
 }
 
 .animate-heart-bounce {
-  animation: heart-bounce 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  animation: heart-bounce var(--duration-slow) cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 @keyframes blink {

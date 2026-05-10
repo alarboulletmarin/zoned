@@ -16,7 +16,7 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 import { Button } from "@/components/ui/button";
 
-import { Skeleton } from "@/components/ui/skeleton";
+import { WorkoutCardSkeleton } from "@/components/skeletons";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import {
   WorkoutCard,
@@ -791,34 +791,7 @@ export function LibraryPage() {
             {isLoading ? (
               <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-2 xl:grid-cols-3">
                 {Array.from({ length: 12 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="rounded-xl border border-border/50 p-3 sm:p-4 space-y-3"
-                  >
-                    {/* Title row */}
-                    <div className="flex items-start justify-between gap-2">
-                      <Skeleton className="h-4 w-3/4" />
-                      <Skeleton className="size-6 rounded-full" />
-                    </div>
-                    {/* Description (hidden on mobile, matching WorkoutCard) */}
-                    <Skeleton className="hidden sm:block h-3 w-full" />
-                    <Skeleton className="hidden sm:block h-3 w-2/3" />
-                    {/* Intensity bar */}
-                    <Skeleton
-                      variant="zone-shimmer"
-                      className="h-[3px] w-full rounded-full"
-                    />
-                    {/* Meta row: duration + category */}
-                    <div className="flex items-center gap-3">
-                      <Skeleton className="h-3 w-16" />
-                      <Skeleton className="h-3 w-20" />
-                    </div>
-                    {/* Badge pills */}
-                    <div className="hidden sm:flex items-center gap-2">
-                      <Skeleton className="h-5 w-20 rounded-full" />
-                      <Skeleton className="h-5 w-14 rounded-full" />
-                    </div>
-                  </div>
+                  <WorkoutCardSkeleton key={i} className="border-border/50" />
                 ))}
               </div>
             ) : filteredWorkouts.length > 0 ? (
