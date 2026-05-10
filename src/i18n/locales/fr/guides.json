@@ -97,6 +97,16 @@
     "routines": "Routines d'échauffement",
     "selectRoutine": "Sélectionnez une routine"
   },
+  "met": {
+    "title": "Équivalent métabolique (MET)",
+    "subtitle": "Comprendre les MET, intensités et dépense calorique",
+    "description": "MET, intensités et calcul des calories",
+    "seoDescription": "Guide complet sur l'équivalent métabolique (MET) : définition, formule de calcul, classification d'intensité et valeurs de référence pour la course, le vélo, la natation et plus.",
+    "seoArticleName": "Guide de l'équivalent métabolique (MET)",
+    "seoArticleDescription": "Tout comprendre sur le MET et son utilisation pour estimer la dépense énergétique.",
+    "openCalculator": "Ouvrir le calculateur MET",
+    "wikipediaLink": "Article Wikipédia complet"
+  },
   "explore": "Explorer",
   "home": "Accueil",
   "rep": "rep",

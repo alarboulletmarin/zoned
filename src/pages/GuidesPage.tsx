@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Utensils, Target, Flame, ArrowRight } from "@/components/icons";
+import { Utensils, Target, Flame, Activity, ArrowRight } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
@@ -35,6 +35,13 @@ const GUIDES: GuideEntry[] = [
     titleKey: "warmup.title",
     descriptionKey: "warmup.description",
     href: "/guides/warmup",
+  },
+  {
+    id: "met",
+    icon: Activity,
+    titleKey: "met.title",
+    descriptionKey: "met.description",
+    href: "/guides/met",
   },
 ];
 
@@ -73,7 +80,7 @@ export function GuidesPage() {
         </div>
 
         {/* Guide Cards */}
-        <div className={cn("grid gap-4", "grid-cols-1 md:grid-cols-3")}>
+        <div className={cn("grid gap-4", "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4")}>
           {GUIDES.map((guide) => {
             const Icon = guide.icon;
             return (

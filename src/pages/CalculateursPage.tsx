@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Target, Gauge, RefreshCw, Route, Timer, ArrowRight, List, Shuffle, Star, Flag, Scale, Zap, Waves } from "@/components/icons";
+import { Target, Gauge, RefreshCw, Route, Timer, ArrowRight, List, Shuffle, Star, Flag, Scale, Zap, Waves, Flame } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
@@ -164,6 +164,18 @@ const CALCULATEURS: CalculateurEntry[] = [
     gradient: "from-primary/10 dark:from-primary/20",
     iconBg: "bg-primary/15",
     iconColor: "text-primary",
+  },
+  {
+    id: "met",
+    icon: Flame,
+    title: "Calories & équivalent métabolique (MET)",
+    titleEn: "Calories & Metabolic Equivalent (MET)",
+    description: "Estimez la dépense calorique d'une séance à partir de la valeur MET",
+    descriptionEn: "Estimate the calorie expenditure of a session from the MET value",
+    href: "/calculators/met",
+    gradient: "from-zone-5/10 dark:from-zone-5/20",
+    iconBg: "bg-zone-5/15",
+    iconColor: "text-zone-5",
   },
 ];
 

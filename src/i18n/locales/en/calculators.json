@@ -247,6 +247,41 @@
       "deleteTitle": "Delete this scenario?",
       "deleteDescription": "This scenario will be permanently deleted. This action cannot be undone."
     },
+    "met": {
+      "seoTitle": "MET Calculator — Calories per Session",
+      "seoDescription": "Calculate calorie expenditure from the Metabolic Equivalent of Task (MET): running, cycling, swimming, strength and 40+ activities, or free MET input.",
+      "seoAppName": "MET Calculator",
+      "seoAppDescription": "Estimate the energy expenditure of a session from the MET value",
+      "seoBreadcrumb": "MET Calculator",
+      "title": "MET Calculator",
+      "description": "Estimate the calorie expenditure of a session using the Metabolic Equivalent of Task (MET).",
+      "readGuide": "Read the MET guide to understand the calculation",
+      "calculatorTitle": "Session calorie expenditure",
+      "calculatorDescription": "Computed from the formula kcal = MET × weight × duration. Reference:",
+      "weight": "Weight",
+      "duration": "Duration",
+      "tabActivity": "Activity",
+      "tabCustom": "Free MET",
+      "customMetLabel": "MET value",
+      "customMetHelp": "Enter a MET value from the Compendium of Physical Activities or another source (range 0.9 to 23).",
+      "calories": "Calories burned",
+      "formula": "MET × kg × hours",
+      "vo2": "O₂ consumption",
+      "fillInputs": "Enter your weight, duration, and pick an activity (or enter a MET value).",
+      "category": {
+        "running": "Running",
+        "cycling": "Cycling",
+        "swimming": "Swimming",
+        "walking": "Walking",
+        "strength": "Strength",
+        "other": "Other"
+      },
+      "intensity": {
+        "light": "Light",
+        "moderate": "Moderate",
+        "vigorous": "Vigorous"
+      }
+    },
     "breadcrumb": "Calculators"
   },
   "workoutBuilder": {

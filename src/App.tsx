@@ -58,6 +58,8 @@ const PaceConverterPage = lazy(() => import("@/pages/PaceConverterPage").then(m 
 const PaceTablePage = lazy(() => import("@/pages/PaceTablePage").then(m => ({ default: m.PaceTablePage })));
 const AgeGradedPage = lazy(() => import("@/pages/AgeGradedPage").then(m => ({ default: m.AgeGradedPage })));
 const WhatIfPage = lazy(() => import("@/pages/WhatIfPage").then(m => ({ default: m.WhatIfPage })));
+const MetCalculatorPage = lazy(() => import("@/pages/MetCalculatorPage").then(m => ({ default: m.MetCalculatorPage })));
+const MetGuidePage = lazy(() => import("@/pages/MetGuidePage").then(m => ({ default: m.MetGuidePage })));
 const WorkoutBuilderPage = lazy(() => import("@/pages/WorkoutBuilderPage").then(m => ({ default: m.WorkoutBuilderPage })));
 const RaceSimulatorPage = lazy(() => import("@/pages/RaceSimulatorPage").then(m => ({ default: m.RaceSimulatorPage })));
 const CompareHubPage = lazy(() => import("@/pages/CompareHubPage").then(m => ({ default: m.CompareHubPage })));
@@ -282,6 +284,7 @@ function App() {
                           <Route path="/calculators/equivalence" element={<RaceEquivalencePage />} />
                           <Route path="/calculators/age-graded" element={<AgeGradedPage />} />
                           <Route path="/calculators/what-if" element={<WhatIfPage />} />
+                          <Route path="/calculators/met" element={<MetCalculatorPage />} />
                           <Route path="/settings" element={<SettingsPage />} />
                           <Route path="/profile" element={<RunnerProfilePage />} />
                           <Route path="/favorites" element={<FavoritesPage />} />
@@ -300,6 +303,7 @@ function App() {
                           <Route path="/guides/nutrition" element={<NutritionGuidePage />} />
                           <Route path="/guides/race-prep" element={<RacePrepGuidePage />} />
                           <Route path="/guides/warmup" element={<WarmupGuidePage />} />
+                          <Route path="/guides/met" element={<MetGuidePage />} />
                           <Route path="/nutrition" element={<NutritionHubPage />} />
                           <Route path="/plans" element={<PlansPage />} />
                           <Route path="/plans/methodology" element={<PlanMethodologyPage />} />

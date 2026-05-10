@@ -247,6 +247,41 @@
       "deleteTitle": "Supprimer ce scénario ?",
       "deleteDescription": "Ce scénario sera définitivement supprimé. Cette action est irréversible."
     },
+    "met": {
+      "seoTitle": "Calculateur MET — Calories par séance",
+      "seoDescription": "Calculez votre dépense calorique à partir de l'équivalent métabolique (MET) : course, vélo, natation, musculation et plus de 40 activités, ou saisie MET libre.",
+      "seoAppName": "Calculateur MET",
+      "seoAppDescription": "Estimez la dépense énergétique d'une séance à partir de la valeur MET",
+      "seoBreadcrumb": "Calculateur MET",
+      "title": "Calculateur MET",
+      "description": "Estimez la dépense calorique d'une séance grâce à l'équivalent métabolique (MET).",
+      "readGuide": "Lire le guide MET pour comprendre le calcul",
+      "calculatorTitle": "Dépense calorique d'une séance",
+      "calculatorDescription": "Calcul basé sur la formule kcal = MET × poids × durée. Référence :",
+      "weight": "Poids",
+      "duration": "Durée",
+      "tabActivity": "Activité",
+      "tabCustom": "MET libre",
+      "customMetLabel": "Valeur MET",
+      "customMetHelp": "Saisissez une valeur MET issue du Compendium of Physical Activities ou d'une autre source (de 0,9 à 23).",
+      "calories": "Calories dépensées",
+      "formula": "MET × kg × heures",
+      "vo2": "Consommation O₂",
+      "fillInputs": "Renseignez votre poids, la durée et choisissez une activité (ou saisissez une valeur MET).",
+      "category": {
+        "running": "Course",
+        "cycling": "Vélo",
+        "swimming": "Natation",
+        "walking": "Marche",
+        "strength": "Musculation",
+        "other": "Autres"
+      },
+      "intensity": {
+        "light": "Léger",
+        "moderate": "Modéré",
+        "vigorous": "Vigoureux"
+      }
+    },
     "breadcrumb": "Calculateurs"
   },
   "workoutBuilder": {

@@ -97,6 +97,16 @@
     "routines": "Warm-up Routines",
     "selectRoutine": "Select a routine"
   },
+  "met": {
+    "title": "Metabolic Equivalent (MET)",
+    "subtitle": "Understanding MET, intensity bands and energy expenditure",
+    "description": "MET, intensity bands and calorie calculation",
+    "seoDescription": "Complete guide to the Metabolic Equivalent of Task (MET): definition, calculation formula, intensity classification and reference values for running, cycling, swimming and more.",
+    "seoArticleName": "Metabolic Equivalent of Task (MET) Guide",
+    "seoArticleDescription": "Everything you need to know about MET and how to estimate energy expenditure with it.",
+    "openCalculator": "Open the MET calculator",
+    "wikipediaLink": "Read the full Wikipedia article"
+  },
   "explore": "Explore",
   "home": "Home",
   "rep": "rep",
