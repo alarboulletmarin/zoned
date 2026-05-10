@@ -41,6 +41,7 @@ const PrebuiltPlansPage = lazy(() => import("@/pages/PrebuiltPlansPage").then(m 
 const PrebuiltPlanDetailPage = lazy(() => import("@/pages/PrebuiltPlanDetailPage").then(m => ({ default: m.PrebuiltPlanDetailPage })));
 const PlanMethodologyPage = lazy(() => import("@/pages/PlanMethodologyPage").then(m => ({ default: m.PlanMethodologyPage })));
 const NutritionGuidePage = lazy(() => import("@/pages/NutritionGuidePage").then(m => ({ default: m.NutritionGuidePage })));
+const NutritionHubPage = lazy(() => import("@/pages/NutritionHubPage").then(m => ({ default: m.NutritionHubPage })));
 const GuidesPage = lazy(() => import("@/pages/GuidesPage").then(m => ({ default: m.GuidesPage })));
 const CalculateursPage = lazy(() => import("@/pages/CalculateursPage").then(m => ({ default: m.CalculateursPage })));
 const ZonesCalculatorPage = lazy(() => import("@/pages/ZonesCalculatorPage").then(m => ({ default: m.ZonesCalculatorPage })));
@@ -299,7 +300,7 @@ function App() {
                           <Route path="/guides/nutrition" element={<NutritionGuidePage />} />
                           <Route path="/guides/race-prep" element={<RacePrepGuidePage />} />
                           <Route path="/guides/warmup" element={<WarmupGuidePage />} />
-                          <Route path="/nutrition" element={<NutritionGuidePage />} />
+                          <Route path="/nutrition" element={<NutritionHubPage />} />
                           <Route path="/plans" element={<PlansPage />} />
                           <Route path="/plans/methodology" element={<PlanMethodologyPage />} />
                           <Route path="/plan/new" element={<PlanNewPage />} />

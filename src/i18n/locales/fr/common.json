@@ -211,7 +211,8 @@
     "builder": "Créer",
     "planMethodology": "Guide des plans",
     "myZones": "Mes Zones",
-    "profile": "Mon Profil"
+    "profile": "Mon Profil",
+    "nutrition": "Nutrition"
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",

@@ -308,6 +308,54 @@ export function Utensils({ className, size = 24 }: IconProps) {
   );
 }
 
+export function Coffee({ className, size = 24 }: IconProps) {
+  return (
+    <svg {...defaultProps} width={size} height={size} className={className}>
+      <path d="M10 2v2" />
+      <path d="M14 2v2" />
+      <path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1" />
+      <path d="M6 2v2" />
+    </svg>
+  );
+}
+
+export function Pill({ className, size = 24 }: IconProps) {
+  return (
+    <svg {...defaultProps} width={size} height={size} className={className}>
+      <path d="M10.5 20.5 20.5 10.5a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z" />
+      <path d="m8.5 8.5 7 7" />
+    </svg>
+  );
+}
+
+export function Snowflake({ className, size = 24 }: IconProps) {
+  return (
+    <svg {...defaultProps} width={size} height={size} className={className}>
+      <line x1="2" x2="22" y1="12" y2="12" />
+      <line x1="12" x2="12" y1="2" y2="22" />
+      <path d="m20 16-4-4 4-4" />
+      <path d="m4 8 4 4-4 4" />
+      <path d="m16 4-4 4-4-4" />
+      <path d="m8 20 4-4 4 4" />
+    </svg>
+  );
+}
+
+export function Wheat({ className, size = 24 }: IconProps) {
+  return (
+    <svg {...defaultProps} width={size} height={size} className={className}>
+      <path d="M2 22 16 8" />
+      <path d="M3.47 12.53 5 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94L5 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" />
+      <path d="M7.47 8.53 9 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94L9 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" />
+      <path d="M11.47 4.53 13 3l1.53 1.53a3.5 3.5 0 0 1 0 4.94L13 11l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" />
+      <path d="M20 9 9 20" />
+      <path d="M20.53 13.47 19 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94L19 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94Z" />
+      <path d="M16.53 17.47 15 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94L15 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94Z" />
+      <path d="M12.53 21.47 11 23l-1.53-1.53a3.5 3.5 0 0 1 0-4.94L11 15l1.53 1.53a3.5 3.5 0 0 1 0 4.94Z" />
+    </svg>
+  );
+}
+
 export function BookOpen({ className, size = 24 }: IconProps) {
   return (
     <svg {...defaultProps} width={size} height={size} className={className}>

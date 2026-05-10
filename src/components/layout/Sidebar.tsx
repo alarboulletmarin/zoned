@@ -22,6 +22,7 @@ import {
   Flag,
   UserRound,
   Route as RouteIcon,
+  Utensils,
 } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -108,6 +109,7 @@ const navGroups: NavGroup[] = [
     labelKey: "nav.learn",
     items: [
       { href: "/learn", icon: GraduationCap, labelKey: "nav.learn" },
+      { href: "/nutrition", icon: Utensils, labelKey: "nav.nutrition" },
       { href: "/methodology", icon: FlaskConical, labelKey: "nav.methodology" },
       { href: "/glossary", icon: Book, labelKey: "nav.glossary" },
     ],

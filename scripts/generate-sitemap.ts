@@ -110,6 +110,8 @@ async function generateSitemap(): Promise<string> {
     { loc: "/methodology", priority: "0.7", changefreq: "monthly" },
     { loc: "/guides", priority: "0.7", changefreq: "monthly" },
     { loc: "/plan/new/prebuilt", priority: "0.6", changefreq: "monthly" },
+    // Nutrition hub (canonical landing page)
+    { loc: "/nutrition", priority: "0.8", changefreq: "monthly" },
     // Guide pages
     { loc: "/guides/nutrition", priority: "0.7", changefreq: "monthly" },
     { loc: "/guides/race-prep", priority: "0.7", changefreq: "monthly" },

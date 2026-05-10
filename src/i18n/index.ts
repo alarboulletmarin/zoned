@@ -44,6 +44,9 @@ import enProfile from "./locales/en/profile.json";
 import frRoutes from "./locales/fr/routes.json";
 import enRoutes from "./locales/en/routes.json";
 
+import frNutrition from "./locales/fr/nutrition.json";
+import enNutrition from "./locales/en/nutrition.json";
+
 // Resources object
 const resources = {
   fr: {
@@ -62,6 +65,7 @@ const resources = {
     homepage: frHomepage,
     profile: frProfile,
     routes: frRoutes,
+    nutrition: frNutrition,
   },
   en: {
     common: enCommon,
@@ -79,6 +83,7 @@ const resources = {
     homepage: enHomepage,
     profile: enProfile,
     routes: enRoutes,
+    nutrition: enNutrition,
   },
 };
 
@@ -93,7 +98,7 @@ i18n
     fallbackLng: "fr",
     defaultNS: "common",
     fallbackNS: "common",
-    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "whatif", "strength", "calculators", "content", "homepage", "profile", "routes"],
+    ns: ["common", "library", "session", "glossary", "contribute", "plan", "guides", "simulator", "whatif", "strength", "calculators", "content", "homepage", "profile", "routes", "nutrition"],
 
     // Detection options
     detection: {

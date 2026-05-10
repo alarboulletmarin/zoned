@@ -1,0 +1,334 @@
+{
+  "hub": {
+    "pageTitle": "Nutrition du coureur",
+    "title": "Manger comme tu cours",
+    "subtitle": "Bien manger pour bien courir, c'est plus simple qu'on le croit. Voici l'essentiel, sans jargon : au quotidien, avant la course, pendant, après.",
+    "eyebrow": "Hub nutrition",
+    "seoDescription": "Hub nutrition pour coureurs débutants à confirmés : que manger au quotidien, semaine de course, café, hydratation, suppléments utiles ou marketing, mythes à oublier.",
+
+    "cta": {
+      "calculator": "Calculateur de ravitaillement",
+      "calculatorSub": "Combien de glucides, de gels, d'eau pour ta course"
+    },
+
+    "toc": { "heading": "Sur cette page" },
+    "breadcrumbs": { "home": "Accueil" },
+
+    "themes": {
+      "daily":       { "title": "Au quotidien",        "tagline": "Ce qu'il faut manger tous les jours" },
+      "carbs":       { "title": "Sucres en course",    "tagline": "La règle du 1:0.8 expliquée simplement" },
+      "protein":     { "title": "Protéines",           "tagline": "Combien, quand, sous quelle forme" },
+      "caffeine":    { "title": "Café",                "tagline": "Quand le boire avant une course" },
+      "hydration":   { "title": "Boire",               "tagline": "Combien, à quel moment, quoi exactement" },
+      "raceWeek":    { "title": "Semaine de course",   "tagline": "Que faire les 7 derniers jours" },
+      "before":      { "title": "Avant l'effort",      "tagline": "Le carburant avant de partir" },
+      "during":      { "title": "Pendant l'effort",    "tagline": "Manger en courant, sans souci d'estomac" },
+      "recovery":    { "title": "Après l'effort",      "tagline": "Bien récupérer en 3 étapes" },
+      "supplements": { "title": "Compléments",         "tagline": "Lesquels marchent vraiment" },
+      "cramps":      { "title": "Crampes",             "tagline": "La vraie cause (ce n'est pas l'eau)" },
+      "heat":        { "title": "Chaleur",             "tagline": "S'habituer pour mieux courir l'été" },
+      "women":       { "title": "Coureuses",           "tagline": "Ce qui change quand on est une femme" },
+      "myths":       { "title": "10 idées reçues",     "tagline": "Ce que la science a démonté" }
+    },
+
+    "daily": {
+      "title": "Au quotidien",
+      "lede": "Bien manger pour courir, c'est l'ordinaire bien fait : assez de pâtes, riz et pain pour avoir de l'énergie, de la viande/poisson/œufs/légumineuses pour réparer les muscles, de l'eau toute la journée. Pas de magie. Juste de la régularité.",
+      "chips": {
+        "carbs":   { "label": "Glucides",  "value": "5-7 g/kg",     "helper": "Ton poids × 5 à 7. Ex : 70 kg → 350-490 g/jour de pâtes, riz, pain" },
+        "protein": { "label": "Protéines", "value": "1,8 g/kg",     "helper": "Ex : 70 kg → 126 g/jour. Une portion de viande/poisson = 25-30 g" },
+        "fat":     { "label": "Lipides",   "value": "1 g/kg",       "helper": "Privilégier huile d'olive, avocat, noix, poissons gras" },
+        "water":   { "label": "Eau",       "value": "30-35 ml/kg",  "helper": "Ex : 70 kg → 2 à 2,5 L/jour. Ajouter 500 ml par heure de course" }
+      }
+    },
+
+    "carbs": {
+      "title": "Le ratio 1:0.8 — la nouvelle règle des sucres",
+      "lede": "Pour les efforts longs, ton corps absorbe mieux deux types de sucres ensemble qu'un seul. C'est ce qui permet aux pros de manger jusqu'à 120 g de sucre par heure sans avoir mal au ventre. Le bon mélange : un peu plus de glucose que de fructose, dans un rapport 1 pour 0,8. Maurten, Precision Fuel et SiS Beta Fuel utilisent tous ce principe.",
+      "ratios": {
+        "recommended": "Idéal",
+        "glucose":  { "label": "Glucose seul",  "capacity": "60 g/h max — tu plafonnes vite" },
+        "classic":  { "label": "Mélange 2:1",   "capacity": "90 g/h — l'ancienne référence" },
+        "modern":   { "label": "Mélange 1:0.8", "capacity": "120 g/h — la limite haute pour les pros" },
+        "footnote": "Recette maison : 50 g de maltodextrine + 40 g de fructose + une pincée de sel dans 500 ml d'eau. Le sel n'est pas anodin : il aide ton corps à absorber le sucre plus vite."
+      }
+    },
+
+    "protein": {
+      "title": "Protéines : 1,8 g/kg, en 4 prises",
+      "lede": "Les vieilles recommandations (1,2 à 1,6 g/kg) sont dépassées. Les coureurs ont besoin de plus de protéines que ce qu'on pensait : environ 1,8 g par kilo de poids. Encore plus important : il vaut mieux les répartir sur 4 repas dans la journée que d'en faire 1 ou 2 gros. Tes muscles se réparent mieux comme ça.",
+      "targets": {
+        "headers": {
+          "profile": "Type de coureur",
+          "volume": "Heures par semaine",
+          "target": "Cible quotidienne"
+        },
+        "amateur": { "profile": "Amateur",        "hours": "3-5 h/sem",  "target": "1,4-1,6 g/kg",   "helper": "Sortie facile, pas de prépa course" },
+        "serious": { "profile": "Confirmé",       "hours": "6-10 h/sem", "target": "1,6-1,8 g/kg",   "helper": "Préparation course longue ou doubles séances" },
+        "elite":   { "profile": "Très entraîné",  "hours": "15+ h/sem",  "target": "1,8-2,2 g/kg",   "helper": "Charge lourde, plusieurs séances par jour" },
+        "ultra":   { "profile": "Après un ultra", "hours": "Récupération", "target": "Jusqu'à 2,5 g/kg", "helper": "Pendant 5 à 7 jours après une course de 50 km et plus" }
+      },
+      "timeline": {
+        "morning":  { "label": "Petit-déjeuner", "value": "30 g",         "helper": "Œufs, fromage blanc, skyr — pas juste du pain-confiture" },
+        "lunch":    { "label": "Déjeuner",       "value": "30-40 g",      "helper": "Viande, poisson ou légumineuses + un féculent" },
+        "snack":    { "label": "Goûter",         "value": "20-25 g",      "helper": "Yaourt grec, ou boisson protéinée si tu t'es entraîné" },
+        "dinner":   { "label": "Dîner",          "value": "30-40 g",      "helper": "Source de protéines + des légumes" },
+        "bedtime":  { "label": "Avant de dormir","value": "40 g de caséine", "helper": "Le fromage blanc fait l'affaire. Ça nourrit tes muscles toute la nuit" },
+        "footnote": "Pour bien réparer tes muscles, il faut un minimum de 25-30 g de protéines complètes par repas (viande, poisson, œufs, fromage blanc, mélange légumineuses+céréales). En dessous, l'effet est faible. Au-dessus, ça plafonne."
+      }
+    },
+
+    "caffeine": {
+      "title": "Le café avant la course",
+      "lede": "Le café (ou la caféine) est l'un des rares produits qui marchent vraiment pour mieux courir. Compte 3 à 6 mg par kilo de ton poids, à prendre 60 minutes avant le départ. Pour 70 kg, ça fait 210 à 420 mg, soit 2 à 4 cafés. En capsules, le dosage est plus précis. À noter : certaines personnes métabolisent le café lentement (génétique). Elles ressentent l'inverse — palpitations, mal au ventre. Si c'est ton cas, descends à 1-2 mg/kg ou abstiens-toi.",
+      "steps": {
+        "t90": { "label": "T-90 min", "action": "Café ou capsule. Si tu n'as pas l'habitude : 3 mg/kg. Si tu en bois tous les jours : 6 mg/kg." },
+        "t60": { "label": "T-60 min", "action": "C'est ici que la caféine atteint son maximum dans ton sang. Profite-en pour finir d'hydrater et passer aux toilettes." },
+        "t30": { "label": "T-30 min", "action": "Tu commences l'échauffement. Plus de café maintenant, il arriverait trop tard." },
+        "t0":  { "label": "Top départ", "action": "Effets pleins pendant 3 à 4 heures. Sur un ultra, tu peux reprendre une petite dose à mi-course." }
+      },
+      "contraindications": {
+        "heading": "Quand faire attention",
+        "items": {
+          "evening": "Pas de café après 14 h si tu cours tôt le lendemain. Le corps met 5 heures à en éliminer la moitié.",
+          "sensitive": "Si tu sens des palpitations, de l'angoisse ou mal au ventre : c'est trop pour toi. Réduis ou arrête.",
+          "gi": "Combiné à un effort long, le café peut accélérer le transit (envie pressante). À tester à l'entraînement, pas le jour J.",
+          "untested": "Règle d'or : ne jamais essayer une nouvelle dose le jour de la course. Toujours tester 2 à 3 fois avant.",
+          "cyp1a2": "Si le café te rend nerveux même à petite dose, tu fais peut-être partie des gens qui le métabolisent lentement. Essaye 1 ou 2 mg/kg, ou abstiens-toi."
+        }
+      }
+    },
+
+    "hydration": {
+      "title": "Hydratation : bois quand tu as soif",
+      "lede": "Pendant longtemps, on a dit qu'il fallait boire avant d'avoir soif. C'est faux et même dangereux. La science depuis 2015 dit l'inverse : ta soif est un bon signal, fie-toi à elle. Boire trop est devenu plus risqué que ne pas assez (cas mortel au marathon de Boston en 2002). Truc simple : la couleur de tes urines au réveil te dit tout. Jaune paille = bien. Foncé = bois plus. Transparent = bois moins.",
+      "morning":  { "label": "Au réveil",     "value": "400-500 ml",   "helper": "Un grand verre d'eau plate après 8 h de jeûne" },
+      "day":      { "label": "Dans la journée","value": "1,5 à 2 L",   "helper": "Petites gorgées régulières, pas tout d'un coup" },
+      "evening":  { "label": "En soirée",      "value": "200-300 ml",  "helper": "Stop 1 heure avant le coucher pour ne pas se réveiller la nuit" },
+      "footnote": "Pendant la course : 500 à 800 ml par heure selon que tu transpires beaucoup ou peu. Au-delà d'1 heure d'effort, ajoute du sel (0,5-0,7 g par litre, soit une petite pincée). Sur un ultra, jusqu'à 1 g de sel par heure. Ne dépasse jamais 800 ml d'eau pure par heure : risque d'intoxication par excès d'eau (rare mais grave). Pas d'ibuprofène ni d'anti-inflammatoires en course : ils bloquent l'élimination de l'eau par les reins."
+    },
+
+    "raceWeek": {
+      "title": "La semaine avant la course",
+      "lede": "Le but de cette semaine : remplir tes muscles d'énergie (le glycogène) sans les fatiguer. La méthode des années 80 (3 jours de privation puis 3 jours de surcharge) est dépassée. Aujourd'hui : on diminue le volume d'entraînement, on augmente progressivement les pâtes/riz/pain, et on dort. Tu vas prendre 1 à 2 kg sur la balance ces derniers jours : c'est normal. Chaque gramme d'énergie stocké retient 3 grammes d'eau.",
+      "timelineLabel": "Chronologie de la semaine de course",
+      "stepLabel": "Étape {{current}} sur {{total}}",
+      "dayLabels": {
+        "j7": "J-7", "j6": "J-6", "j5": "J-5", "j4": "J-4",
+        "j3": "J-3", "j2": "J-2", "j1": "J-1", "j0": "Jour J"
+      },
+      "j7": { "title": "Réduire le volume", "detail": "Volume divisé par 5. On garde l'intensité courte. Repas habituels équilibrés." },
+      "j6": { "title": "Sortir des excès",  "detail": "Pas d'alcool (ça abîme la réparation musculaire). Pas de fritures ni de gros plats lourds." },
+      "j5": { "title": "Plus de pâtes",     "detail": "Pâtes, riz, patate douce, pain. Vise 6 à 8 g de glucides par kilo de poids." },
+      "j4": { "title": "Bien hydrater",     "detail": "1,5 à 2 L d'eau + une boisson avec un peu de sel. Urines jaune paille." },
+      "j3": { "title": "Charger en sucres", "detail": "Maintenant 10 à 12 g de glucides par kilo (soit 700-800 g pour 70 kg). Privilégie les sources simples : pâtes blanches, riz blanc, pain blanc." },
+      "j2": { "title": "Sortie de réveil",  "detail": "20-30 min à allure facile pour rester actif sans fatiguer. Surtout pas de nouveauté : ni nouveau gel, ni nouvelles chaussures, ni vêtement jamais porté. Ce que tu utiliseras le jour J doit déjà avoir tourné des semaines." },
+      "j1": { "title": "Repas et préparation","detail": "Repas connu, riche en glucides et pauvre en fibres (pas trop de légumes crus). Coucher tôt. Préparer dossard, vêtements, gels, chaussures, montre — tout posé la veille pour gagner du temps le matin." },
+      "j0": { "title": "Petit-déj 3 h avant","detail": "1 à 3 g de glucides par kilo, faciles à digérer. 500 ml d'eau. Dernier café 90 min avant le départ." }
+    },
+
+    "before": {
+      "title": "Avant l'effort",
+      "lede": "Plus on s'approche du départ, plus on cherche du sucre rapide en petite quantité. Ton estomac doit être tranquille au départ. Règle d'or : rien de nouveau le jour de la course. Ce que tu manges ce jour-là, tu l'as déjà testé en sortie longue, plusieurs fois.",
+      "chips": {
+        "t3h":    { "label": "T-3 h",    "value": "1 à 3 g/kg de glucides", "helper": "Repas habituel, peu de fibres et de gras. Ex : pâtes blanches + filet de poulet + banane mûre" },
+        "t1h":    { "label": "T-1 h",    "value": "30 à 60 g de glucides",  "helper": "Snack léger : banane mûre, compote, pain blanc avec du miel" },
+        "t15min": { "label": "T-15 min", "value": "Gel ou boisson",         "helper": "Optionnel. Surtout utile si la course dure plus d'1 h 30" }
+      }
+    },
+
+    "during": {
+      "title": "Pendant l'effort",
+      "lede": "Au-delà d'1 heure d'effort, manger fait vraiment la différence. Vise 60 à 90 g de sucre par heure (1 gel = 25 g en moyenne). Les coureurs élites montent jusqu'à 120 g/h, mais ça demande des semaines d'entraînement digestif. Le piège : ne pas attendre d'avoir faim ou soif. Tu démarres dès la 30e minute, par petites quantités régulières.",
+      "headers": {
+        "distance":     "Distance",
+        "carbsPerHour": "Sucre par heure",
+        "ratio":        "Mélange recommandé",
+        "total":        "Total typique"
+      },
+      "rows": {
+        "short":    { "distance": "5 km (moins de 30 min)", "ratio": "—",     "total": "Eau seule, c'est suffisant" },
+        "tenK":     { "distance": "10 km (40-60 min)",      "ratio": "1:0",   "total": "1 à 2 gels ou 500 ml de boisson" },
+        "semi":     { "distance": "Semi (~1 h 30)",         "ratio": "2:1",   "total": "2 à 3 gels + boisson" },
+        "marathon": { "distance": "Marathon (3-4 h)",       "ratio": "1:0.8", "total": "5 à 7 gels + boisson énergétique" },
+        "elite":    { "distance": "Élite (moins de 3 h)",   "ratio": "1:0.8", "total": "120 g/h, estomac entraîné" },
+        "ultra":    { "distance": "Ultra (plus de 4 h)",    "ratio": "1:0.8", "total": "Mélange solides + gels + boisson + soupe salée" }
+      },
+      "gut": {
+        "heading": "Habituer son estomac — protocole sur 6 à 12 semaines",
+        "phase1": { "weeks": "Sem. 1-2", "detail": "On démarre tranquille, sur des sorties de plus d'1 h 30." },
+        "phase2": { "weeks": "Sem. 3-4", "detail": "L'estomac s'adapte progressivement." },
+        "phase3": { "weeks": "Sem. 5-6", "detail": "Tu atteins la cible standard." },
+        "phase4": { "weeks": "Sem. 7+",  "detail": "Niveau pro. Mélange 1:0.8 obligatoire." }
+      }
+    },
+
+    "recovery": {
+      "title": "Après l'effort",
+      "lede": "On a longtemps dit qu'il fallait manger dans les 30 minutes après l'effort. Faux : la vraie fenêtre est plus large. Ton corps continue d'absorber pendant 4 à 6 heures pour les sucres, et 24 à 48 h pour les protéines. Si tu rentres chez toi et que tu manges normalement dans les 2 heures, c'est bon. La fenêtre courte ne compte vraiment que si tu enchaînes une 2e séance dans la journée.",
+      "phases": {
+        "immediate": { "window": "0 à 30 min", "title": "Recharge rapide",      "detail": "Si tu as une autre séance dans moins de 4 h : 1 à 1,2 g de sucre + 0,3 g de protéines par kilo. Le lait au chocolat marche très bien (étude scientifique le prouve). Sinon, attendre le repas suivant suffit." },
+        "short":     { "window": "0 à 2 h",    "title": "Repas complet",       "detail": "Glucides + protéines + un peu de gras + des légumes. Boire jusqu'à compenser 1,5 fois ce que tu as perdu en transpirant. Cerise Montmorency et curcuma aident la récupération (preuves scientifiques 2024)." },
+        "long":      { "window": "24 à 48 h",  "title": "Réparation profonde", "detail": "Répartir les protéines sur 4 prises de 25-30 g. 40 g de fromage blanc avant de dormir. Bien dormir. Éviter l'alcool : il diminue la réparation musculaire de 24 %." }
+      }
+    },
+
+    "supplements": {
+      "title": "Compléments alimentaires — ce qui marche vraiment",
+      "lede": "L'Institut Australien du Sport a classé tous les compléments populaires en 4 niveaux selon les preuves scientifiques. Sur 28 produits courants chez les coureurs, seuls 5 ont des preuves solides. Les autres vont de \"intéressant dans certains cas\" à \"argument commercial pur\". Voici les 17 que tu dois connaître.",
+      "aisFootnote": "Classification A : preuves multiples et solides. B : preuves correctes mais dans des cas précis. C : preuves limitées, à voir au cas par cas. D : pas ou peu de preuves.",
+      "aisLabel": {
+        "A": "Niveau A — Preuves solides",
+        "B": "Niveau B — Preuves correctes",
+        "C": "Niveau C — Preuves limitées",
+        "D": "Niveau D — Pas de preuves"
+      },
+      "doseLabel": "Dose",
+      "whenLabel": "Quand",
+      "verdicts": {
+        "proven": "Marche",
+        "conditional": "Selon le cas",
+        "marketing": "Marketing"
+      },
+      "caffeine":    { "name": "Caféine",         "dose": "3-6 mg/kg",       "when": "60 min avant",     "rationale": "Le complément le plus prouvé pour courir. Améliore la performance de 2 à 7 % sur les efforts longs. En capsule, le dosage est précis." },
+      "creatine":    { "name": "Créatine",        "dose": "3-5 g/jour",      "when": "Toute l'année",    "rationale": "Mythe à oublier : ça ne fait pas grossir comme un culturiste. Le +1 kg, c'est de l'eau retenue dans les muscles. Utile pour les ultra, le trail, après 40 ans, et les périodes de double séance." },
+      "bicarbonate": { "name": "Bicarbonate",     "dose": "0,2-0,3 g/kg",    "when": "1 500 m à 10 km",  "rationale": "Aide à neutraliser l'acidité musculaire sur efforts courts et intenses. La forme Maurten Bicarb System évite les troubles digestifs. Inutile au-delà du marathon." },
+      "betaalanine": { "name": "Bêta-alanine",    "dose": "4-6 g/jour ×4-12 sem", "when": "800 m à 5 km", "rationale": "Aide les muscles à mieux gérer la fatigue sur efforts de 1 à 10 minutes. Picotements possibles si on prend une grosse dose d'un coup." },
+      "beetroot":    { "name": "Jus de betterave","dose": "5-15 mmol nitrates", "when": "2-3 h avant",   "rationale": "Améliore l'économie de course (+1-3 %) chez les coureurs amateurs. L'effet diminue chez les coureurs très entraînés. Pas de bain de bouche antiseptique le jour J : il tue les bactéries qui activent la betterave." },
+      "collagen":    { "name": "Collagène + vitamine C", "dose": "15 g + 50 mg", "when": "30-60 min avant la séance", "rationale": "Double la production de collagène par les tendons. Utile en cas de tendinite chronique ou de séances avec sauts/plyométrie." },
+      "tartcherry":  { "name": "Cerise Montmorency", "dose": "30 ml × 2/jour", "when": "5-7 j avant + après la course", "rationale": "Réduit les courbatures et l'inflammation. Utile après un marathon ou un ultra. Ne pas en prendre toute l'année (ça pourrait freiner les progrès à l'entraînement)." },
+      "curcumin":    { "name": "Curcuma",         "dose": "200-1500 mg/jour", "when": "Autour de la course", "rationale": "Anti-inflammatoire naturel. Pour qu'il soit absorbé, il faut une forme spéciale (avec poivre noir ou phytosome). Pas en utilisation continue." },
+      "probiotics":  { "name": "Probiotiques",    "dose": "10-30 milliards de bactéries/jour", "when": "4 sem avant la course", "rationale": "Réduit les rhumes et les troubles digestifs en marathon/ultra. Mélange de bactéries Lactobacillus + Bifidobacterium." },
+      "omega3":      { "name": "Oméga-3",         "dose": "2 g/jour",        "when": "Toute l'année",    "rationale": "Anti-inflammatoire naturel. Réduit les blessures et accélère la récupération. Si tu manges du poisson gras 2 fois par semaine, tu peux t'en passer." },
+      "vitD":        { "name": "Vitamine D",      "dose": "2000-4000 UI",    "when": "Hiver",            "rationale": "1 sportif sur 2 est en manque l'hiver dans le nord de l'Europe. Faire un dosage sanguin. Cible : 30 ng/mL minimum, idéalement 40-50." },
+      "iron":        { "name": "Fer",             "dose": "60-120 mg ×3/sem", "when": "Si ferritine < 35", "rationale": "Les coureuses sont à risque (1 sur 3 manque de fer). Ne jamais se supplémenter sans dosage sanguin. Prendre le matin avec de la vitamine C, à distance du café et du thé." },
+      "magnesium":   { "name": "Magnésium",       "dose": "200-400 mg",      "when": "Le soir",          "rationale": "Forme bisglycinate (mieux absorbée, douce pour le ventre). Aide le sommeil et la récupération. Inefficace contre les crampes (étude Cochrane 2020)." },
+      "bcaa":        { "name": "BCAA (acides aminés ramifiés)", "dose": "—",  "when": "À éviter",        "rationale": "Inutiles si tu manges assez de protéines. Une portion de poulet ou un yaourt grec contient autant de BCAA qu'un complément, en mieux. Pur argument commercial pour 99 % des coureurs." },
+      "lcarnitine":  { "name": "L-carnitine",     "dose": "—",               "when": "À éviter",         "rationale": "Pas absorbée correctement par voie orale. Les études concluent à un effet nul en course. Garde ton argent pour des compléments qui marchent vraiment." },
+      "ketones":     { "name": "Cétones",         "dose": "—",               "when": "À éviter",         "rationale": "Très à la mode entre 2018 et 2022, mais aucune preuve d'amélioration en course (revue 2024). Cher, goût difficile, troubles digestifs possibles." },
+      "antioxidants":{ "name": "Antioxydants haute dose", "dose": "—",       "when": "À éviter",         "rationale": "Vitamine C à 1 000 mg + vitamine E à haute dose, prises tous les jours, BLOQUENT les progrès à l'entraînement (étude majeure 2014). Mieux vaut manger des fruits et des légumes." }
+    },
+
+    "cramps": {
+      "title": "Crampes : la vraie cause (ce n'est pas l'eau)",
+      "lede": "Depuis un siècle, on a cru que les crampes venaient de la déshydratation et du manque de sels minéraux. C'est faux. Les études modernes ont démontré que la cause est nerveuse : tes muscles fatiguent, le système qui les contrôle se dérègle, et la crampe survient. La preuve la plus parlante : une gorgée de jus de cornichon stoppe une crampe en moins de 90 secondes — bien trop rapide pour modifier ta composition sanguine. C'est un réflexe nerveux déclenché par le goût acide dans la bouche.",
+      "old": {
+        "label": "Théorie ancienne",
+        "title": "Manque d'eau et de sels",
+        "detail": "Jamais prouvée scientifiquement. Le magnésium n'a aucun effet sur les crampes (étude Cochrane 2020)."
+      },
+      "new": {
+        "label": "Théorie actuelle",
+        "title": "Fatigue nerveuse et musculaire",
+        "detail": "En fin d'effort, le système qui régule tes muscles se dérègle. Les crampes arrivent quand tu pousses au-delà de ton niveau d'entraînement, pas quand tu es déshydraté."
+      },
+      "fix": {
+        "label": "Ce qui marche",
+        "title": "Étirements + jus de cornichon",
+        "detail": "Étirer le muscle qui crampe le calme presque toujours. Une gorgée de jus de cornichon (ou de moutarde) coupe la crampe en moins d'une minute. Vraie prévention : ne pas partir trop vite et bien construire son entraînement."
+      }
+    },
+
+    "heat": {
+      "title": "Chaleur : s'habituer pour mieux courir l'été",
+      "lede": "S'habituer à la chaleur est probablement le moyen le plus sous-estimé pour mieux courir. En 10 à 14 jours, tu peux gagner 5 à 10 % de volume sanguin, transpirer plus efficacement et perdre moins de sel. Bonus : ça améliore aussi la performance par temps frais. Le sauna ou un bain chaud après l'entraînement sont les méthodes les plus simples.",
+      "sauna":     { "title": "Sauna après l'entraînement", "duration": "12-15 séances", "detail": "30 min à environ 87°C juste après l'entraînement, sur 3 semaines. Études : +7 % de volume sanguin, +1,9 % sur 5 km." },
+      "bath":      { "title": "Bain chaud",                 "duration": "6 jours d'affilée", "detail": "40°C pendant 40 minutes après l'entraînement. Effets comparables au sauna. Plus accessible." },
+      "icySlush":  { "title": "Glace pilée avant la course","duration": "30 min avant", "detail": "Manger 7 à 14 g de glace pilée par kilo de poids. Ça baisse la température interne de 0,3 à 0,5°C. Permet de tenir 19 % plus longtemps en chaleur." },
+      "altitude":  { "title": "Altitude",                   "duration": "Stage de 2-4 sem", "detail": "Dormir haut, s'entraîner bas, vers 2200-2500 m. Avant : faire un dosage sanguin de la ferritine. Si elle est sous 50 ng/mL, le stage altitude ne servira à rien." }
+    },
+
+    "women": {
+      "title": "Coureuses : ce qui change",
+      "lede": "Les recommandations standards viennent souvent d'études faites sur des hommes. Pour les femmes, 4 points méritent attention particulière : le fer (1 sur 3 en manque), les protéines selon le cycle, le calcium et la vitamine D pour la santé des os, et le risque de manque d'énergie chronique (8 femmes élites sur 10 ont au moins un symptôme).",
+      "iron":     { "title": "Fer et ferritine",            "detail": "Faire doser le fer une fois par an. Cible : ferritine au-dessus de 50 ng/mL (pas 30, comme on lit souvent). Si carence : 60-100 mg de fer un jour sur deux, le matin, avec de la vitamine C, sans café ni thé à proximité." },
+      "protein":  { "title": "Protéines en deuxième moitié de cycle", "detail": "Augmenter de 0,1 à 0,2 g/kg dans les 2 semaines avant les règles. Privilégier viandes, œufs, poissons (riches en lysine). Pas de jeûne intermittent à cette période." },
+      "calcium":  { "title": "Calcium et vitamine D",       "detail": "1300-1500 mg de calcium par jour si troubles des règles. 800-2000 UI de vitamine D. Critiques pour la santé des os : les fractures de fatigue sont 4,5 fois plus fréquentes en cas d'absence de règles." },
+      "reds":     { "title": "Manque d'énergie chronique — les signaux", "detail": "Si tu manges moins de 30 calories par kilo de masse maigre par jour, tu rentres dans une zone à risque. Signaux : règles qui s'arrêtent, fatigue chronique, blessures à répétition, immunité basse, mauvais sommeil. Voir un médecin." }
+    },
+
+    "myths": {
+      "title": "10 idées reçues que la science a démontées",
+      "lede": "Le marketing du fitness propage des idées que les études récentes ont démontées. Voici les plus tenaces, avec ce que dit vraiment la science aujourd'hui.",
+      "mythLabel": "Idée reçue",
+      "truthLabel": "Ce que dit la science",
+      "window30": {
+        "myth": "Il faut absolument manger dans les 30 minutes après l'effort",
+        "truth": "La vraie fenêtre est de 4 à 6 heures pour reconstituer les réserves d'énergie, et 24 à 48 heures pour la réparation musculaire. Le repas suivant suffit dans 9 cas sur 10.",
+        "source": "Études Aragon & Schoenfeld 2013, Margolis 2021"
+      },
+      "ratio4to1": {
+        "myth": "Le mélange 4 sucres pour 1 protéine est idéal pour récupérer",
+        "truth": "Les protéines n'aident pas à reconstituer les réserves d'énergie si tu manges déjà assez de sucres. L'effet apparent vient juste des calories en plus.",
+        "source": "Synthèse de 19 études (Margolis 2021)"
+      },
+      "magnesium": {
+        "myth": "Le magnésium prévient les crampes",
+        "truth": "Aucun effet prouvé sur les crampes chez les sportifs. Effet placebo. Les crampes viennent de la fatigue nerveuse, pas d'un manque de minéraux.",
+        "source": "Étude Cochrane 2020, travaux de Schwellnus"
+      },
+      "coffee": {
+        "myth": "Le café déshydrate",
+        "truth": "Faux pour ceux qui en boivent régulièrement. Étude majeure : 4 cafés par jour hydratent autant que de l'eau. Le café compte dans ton total de boissons quotidiennes.",
+        "source": "Étude Killer 2014 (PLOS One)"
+      },
+      "thirst": {
+        "myth": "Si tu as soif, c'est que tu es déjà déshydraté",
+        "truth": "La soif se déclenche au moment exact où ta performance commence à baisser (1-2 % de déshydratation). C'est un signal fiable qu'il faut écouter.",
+        "source": "Consensus international 2015 sur l'hydratation"
+      },
+      "creatine": {
+        "myth": "La créatine fait grossir et nuit aux coureurs",
+        "truth": "Les +0,5 à 1,5 kg, c'est de l'eau dans les muscles, pas de la graisse. Très utile pour les ultra, le trail, les seniors et les périodes de double séance.",
+        "source": "Études Forbes 2023, Davies 2024"
+      },
+      "bcaa": {
+        "myth": "Les BCAA aident à mieux récupérer",
+        "truth": "Inutiles si tu manges assez de protéines. Un yaourt grec ou une portion de poulet contient autant de BCAA qu'un complément, accompagnés des autres acides aminés nécessaires.",
+        "source": "Position officielle ISSN 2024"
+      },
+      "carbload3d": {
+        "myth": "Pour un marathon, il faut 3 jours de privation puis 3 jours de surcharge",
+        "truth": "Méthode dépassée depuis 2002. Aujourd'hui : 36 à 48 heures à 10-12 g de glucides par kilo, sans phase de privation. Plus efficace, beaucoup moins éprouvant.",
+        "source": "Études Bussau 2002, Burke 2019"
+      },
+      "drinkmore": {
+        "myth": "Plus tu bois, mieux c'est",
+        "truth": "Faux et dangereux. Trop boire dilue le sang en sodium et peut tuer (cas Cynthia Lucero, marathon de Boston 2002). Bois selon ta soif. Maximum environ 800 ml par heure.",
+        "source": "Étude NEJM 2005, Hew-Butler 2017"
+      },
+      "antiox": {
+        "myth": "Les antioxydants à haute dose accélèrent la récupération",
+        "truth": "Vitamine C et E à haute dose, prises tous les jours, BLOQUENT les progrès à l'entraînement. Les radicaux libres produits par l'effort sont des signaux qui déclenchent ton adaptation.",
+        "source": "Étude Paulsen 2014 (J Physiol)"
+      }
+    },
+
+    "ctaStrip": {
+      "heading": "Aller plus loin",
+      "guide":     { "title": "Guide pratique",       "subtitle": "Calculateur + 7 sections détaillées" },
+      "glossary":  { "title": "Glossaire nutrition",  "subtitle": "Tous les termes essentiels" },
+      "article":   { "title": "Article complet",      "subtitle": "Le pourquoi du comment" },
+      "simulator": { "title": "Simulateur de course", "subtitle": "Plan kilomètre par kilomètre" }
+    },
+
+    "faq": {
+      "q1": { "question": "Combien de protéines faut-il vraiment quand on court ?",
+              "answer": "Les anciennes recommandations (1,2 à 1,6 g par kilo de poids) sont dépassées. Aujourd'hui, on conseille 1,8 g par kilo, avec 2 g et plus les jours de repos. Pour 70 kg, ça fait 126 g par jour. Encore plus important que le total : étaler sur 4 repas (25 à 30 g par repas). Une portion de poulet, un yaourt grec ou un morceau de fromage blanc font l'affaire. 40 g de fromage blanc ou de caséine avant de dormir nourrissent les muscles toute la nuit." },
+      "q2": { "question": "Le fameux ratio 1:0.8, qu'est-ce que ça change concrètement ?",
+              "answer": "Pour les efforts longs (au-delà de 90 g de sucre par heure), mélanger glucose et fructose dans un ratio de 1 pour 0,8 permet d'absorber 45 % de sucre en plus, sans avoir mal au ventre. Pourquoi ça marche ? Ton corps utilise deux portes d'entrée différentes pour ces deux sucres, en parallèle. Maurten, Precision Fuel, SiS Beta Fuel et Styrkr utilisent tous ce principe. En dessous de 90 g/h, le ratio classique 2:1 fonctionne aussi bien." },
+      "q3": { "question": "La créatine, ça fait grossir un coureur ?",
+              "answer": "Oui un peu (0,5 à 1,5 kg) mais c'est de l'eau retenue dans les muscles, pas de la graisse. Pour un marathonien qui vise moins de 3 h, ce poids supplémentaire n'aide pas. Pour un coureur d'ultra, un coureur de trail, un coureur de plus de 40 ans ou quelqu'un qui enchaîne plusieurs séances, les bénéfices (récupération, accélérations, prévention de la perte musculaire avec l'âge) compensent largement. Dose : 3 à 5 g par jour, en continu, pas besoin de phase de charge." },
+      "q4": { "question": "Combien de gels pour un marathon ?",
+              "answer": "Vise 60 à 90 g de sucre par heure, soit 5 à 7 gels sur la durée totale. Mieux : commencer tôt (au km 8-10), espacer toutes les 25 à 30 minutes, alterner avec une boisson énergétique. Pour atteindre 120 g/h (niveau pro), il faut 8 à 12 semaines d'entraînement digestif et un mélange 1:0.8 obligatoire. Les gels Maurten en hydrogel : utiles surtout au-delà de 150 g/h, pas magiques en dessous." },
+      "q5": { "question": "Le café avant la course, ça aide ou ça fatigue ?",
+              "answer": "À 3 mg/kg en capsule, pris 60 minutes avant le départ, le café améliore la performance de 2 à 7 % sur les efforts longs. La capsule est plus précise qu'un café classique (le dosage varie de 50 à 300 mg selon les machines). Attention : certaines personnes métabolisent le café lentement à cause de leur génétique. À haute dose, leur performance peut au contraire baisser. Si le café te rend nerveux, descends à 1-2 mg/kg ou abstiens-toi. Pas de café après 14 h si tu cours tôt le lendemain." },
+      "q6": { "question": "Comment éviter le mur du marathon ?",
+              "answer": "Trois leviers : charger en sucres pendant 36 à 48 h avant la course (pas 3 jours), manger régulièrement pendant la course (60-90 g/h dès le départ avec mélange 1:0.8), partir prudent sur l'allure. Le mur n'est pas dans la tête : c'est ton foie qui n'a plus de réserves. Habituer son estomac à manger en courant pendant les 6 à 12 semaines avant la course est essentiel." },
+      "q7": { "question": "Quels compléments un coureur doit-il vraiment prendre ?",
+              "answer": "5 ont des preuves solides pour la course : caféine, créatine, bicarbonate (pour les courses courtes du 1 500 m au 10 km), bêta-alanine (efforts intenses de 1 à 10 min), jus de betterave (chez les coureurs amateurs). À ajouter selon ton cas : oméga-3, vitamine D en hiver, fer si tu en manques (dosage sanguin obligatoire). À éviter : les BCAA, la L-carnitine, les cétones, et surtout les antioxydants à haute dose pris tous les jours (ils bloquent les progrès à l'entraînement)." },
+      "q8": { "question": "Les crampes viennent vraiment de la déshydratation ?",
+              "answer": "Non. Cette idée a été démontée par les études (Schwellnus 2009-2018). La vraie cause est nerveuse : ta fatigue dérègle le système qui contrôle tes muscles. Preuve la plus parlante : un peu de jus de cornichon coupe une crampe en moins d'une minute, bien trop vite pour avoir modifié ta composition sanguine. C'est un réflexe nerveux. Le magnésium n'a aucun effet (étude Cochrane 2020). Vraie prévention : ne pas partir trop vite et bien construire son entraînement." }
+    }
+  }
+}
