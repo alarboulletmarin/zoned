@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.3] - 2026-05-10
+
+### Added
+- Plan wizard autosave with "Resume / Start fresh" banner on reload
+- Undo/Redo in workout builder with Cmd+Z / Shift+Cmd+Z keyboard shortcuts
+- Reusable hooks: useZoneColors (multi-discipline), useUndoRedo, usePlanDraft
+- ResponsiveTable component (desktop table → mobile cards) and PageContainer layout primitive
+- Contextual skeleton composites (WorkoutCard, PlanWeek, Table, Article) with shimmer effect
+- EmptyState variants (no-results, not-started, error, offline)
+- Tailwind `tablet:` breakpoint (900px) plus CSS vars for cycling/swimming zones and discipline accents
+
+### Changed
+- HomePage hero accent words migrated to framer-motion (smoother rotation, no setTimeout jank)
+- Library and glossary search runs non-blocking via useDeferredValue
+- PDF / PNG / FIT / ICS exports show toast.loading during generation
+- Sidebar entry "Create" → "Create workout" for clarity
+- WCAG touch targets: icon buttons reach 44×44 px on coarse-pointer devices
+- `index.css` split into 5 focused modules (tokens / themes / palettes-a11y / animations / overrides)
+- Sticky thead on scrollable tables; VMA and race-equivalence tables render as cards on mobile
+
+### Fixed
+- Plan draft was wiped on mount under React Strict Mode (silent data loss)
+- Hardcoded cycling/swimming hex colors migrated to CSS vars (multisport-ready)
+- iOS input auto-zoom mitigated architecturally via pointer:coarse media query
+- "Zoned" logo now visible from tablet width (md:inline) instead of ≥ 1024 px
+- Removed orphan `Header.tsx` (537 lines, no importers)
+
+### Performance
+- Shimmer skeletons via react-loading-skeleton (~5 kB gz)
+- No LCP regression: /library at 1572 ms, CLS 0.00
+
 ## [0.5.2] - 2026-05-10
 
 ### Added

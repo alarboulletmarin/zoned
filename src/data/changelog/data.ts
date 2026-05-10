@@ -2,6 +2,146 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.5.3",
+    date: "2026-05-10",
+    changes: {
+      added: [
+        {
+          text: "Wizard de plan : sauvegarde automatique du brouillon avec banniere Reprendre / Repartir de zero au reload",
+          textEn: "Plan wizard autosave with Resume / Start fresh banner on reload",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Undo/Redo dans l'editeur de seance avec raccourcis Cmd+Z / Shift+Cmd+Z",
+          textEn: "Undo/Redo in workout builder with Cmd+Z / Shift+Cmd+Z keyboard shortcuts",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Hooks reutilisables : useZoneColors (multi-discipline), useUndoRedo, usePlanDraft",
+          textEn: "Reusable hooks: useZoneColors (multi-discipline), useUndoRedo, usePlanDraft",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Composants ResponsiveTable (table desktop -> cards mobile) et PageContainer pour des layouts coherents",
+          textEn: "ResponsiveTable component (desktop table → mobile cards) and PageContainer layout primitive",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Skeletons composites contextuels (WorkoutCard, PlanWeek, Table, Article) avec effet shimmer",
+          textEn: "Contextual skeleton composites (WorkoutCard, PlanWeek, Table, Article) with shimmer effect",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Variants d'EmptyState : no-results, not-started, error, offline",
+          textEn: "EmptyState variants: no-results, not-started, error, offline",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Breakpoint Tailwind tablet: (900px) et variables CSS pour les zones cycling/swimming + accents par discipline",
+          textEn: "Tailwind tablet: breakpoint (900px) plus CSS vars for cycling/swimming zones and discipline accents",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+      ],
+      changed: [
+        {
+          text: "HomePage : animation des mots accent migree vers framer-motion (rotation plus fluide, suppression du jank setTimeout)",
+          textEn: "HomePage hero accent words migrated to framer-motion (smoother rotation, no setTimeout jank)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Recherche /library + /glossary : non-bloquante via useDeferredValue (60 fps en tapant)",
+          textEn: "Library and glossary search runs non-blocking via useDeferredValue",
+          category: "Performance",
+          categoryEn: "Performance",
+        },
+        {
+          text: "Exports PDF / PNG / FIT / ICS : toast.loading durant la generation",
+          textEn: "PDF / PNG / FIT / ICS exports show toast.loading during generation",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Sidebar : 'Creer' -> 'Creer une seance' pour plus de clarte",
+          textEn: "Sidebar entry 'Create' → 'Create workout' for clarity",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Touch targets WCAG : boutons icon-* atteignent 44x44 px sur les devices tactiles",
+          textEn: "WCAG touch targets: icon buttons reach 44×44 px on coarse-pointer devices",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "index.css scinde en 5 modules focused (tokens / themes / palettes-a11y / animations / overrides)",
+          textEn: "index.css split into 5 focused modules (tokens / themes / palettes-a11y / animations / overrides)",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Tableaux scrollables : sticky thead; VMA et equivalence affichent des cards sur mobile",
+          textEn: "Sticky thead on scrollable tables; VMA and race-equivalence tables render as cards on mobile",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      fixed: [
+        {
+          text: "Brouillon de plan ecrase au mount sous React Strict Mode (silent data loss)",
+          textEn: "Plan draft was wiped on mount under React Strict Mode (silent data loss)",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Couleurs hex cycling/swimming hardcodees migrees vers CSS vars (multisport-ready)",
+          textEn: "Hardcoded cycling/swimming hex colors migrated to CSS vars (multisport-ready)",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Auto-zoom iOS sur les inputs corrige architecturalement via pointer:coarse",
+          textEn: "iOS input auto-zoom mitigated architecturally via pointer:coarse media query",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Logo 'Zoned' visible des la largeur tablette (md:inline) au lieu de >= 1024 px",
+          textEn: "'Zoned' logo now visible from tablet width (md:inline) instead of ≥ 1024 px",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Suppression de Header.tsx orphelin (537 lignes, plus aucun importeur)",
+          textEn: "Removed orphan Header.tsx (537 lines, no importers)",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+      ],
+      performance: [
+        {
+          text: "Skeletons avec effet shimmer via react-loading-skeleton (~5 kB gz)",
+          textEn: "Shimmer skeletons via react-loading-skeleton (~5 kB gz)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Pas de regression LCP : /library a 1572 ms, CLS 0.00",
+          textEn: "No LCP regression: /library at 1572 ms, CLS 0.00",
+          category: "Performance",
+          categoryEn: "Performance",
+        },
+      ],
+    },
+  },
+  {
     version: "0.5.2",
     date: "2026-05-10",
     changes: {
