@@ -1,0 +1,232 @@
+/* ==========================================================================
+   OVERRIDES — base styles, scrollbar, reduced-motion, zone utilities,
+   third-party fixes (Leaflet), iOS form-zoom mitigation.
+   ========================================================================== */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Focus visible for accessibility */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+
+  /* iOS Safari auto-zooms a focused input whenever its computed font-size
+     is below 16px. Apply a 16px floor on every editable form control via
+     max() so Tailwind's text-sm/text-xs stays visually compact on desktop
+     but the rendered font-size never drops below the iOS threshold on
+     touch devices. Touch detection via pointer:coarse keeps desktop UIs
+     unaffected. */
+  @media (pointer: coarse) {
+    input,
+    textarea,
+    select {
+      font-size: max(16px, 1rem);
+    }
+  }
+}
+
+/* ==========================================================================
+   SCROLLBAR STYLING
+   ========================================================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 4px;
+  opacity: 0.5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  opacity: 0.8;
+}
+
+/* ==========================================================================
+   REDUCED MOTION — global override (applies to all keyframes & transitions)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   ZONE SYSTEM — Utility classes & components
+   ========================================================================== */
+
+.zone-1 {
+  --zone-color: var(--zone-1);
+  --zone-bg: var(--zone-1-bg);
+  --zone-text: var(--zone-1-text);
+}
+.zone-2 {
+  --zone-color: var(--zone-2);
+  --zone-bg: var(--zone-2-bg);
+  --zone-text: var(--zone-2-text);
+}
+.zone-3 {
+  --zone-color: var(--zone-3);
+  --zone-bg: var(--zone-3-bg);
+  --zone-text: var(--zone-3-text);
+}
+.zone-4 {
+  --zone-color: var(--zone-4);
+  --zone-bg: var(--zone-4-bg);
+  --zone-text: var(--zone-4-text);
+}
+.zone-5 {
+  --zone-color: var(--zone-5);
+  --zone-bg: var(--zone-5-bg);
+  --zone-text: var(--zone-5-text);
+}
+.zone-6 {
+  --zone-color: var(--zone-6);
+  --zone-bg: var(--zone-6-bg);
+  --zone-text: var(--zone-6-text);
+}
+
+.zone-stripe {
+  position: relative;
+}
+
+.zone-stripe::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--zone-color);
+  border-radius: 2px 0 0 2px;
+  transition: background-color var(--duration-normal) ease-in-out;
+}
+
+.zone-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.5rem;
+  background: var(--zone-bg);
+  color: var(--zone-text);
+  border-radius: var(--radius-sm, 0.375rem);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  transition:
+    background-color var(--duration-normal) ease-in-out,
+    color var(--duration-normal) ease-in-out,
+    transform var(--duration-fast) ease-out;
+}
+
+.zone-badge:hover {
+  transform: scale(1.05);
+}
+
+.intensity-bar {
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--zone-1) 0%,
+    var(--zone-2) 20%,
+    var(--zone-3) 40%,
+    var(--zone-4) 60%,
+    var(--zone-5) 80%,
+    var(--zone-6) 100%
+  );
+  border-radius: 2px;
+}
+
+.intensity-bar.thin {
+  height: 2px;
+}
+
+.intensity-bar.thick {
+  height: 4px;
+}
+
+.zone-fill {
+  background: var(--zone-color);
+}
+
+.text-zone {
+  color: var(--zone-color);
+}
+
+.bg-zone {
+  background: var(--zone-bg);
+}
+
+.border-zone {
+  border-color: var(--zone-color);
+}
+
+/* ==========================================================================
+   STRENGTH — Muscle & Intensity badge styles
+   ========================================================================== */
+
+.muscle-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm, 0.375rem);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  transition:
+    background-color var(--duration-normal) ease-in-out,
+    color var(--duration-normal) ease-in-out,
+    transform var(--duration-fast) ease-out;
+}
+
+.muscle-badge:hover {
+  transform: scale(1.05);
+}
+
+.intensity-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm, 0.375rem);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  transition:
+    background-color var(--duration-normal) ease-in-out,
+    color var(--duration-normal) ease-in-out,
+    transform var(--duration-fast) ease-out;
+}
+
+.intensity-badge:hover {
+  transform: scale(1.05);
+}
+
+/* ==========================================================================
+   LEAFLET — restore tile/marker max-width that Tailwind's preflight resets
+   ========================================================================== */
+.leaflet-pane img,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+  max-width: none !important;
+  max-height: none !important;
+}

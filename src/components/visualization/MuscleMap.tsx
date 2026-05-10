@@ -33,6 +33,17 @@ interface MuscleMapProps {
 }
 
 /**
+ * Heatmap intensity ramp for the body model — yellow → orange → red.
+ * Centralised here because react-body-highlighter renders raw SVG fill
+ * attributes that don't resolve CSS custom properties; if the design
+ * system needs to reskin these via a token, this list is the single
+ * point of change. Body bg colors mirror Tailwind neutral-700/300.
+ */
+const MUSCLE_HEATMAP_RAMP: [string, string, string] = ["#fbbf24", "#f97316", "#ef4444"];
+const BODY_BG_DARK = "#404040";
+const BODY_BG_LIGHT = "#d1d5db";
+
+/**
  * Mapping from our MuscleGroup type to react-body-highlighter muscle names.
  *
  * The library accepts these muscle strings:
@@ -133,8 +144,8 @@ export function MuscleMap({ workout, className }: MuscleMapProps) {
             <Model
               data={modelData}
               style={{ width: "100%", padding: "0" }}
-              highlightedColors={["#fbbf24", "#f97316", "#ef4444"]}
-              bodyColor={isDark ? "#404040" : "#d1d5db"}
+              highlightedColors={MUSCLE_HEATMAP_RAMP}
+              bodyColor={isDark ? BODY_BG_DARK : BODY_BG_LIGHT}
               type="anterior"
             />
             <p className="text-[10px] text-muted-foreground text-center mt-1">
@@ -147,8 +158,8 @@ export function MuscleMap({ workout, className }: MuscleMapProps) {
             <Model
               data={modelData}
               style={{ width: "100%", padding: "0" }}
-              highlightedColors={["#fbbf24", "#f97316", "#ef4444"]}
-              bodyColor={isDark ? "#404040" : "#d1d5db"}
+              highlightedColors={MUSCLE_HEATMAP_RAMP}
+              bodyColor={isDark ? BODY_BG_DARK : BODY_BG_LIGHT}
               type="posterior"
             />
             <p className="text-[10px] text-muted-foreground text-center mt-1">
@@ -160,15 +171,15 @@ export function MuscleMap({ workout, className }: MuscleMapProps) {
         {/* Legend */}
         <div className="flex items-center justify-center gap-3 text-[10px] text-muted-foreground">
           <span className="flex items-center gap-1">
-            <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: "#fbbf24" }} />
+            <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: MUSCLE_HEATMAP_RAMP[0] }} />
             {t("detail.lowIntensity")}
           </span>
           <span className="flex items-center gap-1">
-            <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: "#f97316" }} />
+            <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: MUSCLE_HEATMAP_RAMP[1] }} />
             {t("detail.mediumIntensity")}
           </span>
           <span className="flex items-center gap-1">
-            <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: "#ef4444" }} />
+            <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: MUSCLE_HEATMAP_RAMP[2] }} />
             {t("detail.highIntensity")}
           </span>
         </div>

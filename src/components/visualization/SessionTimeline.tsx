@@ -11,10 +11,11 @@
 import { useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
-import type { Discipline, WorkoutTemplate } from "@/types";
+import type { WorkoutTemplate } from "@/types";
 import { getWorkoutDiscipline } from "@/types";
 import type { TimelineSegment, ZoneNumber } from "./types";
 import { transformSessionBlocks, formatDurationMinutes } from "./transforms";
+import { useZoneColors, type ZoneColorMap } from "@/hooks/useZoneColors";
 import {
   Tooltip,
   TooltipContent,
@@ -28,45 +29,6 @@ interface SessionTimelineProps {
 }
 
 /**
- * Running zone colors use the app's shared zone CSS variables (warm palette).
- * Cycling and swimming shift the hue — cycling blue, swimming cyan — so a
- * multi-discipline plan reads at a glance, while keeping intensity legible
- * through the zone gradient.
- */
-const RUNNING_ZONE_COLORS: Record<ZoneNumber, string> = {
-  1: "var(--zone-1)",
-  2: "var(--zone-2)",
-  3: "var(--zone-3)",
-  4: "var(--zone-4)",
-  5: "var(--zone-5)",
-  6: "var(--zone-6)",
-};
-
-const CYCLING_ZONE_COLORS: Record<ZoneNumber, string> = {
-  1: "#cfe2ff",
-  2: "#9ec5fe",
-  3: "#6ea8fe",
-  4: "#3d8bfd",
-  5: "#0d6efd",
-  6: "#084298",
-};
-
-const SWIMMING_ZONE_COLORS: Record<ZoneNumber, string> = {
-  1: "#d1f2f4",
-  2: "#a2e5e9",
-  3: "#63cbd1",
-  4: "#2eb0b9",
-  5: "#1b8a93",
-  6: "#0d5e66",
-};
-
-const DISCIPLINE_ZONE_COLORS: Record<Discipline, Record<ZoneNumber, string>> = {
-  running: RUNNING_ZONE_COLORS,
-  cycling: CYCLING_ZONE_COLORS,
-  swimming: SWIMMING_ZONE_COLORS,
-};
-
-/**
  * Height percentage based on zone intensity
  * Z1 = 30%, Z6 = 100% (linear interpolation)
  */
@@ -77,7 +39,7 @@ function getHeightPercent(zone: ZoneNumber | null): number {
 
 interface SegmentTooltipContentProps {
   segment: TimelineSegment;
-  zoneColors: Record<ZoneNumber, string>;
+  zoneColors: ZoneColorMap;
   t: (key: string) => string;
 }
 
@@ -130,7 +92,7 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
     return transformSessionBlocks(workout);
   }, [workout]);
 
-  const zoneColors = DISCIPLINE_ZONE_COLORS[getWorkoutDiscipline(workout)];
+  const zoneColors = useZoneColors(getWorkoutDiscipline(workout));
 
   if (segments.length === 0) {
     return (

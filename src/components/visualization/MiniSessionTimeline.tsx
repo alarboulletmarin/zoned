@@ -4,23 +4,16 @@ import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { ChevronUp } from "@/components/icons";
 import type { WorkoutTemplate } from "@/types";
+import { getWorkoutDiscipline } from "@/types";
 import type { ZoneNumber } from "./types";
 import { transformSessionBlocks, formatDurationMinutes } from "./transforms";
 import { usePickLang } from "@/lib/i18n-utils";
+import { useZoneColors } from "@/hooks/useZoneColors";
 
 interface MiniSessionTimelineProps {
   workout: WorkoutTemplate;
   onClickScrollBack: () => void;
 }
-
-const ZONE_COLORS: Record<ZoneNumber, string> = {
-  1: "var(--zone-1)",
-  2: "var(--zone-2)",
-  3: "var(--zone-3)",
-  4: "var(--zone-4)",
-  5: "var(--zone-5)",
-  6: "var(--zone-6)",
-};
 
 function getHeightPercent(zone: ZoneNumber | null): number {
   if (!zone) return 40;
@@ -35,6 +28,7 @@ export function MiniSessionTimeline({
   const { t } = useTranslation("session");
   const pick = usePickLang();
   const isMobile = useIsMobile();
+  const zoneColors = useZoneColors(getWorkoutDiscipline(workout));
 
   const data = useMemo(() => {
     return transformSessionBlocks(workout);
@@ -90,7 +84,7 @@ export function MiniSessionTimeline({
             const isFirst = i === 0;
             const isLast = i === segmentCount - 1;
             const zoneColor = seg.zoneNumber
-              ? ZONE_COLORS[seg.zoneNumber]
+              ? zoneColors[seg.zoneNumber]
               : "var(--muted-foreground)";
 
             return (
@@ -155,7 +149,7 @@ export function MiniSessionTimeline({
         >
           {data.segments.map((seg, i) => {
             const zoneColor = seg.zoneNumber
-              ? ZONE_COLORS[seg.zoneNumber]
+              ? zoneColors[seg.zoneNumber]
               : "transparent";
             return (
               <div

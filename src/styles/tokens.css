@@ -1,0 +1,113 @@
+/* ==========================================================================
+   TOKENS — Design system primitives (Tailwind v4 @theme)
+   Motion durations, radius scale, color mappings, typography, breakpoints.
+   ========================================================================== */
+
+@theme inline {
+  /* Motion tokens */
+  --duration-instant: 75ms;
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 500ms;
+
+  /* Custom breakpoint — tablet portrait (iPad mini, Air, larger phones landscape).
+     Fills the gap between md (768px) and lg (1024px) where layouts often need
+     a denser-than-mobile but lighter-than-desktop treatment. */
+  --breakpoint-tablet: 900px;
+
+  /* Radius scale */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  /* Semantic color mappings */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Training zones — Running (default discipline) */
+  --color-zone-1: var(--zone-1);
+  --color-zone-1-bg: var(--zone-1-bg);
+  --color-zone-1-text: var(--zone-1-text);
+  --color-zone-2: var(--zone-2);
+  --color-zone-2-bg: var(--zone-2-bg);
+  --color-zone-2-text: var(--zone-2-text);
+  --color-zone-3: var(--zone-3);
+  --color-zone-3-bg: var(--zone-3-bg);
+  --color-zone-3-text: var(--zone-3-text);
+  --color-zone-4: var(--zone-4);
+  --color-zone-4-bg: var(--zone-4-bg);
+  --color-zone-4-text: var(--zone-4-text);
+  --color-zone-5: var(--zone-5);
+  --color-zone-5-bg: var(--zone-5-bg);
+  --color-zone-5-text: var(--zone-5-text);
+  --color-zone-6: var(--zone-6);
+  --color-zone-6-bg: var(--zone-6-bg);
+  --color-zone-6-text: var(--zone-6-text);
+
+  /* Training zones — Cycling (blue scale) */
+  --color-zone-cyclo-1: var(--zone-cyclo-1);
+  --color-zone-cyclo-2: var(--zone-cyclo-2);
+  --color-zone-cyclo-3: var(--zone-cyclo-3);
+  --color-zone-cyclo-4: var(--zone-cyclo-4);
+  --color-zone-cyclo-5: var(--zone-cyclo-5);
+  --color-zone-cyclo-6: var(--zone-cyclo-6);
+
+  /* Training zones — Swimming (cyan scale) */
+  --color-zone-swim-1: var(--zone-swim-1);
+  --color-zone-swim-2: var(--zone-swim-2);
+  --color-zone-swim-3: var(--zone-swim-3);
+  --color-zone-swim-4: var(--zone-swim-4);
+  --color-zone-swim-5: var(--zone-swim-5);
+  --color-zone-swim-6: var(--zone-swim-6);
+
+  /* Discipline accent (used for plan calendar dots, sparkline, badges) */
+  --color-discipline-cycling: var(--discipline-cycling);
+  --color-discipline-swimming: var(--discipline-swimming);
+
+  /* Strength muscle group colors */
+  --color-muscle-quadriceps: var(--muscle-quadriceps);
+  --color-muscle-hamstrings: var(--muscle-hamstrings);
+  --color-muscle-calves: var(--muscle-calves);
+  --color-muscle-glutes: var(--muscle-glutes);
+  --color-muscle-hip_flexors: var(--muscle-hip_flexors);
+  --color-muscle-adductors: var(--muscle-adductors);
+  --color-muscle-core_anterior: var(--muscle-core_anterior);
+  --color-muscle-core_lateral: var(--muscle-core_lateral);
+  --color-muscle-core_posterior: var(--muscle-core_posterior);
+  --color-muscle-upper_back: var(--muscle-upper_back);
+  --color-muscle-shoulders: var(--muscle-shoulders);
+  --color-muscle-chest: var(--muscle-chest);
+
+  /* Strength intensity colors */
+  --color-intensity-mobility: var(--intensity-mobility);
+  --color-intensity-endurance: var(--intensity-endurance);
+  --color-intensity-hypertrophy: var(--intensity-hypertrophy);
+  --color-intensity-strength: var(--intensity-strength);
+  --color-intensity-power: var(--intensity-power);
+
+  /* Typography */
+  --font-sans: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+}
