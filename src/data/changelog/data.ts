@@ -2,6 +2,120 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.5.4",
+    date: "2026-05-11",
+    changes: {
+      added: [
+        {
+          text: "Nouvelle categorie 'Trail' avec 10 seances (TRL-001 → TRL-010) basees sur protocoles Koop / Vernillo / Uphill Athlete : sprints en cote, VMA cote, force-endurance, tempo en montee prolongee, descente technique, endurance en montee soutenue, endurance vallonnee, sortie longue trail, back-to-back jour 1 et jour 2",
+          textEn: "New 'Trail' category with 10 sessions (TRL-001 → TRL-010) based on Koop / Vernillo / Uphill Athlete protocols: hill sprints, VO2max hills, power hills, sustained tempo climb, controlled downhill, sustained climbing endurance, rolling endurance, specific long run, back-to-back day 1 and 2",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Champs D+, pente et terrain sur les blocs de seance (4 types de terrain : route, sentier roulant, sentier technique, montagne)",
+          textEn: "elevationGainM, gradientPercent and terrainType fields on workout blocks (4 terrain types: road, runnable trail, technical trail, mountain)",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Mini profil altimetrique SVG sur les fiches seance et les cards Trail avec detection intelligente des oscillations (montee/descente repetees)",
+          textEn: "Mini elevation profile SVG on workout detail pages and Trail cards with smart oscillation detection for hill repeats",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Helper workoutMetrics : calcul du D+, D-, pente moyenne, terrain dominant et densite verticale (m/km)",
+          textEn: "workoutMetrics helper: computes D+, D-, average gradient, dominant terrain and vertical density (m/km)",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Enrichissement D+/pente/terrain sur les 15 seances 'Cotes' et 10 autres seances vallonnees (Endurance vallonnee, Sortie longue trail, Ultra time-on-feet, Tempo vallonne, Allure trail, Seuil vallonne...)",
+          textEn: "D+/gradient/terrain backfill on all 15 'Hills' workouts and 10 other hilly endurance workouts (rolling endurance, trail long run, ultra time-on-feet, hilly tempo, trail race pace, hilly threshold...)",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Bandeau Trail sur les fiches seance : D+ total, D- total, densite verticale, pente moyenne, terrain dominant",
+          textEn: "Trail stats banner on workout detail pages: total D+, total D-, vertical density, average gradient, dominant terrain",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Badges D+ et terrain sur les cards de la bibliotheque (Grid + Focus), D+ chiffre sur les vues Compact et Liste",
+          textEn: "D+ and terrain badges on library cards (Grid + Focus), numeric D+ on Compact and List views",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      changed: [
+        {
+          text: "Generateur de plan : priorite +100 pour les seances 'trail' lors d'une course trail_short / trail / ultra",
+          textEn: "Plan generator: +100 priority boost for 'trail' workouts when race is trail_short / trail / ultra",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Quiz 'cotes' inclut maintenant les seances trail (en plus de la categorie hills)",
+          textEn: "Quiz 'hills' environment now includes trail workouts in addition to hills category",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Generateur de parcours : detecte category=trail et override surface, terrain et target D+ depuis les metriques de la seance",
+          textEn: "Route generator: detects category=trail and overrides surface, terrain preference and elevation target from workout metrics",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Durees explicites parsables ajoutees aux phases de recuperation des seances de cotes et mixtes",
+          textEn: "Explicit parsable durations added to recovery phases of hills and mixed workouts",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+      ],
+      fixed: [
+        {
+          text: "Scroll infini bibliotheque bloque a 24 elements quand le sentinel se monte apres isLoading",
+          textEn: "Library infinite scroll stuck at 24 items when sentinel mounts after isLoading",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "D+/km et pente moyenne plus honnetes : prennent en compte tout l'echauffement et le retour au calme (distance estimee via duree × allure de zone)",
+          textEn: "D+/km and average gradient more honest: include warmup and cooldown blocks (distance estimated via duration × zone-pace)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "D- (denivele negatif) affiche pour les seances de descente ou oscillantes (cotes avec recuperation en descente)",
+          textEn: "D- (elevation loss) displayed for downhill or oscillating sessions (hill repeats with descending recovery)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Bandeau 'Cotes requises' supprime quand les metriques Trail sont visibles (suppression de la redondance)",
+          textEn: "'Hills required' environment label removed when trail metrics are displayed (deduplication)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Descentes HIL-015 zonees en Z2 pour distinguer visuellement montees (orange) et descentes (vert) dans la timeline",
+          textEn: "HIL-015 descents zoned Z2 (instead of Z3) so SessionTimeline visually distinguishes climbs (orange) from descents (green)",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Recovery 'Remontee trottee souple' de TRL-005 affiche maintenant sa duree explicite (12 min)",
+          textEn: "TRL-005 recovery 'Remontee trottee souple' now displays its explicit duration (12 min)",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+      ],
+    },
+  },
+  {
     version: "0.5.3",
     date: "2026-05-10",
     changes: {

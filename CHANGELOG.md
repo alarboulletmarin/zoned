@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.4] - 2026-05-11
+
+### Added
+- New `trail` workout category with 10 sessions (TRL-001 → TRL-010): hill sprints, VO2max hills, power hills, sustained tempo climb, controlled downhill repeats, sustained climbing endurance, rolling endurance, specific long run, back-to-back day 1 and day 2
+- `elevationGainM`, `gradientPercent`, `terrainType` fields on `WorkoutBlock` (terrain: road / trail_runnable / trail_technical / mountain)
+- `MiniElevationProfile` SVG component with smart oscillation detection for hill repeats
+- `workoutMetrics.ts` helper (D+, D−, avg gradient, dominant terrain, vertical density, trail metrics)
+- D+/gradient/terrain backfill on all 15 hills workouts and 10 other hilly endurance workouts (END-004, END-009, SL-005, SL-006, LR-016 ultra time-on-feet, TMP-010, RP-005, MIX-002, FAR-005, THR-011)
+- Trail stats banner on WorkoutDetailPage (D+ total · D− total · vertical density · avg gradient · dominant terrain)
+- D+/terrain badges on WorkoutCard (Grid + Focus), D+ on WorkoutCardCompact and WorkoutListItem
+- Bilingual i18n trail keys (categories.trail, trail.elevationGain, trail.elevationLoss, trail.verticalDensity, trail.gradientAvg, trail.terrainType.*)
+
+### Changed
+- Plan generator prioritises `category === "trail"` workouts (+100 priority) for `trail_short` / `trail` / `ultra` race distances
+- Quiz `environment: hills` answer now includes both `hills` and `trail` categories
+- Route generator detects `category === "trail"` and overrides surface, terrain preference, and elevation target accordingly
+- Recovery strings on hills + mixed workouts updated with parsable durations (e.g. "Descente en marchant" → "2-3 min descente en marchant")
+- WorkoutDetailPage no longer shows "Hills required" environment label when trail metrics are visible (deduplication)
+
+### Fixed
+- Library infinite scroll stuck at 24 items when sentinel mounts after isLoading
+- D+/km and avg gradient now count all blocks (warmup/cooldown estimated via duration × zone-pace) for honest values
+- D− (elevation loss) displayed on WorkoutDetailPage, WorkoutCard, WorkoutListItem, WorkoutCardCompact for downhill or oscillating sessions
+- HIL-015 descents zoned Z2 (instead of Z3) so SessionTimeline visually distinguishes climbs (orange) from descents (green)
+- HIL-011 main block missing `distanceM` — added 250 m so D− computes correctly
+- TRL-005 recovery "Remontée trottée souple" now carries an explicit "12 min" duration so the structure renders timing
+
 ## [0.5.3] - 2026-05-10
 
 ### Added
