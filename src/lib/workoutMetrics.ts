@@ -35,13 +35,16 @@ export function computeTotalElevationGain(template: WorkoutTemplate): number {
 export function computeAvgGradient(template: WorkoutTemplate): number {
   let weightedSum = 0;
   let totalWeight = 0;
+  let anyGradient = false;
   for (const block of allBlocks(template)) {
-    if (block.gradientPercent == null) continue;
     const weight = blockDurationMin(block) || blockEffectiveCount(block);
-    weightedSum += block.gradientPercent * weight;
+    if (block.gradientPercent != null) {
+      anyGradient = true;
+      weightedSum += block.gradientPercent * weight;
+    }
     totalWeight += weight;
   }
-  if (totalWeight === 0) return 0;
+  if (!anyGradient || totalWeight === 0) return 0;
   return Math.round((weightedSum / totalWeight) * 10) / 10;
 }
 
@@ -64,6 +67,22 @@ export function computeDominantTerrain(template: WorkoutTemplate): TerrainType |
   return best;
 }
 
+function paceKmhForZone(zone: string | undefined): number {
+  if (!zone) return 10;
+  const matches = zone.match(/[1-6]/g);
+  if (!matches) return 10;
+  const z = Math.max(...matches.map((m) => Number(m)));
+  switch (z) {
+    case 1: return 9;
+    case 2: return 10;
+    case 3: return 12;
+    case 4: return 14;
+    case 5: return 16;
+    case 6: return 18;
+    default: return 10;
+  }
+}
+
 export function computeVerticalDensity(
   template: WorkoutTemplate,
   totalElevationM?: number,
@@ -78,6 +97,9 @@ export function computeVerticalDensity(
       totalKm += block.distanceKm * count;
     } else if (block.distanceM != null) {
       totalKm += (block.distanceM / 1000) * count;
+    } else if (block.durationMin != null) {
+      const speed = paceKmhForZone(block.zone);
+      totalKm += (block.durationMin / 60) * speed * count;
     }
   }
   if (totalKm <= 0) return 0;
