@@ -416,7 +416,10 @@
           "durationMin": 45,
           "zone": "Z3",
           "pace": "Effort Trail",
-          "intensityType": "M"
+          "intensityType": "M",
+          "elevationGainM": 200,
+          "gradientPercent": 4,
+          "terrainType": "trail_runnable"
         }
       ],
       "cooldownTemplate": [

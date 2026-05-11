@@ -347,7 +347,7 @@
           "durationMin": 8,
           "repetitions": 5,
           "zone": "Z2-Z3",
-          "recovery": "Remontée trottée souple",
+          "recovery": "12 min remontée trottée souple",
           "elevationGainM": 0,
           "gradientPercent": -9,
           "terrainType": "trail_runnable"

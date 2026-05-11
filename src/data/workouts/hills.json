@@ -31,7 +31,10 @@
         {
           "description": "Gammes et 2-3 côtes d'échauffement",
           "descriptionEn": "Drills and 2-3 warm-up hills",
-          "durationMin": 5
+          "durationMin": 5,
+          "elevationGainM": 15,
+          "gradientPercent": 10,
+          "terrainType": "road"
         }
       ],
       "mainSetTemplate": [
@@ -40,7 +43,10 @@
           "descriptionEn": "8x100m hill at maximum effort",
           "distanceM": 100,
           "repetitions": 8,
-          "recovery": "Descente en marchant"
+          "recovery": "Descente en marchant",
+          "elevationGainM": 10,
+          "gradientPercent": 10,
+          "terrainType": "road"
         }
       ],
       "cooldownTemplate": [
@@ -124,7 +130,10 @@
         {
           "description": "Gammes et côtes d'échauffement",
           "descriptionEn": "Drills and warm-up hills",
-          "durationMin": 5
+          "durationMin": 5,
+          "elevationGainM": 12,
+          "gradientPercent": 7,
+          "terrainType": "road"
         }
       ],
       "mainSetTemplate": [
@@ -135,7 +144,10 @@
           "zone": "Z4-Z5",
           "repetitions": 6,
           "recovery": "Descente en trottinant",
-          "intensityType": "I"
+          "intensityType": "I",
+          "elevationGainM": 18,
+          "gradientPercent": 7,
+          "terrainType": "road"
         }
       ],
       "cooldownTemplate": [
@@ -227,7 +239,10 @@
           "zone": "Z4",
           "repetitions": 5,
           "recovery": "Descente + 1min récup",
-          "intensityType": "T"
+          "intensityType": "T",
+          "elevationGainM": 28,
+          "gradientPercent": 5.5,
+          "terrainType": "road"
         }
       ],
       "cooldownTemplate": [
@@ -318,7 +333,10 @@
           "descriptionEn": "6x80m hill with bounding",
           "distanceM": 80,
           "repetitions": 6,
-          "recovery": "Descente en marchant"
+          "recovery": "Descente en marchant",
+          "elevationGainM": 5,
+          "gradientPercent": 6,
+          "terrainType": "road"
         }
       ],
       "cooldownTemplate": [
@@ -413,7 +431,10 @@
           "recovery": "Footing descente",
           "restBetweenSets": "3min footing Z1",
           "intensityType": "I",
-          "sets": 3
+          "sets": 3,
+          "elevationGainM": 10,
+          "gradientPercent": 10,
+          "terrainType": "road"
         }
       ],
       "mainSetStructure": [
@@ -542,7 +563,10 @@
           "distanceM": 200,
           "zone": "Z2",
           "recovery": "Descente",
-          "intensityType": "E"
+          "intensityType": "E",
+          "elevationGainM": 10,
+          "gradientPercent": 5,
+          "terrainType": "road"
         },
         {
           "description": "2x côte tempo Z3",
@@ -550,7 +574,10 @@
           "distanceM": 200,
           "zone": "Z3",
           "recovery": "Descente",
-          "intensityType": "M"
+          "intensityType": "M",
+          "elevationGainM": 12,
+          "gradientPercent": 6,
+          "terrainType": "road"
         },
         {
           "description": "2x côte seuil Z4",
@@ -558,7 +585,10 @@
           "distanceM": 200,
           "zone": "Z4",
           "recovery": "Descente",
-          "intensityType": "T"
+          "intensityType": "T",
+          "elevationGainM": 14,
+          "gradientPercent": 7,
+          "terrainType": "road"
         },
         {
           "description": "2x côte VMA Z5",
@@ -566,7 +596,10 @@
           "distanceM": 150,
           "zone": "Z5",
           "recovery": "Descente",
-          "intensityType": "I"
+          "intensityType": "I",
+          "elevationGainM": 14,
+          "gradientPercent": 9,
+          "terrainType": "road"
         }
       ],
       "mainSetStructure": [
@@ -699,7 +732,10 @@
           "zone": "Z4",
           "repetitions": 6,
           "recovery": "30s en bas",
-          "intensityType": "T"
+          "intensityType": "T",
+          "elevationGainM": 10,
+          "gradientPercent": 10,
+          "terrainType": "trail_runnable"
         }
       ],
       "mainSetStructure": [
@@ -813,7 +849,10 @@
           "zone": "Z3-Z4",
           "repetitions": 5,
           "recovery": "Marche descente + 1min",
-          "intensityType": "T"
+          "intensityType": "T",
+          "elevationGainM": 3,
+          "gradientPercent": 5,
+          "terrainType": "road"
         }
       ],
       "cooldownTemplate": [
@@ -897,7 +936,10 @@
           "descriptionEn": "3 loops of a hilly circuit, sustained effort",
           "durationMin": 35,
           "zone": "Z3-Z4",
-          "intensityType": "T"
+          "intensityType": "T",
+          "elevationGainM": 200,
+          "gradientPercent": 7,
+          "terrainType": "trail_runnable"
         }
       ],
       "cooldownTemplate": [
@@ -974,7 +1016,8 @@
           "descriptionEn": "Trail jog",
           "durationMin": 15,
           "zone": "Z1-Z2",
-          "intensityType": "E"
+          "intensityType": "E",
+          "terrainType": "trail_runnable"
         }
       ],
       "mainSetTemplate": [
@@ -982,7 +1025,10 @@
           "description": "Montées variées (3 courtes + 2 longues) sur sentier",
           "descriptionEn": "Varied climbs (3 short + 2 long) on trail",
           "durationMin": 40,
-          "zone": "Z3-Z5"
+          "zone": "Z3-Z5",
+          "elevationGainM": 250,
+          "gradientPercent": 8,
+          "terrainType": "trail_runnable"
         }
       ],
       "mainSetStructure": [
@@ -1083,7 +1129,9 @@
           "zone": "Z3",
           "repetitions": 7,
           "recovery": "Remontée en marchant",
-          "intensityType": "M"
+          "intensityType": "M",
+          "gradientPercent": -10,
+          "terrainType": "trail_runnable"
         }
       ],
       "cooldownTemplate": [
@@ -1178,7 +1226,10 @@
           "descriptionEn": "Drills: high knees, butt kicks, pawing, plus 2 hills at 70% effort",
           "durationMin": 5,
           "zone": "Z3",
-          "intensityType": "M"
+          "intensityType": "M",
+          "elevationGainM": 10,
+          "gradientPercent": 10,
+          "terrainType": "road"
         }
       ],
       "mainSetTemplate": [
@@ -1188,7 +1239,10 @@
           "repetitions": 8,
           "zone": "Z6",
           "recovery": "Descente en marchant + 2-3 min repos complet",
-          "intensityType": "R"
+          "intensityType": "R",
+          "elevationGainM": 5,
+          "gradientPercent": 10,
+          "terrainType": "road"
         }
       ],
       "cooldownTemplate": [
@@ -1281,7 +1335,10 @@
           "repetitions": 3,
           "zone": "Z3",
           "recovery": "Descente en trottinant",
-          "intensityType": "M"
+          "intensityType": "M",
+          "elevationGainM": 10,
+          "gradientPercent": 5,
+          "terrainType": "road"
         },
         {
           "description": "3x200m côte moyenne (6-8% pente)",
@@ -1290,7 +1347,10 @@
           "repetitions": 3,
           "zone": "Z4",
           "recovery": "Descente en trottinant",
-          "intensityType": "T"
+          "intensityType": "T",
+          "elevationGainM": 14,
+          "gradientPercent": 7,
+          "terrainType": "road"
         },
         {
           "description": "3x150m côte raide (8-12% pente)",
@@ -1299,7 +1359,10 @@
           "repetitions": 3,
           "zone": "Z5",
           "recovery": "Descente en marchant",
-          "intensityType": "I"
+          "intensityType": "I",
+          "elevationGainM": 15,
+          "gradientPercent": 10,
+          "terrainType": "road"
         }
       ],
       "cooldownTemplate": [
@@ -1381,7 +1444,9 @@
           "descriptionEn": "Progressive jog on the first rolling sections",
           "durationMin": 10,
           "zone": "Z2",
-          "intensityType": "E"
+          "intensityType": "E",
+          "elevationGainM": 30,
+          "terrainType": "trail_runnable"
         }
       ],
       "mainSetTemplate": [
@@ -1390,7 +1455,10 @@
           "descriptionEn": "35-45min continuous run on undulating terrain. Constant effort (Z2-Z3). Push on uphills without blowing up. Ease on downhills without sprinting.",
           "durationMin": 40,
           "zone": "Z3",
-          "intensityType": "M"
+          "intensityType": "M",
+          "elevationGainM": 240,
+          "gradientPercent": 4,
+          "terrainType": "trail_runnable"
         }
       ],
       "cooldownTemplate": [
@@ -1472,14 +1540,18 @@
           "descriptionEn": "Progressive jog on mixed terrain",
           "durationMin": 15,
           "zone": "Z2",
-          "intensityType": "E"
+          "intensityType": "E",
+          "terrainType": "trail_runnable"
         },
         {
           "description": "Montée et descente douce en trottinant x2 pour échauffer les quadriceps",
           "descriptionEn": "Gentle uphill and downhill jog x2 to warm up quadriceps",
           "durationMin": 5,
           "zone": "Z2",
-          "intensityType": "E"
+          "intensityType": "E",
+          "elevationGainM": 20,
+          "gradientPercent": 5,
+          "terrainType": "trail_runnable"
         }
       ],
       "mainSetTemplate": [
@@ -1489,7 +1561,10 @@
           "durationMin": 3,
           "zone": "Z3",
           "repetitions": 6,
-          "intensityType": "M"
+          "intensityType": "M",
+          "elevationGainM": 24,
+          "gradientPercent": 6,
+          "terrainType": "trail_runnable"
         },
         {
           "description": "6x descente de 200-300m à allure modérée (pente 5-8%). Focus technique : cadence haute (>180 spm), posture droite, pas de freinage, atterrissage médiopied",
@@ -1497,7 +1572,9 @@
           "distanceM": 250,
           "repetitions": 6,
           "zone": "Z3",
-          "intensityType": "M"
+          "intensityType": "M",
+          "gradientPercent": -6,
+          "terrainType": "trail_runnable"
         }
       ],
       "cooldownTemplate": [

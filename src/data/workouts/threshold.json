@@ -1083,7 +1083,10 @@
           "descriptionEn": "Threshold on hilly course, constant effort",
           "durationMin": 20,
           "zone": "Z4",
-          "intensityType": "T"
+          "intensityType": "T",
+          "elevationGainM": 230,
+          "gradientPercent": 5,
+          "terrainType": "trail_runnable"
         }
       ],
       "cooldownTemplate": [

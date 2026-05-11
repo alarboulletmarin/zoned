@@ -887,7 +887,10 @@
           "descriptionEn": "Tempo on hilly course, constant effort",
           "durationMin": 25,
           "zone": "Z3",
-          "intensityType": "M"
+          "intensityType": "M",
+          "elevationGainM": 130,
+          "gradientPercent": 5,
+          "terrainType": "trail_runnable"
         }
       ],
       "cooldownTemplate": [

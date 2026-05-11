@@ -419,7 +419,10 @@
           "descriptionEn": "Running on hilly terrain, Z2 effort",
           "durationMin": 75,
           "zone": "Z2",
-          "intensityType": "E"
+          "intensityType": "E",
+          "elevationGainM": 190,
+          "gradientPercent": 3.5,
+          "terrainType": "trail_runnable"
         }
       ],
       "cooldownTemplate": [
@@ -506,7 +509,10 @@
           "descriptionEn": "Trail running, Z2 effort",
           "durationMin": 90,
           "zone": "Z2",
-          "intensityType": "E"
+          "intensityType": "E",
+          "elevationGainM": 380,
+          "gradientPercent": 5,
+          "terrainType": "trail_runnable"
         }
       ],
       "cooldownTemplate": [
@@ -1380,7 +1386,10 @@
           "descriptionEn": "3-5h in strict Z1 (< 70% HRmax). Alternating: 20-30min easy run / 10-15min active walk (power hike, arms engaged). Fueling every 30-45min (gels, bars, water + electrolytes). On trails if possible",
           "durationMin": 210,
           "zone": "Z1",
-          "intensityType": "E"
+          "intensityType": "E",
+          "elevationGainM": 750,
+          "gradientPercent": 6,
+          "terrainType": "trail_technical"
         }
       ],
       "mainSetStructure": [

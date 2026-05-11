@@ -466,7 +466,10 @@
           "description": "Fartlek sur sentier : efforts sur montées et parties techniques",
           "descriptionEn": "Trail fartlek: efforts on climbs and technical sections",
           "durationMin": 35,
-          "zone": "Z2-Z4"
+          "zone": "Z2-Z4",
+          "elevationGainM": 90,
+          "gradientPercent": 4,
+          "terrainType": "trail_runnable"
         }
       ],
       "cooldownTemplate": [

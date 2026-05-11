@@ -134,19 +134,28 @@
           "description": "Endurance Z2",
           "descriptionEn": "Z2 endurance",
           "durationMin": 15,
-          "zone": "Z2"
+          "zone": "Z2",
+          "elevationGainM": 45,
+          "gradientPercent": 3,
+          "terrainType": "trail_runnable"
         },
         {
           "description": "6x côtes courtes",
           "descriptionEn": "6x short hills",
           "repetitions": 6,
-          "recovery": "Descente"
+          "recovery": "Descente",
+          "elevationGainM": 12,
+          "gradientPercent": 7,
+          "terrainType": "trail_runnable"
         },
         {
           "description": "Endurance Z2",
           "descriptionEn": "Z2 endurance",
           "durationMin": 15,
-          "zone": "Z2"
+          "zone": "Z2",
+          "elevationGainM": 45,
+          "gradientPercent": 3,
+          "terrainType": "trail_runnable"
         }
       ],
       "cooldownTemplate": [

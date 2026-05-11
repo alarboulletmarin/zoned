@@ -309,7 +309,10 @@
           "descriptionEn": "Run on hilly terrain, constant effort",
           "durationMin": 40,
           "zone": "Z2",
-          "intensityType": "E"
+          "intensityType": "E",
+          "elevationGainM": 130,
+          "gradientPercent": 4,
+          "terrainType": "trail_runnable"
         }
       ],
       "cooldownTemplate": [
@@ -753,7 +756,10 @@
           "descriptionEn": "Run on varied trails, Z2 effort",
           "durationMin": 55,
           "zone": "Z2",
-          "intensityType": "E"
+          "intensityType": "E",
+          "elevationGainM": 180,
+          "gradientPercent": 4,
+          "terrainType": "trail_runnable"
         }
       ],
       "cooldownTemplate": [
