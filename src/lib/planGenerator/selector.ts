@@ -133,26 +133,26 @@ function findBestWorkout(
 ): WorkoutSelection | null {
   const categories = SESSION_TO_CATEGORY[sessionType] ?? [];
   const diffLevel = DIFFICULTY_LEVELS[difficulty];
-  // Step 1: Filter by category
+  const isTrailRace = raceDistance === "trail_short" || raceDistance === "trail" || raceDistance === "ultra";
+
   let candidates = allWorkouts.filter((w) => categories.includes(w.category));
 
-  // Step 1b: Exclude trail workouts for road races, include for trail races
-  const isTrailRace = raceDistance === "trail_short" || raceDistance === "trail" || raceDistance === "ultra";
-  if (!isTrailRace) {
-    candidates = candidates.filter((w) =>
-      !w.selectionCriteria.tags.includes("trail"),
-    );
-  }
-
-  // For trail races, broaden endurance and long_run to include hills
-  if (isTrailRace && (sessionType === "endurance" || sessionType === "long_run")) {
-    const hillsCandidates = allWorkouts.filter((w) => w.category === "hills");
-    const existingIds = new Set(candidates.map(c => c.id));
-    for (const hw of hillsCandidates) {
-      if (!existingIds.has(hw.id)) {
-        candidates.push(hw);
+  if (isTrailRace) {
+    const trailCandidates = allWorkouts.filter((w) => w.category === "trail");
+    const existingIds = new Set(candidates.map((c) => c.id));
+    for (const tw of trailCandidates) {
+      if (!existingIds.has(tw.id)) candidates.push(tw);
+    }
+    if (sessionType === "endurance" || sessionType === "long_run") {
+      const hillsCandidates = allWorkouts.filter((w) => w.category === "hills");
+      for (const hw of hillsCandidates) {
+        if (!existingIds.has(hw.id)) candidates.push(hw);
       }
     }
+  } else {
+    candidates = candidates.filter(
+      (w) => w.category !== "trail" && !w.selectionCriteria.tags.includes("trail"),
+    );
   }
 
   // Step 2: Filter by phase

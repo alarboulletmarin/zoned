@@ -10,6 +10,7 @@ import { getDominantZone, isStrengthWorkout } from "@/types";
 import { getWorkoutDuration } from "@/components/visualization";
 import { StrengthWorkoutListItem } from "./StrengthWorkoutCard";
 import { usePickLang } from "@/lib/i18n-utils";
+import { computeTrailMetrics } from "@/lib/workoutMetrics";
 
 interface WorkoutListItemProps {
   workout: AnyWorkoutTemplate;
@@ -31,6 +32,8 @@ function RunningWorkoutListItem({ workout, className }: { workout: WorkoutTempla
   const pick = usePickLang();
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);
+  const trail = computeTrailMetrics(workout);
+  const hasTrail = trail.totalElevationGainM > 0;
 
   return (
     <Link
@@ -68,12 +71,19 @@ function RunningWorkoutListItem({ workout, className }: { workout: WorkoutTempla
           {t(`difficulty.${workout.difficulty}`)}
         </Badge>
         {/* Terrain indicators */}
-        <div className="w-16 flex items-center gap-1">
+        <div className="w-20 flex items-center gap-1 text-xs">
           {workout.environment.requiresTrack && (
             <Circle className="size-3.5 text-muted-foreground" />
           )}
-          {workout.environment.requiresHills && (
-            <Mountain className="size-3.5 text-muted-foreground" />
+          {hasTrail ? (
+            <span className="flex items-center gap-1">
+              <Mountain className="size-3.5 text-muted-foreground" />
+              <span>{trail.totalElevationGainM}&nbsp;m</span>
+            </span>
+          ) : (
+            workout.environment.requiresHills && (
+              <Mountain className="size-3.5 text-muted-foreground" />
+            )
           )}
         </div>
       </div>

@@ -1,6 +1,7 @@
 export { ZoneDistribution, SessionIntensityBar } from "./ZoneDistribution";
 export { SessionTimeline } from "./SessionTimeline";
 export { MiniSessionTimeline } from "./MiniSessionTimeline";
+export { MiniElevationProfile } from "./MiniElevationProfile";
 export { StrengthSessionTimeline } from "./StrengthSessionTimeline";
 export { MuscleDistribution } from "./MuscleDistribution";
 export { MuscleMap } from "./MuscleMap";

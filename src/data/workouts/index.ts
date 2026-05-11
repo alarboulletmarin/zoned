@@ -30,6 +30,7 @@ export const categories: WorkoutCategory[] = [
   "race_pace",
   "mixed",
   "assessment",
+  "trail",
 ];
 
 // ============================================================
@@ -62,6 +63,7 @@ const categoryLoaders: Record<WorkoutCategory, () => Promise<WorkoutCategoryFile
   race_pace: () => import("./race_pace.json").then((m) => m.default as WorkoutCategoryFile),
   mixed: () => import("./mixed.json").then((m) => m.default as WorkoutCategoryFile),
   assessment: () => import("./assessment.json").then((m) => m.default as WorkoutCategoryFile),
+  trail: () => import("./trail.json").then((m) => m.default as WorkoutCategoryFile),
 };
 
 // ============================================================

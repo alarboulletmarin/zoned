@@ -65,7 +65,19 @@
     "fartlek": "Fartlek",
     "race_pace": "Allure course",
     "mixed": "Mixte",
-    "assessment": "Tests"
+    "assessment": "Tests",
+    "trail": "Trail"
+  },
+  "trail": {
+    "elevationGain": "D+ {{value}} m",
+    "verticalDensity": "{{value}} m/km",
+    "gradientAvg": "pente moy. {{value}} %",
+    "terrainType": {
+      "road": "Route",
+      "trail_runnable": "Sentier roulant",
+      "trail_technical": "Sentier technique",
+      "mountain": "Montagne"
+    }
   },
   "difficulty": {
     "beginner": "Débutant",

@@ -25,7 +25,12 @@ export interface WorkoutStepSegment {
   vmaPercent?: number;
   intensityType?: "E" | "M" | "T" | "I" | "R";
   role?: WorkoutStepRole;
+  elevationGainM?: number;
+  gradientPercent?: number;
+  terrainType?: TerrainType;
 }
+
+export type TerrainType = "road" | "trail_runnable" | "trail_technical" | "mountain";
 
 export interface WorkoutStepRepeat {
   kind: "repeat";
@@ -49,7 +54,8 @@ export type WorkoutCategory =
   | "fartlek"
   | "race_pace"
   | "mixed"
-  | "assessment";
+  | "assessment"
+  | "trail";
 
 // Session Types (training focus)
 export type SessionType =
@@ -114,6 +120,9 @@ export interface WorkoutBlock {
   restBetweenSets?: string;    // Rest between series (e.g., "3min footing")
   vmaPercent?: number;         // % VMA target (alternative to zone)
   intensityType?: "E" | "M" | "T" | "I" | "R"; // Daniels intensity reference
+  elevationGainM?: number;
+  gradientPercent?: number;
+  terrainType?: TerrainType;
 }
 
 // Environment Requirements
@@ -350,6 +359,7 @@ export const CATEGORY_META: Record<
   race_pace: { label: "Allure course", labelEn: "Race Pace", icon: "Flag" },
   mixed: { label: "Mixte", labelEn: "Mixed", icon: "RefreshCw" },
   assessment: { label: "Tests", labelEn: "Assessment", icon: "ClipboardCheck" },
+  trail: { label: "Trail", labelEn: "Trail", icon: "TreePine" },
 };
 
 // Difficulty Display Metadata

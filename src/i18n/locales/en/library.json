@@ -65,7 +65,19 @@
     "fartlek": "Fartlek",
     "race_pace": "Race Pace",
     "mixed": "Mixed",
-    "assessment": "Assessment"
+    "assessment": "Assessment",
+    "trail": "Trail"
+  },
+  "trail": {
+    "elevationGain": "+{{value}} m gain",
+    "verticalDensity": "{{value}} m/km",
+    "gradientAvg": "avg grade {{value}}%",
+    "terrainType": {
+      "road": "Road",
+      "trail_runnable": "Runnable trail",
+      "trail_technical": "Technical trail",
+      "mountain": "Mountain"
+    }
   },
   "difficulty": {
     "beginner": "Beginner",

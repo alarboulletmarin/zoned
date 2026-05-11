@@ -6,6 +6,7 @@ import {
   Dumbbell,
   Circle,
   Mountain,
+  TreePine,
   Leaf,
   Footprints,
   Zap,
@@ -26,7 +27,9 @@ import {
   transformSessionBlocks,
   getWorkoutDuration,
   formatDurationMinutes,
+  MiniElevationProfile,
 } from "@/components/visualization";
+import { computeTrailMetrics } from "@/lib/workoutMetrics";
 import type { ZoneNumber } from "@/components/visualization";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -48,6 +51,7 @@ const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: 
   race_pace: Target,
   mixed: Shuffle,
   assessment: ClipboardCheck,
+  trail: TreePine,
 };
 
 const ZONE_COLORS: Record<ZoneNumber, string> = {
@@ -95,6 +99,9 @@ function RunningWorkoutCard({ workout, className, expanded }: { workout: Workout
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workout, pick]);
 
+  const trailMetrics = useMemo(() => computeTrailMetrics(workout), [workout]);
+  const hasTrail = trailMetrics.totalElevationGainM > 0;
+
   return (
     <Link to={`/workout/${workout.id}`}>
       <Card
@@ -137,21 +144,32 @@ function RunningWorkoutCard({ workout, className, expanded }: { workout: Workout
             </div>
           </div>
 
-          <div className={cn("hidden sm:flex items-center gap-2", expanded && "flex")}>
-            <Badge variant="secondary" className="text-xs">
+          <div className={cn("hidden sm:flex flex-wrap items-center gap-1.5", expanded && "flex")}>
+            <Badge variant="secondary" className="text-xs whitespace-nowrap">
               <Dumbbell className="size-3 mr-1" />
               {t(`difficulty.${workout.difficulty}`)}
             </Badge>
             {workout.environment.requiresTrack && (
-              <Badge variant="outline" className="text-xs gap-1">
+              <Badge variant="outline" className="text-xs gap-1 whitespace-nowrap">
                 <Circle className="size-3" />
                 {t("common:library.track")}
               </Badge>
             )}
-            {workout.environment.requiresHills && (
-              <Badge variant="outline" className="text-xs gap-1">
+            {workout.environment.requiresHills && !hasTrail && (
+              <Badge variant="outline" className="text-xs gap-1 whitespace-nowrap">
                 <Mountain className="size-3" />
                 {t("common:library.hills")}
+              </Badge>
+            )}
+            {hasTrail && (
+              <Badge variant="outline" className="text-xs gap-1 whitespace-nowrap">
+                <Mountain className="size-3" />
+                {t("library:trail.elevationGain", { value: trailMetrics.totalElevationGainM })}
+              </Badge>
+            )}
+            {hasTrail && trailMetrics.dominantTerrain && (
+              <Badge variant="outline" className="text-xs whitespace-nowrap">
+                {t(`library:trail.terrainType.${trailMetrics.dominantTerrain}`)}
               </Badge>
             )}
           </div>
@@ -191,6 +209,9 @@ function RunningWorkoutCard({ workout, className, expanded }: { workout: Workout
                   {peekData.summary}
                 </p>
               )}
+              {hasTrail && (
+                <MiniElevationProfile workout={workout} height={28} />
+              )}
             </div>
           )}
         </CardContent>
@@ -222,6 +243,7 @@ function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTem
   const pick = usePickLang();
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);
+  const trail = computeTrailMetrics(workout);
 
   return (
     <Link
@@ -240,9 +262,17 @@ function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTem
         <ZoneBadge zone={dominantZone} size="sm" />
       </div>
       <div className="flex items-center justify-between mt-1.5 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1">
-          <Clock className="size-3" />
-          {formatDurationMinutes(duration)}
+        <span className="flex items-center gap-2">
+          <span className="flex items-center gap-1">
+            <Clock className="size-3" />
+            {formatDurationMinutes(duration)}
+          </span>
+          {trail.totalElevationGainM > 0 && (
+            <span className="flex items-center gap-1">
+              <Mountain className="size-3" />
+              {trail.totalElevationGainM}&nbsp;m
+            </span>
+          )}
         </span>
         <FavoriteButton workoutId={workout.id} size="sm" />
       </div>

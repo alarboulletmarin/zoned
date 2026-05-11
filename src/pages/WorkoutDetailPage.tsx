@@ -9,6 +9,7 @@ import {
   Target,
   Circle,
   Mountain,
+  TreePine,
   Route,
   Leaf,
   Footprints,
@@ -42,7 +43,7 @@ import { NutritionRecoverySection } from "@/components/domain/NutritionRecoveryS
 import { ScienceSection } from "@/components/domain/ScienceSection";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { SEOHead } from "@/components/seo";
-import { SessionTimeline, ZoneDistribution, transformSessionBlocks } from "@/components/visualization";
+import { SessionTimeline, ZoneDistribution, transformSessionBlocks, MiniElevationProfile } from "@/components/visualization";
 import { StrengthSessionTimeline } from "@/components/visualization/StrengthSessionTimeline";
 import { MuscleDistribution } from "@/components/visualization/MuscleDistribution";
 import { MuscleMap } from "@/components/visualization/MuscleMap";
@@ -60,6 +61,7 @@ import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { IntensityBadge, INTENSITY_COLORS } from "@/components/domain/IntensityBadge";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { usePickLang, usePickLangArray } from "@/lib/i18n-utils";
+import { computeTrailMetrics } from "@/lib/workoutMetrics";
 import { MuscleGroupBadges } from "@/components/domain/MuscleGroupBadge";
 import { StrengthExerciseList } from "@/components/domain/StrengthExerciseList";
 import { loadUserZonePrefs, calculateAllZones } from "@/lib/zones";
@@ -77,6 +79,7 @@ const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: 
   race_pace: Target,
   mixed: Shuffle,
   assessment: ClipboardCheck,
+  trail: TreePine,
 };
 
 export function WorkoutDetailPage() {
@@ -269,6 +272,9 @@ export function WorkoutDetailPage() {
 
   const seoTitle = pick(workout, "name");
   const seoDescription = pick(workout, "description").slice(0, 155);
+
+  const trailMetrics = computeTrailMetrics(workout);
+  const hasTrail = trailMetrics.totalElevationGainM > 0;
 
   // Derive the environment label for the metric card
   const envLabel = envRequirements.length > 0
@@ -472,6 +478,33 @@ export function WorkoutDetailPage() {
             </div>
           </div>
         </header>
+
+        {hasTrail && (
+          <div className="rounded-lg border bg-muted/30 px-4 py-3 space-y-2">
+            <div className="text-sm flex flex-wrap items-center gap-x-4 gap-y-1.5">
+              <span className="flex items-center gap-1.5">
+                <Mountain className="size-4 text-muted-foreground" />
+                <strong>{t("library:trail.elevationGain", { value: trailMetrics.totalElevationGainM })}</strong>
+              </span>
+              {trailMetrics.verticalDensityMPerKm > 0 && (
+                <span className="text-muted-foreground">
+                  {t("library:trail.verticalDensity", { value: trailMetrics.verticalDensityMPerKm })}
+                </span>
+              )}
+              {trailMetrics.avgGradientPercent !== 0 && (
+                <span className="text-muted-foreground">
+                  {t("library:trail.gradientAvg", { value: trailMetrics.avgGradientPercent })}
+                </span>
+              )}
+              {trailMetrics.dominantTerrain && (
+                <span className="text-muted-foreground">
+                  {t(`library:trail.terrainType.${trailMetrics.dominantTerrain}`)}
+                </span>
+              )}
+            </div>
+            <MiniElevationProfile workout={workout} height={56} />
+          </div>
+        )}
 
         {/* Zone Personalization CTA - show only if user has no zones configured */}
         {!hasUserZones && <ZonePersonalizationCTA />}

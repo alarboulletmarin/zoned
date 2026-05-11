@@ -6,6 +6,7 @@ import {
   Rocket,
   Route,
   Mountain,
+  TreePine,
   Crosshair,
   Flag,
   RefreshCw,
@@ -36,6 +37,7 @@ const CATEGORY_ICONS: Record<WorkoutCategory, ComponentType<IconProps>> = {
   race_pace: Flag,
   mixed: RefreshCw,
   assessment: ClipboardCheck,
+  trail: TreePine,
 };
 
 const STRENGTH_CATEGORY_ICONS: Record<StrengthCategory, ComponentType<IconProps>> = {

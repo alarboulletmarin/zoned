@@ -253,6 +253,9 @@ function buildLegacyEffortSegment(block: WorkoutBlock): WorkoutStepSegment {
     ...(block.zone ? { zone: block.zone } : {}),
     ...(block.vmaPercent != null ? { vmaPercent: block.vmaPercent } : {}),
     ...(block.intensityType ? { intensityType: block.intensityType } : {}),
+    ...(block.elevationGainM != null ? { elevationGainM: block.elevationGainM } : {}),
+    ...(block.gradientPercent != null ? { gradientPercent: block.gradientPercent } : {}),
+    ...(block.terrainType ? { terrainType: block.terrainType } : {}),
     role: "effort",
   };
 }

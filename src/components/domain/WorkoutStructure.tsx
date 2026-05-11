@@ -326,6 +326,12 @@ function SegmentSummaryRow({
   if (step.durationSec != null) metaParts.push(formatDurationMinutes(step.durationSec / 60));
   if (step.distanceKm != null) metaParts.push(`${step.distanceKm} km`);
   if (step.distanceM != null) metaParts.push(`${step.distanceM} m`);
+  if (step.elevationGainM != null && step.elevationGainM > 0) {
+    metaParts.push(`+${step.elevationGainM} m D+`);
+  }
+  if (step.gradientPercent != null && step.gradientPercent !== 0) {
+    metaParts.push(`${step.gradientPercent > 0 ? "+" : ""}${step.gradientPercent}%`);
+  }
 
   return (
     <div className={cn(
@@ -374,6 +380,12 @@ function SegmentItem({
   if (step.durationSec != null) metaParts.push(formatDurationMinutes(step.durationSec / 60));
   if (step.distanceKm != null) metaParts.push(`${step.distanceKm} km`);
   if (step.distanceM != null) metaParts.push(`${step.distanceM} m`);
+  if (step.elevationGainM != null && step.elevationGainM > 0) {
+    metaParts.push(`+${step.elevationGainM} m D+`);
+  }
+  if (step.gradientPercent != null && step.gradientPercent !== 0) {
+    metaParts.push(`${step.gradientPercent > 0 ? "+" : ""}${step.gradientPercent}%`);
+  }
 
   return (
     <div
