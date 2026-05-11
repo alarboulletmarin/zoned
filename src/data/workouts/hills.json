@@ -1127,6 +1127,7 @@
           "description": "6-8x descentes de 200-300m (pente 8-12%) en contrôle",
           "descriptionEn": "6-8x downhill 200-300m (8-12% grade) controlled",
           "zone": "Z3",
+          "distanceM": 250,
           "repetitions": 7,
           "recovery": "3-4 min remontée en marchant",
           "intensityType": "M",
@@ -1571,8 +1572,9 @@
           "descriptionEn": "6x 200-300m descent at moderate pace (5-8% grade). Technique focus: high cadence (>180 spm), upright posture, no braking, midfoot landing",
           "distanceM": 250,
           "repetitions": 6,
-          "zone": "Z3",
-          "intensityType": "M",
+          "zone": "Z2",
+          "recovery": "2 min remontée trottée",
+          "intensityType": "E",
           "gradientPercent": -6,
           "terrainType": "trail_runnable"
         }

@@ -1,4 +1,5 @@
 import { calculateTrainingPaces, estimateDistanceForDuration, sessionTypeToIntensity } from "@/lib/planGenerator/paceEngine";
+import { computeTrailMetrics } from "@/lib/workoutMetrics";
 import type { PoiBoost } from "@/lib/routeGenerator";
 import type { PlanSession, PlanWeek } from "@/types/plan";
 import type { RunnerProfile } from "@/types/runner-profile";
@@ -180,12 +181,25 @@ export function buildWorkoutRoutePreset(args: {
         athlete,
         discipline,
       );
-  const elevationGainTargetM = args.workout.environment.requiresHills
-    ? defaultElevationTargetM(targetDistanceKm, discipline, args.workout.sessionType)
-    : undefined;
-  const shapePreference = args.workout.environment.requiresHills
+  const isTrailWorkout = args.workout.category === "trail";
+  const trailMetrics = isTrailWorkout ? computeTrailMetrics(args.workout) : null;
+
+  const elevationGainTargetM = trailMetrics && trailMetrics.totalElevationGainM > 0
+    ? trailMetrics.totalElevationGainM
+    : args.workout.environment.requiresHills
+      ? defaultElevationTargetM(targetDistanceKm, discipline, args.workout.sessionType)
+      : undefined;
+  const shapePreference = args.workout.environment.requiresHills || isTrailWorkout
     ? "out_and_back"
     : defaultShapeForSessionType(args.workout.sessionType);
+  const surface: RouteSurface = isTrailWorkout ? "trail" : defaultSurfaceForWorkout(args.workout);
+  const terrainPreference: RouteIntent["terrainPreference"] = args.workout.environment.prefersFlat
+    ? "flat"
+    : trailMetrics
+      ? (trailMetrics.avgGradientPercent >= 5 ? "climbing" : "rolling")
+      : args.workout.environment.requiresHills
+        ? "climbing"
+        : terrainPreferenceForSessionType(args.workout.sessionType);
 
   return {
     intent: {
@@ -196,11 +210,7 @@ export function buildWorkoutRoutePreset(args: {
       targetDurationMin: durationMin,
       elevationGainTargetM,
       shapePreference,
-      terrainPreference: args.workout.environment.prefersFlat
-        ? "flat"
-        : args.workout.environment.requiresHills
-          ? "climbing"
-          : terrainPreferenceForSessionType(args.workout.sessionType),
+      terrainPreference,
       continuityPriority: continuityPriorityForSessionType(args.workout.sessionType),
       repeatabilityPriority: repeatabilityPriorityForSessionType(args.workout.sessionType),
     },
@@ -208,7 +218,7 @@ export function buildWorkoutRoutePreset(args: {
     formDefaults: {
       discipline,
       shape: shapePreference,
-      surface: defaultSurfaceForWorkout(args.workout),
+      surface,
       targetDistanceKm,
       elevationGainTargetM,
     },

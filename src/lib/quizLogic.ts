@@ -70,7 +70,7 @@ function getTargetCategories(answers: QuizAnswers): WorkoutCategory[] {
     if (environment === "track") {
       categories.push("vma_intervals");
     } else if (environment === "hills") {
-      categories.push("hills");
+      categories.push("hills", "trail");
     } else {
       categories.push("tempo", "threshold", "fartlek");
     }

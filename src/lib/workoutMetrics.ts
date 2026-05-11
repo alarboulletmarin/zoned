@@ -21,12 +21,55 @@ function blockDurationMin(block: WorkoutBlock): number {
   return 0;
 }
 
+function blockDistanceKm(block: WorkoutBlock): number {
+  if (block.distanceKm != null) return block.distanceKm;
+  if (block.distanceM != null) return block.distanceM / 1000;
+  if (block.durationMin != null) {
+    const speed = paceKmhForZone(block.zone);
+    return (block.durationMin / 60) * speed;
+  }
+  return 0;
+}
+
 export function computeTotalElevationGain(template: WorkoutTemplate): number {
   let total = 0;
   for (const block of allBlocks(template)) {
-    if (block.elevationGainM != null) {
-      const count = blockEffectiveCount(block);
+    const count = blockEffectiveCount(block);
+    if (block.elevationGainM != null && block.elevationGainM > 0) {
       total += block.elevationGainM * count;
+    } else if (block.gradientPercent != null && block.gradientPercent > 0) {
+      const distKm = blockDistanceKm(block);
+      if (distKm > 0) total += (block.gradientPercent / 100) * distKm * 1000 * count;
+    }
+  }
+  return Math.round(total);
+}
+
+const DESCENT_RECOVERY_RE = /descente|descend|jog down|walk down|remont/i;
+
+export function computeTotalElevationLoss(template: WorkoutTemplate): number {
+  let total = 0;
+  for (const block of allBlocks(template)) {
+    const count = blockEffectiveCount(block);
+    if (block.gradientPercent != null && block.gradientPercent < 0) {
+      const distKm = blockDistanceKm(block);
+      if (distKm > 0) total += (-block.gradientPercent / 100) * distKm * 1000 * count;
+    }
+    if (
+      block.elevationGainM != null &&
+      block.elevationGainM > 0 &&
+      block.recovery &&
+      DESCENT_RECOVERY_RE.test(block.recovery)
+    ) {
+      total += block.elevationGainM * count;
+    } else if (
+      block.gradientPercent != null &&
+      block.gradientPercent > 0 &&
+      block.recovery &&
+      DESCENT_RECOVERY_RE.test(block.recovery)
+    ) {
+      const distKm = blockDistanceKm(block);
+      if (distKm > 0) total += (block.gradientPercent / 100) * distKm * 1000 * count;
     }
   }
   return Math.round(total);
@@ -108,6 +151,7 @@ export function computeVerticalDensity(
 
 export interface TrailMetrics {
   totalElevationGainM: number;
+  totalElevationLossM: number;
   avgGradientPercent: number;
   dominantTerrain?: TerrainType;
   verticalDensityMPerKm: number;
@@ -115,8 +159,10 @@ export interface TrailMetrics {
 
 export function computeTrailMetrics(template: WorkoutTemplate): TrailMetrics {
   const totalElevationGainM = computeTotalElevationGain(template);
+  const totalElevationLossM = computeTotalElevationLoss(template);
   return {
     totalElevationGainM,
+    totalElevationLossM,
     avgGradientPercent: computeAvgGradient(template),
     dominantTerrain: computeDominantTerrain(template),
     verticalDensityMPerKm: computeVerticalDensity(template, totalElevationGainM),
@@ -124,5 +170,6 @@ export function computeTrailMetrics(template: WorkoutTemplate): TrailMetrics {
 }
 
 export function hasTrailData(template: WorkoutTemplate): boolean {
-  return computeTotalElevationGain(template) > 0;
+  const m = computeTrailMetrics(template);
+  return m.totalElevationGainM > 0 || m.totalElevationLossM > 0 || m.dominantTerrain != null;
 }

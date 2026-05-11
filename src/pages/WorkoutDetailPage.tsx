@@ -258,23 +258,25 @@ export function WorkoutDetailPage() {
   // The immediate parent is the second-to-last breadcrumb (for mobile)
   const parentCrumb = breadcrumbs[breadcrumbs.length - 2];
 
-  // Environment requirements
+  const seoTitle = pick(workout, "name");
+  const seoDescription = pick(workout, "description").slice(0, 155);
+
+  const trailMetrics = computeTrailMetrics(workout);
+  const hasTrail =
+    trailMetrics.totalElevationGainM > 0 ||
+    trailMetrics.totalElevationLossM > 0 ||
+    trailMetrics.dominantTerrain != null;
+
   const envRequirements: { icon: React.ComponentType<{ className?: string }>; text: string }[] = [];
   if (workout.environment.requiresTrack) {
     envRequirements.push({ icon: Circle, text: t("environment.requiresTrack") });
   }
-  if (workout.environment.requiresHills) {
+  if (workout.environment.requiresHills && !hasTrail) {
     envRequirements.push({ icon: Mountain, text: t("environment.requiresHills") });
   }
   if (workout.environment.prefersFlat) {
     envRequirements.push({ icon: Route, text: t("environment.prefersFlat") });
   }
-
-  const seoTitle = pick(workout, "name");
-  const seoDescription = pick(workout, "description").slice(0, 155);
-
-  const trailMetrics = computeTrailMetrics(workout);
-  const hasTrail = trailMetrics.totalElevationGainM > 0;
 
   // Derive the environment label for the metric card
   const envLabel = envRequirements.length > 0
@@ -482,10 +484,17 @@ export function WorkoutDetailPage() {
         {hasTrail && (
           <div className="rounded-lg border bg-muted/30 px-4 py-3 space-y-2">
             <div className="text-sm flex flex-wrap items-center gap-x-4 gap-y-1.5">
-              <span className="flex items-center gap-1.5">
-                <Mountain className="size-4 text-muted-foreground" />
-                <strong>{t("library:trail.elevationGain", { value: trailMetrics.totalElevationGainM })}</strong>
-              </span>
+              {trailMetrics.totalElevationGainM > 0 && (
+                <span className="flex items-center gap-1.5">
+                  <Mountain className="size-4 text-muted-foreground" />
+                  <strong>{t("library:trail.elevationGain", { value: trailMetrics.totalElevationGainM })}</strong>
+                </span>
+              )}
+              {trailMetrics.totalElevationLossM > 0 && (
+                <span className="flex items-center gap-1.5 text-muted-foreground">
+                  <strong>{t("library:trail.elevationLoss", { value: trailMetrics.totalElevationLossM })}</strong>
+                </span>
+              )}
               {trailMetrics.verticalDensityMPerKm > 0 && (
                 <span className="text-muted-foreground">
                   {t("library:trail.verticalDensity", { value: trailMetrics.verticalDensityMPerKm })}

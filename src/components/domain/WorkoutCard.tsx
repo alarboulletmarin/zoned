@@ -100,7 +100,10 @@ function RunningWorkoutCard({ workout, className, expanded }: { workout: Workout
   }, [workout, pick]);
 
   const trailMetrics = useMemo(() => computeTrailMetrics(workout), [workout]);
-  const hasTrail = trailMetrics.totalElevationGainM > 0;
+  const hasTrail =
+    trailMetrics.totalElevationGainM > 0 ||
+    trailMetrics.totalElevationLossM > 0 ||
+    trailMetrics.dominantTerrain != null;
 
   return (
     <Link to={`/workout/${workout.id}`}>
@@ -161,10 +164,15 @@ function RunningWorkoutCard({ workout, className, expanded }: { workout: Workout
                 {t("common:library.hills")}
               </Badge>
             )}
-            {hasTrail && (
+            {hasTrail && trailMetrics.totalElevationGainM > 0 && (
               <Badge variant="outline" className="text-xs gap-1 whitespace-nowrap">
                 <Mountain className="size-3" />
                 {t("library:trail.elevationGain", { value: trailMetrics.totalElevationGainM })}
+              </Badge>
+            )}
+            {hasTrail && trailMetrics.totalElevationLossM > 0 && (
+              <Badge variant="outline" className="text-xs gap-1 whitespace-nowrap">
+                {t("library:trail.elevationLoss", { value: trailMetrics.totalElevationLossM })}
               </Badge>
             )}
             {hasTrail && trailMetrics.dominantTerrain && (
@@ -244,6 +252,11 @@ function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTem
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);
   const trail = computeTrailMetrics(workout);
+  const climbLabel = trail.totalElevationGainM > 0
+    ? `${trail.totalElevationGainM} m`
+    : trail.totalElevationLossM > 0
+      ? `-${trail.totalElevationLossM} m`
+      : null;
 
   return (
     <Link
@@ -267,10 +280,10 @@ function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTem
             <Clock className="size-3" />
             {formatDurationMinutes(duration)}
           </span>
-          {trail.totalElevationGainM > 0 && (
+          {climbLabel && (
             <span className="flex items-center gap-1">
               <Mountain className="size-3" />
-              {trail.totalElevationGainM}&nbsp;m
+              {climbLabel}
             </span>
           )}
         </span>

@@ -208,27 +208,24 @@ function findBestWorkout(
     if (filtered.length > 0) candidates = filtered;
   }
 
-  // Step 6: Sort by priority score descending
-  candidates.sort(
-    (a, b) =>
-      b.selectionCriteria.priorityScore - a.selectionCriteria.priorityScore,
-  );
+  const scoreOf = (w: WorkoutTemplate): number => {
+    const base = w.selectionCriteria.priorityScore;
+    if (isTrailRace && w.category === "trail") return base + 100;
+    return base;
+  };
 
-  // Step 7: Variety — sort by least-used first, then by priority within tier
-  // Count how many times each candidate has been used in the plan so far
+  candidates.sort((a, b) => scoreOf(b) - scoreOf(a));
+
   const usageCounts = new Map<string, number>();
   for (const id of usedWorkoutIds) {
     usageCounts.set(id, (usageCounts.get(id) ?? 0) + 1);
   }
 
-  // Sort candidates: least-used first, then by priority score
   candidates.sort((a, b) => {
     const usageA = usageCounts.get(a.id) ?? 0;
     const usageB = usageCounts.get(b.id) ?? 0;
-    // Primary: least used first
     if (usageA !== usageB) return usageA - usageB;
-    // Secondary: higher priority first
-    return b.selectionCriteria.priorityScore - a.selectionCriteria.priorityScore;
+    return scoreOf(b) - scoreOf(a);
   });
 
   // Step 8: Randomize among the least-used candidates for freshness

@@ -33,7 +33,12 @@ function RunningWorkoutListItem({ workout, className }: { workout: WorkoutTempla
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);
   const trail = computeTrailMetrics(workout);
-  const hasTrail = trail.totalElevationGainM > 0;
+  const hasTrail = trail.totalElevationGainM > 0 || trail.totalElevationLossM > 0 || trail.dominantTerrain != null;
+  const climbLabel = trail.totalElevationGainM > 0
+    ? `${trail.totalElevationGainM} m`
+    : trail.totalElevationLossM > 0
+      ? `-${trail.totalElevationLossM} m`
+      : null;
 
   return (
     <Link
@@ -75,10 +80,10 @@ function RunningWorkoutListItem({ workout, className }: { workout: WorkoutTempla
           {workout.environment.requiresTrack && (
             <Circle className="size-3.5 text-muted-foreground" />
           )}
-          {hasTrail ? (
+          {hasTrail && climbLabel ? (
             <span className="flex items-center gap-1">
               <Mountain className="size-3.5 text-muted-foreground" />
-              <span>{trail.totalElevationGainM}&nbsp;m</span>
+              <span>{climbLabel}</span>
             </span>
           ) : (
             workout.environment.requiresHills && (

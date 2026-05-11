@@ -70,6 +70,7 @@
   },
   "trail": {
     "elevationGain": "D+ {{value}} m",
+    "elevationLoss": "D− {{value}} m",
     "verticalDensity": "{{value}} m/km",
     "gradientAvg": "pente moy. {{value}} %",
     "terrainType": {
