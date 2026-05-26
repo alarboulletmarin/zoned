@@ -1,6 +1,6 @@
 {
   "home": {
-    "seoTitle": "Séances de Course Scientifiques",
+    "seoTitle": "L'entraînement structuré, sans bruit.",
     "findWorkout": "Trouve ta séance",
     "findWorkoutDesc": "5 questions pour trouver la séance parfaite",
     "raceSimulator": "Simulateur",
@@ -32,6 +32,182 @@
     "swimmingEyebrow": "Natation",
     "swimmingTitle": "Plonge dans le bassin",
     "swimmingDesc": "10 séances : technique, endurance, sprints, pyramides. Zones CSS intégrées.",
-    "swimmingCta": "Voir les séances natation"
+    "swimmingCta": "Voir les séances natation",
+
+    "masthead": {
+      "volume": "Vol.",
+      "issue": "N°",
+      "openSource": "Open-source",
+      "local": "100 % local",
+      "noAccount": "Sans compte"
+    },
+
+    "hero": {
+      "head": "L'entraînement",
+      "tail": ", sans bruit.",
+      "accent": ["structuré", "lisible", "outillé", "documenté"],
+      "lead": "{{sessions}} séances validées par la science (Seiler, Daniels, Billat, Coggan), {{plans}} plans pré-construits du 5K au marathon, {{calculators}} calculateurs et un générateur de parcours. Tout fonctionne dans votre navigateur — aucune donnée ne quitte votre appareil.",
+      "ctaPrimary": "Ouvrir la bibliothèque",
+      "ctaSecondary": "Choisir un plan",
+      "fig": {
+        "title": "Fig. 01 — Distribution polarisée",
+        "attr": "Seiler, 2009",
+        "totalLabel": "Total",
+        "hourShort": "h",
+        "minShort": "m",
+        "caption": "{{low}} % à basse intensité, {{high}} % au-dessus du seuil."
+      }
+    },
+
+    "stats": {
+      "sessions": "Séances classées",
+      "plansFrom": "Plans",
+      "calculators": "Calculateurs",
+      "trackers": "Tracker",
+      "noAccount": "0 compte"
+    },
+
+    "s01": {
+      "kicker": "Trois entrées",
+      "title": "Un outil par usage, pas par persona.",
+      "body": "Zoned ne vous demande pas qui vous êtes — il vous laisse choisir comment vous voulez l'aborder.",
+      "e1Title": "Trouver la séance du jour",
+      "e1Body": "Filtrez par discipline, zone, durée, niveau. Chaque carte annonce sa difficulté et son coût TSS avant que vous ne cliquiez. La sélection du jour s'adapte à votre charge récente.",
+      "e1Link": "Bibliothèque",
+      "e2Title": "Suivre un plan structuré",
+      "e2Body": "Du 5 km au marathon, plans de 8 à 18 semaines. Progression de charge transparente, semaine de récupération tous les 21 jours, affûtage calibré pour le jour J.",
+      "e2Link": "Plans",
+      "e3Title": "Comprendre la science",
+      "e3Body": "Chaque séance cite sa méthode (Seiler, Daniels, Billat, Coggan), l'adaptation physiologique visée, la zone, et la référence bibliographique vérifiable.",
+      "e3Link": "Méthodes"
+    },
+
+    "s02": {
+      "kicker": "Suggéré aujourd'hui",
+      "title": "Trois séances pour rester dans le bon volume cette semaine.",
+      "body": "Sélection déterministe par semaine ISO — pas d'A/B ni de boucle d'engagement. Cliquez pour ajuster les critères.",
+      "dur": "Dur",
+      "tss": "TSS",
+      "lvl": "Lvl"
+    },
+
+    "s03": {
+      "kicker": "L'atlas des zones",
+      "title1": "Six zones, six adaptations,",
+      "title2": "une grille cohérente.",
+      "body": "Chaque séance de la bibliothèque s'ancre dans ce système. Vos plages personnelles sont calculées depuis vos tests (FCmax, FTP, allure-seuil, CSS).",
+      "zone": "Zone",
+      "name": "Nom",
+      "rpe": "RPE",
+      "lactate": "Lactate mmol",
+      "adaptation": "Adaptation visée",
+      "refPace": "Allure réf.",
+      "fig": "Fig. 02 — Modèle à 6 zones, calibré sur FCmax / FTP / allure-seuil"
+    },
+
+    "s04": {
+      "kicker": "Les méthodes",
+      "title": "Quatre écoles, une bibliothèque.",
+      "body": "Zoned ne pousse pas une méthode unique. Chaque séance déclare son école et sa référence — vous gardez la liberté de mélanger.",
+      "schoolLabel": "École",
+      "sessions": "séances",
+      "tags": {
+        "polarised": "Polarisé · 80/20",
+        "vdot": "VDOT · T/I/R Pace",
+        "vvo2": "vVO₂max · 30/30",
+        "tss": "FTP · IF · TSS"
+      },
+      "schoolSeilerDesc": "Distribuer le volume hebdomadaire en deux pôles : ~80 % sous le premier seuil, ~20 % au-dessus du second. Le milieu — la zone « grise » — est minimisé.",
+      "schoolSeilerBib": "Seiler, Sportscience 13 (2009) · Stöggl & Sperlich, Front. Physiol. 5 (2014)",
+      "schoolDanielsDesc": "Cinq allures précises (E, M, T, I, R) dérivées d'une valeur VDOT calculée depuis une performance récente. Une logique de prescription d'une grande clarté pédagogique.",
+      "schoolDanielsBib": "Daniels, Running Formula (3rd ed., 2014)",
+      "schoolBillatDesc": "Fractions très courtes à la vitesse minimale à VO₂max, alternant 30 s effort / 30 s récupération. Maximise le temps passé à VO₂max sans dette excessive.",
+      "schoolBillatBib": "Billat et al., Med. Sci. Sports Exerc. 33 (2001)",
+      "schoolCogganDesc": "Quantifier la charge d'entraînement par le couple intensité (IF) et durée (TSS). Donne un langage commun entre cyclistes, coureurs et triathlètes.",
+      "schoolCogganBib": "Allen, Coggan & McGregor, Training and Racing with a Power Meter (3rd ed., 2019)",
+      "quote": "« L'endurance n'est pas un mystère. C'est de la physiologie patiemment empilée semaine après semaine, et un peu de patience. »",
+      "quoteAttr": "Note d'éditeur, Zoned Vol. {{vol}}"
+    },
+
+    "s05": {
+      "kicker": "Plans · 5K → Marathon",
+      "title": "Une trajectoire pour chaque distance.",
+      "body": "{{count}} plans publiés, {{min}} à {{max}} semaines. Charge progressive, semaine de récupération tous les 21 jours, affûtage calibré pour le jour J.",
+      "weeks": "semaines",
+      "sessionsPerWeek": "séances / sem",
+      "choose": "choisir",
+      "fig": "Fig. 03 — Phases-types d'un macrocycle : base · construction · spécifique · affûtage",
+      "distance": {
+        "5K": "5K",
+        "10K": "10K",
+        "semi": "Semi",
+        "marathon": "Marathon",
+        "trail": "Trail"
+      }
+    },
+
+    "s06": {
+      "kicker": "{{count}} instruments",
+      "title": "Une trousse de calcul pour mesurer vos plages.",
+      "body": "Tous les calculs tournent dans le navigateur, sans envoi de données. Les formules sont documentées et leur code est lisible.",
+      "tools": {
+        "vdot": { "name": "VDOT", "sub": "Indice de Daniels" },
+        "ftp": { "name": "FTP", "sub": "Seuil fonctionnel · vélo" },
+        "hrZones": { "name": "Zones FC", "sub": "À partir de FCmax / FCrepos" },
+        "paceZones": { "name": "Zones allure", "sub": "À partir d'un test 5K / 10K" },
+        "css": { "name": "CSS", "sub": "Critical Swim Speed · natation" },
+        "splits": { "name": "Splits", "sub": "Stratégie de course" },
+        "predictor": { "name": "Prédicteur", "sub": "Riegel et Daniels combinés" },
+        "ageGraded": { "name": "Age-graded", "sub": "Performance ajustée à l'âge" },
+        "whatIf": { "name": "What-if", "sub": "Forme et fatigue chroniques" }
+      }
+    },
+
+    "s07": {
+      "kicker": "Séance de la semaine",
+      "open": "Lancer la séance",
+      "target": "Adaptation visée",
+      "metrics": "Métriques",
+      "dur": "Durée",
+      "zone": "Zone",
+      "lvl": "Niveau"
+    },
+
+    "s08": {
+      "kicker": "Éthos",
+      "title1": "Aucune donnée",
+      "title2": "ne quitte votre appareil.",
+      "body": "Zoned est conçu pour fonctionner entièrement en local. Pas de serveur d'analytics, pas de compte, pas de mot de passe à retenir, pas de cookie tiers. Le code est public et auditable sous licence AGPL-3.0.",
+      "lines": {
+        "trackers": "Tracker tiers",
+        "account": "Compte requis",
+        "network": "Données envoyées",
+        "exports": "Exports locaux"
+      }
+    },
+
+    "s09": {
+      "kicker": "Questions fréquentes",
+      "title": "Cinq points levés d'avance.",
+      "more": "{{count}} articles complémentaires dans la bibliothèque pédagogique.",
+      "moreLink": "Tout lire →",
+      "q": {
+        "hrm": "Faut-il un capteur cardiaque ?",
+        "export": "Comment exporter une séance vers ma montre ?",
+        "custom": "Puis-je personnaliser un plan ?",
+        "free": "Zoned est-il gratuit ?",
+        "devices": "Sur quels appareils Zoned fonctionne-t-il ?"
+      }
+    },
+
+    "tip": "Conseil du jour",
+
+    "cta": {
+      "kicker": "Commencer maintenant",
+      "line1": "Ouvrez la bibliothèque.",
+      "line2": "Lancez votre première séance en deux clics.",
+      "primary": "Ouvrir Zoned",
+      "secondary": "Voir le code (GitHub)"
+    }
   }
 }

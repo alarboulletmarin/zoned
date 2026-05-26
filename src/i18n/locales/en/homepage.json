@@ -1,6 +1,6 @@
 {
   "home": {
-    "seoTitle": "Scientific Running Workouts",
+    "seoTitle": "Structured training, without the noise.",
     "findWorkout": "Find your workout",
     "findWorkoutDesc": "5 questions to find the perfect session",
     "raceSimulator": "Race simulator",
@@ -32,6 +32,182 @@
     "swimmingEyebrow": "Swimming",
     "swimmingTitle": "Dive into the pool",
     "swimmingDesc": "10 sessions: technique, endurance, sprints, pyramids. Built-in CSS zones.",
-    "swimmingCta": "See swimming sessions"
+    "swimmingCta": "See swimming sessions",
+
+    "masthead": {
+      "volume": "Vol.",
+      "issue": "No.",
+      "openSource": "Open-source",
+      "local": "100 % local",
+      "noAccount": "No account"
+    },
+
+    "hero": {
+      "head": "Training,",
+      "tail": ", without the noise.",
+      "accent": ["structured", "readable", "instrumented", "documented"],
+      "lead": "{{sessions}} workouts grounded in the literature (Seiler, Daniels, Billat, Coggan), {{plans}} pre-built plans from 5K to marathon, {{calculators}} calculators and a route generator. Everything runs in your browser — no data ever leaves your device.",
+      "ctaPrimary": "Open the library",
+      "ctaSecondary": "Pick a plan",
+      "fig": {
+        "title": "Fig. 01 — Polarised distribution",
+        "attr": "Seiler, 2009",
+        "totalLabel": "Total",
+        "hourShort": "h",
+        "minShort": "m",
+        "caption": "{{low}} % at low intensity, {{high}} % above threshold."
+      }
+    },
+
+    "stats": {
+      "sessions": "Catalogued sessions",
+      "plansFrom": "Plans",
+      "calculators": "Calculators",
+      "trackers": "Tracker",
+      "noAccount": "0 account"
+    },
+
+    "s01": {
+      "kicker": "Three entry points",
+      "title": "One tool per use, not per persona.",
+      "body": "Zoned doesn't ask who you are — it lets you choose how to approach the work.",
+      "e1Title": "Find today's session",
+      "e1Body": "Filter by discipline, zone, duration, level. Every card states its difficulty and TSS cost before you click. Today's pick adapts to your recent load.",
+      "e1Link": "Library",
+      "e2Title": "Follow a structured plan",
+      "e2Body": "From 5K to marathon, 8 to 18 weeks. Transparent load progression, recovery week every 21 days, taper calibrated for race day.",
+      "e2Link": "Plans",
+      "e3Title": "Understand the science",
+      "e3Body": "Every session cites its method (Seiler, Daniels, Billat, Coggan), the physiological adaptation targeted, the zone, and a verifiable bibliographic reference.",
+      "e3Link": "Methods"
+    },
+
+    "s02": {
+      "kicker": "Suggested this week",
+      "title": "Three sessions to stay on the right volume.",
+      "body": "Deterministic by ISO week — no A/B, no engagement loop. Click to adjust the criteria.",
+      "dur": "Dur",
+      "tss": "TSS",
+      "lvl": "Lvl"
+    },
+
+    "s03": {
+      "kicker": "The zone atlas",
+      "title1": "Six zones, six adaptations,",
+      "title2": "one coherent grid.",
+      "body": "Every session in the library is anchored in this system. Your personal ranges are computed from your tests (HRmax, FTP, threshold pace, CSS).",
+      "zone": "Zone",
+      "name": "Name",
+      "rpe": "RPE",
+      "lactate": "Lactate mmol",
+      "adaptation": "Targeted adaptation",
+      "refPace": "Ref. pace",
+      "fig": "Fig. 02 — 6-zone model, calibrated on HRmax / FTP / threshold pace"
+    },
+
+    "s04": {
+      "kicker": "The methods",
+      "title": "Four schools, one library.",
+      "body": "Zoned does not push a single method. Every session declares its school and reference — you remain free to mix them.",
+      "schoolLabel": "School",
+      "sessions": "sessions",
+      "tags": {
+        "polarised": "Polarised · 80/20",
+        "vdot": "VDOT · T/I/R Pace",
+        "vvo2": "vVO₂max · 30/30",
+        "tss": "FTP · IF · TSS"
+      },
+      "schoolSeilerDesc": "Split weekly volume into two poles: ~80 % below the first threshold, ~20 % above the second. The middle — the 'grey zone' — is kept to a minimum.",
+      "schoolSeilerBib": "Seiler, Sportscience 13 (2009) · Stöggl & Sperlich, Front. Physiol. 5 (2014)",
+      "schoolDanielsDesc": "Five precise paces (E, M, T, I, R) derived from a VDOT value computed from a recent race. A prescription logic of unusual pedagogical clarity.",
+      "schoolDanielsBib": "Daniels, Running Formula (3rd ed., 2014)",
+      "schoolBillatDesc": "Very short intervals at the minimum velocity at VO₂max, alternating 30 s effort / 30 s recovery. Maximises time at VO₂max without excessive debt.",
+      "schoolBillatBib": "Billat et al., Med. Sci. Sports Exerc. 33 (2001)",
+      "schoolCogganDesc": "Quantify training load through the intensity (IF) and duration (TSS) pair. Provides a common vocabulary across cyclists, runners and triathletes.",
+      "schoolCogganBib": "Allen, Coggan & McGregor, Training and Racing with a Power Meter (3rd ed., 2019)",
+      "quote": "\"Endurance is not a mystery. It is physiology patiently stacked week after week, plus a little patience.\"",
+      "quoteAttr": "Editor's note, Zoned Vol. {{vol}}"
+    },
+
+    "s05": {
+      "kicker": "Plans · 5K → Marathon",
+      "title": "One trajectory per distance.",
+      "body": "{{count}} published plans, {{min}} to {{max}} weeks. Progressive load, recovery week every 21 days, taper calibrated for race day.",
+      "weeks": "weeks",
+      "sessionsPerWeek": "sessions / wk",
+      "choose": "choose",
+      "fig": "Fig. 03 — Standard macrocycle phases: base · build · specific · taper",
+      "distance": {
+        "5K": "5K",
+        "10K": "10K",
+        "semi": "Half",
+        "marathon": "Marathon",
+        "trail": "Trail"
+      }
+    },
+
+    "s06": {
+      "kicker": "{{count}} instruments",
+      "title": "A toolkit to measure your ranges.",
+      "body": "Every computation runs in the browser, no data is sent. Formulas are documented and the source code is readable.",
+      "tools": {
+        "vdot": { "name": "VDOT", "sub": "Daniels' index" },
+        "ftp": { "name": "FTP", "sub": "Functional threshold · bike" },
+        "hrZones": { "name": "HR Zones", "sub": "From HRmax / HRrest" },
+        "paceZones": { "name": "Pace zones", "sub": "From a 5K / 10K test" },
+        "css": { "name": "CSS", "sub": "Critical Swim Speed" },
+        "splits": { "name": "Splits", "sub": "Race strategy" },
+        "predictor": { "name": "Predictor", "sub": "Riegel and Daniels combined" },
+        "ageGraded": { "name": "Age-graded", "sub": "Age-adjusted performance" },
+        "whatIf": { "name": "What-if", "sub": "Chronic form & fatigue" }
+      }
+    },
+
+    "s07": {
+      "kicker": "Session of the week",
+      "open": "Start session",
+      "target": "Targeted adaptation",
+      "metrics": "Metrics",
+      "dur": "Duration",
+      "zone": "Zone",
+      "lvl": "Level"
+    },
+
+    "s08": {
+      "kicker": "Ethos",
+      "title1": "No data",
+      "title2": "ever leaves your device.",
+      "body": "Zoned is built to run entirely locally. No analytics server, no account, no password to remember, no third-party cookies. The code is public and auditable under AGPL-3.0.",
+      "lines": {
+        "trackers": "Third-party trackers",
+        "account": "Account required",
+        "network": "Data sent",
+        "exports": "Local exports"
+      }
+    },
+
+    "s09": {
+      "kicker": "Frequently asked",
+      "title": "Five questions answered upfront.",
+      "more": "{{count}} more articles in the learning library.",
+      "moreLink": "Read all →",
+      "q": {
+        "hrm": "Do I need a heart rate strap?",
+        "export": "How do I send a session to my watch?",
+        "custom": "Can I customise a plan?",
+        "free": "Is Zoned free?",
+        "devices": "What devices does Zoned run on?"
+      }
+    },
+
+    "tip": "Tip of the day",
+
+    "cta": {
+      "kicker": "Get started",
+      "line1": "Open the library.",
+      "line2": "Launch your first session in two clicks.",
+      "primary": "Open Zoned",
+      "secondary": "See the code (GitHub)"
+    }
   }
 }
