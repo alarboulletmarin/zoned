@@ -218,7 +218,9 @@
     "planMethodology": "Guide des plans",
     "myZones": "Mes Zones",
     "profile": "Mon Profil",
-    "nutrition": "Nutrition"
+    "nutrition": "Nutrition",
+    "calculators": "Calculateurs",
+    "primary": "Navigation principale"
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",

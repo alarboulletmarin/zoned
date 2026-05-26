@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, GithubIcon } from "@/components/icons";
+import { ArrowRight, GithubIcon, ChevronDown } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
 import { useWorkouts, useTips } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
@@ -13,8 +14,6 @@ import {
   computeLandingStats,
   pickWeeklyWorkouts,
   getISOWeek,
-  estimateTSS,
-  getWorkoutZones,
   EXPORT_FORMATS,
   SCHOOLS,
   type School,
@@ -22,6 +21,15 @@ import {
 import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
 import { articleMetadata } from "@/data/articles";
 import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
+import { WorkoutCard } from "@/components/domain/WorkoutCard";
+import {
+  loadUserZonePrefs,
+  saveUserZonePrefs,
+  calculateAllZones,
+  formatPace,
+} from "@/lib/zones";
+import type { UserZonePreferences } from "@/types";
+import Logo from "@/assets/logo.svg?react";
 
 // ────────────────────────────────────────────────────────────────────────────
 // Editorial atoms — short, local helpers that build the "training journal"
@@ -74,7 +82,17 @@ const ZONE_CHIP_BG: Record<ZoneNumber, string> = {
 
 const SCHOOL_REFS: Record<
   School,
-  { name: string; year: number; tagKey: string; bibKey: string; descKey: string }
+  {
+    name: string;
+    year: number;
+    tagKey: string;
+    bibKey: string;
+    descKey: string;
+    /** Where the "read more" link points — either an article slug
+     *  (/learn/<slug>) or the methodology hub. Keeps every school linked
+     *  to something readable inside Zoned, never to an external page. */
+    readMore: { kind: "article"; slug: string } | { kind: "methodology" };
+  }
 > = {
   seiler: {
     name: "Stephen Seiler",
@@ -82,6 +100,7 @@ const SCHOOL_REFS: Record<
     tagKey: "polarised",
     bibKey: "schoolSeilerBib",
     descKey: "schoolSeilerDesc",
+    readMore: { kind: "article", slug: "polarized-training" },
   },
   daniels: {
     name: "Jack Daniels",
@@ -89,6 +108,7 @@ const SCHOOL_REFS: Record<
     tagKey: "vdot",
     bibKey: "schoolDanielsBib",
     descKey: "schoolDanielsDesc",
+    readMore: { kind: "methodology" },
   },
   billat: {
     name: "Véronique Billat",
@@ -96,6 +116,7 @@ const SCHOOL_REFS: Record<
     tagKey: "vvo2",
     bibKey: "schoolBillatBib",
     descKey: "schoolBillatDesc",
+    readMore: { kind: "article", slug: "testing-vma" },
   },
   coggan: {
     name: "Andrew Coggan",
@@ -103,42 +124,141 @@ const SCHOOL_REFS: Record<
     tagKey: "tss",
     bibKey: "schoolCogganBib",
     descKey: "schoolCogganDesc",
+    readMore: { kind: "methodology" },
   },
 };
 
-// Glyph + slug pairs for the 9 calculators surfaced in §06. The total count
-// drives the "neuf instruments" kicker — keep this list in sync with reality.
-const CALCULATORS: Array<{ glyph: string; key: string; slug: string }> = [
-  { glyph: "σ", key: "vdot", slug: "/calculators/vma" },
-  { glyph: "W", key: "ftp", slug: "/calculators/ftp" },
-  { glyph: "♥", key: "hrZones", slug: "/calculators/zones" },
-  { glyph: "τ", key: "paceZones", slug: "/calculators/allures" },
-  { glyph: "~", key: "css", slug: "/calculators/css" },
-  { glyph: "Σ", key: "splits", slug: "/calculators/splits" },
-  { glyph: "P", key: "predictor", slug: "/calculators/equivalence" },
-  { glyph: "∫", key: "ageGraded", slug: "/calculators/age-graded" },
-  { glyph: "◐", key: "whatIf", slug: "/calculators/what-if" },
+// Every calculator surfaced on the home page. Each entry maps 1:1 to an
+// existing route in App.tsx, and the title/desc come from calculators.json
+// (or a fallback in homepage.json for the ones that don't have a dedicated
+// key) so the wording stays in sync with the destination page.
+const CALCULATORS: Array<{
+  key: string;
+  slug: string;
+  titleKey: string;
+  descKey: string;
+}> = [
+  {
+    key: "zones",
+    slug: "/calculators/zones",
+    titleKey: "calculators:calculateurs.zones.title",
+    descKey: "homepage:home.s06.tools.zones",
+  },
+  {
+    key: "converter",
+    slug: "/calculators/convertisseur",
+    titleKey: "calculators:calculateurs.converter.title",
+    descKey: "homepage:home.s06.tools.converter",
+  },
+  {
+    key: "paceTable",
+    slug: "/calculators/table-allures",
+    titleKey: "calculators:calculateurs.paceTable.title",
+    descKey: "homepage:home.s06.tools.paceTable",
+  },
+  {
+    key: "treadmill",
+    slug: "/calculators/tapis-roulant",
+    titleKey: "calculators:calculateurs.treadmill.title",
+    descKey: "homepage:home.s06.tools.treadmill",
+  },
+  {
+    key: "splits",
+    slug: "/calculators/splits",
+    titleKey: "calculators:calculateurs.splits.title",
+    descKey: "homepage:home.s06.tools.splits",
+  },
+  {
+    key: "vma",
+    slug: "/calculators/vma",
+    titleKey: "calculators:calculateurs.vma.title",
+    descKey: "homepage:home.s06.tools.vma",
+  },
+  {
+    key: "ftp",
+    slug: "/calculators/ftp",
+    titleKey: "calculators:calculateurs.ftp.title",
+    descKey: "homepage:home.s06.tools.ftp",
+  },
+  {
+    key: "css",
+    slug: "/calculators/css",
+    titleKey: "calculators:calculateurs.css.title",
+    descKey: "homepage:home.s06.tools.css",
+  },
+  {
+    key: "equivalence",
+    slug: "/calculators/equivalence",
+    titleKey: "calculators:calculateurs.equivalence.title",
+    descKey: "homepage:home.s06.tools.equivalence",
+  },
+  {
+    key: "ageGraded",
+    slug: "/calculators/age-graded",
+    titleKey: "calculators:calculateurs.ageGraded.title",
+    descKey: "homepage:home.s06.tools.ageGraded",
+  },
+  {
+    key: "raceSimulator",
+    slug: "/race-simulator",
+    titleKey: "homepage:home.s06.tools.raceSimulator.title",
+    descKey: "homepage:home.s06.tools.raceSimulator.desc",
+  },
+  {
+    key: "whatIf",
+    slug: "/calculators/what-if",
+    titleKey: "calculators:calculateurs.whatIf.title",
+    descKey: "homepage:home.s06.tools.whatIf",
+  },
 ];
 
-// FAQ entries — point to existing articles so the answers always exist.
-// "id" is an i18n key under common:pages.home.faq.*.
-const FAQ_ENTRIES: Array<{ id: string; slug: string }> = [
-  { id: "hrm", slug: "testing-vma" },
-  { id: "export", slug: "faq" },
-  { id: "custom", slug: "periodization" },
-  { id: "free", slug: "faq" },
-  { id: "devices", slug: "faq" },
-];
+// Frequently-asked questions answered on the page (no external link).
+// The id picks both the question and the answer in homepage.s09.q[id]. Each
+// answer has been verified against README.md and src/lib/export/* so the
+// list never advertises a feature that isn't shipped.
+const FAQ_IDS = [
+  "hrm",
+  "export",
+  "custom",
+  "free",
+  "devices",
+  "offline",
+  "data",
+] as const;
 
 // ────────────────────────────────────────────────────────────────────────────
 // HomePage
 // ────────────────────────────────────────────────────────────────────────────
 
 export function HomePage() {
-  const { t, i18n } = useTranslation(["homepage", "common", "library"]);
-  const isEn = i18n.language?.startsWith("en") ?? false;
+  const { t } = useTranslation(["homepage", "common", "library"]);
   const pickLang = usePickLang();
   const [selectedZone, setSelectedZone] = useState<ZoneNumber | null>(null);
+  // User's measured references (VMA, FCmax) — read once at mount. Updates from
+  // the inline form below the zone table re-store these in localStorage and
+  // bump local state so the table refreshes without a page reload.
+  const [userPrefs, setUserPrefs] = useState<UserZonePreferences | null>(
+    () => loadUserZonePrefs(),
+  );
+  const hasUserZones = !!(userPrefs?.vma || userPrefs?.fcMax);
+
+  const personalRanges = useMemo(() => {
+    if (!userPrefs) return null;
+    const all = calculateAllZones(userPrefs);
+    if (all.length === 0) return null;
+    return all.reduce(
+      (acc, range) => {
+        acc[range.zone] = range;
+        return acc;
+      },
+      {} as Record<ZoneNumber, (typeof all)[number]>,
+    );
+  }, [userPrefs]);
+
+  const updatePrefs = (next: UserZonePreferences) => {
+    saveUserZonePrefs(next);
+    setUserPrefs(next);
+  };
 
   const { workouts: runWorkouts } = useWorkouts();
   const { workouts: cyclingWorkouts } = useCrossDisciplineWorkouts("cycling");
@@ -225,23 +345,36 @@ export function HomePage() {
 
   // ── Plans by distance, ordered race-progression. Filter to distances that
   // actually have a plan shipped so empty rows never render.
+  //
+  // Each row needs its "canonical" plan for that distance. We can't just pick
+  // the shortest because some recovery plans (retour-blessure, reprise-longue
+  // -pause) are tagged with a raceDistance but are not the entry point for
+  // beginners. Matching by slug prefix instead gives the right row.
   const planRows = useMemo(() => {
-    const order: Array<{ key: string; distance: string }> = [
-      { key: "5K", distance: "5K" },
-      { key: "10K", distance: "10K" },
+    const order: Array<{ key: string; distance: string; slugPrefix?: string }> = [
+      { key: "5K", distance: "5K", slugPrefix: "5k-" },
+      { key: "10K", distance: "10K", slugPrefix: "10k-" },
       { key: "semi", distance: "semi" },
       { key: "marathon", distance: "marathon" },
       { key: "trail", distance: "trail" },
     ];
     return order
-      .map(({ key, distance }) => {
-        const plans = prebuiltPlans.filter((p) => p.raceDistance === distance);
+      .map(({ key, distance, slugPrefix }) => {
+        let plans = prebuiltPlans.filter((p) => p.raceDistance === distance);
+        if (slugPrefix) {
+          const matching = plans.filter((p) => p.slug.startsWith(slugPrefix));
+          if (matching.length > 0) plans = matching;
+        }
         if (plans.length === 0) return null;
-        // Pick the canonical plan for the distance: shortest duration first
-        // (debutant), so the row reflects an honest entry point.
-        const canonical = plans.reduce((a, b) =>
-          a.totalWeeks < b.totalWeeks ? a : b,
-        );
+        // Prefer the beginner plan: easiest difficulty, then shortest.
+        const score = (d: typeof plans[0]["difficulty"]) =>
+          d === "beginner" ? 0 : d === "intermediate" ? 1 : d === "advanced" ? 2 : 3;
+        const canonical = plans.reduce((a, b) => {
+          const da = score(a.difficulty);
+          const db = score(b.difficulty);
+          if (da !== db) return da < db ? a : b;
+          return a.totalWeeks < b.totalWeeks ? a : b;
+        });
         return { key, plan: canonical, alt: plans.length - 1 };
       })
       .filter((r): r is { key: string; plan: typeof prebuiltPlans[0]; alt: number } => r != null);
@@ -286,8 +419,12 @@ export function HomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-10 lg:gap-16 items-start">
           {/* Left column — title + body + CTAs + stat row */}
           <div className="max-w-[640px]">
+            {/* Headline locked to 3 lines (head / rotating accent / tail) so
+                the hero block keeps the exact same height as the word
+                rotates — no layout jitter between "structuré" and
+                "documenté". Each piece sits on its own line via block. */}
             <h1 className="font-sans font-semibold text-[40px] sm:text-6xl md:text-[68px] leading-[1.02] tracking-tight mb-8">
-              {t("homepage:home.hero.head")}{" "}
+              <span className="block">{t("homepage:home.hero.head")}</span>
               <AnimatePresence mode="wait" initial={false}>
                 <motion.span
                   key={accentIndex}
@@ -295,12 +432,12 @@ export function HomePage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.35, ease: [0, 0, 0.2, 1] }}
-                  className="italic"
+                  className="block italic"
                 >
-                  {accentWords[accentIndex]}
+                  {accentWords[accentIndex]},
                 </motion.span>
               </AnimatePresence>
-              {t("homepage:home.hero.tail")}
+              <span className="block">{t("homepage:home.hero.tail")}</span>
             </h1>
 
             <p className="text-[15px] md:text-base leading-[1.65] text-foreground/75 max-w-[520px] mb-8">
@@ -312,19 +449,15 @@ export function HomePage() {
             </p>
 
             <div className="flex flex-wrap items-center gap-3 mb-12">
-              <Link
-                to="/library"
-                className="inline-flex items-center gap-2 bg-foreground text-background px-5 py-3 text-sm font-medium hover:bg-foreground/85 transition-colors"
-              >
-                <ArrowRight className="size-4" />
-                {t("homepage:home.hero.ctaPrimary")}
-              </Link>
-              <Link
-                to="/plan/new"
-                className="inline-flex items-center gap-2 border border-foreground/30 px-5 py-3 text-sm font-medium hover:bg-foreground/5 transition-colors"
-              >
-                {t("homepage:home.hero.ctaSecondary")}
-              </Link>
+              <Button asChild size="lg" className="rounded-full px-6">
+                <Link to="/library">
+                  <ArrowRight className="size-4" />
+                  {t("homepage:home.hero.ctaPrimary")}
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="rounded-full px-6">
+                <Link to="/plan/new">{t("homepage:home.hero.ctaSecondary")}</Link>
+              </Button>
             </div>
 
             {/* Stat row — every figure derived, including the trailing zero */}
@@ -355,12 +488,8 @@ export function HomePage() {
             </div>
           </div>
 
-          {/* Right column — Fig.01 polarised distribution */}
-          <PolarisedChart
-            zones={stats.zones}
-            polarised={stats.polarised}
-            totalMinutes={stats.totalMinutes}
-          />
+          {/* Right column — canonical polarised week reference */}
+          <PolarisedChart />
         </div>
       </section>
 
@@ -417,31 +546,9 @@ export function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {suggested.map((w) => (
-              <SuggestedCard
-                key={w.id}
-                workoutId={w.id}
-                discipline={w.discipline ?? "running"}
-                name={pickLang(w, "name")}
-                method={detectMethodLabel(w.name + " " + w.descriptionEn, isEn)}
-                target={w.targetSystem}
-                durationMin={Math.round(
-                  (w.typicalDuration.min + w.typicalDuration.max) / 2,
-                )}
-                tss={estimateTSS(w)}
-                level={
-                  w.difficulty === "beginner"
-                    ? 1
-                    : w.difficulty === "intermediate"
-                      ? 2
-                      : w.difficulty === "advanced"
-                        ? 3
-                        : 4
-                }
-                zones={getWorkoutZones(w)}
-                t={t}
-              />
+              <WorkoutCard key={w.id} workout={w} />
             ))}
           </div>
         </div>
@@ -463,7 +570,13 @@ export function HomePage() {
           {t("homepage:home.s03.body")}
         </p>
 
-        <div className="mt-10 overflow-x-auto">
+        <ZonesPersonaliser
+          prefs={userPrefs}
+          hasUserZones={hasUserZones}
+          onSave={updatePrefs}
+        />
+
+        <div className="mt-8 overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="font-mono text-[10px] tracking-[0.18em] uppercase text-foreground/55 border-b border-foreground/20">
@@ -473,11 +586,11 @@ export function HomePage() {
                 <th className="text-left py-3 pr-4 font-normal">
                   {t("homepage:home.s03.name")}
                 </th>
+                <th className="text-left py-3 pr-4 font-normal w-28">
+                  {t("homepage:home.s03.hr")}
+                </th>
                 <th className="text-left py-3 pr-4 font-normal w-24">
                   {t("homepage:home.s03.rpe")}
-                </th>
-                <th className="text-left py-3 pr-4 font-normal w-28">
-                  {t("homepage:home.s03.lactate")}
                 </th>
                 <th className="text-left py-3 pr-4 font-normal">
                   {t("homepage:home.s03.adaptation")}
@@ -488,19 +601,31 @@ export function HomePage() {
               </tr>
             </thead>
             <tbody>
-              {([1, 2, 3, 4, 5, 6] as const).map((z) => (
-                <ZoneRow
-                  key={z}
-                  zone={z}
-                  label={pickLang(ZONE_META[z], "label")}
-                  fcRange={ZONE_FC[z]}
-                  rpe={ZONE_RPE[z]}
-                  lactate={ZONE_LACTATE[z]}
-                  benefit={pickLang(ZONE_META[z], "benefit")}
-                  refPace={ZONE_PACE[z]}
-                  onClick={() => setSelectedZone(z)}
-                />
-              ))}
+              {([1, 2, 3, 4, 5, 6] as const).map((z) => {
+                const range = personalRanges?.[z];
+                const hrCell =
+                  range?.hrMin && range?.hrMax
+                    ? `${range.hrMin}–${range.hrMax} bpm`
+                    : ZONE_FC_FALLBACK[z];
+                const paceCell =
+                  range?.paceMinPerKm && range?.paceMaxPerKm
+                    ? `${formatPace(range.paceMinPerKm)}–${formatPace(range.paceMaxPerKm)}/km`
+                    : ZONE_PACE_FALLBACK[z];
+                return (
+                  <ZoneRow
+                    key={z}
+                    zone={z}
+                    label={pickLang(ZONE_META[z], "label")}
+                    hrRange={hrCell}
+                    fcPercent={ZONE_FC_PERCENT[z]}
+                    rpe={ZONE_RPE[z]}
+                    benefit={pickLang(ZONE_META[z], "benefit")}
+                    refPace={paceCell}
+                    isPersonal={!!range}
+                    onClick={() => setSelectedZone(z)}
+                  />
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -529,19 +654,27 @@ export function HomePage() {
         </p>
 
         <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {SCHOOLS.map((s) => (
-            <SchoolCard
-              key={s}
-              school={s}
-              name={SCHOOL_REFS[s].name}
-              year={SCHOOL_REFS[s].year}
-              tag={t(`homepage:home.s04.tags.${SCHOOL_REFS[s].tagKey}`)}
-              desc={t(`homepage:home.s04.${SCHOOL_REFS[s].descKey}`)}
-              bib={t(`homepage:home.s04.${SCHOOL_REFS[s].bibKey}`)}
-              count={stats.bySchool[s]}
-              t={t}
-            />
-          ))}
+          {SCHOOLS.map((s) => {
+            const refs = SCHOOL_REFS[s];
+            const readMoreHref =
+              refs.readMore.kind === "article"
+                ? `/learn/${refs.readMore.slug}`
+                : "/methodology";
+            return (
+              <SchoolCard
+                key={s}
+                name={refs.name}
+                year={refs.year}
+                tag={t(`homepage:home.s04.tags.${refs.tagKey}`)}
+                desc={t(`homepage:home.s04.${refs.descKey}`)}
+                bib={t(`homepage:home.s04.${refs.bibKey}`)}
+                count={stats.bySchool[s]}
+                readMoreHref={readMoreHref}
+                readMoreLabel={t("homepage:home.s04.readMore")}
+                t={t}
+              />
+            );
+          })}
         </div>
 
         {/* Editor's note quote */}
@@ -599,30 +732,23 @@ export function HomePage() {
           {t("homepage:home.s06.body")}
         </p>
 
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 border-t border-l border-foreground/15">
-          {CALCULATORS.map((c, i) => (
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          {CALCULATORS.map((c) => (
             <Link
               key={c.key}
               to={c.slug}
-              className="group relative border-r border-b border-foreground/15 p-6 hover:bg-foreground/5 transition-colors"
+              className="group block border border-border bg-card hover:border-primary/40 hover:bg-accent/30 transition-colors p-5 rounded-md"
             >
-              <div className="flex items-start justify-between">
-                <span className="font-mono text-[11px] tracking-[0.15em] text-foreground/50">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span
-                  aria-hidden
-                  className="font-sans text-2xl text-foreground/60 group-hover:text-foreground transition-colors"
-                >
-                  {c.glyph}
-                </span>
-              </div>
-              <h3 className="font-sans italic text-xl mt-8">
-                {t(`homepage:home.s06.tools.${c.key}.name`)}
+              <h3 className="text-base font-semibold mb-1.5 group-hover:text-primary transition-colors">
+                {t(c.titleKey)}
               </h3>
-              <p className="text-xs text-foreground/55 mt-1">
-                {t(`homepage:home.s06.tools.${c.key}.sub`)}
+              <p className="text-sm text-muted-foreground leading-snug line-clamp-2">
+                {t(c.descKey)}
               </p>
+              <span className="mt-3 inline-flex items-center text-xs font-medium text-primary">
+                {t("calculators:calculateurs.explore")}
+                <ArrowRight className="size-3 ml-1 transition-transform group-hover:translate-x-0.5" />
+              </span>
             </Link>
           ))}
         </div>
@@ -636,7 +762,9 @@ export function HomePage() {
       {sessionOfWeek && (
         <>
           <section className="py-16 md:py-20">
-
+            <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-muted-foreground mb-3">
+              {t("homepage:home.s07.kicker")}
+            </p>
             <EditorialTitle>
               «&nbsp;{pickLang(sessionOfWeek, "name")}&nbsp;»
             </EditorialTitle>
@@ -644,45 +772,8 @@ export function HomePage() {
               {pickLang(sessionOfWeek, "description")}
             </p>
 
-            <div className="mt-10 border border-foreground/15 p-6 md:p-8">
-              <div className="font-mono text-[11px] tracking-[0.15em] uppercase text-foreground/55 flex flex-wrap gap-x-3 gap-y-1 mb-6">
-                <span>{t(`library:disciplines.${sessionOfWeek.discipline ?? "running"}`, sessionOfWeek.discipline ?? "running")}</span>
-                <span aria-hidden>·</span>
-                <span>{t(`library:categories.${sessionOfWeek.category}`)}</span>
-                <span aria-hidden>·</span>
-                <span>{sessionOfWeek.id}</span>
-              </div>
-
-              <h3 className="font-sans italic text-2xl md:text-3xl mb-6">
-                {pickLang(sessionOfWeek, "name")}
-              </h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-8">
-                <SessionProfile workout={sessionOfWeek} />
-                <div className="space-y-6">
-                  <div>
-                    <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-foreground/55 mb-1">
-                      {t("homepage:home.s07.target")}
-                    </p>
-                    <p className="text-sm leading-relaxed text-foreground/80">
-                      {pickLang(ZONE_META[getWorkoutZones(sessionOfWeek)[0] ?? 4], "benefit")}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-foreground/55 mb-1">
-                      {t("homepage:home.s07.metrics")}
-                    </p>
-                    <SessionMetrics workout={sessionOfWeek} t={t} />
-                  </div>
-                  <Link
-                    to={`/workout/${sessionOfWeek.id}`}
-                    className="inline-flex items-center gap-2 bg-foreground text-background px-4 py-2.5 text-xs font-medium hover:bg-foreground/85 transition-colors"
-                  >
-                    <ArrowRight className="size-3.5" />
-                    {t("homepage:home.s07.open")}
-                  </Link>
-                </div>
-              </div>
+            <div className="mt-8 max-w-2xl">
+              <WorkoutCard workout={sessionOfWeek} expanded />
             </div>
           </section>
           <Divider />
@@ -728,33 +819,36 @@ export function HomePage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          §09 — FAQ (5 questions liées à des articles existants)
+          §09 — FAQ (in-page accordion, real answers — no external link)
           ═══════════════════════════════════════════════════════════════════ */}
       <section className="py-16 md:py-20">
         <EditorialTitle>{t("homepage:home.s09.title")}</EditorialTitle>
 
-        <ul className="mt-10 border-y border-foreground/15">
-          {FAQ_ENTRIES.map((q, i) => (
-            <li key={q.id} className="border-b border-foreground/15 last:border-b-0">
-              <Link
-                to={`/learn/${q.slug}`}
-                className="flex items-baseline gap-6 py-4 hover:bg-foreground/5 transition-colors px-2 -mx-2"
-              >
-                <span className="font-mono text-[11px] tracking-[0.15em] text-foreground/50 w-6">
+        <div className="mt-10 border-t border-foreground/15">
+          {FAQ_IDS.map((id, i) => (
+            <details
+              key={id}
+              className="group border-b border-foreground/15 [&[open]>summary>svg]:rotate-180"
+            >
+              <summary className="flex items-center gap-6 py-5 cursor-pointer list-none hover:bg-accent/30 transition-colors px-2 -mx-2">
+                <span className="font-mono text-[11px] tracking-[0.15em] text-foreground/50 w-6 shrink-0">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span className="font-sans italic text-lg md:text-xl flex-1">
-                  {t(`homepage:home.s09.q.${q.id}`)}
+                  {t(`homepage:home.s09.q.${id}.q`)}
                 </span>
-                <ArrowRight className="size-4 text-foreground/40" />
-              </Link>
-            </li>
+                <ChevronDown className="size-4 text-foreground/40 transition-transform shrink-0" />
+              </summary>
+              <div className="pb-5 pl-12 pr-6 text-sm leading-relaxed text-foreground/75 max-w-3xl">
+                {t(`homepage:home.s09.q.${id}.a`)}
+              </div>
+            </details>
           ))}
-        </ul>
+        </div>
 
         <p className="mt-6 text-xs text-foreground/55">
           {t("homepage:home.s09.more", { count: articleCount })}{" "}
-          <Link to="/learn" className="underline underline-offset-4">
+          <Link to="/learn" className="underline underline-offset-4 text-primary">
             {t("homepage:home.s09.moreLink")}
           </Link>
         </p>
@@ -780,7 +874,7 @@ export function HomePage() {
       <Divider />
 
       {/* ═══════════════════════════════════════════════════════════════════
-          CTA final — "Commencer maintenant"
+          CTA final — last call before the footer
           ═══════════════════════════════════════════════════════════════════ */}
       <section className="py-20 md:py-28 text-center">
         <p className="font-mono text-[11px] tracking-[0.25em] uppercase text-foreground/55 mb-8">
@@ -788,19 +882,18 @@ export function HomePage() {
           {t("homepage:home.cta.kicker")}
           <span className="inline-block h-px w-10 bg-foreground/55 align-middle ml-3" />
         </p>
-        <h2 className="font-sans italic text-3xl md:text-5xl leading-[1.1] max-w-3xl mx-auto">
+        <h2 className="font-sans font-semibold italic text-3xl md:text-5xl leading-[1.1] max-w-3xl mx-auto">
           {t("homepage:home.cta.line1")}
           <br />
           {t("homepage:home.cta.line2")}
         </h2>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <Link
-            to="/library"
-            className="inline-flex items-center gap-2 bg-foreground text-background px-6 py-3 text-sm font-medium hover:bg-foreground/85 transition-colors"
-          >
-            <ArrowRight className="size-4" />
-            {t("homepage:home.cta.primary")}
-          </Link>
+          <Button asChild size="lg" className="rounded-full px-6">
+            <Link to="/library">
+              <ArrowRight className="size-4" />
+              {t("homepage:home.cta.primary")}
+            </Link>
+          </Button>
           <a
             href="https://github.com/alarboulletmarin/zoned"
             target="_blank"
@@ -812,9 +905,146 @@ export function HomePage() {
           </a>
         </div>
       </section>
+
+      <LandingFooter />
     </div>
   );
 }
+
+// ────────────────────────────────────────────────────────────────────────────
+// Landing-page footer — richer than the global one. Mirrors the magazine
+// reference: brand + tagline on the left, four short columns on the right
+// (product / science / project / legal), license + version on the bottom row.
+// The global app footer is hidden on / by App.tsx's ConditionalFooter rule.
+// ────────────────────────────────────────────────────────────────────────────
+
+function LandingFooter() {
+  const { t } = useTranslation(["homepage", "common"]);
+  const year = new Date().getFullYear();
+  const version = APP_VERSION;
+
+  return (
+    <footer className="-mx-4 md:-mx-6 lg:-mx-8 mt-8 border-t border-border bg-card">
+      <div className="px-4 md:px-6 lg:px-8 py-14 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr] gap-10 md:gap-8">
+          {/* Brand block */}
+          <div className="max-w-xs">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 mb-4"
+              aria-label="Zoned — accueil"
+            >
+              <Logo className="w-10 h-5" />
+              <span className="font-bold text-base">{t("common:app.name")}</span>
+            </Link>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {t("homepage:home.footer.tagline")}
+            </p>
+          </div>
+
+          <FooterColumn
+            title={t("homepage:home.footer.groups.product")}
+            links={[
+              { label: t("homepage:home.footer.product.library"), to: "/library" },
+              { label: t("homepage:home.footer.product.plans"), to: "/plans" },
+              { label: t("homepage:home.footer.product.calculators"), to: "/calculators" },
+              { label: t("homepage:home.footer.product.routes"), to: "/routes" },
+            ]}
+          />
+          <FooterColumn
+            title={t("homepage:home.footer.groups.science")}
+            links={[
+              { label: t("homepage:home.footer.science.methodology"), to: "/methodology" },
+              { label: t("homepage:home.footer.science.zones"), to: "/learn/zones" },
+              { label: t("homepage:home.footer.science.glossary"), to: "/glossary" },
+              { label: t("homepage:home.footer.science.faq"), to: "/learn/faq" },
+            ]}
+          />
+          <FooterColumn
+            title={t("homepage:home.footer.groups.project")}
+            links={[
+              { label: t("homepage:home.footer.project.about"), to: "/about" },
+              {
+                label: t("homepage:home.footer.project.github"),
+                href: "https://github.com/alarboulletmarin/zoned",
+              },
+              { label: t("homepage:home.footer.project.changelog"), to: "/changelog" },
+              { label: t("homepage:home.footer.project.support"), to: "/contribute" },
+            ]}
+          />
+          <FooterColumn
+            title={t("homepage:home.footer.groups.legal")}
+            links={[
+              {
+                label: t("homepage:home.footer.legal.license"),
+                href: "https://github.com/alarboulletmarin/zoned/blob/main/LICENSE",
+              },
+              { label: t("homepage:home.footer.legal.imprint"), to: "/about" },
+              { label: t("homepage:home.footer.legal.privacy"), to: "/about" },
+              { label: t("homepage:home.footer.legal.credits"), to: "/contribute" },
+            ]}
+          />
+        </div>
+
+        <div className="mt-10 pt-6 border-t border-border flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground">
+            {t("homepage:home.footer.license", { year })}
+          </p>
+          <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground">
+            {t("homepage:home.footer.version", { version })}
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+function FooterColumn({
+  title,
+  links,
+}: {
+  title: string;
+  links: Array<{ label: string; to?: string; href?: string }>;
+}) {
+  return (
+    <div>
+      <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground mb-3">
+        {title}
+      </p>
+      <ul className="space-y-2">
+        {links.map((link) => (
+          <li key={link.label}>
+            {link.to ? (
+              <Link
+                to={link.to}
+                className="text-sm text-foreground/80 hover:text-primary transition-colors"
+              >
+                {link.label}
+              </Link>
+            ) : (
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-foreground/80 hover:text-primary transition-colors"
+              >
+                {link.label}
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// Package version is injected at build time by Vite via __APP_VERSION__.
+// We fall back to "dev" when the constant is missing (eg. unit tests).
+declare const __APP_VERSION__: string | undefined;
+const APP_VERSION =
+  typeof __APP_VERSION__ === "string" && __APP_VERSION__.length > 0
+    ? __APP_VERSION__
+    : "dev";
 
 // ────────────────────────────────────────────────────────────────────────────
 // Sub-components — kept in this file because nothing outside the landing
@@ -851,67 +1081,112 @@ function StatBlock({
   );
 }
 
-function PolarisedChart({
-  zones,
-  polarised,
-  totalMinutes,
-}: {
-  zones: { zone: ZoneNumber; share: number }[];
-  polarised: { low: number; mid: number; high: number };
-  totalMinutes: number;
-}) {
+// Canonical Seiler-style polarised reference — these are *teaching values*,
+// not measurements of the user's library. They illustrate what a well-dosed
+// training week looks like under the 80/20 model. Anything that smells like
+// "live data" (TSS, totals) has been removed to avoid mixing both ideas.
+const POLARISED_REFERENCE: Record<ZoneNumber, number> = {
+  1: 62,
+  2: 18,
+  3: 6,
+  4: 9,
+  5: 4,
+  6: 1,
+};
+const POLARISED_LOW = POLARISED_REFERENCE[1] + POLARISED_REFERENCE[2];
+const POLARISED_HIGH =
+  POLARISED_REFERENCE[4] + POLARISED_REFERENCE[5] + POLARISED_REFERENCE[6];
+
+function PolarisedChart() {
   const { t } = useTranslation("homepage");
-  const max = Math.max(...zones.map((z) => z.share));
-  const h = Math.floor(totalMinutes / 60);
-  const m = Math.round(totalMinutes % 60);
-  // Crude TSS aggregate: ~1 TSS per IF²×minute. The figure is illustrative,
-  // it's there to give the "FIG.01" caption a real value to print.
-  const tssTotal = Math.round(totalMinutes * 0.7);
+  const max = Math.max(...Object.values(POLARISED_REFERENCE));
+  const zoneNames: Record<ZoneNumber, string> = {
+    1: t("home.hero.fig.zones.z1"),
+    2: t("home.hero.fig.zones.z2"),
+    3: t("home.hero.fig.zones.z3"),
+    4: t("home.hero.fig.zones.z4"),
+    5: t("home.hero.fig.zones.z5"),
+    6: t("home.hero.fig.zones.z6"),
+  };
 
   return (
-    <div className="border border-foreground/15 p-6 md:p-8 bg-foreground/[0.02]">
-      <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-foreground/55">
+    <div className="border border-border bg-card rounded-lg p-6 md:p-8">
+      <p className="font-sans font-semibold italic text-2xl md:text-3xl leading-tight">
         {t("home.hero.fig.title")}
       </p>
-      <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-foreground/45">
-        {t("home.hero.fig.attr")}
+      <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+        {t("home.hero.fig.body")}
       </p>
 
-      <div className="mt-8 space-y-3.5">
-        {zones.map(({ zone, share }) => (
-          <div key={zone} className="flex items-center gap-4">
-            <span className="font-mono text-[11px] tracking-wider text-foreground/65 w-6">
-              Z{zone}
-            </span>
-            <div className="flex-1 h-2 bg-foreground/[0.06]">
-              <div
-                className={`h-full ${ZONE_BAR_BG[zone]}`}
-                style={{
-                  width: `${max > 0 ? (share / max) * 100 : 0}%`,
-                }}
-              />
+      <div className="mt-7 space-y-2.5">
+        {([1, 2, 3, 4, 5, 6] as const).map((zone) => {
+          const pct = POLARISED_REFERENCE[zone];
+          return (
+            <div key={zone} className="grid grid-cols-[7.5rem_1fr_2.4rem] items-center gap-3">
+              <div className="flex items-baseline gap-1.5 text-xs min-w-0">
+                <span className="font-mono font-semibold text-foreground/75 shrink-0">
+                  Z{zone}
+                </span>
+                <span className="text-muted-foreground truncate">
+                  {zoneNames[zone]}
+                </span>
+              </div>
+              <div className="h-2.5 bg-foreground/[0.06] rounded-sm overflow-hidden">
+                <div
+                  className={`h-full ${ZONE_BAR_BG[zone]} rounded-sm transition-[width] duration-700 ease-out`}
+                  style={{ width: `${(pct / max) * 100}%` }}
+                />
+              </div>
+              <span className="font-mono text-xs text-foreground tabular-nums text-right font-semibold">
+                {pct}%
+              </span>
             </div>
-            <span className="font-mono text-[11px] text-foreground/65 w-10 text-right tabular-nums">
-              {(share * 100).toFixed(share < 0.005 ? 1 : 0)}%
-            </span>
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-8 pt-4 border-t border-dashed border-foreground/20 flex justify-between font-mono text-[11px] tracking-wider text-foreground/65">
-        <span>
-          {t("home.hero.fig.totalLabel")} {h}
-          {t("home.hero.fig.hourShort")} {String(m).padStart(2, "0")}
-          {t("home.hero.fig.minShort")}
-        </span>
-        <span>TSS {tssTotal.toLocaleString()}</span>
-      </div>
-
-      <p className="mt-4 font-sans italic text-xs text-foreground/60 leading-relaxed">
-        {t("home.hero.fig.caption", {
-          low: Math.round(polarised.low * 100),
-          high: Math.round(polarised.high * 100),
+          );
         })}
+      </div>
+
+      {/* Two summary chips — the actual takeaway of the figure. */}
+      <div className="mt-6 pt-5 border-t border-dashed border-border grid grid-cols-2 gap-3">
+        <PolarisedSummaryChip
+          rangeLabel={t("home.hero.fig.lowRange")}
+          value={POLARISED_LOW}
+          caption={t("home.hero.fig.lowCaption")}
+          accent="zone-2"
+        />
+        <PolarisedSummaryChip
+          rangeLabel={t("home.hero.fig.highRange")}
+          value={POLARISED_HIGH}
+          caption={t("home.hero.fig.highCaption")}
+          accent="zone-5"
+        />
+      </div>
+    </div>
+  );
+}
+
+function PolarisedSummaryChip({
+  rangeLabel,
+  value,
+  caption,
+  accent,
+}: {
+  rangeLabel: string;
+  value: number;
+  caption: string;
+  accent: "zone-2" | "zone-5";
+}) {
+  const accentBg = accent === "zone-2" ? "bg-zone-2/15" : "bg-zone-5/15";
+  const accentText = accent === "zone-2" ? "text-zone-2" : "text-zone-5";
+  return (
+    <div className={`${accentBg} rounded-md p-3`}>
+      <p className="font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground leading-tight">
+        {rangeLabel}
+      </p>
+      <p className={`font-sans font-semibold italic text-2xl mt-1 ${accentText}`}>
+        {value}&thinsp;%
+      </p>
+      <p className="text-[11px] text-muted-foreground mt-0.5 leading-tight">
+        {caption}
       </p>
     </div>
   );
@@ -947,100 +1222,25 @@ function EntryColumn({
   );
 }
 
-function SuggestedCard({
-  workoutId,
-  discipline,
-  name,
-  method,
-  target,
-  durationMin,
-  tss,
-  level,
-  zones,
-  t,
-}: {
-  workoutId: string;
-  discipline: string;
-  name: string;
-  method: string;
-  target: string;
-  durationMin: number;
-  tss: number;
-  level: number;
-  zones: ZoneNumber[];
-  t: ReturnType<typeof useTranslation>["t"];
-}) {
-  const discIcon: Record<string, string> = {
-    running: "↗",
-    cycling: "⌀",
-    swimming: "≋",
-  };
-  return (
-    <Link
-      to={`/workout/${workoutId}`}
-      className="block border border-foreground/15 p-5 hover:bg-foreground/[0.03] transition-colors group"
-    >
-      <div className="flex items-center justify-between text-[10px] font-mono tracking-[0.15em] uppercase text-foreground/55">
-        <span className="flex items-center gap-2">
-          <span aria-hidden className="text-foreground/70">
-            {discIcon[discipline] ?? "•"}
-          </span>
-          {t(`library:disciplines.${discipline}`, discipline)}
-        </span>
-        <span className="text-foreground/45">{method}</span>
-      </div>
-      <h3 className="font-sans italic text-lg leading-tight mt-3 group-hover:text-foreground/90">
-        {name}
-      </h3>
-      <p className="font-mono text-[10px] tracking-[0.15em] uppercase text-foreground/40 mt-1">
-        {target.replace(/_/g, " ")}
-      </p>
-
-      <div className="mt-5 grid grid-cols-3 gap-3 text-xs">
-        <Metric label={t("homepage:home.s02.dur")} value={`${durationMin}'`} />
-        <Metric label={t("homepage:home.s02.tss")} value={String(tss)} />
-        <Metric
-          label={t("homepage:home.s02.lvl")}
-          value={"★".repeat(level) + "☆".repeat(Math.max(0, 4 - level))}
-        />
-      </div>
-
-      <div className="mt-4 flex flex-wrap gap-1">
-        {zones.map((z) => (
-          <span
-            key={z}
-            className={`font-mono text-[10px] tracking-wider px-1.5 py-0.5 ${ZONE_CHIP_BG[z]}`}
-          >
-            Z{z}
-          </span>
-        ))}
-      </div>
-    </Link>
-  );
-}
-
-function Metric({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <p className="font-mono text-[9px] tracking-[0.18em] uppercase text-foreground/45">
-        {label}
-      </p>
-      <p className="font-mono text-sm text-foreground tabular-nums mt-0.5">
-        {value}
-      </p>
-    </div>
-  );
-}
-
-// ── §03 zone metadata. Numeric ranges aren't in ZONE_META so they live here;
-// they describe the model, not arbitrary copy. Kept as pure constants.
-const ZONE_FC: Record<ZoneNumber, string> = {
-  1: "< 68% FCmax",
-  2: "68–78% FCmax",
-  3: "78–87% FCmax",
-  4: "87–93% FCmax",
-  5: "93–97% FCmax",
-  6: "> 97% FCmax",
+// ── §03 zone metadata. RPE and the "% FCmax" model lines describe the
+// physiology and don't depend on the user; the bpm and pace columns are
+// computed from their measured FCmax / VMA when available (see calculateAll
+// Zones), and these fallbacks appear when nothing has been measured yet.
+const ZONE_FC_PERCENT: Record<ZoneNumber, string> = {
+  1: "50–60 % FCmax",
+  2: "60–70 % FCmax",
+  3: "70–80 % FCmax",
+  4: "80–90 % FCmax",
+  5: "90–100 % FCmax",
+  6: "> 100 % FCmax",
+};
+const ZONE_FC_FALLBACK: Record<ZoneNumber, string> = {
+  1: "—",
+  2: "—",
+  3: "—",
+  4: "—",
+  5: "—",
+  6: "—",
 };
 const ZONE_RPE: Record<ZoneNumber, string> = {
   1: "1–2 / 10",
@@ -1050,40 +1250,34 @@ const ZONE_RPE: Record<ZoneNumber, string> = {
   5: "8–9 / 10",
   6: "10 / 10",
 };
-const ZONE_LACTATE: Record<ZoneNumber, string> = {
-  1: "< 1.5",
-  2: "1.5–2.0",
-  3: "2.0–3.0",
-  4: "3.0–4.5",
-  5: "4.5–7.0",
-  6: "> 7.0",
-};
-const ZONE_PACE: Record<ZoneNumber, string> = {
-  1: "8:30/km",
-  2: "6:30/km",
-  3: "5:30/km",
-  4: "4:45/km",
-  5: "4:00/km",
-  6: "3:20/km",
+const ZONE_PACE_FALLBACK: Record<ZoneNumber, string> = {
+  1: "—",
+  2: "—",
+  3: "—",
+  4: "—",
+  5: "—",
+  6: "—",
 };
 
 function ZoneRow({
   zone,
   label,
-  fcRange,
+  hrRange,
+  fcPercent,
   rpe,
-  lactate,
   benefit,
   refPace,
+  isPersonal,
   onClick,
 }: {
   zone: ZoneNumber;
   label: string;
-  fcRange: string;
+  hrRange: string;
+  fcPercent: string;
   rpe: string;
-  lactate: string;
   benefit: string;
   refPace: string;
+  isPersonal: boolean;
   onClick: () => void;
 }) {
   return (
@@ -1101,22 +1295,139 @@ function ZoneRow({
       <td className="py-5 pr-4">
         <p className="font-sans italic text-lg leading-tight">{label}</p>
         <p className="font-mono text-[10px] tracking-wider text-foreground/45 mt-0.5">
-          {fcRange}
+          {fcPercent}
         </p>
+      </td>
+      <td className="py-5 pr-4 font-mono text-xs tabular-nums">
+        <span className={isPersonal ? "text-primary font-semibold" : "text-foreground/45"}>
+          {hrRange}
+        </span>
       </td>
       <td className="py-5 pr-4 font-mono text-xs text-foreground/70 tabular-nums">
         {rpe}
       </td>
-      <td className="py-5 pr-4 font-mono text-xs text-foreground/70 tabular-nums">
-        {lactate}
-      </td>
       <td className="py-5 pr-4 text-sm leading-snug text-foreground/80">
         {benefit}
       </td>
-      <td className="py-5 pl-4 text-right font-mono text-xs text-foreground/70 tabular-nums">
-        {refPace}
+      <td className="py-5 pl-4 text-right font-mono text-xs tabular-nums">
+        <span className={isPersonal ? "text-primary font-semibold" : "text-foreground/45"}>
+          {refPace}
+        </span>
       </td>
     </tr>
+  );
+}
+
+// ─── ZonesPersonaliser ──────────────────────────────────────────────────────
+// Two compact inputs (VMA, FCmax) shown above the zone table. Submitting them
+// writes the values through saveUserZonePrefs (which also syncs them to the
+// runner profile) and the parent re-renders the table with personalised bpm
+// and pace ranges. When values already exist we show a quiet status line
+// instead so the form doesn't keep nagging set-up users.
+function ZonesPersonaliser({
+  prefs,
+  hasUserZones,
+  onSave,
+}: {
+  prefs: UserZonePreferences | null;
+  hasUserZones: boolean;
+  onSave: (next: UserZonePreferences) => void;
+}) {
+  const { t } = useTranslation("homepage");
+  const [vma, setVma] = useState(prefs?.vma?.toString() ?? "");
+  const [fcMax, setFcMax] = useState(prefs?.fcMax?.toString() ?? "");
+  const [editing, setEditing] = useState(false);
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const v = vma.trim() === "" ? undefined : parseFloat(vma.replace(",", "."));
+    const f = fcMax.trim() === "" ? undefined : parseInt(fcMax, 10);
+    if (v === undefined && f === undefined) return;
+    onSave({ vma: v, fcMax: f });
+    setEditing(false);
+  };
+
+  if (hasUserZones && !editing) {
+    return (
+      <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+        <span className="font-mono text-[11px] tracking-[0.12em] uppercase text-foreground/55">
+          {t("home.s03.personal.label")}
+        </span>
+        {prefs?.vma != null && (
+          <span className="font-mono tabular-nums">
+            VMA <strong className="text-foreground font-semibold">{prefs.vma}</strong> km/h
+          </span>
+        )}
+        {prefs?.fcMax != null && (
+          <span className="font-mono tabular-nums">
+            FCmax <strong className="text-foreground font-semibold">{prefs.fcMax}</strong> bpm
+          </span>
+        )}
+        <button
+          type="button"
+          onClick={() => setEditing(true)}
+          className="text-primary text-sm font-medium underline underline-offset-4 hover:text-primary/80"
+        >
+          {t("home.s03.personal.edit")}
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <form
+      onSubmit={submit}
+      className="mt-6 flex flex-wrap items-end gap-3 p-4 rounded-md border border-dashed border-border bg-card"
+    >
+      <div>
+        <p className="font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground mb-2">
+          {t("home.s03.personal.prompt")}
+        </p>
+        <div className="flex flex-wrap items-end gap-3">
+          <label className="flex flex-col text-xs text-muted-foreground">
+            <span className="mb-1">{t("home.s03.personal.vmaLabel")}</span>
+            <input
+              type="number"
+              inputMode="decimal"
+              step="0.1"
+              min="8"
+              max="30"
+              value={vma}
+              onChange={(e) => setVma(e.target.value)}
+              placeholder="16.0"
+              className="w-24 px-2.5 py-1.5 rounded border border-input bg-background text-sm tabular-nums focus:outline-none focus:ring-2 focus:ring-primary/30"
+            />
+          </label>
+          <label className="flex flex-col text-xs text-muted-foreground">
+            <span className="mb-1">{t("home.s03.personal.fcMaxLabel")}</span>
+            <input
+              type="number"
+              inputMode="numeric"
+              step="1"
+              min="100"
+              max="250"
+              value={fcMax}
+              onChange={(e) => setFcMax(e.target.value)}
+              placeholder="190"
+              className="w-24 px-2.5 py-1.5 rounded border border-input bg-background text-sm tabular-nums focus:outline-none focus:ring-2 focus:ring-primary/30"
+            />
+          </label>
+          <Button type="submit" size="sm">
+            {t("home.s03.personal.submit")}
+          </Button>
+          {editing && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setEditing(false)}
+            >
+              {t("home.s03.personal.cancel")}
+            </Button>
+          )}
+        </div>
+      </div>
+    </form>
   );
 }
 
@@ -1127,7 +1438,8 @@ function SchoolCard({
   desc,
   bib,
   count,
-  school,
+  readMoreHref,
+  readMoreLabel,
   t,
 }: {
   name: string;
@@ -1136,16 +1448,17 @@ function SchoolCard({
   desc: string;
   bib: string;
   count: number;
-  school: School;
+  readMoreHref: string;
+  readMoreLabel: string;
   t: ReturnType<typeof useTranslation>["t"];
 }) {
   return (
-    <article className="border border-foreground/15 p-6 md:p-7 flex flex-col">
+    <article className="border border-foreground/15 p-6 md:p-7 flex flex-col bg-card">
       <div className="flex items-start justify-between gap-4">
         <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-foreground/55">
           {t("homepage:home.s04.schoolLabel")} · {year}
         </p>
-        <span className="font-mono text-[10px] tracking-[0.15em] uppercase bg-foreground/8 px-2 py-1">
+        <span className="font-mono text-[10px] tracking-[0.15em] uppercase bg-accent/60 px-2 py-1 rounded-sm">
           {tag}
         </span>
       </div>
@@ -1157,14 +1470,13 @@ function SchoolCard({
         <p className="font-sans italic text-xs text-foreground/55 leading-snug">
           {bib}
         </p>
-        {count > 0 && (
-          <Link
-            to={`/library?q=${school}`}
-            className="font-sans italic text-sm shrink-0 underline underline-offset-4 hover:text-foreground/80"
-          >
-            {count} {t("homepage:home.s04.sessions")} →
-          </Link>
-        )}
+        <Link
+          to={readMoreHref}
+          className="font-sans italic text-sm shrink-0 underline underline-offset-4 text-primary hover:text-primary/80"
+        >
+          {readMoreLabel}
+          {count > 0 ? ` · ${count}` : ""} →
+        </Link>
       </div>
     </article>
   );
@@ -1219,86 +1531,6 @@ function PlanRow({
   );
 }
 
-function SessionProfile({
-  workout,
-}: {
-  workout: ReturnType<typeof getAllPrebuiltPlans>[number] extends infer _
-    ? import("@/types").WorkoutTemplate
-    : never;
-}) {
-  // Build a horizontal effort profile from main set blocks. Each block becomes
-  // a bar, height = zone level, width proportional to durationMin × repetitions.
-  const blocks = (workout.mainSetTemplate ?? []).filter((b) => b.zone);
-  if (blocks.length === 0) {
-    return (
-      <div className="h-32 border-t border-dashed border-foreground/20 flex items-end justify-center text-xs text-foreground/40 font-mono">
-        no profile
-      </div>
-    );
-  }
-  const totalUnits = blocks.reduce(
-    (s, b) => s + (b.durationMin ?? 1) * (b.repetitions ?? 1) * (b.sets ?? 1),
-    0,
-  );
-  return (
-    <div>
-      <div className="h-32 flex items-end gap-0.5">
-        {blocks.map((b, i) => {
-          const z = parseInt(b.zone?.replace(/\D/g, "") ?? "1", 10) as ZoneNumber;
-          const units = (b.durationMin ?? 1) * (b.repetitions ?? 1) * (b.sets ?? 1);
-          const width = totalUnits > 0 ? (units / totalUnits) * 100 : 0;
-          const height = 25 + z * 12; // 37%..97%
-          return (
-            <div
-              key={i}
-              className={`${ZONE_BAR_BG[z]} opacity-90`}
-              style={{ width: `${width}%`, height: `${height}%` }}
-              title={`Z${z} · ${units}'`}
-            />
-          );
-        })}
-      </div>
-      <p className="mt-2 font-mono text-[10px] tracking-[0.18em] uppercase text-foreground/45">
-        FIG.04 — {workout.id}
-      </p>
-    </div>
-  );
-}
-
-function SessionMetrics({
-  workout,
-  t,
-}: {
-  workout: import("@/types").WorkoutTemplate;
-  t: ReturnType<typeof useTranslation>["t"];
-}) {
-  const mid = Math.round(
-    (workout.typicalDuration.min + workout.typicalDuration.max) / 2,
-  );
-  const tss = estimateTSS(workout);
-  const zones = getWorkoutZones(workout);
-  const topZone = zones[zones.length - 1] ?? 4;
-  const level =
-    workout.difficulty === "beginner"
-      ? 1
-      : workout.difficulty === "intermediate"
-        ? 2
-        : workout.difficulty === "advanced"
-          ? 3
-          : 4;
-  return (
-    <div className="grid grid-cols-4 gap-3">
-      <Metric label={t("homepage:home.s07.dur")} value={`${mid}'`} />
-      <Metric label="TSS" value={String(tss)} />
-      <Metric label={t("homepage:home.s07.zone")} value={`Z${topZone}`} />
-      <Metric
-        label={t("homepage:home.s07.lvl")}
-        value={"★".repeat(level) + "☆".repeat(Math.max(0, 4 - level))}
-      />
-    </div>
-  );
-}
-
 function EthosLine({
   value,
   label,
@@ -1325,15 +1557,3 @@ function EthosLine({
   );
 }
 
-/** Coarse method label inferred from a workout's text. Kept extremely small
- *  because the workout schema doesn't carry a structured "method" field yet —
- *  improving this is on the to-do list, but a regex here is honest and works
- *  with the existing JSON. */
-function detectMethodLabel(haystack: string, isEn: boolean): string {
-  if (/billat|30\s*\/\s*30|vvo2/i.test(haystack)) return "Billat · 30/30";
-  if (/daniels|vdot|t-?pace/i.test(haystack)) return isEn ? "Daniels · T-pace" : "Daniels · T-pace";
-  if (/coggan|ftp|tss/i.test(haystack)) return "Coggan · FTP";
-  if (/seiler|polaris/i.test(haystack)) return "Seiler · 80/20";
-  if (/css/i.test(haystack)) return "CSS · Pyramide";
-  return isEn ? "Open" : "Libre";
-}

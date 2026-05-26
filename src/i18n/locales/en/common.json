@@ -218,7 +218,9 @@
     "planMethodology": "Plan guide",
     "myZones": "My Zones",
     "profile": "My Profile",
-    "nutrition": "Nutrition"
+    "nutrition": "Nutrition",
+    "calculators": "Calculators",
+    "primary": "Primary navigation"
   },
   "errors": {
     "workoutNotFound": "Workout not found",

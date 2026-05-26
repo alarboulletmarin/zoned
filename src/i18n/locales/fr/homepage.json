@@ -44,18 +44,26 @@
 
     "hero": {
       "head": "L'entraînement",
-      "tail": ", sans bruit.",
+      "tail": "sans bruit.",
       "accent": ["structuré", "lisible", "outillé", "documenté"],
       "lead": "{{sessions}} séances validées par la science (Seiler, Daniels, Billat, Coggan), {{plans}} plans pré-construits du 5K au marathon, {{calculators}} calculateurs et un générateur de parcours. Tout fonctionne dans votre navigateur — aucune donnée ne quitte votre appareil.",
       "ctaPrimary": "Ouvrir la bibliothèque",
       "ctaSecondary": "Choisir un plan",
       "fig": {
-        "title": "Fig. 01 — Distribution polarisée",
-        "attr": "Seiler, 2009",
-        "totalLabel": "Total",
-        "hourShort": "h",
-        "minShort": "m",
-        "caption": "{{low}} % à basse intensité, {{high}} % au-dessus du seuil."
+        "title": "À quoi ressemble une semaine bien dosée.",
+        "body": "Répartition du temps d'entraînement par zone d'effort, modèle polarisé. La règle clé : 80 % facile, 20 % difficile, presque rien dans la « zone grise » du milieu.",
+        "zones": {
+          "z1": "Récupération",
+          "z2": "Endurance",
+          "z3": "Tempo",
+          "z4": "Seuil",
+          "z5": "VO₂max",
+          "z6": "Anaérobie"
+        },
+        "lowRange": "Facile (Z1–Z2)",
+        "lowCaption": "volume aérobie",
+        "highRange": "Au-dessus du seuil (Z4–Z6)",
+        "highCaption": "qualité intense"
       }
     },
 
@@ -83,26 +91,32 @@
     },
 
     "s02": {
-      "kicker": "Suggéré aujourd'hui",
+      "kicker": "Suggéré cette semaine",
       "title": "Trois séances pour rester dans le bon volume cette semaine.",
-      "body": "Sélection déterministe par semaine ISO — pas d'A/B ni de boucle d'engagement. Cliquez pour ajuster les critères.",
-      "dur": "Dur",
-      "tss": "TSS",
-      "lvl": "Lvl"
+      "body": "Sélection déterministe par semaine ISO — pas d'A/B ni de boucle d'engagement. Cliquez sur une carte pour ouvrir la séance complète."
     },
 
     "s03": {
       "kicker": "L'atlas des zones",
       "title1": "Six zones, six adaptations,",
       "title2": "une grille cohérente.",
-      "body": "Chaque séance de la bibliothèque s'ancre dans ce système. Vos plages personnelles sont calculées depuis vos tests (FCmax, FTP, allure-seuil, CSS).",
+      "body": "Chaque séance de la bibliothèque s'ancre dans ce système. Entrez votre VMA et/ou votre FCmax pour calculer vos plages personnelles — ou retrouvez-les depuis votre profil.",
       "zone": "Zone",
       "name": "Nom",
+      "hr": "Fréquence cardiaque",
       "rpe": "RPE",
-      "lactate": "Lactate mmol",
       "adaptation": "Adaptation visée",
-      "refPace": "Allure réf.",
-      "fig": "Fig. 02 — Modèle à 6 zones, calibré sur FCmax / FTP / allure-seuil"
+      "refPace": "Allure",
+      "fig": "Fig. 02 — Modèle à 6 zones, calibré sur FCmax / FTP / allure-seuil",
+      "personal": {
+        "label": "Calculé depuis votre profil",
+        "edit": "Modifier",
+        "prompt": "Calculez vos zones personnalisées — au moins une valeur suffit.",
+        "vmaLabel": "VMA (km/h)",
+        "fcMaxLabel": "FCmax (bpm)",
+        "submit": "Calculer mes zones",
+        "cancel": "Annuler"
+      }
     },
 
     "s04": {
@@ -111,6 +125,7 @@
       "body": "Zoned ne pousse pas une méthode unique. Chaque séance déclare son école et sa référence — vous gardez la liberté de mélanger.",
       "schoolLabel": "École",
       "sessions": "séances",
+      "readMore": "Lire la méthode",
       "tags": {
         "polarised": "Polarisé · 80/20",
         "vdot": "VDOT · T/I/R Pace",
@@ -147,19 +162,25 @@
     },
 
     "s06": {
-      "kicker": "{{count}} instruments",
+      "kicker": "Calculateurs",
       "title": "Une trousse de calcul pour mesurer vos plages.",
       "body": "Tous les calculs tournent dans le navigateur, sans envoi de données. Les formules sont documentées et leur code est lisible.",
       "tools": {
-        "vdot": { "name": "VDOT", "sub": "Indice de Daniels" },
-        "ftp": { "name": "FTP", "sub": "Seuil fonctionnel · vélo" },
-        "hrZones": { "name": "Zones FC", "sub": "À partir de FCmax / FCrepos" },
-        "paceZones": { "name": "Zones allure", "sub": "À partir d'un test 5K / 10K" },
-        "css": { "name": "CSS", "sub": "Critical Swim Speed · natation" },
-        "splits": { "name": "Splits", "sub": "Stratégie de course" },
-        "predictor": { "name": "Prédicteur", "sub": "Riegel et Daniels combinés" },
-        "ageGraded": { "name": "Age-graded", "sub": "Performance ajustée à l'âge" },
-        "whatIf": { "name": "What-if", "sub": "Forme et fatigue chroniques" }
+        "zones": "Calculez vos zones FC et allures depuis votre VMA ou FCmax.",
+        "converter": "Convertissez entre min/km, km/h et min/mile en temps réel.",
+        "paceTable": "Toutes les allures de 3:00 à 10:00/km avec temps estimés.",
+        "treadmill": "Convertissez vitesse et inclinaison en allure équivalente.",
+        "splits": "Planifiez vos passages pour atteindre votre objectif chrono.",
+        "vma": "Estimez votre VMA à partir d'un résultat de course.",
+        "ftp": "Estimez votre FTP depuis un test 20 minutes ou un ramp test.",
+        "css": "Estimez votre CSS depuis un test 400 m + 200 m.",
+        "equivalence": "Prédisez vos temps sur toutes les distances depuis un résultat.",
+        "ageGraded": "Comparez votre performance au record mondial de votre catégorie.",
+        "raceSimulator": {
+          "title": "Simulateur jour de course",
+          "desc": "Plan complet pour votre journée de course : horaires, allures, nutrition, mental."
+        },
+        "whatIf": "Comparez deux scénarios d'entraînement et visualisez les différences."
       }
     },
 
@@ -177,7 +198,7 @@
       "kicker": "Éthos",
       "title1": "Aucune donnée",
       "title2": "ne quitte votre appareil.",
-      "body": "Zoned est conçu pour fonctionner entièrement en local. Pas de serveur d'analytics, pas de compte, pas de mot de passe à retenir, pas de cookie tiers. Le code est public et auditable sous licence AGPL-3.0.",
+      "body": "Zoned est conçu pour fonctionner entièrement en local. Pas de serveur d'analytics, pas de compte, pas de mot de passe à retenir, pas de cookie tiers. Le code est public et auditable sous licence MIT.",
       "lines": {
         "trackers": "Tracker tiers",
         "account": "Compte requis",
@@ -192,11 +213,34 @@
       "more": "{{count}} articles complémentaires dans la bibliothèque pédagogique.",
       "moreLink": "Tout lire →",
       "q": {
-        "hrm": "Faut-il un capteur cardiaque ?",
-        "export": "Comment exporter une séance vers ma montre ?",
-        "custom": "Puis-je personnaliser un plan ?",
-        "free": "Zoned est-il gratuit ?",
-        "devices": "Sur quels appareils Zoned fonctionne-t-il ?"
+        "hrm": {
+          "q": "Faut-il un capteur cardiaque ?",
+          "a": "Non. Vous pouvez calibrer les zones par l'allure (course, natation) ou la puissance (vélo, via la FTP). Le capteur cardiaque devient utile pour valider Z1–Z2 et détecter la dérive cardiaque sur les sorties longues."
+        },
+        "export": {
+          "q": "Comment exporter une séance vers ma montre ?",
+          "a": "Chaque séance se télécharge en .fit (Garmin / Wahoo / COROS, fichier d'entraînement natif), .ics (Apple Calendar, Google Calendar, Outlook), .pdf ou .png. Les parcours générés s'exportent en .gpx. Tous les exports sont locaux — aucun fichier ne transite par un serveur."
+        },
+        "custom": {
+          "q": "Puis-je personnaliser un plan ?",
+          "a": "Oui. Vous pouvez décaler les semaines (blessure, voyage), substituer une séance (course ↔ vélo ↔ natation, séance ↔ renforcement) et déplacer chaque jour par glisser-déposer sur le calendrier. Un mode plan libre permet aussi de bâtir le plan de zéro."
+        },
+        "free": {
+          "q": "Zoned est-il gratuit ?",
+          "a": "Oui, et pour toujours. Pas de niveau payant, pas de fonctionnalité bloquée, pas de bannière publicitaire. Le projet est open-source sous licence MIT et financé par dons libres."
+        },
+        "devices": {
+          "q": "Sur quels appareils Zoned fonctionne-t-il ?",
+          "a": "Tout navigateur moderne, sur ordinateur, tablette et téléphone. Aucune application à installer — Zoned est une PWA, un raccourci sur l'écran d'accueil suffit pour avoir l'expérience d'une app."
+        },
+        "offline": {
+          "q": "Zoned fonctionne-t-il hors-ligne ?",
+          "a": "Oui. Après le premier chargement, l'application et les séances sont mises en cache par le service worker. Vous pouvez consulter une séance, lancer un calculateur ou ouvrir votre plan sans connexion."
+        },
+        "data": {
+          "q": "Où sont stockées mes données ?",
+          "a": "Tout (zones, profil, plans, favoris, parcours) reste dans le stockage local de votre navigateur. Aucun compte, aucun serveur, aucun cookie tiers. Vous pouvez exporter vos données en .json depuis les Paramètres pour les sauvegarder ou les migrer."
+        }
       }
     },
 
@@ -206,8 +250,44 @@
       "kicker": "Commencer maintenant",
       "line1": "Ouvrez la bibliothèque.",
       "line2": "Lancez votre première séance en deux clics.",
-      "primary": "Ouvrir Zoned",
+      "primary": "Voir les séances",
       "secondary": "Voir le code (GitHub)"
+    },
+
+    "footer": {
+      "tagline": "Un carnet d'entraînement scientifique, local, gratuit et libre. Pour celles et ceux qui veulent comprendre ce qu'ils font.",
+      "groups": {
+        "product": "Produit",
+        "science": "Science",
+        "project": "Projet",
+        "legal": "Légal"
+      },
+      "product": {
+        "library": "Bibliothèque",
+        "plans": "Plans",
+        "calculators": "Calculateurs",
+        "routes": "Générateur de parcours"
+      },
+      "science": {
+        "methodology": "Méthodes",
+        "zones": "Atlas des zones",
+        "glossary": "Glossaire",
+        "faq": "FAQ"
+      },
+      "project": {
+        "about": "À propos",
+        "github": "GitHub",
+        "changelog": "Changelog",
+        "support": "Soutenir"
+      },
+      "legal": {
+        "license": "Licence MIT",
+        "imprint": "Mentions",
+        "privacy": "RGPD",
+        "credits": "Crédits"
+      },
+      "license": "© {{year}} · ZONED — Logiciel libre, licence MIT",
+      "version": "v.{{version}}"
     }
   }
 }
