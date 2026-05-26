@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, GithubIcon, ChevronDown } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
-import { useWorkouts, useTips } from "@/hooks";
+import { useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import { ZONE_META, type ZoneNumber } from "@/types";
@@ -15,11 +15,8 @@ import {
   pickWeeklyWorkouts,
   getISOWeek,
   EXPORT_FORMATS,
-  SCHOOLS,
-  type School,
 } from "@/lib/landing-stats";
 import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
-import { articleMetadata } from "@/data/articles";
 import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
 import { WorkoutCard } from "@/components/domain/WorkoutCard";
 import {
@@ -75,58 +72,89 @@ const ZONE_CHIP_BG: Record<ZoneNumber, string> = {
 
 // ────────────────────────────────────────────────────────────────────────────
 // Static editorial constants — derived from the codebase, not invented.
-// SCHOOL_REFS uses real bibliography for each coach surfaced in §04. The
-// referenced calculators map 1:1 to existing routes in App.tsx, so changing
-// the list here changes both the count (§06 kicker) and the cards rendered.
+// RESEARCHERS surfaces the major scientific figures whose work the app
+// builds on. Each entry points to the canonical source (peer-reviewed paper
+// when one exists, otherwise a reference book). External URLs go to PubMed
+// or the publisher so the user lands on the official record, not a Zoned
+// summary article.
 // ────────────────────────────────────────────────────────────────────────────
 
-const SCHOOL_REFS: Record<
-  School,
+interface ResearcherSource {
+  /** Italic, single-line citation as it appears in the card. */
+  citationKey: string;
+  /** Optional external link. We point at PubMed / publisher so the user
+   *  always lands on the canonical record. Books usually have no URL. */
+  url?: string;
+}
+
+interface Researcher {
+  name: string;
+  /** One short line under the name describing the contribution. */
+  contributionKey: string;
+  source: ResearcherSource;
+}
+
+const RESEARCHERS: Researcher[] = [
   {
-    name: string;
-    year: number;
-    tagKey: string;
-    bibKey: string;
-    descKey: string;
-    /** Where the "read more" link points — either an article slug
-     *  (/learn/<slug>) or the methodology hub. Keeps every school linked
-     *  to something readable inside Zoned, never to an external page. */
-    readMore: { kind: "article"; slug: string } | { kind: "methodology" };
-  }
-> = {
-  seiler: {
     name: "Stephen Seiler",
-    year: 2009,
-    tagKey: "polarised",
-    bibKey: "schoolSeilerBib",
-    descKey: "schoolSeilerDesc",
-    readMore: { kind: "article", slug: "polarized-training" },
+    contributionKey: "homepage:home.s04.researchers.seiler.contribution",
+    source: {
+      citationKey: "homepage:home.s04.researchers.seiler.citation",
+      url: "https://pubmed.ncbi.nlm.nih.gov/16774644/",
+    },
   },
-  daniels: {
-    name: "Jack Daniels",
-    year: 1998,
-    tagKey: "vdot",
-    bibKey: "schoolDanielsBib",
-    descKey: "schoolDanielsDesc",
-    readMore: { kind: "methodology" },
-  },
-  billat: {
+  {
     name: "Véronique Billat",
-    year: 2001,
-    tagKey: "vvo2",
-    bibKey: "schoolBillatBib",
-    descKey: "schoolBillatDesc",
-    readMore: { kind: "article", slug: "testing-vma" },
+    contributionKey: "homepage:home.s04.researchers.billat.contribution",
+    source: {
+      citationKey: "homepage:home.s04.researchers.billat.citation",
+      url: "https://pubmed.ncbi.nlm.nih.gov/9927009/",
+    },
   },
-  coggan: {
-    name: "Andrew Coggan",
-    year: 2003,
-    tagKey: "tss",
-    bibKey: "schoolCogganBib",
-    descKey: "schoolCogganDesc",
-    readMore: { kind: "methodology" },
+  {
+    name: "Jack Daniels",
+    contributionKey: "homepage:home.s04.researchers.daniels.contribution",
+    source: {
+      citationKey: "homepage:home.s04.researchers.daniels.citation",
+    },
   },
-};
+  {
+    name: "Arthur Lydiard",
+    contributionKey: "homepage:home.s04.researchers.lydiard.contribution",
+    source: {
+      citationKey: "homepage:home.s04.researchers.lydiard.citation",
+    },
+  },
+  {
+    name: "Tim Noakes",
+    contributionKey: "homepage:home.s04.researchers.noakes.contribution",
+    source: {
+      citationKey: "homepage:home.s04.researchers.noakes.citation",
+    },
+  },
+  {
+    name: "Wildor Hollmann & Alois Mader",
+    contributionKey: "homepage:home.s04.researchers.cologne.contribution",
+    source: {
+      citationKey: "homepage:home.s04.researchers.cologne.citation",
+    },
+  },
+  {
+    name: "Oliver Faude",
+    contributionKey: "homepage:home.s04.researchers.faude.contribution",
+    source: {
+      citationKey: "homepage:home.s04.researchers.faude.citation",
+      url: "https://pubmed.ncbi.nlm.nih.gov/19402743/",
+    },
+  },
+  {
+    name: "Iñigo San Millán",
+    contributionKey: "homepage:home.s04.researchers.sanMillan.contribution",
+    source: {
+      citationKey: "homepage:home.s04.researchers.sanMillan.citation",
+    },
+  },
+];
 
 // Every calculator surfaced on the home page. Each entry maps 1:1 to an
 // existing route in App.tsx, and the title/desc come from calculators.json
@@ -264,7 +292,6 @@ export function HomePage() {
   const { workouts: cyclingWorkouts } = useCrossDisciplineWorkouts("cycling");
   const { workouts: swimWorkouts } = useCrossDisciplineWorkouts("swimming");
   const { workouts: strengthWorkouts } = useStrengthWorkouts();
-  const { tip } = useTips();
 
   // Endurance pool — running + cycling + swimming. Strength sessions are on
   // a different shape (no zones) so we add them only to the headline count.
@@ -279,7 +306,6 @@ export function HomePage() {
   const totalSessions = stats.totalSessions + strengthWorkouts.length;
 
   const prebuiltPlans = useMemo(() => getAllPrebuiltPlans(), []);
-  const articleCount = articleMetadata.length;
 
   // ── Hero rotating accent — single italic word punctuating the headline.
   // Reads "L'entraînement <structuré|lisible|outillé|documenté>, sans bruit."
@@ -616,37 +642,18 @@ export function HomePage() {
       <Divider />
 
       {/* ═══════════════════════════════════════════════════════════════════
-          §04 — Quatre écoles (counts dérivés depuis les workouts)
+          §04 — Chercheurs et sources de référence
           ═══════════════════════════════════════════════════════════════════ */}
       <section className="py-16 md:py-20">
-
         <EditorialTitle>{t("homepage:home.s04.title")}</EditorialTitle>
         <p className="mt-3 text-sm text-foreground/65 max-w-xl leading-relaxed">
           {t("homepage:home.s04.body")}
         </p>
 
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {SCHOOLS.map((s) => {
-            const refs = SCHOOL_REFS[s];
-            const readMoreHref =
-              refs.readMore.kind === "article"
-                ? `/learn/${refs.readMore.slug}`
-                : "/methodology";
-            return (
-              <SchoolCard
-                key={s}
-                name={refs.name}
-                year={refs.year}
-                tag={t(`homepage:home.s04.tags.${refs.tagKey}`)}
-                desc={t(`homepage:home.s04.${refs.descKey}`)}
-                bib={t(`homepage:home.s04.${refs.bibKey}`)}
-                count={stats.bySchool[s]}
-                readMoreHref={readMoreHref}
-                readMoreLabel={t("homepage:home.s04.readMore")}
-                t={t}
-              />
-            );
-          })}
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+          {RESEARCHERS.map((r) => (
+            <ResearcherCard key={r.name} researcher={r} t={t} />
+          ))}
         </div>
 
         {/* Editor's note quote */}
@@ -699,23 +706,27 @@ export function HomePage() {
           {t("homepage:home.s06.body")}
         </p>
 
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        {/* Mobile: dense 2-col grid with title + chevron only — keeps the
+            scroll short. From sm+ each card grows to title + description +
+            CTA, three columns on md+. */}
+        <div className="mt-10 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
           {CALCULATORS.map((c) => (
             <Link
               key={c.key}
               to={c.slug}
-              className="group block border border-border bg-card hover:border-primary/40 hover:bg-accent/30 transition-colors p-5 rounded-md"
+              className="group block border border-border bg-card hover:border-primary/40 hover:bg-accent/30 transition-colors p-3 sm:p-5 rounded-md flex items-center sm:block gap-2 sm:gap-0"
             >
-              <h3 className="text-base font-semibold mb-1.5 group-hover:text-primary transition-colors">
+              <h3 className="text-sm sm:text-base font-semibold sm:mb-1.5 group-hover:text-primary transition-colors flex-1 sm:flex-none leading-snug">
                 {t(c.titleKey)}
               </h3>
-              <p className="text-sm text-muted-foreground leading-snug line-clamp-2">
+              <p className="hidden sm:block text-sm text-muted-foreground leading-snug line-clamp-2">
                 {t(c.descKey)}
               </p>
-              <span className="mt-3 inline-flex items-center text-xs font-medium text-primary">
+              <span className="hidden sm:inline-flex mt-3 items-center text-xs font-medium text-primary">
                 {t("calculators:calculateurs.explore")}
                 <ArrowRight className="size-3 ml-1 transition-transform group-hover:translate-x-0.5" />
               </span>
+              <ArrowRight className="size-4 sm:hidden text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
             </Link>
           ))}
         </div>
@@ -750,8 +761,8 @@ export function HomePage() {
       {/* ═══════════════════════════════════════════════════════════════════
           §08 — Éthos (section sombre inverse) — 4 chiffres factuels
           ═══════════════════════════════════════════════════════════════════ */}
-      <section className="-mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 py-16 md:py-24 bg-foreground text-background">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-10 lg:gap-16">
+      <section className="relative w-screen left-1/2 -ml-[50vw] py-16 md:py-24 bg-foreground text-background">
+        <div className="mx-auto max-w-6xl px-4 md:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-10 lg:gap-16">
           <div>
             <h2 className="font-sans font-semibold italic text-3xl md:text-5xl leading-[1.05]">
               {t("homepage:home.s08.title1")}
@@ -812,31 +823,7 @@ export function HomePage() {
             </details>
           ))}
         </div>
-
-        <p className="mt-6 text-xs text-foreground/55">
-          {t("homepage:home.s09.more", { count: articleCount })}{" "}
-          <Link to="/learn" className="underline underline-offset-4 text-primary">
-            {t("homepage:home.s09.moreLink")}
-          </Link>
-        </p>
       </section>
-
-      {/* Optional tip — only shows when one is available for the day */}
-      {tip && (
-        <>
-          <Divider />
-          <section className="py-10">
-            <div className="flex items-baseline gap-6">
-              <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-foreground/50">
-                {t("homepage:home.tip")}
-              </span>
-              <p className="font-sans italic text-base md:text-lg flex-1">
-                {pickLang(tip, "content")}
-              </p>
-            </div>
-          </section>
-        </>
-      )}
 
       <Divider />
 
@@ -861,15 +848,16 @@ export function HomePage() {
               {t("homepage:home.cta.primary")}
             </Link>
           </Button>
-          <a
-            href="https://github.com/alarboulletmarin/zoned"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm font-medium text-foreground/70 hover:text-foreground"
-          >
-            {t("homepage:home.cta.secondary")}
-            <GithubIcon className="size-4" />
-          </a>
+          <Button asChild variant="outline" size="lg" className="rounded-full px-6">
+            <a
+              href="https://github.com/alarboulletmarin/zoned"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <GithubIcon className="size-4" />
+              {t("homepage:home.cta.secondary")}
+            </a>
+          </Button>
         </div>
       </section>
 
@@ -891,10 +879,9 @@ function LandingFooter() {
   const version = APP_VERSION;
 
   return (
-    <footer className="-mx-4 md:-mx-6 lg:-mx-8 mt-8 border-t border-border bg-card">
-      <div className="px-4 md:px-6 lg:px-8 py-14 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr] gap-10 md:gap-8">
-          {/* Brand block */}
+    <footer className="relative w-screen left-1/2 -ml-[50vw] mt-8 border-t border-border bg-card">
+      <div className="mx-auto max-w-6xl px-4 md:px-6 lg:px-8 py-14 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr_1fr] gap-10 md:gap-8">
           <div className="max-w-xs">
             <Link
               to="/"
@@ -922,9 +909,8 @@ function LandingFooter() {
             title={t("homepage:home.footer.groups.science")}
             links={[
               { label: t("homepage:home.footer.science.methodology"), to: "/methodology" },
-              { label: t("homepage:home.footer.science.zones"), to: "/learn/zones" },
               { label: t("homepage:home.footer.science.glossary"), to: "/glossary" },
-              { label: t("homepage:home.footer.science.faq"), to: "/learn/faq" },
+              { label: t("homepage:home.footer.science.guides"), to: "/guides" },
             ]}
           />
           <FooterColumn
@@ -936,19 +922,6 @@ function LandingFooter() {
                 href: "https://github.com/alarboulletmarin/zoned",
               },
               { label: t("homepage:home.footer.project.changelog"), to: "/changelog" },
-              { label: t("homepage:home.footer.project.support"), to: "/contribute" },
-            ]}
-          />
-          <FooterColumn
-            title={t("homepage:home.footer.groups.legal")}
-            links={[
-              {
-                label: t("homepage:home.footer.legal.license"),
-                href: "https://github.com/alarboulletmarin/zoned/blob/main/LICENSE",
-              },
-              { label: t("homepage:home.footer.legal.imprint"), to: "/about" },
-              { label: t("homepage:home.footer.legal.privacy"), to: "/about" },
-              { label: t("homepage:home.footer.legal.credits"), to: "/contribute" },
             ]}
           />
         </div>
@@ -1173,18 +1146,20 @@ function EntryColumn({
   to: string;
 }) {
   return (
-    <div className="py-8 md:py-0 md:px-8 first:md:pl-0 last:md:pr-0">
+    <div className="py-8 md:py-0 md:px-8 first:md:pl-0 last:md:pr-0 flex flex-col">
       <p className="font-mono text-[11px] tracking-[0.15em] text-foreground/50 mb-3">
         {num}
       </p>
       <h3 className="font-sans italic text-2xl mb-3">{title}</h3>
-      <p className="text-sm leading-[1.65] text-foreground/75 mb-4">{body}</p>
-      <Link
-        to={to}
-        className="font-sans italic text-sm underline underline-offset-4 hover:text-foreground/80"
-      >
-        {linkLabel} →
-      </Link>
+      <p className="text-sm leading-[1.65] text-foreground/75 mb-5 flex-1">
+        {body}
+      </p>
+      <Button asChild variant="outline" size="sm" className="self-start">
+        <Link to={to}>
+          {linkLabel}
+          <ArrowRight className="size-3.5" />
+        </Link>
+      </Button>
     </div>
   );
 }
@@ -1398,53 +1373,34 @@ function ZonesPersonaliser({
   );
 }
 
-function SchoolCard({
-  name,
-  year,
-  tag,
-  desc,
-  bib,
-  count,
-  readMoreHref,
-  readMoreLabel,
+function ResearcherCard({
+  researcher,
   t,
 }: {
-  name: string;
-  year: number;
-  tag: string;
-  desc: string;
-  bib: string;
-  count: number;
-  readMoreHref: string;
-  readMoreLabel: string;
+  researcher: Researcher;
   t: ReturnType<typeof useTranslation>["t"];
 }) {
+  const hasUrl = !!researcher.source.url;
   return (
-    <article className="border border-foreground/15 p-6 md:p-7 flex flex-col bg-card">
-      <div className="flex items-start justify-between gap-4">
-        <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-foreground/55">
-          {t("homepage:home.s04.schoolLabel")} · {year}
-        </p>
-        <span className="font-mono text-[10px] tracking-[0.15em] uppercase bg-accent/60 px-2 py-1 rounded-sm">
-          {tag}
-        </span>
-      </div>
-      <h3 className="font-sans italic text-2xl mt-3">{name}</h3>
-      <p className="text-sm leading-[1.6] text-foreground/75 mt-3 flex-1">
-        {desc}
+    <article className="border-l-2 border-border pl-5 py-1">
+      <h3 className="text-lg font-semibold">{researcher.name}</h3>
+      <p className="text-sm text-muted-foreground mt-1 leading-snug">
+        {t(researcher.contributionKey)}
       </p>
-      <div className="mt-6 pt-4 border-t border-dashed border-foreground/20 flex items-baseline justify-between gap-4">
-        <p className="font-sans italic text-xs text-foreground/55 leading-snug">
-          {bib}
-        </p>
-        <Link
-          to={readMoreHref}
-          className="font-sans italic text-sm shrink-0 underline underline-offset-4 text-primary hover:text-primary/80"
+      <p className="font-sans italic text-sm text-foreground/80 mt-3 leading-snug">
+        {t(researcher.source.citationKey)}
+      </p>
+      {hasUrl && (
+        <a
+          href={researcher.source.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary hover:text-primary/80"
         >
-          {readMoreLabel}
-          {count > 0 ? ` · ${count}` : ""} →
-        </Link>
-      </div>
+          {t("homepage:home.s04.viewPublication")}
+          <ArrowRight className="size-3" />
+        </a>
+      )}
     </article>
   );
 }
@@ -1488,12 +1444,12 @@ function PlanRow({
           );
         })}
       </div>
-      <Link
-        to={`/plan/prebuilt/${plan.slug}`}
-        className="font-sans italic text-sm justify-self-end underline underline-offset-4 hover:text-foreground/80"
-      >
-        {t("homepage:home.s05.choose")} →
-      </Link>
+      <Button asChild variant="outline" size="sm" className="justify-self-end">
+        <Link to={`/plan/prebuilt/${plan.slug}`}>
+          {t("homepage:home.s05.choose")}
+          <ArrowRight className="size-3.5" />
+        </Link>
+      </Button>
     </div>
   );
 }

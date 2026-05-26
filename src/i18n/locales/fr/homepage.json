@@ -121,25 +121,43 @@
 
     "s04": {
       "kicker": "Les méthodes",
-      "title": "Quatre écoles, une bibliothèque.",
-      "body": "Zoned ne pousse pas une méthode unique. Chaque séance déclare son école et sa référence — vous gardez la liberté de mélanger.",
-      "schoolLabel": "École",
-      "sessions": "séances",
-      "readMore": "Lire la méthode",
-      "tags": {
-        "polarised": "Polarisé · 80/20",
-        "vdot": "VDOT · T/I/R Pace",
-        "vvo2": "vVO₂max · 30/30",
-        "tss": "FTP · IF · TSS"
+      "title": "Chercheurs & méthodes de référence.",
+      "body": "Zoned ne pousse pas une méthode unique. Chaque zone, chaque séance s'appuie sur des travaux publiés ; voici les sources officielles que vous pouvez consulter directement.",
+      "viewPublication": "Voir la publication",
+      "researchers": {
+        "seiler": {
+          "contribution": "Modèle d'entraînement polarisé (80/20).",
+          "citation": "« Quantifying training intensity distribution in elite endurance athletes » — Scand J Med Sci Sports, 2006."
+        },
+        "billat": {
+          "contribution": "Chercheuse française. vVO₂max et protocole 30/30.",
+          "citation": "« Interval training at VO₂max: effects on aerobic performance » — Med Sci Sports Exerc, 1999."
+        },
+        "daniels": {
+          "contribution": "Système VDOT et zones d'entraînement (1933–2025).",
+          "citation": "Daniels' Running Formula (Human Kinetics, 3ᵉ éd., 2014)."
+        },
+        "lydiard": {
+          "contribution": "Périodisation et construction de la base aérobie.",
+          "citation": "Pionnier néo-zélandais de l'approche par construction de base, années 1950-60."
+        },
+        "noakes": {
+          "contribution": "Théorie du gouverneur central et limites perçues à l'effort.",
+          "citation": "Lore of Running (Oxford University Press, 4ᵉ éd., 2003)."
+        },
+        "cologne": {
+          "contribution": "Origines du concept de seuil lactique — groupe de Cologne.",
+          "citation": "Travaux fondateurs sur le métabolisme lactique, années 1970."
+        },
+        "faude": {
+          "contribution": "Revue définitive des concepts de seuil lactique.",
+          "citation": "« Lactate Threshold Concepts: How Valid Are They? » — Sports Med, 2009."
+        },
+        "sanMillan": {
+          "contribution": "Entraînement en Zone 2 et santé métabolique.",
+          "citation": "Recherche sur la fonction mitochondriale et la flexibilité métabolique chez les athlètes d'endurance."
+        }
       },
-      "schoolSeilerDesc": "Distribuer le volume hebdomadaire en deux pôles : ~80 % sous le premier seuil, ~20 % au-dessus du second. Le milieu — la zone « grise » — est minimisé.",
-      "schoolSeilerBib": "Seiler, Sportscience 13 (2009) · Stöggl & Sperlich, Front. Physiol. 5 (2014)",
-      "schoolDanielsDesc": "Cinq allures précises (E, M, T, I, R) dérivées d'une valeur VDOT calculée depuis une performance récente. Une logique de prescription d'une grande clarté pédagogique.",
-      "schoolDanielsBib": "Daniels, Running Formula (3rd ed., 2014)",
-      "schoolBillatDesc": "Fractions très courtes à la vitesse minimale à VO₂max, alternant 30 s effort / 30 s récupération. Maximise le temps passé à VO₂max sans dette excessive.",
-      "schoolBillatBib": "Billat et al., Med. Sci. Sports Exerc. 33 (2001)",
-      "schoolCogganDesc": "Quantifier la charge d'entraînement par le couple intensité (IF) et durée (TSS). Donne un langage commun entre cyclistes, coureurs et triathlètes.",
-      "schoolCogganBib": "Allen, Coggan & McGregor, Training and Racing with a Power Meter (3rd ed., 2019)",
       "quote": "« L'endurance n'est pas un mystère. C'est de la physiologie patiemment empilée semaine après semaine, et un peu de patience. »",
       "quoteAttr": "Note d'éditeur, Zoned"
     },
@@ -259,8 +277,7 @@
       "groups": {
         "product": "Produit",
         "science": "Science",
-        "project": "Projet",
-        "legal": "Légal"
+        "project": "Projet"
       },
       "product": {
         "library": "Bibliothèque",
@@ -270,21 +287,13 @@
       },
       "science": {
         "methodology": "Méthodes",
-        "zones": "Atlas des zones",
         "glossary": "Glossaire",
-        "faq": "FAQ"
+        "guides": "Guides"
       },
       "project": {
         "about": "À propos",
         "github": "GitHub",
-        "changelog": "Changelog",
-        "support": "Soutenir"
-      },
-      "legal": {
-        "license": "Licence MIT",
-        "imprint": "Mentions",
-        "privacy": "RGPD",
-        "credits": "Crédits"
+        "changelog": "Changelog"
       },
       "license": "© {{year}} · ZONED — Logiciel libre, licence MIT",
       "version": "v.{{version}}"

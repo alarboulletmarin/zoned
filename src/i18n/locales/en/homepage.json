@@ -121,25 +121,43 @@
 
     "s04": {
       "kicker": "The methods",
-      "title": "Four schools, one library.",
-      "body": "Zoned does not push a single method. Every session declares its school and reference — you remain free to mix them.",
-      "schoolLabel": "School",
-      "sessions": "sessions",
-      "readMore": "Read the method",
-      "tags": {
-        "polarised": "Polarised · 80/20",
-        "vdot": "VDOT · T/I/R Pace",
-        "vvo2": "vVO₂max · 30/30",
-        "tss": "FTP · IF · TSS"
+      "title": "Researchers & reference methods.",
+      "body": "Zoned does not push a single method. Every zone, every session rests on published work; here are the official sources you can consult directly.",
+      "viewPublication": "View publication",
+      "researchers": {
+        "seiler": {
+          "contribution": "Polarised training model (80/20).",
+          "citation": "\"Quantifying training intensity distribution in elite endurance athletes\" — Scand J Med Sci Sports, 2006."
+        },
+        "billat": {
+          "contribution": "French researcher. vVO₂max and the 30/30 protocol.",
+          "citation": "\"Interval training at VO₂max: effects on aerobic performance\" — Med Sci Sports Exerc, 1999."
+        },
+        "daniels": {
+          "contribution": "VDOT system and training zones (1933–2025).",
+          "citation": "Daniels' Running Formula (Human Kinetics, 3rd ed., 2014)."
+        },
+        "lydiard": {
+          "contribution": "Periodisation and aerobic base building.",
+          "citation": "New-Zealand pioneer of the base-building approach, 1950-60s."
+        },
+        "noakes": {
+          "contribution": "Central governor theory and perceived effort.",
+          "citation": "Lore of Running (Oxford University Press, 4th ed., 2003)."
+        },
+        "cologne": {
+          "contribution": "Origins of the lactate threshold concept — Cologne group.",
+          "citation": "Foundational work on lactate metabolism, 1970s."
+        },
+        "faude": {
+          "contribution": "Definitive review of lactate threshold concepts.",
+          "citation": "\"Lactate Threshold Concepts: How Valid Are They?\" — Sports Med, 2009."
+        },
+        "sanMillan": {
+          "contribution": "Zone 2 training and metabolic health.",
+          "citation": "Research on mitochondrial function and metabolic flexibility in endurance athletes."
+        }
       },
-      "schoolSeilerDesc": "Split weekly volume into two poles: ~80 % below the first threshold, ~20 % above the second. The middle — the 'grey zone' — is kept to a minimum.",
-      "schoolSeilerBib": "Seiler, Sportscience 13 (2009) · Stöggl & Sperlich, Front. Physiol. 5 (2014)",
-      "schoolDanielsDesc": "Five precise paces (E, M, T, I, R) derived from a VDOT value computed from a recent race. A prescription logic of unusual pedagogical clarity.",
-      "schoolDanielsBib": "Daniels, Running Formula (3rd ed., 2014)",
-      "schoolBillatDesc": "Very short intervals at the minimum velocity at VO₂max, alternating 30 s effort / 30 s recovery. Maximises time at VO₂max without excessive debt.",
-      "schoolBillatBib": "Billat et al., Med. Sci. Sports Exerc. 33 (2001)",
-      "schoolCogganDesc": "Quantify training load through the intensity (IF) and duration (TSS) pair. Provides a common vocabulary across cyclists, runners and triathletes.",
-      "schoolCogganBib": "Allen, Coggan & McGregor, Training and Racing with a Power Meter (3rd ed., 2019)",
       "quote": "\"Endurance is not a mystery. It is physiology patiently stacked week after week, plus a little patience.\"",
       "quoteAttr": "Editor's note, Zoned"
     },
@@ -259,8 +277,7 @@
       "groups": {
         "product": "Product",
         "science": "Science",
-        "project": "Project",
-        "legal": "Legal"
+        "project": "Project"
       },
       "product": {
         "library": "Library",
@@ -270,21 +287,13 @@
       },
       "science": {
         "methodology": "Methods",
-        "zones": "Zone atlas",
         "glossary": "Glossary",
-        "faq": "FAQ"
+        "guides": "Guides"
       },
       "project": {
         "about": "About",
         "github": "GitHub",
-        "changelog": "Changelog",
-        "support": "Support"
-      },
-      "legal": {
-        "license": "MIT licence",
-        "imprint": "Imprint",
-        "privacy": "Privacy",
-        "credits": "Credits"
+        "changelog": "Changelog"
       },
       "license": "© {{year}} · ZONED — Free software, MIT licence",
       "version": "v.{{version}}"
