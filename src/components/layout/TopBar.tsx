@@ -185,6 +185,16 @@ export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
               <Button
                 variant="ghost"
                 size="icon-sm"
+                onClick={() => changeLanguage(currentLang === "fr" ? "en" : "fr")}
+                title={currentLang === "fr" ? "Switch to English" : "Passer en français"}
+                aria-label={currentLang === "fr" ? "Switch to English" : "Passer en français"}
+                className={`${touchTarget} text-xs font-semibold`}
+              >
+                {currentLang === "fr" ? "EN" : "FR"}
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon-sm"
                 onClick={onThemeToggle}
                 aria-label={theme === "light" ? t("theme.dark") : t("theme.light")}
                 className={touchTarget}

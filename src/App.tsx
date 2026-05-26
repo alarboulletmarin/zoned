@@ -91,14 +91,10 @@ function preloadSidebarPages() {
  *  the entire vertical space without the user being pushed past the
  *  fold to satisfy a footer below the map. */
 const FULLSCREEN_ROUTES = ["/routes"];
-/** Routes that render their own bespoke footer — the global one would
- *  otherwise stack underneath. Today this is just the landing page. */
-const CUSTOM_FOOTER_ROUTES = ["/"];
 
 function ConditionalFooter() {
   const { pathname } = useLocation();
   if (FULLSCREEN_ROUTES.includes(pathname)) return null;
-  if (CUSTOM_FOOTER_ROUTES.includes(pathname)) return null;
   return <Footer />;
 }
 
