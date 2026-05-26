@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ResponsiveTable } from "@/components/ui/responsive-table";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import { ZONE_META, type ZoneNumber } from "@/types";
 import { calculatePaceZones, saveUserZonePrefs, formatPace } from "@/lib/zones";
@@ -124,13 +125,13 @@ export function VmaCalculatorPage() {
       <div className="py-8 max-w-2xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
-            <Timer className="size-8 text-primary" />
+          <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
+            <Timer className="size-8 text-primary shrink-0" />
             {t("calculators:calculateurs.vma.title")}
-          </h1>
-          <p className="text-muted-foreground text-lg">
+          </EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
             {t("calculators:calculateurs.vma.description")}
-          </p>
+          </FadeUp>
         </div>
 
         {/* Input Card */}

@@ -38,6 +38,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import { generatePlan } from "@/lib/planGenerator";
 import { computePlanStats, computeEnhancedPlanAnalysis } from "@/lib/planStats";
@@ -621,11 +622,13 @@ export function WhatIfPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
-              <Scale className="size-8" />
+            <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
+              <Scale className="size-8 shrink-0" />
               {t("title")}
-            </h1>
-            <p className="text-muted-foreground text-lg">{t("subtitle")}</p>
+            </EditorialTitle>
+            <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
+              {t("subtitle")}
+            </FadeUp>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <Button
