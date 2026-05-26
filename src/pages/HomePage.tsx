@@ -3,6 +3,13 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, GithubIcon, ChevronDown } from "@/components/icons";
+import {
+  EditorialTitle,
+  StaggerGrid,
+  StaggerItem,
+  useCountUp,
+  Divider,
+} from "@/components/editorial";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
 import { useWorkouts } from "@/hooks";
@@ -26,35 +33,6 @@ import {
 } from "@/lib/zones";
 import type { UserZonePreferences } from "@/types";
 import Logo from "@/assets/logo.svg?react";
-
-// ────────────────────────────────────────────────────────────────────────────
-// Editorial atoms — short, local helpers that build the "training journal"
-// vocabulary used throughout the page. Kept in-file so the HomePage stays
-// self-contained and the rest of the app isn't polluted with one-shot styles.
-// ────────────────────────────────────────────────────────────────────────────
-
-/** Title used for every section heading. Italic sans display. */
-function EditorialTitle({
-  children,
-  size = "lg",
-}: {
-  children: React.ReactNode;
-  size?: "lg" | "xl";
-}) {
-  const cls = size === "xl" ? "text-[44px] md:text-6xl" : "text-3xl md:text-4xl";
-  const reduced = useReducedMotion();
-  return (
-    <motion.h2
-      className={`font-sans font-semibold italic leading-[1.05] tracking-tight ${cls}`}
-      initial={reduced ? false : { opacity: 0, y: 14 }}
-      whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5, ease: [0, 0, 0.2, 1] }}
-    >
-      {children}
-    </motion.h2>
-  );
-}
 
 // Zone color classes — Tailwind needs static class names so we map explicitly.
 const ZONE_BAR_BG: Record<ZoneNumber, string> = {
@@ -258,11 +236,6 @@ const FAQ_IDS = [
   "data",
 ] as const;
 
-// ────────────────────────────────────────────────────────────────────────────
-// Animation helpers — every motion gate respects prefers-reduced-motion.
-// fadeUp props are spread on a <motion.div> for stagger-on-scroll reveals.
-// ────────────────────────────────────────────────────────────────────────────
-
 /** Subtle "scroll to discover" cue anchored at the foot of the hero. Pulses
  *  gently; respects prefers-reduced-motion (then it stays static). */
 function ScrollHint() {
@@ -294,77 +267,6 @@ function ScrollHint() {
       </motion.div>
     </div>
   );
-}
-
-/** Stagger container — children fade-up with a small delay between each.
- *  Uses framer-motion variants so the timing is handled in one place. */
-function StaggerGrid({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  const reduced = useReducedMotion();
-  if (reduced) return <div className={className}>{children}</div>;
-  return (
-    <motion.div
-      className={className}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
-      variants={{
-        hidden: {},
-        show: { transition: { staggerChildren: 0.06 } },
-      }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-function StaggerItem({ children }: { children: React.ReactNode }) {
-  const reduced = useReducedMotion();
-  if (reduced) return <>{children}</>;
-  return (
-    <motion.div
-      variants={{
-        hidden: { opacity: 0, y: 14 },
-        show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0, 0, 0.2, 1] } },
-      }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-/** Animate an integer from 0 to `target`. Skips the animation entirely
- *  when the user prefers reduced motion. */
-function useCountUp(target: number, durationMs = 900): number {
-  const reduced = useReducedMotion();
-  const [value, setValue] = useState(reduced ? target : 0);
-  useEffect(() => {
-    if (reduced) {
-      setValue(target);
-      return;
-    }
-    if (target <= 0) {
-      setValue(0);
-      return;
-    }
-    let raf = 0;
-    const start = performance.now();
-    const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / durationMs);
-      // easeOutCubic — fast start, gentle settle
-      const eased = 1 - Math.pow(1 - t, 3);
-      setValue(Math.round(target * eased));
-      if (t < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [target, durationMs, reduced]);
-  return value;
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -1216,13 +1118,9 @@ const APP_VERSION =
     : "dev";
 
 // ────────────────────────────────────────────────────────────────────────────
-// Sub-components — kept in this file because nothing outside the landing
-// uses them. Promoting them to /components would only add noise.
+// Sub-components — local to the landing. Generic editorial atoms live in
+// src/components/editorial/.
 // ────────────────────────────────────────────────────────────────────────────
-
-function Divider() {
-  return <hr className="border-0 border-t border-foreground/15" />;
-}
 
 function StatBlock({
   value,

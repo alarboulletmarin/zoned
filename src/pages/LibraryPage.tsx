@@ -15,6 +15,7 @@ import {
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 import { Button } from "@/components/ui/button";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 
 import { WorkoutCardSkeleton } from "@/components/skeletons";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
@@ -557,10 +558,12 @@ export function LibraryPage() {
         <div ref={filterSectionRef} className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold">{t("title")}</h1>
-              <p className="text-muted-foreground mt-1">
+              <EditorialTitle as="h1" size="md">
+                {t("title")}
+              </EditorialTitle>
+              <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
                 {t(subtitleKey, { count: filteredWorkouts.length })}
-              </p>
+              </FadeUp>
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
