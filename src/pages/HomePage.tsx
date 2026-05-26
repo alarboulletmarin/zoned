@@ -831,7 +831,45 @@ export function HomePage() {
           {t("homepage:home.s04.body")}
         </p>
 
-        <StaggerGrid className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+        {/* Mobile: dense 2-col grid (name + arrow only). Links open the
+            external publication when available, otherwise the methodology
+            hub — matches the calculator-grid pattern on mobile. */}
+        <StaggerGrid className="md:hidden mt-10 grid grid-cols-2 gap-2">
+          {RESEARCHERS.map((r) => {
+            const href = r.source.url ?? "/methodology";
+            const isExternal = !!r.source.url;
+            const cls =
+              "group block border border-border bg-card hover:border-foreground/40 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 p-3 rounded-md flex items-center gap-2 h-full";
+            const content = (
+              <>
+                <span className="text-sm font-semibold flex-1 leading-snug group-hover:text-primary transition-colors">
+                  {r.name}
+                </span>
+                <ArrowRight className="size-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+              </>
+            );
+            return (
+              <StaggerItem key={r.name}>
+                {isExternal ? (
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cls}
+                  >
+                    {content}
+                  </a>
+                ) : (
+                  <Link to={href} className={cls}>
+                    {content}
+                  </Link>
+                )}
+              </StaggerItem>
+            );
+          })}
+        </StaggerGrid>
+
+        <StaggerGrid className="hidden md:grid mt-10 grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
           {RESEARCHERS.map((r) => (
             <StaggerItem key={r.name}>
               <ResearcherCard researcher={r} t={t} />
@@ -866,7 +904,27 @@ export function HomePage() {
           })}
         </p>
 
-        <div className="mt-10 divide-y divide-foreground/15 border-y border-foreground/15">
+        {/* Mobile: dense 2-col grid (distance + arrow only). Each card
+            jumps to the canonical plan for that distance — matches the
+            calculator-grid pattern. */}
+        <StaggerGrid className="md:hidden mt-10 grid grid-cols-2 gap-2">
+          {planRows.map(({ key, plan }) => (
+            <StaggerItem key={key}>
+              <Link
+                to={`/plan/prebuilt/${plan.slug}`}
+                className="group block border border-border bg-card hover:border-foreground/40 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 p-3 rounded-md flex items-center gap-2 h-full"
+              >
+                <span className="text-base font-sans italic font-semibold flex-1 leading-snug group-hover:text-primary transition-colors">
+                  {t(`homepage:home.s05.distance.${key}`)}
+                </span>
+                <ArrowRight className="size-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+              </Link>
+            </StaggerItem>
+          ))}
+        </StaggerGrid>
+
+        {/* Desktop / tablet: existing full row layout. */}
+        <div className="hidden md:block mt-10 divide-y divide-foreground/15 border-y border-foreground/15">
           {planRows.map(({ key, plan }) => (
             <PlanRow
               key={key}
