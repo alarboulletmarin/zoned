@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -12,6 +12,7 @@ import {
   Book,
   FlaskConical,
   ClipboardCheck,
+  ChevronDown,
   Dices,
   Send,
   Settings,
@@ -271,6 +272,116 @@ function SidebarSubNavItem({
 }
 
 // ---------------------------------------------------------------------------
+// Group expand/collapse — persisted in localStorage. The first time a user
+// loads the app, every group except the one matching the active route stays
+// folded so the rail reads as a short table of contents rather than a
+// vertically scrolling list. Subsequent loads restore the user's choices.
+// ---------------------------------------------------------------------------
+
+const GROUP_STATE_KEY = "zoned-sidebar-groups";
+
+function readStoredGroupState(): Record<string, boolean> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = localStorage.getItem(GROUP_STATE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return typeof parsed === "object" && parsed != null ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function findActiveGroupKey(pathname: string): string | null {
+  for (const group of navGroups) {
+    if (group.items.some((item) => item.href && isActive(pathname, item.href))) {
+      return group.labelKey;
+    }
+  }
+  return null;
+}
+
+function useGroupCollapseState(pathname: string) {
+  // Compute the default open set from storage + active group. Stored values
+  // take precedence over the heuristic so navigation never re-collapses a
+  // group the user explicitly opened.
+  const [openMap, setOpenMap] = useState<Record<string, boolean>>(() => {
+    const stored = readStoredGroupState();
+    const activeKey = findActiveGroupKey(pathname);
+    const next: Record<string, boolean> = {};
+    for (const group of navGroups) {
+      next[group.labelKey] =
+        stored[group.labelKey] ?? group.labelKey === activeKey;
+    }
+    return next;
+  });
+
+  // Whenever the route changes to a group that's currently collapsed, open
+  // it. Other groups keep whatever state the user set — we never re-close
+  // anything on navigation.
+  useEffect(() => {
+    const activeKey = findActiveGroupKey(pathname);
+    if (!activeKey) return;
+    setOpenMap((prev) => (prev[activeKey] ? prev : { ...prev, [activeKey]: true }));
+  }, [pathname]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(GROUP_STATE_KEY, JSON.stringify(openMap));
+    } catch {
+      // Storage quota or private mode — silently ignore, the next load just
+      // falls back to the heuristic.
+    }
+  }, [openMap]);
+
+  const toggle = useCallback((key: string) => {
+    setOpenMap((prev) => ({ ...prev, [key]: !prev[key] }));
+  }, []);
+
+  return { openMap, toggle };
+}
+
+// ---------------------------------------------------------------------------
+// Group header — clickable label + chevron. Only shown when the sidebar is
+// expanded; the icon-rail mode bypasses grouping entirely so every shortcut
+// stays one click away.
+// ---------------------------------------------------------------------------
+
+function GroupHeader({
+  label,
+  count,
+  open,
+  onToggle,
+}: {
+  label: string;
+  count: number;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-expanded={open}
+      className="group/header flex w-full items-center justify-between px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/80 hover:text-foreground transition-colors"
+    >
+      <span className="flex items-center gap-2">
+        <span>{label}</span>
+        <span className="text-muted-foreground/50 font-normal tabular-nums">
+          {count}
+        </span>
+      </span>
+      <ChevronDown
+        className={cn(
+          "size-3 transition-transform duration-200",
+          open ? "rotate-0" : "-rotate-90",
+        )}
+      />
+    </button>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Sidebar content (shared between desktop & mobile)
 // ---------------------------------------------------------------------------
 
@@ -283,59 +394,81 @@ function SidebarContent({
 }) {
   const { t } = useTranslation("common");
   const location = useLocation();
+  const { openMap, toggle } = useGroupCollapseState(location.pathname);
 
+  // In icon-only mode, the user gets a fast visual scan of every shortcut.
+  // Hiding items behind collapsed groups would defeat the rail's purpose.
+  const showAllItems = collapsed;
+
+  // Render the group separator (border between groups) outside the per-group
+  // render so we can keep it consistent regardless of which groups are open.
   return (
     <div className="flex h-full flex-col">
-      {/* Navigation groups */}
       <nav className="flex-1 overflow-y-auto overflow-x-hidden px-2 py-3">
-        {navGroups.map((group, index) => (
-          <div key={group.labelKey} className={cn(index > 0 && "mt-3")}>
-            {index > 0 && (
-              <div className={cn("mb-2 border-t", collapsed ? "mx-2" : "mx-1")} />
-            )}
-            <div
-              className={cn(
-                "mb-1 overflow-hidden px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground transition-all duration-300 whitespace-nowrap",
-                collapsed ? "h-0 opacity-0" : "h-5 opacity-100"
+        {navGroups.map((group, index) => {
+          const isOpen = showAllItems || openMap[group.labelKey];
+          const itemsForCount = group.items.length;
+          return (
+            <div key={group.labelKey} className={cn(index > 0 && "mt-2")}>
+              {index > 0 && !collapsed && (
+                <div className="mb-1 mx-1 border-t border-border/40" />
               )}
-            >
-              {t(group.labelKey)}
+              {index > 0 && collapsed && (
+                <div className="my-1 mx-2 border-t border-border/40" />
+              )}
+
+              {!collapsed && (
+                <GroupHeader
+                  label={t(group.labelKey)}
+                  count={itemsForCount}
+                  open={!!openMap[group.labelKey]}
+                  onToggle={() => toggle(group.labelKey)}
+                />
+              )}
+
+              <div
+                className={cn(
+                  "flex flex-col gap-0.5 overflow-hidden transition-[max-height,opacity] duration-200 ease-out",
+                  isOpen
+                    ? "max-h-[1000px] opacity-100"
+                    : "max-h-0 opacity-0 pointer-events-none",
+                )}
+              >
+                {group.items.map((item) => {
+                  const parentActive = item.href
+                    ? isActive(location.pathname, item.href)
+                    : false;
+                  return (
+                    <div key={item.labelKey} className="flex flex-col gap-0.5">
+                      <SidebarNavItem
+                        item={item}
+                        pathname={location.pathname}
+                        collapsed={collapsed}
+                        onClick={onLinkClick}
+                      />
+                      {!collapsed && parentActive && item.subItems?.length ? (
+                        <div className="ml-3 flex flex-col gap-0.5 border-l border-border/40 pl-2">
+                          {item.subItems.map((sub) => (
+                            <SidebarSubNavItem
+                              key={sub.labelKey}
+                              item={sub}
+                              pathname={location.pathname}
+                              onClick={onLinkClick}
+                            />
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <div className="flex flex-col gap-0.5">
-              {group.items.map((item) => {
-                const parentActive = item.href ? isActive(location.pathname, item.href) : false;
-                return (
-                  <div key={item.labelKey} className="flex flex-col gap-0.5">
-                    <SidebarNavItem
-                      item={item}
-                      pathname={location.pathname}
-                      collapsed={collapsed}
-                      onClick={onLinkClick}
-                    />
-                    {/* Sub-items only render when the parent route is
-                        active AND the sidebar is expanded — collapsed
-                        mode keeps the rail icon-only. */}
-                    {!collapsed && parentActive && item.subItems?.length ? (
-                      <div className="ml-3 flex flex-col gap-0.5 border-l border-border/40 pl-2">
-                        {item.subItems.map((sub) => (
-                          <SidebarSubNavItem
-                            key={sub.labelKey}
-                            item={sub}
-                            pathname={location.pathname}
-                            onClick={onLinkClick}
-                          />
-                        ))}
-                      </div>
-                    ) : null}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </nav>
 
-      {/* Footer */}
+      {/* Footer — always visible. Settings + contribute + changelog are too
+          important to hide behind a collapsed group. */}
       <div className="shrink-0 px-2 py-2 border-t border-border/40">
         <div className="flex flex-col gap-0.5 pt-1">
           {footerItems.map((item) => (
