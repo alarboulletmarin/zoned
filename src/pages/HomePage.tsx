@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, GithubIcon, ChevronDown } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
@@ -13,7 +13,6 @@ import { usePickLang } from "@/lib/i18n-utils";
 import {
   computeLandingStats,
   pickWeeklyWorkouts,
-  getISOWeek,
   EXPORT_FORMATS,
 } from "@/lib/landing-stats";
 import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
@@ -43,12 +42,17 @@ function EditorialTitle({
   size?: "lg" | "xl";
 }) {
   const cls = size === "xl" ? "text-[44px] md:text-6xl" : "text-3xl md:text-4xl";
+  const reduced = useReducedMotion();
   return (
-    <h2
+    <motion.h2
       className={`font-sans font-semibold italic leading-[1.05] tracking-tight ${cls}`}
+      initial={reduced ? false : { opacity: 0, y: 14 }}
+      whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.5, ease: [0, 0, 0.2, 1] }}
     >
       {children}
-    </h2>
+    </motion.h2>
   );
 }
 
@@ -255,6 +259,115 @@ const FAQ_IDS = [
 ] as const;
 
 // ────────────────────────────────────────────────────────────────────────────
+// Animation helpers — every motion gate respects prefers-reduced-motion.
+// fadeUp props are spread on a <motion.div> for stagger-on-scroll reveals.
+// ────────────────────────────────────────────────────────────────────────────
+
+/** Subtle "scroll to discover" cue anchored at the foot of the hero. Pulses
+ *  gently; respects prefers-reduced-motion (then it stays static). */
+function ScrollHint() {
+  const reduced = useReducedMotion();
+  const { t } = useTranslation("homepage");
+  return (
+    <div className="hidden md:flex justify-center mt-14 pb-2">
+      <motion.div
+        className="flex flex-col items-center gap-1.5 text-muted-foreground"
+        initial={reduced ? false : { opacity: 0 }}
+        animate={reduced ? undefined : { opacity: 1 }}
+        transition={{ duration: 0.6, delay: 1.2 }}
+      >
+        <span className="font-mono text-[10px] tracking-[0.2em] uppercase">
+          {t("home.hero.scrollHint")}
+        </span>
+        <motion.span
+          aria-hidden
+          animate={reduced ? undefined : { y: [0, 5, 0] }}
+          transition={
+            reduced
+              ? undefined
+              : { duration: 1.8, repeat: Infinity, ease: "easeInOut" }
+          }
+          className="inline-block"
+        >
+          <ChevronDown className="size-4" />
+        </motion.span>
+      </motion.div>
+    </div>
+  );
+}
+
+/** Stagger container — children fade-up with a small delay between each.
+ *  Uses framer-motion variants so the timing is handled in one place. */
+function StaggerGrid({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const reduced = useReducedMotion();
+  if (reduced) return <div className={className}>{children}</div>;
+  return (
+    <motion.div
+      className={className}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-60px" }}
+      variants={{
+        hidden: {},
+        show: { transition: { staggerChildren: 0.06 } },
+      }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function StaggerItem({ children }: { children: React.ReactNode }) {
+  const reduced = useReducedMotion();
+  if (reduced) return <>{children}</>;
+  return (
+    <motion.div
+      variants={{
+        hidden: { opacity: 0, y: 14 },
+        show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0, 0, 0.2, 1] } },
+      }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/** Animate an integer from 0 to `target`. Skips the animation entirely
+ *  when the user prefers reduced motion. */
+function useCountUp(target: number, durationMs = 900): number {
+  const reduced = useReducedMotion();
+  const [value, setValue] = useState(reduced ? target : 0);
+  useEffect(() => {
+    if (reduced) {
+      setValue(target);
+      return;
+    }
+    if (target <= 0) {
+      setValue(0);
+      return;
+    }
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / durationMs);
+      // easeOutCubic — fast start, gentle settle
+      const eased = 1 - Math.pow(1 - t, 3);
+      setValue(Math.round(target * eased));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target, durationMs, reduced]);
+  return value;
+}
+
+// ────────────────────────────────────────────────────────────────────────────
 // HomePage
 // ────────────────────────────────────────────────────────────────────────────
 
@@ -349,19 +462,6 @@ export function HomePage() {
       (w): w is NonNullable<typeof w> => w != null,
     );
   }, [runWorkouts, cyclingWorkouts, swimWorkouts]);
-
-  // ── Session of the week — one prominent pick distinct from the trio above.
-  const sessionOfWeek = useMemo(() => {
-    const pool = runWorkouts
-      .filter(
-        (w) =>
-          (w.discipline ?? "running") === "running" &&
-          (w.category === "threshold" || w.category === "vma_intervals"),
-      )
-      .sort((a, b) => a.id.localeCompare(b.id));
-    if (pool.length === 0) return null;
-    return pool[getISOWeek() % pool.length];
-  }, [runWorkouts]);
 
   // ── Plans by distance, ordered race-progression. Filter to distances that
   // actually have a plan shipped so empty rows never render.
@@ -461,14 +561,14 @@ export function HomePage() {
               </Button>
             </div>
 
-            {/* Stat row — every figure derived, including the trailing zero */}
+            {/* Stat row — every figure derived, count-up on mount */}
             <div className="border-t border-foreground/15 pt-6 grid grid-cols-4 gap-4">
-              <StatBlock
-                value={String(totalSessions)}
+              <CountStat
+                target={totalSessions}
                 label={t("homepage:home.stats.sessions")}
               />
-              <StatBlock
-                value={String(prebuiltPlans.length)}
+              <CountStat
+                target={prebuiltPlans.length}
                 label={`${t("homepage:home.stats.plansFrom")} ${
                   prebuiltPlans.find((p) => p.raceDistance === "5K") ? "5K" : ""
                 } → ${
@@ -477,8 +577,8 @@ export function HomePage() {
                     : prebuiltPlans[prebuiltPlans.length - 1]?.raceDistance ?? ""
                 }`}
               />
-              <StatBlock
-                value={String(CALCULATORS.length)}
+              <CountStat
+                target={CALCULATORS.length}
                 label={t("homepage:home.stats.calculators")}
               />
               <StatBlock
@@ -492,6 +592,8 @@ export function HomePage() {
           {/* Right column — canonical polarised week reference */}
           <PolarisedChart />
         </div>
+
+        <ScrollHint />
       </section>
 
       {/* Horizontal rule between sections — recurring across the page. */}
@@ -577,7 +679,8 @@ export function HomePage() {
           onSave={updatePrefs}
         />
 
-        <div className="mt-8 overflow-x-auto">
+        {/* Desktop / tablet: full 6-column table. */}
+        <div className="hidden md:block mt-8 overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="font-mono text-[10px] tracking-[0.18em] uppercase text-foreground/55 border-b border-foreground/20">
@@ -630,6 +733,84 @@ export function HomePage() {
             </tbody>
           </table>
         </div>
+
+        {/* Mobile: one card per zone — keeps every column readable
+            without horizontal scrolling. */}
+        <ul className="md:hidden mt-8 space-y-3">
+          {([1, 2, 3, 4, 5, 6] as const).map((z) => {
+            const range = personalRanges?.[z];
+            const hrCell =
+              range?.hrMin && range?.hrMax
+                ? `${range.hrMin}–${range.hrMax} bpm`
+                : ZONE_FC_FALLBACK[z];
+            const paceCell =
+              range?.paceMinPerKm && range?.paceMaxPerKm
+                ? `${formatPace(range.paceMinPerKm)}–${formatPace(range.paceMaxPerKm)}/km`
+                : ZONE_PACE_FALLBACK[z];
+            return (
+              <li key={z}>
+                <button
+                  type="button"
+                  onClick={() => setSelectedZone(z)}
+                  className="block w-full text-left border border-border rounded-md p-4 hover:bg-accent/30 transition-colors"
+                >
+                  <div className="flex items-baseline justify-between gap-3">
+                    <div className="flex items-baseline gap-3">
+                      <span
+                        className={`inline-flex items-center justify-center px-2 py-1 font-mono text-[11px] rounded-sm ${ZONE_CHIP_BG[z]}`}
+                      >
+                        Z{z}
+                      </span>
+                      <span className="font-semibold text-base">
+                        {pickLang(ZONE_META[z], "label")}
+                      </span>
+                    </div>
+                    <span className="font-mono text-[10px] text-foreground/45 tracking-wider">
+                      {ZONE_FC_PERCENT[z]}
+                    </span>
+                  </div>
+                  <p className="text-sm text-foreground/80 mt-3 leading-snug">
+                    {pickLang(ZONE_META[z], "benefit")}
+                  </p>
+                  <div className="mt-3 pt-3 border-t border-dashed border-border/60 grid grid-cols-3 gap-2 text-xs">
+                    <div>
+                      <p className="font-mono text-[9px] tracking-[0.18em] uppercase text-foreground/45">
+                        {t("homepage:home.s03.hr")}
+                      </p>
+                      <p
+                        className={`font-mono tabular-nums mt-0.5 ${
+                          range ? "text-primary font-semibold" : "text-foreground/60"
+                        }`}
+                      >
+                        {hrCell}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="font-mono text-[9px] tracking-[0.18em] uppercase text-foreground/45">
+                        {t("homepage:home.s03.rpe")}
+                      </p>
+                      <p className="font-mono tabular-nums mt-0.5 text-foreground/60">
+                        {ZONE_RPE[z]}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-mono text-[9px] tracking-[0.18em] uppercase text-foreground/45">
+                        {t("homepage:home.s03.refPace")}
+                      </p>
+                      <p
+                        className={`font-mono tabular-nums mt-0.5 ${
+                          range ? "text-primary font-semibold" : "text-foreground/60"
+                        }`}
+                      >
+                        {paceCell}
+                      </p>
+                    </div>
+                  </div>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
       </section>
 
       <ZoneDetailModal
@@ -650,11 +831,13 @@ export function HomePage() {
           {t("homepage:home.s04.body")}
         </p>
 
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+        <StaggerGrid className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
           {RESEARCHERS.map((r) => (
-            <ResearcherCard key={r.name} researcher={r} t={t} />
+            <StaggerItem key={r.name}>
+              <ResearcherCard researcher={r} t={t} />
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGrid>
 
         {/* Editor's note quote */}
         <blockquote className="mt-16 md:mt-20 max-w-2xl mx-auto text-center">
@@ -693,6 +876,7 @@ export function HomePage() {
             />
           ))}
         </div>
+        <PlanPhaseLegend />
       </section>
 
       <Divider />
@@ -709,54 +893,31 @@ export function HomePage() {
         {/* Mobile: dense 2-col grid with title + chevron only — keeps the
             scroll short. From sm+ each card grows to title + description +
             CTA, three columns on md+. */}
-        <div className="mt-10 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
+        <StaggerGrid className="mt-10 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
           {CALCULATORS.map((c) => (
-            <Link
-              key={c.key}
-              to={c.slug}
-              className="group block border border-border bg-card hover:border-primary/40 hover:bg-accent/30 transition-colors p-3 sm:p-5 rounded-md flex items-center sm:block gap-2 sm:gap-0"
-            >
-              <h3 className="text-sm sm:text-base font-semibold sm:mb-1.5 group-hover:text-primary transition-colors flex-1 sm:flex-none leading-snug">
-                {t(c.titleKey)}
-              </h3>
-              <p className="hidden sm:block text-sm text-muted-foreground leading-snug line-clamp-2">
-                {t(c.descKey)}
-              </p>
-              <span className="hidden sm:inline-flex mt-3 items-center text-xs font-medium text-primary">
-                {t("calculators:calculateurs.explore")}
-                <ArrowRight className="size-3 ml-1 transition-transform group-hover:translate-x-0.5" />
-              </span>
-              <ArrowRight className="size-4 sm:hidden text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-            </Link>
+            <StaggerItem key={c.key}>
+              <Link
+                to={c.slug}
+                className="group block border border-border bg-card hover:border-foreground/40 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 p-3 sm:p-5 rounded-md flex items-center sm:block gap-2 sm:gap-0"
+              >
+                <h3 className="text-sm sm:text-base font-semibold sm:mb-1.5 group-hover:text-primary transition-colors flex-1 sm:flex-none leading-snug">
+                  {t(c.titleKey)}
+                </h3>
+                <p className="hidden sm:block text-sm text-muted-foreground leading-snug line-clamp-2">
+                  {t(c.descKey)}
+                </p>
+                <span className="hidden sm:inline-flex mt-3 items-center text-xs font-medium text-primary">
+                  {t("calculators:calculateurs.explore")}
+                  <ArrowRight className="size-3 ml-1 transition-transform group-hover:translate-x-0.5" />
+                </span>
+                <ArrowRight className="size-4 sm:hidden text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+              </Link>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGrid>
       </section>
 
       <Divider />
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          §07 — Séance de la semaine (anatomie + bloc d'effort)
-          ═══════════════════════════════════════════════════════════════════ */}
-      {sessionOfWeek && (
-        <>
-          <section className="py-16 md:py-20">
-            <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-muted-foreground mb-3">
-              {t("homepage:home.s07.kicker")}
-            </p>
-            <EditorialTitle>
-              «&nbsp;{pickLang(sessionOfWeek, "name")}&nbsp;»
-            </EditorialTitle>
-            <p className="mt-3 text-sm text-foreground/65 max-w-xl leading-relaxed">
-              {pickLang(sessionOfWeek, "description")}
-            </p>
-
-            <div className="mt-8 max-w-2xl">
-              <WorkoutCard workout={sessionOfWeek} expanded />
-            </div>
-          </section>
-          <Divider />
-        </>
-      )}
 
       {/* ═══════════════════════════════════════════════════════════════════
           §08 — Éthos (section sombre inverse) — 4 chiffres factuels
@@ -930,9 +1091,19 @@ function LandingFooter() {
           <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground">
             {t("homepage:home.footer.license", { year })}
           </p>
-          <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground">
-            {t("homepage:home.footer.version", { version })}
-          </p>
+          <div className="flex items-center gap-4 font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground">
+            <a
+              href="https://github.com/alarboulletmarin/zoned"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
+            >
+              <GithubIcon className="size-3.5" />
+              {t("homepage:home.footer.builtInPublic")}
+            </a>
+            <span aria-hidden className="opacity-40">·</span>
+            <span>{t("homepage:home.footer.version", { version })}</span>
+          </div>
         </div>
       </div>
     </footer>
@@ -1006,7 +1177,7 @@ function StatBlock({
 }) {
   return (
     <div>
-      <p className="font-sans italic text-3xl md:text-4xl leading-none">
+      <p className="font-sans italic text-3xl md:text-4xl leading-none tabular-nums">
         {value}
       </p>
       <p className="font-mono text-[10px] tracking-[0.15em] uppercase text-foreground/55 mt-2 leading-tight">
@@ -1019,6 +1190,12 @@ function StatBlock({
       )}
     </div>
   );
+}
+
+/** Stat block whose value animates from 0 to `target` on mount. */
+function CountStat({ target, label }: { target: number; label: string }) {
+  const value = useCountUp(target);
+  return <StatBlock value={String(value)} label={label} />;
 }
 
 // Canonical Seiler-style polarised reference — these are *teaching values*,
@@ -1039,6 +1216,7 @@ const POLARISED_HIGH =
 
 function PolarisedChart() {
   const { t } = useTranslation("homepage");
+  const reduced = useReducedMotion();
   const max = Math.max(...Object.values(POLARISED_REFERENCE));
   const zoneNames: Record<ZoneNumber, string> = {
     1: t("home.hero.fig.zones.z1"),
@@ -1048,6 +1226,18 @@ function PolarisedChart() {
     5: t("home.hero.fig.zones.z5"),
     6: t("home.hero.fig.zones.z6"),
   };
+
+  // Bars start collapsed and grow to their target width once the chart
+  // is mounted. Mirrors the "discover, don't announce" intent.
+  const [animated, setAnimated] = useState(reduced);
+  useEffect(() => {
+    if (reduced) {
+      setAnimated(true);
+      return;
+    }
+    const id = window.setTimeout(() => setAnimated(true), 200);
+    return () => window.clearTimeout(id);
+  }, [reduced]);
 
   return (
     <div className="border border-border bg-card rounded-lg p-6 md:p-8">
@@ -1059,7 +1249,7 @@ function PolarisedChart() {
       </p>
 
       <div className="mt-7 space-y-2.5">
-        {([1, 2, 3, 4, 5, 6] as const).map((zone) => {
+        {([1, 2, 3, 4, 5, 6] as const).map((zone, i) => {
           const pct = POLARISED_REFERENCE[zone];
           return (
             <div key={zone} className="grid grid-cols-[7.5rem_1fr_2.4rem] items-center gap-3">
@@ -1073,8 +1263,11 @@ function PolarisedChart() {
               </div>
               <div className="h-2.5 bg-foreground/[0.06] rounded-sm overflow-hidden">
                 <div
-                  className={`h-full ${ZONE_BAR_BG[zone]} rounded-sm transition-[width] duration-700 ease-out`}
-                  style={{ width: `${(pct / max) * 100}%` }}
+                  className={`h-full ${ZONE_BAR_BG[zone]} rounded-sm transition-[width] duration-[900ms] ease-out`}
+                  style={{
+                    width: `${animated ? (pct / max) * 100 : 0}%`,
+                    transitionDelay: reduced ? "0ms" : `${i * 80}ms`,
+                  }}
                 />
               </div>
               <span className="font-mono text-xs text-foreground tabular-nums text-right font-semibold">
@@ -1382,7 +1575,7 @@ function ResearcherCard({
 }) {
   const hasUrl = !!researcher.source.url;
   return (
-    <article className="border-l-2 border-border pl-5 py-1">
+    <article className="border-l-2 border-border pl-5 py-1 transition-colors hover:border-foreground/60">
       <h3 className="text-lg font-semibold">{researcher.name}</h3>
       <p className="text-sm text-muted-foreground mt-1 leading-snug">
         {t(researcher.contributionKey)}
@@ -1405,6 +1598,17 @@ function ResearcherCard({
   );
 }
 
+/** Maps macrocycle phase identifiers to zone-coloured backgrounds. The
+ *  same colour scale is reused by the legend below the plan rows so the
+ *  reader can decode the segments in one glance. */
+const PHASE_COLORS: Record<string, string> = {
+  base: "bg-zone-2",
+  build: "bg-zone-3",
+  peak: "bg-zone-4",
+  taper: "bg-zone-5",
+  recovery: "bg-zone-1",
+};
+
 function PlanRow({
   label,
   plan,
@@ -1414,15 +1618,15 @@ function PlanRow({
   plan: ReturnType<typeof getAllPrebuiltPlans>[number];
   t: ReturnType<typeof useTranslation>["t"];
 }) {
-  const phaseColors: Record<string, string> = {
-    base: "bg-zone-2",
-    build: "bg-zone-3",
-    peak: "bg-zone-4",
-    taper: "bg-zone-5",
-    recovery: "bg-zone-1",
-  };
+  const reduced = useReducedMotion();
   return (
-    <div className="grid grid-cols-2 md:grid-cols-[1.2fr_1fr_1fr_2fr_0.8fr] items-center gap-4 py-5">
+    <motion.div
+      className="grid grid-cols-2 md:grid-cols-[1.2fr_1fr_1fr_2fr_0.8fr] items-center gap-4 py-5"
+      initial={reduced ? false : { opacity: 0, y: 12 }}
+      whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.4, ease: [0, 0, 0.2, 1] }}
+    >
       <p className="font-sans italic text-xl md:text-2xl">{label}</p>
       <p className="text-sm text-foreground/70">
         {plan.totalWeeks} {t("homepage:home.s05.weeks")}
@@ -1430,26 +1634,61 @@ function PlanRow({
       <p className="text-sm text-foreground/70 hidden md:block">
         {plan.sessionsPerWeek} {t("homepage:home.s05.sessionsPerWeek")}
       </p>
-      <div className="hidden md:flex h-2 overflow-hidden">
+      {/* Phase bar — fills in left-to-right when the row enters the
+          viewport. Each segment's width is proportional to its share of
+          the total weeks; same colour code as the legend below. */}
+      <motion.div
+        className="hidden md:flex h-2 overflow-hidden rounded-sm origin-left"
+        initial={reduced ? false : { scaleX: 0 }}
+        whileInView={reduced ? undefined : { scaleX: 1 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.7, ease: [0, 0, 0.2, 1], delay: 0.1 }}
+      >
         {plan.phases.map((p, i) => {
           const span = p.endWeek - p.startWeek + 1;
           const pct = (span / plan.totalWeeks) * 100;
           return (
             <div
               key={i}
-              className={phaseColors[p.phase] ?? "bg-foreground/20"}
+              className={PHASE_COLORS[p.phase] ?? "bg-foreground/20"}
               style={{ width: `${pct}%` }}
               title={`${p.phase} (${span}w)`}
             />
           );
         })}
-      </div>
+      </motion.div>
       <Button asChild variant="outline" size="sm" className="justify-self-end">
         <Link to={`/plan/prebuilt/${plan.slug}`}>
           {t("homepage:home.s05.choose")}
           <ArrowRight className="size-3.5" />
         </Link>
       </Button>
+    </motion.div>
+  );
+}
+
+/** Tiny legend explaining what the phase-bar colours mean. Anchored
+ *  under the plan table; only visible from md+ since the bars are
+ *  hidden on mobile (each row reduces to label + weeks + CTA there). */
+function PlanPhaseLegend() {
+  const { t } = useTranslation("homepage");
+  const phases: Array<{ key: string; color: string }> = [
+    { key: "base", color: PHASE_COLORS.base },
+    { key: "build", color: PHASE_COLORS.build },
+    { key: "peak", color: PHASE_COLORS.peak },
+    { key: "taper", color: PHASE_COLORS.taper },
+  ];
+  return (
+    <div className="hidden md:flex flex-wrap items-center gap-x-5 gap-y-2 mt-4 text-xs text-muted-foreground">
+      <span className="font-mono text-[10px] tracking-[0.18em] uppercase">
+        {t("home.s05.legend")}
+      </span>
+      {phases.map((p) => (
+        <span key={p.key} className="inline-flex items-center gap-1.5">
+          <span className={`inline-block w-3.5 h-2 rounded-sm ${p.color}`} />
+          {t(`home.s05.phases.${p.key}`)}
+        </span>
+      ))}
     </div>
   );
 }

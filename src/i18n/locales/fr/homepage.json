@@ -49,6 +49,7 @@
       "lead": "{{sessions}} séances validées par la science (Seiler, Daniels, Billat, Coggan), {{plans}} plans pré-construits du 5K au marathon, {{calculators}} calculateurs et un générateur de parcours. Tout fonctionne dans votre navigateur — aucune donnée ne quitte votre appareil.",
       "ctaPrimary": "Ouvrir la bibliothèque",
       "ctaSecondary": "Choisir un plan",
+      "scrollHint": "Découvrir l'app",
       "fig": {
         "title": "À quoi ressemble une semaine bien dosée.",
         "body": "Répartition du temps d'entraînement par zone d'effort, modèle polarisé. La règle clé : 80 % facile, 20 % difficile, presque rien dans la « zone grise » du milieu.",
@@ -169,6 +170,13 @@
       "weeks": "semaines",
       "sessionsPerWeek": "séances / sem",
       "choose": "choisir",
+      "legend": "Phases d'un macrocycle",
+      "phases": {
+        "base": "Base aérobie",
+        "build": "Construction",
+        "peak": "Spécifique",
+        "taper": "Affûtage"
+      },
       "fig": "Fig. 03 — Phases-types d'un macrocycle : base · construction · spécifique · affûtage",
       "distance": {
         "5K": "5K",
@@ -296,7 +304,8 @@
         "changelog": "Changelog"
       },
       "license": "© {{year}} · ZONED — Logiciel libre, licence MIT",
-      "version": "v.{{version}}"
+      "version": "v.{{version}}",
+      "builtInPublic": "Construit en public"
     }
   }
 }

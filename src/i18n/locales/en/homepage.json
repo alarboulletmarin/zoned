@@ -49,6 +49,7 @@
       "lead": "{{sessions}} workouts grounded in the literature (Seiler, Daniels, Billat, Coggan), {{plans}} pre-built plans from 5K to marathon, {{calculators}} calculators and a route generator. Everything runs in your browser — no data ever leaves your device.",
       "ctaPrimary": "Open the library",
       "ctaSecondary": "Pick a plan",
+      "scrollHint": "Scroll to discover",
       "fig": {
         "title": "What a well-dosed week looks like.",
         "body": "Weekly training time distributed by effort zone, polarised model. The key rule: 80 % easy, 20 % hard, almost nothing in the middle 'grey zone'.",
@@ -169,6 +170,13 @@
       "weeks": "weeks",
       "sessionsPerWeek": "sessions / wk",
       "choose": "choose",
+      "legend": "Macrocycle phases",
+      "phases": {
+        "base": "Aerobic base",
+        "build": "Build",
+        "peak": "Specific",
+        "taper": "Taper"
+      },
       "fig": "Fig. 03 — Standard macrocycle phases: base · build · specific · taper",
       "distance": {
         "5K": "5K",
@@ -296,7 +304,8 @@
         "changelog": "Changelog"
       },
       "license": "© {{year}} · ZONED — Free software, MIT licence",
-      "version": "v.{{version}}"
+      "version": "v.{{version}}",
+      "builtInPublic": "Built in public"
     }
   }
 }
