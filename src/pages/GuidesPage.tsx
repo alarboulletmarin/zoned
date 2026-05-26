@@ -5,6 +5,7 @@ import type { IconProps } from "@/components/icons";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
+import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
 
 interface GuideEntry {
   id: string;
@@ -66,41 +67,43 @@ export function GuidesPage() {
       <div className="py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Guides</h1>
-          <p className="text-muted-foreground text-lg">
+          <EditorialTitle as="h1" className="mb-2">Guides</EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
             {t("guides.subtitle")}
-          </p>
+          </FadeUp>
         </div>
 
         {/* Guide Cards */}
-        <div className={cn("grid gap-4", "grid-cols-1 md:grid-cols-3")}>
+        <StaggerGrid className={cn("grid gap-4", "grid-cols-1 md:grid-cols-3")}>
           {GUIDES.map((guide) => {
             const Icon = guide.icon;
             return (
-              <Link key={guide.id} to={guide.href} className="group">
-                <Card interactive className="h-full bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent">
-                  <CardContent className="flex flex-col items-center text-center gap-4 pt-8 pb-6">
-                    <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                      <Icon className="size-7 text-primary" />
-                    </div>
-                    <div className="space-y-1">
-                      <h2 className="text-lg font-semibold">
-                        {t(guide.titleKey)}
-                      </h2>
-                      <p className="text-sm text-muted-foreground">
-                        {t(guide.descriptionKey)}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-1 text-sm text-primary font-medium">
-                      {t("explore")}
-                      <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+              <StaggerItem key={guide.id}>
+                <Link to={guide.href} className="group block h-full">
+                  <Card interactive className="h-full bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent hover:-translate-y-0.5 hover:border-foreground/40 hover:shadow-sm transition-all duration-200">
+                    <CardContent className="flex flex-col items-center text-center gap-4 pt-8 pb-6">
+                      <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                        <Icon className="size-7 text-primary" />
+                      </div>
+                      <div className="space-y-1">
+                        <h2 className="text-lg font-semibold">
+                          {t(guide.titleKey)}
+                        </h2>
+                        <p className="text-sm text-muted-foreground">
+                          {t(guide.descriptionKey)}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1 text-sm text-primary font-medium">
+                        {t("explore")}
+                        <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerGrid>
       </div>
     </>
   );

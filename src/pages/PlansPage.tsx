@@ -31,6 +31,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import { usePlans } from "@/hooks/usePlans";
 import { importPlan } from "@/lib/planStorage";
@@ -267,12 +268,12 @@ export function PlansPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold">
+            <EditorialTitle as="h1" size="md">
               {t("plansPage.title")}
-            </h1>
-            <p className="text-muted-foreground mt-1">
+            </EditorialTitle>
+            <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
               {t("plansPage.subtitle")}
-            </p>
+            </FadeUp>
             <div className="flex flex-wrap gap-2 mt-2">
               <Link
                 to="/plans/methodology"

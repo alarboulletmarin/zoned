@@ -4,6 +4,7 @@ import { SEOHead } from "@/components/seo";
 import { CollectionCard } from "@/components/domain/CollectionCard";
 import { useCollections } from "@/hooks/useCollections";
 import { cn } from "@/lib/utils";
+import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
 
 export function CollectionsPage() {
   const { t, i18n } = useTranslation("common");
@@ -38,10 +39,12 @@ export function CollectionsPage() {
       <div className="py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">{t("collections.title")}</h1>
-          <p className="text-muted-foreground text-lg">
+          <EditorialTitle as="h1" className="mb-2">
+            {t("collections.title")}
+          </EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
             {t("collections.subtitle")}
-          </p>
+          </FadeUp>
         </div>
 
         {/* Collections Grid */}
@@ -51,14 +54,18 @@ export function CollectionsPage() {
           </div>
         ) : (
           <>
-            <div className={cn(
-              "grid gap-4",
-              "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-            )}>
+            <StaggerGrid
+              className={cn(
+                "grid gap-4",
+                "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+              )}
+            >
               {collections.map((collection) => (
-                <CollectionCard key={collection.id} collection={collection} />
+                <StaggerItem key={collection.id}>
+                  <CollectionCard collection={collection} />
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerGrid>
 
             {/* Stats */}
             <div className="mt-8 text-center text-sm text-muted-foreground">

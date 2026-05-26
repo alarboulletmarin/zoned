@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { SEOHead } from "@/components/seo";
 import { GlossaryCard } from "@/components/domain/GlossaryCard";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import {
   useGlossary,
   useGlossaryCategories,
@@ -129,13 +130,13 @@ export function GlossaryPage() {
       <div className="py-8">
       {/* Page Header */}
       <div className="mb-6">
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-3 mb-2">
           <Book className="h-6 w-6 text-primary" />
-          <h1 className="text-2xl font-bold">{t("title")}</h1>
+          <EditorialTitle as="h1" size="md">{t("title")}</EditorialTitle>
         </div>
-        <p className="text-muted-foreground">
+        <FadeUp as="p" delay={0.1} className="text-muted-foreground">
           {t("subtitle", { count: totalCount })}
-        </p>
+        </FadeUp>
       </div>
 
       {/* Loading State */}

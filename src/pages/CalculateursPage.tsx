@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Target, Gauge, RefreshCw, Route, Timer, ArrowRight, List, Shuffle, Star, Flag, Scale, Zap, Waves } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import { usePickLang } from "@/lib/i18n-utils";
 
@@ -196,20 +197,22 @@ export function CalculateursPage() {
       <div className="py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">{t("calculators:calculateurs.title")}</h1>
-          <p className="text-muted-foreground text-lg">
+          <EditorialTitle as="h1" className="mb-2">
+            {t("calculators:calculateurs.title")}
+          </EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
             {t("calculators:calculateurs.description")}
-          </p>
+          </FadeUp>
         </div>
 
         {/* Calculateur Cards */}
-        <div className={cn("grid gap-4", "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3")}>
+        <StaggerGrid className={cn("grid gap-4", "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3")}>
           {CALCULATEURS.map((item) => {
             const Icon = item.icon;
 
             if (item.comingSoon) {
               return (
-                <div key={item.id}>
+                <StaggerItem key={item.id}>
                   <div className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50 h-full opacity-60 p-6">
                     <div className="flex flex-col items-center text-center gap-4">
                       <div className={cn("size-14 rounded-2xl flex items-center justify-center", `bg-muted/20`)}>
@@ -230,39 +233,41 @@ export function CalculateursPage() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </StaggerItem>
               );
             }
 
             return (
-              <Link key={item.id} to={item.href} className="group">
-                <div className={cn(
-                  "bg-gradient-to-br to-transparent rounded-xl border border-border/50 h-full p-6",
-                  "hover:shadow-md hover:-translate-y-1 transition-all duration-200",
-                  item.gradient,
-                )}>
-                  <div className="flex flex-col items-center text-center gap-4">
-                    <div className={cn("size-14 rounded-2xl flex items-center justify-center", item.iconBg)}>
-                      <Icon className={cn("size-7", item.iconColor)} />
-                    </div>
-                    <div className="space-y-1">
-                      <h2 className="text-lg font-semibold">
-                        {pickLang(item, "title")}
-                      </h2>
-                      <p className="text-sm text-muted-foreground">
-                        {pickLang(item, "description")}
-                      </p>
-                    </div>
-                    <div className={cn("flex items-center gap-1 text-sm font-medium", item.iconColor)}>
-                      {t("calculators:calculateurs.explore")}
-                      <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
+              <StaggerItem key={item.id}>
+                <Link to={item.href} className="group block h-full">
+                  <div className={cn(
+                    "bg-gradient-to-br to-transparent rounded-xl border border-border/50 h-full p-6",
+                    "hover:shadow-sm hover:-translate-y-0.5 hover:border-foreground/40 transition-all duration-200",
+                    item.gradient,
+                  )}>
+                    <div className="flex flex-col items-center text-center gap-4">
+                      <div className={cn("size-14 rounded-2xl flex items-center justify-center", item.iconBg)}>
+                        <Icon className={cn("size-7", item.iconColor)} />
+                      </div>
+                      <div className="space-y-1">
+                        <h2 className="text-lg font-semibold">
+                          {pickLang(item, "title")}
+                        </h2>
+                        <p className="text-sm text-muted-foreground">
+                          {pickLang(item, "description")}
+                        </p>
+                      </div>
+                      <div className={cn("flex items-center gap-1 text-sm font-medium", item.iconColor)}>
+                        {t("calculators:calculateurs.explore")}
+                        <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerGrid>
       </div>
     </>
   );
