@@ -44,14 +44,14 @@
 
     "hero": {
       "head": "Training",
-      "tail": "without the noise.",
+      "tail": "without the noise",
       "accent": ["structured", "readable", "instrumented", "documented"],
-      "lead": "{{sessions}} workouts grounded in the literature (Seiler, Daniels, Billat, Coggan), {{plans}} pre-built plans from 5K to marathon, {{calculators}} calculators and a route generator. Everything runs in your browser — no data ever leaves your device.",
+      "lead": "{{sessions}} workouts grounded in the literature (Seiler, Daniels, Billat, Coggan), {{plans}} pre-built plans from 5K to marathon, {{calculators}} calculators and a route generator. Everything runs in your browser; no data ever leaves your device.",
       "ctaPrimary": "Open the library",
       "ctaSecondary": "Pick a plan",
       "scrollHint": "Scroll to discover",
       "fig": {
-        "title": "What a well-dosed week looks like.",
+        "title": "What a well-dosed week looks like",
         "body": "Weekly training time distributed by effort zone, polarised model. The key rule: 80 % easy, 20 % hard, almost nothing in the middle 'grey zone'.",
         "zones": {
           "z1": "Recovery",
@@ -78,8 +78,8 @@
 
     "s01": {
       "kicker": "Three entry points",
-      "title": "One tool per use, not per persona.",
-      "body": "Zoned doesn't ask who you are — it lets you choose how to approach the work.",
+      "title": "One tool per use, not per persona",
+      "body": "Zoned doesn't ask who you are. It lets you choose how to approach the work.",
       "e1Title": "Find today's session",
       "e1Body": "Filter by discipline, zone, duration, level. Every card states its difficulty and TSS cost before you click. Today's pick adapts to your recent load.",
       "e1Link": "Library",
@@ -93,15 +93,15 @@
 
     "s02": {
       "kicker": "Suggested this week",
-      "title": "Three sessions to stay on the right volume.",
-      "body": "Deterministic by ISO week — no A/B, no engagement loop. Click a card to open the full session."
+      "title": "Three sessions to stay on the right volume",
+      "body": "Deterministic by ISO week. No A/B, no engagement loop. Click a card to open the full session."
     },
 
     "s03": {
       "kicker": "The zone atlas",
       "title1": "Six zones, six adaptations,",
-      "title2": "one coherent grid.",
-      "body": "Every session in the library is anchored in this system. Enter your VMA and/or HRmax to compute your personal ranges — or pull them from your profile.",
+      "title2": "one coherent grid",
+      "body": "Every session in the library is anchored in this system. Enter your VMA and/or HRmax to compute your personal ranges, or pull them from your profile.",
       "zone": "Zone",
       "name": "Name",
       "hr": "Heart rate",
@@ -112,7 +112,7 @@
       "personal": {
         "label": "Computed from your profile",
         "edit": "Edit",
-        "prompt": "Compute your personalised zones — one value is enough.",
+        "prompt": "Compute your personalised zones. One value is enough.",
         "vmaLabel": "VMA (km/h)",
         "fcMaxLabel": "HRmax (bpm)",
         "submit": "Compute my zones",
@@ -122,17 +122,17 @@
 
     "s04": {
       "kicker": "The methods",
-      "title": "Researchers & reference methods.",
+      "title": "Researchers & reference methods",
       "body": "Zoned does not push a single method. Every zone, every session rests on published work; here are the official sources you can consult directly.",
       "viewPublication": "View publication",
       "researchers": {
         "seiler": {
           "contribution": "Polarised training model (80/20).",
-          "citation": "\"Quantifying training intensity distribution in elite endurance athletes\" — Scand J Med Sci Sports, 2006."
+          "citation": "\"Quantifying training intensity distribution in elite endurance athletes\", Scand J Med Sci Sports, 2006."
         },
         "billat": {
           "contribution": "French researcher. vVO₂max and the 30/30 protocol.",
-          "citation": "\"Interval training at VO₂max: effects on aerobic performance\" — Med Sci Sports Exerc, 1999."
+          "citation": "\"Interval training at VO₂max: effects on aerobic performance\", Med Sci Sports Exerc, 1999."
         },
         "daniels": {
           "contribution": "VDOT system and training zones (1933–2025).",
@@ -147,12 +147,12 @@
           "citation": "Lore of Running (Oxford University Press, 4th ed., 2003)."
         },
         "cologne": {
-          "contribution": "Origins of the lactate threshold concept — Cologne group.",
+          "contribution": "Origins of the lactate threshold concept, Cologne group.",
           "citation": "Foundational work on lactate metabolism, 1970s."
         },
         "faude": {
           "contribution": "Definitive review of lactate threshold concepts.",
-          "citation": "\"Lactate Threshold Concepts: How Valid Are They?\" — Sports Med, 2009."
+          "citation": "\"Lactate Threshold Concepts: How Valid Are They?\", Sports Med, 2009."
         },
         "sanMillan": {
           "contribution": "Zone 2 training and metabolic health.",
@@ -165,7 +165,7 @@
 
     "s05": {
       "kicker": "Plans · 5K → Marathon",
-      "title": "One trajectory per distance.",
+      "title": "One trajectory per distance",
       "body": "{{count}} published plans, {{min}} to {{max}} weeks. Progressive load, recovery week every 21 days, taper calibrated for race day.",
       "weeks": "weeks",
       "sessionsPerWeek": "sessions / wk",
@@ -189,7 +189,7 @@
 
     "s06": {
       "kicker": "Calculators",
-      "title": "A toolkit to measure your ranges.",
+      "title": "A toolkit to measure your ranges",
       "body": "Every computation runs in the browser, no data is sent. Formulas are documented and the source code is readable.",
       "tools": {
         "zones": "Compute your HR and pace zones from your VMA or HRmax.",
@@ -223,7 +223,7 @@
     "s08": {
       "kicker": "Ethos",
       "title1": "No data",
-      "title2": "ever leaves your device.",
+      "title2": "ever leaves your device",
       "body": "Zoned is built to run entirely locally. No analytics server, no account, no password to remember, no third-party cookies. The code is public and auditable under MIT licence.",
       "lines": {
         "trackers": "Third-party trackers",
@@ -235,7 +235,7 @@
 
     "s09": {
       "kicker": "Frequently asked",
-      "title": "Five questions answered upfront.",
+      "title": "Five questions answered upfront",
       "more": "{{count}} more articles in the learning library.",
       "moreLink": "Read all →",
       "q": {
@@ -245,7 +245,7 @@
         },
         "export": {
           "q": "How do I send a session to my watch?",
-          "a": "Each session downloads as .fit (Garmin / Wahoo / COROS native workout file), .ics (Apple Calendar, Google Calendar, Outlook), .pdf or .png. Generated routes export as .gpx. Every export runs locally — no file ever transits through a server."
+          "a": "Each session downloads as .fit (Garmin / Wahoo / COROS native workout file), .ics (Apple Calendar, Google Calendar, Outlook), .pdf or .png. Generated routes export as .gpx. Every export runs locally; no file ever transits through a server."
         },
         "custom": {
           "q": "Can I customise a plan?",
@@ -257,7 +257,7 @@
         },
         "devices": {
           "q": "What devices does Zoned run on?",
-          "a": "Any modern browser — desktop, tablet or phone. No app to install: Zoned is a PWA, a home-screen shortcut gives you an app-like experience."
+          "a": "Any modern browser on desktop, tablet or phone. No app to install: Zoned is a PWA, a home-screen shortcut gives you an app-like experience."
         },
         "offline": {
           "q": "Does Zoned work offline?",
@@ -274,14 +274,14 @@
 
     "cta": {
       "kicker": "Get started",
-      "line1": "Open the library.",
-      "line2": "Launch your first session in two clicks.",
+      "line1": "Open the library",
+      "line2": "Launch your first session in two clicks",
       "primary": "Browse sessions",
       "secondary": "See the code (GitHub)"
     },
 
     "footer": {
-      "tagline": "A scientific training journal — local, free and open. For those who want to understand what they're doing.",
+      "tagline": "A scientific training journal, local, free and open. For those who want to understand what they're doing.",
       "groups": {
         "product": "Product",
         "science": "Science",
@@ -303,7 +303,7 @@
         "github": "GitHub",
         "changelog": "Changelog"
       },
-      "license": "© {{year}} · ZONED — Free software, MIT licence",
+      "license": "© {{year}} · ZONED · Free software, MIT licence",
       "version": "v.{{version}}",
       "builtInPublic": "Built in public"
     }

@@ -44,14 +44,14 @@
 
     "hero": {
       "head": "L'entraînement",
-      "tail": "sans bruit.",
+      "tail": "sans bruit",
       "accent": ["structuré", "lisible", "outillé", "documenté"],
-      "lead": "{{sessions}} séances validées par la science (Seiler, Daniels, Billat, Coggan), {{plans}} plans pré-construits du 5K au marathon, {{calculators}} calculateurs et un générateur de parcours. Tout fonctionne dans votre navigateur — aucune donnée ne quitte votre appareil.",
+      "lead": "{{sessions}} séances validées par la science (Seiler, Daniels, Billat, Coggan), {{plans}} plans pré-construits du 5K au marathon, {{calculators}} calculateurs et un générateur de parcours. Tout fonctionne dans votre navigateur, aucune donnée ne quitte votre appareil.",
       "ctaPrimary": "Ouvrir la bibliothèque",
       "ctaSecondary": "Choisir un plan",
       "scrollHint": "Découvrir l'app",
       "fig": {
-        "title": "À quoi ressemble une semaine bien dosée.",
+        "title": "À quoi ressemble une semaine bien dosée",
         "body": "Répartition du temps d'entraînement par zone d'effort, modèle polarisé. La règle clé : 80 % facile, 20 % difficile, presque rien dans la « zone grise » du milieu.",
         "zones": {
           "z1": "Récupération",
@@ -78,8 +78,8 @@
 
     "s01": {
       "kicker": "Trois entrées",
-      "title": "Un outil par usage, pas par persona.",
-      "body": "Zoned ne vous demande pas qui vous êtes — il vous laisse choisir comment vous voulez l'aborder.",
+      "title": "Un outil par usage, pas par persona",
+      "body": "Zoned ne vous demande pas qui vous êtes. Il vous laisse choisir comment vous voulez l'aborder.",
       "e1Title": "Trouver la séance du jour",
       "e1Body": "Filtrez par discipline, zone, durée, niveau. Chaque carte annonce sa difficulté et son coût TSS avant que vous ne cliquiez. La sélection du jour s'adapte à votre charge récente.",
       "e1Link": "Bibliothèque",
@@ -93,15 +93,15 @@
 
     "s02": {
       "kicker": "Suggéré cette semaine",
-      "title": "Trois séances pour rester dans le bon volume cette semaine.",
-      "body": "Sélection déterministe par semaine ISO — pas d'A/B ni de boucle d'engagement. Cliquez sur une carte pour ouvrir la séance complète."
+      "title": "Trois séances pour rester dans le bon volume cette semaine",
+      "body": "Sélection déterministe par semaine ISO. Pas d'A/B ni de boucle d'engagement. Cliquez sur une carte pour ouvrir la séance complète."
     },
 
     "s03": {
       "kicker": "L'atlas des zones",
       "title1": "Six zones, six adaptations,",
-      "title2": "une grille cohérente.",
-      "body": "Chaque séance de la bibliothèque s'ancre dans ce système. Entrez votre VMA et/ou votre FCmax pour calculer vos plages personnelles — ou retrouvez-les depuis votre profil.",
+      "title2": "une grille cohérente",
+      "body": "Chaque séance de la bibliothèque s'ancre dans ce système. Entrez votre VMA et/ou votre FCmax pour calculer vos plages personnelles, ou retrouvez-les depuis votre profil.",
       "zone": "Zone",
       "name": "Nom",
       "hr": "Fréquence cardiaque",
@@ -112,7 +112,7 @@
       "personal": {
         "label": "Calculé depuis votre profil",
         "edit": "Modifier",
-        "prompt": "Calculez vos zones personnalisées — au moins une valeur suffit.",
+        "prompt": "Calculez vos zones personnalisées. Au moins une valeur suffit.",
         "vmaLabel": "VMA (km/h)",
         "fcMaxLabel": "FCmax (bpm)",
         "submit": "Calculer mes zones",
@@ -122,17 +122,17 @@
 
     "s04": {
       "kicker": "Les méthodes",
-      "title": "Chercheurs & méthodes de référence.",
+      "title": "Chercheurs & méthodes de référence",
       "body": "Zoned ne pousse pas une méthode unique. Chaque zone, chaque séance s'appuie sur des travaux publiés ; voici les sources officielles que vous pouvez consulter directement.",
       "viewPublication": "Voir la publication",
       "researchers": {
         "seiler": {
           "contribution": "Modèle d'entraînement polarisé (80/20).",
-          "citation": "« Quantifying training intensity distribution in elite endurance athletes » — Scand J Med Sci Sports, 2006."
+          "citation": "« Quantifying training intensity distribution in elite endurance athletes », Scand J Med Sci Sports, 2006."
         },
         "billat": {
           "contribution": "Chercheuse française. vVO₂max et protocole 30/30.",
-          "citation": "« Interval training at VO₂max: effects on aerobic performance » — Med Sci Sports Exerc, 1999."
+          "citation": "« Interval training at VO₂max: effects on aerobic performance », Med Sci Sports Exerc, 1999."
         },
         "daniels": {
           "contribution": "Système VDOT et zones d'entraînement (1933–2025).",
@@ -147,12 +147,12 @@
           "citation": "Lore of Running (Oxford University Press, 4ᵉ éd., 2003)."
         },
         "cologne": {
-          "contribution": "Origines du concept de seuil lactique — groupe de Cologne.",
+          "contribution": "Origines du concept de seuil lactique, groupe de Cologne.",
           "citation": "Travaux fondateurs sur le métabolisme lactique, années 1970."
         },
         "faude": {
           "contribution": "Revue définitive des concepts de seuil lactique.",
-          "citation": "« Lactate Threshold Concepts: How Valid Are They? » — Sports Med, 2009."
+          "citation": "« Lactate Threshold Concepts: How Valid Are They? », Sports Med, 2009."
         },
         "sanMillan": {
           "contribution": "Entraînement en Zone 2 et santé métabolique.",
@@ -165,7 +165,7 @@
 
     "s05": {
       "kicker": "Plans · 5K → Marathon",
-      "title": "Une trajectoire pour chaque distance.",
+      "title": "Une trajectoire pour chaque distance",
       "body": "{{count}} plans publiés, {{min}} à {{max}} semaines. Charge progressive, semaine de récupération tous les 21 jours, affûtage calibré pour le jour J.",
       "weeks": "semaines",
       "sessionsPerWeek": "séances / sem",
@@ -189,7 +189,7 @@
 
     "s06": {
       "kicker": "Calculateurs",
-      "title": "Une trousse de calcul pour mesurer vos plages.",
+      "title": "Une trousse de calcul pour mesurer vos plages",
       "body": "Tous les calculs tournent dans le navigateur, sans envoi de données. Les formules sont documentées et leur code est lisible.",
       "tools": {
         "zones": "Calculez vos zones FC et allures depuis votre VMA ou FCmax.",
@@ -223,7 +223,7 @@
     "s08": {
       "kicker": "Éthos",
       "title1": "Aucune donnée",
-      "title2": "ne quitte votre appareil.",
+      "title2": "ne quitte votre appareil",
       "body": "Zoned est conçu pour fonctionner entièrement en local. Pas de serveur d'analytics, pas de compte, pas de mot de passe à retenir, pas de cookie tiers. Le code est public et auditable sous licence MIT.",
       "lines": {
         "trackers": "Tracker tiers",
@@ -235,7 +235,7 @@
 
     "s09": {
       "kicker": "Questions fréquentes",
-      "title": "Cinq points levés d'avance.",
+      "title": "Cinq points levés d'avance",
       "more": "{{count}} articles complémentaires dans la bibliothèque pédagogique.",
       "moreLink": "Tout lire →",
       "q": {
@@ -245,7 +245,7 @@
         },
         "export": {
           "q": "Comment exporter une séance vers ma montre ?",
-          "a": "Chaque séance se télécharge en .fit (Garmin / Wahoo / COROS, fichier d'entraînement natif), .ics (Apple Calendar, Google Calendar, Outlook), .pdf ou .png. Les parcours générés s'exportent en .gpx. Tous les exports sont locaux — aucun fichier ne transite par un serveur."
+          "a": "Chaque séance se télécharge en .fit (Garmin / Wahoo / COROS, fichier d'entraînement natif), .ics (Apple Calendar, Google Calendar, Outlook), .pdf ou .png. Les parcours générés s'exportent en .gpx. Tous les exports sont locaux ; aucun fichier ne transite par un serveur."
         },
         "custom": {
           "q": "Puis-je personnaliser un plan ?",
@@ -257,7 +257,7 @@
         },
         "devices": {
           "q": "Sur quels appareils Zoned fonctionne-t-il ?",
-          "a": "Tout navigateur moderne, sur ordinateur, tablette et téléphone. Aucune application à installer — Zoned est une PWA, un raccourci sur l'écran d'accueil suffit pour avoir l'expérience d'une app."
+          "a": "Tout navigateur moderne, sur ordinateur, tablette et téléphone. Aucune application à installer : Zoned est une PWA, un raccourci sur l'écran d'accueil suffit pour avoir l'expérience d'une app."
         },
         "offline": {
           "q": "Zoned fonctionne-t-il hors-ligne ?",
@@ -274,8 +274,8 @@
 
     "cta": {
       "kicker": "Commencer maintenant",
-      "line1": "Ouvrez la bibliothèque.",
-      "line2": "Lancez votre première séance en deux clics.",
+      "line1": "Ouvrez la bibliothèque",
+      "line2": "Lancez votre première séance en deux clics",
       "primary": "Voir les séances",
       "secondary": "Voir le code (GitHub)"
     },
@@ -303,7 +303,7 @@
         "github": "GitHub",
         "changelog": "Changelog"
       },
-      "license": "© {{year}} · ZONED — Logiciel libre, licence MIT",
+      "license": "© {{year}} · ZONED · Logiciel libre, licence MIT",
       "version": "v.{{version}}",
       "builtInPublic": "Construit en public"
     }

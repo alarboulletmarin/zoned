@@ -883,7 +883,7 @@ export function HomePage() {
             {t("homepage:home.s04.quote")}
           </p>
           <p className="mt-4 font-mono text-[10px] tracking-[0.18em] uppercase text-foreground/55">
-            — {t("homepage:home.s04.quoteAttr")}
+            {t("homepage:home.s04.quoteAttr")}
           </p>
         </blockquote>
       </section>
