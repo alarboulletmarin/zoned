@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -13,6 +13,7 @@ import {
   Sparkles,
   Gauge,
   Plus,
+  ChevronDown,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -46,30 +47,96 @@ function useThemeIcon() {
   return isDark;
 }
 
-// Ensures 44px minimum touch target without increasing visual size.
 const touchTarget =
   "relative after:absolute after:inset-[-6px] after:content-['']";
 
 // ────────────────────────────────────────────────────────────────────────────
-// Primary navigation. Five top-level entries — the rest of the app (Routes,
-// Race Simulator, Glossary, Nutrition, Builder, Workouts of mine…) lives
-// behind those hubs or in the Command Palette (⌘K). Keeping this list short
-// is the whole point of the rework.
+// Menu tree — five top-level sections, each with the sub-pages that used to
+// live in the old sidebar. The same tree is consumed by the desktop hover
+// dropdowns and the mobile sheet menu, so adding a route in one place
+// propagates everywhere.
 // ────────────────────────────────────────────────────────────────────────────
 
-const PRIMARY_NAV: Array<{ to: string; key: string; prefix?: string[] }> = [
-  { to: "/library", key: "nav.library", prefix: ["/library", "/workout", "/collections"] },
-  { to: "/plans", key: "nav.plans", prefix: ["/plan", "/plans", "/race-simulator"] },
-  { to: "/calculators", key: "nav.calculators", prefix: ["/calculators"] },
-  { to: "/methodology", key: "nav.methodology", prefix: ["/methodology", "/plans/methodology"] },
-  { to: "/learn", key: "nav.learn", prefix: ["/learn", "/guides", "/nutrition", "/glossary"] },
+export interface NavChild {
+  to: string;
+  labelKey: string;
+  /** Short caption shown under the label in the dropdown. Optional. */
+  descKey?: string;
+}
+
+export interface NavSection {
+  to: string;
+  labelKey: string;
+  /** Pathname prefixes that should mark this top-level link as active. */
+  prefix: string[];
+  children?: NavChild[];
+}
+
+export const PRIMARY_NAV: NavSection[] = [
+  {
+    to: "/library",
+    labelKey: "nav.library",
+    prefix: ["/library", "/workout", "/collections"],
+    children: [
+      { to: "/library", labelKey: "topnav.libraryAll", descKey: "topnav.libraryAllDesc" },
+      { to: "/collections", labelKey: "topnav.collections", descKey: "topnav.collectionsDesc" },
+      { to: "/workout/builder", labelKey: "topnav.builder", descKey: "topnav.builderDesc" },
+    ],
+  },
+  {
+    to: "/plans",
+    labelKey: "nav.plans",
+    prefix: ["/plan", "/plans", "/race-simulator", "/routes"],
+    children: [
+      { to: "/plans", labelKey: "topnav.plansMine", descKey: "topnav.plansMineDesc" },
+      { to: "/plan/new", labelKey: "topnav.plansNew", descKey: "topnav.plansNewDesc" },
+      { to: "/race-simulator", labelKey: "topnav.raceSim", descKey: "topnav.raceSimDesc" },
+      { to: "/routes", labelKey: "topnav.routes", descKey: "topnav.routesDesc" },
+    ],
+  },
+  {
+    to: "/calculators",
+    labelKey: "nav.calculators",
+    prefix: ["/calculators"],
+    children: [
+      { to: "/calculators", labelKey: "topnav.calculatorsAll", descKey: "topnav.calculatorsAllDesc" },
+      { to: "/calculators/zones", labelKey: "topnav.calcZones" },
+      { to: "/calculators/vma", labelKey: "topnav.calcVma" },
+      { to: "/calculators/ftp", labelKey: "topnav.calcFtp" },
+      { to: "/calculators/css", labelKey: "topnav.calcCss" },
+      { to: "/calculators/equivalence", labelKey: "topnav.calcEquivalence" },
+    ],
+  },
+  {
+    to: "/methodology",
+    labelKey: "nav.methodology",
+    prefix: ["/methodology", "/plans/methodology"],
+    children: [
+      { to: "/methodology", labelKey: "topnav.methodScience", descKey: "topnav.methodScienceDesc" },
+      { to: "/plans/methodology", labelKey: "topnav.methodPlans", descKey: "topnav.methodPlansDesc" },
+    ],
+  },
+  {
+    to: "/learn",
+    labelKey: "nav.learn",
+    prefix: ["/learn", "/guides", "/nutrition", "/glossary"],
+    children: [
+      { to: "/learn", labelKey: "topnav.learnArticles", descKey: "topnav.learnArticlesDesc" },
+      { to: "/nutrition", labelKey: "topnav.learnNutrition", descKey: "topnav.learnNutritionDesc" },
+      { to: "/guides", labelKey: "topnav.learnGuides", descKey: "topnav.learnGuidesDesc" },
+      { to: "/glossary", labelKey: "topnav.learnGlossary", descKey: "topnav.learnGlossaryDesc" },
+    ],
+  },
 ];
 
-function isNavActive(pathname: string, item: { to: string; prefix?: string[] }): boolean {
-  if (pathname === item.to) return true;
-  if (!item.prefix) return false;
-  return item.prefix.some((p) => pathname === p || pathname.startsWith(p + "/"));
+export function isNavActive(pathname: string, section: NavSection): boolean {
+  if (pathname === section.to) return true;
+  return section.prefix.some((p) => pathname === p || pathname.startsWith(p + "/"));
 }
+
+// ────────────────────────────────────────────────────────────────────────────
+// TopBar
+// ────────────────────────────────────────────────────────────────────────────
 
 export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
   const { t } = useTranslation("common");
@@ -127,9 +194,8 @@ export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
             </div>
           </>
         ) : (
-          /* ───── Desktop / Tablet ───────────────────────────────────────── */
+          /* ───── Desktop ─────────────────────────────────────────────────── */
           <>
-            {/* Brand */}
             <Link to="/" viewTransition className="flex items-center gap-2 shrink-0">
               <Logo className="w-12 h-6" />
               <span className="font-bold text-sm whitespace-nowrap">
@@ -137,34 +203,19 @@ export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
               </span>
             </Link>
 
-            {/* Primary nav — flush left after the brand, hairline divider
-                separates it from the brand block so the eye lands on the
-                links immediately. */}
             <nav
               aria-label={t("nav.primary", "Navigation principale")}
               className="hidden md:flex items-center gap-1 pl-3 ml-1 border-l h-6"
             >
-              {PRIMARY_NAV.map((item) => {
-                const active = isNavActive(pathname, item);
-                return (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    className={cn(
-                      "px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
-                      active
-                        ? "text-foreground bg-accent/60"
-                        : "text-muted-foreground hover:text-foreground hover:bg-accent/40",
-                    )}
-                  >
-                    {t(item.key)}
-                  </NavLink>
-                );
-              })}
+              {PRIMARY_NAV.map((section) => (
+                <NavSectionTrigger
+                  key={section.to}
+                  section={section}
+                  active={isNavActive(pathname, section)}
+                />
+              ))}
             </nav>
 
-            {/* Search — pushed to the right edge of the nav block, leaves
-                room for the right cluster (user menu + theme + lang). */}
             <Button
               variant="outline"
               size="sm"
@@ -206,9 +257,75 @@ export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
   );
 }
 
-/** Personal account menu — gathers every entry that used to clutter the
- *  sidebar (Profile, My Zones, Favorites, Builder, Contribute, Settings,
- *  Changelog). One round chip on the right side of the topbar opens it. */
+// ────────────────────────────────────────────────────────────────────────────
+// NavSectionTrigger — primary nav item with an optional hover/focus dropdown.
+// Uses CSS-only group-hover for opening, plus focus-within so keyboard tab
+// navigation works. A small delay-out using opacity transitions feels
+// noticeably smoother than instant pop-on/pop-off.
+// ────────────────────────────────────────────────────────────────────────────
+
+function NavSectionTrigger({
+  section,
+  active,
+}: {
+  section: NavSection;
+  active: boolean;
+}) {
+  const { t } = useTranslation("common");
+  const hasChildren = !!section.children?.length;
+
+  const triggerClass = cn(
+    "px-3 py-1.5 rounded-md text-sm font-medium transition-colors inline-flex items-center gap-1",
+    active
+      ? "text-foreground bg-accent/60"
+      : "text-muted-foreground hover:text-foreground hover:bg-accent/40",
+  );
+
+  if (!hasChildren) {
+    return (
+      <NavLink to={section.to} className={triggerClass}>
+        {t(section.labelKey)}
+      </NavLink>
+    );
+  }
+
+  return (
+    <div className="relative group">
+      <NavLink to={section.to} className={triggerClass}>
+        {t(section.labelKey)}
+        <ChevronDown className="size-3 opacity-60 transition-transform group-hover:rotate-180 group-focus-within:rotate-180" />
+      </NavLink>
+      {/* Spacer keeps the dropdown contiguous with the trigger so hovering
+          between the two doesn't dismiss the menu. */}
+      <div className="absolute left-0 top-full pt-1.5 invisible group-hover:visible group-focus-within:visible opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-150 z-50">
+        <div className="bg-popover text-popover-foreground border rounded-md shadow-lg p-1.5 min-w-[260px]">
+          <ul className="space-y-0.5">
+            {section.children!.map((child) => (
+              <li key={child.to}>
+                <Link
+                  to={child.to}
+                  className="block px-3 py-2 rounded-md hover:bg-accent transition-colors"
+                >
+                  <p className="text-sm font-medium leading-snug">
+                    {t(child.labelKey)}
+                  </p>
+                  {child.descKey && (
+                    <p className="text-xs text-muted-foreground leading-snug mt-0.5">
+                      {t(child.descKey)}
+                    </p>
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Personal account menu — round avatar trigger, click-only (no hover) so
+ *  it doesn't fight with the primary nav dropdowns. */
 function UserMenu() {
   const { t } = useTranslation("common");
   return (

@@ -297,12 +297,6 @@ export function HomePage() {
     return () => clearInterval(id);
   }, [accentWords.length]);
 
-  // ── Volume number printed on the masthead. Resets every year so the issue
-  // numbering stays bounded and matches the calendar (Vol.01 in 2026).
-  const now = new Date();
-  const volume = Math.max(1, now.getFullYear() - 2025);
-  const issue = String(getISOWeek(now)).padStart(2, "0");
-
   // ── Three weekly suggestions. Pick one run, one bike, one swim from the
   // library — the deterministic week-keyed picker keeps the trio stable for
   // the entire ISO week, which matches the editorial "issue" framing.
@@ -393,28 +387,9 @@ export function HomePage() {
       />
 
       {/* ═══════════════════════════════════════════════════════════════════
-          HERO — masthead + headline + sidecar (Fig.01 distribution Seiler)
+          HERO — headline + lead + CTAs + sidecar polarised chart
           ═══════════════════════════════════════════════════════════════════ */}
       <section className="pt-2 md:pt-8 pb-12 md:pb-20">
-        {/* Masthead line — volume, issue, license */}
-        <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-foreground/60 mb-10 md:mb-14 flex flex-wrap items-center gap-x-2">
-          <span className="inline-block h-px w-10 bg-foreground/60 mr-2 align-middle" />
-          <span>
-            {t("homepage:home.masthead.volume")} {String(volume).padStart(2, "0")}
-          </span>
-          <span aria-hidden>·</span>
-          <span>
-            {t("homepage:home.masthead.issue")} {issue}
-          </span>
-          <span aria-hidden className="text-foreground/30">
-            ◇
-          </span>
-          <span>{t("homepage:home.masthead.openSource")}</span>
-          <span aria-hidden>·</span>
-          <span>{t("homepage:home.masthead.local")}</span>
-          <span aria-hidden>·</span>
-          <span>{t("homepage:home.masthead.noAccount")}</span>
-        </p>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-10 lg:gap-16 items-start">
           {/* Left column — title + body + CTAs + stat row */}
@@ -629,9 +604,6 @@ export function HomePage() {
             </tbody>
           </table>
         </div>
-        <p className="mt-3 font-mono text-[10px] tracking-[0.18em] uppercase text-right text-foreground/45">
-          {t("homepage:home.s03.fig")}
-        </p>
       </section>
 
       <ZoneDetailModal
@@ -683,9 +655,7 @@ export function HomePage() {
             {t("homepage:home.s04.quote")}
           </p>
           <p className="mt-4 font-mono text-[10px] tracking-[0.18em] uppercase text-foreground/55">
-            — {t("homepage:home.s04.quoteAttr", {
-              vol: String(volume).padStart(2, "0"),
-            })}
+            — {t("homepage:home.s04.quoteAttr")}
           </p>
         </blockquote>
       </section>
@@ -716,9 +686,6 @@ export function HomePage() {
             />
           ))}
         </div>
-        <p className="mt-3 font-mono text-[10px] tracking-[0.18em] uppercase text-foreground/45">
-          {t("homepage:home.s05.fig")}
-        </p>
       </section>
 
       <Divider />
