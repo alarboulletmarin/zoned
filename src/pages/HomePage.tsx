@@ -23,6 +23,7 @@ import {
   EXPORT_FORMATS,
 } from "@/lib/landing-stats";
 import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
+import { getQuoteOfTheDay } from "@/data/quotes";
 import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
 import { WorkoutCard } from "@/components/domain/WorkoutCard";
 import {
@@ -296,8 +297,10 @@ function ScrollHint() {
 // ────────────────────────────────────────────────────────────────────────────
 
 export function HomePage() {
-  const { t } = useTranslation(["homepage", "common", "library"]);
+  const { t, i18n } = useTranslation(["homepage", "common", "library"]);
   const pickLang = usePickLang();
+  const dailyQuote = useMemo(() => getQuoteOfTheDay(), []);
+  const isEn = i18n.language?.startsWith("en");
   const [selectedZone, setSelectedZone] = useState<ZoneNumber | null>(null);
   // User's measured references (VMA, FCmax) — read once at mount. Updates from
   // the inline form below the zone table re-store these in localStorage and
@@ -816,13 +819,14 @@ export function HomePage() {
           ))}
         </StaggerGrid>
 
-        {/* Editor's note quote */}
+        {/* Quote of the day — rotates daily through 20 attributable
+            quotes from runners, coaches and sports physicians. */}
         <blockquote className="mt-16 md:mt-20 max-w-2xl mx-auto text-center">
           <p className="font-sans italic text-xl md:text-2xl leading-[1.45]">
-            {t("homepage:home.s04.quote")}
+            {isEn ? dailyQuote.en : dailyQuote.fr}
           </p>
           <p className="mt-4 font-mono text-[10px] tracking-[0.18em] uppercase text-foreground/55">
-            {t("homepage:home.s04.quoteAttr")}
+            {dailyQuote.author} · {isEn ? dailyQuote.role.en : dailyQuote.role.fr}
           </p>
         </blockquote>
       </section>
