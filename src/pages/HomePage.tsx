@@ -73,11 +73,20 @@ interface Researcher {
   /** One short line under the name describing the contribution. */
   contributionKey: string;
   source: ResearcherSource;
+  /** Short method tag rendered as a mono uppercase caption on every
+   *  surface (mobile card + desktop card). Hard-coded — these are
+   *  named conventions (POLARISED, VDOT, vVO₂max…), not translated. */
+  tag: string;
+  /** Tailwind text-* colour for the tag. Picked per researcher so the
+   *  list reads with a coherent palette rather than a flat grey wash. */
+  tagColor: string;
 }
 
 const RESEARCHERS: Researcher[] = [
   {
     name: "Stephen Seiler",
+    tag: "Polarised · 80/20",
+    tagColor: "text-zone-2",
     contributionKey: "homepage:home.s04.researchers.seiler.contribution",
     source: {
       citationKey: "homepage:home.s04.researchers.seiler.citation",
@@ -86,6 +95,8 @@ const RESEARCHERS: Researcher[] = [
   },
   {
     name: "Véronique Billat",
+    tag: "vVO₂max · 30/30",
+    tagColor: "text-zone-5",
     contributionKey: "homepage:home.s04.researchers.billat.contribution",
     source: {
       citationKey: "homepage:home.s04.researchers.billat.citation",
@@ -94,6 +105,8 @@ const RESEARCHERS: Researcher[] = [
   },
   {
     name: "Jack Daniels",
+    tag: "VDOT · T/I/R",
+    tagColor: "text-zone-3",
     contributionKey: "homepage:home.s04.researchers.daniels.contribution",
     source: {
       citationKey: "homepage:home.s04.researchers.daniels.citation",
@@ -101,6 +114,8 @@ const RESEARCHERS: Researcher[] = [
   },
   {
     name: "Arthur Lydiard",
+    tag: "Base building",
+    tagColor: "text-zone-2",
     contributionKey: "homepage:home.s04.researchers.lydiard.contribution",
     source: {
       citationKey: "homepage:home.s04.researchers.lydiard.citation",
@@ -108,6 +123,8 @@ const RESEARCHERS: Researcher[] = [
   },
   {
     name: "Tim Noakes",
+    tag: "Central governor",
+    tagColor: "text-primary",
     contributionKey: "homepage:home.s04.researchers.noakes.contribution",
     source: {
       citationKey: "homepage:home.s04.researchers.noakes.citation",
@@ -115,6 +132,8 @@ const RESEARCHERS: Researcher[] = [
   },
   {
     name: "Wildor Hollmann & Alois Mader",
+    tag: "Lactate threshold",
+    tagColor: "text-zone-4",
     contributionKey: "homepage:home.s04.researchers.cologne.contribution",
     source: {
       citationKey: "homepage:home.s04.researchers.cologne.citation",
@@ -122,6 +141,8 @@ const RESEARCHERS: Researcher[] = [
   },
   {
     name: "Oliver Faude",
+    tag: "Threshold review",
+    tagColor: "text-zone-4",
     contributionKey: "homepage:home.s04.researchers.faude.contribution",
     source: {
       citationKey: "homepage:home.s04.researchers.faude.citation",
@@ -130,6 +151,8 @@ const RESEARCHERS: Researcher[] = [
   },
   {
     name: "Iñigo San Millán",
+    tag: "Zone 2 · mitochondria",
+    tagColor: "text-zone-2",
     contributionKey: "homepage:home.s04.researchers.sanMillan.contribution",
     source: {
       citationKey: "homepage:home.s04.researchers.sanMillan.citation",
@@ -457,16 +480,21 @@ export function HomePage() {
                   {t("homepage:home.hero.ctaPrimary")}
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="rounded-full px-6">
+              <Button asChild variant="outline-primary" size="lg" className="rounded-full px-6">
                 <Link to="/plan/new">{t("homepage:home.hero.ctaSecondary")}</Link>
               </Button>
             </div>
 
-            {/* Stat row — every figure derived, count-up on mount */}
+            {/* Stat row — every figure derived, count-up on mount. Each
+                number gets its own accent: the catalogue size in primary
+                (the "headline" stat), then the three companion stats
+                tint Z2 / Z3 / Z5 to walk the eye across the row without
+                competing with the chart sidecar. */}
             <div className="border-t border-foreground/15 pt-6 grid grid-cols-4 gap-4">
               <CountStat
                 target={totalSessions}
                 label={t("homepage:home.stats.sessions")}
+                color="text-primary"
               />
               <CountStat
                 target={prebuiltPlans.length}
@@ -477,15 +505,18 @@ export function HomePage() {
                     ? "marathon"
                     : prebuiltPlans[prebuiltPlans.length - 1]?.raceDistance ?? ""
                 }`}
+                color="text-zone-2"
               />
               <CountStat
                 target={CALCULATORS.length}
                 label={t("homepage:home.stats.calculators")}
+                color="text-zone-3"
               />
               <StatBlock
                 value="0"
                 label={t("homepage:home.stats.trackers")}
                 sub={t("homepage:home.stats.noAccount")}
+                color="text-zone-5"
               />
             </div>
           </div>
@@ -740,13 +771,20 @@ export function HomePage() {
             const href = r.source.url ?? "/methodology";
             const isExternal = !!r.source.url;
             const cls =
-              "group block border border-border bg-card hover:border-foreground/40 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 p-3 rounded-md flex items-center gap-2 h-full";
+              "group block border border-border bg-card hover:border-foreground/40 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 p-3 rounded-md flex flex-col h-full";
             const content = (
               <>
-                <span className="text-sm font-semibold flex-1 leading-snug group-hover:text-primary transition-colors">
-                  {r.name}
+                <span
+                  className={`font-mono text-[9px] tracking-[0.14em] uppercase ${r.tagColor} mb-1.5 truncate`}
+                >
+                  {r.tag}
                 </span>
-                <ArrowRight className="size-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                <div className="flex items-center gap-2 flex-1">
+                  <span className="text-sm font-semibold flex-1 leading-snug group-hover:text-primary transition-colors">
+                    {r.name}
+                  </span>
+                  <ArrowRight className="size-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                </div>
               </>
             );
             return (
@@ -808,17 +846,38 @@ export function HomePage() {
         {/* Mobile: dense 2-col grid (distance + arrow only). Each card
             jumps to the canonical plan for that distance — matches the
             calculator-grid pattern. */}
-        <StaggerGrid className="md:hidden mt-10 grid grid-cols-2 gap-2">
+        <StaggerGrid className="md:hidden mt-10 grid grid-cols-2 gap-3">
           {planRows.map(({ key, plan }) => (
             <StaggerItem key={key}>
               <Link
                 to={`/plan/prebuilt/${plan.slug}`}
-                className="group block border border-border bg-card hover:border-foreground/40 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 p-3 rounded-md flex items-center gap-2 h-full"
+                className="group block border border-border bg-card hover:border-foreground/40 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 p-3 rounded-md flex flex-col gap-3 h-full"
               >
-                <span className="text-base font-sans italic font-semibold flex-1 leading-snug group-hover:text-primary transition-colors">
-                  {t(`homepage:home.s05.distance.${key}`)}
-                </span>
-                <ArrowRight className="size-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                <div className="flex items-center gap-2">
+                  <span className="text-base font-sans italic font-semibold flex-1 leading-snug group-hover:text-primary transition-colors">
+                    {t(`homepage:home.s05.distance.${key}`)}
+                  </span>
+                  <ArrowRight className="size-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                </div>
+                {/* Mini macrocycle bar — same colour scale as the
+                    desktop legend so the user can read base → taper at
+                    a glance even on phones. */}
+                <div className="flex h-1.5 overflow-hidden rounded-sm">
+                  {plan.phases.map((p, i) => {
+                    const span = p.endWeek - p.startWeek + 1;
+                    const pct = (span / plan.totalWeeks) * 100;
+                    return (
+                      <div
+                        key={i}
+                        className={PHASE_COLORS[p.phase] ?? "bg-foreground/20"}
+                        style={{ width: `${pct}%` }}
+                      />
+                    );
+                  })}
+                </div>
+                <div className="font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground -mt-1">
+                  {plan.totalWeeks} {t("homepage:home.s05.weeks")}
+                </div>
               </Link>
             </StaggerItem>
           ))}
@@ -926,16 +985,16 @@ export function HomePage() {
           {FAQ_IDS.map((id, i) => (
             <details
               key={id}
-              className="group border-b border-foreground/15 [&[open]>summary>svg]:rotate-180"
+              className="group border-b border-foreground/15 [&[open]>summary>svg]:rotate-180 [&[open]>summary]:bg-accent/40 [&[open]>summary>svg]:text-primary [&[open]>summary>span.q-num]:text-primary"
             >
-              <summary className="flex items-center gap-6 py-5 cursor-pointer list-none hover:bg-accent/30 transition-colors px-2 -mx-2">
-                <span className="font-mono text-[11px] tracking-[0.15em] text-foreground/50 w-6 shrink-0">
+              <summary className="flex items-center gap-4 sm:gap-6 py-5 cursor-pointer list-none hover:bg-accent/30 transition-colors px-2 -mx-2 rounded-sm">
+                <span className="q-num font-mono text-[11px] tracking-[0.15em] text-foreground/50 w-6 shrink-0 transition-colors">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span className="font-sans italic text-lg md:text-xl flex-1">
                   {t(`homepage:home.s09.q.${id}.q`)}
                 </span>
-                <ChevronDown className="size-4 text-foreground/40 transition-transform shrink-0" />
+                <ChevronDown className="size-4 text-foreground/40 transition-all shrink-0" />
               </summary>
               <div className="pb-5 pl-12 pr-6 text-sm leading-relaxed text-foreground/75 max-w-3xl">
                 {t(`homepage:home.s09.q.${id}.a`)}
@@ -968,7 +1027,7 @@ export function HomePage() {
               {t("homepage:home.cta.primary")}
             </Link>
           </Button>
-          <Button asChild variant="outline" size="lg" className="rounded-full px-6">
+          <Button asChild variant="outline-primary" size="lg" className="rounded-full px-6">
             <a
               href="https://github.com/alarboulletmarin/zoned"
               target="_blank"
@@ -995,14 +1054,19 @@ function StatBlock({
   value,
   label,
   sub,
+  color,
 }: {
   value: string;
   label: string;
   sub?: string;
+  /** Tailwind text-* class for the big number. Defaults to foreground. */
+  color?: string;
 }) {
   return (
     <div>
-      <p className="font-sans italic text-3xl md:text-4xl leading-none tabular-nums">
+      <p
+        className={`font-sans italic text-3xl md:text-4xl leading-none tabular-nums ${color ?? "text-foreground"}`}
+      >
         {value}
       </p>
       <p className="font-mono text-[10px] tracking-[0.15em] uppercase text-foreground/55 mt-2 leading-tight">
@@ -1018,9 +1082,17 @@ function StatBlock({
 }
 
 /** Stat block whose value animates from 0 to `target` on mount. */
-function CountStat({ target, label }: { target: number; label: string }) {
+function CountStat({
+  target,
+  label,
+  color,
+}: {
+  target: number;
+  label: string;
+  color?: string;
+}) {
   const value = useCountUp(target);
-  return <StatBlock value={String(value)} label={label} />;
+  return <StatBlock value={String(value)} label={label} color={color} />;
 }
 
 // Canonical Seiler-style polarised reference — these are *teaching values*,
@@ -1172,7 +1244,7 @@ function EntryColumn({
       <p className="text-sm leading-[1.65] text-foreground/75 mb-5 flex-1">
         {body}
       </p>
-      <Button asChild variant="outline" size="sm" className="self-start">
+      <Button asChild variant="outline-primary" size="sm" className="self-start">
         <Link to={to}>
           {linkLabel}
           <ArrowRight className="size-3.5" />
@@ -1400,7 +1472,12 @@ function ResearcherCard({
 }) {
   const hasUrl = !!researcher.source.url;
   return (
-    <article className="border-l-2 border-border pl-5 py-1 transition-colors hover:border-foreground/60">
+    <article className="pl-5 py-1 border-l border-border transition-colors hover:border-foreground/40">
+      <p
+        className={`font-mono text-[10px] tracking-[0.16em] uppercase ${researcher.tagColor} mb-1.5`}
+      >
+        {researcher.tag}
+      </p>
       <h3 className="text-lg font-semibold">{researcher.name}</h3>
       <p className="text-sm text-muted-foreground mt-1 leading-snug">
         {t(researcher.contributionKey)}
@@ -1482,7 +1559,7 @@ function PlanRow({
           );
         })}
       </motion.div>
-      <Button asChild variant="outline" size="sm" className="justify-self-end">
+      <Button asChild variant="outline-primary" size="sm" className="justify-self-end">
         <Link to={`/plan/prebuilt/${plan.slug}`}>
           {t("homepage:home.s05.choose")}
           <ArrowRight className="size-3.5" />
