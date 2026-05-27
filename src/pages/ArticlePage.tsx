@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ChevronLeft, ChevronRight, Clock, BookOpen, Home, Loader2, Lightbulb, AlertTriangle, Info, Activity } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { useArticle, useAdjacentArticles } from "@/hooks/useArticles";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { ReadingProgress } from "@/components/domain/ReadingProgress";
@@ -494,8 +495,10 @@ export function ArticlePage() {
           <Clock className="size-3" />
           <span>{article.readTime} min {t("content:learn.readTime")}</span>
         </div>
-        <h1 className="text-3xl font-bold mb-3">{title}</h1>
-        <p className="text-lg text-muted-foreground"><GlossaryLinkedText text={description} /></p>
+        <EditorialTitle as="h1" className="mb-3">{title}</EditorialTitle>
+        <FadeUp as="p" delay={0.1} className="text-lg text-muted-foreground">
+          <GlossaryLinkedText text={description} />
+        </FadeUp>
       </header>
 
       {/* Mobile TOC */}

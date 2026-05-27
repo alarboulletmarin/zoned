@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { ArrowLeft, Download, Trash2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle } from "@/components/editorial";
 import { downloadRouteGpx } from "@/lib/export/gpx";
 import { useRoutes } from "@/hooks/useRoutes";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
@@ -83,7 +84,7 @@ export function RouteDetailPage() {
         </Button>
 
         <header className="space-y-1">
-          <h1 className="text-2xl font-bold sm:text-3xl">{route.name}</h1>
+          <EditorialTitle as="h1" size="md">{route.name}</EditorialTitle>
           <p className="text-sm text-muted-foreground">
             {(route.distanceM / 1000).toFixed(2)} km · D+ {route.elevationGainM} m · ~
             {formatDurationMinutes(route.estimatedDurationSec / 60)}

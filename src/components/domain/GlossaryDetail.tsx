@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { ZoneBadge } from "./ZoneBadge";
 import { cn } from "@/lib/utils";
 import type { GlossaryTerm } from "@/data/glossary/types";
+import { EditorialTitle } from "@/components/editorial";
 import { useGlossaryCategoryInfo, useRelatedTerms } from "@/hooks/useGlossary";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 
@@ -37,11 +38,11 @@ export function GlossaryDetail({ term, className }: GlossaryDetailProps) {
           <Badge variant="secondary">{categoryLabel}</Badge>
           {term.zone && <ZoneBadge zone={term.zone} size="md" showLabel />}
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold">
-          {term.acronym && <span className="text-primary">{term.acronym}</span>}
-          {term.acronym && " — "}
+        <EditorialTitle as="h1" size="md">
+          {term.acronym && <span className="text-primary not-italic">{term.acronym}</span>}
+          {term.acronym && " · "}
           {displayTerm}
-        </h1>
+        </EditorialTitle>
       </div>
 
       {/* Definition */}

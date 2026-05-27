@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import { getPrebuiltBySlug } from "@/data/prebuilt-plans";
 import { getWorkoutById } from "@/data/workouts";
@@ -222,8 +223,10 @@ export function PrebuiltPlanDetailPage() {
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-3">
-            <h1 className="text-3xl font-bold">{name}</h1>
-            <p className="text-muted-foreground max-w-2xl">{description}</p>
+            <EditorialTitle as="h1">{name}</EditorialTitle>
+            <FadeUp as="p" delay={0.1} className="text-muted-foreground max-w-2xl">
+              {description}
+            </FadeUp>
             <div className="flex flex-wrap items-center gap-2">
               {difficultyLabel && (
                 <Badge variant="secondary">

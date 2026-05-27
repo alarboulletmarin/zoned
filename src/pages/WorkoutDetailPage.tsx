@@ -43,6 +43,7 @@ import { NutritionRecoverySection } from "@/components/domain/NutritionRecoveryS
 import { ScienceSection } from "@/components/domain/ScienceSection";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle } from "@/components/editorial";
 import { SessionTimeline, ZoneDistribution, transformSessionBlocks, MiniElevationProfile } from "@/components/visualization";
 import { StrengthSessionTimeline } from "@/components/visualization/StrengthSessionTimeline";
 import { MuscleDistribution } from "@/components/visualization/MuscleDistribution";
@@ -406,9 +407,9 @@ export function WorkoutDetailPage() {
                 </div>
                 <FavoriteButton workoutId={workout.id} />
               </div>
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold leading-tight mb-4">
+              <EditorialTitle as="h1" size="lg" className="mb-4 sm:text-4xl md:text-5xl">
                 {pick(workout, "name")}
-              </h1>
+              </EditorialTitle>
               <p className="text-muted-foreground max-w-2xl leading-relaxed text-lg">
                 <GlossaryLinkedText text={pick(workout, "description")} />
               </p>
@@ -781,9 +782,9 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
                 </div>
                 <FavoriteButton workoutId={workout.id} />
               </div>
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold leading-tight mb-4">
+              <EditorialTitle as="h1" size="lg" className="mb-4 sm:text-4xl md:text-5xl">
                 {workoutName}
-              </h1>
+              </EditorialTitle>
               <p className="text-muted-foreground max-w-2xl leading-relaxed text-lg">
                 <GlossaryLinkedText text={description} />
               </p>
