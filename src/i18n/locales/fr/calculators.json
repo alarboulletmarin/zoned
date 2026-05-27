@@ -4,6 +4,11 @@
     "description": "Tous les outils de calcul pour vos entraînements",
     "explore": "Ouvrir",
     "comingSoon": "Bientôt",
+    "groups": {
+      "benchmarks": "Tes références",
+      "pace": "Allures & conversions",
+      "race": "Course & planification"
+    },
     "hub": {
       "seoTitle": "Calculateurs — Outils de Course",
       "seoDescription": "Calculateurs de course à pied : zones d'entraînement, allures, convertisseur tapis roulant, splits, estimation VMA.",
