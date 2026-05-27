@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { ContributeForm } from "@/components/domain/contribute/ContributeForm";
 
 export function ContributePage() {
@@ -22,8 +23,10 @@ export function ContributePage() {
       <div className="py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold">{t("title")}</h1>
-          <p className="text-muted-foreground mt-1">{t("subtitle")}</p>
+          <EditorialTitle as="h1" size="md">{t("title")}</EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
+            {t("subtitle")}
+          </FadeUp>
         </div>
 
         {/* Form */}

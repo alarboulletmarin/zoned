@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Heart, ArrowRight, Loader2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { WorkoutCard } from "@/components/domain";
 import { useFavorites, useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
@@ -35,14 +36,14 @@ export function FavoritesPage() {
       <div className="py-8 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Heart className="size-6 text-red-500 fill-red-500" />
+        <Heart className="size-6 text-red-500 fill-red-500 shrink-0" />
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold">
+          <EditorialTitle as="h1" size="md">
             {t("common:favorites.title")}
-          </h1>
-          <p className="text-muted-foreground mt-1">
+          </EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
             {t("common:favorites.savedWorkouts", { count: favoriteWorkouts.length })}
-          </p>
+          </FadeUp>
         </div>
       </div>
 

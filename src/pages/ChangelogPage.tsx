@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Sparkles, Rocket, RefreshCw } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
 import { changelogVersions } from "@/data/changelog";
 import type { ChangeType, ChangelogItem } from "@/data/changelog";
 import { useWhatsNew } from "@/hooks/useWhatsNew";
@@ -72,16 +73,17 @@ export function ChangelogPage() {
       <div className="py-8 space-y-8 max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center space-y-4">
-          <h1 className="text-3xl font-bold">{t("content:changelog.title")}</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <EditorialTitle as="h1">{t("content:changelog.title")}</EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-lg text-muted-foreground max-w-2xl mx-auto">
             {t("content:changelog.subtitle")}
-          </p>
+          </FadeUp>
         </div>
 
         {/* Timeline */}
-        <div className="space-y-10">
+        <StaggerGrid className="space-y-10">
           {changelogVersions.map((version) => (
-            <div key={version.version} className="space-y-4">
+            <StaggerItem key={version.version}>
+            <div className="space-y-4">
               {/* Version header */}
               <div className="flex items-center gap-3">
                 <Badge className="text-sm px-3 py-1">
@@ -143,8 +145,9 @@ export function ChangelogPage() {
                 })}
               </div>
             </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGrid>
       </div>
     </>
   );

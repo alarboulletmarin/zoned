@@ -39,6 +39,7 @@ import {
 } from "@/components/ui/select";
 import { DateInput } from "@/components/ui/date-input";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import {
   getRunnerProfileOrMigrate,
@@ -1182,10 +1183,12 @@ export function RunnerProfilePage() {
       <div className="py-8 max-w-2xl mx-auto">
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-2">
-            <UserRound className="size-7 text-primary" />
-            <h1 className="text-2xl font-bold">{t("title")}</h1>
+            <UserRound className="size-7 text-primary shrink-0" />
+            <EditorialTitle as="h1" size="md">{t("title")}</EditorialTitle>
           </div>
-          <p className="text-muted-foreground">{t("description")}</p>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground">
+            {t("description")}
+          </FadeUp>
         </div>
 
         <Tabs defaultValue="base">
