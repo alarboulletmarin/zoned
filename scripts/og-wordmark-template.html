@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --w: {{W}}px;
+      --h: {{H}}px;
+      --px-x: {{PX_X}}px;
+      --px-y: {{PX_Y}}px;
+      --wordmark-size: {{WORDMARK_SIZE}}px;
+      --fs: {{FS}}px;
+      --sub: {{SUB}}px;
+      --bullet-num-fs: {{BULLET_NUM_FS}}px;
+      --bullet-fs: {{BULLET_FS}}px;
+      --url-fs: {{URL_FS}}px;
+      --meta-fs: {{META_FS}}px;
+
+      --paper: #f8fafc;
+      --ink: #0f172a;
+      --muted: #334155;
+      --subtle: #64748b;
+      --subtler: #94a3b8;
+      --accent: #f97316;
+
+      --font: "Space Grotesk", "Helvetica Neue", system-ui, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: var(--w);
+      height: var(--h);
+      overflow: hidden;
+      background: var(--paper);
+    }
+
+    body {
+      font-family: var(--font);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .card {
+      width: var(--w);
+      height: var(--h);
+      padding: var(--px-y) var(--px-x);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(ellipse at top left, rgba(249, 115, 22, 0.06), transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(249, 115, 22, 0.04), transparent 60%),
+        var(--paper);
+    }
+
+    /* Top eyebrow */
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .wordmark {
+      display: inline-flex;
+      align-items: center;
+      gap: calc(var(--wordmark-size) * 0.32);
+      font-size: var(--wordmark-size);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .wordmark svg {
+      width: calc(var(--wordmark-size) * 1.6);
+      height: calc(var(--wordmark-size) * 1.6);
+      display: block;
+    }
+
+    .wordmark .dot {
+      color: var(--accent);
+    }
+
+    /* Big headline block */
+    .headline-block {
+      margin-top: auto;
+    }
+
+    h1.headline {
+      font-size: var(--fs);
+      font-weight: 700;
+      line-height: 0.92;
+      letter-spacing: -0.045em;
+      color: var(--ink);
+    }
+
+    h1.headline em {
+      font-style: italic;
+      font-weight: 500;
+      color: var(--accent);
+    }
+
+    p.subline {
+      margin-top: 28px;
+      font-size: var(--sub);
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--muted);
+      max-width: calc(var(--w) * 0.72);
+    }
+
+    /* Bullets */
+    .bullets {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-top: var(--bullets-mt, 48px);
+    }
+
+    .bullet {
+      border-top: 2px solid var(--ink);
+      padding-top: 18px;
+    }
+
+    .bullet .b-num {
+      font-size: var(--bullet-num-fs);
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      color: var(--subtler);
+      margin-bottom: 10px;
+    }
+
+    .bullet .b-value {
+      font-size: var(--bullet-fs);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .bullet .b-label {
+      font-size: var(--bullet-num-fs);
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--subtle);
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: auto;
+      padding-top: 28px;
+      border-top: 2px solid var(--ink);
+      text-align: center;
+      font-size: var(--meta-fs);
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--subtle);
+      line-height: 1.4;
+    }
+
+    .footer b {
+      color: var(--ink);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="top">
+      <div class="wordmark">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="zonedGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#94a3b8;stop-opacity:1" />
+              <stop offset="20%" style="stop-color:#22c55e;stop-opacity:1" />
+              <stop offset="40%" style="stop-color:#eab308;stop-opacity:1" />
+              <stop offset="60%" style="stop-color:#f97316;stop-opacity:1" />
+              <stop offset="80%" style="stop-color:#ef4444;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <path d="M 4 32 L 12 32 L 15 38 L 20 20 L 25 44 L 30 12 L 35 40 L 40 16 L 45 32 L 52 32"
+                stroke="url(#zonedGrad)"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"/>
+        </svg>
+        <span>Zoned<span class="dot">.</span></span>
+      </div>
+    </div>
+
+    <div class="headline-block">
+      <h1 class="headline">L&rsquo;entra&icirc;nement<br /><em>structur&eacute;</em>, sans bruit.</h1>
+      <p class="subline">Une appli d&rsquo;endurance scientifiquement valid&eacute;e. Tout reste dans votre navigateur.</p>
+    </div>
+
+    <div class="bullets">
+      <div class="bullet">
+        <div class="b-num">01</div>
+        <div class="b-value">{{WORKOUT_COUNT}}</div>
+        <div class="b-label">S&eacute;ances</div>
+      </div>
+      <div class="bullet">
+        <div class="b-num">02</div>
+        <div class="b-value">{{PLAN_COUNT}}</div>
+        <div class="b-label">Plans 5K &rarr; marathon</div>
+      </div>
+      <div class="bullet">
+        <div class="b-num">03</div>
+        <div class="b-value">{{CALCULATOR_COUNT}}</div>
+        <div class="b-label">Calculateurs</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Gratuit.&nbsp; Sans compte.&nbsp; Sans tracking.&nbsp; Pour toujours.
+    </div>
+  </div>
+</body>
+</html>

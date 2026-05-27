@@ -1,23 +1,68 @@
 /**
  * USAGE: bun run scripts/generate-og-image.ts
  *
- * Generates a professional OG image (1200x630 PNG) for social sharing.
- * Reads actual app data to display accurate stats, renders an HTML
- * template with Puppeteer, and saves to public/og-image.png.
+ * Generates Zoned share cards (Wordmark direction) in two formats:
+ *   - OG    1200×630 → public/og-image.png             (default OG referenced by SEOHead)
+ *   - Square 1080×1080 → public/og-images/wordmark-square.png  (Instagram / LinkedIn carousel)
+ *
+ * Reads live app data (workouts, plans, calculators) to keep the subtitle accurate.
+ * Design tokens sourced from the Claude Design handoff (variant A — "Scientific & Calm").
  */
 
-import { readFileSync, readdirSync, writeFileSync } from "fs";
-import { join } from "path";
+import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
+import { dirname, join } from "path";
 import puppeteer from "puppeteer";
 
 const ROOT = join(import.meta.dirname, "..");
-const TEMPLATE_PATH = join(import.meta.dirname, "og-template.html");
-const OUTPUT_PATH = join(ROOT, "public/og-image.png");
+const TEMPLATE_PATH = join(import.meta.dirname, "og-wordmark-template.html");
+
+// --- Format configs (mirror share-cards.jsx `fmt` for ShareWordmarkCard) ---
+
+type FormatConfig = {
+  name: string;
+  w: number;
+  h: number;
+  pxX: number;
+  pxY: number;
+  wordmarkSize: number;
+  fs: number;
+  sub: number;
+  bulletNumFs: number;
+  bulletFs: number;
+  urlFs: number;
+  metaFs: number;
+  out: string;
+};
+
+// Sizes scale roughly with the story-ui-refonte.html reference (1080×1920 → headline 156, padding 96).
+const FORMATS: FormatConfig[] = [
+  {
+    name: "og",
+    w: 1200, h: 630,
+    pxX: 72, pxY: 56,
+    wordmarkSize: 36,
+    fs: 88, sub: 22,
+    bulletNumFs: 13, bulletFs: 44,
+    urlFs: 28, metaFs: 13,
+    out: "public/og-image.png",
+  },
+  {
+    name: "square",
+    w: 1080, h: 1080,
+    pxX: 96, pxY: 96,
+    wordmarkSize: 44,
+    fs: 132, sub: 32,
+    bulletNumFs: 16, bulletFs: 60,
+    urlFs: 40, metaFs: 18,
+    out: "public/og-images/wordmark-square.png",
+  },
+];
 
 // --- Data collection ---
+// Must mirror `useAppStats` (src/hooks/useAppStats.ts) so the OG image shows the
+// same numbers users see on the About page: running + cycling + swimming + strength.
 
-function countWorkouts(): number {
-  const dir = join(ROOT, "src/data/workouts");
+function countTemplatesInDir(dir: string): number {
   const files = readdirSync(dir).filter((f) => f.endsWith(".json"));
   let total = 0;
   for (const file of files) {
@@ -29,20 +74,23 @@ function countWorkouts(): number {
   return total;
 }
 
-function countCalculators(): number {
-  return 9;
+function countWorkouts(): number {
+  // src/data/workouts/*.json holds running + cycling + swimming files; strength sessions live separately.
+  const main = countTemplatesInDir(join(ROOT, "src/data/workouts"));
+  const strength = countTemplatesInDir(join(ROOT, "src/data/strength/sessions"));
+  return main + strength;
 }
 
-function countGlossaryTerms(): number {
-  const dir = join(ROOT, "src/data/glossary/terms");
-  const files = readdirSync(dir).filter((f) => f.endsWith(".ts"));
-  let total = 0;
-  for (const file of files) {
-    const content = readFileSync(join(dir, file), "utf-8");
-    const matches = content.match(/^\s+id:\s/gm);
-    if (matches) total += matches.length;
-  }
-  return total;
+function countCalculators(): number {
+  // Parse the CALCULATEURS array literal in CalculateursPage.tsx (single source of truth in-app).
+  const src = readFileSync(join(ROOT, "src/pages/CalculateursPage.tsx"), "utf-8");
+  const start = src.indexOf("export const CALCULATEURS");
+  if (start === -1) throw new Error("CALCULATEURS array not found");
+  const end = src.indexOf("\n];", start);
+  if (end === -1) throw new Error("CALCULATEURS array terminator not found");
+  const slice = src.slice(start, end);
+  const matches = slice.match(/^\s+id:\s/gm);
+  return matches ? matches.length : 0;
 }
 
 function countPlans(): number {
@@ -50,66 +98,83 @@ function countPlans(): number {
   return readdirSync(dir).filter((f) => f.endsWith(".ts")).length;
 }
 
-function loadLogoSvg(): string {
-  return readFileSync(join(ROOT, "src/assets/logo.svg"), "utf-8");
-}
-
 // --- Template rendering ---
 
-function buildHtml(): string {
-  const stats = {
-    workouts: countWorkouts(),
-    calculators: countCalculators(),
-    glossary: countGlossaryTerms(),
-    plans: countPlans(),
+function buildHtml(fmt: FormatConfig, stats: { workouts: number; plans: number; calculators: number }): string {
+  let html = readFileSync(TEMPLATE_PATH, "utf-8");
+
+  const subs: Record<string, string | number> = {
+    W: fmt.w,
+    H: fmt.h,
+    PX_X: fmt.pxX,
+    PX_Y: fmt.pxY,
+    WORDMARK_SIZE: fmt.wordmarkSize,
+    FS: fmt.fs,
+    SUB: fmt.sub,
+    BULLET_NUM_FS: fmt.bulletNumFs,
+    BULLET_FS: fmt.bulletFs,
+    URL_FS: fmt.urlFs,
+    META_FS: fmt.metaFs,
+    WORKOUT_COUNT: stats.workouts,
+    PLAN_COUNT: stats.plans,
+    CALCULATOR_COUNT: stats.calculators,
   };
 
-  console.log("Stats:", stats);
-
-  let html = readFileSync(TEMPLATE_PATH, "utf-8");
-  html = html.replace(/\{\{WORKOUT_COUNT\}\}/g, String(stats.workouts));
-  html = html.replace(/\{\{CALCULATOR_COUNT\}\}/g, String(stats.calculators));
-  html = html.replace(/\{\{GLOSSARY_COUNT\}\}/g, String(stats.glossary));
-  html = html.replace(/\{\{PLAN_COUNT\}\}/g, String(stats.plans));
-  html = html.replace(/\{\{LOGO_SVG\}\}/g, loadLogoSvg());
-
+  for (const [key, val] of Object.entries(subs)) {
+    html = html.replace(new RegExp(`\\{\\{${key}\\}\\}`, "g"), String(val));
+  }
   return html;
 }
 
 // --- Screenshot ---
 
-async function captureScreenshot(html: string): Promise<Buffer> {
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
-  });
-
+async function captureOne(browser: import("puppeteer").Browser, fmt: FormatConfig, html: string): Promise<Buffer> {
   const page = await browser.newPage();
-  await page.setViewport({ width: 1200, height: 630, deviceScaleFactor: 1 });
+  await page.setViewport({ width: fmt.w, height: fmt.h, deviceScaleFactor: 1 });
   await page.setContent(html, { waitUntil: "networkidle0", timeout: 15000 });
 
   const screenshot = await page.screenshot({
     type: "png",
-    clip: { x: 0, y: 0, width: 1200, height: 630 },
+    clip: { x: 0, y: 0, width: fmt.w, height: fmt.h },
   });
-
-  await browser.close();
+  await page.close();
   return Buffer.from(screenshot);
 }
 
 // --- Main ---
 
 async function main() {
-  console.log("Generating OG image...");
+  console.log("Generating Zoned share cards (Wordmark direction)...");
 
-  const html = buildHtml();
-  const png = await captureScreenshot(html);
-  writeFileSync(OUTPUT_PATH, png);
+  const stats = {
+    workouts: countWorkouts(),
+    plans: countPlans(),
+    calculators: countCalculators(),
+  };
+  console.log("Stats:", stats);
 
-  console.log(`OG image saved to ${OUTPUT_PATH}`);
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+  });
+
+  try {
+    for (const fmt of FORMATS) {
+      const html = buildHtml(fmt, stats);
+      const png = await captureOne(browser, fmt, html);
+      const outPath = join(ROOT, fmt.out);
+      mkdirSync(dirname(outPath), { recursive: true });
+      writeFileSync(outPath, png);
+      console.log(`  ${fmt.name.padEnd(8)} ${fmt.w}×${fmt.h} → ${fmt.out}`);
+    }
+  } finally {
+    await browser.close();
+  }
+
+  console.log("Done.");
 }
 
 main().catch((err) => {
-  console.error("Failed to generate OG image:", err);
+  console.error("Failed to generate share cards:", err);
   process.exit(1);
 });
