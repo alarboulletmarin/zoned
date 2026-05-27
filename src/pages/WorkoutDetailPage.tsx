@@ -5,7 +5,6 @@ import {
   ArrowLeft,
   Clock,
   Dumbbell,
-  MapPin,
   Target,
   Circle,
   Mountain,
@@ -27,7 +26,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ZoneBadge,
   WorkoutCardCompact,
@@ -43,7 +41,7 @@ import { NutritionRecoverySection } from "@/components/domain/NutritionRecoveryS
 import { ScienceSection } from "@/components/domain/ScienceSection";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle } from "@/components/editorial";
+import { EditorialTitle, FadeUp, DetailAccordion } from "@/components/editorial";
 import { SessionTimeline, ZoneDistribution, transformSessionBlocks, MiniElevationProfile } from "@/components/visualization";
 import { StrengthSessionTimeline } from "@/components/visualization/StrengthSessionTimeline";
 import { MuscleDistribution } from "@/components/visualization/MuscleDistribution";
@@ -59,7 +57,7 @@ import {
   isStrengthWorkout,
 } from "@/types";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
-import { IntensityBadge, INTENSITY_COLORS } from "@/components/domain/IntensityBadge";
+import { IntensityBadge } from "@/components/domain/IntensityBadge";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { usePickLang, usePickLangArray } from "@/lib/i18n-utils";
 import { computeTrailMetrics } from "@/lib/workoutMetrics";
@@ -320,16 +318,27 @@ export function WorkoutDetailPage() {
           },
         ]}
       />
-      <div className={`zone-${dominantZone} py-8 space-y-8`}>
-        {/* Back + Breadcrumb */}
+      <div className={`zone-${dominantZone} py-6 md:py-8 space-y-8`}>
+        {/* Top strip — back, breadcrumb, optional plan chip. */}
         <div className="flex flex-col gap-2">
-          <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="self-start">
-            <ArrowLeft className="mr-2 size-4" />
-            {t("common:pages.workoutDetail.back")}
-          </Button>
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="-ml-2">
+              <ArrowLeft className="mr-1.5 size-4" />
+              {t("common:pages.workoutDetail.back")}
+            </Button>
+            {hasPlanContext && (
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary">
+                <Clock className="size-3" />
+                {t("session:planContext.banner", {
+                  week: planWeekNumber,
+                  volume: planVolumePercent,
+                  duration,
+                })}
+              </span>
+            )}
+          </div>
 
           <nav aria-label="Breadcrumb">
-            {/* Desktop: full breadcrumb */}
             <ol className="hidden sm:flex items-center flex-wrap">
               {breadcrumbs.map((crumb, i) => {
                 const isLast = i === breadcrumbs.length - 1;
@@ -339,7 +348,7 @@ export function WorkoutDetailPage() {
                       <span className="text-muted-foreground/50 mx-1.5 text-sm">/</span>
                     )}
                     {isLast ? (
-                      <span className="text-foreground text-sm font-medium">{crumb.label}</span>
+                      <span className="text-foreground text-sm font-medium truncate max-w-[280px]">{crumb.label}</span>
                     ) : (
                       <Link
                         to={crumb.to!}
@@ -353,7 +362,6 @@ export function WorkoutDetailPage() {
                 );
               })}
             </ol>
-            {/* Mobile: immediate parent + current name */}
             <div className="flex sm:hidden items-center text-sm">
               <Link
                 to={parentCrumb.to!}
@@ -368,157 +376,120 @@ export function WorkoutDetailPage() {
           </nav>
         </div>
 
-        {/* Plan context banner — volume reduction or long run target */}
-        {hasPlanContext && Math.abs(duration - baseDuration) > 3 && (
-          <div className="rounded-lg border border-primary/20 bg-primary/5 px-4 py-2.5 text-sm flex items-center gap-2">
-            <Clock className="size-4 text-primary shrink-0" />
-            <span>
-              {duration > baseDuration && planTargetDistanceKm ? (
-                <>
-                  {t("session:planContext.longRunBanner", { week: planWeekNumber, distance: planTargetDistanceKm, duration })}
-                  <span className="text-muted-foreground ml-1">
-                    {t("session:planContext.longRunStructure", { duration: baseDuration })}
-                  </span>
-                </>
-              ) : (
-                <>
-                  {t("session:planContext.banner", { week: planWeekNumber, volume: planVolumePercent, duration })}
-                  <span className="text-muted-foreground ml-1">
-                    {t("session:planContext.fullSession", { duration: baseDuration })}
-                  </span>
-                </>
-              )}
+        {/* Hero block — title + badges + description + actions + inline
+            stats row. Replaces the previous bento + 5-card summary grid. */}
+        <FadeUp as="section">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+            <ZoneBadge zone={dominantZone} size="md" showLabel />
+            <Badge variant="outline" className="gap-1.5 text-muted-foreground">
+              <CategoryIcon className="size-3.5" />
+              {t(`library:categories.${workout.category}`)}
+            </Badge>
+            <span className="ml-auto">
+              <FavoriteButton workoutId={workout.id} />
             </span>
           </div>
-        )}
 
-        {/* Bento Header */}
-        <header className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Session Identity Card */}
-          <div className={`lg:col-span-8 bg-gradient-to-br from-zone-${dominantZone}/10 dark:from-zone-${dominantZone}/20 to-transparent border border-border/50 rounded-xl p-5 sm:p-8 md:p-10 flex flex-col justify-between lg:min-h-[240px]`}>
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <ZoneBadge zone={dominantZone} size="lg" showLabel />
-                  <Badge variant="outline" className="gap-1.5 text-muted-foreground">
-                    <CategoryIcon className="size-3.5" />
-                    {t(`library:categories.${workout.category}`)}
-                  </Badge>
-                </div>
-                <FavoriteButton workoutId={workout.id} />
-              </div>
-              <EditorialTitle as="h1" size="lg" className="mb-4 sm:text-4xl md:text-5xl">
-                {pick(workout, "name")}
-              </EditorialTitle>
-              <p className="text-muted-foreground max-w-2xl leading-relaxed text-lg">
-                <GlossaryLinkedText text={pick(workout, "description")} />
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-8">
-              {canGenerateRoute && (
-                <Button asChild className="rounded-full px-5 py-2.5 h-auto font-bold">
-                  <Link
-                    to="/routes"
-                    state={{ workoutRouteWorkout: workout }}
-                  >
-                    <Route className="size-4 mr-2" />
-                    {t("session:actions.findRoute")}
-                  </Link>
-                </Button>
-              )}
-              <ExportMenu workout={workout} />
-              <Button
-                variant="secondary"
-                className="rounded-full px-5 py-2.5 h-auto font-bold"
-                onClick={async () => {
-                  const ok = await copyToClipboard(window.location.href);
-                  if (ok) toast.success(t("common:actions.linkCopied"));
-                  else toast.error(t("common:errors.generic"));
-                }}
-              >
-                <Link2 className="size-4 mr-2" />
-                {t("common:actions.copyLink")}
+          <EditorialTitle as="h1" size="lg" className="mb-3 sm:text-4xl md:text-5xl">
+            {pick(workout, "name")}
+          </EditorialTitle>
+
+          <p className="text-muted-foreground max-w-2xl leading-relaxed text-base sm:text-lg">
+            <GlossaryLinkedText text={pick(workout, "description")} />
+          </p>
+
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-5">
+            {canGenerateRoute && (
+              <Button asChild size="sm" className="rounded-full px-4">
+                <Link to="/routes" state={{ workoutRouteWorkout: workout }}>
+                  <Route className="size-3.5 mr-1.5" />
+                  {t("session:actions.findRoute")}
+                </Link>
               </Button>
-            </div>
+            )}
+            <ExportMenu workout={workout} />
+            <Button
+              variant="ghost"
+              size="sm"
+              className="rounded-full px-4 text-muted-foreground hover:text-foreground"
+              onClick={async () => {
+                const ok = await copyToClipboard(window.location.href);
+                if (ok) toast.success(t("common:actions.linkCopied"));
+                else toast.error(t("common:errors.generic"));
+              }}
+            >
+              <Link2 className="size-3.5 mr-1.5" />
+              {t("common:actions.copyLink")}
+            </Button>
           </div>
 
-          {/* Summary Metrics */}
-          <div className="lg:col-span-4">
-            <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
-              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
-                <Clock className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
-                <span className="text-lg lg:text-2xl font-bold">{formatDurationMinutes(duration)}</span>
-                {hasPlanContext && duration < baseDuration - 3 && (
-                  <span className="text-[9px] text-muted-foreground line-through">{formatDurationMinutes(baseDuration)}</span>
-                )}
-              </div>
-              {planTargetDistanceKm != null && planTargetDistanceKm > 0 && (
-                <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
-                  <Route className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
-                  <span className="text-lg lg:text-2xl font-bold">
-                    {workout.category !== "long_run" && "~"}{planTargetDistanceKm}
-                  </span>
-                  <span className="text-[10px] lg:text-xs text-muted-foreground">km</span>
-                </div>
-              )}
-              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
-                <Dumbbell className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
-                <span className="text-sm lg:text-lg font-bold">{t(`library:difficulty.${workout.difficulty}`)}</span>
-                <span className="text-xs text-muted-foreground">{t("details.difficulty")}</span>
-              </div>
-              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
-                <Target className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
-                <span className="text-sm font-bold">{t(`targetSystems.${workout.targetSystem}`)}</span>
-                <span className="text-xs text-muted-foreground">{t("details.targetSystem")}</span>
-              </div>
-              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
-                <MapPin className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
-                <span className="text-sm font-bold">
-                  {envRequirements.length > 0 ? envLabel : t("common:pages.workoutDetail.envAny")}
-                </span>
-                <span className="text-xs text-muted-foreground">{t("details.environment")}</span>
-              </div>
-            </div>
-          </div>
-        </header>
+          {/* Inline stats row — single horizontal strip. Trail metrics
+              fold in naturally when applicable so we don't need a
+              separate trail bar. */}
+          <dl className="mt-6 grid grid-cols-3 sm:flex sm:flex-wrap sm:items-baseline sm:gap-x-8 gap-y-3 border-t border-border/60 pt-5">
+            <HeroStat
+              label={t("session:stats.duration")}
+              value={formatDurationMinutes(duration)}
+              hint={
+                hasPlanContext && duration < baseDuration - 3
+                  ? formatDurationMinutes(baseDuration)
+                  : undefined
+              }
+            />
+            {planTargetDistanceKm != null && planTargetDistanceKm > 0 && (
+              <HeroStat
+                label={t("session:stats.distance")}
+                value={`${workout.category !== "long_run" ? "~" : ""}${planTargetDistanceKm} km`}
+              />
+            )}
+            <HeroStat
+              label={t("session:stats.difficulty")}
+              value={t(`library:difficulty.${workout.difficulty}`)}
+            />
+            <HeroStat
+              label={t("session:stats.target")}
+              value={t(`targetSystems.${workout.targetSystem}`)}
+            />
+            {envRequirements.length > 0 && (
+              <HeroStat
+                label={t("session:stats.environment")}
+                value={envLabel}
+              />
+            )}
+            {hasTrail && trailMetrics.totalElevationGainM > 0 && (
+              <HeroStat
+                label={t("library:trail.elevationGain", { value: "" }).replace(/[\s+0-9]+m?\s*$/, "")}
+                value={`+${trailMetrics.totalElevationGainM} m`}
+              />
+            )}
+          </dl>
+        </FadeUp>
 
+        {/* Trail elevation profile — only when meaningful. Kept tight. */}
         {hasTrail && (
-          <div className="rounded-lg border bg-muted/30 px-4 py-3 space-y-2">
-            <div className="text-sm flex flex-wrap items-center gap-x-4 gap-y-1.5">
-              {trailMetrics.totalElevationGainM > 0 && (
-                <span className="flex items-center gap-1.5">
-                  <Mountain className="size-4 text-muted-foreground" />
-                  <strong>{t("library:trail.elevationGain", { value: trailMetrics.totalElevationGainM })}</strong>
-                </span>
-              )}
-              {trailMetrics.totalElevationLossM > 0 && (
-                <span className="flex items-center gap-1.5 text-muted-foreground">
-                  <strong>{t("library:trail.elevationLoss", { value: trailMetrics.totalElevationLossM })}</strong>
-                </span>
-              )}
-              {trailMetrics.verticalDensityMPerKm > 0 && (
-                <span className="text-muted-foreground">
-                  {t("library:trail.verticalDensity", { value: trailMetrics.verticalDensityMPerKm })}
-                </span>
-              )}
-              {trailMetrics.avgGradientPercent !== 0 && (
-                <span className="text-muted-foreground">
-                  {t("library:trail.gradientAvg", { value: trailMetrics.avgGradientPercent })}
-                </span>
-              )}
-              {trailMetrics.dominantTerrain && (
-                <span className="text-muted-foreground">
-                  {t(`library:trail.terrainType.${trailMetrics.dominantTerrain}`)}
-                </span>
-              )}
-            </div>
-            <MiniElevationProfile workout={workout} height={56} />
-          </div>
+          <FadeUp as="section">
+            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-2">
+              {t("session:titles.trailProfile")}
+            </p>
+            <MiniElevationProfile workout={workout} height={64} />
+            {trailMetrics.dominantTerrain && (
+              <p className="text-xs text-muted-foreground mt-2">
+                {t(`library:trail.terrainType.${trailMetrics.dominantTerrain}`)}
+                {trailMetrics.verticalDensityMPerKm > 0 && (
+                  <> · {t("library:trail.verticalDensity", { value: trailMetrics.verticalDensityMPerKm })}</>
+                )}
+                {trailMetrics.avgGradientPercent !== 0 && (
+                  <> · {t("library:trail.gradientAvg", { value: trailMetrics.avgGradientPercent })}</>
+                )}
+              </p>
+            )}
+          </FadeUp>
         )}
 
-        {/* Zone Personalization CTA - show only if user has no zones configured */}
+        {/* Discreet zone-personalization CTA — only when zones are missing */}
         {!hasUserZones && <ZonePersonalizationCTA />}
 
+        {/* Sticky mini timeline (existing behaviour) */}
         {timelineScrolledPast && (
           <div className="sticky top-12 z-40 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 bg-background/90 backdrop-blur-sm md:backdrop-blur-md shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_6px_12px_-4px_rgba(0,0,0,0.15)] dark:shadow-[0_1px_3px_0_rgba(0,0,0,0.3),0_6px_12px_-4px_rgba(0,0,0,0.4)] border-b border-border/30 will-change-[transform,opacity] animate-slide-in-top print:hidden">
             <MiniSessionTimeline
@@ -530,95 +501,116 @@ export function WorkoutDetailPage() {
           </div>
         )}
 
-        <div className="grid gap-8 lg:grid-cols-3">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Timeline Visualization */}
-            <div ref={timelineCardRef}>
-              <Card className="rounded-xl">
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    {t("titles.sessionTimeline")}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <SessionTimeline workout={workout} />
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Structure */}
-            <Card className="rounded-xl">
-              <CardHeader>
-                <CardTitle className="text-lg">
-                  {t("titles.workoutStructure")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <WorkoutStructure workout={workout} userZones={hasUserZones ? userZones : undefined} />
-              </CardContent>
-            </Card>
-
-            {/* Nutrition & Recovery */}
-            <NutritionRecoverySection workout={workout} />
-
-            {/* Science Mode */}
-            <ScienceSection workout={workout} />
+        {/* Session viz — the actual workout. Always visible. */}
+        <FadeUp as="section">
+          <div ref={timelineCardRef}>
+            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-3">
+              {t("session:captions.viz")}
+            </p>
+            <EditorialTitle as="h2" size="md" className="mb-4">
+              {t("session:titles.sessionTimeline")}
+            </EditorialTitle>
+            <SessionTimeline workout={workout} />
           </div>
+        </FadeUp>
 
-          {/* Sidebar */}
-          <aside className="space-y-6">
-            {/* Zone Distribution */}
-            <Card className="rounded-xl">
-              <CardHeader>
-                <CardTitle className="text-sm font-medium">
-                  {t("titles.zoneDistribution")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ZoneDistribution workout={workout} />
-              </CardContent>
-            </Card>
+        <FadeUp as="section">
+          <EditorialTitle as="h2" size="md" className="mb-4">
+            {t("session:titles.workoutStructure")}
+          </EditorialTitle>
+          <WorkoutStructure workout={workout} userZones={hasUserZones ? userZones : undefined} />
+        </FadeUp>
 
-            {/* Contextual Tip */}
-            {tip && (
-              <TipCard tip={tip} variant="card" />
-            )}
+        {/* Zone distribution + coaching tips paired in a compact 2-col on
+            md+, stacked on mobile. */}
+        <FadeUp as="section">
+          <div className="grid md:grid-cols-[2fr_3fr] gap-6 md:gap-10">
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-3">
+                {t("session:titles.zoneDistribution")}
+              </p>
+              <ZoneDistribution workout={workout} />
+            </div>
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-3">
+                {t("session:titles.coachingTips")}
+              </p>
+              <CoachingTips workout={workout} />
+              {tip && (
+                <div className="mt-4">
+                  <TipCard tip={tip} variant="banner" />
+                </div>
+              )}
+            </div>
+          </div>
+        </FadeUp>
 
-            {/* Related Content (cross-links to articles, workouts, glossary) */}
-            <RelatedContent source={{ type: "workout", id: workout.id }} />
+        {/* Accordions — secondary content, closed by default so the page
+            scans at a glance. Pattern identical to the home FAQ. */}
+        <FadeUp as="section">
+          <div className="border-t border-foreground/15">
+            <DetailAccordion
+              caption={t("session:captions.nutrition")}
+              title={t("session:titles.nutritionRecovery")}
+            >
+              <NutritionRecoverySection workout={workout} />
+            </DetailAccordion>
+            <DetailAccordion
+              caption={t("session:captions.science")}
+              title={t("session:titles.scienceMode")}
+            >
+              <ScienceSection workout={workout} />
+            </DetailAccordion>
+          </div>
+        </FadeUp>
 
-            {/* Related Workouts (same category) */}
-            {relatedWorkouts.length > 0 && (
-              <Card className="rounded-xl">
-                <CardHeader>
-                  <CardTitle className="text-sm font-medium">
-                    {t("titles.relatedWorkouts")}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  {relatedWorkouts.slice(0, 5).map((related) => (
-                    <WorkoutCardCompact key={related.id} workout={related} />
-                  ))}
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Coaching Tips */}
-            <Card className="rounded-xl">
-              <CardHeader>
-                <CardTitle className="text-sm font-medium">
-                  {t("titles.coachingTips")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CoachingTips workout={workout} />
-              </CardContent>
-            </Card>
-          </aside>
-        </div>
+        {/* Continue exploring — single block. RelatedContent already
+            mixes workouts + articles + glossary terms, so we no longer
+            need a separate "similar workouts" card next to it. */}
+        <FadeUp as="section">
+          <EditorialTitle as="h2" size="md" className="mb-4">
+            {t("session:titles.continueExploring")}
+          </EditorialTitle>
+          <RelatedContent source={{ type: "workout", id: workout.id }} />
+          {relatedWorkouts.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-6">
+              {relatedWorkouts.slice(0, 3).map((related) => (
+                <WorkoutCardCompact key={related.id} workout={related} />
+              ))}
+            </div>
+          )}
+        </FadeUp>
       </div>
     </>
+  );
+}
+
+/** Single inline stat in the hero strip. Mono uppercase label, semibold
+ *  italic value, optional grey strikethrough for plan-context volume
+ *  scaling. */
+function HeroStat({
+  label,
+  value,
+  hint,
+}: {
+  label: string;
+  value: string;
+  hint?: string;
+}) {
+  return (
+    <div>
+      <dt className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-1">
+        {label}
+      </dt>
+      <dd className="font-sans font-semibold italic text-lg sm:text-xl tabular-nums">
+        {value}
+        {hint && (
+          <span className="ml-2 text-xs not-italic font-normal text-muted-foreground line-through">
+            {hint}
+          </span>
+        )}
+      </dd>
+    </div>
   );
 }
 
@@ -652,7 +644,6 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
 
   const workoutName = pick(workout, "name");
   const description = pick(workout, "description");
-  const intensityColor = INTENSITY_COLORS[workout.intensity];
 
   // Estimate total duration from typical range
   const duration = Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2);
@@ -716,11 +707,12 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
           },
         ]}
       />
-      <div className="py-8 space-y-8">
-        {/* Back + Breadcrumbs */}
+      <div className="py-6 md:py-8 space-y-8">
+        {/* Top strip — back + breadcrumb. Strength sessions don't have
+            plan-context decoration, so we skip the chip slot. */}
         <div className="flex flex-col gap-2">
-          <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="self-start">
-            <ArrowLeft className="mr-2 size-4" />
+          <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="-ml-2 self-start">
+            <ArrowLeft className="mr-1.5 size-4" />
             {tCommon("pages.workoutDetail.back")}
           </Button>
 
@@ -734,7 +726,7 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
                       <span className="text-muted-foreground/50 mx-1.5 text-sm">/</span>
                     )}
                     {isLast ? (
-                      <span className="text-foreground text-sm font-medium">{crumb.label}</span>
+                      <span className="text-foreground text-sm font-medium truncate max-w-[280px]">{crumb.label}</span>
                     ) : (
                       <Link
                         to={crumb.to!}
@@ -762,249 +754,198 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
           </nav>
         </div>
 
-        {/* Bento Header */}
-        <header className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Session Identity Card */}
-          <div
-            className="lg:col-span-8 border border-border/50 rounded-xl p-5 sm:p-8 md:p-10 flex flex-col justify-between lg:min-h-[240px]"
-            style={{
-              background: `linear-gradient(135deg, color-mix(in srgb, ${intensityColor} 10%, transparent), transparent)`,
-            }}
-          >
+        {/* Hero block — same shape as the running variant, with strength-
+            flavoured badges + stats (frequency, recovery). */}
+        <FadeUp as="section">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+            <IntensityBadge intensity={workout.intensity} size="md" />
+            <Badge variant="outline" className="gap-1.5 text-muted-foreground">
+              <Dumbbell className="size-3.5" />
+              {tStrength(`categories.${workout.category}`)}
+            </Badge>
+            <span className="ml-auto">
+              <FavoriteButton workoutId={workout.id} />
+            </span>
+          </div>
+
+          <EditorialTitle as="h1" size="lg" className="mb-3 sm:text-4xl md:text-5xl">
+            {workoutName}
+          </EditorialTitle>
+
+          <p className="text-muted-foreground max-w-2xl leading-relaxed text-base sm:text-lg">
+            <GlossaryLinkedText text={description} />
+          </p>
+
+          {/* Primary muscle groups — inline under description so the user
+              sees what the session works without scrolling. */}
+          <div className="mt-4 flex items-center gap-2 flex-wrap">
+            <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
+              {tStrength("detail.targetMuscles")}
+            </span>
+            <MuscleGroupBadges muscles={workout.primaryMuscleGroups} size="md" />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-5">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="rounded-full px-4 text-muted-foreground hover:text-foreground"
+              onClick={async () => {
+                const ok = await copyToClipboard(window.location.href);
+                if (ok) toast.success(tCommon("actions.linkCopied"));
+                else toast.error(tCommon("errors.generic"));
+              }}
+            >
+              <Link2 className="size-3.5 mr-1.5" />
+              {tCommon("actions.copyLink")}
+            </Button>
+          </div>
+
+          {/* Inline stats row — 3-4 stats max. */}
+          <dl className="mt-6 grid grid-cols-2 sm:flex sm:flex-wrap sm:items-baseline sm:gap-x-8 gap-y-3 border-t border-border/60 pt-5">
+            <HeroStat
+              label={tSession("stats.duration")}
+              value={`${formatDurationMinutes(workout.typicalDuration.min)}–${formatDurationMinutes(workout.typicalDuration.max)}`}
+            />
+            <HeroStat
+              label={tSession("stats.difficulty")}
+              value={tLib(`difficulty.${workout.difficulty}`)}
+            />
+            <HeroStat
+              label={tSession("stats.frequency")}
+              value={tStrength("detail.weeklyMax", { count: workout.weeklyFrequencyMax })}
+            />
+            <HeroStat
+              label={tSession("stats.recovery")}
+              value={tStrength("detail.minRecovery", { days: workout.minimumRecoveryDays })}
+            />
+          </dl>
+        </FadeUp>
+
+        {/* Main viz — timeline + exercise list, both always visible. */}
+        <FadeUp as="section">
+          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-3">
+            {tSession("captions.viz")}
+          </p>
+          <EditorialTitle as="h2" size="md" className="mb-4">
+            {tStrength("detail.sessionTimeline")}
+          </EditorialTitle>
+          <StrengthSessionTimeline workout={workout} />
+        </FadeUp>
+
+        <FadeUp as="section">
+          <EditorialTitle as="h2" size="md" className="mb-4">
+            {tStrength("detail.exerciseDetail")}
+          </EditorialTitle>
+          <div className="space-y-6">
+            <StrengthExerciseList blocks={workout.warmupBlocks} phase="warmup" />
+            <StrengthExerciseList blocks={workout.mainBlocks} phase="main" />
+            <StrengthExerciseList blocks={workout.cooldownBlocks} phase="cooldown" />
+          </div>
+        </FadeUp>
+
+        {/* Muscle distribution + map paired in compact 2-col on md+. */}
+        <FadeUp as="section">
+          <div className="grid md:grid-cols-2 gap-6 md:gap-10">
             <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <IntensityBadge intensity={workout.intensity} size="lg" />
-                  <Badge variant="outline" className="gap-1.5 text-muted-foreground">
-                    <Dumbbell className="size-3.5" />
-                    {tStrength(`categories.${workout.category}`)}
-                  </Badge>
-                </div>
-                <FavoriteButton workoutId={workout.id} />
-              </div>
-              <EditorialTitle as="h1" size="lg" className="mb-4 sm:text-4xl md:text-5xl">
-                {workoutName}
-              </EditorialTitle>
-              <p className="text-muted-foreground max-w-2xl leading-relaxed text-lg">
-                <GlossaryLinkedText text={description} />
+              <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-3">
+                {tStrength("detail.muscleDistribution")}
               </p>
+              <MuscleDistribution workout={workout} />
             </div>
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-8">
-              <Button
-                variant="secondary"
-                className="rounded-full px-5 py-2.5 h-auto font-bold"
-                onClick={async () => {
-                  const ok = await copyToClipboard(window.location.href);
-                  if (ok) toast.success(tCommon("actions.linkCopied"));
-                  else toast.error(tCommon("errors.generic"));
-                }}
-              >
-                <Link2 className="size-4 mr-2" />
-                {tCommon("actions.copyLink")}
-              </Button>
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-3">
+                {tStrength("detail.muscleMap")}
+              </p>
+              <MuscleMap workout={workout} />
             </div>
           </div>
+        </FadeUp>
 
-          {/* Summary Metrics */}
-          <div className="lg:col-span-4">
-            <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
-              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
-                <Clock className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
-                <span className="text-lg lg:text-2xl font-bold">
-                  {formatDurationMinutes(workout.typicalDuration.min)}-{formatDurationMinutes(workout.typicalDuration.max)}
-                </span>
-              </div>
-              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
-                <Dumbbell className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
-                <span className="text-sm lg:text-lg font-bold">
-                  {tLib(`difficulty.${workout.difficulty}`)}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  {tSession("details.difficulty")}
-                </span>
-              </div>
-              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
-                <Target className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
-                <span className="text-sm font-bold">
-                  {tStrength(`intensity.${workout.intensity}`)}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  {tStrength("detail.intensity")}
-                </span>
-              </div>
-              <div className="bg-muted/50 border rounded-lg lg:rounded-xl p-3 sm:p-4 lg:p-6 flex flex-col items-center justify-center text-center">
-                <Shield className="size-4 lg:size-5 text-muted-foreground mb-1 lg:mb-2" />
-                <span className="text-sm font-bold">
-                  {tStrength("detail.weeklyMax", { count: workout.weeklyFrequencyMax })}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  {tStrength("detail.minRecovery", { days: workout.minimumRecoveryDays })}
-                </span>
-              </div>
-            </div>
-          </div>
-        </header>
+        {/* Accordions — secondary content collapsed by default. */}
+        <FadeUp as="section">
+          <div className="border-t border-foreground/15">
+            <DetailAccordion
+              caption={tSession("captions.equipment")}
+              title={tSession("titles.equipment")}
+            >
+              {hasEquipment ? (
+                <div className="flex flex-wrap gap-2">
+                  {equipmentList.map((eq) => (
+                    <Badge key={eq} variant="secondary" className="text-xs">
+                      {tStrength(`equipment.${eq}`)}
+                    </Badge>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  {tStrength("detail.noEquipment")}
+                </p>
+              )}
+            </DetailAccordion>
 
-        {/* Primary muscle groups */}
-        <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-sm font-medium text-muted-foreground">
-            {tStrength("detail.targetMuscles")}:
-          </span>
-          <MuscleGroupBadges muscles={workout.primaryMuscleGroups} size="md" />
-        </div>
-
-        <div className="grid gap-8 lg:grid-cols-3">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Timeline Visualization */}
-            <Card className="rounded-xl">
-              <CardHeader>
-                <CardTitle className="text-lg">
-                  {tStrength("detail.sessionTimeline")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <StrengthSessionTimeline workout={workout} />
-              </CardContent>
-            </Card>
-
-            {/* Exercise Detail */}
-            <Card className="rounded-xl">
-              <CardHeader>
-                <CardTitle className="text-lg">
-                  {tStrength("detail.exerciseDetail")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <StrengthExerciseList blocks={workout.warmupBlocks} phase="warmup" />
-                <StrengthExerciseList blocks={workout.mainBlocks} phase="main" />
-                <StrengthExerciseList blocks={workout.cooldownBlocks} phase="cooldown" />
-              </CardContent>
-            </Card>
-
-            {/* Scientific References */}
-            {workout.references && workout.references.length > 0 && (
-              <Card className="rounded-xl">
-                <CardHeader>
-                  <CardTitle className="text-sm font-medium flex items-center gap-2">
-                    <BookOpen className="size-4" />
-                    {tStrength("detail.references")}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {workout.references.map((ref, i) => (
-                      <li key={i} className="text-sm text-muted-foreground">
-                        {ref.startsWith("http") ? (
-                          <a
-                            href={ref}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-foreground underline underline-offset-2 transition-colors"
-                          >
-                            {ref}
-                          </a>
-                        ) : (
-                          ref
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-
-          {/* Sidebar */}
-          <aside className="space-y-6">
-            {/* Muscle Distribution */}
-            <Card className="rounded-xl">
-              <CardHeader>
-                <CardTitle className="text-sm font-medium">
-                  {tStrength("detail.muscleDistribution")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <MuscleDistribution workout={workout} />
-              </CardContent>
-            </Card>
-
-            {/* Muscle Map (body visualization) */}
-            <Card className="rounded-xl">
-              <CardHeader>
-                <CardTitle className="text-sm font-medium">
-                  {tStrength("detail.muscleMap")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <MuscleMap workout={workout} />
-              </CardContent>
-            </Card>
-
-            {/* Equipment */}
-            <Card className="rounded-xl">
-              <CardHeader>
-                <CardTitle className="text-sm font-medium">
-                  {tStrength("detail.equipmentNeeded")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {hasEquipment ? (
-                  <div className="flex flex-wrap gap-2">
-                    {equipmentList.map((eq) => (
-                      <Badge key={eq} variant="secondary" className="text-xs">
-                        {tStrength(`equipment.${eq}`)}
-                      </Badge>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-sm text-muted-foreground">
-                    {tStrength("detail.noEquipment")}
-                  </p>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Suitable Training Phases */}
             {workout.suitablePhases.length > 0 && (
-              <Card className="rounded-xl">
-                <CardHeader>
-                  <CardTitle className="text-sm font-medium">
-                    {tStrength("detail.suitablePhases")}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {workout.suitablePhases.map((phase) => (
-                      <Badge key={phase} variant="outline" className="text-xs capitalize">
-                        {tStrength(`trainingPhases.${phase}`)}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+              <DetailAccordion
+                caption={tSession("captions.phases")}
+                title={tSession("titles.suitablePhases")}
+              >
+                <div className="flex flex-wrap gap-2">
+                  {workout.suitablePhases.map((phase) => (
+                    <Badge key={phase} variant="outline" className="text-xs capitalize">
+                      {tStrength(`trainingPhases.${phase}`)}
+                    </Badge>
+                  ))}
+                </div>
+              </DetailAccordion>
             )}
 
-            {/* Related Content */}
-            <RelatedContent source={{ type: "workout", id: workout.id }} />
-
-            {/* Coaching Tips & Common Mistakes */}
             {(tips.length > 0 || mistakes.length > 0) && (
-              <Card className="rounded-xl">
-                <CardHeader>
-                  <CardTitle className="text-sm font-medium">
-                    {tSession("titles.coachingTips")}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <StrengthCoachingTips tips={tips} mistakes={mistakes} />
-                </CardContent>
-              </Card>
+              <DetailAccordion
+                caption={tSession("captions.mistakes")}
+                title={tSession("titles.coachingTips")}
+              >
+                <StrengthCoachingTips tips={tips} mistakes={mistakes} />
+              </DetailAccordion>
             )}
-          </aside>
-        </div>
 
-        {/* Image source credit */}
+            {workout.references && workout.references.length > 0 && (
+              <DetailAccordion
+                caption={tSession("captions.refs")}
+                title={tSession("titles.scientificRefs")}
+              >
+                <ul className="space-y-2">
+                  {workout.references.map((ref, i) => (
+                    <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                      <BookOpen className="size-4 shrink-0 mt-0.5" />
+                      {ref.startsWith("http") ? (
+                        <a
+                          href={ref}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-foreground underline underline-offset-2 transition-colors break-all"
+                        >
+                          {ref}
+                        </a>
+                      ) : (
+                        <span>{ref}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </DetailAccordion>
+            )}
+          </div>
+        </FadeUp>
+
+        {/* Continue exploring — same pattern as the running variant. */}
+        <FadeUp as="section">
+          <EditorialTitle as="h2" size="md" className="mb-4">
+            {tSession("titles.continueExploring")}
+          </EditorialTitle>
+          <RelatedContent source={{ type: "workout", id: workout.id }} />
+        </FadeUp>
+
+        {/* Image source credit — small footnote */}
         <p className="text-xs text-muted-foreground/60 mt-8">
           {tCommon("pages.workoutDetail.exerciseCredits")}
         </p>

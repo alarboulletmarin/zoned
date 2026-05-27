@@ -199,6 +199,52 @@ export function Divider({ className = "" }: { className?: string }) {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
+// DetailAccordion — progressive-disclosure section using <details>
+// ────────────────────────────────────────────────────────────────────────────
+
+import { ChevronDown } from "@/components/icons";
+
+/** Native <details>/<summary> wrapper with the same look as the FAQ block
+ *  on the home page: open state gets a soft bg-accent/40 wash, the chevron
+ *  flips and turns primary, and the heading itself is an EditorialTitle.
+ *  Keeps the SEO-friendly semantics (no JS state machine, content stays
+ *  in the DOM at all times). */
+export function DetailAccordion({
+  title,
+  caption,
+  defaultOpen = false,
+  children,
+}: {
+  title: React.ReactNode;
+  /** Optional mono-uppercase eyebrow shown above the title. */
+  caption?: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <details
+      open={defaultOpen}
+      className="group border-b border-foreground/15 [&[open]>summary>svg]:rotate-180 [&[open]>summary>svg]:text-primary"
+    >
+      <summary className="flex items-center gap-4 py-5 cursor-pointer list-none hover:bg-accent/30 transition-colors px-3 -mx-3 rounded-sm">
+        <div className="flex-1 min-w-0">
+          {caption && (
+            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-1">
+              {caption}
+            </p>
+          )}
+          <h3 className="font-sans font-semibold italic text-xl md:text-2xl leading-tight tracking-tight">
+            {title}
+          </h3>
+        </div>
+        <ChevronDown className="size-5 text-foreground/40 transition-all shrink-0" />
+      </summary>
+      <div className="pb-6 pt-2 px-1">{children}</div>
+    </details>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
 // Shared class strings
 // ────────────────────────────────────────────────────────────────────────────
 
