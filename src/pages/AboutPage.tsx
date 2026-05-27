@@ -2,9 +2,11 @@ import { useTranslation } from "react-i18next";
 import { GithubIcon, Shield, Code, Sparkles, ExternalLink } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
 import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem, useCountUp } from "@/components/editorial";
+import { useAppStats } from "@/hooks/useAppStats";
 
 export function AboutPage() {
   const { t } = useTranslation("common");
+  const stats = useAppStats();
 
   return (
     <>
@@ -48,12 +50,12 @@ export function AboutPage() {
         {/* Stats Bento Grid */}
         <StaggerGrid className="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
           {[
-            { target: 200, label: t("content:about.statsWorkouts"), color: "primary", gradient: "from-primary/10 dark:from-primary/20" },
-            { target: 9, label: t("content:about.statsCalculators"), color: "zone-3", gradient: "from-zone-3/10 dark:from-zone-3/20" },
-            { target: 8, label: "Plans", color: "zone-2", gradient: "from-zone-2/10 dark:from-zone-2/20" },
-            { target: 16, label: "Collections", color: "zone-5", gradient: "from-zone-5/10 dark:from-zone-5/20" },
-            { target: 12, label: "Articles", color: "zone-4", gradient: "from-zone-4/10 dark:from-zone-4/20" },
-            { target: 6, label: "Zones", color: "zone-6", gradient: "from-zone-6/10 dark:from-zone-6/20" },
+            { target: stats.workouts, label: t("content:about.statsWorkouts"), color: "primary", gradient: "from-primary/10 dark:from-primary/20" },
+            { target: stats.calculators, label: t("content:about.statsCalculators"), color: "zone-3", gradient: "from-zone-3/10 dark:from-zone-3/20" },
+            { target: stats.plans, label: "Plans", color: "zone-2", gradient: "from-zone-2/10 dark:from-zone-2/20" },
+            { target: stats.collections, label: "Collections", color: "zone-5", gradient: "from-zone-5/10 dark:from-zone-5/20" },
+            { target: stats.articles, label: "Articles", color: "zone-4", gradient: "from-zone-4/10 dark:from-zone-4/20" },
+            { target: stats.zones, label: "Zones", color: "zone-6", gradient: "from-zone-6/10 dark:from-zone-6/20" },
           ].map((stat) => (
             <StaggerItem key={stat.label}>
               <AboutStatCard {...stat} />

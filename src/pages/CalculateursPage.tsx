@@ -49,7 +49,7 @@ const CALC_GROUPS: CalcGroup[] = [
   },
 ];
 
-const CALCULATEURS: CalculateurEntry[] = [
+export const CALCULATEURS: CalculateurEntry[] = [
   {
     id: "zones",
     icon: Target,
