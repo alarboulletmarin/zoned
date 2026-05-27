@@ -26,15 +26,18 @@ export function Footer() {
 
   return (
     <footer className="relative w-screen left-1/2 -ml-[50vw] mt-8 border-t border-border bg-card">
-      <div className="mx-auto max-w-6xl px-4 md:px-6 lg:px-8 py-14 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr_1fr] gap-10 md:gap-8">
-          <div className="max-w-xs">
+      <div className="mx-auto max-w-6xl px-4 md:px-6 lg:px-8 py-10 md:py-16">
+        {/* Mobile (md-): brand + tagline span full width on top, the three
+            link columns sit side by side underneath. Desktop (md+): the
+            brand block and the three columns share a single 4-col grid. */}
+        <div className="grid gap-8 md:grid-cols-[1.4fr_1fr_1fr_1fr] md:gap-8">
+          <div className="max-w-md md:max-w-xs">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 mb-4"
+              className="inline-flex items-center gap-2 mb-3 md:mb-4"
               aria-label="Zoned"
             >
-              <Logo className="w-10 h-5" />
+              <Logo className="w-9 h-4.5 md:w-10 md:h-5" />
               <span className="font-bold text-base">
                 {t("common:app.name")}
               </span>
@@ -44,41 +47,46 @@ export function Footer() {
             </p>
           </div>
 
-          <FooterColumn
-            title={t("homepage:home.footer.groups.product")}
-            links={[
-              { label: t("homepage:home.footer.product.library"), to: "/library" },
-              { label: t("homepage:home.footer.product.plans"), to: "/plans" },
-              { label: t("homepage:home.footer.product.calculators"), to: "/calculators" },
-              { label: t("homepage:home.footer.product.routes"), to: "/routes" },
-            ]}
-          />
-          <FooterColumn
-            title={t("homepage:home.footer.groups.science")}
-            links={[
-              { label: t("homepage:home.footer.science.methodology"), to: "/methodology" },
-              { label: t("homepage:home.footer.science.glossary"), to: "/glossary" },
-              { label: t("homepage:home.footer.science.guides"), to: "/guides" },
-            ]}
-          />
-          <FooterColumn
-            title={t("homepage:home.footer.groups.project")}
-            links={[
-              { label: t("homepage:home.footer.project.about"), to: "/about" },
-              {
-                label: t("homepage:home.footer.project.github"),
-                href: "https://github.com/alarboulletmarin/zoned",
-              },
-              { label: t("homepage:home.footer.project.changelog"), to: "/changelog" },
-            ]}
-          />
+          {/* On mobile the three columns wrap in a 3-up grid; on md+
+              `md:contents` flattens this wrapper so the parent 4-col
+              grid takes over. */}
+          <div className="grid grid-cols-3 gap-3 md:contents">
+            <FooterColumn
+              title={t("homepage:home.footer.groups.product")}
+              links={[
+                { label: t("homepage:home.footer.product.library"), to: "/library" },
+                { label: t("homepage:home.footer.product.plans"), to: "/plans" },
+                { label: t("homepage:home.footer.product.calculators"), to: "/calculators" },
+                { label: t("homepage:home.footer.product.routes"), to: "/routes" },
+              ]}
+            />
+            <FooterColumn
+              title={t("homepage:home.footer.groups.science")}
+              links={[
+                { label: t("homepage:home.footer.science.methodology"), to: "/methodology" },
+                { label: t("homepage:home.footer.science.glossary"), to: "/glossary" },
+                { label: t("homepage:home.footer.science.guides"), to: "/guides" },
+              ]}
+            />
+            <FooterColumn
+              title={t("homepage:home.footer.groups.project")}
+              links={[
+                { label: t("homepage:home.footer.project.about"), to: "/about" },
+                {
+                  label: t("homepage:home.footer.project.github"),
+                  href: "https://github.com/alarboulletmarin/zoned",
+                },
+                { label: t("homepage:home.footer.project.changelog"), to: "/changelog" },
+              ]}
+            />
+          </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-border flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-          <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground">
+        <div className="mt-8 md:mt-10 pt-5 md:pt-6 border-t border-border flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-3">
+          <p className="font-mono text-[10px] tracking-[0.16em] md:tracking-[0.18em] uppercase text-muted-foreground">
             {t("homepage:home.footer.license", { year })}
           </p>
-          <div className="flex items-center gap-4 font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground">
+          <div className="flex items-center gap-3 md:gap-4 font-mono text-[10px] tracking-[0.16em] md:tracking-[0.18em] uppercase text-muted-foreground">
             <a
               href="https://github.com/alarboulletmarin/zoned"
               target="_blank"
@@ -109,17 +117,17 @@ function FooterColumn({
   links: Array<{ label: string; to?: string; href?: string }>;
 }) {
   return (
-    <div>
-      <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground mb-3">
+    <div className="min-w-0">
+      <p className="font-mono text-[10px] tracking-[0.16em] md:tracking-[0.18em] uppercase text-muted-foreground mb-2.5 md:mb-3">
         {title}
       </p>
-      <ul className="space-y-2">
+      <ul className="space-y-1.5 md:space-y-2">
         {links.map((link) => (
           <li key={link.label}>
             {link.to ? (
               <Link
                 to={link.to}
-                className="text-sm text-foreground/80 hover:text-primary transition-colors"
+                className="text-xs md:text-sm text-foreground/80 hover:text-primary transition-colors break-words"
               >
                 {link.label}
               </Link>
@@ -128,7 +136,7 @@ function FooterColumn({
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-foreground/80 hover:text-primary transition-colors"
+                className="text-xs md:text-sm text-foreground/80 hover:text-primary transition-colors break-words"
               >
                 {link.label}
               </a>
