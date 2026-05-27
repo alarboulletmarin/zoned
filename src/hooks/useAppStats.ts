@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
 import { getAllCollections } from "@/data/collections";
 import { articleMetadata } from "@/data/articles";
-import { loadAllWorkouts } from "@/data/workouts";
+import { loadAllWorkouts, loadDisciplineWorkouts } from "@/data/workouts";
 import { loadAllStrengthSessions } from "@/data/strength";
 
 const ZONES = 6;
@@ -22,11 +22,18 @@ export function useAppStats(): AppStats {
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([loadAllWorkouts(), loadAllStrengthSessions()]).then(
-      ([running, strength]) => {
-        if (!cancelled) setWorkouts(running.length + strength.length);
+    Promise.all([
+      loadAllWorkouts(),
+      loadDisciplineWorkouts("cycling"),
+      loadDisciplineWorkouts("swimming"),
+      loadAllStrengthSessions(),
+    ]).then(([running, cycling, swimming, strength]) => {
+      if (!cancelled) {
+        setWorkouts(
+          running.length + cycling.length + swimming.length + strength.length
+        );
       }
-    );
+    });
     import("@/pages/CalculateursPage").then((m) => {
       if (!cancelled) setCalculators(m.CALCULATEURS.length);
     });
