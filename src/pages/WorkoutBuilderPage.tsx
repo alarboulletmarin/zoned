@@ -15,6 +15,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { WorkoutStepListEditor } from "@/components/domain/contribute/WorkoutStepListEditor";
 import { SessionTimeline } from "@/components/visualization/SessionTimeline";
 import { getStructuredWorkoutDurationMinutes, getWorkoutPhaseSteps, normalizeWorkoutStructureSource, replaceWorkoutPhaseSteps } from "@/lib/workoutStructure";
@@ -90,10 +91,12 @@ function WorkoutListView() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold">{t("calculators:workoutBuilder.myWorkouts")}</h1>
-              <p className="text-muted-foreground mt-1">
+              <EditorialTitle as="h1" size="md">
+                {t("calculators:workoutBuilder.myWorkouts")}
+              </EditorialTitle>
+              <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
                 {t("calculators:workoutBuilder.listSubtitle")}
-              </p>
+              </FadeUp>
             </div>
             <Button
               className="rounded-full px-5 py-2.5 h-auto font-bold"

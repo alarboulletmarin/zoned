@@ -205,29 +205,31 @@ export function CalculateursPage() {
           </FadeUp>
         </div>
 
-        {/* Calculateur Cards */}
-        <StaggerGrid className={cn("grid gap-4", "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3")}>
+        {/* Calculateur Cards — dense 2-col grid on mobile (title + icon
+            + arrow only, like the HomePage §06 calculator grid), expands
+            to richer 3-col cards from md+ with description + CTA. */}
+        <StaggerGrid className={cn("grid gap-2 sm:gap-3", "grid-cols-2 sm:grid-cols-2 lg:grid-cols-3")}>
           {CALCULATEURS.map((item) => {
             const Icon = item.icon;
 
             if (item.comingSoon) {
               return (
                 <StaggerItem key={item.id}>
-                  <div className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50 h-full opacity-60 p-6">
-                    <div className="flex flex-col items-center text-center gap-4">
-                      <div className={cn("size-14 rounded-2xl flex items-center justify-center", `bg-muted/20`)}>
-                        <Icon className="size-7 text-muted-foreground" />
+                  <div className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-md sm:rounded-xl border border-border/50 h-full opacity-60 p-3 sm:p-6">
+                    <div className="flex items-center sm:flex-col sm:text-center gap-2 sm:gap-4">
+                      <div className={cn("size-9 sm:size-14 rounded-lg sm:rounded-2xl flex items-center justify-center shrink-0", `bg-muted/20`)}>
+                        <Icon className="size-5 sm:size-7 text-muted-foreground" />
                       </div>
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-center gap-2">
-                          <h2 className="text-lg font-semibold">
+                      <div className="space-y-1 flex-1 sm:flex-none">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-center gap-1 sm:gap-2">
+                          <h2 className="text-sm sm:text-lg font-semibold leading-snug">
                             {pickLang(item, "title")}
                           </h2>
-                          <span className="bg-muted text-muted-foreground text-xs px-2 py-0.5 rounded-full">
+                          <span className="bg-muted text-muted-foreground text-[10px] sm:text-xs px-2 py-0.5 rounded-full whitespace-nowrap">
                             {t("calculators:calculateurs.comingSoon")}
                           </span>
                         </div>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="hidden sm:block text-sm text-muted-foreground">
                           {pickLang(item, "description")}
                         </p>
                       </div>
@@ -241,23 +243,27 @@ export function CalculateursPage() {
               <StaggerItem key={item.id}>
                 <Link to={item.href} className="group block h-full">
                   <div className={cn(
-                    "bg-gradient-to-br to-transparent rounded-xl border border-border/50 h-full p-6",
+                    "bg-gradient-to-br to-transparent rounded-md sm:rounded-xl border border-border/50 h-full p-3 sm:p-6",
                     "hover:shadow-sm hover:-translate-y-0.5 hover:border-foreground/40 transition-all duration-200",
                     item.gradient,
                   )}>
-                    <div className="flex flex-col items-center text-center gap-4">
-                      <div className={cn("size-14 rounded-2xl flex items-center justify-center", item.iconBg)}>
-                        <Icon className={cn("size-7", item.iconColor)} />
+                    <div className="flex items-center sm:flex-col sm:text-center gap-2 sm:gap-4">
+                      <div className={cn("size-9 sm:size-14 rounded-lg sm:rounded-2xl flex items-center justify-center shrink-0", item.iconBg)}>
+                        <Icon className={cn("size-5 sm:size-7", item.iconColor)} />
                       </div>
-                      <div className="space-y-1">
-                        <h2 className="text-lg font-semibold">
+                      <div className="flex-1 sm:flex-none space-y-1 min-w-0">
+                        <h2 className="text-sm sm:text-lg font-semibold leading-snug group-hover:text-primary transition-colors">
                           {pickLang(item, "title")}
                         </h2>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="hidden sm:block text-sm text-muted-foreground">
                           {pickLang(item, "description")}
                         </p>
                       </div>
-                      <div className={cn("flex items-center gap-1 text-sm font-medium", item.iconColor)}>
+                      <ArrowRight className={cn(
+                        "size-4 sm:hidden shrink-0 transition-transform group-hover:translate-x-0.5",
+                        item.iconColor,
+                      )} />
+                      <div className={cn("hidden sm:flex items-center gap-1 text-sm font-medium", item.iconColor)}>
                         {t("calculators:calculateurs.explore")}
                         <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
                       </div>

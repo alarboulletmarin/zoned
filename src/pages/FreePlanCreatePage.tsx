@@ -6,6 +6,7 @@ import { ArrowLeft, CalendarRange, ChevronDown } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { savePlan } from "@/lib/planStorage";
 import { createFreePlan } from "@/lib/createFreePlan";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
@@ -74,12 +75,12 @@ export function FreePlanCreatePage() {
             <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
               <CalendarRange className="size-8 text-primary" />
             </div>
-            <h1 className="text-2xl font-bold">
+            <EditorialTitle as="h1" size="md">
               {t("calculators:freePlan.title")}
-            </h1>
-            <p className="text-muted-foreground">
+            </EditorialTitle>
+            <FadeUp as="p" delay={0.1} className="text-muted-foreground">
               {t("calculators:freePlan.subtitle")}
-            </p>
+            </FadeUp>
           </div>
 
           {/* Form */}
