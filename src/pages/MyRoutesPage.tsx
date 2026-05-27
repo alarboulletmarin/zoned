@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Plus, Route as RouteIcon, Trash2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle } from "@/components/editorial";
 import { useRoutes } from "@/hooks/useRoutes";
 import { useIsEnglish } from "@/lib/i18n-utils";
 import { ROUTE_STORAGE_SOFT_LIMIT } from "@/lib/routeGenerator";
@@ -37,7 +38,7 @@ export function MyRoutesPage() {
       <div className="space-y-6 py-6">
         <header className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold sm:text-3xl">{t("myRoutes")}</h1>
+            <EditorialTitle as="h1" size="md">{t("myRoutes")}</EditorialTitle>
             <p className="text-sm text-muted-foreground">{routes.length} / {ROUTE_STORAGE_SOFT_LIMIT}</p>
           </div>
           <Button asChild>

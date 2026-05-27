@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { ArrowRight, Download, EyeOff, Loader2, MapPin, RotateCcw, Save } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { AddressSearchInput } from "@/components/domain/AddressSearchInput";
 import { findNearbyTracks, type NearbyTrack } from "@/lib/routeGenerator/poi/overpass";
 import { BrouterError, routeFromWaypoints } from "@/lib/routeGenerator";
@@ -230,8 +231,10 @@ export function TrackFinderPage() {
       />
       <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <header className="mb-6 space-y-1">
-          <h1 className="text-2xl font-bold sm:text-3xl">{t("trackFinder.title")}</h1>
-          <p className="text-sm text-muted-foreground">{t("trackFinder.subtitle")}</p>
+          <EditorialTitle as="h1" size="md">{t("trackFinder.title")}</EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-sm text-muted-foreground">
+            {t("trackFinder.subtitle")}
+          </FadeUp>
           <Link
             to="/routes"
             className="inline-flex items-center gap-1 text-sm text-primary hover:underline"

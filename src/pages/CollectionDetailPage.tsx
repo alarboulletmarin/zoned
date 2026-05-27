@@ -25,6 +25,7 @@ import { useCollection } from "@/hooks/useCollections";
 import { cn } from "@/lib/utils";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { usePickLang } from "@/lib/i18n-utils";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 
 /** Map collection icon strings to actual icon components (same as CollectionCard) */
 const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
@@ -155,14 +156,14 @@ export function CollectionDetailPage() {
             </div>
 
             {/* Name */}
-            <h1 className="text-3xl md:text-4xl font-bold leading-tight">
+            <EditorialTitle as="h1" size="lg">
               {name}
-            </h1>
+            </EditorialTitle>
 
             {/* Description */}
-            <p className="text-muted-foreground text-lg leading-relaxed">
+            <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg leading-relaxed">
               <GlossaryLinkedText text={description} />
-            </p>
+            </FadeUp>
 
             {/* Badges */}
             <div className="flex flex-wrap items-center gap-2 pt-2">

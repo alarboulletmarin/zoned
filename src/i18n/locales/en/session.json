@@ -61,7 +61,33 @@
     "details": "Details",
     "relatedWorkouts": "Similar Workouts",
     "nutritionRecovery": "Nutrition & Recovery",
-    "scienceMode": "Why it works"
+    "scienceMode": "Why it works",
+    "continueExploring": "Continue exploring",
+    "trailProfile": "Trail profile",
+    "commonMistakes": "Common mistakes",
+    "equipment": "Equipment",
+    "suitablePhases": "Suitable phases",
+    "scientificRefs": "Scientific references",
+    "muscleGroups": "Muscle groups"
+  },
+  "captions": {
+    "viz": "Visualisation",
+    "nutrition": "Before · during · after",
+    "science": "The science behind the session",
+    "mistakes": "What to avoid",
+    "equipment": "Setup",
+    "phases": "Periodisation",
+    "refs": "Sources",
+    "related": "Go further"
+  },
+  "stats": {
+    "duration": "Duration",
+    "distance": "Distance",
+    "difficulty": "Level",
+    "target": "Target",
+    "environment": "Environment",
+    "frequency": "Frequency",
+    "recovery": "Recovery"
   },
   "targetSystems": {
     "aerobic_base": "Aerobic Base",

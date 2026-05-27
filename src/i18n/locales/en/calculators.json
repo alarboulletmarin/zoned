@@ -4,6 +4,11 @@
     "description": "All the calculation tools for your training",
     "explore": "Open",
     "comingSoon": "Coming soon",
+    "groups": {
+      "benchmarks": "Your benchmarks",
+      "pace": "Pace & conversions",
+      "race": "Race & planning"
+    },
     "hub": {
       "seoTitle": "Calculators — Running Tools",
       "seoDescription": "Running calculators: training zones, race paces, treadmill converter, split generator, VMA estimation.",

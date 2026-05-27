@@ -1,6 +1,7 @@
 import { useParams, Navigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { getCompetitorBySlug, type ComparisonValue } from "@/data/competitors";
 import { CheckIcon, X, Shield, EyeOff, GithubIcon, Sparkles, ArrowLeft, ArrowRight } from "@/components/icons";
 import { usePickLang } from "@/lib/i18n-utils";
@@ -121,10 +122,12 @@ export function CompareDetailPage() {
           <p className="text-xs uppercase tracking-widest text-primary font-semibold">
             Zoned {t("compare.tableHeader.zoned") !== "Zoned" ? "" : "vs"} {name}
           </p>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Zoned <span className="text-muted-foreground">vs</span> {name}
-          </h1>
-          <p className="text-muted-foreground max-w-xl">{tagline}</p>
+          <EditorialTitle as="h1">
+            Zoned <span className="text-muted-foreground not-italic">vs</span> {name}
+          </EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground max-w-xl">
+            {tagline}
+          </FadeUp>
           <div className="flex flex-wrap gap-2">
             {[t("comparePage.badgeFree"), t("comparePage.badgeNoAccount"), "Open Source"].map((badge) => (
               <span

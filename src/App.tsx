@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { HelmetProvider } from "react-helmet-async";
 import { Analytics } from "@vercel/analytics/react";
 import { toast, Toaster } from "sonner";
-import { Sidebar, MobileSidebar, TopBar, Footer } from "@/components/layout";
+import { MobileSidebar, TopBar, Footer } from "@/components/layout";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { FavoritesProvider } from "@/hooks";
 import { SettingsProvider } from "@/hooks/useSettings";
@@ -206,22 +206,7 @@ function App() {
     });
   }, []);
 
-  // Sidebar state with localStorage persistence
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
-    const stored = localStorage.getItem("zoned-sidebar-collapsed");
-    if (stored !== null) return stored === "true";
-    return typeof window !== "undefined" && window.innerWidth < 1024;
-  });
-
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-
-  const toggleSidebar = useCallback(() => {
-    setSidebarCollapsed((prev) => {
-      const next = !prev;
-      localStorage.setItem("zoned-sidebar-collapsed", String(next));
-      return next;
-    });
-  }, []);
 
   return (
     <HelmetProvider>
@@ -237,28 +222,22 @@ function App() {
               {t("accessibility.skipToContent", "Aller au contenu")}
             </a>
             <ScrollToTopOnNavigate />
-            <div className="min-h-screen bg-background text-foreground flex">
-              {/* Sidebar - fixed left column */}
-              <Sidebar
-                collapsed={sidebarCollapsed}
-                onToggleCollapse={toggleSidebar}
+            <div className="min-h-screen bg-background text-foreground flex flex-col">
+              <TopBar
+                onThemeToggle={toggleTheme}
+                onMobileMenuOpen={() => setMobileSidebarOpen(true)}
               />
 
+              {/* Mobile slide-over nav (hamburger). Desktop uses the
+                  horizontal nav inside TopBar, no sidebar. */}
               <MobileSidebar
                 open={mobileSidebarOpen}
                 onOpenChange={setMobileSidebarOpen}
               />
 
-              {/* Right column: TopBar + content */}
               <div className="flex flex-1 min-w-0 flex-col">
-                <TopBar
-                  onThemeToggle={toggleTheme}
-                  onMobileMenuOpen={() => setMobileSidebarOpen(true)}
-                  sidebarCollapsed={sidebarCollapsed}
-                />
-
                 <ErrorBoundary>
-                <main id="main-content" className="flex-1 px-4 md:px-6 lg:px-8 pt-16 pb-4">
+                <main id="main-content" className="flex-1 px-4 md:px-6 lg:px-8 pt-20 pb-4">
                   <div className="mx-auto max-w-6xl">
                     <ErrorBoundary>
                       <Suspense fallback={<div className="min-h-screen" />}>

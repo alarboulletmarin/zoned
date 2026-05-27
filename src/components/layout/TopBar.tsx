@@ -1,17 +1,37 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Search, Moon, Sun, Menu } from "@/components/icons";
+import {
+  Search,
+  Moon,
+  Sun,
+  Menu,
+  UserRound,
+  Heart,
+  Settings,
+  Send,
+  Sparkles,
+  Gauge,
+  Plus,
+  ChevronDown,
+} from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useCommandPalette } from "@/components/search";
 import { changeLanguage, getCurrentLanguage } from "@/i18n";
 import Logo from "@/assets/logo.svg?react";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { cn } from "@/lib/utils";
 
 interface TopBarProps {
   onThemeToggle: () => void;
   onMobileMenuOpen: () => void;
-  sidebarCollapsed?: boolean;
 }
 
 /** Hook to track theme without causing parent re-renders */
@@ -27,11 +47,96 @@ function useThemeIcon() {
   return isDark;
 }
 
-// Ensures 44px minimum touch target without increasing visual size.
-// The button stays 32px visually, but a transparent ::after pseudo-element
-// extends the tappable area to 44px.
 const touchTarget =
   "relative after:absolute after:inset-[-6px] after:content-['']";
+
+// ────────────────────────────────────────────────────────────────────────────
+// Menu tree — five top-level sections, each with the sub-pages that used to
+// live in the old sidebar. The same tree is consumed by the desktop hover
+// dropdowns and the mobile sheet menu, so adding a route in one place
+// propagates everywhere.
+// ────────────────────────────────────────────────────────────────────────────
+
+export interface NavChild {
+  to: string;
+  labelKey: string;
+  /** Short caption shown under the label in the dropdown. Optional. */
+  descKey?: string;
+}
+
+export interface NavSection {
+  to: string;
+  labelKey: string;
+  /** Pathname prefixes that should mark this top-level link as active. */
+  prefix: string[];
+  children?: NavChild[];
+}
+
+export const PRIMARY_NAV: NavSection[] = [
+  {
+    to: "/library",
+    labelKey: "nav.library",
+    prefix: ["/library", "/workout", "/collections"],
+    children: [
+      { to: "/library", labelKey: "topnav.libraryAll", descKey: "topnav.libraryAllDesc" },
+      { to: "/collections", labelKey: "topnav.collections", descKey: "topnav.collectionsDesc" },
+      { to: "/workout/builder", labelKey: "topnav.builder", descKey: "topnav.builderDesc" },
+    ],
+  },
+  {
+    to: "/plans",
+    labelKey: "nav.plans",
+    prefix: ["/plan", "/plans", "/race-simulator", "/routes"],
+    children: [
+      { to: "/plans", labelKey: "topnav.plansMine", descKey: "topnav.plansMineDesc" },
+      { to: "/plan/new", labelKey: "topnav.plansNew", descKey: "topnav.plansNewDesc" },
+      { to: "/race-simulator", labelKey: "topnav.raceSim", descKey: "topnav.raceSimDesc" },
+      { to: "/routes", labelKey: "topnav.routes", descKey: "topnav.routesDesc" },
+    ],
+  },
+  {
+    to: "/calculators",
+    labelKey: "nav.calculators",
+    prefix: ["/calculators"],
+    children: [
+      { to: "/calculators", labelKey: "topnav.calculatorsAll", descKey: "topnav.calculatorsAllDesc" },
+      { to: "/calculators/zones", labelKey: "topnav.calcZones" },
+      { to: "/calculators/vma", labelKey: "topnav.calcVma" },
+      { to: "/calculators/ftp", labelKey: "topnav.calcFtp" },
+      { to: "/calculators/css", labelKey: "topnav.calcCss" },
+      { to: "/calculators/equivalence", labelKey: "topnav.calcEquivalence" },
+    ],
+  },
+  {
+    to: "/methodology",
+    labelKey: "nav.methodology",
+    prefix: ["/methodology", "/plans/methodology"],
+    children: [
+      { to: "/methodology", labelKey: "topnav.methodScience", descKey: "topnav.methodScienceDesc" },
+      { to: "/plans/methodology", labelKey: "topnav.methodPlans", descKey: "topnav.methodPlansDesc" },
+    ],
+  },
+  {
+    to: "/learn",
+    labelKey: "nav.learn",
+    prefix: ["/learn", "/guides", "/nutrition", "/glossary"],
+    children: [
+      { to: "/learn", labelKey: "topnav.learnArticles", descKey: "topnav.learnArticlesDesc" },
+      { to: "/nutrition", labelKey: "topnav.learnNutrition", descKey: "topnav.learnNutritionDesc" },
+      { to: "/guides", labelKey: "topnav.learnGuides", descKey: "topnav.learnGuidesDesc" },
+      { to: "/glossary", labelKey: "topnav.learnGlossary", descKey: "topnav.learnGlossaryDesc" },
+    ],
+  },
+];
+
+export function isNavActive(pathname: string, section: NavSection): boolean {
+  if (pathname === section.to) return true;
+  return section.prefix.some((p) => pathname === p || pathname.startsWith(p + "/"));
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// TopBar
+// ────────────────────────────────────────────────────────────────────────────
 
 export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
   const { t } = useTranslation("common");
@@ -40,13 +145,14 @@ export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
   const isMobile = useIsMobile();
   const isDark = useThemeIcon();
   const theme = isDark ? "dark" : "light";
+  const { pathname } = useLocation();
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 h-12 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="relative flex h-full items-center px-4">
+    <header className="fixed inset-x-0 top-0 z-50 h-14 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="flex h-full items-center gap-4 px-4 md:px-6">
         {isMobile ? (
-          /* Mobile */
-          <div className="flex h-full w-full items-center">
+          /* ───── Mobile ─────────────────────────────────────────────────── */
+          <>
             <Button
               variant="ghost"
               size="icon-sm"
@@ -60,12 +166,10 @@ export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
             <Link
               to="/"
               viewTransition
-              className="absolute inset-0 flex items-center justify-center pointer-events-none"
+              className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1.5"
             >
-              <div className="pointer-events-auto flex items-center gap-1.5">
-                <Logo className="w-16 h-8" />
-                <span className="font-bold text-sm">{t("app.name")}</span>
-              </div>
+              <Logo className="w-12 h-6" />
+              <span className="font-bold text-sm">{t("app.name")}</span>
             </Link>
 
             <div className="ml-auto flex items-center gap-0.5">
@@ -83,9 +187,10 @@ export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
                 size="icon-sm"
                 onClick={() => changeLanguage(currentLang === "fr" ? "en" : "fr")}
                 title={currentLang === "fr" ? "Switch to English" : "Passer en français"}
-                className={touchTarget}
+                aria-label={currentLang === "fr" ? "Switch to English" : "Passer en français"}
+                className={`${touchTarget} text-xs font-semibold`}
               >
-                <span className="text-xs font-semibold">{currentLang.toUpperCase()}</span>
+                {currentLang === "fr" ? "EN" : "FR"}
               </Button>
               <Button
                 variant="ghost"
@@ -97,38 +202,44 @@ export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
                 {theme === "light" ? <Moon className="size-4" /> : <Sun className="size-4" />}
               </Button>
             </div>
-          </div>
+          </>
         ) : (
-          /* Desktop / Tablet */
+          /* ───── Desktop ─────────────────────────────────────────────────── */
           <>
-            {/* Logo left */}
-            <Link
-              to="/"
-              viewTransition
-              className="flex items-center gap-2 mr-4"
-            >
-              <Logo className="w-14 h-7" />
-              <span className="font-bold text-sm whitespace-nowrap">{t("app.name")}</span>
+            <Link to="/" viewTransition className="flex items-center gap-2 shrink-0">
+              <Logo className="w-12 h-6" />
+              <span className="font-bold text-sm whitespace-nowrap">
+                {t("app.name")}
+              </span>
             </Link>
 
-            {/* Centered search */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={openPalette}
-                className="pointer-events-auto h-8 w-48 lg:w-72 justify-start gap-2 text-muted-foreground"
-              >
-                <Search className="size-3.5" />
-                <span className="text-sm">{t("actions.search")}</span>
-                <kbd className="pointer-events-none ml-auto hidden select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground lg:inline-flex">
-                  <span className="text-xs">&#8984;</span>K
-                </kbd>
-              </Button>
-            </div>
+            <nav
+              aria-label={t("nav.primary", "Navigation principale")}
+              className="hidden md:flex items-center gap-1 pl-3 ml-1 border-l h-6"
+            >
+              {PRIMARY_NAV.map((section) => (
+                <NavSectionTrigger
+                  key={section.to}
+                  section={section}
+                  active={isNavActive(pathname, section)}
+                />
+              ))}
+            </nav>
 
-            {/* Right actions */}
-            <div className="ml-auto flex items-center gap-1">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={openPalette}
+              className="ml-auto h-8 w-48 lg:w-72 justify-start gap-2 text-muted-foreground"
+            >
+              <Search className="size-3.5" />
+              <span className="text-sm">{t("actions.search")}</span>
+              <kbd className="pointer-events-none ml-auto hidden select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground lg:inline-flex">
+                <span className="text-xs">&#8984;</span>K
+              </kbd>
+            </Button>
+
+            <div className="flex items-center gap-1">
               <Button
                 variant="ghost"
                 size="icon-sm"
@@ -146,10 +257,144 @@ export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
               >
                 {currentLang === "fr" ? "EN" : "FR"}
               </Button>
+
+              <UserMenu />
             </div>
           </>
         )}
       </div>
     </header>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// NavSectionTrigger — primary nav item with an optional hover/focus dropdown.
+// Uses CSS-only group-hover for opening, plus focus-within so keyboard tab
+// navigation works. A small delay-out using opacity transitions feels
+// noticeably smoother than instant pop-on/pop-off.
+// ────────────────────────────────────────────────────────────────────────────
+
+function NavSectionTrigger({
+  section,
+  active,
+}: {
+  section: NavSection;
+  active: boolean;
+}) {
+  const { t } = useTranslation("common");
+  const hasChildren = !!section.children?.length;
+
+  const triggerClass = cn(
+    "px-3 py-1.5 rounded-md text-sm font-medium transition-colors inline-flex items-center gap-1",
+    active
+      ? "text-foreground bg-accent/60"
+      : "text-muted-foreground hover:text-foreground hover:bg-accent/40",
+  );
+
+  if (!hasChildren) {
+    return (
+      <NavLink to={section.to} className={triggerClass}>
+        {t(section.labelKey)}
+      </NavLink>
+    );
+  }
+
+  return (
+    <div className="relative group">
+      <NavLink to={section.to} className={triggerClass}>
+        {t(section.labelKey)}
+        <ChevronDown className="size-3 opacity-60 transition-transform group-hover:rotate-180 group-focus-within:rotate-180" />
+      </NavLink>
+      {/* Spacer keeps the dropdown contiguous with the trigger so hovering
+          between the two doesn't dismiss the menu. */}
+      <div className="absolute left-0 top-full pt-1.5 invisible group-hover:visible group-focus-within:visible opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-150 z-50">
+        <div className="bg-popover text-popover-foreground border rounded-md shadow-lg p-1.5 min-w-[260px]">
+          <ul className="space-y-0.5">
+            {section.children!.map((child) => (
+              <li key={child.to}>
+                <Link
+                  to={child.to}
+                  className="block px-3 py-2 rounded-md hover:bg-accent transition-colors"
+                >
+                  <p className="text-sm font-medium leading-snug">
+                    {t(child.labelKey)}
+                  </p>
+                  {child.descKey && (
+                    <p className="text-xs text-muted-foreground leading-snug mt-0.5">
+                      {t(child.descKey)}
+                    </p>
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Personal account menu — round avatar trigger, click-only (no hover) so
+ *  it doesn't fight with the primary nav dropdowns. */
+function UserMenu() {
+  const { t } = useTranslation("common");
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          aria-label={t("nav.profile")}
+          className="rounded-full"
+        >
+          <UserRound className="size-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuItem asChild>
+          <Link to="/profile" className="flex items-center gap-2 cursor-pointer">
+            <UserRound className="size-4" />
+            {t("nav.profile")}
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/my-zones" className="flex items-center gap-2 cursor-pointer">
+            <Gauge className="size-4" />
+            {t("nav.myZones")}
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/favorites" className="flex items-center gap-2 cursor-pointer">
+            <Heart className="size-4" />
+            {t("nav.favorites")}
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/workout/builder" className="flex items-center gap-2 cursor-pointer">
+            <Plus className="size-4" />
+            {t("nav.builder")}
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link to="/settings" className="flex items-center gap-2 cursor-pointer">
+            <Settings className="size-4" />
+            {t("nav.settings")}
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/contribute" className="flex items-center gap-2 cursor-pointer">
+            <Send className="size-4" />
+            {t("nav.contribute")}
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/changelog" className="flex items-center gap-2 cursor-pointer">
+            <Sparkles className="size-4" />
+            {t("nav.changelog")}
+          </Link>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

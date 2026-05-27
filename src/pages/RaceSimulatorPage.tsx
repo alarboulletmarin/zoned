@@ -28,6 +28,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import { generateRacePlan, getDistanceLabelEn } from "@/lib/raceSimulator";
 import type { RacePlan } from "@/lib/raceSimulator";
@@ -277,8 +278,10 @@ export function RaceSimulatorPage() {
       <div className="py-8 max-w-2xl mx-auto space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold mb-2">{t("title")}</h1>
-          <p className="text-muted-foreground text-lg">{t("description")}</p>
+          <EditorialTitle as="h1" className="mb-2">{t("title")}</EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
+            {t("description")}
+          </FadeUp>
         </div>
 
         {/* Inputs */}

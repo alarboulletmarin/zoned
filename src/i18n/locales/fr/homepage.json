@@ -1,6 +1,6 @@
 {
   "home": {
-    "seoTitle": "Séances de Course Scientifiques",
+    "seoTitle": "L'entraînement structuré, sans bruit.",
     "findWorkout": "Trouve ta séance",
     "findWorkoutDesc": "5 questions pour trouver la séance parfaite",
     "raceSimulator": "Simulateur",
@@ -32,6 +32,278 @@
     "swimmingEyebrow": "Natation",
     "swimmingTitle": "Plonge dans le bassin",
     "swimmingDesc": "10 séances : technique, endurance, sprints, pyramides. Zones CSS intégrées.",
-    "swimmingCta": "Voir les séances natation"
+    "swimmingCta": "Voir les séances natation",
+
+    "masthead": {
+      "volume": "Vol.",
+      "issue": "N°",
+      "openSource": "Open-source",
+      "local": "100 % local",
+      "noAccount": "Sans compte"
+    },
+
+    "hero": {
+      "head": "L'entraînement",
+      "tail": "sans bruit",
+      "accent": ["structuré", "lisible", "outillé", "documenté"],
+      "lead": "{{sessions}} séances validées par la science (Seiler, Daniels, Billat, Coggan), {{plans}} plans pré-construits du 5K au marathon, {{calculators}} calculateurs et un générateur de parcours. Tout fonctionne dans votre navigateur, aucune donnée ne quitte votre appareil.",
+      "ctaPrimary": "Ouvrir la bibliothèque",
+      "ctaSecondary": "Choisir un plan",
+      "scrollHint": "Découvrir l'app",
+      "fig": {
+        "title": "À quoi ressemble une semaine bien dosée",
+        "body": "Répartition du temps d'entraînement par zone d'effort, modèle polarisé. La règle clé : 80 % facile, 20 % difficile, presque rien dans la « zone grise » du milieu.",
+        "zones": {
+          "z1": "Récupération",
+          "z2": "Endurance",
+          "z3": "Tempo",
+          "z4": "Seuil",
+          "z5": "VO₂max",
+          "z6": "Anaérobie"
+        },
+        "lowRange": "Facile (Z1–Z2)",
+        "lowCaption": "volume aérobie",
+        "highRange": "Au-dessus du seuil (Z4–Z6)",
+        "highCaption": "qualité intense"
+      }
+    },
+
+    "stats": {
+      "sessions": "Séances classées",
+      "plansFrom": "Plans",
+      "calculators": "Calculateurs",
+      "trackers": "Tracker",
+      "noAccount": "0 compte"
+    },
+
+    "s01": {
+      "kicker": "Trois entrées",
+      "title": "Un outil par usage, pas par persona",
+      "body": "Zoned ne vous demande pas qui vous êtes. Il vous laisse choisir comment vous voulez l'aborder.",
+      "e1Title": "Trouver la séance du jour",
+      "e1Body": "Filtrez par discipline, zone, durée, niveau. Chaque carte annonce sa difficulté et son coût TSS avant que vous ne cliquiez. La sélection du jour s'adapte à votre charge récente.",
+      "e1Link": "Bibliothèque",
+      "e2Title": "Suivre un plan structuré",
+      "e2Body": "Du 5 km au marathon, plans de 8 à 18 semaines. Progression de charge transparente, semaine de récupération tous les 21 jours, affûtage calibré pour le jour J.",
+      "e2Link": "Plans",
+      "e3Title": "Comprendre la science",
+      "e3Body": "Chaque séance cite sa méthode (Seiler, Daniels, Billat, Coggan), l'adaptation physiologique visée, la zone, et la référence bibliographique vérifiable.",
+      "e3Link": "Méthodes"
+    },
+
+    "s02": {
+      "kicker": "Suggéré cette semaine",
+      "title": "Trois séances pour rester dans le bon volume cette semaine",
+      "body": "Sélection déterministe par semaine ISO. Pas d'A/B ni de boucle d'engagement. Cliquez sur une carte pour ouvrir la séance complète."
+    },
+
+    "s03": {
+      "kicker": "L'atlas des zones",
+      "title1": "Six zones, six adaptations,",
+      "title2": "une grille cohérente",
+      "body": "Chaque séance de la bibliothèque s'ancre dans ce système. Entrez votre VMA et/ou votre FCmax pour calculer vos plages personnelles, ou retrouvez-les depuis votre profil.",
+      "zone": "Zone",
+      "name": "Nom",
+      "hr": "Fréquence cardiaque",
+      "rpe": "RPE",
+      "adaptation": "Adaptation visée",
+      "refPace": "Allure",
+      "fig": "Fig. 02 — Modèle à 6 zones, calibré sur FCmax / FTP / allure-seuil",
+      "personal": {
+        "label": "Calculé depuis votre profil",
+        "edit": "Modifier",
+        "prompt": "Calculez vos zones personnalisées. Au moins une valeur suffit.",
+        "vmaLabel": "VMA (km/h)",
+        "fcMaxLabel": "FCmax (bpm)",
+        "submit": "Calculer mes zones",
+        "cancel": "Annuler"
+      }
+    },
+
+    "s04": {
+      "kicker": "Les méthodes",
+      "title": "Chercheurs & méthodes de référence",
+      "body": "Zoned ne pousse pas une méthode unique. Chaque zone, chaque séance s'appuie sur des travaux publiés ; voici les sources officielles que vous pouvez consulter directement.",
+      "viewPublication": "Voir la publication",
+      "researchers": {
+        "seiler": {
+          "contribution": "Modèle d'entraînement polarisé (80/20).",
+          "citation": "« Quantifying training intensity distribution in elite endurance athletes », Scand J Med Sci Sports, 2006."
+        },
+        "billat": {
+          "contribution": "Chercheuse française. vVO₂max et protocole 30/30.",
+          "citation": "« Interval training at VO₂max: effects on aerobic performance », Med Sci Sports Exerc, 1999."
+        },
+        "daniels": {
+          "contribution": "Système VDOT et zones d'entraînement (1933–2025).",
+          "citation": "Daniels' Running Formula (Human Kinetics, 3ᵉ éd., 2014)."
+        },
+        "lydiard": {
+          "contribution": "Périodisation et construction de la base aérobie.",
+          "citation": "Pionnier néo-zélandais de l'approche par construction de base, années 1950-60."
+        },
+        "noakes": {
+          "contribution": "Théorie du gouverneur central et limites perçues à l'effort.",
+          "citation": "Lore of Running (Oxford University Press, 4ᵉ éd., 2003)."
+        },
+        "cologne": {
+          "contribution": "Origines du concept de seuil lactique, groupe de Cologne.",
+          "citation": "Travaux fondateurs sur le métabolisme lactique, années 1970."
+        },
+        "faude": {
+          "contribution": "Revue définitive des concepts de seuil lactique.",
+          "citation": "« Lactate Threshold Concepts: How Valid Are They? », Sports Med, 2009."
+        },
+        "sanMillan": {
+          "contribution": "Entraînement en Zone 2 et santé métabolique.",
+          "citation": "Recherche sur la fonction mitochondriale et la flexibilité métabolique chez les athlètes d'endurance."
+        }
+      }
+    },
+
+    "s05": {
+      "kicker": "Plans · 5K → Marathon",
+      "title": "Une trajectoire pour chaque distance",
+      "body": "{{count}} plans publiés, {{min}} à {{max}} semaines. Charge progressive, semaine de récupération tous les 21 jours, affûtage calibré pour le jour J.",
+      "weeks": "semaines",
+      "sessionsPerWeek": "séances / sem",
+      "choose": "choisir",
+      "legend": "Phases d'un macrocycle",
+      "phases": {
+        "base": "Base aérobie",
+        "build": "Construction",
+        "peak": "Spécifique",
+        "taper": "Affûtage"
+      },
+      "fig": "Fig. 03 — Phases-types d'un macrocycle : base · construction · spécifique · affûtage",
+      "distance": {
+        "5K": "5K",
+        "10K": "10K",
+        "semi": "Semi",
+        "marathon": "Marathon",
+        "trail": "Trail"
+      }
+    },
+
+    "s06": {
+      "kicker": "Calculateurs",
+      "title": "Une trousse de calcul pour mesurer vos plages",
+      "body": "Tous les calculs tournent dans le navigateur, sans envoi de données. Les formules sont documentées et leur code est lisible.",
+      "tools": {
+        "zones": "Calculez vos zones FC et allures depuis votre VMA ou FCmax.",
+        "converter": "Convertissez entre min/km, km/h et min/mile en temps réel.",
+        "paceTable": "Toutes les allures de 3:00 à 10:00/km avec temps estimés.",
+        "treadmill": "Convertissez vitesse et inclinaison en allure équivalente.",
+        "splits": "Planifiez vos passages pour atteindre votre objectif chrono.",
+        "vma": "Estimez votre VMA à partir d'un résultat de course.",
+        "ftp": "Estimez votre FTP depuis un test 20 minutes ou un ramp test.",
+        "css": "Estimez votre CSS depuis un test 400 m + 200 m.",
+        "equivalence": "Prédisez vos temps sur toutes les distances depuis un résultat.",
+        "ageGraded": "Comparez votre performance au record mondial de votre catégorie.",
+        "raceSimulator": {
+          "title": "Simulateur jour de course",
+          "desc": "Plan complet pour votre journée de course : horaires, allures, nutrition, mental."
+        },
+        "whatIf": "Comparez deux scénarios d'entraînement et visualisez les différences."
+      }
+    },
+
+    "s07": {
+      "kicker": "Séance de la semaine",
+      "open": "Lancer la séance",
+      "target": "Adaptation visée",
+      "metrics": "Métriques",
+      "dur": "Durée",
+      "zone": "Zone",
+      "lvl": "Niveau"
+    },
+
+    "s08": {
+      "kicker": "Éthos",
+      "title1": "Aucune donnée",
+      "title2": "ne quitte votre appareil",
+      "body": "Zoned est conçu pour fonctionner entièrement en local. Pas de serveur d'analytics, pas de compte, pas de mot de passe à retenir, pas de cookie tiers. Le code est public et auditable sous licence MIT.",
+      "lines": {
+        "trackers": "Tracker tiers",
+        "account": "Compte requis",
+        "network": "Données envoyées",
+        "exports": "Exports locaux"
+      }
+    },
+
+    "s09": {
+      "kicker": "Questions fréquentes",
+      "title": "Cinq points levés d'avance",
+      "more": "{{count}} articles complémentaires dans la bibliothèque pédagogique.",
+      "moreLink": "Tout lire →",
+      "q": {
+        "hrm": {
+          "q": "Faut-il un capteur cardiaque ?",
+          "a": "Non. Vous pouvez calibrer les zones par l'allure (course, natation) ou la puissance (vélo, via la FTP). Le capteur cardiaque devient utile pour valider Z1–Z2 et détecter la dérive cardiaque sur les sorties longues."
+        },
+        "export": {
+          "q": "Comment exporter une séance vers ma montre ?",
+          "a": "Chaque séance se télécharge en .fit (Garmin / Wahoo / COROS, fichier d'entraînement natif), .ics (Apple Calendar, Google Calendar, Outlook), .pdf ou .png. Les parcours générés s'exportent en .gpx. Tous les exports sont locaux ; aucun fichier ne transite par un serveur."
+        },
+        "custom": {
+          "q": "Puis-je personnaliser un plan ?",
+          "a": "Oui. Vous pouvez décaler les semaines (blessure, voyage), substituer une séance (course ↔ vélo ↔ natation, séance ↔ renforcement) et déplacer chaque jour par glisser-déposer sur le calendrier. Un mode plan libre permet aussi de bâtir le plan de zéro."
+        },
+        "free": {
+          "q": "Zoned est-il gratuit ?",
+          "a": "Oui, et pour toujours. Pas de niveau payant, pas de fonctionnalité bloquée, pas de bannière publicitaire. Le projet est open-source sous licence MIT et financé par dons libres."
+        },
+        "devices": {
+          "q": "Sur quels appareils Zoned fonctionne-t-il ?",
+          "a": "Tout navigateur moderne, sur ordinateur, tablette et téléphone. Aucune application à installer : Zoned est une PWA, un raccourci sur l'écran d'accueil suffit pour avoir l'expérience d'une app."
+        },
+        "offline": {
+          "q": "Zoned fonctionne-t-il hors-ligne ?",
+          "a": "Oui. Après le premier chargement, l'application et les séances sont mises en cache par le service worker. Vous pouvez consulter une séance, lancer un calculateur ou ouvrir votre plan sans connexion."
+        },
+        "data": {
+          "q": "Où sont stockées mes données ?",
+          "a": "Tout (zones, profil, plans, favoris, parcours) reste dans le stockage local de votre navigateur. Aucun compte, aucun serveur, aucun cookie tiers. Vous pouvez exporter vos données en .json depuis les Paramètres pour les sauvegarder ou les migrer."
+        }
+      }
+    },
+
+    "tip": "Conseil du jour",
+
+    "cta": {
+      "kicker": "Commencer maintenant",
+      "line1": "Ouvrez la bibliothèque",
+      "line2": "Lancez votre première séance en deux clics",
+      "primary": "Voir les séances",
+      "secondary": "Voir le code (GitHub)"
+    },
+
+    "footer": {
+      "tagline": "Un carnet d'entraînement scientifique, local, gratuit et libre. Pour celles et ceux qui veulent comprendre ce qu'ils font.",
+      "groups": {
+        "product": "Produit",
+        "science": "Science",
+        "project": "Projet"
+      },
+      "product": {
+        "library": "Bibliothèque",
+        "plans": "Plans",
+        "calculators": "Calculateurs",
+        "routes": "Générateur de parcours"
+      },
+      "science": {
+        "methodology": "Méthodes",
+        "glossary": "Glossaire",
+        "guides": "Guides"
+      },
+      "project": {
+        "about": "À propos",
+        "github": "GitHub",
+        "changelog": "Changelog"
+      },
+      "license": "© {{year}} · ZONED · Logiciel libre, licence MIT",
+      "version": "v.{{version}}",
+      "builtInPublic": "Construit en public"
+    }
   }
 }

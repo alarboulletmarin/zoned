@@ -1,32 +1,27 @@
+/**
+ * Mobile slide-over navigation. Triggered by the hamburger button in TopBar.
+ *
+ * Desktop navigation now lives entirely in TopBar (horizontal links with
+ * hover dropdowns), so this file only renders the mobile sheet. The legacy
+ * `Sidebar` component is kept as an empty re-export so any code still
+ * importing it doesn't break at runtime; nothing in the app renders it
+ * anymore.
+ */
+
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
-  BookOpen,
-  CalendarRange,
-  Gauge,
-  Heart,
-  Calculator,
-  Library,
-  GraduationCap,
-  Book,
-  FlaskConical,
-  ClipboardCheck,
-  Dices,
-  Send,
-  Settings,
-  Sparkles,
-  PanelLeftClose,
-  PanelLeftOpen,
-  Plus,
-  Flag,
+  ChevronDown,
   UserRound,
-  Route as RouteIcon,
-  Utensils,
+  Heart,
+  Gauge,
+  Plus,
+  Settings,
+  Send,
+  Sparkles,
+  GithubIcon,
 } from "@/components/icons";
-import type { IconProps } from "@/components/icons";
-import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import {
   Sheet,
   SheetContent,
@@ -34,408 +29,202 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { getRandomWorkout } from "@/data/workouts";
-
-// ---------------------------------------------------------------------------
-// Types & Data
-// ---------------------------------------------------------------------------
-
-interface SidebarProps {
-  collapsed: boolean;
-  onToggleCollapse: () => void;
-  className?: string;
-}
+import Logo from "@/assets/logo.svg?react";
+import { PRIMARY_NAV, isNavActive, type NavSection } from "./TopBar";
 
 interface MobileSidebarProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-interface NavItem {
-  href?: string;
-  action?: string;
-  icon: (props: IconProps) => React.JSX.Element;
-  labelKey: string;
-  /**
-   * Optional secondary entries that appear *only* when the parent route
-   * is active and the sidebar is expanded. Used for /routes today
-   * (Mes parcours, Trouver une piste). Collapsed mode hides them to
-   * avoid a hidden tree behind the icon rail.
-   */
-  subItems?: NavItem[];
-}
-
-interface NavGroup {
-  labelKey: string;
-  items: NavItem[];
-}
-
-const navGroups: NavGroup[] = [
-  {
-    labelKey: "nav.sessions",
-    items: [
-      { href: "/library", icon: BookOpen, labelKey: "nav.library" },
-      { href: "/collections", icon: Library, labelKey: "collections.title" },
-      { href: "/favorites", icon: Heart, labelKey: "nav.favorites" },
-      { href: "/my-zones", icon: Gauge, labelKey: "nav.myZones" },
-      { href: "/profile", icon: UserRound, labelKey: "nav.profile" },
-      { href: "/workout/builder", icon: Plus, labelKey: "nav.builder" },
-    ],
-  },
-  {
-    labelKey: "nav.plan",
-    items: [
-      { href: "/plans", icon: CalendarRange, labelKey: "nav.plans" },
-      { href: "/race-simulator", icon: Flag, labelKey: "simulator.title" },
-      {
-        href: "/routes",
-        icon: RouteIcon,
-        labelKey: "routes:title",
-        subItems: [
-          { href: "/routes/mine", icon: Heart, labelKey: "routes:myRoutes" },
-          { href: "/routes/tracks", icon: Flag, labelKey: "routes:trackFinder.entry" },
-        ],
-      },
-      { href: "/plans/methodology", icon: FlaskConical, labelKey: "nav.planMethodology" },
-    ],
-  },
-  {
-    labelKey: "actions.tools",
-    items: [
-      { href: "/calculators", icon: Calculator, labelKey: "calculators:calculateurs.title" },
-    ],
-  },
-  {
-    labelKey: "nav.learn",
-    items: [
-      { href: "/learn", icon: GraduationCap, labelKey: "nav.learn" },
-      { href: "/nutrition", icon: Utensils, labelKey: "nav.nutrition" },
-      { href: "/methodology", icon: FlaskConical, labelKey: "nav.methodology" },
-      { href: "/glossary", icon: Book, labelKey: "nav.glossary" },
-    ],
-  },
-  {
-    labelKey: "nav.quickActions",
-    items: [
-      { href: "/quiz", icon: ClipboardCheck, labelKey: "quiz.title" },
-      { action: "random", icon: Dices, labelKey: "randomWorkout.title" },
-    ],
-  },
+/** Account / utility links shown at the bottom of the mobile sheet. */
+const ACCOUNT_LINKS = [
+  { to: "/profile", icon: UserRound, labelKey: "nav.profile" },
+  { to: "/my-zones", icon: Gauge, labelKey: "nav.myZones" },
+  { to: "/favorites", icon: Heart, labelKey: "nav.favorites" },
+  { to: "/workout/builder", icon: Plus, labelKey: "nav.builder" },
+];
+const SECONDARY_LINKS = [
+  { to: "/settings", icon: Settings, labelKey: "nav.settings" },
+  { to: "/contribute", icon: Send, labelKey: "nav.contribute" },
+  { to: "/changelog", icon: Sparkles, labelKey: "nav.changelog" },
 ];
 
-const footerItems: NavItem[] = [
-  { href: "/contribute", icon: Send, labelKey: "nav.contribute" },
-  { href: "/settings", icon: Settings, labelKey: "nav.settings" },
-  { href: "/changelog", icon: Sparkles, labelKey: "nav.changelog" },
-];
-
-const prefixRoutes = ["/learn", "/collections", "/glossary", "/plan", "/calculators", "/routes"];
-
-function isActive(pathname: string, href: string): boolean {
-  if (pathname === href) return true;
-  return prefixRoutes.some(
-    (prefix) => href === prefix && pathname.startsWith(prefix + "/")
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Unified nav item - same DOM for collapsed & expanded, CSS handles visibility
-// ---------------------------------------------------------------------------
-
-function SidebarNavItem({
-  item,
-  pathname,
-  collapsed,
-  onClick,
-}: {
-  item: NavItem;
-  pathname: string;
-  collapsed: boolean;
-  onClick?: () => void;
-}) {
-  const { t } = useTranslation("common");
-  const navigate = useNavigate();
-  const [isLoadingRandom, setIsLoadingRandom] = useState(false);
-
-  const label = t(item.labelKey);
-  const active = item.href ? isActive(pathname, item.href) : false;
-
-  const handleRandomWorkout = async () => {
-    if (isLoadingRandom) return;
-    setIsLoadingRandom(true);
-    try {
-      const workout = await getRandomWorkout();
-      navigate(`/workout/${workout.id}`);
-      onClick?.();
-    } finally {
-      setIsLoadingRandom(false);
-    }
-  };
-
-  const classes = cn(
-    "flex items-center rounded-md py-2 text-sm font-medium transition-all duration-300 whitespace-nowrap",
-    collapsed ? "justify-center px-2 gap-0" : "px-3 gap-3",
-    active
-      ? "bg-accent text-accent-foreground"
-      : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground"
-  );
-
-  const content = (
-    <>
-      <item.icon className="size-4 shrink-0" />
-      <span
-        className={cn(
-          "transition-all duration-300 overflow-hidden",
-          collapsed ? "w-0 opacity-0" : "w-auto opacity-100"
-        )}
-      >
-        {label}
-      </span>
-    </>
-  );
-
-  const element = item.action === "random" ? (
-    <button
-      onClick={handleRandomWorkout}
-      disabled={isLoadingRandom}
-      className={cn(classes, "w-full")}
-      aria-label={label}
-    >
-      {content}
-    </button>
-  ) : (
-    <Link
-      to={item.href!}
-      viewTransition
-      onClick={onClick}
-      className={classes}
-      aria-label={collapsed ? label : undefined}
-      data-onboarding={
-        item.href === "/library" ? "library" :
-        item.href === "/quiz" ? "quiz" :
-        item.href === "/plans" ? "plans" :
-        item.href === "/workout/builder" ? "builder" :
-        undefined
-      }
-    >
-      {content}
-    </Link>
-  );
-
-  if (collapsed) {
-    return (
-      <Tooltip>
-        <TooltipTrigger asChild>{element}</TooltipTrigger>
-        <TooltipContent side="right">{label}</TooltipContent>
-      </Tooltip>
-    );
-  }
-
-  return element;
-}
-
-// ---------------------------------------------------------------------------
-// Sub-item — smaller variant rendered under an active parent. Always
-// uses the expanded layout (sub-items are hidden in collapsed mode).
-// ---------------------------------------------------------------------------
-
-function SidebarSubNavItem({
-  item,
-  pathname,
-  onClick,
-}: {
-  item: NavItem;
-  pathname: string;
-  onClick?: () => void;
-}) {
-  const { t } = useTranslation("common");
-  const label = t(item.labelKey);
-  const active = item.href ? pathname === item.href : false;
-
-  return (
-    <Link
-      to={item.href!}
-      viewTransition
-      onClick={onClick}
-      className={cn(
-        "flex items-center gap-2 rounded-md px-3 py-1.5 text-xs font-medium transition-colors",
-        active
-          ? "bg-accent/70 text-foreground"
-          : "text-muted-foreground hover:bg-accent/50 hover:text-foreground",
-      )}
-    >
-      <item.icon className="size-3.5 shrink-0" />
-      <span>{label}</span>
-    </Link>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Sidebar content (shared between desktop & mobile)
-// ---------------------------------------------------------------------------
-
-function SidebarContent({
-  collapsed,
-  onLinkClick,
-}: {
-  collapsed: boolean;
-  onLinkClick?: () => void;
-}) {
+export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
   const { t } = useTranslation("common");
   const location = useLocation();
 
-  return (
-    <div className="flex h-full flex-col">
-      {/* Navigation groups */}
-      <nav className="flex-1 overflow-y-auto overflow-x-hidden px-2 py-3">
-        {navGroups.map((group, index) => (
-          <div key={group.labelKey} className={cn(index > 0 && "mt-3")}>
-            {index > 0 && (
-              <div className={cn("mb-2 border-t", collapsed ? "mx-2" : "mx-1")} />
-            )}
-            <div
-              className={cn(
-                "mb-1 overflow-hidden px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground transition-all duration-300 whitespace-nowrap",
-                collapsed ? "h-0 opacity-0" : "h-5 opacity-100"
-              )}
-            >
-              {t(group.labelKey)}
-            </div>
-            <div className="flex flex-col gap-0.5">
-              {group.items.map((item) => {
-                const parentActive = item.href ? isActive(location.pathname, item.href) : false;
-                return (
-                  <div key={item.labelKey} className="flex flex-col gap-0.5">
-                    <SidebarNavItem
-                      item={item}
-                      pathname={location.pathname}
-                      collapsed={collapsed}
-                      onClick={onLinkClick}
-                    />
-                    {/* Sub-items only render when the parent route is
-                        active AND the sidebar is expanded — collapsed
-                        mode keeps the rail icon-only. */}
-                    {!collapsed && parentActive && item.subItems?.length ? (
-                      <div className="ml-3 flex flex-col gap-0.5 border-l border-border/40 pl-2">
-                        {item.subItems.map((sub) => (
-                          <SidebarSubNavItem
-                            key={sub.labelKey}
-                            item={sub}
-                            pathname={location.pathname}
-                            onClick={onLinkClick}
-                          />
-                        ))}
-                      </div>
-                    ) : null}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </nav>
-
-      {/* Footer */}
-      <div className="shrink-0 px-2 py-2 border-t border-border/40">
-        <div className="flex flex-col gap-0.5 pt-1">
-          {footerItems.map((item) => (
-            <SidebarNavItem
-              key={item.labelKey}
-              item={item}
-              pathname={location.pathname}
-              collapsed={collapsed}
-              onClick={onLinkClick}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Desktop Sidebar
-// ---------------------------------------------------------------------------
-
-export function Sidebar({
-  collapsed,
-  onToggleCollapse,
-  className,
-}: SidebarProps) {
-  const { t } = useTranslation("common");
-
-  return (
-    <aside
-      className={cn(
-        // The global TopBar is `fixed h-12 z-50` so anything sitting at
-        // top-0 ends up underneath it. We anchor the sidebar at top-12
-        // and shrink the height accordingly so the toggle button stays
-        // visible (was clipped by the TopBar before).
-        "sticky top-12 hidden md:flex h-[calc(100vh-3rem)] flex-col border-r bg-background overflow-hidden",
-        "transition-[width] duration-300 ease-in-out",
-        collapsed ? "w-[52px]" : "w-60",
-        className
-      )}
-    >
-      {/* Header - toggle button */}
-      <div className={cn(
-        "flex h-12 shrink-0 items-center border-b transition-all duration-300",
-        collapsed ? "justify-center px-1" : "justify-end px-3"
-      )}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={onToggleCollapse}
-              aria-label={t("actions.menu")}
-            >
-              {collapsed ? (
-                <PanelLeftOpen className="size-4" />
-              ) : (
-                <PanelLeftClose className="size-4" />
-              )}
-            </Button>
-          </TooltipTrigger>
-          {collapsed && (
-            <TooltipContent side="right">{t("actions.menu")}</TooltipContent>
-          )}
-        </Tooltip>
-      </div>
-
-      {/* Content */}
-      <SidebarContent collapsed={collapsed} />
-    </aside>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Mobile Sidebar (Sheet)
-// ---------------------------------------------------------------------------
-
-export function MobileSidebar({
-  open,
-  onOpenChange,
-}: MobileSidebarProps) {
-  const { t } = useTranslation("common");
-  const location = useLocation();
-
+  // Close on navigation. Without this the sheet would linger after tapping
+  // a link because react-router triggers a re-render but not a re-mount.
   useEffect(() => {
     onOpenChange(false);
   }, [location.pathname, onOpenChange]);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="left" className="w-[280px] p-0">
-        <SheetHeader className="sr-only">
-          <SheetTitle>{t("actions.menu")}</SheetTitle>
+      <SheetContent
+        side="left"
+        className="w-[320px] max-w-[88vw] p-0 flex flex-col bg-background"
+      >
+        <SheetHeader className="px-5 py-5 border-b border-border/60">
+          <SheetTitle className="flex items-center gap-2 text-left">
+            <Logo className="w-10 h-5" />
+            <span className="font-bold text-base">Zoned</span>
+          </SheetTitle>
         </SheetHeader>
-        <div className="h-full">
-          <SidebarContent
-            collapsed={false}
-          />
+
+        {/* Primary sections — same tree as the desktop top-nav. Each section
+            is an expandable accordion ; the section matching the current
+            route is open by default. */}
+        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1" aria-label={t("nav.primary", "Navigation")}>
+          {PRIMARY_NAV.map((section) => (
+            <MobileSection
+              key={section.to}
+              section={section}
+              pathname={location.pathname}
+            />
+          ))}
+        </nav>
+
+        {/* Account block — visually separated, never hidden behind an
+            accordion (these are the most frequently tapped actions). */}
+        <div className="border-t border-border/60 px-3 py-4 space-y-3">
+          <div>
+            <p className="px-2 mb-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              {t("topnav.account", "Compte")}
+            </p>
+            <div className="grid grid-cols-2 gap-1">
+              {ACCOUNT_LINKS.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className="flex items-center gap-2 px-3 py-2.5 rounded-md text-sm font-medium text-foreground/85 hover:bg-accent/50 transition-colors"
+                >
+                  <item.icon className="size-4 text-muted-foreground" />
+                  <span className="truncate">{t(item.labelKey)}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="border-t border-border/60 pt-3 flex items-center justify-between gap-1">
+            {SECONDARY_LINKS.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className="flex-1 flex items-center justify-center gap-1.5 px-2 py-2 rounded-md text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
+              >
+                <item.icon className="size-3.5" />
+                <span className="truncate">{t(item.labelKey)}</span>
+              </Link>
+            ))}
+            <a
+              href="https://github.com/alarboulletmarin/zoned"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+              className="flex items-center justify-center px-2 py-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
+            >
+              <GithubIcon className="size-3.5" />
+            </a>
+          </div>
         </div>
       </SheetContent>
     </Sheet>
   );
+}
+
+function MobileSection({
+  section,
+  pathname,
+}: {
+  section: NavSection;
+  pathname: string;
+}) {
+  const { t } = useTranslation("common");
+  const isActive = isNavActive(pathname, section);
+  const hasChildren = !!section.children?.length;
+  const [open, setOpen] = useState(isActive);
+
+  // Re-open the section when the route lands inside it — useful when the
+  // user navigates via the user menu and then re-opens the sheet.
+  useEffect(() => {
+    if (isActive) setOpen(true);
+  }, [isActive]);
+
+  if (!hasChildren) {
+    return (
+      <Link
+        to={section.to}
+        className={cn(
+          "block px-3 py-2.5 rounded-md text-sm font-medium transition-colors",
+          isActive
+            ? "bg-accent text-foreground"
+            : "text-foreground/85 hover:bg-accent/50",
+        )}
+      >
+        {t(section.labelKey)}
+      </Link>
+    );
+  }
+
+  return (
+    <div>
+      <div className="flex items-center">
+        <Link
+          to={section.to}
+          className={cn(
+            "flex-1 px-3 py-2.5 rounded-md text-sm font-semibold transition-colors",
+            isActive
+              ? "text-foreground"
+              : "text-foreground/85 hover:bg-accent/50",
+          )}
+        >
+          {t(section.labelKey)}
+        </Link>
+        <button
+          type="button"
+          aria-label={open ? "Collapse" : "Expand"}
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+          className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
+        >
+          <ChevronDown
+            className={cn(
+              "size-4 transition-transform",
+              open ? "rotate-0" : "-rotate-90",
+            )}
+          />
+        </button>
+      </div>
+      {open && (
+        <ul className="ml-3 mt-0.5 mb-1 border-l border-border/60 pl-3 space-y-0.5">
+          {section.children!.map((child) => {
+            const childActive = pathname === child.to;
+            return (
+              <li key={child.to}>
+                <Link
+                  to={child.to}
+                  className={cn(
+                    "block px-3 py-2 rounded-md text-sm transition-colors",
+                    childActive
+                      ? "bg-accent/70 text-foreground font-medium"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent/40",
+                  )}
+                >
+                  {t(child.labelKey)}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+/** Legacy export kept so any leftover desktop sidebar import doesn't crash.
+ *  The actual desktop navigation is the horizontal top-bar in TopBar.tsx. */
+export function Sidebar(): null {
+  return null;
 }

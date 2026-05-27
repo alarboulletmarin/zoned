@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-05-27
+
+### Added
+- Editorial landing rewrite: home redesigned as a "training journal" with full-bleed sections, real researcher sources, accordion FAQ, and reusable card primitives
+- Daily rotating quote on home from real athletes & coaches (deterministic by day)
+- Top navigation rework with hover dropdowns + redesigned mobile sheet
+- Sidebar with collapsible groups + persisted open/closed state across sessions
+- Global Footer promoted from the landing page (FR/EN switcher visible on mobile, compact 3-column layout)
+- Open-source README with live GitHub stats (stars, issues, last commit) and badge
+
+### Changed
+- Editorial header propagated across the whole app in 6 waves: calculator pages, hub pages (wave 1), article-like pages (wave 3), detail pages (wave 4), utility pages (wave 5), forms/builders
+- Workout detail page refactored with progressive disclosure (editorial tone, less visual noise)
+- Home colour pass: punchier hero, signalled cards, decorative borders removed
+- Calculators hub grouped into 3 sections with an airy single-column layout on mobile
+- HomePage atoms extracted and reused on LibraryPage for consistency
+- Home mobile compaction: §04/§05 now match the §06 grid pattern
+- Home: subtle motion + readability polish, trailing periods dropped on section titles, em dashes adopted
+
+### Fixed
+- About workouts count now includes cycling + swimming sessions (not only running)
+- About page live stats wired to the actual catalogue counts
+- Footer 3-column layout no longer breaks on narrow mobile screens
+
 ## [0.5.4] - 2026-05-11
 
 ### Added

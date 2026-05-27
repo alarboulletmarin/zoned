@@ -4,6 +4,7 @@ import { Star } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { useSettings } from "@/hooks/useSettings";
 import { formatPaceWithUnit } from "@/lib/units";
 import { usePickLang } from "@/lib/i18n-utils";
@@ -187,13 +188,13 @@ export function AgeGradedPage() {
       <div className="py-8 max-w-2xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
-            <Star className="size-8 text-primary" />
+          <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
+            <Star className="size-8 text-primary shrink-0" />
             {t("calculators:calculateurs.ageGraded.title")}
-          </h1>
-          <p className="text-muted-foreground text-lg">
+          </EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
             {t("calculators:calculateurs.ageGraded.description")}
-          </p>
+          </FadeUp>
         </div>
 
         {/* Input Card */}

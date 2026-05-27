@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
 import { competitors } from "@/data/competitors";
 import { ArrowRight } from "@/components/icons";
 import { usePickLang } from "@/lib/i18n-utils";
@@ -34,37 +35,40 @@ export function CompareHubPage() {
           <p className="text-xs uppercase tracking-widest text-primary font-semibold">
             {t("compare.subtitle")}
           </p>
-          <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
-          <p className="text-muted-foreground max-w-xl">{description}</p>
+          <EditorialTitle as="h1">{title}</EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground max-w-xl">
+            {description}
+          </FadeUp>
         </div>
 
         {/* Competitor cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <StaggerGrid className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {competitors.map((competitor) => {
             const name = pickLang(competitor, "name");
             const tagline = pickLang(competitor, "tagline");
             return (
-              <Link
-                key={competitor.slug}
-                to={`/compare/${competitor.slug}`}
-                className="group flex flex-col gap-3 rounded-xl border border-border p-5 hover:border-primary/50 hover:bg-muted/30 transition-all"
-              >
-                <div className="space-y-1">
-                  <p className="font-semibold text-sm">
-                    Zoned <span className="text-muted-foreground">vs</span> {name}
-                  </p>
-                  <p className="text-xs text-muted-foreground line-clamp-2">{tagline}</p>
-                </div>
-                <div className="flex items-center justify-between mt-auto">
-                  <span className="text-xs rounded-full border px-2 py-0.5 text-muted-foreground">
-                    {pickLang(competitor, "price")}
-                  </span>
-                  <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
-                </div>
-              </Link>
+              <StaggerItem key={competitor.slug}>
+                <Link
+                  to={`/compare/${competitor.slug}`}
+                  className="group flex h-full flex-col gap-3 rounded-xl border border-border p-5 hover:border-foreground/40 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200"
+                >
+                  <div className="space-y-1">
+                    <p className="font-semibold text-sm">
+                      Zoned <span className="text-muted-foreground">vs</span> {name}
+                    </p>
+                    <p className="text-xs text-muted-foreground line-clamp-2">{tagline}</p>
+                  </div>
+                  <div className="flex items-center justify-between mt-auto">
+                    <span className="text-xs rounded-full border px-2 py-0.5 text-muted-foreground">
+                      {pickLang(competitor, "price")}
+                    </span>
+                    <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                  </div>
+                </Link>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerGrid>
 
         {/* Zoned pitch */}
         <div className="rounded-xl border bg-muted/30 p-6 space-y-2">

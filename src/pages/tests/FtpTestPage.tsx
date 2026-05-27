@@ -5,6 +5,7 @@ import { Zap, Save } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import {
   calculateCyclingZones,
@@ -96,13 +97,13 @@ export function FtpTestPage() {
       <div className="py-8 max-w-2xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
-            <Zap className="size-8 text-primary" />
+          <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
+            <Zap className="size-8 text-primary shrink-0" />
             {t("calculateurs.ftp.title")}
-          </h1>
-          <p className="text-muted-foreground text-lg">
+          </EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
             {t("calculateurs.ftp.description")}
-          </p>
+          </FadeUp>
         </div>
 
         {/* Input card */}

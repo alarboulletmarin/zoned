@@ -747,11 +747,11 @@ export function PlanViewPage() {
                   if (e.key === "Enter") e.currentTarget.blur();
                   if (e.key === "Escape") setIsEditingName(false);
                 }}
-                className="text-3xl font-bold bg-transparent border-b-2 border-primary outline-none w-full"
+                className="font-sans font-semibold italic text-3xl md:text-4xl tracking-tight bg-transparent border-b-2 border-primary outline-none w-full"
               />
             ) : (
               <h1
-                className="text-3xl font-bold cursor-pointer group flex items-center gap-2"
+                className="font-sans font-semibold italic text-3xl md:text-4xl leading-[1.05] tracking-tight cursor-pointer group flex items-center gap-2"
                 onClick={() => { setEditName(planName); setIsEditingName(true); }}
                 title={t("view.clickToRename")}
               >

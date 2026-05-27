@@ -1,9 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { GithubIcon, Shield, Code, Sparkles, ExternalLink } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem, useCountUp } from "@/components/editorial";
+import { useAppStats } from "@/hooks/useAppStats";
 
 export function AboutPage() {
   const { t } = useTranslation("common");
+  const stats = useAppStats();
 
   return (
     <>
@@ -35,38 +38,30 @@ export function AboutPage() {
             <span className="text-primary font-bold tracking-widest text-sm uppercase mb-4 block">
               {t("content:about.seoHeroLabel")}
             </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4 leading-[1.1]">
+            <EditorialTitle as="h1" size="xl" className="mb-4 !leading-[1.1]">
               {t("content:about.title")}
-            </h1>
-            <p className="text-base md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
+            </EditorialTitle>
+            <FadeUp as="p" delay={0.1} className="text-base md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
               {t("content:about.description")}
-            </p>
+            </FadeUp>
           </div>
         </section>
 
         {/* Stats Bento Grid */}
-        <section className="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
+        <StaggerGrid className="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
           {[
-            { value: "200", label: t("content:about.statsWorkouts"), color: "primary", gradient: "from-primary/10 dark:from-primary/20" },
-            { value: "9", label: t("content:about.statsCalculators"), color: "zone-3", gradient: "from-zone-3/10 dark:from-zone-3/20" },
-            { value: "8", label: "Plans", color: "zone-2", gradient: "from-zone-2/10 dark:from-zone-2/20" },
-            { value: "16", label: "Collections", color: "zone-5", gradient: "from-zone-5/10 dark:from-zone-5/20" },
-            { value: "12", label: "Articles", color: "zone-4", gradient: "from-zone-4/10 dark:from-zone-4/20" },
-            { value: "6", label: "Zones", color: "zone-6", gradient: "from-zone-6/10 dark:from-zone-6/20" },
+            { target: stats.workouts, label: t("content:about.statsWorkouts"), color: "primary", gradient: "from-primary/10 dark:from-primary/20" },
+            { target: stats.calculators, label: t("content:about.statsCalculators"), color: "zone-3", gradient: "from-zone-3/10 dark:from-zone-3/20" },
+            { target: stats.plans, label: "Plans", color: "zone-2", gradient: "from-zone-2/10 dark:from-zone-2/20" },
+            { target: stats.collections, label: "Collections", color: "zone-5", gradient: "from-zone-5/10 dark:from-zone-5/20" },
+            { target: stats.articles, label: "Articles", color: "zone-4", gradient: "from-zone-4/10 dark:from-zone-4/20" },
+            { target: stats.zones, label: "Zones", color: "zone-6", gradient: "from-zone-6/10 dark:from-zone-6/20" },
           ].map((stat) => (
-            <div
-              key={stat.label}
-              className={`bg-gradient-to-br ${stat.gradient} to-transparent p-4 md:p-5 rounded-xl border border-border/50 text-center`}
-            >
-              <span className={`text-${stat.color} font-bold text-2xl md:text-3xl block`}>
-                {stat.value}
-              </span>
-              <span className="text-muted-foreground text-xs md:text-sm">
-                {stat.label}
-              </span>
-            </div>
+            <StaggerItem key={stat.label}>
+              <AboutStatCard {...stat} />
+            </StaggerItem>
           ))}
-        </section>
+        </StaggerGrid>
 
         {/* Personal + Links */}
         <section>
@@ -167,5 +162,32 @@ export function AboutPage() {
         </section>
       </div>
     </>
+  );
+}
+
+/** One bento-tile in the About stats grid. Count-up on mount. */
+function AboutStatCard({
+  target,
+  label,
+  color,
+  gradient,
+}: {
+  target: number;
+  label: string;
+  color: string;
+  gradient: string;
+}) {
+  const value = useCountUp(target);
+  return (
+    <div
+      className={`bg-gradient-to-br ${gradient} to-transparent p-4 md:p-5 rounded-xl border border-border/50 text-center`}
+    >
+      <span
+        className={`text-${color} font-bold text-2xl md:text-3xl block tabular-nums`}
+      >
+        {value}
+      </span>
+      <span className="text-muted-foreground text-xs md:text-sm">{label}</span>
+    </div>
   );
 }

@@ -23,6 +23,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import {
@@ -517,12 +518,12 @@ export function NutritionGuidePage() {
       <div className="py-8 space-y-8">
         {/* Page header */}
         <div>
-          <h1 className="text-3xl font-bold mb-2">
+          <EditorialTitle as="h1" className="mb-2">
             {t("nutrition.pageTitle")}
-          </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl">
+          </EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg max-w-2xl">
             {t("nutrition.subtitle")}
-          </p>
+          </FadeUp>
         </div>
 
         {/* Fueling calculator */}

@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
 import { Card, CardContent } from "@/components/ui/card";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { useSettings } from "@/hooks/useSettings";
 import { loadUserZonePrefs, calculatePaceZones } from "@/lib/zones";
 import type { ZoneNumber } from "@/types";
@@ -219,12 +220,12 @@ export function PaceConverterPage() {
       <div className="py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">
+          <EditorialTitle as="h1" className="mb-2">
             {t("calculators:calculateurs.converter.title")}
-          </h1>
-          <p className="text-muted-foreground text-lg">
+          </EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
             {t("calculators:calculateurs.converter.description")}
-          </p>
+          </FadeUp>
         </div>
 
         {/* Input grid */}

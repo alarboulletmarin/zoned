@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Target, Gauge, RefreshCw, Route, Timer, ArrowRight, List, Shuffle, Star, Flag, Scale, Zap, Waves } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import { usePickLang } from "@/lib/i18n-utils";
 
@@ -20,7 +21,35 @@ interface CalculateurEntry {
   iconColor: string;
 }
 
-const CALCULATEURS: CalculateurEntry[] = [
+/** Group ids surfaced in the hub. Each group reads as a small editorial
+ *  section with its own mono caption + the matching cards underneath. */
+type CalcGroupId = "benchmarks" | "pace" | "race";
+
+interface CalcGroup {
+  id: CalcGroupId;
+  titleKey: string;
+  members: string[];
+}
+
+const CALC_GROUPS: CalcGroup[] = [
+  {
+    id: "benchmarks",
+    titleKey: "calculators:calculateurs.groups.benchmarks",
+    members: ["zones", "vma", "ftp", "css"],
+  },
+  {
+    id: "pace",
+    titleKey: "calculators:calculateurs.groups.pace",
+    members: ["allures", "table-allures", "tapis-roulant"],
+  },
+  {
+    id: "race",
+    titleKey: "calculators:calculateurs.groups.race",
+    members: ["splits", "equivalence", "age-graded", "race-simulator", "what-if"],
+  },
+];
+
+export const CALCULATEURS: CalculateurEntry[] = [
   {
     id: "zones",
     icon: Target,
@@ -196,70 +225,96 @@ export function CalculateursPage() {
       <div className="py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">{t("calculators:calculateurs.title")}</h1>
-          <p className="text-muted-foreground text-lg">
+          <EditorialTitle as="h1" className="mb-2">
+            {t("calculators:calculateurs.title")}
+          </EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
             {t("calculators:calculateurs.description")}
-          </p>
+          </FadeUp>
         </div>
 
-        {/* Calculateur Cards */}
-        <div className={cn("grid gap-4", "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3")}>
-          {CALCULATEURS.map((item) => {
-            const Icon = item.icon;
-
-            if (item.comingSoon) {
-              return (
-                <div key={item.id}>
-                  <div className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50 h-full opacity-60 p-6">
-                    <div className="flex flex-col items-center text-center gap-4">
-                      <div className={cn("size-14 rounded-2xl flex items-center justify-center", `bg-muted/20`)}>
-                        <Icon className="size-7 text-muted-foreground" />
-                      </div>
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-center gap-2">
-                          <h2 className="text-lg font-semibold">
-                            {pickLang(item, "title")}
-                          </h2>
-                          <span className="bg-muted text-muted-foreground text-xs px-2 py-0.5 rounded-full">
-                            {t("calculators:calculateurs.comingSoon")}
-                          </span>
-                        </div>
-                        <p className="text-sm text-muted-foreground">
-                          {pickLang(item, "description")}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            }
-
+        {/* Calculateur Cards — grouped by theme. Each group reads as a
+            small editorial section: mono caption + matching cards. On
+            mobile cards collapse to icon + title + arrow; from sm+ they
+            expand to the full card with description + CTA. */}
+        <div className="space-y-10 sm:space-y-12">
+          {CALC_GROUPS.map((group) => {
+            const groupItems = group.members
+              .map((memberId) =>
+                CALCULATEURS.find((c) => c.id === memberId),
+              )
+              .filter((c): c is CalculateurEntry => c != null);
+            if (groupItems.length === 0) return null;
             return (
-              <Link key={item.id} to={item.href} className="group">
-                <div className={cn(
-                  "bg-gradient-to-br to-transparent rounded-xl border border-border/50 h-full p-6",
-                  "hover:shadow-md hover:-translate-y-1 transition-all duration-200",
-                  item.gradient,
-                )}>
-                  <div className="flex flex-col items-center text-center gap-4">
-                    <div className={cn("size-14 rounded-2xl flex items-center justify-center", item.iconBg)}>
-                      <Icon className={cn("size-7", item.iconColor)} />
-                    </div>
-                    <div className="space-y-1">
-                      <h2 className="text-lg font-semibold">
-                        {pickLang(item, "title")}
-                      </h2>
-                      <p className="text-sm text-muted-foreground">
-                        {pickLang(item, "description")}
-                      </p>
-                    </div>
-                    <div className={cn("flex items-center gap-1 text-sm font-medium", item.iconColor)}>
-                      {t("calculators:calculateurs.explore")}
-                      <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
-                    </div>
-                  </div>
-                </div>
-              </Link>
+              <section key={group.id} aria-labelledby={`calc-${group.id}`}>
+                <p
+                  id={`calc-${group.id}`}
+                  className="font-mono text-[10px] sm:text-[11px] tracking-[0.18em] uppercase text-muted-foreground mb-3 sm:mb-4 flex items-center gap-3"
+                >
+                  <span className="inline-block h-px w-8 bg-border" />
+                  {t(group.titleKey)}
+                </p>
+                <StaggerGrid className={cn("grid gap-3 sm:gap-4", "grid-cols-2 lg:grid-cols-3")}>
+                  {groupItems.map((item) => {
+                    const Icon = item.icon;
+
+                    if (item.comingSoon) {
+                      return (
+                        <StaggerItem key={item.id}>
+                          <div className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-lg sm:rounded-xl border border-border/50 h-full opacity-60 p-4 sm:p-6">
+                            <div className="flex flex-col items-center text-center gap-3 sm:gap-4 h-full">
+                              <div className={cn("size-10 sm:size-14 rounded-lg sm:rounded-2xl flex items-center justify-center shrink-0", `bg-muted/20`)}>
+                                <Icon className="size-5 sm:size-7 text-muted-foreground" />
+                              </div>
+                              <div className="space-y-1 min-w-0">
+                                <h2 className="text-sm sm:text-lg font-semibold leading-snug">
+                                  {pickLang(item, "title")}
+                                </h2>
+                                <span className="inline-block bg-muted text-muted-foreground text-[10px] sm:text-xs px-2 py-0.5 rounded-full whitespace-nowrap mt-1">
+                                  {t("calculators:calculateurs.comingSoon")}
+                                </span>
+                                <p className="hidden sm:block text-sm text-muted-foreground">
+                                  {pickLang(item, "description")}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </StaggerItem>
+                      );
+                    }
+
+                    return (
+                      <StaggerItem key={item.id}>
+                        <Link to={item.href} className="group block h-full">
+                          <div className={cn(
+                            "bg-gradient-to-br to-transparent rounded-lg sm:rounded-xl border border-border/50 h-full p-4 sm:p-6",
+                            "hover:shadow-sm hover:-translate-y-0.5 hover:border-foreground/40 transition-all duration-200",
+                            item.gradient,
+                          )}>
+                            <div className="flex flex-col items-center text-center gap-3 sm:gap-4 h-full">
+                              <div className={cn("size-10 sm:size-14 rounded-lg sm:rounded-2xl flex items-center justify-center shrink-0", item.iconBg)}>
+                                <Icon className={cn("size-5 sm:size-7", item.iconColor)} />
+                              </div>
+                              <div className="space-y-1 min-w-0 flex-1">
+                                <h2 className="text-sm sm:text-lg font-semibold leading-snug group-hover:text-primary transition-colors">
+                                  {pickLang(item, "title")}
+                                </h2>
+                                <p className="hidden sm:block text-sm text-muted-foreground">
+                                  {pickLang(item, "description")}
+                                </p>
+                              </div>
+                              <div className={cn("hidden sm:flex items-center gap-1 text-sm font-medium", item.iconColor)}>
+                                {t("calculators:calculateurs.explore")}
+                                <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                      </StaggerItem>
+                    );
+                  })}
+                </StaggerGrid>
+              </section>
             );
           })}
         </div>

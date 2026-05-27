@@ -24,6 +24,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { PLAN_PRINCIPLES } from "@/data/plan-methodology";
 import { cn } from "@/lib/utils";
@@ -145,12 +146,12 @@ export function PlanMethodologyPage() {
               <FlaskConical className="size-6 text-primary" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold">
+          <EditorialTitle as="h1">
             {t("content:planMethodology.heading")}
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          </EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-lg text-muted-foreground max-w-2xl mx-auto">
             {t("content:planMethodology.intro")}
-          </p>
+          </FadeUp>
         </div>
 
         {/* Intro paragraph */}

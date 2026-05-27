@@ -10,6 +10,7 @@ import {
 import { SEOHead } from "@/components/seo";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { usePickLang } from "@/lib/i18n-utils";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 
 // ---------------------------------------------------------------------------
 // Zone data
@@ -326,12 +327,12 @@ export function MethodologyPage() {
               <FlaskConical className="size-6 text-primary" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold">
+          <EditorialTitle as="h1">
             {t("content:methodology.heading")}
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          </EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-lg text-muted-foreground max-w-2xl mx-auto">
             {t("content:methodology.intro")}
-          </p>
+          </FadeUp>
         </div>
 
         {/* Section 1: Our Approach */}

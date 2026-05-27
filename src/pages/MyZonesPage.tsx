@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { ZoneCalculator } from "@/components/domain/ZoneCalculator";
 import { PaceCalculator } from "@/components/domain/PaceCalculator";
 import { SEOHead } from "@/components/seo";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
 
 export function MyZonesPage() {
   const { t } = useTranslation("common");
@@ -15,8 +16,10 @@ export function MyZonesPage() {
       />
       <div className="py-8 max-w-2xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold">{t("myZones.title")}</h1>
-          <p className="text-muted-foreground">{t("myZones.description")}</p>
+          <EditorialTitle as="h1" size="md">{t("myZones.title")}</EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground">
+            {t("myZones.description")}
+          </FadeUp>
         </div>
 
         <div className="space-y-6">

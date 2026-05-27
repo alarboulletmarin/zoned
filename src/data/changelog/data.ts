@@ -2,6 +2,108 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.6.0",
+    date: "2026-05-27",
+    changes: {
+      added: [
+        {
+          text: "Refonte editoriale de la home : journal d'entrainement, sections pleine largeur, sources de chercheurs reelles, FAQ en accordeon et primitives de cards reutilisables",
+          textEn: "Editorial landing rewrite: home redesigned as a training journal with full-bleed sections, real researcher sources, accordion FAQ, and reusable card primitives",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Citation rotative quotidienne sur la home, signee par de vrais athletes et coachs (deterministe selon le jour)",
+          textEn: "Daily rotating quote on home from real athletes & coaches (deterministic by day)",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Nouvelle navigation haute avec menus deroulants au survol et menu mobile redessine",
+          textEn: "Top navigation rework with hover dropdowns and a redesigned mobile sheet",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Sidebar avec groupes repliables et etat ouvert/ferme conserve d'une session a l'autre",
+          textEn: "Sidebar with collapsible groups and persisted open/closed state across sessions",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Footer global promu depuis la landing : switcher FR/EN visible sur mobile, layout 3 colonnes compact",
+          textEn: "Global Footer promoted from the landing page (FR/EN switcher visible on mobile, compact 3-column layout)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "README open-source avec stats GitHub live (etoiles, issues, dernier commit) et badge de version",
+          textEn: "Open-source README with live GitHub stats (stars, issues, last commit) and version badge",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+      ],
+      changed: [
+        {
+          text: "Header editorial propage a l'ensemble de l'app en 6 vagues : pages calculateurs, pages hub (vague 1), pages article-like (vague 3), pages detail (vague 4), pages utilitaires (vague 5), formulaires et builders",
+          textEn: "Editorial header propagated across the whole app in 6 waves: calculator pages, hub pages (wave 1), article-like pages (wave 3), detail pages (wave 4), utility pages (wave 5), forms/builders",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Fiche seance refondue avec divulgation progressive : ton editorial, moins de bruit visuel",
+          textEn: "Workout detail page refactored with progressive disclosure (editorial tone, less visual noise)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Passe couleur sur la home : hero plus marque, cards signalees par accents, bordures decoratives supprimees",
+          textEn: "Home colour pass: punchier hero, signalled cards, decorative borders removed",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Hub calculateurs regroupe en 3 sections avec layout aere en colonne unique sur mobile",
+          textEn: "Calculators hub grouped into 3 sections with an airy single-column layout on mobile",
+          category: "Calculateurs",
+          categoryEn: "Calculators",
+        },
+        {
+          text: "Atomes de la HomePage extraits et reutilises sur la LibraryPage pour cohesion visuelle",
+          textEn: "HomePage atoms extracted and reused on LibraryPage for consistency",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Compaction mobile de la home : §04 et §05 alignes sur le pattern de grille de §06 ; motion subtile, points finaux abandonnes sur les titres, em dashes generalises",
+          textEn: "Home mobile compaction: §04/§05 now match the §06 grid pattern; subtle motion polish, trailing periods dropped on section titles, em dashes adopted",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      fixed: [
+        {
+          text: "Le compteur de seances sur la page About inclut maintenant les sessions velo et natation (pas seulement le running)",
+          textEn: "About workouts count now includes cycling + swimming sessions (not only running)",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Stats live de la page About cablees sur les vrais compteurs du catalogue",
+          textEn: "About page live stats wired to the actual catalogue counts",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Layout 3 colonnes du footer ne casse plus sur les ecrans mobiles etroits",
+          textEn: "Footer 3-column layout no longer breaks on narrow mobile screens",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+    },
+  },
+  {
     version: "0.5.4",
     date: "2026-05-11",
     changes: {

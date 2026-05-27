@@ -6,6 +6,7 @@ import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { PrebuiltPlanCard } from "@/components/domain/PrebuiltPlanCard";
 import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
+import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
 
 export function PrebuiltPlansPage() {
   const { t } = useTranslation("plan");
@@ -38,25 +39,27 @@ export function PrebuiltPlansPage() {
 
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">
+          <EditorialTitle as="h1" className="mb-2">
             {t("prebuiltList.title")}
-          </h1>
-          <p className="text-muted-foreground text-lg">
+          </EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
             {t("prebuiltList.subtitle")}
-          </p>
+          </FadeUp>
         </div>
 
         {/* Grid */}
-        <div
+        <StaggerGrid
           className={cn(
             "grid gap-4",
             "grid-cols-2 lg:grid-cols-3",
           )}
         >
           {plans.map((plan) => (
-            <PrebuiltPlanCard key={plan.id} plan={plan} />
+            <StaggerItem key={plan.id}>
+              <PrebuiltPlanCard plan={plan} />
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGrid>
 
         {/* Stats */}
         <div className="mt-8 text-center text-sm text-muted-foreground">

@@ -7,6 +7,7 @@ import { ArticleCard } from "@/components/domain/ArticleCard";
 import { useArticles } from "@/hooks/useArticles";
 import type { ArticleCategory } from "@/data/articles/types";
 import { cn } from "@/lib/utils";
+import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
 
 const CATEGORY_ICONS: Record<ArticleCategory, React.ComponentType<{ className?: string }>> = {
   fundamentals: BookOpen,
@@ -55,10 +56,12 @@ export function LearnPage() {
       <div className="py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">{t("content:learn.title")}</h1>
-        <p className="text-muted-foreground text-lg">
+        <EditorialTitle as="h1" className="mb-2">
+          {t("content:learn.title")}
+        </EditorialTitle>
+        <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
           {t("content:learn.description")}
-        </p>
+        </FadeUp>
       </div>
 
       {/* Category Filter */}
@@ -96,14 +99,18 @@ export function LearnPage() {
       ) : (
         <>
           {/* Articles Grid */}
-          <div className={cn(
-            "grid gap-4",
-            "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-          )}>
+          <StaggerGrid
+            className={cn(
+              "grid gap-4",
+              "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+            )}
+          >
             {filteredArticles.map((article) => (
-              <ArticleCard key={article.id} article={article} />
+              <StaggerItem key={article.id}>
+                <ArticleCard article={article} />
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerGrid>
 
           {/* Stats */}
           <div className="mt-8 text-center text-sm text-muted-foreground">

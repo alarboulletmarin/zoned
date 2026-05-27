@@ -1,6 +1,6 @@
 {
   "home": {
-    "seoTitle": "Scientific Running Workouts",
+    "seoTitle": "Structured training, without the noise.",
     "findWorkout": "Find your workout",
     "findWorkoutDesc": "5 questions to find the perfect session",
     "raceSimulator": "Race simulator",
@@ -32,6 +32,278 @@
     "swimmingEyebrow": "Swimming",
     "swimmingTitle": "Dive into the pool",
     "swimmingDesc": "10 sessions: technique, endurance, sprints, pyramids. Built-in CSS zones.",
-    "swimmingCta": "See swimming sessions"
+    "swimmingCta": "See swimming sessions",
+
+    "masthead": {
+      "volume": "Vol.",
+      "issue": "No.",
+      "openSource": "Open-source",
+      "local": "100 % local",
+      "noAccount": "No account"
+    },
+
+    "hero": {
+      "head": "Training",
+      "tail": "without the noise",
+      "accent": ["structured", "readable", "instrumented", "documented"],
+      "lead": "{{sessions}} workouts grounded in the literature (Seiler, Daniels, Billat, Coggan), {{plans}} pre-built plans from 5K to marathon, {{calculators}} calculators and a route generator. Everything runs in your browser; no data ever leaves your device.",
+      "ctaPrimary": "Open the library",
+      "ctaSecondary": "Pick a plan",
+      "scrollHint": "Scroll to discover",
+      "fig": {
+        "title": "What a well-dosed week looks like",
+        "body": "Weekly training time distributed by effort zone, polarised model. The key rule: 80 % easy, 20 % hard, almost nothing in the middle 'grey zone'.",
+        "zones": {
+          "z1": "Recovery",
+          "z2": "Endurance",
+          "z3": "Tempo",
+          "z4": "Threshold",
+          "z5": "VO₂max",
+          "z6": "Anaerobic"
+        },
+        "lowRange": "Easy (Z1–Z2)",
+        "lowCaption": "aerobic volume",
+        "highRange": "Above threshold (Z4–Z6)",
+        "highCaption": "intense quality"
+      }
+    },
+
+    "stats": {
+      "sessions": "Catalogued sessions",
+      "plansFrom": "Plans",
+      "calculators": "Calculators",
+      "trackers": "Tracker",
+      "noAccount": "0 account"
+    },
+
+    "s01": {
+      "kicker": "Three entry points",
+      "title": "One tool per use, not per persona",
+      "body": "Zoned doesn't ask who you are. It lets you choose how to approach the work.",
+      "e1Title": "Find today's session",
+      "e1Body": "Filter by discipline, zone, duration, level. Every card states its difficulty and TSS cost before you click. Today's pick adapts to your recent load.",
+      "e1Link": "Library",
+      "e2Title": "Follow a structured plan",
+      "e2Body": "From 5K to marathon, 8 to 18 weeks. Transparent load progression, recovery week every 21 days, taper calibrated for race day.",
+      "e2Link": "Plans",
+      "e3Title": "Understand the science",
+      "e3Body": "Every session cites its method (Seiler, Daniels, Billat, Coggan), the physiological adaptation targeted, the zone, and a verifiable bibliographic reference.",
+      "e3Link": "Methods"
+    },
+
+    "s02": {
+      "kicker": "Suggested this week",
+      "title": "Three sessions to stay on the right volume",
+      "body": "Deterministic by ISO week. No A/B, no engagement loop. Click a card to open the full session."
+    },
+
+    "s03": {
+      "kicker": "The zone atlas",
+      "title1": "Six zones, six adaptations,",
+      "title2": "one coherent grid",
+      "body": "Every session in the library is anchored in this system. Enter your VMA and/or HRmax to compute your personal ranges, or pull them from your profile.",
+      "zone": "Zone",
+      "name": "Name",
+      "hr": "Heart rate",
+      "rpe": "RPE",
+      "adaptation": "Targeted adaptation",
+      "refPace": "Pace",
+      "fig": "Fig. 02 — 6-zone model, calibrated on HRmax / FTP / threshold pace",
+      "personal": {
+        "label": "Computed from your profile",
+        "edit": "Edit",
+        "prompt": "Compute your personalised zones. One value is enough.",
+        "vmaLabel": "VMA (km/h)",
+        "fcMaxLabel": "HRmax (bpm)",
+        "submit": "Compute my zones",
+        "cancel": "Cancel"
+      }
+    },
+
+    "s04": {
+      "kicker": "The methods",
+      "title": "Researchers & reference methods",
+      "body": "Zoned does not push a single method. Every zone, every session rests on published work; here are the official sources you can consult directly.",
+      "viewPublication": "View publication",
+      "researchers": {
+        "seiler": {
+          "contribution": "Polarised training model (80/20).",
+          "citation": "\"Quantifying training intensity distribution in elite endurance athletes\", Scand J Med Sci Sports, 2006."
+        },
+        "billat": {
+          "contribution": "French researcher. vVO₂max and the 30/30 protocol.",
+          "citation": "\"Interval training at VO₂max: effects on aerobic performance\", Med Sci Sports Exerc, 1999."
+        },
+        "daniels": {
+          "contribution": "VDOT system and training zones (1933–2025).",
+          "citation": "Daniels' Running Formula (Human Kinetics, 3rd ed., 2014)."
+        },
+        "lydiard": {
+          "contribution": "Periodisation and aerobic base building.",
+          "citation": "New-Zealand pioneer of the base-building approach, 1950-60s."
+        },
+        "noakes": {
+          "contribution": "Central governor theory and perceived effort.",
+          "citation": "Lore of Running (Oxford University Press, 4th ed., 2003)."
+        },
+        "cologne": {
+          "contribution": "Origins of the lactate threshold concept, Cologne group.",
+          "citation": "Foundational work on lactate metabolism, 1970s."
+        },
+        "faude": {
+          "contribution": "Definitive review of lactate threshold concepts.",
+          "citation": "\"Lactate Threshold Concepts: How Valid Are They?\", Sports Med, 2009."
+        },
+        "sanMillan": {
+          "contribution": "Zone 2 training and metabolic health.",
+          "citation": "Research on mitochondrial function and metabolic flexibility in endurance athletes."
+        }
+      }
+    },
+
+    "s05": {
+      "kicker": "Plans · 5K → Marathon",
+      "title": "One trajectory per distance",
+      "body": "{{count}} published plans, {{min}} to {{max}} weeks. Progressive load, recovery week every 21 days, taper calibrated for race day.",
+      "weeks": "weeks",
+      "sessionsPerWeek": "sessions / wk",
+      "choose": "choose",
+      "legend": "Macrocycle phases",
+      "phases": {
+        "base": "Aerobic base",
+        "build": "Build",
+        "peak": "Specific",
+        "taper": "Taper"
+      },
+      "fig": "Fig. 03 — Standard macrocycle phases: base · build · specific · taper",
+      "distance": {
+        "5K": "5K",
+        "10K": "10K",
+        "semi": "Half",
+        "marathon": "Marathon",
+        "trail": "Trail"
+      }
+    },
+
+    "s06": {
+      "kicker": "Calculators",
+      "title": "A toolkit to measure your ranges",
+      "body": "Every computation runs in the browser, no data is sent. Formulas are documented and the source code is readable.",
+      "tools": {
+        "zones": "Compute your HR and pace zones from your VMA or HRmax.",
+        "converter": "Convert between min/km, km/h and min/mile in real time.",
+        "paceTable": "Every pace from 3:00 to 10:00/km with estimated times.",
+        "treadmill": "Convert speed and incline into an equivalent outdoor pace.",
+        "splits": "Plan your splits to hit your target time.",
+        "vma": "Estimate your VMA from a recent race result.",
+        "ftp": "Estimate your FTP from a 20-min or a ramp test.",
+        "css": "Estimate your CSS from a 400 m + 200 m swim test.",
+        "equivalence": "Predict your times across every distance from one result.",
+        "ageGraded": "Compare your performance to the world record for your category.",
+        "raceSimulator": {
+          "title": "Race-day simulator",
+          "desc": "Full race-day plan: schedule, paces, nutrition, mental cues."
+        },
+        "whatIf": "Compare two training scenarios side by side."
+      }
+    },
+
+    "s07": {
+      "kicker": "Session of the week",
+      "open": "Start session",
+      "target": "Targeted adaptation",
+      "metrics": "Metrics",
+      "dur": "Duration",
+      "zone": "Zone",
+      "lvl": "Level"
+    },
+
+    "s08": {
+      "kicker": "Ethos",
+      "title1": "No data",
+      "title2": "ever leaves your device",
+      "body": "Zoned is built to run entirely locally. No analytics server, no account, no password to remember, no third-party cookies. The code is public and auditable under MIT licence.",
+      "lines": {
+        "trackers": "Third-party trackers",
+        "account": "Account required",
+        "network": "Data sent",
+        "exports": "Local exports"
+      }
+    },
+
+    "s09": {
+      "kicker": "Frequently asked",
+      "title": "Five questions answered upfront",
+      "more": "{{count}} more articles in the learning library.",
+      "moreLink": "Read all →",
+      "q": {
+        "hrm": {
+          "q": "Do I need a heart rate strap?",
+          "a": "No. You can calibrate your zones with pace (running, swimming) or power (cycling, via FTP). A heart-rate strap is useful to validate Z1–Z2 and to detect cardiac drift on long runs."
+        },
+        "export": {
+          "q": "How do I send a session to my watch?",
+          "a": "Each session downloads as .fit (Garmin / Wahoo / COROS native workout file), .ics (Apple Calendar, Google Calendar, Outlook), .pdf or .png. Generated routes export as .gpx. Every export runs locally; no file ever transits through a server."
+        },
+        "custom": {
+          "q": "Can I customise a plan?",
+          "a": "Yes. You can shift weeks (injury, travel), substitute a session (run ↔ bike ↔ swim, session ↔ strength) and move any day with drag-and-drop on the calendar. A free-form plan mode also lets you build a plan from scratch."
+        },
+        "free": {
+          "q": "Is Zoned free?",
+          "a": "Yes, and forever. No paid tier, no locked feature, no ad banner. The project is open-source under MIT licence and funded by voluntary donations."
+        },
+        "devices": {
+          "q": "What devices does Zoned run on?",
+          "a": "Any modern browser on desktop, tablet or phone. No app to install: Zoned is a PWA, a home-screen shortcut gives you an app-like experience."
+        },
+        "offline": {
+          "q": "Does Zoned work offline?",
+          "a": "Yes. After the first load, the app and the sessions are cached by the service worker. You can open a workout, run a calculator or check your plan with no connection."
+        },
+        "data": {
+          "q": "Where is my data stored?",
+          "a": "Everything (zones, profile, plans, favourites, routes) lives in your browser's local storage. No account, no server, no third-party cookies. You can export your data as .json from Settings to back it up or move it."
+        }
+      }
+    },
+
+    "tip": "Tip of the day",
+
+    "cta": {
+      "kicker": "Get started",
+      "line1": "Open the library",
+      "line2": "Launch your first session in two clicks",
+      "primary": "Browse sessions",
+      "secondary": "See the code (GitHub)"
+    },
+
+    "footer": {
+      "tagline": "A scientific training journal, local, free and open. For those who want to understand what they're doing.",
+      "groups": {
+        "product": "Product",
+        "science": "Science",
+        "project": "Project"
+      },
+      "product": {
+        "library": "Library",
+        "plans": "Plans",
+        "calculators": "Calculators",
+        "routes": "Route generator"
+      },
+      "science": {
+        "methodology": "Methods",
+        "glossary": "Glossary",
+        "guides": "Guides"
+      },
+      "project": {
+        "about": "About",
+        "github": "GitHub",
+        "changelog": "Changelog"
+      },
+      "license": "© {{year}} · ZONED · Free software, MIT licence",
+      "version": "v.{{version}}",
+      "builtInPublic": "Built in public"
+    }
   }
 }
