@@ -49,6 +49,7 @@
       "lead": "{{sessions}} séances validées par la science (Seiler, Daniels, Billat, Coggan), {{plans}} plans pré-construits du 5K au marathon, {{calculators}} calculateurs et un générateur de parcours. Tout fonctionne dans votre navigateur, aucune donnée ne quitte votre appareil.",
       "ctaPrimary": "Ouvrir la bibliothèque",
       "ctaSecondary": "Choisir un plan",
+      "ctaSecondaryHasPlans": "Voir mes plans",
       "scrollHint": "Découvrir l'app",
       "fig": {
         "title": "À quoi ressemble une semaine bien dosée",

@@ -15,6 +15,7 @@ import { SEOHead } from "@/components/seo";
 import { useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
+import { usePlans } from "@/hooks/usePlans";
 import { ZONE_META, type ZoneNumber } from "@/types";
 import { usePickLang } from "@/lib/i18n-utils";
 import {
@@ -332,6 +333,8 @@ export function HomePage() {
   const { workouts: cyclingWorkouts } = useCrossDisciplineWorkouts("cycling");
   const { workouts: swimWorkouts } = useCrossDisciplineWorkouts("swimming");
   const { workouts: strengthWorkouts } = useStrengthWorkouts();
+  const { plans: userPlans } = usePlans();
+  const hasPlans = userPlans.length > 0;
 
   // Endurance pool — running + cycling + swimming. Strength sessions are on
   // a different shape (no zones) so we add them only to the headline count.
@@ -484,7 +487,13 @@ export function HomePage() {
                 </Link>
               </Button>
               <Button asChild variant="outline-primary" size="lg" className="rounded-full px-6">
-                <Link to="/plan/new">{t("homepage:home.hero.ctaSecondary")}</Link>
+                <Link to={hasPlans ? "/plans" : "/plan/new"}>
+                  {t(
+                    hasPlans
+                      ? "homepage:home.hero.ctaSecondaryHasPlans"
+                      : "homepage:home.hero.ctaSecondary",
+                  )}
+                </Link>
               </Button>
             </div>
 

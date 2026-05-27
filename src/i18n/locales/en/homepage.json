@@ -49,6 +49,7 @@
       "lead": "{{sessions}} workouts grounded in the literature (Seiler, Daniels, Billat, Coggan), {{plans}} pre-built plans from 5K to marathon, {{calculators}} calculators and a route generator. Everything runs in your browser; no data ever leaves your device.",
       "ctaPrimary": "Open the library",
       "ctaSecondary": "Pick a plan",
+      "ctaSecondaryHasPlans": "View my plans",
       "scrollHint": "Scroll to discover",
       "fig": {
         "title": "What a well-dosed week looks like",
