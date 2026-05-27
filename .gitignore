@@ -42,3 +42,8 @@ _bmad_output/
 _bmad-output/
 design-artifacts/
 .playwright-mcp/
+
+# social story drafts (local only)
+scripts/story-ui-refonte.html
+scripts/render-story.ts
+public/social/
