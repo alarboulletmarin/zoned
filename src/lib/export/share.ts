@@ -118,7 +118,6 @@ export async function shareImage(
   target: Target,
   filename: string,
   transparent: boolean,
-  meta: { title?: string; text?: string } = {},
 ): Promise<ShareMethod> {
   const blob = await nodeToBlob(target, transparent);
   const file = new File([blob], filename, { type: "image/png" });
@@ -130,16 +129,15 @@ export async function shareImage(
     navigator.canShare({ files: [file] })
   ) {
     try {
-      // We deliberately drop `text` here. Instagram Stories (and a handful of
-      // other apps) accept the share payload but render *only* the text body
-      // — the image is silently dropped, so the user ends up pasting "Z6 –
-      // VMA courte" instead of the visual they curated. Stripping the text
-      // forces every receiving app to handle the image as the primary asset.
-      // `title` is kept because it appears as the share-sheet header on iOS
-      // and the file label on Android; it never bleeds into the post body.
-      const payload: ShareData = { files: [file] };
-      if (meta.title) payload.title = meta.title;
-      await navigator.share(payload);
+      // Image-only payload: no `title`, no `text`. iOS's share-sheet
+      // "Copy" option pastes the *whole* ShareData (title + image), so a
+      // title here ends up in the user's clipboard alongside the picture.
+      // Instagram Stories goes further and prefers text over the file
+      // entirely. Stripping both fields forces every receiving app —
+      // copy, Stories, Mail, Messages — to treat the image as the only
+      // asset. The filename on the File object (e.g. "zoned-REC-001.png")
+      // already gives apps a sensible label.
+      await navigator.share({ files: [file] });
       return "native";
     } catch (err) {
       // AbortError = user cancelled the native sheet; surface as cancellation.

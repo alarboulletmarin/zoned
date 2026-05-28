@@ -19,14 +19,37 @@ createRoot(document.getElementById("root")!).render(
 // Hide shell after first paint
 requestAnimationFrame(hideLoadingShell);
 
-// PWA service worker registration — dispatch event on update so UI can prompt
+// PWA service worker registration.
+// Strategy: auto-reload silently when an update is detected within the first
+// few seconds (typical refresh case — user expects fresh content). Otherwise
+// surface the banner so we don't interrupt an in-flight action.
 if ("serviceWorker" in navigator && import.meta.env.PROD) {
+  const APP_LOADED_AT = Date.now();
+  const SILENT_RELOAD_WINDOW_MS = 10_000;
+  const UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1000;
+
   import("virtual:pwa-register").then(({ registerSW }) => {
     const updateSW = registerSW({
       immediate: true,
       onNeedRefresh() {
+        const elapsed = Date.now() - APP_LOADED_AT;
+        if (elapsed < SILENT_RELOAD_WINDOW_MS) {
+          updateSW(true);
+          return;
+        }
         window.dispatchEvent(new CustomEvent("zoned-sw-update"));
         (window as any).__zonedApplyUpdate = () => updateSW(true);
+      },
+      onRegisteredSW(_swUrl, registration) {
+        if (!registration) return;
+        const checkForUpdate = () => {
+          if (registration.installing || !navigator.onLine) return;
+          registration.update().catch(() => {});
+        };
+        document.addEventListener("visibilitychange", () => {
+          if (document.visibilityState === "visible") checkForUpdate();
+        });
+        setInterval(checkForUpdate, UPDATE_CHECK_INTERVAL_MS);
       },
     });
   });

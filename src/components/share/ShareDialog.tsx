@@ -30,7 +30,6 @@ import {
   shareImage,
   isCopySupported,
 } from "@/lib/export/share";
-import { usePickLang } from "@/lib/i18n-utils";
 import type { WorkoutTemplate } from "@/types";
 import {
   SHARE_TEMPLATES,
@@ -46,7 +45,6 @@ interface ShareDialogProps {
 
 export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
   const { t } = useTranslation("common");
-  const pickLang = usePickLang();
   const [selectedId, setSelectedId] = useState<string>(SHARE_TEMPLATES[0].id);
   const [transparent, setTransparent] = useState(false);
   const [busy, setBusy] = useState<null | "download" | "copy" | "share">(null);
@@ -124,10 +122,7 @@ export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
     setBusy("share");
     const toastId = toast.loading(t("share.toast.loading"));
     try {
-      const name = pickLang(workout, "name");
-      const method = await shareImage(node, filename(), transparent, {
-        title: name,
-      });
+      const method = await shareImage(node, filename(), transparent);
       toast.success(
         method === "native" ? t("share.toast.shared") : t("share.toast.downloaded"),
         { id: toastId },
