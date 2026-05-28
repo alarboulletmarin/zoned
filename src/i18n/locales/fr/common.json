@@ -550,6 +550,12 @@
     "freeSelection": "Sélection libre",
     "step": "Étape {{number}}",
     "featured": "Collections à découvrir",
+    "groups": {
+      "starter": "Débuter & bien-être",
+      "race": "Objectifs course",
+      "speed": "Vitesse & séances clés",
+      "strength": "Force & prévention"
+    },
     "difficulty": {
       "beginner": "Débutant",
       "intermediate": "Intermédiaire",
