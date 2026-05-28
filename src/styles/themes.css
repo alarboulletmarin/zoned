@@ -18,7 +18,9 @@
 
   /* Primary - Zone 4 Orange */
   --primary: #f97316;
-  --primary-foreground: #ffffff;
+  /* White on orange-500 fails WCAG AA (2.8:1). Charcoal hits 5.5:1 while
+     keeping the orange brand identity intact. */
+  --primary-foreground: #1c1917;
 
   /* Secondary */
   --secondary: #f1f5f9;
@@ -26,7 +28,9 @@
 
   /* Muted */
   --muted: #f1f5f9;
-  --muted-foreground: #64748b;
+  /* Was #64748b (slate-500); bumped a notch darker so secondary text passes
+     WCAG AA 4.5:1 on the light pastel callout backgrounds we use. */
+  --muted-foreground: #525e72;
 
   /* Accent (Zone 4 background/text for interactive states) */
   --accent: #ffedd5;

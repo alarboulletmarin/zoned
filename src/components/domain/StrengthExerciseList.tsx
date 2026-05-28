@@ -69,9 +69,9 @@ export function StrengthExerciseList({ blocks, phase, className }: StrengthExerc
 
   return (
     <div className={cn("space-y-2", className)}>
-      <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+      <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
         {phaseLabel}
-      </h4>
+      </h3>
 
       {isLoading ? (
         <div className="space-y-2">

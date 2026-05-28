@@ -64,9 +64,9 @@ export function WorkoutStructure({ workout, userZones, className }: WorkoutStruc
       {phases.map((phase) => (
         <section key={phase.key} className="space-y-2.5">
           <div className="space-y-1">
-            <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
               {phase.label}
-            </h4>
+            </h3>
             {phase.summary && shouldShowPhaseSummary(phase.steps) && (
               <p className="text-sm font-medium text-foreground/85 tracking-tight">
                 {phase.summary}

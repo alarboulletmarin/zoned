@@ -392,6 +392,7 @@ export function WorkoutFilters({
         </label>
         <Switch
           id="favoritesOnly"
+          aria-label={t("filters.favoritesOnly")}
           checked={filters.favoritesOnly}
           onCheckedChange={(checked) => updateFilter("favoritesOnly", checked)}
         />

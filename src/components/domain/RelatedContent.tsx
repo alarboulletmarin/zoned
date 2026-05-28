@@ -79,10 +79,10 @@ export function RelatedContent({ source, className }: RelatedContentProps) {
         {/* Articles */}
         {articles.length > 0 && (
           <div>
-            <h4 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
+            <h3 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
               <BookOpen className="size-3.5" />
               {t("relatedContent.articles")}
-            </h4>
+            </h3>
             <div className="space-y-2">
               {articles.map((article) => (
                 <ArticleCardCompact key={article.id} article={article} />
@@ -94,10 +94,10 @@ export function RelatedContent({ source, className }: RelatedContentProps) {
         {/* Workouts */}
         {workouts.length > 0 && (
           <div>
-            <h4 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
+            <h3 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
               <Dumbbell className="size-3.5" />
               {t("relatedContent.workouts")}
-            </h4>
+            </h3>
             <div className="space-y-2">
               {workouts.map((workout) => (
                 <WorkoutCardCompact key={workout.id} workout={workout} />
@@ -109,10 +109,10 @@ export function RelatedContent({ source, className }: RelatedContentProps) {
         {/* Glossary */}
         {glossaryTerms.length > 0 && (
           <div>
-            <h4 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
+            <h3 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
               <Book className="size-3.5" />
               {t("relatedContent.glossary")}
-            </h4>
+            </h3>
             <div className="flex flex-wrap gap-2">
               {glossaryTerms.map((term) => (
                 <GlossaryChip key={term.id} term={term} />

@@ -575,9 +575,10 @@ export function LibraryPage() {
                 variant="outline"
                 size="sm"
                 onClick={openMobileFilters}
+                aria-label={t("filters.title")}
                 className="lg:hidden relative"
               >
-                <Filter className="size-4" />
+                <Filter className="size-4" aria-hidden="true" />
                 <span className="hidden sm:inline ml-2">
                   {t("filters.title")}
                 </span>
