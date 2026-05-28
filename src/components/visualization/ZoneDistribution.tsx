@@ -25,16 +25,16 @@ export function ZoneDistribution({ workout, className }: ZoneDistributionProps) 
   return (
     <div className={cn("space-y-3", className)}>
       {/* Horizontal bars */}
-      <div className="space-y-2">
+      <div className="space-y-3">
         {zoneBreakdown.map((item) => (
-          <div key={item.zone} className="space-y-1">
+          <div key={item.zone} className="space-y-1.5">
             <div className="flex items-center justify-between text-xs">
               <span className="font-medium">Z{item.zone} - {item.label}</span>
               <span className="text-muted-foreground">
                 {Math.round(item.percent)}% ({formatDurationMinutes(item.durationMin)})
               </span>
             </div>
-            <div className="h-2 rounded-full bg-muted overflow-hidden">
+            <div className="h-2.5 rounded-full bg-muted overflow-hidden">
               <div
                 className="h-full rounded-full transition-all"
                 style={{
