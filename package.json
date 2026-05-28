@@ -6,12 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "postinstall": "puppeteer browsers install chrome",
     "generate:sitemap": "bun run scripts/generate-sitemap.ts",
     "generate:og": "bun run scripts/generate-og-image.ts",
     "preview": "vite preview",
     "prerender": "bun run scripts/prerender.ts",
     "check:i18n": "bun run scripts/check-i18n-parity.ts",
-    "build:seo": "bun run scripts/generate-og-image.ts && tsc && vite build && bun run scripts/generate-sitemap.ts && bun run scripts/prerender.ts"
+    "build:seo": "tsc && vite build && bun run scripts/generate-sitemap.ts && bun run scripts/prerender.ts",
+    "build:seo:full": "bun run scripts/generate-og-image.ts && bun run build:seo"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.18",

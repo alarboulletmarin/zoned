@@ -17,9 +17,10 @@ import puppeteer from "puppeteer";
 const DIST_DIR = join(import.meta.dirname, "../dist");
 const SITEMAP_PATH = join(import.meta.dirname, "../public/sitemap.xml");
 const PORT = 4173;
-// Higher concurrency cuts wall time roughly linearly. Puppeteer's Chrome can
-// comfortably handle ~12 pages in parallel on a multi-core dev box.
-const CONCURRENCY = 12;
+// Concurrency: higher numbers cut wall time linearly but each Chrome tab
+// uses ~150-250 MB. Vercel build runners (2 cores, 8 GB) need a tighter
+// cap to avoid OOM kills; local dev boxes can push much harder.
+const CONCURRENCY = process.env.VERCEL ? 6 : 12;
 const SITE_URL = `http://localhost:${PORT}`;
 
 // Parse routes from sitemap.xml
