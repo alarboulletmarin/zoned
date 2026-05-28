@@ -44,6 +44,7 @@ design-artifacts/
 .playwright-mcp/
 
 # social story drafts (local only)
+scripts/stories/
 scripts/story-ui-refonte.html
 scripts/render-story.ts
 public/social/
