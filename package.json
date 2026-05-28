@@ -13,7 +13,8 @@
     "prerender": "bun run scripts/prerender.ts",
     "check:i18n": "bun run scripts/check-i18n-parity.ts",
     "build:seo": "tsc && vite build && bun run scripts/generate-sitemap.ts && bun run scripts/prerender.ts",
-    "build:seo:full": "bun run scripts/generate-og-image.ts && bun run build:seo"
+    "build:seo:full": "bun run scripts/generate-og-image.ts && bun run build:seo",
+    "deploy": "bun run build:seo && git add -f dist public/sitemap.xml && git diff --cached --quiet || git commit -m 'chore(build): regenerate prerendered dist'"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.18",

@@ -1,7 +1,7 @@
 {
-  "buildCommand": "bun run build:seo",
   "outputDirectory": "dist",
-  "framework": "vite",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "installCommand": "echo 'static deploy: skipping install'",
+  "buildCommand": "echo 'static deploy: using prerendered dist/ from repo'"
 }

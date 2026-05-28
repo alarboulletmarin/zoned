@@ -3,7 +3,9 @@ node_modules
 
 # output
 out
-dist
+# dist/ is committed: prerender runs locally via `bun run deploy` so Vercel
+# can serve static files without invoking Puppeteer on its build runners.
+# dist
 *.tgz
 
 # code coverage
