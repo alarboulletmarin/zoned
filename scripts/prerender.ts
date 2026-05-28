@@ -9,7 +9,7 @@
  *   bun run build && bun run scripts/prerender.ts
  */
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, statSync } from "fs";
 import { join, dirname } from "path";
 import { createServer } from "http";
 import puppeteer from "puppeteer";
@@ -17,7 +17,9 @@ import puppeteer from "puppeteer";
 const DIST_DIR = join(import.meta.dirname, "../dist");
 const SITEMAP_PATH = join(import.meta.dirname, "../public/sitemap.xml");
 const PORT = 4173;
-const CONCURRENCY = 5;
+// Higher concurrency cuts wall time roughly linearly. Puppeteer's Chrome can
+// comfortably handle ~12 pages in parallel on a multi-core dev box.
+const CONCURRENCY = 12;
 const SITE_URL = `http://localhost:${PORT}`;
 
 // Parse routes from sitemap.xml
@@ -29,14 +31,24 @@ function getRoutesFromSitemap(): string[] {
 
 // Simple static file server for dist/
 function startServer(): Promise<ReturnType<typeof createServer>> {
+  // Snapshot the SPA shell once at boot. The FR pass overwrites
+  // dist/index.html with its rendered output, which would break every
+  // subsequent route request that falls back to the SPA shell. Caching
+  // sidesteps the race and keeps the server stable across passes.
+  const spaShell = readFileSync(join(DIST_DIR, "index.html"));
+
   return new Promise((resolve) => {
     const server = createServer((req, res) => {
       const url = req.url || "/";
       const filePath = url === "/" ? "/index.html" : url;
       const fullPath = join(DIST_DIR, filePath);
 
-      // Try exact file first
-      if (existsSync(fullPath) && !fullPath.endsWith("/")) {
+      // Try exact file first — but only if it's actually a file. A bare
+      // route like /workout/REC-001 matches an existing directory left over
+      // from a previous prerender pass; reading it as a file throws EISDIR.
+      // For "/" we always serve the cached shell; otherwise the FR pass's
+      // own output would feed back into the EN pass.
+      if (url !== "/" && existsSync(fullPath) && !fullPath.endsWith("/") && statSync(fullPath).isFile()) {
         const ext = fullPath.split(".").pop() || "";
         const mimeTypes: Record<string, string> = {
           html: "text/html",
@@ -50,123 +62,138 @@ function startServer(): Promise<ReturnType<typeof createServer>> {
           woff2: "font/woff2",
           webmanifest: "application/manifest+json",
         };
-        res.writeHead(200, { "Content-Type": mimeTypes[ext] || "application/octet-stream" });
-        res.end(readFileSync(fullPath));
-        return;
+        try {
+          const body = readFileSync(fullPath);
+          res.writeHead(200, { "Content-Type": mimeTypes[ext] || "application/octet-stream" });
+          res.end(body);
+          return;
+        } catch {
+          // File vanished between stat and read; fall through to the shell.
+        }
       }
 
-      // SPA fallback: serve index.html for all routes
+      // SPA fallback: serve the cached shell. Never read from disk here.
       res.writeHead(200, { "Content-Type": "text/html" });
-      res.end(readFileSync(join(DIST_DIR, "index.html")));
+      res.end(spaShell);
     });
 
     server.listen(PORT, () => resolve(server));
   });
 }
 
-// Process routes in batches for a given language
+// Process routes in batches for a given language. Returns the list of
+// routes whose SEOHead snapshot didn't catch (rendered=false) so callers
+// can retry them.
 async function processInBatches(
   routes: string[],
   lang: "fr" | "en",
   browser: Awaited<ReturnType<typeof puppeteer.launch>>,
-  batchSize: number
-): Promise<{ success: number; failed: number }> {
+  batchSize: number,
+  options: { waitTimeoutMs?: number } = {}
+): Promise<{ success: number; failed: number; unrendered: string[] }> {
   let success = 0;
   let failed = 0;
+  const unrendered: string[] = [];
 
   for (let i = 0; i < routes.length; i += batchSize) {
     const batch = routes.slice(i, i + batchSize);
     const results = await Promise.allSettled(
-      batch.map((route) => prerenderRoute(route, lang, browser))
+      batch.map((route) => prerenderRoute(route, lang, browser, options))
     );
 
-    for (const result of results) {
+    results.forEach((result, idx) => {
       if (result.status === "fulfilled") {
         success++;
+        if (!result.value.success) {
+          unrendered.push(batch[idx]);
+        }
       } else {
         failed++;
+        unrendered.push(batch[idx]);
         console.error(`  ✗ ${result.reason}`);
       }
-    }
+    });
 
     const progress = Math.min(i + batchSize, routes.length);
     process.stdout.write(`\r  [${lang.toUpperCase()}] Progress: ${progress}/${routes.length} routes`);
   }
 
   console.log();
-  return { success, failed };
+  return { success, failed, unrendered };
 }
 
-// Prerender a single route in a given language
+// Prerender a single route in a given language. Returns true if SEOHead
+// successfully rendered JSON-LD into the document; false if we snapshot
+// an empty React shell (signals we should retry the route).
 async function prerenderRoute(
   route: string,
   lang: "fr" | "en",
-  browser: Awaited<ReturnType<typeof puppeteer.launch>>
-): Promise<void> {
+  browser: Awaited<ReturnType<typeof puppeteer.launch>>,
+  options: { waitTimeoutMs?: number } = {}
+): Promise<{ success: boolean }> {
   const page = await browser.newPage();
+  const waitTimeoutMs = options.waitTimeoutMs ?? 8000;
 
   try {
     const acceptLang = lang === "fr" ? "fr-FR,fr;q=0.9" : "en-US,en;q=0.9";
     await page.setExtraHTTPHeaders({ "Accept-Language": acceptLang });
 
-    // Block unnecessary resources for speed
+    // Block unnecessary resources for speed.
     await page.setRequestInterception(true);
     page.on("request", (req) => {
       const type = req.resourceType();
-      if (["image", "font", "media"].includes(type)) {
+      if (["image", "font", "media", "stylesheet"].includes(type)) {
         req.abort();
       } else {
         req.continue();
       }
     });
 
-    // i18n detection order: localStorage("zoned-language") → navigator → htmlTag
-    await page.evaluateOnNewDocument(() => {
-      Object.defineProperty(window, "__prerender_localStorage", { value: {} });
-    });
-
-    await page.goto(`${SITE_URL}${route}`, {
-      waitUntil: "domcontentloaded",
-      timeout: 15000,
-    });
-
-    // Set localStorage on the correct origin, then reload
-    await page.evaluate((l: string) => {
-      localStorage.setItem("zoned-language", l);
+    // Seed localStorage before any script executes so i18next picks the
+    // right language on first (and only) load.
+    await page.evaluateOnNewDocument((l: string) => {
+      try {
+        localStorage.setItem("zoned-language", l);
+      } catch {
+        // ignore
+      }
     }, lang);
+
     await page.goto(`${SITE_URL}${route}`, {
-      waitUntil: "networkidle0",
-      timeout: 15000,
+      waitUntil: "networkidle2",
+      timeout: 25000,
     });
 
-    // Wait for React lazy-loading, data fetching, and react-helmet-async to flush
-    await page.waitForFunction(
-      () => {
-        const title = document.title;
-        const hasHelmet = title !== "Zoned - Scientific Running Workouts" || document.querySelector('[data-rh]');
-        const noSpinner = !document.querySelector('.spinner');
-        return hasHelmet || noSpinner;
-      },
-      { timeout: 10000 }
-    ).catch(() => {
-      // Fallback: wait a bit more for homepage/simple pages
-    });
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 300)));
+    // Wait for SEOHead's JSON-LD scripts to land in <head>. Base SEOHead
+    // emits 2 site-wide schemas (WebSite + Organization), so >=2 means at
+    // least one render commit has happened.
+    const rendered = await page
+      .waitForFunction(
+        () => {
+          const tags = document.head.querySelectorAll(
+            'script[type="application/ld+json"]'
+          );
+          return tags.length >= 2;
+        },
+        { timeout: waitTimeoutMs, polling: 100 }
+      )
+      .then(() => true)
+      .catch(() => false);
 
     const html = await page.content();
 
     // FR: dist/<route>/index.html — EN: dist/<route>/index.en.html
-    const outputDir = join(DIST_DIR, route);
     const fileName = lang === "fr" ? "index.html" : "index.en.html";
     const outputPath = route === "/"
       ? join(DIST_DIR, fileName)
-      : join(outputDir, fileName);
+      : join(DIST_DIR, route, fileName);
 
     if (route !== "/") {
       mkdirSync(dirname(outputPath), { recursive: true });
     }
 
     writeFileSync(outputPath, html);
+    return { success: rendered };
   } finally {
     await page.close();
   }
@@ -206,9 +233,48 @@ async function main() {
     console.log("\n  Pass 2: English\n");
     const en = await processInBatches(routes, "en", browser, CONCURRENCY);
 
-    const success = fr.success + en.success;
-    const failed = fr.failed + en.failed;
-    console.log(`\n✅ Prerendering complete: ${success} success, ${failed} failed (${routes.length} FR + ${routes.length} EN)`);
+    // Pass 3: Retry routes that snapshotted before SEOHead committed.
+    // Lower concurrency + longer timeout so the heavy hub pages
+    // (calculators, library, learn) get the resources they need to mount.
+    const retryFr = fr.unrendered;
+    const retryEn = en.unrendered;
+    let retryFrResult = { success: 0, failed: 0, unrendered: [] as string[] };
+    let retryEnResult = { success: 0, failed: 0, unrendered: [] as string[] };
+
+    if (retryFr.length > 0 || retryEn.length > 0) {
+      console.log(
+        `\n  Pass 3: Retry (FR: ${retryFr.length}, EN: ${retryEn.length}) with longer timeout\n`
+      );
+      if (retryFr.length > 0) {
+        retryFrResult = await processInBatches(retryFr, "fr", browser, 3, {
+          waitTimeoutMs: 20000,
+        });
+      }
+      if (retryEn.length > 0) {
+        retryEnResult = await processInBatches(retryEn, "en", browser, 3, {
+          waitTimeoutMs: 20000,
+        });
+      }
+    }
+
+    const totalRoutes = routes.length * 2;
+    const totalRendered =
+      (fr.success - fr.unrendered.length) +
+      (en.success - en.unrendered.length) +
+      (retryFrResult.success - retryFrResult.unrendered.length) +
+      (retryEnResult.success - retryEnResult.unrendered.length);
+    const totalFailed = fr.failed + en.failed + retryFrResult.failed + retryEnResult.failed;
+    const stillUnrendered = retryFrResult.unrendered.length + retryEnResult.unrendered.length;
+
+    console.log(
+      `\n✅ Prerendering complete: ${totalRendered}/${totalRoutes} fully rendered, ${stillUnrendered} shell-only, ${totalFailed} crashed`
+    );
+    if (stillUnrendered > 0) {
+      console.log(`  Routes still missing SEOHead after retry:`);
+      [...retryFrResult.unrendered.map((r) => `    FR: ${r}`), ...retryEnResult.unrendered.map((r) => `    EN: ${r}`)].forEach(
+        (line) => console.log(line)
+      );
+    }
   } finally {
     await browser.close();
     server.close();

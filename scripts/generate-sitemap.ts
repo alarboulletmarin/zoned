@@ -1,61 +1,114 @@
-import { readFileSync, writeFileSync, readdirSync } from "fs";
+/**
+ * USAGE: bun run scripts/generate-sitemap.ts
+ *
+ * Generates public/sitemap.xml from the static route catalogue + data files.
+ *
+ * What we include:
+ *   - All public pages (homepage, hubs, calculators, guides, comparisons)
+ *   - All workouts (~220 items)
+ *   - All articles, with their per-article publishedAt/updatedAt dates
+ *   - All glossary terms
+ *   - All curated collections
+ *   - All prebuilt training plans
+ *
+ * What we exclude (matches robots.txt Disallow rules):
+ *   - /my-zones, /favorites, /settings, /profile (per-user state)
+ *   - /plans (user dashboard), /plan/new/assisted, /plan/new/free
+ *   - /plan/:id, /routes/:id (localStorage-only entities)
+ *
+ * Date strategy:
+ *   - Articles get their real publishedAt/updatedAt from metadata.ts.
+ *   - Other pages get a stable lastmod derived from the file's mtime so
+ *     Google sees a real change signal when content moves, not a "today"
+ *     pulse every build.
+ */
+
+import { readFileSync, writeFileSync, readdirSync, statSync } from "fs";
 import { join } from "path";
 
 const SITE_URL = "https://zoned.run";
-const DATA_DIR = join(import.meta.dirname, "../src/data");
-const OUTPUT_PATH = join(import.meta.dirname, "../public/sitemap.xml");
+const ROOT = join(import.meta.dirname, "..");
+const DATA_DIR = join(ROOT, "src/data");
+const OUTPUT_PATH = join(ROOT, "public/sitemap.xml");
 
 interface WorkoutTemplate {
   id: string;
 }
 
-function getWorkoutIds(): string[] {
+interface UrlEntry {
+  loc: string;
+  priority: string;
+  changefreq: string;
+  lastmod: string;
+}
+
+// ── Helpers ─────────────────────────────────────────────────────────────────
+
+function fileMtimeIso(path: string): string {
+  try {
+    return statSync(path).mtime.toISOString().split("T")[0];
+  } catch {
+    return new Date().toISOString().split("T")[0];
+  }
+}
+
+// ── Data extractors ─────────────────────────────────────────────────────────
+
+function getWorkoutIds(): { id: string; lastmod: string }[] {
   const workoutsDir = join(DATA_DIR, "workouts");
-  const ids: string[] = [];
+  const out: { id: string; lastmod: string }[] = [];
 
   const files = readdirSync(workoutsDir).filter((f) => f.endsWith(".json"));
   for (const file of files) {
-    const content = readFileSync(join(workoutsDir, file), "utf-8");
+    const fullPath = join(workoutsDir, file);
+    const lastmod = fileMtimeIso(fullPath);
+    const content = readFileSync(fullPath, "utf-8");
     const data = JSON.parse(content);
     if (data.templates && Array.isArray(data.templates)) {
       for (const workout of data.templates as WorkoutTemplate[]) {
-        ids.push(workout.id);
+        out.push({ id: workout.id, lastmod });
       }
     }
   }
 
-  return ids;
+  return out;
 }
 
-function getArticleSlugs(): string[] {
-  return [
-    "zones",
-    "testing-vma",
-    "warmup",
-    "recovery",
-    "nutrition",
-    "faq",
-    "periodization",
-    "supercompensation",
-    "tapering",
-    "polarized-training",
-    "progressive-overload",
-    "consistency",
-  ];
+interface ArticleEntry {
+  slug: string;
+  publishedAt: string;
+  updatedAt?: string;
 }
 
-async function getGlossaryTermIds(): Promise<string[]> {
+async function getArticles(): Promise<ArticleEntry[]> {
+  // Pull straight from the source-of-truth metadata.ts.
+  const mod = await import(join(DATA_DIR, "articles/metadata.ts"));
+  const articles = (mod.articleMetadata || []) as Array<{
+    slug: string;
+    publishedAt: string;
+    updatedAt?: string;
+  }>;
+  return articles.map((a) => ({
+    slug: a.slug,
+    publishedAt: a.publishedAt,
+    updatedAt: a.updatedAt,
+  }));
+}
+
+async function getGlossaryTermIds(): Promise<{ id: string; lastmod: string }[]> {
   const termsDir = join(DATA_DIR, "glossary/terms");
   const files = readdirSync(termsDir).filter((f) => f.endsWith(".ts"));
-  const ids: string[] = [];
+  const ids: { id: string; lastmod: string }[] = [];
 
   for (const file of files) {
-    const mod = await import(join(termsDir, file));
+    const fullPath = join(termsDir, file);
+    const lastmod = fileMtimeIso(fullPath);
+    const mod = await import(fullPath);
     const exported = Object.values(mod);
     for (const val of exported) {
       if (Array.isArray(val)) {
         for (const term of val as { id: string }[]) {
-          if (term.id) ids.push(term.id);
+          if (term.id) ids.push({ id: term.id, lastmod });
         }
       }
     }
@@ -88,70 +141,95 @@ function getCalculatorPaths(): string[] {
   ];
 }
 
+// ── Sitemap builder ─────────────────────────────────────────────────────────
+
 async function generateSitemap(): Promise<string> {
-  const workoutIds = getWorkoutIds();
-  const articleSlugs = getArticleSlugs();
-  const glossaryTermIds = await getGlossaryTermIds();
+  const workouts = getWorkoutIds();
+  const articles = await getArticles();
+  const glossaryTerms = await getGlossaryTermIds();
   const collectionSlugs = getCollectionSlugs();
   const prebuiltPlanSlugs = getPrebuiltPlanSlugs();
   const calculatorPaths = getCalculatorPaths();
-  const today = new Date().toISOString().split("T")[0];
 
-  const urls: { loc: string; priority: string; changefreq: string }[] = [
-    // Main pages
-    { loc: "/", priority: "1.0", changefreq: "weekly" },
-    { loc: "/library", priority: "0.9", changefreq: "weekly" },
-    { loc: "/learn", priority: "0.8", changefreq: "monthly" },
-    { loc: "/glossary", priority: "0.8", changefreq: "monthly" },
-    { loc: "/quiz", priority: "0.6", changefreq: "monthly" },
-    { loc: "/about", priority: "0.5", changefreq: "monthly" },
-    { loc: "/collections", priority: "0.6", changefreq: "monthly" },
-    { loc: "/calculators", priority: "0.6", changefreq: "monthly" },
-    { loc: "/methodology", priority: "0.7", changefreq: "monthly" },
-    { loc: "/guides", priority: "0.7", changefreq: "monthly" },
-    { loc: "/plan/new/prebuilt", priority: "0.6", changefreq: "monthly" },
+  // Stable lastmod for non-data pages: tied to package.json mtime so it only
+  // moves when we ship something new. Beats "today" on every build.
+  const pkgMtime = fileMtimeIso(join(ROOT, "package.json"));
+
+  const urls: UrlEntry[] = [
+    { loc: "/", priority: "1.0", changefreq: "weekly", lastmod: pkgMtime },
+    { loc: "/library", priority: "0.9", changefreq: "weekly", lastmod: pkgMtime },
+    { loc: "/learn", priority: "0.8", changefreq: "monthly", lastmod: pkgMtime },
+    { loc: "/glossary", priority: "0.8", changefreq: "monthly", lastmod: pkgMtime },
+    { loc: "/quiz", priority: "0.6", changefreq: "monthly", lastmod: pkgMtime },
+    { loc: "/about", priority: "0.5", changefreq: "monthly", lastmod: pkgMtime },
+    { loc: "/collections", priority: "0.7", changefreq: "monthly", lastmod: pkgMtime },
+    { loc: "/calculators", priority: "0.7", changefreq: "monthly", lastmod: pkgMtime },
+    { loc: "/methodology", priority: "0.7", changefreq: "monthly", lastmod: pkgMtime },
+    { loc: "/guides", priority: "0.7", changefreq: "monthly", lastmod: pkgMtime },
+    { loc: "/plan/new/prebuilt", priority: "0.7", changefreq: "monthly", lastmod: pkgMtime },
+    { loc: "/plan/new", priority: "0.6", changefreq: "monthly", lastmod: pkgMtime },
+    { loc: "/plans/methodology", priority: "0.6", changefreq: "yearly", lastmod: pkgMtime },
+    { loc: "/changelog", priority: "0.5", changefreq: "weekly", lastmod: pkgMtime },
+    { loc: "/contribute", priority: "0.4", changefreq: "yearly", lastmod: pkgMtime },
     // Nutrition hub (canonical landing page)
-    { loc: "/nutrition", priority: "0.8", changefreq: "monthly" },
+    { loc: "/nutrition", priority: "0.8", changefreq: "monthly", lastmod: pkgMtime },
     // Guide pages
-    { loc: "/guides/nutrition", priority: "0.7", changefreq: "monthly" },
-    { loc: "/guides/race-prep", priority: "0.7", changefreq: "monthly" },
-    { loc: "/guides/warmup", priority: "0.7", changefreq: "monthly" },
+    { loc: "/guides/nutrition", priority: "0.7", changefreq: "monthly", lastmod: pkgMtime },
+    { loc: "/guides/race-prep", priority: "0.7", changefreq: "monthly", lastmod: pkgMtime },
+    { loc: "/guides/warmup", priority: "0.7", changefreq: "monthly", lastmod: pkgMtime },
+    // Race simulator
+    { loc: "/race-simulator", priority: "0.7", changefreq: "monthly", lastmod: pkgMtime },
   ];
 
   // Calculators
   for (const path of calculatorPaths) {
-    urls.push({ loc: path, priority: "0.7", changefreq: "monthly" });
+    urls.push({ loc: path, priority: "0.7", changefreq: "monthly", lastmod: pkgMtime });
   }
 
   // Collections
   for (const slug of collectionSlugs) {
-    urls.push({ loc: `/collections/${slug}`, priority: "0.6", changefreq: "monthly" });
+    urls.push({ loc: `/collections/${slug}`, priority: "0.6", changefreq: "monthly", lastmod: pkgMtime });
   }
 
   // Prebuilt plans
   for (const slug of prebuiltPlanSlugs) {
-    urls.push({ loc: `/plan/prebuilt/${slug}`, priority: "0.6", changefreq: "monthly" });
+    urls.push({ loc: `/plan/prebuilt/${slug}`, priority: "0.7", changefreq: "monthly", lastmod: pkgMtime });
   }
 
-  // Articles
-  for (const slug of articleSlugs) {
-    urls.push({ loc: `/learn/${slug}`, priority: "0.7", changefreq: "monthly" });
+  // Articles — per-article publishedAt/updatedAt
+  for (const a of articles) {
+    urls.push({
+      loc: `/learn/${a.slug}`,
+      priority: "0.8",
+      changefreq: "monthly",
+      lastmod: a.updatedAt || a.publishedAt,
+    });
   }
 
-  // Workouts
-  for (const id of workoutIds) {
-    urls.push({ loc: `/workout/${id}`, priority: "0.7", changefreq: "monthly" });
+  // Workouts — lastmod from JSON file mtime
+  for (const w of workouts) {
+    urls.push({
+      loc: `/workout/${w.id}`,
+      priority: "0.7",
+      changefreq: "monthly",
+      lastmod: w.lastmod,
+    });
   }
 
   // Glossary terms
-  for (const id of glossaryTermIds) {
-    urls.push({ loc: `/glossary/${id}`, priority: "0.6", changefreq: "monthly" });
+  for (const t of glossaryTerms) {
+    urls.push({
+      loc: `/glossary/${t.id}`,
+      priority: "0.6",
+      changefreq: "monthly",
+      lastmod: t.lastmod,
+    });
   }
 
   // Compare pages
-  urls.push({ loc: "/compare", priority: "0.7", changefreq: "monthly" });
+  urls.push({ loc: "/compare", priority: "0.7", changefreq: "monthly", lastmod: pkgMtime });
   for (const slug of ["runna", "kiprun-pacer", "campus-coach"]) {
-    urls.push({ loc: `/compare/${slug}`, priority: "0.7", changefreq: "monthly" });
+    urls.push({ loc: `/compare/${slug}`, priority: "0.7", changefreq: "monthly", lastmod: pkgMtime });
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -160,10 +238,10 @@ ${urls
   .map(
     (url) => `  <url>
     <loc>${SITE_URL}${url.loc}</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="${SITE_URL}${url.loc}" />
-    <xhtml:link rel="alternate" hreflang="en" href="${SITE_URL}${url.loc}?lang=en" />
+    <xhtml:link rel="alternate" hreflang="fr-FR" href="${SITE_URL}${url.loc}" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="${SITE_URL}${url.loc}?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}${url.loc}" />
-    <lastmod>${today}</lastmod>
+    <lastmod>${url.lastmod}</lastmod>
     <changefreq>${url.changefreq}</changefreq>
     <priority>${url.priority}</priority>
   </url>`
