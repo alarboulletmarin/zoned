@@ -58,6 +58,15 @@ export default defineConfig({
         globIgnores: ["**/pdfmake*", "**/vfs_fonts*", "**/fitsdk*", "**/garmin*"],
         cleanupOutdatedCaches: true,
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
+        // skipWaiting + clientsClaim: the new SW activates as soon as it's
+        // installed, instead of waiting for every tab to close. Mobile users
+        // never "close all tabs" (they just background the browser), so without
+        // this they're permanently stuck on whatever version was first cached.
+        // The trade-off: in-flight lazy chunks pointing to old hashes can 404
+        // mid-navigation; we accept that — a soft reload recovers, and a stale
+        // app is worse than one occasional refresh.
+        skipWaiting: true,
+        clientsClaim: true,
       },
     }),
   ],
