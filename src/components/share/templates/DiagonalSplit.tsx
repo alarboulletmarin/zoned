@@ -25,6 +25,12 @@ export function DiagonalSplit({ workout, transparent }: ShareTemplateProps) {
   const zoneLabel = pickLang(hero.zoneMeta, "label");
   const zoneHex = ZONE_HEX[hero.dominantZone];
 
+  // Coloured side is ~46% of the 1080 canvas → ~500px usable. At 96px the
+  // longer labels ("Récupération") clip. Tier by length.
+  const labelLen = zoneLabel.length;
+  const zoneLabelSize =
+    labelLen <= 6 ? 96 : labelLen <= 9 ? 80 : labelLen <= 11 ? 68 : 58;
+
   return (
     <div
       data-share-template
@@ -121,12 +127,13 @@ export function DiagonalSplit({ workout, transparent }: ShareTemplateProps) {
           </div>
           <div
             style={{
-              fontSize: 96,
+              fontSize: zoneLabelSize,
               fontWeight: 700,
               lineHeight: 0.95,
               letterSpacing: "-0.04em",
               marginTop: 8,
               overflowWrap: "break-word",
+              wordBreak: "break-word",
             }}
           >
             {zoneLabel}

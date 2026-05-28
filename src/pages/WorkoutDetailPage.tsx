@@ -457,15 +457,10 @@ export function WorkoutDetailPage() {
             <GlossaryLinkedText text={pick(workout, "description")} />
           </p>
 
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-5">
-            {canGenerateRoute && (
-              <Button asChild size="sm" className="rounded-full px-4">
-                <Link to="/routes" state={{ workoutRouteWorkout: workout }}>
-                  <Route className="size-3.5 mr-1.5" />
-                  {t("session:actions.findRoute")}
-                </Link>
-              </Button>
-            )}
+          {/* Action bar — hierarchy: primary (Exporter) → outlines (Partager,
+              Parcours) → ghost utility (Copier le lien). Same h-9 height
+              across the row for visual cohesion. */}
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 mt-5">
             <ExportMenu workout={workout} />
             <Button
               variant="outline"
@@ -476,10 +471,18 @@ export function WorkoutDetailPage() {
               <Share className="size-3.5 mr-1.5" />
               {t("common:share.trigger")}
             </Button>
+            {canGenerateRoute && (
+              <Button asChild variant="outline" size="sm" className="rounded-full px-4">
+                <Link to="/routes" state={{ workoutRouteWorkout: workout }}>
+                  <Route className="size-3.5 mr-1.5" />
+                  {t("session:actions.findRoute")}
+                </Link>
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="sm"
-              className="rounded-full px-4 text-muted-foreground hover:text-foreground"
+              className="rounded-full px-3 text-muted-foreground hover:text-foreground"
               onClick={async () => {
                 const ok = await copyToClipboard(window.location.href);
                 if (ok) toast.success(t("common:actions.linkCopied"));

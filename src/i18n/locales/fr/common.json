@@ -6,12 +6,15 @@
     "heroTitleAccent": "objectif"
   },
   "share": {
-    "title": "Partager cette séance",
+    "title": "Partager l'activité",
     "subtitle": "Choisis un visuel",
     "trigger": "Partager",
+    "close": "Fermer",
+    "shareOn": "Partager sur",
     "action": {
-      "download": "Télécharger",
+      "download": "Enregistrer",
       "copy": "Copier",
+      "copyLink": "Copier le lien",
       "share": "Partager"
     },
     "transparent": {
@@ -40,13 +43,29 @@
       "highlightBanner": { "label": "Bandeau", "format": "Sticker pour bas de photo paysage · 1080 × 360" },
       "cornerStamp": { "label": "Tampon", "format": "Petit sticker coin de photo · 480 × 480" },
       "spotifyWrapSquare": { "label": "Recap carré", "format": "Version Insta Feed du Recap · 1080 × 1080" },
-      "badgeChip": { "label": "Chip", "format": "Badge solide néo-brutaliste · 480 × 480" }
+      "badgeChip": { "label": "Chip", "format": "Badge solide néo-brutaliste · 480 × 480" },
+      "holographicCard": { "label": "Holo", "format": "Carte chromatique iridescente · 480 × 480" },
+      "waxSeal": { "label": "Sceau", "format": "Sceau de cire premium · 480 × 480" },
+      "casinoChip": { "label": "Jeton", "format": "Jeton de poker · 480 × 480" },
+      "vinylDieCut": { "label": "Sticker", "format": "Vinyle die-cut laptop · 480 × 480" },
+      "mapPinDrop": { "label": "Pin", "format": "Pin Google Maps · 480 × 480" },
+      "coffeeStamp": { "label": "Fidélité", "format": "Carte de fidélité · 480 × 480" },
+      "enamelPin": { "label": "Broche", "format": "Broche émaillée varsity · 480 × 480" },
+      "polaroidSquare": { "label": "Polaroid", "format": "Photo Polaroid manuscrite · 1080 × 1080" },
+      "periodicElement": { "label": "Élément", "format": "Case tableau périodique · 1080 × 1080" },
+      "albumCover": { "label": "Vinyle", "format": "Pochette d'album duotone · 1080 × 1080" },
+      "tradingCard": { "label": "Trading Card", "format": "Carte collector style NBA · 1080 × 1080" },
+      "subwayMap": { "label": "Métro", "format": "Plan de métro stylisé · 1080 × 1080" },
+      "cassetteTape": { "label": "K7", "format": "Cassette audio rétro · 1080 × 1080" },
+      "y2kChrome": { "label": "Y2K", "format": "Chrome Frutiger Aero · 1080 × 1080" },
+      "boxingPoster": { "label": "Combat", "format": "Affiche de combat boxing · 1080 × 1080" }
     },
     "toast": {
       "shared": "Partagé via le menu de l'appareil",
-      "downloaded": "Image téléchargée",
-      "copied": "Copié dans le presse-papier",
-      "copyUnsupported": "Copie image dispo uniquement en HTTPS (utilise Télécharger ou Partager)",
+      "downloaded": "Image enregistrée",
+      "copied": "Image copiée dans le presse-papier",
+      "linkCopied": "Lien copié dans le presse-papier",
+      "copyUnsupported": "Copie image dispo uniquement en HTTPS (utilise Enregistrer ou Partager)",
       "loading": "Génération de l'image…",
       "error": "Erreur lors de la génération"
     }

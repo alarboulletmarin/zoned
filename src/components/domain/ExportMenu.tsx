@@ -111,11 +111,11 @@ export function ExportMenu({ workout }: ExportMenuProps) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="default" disabled={isExporting} className="rounded-full px-5 py-2.5 h-auto font-bold">
+          <Button variant="default" size="sm" disabled={isExporting} className="rounded-full px-4">
             {isExporting ? (
-              <Loader2 className="size-4 mr-2 animate-spin" />
+              <Loader2 className="size-3.5 mr-1.5 animate-spin" />
             ) : (
-              <Download className="size-4 mr-2" />
+              <Download className="size-3.5 mr-1.5" />
             )}
             {t("export.title")}
           </Button>

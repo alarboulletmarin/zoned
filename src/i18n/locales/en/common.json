@@ -6,12 +6,15 @@
     "heroTitleAccent": "race"
   },
   "share": {
-    "title": "Share this workout",
+    "title": "Share activity",
     "subtitle": "Pick a visual",
     "trigger": "Share",
+    "close": "Close",
+    "shareOn": "Share to",
     "action": {
-      "download": "Download",
+      "download": "Save",
       "copy": "Copy",
+      "copyLink": "Copy link",
       "share": "Share"
     },
     "transparent": {
@@ -40,13 +43,29 @@
       "highlightBanner": { "label": "Banner", "format": "Sticker for bottom of landscape photo · 1080 × 360" },
       "cornerStamp": { "label": "Stamp", "format": "Small corner sticker · 480 × 480" },
       "spotifyWrapSquare": { "label": "Square Recap", "format": "Insta Feed version · 1080 × 1080" },
-      "badgeChip": { "label": "Chip", "format": "Neo-brutalist solid badge · 480 × 480" }
+      "badgeChip": { "label": "Chip", "format": "Neo-brutalist solid badge · 480 × 480" },
+      "holographicCard": { "label": "Holo", "format": "Iridescent chrome card · 480 × 480" },
+      "waxSeal": { "label": "Wax Seal", "format": "Premium embossed wax seal · 480 × 480" },
+      "casinoChip": { "label": "Chip", "format": "Casino poker chip · 480 × 480" },
+      "vinylDieCut": { "label": "Sticker", "format": "Die-cut laptop sticker · 480 × 480" },
+      "mapPinDrop": { "label": "Pin", "format": "Map pin drop · 480 × 480" },
+      "coffeeStamp": { "label": "Loyalty", "format": "Loyalty stamp card · 480 × 480" },
+      "enamelPin": { "label": "Pin", "format": "Varsity enamel pin · 480 × 480" },
+      "polaroidSquare": { "label": "Polaroid", "format": "Hand-written Polaroid · 1080 × 1080" },
+      "periodicElement": { "label": "Element", "format": "Periodic table cell · 1080 × 1080" },
+      "albumCover": { "label": "Vinyl", "format": "Duotone album cover · 1080 × 1080" },
+      "tradingCard": { "label": "Trading Card", "format": "NBA-style collector card · 1080 × 1080" },
+      "subwayMap": { "label": "Subway", "format": "Stylized subway line · 1080 × 1080" },
+      "cassetteTape": { "label": "Tape", "format": "Retro audio cassette · 1080 × 1080" },
+      "y2kChrome": { "label": "Y2K", "format": "Frutiger Aero chrome · 1080 × 1080" },
+      "boxingPoster": { "label": "Fight", "format": "Boxing fight poster · 1080 × 1080" }
     },
     "toast": {
       "shared": "Shared via device menu",
-      "downloaded": "Image downloaded",
-      "copied": "Copied to clipboard",
-      "copyUnsupported": "Image copy requires HTTPS (use Download or Share)",
+      "downloaded": "Image saved",
+      "copied": "Image copied to clipboard",
+      "linkCopied": "Link copied to clipboard",
+      "copyUnsupported": "Image copy requires HTTPS (use Save or Share)",
       "loading": "Generating image…",
       "error": "Generation failed"
     }

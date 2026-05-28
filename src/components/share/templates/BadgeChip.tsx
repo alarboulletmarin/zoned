@@ -19,6 +19,13 @@ export function BadgeChip({ workout, transparent }: ShareTemplateProps) {
   const zoneLabel = pickLang(hero.zoneMeta, "label");
   const zoneHex = ZONE_HEX[hero.dominantZone];
 
+  // Adaptive size — at 88px the wider zone labels ("Récupération",
+  // "Endurance", "Threshold") overflow the 392px content area. Tier by
+  // character count so the chip stays bold without clipping.
+  const labelLen = zoneLabel.length;
+  const labelSize =
+    labelLen <= 6 ? 88 : labelLen <= 9 ? 68 : labelLen <= 11 ? 58 : 50;
+
   return (
     <div
       data-share-template
@@ -90,11 +97,13 @@ export function BadgeChip({ workout, transparent }: ShareTemplateProps) {
           </div>
           <div
             style={{
-              fontSize: 88,
+              fontSize: labelSize,
               fontWeight: 900,
-              letterSpacing: "-0.05em",
+              letterSpacing: "-0.04em",
               lineHeight: 0.92,
               marginTop: 6,
+              overflowWrap: "break-word",
+              wordBreak: "break-word",
             }}
           >
             {zoneLabel}

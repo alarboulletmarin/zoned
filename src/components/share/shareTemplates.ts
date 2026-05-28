@@ -28,6 +28,21 @@ import { HighlightBanner } from "./templates/HighlightBanner";
 import { CornerStamp } from "./templates/CornerStamp";
 import { SpotifyWrapSquare } from "./templates/SpotifyWrapSquare";
 import { BadgeChip } from "./templates/BadgeChip";
+import { HolographicCard } from "./templates/HolographicCard";
+import { WaxSeal } from "./templates/WaxSeal";
+import { CasinoChip } from "./templates/CasinoChip";
+import { VinylDieCut } from "./templates/VinylDieCut";
+import { MapPinDrop } from "./templates/MapPinDrop";
+import { CoffeeStamp } from "./templates/CoffeeStamp";
+import { EnamelPin } from "./templates/EnamelPin";
+import { PolaroidSquare } from "./templates/PolaroidSquare";
+import { PeriodicElement } from "./templates/PeriodicElement";
+import { AlbumCover } from "./templates/AlbumCover";
+import { TradingCard } from "./templates/TradingCard";
+import { SubwayMap } from "./templates/SubwayMap";
+import { CassetteTape } from "./templates/CassetteTape";
+import { Y2KChrome } from "./templates/Y2KChrome";
+import { BoxingPoster } from "./templates/BoxingPoster";
 
 export interface ShareTemplateProps {
   workout: WorkoutTemplate;
@@ -214,6 +229,130 @@ export const SHARE_TEMPLATES: ShareTemplateDescriptor[] = [
     height: 480,
     supportsTransparent: true,
     Component: BadgeChip,
+  },
+  {
+    id: "holographic-card",
+    labelKey: "holographicCard",
+    width: 480,
+    height: 480,
+    supportsTransparent: true,
+    Component: HolographicCard,
+  },
+  {
+    id: "wax-seal",
+    labelKey: "waxSeal",
+    width: 480,
+    height: 480,
+    supportsTransparent: true,
+    Component: WaxSeal,
+  },
+  {
+    id: "casino-chip",
+    labelKey: "casinoChip",
+    width: 480,
+    height: 480,
+    supportsTransparent: true,
+    Component: CasinoChip,
+  },
+  {
+    id: "vinyl-die-cut",
+    labelKey: "vinylDieCut",
+    width: 480,
+    height: 480,
+    supportsTransparent: true,
+    Component: VinylDieCut,
+  },
+  {
+    id: "map-pin-drop",
+    labelKey: "mapPinDrop",
+    width: 480,
+    height: 480,
+    supportsTransparent: true,
+    Component: MapPinDrop,
+  },
+  {
+    id: "coffee-stamp",
+    labelKey: "coffeeStamp",
+    width: 480,
+    height: 480,
+    supportsTransparent: true,
+    Component: CoffeeStamp,
+  },
+  {
+    id: "enamel-pin",
+    labelKey: "enamelPin",
+    width: 480,
+    height: 480,
+    supportsTransparent: true,
+    Component: EnamelPin,
+  },
+  {
+    id: "polaroid-square",
+    labelKey: "polaroidSquare",
+    width: 1080,
+    height: 1080,
+    supportsTransparent: true,
+    Component: PolaroidSquare,
+  },
+  {
+    id: "periodic-element",
+    labelKey: "periodicElement",
+    width: 1080,
+    height: 1080,
+    supportsTransparent: true,
+    Component: PeriodicElement,
+  },
+  {
+    id: "album-cover",
+    labelKey: "albumCover",
+    width: 1080,
+    height: 1080,
+    // Duotone background = signature.
+    supportsTransparent: false,
+    Component: AlbumCover,
+  },
+  {
+    id: "trading-card",
+    labelKey: "tradingCard",
+    width: 1080,
+    height: 1080,
+    supportsTransparent: true,
+    Component: TradingCard,
+  },
+  {
+    id: "subway-map",
+    labelKey: "subwayMap",
+    width: 1080,
+    height: 1080,
+    // Grid background = the visual.
+    supportsTransparent: false,
+    Component: SubwayMap,
+  },
+  {
+    id: "cassette-tape",
+    labelKey: "cassetteTape",
+    width: 1080,
+    height: 1080,
+    supportsTransparent: true,
+    Component: CassetteTape,
+  },
+  {
+    id: "y2k-chrome",
+    labelKey: "y2kChrome",
+    width: 1080,
+    height: 1080,
+    // Liquid gradient sky = signature.
+    supportsTransparent: false,
+    Component: Y2KChrome,
+  },
+  {
+    id: "boxing-poster",
+    labelKey: "boxingPoster",
+    width: 1080,
+    height: 1080,
+    // Deep crimson burst = signature.
+    supportsTransparent: false,
+    Component: BoxingPoster,
   },
 ];
 
