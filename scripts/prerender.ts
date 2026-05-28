@@ -12,7 +12,33 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync, statSync } from "fs";
 import { join, dirname } from "path";
 import { createServer } from "http";
-import puppeteer from "puppeteer";
+import puppeteerCore from "puppeteer-core";
+import type { Browser } from "puppeteer-core";
+
+/**
+ * Launch a headless Chrome that works in both environments:
+ *
+ * - **Dev box** uses the full `puppeteer` package; its postinstall already
+ *   downloaded a matching Chrome into `node_modules/.cache/puppeteer`.
+ * - **Vercel** can't run that binary (the build image lacks libnspr4 and
+ *   friends), so we swap in `@sparticuz/chromium`, a self-contained build
+ *   designed for serverless runtimes, and drive it with `puppeteer-core`.
+ */
+async function launchBrowser(): Promise<Browser> {
+  if (process.env.VERCEL) {
+    const chromium = (await import("@sparticuz/chromium")).default;
+    return puppeteerCore.launch({
+      headless: true,
+      args: [...chromium.args, "--disable-dev-shm-usage"],
+      executablePath: await chromium.executablePath(),
+    });
+  }
+  const puppeteer = (await import("puppeteer")).default;
+  return puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+  }) as Promise<Browser>;
+}
 
 const DIST_DIR = join(import.meta.dirname, "../dist");
 const SITEMAP_PATH = join(import.meta.dirname, "../public/sitemap.xml");
@@ -88,7 +114,7 @@ function startServer(): Promise<ReturnType<typeof createServer>> {
 async function processInBatches(
   routes: string[],
   lang: "fr" | "en",
-  browser: Awaited<ReturnType<typeof puppeteer.launch>>,
+  browser: Browser,
   batchSize: number,
   options: { waitTimeoutMs?: number } = {}
 ): Promise<{ success: number; failed: number; unrendered: string[] }> {
@@ -129,7 +155,7 @@ async function processInBatches(
 async function prerenderRoute(
   route: string,
   lang: "fr" | "en",
-  browser: Awaited<ReturnType<typeof puppeteer.launch>>,
+  browser: Browser,
   options: { waitTimeoutMs?: number } = {}
 ): Promise<{ success: boolean }> {
   const page = await browser.newPage();
@@ -218,11 +244,8 @@ async function main() {
   const server = await startServer();
   console.log(`  Static server on port ${PORT}`);
 
-  // Launch browser
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
-  });
+  // Launch browser (full puppeteer locally, @sparticuz/chromium on Vercel)
+  const browser = await launchBrowser();
   console.log(`  Puppeteer launched (concurrency: ${CONCURRENCY})\n`);
 
   try {
