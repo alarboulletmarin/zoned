@@ -12,6 +12,7 @@ import { GlossaryMatcherProvider } from "@/contexts/GlossaryMatcherContext";
 import { StorageWarning } from "@/components/domain/StorageWarning";
 import { PWAInstallPrompt } from "@/components/domain/PWAInstallPrompt";
 import { usePWA } from "@/hooks/usePWA";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 // All pages lazy loaded for optimal code-splitting
 const HomePage = lazy(() => import("@/pages/HomePage").then(m => ({ default: m.HomePage })));
@@ -125,6 +126,11 @@ function ScrollToTopOnNavigate() {
 function App() {
   const { t } = useTranslation("common");
   const { canInstall, promptInstall, dismissInstall, isOnline, updateAvailable, applyUpdate } = usePWA();
+  // Toaster placement: bottom-right covers the share-sheet action row on
+  // mobile (Copier / Partager / Télécharger). On small viewports we surface
+  // the toast at the top instead so it never overlaps a button the user just
+  // tapped, and dismiss it slightly faster.
+  const isMobile = useMediaQuery("(max-width: 767px)");
 
   // Preload main pages in background after first render
   useEffect(() => { preloadSidebarPages(); }, []);
@@ -310,7 +316,13 @@ function App() {
           <Analytics />
           <StorageWarning />
           {canInstall && <PWAInstallPrompt onInstall={promptInstall} onDismiss={dismissInstall} />}
-          <Toaster richColors position="bottom-right" />
+          <Toaster
+            richColors
+            closeButton
+            position={isMobile ? "top-center" : "bottom-right"}
+            duration={isMobile ? 2500 : 4000}
+            offset={isMobile ? "calc(env(safe-area-inset-top, 0px) + 12px)" : undefined}
+          />
           </BrowserRouter>
       </FavoritesProvider>
     </SettingsProvider>
