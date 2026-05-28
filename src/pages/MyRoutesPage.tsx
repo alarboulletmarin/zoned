@@ -34,7 +34,7 @@ export function MyRoutesPage() {
 
   return (
     <>
-      <SEOHead title={t("myRoutes")} description={t("subtitle")} canonical="/routes/mine" />
+      <SEOHead title={t("myRoutes")} description={t("subtitle")} canonical="/routes/mine" noindex />
       <div className="space-y-6 py-6">
         <header className="flex items-center justify-between">
           <div>

@@ -19,6 +19,8 @@ export const articleMetadata: ArticleMeta[] = [
       "The science behind zone training and how to apply it to your practice",
     category: "fundamentals",
     readTime: 10,
+    publishedAt: "2025-09-12",
+    updatedAt: "2026-04-22",
   },
   {
     id: "testing-vma",
@@ -31,6 +33,8 @@ export const articleMetadata: ArticleMeta[] = [
       "Test protocols and methods to establish your training benchmarks",
     category: "fundamentals",
     readTime: 12,
+    publishedAt: "2025-09-24",
+    updatedAt: "2026-03-08",
   },
   {
     id: "warmup",
@@ -43,6 +47,8 @@ export const articleMetadata: ArticleMeta[] = [
       "Preparing your body for effort: physiology, protocols and common mistakes",
     category: "training",
     readTime: 8,
+    publishedAt: "2025-10-07",
+    updatedAt: "2026-02-14",
   },
   {
     id: "recovery",
@@ -55,6 +61,8 @@ export const articleMetadata: ArticleMeta[] = [
       "Understanding why progression happens at rest and how to optimize your recovery",
     category: "lifestyle",
     readTime: 10,
+    publishedAt: "2025-10-29",
+    updatedAt: "2026-04-02",
   },
   {
     id: "nutrition",
@@ -66,6 +74,8 @@ export const articleMetadata: ArticleMeta[] = [
     descriptionEn: "Fueling performance: before, during and after effort",
     category: "lifestyle",
     readTime: 12,
+    publishedAt: "2025-11-15",
+    updatedAt: "2026-05-09",
   },
   {
     id: "faq",
@@ -76,6 +86,8 @@ export const articleMetadata: ArticleMeta[] = [
     descriptionEn: "Answers to common runner questions",
     category: "fundamentals",
     readTime: 8,
+    publishedAt: "2025-12-03",
+    updatedAt: "2026-05-21",
   },
   {
     id: "periodization",
@@ -88,6 +100,8 @@ export const articleMetadata: ArticleMeta[] = [
       "Organizing training in cycles to progress efficiently and reach your goals",
     category: "training",
     readTime: 8,
+    publishedAt: "2025-12-18",
+    updatedAt: "2026-04-12",
   },
   {
     id: "supercompensation",
@@ -100,6 +114,8 @@ export const articleMetadata: ArticleMeta[] = [
       "The key mechanism of progression: why we improve at rest and how to leverage it",
     category: "training",
     readTime: 6,
+    publishedAt: "2026-01-09",
+    updatedAt: "2026-04-30",
   },
   {
     id: "tapering",
@@ -112,6 +128,8 @@ export const articleMetadata: ArticleMeta[] = [
       "Reducing training before a race to arrive at peak form",
     category: "training",
     readTime: 7,
+    publishedAt: "2026-01-28",
+    updatedAt: "2026-04-18",
   },
   {
     id: "polarized-training",
@@ -124,6 +142,8 @@ export const articleMetadata: ArticleMeta[] = [
       "Run slow to get fast: the elite method explained",
     category: "training",
     readTime: 8,
+    publishedAt: "2026-02-15",
+    updatedAt: "2026-05-04",
   },
   {
     id: "progressive-overload",
@@ -136,6 +156,8 @@ export const articleMetadata: ArticleMeta[] = [
       "The fundamental principle for progress without injury: gradually increasing the load",
     category: "training",
     readTime: 6,
+    publishedAt: "2026-03-04",
+    updatedAt: "2026-05-12",
   },
   {
     id: "consistency",
@@ -148,6 +170,8 @@ export const articleMetadata: ArticleMeta[] = [
       "Why consistency matters more than intensity and how to build sustainable habits",
     category: "fundamentals",
     readTime: 5,
+    publishedAt: "2026-03-22",
+    updatedAt: "2026-05-25",
   },
 ];
 

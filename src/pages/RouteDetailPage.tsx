@@ -75,7 +75,7 @@ export function RouteDetailPage() {
 
   return (
     <>
-      <SEOHead title={route.name} description={t("subtitle")} canonical={`/routes/${route.id}`} />
+      <SEOHead title={route.name} description={t("subtitle")} canonical={`/routes/${route.id}`} noindex />
       <div className="space-y-6 py-6">
         <Button asChild variant="ghost" size="sm" className="gap-2">
           <Link to="/routes/mine">

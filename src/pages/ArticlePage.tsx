@@ -363,6 +363,19 @@ export function ArticlePage() {
   const description = pick(article, "description");
   const truncatedDescription = description.length > 155 ? description.slice(0, 152) + "..." : description;
 
+  // Build an ISO datetime from the article's YYYY-MM-DD metadata. We avoid
+  // hardcoding dates so each article gets its own published_time / modified_time
+  // in both OG meta and Article schema.
+  const publishedAt = `${article.publishedAt}T08:00:00+01:00`;
+  const updatedAt = `${article.updatedAt || article.publishedAt}T08:00:00+01:00`;
+
+  // Word count drives Article richness for Google. Strip markdown noise first.
+  const wordCount = content
+    .replace(/[#>*_`\-|]/g, " ")
+    .replace(/\[(.*?)\]\(.*?\)/g, "$1")
+    .split(/\s+/)
+    .filter((w) => w.length > 0).length;
+
   return (
     <>
       <SEOHead
@@ -370,15 +383,50 @@ export function ArticlePage() {
         description={truncatedDescription}
         canonical={`/learn/${slug}`}
         ogType="article"
+        article={{
+          publishedTime: publishedAt,
+          modifiedTime: updatedAt,
+          author: "Andrea Larboullet-Marin",
+          section: t(`content:learn.categories.${article.category}`),
+          tags: [
+            t(`content:learn.categories.${article.category}`),
+            "course à pied",
+            "running",
+          ],
+        }}
         jsonLd={[
           {
             "@type": "Article",
             headline: title,
             description: truncatedDescription,
-            author: { "@type": "Person", name: "Andrea Larboullet-Marin" },
-            publisher: { "@type": "Organization", name: "Zoned", url: "https://zoned.run" },
-            datePublished: "2026-03-01",
-            dateModified: "2026-03-20",
+            image: "https://zoned.run/og-image.png",
+            author: {
+              "@type": "Person",
+              name: "Andrea Larboullet-Marin",
+              url: "https://zoned.run/about",
+            },
+            publisher: {
+              "@type": "Organization",
+              name: "Zoned",
+              url: "https://zoned.run",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://zoned.run/pwa-512x512.png",
+                width: 512,
+                height: 512,
+              },
+            },
+            datePublished: publishedAt,
+            dateModified: updatedAt,
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `https://zoned.run/learn/${slug}`,
+            },
+            wordCount,
+            timeRequired: `PT${article.readTime}M`,
+            articleSection: t(`content:learn.categories.${article.category}`),
+            inLanguage: pick(article, "title") === article.titleEn ? "en-US" : "fr-FR",
+            isAccessibleForFree: true,
           },
           {
             "@type": "BreadcrumbList",
@@ -474,16 +522,16 @@ export function ArticlePage() {
       <ReadingProgress />
       <div className="py-8 max-w-3xl mx-auto xl:max-w-5xl">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-        <Link to="/" className="hover:text-foreground transition-colors">
-          <Home className="size-4" />
+      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
+        <Link to="/" aria-label={t("content:article.home")} className="hover:text-foreground transition-colors">
+          <Home className="size-4" aria-hidden="true" />
         </Link>
-        <ChevronRight className="size-3" />
+        <ChevronRight className="size-3" aria-hidden="true" />
         <Link to="/learn" className="hover:text-foreground transition-colors">
           {t("content:learn.title")}
         </Link>
-        <ChevronRight className="size-3" />
-        <span className="text-foreground truncate">{title}</span>
+        <ChevronRight className="size-3" aria-hidden="true" />
+        <span className="text-foreground truncate" aria-current="page">{title}</span>
       </nav>
 
       {/* Header */}

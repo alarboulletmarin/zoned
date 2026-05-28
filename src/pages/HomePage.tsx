@@ -434,12 +434,88 @@ export function HomePage() {
     count: totalSessions || 200,
   });
 
+  // Rich JSON-LD for the homepage. SEOHead already injects WebSite + Organization
+  // site-wide, so we only add the homepage-specific layers here:
+  // - WebApplication descriptor (we're a free running app — closest type)
+  // - FAQPage so questions qualify for "People also ask" snippets
+  const homepageJsonLd: Record<string, unknown>[] = [
+    {
+      "@type": "WebApplication",
+      name: "Zoned",
+      url: "https://zoned.run",
+      applicationCategory: "SportsApplication",
+      operatingSystem: "Web, iOS, Android",
+      browserRequirements: "Requires JavaScript. Works offline as a PWA.",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "EUR",
+      },
+      featureList: [
+        "200+ science-based running workouts",
+        "6-zone training system",
+        "Personalised training plans",
+        "VMA / HRmax / pace calculators",
+        "Race simulator with nutrition timing",
+        "FIT, PDF, ICS exports",
+        "Bilingual FR / EN",
+        "Open source, no account, no tracking",
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "Est-ce que Zoned est gratuit ?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Oui. Zoned est gratuit, sans compte, sans publicité et sans tracking. Le code source est ouvert sur GitHub.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Faut-il créer un compte pour utiliser Zoned ?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Non. Aucune inscription n'est requise. Vos préférences (zones personnelles, favoris, plans) sont stockées localement dans votre navigateur.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Sur quelles bases scientifiques s'appuie Zoned ?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Zoned s'appuie sur les travaux de Stephen Seiler (polarisé 80/20), Véronique Billat (vVO₂max, 30/30), Jack Daniels (VDOT), Joe Friel (zones LTHR) et Phil Maffetone (MAF 180).",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Combien de séances sont disponibles ?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: `Plus de ${totalSessions || 200} séances de course à pied, plus 10 séances cyclisme et 10 séances natation pour le cross-training, organisées en 6 zones d'intensité.`,
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Puis-je exporter les séances sur ma montre Garmin ?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Oui. Chaque séance peut être exportée au format FIT (Garmin), PDF imprimable, ICS (calendrier) ou PNG image.",
+          },
+        },
+      ],
+    },
+  ];
+
   return (
     <div className="font-sans text-foreground">
       <SEOHead
         title={t("homepage:home.seoTitle")}
         description={seoDescription}
         canonical="/"
+        jsonLd={homepageJsonLd}
       />
 
       {/* ═══════════════════════════════════════════════════════════════════

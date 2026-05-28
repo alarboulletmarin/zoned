@@ -19,6 +19,10 @@ export interface ArticleMeta {
   descriptionEn: string;
   category: ArticleCategory;
   readTime: number;
+  /** ISO 8601 publication date — surfaces in Article JSON-LD and OG. */
+  publishedAt: string;
+  /** ISO 8601 last meaningful edit. Defaults to publishedAt if absent. */
+  updatedAt?: string;
 }
 
 /**

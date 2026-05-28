@@ -22,6 +22,7 @@ import {
   Shield,
   BookOpen,
   Sparkles,
+  Share,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -35,6 +36,7 @@ import {
 } from "@/components/domain";
 import { WorkoutStructure, CoachingTips } from "@/components/domain/WorkoutStructure";
 import { ExportMenu } from "@/components/domain/ExportMenu";
+import { ShareDialog } from "@/components/share/ShareDialog";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/issueBuilder";
 import { NutritionRecoverySection } from "@/components/domain/NutritionRecoverySection";
@@ -115,6 +117,9 @@ export function WorkoutDetailPage() {
   // Load user zones from localStorage
   const [userZones, setUserZones] = useState<ZoneRange[]>([]);
   const [hasUserZones, setHasUserZones] = useState(false);
+
+  // Share modal (5 social templates)
+  const [shareOpen, setShareOpen] = useState(false);
 
   useEffect(() => {
     const prefs = loadUserZonePrefs();
@@ -294,19 +299,73 @@ export function WorkoutDetailPage() {
             "@type": "ExercisePlan",
             name: seoTitle,
             description: seoDescription,
+            url: `https://zoned.run/workout/${workout.id}`,
             exerciseType: "Running",
             activityDuration: `PT${duration}M`,
             intensity: workout.difficulty,
+            isAccessibleForFree: true,
+            inLanguage: ["fr-FR", "en-US"],
+            audience: {
+              "@type": "Audience",
+              audienceType: workout.difficulty,
+            },
             additionalProperty: [
               { "@type": "PropertyValue", name: "Category", value: workout.category },
               { "@type": "PropertyValue", name: "Target System", value: workout.targetSystem },
               { "@type": "PropertyValue", name: "Difficulty", value: workout.difficulty },
+              { "@type": "PropertyValue", name: "Dominant Zone", value: `Z${dominantZone}` },
             ],
             isPartOf: {
               "@type": "CollectionPage",
               name: "Zoned Running Workouts Library",
               url: "https://zoned.run/library",
             },
+            publisher: {
+              "@type": "Organization",
+              name: "Zoned",
+              url: "https://zoned.run",
+              logo: "https://zoned.run/pwa-512x512.png",
+            },
+          },
+          {
+            "@type": "HowTo",
+            name: seoTitle,
+            description: seoDescription,
+            totalTime: `PT${duration}M`,
+            estimatedCost: { "@type": "MonetaryAmount", currency: "EUR", value: "0" },
+            tool: ["Running shoes", "Heart rate monitor (optional)", "GPS watch (optional)"],
+            step: [
+              {
+                "@type": "HowToStep",
+                position: 1,
+                name: "Échauffement",
+                text:
+                  workout.warmupTemplate
+                    .map((b) => pick(b, "description"))
+                    .filter(Boolean)
+                    .join(" — ") || "Échauffement progressif",
+              },
+              {
+                "@type": "HowToStep",
+                position: 2,
+                name: "Corps de séance",
+                text:
+                  workout.mainSetTemplate
+                    .map((b) => pick(b, "description"))
+                    .filter(Boolean)
+                    .join(" — ") || seoDescription,
+              },
+              {
+                "@type": "HowToStep",
+                position: 3,
+                name: "Retour au calme",
+                text:
+                  workout.cooldownTemplate
+                    .map((b) => pick(b, "description"))
+                    .filter(Boolean)
+                    .join(" — ") || "Retour au calme",
+              },
+            ],
           },
           {
             "@type": "BreadcrumbList",
@@ -409,6 +468,15 @@ export function WorkoutDetailPage() {
             )}
             <ExportMenu workout={workout} />
             <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full px-4"
+              onClick={() => setShareOpen(true)}
+            >
+              <Share className="size-3.5 mr-1.5" />
+              {t("common:share.trigger")}
+            </Button>
+            <Button
               variant="ghost"
               size="sm"
               className="rounded-full px-4 text-muted-foreground hover:text-foreground"
@@ -422,6 +490,12 @@ export function WorkoutDetailPage() {
               {t("common:actions.copyLink")}
             </Button>
           </div>
+
+          <ShareDialog
+            workout={workout}
+            open={shareOpen}
+            onOpenChange={setShareOpen}
+          />
 
           {/* Inline stats row — single horizontal strip. Trail metrics
               fold in naturally when applicable so we don't need a
