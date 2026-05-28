@@ -550,6 +550,12 @@
     "freeSelection": "Free selection",
     "step": "Step {{number}}",
     "featured": "Featured collections",
+    "groups": {
+      "starter": "Get started & wellness",
+      "race": "Race goals",
+      "speed": "Speed & key sessions",
+      "strength": "Strength & prevention"
+    },
     "difficulty": {
       "beginner": "Beginner",
       "intermediate": "Intermediate",
