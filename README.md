@@ -62,6 +62,25 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
   <p><em>Training plan</em></p>
 </div>
 
+### In motion
+
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <img src="assets/polarise.gif" alt="Polarised week distribution" width="240" /><br/>
+      <sub><b>The 80/20 model</b><br/>What a well-dosed week looks like</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="assets/zones.gif" alt="Six training zones" width="240" /><br/>
+      <sub><b>Six zones, six adaptations</b><br/>Z1 recovery → Z6 sprint</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="assets/workouts.gif" alt="Three weekly workouts" width="240" /><br/>
+      <sub><b>Three workouts a week</b><br/>Recovery · VMA · long run</sub>
+    </td>
+  </tr>
+</table>
+
 ---
 
 ## Features
