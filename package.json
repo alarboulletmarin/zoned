@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && bun run scripts/generate-sitemap.ts && vite build",
     "postinstall": "test -n \"$VERCEL\" || puppeteer browsers install chrome",
     "generate:sitemap": "bun run scripts/generate-sitemap.ts",
     "generate:og": "bun run scripts/generate-og-image.ts",
