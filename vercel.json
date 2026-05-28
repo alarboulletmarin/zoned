@@ -2,8 +2,8 @@
   "outputDirectory": "dist",
   "cleanUrls": true,
   "trailingSlash": false,
-  "installCommand": "echo 'static deploy: skipping install'",
-  "buildCommand": "echo 'static deploy: using prerendered dist/ from repo'",
+  "installCommand": "bun install --frozen-lockfile",
+  "buildCommand": "bun run build",
   "headers": [
     {
       "source": "/sw.js",
