@@ -377,7 +377,7 @@ export function WorkoutDetailPage() {
           },
         ]}
       />
-      <div className={`zone-${dominantZone} py-6 md:py-8 space-y-8`}>
+      <div className={`zone-${dominantZone} py-6 md:py-8 space-y-10 sm:space-y-12 md:space-y-16`}>
         {/* Top strip — back, breadcrumb, optional plan chip. */}
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-3 flex-wrap">
@@ -503,7 +503,7 @@ export function WorkoutDetailPage() {
           {/* Inline stats row — single horizontal strip. Trail metrics
               fold in naturally when applicable so we don't need a
               separate trail bar. */}
-          <dl className="mt-6 grid grid-cols-3 sm:flex sm:flex-wrap sm:items-baseline sm:gap-x-8 gap-y-3 border-t border-border/60 pt-5">
+          <dl className="mt-6 grid grid-cols-2 sm:flex sm:flex-wrap sm:items-baseline sm:gap-x-8 gap-x-4 gap-y-5 sm:gap-y-3 border-t border-border/60 pt-6">
             <HeroStat
               label={t("session:stats.duration")}
               value={formatDurationMinutes(duration)}
@@ -601,7 +601,7 @@ export function WorkoutDetailPage() {
         {/* Zone distribution + coaching tips paired in a compact 2-col on
             md+, stacked on mobile. */}
         <FadeUp as="section">
-          <div className="grid md:grid-cols-[2fr_3fr] gap-6 md:gap-10">
+          <div className="grid md:grid-cols-[2fr_3fr] gap-8 md:gap-10">
             <div>
               <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-3">
                 {t("session:titles.zoneDistribution")}

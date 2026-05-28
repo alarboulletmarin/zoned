@@ -60,9 +60,9 @@ export function WorkoutStructure({ workout, userZones, className }: WorkoutStruc
   ].filter((phase) => phase.steps.length > 0);
 
   return (
-    <div className={cn("space-y-5", className)}>
+    <div className={cn("space-y-7 sm:space-y-8", className)}>
       {phases.map((phase) => (
-        <section key={phase.key} className="space-y-2.5">
+        <section key={phase.key} className="space-y-3">
           <div className="space-y-1">
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
               {phase.label}
@@ -335,7 +335,7 @@ function SegmentSummaryRow({
 
   return (
     <div className={cn(
-      "rounded-lg border border-border/40 bg-background/80 p-2.5 space-y-1.5",
+      "rounded-lg border border-border/40 bg-background/80 p-3 space-y-1.5",
       muted && "bg-muted/35",
       dashed && "border-dashed border-border/50 bg-muted/20",
     )}>
