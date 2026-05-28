@@ -18,3 +18,13 @@ export { exportToPDF } from "./pdf";
 export { exportToFIT } from "./fit";
 export { exportPlanToICS } from "./planIcs";
 export { exportPlanToPDF } from "./planPdf";
+
+// Social share pipeline (download / copy / Web Share API).
+export {
+  downloadImage,
+  copyImage,
+  shareImage,
+  isCopySupported,
+  type ShareMethod,
+} from "./share";
+export { getWorkoutHero, type WorkoutHero } from "./workoutHero";

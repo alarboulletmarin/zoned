@@ -5,6 +5,52 @@
     "heroTitle": "Prepare your next",
     "heroTitleAccent": "race"
   },
+  "share": {
+    "title": "Share this workout",
+    "subtitle": "Pick a visual",
+    "trigger": "Share",
+    "action": {
+      "download": "Download",
+      "copy": "Copy",
+      "share": "Share"
+    },
+    "transparent": {
+      "label": "Transparent background",
+      "hint": "To paste the visual over a photo (Insta Story, etc.)",
+      "notForZoneHero": "Not available on this template"
+    },
+    "privacy": "The image is generated in your browser — no data sent.",
+    "template": {
+      "storyHero": { "label": "Story", "format": "Insta · 1080 × 1920" },
+      "squareStats": { "label": "Square stats", "format": "Insta Feed · 1080 × 1080" },
+      "landscapeWide": { "label": "Landscape", "format": "Twitter · 1200 × 675" },
+      "minimalTypo": { "label": "Minimal", "format": "Editorial · 1080 × 1080" },
+      "zoneHero": { "label": "Zone hero", "format": "Coloured story · 1080 × 1920" },
+      "heartbeatEcg": { "label": "Pulse ECG", "format": "Cardiac trace · 1080 × 1920" },
+      "magazineCover": { "label": "Magazine", "format": "Editorial cover · 1080 × 1920" },
+      "diagonalSplit": { "label": "Diagonal", "format": "Geometric · 1080 × 1080" },
+      "receiptTicket": { "label": "Ticket", "format": "Receipt / bib · 1080 × 1920" },
+      "qrCard": { "label": "QR Code", "format": "Direct scan to workout · 1080 × 1080" },
+      "bibCard": { "label": "Race Bib", "format": "Running bib style · 1080 × 1080" },
+      "spotifyWrap": { "label": "Recap", "format": "Bold gradient & XL typo · 1080 × 1920" },
+      "boardingPass": { "label": "Boarding Pass", "format": "Airline ticket · 1080 × 1920" },
+      "postcard": { "label": "Postcard", "format": "Vintage with stamp · 1080 × 1920" },
+      "moviePoster": { "label": "Movie Poster", "format": "A24-style cinema · 1080 × 1920" },
+      "sneakerDrop": { "label": "SNKRS Drop", "format": "Sneaker release card · 1080 × 1920" },
+      "highlightBanner": { "label": "Banner", "format": "Sticker for bottom of landscape photo · 1080 × 360" },
+      "cornerStamp": { "label": "Stamp", "format": "Small corner sticker · 480 × 480" },
+      "spotifyWrapSquare": { "label": "Square Recap", "format": "Insta Feed version · 1080 × 1080" },
+      "badgeChip": { "label": "Chip", "format": "Neo-brutalist solid badge · 480 × 480" }
+    },
+    "toast": {
+      "shared": "Shared via device menu",
+      "downloaded": "Image downloaded",
+      "copied": "Copied to clipboard",
+      "copyUnsupported": "Image copy requires HTTPS (use Download or Share)",
+      "loading": "Generating image…",
+      "error": "Generation failed"
+    }
+  },
   "export": {
     "title": "Export",
     "calendar": "Calendar (ICS)",

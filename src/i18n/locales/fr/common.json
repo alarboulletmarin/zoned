@@ -5,6 +5,52 @@
     "heroTitle": "Prépare ton prochain",
     "heroTitleAccent": "objectif"
   },
+  "share": {
+    "title": "Partager cette séance",
+    "subtitle": "Choisis un visuel",
+    "trigger": "Partager",
+    "action": {
+      "download": "Télécharger",
+      "copy": "Copier",
+      "share": "Partager"
+    },
+    "transparent": {
+      "label": "Fond transparent",
+      "hint": "Pour coller le visuel par-dessus une photo (story Insta, etc.)",
+      "notForZoneHero": "Indisponible sur ce template"
+    },
+    "privacy": "L'image est générée dans ton navigateur — aucune donnée envoyée.",
+    "template": {
+      "storyHero": { "label": "Story", "format": "Insta · 1080 × 1920" },
+      "squareStats": { "label": "Carré stats", "format": "Insta Feed · 1080 × 1080" },
+      "landscapeWide": { "label": "Paysage", "format": "Twitter · 1200 × 675" },
+      "minimalTypo": { "label": "Minimal", "format": "Éditorial · 1080 × 1080" },
+      "zoneHero": { "label": "Zone hero", "format": "Story coloré · 1080 × 1920" },
+      "heartbeatEcg": { "label": "Pulse ECG", "format": "Trace cardiaque · 1080 × 1920" },
+      "magazineCover": { "label": "Magazine", "format": "Couverture éditoriale · 1080 × 1920" },
+      "diagonalSplit": { "label": "Diagonal", "format": "Géométrique · 1080 × 1080" },
+      "receiptTicket": { "label": "Ticket", "format": "Reçu / dossard · 1080 × 1920" },
+      "qrCard": { "label": "QR Code", "format": "Scan direct vers la séance · 1080 × 1080" },
+      "bibCard": { "label": "Dossard", "format": "Style course à pied · 1080 × 1080" },
+      "spotifyWrap": { "label": "Recap", "format": "Gradient flashy & typo XL · 1080 × 1920" },
+      "boardingPass": { "label": "Boarding Pass", "format": "Billet d'avion · 1080 × 1920" },
+      "postcard": { "label": "Carte postale", "format": "Vintage avec timbre · 1080 × 1920" },
+      "moviePoster": { "label": "Affiche", "format": "Style A24 / movie poster · 1080 × 1920" },
+      "sneakerDrop": { "label": "Drop SNKRS", "format": "Fiche release sneaker · 1080 × 1920" },
+      "highlightBanner": { "label": "Bandeau", "format": "Sticker pour bas de photo paysage · 1080 × 360" },
+      "cornerStamp": { "label": "Tampon", "format": "Petit sticker coin de photo · 480 × 480" },
+      "spotifyWrapSquare": { "label": "Recap carré", "format": "Version Insta Feed du Recap · 1080 × 1080" },
+      "badgeChip": { "label": "Chip", "format": "Badge solide néo-brutaliste · 480 × 480" }
+    },
+    "toast": {
+      "shared": "Partagé via le menu de l'appareil",
+      "downloaded": "Image téléchargée",
+      "copied": "Copié dans le presse-papier",
+      "copyUnsupported": "Copie image dispo uniquement en HTTPS (utilise Télécharger ou Partager)",
+      "loading": "Génération de l'image…",
+      "error": "Erreur lors de la génération"
+    }
+  },
   "export": {
     "title": "Exporter",
     "calendar": "Calendrier (ICS)",

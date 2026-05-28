@@ -1,0 +1,7 @@
+/* When the share template wrapper is marked transparent, the inner
+   background layer disappears. The PNG export keeps its alpha channel
+   intact, so the visual can be dropped over a photo (Insta story etc.). */
+
+[data-share-template][data-transparent="true"] [data-bg-layer] {
+  display: none !important;
+}
