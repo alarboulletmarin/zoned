@@ -193,8 +193,10 @@ async function prerenderRoute(
 
     // Wait for SEOHead's JSON-LD scripts to land in <head>. Base SEOHead
     // emits 2 site-wide schemas (WebSite + Organization), so >=2 means at
-    // least one render commit has happened.
-    const rendered = await page
+    // least one render commit has happened. We don't fail on timeout —
+    // some Vercel boxes are slow to mount React but eventually do; we'd
+    // rather snapshot late content than skip it.
+    await page
       .waitForFunction(
         () => {
           const tags = document.head.querySelectorAll(
@@ -204,10 +206,16 @@ async function prerenderRoute(
         },
         { timeout: waitTimeoutMs, polling: 100 }
       )
-      .then(() => true)
-      .catch(() => false);
+      .catch(() => {
+        // Fallback: trust the HTML check below.
+      });
 
     const html = await page.content();
+    // Truth source for "did SEOHead render?": inspect the captured HTML
+    // directly. Avoids spurious retries when waitForFunction's polling
+    // misses the commit window but the content is still there.
+    const ldMatches = html.match(/<script\s+type="application\/ld\+json"/gi) || [];
+    const rendered = ldMatches.length >= 2;
 
     // FR: dist/<route>/index.html — EN: dist/<route>/index.en.html
     const fileName = lang === "fr" ? "index.html" : "index.en.html";
@@ -260,14 +268,22 @@ async function main() {
     // Pass 3: Retry routes that snapshotted before SEOHead committed.
     // Lower concurrency + longer timeout so the heavy hub pages
     // (calculators, library, learn) get the resources they need to mount.
-    const retryFr = fr.unrendered;
-    const retryEn = en.unrendered;
+    //
+    // Cap the retry size: if more than 1/4 of routes "didn't render", the
+    // wait condition is the problem, not the routes. Retrying 800+ pages
+    // on a Vercel build runner would blow past the 45-minute build limit
+    // for no benefit (we already captured their HTML in the first pass).
+    const retryCap = Math.floor(routes.length / 4);
+    const retryFr = fr.unrendered.slice(0, retryCap);
+    const retryEn = en.unrendered.slice(0, retryCap);
     let retryFrResult = { success: 0, failed: 0, unrendered: [] as string[] };
     let retryEnResult = { success: 0, failed: 0, unrendered: [] as string[] };
 
     if (retryFr.length > 0 || retryEn.length > 0) {
+      const skippedFr = fr.unrendered.length - retryFr.length;
+      const skippedEn = en.unrendered.length - retryEn.length;
       console.log(
-        `\n  Pass 3: Retry (FR: ${retryFr.length}, EN: ${retryEn.length}) with longer timeout\n`
+        `\n  Pass 3: Retry (FR: ${retryFr.length}${skippedFr ? ` +${skippedFr} skipped` : ""}, EN: ${retryEn.length}${skippedEn ? ` +${skippedEn} skipped` : ""}) with longer timeout\n`
       );
       if (retryFr.length > 0) {
         retryFrResult = await processInBatches(retryFr, "fr", browser, 3, {
