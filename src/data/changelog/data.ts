@@ -2,6 +2,114 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.6.1",
+    date: "2026-05-28",
+    changes: {
+      added: [
+        {
+          text: "Dialog de partage avec carrousel style Strava et 17 templates de seance (export PNG bilingue)",
+          textEn: "Share dialog with Strava-style template carousel and 17 workout templates (bilingual PNG export)",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Carte OG editoriale avec stats live au format carre, optimisee pour les previews sociales",
+          textEn: "Editorial OG share card with live stats in a square format optimised for social previews",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "SEO : enrichissement JSON-LD sur toutes les pages et ajout de llms.txt pour les crawlers IA",
+          textEn: "SEO: enriched JSON-LD across all pages and added llms.txt for AI crawlers",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Migration vers le meta hoisting natif de React 19 (remplace react-helmet-async)",
+          textEn: "React 19 native meta hoisting (replaces react-helmet-async)",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Generateur de sitemap reecrit et prerender durci pour React 19",
+          textEn: "Sitemap generator rewritten and prerender hardened for React 19",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+      ],
+      changed: [
+        {
+          text: "CTA hero de la home bascule sur 'Voir mes plans' quand l'utilisateur a deja des plans sauvegardes",
+          textEn: "Home hero CTA swaps to 'View my plans' when the user has saved plans",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Strategie de deploiement : Vercel build au runtime au lieu de servir un dist/ commite",
+          textEn: "Deploy strategy: Vercel builds at runtime instead of serving a committed dist/",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Dependance react-helmet-async supprimee (bundle allege)",
+          textEn: "Dropped react-helmet-async dependency (lighter bundle)",
+          category: "Performance",
+          categoryEn: "Performance",
+        },
+      ],
+      fixed: [
+        {
+          text: "Toast positionne top-center sur mobile pour ne plus chevaucher les boutons d'action",
+          textEn: "Toast pinned top-center on mobile so it no longer overlaps action buttons",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Vercel SPA rewrite /(.*) vers / pour que les routes client ne renvoient plus 404",
+          textEn: "Vercel SPA rewrite /(.*) → / so client routes stop returning 404",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Share sur iOS Safari : Promise<Blob> dans ClipboardItem et title retire du native share (Instagram)",
+          textEn: "Share on iOS Safari: Promise<Blob> in ClipboardItem and title dropped from native share (Instagram)",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "PWA : skipWaiting et clientsClaim forces pour que mobile recoive le contenu frais immediatement",
+          textEn: "PWA: skipWaiting + clientsClaim so mobile clients receive fresh content immediately",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Accessibilite : ordre des headings, aria labels et contraste WCAG AA ajustes",
+          textEn: "Accessibility: heading order, aria labels and WCAG AA contrast tweaks",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Learn page : la grille stagger se remonte au changement de filtre pour que les cards restent visibles",
+          textEn: "Learn page: stagger grid remounts on filter change so cards stay visible",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Build : sitemap genere avant vite build pour qu'il soit shippe dans dist/",
+          textEn: "Build: sitemap generated before vite build so it ships in dist/",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Prerender ne tombe plus dans une boucle de retry sur Vercel (HTML capture utilise au lieu de waitForFunction)",
+          textEn: "Prerender no longer hits a retry storm on Vercel (trusts captured HTML instead of waitForFunction)",
+          category: "Performance",
+          categoryEn: "Performance",
+        },
+      ],
+    },
+  },
+  {
     version: "0.6.0",
     date: "2026-05-27",
     changes: {

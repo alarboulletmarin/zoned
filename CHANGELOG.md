@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.1] - 2026-05-28
+
+### Added
+- Share dialog with Strava-style template carousel and 17 workout templates (bilingual PNG export)
+- Editorial OG share card with live stats in a square format optimised for social previews
+- SEO: enriched JSON-LD across all pages plus `llms.txt` for AI crawlers
+- React 19 native meta hoisting (replaces `react-helmet-async`)
+- Sitemap generator rewritten and prerender hardened for React 19
+
+### Changed
+- Home hero CTA swaps to "View my plans" when the user has saved plans
+- Deploy strategy: Vercel builds at runtime instead of serving a committed `dist/`
+- Dropped `react-helmet-async` dependency (lighter bundle)
+
+### Fixed
+- Toast position pinned top-center on mobile so it no longer overlaps action buttons
+- Vercel SPA rewrite `/(.*)` → `/` so client routes stop returning 404
+- Share on iOS Safari: `Promise<Blob>` in `ClipboardItem` and dropped title from native share (Instagram)
+- PWA: `skipWaiting` + `clientsClaim` so mobile clients receive fresh content immediately
+- Accessibility: heading order, aria labels and WCAG AA contrast tweaks
+- Learn page: stagger grid remounts on filter change so cards stay visible
+- Build: sitemap generated before `vite build` so it ships in `dist/`
+- Prerender no longer hits a retry storm on Vercel (trusts captured HTML instead of `waitForFunction`)
+
 ## [0.6.0] - 2026-05-27
 
 ### Added

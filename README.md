@@ -10,7 +10,7 @@
   ### [→ zoned.run](https://zoned.run)
 
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
-  [![Version](https://img.shields.io/badge/version-v0.6.0-orange?style=flat-square)](https://github.com/alarboulletmarin/zoned/releases)
+  [![Version](https://img.shields.io/badge/version-v0.6.1-orange?style=flat-square)](https://github.com/alarboulletmarin/zoned/releases)
   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md)
   [![Good first issues](https://img.shields.io/github/issues/alarboulletmarin/zoned/good%20first%20issue?style=flat-square&color=7057ff&label=good%20first%20issues)](https://github.com/alarboulletmarin/zoned/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
   [![Open issues](https://img.shields.io/github/issues/alarboulletmarin/zoned?style=flat-square)](https://github.com/alarboulletmarin/zoned/issues)
