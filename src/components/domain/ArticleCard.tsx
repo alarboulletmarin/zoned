@@ -1,7 +1,5 @@
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { Clock, BookOpen, Heart, Dumbbell } from "@/components/icons";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { ArticleMeta, ArticleCategory } from "@/data/articles";
@@ -14,63 +12,51 @@ const CATEGORY_ICONS: Record<ArticleCategory, React.ComponentType<{ className?: 
   lifestyle: Heart,
 };
 
-const CATEGORY_COLORS: Record<ArticleCategory, string> = {
-  fundamentals: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
-  training: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300",
-  lifestyle: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
-};
-
 const CATEGORY_GRADIENT: Record<ArticleCategory, string> = {
-  fundamentals: "bg-gradient-to-br from-blue-500/10 dark:from-blue-500/20 to-transparent",
-  training: "bg-gradient-to-br from-orange-500/10 dark:from-orange-500/20 to-transparent",
-  lifestyle: "bg-gradient-to-br from-green-500/10 dark:from-green-500/20 to-transparent",
+  fundamentals: "from-blue-500/10 dark:from-blue-500/20",
+  training: "from-orange-500/10 dark:from-orange-500/20",
+  lifestyle: "from-green-500/10 dark:from-green-500/20",
 };
 
 interface ArticleCardProps {
   article: ArticleMeta;
-  className?: string;
 }
 
-export function ArticleCard({ article, className }: ArticleCardProps) {
-  const { t } = useTranslation("common");
+export function ArticleCard({ article }: ArticleCardProps) {
   const pick = usePickLang();
   const CategoryIcon = CATEGORY_ICONS[article.category];
 
   return (
-    <Link to={`/learn/${article.slug}`}>
-      <Card
-        interactive
+    <Link to={`/learn/${article.slug}`} className="group block h-full">
+      <div
         className={cn(
-          "h-full border-border/50",
+          "rounded-lg sm:rounded-xl border border-border/50 h-full p-4 sm:p-6",
+          "bg-gradient-to-br to-transparent",
           CATEGORY_GRADIENT[article.category],
-          className,
+          "hover:shadow-sm hover:-translate-y-0.5 hover:border-foreground/40 active:translate-y-0 transition-all duration-200",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         )}
       >
-        <CardHeader className="pb-2">
-          <div className="flex items-start justify-between gap-2">
-            <Badge
-              variant="secondary"
-              className={cn("text-xs", CATEGORY_COLORS[article.category])}
-            >
-              <CategoryIcon className="size-3 mr-1" />
-              {t(`content:learn.categories.${article.category}`)}
-            </Badge>
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
-              <Clock className="size-3" />
-              <span>{article.readTime} min</span>
-            </div>
+        <div className="flex flex-col items-center text-center gap-3 sm:gap-4 h-full">
+          <div className="size-10 sm:size-14 rounded-lg sm:rounded-2xl flex items-center justify-center shrink-0 bg-secondary">
+            <CategoryIcon className="size-5 sm:size-7" />
           </div>
-          <CardTitle className="text-lg mt-2">
-            {pick(article, "title")}
-          </CardTitle>
-        </CardHeader>
-
-        <CardContent>
-          <p className="text-sm text-muted-foreground line-clamp-2">
-            <GlossaryLinkedText text={pick(article, "description")} />
-          </p>
-        </CardContent>
-      </Card>
+          <div className="space-y-1 min-w-0 flex-1">
+            <h3 className="text-sm sm:text-lg font-semibold leading-snug group-hover:text-primary transition-colors">
+              {pick(article, "title")}
+            </h3>
+            <p className="hidden sm:block text-sm text-muted-foreground line-clamp-2">
+              <GlossaryLinkedText text={pick(article, "description")} />
+            </p>
+          </div>
+          <div className="hidden sm:flex flex-wrap items-center justify-center gap-1.5">
+            <Badge variant="outline" className="text-xs gap-1">
+              <Clock className="size-3" />
+              {article.readTime} min
+            </Badge>
+          </div>
+        </div>
+      </div>
     </Link>
   );
 }

@@ -1,19 +1,11 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { BookOpen, Dumbbell, Heart, Filter, Loader2 } from "@/components/icons";
-import { Button } from "@/components/ui/button";
+import { Loader2 } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
 import { ArticleCard } from "@/components/domain/ArticleCard";
 import { useArticles } from "@/hooks/useArticles";
 import type { ArticleCategory } from "@/data/articles/types";
 import { cn } from "@/lib/utils";
 import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
-
-const CATEGORY_ICONS: Record<ArticleCategory, React.ComponentType<{ className?: string }>> = {
-  fundamentals: BookOpen,
-  training: Dumbbell,
-  lifestyle: Heart,
-};
 
 const ARTICLE_CATEGORIES: ArticleCategory[] = [
   "fundamentals",
@@ -23,13 +15,8 @@ const ARTICLE_CATEGORIES: ArticleCategory[] = [
 
 export function LearnPage() {
   const { t } = useTranslation("common");
-  const [selectedCategory, setSelectedCategory] = useState<ArticleCategory | "all">("all");
 
   const { articles, isLoading } = useArticles();
-
-  const filteredArticles = selectedCategory === "all"
-    ? articles
-    : articles.filter((a) => a.category === selectedCategory);
 
   return (
     <>
@@ -64,58 +51,44 @@ export function LearnPage() {
         </FadeUp>
       </div>
 
-      {/* Category Filter */}
-      <div className="flex flex-wrap items-center gap-2 mb-6">
-        <Filter className="size-4 text-muted-foreground" />
-        <Button
-          variant={selectedCategory === "all" ? "default" : "outline"}
-          size="sm"
-          onClick={() => setSelectedCategory("all")}
-        >
-          {t("content:learn.allCategories")}
-        </Button>
-        {ARTICLE_CATEGORIES.map((category) => {
-          const Icon = CATEGORY_ICONS[category];
-          return (
-            <Button
-              key={category}
-              variant={selectedCategory === category ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSelectedCategory(category)}
-              className="gap-1"
-            >
-              <Icon className="size-3.5" />
-              {t(`content:learn.categories.${category}`)}
-            </Button>
-          );
-        })}
-      </div>
-
-      {/* Loading State */}
+      {/* Articles — grouped by category. Each category reads as a small
+          editorial section: mono caption + matching cards. On mobile cards
+          collapse to icon + title; from sm+ they expand to the full card
+          with description + read time. */}
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
           <Loader2 className="size-8 animate-spin text-muted-foreground" />
         </div>
       ) : (
         <>
-          {/* Articles Grid */}
-          <StaggerGrid
-            key={selectedCategory}
-            className={cn(
-              "grid gap-4",
-              "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
-            )}
-          >
-            {filteredArticles.map((article) => (
-              <StaggerItem key={article.id}>
-                <ArticleCard article={article} />
-              </StaggerItem>
-            ))}
-          </StaggerGrid>
+          <div className="space-y-10 sm:space-y-12">
+            {ARTICLE_CATEGORIES.map((category) => {
+              const categoryArticles = articles.filter((a) => a.category === category);
+              if (categoryArticles.length === 0) return null;
+              return (
+                <section key={category} aria-labelledby={`learn-${category}`}>
+                  <p
+                    id={`learn-${category}`}
+                    className="font-mono text-[10px] sm:text-[11px] tracking-[0.18em] uppercase text-muted-foreground mb-3 sm:mb-4 flex items-center gap-3"
+                  >
+                    <span className="inline-block h-px w-8 bg-border" />
+                    {t(`content:learn.categories.${category}`)}
+                  </p>
+                  <StaggerGrid className={cn("grid gap-3 sm:gap-4", "grid-cols-2 lg:grid-cols-3")}>
+                    {categoryArticles.map((article) => (
+                      <StaggerItem key={article.id}>
+                        <ArticleCard article={article} />
+                      </StaggerItem>
+                    ))}
+                  </StaggerGrid>
+                </section>
+              );
+            })}
+          </div>
 
           {/* Stats */}
-          <div className="mt-8 text-center text-sm text-muted-foreground">
-            {t("content:learn.articleCount", { count: filteredArticles.length })}
+          <div className="mt-10 sm:mt-12 text-center text-sm text-muted-foreground">
+            {t("content:learn.articleCount", { count: articles.length })}
           </div>
         </>
       )}
