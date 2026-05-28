@@ -2,8 +2,7 @@
   "outputDirectory": "dist",
   "cleanUrls": true,
   "trailingSlash": false,
-  "installCommand": "bun install --frozen-lockfile",
-  "buildCommand": "bun run build",
+  "framework": "vite",
   "rewrites": [
     { "source": "/((?!assets/|.*\\.[a-zA-Z0-9]+$).*)", "destination": "/index.html" }
   ],
