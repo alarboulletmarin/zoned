@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
-import { HelmetProvider } from "react-helmet-async";
 import { Analytics } from "@vercel/analytics/react";
 import { toast, Toaster } from "sonner";
 import { MobileSidebar, TopBar, Footer } from "@/components/layout";
@@ -209,8 +208,7 @@ function App() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
-    <HelmetProvider>
-      <SettingsProvider>
+    <SettingsProvider>
         <FavoritesProvider>
           <BrowserRouter>
           <GlossaryMatcherProvider>
@@ -314,9 +312,8 @@ function App() {
           {canInstall && <PWAInstallPrompt onInstall={promptInstall} onDismiss={dismissInstall} />}
           <Toaster richColors position="bottom-right" />
           </BrowserRouter>
-        </FavoritesProvider>
-      </SettingsProvider>
-    </HelmetProvider>
+      </FavoritesProvider>
+    </SettingsProvider>
   );
 }
 

@@ -9,29 +9,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <title>Zoned - 200 Science-Based Running Workouts by Zone</title>
-    <meta name="description" content="200 free running workouts organized by 6 training zones. Calculators, training plans, glossary, and guides to help you train smarter. No account needed." />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="application-name" content="Zoned" />
+    <meta name="apple-mobile-web-app-title" content="Zoned" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="mobile-web-app-capable" content="yes" />
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Zoned" />
-    <meta property="og:title" content="Zoned - 200 Science-Based Running Workouts by Zone" />
-    <meta property="og:description" content="200 free running workouts organized by 6 training zones. Calculators, training plans, glossary, and guides to help you train smarter. No account needed." />
-    <meta property="og:url" content="https://zoned.run" />
-    <meta property="og:image" content="https://zoned.run/og-image.png" />
-    <meta property="og:locale" content="fr_FR" />
-    <meta property="og:locale:alternate" content="en_US" />
+    <!-- SEO metadata is owned by <SEOHead> via React 19 native auto-hoist.
+         Keeping a minimal default here so non-JS crawlers hitting an
+         un-prerendered URL still see something reasonable. The build's
+         prerender pass replaces this for every public route. -->
+    <title>Zoned</title>
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Zoned - 200 Science-Based Running Workouts by Zone" />
-    <meta name="twitter:description" content="200 free running workouts organized by 6 training zones. Calculators, training plans, glossary, and guides to help you train smarter. No account needed." />
-    <meta name="twitter:image" content="https://zoned.run/og-image.png" />
-
-    <!-- Alternate Languages -->
-    <link rel="alternate" hreflang="fr" href="https://zoned.run/" />
-    <link rel="alternate" hreflang="en" href="https://zoned.run/?lang=en" />
-    <link rel="alternate" hreflang="x-default" href="https://zoned.run/" />
+    <!-- Performance hints -->
+    <link rel="dns-prefetch" href="https://vitals.vercel-insights.com" />
+    <link rel="preconnect" href="https://vitals.vercel-insights.com" crossorigin />
 
     <!-- Theme sync script - MUST run before any render to prevent flash -->
     <script>
@@ -156,7 +149,7 @@
       <header class="shell-header">
         <div class="shell-header-inner">
           <div class="shell-logo">
-            <svg width="200" height="100" viewBox="5 35 190 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="200" height="100" viewBox="5 35 190 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo Zoned">
               <defs>
                 <linearGradient id="pulseGradient" x1="0%" y1="50%" x2="100%" y2="50%">
                   <stop offset="0%" style="stop-color:#94a3b8;stop-opacity:1" />
@@ -184,7 +177,7 @@
             </svg>
             <span>Zoned</span>
           </div>
-          <nav class="shell-nav">
+          <nav class="shell-nav" aria-label="Navigation principale">
             <span class="shell-nav-item">Accueil</span>
             <span class="shell-nav-item">Bibliothèque</span>
             <span class="shell-nav-item">Apprendre</span>
@@ -193,7 +186,7 @@
         </div>
       </header>
       <main class="shell-content">
-        <div class="spinner"></div>
+        <div class="spinner" role="status" aria-label="Chargement"></div>
       </main>
     </div>
 
