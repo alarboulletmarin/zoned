@@ -84,9 +84,32 @@ export async function copyImage(
   transparent: boolean,
 ): Promise<boolean> {
   if (!isCopySupported()) return false;
-  const blob = await nodeToBlob(target, transparent);
-  await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-  return true;
+
+  // Safari (iOS + macOS) requires `clipboard.write()` to run inside the same
+  // user-activation tick as the click. Awaiting `nodeToBlob()` first (~500ms
+  // for html-to-image) drops that activation and the write is rejected as
+  // "Document is not focused" / "NotAllowedError".
+  //
+  // The standard workaround: hand `ClipboardItem` a *Promise<Blob>* directly,
+  // so the browser preserves the activation context while waiting for the
+  // image to be ready. Chromium and Firefox accept this too; older Safari
+  // (<15.4) falls through to the legacy path.
+  try {
+    const item = new ClipboardItem({
+      "image/png": nodeToBlob(target, transparent),
+    });
+    await navigator.clipboard.write([item]);
+    return true;
+  } catch (err) {
+    // Some browsers (older Safari, some Android WebViews) reject a Promise
+    // inside ClipboardItem. Fall back to the legacy two-step pattern.
+    if (err instanceof DOMException && err.name === "NotAllowedError") {
+      throw err;
+    }
+    const blob = await nodeToBlob(target, transparent);
+    await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+    return true;
+  }
 }
 
 export type ShareMethod = "native" | "download";
@@ -107,7 +130,16 @@ export async function shareImage(
     navigator.canShare({ files: [file] })
   ) {
     try {
-      await navigator.share({ files: [file], ...meta });
+      // We deliberately drop `text` here. Instagram Stories (and a handful of
+      // other apps) accept the share payload but render *only* the text body
+      // — the image is silently dropped, so the user ends up pasting "Z6 –
+      // VMA courte" instead of the visual they curated. Stripping the text
+      // forces every receiving app to handle the image as the primary asset.
+      // `title` is kept because it appears as the share-sheet header on iOS
+      // and the file label on Android; it never bleeds into the post body.
+      const payload: ShareData = { files: [file] };
+      if (meta.title) payload.title = meta.title;
+      await navigator.share(payload);
       return "native";
     } catch (err) {
       // AbortError = user cancelled the native sheet; surface as cancellation.
