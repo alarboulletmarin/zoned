@@ -4,6 +4,9 @@
   "trailingSlash": false,
   "installCommand": "bun install --frozen-lockfile",
   "buildCommand": "bun run build",
+  "rewrites": [
+    { "source": "/((?!assets/|.*\\.[a-zA-Z0-9]+$).*)", "destination": "/index.html" }
+  ],
   "headers": [
     {
       "source": "/sw.js",
