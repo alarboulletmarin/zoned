@@ -1,0 +1,1 @@
+const s="https://brouter.de/brouter",_=15e3,t=2,R=500,E={running:"trekking",cycling:"fastbike",swimming:null},T="https://nominatim.openstreetmap.org",n=1e3,a="https://overpass-api.de/api/interpreter",o=25,A=1.5,O=3,S=.05,I=4,c=100;export{s as B,S as D,I as M,T as N,a as O,A as P,c as R,n as a,E as b,t as c,_ as d,R as e,o as f,O as g};

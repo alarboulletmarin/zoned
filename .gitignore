@@ -50,3 +50,5 @@ scripts/stories/
 scripts/story-ui-refonte.html
 scripts/render-story.ts
 public/social/
+# Stories get copied into the build by Vite; exclude from the committed dist.
+dist/social/

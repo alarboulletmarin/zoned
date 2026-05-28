@@ -1,0 +1,90 @@
+# Zoned
+
+> Zoned est une bibliothèque libre et open-source de plus de 200 séances de course à pied basées sur la science, organisées autour de 6 zones d'entraînement. Le site propose également des calculateurs (VMA, allures, zones), des plans d'entraînement personnalisés, un glossaire de plus de 50 termes et des articles pédagogiques — le tout sans compte, sans tracking, sans abonnement.
+
+Zoned (anciennement appelé "Zones") s'adresse aux coureurs autonomes qui cherchent à structurer leur entraînement sans la complexité d'un coach digital. La méthodologie s'appuie sur les travaux de Stephen Seiler (polarisé 80/20), Véronique Billat (vVO₂max, 30/30), Jack Daniels (VDOT), Joe Friel (zones LTHR) et Phil Maffetone (MAF 180).
+
+Le site est :
+
+- 100 % gratuit, sans compte ni paywall
+- Open source ([GitHub](https://github.com/alarboulletmarin/zoned))
+- Sans tracking, sans publicité, sans cookie tiers
+- Bilingue français / anglais
+- Mobile-first et installable comme PWA
+
+## Pages principales
+
+- [Accueil](https://zoned.run/): vue d'ensemble du site avec les zones, séances de la semaine et statistiques globales
+- [Bibliothèque de séances](https://zoned.run/library): catalogue filtrable de 200+ séances scientifiques par zone, catégorie, durée
+- [Plans d'entraînement](https://zoned.run/plan/new/prebuilt): plans pré-construits pour 5K, 10K, semi, marathon, trail, retour de blessure
+- [Calculateurs](https://zoned.run/calculators): VMA, allures, zones, table d'allures, tapis roulant, splits, équivalences, age-graded
+- [Glossaire](https://zoned.run/glossary): 50+ termes (VMA, FCmax, seuil, lactate, polarisé, etc.)
+- [Apprendre](https://zoned.run/learn): articles pédagogiques sur les zones, la VMA, la nutrition, la récupération
+- [Méthodologie](https://zoned.run/methodology): sources scientifiques et choix de conception
+- [Guides pratiques](https://zoned.run/guides): échauffement, préparation course, nutrition
+- [Collections thématiques](https://zoned.run/collections): parcours guidés pour débuter, retour de blessure, anti-stress
+- [Simulateur de course](https://zoned.run/race-simulator): pacing kilomètre par kilomètre avec nutrition et hydratation
+
+## Zones d'entraînement
+
+Le système Zoned utilise 6 zones d'intensité construites depuis la VMA et la FCmax :
+
+- [Z1 — Récupération](https://zoned.run/glossary/zone-1): 50-60 % VMA, footing très léger
+- [Z2 — Endurance fondamentale](https://zoned.run/glossary/zone-2): 60-75 % VMA, base aérobie
+- [Z3 — Tempo](https://zoned.run/glossary/zone-3): 75-85 % VMA, allure soutenue
+- [Z4 — Seuil](https://zoned.run/glossary/zone-4): 85-90 % VMA, seuil lactique
+- [Z5 — VO₂max](https://zoned.run/glossary/zone-5): 90-100 % VMA, intervalles VMA
+- [Z6 — Sprint](https://zoned.run/glossary/zone-6): >100 % VMA, sprint anaérobie
+
+## Calculateurs disponibles
+
+- [Calculateur de zones](https://zoned.run/calculators/zones): détermine vos 6 zones d'entraînement à partir de votre VMA et FCmax
+- [Calculateur d'allures](https://zoned.run/calculators/allures): convertit vos zones en allures min/km
+- [Test VMA](https://zoned.run/calculators/vma): protocoles VAMEVAL, demi-Cooper, Cooper, 6 minutes
+- [Convertisseur d'allures](https://zoned.run/calculators/convertisseur): min/km ↔ km/h ↔ mph
+- [Table d'allures imprimable](https://zoned.run/calculators/table-allures): référence rapide pour toutes les zones
+- [Tapis roulant](https://zoned.run/calculators/tapis-roulant): convertit pente et vitesse en effort équivalent route
+- [Splits négatifs](https://zoned.run/calculators/splits): planifie votre pacing course
+- [Équivalence courses](https://zoned.run/calculators/equivalence): prédit vos temps sur d'autres distances
+- [Age-graded](https://zoned.run/calculators/age-graded): performance ajustée par âge et sexe
+
+## Articles pédagogiques
+
+- [Comprendre les 6 zones d'entraînement](https://zoned.run/learn/zones)
+- [Mesurer sa VMA et sa FCmax](https://zoned.run/learn/testing-vma)
+- [L'échauffement du coureur](https://zoned.run/learn/warmup)
+- [La récupération : là où tout se joue](https://zoned.run/learn/recovery)
+- [Nutrition du coureur](https://zoned.run/learn/nutrition)
+- [La périodisation en course à pied](https://zoned.run/learn/periodization)
+- [Comprendre la surcompensation](https://zoned.run/learn/supercompensation)
+- [L'art du taper](https://zoned.run/learn/tapering)
+- [L'entraînement polarisé 80/20](https://zoned.run/learn/polarized-training)
+- [La surcharge progressive](https://zoned.run/learn/progressive-overload)
+- [La régularité : clé de la progression](https://zoned.run/learn/consistency)
+- [Questions fréquentes](https://zoned.run/learn/faq)
+
+## Plans pré-construits
+
+- [5K débutant](https://zoned.run/plan/prebuilt/5k-debutant): 8 semaines, 3 séances/semaine
+- [5K intermédiaire](https://zoned.run/plan/prebuilt/5k-intermediaire): 8 semaines, 4 séances/semaine
+- [10K débutant](https://zoned.run/plan/prebuilt/10k-debutant): 10 semaines
+- [10K intermédiaire](https://zoned.run/plan/prebuilt/10k-intermediaire): 10 semaines
+- [Semi-marathon](https://zoned.run/plan/prebuilt/semi-marathon): 12 semaines
+- [Marathon](https://zoned.run/plan/prebuilt/marathon): 16 semaines
+- [Construction de base aérobie](https://zoned.run/plan/prebuilt/construction-base): renforcer l'endurance fondamentale
+- [Retour de blessure](https://zoned.run/plan/prebuilt/retour-de-blessure): reprise progressive et sécurisée
+
+## Comparaisons
+
+- [Zoned vs Runna](https://zoned.run/compare/runna)
+- [Zoned vs Kiprun Pacer](https://zoned.run/compare/kiprun-pacer)
+- [Zoned vs Campus Coach](https://zoned.run/compare/campus-coach)
+
+## Optionnel
+
+- [Sitemap complet](https://zoned.run/sitemap.xml): toutes les URL indexables
+- [Méthodologie des plans](https://zoned.run/plans/methodology): comment Zoned construit les plans
+- [Quiz de découverte](https://zoned.run/quiz): trouvez votre séance idéale en 5 questions
+- [À propos](https://zoned.run/about): histoire du projet et auteur
+- [Changelog](https://zoned.run/changelog): historique des versions
+- [Code source](https://github.com/alarboulletmarin/zoned): dépôt GitHub

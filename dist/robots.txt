@@ -1,0 +1,51 @@
+# Zoned - https://zoned.run
+# Free, open-source library of science-based running workouts.
+
+User-agent: *
+Allow: /
+
+# Private state (per-user data, no SEO value)
+Disallow: /my-zones
+Disallow: /favorites
+Disallow: /plans
+Disallow: /plan/new/assisted
+Disallow: /plan/new/free
+Disallow: /routes/mine
+Disallow: /profile
+Disallow: /settings
+Disallow: /plan/$
+Disallow: /routes/$
+
+# Allow major social crawlers to fetch og-images and previews
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Slackbot
+Allow: /
+
+# LLM / agent crawlers — explicitly welcome, point them at llms.txt
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://zoned.run/sitemap.xml
