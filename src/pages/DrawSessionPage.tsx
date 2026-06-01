@@ -27,8 +27,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
-import { ZoneBadges } from "@/components/domain/ZoneBadge";
-import { SessionIntensityBar } from "@/components/visualization";
+import { WorkoutCardChrome } from "@/components/domain";
 import {
   getWorkoutDuration,
   formatDurationMinutes,
@@ -772,7 +771,15 @@ function ScanCard({
   );
 }
 
-/** Full result card with profile, zones, metrics and actions. */
+/**
+ * Full result card with profile, zones, metrics and actions.
+ *
+ * Running-family workouts reuse the shared {@link WorkoutCardChrome} (same
+ * visual shell as the library card) with the draw-specific slots injected.
+ * Strength sessions — which have no aerobic zones / intensity profile and a
+ * different template type — fall back to a lightweight layout, mirroring how
+ * the rest of the app branches on `isStrengthWorkout`.
+ */
 function ResultCard({
   workout,
   pick,
@@ -791,9 +798,7 @@ function ResultCard({
   const isStrength = isStrengthWorkout(workout);
   const discipline = getDrawDiscipline(workout);
   const DisciplineIcon = DISCIPLINE_ICONS[discipline];
-  const dominantZone = isRunningWorkout(workout)
-    ? getDominantZone(workout)
-    : 2;
+  const dominantZone = isRunningWorkout(workout) ? getDominantZone(workout) : 2;
   const zones = getAnyWorkoutZones(workout);
   const duration = getAnyWorkoutDuration(workout);
   const tss = getAnyWorkoutTss(workout);
@@ -802,90 +807,100 @@ function ResultCard({
     ? tStrength(`categories.${workout.category}`)
     : t(`categories.${workout.category}`);
 
-  return (
-    <div
-      className={cn(
-        "rounded-xl border border-border p-5 motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:duration-300",
-        `zone-${dominantZone} bg-gradient-to-br from-zone-${dominantZone}/15 to-transparent`,
-      )}
-    >
-      {/* Eyebrow: discipline · method · n° */}
-      <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-        <DisciplineIcon className="size-3.5" />
-        <span>{t(`activityToggle.${discipline}`)}</span>
-        <span aria-hidden="true">·</span>
-        <span>{methodLabel}</span>
-        <span aria-hidden="true">·</span>
-        <span className="tabular-nums">n°{getWorkoutNumber(workout.id)}</span>
-      </div>
+  // Eyebrow: discipline · method · n°
+  const eyebrow = (
+    <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+      <DisciplineIcon className="size-3.5" />
+      <span>{t(`activityToggle.${discipline}`)}</span>
+      <span aria-hidden="true">·</span>
+      <span>{methodLabel}</span>
+      <span aria-hidden="true">·</span>
+      <span className="tabular-nums">n°{getWorkoutNumber(workout.id)}</span>
+    </div>
+  );
 
-      {/* Title */}
+  const metrics = (
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <Metric
+        icon={Clock}
+        label={t("draw.metrics.duration")}
+        value={formatDurationMinutes(duration)}
+      />
+      <Metric
+        icon={Gauge}
+        label={t("draw.metrics.tss")}
+        value={tss != null ? String(tss) : "—"}
+      />
+      <Metric
+        icon={Target}
+        label={t("draw.metrics.zone")}
+        value={zones.length > 0 ? `Z${dominantZone}` : "—"}
+      />
+      <Metric
+        icon={Star}
+        label={t("draw.metrics.level")}
+        value={t(`difficulty.${workout.difficulty}`)}
+      />
+    </div>
+  );
+
+  const actions = (
+    <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+      <Button asChild className="flex-1 sm:flex-none">
+        <Link to={`/workout/${workout.id}`}>
+          {t("draw.start")}
+          <ArrowRight className="size-4" />
+        </Link>
+      </Button>
+      <Button asChild variant="outline" className="flex-1 sm:flex-none">
+        <Link to={`/workout/${workout.id}`}>{t("draw.viewDetail")}</Link>
+      </Button>
+      <Button
+        variant="ghost"
+        onClick={onRedraw}
+        disabled={isDrawing}
+        className="flex-1 sm:flex-none"
+      >
+        <RotateCcw className="size-4" />
+        {t("draw.redraw")}
+      </Button>
+    </div>
+  );
+
+  const animateIn =
+    "motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:duration-300";
+
+  // Running / cycling / swimming → reuse the shared library card chrome.
+  if (isRunningWorkout(workout)) {
+    return (
+      <div className={animateIn}>
+        <WorkoutCardChrome
+          workout={workout}
+          interactive={false}
+          eyebrow={eyebrow}
+          metrics={metrics}
+          actions={actions}
+          showZoneBadges
+          showFavorite={false}
+          showPeek={false}
+          showBadges={false}
+        />
+      </div>
+    );
+  }
+
+  // Strength fallback — no zones / intensity profile.
+  return (
+    <div className={cn("rounded-xl border border-border p-5", animateIn)}>
+      {eyebrow}
       <h3 className="mt-1.5 text-xl font-bold leading-snug">
         {pick(workout, "name")}
       </h3>
       <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
         {pick(workout, "description")}
       </p>
-
-      {/* Effort profile (aerobic sports only) */}
-      {!isStrength && (
-        <div className="mt-4">
-          <SessionIntensityBar workout={workout} className="h-1.5" />
-        </div>
-      )}
-
-      {/* Zone chips */}
-      {zones.length > 0 && (
-        <div className="mt-3">
-          <ZoneBadges zones={zones} size="sm" />
-        </div>
-      )}
-
-      {/* 4 metrics */}
-      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Metric
-          icon={Clock}
-          label={t("draw.metrics.duration")}
-          value={formatDurationMinutes(duration)}
-        />
-        <Metric
-          icon={Gauge}
-          label={t("draw.metrics.tss")}
-          value={tss != null ? String(tss) : "—"}
-        />
-        <Metric
-          icon={Target}
-          label={t("draw.metrics.zone")}
-          value={zones.length > 0 ? `Z${dominantZone}` : "—"}
-        />
-        <Metric
-          icon={Star}
-          label={t("draw.metrics.level")}
-          value={t(`difficulty.${workout.difficulty}`)}
-        />
-      </div>
-
-      {/* Actions */}
-      <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-        <Button asChild className="flex-1 sm:flex-none">
-          <Link to={`/workout/${workout.id}`}>
-            {t("draw.start")}
-            <ArrowRight className="size-4" />
-          </Link>
-        </Button>
-        <Button asChild variant="outline" className="flex-1 sm:flex-none">
-          <Link to={`/workout/${workout.id}`}>{t("draw.viewDetail")}</Link>
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={onRedraw}
-          disabled={isDrawing}
-          className="flex-1 sm:flex-none"
-        >
-          <RotateCcw className="size-4" />
-          {t("draw.redraw")}
-        </Button>
-      </div>
+      <div className="mt-4">{metrics}</div>
+      <div className="mt-5">{actions}</div>
     </div>
   );
 }

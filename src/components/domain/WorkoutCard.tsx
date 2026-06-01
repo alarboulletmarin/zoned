@@ -20,8 +20,9 @@ import {
 } from "@/components/icons";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ZoneBadge } from "./ZoneBadge";
+import { ZoneBadge, ZoneBadges } from "./ZoneBadge";
 import { FavoriteButton } from "./FavoriteButton";
+import { getWorkoutZones } from "@/lib/landing-stats";
 import {
   SessionIntensityBar,
   transformSessionBlocks,
@@ -78,8 +79,49 @@ export function WorkoutCard({ workout, className, expanded }: WorkoutCardProps) 
   return <RunningWorkoutCard workout={workout} className={className} expanded={expanded} />;
 }
 
-/** Internal running-only card with properly typed props */
-function RunningWorkoutCard({ workout, className, expanded }: { workout: WorkoutTemplate; className?: string; expanded?: boolean }) {
+/**
+ * Shared presentational shell for a running-family workout (running, cycling,
+ * swimming). Renders the visual chrome — zone gradient, title, description,
+ * intensity bar, duration/category line — and exposes slots so the same card
+ * can serve both the library grid (wrapped in a Link, with favourite + peek)
+ * and the "draw a session" result (no link, with an eyebrow, zone badges, a
+ * metrics grid and action buttons).
+ *
+ * Defaults reproduce the original library card exactly, so existing call sites
+ * keep their behaviour without passing any new prop.
+ */
+interface WorkoutCardChromeProps {
+  workout: WorkoutTemplate;
+  className?: string;
+  expanded?: boolean;
+  /** Hover affordance — keep on when the card is wrapped in a link. */
+  interactive?: boolean;
+  /** Content rendered above the title (e.g. discipline · method · n°). */
+  eyebrow?: React.ReactNode;
+  /** Content rendered at the bottom of the card (e.g. action buttons). */
+  actions?: React.ReactNode;
+  /** Content rendered in place of the terrain/difficulty badge row. */
+  metrics?: React.ReactNode;
+  /** Show the zone badges for every zone the workout touches. */
+  showZoneBadges?: boolean;
+  showFavorite?: boolean;
+  showPeek?: boolean;
+  showBadges?: boolean;
+}
+
+export function WorkoutCardChrome({
+  workout,
+  className,
+  expanded,
+  interactive = true,
+  eyebrow,
+  actions,
+  metrics,
+  showZoneBadges = false,
+  showFavorite = true,
+  showPeek = true,
+  showBadges = true,
+}: WorkoutCardChromeProps) {
   const { t } = useTranslation(["library", "common"]);
   const pick = usePickLang();
   const dominantZone = getDominantZone(workout);
@@ -105,48 +147,58 @@ function RunningWorkoutCard({ workout, className, expanded }: { workout: Workout
     trailMetrics.totalElevationLossM > 0 ||
     trailMetrics.dominantTerrain != null;
 
+  const zones = useMemo(
+    () => (showZoneBadges ? getWorkoutZones(workout) : []),
+    [showZoneBadges, workout],
+  );
+
   return (
-    <Link to={`/workout/${workout.id}`}>
-      <Card
-        interactive
-        size="compact"
-        className={cn(
-          `zone-${dominantZone} bg-gradient-to-br from-zone-${dominantZone}/10 dark:from-zone-${dominantZone}/20 to-transparent`,
-          "border-border/50",
-          "overflow-hidden h-full flex flex-col",
-          className
+    <Card
+      interactive={interactive}
+      size="compact"
+      className={cn(
+        `zone-${dominantZone} bg-gradient-to-br from-zone-${dominantZone}/10 dark:from-zone-${dominantZone}/20 to-transparent`,
+        "border-border/50",
+        "overflow-hidden h-full flex flex-col",
+        className
+      )}
+    >
+      <CardHeader className={cn("pb-1.5 sm:pb-2 px-3 sm:px-4", expanded && "pb-2 px-4")}>
+        {eyebrow && <div className="mb-1">{eyebrow}</div>}
+        <div className="flex items-start justify-between gap-2">
+          <CardTitle className={cn("text-sm sm:text-base line-clamp-2 sm:line-clamp-1 flex-1", expanded && "text-base line-clamp-none")}>
+            {pick(workout, "name")}
+          </CardTitle>
+          <div className="flex items-center gap-1">
+            {showFavorite && <FavoriteButton workoutId={workout.id} size="sm" />}
+            <ZoneBadge zone={dominantZone} size="sm" />
+          </div>
+        </div>
+        <p className={cn("hidden sm:block text-muted-foreground text-sm line-clamp-2", expanded && "block")}>
+          {pick(workout, "description")}
+        </p>
+      </CardHeader>
+
+      <CardContent className={cn("px-3 sm:px-4 pt-0 mt-auto space-y-2 sm:space-y-3", expanded && "px-4 space-y-3")}>
+        {/* Intensity bar showing zone distribution */}
+        <SessionIntensityBar workout={workout} />
+
+        <div className={cn("flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground", expanded && "gap-3 text-sm")}>
+          <div className="flex items-center gap-1">
+            <Clock className="size-3.5" />
+            <span>{formatDurationMinutes(duration)}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <CategoryIcon className="size-3.5" />
+            <span>{t(`categories.${workout.category}`)}</span>
+          </div>
+        </div>
+
+        {showZoneBadges && zones.length > 0 && (
+          <ZoneBadges zones={zones} size="sm" />
         )}
-      >
-        <CardHeader className={cn("pb-1.5 sm:pb-2 px-3 sm:px-4", expanded && "pb-2 px-4")}>
-          <div className="flex items-start justify-between gap-2">
-            <CardTitle className={cn("text-sm sm:text-base line-clamp-2 sm:line-clamp-1 flex-1", expanded && "text-base line-clamp-none")}>
-              {pick(workout, "name")}
-            </CardTitle>
-            <div className="flex items-center gap-1">
-              <FavoriteButton workoutId={workout.id} size="sm" />
-              <ZoneBadge zone={dominantZone} size="sm" />
-            </div>
-          </div>
-          <p className={cn("hidden sm:block text-muted-foreground text-sm line-clamp-2", expanded && "block")}>
-            {pick(workout, "description")}
-          </p>
-        </CardHeader>
 
-        <CardContent className={cn("px-3 sm:px-4 pt-0 mt-auto space-y-2 sm:space-y-3", expanded && "px-4 space-y-3")}>
-          {/* Intensity bar showing zone distribution */}
-          <SessionIntensityBar workout={workout} />
-
-          <div className={cn("flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground", expanded && "gap-3 text-sm")}>
-            <div className="flex items-center gap-1">
-              <Clock className="size-3.5" />
-              <span>{formatDurationMinutes(duration)}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <CategoryIcon className="size-3.5" />
-              <span>{t(`categories.${workout.category}`)}</span>
-            </div>
-          </div>
-
+        {showBadges && (
           <div className={cn("hidden sm:flex flex-wrap items-center gap-1.5", expanded && "flex")}>
             <Badge variant="secondary" className="text-xs whitespace-nowrap">
               <Dumbbell className="size-3 mr-1" />
@@ -181,49 +233,63 @@ function RunningWorkoutCard({ workout, className, expanded }: { workout: Workout
               </Badge>
             )}
           </div>
+        )}
 
-          {/* Always-visible peek preview */}
-          {peekData.segments.length > 0 && (
-            <div className="border-t border-border/30 pt-2 mt-1 space-y-1.5">
-              {/* Compact session timeline bar */}
-              <div className={cn("flex items-end rounded-md overflow-hidden", isMobile ? "h-4" : "h-6")}>
-                {peekData.segments.map((seg, i) => {
-                  const zoneColor = seg.zoneNumber
-                    ? ZONE_COLORS[seg.zoneNumber]
-                    : "var(--muted-foreground)";
-                  const heightPct = seg.zoneNumber
-                    ? 30 + (seg.zoneNumber - 1) * 14
-                    : 40;
-                  return (
-                    <div
-                      key={seg.id}
-                      className={cn(
-                        "relative",
-                        seg.isRecovery && "opacity-50",
-                      )}
-                      style={{
-                        width: `${seg.widthPercent}%`,
-                        height: `${heightPct}%`,
-                        backgroundColor: zoneColor,
-                        marginLeft: i > 0 ? "1px" : undefined,
-                      }}
-                    />
-                  );
-                })}
-              </div>
-              {/* One-line summary of main set */}
-              {!isMobile && peekData.summary && (
-                <p className="text-xs text-muted-foreground truncate">
-                  {peekData.summary}
-                </p>
-              )}
-              {hasTrail && (
-                <MiniElevationProfile workout={workout} height={28} />
-              )}
+        {/* Optional metrics grid (draw result) */}
+        {metrics}
+
+        {/* Always-visible peek preview */}
+        {showPeek && peekData.segments.length > 0 && (
+          <div className="border-t border-border/30 pt-2 mt-1 space-y-1.5">
+            {/* Compact session timeline bar */}
+            <div className={cn("flex items-end rounded-md overflow-hidden", isMobile ? "h-4" : "h-6")}>
+              {peekData.segments.map((seg, i) => {
+                const zoneColor = seg.zoneNumber
+                  ? ZONE_COLORS[seg.zoneNumber]
+                  : "var(--muted-foreground)";
+                const heightPct = seg.zoneNumber
+                  ? 30 + (seg.zoneNumber - 1) * 14
+                  : 40;
+                return (
+                  <div
+                    key={seg.id}
+                    className={cn(
+                      "relative",
+                      seg.isRecovery && "opacity-50",
+                    )}
+                    style={{
+                      width: `${seg.widthPercent}%`,
+                      height: `${heightPct}%`,
+                      backgroundColor: zoneColor,
+                      marginLeft: i > 0 ? "1px" : undefined,
+                    }}
+                  />
+                );
+              })}
             </div>
-          )}
-        </CardContent>
-      </Card>
+            {/* One-line summary of main set */}
+            {!isMobile && peekData.summary && (
+              <p className="text-xs text-muted-foreground truncate">
+                {peekData.summary}
+              </p>
+            )}
+            {hasTrail && (
+              <MiniElevationProfile workout={workout} height={28} />
+            )}
+          </div>
+        )}
+
+        {actions && <div className="pt-1">{actions}</div>}
+      </CardContent>
+    </Card>
+  );
+}
+
+/** Internal running-only card with properly typed props */
+function RunningWorkoutCard({ workout, className, expanded }: { workout: WorkoutTemplate; className?: string; expanded?: boolean }) {
+  return (
+    <Link to={`/workout/${workout.id}`}>
+      <WorkoutCardChrome workout={workout} className={className} expanded={expanded} />
     </Link>
   );
 }
