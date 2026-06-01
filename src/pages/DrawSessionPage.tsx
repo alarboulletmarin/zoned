@@ -137,6 +137,38 @@ const defaultFilters: DrawFilters = {
   levels: [],
 };
 
+// ── Session persistence ──────────────────────────────────────────────────────
+// Keep the drawn session (with filters and history) alive across navigation:
+// opening a workout and hitting "back" should restore the draw, not wipe it.
+// Stored in sessionStorage so it lives for the tab and clears on close.
+const STORAGE_KEY = "zoned-draw-state";
+
+interface DrawSnapshot {
+  result: AnyWorkoutTemplate | null;
+  history: AnyWorkoutTemplate[];
+  filters: DrawFilters;
+  avoidRepeats: boolean;
+}
+
+function readDrawSnapshot(): Partial<DrawSnapshot> {
+  if (typeof sessionStorage === "undefined") return {};
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as Partial<DrawSnapshot>) : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeDrawSnapshot(snap: DrawSnapshot): void {
+  if (typeof sessionStorage === "undefined") return;
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(snap));
+  } catch {
+    /* storage unavailable or full (non-critical) */
+  }
+}
+
 function isFilterActive(f: DrawFilters): boolean {
   return (
     f.disciplines.length > 0 ||
@@ -189,15 +221,26 @@ export function DrawSessionPage() {
     [running, cycling, swimming, strength],
   );
 
-  const [filters, setFilters] = useState<DrawFilters>(defaultFilters);
+  // Restore any previously drawn session (read once on mount).
+  const restored = useMemo(readDrawSnapshot, []);
+  const [filters, setFilters] = useState<DrawFilters>(() => ({
+    ...defaultFilters,
+    ...restored.filters,
+  }));
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [avoidRepeats, setAvoidRepeats] = useState(true);
+  const [avoidRepeats, setAvoidRepeats] = useState<boolean>(
+    restored.avoidRepeats ?? true,
+  );
 
   // ── Draw state ───────────────────────────────────────────────────────────
-  const [result, setResult] = useState<AnyWorkoutTemplate | null>(null);
+  const [result, setResult] = useState<AnyWorkoutTemplate | null>(
+    restored.result ?? null,
+  );
   const [scanWorkout, setScanWorkout] = useState<AnyWorkoutTemplate | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [history, setHistory] = useState<AnyWorkoutTemplate[]>([]);
+  const [history, setHistory] = useState<AnyWorkoutTemplate[]>(
+    restored.history ?? [],
+  );
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const filtered = useMemo(
@@ -215,6 +258,11 @@ export function DrawSessionPage() {
   }, []);
 
   useEffect(() => clearTimeouts, [clearTimeouts]);
+
+  // Persist the draw so navigating to a workout and back restores it.
+  useEffect(() => {
+    writeDrawSnapshot({ result, history, filters, avoidRepeats });
+  }, [result, history, filters, avoidRepeats]);
 
   /** Pick a final result, optionally avoiding the recent history. */
   const pickFinal = useCallback(
