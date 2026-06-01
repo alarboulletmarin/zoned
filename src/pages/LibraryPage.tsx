@@ -61,7 +61,7 @@ import { normalizeSearch } from "@/lib/search-utils";
 
 // Duration constants (same as in WorkoutFilters)
 const DURATION_MIN = 0;
-const DURATION_MAX = 240;
+const DURATION_MAX = 300;
 
 /**
  * Get average duration for a strength workout
@@ -389,9 +389,15 @@ export function LibraryPage() {
         return false;
       }
 
-      // Duration filter
+      // Duration filter. When the upper bound sits at the slider ceiling we
+      // treat it as "no cap", so long sessions above the ceiling (e.g. a
+      // 300-min long run) aren't silently filtered out by default.
       const duration = getAnyWorkoutDuration(workout);
-      if (duration < f.durationRange[0] || duration > f.durationRange[1]) {
+      const capped = f.durationRange[1] < DURATION_MAX;
+      if (
+        duration < f.durationRange[0] ||
+        (capped && duration > f.durationRange[1])
+      ) {
         return false;
       }
 
@@ -755,8 +761,8 @@ export function LibraryPage() {
                 <div className="border-t p-4 flex flex-col gap-2 shrink-0">
                   {(tempFilters.category.length > 0 ||
                     tempFilters.difficulty.length > 0 ||
-                    tempFilters.durationRange[0] !== 0 ||
-                    tempFilters.durationRange[1] !== 240 ||
+                    tempFilters.durationRange[0] !== DURATION_MIN ||
+                    tempFilters.durationRange[1] !== DURATION_MAX ||
                     tempFilters.terrain.length > 0 ||
                     tempFilters.targetSystem.length > 0 ||
                     tempFilters.favoritesOnly ||
