@@ -79,6 +79,7 @@ export const PRIMARY_NAV: NavSection[] = [
     prefix: ["/library", "/workout", "/collections"],
     children: [
       { to: "/library", labelKey: "topnav.libraryAll", descKey: "topnav.libraryAllDesc" },
+      { to: "/library/draw", labelKey: "topnav.drawSession", descKey: "topnav.drawSessionDesc" },
       { to: "/collections", labelKey: "topnav.collections", descKey: "topnav.collectionsDesc" },
       { to: "/workout/builder", labelKey: "topnav.builder", descKey: "topnav.builderDesc" },
     ],
