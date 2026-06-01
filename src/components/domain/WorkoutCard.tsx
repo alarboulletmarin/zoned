@@ -98,9 +98,7 @@ interface WorkoutCardChromeProps {
   interactive?: boolean;
   /** Content rendered above the title (e.g. discipline · method · n°). */
   eyebrow?: React.ReactNode;
-  /** Content rendered at the bottom of the card (e.g. action buttons). */
-  actions?: React.ReactNode;
-  /** Content rendered in place of the terrain/difficulty badge row. */
+  /** Content rendered after the badge row (e.g. a metrics grid). */
   metrics?: React.ReactNode;
   /** Show the zone badges for every zone the workout touches. */
   showZoneBadges?: boolean;
@@ -115,7 +113,6 @@ export function WorkoutCardChrome({
   expanded,
   interactive = true,
   eyebrow,
-  actions,
   metrics,
   showZoneBadges = false,
   showFavorite = true,
@@ -278,8 +275,6 @@ export function WorkoutCardChrome({
             )}
           </div>
         )}
-
-        {actions && <div className="pt-1">{actions}</div>}
       </CardContent>
     </Card>
   );

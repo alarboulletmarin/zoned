@@ -17,7 +17,6 @@ import {
   Gauge,
   Filter,
   X,
-  ArrowRight,
   Footprints,
   Bike,
   Waves,
@@ -28,6 +27,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { WorkoutCardChrome } from "@/components/domain";
+import { FavoriteButton } from "@/components/domain/FavoriteButton";
 import {
   getWorkoutDuration,
   formatDurationMinutes,
@@ -573,7 +573,11 @@ export function DrawSessionPage() {
                   className="h-14 px-8 text-base w-full sm:w-auto"
                 >
                   <Dices className={cn("size-5", isDrawing && "animate-spin")} />
-                  {isDrawing ? t("draw.scanning") : t("draw.draw")}
+                  {isDrawing
+                    ? t("draw.scanning")
+                    : result
+                      ? t("draw.redraw")
+                      : t("draw.draw")}
                 </Button>
                 {!isMobile && (
                   <p className="text-xs text-muted-foreground">
@@ -605,8 +609,6 @@ export function DrawSessionPage() {
                     pick={pick}
                     t={t}
                     tStrength={tStrength}
-                    onRedraw={handleDraw}
-                    isDrawing={isDrawing}
                   />
                 ) : (
                   <Placeholder t={t} />
@@ -772,28 +774,26 @@ function ScanCard({
 }
 
 /**
- * Full result card with profile, zones, metrics and actions.
+ * Full result card with profile, zones and metrics.
  *
- * Running-family workouts reuse the shared {@link WorkoutCardChrome} (same
- * visual shell as the library card) with the draw-specific slots injected.
- * Strength sessions — which have no aerobic zones / intensity profile and a
- * different template type — fall back to a lightweight layout, mirroring how
- * the rest of the app branches on `isStrengthWorkout`.
+ * Like a library card, the whole card is a link to the workout detail and
+ * carries a favourite toggle — there is no separate "view / launch" button,
+ * since tapping the card already opens the session (re-drawing is the big
+ * button above). Running-family workouts reuse the shared
+ * {@link WorkoutCardChrome}; strength sessions — no aerobic zones / intensity
+ * profile, different template type — fall back to a lightweight layout,
+ * mirroring how the rest of the app branches on `isStrengthWorkout`.
  */
 function ResultCard({
   workout,
   pick,
   t,
   tStrength,
-  onRedraw,
-  isDrawing,
 }: {
   workout: AnyWorkoutTemplate;
   pick: ReturnType<typeof usePickLang>;
   t: (k: string, o?: Record<string, unknown>) => string;
   tStrength: (k: string) => string;
-  onRedraw: () => void;
-  isDrawing: boolean;
 }) {
   const isStrength = isStrengthWorkout(workout);
   const discipline = getDrawDiscipline(workout);
@@ -844,55 +844,38 @@ function ResultCard({
     </div>
   );
 
-  const actions = (
-    <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-      <Button asChild className="flex-1 sm:flex-none">
-        <Link to={`/workout/${workout.id}`}>
-          {t("draw.start")}
-          <ArrowRight className="size-4" />
-        </Link>
-      </Button>
-      <Button asChild variant="outline" className="flex-1 sm:flex-none">
-        <Link to={`/workout/${workout.id}`}>{t("draw.viewDetail")}</Link>
-      </Button>
-      <Button
-        variant="ghost"
-        onClick={onRedraw}
-        disabled={isDrawing}
-        className="flex-1 sm:flex-none"
-      >
-        <RotateCcw className="size-4" />
-        {t("draw.redraw")}
-      </Button>
-    </div>
-  );
-
   const animateIn =
-    "motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:duration-300";
+    "block motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:duration-300";
 
   // Running / cycling / swimming → reuse the shared library card chrome.
   if (isRunningWorkout(workout)) {
     return (
-      <div className={animateIn}>
+      <Link to={`/workout/${workout.id}`} className={animateIn}>
         <WorkoutCardChrome
           workout={workout}
-          interactive={false}
           eyebrow={eyebrow}
           metrics={metrics}
-          actions={actions}
           showZoneBadges
-          showFavorite={false}
           showPeek={false}
           showBadges={false}
         />
-      </div>
+      </Link>
     );
   }
 
   // Strength fallback — no zones / intensity profile.
   return (
-    <div className={cn("rounded-xl border border-border p-5", animateIn)}>
-      {eyebrow}
+    <Link
+      to={`/workout/${workout.id}`}
+      className={cn(
+        "rounded-xl border border-border p-5 hover:bg-accent/40 transition-colors",
+        animateIn,
+      )}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">{eyebrow}</div>
+        <FavoriteButton workoutId={workout.id} size="sm" />
+      </div>
       <h3 className="mt-1.5 text-xl font-bold leading-snug">
         {pick(workout, "name")}
       </h3>
@@ -900,8 +883,7 @@ function ResultCard({
         {pick(workout, "description")}
       </p>
       <div className="mt-4">{metrics}</div>
-      <div className="mt-5">{actions}</div>
-    </div>
+    </Link>
   );
 }
 
