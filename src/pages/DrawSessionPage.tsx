@@ -845,45 +845,56 @@ function ResultCard({
   );
 
   const animateIn =
-    "block motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:duration-300";
+    "motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:duration-300";
+
+  // Explicit "view detail" CTA. Kept outside the card link below to avoid an
+  // anchor nested inside an anchor (the whole card is already a link).
+  const detailAction = (
+    <Button asChild variant="outline" className="mt-3 w-full sm:w-auto">
+      <Link to={`/workout/${workout.id}`}>{t("draw.viewDetail")}</Link>
+    </Button>
+  );
 
   // Running / cycling / swimming → reuse the shared library card chrome.
   if (isRunningWorkout(workout)) {
     return (
-      <Link to={`/workout/${workout.id}`} className={animateIn}>
-        <WorkoutCardChrome
-          workout={workout}
-          eyebrow={eyebrow}
-          metrics={metrics}
-          showZoneBadges
-          showPeek={false}
-          showBadges={false}
-        />
-      </Link>
+      <div className={animateIn}>
+        <Link to={`/workout/${workout.id}`} className="block">
+          <WorkoutCardChrome
+            workout={workout}
+            eyebrow={eyebrow}
+            metrics={metrics}
+            showZoneBadges
+            showPeek={false}
+            showBadges={false}
+          />
+        </Link>
+        {detailAction}
+      </div>
     );
   }
 
   // Strength fallback — no zones / intensity profile.
   return (
-    <Link
-      to={`/workout/${workout.id}`}
-      className={cn(
-        "rounded-xl border border-border p-5 hover:bg-accent/40 transition-colors",
-        animateIn,
-      )}
-    >
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">{eyebrow}</div>
-        <FavoriteButton workoutId={workout.id} size="sm" />
-      </div>
-      <h3 className="mt-1.5 text-xl font-bold leading-snug">
-        {pick(workout, "name")}
-      </h3>
-      <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
-        {pick(workout, "description")}
-      </p>
-      <div className="mt-4">{metrics}</div>
-    </Link>
+    <div className={animateIn}>
+      <Link
+        to={`/workout/${workout.id}`}
+        className="block rounded-xl border border-border p-5 hover:bg-accent/40 transition-colors"
+      >
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">{eyebrow}</div>
+          <FavoriteButton workoutId={workout.id} size="sm" />
+        </div>
+        <h3 className="mt-1.5 text-xl font-bold leading-snug">
+          {pick(workout, "name")}
+        </h3>
+        <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
+          {pick(workout, "description")}
+        </p>
+        <div className="mt-4">{metrics}</div>
+      </Link>
+      {detailAction}
+    </div>
   );
 }
 
