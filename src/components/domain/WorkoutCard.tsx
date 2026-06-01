@@ -81,8 +81,8 @@ export function WorkoutCard({ workout, className, expanded }: WorkoutCardProps) 
 
 /**
  * Shared presentational shell for a running-family workout (running, cycling,
- * swimming). Renders the visual chrome — zone gradient, title, description,
- * intensity bar, duration/category line — and exposes slots so the same card
+ * swimming). Renders the visual chrome (zone gradient, title, description,
+ * intensity bar, duration/category line) and exposes slots so the same card
  * can serve both the library grid (wrapped in a Link, with favourite + peek)
  * and the "draw a session" result (no link, with an eyebrow, zone badges, a
  * metrics grid and action buttons).
@@ -94,7 +94,7 @@ interface WorkoutCardChromeProps {
   workout: WorkoutTemplate;
   className?: string;
   expanded?: boolean;
-  /** Hover affordance — keep on when the card is wrapped in a link. */
+  /** Hover affordance: keep on when the card is wrapped in a link. */
   interactive?: boolean;
   /** Content rendered above the title (e.g. discipline · method · n°). */
   eyebrow?: React.ReactNode;

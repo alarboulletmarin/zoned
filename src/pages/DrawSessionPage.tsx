@@ -777,12 +777,11 @@ function ScanCard({
  * Full result card with profile, zones and metrics.
  *
  * Like a library card, the whole card is a link to the workout detail and
- * carries a favourite toggle — there is no separate "view / launch" button,
- * since tapping the card already opens the session (re-drawing is the big
- * button above). Running-family workouts reuse the shared
- * {@link WorkoutCardChrome}; strength sessions — no aerobic zones / intensity
- * profile, different template type — fall back to a lightweight layout,
- * mirroring how the rest of the app branches on `isStrengthWorkout`.
+ * carries a favourite toggle, plus an explicit "view detail" button below.
+ * Running-family workouts reuse the shared {@link WorkoutCardChrome};
+ * strength sessions (no aerobic zones / intensity profile, different template
+ * type) fall back to a lightweight layout, mirroring how the rest of the app
+ * branches on `isStrengthWorkout`.
  */
 function ResultCard({
   workout,
@@ -829,12 +828,12 @@ function ResultCard({
       <Metric
         icon={Gauge}
         label={t("draw.metrics.tss")}
-        value={tss != null ? String(tss) : "—"}
+        value={tss != null ? String(tss) : "-"}
       />
       <Metric
         icon={Target}
         label={t("draw.metrics.zone")}
-        value={zones.length > 0 ? `Z${dominantZone}` : "—"}
+        value={zones.length > 0 ? `Z${dominantZone}` : "-"}
       />
       <Metric
         icon={Star}
@@ -874,7 +873,7 @@ function ResultCard({
     );
   }
 
-  // Strength fallback — no zones / intensity profile.
+  // Strength fallback (no zones / intensity profile).
   return (
     <div className={animateIn}>
       <Link
