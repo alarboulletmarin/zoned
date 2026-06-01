@@ -36,6 +36,7 @@ import {
 import { SEOHead } from "@/components/seo";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { usePageHint } from "@/hooks/usePageHint";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
@@ -177,6 +178,7 @@ export function DrawSessionPage() {
   const { t: tStrength } = useTranslation("strength");
   const pick = usePickLang();
   const isEn = i18n.language?.startsWith("en") ?? false;
+  const isMobile = useIsMobile();
 
   const { workouts: running } = useWorkouts();
   const { workouts: strength } = useStrengthWorkouts();
@@ -574,9 +576,11 @@ export function DrawSessionPage() {
                   <Dices className={cn("size-5", isDrawing && "animate-spin")} />
                   {isDrawing ? t("draw.scanning") : t("draw.draw")}
                 </Button>
-                <p className="text-xs text-muted-foreground">
-                  {t("draw.spaceHint")}
-                </p>
+                {!isMobile && (
+                  <p className="text-xs text-muted-foreground">
+                    {t("draw.spaceHint")}
+                  </p>
+                )}
                 {filtersActive && (
                   <button
                     type="button"
