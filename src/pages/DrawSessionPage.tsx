@@ -61,8 +61,19 @@ import { cn } from "@/lib/utils";
 // ────────────────────────────────────────────────────────────────────────────
 
 const DURATION_MIN = 25;
-const DURATION_MAX = 150;
-const DURATION_PRESETS = [30, 45, 60, 90, 150] as const;
+const DURATION_MAX = 300; // slider ceiling
+// Sentinel for "no upper limit" (the "+300" preset). A finite value so it
+// serialises cleanly to sessionStorage, unlike Infinity.
+const DURATION_NO_LIMIT = Number.MAX_SAFE_INTEGER;
+const DURATION_PRESETS: { label: string; value: number }[] = [
+  { label: "≤30", value: 30 },
+  { label: "≤45", value: 45 },
+  { label: "≤60", value: 60 },
+  { label: "≤90", value: 90 },
+  { label: "≤150", value: 150 },
+  { label: "≤300", value: 300 },
+  { label: "+300", value: DURATION_NO_LIMIT },
+];
 
 const DISCIPLINES = ["running", "cycling", "swimming", "strength"] as const;
 type DrawDiscipline = (typeof DISCIPLINES)[number];
@@ -133,7 +144,7 @@ interface DrawFilters {
 const defaultFilters: DrawFilters = {
   disciplines: [],
   zones: [],
-  maxDuration: DURATION_MAX,
+  maxDuration: DURATION_NO_LIMIT, // no cap by default (the "+300" preset)
   levels: [],
 };
 
@@ -174,7 +185,7 @@ function isFilterActive(f: DrawFilters): boolean {
     f.disciplines.length > 0 ||
     f.zones.length > 0 ||
     f.levels.length > 0 ||
-    f.maxDuration !== DURATION_MAX
+    f.maxDuration !== DURATION_NO_LIMIT
   );
 }
 
@@ -530,7 +541,7 @@ export function DrawSessionPage() {
               {/* Max duration */}
               <FilterGroup label={t("draw.filters.maxDuration")}>
                 <Slider
-                  value={[filters.maxDuration]}
+                  value={[Math.min(filters.maxDuration, DURATION_MAX)]}
                   min={DURATION_MIN}
                   max={DURATION_MAX}
                   step={5}
@@ -542,27 +553,29 @@ export function DrawSessionPage() {
                 <div className="mt-1.5 flex items-center justify-between text-xs text-muted-foreground">
                   <span>{DURATION_MIN} min</span>
                   <span className="font-semibold text-foreground">
-                    ≤ {filters.maxDuration} min
+                    {filters.maxDuration > DURATION_MAX
+                      ? `+${DURATION_MAX} min`
+                      : `≤ ${filters.maxDuration} min`}
                   </span>
                   <span>{DURATION_MAX} min</span>
                 </div>
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {DURATION_PRESETS.map((p) => (
                     <button
-                      key={p}
+                      key={p.label}
                       type="button"
                       onClick={() =>
-                        setFilters((f) => ({ ...f, maxDuration: p }))
+                        setFilters((f) => ({ ...f, maxDuration: p.value }))
                       }
-                      aria-pressed={filters.maxDuration === p}
+                      aria-pressed={filters.maxDuration === p.value}
                       className={cn(
                         "rounded-md border px-2 py-1 text-xs font-medium transition-colors",
-                        filters.maxDuration === p
+                        filters.maxDuration === p.value
                           ? "border-primary bg-primary/10 text-primary"
                           : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
                       )}
                     >
-                      ≤{p}
+                      {p.label}
                     </button>
                   ))}
                 </div>
