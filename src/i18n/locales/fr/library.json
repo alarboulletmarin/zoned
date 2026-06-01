@@ -95,5 +95,58 @@
   "noResults": "Aucune séance ne correspond à vos critères",
   "clearFilters": "Effacer les filtres",
   "showMore": "Voir plus",
-  "showingCount": "{{visible}} sur {{total}} séances"
+  "showingCount": "{{visible}} sur {{total}} séances",
+  "draw": {
+    "title": "Tirer une séance",
+    "subtitle": "Laisse le hasard choisir ta prochaine séance dans le catalogue",
+    "scanning": "Scan du catalogue…",
+    "draw": "Tirer une séance",
+    "redraw": "Re-tirer",
+    "surprise": "Surprends-moi (tout le catalogue)",
+    "spaceHint": "ou appuie sur la barre Espace",
+    "start": "Lancer la séance",
+    "viewDetail": "Voir le détail",
+    "filters": {
+      "title": "Filtres",
+      "discipline": "Discipline",
+      "zone": "Objectif · zone visée",
+      "maxDuration": "Durée maximale",
+      "level": "Niveau",
+      "reset": "Réinitialiser"
+    },
+    "zoneChips": {
+      "1": "Z1 · Récup",
+      "2": "Z2 · Endurance",
+      "3": "Z3 · Tempo",
+      "4": "Z4 · Seuil",
+      "5": "Z5 · VO₂max / VMA",
+      "6": "Z6 · Sprint"
+    },
+    "counter": {
+      "match_one": "séance correspond",
+      "match_other": "séances correspondent",
+      "short_one": "{{count}} séance",
+      "short_other": "{{count}} séances",
+      "ofTotal": "sur {{total}} au catalogue"
+    },
+    "metrics": {
+      "duration": "Durée",
+      "tss": "TSS",
+      "zone": "Zone",
+      "level": "Niveau"
+    },
+    "recent": {
+      "title": "Tirages récents",
+      "avoidRepeats": "Éviter les répétitions"
+    },
+    "placeholder": {
+      "title": "Prêt à piocher ?",
+      "description": "Règle tes filtres à gauche, puis tire une séance, ou laisse le hasard décider."
+    },
+    "empty": {
+      "title": "Aucune séance ne correspond",
+      "description": "Élargis tes filtres ou réinitialise pour relancer un tirage.",
+      "reset": "Réinitialiser les filtres"
+    }
+  }
 }

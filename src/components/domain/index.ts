@@ -1,5 +1,5 @@
 export { ZoneBadge, ZoneBadges } from "./ZoneBadge";
-export { WorkoutCard, WorkoutCardCompact } from "./WorkoutCard";
+export { WorkoutCard, WorkoutCardCompact, WorkoutCardChrome } from "./WorkoutCard";
 export { WorkoutListItem } from "./WorkoutListItem";
 export { StrengthWorkoutCard, StrengthWorkoutCardCompact, StrengthWorkoutListItem } from "./StrengthWorkoutCard";
 export { ViewModeSelector } from "./ViewModeSelector";

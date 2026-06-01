@@ -95,5 +95,58 @@
   "noResults": "No workouts match your criteria",
   "clearFilters": "Clear filters",
   "showMore": "Show more",
-  "showingCount": "{{visible}} of {{total}} workouts"
+  "showingCount": "{{visible}} of {{total}} workouts",
+  "draw": {
+    "title": "Draw a session",
+    "subtitle": "Let chance pick your next session from the catalogue",
+    "scanning": "Scanning the catalogue…",
+    "draw": "Draw a session",
+    "redraw": "Re-draw",
+    "surprise": "Surprise me (whole catalogue)",
+    "spaceHint": "or press the Space bar",
+    "start": "Start the session",
+    "viewDetail": "View details",
+    "filters": {
+      "title": "Filters",
+      "discipline": "Discipline",
+      "zone": "Goal · target zone",
+      "maxDuration": "Maximum duration",
+      "level": "Level",
+      "reset": "Reset"
+    },
+    "zoneChips": {
+      "1": "Z1 · Recovery",
+      "2": "Z2 · Endurance",
+      "3": "Z3 · Tempo",
+      "4": "Z4 · Threshold",
+      "5": "Z5 · VO₂max",
+      "6": "Z6 · Sprint"
+    },
+    "counter": {
+      "match_one": "session matches",
+      "match_other": "sessions match",
+      "short_one": "{{count}} session",
+      "short_other": "{{count}} sessions",
+      "ofTotal": "of {{total}} in catalogue"
+    },
+    "metrics": {
+      "duration": "Duration",
+      "tss": "TSS",
+      "zone": "Zone",
+      "level": "Level"
+    },
+    "recent": {
+      "title": "Recent draws",
+      "avoidRepeats": "Avoid repeats"
+    },
+    "placeholder": {
+      "title": "Ready to draw?",
+      "description": "Set your filters on the left, then draw a session, or let chance decide."
+    },
+    "empty": {
+      "title": "No session matches",
+      "description": "Widen your filters or reset to draw again.",
+      "reset": "Reset filters"
+    }
+  }
 }

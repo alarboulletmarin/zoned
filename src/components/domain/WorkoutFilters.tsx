@@ -82,7 +82,7 @@ interface WorkoutFiltersProps {
 }
 
 const DURATION_MIN = 0;
-const DURATION_MAX = 240;
+const DURATION_MAX = 300;
 
 /* ── Chip / tag button ── */
 function FilterChip({

@@ -291,6 +291,8 @@
     "account": "Account",
     "libraryAll": "All sessions",
     "libraryAllDesc": "Running, cycling, swimming, strength",
+    "drawSession": "Draw a session",
+    "drawSessionDesc": "Let chance pick your session",
     "collections": "Collections",
     "collectionsDesc": "Sessions grouped by theme",
     "builder": "Create a session",
@@ -563,6 +565,10 @@
     }
   },
   "hints": {
+    "draw": {
+      "title": "Let chance decide",
+      "description": "Filter by discipline, zone, duration and level, then draw a session from the catalogue."
+    },
     "planCalendar": {
       "title": "Organize your plan",
       "description": "Drag a session to another day. Long press or right-click to view, delete or reorder."
@@ -682,6 +688,7 @@
     "title": "Table of contents"
   },
   "seo": {
+    "drawTitle": "Draw a session",
     "contribute": "Contribute",
     "contributeDesc": "Share your favorite training sessions with the Zoned community",
     "quiz": "Workout Quiz",

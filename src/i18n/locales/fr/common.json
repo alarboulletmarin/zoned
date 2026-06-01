@@ -291,6 +291,8 @@
     "account": "Compte",
     "libraryAll": "Toutes les séances",
     "libraryAllDesc": "Course, vélo, natation, renforcement",
+    "drawSession": "Tirer une séance",
+    "drawSessionDesc": "Laisse le hasard choisir ta séance",
     "collections": "Collections",
     "collectionsDesc": "Séances groupées par thème",
     "builder": "Créer une séance",
@@ -563,6 +565,10 @@
     }
   },
   "hints": {
+    "draw": {
+      "title": "Laisse le hasard décider",
+      "description": "Filtre par discipline, zone, durée et niveau, puis tire une séance dans le catalogue."
+    },
     "planCalendar": {
       "title": "Organisez votre plan",
       "description": "Glissez une séance vers un autre jour. Appui long ou clic droit pour voir, supprimer ou réordonner."
@@ -682,6 +688,7 @@
     "title": "Sommaire"
   },
   "seo": {
+    "drawTitle": "Tirer une séance",
     "contribute": "Contribuer",
     "contributeDesc": "Partagez vos séances d'entraînement préférées avec la communauté Zoned",
     "quiz": "Quiz d'entraînement",
