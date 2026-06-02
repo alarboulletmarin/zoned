@@ -181,6 +181,25 @@
       "balanced": "Équilibre 80/20",
       "overBudget": "Au-dessus du budget de {{target}} h"
     },
+    "gauge": {
+      "title": "Polarisation",
+      "easy": "Facile",
+      "tempo": "Tempo",
+      "intense": "Intense",
+      "target": "Cible 80 %"
+    },
+    "rhythm": {
+      "title": "Rythme de la semaine"
+    },
+    "daysShort": {
+      "0": "Lun",
+      "1": "Mar",
+      "2": "Mer",
+      "3": "Jeu",
+      "4": "Ven",
+      "5": "Sam",
+      "6": "Dim"
+    },
     "kinds": {
       "easy": "Facile",
       "quality": "Qualité",

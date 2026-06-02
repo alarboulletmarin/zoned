@@ -14,7 +14,6 @@ import {
   LockOpen,
   Shuffle,
   AlertTriangle,
-  Check,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -26,6 +25,7 @@ import { useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import { formatDurationMinutes } from "@/components/visualization";
+import { PolarizationGauge, WeekRhythmChart } from "@/components/weekly";
 import {
   DISCIPLINES,
   getAnyWorkoutDuration,
@@ -384,6 +384,12 @@ export function WeeklyPlannerPage() {
             )}
 
             {week && (
+              <Card className="p-4">
+                <WeekRhythmChart slots={week.slots} />
+              </Card>
+            )}
+
+            {week && (
               <div className="space-y-3">
                 {week.slots.map((slot) => (
                   <SlotRow
@@ -416,21 +422,13 @@ function SummaryCard({
   overBudget: boolean;
 }) {
   const { t } = useTranslation("library");
-  const pct = (n: number) => Math.round(n * 100);
-  const balanced = stats.polarised.lowShare >= 0.8;
 
   return (
     <Card className="p-4">
-      <div className="flex items-center justify-between gap-3 mb-3">
+      <div className="mb-3">
         <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
           {t("weekly.summary.title")}
         </h2>
-        {balanced && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2.5 py-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-            <Check className="size-3.5" />
-            {t("weekly.summary.balanced")}
-          </span>
-        )}
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -443,13 +441,7 @@ function SummaryCard({
         <Metric label={t("weekly.summary.hard")} value={String(stats.hardSessions)} />
       </div>
 
-      <p className="mt-3 text-sm text-muted-foreground">
-        {t("weekly.summary.polarisation", {
-          low: pct(stats.polarised.lowShare),
-          mid: pct(stats.polarised.midShare),
-          high: pct(stats.polarised.highShare),
-        })}
-      </p>
+      <PolarizationGauge polarised={stats.polarised} className="mt-4" />
 
       {overBudget && (
         <p className="mt-2 inline-flex items-center gap-1.5 text-sm text-amber-600 dark:text-amber-400">

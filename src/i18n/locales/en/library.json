@@ -181,6 +181,25 @@
       "balanced": "80/20 balance",
       "overBudget": "Over the {{target}} h budget"
     },
+    "gauge": {
+      "title": "Polarisation",
+      "easy": "Easy",
+      "tempo": "Tempo",
+      "intense": "Intense",
+      "target": "80 % target"
+    },
+    "rhythm": {
+      "title": "Week rhythm"
+    },
+    "daysShort": {
+      "0": "Mon",
+      "1": "Tue",
+      "2": "Wed",
+      "3": "Thu",
+      "4": "Fri",
+      "5": "Sat",
+      "6": "Sun"
+    },
     "kinds": {
       "easy": "Easy",
       "quality": "Quality",
