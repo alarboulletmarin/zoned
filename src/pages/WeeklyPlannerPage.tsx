@@ -1,18 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   Footprints,
   Bike,
   Waves,
   Dumbbell,
-  Clock,
-  Gauge,
-  Target,
   RefreshCw,
-  Lock,
   LockOpen,
-  Shuffle,
   AlertTriangle,
   Download,
   Save,
@@ -23,23 +17,17 @@ import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Segmented } from "@/components/ui/segmented";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
 import { usePageHint } from "@/hooks/usePageHint";
 import { useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
-import { formatDurationMinutes } from "@/components/visualization";
 import {
   PolarizationGauge,
   WeekRhythmChart,
-  EffortProfile,
+  WeekDayCard,
 } from "@/components/weekly";
-import {
-  DISCIPLINES,
-  getAnyWorkoutDuration,
-  getAnyWorkoutTss,
-  type DrawDiscipline,
-} from "@/lib/workoutFilters";
+import { DISCIPLINES, type DrawDiscipline } from "@/lib/workoutFilters";
 import {
   generateWeek,
   regenerateUnlocked,
@@ -63,18 +51,13 @@ import { toast } from "sonner";
 import { usePickLang } from "@/lib/i18n-utils";
 import { cn } from "@/lib/utils";
 import type { AnyWorkoutTemplate, Difficulty } from "@/types";
-import {
-  DIFFICULTY_META,
-  getDominantZone,
-  isStrengthWorkout,
-} from "@/types";
+import { DIFFICULTY_META } from "@/types";
 import {
   DEFAULT_WEEK_SETTINGS,
   type DayIndex,
   type GeneratedWeek,
   type QualityType,
   type SessionCount,
-  type SlotKind,
   type WeekSettings,
   type WeekSlot,
 } from "@/types/week";
@@ -129,12 +112,6 @@ function writeSnapshot(snap: WeekSnapshot): void {
   } catch {
     /* storage unavailable or full (non-critical) */
   }
-}
-
-/** Accent zone for a slot — strength/rest have no aerobic zone. */
-function slotZone(w: AnyWorkoutTemplate | null): number | null {
-  if (!w || isStrengthWorkout(w)) return null;
-  return getDominantZone(w);
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -233,8 +210,48 @@ export function WeeklyPlannerPage() {
     });
   }
 
+  // ── Re-roll with the "draw a session" scan animation ─────────────────────
+  const [scan, setScan] = useState<{
+    day: DayIndex;
+    workout: AnyWorkoutTemplate;
+  } | null>(null);
+  const scanTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  useEffect(
+    () => () => scanTimers.current.forEach(clearTimeout),
+    [],
+  );
+
   function handleReroll(day: DayIndex) {
-    if (week) setWeek(rerollSlot(week, day, catalog));
+    if (!week || scan || catalog.length === 0) return;
+    // Flash random candidates while decelerating (ease-out), then settle —
+    // the same archive-drawer feel as the draw page, scoped to one slot.
+    const total = 900;
+    const times: number[] = [];
+    let elapsed = 0;
+    let gap = 45;
+    while (elapsed < total) {
+      times.push(elapsed);
+      elapsed += gap;
+      gap *= 1.16;
+    }
+    times.forEach((at, i) => {
+      const isLast = i === times.length - 1;
+      scanTimers.current.push(
+        setTimeout(() => {
+          if (isLast) {
+            scanTimers.current = [];
+            setScan(null);
+            setWeek((prev) => (prev ? rerollSlot(prev, day, catalog) : prev));
+          } else {
+            setScan({
+              day,
+              workout: catalog[Math.floor(Math.random() * catalog.length)],
+            });
+          }
+        }, at),
+      );
+    });
   }
 
   // ── Saved weeks + export ─────────────────────────────────────────────────
@@ -473,16 +490,20 @@ export function WeeklyPlannerPage() {
             )}
 
             {week && (
-              <div className="space-y-3">
+              <StaggerGrid className="space-y-3">
                 {week.slots.map((slot) => (
-                  <SlotRow
-                    key={slot.day}
-                    slot={slot}
-                    onToggleLock={() => toggleLock(slot.day)}
-                    onReroll={() => handleReroll(slot.day)}
-                  />
+                  <StaggerItem key={slot.day}>
+                    <WeekDayCard
+                      slot={slot}
+                      flashWorkout={
+                        scan?.day === slot.day ? scan.workout : null
+                      }
+                      onToggleLock={() => toggleLock(slot.day)}
+                      onReroll={() => handleReroll(slot.day)}
+                    />
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerGrid>
             )}
 
             {/* Footer: export + save */}
@@ -615,137 +636,5 @@ function Metric({ label, value }: { label: string; value: string }) {
       <div className="text-xs text-muted-foreground">{label}</div>
       <div className="text-lg font-semibold tabular-nums">{value}</div>
     </div>
-  );
-}
-
-// ────────────────────────────────────────────────────────────────────────────
-// Day row (basic — the rhythm chart & rich cards land in #88/#89)
-// ────────────────────────────────────────────────────────────────────────────
-
-const KIND_TAG: Record<Exclude<SlotKind, "rest">, string> = {
-  easy: "weekly.kinds.easy",
-  quality: "weekly.kinds.quality",
-  long: "weekly.kinds.long",
-};
-
-function SlotRow({
-  slot,
-  onToggleLock,
-  onReroll,
-}: {
-  slot: WeekSlot;
-  onToggleLock: () => void;
-  onReroll: () => void;
-}) {
-  const { t } = useTranslation("library");
-  const pick = usePickLang();
-  const w = slot.workout;
-  const zone = slotZone(w);
-  const isRest = slot.kind === "rest" || !w;
-
-  // Rest day — slim, muted row.
-  if (isRest) {
-    return (
-      <Card className="px-4 py-3 flex items-center gap-3 border-dashed opacity-70">
-        <span className="text-sm font-medium w-24 shrink-0">
-          {t(`weekly.days.${slot.day}`)}
-        </span>
-        <span className="text-sm text-muted-foreground">
-          {t("weekly.slot.rest")}
-        </span>
-      </Card>
-    );
-  }
-
-  const tagStyle = zone
-    ? {
-        backgroundColor: `color-mix(in srgb, var(--zone-${zone}) 18%, transparent)`,
-        color: `var(--zone-${zone})`,
-      }
-    : undefined;
-
-  return (
-    <Card
-      className={cn(
-        "p-4 border-l-4 transition-shadow",
-        slot.locked && "ring-2 ring-primary/40",
-      )}
-      style={{
-        borderLeftColor: zone ? `var(--zone-${zone})` : "var(--border)",
-      }}
-    >
-      {/* Header: day + tag · actions */}
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold">
-              {t(`weekly.days.${slot.day}`)}
-            </span>
-            <span
-              className="rounded-full px-2 py-0.5 text-[11px] font-medium"
-              style={tagStyle}
-            >
-              {t(KIND_TAG[slot.kind as Exclude<SlotKind, "rest">])}
-            </span>
-          </div>
-          <Link
-            to={`/workout/${w.id}`}
-            className="mt-1 block text-sm font-medium hover:underline line-clamp-1"
-          >
-            {pick(w, "name")}
-          </Link>
-        </div>
-
-        <div className="flex items-center gap-1 shrink-0">
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={onReroll}
-            aria-label={t("weekly.slot.reroll")}
-            title={t("weekly.slot.reroll")}
-          >
-            <Shuffle className="size-4" />
-          </Button>
-          <Button
-            variant={slot.locked ? "secondary" : "ghost"}
-            size="icon-sm"
-            onClick={onToggleLock}
-            aria-pressed={slot.locked}
-            aria-label={t(slot.locked ? "weekly.slot.unlock" : "weekly.slot.lock")}
-            title={t(slot.locked ? "weekly.slot.unlock" : "weekly.slot.lock")}
-          >
-            {slot.locked ? (
-              <Lock className="size-4" />
-            ) : (
-              <LockOpen className="size-4" />
-            )}
-          </Button>
-        </div>
-      </div>
-
-      {/* Effort profile (endurance only) */}
-      {!isStrengthWorkout(w) && (
-        <EffortProfile workout={w} className="mt-3" />
-      )}
-
-      {/* Metrics */}
-      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-        <span className="inline-flex items-center gap-1">
-          <Clock className="size-3.5" />
-          {formatDurationMinutes(getAnyWorkoutDuration(w))}
-        </span>
-        {getAnyWorkoutTss(w) != null && (
-          <span className="inline-flex items-center gap-1">
-            <Gauge className="size-3.5" />
-            {getAnyWorkoutTss(w)} TSS
-          </span>
-        )}
-        {zone && (
-          <span className="inline-flex items-center gap-1">
-            <Target className="size-3.5" />Z{zone}
-          </span>
-        )}
-      </div>
-    </Card>
   );
 }
