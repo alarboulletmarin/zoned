@@ -153,6 +153,14 @@
   "weekly": {
     "title": "My week",
     "subtitle": "Compose a polarised 80/20 week: 3 to 6 complementary sessions, balanced between easy and quality.",
+    "presets": {
+      "title": "Template weeks",
+      "options": {
+        "base": "Base",
+        "build": "Build",
+        "sharpening": "Sharpening"
+      }
+    },
     "settings": {
       "title": "Settings",
       "sessions": "Sessions",
@@ -242,7 +250,9 @@
       "title": "Saved weeks",
       "empty": "No saved weeks yet.",
       "restore": "Load",
-      "delete": "Delete"
+      "duplicate": "Duplicate",
+      "delete": "Delete",
+      "copySuffix": "(copy)"
     },
     "toast": {
       "saved": "Week saved",

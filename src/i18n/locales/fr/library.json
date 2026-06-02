@@ -153,6 +153,14 @@
   "weekly": {
     "title": "Ma semaine",
     "subtitle": "Compose une semaine polarisée 80/20 : 3 à 6 séances complémentaires, équilibrées entre facile et qualité.",
+    "presets": {
+      "title": "Semaines type",
+      "options": {
+        "base": "Base",
+        "build": "Développement",
+        "sharpening": "Affûtage"
+      }
+    },
     "settings": {
       "title": "Réglages",
       "sessions": "Séances",
@@ -242,7 +250,9 @@
       "title": "Semaines enregistrées",
       "empty": "Aucune semaine enregistrée pour l'instant.",
       "restore": "Charger",
-      "delete": "Supprimer"
+      "duplicate": "Dupliquer",
+      "delete": "Supprimer",
+      "copySuffix": "(copie)"
     },
     "toast": {
       "saved": "Semaine enregistrée",

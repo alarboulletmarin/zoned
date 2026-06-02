@@ -61,6 +61,14 @@ export function deleteSavedWeek(id: string): void {
   write(read().filter((w) => w.id !== id));
 }
 
+/** Duplicate a saved week (new id, "… (copie)" name, fresh timestamp). */
+export function duplicateSavedWeek(id: string, copySuffix: string): SavedWeek | null {
+  const source = read().find((w) => w.id === id);
+  if (!source) return null;
+  const copy = saveWeek(source.week, `${source.name} ${copySuffix}`);
+  return copy;
+}
+
 /** A readable fallback name, e.g. "4 séances · 6 h". */
 function defaultName(week: GeneratedWeek): string {
   const sessions = week.slots.filter((s) => s.workout).length;

@@ -55,8 +55,10 @@ import {
   listSavedWeeks,
   saveWeek,
   deleteSavedWeek,
+  duplicateSavedWeek,
   type SavedWeek,
 } from "@/lib/weekStorage";
+import { WEEK_PRESETS } from "@/lib/weekPresets";
 import { toast } from "sonner";
 import { usePickLang } from "@/lib/i18n-utils";
 import { cn } from "@/lib/utils";
@@ -205,6 +207,10 @@ export function WeeklyPlannerPage() {
     });
   }
 
+  function applyPreset(next: WeekSettings) {
+    applySettings(next);
+  }
+
   function handleRegenerate() {
     if (week) setWeek(regenerateUnlocked(week, catalog));
   }
@@ -243,6 +249,11 @@ export function WeeklyPlannerPage() {
 
   function handleDelete(id: string) {
     deleteSavedWeek(id);
+    setSaved(listSavedWeeks());
+  }
+
+  function handleDuplicate(id: string) {
+    duplicateSavedWeek(id, t("weekly.saved.copySuffix"));
     setSaved(listSavedWeeks());
   }
 
@@ -291,6 +302,25 @@ export function WeeklyPlannerPage() {
         <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
           {/* Settings */}
           <aside className="space-y-5">
+            {/* Template weeks (presets) */}
+            <Card className="p-4 space-y-2">
+              <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+                {t("weekly.presets.title")}
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {WEEK_PRESETS.map((preset) => (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    onClick={() => applyPreset(preset.settings)}
+                    className="rounded-full border border-border px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+                  >
+                    {t(`weekly.presets.options.${preset.id}`)}
+                  </button>
+                ))}
+              </div>
+            </Card>
+
             <Card className="p-4 space-y-5">
               <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
                 {t("weekly.settings.title")}
@@ -504,6 +534,13 @@ export function WeeklyPlannerPage() {
                           onClick={() => handleRestore(entry)}
                         >
                           {t("weekly.saved.restore")}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDuplicate(entry.id)}
+                        >
+                          {t("weekly.saved.duplicate")}
                         </Button>
                         <Button
                           variant="ghost"
