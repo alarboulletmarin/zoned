@@ -107,14 +107,14 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
             </div>
           </div>
 
-          <div className="border-t border-border/60 pt-3 flex items-center justify-between gap-1">
+          <div className="border-t border-border/60 pt-3 grid grid-cols-2 gap-1">
             {SECONDARY_LINKS.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                className="flex-1 min-w-0 flex items-center justify-center gap-1.5 px-2 py-2 rounded-md text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
+                className="min-w-0 flex items-center gap-2 px-3 py-2 rounded-md text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
               >
-                <item.icon className="size-3.5" />
+                <item.icon className="size-3.5 shrink-0" />
                 <span className="truncate">{t(item.labelKey)}</span>
               </Link>
             ))}
@@ -123,9 +123,10 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
-              className="shrink-0 flex items-center justify-center px-2 py-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
+              className="min-w-0 flex items-center gap-2 px-3 py-2 rounded-md text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
             >
-              <GithubIcon className="size-3.5" />
+              <GithubIcon className="size-3.5 shrink-0" />
+              <span className="truncate">GitHub</span>
             </a>
           </div>
         </div>
