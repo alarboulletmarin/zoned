@@ -112,7 +112,7 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
               <Link
                 key={item.to}
                 to={item.to}
-                className="flex-1 flex items-center justify-center gap-1.5 px-2 py-2 rounded-md text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
+                className="flex-1 min-w-0 flex items-center justify-center gap-1.5 px-2 py-2 rounded-md text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
               >
                 <item.icon className="size-3.5" />
                 <span className="truncate">{t(item.labelKey)}</span>
@@ -123,7 +123,7 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
-              className="flex items-center justify-center px-2 py-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
+              className="shrink-0 flex items-center justify-center px-2 py-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
             >
               <GithubIcon className="size-3.5" />
             </a>
