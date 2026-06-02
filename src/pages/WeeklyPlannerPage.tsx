@@ -25,7 +25,11 @@ import { useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import { formatDurationMinutes } from "@/components/visualization";
-import { PolarizationGauge, WeekRhythmChart } from "@/components/weekly";
+import {
+  PolarizationGauge,
+  WeekRhythmChart,
+  EffortProfile,
+} from "@/components/weekly";
 import {
   DISCIPLINES,
   getAnyWorkoutDuration,
@@ -485,92 +489,111 @@ function SlotRow({
   const pick = usePickLang();
   const w = slot.workout;
   const zone = slotZone(w);
+  const isRest = slot.kind === "rest" || !w;
+
+  // Rest day — slim, muted row.
+  if (isRest) {
+    return (
+      <Card className="px-4 py-3 flex items-center gap-3 border-dashed opacity-70">
+        <span className="text-sm font-medium w-24 shrink-0">
+          {t(`weekly.days.${slot.day}`)}
+        </span>
+        <span className="text-sm text-muted-foreground">
+          {t("weekly.slot.rest")}
+        </span>
+      </Card>
+    );
+  }
+
+  const tagStyle = zone
+    ? {
+        backgroundColor: `color-mix(in srgb, var(--zone-${zone}) 18%, transparent)`,
+        color: `var(--zone-${zone})`,
+      }
+    : undefined;
 
   return (
     <Card
       className={cn(
-        "p-3 flex items-center gap-3",
-        slot.kind === "rest" && "opacity-60",
+        "p-4 border-l-4 transition-shadow",
+        slot.locked && "ring-2 ring-primary/40",
       )}
+      style={{
+        borderLeftColor: zone ? `var(--zone-${zone})` : "var(--border)",
+      }}
     >
-      {/* Day + accent */}
-      <div className="flex items-center gap-3 w-28 shrink-0">
-        <span
-          className="h-9 w-1.5 rounded-full bg-muted"
-          style={zone ? { backgroundColor: `var(--zone-${zone})` } : undefined}
-          aria-hidden
-        />
-        <div>
-          <div className="text-sm font-medium">{t(`weekly.days.${slot.day}`)}</div>
-          {slot.kind !== "rest" && (
-            <div className="text-xs text-muted-foreground">
-              {t(KIND_TAG[slot.kind])}
-            </div>
-          )}
+      {/* Header: day + tag · actions */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-semibold">
+              {t(`weekly.days.${slot.day}`)}
+            </span>
+            <span
+              className="rounded-full px-2 py-0.5 text-[11px] font-medium"
+              style={tagStyle}
+            >
+              {t(KIND_TAG[slot.kind as Exclude<SlotKind, "rest">])}
+            </span>
+          </div>
+          <Link
+            to={`/workout/${w.id}`}
+            className="mt-1 block text-sm font-medium hover:underline line-clamp-1"
+          >
+            {pick(w, "name")}
+          </Link>
+        </div>
+
+        <div className="flex items-center gap-1 shrink-0">
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={onReroll}
+            aria-label={t("weekly.slot.reroll")}
+            title={t("weekly.slot.reroll")}
+          >
+            <Shuffle className="size-4" />
+          </Button>
+          <Button
+            variant={slot.locked ? "secondary" : "ghost"}
+            size="icon-sm"
+            onClick={onToggleLock}
+            aria-pressed={slot.locked}
+            aria-label={t(slot.locked ? "weekly.slot.unlock" : "weekly.slot.lock")}
+            title={t(slot.locked ? "weekly.slot.unlock" : "weekly.slot.lock")}
+          >
+            {slot.locked ? (
+              <Lock className="size-4" />
+            ) : (
+              <LockOpen className="size-4" />
+            )}
+          </Button>
         </div>
       </div>
 
-      {/* Workout */}
-      {slot.kind === "rest" || !w ? (
-        <div className="flex-1 text-sm text-muted-foreground">
-          {t("weekly.slot.rest")}
-        </div>
-      ) : (
-        <>
-          <div className="flex-1 min-w-0">
-            <Link
-              to={`/workout/${w.id}`}
-              className="text-sm font-medium hover:underline line-clamp-1"
-            >
-              {pick(w, "name")}
-            </Link>
-            <div className="mt-0.5 flex items-center gap-3 text-xs text-muted-foreground">
-              <span className="inline-flex items-center gap-1">
-                <Clock className="size-3.5" />
-                {formatDurationMinutes(getAnyWorkoutDuration(w))}
-              </span>
-              {getAnyWorkoutTss(w) != null && (
-                <span className="inline-flex items-center gap-1">
-                  <Gauge className="size-3.5" />
-                  {getAnyWorkoutTss(w)} TSS
-                </span>
-              )}
-              {zone && (
-                <span className="inline-flex items-center gap-1">
-                  <Target className="size-3.5" />Z{zone}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="flex items-center gap-1 shrink-0">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onReroll}
-              aria-label={t("weekly.slot.reroll")}
-              title={t("weekly.slot.reroll")}
-            >
-              <Shuffle className="size-4" />
-            </Button>
-            <Button
-              variant={slot.locked ? "secondary" : "ghost"}
-              size="sm"
-              onClick={onToggleLock}
-              aria-pressed={slot.locked}
-              aria-label={t(slot.locked ? "weekly.slot.unlock" : "weekly.slot.lock")}
-              title={t(slot.locked ? "weekly.slot.unlock" : "weekly.slot.lock")}
-            >
-              {slot.locked ? (
-                <Lock className="size-4" />
-              ) : (
-                <LockOpen className="size-4" />
-              )}
-            </Button>
-          </div>
-        </>
+      {/* Effort profile (endurance only) */}
+      {!isStrengthWorkout(w) && (
+        <EffortProfile workout={w} className="mt-3" />
       )}
+
+      {/* Metrics */}
+      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+        <span className="inline-flex items-center gap-1">
+          <Clock className="size-3.5" />
+          {formatDurationMinutes(getAnyWorkoutDuration(w))}
+        </span>
+        {getAnyWorkoutTss(w) != null && (
+          <span className="inline-flex items-center gap-1">
+            <Gauge className="size-3.5" />
+            {getAnyWorkoutTss(w)} TSS
+          </span>
+        )}
+        {zone && (
+          <span className="inline-flex items-center gap-1">
+            <Target className="size-3.5" />Z{zone}
+          </span>
+        )}
+      </div>
     </Card>
   );
 }
