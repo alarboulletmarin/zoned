@@ -169,7 +169,19 @@
     },
     "actions": {
       "regenerate": "Régénérer",
-      "unlockAll": "Tout déverrouiller"
+      "unlockAll": "Tout déverrouiller",
+      "export": "Exporter la semaine",
+      "exportIcs": "Calendrier (.ics)",
+      "exportPdf": "Document (.pdf)",
+      "exportJson": "Données (.json)",
+      "save": "Enregistrer la semaine"
+    },
+    "table": {
+      "day": "Jour",
+      "type": "Type",
+      "session": "Séance",
+      "duration": "Durée",
+      "zone": "Zone"
     },
     "summary": {
       "title": "Résumé de la semaine",
@@ -225,6 +237,17 @@
     "empty": {
       "title": "Aucune séance ne correspond",
       "description": "Élargis tes disciplines ou tes niveaux, puis régénère la semaine."
+    },
+    "saved": {
+      "title": "Semaines enregistrées",
+      "empty": "Aucune semaine enregistrée pour l'instant.",
+      "restore": "Charger",
+      "delete": "Supprimer"
+    },
+    "toast": {
+      "saved": "Semaine enregistrée",
+      "exported": "Export généré",
+      "exportError": "L'export a échoué"
     }
   }
 }

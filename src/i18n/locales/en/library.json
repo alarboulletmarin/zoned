@@ -169,7 +169,19 @@
     },
     "actions": {
       "regenerate": "Regenerate",
-      "unlockAll": "Unlock all"
+      "unlockAll": "Unlock all",
+      "export": "Export week",
+      "exportIcs": "Calendar (.ics)",
+      "exportPdf": "Document (.pdf)",
+      "exportJson": "Data (.json)",
+      "save": "Save week"
+    },
+    "table": {
+      "day": "Day",
+      "type": "Type",
+      "session": "Session",
+      "duration": "Duration",
+      "zone": "Zone"
     },
     "summary": {
       "title": "Week summary",
@@ -225,6 +237,17 @@
     "empty": {
       "title": "No session matches",
       "description": "Widen your disciplines or levels, then regenerate the week."
+    },
+    "saved": {
+      "title": "Saved weeks",
+      "empty": "No saved weeks yet.",
+      "restore": "Load",
+      "delete": "Delete"
+    },
+    "toast": {
+      "saved": "Week saved",
+      "exported": "Export ready",
+      "exportError": "Export failed"
     }
   }
 }

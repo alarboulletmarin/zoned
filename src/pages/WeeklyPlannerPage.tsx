@@ -14,6 +14,9 @@ import {
   LockOpen,
   Shuffle,
   AlertTriangle,
+  Download,
+  Save,
+  Trash2,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -42,6 +45,18 @@ import {
   rerollSlot,
 } from "@/lib/weekGenerator";
 import { computeWeekStats } from "@/lib/weekStats";
+import {
+  exportWeekToICS,
+  exportWeekToPDF,
+  exportWeekToJSON,
+} from "@/lib/export";
+import {
+  listSavedWeeks,
+  saveWeek,
+  deleteSavedWeek,
+  type SavedWeek,
+} from "@/lib/weekStorage";
+import { toast } from "sonner";
 import { usePickLang } from "@/lib/i18n-utils";
 import { cn } from "@/lib/utils";
 import type { AnyWorkoutTemplate, Difficulty } from "@/types";
@@ -212,6 +227,38 @@ export function WeeklyPlannerPage() {
 
   function handleReroll(day: DayIndex) {
     if (week) setWeek(rerollSlot(week, day, catalog));
+  }
+
+  // ── Saved weeks + export ─────────────────────────────────────────────────
+  const [saved, setSaved] = useState<SavedWeek[]>(() => listSavedWeeks());
+
+  function handleSave() {
+    if (!week) return;
+    saveWeek(week);
+    setSaved(listSavedWeeks());
+    toast.success(t("weekly.toast.saved"));
+  }
+
+  function handleDelete(id: string) {
+    deleteSavedWeek(id);
+    setSaved(listSavedWeeks());
+  }
+
+  function handleRestore(entry: SavedWeek) {
+    setSettings(entry.week.settings);
+    setWeek(entry.week);
+  }
+
+  async function handleExport(fmt: "ics" | "pdf" | "json") {
+    if (!week) return;
+    try {
+      if (fmt === "ics") await exportWeekToICS(week);
+      else if (fmt === "pdf") await exportWeekToPDF(week);
+      else exportWeekToJSON(week);
+      toast.success(t("weekly.toast.exported"));
+    } catch {
+      toast.error(t("weekly.toast.exportError"));
+    }
   }
 
   const stats = useMemo(
@@ -404,6 +451,72 @@ export function WeeklyPlannerPage() {
                   />
                 ))}
               </div>
+            )}
+
+            {/* Footer: export + save */}
+            {week && (
+              <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 pt-1">
+                <Button variant="outline" onClick={() => handleExport("ics")}>
+                  <Download className="size-4" />
+                  {t("weekly.actions.exportIcs")}
+                </Button>
+                <Button variant="outline" onClick={() => handleExport("pdf")}>
+                  <Download className="size-4" />
+                  {t("weekly.actions.exportPdf")}
+                </Button>
+                <Button variant="outline" onClick={() => handleExport("json")}>
+                  <Download className="size-4" />
+                  {t("weekly.actions.exportJson")}
+                </Button>
+                <Button onClick={handleSave} className="sm:ml-auto">
+                  <Save className="size-4" />
+                  {t("weekly.actions.save")}
+                </Button>
+              </div>
+            )}
+
+            {/* Saved weeks */}
+            {saved.length > 0 && (
+              <Card className="p-4">
+                <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+                  {t("weekly.saved.title")}
+                </h2>
+                <ul className="divide-y divide-border">
+                  {saved.map((entry) => (
+                    <li
+                      key={entry.id}
+                      className="flex items-center justify-between gap-3 py-2"
+                    >
+                      <div className="min-w-0">
+                        <div className="text-sm font-medium truncate">
+                          {entry.name}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {new Date(entry.savedAt).toLocaleDateString()}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleRestore(entry)}
+                        >
+                          {t("weekly.saved.restore")}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon-sm"
+                          onClick={() => handleDelete(entry.id)}
+                          aria-label={t("weekly.saved.delete")}
+                          title={t("weekly.saved.delete")}
+                        >
+                          <Trash2 className="size-4" />
+                        </Button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
             )}
           </div>
         </div>
