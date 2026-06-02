@@ -28,10 +28,7 @@ import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { WorkoutCardChrome } from "@/components/domain";
 import { FavoriteButton } from "@/components/domain/FavoriteButton";
-import {
-  getWorkoutDuration,
-  formatDurationMinutes,
-} from "@/components/visualization";
+import { formatDurationMinutes } from "@/components/visualization";
 import { SEOHead } from "@/components/seo";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { usePageHint } from "@/hooks/usePageHint";
@@ -39,20 +36,30 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
-import { estimateTSS, getWorkoutZones } from "@/lib/landing-stats";
+import {
+  DISCIPLINES,
+  DURATION_NO_LIMIT,
+  defaultFilterCriteria,
+  getAnyWorkoutDuration,
+  getAnyWorkoutTss,
+  getAnyWorkoutZones,
+  getDrawDiscipline,
+  isFilterActive,
+  matchesFilters,
+  type DrawDiscipline,
+  type WorkoutFilterCriteria,
+} from "@/lib/workoutFilters";
 import type {
   AnyWorkoutTemplate,
   Difficulty,
   ZoneNumber,
 } from "@/types";
 import {
-  getWorkoutDiscipline,
   getDominantZone,
   isStrengthWorkout,
   isRunningWorkout,
   DIFFICULTY_META,
 } from "@/types";
-import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { usePickLang } from "@/lib/i18n-utils";
 import { cn } from "@/lib/utils";
 
@@ -62,9 +69,6 @@ import { cn } from "@/lib/utils";
 
 const DURATION_MIN = 25;
 const DURATION_MAX = 300; // slider ceiling
-// Sentinel for "no upper limit" (the "+300" preset). A finite value so it
-// serialises cleanly to sessionStorage, unlike Infinity.
-const DURATION_NO_LIMIT = Number.MAX_SAFE_INTEGER;
 const DURATION_PRESETS: { label: string; value: number }[] = [
   { label: "≤30", value: 30 },
   { label: "≤45", value: 45 },
@@ -74,9 +78,6 @@ const DURATION_PRESETS: { label: string; value: number }[] = [
   { label: "≤300", value: 300 },
   { label: "+300", value: DURATION_NO_LIMIT },
 ];
-
-const DISCIPLINES = ["running", "cycling", "swimming", "strength"] as const;
-type DrawDiscipline = (typeof DISCIPLINES)[number];
 
 const DISCIPLINE_ICONS: Record<
   DrawDiscipline,
@@ -93,32 +94,6 @@ const LEVELS: Difficulty[] = ["beginner", "intermediate", "advanced", "elite"];
 
 const HISTORY_LIMIT = 5;
 
-/** Resolve the draw-level discipline (strength sits alongside the 3 sports). */
-function getDrawDiscipline(w: AnyWorkoutTemplate): DrawDiscipline {
-  if (isStrengthWorkout(w)) return "strength";
-  return getWorkoutDiscipline(w) as DrawDiscipline;
-}
-
-function getStrengthDuration(w: StrengthWorkoutTemplate): number {
-  return Math.round((w.typicalDuration.min + w.typicalDuration.max) / 2);
-}
-
-function getAnyWorkoutDuration(w: AnyWorkoutTemplate): number {
-  if (isStrengthWorkout(w)) return getStrengthDuration(w);
-  return getWorkoutDuration(w);
-}
-
-/** Zones touched by a workout. Strength sessions have no aerobic zones. */
-function getAnyWorkoutZones(w: AnyWorkoutTemplate): ZoneNumber[] {
-  if (isStrengthWorkout(w)) return [];
-  return getWorkoutZones(w);
-}
-
-function getAnyWorkoutTss(w: AnyWorkoutTemplate): number | null {
-  if (isStrengthWorkout(w)) return null;
-  return estimateTSS(w);
-}
-
 /** "VMA-001" → "001", "LR-014" → "014". */
 function getWorkoutNumber(id: string): string {
   const parts = id.split("-");
@@ -134,19 +109,9 @@ function sample<T>(arr: readonly T[]): T {
 // Filter state
 // ────────────────────────────────────────────────────────────────────────────
 
-interface DrawFilters {
-  disciplines: DrawDiscipline[];
-  zones: ZoneNumber[];
-  maxDuration: number;
-  levels: Difficulty[];
-}
+type DrawFilters = WorkoutFilterCriteria;
 
-const defaultFilters: DrawFilters = {
-  disciplines: [],
-  zones: [],
-  maxDuration: DURATION_NO_LIMIT, // no cap by default (the "+300" preset)
-  levels: [],
-};
+const defaultFilters: DrawFilters = defaultFilterCriteria;
 
 // ── Session persistence ──────────────────────────────────────────────────────
 // Keep the drawn session (with filters and history) alive across navigation:
@@ -178,36 +143,6 @@ function writeDrawSnapshot(snap: DrawSnapshot): void {
   } catch {
     /* storage unavailable or full (non-critical) */
   }
-}
-
-function isFilterActive(f: DrawFilters): boolean {
-  return (
-    f.disciplines.length > 0 ||
-    f.zones.length > 0 ||
-    f.levels.length > 0 ||
-    f.maxDuration !== DURATION_NO_LIMIT
-  );
-}
-
-function matchesFilters(w: AnyWorkoutTemplate, f: DrawFilters): boolean {
-  // Discipline (multi-select)
-  if (f.disciplines.length > 0 && !f.disciplines.includes(getDrawDiscipline(w))) {
-    return false;
-  }
-  // Duration ceiling
-  if (getAnyWorkoutDuration(w) > f.maxDuration) {
-    return false;
-  }
-  // Level (multi-select)
-  if (f.levels.length > 0 && !f.levels.includes(w.difficulty)) {
-    return false;
-  }
-  // Zones (multi-select). Strength has no zones → excluded once a zone is picked.
-  if (f.zones.length > 0) {
-    const zones = getAnyWorkoutZones(w);
-    if (!zones.some((z) => f.zones.includes(z))) return false;
-  }
-  return true;
 }
 
 // ────────────────────────────────────────────────────────────────────────────
