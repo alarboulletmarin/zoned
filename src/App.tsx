@@ -18,6 +18,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 const HomePage = lazy(() => import("@/pages/HomePage").then(m => ({ default: m.HomePage })));
 const LibraryPage = lazy(() => import("@/pages/LibraryPage").then(m => ({ default: m.LibraryPage })));
 const DrawSessionPage = lazy(() => import("@/pages/DrawSessionPage").then(m => ({ default: m.DrawSessionPage })));
+const WeeklyPlannerPage = lazy(() => import("@/pages/WeeklyPlannerPage").then(m => ({ default: m.WeeklyPlannerPage })));
 const WorkoutDetailPage = lazy(() => import("@/pages/WorkoutDetailPage").then(m => ({ default: m.WorkoutDetailPage })));
 const MyZonesPage = lazy(() => import("@/pages/MyZonesPage").then(m => ({ default: m.MyZonesPage })));
 const FavoritesPage = lazy(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
@@ -250,6 +251,7 @@ function App() {
                           <Route path="/" element={<HomePage />} />
                           <Route path="/library" element={<LibraryPage />} />
                           <Route path="/library/draw" element={<DrawSessionPage />} />
+                          <Route path="/library/weekly" element={<WeeklyPlannerPage />} />
                           <Route path="/workout/builder" element={<WorkoutBuilderPage />} />
                           <Route path="/workout/builder/:id" element={<WorkoutBuilderPage />} />
                           <Route path="/workout/:id" element={<WorkoutDetailPage />} />

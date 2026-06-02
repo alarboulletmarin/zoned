@@ -147,6 +147,65 @@
       "title": "Aucune séance ne correspond",
       "description": "Élargis tes filtres ou réinitialise pour relancer un tirage.",
       "reset": "Réinitialiser les filtres"
+    },
+    "toWeek": "Composer ma semaine"
+  },
+  "weekly": {
+    "title": "Ma semaine",
+    "subtitle": "Compose une semaine polarisée 80/20 : 3 à 6 séances complémentaires, équilibrées entre facile et qualité.",
+    "settings": {
+      "title": "Réglages",
+      "sessions": "Séances",
+      "volume": "Volume cible",
+      "quality": "Séance qualité",
+      "qualityOptions": {
+        "random": "Au hasard",
+        "tempo": "Tempo",
+        "threshold": "Seuil",
+        "vo2vma": "VO₂ · VMA"
+      },
+      "disciplines": "Disciplines",
+      "levels": "Niveau"
+    },
+    "actions": {
+      "regenerate": "Régénérer",
+      "unlockAll": "Tout déverrouiller"
+    },
+    "summary": {
+      "title": "Résumé de la semaine",
+      "sessions": "Séances",
+      "volume": "Volume",
+      "load": "Charge",
+      "hard": "Séances dures",
+      "polarisation": "Facile {{low}} % · Tempo {{mid}} % · Intense {{high}} %",
+      "balanced": "Équilibre 80/20",
+      "overBudget": "Au-dessus du budget de {{target}} h"
+    },
+    "kinds": {
+      "easy": "Facile",
+      "quality": "Qualité",
+      "long": "Sortie longue",
+      "rest": "Repos"
+    },
+    "slot": {
+      "lock": "Verrouiller",
+      "unlock": "Déverrouiller",
+      "reroll": "Re-tirer",
+      "viewDetail": "Voir le détail",
+      "rest": "Jour de repos"
+    },
+    "days": {
+      "0": "Lundi",
+      "1": "Mardi",
+      "2": "Mercredi",
+      "3": "Jeudi",
+      "4": "Vendredi",
+      "5": "Samedi",
+      "6": "Dimanche"
+    },
+    "empty": {
+      "title": "Aucune séance ne correspond",
+      "description": "Élargis tes disciplines ou tes niveaux, puis régénère la semaine."
     }
   }
 }

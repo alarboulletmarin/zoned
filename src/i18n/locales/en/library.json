@@ -147,6 +147,65 @@
       "title": "No session matches",
       "description": "Widen your filters or reset to draw again.",
       "reset": "Reset filters"
+    },
+    "toWeek": "Build my week"
+  },
+  "weekly": {
+    "title": "My week",
+    "subtitle": "Compose a polarised 80/20 week: 3 to 6 complementary sessions, balanced between easy and quality.",
+    "settings": {
+      "title": "Settings",
+      "sessions": "Sessions",
+      "volume": "Target volume",
+      "quality": "Quality session",
+      "qualityOptions": {
+        "random": "Random",
+        "tempo": "Tempo",
+        "threshold": "Threshold",
+        "vo2vma": "VO₂ · VMA"
+      },
+      "disciplines": "Disciplines",
+      "levels": "Level"
+    },
+    "actions": {
+      "regenerate": "Regenerate",
+      "unlockAll": "Unlock all"
+    },
+    "summary": {
+      "title": "Week summary",
+      "sessions": "Sessions",
+      "volume": "Volume",
+      "load": "Load",
+      "hard": "Hard sessions",
+      "polarisation": "Easy {{low}} % · Tempo {{mid}} % · Intense {{high}} %",
+      "balanced": "80/20 balance",
+      "overBudget": "Over the {{target}} h budget"
+    },
+    "kinds": {
+      "easy": "Easy",
+      "quality": "Quality",
+      "long": "Long run",
+      "rest": "Rest"
+    },
+    "slot": {
+      "lock": "Lock",
+      "unlock": "Unlock",
+      "reroll": "Re-roll",
+      "viewDetail": "View detail",
+      "rest": "Rest day"
+    },
+    "days": {
+      "0": "Monday",
+      "1": "Tuesday",
+      "2": "Wednesday",
+      "3": "Thursday",
+      "4": "Friday",
+      "5": "Saturday",
+      "6": "Sunday"
+    },
+    "empty": {
+      "title": "No session matches",
+      "description": "Widen your disciplines or levels, then regenerate the week."
     }
   }
 }

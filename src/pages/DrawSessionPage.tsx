@@ -21,6 +21,7 @@ import {
   Bike,
   Waves,
   Dumbbell,
+  CalendarRange,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -344,6 +345,13 @@ export function DrawSessionPage() {
           <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
             {t("draw.subtitle")}
           </FadeUp>
+          <Link
+            to="/library/weekly"
+            className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+          >
+            <CalendarRange className="size-4" />
+            {t("draw.toWeek")}
+          </Link>
         </div>
 
         {/* Mobile filters toggle */}
