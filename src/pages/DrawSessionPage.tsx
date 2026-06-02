@@ -346,7 +346,7 @@ export function DrawSessionPage() {
             {t("draw.subtitle")}
           </FadeUp>
           <Link
-            to="/library/weekly"
+            to="/weeks"
             className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
           >
             <CalendarRange className="size-4" />

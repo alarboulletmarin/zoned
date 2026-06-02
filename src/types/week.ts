@@ -35,6 +35,10 @@ export interface WeekSettings {
   quality: QualityType;
   disciplines: DrawDiscipline[];
   levels: Difficulty[];
+  /** Day the long session is placed on (0 = Monday … 6 = Sunday). */
+  longRunDay: DayIndex;
+  /** Optional per-day kind pins. A pinned day keeps its kind across (re)generation. */
+  dayTypes?: Partial<Record<DayIndex, SlotKind>>;
 }
 
 /** A fully generated week: exactly 7 slots, Monday → Sunday. */
@@ -49,4 +53,5 @@ export const DEFAULT_WEEK_SETTINGS: WeekSettings = {
   quality: "random",
   disciplines: [],
   levels: [],
+  longRunDay: 5, // Saturday
 };

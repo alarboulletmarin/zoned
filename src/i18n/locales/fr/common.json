@@ -293,6 +293,8 @@
     "libraryAllDesc": "Course, vélo, natation, renforcement",
     "drawSession": "Tirer une séance",
     "drawSessionDesc": "Laisse le hasard choisir ta séance",
+    "weeks": "Mes semaines",
+    "weeksDesc": "Compose une semaine 80/20 ou de zéro",
     "collections": "Collections",
     "collectionsDesc": "Séances groupées par thème",
     "builder": "Créer une séance",

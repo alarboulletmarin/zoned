@@ -156,10 +156,39 @@
     "presets": {
       "title": "Template weeks",
       "options": {
+        "recovery": "Recovery",
         "base": "Base",
         "build": "Build",
+        "volume": "Volume",
         "sharpening": "Sharpening"
       }
+    },
+    "list": {
+      "title": "My weeks",
+      "subtitle": "Your training weeks, generated or built by hand.",
+      "create": "Create a week",
+      "empty": "No weeks yet. Generate one or build it from scratch.",
+      "sessionsCount_one": "{{count}} session",
+      "sessionsCount_other": "{{count}} sessions",
+      "delete": "Delete"
+    },
+    "new": {
+      "title": "Create a week",
+      "subtitle": "Let the generator compose an 80/20 week, or start from an empty one.",
+      "generate": "Generate (80/20)",
+      "generateDesc": "The generator composes a polarised week from your settings.",
+      "scratch": "From scratch",
+      "scratchDesc": "An empty week you fill in by hand, session by session.",
+      "namePlaceholder": "Week name",
+      "scratchCreate": "Create empty week"
+    },
+    "generate": {
+      "title": "Generate my week",
+      "subtitle": "Tune the settings, generate, then create the week to edit it.",
+      "action": "Regenerate",
+      "create": "Create week",
+      "namePlaceholder": "Week name",
+      "defaultName": "My week"
     },
     "settings": {
       "title": "Settings",
@@ -173,7 +202,10 @@
         "vo2vma": "VO₂ · VMA"
       },
       "disciplines": "Disciplines",
-      "levels": "Level"
+      "levels": "Level",
+      "longRunDay": "Long run day",
+      "show": "Show settings",
+      "hide": "Hide settings"
     },
     "actions": {
       "regenerate": "Regenerate",

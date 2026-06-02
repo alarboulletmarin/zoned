@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { Analytics } from "@vercel/analytics/react";
@@ -18,7 +18,9 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 const HomePage = lazy(() => import("@/pages/HomePage").then(m => ({ default: m.HomePage })));
 const LibraryPage = lazy(() => import("@/pages/LibraryPage").then(m => ({ default: m.LibraryPage })));
 const DrawSessionPage = lazy(() => import("@/pages/DrawSessionPage").then(m => ({ default: m.DrawSessionPage })));
-const WeeklyPlannerPage = lazy(() => import("@/pages/WeeklyPlannerPage").then(m => ({ default: m.WeeklyPlannerPage })));
+const WeeksListPage = lazy(() => import("@/pages/WeeksListPage").then(m => ({ default: m.WeeksListPage })));
+const WeekNewPage = lazy(() => import("@/pages/WeekNewPage").then(m => ({ default: m.WeekNewPage })));
+const WeekGeneratePage = lazy(() => import("@/pages/WeekGeneratePage").then(m => ({ default: m.WeekGeneratePage })));
 const WorkoutDetailPage = lazy(() => import("@/pages/WorkoutDetailPage").then(m => ({ default: m.WorkoutDetailPage })));
 const MyZonesPage = lazy(() => import("@/pages/MyZonesPage").then(m => ({ default: m.MyZonesPage })));
 const FavoritesPage = lazy(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
@@ -251,7 +253,10 @@ function App() {
                           <Route path="/" element={<HomePage />} />
                           <Route path="/library" element={<LibraryPage />} />
                           <Route path="/library/draw" element={<DrawSessionPage />} />
-                          <Route path="/library/weekly" element={<WeeklyPlannerPage />} />
+                          <Route path="/weeks" element={<WeeksListPage />} />
+                          <Route path="/weeks/new" element={<WeekNewPage />} />
+                          <Route path="/weeks/new/generate" element={<WeekGeneratePage />} />
+                          <Route path="/library/weekly" element={<Navigate to="/weeks" replace />} />
                           <Route path="/workout/builder" element={<WorkoutBuilderPage />} />
                           <Route path="/workout/builder/:id" element={<WorkoutBuilderPage />} />
                           <Route path="/workout/:id" element={<WorkoutDetailPage />} />

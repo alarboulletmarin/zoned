@@ -18,13 +18,6 @@ export { exportToPDF } from "./pdf";
 export { exportToFIT } from "./fit";
 export { exportPlanToICS } from "./planIcs";
 export { exportPlanToPDF } from "./planPdf";
-export {
-  exportWeekToICS,
-  exportWeekToPDF,
-  exportWeekToJSON,
-  buildWeekJSON,
-  type WeekExportJSON,
-} from "./weekExport";
 
 // Social share pipeline (download / copy / Web Share API).
 export {

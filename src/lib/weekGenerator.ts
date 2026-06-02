@@ -24,7 +24,6 @@ import type {
   DayIndex,
   GeneratedWeek,
   QualityType,
-  SessionCount,
   SlotKind,
   WeekSettings,
   WeekSlot,
@@ -39,18 +38,74 @@ const LONG_MIN_DURATION = 70;
 /** Target share of easy (Z1+Z2) time — the 80 in 80/20. */
 export const POLAR_TARGET_LOW = 0.8;
 
-/** Saturday is index 5 (Mon = 0). */
-const SATURDAY: DayIndex = 5;
+/** Preferred order for filling days: spreads sessions out across the week. */
+const FILL_ORDER: DayIndex[] = [1, 3, 0, 4, 2, 6, 5];
 
-/** Placement template per session count: one SlotKind per weekday (Mon→Sun).
- *  Exactly one quality session, one long on Saturday, the rest easy, with rest
- *  days spread out and Sunday always off. */
-const TEMPLATES: Record<SessionCount, SlotKind[]> = {
-  3: ["rest", "quality", "rest", "easy", "rest", "long", "rest"],
-  4: ["easy", "quality", "rest", "easy", "rest", "long", "rest"],
-  5: ["easy", "quality", "rest", "easy", "easy", "long", "rest"],
-  6: ["easy", "quality", "easy", "easy", "easy", "long", "rest"],
-};
+/**
+ * Build the per-day placement (one SlotKind for Mon→Sun) from the settings:
+ * one long session on the chosen day, one quality session kept away from it,
+ * the rest easy, honouring any explicit per-day pins. Exactly `sessions`
+ * active days; the others rest.
+ */
+function buildPlacement(settings: WeekSettings): SlotKind[] {
+  const placement: SlotKind[] = Array<SlotKind>(7).fill("rest");
+  const pinned = settings.dayTypes ?? {};
+
+  // 1. Explicit pins win.
+  for (let d = 0 as DayIndex; d <= 6; d = (d + 1) as DayIndex) {
+    const p = pinned[d];
+    if (p) placement[d] = p;
+  }
+
+  // 2. Long session on the chosen day (unless that day is pinned otherwise).
+  const longDay = settings.longRunDay;
+  if (!pinned[longDay]) placement[longDay] = "long";
+
+  let active = placement.filter((k) => k !== "rest").length;
+  const target = settings.sessions;
+
+  // 3. Ensure a quality day, away from the long day, if there's room.
+  if (!placement.includes("quality") && active < target) {
+    for (const d of FILL_ORDER) {
+      if (placement[d] !== "rest" || pinned[d]) continue;
+      if (Math.abs(d - longDay) <= 1) continue; // keep hard days off the long
+      placement[d] = "quality";
+      active++;
+      break;
+    }
+  }
+
+  // 4. Fill the remaining active days with easy sessions.
+  for (const d of FILL_ORDER) {
+    if (active >= target) break;
+    if (placement[d] !== "rest" || pinned[d]) continue;
+    placement[d] = "easy";
+    active++;
+  }
+
+  return placement;
+}
+
+/** Per-kind share of the volume budget (long > quality > easy). */
+function volumeWeight(kind: SlotKind): number {
+  return kind === "long" ? 1.7 : kind === "quality" ? 1.15 : 0.85;
+}
+
+/** Pick the workout whose duration is closest to `targetMin`, with a little
+ *  randomness among the nearest few so variants stay varied. */
+function pickNearDuration(
+  pool: AnyWorkoutTemplate[],
+  targetMin: number,
+): AnyWorkoutTemplate | null {
+  if (pool.length === 0) return null;
+  const sorted = [...pool].sort(
+    (a, b) =>
+      Math.abs(getAnyWorkoutDuration(a) - targetMin) -
+      Math.abs(getAnyWorkoutDuration(b) - targetMin),
+  );
+  const k = Math.min(5, sorted.length);
+  return sorted[Math.floor(Math.random() * k)];
+}
 
 /** Pick a uniformly random element. */
 function sample<T>(arr: readonly T[]): T | null {
@@ -189,34 +244,51 @@ export interface GenerateOptions {
   locked?: WeekSlot[];
 }
 
-/** Build one candidate week from the template, honouring locked slots. */
+/** Build one candidate week, honouring locked slots and the volume budget. */
 function buildVariant(
   settings: WeekSettings,
   pools: Pools,
   lockedByDay: Map<DayIndex, WeekSlot>,
 ): WeekSlot[] {
-  const template = TEMPLATES[settings.sessions];
+  const placement = buildPlacement(settings);
   const used = new Set<string>();
-  const slots: WeekSlot[] = [];
 
+  // Account for locked sessions, then share the remaining minutes across the
+  // unlocked active days by kind weight, so total volume tracks the budget.
+  let lockedMin = 0;
+  for (const [, locked] of lockedByDay) {
+    if (locked.workout) {
+      lockedMin += getAnyWorkoutDuration(locked.workout);
+      used.add(locked.workout.id);
+    }
+  }
+  let sumWeights = 0;
+  for (let d = 0 as DayIndex; d <= 6; d = (d + 1) as DayIndex) {
+    if (lockedByDay.has(d) || placement[d] === "rest") continue;
+    sumWeights += volumeWeight(placement[d]);
+  }
+  sumWeights = sumWeights || 1;
+  const remaining = Math.max(0, settings.targetVolumeH * 60 - lockedMin);
+
+  const slots: WeekSlot[] = [];
   for (let day = 0 as DayIndex; day <= 6; day = (day + 1) as DayIndex) {
     const locked = lockedByDay.get(day);
     if (locked) {
-      if (locked.workout) used.add(locked.workout.id);
       slots.push({ ...locked });
       continue;
     }
 
-    const kind = template[day];
+    const kind = placement[day];
     if (kind === "rest") {
       slots.push({ day, kind, workout: null, locked: false });
       continue;
     }
 
-    const candidates = poolFor(kind, pools).filter((w) => !used.has(w.id));
-    // Fall back to the full pool (allowing a repeat) rather than leave it empty.
+    const slotTarget = remaining * (volumeWeight(kind) / sumWeights);
+    const fresh = poolFor(kind, pools).filter((w) => !used.has(w.id));
     const picked =
-      sample(candidates) ?? sample(poolFor(kind, pools)) ?? null;
+      pickNearDuration(fresh, slotTarget) ??
+      pickNearDuration(poolFor(kind, pools), slotTarget);
     if (picked) used.add(picked.id);
     slots.push({ day, kind, workout: picked, locked: false });
   }
@@ -253,14 +325,6 @@ export function generateWeek(
   return { slots: best ?? buildVariant(settings, pools, lockedByDay), settings };
 }
 
-/** Regenerate every unlocked slot, preserving the locked ones. */
-export function regenerateUnlocked(
-  week: GeneratedWeek,
-  catalog: AnyWorkoutTemplate[],
-): GeneratedWeek {
-  return generateWeek(week.settings, catalog, { locked: week.slots });
-}
-
 /** Re-roll a single day, keeping every other slot exactly as-is. */
 export function rerollSlot(
   week: GeneratedWeek,
@@ -288,9 +352,4 @@ export function rerollSlot(
     s.day === day ? { ...s, workout: picked } : s,
   );
   return { ...week, slots };
-}
-
-/** Convenience helper used by Saturday-aware UI copy. */
-export function isLongDay(day: DayIndex): boolean {
-  return day === SATURDAY;
 }

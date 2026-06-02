@@ -156,10 +156,39 @@
     "presets": {
       "title": "Semaines type",
       "options": {
+        "recovery": "Récup",
         "base": "Base",
         "build": "Développement",
+        "volume": "Volume",
         "sharpening": "Affûtage"
       }
+    },
+    "list": {
+      "title": "Mes semaines",
+      "subtitle": "Tes semaines d'entraînement, générées ou composées à la main.",
+      "create": "Créer une semaine",
+      "empty": "Aucune semaine pour l'instant. Génère-en une ou compose-la de zéro.",
+      "sessionsCount_one": "{{count}} séance",
+      "sessionsCount_other": "{{count}} séances",
+      "delete": "Supprimer"
+    },
+    "new": {
+      "title": "Créer une semaine",
+      "subtitle": "Laisse le générateur composer un 80/20, ou pars d'une semaine vide.",
+      "generate": "Générer (80/20)",
+      "generateDesc": "Le générateur compose une semaine polarisée à partir de tes réglages.",
+      "scratch": "Partir de zéro",
+      "scratchDesc": "Une semaine vide que tu remplis à la main, séance par séance.",
+      "namePlaceholder": "Nom de la semaine",
+      "scratchCreate": "Créer la semaine vide"
+    },
+    "generate": {
+      "title": "Générer ma semaine",
+      "subtitle": "Règle les paramètres, génère, puis crée la semaine pour l'éditer.",
+      "action": "Régénérer",
+      "create": "Créer la semaine",
+      "namePlaceholder": "Nom de la semaine",
+      "defaultName": "Ma semaine"
     },
     "settings": {
       "title": "Réglages",
@@ -173,7 +202,10 @@
         "vo2vma": "VO₂ · VMA"
       },
       "disciplines": "Disciplines",
-      "levels": "Niveau"
+      "levels": "Niveau",
+      "longRunDay": "Jour de sortie longue",
+      "show": "Afficher les réglages",
+      "hide": "Masquer les réglages"
     },
     "actions": {
       "regenerate": "Régénérer",

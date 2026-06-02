@@ -293,6 +293,8 @@
     "libraryAllDesc": "Running, cycling, swimming, strength",
     "drawSession": "Draw a session",
     "drawSessionDesc": "Let chance pick your session",
+    "weeks": "My weeks",
+    "weeksDesc": "Compose an 80/20 week or from scratch",
     "collections": "Collections",
     "collectionsDesc": "Sessions grouped by theme",
     "builder": "Create a session",

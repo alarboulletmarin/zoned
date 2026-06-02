@@ -43,6 +43,8 @@ export interface IntermediateGoal {
 export interface PlanConfig {
   id: string;
   planMode?: "assisted" | "free" | "prebuilt"; // undefined = "assisted" for backward compat
+  /** Marks a standalone "Ma semaine" (a 1-week free plan surfaced under /weeks). */
+  isSingleWeek?: boolean;
   planName?: string; // user-given name for free plans
   raceDistance?: RaceDistance;
   raceDate?: string; // ISO date
