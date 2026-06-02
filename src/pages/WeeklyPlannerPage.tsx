@@ -24,6 +24,7 @@ import { Slider } from "@/components/ui/slider";
 import { Segmented } from "@/components/ui/segmented";
 import { SEOHead } from "@/components/seo";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { usePageHint } from "@/hooks/usePageHint";
 import { useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
@@ -139,6 +140,7 @@ function slotZone(w: AnyWorkoutTemplate | null): number | null {
 // ────────────────────────────────────────────────────────────────────────────
 
 export function WeeklyPlannerPage() {
+  usePageHint("weekly", "hints.weekly.title", "hints.weekly.description");
   const { t } = useTranslation(["library", "common"]);
   const pick = usePickLang();
 

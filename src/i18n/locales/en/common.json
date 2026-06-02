@@ -569,6 +569,10 @@
       "title": "Let chance decide",
       "description": "Filter by discipline, zone, duration and level, then draw a session from the catalogue."
     },
+    "weekly": {
+      "title": "Compose your week",
+      "description": "Set the number of sessions, the volume and the quality session: the generator composes a balanced 80/20 week."
+    },
     "planCalendar": {
       "title": "Organize your plan",
       "description": "Drag a session to another day. Long press or right-click to view, delete or reorder."
