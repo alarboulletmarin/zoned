@@ -65,6 +65,8 @@ interface PlanWeeklyViewProps {
   onWeekChange?: (week: number) => void;
   onFindWeekRoute?: (weekNumber: number) => void;
   blockedDays?: Set<string>;
+  /** Standalone "Ma semaine": hide week nav + free-plan guide, taller day columns. */
+  singleWeek?: boolean;
 }
 
 // ── Component ───────────────────────────────────────────────────────
@@ -87,6 +89,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   onWeekChange,
   onFindWeekRoute,
   blockedDays,
+  singleWeek = false,
 }: PlanWeeklyViewProps) {
   const { t } = useTranslation("plan");
   const pickLang = usePickLang();
@@ -430,6 +433,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
     <>
       <div className="space-y-4">
         {/* ── Week navigation ── */}
+        {!singleWeek && (
         <div className="flex items-center justify-between gap-2">
           <button
             type="button"
@@ -496,6 +500,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
             <ChevronRight className="size-4" />
           </button>
         </div>
+        )}
 
         {/* ── Week completion stats ── */}
         {weekData && (() => {
@@ -558,7 +563,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
         )}
 
         {/* ── Week guidance (free plans only) ── */}
-        {weekData && plan.config.planMode === "free" && (
+        {weekData && plan.config.planMode === "free" && !singleWeek && (
           <WeekGuidancePanel
             week={weekData}
             daysPerWeek={plan.config.daysPerWeek}
@@ -619,6 +624,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                         workoutNames={workoutNames}
                         dropTarget={dropTarget}
                         draggedSession={draggedSession}
+                        tall={singleWeek}
                         onDragOver={handleDragOver}
                         onDragLeave={handleDragLeave}
                         onDrop={handleDrop}
@@ -675,6 +681,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                     dropTarget={dropTarget}
                     draggedSession={draggedSession}
                     isDesktop
+                    tall={singleWeek}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
@@ -794,6 +801,7 @@ interface DayCellProps {
   dropTarget: { weekNumber: number; day: number } | null;
   draggedSession: { weekNumber: number; sessionIndex: number } | null;
   isDesktop?: boolean;
+  tall?: boolean;
   onDragOver: (e: React.DragEvent, weekNumber: number, day: number) => void;
   onDragLeave: () => void;
   onDrop: (e: React.DragEvent, weekNumber: number, day: number) => void;
@@ -835,6 +843,7 @@ const DayCell = memo(function DayCell({
   dropTarget,
   draggedSession,
   isDesktop,
+  tall,
   onDragOver,
   onDragLeave,
   onDrop,
@@ -863,7 +872,7 @@ const DayCell = memo(function DayCell({
       onDrop={(e) => onDrop(e, selectedWeek, dayIndex)}
       className={cn(
         "rounded-lg bg-secondary/30 p-1.5 transition-colors",
-        isDesktop ? "min-h-[120px]" : "min-h-[80px]",
+        isDesktop ? (tall ? "min-h-[220px]" : "min-h-[120px]") : (tall ? "min-h-[120px]" : "min-h-[80px]"),
         isDropHere && "ring-2 ring-primary/50 bg-primary/5",
         isBlockedDay && "bg-muted/50 bg-[repeating-linear-gradient(135deg,transparent,transparent_4px,rgba(0,0,0,0.04)_4px,rgba(0,0,0,0.04)_6px)]",
       )}

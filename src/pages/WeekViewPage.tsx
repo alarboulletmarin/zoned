@@ -218,6 +218,7 @@ export function WeekViewPage() {
                   onSessionDelete={handleDelete}
                   onWorkoutAdd={handleWorkoutAdd}
                   onAddToDay={handleAddToDay}
+                  singleWeek
                 />
               </div>
               {showPanel && (
