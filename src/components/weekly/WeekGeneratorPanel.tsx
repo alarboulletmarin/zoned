@@ -87,8 +87,16 @@ export function WeekGeneratorPanel({
         </span>
       )}
 
-      {/* Presets — single scrollable row to save vertical space */}
-      <div className="flex gap-2 overflow-x-auto pb-0.5 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      {/* Presets — wrap on desktop (room to spare); compact single scrollable
+          row only inside the mobile "Régler" sheet (bare). */}
+      <div
+        className={cn(
+          "flex gap-2",
+          bare
+            ? "overflow-x-auto pb-0.5 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            : "flex-wrap",
+        )}
+      >
         {WEEK_PRESETS.map((preset) => (
           <button
             key={preset.id}
