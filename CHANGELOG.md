@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-06-03
+
+### Added
+- "My week" mode: a polarised 80/20 week generator composing 3-6 complementary sessions, with a week editor (7-day board, 80/20 balance gauge, week rhythm) and an animated automatic generation
+- Pre-built weeks: sourced template weeks (aerobic base, threshold block, VO2 sharpening, recovery, high volume, easy return) with pedagogical "why this week" and "why this session" notes
+- "Draw a session" page: random session draw from filters (discipline, zones, duration, level) with a searching animation
+
+### Changed
+- Weeks page (/weeks) and its creation flow now match the plans design (cards, badges, mini-stats, View/Export actions)
+- Mobile-first week editor: summary strip above the board, settings always accessible, board never compressed
+- Learn and Collections pages aligned with the Calculators hub layout
+- Session detail page given more breathing room for better mobile readability
+- FR/EN i18n and SEO finalised on the week pages
+
+### Fixed
+- Library duration filter no longer hides long sessions
+- Drawn session kept across navigation
+- Sidebar footer links no longer overflow on mobile (2x2 grid)
+
 ## [0.6.1] - 2026-05-28
 
 ### Added

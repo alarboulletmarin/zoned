@@ -2,6 +2,84 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.7.0",
+    date: "2026-06-03",
+    changes: {
+      added: [
+        {
+          text: "Mode « Ma semaine » : generateur de semaine polarisee 80/20 qui compose 3 a 6 seances complementaires, avec un editeur de semaine (board 7 jours, jauge d'equilibre 80/20, rythme de la semaine) et une generation automatique animee",
+          textEn: "« My week » mode: a polarised 80/20 week generator composing 3-6 complementary sessions, with a week editor (7-day board, 80/20 balance gauge, week rhythm) and an animated automatic generation",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Semaines pre-construites : semaines types sourcees (base aerobie 80/20, bloc seuil, affutage VO2, recuperation, gros volume, reprise douce) avec un contenu pedagogique « pourquoi cette semaine » et « pourquoi cette seance »",
+          textEn: "Pre-built weeks: sourced template weeks (aerobic base 80/20, threshold block, VO2 sharpening, recovery, high volume, easy return) with pedagogical « why this week » and « why this session » notes",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Page « Tirer une seance » : tirage aleatoire d'une seance selon des filtres (discipline, zones, duree, niveau) avec une animation de recherche",
+          textEn: "« Draw a session » page: random session draw from filters (discipline, zones, duration, level) with a searching animation",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+      ],
+      changed: [
+        {
+          text: "La page des semaines (/weeks) et sa creation s'alignent sur le design des plans (cartes, badges, mini-stats, boutons Voir/Exporter)",
+          textEn: "The weeks page (/weeks) and its creation flow now match the plans design (cards, badges, mini-stats, View/Export actions)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Editeur de semaine mobile-first : bandeau resume au-dessus du board, reglages toujours accessibles, board jamais comprime",
+          textEn: "Mobile-first week editor: summary strip above the board, settings always accessible, board never compressed",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Pages Articles et Collections alignees sur la mise en page du hub Calculateurs",
+          textEn: "Learn and Collections pages aligned with the Calculators hub layout",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Page de detail d'une seance aeree pour une meilleure lisibilite mobile",
+          textEn: "Session detail page given more breathing room for better mobile readability",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "i18n FR/EN et SEO finalises sur les pages semaine",
+          textEn: "FR/EN i18n and SEO finalised on the week pages",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+      ],
+      fixed: [
+        {
+          text: "Le filtre de duree de la bibliotheque ne masque plus les seances longues",
+          textEn: "The library duration filter no longer hides long sessions",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "La seance tiree est conservee lors de la navigation",
+          textEn: "The drawn session is kept across navigation",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Liens de pied de page de la sidebar : plus de debordement sur mobile (grille 2x2)",
+          textEn: "Sidebar footer links: no more overflow on mobile (2x2 grid)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+    },
+  },
+  {
     version: "0.6.1",
     date: "2026-05-28",
     changes: {
