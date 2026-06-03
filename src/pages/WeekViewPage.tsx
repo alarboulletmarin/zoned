@@ -187,7 +187,7 @@ export function WeekViewPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6">
           {/* Calendar editor */}
-          <div className="min-w-0 space-y-4">
+          <div className="min-w-0 space-y-4 lg:flex lg:flex-col">
             <div className="flex items-center justify-between gap-2">
               <EditorialTitle as="h2" size="md" className="sr-only">
                 {displayName}
@@ -205,8 +205,8 @@ export function WeekViewPage() {
               </Button>
             </div>
 
-            <div className="flex gap-4">
-              <div className="flex-1 min-w-0">
+            <div className="flex gap-4 lg:flex-1 lg:min-h-0">
+              <div className="flex-1 min-w-0 lg:flex lg:flex-col">
                 <PlanWeeklyView
                   plan={plan}
                   workoutNames={workoutNames}
