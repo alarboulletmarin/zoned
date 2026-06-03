@@ -11,8 +11,8 @@ import { createFreePlan } from "@/lib/createFreePlan";
 import { getAnyWorkoutDuration, getDrawDiscipline } from "@/lib/workoutFilters";
 import { getDominantZone, isStrengthWorkout } from "@/types";
 import type { Discipline, SessionType, AnyWorkoutTemplate } from "@/types";
-import type { TrainingPlan, PlanSession } from "@/types/plan";
-import type { GeneratedWeek, SlotKind } from "@/types/week";
+import type { TrainingPlan, PlanSession, PlanWeek } from "@/types/plan";
+import type { DayIndex, GeneratedWeek, SlotKind, WeekSlot } from "@/types/week";
 
 function sessionTypeFor(kind: SlotKind, w: AnyWorkoutTemplate): SessionType {
   if (isStrengthWorkout(w)) return "strength";
@@ -26,9 +26,71 @@ function sessionTypeFor(kind: SlotKind, w: AnyWorkoutTemplate): SessionType {
   return "endurance";
 }
 
+/** Map a session type back to a coarse slot kind (for stats / rhythm colour). */
+function kindForSessionType(type: SessionType): SlotKind {
+  if (type === "long_run") return "long";
+  if (
+    type === "tempo" ||
+    type === "threshold" ||
+    type === "vo2max" ||
+    type === "speed" ||
+    type === "hills" ||
+    type === "fartlek" ||
+    type === "race_specific"
+  ) {
+    return "quality";
+  }
+  return "easy";
+}
+
 function disciplineFor(w: AnyWorkoutTemplate): Discipline | undefined {
   const d = getDrawDiscipline(w);
   return d === "cycling" || d === "swimming" ? d : d === "running" ? "running" : undefined;
+}
+
+/** Generated 80/20 week → plan sessions for a single week. */
+export function generatedWeekToSessions(week: GeneratedWeek): PlanSession[] {
+  return week.slots
+    .filter((s) => s.workout)
+    .map((s) => {
+      const w = s.workout!;
+      return {
+        dayOfWeek: s.day,
+        workoutId: w.id,
+        discipline: disciplineFor(w),
+        sessionType: sessionTypeFor(s.kind, w),
+        isKeySession: s.kind !== "easy",
+        estimatedDurationMin: getAnyWorkoutDuration(w),
+      } satisfies PlanSession;
+    })
+    .sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+}
+
+/**
+ * Resolve a plan week's sessions back to WeekSlot[] (Mon→Sun) using a workout
+ * lookup, so the existing computeWeekStats / gauge / rhythm work directly on a
+ * stored week — whether it was generated or built by hand.
+ */
+export function planWeekToSlots(
+  planWeek: PlanWeek | undefined,
+  byId: Map<string, AnyWorkoutTemplate>,
+): WeekSlot[] {
+  const byDay = new Map<number, PlanSession>();
+  for (const s of planWeek?.sessions ?? []) {
+    if (!byDay.has(s.dayOfWeek)) byDay.set(s.dayOfWeek, s);
+  }
+  const slots: WeekSlot[] = [];
+  for (let day = 0 as DayIndex; day <= 6; day = (day + 1) as DayIndex) {
+    const session = byDay.get(day);
+    const workout = session ? byId.get(session.workoutId) ?? null : null;
+    slots.push({
+      day,
+      kind: session ? kindForSessionType(session.sessionType) : "rest",
+      workout,
+      locked: false,
+    });
+  }
+  return slots;
 }
 
 /** An empty single-week plan (the "from scratch" path). */
@@ -48,22 +110,6 @@ export function createWeekPlanFromGenerated(
   });
   plan.config.isSingleWeek = true;
   plan.config.longRunDay = week.settings.longRunDay;
-
-  const sessions: PlanSession[] = week.slots
-    .filter((s) => s.workout)
-    .map((s) => {
-      const w = s.workout!;
-      return {
-        dayOfWeek: s.day,
-        workoutId: w.id,
-        discipline: disciplineFor(w),
-        sessionType: sessionTypeFor(s.kind, w),
-        isKeySession: s.kind !== "easy",
-        estimatedDurationMin: getAnyWorkoutDuration(w),
-      };
-    })
-    .sort((a, b) => a.dayOfWeek - b.dayOfWeek);
-
-  plan.weeks[0].sessions = sessions;
+  plan.weeks[0].sessions = generatedWeekToSessions(week);
   return plan;
 }

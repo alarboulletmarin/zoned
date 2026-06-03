@@ -107,12 +107,6 @@ function pickNearDuration(
   return sorted[Math.floor(Math.random() * k)];
 }
 
-/** Pick a uniformly random element. */
-function sample<T>(arr: readonly T[]): T | null {
-  if (arr.length === 0) return null;
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
 /** Highest zone reached — strength has none, treated as 0. */
 function topZone(w: AnyWorkoutTemplate): number {
   if (isStrengthWorkout(w)) return 0;
@@ -323,33 +317,4 @@ export function generateWeek(
   }
 
   return { slots: best ?? buildVariant(settings, pools, lockedByDay), settings };
-}
-
-/** Re-roll a single day, keeping every other slot exactly as-is. */
-export function rerollSlot(
-  week: GeneratedWeek,
-  day: DayIndex,
-  catalog: AnyWorkoutTemplate[],
-): GeneratedWeek {
-  const pools = buildPools(catalog, week.settings);
-  const target = week.slots.find((s) => s.day === day);
-  if (!target || target.kind === "rest") return week;
-
-  const usedElsewhere = new Set(
-    week.slots
-      .filter((s) => s.day !== day && s.workout)
-      .map((s) => s.workout!.id),
-  );
-  const candidates = poolFor(target.kind, pools).filter(
-    (w) => !usedElsewhere.has(w.id) && w.id !== target.workout?.id,
-  );
-  const picked =
-    sample(candidates) ??
-    sample(poolFor(target.kind, pools)) ??
-    target.workout;
-
-  const slots = week.slots.map((s) =>
-    s.day === day ? { ...s, workout: picked } : s,
-  );
-  return { ...week, slots };
 }

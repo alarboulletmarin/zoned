@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Plus, Trash2, CalendarRange } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -12,12 +12,21 @@ import {
   StaggerItem,
 } from "@/components/editorial";
 import { usePlans } from "@/hooks/usePlans";
+import { savePlan } from "@/lib/planStorage";
+import { createEmptyWeekPlan } from "@/lib/weekToPlan";
 import { usePickLang } from "@/lib/i18n-utils";
 
 export function WeeksListPage() {
   const { t } = useTranslation(["library", "plan"]);
   const pick = usePickLang();
+  const navigate = useNavigate();
   const { plans, remove } = usePlans();
+
+  function handleCreate() {
+    const plan = createEmptyWeekPlan(t("weekly.generate.defaultName"));
+    savePlan(plan);
+    navigate(`/weeks/${plan.id}`);
+  }
 
   const weeks = useMemo(
     () =>
@@ -44,11 +53,9 @@ export function WeeksListPage() {
               {t("weekly.list.subtitle")}
             </FadeUp>
           </div>
-          <Button asChild>
-            <Link to="/weeks/new">
-              <Plus className="size-4" />
-              {t("weekly.list.create")}
-            </Link>
+          <Button onClick={handleCreate}>
+            <Plus className="size-4" />
+            {t("weekly.list.create")}
           </Button>
         </div>
 
@@ -57,11 +64,9 @@ export function WeeksListPage() {
             <CardContent className="py-12 text-center space-y-4">
               <CalendarRange className="size-10 mx-auto text-muted-foreground/60" />
               <p className="text-muted-foreground">{t("weekly.list.empty")}</p>
-              <Button asChild>
-                <Link to="/weeks/new">
-                  <Plus className="size-4" />
-                  {t("weekly.list.create")}
-                </Link>
+              <Button onClick={handleCreate}>
+                <Plus className="size-4" />
+                {t("weekly.list.create")}
               </Button>
             </CardContent>
           </Card>
@@ -72,7 +77,7 @@ export function WeeksListPage() {
               return (
                 <StaggerItem key={week.id}>
                   <div className="group relative h-full">
-                    <Link to={`/plan/${week.id}`} className="block h-full">
+                    <Link to={`/weeks/${week.id}`} className="block h-full">
                       <Card
                         interactive
                         className="h-full bg-gradient-to-br from-zone-2/10 dark:from-zone-2/20 to-transparent border-border/50"
