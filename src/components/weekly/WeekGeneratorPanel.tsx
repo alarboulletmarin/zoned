@@ -77,8 +77,7 @@ export function WeekGeneratorPanel({
   return (
     <div
       className={cn(
-        "space-y-4",
-        !bare && "rounded-xl border bg-card p-4 md:space-y-5",
+        bare ? "space-y-3" : "rounded-xl border bg-card p-4 space-y-5",
       )}
     >
       {!bare && (
@@ -87,22 +86,15 @@ export function WeekGeneratorPanel({
         </span>
       )}
 
-      {/* Presets — wrap on desktop (room to spare); compact single scrollable
-          row only inside the mobile "Régler" sheet (bare). */}
-      <div
-        className={cn(
-          "flex gap-2",
-          bare
-            ? "overflow-x-auto pb-0.5 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-            : "flex-wrap",
-        )}
-      >
+      {/* Presets — always wrap (chips flow onto the next line), never a
+          side-scroll, on both mobile and desktop. */}
+      <div className="flex flex-wrap gap-2">
         {WEEK_PRESETS.map((preset) => (
           <button
             key={preset.id}
             type="button"
             onClick={() => onSettingsChange(preset.settings)}
-            className="shrink-0 rounded-full border border-border px-3 py-1 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+            className="rounded-full border border-border px-3 py-1 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
           >
             {t(`weekly.presets.options.${preset.id}`)}
           </button>
@@ -200,11 +192,13 @@ export function WeekGeneratorPanel({
           )}
           {busy ? t("weekly.generate.busy") : t("weekly.generate.action")}
         </Button>
-        <p className="text-xs text-muted-foreground">
-          {weekIsPopulated
-            ? t("weekly.generate.hintRegen")
-            : t("weekly.generate.hint")}
-        </p>
+        {!bare && (
+          <p className="text-xs text-muted-foreground">
+            {weekIsPopulated
+              ? t("weekly.generate.hintRegen")
+              : t("weekly.generate.hint")}
+          </p>
+        )}
       </div>
     </div>
   );
