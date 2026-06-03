@@ -13,6 +13,7 @@ import { getDominantZone, isStrengthWorkout } from "@/types";
 import type { Discipline, SessionType, AnyWorkoutTemplate } from "@/types";
 import type { TrainingPlan, PlanSession, PlanWeek } from "@/types/plan";
 import type { DayIndex, GeneratedWeek, SlotKind, WeekSlot } from "@/types/week";
+import type { PrebuiltWeek } from "@/data/prebuilt-weeks/types";
 
 function sessionTypeFor(kind: SlotKind, w: AnyWorkoutTemplate): SessionType {
   if (isStrengthWorkout(w)) return "strength";
@@ -111,5 +112,29 @@ export function createWeekPlanFromGenerated(
   plan.config.isSingleWeek = true;
   plan.config.longRunDay = week.settings.longRunDay;
   plan.weeks[0].sessions = generatedWeekToSessions(week);
+  return plan;
+}
+
+/**
+ * A single-week plan pre-filled from a curated {@link PrebuiltWeek}. Reuses the
+ * empty-week scaffolding (id, config flag, single week) and fills the sessions
+ * straight from the authored data — the `why` lines are editorial only and not
+ * carried into the editable plan.
+ */
+export function prebuiltWeekToPlan(week: PrebuiltWeek, name?: string): TrainingPlan {
+  const plan = createEmptyWeekPlan(name ?? week.name);
+  plan.config.longRunDay = week.settings.longRunDay;
+  plan.config.daysPerWeek = week.settings.sessions;
+  plan.weeks[0].sessions = week.sessions
+    .map(
+      (s): PlanSession => ({
+        dayOfWeek: s.dayOfWeek,
+        workoutId: s.workoutId,
+        sessionType: s.sessionType,
+        isKeySession: s.isKeySession,
+        estimatedDurationMin: s.estimatedDurationMin,
+      }),
+    )
+    .sort((a, b) => a.dayOfWeek - b.dayOfWeek);
   return plan;
 }

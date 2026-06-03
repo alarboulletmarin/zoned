@@ -170,11 +170,23 @@
       "empty": "No weeks yet. Generate one or build it from scratch.",
       "sessionsCount_one": "{{count}} session",
       "sessionsCount_other": "{{count}} sessions",
+      "view": "View",
       "delete": "Delete"
     },
     "new": {
       "title": "Create a week",
-      "subtitle": "Let the generator compose an 80/20 week, or start from an empty one.",
+      "subtitle": "Choose how to compose your training week.",
+      "back": "Back to weeks",
+      "modes": {
+        "create": {
+          "title": "Create a week",
+          "desc": "Auto-generate a balanced 80/20 week, or build it session by session."
+        },
+        "prebuilt": {
+          "title": "Pre-built week",
+          "desc": "Pick a sourced template week and start right away."
+        }
+      },
       "generate": "Generate (80/20)",
       "generateDesc": "The generator composes a polarised week from your settings.",
       "scratch": "From scratch",
@@ -182,10 +194,35 @@
       "namePlaceholder": "Week name",
       "scratchCreate": "Create empty week"
     },
+    "prebuilt": {
+      "title": "Pre-built weeks",
+      "subtitle": "Sourced, ready-to-use template weeks. Pick one, understand why it works, then make it yours.",
+      "back": "Back to creation",
+      "backToList": "All pre-built weeks",
+      "available": "{{count}} weeks available",
+      "notFound": "Week not found.",
+      "sessions": "{{count}} sessions",
+      "volume": "{{hours}} h",
+      "whyTitle": "Why this week works",
+      "whySessionTitle": "Why these sessions",
+      "useThisWeek": "Use this week",
+      "weekAdded": "Week added to your weeks",
+      "preview": "Week preview",
+      "category": {
+        "base": "Base",
+        "build": "Build",
+        "peak": "Peak",
+        "recovery": "Recovery",
+        "sharpening": "Sharpening"
+      }
+    },
     "generate": {
       "title": "Generate my week",
       "subtitle": "Tune the settings, generate, then create the week to edit it.",
-      "action": "Regenerate",
+      "action": "Generate my week",
+      "busy": "Generating…",
+      "hint": "Automatically composes 3–6 balanced 80/20 sessions from your settings.",
+      "hintRegen": "Recomposes a fresh week from your current settings.",
       "create": "Create week",
       "namePlaceholder": "Week name",
       "defaultName": "My week"
@@ -209,6 +246,7 @@
     },
     "actions": {
       "regenerate": "Regenerate",
+      "adjust": "Adjust",
       "unlockAll": "Unlock all",
       "export": "Export week",
       "exportIcs": "Calendar (.ics)",

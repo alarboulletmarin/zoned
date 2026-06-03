@@ -20,6 +20,9 @@ const LibraryPage = lazy(() => import("@/pages/LibraryPage").then(m => ({ defaul
 const DrawSessionPage = lazy(() => import("@/pages/DrawSessionPage").then(m => ({ default: m.DrawSessionPage })));
 const WeeksListPage = lazy(() => import("@/pages/WeeksListPage").then(m => ({ default: m.WeeksListPage })));
 const WeekViewPage = lazy(() => import("@/pages/WeekViewPage").then(m => ({ default: m.WeekViewPage })));
+const WeekNewPage = lazy(() => import("@/pages/WeekNewPage").then(m => ({ default: m.WeekNewPage })));
+const PrebuiltWeeksPage = lazy(() => import("@/pages/PrebuiltWeeksPage").then(m => ({ default: m.PrebuiltWeeksPage })));
+const PrebuiltWeekDetailPage = lazy(() => import("@/pages/PrebuiltWeekDetailPage").then(m => ({ default: m.PrebuiltWeekDetailPage })));
 const WorkoutDetailPage = lazy(() => import("@/pages/WorkoutDetailPage").then(m => ({ default: m.WorkoutDetailPage })));
 const MyZonesPage = lazy(() => import("@/pages/MyZonesPage").then(m => ({ default: m.MyZonesPage })));
 const FavoritesPage = lazy(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
@@ -253,6 +256,9 @@ function App() {
                           <Route path="/library" element={<LibraryPage />} />
                           <Route path="/library/draw" element={<DrawSessionPage />} />
                           <Route path="/weeks" element={<WeeksListPage />} />
+                          <Route path="/weeks/new" element={<WeekNewPage />} />
+                          <Route path="/weeks/new/prebuilt" element={<PrebuiltWeeksPage />} />
+                          <Route path="/weeks/prebuilt/:slug" element={<PrebuiltWeekDetailPage />} />
                           <Route path="/weeks/:id" element={<WeekViewPage />} />
                           <Route path="/library/weekly" element={<Navigate to="/weeks" replace />} />
                           <Route path="/workout/builder" element={<WorkoutBuilderPage />} />

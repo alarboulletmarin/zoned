@@ -170,11 +170,23 @@
       "empty": "Aucune semaine pour l'instant. Génère-en une ou compose-la de zéro.",
       "sessionsCount_one": "{{count}} séance",
       "sessionsCount_other": "{{count}} séances",
+      "view": "Voir",
       "delete": "Supprimer"
     },
     "new": {
       "title": "Créer une semaine",
-      "subtitle": "Laisse le générateur composer un 80/20, ou pars d'une semaine vide.",
+      "subtitle": "Choisis comment composer ta semaine d'entraînement.",
+      "back": "Retour aux semaines",
+      "modes": {
+        "create": {
+          "title": "Créer une semaine",
+          "desc": "Génère une semaine 80/20 automatiquement, ou compose-la séance par séance."
+        },
+        "prebuilt": {
+          "title": "Semaine pré-construite",
+          "desc": "Choisis une semaine type sourcée et commence immédiatement."
+        }
+      },
       "generate": "Générer (80/20)",
       "generateDesc": "Le générateur compose une semaine polarisée à partir de tes réglages.",
       "scratch": "Partir de zéro",
@@ -182,10 +194,35 @@
       "namePlaceholder": "Nom de la semaine",
       "scratchCreate": "Créer la semaine vide"
     },
+    "prebuilt": {
+      "title": "Semaines pré-construites",
+      "subtitle": "Des semaines types sourcées, prêtes à l'emploi. Choisis-en une, comprends pourquoi elle marche, puis personnalise-la.",
+      "back": "Retour à la création",
+      "backToList": "Toutes les semaines pré-construites",
+      "available": "{{count}} semaines disponibles",
+      "notFound": "Semaine introuvable.",
+      "sessions": "{{count}} séances",
+      "volume": "{{hours}} h",
+      "whyTitle": "Pourquoi cette semaine",
+      "whySessionTitle": "Pourquoi ces séances",
+      "useThisWeek": "Utiliser cette semaine",
+      "weekAdded": "Semaine ajoutée à tes semaines",
+      "preview": "Aperçu de la semaine",
+      "category": {
+        "base": "Base",
+        "build": "Développement",
+        "peak": "Pic de forme",
+        "recovery": "Récupération",
+        "sharpening": "Affûtage"
+      }
+    },
     "generate": {
       "title": "Générer ma semaine",
       "subtitle": "Règle les paramètres, génère, puis crée la semaine pour l'éditer.",
-      "action": "Régénérer",
+      "action": "Générer ma semaine",
+      "busy": "Génération…",
+      "hint": "Compose automatiquement 3 à 6 séances équilibrées 80/20 selon vos réglages.",
+      "hintRegen": "Recompose une nouvelle semaine à partir de vos réglages actuels.",
       "create": "Créer la semaine",
       "namePlaceholder": "Nom de la semaine",
       "defaultName": "Ma semaine"
@@ -209,6 +246,7 @@
     },
     "actions": {
       "regenerate": "Régénérer",
+      "adjust": "Régler",
       "unlockAll": "Tout déverrouiller",
       "export": "Exporter la semaine",
       "exportIcs": "Calendrier (.ics)",

@@ -27,7 +27,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
-import { WorkoutCardChrome } from "@/components/domain";
+import { WorkoutCardChrome, ScanCard } from "@/components/domain";
 import { FavoriteButton } from "@/components/domain/FavoriteButton";
 import { formatDurationMinutes } from "@/components/visualization";
 import { SEOHead } from "@/components/seo";
@@ -62,6 +62,7 @@ import {
   DIFFICULTY_META,
 } from "@/types";
 import { usePickLang } from "@/lib/i18n-utils";
+import { buildScanSchedule } from "@/lib/scanSchedule";
 import { cn } from "@/lib/utils";
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -237,16 +238,8 @@ export function DrawSessionPage() {
       setIsDrawing(true);
       setResult(null);
 
-      // Build a schedule whose gaps grow geometrically → ease-out feel.
-      const total = 1500;
-      const times: number[] = [];
-      let elapsed = 0;
-      let gap = 45;
-      while (elapsed < total) {
-        times.push(elapsed);
-        elapsed += gap;
-        gap *= 1.14;
-      }
+      // Schedule whose gaps grow geometrically → ease-out feel (shared helper).
+      const times = buildScanSchedule();
 
       times.forEach((at, i) => {
         const isLast = i === times.length - 1;
@@ -736,43 +729,6 @@ function EmptyState({
         <RotateCcw className="size-4 mr-1" />
         {t("draw.empty.reset")}
       </Button>
-    </div>
-  );
-}
-
-/** Flashing card shown while the catalogue is being scanned. */
-function ScanCard({
-  workout,
-  pick,
-}: {
-  workout: AnyWorkoutTemplate;
-  pick: ReturnType<typeof usePickLang>;
-}) {
-  const zone = isRunningWorkout(workout) ? getDominantZone(workout) : 2;
-  return (
-    <div
-      className={cn(
-        "relative overflow-hidden rounded-xl border border-border p-5",
-        `zone-${zone} bg-gradient-to-br from-zone-${zone}/10 to-transparent`,
-      )}
-      aria-hidden="true"
-    >
-      {/* Accent scan line sweeping across the card */}
-      <div
-        className="pointer-events-none absolute inset-y-0 left-0 w-1/3"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, color-mix(in srgb, var(--primary) 35%, transparent), transparent)",
-          animation: "draw-scan 0.6s linear infinite",
-        }}
-      />
-      <style>{`@keyframes draw-scan { 0% { transform: translateX(-100%);} 100% { transform: translateX(400%);} }`}</style>
-      <p className="text-lg font-semibold opacity-80 line-clamp-1">
-        {pick(workout, "name")}
-      </p>
-      <p className="mt-2 text-sm text-muted-foreground line-clamp-2 opacity-70">
-        {pick(workout, "description")}
-      </p>
     </div>
   );
 }

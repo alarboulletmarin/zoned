@@ -1,3 +1,4 @@
 export { PolarizationGauge } from "./PolarizationGauge";
 export { WeekRhythmChart } from "./WeekRhythmChart";
-export { WeekPanel } from "./WeekPanel";
+export { WeekSummaryBar } from "./WeekSummaryBar";
+export { WeekGeneratorPanel } from "./WeekGeneratorPanel";
