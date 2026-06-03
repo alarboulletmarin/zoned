@@ -8,6 +8,7 @@ import { SEOHead } from "@/components/seo";
 import { EditorialTitle } from "@/components/editorial";
 import { PlanWeeklyView } from "@/components/domain/PlanWeeklyView";
 import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
+import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { WeekPanel } from "@/components/weekly";
 import { usePlan } from "@/hooks/usePlans";
 import { useWorkouts } from "@/hooks";
@@ -192,17 +193,20 @@ export function WeekViewPage() {
               <EditorialTitle as="h2" size="md" className="sr-only">
                 {displayName}
               </EditorialTitle>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  setAddTarget(null);
-                  setShowPanel((v) => !v);
-                }}
-              >
-                <Plus className="size-4" />
-                {t("plan:view.addWorkout", { defaultValue: "Add workout" })}
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setAddTarget(null);
+                    setShowPanel((v) => !v);
+                  }}
+                >
+                  <Plus className="size-4" />
+                  {t("plan:view.addWorkout", { defaultValue: "Add workout" })}
+                </Button>
+                <PlanExportMenu plan={plan} workoutNames={workoutNames} size="sm" />
+              </div>
             </div>
 
             <div className="flex gap-4 lg:flex-1 lg:min-h-0">
