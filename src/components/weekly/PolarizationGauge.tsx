@@ -1,10 +1,13 @@
 import { useTranslation } from "react-i18next";
-import { Check } from "@/components/icons";
+import { Check, AlertTriangle } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import type { PolarisedSplit } from "@/lib/weekStats";
 
 /** Target easy share — the 80 in 80/20. */
 const TARGET_LOW = 0.8;
+/** "Balanced" band on the hard share (Tempo + Intense): roughly 20 ± 8. */
+const HARD_MIN = 0.12;
+const HARD_MAX = 0.3;
 
 interface PolarizationGaugeProps {
   polarised: PolarisedSplit;
@@ -25,7 +28,10 @@ export function PolarizationGauge({
 
   if (zonedMinutes <= 0) return null;
 
-  const balanced = lowShare >= TARGET_LOW;
+  const hardShare = midShare + highShare;
+  const status =
+    hardShare < HARD_MIN ? "tooEasy" : hardShare > HARD_MAX ? "tooHard" : "balanced";
+  const balanced = status === "balanced";
   const pct = (n: number) => Math.round(n * 100);
 
   const segments = [
@@ -43,11 +49,16 @@ export function PolarizationGauge({
             "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium",
             balanced
               ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
-              : "bg-muted text-muted-foreground",
+              : "bg-amber-500/15 text-amber-600 dark:text-amber-400",
           )}
+          title={t(`weekly.gauge.${status}`)}
         >
-          {balanced && <Check className="size-3.5" />}
-          {pct(lowShare)} / {pct(midShare + highShare)}
+          {balanced ? (
+            <Check className="size-3.5" />
+          ) : (
+            <AlertTriangle className="size-3.5" />
+          )}
+          {pct(lowShare)} / {pct(hardShare)}
         </span>
       </div>
 
@@ -78,6 +89,18 @@ export function PolarizationGauge({
           </span>
         </div>
       </div>
+
+      {/* Verdict caption */}
+      {!balanced && (
+        <p
+          className={cn(
+            "text-xs",
+            "text-amber-600 dark:text-amber-400",
+          )}
+        >
+          {t(`weekly.gauge.${status}Hint`)}
+        </p>
+      )}
 
       {/* Legend */}
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">

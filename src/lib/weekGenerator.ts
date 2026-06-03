@@ -64,15 +64,19 @@ function buildPlacement(settings: WeekSettings): SlotKind[] {
   let active = placement.filter((k) => k !== "rest").length;
   const target = settings.sessions;
 
-  // 3. Ensure a quality day, away from the long day, if there's room.
-  if (!placement.includes("quality") && active < target) {
-    for (const d of FILL_ORDER) {
-      if (placement[d] !== "rest" || pinned[d]) continue;
-      if (Math.abs(d - longDay) <= 1) continue; // keep hard days off the long
-      placement[d] = "quality";
-      active++;
-      break;
+  // 3. Quality days — one for short weeks, two from five sessions up, kept off
+  //    the long day and never back-to-back, so the week lands near 80/20.
+  const qualityTarget = target >= 5 ? 2 : 1;
+  for (const d of FILL_ORDER) {
+    if (placement.filter((k) => k === "quality").length >= qualityTarget) break;
+    if (active >= target) break;
+    if (placement[d] !== "rest" || pinned[d]) continue;
+    if (Math.abs(d - longDay) <= 1) continue; // keep hard days off the long
+    if (placement[(d + 6) % 7] === "quality" || placement[(d + 1) % 7] === "quality") {
+      continue; // no consecutive hard days
     }
+    placement[d] = "quality";
+    active++;
   }
 
   // 4. Fill the remaining active days with easy sessions.

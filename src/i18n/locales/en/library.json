@@ -238,7 +238,12 @@
       "easy": "Easy",
       "tempo": "Tempo",
       "intense": "Intense",
-      "target": "80 % target"
+      "target": "80 % target",
+      "balanced": "80/20 balance",
+      "tooEasy": "Not enough intensity",
+      "tooHard": "Too much intensity",
+      "tooEasyHint": "Very little quality this week — add a tempo/threshold session to reach ~20 % intensity.",
+      "tooHardHint": "A lot of intensity — add easy volume or ease one hard session."
     },
     "rhythm": {
       "title": "Week rhythm"

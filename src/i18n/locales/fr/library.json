@@ -238,7 +238,12 @@
       "easy": "Facile",
       "tempo": "Tempo",
       "intense": "Intense",
-      "target": "Cible 80 %"
+      "target": "Cible 80 %",
+      "balanced": "Équilibre 80/20",
+      "tooEasy": "Pas assez d'intensité",
+      "tooHard": "Trop d'intensité",
+      "tooEasyHint": "Très peu de qualité cette semaine — ajoute une séance tempo/seuil pour viser ~20 % d'intensité.",
+      "tooHardHint": "Beaucoup d'intensité — ajoute du volume facile ou allège une séance dure."
     },
     "rhythm": {
       "title": "Rythme de la semaine"
