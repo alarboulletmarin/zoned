@@ -249,6 +249,25 @@ export function estimateTSS(workout: WorkoutTemplate): number {
   return Math.round(weightedHours * 100);
 }
 
+/** Time-in-zone (minutes) across a workout's full session — warm-up, main set
+ *  and cool-down. Reuses the same block/step aggregation as estimateTSS so the
+ *  week planner can sum real time-in-zone to compute a polarised distribution. */
+export function getWorkoutZoneMinutes(
+  workout: WorkoutTemplate,
+): Record<ZoneNumber, number> {
+  const minutes: Record<ZoneNumber, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+  const buffer: Array<{ zone: ZoneNumber; minutes: number }> = [];
+  if (workout.warmupTemplate?.length) collectFromBlocks(workout.warmupTemplate, buffer);
+  if (workout.mainSetStructure?.length) {
+    collectFromSteps(workout.mainSetStructure, buffer);
+  } else {
+    collectFromBlocks(workout.mainSetTemplate, buffer);
+  }
+  if (workout.cooldownTemplate?.length) collectFromBlocks(workout.cooldownTemplate, buffer);
+  for (const seg of buffer) minutes[seg.zone] += seg.minutes;
+  return minutes;
+}
+
 /** Distinct zones touched by a workout's main set, sorted ascending. */
 export function getWorkoutZones(workout: WorkoutTemplate): ZoneNumber[] {
   const set = new Set<ZoneNumber>();

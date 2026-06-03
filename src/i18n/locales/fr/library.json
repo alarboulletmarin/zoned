@@ -147,6 +147,193 @@
       "title": "Aucune séance ne correspond",
       "description": "Élargis tes filtres ou réinitialise pour relancer un tirage.",
       "reset": "Réinitialiser les filtres"
+    },
+    "toWeek": "Composer ma semaine"
+  },
+  "weekly": {
+    "title": "Ma semaine",
+    "subtitle": "Compose une semaine polarisée 80/20 : 3 à 6 séances complémentaires, équilibrées entre facile et qualité.",
+    "presets": {
+      "title": "Semaines type",
+      "options": {
+        "recovery": "Récup",
+        "base": "Base",
+        "build": "Développement",
+        "volume": "Volume",
+        "sharpening": "Affûtage"
+      }
+    },
+    "list": {
+      "title": "Mes semaines",
+      "subtitle": "Tes semaines d'entraînement, générées ou composées à la main.",
+      "create": "Créer une semaine",
+      "empty": "Aucune semaine pour l'instant. Génère-en une ou compose-la de zéro.",
+      "sessionsCount_one": "{{count}} séance",
+      "sessionsCount_other": "{{count}} séances",
+      "view": "Voir",
+      "delete": "Supprimer"
+    },
+    "new": {
+      "title": "Créer une semaine",
+      "subtitle": "Choisis comment composer ta semaine d'entraînement.",
+      "back": "Retour aux semaines",
+      "modes": {
+        "create": {
+          "title": "Créer une semaine",
+          "desc": "Génère une semaine 80/20 automatiquement, ou compose-la séance par séance."
+        },
+        "prebuilt": {
+          "title": "Semaine pré-construite",
+          "desc": "Choisis une semaine type sourcée et commence immédiatement."
+        }
+      },
+      "generate": "Générer (80/20)",
+      "generateDesc": "Le générateur compose une semaine polarisée à partir de tes réglages.",
+      "scratch": "Partir de zéro",
+      "scratchDesc": "Une semaine vide que tu remplis à la main, séance par séance.",
+      "namePlaceholder": "Nom de la semaine",
+      "scratchCreate": "Créer la semaine vide"
+    },
+    "prebuilt": {
+      "title": "Semaines pré-construites",
+      "subtitle": "Des semaines types sourcées, prêtes à l'emploi. Choisis-en une, comprends pourquoi elle marche, puis personnalise-la.",
+      "back": "Retour à la création",
+      "backToList": "Toutes les semaines pré-construites",
+      "available": "{{count}} semaines disponibles",
+      "notFound": "Semaine introuvable.",
+      "sessions": "{{count}} séances",
+      "volume": "{{hours}} h",
+      "whyTitle": "Pourquoi cette semaine",
+      "whySessionTitle": "Pourquoi ces séances",
+      "useThisWeek": "Utiliser cette semaine",
+      "weekAdded": "Semaine ajoutée à tes semaines",
+      "preview": "Aperçu de la semaine",
+      "category": {
+        "base": "Base",
+        "build": "Développement",
+        "peak": "Pic de forme",
+        "recovery": "Récupération",
+        "sharpening": "Affûtage"
+      }
+    },
+    "generate": {
+      "title": "Générer ma semaine",
+      "subtitle": "Règle les paramètres, génère, puis crée la semaine pour l'éditer.",
+      "action": "Générer ma semaine",
+      "busy": "Génération…",
+      "hint": "Compose automatiquement 3 à 6 séances équilibrées 80/20 selon vos réglages.",
+      "hintRegen": "Recompose une nouvelle semaine à partir de vos réglages actuels.",
+      "create": "Créer la semaine",
+      "namePlaceholder": "Nom de la semaine",
+      "defaultName": "Ma semaine"
+    },
+    "settings": {
+      "title": "Réglages",
+      "sessions": "Séances",
+      "volume": "Volume cible",
+      "quality": "Séance qualité",
+      "qualityOptions": {
+        "random": "Au hasard",
+        "tempo": "Tempo",
+        "threshold": "Seuil",
+        "vo2vma": "VO₂ · VMA"
+      },
+      "disciplines": "Disciplines",
+      "levels": "Niveau",
+      "longRunDay": "Jour de sortie longue",
+      "show": "Afficher les réglages",
+      "hide": "Masquer les réglages"
+    },
+    "actions": {
+      "regenerate": "Régénérer",
+      "adjust": "Régler",
+      "unlockAll": "Tout déverrouiller",
+      "export": "Exporter la semaine",
+      "exportIcs": "Calendrier (.ics)",
+      "exportPdf": "Document (.pdf)",
+      "exportJson": "Données (.json)",
+      "save": "Enregistrer la semaine"
+    },
+    "table": {
+      "day": "Jour",
+      "type": "Type",
+      "session": "Séance",
+      "duration": "Durée",
+      "zone": "Zone"
+    },
+    "summary": {
+      "title": "Résumé de la semaine",
+      "sessions": "Séances",
+      "volume": "Volume",
+      "load": "Charge",
+      "hard": "Séances dures",
+      "polarisation": "Facile {{low}} % · Tempo {{mid}} % · Intense {{high}} %",
+      "balanced": "Équilibre 80/20",
+      "overBudget": "Au-dessus du budget de {{target}} h"
+    },
+    "gauge": {
+      "title": "Polarisation",
+      "easy": "Facile",
+      "tempo": "Tempo",
+      "intense": "Intense",
+      "target": "Cible 80 %",
+      "balanced": "Équilibre 80/20",
+      "tooEasy": "Pas assez d'intensité",
+      "tooHard": "Trop d'intensité",
+      "tooEasyHint": "Très peu de qualité cette semaine — ajoute une séance tempo/seuil pour viser ~20 % d'intensité.",
+      "tooHardHint": "Beaucoup d'intensité — ajoute du volume facile ou allège une séance dure."
+    },
+    "rhythm": {
+      "title": "Rythme de la semaine"
+    },
+    "daysShort": {
+      "0": "Lun",
+      "1": "Mar",
+      "2": "Mer",
+      "3": "Jeu",
+      "4": "Ven",
+      "5": "Sam",
+      "6": "Dim"
+    },
+    "kinds": {
+      "easy": "Facile",
+      "quality": "Qualité",
+      "long": "Sortie longue",
+      "rest": "Repos"
+    },
+    "slot": {
+      "lock": "Verrouiller",
+      "unlock": "Déverrouiller",
+      "reroll": "Re-tirer",
+      "viewDetail": "Voir le détail",
+      "rest": "Jour de repos"
+    },
+    "days": {
+      "0": "Lundi",
+      "1": "Mardi",
+      "2": "Mercredi",
+      "3": "Jeudi",
+      "4": "Vendredi",
+      "5": "Samedi",
+      "6": "Dimanche"
+    },
+    "empty": {
+      "title": "Aucune séance ne correspond",
+      "description": "Élargis tes disciplines ou tes niveaux, puis régénère la semaine."
+    },
+    "saved": {
+      "title": "Semaines enregistrées",
+      "empty": "Aucune semaine enregistrée pour l'instant.",
+      "restore": "Charger",
+      "duplicate": "Dupliquer",
+      "delete": "Supprimer",
+      "copySuffix": "(copie)"
+    },
+    "toast": {
+      "saved": "Semaine enregistrée",
+      "exported": "Export généré",
+      "generated": "Semaine générée",
+      "exportError": "L'export a échoué"
     }
   }
 }

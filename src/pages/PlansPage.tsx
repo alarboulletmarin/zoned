@@ -246,14 +246,17 @@ export function PlansPage() {
   }, [t, reload, navigate]);
   const deleteTargetPlan = plans.find((p) => p.id === deleteTarget);
 
-  // Sort plans by creation date (newest first)
+  // Sort plans by creation date (newest first). Standalone weeks live under
+  // their own /weeks section, so they're excluded here.
   const sortedPlans = useMemo(
     () =>
-      [...plans].sort(
-        (a, b) =>
-          new Date(b.config.createdAt).getTime() -
-          new Date(a.config.createdAt).getTime()
-      ),
+      [...plans]
+        .filter((p) => !p.config.isSingleWeek)
+        .sort(
+          (a, b) =>
+            new Date(b.config.createdAt).getTime() -
+            new Date(a.config.createdAt).getTime()
+        ),
     [plans]
   );
 

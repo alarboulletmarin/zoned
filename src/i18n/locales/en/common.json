@@ -293,6 +293,8 @@
     "libraryAllDesc": "Running, cycling, swimming, strength",
     "drawSession": "Draw a session",
     "drawSessionDesc": "Let chance pick your session",
+    "weeks": "My weeks",
+    "weeksDesc": "Compose an 80/20 week or from scratch",
     "collections": "Collections",
     "collectionsDesc": "Sessions grouped by theme",
     "builder": "Create a session",
@@ -568,6 +570,10 @@
     "draw": {
       "title": "Let chance decide",
       "description": "Filter by discipline, zone, duration and level, then draw a session from the catalogue."
+    },
+    "weekly": {
+      "title": "Compose your week",
+      "description": "Set the number of sessions, the volume and the quality session: the generator composes a balanced 80/20 week."
     },
     "planCalendar": {
       "title": "Organize your plan",

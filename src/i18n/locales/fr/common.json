@@ -293,6 +293,8 @@
     "libraryAllDesc": "Course, vélo, natation, renforcement",
     "drawSession": "Tirer une séance",
     "drawSessionDesc": "Laisse le hasard choisir ta séance",
+    "weeks": "Mes semaines",
+    "weeksDesc": "Compose une semaine 80/20 ou de zéro",
     "collections": "Collections",
     "collectionsDesc": "Séances groupées par thème",
     "builder": "Créer une séance",
@@ -568,6 +570,10 @@
     "draw": {
       "title": "Laisse le hasard décider",
       "description": "Filtre par discipline, zone, durée et niveau, puis tire une séance dans le catalogue."
+    },
+    "weekly": {
+      "title": "Compose ta semaine",
+      "description": "Règle le nombre de séances, le volume et la séance qualité : le générateur compose une semaine 80/20 équilibrée."
     },
     "planCalendar": {
       "title": "Organisez votre plan",

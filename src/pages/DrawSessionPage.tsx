@@ -21,17 +21,15 @@ import {
   Bike,
   Waves,
   Dumbbell,
+  CalendarRange,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
-import { WorkoutCardChrome } from "@/components/domain";
+import { WorkoutCardChrome, ScanCard } from "@/components/domain";
 import { FavoriteButton } from "@/components/domain/FavoriteButton";
-import {
-  getWorkoutDuration,
-  formatDurationMinutes,
-} from "@/components/visualization";
+import { formatDurationMinutes } from "@/components/visualization";
 import { SEOHead } from "@/components/seo";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { usePageHint } from "@/hooks/usePageHint";
@@ -39,21 +37,32 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
-import { estimateTSS, getWorkoutZones } from "@/lib/landing-stats";
+import {
+  DISCIPLINES,
+  DURATION_NO_LIMIT,
+  defaultFilterCriteria,
+  getAnyWorkoutDuration,
+  getAnyWorkoutTss,
+  getAnyWorkoutZones,
+  getDrawDiscipline,
+  isFilterActive,
+  matchesFilters,
+  type DrawDiscipline,
+  type WorkoutFilterCriteria,
+} from "@/lib/workoutFilters";
 import type {
   AnyWorkoutTemplate,
   Difficulty,
   ZoneNumber,
 } from "@/types";
 import {
-  getWorkoutDiscipline,
   getDominantZone,
   isStrengthWorkout,
   isRunningWorkout,
   DIFFICULTY_META,
 } from "@/types";
-import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { usePickLang } from "@/lib/i18n-utils";
+import { buildScanSchedule } from "@/lib/scanSchedule";
 import { cn } from "@/lib/utils";
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -62,9 +71,6 @@ import { cn } from "@/lib/utils";
 
 const DURATION_MIN = 25;
 const DURATION_MAX = 300; // slider ceiling
-// Sentinel for "no upper limit" (the "+300" preset). A finite value so it
-// serialises cleanly to sessionStorage, unlike Infinity.
-const DURATION_NO_LIMIT = Number.MAX_SAFE_INTEGER;
 const DURATION_PRESETS: { label: string; value: number }[] = [
   { label: "≤30", value: 30 },
   { label: "≤45", value: 45 },
@@ -74,9 +80,6 @@ const DURATION_PRESETS: { label: string; value: number }[] = [
   { label: "≤300", value: 300 },
   { label: "+300", value: DURATION_NO_LIMIT },
 ];
-
-const DISCIPLINES = ["running", "cycling", "swimming", "strength"] as const;
-type DrawDiscipline = (typeof DISCIPLINES)[number];
 
 const DISCIPLINE_ICONS: Record<
   DrawDiscipline,
@@ -93,32 +96,6 @@ const LEVELS: Difficulty[] = ["beginner", "intermediate", "advanced", "elite"];
 
 const HISTORY_LIMIT = 5;
 
-/** Resolve the draw-level discipline (strength sits alongside the 3 sports). */
-function getDrawDiscipline(w: AnyWorkoutTemplate): DrawDiscipline {
-  if (isStrengthWorkout(w)) return "strength";
-  return getWorkoutDiscipline(w) as DrawDiscipline;
-}
-
-function getStrengthDuration(w: StrengthWorkoutTemplate): number {
-  return Math.round((w.typicalDuration.min + w.typicalDuration.max) / 2);
-}
-
-function getAnyWorkoutDuration(w: AnyWorkoutTemplate): number {
-  if (isStrengthWorkout(w)) return getStrengthDuration(w);
-  return getWorkoutDuration(w);
-}
-
-/** Zones touched by a workout. Strength sessions have no aerobic zones. */
-function getAnyWorkoutZones(w: AnyWorkoutTemplate): ZoneNumber[] {
-  if (isStrengthWorkout(w)) return [];
-  return getWorkoutZones(w);
-}
-
-function getAnyWorkoutTss(w: AnyWorkoutTemplate): number | null {
-  if (isStrengthWorkout(w)) return null;
-  return estimateTSS(w);
-}
-
 /** "VMA-001" → "001", "LR-014" → "014". */
 function getWorkoutNumber(id: string): string {
   const parts = id.split("-");
@@ -134,19 +111,9 @@ function sample<T>(arr: readonly T[]): T {
 // Filter state
 // ────────────────────────────────────────────────────────────────────────────
 
-interface DrawFilters {
-  disciplines: DrawDiscipline[];
-  zones: ZoneNumber[];
-  maxDuration: number;
-  levels: Difficulty[];
-}
+type DrawFilters = WorkoutFilterCriteria;
 
-const defaultFilters: DrawFilters = {
-  disciplines: [],
-  zones: [],
-  maxDuration: DURATION_NO_LIMIT, // no cap by default (the "+300" preset)
-  levels: [],
-};
+const defaultFilters: DrawFilters = defaultFilterCriteria;
 
 // ── Session persistence ──────────────────────────────────────────────────────
 // Keep the drawn session (with filters and history) alive across navigation:
@@ -178,36 +145,6 @@ function writeDrawSnapshot(snap: DrawSnapshot): void {
   } catch {
     /* storage unavailable or full (non-critical) */
   }
-}
-
-function isFilterActive(f: DrawFilters): boolean {
-  return (
-    f.disciplines.length > 0 ||
-    f.zones.length > 0 ||
-    f.levels.length > 0 ||
-    f.maxDuration !== DURATION_NO_LIMIT
-  );
-}
-
-function matchesFilters(w: AnyWorkoutTemplate, f: DrawFilters): boolean {
-  // Discipline (multi-select)
-  if (f.disciplines.length > 0 && !f.disciplines.includes(getDrawDiscipline(w))) {
-    return false;
-  }
-  // Duration ceiling
-  if (getAnyWorkoutDuration(w) > f.maxDuration) {
-    return false;
-  }
-  // Level (multi-select)
-  if (f.levels.length > 0 && !f.levels.includes(w.difficulty)) {
-    return false;
-  }
-  // Zones (multi-select). Strength has no zones → excluded once a zone is picked.
-  if (f.zones.length > 0) {
-    const zones = getAnyWorkoutZones(w);
-    if (!zones.some((z) => f.zones.includes(z))) return false;
-  }
-  return true;
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -301,16 +238,8 @@ export function DrawSessionPage() {
       setIsDrawing(true);
       setResult(null);
 
-      // Build a schedule whose gaps grow geometrically → ease-out feel.
-      const total = 1500;
-      const times: number[] = [];
-      let elapsed = 0;
-      let gap = 45;
-      while (elapsed < total) {
-        times.push(elapsed);
-        elapsed += gap;
-        gap *= 1.14;
-      }
+      // Schedule whose gaps grow geometrically → ease-out feel (shared helper).
+      const times = buildScanSchedule();
 
       times.forEach((at, i) => {
         const isLast = i === times.length - 1;
@@ -409,6 +338,13 @@ export function DrawSessionPage() {
           <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
             {t("draw.subtitle")}
           </FadeUp>
+          <Link
+            to="/weeks"
+            className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+          >
+            <CalendarRange className="size-4" />
+            {t("draw.toWeek")}
+          </Link>
         </div>
 
         {/* Mobile filters toggle */}
@@ -793,43 +729,6 @@ function EmptyState({
         <RotateCcw className="size-4 mr-1" />
         {t("draw.empty.reset")}
       </Button>
-    </div>
-  );
-}
-
-/** Flashing card shown while the catalogue is being scanned. */
-function ScanCard({
-  workout,
-  pick,
-}: {
-  workout: AnyWorkoutTemplate;
-  pick: ReturnType<typeof usePickLang>;
-}) {
-  const zone = isRunningWorkout(workout) ? getDominantZone(workout) : 2;
-  return (
-    <div
-      className={cn(
-        "relative overflow-hidden rounded-xl border border-border p-5",
-        `zone-${zone} bg-gradient-to-br from-zone-${zone}/10 to-transparent`,
-      )}
-      aria-hidden="true"
-    >
-      {/* Accent scan line sweeping across the card */}
-      <div
-        className="pointer-events-none absolute inset-y-0 left-0 w-1/3"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, color-mix(in srgb, var(--primary) 35%, transparent), transparent)",
-          animation: "draw-scan 0.6s linear infinite",
-        }}
-      />
-      <style>{`@keyframes draw-scan { 0% { transform: translateX(-100%);} 100% { transform: translateX(400%);} }`}</style>
-      <p className="text-lg font-semibold opacity-80 line-clamp-1">
-        {pick(workout, "name")}
-      </p>
-      <p className="mt-2 text-sm text-muted-foreground line-clamp-2 opacity-70">
-        {pick(workout, "description")}
-      </p>
     </div>
   );
 }

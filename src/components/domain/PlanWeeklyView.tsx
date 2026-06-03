@@ -65,6 +65,8 @@ interface PlanWeeklyViewProps {
   onWeekChange?: (week: number) => void;
   onFindWeekRoute?: (weekNumber: number) => void;
   blockedDays?: Set<string>;
+  /** Standalone "Ma semaine": hide week nav + free-plan guide, taller day columns. */
+  singleWeek?: boolean;
 }
 
 // ── Component ───────────────────────────────────────────────────────
@@ -87,6 +89,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   onWeekChange,
   onFindWeekRoute,
   blockedDays,
+  singleWeek = false,
 }: PlanWeeklyViewProps) {
   const { t } = useTranslation("plan");
   const pickLang = usePickLang();
@@ -428,8 +431,9 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
 
   return (
     <>
-      <div className="space-y-4">
+      <div className={cn("space-y-4", singleWeek && "lg:flex lg:flex-col lg:h-full")}>
         {/* ── Week navigation ── */}
+        {!singleWeek && (
         <div className="flex items-center justify-between gap-2">
           <button
             type="button"
@@ -496,6 +500,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
             <ChevronRight className="size-4" />
           </button>
         </div>
+        )}
 
         {/* ── Week completion stats ── */}
         {weekData && (() => {
@@ -558,7 +563,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
         )}
 
         {/* ── Week guidance (free plans only) ── */}
-        {weekData && plan.config.planMode === "free" && (
+        {weekData && plan.config.planMode === "free" && !singleWeek && (
           <WeekGuidancePanel
             week={weekData}
             daysPerWeek={plan.config.daysPerWeek}
@@ -570,6 +575,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
           <div
             className={cn(
               "rounded-lg p-2 transition-colors",
+              singleWeek && "lg:flex-1 lg:min-h-0",
               weekData.isRecoveryWeek && "bg-muted/40",
               !weekData.isRecoveryWeek && PHASE_BG[weekData.phase as string],
             )}
@@ -619,6 +625,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                         workoutNames={workoutNames}
                         dropTarget={dropTarget}
                         draggedSession={draggedSession}
+                        tall={singleWeek}
                         onDragOver={handleDragOver}
                         onDragLeave={handleDragLeave}
                         onDrop={handleDrop}
@@ -641,7 +648,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
             </div>
 
             {/* Desktop: single 7-column row */}
-            <div className="hidden md:grid md:grid-cols-7 md:gap-2">
+            <div className={cn("hidden md:grid md:grid-cols-7 md:gap-2", singleWeek && "lg:h-full")}>
               {Array.from({ length: 7 }, (_, dayIndex) => {
                 let dayOfMonth: number | null = null;
                 let monthLabel = "";
@@ -675,6 +682,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                     dropTarget={dropTarget}
                     draggedSession={draggedSession}
                     isDesktop
+                    tall={singleWeek}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
@@ -794,6 +802,7 @@ interface DayCellProps {
   dropTarget: { weekNumber: number; day: number } | null;
   draggedSession: { weekNumber: number; sessionIndex: number } | null;
   isDesktop?: boolean;
+  tall?: boolean;
   onDragOver: (e: React.DragEvent, weekNumber: number, day: number) => void;
   onDragLeave: () => void;
   onDrop: (e: React.DragEvent, weekNumber: number, day: number) => void;
@@ -835,6 +844,7 @@ const DayCell = memo(function DayCell({
   dropTarget,
   draggedSession,
   isDesktop,
+  tall,
   onDragOver,
   onDragLeave,
   onDrop,
@@ -863,7 +873,8 @@ const DayCell = memo(function DayCell({
       onDrop={(e) => onDrop(e, selectedWeek, dayIndex)}
       className={cn(
         "rounded-lg bg-secondary/30 p-1.5 transition-colors",
-        isDesktop ? "min-h-[120px]" : "min-h-[80px]",
+        isDesktop ? (tall ? "min-h-[220px]" : "min-h-[120px]") : (tall ? "min-h-[120px]" : "min-h-[80px]"),
+        tall && isDesktop && "flex flex-col",
         isDropHere && "ring-2 ring-primary/50 bg-primary/5",
         isBlockedDay && "bg-muted/50 bg-[repeating-linear-gradient(135deg,transparent,transparent_4px,rgba(0,0,0,0.04)_4px,rgba(0,0,0,0.04)_6px)]",
       )}
@@ -903,6 +914,7 @@ const DayCell = memo(function DayCell({
             className={cn(
               "w-full rounded bg-card/50 border border-dashed border-muted-foreground/30 flex items-center justify-center gap-1 text-muted-foreground/40 active:text-primary hover:text-primary hover:border-primary/40 transition-colors",
               isDesktop ? "p-4" : "p-3",
+              tall && isDesktop && "flex-1",
             )}
           >
             <span className="text-sm font-medium">+</span>
@@ -1143,7 +1155,10 @@ const DayCell = memo(function DayCell({
         <button
           type="button"
           onClick={() => onAddToDay(selectedWeek, dayIndex)}
-          className="w-full mt-1 rounded bg-card/50 border border-dashed border-muted-foreground/30 p-1.5 flex items-center justify-center gap-1 text-muted-foreground/40 active:text-primary hover:text-primary hover:border-primary/40 transition-colors"
+          className={cn(
+            "w-full mt-1 rounded bg-card/50 border border-dashed border-muted-foreground/30 p-1.5 flex items-center justify-center gap-1 text-muted-foreground/40 active:text-primary hover:text-primary hover:border-primary/40 transition-colors",
+            tall && isDesktop && "flex-1",
+          )}
         >
           <span className="text-sm font-medium">+</span>
         </button>

@@ -114,6 +114,7 @@ function normalizeConfig(raw: unknown, fallbackId: string, fallbackCreatedAt: st
     planMode: raw.planMode === "assisted" || raw.planMode === "free" || raw.planMode === "prebuilt"
       ? raw.planMode
       : undefined,
+    isSingleWeek: raw.isSingleWeek === true ? true : undefined,
     planName: typeof raw.planName === "string" ? raw.planName : undefined,
     raceDistance: typeof raw.raceDistance === "string" ? raw.raceDistance as PlanConfig["raceDistance"] : undefined,
     raceDate: typeof raw.raceDate === "string" ? raw.raceDate : undefined,
