@@ -413,14 +413,19 @@
     }
   },
   "search": {
-    "placeholder": "Search workouts, articles, glossary...",
+    "placeholder": "Search workouts, tools, guides, pages...",
     "shortcut": "Cmd+K",
     "noResults": "No results found",
     "viewAll": "View all in Library",
     "sections": {
+      "quickAccess": "Quick access",
       "workouts": "Workouts",
+      "collections": "Collections",
+      "calculators": "Calculators",
+      "guides": "Guides",
       "articles": "Articles",
-      "glossary": "Glossary"
+      "glossary": "Glossary",
+      "pages": "Pages"
     }
   },
   "relatedContent": {

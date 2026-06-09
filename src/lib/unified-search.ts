@@ -1,13 +1,23 @@
 // src/lib/unified-search.ts
-// Unified search across workouts, articles, and glossary terms
+// Unified search across workouts, collections, calculators, guides, articles,
+// glossary terms and navigable product pages.
 
 import { searchWorkouts } from "@/data/workouts";
 import { searchStrengthSessions } from "@/data/strength";
 import { getAllArticleMeta } from "@/data/articles/metadata";
 import { loadAllTerms } from "@/data/glossary";
+import { getAllCollections } from "@/data/collections";
+import { searchSurfaces, type SurfaceSection } from "@/data/command-surfaces";
 import { normalizeSearch } from "@/lib/search-utils";
 
-export type SearchResultType = "workout" | "article" | "glossary";
+export type SearchResultType =
+  | "workout"
+  | "collection"
+  | "calculator"
+  | "guide"
+  | "article"
+  | "glossary"
+  | "page";
 
 export interface UnifiedSearchResult {
   type: SearchResultType;
@@ -19,10 +29,32 @@ export interface UnifiedSearchResult {
 
 export interface UnifiedSearchResults {
   workouts: UnifiedSearchResult[];
+  collections: UnifiedSearchResult[];
+  calculators: UnifiedSearchResult[];
+  guides: UnifiedSearchResult[];
   articles: UnifiedSearchResult[];
   glossary: UnifiedSearchResult[];
+  pages: UnifiedSearchResult[];
   total: number;
 }
+
+/** Maps a static surface section to the result type used by the palette. */
+const SURFACE_SECTION_TYPE: Record<SurfaceSection, SearchResultType> = {
+  calculator: "calculator",
+  guide: "guide",
+  page: "page",
+};
+
+const emptyResults = (): UnifiedSearchResults => ({
+  workouts: [],
+  collections: [],
+  calculators: [],
+  guides: [],
+  articles: [],
+  glossary: [],
+  pages: [],
+  total: 0,
+});
 
 const isEn = (lang: string): boolean => lang.startsWith("en");
 
@@ -33,7 +65,7 @@ export async function unifiedSearch(
 ): Promise<UnifiedSearchResults> {
   const trimmed = query.trim();
   if (!trimmed) {
-    return { workouts: [], articles: [], glossary: [], total: 0 };
+    return emptyResults();
   }
 
   const lowerQuery = normalizeSearch(trimmed);
@@ -119,10 +151,58 @@ export async function unifiedSearch(
       url: `/glossary/${t.id}`,
     }));
 
+  // --- Collections ---
+  const matchingCollections = getAllCollections().filter((c) => {
+    const searchable = normalizeSearch(
+      [c.name, c.nameEn, c.description, c.descriptionEn, ...c.tags].join(" ")
+    );
+    return searchable.includes(lowerQuery);
+  });
+
+  const collections: UnifiedSearchResult[] = matchingCollections
+    .slice(0, maxPerType)
+    .map((c) => ({
+      type: "collection" as const,
+      id: c.id,
+      title: en ? c.nameEn : c.name,
+      subtitle: en ? c.descriptionEn : c.description,
+      url: `/collections/${c.slug}`,
+    }));
+
+  // --- Navigable surfaces (calculators / guides / pages) ---
+  const surfaces = searchSurfaces(trimmed);
+  const calculators: UnifiedSearchResult[] = [];
+  const guides: UnifiedSearchResult[] = [];
+  const pages: UnifiedSearchResult[] = [];
+
+  for (const s of surfaces) {
+    const result: UnifiedSearchResult = {
+      type: SURFACE_SECTION_TYPE[s.section],
+      id: s.id,
+      title: en ? s.titleEn : s.title,
+      subtitle: en ? s.subtitleEn : s.subtitle,
+      url: s.url,
+    };
+    const bucket =
+      s.section === "calculator" ? calculators : s.section === "guide" ? guides : pages;
+    if (bucket.length < maxPerType) bucket.push(result);
+  }
+
   return {
     workouts,
+    collections,
+    calculators,
+    guides,
     articles,
     glossary,
-    total: workouts.length + articles.length + glossary.length,
+    pages,
+    total:
+      workouts.length +
+      collections.length +
+      calculators.length +
+      guides.length +
+      articles.length +
+      glossary.length +
+      pages.length,
   };
 }
