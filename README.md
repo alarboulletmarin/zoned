@@ -47,6 +47,21 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 
 ---
 
+## Demos
+
+<div align="center">
+  <img src="assets/demo-plans.gif" alt="Demo — adopting a prebuilt semi-marathon plan: phases, stats and calendar" width="800" />
+  <p><em>Adopt a prebuilt training plan — phases, stats, then your own calendar</em></p>
+
+  <img src="assets/demo-calculators.gif" alt="Demo — estimating VMA from a 10K race time and previewing pace zones" width="800" />
+  <p><em>Estimate your VMA from a race time and preview your pace zones</em></p>
+
+  <img src="assets/demo-mobile.gif" alt="Demo — mobile: navigation menu, filter drawer and workout structure" width="300" />
+  <p><em>Fully responsive — filter drawer and workout details on mobile</em></p>
+</div>
+
+---
+
 ## Screenshots
 
 <div align="center">
