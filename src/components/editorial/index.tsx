@@ -30,12 +30,14 @@ export function EditorialTitle({
   as?: "h1" | "h2" | "h3";
 }) {
   const reduced = useReducedMotion();
+  // Mobile-first: smaller heads on phones so the hero doesn't eat the first
+  // screen (#106). Tablet/desktop (md:) sizes are unchanged.
   const sizeCls =
     size === "xl"
-      ? "text-[44px] md:text-6xl"
+      ? "text-[40px] md:text-6xl"
       : size === "md"
-        ? "text-2xl md:text-3xl"
-        : "text-3xl md:text-4xl";
+        ? "text-xl sm:text-2xl md:text-3xl"
+        : "text-[26px] sm:text-3xl md:text-4xl";
   const baseCls = `font-sans font-semibold italic leading-[1.05] tracking-tight ${sizeCls} ${className}`;
 
   const motionProps = reduced

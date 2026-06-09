@@ -2,6 +2,10 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
+import {
+  ResponsiveTable,
+  type ResponsiveTableColumn,
+} from "@/components/ui/responsive-table";
 import { loadUserZonePrefs, calculatePaceZones } from "@/lib/zones";
 import type { ZoneNumber } from "@/types";
 
@@ -122,6 +126,45 @@ export function PaceTablePage() {
     return Math.max(180, Math.min(600, rounded));
   }, [vmaPaceMinPerKm]);
 
+  const numericCell = "font-mono tabular-nums whitespace-nowrap";
+
+  // ResponsiveTable: real <table> at md+, stacked key/value cards on phones so
+  // every column (incl. semi/marathon) is readable without horizontal scroll (#104).
+  const columns = useMemo<ResponsiveTableColumn<PaceRow>[]>(() => {
+    const base: ResponsiveTableColumn<PaceRow>[] = [
+      { key: "kmPace", header: "min/km", className: numericCell, cell: (r) => formatPace(r.paceMinPerKm) },
+      { key: "kmh", header: "km/h", className: numericCell, cell: (r) => r.kmh.toFixed(1) },
+      { key: "milePace", header: "min/mi", className: numericCell, cell: (r) => formatPace(r.paceMinPerMile) },
+      { key: "5k", header: "5K", className: numericCell, cell: (r) => formatDuration(r.time5K) },
+      { key: "10k", header: "10K", className: numericCell, cell: (r) => formatDuration(r.time10K) },
+      {
+        key: "semi",
+        header: t("calculators:calculateurs.paceTable.halfLabel"),
+        className: numericCell,
+        cell: (r) => formatDuration(r.timeSemi),
+      },
+      { key: "marathon", header: "Marathon", className: numericCell, cell: (r) => formatDuration(r.timeMarathon) },
+    ];
+    if (hasZones) {
+      base.push({
+        key: "zone",
+        header: t("calculators:calculateurs.paceTable.yourZone"),
+        className: "whitespace-nowrap",
+        cell: (r) =>
+          r.zone != null ? (
+            <span
+              className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium bg-zone-${r.zone}/10 text-zone-${r.zone}`}
+            >
+              Z{r.zone}
+            </span>
+          ) : (
+            <span className="text-muted-foreground">-</span>
+          ),
+      });
+    }
+    return base;
+  }, [hasZones, t]);
+
   return (
     <>
       <SEOHead
@@ -157,94 +200,26 @@ export function PaceTablePage() {
           </FadeUp>
         </div>
 
-        {/* Table */}
-        <div className="overflow-x-auto rounded-lg border">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="sticky top-0 bg-background border-b">
-                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
-                  min/km
-                </th>
-                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
-                  km/h
-                </th>
-                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
-                  min/mi
-                </th>
-                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
-                  5K
-                </th>
-                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
-                  10K
-                </th>
-                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
-                  {t("calculators:calculateurs.paceTable.halfLabel")}
-                </th>
-                <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
-                  Marathon
-                </th>
-                {hasZones && (
-                  <th scope="col" className="px-3 py-2 text-left font-medium text-muted-foreground whitespace-nowrap">
-                    {t("calculators:calculateurs.paceTable.yourZone")}
-                  </th>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => {
-                const isHighlighted =
-                  highlightSeconds != null &&
-                  row.totalSeconds === highlightSeconds;
-
-                return (
-                  <tr
-                    key={row.totalSeconds}
-                    className={
-                      isHighlighted
-                        ? "bg-primary/10 font-medium"
-                        : "even:bg-muted/50"
-                    }
-                  >
-                    <td className="px-3 py-1.5 font-mono tabular-nums whitespace-nowrap">
-                      {formatPace(row.paceMinPerKm)}
-                    </td>
-                    <td className="px-3 py-1.5 font-mono tabular-nums whitespace-nowrap">
-                      {row.kmh.toFixed(1)}
-                    </td>
-                    <td className="px-3 py-1.5 font-mono tabular-nums whitespace-nowrap">
-                      {formatPace(row.paceMinPerMile)}
-                    </td>
-                    <td className="px-3 py-1.5 font-mono tabular-nums whitespace-nowrap">
-                      {formatDuration(row.time5K)}
-                    </td>
-                    <td className="px-3 py-1.5 font-mono tabular-nums whitespace-nowrap">
-                      {formatDuration(row.time10K)}
-                    </td>
-                    <td className="px-3 py-1.5 font-mono tabular-nums whitespace-nowrap">
-                      {formatDuration(row.timeSemi)}
-                    </td>
-                    <td className="px-3 py-1.5 font-mono tabular-nums whitespace-nowrap">
-                      {formatDuration(row.timeMarathon)}
-                    </td>
-                    {hasZones && (
-                      <td className="px-3 py-1.5 whitespace-nowrap">
-                        {row.zone != null ? (
-                          <span
-                            className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium bg-zone-${row.zone}/10 text-zone-${row.zone}`}
-                          >
-                            Z{row.zone}
-                          </span>
-                        ) : (
-                          <span className="text-muted-foreground">-</span>
-                        )}
-                      </td>
-                    )}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+        {/* Table — responsive: scrollable table on tablet/desktop, stacked
+            cards on mobile. */}
+        <ResponsiveTable
+          data={rows}
+          columns={columns}
+          rowKey="totalSeconds"
+          stickyHeader
+          className="md:overflow-x-auto md:rounded-lg md:border"
+          mobileCardTitle={(row) => (
+            <span className="font-mono tabular-nums">
+              {formatPace(row.paceMinPerKm)}
+              <span className="text-muted-foreground font-sans font-normal"> /km</span>
+            </span>
+          )}
+          rowClassName={(row) =>
+            highlightSeconds != null && row.totalSeconds === highlightSeconds
+              ? "bg-primary/10 font-medium ring-1 ring-primary/30"
+              : undefined
+          }
+        />
 
         {/* Footer notes */}
         {highlightSeconds != null && (

@@ -775,7 +775,10 @@ export function PlanViewPage() {
                   {t("view.prebuilt")}
                 </Badge>
               )}
-              {raceDate && (
+              {/* Only show this createdAt→raceDate range when no explicit start
+                  date is set — otherwise the editable startDate→endDate block
+                  below renders the same span and we'd duplicate it (#102). */}
+              {raceDate && !plan.config.startDate && (
                 <div className="flex items-center gap-1 text-sm text-muted-foreground">
                   <Calendar className="size-3.5" />
                   <span>
