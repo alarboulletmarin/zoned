@@ -20,6 +20,7 @@ import {
 } from "@/components/icons";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { InteractiveCard } from "@/components/editorial";
 import { ZoneBadge, ZoneBadges } from "./ZoneBadge";
 import { FavoriteButton } from "./FavoriteButton";
 import { getWorkoutZones } from "@/lib/landing-stats";
@@ -282,9 +283,20 @@ export function WorkoutCardChrome({
 
 /** Internal running-only card with properly typed props */
 function RunningWorkoutCard({ workout, className, expanded }: { workout: WorkoutTemplate; className?: string; expanded?: boolean }) {
+  const dominantZone = getDominantZone(workout);
   return (
-    <Link to={`/workout/${workout.id}`}>
-      <WorkoutCardChrome workout={workout} className={className} expanded={expanded} />
+    <Link to={`/workout/${workout.id}`} className="block h-full">
+      <InteractiveCard
+        accent={`var(--zone-${dominantZone})`}
+        className="block h-full rounded-xl"
+      >
+        <WorkoutCardChrome
+          workout={workout}
+          className={className}
+          expanded={expanded}
+          interactive={false}
+        />
+      </InteractiveCard>
     </Link>
   );
 }
@@ -320,15 +332,16 @@ function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTem
       : null;
 
   return (
-    <Link
-      to={`/workout/${workout.id}`}
-      className={cn(
-        `zone-${dominantZone} bg-gradient-to-br from-zone-${dominantZone}/10 dark:from-zone-${dominantZone}/20 to-transparent`,
-        "border-border/50",
-        "block p-3 rounded-xl border hover:bg-accent/50 transition-colors",
-        className
-      )}
-    >
+    <Link to={`/workout/${workout.id}`} className="block h-full">
+      <InteractiveCard
+        accent={`var(--zone-${dominantZone})`}
+        className={cn(
+          `zone-${dominantZone} bg-gradient-to-br from-zone-${dominantZone}/10 dark:from-zone-${dominantZone}/20 to-transparent`,
+          "border-border/50",
+          "block p-3 rounded-xl border h-full",
+          className
+        )}
+      >
       <div className="flex items-center justify-between gap-2">
         <span className="font-medium text-sm line-clamp-1 flex-1">
           {pick(workout, "name")}
@@ -350,6 +363,7 @@ function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTem
         </span>
         <FavoriteButton workoutId={workout.id} size="sm" />
       </div>
+      </InteractiveCard>
     </Link>
   );
 }
