@@ -22,6 +22,10 @@
   [![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev)
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
   [![Bun](https://img.shields.io/badge/Bun-runtime-fbf0df?style=flat-square&logo=bun&logoColor=black)](https://bun.sh)
+
+  <br/>
+
+  <img src="assets/demo.gif" alt="Demo — browsing the library, filtering threshold workouts, opening a session and exporting it as Garmin FIT" width="800" />
 </div>
 
 ---
