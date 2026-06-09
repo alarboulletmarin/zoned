@@ -137,16 +137,14 @@ Training zones · Pace converter · Pace reference table · Treadmill converter 
 - **3 candidates per request**: each with elevation profile, estimated duration and named POI markers
 - **Track finder**: locate athletics tracks near you and route to them
 - **GPX export** + locally saved routes (`/routes/mine`)
-- **Per-session routes**: generate a route matching a plan session's distance right from the calendar
+- **Per-session routes**: "Trouver un parcours adapté" on a workout page pre-fills the generator with that session's distance
 - **Privacy toggle**: routing is opt-in — no coordinates leave the browser unless you enable it in Settings
 
 ### Discovery
-- **Quiz**: find the right workout in 5 questions (goal, time, terrain, level, weakness)
-- **Workout of the day** on the home page
-- **Workout draw** (`/library/draw`): pull a random session matching your filters (discipline, duration, zones, terrain, equipment…)
+- **Workout draw** ("Tirer une séance", `/library/draw`): pull a random session matching your filters (discipline, duration, zones, terrain, equipment…)
 - **15 curated collections** grouped by goal (start running, 5K → ultra, speed, strength)
 - **Command palette** (Cmd+K): search workouts, articles, glossary terms and pages from anywhere
-- **Favorites**: save preferred workouts, browse them on a dedicated page
+- **Favorites**: a heart on every workout card (library, collections, draw, quiz results) saves it locally in one click — browse them all on the dedicated `/favorites` page
 
 ### Profile & personal records
 - **Runner profile** (`/profile`): max HR, VMA, weekly volume, long-run distance and level — used to personalize zones and plans
@@ -174,7 +172,7 @@ Training zones · Pace converter · Pace reference table · Treadmill converter 
 - **3 practical guides**: nutrition (with fueling calculator), race prep, warm-up
 - **Methodology** page and **50+ term glossary** across 9 categories
 - **69 contextual tips** throughout the app
-- **Changelog** page (`/changelog`) and honest **feature comparisons** vs. paid alternatives (`/compare`)
+- **Changelog** page (`/changelog`) with an in-app "what's new" notification after updates
 
 ### App
 - **Installable PWA** with offline support and in-app update notifications
