@@ -115,6 +115,14 @@ function PlanCard({
               <Calendar className="size-3.5" />
               {t("plansPage.sessionsCount", { count: totalSessions })}
             </span>
+          ) : plan.config.startDate ? (
+            // Prefer the explicit start→end range; falls through to
+            // createdAt→raceDate only when no start date is set (#102).
+            <span className="flex items-center gap-1">
+              <Calendar className="size-3.5" />
+              {formatDateShort(plan.config.startDate)}
+              {plan.config.endDate && ` → ${formatDateShort(plan.config.endDate)}`}
+            </span>
           ) : plan.config.raceDate ? (
             <span className="flex items-center gap-1">
               <Calendar className="size-3.5" />
@@ -125,12 +133,6 @@ function PlanCard({
             <span className="flex items-center gap-1">
               <Calendar className="size-3.5" />
               {formatDateShort(plan.config.createdAt)}
-            </span>
-          )}
-          {plan.config.startDate && (
-            <span className="text-xs text-muted-foreground">
-              {formatDateShort(plan.config.startDate)}
-              {plan.config.endDate && ` \u2192 ${formatDateShort(plan.config.endDate)}`}
             </span>
           )}
         </CardDescription>

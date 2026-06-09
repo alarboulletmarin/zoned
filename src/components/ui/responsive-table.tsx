@@ -48,6 +48,8 @@ interface ResponsiveTableProps<T> {
   tableClassName?: string;
   /** Make the desktop <thead> sticky to the closest scrolling ancestor. */
   stickyHeader?: boolean;
+  /** Per-row extra classes, applied to both the desktop <tr> and mobile card. */
+  rowClassName?: (row: T, index: number) => string | undefined;
 }
 
 function getRowKey<T>(
@@ -71,6 +73,7 @@ export function ResponsiveTable<T>({
   className,
   tableClassName,
   stickyHeader,
+  rowClassName,
 }: ResponsiveTableProps<T>) {
   if (data.length === 0 && emptyState) {
     return <div className={className}>{emptyState}</div>;
@@ -86,7 +89,9 @@ export function ResponsiveTable<T>({
           {caption && <caption className="sr-only">{caption}</caption>}
           <thead
             className={cn(
-              stickyHeader && "sticky top-0 bg-background z-10",
+              // top-14 clears the fixed h-14 TopBar so the header isn't hidden
+              // behind it while scrolling (#103).
+              stickyHeader && "sticky top-14 bg-background z-10",
             )}
           >
             <tr className="border-b">
@@ -108,7 +113,10 @@ export function ResponsiveTable<T>({
             {data.map((row, rowIndex) => (
               <tr
                 key={getRowKey(row, rowIndex, rowKey)}
-                className="border-b last:border-0 hover:bg-muted/40 transition-colors"
+                className={cn(
+                  "border-b last:border-0 hover:bg-muted/40 transition-colors",
+                  rowClassName?.(row, rowIndex),
+                )}
               >
                 {columns.map((col) => (
                   <td
@@ -129,7 +137,10 @@ export function ResponsiveTable<T>({
         {data.map((row, rowIndex) => (
           <div
             key={getRowKey(row, rowIndex, rowKey)}
-            className="rounded-lg border bg-card p-3 shadow-xs"
+            className={cn(
+              "rounded-lg border bg-card p-3 shadow-xs",
+              rowClassName?.(row, rowIndex),
+            )}
           >
             {mobileCardTitle && (
               <div className="mb-2 text-sm font-semibold text-foreground">
