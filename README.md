@@ -22,6 +22,10 @@
   [![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev)
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
   [![Bun](https://img.shields.io/badge/Bun-runtime-fbf0df?style=flat-square&logo=bun&logoColor=black)](https://bun.sh)
+
+  <br/>
+
+  <img src="assets/demo.gif" alt="Demo — browsing the library, filtering threshold workouts, opening a session and exporting it as Garmin FIT" width="800" />
 </div>
 
 ---
@@ -40,6 +44,21 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 | **9** training plans | 5K → marathon, with strength periodization |
 | **12** calculators | zones, paces, VMA, FTP, CSS, age-graded, what-if, race-day |
 | **15** collections · **12** articles · **50+** glossary terms | bilingual FR / EN |
+
+---
+
+## Demos
+
+<div align="center">
+  <img src="assets/demo-plans.gif" alt="Demo — adopting a prebuilt semi-marathon plan: phases, stats and calendar" width="800" />
+  <p><em>Adopt a prebuilt training plan — phases, stats, then your own calendar</em></p>
+
+  <img src="assets/demo-calculators.gif" alt="Demo — estimating VMA from a 10K race time and previewing pace zones" width="800" />
+  <p><em>Estimate your VMA from a race time and preview your pace zones</em></p>
+
+  <img src="assets/demo-mobile.gif" alt="Demo — mobile: navigation menu, filter drawer and workout structure" width="300" />
+  <p><em>Fully responsive — filter drawer and workout details on mobile</em></p>
+</div>
 
 ---
 
@@ -92,43 +111,73 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 - **46 exercises** with A/B position images, muscle maps, form cues, and progression/regression chains
 - **6 training zones**: Z1 (recovery) → Z6 (sprint)
 - **Specialized methods**: Norwegian double threshold, Bangsbo 10-20-30, Billat 30/30, Yasso 800s, Cooper / VAMEVAL tests
-- **Personalized zones**: from your max HR and VMA
-- **Custom workout builder**: assemble your own sessions block by block (warm-up, main set, cool-down)
+- **Custom workout builder** (`/workout/builder`): assemble sessions block by block (warm-up, main set, cool-down) with undo/redo, then export them like any catalog workout — or share them as JSON (single or bulk export, import with validation)
+- **Workout detail pages**: session timeline, zone distribution, personalized pace table, coaching tips, related workouts and science references — with glossary terms linked inline
 
 ### Calculators (12)
 Training zones · Pace converter · Pace reference table · Treadmill converter · Split generator · VMA from race time · FTP cycling test · CSS swimming test · Race equivalence · Age-graded performance · Race-day simulator · What-if simulator
 
+- **What-if simulator**: compare training scenarios (volume, level, goal) with zone distribution and load preview — scenarios can be named and saved
+- **Race-day simulator**: km-by-km pacing, gel/water/electrolyte timing, pre-race checklists (race week, morning, logistics), saved simulations, PDF export
+
 ### Training plans
-- **Plan generator**: personalised multi-week plans (5K to marathon)
+- **Assisted plan generator**: personalised multi-week plans (5K to marathon) with start date, level and optional intermediate goals (half-way, 4-weeks-out, taper)
 - **9 prebuilt plans** with integrated strength training, plus free mode to build from scratch
 - **Strength periodization**: auto-suggested strength sessions per training phase
 - **4 view modes**: Calendar, Weekly, Monthly, List
 - **Drag-and-drop** calendar, cross-training support (strength, cycling, swimming, yoga)
+- **Plan audit**: detects imbalanced weeks (missing tempo work, too much intensity…) and proposes one-click fixes
+- **Life happens**: block unavailable dates with auto-rescheduling, swap a session for an equivalent one, mark sessions done/skipped, adaptation preview when changing race or start date — all with undo
+- **Weekly composer** (`/weeks`): generate a balanced standalone 80/20 week (sessions count, volume, quality session) when you don't want a full plan
 - **Export**: PDF, ICS (Google/Apple/Outlook Calendar)
-- **Race day simulator**: km-by-km pacing, nutrition timing, checklists
 
 ### Routes
 - **Route generator**: build a real-world loop or out-and-back from your position
 - **POI-aware routing**: waypoints picked from parks, promenades, greenways and beaches via Overpass
 - **3 candidates per request**: each with elevation profile, estimated duration and named POI markers
-- **GPX export** + local saved routes
-- **Privacy toggle**: opt-out from Settings if you don't want to send coordinates to public services
+- **Track finder**: locate athletics tracks near you and route to them
+- **GPX export** + locally saved routes (`/routes/mine`)
+- **Per-session routes**: "Trouver un parcours adapté" on a workout page pre-fills the generator with that session's distance
+- **Privacy toggle**: routing is opt-in — no coordinates leave the browser unless you enable it in Settings
 
 ### Discovery
-- **Quiz**: find the right workout in 5 questions (goal, time, terrain, level, weakness)
-- **Workout of the day** · random workout
-- **15 curated collections** · command palette (Cmd+K)
-- **Favorites**: save and organise preferred workouts
+- **Workout draw** ("Tirer une séance", `/library/draw`): pull a random session matching your filters (discipline, duration, zones, terrain, equipment…)
+- **15 curated collections** grouped by goal (start running, 5K → ultra, speed, strength)
+- **Command palette** (Cmd+K): search workouts, articles, glossary terms and pages from anywhere
+- **Favorites**: a heart on every workout card (library, collections, draw, quiz results) saves it locally in one click — browse them all on the dedicated `/favorites` page
 
-### Export
-ICS · PNG · PDF · **Garmin FIT** (native workout file) · **GPX** (routes)
+### Profile & personal records
+- **Runner profile** (`/profile`): max HR, VMA, weekly volume, long-run distance and level — used to personalize zones and plans
+- **Performance references**: log a race time per distance (5K → marathon) to power VDOT-based equivalences
+- **Benchmark history**: record field tests (Cooper, half-Cooper, time trial, lab test) over time, with VMA derived from each result and applied to your zones in one click
+- **Personal records**: track PBs per distance with date, label and provenance
+- **My zones** (`/my-zones`): your personalized HR + pace zones with a pace converter alongside
+
+### Settings, data & privacy
+- **Full backup**: export *all* your data (plans, favorites, custom workouts, zones, profile, routes, scenarios, settings) as a single dated JSON file
+- **Restore**: import a backup in **merge** mode (keeps current data) or **replace** mode — with validation and automatic rollback if the import fails
+- **Colorblind-safe palettes**: standard, deuteranopia and tritanopia zone color schemes
+- **Units**: metric (km, min/km) or imperial (mi, min/mile), applied app-wide
+- **Bilingual**: full French / English interface and content; light / dark theme
+- **Privacy panel**: plain-language summary of what is stored where (everything in `localStorage`, no server, no account) and the single opt-in network feature (route generation)
+
+### Export & sharing
+- **Workouts**: ICS (Google/Apple/Outlook) · PNG · PDF · **Garmin FIT** (native workout file, with on-device transfer guide)
+- **Plans**: PDF · ICS — **Routes**: GPX — **Race plan**: PDF — **Custom workouts**: JSON
+- **Share cards**: multiple social-ready templates per workout (compact, hero, minimal, dark…), copy/download/native share, plus a ready-to-paste Strava description
 
 ### Learn
 - **12 bilingual articles** on training principles (Seiler, polarized, threshold…)
-- **Nutrition hub**: 14 sections covering the 1:0.8 carb ratio, 1.8 g/kg protein target, AIS-classified supplements, cramps science, heat acclimation, female-specific needs, debunked myths — sources Witard 2025, Rowlands 2020, Schwellnus, Aragon, Margolis, Paulsen, Trommelen
+- **Nutrition hub**: 14 sections covering the 1:0.8 carb ratio, 1.8 g/kg protein target, AIS-classified supplements, caffeine timing, cramps science, heat acclimation, gut training, female-specific needs, debunked myths — sources Witard 2025, Rowlands 2020, Schwellnus, Aragon, Margolis, Paulsen, Trommelen
 - **3 practical guides**: nutrition (with fueling calculator), race prep, warm-up
 - **Methodology** page and **50+ term glossary** across 9 categories
 - **69 contextual tips** throughout the app
+- **Changelog** page (`/changelog`) with an in-app "what's new" notification after updates
+
+### App
+- **Installable PWA** with offline support and in-app update notifications
+- **Accessible**: keyboard navigation, screen-reader labels, skip links, `prefers-reduced-motion` respected
+- **Fast**: lazy-loaded routes, code-split workout data, infinite-scroll library
 
 ---
 

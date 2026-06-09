@@ -249,9 +249,6 @@ export function WorkoutDetailPage() {
       label: locationState.collectionName || t("common:pages.workoutDetail.collectionFallback"),
       to: `/collections/${locationState.collectionSlug}`,
     });
-  } else if (locationState?.from === "quiz") {
-    breadcrumbs.push({ label: t("common:nav.library"), to: "/library" });
-    breadcrumbs.push({ label: "Quiz", to: "/quiz" });
   } else {
     breadcrumbs.push({ label: t("common:nav.library"), to: "/library" });
     breadcrumbs.push({

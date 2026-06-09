@@ -5,7 +5,6 @@ export {
   useWorkouts,
   useWorkout,
   useCategoryWorkouts,
-  useWorkoutOfTheDay,
   useRelatedWorkouts,
   useFilteredWorkouts,
 } from "./useWorkouts";

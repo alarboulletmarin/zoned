@@ -281,33 +281,6 @@ export async function getCategoryStats(): Promise<
   return results;
 }
 
-/**
- * Get workout of the day (deterministic based on date) (async)
- */
-export async function getWorkoutOfTheDay(): Promise<WorkoutTemplate> {
-  const workouts = await loadAllWorkouts();
-  const sorted = [...workouts].sort((a, b) => a.id.localeCompare(b.id));
-  const dateStr = new Date().toISOString().split("T")[0];
-  let hash = 0;
-  for (let i = 0; i < dateStr.length; i++) {
-    hash = ((hash << 5) - hash + dateStr.charCodeAt(i)) | 0;
-  }
-  const index = Math.abs(hash) % sorted.length;
-  return sorted[index];
-}
-
-// Alias for backward compatibility
-export const getWorkoutOfTheDayAsync = getWorkoutOfTheDay;
-
-/**
- * Get a truly random workout (async)
- * Uses Math.random() for true randomness (vs getWorkoutOfTheDay which is deterministic)
- */
-export async function getRandomWorkout(): Promise<WorkoutTemplate> {
-  const workouts = await loadAllWorkouts();
-  const index = Math.floor(Math.random() * workouts.length);
-  return workouts[index];
-}
 
 /**
  * Get total workout count (async)
