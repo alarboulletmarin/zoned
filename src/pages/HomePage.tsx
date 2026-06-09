@@ -7,6 +7,7 @@ import {
   EditorialTitle,
   StaggerGrid,
   StaggerItem,
+  InteractiveCard,
   useCountUp,
   Divider,
 } from "@/components/editorial";
@@ -669,11 +670,13 @@ export function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <StaggerGrid className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {suggested.map((w) => (
-              <WorkoutCard key={w.id} workout={w} />
+              <StaggerItem key={w.id}>
+                <WorkoutCard workout={w} />
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerGrid>
         </div>
       </section>
 
@@ -859,7 +862,7 @@ export function HomePage() {
             const href = r.source.url ?? "/methodology";
             const isExternal = !!r.source.url;
             const cls =
-              "group block border border-border bg-card hover:border-foreground/40 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 p-3 rounded-md flex flex-col h-full";
+              "block border border-border bg-card hover:border-foreground/40 hover:shadow-sm transition-[box-shadow,border-color] duration-200 p-3 rounded-md flex flex-col h-full";
             const content = (
               <>
                 <span
@@ -878,18 +881,18 @@ export function HomePage() {
             return (
               <StaggerItem key={r.name}>
                 {isExternal ? (
-                  <a
+                  <InteractiveCard
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={cls}
                   >
                     {content}
-                  </a>
+                  </InteractiveCard>
                 ) : (
-                  <Link to={href} className={cls}>
+                  <InteractiveCard to={href} className={cls}>
                     {content}
-                  </Link>
+                  </InteractiveCard>
                 )}
               </StaggerItem>
             );
@@ -938,9 +941,9 @@ export function HomePage() {
         <StaggerGrid className="md:hidden mt-10 grid grid-cols-2 gap-3">
           {planRows.map(({ key, plan }) => (
             <StaggerItem key={key}>
-              <Link
+              <InteractiveCard
                 to={`/plan/prebuilt/${plan.slug}`}
-                className="group block border border-border bg-card hover:border-foreground/40 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 p-3 rounded-md flex flex-col gap-3 h-full"
+                className="block border border-border bg-card hover:border-foreground/40 hover:shadow-sm transition-[box-shadow,border-color] duration-200 p-3 rounded-md flex flex-col gap-3 h-full"
               >
                 <div className="flex items-center gap-2">
                   <span className="text-base font-sans italic font-semibold flex-1 leading-snug group-hover:text-primary transition-colors">
@@ -967,7 +970,7 @@ export function HomePage() {
                 <div className="font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground -mt-1">
                   {plan.totalWeeks} {t("homepage:home.s05.weeks")}
                 </div>
-              </Link>
+              </InteractiveCard>
             </StaggerItem>
           ))}
         </StaggerGrid>
@@ -1003,9 +1006,9 @@ export function HomePage() {
         <StaggerGrid className="mt-10 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
           {CALCULATORS.map((c) => (
             <StaggerItem key={c.key}>
-              <Link
+              <InteractiveCard
                 to={c.slug}
-                className="group block border border-border bg-card hover:border-foreground/40 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 p-3 sm:p-5 rounded-md flex items-center sm:block gap-2 sm:gap-0"
+                className="block border border-border bg-card hover:border-foreground/40 hover:shadow-sm transition-[box-shadow,border-color] duration-200 p-3 sm:p-5 rounded-md flex items-center sm:block gap-2 sm:gap-0"
               >
                 <h3 className="text-sm sm:text-base font-semibold sm:mb-1.5 group-hover:text-primary transition-colors flex-1 sm:flex-none leading-snug">
                   {t(c.titleKey)}
@@ -1018,7 +1021,7 @@ export function HomePage() {
                   <ArrowRight className="size-3 ml-1 transition-transform group-hover:translate-x-0.5" />
                 </span>
                 <ArrowRight className="size-4 sm:hidden text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-              </Link>
+              </InteractiveCard>
             </StaggerItem>
           ))}
         </StaggerGrid>

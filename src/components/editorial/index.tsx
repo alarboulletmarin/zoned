@@ -11,6 +11,8 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
+export { InteractiveCard } from "./InteractiveCard";
+
 // ────────────────────────────────────────────────────────────────────────────
 // EditorialTitle
 // ────────────────────────────────────────────────────────────────────────────

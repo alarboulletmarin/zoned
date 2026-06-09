@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { InteractiveCard } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import type { PrebuiltPlan } from "@/data/prebuilt-plans/types";
@@ -13,6 +14,15 @@ const DIFFICULTY_GRADIENT: Record<string, string> = {
   intermediate: "bg-gradient-to-br from-yellow-500/10 dark:from-yellow-500/20 to-transparent",
   advanced: "bg-gradient-to-br from-orange-500/10 dark:from-orange-500/20 to-transparent",
   elite: "bg-gradient-to-br from-red-500/10 dark:from-red-500/20 to-transparent",
+};
+
+// Spotlight tint per difficulty — matches the gradient hue above
+// (green / yellow / orange / red -500).
+const DIFFICULTY_ACCENT: Record<string, string> = {
+  beginner: "#22c55e",
+  intermediate: "#eab308",
+  advanced: "#f97316",
+  elite: "#ef4444",
 };
 
 const DIFFICULTY_KEYS: Record<string, string> = {
@@ -39,8 +49,11 @@ export function PrebuiltPlanCard({ plan }: PrebuiltPlanCardProps) {
 
   return (
     <Link to={`/plan/prebuilt/${plan.slug}`} className="group block h-full">
+      <InteractiveCard
+        accent={DIFFICULTY_ACCENT[plan.difficulty] ?? "var(--primary)"}
+        className="block h-full rounded-xl"
+      >
       <Card
-        interactive
         className={cn(
           "h-full border-border/50",
           DIFFICULTY_GRADIENT[plan.difficulty] ?? "bg-gradient-to-br from-gray-400/10 dark:from-gray-400/20 to-transparent",
@@ -73,6 +86,7 @@ export function PrebuiltPlanCard({ plan }: PrebuiltPlanCardProps) {
           </div>
         </CardContent>
       </Card>
+      </InteractiveCard>
     </Link>
   );
 }

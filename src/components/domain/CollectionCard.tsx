@@ -14,6 +14,7 @@ import {
 } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
+import { InteractiveCard } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import type { Collection } from "@/data/collections/types";
 import { usePickLang } from "@/lib/i18n-utils";
@@ -76,14 +77,15 @@ export function CollectionCard({ collection }: CollectionCardProps) {
   const zone = getCollectionZone(collection.slug);
 
   return (
-    <Link to={`/collections/${collection.slug}`} className="group block h-full">
-      <div
+    <Link to={`/collections/${collection.slug}`} className="block h-full">
+      <InteractiveCard
+        accent={`var(--zone-${zone})`}
         className={cn(
           "rounded-lg sm:rounded-xl border border-border/50 h-full p-4 sm:p-6",
           `zone-${zone}`,
           "bg-gradient-to-br to-transparent",
           ZONE_GRADIENT[zone],
-          "hover:shadow-sm hover:-translate-y-0.5 hover:border-foreground/40 active:translate-y-0 transition-all duration-200",
+          "hover:shadow-sm hover:border-foreground/40 transition-[box-shadow,border-color] duration-200",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         )}
       >
@@ -110,7 +112,7 @@ export function CollectionCard({ collection }: CollectionCardProps) {
             </Badge>
           </div>
         </div>
-      </div>
+      </InteractiveCard>
     </Link>
   );
 }
