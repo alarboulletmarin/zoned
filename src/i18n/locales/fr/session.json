@@ -113,7 +113,11 @@
     "mistakes": "Erreurs courantes"
   },
   "actions": {
-    "findRoute": "Trouver un parcours adapté"
+    "findRoute": "Trouver un parcours adapté",
+    "shareStrava": "Partager sur Strava"
+  },
+  "strava": {
+    "copied": "Séance copiée, il ne reste plus qu'à la coller sur Strava !"
   },
   "variations": {
     "title": "Variantes",
