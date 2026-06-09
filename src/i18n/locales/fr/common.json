@@ -413,14 +413,19 @@
     }
   },
   "search": {
-    "placeholder": "Rechercher séances, articles, glossaire...",
+    "placeholder": "Rechercher séances, outils, guides, pages...",
     "shortcut": "Cmd+K",
     "noResults": "Aucun résultat trouvé",
     "viewAll": "Voir tout dans la bibliothèque",
     "sections": {
+      "quickAccess": "Accès rapide",
       "workouts": "Séances",
+      "collections": "Collections",
+      "calculators": "Calculateurs",
+      "guides": "Guides",
       "articles": "Articles",
-      "glossary": "Glossaire"
+      "glossary": "Glossaire",
+      "pages": "Pages"
     }
   },
   "relatedContent": {

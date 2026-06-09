@@ -1,15 +1,53 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Search, X, Loader2, ArrowRight, BookOpen, Book, Dumbbell } from "@/components/icons";
+import {
+  Search,
+  X,
+  Loader2,
+  ArrowRight,
+  BookOpen,
+  Book,
+  Dumbbell,
+  Library,
+  Calculator,
+  Compass,
+  Sparkles,
+} from "@/components/icons";
 import { Dialog, DialogPortal, DialogOverlay, DialogTitle } from "@/components/ui/dialog";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { useCommandPalette } from "./CommandPaletteProvider";
 import { SearchResultItem } from "./SearchResultItem";
-import { unifiedSearch, type UnifiedSearchResult, type UnifiedSearchResults } from "@/lib/unified-search";
+import {
+  unifiedSearch,
+  type SearchResultType,
+  type UnifiedSearchResult,
+  type UnifiedSearchResults,
+} from "@/lib/unified-search";
+import { FEATURED_SURFACES, type SurfaceSection } from "@/data/command-surfaces";
 import { getWorkoutById } from "@/data/workouts";
 import type { AnyWorkoutTemplate } from "@/types";
 import { cn } from "@/lib/utils";
+
+type IconComponent = React.ComponentType<{ className?: string }>;
+
+/** Icon shown next to a generic result, by result type. */
+const TYPE_ICON: Record<SearchResultType, IconComponent> = {
+  workout: Dumbbell,
+  collection: Library,
+  calculator: Calculator,
+  guide: Compass,
+  article: BookOpen,
+  glossary: Book,
+  page: Sparkles,
+};
+
+/** Maps a static surface section to a result type (for the quick-access list). */
+const SURFACE_TYPE: Record<SurfaceSection, SearchResultType> = {
+  calculator: "calculator",
+  guide: "guide",
+  page: "page",
+};
 
 const DEBOUNCE_MS = 150;
 const MAX_PER_TYPE = 5;
@@ -58,6 +96,7 @@ export function CommandPalette() {
     if (!query.trim()) {
       setSearchResults(null);
       setIsLoading(false);
+      setSelectedIndex(0);
       return;
     }
 
@@ -83,9 +122,35 @@ export function CommandPalette() {
 
   // Build flat list of selectable items (skip headers for navigation)
   const { flatItems, selectableItems } = useMemo(() => {
+    const items: FlatItem[] = [];
+
+    // Empty state: surface a few featured destinations for quick access.
+    if (!query.trim()) {
+      const en = i18n.language.startsWith("en");
+      items.push({ kind: "header", label: t("search.sections.quickAccess"), icon: Sparkles });
+      for (const s of FEATURED_SURFACES) {
+        items.push({
+          kind: "generic",
+          result: {
+            type: SURFACE_TYPE[s.section],
+            id: s.id,
+            title: en ? s.titleEn : s.title,
+            subtitle: en ? s.subtitleEn : s.subtitle,
+            url: s.url,
+          },
+        });
+      }
+      const selectable = items.filter((i) => i.kind !== "header");
+      return { flatItems: items, selectableItems: selectable };
+    }
+
     if (!searchResults) return { flatItems: [] as FlatItem[], selectableItems: [] as FlatItem[] };
 
-    const items: FlatItem[] = [];
+    const addGeneric = (results: UnifiedSearchResult[], label: string, icon: IconComponent) => {
+      if (results.length === 0) return;
+      items.push({ kind: "header", label, icon });
+      for (const r of results) items.push({ kind: "generic", result: r });
+    };
 
     if (searchResults.workouts.length > 0) {
       items.push({ kind: "header", label: t("search.sections.workouts"), icon: Dumbbell });
@@ -95,23 +160,16 @@ export function CommandPalette() {
       }
     }
 
-    if (searchResults.articles.length > 0) {
-      items.push({ kind: "header", label: t("search.sections.articles"), icon: BookOpen });
-      for (const r of searchResults.articles) {
-        items.push({ kind: "generic", result: r });
-      }
-    }
-
-    if (searchResults.glossary.length > 0) {
-      items.push({ kind: "header", label: t("search.sections.glossary"), icon: Book });
-      for (const r of searchResults.glossary) {
-        items.push({ kind: "generic", result: r });
-      }
-    }
+    addGeneric(searchResults.collections, t("search.sections.collections"), Library);
+    addGeneric(searchResults.calculators, t("search.sections.calculators"), Calculator);
+    addGeneric(searchResults.guides, t("search.sections.guides"), Compass);
+    addGeneric(searchResults.articles, t("search.sections.articles"), BookOpen);
+    addGeneric(searchResults.glossary, t("search.sections.glossary"), Book);
+    addGeneric(searchResults.pages, t("search.sections.pages"), Sparkles);
 
     const selectable = items.filter((i) => i.kind !== "header");
     return { flatItems: items, selectableItems: selectable };
-  }, [searchResults, workoutCache, t]);
+  }, [searchResults, workoutCache, query, i18n.language, t]);
 
   // Scroll selected item into view
   useEffect(() => {
@@ -226,13 +284,6 @@ export function CommandPalette() {
 
           {/* Results */}
           <div className="flex-1 overflow-y-auto p-2" ref={resultsRef} aria-live="polite" aria-atomic="false">
-            {/* No query - hint */}
-            {!query.trim() && (
-              <div className="px-3 py-8 text-center text-sm text-muted-foreground">
-                {t("search.placeholder")}
-              </div>
-            )}
-
             {/* Loading state */}
             {query.trim() && isLoading && (
               <div className="px-3 py-8 text-center">
@@ -278,8 +329,8 @@ export function CommandPalette() {
                   );
                 }
 
-                // Generic result (article or glossary)
-                const Icon = item.result.type === "article" ? BookOpen : Book;
+                // Generic result (collection, calculator, guide, article, glossary, page)
+                const Icon = TYPE_ICON[item.result.type];
                 return (
                   <button
                     key={item.result.id}
