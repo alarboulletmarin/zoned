@@ -113,7 +113,11 @@
     "mistakes": "Common Mistakes"
   },
   "actions": {
-    "findRoute": "Find a matching route"
+    "findRoute": "Find a matching route",
+    "shareStrava": "Share on Strava"
+  },
+  "strava": {
+    "copied": "Workout copied, just paste it on Strava!"
   },
   "variations": {
     "title": "Variations",

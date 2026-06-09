@@ -11,9 +11,13 @@ import i18n from "@/i18n";
 import { isEnglish, pickLang } from "@/lib/i18n-utils";
 
 /**
- * Formats workout blocks into a readable description for calendar events
+ * Formats workout blocks into a readable, multi-line description.
+ *
+ * Reused by both the ICS calendar export and the Strava share-text builder
+ * so the human-readable breakdown (description → warmup/main/cooldown →
+ * tips) stays consistent across surfaces.
  */
-function formatWorkoutDescription(workout: WorkoutTemplate): string {
+export function formatWorkoutDescription(workout: WorkoutTemplate): string {
   const lines: string[] = [];
   const t = (key: string) => i18n.t(`common:export.ics.${key}`);
 

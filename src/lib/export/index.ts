@@ -28,3 +28,6 @@ export {
   type ShareMethod,
 } from "./share";
 export { getWorkoutHero, type WorkoutHero } from "./workoutHero";
+
+// Strava share text (copy-to-clipboard for activity descriptions).
+export { buildStravaShareText } from "./strava";

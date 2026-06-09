@@ -23,6 +23,7 @@ import {
   BookOpen,
   Sparkles,
   Share,
+  StravaIcon,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -39,6 +40,7 @@ import { ExportMenu } from "@/components/domain/ExportMenu";
 import { ShareDialog } from "@/components/share/ShareDialog";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/issueBuilder";
+import { buildStravaShareText } from "@/lib/export";
 import { NutritionRecoverySection } from "@/components/domain/NutritionRecoverySection";
 import { ScienceSection } from "@/components/domain/ScienceSection";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
@@ -470,6 +472,19 @@ export function WorkoutDetailPage() {
             >
               <Share className="size-3.5 mr-1.5" />
               {t("common:share.trigger")}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full px-4"
+              onClick={async () => {
+                const ok = await copyToClipboard(buildStravaShareText(workout));
+                if (ok) toast.success(t("session:strava.copied"));
+                else toast.error(t("common:errors.generic"));
+              }}
+            >
+              <StravaIcon className="size-3.5 mr-1.5 text-[#FC4C02]" />
+              {t("session:actions.shareStrava")}
             </Button>
             {canGenerateRoute && (
               <Button asChild variant="outline" size="sm" className="rounded-full px-4">
