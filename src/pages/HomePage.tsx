@@ -579,7 +579,7 @@ export function HomePage() {
                 (the "headline" stat), then the three companion stats
                 tint Z2 / Z3 / Z5 to walk the eye across the row without
                 competing with the chart sidecar. */}
-            <div className="border-t border-foreground/15 pt-6 grid grid-cols-4 gap-4">
+            <div className="border-t border-foreground/15 pt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
               <CountStat
                 target={totalSessions}
                 label={t("homepage:home.stats.sessions")}

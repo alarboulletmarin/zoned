@@ -71,6 +71,18 @@
 }
 
 /* ==========================================================================
+   ACCENT TEXT — WCAG AA contrast fix (#96)
+   `text-primary` maps to orange-500 (`--primary`), which only reaches 2.67:1
+   as text on light backgrounds. Re-point the utility to `--primary-text`
+   (orange-700 in light mode, unchanged in dark) so accent text passes AA
+   without darkening the filled `bg-primary` buttons that share `--primary`.
+   Unlayered so it wins over Tailwind's layered `.text-primary` utility.
+   ========================================================================== */
+.text-primary {
+  color: var(--primary-text);
+}
+
+/* ==========================================================================
    ZONE SYSTEM — Utility classes & components
    ========================================================================== */
 

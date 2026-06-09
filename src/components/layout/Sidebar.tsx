@@ -100,8 +100,10 @@ export function MobileSidebar({ open, onOpenChange }: MobileSidebarProps) {
                   to={item.to}
                   className="flex items-center gap-2 px-3 py-2.5 rounded-md text-sm font-medium text-foreground/85 hover:bg-accent/50 transition-colors"
                 >
-                  <item.icon className="size-4 text-muted-foreground" />
-                  <span className="truncate">{t(item.labelKey)}</span>
+                  <item.icon className="size-4 shrink-0 text-muted-foreground" />
+                  {/* Wrap rather than truncate so longer labels like
+                      "Créer une séance" stay fully readable (#105). */}
+                  <span className="leading-tight">{t(item.labelKey)}</span>
                 </Link>
               ))}
             </div>
@@ -188,7 +190,7 @@ function MobileSection({
           aria-label={open ? "Collapse" : "Expand"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
+          className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
         >
           <ChevronDown
             className={cn(

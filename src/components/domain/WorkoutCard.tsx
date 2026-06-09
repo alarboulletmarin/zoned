@@ -164,7 +164,7 @@ export function WorkoutCardChrome({
       <CardHeader className={cn("pb-1.5 sm:pb-2 px-3 sm:px-4", expanded && "pb-2 px-4")}>
         {eyebrow && <div className="mb-1">{eyebrow}</div>}
         <div className="flex items-start justify-between gap-2">
-          <CardTitle className={cn("text-sm sm:text-base line-clamp-2 sm:line-clamp-1 flex-1", expanded && "text-base line-clamp-none")}>
+          <CardTitle className={cn("text-sm sm:text-base line-clamp-2 sm:line-clamp-1 flex-1 min-w-0 break-words", expanded && "text-base line-clamp-none")}>
             {pick(workout, "name")}
           </CardTitle>
           <div className="flex items-center gap-1">
@@ -182,13 +182,13 @@ export function WorkoutCardChrome({
         <SessionIntensityBar workout={workout} />
 
         <div className={cn("flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground", expanded && "gap-3 text-sm")}>
-          <div className="flex items-center gap-1">
-            <Clock className="size-3.5" />
+          <div className="flex items-center gap-1 shrink-0">
+            <Clock className="size-3.5 shrink-0" />
             <span>{formatDurationMinutes(duration)}</span>
           </div>
-          <div className="flex items-center gap-1">
-            <CategoryIcon className="size-3.5" />
-            <span>{t(`categories.${workout.category}`)}</span>
+          <div className="flex items-center gap-1 min-w-0">
+            <CategoryIcon className="size-3.5 shrink-0" />
+            <span className="truncate">{t(`categories.${workout.category}`)}</span>
           </div>
         </div>
 

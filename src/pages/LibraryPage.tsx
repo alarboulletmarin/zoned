@@ -799,7 +799,7 @@ export function LibraryPage() {
           {/* Workout Display */}
           <div className="flex-1">
             {isLoading ? (
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-2 xl:grid-cols-3">
+              <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-2 xl:grid-cols-3">
                 {Array.from({ length: 12 }).map((_, i) => (
                   <WorkoutCardSkeleton key={i} className="border-border/50" />
                 ))}
@@ -807,7 +807,7 @@ export function LibraryPage() {
             ) : filteredWorkouts.length > 0 ? (
               <>
                 {viewMode === "grid" && (
-                  <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-2 xl:grid-cols-3">
+                  <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-2 xl:grid-cols-3">
                     {visibleWorkouts.map((workout) => (
                       <WorkoutCard key={workout.id} workout={workout} />
                     ))}

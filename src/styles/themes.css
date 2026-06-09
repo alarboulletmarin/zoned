@@ -21,6 +21,11 @@
   /* White on orange-500 fails WCAG AA (2.8:1). Charcoal hits 5.5:1 while
      keeping the orange brand identity intact. */
   --primary-foreground: #1c1917;
+  /* Accent text on light backgrounds. orange-500 as text only hits 2.67:1 —
+     below AA. orange-700 reaches ~4.6:1 while reading as the same brand
+     orange. Used by the `.text-primary` utility (see overrides.css); the
+     filled `--primary` button background stays orange-500 and untouched. */
+  --primary-text: #c2410c;
 
   /* Secondary */
   --secondary: #f1f5f9;
@@ -149,6 +154,9 @@
 
   --primary: #fb923c;
   --primary-foreground: #1c1917;
+  /* Dark mode already passes AA (#fb923c on navy) — keep accent text identical
+     to the primary hue. */
+  --primary-text: #fb923c;
 
   --secondary: #1e293b;
   --secondary-foreground: #e2e8f0;
