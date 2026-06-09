@@ -453,7 +453,6 @@ async function recordScenario(scenario: Scenario, videoDir: string): Promise<Rec
       localStorage.setItem("zoned-language", "fr");
       localStorage.setItem("i18nextLng", "fr");
       localStorage.setItem("zoned-theme", "light");
-      localStorage.setItem("zoned-onboarding-seen", "true");
       // "Your data is stored locally" dialog on the first plan page.
       localStorage.setItem("zoned-storage-warning-seen", "true");
       // Page-level hint toasts (usePageHint) would pop over the recording.

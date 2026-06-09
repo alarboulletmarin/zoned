@@ -160,7 +160,6 @@ async function generateSitemap(): Promise<string> {
     { loc: "/library", priority: "0.9", changefreq: "weekly", lastmod: pkgMtime },
     { loc: "/learn", priority: "0.8", changefreq: "monthly", lastmod: pkgMtime },
     { loc: "/glossary", priority: "0.8", changefreq: "monthly", lastmod: pkgMtime },
-    { loc: "/quiz", priority: "0.6", changefreq: "monthly", lastmod: pkgMtime },
     { loc: "/about", priority: "0.5", changefreq: "monthly", lastmod: pkgMtime },
     { loc: "/collections", priority: "0.7", changefreq: "monthly", lastmod: pkgMtime },
     { loc: "/calculators", priority: "0.7", changefreq: "monthly", lastmod: pkgMtime },

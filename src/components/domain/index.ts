@@ -19,7 +19,6 @@ export { ScanCard } from "./ScanCard";
 // Import them directly from their files when needed:
 //
 // Visualization-dependent (import visualization code):
-// import { WorkoutOfTheDay } from "@/components/domain/WorkoutOfTheDay";
 // import { WorkoutStructure, CoachingTips } from "@/components/domain/WorkoutStructure";
 // import { ExportMenu } from "@/components/domain/ExportMenu";
 // import { ExportableWorkoutCard } from "@/components/domain/ExportableWorkoutCard";
@@ -27,7 +26,6 @@ export { ScanCard } from "./ScanCard";
 // Lazy-loaded pages only:
 // import { ZoneCalculator } from "@/components/domain/ZoneCalculator";
 // import { PaceCalculator } from "@/components/domain/PaceCalculator";
-// import { WorkoutQuiz } from "@/components/domain/WorkoutQuiz";
 // import { ExportDatePicker } from "@/components/domain/ExportDatePicker";
 // import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
 //

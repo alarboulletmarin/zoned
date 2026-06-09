@@ -5,7 +5,6 @@ import {
   loadCategory,
   getWorkoutByIdAsync,
   getRelatedWorkoutsAsync,
-  getWorkoutOfTheDayAsync,
   getAllWorkoutsSync,
   isAllWorkoutsLoaded,
 } from "@/data/workouts";
@@ -18,12 +17,6 @@ interface UseWorkoutsResult {
 }
 
 interface UseWorkoutResult {
-  workout: WorkoutTemplate | null;
-  isLoading: boolean;
-  error: Error | null;
-}
-
-interface UseWorkoutOfTheDayResult {
   workout: WorkoutTemplate | null;
   isLoading: boolean;
   error: Error | null;
@@ -169,39 +162,6 @@ export function useCategoryWorkouts(
   }, [category]);
 
   return { workouts, isLoading, error };
-}
-
-/**
- * Hook to get workout of the day
- */
-export function useWorkoutOfTheDay(): UseWorkoutOfTheDayResult {
-  const [workout, setWorkout] = useState<WorkoutTemplate | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    getWorkoutOfTheDayAsync()
-      .then((data) => {
-        if (!cancelled) {
-          setWorkout(data);
-          setIsLoading(false);
-        }
-      })
-      .catch((err) => {
-        if (!cancelled) {
-          setError(err instanceof Error ? err : new Error(String(err)));
-          setIsLoading(false);
-        }
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  return { workout, isLoading, error };
 }
 
 /**

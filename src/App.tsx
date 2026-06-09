@@ -26,7 +26,6 @@ const PrebuiltWeekDetailPage = lazy(() => import("@/pages/PrebuiltWeekDetailPage
 const WorkoutDetailPage = lazy(() => import("@/pages/WorkoutDetailPage").then(m => ({ default: m.WorkoutDetailPage })));
 const MyZonesPage = lazy(() => import("@/pages/MyZonesPage").then(m => ({ default: m.MyZonesPage })));
 const FavoritesPage = lazy(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
-const QuizPage = lazy(() => import("@/pages/QuizPage").then(m => ({ default: m.QuizPage })));
 const ContributePage = lazy(() => import("@/pages/ContributePage").then(m => ({ default: m.ContributePage })));
 const AboutPage = lazy(() => import("@/pages/AboutPage").then(m => ({ default: m.AboutPage })));
 const LearnPage = lazy(() => import("@/pages/LearnPage").then(m => ({ default: m.LearnPage })));
@@ -281,7 +280,7 @@ function App() {
                           <Route path="/settings" element={<SettingsPage />} />
                           <Route path="/profile" element={<RunnerProfilePage />} />
                           <Route path="/favorites" element={<FavoritesPage />} />
-                          <Route path="/quiz" element={<QuizPage />} />
+                          <Route path="/quiz" element={<Navigate to="/library/draw" replace />} />
                           <Route path="/contribute" element={<ContributePage />} />
                           <Route path="/about" element={<AboutPage />} />
                           <Route path="/learn" element={<LearnPage />} />
