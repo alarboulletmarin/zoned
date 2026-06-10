@@ -80,7 +80,11 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          "vendor-react": ["react", "react-dom", "react-router-dom"],
+          // react-dom/client must be listed explicitly: the object form maps
+          // resolved entry points, and the /client subpath (where the whole
+          // 540KB renderer lives) is a separate entry from "react-dom".
+          // Without it the renderer lands in the app entry chunk.
+          "vendor-react": ["react", "react-dom", "react-dom/client", "react-router-dom"],
           "vendor-radix": [
             "@radix-ui/react-dialog",
             "@radix-ui/react-dropdown-menu",

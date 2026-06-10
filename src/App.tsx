@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react";
+import { useState, useEffect, useRef, useCallback, lazy, Suspense, type ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 import { Analytics } from "@vercel/analytics/react";
 import { toast, Toaster } from "sonner";
@@ -7,72 +7,110 @@ import { MobileSidebar, TopBar, Footer } from "@/components/layout";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { FavoritesProvider } from "@/hooks";
 import { SettingsProvider } from "@/hooks/useSettings";
-import { CommandPaletteProvider, CommandPalette } from "@/components/search";
+import { CommandPaletteProvider, useCommandPalette } from "@/components/search";
 import { GlossaryMatcherProvider } from "@/contexts/GlossaryMatcherContext";
 import { StorageWarning } from "@/components/domain/StorageWarning";
 import { PWAInstallPrompt } from "@/components/domain/PWAInstallPrompt";
 import { usePWA } from "@/hooks/usePWA";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { i18nReady } from "@/i18n";
+
+/** React.lazy that also waits for the active language's translation bundles
+ *  (loaded in parallel with the page chunk). The page renders only once both
+ *  are ready, behind the same Suspense fallback — no flash of raw i18n keys.
+ *  After the first page, i18nReady is resolved and this is free. */
+function lazyPage<T extends ComponentType<unknown>>(
+  loader: () => Promise<{ default: T }>
+) {
+  return lazy(() =>
+    Promise.all([loader(), i18nReady]).then(([module]) => module)
+  );
+}
 
 // All pages lazy loaded for optimal code-splitting
-const HomePage = lazy(() => import("@/pages/HomePage").then(m => ({ default: m.HomePage })));
-const LibraryPage = lazy(() => import("@/pages/LibraryPage").then(m => ({ default: m.LibraryPage })));
-const DrawSessionPage = lazy(() => import("@/pages/DrawSessionPage").then(m => ({ default: m.DrawSessionPage })));
-const WeeksListPage = lazy(() => import("@/pages/WeeksListPage").then(m => ({ default: m.WeeksListPage })));
-const WeekViewPage = lazy(() => import("@/pages/WeekViewPage").then(m => ({ default: m.WeekViewPage })));
-const WeekNewPage = lazy(() => import("@/pages/WeekNewPage").then(m => ({ default: m.WeekNewPage })));
-const PrebuiltWeeksPage = lazy(() => import("@/pages/PrebuiltWeeksPage").then(m => ({ default: m.PrebuiltWeeksPage })));
-const PrebuiltWeekDetailPage = lazy(() => import("@/pages/PrebuiltWeekDetailPage").then(m => ({ default: m.PrebuiltWeekDetailPage })));
-const WorkoutDetailPage = lazy(() => import("@/pages/WorkoutDetailPage").then(m => ({ default: m.WorkoutDetailPage })));
-const MyZonesPage = lazy(() => import("@/pages/MyZonesPage").then(m => ({ default: m.MyZonesPage })));
-const FavoritesPage = lazy(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
-const ContributePage = lazy(() => import("@/pages/ContributePage").then(m => ({ default: m.ContributePage })));
-const AboutPage = lazy(() => import("@/pages/AboutPage").then(m => ({ default: m.AboutPage })));
-const LearnPage = lazy(() => import("@/pages/LearnPage").then(m => ({ default: m.LearnPage })));
-const MethodologyPage = lazy(() => import("@/pages/MethodologyPage").then(m => ({ default: m.MethodologyPage })));
-const ArticlePage = lazy(() => import("@/pages/ArticlePage").then(m => ({ default: m.ArticlePage })));
-const GlossaryPage = lazy(() => import("@/pages/GlossaryPage").then(m => ({ default: m.GlossaryPage })));
-const GlossaryTermPage = lazy(() => import("@/pages/GlossaryTermPage").then(m => ({ default: m.GlossaryTermPage })));
-const SettingsPage = lazy(() => import("@/pages/SettingsPage").then(m => ({ default: m.SettingsPage })));
-const CollectionsPage = lazy(() => import("@/pages/CollectionsPage").then(m => ({ default: m.CollectionsPage })));
-const CollectionDetailPage = lazy(() => import("@/pages/CollectionDetailPage").then(m => ({ default: m.CollectionDetailPage })));
-const ChangelogPage = lazy(() => import("@/pages/ChangelogPage").then(m => ({ default: m.ChangelogPage })));
-const PlansPage = lazy(() => import("@/pages/PlansPage").then(m => ({ default: m.PlansPage })));
-const PlanNewPage = lazy(() => import("@/pages/PlanNewPage").then(m => ({ default: m.PlanNewPage })));
-const PlanCreatePage = lazy(() => import("@/pages/PlanCreatePage").then(m => ({ default: m.PlanCreatePage })));
-const FreePlanCreatePage = lazy(() => import("@/pages/FreePlanCreatePage").then(m => ({ default: m.FreePlanCreatePage })));
-const PlanViewPage = lazy(() => import("@/pages/PlanViewPage").then(m => ({ default: m.PlanViewPage })));
-const PrebuiltPlansPage = lazy(() => import("@/pages/PrebuiltPlansPage").then(m => ({ default: m.PrebuiltPlansPage })));
-const PrebuiltPlanDetailPage = lazy(() => import("@/pages/PrebuiltPlanDetailPage").then(m => ({ default: m.PrebuiltPlanDetailPage })));
-const PlanMethodologyPage = lazy(() => import("@/pages/PlanMethodologyPage").then(m => ({ default: m.PlanMethodologyPage })));
-const NutritionGuidePage = lazy(() => import("@/pages/NutritionGuidePage").then(m => ({ default: m.NutritionGuidePage })));
-const NutritionHubPage = lazy(() => import("@/pages/NutritionHubPage").then(m => ({ default: m.NutritionHubPage })));
-const GuidesPage = lazy(() => import("@/pages/GuidesPage").then(m => ({ default: m.GuidesPage })));
-const CalculateursPage = lazy(() => import("@/pages/CalculateursPage").then(m => ({ default: m.CalculateursPage })));
-const ZonesCalculatorPage = lazy(() => import("@/pages/ZonesCalculatorPage").then(m => ({ default: m.ZonesCalculatorPage })));
-const PaceCalculatorPage = lazy(() => import("@/pages/PaceCalculatorPage").then(m => ({ default: m.PaceCalculatorPage })));
-const TreadmillConverterPage = lazy(() => import("@/pages/TreadmillConverterPage").then(m => ({ default: m.TreadmillConverterPage })));
-const SplitGeneratorPage = lazy(() => import("@/pages/SplitGeneratorPage").then(m => ({ default: m.SplitGeneratorPage })));
-const VmaCalculatorPage = lazy(() => import("@/pages/VmaCalculatorPage").then(m => ({ default: m.VmaCalculatorPage })));
-const FtpTestPage = lazy(() => import("@/pages/tests/FtpTestPage").then(m => ({ default: m.FtpTestPage })));
-const CssTestPage = lazy(() => import("@/pages/tests/CssTestPage").then(m => ({ default: m.CssTestPage })));
-const RaceEquivalencePage = lazy(() => import("@/pages/RaceEquivalencePage").then(m => ({ default: m.RaceEquivalencePage })));
-const RacePrepGuidePage = lazy(() => import("@/pages/RacePrepGuidePage").then(m => ({ default: m.RacePrepGuidePage })));
-const WarmupGuidePage = lazy(() => import("@/pages/WarmupGuidePage").then(m => ({ default: m.WarmupGuidePage })));
-const PaceConverterPage = lazy(() => import("@/pages/PaceConverterPage").then(m => ({ default: m.PaceConverterPage })));
-const PaceTablePage = lazy(() => import("@/pages/PaceTablePage").then(m => ({ default: m.PaceTablePage })));
-const AgeGradedPage = lazy(() => import("@/pages/AgeGradedPage").then(m => ({ default: m.AgeGradedPage })));
-const WhatIfPage = lazy(() => import("@/pages/WhatIfPage").then(m => ({ default: m.WhatIfPage })));
-const WorkoutBuilderPage = lazy(() => import("@/pages/WorkoutBuilderPage").then(m => ({ default: m.WorkoutBuilderPage })));
-const RaceSimulatorPage = lazy(() => import("@/pages/RaceSimulatorPage").then(m => ({ default: m.RaceSimulatorPage })));
-const CompareHubPage = lazy(() => import("@/pages/CompareHubPage").then(m => ({ default: m.CompareHubPage })));
-const CompareDetailPage = lazy(() => import("@/pages/CompareDetailPage").then(m => ({ default: m.CompareDetailPage })));
-const RunnerProfilePage = lazy(() => import("@/pages/RunnerProfilePage").then(m => ({ default: m.RunnerProfilePage })));
-const RouteGeneratorPage = lazy(() => import("@/pages/RouteGeneratorPage").then(m => ({ default: m.RouteGeneratorPage })));
-const MyRoutesPage = lazy(() => import("@/pages/MyRoutesPage").then(m => ({ default: m.MyRoutesPage })));
-const RouteDetailPage = lazy(() => import("@/pages/RouteDetailPage").then(m => ({ default: m.RouteDetailPage })));
-const TrackFinderPage = lazy(() => import("@/pages/TrackFinderPage").then(m => ({ default: m.TrackFinderPage })));
-const NotFoundPage = lazy(() => import("@/pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
+const HomePage = lazyPage(() => import("@/pages/HomePage").then(m => ({ default: m.HomePage })));
+const LibraryPage = lazyPage(() => import("@/pages/LibraryPage").then(m => ({ default: m.LibraryPage })));
+const DrawSessionPage = lazyPage(() => import("@/pages/DrawSessionPage").then(m => ({ default: m.DrawSessionPage })));
+const WeeksListPage = lazyPage(() => import("@/pages/WeeksListPage").then(m => ({ default: m.WeeksListPage })));
+const WeekViewPage = lazyPage(() => import("@/pages/WeekViewPage").then(m => ({ default: m.WeekViewPage })));
+const WeekNewPage = lazyPage(() => import("@/pages/WeekNewPage").then(m => ({ default: m.WeekNewPage })));
+const PrebuiltWeeksPage = lazyPage(() => import("@/pages/PrebuiltWeeksPage").then(m => ({ default: m.PrebuiltWeeksPage })));
+const PrebuiltWeekDetailPage = lazyPage(() => import("@/pages/PrebuiltWeekDetailPage").then(m => ({ default: m.PrebuiltWeekDetailPage })));
+const WorkoutDetailPage = lazyPage(() => import("@/pages/WorkoutDetailPage").then(m => ({ default: m.WorkoutDetailPage })));
+const MyZonesPage = lazyPage(() => import("@/pages/MyZonesPage").then(m => ({ default: m.MyZonesPage })));
+const FavoritesPage = lazyPage(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
+const ContributePage = lazyPage(() => import("@/pages/ContributePage").then(m => ({ default: m.ContributePage })));
+const AboutPage = lazyPage(() => import("@/pages/AboutPage").then(m => ({ default: m.AboutPage })));
+const LearnPage = lazyPage(() => import("@/pages/LearnPage").then(m => ({ default: m.LearnPage })));
+const MethodologyPage = lazyPage(() => import("@/pages/MethodologyPage").then(m => ({ default: m.MethodologyPage })));
+const ArticlePage = lazyPage(() => import("@/pages/ArticlePage").then(m => ({ default: m.ArticlePage })));
+const GlossaryPage = lazyPage(() => import("@/pages/GlossaryPage").then(m => ({ default: m.GlossaryPage })));
+const GlossaryTermPage = lazyPage(() => import("@/pages/GlossaryTermPage").then(m => ({ default: m.GlossaryTermPage })));
+const SettingsPage = lazyPage(() => import("@/pages/SettingsPage").then(m => ({ default: m.SettingsPage })));
+const CollectionsPage = lazyPage(() => import("@/pages/CollectionsPage").then(m => ({ default: m.CollectionsPage })));
+const CollectionDetailPage = lazyPage(() => import("@/pages/CollectionDetailPage").then(m => ({ default: m.CollectionDetailPage })));
+const ChangelogPage = lazyPage(() => import("@/pages/ChangelogPage").then(m => ({ default: m.ChangelogPage })));
+const PlansPage = lazyPage(() => import("@/pages/PlansPage").then(m => ({ default: m.PlansPage })));
+const PlanNewPage = lazyPage(() => import("@/pages/PlanNewPage").then(m => ({ default: m.PlanNewPage })));
+const PlanCreatePage = lazyPage(() => import("@/pages/PlanCreatePage").then(m => ({ default: m.PlanCreatePage })));
+const FreePlanCreatePage = lazyPage(() => import("@/pages/FreePlanCreatePage").then(m => ({ default: m.FreePlanCreatePage })));
+const PlanViewPage = lazyPage(() => import("@/pages/PlanViewPage").then(m => ({ default: m.PlanViewPage })));
+const PrebuiltPlansPage = lazyPage(() => import("@/pages/PrebuiltPlansPage").then(m => ({ default: m.PrebuiltPlansPage })));
+const PrebuiltPlanDetailPage = lazyPage(() => import("@/pages/PrebuiltPlanDetailPage").then(m => ({ default: m.PrebuiltPlanDetailPage })));
+const PlanMethodologyPage = lazyPage(() => import("@/pages/PlanMethodologyPage").then(m => ({ default: m.PlanMethodologyPage })));
+const NutritionGuidePage = lazyPage(() => import("@/pages/NutritionGuidePage").then(m => ({ default: m.NutritionGuidePage })));
+const NutritionHubPage = lazyPage(() => import("@/pages/NutritionHubPage").then(m => ({ default: m.NutritionHubPage })));
+const GuidesPage = lazyPage(() => import("@/pages/GuidesPage").then(m => ({ default: m.GuidesPage })));
+const CalculateursPage = lazyPage(() => import("@/pages/CalculateursPage").then(m => ({ default: m.CalculateursPage })));
+const ZonesCalculatorPage = lazyPage(() => import("@/pages/ZonesCalculatorPage").then(m => ({ default: m.ZonesCalculatorPage })));
+const PaceCalculatorPage = lazyPage(() => import("@/pages/PaceCalculatorPage").then(m => ({ default: m.PaceCalculatorPage })));
+const TreadmillConverterPage = lazyPage(() => import("@/pages/TreadmillConverterPage").then(m => ({ default: m.TreadmillConverterPage })));
+const SplitGeneratorPage = lazyPage(() => import("@/pages/SplitGeneratorPage").then(m => ({ default: m.SplitGeneratorPage })));
+const VmaCalculatorPage = lazyPage(() => import("@/pages/VmaCalculatorPage").then(m => ({ default: m.VmaCalculatorPage })));
+const FtpTestPage = lazyPage(() => import("@/pages/tests/FtpTestPage").then(m => ({ default: m.FtpTestPage })));
+const CssTestPage = lazyPage(() => import("@/pages/tests/CssTestPage").then(m => ({ default: m.CssTestPage })));
+const RaceEquivalencePage = lazyPage(() => import("@/pages/RaceEquivalencePage").then(m => ({ default: m.RaceEquivalencePage })));
+const RacePrepGuidePage = lazyPage(() => import("@/pages/RacePrepGuidePage").then(m => ({ default: m.RacePrepGuidePage })));
+const WarmupGuidePage = lazyPage(() => import("@/pages/WarmupGuidePage").then(m => ({ default: m.WarmupGuidePage })));
+const PaceConverterPage = lazyPage(() => import("@/pages/PaceConverterPage").then(m => ({ default: m.PaceConverterPage })));
+const PaceTablePage = lazyPage(() => import("@/pages/PaceTablePage").then(m => ({ default: m.PaceTablePage })));
+const AgeGradedPage = lazyPage(() => import("@/pages/AgeGradedPage").then(m => ({ default: m.AgeGradedPage })));
+const WhatIfPage = lazyPage(() => import("@/pages/WhatIfPage").then(m => ({ default: m.WhatIfPage })));
+const WorkoutBuilderPage = lazyPage(() => import("@/pages/WorkoutBuilderPage").then(m => ({ default: m.WorkoutBuilderPage })));
+const RaceSimulatorPage = lazyPage(() => import("@/pages/RaceSimulatorPage").then(m => ({ default: m.RaceSimulatorPage })));
+const CompareHubPage = lazyPage(() => import("@/pages/CompareHubPage").then(m => ({ default: m.CompareHubPage })));
+const CompareDetailPage = lazyPage(() => import("@/pages/CompareDetailPage").then(m => ({ default: m.CompareDetailPage })));
+const RunnerProfilePage = lazyPage(() => import("@/pages/RunnerProfilePage").then(m => ({ default: m.RunnerProfilePage })));
+const RouteGeneratorPage = lazyPage(() => import("@/pages/RouteGeneratorPage").then(m => ({ default: m.RouteGeneratorPage })));
+const MyRoutesPage = lazyPage(() => import("@/pages/MyRoutesPage").then(m => ({ default: m.MyRoutesPage })));
+const RouteDetailPage = lazyPage(() => import("@/pages/RouteDetailPage").then(m => ({ default: m.RouteDetailPage })));
+const TrackFinderPage = lazyPage(() => import("@/pages/TrackFinderPage").then(m => ({ default: m.TrackFinderPage })));
+const NotFoundPage = lazyPage(() => import("@/pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
+
+// Command palette body: lazy so its search index (workout structures,
+// collections, command surfaces, unified search) stays out of the entry
+// chunk. Mounted on first open; the chunk is also preloaded at idle below,
+// so by the time a human presses Cmd+K it is already in cache.
+const LazyCommandPalette = lazy(() =>
+  Promise.all([
+    import("@/components/search/CommandPalette").then(m => ({ default: m.CommandPalette })),
+    i18nReady,
+  ]).then(([module]) => module)
+);
+
+function DeferredCommandPalette() {
+  const { isOpen } = useCommandPalette();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    if (isOpen) setMounted(true);
+  }, [isOpen]);
+  if (!mounted) return null;
+  return (
+    <Suspense fallback={null}>
+      <LazyCommandPalette />
+    </Suspense>
+  );
+}
 
 // Preload sidebar pages after initial render to eliminate navigation latency
 function preloadSidebarPages() {
@@ -86,6 +124,7 @@ function preloadSidebarPages() {
     () => import("@/pages/LearnPage"),
     () => import("@/pages/GlossaryPage"),
     () => import("@/pages/MethodologyPage"),
+    () => import("@/components/search/CommandPalette"),
   ];
   // Stagger preloads to not block the main thread
   pages.forEach((load, i) => setTimeout(load, 1000 + i * 200));
@@ -322,7 +361,7 @@ function App() {
                 </ErrorBoundary>
               </div>
             </div>
-            <CommandPalette />
+            <DeferredCommandPalette />
           </CommandPaletteProvider>
           </GlossaryMatcherProvider>
           <Analytics />
