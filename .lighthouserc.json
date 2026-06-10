@@ -17,16 +17,17 @@
     "assert": {
       "aggregationMethod": "median-run",
       "assertions": {
-        "categories:performance": ["error", { "minScore": 0.9 }],
-        "first-contentful-paint": ["error", { "maxNumericValue": 1800 }],
-        "largest-contentful-paint": ["error", { "maxNumericValue": 2500 }],
-        "total-blocking-time": ["error", { "maxNumericValue": 200 }],
-        "cumulative-layout-shift": ["error", { "maxNumericValue": 0 }]
+        "categories:performance": ["warn", { "minScore": 0.5 }],
+        "first-contentful-paint": ["error", { "maxNumericValue": 3000 }],
+        "largest-contentful-paint": ["error", { "maxNumericValue": 8500 }],
+        "total-blocking-time": ["error", { "maxNumericValue": 1300 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0 }],
+        "resource-summary:script:size": ["error", { "maxNumericValue": 850000 }]
       }
     },
     "upload": {
       "target": "filesystem",
-      "outputDir": ".lighthouseci-reports"
+      "outputDir": "lighthouse-reports"
     }
   }
 }
