@@ -1,0 +1,45 @@
+# Performance guardrail: Lighthouse CI on the production build.
+#
+# Mobile emulation + simulated slow 4G (Lighthouse defaults), on the home
+# page and the zones calculator. Budgets are blocking — the job fails when
+# the median of 3 runs breaks any of:
+#   perf score > 90, FCP < 1.8s, LCP < 2.5s, TBT < 200ms, CLS = 0
+# Budgets live in .lighthouserc.json.
+name: Lighthouse CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        # VERCEL=1 short-circuits the postinstall puppeteer Chrome download
+        # (only needed for the OG-image scripts); Lighthouse uses the
+        # runner's preinstalled Chrome.
+        run: bun install --frozen-lockfile
+        env:
+          VERCEL: "1"
+
+      - name: Build production bundle
+        run: bun run build
+
+      - name: Run Lighthouse CI
+        run: bunx @lhci/cli@0.15.1 autorun
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci-reports
+          if-no-files-found: ignore

@@ -292,10 +292,29 @@ function App() {
 
               <div className="flex flex-1 min-w-0 flex-col">
                 <ErrorBoundary>
+                {/* The Suspense boundary wraps BOTH the page and the footer:
+                    with the footer outside, it sat just below the
+                    min-h-screen fallback during the initial load, then
+                    jumped up into the viewport when a shorter page (e.g. a
+                    calculator) resolved — a real CLS hit. Inside, footer and
+                    page appear together (appearance is not a shift), and
+                    later navigations never show this fallback because
+                    react-router wraps them in startTransition. */}
+                <Suspense
+                  fallback={
+                    <main
+                      id="main-content"
+                      className="flex-1 px-4 md:px-6 lg:px-8 pt-20 pb-4"
+                    >
+                      <div className="mx-auto max-w-6xl">
+                        <div className="min-h-screen" />
+                      </div>
+                    </main>
+                  }
+                >
                 <main id="main-content" className="flex-1 px-4 md:px-6 lg:px-8 pt-20 pb-4">
                   <div className="mx-auto max-w-6xl">
                     <ErrorBoundary>
-                      <Suspense fallback={<div className="min-h-screen" />}>
                         <Routes>
                           <Route path="/" element={<HomePage />} />
                           <Route path="/library" element={<LibraryPage />} />
@@ -359,12 +378,12 @@ function App() {
                           <Route path="/compare/:slug" element={<CompareDetailPage />} />
                           <Route path="*" element={<NotFoundPage />} />
                         </Routes>
-                      </Suspense>
                     </ErrorBoundary>
                   </div>
                 </main>
 
                 <ConditionalFooter />
+                </Suspense>
                 </ErrorBoundary>
               </div>
             </div>
