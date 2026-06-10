@@ -17,12 +17,17 @@ interface UseCrossDisciplineWorkoutsResult {
  */
 export function useCrossDisciplineWorkouts(
   discipline: CrossDiscipline,
+  options: { enabled?: boolean } = {},
 ): UseCrossDisciplineWorkoutsResult {
+  const { enabled = true } = options;
   const [workouts, setWorkouts] = useState<WorkoutTemplate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    // `enabled: false` postpones the fetch until the caller flips it (used
+    // by HomePage to keep these chunks out of the LCP window).
+    if (!enabled) return;
     let cancelled = false;
     setIsLoading(true);
     setError(null);
@@ -44,7 +49,7 @@ export function useCrossDisciplineWorkouts(
     return () => {
       cancelled = true;
     };
-  }, [discipline]);
+  }, [discipline, enabled]);
 
   return { workouts, isLoading, error };
 }

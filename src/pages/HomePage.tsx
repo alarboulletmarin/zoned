@@ -16,6 +16,7 @@ import { SEOHead } from "@/components/seo";
 import { useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
+import { useIdleAfterLoad } from "@/hooks/useIdleAfterLoad";
 import { usePlans } from "@/hooks/usePlans";
 import { ZONE_META, type ZoneNumber } from "@/types";
 import { usePickLang } from "@/lib/i18n-utils";
@@ -330,10 +331,15 @@ export function HomePage() {
     setUserPrefs(next);
   };
 
-  const { workouts: runWorkouts } = useWorkouts();
-  const { workouts: cyclingWorkouts } = useCrossDisciplineWorkouts("cycling");
-  const { workouts: swimWorkouts } = useCrossDisciplineWorkouts("swimming");
-  const { workouts: strengthWorkouts } = useStrengthWorkouts();
+  // The landing stats and weekly picks need the full library (12 running
+  // category chunks + cycling + swimming + strength). None of it is
+  // LCP-critical — the hero renders without it — so wait for load+idle
+  // before fetching to keep the bandwidth free for the hero on slow mobile.
+  const libraryFetchReady = useIdleAfterLoad();
+  const { workouts: runWorkouts } = useWorkouts({ enabled: libraryFetchReady });
+  const { workouts: cyclingWorkouts } = useCrossDisciplineWorkouts("cycling", { enabled: libraryFetchReady });
+  const { workouts: swimWorkouts } = useCrossDisciplineWorkouts("swimming", { enabled: libraryFetchReady });
+  const { workouts: strengthWorkouts } = useStrengthWorkouts({ enabled: libraryFetchReady });
   const { plans: userPlans } = usePlans();
   const hasPlans = userPlans.length > 0;
 
@@ -1251,10 +1257,15 @@ function PolarisedChart() {
                 </span>
               </div>
               <div className="h-2.5 bg-foreground/[0.06] rounded-sm overflow-hidden">
+                {/* Animate scaleX, not width: transform runs on the
+                    compositor while width re-layouts every frame (these six
+                    bars were Lighthouse's six non-composited animations).
+                    Width is fixed at the target value; only the scale moves. */}
                 <div
-                  className={`h-full ${ZONE_BAR_BG[zone]} rounded-sm transition-[width] duration-[900ms] ease-out`}
+                  className={`h-full ${ZONE_BAR_BG[zone]} rounded-sm origin-left transition-transform duration-[900ms] ease-out`}
                   style={{
-                    width: `${animated ? (pct / max) * 100 : 0}%`,
+                    width: `${(pct / max) * 100}%`,
+                    transform: animated ? "scaleX(1)" : "scaleX(0)",
                     transitionDelay: reduced ? "0ms" : `${i * 80}ms`,
                   }}
                 />

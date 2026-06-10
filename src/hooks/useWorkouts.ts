@@ -44,7 +44,10 @@ function mergeWithCustom(workouts: WorkoutTemplate[]): WorkoutTemplate[] {
   return [...workouts, ...custom];
 }
 
-export function useWorkouts(): UseWorkoutsResult {
+export function useWorkouts(
+  options: { enabled?: boolean } = {}
+): UseWorkoutsResult {
+  const { enabled = true } = options;
   const [workouts, setWorkouts] = useState<WorkoutTemplate[]>(() =>
     mergeWithCustom(getAllWorkoutsSync())
   );
@@ -52,6 +55,9 @@ export function useWorkouts(): UseWorkoutsResult {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    // `enabled: false` postpones the fetch (e.g. HomePage waits for idle so
+    // the 12 category chunks don't compete with LCP-critical resources).
+    if (!enabled) return;
     if (isAllWorkoutsLoaded()) {
       setWorkouts(mergeWithCustom(getAllWorkoutsSync()));
       setIsLoading(false);
@@ -77,7 +83,7 @@ export function useWorkouts(): UseWorkoutsResult {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [enabled]);
 
   return { workouts, isLoading, error };
 }

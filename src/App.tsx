@@ -13,6 +13,7 @@ import { StorageWarning } from "@/components/domain/StorageWarning";
 import { PWAInstallPrompt } from "@/components/domain/PWAInstallPrompt";
 import { usePWA } from "@/hooks/usePWA";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useIdleAfterLoad } from "@/hooks/useIdleAfterLoad";
 import { i18nReady } from "@/i18n";
 
 /** React.lazy that also waits for the active language's translation bundles
@@ -126,8 +127,9 @@ function preloadSidebarPages() {
     () => import("@/pages/MethodologyPage"),
     () => import("@/components/search/CommandPalette"),
   ];
-  // Stagger preloads to not block the main thread
-  pages.forEach((load, i) => setTimeout(load, 1000 + i * 200));
+  // Stagger preloads to not block the main thread. The caller already waits
+  // for load+idle, so no extra base delay is needed.
+  pages.forEach((load, i) => setTimeout(load, i * 200));
 }
 
 /** Routes that take over the full viewport (Strava-style map experiences,
@@ -176,8 +178,13 @@ function App() {
   // tapped, and dismiss it slightly faster.
   const isMobile = useMediaQuery("(max-width: 767px)");
 
-  // Preload main pages in background after first render
-  useEffect(() => { preloadSidebarPages(); }, []);
+  // Preload main pages in background once the window has loaded and the
+  // main thread is idle — a fixed 1s timer used to fire while the LCP page
+  // chunk and fonts were still downloading on slow connections.
+  const preloadReady = useIdleAfterLoad();
+  useEffect(() => {
+    if (preloadReady) preloadSidebarPages();
+  }, [preloadReady]);
 
   // Track if user has manually set theme preference
   const userHasSetTheme = useRef(

@@ -17,7 +17,10 @@ interface UseStrengthWorkoutsResult {
  * Returns workouts from cache immediately if available, otherwise loads asynchronously.
  * Mirrors the pattern from useWorkouts.ts for running workouts.
  */
-export function useStrengthWorkouts(): UseStrengthWorkoutsResult {
+export function useStrengthWorkouts(
+  options: { enabled?: boolean } = {}
+): UseStrengthWorkoutsResult {
+  const { enabled = true } = options;
   const [workouts, setWorkouts] = useState<StrengthWorkoutTemplate[]>(
     () => getAllStrengthSessionsSync()
   );
@@ -25,6 +28,8 @@ export function useStrengthWorkouts(): UseStrengthWorkoutsResult {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    // `enabled: false` postpones the fetch (HomePage waits for idle).
+    if (!enabled) return;
     if (isStrengthLoaded()) {
       setWorkouts(getAllStrengthSessionsSync());
       setIsLoading(false);
@@ -50,7 +55,7 @@ export function useStrengthWorkouts(): UseStrengthWorkoutsResult {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [enabled]);
 
   return { workouts, isLoading, error };
 }
