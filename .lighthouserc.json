@@ -1,0 +1,33 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./dist",
+      "isSinglePageApplication": true,
+      "url": [
+        "http://localhost/",
+        "http://localhost/calculators/zones"
+      ],
+      "numberOfRuns": 3,
+      "settings": {
+        "onlyCategories": ["performance"],
+        "skipAudits": ["uses-http2"],
+        "chromeFlags": "--no-sandbox"
+      }
+    },
+    "assert": {
+      "aggregationMethod": "median-run",
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.5 }],
+        "first-contentful-paint": ["error", { "maxNumericValue": 3000 }],
+        "largest-contentful-paint": ["error", { "maxNumericValue": 8500 }],
+        "total-blocking-time": ["error", { "maxNumericValue": 1300 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0 }],
+        "resource-summary:script:size": ["error", { "maxNumericValue": 850000 }]
+      }
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": "lighthouse-reports"
+    }
+  }
+}

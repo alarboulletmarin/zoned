@@ -142,16 +142,33 @@
    SKELETON LOADING — zone-shimmer variant
    ========================================================================== */
 
+/* The gradient lives on an oversized pseudo-element moved with translateX
+   instead of animating background-position: transform runs on the compositor,
+   background-position repaints every frame. The pseudo is 600% wide (same as
+   the old background-size) and slides by -500% of the container width
+   (-83.333% of its own width), reproducing the 0%→100% position sweep. */
 @keyframes zone-shimmer {
   0% {
-    background-position: 0% 50%;
+    transform: translateX(0);
   }
   100% {
-    background-position: 100% 50%;
+    transform: translateX(-83.333%);
   }
 }
 
 .zone-shimmer {
+  position: relative;
+  overflow: hidden;
+  opacity: 0.35;
+}
+
+.zone-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 600%;
   background: linear-gradient(
     90deg,
     var(--zone-1),
@@ -162,12 +179,10 @@
     var(--zone-6),
     var(--zone-1)
   );
-  background-size: 600% 100%;
-  opacity: 0.35;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .zone-shimmer {
+  .zone-shimmer::after {
     animation: zone-shimmer 3s ease-in-out infinite alternate;
   }
 }

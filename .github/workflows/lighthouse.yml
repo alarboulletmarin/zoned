@@ -1,0 +1,54 @@
+# Performance guardrail: Lighthouse CI on the production build.
+#
+# Mobile emulation + simulated slow 4G (Lighthouse defaults), median of 3
+# runs on the home page and the zones calculator. Budgets live in
+# .lighthouserc.json and are calibrated for THIS environment (shared 2-vCPU
+# runners are ~3-4x slower than Lighthouse's reference device, and simulated
+# throttling multiplies that gap), so they are regression tripwires, not
+# real-device targets — track those on PageSpeed Insights / field data.
+#
+# Calibration (2026-06, median of 3 on ubuntu-latest):
+#   FCP ~2.4s -> budget 3.0s | LCP 6.5-7.1s -> 8.5s | TBT 269-927ms -> 1300ms
+#   CLS = 0 (blocking, environment-independent)
+#   script bytes over the full trace ~740KB -> 850KB (deterministic; catches
+#   a heavy dependency leaking into the boot path)
+#   perf score: warn only — observed 0.37-0.55 across runs of the SAME
+#   commit on shared runners, too noisy to block on.
+name: Lighthouse CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        # VERCEL=1 short-circuits the postinstall puppeteer Chrome download
+        # (only needed for the OG-image scripts); Lighthouse uses the
+        # runner's preinstalled Chrome.
+        run: bun install --frozen-lockfile
+        env:
+          VERCEL: "1"
+
+      - name: Build production bundle
+        run: bun run build
+
+      - name: Run Lighthouse CI
+        run: bunx @lhci/cli@0.15.1 autorun
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: lighthouse-reports
+          if-no-files-found: ignore
