@@ -46,10 +46,10 @@
       "head": "L'entraînement",
       "tail": "sans bruit",
       "accent": ["structuré", "lisible", "outillé", "documenté"],
-      "lead": "{{sessions}} séances validées par la science (Seiler, Daniels, Billat, Coggan), {{plans}} plans pré-construits du 5K au marathon, {{calculators}} calculateurs et un générateur de parcours. Tout fonctionne dans votre navigateur, aucune donnée ne quitte votre appareil.",
-      "ctaPrimary": "Ouvrir la bibliothèque",
-      "ctaSecondary": "Choisir un plan",
-      "ctaSecondaryHasPlans": "Voir mes plans",
+      "lead": "Sachez exactement quoi courir demain. {{plans}} plans d'entraînement du 5K au marathon, {{sessions}} séances expliquées par la science (Seiler, Daniels, Billat, Coggan) et {{calculators}} calculateurs. Gratuit, sans compte, tout reste dans votre navigateur.",
+      "ctaPrimary": "Générer mon plan",
+      "ctaPrimaryHasPlans": "Voir mes plans",
+      "ctaSecondary": "Explorer les séances",
       "scrollHint": "Découvrir l'app",
       "fig": {
         "title": "À quoi ressemble une semaine bien dosée",
@@ -166,6 +166,7 @@
       "kicker": "Plans · 5K → Marathon",
       "title": "Une trajectoire pour chaque distance",
       "body": "{{count}} plans publiés, {{min}} à {{max}} semaines. Charge progressive, semaine de récupération tous les 21 jours, affûtage calibré pour le jour J.",
+      "quick": "Plan actif en 2 clics, modifiable à tout moment, exportable vers votre montre.",
       "weeks": "semaines",
       "sessionsPerWeek": "séances / sem",
       "choose": "choisir",
@@ -273,10 +274,10 @@
 
     "cta": {
       "kicker": "Commencer maintenant",
-      "line1": "Ouvrez la bibliothèque",
-      "line2": "Lancez votre première séance en deux clics",
-      "primary": "Voir les séances",
-      "secondary": "Voir le code (GitHub)"
+      "line1": "Votre prochaine course commence ici",
+      "line2": "Un plan complet en deux clics, gratuit, sans compte",
+      "primary": "Générer mon plan",
+      "secondary": "Explorer les séances"
     },
 
     "footer": {

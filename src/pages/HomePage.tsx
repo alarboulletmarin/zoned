@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, GithubIcon, ChevronDown } from "@/components/icons";
+import { ArrowRight, ChevronDown } from "@/components/icons";
 import {
   EditorialTitle,
   StaggerGrid,
@@ -564,18 +564,18 @@ export function HomePage() {
 
             <div className="flex flex-wrap items-center gap-3 mb-12">
               <Button asChild size="lg" className="rounded-full px-6">
-                <Link to="/library">
+                <Link to={hasPlans ? "/plans" : "/plan/new"}>
                   <ArrowRight className="size-4" />
-                  {t("homepage:home.hero.ctaPrimary")}
+                  {t(
+                    hasPlans
+                      ? "homepage:home.hero.ctaPrimaryHasPlans"
+                      : "homepage:home.hero.ctaPrimary",
+                  )}
                 </Link>
               </Button>
               <Button asChild variant="outline-primary" size="lg" className="rounded-full px-6">
-                <Link to={hasPlans ? "/plans" : "/plan/new"}>
-                  {t(
-                    hasPlans
-                      ? "homepage:home.hero.ctaSecondaryHasPlans"
-                      : "homepage:home.hero.ctaSecondary",
-                  )}
+                <Link to="/library">
+                  {t("homepage:home.hero.ctaSecondary")}
                 </Link>
               </Button>
             </div>
@@ -659,6 +659,79 @@ export function HomePage() {
             to="/methodology"
           />
         </div>
+      </section>
+
+      <Divider />
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          §05 — Plans (5K → ultra), data from prebuilt-plans
+          ═══════════════════════════════════════════════════════════════════ */}
+      <section className="py-16 md:py-20">
+
+        <EditorialTitle>{t("homepage:home.s05.title")}</EditorialTitle>
+        <p className="mt-3 text-sm text-foreground/65 max-w-xl leading-relaxed">
+          {t("homepage:home.s05.body", {
+            count: prebuiltPlans.length,
+            min: Math.min(...prebuiltPlans.map((p) => p.totalWeeks)),
+            max: Math.max(...prebuiltPlans.map((p) => p.totalWeeks)),
+          })}
+        </p>
+        <p className="mt-2 text-sm font-medium text-primary">
+          {t("homepage:home.s05.quick")}
+        </p>
+
+        {/* Mobile: dense 2-col grid (distance + arrow only). Each card
+            jumps to the canonical plan for that distance — matches the
+            calculator-grid pattern. */}
+        <StaggerGrid className="md:hidden mt-10 grid grid-cols-2 gap-3">
+          {planRows.map(({ key, plan }) => (
+            <StaggerItem key={key}>
+              <InteractiveCard
+                to={`/plan/prebuilt/${plan.slug}`}
+                className="block border border-border bg-card hover:border-foreground/40 hover:shadow-sm transition-[box-shadow,border-color] duration-200 p-3 rounded-md flex flex-col gap-3 h-full"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-base font-sans italic font-semibold flex-1 leading-snug group-hover:text-primary transition-colors">
+                    {t(`homepage:home.s05.distance.${key}`)}
+                  </span>
+                  <ArrowRight className="size-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                </div>
+                {/* Mini macrocycle bar — same colour scale as the
+                    desktop legend so the user can read base → taper at
+                    a glance even on phones. */}
+                <div className="flex h-1.5 overflow-hidden rounded-sm">
+                  {plan.phases.map((p, i) => {
+                    const span = p.endWeek - p.startWeek + 1;
+                    const pct = (span / plan.totalWeeks) * 100;
+                    return (
+                      <div
+                        key={i}
+                        className={PHASE_COLORS[p.phase] ?? "bg-foreground/20"}
+                        style={{ width: `${pct}%` }}
+                      />
+                    );
+                  })}
+                </div>
+                <div className="font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground -mt-1">
+                  {plan.totalWeeks} {t("homepage:home.s05.weeks")}
+                </div>
+              </InteractiveCard>
+            </StaggerItem>
+          ))}
+        </StaggerGrid>
+
+        {/* Desktop / tablet: existing full row layout. */}
+        <div className="hidden md:block mt-10 divide-y divide-foreground/15 border-y border-foreground/15">
+          {planRows.map(({ key, plan }) => (
+            <PlanRow
+              key={key}
+              label={t(`homepage:home.s05.distance.${key}`)}
+              plan={plan}
+              t={t}
+            />
+          ))}
+        </div>
+        <PlanPhaseLegend />
       </section>
 
       <Divider />
@@ -928,76 +1001,6 @@ export function HomePage() {
       <Divider />
 
       {/* ═══════════════════════════════════════════════════════════════════
-          §05 — Plans (5K → ultra), data from prebuilt-plans
-          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-16 md:py-20">
-
-        <EditorialTitle>{t("homepage:home.s05.title")}</EditorialTitle>
-        <p className="mt-3 text-sm text-foreground/65 max-w-xl leading-relaxed">
-          {t("homepage:home.s05.body", {
-            count: prebuiltPlans.length,
-            min: Math.min(...prebuiltPlans.map((p) => p.totalWeeks)),
-            max: Math.max(...prebuiltPlans.map((p) => p.totalWeeks)),
-          })}
-        </p>
-
-        {/* Mobile: dense 2-col grid (distance + arrow only). Each card
-            jumps to the canonical plan for that distance — matches the
-            calculator-grid pattern. */}
-        <StaggerGrid className="md:hidden mt-10 grid grid-cols-2 gap-3">
-          {planRows.map(({ key, plan }) => (
-            <StaggerItem key={key}>
-              <InteractiveCard
-                to={`/plan/prebuilt/${plan.slug}`}
-                className="block border border-border bg-card hover:border-foreground/40 hover:shadow-sm transition-[box-shadow,border-color] duration-200 p-3 rounded-md flex flex-col gap-3 h-full"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="text-base font-sans italic font-semibold flex-1 leading-snug group-hover:text-primary transition-colors">
-                    {t(`homepage:home.s05.distance.${key}`)}
-                  </span>
-                  <ArrowRight className="size-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-                </div>
-                {/* Mini macrocycle bar — same colour scale as the
-                    desktop legend so the user can read base → taper at
-                    a glance even on phones. */}
-                <div className="flex h-1.5 overflow-hidden rounded-sm">
-                  {plan.phases.map((p, i) => {
-                    const span = p.endWeek - p.startWeek + 1;
-                    const pct = (span / plan.totalWeeks) * 100;
-                    return (
-                      <div
-                        key={i}
-                        className={PHASE_COLORS[p.phase] ?? "bg-foreground/20"}
-                        style={{ width: `${pct}%` }}
-                      />
-                    );
-                  })}
-                </div>
-                <div className="font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground -mt-1">
-                  {plan.totalWeeks} {t("homepage:home.s05.weeks")}
-                </div>
-              </InteractiveCard>
-            </StaggerItem>
-          ))}
-        </StaggerGrid>
-
-        {/* Desktop / tablet: existing full row layout. */}
-        <div className="hidden md:block mt-10 divide-y divide-foreground/15 border-y border-foreground/15">
-          {planRows.map(({ key, plan }) => (
-            <PlanRow
-              key={key}
-              label={t(`homepage:home.s05.distance.${key}`)}
-              plan={plan}
-              t={t}
-            />
-          ))}
-        </div>
-        <PlanPhaseLegend />
-      </section>
-
-      <Divider />
-
-      {/* ═══════════════════════════════════════════════════════════════════
           §06 — Calculateurs (grid 3×3, count dérivé du tableau)
           ═══════════════════════════════════════════════════════════════════ */}
       <section className="py-16 md:py-20">
@@ -1120,20 +1123,15 @@ export function HomePage() {
         </h2>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Button asChild size="lg" className="rounded-full px-6">
-            <Link to="/library">
+            <Link to="/plan/new">
               <ArrowRight className="size-4" />
               {t("homepage:home.cta.primary")}
             </Link>
           </Button>
           <Button asChild variant="outline-primary" size="lg" className="rounded-full px-6">
-            <a
-              href="https://github.com/alarboulletmarin/zoned"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <GithubIcon className="size-4" />
+            <Link to="/library">
               {t("homepage:home.cta.secondary")}
-            </a>
+            </Link>
           </Button>
         </div>
       </section>
