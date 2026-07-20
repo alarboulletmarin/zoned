@@ -166,7 +166,7 @@
       "kicker": "Plans · 5K → Marathon",
       "title": "Une trajectoire pour chaque distance",
       "body": "{{count}} plans publiés, {{min}} à {{max}} semaines. Charge progressive, semaine de récupération tous les 21 jours, affûtage calibré pour le jour J.",
-      "quick": "Plan actif en 2 clics, modifiable à tout moment, exportable vers votre montre.",
+      "quick": "Plan actif en 2 clics, modifiable à tout moment, exportable en PDF ou calendrier.",
       "weeks": "semaines",
       "sessionsPerWeek": "séances / sem",
       "choose": "choisir",

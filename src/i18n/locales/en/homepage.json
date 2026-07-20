@@ -166,7 +166,7 @@
       "kicker": "Plans · 5K → Marathon",
       "title": "One trajectory per distance",
       "body": "{{count}} published plans, {{min}} to {{max}} weeks. Progressive load, recovery week every 21 days, taper calibrated for race day.",
-      "quick": "An active plan in 2 clicks, editable anytime, exportable to your watch.",
+      "quick": "An active plan in 2 clicks, editable anytime, exportable to PDF or calendar.",
       "weeks": "weeks",
       "sessionsPerWeek": "sessions / wk",
       "choose": "choose",
