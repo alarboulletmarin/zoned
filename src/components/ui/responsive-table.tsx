@@ -46,7 +46,11 @@ interface ResponsiveTableProps<T> {
   className?: string;
   /** className applied to the underlying <table>. */
   tableClassName?: string;
-  /** Make the desktop <thead> sticky to the closest scrolling ancestor. */
+  /**
+   * Make the desktop <thead> stick below the fixed TopBar while the page
+   * scrolls. Disables the wrapper's horizontal scrolling (sticky cannot
+   * escape a scroll container), so the table must fit its container at md+.
+   */
   stickyHeader?: boolean;
   /** Per-row extra classes, applied to both the desktop <tr> and mobile card. */
   rowClassName?: (row: T, index: number) => string | undefined;
@@ -84,7 +88,16 @@ export function ResponsiveTable<T>({
   return (
     <div className={className}>
       {/* Desktop: real <table>, hidden on phones */}
-      <div className="hidden md:block overflow-x-auto">
+      {/* overflow-x-clip (not auto) with stickyHeader: an overflow:auto
+          ancestor becomes the sticky containing block, which pins the thead
+          56px inside the card and detaches it from page scroll. clip keeps
+          stray overflow contained without creating a scroll container. */}
+      <div
+        className={cn(
+          "hidden md:block",
+          stickyHeader ? "overflow-x-clip" : "overflow-x-auto",
+        )}
+      >
         <table className={cn("w-full text-sm", tableClassName)}>
           {caption && <caption className="sr-only">{caption}</caption>}
           <thead

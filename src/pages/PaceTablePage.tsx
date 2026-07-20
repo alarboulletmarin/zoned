@@ -207,7 +207,7 @@ export function PaceTablePage() {
           columns={columns}
           rowKey="totalSeconds"
           stickyHeader
-          className="md:overflow-x-auto md:rounded-lg md:border"
+          className="md:rounded-lg md:border"
           mobileCardTitle={(row) => (
             <span className="font-mono tabular-nums">
               {formatPace(row.paceMinPerKm)}
