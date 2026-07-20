@@ -1,17 +1,29 @@
-import { useMemo } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import {
   Plus,
   Trash2,
   CalendarRange,
   Activity,
   Clock,
+  Copy,
   Gauge,
   ArrowRight,
+  MoreVertical,
+  Share,
+  Upload,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Card,
   CardContent,
@@ -34,9 +46,14 @@ import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import { planWeekToSlots } from "@/lib/weekToPlan";
 import { computeWeekStats } from "@/lib/weekStats";
+import { duplicatePlan, savePlan } from "@/lib/planStorage";
+import { parseImportedPlanJson } from "@/lib/planSchema";
+import { sharedWeekUrl } from "@/lib/weekShare";
 import { usePickLang } from "@/lib/i18n-utils";
+import { cn } from "@/lib/utils";
 import type { AnyWorkoutTemplate } from "@/types";
-import type { TrainingPlan } from "@/types/plan";
+import type { TrainingPlan, WeekCategory } from "@/types/plan";
+import { WEEK_CATEGORIES } from "@/types/plan";
 
 /** One compact stat (icon + value) shown in a week card's mini-stats row. */
 function WeekStat({
@@ -59,11 +76,15 @@ function WeekCard({
   byId,
   workoutNames,
   onDelete,
+  onDuplicate,
+  onShare,
 }: {
   week: TrainingPlan;
   byId: Map<string, AnyWorkoutTemplate>;
   workoutNames: Record<string, string>;
   onDelete: (id: string) => void;
+  onDuplicate: (week: TrainingPlan) => void;
+  onShare: (week: TrainingPlan) => void;
 }) {
   const { t } = useTranslation("library");
   const pick = usePickLang();
@@ -86,7 +107,9 @@ function WeekCard({
             {pick(week, "name")}
           </CardTitle>
           <Badge variant="secondary" className="shrink-0">
-            {t("weekly.title")}
+            {week.config.weekCategory
+              ? t(`weekly.prebuilt.category.${week.config.weekCategory}`)
+              : t("weekly.title")}
           </Badge>
         </div>
         <CardDescription>
@@ -117,7 +140,7 @@ function WeekCard({
         <WeekRhythmChart slots={slots} />
       </CardContent>
 
-      {/* Actions — mirrors PlanCard: View · Export · Delete */}
+      {/* Actions — View · Export · overflow menu (share / duplicate / delete) */}
       <div className="px-6 pb-4 flex gap-2">
         <Button variant="outline" size="sm" className="flex-1" asChild>
           <Link to={to}>
@@ -126,26 +149,72 @@ function WeekCard({
           </Link>
         </Button>
         <PlanExportMenu plan={week} workoutNames={workoutNames} size="sm" />
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete(week.id);
-          }}
-          aria-label={t("weekly.list.delete")}
-        >
-          <Trash2 className="size-3.5" />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              aria-label={t("weekly.list.actions")}
+            >
+              <MoreVertical className="size-3.5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => onShare(week)}>
+              <Share className="size-4" />
+              {t("weekly.share.action")}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onDuplicate(week)}>
+              <Copy className="size-4" />
+              {t("weekly.saved.duplicate")}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={() => onDelete(week.id)}
+            >
+              <Trash2 className="size-4" />
+              {t("weekly.list.delete")}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </Card>
   );
 }
 
+/** Toggle chip for the category filter — mirrors WorkoutFilters' FilterChip. */
+function CategoryChip({
+  label,
+  selected,
+  onClick,
+}: {
+  label: string;
+  selected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors",
+        selected
+          ? "border-primary bg-primary/10 text-primary"
+          : "border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground",
+      )}
+    >
+      {label}
+    </button>
+  );
+}
+
 export function WeeksListPage() {
-  const { t } = useTranslation("library");
+  const { t } = useTranslation(["library", "common"]);
   const pick = usePickLang();
-  const { plans, remove } = usePlans();
+  const { plans, remove, reload } = usePlans();
+  const [categoryFilter, setCategoryFilter] = useState<WeekCategory | "all">("all");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Resolve sessions → slots for the mini-stats + rhythm. Mirrors WeekViewPage's
   // catalog build (running + cycling + swimming + strength) into one id→workout map.
@@ -181,6 +250,65 @@ export function WeeksListPage() {
     [plans],
   );
 
+  // Category filter — chips only appear once at least one week is categorized.
+  const presentCategories = useMemo(
+    () =>
+      WEEK_CATEGORIES.filter((c) =>
+        weeks.some((w) => w.config.weekCategory === c),
+      ),
+    [weeks],
+  );
+  const visibleWeeks =
+    categoryFilter === "all"
+      ? weeks
+      : weeks.filter((w) => w.config.weekCategory === categoryFilter);
+
+  const handleDuplicate = (week: TrainingPlan) => {
+    const newId = duplicatePlan(
+      week.id,
+      `${pick(week, "name")} ${t("weekly.saved.copySuffix")}`,
+    );
+    if (!newId) {
+      toast.error(t("weekly.toast.duplicateError"));
+      return;
+    }
+    reload();
+    toast.success(t("weekly.toast.duplicated"));
+  };
+
+  const handleShare = async (week: TrainingPlan) => {
+    const name = pick(week, "name");
+    const url = sharedWeekUrl(week, name);
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: name, url });
+      } catch {
+        // Share sheet dismissed — nothing to do.
+      }
+      return;
+    }
+    await navigator.clipboard.writeText(url);
+    toast.success(t("common:share.toast.linkCopied"));
+  };
+
+  const handleImportFile = async (file: File) => {
+    const plan = parseImportedPlanJson(await file.text());
+    if (!plan) {
+      toast.error(t("weekly.toast.importError"));
+      return;
+    }
+    if (!plan.config.isSingleWeek) {
+      toast.error(t("weekly.toast.importNotWeek"));
+      return;
+    }
+    if (!savePlan(plan)) {
+      toast.error(t("weekly.toast.importError"));
+      return;
+    }
+    reload();
+    toast.success(t("weekly.toast.imported"));
+  };
+
   return (
     <>
       <SEOHead noindex title={t("weekly.list.title")} canonical="/weeks" />
@@ -194,13 +322,48 @@ export function WeeksListPage() {
               {t("weekly.list.subtitle")}
             </FadeUp>
           </div>
-          <Button asChild>
-            <Link to="/weeks/new">
-              <Plus className="size-4" />
-              {t("weekly.list.create")}
-            </Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json,application/json"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) handleImportFile(file);
+                e.target.value = "";
+              }}
+            />
+            <Button variant="outline" onClick={() => fileInputRef.current?.click()}>
+              <Upload className="size-4" />
+              {t("weekly.list.import")}
+            </Button>
+            <Button asChild>
+              <Link to="/weeks/new">
+                <Plus className="size-4" />
+                {t("weekly.list.create")}
+              </Link>
+            </Button>
+          </div>
         </div>
+
+        {presentCategories.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5">
+            <CategoryChip
+              label={t("weekly.list.filterAll")}
+              selected={categoryFilter === "all"}
+              onClick={() => setCategoryFilter("all")}
+            />
+            {presentCategories.map((c) => (
+              <CategoryChip
+                key={c}
+                label={t(`weekly.prebuilt.category.${c}`)}
+                selected={categoryFilter === c}
+                onClick={() => setCategoryFilter(c)}
+              />
+            ))}
+          </div>
+        )}
 
         {weeks.length === 0 ? (
           <Card className="border-dashed">
@@ -216,14 +379,22 @@ export function WeeksListPage() {
             </CardContent>
           </Card>
         ) : (
-          <StaggerGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            {weeks.map((week) => (
+          <StaggerGrid
+            // Remount when the list changes: a StaggerItem mounted after the
+            // grid has played its entrance would otherwise stay at opacity 0
+            // (viewport once) — duplicated/imported weeks were invisible.
+            key={visibleWeeks.map((w) => w.id).join("|")}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
+          >
+            {visibleWeeks.map((week) => (
               <StaggerItem key={week.id}>
                 <WeekCard
                   week={week}
                   byId={byId}
                   workoutNames={workoutNames}
                   onDelete={remove}
+                  onDuplicate={handleDuplicate}
+                  onShare={handleShare}
                 />
               </StaggerItem>
             ))}

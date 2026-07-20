@@ -1,4 +1,5 @@
-import type { PhaseRange, PlanConfig, PlanSession, PlanWeek, RaceDistance, TrainingPlan, UnavailabilityReason } from "@/types/plan";
+import type { PhaseRange, PlanConfig, PlanSession, PlanWeek, RaceDistance, TrainingPlan, UnavailabilityReason, WeekCategory } from "@/types/plan";
+import { WEEK_CATEGORIES } from "@/types/plan";
 
 // Domain bounds — defensive guards against pathological imports.
 const MAX_WEEKS_PER_PLAN = 104; // 2 years is more than enough for any realistic plan
@@ -115,6 +116,9 @@ function normalizeConfig(raw: unknown, fallbackId: string, fallbackCreatedAt: st
       ? raw.planMode
       : undefined,
     isSingleWeek: raw.isSingleWeek === true ? true : undefined,
+    weekCategory: WEEK_CATEGORIES.includes(raw.weekCategory as WeekCategory)
+      ? raw.weekCategory as WeekCategory
+      : undefined,
     planName: typeof raw.planName === "string" ? raw.planName : undefined,
     raceDistance: typeof raw.raceDistance === "string" ? raw.raceDistance as PlanConfig["raceDistance"] : undefined,
     raceDate: typeof raw.raceDate === "string" ? raw.raceDate : undefined,

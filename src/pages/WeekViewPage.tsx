@@ -8,8 +8,16 @@ import {
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { ArrowLeft, Sparkles, Settings, Loader2 } from "@/components/icons";
+import { ArrowLeft, ChevronDown, Share, Sparkles, Settings, Loader2 } from "@/components/icons";
+import { badgeVariants } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Sheet,
   SheetContent,
@@ -36,6 +44,7 @@ import {
   getPlan,
 } from "@/lib/planStorage";
 import { generateWeek } from "@/lib/weekGenerator";
+import { sharedWeekUrl } from "@/lib/weekShare";
 import { generatedWeekToSessions, planWeekToSlots } from "@/lib/weekToPlan";
 import { computeWeekStats } from "@/lib/weekStats";
 import { buildScanSchedule } from "@/lib/scanSchedule";
@@ -43,6 +52,7 @@ import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
 import { cn } from "@/lib/utils";
 import type { AnyWorkoutTemplate } from "@/types";
 import type { SessionType } from "@/types";
+import { WEEK_CATEGORIES, type WeekCategory } from "@/types/plan";
 import {
   DEFAULT_WEEK_SETTINGS,
   type DayIndex,
@@ -266,12 +276,39 @@ export function WeekViewPage() {
     [plan, reload],
   );
 
+  const handleCategoryChange = useCallback(
+    (value: string) => {
+      if (!plan) return;
+      const fresh = getPlan(plan.id);
+      if (!fresh) return;
+      fresh.config.weekCategory =
+        value === "none" ? undefined : (value as WeekCategory);
+      savePlan(fresh);
+      reload();
+    },
+    [plan, reload],
+  );
+
   if (isLoading) return null;
   if (!plan) return <Navigate to="/weeks" replace />;
   // A regular (multi-week) plan should use the full plan editor.
   if (!plan.config.isSingleWeek) return <Navigate to={`/plan/${plan.id}`} replace />;
 
   const displayName = name ?? pick(plan, "name");
+
+  const handleShare = async () => {
+    const url = sharedWeekUrl(plan, displayName);
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: displayName, url });
+      } catch {
+        // Share sheet dismissed — nothing to do.
+      }
+      return;
+    }
+    await navigator.clipboard.writeText(url);
+    toast.success(t("common:share.toast.linkCopied"));
+  };
 
   const generatorPanel = (
     <WeekGeneratorPanel
@@ -294,16 +331,60 @@ export function WeekViewPage() {
           </Link>
         </Button>
 
-        <div className="flex items-start justify-between gap-2">
+        <div className="space-y-2">
           <input
             value={displayName}
             onChange={(e) => setName(e.target.value)}
             onBlur={(e) => handleRename(e.target.value.trim() || displayName)}
             onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
             aria-label={t("library:weekly.generate.namePlaceholder")}
-            className="min-w-0 flex-1 bg-transparent text-2xl sm:text-3xl font-semibold italic focus:outline-none focus:ring-2 focus:ring-primary rounded-md px-1 -mx-1"
+            className="w-full min-w-0 bg-transparent text-2xl sm:text-3xl font-semibold italic focus:outline-none focus:ring-2 focus:ring-primary rounded-md px-1 -mx-1"
           />
-          <PlanExportMenu plan={plan} workoutNames={workoutNames} size="sm" />
+          {/* Meta row: category badge (left) · share + export (right) */}
+          <div className="flex items-center justify-between gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className={cn(
+                  badgeVariants({
+                    variant: plan.config.weekCategory ? "secondary" : "outline",
+                  }),
+                  "cursor-pointer",
+                  !plan.config.weekCategory && "text-muted-foreground",
+                )}
+              >
+                {plan.config.weekCategory
+                  ? t(`library:weekly.prebuilt.category.${plan.config.weekCategory}`)
+                  : t("library:weekly.category.label")}
+                <ChevronDown className="size-3" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuRadioGroup
+                  value={plan.config.weekCategory ?? "none"}
+                  onValueChange={handleCategoryChange}
+                >
+                  <DropdownMenuRadioItem value="none">
+                    {t("library:weekly.category.none")}
+                  </DropdownMenuRadioItem>
+                  {WEEK_CATEGORIES.map((c) => (
+                    <DropdownMenuRadioItem key={c} value={c}>
+                      {t(`library:weekly.prebuilt.category.${c}`)}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleShare}
+                aria-label={t("library:weekly.share.action")}
+              >
+                <Share className="size-3.5" />
+              </Button>
+              <PlanExportMenu plan={plan} workoutNames={workoutNames} size="sm" />
+            </div>
+          </div>
         </div>
 
         {/* Compact summary strip above the board */}

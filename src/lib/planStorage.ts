@@ -92,6 +92,40 @@ export function savePlan(plan: TrainingPlan): boolean {
   }
 }
 
+/**
+ * Duplicate a plan/week under a new id with a fresh createdAt. Completion
+ * tracking is reset — the copy is a clean template, not a training log.
+ * Returns the new id, or null on failure (unknown id or storage quota).
+ */
+export function duplicatePlan(id: string, newName?: string): string | null {
+  const source = getPlan(id);
+  if (!source) return null;
+
+  const clone = structuredClone(source);
+  const newId = crypto.randomUUID();
+  clone.id = newId;
+  clone.config.id = newId;
+  clone.config.createdAt = new Date().toISOString();
+  clone._lastUndoableChange = undefined;
+  if (newName) {
+    clone.name = newName;
+    clone.nameEn = newName;
+    if (clone.config.planName) clone.config.planName = newName;
+  }
+  for (const week of clone.weeks) {
+    for (const session of week.sessions) {
+      delete session.status;
+      delete session.completedAt;
+      delete session.actualDurationMin;
+      delete session.actualDistanceKm;
+      delete session.rpe;
+      delete session.userNote;
+    }
+  }
+
+  return savePlan(clone) ? newId : null;
+}
+
 export function deletePlan(id: string): boolean {
   const plans = getAllPlans().filter(p => p.id !== id);
   try {

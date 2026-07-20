@@ -40,11 +40,24 @@ export interface IntermediateGoal {
 
 // ── Plan configuration (user inputs) ───────────────────────────────
 
+/** Editorial category of a standalone week (mirrors the prebuilt-week gallery). */
+export const WEEK_CATEGORIES = [
+  "base",
+  "build",
+  "peak",
+  "recovery",
+  "sharpening",
+] as const;
+
+export type WeekCategory = (typeof WEEK_CATEGORIES)[number];
+
 export interface PlanConfig {
   id: string;
   planMode?: "assisted" | "free" | "prebuilt"; // undefined = "assisted" for backward compat
   /** Marks a standalone "Ma semaine" (a 1-week free plan surfaced under /weeks). */
   isSingleWeek?: boolean;
+  /** Category of a standalone week — inherited from a prebuilt week or set by the user. */
+  weekCategory?: WeekCategory;
   planName?: string; // user-given name for free plans
   raceDistance?: RaceDistance;
   raceDate?: string; // ISO date

@@ -71,27 +71,32 @@ export function generatedWeekToSessions(week: GeneratedWeek): PlanSession[] {
  * Resolve a plan week's sessions back to WeekSlot[] (Mon→Sun) using a workout
  * lookup, so the existing computeWeekStats / gauge / rhythm work directly on a
  * stored week — whether it was generated or built by hand.
+ *
+ * Emits one slot **per session** — a day with several sessions yields several
+ * slots (so stats count every session) — plus a rest slot for empty days.
  */
 export function planWeekToSlots(
   planWeek: PlanWeek | undefined,
   byId: Map<string, AnyWorkoutTemplate>,
 ): WeekSlot[] {
-  const byDay = new Map<number, PlanSession>();
-  for (const s of planWeek?.sessions ?? []) {
-    if (!byDay.has(s.dayOfWeek)) byDay.set(s.dayOfWeek, s);
-  }
   const slots: WeekSlot[] = [];
-  for (let day = 0 as DayIndex; day <= 6; day = (day + 1) as DayIndex) {
-    const session = byDay.get(day);
-    const workout = session ? byId.get(session.workoutId) ?? null : null;
+  const daysWithSession = new Set<number>();
+  for (const s of planWeek?.sessions ?? []) {
+    daysWithSession.add(s.dayOfWeek);
     slots.push({
-      day,
-      kind: session ? kindForSessionType(session.sessionType) : "rest",
-      workout,
+      day: s.dayOfWeek as DayIndex,
+      kind: kindForSessionType(s.sessionType),
+      workout: byId.get(s.workoutId) ?? null,
       locked: false,
     });
   }
-  return slots;
+  for (let day = 0 as DayIndex; day <= 6; day = (day + 1) as DayIndex) {
+    if (!daysWithSession.has(day)) {
+      slots.push({ day, kind: "rest", workout: null, locked: false });
+    }
+  }
+  // Stable sort: intra-day session order is preserved.
+  return slots.sort((a, b) => a.day - b.day);
 }
 
 /** An empty single-week plan (the "from scratch" path). */
@@ -125,6 +130,7 @@ export function prebuiltWeekToPlan(week: PrebuiltWeek, name?: string): TrainingP
   const plan = createEmptyWeekPlan(name ?? week.name);
   plan.config.longRunDay = week.settings.longRunDay;
   plan.config.daysPerWeek = week.settings.sessions;
+  plan.config.weekCategory = week.category;
   plan.weeks[0].sessions = week.sessions
     .map(
       (s): PlanSession => ({

@@ -20,11 +20,12 @@ export function WeekSummaryBar({
 }: {
   stats: WeekStats;
   slots: WeekSlot[];
-  targetVolumeH: number;
+  /** Volume budget in hours — omit to show the raw volume without a budget. */
+  targetVolumeH?: number;
   className?: string;
 }) {
   const { t } = useTranslation("library");
-  const overBudget = stats.totalHours > targetVolumeH;
+  const overBudget = targetVolumeH != null && stats.totalHours > targetVolumeH;
 
   return (
     <div
@@ -39,7 +40,11 @@ export function WeekSummaryBar({
           <Metric label={t("weekly.summary.sessions")} value={String(stats.sessions)} />
           <Metric
             label={t("weekly.summary.volume")}
-            value={`${stats.totalHours.toFixed(1)} / ${targetVolumeH} h`}
+            value={
+              targetVolumeH != null
+                ? `${stats.totalHours.toFixed(1)} / ${targetVolumeH} h`
+                : `${stats.totalHours.toFixed(1)} h`
+            }
             alert={overBudget}
           />
           <Metric label={t("weekly.summary.load")} value={`${stats.totalTss} TSS`} />

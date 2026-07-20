@@ -1,14 +1,10 @@
 import type { Difficulty } from "@/types";
 import type { SessionType } from "@/types";
+import type { WeekCategory } from "@/types/plan";
 import type { DayIndex, WeekSettings } from "@/types/week";
 
 /** Editorial category for a curated week (drives badge + gradient). */
-export type PrebuiltWeekCategory =
-  | "base"
-  | "build"
-  | "peak"
-  | "recovery"
-  | "sharpening";
+export type PrebuiltWeekCategory = WeekCategory;
 
 /**
  * One session of a curated week. Mirrors the fields a {@link PlanSession}

@@ -171,7 +171,25 @@
       "sessionsCount_one": "{{count}} séance",
       "sessionsCount_other": "{{count}} séances",
       "view": "Voir",
-      "delete": "Supprimer"
+      "delete": "Supprimer",
+      "filterAll": "Toutes",
+      "import": "Importer",
+      "actions": "Plus d'actions"
+    },
+    "category": {
+      "label": "Catégorie",
+      "none": "Sans catégorie"
+    },
+    "share": {
+      "action": "Partager"
+    },
+    "shared": {
+      "title": "Semaine partagée",
+      "subtitle": "Quelqu'un t'a partagé cette semaine d'entraînement. Ajoute-la à tes semaines pour la personnaliser.",
+      "invalid": "Ce lien de partage est invalide ou incomplet.",
+      "add": "Ajouter à mes semaines",
+      "unknownCount_one": "{{count}} séance n'existe pas dans ton catalogue et sera ignorée.",
+      "unknownCount_other": "{{count}} séances n'existent pas dans ton catalogue et seront ignorées."
     },
     "new": {
       "title": "Créer une semaine",
@@ -333,7 +351,12 @@
       "saved": "Semaine enregistrée",
       "exported": "Export généré",
       "generated": "Semaine générée",
-      "exportError": "L'export a échoué"
+      "exportError": "L'export a échoué",
+      "duplicated": "Semaine dupliquée",
+      "duplicateError": "La duplication a échoué",
+      "imported": "Semaine importée",
+      "importError": "Import impossible : fichier invalide",
+      "importNotWeek": "Ce fichier contient un plan complet, pas une semaine"
     }
   }
 }

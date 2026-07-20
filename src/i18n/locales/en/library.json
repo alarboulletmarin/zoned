@@ -171,7 +171,25 @@
       "sessionsCount_one": "{{count}} session",
       "sessionsCount_other": "{{count}} sessions",
       "view": "View",
-      "delete": "Delete"
+      "delete": "Delete",
+      "filterAll": "All",
+      "import": "Import",
+      "actions": "More actions"
+    },
+    "category": {
+      "label": "Category",
+      "none": "No category"
+    },
+    "share": {
+      "action": "Share"
+    },
+    "shared": {
+      "title": "Shared week",
+      "subtitle": "Someone shared this training week with you. Add it to your weeks to make it yours.",
+      "invalid": "This share link is invalid or incomplete.",
+      "add": "Add to my weeks",
+      "unknownCount_one": "{{count}} session is missing from your catalog and will be skipped.",
+      "unknownCount_other": "{{count}} sessions are missing from your catalog and will be skipped."
     },
     "new": {
       "title": "Create a week",
@@ -333,7 +351,12 @@
       "saved": "Week saved",
       "exported": "Export ready",
       "generated": "Week generated",
-      "exportError": "Export failed"
+      "exportError": "Export failed",
+      "duplicated": "Week duplicated",
+      "duplicateError": "Duplication failed",
+      "imported": "Week imported",
+      "importError": "Import failed: invalid file",
+      "importNotWeek": "This file contains a full plan, not a week"
     }
   }
 }

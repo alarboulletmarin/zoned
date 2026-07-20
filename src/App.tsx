@@ -37,6 +37,7 @@ const WeekViewPage = lazyPage(() => import("@/pages/WeekViewPage").then(m => ({ 
 const WeekNewPage = lazyPage(() => import("@/pages/WeekNewPage").then(m => ({ default: m.WeekNewPage })));
 const PrebuiltWeeksPage = lazyPage(() => import("@/pages/PrebuiltWeeksPage").then(m => ({ default: m.PrebuiltWeeksPage })));
 const PrebuiltWeekDetailPage = lazyPage(() => import("@/pages/PrebuiltWeekDetailPage").then(m => ({ default: m.PrebuiltWeekDetailPage })));
+const SharedWeekPage = lazyPage(() => import("@/pages/SharedWeekPage").then(m => ({ default: m.SharedWeekPage })));
 const WorkoutDetailPage = lazyPage(() => import("@/pages/WorkoutDetailPage").then(m => ({ default: m.WorkoutDetailPage })));
 const MyZonesPage = lazyPage(() => import("@/pages/MyZonesPage").then(m => ({ default: m.MyZonesPage })));
 const FavoritesPage = lazyPage(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
@@ -323,6 +324,7 @@ function App() {
                           <Route path="/weeks/new" element={<WeekNewPage />} />
                           <Route path="/weeks/new/prebuilt" element={<PrebuiltWeeksPage />} />
                           <Route path="/weeks/prebuilt/:slug" element={<PrebuiltWeekDetailPage />} />
+                          <Route path="/weeks/shared" element={<SharedWeekPage />} />
                           <Route path="/weeks/:id" element={<WeekViewPage />} />
                           <Route path="/library/weekly" element={<Navigate to="/weeks" replace />} />
                           <Route path="/workout/builder" element={<WorkoutBuilderPage />} />
