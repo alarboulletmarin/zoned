@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.2] - 2026-07-20
+
+### Added
+- Categories on saved weeks (inherited from prebuilt weeks) with a badge and filter chips on My weeks
+- Duplicate a saved week from the list (completion tracking reset on the copy)
+- Share a week as a compact encoded link with a preview page and "Add to my weeks"
+- Import a week from a JSON file on My weeks
+
+### Changed
+- Week card actions grouped into an overflow menu; week page header reworked around a category badge
+
+### Fixed
+- Multiple sessions on the same day now count in weekly stats and stack in the rhythm chart
+- Duplicated or imported weeks appear immediately without a page refresh
+
 ## [0.7.1] - 2026-07-20
 
 ### Added

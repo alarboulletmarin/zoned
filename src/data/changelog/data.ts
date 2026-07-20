@@ -2,6 +2,60 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.7.2",
+    date: "2026-07-20",
+    changes: {
+      added: [
+        {
+          text: "Categories sur les semaines enregistrees (heritees des semaines pre-construites), avec badge et filtres sur Mes semaines",
+          textEn: "Categories on saved weeks (inherited from prebuilt weeks), with a badge and filter chips on My weeks",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Duplication d'une semaine depuis la liste (suivi de completion remis a zero sur la copie)",
+          textEn: "Duplicate a saved week from the list (completion tracking reset on the copy)",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Partage d'une semaine par lien encode compact, avec page d'apercu et « Ajouter a mes semaines »",
+          textEn: "Share a week as a compact encoded link, with a preview page and \"Add to my weeks\"",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Import d'une semaine depuis un fichier JSON sur Mes semaines",
+          textEn: "Import a week from a JSON file on My weeks",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+      ],
+      changed: [
+        {
+          text: "Actions des cartes de semaine regroupees dans un menu ; en-tete de la page semaine reorganise autour d'un badge categorie",
+          textEn: "Week card actions grouped into an overflow menu; week page header reworked around a category badge",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      fixed: [
+        {
+          text: "Les seances multiples d'un meme jour comptent dans les stats hebdo et s'empilent dans le rythme de la semaine",
+          textEn: "Multiple sessions on the same day now count in weekly stats and stack in the rhythm chart",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Les semaines dupliquees ou importees apparaissent immediatement, sans rafraichir la page",
+          textEn: "Duplicated or imported weeks appear immediately without a page refresh",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+    },
+  },
+  {
     version: "0.7.1",
     date: "2026-07-20",
     changes: {
