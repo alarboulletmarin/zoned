@@ -28,6 +28,7 @@ import { FEATURED_SURFACES, type SurfaceSection } from "@/data/command-surfaces"
 import { getWorkoutById } from "@/data/workouts";
 import type { AnyWorkoutTemplate } from "@/types";
 import { cn } from "@/lib/utils";
+import { isMac } from "@/lib/platform";
 
 type IconComponent = React.ComponentType<{ className?: string }>;
 
@@ -223,8 +224,6 @@ export function CommandPalette() {
     [selectableItems, selectedIndex, handleNavigate, closePalette]
   );
 
-  // Detect OS for shortcut display
-  const isMac = typeof navigator !== "undefined" && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
   const shortcutKey = isMac ? "⌘K" : "Ctrl+K";
 
   // Track which selectable index each item maps to

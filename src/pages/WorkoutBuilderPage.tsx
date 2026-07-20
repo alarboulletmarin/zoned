@@ -19,6 +19,7 @@ import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { WorkoutStepListEditor } from "@/components/domain/contribute/WorkoutStepListEditor";
 import { SessionTimeline } from "@/components/visualization/SessionTimeline";
 import { getStructuredWorkoutDurationMinutes, getWorkoutPhaseSteps, normalizeWorkoutStructureSource, replaceWorkoutPhaseSteps } from "@/lib/workoutStructure";
+import { isMac } from "@/lib/platform";
 import { ExportMenu } from "@/components/domain/ExportMenu";
 import { FavoriteButton } from "@/components/domain/FavoriteButton";
 import { useFavorites } from "@/hooks";
@@ -376,7 +377,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
                 onClick={undo}
                 disabled={!canUndo}
                 aria-label={t("calculators:workoutBuilder.undo", "Annuler")}
-                title={t("calculators:workoutBuilder.undo", "Annuler") + " (⌘Z)"}
+                title={t("calculators:workoutBuilder.undo", "Annuler") + (isMac ? " (⌘Z)" : " (Ctrl+Z)")}
               >
                 <Undo2 className="size-4" />
               </Button>
@@ -386,7 +387,7 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
                 onClick={redo}
                 disabled={!canRedo}
                 aria-label={t("calculators:workoutBuilder.redo", "Rétablir")}
-                title={t("calculators:workoutBuilder.redo", "Rétablir") + " (⇧⌘Z)"}
+                title={t("calculators:workoutBuilder.redo", "Rétablir") + (isMac ? " (⇧⌘Z)" : " (Ctrl+Shift+Z)")}
               >
                 <Redo2 className="size-4" />
               </Button>
