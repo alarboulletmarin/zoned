@@ -1017,7 +1017,7 @@ export function HomePage() {
             <StaggerItem key={c.key}>
               <InteractiveCard
                 to={c.slug}
-                className="block border border-border bg-card hover:border-foreground/40 hover:shadow-sm transition-[box-shadow,border-color] duration-200 p-3 sm:p-5 rounded-md flex items-center sm:block gap-2 sm:gap-0"
+                className="block border border-border bg-card hover:border-foreground/40 hover:shadow-sm transition-[box-shadow,border-color] duration-200 p-3 sm:p-5 rounded-md flex items-center sm:flex-col sm:items-start gap-2 sm:gap-0 h-full"
               >
                 <h3 className="text-sm sm:text-base font-semibold sm:mb-1.5 group-hover:text-primary transition-colors flex-1 sm:flex-none leading-snug">
                   {t(c.titleKey)}
@@ -1025,7 +1025,7 @@ export function HomePage() {
                 <p className="hidden sm:block text-sm text-muted-foreground leading-snug line-clamp-2">
                   {t(c.descKey)}
                 </p>
-                <span className="hidden sm:inline-flex mt-3 items-center text-xs font-medium text-primary">
+                <span className="hidden sm:inline-flex mt-auto pt-3 items-center text-xs font-medium text-primary">
                   {t("calculators:calculateurs.explore")}
                   <ArrowRight className="size-3 ml-1 transition-transform group-hover:translate-x-0.5" />
                 </span>
