@@ -190,6 +190,7 @@
     "freePlan": "Free plan",
     "prebuilt": "Pre-built",
     "addDates": "Add dates",
+    "planEnded": "This plan has ended. It remains available as your training history.",
     "clickToRename": "Click to rename",
     "nameUpdated": "Name updated",
     "sessionReplaced": "Session replaced",
@@ -419,7 +420,9 @@
     "weekProgress": "Week {{current}} / {{total}}",
     "target": "Target: ",
     "sessionsCount": "{{count}} sessions",
-    "planCount": "{{count}} plans"
+    "planCount": "{{count}} plans",
+    "ended": "Ended",
+    "endedSection": "Past plans"
   },
   "prebuilt": {
     "notFound": "Plan not found",

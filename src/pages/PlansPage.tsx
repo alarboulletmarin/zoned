@@ -42,7 +42,7 @@ import {
 } from "@/types/plan";
 import type { TrainingPlan, PhaseRange } from "@/types/plan";
 import type { TrainingPhase } from "@/types";
-import { getCurrentWeek } from "@/lib/planUtils";
+import { getCurrentWeek, isPlanEnded } from "@/lib/planUtils";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { PlanSparkline } from "@/components/domain/PlanSparkline";
 import { useIsEnglish, usePickLang, formatDateShort } from "@/lib/i18n-utils";
@@ -84,9 +84,16 @@ function PlanCard({
   );
   const weeksElapsed = Math.min(Math.max(currentWeek, 0), plan.totalWeeks);
   const totalSessions = plan.weeks.reduce((sum, w) => sum + w.sessions.length, 0);
+  const ended = isPlanEnded(plan);
 
   return (
-    <Card interactive className="h-full bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent">
+    <Card
+      interactive
+      className={cn(
+        "h-full bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent",
+        ended && "opacity-70 hover:opacity-100 transition-opacity"
+      )}
+    >
       <CardHeader
         className="cursor-pointer"
         onClick={() => navigate(`/plan/${plan.id}`)}
@@ -95,6 +102,11 @@ function PlanCard({
           <CardTitle className="text-lg line-clamp-1 flex-1">
             {planName}
           </CardTitle>
+          {ended && (
+            <Badge variant="outline" className="shrink-0 text-muted-foreground">
+              {t("plansPage.ended")}
+            </Badge>
+          )}
           {raceMeta ? (
             <Badge variant="default" className="shrink-0">
               {pick(raceMeta, "label")}
@@ -249,18 +261,22 @@ export function PlansPage() {
   const deleteTargetPlan = plans.find((p) => p.id === deleteTarget);
 
   // Sort plans by creation date (newest first). Standalone weeks live under
-  // their own /weeks section, so they're excluded here.
-  const sortedPlans = useMemo(
-    () =>
-      [...plans]
-        .filter((p) => !p.config.isSingleWeek)
-        .sort(
-          (a, b) =>
-            new Date(b.config.createdAt).getTime() -
-            new Date(a.config.createdAt).getTime()
-        ),
-    [plans]
-  );
+  // their own /weeks section, so they're excluded here. Ended plans (past
+  // their date range) are split into their own section below the active ones.
+  const { activePlans, endedPlans } = useMemo(() => {
+    const sorted = [...plans]
+      .filter((p) => !p.config.isSingleWeek)
+      .sort(
+        (a, b) =>
+          new Date(b.config.createdAt).getTime() -
+          new Date(a.config.createdAt).getTime()
+      );
+    return {
+      activePlans: sorted.filter((p) => !isPlanEnded(p)),
+      endedPlans: sorted.filter((p) => isPlanEnded(p)),
+    };
+  }, [plans]);
+  const planCount = activePlans.length + endedPlans.length;
 
   return (
     <>
@@ -317,26 +333,51 @@ export function PlansPage() {
           <div className="flex items-center justify-center py-16">
             <Loader2 className="size-8 animate-spin text-muted-foreground" />
           </div>
-        ) : sortedPlans.length > 0 ? (
+        ) : planCount > 0 ? (
           <>
-            <div
-              className={cn(
-                "grid gap-4",
-                "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-              )}
-            >
-              {sortedPlans.map((plan) => (
-                <PlanCard
-                  key={plan.id}
-                  plan={plan}
-                  onDelete={setDeleteTarget}
-                />
-              ))}
-            </div>
+            {activePlans.length > 0 && (
+              <div
+                className={cn(
+                  "grid gap-4",
+                  "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+                )}
+              >
+                {activePlans.map((plan) => (
+                  <PlanCard
+                    key={plan.id}
+                    plan={plan}
+                    onDelete={setDeleteTarget}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Ended plans: kept as training history, visually separated */}
+            {endedPlans.length > 0 && (
+              <div className="space-y-4">
+                <h2 className="text-sm font-medium text-muted-foreground">
+                  {t("plansPage.endedSection")}
+                </h2>
+                <div
+                  className={cn(
+                    "grid gap-4",
+                    "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+                  )}
+                >
+                  {endedPlans.map((plan) => (
+                    <PlanCard
+                      key={plan.id}
+                      plan={plan}
+                      onDelete={setDeleteTarget}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Stats */}
             <div className="text-center text-sm text-muted-foreground">
-              {t("plansPage.planCount", { count: sortedPlans.length })}
+              {t("plansPage.planCount", { count: planCount })}
             </div>
           </>
         ) : (

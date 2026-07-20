@@ -190,6 +190,7 @@
     "freePlan": "Plan libre",
     "prebuilt": "Pré-construit",
     "addDates": "Ajouter des dates",
+    "planEnded": "Ce plan est terminé. Il reste consultable comme historique d'entraînement.",
     "clickToRename": "Cliquer pour renommer",
     "nameUpdated": "Nom mis à jour",
     "sessionReplaced": "Séance remplacée",
@@ -419,7 +420,9 @@
     "weekProgress": "Semaine {{current}} / {{total}}",
     "target": "Objectif : ",
     "sessionsCount": "{{count}} séances",
-    "planCount": "{{count}} plans"
+    "planCount": "{{count}} plans",
+    "ended": "Terminé",
+    "endedSection": "Plans terminés"
   },
   "prebuilt": {
     "notFound": "Plan introuvable",

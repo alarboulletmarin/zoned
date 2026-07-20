@@ -18,6 +18,7 @@ import {
   AlertTriangle,
   Shuffle,
   Route as RouteIcon,
+  ClipboardCheck,
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -73,7 +74,7 @@ import { PlanViewModeSelector } from "@/components/domain/PlanViewModeSelector";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { WeekGuidancePanel } from "@/components/domain/WeekGuidancePanel";
 import { usePlanViewMode } from "@/hooks/usePlanViewMode";
-import { getCurrentWeek } from "@/lib/planUtils";
+import { getCurrentWeek, isPlanEnded } from "@/lib/planUtils";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { pickWeekRouteTarget } from "@/lib/routeGenerator/recommendation";
 import { applyWeekValidationDecision, getUnresolvedSessions, getWeekResolutionSummary, type UnresolvedSessionPreview } from "@/lib/weekValidation";
@@ -153,10 +154,15 @@ export function PlanViewPage() {
     return getCurrentWeek(referenceDate);
   }, [plan]);
 
-  // Effective initial week: URL param (clamped) > current training week
+  // Effective initial week: URL param (clamped) > current training week,
+  // itself clamped so ended plans open on their last week (not an empty
+  // out-of-range one) and not-yet-started plans on week 1.
   const initialWeek = useMemo(() => {
     if (weekFromUrl != null && plan) {
       return Math.max(1, Math.min(weekFromUrl, plan.totalWeeks));
+    }
+    if (plan) {
+      return Math.max(1, Math.min(currentWeek, plan.totalWeeks));
     }
     return currentWeek;
   }, [weekFromUrl, currentWeek, plan]);
@@ -869,6 +875,14 @@ export function PlanViewPage() {
             </Button>
           </div>
         </div>
+
+        {/* Ended plan notice: the plan stays viewable as training history */}
+        {isPlanEnded(plan) && (
+          <div className="flex items-center gap-2 rounded-lg border border-border/60 bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
+            <ClipboardCheck className="size-4 shrink-0" />
+            <span>{t("view.planEnded")}</span>
+          </div>
+        )}
 
         {/* Phase Timeline */}
         {plan.phases.length > 0 && (
