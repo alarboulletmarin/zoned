@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.1] - 2026-07-20
+
+### Added
+- "Share on Strava" copy-to-clipboard button on session pages
+- Command Palette extended to more product surfaces
+- Multi-scenario demo GIFs in the README (plans, calculators, mobile)
+
+### Changed
+- Homepage reordered around plan generation: benefit-led hero copy, "Generate my plan" as primary CTA, Plans section moved right after the entry points
+- Plans dashboard separates ended plans from active ones
+- Card grids gain mobile-first interactive motion (tap feedback, hover lift and glow)
+- Keyboard shortcut hints follow the OS (Ctrl on Windows/Linux, Cmd on macOS)
+- Retired quiz and dead workout-of-the-day/onboarding code removed
+
+### Fixed
+- Top bar no longer overflows at mid-size viewports: it collapses to the hamburger below 1024px, with an adaptive search trigger
+- Homepage calculator cards share equal heights, explore link pinned to the bottom
+- Mobile-first audit issues resolved (#96-#106)
+- Sticky table headers pin inside their card instead of the viewport
+
+### Performance
+- Space Grotesk self-hosted, render-blocking Google Fonts chain removed
+- Entry bundle split: locales, react-dom and command palette in separate chunks
+- Library fetch deferred out of the LCP window, all animations composited
+- Lighthouse CI performance budgets, footer CLS fixed on short pages
+
 ## [0.7.0] - 2026-06-03
 
 ### Added

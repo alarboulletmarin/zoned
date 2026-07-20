@@ -2,6 +2,104 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.7.1",
+    date: "2026-07-20",
+    changes: {
+      added: [
+        {
+          text: "Bouton « Partager sur Strava » (copie en un clic) sur les pages seance",
+          textEn: "\"Share on Strava\" copy-to-clipboard button on session pages",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Palette de commandes etendue a davantage de surfaces produit",
+          textEn: "Command Palette extended to more product surfaces",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+      ],
+      changed: [
+        {
+          text: "Page d'accueil reorganisee autour de la generation de plans : accroche orientee benefice, « Generer mon plan » en action principale, section Plans remontee juste apres les points d'entree",
+          textEn: "Homepage reordered around plan generation: benefit-led hero copy, \"Generate my plan\" as primary CTA, Plans section moved right after the entry points",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Tableau de bord des plans : les plans termines sont separes des plans actifs",
+          textEn: "Plans dashboard separates ended plans from active ones",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Grilles de cartes animees mobile-first (retour tactile, lift et glow au survol)",
+          textEn: "Card grids gain mobile-first interactive motion (tap feedback, hover lift and glow)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Raccourcis clavier affiches selon le systeme (Ctrl sur Windows/Linux, Cmd sur macOS)",
+          textEn: "Keyboard shortcut hints follow the OS (Ctrl on Windows/Linux, Cmd on macOS)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      fixed: [
+        {
+          text: "Barre de navigation : bascule en menu hamburger sous 1024 px, plus aucun debordement aux largeurs intermediaires",
+          textEn: "Top bar collapses to the hamburger below 1024px, no more overflow at mid-size viewports",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Cartes calculateurs de la page d'accueil a hauteur egale, lien d'ouverture ancre en bas",
+          textEn: "Homepage calculator cards share equal heights, explore link pinned to the bottom",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Serie de correctifs issus de l'audit mobile-first (#96-#106)",
+          textEn: "Mobile-first audit issues resolved (#96-#106)",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "En-tetes de tableau colles a leur carte plutot qu'au viewport",
+          textEn: "Sticky table headers pin inside their card instead of the viewport",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      performance: [
+        {
+          text: "Police Space Grotesk auto-hebergee, chaine Google Fonts bloquante supprimee",
+          textEn: "Space Grotesk self-hosted, render-blocking Google Fonts chain removed",
+          category: "Performance",
+          categoryEn: "Performance",
+        },
+        {
+          text: "Bundle d'entree scinde : locales, react-dom et palette de commandes en chunks separes",
+          textEn: "Entry bundle split: locales, react-dom and command palette in separate chunks",
+          category: "Performance",
+          categoryEn: "Performance",
+        },
+        {
+          text: "Chargement de la bibliotheque differe hors de la fenetre LCP, toutes les animations composited",
+          textEn: "Library fetch deferred out of the LCP window, all animations composited",
+          category: "Performance",
+          categoryEn: "Performance",
+        },
+        {
+          text: "Budgets de performance Lighthouse en CI, CLS du footer corrige sur les pages courtes",
+          textEn: "Lighthouse CI performance budgets, footer CLS fixed on short pages",
+          category: "Performance",
+          categoryEn: "Performance",
+        },
+      ],
+    },
+  },
+  {
     version: "0.7.0",
     date: "2026-06-03",
     changes: {
