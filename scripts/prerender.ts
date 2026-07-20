@@ -31,12 +31,18 @@ async function launchBrowser(): Promise<Browser> {
       headless: true,
       args: [...chromium.args, "--disable-dev-shm-usage"],
       executablePath: await chromium.executablePath(),
+      // Desktop viewport so the snapshot keeps the full top-bar nav links
+      // (below 1024px the TopBar collapses into the hamburger sheet).
+      defaultViewport: { width: 1280, height: 800 },
     });
   }
   const puppeteer = (await import("puppeteer")).default;
   return puppeteer.launch({
     headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+    // Desktop viewport so the snapshot keeps the full top-bar nav links
+    // (below 1024px the TopBar collapses into the hamburger sheet).
+    defaultViewport: { width: 1280, height: 800 },
   }) as Promise<Browser>;
 }
 

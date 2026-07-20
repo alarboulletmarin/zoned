@@ -26,7 +26,8 @@ import {
 import { useCommandPalette } from "@/components/search";
 import { changeLanguage, getCurrentLanguage } from "@/i18n";
 import Logo from "@/assets/logo.svg?react";
-import { useIsMobile } from "@/hooks/useIsMobile";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { isMac } from "@/lib/platform";
 import { cn } from "@/lib/utils";
 
 interface TopBarProps {
@@ -144,7 +145,10 @@ export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
   const { t } = useTranslation("common");
   const { openPalette } = useCommandPalette();
   const currentLang = getCurrentLanguage();
-  const isMobile = useIsMobile();
+  // Below lg (1024px) the full bar — 5 nav sections (~600px in FR), search
+  // field and icon cluster — needs ~1100px and pushes the right-side icons
+  // off-screen, so mid-size viewports use the compact hamburger layout.
+  const isCompact = useMediaQuery("(max-width: 1023px)");
   const isDark = useThemeIcon();
   const theme = isDark ? "dark" : "light";
   const { pathname } = useLocation();
@@ -152,7 +156,7 @@ export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 h-14 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-full items-center gap-4 px-4 md:px-6">
-        {isMobile ? (
+        {isCompact ? (
           /* ───── Mobile ─────────────────────────────────────────────────── */
           <>
             <Button
@@ -228,17 +232,35 @@ export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
               ))}
             </nav>
 
+            {/* Search: full field with the ⌘K hint from xl up; below that the
+                bar is too tight for a field, so it collapses into a ghost
+                icon matching the theme/lang buttons beside it. */}
             <Button
               variant="outline"
               size="sm"
               onClick={openPalette}
-              className="ml-auto h-8 w-48 lg:w-72 justify-start gap-2 text-muted-foreground"
+              className="ml-auto hidden xl:inline-flex h-8 w-72 justify-start gap-2 text-muted-foreground"
             >
               <Search className="size-3.5" />
               <span className="text-sm">{t("actions.search")}</span>
-              <kbd className="pointer-events-none ml-auto hidden select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground lg:inline-flex">
-                <span className="text-xs">&#8984;</span>K
+              <kbd className="pointer-events-none ml-auto hidden select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground xl:inline-flex">
+                {isMac ? (
+                  <>
+                    <span className="text-xs">&#8984;</span>K
+                  </>
+                ) : (
+                  "Ctrl+K"
+                )}
               </kbd>
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={openPalette}
+              aria-label={t("actions.search")}
+              className="ml-auto xl:hidden"
+            >
+              <Search className="size-4" />
             </Button>
 
             <div className="flex items-center gap-1">
