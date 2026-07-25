@@ -43,6 +43,7 @@ import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { usePickLang, formatDate } from "@/lib/i18n-utils";
 import { DateInput } from "@/components/ui/date-input";
 import { addWeeksToDate, buildRacePlanDateRange, calculateWeeksBetweenDates } from "@/lib/planDates";
+import { RECOMMENDED_PLAN_WEEKS } from "@/lib/planGenerator/constants";
 import { validateIntermediateGoals, sortIntermediateGoals } from "@/lib/intermediateGoalValidation";
 import { loadRunnerProfile } from "@/lib/runnerProfile";
 import { usePlanDraft } from "./plan-create/usePlanDraft";
@@ -57,16 +58,13 @@ const NON_RACE_STEPS: StepId[] = ["purpose", "duration", "level", "goal", "fitne
 
 const DAYS_PER_WEEK_OPTIONS = [3, 4, 5, 6, 7] as const;
 
-/** Recommended week ranges per distance — warnings, not hard blocks */
-const RECOMMENDED_WEEKS: Record<string, { min: number; max: number }> = {
-  "5K":         { min: 4,  max: 16 },
-  "10K":        { min: 6,  max: 20 },
-  semi:         { min: 8,  max: 24 },
-  marathon:     { min: 12, max: 30 },
-  trail_short:  { min: 8,  max: 24 },
-  trail:        { min: 12, max: 36 },
-  ultra:        { min: 14, max: 52 },
-};
+/**
+ * Recommended week ranges per distance — warnings, not hard blocks.
+ * Single source of truth: this page used to keep its own, looser copy
+ * (marathon min 12 against 14), so the wizard let through plans the generator
+ * itself considers too short.
+ */
+const RECOMMENDED_WEEKS = RECOMMENDED_PLAN_WEEKS;
 
 const RACE_DISTANCE_ICONS: Record<RaceDistance, React.ReactNode> = {
   "5K": <Zap className="size-5 md:size-6 text-primary" />,

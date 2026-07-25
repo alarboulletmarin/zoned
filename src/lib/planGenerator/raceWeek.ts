@@ -1,6 +1,7 @@
 import type { RaceDistance, PlanWeek, PlanSession } from "@/types/plan";
 import type { Difficulty, WorkoutTemplate } from "@/types";
 import { RACE_WEEK_VOLUME_PCT, OPENER_DAYS_BEFORE_RACE } from "./constants";
+import { computeBlockLoad } from "./paceEngine";
 
 /** Floor for race-week jogs — shorter than this is not a run, it's a warm-up */
 const RACE_WEEK_MIN_SESSION_MIN = 25;
@@ -112,6 +113,8 @@ export function generateRaceWeek(
     for (const s of sessions) {
       if (s.workoutId === "__race_day__") continue;
       s.targetDistanceKm = Math.round((s.estimatedDurationMin / easyPaceMinKm) * 2) / 2;
+      // Easy jogs carry little load, but not none
+      s.loadScore = Math.round(computeBlockLoad(s.estimatedDurationMin, 2) * 10) / 10;
     }
   }
 

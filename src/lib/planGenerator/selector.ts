@@ -177,16 +177,13 @@ function findBestWorkout(
     candidates = candidates.filter((w) =>
       w.selectionCriteria.phases.includes(phase),
     );
-  } else {
-    // Still prefer phase-matching workouts, but keep all as fallback
-    const phaseMatched = candidates.filter((w) =>
-      w.selectionCriteria.phases.includes(phase),
-    );
-    if (phaseMatched.length >= 3) {
-      candidates = phaseMatched;
-    }
-    // Otherwise keep full candidate pool for variety
   }
+  // Easy and recovery slots keep the full pool: an easy run is an easy run in
+  // every phase. Restricting them to phase-tagged templates left only 8 easy
+  // sessions in peak, none longer than 50 minutes, so peak weeks physically
+  // could not carry their volume and ended up lighter than base weeks. The
+  // phase drives the quality session; the volume target drives the easy ones,
+  // and targetDurationMin below already steers those toward the right length.
 
   // Step 3: Filter by relativeLoad matching slot type.
   // Load comes before difficulty: an easy/recovery slot must never be filled
