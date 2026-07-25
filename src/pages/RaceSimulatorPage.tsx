@@ -1,26 +1,24 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
-  Flag,
-  Clock,
-  Utensils,
-  Flame,
-  Route,
   Brain,
+  ClipboardCheck,
+  Clock,
+  Flag,
+  Flame,
   Heart,
-  ChevronDown,
-  ChevronUp,
-  Save,
-  Share,
-  Download,
-  Trash2,
   Info,
-  Plus,
+  Route,
+  Settings,
+  Share,
+  Trash2,
+  Utensils,
 } from "@/components/icons";
 import { decodeSharedSimulation, sharedSimulationUrl } from "@/lib/share/raceSimShare";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Segmented } from "@/components/ui/segmented";
 import {
   Dialog,
   DialogContent,
@@ -30,11 +28,38 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { SEOHead } from "@/components/seo";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { PageContainer } from "@/components/layout/PageContainer";
+import {
+  Checklist,
+  DEFAULT_SETTINGS,
+  MentalCuesPanel,
+  NutritionPanel,
+  RACE_OPTIONS,
+  RaceDaySheet,
+  RaceSimActions,
+  RaceSimForm,
+  RaceSimNav,
+  RaceSimSection,
+  RaceSimSummaryBar,
+  RaceTimeline,
+  SplitsPanel,
+  Stat,
+  WarmupChecklist,
+  resolveSettings,
+  type RaceSimNavItem,
+  type RaceSimSettings,
+} from "@/components/domain/raceSim";
 import { cn } from "@/lib/utils";
 import { generateRacePlan, getDistanceLabelEn } from "@/lib/raceSimulator";
-import type { RacePlan } from "@/lib/raceSimulator";
+import type { RacePlan, RaceSimInput } from "@/lib/raceSimulator";
 import { formatSplitTime, formatPaceDisplay } from "@/lib/splits";
 import {
   getAllSimulations,
@@ -43,80 +68,52 @@ import {
 } from "@/lib/raceSimStorage";
 import type { SavedSimulation } from "@/lib/raceSimStorage";
 import { useSettings } from "@/hooks/useSettings";
-import {
-  convertPace,
-  convertDistance,
-  getPaceUnit,
-  getDistanceUnit,
-} from "@/lib/units";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { convertPace, getPaceUnit } from "@/lib/units";
 import { toast } from "sonner";
 import { exportRaceSimToPDF } from "@/lib/export/raceSimPdf";
 import { useIsEnglish, usePickLang, formatDate } from "@/lib/i18n-utils";
 
-interface RaceOption {
-  label: string;
-  labelEn: string;
-  value: string;
-  distanceKm: number;
-}
+type SectionId =
+  | "timeline"
+  | "dayBefore"
+  | "packing"
+  | "morning"
+  | "warmup"
+  | "race"
+  | "nutrition"
+  | "mental"
+  | "recovery";
 
-const RACE_OPTIONS: RaceOption[] = [
-  { label: "5K", labelEn: "5K", value: "5", distanceKm: 5 },
-  { label: "10K", labelEn: "10K", value: "10", distanceKm: 10 },
-  {
-    label: "Semi-marathon",
-    labelEn: "Half Marathon",
-    value: "21.1",
-    distanceKm: 21.1,
-  },
-  { label: "Marathon", labelEn: "Marathon", value: "42.195", distanceKm: 42.195 },
-];
-
-const TIMELINE_COLORS: Record<string, string> = {
-  prep: "text-blue-600 dark:text-blue-400",
-  meal: "text-orange-600 dark:text-orange-400",
-  warmup: "text-amber-600 dark:text-amber-400",
-  race: "text-red-600 dark:text-red-400",
-  nutrition: "text-green-600 dark:text-green-400",
-  recovery: "text-purple-600 dark:text-purple-400",
+/**
+ * Reference blocks start folded; the ones you act on start open. Collapsing
+ * everything by default made the chevrons decorative, and opening everything
+ * made the page a four-thousand-pixel tunnel.
+ */
+const DEFAULT_OPEN: Record<SectionId, boolean> = {
+  timeline: true,
+  dayBefore: true,
+  packing: false,
+  morning: true,
+  warmup: false,
+  race: true,
+  nutrition: true,
+  mental: false,
+  recovery: false,
 };
 
-function CollapsibleSection({
-  id,
-  icon,
-  title,
-  defaultOpen,
-  expanded,
-  onToggle,
-  children,
-}: {
-  id: string;
-  icon: React.ReactNode;
-  title: string;
-  defaultOpen?: boolean;
-  expanded: Record<string, boolean>;
-  onToggle: (id: string) => void;
-  children: React.ReactNode;
-}) {
-  const isOpen = expanded[id] ?? (defaultOpen ?? true);
-  return (
-    <Card>
-      <button onClick={() => onToggle(id)} className="w-full">
-        <CardHeader className="flex flex-row items-center justify-between py-4">
-          <CardTitle className="flex items-center gap-2 text-base">
-            {icon}
-            {title}
-          </CardTitle>
-          {isOpen ? (
-            <ChevronUp className="size-4" />
-          ) : (
-            <ChevronDown className="size-4" />
-          )}
-        </CardHeader>
-      </button>
-      {isOpen && <CardContent>{children}</CardContent>}
-    </Card>
+function settingsFromInput(input: RaceSimInput): RaceSimSettings {
+  const match = RACE_OPTIONS.find(
+    (opt) => Math.abs(opt.distanceKm - input.distanceKm) < 0.01,
   );
+  return {
+    distance: match ? match.value : "custom",
+    customDistance: match ? "" : String(input.distanceKm),
+    targetTime: formatSplitTime(input.targetTimeSeconds),
+    startTime: input.startTime,
+    strategy: input.strategy,
+    weight: input.bodyWeightKg?.toString() ?? "",
+  };
 }
 
 export function RaceSimulatorPage() {
@@ -124,27 +121,22 @@ export function RaceSimulatorPage() {
   const { t: tCommon } = useTranslation("common");
   const isEn = useIsEnglish();
   const pick = usePickLang();
-  const { settings } = useSettings();
-  const unit = settings.unitSystem;
+  const { settings: userSettings } = useSettings();
+  const unit = userSettings.unitSystem;
+  // The settings panel lives in the left column on desktop and in a sheet
+  // below it — "Ajuster" has to reach the one that is actually on screen.
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
-  const [selectedDistance, setSelectedDistance] = useState<string>("10");
-  const [customDistance, setCustomDistance] = useState<string>("");
-  const [hours, setHours] = useState<string>("0");
-  const [minutes, setMinutes] = useState<string>("45");
-  const [seconds, setSeconds] = useState<string>("0");
-  const [startTime, setStartTime] = useState<string>("08:30");
-  const [strategy, setStrategy] = useState<"even" | "negative" | "positive">(
-    "even",
-  );
-  const [weight, setWeight] = useState<string>("");
+  const [settings, setSettings] = useState<RaceSimSettings>(DEFAULT_SETTINGS);
   const [plan, setPlan] = useState<RacePlan | null>(null);
-  const [savedSimulations, setSavedSimulations] = useState<SavedSimulation[]>(
-    [],
-  );
-  const [expandedSections, setExpandedSections] = useState<
-    Record<string, boolean>
-  >({});
-  const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
+  const [planInput, setPlanInput] = useState<RaceSimInput | null>(null);
+  const [view, setView] = useState<"prepare" | "raceDay">("prepare");
+  const [formOpen, setFormOpen] = useState(true);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [openSections, setOpenSections] = useState<Partial<Record<SectionId, boolean>>>({});
+  const [checked, setChecked] = useState<Record<string, boolean>>({});
+  const [exporting, setExporting] = useState(false);
+  const [savedSimulations, setSavedSimulations] = useState<SavedSimulation[]>([]);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [isShared, setIsShared] = useState(false);
   const [searchParams] = useSearchParams();
@@ -153,99 +145,38 @@ export function RaceSimulatorPage() {
     setSavedSimulations(getAllSimulations());
   }, []);
 
-  const isCustom = selectedDistance === "custom";
-  const distanceKm = isCustom
-    ? parseFloat(customDistance) || 0
-    : parseFloat(selectedDistance);
+  const resolved = resolveSettings(settings);
 
-  const totalTimeSeconds =
-    (parseInt(hours) || 0) * 3600 +
-    (parseInt(minutes) || 0) * 60 +
-    (parseInt(seconds) || 0);
-
-  const hasValidInput = distanceKm > 0 && totalTimeSeconds > 0;
-
-  const distanceUnitLabel = getDistanceUnit(unit);
-  const paceUnitLabel = getPaceUnit(unit);
-
-  const toggleSection = useCallback((id: string) => {
-    setExpandedSections((prev) => ({ ...prev, [id]: !(prev[id] ?? true) }));
+  const applyPlan = useCallback((input: RaceSimInput) => {
+    setPlan(generateRacePlan(input));
+    setPlanInput(input);
+    setChecked({});
+    setOpenSections({});
+    setFormOpen(false);
+    setSheetOpen(false);
   }, []);
 
   const handleGenerate = useCallback(() => {
-    if (!hasValidInput) return;
-    const result = generateRacePlan({
-      distanceKm,
-      targetTimeSeconds: totalTimeSeconds,
-      startTime,
-      strategy,
-      bodyWeightKg: weight ? parseFloat(weight) : undefined,
+    if (!resolved.valid || resolved.targetSeconds === null) return;
+    applyPlan({
+      distanceKm: resolved.distanceKm,
+      targetTimeSeconds: resolved.targetSeconds,
+      startTime: settings.startTime,
+      strategy: settings.strategy,
+      bodyWeightKg: settings.weight ? parseFloat(settings.weight) : undefined,
     });
-    setPlan(result);
-    setCheckedItems({});
-    setExpandedSections({});
-  }, [hasValidInput, distanceKm, totalTimeSeconds, startTime, strategy, weight]);
-
-  const handleSave = useCallback(() => {
-    if (!plan) return;
-    const label = isEn
-      ? `${getDistanceLabelEn(plan.distanceKm)} - ${formatSplitTime(plan.targetTimeSeconds)}`
-      : `${plan.distanceLabel} - ${formatSplitTime(plan.targetTimeSeconds)}`;
-    const sim: SavedSimulation = {
-      id: crypto.randomUUID(),
-      createdAt: new Date().toISOString(),
-      label,
-      input: {
-        distanceKm: plan.distanceKm,
-        targetTimeSeconds: plan.targetTimeSeconds,
-        startTime,
-        strategy,
-        bodyWeightKg: weight ? parseFloat(weight) : undefined,
-      },
-    };
-    try {
-      saveSimulation(sim);
-      setSavedSimulations(getAllSimulations());
-      toast.success(t("saved.savedSuccess"));
-    } catch {
-      toast.error(t("saved.maxReached"));
-    }
-  }, [plan, isEn, startTime, strategy, weight, t]);
+  }, [resolved, settings, applyPlan]);
 
   const handleLoad = useCallback(
-    (sim: SavedSimulation) => {
-      const { input } = sim;
-      const km = input.distanceKm;
-      const matchingOption = RACE_OPTIONS.find(
-        (opt) => Math.abs(opt.distanceKm - km) < 0.01,
-      );
-      if (matchingOption) {
-        setSelectedDistance(matchingOption.value);
-        setCustomDistance("");
-      } else {
-        setSelectedDistance("custom");
-        setCustomDistance(km.toString());
-      }
-      const h = Math.floor(input.targetTimeSeconds / 3600);
-      const m = Math.floor((input.targetTimeSeconds % 3600) / 60);
-      const s = Math.round(input.targetTimeSeconds % 60);
-      setHours(h.toString());
-      setMinutes(m.toString());
-      setSeconds(s.toString());
-      setStartTime(input.startTime);
-      setStrategy(input.strategy);
-      setWeight(input.bodyWeightKg?.toString() ?? "");
-
-      const result = generateRacePlan(input);
-      setPlan(result);
-      setCheckedItems({});
-      setExpandedSections({});
+    (input: RaceSimInput) => {
+      setSettings(settingsFromInput(input));
+      applyPlan(input);
     },
-    [],
+    [applyPlan],
   );
 
-  // `/race-simulator/shared?d=…` — the inputs fully describe the plan, so we
-  // just replay them through the same path a saved simulation takes.
+  // `/race-simulator/shared?d=…` — the inputs fully describe the plan, so a shared
+  // link just replays them through the same path a saved simulation takes.
   const sharedParam = searchParams.get("d");
   useEffect(() => {
     if (!sharedParam) return;
@@ -254,19 +185,30 @@ export function RaceSimulatorPage() {
       toast.error(t("shared.invalid"));
       return;
     }
-    handleLoad({ id: "shared", createdAt: "", label: "", input });
+    handleLoad(input);
     setIsShared(true);
   }, [sharedParam, handleLoad, t]);
 
+  const handleSave = useCallback(() => {
+    if (!plan || !planInput) return;
+    const label = `${isEn ? getDistanceLabelEn(plan.distanceKm) : plan.distanceLabel} - ${formatSplitTime(plan.targetTimeSeconds)}`;
+    try {
+      saveSimulation({
+        id: crypto.randomUUID(),
+        createdAt: new Date().toISOString(),
+        label,
+        input: planInput,
+      });
+      setSavedSimulations(getAllSimulations());
+      toast.success(t("saved.savedSuccess"));
+    } catch {
+      toast.error(t("saved.maxReached"));
+    }
+  }, [plan, planInput, isEn, t]);
+
   const handleShare = useCallback(async () => {
-    if (!plan) return;
-    const url = sharedSimulationUrl({
-      distanceKm: plan.distanceKm,
-      targetTimeSeconds: plan.targetTimeSeconds,
-      startTime,
-      strategy,
-      bodyWeightKg: weight ? parseFloat(weight) : undefined,
-    });
+    if (!plan || !planInput) return;
+    const url = sharedSimulationUrl(planInput);
     if (navigator.share) {
       try {
         await navigator.share({ title: plan.distanceLabel, url });
@@ -277,7 +219,23 @@ export function RaceSimulatorPage() {
     }
     await navigator.clipboard.writeText(url);
     toast.success(tCommon("share.toast.linkCopied"));
-  }, [plan, startTime, strategy, weight, tCommon]);
+  }, [plan, planInput, tCommon]);
+
+  const handleExportPdf = useCallback(async () => {
+    if (!plan) return;
+    setExporting(true);
+    const toastId = toast.loading(
+      tCommon("export.loading.pdf", tCommon("export.title")),
+    );
+    try {
+      await exportRaceSimToPDF(plan, isEn);
+      toast.success(tCommon("calculators:raceSimulator.pdfExported"), { id: toastId });
+    } catch {
+      toast.error(tCommon("calculators:raceSimulator.exportFailed"), { id: toastId });
+    } finally {
+      setExporting(false);
+    }
+  }, [plan, isEn, tCommon]);
 
   const confirmDelete = useCallback(() => {
     if (!deleteTarget) return;
@@ -287,10 +245,231 @@ export function RaceSimulatorPage() {
     toast.success(t("saved.deletedSuccess"));
   }, [deleteTarget, t]);
 
-  const inputClassName =
-    "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
-  const smallInputClassName =
-    "flex h-9 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-sm text-center shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  const toggleSection = useCallback((id: string) => {
+    setOpenSections((prev) => ({
+      ...prev,
+      [id as SectionId]: !(prev[id as SectionId] ?? DEFAULT_OPEN[id as SectionId]),
+    }));
+  }, []);
+
+  const toggleChecked = useCallback((key: string) => {
+    setChecked((prev) => ({ ...prev, [key]: !prev[key] }));
+  }, []);
+
+  const handleJump = useCallback((id: string) => {
+    setOpenSections((prev) => ({ ...prev, [id as SectionId]: true }));
+    requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, []);
+
+  const paceUnit = getPaceUnit(unit);
+
+  // Every plan block, in the order you meet it on the day. Drives both the
+  // rendered grid and the anchor rail, so the two can never drift apart.
+  const sections = useMemo(() => {
+    if (!plan) return [];
+    const durationMin = plan.targetTimeSeconds / 60;
+    const recovery = plan.fuelingPlan.timeline.filter(
+      (cp) => cp.timeMin >= durationMin,
+    );
+
+    const list: {
+      id: SectionId;
+      label: string;
+      navLabel: string;
+      icon: React.ReactNode;
+      meta?: React.ReactNode;
+      wide?: boolean;
+      body: React.ReactNode;
+    }[] = [
+      {
+        id: "timeline",
+        label: t("sections.timeline"),
+        navLabel: t("nav.timeline"),
+        icon: <Clock className="size-4" />,
+        meta: `${plan.wakeUpTime} → ${plan.estimatedFinishTime}`,
+        body: <RaceTimeline timeline={plan.timeline} />,
+      },
+    ];
+
+    if (plan.dayBeforeChecklist.length > 0) {
+      list.push({
+        id: "dayBefore",
+        label: t("sections.dayBefore"),
+        navLabel: t("nav.dayBefore"),
+        icon: <Flag className="size-4" />,
+        meta: t("meta.items", { count: plan.dayBeforeChecklist.length }),
+        body: (
+          <Checklist
+            entries={plan.dayBeforeChecklist.map((item, i) => ({
+              key: `dayBefore:${i}`,
+              text: pick(item, "text"),
+            }))}
+            checked={checked}
+            onToggle={toggleChecked}
+          />
+        ),
+      });
+    }
+
+    if (plan.raceDayChecklist.length > 0) {
+      list.push({
+        id: "packing",
+        label: t("sections.packing"),
+        navLabel: t("nav.packing"),
+        icon: <ClipboardCheck className="size-4" />,
+        meta: t("meta.items", { count: plan.raceDayChecklist.length }),
+        body: (
+          <Checklist
+            entries={plan.raceDayChecklist.map((item, i) => ({
+              key: `packing:${i}`,
+              text: pick(item, "text"),
+            }))}
+            checked={checked}
+            onToggle={toggleChecked}
+          />
+        ),
+      });
+    }
+
+    list.push({
+      id: "morning",
+      label: t("sections.morning"),
+      navLabel: t("nav.morning"),
+      icon: <Utensils className="size-4" />,
+      meta: plan.wakeUpTime,
+      body: (
+        <div className="space-y-4">
+          <div className="flex flex-wrap gap-x-8 gap-y-3">
+            <Stat label={t("labels.wakeUp")} value={plan.wakeUpTime} />
+            <Stat
+              label={t("labels.breakfast")}
+              value={plan.breakfast.time}
+              hint={t("meta.carbs", { amount: plan.breakfast.carbsG })}
+            />
+          </div>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            {pick(plan.breakfast, "description")}
+          </p>
+        </div>
+      ),
+    });
+
+    if (plan.warmupExercises.length > 0) {
+      list.push({
+        id: "warmup",
+        label: t("sections.warmup"),
+        navLabel: t("nav.warmup"),
+        icon: <Flame className="size-4" />,
+        meta: `${plan.warmupStartTime} · ${plan.warmupDurationMin} min`,
+        body: (
+          <WarmupChecklist
+            exercises={plan.warmupExercises}
+            startTime={plan.warmupStartTime}
+            totalDurationMin={plan.warmupDurationMin}
+            checked={checked}
+            onToggle={toggleChecked}
+          />
+        ),
+      });
+    }
+
+    list.push({
+      id: "race",
+      label: t("sections.race"),
+      navLabel: t("nav.race"),
+      icon: <Route className="size-4" />,
+      wide: true,
+      meta: `${formatPaceDisplay(convertPace(plan.targetTimeSeconds / 60 / plan.distanceKm, unit))}${paceUnit}`,
+      body: (
+        <SplitsPanel
+          plan={plan}
+          strategy={planInput?.strategy ?? "even"}
+          unit={unit}
+        />
+      ),
+    });
+
+    list.push({
+      id: "nutrition",
+      label: t("sections.nutrition"),
+      navLabel: t("nav.nutrition"),
+      icon: <Utensils className="size-4" />,
+      meta:
+        plan.fuelingPlan.carbsPerHourG > 0
+          ? `${plan.fuelingPlan.carbsPerHourG} g/h`
+          : t("meta.hydrationOnly"),
+      body: (
+        <NutritionPanel
+          fuelingPlan={plan.fuelingPlan}
+          durationMin={durationMin}
+        />
+      ),
+    });
+
+    list.push({
+      id: "mental",
+      label: t("sections.mental"),
+      navLabel: t("nav.mental"),
+      icon: <Brain className="size-4" />,
+      meta: t("meta.segments", { count: plan.mentalCues.length }),
+      body: <MentalCuesPanel cues={plan.mentalCues} />,
+    });
+
+    if (recovery.length > 0) {
+      list.push({
+        id: "recovery",
+        label: t("sections.recovery"),
+        navLabel: t("nav.recovery"),
+        icon: <Heart className="size-4" />,
+        body: (
+          <ul className="space-y-2">
+            {recovery.map((cp, i) => (
+              <li key={i} className="text-sm leading-relaxed">
+                {pick(cp, "action")}
+              </li>
+            ))}
+          </ul>
+        ),
+      });
+    }
+
+    return list;
+  }, [plan, planInput, checked, toggleChecked, pick, t, unit, paceUnit]);
+
+  const navItems: RaceSimNavItem[] = sections.map((s) => ({
+    id: s.id,
+    label: s.navLabel,
+  }));
+
+  const allOpen =
+    sections.length > 0 &&
+    sections.every((s) => openSections[s.id] ?? DEFAULT_OPEN[s.id]);
+
+  const handleToggleAll = useCallback(() => {
+    const next = !allOpen;
+    setOpenSections(
+      Object.fromEntries(sections.map((s) => [s.id, next])) as Partial<
+        Record<SectionId, boolean>
+      >,
+    );
+  }, [allOpen, sections]);
+
+  const distanceLabel = plan
+    ? isEn
+      ? getDistanceLabelEn(plan.distanceKm)
+      : plan.distanceLabel
+    : "";
+
+  const formNode = (
+    <RaceSimForm
+      settings={settings}
+      onChange={setSettings}
+      onGenerate={handleGenerate}
+      submitLabel={plan ? t("inputs.regenerate") : t("inputs.generate")}
+    />
+  );
 
   return (
     <>
@@ -315,654 +494,283 @@ export function RaceSimulatorPage() {
           },
         ]}
       />
-      <div className="py-8 max-w-2xl mx-auto space-y-6">
-        {/* Header */}
-        <div>
-          <EditorialTitle as="h1" className="mb-2">{t("title")}</EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
+      <PageContainer width="wide" className="py-8 pb-28 lg:pb-8">
+        <header className="mb-6 max-w-3xl">
+          <EditorialTitle as="h1" className="mb-2">
+            {t("title")}
+          </EditorialTitle>
+          <FadeUp as="p" delay={0.1} className="text-lg text-muted-foreground">
             {t("description")}
           </FadeUp>
-        </div>
+        </header>
 
         {isShared && (
-          <div className="flex items-center gap-2 rounded-lg border border-zone-2/30 bg-zone-2/5 px-3 py-2 text-sm">
+          <div className="mb-4 flex items-center gap-2 rounded-lg border border-zone-2/30 bg-zone-2/5 px-3 py-2 text-sm">
             <Share className="size-4 shrink-0 text-foreground/70" />
             {t("shared.banner")}
           </div>
         )}
 
-        {/* Inputs */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Route className="size-5" />
-              {t("inputs.distance")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Distance */}
-            <div className="space-y-2">
-              <label htmlFor="sim-distance" className="text-sm font-medium">
-                {t("inputs.distance")}
-              </label>
-              <select
-                id="sim-distance"
-                value={selectedDistance}
-                onChange={(e) => setSelectedDistance(e.target.value)}
-                className={inputClassName}
-              >
-                {RACE_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {pick(opt, "label")}
-                  </option>
-                ))}
-                <option value="custom">{t("inputs.custom")}</option>
-              </select>
-              {isCustom && (
-                <div className="flex items-center gap-2 mt-2">
-                  <input
-                    type="number"
-                    min={0.5}
-                    max={200}
-                    step={0.1}
-                    placeholder="15"
-                    value={customDistance}
-                    onChange={(e) => setCustomDistance(e.target.value)}
-                    className="flex h-9 w-full max-w-[120px] rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  />
-                  <span className="text-sm text-muted-foreground">km</span>
-                </div>
-              )}
-            </div>
-
-            {/* Target time */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium">
-                {t("inputs.targetTime")}
-              </label>
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1">
-                  <input
-                    type="number"
-                    min={0}
-                    max={23}
-                    value={hours}
-                    onChange={(e) => setHours(e.target.value)}
-                    className={smallInputClassName}
-                  />
-                  <span className="text-sm text-muted-foreground">h</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <input
-                    type="number"
-                    min={0}
-                    max={59}
-                    value={minutes}
-                    onChange={(e) => setMinutes(e.target.value)}
-                    className={smallInputClassName}
-                  />
-                  <span className="text-sm text-muted-foreground">min</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <input
-                    type="number"
-                    min={0}
-                    max={59}
-                    value={seconds}
-                    onChange={(e) => setSeconds(e.target.value)}
-                    className={smallInputClassName}
-                  />
-                  <span className="text-sm text-muted-foreground">s</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Start time */}
-            <div className="space-y-2">
-              <label htmlFor="sim-start-time" className="text-sm font-medium">
-                {t("inputs.startTime")}
-              </label>
-              <input
-                id="sim-start-time"
-                type="time"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-                className={inputClassName}
-              />
-            </div>
-
-            {/* Strategy */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium">
-                {t("inputs.strategy")}
-              </label>
-              <div className="flex gap-2">
-                {(
-                  [
-                    { value: "even", label: t("inputs.even"), desc: t("inputs.evenDesc") },
-                    { value: "negative", label: t("inputs.negative"), desc: t("inputs.negativeDesc") },
-                    { value: "positive", label: t("inputs.positive"), desc: t("inputs.positiveDesc") },
-                  ] as const
-                ).map((s) => (
-                  <button
-                    key={s.value}
-                    onClick={() => setStrategy(s.value)}
-                    className={cn(
-                      "flex-1 px-3 py-2 rounded-md text-sm font-medium border transition-colors",
-                      strategy === s.value
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-transparent border-input hover:bg-muted",
-                    )}
-                    title={s.desc}
-                  >
-                    {s.label}
-                  </button>
-                ))}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {strategy === "even" && t("inputs.evenDesc")}
-                {strategy === "negative" && t("inputs.negativeDesc")}
-                {strategy === "positive" && t("inputs.positiveDesc")}
-              </p>
-            </div>
-
-            {/* Weight */}
-            <div className="space-y-2">
-              <label htmlFor="sim-weight" className="text-sm font-medium">
-                {t("inputs.weight")}
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  id="sim-weight"
-                  type="number"
-                  min={30}
-                  max={200}
-                  step={0.5}
-                  placeholder="70"
-                  value={weight}
-                  onChange={(e) => setWeight(e.target.value)}
-                  className="flex h-9 w-full max-w-[120px] rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                />
-                <span className="text-sm text-muted-foreground">
-                  {t("inputs.weightUnit")}
-                </span>
-              </div>
-            </div>
-
-            {/* Generate */}
-            <Button
-              onClick={handleGenerate}
-              disabled={!hasValidInput}
-              className="w-full"
-            >
-              <Flag className="size-4" />
-              {t("inputs.generate")}
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Results */}
         {plan && (
-          <>
-            {/* Timeline */}
-            <CollapsibleSection
-              id="timeline"
-              icon={<Clock className="size-5" />}
-              title={t("sections.timeline")}
-              defaultOpen
-              expanded={expandedSections}
-              onToggle={toggleSection}
-            >
-              <div className="space-y-3">
-                {plan.timeline.map((event, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <span className="tabular-nums font-mono text-sm font-medium min-w-[3.5rem] shrink-0">
-                      {event.time}
-                    </span>
-                    <span
-                      className={cn(
-                        "text-sm",
-                        TIMELINE_COLORS[event.type] ?? "text-foreground",
-                      )}
-                    >
-                      {pick(event, "label")}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </CollapsibleSection>
+          <RaceSimSummaryBar
+            className="mb-4"
+            distanceLabel={distanceLabel}
+            timeLabel={formatSplitTime(plan.targetTimeSeconds)}
+            paceLabel={`${formatPaceDisplay(convertPace(plan.targetTimeSeconds / 60 / plan.distanceKm, unit))}${paceUnit}`}
+            startTime={plan.startTime}
+            strategyLabel={t(`inputs.${planInput?.strategy ?? "even"}`)}
+            onAdjust={() => {
+              if (isDesktop) {
+                setFormOpen(true);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              } else {
+                setSheetOpen(true);
+              }
+            }}
+          />
+        )}
 
-            {/* Day Before Checklist */}
-            {plan.dayBeforeChecklist.length > 0 && (
-              <CollapsibleSection
-                id="dayBefore"
-                icon={<Flag className="size-5" />}
-                title={t("sections.dayBefore")}
-                defaultOpen
-                expanded={expandedSections}
-                onToggle={toggleSection}
-              >
-                <ul className="space-y-2">
-                  {plan.dayBeforeChecklist.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <input
-                        type="checkbox"
-                        checked={checkedItems[i] ?? false}
-                        onChange={() =>
-                          setCheckedItems((prev) => ({
-                            ...prev,
-                            [i]: !prev[i],
-                          }))
-                        }
-                        className="mt-0.5 shrink-0"
-                      />
-                      <span
-                        className={cn(
-                          "text-sm",
-                          checkedItems[i] &&
-                            "line-through text-muted-foreground",
-                        )}
-                      >
-                        {pick(item, "text")}
-                      </span>
+        <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)] xl:grid-cols-[360px_minmax(0,1fr)]">
+          {/* Left rail — settings before generation, navigation after. */}
+          <aside className="hidden lg:block lg:sticky lg:top-20 lg:self-start">
+            {formOpen || !plan ? (
+              <Card size="flush" className="p-5">
+                <h2 className="mb-4 text-sm font-semibold tracking-tight">
+                  {t("inputs.title")}
+                </h2>
+                {formNode}
+                {plan && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="mt-2 w-full"
+                    onClick={() => setFormOpen(false)}
+                  >
+                    {t("inputs.close")}
+                  </Button>
+                )}
+              </Card>
+            ) : (
+              <div className="space-y-6">
+                {/* The anchors only exist in "Préparer" — the race-day sheet
+                    renders one continuous run sheet, with nothing to jump to. */}
+                {view === "prepare" && (
+                  <RaceSimNav
+                    items={navItems}
+                    onJump={handleJump}
+                    onToggleAll={handleToggleAll}
+                    allOpen={allOpen}
+                  />
+                )}
+                <RaceSimActions
+                  onExportPdf={handleExportPdf}
+                  onSave={handleSave}
+                  onShare={handleShare}
+                  exporting={exporting}
+                />
+              </div>
+            )}
+          </aside>
+
+          {/* Plan */}
+          <div className="min-w-0">
+            {/* Mobile settings — inline until a plan exists, then behind "Ajuster". */}
+            {!plan && (
+              <Card size="flush" className="mb-4 p-5 lg:hidden">
+                <h2 className="mb-4 text-sm font-semibold tracking-tight">
+                  {t("inputs.title")}
+                </h2>
+                {formNode}
+              </Card>
+            )}
+
+            {!plan ? (
+              <EmptyState />
+            ) : (
+              <>
+                <div className="mb-4 flex flex-wrap items-center gap-3">
+                  <Segmented
+                    className="w-full sm:w-auto sm:min-w-[16rem]"
+                    label={t("view.label")}
+                    value={view}
+                    onChange={setView}
+                    options={[
+                      { value: "prepare", label: t("view.prepare") },
+                      { value: "raceDay", label: t("view.raceDay") },
+                    ]}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {view === "prepare" ? t("view.prepareHint") : t("view.raceDayHint")}
+                  </p>
+                </div>
+
+                {view === "prepare" ? (
+                  <>
+                    <div className="sticky top-14 z-20 -mx-4 mb-3 bg-background/95 px-4 py-2 backdrop-blur lg:hidden">
+                      <RaceSimNav items={navItems} onJump={handleJump} variant="chips" />
+                    </div>
+
+                    <div className="grid items-start gap-4 xl:grid-cols-2">
+                      {sections.map((section) => (
+                        <RaceSimSection
+                          key={section.id}
+                          id={section.id}
+                          icon={section.icon}
+                          title={section.label}
+                          meta={section.meta}
+                          open={openSections[section.id] ?? DEFAULT_OPEN[section.id]}
+                          onToggle={toggleSection}
+                          className={cn(
+                            "scroll-mt-32 lg:scroll-mt-24",
+                            section.wide && "xl:col-span-2",
+                          )}
+                        >
+                          {section.body}
+                        </RaceSimSection>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <RaceDaySheet
+                    plan={plan}
+                    unit={unit}
+                    checked={checked}
+                    onToggle={toggleChecked}
+                  />
+                )}
+              </>
+            )}
+
+            {/* Saved simulations */}
+            {savedSimulations.length > 0 && (
+              <section className="mt-8">
+                <h2 className="mb-3 text-sm font-semibold tracking-tight">
+                  {t("saved.title")}
+                </h2>
+                <ul className="grid gap-2 sm:grid-cols-2">
+                  {savedSimulations.map((sim) => (
+                    <li
+                      key={sim.id}
+                      className="flex items-center justify-between gap-2 rounded-lg border bg-card p-3"
+                    >
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium">{sim.label}</p>
+                        <p className="text-xs tabular-nums text-muted-foreground">
+                          {formatDate(new Date(sim.createdAt))}
+                        </p>
+                      </div>
+                      <div className="flex shrink-0 items-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleLoad(sim.input)}
+                        >
+                          {t("actions.load")}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon-sm"
+                          aria-label={t("actions.delete")}
+                          onClick={() => setDeleteTarget(sim.id)}
+                        >
+                          <Trash2 className="size-4" />
+                        </Button>
+                      </div>
                     </li>
                   ))}
                 </ul>
-              </CollapsibleSection>
+              </section>
             )}
-
-            {/* Morning */}
-            <CollapsibleSection
-              id="morning"
-              icon={<Utensils className="size-5" />}
-              title={t("sections.morning")}
-              defaultOpen
-              expanded={expandedSections}
-              onToggle={toggleSection}
-            >
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="font-medium">{t("labels.wakeUp")}:</span>
-                  <span className="tabular-nums font-mono">
-                    {plan.wakeUpTime}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="font-medium">{t("labels.breakfast")}:</span>
-                  <span className="tabular-nums font-mono">
-                    {plan.breakfast.time}
-                  </span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  {pick(plan.breakfast, "description")}
-                </p>
-              </div>
-            </CollapsibleSection>
-
-            {/* Warm-up */}
-            {plan.warmupExercises.length > 0 && (
-              <CollapsibleSection
-                id="warmup"
-                icon={<Flame className="size-5" />}
-                title={t("sections.warmup")}
-                defaultOpen
-                expanded={expandedSections}
-                onToggle={toggleSection}
-              >
-                <div className="space-y-3">
-                  <p className="text-sm text-muted-foreground">
-                    {t("labels.warmupStart")}:{" "}
-                    <span className="tabular-nums font-mono font-medium text-foreground">
-                      {plan.warmupStartTime}
-                    </span>{" "}
-                    ({plan.warmupDurationMin} min)
-                  </p>
-                  <ul className="space-y-2">
-                    {plan.warmupExercises.map((ex, i) => (
-                      <li key={i} className="text-sm">
-                        <span className="font-medium">
-                          {pick(ex, "name")}
-                        </span>
-                        <span className="text-muted-foreground">
-                          {" "}
-                          &mdash; {pick(ex, "description")}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </CollapsibleSection>
-            )}
-
-            {/* Race -- Splits */}
-            <CollapsibleSection
-              id="race"
-              icon={<Route className="size-5" />}
-              title={t("sections.race")}
-              defaultOpen
-              expanded={expandedSections}
-              onToggle={toggleSection}
-            >
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="font-medium">{t("labels.targetPace")}:</span>
-                  <span className="tabular-nums font-mono">
-                    {formatPaceDisplay(
-                      convertPace(
-                        plan.targetTimeSeconds / 60 / plan.distanceKm,
-                        unit,
-                      ),
-                    )}
-                    {paceUnitLabel}
-                  </span>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead className="sticky top-14 bg-background z-10">
-                      <tr className="border-b">
-                        <th className="py-2 px-2 text-left font-medium">#</th>
-                        <th className="py-2 px-2 text-left font-medium">
-                          {t("labels.dist")}
-                        </th>
-                        <th className="py-2 px-2 text-left font-medium">
-                          {t("labels.split")}
-                        </th>
-                        <th className="py-2 px-2 text-left font-medium">
-                          {t("labels.pace")}
-                        </th>
-                        <th className="py-2 px-2 text-left font-medium">
-                          {t("labels.cumulative")}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {plan.splits.map((split) => {
-                        const convertedPace = convertPace(
-                          split.paceMinPerKm,
-                          unit,
-                        );
-                        const displayDist =
-                          split.distance < 0.999
-                            ? convertDistance(split.distance, unit).toFixed(2)
-                            : convertDistance(split.distance, unit).toFixed(
-                                unit === "imperial" ? 2 : 0,
-                              );
-                        return (
-                          <tr
-                            key={split.index}
-                            className="border-b last:border-b-0 hover:bg-muted/50"
-                          >
-                            <td className="py-2 px-2 tabular-nums text-muted-foreground">
-                              {split.index}
-                            </td>
-                            <td className="py-2 px-2 tabular-nums">
-                              {displayDist} {distanceUnitLabel}
-                            </td>
-                            <td className="py-2 px-2 tabular-nums">
-                              {formatSplitTime(split.splitTimeSeconds)}
-                            </td>
-                            <td className="py-2 px-2 tabular-nums">
-                              {formatPaceDisplay(convertedPace)}
-                              {paceUnitLabel}
-                            </td>
-                            <td className="py-2 px-2 tabular-nums font-medium">
-                              {formatSplitTime(split.cumulativeTimeSeconds)}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                    <tfoot>
-                      <tr className="border-t font-medium">
-                        <td className="py-2 px-2">{t("labels.total")}</td>
-                        <td className="py-2 px-2 tabular-nums">
-                          {convertDistance(plan.distanceKm, unit).toFixed(
-                            unit === "imperial" ? 2 : 1,
-                          )}{" "}
-                          {distanceUnitLabel}
-                        </td>
-                        <td className="py-2 px-2" />
-                        <td className="py-2 px-2 tabular-nums">
-                          {formatPaceDisplay(
-                            convertPace(
-                              plan.targetTimeSeconds / 60 / plan.distanceKm,
-                              unit,
-                            ),
-                          )}
-                          {paceUnitLabel}
-                        </td>
-                        <td className="py-2 px-2 tabular-nums font-bold">
-                          {formatSplitTime(plan.targetTimeSeconds)}
-                        </td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-            </CollapsibleSection>
-
-            {/* Nutrition */}
-            <CollapsibleSection
-              id="nutrition"
-              icon={<Utensils className="size-5" />}
-              title={t("sections.nutrition")}
-              defaultOpen
-              expanded={expandedSections}
-              onToggle={toggleSection}
-            >
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-lg border p-3">
-                    <p className="text-xs text-muted-foreground">
-                      {t("nutrition.carbsPerHour")}
-                    </p>
-                    <p className="text-lg font-semibold tabular-nums">
-                      {plan.fuelingPlan.carbsPerHourG}g
-                    </p>
-                  </div>
-                  <div className="rounded-lg border p-3">
-                    <p className="text-xs text-muted-foreground">
-                      {t("nutrition.fluidPerHour")}
-                    </p>
-                    <p className="text-lg font-semibold tabular-nums">
-                      {plan.fuelingPlan.fluidMlPerHour}ml
-                    </p>
-                  </div>
-                  <div className="rounded-lg border p-3">
-                    <p className="text-xs text-muted-foreground">
-                      {t("nutrition.gelCount")}
-                    </p>
-                    <p className="text-lg font-semibold tabular-nums">
-                      {plan.fuelingPlan.gelCount}
-                    </p>
-                  </div>
-                  <div className="rounded-lg border p-3">
-                    <p className="text-xs text-muted-foreground">
-                      {t("nutrition.gelFrequency")}
-                    </p>
-                    <p className="text-lg font-semibold tabular-nums">
-                      {plan.fuelingPlan.gelFrequencyMin > 0
-                        ? t("nutrition.everyMin", {
-                            min: plan.fuelingPlan.gelFrequencyMin,
-                          })
-                        : "—"}
-                    </p>
-                  </div>
-                </div>
-                {plan.fuelingPlan.tips.length > 0 && (
-                  <div className="space-y-2">
-                    <p className="text-sm font-medium">
-                      {t("nutrition.tips")}
-                    </p>
-                    <ul className="space-y-1">
-                      {plan.fuelingPlan.tips.map((tip, i) => (
-                        <li
-                          key={i}
-                          className="text-sm text-muted-foreground flex items-start gap-2"
-                        >
-                          <Info className="size-3.5 mt-0.5 shrink-0" />
-                          {pick(tip, "text")}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </CollapsibleSection>
-
-            {/* Mental Cues */}
-            <CollapsibleSection
-              id="mental"
-              icon={<Brain className="size-5" />}
-              title={t("sections.mental")}
-              defaultOpen
-              expanded={expandedSections}
-              onToggle={toggleSection}
-            >
-              <div className="space-y-3">
-                {plan.mentalCues.map((cue, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <span className="tabular-nums text-xs font-medium bg-muted rounded-full px-2 py-0.5 shrink-0 mt-0.5">
-                      {cue.fromKm}–{cue.toKm} {t("labels.km")}
-                    </span>
-                    <p className="text-sm">
-                      {pick(cue, "text")}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </CollapsibleSection>
-
-            {/* Recovery */}
-            <CollapsibleSection
-              id="recovery"
-              icon={<Heart className="size-5" />}
-              title={t("sections.recovery")}
-              defaultOpen
-              expanded={expandedSections}
-              onToggle={toggleSection}
-            >
-              <div className="space-y-2">
-                {plan.fuelingPlan.timeline
-                  .filter((cp) => cp.timeMin >= plan.targetTimeSeconds / 60)
-                  .map((cp, i) => (
-                    <p key={i} className="text-sm">
-                      {pick(cp, "action")}
-                    </p>
-                  ))}
-              </div>
-            </CollapsibleSection>
-
-            {/* Actions */}
-            <div className="flex flex-wrap gap-2">
-              <Button onClick={handleSave} variant="outline">
-                <Save className="size-4" />
-                {t("actions.save")}
-              </Button>
-              <Button onClick={handleShare} variant="outline">
-                <Share className="size-4" />
-                {t("actions.share")}
-              </Button>
-              <Button
-                onClick={async () => {
-                  if (!plan) return;
-                  const toastId = toast.loading(tCommon("export.loading.pdf", tCommon("export.title")));
-                  try {
-                    await exportRaceSimToPDF(plan, isEn);
-                    toast.success(tCommon("calculators:raceSimulator.pdfExported"), { id: toastId });
-                  } catch {
-                    toast.error(tCommon("calculators:raceSimulator.exportFailed"), { id: toastId });
-                  }
-                }}
-                variant="outline"
-              >
-                <Download className="size-4" />
-                {t("actions.exportPdf")}
-              </Button>
-            </div>
-          </>
-        )}
-
-        {/* Empty state */}
-        {!plan && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground py-4">
-            <Info className="size-4 shrink-0" />
-            {t("empty")}
           </div>
-        )}
+        </div>
+      </PageContainer>
 
-        {/* Saved simulations */}
-        {savedSimulations.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Plus className="size-5" />
-                {t("saved.title")}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
-                {savedSimulations.map((sim) => (
-                  <li
-                    key={sim.id}
-                    className="flex items-center justify-between gap-2 rounded-md border p-2"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium truncate">
-                        {sim.label}
-                      </p>
-                      <p className="text-xs text-muted-foreground tabular-nums">
-                        {formatDate(new Date(sim.createdAt))}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-1 shrink-0">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleLoad(sim)}
-                      >
-                        {t("actions.load")}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setDeleteTarget(sim.id)}
-                      >
-                        <Trash2 className="size-4" />
-                      </Button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        )}
+      {/* Mobile action bar — the PDF is what ends up on a phone race morning. */}
+      {plan && (
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t bg-background/95 px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur lg:hidden">
+          <div className="flex gap-2">
+            <RaceSimActions
+              className="flex-1"
+              variant="bar"
+              onExportPdf={handleExportPdf}
+              onSave={handleSave}
+              onShare={handleShare}
+              exporting={exporting}
+            />
+            <Button
+              variant="outline"
+              size="icon"
+              aria-label={t("inputs.adjust")}
+              onClick={() => setSheetOpen(true)}
+            >
+              <Settings className="size-4" />
+            </Button>
+          </div>
+        </div>
+      )}
 
-        {/* Delete Confirmation Dialog */}
-        <Dialog open={deleteTarget !== null} onOpenChange={(open) => !open && setDeleteTarget(null)}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>
-                {tCommon("calculators:raceSimulator.deleteConfirm")}
-              </DialogTitle>
-              <DialogDescription>
-                {tCommon("calculators:raceSimulator.deleteDescription")}
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">
-                  {tCommon("calculators:raceSimulator.cancel")}
-                </Button>
-              </DialogClose>
-              <Button variant="destructive" onClick={confirmDelete}>
-                <Trash2 className="size-4" />
-                {t("actions.delete")}
+      {/* Mobile settings sheet */}
+      <Sheet open={sheetOpen && !!plan && !isDesktop} onOpenChange={setSheetOpen}>
+        <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>{t("inputs.title")}</SheetTitle>
+          </SheetHeader>
+          <div className="px-4 pb-6">{formNode}</div>
+        </SheetContent>
+      </Sheet>
+
+      <Dialog
+        open={deleteTarget !== null}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {tCommon("calculators:raceSimulator.deleteConfirm")}
+            </DialogTitle>
+            <DialogDescription>
+              {tCommon("calculators:raceSimulator.deleteDescription")}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">
+                {tCommon("calculators:raceSimulator.cancel")}
               </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </div>
+            </DialogClose>
+            <Button variant="destructive" onClick={confirmDelete}>
+              <Trash2 className="size-4" />
+              {t("actions.delete")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
+  );
+}
+
+function EmptyState() {
+  const { t } = useTranslation("simulator");
+  const steps = [
+    { icon: <Clock className="size-4" />, text: t("emptyState.timeline") },
+    { icon: <Route className="size-4" />, text: t("emptyState.splits") },
+    { icon: <Utensils className="size-4" />, text: t("emptyState.nutrition") },
+    { icon: <Brain className="size-4" />, text: t("emptyState.mental") },
+  ];
+  return (
+    <Card size="flush" className="border-dashed p-8">
+      <div className="flex items-start gap-2 text-sm text-muted-foreground">
+        <Info className="mt-0.5 size-4 shrink-0" />
+        <p>{t("empty")}</p>
+      </div>
+      <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+        {steps.map((step, i) => (
+          <li key={i} className="flex items-center gap-3 text-sm">
+            <span className="text-muted-foreground">{step.icon}</span>
+            {step.text}
+          </li>
+        ))}
+      </ul>
+    </Card>
   );
 }

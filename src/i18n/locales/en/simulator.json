@@ -2,14 +2,21 @@
   "title": "Race Day Simulator",
   "description": "Generate your complete race day plan: per-kilometer pacing, nutrition, warm-up, timeline and checklist.",
   "inputs": {
+    "title": "Race parameters",
     "distance": "Distance",
     "targetTime": "Target Time",
     "startTime": "Start Time",
     "strategy": "Pacing Strategy",
     "weight": "Weight (optional)",
     "weightUnit": "kg",
+    "weightHint": "Used to calibrate nutrition and hydration.",
+    "timeHint": "Format mm:ss or h:mm:ss",
+    "timeInvalid": "Format not recognised. Try 45:00 or 3:30:00.",
     "generate": "Generate my race plan",
-    "custom": "Custom",
+    "regenerate": "Regenerate plan",
+    "adjust": "Adjust",
+    "close": "Hide parameters",
+    "custom": "Other distance",
     "even": "Even",
     "negative": "Negative",
     "positive": "Positive",
@@ -17,11 +24,33 @@
     "negativeDesc": "Start slower, finish faster.",
     "positiveDesc": "Start faster, finish slower."
   },
-  "sections": {
-    "dayBefore": "Day Before (D-1)",
+  "view": {
+    "label": "Display mode",
+    "prepare": "Prepare",
+    "raceDay": "Race day",
+    "prepareHint": "The full plan, to read at your own pace.",
+    "raceDayHint": "The essentials, in order, on the clock."
+  },
+  "nav": {
+    "title": "The plan",
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all",
+    "timeline": "Schedule",
+    "dayBefore": "Day before",
+    "packing": "Kit bag",
     "morning": "Morning",
     "warmup": "Warm-up",
-    "race": "The Race — Pacing Strategy",
+    "race": "The race",
+    "nutrition": "Nutrition",
+    "mental": "Mental",
+    "recovery": "After"
+  },
+  "sections": {
+    "dayBefore": "Day Before (D-1)",
+    "packing": "Kit bag and logistics",
+    "morning": "Morning",
+    "warmup": "Warm-up",
+    "race": "The race: pacing strategy",
     "nutrition": "Race Nutrition",
     "mental": "Mental Cues",
     "recovery": "After the Race",
@@ -43,6 +72,44 @@
     "pace": "Pace",
     "cumulative": "Cumul.",
     "dist": "Dist."
+  },
+  "summary": {
+    "startAt": "start {{time}}"
+  },
+  "timeline": {
+    "now": "Now"
+  },
+  "meta": {
+    "items_one": "{{count}} item",
+    "items_other": "{{count}} items",
+    "segments_one": "{{count}} segment",
+    "segments_other": "{{count}} segments",
+    "carbs": "{{amount}} g of carbs",
+    "hydrationOnly": "hydration only"
+  },
+  "splits": {
+    "evenSummary": "Constant pace: {{pace}}, start to finish.",
+    "negativeSummary": "You speed up: {{first}} on the first split, {{last}} on the last.",
+    "positiveSummary": "You slow down: {{first}} on the first split, {{last}} on the last.",
+    "showTable": "Show split-by-split detail",
+    "hideTable": "Hide detail",
+    "curve": "Pace curve",
+    "curveAria": "Pace curve, from {{fastest}} to {{slowest}}",
+    "curveStart": "Start",
+    "curveEnd": "Finish",
+    "curveFaster": "↑ faster"
+  },
+  "warmup": {
+    "window": "{{start}} → {{end}}, {{minutes}} min total"
+  },
+  "raceDay": {
+    "nextUp": "Next up",
+    "notToday": "Not race day yet",
+    "startsAt": "The plan starts at {{time}}.",
+    "inNow": "now",
+    "inMin": "in {{min}} min",
+    "inH": "in {{h}} h",
+    "inHM": "in {{h}} h {{min}}"
   },
   "shared": {
     "banner": "This simulation was shared with you. Adjust the inputs to match your own race.",
@@ -69,7 +136,20 @@
     "gelCount": "Gel count",
     "gelFrequency": "Gel frequency",
     "everyMin": "every {{min}} min",
+    "totalCarbs": "{{total}} g total",
+    "totalFluid": "{{total}} ml total",
+    "noCarbs": "Over {{duration}} of effort, no carbohydrate intake is needed. Focus on hydration.",
+    "toThirst": "To thirst, no forcing.",
+    "durationMin": "{{min}} min",
+    "durationH": "{{h}} h",
+    "durationHM": "{{h}} h {{min}}",
     "tips": "Nutrition tips"
   },
-  "empty": "Enter your race parameters to generate your plan."
+  "empty": "Enter your race parameters to generate your plan.",
+  "emptyState": {
+    "timeline": "The day's schedule, from wake-up to finish",
+    "splits": "Your pacing, split by split",
+    "nutrition": "What you drink and eat, and when",
+    "mental": "Mental cues broken down by segment"
+  }
 }

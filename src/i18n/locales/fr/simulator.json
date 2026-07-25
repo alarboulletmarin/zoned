@@ -1,15 +1,22 @@
 {
   "title": "Simulateur jour de course",
-  "description": "Générez votre plan complet pour le jour de la course : allures par kilomètre, nutrition, échauffement, timeline et checklist.",
+  "description": "Génère ton plan complet pour le jour de la course : allures par kilomètre, nutrition, échauffement, timeline et checklist.",
   "inputs": {
+    "title": "Paramètres de course",
     "distance": "Distance",
     "targetTime": "Temps objectif",
     "startTime": "Heure de départ",
     "strategy": "Stratégie d'allure",
     "weight": "Poids (optionnel)",
     "weightUnit": "kg",
+    "weightHint": "Sert à calibrer la nutrition et l'hydratation.",
+    "timeHint": "Format mm:ss ou h:mm:ss",
+    "timeInvalid": "Format non reconnu. Essaie 45:00 ou 3:30:00.",
     "generate": "Générer mon plan de course",
-    "custom": "Personnalisé",
+    "regenerate": "Regénérer le plan",
+    "adjust": "Ajuster",
+    "close": "Masquer les paramètres",
+    "custom": "Autre distance",
     "even": "Régulier",
     "negative": "Négatif",
     "positive": "Positif",
@@ -17,11 +24,33 @@
     "negativeDesc": "Départ plus lent, arrivée plus rapide.",
     "positiveDesc": "Départ plus rapide, arrivée plus lente."
   },
-  "sections": {
-    "dayBefore": "La veille (J-1)",
+  "view": {
+    "label": "Mode d'affichage",
+    "prepare": "Préparer",
+    "raceDay": "Jour J",
+    "prepareHint": "Le plan complet, à lire au calme.",
+    "raceDayHint": "L'essentiel, dans l'ordre, minuté."
+  },
+  "nav": {
+    "title": "Le plan",
+    "expandAll": "Tout déplier",
+    "collapseAll": "Tout replier",
+    "timeline": "Planning",
+    "dayBefore": "La veille",
+    "packing": "Le sac",
     "morning": "Le matin",
     "warmup": "Échauffement",
-    "race": "La course — Stratégie d'allure",
+    "race": "La course",
+    "nutrition": "Nutrition",
+    "mental": "Mental",
+    "recovery": "Après"
+  },
+  "sections": {
+    "dayBefore": "La veille (J-1)",
+    "packing": "Sac et logistique",
+    "morning": "Le matin",
+    "warmup": "Échauffement",
+    "race": "La course : stratégie d'allure",
     "nutrition": "Nutrition pendant la course",
     "mental": "Cues mentaux",
     "recovery": "Après la course",
@@ -44,8 +73,46 @@
     "cumulative": "Cumul.",
     "dist": "Dist."
   },
+  "summary": {
+    "startAt": "départ {{time}}"
+  },
+  "timeline": {
+    "now": "Maintenant"
+  },
+  "meta": {
+    "items_one": "{{count}} point",
+    "items_other": "{{count}} points",
+    "segments_one": "{{count}} segment",
+    "segments_other": "{{count}} segments",
+    "carbs": "{{amount}} g de glucides",
+    "hydrationOnly": "hydratation seule"
+  },
+  "splits": {
+    "evenSummary": "Allure constante : {{pace}}, du départ à l'arrivée.",
+    "negativeSummary": "Tu accélères : {{first}} sur le premier split, {{last}} sur le dernier.",
+    "positiveSummary": "Tu ralentis : {{first}} sur le premier split, {{last}} sur le dernier.",
+    "showTable": "Voir le détail split par split",
+    "hideTable": "Masquer le détail",
+    "curve": "Courbe d'allure",
+    "curveAria": "Courbe d'allure, de {{fastest}} à {{slowest}}",
+    "curveStart": "Départ",
+    "curveEnd": "Arrivée",
+    "curveFaster": "↑ plus rapide"
+  },
+  "warmup": {
+    "window": "{{start}} → {{end}}, {{minutes}} min au total"
+  },
+  "raceDay": {
+    "nextUp": "Prochaine étape",
+    "notToday": "Ce n'est pas le jour J",
+    "startsAt": "Le plan démarre à {{time}}.",
+    "inNow": "maintenant",
+    "inMin": "dans {{min}} min",
+    "inH": "dans {{h}} h",
+    "inHM": "dans {{h}} h {{min}}"
+  },
   "shared": {
-    "banner": "Cette simulation a été partagée avec vous. Modifiez les paramètres pour l'adapter à votre course.",
+    "banner": "Cette simulation a été partagée avec toi. Modifie les paramètres pour l'adapter à ta course.",
     "invalid": "Ce lien de partage est invalide ou incomplet."
   },
   "actions": {
@@ -69,7 +136,20 @@
     "gelCount": "Nombre de gels",
     "gelFrequency": "Fréquence des gels",
     "everyMin": "toutes les {{min}} min",
+    "totalCarbs": "{{total}} g au total",
+    "totalFluid": "{{total}} ml au total",
+    "noCarbs": "Sur {{duration}} d'effort, aucun apport glucidique n'est nécessaire. Concentre-toi sur l'hydratation.",
+    "toThirst": "À la soif, sans forcer.",
+    "durationMin": "{{min}} min",
+    "durationH": "{{h}} h",
+    "durationHM": "{{h}} h {{min}}",
     "tips": "Conseils nutrition"
   },
-  "empty": "Entrez vos paramètres de course pour générer votre plan."
+  "empty": "Renseigne tes paramètres de course pour générer ton plan.",
+  "emptyState": {
+    "timeline": "Le planning de la journée, du réveil à l'arrivée",
+    "splits": "Tes allures, split par split",
+    "nutrition": "Ce que tu bois et manges, et à quel moment",
+    "mental": "Des repères mentaux découpés par segment"
+  }
 }

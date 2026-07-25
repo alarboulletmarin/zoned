@@ -99,6 +99,10 @@ function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
 
+function roundTo(value: number, step: number): number {
+  return Math.round(value / step) * step;
+}
+
 /**
  * Calculate personalized fueling plan based on Jeukendrup 2014, Rowlands 2020
  * (1:0.8 ratio), Viribay 2020 (120 g/h ceiling), ACSM Position Stand, and
@@ -122,14 +126,17 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
   const totalCarbsG = Math.round(carbsPerHourG * durationH);
 
   // --- Hydration ---
-  // Higher weight and intensity = more fluid
+  // Higher weight and intensity = more fluid.
+  // Rounded to 50 ml: nobody doses a bottle to the millilitre, and "518 ml"
+  // reads as a precision the model does not have.
   const weightFluidFactor = clamp((weight - 50) / 50, 0, 1); // 50-100kg range
-  const fluidMlPerHour = Math.round(
+  const fluidMlPerHour = roundTo(
     strategy.fluidMlPerHour[0] +
       (strategy.fluidMlPerHour[1] - strategy.fluidMlPerHour[0]) *
-        (intensityFactor * 0.5 + weightFluidFactor * 0.5)
+        (intensityFactor * 0.5 + weightFluidFactor * 0.5),
+    50
   );
-  const totalFluidMl = Math.round(fluidMlPerHour * durationH);
+  const totalFluidMl = roundTo(fluidMlPerHour * durationH, 50);
 
   // --- Sodium ---
   const sodiumMgPerHour = Math.round(
@@ -246,8 +253,8 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
   // another session is planned within 4h. Otherwise, the next regular meal is fine.
   timeline.push({
     timeMin: durationMin,
-    action: `Arrivée ! Dans les 2 h : ${Math.round(weight * 1)}–${Math.round(weight * 1.2)}g glucides + ${Math.round(weight * 0.3)}–${Math.round(weight * 0.4)}g protéines. Réhydrater : ${Math.round(totalFluidMl * 0.5)}ml minimum. La fenêtre 30 min n'est cruciale que si tu enchaînes une autre séance sous 4 h.`,
-    actionEn: `Finish! Within 2h: ${Math.round(weight * 1)}–${Math.round(weight * 1.2)}g carbs + ${Math.round(weight * 0.3)}–${Math.round(weight * 0.4)}g protein. Rehydrate: ${Math.round(totalFluidMl * 0.5)}ml minimum. The 30-min window matters mainly if another session is within 4h.`,
+    action: `Arrivée ! Dans les 2 h : ${Math.round(weight * 1)}–${Math.round(weight * 1.2)}g glucides + ${Math.round(weight * 0.3)}–${Math.round(weight * 0.4)}g protéines. Réhydrater : ${roundTo(totalFluidMl * 0.5, 50)}ml minimum. La fenêtre 30 min n'est cruciale que si tu enchaînes une autre séance sous 4 h.`,
+    actionEn: `Finish! Within 2h: ${Math.round(weight * 1)}–${Math.round(weight * 1.2)}g carbs + ${Math.round(weight * 0.3)}–${Math.round(weight * 0.4)}g protein. Rehydrate: ${roundTo(totalFluidMl * 0.5, 50)}ml minimum. The 30-min window matters mainly if another session is within 4h.`,
   });
 
   // Sort timeline by time
@@ -257,27 +264,27 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
   const tips: { text: string; textEn: string }[] = [];
 
   tips.push({
-    text: "Testez toujours votre stratégie nutritionnelle à l'entraînement avant la course. Ne jamais rien essayer de nouveau le jour J.",
+    text: "Teste toujours ta stratégie nutritionnelle à l'entraînement avant la course. Ne jamais rien essayer de nouveau le jour J.",
     textEn: "Always test your nutrition strategy in training before race day. Never try anything new on race day.",
   });
 
   if (durationMin > 90) {
     tips.push({
-      text: "Habituez votre estomac : commencez par 30 g/h et augmentez progressivement sur 6-12 semaines pour atteindre votre cible.",
+      text: "Habitue ton estomac : commence par 30 g/h et augmente progressivement sur 6-12 semaines pour atteindre ta cible.",
       textEn: "Train your gut: start at 30 g/h and gradually increase over 6-12 weeks to reach your target.",
     });
   }
 
   if (carbsPerHourG > 60) {
     tips.push({
-      text: `Au-delà de 60 g/h, utilisez un ratio glucose:fructose 1:0.8 (Maurten, Precision Fuel, SiS Beta Fuel l'utilisent). Il améliore l'absorption de 45 % et réduit les troubles digestifs vs le ratio 2:1.`,
+      text: `Au-delà de 60 g/h, utilise un ratio glucose:fructose 1:0.8 (Maurten, Precision Fuel, SiS Beta Fuel l'utilisent). Il améliore l'absorption de 45 % et réduit les troubles digestifs vs le ratio 2:1.`,
       textEn: `Above 60 g/h, use a 1:0.8 glucose:fructose ratio (Maurten, Precision Fuel, SiS Beta Fuel use it). It improves absorption by 45% and reduces GI issues vs 2:1.`,
     });
   }
 
   if (durationMin > 150) {
     tips.push({
-      text: "Variez les textures : alternez gels, barres, et boissons pour éviter la lassitude gustative et les nausées.",
+      text: "Varie les textures : alterne gels, barres et boissons pour éviter la lassitude gustative et les nausées.",
       textEn: "Vary textures: alternate gels, bars, and drinks to avoid palate fatigue and nausea.",
     });
   }
@@ -291,20 +298,20 @@ export function calculateFueling(input: FuelingInput): FuelingResult {
 
   if (carbsPerHourG > 0) {
     tips.push({
-      text: "Prenez chaque gel avec de l'eau (jamais avec une boisson énergétique, risque de surdosage glucidique).",
+      text: "Prends chaque gel avec de l'eau (jamais avec une boisson énergétique, risque de surdosage glucidique).",
       textEn: "Take each gel with water (never with a sports drink to avoid carbohydrate overload).",
     });
   }
 
   if (electrolyteDrink) {
     tips.push({
-      text: `Visez ${sodiumMgPerHour}mg de sodium/h. En cas de forte chaleur ou transpiration abondante, augmentez de 20-30%.`,
+      text: `Vise ${sodiumMgPerHour}mg de sodium/h. En cas de forte chaleur ou transpiration abondante, augmente de 20-30 %.`,
       textEn: `Target ${sodiumMgPerHour}mg sodium/h. In hot weather or heavy sweating, increase by 20-30%.`,
     });
   }
 
   tips.push({
-    text: "Pesez-vous avant et après l'effort pour estimer vos pertes hydriques et affiner votre plan.",
+    text: "Pèse-toi avant et après l'effort pour estimer tes pertes hydriques et affiner ton plan.",
     textEn: "Weigh yourself before and after exercise to estimate fluid losses and refine your plan.",
   });
 

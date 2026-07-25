@@ -509,7 +509,10 @@ export const warmupRoutines: WarmupRoutine[] = [
     name: "Échauffement jour de course",
     nameEn: "Race Day Warm-up",
     targetSessionType: "race",
-    totalDurationMin: 18,
+    // Sum of the exercises below (elapsed time, recovery included) — the race
+    // simulator schedules the block backwards from the gun, so this has to be
+    // the real wall-clock duration, not a headline figure.
+    totalDurationMin: 28,
     exercises: [
       {
         name: "Footing facile",
@@ -523,6 +526,7 @@ export const warmupRoutines: WarmupRoutine[] = [
         nameEn: "Leg swings (front-to-back and lateral)",
         description: "10 balancements avant-arrière et 10 latéraux par jambe. Bien mobiliser les hanches.",
         descriptionEn: "10 front-to-back and 10 lateral swings per leg. Thoroughly mobilize the hips.",
+        durationSeconds: 45,
         repetitions: 10,
         sets: 2,
       },
@@ -531,6 +535,7 @@ export const warmupRoutines: WarmupRoutine[] = [
         nameEn: "A-skip",
         description: "2 longueurs de 30 m. Montée de genou explosive avec contact au sol dynamique.",
         descriptionEn: "2 lengths of 30m. Explosive knee drive with dynamic ground contact.",
+        durationSeconds: 30,
         repetitions: 2,
       },
       {
@@ -538,6 +543,7 @@ export const warmupRoutines: WarmupRoutine[] = [
         nameEn: "B-skip",
         description: "2 longueurs de 30 m. Extension complète de la jambe, retour griffé au sol.",
         descriptionEn: "2 lengths of 30m. Full leg extension, pawing return to the ground.",
+        durationSeconds: 30,
         repetitions: 2,
       },
       {
@@ -561,6 +567,7 @@ export const warmupRoutines: WarmupRoutine[] = [
         nameEn: "Lateral shuffles",
         description: "2 longueurs de 20 m dans chaque direction. Activer les adducteurs et abducteurs.",
         descriptionEn: "2 lengths of 20m in each direction. Activate adductors and abductors.",
+        durationSeconds: 40,
         repetitions: 2,
         sets: 2,
       },
@@ -569,6 +576,7 @@ export const warmupRoutines: WarmupRoutine[] = [
         nameEn: "Strides at race pace",
         description: "4-6 accélérations de 80 m à allure de course cible. Récupération en marchant 60-90 s entre chaque.",
         descriptionEn: "4-6 accelerations of 80m at target race pace. Walk recovery 60-90s between each.",
+        durationSeconds: 80,
         repetitions: 5,
       },
       {
