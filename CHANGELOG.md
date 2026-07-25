@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.4] - 2026-07-25
+
+### Added
+- Four curated weeks: first steps, hill block, peak week and race-pace week, filling the previously empty "peak" category
+- Nine catalogue sessions: volume endurance for advanced and elite, negative-split and strides endurance, recovery for advanced and elite, and the first two beginner trail sessions
+- GitHub Releases are now published automatically when a version tag is pushed, using the matching changelog section as the release notes
+
+### Changed
+- The plan generator drives weekly volume from its own model instead of summing whatever sessions were drawn, so the planned progression reaches the runner
+- Quality work is weighted by race distance: VO2max for 5K and 10K, threshold and race pace for half marathon and marathon, hills for trail
+- Four-day plans schedule two quality sessions per week instead of one, which a single session could not cover
+- The marathon plan moves to five sessions per week, what an 80 km peak alongside a 31 km long run requires
+- Return-to-running plans now progress across their cycle instead of starting at their own peak
+- Curated weeks declare the volume their sessions actually add up to
+
+### Fixed
+- VO2max sessions were annotated and costed at easy pace: zone strings such as "Z5+" silently fell back to Z2
+- The session page contradicted itself on zones, durations and headings; a single zone parser now backs all of them (166 of 230 templates affected)
+- Peak weeks could not carry their volume and ended up lighter than base weeks
+- Race week no longer prescribes 9-minute jogs, and no week repeats the same session twice
+- Plan audit checks weekly volume in kilometres instead of a model percentage that progressed smoothly whatever the plan delivered
+
 ## [0.7.3] - 2026-07-25
 
 ### Added

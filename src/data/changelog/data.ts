@@ -2,6 +2,102 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.7.4",
+    date: "2026-07-25",
+    changes: {
+      added: [
+        {
+          text: "Quatre semaines prêtes à l'emploi : premiers pas, bloc côtes, semaine pic et allure spécifique",
+          textEn: "Four curated weeks: first steps, hill block, peak week and race-pace week",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Neuf séances au catalogue : endurance volume pour confirmés et élite, endurance en négative split et avec lignes droites, récupération confirmés et élite, et les deux premières séances de trail débutant",
+          textEn: "Nine catalogue sessions: volume endurance for advanced and elite, negative-split and strides endurance, recovery for advanced and elite, and the first two beginner trail sessions",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Publication automatique des releases GitHub à la pose d'un tag de version, à partir de la section correspondante du changelog",
+          textEn: "GitHub Releases published automatically when a version tag is pushed, from the matching changelog section",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+      ],
+      changed: [
+        {
+          text: "Le générateur de plans pilote le volume hebdomadaire par son modèle au lieu d'additionner les séances tirées : la progression prévue arrive enfin jusqu'au coureur",
+          textEn: "The plan generator drives weekly volume from its own model instead of summing whatever sessions were drawn, so the planned progression reaches the runner",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Le travail de qualité est pondéré par la distance visée : VMA sur 5K et 10K, seuil et allure spécifique sur semi et marathon, côtes sur trail",
+          textEn: "Quality work is weighted by race distance: VO2max for 5K and 10K, threshold and race pace for half marathon and marathon, hills for trail",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Les plans à quatre séances programment deux séances de qualité par semaine au lieu d'une seule",
+          textEn: "Four-day plans schedule two quality sessions per week instead of one",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Le plan marathon passe à cinq séances par semaine, ce qu'exige un pic à 80 km avec une sortie longue de 31 km",
+          textEn: "The marathon plan moves to five sessions per week, what an 80 km peak alongside a 31 km long run requires",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Les plans de reprise progressent réellement sur leur cycle au lieu de démarrer à leur propre pic",
+          textEn: "Return-to-running plans progress across their cycle instead of starting at their own peak",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "Les semaines prêtes à l'emploi annoncent le volume que leurs séances totalisent vraiment",
+          textEn: "Curated weeks declare the volume their sessions actually add up to",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+      fixed: [
+        {
+          text: "Les séances de VMA étaient annotées et calculées à l'allure endurance : les zones écrites « Z5+ » retombaient silencieusement en Z2",
+          textEn: "VO2max sessions were annotated and costed at easy pace: zone strings such as \"Z5+\" silently fell back to Z2",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "La page séance se contredisait sur les zones, les durées et les titres ; un seul analyseur de zone les alimente désormais (166 séances sur 230 concernées)",
+          textEn: "The session page contradicted itself on zones, durations and headings; a single zone parser now backs all of them (166 of 230 templates affected)",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Les semaines de pic ne pouvaient pas porter leur volume et finissaient plus légères que les semaines de base",
+          textEn: "Peak weeks could not carry their volume and ended up lighter than base weeks",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "La semaine de course ne prescrit plus de footings de 9 minutes, et aucune semaine ne répète deux fois la même séance",
+          textEn: "Race week no longer prescribes 9-minute jogs, and no week repeats the same session twice",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+        {
+          text: "L'audit de plan contrôle le volume en kilomètres au lieu d'un pourcentage théorique qui progressait proprement quoi que le plan livre",
+          textEn: "Plan audit checks weekly volume in kilometres instead of a model percentage that progressed smoothly whatever the plan delivered",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+    },
+  },
+  {
     version: "0.7.3",
     date: "2026-07-25",
     changes: {
