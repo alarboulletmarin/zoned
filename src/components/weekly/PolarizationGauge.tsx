@@ -34,31 +34,50 @@ export function PolarizationGauge({
   const balanced = status === "balanced";
   const pct = (n: number) => Math.round(n * 100);
 
+  // Zone tokens, same mapping as the rhythm chart: easy reads green there, so
+  // it reads green here too. One colour, one meaning, across the page.
   const segments = [
-    { key: "easy", share: lowShare, zone: 1 },
+    { key: "easy", share: lowShare, zone: 2 },
     { key: "tempo", share: midShare, zone: 3 },
     { key: "intense", share: highShare, zone: 4 },
   ] as const;
 
   return (
     <div className={cn("space-y-2", className)}>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <span className="text-sm font-medium">{t("weekly.gauge.title")}</span>
         <span
           className={cn(
-            "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium",
+            "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium",
             balanced
               ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
               : "bg-amber-500/15 text-amber-600 dark:text-amber-400",
           )}
-          title={t(`weekly.gauge.${status}`)}
+          title={t("weekly.gauge.tolerance", {
+            min: Math.round(HARD_MIN * 100),
+            max: Math.round(HARD_MAX * 100),
+          })}
         >
           {balanced ? (
-            <Check className="size-3.5" />
+            <Check className="size-3.5 shrink-0" />
           ) : (
-            <AlertTriangle className="size-3.5" />
+            <AlertTriangle className="size-3.5 shrink-0" />
           )}
-          {pct(lowShare)} / {pct(hardShare)}
+          {/* Say the verdict, not just two numbers the reader must interpret. */}
+          <span className="hidden sm:inline">{t(`weekly.gauge.${status}`)}</span>
+          <span className="tabular-nums">
+            {pct(lowShare)} / {pct(hardShare)}
+          </span>
+        </span>
+      </div>
+
+      {/* Target caption sits above the bar — never on top of a segment. */}
+      <div className="relative h-4">
+        <span
+          className="absolute top-0 -translate-x-1/2 whitespace-nowrap text-[10px] font-medium text-muted-foreground"
+          style={{ left: `${TARGET_LOW * 100}%` }}
+        >
+          {t("weekly.gauge.target")}
         </span>
       </div>
 
@@ -78,16 +97,11 @@ export function PolarizationGauge({
             ) : null,
           )}
         </div>
-        {/* Dotted target marker at 80 % */}
         <div
-          className="pointer-events-none absolute inset-y-0 border-l-2 border-dashed border-foreground/60"
+          className="pointer-events-none absolute -inset-y-1 border-l-2 border-dashed border-foreground/60"
           style={{ left: `${TARGET_LOW * 100}%` }}
           aria-hidden
-        >
-          <span className="absolute -top-0.5 left-1 whitespace-nowrap text-[10px] font-medium text-muted-foreground">
-            {t("weekly.gauge.target")}
-          </span>
-        </div>
+        />
       </div>
 
       {/* Verdict caption */}
@@ -102,17 +116,19 @@ export function PolarizationGauge({
         </p>
       )}
 
-      {/* Legend */}
+      {/* Legend — only the bands actually present in the bar. */}
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
-        {segments.map((s) => (
-          <span key={s.key} className="inline-flex items-center gap-1.5">
-            <span
-              className="size-2.5 rounded-full"
-              style={{ backgroundColor: `var(--zone-${s.zone})` }}
-            />
-            {t(`weekly.gauge.${s.key}`)} {pct(s.share)} %
-          </span>
-        ))}
+        {segments
+          .filter((s) => s.share > 0)
+          .map((s) => (
+            <span key={s.key} className="inline-flex items-center gap-1.5">
+              <span
+                className="size-2.5 rounded-full"
+                style={{ backgroundColor: `var(--zone-${s.zone})` }}
+              />
+              {t(`weekly.gauge.${s.key}`)} {pct(s.share)} %
+            </span>
+          ))}
       </div>
     </div>
   );

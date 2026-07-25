@@ -23,6 +23,8 @@ interface PlanExportMenuProps {
   /** Pre-loaded workout templates (optional — loaded on demand if absent) */
   workoutTemplates?: Record<string, WorkoutTemplate>;
   size?: "sm" | "default";
+  /** Visual weight. Use "outline" where another filled CTA already leads. */
+  variant?: "default" | "outline";
 }
 
 /**
@@ -57,6 +59,7 @@ export function PlanExportMenu({
   workoutNames: preloadedNames,
   workoutTemplates: preloadedTemplates,
   size = "default",
+  variant = "default",
 }: PlanExportMenuProps) {
   const { t } = useTranslation("common");
   const [isExporting, setIsExporting] = useState(false);
@@ -115,7 +118,7 @@ export function PlanExportMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="default"
+          variant={variant}
           size={isSmall ? "sm" : "default"}
           disabled={isExporting}
           className={isSmall ? "rounded-full font-semibold" : "rounded-full px-5 py-2.5 h-auto font-bold"}

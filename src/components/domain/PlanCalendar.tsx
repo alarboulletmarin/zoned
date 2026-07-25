@@ -8,28 +8,9 @@ import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { usePickLang } from "@/lib/i18n-utils";
 import { toast } from "sonner";
+import { SESSION_COLORS } from "@/lib/sessionColors";
 
 // ── Color maps ──────────────────────────────────────────────────────
-
-const SESSION_COLORS: Record<string, string> = {
-  recovery: "#94a3b8",
-  endurance: "#60a5fa",
-  long_run: "#2563eb",
-  tempo: "#eab308",
-  threshold: "#f97316",
-  vo2max: "#ef4444",
-  speed: "#f87171",
-  fartlek: "#a855f7",
-  hills: "#22c55e",
-  race_specific: "#f59e0b",
-  strength: "#78716c",
-  cycling: "var(--discipline-cycling)",
-  swimming: "var(--discipline-swimming)",
-  yoga: "#d946ef",
-  rest_day: "#a1a1aa",
-  rest: "#a1a1aa",
-  cross_training: "#6b7280",
-};
 
 const PHASE_BG: Record<string, string> = {
   base: "bg-blue-50/50 dark:bg-blue-950/20",

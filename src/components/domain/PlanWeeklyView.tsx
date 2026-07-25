@@ -9,28 +9,9 @@ import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { usePickLang } from "@/lib/i18n-utils";
 import { toast } from "sonner";
 import { WeekGuidancePanel } from "@/components/domain/WeekGuidancePanel";
+import { sessionColor } from "@/lib/sessionColors";
 
 // ── Color maps ──────────────────────────────────────────────────────
-
-const SESSION_COLORS: Record<string, string> = {
-  recovery: "#94a3b8",
-  endurance: "#60a5fa",
-  long_run: "#2563eb",
-  tempo: "#eab308",
-  threshold: "#f97316",
-  vo2max: "#ef4444",
-  speed: "#f87171",
-  fartlek: "#a855f7",
-  hills: "#22c55e",
-  race_specific: "#f59e0b",
-  strength: "#78716c",
-  cycling: "var(--discipline-cycling)",
-  swimming: "var(--discipline-swimming)",
-  yoga: "#d946ef",
-  rest_day: "#a1a1aa",
-  rest: "#a1a1aa",
-  cross_training: "#6b7280",
-};
 
 const PHASE_BG: Record<string, string> = {
   base: "bg-blue-50/50 dark:bg-blue-950/20",
@@ -48,9 +29,17 @@ function isRedrawable(workoutId: string): boolean {
 
 // ── Props ───────────────────────────────────────────────────────────
 
+/** Per-workout badge data shown on the card (zone + session load). */
+export interface WorkoutCardMeta {
+  zone?: number;
+  tss?: number | null;
+}
+
 interface PlanWeeklyViewProps {
   plan: TrainingPlan;
   workoutNames: Record<string, string>;
+  /** Optional zone/TSS per workout id — adds a meta line to each card. */
+  workoutMeta?: Record<string, WorkoutCardMeta>;
   currentWeek: number;
   initialWeek?: number;
   isEn: boolean;
@@ -69,13 +58,15 @@ interface PlanWeeklyViewProps {
   onToggleLock?: (weekNumber: number, sessionIndex: number) => void;
   /** "Ma semaine": draw another workout for this session only. */
   onRedraw?: (weekNumber: number, sessionIndex: number) => void;
+  /** Replaces a day's content while the draw animation runs (null = untouched). */
+  renderScanCell?: (day: number) => React.ReactNode | null;
   onValidateWeek?: (weekNumber: number) => void;
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
   onAddToDay?: (weekNumber: number, day: number) => void;
   onWeekChange?: (week: number) => void;
   onFindWeekRoute?: (weekNumber: number) => void;
   blockedDays?: Set<string>;
-  /** Standalone "Ma semaine": hide week nav + free-plan guide, taller day columns. */
+  /** Standalone "Ma semaine": hide week nav + free-plan guide, rest cards on empty days. */
   singleWeek?: boolean;
 }
 
@@ -84,6 +75,7 @@ interface PlanWeeklyViewProps {
 export const PlanWeeklyView = memo(function PlanWeeklyView({
   plan,
   workoutNames,
+  workoutMeta,
   currentWeek,
   initialWeek,
   isEn,
@@ -95,6 +87,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   onToggleComplete,
   onToggleLock,
   onRedraw,
+  renderScanCell,
   onValidateWeek,
   onWorkoutAdd,
   onAddToDay,
@@ -469,7 +462,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
 
   return (
     <>
-      <div className={cn("space-y-4", singleWeek && "lg:flex lg:flex-col lg:h-full")}>
+      <div className="space-y-4">
         {/* ── Week navigation ── */}
         {!singleWeek && (
         <div className="flex items-center justify-between gap-2">
@@ -661,9 +654,10 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                         monthLabel={monthLabel}
                         isToday={isToday}
                         workoutNames={workoutNames}
+                        workoutMeta={workoutMeta}
                         dropTarget={dropTarget}
                         draggedSession={draggedSession}
-                        tall={singleWeek}
+                        singleWeek={singleWeek}
                         onDragOver={handleDragOver}
                         onDragLeave={handleDragLeave}
                         onDrop={handleDrop}
@@ -678,6 +672,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                         onToggleLock={onToggleLock}
                         onRedraw={onRedraw}
                         onSessionDelete={onSessionDelete}
+                        renderScanCell={renderScanCell}
                         onAddToDay={onAddToDay}
                         setContextMenu={setContextMenu}
                         isBlockedDay={blockedDays?.has(`${selectedWeek}-${dayIndex}`) ?? false}
@@ -689,7 +684,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
             </div>
 
             {/* Desktop: single 7-column row */}
-            <div className={cn("hidden md:grid md:grid-cols-7 md:gap-2", singleWeek && "lg:h-full")}>
+            <div className="hidden md:grid md:grid-cols-7 md:gap-2 md:items-start">
               {Array.from({ length: 7 }, (_, dayIndex) => {
                 let dayOfMonth: number | null = null;
                 let monthLabel = "";
@@ -720,10 +715,11 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                     monthLabel={monthLabel}
                     isToday={isToday}
                     workoutNames={workoutNames}
+                    workoutMeta={workoutMeta}
                     dropTarget={dropTarget}
                     draggedSession={draggedSession}
                     isDesktop
-                    tall={singleWeek}
+                    singleWeek={singleWeek}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
@@ -738,6 +734,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                     onToggleLock={onToggleLock}
                     onRedraw={onRedraw}
                     onSessionDelete={onSessionDelete}
+                    renderScanCell={renderScanCell}
                     onAddToDay={onAddToDay}
                     setContextMenu={setContextMenu}
                     isBlockedDay={blockedDays?.has(`${selectedWeek}-${dayIndex}`) ?? false}
@@ -907,10 +904,12 @@ interface DayCellProps {
   monthLabel?: string;
   isToday?: boolean;
   workoutNames: Record<string, string>;
+  workoutMeta?: Record<string, WorkoutCardMeta>;
   dropTarget: { weekNumber: number; day: number } | null;
   draggedSession: { weekNumber: number; sessionIndex: number } | null;
   isDesktop?: boolean;
-  tall?: boolean;
+  /** Standalone "Ma semaine" board: rest cards on empty days, taller mobile cells. */
+  singleWeek?: boolean;
   onDragOver: (e: React.DragEvent, weekNumber: number, day: number) => void;
   onDragLeave: () => void;
   onDrop: (e: React.DragEvent, weekNumber: number, day: number) => void;
@@ -930,6 +929,7 @@ interface DayCellProps {
   onToggleLock?: (weekNumber: number, sessionIndex: number) => void;
   onRedraw?: (weekNumber: number, sessionIndex: number) => void;
   onSessionDelete?: (weekNumber: number, sessionIndex: number) => void;
+  renderScanCell?: (day: number) => React.ReactNode | null;
   onAddToDay?: (weekNumber: number, day: number) => void;
   setContextMenu: (
     menu: {
@@ -952,10 +952,11 @@ const DayCell = memo(function DayCell({
   monthLabel,
   isToday,
   workoutNames,
+  workoutMeta,
   dropTarget,
   draggedSession,
   isDesktop,
-  tall,
+  singleWeek,
   onDragOver,
   onDragLeave,
   onDrop,
@@ -970,6 +971,7 @@ const DayCell = memo(function DayCell({
   onToggleLock,
   onRedraw,
   onSessionDelete,
+  renderScanCell,
   onAddToDay,
   setContextMenu,
   isBlockedDay,
@@ -977,6 +979,9 @@ const DayCell = memo(function DayCell({
   const { t } = useTranslation(["plan", "library"]);
   const pickLang = usePickLang();
   const sessions = weekData.sessions.filter((s) => s.dayOfWeek === dayIndex);
+  // While the draw animation runs, this day shows the spinning card instead of
+  // its own content — same cell, same position, so nothing can drift.
+  const scanContent = renderScanCell?.(dayIndex) ?? null;
   const isDropHere = dropTarget?.weekNumber === selectedWeek && dropTarget?.day === dayIndex;
 
   return (
@@ -987,8 +992,7 @@ const DayCell = memo(function DayCell({
       onDrop={(e) => onDrop(e, selectedWeek, dayIndex)}
       className={cn(
         "rounded-lg bg-secondary/30 p-1.5 transition-colors",
-        isDesktop ? (tall ? "min-h-[220px]" : "min-h-[120px]") : (tall ? "min-h-[120px]" : "min-h-[80px]"),
-        tall && isDesktop && "flex flex-col",
+        isDesktop ? "min-h-[120px]" : (singleWeek ? "min-h-[120px]" : "min-h-[80px]"),
         isDropHere && "ring-2 ring-primary/50 bg-primary/5",
         isBlockedDay && "bg-muted/50 bg-[repeating-linear-gradient(135deg,transparent,transparent_4px,rgba(0,0,0,0.04)_4px,rgba(0,0,0,0.04)_6px)]",
       )}
@@ -1020,17 +1024,30 @@ const DayCell = memo(function DayCell({
         </span>
       )}
 
-      {sessions.length === 0 ? (
+      {scanContent && (
+        <div
+          className="overflow-hidden rounded-lg bg-background/85 backdrop-blur-sm"
+          aria-hidden="true"
+        >
+          {scanContent}
+        </div>
+      )}
+
+      {!scanContent && sessions.length === 0 ? (
         onAddToDay && !isBlockedDay ? (
           <button
             type="button"
             onClick={() => onAddToDay(selectedWeek, dayIndex)}
             className={cn(
-              "w-full rounded bg-card/50 border border-dashed border-muted-foreground/30 flex items-center justify-center gap-1 text-muted-foreground/40 active:text-primary hover:text-primary hover:border-primary/40 transition-colors",
+              "group/rest w-full rounded bg-card/50 border border-dashed border-muted-foreground/30 flex flex-col items-center justify-center gap-0.5 text-muted-foreground/40 active:text-primary hover:text-primary hover:border-primary/40 transition-colors",
               isDesktop ? "p-4" : "p-3",
-              tall && isDesktop && "flex-1",
             )}
           >
+            {singleWeek && (
+              <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground/50 transition-colors group-hover/rest:text-primary">
+                {t("library:weekly.kinds.rest")}
+              </span>
+            )}
             <span className="text-sm font-medium">+</span>
           </button>
         ) : (
@@ -1040,7 +1057,7 @@ const DayCell = memo(function DayCell({
         )
       ) : null}
 
-      {sessions.map((session, sIdx) => {
+      {!scanContent && sessions.map((session, sIdx) => {
         const isRaceDay = session.workoutId === "__race_day__";
         const isIntermediateRace = session.workoutId === "__intermediate_race__";
         const isSpecialSession = isRaceDay || isIntermediateRace;
@@ -1050,6 +1067,7 @@ const DayCell = memo(function DayCell({
           draggedSession?.sessionIndex === originalIndex;
         const sessionName = workoutNames[session.workoutId] || session.workoutId;
         const isStrength = session.sessionType === "strength" || session.workoutId?.startsWith("STR-");
+        const meta = workoutMeta?.[session.workoutId];
 
         return (
           <div
@@ -1275,12 +1293,25 @@ const DayCell = memo(function DayCell({
                       <span
                         className="size-2 rounded-full shrink-0"
                         style={{
-                          backgroundColor: SESSION_COLORS[session.sessionType] || "#9ca3af",
+                          backgroundColor: sessionColor(session.sessionType),
                         }}
                       />
                     )}
+                    {/* The zone label is the dot's legend — colour alone carries
+                        no meaning for a first-time reader. */}
+                    {meta?.zone != null && (
+                      <span
+                        className="text-[9px] font-semibold leading-none tabular-nums shrink-0"
+                        style={{ color: `var(--zone-${meta.zone}-text)` }}
+                        title={t("library:weekly.card.zone", { zone: meta.zone })}
+                      >
+                        Z{meta.zone}
+                      </span>
+                    )}
                     {session.isKeySession && (
-                      <Star className="size-2.5 text-yellow-500 fill-yellow-500 shrink-0" />
+                      <span className="shrink-0" title={t("view.keySession")}>
+                        <Star className="size-2.5 text-yellow-500 fill-yellow-500" />
+                      </span>
                     )}
                   </div>
                   <span
@@ -1300,7 +1331,11 @@ const DayCell = memo(function DayCell({
                         : undefined
                     }
                     className={cn(
-                      "text-[10px] leading-tight font-medium line-clamp-2 block",
+                      // No `block` here: it would override the line-clamp's own
+                      // display and let long names run past their clamp. The
+                      // single-week board has room for a third line.
+                      "text-[10px] leading-tight font-medium",
+                      singleWeek ? "line-clamp-3" : "line-clamp-2",
                       isDesktop && "text-[11px]",
                       session.status === "skipped" && "line-through text-muted-foreground",
                       isStrength && session.status !== "skipped" && "text-amber-900 dark:text-amber-100",
@@ -1319,6 +1354,9 @@ const DayCell = memo(function DayCell({
                           {session.targetDistanceKm != null && session.targetDistanceKm > 0 && (
                             <span className="hidden md:inline"> · {session.sessionType !== "long_run" && "~"}{session.targetDistanceKm}km</span>
                           )}
+                          {meta?.tss != null && meta.tss > 0 && (
+                            <span className="hidden md:inline"> · {meta.tss} TSS</span>
+                          )}
                         </span>
                         {session.rpe && (
                           <span className="ml-0.5 text-[9px] font-medium text-amber-600 shrink-0 hidden md:inline">RPE {session.rpe}</span>
@@ -1332,13 +1370,12 @@ const DayCell = memo(function DayCell({
         );
       })}
 
-      {sessions.length > 0 && onAddToDay && !isBlockedDay && (
+      {!scanContent && sessions.length > 0 && onAddToDay && !isBlockedDay && (
         <button
           type="button"
           onClick={() => onAddToDay(selectedWeek, dayIndex)}
           className={cn(
             "w-full mt-1 rounded bg-card/50 border border-dashed border-muted-foreground/30 p-1.5 flex items-center justify-center gap-1 text-muted-foreground/40 active:text-primary hover:text-primary hover:border-primary/40 transition-colors",
-            tall && isDesktop && "flex-1",
           )}
         >
           <span className="text-sm font-medium">+</span>

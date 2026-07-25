@@ -46,6 +46,13 @@ export function WeekSummaryBar({
                 : `${stats.totalHours.toFixed(1)} h`
             }
             alert={overBudget}
+            // Volume vs budget is an achieved-vs-target reading, like the
+            // polarisation bar — so it gets a bar too, not just a number.
+            progress={
+              targetVolumeH != null
+                ? stats.totalHours / targetVolumeH
+                : undefined
+            }
           />
           <Metric label={t("weekly.summary.load")} value={`${stats.totalTss} TSS`} />
           <Metric label={t("weekly.summary.hard")} value={String(stats.hardSessions)} />
@@ -72,10 +79,13 @@ function Metric({
   label,
   value,
   alert,
+  progress,
 }: {
   label: string;
   value: string;
   alert?: boolean;
+  /** Achieved / target ratio — renders a thin fill under the value. */
+  progress?: number;
 }) {
   return (
     <div className="min-w-0">
@@ -88,6 +98,17 @@ function Metric({
       >
         {value}
       </div>
+      {progress != null && (
+        <div className="mt-1 h-1 w-full min-w-16 overflow-hidden rounded-full bg-muted">
+          <div
+            className={cn(
+              "h-full rounded-full transition-[width]",
+              alert ? "bg-amber-500" : "bg-primary",
+            )}
+            style={{ width: `${Math.min(100, Math.max(0, progress * 100))}%` }}
+          />
+        </div>
+      )}
     </div>
   );
 }

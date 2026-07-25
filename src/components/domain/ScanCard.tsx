@@ -8,16 +8,20 @@ export function ScanCard({
   workout,
   pick,
   className,
+  compact = false,
 }: {
   workout: AnyWorkoutTemplate;
   pick: ReturnType<typeof usePickLang>;
   className?: string;
+  /** Board-cell sizing: matches a real day card so the flicker reads as one. */
+  compact?: boolean;
 }) {
   const zone = isRunningWorkout(workout) ? getDominantZone(workout) : 2;
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-xl border border-border p-5",
+        "relative overflow-hidden border border-border",
+        compact ? "rounded p-1.5" : "rounded-xl p-5",
         `zone-${zone} bg-gradient-to-br from-zone-${zone}/10 to-transparent`,
         className,
       )}
@@ -33,12 +37,22 @@ export function ScanCard({
         }}
       />
       <style>{`@keyframes draw-scan { 0% { transform: translateX(-100%);} 100% { transform: translateX(400%);} }`}</style>
-      <p className="text-lg font-semibold opacity-80 line-clamp-1">
+      <p
+        className={cn(
+          "font-semibold opacity-80",
+          compact
+            ? "text-[10px] leading-tight line-clamp-3"
+            : "text-lg line-clamp-1",
+        )}
+      >
         {pick(workout, "name")}
       </p>
-      <p className="mt-2 text-sm text-muted-foreground line-clamp-2 opacity-70">
-        {pick(workout, "description")}
-      </p>
+      {/* The description never fits a day cell — the name alone carries the flicker. */}
+      {!compact && (
+        <p className="mt-2 text-sm text-muted-foreground line-clamp-2 opacity-70">
+          {pick(workout, "description")}
+        </p>
+      )}
     </div>
   );
 }

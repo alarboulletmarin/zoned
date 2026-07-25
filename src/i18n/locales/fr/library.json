@@ -161,7 +161,8 @@
         "build": "Développement",
         "volume": "Volume",
         "sharpening": "Affûtage"
-      }
+      },
+      "label": "Raccourcis"
     },
     "list": {
       "title": "Mes semaines",
@@ -262,7 +263,9 @@
       "levels": "Niveau",
       "longRunDay": "Jour de sortie longue",
       "show": "Afficher les réglages",
-      "hide": "Masquer les réglages"
+      "hide": "Masquer les réglages",
+      "allDisciplines": "Toutes",
+      "allLevels": "Tous"
     },
     "actions": {
       "regenerate": "Régénérer",
@@ -301,7 +304,8 @@
       "tooEasy": "Pas assez d'intensité",
       "tooHard": "Trop d'intensité",
       "tooEasyHint": "Très peu de qualité cette semaine — ajoute une séance tempo/seuil pour viser ~20 % d'intensité.",
-      "tooHardHint": "Beaucoup d'intensité — ajoute du volume facile ou allège une séance dure."
+      "tooHardHint": "Beaucoup d'intensité — ajoute du volume facile ou allège une séance dure.",
+      "tolerance": "Équilibre atteint entre {{min}} et {{max}} % d'intensité"
     },
     "rhythm": {
       "title": "Rythme de la semaine"
@@ -363,7 +367,10 @@
       "rerolled": "Séance re-tirée",
       "rerollEmpty": "Aucune autre séance disponible avec ces réglages"
     },
-    "boardHint": "Survolez une carte pour re-tirer, verrouiller ou supprimer la séance. Glissez-la pour la déplacer, ou déposez-la sur la corbeille pour la retirer.",
-    "boardHintTouch": "Touchez une séance pour re-tirer, verrouiller ou supprimer. Maintenez-la pour la déplacer, ou déposez-la sur la corbeille."
+    "boardHint": "Survolez une carte pour la modifier · glissez-la pour la déplacer ou la retirer",
+    "boardHintTouch": "Touchez une séance pour la modifier · maintenez pour la déplacer",
+    "card": {
+      "zone": "Zone {{zone}}"
+    }
   }
 }

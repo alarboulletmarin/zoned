@@ -161,7 +161,8 @@
         "build": "Build",
         "volume": "Volume",
         "sharpening": "Sharpening"
-      }
+      },
+      "label": "Shortcuts"
     },
     "list": {
       "title": "My weeks",
@@ -262,7 +263,9 @@
       "levels": "Level",
       "longRunDay": "Long run day",
       "show": "Show settings",
-      "hide": "Hide settings"
+      "hide": "Hide settings",
+      "allDisciplines": "All",
+      "allLevels": "All"
     },
     "actions": {
       "regenerate": "Regenerate",
@@ -301,7 +304,8 @@
       "tooEasy": "Not enough intensity",
       "tooHard": "Too much intensity",
       "tooEasyHint": "Very little quality this week — add a tempo/threshold session to reach ~20 % intensity.",
-      "tooHardHint": "A lot of intensity — add easy volume or ease one hard session."
+      "tooHardHint": "A lot of intensity — add easy volume or ease one hard session.",
+      "tolerance": "Balanced between {{min}} and {{max}} % intensity"
     },
     "rhythm": {
       "title": "Week rhythm"
@@ -363,7 +367,10 @@
       "rerolled": "Session re-rolled",
       "rerollEmpty": "No other session available with these settings"
     },
-    "boardHint": "Hover a card to re-roll, lock or delete the session. Drag it to move it, or drop it on the bin to remove it.",
-    "boardHintTouch": "Tap a session to re-roll, lock or delete it. Hold to drag it, or drop it on the bin."
+    "boardHint": "Hover a card to edit it · drag it to move or remove it",
+    "boardHintTouch": "Tap a session to edit it · hold to drag it",
+    "card": {
+      "zone": "Zone {{zone}}"
+    }
   }
 }

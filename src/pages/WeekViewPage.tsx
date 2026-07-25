@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/sheet";
 import { SEOHead } from "@/components/seo";
 import { EditorialTitle } from "@/components/editorial";
-import { PlanWeeklyView } from "@/components/domain/PlanWeeklyView";
+import { PlanWeeklyView, type WorkoutCardMeta } from "@/components/domain/PlanWeeklyView";
 import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { ScanCard } from "@/components/domain";
@@ -44,7 +44,7 @@ import {
   getPlan,
 } from "@/lib/planStorage";
 import { generateWeek, redrawSlot } from "@/lib/weekGenerator";
-import { getDrawDiscipline } from "@/lib/workoutFilters";
+import { getAnyWorkoutTss, getDrawDiscipline } from "@/lib/workoutFilters";
 import { sharedWeekUrl } from "@/lib/weekShare";
 import {
   generatedWeekToSessions,
@@ -57,6 +57,7 @@ import { buildScanSchedule } from "@/lib/scanSchedule";
 import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
 import { cn } from "@/lib/utils";
 import type { AnyWorkoutTemplate } from "@/types";
+import { getDominantZone, isStrengthWorkout } from "@/types";
 import type { SessionType } from "@/types";
 import { WEEK_CATEGORIES, type WeekCategory } from "@/types/plan";
 import {
@@ -105,6 +106,19 @@ export function WeekViewPage() {
     const m = new Map<string, AnyWorkoutTemplate>();
     for (const w of catalog) m.set(w.id, w);
     return m;
+  }, [catalog]);
+
+  // Zone + load per workout: gives every card a meta line (Z2 · 1h05 · 62 TSS)
+  // instead of a bare name floating in an empty column.
+  const workoutMeta = useMemo(() => {
+    const meta: Record<string, WorkoutCardMeta> = {};
+    for (const w of catalog) {
+      meta[w.id] = {
+        zone: isStrengthWorkout(w) ? undefined : getDominantZone(w),
+        tss: getAnyWorkoutTss(w),
+      };
+    }
+    return meta;
   }, [catalog]);
 
   const workoutNames = useMemo(() => {
@@ -188,6 +202,25 @@ export function WeekViewPage() {
       });
     },
     [catalog, clearTimeouts, reload],
+  );
+
+  /**
+   * Draw animation, rendered by the board inside its own day cells. A separate
+   * overlay grid could never stay aligned — the board is 7 columns on desktop
+   * but 4 + 3 on mobile — so the scan lives where the content lives.
+   * Days outside `scanTargets` return null and keep their real card on screen.
+   */
+  const renderScanCell = useCallback(
+    (day: number) => {
+      if (!scanning || !scanTargets.has(day)) return null;
+      const w = scanCells[day];
+      return w ? (
+        <ScanCard workout={w} pick={pick} compact />
+      ) : (
+        <div className="h-14 rounded border border-dashed border-border/60 bg-muted/30" />
+      );
+    },
+    [scanning, scanTargets, scanCells, pick],
   );
 
   const slots = useMemo(
@@ -504,7 +537,7 @@ export function WeekViewPage() {
               >
                 <Share className="size-3.5" />
               </Button>
-              <PlanExportMenu plan={plan} workoutNames={workoutNames} size="sm" />
+              <PlanExportMenu plan={plan} workoutNames={workoutNames} size="sm" variant="outline" />
             </div>
           </div>
         </div>
@@ -513,15 +546,36 @@ export function WeekViewPage() {
         <WeekSummaryBar stats={stats} slots={slots} targetVolumeH={settings.targetVolumeH} />
 
         {/* Board (left) + always-visible generator (right, tablet/desktop) */}
-        <div className="relative grid gap-6 md:grid-cols-[1fr_300px] lg:grid-cols-[1fr_340px]">
+        {/* items-start: without it the board column is stretched to the
+            sidebar's height, and the scan overlay (absolute inset-0) would
+            cover that whole empty area instead of just the board. */}
+        <div className="relative grid gap-6 md:grid-cols-[1fr_300px] md:items-start lg:grid-cols-[1fr_340px]">
           {/* Board — kept full width, never compressed (picker sits in the column). */}
-          <div ref={boardRef} className="relative min-w-0 scroll-mt-20">
+          <div className="min-w-0">
             <EditorialTitle as="h2" size="md" className="sr-only">
               {displayName}
             </EditorialTitle>
+            {/* Editing legend, right above the board it describes. Touch has no
+                hover, so its actions live in the tap menu instead. It sits
+                OUTSIDE the positioned wrapper below, so the scan overlay covers
+                the board and nothing else. */}
+            {weekIsPopulated && (
+              <p
+                className={cn(
+                  "mb-1.5 text-right text-[11px] leading-tight text-muted-foreground/80",
+                  scanning && "invisible",
+                )}
+              >
+                {isMobile
+                  ? t("library:weekly.boardHintTouch")
+                  : t("library:weekly.boardHint")}
+              </p>
+            )}
+            <div ref={boardRef} className="relative scroll-mt-20">
             <PlanWeeklyView
               plan={plan}
               workoutNames={workoutNames}
+              workoutMeta={workoutMeta}
               currentWeek={1}
               initialWeek={1}
               isEn={isEn}
@@ -532,62 +586,10 @@ export function WeekViewPage() {
               onRedraw={handleRedraw}
               onWorkoutAdd={handleWorkoutAdd}
               onAddToDay={handleAddToDay}
+              renderScanCell={renderScanCell}
               singleWeek
             />
-
-            {/* Scan overlay during animated generation. The veil is applied per
-                cell, never globally: a locked day shows its real card, sharp and
-                still, while the others cycle — the lock is proven on screen. */}
-            {scanning && (
-              <div
-                className="absolute inset-0 z-10 rounded-xl p-2 sm:p-3"
-                aria-hidden="true"
-              >
-                <div className="grid h-full grid-cols-4 gap-1.5 sm:gap-2 md:grid-cols-7">
-                  {WEEKDAYS.map((day) => {
-                    const w = scanCells[day];
-                    // Days outside the scan keep their real card on screen.
-                    if (!scanTargets.has(day)) {
-                      return (
-                        <div
-                          key={day}
-                          className={cn("min-h-20", day === 6 && "col-span-4 md:col-span-1")}
-                        />
-                      );
-                    }
-                    return (
-                      <div
-                        key={day}
-                        className={cn(
-                          "min-h-20 rounded-xl bg-background/85 backdrop-blur-sm",
-                          day === 6 && "col-span-4 md:col-span-1",
-                        )}
-                      >
-                        {w ? (
-                          <ScanCard
-                            workout={w}
-                            pick={pick}
-                            className="h-full p-2.5"
-                          />
-                        ) : (
-                          <div className="h-full rounded-xl border border-dashed border-border/60 bg-muted/30" />
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* Editing legend — the board's gestures are otherwise invisible.
-                Touch has no hover, so its actions live in the tap menu. */}
-            {weekIsPopulated && !scanning && (
-              <p className="mt-2 text-xs text-muted-foreground">
-                {isMobile
-                  ? t("library:weekly.boardHintTouch")
-                  : t("library:weekly.boardHint")}
-              </p>
-            )}
+            </div>
           </div>
 
           {/* Right column: the always-visible generator — or, while adding a

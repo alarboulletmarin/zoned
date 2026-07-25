@@ -4,6 +4,8 @@ export interface SegmentedOption<T extends string> {
   value: T;
   label: string;
   icon?: React.ReactNode;
+  /** Full wording when `label` is abbreviated (tooltip + accessible name). */
+  title?: string;
 }
 
 interface SegmentedProps<T extends string> {
@@ -45,9 +47,13 @@ export function Segmented<T extends string>({
           type="button"
           role="radio"
           aria-checked={value === opt.value}
+          aria-label={opt.title}
+          title={opt.title}
           onClick={() => onChange(opt.value)}
           className={cn(
-            "inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-all",
+            // Horizontal padding stays modest so narrow columns (7-day rows)
+            // never clip their label.
+            "inline-flex min-w-0 items-center justify-center gap-1.5 rounded-md px-1.5 py-1.5 text-sm font-medium transition-all sm:px-2",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30",
             value === opt.value
               ? "bg-background text-foreground shadow-sm"

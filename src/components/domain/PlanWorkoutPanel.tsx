@@ -11,21 +11,9 @@ import { IntensityBadge } from "@/components/domain/IntensityBadge";
 import type { WorkoutTemplate, WorkoutCategory, SessionType } from "@/types";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { usePickLang } from "@/lib/i18n-utils";
+import { SESSION_COLORS } from "@/lib/sessionColors";
 
 // ── Color map (same as PlanCalendar) ──────────────────────────────
-
-const SESSION_COLORS: Record<string, string> = {
-  recovery: "#94a3b8",
-  endurance: "#60a5fa",
-  long_run: "#2563eb",
-  tempo: "#eab308",
-  threshold: "#f97316",
-  vo2max: "#ef4444",
-  speed: "#f87171",
-  fartlek: "#a855f7",
-  hills: "#22c55e",
-  race_specific: "#f59e0b",
-};
 
 // ── Category to sessionType mapping for filter dots ───────────────
 

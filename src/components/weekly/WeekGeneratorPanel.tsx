@@ -92,20 +92,23 @@ export function WeekGeneratorPanel({
         </span>
       )}
 
-      {/* Presets — always wrap (chips flow onto the next line), never a
-          side-scroll, on both mobile and desktop. */}
-      <div className="flex flex-wrap gap-2">
-        {WEEK_PRESETS.map((preset) => (
-          <button
-            key={preset.id}
-            type="button"
-            onClick={() => onSettingsChange(preset.settings)}
-            className="rounded-full border border-border px-3 py-1 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
-          >
-            {t(`weekly.presets.options.${preset.id}`)}
-          </button>
-        ))}
-      </div>
+      {/* Presets fill in every setting below in one click. They are shortcuts,
+          not a selectable state — hence the label and the flat, unselected
+          styling, so they never read as "the current phase of the week". */}
+      <Field label={t("weekly.presets.label")}>
+        <div className="flex flex-wrap gap-1.5">
+          {WEEK_PRESETS.map((preset) => (
+            <button
+              key={preset.id}
+              type="button"
+              onClick={() => onSettingsChange(preset.settings)}
+              className="rounded-full border border-dashed border-border px-3 py-1 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+            >
+              {t(`weekly.presets.options.${preset.id}`)}
+            </button>
+          ))}
+        </div>
+      </Field>
 
       <Field label={t("weekly.settings.sessions")}>
         <Segmented
@@ -144,36 +147,43 @@ export function WeekGeneratorPanel({
       </Field>
 
       <Field label={t("weekly.settings.longRunDay")}>
+        {/* One letter per day: a 7-cell row is far too narrow for "Lun". The
+            full day name lives in the tooltip and the accessible name. */}
         <Segmented
           value={String(settings.longRunDay)}
           onChange={(v) => set({ longRunDay: Number(v) as DayIndex })}
           className="grid-cols-7"
-          options={DAYS.map((d) => ({ value: String(d), label: t(`weekly.daysShort.${d}`) }))}
+          options={DAYS.map((d) => ({
+            value: String(d),
+            label: t(`weekly.daysShort.${d}`).charAt(0),
+            title: t(`weekly.days.${d}`),
+          }))}
         />
       </Field>
 
+      {/* Disciplines and levels are both multi-select filters where "none
+          picked" means "all" — so they share one chip treatment, with an
+          explicit "All" state instead of a silently empty selection. */}
       <Field label={t("weekly.settings.disciplines")}>
-        <div className="flex gap-1.5">
+        <div className="grid grid-cols-2 gap-1.5">
+          <Chip
+            className="col-span-2"
+            active={settings.disciplines.length === 0}
+            onClick={() => set({ disciplines: [] })}
+          >
+            {t("weekly.settings.allDisciplines")}
+          </Chip>
           {DISCIPLINES.map((d) => {
             const Icon = DISCIPLINE_ICONS[d];
-            const active = settings.disciplines.includes(d);
             return (
-              <button
+              <Chip
                 key={d}
-                type="button"
+                active={settings.disciplines.includes(d)}
                 onClick={() => toggle("disciplines", d)}
-                aria-pressed={active}
-                aria-label={t(`activityToggle.${d}`)}
-                title={t(`activityToggle.${d}`)}
-                className={cn(
-                  "flex size-9 shrink-0 items-center justify-center rounded-lg border transition-colors",
-                  active
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border text-muted-foreground hover:bg-muted",
-                )}
               >
-                <Icon className="size-4" />
-              </button>
+                <Icon className="size-3.5 shrink-0" />
+                <span className="truncate">{t(`activityToggle.${d}`)}</span>
+              </Chip>
             );
           })}
         </div>
@@ -181,9 +191,16 @@ export function WeekGeneratorPanel({
 
       <Field label={t("weekly.settings.levels")}>
         <div className="grid grid-cols-2 gap-1.5">
+          <Chip
+            className="col-span-2"
+            active={settings.levels.length === 0}
+            onClick={() => set({ levels: [] })}
+          >
+            {t("weekly.settings.allLevels")}
+          </Chip>
           {LEVELS.map((l) => (
             <Chip key={l} active={settings.levels.includes(l)} onClick={() => toggle("levels", l)}>
-              {pick(DIFFICULTY_META[l], "label")}
+              <span className="truncate">{pick(DIFFICULTY_META[l], "label")}</span>
             </Chip>
           ))}
         </div>
@@ -237,10 +254,12 @@ function Chip({
   active,
   onClick,
   children,
+  className,
 }: {
   active: boolean;
   onClick: () => void;
   children: React.ReactNode;
+  className?: string;
 }) {
   return (
     <button
@@ -248,10 +267,11 @@ function Chip({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "flex w-full items-center justify-center gap-1.5 rounded-full border px-2.5 py-1.5 text-sm transition-colors",
+        "flex w-full min-w-0 items-center justify-center gap-1.5 rounded-full border px-2.5 py-1.5 text-sm transition-colors",
         active
           ? "border-primary bg-primary/10 text-primary"
           : "border-border text-muted-foreground hover:bg-muted",
+        className,
       )}
     >
       {children}
