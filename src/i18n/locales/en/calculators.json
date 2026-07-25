@@ -286,7 +286,14 @@
     "save": "Save",
     "preview": "Preview",
     "addBlock": "Add block",
-    "listSubtitle": "Custom workouts stored locally in your browser"
+    "listSubtitle": "Custom workouts stored locally in your browser",
+    "shareLink": "Link",
+    "shared": {
+      "title": "Shared workout",
+      "subtitle": "This workout was shared with you. Add it to your workouts to edit or export it.",
+      "add": "Add to my workouts",
+      "invalid": "This share link is invalid or incomplete."
+    }
   },
   "raceSimulator": {
     "seoBreadcrumb": "Race Simulator",

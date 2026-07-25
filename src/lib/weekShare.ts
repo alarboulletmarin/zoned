@@ -10,31 +10,11 @@
  * have are surfaced and skipped on import.
  */
 
-import type { SessionType } from "@/types";
 import type { PlanSession, TrainingPlan, WeekCategory } from "@/types/plan";
 import { WEEK_CATEGORIES } from "@/types/plan";
 import { createEmptyWeekPlan } from "@/lib/weekToPlan";
-
-/** Wire codes for session types — append only, indexes are part of the format. */
-const SESSION_TYPE_CODES: SessionType[] = [
-  "recovery",
-  "endurance",
-  "tempo",
-  "threshold",
-  "vo2max",
-  "speed",
-  "long_run",
-  "hills",
-  "fartlek",
-  "race_specific",
-  "strength",
-  "cycling",
-  "swimming",
-  "yoga",
-  "rest",
-  "rest_day",
-  "cross_training",
-];
+import { decodePayload, encodePayload, shareUrl } from "@/lib/share/codec";
+import { SESSION_TYPE_CODES } from "@/lib/share/codes";
 
 /** One shared session — [day 0-6, workoutId, type code, minutes, key session?]. */
 type SharedSessionTuple = [number, string, number, number] | [number, string, number, number, 1];
@@ -45,24 +25,6 @@ export interface SharedWeekPayload {
   n: string;
   c?: WeekCategory;
   s: SharedSessionTuple[];
-}
-
-function toBase64Url(json: string): string {
-  const bytes = new TextEncoder().encode(json);
-  let binary = "";
-  for (const b of bytes) binary += String.fromCharCode(b);
-  return btoa(binary).replaceAll("+", "-").replaceAll("/", "_").replace(/=+$/, "");
-}
-
-function fromBase64Url(encoded: string): string | null {
-  try {
-    const base64 = encoded.replaceAll("-", "+").replaceAll("_", "/");
-    const binary = atob(base64);
-    const bytes = Uint8Array.from(binary, (ch) => ch.charCodeAt(0));
-    return new TextDecoder().decode(bytes);
-  } catch {
-    return null;
-  }
 }
 
 export function encodeSharedWeek(plan: TrainingPlan, name: string): string {
@@ -81,30 +43,16 @@ export function encodeSharedWeek(plan: TrainingPlan, name: string): string {
       return session.isKeySession ? [...base, 1] as SharedSessionTuple : base;
     }),
   };
-  return toBase64Url(JSON.stringify(payload));
+  return encodePayload(payload);
 }
 
 export function sharedWeekUrl(plan: TrainingPlan, name: string): string {
-  const origin =
-    typeof window !== "undefined" && window.location.origin
-      ? window.location.origin
-      : "https://zoned.run";
-  return `${origin}/weeks/shared?d=${encodeSharedWeek(plan, name)}`;
+  return shareUrl("/weeks/shared", encodeSharedWeek(plan, name));
 }
 
 export function decodeSharedWeek(encoded: string): SharedWeekPayload | null {
-  const json = fromBase64Url(encoded);
-  if (!json) return null;
-
-  let raw: unknown;
-  try {
-    raw = JSON.parse(json);
-  } catch {
-    return null;
-  }
-  if (typeof raw !== "object" || raw === null) return null;
-
-  const obj = raw as Record<string, unknown>;
+  const obj = decodePayload(encoded);
+  if (!obj) return null;
   if (obj.v !== 1) return null;
   if (typeof obj.n !== "string" || obj.n.trim().length === 0) return null;
   if (!Array.isArray(obj.s)) return null;

@@ -26,6 +26,7 @@ import type {
   StrengthWorkoutTemplate,
 } from "@/types";
 import { loadAllStrengthSessions } from "@/data/strength";
+import { planRandom } from "./rng";
 
 // ── Strength Load Bridge ─────────────────────────────────────────
 // Maps strength intensity to a load factor (0-1) for TRIMP-like scoring.
@@ -111,7 +112,7 @@ function selectStrengthSessions(
   const scored = candidates.map((s) => ({
     session: s,
     usageCount: usedIds.get(s.id) ?? 0,
-    random: Math.random(),
+    random: planRandom(),
   }));
 
   scored.sort((a, b) => {

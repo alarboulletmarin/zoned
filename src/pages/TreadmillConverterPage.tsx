@@ -1,6 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { RefreshCw, Gauge, Info } from "@/components/icons";
+import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
+import { buildParamsUrl } from "@/lib/share/urlParams";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
@@ -41,8 +44,11 @@ export function TreadmillConverterPage() {
   const { settings } = useSettings();
   const unit = settings.unitSystem;
 
-  const [speed, setSpeed] = useState<string>("10");
-  const [incline, setIncline] = useState<string>("1");
+  const [searchParams] = useSearchParams();
+  const [speed, setSpeed] = useState<string>(() => searchParams.get("speed") ?? "10");
+  const [incline, setIncline] = useState<string>(
+    () => searchParams.get("incline") ?? "1",
+  );
   const [vma, setVma] = useState<number | null>(null);
 
   // Load stored VMA on mount
@@ -242,6 +248,13 @@ export function TreadmillConverterPage() {
             </CardContent>
           </Card>
         )}
+
+        <ShareLinkButton
+          buildUrl={() =>
+            buildParamsUrl("/calculators/tapis-roulant", { speed, incline })
+          }
+          title={t("calculators:calculateurs.treadmill.title")}
+        />
 
         {/* Explanation */}
         <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">

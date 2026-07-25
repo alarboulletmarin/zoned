@@ -9,6 +9,7 @@
     "title": "Share activity",
     "subtitle": "Pick a visual",
     "trigger": "Share",
+    "link": "Share",
     "close": "Close",
     "shareOn": "Share to",
     "action": {

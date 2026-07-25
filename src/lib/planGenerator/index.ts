@@ -25,6 +25,7 @@ import {
 } from "./paceEngine";
 import { calculateLongRunProgression } from "./longRunProgression";
 import { buildSession } from "./sessionBuilder";
+import { planSeedFromConfig, seedPlanRng } from "./rng";
 import { calculateWeeksBetweenDates } from "@/lib/planDates";
 import { intermediateGoalToWeekNumber } from "@/lib/intermediateGoalValidation";
 
@@ -126,6 +127,10 @@ function getWeekLabel(
  * 6. Return complete plan with v2 metadata
  */
 export async function generatePlan(config: AssistedPlanConfig): Promise<TrainingPlan> {
+  // Same config → same plan, so a plan shared by its config regenerates
+  // identically on the recipient's side.
+  seedPlanRng(planSeedFromConfig(config));
+
   const purpose = config.planPurpose ?? "race";
   const isRacePlan = purpose === "race";
   const purposeConfig = !isRacePlan ? PURPOSE_CONFIGS[purpose] : null;

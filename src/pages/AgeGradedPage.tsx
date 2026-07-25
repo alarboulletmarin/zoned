@@ -1,7 +1,10 @@
 import { useState, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Star } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
+import { buildParamsUrl } from "@/lib/share/urlParams";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
@@ -92,12 +95,18 @@ export function AgeGradedPage() {
   const { settings } = useSettings();
   const unit = settings.unitSystem;
 
-  const [age, setAge] = useState<string>("");
-  const [gender, setGender] = useState<Gender>("male");
-  const [distanceKey, setDistanceKey] = useState<DistanceKey>(10);
-  const [hours, setHours] = useState<string>("");
-  const [minutes, setMinutes] = useState<string>("");
-  const [seconds, setSeconds] = useState<string>("");
+  const [searchParams] = useSearchParams();
+  const [age, setAge] = useState<string>(() => searchParams.get("age") ?? "");
+  const [gender, setGender] = useState<Gender>(() =>
+    searchParams.get("g") === "female" ? "female" : "male",
+  );
+  const [distanceKey, setDistanceKey] = useState<DistanceKey>(() => {
+    const shared = Number(searchParams.get("d"));
+    return DISTANCES.some((d) => d.id === shared) ? (shared as DistanceKey) : 10;
+  });
+  const [hours, setHours] = useState<string>(() => searchParams.get("h") ?? "");
+  const [minutes, setMinutes] = useState<string>(() => searchParams.get("m") ?? "");
+  const [seconds, setSeconds] = useState<string>(() => searchParams.get("s") ?? "");
 
   // Parse inputs
   const parsedAge = age !== "" ? parseInt(age, 10) : 0;
@@ -390,6 +399,20 @@ export function AgeGradedPage() {
                 </div>
               </CardContent>
             </Card>
+
+            <ShareLinkButton
+              buildUrl={() =>
+                buildParamsUrl("/calculators/age-graded", {
+                  age,
+                  g: gender,
+                  d: distanceKey,
+                  h: hours,
+                  m: minutes,
+                  s: seconds,
+                })
+              }
+              title={t("calculators:calculateurs.ageGraded.title")}
+            />
 
             {/* Explanation */}
             <p className="text-sm text-muted-foreground">

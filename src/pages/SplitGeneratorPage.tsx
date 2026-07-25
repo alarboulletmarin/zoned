@@ -1,6 +1,9 @@
 import { useState, useMemo, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Route, Download, Info } from "@/components/icons";
+import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
+import { buildParamsUrl } from "@/lib/share/urlParams";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
@@ -33,12 +36,20 @@ export function SplitGeneratorPage() {
   const tableRef = useRef<HTMLDivElement>(null);
 
   // Inputs
-  const [selectedRace, setSelectedRace] = useState<string>("10");
-  const [customDistance, setCustomDistance] = useState<string>("");
-  const [hours, setHours] = useState<string>("0");
-  const [minutes, setMinutes] = useState<string>("45");
-  const [seconds, setSeconds] = useState<string>("0");
-  const [strategy, setStrategy] = useState<Strategy>("even");
+  const [searchParams] = useSearchParams();
+  const [selectedRace, setSelectedRace] = useState<string>(
+    () => searchParams.get("d") ?? "10",
+  );
+  const [customDistance, setCustomDistance] = useState<string>(
+    () => searchParams.get("km") ?? "",
+  );
+  const [hours, setHours] = useState<string>(() => searchParams.get("h") ?? "0");
+  const [minutes, setMinutes] = useState<string>(() => searchParams.get("m") ?? "45");
+  const [seconds, setSeconds] = useState<string>(() => searchParams.get("s") ?? "0");
+  const [strategy, setStrategy] = useState<Strategy>(() => {
+    const shared = searchParams.get("strat");
+    return shared === "negative" || shared === "positive" ? shared : "even";
+  });
 
   const isCustom = selectedRace === "custom";
   const distanceKm = isCustom
@@ -315,13 +326,28 @@ export function SplitGeneratorPage() {
             </div>
 
             {/* Export button */}
-            <button
-              onClick={handleExport}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
-            >
-              <Download className="size-4" />
-              {t("calculators:calculateurs.splits.downloadPng")}
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                onClick={handleExport}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+              >
+                <Download className="size-4" />
+                {t("calculators:calculateurs.splits.downloadPng")}
+              </button>
+              <ShareLinkButton
+                buildUrl={() =>
+                  buildParamsUrl("/calculators/splits", {
+                    d: selectedRace,
+                    km: customDistance,
+                    h: hours,
+                    m: minutes,
+                    s: seconds,
+                    strat: strategy,
+                  })
+                }
+                title={t("calculators:calculateurs.splits.title")}
+              />
+            </div>
           </>
         )}
 

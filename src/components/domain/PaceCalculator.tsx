@@ -1,6 +1,9 @@
 import { useState, useEffect, type ChangeEvent } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Timer, Gauge, Info } from "@/components/icons";
+import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
+import { buildParamsUrl } from "@/lib/share/urlParams";
 import {
   Card,
   CardContent,
@@ -23,15 +26,20 @@ export function PaceCalculator() {
   const { settings } = useSettings();
   const unit = settings.unitSystem;
 
-  const [vma, setVma] = useState<string>("");
+  // A shared link carries the sender's VMA — it wins over the stored one.
+  const [searchParams] = useSearchParams();
+  const sharedVma = searchParams.get("vma") ?? "";
+
+  const [vma, setVma] = useState<string>(sharedVma);
 
   // Load stored VMA from user zone preferences on mount
   useEffect(() => {
+    if (sharedVma) return;
     const prefs = loadUserZonePrefs();
     if (prefs?.vma) {
       setVma(prefs.vma.toString());
     }
-  }, []);
+  }, [sharedVma]);
 
   const vmaValue = vma ? parseFloat(vma) : 0;
   const raceEstimates = calculateRaceTimes(vmaValue);
@@ -128,6 +136,12 @@ export function PaceCalculator() {
                 })}
               </tbody>
             </table>
+            <div className="pt-4">
+              <ShareLinkButton
+                buildUrl={() => buildParamsUrl("/calculators/allures", { vma })}
+                title={t("myZones.paceCalculator.title")}
+              />
+            </div>
           </div>
         ) : (
           <div className="flex items-center gap-2 text-sm text-muted-foreground py-4">

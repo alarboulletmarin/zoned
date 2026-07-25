@@ -1,6 +1,9 @@
 import { useState, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Shuffle, Info } from "@/components/icons";
+import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
+import { buildParamsUrl } from "@/lib/share/urlParams";
 import { Card, CardContent } from "@/components/ui/card";
 import { ResponsiveTable } from "@/components/ui/responsive-table";
 import { SEOHead } from "@/components/seo";
@@ -84,11 +87,14 @@ export function RaceEquivalencePage() {
   const { settings } = useSettings();
   const unit = settings.unitSystem;
 
-  const [distanceId, setDistanceId] = useState<string>("10k");
-  const [customKm, setCustomKm] = useState<string>("");
-  const [hours, setHours] = useState<string>("");
-  const [minutes, setMinutes] = useState<string>("");
-  const [seconds, setSeconds] = useState<string>("");
+  const [searchParams] = useSearchParams();
+  const [distanceId, setDistanceId] = useState<string>(
+    () => searchParams.get("d") ?? "10k",
+  );
+  const [customKm, setCustomKm] = useState<string>(() => searchParams.get("km") ?? "");
+  const [hours, setHours] = useState<string>(() => searchParams.get("h") ?? "");
+  const [minutes, setMinutes] = useState<string>(() => searchParams.get("m") ?? "");
+  const [seconds, setSeconds] = useState<string>(() => searchParams.get("s") ?? "");
 
   // Resolve input distance in km
   const inputDistanceKm = useMemo(() => {
@@ -361,6 +367,21 @@ export function RaceEquivalencePage() {
               />
             </CardContent>
           </Card>
+        )}
+
+        {predictions && (
+          <ShareLinkButton
+            buildUrl={() =>
+              buildParamsUrl("/calculators/equivalence", {
+                d: distanceId,
+                km: customKm,
+                h: hours,
+                m: minutes,
+                s: seconds,
+              })
+            }
+            title={t("calculators:calculateurs.equivalence.title")}
+          />
         )}
 
         {/* Explanation Card */}

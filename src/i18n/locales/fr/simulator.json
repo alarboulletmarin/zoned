@@ -44,7 +44,12 @@
     "cumulative": "Cumul.",
     "dist": "Dist."
   },
+  "shared": {
+    "banner": "Cette simulation a été partagée avec vous. Modifiez les paramètres pour l'adapter à votre course.",
+    "invalid": "Ce lien de partage est invalide ou incomplet."
+  },
   "actions": {
+    "share": "Partager",
     "save": "Sauvegarder",
     "exportPdf": "Exporter en PDF",
     "delete": "Supprimer",

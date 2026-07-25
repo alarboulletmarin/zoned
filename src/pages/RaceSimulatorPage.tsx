@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   Flag,
@@ -11,11 +12,13 @@ import {
   ChevronDown,
   ChevronUp,
   Save,
+  Share,
   Download,
   Trash2,
   Info,
   Plus,
 } from "@/components/icons";
+import { decodeSharedSimulation, sharedSimulationUrl } from "@/lib/share/raceSimShare";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -143,6 +146,8 @@ export function RaceSimulatorPage() {
   >({});
   const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [isShared, setIsShared] = useState(false);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     setSavedSimulations(getAllSimulations());
@@ -239,6 +244,41 @@ export function RaceSimulatorPage() {
     [],
   );
 
+  // `/race-simulator/shared?d=…` — the inputs fully describe the plan, so we
+  // just replay them through the same path a saved simulation takes.
+  const sharedParam = searchParams.get("d");
+  useEffect(() => {
+    if (!sharedParam) return;
+    const input = decodeSharedSimulation(sharedParam);
+    if (!input) {
+      toast.error(t("shared.invalid"));
+      return;
+    }
+    handleLoad({ id: "shared", createdAt: "", label: "", input });
+    setIsShared(true);
+  }, [sharedParam, handleLoad, t]);
+
+  const handleShare = useCallback(async () => {
+    if (!plan) return;
+    const url = sharedSimulationUrl({
+      distanceKm: plan.distanceKm,
+      targetTimeSeconds: plan.targetTimeSeconds,
+      startTime,
+      strategy,
+      bodyWeightKg: weight ? parseFloat(weight) : undefined,
+    });
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: plan.distanceLabel, url });
+      } catch {
+        // Share sheet dismissed — nothing to do.
+      }
+      return;
+    }
+    await navigator.clipboard.writeText(url);
+    toast.success(tCommon("share.toast.linkCopied"));
+  }, [plan, startTime, strategy, weight, tCommon]);
+
   const confirmDelete = useCallback(() => {
     if (!deleteTarget) return;
     deleteSimulation(deleteTarget);
@@ -283,6 +323,13 @@ export function RaceSimulatorPage() {
             {t("description")}
           </FadeUp>
         </div>
+
+        {isShared && (
+          <div className="flex items-center gap-2 rounded-lg border border-zone-2/30 bg-zone-2/5 px-3 py-2 text-sm">
+            <Share className="size-4 shrink-0 text-foreground/70" />
+            {t("shared.banner")}
+          </div>
+        )}
 
         {/* Inputs */}
         <Card>
@@ -811,6 +858,10 @@ export function RaceSimulatorPage() {
               <Button onClick={handleSave} variant="outline">
                 <Save className="size-4" />
                 {t("actions.save")}
+              </Button>
+              <Button onClick={handleShare} variant="outline">
+                <Share className="size-4" />
+                {t("actions.share")}
               </Button>
               <Button
                 onClick={async () => {

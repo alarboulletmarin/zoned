@@ -1,9 +1,11 @@
 import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Timer, Save, ArrowRight } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
+import { buildParamsUrl } from "@/lib/share/urlParams";
 import { Card, CardContent } from "@/components/ui/card";
 import { ResponsiveTable } from "@/components/ui/responsive-table";
 import { SEOHead } from "@/components/seo";
@@ -34,10 +36,13 @@ export function VmaCalculatorPage() {
   const { settings } = useSettings();
   const unit = settings.unitSystem;
 
-  const [distanceId, setDistanceId] = useState<string>("10k");
-  const [hours, setHours] = useState<string>("");
-  const [minutes, setMinutes] = useState<string>("");
-  const [seconds, setSeconds] = useState<string>("");
+  const [searchParams] = useSearchParams();
+  const [distanceId, setDistanceId] = useState<string>(
+    () => searchParams.get("d") ?? "10k",
+  );
+  const [hours, setHours] = useState<string>(() => searchParams.get("h") ?? "");
+  const [minutes, setMinutes] = useState<string>(() => searchParams.get("m") ?? "");
+  const [seconds, setSeconds] = useState<string>(() => searchParams.get("s") ?? "");
 
   const selectedDistance = DISTANCES.find((d) => d.id === distanceId)!;
 
@@ -282,6 +287,17 @@ export function VmaCalculatorPage() {
                 <ArrowRight className="size-4" />
                 {t("calculators:calculateurs.vma.createPlan")}
               </Button>
+              <ShareLinkButton
+                buildUrl={() =>
+                  buildParamsUrl("/calculators/vma", {
+                    d: distanceId,
+                    h: hours,
+                    m: minutes,
+                    s: seconds,
+                  })
+                }
+                title={t("calculators:calculateurs.vma.title")}
+              />
             </div>
           </div>
         )}

@@ -1,4 +1,26 @@
 {
+  "shared": {
+    "title": "Plan partagé",
+    "subtitle": "Ce plan a été partagé avec vous. Il a été régénéré à partir des paramètres du lien.",
+    "add": "Ajouter à mes plans",
+    "added": "Plan ajouté à vos plans",
+    "generating": "Génération du plan…",
+    "invalid": "Ce lien de partage est invalide ou incomplet.",
+    "backToPlans": "Mes plans",
+    "week": "Sem. {{number}}",
+    "weeks_one": "{{count}} semaine",
+    "weeks_other": "{{count}} semaines",
+    "sessions_one": "{{count}} séance",
+    "sessions_other": "{{count}} séances",
+    "shareLink": "Partager",
+    "phase": {
+      "base": "Base",
+      "build": "Construction",
+      "peak": "Pic",
+      "taper": "Affûtage",
+      "recovery": "Récupération"
+    }
+  },
   "title": "Plans d'entraînement",
   "create": "Créer un plan",
   "createTitle": "Nouveau plan d'entraînement",

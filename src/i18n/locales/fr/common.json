@@ -9,6 +9,7 @@
     "title": "Partager l'activité",
     "subtitle": "Choisis un visuel",
     "trigger": "Partager",
+    "link": "Partager",
     "close": "Fermer",
     "shareOn": "Partager sur",
     "action": {

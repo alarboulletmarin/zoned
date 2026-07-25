@@ -72,6 +72,8 @@ import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
 import { LastChangePanel } from "@/components/domain/LastChangePanel";
 import { PlanViewModeSelector } from "@/components/domain/PlanViewModeSelector";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
+import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
+import { isShareablePlan, sharedPlanUrl } from "@/lib/share/planShare";
 import { WeekGuidancePanel } from "@/components/domain/WeekGuidancePanel";
 import { usePlanViewMode } from "@/hooks/usePlanViewMode";
 import { getCurrentWeek, isPlanEnded } from "@/lib/planUtils";
@@ -864,6 +866,15 @@ export function PlanViewPage() {
               workoutTemplates={workoutTemplates}
               size="sm"
             />
+            {/* Only assisted plans replay from their config — see planShare.ts */}
+            {isShareablePlan(plan.config) && (
+              <ShareLinkButton
+                buildUrl={() => sharedPlanUrl(plan.config)}
+                title={planName}
+                label={t("shared.shareLink")}
+                className="rounded-full"
+              />
+            )}
             <Button
               variant="destructive"
               size="sm"

@@ -2,7 +2,7 @@ import { useState, useCallback, useReducer, useRef, useEffect, useMemo } from "r
 import { usePageHint } from "@/hooks/usePageHint";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight, Download, Upload, Undo2, Redo2 } from "@/components/icons";
+import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight, Download, Upload, Undo2, Redo2, Share } from "@/components/icons";
 import { useUndoRedo } from "@/hooks/useUndoRedo";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,7 @@ import { ExportMenu } from "@/components/domain/ExportMenu";
 import { FavoriteButton } from "@/components/domain/FavoriteButton";
 import { useFavorites } from "@/hooks";
 import { toast } from "sonner";
+import { sharedWorkoutUrl } from "@/lib/share/workoutShare";
 import {
   getCustomWorkout,
   getCustomWorkouts,
@@ -300,6 +301,22 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
     }
   }, [workout, canSave, t, navigate]);
 
+  // Everything the link needs lives in the URL, so an unsaved draft shares fine.
+  const handleShare = useCallback(async () => {
+    if (!canSave) return;
+    const url = sharedWorkoutUrl(workout);
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: workout.name, url });
+      } catch {
+        // Share sheet dismissed — nothing to do.
+      }
+      return;
+    }
+    await navigator.clipboard.writeText(url);
+    toast.success(t("common:share.toast.linkCopied"));
+  }, [workout, canSave, t]);
+
   const handleDelete = useCallback(() => {
     deleteCustomWorkout(workout.id);
     toast.success(t("calculators:workoutBuilder.workoutDeleted"));
@@ -392,6 +409,15 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
                 <Redo2 className="size-4" />
               </Button>
             </div>
+            <Button
+              variant="outline"
+              className="rounded-full px-5 py-2.5 h-auto font-bold"
+              onClick={handleShare}
+              disabled={!canSave}
+            >
+              <Share className="size-4 mr-2" />
+              {t("calculators:workoutBuilder.shareLink")}
+            </Button>
             {isSaved && <ExportMenu workout={workout} />}
             {isSaved && (
               <Button

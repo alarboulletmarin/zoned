@@ -10,6 +10,7 @@ import type {
 import type { RaceDistance } from "@/types/plan";
 import type { WeekSlot } from "./weekTemplate";
 import { DISTANCE_TAGS } from "./constants";
+import { planRandom } from "./rng";
 
 // ── Category mapping ───────────────────────────────────────────────
 // Maps SessionType to the WorkoutCategory(ies) that contain matching workouts
@@ -236,7 +237,7 @@ function findBestWorkout(
     if (leastUsed.length > 1) {
       // Shuffle among least-used
       for (let i = leastUsed.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+        const j = Math.floor(planRandom() * (i + 1));
         [leastUsed[i], leastUsed[j]] = [leastUsed[j], leastUsed[i]];
       }
       finalList = [...leastUsed, ...finalList.filter(w => (usageCounts.get(w.id) ?? 0) > minUsage + 1)];

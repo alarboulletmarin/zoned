@@ -286,7 +286,14 @@
     "save": "Enregistrer",
     "preview": "Aperçu",
     "addBlock": "Ajouter un bloc",
-    "listSubtitle": "Séances personnalisées stockées dans votre navigateur"
+    "listSubtitle": "Séances personnalisées stockées dans votre navigateur",
+    "shareLink": "Lien",
+    "shared": {
+      "title": "Séance partagée",
+      "subtitle": "Cette séance a été partagée avec vous. Ajoutez-la à vos séances pour la modifier ou l'exporter.",
+      "add": "Ajouter à mes séances",
+      "invalid": "Ce lien de partage est invalide ou incomplet."
+    }
   },
   "raceSimulator": {
     "seoBreadcrumb": "Simulateur de course",

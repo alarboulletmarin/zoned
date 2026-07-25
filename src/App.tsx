@@ -39,6 +39,8 @@ const PrebuiltWeeksPage = lazyPage(() => import("@/pages/PrebuiltWeeksPage").the
 const PrebuiltWeekDetailPage = lazyPage(() => import("@/pages/PrebuiltWeekDetailPage").then(m => ({ default: m.PrebuiltWeekDetailPage })));
 const SharedWeekPage = lazyPage(() => import("@/pages/SharedWeekPage").then(m => ({ default: m.SharedWeekPage })));
 const WorkoutDetailPage = lazyPage(() => import("@/pages/WorkoutDetailPage").then(m => ({ default: m.WorkoutDetailPage })));
+const SharedWorkoutPage = lazyPage(() => import("@/pages/SharedWorkoutPage").then(m => ({ default: m.SharedWorkoutPage })));
+const SharedPlanPage = lazyPage(() => import("@/pages/SharedPlanPage").then(m => ({ default: m.SharedPlanPage })));
 const MyZonesPage = lazyPage(() => import("@/pages/MyZonesPage").then(m => ({ default: m.MyZonesPage })));
 const FavoritesPage = lazyPage(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
 const ContributePage = lazyPage(() => import("@/pages/ContributePage").then(m => ({ default: m.ContributePage })));
@@ -329,6 +331,7 @@ function App() {
                           <Route path="/library/weekly" element={<Navigate to="/weeks" replace />} />
                           <Route path="/workout/builder" element={<WorkoutBuilderPage />} />
                           <Route path="/workout/builder/:id" element={<WorkoutBuilderPage />} />
+                          <Route path="/workout/shared" element={<SharedWorkoutPage />} />
                           <Route path="/workout/:id" element={<WorkoutDetailPage />} />
                           <Route path="/my-zones" element={<MyZonesPage />} />
                           <Route path="/calculators" element={<CalculateursPage />} />
@@ -370,8 +373,10 @@ function App() {
                           <Route path="/plan/new/free" element={<FreePlanCreatePage />} />
                           <Route path="/plan/new/prebuilt" element={<PrebuiltPlansPage />} />
                           <Route path="/plan/prebuilt/:slug" element={<PrebuiltPlanDetailPage />} />
+                          <Route path="/plan/shared" element={<SharedPlanPage />} />
                           <Route path="/plan/:id" element={<PlanViewPage />} />
                           <Route path="/race-simulator" element={<RaceSimulatorPage />} />
+                          <Route path="/race-simulator/shared" element={<RaceSimulatorPage />} />
                           <Route path="/routes" element={<RouteGeneratorPage />} />
                           <Route path="/routes/tracks" element={<TrackFinderPage />} />
                           <Route path="/routes/mine" element={<MyRoutesPage />} />

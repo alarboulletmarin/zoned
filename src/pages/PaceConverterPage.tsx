@@ -1,6 +1,9 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
+import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
+import { buildParamsUrl } from "@/lib/share/urlParams";
 import { Card, CardContent } from "@/components/ui/card";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { useSettings } from "@/hooks/useSettings";
@@ -67,6 +70,8 @@ export function PaceConverterPage() {
   const { t } = useTranslation("common");
   const { settings } = useSettings();
   const isImperial = settings.unitSystem === "imperial";
+
+  const [searchParams] = useSearchParams();
 
   // Controlled input values (display strings)
   const [primaryPace, setPrimaryPace] = useState("");
@@ -164,6 +169,16 @@ export function PaceConverterPage() {
     },
     [isImperial]
   );
+
+  // Shared links carry km/h so they survive a unit-system mismatch between
+  // sender and recipient; convert into whatever this browser displays.
+  const sharedKmh = searchParams.get("kmh");
+  useEffect(() => {
+    if (!sharedKmh) return;
+    const kmh = parseFloat(sharedKmh);
+    if (!Number.isFinite(kmh) || kmh <= 0) return;
+    handleSpeedChange((isImperial ? kmh * KM_TO_MILES : kmh).toFixed(1));
+  }, [sharedKmh, isImperial, handleSpeedChange]);
 
   const handleSecondaryPaceChange = useCallback(
     (value: string) => {
@@ -290,6 +305,19 @@ export function PaceConverterPage() {
             >
               {t("calculators:calculateurs.converter.zoneForYou", { zone: currentZone })}
             </span>
+          </div>
+        )}
+
+        {currentPaceMinPerKm != null && (
+          <div className="mt-6 flex justify-center">
+            <ShareLinkButton
+              buildUrl={() =>
+                buildParamsUrl("/calculators/convertisseur", {
+                  kmh: (60 / currentPaceMinPerKm).toFixed(2),
+                })
+              }
+              title={t("calculators:calculateurs.converter.title")}
+            />
           </div>
         )}
 

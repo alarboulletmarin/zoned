@@ -1,8 +1,10 @@
 import { useState, useEffect, useMemo, useCallback, type ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Save, Trash2, Heart, Gauge, ChevronDown, Dumbbell } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
+import { buildParamsUrl } from "@/lib/share/urlParams";
 import {
   Card,
   CardContent,
@@ -71,8 +73,14 @@ export function ZoneCalculator() {
   const unit = settings.unitSystem;
   const isMobile = useIsMobile();
 
-  const [fcMax, setFcMax] = useState<string>("");
-  const [vma, setVma] = useState<string>("");
+  // A shared link carries the sender's values — they win over whatever the
+  // recipient has stored locally, otherwise the link would show their zones.
+  const [searchParams] = useSearchParams();
+  const sharedFcMax = searchParams.get("fcmax") ?? "";
+  const sharedVma = searchParams.get("vma") ?? "";
+
+  const [fcMax, setFcMax] = useState<string>(sharedFcMax);
+  const [vma, setVma] = useState<string>(sharedVma);
   const [saved, setSaved] = useState(false);
   const [expandedZone, setExpandedZone] = useState<ZoneNumber | null>(null);
 
@@ -97,15 +105,16 @@ export function ZoneCalculator() {
       parsedVma < 8 ||
       parsedVma > 30);
 
-  // Load stored preferences on mount
+  // Load stored preferences on mount — skipped when the URL already supplies values.
   useEffect(() => {
+    if (sharedFcMax || sharedVma) return;
     const prefs = loadUserZonePrefs();
     if (prefs) {
       if (prefs.fcMax) setFcMax(prefs.fcMax.toString());
       if (prefs.vma) setVma(prefs.vma.toString());
       setSaved(true);
     }
-  }, []);
+  }, [sharedFcMax, sharedVma]);
 
   const prefs: UserZonePreferences = {
     fcMax: fcMax && !fcMaxError ? parsedFcMax : undefined,
@@ -402,6 +411,13 @@ export function ZoneCalculator() {
               {t("myZones.zoneCalculator.clear")}
             </Button>
           )}
+          <ShareLinkButton
+            buildUrl={() =>
+              buildParamsUrl("/calculators/zones", { vma, fcmax: fcMax })
+            }
+            title={t("myZones.zoneCalculator.title")}
+            disabled={!hasValues || hasErrors}
+          />
         </div>
       </CardContent>
     </Card>

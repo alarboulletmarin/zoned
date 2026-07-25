@@ -1,4 +1,26 @@
 {
+  "shared": {
+    "title": "Shared plan",
+    "subtitle": "This plan was shared with you. It was regenerated from the settings in the link.",
+    "add": "Add to my plans",
+    "added": "Plan added to your plans",
+    "generating": "Generating the plan…",
+    "invalid": "This share link is invalid or incomplete.",
+    "backToPlans": "My plans",
+    "week": "Wk {{number}}",
+    "weeks_one": "{{count}} week",
+    "weeks_other": "{{count}} weeks",
+    "sessions_one": "{{count}} session",
+    "sessions_other": "{{count}} sessions",
+    "shareLink": "Share",
+    "phase": {
+      "base": "Base",
+      "build": "Build",
+      "peak": "Peak",
+      "taper": "Taper",
+      "recovery": "Recovery"
+    }
+  },
   "title": "Training Plans",
   "create": "Create a plan",
   "createTitle": "New training plan",

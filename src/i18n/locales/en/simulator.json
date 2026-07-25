@@ -44,7 +44,12 @@
     "cumulative": "Cumul.",
     "dist": "Dist."
   },
+  "shared": {
+    "banner": "This simulation was shared with you. Adjust the inputs to match your own race.",
+    "invalid": "This share link is invalid or incomplete."
+  },
   "actions": {
+    "share": "Share",
     "save": "Save",
     "exportPdf": "Export PDF",
     "delete": "Delete",
