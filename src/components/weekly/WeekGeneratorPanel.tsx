@@ -6,6 +6,7 @@ import {
   Dumbbell,
   Sparkles,
   Loader2,
+  LockOpen,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -46,6 +47,8 @@ export function WeekGeneratorPanel({
   busy = false,
   onGenerate,
   weekIsPopulated,
+  lockedCount = 0,
+  onUnlockAll,
   bare = false,
 }: {
   settings: WeekSettings;
@@ -53,6 +56,9 @@ export function WeekGeneratorPanel({
   busy?: boolean;
   onGenerate: (settings: WeekSettings) => void;
   weekIsPopulated: boolean;
+  /** Sessions locked in the current week — kept as-is on the next generation. */
+  lockedCount?: number;
+  onUnlockAll?: () => void;
   /** Compact, surface-less variant for the mobile "Régler" sheet (no border,
    *  no padding, no redundant title) so the whole panel fits without scroll. */
   bare?: boolean;
@@ -192,11 +198,25 @@ export function WeekGeneratorPanel({
           )}
           {busy ? t("weekly.generate.busy") : t("weekly.generate.action")}
         </Button>
+        {lockedCount > 0 && onUnlockAll && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onUnlockAll}
+            disabled={busy}
+            className="w-full text-muted-foreground"
+          >
+            <LockOpen className="size-3.5" />
+            {t("weekly.actions.unlockAll")}
+          </Button>
+        )}
         {!bare && (
           <p className="text-xs text-muted-foreground">
-            {weekIsPopulated
-              ? t("weekly.generate.hintRegen")
-              : t("weekly.generate.hint")}
+            {lockedCount > 0
+              ? t("weekly.generate.hintLocked", { count: lockedCount })
+              : weekIsPopulated
+                ? t("weekly.generate.hintRegen")
+                : t("weekly.generate.hint")}
           </p>
         )}
       </div>

@@ -43,9 +43,15 @@ import {
   savePlan,
   getPlan,
 } from "@/lib/planStorage";
-import { generateWeek } from "@/lib/weekGenerator";
+import { generateWeek, redrawSlot } from "@/lib/weekGenerator";
+import { getDrawDiscipline } from "@/lib/workoutFilters";
 import { sharedWeekUrl } from "@/lib/weekShare";
-import { generatedWeekToSessions, planWeekToSlots } from "@/lib/weekToPlan";
+import {
+  generatedWeekToSessions,
+  kindForSessionType,
+  planWeekToSlots,
+  slotToSession,
+} from "@/lib/weekToPlan";
 import { computeWeekStats } from "@/lib/weekStats";
 import { buildScanSchedule } from "@/lib/scanSchedule";
 import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
@@ -57,6 +63,7 @@ import {
   DEFAULT_WEEK_SETTINGS,
   type DayIndex,
   type WeekSettings,
+  type WeekSlot,
 } from "@/types/week";
 
 const ACTIVITY_KEYS: Record<string, string> = {
@@ -121,13 +128,14 @@ export function WeekViewPage() {
     longRunDay: (plan?.config.longRunDay ?? 5) as DayIndex,
   });
 
-  // ── Generation animation state ───────────────────────────────────────────
+  // ── Draw animation state ─────────────────────────────────────────────────
   const [scanning, setScanning] = useState(false);
-  // Per-day cycling workout shown during the scan (only for target days).
+  // Per-day cycling workout shown during the scan.
   const [scanCells, setScanCells] = useState<Record<number, AnyWorkoutTemplate>>(
     {},
   );
-  // Which days the generated week will populate (drives the overlay layout).
+  // Days the overlay covers. Every other day stays sharp and untouched — that
+  // is how a locked session, or a single re-roll, reads on screen.
   const [scanTargets, setScanTargets] = useState<Set<number>>(new Set());
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const boardRef = useRef<HTMLDivElement>(null);
@@ -137,6 +145,50 @@ export function WeekViewPage() {
     timeoutsRef.current = [];
   }, []);
   useEffect(() => clearTimeouts, [clearTimeouts]);
+
+  /**
+   * Run the slot-machine animation, then apply the change on the last tick.
+   * Shared by "generate the week" (many cells) and "re-roll one session" (one).
+   */
+  const runScan = useCallback(
+    (opts: {
+      /** Days the overlay veils. */
+      veiled: Set<number>;
+      /** Days that flash random workouts (a subset of `veiled`). */
+      cycling: number[];
+      durationMs: number;
+      /** Applies the result — called once, on the final tick. */
+      onReveal: () => void;
+    }) => {
+      clearTimeouts();
+      const roll = () =>
+        setScanCells(
+          Object.fromEntries(opts.cycling.map((d) => [d, sample(catalog)])),
+        );
+
+      setScanTargets(opts.veiled);
+      roll();
+      setScanning(true);
+
+      const times = buildScanSchedule(opts.durationMs);
+      times.forEach((at, i) => {
+        const isLast = i === times.length - 1;
+        timeoutsRef.current.push(
+          setTimeout(() => {
+            if (!isLast) {
+              roll();
+              return;
+            }
+            opts.onReveal();
+            setScanning(false);
+            setScanCells({});
+            reload();
+          }, at),
+        );
+      });
+    },
+    [catalog, clearTimeouts, reload],
+  );
 
   const slots = useMemo(
     () => planWeekToSlots(plan?.weeks[0], byId),
@@ -202,53 +254,121 @@ export function WeekViewPage() {
   const handleGenerate = useCallback(
     (cfg: WeekSettings) => {
       if (!plan || catalog.length === 0 || scanning) return;
-      clearTimeouts();
+
+      // Locked sessions are carried over verbatim: the generator keeps their day
+      // free, and their original plan session (notes, status…) is re-used below.
+      const lockedSessions = plan.weeks[0].sessions.filter((s) => s.locked);
+      const lockedDays = new Set(lockedSessions.map((s) => s.dayOfWeek));
+      const lockedSlots: WeekSlot[] = lockedSessions.map((s) => ({
+        day: s.dayOfWeek as DayIndex,
+        kind: kindForSessionType(s.sessionType),
+        workout: byId.get(s.workoutId) ?? null,
+        locked: true,
+      }));
 
       // Compute the real week up-front; reveal it on the final tick.
-      const generated = generateWeek(cfg, catalog);
-      const targets = new Set(
-        generated.slots.filter((s) => s.workout).map((s) => s.day),
-      );
+      const generated = generateWeek(cfg, catalog, { locked: lockedSlots });
 
-      setScanTargets(targets);
-      setScanCells({});
-      setScanning(true);
       setSettingsOpen(false);
       // Immediate feedback: bring the board into view so the scan is always
       // visible (esp. mobile, where the trigger sits at the bottom).
       boardRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
 
-      const times = buildScanSchedule(800);
-      times.forEach((at, i) => {
-        const isLast = i === times.length - 1;
-        timeoutsRef.current.push(
-          setTimeout(() => {
-            if (isLast) {
-              const fresh = getPlan(plan.id);
-              if (fresh) {
-                fresh.weeks[0].sessions = generatedWeekToSessions(generated);
-                fresh.config.longRunDay = cfg.longRunDay;
-                savePlan(fresh);
-              }
-              setScanning(false);
-              setScanCells({});
-              reload();
-              toast.success(
-                t("library:weekly.toast.generated", {
-                  defaultValue: "Semaine générée",
-                }),
-              );
-            } else {
-              // Cycle a fresh random workout into each target day cell.
-              const next: Record<number, AnyWorkoutTemplate> = {};
-              for (const day of targets) next[day] = sample(catalog);
-              setScanCells(next);
-            }
-          }, at),
-        );
+      runScan({
+        // Locked days are left out of the overlay entirely: they stay on screen,
+        // sharp and still, while everything else is redrawn.
+        veiled: new Set(WEEKDAYS.filter((d) => !lockedDays.has(d))),
+        cycling: generated.slots
+          .filter((s) => s.workout && !lockedDays.has(s.day))
+          .map((s) => s.day),
+        durationMs: 800,
+        onReveal: () => {
+          const fresh = getPlan(plan.id);
+          if (fresh) {
+            fresh.weeks[0].sessions = [
+              ...lockedSessions,
+              ...generatedWeekToSessions(generated).filter(
+                (s) => !lockedDays.has(s.dayOfWeek),
+              ),
+            ].sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+            fresh.config.longRunDay = cfg.longRunDay;
+            savePlan(fresh);
+          }
+          toast.success(t("library:weekly.toast.generated"));
+        },
       });
     },
-    [plan, catalog, scanning, clearTimeouts, reload, t],
+    [plan, catalog, byId, scanning, runScan, t],
+  );
+
+  // ── Lock / re-roll (issue #89) ────────────────────────────────────────────
+  const lockedCount = useMemo(
+    () => slots.filter((s) => s.locked).length,
+    [slots],
+  );
+
+  const handleToggleLock = useCallback(
+    (_weekNumber: number, sessionIndex: number) => {
+      if (!plan) return;
+      const fresh = getPlan(plan.id);
+      const session = fresh?.weeks[0].sessions[sessionIndex];
+      if (!fresh || !session) return;
+      session.locked = !session.locked;
+      savePlan(fresh);
+      reload();
+    },
+    [plan, reload],
+  );
+
+  const handleUnlockAll = useCallback(() => {
+    if (!plan) return;
+    const fresh = getPlan(plan.id);
+    if (!fresh) return;
+    for (const session of fresh.weeks[0].sessions) delete session.locked;
+    savePlan(fresh);
+    reload();
+  }, [plan, reload]);
+
+  /** Draw another workout for a single session — the rest of the week is kept. */
+  const handleRedraw = useCallback(
+    (_weekNumber: number, sessionIndex: number) => {
+      if (!plan || scanning) return;
+      const session = plan.weeks[0].sessions[sessionIndex];
+      if (!session || session.locked) return;
+
+      const kind = kindForSessionType(session.sessionType);
+      const current = byId.get(session.workoutId);
+      const replacement = redrawSlot(settings, catalog, kind, {
+        targetMin: session.estimatedDurationMin,
+        excludeIds: plan.weeks[0].sessions.map((s) => s.workoutId),
+        currentId: session.workoutId,
+        discipline: current ? getDrawDiscipline(current) : undefined,
+      });
+      if (!replacement) {
+        toast.error(t("library:weekly.toast.rerollEmpty"));
+        return;
+      }
+
+      // Same slot-machine, scoped to this one day: the rest of the week stays
+      // visible and untouched, so the re-roll reads as strictly local.
+      runScan({
+        veiled: new Set([session.dayOfWeek]),
+        cycling: [session.dayOfWeek],
+        durationMs: 450,
+        onReveal: () => {
+          const fresh = getPlan(plan.id);
+          if (!fresh) return;
+          fresh.weeks[0].sessions[sessionIndex] = slotToSession(
+            session.dayOfWeek,
+            kind,
+            replacement,
+          );
+          savePlan(fresh);
+          toast.success(t("library:weekly.toast.rerolled"));
+        },
+      });
+    },
+    [plan, catalog, byId, settings, scanning, runScan, t],
   );
 
   // Arriving from the "Générer une semaine" creation mode: surface the settings
@@ -317,6 +437,8 @@ export function WeekViewPage() {
       busy={scanning}
       onGenerate={handleGenerate}
       weekIsPopulated={weekIsPopulated}
+      lockedCount={lockedCount}
+      onUnlockAll={handleUnlockAll}
     />
   );
 
@@ -406,30 +528,42 @@ export function WeekViewPage() {
               onSessionClick={handleSessionClick}
               onSessionMove={handleMove}
               onSessionDelete={handleDelete}
+              onToggleLock={handleToggleLock}
+              onRedraw={handleRedraw}
               onWorkoutAdd={handleWorkoutAdd}
               onAddToDay={handleAddToDay}
               singleWeek
             />
 
-            {/* Scan overlay during animated generation */}
+            {/* Scan overlay during animated generation. The veil is applied per
+                cell, never globally: a locked day shows its real card, sharp and
+                still, while the others cycle — the lock is proven on screen. */}
             {scanning && (
               <div
-                className="absolute inset-0 z-10 rounded-xl bg-background/70 backdrop-blur-sm p-2 sm:p-3"
+                className="absolute inset-0 z-10 rounded-xl p-2 sm:p-3"
                 aria-hidden="true"
               >
                 <div className="grid h-full grid-cols-4 gap-1.5 sm:gap-2 md:grid-cols-7">
                   {WEEKDAYS.map((day) => {
-                    const isTarget = scanTargets.has(day);
                     const w = scanCells[day];
+                    // Days outside the scan keep their real card on screen.
+                    if (!scanTargets.has(day)) {
+                      return (
+                        <div
+                          key={day}
+                          className={cn("min-h-20", day === 6 && "col-span-4 md:col-span-1")}
+                        />
+                      );
+                    }
                     return (
                       <div
                         key={day}
                         className={cn(
-                          "min-h-20",
+                          "min-h-20 rounded-xl bg-background/85 backdrop-blur-sm",
                           day === 6 && "col-span-4 md:col-span-1",
                         )}
                       >
-                        {isTarget && w ? (
+                        {w ? (
                           <ScanCard
                             workout={w}
                             pick={pick}
@@ -445,6 +579,15 @@ export function WeekViewPage() {
               </div>
             )}
 
+            {/* Editing legend — the board's gestures are otherwise invisible.
+                Touch has no hover, so its actions live in the tap menu. */}
+            {weekIsPopulated && !scanning && (
+              <p className="mt-2 text-xs text-muted-foreground">
+                {isMobile
+                  ? t("library:weekly.boardHintTouch")
+                  : t("library:weekly.boardHint")}
+              </p>
+            )}
           </div>
 
           {/* Right column: the always-visible generator — or, while adding a
@@ -512,6 +655,8 @@ export function WeekViewPage() {
             busy={scanning}
             onGenerate={handleGenerate}
             weekIsPopulated={weekIsPopulated}
+            lockedCount={lockedCount}
+            onUnlockAll={handleUnlockAll}
             bare
           />
         </SheetContent>

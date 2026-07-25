@@ -333,6 +333,7 @@
     "viewSession": "View session",
     "deleteSession": "Delete",
     "deleteSessionTitle": "Delete session",
+    "dropToDelete": "Drop here to remove",
     "validateWeek": "Validate week",
     "validateCount": "Validate {{done}}/{{total}}"
   },

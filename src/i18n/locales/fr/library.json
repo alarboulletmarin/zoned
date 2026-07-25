@@ -243,7 +243,9 @@
       "hintRegen": "Recompose une nouvelle semaine à partir de vos réglages actuels.",
       "create": "Créer la semaine",
       "namePlaceholder": "Nom de la semaine",
-      "defaultName": "Ma semaine"
+      "defaultName": "Ma semaine",
+      "hintLocked_one": "{{count}} séance verrouillée sera conservée, le reste sera recomposé.",
+      "hintLocked_other": "{{count}} séances verrouillées seront conservées, le reste sera recomposé."
     },
     "settings": {
       "title": "Réglages",
@@ -324,7 +326,8 @@
       "unlock": "Déverrouiller",
       "reroll": "Re-tirer",
       "viewDetail": "Voir le détail",
-      "rest": "Jour de repos"
+      "rest": "Jour de repos",
+      "lockedHint": "Verrouillée : conservée à la régénération"
     },
     "days": {
       "0": "Lundi",
@@ -356,7 +359,11 @@
       "duplicateError": "La duplication a échoué",
       "imported": "Semaine importée",
       "importError": "Import impossible : fichier invalide",
-      "importNotWeek": "Ce fichier contient un plan complet, pas une semaine"
-    }
+      "importNotWeek": "Ce fichier contient un plan complet, pas une semaine",
+      "rerolled": "Séance re-tirée",
+      "rerollEmpty": "Aucune autre séance disponible avec ces réglages"
+    },
+    "boardHint": "Survolez une carte pour re-tirer, verrouiller ou supprimer la séance. Glissez-la pour la déplacer, ou déposez-la sur la corbeille pour la retirer.",
+    "boardHintTouch": "Touchez une séance pour re-tirer, verrouiller ou supprimer. Maintenez-la pour la déplacer, ou déposez-la sur la corbeille."
   }
 }

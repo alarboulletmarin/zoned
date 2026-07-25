@@ -28,7 +28,7 @@ function sessionTypeFor(kind: SlotKind, w: AnyWorkoutTemplate): SessionType {
 }
 
 /** Map a session type back to a coarse slot kind (for stats / rhythm colour). */
-function kindForSessionType(type: SessionType): SlotKind {
+export function kindForSessionType(type: SessionType): SlotKind {
   if (type === "long_run") return "long";
   if (
     type === "tempo" ||
@@ -49,21 +49,31 @@ function disciplineFor(w: AnyWorkoutTemplate): Discipline | undefined {
   return d === "cycling" || d === "swimming" ? d : d === "running" ? "running" : undefined;
 }
 
+/**
+ * One filled slot → a plan session. Used both by the full-week generation and
+ * by the single-slot re-roll, so a re-drawn session carries the exact same
+ * metadata (type, key flag, duration) a generated one would.
+ */
+export function slotToSession(
+  day: number,
+  kind: SlotKind,
+  workout: AnyWorkoutTemplate,
+): PlanSession {
+  return {
+    dayOfWeek: day,
+    workoutId: workout.id,
+    discipline: disciplineFor(workout),
+    sessionType: sessionTypeFor(kind, workout),
+    isKeySession: kind !== "easy",
+    estimatedDurationMin: getAnyWorkoutDuration(workout),
+  };
+}
+
 /** Generated 80/20 week → plan sessions for a single week. */
 export function generatedWeekToSessions(week: GeneratedWeek): PlanSession[] {
   return week.slots
     .filter((s) => s.workout)
-    .map((s) => {
-      const w = s.workout!;
-      return {
-        dayOfWeek: s.day,
-        workoutId: w.id,
-        discipline: disciplineFor(w),
-        sessionType: sessionTypeFor(s.kind, w),
-        isKeySession: s.kind !== "easy",
-        estimatedDurationMin: getAnyWorkoutDuration(w),
-      } satisfies PlanSession;
-    })
+    .map((s) => slotToSession(s.day, s.kind, s.workout!))
     .sort((a, b) => a.dayOfWeek - b.dayOfWeek);
 }
 
@@ -87,7 +97,7 @@ export function planWeekToSlots(
       day: s.dayOfWeek as DayIndex,
       kind: kindForSessionType(s.sessionType),
       workout: byId.get(s.workoutId) ?? null,
-      locked: false,
+      locked: s.locked === true,
     });
   }
   for (let day = 0 as DayIndex; day <= 6; day = (day + 1) as DayIndex) {

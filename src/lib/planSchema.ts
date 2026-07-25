@@ -67,6 +67,7 @@ function normalizeSession(raw: unknown): PlanSession | null {
     rpe: asOptionalNumber(raw.rpe),
     userNote: typeof raw.userNote === "string" ? raw.userNote : undefined,
     isSuggestion: typeof raw.isSuggestion === "boolean" ? raw.isSuggestion : undefined,
+    locked: typeof raw.locked === "boolean" ? raw.locked : undefined,
   };
 }
 

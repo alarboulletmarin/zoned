@@ -243,7 +243,9 @@
       "hintRegen": "Recomposes a fresh week from your current settings.",
       "create": "Create week",
       "namePlaceholder": "Week name",
-      "defaultName": "My week"
+      "defaultName": "My week",
+      "hintLocked_one": "{{count}} locked session will be kept, the rest is recomposed.",
+      "hintLocked_other": "{{count}} locked sessions will be kept, the rest is recomposed."
     },
     "settings": {
       "title": "Settings",
@@ -324,7 +326,8 @@
       "unlock": "Unlock",
       "reroll": "Re-roll",
       "viewDetail": "View detail",
-      "rest": "Rest day"
+      "rest": "Rest day",
+      "lockedHint": "Locked: kept when regenerating"
     },
     "days": {
       "0": "Monday",
@@ -356,7 +359,11 @@
       "duplicateError": "Duplication failed",
       "imported": "Week imported",
       "importError": "Import failed: invalid file",
-      "importNotWeek": "This file contains a full plan, not a week"
-    }
+      "importNotWeek": "This file contains a full plan, not a week",
+      "rerolled": "Session re-rolled",
+      "rerollEmpty": "No other session available with these settings"
+    },
+    "boardHint": "Hover a card to re-roll, lock or delete the session. Drag it to move it, or drop it on the bin to remove it.",
+    "boardHintTouch": "Tap a session to re-roll, lock or delete it. Hold to drag it, or drop it on the bin."
   }
 }

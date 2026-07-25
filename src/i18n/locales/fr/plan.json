@@ -333,6 +333,7 @@
     "viewSession": "Voir la séance",
     "deleteSession": "Supprimer",
     "deleteSessionTitle": "Supprimer la séance",
+    "dropToDelete": "Déposer ici pour supprimer",
     "validateWeek": "Valider la semaine",
     "validateCount": "Valider {{done}}/{{total}}"
   },

@@ -14,7 +14,9 @@
 import {
   DURATION_NO_LIMIT,
   getAnyWorkoutDuration,
+  getDrawDiscipline,
   matchesFilters,
+  type DrawDiscipline,
   type WorkoutFilterCriteria,
 } from "@/lib/workoutFilters";
 import { computeWeekStats } from "@/lib/weekStats";
@@ -321,4 +323,50 @@ export function generateWeek(
   }
 
   return { slots: best ?? buildVariant(settings, pools, lockedByDay), settings };
+}
+
+export interface RedrawOptions {
+  /** Aim for a workout of roughly this many minutes (usually the current one). */
+  targetMin?: number;
+  /** Workouts already placed in the week — avoided so the draw brings novelty. */
+  excludeIds?: readonly string[];
+  /** The workout being replaced — never drawn again, even as a last resort. */
+  currentId?: string;
+  /** Keep the draw within this discipline (a swim re-rolls into a swim). */
+  discipline?: DrawDiscipline;
+}
+
+/**
+ * Draw a replacement for a single slot, keeping its role (easy / quality /
+ * long) and rough duration. Used by the per-session "re-roll" — the rest of
+ * the week is left untouched. Returns null when the pool has no alternative.
+ */
+export function redrawSlot(
+  settings: WeekSettings,
+  catalog: AnyWorkoutTemplate[],
+  kind: SlotKind,
+  options: RedrawOptions = {},
+): AnyWorkoutTemplate | null {
+  if (kind === "rest") return null;
+
+  const all = poolFor(kind, buildPools(catalog, settings));
+  const sameDiscipline = options.discipline
+    ? all.filter((w) => getDrawDiscipline(w) === options.discipline)
+    : all;
+  // Fall back to the whole pool when the discipline alone has nothing to offer.
+  const pool = sameDiscipline.length > 1 ? sameDiscipline : all;
+  const exclude = new Set(options.excludeIds ?? []);
+  const target = options.targetMin ?? 0;
+
+  const fresh = pool.filter(
+    (w) => w.id !== options.currentId && !exclude.has(w.id),
+  );
+  if (fresh.length > 0) return pickNearDuration(fresh, target);
+
+  // Pool exhausted: allow a workout already placed elsewhere in the week, but
+  // never hand back the one we are replacing.
+  return pickNearDuration(
+    pool.filter((w) => w.id !== options.currentId),
+    target,
+  );
 }

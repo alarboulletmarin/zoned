@@ -1,7 +1,7 @@
 import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
-import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, Dumbbell, Route as RouteIcon } from "@/components/icons";
+import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, Dumbbell, Dices, Lock, LockOpen, Route as RouteIcon } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
@@ -40,6 +40,12 @@ const PHASE_BG: Record<string, string> = {
   recovery: "bg-slate-50/50 dark:bg-slate-950/20",
 };
 
+/** Placeholder sessions (race day, cross-training activities) have no catalog
+ *  workout behind them, so there is nothing to draw a replacement from. */
+function isRedrawable(workoutId: string): boolean {
+  return !workoutId.startsWith("__");
+}
+
 // ── Props ───────────────────────────────────────────────────────────
 
 interface PlanWeeklyViewProps {
@@ -59,6 +65,10 @@ interface PlanWeeklyViewProps {
   onSessionDelete?: (weekNumber: number, sessionIndex: number) => void;
   onFindRoute?: (weekNumber: number, sessionIndex: number) => void;
   onToggleComplete?: (weekNumber: number, sessionIndex: number) => void;
+  /** "Ma semaine": lock a session so it survives week (re)generation. */
+  onToggleLock?: (weekNumber: number, sessionIndex: number) => void;
+  /** "Ma semaine": draw another workout for this session only. */
+  onRedraw?: (weekNumber: number, sessionIndex: number) => void;
   onValidateWeek?: (weekNumber: number) => void;
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
   onAddToDay?: (weekNumber: number, day: number) => void;
@@ -83,6 +93,8 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   onSessionDelete,
   onFindRoute,
   onToggleComplete,
+  onToggleLock,
+  onRedraw,
   onValidateWeek,
   onWorkoutAdd,
   onAddToDay,
@@ -91,7 +103,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   blockedDays,
   singleWeek = false,
 }: PlanWeeklyViewProps) {
-  const { t } = useTranslation("plan");
+  const { t } = useTranslation(["plan", "library"]);
   const pickLang = usePickLang();
   // ── Week navigation state ──────────────────────────────────────
   const [selectedWeek, setSelectedWeek] = useState(Math.max(1, initialWeek ?? currentWeek));
@@ -119,6 +131,11 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
     sessionIndex: number;
   } | null>(null);
   const [dropTarget, setDropTarget] = useState<{ weekNumber: number; day: number } | null>(null);
+
+  // Trash drop zone — surfaced only while a session is being dragged, so
+  // "remove a session" is discoverable without a right-click.
+  const [overTrash, setOverTrash] = useState(false);
+  const overTrashRef = useRef(false);
 
   // Touch-specific refs
   const touchDragRef = useRef<{
@@ -162,6 +179,12 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
       document.removeEventListener("keydown", handleKey);
     };
   }, [contextMenu]);
+
+  // Lock state of the session the context menu targets (drives lock/unlock label).
+  const contextSessionLocked =
+    contextMenu != null &&
+    plan.weeks.find((w) => w.weekNumber === contextMenu.weekNumber)
+      ?.sessions[contextMenu.sessionIndex]?.locked === true;
 
   // ── Desktop drag handlers (HTML5 Drag and Drop) ───────────────
 
@@ -326,6 +349,16 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
 
         // Find drop target using document.elementsFromPoint
         const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
+        const overTrashNow = elements.some((el) => el.hasAttribute("data-trash-drop"));
+        if (overTrashNow !== overTrashRef.current) {
+          overTrashRef.current = overTrashNow;
+          setOverTrash(overTrashNow);
+        }
+        if (overTrashNow) {
+          dropTargetRef.current = null;
+          setDropTarget(null);
+          return;
+        }
         const dropCell = elements.find((el) => el.hasAttribute("data-drop-id"));
 
         if (dropCell) {
@@ -369,12 +402,17 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
       // Handle drop
       const dragState = touchDragRef.current;
       const target = dropTargetRef.current;
+      const droppedOnTrash = overTrashRef.current;
       touchDragRef.current = null;
       dropTargetRef.current = null;
+      overTrashRef.current = false;
+      setOverTrash(false);
       setDraggedSession(null);
       setDropTarget(null);
 
-      if (dragState && target && onSessionMove) {
+      if (dragState && droppedOnTrash && onSessionDelete) {
+        onSessionDelete(dragState.weekNumber, dragState.sessionIndex);
+      } else if (dragState && target && onSessionMove) {
         // Block drop on unavailable days
         if (blockedDays?.has(`${target.weekNumber}-${target.day}`)) {
           toast.error(t("reschedule.blockedDrop"));
@@ -409,7 +447,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
     longPressFiredRef.current = false;
     touchStartPosRef.current = null;
     touchSessionRef.current = null;
-  }, [onSessionMove, onSessionClick, plan.weeks]);
+  }, [onSessionMove, onSessionDelete, onSessionClick, plan.weeks]);
 
   // ── Derived data ──────────────────────────────────────────────
 
@@ -637,6 +675,9 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                         onSessionClick={onSessionClick}
                         onFindRoute={onFindRoute}
                         onToggleComplete={onToggleComplete}
+                        onToggleLock={onToggleLock}
+                        onRedraw={onRedraw}
+                        onSessionDelete={onSessionDelete}
                         onAddToDay={onAddToDay}
                         setContextMenu={setContextMenu}
                         isBlockedDay={blockedDays?.has(`${selectedWeek}-${dayIndex}`) ?? false}
@@ -694,6 +735,9 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                     onSessionClick={onSessionClick}
                     onFindRoute={onFindRoute}
                     onToggleComplete={onToggleComplete}
+                    onToggleLock={onToggleLock}
+                    onRedraw={onRedraw}
+                    onSessionDelete={onSessionDelete}
                     onAddToDay={onAddToDay}
                     setContextMenu={setContextMenu}
                     isBlockedDay={blockedDays?.has(`${selectedWeek}-${dayIndex}`) ?? false}
@@ -704,6 +748,38 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
           </div>
         )}
       </div>
+
+      {/* ── Trash drop zone (appears while dragging a session) ── */}
+      {draggedSession && onSessionDelete && (
+        <div
+          data-trash-drop=""
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = "move";
+            setOverTrash(true);
+          }}
+          onDragLeave={() => setOverTrash(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setOverTrash(false);
+            if (draggedSession) {
+              onSessionDelete(draggedSession.weekNumber, draggedSession.sessionIndex);
+              setDraggedSession(null);
+              setDropTarget(null);
+            }
+          }}
+          className={cn(
+            "fixed inset-x-0 bottom-24 z-50 mx-auto flex w-fit items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium shadow-lg transition-colors md:bottom-8",
+            overTrash
+              ? "border-destructive bg-destructive text-destructive-foreground"
+              : "border-destructive/40 bg-card text-destructive",
+          )}
+        >
+          <Trash2 className="size-4 shrink-0" />
+          {t("calendar.dropToDelete")}
+        </div>
+      )}
 
       {/* ── Context menu (long press mobile / right-click desktop) ── */}
       {contextMenu && (
@@ -768,6 +844,38 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                 {t("completion.toggleDone")}
               </button>
             )}
+            {onRedraw && isRedrawable(contextMenu.workoutId) && !contextSessionLocked && (
+              <button
+                type="button"
+                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors text-left"
+                onClick={() => {
+                  onRedraw(contextMenu.weekNumber, contextMenu.sessionIndex);
+                  setContextMenu(null);
+                }}
+              >
+                <Dices className="size-4 text-muted-foreground shrink-0" />
+                {t("library:weekly.slot.reroll")}
+              </button>
+            )}
+            {onToggleLock && (
+              <button
+                type="button"
+                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-foreground hover:bg-accent transition-colors text-left"
+                onClick={() => {
+                  onToggleLock(contextMenu.weekNumber, contextMenu.sessionIndex);
+                  setContextMenu(null);
+                }}
+              >
+                {contextSessionLocked ? (
+                  <LockOpen className="size-4 text-muted-foreground shrink-0" />
+                ) : (
+                  <Lock className="size-4 text-muted-foreground shrink-0" />
+                )}
+                {contextSessionLocked
+                  ? t("library:weekly.slot.unlock")
+                  : t("library:weekly.slot.lock")}
+              </button>
+            )}
             {onSessionDelete && (
               <button
                 type="button"
@@ -819,6 +927,9 @@ interface DayCellProps {
   onSessionClick?: (weekNumber: number, sessionIndex: number, workoutId: string) => void;
   onFindRoute?: (weekNumber: number, sessionIndex: number) => void;
   onToggleComplete?: (weekNumber: number, sessionIndex: number) => void;
+  onToggleLock?: (weekNumber: number, sessionIndex: number) => void;
+  onRedraw?: (weekNumber: number, sessionIndex: number) => void;
+  onSessionDelete?: (weekNumber: number, sessionIndex: number) => void;
   onAddToDay?: (weekNumber: number, day: number) => void;
   setContextMenu: (
     menu: {
@@ -856,11 +967,14 @@ const DayCell = memo(function DayCell({
   onSessionClick,
   onFindRoute,
   onToggleComplete,
+  onToggleLock,
+  onRedraw,
+  onSessionDelete,
   onAddToDay,
   setContextMenu,
   isBlockedDay,
 }: DayCellProps) {
-  const { t } = useTranslation("plan");
+  const { t } = useTranslation(["plan", "library"]);
   const pickLang = usePickLang();
   const sessions = weekData.sessions.filter((s) => s.dayOfWeek === dayIndex);
   const isDropHere = dropTarget?.weekNumber === selectedWeek && dropTarget?.day === dayIndex;
@@ -981,6 +1095,8 @@ const DayCell = memo(function DayCell({
                   : isStrength
                     ? "bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700"
                     : "bg-card border border-border/50",
+                // Reserve room for the always-visible padlock.
+                session.locked && "ring-1 ring-primary/50 border-primary/50 pr-5",
               )}
             >
               {isRaceDay ? (
@@ -1011,19 +1127,84 @@ const DayCell = memo(function DayCell({
                 </div>
               ) : (
                 <>
-                  {onFindRoute && (
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onFindRoute(selectedWeek, originalIndex);
-                      }}
-                      className="absolute right-1.5 top-1.5 z-10 hidden rounded text-muted-foreground transition-colors hover:text-primary md:group-hover:block"
-                      title={t("view.findRoute")}
-                    >
-                      <RouteIcon className="size-3.5" />
-                    </button>
-                  )}
+                  {/* Card actions, top-right. Hover-only on desktop; the lock
+                      stays visible once set. Touch users reach them through the
+                      long-press context menu. */}
+                  <div className="absolute right-1.5 top-1.5 z-10 flex items-center gap-1">
+                    {onFindRoute && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onFindRoute(selectedWeek, originalIndex);
+                        }}
+                        className="hidden rounded text-muted-foreground transition-colors hover:text-primary md:group-hover:block"
+                        title={t("view.findRoute")}
+                      >
+                        <RouteIcon className="size-3.5" />
+                      </button>
+                    )}
+                    {onRedraw && isRedrawable(session.workoutId) && !session.locked && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onRedraw(selectedWeek, originalIndex);
+                        }}
+                        className="hidden rounded text-muted-foreground transition-colors hover:text-primary md:group-hover:block"
+                        title={t("library:weekly.slot.reroll")}
+                        aria-label={t("library:weekly.slot.reroll")}
+                      >
+                        <Dices className="size-3.5" />
+                      </button>
+                    )}
+                    {onSessionDelete && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onSessionDelete(selectedWeek, originalIndex);
+                        }}
+                        className="hidden rounded text-muted-foreground transition-colors hover:text-destructive md:group-hover:block"
+                        title={t("calendar.deleteSession")}
+                        aria-label={t("calendar.deleteSession")}
+                      >
+                        <Trash2 className="size-3.5" />
+                      </button>
+                    )}
+                    {onToggleLock && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onToggleLock(selectedWeek, originalIndex);
+                        }}
+                        aria-pressed={session.locked === true}
+                        className={cn(
+                          "rounded transition-colors hover:text-primary",
+                          session.locked
+                            ? "block text-primary"
+                            : "hidden text-muted-foreground md:group-hover:block",
+                        )}
+                        title={
+                          session.locked
+                            ? t("library:weekly.slot.lockedHint")
+                            : t("library:weekly.slot.lock")
+                        }
+                        aria-label={
+                          session.locked
+                            ? t("library:weekly.slot.unlock")
+                            : t("library:weekly.slot.lock")
+                        }
+                      >
+                        {session.locked ? (
+                          <Lock className="size-3.5" />
+                        ) : (
+                          <LockOpen className="size-3.5" />
+                        )}
+                      </button>
+                    )}
+                  </div>
                   <div className="flex items-center gap-1 mb-0.5">
                     {onToggleComplete && (
                       <button

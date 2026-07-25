@@ -127,6 +127,8 @@ export interface PlanSession {
   rpe?: number;                  // 1-10 Rate of Perceived Effort
   userNote?: string;             // Free-form note captured at completion (does not overwrite generated `notes`)
   isSuggestion?: boolean;          // v2: true if auto-suggested (user can dismiss)
+  /** "Ma semaine" lock — a locked session survives week (re)generation. */
+  locked?: boolean;
 }
 
 // ── Unavailability (blocked days) ─────────────────────────────────
