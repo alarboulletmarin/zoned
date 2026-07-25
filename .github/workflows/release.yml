@@ -22,6 +22,10 @@ on:
         description: "Existing tag to publish (e.g. v0.7.3)"
         required: true
         type: string
+      make_latest:
+        description: "Mark as the latest release (leave off when backfilling old tags)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -65,3 +69,7 @@ jobs:
           tag_name: ${{ steps.tag.outputs.name }}
           name: ${{ steps.tag.outputs.name }}
           body_path: release-notes.md
+          # A pushed tag is a genuinely new version and takes "Latest". A manual
+          # run defaults to not taking it: backfilling old tags one by one
+          # otherwise leaves the oldest published release wearing the badge.
+          make_latest: ${{ github.event_name == 'push' || inputs.make_latest }}
