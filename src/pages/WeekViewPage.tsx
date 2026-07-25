@@ -486,109 +486,115 @@ export function WeekViewPage() {
           </Link>
         </Button>
 
-        <div className="space-y-2">
-          <input
-            value={displayName}
-            onChange={(e) => setName(e.target.value)}
-            onBlur={(e) => handleRename(e.target.value.trim() || displayName)}
-            onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
-            aria-label={t("library:weekly.generate.namePlaceholder")}
-            className="w-full min-w-0 bg-transparent text-2xl sm:text-3xl font-semibold italic focus:outline-none focus:ring-2 focus:ring-primary rounded-md px-1 -mx-1"
-          />
-          {/* Meta row: category badge (left) · share + export (right) */}
-          <div className="flex items-center justify-between gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                className={cn(
-                  badgeVariants({
-                    variant: plan.config.weekCategory ? "secondary" : "outline",
-                  }),
-                  "cursor-pointer",
-                  !plan.config.weekCategory && "text-muted-foreground",
-                )}
-              >
-                {plan.config.weekCategory
-                  ? t(`library:weekly.prebuilt.category.${plan.config.weekCategory}`)
-                  : t("library:weekly.category.label")}
-                <ChevronDown className="size-3" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                <DropdownMenuRadioGroup
-                  value={plan.config.weekCategory ?? "none"}
-                  onValueChange={handleCategoryChange}
-                >
-                  <DropdownMenuRadioItem value="none">
-                    {t("library:weekly.category.none")}
-                  </DropdownMenuRadioItem>
-                  {WEEK_CATEGORIES.map((c) => (
-                    <DropdownMenuRadioItem key={c} value={c}>
-                      {t(`library:weekly.prebuilt.category.${c}`)}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleShare}
-                aria-label={t("library:weekly.share.action")}
-              >
-                <Share className="size-3.5" />
-              </Button>
-              <PlanExportMenu plan={plan} workoutNames={workoutNames} size="sm" variant="outline" />
-            </div>
-          </div>
-        </div>
-
-        {/* Compact summary strip above the board */}
-        <WeekSummaryBar stats={stats} slots={slots} targetVolumeH={settings.targetVolumeH} />
-
-        {/* Board (left) + always-visible generator (right, tablet/desktop) */}
-        {/* items-start: without it the board column is stretched to the
-            sidebar's height, and the scan overlay (absolute inset-0) would
-            cover that whole empty area instead of just the board. */}
+        {/* Board column (left) + always-visible generator rail (right, tablet /
+            desktop). The grid starts right under the back link — not below the
+            summary — so the rail begins high enough for its own CTA to sit
+            above the fold. A rail that starts mid-page pushes its actions out
+            of sight, and a `sticky` column never scrolls its own bottom back.
+            items-start: without it the board column is stretched to the rail's
+            height, and the scan overlay (absolute inset-0) would cover that
+            whole empty area instead of just the board. */}
         <div className="relative grid gap-6 md:grid-cols-[1fr_300px] md:items-start lg:grid-cols-[1fr_340px]">
-          {/* Board — kept full width, never compressed (picker sits in the column). */}
-          <div className="min-w-0">
-            <EditorialTitle as="h2" size="md" className="sr-only">
-              {displayName}
-            </EditorialTitle>
-            {/* Editing legend, right above the board it describes. Touch has no
-                hover, so its actions live in the tap menu instead. It sits
-                OUTSIDE the positioned wrapper below, so the scan overlay covers
-                the board and nothing else. */}
-            {weekIsPopulated && (
-              <p
-                className={cn(
-                  "mb-1.5 text-right text-[11px] leading-tight text-muted-foreground/80",
-                  scanning && "invisible",
-                )}
-              >
-                {isMobile
-                  ? t("library:weekly.boardHintTouch")
-                  : t("library:weekly.boardHint")}
-              </p>
-            )}
-            <div ref={boardRef} className="relative scroll-mt-20">
-            <PlanWeeklyView
-              plan={plan}
-              workoutNames={workoutNames}
-              workoutMeta={workoutMeta}
-              currentWeek={1}
-              initialWeek={1}
-              isEn={isEn}
-              onSessionClick={handleSessionClick}
-              onSessionMove={handleMove}
-              onSessionDelete={handleDelete}
-              onToggleLock={handleToggleLock}
-              onRedraw={handleRedraw}
-              onWorkoutAdd={handleWorkoutAdd}
-              onAddToDay={handleAddToDay}
-              renderScanCell={renderScanCell}
-              singleWeek
-            />
+          <div className="min-w-0 space-y-5">
+            <div className="space-y-2">
+              <input
+                value={displayName}
+                onChange={(e) => setName(e.target.value)}
+                onBlur={(e) => handleRename(e.target.value.trim() || displayName)}
+                onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
+                aria-label={t("library:weekly.generate.namePlaceholder")}
+                className="w-full min-w-0 bg-transparent text-2xl sm:text-3xl font-semibold italic focus:outline-none focus:ring-2 focus:ring-primary rounded-md px-1 -mx-1"
+              />
+              {/* Meta row: category badge (left) · share + export (right) */}
+              <div className="flex items-center justify-between gap-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger
+                    className={cn(
+                      badgeVariants({
+                        variant: plan.config.weekCategory ? "secondary" : "outline",
+                      }),
+                      "cursor-pointer",
+                      !plan.config.weekCategory && "text-muted-foreground",
+                    )}
+                  >
+                    {plan.config.weekCategory
+                      ? t(`library:weekly.prebuilt.category.${plan.config.weekCategory}`)
+                      : t("library:weekly.category.label")}
+                    <ChevronDown className="size-3" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    <DropdownMenuRadioGroup
+                      value={plan.config.weekCategory ?? "none"}
+                      onValueChange={handleCategoryChange}
+                    >
+                      <DropdownMenuRadioItem value="none">
+                        {t("library:weekly.category.none")}
+                      </DropdownMenuRadioItem>
+                      {WEEK_CATEGORIES.map((c) => (
+                        <DropdownMenuRadioItem key={c} value={c}>
+                          {t(`library:weekly.prebuilt.category.${c}`)}
+                        </DropdownMenuRadioItem>
+                      ))}
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleShare}
+                    aria-label={t("library:weekly.share.action")}
+                  >
+                    <Share className="size-3.5" />
+                  </Button>
+                  <PlanExportMenu plan={plan} workoutNames={workoutNames} size="sm" variant="outline" />
+                </div>
+              </div>
+            </div>
+
+            {/* Compact summary strip above the board */}
+            <WeekSummaryBar stats={stats} slots={slots} targetVolumeH={settings.targetVolumeH} />
+
+            {/* Board — kept full width, never compressed (picker sits in the column). */}
+            <div className="min-w-0">
+              <EditorialTitle as="h2" size="md" className="sr-only">
+                {displayName}
+              </EditorialTitle>
+              {/* Editing legend, right above the board it describes. Touch has no
+                  hover, so its actions live in the tap menu instead. It sits
+                  OUTSIDE the positioned wrapper below, so the scan overlay covers
+                  the board and nothing else. */}
+              {weekIsPopulated && (
+                <p
+                  className={cn(
+                    "mb-1.5 text-right text-[11px] leading-tight text-muted-foreground/80",
+                    scanning && "invisible",
+                  )}
+                >
+                  {isMobile
+                    ? t("library:weekly.boardHintTouch")
+                    : t("library:weekly.boardHint")}
+                </p>
+              )}
+              <div ref={boardRef} className="relative scroll-mt-20">
+              <PlanWeeklyView
+                plan={plan}
+                workoutNames={workoutNames}
+                workoutMeta={workoutMeta}
+                currentWeek={1}
+                initialWeek={1}
+                isEn={isEn}
+                onSessionClick={handleSessionClick}
+                onSessionMove={handleMove}
+                onSessionDelete={handleDelete}
+                onToggleLock={handleToggleLock}
+                onRedraw={handleRedraw}
+                onWorkoutAdd={handleWorkoutAdd}
+                onAddToDay={handleAddToDay}
+                renderScanCell={renderScanCell}
+                singleWeek
+              />
+              </div>
             </div>
           </div>
 

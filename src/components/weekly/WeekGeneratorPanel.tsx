@@ -40,6 +40,11 @@ const DISCIPLINE_ICONS: Record<
  * collapse). Controlled: `settings` + `onSettingsChange` are owned by the page
  * so both the sticky "Générer" button (mobile) and this panel share one state.
  * The Generate button carries an explicit label + helper sub-text.
+ *
+ * On desktop the panel is capped to the viewport and split into a scrolling
+ * body + a pinned action footer: it lives in a `sticky` column, so a panel
+ * taller than the screen would put its own CTA permanently out of reach
+ * (scrolling the page never brings a stuck element's bottom back).
  */
 export function WeekGeneratorPanel({
   settings,
@@ -83,130 +88,143 @@ export function WeekGeneratorPanel({
   return (
     <div
       className={cn(
-        bare ? "space-y-3" : "rounded-xl border bg-card p-4 space-y-5",
+        bare
+          ? "space-y-3"
+          // 11rem ≈ the page header sitting above the rail plus a bottom margin:
+          // the cap has to hold at the rail's *initial* position, not only once
+          // it sticks, otherwise the footer starts below the fold.
+          : "flex flex-col overflow-hidden rounded-xl border bg-card md:max-h-[calc(100dvh-11rem)]",
       )}
     >
       {!bare && (
-        <span className="block text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+        <span className="block border-b px-4 py-3 text-sm font-semibold text-muted-foreground uppercase tracking-wide">
           {t("weekly.generate.title")}
         </span>
       )}
 
-      {/* Presets fill in every setting below in one click. They are shortcuts,
-          not a selectable state — hence the label and the flat, unselected
-          styling, so they never read as "the current phase of the week". */}
-      <Field label={t("weekly.presets.label")}>
-        <div className="flex flex-wrap gap-1.5">
-          {WEEK_PRESETS.map((preset) => (
-            <button
-              key={preset.id}
-              type="button"
-              onClick={() => onSettingsChange(preset.settings)}
-              className="rounded-full border border-dashed border-border px-3 py-1 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+      <div
+        className={cn(
+          bare ? "space-y-3" : "min-h-0 flex-1 overflow-y-auto px-4 py-4 space-y-5",
+        )}
+      >
+        {/* Presets fill in every setting below in one click. They are shortcuts,
+            not a selectable state — hence the label and the flat, unselected
+            styling, so they never read as "the current phase of the week". */}
+        <Field label={t("weekly.presets.label")}>
+          <div className="flex flex-wrap gap-1.5">
+            {WEEK_PRESETS.map((preset) => (
+              <button
+                key={preset.id}
+                type="button"
+                onClick={() => onSettingsChange(preset.settings)}
+                className="rounded-full border border-dashed border-border px-3 py-1 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+              >
+                {t(`weekly.presets.options.${preset.id}`)}
+              </button>
+            ))}
+          </div>
+        </Field>
+
+        <Field label={t("weekly.settings.sessions")}>
+          <Segmented
+            value={String(settings.sessions)}
+            onChange={(v) => set({ sessions: Number(v) as SessionCount })}
+            options={SESSION_OPTIONS.map((n) => ({ value: String(n), label: String(n) }))}
+          />
+        </Field>
+
+        <div className="space-y-2">
+          <div className="flex items-baseline justify-between">
+            <label className="text-sm font-medium">{t("weekly.settings.volume")}</label>
+            <span className="text-sm tabular-nums text-muted-foreground">
+              {settings.targetVolumeH} h
+            </span>
+          </div>
+          <Slider
+            min={VOLUME_MIN}
+            max={VOLUME_MAX}
+            step={1}
+            value={[settings.targetVolumeH]}
+            onValueChange={([v]) => set({ targetVolumeH: v })}
+          />
+        </div>
+
+        <Field label={t("weekly.settings.quality")}>
+          <Segmented
+            value={settings.quality}
+            onChange={(v) => set({ quality: v as QualityType })}
+            className="grid-cols-2"
+            options={QUALITY_OPTIONS.map((q) => ({
+              value: q,
+              label: t(`weekly.settings.qualityOptions.${q}`),
+            }))}
+          />
+        </Field>
+
+        <Field label={t("weekly.settings.longRunDay")}>
+          {/* One letter per day: a 7-cell row is far too narrow for "Lun". The
+              full day name lives in the tooltip and the accessible name. */}
+          <Segmented
+            value={String(settings.longRunDay)}
+            onChange={(v) => set({ longRunDay: Number(v) as DayIndex })}
+            className="grid-cols-7"
+            options={DAYS.map((d) => ({
+              value: String(d),
+              label: t(`weekly.daysShort.${d}`).charAt(0),
+              title: t(`weekly.days.${d}`),
+            }))}
+          />
+        </Field>
+
+        {/* Disciplines and levels are both multi-select filters where "none
+            picked" means "all" — so they share one chip treatment, with an
+            explicit "All" state instead of a silently empty selection. */}
+        <Field label={t("weekly.settings.disciplines")}>
+          <div className="grid grid-cols-2 gap-1.5">
+            <Chip
+              className="col-span-2"
+              active={settings.disciplines.length === 0}
+              onClick={() => set({ disciplines: [] })}
             >
-              {t(`weekly.presets.options.${preset.id}`)}
-            </button>
-          ))}
-        </div>
-      </Field>
+              {t("weekly.settings.allDisciplines")}
+            </Chip>
+            {DISCIPLINES.map((d) => {
+              const Icon = DISCIPLINE_ICONS[d];
+              return (
+                <Chip
+                  key={d}
+                  active={settings.disciplines.includes(d)}
+                  onClick={() => toggle("disciplines", d)}
+                >
+                  <Icon className="size-3.5 shrink-0" />
+                  <span className="truncate">{t(`activityToggle.${d}`)}</span>
+                </Chip>
+              );
+            })}
+          </div>
+        </Field>
 
-      <Field label={t("weekly.settings.sessions")}>
-        <Segmented
-          value={String(settings.sessions)}
-          onChange={(v) => set({ sessions: Number(v) as SessionCount })}
-          options={SESSION_OPTIONS.map((n) => ({ value: String(n), label: String(n) }))}
-        />
-      </Field>
-
-      <div className="space-y-2">
-        <div className="flex items-baseline justify-between">
-          <label className="text-sm font-medium">{t("weekly.settings.volume")}</label>
-          <span className="text-sm tabular-nums text-muted-foreground">
-            {settings.targetVolumeH} h
-          </span>
-        </div>
-        <Slider
-          min={VOLUME_MIN}
-          max={VOLUME_MAX}
-          step={1}
-          value={[settings.targetVolumeH]}
-          onValueChange={([v]) => set({ targetVolumeH: v })}
-        />
+        <Field label={t("weekly.settings.levels")}>
+          <div className="grid grid-cols-2 gap-1.5">
+            <Chip
+              className="col-span-2"
+              active={settings.levels.length === 0}
+              onClick={() => set({ levels: [] })}
+            >
+              {t("weekly.settings.allLevels")}
+            </Chip>
+            {LEVELS.map((l) => (
+              <Chip key={l} active={settings.levels.includes(l)} onClick={() => toggle("levels", l)}>
+                <span className="truncate">{pick(DIFFICULTY_META[l], "label")}</span>
+              </Chip>
+            ))}
+          </div>
+        </Field>
       </div>
 
-      <Field label={t("weekly.settings.quality")}>
-        <Segmented
-          value={settings.quality}
-          onChange={(v) => set({ quality: v as QualityType })}
-          className="grid-cols-2"
-          options={QUALITY_OPTIONS.map((q) => ({
-            value: q,
-            label: t(`weekly.settings.qualityOptions.${q}`),
-          }))}
-        />
-      </Field>
-
-      <Field label={t("weekly.settings.longRunDay")}>
-        {/* One letter per day: a 7-cell row is far too narrow for "Lun". The
-            full day name lives in the tooltip and the accessible name. */}
-        <Segmented
-          value={String(settings.longRunDay)}
-          onChange={(v) => set({ longRunDay: Number(v) as DayIndex })}
-          className="grid-cols-7"
-          options={DAYS.map((d) => ({
-            value: String(d),
-            label: t(`weekly.daysShort.${d}`).charAt(0),
-            title: t(`weekly.days.${d}`),
-          }))}
-        />
-      </Field>
-
-      {/* Disciplines and levels are both multi-select filters where "none
-          picked" means "all" — so they share one chip treatment, with an
-          explicit "All" state instead of a silently empty selection. */}
-      <Field label={t("weekly.settings.disciplines")}>
-        <div className="grid grid-cols-2 gap-1.5">
-          <Chip
-            className="col-span-2"
-            active={settings.disciplines.length === 0}
-            onClick={() => set({ disciplines: [] })}
-          >
-            {t("weekly.settings.allDisciplines")}
-          </Chip>
-          {DISCIPLINES.map((d) => {
-            const Icon = DISCIPLINE_ICONS[d];
-            return (
-              <Chip
-                key={d}
-                active={settings.disciplines.includes(d)}
-                onClick={() => toggle("disciplines", d)}
-              >
-                <Icon className="size-3.5 shrink-0" />
-                <span className="truncate">{t(`activityToggle.${d}`)}</span>
-              </Chip>
-            );
-          })}
-        </div>
-      </Field>
-
-      <Field label={t("weekly.settings.levels")}>
-        <div className="grid grid-cols-2 gap-1.5">
-          <Chip
-            className="col-span-2"
-            active={settings.levels.length === 0}
-            onClick={() => set({ levels: [] })}
-          >
-            {t("weekly.settings.allLevels")}
-          </Chip>
-          {LEVELS.map((l) => (
-            <Chip key={l} active={settings.levels.includes(l)} onClick={() => toggle("levels", l)}>
-              <span className="truncate">{pick(DIFFICULTY_META[l], "label")}</span>
-            </Chip>
-          ))}
-        </div>
-      </Field>
-
-      <div className="space-y-1.5">
+      {/* Pinned below the scrolling body: the primary action stays on screen
+          whatever the settings above are worth reading. */}
+      <div className={cn("space-y-1.5", !bare && "border-t px-4 py-3")}>
         <Button onClick={() => onGenerate(settings)} disabled={busy} className="w-full">
           {busy ? (
             <Loader2 className="size-4 animate-spin" />
