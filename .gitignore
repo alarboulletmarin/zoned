@@ -54,3 +54,8 @@ public/social/
 dist/social/
 lighthouse-reports/
 .lighthouseci/
+
+# One-off QA harnesses: they generate plans or weeks and print measurements.
+# Useful while auditing, not part of the build. Ignoring scripts/ wholesale
+# would also swallow the build scripts (sitemap, prerender, i18n check).
+scripts/qa-*.ts

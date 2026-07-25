@@ -1372,6 +1372,200 @@
       },
       "weeklyFrequencyMax": 4,
       "minimumRecoveryDays": 1
+    },
+    {
+      "id": "REC-017",
+      "name": "Décrassage entre deux séances de qualité",
+      "nameEn": "Recovery Run Between Quality Sessions",
+      "description": "Footing de 40 à 50 minutes en zone 1 stricte, placé au lendemain d'une séance dure. Assez long pour relancer la circulation et tenir le volume, assez lent pour que la séance de qualité du surlendemain ne soit pas entamée.",
+      "descriptionEn": "40 to 50 minute strict zone 1 run, placed the day after a hard session. Long enough to restore circulation and hold volume, slow enough to leave the next quality session untouched.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 40,
+        "max": 50
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "5min de marche active puis mise en course",
+          "descriptionEn": "5min brisk walk then easing into a jog",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "35-40min en zone 1, sans jamais consulter l'allure. Le seul repère valable est la capacité à tenir une conversation complète",
+          "descriptionEn": "35-40min in zone 1, never checking pace. The only valid gauge is holding a full conversation",
+          "durationMin": 37,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "5min de marche et mobilité des hanches",
+          "descriptionEn": "5min walking and hip mobility",
+          "durationMin": 5,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "coachingTips": [
+        "Un décrassage trop rapide est la première cause de stagnation chez le coureur à fort volume",
+        "Terrain souple de préférence : chemin, herbe, piste en terre",
+        "Si la fatigue est franche, la marche rapide reste préférable à un footing forcé",
+        "Elle compte dans le volume hebdomadaire au même titre qu'un footing classique"
+      ],
+      "coachingTipsEn": [
+        "A recovery run run too fast is the leading cause of stagnation in high-volume runners",
+        "Prefer soft ground: trail, grass, cinder track",
+        "If fatigue is clear, brisk walking beats a forced jog",
+        "It counts toward weekly volume like any other easy run"
+      ],
+      "commonMistakes": [
+        "La courir à l'allure du footing habituel, ce qui en fait une troisième séance de charge",
+        "Ajouter des accélérations sous prétexte que les jambes se dénouent",
+        "La supprimer pour se reposer complètement, ce qui prive du bénéfice circulatoire"
+      ],
+      "commonMistakesEn": [
+        "Running it at your usual easy pace, which makes it a third load session",
+        "Adding pickups because the legs are loosening up",
+        "Dropping it for full rest, which forgoes the circulatory benefit"
+      ],
+      "variationIds": [
+        "REC-001",
+        "REC-005",
+        "REC-018"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build",
+          "peak",
+          "taper"
+        ],
+        "weekPositions": [
+          "early",
+          "mid",
+          "late"
+        ],
+        "relativeLoad": "light",
+        "tags": [
+          "recovery",
+          "zone-1",
+          "between-quality",
+          "circulation"
+        ],
+        "priorityScore": 74
+      },
+      "weeklyFrequencyMax": 3,
+      "minimumRecoveryDays": 0
+    },
+    {
+      "id": "REC-018",
+      "name": "Récupération longue elite",
+      "nameEn": "Elite Long Recovery Run",
+      "description": "Footing de 55 à 70 minutes en zone 1, sur terrain souple. Chez les coureurs à très fort volume, la récupération ne se fait pas en s'arrêtant mais en courant très lentement pendant une durée que l'organisme ne perçoit plus comme une charge.",
+      "descriptionEn": "55 to 70 minute zone 1 run on soft ground. For very high-volume runners, recovery does not come from stopping but from running very slowly for a duration the body no longer registers as load.",
+      "category": "recovery",
+      "sessionType": "recovery",
+      "targetSystem": "aerobic_base",
+      "difficulty": "elite",
+      "typicalDuration": {
+        "min": 55,
+        "max": 70
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "10min de mise en route très lente",
+          "descriptionEn": "10min very slow easing in",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "40-50min en zone 1, allure libre. Chez un coureur entraîné, cette allure est souvent 90 à 120s/km plus lente que l'allure marathon",
+          "descriptionEn": "40-50min in zone 1 at free pace. For a trained runner this is often 90 to 120s/km slower than marathon pace",
+          "durationMin": 45,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "8min de marche et étirements dynamiques légers",
+          "descriptionEn": "8min walking and light dynamic stretching",
+          "durationMin": 8,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "coachingTips": [
+        "L'écart d'allure avec le footing normal doit être visible : sinon ce n'est pas une récupération",
+        "Idéale en séance du matin d'une journée double, avant une qualité l'après-midi",
+        "Le terrain souple prime sur le chrono, quitte à allonger le trajet",
+        "Un capteur de fréquence cardiaque aide à ne pas dériver, l'allure seule trompe"
+      ],
+      "coachingTipsEn": [
+        "The pace gap with a normal easy run must be visible, otherwise it is not recovery",
+        "Ideal as the morning leg of a double day, ahead of afternoon quality work",
+        "Soft ground matters more than the clock, even if the route gets longer",
+        "A heart rate monitor helps avoid drift; pace alone is misleading"
+      ],
+      "commonMistakes": [
+        "Se caler sur l'allure d'un partenaire d'entraînement plus frais",
+        "La programmer sur bitume pour gagner du temps",
+        "En faire une séance de volume déguisée en allongeant la durée"
+      ],
+      "commonMistakesEn": [
+        "Matching the pace of a fresher training partner",
+        "Running it on tarmac to save time",
+        "Turning it into disguised volume work by stretching the duration"
+      ],
+      "variationIds": [
+        "REC-009",
+        "REC-017",
+        "REC-016"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build",
+          "peak",
+          "taper"
+        ],
+        "weekPositions": [
+          "early",
+          "mid",
+          "late"
+        ],
+        "relativeLoad": "light",
+        "tags": [
+          "recovery",
+          "zone-1",
+          "elite",
+          "double-day"
+        ],
+        "priorityScore": 72
+      },
+      "weeklyFrequencyMax": 3,
+      "minimumRecoveryDays": 0
     }
   ]
 }

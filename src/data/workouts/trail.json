@@ -758,6 +758,197 @@
       },
       "weeklyFrequencyMax": 1,
       "minimumRecoveryDays": 1
+    },
+    {
+      "id": "TRL-011",
+      "name": "Découverte du sentier",
+      "nameEn": "First Steps on Trail",
+      "description": "Sortie de 45 à 60 minutes sur sentier roulant, sans recherche de performance. Objectif : apprendre à lever les pieds, à regarder trois mètres devant soi et à accepter que l'allure ne veuille plus rien dire dès qu'on quitte le bitume.",
+      "descriptionEn": "45 to 60 minute outing on easy trail with no performance intent. The goal: learn to pick up your feet, look three metres ahead, and accept that pace stops meaning anything once you leave the tarmac.",
+      "category": "trail",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": {
+        "min": 45,
+        "max": 60
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "10min sur chemin large et roulant, foulée courte",
+          "descriptionEn": "10min on wide, rolling path with a short stride",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "30-40min sur sentier, en marchant les montées raides sans culpabiliser. Regard porté 3 à 4 mètres devant, foulée raccourcie, bras utilisés pour l'équilibre",
+          "descriptionEn": "30-40min on trail, walking the steep climbs without guilt. Eyes 3 to 4 metres ahead, shortened stride, arms used for balance",
+          "durationMin": 35,
+          "zone": "Z2",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "8min sur terrain facile pour relâcher les chevilles",
+          "descriptionEn": "8min on easy ground to release the ankles",
+          "durationMin": 8,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "coachingTips": [
+        "Marcher en côte n'est pas un échec en trail, c'est la technique de référence dès que la pente dépasse 15 %",
+        "La fréquence cardiaque monte plus vite qu'en plaine pour une allure bien plus lente : c'est normal",
+        "Choisissez un sentier balisé et connu pour vos premières sorties",
+        "Des chaussures à crampons changent tout dès que le terrain devient humide"
+      ],
+      "coachingTipsEn": [
+        "Walking the climbs is not failure in trail running, it is the reference technique above 15% gradient",
+        "Heart rate climbs faster than on the road for a much slower pace, and that is normal",
+        "Pick a marked, familiar trail for your first outings",
+        "Lugged shoes change everything as soon as the ground turns wet"
+      ],
+      "commonMistakes": [
+        "Vouloir tenir son allure route et se retrouver à bout de souffle dans la première montée",
+        "Regarder ses pieds au lieu du sentier trois mètres devant",
+        "Partir seul et sans téléphone sur un parcours inconnu"
+      ],
+      "commonMistakesEn": [
+        "Trying to hold road pace and blowing up on the first climb",
+        "Watching your feet instead of the trail three metres ahead",
+        "Heading out alone with no phone on an unfamiliar route"
+      ],
+      "variationIds": [
+        "TRL-012",
+        "TRL-007",
+        "END-004"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "early",
+          "mid"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "trail",
+          "nature",
+          "beginner",
+          "technique",
+          "short-trail"
+        ],
+        "priorityScore": 72
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 0
+    },
+    {
+      "id": "TRL-012",
+      "name": "Rando-course en nature",
+      "nameEn": "Hike-Run in Nature",
+      "description": "Sortie de 75 à 95 minutes alternant course sur les portions roulantes et marche soutenue dans les montées. C'est le format qui construit l'endurance du traileur débutant : le temps passé debout compte davantage que la distance parcourue.",
+      "descriptionEn": "75 to 95 minute outing alternating running on rolling sections and strong hiking on the climbs. This is the format that builds a beginner trail runner's endurance: time on feet counts for more than distance covered.",
+      "category": "trail",
+      "sessionType": "long_run",
+      "targetSystem": "aerobic_base",
+      "difficulty": "beginner",
+      "typicalDuration": {
+        "min": 75,
+        "max": 95
+      },
+      "environment": {
+        "requiresHills": true,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "15min sur chemin roulant, mise en route progressive",
+          "descriptionEn": "15min on rolling path, progressive start",
+          "durationMin": 15,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "50-65min en alternance libre : course sur le plat et les descentes douces, marche active et soutenue dès que la pente se redresse. Ne cherchez pas la régularité d'allure, cherchez la régularité d'effort",
+          "descriptionEn": "50-65min freely alternating: run the flats and gentle descents, hike strongly as soon as the gradient steepens. Do not chase even pace, chase even effort",
+          "durationMin": 57,
+          "zone": "Z2",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "10min sur terrain facile, foulée relâchée",
+          "descriptionEn": "10min on easy ground with a relaxed stride",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "coachingTips": [
+        "La marche soutenue en côte sollicite l'aérobie autant qu'un footing : ce n'est pas du repos",
+        "Emportez eau et un en-cas au-delà de 75 minutes, même en sortie facile",
+        "Cette séance remplace la sortie longue route pendant une préparation trail",
+        "Notez le dénivelé plutôt que la distance : c'est lui qui mesure la charge en trail"
+      ],
+      "coachingTipsEn": [
+        "Strong hiking on climbs taxes the aerobic system as much as jogging; it is not rest",
+        "Carry water and a snack beyond 75 minutes, even on an easy outing",
+        "This session replaces the road long run during a trail build-up",
+        "Log elevation rather than distance: elevation is what measures trail load"
+      ],
+      "commonMistakes": [
+        "Courir les montées coûte que coûte et finir la sortie vidé",
+        "Négliger la descente, qui est pourtant la première source de courbatures en trail",
+        "Choisir un parcours au dénivelé trop marqué pour une première sortie longue"
+      ],
+      "commonMistakesEn": [
+        "Running every climb at all costs and finishing the outing empty",
+        "Neglecting the descents, which are the leading source of trail soreness",
+        "Picking a route with too much elevation for a first long outing"
+      ],
+      "variationIds": [
+        "TRL-011",
+        "TRL-007",
+        "LR-016"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build"
+        ],
+        "weekPositions": [
+          "mid",
+          "late"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "trail",
+          "nature",
+          "beginner",
+          "hike-run",
+          "time-on-feet",
+          "long-trail"
+        ],
+        "priorityScore": 74
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 1
     }
   ]
 }

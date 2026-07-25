@@ -1546,6 +1546,499 @@
       },
       "weeklyFrequencyMax": 3,
       "minimumRecoveryDays": 0
+    },
+    {
+      "id": "END-018",
+      "name": "Endurance de volume",
+      "nameEn": "Volume Endurance Run",
+      "description": "Footing continu de 1h30 à 1h50 en zone 2 basse, sur terrain roulant. C'est la séance qui construit le kilométrage hebdomadaire des coureurs à fort volume : ni tempo ni sortie longue, simplement du temps passé en aérobie pure entre deux séances de qualité.",
+      "descriptionEn": "Continuous 90 to 110 minute run in low zone 2 on rolling terrain. This is the session that builds weekly mileage for high-volume runners: neither tempo nor long run, just time spent in pure aerobic work between two quality sessions.",
+      "category": "endurance",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 90,
+        "max": 110
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "15min de mise en route très progressive, sans regarder l'allure",
+          "descriptionEn": "15min very progressive start, without checking pace",
+          "durationMin": 15,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "70-80min en zone 2 basse, allure conversationnelle stricte. L'allure doit rester identique à la fin qu'au début : si elle dérive vers le haut, c'est trop rapide",
+          "descriptionEn": "70-80min in low zone 2, strictly conversational. Pace must be the same at the end as at the start: if it drifts upward, you started too fast",
+          "durationMin": 75,
+          "zone": "Z2",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "10min en relâchement, foulée courte",
+          "descriptionEn": "10min relaxed, short stride",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "coachingTips": [
+        "Cette séance ne se juge pas à l'allure mais à la fraîcheur du lendemain : vous devez pouvoir enchaîner une séance de qualité",
+        "Emportez de quoi boire au-delà de 75 minutes, même par temps frais",
+        "Le terrain vallonné est un plus tant que l'effort reste régulier en montée",
+        "Deux séances de ce type par semaine suffisent à ancrer un volume de 90 à 120 km"
+      ],
+      "coachingTipsEn": [
+        "Judge this session by how fresh you feel the next day, not by pace: you should be able to follow it with a quality session",
+        "Carry fluids beyond 75 minutes, even in cool weather",
+        "Rolling terrain is a bonus as long as effort stays even on the climbs",
+        "Two of these per week are enough to anchor a 90 to 120 km volume"
+      ],
+      "commonMistakes": [
+        "Dériver vers l'allure marathon parce que les jambes sont bonnes : la séance perd alors sa raison d'être",
+        "La placer la veille d'une séance de seuil ou de VMA",
+        "Sauter le ravitaillement en pensant qu'un footing ne le nécessite pas"
+      ],
+      "commonMistakesEn": [
+        "Drifting toward marathon pace because the legs feel good, which defeats the purpose",
+        "Scheduling it the day before a threshold or VO2max session",
+        "Skipping fuelling on the assumption that an easy run does not need it"
+      ],
+      "variationIds": [
+        "END-011",
+        "END-019",
+        "REC-009"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "early",
+          "mid",
+          "late"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "aerobic-base",
+          "volume",
+          "zone-2",
+          "high-mileage"
+        ],
+        "priorityScore": 78
+      },
+      "weeklyFrequencyMax": 3,
+      "minimumRecoveryDays": 0
+    },
+    {
+      "id": "END-019",
+      "name": "Endurance de volume elite",
+      "nameEn": "Elite Volume Endurance Run",
+      "description": "Footing de 1h50 à 2h10 en zone 2, terrain roulant, sans intention autre que le temps de contact avec le sol. Réservé aux coureurs dont le volume dépasse 120 km hebdomadaires et dont l'économie de course supporte deux heures sans dégradation technique.",
+      "descriptionEn": "110 to 130 minute zone 2 run on rolling terrain, with no purpose beyond time on feet. For runners above 120 km per week whose running economy holds two hours without technical breakdown.",
+      "category": "endurance",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "elite",
+      "typicalDuration": {
+        "min": 110,
+        "max": 130
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "20min de mise en route, allure libre en zone 1",
+          "descriptionEn": "20min easing in, free zone 1 pace",
+          "durationMin": 20,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "85-95min en zone 2, allure stable. Surveillez la fréquence de foulée plutôt que l'allure : une cadence qui chute de plus de 3 pas par minute signale la fatigue technique",
+          "descriptionEn": "85-95min in zone 2 at a steady pace. Watch cadence rather than pace: a drop of more than 3 steps per minute signals technical fatigue",
+          "durationMin": 90,
+          "zone": "Z2",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "15min en décontraction complète",
+          "descriptionEn": "15min fully relaxed",
+          "durationMin": 15,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "coachingTips": [
+        "Deux heures de course demandent 30 à 60g de glucides par heure au-delà de la première heure",
+        "Alternez les surfaces d'une semaine sur l'autre pour répartir la contrainte mécanique",
+        "Si la cadence chute nettement, écourtez : le bénéfice aérobie ne compense pas une foulée dégradée",
+        "Cette séance remplace avantageusement une double séance quand le planning ne le permet pas"
+      ],
+      "coachingTipsEn": [
+        "Two hours of running calls for 30 to 60g of carbohydrate per hour beyond the first hour",
+        "Rotate surfaces week to week to spread the mechanical load",
+        "If cadence drops clearly, cut it short: the aerobic gain does not offset a degraded stride",
+        "This session is a sound substitute for a double day when the schedule does not allow one"
+      ],
+      "commonMistakes": [
+        "L'aborder sans base de volume : deux heures faciles se construisent, elles ne s'improvisent pas",
+        "Courir systématiquement sur bitume et accumuler la contrainte d'impact",
+        "Confondre cette séance avec une sortie longue : il n'y a ni bloc allure ni objectif de distance"
+      ],
+      "commonMistakesEn": [
+        "Attempting it without a volume base: two easy hours are built, not improvised",
+        "Always running on tarmac and stacking impact load",
+        "Mistaking it for a long run: there is no pace block and no distance target"
+      ],
+      "variationIds": [
+        "END-018",
+        "REC-009",
+        "SL-003"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "early",
+          "mid",
+          "late"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "aerobic-base",
+          "volume",
+          "zone-2",
+          "high-mileage",
+          "elite"
+        ],
+        "priorityScore": 74
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 0
+    },
+    {
+      "id": "END-020",
+      "name": "Endurance à allure descendante",
+      "nameEn": "Negative Split Endurance Run",
+      "description": "Footing de 1h10 à 1h25 coupé en deux moitiés : la première en zone 1 haute, la seconde en zone 2 haute, sans jamais franchir le seuil. Apprend à finir plus vite qu'on n'a commencé, réflexe que la course rend décisif.",
+      "descriptionEn": "70 to 85 minute run split in two halves: the first in high zone 1, the second in high zone 2, never crossing threshold. Teaches finishing faster than you started, a reflex that racing makes decisive.",
+      "category": "endurance",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_threshold",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 70,
+        "max": 85
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "10min très lent, le point de départ doit paraître trop facile",
+          "descriptionEn": "10min very slow; the starting pace should feel too easy",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "30min en zone 1 haute, allure contenue",
+          "descriptionEn": "30min in high zone 1, held back",
+          "durationMin": 30,
+          "zone": "Z1",
+          "intensityType": "E"
+        },
+        {
+          "description": "30min en zone 2 haute, en accélérant de 10 à 15s/km sans jamais atteindre l'allure seuil",
+          "descriptionEn": "30min in high zone 2, picking up 10 to 15s/km without ever reaching threshold pace",
+          "durationMin": 30,
+          "zone": "Z2",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "10min en relâchement",
+          "descriptionEn": "10min relaxed",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "coachingTips": [
+        "L'écart entre les deux moitiés doit rester modeste : 10 à 15s/km, pas 40",
+        "Le repère est la respiration, qui doit rester nasale possible jusqu'au bout",
+        "Utile en fin de phase de base pour préparer le corps aux séances de seuil à venir",
+        "Se place en milieu de semaine, entre deux séances de qualité"
+      ],
+      "coachingTipsEn": [
+        "Keep the gap between halves modest: 10 to 15s/km, not 40",
+        "Breathing is the gauge; nasal breathing should remain possible throughout",
+        "Useful late in the base phase to prepare for the threshold work ahead",
+        "Place it midweek, between two quality sessions"
+      ],
+      "commonMistakes": [
+        "Transformer la seconde moitié en tempo et perdre le caractère aérobie de la séance",
+        "Partir trop vite et se retrouver incapable d'accélérer, ce qui inverse l'intention",
+        "La programmer la veille d'une séance de seuil"
+      ],
+      "commonMistakesEn": [
+        "Turning the second half into a tempo and losing the aerobic character",
+        "Starting too fast and being unable to pick up, which reverses the intent",
+        "Scheduling it the day before a threshold session"
+      ],
+      "variationIds": [
+        "END-002",
+        "END-018",
+        "SL-001"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "mid",
+          "late"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "negative-split",
+          "aerobic-base",
+          "progression",
+          "pacing"
+        ],
+        "priorityScore": 72
+      },
+      "weeklyFrequencyMax": 1,
+      "minimumRecoveryDays": 0
+    },
+    {
+      "id": "END-021",
+      "name": "Endurance de soutien en phase spécifique",
+      "nameEn": "Support Run for the Specific Phase",
+      "description": "Footing de 55 à 70 minutes en zone 2, conçu pour tenir le volume pendant les semaines où les séances de qualité prennent le devant. Assez long pour compter, assez facile pour ne rien coûter à la séance suivante.",
+      "descriptionEn": "55 to 70 minute zone 2 run designed to hold volume during the weeks when quality sessions take the lead. Long enough to count, easy enough to cost the next session nothing.",
+      "category": "endurance",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "intermediate",
+      "typicalDuration": {
+        "min": 55,
+        "max": 70
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": false
+      },
+      "warmupTemplate": [
+        {
+          "description": "10min de mise en route",
+          "descriptionEn": "10min easing in",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "40-50min en zone 2, allure stable et sans ambition. La consigne est de finir en ayant l'impression de pouvoir repartir",
+          "descriptionEn": "40-50min in zone 2, steady and unambitious. The brief is to finish feeling you could go again",
+          "durationMin": 45,
+          "zone": "Z2",
+          "intensityType": "E"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "8min en décontraction",
+          "descriptionEn": "8min relaxed",
+          "durationMin": 8,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "coachingTips": [
+        "En phase spécifique, ce sont ces footings qui portent le volume : les séances de qualité, elles, raccourcissent",
+        "Si les jambes sont lourdes, réduisez la durée plutôt que l'intensité, déjà minimale",
+        "Un parcours connu et sans difficulté évite la tentation d'accélérer"
+      ],
+      "coachingTipsEn": [
+        "In the specific phase these runs carry the volume; the quality sessions get shorter",
+        "If the legs are heavy, cut the duration rather than the intensity, which is already minimal",
+        "A familiar, undemanding route removes the temptation to push"
+      ],
+      "commonMistakes": [
+        "L'accélérer parce qu'elle paraît trop facile, et compromettre la séance de qualité suivante",
+        "La supprimer en semaine chargée, ce qui fait chuter le volume au pire moment",
+        "La transformer en sortie longue improvisée"
+      ],
+      "commonMistakesEn": [
+        "Speeding it up because it feels too easy, compromising the next quality session",
+        "Dropping it on a busy week, which sinks volume at the worst moment",
+        "Turning it into an improvised long run"
+      ],
+      "variationIds": [
+        "END-001",
+        "END-014",
+        "END-018"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "build",
+          "peak",
+          "taper"
+        ],
+        "weekPositions": [
+          "early",
+          "mid",
+          "late"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "aerobic-base",
+          "support",
+          "zone-2",
+          "specific-phase"
+        ],
+        "priorityScore": 76
+      },
+      "weeklyFrequencyMax": 3,
+      "minimumRecoveryDays": 0
+    },
+    {
+      "id": "END-022",
+      "name": "Endurance et lignes droites",
+      "nameEn": "Endurance Run with Strides",
+      "description": "Footing de 60 à 75 minutes en zone 2 terminé par 6 à 8 lignes droites de 20 secondes en accélération progressive. Entretient la vitesse de pied pendant les blocs de volume, sans créer de fatigue mesurable.",
+      "descriptionEn": "60 to 75 minute zone 2 run finished with 6 to 8 strides of 20 seconds building progressively. Maintains leg speed through volume blocks without creating measurable fatigue.",
+      "category": "endurance",
+      "sessionType": "endurance",
+      "targetSystem": "aerobic_base",
+      "difficulty": "advanced",
+      "typicalDuration": {
+        "min": 60,
+        "max": 75
+      },
+      "environment": {
+        "requiresHills": false,
+        "requiresTrack": false,
+        "prefersFlat": true
+      },
+      "warmupTemplate": [
+        {
+          "description": "10min de mise en route progressive",
+          "descriptionEn": "10min progressive start",
+          "durationMin": 10,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "mainSetTemplate": [
+        {
+          "description": "45min en zone 2, allure conversationnelle",
+          "descriptionEn": "45min in zone 2, conversational",
+          "durationMin": 45,
+          "zone": "Z2",
+          "intensityType": "E"
+        },
+        {
+          "description": "6-8 lignes droites de 20s en accélération progressive jusqu'à l'allure 5000m, récupération 60s en marchant ou trottinant",
+          "descriptionEn": "6-8 strides of 20s building to 5K pace, 60s walking or jogging recovery",
+          "durationMin": 1,
+          "repetitions": 7,
+          "recovery": "60s",
+          "zone": "Z5",
+          "intensityType": "R"
+        }
+      ],
+      "cooldownTemplate": [
+        {
+          "description": "8min en relâchement complet",
+          "descriptionEn": "8min fully relaxed",
+          "durationMin": 8,
+          "zone": "Z1",
+          "intensityType": "E"
+        }
+      ],
+      "coachingTips": [
+        "Une ligne droite n'est pas un sprint : on accélère progressivement et on relâche avant la fin",
+        "L'objectif est technique, pas énergétique. Si vous êtes essoufflé, elles sont trop rapides",
+        "À placer en phase de base et de développement, deux fois par semaine sans risque",
+        "Sur herbe ou piste plutôt que sur bitume pour préserver les tendons"
+      ],
+      "coachingTipsEn": [
+        "A stride is not a sprint: build gradually and relax before the end",
+        "The aim is technical, not energetic. If you are out of breath, they are too fast",
+        "Fits base and build phases, twice a week without risk",
+        "Prefer grass or track over tarmac to spare the tendons"
+      ],
+      "commonMistakes": [
+        "Les courir à fond et en faire une séance de vitesse déguisée",
+        "Écourter la récupération entre les lignes droites",
+        "Les placer en début de footing sur des jambes froides"
+      ],
+      "commonMistakesEn": [
+        "Running them flat out, turning them into a disguised speed session",
+        "Cutting the recovery between strides short",
+        "Placing them at the start of the run on cold legs"
+      ],
+      "variationIds": [
+        "END-005",
+        "END-018",
+        "END-001"
+      ],
+      "selectionCriteria": {
+        "phases": [
+          "base",
+          "build",
+          "peak"
+        ],
+        "weekPositions": [
+          "early",
+          "mid"
+        ],
+        "relativeLoad": "moderate",
+        "tags": [
+          "strides",
+          "leg-speed",
+          "aerobic-base",
+          "neuromuscular"
+        ],
+        "priorityScore": 75
+      },
+      "weeklyFrequencyMax": 2,
+      "minimumRecoveryDays": 0
     }
   ]
 }
