@@ -2,6 +2,9 @@ import type { RaceDistance, PlanWeek, PlanSession } from "@/types/plan";
 import type { Difficulty, WorkoutTemplate } from "@/types";
 import { RACE_WEEK_VOLUME_PCT, OPENER_DAYS_BEFORE_RACE } from "./constants";
 
+/** Floor for race-week jogs — shorter than this is not a run, it's a warm-up */
+const RACE_WEEK_MIN_SESSION_MIN = 25;
+
 function getRaceLabel(raceDistance: RaceDistance): { fr: string; en: string } {
   switch (raceDistance) {
     case "semi": return { fr: "Semi-marathon", en: "Half Marathon" };
@@ -22,6 +25,8 @@ export function generateRaceWeek(
   longRunDay: number, // This becomes race day (0=Mon...6=Sun)
   difficulty: Difficulty,
   allWorkouts: WorkoutTemplate[],
+  /** Average easy pace (min/km) — states the jogs in km like every other week */
+  easyPaceMinKm?: number,
 ): PlanWeek {
   const sessions: PlanSession[] = [];
 
@@ -79,18 +84,34 @@ export function generateRaceWeek(
     });
 
   const maxExtraSessions = Math.max(0, daysPerWeek - 2);
-  for (const day of candidateDays.slice(0, maxExtraSessions)) {
-    const workout = recoveryWorkouts[0];
+  candidateDays.slice(0, maxExtraSessions).forEach((day, i) => {
+    // Rotate through the pool so race week isn't the same jog three days running
+    const workout = recoveryWorkouts[i % Math.max(1, recoveryWorkouts.length)];
     if (workout) {
       sessions.push({
         dayOfWeek: day,
         workoutId: workout.id,
         sessionType: "recovery",
         isKeySession: false,
-        estimatedDurationMin: Math.round(workout.typicalDuration.min * RACE_WEEK_VOLUME_PCT),
+        // Race week is about staying sharp, not about logging volume. Scaling
+        // the template minimum by 35% produced 9-minute sessions.
+        estimatedDurationMin: Math.max(
+          RACE_WEEK_MIN_SESSION_MIN,
+          Math.round(workout.typicalDuration.min * RACE_WEEK_VOLUME_PCT),
+        ),
         notes: "Footing léger - semaine de course",
         notesEn: "Easy jog - race week",
       });
+    }
+  });
+
+  // State the jogs in km so race week reads like every other week.
+  // The race marker itself keeps no distance: it is an event, not training
+  // volume, and counting it would double the week's reported load.
+  if (easyPaceMinKm && easyPaceMinKm > 0) {
+    for (const s of sessions) {
+      if (s.workoutId === "__race_day__") continue;
+      s.targetDistanceKm = Math.round((s.estimatedDurationMin / easyPaceMinKm) * 2) / 2;
     }
   }
 

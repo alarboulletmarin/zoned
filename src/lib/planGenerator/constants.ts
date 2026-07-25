@@ -78,6 +78,8 @@ export const RECOMMENDED_PLAN_WEEKS: Record<RaceDistance, { min: number; max: nu
 export const MAX_WEEKLY_VOLUME_INCREASE = 0.10; // 10% max (classic rule)
 export const RECOVERY_WEEK_VOLUME_PCT = 0.65; // 65% — less aggressive than 60% (Mujika)
 export const MAX_CONSECUTIVE_LOAD_WEEKS = 3; // Recovery after 3 consecutive load weeks
+/** Long run is shortened on recovery weeks, never removed (Pfitzinger) */
+export const RECOVERY_LONG_RUN_PCT = 0.7;
 
 // ── Taper: exponential decay (Mujika & Padilla) ───────────────────
 // volume(week_i) = peak × e^(-rate × week_i)
@@ -167,6 +169,10 @@ export const PHASE_SESSION_TYPES: Record<TrainingPhase, SessionType[]> = {
 //   Build: I-pace focus — VO2max intervals, hills (Daniels Phase III)
 //   Peak: T-pace + race-specific (Daniels Phase IV)
 //   Taper: Race-specific only
+//
+// Kept as the distance-agnostic default. Prefer getKeySessionTypes(), which
+// weights the same phases toward what actually limits performance on the
+// target distance.
 
 export const KEY_SESSION_TYPES: Record<TrainingPhase, SessionType[]> = {
   base: ["fartlek", "hills", "endurance"],
@@ -175,6 +181,68 @@ export const KEY_SESSION_TYPES: Record<TrainingPhase, SessionType[]> = {
   taper: ["race_specific", "tempo"],
   recovery: [],
 };
+
+// ── Key session types per distance profile ─────────────────────────
+// The limiting factor differs by distance, so the same phase should not
+// prescribe the same work for a 5K and a marathon:
+//   short (5K/10K):    VO2max is the primary determinant (Daniels I-pace)
+//   long (semi/mara):  lactate threshold and race-pace work dominate
+//   trail:             hill strength and sustained climbing
+//
+// Ordering matters — the selector takes the first type that yields a match.
+
+export type DistanceProfile = "short" | "long" | "trail";
+
+export const DISTANCE_PROFILE: Record<RaceDistance, DistanceProfile> = {
+  "5K": "short",
+  "10K": "short",
+  semi: "long",
+  marathon: "long",
+  trail_short: "trail",
+  trail: "trail",
+  ultra: "trail",
+};
+
+const KEY_SESSION_TYPES_BY_PROFILE: Record<
+  DistanceProfile,
+  Record<TrainingPhase, SessionType[]>
+> = {
+  short: {
+    base: ["fartlek", "hills", "tempo"],
+    build: ["vo2max", "threshold", "fartlek"],
+    peak: ["vo2max", "race_specific", "threshold"],
+    taper: ["race_specific", "vo2max"],
+    recovery: [],
+  },
+  long: {
+    base: ["tempo", "fartlek", "hills"],
+    build: ["threshold", "tempo", "race_specific"],
+    // A marathon block still needs some VO2max work to lift the ceiling the
+    // threshold sits under (Pfitzinger keeps it in race preparation) — it is
+    // last because race-pace and threshold come first, not absent.
+    peak: ["race_specific", "threshold", "tempo", "vo2max"],
+    taper: ["race_specific", "tempo"],
+    recovery: [],
+  },
+  trail: {
+    base: ["hills", "fartlek", "endurance"],
+    build: ["hills", "threshold", "tempo"],
+    peak: ["race_specific", "hills", "threshold"],
+    taper: ["race_specific", "tempo"],
+    recovery: [],
+  },
+};
+
+/**
+ * Key session types for a phase, weighted by what limits the target distance.
+ */
+export function getKeySessionTypes(
+  phase: TrainingPhase,
+  raceDistance?: RaceDistance,
+): SessionType[] {
+  if (!raceDistance) return KEY_SESSION_TYPES[phase];
+  return KEY_SESSION_TYPES_BY_PROFILE[DISTANCE_PROFILE[raceDistance]][phase];
+}
 
 // ── VMA percentages for race time prediction ───────────────────────
 // Aligned with src/lib/paceCalculator.ts RACE_CONFIGS
@@ -275,8 +343,11 @@ export interface PurposeConfig {
   maxWeeks: number;
   /** Phase distribution override (no taper for non-race plans) */
   phases: { base: number; build: number; peak: number; taper: number };
-  /** Volume multiplier relative to 10K targets */
+  /** Volume multiplier relative to 10K targets, applied to the peak */
   volumeMultiplier: number;
+  /** Volume multiplier applied to the starting point; together with
+   *  volumeMultiplier it sets how far the plan progresses. */
+  startVolumeMultiplier: number;
   /** Max key sessions per week */
   maxKeySessions: number;
   /** Default race distance to use for workout selection (non-race plans still need one) */
@@ -294,7 +365,11 @@ export const PURPOSE_CONFIGS: Record<Exclude<PlanPurpose, "race">, PurposeConfig
     minWeeks: 6,
     maxWeeks: 24,
     phases: { base: 0.55, build: 0.30, peak: 0.15, taper: 0 },
-    volumeMultiplier: 0.90,
+    // startVolumeMultiplier is deliberately lower than volumeMultiplier: the
+    // pair sets how far the plan travels. Applying one value to both ends left
+    // these plans starting at their own peak and progressing nowhere.
+    startVolumeMultiplier: 0.70,
+    volumeMultiplier: 0.95,
     maxKeySessions: 2,
     fallbackDistance: "10K",
     label: "Construction de base",
@@ -307,7 +382,10 @@ export const PURPOSE_CONFIGS: Record<Exclude<PlanPurpose, "race">, PurposeConfig
     minWeeks: 4,
     maxWeeks: 16,
     phases: { base: 0.65, build: 0.25, peak: 0.10, taper: 0 },
-    volumeMultiplier: 0.60,
+    // Start well below the reference table, finish on it: the point of the plan
+    // is the journey back to normal training, not a flat line at 60%.
+    startVolumeMultiplier: 0.35,
+    volumeMultiplier: 1.0,
     maxKeySessions: 1,
     fallbackDistance: "5K",
     label: "Retour de blessure",
@@ -320,7 +398,8 @@ export const PURPOSE_CONFIGS: Record<Exclude<PlanPurpose, "race">, PurposeConfig
     minWeeks: 4,
     maxWeeks: 16,
     phases: { base: 0.70, build: 0.20, peak: 0.10, taper: 0 },
-    volumeMultiplier: 0.50,
+    startVolumeMultiplier: 0.30,
+    volumeMultiplier: 0.75,
     maxKeySessions: 1,
     fallbackDistance: "5K",
     label: "Débutant",

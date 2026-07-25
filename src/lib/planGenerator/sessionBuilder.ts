@@ -49,19 +49,37 @@ export interface SessionBuildContext {
   raceDistance: RaceDistance;
   allWorkouts: WorkoutTemplate[];
   usedWorkoutIds: string[];
+  /** Workouts already placed in the current week — never reuse them */
+  excludeWorkoutIds?: string[];
   paces: TrainingPaces;
   elevationGain?: number;
   targetLongRunKm?: number;   // From longRunProgression
   targetLongRunMin?: number;
   daysPerWeek?: number;
+  /**
+   * Rough duration an easy/recovery session should land on this week.
+   * Lets low-volume weeks pick short templates instead of picking a 90-minute
+   * one and relying on the volume fit to cut it in half afterwards.
+   */
+  targetEasyMin?: number;
 }
 
 // ── Zone mapping ────────────────────────────────────────────────
 
-const ZONE_TO_NUMBER: Record<string, number> = {
-  Z1: 1, Z2: 2, Z3: 3, Z4: 4, Z5: 5, Z6: 6,
-  "Z1-Z2": 2, "Z2-Z3": 3, "Z3-Z4": 4, "Z4-Z5": 5,
-};
+/**
+ * Highest zone referenced by a zone string.
+ *
+ * Zone strings are free-form in the catalogue ("Z4", "Z1-Z2", "Z5+", "Z4→Z5+"),
+ * so a lookup table silently missed the extended forms and fell back to Z2 —
+ * which annotated VO2max sets with easy pace and costed them at easy pace too.
+ * Mirrors parseZoneNumber() in components/visualization/transforms.ts.
+ */
+function parseZoneNumber(zone: string | number | undefined): number | null {
+  if (zone === undefined || zone === null) return null;
+  const matches = String(zone).match(/[1-6]/g);
+  if (!matches) return null;
+  return Math.max(...matches.map(Number));
+}
 
 const INTENSITY_TO_ZONE: Record<DanielsIntensity, number> = {
   E: 2, M: 3, T: 4, I: 5, R: 6,
@@ -93,6 +111,12 @@ export function buildSession(ctx: SessionBuildContext): SessionBuildResult | nul
     ctx.volumePercent,
     ctx.elevationGain,
     ctx.daysPerWeek ?? 5,
+    ctx.excludeWorkoutIds ?? [],
+    ctx.slot.slotType === "long_run"
+      ? ctx.targetLongRunMin
+      : (ctx.slot.slotType === "easy" || ctx.slot.slotType === "recovery")
+        ? ctx.targetEasyMin
+        : undefined,
   );
 
   if (!selection) return null;
@@ -109,38 +133,58 @@ export function buildSession(ctx: SessionBuildContext): SessionBuildResult | nul
   // Step 3: Scale the workout (reps, duration, distance)
   const scaledReps = scaleWorkout(workout, progression);
 
-  // Step 4: Compute pace-aware duration (breakdown for volume scaling)
-  const dur = estimatePaceAwareDuration(workout, ctx.paces, scaledReps);
+  // Step 4: Compute pace-aware duration AND distance (breakdown for volume scaling)
+  const dur = estimatePaceAwareEffort(workout, ctx.paces, scaledReps);
 
   // Apply volume scaling to main set only (warmup/cooldown unchanged)
   const volumeScale = ctx.volumePercent / 100;
   const scaledTotal = Math.round(dur.warmupMin + dur.mainMin * volumeScale + dur.cooldownMin);
+  const scaledKm = dur.warmupKm + dur.mainKm * volumeScale + dur.cooldownKm;
 
   // Step 5: Build pace notes
   const paceNotes = buildPaceNotes(workout, ctx.paces);
 
-  // Step 6: Compute load score (based on full duration, not volume-scaled)
-  const intensity = sessionTypeToIntensity(ctx.slot.sessionTypes[0]);
+  // Step 6: Compute load score (based on full duration, not volume-scaled).
+  // Use the type that actually matched, which may be a fallback of the slot.
+  const sessionType = selection.sessionType;
+  const intensity = sessionTypeToIntensity(sessionType);
   const zone = INTENSITY_TO_ZONE[intensity];
   const loadScore = computeBlockLoad(dur.totalMin, zone);
 
-  // Step 7: Build session notes
+  // Step 7: Build session notes.
+  // Quote the hardest pace the main set actually calls for, not the one implied
+  // by the session type: fartlek maps to I, yet most fartlek templates top out
+  // at Z4, so the note read "Allure VMA" above threshold-pace blocks.
+  const INTENSITY_RANK: DanielsIntensity[] = ["E", "M", "T", "I", "R"];
+  const hardestFromBlocks = paceNotes.reduce<DanielsIntensity | null>((hardest, n) => {
+    const candidate = n.zone as DanielsIntensity;
+    if (!INTENSITY_RANK.includes(candidate)) return hardest;
+    if (!hardest) return candidate;
+    return INTENSITY_RANK.indexOf(candidate) > INTENSITY_RANK.indexOf(hardest) ? candidate : hardest;
+  }, null);
+
   const notesParts = buildSessionNotes(
-    ctx.slot.sessionTypes[0],
+    sessionType,
     ctx.paces,
     scaledReps,
     ctx.targetLongRunKm,
     ctx.targetLongRunMin,
     ctx.elevationGain,
     ctx.slot.slotType,
+    hardestFromBlocks,
   );
 
-  // Assemble the session
+  // Assemble the session.
+  // A key_quality slot filled with an easy-run fallback is not a key session —
+  // labelling it as one misrepresents the week's hard/easy balance.
+  const QUALITY_TYPES = new Set([
+    "vo2max", "threshold", "tempo", "hills", "fartlek", "race_specific", "speed", "intervals",
+  ]);
   const session: PlanSession = {
     dayOfWeek: ctx.slot.dayOfWeek,
     workoutId: workout.id,
-    sessionType: ctx.slot.sessionTypes[0],
-    isKeySession: ctx.slot.slotType === "key_quality",
+    sessionType,
+    isKeySession: ctx.slot.slotType === "key_quality" && QUALITY_TYPES.has(sessionType),
     estimatedDurationMin: Math.max(20, scaledTotal),
     notes: notesParts.notes,
     notesEn: notesParts.notesEn,
@@ -159,14 +203,25 @@ export function buildSession(ctx: SessionBuildContext): SessionBuildResult | nul
       ?? Math.round(ctx.targetLongRunKm * ((ctx.paces.E.min + ctx.paces.E.max) / 2));
     session.targetDurationMin = longRunDurationFromTarget;
     session.estimatedDurationMin = Math.max(session.estimatedDurationMin, longRunDurationFromTarget);
+    // Recompute the load on the duration actually prescribed. Keeping the
+    // template's score made a 174-minute long run cost the same as a 79-minute
+    // one, which reported week 1 as harder than the peak week.
+    session.loadScore = Math.round(
+      computeBlockLoad(session.estimatedDurationMin, zone) * 10,
+    ) / 10;
   }
 
-  // Estimate distance for all running sessions that don't already have it
+  // Estimate distance for all running sessions that don't already have it.
+  // The distance comes from the block-level breakdown (warmup/cooldown and
+  // interval recoveries run at easy pace), never from applying the session's
+  // peak intensity to its whole duration.
   const NON_RUNNING_TYPES = new Set(["strength", "cycling", "swimming", "yoga", "cross_training"]);
   if (!session.targetDistanceKm && !NON_RUNNING_TYPES.has(session.sessionType)) {
-    const paceRange = ctx.paces[intensity];
-    const avgPaceMinKm = (paceRange.min + paceRange.max) / 2;
-    session.targetDistanceKm = Math.round((session.estimatedDurationMin / avgPaceMinKm) * 2) / 2; // round to 0.5km
+    // If the duration was clamped up to the 20min floor, scale distance with it
+    const km = scaledTotal > 0
+      ? scaledKm * (session.estimatedDurationMin / scaledTotal)
+      : session.estimatedDurationMin / ((ctx.paces.E.min + ctx.paces.E.max) / 2);
+    session.targetDistanceKm = Math.round(km * 2) / 2; // round to 0.5km
   }
 
   return { session, workout };
@@ -200,118 +255,125 @@ function scaleWorkout(workout: WorkoutTemplate, progression: number): number | n
 // ── Pace-aware duration estimation ──────────────────────────────
 
 /**
- * Estimate workout duration using actual user paces instead of hardcoded 5min/km.
- * Falls back to the old approach for workouts without distance data.
+ * Estimate workout duration and distance using actual user paces instead of a
+ * hardcoded 5min/km. Distance is accumulated block by block: efforts run at
+ * their own zone pace, recoveries and rests at easy pace. Applying the peak
+ * intensity to the whole session would badly overstate weekly km.
+ * Falls back to typicalDuration for workouts without block data.
  */
-interface DurationBreakdown {
+interface EffortBreakdown {
   warmupMin: number;
+  warmupKm: number;
   mainMin: number;
+  mainKm: number;
   cooldownMin: number;
+  cooldownKm: number;
   totalMin: number;
 }
 
-function estimatePaceAwareDuration(
+interface BlockEffort {
+  min: number;
+  km: number;
+}
+
+const NO_DATA: BlockEffort = { min: -1, km: 0 };
+
+function estimatePaceAwareEffort(
   workout: WorkoutTemplate,
   paces: TrainingPaces,
   scaledReps: number | null,
-): DurationBreakdown {
-  const warmup = estimateBlocksDurationWithPaces(workout.warmupTemplate || [], paces);
-  const cooldown = estimateBlocksDurationWithPaces(workout.cooldownTemplate || [], paces);
+): EffortBreakdown {
+  const warmup = estimateBlocksEffort(workout.warmupTemplate || [], paces, null);
+  const cooldown = estimateBlocksEffort(workout.cooldownTemplate || [], paces, null);
 
-  let mainDuration: number;
   const mainBlocks = workout.mainSetTemplate || [];
+  const main = mainBlocks.length > 0
+    ? estimateBlocksEffort(mainBlocks, paces, scaledReps)
+    : NO_DATA;
 
-  if (mainBlocks.length > 0) {
-    mainDuration = estimateMainSetDuration(mainBlocks, paces, scaledReps);
-  } else {
-    mainDuration = -1;
-  }
+  const wMin = warmup.min >= 0 ? warmup.min : 0;
+  const cMin = cooldown.min >= 0 ? cooldown.min : 0;
 
-  const wMin = warmup >= 0 ? warmup : 0;
-  const cMin = cooldown >= 0 ? cooldown : 0;
-
-  if (mainDuration >= 0) {
+  if (main.min >= 0) {
     return {
       warmupMin: wMin,
-      mainMin: mainDuration,
+      warmupKm: warmup.min >= 0 ? warmup.km : 0,
+      mainMin: main.min,
+      mainKm: main.km,
       cooldownMin: cMin,
-      totalMin: Math.round(wMin + mainDuration + cMin),
+      cooldownKm: cooldown.min >= 0 ? cooldown.km : 0,
+      totalMin: Math.round(wMin + main.min + cMin),
     };
   }
 
-  // Fallback to typicalDuration
+  // Fallback to typicalDuration — assume easy pace for the whole session
   const avg = (workout.typicalDuration.min + workout.typicalDuration.max) / 2;
-  return { warmupMin: 0, mainMin: avg, cooldownMin: 0, totalMin: Math.round(avg) };
+  const easyPace = (paces.E.min + paces.E.max) / 2;
+  return {
+    warmupMin: 0,
+    warmupKm: 0,
+    mainMin: avg,
+    mainKm: avg / easyPace,
+    cooldownMin: 0,
+    cooldownKm: 0,
+    totalMin: Math.round(avg),
+  };
 }
 
 /**
- * Estimate duration of workout blocks using user-specific paces.
+ * Sum duration and distance over a group of blocks.
  */
-function estimateBlocksDurationWithPaces(blocks: WorkoutBlock[], paces: TrainingPaces): number {
-  let total = 0;
-  let hasData = false;
-
-  for (const block of blocks) {
-    const dur = estimateSingleBlockDuration(block, paces, null);
-    if (dur > 0) {
-      total += dur;
-      hasData = true;
-    }
-  }
-
-  return hasData ? total : -1;
-}
-
-/**
- * Estimate main set duration, with optional rep scaling.
- */
-function estimateMainSetDuration(
+function estimateBlocksEffort(
   blocks: WorkoutBlock[],
   paces: TrainingPaces,
   scaledReps: number | null,
-): number {
-  let total = 0;
+): BlockEffort {
+  let totalMin = 0;
+  let totalKm = 0;
   let hasData = false;
 
   for (const block of blocks) {
-    const dur = estimateSingleBlockDuration(block, paces, scaledReps);
-    if (dur > 0) {
-      total += dur;
+    const effort = estimateSingleBlockEffort(block, paces, scaledReps);
+    if (effort.min > 0) {
+      totalMin += effort.min;
+      totalKm += effort.km;
       hasData = true;
     }
   }
 
-  return hasData ? total : -1;
+  return hasData ? { min: totalMin, km: totalKm } : NO_DATA;
 }
 
 /**
- * Estimate duration of a single block using pace-aware calculations.
+ * Estimate duration and distance of a single block using pace-aware calculations.
  */
-function estimateSingleBlockDuration(
+function estimateSingleBlockEffort(
   block: WorkoutBlock,
   paces: TrainingPaces,
   scaledReps: number | null,
-): number {
+): BlockEffort {
   // Only apply scaledReps to blocks that already have repetitions defined
   // (scaledReps overrides the rep count for the scaled block, not all blocks)
   const reps = (block.repetitions && scaledReps) ? scaledReps : (block.repetitions ?? 1);
   const sets = block.sets ?? 1;
+  const easyPace = (paces.E.min + paces.E.max) / 2;
 
   // Duration-based blocks (steady-state efforts)
   if (block.durationMin) {
-    return block.durationMin * reps * sets;
+    const min = block.durationMin * reps * sets;
+    return { min, km: min / getPaceForBlock(block, paces) };
   }
 
   // Distance-based blocks (intervals) — use pace-aware estimation
   if (block.distanceM || block.distanceKm) {
     const distanceKm = block.distanceKm ?? ((block.distanceM ?? 0) / 1000);
-    if (distanceKm <= 0) return 0;
+    if (distanceKm <= 0) return { min: 0, km: 0 };
 
     // Determine pace from zone or intensityType
     const paceMinKm = getPaceForBlock(block, paces);
     const runTimeMin = distanceKm * paceMinKm;
 
-    // Recovery time between reps
+    // Recovery time between reps — covered at easy pace
     let recoveryMin = 0;
     if (block.recovery || block.rest) {
       recoveryMin = estimateRecoveryTime(block, runTimeMin);
@@ -323,7 +385,10 @@ function estimateSingleBlockDuration(
       setBetweenRest = parseRestDuration(block.restBetweenSets) * (sets - 1);
     }
 
-    return (runTimeMin + recoveryMin) * reps * sets + setBetweenRest;
+    return {
+      min: (runTimeMin + recoveryMin) * reps * sets + setBetweenRest,
+      km: (distanceKm + recoveryMin / easyPace) * reps * sets + setBetweenRest / easyPace,
+    };
   }
 
   // Rep-only blocks (no distance/duration) — parse rep duration from description
@@ -341,10 +406,15 @@ function estimateSingleBlockDuration(
       setBetweenRest = 3 * (sets - 1); // default 3min between sets
     }
 
-    return (repDurationMin + recoveryMin) * reps * sets + setBetweenRest;
+    const effortPace = getPaceForBlock(block, paces);
+    return {
+      min: (repDurationMin + recoveryMin) * reps * sets + setBetweenRest,
+      km: (repDurationMin / effortPace + recoveryMin / easyPace) * reps * sets
+        + setBetweenRest / easyPace,
+    };
   }
 
-  return 0;
+  return { min: 0, km: 0 };
 }
 
 /**
@@ -389,14 +459,11 @@ function getPaceForBlock(block: WorkoutBlock, paces: TrainingPaces): number {
   }
 
   // Zone-based (existing blocks)
-  if (block.zone) {
-    const zoneStr = typeof block.zone === "string" ? block.zone : `Z${block.zone}`;
-    const zoneNum = ZONE_TO_NUMBER[zoneStr];
-    if (zoneNum) {
-      const intensity = zoneToIntensity(zoneNum);
-      const range = paces[intensity];
-      return (range.min + range.max) / 2;
-    }
+  const zoneNum = parseZoneNumber(block.zone);
+  if (zoneNum) {
+    const intensity = zoneToIntensity(zoneNum);
+    const range = paces[intensity];
+    return (range.min + range.max) / 2;
   }
 
   // Default: easy pace
@@ -468,12 +535,10 @@ function buildPaceNotes(workout: WorkoutTemplate, paces: TrainingPaces): PaceNot
 
     if (block.intensityType) {
       intensity = block.intensityType;
-    } else if (block.zone) {
-      const zoneStr = typeof block.zone === "string" ? block.zone : `Z${block.zone}`;
-      const zoneNum = ZONE_TO_NUMBER[zoneStr] ?? 2;
-      intensity = zoneToIntensity(zoneNum);
     } else {
-      continue; // Skip blocks without intensity info
+      const zoneNum = parseZoneNumber(block.zone);
+      if (zoneNum === null) continue; // Skip blocks without intensity info
+      intensity = zoneToIntensity(zoneNum);
     }
 
     if (seenIntensities.has(intensity)) continue;
@@ -504,12 +569,13 @@ function buildSessionNotes(
   targetLongRunMin?: number,
   elevationGain?: number,
   slotType?: string,
+  blockIntensity?: DanielsIntensity | null,
 ): { notes: string; notesEn: string } {
   const parts: string[] = [];
   const partsEn: string[] = [];
 
-  // Pace note
-  const intensity = sessionTypeToIntensity(sessionType);
+  // Pace note — prefer what the blocks actually prescribe
+  const intensity = blockIntensity ?? sessionTypeToIntensity(sessionType);
   const range = paces[intensity];
   const label = INTENSITY_LABELS[intensity];
 

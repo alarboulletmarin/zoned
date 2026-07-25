@@ -1,6 +1,6 @@
 import type { SessionType, TrainingPhase } from "@/types";
-import type { TrainingGoal } from "@/types/plan";
-import { PHASE_SESSION_TYPES, KEY_SESSION_TYPES, getGoalModifiers } from "./constants";
+import type { TrainingGoal, RaceDistance } from "@/types/plan";
+import { PHASE_SESSION_TYPES, getKeySessionTypes, getGoalModifiers } from "./constants";
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -26,23 +26,22 @@ function distributeDays(daysPerWeek: number, longRunDay: number): number[] {
   if (daysPerWeek >= 7) return [0, 1, 2, 3, 4, 5, 6];
 
   const totalDays = 7;
-  // Ideal spacing between sessions
-  const idealSpacing = totalDays / daysPerWeek;
 
-  const days: number[] = [longRunDay];
+  // Offsets from the long run day. Even spacing looks right but leaves no pair
+  // of days that is both 2+ days from the long run and 2+ days from each other
+  // — on 5 days it produced Mon/Wed/Thu/Sat/Sun, where the only candidates for
+  // the two key sessions were Wed and Thu, back to back. These patterns always
+  // keep two such slots free.
+  const OFFSETS: Record<number, number[]> = {
+    2: [0, 3],
+    3: [0, 2, 4],
+    4: [0, 1, 3, 5],
+    5: [0, 1, 2, 4, 5],
+    6: [0, 1, 2, 3, 4, 5],
+  };
 
-  // Generate candidate positions evenly spaced starting from longRunDay
-  for (let i = 1; i < daysPerWeek; i++) {
-    const candidate = Math.round(longRunDay + i * idealSpacing) % totalDays;
-    // Avoid duplicates: nudge if collision
-    let day = candidate;
-    let offset = 0;
-    while (days.includes(day)) {
-      offset++;
-      day = (candidate + offset) % totalDays;
-    }
-    days.push(day);
-  }
+  const offsets = OFFSETS[daysPerWeek] ?? OFFSETS[4];
+  const days = offsets.map((o) => (longRunDay + o) % totalDays);
 
   return days.sort((a, b) => a - b);
 }
@@ -74,23 +73,28 @@ function pickBestDay(
   }
 
   let bestDay = availableDays.find(d => !usedDays.has(d)) ?? availableDays[0];
-  let bestMinDist = -1;
+  let bestScore = -1;
 
   // Search ALL available days (not just from startIndex)
   for (const day of availableDays) {
     if (usedDays.has(day)) continue;
 
     let minDist = totalDays;
+    let sumDist = 0;
     for (const hd of heavyDays) {
       const dist = Math.min(
         (day - hd + totalDays) % totalDays,
         (hd - day + totalDays) % totalDays,
       );
       minDist = Math.min(minDist, dist);
+      sumDist += dist;
     }
 
-    if (minDist > bestMinDist) {
-      bestMinDist = minDist;
+    // Break ties on total spread instead of day order: picking the first day
+    // of the week on a tie is what put a key session right after the long run.
+    const score = minDist * 100 + sumDist;
+    if (score > bestScore) {
+      bestScore = score;
       bestDay = day;
     }
   }
@@ -117,6 +121,8 @@ function pickBestDay(
  * @param phase - Current training phase
  * @param isRecoveryWeek - If true, replace key sessions with easy
  * @param trainingGoal - Optional: adjusts quality session count
+ * @param raceDistance - Optional: weights key session types toward the distance
+ * @param weekNumber - Optional: rotates key session types across weeks
  */
 export function buildWeekTemplate(
   daysPerWeek: number,
@@ -124,18 +130,26 @@ export function buildWeekTemplate(
   phase: TrainingPhase,
   isRecoveryWeek: boolean,
   trainingGoal?: TrainingGoal,
+  raceDistance?: RaceDistance,
+  weekNumber: number = 0,
 ): WeekSlot[] {
   // Determine slot distribution by days per week
   // Format: { key count, easy count, recovery count } — long_run is always 1
   // Designed to respect ~80/20 polarized distribution:
   //   3j: 1 key + 1 SL + 1 easy     = 33% hard (acceptable for low volume)
-  //   4j: 1 key + 1 SL + 2 easy     = 25% hard (good 80/20)
+  //   4j: 2 key + 1 SL + 1 easy     = Daniels' Q1/Q2 pair, ~15% hard *time*
   //   5j: 2 key + 1 SL + 2 easy     = 40% hard sessions but key≠all-out → ~25% hard time
   //   6j: 2 key + 1 SL + 2 easy + 1 recovery
   //   7j: 2 key + 1 SL + 3 easy + 1 recovery
+  //
+  // The 80/20 split is a share of *time*, not of sessions: a key session spends
+  // most of its minutes warming up, recovering and cooling down. Budgeting a
+  // single key session per week left 4-day plans under one quality session per
+  // week once recovery weeks were removed, too little to develop VO2max and
+  // threshold in the same cycle (Daniels prescribes a Q1/Q2 pair).
   const slotDistribution: Record<number, { key: number; easy: number; recovery: number }> = {
     3: { key: 1, easy: 1, recovery: 0 },
-    4: { key: 1, easy: 2, recovery: 0 },
+    4: { key: 2, easy: 1, recovery: 0 },
     5: { key: 2, easy: 2, recovery: 0 },
     6: { key: 2, easy: 2, recovery: 1 },
     7: { key: 2, easy: 3, recovery: 1 },
@@ -143,14 +157,17 @@ export function buildWeekTemplate(
 
   const dist = slotDistribution[daysPerWeek] ?? slotDistribution[4];
 
-  // Apply training goal modifier to key sessions
+  // Apply training goal modifier to key sessions.
+  // Hard cap: key sessions + long run must stay spaceable over 7 days. Four
+  // hard days cannot be spread without two of them landing back to back, so
+  // "compete" buys ambition through volume and long-run progression instead.
+  const MAX_KEY_SESSIONS_BY_DAYS: Record<number, number> = { 3: 1, 4: 2, 5: 2, 6: 2, 7: 2 };
   const goalMods = getGoalModifiers(trainingGoal);
-  let maxKey = dist.key;
-  if (goalMods.maxQualitySessions > 0) {
-    // Goal overrides: cap or boost quality sessions
-    maxKey = Math.min(goalMods.maxQualitySessions, daysPerWeek - 1); // Always need at least 1 non-key day
-  }
-  const adjustedKey = Math.min(maxKey, dist.key + (goalMods.maxQualitySessions > dist.key ? 1 : 0));
+  const spacingCap = MAX_KEY_SESSIONS_BY_DAYS[daysPerWeek] ?? 2;
+  const requestedKey = goalMods.maxQualitySessions > 0
+    ? goalMods.maxQualitySessions
+    : dist.key;
+  const adjustedKey = Math.min(requestedKey, spacingCap, daysPerWeek - 1);
   const adjustedEasy = dist.easy + (dist.key - adjustedKey); // Reassign reduced key → easy
   const adjustedRecovery = dist.recovery;
 
@@ -164,7 +181,7 @@ export function buildWeekTemplate(
   const otherDays = trainingDays.filter((d) => d !== longRunDay);
 
   // Session types based on phase
-  const keyTypes = KEY_SESSION_TYPES[phase];
+  const keyTypes = getKeySessionTypes(phase, raceDistance);
   const easyTypes: SessionType[] =
     phase === "taper"
       ? ["recovery", "endurance"]
@@ -173,20 +190,27 @@ export function buildWeekTemplate(
 
   const slots: WeekSlot[] = [];
 
-  // 1. Long run slot (always first)
+  // 1. Long run slot (always first).
+  // Recovery weeks keep the long run — it is shortened by the caller
+  // (RECOVERY_LONG_RUN_PCT), not removed. Dropping it entirely cost marathon
+  // plans 4 to 5 long runs per cycle.
   slots.push({
     dayOfWeek: longRunDay,
-    slotType: isRecoveryWeek ? "easy" : "long_run",
-    sessionTypes: isRecoveryWeek ? easyTypes : ["long_run"],
+    slotType: "long_run",
+    sessionTypes: ["long_run"],
   });
 
-  // 2. Key quality sessions (spaced apart from long run and each other)
+  // 2. Key quality sessions (spaced apart from long run and each other).
+  // Rotate the priority order week to week: the selector takes the first type
+  // that matches, so a fixed order gave 3-day plans the same stimulus every
+  // single week (VO2max only, never a threshold session in the whole plan).
   for (let i = 0; i < keyCount; i++) {
     const day = pickBestDay(otherDays, longRunDay, slots);
+    const offset = (weekNumber + i) % keyTypes.length;
     slots.push({
       dayOfWeek: day,
       slotType: "key_quality",
-      sessionTypes: i === 0 ? keyTypes : [...keyTypes].reverse(),
+      sessionTypes: [...keyTypes.slice(offset), ...keyTypes.slice(0, offset)],
     });
   }
 

@@ -11,20 +11,31 @@
  */
 
 import type { TrainingPlan, AssistedPlanConfig, PlanWeek, PlanSession } from "@/types/plan";
+import type { SessionType } from "@/types";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import { loadAllWorkouts } from "@/data/workouts";
 import { calculatePhases, getPhaseForWeek, getWeekInPhase } from "./phases";
 import { calculateVolumeProgression } from "./volume";
 import { buildWeekTemplate } from "./weekTemplate";
 import { generateRaceWeek } from "./raceWeek";
-import { MIN_PLAN_WEEKS, MAX_PLAN_WEEKS, PURPOSE_CONFIGS } from "./constants";
+import {
+  MIN_PLAN_WEEKS,
+  MAX_PLAN_WEEKS,
+  PURPOSE_CONFIGS,
+  RECOVERY_LONG_RUN_PCT,
+  MAX_WEEKLY_VOLUME_INCREASE,
+} from "./constants";
 import {
   calculateTrainingPaces,
   predictRaceTime,
-  sessionTypeToIntensity,
 } from "./paceEngine";
-import { calculateLongRunProgression } from "./longRunProgression";
+import {
+  calculateLongRunProgression,
+  capLongRunToWeeklyShare,
+} from "./longRunProgression";
 import { buildSession } from "./sessionBuilder";
+import { fitWeeklyVolume } from "./weeklyVolumeFit";
+import { goalDemandFactor } from "./goalCalibration";
 import { planSeedFromConfig, seedPlanRng } from "./rng";
 import { calculateWeeksBetweenDates } from "@/lib/planDates";
 import { intermediateGoalToWeekNumber } from "@/lib/intermediateGoalValidation";
@@ -208,7 +219,9 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     phases = calculatePhases(totalWeeks, effectiveDistance, trainingGoal);
   }
 
-  // Step 6: Calculate volume progression
+  // Step 6: Calculate volume progression.
+  // The purpose multiplier is passed in so it scales the reference table only:
+  // applying it afterwards also shrank the volume the runner reported doing.
   const volumeMultiplier = purposeConfig?.volumeMultiplier ?? 1;
   const volumeProgression = calculateVolumeProgression(
     totalWeeks,
@@ -218,14 +231,13 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     config.currentWeeklyKm,
     trainingGoal,
     config.daysPerWeek,
+    volumeMultiplier,
+    // A target race time that current fitness does not support needs volume
+    isRacePlan
+      ? goalDemandFactor(config.targetPaceMinKm, config.vma, effectiveDistance)
+      : 1,
+    purposeConfig?.startVolumeMultiplier,
   );
-
-  // Apply purpose volume multiplier
-  if (volumeMultiplier !== 1) {
-    for (const wv of volumeProgression) {
-      wv.targetKm = Math.round(wv.targetKm * volumeMultiplier);
-    }
-  }
 
   // Step 7: Calculate training paces (already done above)
   const taperPhase = phases.find(p => p.phase === "taper");
@@ -262,6 +274,8 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
   const weeks: PlanWeek[] = [];
   const usedWorkoutIds: string[] = [];
   let peakWeeklyKm = 0;
+  /** Km actually delivered by the last load week — anchors the ramp cap */
+  let lastLoadWeekKm = 0;
   let peakLongRunKm = 0;
 
   for (let weekNum = 1; weekNum <= totalWeeks; weekNum++) {
@@ -270,7 +284,27 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
     const volumePercent = volumeInfo?.volumePercent ?? 80;
     const targetKm = volumeInfo?.targetKm ?? 0;
     const isRecoveryWeek = volumeInfo?.isRecoveryWeek ?? false;
-    const longRunTarget = longRunTargets.find(lr => lr.weekNumber === weekNum);
+    const rawLongRunTarget = longRunTargets.find(lr => lr.weekNumber === weekNum);
+    // Recovery weeks keep a shortened long run rather than dropping it, and no
+    // week lets the long run swallow most of its volume.
+    const longRunTarget = rawLongRunTarget
+      ? (() => {
+          const recoveryScale = isRecoveryWeek ? RECOVERY_LONG_RUN_PCT : 1;
+          const capped = capLongRunToWeeklyShare(
+            rawLongRunTarget.distanceKm * recoveryScale,
+            targetKm,
+            effectiveDistance,
+          );
+          const ratio = rawLongRunTarget.distanceKm > 0
+            ? capped / rawLongRunTarget.distanceKm
+            : 1;
+          return {
+            ...rawLongRunTarget,
+            distanceKm: Math.round(capped * 2) / 2,
+            durationMin: Math.round(rawLongRunTarget.durationMin * ratio),
+          };
+        })()
+      : rawLongRunTarget;
 
     // Track peaks (will be recalculated from actual sessions below)
     if (longRunTarget && longRunTarget.distanceKm > peakLongRunKm) {
@@ -285,9 +319,23 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
         config.daysPerWeek,
         config.longRunDay,
         config.runnerLevel,
-        allWorkouts
+        allWorkouts,
+        (paces.E.min + paces.E.max) / 2,
       );
-      raceWeek.targetKm = targetKm;
+      // Report what is actually scheduled, not the model's target: race week
+      // announced 30 km for two 25-minute jogs. The race itself is an event,
+      // not training volume, so it stays out of the weekly total.
+      const easyPaceRaceWeek = (paces.E.min + paces.E.max) / 2;
+      raceWeek.targetKm = Math.round(
+        raceWeek.sessions.reduce((sum, s) => {
+          if (s.workoutId === "__race_day__") return sum;
+          if (s.targetDistanceKm && s.targetDistanceKm > 0) return sum + s.targetDistanceKm;
+          return sum + s.estimatedDurationMin / easyPaceRaceWeek;
+        }, 0),
+      );
+      raceWeek.weeklyLoadScore = Math.round(
+        raceWeek.sessions.reduce((sum, s) => sum + (s.loadScore ?? 0), 0),
+      );
       weeks.push(raceWeek);
       continue;
     }
@@ -299,10 +347,46 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
       phase,
       isRecoveryWeek,
       trainingGoal,
+      effectiveDistance,
+      weekNum,
     );
+
+    // Non-race plans have their own quality budget and intensity ceiling.
+    // PURPOSE_CONFIGS.maxKeySessions was defined but never read, so a
+    // return-from-injury plan could schedule VO2max intervals in week 4.
+    if (purposeConfig) {
+      const softKeyTypes: SessionType[] = purpose === "base_building"
+        ? ["fartlek", "tempo", "hills"]
+        : ["fartlek", "endurance"];
+      let keptKeys = 0;
+      for (const slot of slots) {
+        if (slot.slotType !== "key_quality") continue;
+        if (keptKeys < purposeConfig.maxKeySessions) {
+          // Rotate like the race-plan templates do: a fixed order meant the
+          // first type always won, so these plans ran fartlek every week and
+          // nothing else for their whole cycle.
+          const offset = (weekNum + keptKeys) % softKeyTypes.length;
+          slot.sessionTypes = [...softKeyTypes.slice(offset), ...softKeyTypes.slice(0, offset)];
+          keptKeys++;
+        } else {
+          slot.slotType = "easy";
+          slot.sessionTypes = ["endurance", "recovery"];
+        }
+      }
+    }
 
     // Get intra-phase progression info (for workout scaling)
     const { weekInPhase, totalPhaseWeeks } = getWeekInPhase(weekNum, phases);
+
+    // Rough size of a non-long-run session this week, so the selector can pick
+    // templates that already fit instead of leaning on the volume fit to resize
+    // them. Key sessions keep their own structure, hence the easy-pace estimate.
+    const easyPaceForSlots = (paces.E.min + paces.E.max) / 2;
+    const nonLongRunSlots = Math.max(1, slots.length - 1);
+    const kmLeftForOthers = Math.max(0, targetKm - (longRunTarget?.distanceKm ?? 0));
+    const targetEasyMin = kmLeftForOthers > 0
+      ? Math.round((kmLeftForOthers / nonLongRunSlots) * easyPaceForSlots)
+      : undefined;
 
     // Build sessions using the session builder (select + scale + annotate)
     const sessions: PlanSession[] = [];
@@ -320,11 +404,15 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
         raceDistance: effectiveDistance,
         allWorkouts,
         usedWorkoutIds,
+        // Hard-exclude what this week already used, otherwise the same workout
+        // gets picked for several slots of the same week.
+        excludeWorkoutIds: weekUsedIds,
         paces,
         elevationGain: config.elevationGain,
         targetLongRunKm: longRunTarget?.distanceKm,
         targetLongRunMin: longRunTarget?.durationMin,
         daysPerWeek: config.daysPerWeek,
+        targetEasyMin,
       });
 
       if (result) {
@@ -343,17 +431,33 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
 
     const labels = getWeekLabel(weekNum, totalWeeks, phase, isRecoveryWeek);
 
-    // Compute weekly km from sessions using pace-aware estimation
+    // Bring the week onto the volume model's target by resizing its easy runs.
+    // Without this the catalogue's session durations set the weekly volume and
+    // the planned progression never reaches the runner.
+    //
+    // The target is also capped against what the previous load week actually
+    // delivered. High targets (130km+ over 6 sessions) exceed what the workout
+    // catalogue can produce, and chasing them week by week made the delivered
+    // volume swing by up to 50% between neighbouring weeks. Growing from what
+    // was really run keeps the progression smooth even when the ceiling binds.
+    const rampCeiling = lastLoadWeekKm > 0 && !isRecoveryWeek && phase !== "taper"
+      ? Math.round(lastLoadWeekKm * (1 + MAX_WEEKLY_VOLUME_INCREASE))
+      : Number.POSITIVE_INFINITY;
+    const fitTargetKm = Math.min(targetKm, rampCeiling);
+
+    const easyPace = (paces.E.min + paces.E.max) / 2;
+    fitWeeklyVolume(sessions, fitTargetKm, easyPace, (id) =>
+      allWorkouts.find((w) => w.id === id)?.typicalDuration,
+    );
+
+    // Recompute from the fitted sessions
+    weeklyLoadScore = sessions.reduce((sum, s) => sum + (s.loadScore ?? 0), 0);
     const weeklyKmFromSessions = sessions.reduce((sum, s) => {
-      // Use explicit distance if set (long runs)
       if (s.targetDistanceKm && s.targetDistanceKm > 0) return sum + s.targetDistanceKm;
-      // Estimate from duration using the session's intensity-specific pace
-      const intensity = sessionTypeToIntensity(s.sessionType);
-      const paceRange = paces[intensity];
-      const avgPaceMinKm = (paceRange.min + paceRange.max) / 2;
-      return sum + (s.estimatedDurationMin / avgPaceMinKm);
+      return sum + (s.estimatedDurationMin / easyPace);
     }, 0);
     const actualKm = Math.round(weeklyKmFromSessions);
+    if (!isRecoveryWeek && phase !== "taper") lastLoadWeekKm = actualKm;
 
     weeks.push({
       weekNumber: weekNum,
@@ -363,7 +467,7 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
       sessions,
       weekLabel: labels.weekLabel,
       weekLabelEn: labels.weekLabelEn,
-      // v2 fields — targetKm based on actual session content, not theoretical model
+      // v2 fields — targetKm reflects the sessions actually scheduled
       targetKm: actualKm,
       targetLongRunKm: longRunTarget?.distanceKm,
       weeklyLoadScore: Math.round(weeklyLoadScore),
@@ -378,6 +482,19 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
 
   // Recalculate peak metrics from actual week data
   peakWeeklyKm = Math.max(...weeks.map(w => w.targetKm ?? 0));
+
+  // Restate volumePercent against the volume actually programmed. It came from
+  // the volume model, whose ceiling the session catalogue cannot always reach:
+  // a plan climbing from 38 to 53 km displayed "46% → 100%", telling the runner
+  // they had doubled their load when they had added a third.
+  if (peakWeeklyKm > 0) {
+    for (const week of weeks) {
+      week.volumePercent = Math.min(
+        100,
+        Math.round(((week.targetKm ?? 0) / peakWeeklyKm) * 100),
+      );
+    }
+  }
 
   // Step 10: Race time prediction (only for race plans)
   const raceTimePrediction = (isRacePlan && config.vma)

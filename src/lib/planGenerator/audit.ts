@@ -1,4 +1,11 @@
-import type { TrainingPlan } from "@/types/plan";
+import type { TrainingPlan, RaceDistance } from "@/types/plan";
+import { RACE_DISTANCE_META } from "@/types/plan";
+import { RECOMMENDED_PLAN_WEEKS } from "./constants";
+import {
+  goalDemandFactor,
+  vmaRequiredForPace,
+  UNREALISTIC_DEMAND,
+} from "./goalCalibration";
 
 // ── Types ────────────────────────────────────────────────────────────
 
@@ -21,6 +28,37 @@ export interface PlanFinding {
 
 const DAY_NAMES_FR = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 const DAY_NAMES_EN = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+// ── Volume metric ────────────────────────────────────────────────────
+// Progression checks must run on the km the runner actually covers.
+// volumePercent is a model value that stays smooth by construction, so
+// auditing it reported a clean progression while the delivered km jumped by
+// more than 100% between two weeks. Fall back to it only for legacy weeks
+// saved before targetKm existed.
+
+interface VolumeMetric {
+  /** Comparable magnitude: km when available, else volumePercent */
+  value: number;
+  /** Below this, relative jumps are tiny in absolute terms and pose little risk */
+  lowThreshold: number;
+  format: (v: number) => string;
+}
+
+function volumeMetric(week: { targetKm?: number; volumePercent: number }): VolumeMetric {
+  if (week.targetKm && week.targetKm > 0) {
+    return { value: week.targetKm, lowThreshold: 25, format: (v) => `${Math.round(v)} km` };
+  }
+  return { value: week.volumePercent, lowThreshold: 55, format: (v) => `${Math.round(v)}%` };
+}
+
+/**
+ * Distance between two days of the week, wrapping around.
+ * Sunday and Monday are 1 day apart, not 6.
+ */
+function dayDistance(a: number, b: number): number {
+  const diff = Math.abs(a - b);
+  return Math.min(diff, 7 - diff);
+}
 
 // ── Audit engine ─────────────────────────────────────────────────────
 
@@ -99,6 +137,9 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
   }
 
   // ── Per-week checks (3-8) ──────────────────────────────────────────
+  // Taper is judged against the plan's own peak, not against a model percentage
+  const peakKm = Math.max(0, ...plan.weeks.map((w) => w.targetKm ?? 0));
+
   for (let i = 0; i < plan.weeks.length; i++) {
     const week = plan.weeks[i];
     const prevWeek = i > 0 ? plan.weeks[i - 1] : null;
@@ -115,9 +156,7 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
     // ── Check 3: KEY_SESSIONS_TOO_CLOSE ──────────────────────────────
     for (let a = 0; a < keySessions.length; a++) {
       for (let b = a + 1; b < keySessions.length; b++) {
-        if (
-          Math.abs(keySessions[a].dayOfWeek - keySessions[b].dayOfWeek) <= 1
-        ) {
+        if (dayDistance(keySessions[a].dayOfWeek, keySessions[b].dayOfWeek) <= 1) {
           findings.push({
             id: nextId(),
             severity: "warning",
@@ -137,7 +176,7 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
     for (const key of keySessions) {
       for (const lr of longRuns) {
         if (key === lr) continue; // a long_run that is also key: skip self
-        if (Math.abs(key.dayOfWeek - lr.dayOfWeek) <= 1) {
+        if (dayDistance(key.dayOfWeek, lr.dayOfWeek) <= 1) {
           findings.push({
             id: nextId(),
             severity: "warning",
@@ -169,45 +208,56 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
     }
 
     // ── Check 6: TAPER_WEEK_HEAVY ────────────────────────────────────
-    if (week.phase === "taper" && week.volumePercent > 70) {
+    // Bosquet et al. (2007): a taper works when volume drops well below peak
+    // while intensity holds. Measured against the plan's real peak km when
+    // available, since volumePercent alone said nothing about delivered load.
+    const taperShare = peakKm > 0 && week.targetKm
+      ? (week.targetKm / peakKm) * 100
+      : week.volumePercent;
+    if (week.phase === "taper" && taperShare > 70) {
+      const shown = Math.round(taperShare);
       findings.push({
         id: nextId(),
         severity: "warning",
         code: "TAPER_WEEK_HEAVY",
         weekNumber: week.weekNumber,
-        message: `Semaine ${week.weekNumber} (affûtage) : volume à ${week.volumePercent}%, trop élevé pour un affûtage efficace. Réduire sous 70% pour arriver frais le jour J.`,
-        messageEn: `Week ${week.weekNumber} (taper): volume at ${week.volumePercent}%, too high for effective tapering. Reduce below 70% to arrive fresh on race day.`,
-        suggestion: `Supprimer une séance ou réduire les durées pour passer sous 70% de volume.`,
-        suggestionEn: `Remove a session or reduce durations to get below 70% volume.`,
+        message: `Semaine ${week.weekNumber} (affûtage) : volume à ${shown}% du pic, trop élevé pour un affûtage efficace. Réduire sous 70% pour arriver frais le jour J.`,
+        messageEn: `Week ${week.weekNumber} (taper): volume at ${shown}% of peak, too high for effective tapering. Reduce below 70% to arrive fresh on race day.`,
+        suggestion: `Supprimer une séance ou réduire les durées pour passer sous 70% du pic.`,
+        suggestionEn: `Remove a session or reduce durations to get below 70% of peak.`,
         fixable: true,
       });
     }
 
     // ── Check 7: VOLUME_JUMP_TOO_LARGE ───────────────────────────────
     // Skip when previous week is recovery or has an intermediate race (expected volume dip).
-    // Skip when both weeks are at low volume (< 55%) — at such low absolute volumes
+    // Skip when both weeks are at low volume — at such low absolute volumes
     // (e.g., return-from-injury plans), relative jumps of 25% represent tiny absolute
     // km increases and pose negligible injury risk.
-    // Threshold: 21% to absorb rounding artifacts on integer volumePercent values.
+    // Threshold: 21% to absorb rounding artifacts.
+    const vol = volumeMetric(week);
+    const prevVol = prevWeek ? volumeMetric(prevWeek) : null;
     if (
       prevWeek &&
+      prevVol &&
       !prevWeek.isRecoveryWeek &&
       !prevWeek.intermediateRace &&
-      prevWeek.volumePercent > 0 &&
-      !(prevWeek.volumePercent < 55 && week.volumePercent < 55) &&
-      week.volumePercent > prevWeek.volumePercent * 1.21
+      prevVol.value > 0 &&
+      !(prevVol.value < prevVol.lowThreshold && vol.value < vol.lowThreshold) &&
+      vol.value > prevVol.value * 1.21
     ) {
-      const pctIncrease = Math.round((week.volumePercent / prevWeek.volumePercent - 1) * 100);
+      const pctIncrease = Math.round((vol.value / prevVol.value - 1) * 100);
+      const suggested = vol.format(prevVol.value * 1.15);
       findings.push({
         id: nextId(),
         severity: "warning",
         code: "VOLUME_JUMP_TOO_LARGE",
         weekNumber: week.weekNumber,
         fixable: true,
-        message: `Semaine ${week.weekNumber} : volume passe de ${prevWeek.volumePercent}% à ${week.volumePercent}% (+${pctIncrease}%). Une augmentation > 20% par semaine augmente le risque de blessure.`,
-        messageEn: `Week ${week.weekNumber}: volume jumps from ${prevWeek.volumePercent}% to ${week.volumePercent}% (+${pctIncrease}%). Increasing by more than 20% per week raises injury risk.`,
-        suggestion: `Réduire le volume de S${week.weekNumber} à ~${Math.round(prevWeek.volumePercent * 1.15)}% ou ajouter une semaine intermédiaire.`,
-        suggestionEn: `Reduce W${week.weekNumber} volume to ~${Math.round(prevWeek.volumePercent * 1.15)}% or add a transition week.`,
+        message: `Semaine ${week.weekNumber} : volume passe de ${prevVol.format(prevVol.value)} à ${vol.format(vol.value)} (+${pctIncrease}%). Une augmentation > 20% par semaine augmente le risque de blessure.`,
+        messageEn: `Week ${week.weekNumber}: volume jumps from ${prevVol.format(prevVol.value)} to ${vol.format(vol.value)} (+${pctIncrease}%). Increasing by more than 20% per week raises injury risk.`,
+        suggestion: `Réduire le volume de S${week.weekNumber} à ~${suggested} ou ajouter une semaine intermédiaire.`,
+        suggestionEn: `Reduce W${week.weekNumber} volume to ~${suggested} or add a transition week.`,
       });
     }
 
@@ -256,27 +306,146 @@ export function auditPlan(plan: TrainingPlan): PlanFinding[] {
       i >= 2
     ) {
       const lastNonRecovery = plan.weeks.slice(0, i).reverse().find(w => !w.isRecoveryWeek);
+      const lastVol = lastNonRecovery ? volumeMetric(lastNonRecovery) : null;
       if (
         lastNonRecovery &&
-        lastNonRecovery.volumePercent > 0 &&
-        !(lastNonRecovery.volumePercent < 55 && week.volumePercent < 55) &&
-        week.volumePercent > lastNonRecovery.volumePercent * 1.30
+        lastVol &&
+        lastVol.value > 0 &&
+        !(lastVol.value < lastVol.lowThreshold && vol.value < vol.lowThreshold) &&
+        vol.value > lastVol.value * 1.30
       ) {
-        const pctIncrease = Math.round((week.volumePercent / lastNonRecovery.volumePercent - 1) * 100);
+        const pctIncrease = Math.round((vol.value / lastVol.value - 1) * 100);
+        const suggested = vol.format(lastVol.value * 1.15);
         findings.push({
           id: nextId(),
           severity: "warning",
           code: "VOLUME_JUMP_AFTER_RECOVERY",
           weekNumber: week.weekNumber,
-          message: `Semaine ${week.weekNumber} : volume passe de ${lastNonRecovery.volumePercent}% (S${lastNonRecovery.weekNumber}) à ${week.volumePercent}% (+${pctIncrease}% en comptant la récupération). Reprise trop agressive après récupération.`,
-          messageEn: `Week ${week.weekNumber}: volume jumps from ${lastNonRecovery.volumePercent}% (W${lastNonRecovery.weekNumber}) to ${week.volumePercent}% (+${pctIncrease}% across recovery). Too aggressive return after recovery.`,
-          suggestion: `Reprendre à ~${Math.round(lastNonRecovery.volumePercent * 1.15)}% maximum après la récupération.`,
-          suggestionEn: `Resume at ~${Math.round(lastNonRecovery.volumePercent * 1.15)}% maximum after recovery.`,
+          message: `Semaine ${week.weekNumber} : volume passe de ${lastVol.format(lastVol.value)} (S${lastNonRecovery.weekNumber}) à ${vol.format(vol.value)} (+${pctIncrease}% en comptant la récupération). Reprise trop agressive après récupération.`,
+          messageEn: `Week ${week.weekNumber}: volume jumps from ${lastVol.format(lastVol.value)} (W${lastNonRecovery.weekNumber}) to ${vol.format(vol.value)} (+${pctIncrease}% across recovery). Too aggressive return after recovery.`,
+          suggestion: `Reprendre à ~${suggested} maximum après la récupération.`,
+          suggestionEn: `Resume at ~${suggested} maximum after recovery.`,
           fixable: true,
         });
       }
     }
   }
 
+  findings.push(...auditGoalFeasibility(plan, nextId));
+
   return findings;
+}
+
+// ── Goal feasibility ─────────────────────────────────────────────────
+// The generator builds the best plan it can from the runner's declared volume
+// and the weeks available. When those inputs cannot support the stated goal it
+// used to stay silent, handing over a plan that looks complete but under-
+// prepares the runner. These checks say so instead.
+
+/** Long run a runner should reach to face the distance, in km */
+const LONG_RUN_TARGET_KM: Record<RaceDistance, number> = {
+  "5K": 10,
+  "10K": 14,
+  semi: 18,
+  marathon: 28,
+  trail_short: 22,
+  trail: 30,
+  ultra: 35,
+};
+
+/** Weekly volume below which the distance becomes a survival exercise, in km */
+const WEEKLY_VOLUME_FLOOR_KM: Record<RaceDistance, number> = {
+  "5K": 20,
+  "10K": 25,
+  semi: 35,
+  marathon: 50,
+  trail_short: 40,
+  trail: 50,
+  ultra: 60,
+};
+
+function auditGoalFeasibility(
+  plan: TrainingPlan,
+  nextId: () => string,
+): PlanFinding[] {
+  const out: PlanFinding[] = [];
+  const distance = plan.config.raceDistance;
+  if (!distance || !plan.config.raceDate) return out;
+
+  const lastWeek = plan.totalWeeks;
+  const peakWeeklyKm = Math.max(0, ...plan.weeks.map((w) => w.targetKm ?? 0));
+  const peakLongRunKm = Math.max(
+    0,
+    ...plan.weeks.flatMap((w) =>
+      w.sessions
+        .filter((s) => s.sessionType === "long_run")
+        .map((s) => s.targetDistanceKm ?? 0),
+    ),
+  );
+
+  // ── PLAN_TOO_SHORT_FOR_DISTANCE ────────────────────────────────────
+  const recommended = RECOMMENDED_PLAN_WEEKS[distance];
+  if (recommended && plan.totalWeeks < recommended.min) {
+    out.push({
+      id: nextId(),
+      severity: "warning",
+      code: "PLAN_TOO_SHORT_FOR_DISTANCE",
+      weekNumber: 1,
+      message: `Plan de ${plan.totalWeeks} semaines pour un ${RACE_DISTANCE_META[distance].label} : ${recommended.min} semaines minimum sont recommandées. La progression sera comprimée.`,
+      messageEn: `${plan.totalWeeks}-week plan for a ${RACE_DISTANCE_META[distance].labelEn}: ${recommended.min} weeks are recommended as a minimum. The progression will be compressed.`,
+      suggestion: `Repousser la course ou viser une distance plus courte pour cette échéance.`,
+      suggestionEn: `Push the race back, or target a shorter distance for this date.`,
+    });
+  }
+
+  // ── WEEKLY_VOLUME_TOO_LOW_FOR_DISTANCE ─────────────────────────────
+  const volumeFloor = WEEKLY_VOLUME_FLOOR_KM[distance];
+  if (peakWeeklyKm > 0 && peakWeeklyKm < volumeFloor) {
+    out.push({
+      id: nextId(),
+      severity: "warning",
+      code: "WEEKLY_VOLUME_TOO_LOW_FOR_DISTANCE",
+      weekNumber: lastWeek,
+      message: `Le plan culmine à ${peakWeeklyKm} km par semaine, en dessous des ~${volumeFloor} km attendus pour un ${RACE_DISTANCE_META[distance].label}. Ton volume de départ et la durée du plan ne permettent pas d'aller plus haut sans risque.`,
+      messageEn: `The plan peaks at ${peakWeeklyKm} km per week, below the ~${volumeFloor} km expected for a ${RACE_DISTANCE_META[distance].labelEn}. Your starting volume and the time available do not allow more without added risk.`,
+      suggestion: `Augmenter le nombre de jours de course par semaine, ou prévoir un cycle de préparation plus long.`,
+      suggestionEn: `Add running days per week, or allow a longer preparation cycle.`,
+    });
+  }
+
+  // ── LONG_RUN_TOO_SHORT_FOR_DISTANCE ────────────────────────────────
+  const longRunFloor = LONG_RUN_TARGET_KM[distance];
+  if (peakLongRunKm > 0 && peakLongRunKm < longRunFloor * 0.85) {
+    out.push({
+      id: nextId(),
+      severity: "warning",
+      code: "LONG_RUN_TOO_SHORT_FOR_DISTANCE",
+      weekNumber: lastWeek,
+      message: `La plus longue sortie du plan atteint ${peakLongRunKm} km, contre ~${longRunFloor} km souhaitables pour un ${RACE_DISTANCE_META[distance].label}. Prévois de marcher ou de ralentir sur la fin de course.`,
+      messageEn: `The longest run in this plan reaches ${peakLongRunKm} km, against the ~${longRunFloor} km worth aiming for on a ${RACE_DISTANCE_META[distance].labelEn}. Expect to walk or slow down late in the race.`,
+      suggestion: `Partir d'une sortie longue plus élevée, ou allonger la durée du plan.`,
+      suggestionEn: `Start from a longer long run, or extend the plan.`,
+    });
+  }
+
+  // ── GOAL_PACE_OUT_OF_REACH ─────────────────────────────────────────
+  const { targetPaceMinKm, vma } = plan.config;
+  if (targetPaceMinKm && vma) {
+    const demand = goalDemandFactor(targetPaceMinKm, vma, distance);
+    if (demand >= UNREALISTIC_DEMAND) {
+      const required = vmaRequiredForPace(targetPaceMinKm, distance);
+      out.push({
+        id: nextId(),
+        severity: "warning",
+        code: "GOAL_PACE_OUT_OF_REACH",
+        weekNumber: 1,
+        message: `L'allure visée demande une VMA d'environ ${required.toFixed(1)} km/h, contre ${vma} km/h déclarée. Le plan pousse le volume au maximum de ce qui est sûr, mais l'écart reste important.`,
+        messageEn: `The target pace calls for a VMA around ${required.toFixed(1)} km/h, against the ${vma} km/h you entered. The plan pushes volume as far as is safe, but the gap remains significant.`,
+        suggestion: `Viser une allure plus prudente pour cette échéance, ou prévoir un cycle supplémentaire.`,
+        suggestionEn: `Aim for a more conservative pace for this date, or plan an extra cycle.`,
+      });
+    }
+  }
+
+  return out;
 }

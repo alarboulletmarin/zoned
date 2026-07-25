@@ -123,14 +123,14 @@ const PREBUILT_CONFIGS: PrebuiltConfig[] = [
     slug: "marathon",
     name: "Marathon",
     nameEn: "Marathon",
-    description: "Plan de 18 semaines pour le marathon. Basé sur Pfitzinger avec sorties longues progressives.",
-    descriptionEn: "18-week marathon plan. Pfitzinger-based with progressive long runs.",
+    description: "Plan de 18 semaines pour le marathon, 5 séances par semaine. Sorties longues progressives et travail à allure spécifique.",
+    descriptionEn: "18-week marathon plan, 5 sessions per week. Progressive long runs and race-pace work.",
     icon: "Trophy",
     tags: ["marathon", "intermediate", "long-distance"],
     config: {
       raceDistance: "marathon",
       runnerLevel: "intermediate",
-      daysPerWeek: 4,
+      daysPerWeek: 5,
       longRunDay: 6,
       trainingGoal: "time",
       planPurpose: "race",
@@ -173,6 +173,24 @@ const PREBUILT_CONFIGS: PrebuiltConfig[] = [
       totalWeeksOverride: 8,
     },
   },
+  {
+    slug: "reprise-longue-pause",
+    name: "Reprise après longue pause",
+    nameEn: "Return After Long Break",
+    description: "Plan de 10 semaines pour reprendre après plusieurs mois d'arrêt. Reconstruction progressive de l'endurance et des habitudes de course.",
+    descriptionEn: "10-week plan to resume running after months off. Progressive rebuilding of endurance and running habits.",
+    icon: "RotateCcw",
+    tags: ["return", "break", "progressive", "beginner"],
+    config: {
+      raceDistance: "10K",
+      runnerLevel: "beginner",
+      daysPerWeek: 3,
+      longRunDay: 6,
+      trainingGoal: "finish",
+      planPurpose: "beginner_start",
+      totalWeeksOverride: 10,
+    },
+  },
 ];
 
 // ── Generator ───────────────────────────────────────────────────
@@ -193,6 +211,11 @@ async function generatePrebuiltPlan(cfg: PrebuiltConfig): Promise<PrebuiltPlan> 
     planPurpose: cfg.config.planPurpose,
     totalWeeksOverride: cfg.config.totalWeeksOverride,
     createdAt: new Date().toISOString(),
+    // Strength was hand-patched into the generated files once and would be
+    // wiped by any regeneration. Frequency is set so the week keeps two full
+    // rest days: strength claims rest days before easy days.
+    includeStrength: true,
+    strengthFrequency: cfg.config.daysPerWeek <= 3 ? 2 : 1,
   };
 
   const plan = await generatePlan(assistedConfig);

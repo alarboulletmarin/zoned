@@ -116,6 +116,18 @@ const MAX_COMFORTABLE_START: Record<Difficulty, number> = {
   elite: 22,
 };
 
+/**
+ * Safety ceiling on how fast the long run may grow, per week.
+ * The configured incrementKm is a comfortable pace, not a limit: when the plan
+ * needs more to reach its peak on time, we go faster, up to this ceiling.
+ */
+const MAX_LONG_RUN_INCREMENT: Record<Difficulty, number> = {
+  beginner: 2.5,
+  intermediate: 3.0,
+  advanced: 3.5,
+  elite: 4.0,
+};
+
 // ── Main function ──────────────────────────────────────────────
 
 export function calculateLongRunProgression(
@@ -136,24 +148,32 @@ export function calculateLongRunProgression(
   const peakKm = Math.min(raceDistanceKm * config.peakFraction, config.absoluteMaxKm);
   const comfortCap = currentLongRunKm ?? MAX_COMFORTABLE_START[difficulty];
   const startKm = Math.min(peakKm * config.startFraction, comfortCap);
-  const increment = config.incrementKm[difficulty] * goalMods.longRunIncrementMultiplier;
 
-  // 2. Calculate the ideal increment to reach peak exactly on time
-  // Available build weeks = total - taper - peakWeeksBeforeRace
-  const buildEndWeek = Math.max(1, totalWeeks - taperWeeks - config.peakWeeksBeforeRace);
+  // 2. Calculate the ideal increment to reach peak exactly on time.
+  // The taper window and the "peak N weeks before race" window overlap — they
+  // both count back from race day. Subtracting both cut the build budget by a
+  // third and inflated the required increment.
+  const buildEndWeek = Math.max(
+    1,
+    totalWeeks - Math.max(taperWeeks, config.peakWeeksBeforeRace),
+  );
   // Count how many build weeks we have (excluding step-back weeks)
   const totalBuildWeeks = buildEndWeek;
   const buildWeeksWithStepBacks = totalBuildWeeks;
   const stepBackCount = Math.floor((buildWeeksWithStepBacks - 1) / config.stepBackFrequency);
   const actualBuildWeeks = buildWeeksWithStepBacks - stepBackCount;
 
-  // Calibrate increment so we reach peak on time (not too early)
+  // Calibrate increment so we reach peak on time — neither too early nor never.
+  // Taking min(configured, needed) capped the progression at the comfortable
+  // pace, so runners starting from a short long run never reached the peak
+  // (a 16-week beginner marathon topped out at 22km instead of ~30km).
   const neededIncrement = actualBuildWeeks > 1
     ? (peakKm - startKm) / (actualBuildWeeks - 1)
     : peakKm - startKm;
-  // Use the smaller of configured increment and needed increment
-  // This prevents hitting peak too early on long plans
-  const calibratedIncrement = Math.min(increment, Math.max(neededIncrement, 1.0));
+  // needed <= cap → reach the peak exactly on time. needed > cap → progress as
+  // fast as is safe and fall short, which the plan warnings surface to the user.
+  const safetyCap = MAX_LONG_RUN_INCREMENT[difficulty] * goalMods.longRunIncrementMultiplier;
+  const calibratedIncrement = Math.min(Math.max(neededIncrement, 1.0), safetyCap);
 
   // 3. Build the progression
   //
@@ -169,8 +189,11 @@ export function calculateLongRunProgression(
   let cycleWeek = 0; // 0-based position within 3-week cycle (0=build, 1=build, 2=stepback)
 
   for (let week = 1; week <= totalWeeks; week++) {
-    // Race week
-    if (week === totalWeeks) {
+    // Race week — only race plans have one. Non-race plans (base building,
+    // return from injury, beginner start) have no taper, and zeroing their last
+    // week left the long run with no target, so it fell back to the raw
+    // template duration and blew past the weekly volume.
+    if (week === totalWeeks && taperWeeks > 0) {
       targets.push({ weekNumber: week, distanceKm: 0, durationMin: 0, isStepBack: false });
       continue;
     }
@@ -226,10 +249,14 @@ export function calculateLongRunProgression(
 
     let weekKm = roundKm(currentKm);
 
-    // Cap the jump from previous week at 3km max (smooth resumption after step-back)
+    // Cap the jump from the previous week. After a step-back the jump is
+    // expected — it resumes the pre-step-back level — so allow the step-back
+    // reduction on top of one increment instead of clamping it away.
     const lastTarget = targets.at(-1);
     if (lastTarget && lastTarget.distanceKm > 0) {
-      const maxJump = 3.0;
+      const maxJump = lastTarget.isStepBack
+        ? lastTarget.distanceKm * (1 / config.stepBackReduction - 1) + calibratedIncrement
+        : Math.max(3.0, calibratedIncrement);
       if (weekKm - lastTarget.distanceKm > maxJump) {
         weekKm = roundKm(lastTarget.distanceKm + maxJump);
       }
@@ -245,6 +272,43 @@ export function calculateLongRunProgression(
   }
 
   return targets;
+}
+
+// ── Weekly share cap ────────────────────────────────────────────
+
+/**
+ * Largest share of the weekly volume the long run may represent.
+ * The long run drives adaptation but a session worth 70% of the week is a
+ * standalone effort with no support around it. Endurance events tolerate a
+ * higher share than short races, where weekly frequency matters more.
+ */
+// Daniels caps easy long runs near a quarter to a third of weekly volume, and
+// Pfitzinger's marathon long runs land around 35% of their week. Allowing half
+// the week in one run left a 33km outing inside a 61km week, which recovers
+// like a race rather than like training. Trail keeps more headroom: its long
+// runs are the specific session, not a share of a road week.
+const MAX_LONG_RUN_SHARE: Record<RaceDistance, number> = {
+  "5K": 0.35,
+  "10K": 0.35,
+  semi: 0.38,
+  marathon: 0.40,
+  trail_short: 0.45,
+  trail: 0.50,
+  ultra: 0.50,
+};
+
+/**
+ * Clamp a long run to its share of the week. Returns the input untouched when
+ * the weekly volume is unknown, so callers can pass through freely.
+ */
+export function capLongRunToWeeklyShare(
+  longRunKm: number,
+  weeklyKm: number,
+  raceDistance: RaceDistance,
+): number {
+  if (weeklyKm <= 0 || longRunKm <= 0) return longRunKm;
+  const cap = weeklyKm * MAX_LONG_RUN_SHARE[raceDistance];
+  return longRunKm <= cap ? longRunKm : roundKm(cap);
 }
 
 // ── Helpers ─────────────────────────────────────────────────────

@@ -114,7 +114,12 @@ function fixRecoveryTooHard(draft: TrainingPlan, week: PlanWeek): TrainingPlan {
 
 function fixTaperHeavy(draft: TrainingPlan, week: PlanWeek): TrainingPlan {
   const targetVol = 65;
-  const scale = targetVol / week.volumePercent;
+  // Scale on the metric the audit used to flag the week, otherwise the fix
+  // reports success while leaving the delivered km untouched.
+  const peakKm = Math.max(0, ...draft.weeks.map(w => w.targetKm ?? 0));
+  const scale = (peakKm > 0 && week.targetKm)
+    ? (peakKm * 0.65) / week.targetKm
+    : targetVol / week.volumePercent;
 
   week.sessions = week.sessions.map(s => ({
     ...s,
@@ -141,10 +146,18 @@ function fixVolumeJump(draft: TrainingPlan, week: PlanWeek): TrainingPlan | null
     ? draft.weeks.slice(0, weekIdx).reverse().find(w => !w.isRecoveryWeek) ?? prevWeek
     : prevWeek;
 
+  // Same metric as the audit: km when the plan carries them. Comparing
+  // volumePercent here made the fix a no-op on the km jumps it was flagging.
+  let scale: number;
   const targetVol = Math.round(refWeek.volumePercent * 1.15);
-  if (targetVol >= week.volumePercent) return null; // no reduction needed
-
-  const scale = targetVol / week.volumePercent;
+  if (refWeek.targetKm && week.targetKm && refWeek.targetKm > 0) {
+    const targetKm = refWeek.targetKm * 1.15;
+    if (targetKm >= week.targetKm) return null; // no reduction needed
+    scale = targetKm / week.targetKm;
+  } else {
+    if (targetVol >= week.volumePercent) return null; // no reduction needed
+    scale = targetVol / week.volumePercent;
+  }
 
   week.sessions = week.sessions.map(s => ({
     ...s,

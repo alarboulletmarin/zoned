@@ -40,6 +40,8 @@ const DIFFICULTY_LEVELS: Record<Difficulty, number> = {
 interface WorkoutSelection {
   workoutId: string;
   estimatedDurationMin: number;
+  /** The session type that actually matched — may be a fallback, not slot.sessionTypes[0] */
+  sessionType: SessionType;
 }
 
 // ── Helpers ────────────────────────────────────────────────────────
@@ -131,6 +133,8 @@ function findBestWorkout(
   slotType: string,
   _elevationGain?: number,
   daysPerWeek: number = 5,
+  excludeWorkoutIds: string[] = [],
+  targetDurationMin?: number,
 ): WorkoutSelection | null {
   const categories = SESSION_TO_CATEGORY[sessionType] ?? [];
   const diffLevel = DIFFICULTY_LEVELS[difficulty];
@@ -139,16 +143,26 @@ function findBestWorkout(
   let candidates = allWorkouts.filter((w) => categories.includes(w.category));
 
   if (isTrailRace) {
-    const trailCandidates = allWorkouts.filter((w) => w.category === "trail");
-    const existingIds = new Set(candidates.map((c) => c.id));
-    for (const tw of trailCandidates) {
-      if (!existingIds.has(tw.id)) candidates.push(tw);
-    }
-    if (sessionType === "endurance" || sessionType === "long_run") {
-      const hillsCandidates = allWorkouts.filter((w) => w.category === "hills");
-      for (const hw of hillsCandidates) {
-        if (!existingIds.has(hw.id)) candidates.push(hw);
+    // Trail workouts are volume/elevation sessions. They stand in for aerobic
+    // and race-specific work, never for recovery or track-style intervals —
+    // injecting them everywhere turned every slot into a 2h mountain outing.
+    const TRAIL_FRIENDLY_TYPES = new Set<SessionType>([
+      "endurance", "long_run", "hills", "fartlek", "race_specific",
+    ]);
+    if (TRAIL_FRIENDLY_TYPES.has(sessionType)) {
+      const trailCandidates = allWorkouts.filter((w) => w.category === "trail");
+      const existingIds = new Set(candidates.map((c) => c.id));
+      for (const tw of trailCandidates) {
+        if (!existingIds.has(tw.id)) candidates.push(tw);
       }
+      if (sessionType === "endurance" || sessionType === "long_run") {
+        const hillsCandidates = allWorkouts.filter((w) => w.category === "hills");
+        for (const hw of hillsCandidates) {
+          if (!existingIds.has(hw.id)) candidates.push(hw);
+        }
+      }
+    } else {
+      candidates = candidates.filter((w) => w.category !== "trail");
     }
   } else {
     candidates = candidates.filter(
@@ -174,21 +188,28 @@ function findBestWorkout(
     // Otherwise keep full candidate pool for variety
   }
 
-  // Step 3: Filter by difficulty (exact match first, then +/-1 tolerance)
-  let filtered = candidates.filter((w) => w.difficulty === difficulty);
-  if (filtered.length === 0) {
-    filtered = candidates.filter(
-      (w) => Math.abs(DIFFICULTY_LEVELS[w.difficulty] - diffLevel) <= 1,
-    );
-  }
-  candidates = filtered.length > 0 ? filtered : candidates;
-
-  // Step 4: Filter by relativeLoad matching slot type
+  // Step 3: Filter by relativeLoad matching slot type.
+  // Load comes before difficulty: an easy/recovery slot must never be filled
+  // with a hard session just because no easy one matches the runner's level.
   const loadFilter = getLoadFilter(slotType);
-  filtered = candidates.filter((w) =>
+  let filtered = candidates.filter((w) =>
     loadFilter.includes(w.selectionCriteria.relativeLoad),
   );
   if (filtered.length > 0) candidates = filtered;
+
+  // Step 4: Filter by difficulty. Keep the exact match only when it leaves a
+  // pool wide enough to fill a week without repeating: an exact-level pool of
+  // one or two workouts is why 6-day plans ran the same session five times.
+  const MIN_POOL_FOR_VARIETY = 4;
+  const exactLevel = candidates.filter((w) => w.difficulty === difficulty);
+  if (exactLevel.length >= MIN_POOL_FOR_VARIETY) {
+    candidates = exactLevel;
+  } else {
+    const tolerant = candidates.filter(
+      (w) => Math.abs(DIFFICULTY_LEVELS[w.difficulty] - diffLevel) <= 1,
+    );
+    if (tolerant.length > 0) candidates = tolerant;
+  }
 
   // Step 4b: Cap duration for easy/recovery slots on low-day plans
   if ((slotType === "easy" || slotType === "recovery") && daysPerWeek <= 4) {
@@ -207,6 +228,59 @@ function findBestWorkout(
       w.selectionCriteria.tags.some((t) => distTags.includes(t)),
     );
     if (filtered.length > 0) candidates = filtered;
+  }
+
+  // Step 5b: Long runs must come from the long_run catalogue when possible.
+  // The endurance fallback exists for short targets, but leaving both pools
+  // mixed let a 50-minute "Endurance mentale" win the slot and get stretched
+  // to a 3-hour marathon long run, showing a structure nobody prescribed.
+  if (slotType === "long_run") {
+    const realLongRuns = candidates.filter((w) => w.category === "long_run");
+    if (realLongRuns.length > 0) candidates = realLongRuns;
+  }
+
+  // Prefer templates whose own duration is close to what this slot needs.
+  // Applies to easy slots too: a 15km week kept drawing 90-minute templates and
+  // leaned on the volume fit to halve them, which both misnamed the session and
+  // pinned the week to a floor it could never go under.
+  if (slotType === "long_run" || slotType === "easy" || slotType === "recovery") {
+    // Keep the templates closest to the target duration. A hard filter empties
+    // the pool at both extremes (no template is short enough for a 25-minute
+    // return-to-running long run, none is long enough for a 3-hour marathon
+    // one), so rank by distance instead and keep the nearest band. The long run
+    // duration itself comes from the progression, but the template still has to
+    // be plausible: "Sortie longue endurance pure" prescribed for 25 minutes
+    // named a session the runner was not doing.
+    if (targetDurationMin && targetDurationMin > 0) {
+      const distanceTo = (w: WorkoutTemplate): number => {
+        const { min, max } = w.typicalDuration;
+        if (targetDurationMin < min) return min - targetDurationMin;
+        if (targetDurationMin > max) return targetDurationMin - max;
+        return 0;
+      };
+      // Widen the band until the pool can still fill a plan without repeating:
+      // a tight band left low-volume plans with a single eligible template,
+      // which then showed up in nine sessions out of thirty.
+      const best = Math.min(...candidates.map(distanceTo));
+      const MIN_POOL = 4;
+      for (const tolerance of [15, 30, 45]) {
+        const nearest = candidates.filter((w) => distanceTo(w) <= best + tolerance);
+        if (nearest.length >= MIN_POOL) {
+          candidates = nearest;
+          break;
+        }
+        if (tolerance === 45 && nearest.length > 0) candidates = nearest;
+      }
+    }
+  }
+
+  // Step 6: Drop workouts already placed this week. Giving up here lets the
+  // caller try the slot's next session type, which usually has a fresh pool —
+  // keeping the duplicate instead is what put the same run on three days.
+  if (excludeWorkoutIds.length > 0) {
+    const excluded = new Set(excludeWorkoutIds);
+    candidates = candidates.filter((w) => !excluded.has(w.id));
+    if (candidates.length === 0) return null;
   }
 
   const scoreOf = (w: WorkoutTemplate): number => {
@@ -253,6 +327,7 @@ function findBestWorkout(
   return {
     workoutId: workout.id,
     estimatedDurationMin: Math.max(20, estimatedDurationMin),
+    sessionType,
   };
 }
 
@@ -274,10 +349,12 @@ export function selectWorkout(
   difficulty: Difficulty,
   raceDistance: RaceDistance,
   allWorkouts: WorkoutTemplate[],
-  usedWorkoutIds: string[], // IDs used in last 3 weeks
+  usedWorkoutIds: string[], // IDs used in last 6 weeks
   _volumePercent: number,
   elevationGain?: number,
   daysPerWeek: number = 5,
+  excludeWorkoutIds: string[] = [], // IDs already placed this week
+  targetDurationMin?: number, // Target duration for this slot (long runs)
 ): WorkoutSelection | null {
   // Try each preferred session type in order
   for (const sessionType of slot.sessionTypes) {
@@ -291,8 +368,32 @@ export function selectWorkout(
       slot.slotType,
       elevationGain,
       daysPerWeek,
+      excludeWorkoutIds,
+      targetDurationMin,
     );
     if (result) return result;
   }
+
+  // Nothing fresh left for any of the slot's types — retry without the
+  // same-week exclusion rather than leaving the day empty.
+  if (excludeWorkoutIds.length > 0) {
+    for (const sessionType of slot.sessionTypes) {
+      const result = findBestWorkout(
+        sessionType,
+        phase,
+        difficulty,
+        raceDistance,
+        allWorkouts,
+        usedWorkoutIds,
+        slot.slotType,
+        elevationGain,
+        daysPerWeek,
+        [],
+        targetDurationMin,
+      );
+      if (result) return result;
+    }
+  }
+
   return null;
 }

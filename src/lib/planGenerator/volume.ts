@@ -64,18 +64,63 @@ export function calculateVolumeProgression(
   currentWeeklyKm?: number,
   trainingGoal?: TrainingGoal,
   daysPerWeek: number = 5,
+  purposeVolumeMultiplier: number = 1,
+  goalDemandFactor: number = 1,
+  /** Purpose multiplier for the starting point; defaults to the peak one */
+  purposeStartMultiplier?: number,
 ): WeekVolume[] {
   const goalMods = getGoalModifiers(trainingGoal);
 
   const [defaultStartKm, defaultPeakKm] = WEEKLY_KM_TARGETS[raceDistance]?.[difficulty]
     ?? WEEKLY_KM_TARGETS["10K"].intermediate;
 
-  const startKm = currentWeeklyKm ?? Math.round(defaultStartKm * goalMods.volumeMultiplier);
-  const peakKm = Math.round(defaultPeakKm * goalMods.volumeMultiplier);
+  // The purpose multiplier (base building, return from injury, beginner start)
+  // scales the reference table, never the volume the runner reports doing.
+  // goalDemandFactor raises the ceiling when the target time asks for more than
+  // current fitness delivers. It never touches the starting point: you begin
+  // where you are, ambition only changes where you are heading.
+  // A single purpose multiplier applied to both ends left return-to-running
+  // plans with no amplitude at all: start and peak moved together, so an 8-week
+  // plan went from 15km to 15km. The starting point is what a purpose lowers
+  // most; the peak is where the plan is allowed to arrive.
+  const startScale = goalMods.volumeMultiplier * (purposeStartMultiplier ?? purposeVolumeMultiplier);
+  const peakScale = goalMods.volumeMultiplier * purposeVolumeMultiplier;
+  const startKm = currentWeeklyKm ?? Math.round(defaultStartKm * startScale);
+  const peakKm = Math.round(defaultPeakKm * peakScale * goalDemandFactor);
 
-  // Scale peak km for fewer training days — 4 days can't sustain same weekly volume as 6 days
-  const daysAdjustment = Math.min(1, 0.7 + (daysPerWeek * 0.06)); // 3d=0.88, 4d=0.94, 5d=1.0, 6+=1.0
-  const adjustedPeakKm = Math.round(peakKm * daysAdjustment);
+  // Scale peak km for fewer training days. The reference tables assume the 5-6
+  // day weeks the source plans are built on, so weekly volume tracks the number
+  // of sessions far more closely than the old 0.7 + days*0.06 curve suggested
+  // (it granted 4-day weeks 94% of a 6-day volume). Asking for a peak the week
+  // cannot physically hold made the generator saturate every week at its
+  // ceiling, which flattened the progression and broke its monotonicity.
+  const DAYS_VOLUME_SHARE: Record<number, number> = {
+    3: 0.70,
+    4: 0.78,
+    5: 0.90,
+    6: 1.00,
+    7: 1.05,
+  };
+  const daysAdjustment = DAYS_VOLUME_SHARE[daysPerWeek] ?? 0.90;
+  const tablePeakKm = Math.round(peakKm * daysAdjustment);
+
+  // A plan must ask for more than the runner already does. Anchoring the peak
+  // on the table alone meant someone reporting 60km/week for a 5K got a plan
+  // capped at 30, and someone reporting exactly the table peak got a flat line.
+  const growthFactor = startKm >= tablePeakKm
+    ? 1.10                              // already at or above target: hold and nudge
+    : (totalWeeks >= 8 ? 1.30 : 1.15);  // room to build
+
+  // Every scheduled day has to be worth running. Spreading 15km over 5 days
+  // yields 3km sessions, which the plan then cannot honour.
+  const MIN_KM_PER_SESSION = 3.5;
+  const volumeFloor = Math.round(daysPerWeek * MIN_KM_PER_SESSION);
+
+  const adjustedPeakKm = Math.max(
+    tablePeakKm,
+    Math.round(startKm * growthFactor),
+    volumeFloor,
+  );
 
   const taperPhase = phases.find(p => p.phase === "taper");
   const taperStart = taperPhase?.startWeek ?? totalWeeks;
@@ -83,8 +128,8 @@ export function calculateVolumeProgression(
   const peakStart = peakPhase?.startWeek ?? taperStart;
 
   const weeks: WeekVolume[] = [];
-  let currentKm = startKm;
-  let actualPeakKm = startKm; // Track actual highest volume achieved
+  let currentKm = Math.max(startKm, volumeFloor);
+  let actualPeakKm = currentKm; // Track actual highest volume achieved
   let consecutiveLoadWeeks = 0;
 
   for (let w = 1; w <= totalWeeks; w++) {
@@ -148,7 +193,7 @@ export function calculateVolumeProgression(
     // ── Normal build week ──
     if (w > 1) {
       const prevNonRecovery = weeks.filter(wk => !wk.isRecoveryWeek).at(-1);
-      const prevKm = prevNonRecovery?.targetKm ?? startKm;
+      const prevKm = prevNonRecovery?.targetKm ?? Math.max(startKm, volumeFloor);
       // For longer plans, use gentler progression to avoid peaking too early
       const maxIncreaseRate = totalWeeks > 20 ? 0.07 : MAX_WEEKLY_VOLUME_INCREASE;
       const maxIncrease = prevKm * maxIncreaseRate;
