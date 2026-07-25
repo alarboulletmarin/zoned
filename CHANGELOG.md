@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.3] - 2026-07-25
+
+### Added
+- URL sharing for custom workouts, training plans, race simulations and calculators
+- Lock a session and re-roll the rest of the week; session removal made discoverable
+- "Race day" view on the race simulator: chronological run sheet, next-up card with countdown, and a "now" marker in the timeline
+- Anchor navigation with scroll-spy on the race simulator
+- Pace curve for negative and positive split strategies
+- Kit bag checklist on the race simulator (it was generated for the PDF only)
+
+### Changed
+- Race simulator reworked into two columns: sticky settings folding into a summary bar, plan in a card grid, PDF export promoted to the primary action
+- Split table adapts to the strategy: one summary line for even pacing, table plus curve for negative and positive
+- Race simulator warm-up is now a timed checklist; per-exercise durations added and the block total corrected from 18 to 28 min
+- Single target-time field (mm:ss / h:mm:ss) replacing three native steppers
+- Nutrition states the no-carb case as advice instead of "0 g / 0 gels"; hydration rounded to 50 ml
+- Desktop week board reworked: natural column heights, explicit Rest cards, zone and load on every session card
+- Intensity colours unified into one table shared by the week board, the plan calendar and the workout picker
+- Coach copy on the race simulator unified on tutoiement
+
+### Fixed
+- Split table sticky header no longer covers the first rows
+- Warm-up was scheduled at a hardcoded -30 min that did not match its real duration
+- Mental cues no longer repeat their km range in the text
+- Desktop week generator CTA stays anchored at the bottom of the rail instead of falling off screen
+- Plan generation is now seeded from its config, so a shared plan regenerates identically for every recipient
+
 ## [0.7.2] - 2026-07-20
 
 ### Added

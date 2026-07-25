@@ -2,6 +2,132 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.7.3",
+    date: "2026-07-25",
+    changes: {
+      added: [
+        {
+          text: "Partage par lien pour les séances personnalisées, les plans, les simulations de course et les calculateurs",
+          textEn: "URL sharing for custom workouts, training plans, race simulations and calculators",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Verrouillage d'une séance et retirage du reste de la semaine ; suppression d'une séance rendue visible",
+          textEn: "Lock a session and re-roll the rest of the week; session removal made discoverable",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Vue « Jour J » du simulateur : déroulé chronologique, prochaine étape avec compte à rebours et marqueur « maintenant » dans la timeline",
+          textEn: "\"Race day\" view on the race simulator: chronological run sheet, next-up card with countdown, and a \"now\" marker in the timeline",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+        {
+          text: "Sommaire d'ancres avec suivi du défilement sur le simulateur",
+          textEn: "Anchor navigation with scroll-spy on the race simulator",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Courbe d'allure pour les stratégies négative et positive",
+          textEn: "Pace curve for negative and positive split strategies",
+          category: "Calculateurs",
+          categoryEn: "Calculators",
+        },
+        {
+          text: "Checklist « Sac et logistique » sur le simulateur, jusque-là générée pour le PDF seulement",
+          textEn: "Kit bag checklist on the race simulator, until now generated for the PDF only",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+      ],
+      changed: [
+        {
+          text: "Simulateur repensé en deux colonnes : réglages sticky repliés en barre de résumé, plan en grille de cards, export PDF passé en action principale",
+          textEn: "Race simulator reworked into two columns: sticky settings folding into a summary bar, plan in a card grid, PDF export promoted to the primary action",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Tableau d'allure adaptatif : une ligne de résumé pour l'allure régulière, tableau et courbe pour négative et positive",
+          textEn: "Split table adapts to the strategy: one summary line for even pacing, table plus curve for negative and positive",
+          category: "Calculateurs",
+          categoryEn: "Calculators",
+        },
+        {
+          text: "Échauffement du simulateur en checklist chronométrée ; durées par exercice ajoutées et total du bloc corrigé de 18 à 28 min",
+          textEn: "Race simulator warm-up is now a timed checklist; per-exercise durations added and the block total corrected from 18 to 28 min",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Un seul champ de temps objectif (mm:ss ou h:mm:ss) à la place des trois steppers natifs",
+          textEn: "Single target-time field (mm:ss / h:mm:ss) replacing three native steppers",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Nutrition : l'absence d'apport glucidique s'affiche comme un conseil et non comme « 0 g / 0 gels » ; hydratation arrondie à 50 ml",
+          textEn: "Nutrition states the no-carb case as advice instead of \"0 g / 0 gels\"; hydration rounded to 50 ml",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Tableau de la semaine sur desktop retravaillé : colonnes à hauteur naturelle, cards Repos explicites, zone et charge sur chaque séance",
+          textEn: "Desktop week board reworked: natural column heights, explicit Rest cards, zone and load on every session card",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Couleurs d'intensité unifiées dans une table unique partagée par le tableau hebdo, le calendrier de plan et le sélecteur de séances",
+          textEn: "Intensity colours unified into one table shared by the week board, the plan calendar and the workout picker",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Copy coach du simulateur unifiée au tutoiement",
+          textEn: "Coach copy on the race simulator unified on tutoiement",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+      ],
+      fixed: [
+        {
+          text: "Le header sticky du tableau d'allure ne recouvre plus les premières lignes",
+          textEn: "Split table sticky header no longer covers the first rows",
+          category: "Calculateurs",
+          categoryEn: "Calculators",
+        },
+        {
+          text: "L'échauffement était planifié à un -30 min en dur qui ne correspondait pas à sa durée réelle",
+          textEn: "Warm-up was scheduled at a hardcoded -30 min that did not match its real duration",
+          category: "Calculateurs",
+          categoryEn: "Calculators",
+        },
+        {
+          text: "Les cues mentaux ne répètent plus leur plage de kilomètres dans le texte",
+          textEn: "Mental cues no longer repeat their km range in the text",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Le bouton de génération du rail desktop reste ancré en bas du panneau au lieu de tomber hors écran",
+          textEn: "Desktop week generator CTA stays anchored at the bottom of the rail instead of falling off screen",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "La génération de plan est amorcée depuis sa config, donc un plan partagé se régénère à l'identique pour chaque destinataire",
+          textEn: "Plan generation is now seeded from its config, so a shared plan regenerates identically for every recipient",
+          category: "Plans",
+          categoryEn: "Plans",
+        },
+      ],
+    },
+  },
+  {
     version: "0.7.2",
     date: "2026-07-20",
     changes: {
