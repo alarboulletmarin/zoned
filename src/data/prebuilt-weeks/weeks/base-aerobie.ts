@@ -2,7 +2,9 @@ import type { PrebuiltWeek } from "../types";
 
 /**
  * Base aérobie 80/20 (Seiler) — 5 sessions, one quality day, the rest easy.
- * Long run Saturday (day 5). Hard day Tuesday (day 1), nothing adjacent.
+ * Long run Saturday (day 5). Hard day Wednesday (day 2), nothing adjacent.
+ * 80/20 is counted in sessions (4 easy out of 5); the share of *time* in
+ * Z1-Z2 sits higher still, around 95%.
  */
 export const baseAerobie: PrebuiltWeek = {
   id: "base-aerobie-80-20",
@@ -10,11 +12,11 @@ export const baseAerobie: PrebuiltWeek = {
   name: "Base aérobie 80/20",
   nameEn: "Aerobic Base 80/20",
   description:
-    "Une semaine de fondation : ~80 % du temps en facile, une seule séance de qualité. Le socle qui développe l'endurance sans creuser la fatigue.",
+    "Une semaine de fondation : 4 séances faciles sur 5, une seule séance de qualité. Le socle qui développe l'endurance sans creuser la fatigue.",
   descriptionEn:
-    "A foundation week: ~80% of time easy, a single quality session. The base that builds endurance without digging fatigue.",
+    "A foundation week: 4 easy sessions out of 5, a single quality session. The base that builds endurance without digging fatigue.",
   icon: "Mountain",
-  difficulty: "beginner",
+  difficulty: "intermediate",
   category: "base",
   provenance: "Modèle polarisé 80/20 — Stephen Seiler",
   provenanceEn: "80/20 polarized model — Stephen Seiler",
@@ -24,7 +26,7 @@ export const baseAerobie: PrebuiltWeek = {
     "Most minutes in Z1–Z2 drive central aerobic adaptations (mitochondrial density, capillarization) at a low neuromuscular cost. A single hard session is enough to maintain VO₂max while leaving room for full recovery, which keeps the load sustainable week after week.",
   settings: {
     sessions: 5,
-    targetVolumeH: 5,
+    targetVolumeH: 4,
     quality: "threshold",
     disciplines: [],
     levels: [],

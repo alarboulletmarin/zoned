@@ -1,8 +1,13 @@
 import type { PrebuiltWeek } from "../types";
 
 /**
- * Affûtage / taper (VO₂·VMA) — 4 sessions, low volume, one sharp short quality.
+ * Affûtage / taper (VO₂·VMA) — 5 sessions, low volume, two intensity touches.
  * Long run shortened. Keeps intensity, slashes volume.
+ *
+ * Bosquet & Mujika's point is that a taper works by cutting volume *while
+ * holding intensity*. A single short VO₂ session left the week 99% easy, which
+ * is the failure mode the meta-analysis warns about, so the Friday recovery jog
+ * is an opener with strides rather than a plain shakeout.
  */
 export const affutageVo2: PrebuiltWeek = {
   id: "affutage-vo2",
@@ -24,7 +29,7 @@ export const affutageVo2: PrebuiltWeek = {
     "Tapering cuts volume by 40–60% while keeping a little intensity: fatigue drops faster than fitness, and freshness climbs. Short VO₂ reps maintain running economy and the neuromuscular system without lasting damage.",
   settings: {
     sessions: 5,
-    targetVolumeH: 3.5,
+    targetVolumeH: 3,
     quality: "vo2vma",
     disciplines: [],
     levels: [],
@@ -36,7 +41,7 @@ export const affutageVo2: PrebuiltWeek = {
       workoutId: "END-013",
       sessionType: "endurance",
       isKeySession: false,
-      estimatedDurationMin: 35,
+      estimatedDurationMin: 40,
       why: "Footing de maintien court : entretient l'aérobie, volume volontairement bas pendant l'affûtage.",
       whyEn: "Short maintenance jog: keeps the aerobic system ticking, volume kept low during the taper.",
     },
@@ -45,34 +50,34 @@ export const affutageVo2: PrebuiltWeek = {
       workoutId: "VMA-020",
       sessionType: "vo2max",
       isKeySession: true,
-      estimatedDurationMin: 28,
+      estimatedDurationMin: 30,
       why: "VMA pré-course : quelques répétitions vives pour rester affûté sans fatiguer — la séance signature de l'affûtage.",
       whyEn: "Pre-race VO₂: a few sharp reps to stay crisp without fatigue — the signature taper session.",
     },
     {
       dayOfWeek: 3,
-      workoutId: "REC-016",
+      workoutId: "REC-005",
       sessionType: "recovery",
       isKeySession: false,
-      estimatedDurationMin: 45,
-      why: "Footing régénération en nature : du volume facile pour garder la part « low » dominante malgré l'intensité.",
-      whyEn: "Nature regeneration jog: easy volume to keep the easy share dominant despite the intensity.",
+      estimatedDurationMin: 30,
+      why: "Régénération active courte : on évacue la séance de la veille sans rajouter de volume en pleine réduction.",
+      whyEn: "Short active regeneration: clears yesterday's session without adding volume mid-taper.",
     },
     {
       dayOfWeek: 4,
-      workoutId: "REC-011",
+      workoutId: "REC-012",
       sessionType: "recovery",
       isKeySession: false,
-      estimatedDurationMin: 22,
-      why: "Shakeout court : activation très légère la veille, jambes fraîches et système nerveux réveillé.",
-      whyEn: "Short shakeout: a very light pre-day activation, fresh legs and nervous system primed.",
+      estimatedDurationMin: 28,
+      why: "Activation pré-course : footing court plus 4 accélérations de 20 s, la deuxième touche d'intensité qui empêche l'affûtage de devenir une semaine molle.",
+      whyEn: "Pre-race activation: a short jog plus 4x20s strides, the second intensity touch that stops the taper turning into a soft week.",
     },
     {
       dayOfWeek: 5,
       workoutId: "LR-014",
       sessionType: "long_run",
       isKeySession: false,
-      estimatedDurationMin: 45,
+      estimatedDurationMin: 50,
       why: "Sortie longue raccourcie : on garde le geste de la longue mais à dose réduite pour arriver frais.",
       whyEn: "Shortened long run: the long-run feel kept, but trimmed so you arrive fresh.",
     },

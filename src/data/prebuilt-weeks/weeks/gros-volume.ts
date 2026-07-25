@@ -2,7 +2,12 @@ import type { PrebuiltWeek } from "../types";
 
 /**
  * Gros volume polarisé — 6 sessions, lots of easy aerobic volume, a single
- * quality day. High weekly load that stays ~80/20.
+ * quality day. High weekly load, 5 easy sessions out of 6.
+ *
+ * Sessions run at the top of their template range and the long run is a
+ * durability outing: at 5.8h the week was an intermediate volume wearing an
+ * "advanced, high volume" label, and its VO2max session was cut to 40min from
+ * the 60-70 its structure calls for.
  */
 export const grosVolume: PrebuiltWeek = {
   id: "gros-volume-polarise",
@@ -24,7 +29,7 @@ export const grosVolume: PrebuiltWeek = {
     "Elite endurance athletes accumulate most of their volume well below threshold and concentrate intensity in a few sessions. This high easy volume maximizes peripheral aerobic adaptations while a single hard session maintains the top end — high volume that doesn't outrun recovery capacity.",
   settings: {
     sessions: 6,
-    targetVolumeH: 8,
+    targetVolumeH: 7,
     quality: "vo2vma",
     disciplines: [],
     levels: [],
@@ -36,7 +41,7 @@ export const grosVolume: PrebuiltWeek = {
       workoutId: "END-007",
       sessionType: "endurance",
       isKeySession: false,
-      estimatedDurationMin: 60,
+      estimatedDurationMin: 65,
       why: "Endurance en groupe : gros bloc aérobie facile pour démarrer le volume de la semaine.",
       whyEn: "Group endurance: a big easy aerobic block to kick off the week's volume.",
     },
@@ -54,7 +59,7 @@ export const grosVolume: PrebuiltWeek = {
       workoutId: "VMA-018",
       sessionType: "vo2max",
       isKeySession: true,
-      estimatedDurationMin: 40,
+      estimatedDurationMin: 65,
       why: "L'unique séance dure : VMA spécifique pour tenir le haut du spectre malgré le gros volume.",
       whyEn: "The single hard session: specific VO₂ work to hold the top end despite the high volume.",
     },
@@ -63,25 +68,25 @@ export const grosVolume: PrebuiltWeek = {
       workoutId: "REC-016",
       sessionType: "recovery",
       isKeySession: false,
-      estimatedDurationMin: 50,
+      estimatedDurationMin: 60,
       why: "Footing régénération long lendemain de qualité : facile mais conséquent, c'est du volume.",
       whyEn: "Long regeneration jog after quality: easy but substantial — it's still volume.",
     },
     {
       dayOfWeek: 5,
-      workoutId: "SL-003",
+      workoutId: "LR-015",
       sessionType: "long_run",
       isKeySession: false,
-      estimatedDurationMin: 100,
-      why: "Sortie longue endurance pure : le plus gros bloc de la semaine, entièrement en facile.",
-      whyEn: "Pure-endurance long run: the biggest block of the week, entirely easy.",
+      estimatedDurationMin: 130,
+      why: "Sortie longue durabilité : le plus gros bloc de la semaine, entièrement en facile, assez long pour travailler la résistance à la dérive cardiaque.",
+      whyEn: "Durability long run: the biggest block of the week, entirely easy, long enough to work on resisting cardiac drift.",
     },
     {
       dayOfWeek: 6,
       workoutId: "END-008",
       sessionType: "endurance",
       isKeySession: false,
-      estimatedDurationMin: 45,
+      estimatedDurationMin: 50,
       why: "Endurance régénératrice : déverrouille les jambes au lendemain de la longue, finit le volume en douceur.",
       whyEn: "Regenerative endurance: loosens the legs after the long run, finishes the volume gently.",
     },
