@@ -9,10 +9,10 @@
  */
 
 import { useState, useEffect, useCallback } from "react";
-import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import { ChevronDown, ChevronUp } from "@/components/icons";
 import { IntensityBadge } from "./IntensityBadge";
+import { PhaseCard } from "./PhaseCard";
 import { ExerciseImage } from "./ExerciseImage";
 import { MuscleGroupBadges } from "./MuscleGroupBadge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -68,11 +68,7 @@ export function StrengthExerciseList({ blocks, phase, className }: StrengthExerc
   const groups = groupBySupersets(blocks);
 
   return (
-    <div className={cn("space-y-2", className)}>
-      <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-        {phaseLabel}
-      </h3>
-
+    <PhaseCard label={phaseLabel} className={className}>
       {isLoading ? (
         <div className="space-y-2">
           {blocks.map((_, i) => (
@@ -115,7 +111,7 @@ export function StrengthExerciseList({ blocks, phase, className }: StrengthExerc
           })}
         </div>
       )}
-    </div>
+    </PhaseCard>
   );
 }
 

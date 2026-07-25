@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { zoneClass } from "@/lib/zoneColors";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Shuffle, Info } from "@/components/icons";
@@ -345,13 +346,13 @@ export function RaceEquivalencePage() {
                               <span
                                 className={cn(
                                   "inline-flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded-full",
-                                  `bg-${zoneMeta.color}/10 text-${zoneMeta.color}`,
+                                  cn(zoneClass(p.zone!, "bgSoft"), zoneClass(p.zone!, "text")),
                                 )}
                               >
                                 <span
                                   className={cn(
                                     "size-2 rounded-full",
-                                    `bg-${zoneMeta.color}`,
+                                    zoneClass(p.zone!, "bg"),
                                   )}
                                 />
                                 Z{p.zone}

@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
 import { Lightbulb, AlertTriangle } from "@/components/icons";
 import { ZoneBadge } from "./ZoneBadge";
-import { Badge } from "@/components/ui/badge";
+import { PhaseCard } from "./PhaseCard";
 import { cn } from "@/lib/utils";
-import type { WorkoutTemplate, WorkoutStep, WorkoutStepRepeat, WorkoutStepSegment, ZoneRange, ZoneNumber } from "@/types";
-import { getWorkoutDiscipline, getZoneNumber } from "@/types";
+import type { WorkoutTemplate, WorkoutStep, WorkoutStepRepeat, WorkoutStepSegment, ZoneRange, ZoneSpan } from "@/types";
+import { getWorkoutDiscipline, parseZoneSpan } from "@/types";
 import { formatPace } from "@/lib/zones";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { useIsEnglish, usePickLang, usePickLangArray } from "@/lib/i18n-utils";
@@ -62,38 +62,38 @@ export function WorkoutStructure({ workout, userZones, className }: WorkoutStruc
   return (
     <div className={cn("space-y-7 sm:space-y-8", className)}>
       {phases.map((phase) => (
-        <section key={phase.key} className="space-y-3">
-          <div className="space-y-1">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-              {phase.label}
-            </h3>
-            {phase.summary && shouldShowPhaseSummary(phase.steps) && (
-              <p className="text-sm font-medium text-foreground/85 tracking-tight">
-                {phase.summary}
-              </p>
-            )}
-          </div>
-          <div className="space-y-3">
-            {phase.steps.map((step, index) => (
-              <StepItem key={`${phase.key}-${index}`} step={step} depth={0} userZones={effectiveUserZones} t={t} isEnglish={isEnglish} />
-            ))}
-          </div>
-        </section>
+        <PhaseCard
+          key={phase.key}
+          label={phase.label}
+          summary={shouldShowPhaseSummary(phase.steps) ? phase.summary : null}
+        >
+          {phase.steps.map((step, index) => (
+            <StepItem key={`${phase.key}-${index}`} step={step} depth={0} userZones={effectiveUserZones} t={t} isEnglish={isEnglish} />
+          ))}
+        </PhaseCard>
       ))}
     </div>
   );
 }
 
-function formatPersonalizedZone(zoneNumber: ZoneNumber, userZones: ZoneRange[]): string | null {
-  const zoneData = userZones.find((zone) => zone.zone === zoneNumber);
-  if (!zoneData) return null;
+/**
+ * Heart-rate and pace targets for a zone spec.
+ *
+ * A range spec spans its whole width: `Z1-Z2` must read from the bottom of Z1
+ * to the top of Z2, not just Z2's numbers under a badge that says Z1-Z2.
+ */
+function formatPersonalizedZone(span: ZoneSpan, userZones: ZoneRange[]): string | null {
+  const low = userZones.find((zone) => zone.zone === span.min);
+  const high = userZones.find((zone) => zone.zone === span.max);
+  if (!low || !high) return null;
 
   const parts: string[] = [];
-  if (zoneData.hrMin && zoneData.hrMax) {
-    parts.push(`${zoneData.hrMin}-${zoneData.hrMax} bpm`);
+  if (low.hrMin && high.hrMax) {
+    parts.push(`${low.hrMin}-${high.hrMax} bpm`);
   }
-  if (zoneData.paceMinPerKm && zoneData.paceMaxPerKm) {
-    parts.push(`${formatPace(zoneData.paceMinPerKm)}-${formatPace(zoneData.paceMaxPerKm)}/km`);
+  // Pace runs the other way: the slowest pace belongs to the easiest zone.
+  if (high.paceMinPerKm && low.paceMaxPerKm) {
+    parts.push(`${formatPace(high.paceMinPerKm)}-${formatPace(low.paceMaxPerKm)}/km`);
   }
 
   return parts.length > 0 ? parts.join(" · ") : null;
@@ -107,12 +107,6 @@ function shouldShowPhaseSummary(steps: WorkoutStep[]): boolean {
   return hasNestedRepeat(steps);
 }
 
-function getPatternChipValue(step: WorkoutStepRepeat, isEnglish: boolean): string {
-  const summary = summarizeWorkoutSteps([step], isEnglish);
-  const prefix = `${step.count} x `;
-  return summary.startsWith(prefix) ? summary.slice(prefix.length) : summary;
-}
-
 function getRecoveryChipLabel(
   step: WorkoutStepRepeat,
   isEnglish: boolean,
@@ -124,18 +118,6 @@ function getRecoveryChipLabel(
   if (step.unit === "sets") return t("structure.chips.seriesRecovery", { value });
   if (step.unit === "blocks") return t("structure.chips.blocksRecovery", { value });
   return null;
-}
-
-function StructureChips({ items }: { items: string[] }) {
-  return (
-    <div className="flex flex-wrap gap-2">
-      {items.map((item) => (
-        <Badge key={item} variant="secondary" className="rounded-full px-2.5 py-1 text-[11px] font-medium tracking-tight">
-          {item}
-        </Badge>
-      ))}
-    </div>
-  );
 }
 
 function areAllSegments(steps: WorkoutStep[]): steps is WorkoutStepSegment[] {
@@ -155,7 +137,7 @@ function isCompactNestedRepeat(step: WorkoutStepRepeat): step is WorkoutStepRepe
 
 function StepItem({ step, depth, userZones, t, isEnglish }: StepItemProps) {
   if (step.kind === "segment") {
-    return <SegmentItem step={step} depth={depth} userZones={userZones} t={t} />;
+    return <StepRow step={step} depth={depth} userZones={userZones} t={t} />;
   }
 
   if (isCompactNestedRepeat(step)) {
@@ -228,36 +210,48 @@ function CompactNestedRepeatItem({
 
   return (
     <div className={cn("rounded-xl border border-border/60 bg-muted/20 p-3 sm:p-4 space-y-3", depth > 0 && "ml-4 sm:ml-6")}>
-      <div className="flex items-center gap-2 flex-wrap">
-        <Badge variant="secondary" className="rounded-full px-2.5 py-1 text-[11px] font-medium tracking-tight">
-          {setsLabel}
-        </Badge>
-        <span className="text-xs text-muted-foreground/60">×</span>
-        <Badge variant="secondary" className="rounded-full px-2.5 py-1 text-[11px] font-medium tracking-tight">
-          {repsLabel}
-        </Badge>
-      </div>
+      {/* Plain text, not pills: these are counts to read, not controls to
+          press. The previous rounded secondary badges read as toggles. */}
+      <p className="text-sm font-semibold tracking-tight">
+        {setsLabel} <span className="text-muted-foreground font-normal">·</span> {repsLabel}
+      </p>
 
-      <div className="rounded-lg border border-border/40 bg-background/50 p-3 space-y-2">
+      <RepeatGroup count={inner.count}>
         {innerSegments.map((segment, index) => (
-          <SegmentSummaryRow key={`compact-inner-step-${index}`} step={segment} userZones={userZones} t={t} />
+          <StepRow key={`compact-inner-step-${index}`} step={segment} userZones={userZones} t={t} />
         ))}
         {innerBetween.map((segment, index) => (
-          <SegmentSummaryRow key={`compact-inner-between-${index}`} step={segment} userZones={userZones} t={t} dashed />
+          <StepRow key={`compact-inner-between-${index}`} step={segment} userZones={userZones} t={t} dashed />
         ))}
-        <p className="text-[11px] text-muted-foreground text-right tracking-tight">
-          × {inner.count}
-        </p>
-      </div>
+      </RepeatGroup>
 
       {setBetween.length > 0 && (
         <div className="rounded-lg border border-dashed border-border/60 bg-background/70 p-3 space-y-2">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{betweenSetsLabel}</p>
           {setBetween.map((segment, index) => (
-            <SegmentSummaryRow key={`compact-between-${index}`} step={segment} userZones={userZones} t={t} muted />
+            <StepRow key={`compact-between-${index}`} step={segment} userZones={userZones} t={t} muted />
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+/**
+ * Wraps the steps a repeat applies to, with the multiplier leading the group
+ * and a rule running down its full height. A bare "x 12" floating under the
+ * last row gave no clue whether it covered one step or the pair.
+ */
+function RepeatGroup({ count, children }: { count: number; children: React.ReactNode }) {
+  return (
+    <div className="rounded-lg border border-border/40 bg-background/50 p-3">
+      <div className="flex items-center gap-2 mb-2">
+        <span className="font-mono text-xs font-semibold text-foreground tabular-nums shrink-0">
+          {count} ×
+        </span>
+        <span className="h-px flex-1 bg-border/60" />
+      </div>
+      <div className="space-y-2 border-l-2 border-border/60 pl-3">{children}</div>
     </div>
   );
 }
@@ -271,26 +265,24 @@ function CompactRepeatItem({
 }: StepItemProps & { step: WorkoutStepRepeat }) {
   const stepSegments = step.steps as WorkoutStepSegment[];
   const betweenSegments = (step.between ?? []) as WorkoutStepSegment[];
-  const chips = [
-    t(`structure.repeatUnits.${step.unit ?? "blocks"}`, { count: step.count }),
-    getPatternChipValue(step, isEnglish),
-    getRecoveryChipLabel(step, isEnglish, t),
-  ].filter(Boolean) as string[];
+  const seriesRecovery = getRecoveryChipLabel(step, isEnglish, t);
   const betweenLabel = t(`structure.between.${step.unit ?? "blocks"}`);
   const showBetweenPlaceholder = (step.unit === "sets" || step.unit === "blocks") && betweenSegments.length === 0;
 
   return (
     <div className={cn("rounded-xl border border-border/60 bg-muted/20 p-3 sm:p-4 space-y-3", depth > 0 && "ml-4 sm:ml-6")}>
-      <StructureChips items={chips} />
-
-      <div className="space-y-2">
+      <RepeatGroup count={step.count}>
         {stepSegments.map((segment, index) => (
-          <SegmentSummaryRow key={`compact-step-${index}`} step={segment} userZones={userZones} t={t} />
+          <StepRow key={`compact-step-${index}`} step={segment} userZones={userZones} t={t} />
         ))}
         {betweenSegments.map((segment, index) => (
-          <SegmentSummaryRow key={`compact-between-${index}`} step={segment} userZones={userZones} t={t} dashed />
+          <StepRow key={`compact-between-${index}`} step={segment} userZones={userZones} t={t} dashed />
         ))}
-      </div>
+      </RepeatGroup>
+
+      {seriesRecovery && (
+        <p className="text-xs text-muted-foreground tracking-tight">{seriesRecovery}</p>
+      )}
 
       {showBetweenPlaceholder && (
         <div className="rounded-lg border border-dashed border-border/60 bg-background/70 p-3 space-y-2">
@@ -302,119 +294,93 @@ function CompactRepeatItem({
   );
 }
 
-function SegmentSummaryRow({
+function buildMetaParts(step: WorkoutStepSegment): string[] {
+  const parts: string[] = [];
+  if (step.durationSec != null) parts.push(formatDurationMinutes(step.durationSec / 60));
+  if (step.distanceKm != null) parts.push(`${step.distanceKm} km`);
+  if (step.distanceM != null) parts.push(`${step.distanceM} m`);
+  if (step.elevationGainM != null && step.elevationGainM > 0) {
+    parts.push(`+${step.elevationGainM} m D+`);
+  }
+  if (step.gradientPercent != null && step.gradientPercent !== 0) {
+    parts.push(`${step.gradientPercent > 0 ? "+" : ""}${step.gradientPercent}%`);
+  }
+  return parts;
+}
+
+/**
+ * One step of a phase.
+ *
+ * Priority is deliberately inverted compared to the previous layout: the
+ * numbers you read mid-session — heart rate and pace — are the dominant
+ * line, and the exercise name drops to a caption underneath. When the runner
+ * has not set their zones there is nothing to promote, so the name keeps the
+ * lead line instead of leaving it empty.
+ */
+function StepRow({
   step,
   userZones,
   t,
+  depth = 0,
   muted = false,
   dashed = false,
 }: {
   step: WorkoutStepSegment;
   userZones?: ZoneRange[];
   t: StepItemProps["t"];
+  depth?: number;
   muted?: boolean;
   dashed?: boolean;
 }) {
   const pickLang = usePickLang();
   const description = pickLang(step, "description");
-  const zoneNumber = step.zone ? getZoneNumber(step.zone) : null;
-  const personalizedInfo = zoneNumber && userZones && userZones.length > 0
-    ? formatPersonalizedZone(zoneNumber, userZones)
+  const span = parseZoneSpan(step.zone);
+  const targets = span && userZones && userZones.length > 0
+    ? formatPersonalizedZone(span, userZones)
     : null;
 
-  const metaParts: string[] = [];
-  if (step.durationSec != null) metaParts.push(formatDurationMinutes(step.durationSec / 60));
-  if (step.distanceKm != null) metaParts.push(`${step.distanceKm} km`);
-  if (step.distanceM != null) metaParts.push(`${step.distanceM} m`);
-  if (step.elevationGainM != null && step.elevationGainM > 0) {
-    metaParts.push(`+${step.elevationGainM} m D+`);
-  }
-  if (step.gradientPercent != null && step.gradientPercent !== 0) {
-    metaParts.push(`${step.gradientPercent > 0 ? "+" : ""}${step.gradientPercent}%`);
-  }
-
-  return (
-    <div className={cn(
-      "rounded-lg border border-border/40 bg-background/80 p-3 space-y-1.5",
-      muted && "bg-muted/35",
-      dashed && "border-dashed border-border/50 bg-muted/20",
-    )}>
-      <div className="flex items-start justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-2 flex-wrap min-w-0">
-          {step.zone ? (
-            <ZoneBadge zone={step.zone} size="sm" showLabel />
-          ) : (
-            <span className="inline-flex items-center rounded-full border border-border/60 bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground">
-              {t("structure.noZone")}
-            </span>
-          )}
-          <GlossaryLinkedText text={description} className="text-sm font-medium min-w-0" as="span" />
-        </div>
-        {metaParts.length > 0 && (
-          <span className="text-xs text-muted-foreground whitespace-nowrap shrink-0">
-            {metaParts.join(" · ")}
-          </span>
-        )}
-      </div>
-      {personalizedInfo && (
-        <p className="text-[11px] text-muted-foreground">{personalizedInfo}</p>
-      )}
-    </div>
-  );
-}
-
-function SegmentItem({
-  step,
-  depth,
-  userZones,
-  t,
-}: Pick<StepItemProps, "depth" | "userZones"> & { step: WorkoutStepSegment; t: StepItemProps["t"] }) {
-  const pickLang = usePickLang();
-  const description = pickLang(step, "description");
-  const zoneNumber = step.zone ? getZoneNumber(step.zone) : null;
-  const personalizedInfo = zoneNumber && userZones && userZones.length > 0
-    ? formatPersonalizedZone(zoneNumber, userZones)
-    : null;
-
-  const metaParts: string[] = [];
-  if (step.durationSec != null) metaParts.push(formatDurationMinutes(step.durationSec / 60));
-  if (step.distanceKm != null) metaParts.push(`${step.distanceKm} km`);
-  if (step.distanceM != null) metaParts.push(`${step.distanceM} m`);
-  if (step.elevationGainM != null && step.elevationGainM > 0) {
-    metaParts.push(`+${step.elevationGainM} m D+`);
-  }
-  if (step.gradientPercent != null && step.gradientPercent !== 0) {
-    metaParts.push(`${step.gradientPercent > 0 ? "+" : ""}${step.gradientPercent}%`);
-  }
+  const metaParts = buildMetaParts(step);
+  const isRecovery = dashed || step.role === "recovery";
 
   return (
     <div
       className={cn(
         "rounded-lg border border-border/40 bg-background/80 p-3",
-        step.role === "recovery" && "border-dashed border-border/50 bg-muted/20",
+        muted && "bg-muted/35",
+        isRecovery && "border-dashed border-border/50 bg-muted/20",
         depth > 0 && "ml-4 sm:ml-6",
       )}
     >
-      <div className="space-y-1.5">
-        <div className="flex items-start justify-between gap-3 flex-wrap">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1 space-y-1">
           <div className="flex items-center gap-2 flex-wrap min-w-0">
             {step.zone ? (
-              <ZoneBadge zone={step.zone} size="sm" showLabel />
+              <ZoneBadge zone={step.zone} size="sm" showLabel={!targets} />
             ) : (
               <span className="inline-flex items-center rounded-full border border-border/60 bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground">
                 {t("structure.noZone")}
               </span>
             )}
-            <GlossaryLinkedText text={description} className="text-sm font-medium min-w-0" as="span" />
+            {targets ? (
+              <span className="font-mono text-sm font-semibold text-foreground tabular-nums">
+                {targets}
+              </span>
+            ) : (
+              <GlossaryLinkedText text={description} className="text-sm font-medium min-w-0" as="span" />
+            )}
           </div>
-          {metaParts.length > 0 && (
-            <span className="text-xs text-muted-foreground whitespace-nowrap shrink-0">
-              {metaParts.join(" · ")}
-            </span>
+          {targets && (
+            <GlossaryLinkedText
+              text={description}
+              className="text-xs text-muted-foreground block min-w-0"
+              as="span"
+            />
           )}
         </div>
-        {personalizedInfo && (
-          <p className="text-[11px] text-muted-foreground">{personalizedInfo}</p>
+        {metaParts.length > 0 && (
+          <span className="font-mono text-sm text-foreground/80 tabular-nums whitespace-nowrap shrink-0">
+            {metaParts.join(" · ")}
+          </span>
         )}
       </div>
     </div>

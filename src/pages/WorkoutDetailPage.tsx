@@ -24,10 +24,18 @@ import {
   Sparkles,
   Share,
   StravaIcon,
+  MoreHorizontal,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   ZoneBadge,
   WorkoutCardCompact,
@@ -45,7 +53,8 @@ import { NutritionRecoverySection } from "@/components/domain/NutritionRecoveryS
 import { ScienceSection } from "@/components/domain/ScienceSection";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp, DetailAccordion } from "@/components/editorial";
+import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { Section } from "@/components/editorial/Section";
 import { SessionTimeline, ZoneDistribution, transformSessionBlocks, MiniElevationProfile } from "@/components/visualization";
 import { StrengthSessionTimeline } from "@/components/visualization/StrengthSessionTimeline";
 import { MuscleDistribution } from "@/components/visualization/MuscleDistribution";
@@ -444,7 +453,7 @@ export function WorkoutDetailPage() {
               {t(`library:categories.${workout.category}`)}
             </Badge>
             <span className="ml-auto">
-              <FavoriteButton workoutId={workout.id} />
+              <FavoriteButton workoutId={workout.id} showLabel />
             </span>
           </div>
 
@@ -456,54 +465,62 @@ export function WorkoutDetailPage() {
             <GlossaryLinkedText text={pick(workout, "description")} />
           </p>
 
-          {/* Action bar — hierarchy: primary (Exporter) → outlines (Partager,
-              Parcours) → ghost utility (Copier le lien). Same h-9 height
-              across the row for visual cohesion. */}
-          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 mt-5">
-            <ExportMenu workout={workout} />
-            <Button
-              variant="outline"
-              size="sm"
-              className="rounded-full px-4"
-              onClick={() => setShareOpen(true)}
-            >
-              <Share className="size-3.5 mr-1.5" />
-              {t("common:share.trigger")}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="rounded-full px-4"
-              onClick={async () => {
-                const ok = await copyToClipboard(buildStravaShareText(workout));
-                if (ok) toast.success(t("session:strava.copied"));
-                else toast.error(t("common:errors.generic"));
-              }}
-            >
-              <StravaIcon className="size-3.5 mr-1.5 text-[#FC4C02]" />
-              {t("session:actions.shareStrava")}
-            </Button>
-            {canGenerateRoute && (
-              <Button asChild variant="outline" size="sm" className="rounded-full px-4">
-                <Link to="/routes" state={{ workoutRouteWorkout: workout }}>
-                  <Route className="size-3.5 mr-1.5" />
-                  {t("session:actions.findRoute")}
-                </Link>
-              </Button>
-            )}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="rounded-full px-3 text-muted-foreground hover:text-foreground"
-              onClick={async () => {
-                const ok = await copyToClipboard(window.location.href);
-                if (ok) toast.success(t("common:actions.linkCopied"));
-                else toast.error(t("common:errors.generic"));
-              }}
-            >
-              <Link2 className="size-3.5 mr-1.5" />
-              {t("common:actions.copyLink")}
-            </Button>
+          {/* Action bar — one primary, everything else behind the overflow
+              menu. Five equally-weighted buttons used to fill a screen before
+              the session itself; three of them (Partager, Strava, Copier le
+              lien) are the same intent, and one (Parcours) is navigation.
+              Full width on phones, contained from sm: up. */}
+          <div className="flex items-center gap-2 mt-5 sm:max-w-sm">
+            <ExportMenu workout={workout} size="default" className="flex-1 justify-center" />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="rounded-full shrink-0 size-10"
+                  aria-label={t("session:actions.moreActions")}
+                >
+                  <MoreHorizontal className="size-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem onClick={() => setShareOpen(true)}>
+                  <Share className="size-4" />
+                  {t("common:share.trigger")}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={async () => {
+                    const ok = await copyToClipboard(buildStravaShareText(workout));
+                    if (ok) toast.success(t("session:strava.copied"));
+                    else toast.error(t("common:errors.generic"));
+                  }}
+                >
+                  <StravaIcon className="size-4 text-[#FC4C02]" />
+                  {t("session:actions.shareStrava")}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={async () => {
+                    const ok = await copyToClipboard(window.location.href);
+                    if (ok) toast.success(t("common:actions.linkCopied"));
+                    else toast.error(t("common:errors.generic"));
+                  }}
+                >
+                  <Link2 className="size-4" />
+                  {t("common:actions.copyLink")}
+                </DropdownMenuItem>
+                {canGenerateRoute && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/routes" state={{ workoutRouteWorkout: workout }}>
+                        <Route className="size-4" />
+                        {t("session:actions.findRoute")}
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           <ShareDialog
@@ -590,84 +607,68 @@ export function WorkoutDetailPage() {
           </div>
         )}
 
-        {/* Session viz — the actual workout. Always visible. */}
-        <FadeUp as="section">
+        {/* Session viz — the actual workout. Always visible.
+            Every block below is a Section: one heading each, no eyebrow
+            restating the title, no inner card repeating it. */}
+        <FadeUp>
           <div ref={timelineCardRef}>
-            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-3">
-              {t("session:captions.viz")}
-            </p>
-            <EditorialTitle as="h2" size="md" className="mb-4">
-              {t("session:titles.sessionTimeline")}
-            </EditorialTitle>
-            <SessionTimeline workout={workout} />
+            <Section title={t("session:titles.sessionTimeline")}>
+              <SessionTimeline workout={workout} />
+            </Section>
           </div>
         </FadeUp>
 
-        <FadeUp as="section">
-          <EditorialTitle as="h2" size="md" className="mb-4">
-            {t("session:titles.workoutStructure")}
-          </EditorialTitle>
-          <WorkoutStructure workout={workout} userZones={hasUserZones ? userZones : undefined} />
+        <FadeUp>
+          <Section title={t("session:titles.workoutStructure")}>
+            <WorkoutStructure workout={workout} userZones={hasUserZones ? userZones : undefined} />
+          </Section>
         </FadeUp>
 
         {/* Zone distribution + coaching tips paired in a compact 2-col on
             md+, stacked on mobile. */}
-        <FadeUp as="section">
+        <FadeUp>
           <div className="grid md:grid-cols-[2fr_3fr] gap-8 md:gap-10">
-            <div>
-              <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-3">
-                {t("session:titles.zoneDistribution")}
-              </p>
+            <Section title={t("session:titles.zoneDistribution")}>
               <ZoneDistribution workout={workout} />
-            </div>
-            <div>
-              <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-3">
-                {t("session:titles.coachingTips")}
-              </p>
+            </Section>
+            <Section title={t("session:titles.coachingTips")}>
               <CoachingTips workout={workout} />
               {tip && (
                 <div className="mt-4">
                   <TipCard tip={tip} variant="banner" />
                 </div>
               )}
-            </div>
+            </Section>
           </div>
         </FadeUp>
 
         {/* Accordions — secondary content, closed by default so the page
             scans at a glance. Pattern identical to the home FAQ. */}
-        <FadeUp as="section">
+        <FadeUp>
           <div className="border-t border-foreground/15">
-            <DetailAccordion
-              caption={t("session:captions.nutrition")}
-              title={t("session:titles.nutritionRecovery")}
-            >
+            <Section collapsible title={t("session:titles.nutritionRecovery")}>
               <NutritionRecoverySection workout={workout} />
-            </DetailAccordion>
-            <DetailAccordion
-              caption={t("session:captions.science")}
-              title={t("session:titles.scienceMode")}
-            >
+            </Section>
+            <Section collapsible title={t("session:titles.scienceMode")}>
               <ScienceSection workout={workout} />
-            </DetailAccordion>
+            </Section>
           </div>
         </FadeUp>
 
-        {/* Continue exploring — single block. RelatedContent already
-            mixes workouts + articles + glossary terms, so we no longer
-            need a separate "similar workouts" card next to it. */}
-        <FadeUp as="section">
-          <EditorialTitle as="h2" size="md" className="mb-4">
-            {t("session:titles.continueExploring")}
-          </EditorialTitle>
-          <RelatedContent source={{ type: "workout", id: workout.id }} />
-          {relatedWorkouts.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-6">
-              {relatedWorkouts.slice(0, 3).map((related) => (
-                <WorkoutCardCompact key={related.id} workout={related} />
-              ))}
-            </div>
-          )}
+        {/* Continue exploring. Similar sessions lead: they are the most
+            likely next tap, so they come before articles and glossary
+            terms rather than sitting below them. */}
+        <FadeUp>
+          <Section title={t("session:titles.continueExploring")}>
+            {relatedWorkouts.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+                {relatedWorkouts.slice(0, 3).map((related) => (
+                  <WorkoutCardCompact key={related.id} workout={related} />
+                ))}
+              </div>
+            )}
+            <RelatedContent source={{ type: "workout", id: workout.id }} showTitle={false} />
+          </Section>
         </FadeUp>
       </div>
     </>
@@ -853,7 +854,7 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
               {tStrength(`categories.${workout.category}`)}
             </Badge>
             <span className="ml-auto">
-              <FavoriteButton workoutId={workout.id} />
+              <FavoriteButton workoutId={workout.id} showLabel />
             </span>
           </div>
 
@@ -912,50 +913,39 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
         </FadeUp>
 
         {/* Main viz — timeline + exercise list, both always visible. */}
-        <FadeUp as="section">
-          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-3">
-            {tSession("captions.viz")}
-          </p>
-          <EditorialTitle as="h2" size="md" className="mb-4">
-            {tStrength("detail.sessionTimeline")}
-          </EditorialTitle>
-          <StrengthSessionTimeline workout={workout} />
+        <FadeUp>
+          <Section title={tStrength("detail.sessionTimeline")}>
+            <StrengthSessionTimeline workout={workout} />
+          </Section>
         </FadeUp>
 
-        <FadeUp as="section">
-          <EditorialTitle as="h2" size="md" className="mb-4">
-            {tStrength("detail.exerciseDetail")}
-          </EditorialTitle>
-          <div className="space-y-6">
-            <StrengthExerciseList blocks={workout.warmupBlocks} phase="warmup" />
-            <StrengthExerciseList blocks={workout.mainBlocks} phase="main" />
-            <StrengthExerciseList blocks={workout.cooldownBlocks} phase="cooldown" />
-          </div>
+        <FadeUp>
+          <Section title={tStrength("detail.exerciseDetail")}>
+            <div className="space-y-6">
+              <StrengthExerciseList blocks={workout.warmupBlocks} phase="warmup" />
+              <StrengthExerciseList blocks={workout.mainBlocks} phase="main" />
+              <StrengthExerciseList blocks={workout.cooldownBlocks} phase="cooldown" />
+            </div>
+          </Section>
         </FadeUp>
 
         {/* Muscle distribution + map paired in compact 2-col on md+. */}
-        <FadeUp as="section">
+        <FadeUp>
           <div className="grid md:grid-cols-2 gap-6 md:gap-10">
-            <div>
-              <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-3">
-                {tStrength("detail.muscleDistribution")}
-              </p>
+            <Section title={tStrength("detail.muscleDistribution")}>
               <MuscleDistribution workout={workout} />
-            </div>
-            <div>
-              <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-3">
-                {tStrength("detail.muscleMap")}
-              </p>
+            </Section>
+            <Section title={tStrength("detail.muscleMap")}>
               <MuscleMap workout={workout} />
-            </div>
+            </Section>
           </div>
         </FadeUp>
 
         {/* Accordions — secondary content collapsed by default. */}
         <FadeUp as="section">
           <div className="border-t border-foreground/15">
-            <DetailAccordion
-              caption={tSession("captions.equipment")}
+            <Section
+              collapsible
               title={tSession("titles.equipment")}
             >
               {hasEquipment ? (
@@ -971,11 +961,11 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
                   {tStrength("detail.noEquipment")}
                 </p>
               )}
-            </DetailAccordion>
+            </Section>
 
             {workout.suitablePhases.length > 0 && (
-              <DetailAccordion
-                caption={tSession("captions.phases")}
+              <Section
+                collapsible
                 title={tSession("titles.suitablePhases")}
               >
                 <div className="flex flex-wrap gap-2">
@@ -985,21 +975,21 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
                     </Badge>
                   ))}
                 </div>
-              </DetailAccordion>
+              </Section>
             )}
 
             {(tips.length > 0 || mistakes.length > 0) && (
-              <DetailAccordion
-                caption={tSession("captions.mistakes")}
+              <Section
+                collapsible
                 title={tSession("titles.coachingTips")}
               >
                 <StrengthCoachingTips tips={tips} mistakes={mistakes} />
-              </DetailAccordion>
+              </Section>
             )}
 
             {workout.references && workout.references.length > 0 && (
-              <DetailAccordion
-                caption={tSession("captions.refs")}
+              <Section
+                collapsible
                 title={tSession("titles.scientificRefs")}
               >
                 <ul className="space-y-2">
@@ -1021,17 +1011,16 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
                     </li>
                   ))}
                 </ul>
-              </DetailAccordion>
+              </Section>
             )}
           </div>
         </FadeUp>
 
         {/* Continue exploring — same pattern as the running variant. */}
-        <FadeUp as="section">
-          <EditorialTitle as="h2" size="md" className="mb-4">
-            {tSession("titles.continueExploring")}
-          </EditorialTitle>
-          <RelatedContent source={{ type: "workout", id: workout.id }} />
+        <FadeUp>
+          <Section title={tSession("titles.continueExploring")}>
+            <RelatedContent source={{ type: "workout", id: workout.id }} showTitle={false} />
+          </Section>
         </FadeUp>
 
         {/* Image source credit — small footnote */}

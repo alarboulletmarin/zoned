@@ -5,6 +5,7 @@
 
 import Logo from "@/assets/logo.svg?react";
 import type { WorkoutTemplate } from "@/types";
+import { ZONE_HEX_LIGHT } from "@/lib/zoneColors";
 
 interface BrandStripProps {
   scale?: number;
@@ -89,14 +90,13 @@ export function workoutShareUrl(workoutId: string): string {
   return `${origin}/workout/${workoutId}`;
 }
 
-export const ZONE_HEX: Record<1 | 2 | 3 | 4 | 5 | 6, string> = {
-  1: "#94a3b8",
-  2: "#16a34a",
-  3: "#ca8a04",
-  4: "#f97316",
-  5: "#ef4444",
-  6: "#7c3aed",
-};
+/**
+ * Share images render on their own light background regardless of the app
+ * theme, so they pin the light ramp deliberately. What was not deliberate was
+ * keeping a private copy of the values: this now tracks the shared table, and
+ * scripts/qa-zone-colors.ts keeps that table honest against themes.css.
+ */
+export const ZONE_HEX = ZONE_HEX_LIGHT;
 
 interface BgLayerProps {
   /** Inline background CSS (defaults to `#f8fafc`). */

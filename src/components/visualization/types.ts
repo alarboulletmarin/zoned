@@ -18,6 +18,9 @@ export interface TimelineSegment {
   type: BlockType;
   description: string;
   durationMin: number;
+  /** Raw zone spec as authored, e.g. `Z5` or the range `Z1-Z2`. */
+  zoneSpec?: string;
+  /** Dominant (hardest) zone of `zoneSpec`, used for colour and height. */
   zoneNumber: ZoneNumber | null;
   widthPercent: number;
   isRecovery: boolean;
@@ -39,7 +42,8 @@ export interface TimelineSegment {
  * Zone breakdown for distribution chart
  */
 export interface ZoneBreakdown {
-  zone: ZoneNumber;
+  /** `null` is the catch-all bar for segments carrying no zone (drills, strides). */
+  zone: ZoneNumber | null;
   durationMin: number;
   percent: number;
   label: string;

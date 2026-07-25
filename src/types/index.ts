@@ -373,14 +373,45 @@ export const DIFFICULTY_META: Record<
   elite: { label: "Élite", labelEn: "Elite", level: 4, desc: "5 à 7 sorties/semaine · 70+ km/semaine", descEn: "5–7 runs/week · 70+ km/week" },
 };
 
-// Helper to extract zone number from zone string. Clamps zones above the
-// 6-zone Zoned model (e.g. Coggan Z7 cycling) to Z6 instead of falling back
-// to Z1, which would silently misclassify high-intensity work as recovery.
+/** Inclusive zone span. `min === max` for a single-zone spec like `Z5`. */
+export interface ZoneSpan {
+  min: ZoneNumber;
+  max: ZoneNumber;
+}
+
+function clampZone(value: number): ZoneNumber {
+  if (value < 1) return 1;
+  if (value > 6) return 6;
+  return value as ZoneNumber;
+}
+
+/**
+ * Single source of truth for reading a zone spec.
+ *
+ * Zone specs are ranges as often as they are scalars: `Z1-Z2` (progressive
+ * jog), `Z4→Z5+`, `Z1-Z6` (free fartlek). Collapsing a range to one number
+ * has to happen in exactly one place, otherwise callers disagree — the phase
+ * badge and the zone breakdown used to answer Z1 and Z2 for the same string.
+ *
+ * Zones above the 6-zone Zoned model (e.g. Coggan Z7 cycling) clamp to Z6
+ * rather than falling back to Z1, which would misclassify hard work as
+ * recovery.
+ */
+export function parseZoneSpan(zone: Zone | string | null | undefined): ZoneSpan | null {
+  if (!zone) return null;
+  const matches = [...String(zone).matchAll(/Z\s*(\d+)/gi)].map((match) => Number(match[1]));
+  const zones = matches.filter(Number.isFinite).map(clampZone);
+  if (zones.length === 0) return null;
+  return { min: Math.min(...zones) as ZoneNumber, max: Math.max(...zones) as ZoneNumber };
+}
+
+/**
+ * Dominant zone of a spec — the hardest zone it reaches. Use for colour,
+ * sorting and intensity ranking. Use `parseZoneSpan` when the range itself
+ * carries meaning (badges, breakdowns).
+ */
 export function getZoneNumber(zone: Zone | string): ZoneNumber {
-  const num = parseInt(zone.replace("Z", ""), 10);
-  if (!Number.isFinite(num) || num < 1) return 1;
-  if (num > 6) return 6;
-  return num as ZoneNumber;
+  return parseZoneSpan(zone)?.max ?? 1;
 }
 
 function collectStepZones(steps: WorkoutStep[], zones: ZoneNumber[]) {

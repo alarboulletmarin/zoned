@@ -13,7 +13,7 @@
       "difficulty": "beginner",
       "typicalDuration": {
         "min": 45,
-        "max": 60
+        "max": 55
       },
       "environment": {
         "requiresHills": false,
@@ -99,7 +99,7 @@
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 50,
+        "min": 60,
         "max": 70
       },
       "environment": {
@@ -199,7 +199,7 @@
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
       "typicalDuration": {
-        "min": 50,
+        "min": 60,
         "max": 70
       },
       "environment": {
@@ -286,8 +286,8 @@
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 50,
-        "max": 70
+        "min": 55,
+        "max": 65
       },
       "environment": {
         "requiresHills": true,
@@ -474,8 +474,8 @@
       "targetSystem": "aerobic_base",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 40,
-        "max": 60
+        "min": 45,
+        "max": 55
       },
       "environment": {
         "requiresHills": false,
@@ -561,8 +561,8 @@
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
       "typicalDuration": {
-        "min": 45,
-        "max": 75
+        "min": 55,
+        "max": 65
       },
       "environment": {
         "requiresHills": false,
@@ -733,8 +733,8 @@
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 60,
-        "max": 90
+        "min": 70,
+        "max": 85
       },
       "environment": {
         "requiresHills": true,
@@ -822,8 +822,8 @@
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 60,
-        "max": 90
+        "min": 70,
+        "max": 85
       },
       "environment": {
         "requiresHills": false,
@@ -915,8 +915,8 @@
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 70,
-        "max": 90
+        "min": 75,
+        "max": 95
       },
       "environment": {
         "requiresHills": false,
@@ -1002,7 +1002,7 @@
       "difficulty": "intermediate",
       "typicalDuration": {
         "min": 45,
-        "max": 60
+        "max": 55
       },
       "environment": {
         "requiresHills": false,
@@ -1089,7 +1089,7 @@
       "difficulty": "beginner",
       "typicalDuration": {
         "min": 30,
-        "max": 35
+        "max": 40
       },
       "environment": {
         "requiresHills": false,
@@ -1179,7 +1179,7 @@
       "difficulty": "intermediate",
       "typicalDuration": {
         "min": 40,
-        "max": 45
+        "max": 50
       },
       "environment": {
         "requiresHills": false,
@@ -1266,8 +1266,8 @@
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 50,
-        "max": 70
+        "min": 65,
+        "max": 75
       },
       "environment": {
         "requiresHills": false,
@@ -1359,8 +1359,8 @@
       "targetSystem": "aerobic_base",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 60,
-        "max": 80
+        "min": 70,
+        "max": 85
       },
       "environment": {
         "requiresHills": false,
@@ -1463,7 +1463,7 @@
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 55,
+        "min": 60,
         "max": 70
       },
       "environment": {

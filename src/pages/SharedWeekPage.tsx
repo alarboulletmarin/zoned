@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { sessionColorClass } from "@/lib/sessionColors";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -29,19 +30,6 @@ import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import type { AnyWorkoutTemplate } from "@/types";
 import type { PlanWeek } from "@/types/plan";
-
-const SESSION_TYPE_COLORS: Record<string, string> = {
-  endurance: "bg-blue-400",
-  long_run: "bg-blue-600",
-  tempo: "bg-yellow-400",
-  threshold: "bg-orange-400",
-  vo2max: "bg-red-500",
-  speed: "bg-red-400",
-  fartlek: "bg-purple-400",
-  hills: "bg-green-500",
-  race_specific: "bg-amber-500",
-  recovery: "bg-slate-300 dark:bg-slate-700",
-};
 
 export function SharedWeekPage() {
   const [searchParams] = useSearchParams();
@@ -191,7 +179,7 @@ export function SharedWeekPage() {
                           <div
                             className={cn(
                               "size-2 rounded-full",
-                              SESSION_TYPE_COLORS[session.sessionType] || "bg-gray-300",
+                              sessionColorClass(session.sessionType),
                             )}
                           />
                           {pickLocale(sessionLabel)}

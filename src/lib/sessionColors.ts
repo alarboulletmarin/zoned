@@ -51,3 +51,56 @@ export const SESSION_COLOR_FALLBACK = "var(--muted-foreground)";
 export function sessionColor(type: string): string {
   return SESSION_COLORS[type] ?? SESSION_COLOR_FALLBACK;
 }
+
+/**
+ * Tailwind background class per session type, for the dots and bars on plan
+ * and week views.
+ *
+ * Four pages used to keep their own copy of this table, and they had drifted
+ * away from the zone scale: `hills` was green while the same session is red Z5
+ * in the rhythm chart, and `speed` was red while it is violet Z6 everywhere
+ * else. Same intensity, different colour depending on the screen.
+ */
+const NEUTRAL_CLASS = "bg-muted-foreground";
+
+/**
+ * Written out in full rather than built as `bg-zone-${n}`: Tailwind scans
+ * source text, so an interpolated class name is never generated.
+ */
+const ZONE_CLASSES: Record<number, string> = {
+  1: "bg-zone-1",
+  2: "bg-zone-2",
+  3: "bg-zone-3",
+  4: "bg-zone-4",
+  5: "bg-zone-5",
+  6: "bg-zone-6",
+};
+
+const SESSION_CLASSES: Record<string, string> = {
+  cycling: "bg-discipline-cycling",
+  swimming: "bg-discipline-swimming",
+  strength: NEUTRAL_CLASS,
+  yoga: NEUTRAL_CLASS,
+  rest_day: NEUTRAL_CLASS,
+  rest: NEUTRAL_CLASS,
+  cross_training: NEUTRAL_CLASS,
+};
+
+export function sessionColorClass(type: string): string {
+  const zone = SESSION_ZONE[type as SessionType];
+  if (zone) return ZONE_CLASSES[zone] ?? NEUTRAL_CLASS;
+  return SESSION_CLASSES[type] ?? NEUTRAL_CLASS;
+}
+
+/**
+ * Perceived effort (RPE 1-10) on the same zone ramp, so "how hard it felt"
+ * and "how hard it was planned" are read with one colour language.
+ */
+export function rpeColor(value: number): string {
+  if (value <= 2) return "var(--zone-1)";
+  if (value <= 4) return "var(--zone-2)";
+  if (value <= 6) return "var(--zone-3)";
+  if (value <= 8) return "var(--zone-4)";
+  if (value === 9) return "var(--zone-5)";
+  return "var(--zone-6)";
+}

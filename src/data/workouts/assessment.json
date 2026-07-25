@@ -13,7 +13,7 @@
       "difficulty": "intermediate",
       "typicalDuration": {
         "min": 30,
-        "max": 40
+        "max": 35
       },
       "environment": {
         "requiresHills": false,
@@ -106,8 +106,8 @@
       "targetSystem": "lactate_threshold",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 40,
-        "max": 50
+        "min": 60,
+        "max": 75
       },
       "environment": {
         "requiresHills": false,
@@ -212,8 +212,8 @@
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 35,
-        "max": 45
+        "min": 60,
+        "max": 70
       },
       "environment": {
         "requiresHills": false,
@@ -399,8 +399,8 @@
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 40,
-        "max": 50
+        "min": 35,
+        "max": 45
       },
       "environment": {
         "requiresHills": false,
@@ -582,8 +582,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 50,
-        "max": 65
+        "min": 100,
+        "max": 120
       },
       "environment": {
         "requiresHills": false,
@@ -611,7 +611,7 @@
           "distanceM": 800,
           "repetitions": 10,
           "zone": "Z4",
-          "recovery": "Footing lent même durée que l'effort"
+          "recovery": "Footing lent 4min (même durée que l'effort)"
         }
       ],
       "cooldownTemplate": [
@@ -676,8 +676,8 @@
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
       "typicalDuration": {
-        "min": 40,
-        "max": 55
+        "min": 50,
+        "max": 65
       },
       "environment": {
         "requiresHills": false,
@@ -762,8 +762,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 25,
+        "max": 30
       },
       "environment": {
         "requiresHills": false,
@@ -857,8 +857,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 40,
-        "max": 50
+        "min": 20,
+        "max": 25
       },
       "environment": {
         "requiresHills": false,

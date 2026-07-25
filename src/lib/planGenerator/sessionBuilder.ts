@@ -23,6 +23,7 @@ import type {
   SessionType,
 } from "@/types";
 import type { RaceDistance, PlanSession, PaceNote } from "@/types/plan";
+import { parseZoneSpan } from "@/types";
 import type { WeekSlot } from "./weekTemplate";
 import type { TrainingPaces } from "./paceEngine";
 import {
@@ -72,13 +73,12 @@ export interface SessionBuildContext {
  * Zone strings are free-form in the catalogue ("Z4", "Z1-Z2", "Z5+", "Z4→Z5+"),
  * so a lookup table silently missed the extended forms and fell back to Z2 —
  * which annotated VO2max sets with easy pace and costed them at easy pace too.
- * Mirrors parseZoneNumber() in components/visualization/transforms.ts.
+ *
+ * Delegates to the shared parser rather than mirroring it: this was the last
+ * of three private copies, and they disagreed on the same input.
  */
-function parseZoneNumber(zone: string | number | undefined): number | null {
-  if (zone === undefined || zone === null) return null;
-  const matches = String(zone).match(/[1-6]/g);
-  if (!matches) return null;
-  return Math.max(...matches.map(Number));
+function parseZoneNumber(zone: string | undefined): number | null {
+  return parseZoneSpan(zone)?.max ?? null;
 }
 
 const INTENSITY_TO_ZONE: Record<DanielsIntensity, number> = {

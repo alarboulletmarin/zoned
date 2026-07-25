@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { zoneClass } from "@/lib/zoneColors";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -254,11 +255,11 @@ export function VmaCalculatorPage() {
                           <span
                             className={cn(
                               "inline-flex items-center gap-2 font-medium",
-                              `text-${meta.color}`,
+                              zoneClass(z.zone as ZoneNumber, "text"),
                             )}
                           >
                             <span
-                              className={cn("size-3 rounded-full", `bg-${meta.color}`)}
+                              className={cn("size-3 rounded-full", zoneClass(z.zone as ZoneNumber, "bg"))}
                             />
                             Z{z.zone} - {pickLang(meta, "label")}
                           </span>

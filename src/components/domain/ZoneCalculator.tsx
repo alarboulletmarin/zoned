@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, type ChangeEvent } from "react";
+import { zoneClass } from "@/lib/zoneColors";
 import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router-dom";
 import { Save, Trash2, Heart, Gauge, ChevronDown, Dumbbell } from "@/components/icons";
@@ -265,7 +266,7 @@ export function ZoneCalculator() {
                       "w-full px-3 py-2 text-left text-xs sm:text-sm transition-colors duration-150",
                       "hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset",
                       "flex flex-col gap-1 sm:grid sm:grid-cols-[1fr_auto_auto_32px] sm:items-center sm:gap-0",
-                      `bg-${meta.color}/10`
+                      zoneClass(z.zone as ZoneNumber, "bgSoft")
                     )}
                   >
                     {/* Zone label + chevron row */}
@@ -273,13 +274,13 @@ export function ZoneCalculator() {
                       <span
                         className={cn(
                           "inline-flex items-center gap-2 font-medium min-w-0",
-                          `text-${meta.color}`
+                          zoneClass(z.zone as ZoneNumber, "text")
                         )}
                       >
                         <span
                           className={cn(
                             "size-3 shrink-0 rounded-full",
-                            `bg-${meta.color}`
+                            zoneClass(z.zone as ZoneNumber, "bg")
                           )}
                         />
                         <span className="truncate">
@@ -339,7 +340,7 @@ export function ZoneCalculator() {
                       <div
                         className={cn(
                           "border-l-4 px-3 sm:px-4 py-3 space-y-2",
-                          `border-${meta.color}`
+                          zoneClass(z.zone as ZoneNumber, "border")
                         )}
                       >
                         {/* Sensation */}
@@ -378,7 +379,7 @@ export function ZoneCalculator() {
                                     to={`/workout/${w.id}`}
                                     className={cn(
                                       "text-xs sm:text-sm underline-offset-2 hover:underline",
-                                      `text-${meta.color}`
+                                      zoneClass(z.zone as ZoneNumber, "text")
                                     )}
                                   >
                                     {pickLang(w, "name")}

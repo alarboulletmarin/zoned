@@ -13,7 +13,7 @@
       "difficulty": "intermediate",
       "typicalDuration": {
         "min": 90,
-        "max": 120
+        "max": 110
       },
       "environment": {
         "requiresHills": false,
@@ -107,8 +107,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 95,
-        "max": 125
+        "min": 100,
+        "max": 120
       },
       "environment": {
         "requiresHills": false,
@@ -486,8 +486,8 @@
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 100,
-        "max": 130
+        "min": 105,
+        "max": 125
       },
       "environment": {
         "requiresHills": true,
@@ -836,8 +836,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 120,
-        "max": 150
+        "min": 115,
+        "max": 145
       },
       "environment": {
         "requiresHills": false,
@@ -922,8 +922,8 @@
       "targetSystem": "aerobic_base",
       "difficulty": "elite",
       "typicalDuration": {
-        "min": 90,
-        "max": 110
+        "min": 85,
+        "max": 105
       },
       "environment": {
         "requiresHills": false,
@@ -1008,7 +1008,7 @@
       "difficulty": "intermediate",
       "typicalDuration": {
         "min": 60,
-        "max": 80
+        "max": 70
       },
       "environment": {
         "requiresHills": false,
@@ -1092,8 +1092,8 @@
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
       "typicalDuration": {
-        "min": 50,
-        "max": 65
+        "min": 60,
+        "max": 70
       },
       "environment": {
         "requiresHills": false,
@@ -1269,8 +1269,8 @@
       "targetSystem": "aerobic_base",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 100,
-        "max": 150
+        "min": 115,
+        "max": 140
       },
       "environment": {
         "requiresHills": false,
@@ -1362,8 +1362,8 @@
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 180,
-        "max": 300
+        "min": 205,
+        "max": 255
       },
       "environment": {
         "requiresHills": false,

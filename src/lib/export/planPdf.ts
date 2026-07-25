@@ -12,7 +12,8 @@ import type { TrainingPlan } from "@/types/plan";
 import type { WorkoutTemplate, WorkoutBlock, Zone } from "@/types";
 import type { StrengthWorkoutTemplate, StrengthBlock } from "@/types/strength";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
-import { getDominantZone } from "@/types";
+import { getDominantZone, parseZoneSpan } from "@/types";
+import { getZoneHex } from "@/lib/zoneColors";
 import { computePlanStats, computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { calculatePaceZones, formatPace } from "@/lib/zones";
 import { getExerciseById } from "@/data/strength";
@@ -29,14 +30,20 @@ const PHASE_COLORS: Record<string, { bg: string; text: string }> = {
   recovery: { bg: "#f1f5f9", text: "#475569" },
 };
 
-const ZONE_COLORS: Record<string, string> = {
-  Z1: "#22c55e",
-  Z2: "#3b82f6",
-  Z3: "#eab308",
-  Z4: "#f97316",
-  Z5: "#ef4444",
-  Z6: "#a855f7",
-};
+/**
+ * Zone colour for the plan PDF. Rendered on white, so the light ramp applies.
+ * Reads the shared table rather than a local copy, which had drifted a full
+ * zone out of step with the app.
+ *
+ * `zoneSpec` may be a range (`Z1-Z2`) and resolves to the dominant zone —
+ * previously this file split on "-" and took the first part, disagreeing with
+ * every other surface.
+ */
+function zoneColorFor(zoneSpec: string | undefined | null, fallback = "#555"): string {
+  if (!zoneSpec) return fallback;
+  const span = parseZoneSpan(zoneSpec);
+  return span ? getZoneHex(span.max, { theme: "light" }) : fallback;
+}
 
 /** Shortened labels for compact PDF tables. */
 const SESSION_TYPE_LABELS_SHORT: Record<string, { fr: string; en: string }> = {
@@ -295,7 +302,7 @@ function renderRunningAppendixEntry(
 ): Content[] {
   const name = isEn() ? template.nameEn : template.name;
   const zone = `Z${getDominantZone(template)}`;
-  const zoneColor = ZONE_COLORS[zone] || "#555";
+  const zoneColor = zoneColorFor(zone);
   const dur = template.typicalDuration
     ? `${template.typicalDuration.min}-${template.typicalDuration.max}min`
     : "";
@@ -336,7 +343,7 @@ function renderRunningAppendixEntry(
       const desc = isEn() ? (block.descriptionEn || block.description) : block.description;
       const dur = block.durationMin ? `${block.durationMin}min` : "";
       const blockZone = block.zone || "";
-      const blockZoneColor = blockZone ? (ZONE_COLORS[blockZone.split("-")[0]] || "#555") : "";
+      const blockZoneColor = blockZone ? zoneColorFor(blockZone) : "";
 
       // Reps column
       let repsStr = "\u2014";
@@ -729,7 +736,7 @@ export async function exportPlanToPDF(
                   bold: true,
                   fontSize: 8,
                   color: "#fff",
-                  fillColor: ZONE_COLORS[`Z${z.zone}`] || "#555",
+                  fillColor: zoneColorFor(`Z${z.zone}`),
                   alignment: "center" as const,
                   margin: [4, 2, 4, 2] as [number, number, number, number],
                 },
@@ -1001,7 +1008,7 @@ export async function exportPlanToPDF(
             text: zStr,
             fontSize: 7,
             color: "#fff",
-            fillColor: ZONE_COLORS[zStr] || "#555",
+            fillColor: zoneColorFor(zStr),
             alignment: "center" as const,
             bold: true,
             margin: [2, 2, 2, 2],

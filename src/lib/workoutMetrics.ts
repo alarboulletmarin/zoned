@@ -1,4 +1,5 @@
 import type { WorkoutBlock, WorkoutTemplate, TerrainType } from "@/types";
+import { parseZoneSpan } from "@/types";
 
 function allBlocks(template: WorkoutTemplate): WorkoutBlock[] {
   return [
@@ -111,10 +112,8 @@ export function computeDominantTerrain(template: WorkoutTemplate): TerrainType |
 }
 
 function paceKmhForZone(zone: string | undefined): number {
-  if (!zone) return 10;
-  const matches = zone.match(/[1-6]/g);
-  if (!matches) return 10;
-  const z = Math.max(...matches.map((m) => Number(m)));
+  const z = parseZoneSpan(zone)?.max;
+  if (!z) return 10;
   switch (z) {
     case 1: return 9;
     case 2: return 10;

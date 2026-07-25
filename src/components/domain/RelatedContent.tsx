@@ -17,6 +17,8 @@ import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
 interface RelatedContentProps {
   source: ContentRef;
   className?: string;
+  /** Set false when an enclosing Section already provides the heading. */
+  showTitle?: boolean;
 }
 
 function ArticleCardCompact({ article }: { article: ArticleMeta }) {
@@ -59,7 +61,7 @@ function GlossaryChip({ term }: { term: GlossaryTerm }) {
   );
 }
 
-export function RelatedContent({ source, className }: RelatedContentProps) {
+export function RelatedContent({ source, className, showTitle = true }: RelatedContentProps) {
   const { t } = useTranslation("common");
   const { workouts, articles, glossaryTerms, isLoading } = useRelatedContent(source);
 
@@ -68,14 +70,9 @@ export function RelatedContent({ source, className }: RelatedContentProps) {
   const hasContent = workouts.length > 0 || articles.length > 0 || glossaryTerms.length > 0;
   if (!hasContent) return null;
 
-  return (
-    <Card className={cn("rounded-xl", className)}>
-      <CardHeader>
-        <CardTitle className="text-lg flex items-center gap-2">
-          {t("relatedContent.title")}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
+  function renderGroups() {
+    return (
+      <>
         {/* Articles */}
         {articles.length > 0 && (
           <div>
@@ -120,7 +117,24 @@ export function RelatedContent({ source, className }: RelatedContentProps) {
             </div>
           </div>
         )}
-      </CardContent>
+      </>
+    );
+  }
+
+  // Inside a titled Section the card and its heading are pure repetition, so
+  // the caller turns them off and the groups render bare.
+  if (!showTitle) {
+    return <div className={cn("space-y-6", className)}>{renderGroups()}</div>;
+  }
+
+  return (
+    <Card className={cn("rounded-xl", className)}>
+      <CardHeader>
+        <CardTitle className="text-lg flex items-center gap-2">
+          {t("relatedContent.title")}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">{renderGroups()}</CardContent>
     </Card>
   );
 }

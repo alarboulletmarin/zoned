@@ -12,8 +12,8 @@
       "targetSystem": "neuromuscular",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 45,
+        "max": 55
       },
       "environment": {
         "requiresHills": true,
@@ -111,8 +111,8 @@
       "targetSystem": "neuromuscular",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 40,
+        "max": 45
       },
       "environment": {
         "requiresHills": true,
@@ -209,8 +209,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 50,
+        "max": 60
       },
       "environment": {
         "requiresHills": true,
@@ -305,8 +305,8 @@
       "targetSystem": "neuromuscular",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 40,
+        "max": 45
       },
       "environment": {
         "requiresHills": true,
@@ -399,8 +399,8 @@
       "targetSystem": "vo2max",
       "difficulty": "elite",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 40,
+        "max": 45
       },
       "environment": {
         "requiresHills": true,
@@ -539,8 +539,8 @@
       "targetSystem": "mixed",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 20,
-        "max": 30
+        "min": 30,
+        "max": 35
       },
       "environment": {
         "requiresHills": true,
@@ -707,8 +707,8 @@
       "targetSystem": "neuromuscular",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 20,
-        "max": 30
+        "min": 30,
+        "max": 35
       },
       "environment": {
         "requiresHills": true,
@@ -824,8 +824,8 @@
       "targetSystem": "neuromuscular",
       "difficulty": "beginner",
       "typicalDuration": {
-        "min": 20,
-        "max": 30
+        "min": 30,
+        "max": 35
       },
       "environment": {
         "requiresHills": true,
@@ -914,7 +914,7 @@
       "difficulty": "advanced",
       "typicalDuration": {
         "min": 55,
-        "max": 70
+        "max": 65
       },
       "environment": {
         "requiresHills": true,
@@ -1003,7 +1003,7 @@
       "difficulty": "advanced",
       "typicalDuration": {
         "min": 60,
-        "max": 80
+        "max": 70
       },
       "environment": {
         "requiresHills": true,
@@ -1100,8 +1100,8 @@
       "targetSystem": "neuromuscular",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 40,
-        "max": 50
+        "min": 50,
+        "max": 65
       },
       "environment": {
         "requiresHills": true,
@@ -1206,8 +1206,8 @@
       "targetSystem": "speed",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 40,
+        "max": 50
       },
       "environment": {
         "requiresHills": true,
@@ -1311,8 +1311,8 @@
       "targetSystem": "strength",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 40,
-        "max": 50
+        "min": 35,
+        "max": 45
       },
       "environment": {
         "requiresHills": true,
@@ -1431,8 +1431,8 @@
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 45,
-        "max": 60
+        "min": 55,
+        "max": 65
       },
       "environment": {
         "requiresHills": true,
@@ -1527,8 +1527,8 @@
       "targetSystem": "strength",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 40,
-        "max": 50
+        "min": 60,
+        "max": 75
       },
       "environment": {
         "requiresHills": true,

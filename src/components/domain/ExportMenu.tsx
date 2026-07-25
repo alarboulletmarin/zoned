@@ -24,12 +24,16 @@ import { FitTransferGuide } from "./FitTransferGuide";
 import { exportToICS, exportToPNG, exportToPDF, exportToFIT } from "@/lib/export";
 import { toast } from "sonner";
 import type { WorkoutTemplate } from "@/types";
+import { cn } from "@/lib/utils";
 
 interface ExportMenuProps {
   workout: WorkoutTemplate;
+  /** Applied to the trigger button, e.g. to stretch it as a primary CTA. */
+  className?: string;
+  size?: "sm" | "default" | "lg";
 }
 
-export function ExportMenu({ workout }: ExportMenuProps) {
+export function ExportMenu({ workout, className, size = "sm" }: ExportMenuProps) {
   const { t } = useTranslation("common");
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showFitGuide, setShowFitGuide] = useState(false);
@@ -111,7 +115,12 @@ export function ExportMenu({ workout }: ExportMenuProps) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="default" size="sm" disabled={isExporting} className="rounded-full px-4">
+          <Button
+            variant="default"
+            size={size}
+            disabled={isExporting}
+            className={cn("rounded-full px-4", className)}
+          >
             {isExporting ? (
               <Loader2 className="size-3.5 mr-1.5 animate-spin" />
             ) : (

@@ -12,8 +12,8 @@
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 50,
+        "max": 60
       },
       "environment": {
         "requiresHills": false,
@@ -158,8 +158,8 @@
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 55,
+        "max": 70
       },
       "environment": {
         "requiresHills": false,
@@ -259,8 +259,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 60,
+        "max": 70
       },
       "environment": {
         "requiresHills": false,
@@ -358,8 +358,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 55,
+        "max": 65
       },
       "environment": {
         "requiresHills": false,
@@ -455,8 +455,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 45,
+        "max": 60
       },
       "environment": {
         "requiresHills": false,
@@ -599,8 +599,8 @@
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 50,
+        "max": 60
       },
       "environment": {
         "requiresHills": false,
@@ -724,8 +724,8 @@
       "targetSystem": "vo2max",
       "difficulty": "beginner",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 35,
+        "max": 45
       },
       "environment": {
         "requiresHills": false,
@@ -848,8 +848,8 @@
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 45,
+        "max": 55
       },
       "environment": {
         "requiresHills": false,
@@ -981,8 +981,8 @@
       "targetSystem": "vo2max",
       "difficulty": "elite",
       "typicalDuration": {
-        "min": 50,
-        "max": 60
+        "min": 55,
+        "max": 70
       },
       "environment": {
         "requiresHills": false,
@@ -1079,8 +1079,8 @@
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 50,
+        "max": 60
       },
       "environment": {
         "requiresHills": false,
@@ -1178,8 +1178,8 @@
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 45,
+        "max": 55
       },
       "environment": {
         "requiresHills": false,
@@ -1275,8 +1275,8 @@
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 60,
+        "max": 70
       },
       "environment": {
         "requiresHills": false,
@@ -1418,8 +1418,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 35,
-        "max": 45
+        "min": 45,
+        "max": 55
       },
       "environment": {
         "requiresHills": false,
@@ -1517,8 +1517,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 60,
+        "max": 75
       },
       "environment": {
         "requiresHills": false,
@@ -1617,8 +1617,8 @@
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 20,
-        "max": 30
+        "min": 40,
+        "max": 50
       },
       "environment": {
         "requiresHills": false,
@@ -1737,8 +1737,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 50,
+        "max": 60
       },
       "environment": {
         "requiresHills": false,
@@ -1870,8 +1870,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 35,
-        "max": 45
+        "min": 60,
+        "max": 75
       },
       "environment": {
         "requiresHills": false,
@@ -2010,8 +2010,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 60,
+        "max": 70
       },
       "environment": {
         "requiresHills": false,
@@ -2109,8 +2109,8 @@
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 40,
+        "max": 50
       },
       "environment": {
         "requiresHills": false,
@@ -2208,7 +2208,7 @@
       "targetSystem": "vo2max",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 20,
+        "min": 25,
         "max": 30
       },
       "environment": {
@@ -2327,8 +2327,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 60,
+        "max": 70
       },
       "environment": {
         "requiresHills": false,
@@ -2477,8 +2477,8 @@
       "targetSystem": "vo2max",
       "difficulty": "elite",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 50,
+        "max": 60
       },
       "environment": {
         "requiresHills": false,
@@ -2579,8 +2579,8 @@
       "targetSystem": "speed",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 55,
+        "max": 65
       },
       "environment": {
         "requiresHills": false,
@@ -2683,8 +2683,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 55,
+        "max": 70
       },
       "environment": {
         "requiresHills": false,
@@ -2834,8 +2834,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 35,
-        "max": 45
+        "min": 45,
+        "max": 55
       },
       "environment": {
         "requiresHills": false,
@@ -2964,8 +2964,8 @@
       "targetSystem": "speed",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 35,
+        "max": 45
       },
       "environment": {
         "requiresHills": false,
@@ -3095,8 +3095,8 @@
       "targetSystem": "neuromuscular",
       "difficulty": "beginner",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 45,
+        "max": 60
       },
       "environment": {
         "requiresHills": false,
@@ -3203,8 +3203,8 @@
       "targetSystem": "vo2max",
       "difficulty": "elite",
       "typicalDuration": {
-        "min": 35,
-        "max": 45
+        "min": 60,
+        "max": 75
       },
       "environment": {
         "requiresHills": false,
@@ -3309,8 +3309,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 40,
-        "max": 50
+        "min": 60,
+        "max": 70
       },
       "environment": {
         "requiresHills": false,
@@ -3444,8 +3444,8 @@
       "targetSystem": "vo2max",
       "difficulty": "beginner",
       "typicalDuration": {
-        "min": 35,
-        "max": 45
+        "min": 30,
+        "max": 35
       },
       "environment": {
         "requiresHills": false,
@@ -3655,7 +3655,7 @@
       "difficulty": "advanced",
       "typicalDuration": {
         "min": 30,
-        "max": 40
+        "max": 35
       },
       "environment": {
         "requiresHills": false,
@@ -3759,8 +3759,8 @@
       "targetSystem": "speed",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 45,
-        "max": 55
+        "min": 55,
+        "max": 70
       },
       "environment": {
         "requiresHills": false,

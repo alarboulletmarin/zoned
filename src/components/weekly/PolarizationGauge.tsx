@@ -36,10 +36,13 @@ export function PolarizationGauge({
 
   // Zone tokens, same mapping as the rhythm chart: easy reads green there, so
   // it reads green here too. One colour, one meaning, across the page.
+  // Each band is coloured by the zone that represents it: "intense" covers
+  // Z4 through Z6 (see weekStats.ts), so it takes Z5 red rather than Z4
+  // orange, which made hard work look a notch easier than it is.
   const segments = [
     { key: "easy", share: lowShare, zone: 2 },
     { key: "tempo", share: midShare, zone: 3 },
-    { key: "intense", share: highShare, zone: 4 },
+    { key: "intense", share: highShare, zone: 5 },
   ] as const;
 
   return (

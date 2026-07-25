@@ -2,7 +2,8 @@
 // Content relationship engine: finds related content across workouts, articles,
 // and glossary terms using curated links + category/zone heuristics.
 
-import type { WorkoutTemplate, WorkoutCategory } from "@/types";
+import type { WorkoutTemplate, WorkoutCategory, ZoneNumber } from "@/types";
+import { parseZoneSpan } from "@/types";
 import type { ArticleMeta } from "@/data/articles/types";
 import type { GlossaryTerm } from "@/data/glossary/types";
 
@@ -112,16 +113,19 @@ const CURATED_LINKS: Record<string, ContentRef[]> = {
  * Returns null if no zones are present.
  */
 function getWorkoutDominantZone(workout: WorkoutTemplate): number | null {
+  // `parseInt(zone.replace("Z", ""))` used to live here: on the range "Z1-Z2"
+  // it parsed "1-Z2" and answered Z1, so range blocks were filed as recovery
+  // and matched against the wrong related content.
   const zones = workout.mainSetTemplate
-    .map((b) => (b.zone ? parseInt(b.zone.replace("Z", ""), 10) : null))
-    .filter((z): z is number => z != null);
+    .map((b) => parseZoneSpan(b.zone)?.max)
+    .filter((z): z is ZoneNumber => z != null);
   if (zones.length === 0) return null;
 
-  const counts = new Map<number, number>();
+  const counts = new Map<ZoneNumber, number>();
   for (const z of zones) counts.set(z, (counts.get(z) ?? 0) + 1);
 
   let max = 0;
-  let dominant = zones[0];
+  let dominant: ZoneNumber = zones[0];
   for (const [z, c] of counts) {
     if (c > max) {
       max = c;

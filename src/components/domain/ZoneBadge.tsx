@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { ZoneSpec, ZoneNumber } from "@/types";
-import { getZoneNumber, ZONE_META } from "@/types";
+import { getZoneNumber, parseZoneSpan, ZONE_META } from "@/types";
 import { usePickLang } from "@/lib/i18n-utils";
 
 interface ZoneBadgeProps {
@@ -10,6 +10,12 @@ interface ZoneBadgeProps {
   className?: string;
 }
 
+/**
+ * Renders a zone spec as written in the data. A range stays a range —
+ * `Z1-Z2` is a progressive jog, not a recovery jog, and flattening it here
+ * is what made the phase badge contradict the zone breakdown.
+ * Colour follows the dominant (hardest) zone.
+ */
 export function ZoneBadge({
   zone,
   showLabel = false,
@@ -17,9 +23,14 @@ export function ZoneBadge({
   className,
 }: ZoneBadgeProps) {
   const pickLang = usePickLang();
-  const zoneNum = typeof zone === "number" ? zone : getZoneNumber(zone);
-  const meta = ZONE_META[zoneNum];
-  const label = pickLang(meta, "label");
+  const span = typeof zone === "number" ? { min: zone, max: zone } : parseZoneSpan(zone);
+  const zoneNum = span?.max ?? (typeof zone === "number" ? zone : getZoneNumber(zone));
+  const isRange = span != null && span.min !== span.max;
+
+  const label = isRange
+    ? `${pickLang(ZONE_META[span.min], "label")} → ${pickLang(ZONE_META[span.max], "label")}`
+    : pickLang(ZONE_META[zoneNum], "label");
+  const zoneText = isRange ? `Z${span.min}-Z${span.max}` : `Z${zoneNum}`;
 
   const sizeClasses = {
     sm: "text-xs px-2 py-0.5",
@@ -35,9 +46,9 @@ export function ZoneBadge({
         sizeClasses[size],
         className
       )}
-      aria-label={`Zone ${zoneNum} - ${label}`}
+      aria-label={`${zoneText} - ${label}`}
     >
-      Z{zoneNum}
+      {zoneText}
       {showLabel && (
         <span className="ml-1">
           {label}

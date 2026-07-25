@@ -12,7 +12,7 @@
       "sessionType": "recovery",
       "targetSystem": "aerobic_base",
       "difficulty": "beginner",
-      "typicalDuration": { "min": 30, "max": 45 },
+      "typicalDuration": { "min": 30, "max": 40 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [],
       "mainSetTemplate": [
@@ -64,7 +64,7 @@
       "sessionType": "endurance",
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 60, "max": 120 },
+      "typicalDuration": { "min": 90, "max": 110 },
       "environment": { "requiresHills": false, "requiresTrack": false },
       "warmupTemplate": [
         {
@@ -131,7 +131,7 @@
       "sessionType": "tempo",
       "targetSystem": "aerobic_threshold",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 60, "max": 75 },
+      "typicalDuration": { "min": 55, "max": 70 },
       "environment": { "requiresHills": false, "requiresTrack": false },
       "warmupTemplate": [
         {
@@ -199,7 +199,7 @@
       "sessionType": "threshold",
       "targetSystem": "lactate_threshold",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 75, "max": 90 },
+      "typicalDuration": { "min": 65, "max": 80 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
         {
@@ -267,7 +267,7 @@
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 60, "max": 75 },
+      "typicalDuration": { "min": 50, "max": 65 },
       "environment": { "requiresHills": false, "requiresTrack": false },
       "warmupTemplate": [
         {
@@ -335,7 +335,7 @@
       "sessionType": "long_run",
       "targetSystem": "aerobic_base",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 120, "max": 180 },
+      "typicalDuration": { "min": 145, "max": 175 },
       "environment": { "requiresHills": false, "requiresTrack": false },
       "warmupTemplate": [
         {
@@ -402,7 +402,7 @@
       "sessionType": "tempo",
       "targetSystem": "aerobic_threshold",
       "difficulty": "intermediate",
-      "typicalDuration": { "min": 75, "max": 90 },
+      "typicalDuration": { "min": 65, "max": 80 },
       "environment": { "requiresHills": false, "requiresTrack": false },
       "warmupTemplate": [
         {
@@ -470,7 +470,7 @@
       "sessionType": "speed",
       "targetSystem": "neuromuscular",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 60, "max": 75 },
+      "typicalDuration": { "min": 55, "max": 70 },
       "environment": { "requiresHills": false, "requiresTrack": false, "prefersFlat": true },
       "warmupTemplate": [
         {
@@ -538,7 +538,7 @@
       "sessionType": "vo2max",
       "targetSystem": "vo2max",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 50, "max": 65 },
+      "typicalDuration": { "min": 45, "max": 55 },
       "environment": { "requiresHills": false, "requiresTrack": false },
       "warmupTemplate": [
         {
@@ -608,7 +608,7 @@
       "sessionType": "hills",
       "targetSystem": "lactate_threshold",
       "difficulty": "advanced",
-      "typicalDuration": { "min": 75, "max": 90 },
+      "typicalDuration": { "min": 70, "max": 85 },
       "environment": { "requiresHills": true, "requiresTrack": false },
       "warmupTemplate": [
         {

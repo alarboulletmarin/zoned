@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { rpeColor } from "@/lib/sessionColors";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import type { SessionType } from "@/types";
@@ -67,15 +68,6 @@ const RPE_LABEL_KEYS: { range: [number, number]; key: string }[] = [
 function getRpeLabelKey(value: number): string {
   const entry = RPE_LABEL_KEYS.find((l) => value >= l.range[0] && value <= l.range[1]);
   return entry ? entry.key : "";
-}
-
-function getRpeColor(value: number): string {
-  if (value <= 2) return "var(--zone-1)";
-  if (value <= 4) return "var(--zone-2)";
-  if (value <= 6) return "var(--zone-3)";
-  if (value <= 8) return "var(--zone-4)";
-  if (value === 9) return "var(--zone-5)";
-  return "var(--zone-6)";
 }
 
 export function CompletionFeedbackCard({
@@ -175,7 +167,7 @@ export function CompletionFeedbackCard({
                   isSelected ? "text-white scale-y-110 z-10" : "text-white/60 hover:text-white/90"
                 )}
                 style={{
-                  backgroundColor: getRpeColor(value),
+                  backgroundColor: rpeColor(value),
                   opacity: isSelected ? 1 : value <= selectedRpe ? 0.7 : 0.3,
                 }}
               >
@@ -190,7 +182,7 @@ export function CompletionFeedbackCard({
         {/* Label */}
         <div className="flex justify-between items-center text-xs">
           <span className="text-muted-foreground/60">{t("feedback.easy")}</span>
-          <span className="font-medium" style={{ color: getRpeColor(selectedRpe) }}>
+          <span className="font-medium" style={{ color: rpeColor(selectedRpe) }}>
             {selectedRpe}/10 — {t(getRpeLabelKey(selectedRpe))}
           </span>
           <span className="text-muted-foreground/60">Max</span>

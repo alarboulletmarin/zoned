@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { rpeColor } from "@/lib/sessionColors";
 import { useTranslation } from "react-i18next";
 import {
   Sheet,
@@ -47,15 +48,6 @@ function getDefaultRpe(sessionType: PlanSession["sessionType"] | undefined): num
     default:
       return 5;
   }
-}
-
-function getRpeColor(value: number): string {
-  if (value <= 2) return "var(--zone-1)";
-  if (value <= 4) return "var(--zone-2)";
-  if (value <= 6) return "var(--zone-3)";
-  if (value <= 8) return "var(--zone-4)";
-  if (value === 9) return "var(--zone-5)";
-  return "var(--zone-6)";
 }
 
 // ── Shared form body ────────────────────────────────────────────────
@@ -203,7 +195,7 @@ function CompletionForm({
               </span>
               <span
                 className="text-xs font-semibold"
-                style={{ color: getRpeColor(rpe) }}
+                style={{ color: rpeColor(rpe) }}
               >
                 {rpe}/10
               </span>
@@ -229,7 +221,7 @@ function CompletionForm({
                       isSelected && "scale-y-110 text-white",
                     )}
                     style={{
-                      backgroundColor: getRpeColor(value),
+                      backgroundColor: rpeColor(value),
                       opacity: isSelected ? 1 : value <= rpe ? 0.75 : 0.3,
                     }}
                   >

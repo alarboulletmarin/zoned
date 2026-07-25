@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { sessionColorClass } from "@/lib/sessionColors";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -32,19 +33,6 @@ import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { useIsEnglish, usePickLang, usePickLocale } from "@/lib/i18n-utils";
-
-const SESSION_TYPE_COLORS: Record<string, string> = {
-  endurance: "bg-blue-400",
-  long_run: "bg-blue-600",
-  tempo: "bg-yellow-400",
-  threshold: "bg-orange-400",
-  vo2max: "bg-red-500",
-  speed: "bg-red-400",
-  fartlek: "bg-purple-400",
-  hills: "bg-green-500",
-  race_specific: "bg-amber-500",
-  recovery: "bg-slate-300 dark:bg-slate-700",
-};
 
 export function PrebuiltPlanDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -482,9 +470,7 @@ export function PrebuiltPlanDetailPage() {
                                   <div
                                     className={cn(
                                       "size-2 rounded-full",
-                                      SESSION_TYPE_COLORS[
-                                        session.sessionType
-                                      ] || "bg-gray-300",
+                                      sessionColorClass(session.sessionType),
                                     )}
                                   />
                                   {pickLocale(sessionLabel)}

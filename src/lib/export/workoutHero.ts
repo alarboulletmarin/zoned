@@ -64,9 +64,10 @@ export function getWorkoutHero(workout: WorkoutTemplate): WorkoutHero {
   const dominantZone = getDominantZone(workout);
   const zoneMeta = ZONE_META[dominantZone];
 
-  const { zoneBreakdown } = transformSessionBlocks(workout);
-  const sortedBreakdown = [...zoneBreakdown]
-    .filter((z) => z.percent > 0)
+  // Share visuals plot the zone ramp only: the unzoned catch-all bar (drills,
+  // strides) has no colour on that scale, so it is left out here.
+  const sortedBreakdown = [...transformSessionBlocks(workout).zoneBreakdown]
+    .filter((z): z is typeof z & { zone: ZoneNumber } => z.zone != null && z.percent > 0)
     .sort((a, b) => a.zone - b.zone);
 
   const allBlocks = [

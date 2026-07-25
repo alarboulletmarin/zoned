@@ -32,11 +32,11 @@ import {
   MiniElevationProfile,
 } from "@/components/visualization";
 import { computeTrailMetrics } from "@/lib/workoutMetrics";
-import type { ZoneNumber } from "@/components/visualization";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import type { WorkoutTemplate, WorkoutCategory, AnyWorkoutTemplate } from "@/types";
-import { getDominantZone, DIFFICULTY_META, isStrengthWorkout } from "@/types";
+import { getDominantZone, getWorkoutDiscipline, DIFFICULTY_META, isStrengthWorkout } from "@/types";
+import { useZoneColors } from "@/hooks/useZoneColors";
 import { StrengthWorkoutCard, StrengthWorkoutCardCompact } from "./StrengthWorkoutCard";
 import { usePickLang } from "@/lib/i18n-utils";
 
@@ -54,15 +54,6 @@ const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: 
   mixed: Shuffle,
   assessment: ClipboardCheck,
   trail: TreePine,
-};
-
-const ZONE_COLORS: Record<ZoneNumber, string> = {
-  1: "var(--zone-1)",
-  2: "var(--zone-2)",
-  3: "var(--zone-3)",
-  4: "var(--zone-4)",
-  5: "var(--zone-5)",
-  6: "var(--zone-6)",
 };
 
 interface WorkoutCardProps {
@@ -128,6 +119,10 @@ export function WorkoutCardChrome({
   void DIFFICULTY_META[workout.difficulty];
 
   const isMobile = useIsMobile();
+  // Follows the workout's discipline, like the timelines do. The card used to
+  // hold its own copy of the running ramp, so a cycling session was painted
+  // with running colours here and blue in the session timeline.
+  const zoneColors = useZoneColors(getWorkoutDiscipline(workout));
 
   // Compute segments for the peek preview (only when visible, but memoised for stability)
   const peekData = useMemo(() => {
@@ -243,7 +238,7 @@ export function WorkoutCardChrome({
             <div className={cn("flex items-end rounded-md overflow-hidden", isMobile ? "h-4" : "h-6")}>
               {peekData.segments.map((seg, i) => {
                 const zoneColor = seg.zoneNumber
-                  ? ZONE_COLORS[seg.zoneNumber]
+                  ? zoneColors[seg.zoneNumber]
                   : "var(--muted-foreground)";
                 const heightPct = seg.zoneNumber
                   ? 30 + (seg.zoneNumber - 1) * 14

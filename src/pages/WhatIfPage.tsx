@@ -47,6 +47,7 @@ import { RACE_DISTANCE_META } from "@/types/plan";
 import type { RaceDistance, TrainingGoal, TrainingPlan } from "@/types/plan";
 import type { PlanStats, EnhancedPlanAnalysis } from "@/lib/planStats";
 import type { Difficulty } from "@/types";
+import { getZoneNumber } from "@/types";
 import type { WhatIfInsight } from "@/lib/whatIfInsights";
 import { toast } from "sonner";
 import { formatDate } from "@/lib/i18n-utils";
@@ -55,15 +56,6 @@ import { loadRunnerProfile } from "@/lib/runnerProfile";
 // ── Constants ────────────────────────────────────────────────────────
 
 const STORAGE_KEY = "zoned-whatif-scenarios";
-
-const ZONE_COLORS: Record<string, string> = {
-  Z1: "#94a3b8",
-  Z2: "#22c55e",
-  Z3: "#eab308",
-  Z4: "#f97316",
-  Z5: "#ef4444",
-  Z6: "#7c3aed",
-};
 
 const ALL_ZONES = ["Z1", "Z2", "Z3", "Z4", "Z5", "Z6"] as const;
 
@@ -1006,7 +998,7 @@ export function WhatIfPage() {
                         <div className="flex items-center gap-2">
                           <span
                             className="text-xs font-medium w-6"
-                            style={{ color: ZONE_COLORS[zone] }}
+                            style={{ color: `var(--zone-${getZoneNumber(zone)})` }}
                           >
                             {zone}
                           </span>

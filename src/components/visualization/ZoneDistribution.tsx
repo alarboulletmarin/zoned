@@ -5,7 +5,9 @@
 
 import { useMemo } from "react";
 import type { WorkoutTemplate } from "@/types";
+import { getWorkoutDiscipline } from "@/types";
 import { transformSessionBlocks, formatDurationMinutes } from "./transforms";
+import { useZoneColors } from "@/hooks/useZoneColors";
 import { cn } from "@/lib/utils";
 
 interface ZoneDistributionProps {
@@ -17,6 +19,7 @@ export function ZoneDistribution({ workout, className }: ZoneDistributionProps) 
   const { zoneBreakdown, totalDurationMin } = useMemo(() => {
     return transformSessionBlocks(workout);
   }, [workout]);
+  const zoneColors = useZoneColors(getWorkoutDiscipline(workout));
 
   if (zoneBreakdown.length === 0) {
     return null;
@@ -27,11 +30,15 @@ export function ZoneDistribution({ workout, className }: ZoneDistributionProps) 
       {/* Horizontal bars */}
       <div className="space-y-3">
         {zoneBreakdown.map((item) => (
-          <div key={item.zone} className="space-y-1.5">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-medium">Z{item.zone} - {item.label}</span>
-              <span className="text-muted-foreground">
-                {Math.round(item.percent)}% ({formatDurationMinutes(item.durationMin)})
+          <div key={item.zone ?? "unzoned"} className="space-y-1.5">
+            <div className="flex items-baseline justify-between gap-3 text-xs">
+              <span className="font-medium truncate">
+                {item.zone != null && <span className="font-mono">Z{item.zone}</span>}
+                {item.zone != null && " · "}
+                {item.label}
+              </span>
+              <span className="text-muted-foreground font-mono tabular-nums shrink-0">
+                {Math.round(item.percent)}% · {formatDurationMinutes(item.durationMin)}
               </span>
             </div>
             <div className="h-2.5 rounded-full bg-muted overflow-hidden">
@@ -39,7 +46,7 @@ export function ZoneDistribution({ workout, className }: ZoneDistributionProps) 
                 className="h-full rounded-full transition-all"
                 style={{
                   width: `${item.percent}%`,
-                  backgroundColor: `var(--zone-${item.zone})`,
+                  backgroundColor: item.zone != null ? zoneColors[item.zone] : "var(--muted-foreground)",
                 }}
               />
             </div>
@@ -67,6 +74,7 @@ export function SessionIntensityBar({ workout, className }: SessionIntensityBarP
   const { zoneBreakdown } = useMemo(() => {
     return transformSessionBlocks(workout);
   }, [workout]);
+  const zoneColors = useZoneColors(getWorkoutDiscipline(workout));
 
   if (zoneBreakdown.length === 0) {
     return null;
@@ -76,10 +84,10 @@ export function SessionIntensityBar({ workout, className }: SessionIntensityBarP
     <div className={cn("flex h-1 w-full overflow-hidden rounded-full bg-muted", className)}>
       {zoneBreakdown.map((item) => (
         <div
-          key={item.zone}
+          key={item.zone ?? "unzoned"}
           style={{
             flex: item.percent,
-            backgroundColor: `var(--zone-${item.zone})`,
+            backgroundColor: item.zone != null ? zoneColors[item.zone] : "var(--muted-foreground)",
           }}
         />
       ))}

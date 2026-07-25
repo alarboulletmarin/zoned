@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Utensils, Droplets, Heart } from "@/components/icons";
 import { getRecommendations } from "@/data/recommendations";
 import type { PhaseRecommendations, RecommendationItem } from "@/data/recommendations";
@@ -103,14 +102,11 @@ export function NutritionRecoverySection({ workout }: NutritionRecoverySectionPr
     { key: "after", label: t("recommendations.phases.after"), data: recommendations.after },
   ];
 
+  // No card, no title: the enclosing Section owns the heading. The tabs below
+  // already say before/during/after, so an eyebrow saying the same was the
+  // third copy of the same words.
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">
-          {t("titles.nutritionRecovery")}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-3">
+    <div className="space-y-3">
         {getWorkoutDiscipline(workout) !== "running" && (
           <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200">
             {t("recommendations.crossDisciplineNote")}
@@ -133,7 +129,6 @@ export function NutritionRecoverySection({ workout }: NutritionRecoverySectionPr
             </TabsContent>
           ))}
         </Tabs>
-      </CardContent>
-    </Card>
+    </div>
   );
 }

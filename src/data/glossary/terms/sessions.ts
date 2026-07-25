@@ -48,7 +48,7 @@ export const sessionsTerms: GlossaryTerm[] = [
   },
   {
     id: "intervals",
-    term: "Intervals",
+    term: "Fractionné",
     termEn: "Intervals",
     category: "sessions",
     shortDefinition:
@@ -65,7 +65,7 @@ export const sessionsTerms: GlossaryTerm[] = [
       "Classic VO2max session: 6x1000m at 100% MAS with 2 min jog recovery. For an athlete with 15 km/h MAS, each 1000m is run in 4:00.",
     relatedTerms: ["vo2max", "zone-5", "vma", "active-recovery"],
     zone: 5,
-    keywords: ["fractionné", "intense", "répétitions", "récupération", "VO2max"],
+    keywords: ["fractionné", "intervals", "intense", "répétitions", "récupération", "VO2max"],
   },
   {
     id: "fartlek",
@@ -168,7 +168,7 @@ export const sessionsTerms: GlossaryTerm[] = [
   },
   {
     id: "hill-repeats",
-    term: "Hill Repeats",
+    term: "Répétitions en côte",
     termEn: "Hill Repeats",
     category: "sessions",
     shortDefinition:
@@ -184,7 +184,7 @@ export const sessionsTerms: GlossaryTerm[] = [
       "Hill session: 8-10 x 60-90 sec uphill at sustained effort (RPE 8-9), jog down to recover. Look for a hill with 6-10% gradient.",
     relatedTerms: ["intervals", "zone-5"],
     zone: 5,
-    keywords: ["côte", "montée", "force", "puissance", "pente"],
+    keywords: ["côte", "hill repeats", "montée", "force", "puissance", "pente"],
   },
   {
     id: "strides",
@@ -290,7 +290,7 @@ export const sessionsTerms: GlossaryTerm[] = [
   },
   {
     id: "surge",
-    term: "Surge",
+    term: "Relance",
     termEn: "Surge",
     category: "sessions",
     shortDefinition:

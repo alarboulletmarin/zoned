@@ -37,6 +37,26 @@ function getHeightPercent(zone: ZoneNumber | null): number {
   return 30 + (zone - 1) * 14;
 }
 
+/**
+ * Round-number gradations for the time axis, sized so labels never crowd:
+ * roughly 3 to 5 ticks whatever the session length. The final tick is
+ * dropped when it would collide with the total duration on the right.
+ */
+function buildTimeTicks(totalMin: number): number[] {
+  if (!Number.isFinite(totalMin) || totalMin <= 0) return [];
+  const step = totalMin <= 20 ? 5 : totalMin <= 75 ? 15 : totalMin <= 150 ? 30 : 60;
+
+  const ticks: number[] = [];
+  for (let minute = 0; minute < totalMin; minute += step) {
+    ticks.push(minute);
+  }
+  // Drop a trailing tick sitting within 12% of the end — the total label owns
+  // that space.
+  const last = ticks[ticks.length - 1];
+  if (last != null && last > 0 && (totalMin - last) / totalMin < 0.12) ticks.pop();
+  return ticks;
+}
+
 interface SegmentTooltipContentProps {
   segment: TimelineSegment;
   zoneColors: ZoneColorMap;
@@ -93,6 +113,7 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
   }, [workout]);
 
   const zoneColors = useZoneColors(getWorkoutDiscipline(workout));
+  const ticks = useMemo(() => buildTimeTicks(totalDurationMin), [totalDurationMin]);
 
   if (segments.length === 0) {
     return (
@@ -184,14 +205,37 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
           })}
         </div>
 
-        {/* Time labels */}
-        <div className="flex justify-between text-xs text-muted-foreground mt-3 px-1">
-          <span>{t("visualization.start")}</span>
-          <span className="font-mono font-bold text-foreground">
-            {formatDurationMinutes(totalDurationMin)}
-          </span>
-          <span>{t("visualization.end")}</span>
+        {/* Time axis — a real scale. The total duration sits at the right
+            edge, where the session actually ends; centring it read as
+            "56min at the halfway point". */}
+        <div className="relative h-7 mt-2 select-none" aria-hidden="true">
+          {ticks.map((minute) => (
+            <div
+              key={minute}
+              className="absolute top-0 flex flex-col items-start"
+              style={{ left: `${(minute / totalDurationMin) * 100}%` }}
+            >
+              <span className="block h-1.5 w-px bg-border" />
+              <span
+                className={cn(
+                  "font-mono text-[10px] sm:text-xs text-muted-foreground mt-1",
+                  minute > 0 && "-translate-x-1/2"
+                )}
+              >
+                {minute}
+              </span>
+            </div>
+          ))}
+          <div className="absolute top-0 right-0 flex flex-col items-end">
+            <span className="block h-1.5 w-px bg-border" />
+            <span className="font-mono text-[10px] sm:text-xs font-bold text-foreground mt-1">
+              {formatDurationMinutes(totalDurationMin)}
+            </span>
+          </div>
         </div>
+        <span className="sr-only">
+          {t("visualization.start")} — {formatDurationMinutes(totalDurationMin)} — {t("visualization.end")}
+        </span>
       </div>
     </TooltipProvider>
   );

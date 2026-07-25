@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, memo } from "react";
+import { sessionColorClass } from "@/lib/sessionColors";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -23,24 +24,6 @@ import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { usePickLang, usePickLocale } from "@/lib/i18n-utils";
 
 // ── Constants ────────────────────────────────────────────────────────
-
-const SESSION_TYPE_COLORS: Record<string, string> = {
-  endurance: "bg-blue-400",
-  long_run: "bg-blue-600",
-  tempo: "bg-yellow-400",
-  threshold: "bg-orange-400",
-  vo2max: "bg-red-500",
-  speed: "bg-red-400",
-  fartlek: "bg-purple-400",
-  hills: "bg-green-500",
-  race_specific: "bg-amber-500",
-  recovery: "bg-slate-300 dark:bg-slate-600",
-  strength: "bg-indigo-400",
-  cycling: "bg-cyan-400",
-  swimming: "bg-teal-400",
-  yoga: "bg-pink-300",
-  cross_training: "bg-gray-400",
-};
 
 const ZONE_COLORS: Record<string, string> = {
   Z1: "#94a3b8",
@@ -433,7 +416,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
               {sortedTypes.map(([type, count]) => (
                 <div
                   key={type}
-                  className={cn(SESSION_TYPE_COLORS[type] || "bg-gray-300")}
+                  className={cn(sessionColorClass(type))}
                   style={{
                     width: `${(count / stats.totalSessions) * 100}%`,
                   }}
@@ -451,7 +434,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                   <div
                     className={cn(
                       "size-2.5 rounded-full",
-                      SESSION_TYPE_COLORS[type] || "bg-gray-300",
+                      sessionColorClass(type),
                     )}
                   />
                   <span>

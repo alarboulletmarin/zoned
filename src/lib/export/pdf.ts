@@ -6,22 +6,24 @@
 
 import type { TDocumentDefinitions, Content, TableCell } from "pdfmake/interfaces";
 import type { WorkoutTemplate, WorkoutBlock } from "@/types";
-import { CATEGORY_META, DIFFICULTY_META } from "@/types";
+import { CATEGORY_META, DIFFICULTY_META, getZoneNumber } from "@/types";
+import { getZoneHex } from "@/lib/zoneColors";
 import { getWorkoutDuration } from "@/components/visualization";
 import i18n from "@/i18n";
 import { pickLang, pickLangArray, formatDate } from "@/lib/i18n-utils";
 
 /**
- * Zone colors for PDF (RGB values)
+ * Zone colours for PDF. PDFs are always rendered on white, so the light ramp
+ * applies. This used to be a local table that had drifted a full zone out of
+ * step with the app: recovery printed green and endurance blue.
+ *
+ * `zoneSpec` is the raw string and may be a range (`Z1-Z2`); it resolves to
+ * the dominant zone, the same way the app does.
  */
-const ZONE_COLORS: Record<string, string> = {
-  Z1: "#22c55e", // green
-  Z2: "#3b82f6", // blue
-  Z3: "#eab308", // yellow
-  Z4: "#f97316", // orange
-  Z5: "#ef4444", // red
-  Z6: "#a855f7", // purple
-};
+function zoneColorFor(zoneSpec: string | undefined): string | undefined {
+  if (!zoneSpec) return undefined;
+  return getZoneHex(getZoneNumber(zoneSpec), { theme: "light" });
+}
 
 /**
  * Format blocks into table rows for PDF
@@ -44,7 +46,7 @@ function formatBlocksTable(blocks: WorkoutBlock[]): TableCell[][] {
       {
         text: zone,
         alignment: "center",
-        color: zone ? ZONE_COLORS[zone] : undefined,
+        color: zoneColorFor(zone),
         bold: !!zone,
         margin: [0, 2, 0, 2],
       },

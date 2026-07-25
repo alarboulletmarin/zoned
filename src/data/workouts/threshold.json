@@ -111,7 +111,7 @@
       "difficulty": "intermediate",
       "typicalDuration": {
         "min": 50,
-        "max": 60
+        "max": 65
       },
       "environment": {
         "requiresHills": false,
@@ -209,8 +209,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "beginner",
       "typicalDuration": {
-        "min": 35,
-        "max": 45
+        "min": 40,
+        "max": 50
       },
       "environment": {
         "requiresHills": false,
@@ -302,8 +302,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 60,
-        "max": 75
+        "min": 55,
+        "max": 70
       },
       "environment": {
         "requiresHills": false,
@@ -640,8 +640,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 60,
+        "max": 70
       },
       "environment": {
         "requiresHills": false,
@@ -740,8 +740,8 @@
       "targetSystem": "lactate_tolerance",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 55,
-        "max": 65
+        "min": 50,
+        "max": 60
       },
       "environment": {
         "requiresHills": false,
@@ -961,8 +961,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 60,
+        "max": 75
       },
       "environment": {
         "requiresHills": false,
@@ -1469,8 +1469,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 40,
+        "max": 50
       },
       "environment": {
         "requiresHills": false,
@@ -1562,7 +1562,7 @@
       "targetSystem": "lactate_threshold",
       "difficulty": "elite",
       "typicalDuration": {
-        "min": 80,
+        "min": 85,
         "max": 100
       },
       "environment": {
@@ -1669,8 +1669,8 @@
       "targetSystem": "lactate_threshold",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 50,
+        "max": 65
       },
       "environment": {
         "requiresHills": false,
@@ -1767,7 +1767,7 @@
       "targetSystem": "lactate_threshold",
       "difficulty": "elite",
       "typicalDuration": {
-        "min": 50,
+        "min": 55,
         "max": 65
       },
       "environment": {
@@ -1968,8 +1968,8 @@
       "targetSystem": "lactate_threshold",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 50,
-        "max": 60
+        "min": 60,
+        "max": 70
       },
       "environment": {
         "requiresHills": false,
@@ -2068,8 +2068,8 @@
       "targetSystem": "lactate_threshold",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 55,
-        "max": 65
+        "min": 65,
+        "max": 80
       },
       "environment": {
         "requiresHills": false,

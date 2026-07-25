@@ -185,7 +185,7 @@
       "targetSystem": "mixed",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 35,
+        "min": 40,
         "max": 45
       },
       "environment": {
@@ -326,8 +326,8 @@
       "targetSystem": "lactate_tolerance",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 45,
+        "max": 55
       },
       "environment": {
         "requiresHills": false,
@@ -444,7 +444,7 @@
       "targetSystem": "mixed",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 50,
+        "min": 55,
         "max": 65
       },
       "environment": {
@@ -732,8 +732,8 @@
       "targetSystem": "mixed",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 35,
-        "max": 45
+        "min": 30,
+        "max": 40
       },
       "environment": {
         "requiresHills": false,
@@ -817,7 +817,7 @@
       "targetSystem": "mixed",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 35,
+        "min": 40,
         "max": 45
       },
       "environment": {
@@ -1131,7 +1131,7 @@
       "targetSystem": "aerobic_power",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 55,
+        "min": 60,
         "max": 70
       },
       "environment": {
@@ -1520,8 +1520,8 @@
       "targetSystem": "aerobic_power",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 45,
-        "max": 55
+        "min": 40,
+        "max": 50
       },
       "environment": {
         "requiresHills": false,
@@ -1667,8 +1667,8 @@
       "targetSystem": "speed",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 40,
-        "max": 50
+        "min": 45,
+        "max": 55
       },
       "environment": {
         "requiresHills": false,

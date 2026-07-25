@@ -236,12 +236,29 @@ function buildLegacyBlockFromStep(step: WorkoutStep): WorkoutBlock {
   };
 }
 
+/**
+ * Guessing a duration from prose is a last resort, and only valid for a block
+ * that is actually a timed effort. Two cases where the guess is always wrong:
+ *
+ *  - the block already states a distance. `6 × 1 000 m à l'allure CV (allure
+ *    course ~30min)` would otherwise be read as 30 minutes per repetition.
+ *  - the block carries no zone, no reps and no intensity, i.e. it is a text
+ *    separator rather than an effort. `--- 6-8h de repos ---` would otherwise
+ *    add six hours to the session.
+ */
+function canInferDurationFromText(block: WorkoutBlock): boolean {
+  if (block.distanceM != null || block.distanceKm != null) return false;
+  return Boolean(block.zone || block.intensityType || (block.repetitions && block.repetitions > 1));
+}
+
 function buildLegacyEffortSegment(block: WorkoutBlock): WorkoutStepSegment {
   const durationSec = block.durationMin != null
     ? block.durationMin * 60
-    : parseDurationToSeconds(block.description)
-      ?? parseDurationToSeconds(block.descriptionEn)
-      ?? undefined;
+    : canInferDurationFromText(block)
+      ? parseDurationToSeconds(block.description)
+        ?? parseDurationToSeconds(block.descriptionEn)
+        ?? undefined
+      : undefined;
 
   return {
     kind: "segment",

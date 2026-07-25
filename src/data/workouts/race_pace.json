@@ -13,7 +13,7 @@
       "difficulty": "advanced",
       "typicalDuration": {
         "min": 60,
-        "max": 80
+        "max": 75
       },
       "environment": {
         "requiresHills": false,
@@ -116,8 +116,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 60,
+        "max": 75
       },
       "environment": {
         "requiresHills": false,
@@ -299,8 +299,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 60,
+        "max": 70
       },
       "environment": {
         "requiresHills": false,
@@ -392,8 +392,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 60,
-        "max": 80
+        "min": 65,
+        "max": 75
       },
       "environment": {
         "requiresHills": true,
@@ -482,8 +482,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 60,
-        "max": 70
+        "min": 55,
+        "max": 65
       },
       "environment": {
         "requiresHills": false,
@@ -585,7 +585,7 @@
       "difficulty": "elite",
       "typicalDuration": {
         "min": 100,
-        "max": 130
+        "max": 120
       },
       "environment": {
         "requiresHills": false,
@@ -685,8 +685,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 40,
+        "max": 50
       },
       "environment": {
         "requiresHills": false,
@@ -772,8 +772,8 @@
       "targetSystem": "vo2max",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 30,
-        "max": 40
+        "min": 90,
+        "max": 110
       },
       "environment": {
         "requiresHills": false,
@@ -801,7 +801,7 @@
           "distanceM": 800,
           "zone": "Z4-Z5",
           "repetitions": 10,
-          "recovery": "Footing = temps du 800m",
+          "recovery": "Footing 3min (= temps du 800m)",
           "intensityType": "I"
         }
       ],
@@ -871,8 +871,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 65,
+        "max": 80
       },
       "environment": {
         "requiresHills": false,
@@ -969,8 +969,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 25,
-        "max": 35
+        "min": 75,
+        "max": 90
       },
       "environment": {
         "requiresHills": false,
@@ -1085,8 +1085,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 50,
-        "max": 65
+        "min": 65,
+        "max": 75
       },
       "environment": {
         "requiresHills": false,
@@ -1215,8 +1215,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 55,
-        "max": 70
+        "min": 65,
+        "max": 80
       },
       "environment": {
         "requiresHills": false,
@@ -1346,8 +1346,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "advanced",
       "typicalDuration": {
-        "min": 55,
-        "max": 70
+        "min": 75,
+        "max": 90
       },
       "environment": {
         "requiresHills": false,
@@ -1476,8 +1476,8 @@
       "targetSystem": "aerobic_threshold",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 45,
-        "max": 55
+        "min": 60,
+        "max": 70
       },
       "environment": {
         "requiresHills": false,
@@ -2111,8 +2111,8 @@
       "targetSystem": "race_specific",
       "difficulty": "intermediate",
       "typicalDuration": {
-        "min": 55,
-        "max": 70
+        "min": 75,
+        "max": 90
       },
       "environment": {
         "requiresHills": false,
@@ -2212,8 +2212,8 @@
       "targetSystem": "race_specific",
       "difficulty": "elite",
       "typicalDuration": {
-        "min": 100,
-        "max": 130
+        "min": 120,
+        "max": 145
       },
       "environment": {
         "requiresHills": false,
