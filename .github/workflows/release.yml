@@ -1,0 +1,67 @@
+# Publish a GitHub Release when a version tag is pushed.
+#
+# Pushing a tag only creates a tag: the Releases page stays empty unless
+# something creates the Release object. That is why the page sat on v0.4.0
+# while ten tags (v0.5.1 -> v0.7.3) had been pushed.
+#
+# The notes are the CHANGELOG.md section for that version, so the Release and
+# the changelog can never drift. No section, no release: an empty release body
+# is worse than a loud failure.
+#
+# workflow_dispatch takes a tag name so already-pushed tags can be published
+# after the fact, without deleting and re-pushing the tag.
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to publish (e.g. v0.7.3)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve tag
+        id: tag
+        run: echo "name=${{ inputs.tag || github.ref_name }}" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ steps.tag.outputs.name }}
+
+      - name: Extract the changelog section
+        id: notes
+        env:
+          TAG: ${{ steps.tag.outputs.name }}
+        run: |
+          set -euo pipefail
+          version="${TAG#v}"
+          awk -v v="$version" '
+            $0 == "## [" v "]" || index($0, "## [" v "] ") == 1 { found = 1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+          # Trim leading/trailing blank lines.
+          sed -i -e '/./,$!d' release-notes.md
+          if [ ! -s release-notes.md ]; then
+            echo "::error::No '## [$version]' section found in CHANGELOG.md" >&2
+            exit 1
+          fi
+          echo "--- release notes for $TAG ---"
+          cat release-notes.md
+
+      - name: Publish the release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.name }}
+          name: ${{ steps.tag.outputs.name }}
+          body_path: release-notes.md
