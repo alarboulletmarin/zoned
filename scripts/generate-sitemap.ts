@@ -117,28 +117,36 @@ async function getGlossaryTermIds(): Promise<{ id: string; lastmod: string }[]> 
   return ids;
 }
 
-function getCollectionSlugs(): string[] {
-  return [
-    "debuter-le-running", "anti-stress", "retour-de-blessure", "post-course",
-    "pre-course", "séances-mythiques", "objectif-5k", "objectif-10k",
-    "objectif-semi", "objectif-marathon", "objectif-ultra", "progresser-vma",
-  ];
+async function getCollectionSlugs(): Promise<string[]> {
+  const mod = await import(join(DATA_DIR, "collections/data.ts"));
+  return ((mod.collections || []) as { slug: string }[]).map((c) => c.slug);
 }
 
-function getPrebuiltPlanSlugs(): string[] {
-  return [
-    "5k-debutant", "5k-intermediaire", "10k-debutant", "10k-intermediaire",
-    "semi-marathon", "marathon", "construction-base", "retour-de-blessure",
-  ];
+async function getPrebuiltPlanSlugs(): Promise<string[]> {
+  const plansDir = join(DATA_DIR, "prebuilt-plans/plans");
+  const files = readdirSync(plansDir).filter((f) => f.endsWith(".ts"));
+  const slugs: string[] = [];
+
+  for (const file of files) {
+    const mod = await import(join(plansDir, file));
+    for (const exported of Object.values(mod)) {
+      const slug = (exported as { slug?: string })?.slug;
+      if (slug) slugs.push(slug);
+    }
+  }
+
+  return slugs;
 }
 
+/**
+ * Read the calculator routes straight out of the router, which is the source of
+ * truth for what actually resolves. Text-matched rather than imported: importing
+ * App.tsx would pull in every page module for three strings.
+ */
 function getCalculatorPaths(): string[] {
-  return [
-    "/calculators/zones", "/calculators/allures", "/calculators/vma",
-    "/calculators/convertisseur", "/calculators/table-allures",
-    "/calculators/tapis-roulant", "/calculators/splits",
-    "/calculators/equivalence", "/calculators/age-graded",
-  ];
+  const app = readFileSync(join(ROOT, "src/App.tsx"), "utf-8");
+  const paths = [...app.matchAll(/path="(\/calculators\/[a-z0-9-]+)"/g)].map((m) => m[1]);
+  return [...new Set(paths)];
 }
 
 // ── Sitemap builder ─────────────────────────────────────────────────────────
@@ -147,8 +155,8 @@ async function generateSitemap(): Promise<string> {
   const workouts = getWorkoutIds();
   const articles = await getArticles();
   const glossaryTerms = await getGlossaryTermIds();
-  const collectionSlugs = getCollectionSlugs();
-  const prebuiltPlanSlugs = getPrebuiltPlanSlugs();
+  const collectionSlugs = await getCollectionSlugs();
+  const prebuiltPlanSlugs = await getPrebuiltPlanSlugs();
   const calculatorPaths = getCalculatorPaths();
 
   // Stable lastmod for non-data pages: tied to package.json mtime so it only
