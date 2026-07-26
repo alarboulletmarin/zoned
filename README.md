@@ -38,7 +38,7 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 
 | | |
 |---|---|
-| **210** running workouts | 12 categories from recovery to VMA |
+| **219** running workouts | 12 categories from recovery to VMA |
 | **17** strength sessions | full body, legs, core, plyometrics, mobility |
 | **10** cycling + **10** swimming sessions | Coggan FTP / CSS zones |
 | **9** training plans | 5K → marathon, with strength periodization |
@@ -65,19 +65,19 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 ## Screenshots
 
 <div align="center">
-  <img src="assets/home_fr_light.png" alt="Home — Light mode" width="600" />
+  <img src="assets/home_en_light.png" alt="Home — Light mode" width="600" />
   <p><em>Home — Light mode</em></p>
 
-  <img src="assets/home_fr_dark.png" alt="Home — Dark mode" width="600" />
+  <img src="assets/home_en_dark.png" alt="Home — Dark mode" width="600" />
   <p><em>Home — Dark mode</em></p>
 
-  <img src="assets/libray_fr_light.png" alt="Library" width="600" />
+  <img src="assets/library_en_light.png" alt="Library" width="600" />
   <p><em>Library</em></p>
 
-  <img src="assets/workout_fr_light.png" alt="Workout detail" width="600" />
+  <img src="assets/workout_en_light.png" alt="Workout detail" width="600" />
   <p><em>Workout detail</em></p>
 
-  <img src="assets/plan_with_stats_fr_light.png" alt="Training plan" width="600" />
+  <img src="assets/plan_with_stats_en_light.png" alt="Training plan" width="600" />
   <p><em>Training plan</em></p>
 </div>
 
@@ -105,7 +105,7 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 ## Features
 
 ### Workouts
-- **210 running sessions** across 12 categories: recovery, endurance, tempo, threshold, VMA, long run, hills, fartlek, race pace, mixed, trail, assessment
+- **219 running sessions** across 12 categories: recovery, endurance, tempo, threshold, VMA, long run, hills, fartlek, race pace, mixed, trail, assessment
 - **10 cycling + 10 swimming sessions** with discipline-aware zones (Coggan FTP, CSS) and cross-discipline substitution in plans
 - **17 strength sessions** for runners: full body, legs, core, plyometrics, mobility, prehab — based on Beattie 2017, Rønnestad 2014, Lauersen 2014
 - **46 exercises** with A/B position images, muscle maps, form cues, and progression/regression chains
@@ -118,7 +118,8 @@ The catalogue is grounded in published training science (**Seiler**, **Billat**,
 Training zones · Pace converter · Pace reference table · Treadmill converter · Split generator · VMA from race time · FTP cycling test · CSS swimming test · Race equivalence · Age-graded performance · Race-day simulator · What-if simulator
 
 - **What-if simulator**: compare training scenarios (volume, level, goal) with zone distribution and load preview — scenarios can be named and saved
-- **Race-day simulator**: km-by-km pacing, gel/water/electrolyte timing, pre-race checklists (race week, morning, logistics), saved simulations, PDF export
+- **Race-day simulator**: km-by-km pacing, gel/water/electrolyte timing, pre-race checklists (race week, morning, logistics), kit-bag list, saved simulations, PDF export
+- **"Race day" view**: a chronological run sheet with a next-up countdown and a *now* marker in the timeline, plus a pace curve for negative and positive split strategies
 
 ### Training plans
 - **Assisted plan generator**: personalised multi-week plans (5K to marathon) with start date, level and optional intermediate goals (half-way, 4-weeks-out, taper)
@@ -128,8 +129,9 @@ Training zones · Pace converter · Pace reference table · Treadmill converter 
 - **Drag-and-drop** calendar, cross-training support (strength, cycling, swimming, yoga)
 - **Plan audit**: detects imbalanced weeks (missing tempo work, too much intensity…) and proposes one-click fixes
 - **Life happens**: block unavailable dates with auto-rescheduling, swap a session for an equivalent one, mark sessions done/skipped, adaptation preview when changing race or start date — all with undo
-- **Weekly composer** (`/weeks`): generate a balanced standalone 80/20 week (sessions count, volume, quality session) when you don't want a full plan
-- **Export**: PDF, ICS (Google/Apple/Outlook Calendar)
+- **Weekly composer** (`/weeks`): generate a balanced standalone 80/20 week (sessions count, volume, quality session) when you don't want a full plan — lock a session and re-roll the rest
+- **10 curated weeks**: first steps, aerobic base, hill block, development block, VO₂max sharpening, race-pace, peak week, big volume, recovery, gentle return — categorised, filterable and duplicable from *My weeks*
+- **Export**: PDF, ICS (Google/Apple/Outlook Calendar) — weeks also import/export as JSON
 
 ### Routes
 - **Route generator**: build a real-world loop or out-and-back from your position
@@ -164,6 +166,7 @@ Training zones · Pace converter · Pace reference table · Treadmill converter 
 ### Export & sharing
 - **Workouts**: ICS (Google/Apple/Outlook) · PNG · PDF · **Garmin FIT** (native workout file, with on-device transfer guide)
 - **Plans**: PDF · ICS — **Routes**: GPX — **Race plan**: PDF — **Custom workouts**: JSON
+- **Share by link**: custom workouts, training plans, weeks and race simulations encode into a compact URL — the recipient gets a preview page and a one-click "add to mine". No account, no upload: the whole payload lives in the link
 - **Share cards**: multiple social-ready templates per workout (compact, hero, minimal, dark…), copy/download/native share, plus a ready-to-paste Strava description
 
 ### Learn
@@ -171,6 +174,7 @@ Training zones · Pace converter · Pace reference table · Treadmill converter 
 - **Nutrition hub**: 14 sections covering the 1:0.8 carb ratio, 1.8 g/kg protein target, AIS-classified supplements, caffeine timing, cramps science, heat acclimation, gut training, female-specific needs, debunked myths — sources Witard 2025, Rowlands 2020, Schwellnus, Aragon, Margolis, Paulsen, Trommelen
 - **3 practical guides**: nutrition (with fueling calculator), race prep, warm-up
 - **Methodology** page and **50+ term glossary** across 9 categories
+- **Comparisons** (`/compare`): criterion-by-criterion against Runna, Kiprun Pacer and Campus Coach — price, account requirement, offline use, data ownership
 - **69 contextual tips** throughout the app
 - **Changelog** page (`/changelog`) with an in-app "what's new" notification after updates
 
@@ -284,7 +288,7 @@ bun run build         # type check + production build
 bun run check:i18n    # FR / EN parity check
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for workout ID conventions, the `WorkoutTemplate` schema, and the bilingual policy. By participating you agree to keep things kind and constructive.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for workout ID conventions, the `WorkoutTemplate` schema, and the bilingual policy. By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md). Found a security issue? Please report it privately — see [SECURITY.md](SECURITY.md).
 
 ---
 

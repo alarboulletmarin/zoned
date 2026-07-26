@@ -1,16 +1,22 @@
 /**
- * USAGE: bun run scripts/capture-readme-shots.ts
+ * USAGE:
+ *   bun run scripts/capture-readme-shots.ts              # English, from zoned.run
+ *   ZONED_LOCALE=fr bun run scripts/capture-readme-shots.ts
+ *   ZONED_BASE_URL=http://localhost:4173 bun run scripts/capture-readme-shots.ts
  *
- * Refreshes the screenshots in assets/ referenced by README.md. Captures
- * clean desktop renderings of the v0.6.0 editorial UI from zoned.run, in
- * French, in light or dark mode as needed.
+ * Refreshes the screenshots in assets/ referenced by README.md. Captures clean
+ * desktop renderings in light or dark mode as needed.
  *
- * Output (overwrites):
- *   assets/home_fr_light.png         (landing viewport)
- *   assets/home_fr_dark.png          (landing viewport, dark)
- *   assets/libray_fr_light.png       (library viewport — kept original typo)
- *   assets/workout_fr_light.png      (one canonical workout detail)
- *   assets/plan_with_stats_fr_light.png (plan view)
+ * English by default: README.md is written in English, so French screenshots
+ * made the two disagree. File names carry the locale, so switching it produces
+ * a distinct set rather than silently overwriting the other language.
+ *
+ * Output (overwrites), with <l> = locale:
+ *   assets/home_<l>_light.png            (landing viewport)
+ *   assets/home_<l>_dark.png             (landing viewport, dark)
+ *   assets/library_<l>_light.png         (library viewport)
+ *   assets/workout_<l>_light.png         (one canonical workout detail)
+ *   assets/plan_with_stats_<l>_light.png (plan view)
  */
 
 import { mkdirSync } from "fs";
@@ -28,12 +34,15 @@ type Shot = {
   fullPage: boolean;
 };
 
+const LOCALE = process.env.ZONED_LOCALE === "fr" ? "fr" : "en";
+const ACCEPT_LANGUAGE = LOCALE === "fr" ? "fr-FR,fr;q=0.9" : "en-US,en;q=0.9";
+
 const SHOTS: Shot[] = [
-  { file: "home_fr_light.png",          url: "/",             theme: "light", fullPage: false },
-  { file: "home_fr_dark.png",           url: "/",             theme: "dark",  fullPage: false },
-  { file: "libray_fr_light.png",        url: "/library",      theme: "light", fullPage: false },
-  { file: "workout_fr_light.png",       url: "/workout/VMA-001", theme: "light", fullPage: false },
-  { file: "plan_with_stats_fr_light.png", url: "/plan/new/prebuilt", theme: "light", fullPage: false },
+  { file: `home_${LOCALE}_light.png`,           url: "/",                  theme: "light", fullPage: false },
+  { file: `home_${LOCALE}_dark.png`,            url: "/",                  theme: "dark",  fullPage: false },
+  { file: `library_${LOCALE}_light.png`,        url: "/library",           theme: "light", fullPage: false },
+  { file: `workout_${LOCALE}_light.png`,        url: "/workout/VMA-001",   theme: "light", fullPage: false },
+  { file: `plan_with_stats_${LOCALE}_light.png`, url: "/plan/new/prebuilt", theme: "light", fullPage: false },
 ];
 
 const VIEWPORT_W = 1440;
@@ -61,22 +70,26 @@ async function main() {
 
   for (const shot of SHOTS) {
     const page = await browser.newPage();
-    await page.setExtraHTTPHeaders({ "Accept-Language": "fr-FR,fr;q=0.9" });
+    await page.setExtraHTTPHeaders({ "Accept-Language": ACCEPT_LANGUAGE });
     await page.setViewport({
       width: VIEWPORT_W,
       height: VIEWPORT_H,
       deviceScaleFactor: 2,
     });
 
-    // Force French language + chosen theme before page scripts run.
-    await page.evaluateOnNewDocument((theme: string) => {
-      try {
-        localStorage.setItem("zoned-language", "fr");
-        localStorage.setItem("i18nextLng", "fr");
-        // Theme is stored under `zoned-theme` by the ThemeProvider.
-        localStorage.setItem("zoned-theme", theme);
-      } catch {}
-    }, shot.theme);
+    // Force the chosen language + theme before page scripts run.
+    await page.evaluateOnNewDocument(
+      (theme: string, locale: string) => {
+        try {
+          localStorage.setItem("zoned-language", locale);
+          localStorage.setItem("i18nextLng", locale);
+          // Theme is stored under `zoned-theme` by the ThemeProvider.
+          localStorage.setItem("zoned-theme", theme);
+        } catch {}
+      },
+      shot.theme,
+      LOCALE
+    );
 
     const target = BASE + shot.url;
     console.log(`→ ${target}  (${shot.theme})`);
