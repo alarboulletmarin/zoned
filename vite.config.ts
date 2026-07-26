@@ -19,11 +19,15 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.svg", "favicon-32x32.png", "favicon-16x16.png"],
       manifest: {
-        name: "Zoned - Entraînements Running",
+        // English strings: the install prompt is the first thing an
+        // international visitor sees, and the app itself still switches to
+        // French automatically from the browser locale.
+        name: "Zoned — Endurance Training",
         short_name: "Zoned",
         description:
-          "Bibliothèque d'entraînements running basés sur les zones",
-        lang: "fr",
+          "Science-based endurance training: structured workouts, training plans and calculators built on a 6-zone system. No account, no tracking.",
+        lang: "en",
+        categories: ["health", "fitness", "sports", "lifestyle"],
         theme_color: "#0f172a",
         background_color: "#0f172a",
         display: "standalone",
@@ -50,6 +54,39 @@ export default defineConfig({
             sizes: "512x512",
             type: "image/png",
             purpose: "maskable",
+          },
+        ],
+        // Drives Chrome's rich install prompt; without both form factors it
+        // falls back to the bare icon-and-name dialog.
+        // Regenerate with `bun run generate:pwa-screenshots`.
+        screenshots: [
+          {
+            src: "screenshots/wide-home.png",
+            sizes: "1280x800",
+            type: "image/png",
+            form_factor: "wide",
+            label: "Structured training, without the noise",
+          },
+          {
+            src: "screenshots/wide-library.png",
+            sizes: "1280x800",
+            type: "image/png",
+            form_factor: "wide",
+            label: "Browse the workout library",
+          },
+          {
+            src: "screenshots/narrow-home.png",
+            sizes: "540x960",
+            type: "image/png",
+            form_factor: "narrow",
+            label: "Structured training, without the noise",
+          },
+          {
+            src: "screenshots/narrow-library.png",
+            sizes: "540x960",
+            type: "image/png",
+            form_factor: "narrow",
+            label: "Browse the workout library",
           },
         ],
       },
