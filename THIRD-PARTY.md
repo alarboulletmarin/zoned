@@ -11,8 +11,8 @@ which carries its own terms.
 - **Copyright:** © Google
 - **Licence:** Apache License 2.0 — full text in [licenses/APACHE-2.0.txt](licenses/APACHE-2.0.txt)
 - **Upstream:** https://github.com/google/material-design-icons
-- **Obtained via:** the [`@material-symbols/svg-400`](https://github.com/marella/material-symbols)
-  npm package (dev dependency), `sharp/` directory, weight 400
+- **Obtained via:** the [`@material-symbols/svg-600`](https://github.com/marella/material-symbols)
+  npm package (dev dependency), `sharp/` directory, weight 600
 - **Where it lives:** `src/components/icons/index.tsx`
 
 The icons ship as SVG files upstream. **The redistributed form is modified**, as

@@ -1,7 +1,7 @@
-# Table de correspondance Lucide -> Material Symbols (sharp/, poids 400).
+# Table de correspondance Lucide -> Material Symbols (sharp/, poids 600).
 # Format : export|material|statut|note
 # Chaque nom Material a ete verifie par un `ls` reel dans
-# node_modules/@material-symbols/svg-400/sharp/. Voir docs/icon-mapping.md.
+# node_modules/@material-symbols/svg-600/sharp/. Voir docs/icon-mapping.md.
 Menu|menu|exact|
 X|close|exact|
 Lock|lock|exact|

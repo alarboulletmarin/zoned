@@ -20,7 +20,7 @@
     "deploy": "bun run build:seo && git add -f dist public/sitemap.xml && git diff --cached --quiet || git commit -m 'chore(build): regenerate prerendered dist'"
   },
   "devDependencies": {
-    "@material-symbols/svg-400": "^0.45.9",
+    "@material-symbols/svg-600": "^0.45.9",
     "@tailwindcss/vite": "^4.1.18",
     "@types/pdfmake": "^0.2.12",
     "@types/react": "^19.2.9",

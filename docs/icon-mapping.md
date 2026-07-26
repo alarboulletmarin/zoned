@@ -4,11 +4,11 @@
 `scripts/data/icon-mapping.csv` sont la source de vérité : le CSV est lu par
 `scripts/generate-icons.ts`, qui émet `src/components/icons/index.tsx`.
 
-- **Cible :** `@material-symbols/svg-400` v0.45.9, dossier `sharp/`, poids 400.
+- **Cible :** `@material-symbols/svg-600` v0.45.9, dossier `sharp/`, poids 600.
 - **Licence :** Apache 2.0 (© Google), tracés modifiés — voir [THIRD-PARTY.md](../THIRD-PARTY.md).
   Le paquet ne fournit aucun fichier NOTICE.
 - **Vérification :** chaque nom a été confirmé par un `ls` réel dans
-  `node_modules/@material-symbols/svg-400/sharp/`. Aucun nom ne vient de mémoire.
+  `node_modules/@material-symbols/svg-600/sharp/`. Aucun nom ne vient de mémoire.
 - **Régénérer :** `bun run generate:icons` — `bun run check:icons` échoue si le
   fichier commité diverge de la table.
 

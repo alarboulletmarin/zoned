@@ -2,7 +2,7 @@
  * USAGE: bun run scripts/generate-icons.ts [--check]
  *
  * Generates src/components/icons/index.tsx from Material Symbols (Sharp,
- * weight 400) SVGs shipped by the @material-symbols/svg-400 dev dependency.
+ * weight 600) SVGs shipped by the @material-symbols/svg-600 dev dependency.
  *
  * Why a generator instead of a runtime dependency:
  *   The output is committed, so the app keeps zero icon dependencies at
@@ -11,8 +11,8 @@
  *
  * Inputs:
  *   - scripts/data/icon-mapping.csv          export|material|status|note
- *   - node_modules/@material-symbols/svg-400/sharp/<name>.svg
- *   - node_modules/@material-symbols/svg-400/sharp/<name>-fill.svg (optional)
+ *   - node_modules/@material-symbols/svg-600/sharp/<name>.svg
+ *   - node_modules/@material-symbols/svg-600/sharp/<name>-fill.svg (optional)
  *
  * Rows whose material name is "-" are brand logos with no Material
  * equivalent; they live in src/components/icons/brand.tsx and are only
@@ -27,8 +27,8 @@ import { join } from "path";
 
 const ROOT = join(import.meta.dirname, "..");
 const MAPPING_PATH = join(ROOT, "scripts/data/icon-mapping.csv");
-const SVG_DIR = join(ROOT, "node_modules/@material-symbols/svg-400/sharp");
-const PKG_PATH = join(ROOT, "node_modules/@material-symbols/svg-400/package.json");
+const SVG_DIR = join(ROOT, "node_modules/@material-symbols/svg-600/sharp");
+const PKG_PATH = join(ROOT, "node_modules/@material-symbols/svg-600/package.json");
 const OUTPUT_PATH = join(ROOT, "src/components/icons/index.tsx");
 
 /** Rows in icon-mapping.csv. */
@@ -164,9 +164,9 @@ function renderFile(glyphs: Glyph[], brandExports: string[], version: string): s
  * Generator:       scripts/generate-icons.ts
  * Mapping table:   scripts/data/icon-mapping.csv (rationale in docs/icon-mapping.md)
  *
- * Source:  Material Symbols, Sharp style, weight 400
+ * Source:  Material Symbols, Sharp style, weight 600
  *          https://github.com/google/material-design-icons
- *          via the @material-symbols/svg-400 npm package (v${version})
+ *          via the @material-symbols/svg-600 npm package (v${version})
  * Licence: Apache License 2.0, © Google — see licenses/APACHE-2.0.txt
  *          The upstream package ships no NOTICE file, so none is propagated.
  *
