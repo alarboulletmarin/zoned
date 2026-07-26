@@ -1,20 +1,22 @@
 ---
-name: Seance complete / Full workout submission
-about: Soumettez une seance complete avec blocs et zones / Submit a complete workout with blocks and zones
+name: Full workout submission
+about: Submit a complete workout with blocks and zones
 title: "[WORKOUT] "
 labels: workout-submission
 assignees: ''
 ---
 
-## Informations de base / Basic Info
+> Feel free to answer in French — les réponses en français sont les bienvenues.
 
-**Nom (FR):**
+## Basic Info
+
+**Name (FR):**
 **Name (EN):**
-**Categorie / Category:**
+**Category:**
 <!-- recovery, endurance, tempo, threshold, vma_intervals, long_run, hills, fartlek, race_pace, mixed, assessment -->
-**Niveau / Difficulty:**
+**Difficulty:**
 <!-- beginner, intermediate, advanced -->
-**Duree typique / Typical duration:** min: ___ max: ___
+**Typical duration:** min: ___ max: ___
 
 ## Description
 
@@ -22,35 +24,35 @@ assignees: ''
 
 **EN:**
 
-## Environnement / Environment
-<!-- Cochez ce qui s'applique / Check what applies -->
-- [ ] Necessite des cotes / Requires hills
-- [ ] Necessite une piste / Requires track
-- [ ] Prefere le plat / Prefers flat terrain
-- [ ] Prefere sol souple / Prefers soft surface
+## Environment
+<!-- Check what applies -->
+- [ ] Requires hills
+- [ ] Requires track
+- [ ] Prefers flat terrain
+- [ ] Prefers soft surface
 
-## Echauffement / Warmup
+## Warmup
 
-| Description | Duree (min) | Zone | Repetitions | Recuperation |
-|-------------|-------------|------|-------------|--------------|
-|             |             |      |             |              |
+| Description | Duration (min) | Zone | Repetitions | Recovery |
+|-------------|----------------|------|-------------|----------|
+|             |                |      |             |          |
 
-## Corps de seance / Main Set
+## Main Set
 
-| Description | Duree (min) | Zone | Repetitions | Recuperation |
-|-------------|-------------|------|-------------|--------------|
-|             |             |      |             |              |
+| Description | Duration (min) | Zone | Repetitions | Recovery |
+|-------------|----------------|------|-------------|----------|
+|             |                |      |             |          |
 
-## Retour au calme / Cooldown
+## Cooldown
 
-| Description | Duree (min) | Zone | Repetitions | Recuperation |
-|-------------|-------------|------|-------------|--------------|
-|             |             |      |             |              |
+| Description | Duration (min) | Zone | Repetitions | Recovery |
+|-------------|----------------|------|-------------|----------|
+|             |                |      |             |          |
 
-## Conseils / Coaching Tips
+## Coaching Tips
 
 -
 
-## Erreurs courantes / Common Mistakes
+## Common Mistakes
 
 -

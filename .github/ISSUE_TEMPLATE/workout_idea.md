@@ -1,21 +1,22 @@
 ---
-name: Idee de seance / Workout idea
-about: Proposez une idee de seance rapide / Share a quick workout idea
+name: Workout idea
+about: Share a quick workout idea
 title: "[IDEA] "
 labels: workout-idea
 assignees: ''
 ---
 
-## Idee de seance / Workout idea
+> Feel free to answer in French — les réponses en français sont les bienvenues.
 
-**Nom / Name:**
+## Workout idea
 
-**Categorie / Category:**
+**Name:**
+
+**Category:**
 <!-- recovery, endurance, tempo, threshold, vma_intervals, long_run, hills, fartlek, race_pace, mixed, assessment -->
 
-**Niveau / Difficulty:**
+**Difficulty:**
 <!-- beginner, intermediate, advanced -->
 
 **Description:**
-<!-- Decrivez la seance, son objectif, et comment la realiser... -->
 <!-- Describe the workout, its goal, and how to perform it... -->

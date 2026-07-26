@@ -6,6 +6,8 @@ labels: bug
 assignees: ''
 ---
 
+> Feel free to answer in French — les réponses en français sont les bienvenues.
+
 ## Description
 
 <!-- A clear and concise description of the bug -->
