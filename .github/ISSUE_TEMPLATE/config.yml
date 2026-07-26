@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 💬 Question or idea
+    url: https://github.com/alarboulletmarin/zoned/discussions
+    about: Ask anything about training, the app or the data — no issue needed.
+  - name: 💡 Suggest a workout from the app
+    url: https://zoned.run/contribute
+    about: The in-app form walks you through it and pre-fills the right template.
+  - name: 🔒 Report a security vulnerability
+    url: https://github.com/alarboulletmarin/zoned/security/advisories/new
+    about: Please report privately rather than in a public issue.
