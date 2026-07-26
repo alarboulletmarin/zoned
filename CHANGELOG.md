@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.5] - 2026-07-26
+
+### Added
+- Social previews for crawlers that never run JavaScript, with metadata specific to each key route — links to zoned.run previewed as a bare URL on X, LinkedIn, Slack, Facebook and Discord
+- Six English share cards, one per section: site-wide, library, calculators, plans, learn and race simulator
+- Community health files: security policy with private vulnerability reporting, code of conduct, Sponsor button and a contact-link issue chooser
+- PWA install screenshots for both desktop and mobile form factors, plus manifest categories, so Chrome shows its rich install prompt
+
+### Changed
+- Icon set migrated to Material Symbols Sharp at weight 600, with a single source of truth for category glyphs and a graded gauge for difficulty
+- PWA manifest and README screenshots switched to English; the app still follows the browser locale
+- README counts and feature list brought back in line with the product: 219 running sessions, share-by-link, the ten curated weeks, the race-day run sheet and the comparison pages
+- The build now fails on a stale or hand-edited generated icon file instead of shipping it
+
+### Fixed
+- Social crawlers saw no metadata at all: `<SEOHead>` only runs client-side, and the prerender pass does not run on Vercel
+- The sitemap listed slugs by hand and they had drifted — two dead URLs were submitted to Google while nine real pages never were
+- Curated weeks, the workout draw, the route generator and the track finder were missing from the sitemap
+- `llms.txt` pointed at two plan slugs that do not exist, still described the retired quiz, and undercounted the catalogue
+- The week board hint named a gesture nothing implements, and picked its wording from viewport width rather than pointer capability
+- Icons: solid star and heart states, the dropdown radio indicator, and the fartlek and upper-body glyphs
+
 ## [0.7.4] - 2026-07-25
 
 ### Added

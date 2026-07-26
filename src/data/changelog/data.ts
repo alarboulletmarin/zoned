@@ -2,6 +2,90 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.7.5",
+    date: "2026-07-26",
+    changes: {
+      added: [
+        {
+          text: "Aperçus sociaux pour les robots qui n'exécutent pas JavaScript, avec des métadonnées propres à chaque page clé : un lien vers zoned.run s'affichait jusqu'ici sans image ni description sur X, LinkedIn, Slack, Facebook et Discord",
+          textEn: "Social previews for crawlers that never run JavaScript, with metadata specific to each key page: a link to zoned.run previously appeared with no image and no description on X, LinkedIn, Slack, Facebook and Discord",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Six cartes de partage en anglais, une par section : générale, bibliothèque, calculateurs, plans, apprendre et simulateur de course",
+          textEn: "Six English share cards, one per section: site-wide, library, calculators, plans, learn and race simulator",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Fichiers communauté sur GitHub : politique de sécurité avec signalement privé des vulnérabilités, code de conduite, bouton de soutien et sélecteur d'issues",
+          textEn: "Community health files on GitHub: security policy with private vulnerability reporting, code of conduct, Sponsor button and an issue chooser",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Captures d'installation de l'app pour ordinateur et mobile, et catégories dans le manifeste : Chrome affiche enfin sa fiche d'installation complète",
+          textEn: "App install screenshots for desktop and mobile, plus manifest categories, so Chrome finally shows its rich install prompt",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+      ],
+      changed: [
+        {
+          text: "Jeu d'icônes migré vers Material Symbols Sharp en graisse 600, avec une source unique pour les glyphes de catégorie et une jauge graduée pour la difficulté",
+          textEn: "Icon set migrated to Material Symbols Sharp at weight 600, with a single source of truth for category glyphs and a graded gauge for difficulty",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Manifeste de l'app et captures du README passés en anglais ; l'app continue de suivre la langue du navigateur",
+          textEn: "App manifest and README screenshots switched to English; the app still follows the browser locale",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+        {
+          text: "Compteurs et liste de fonctionnalités du README remis en accord avec le produit : 219 séances de course, partage par lien, les dix semaines prêtes à l'emploi, le déroulé du jour de course et les pages de comparaison",
+          textEn: "README counts and feature list brought back in line with the product: 219 running sessions, share-by-link, the ten curated weeks, the race-day run sheet and the comparison pages",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+      ],
+      fixed: [
+        {
+          text: "Les robots sociaux ne voyaient aucune métadonnée : les balises ne sont posées qu'une fois la page exécutée côté navigateur, et la passe de pré-rendu ne tourne pas en production",
+          textEn: "Social crawlers saw no metadata at all: the tags are only set once the page runs in the browser, and the prerender pass does not run in production",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Le plan du site listait des adresses écrites à la main qui avaient dérivé : deux pages mortes étaient soumises à Google pendant que neuf pages réelles ne l'étaient jamais",
+          textEn: "The sitemap listed hand-written addresses that had drifted: two dead pages were submitted to Google while nine real ones never were",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Les semaines prêtes à l'emploi, le tirage de séance, le générateur de parcours et la recherche de piste manquaient au plan du site",
+          textEn: "The curated weeks, the workout draw, the route generator and the track finder were missing from the sitemap",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "L'aide du tableau de semaine décrivait un geste que rien n'implémente, et choisissait sa formulation d'après la largeur d'écran au lieu du type de pointeur",
+          textEn: "The week board hint named a gesture nothing implements, and picked its wording from viewport width rather than pointer capability",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Icônes : états pleins de l'étoile et du cœur, indicateur de sélection des menus, et glyphes du fartlek et du haut du corps",
+          textEn: "Icons: solid star and heart states, the dropdown selection indicator, and the fartlek and upper-body glyphs",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+    },
+  },
+  {
     version: "0.7.4",
     date: "2026-07-25",
     changes: {
