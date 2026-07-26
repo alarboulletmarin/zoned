@@ -4,7 +4,7 @@ import {
   ArrowRight,
   Bike,
   ChevronDown,
-  Footprints,
+  Run,
   Loader2,
   MapPin,
   Mountain,
@@ -217,7 +217,7 @@ export function RouteParametersForm({
   ];
 
   const disciplineOptions: SegmentedOption<Discipline>[] = [
-    { value: "running", label: t("form.disciplineRunning"), icon: <Footprints className="size-3.5" /> },
+    { value: "running", label: t("form.disciplineRunning"), icon: <Run className="size-3.5" /> },
     { value: "cycling", label: t("form.disciplineCycling"), icon: <Bike className="size-3.5" /> },
   ];
 

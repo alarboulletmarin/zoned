@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { Waves, Save } from "@/components/icons";
+import { Pool, Save } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
@@ -162,7 +162,7 @@ export function CssTestPage() {
       <div className="py-8 max-w-2xl mx-auto">
         <div className="mb-8">
           <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
-            <Waves className="size-8 text-primary shrink-0" />
+            <Pool className="size-8 text-primary shrink-0" />
             {t("calculateurs.css.title")}
           </EditorialTitle>
           <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">

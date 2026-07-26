@@ -6,7 +6,7 @@ import {
   ArrowRight,
   Bike,
   Mountain,
-  Waves,
+  Pool,
 } from "@/components/icons";
 
 /**
@@ -76,7 +76,7 @@ const SLIDES: SpotlightSlide[] = [
     gradient:
       "from-zone-2/15 via-zone-2/5 to-zone-1/10 dark:from-zone-2/25 dark:via-zone-2/10 dark:to-zone-1/15 border-zone-2/30",
     iconColor: "text-zone-2",
-    DecorIcon: Waves,
+    DecorIcon: Pool,
     i18n: {
       eyebrow: "home.swimmingEyebrow",
       title: "home.swimmingTitle",

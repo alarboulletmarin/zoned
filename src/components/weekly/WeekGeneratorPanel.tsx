@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import {
-  Footprints,
+  Run,
   Bike,
-  Waves,
+  Pool,
   Dumbbell,
   Sparkles,
   Loader2,
@@ -33,7 +33,7 @@ const DAYS: DayIndex[] = [0, 1, 2, 3, 4, 5, 6];
 const DISCIPLINE_ICONS: Record<
   DrawDiscipline,
   React.ComponentType<{ className?: string }>
-> = { running: Footprints, cycling: Bike, swimming: Waves, strength: Dumbbell };
+> = { running: Run, cycling: Bike, swimming: Pool, strength: Dumbbell };
 
 /**
  * Generator settings for "Ma semaine" (Epic #83) — always expanded (no

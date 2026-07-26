@@ -17,9 +17,9 @@ import {
   Gauge,
   Filter,
   X,
-  Footprints,
+  Run,
   Bike,
-  Waves,
+  Pool,
   Dumbbell,
   CalendarRange,
 } from "@/components/icons";
@@ -85,9 +85,9 @@ const DISCIPLINE_ICONS: Record<
   DrawDiscipline,
   React.ComponentType<{ className?: string }>
 > = {
-  running: Footprints,
+  running: Run,
   cycling: Bike,
-  swimming: Waves,
+  swimming: Pool,
   strength: Dumbbell,
 };
 

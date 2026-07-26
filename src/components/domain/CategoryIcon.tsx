@@ -16,8 +16,8 @@ import {
   Shield,
   ArrowUp,
   Zap,
-  Waves,
-  HeartPulse,
+  Stretching,
+  Healing,
   type IconProps,
 } from "@/components/icons";
 import type { WorkoutCategory } from "@/types";
@@ -46,8 +46,8 @@ const STRENGTH_CATEGORY_ICONS: Record<StrengthCategory, ComponentType<IconProps>
   runner_core: Shield,
   runner_upper: ArrowUp,
   plyometrics: Zap,
-  mobility: Waves,
-  prehab: HeartPulse,
+  mobility: Stretching,
+  prehab: Healing,
 };
 
 interface CategoryIconProps {

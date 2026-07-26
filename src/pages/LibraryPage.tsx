@@ -7,9 +7,9 @@ import {
   Search,
   Loader2,
   Dumbbell,
-  Footprints,
+  Run,
   Bike,
-  Waves,
+  Pool,
   X,
 } from "@/components/icons";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
@@ -612,9 +612,9 @@ export function LibraryPage() {
                         : "text-muted-foreground hover:text-foreground",
                     )}
                   >
-                    {type === "running" && <Footprints className="size-3.5" />}
+                    {type === "running" && <Run className="size-3.5" />}
                     {type === "cycling" && <Bike className="size-3.5" />}
-                    {type === "swimming" && <Waves className="size-3.5" />}
+                    {type === "swimming" && <Pool className="size-3.5" />}
                     {type === "strength" && <Dumbbell className="size-3.5" />}
                     {t(`activityToggle.${type}`)}
                   </button>

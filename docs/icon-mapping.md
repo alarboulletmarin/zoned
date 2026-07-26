@@ -1,92 +1,86 @@
 # Cartographie des icônes — Lucide → Material Symbols (Sharp)
 
-**Phase 1 de la migration. Aucun code applicatif n'a été modifié :** ce document
-est la table d'arbitrage à valider avant la génération (phase 2).
+État **final** de la migration. Ce document et
+`scripts/data/icon-mapping.csv` sont la source de vérité : le CSV est lu par
+`scripts/generate-icons.ts`, qui émet `src/components/icons/index.tsx`.
 
 - **Cible :** `@material-symbols/svg-400` v0.45.9, dossier `sharp/`, poids 400.
-- **Licence :** Apache 2.0 (© Google). Le paquet ne fournit aucun fichier NOTICE.
-- **Vérification :** chaque nom ci-dessous a été confirmé par un `ls` réel dans
+- **Licence :** Apache 2.0 (© Google), tracés modifiés — voir [THIRD-PARTY.md](../THIRD-PARTY.md).
+  Le paquet ne fournit aucun fichier NOTICE.
+- **Vérification :** chaque nom a été confirmé par un `ls` réel dans
   `node_modules/@material-symbols/svg-400/sharp/`. Aucun nom ne vient de mémoire.
-- **Source de vérité machine :** `scripts/data/icon-mapping.csv` (lu par le générateur).
+- **Régénérer :** `bun run generate:icons` — `bun run check:icons` échoue si le
+  fichier commité diverge de la table.
 
 ## Résumé
 
 | | |
 |---|---|
-| Exports actuels | 112 |
-| Correspondance exacte | 98 |
+| Exports | 117 (112 repris de l'ancien set + 5 ajoutés pour le contexte) |
+| Correspondance exacte | 103 |
 | Correspondance approchante | 12 |
-| Manquants | 2 (`GithubIcon`, `StravaIcon`) |
-| Variante `-fill` disponible | 110 / 110 icônes mappées |
+| Manquants (logos de marque) | 2 |
+| Variante `-fill` disponible | 115 / 115 icônes mappées |
 
-## Différences de géométrie
+Sur les 113 glyphes distincts, 71 ont une variante pleine réellement différente
+du contour ; les 44 autres ont un `-fill` identique en amont et sont émis une
+seule fois, avec un commentaire dans le fichier généré.
 
-| | Actuel (Lucide) | Cible (Material Sharp) |
+## Contrat de composant
+
+```ts
+interface IconProps {
+  className?: string;
+  size?: number | string;   // défaut 24
+  filled?: boolean;         // bascule sur le tracé -fill
+}
+```
+
+| | Ancien (Lucide) | Actuel (Material Sharp) |
 |---|---|---|
-| viewBox | `0 0 24 24` | `0 -960 960 960` |
+| viewBox | `0 0 24 24` global | `0 -960 960 960`, porté par icône |
 | Rendu | contour, `stroke="currentColor"`, `strokeWidth={2}` | tracé plein, `fill="currentColor"` |
 | Terminaisons | `strokeLinecap` / `strokeLinejoin` : `round` | sans objet |
-| Variante pleine | inexistante | `<nom>-fill.svg` |
+| Variante pleine | inexistante (obtenue via `fill-*` en CSS) | prop `filled` |
+| Accessibilité | rien | `aria-hidden="true"`, `focusable="false"` |
 
-## Points d'arbitrage
+**Conséquence sur les appels :** les utilitaires `fill-*` ne remplissent plus rien
+(le glyphe est déjà peint en `currentColor`) ; il faut `filled`. Dix sites
+reposaient dessus pour les cœurs « favori » et les étoiles de notation.
 
-### 1. Les deux manquants : logos de marque
+## Ajouts contextuels
 
-Material Symbols ne publie pas de logos tiers. `GithubIcon` et `StravaIcon` n'ont
-donc aucun équivalent, et je ne dessine rien à la main. État actuel :
+Cinq exports ont été ajoutés après coup, parce que l'export d'origine était
+partagé par plusieurs sens et que le glyphe ne convenait qu'à l'un d'eux :
 
-- `StravaIcon` — déjà un tracé de marque en `fill="currentColor"`, viewBox 24.
-  Il n'a jamais été une icône Lucide.
-- `GithubIcon` — actuellement le tracé **Lucide** (contour, strokeWidth 2). C'est le
-  seul reliquat Lucide qui subsisterait à l'exécution après migration, ce qui maintient
-  l'obligation de licence ISC de façon permanente et non plus seulement historique.
-
-Trois options, à trancher :
-
-| Option | Effet |
-|---|---|
-| **A.** Conserver les deux tels quels, hors pipeline de génération | Le plus simple. Maintient la dépendance ISC vivante pour GitHub. |
-| **B.** Conserver Strava, remplacer le tracé GitHub par le logo officiel Octicons (MIT) | Supprime tout tracé Lucide du runtime. Ajoute une 3ᵉ licence à créditer. |
-| **C.** Supprimer les deux exports | Hors périmètre : casserait des sites d'appel. |
-
-Sans arbitrage de ta part, la phase 2 partira sur **l'option A** (préservation à
-l'identique, hors génération), qui respecte l'interdit « ne pas dessiner d'icône maison ».
-
-### 2. Les 12 correspondances approchantes
-
-Aucune n'est un bouche-trou : le concept existe, seule la métaphore graphique diffère.
-Celles qui méritent un œil, avec leur contexte d'usage réel :
-
-| Export | Proposé | Contexte dans Zoned | Alternative si tu préfères |
+| Export | Material | Remplace | Où |
 |---|---|---|---|
-| `Sparkles` | `star_shine` | génération assistée, semaines | `wand_shine` |
-| `Mountain` | `landscape` | catégorie « côtes », plans trail | `mountain_flag`, `hiking` |
-| `TreePine` | `forest` | catégorie « trail » | `park`, `nature` |
-| `Crosshair` | `my_location` | catégorie « fartlek » | `center_focus_strong`, `adjust` |
-| `Rocket` | `rocket_launch` | catégorie « VMA / VO2max » | `rocket` |
-| `Brain` | `psychology` | sections science, zones | `neurology`, `cognition` |
-| `Droplets` | `water_drop` | hydratation (guide nutrition) | `water_drops` (deux gouttes, plus fidèle) |
-| `Share` | `share` | partage de séance / semaine | `ios_share` (plus fidèle au tracé Lucide) |
-| `Rows3` | `view_stream` | mode d'affichage « focus » | `view_agenda`, `density_medium` |
-| `Grid3x3` | `grid_on` | mode d'affichage « compact » | `view_module`, `apps` |
-| `Library` | `library_books` | bibliothèque de séances | `local_library` |
-| `CalendarOff` | `event_busy` | jour sans séance | `free_cancellation` |
+| `Run` | `directions_run` | `Footprints` | sélecteurs de discipline « course » |
+| `Pool` | `pool` | `Waves` | sélecteurs de discipline « natation », test CSS |
+| `HeartRate` | `monitor_heart` | `Heart` | FC max dans le calculateur de zones |
+| `Stretching` | `sports_gymnastics` | `Waves` | catégorie renforcement « mobilité » |
+| `Healing` | `healing` | `HeartPulse` | catégorie renforcement « prévention blessures » |
 
-### 3. Doublons dans le fichier actuel
+`Footprints` reste en service là où l'empreinte est juste (technique de foulée,
+collection « premiers pas », renforcement des jambes). `Heart` reste l'icône des
+favoris. `HeartPulse` reste utilisé par les données (récupération, nutrition).
 
-`Check` / `CheckIcon` et `Circle` / `CircleIcon` sont deux paires de tracés
-strictement identiques. Les quatre exports sont conservés (aucun site d'appel touché) ;
-ils pointeront simplement sur le même SVG source.
+## Points restés en l'état
 
-### 4. Exports jamais importés
-
-`Bell`, `Mail`, `Users`, `Languages`, `Minus`, `PanelLeftClose`, `PanelLeftOpen` ne
-sont importés nulle part dans `src/`. Ils sont **conservés et migrés** — je ne supprime
-pas d'export sans validation. Signalé au cas où tu voudrais les retirer séparément.
+- **Deux manquants.** Material Symbols ne publie pas de logos tiers.
+  `GithubIcon` et `StravaIcon` gardent leur géométrie d'origine (viewBox 24) dans
+  `src/components/icons/brand.tsx`, fichier maintenu à la main et réexporté par le
+  fichier généré. `GithubIcon` vient de Lucide, d'où la section ISC de THIRD-PARTY.md.
+- **Doublons.** `Check`/`CheckIcon` et `Circle`/`CircleIcon` étaient des tracés
+  identiques dans l'ancien set ; les quatre exports sont conservés et pointent sur
+  le même SVG.
+- **Exports sans usage.** `Bell`, `Mail`, `Users`, `Languages`, `Minus`,
+  `PanelLeftClose`, `PanelLeftOpen` n'étaient déjà importés nulle part, et `Waves`
+  l'est devenu depuis le passage à `Pool`/`Stretching`. Tous sont conservés.
 
 ## Table de correspondance complète
 
-| Export actuel | Nom Material (`sharp/`) | Variante `-fill` | Statut | Note |
+| Export | Nom Material (`sharp/`) | Variante `-fill` | Statut | Note |
 |---|---|---|---|---|
 | `Menu` | `menu` | oui | exact | — |
 | `X` | `close` | oui | exact | — |
@@ -198,5 +192,10 @@ pas d'export sans validation. Signalé au cas où tu voudrais les retirer sépar
 | `ClipboardCheck` | `assignment_turned_in` | oui | exact | — |
 | `Bike` | `directions_bike` | oui | exact | — |
 | `Waves` | `waves` | oui | exact | — |
+| `Run` | `directions_run` | oui | exact | discipline « course à pied », remplace Footprints sur les sélecteurs de discipline |
+| `Pool` | `pool` | oui | exact | discipline « natation », remplace Waves sur les sélecteurs de discipline |
+| `HeartRate` | `monitor_heart` | oui | exact | fréquence cardiaque (FC max, zones) — à distinguer de `Heart`, qui est l’icône « favoris » |
+| `Stretching` | `sports_gymnastics` | oui | exact | catégorie renforcement « mobilité » |
+| `Healing` | `healing` | oui | exact | catégorie renforcement « prévention blessures » |
 | `GithubIcon` | — | — | **MANQUANT** | logo de marque, hors périmètre Material Symbols |
 | `StravaIcon` | — | — | **MANQUANT** | logo de marque, hors périmètre Material Symbols |

@@ -112,5 +112,10 @@ Dices|casino|exact|
 ClipboardCheck|assignment_turned_in|exact|
 Bike|directions_bike|exact|
 Waves|waves|exact|
+Run|directions_run|exact|discipline « course à pied », remplace Footprints sur les sélecteurs de discipline
+Pool|pool|exact|discipline « natation », remplace Waves sur les sélecteurs de discipline
+HeartRate|monitor_heart|exact|fréquence cardiaque (FC max, zones) — à distinguer de `Heart`, qui est l’icône « favoris »
+Stretching|sports_gymnastics|exact|catégorie renforcement « mobilité »
+Healing|healing|exact|catégorie renforcement « prévention blessures »
 GithubIcon|-|manquant|logo de marque, hors périmètre Material Symbols
 StravaIcon|-|manquant|logo de marque, hors périmètre Material Symbols

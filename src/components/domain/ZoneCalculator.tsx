@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback, type ChangeEvent } from "rea
 import { zoneClass } from "@/lib/zoneColors";
 import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router-dom";
-import { Save, Trash2, Heart, Gauge, ChevronDown, Dumbbell } from "@/components/icons";
+import { Save, Trash2, HeartRate, Gauge, ChevronDown, Dumbbell } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
 import { buildParamsUrl } from "@/lib/share/urlParams";
@@ -160,7 +160,7 @@ export function ZoneCalculator() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <label htmlFor="fcMax" className="flex items-center gap-2 text-sm font-medium">
-              <Heart className="size-4 text-red-500" />
+              <HeartRate className="size-4 text-red-500" />
               {t("myZones.zoneCalculator.fcMax")}
             </label>
             <div className="flex items-center gap-2">
