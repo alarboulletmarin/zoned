@@ -1,0 +1,116 @@
+# Table de correspondance Lucide -> Material Symbols (sharp/, poids 400).
+# Format : export|material|statut|note
+# Chaque nom Material a ete verifie par un `ls` reel dans
+# node_modules/@material-symbols/svg-400/sharp/. Voir docs/icon-mapping.md.
+Menu|menu|exact|
+X|close|exact|
+Lock|lock|exact|
+LockOpen|lock_open|exact|
+Home|home|exact|
+ArrowRight|arrow_forward|exact|
+ArrowLeft|arrow_back|exact|
+ArrowUp|arrow_upward|exact|
+ChevronLeft|chevron_left|exact|
+ChevronRight|chevron_right|exact|
+ChevronDown|keyboard_arrow_down|exact|`expand_more` absent du paquet
+ChevronUp|keyboard_arrow_up|exact|`expand_less` absent du paquet
+ExternalLink|open_in_new|exact|
+PanelLeftClose|left_panel_close|exact|export jamais importé
+PanelLeftOpen|left_panel_open|exact|export jamais importé
+LayoutGrid|grid_view|exact|
+Rows3|view_stream|approchant|trois bandes horizontales au lieu de trois rangées pleine largeur
+Grid3x3|grid_on|approchant|grille 4×4 au lieu de 3×3
+List|format_list_bulleted|exact|
+Search|search|exact|
+Filter|filter_alt|exact|
+Download|download|exact|
+Upload|upload|exact|
+Save|save|exact|
+Trash2|delete|exact|
+RotateCcw|rotate_left|exact|alternative sémantique : `restart_alt`
+Settings|settings|exact|
+Heart|favorite|exact|
+Pencil|edit|exact|
+Plus|add|exact|
+Minus|remove|exact|export jamais importé
+Copy|content_copy|exact|
+Share|share|approchant|Lucide = flèche hors boîte (proche de `ios_share`), Material = nœuds reliés
+Eye|visibility|exact|
+EyeOff|visibility_off|exact|
+Check|check|exact|
+CheckIcon|check|exact|doublon de `Check` dans le fichier actuel
+Circle|circle|exact|
+CircleIcon|circle|exact|doublon de `Circle` dans le fichier actuel
+MoreHorizontal|more_horiz|exact|
+MoreVertical|more_vert|exact|
+Maximize2|open_in_full|exact|
+Minimize2|close_fullscreen|exact|
+ArrowLeftRight|swap_horiz|exact|
+Undo2|undo|exact|
+Redo2|redo|exact|
+RefreshCw|refresh|exact|
+Loader2|progress_activity|exact|arc de spinner, compatible avec `animate-spin`
+Shuffle|shuffle|exact|
+Send|send|exact|
+Link2|link|exact|
+Info|info|exact|
+AlertTriangle|warning|exact|
+Shield|shield|exact|
+Code|code|exact|
+Star|star|exact|
+Bell|notifications|exact|export jamais importé
+Mail|mail|exact|export jamais importé
+Users|group|exact|export jamais importé
+UserRound|person|exact|
+Languages|translate|exact|export jamais importé
+Moon|dark_mode|exact|
+Sun|light_mode|exact|
+Image|image|exact|
+FileText|description|exact|
+Watch|watch|exact|
+Sparkles|star_shine|approchant|`auto_awesome` absent de ce paquet, `star_shine` est son remplaçant amont
+Lightbulb|lightbulb|exact|
+Book|book|exact|
+BookOpen|menu_book|exact|
+GraduationCap|school|exact|
+Library|library_books|approchant|rayonnage de livres au lieu de colonnes de temple
+Calculator|calculate|exact|
+Calendar|calendar_today|exact|
+CalendarDays|calendar_month|exact|
+CalendarRange|date_range|exact|
+CalendarOff|event_busy|approchant|calendrier barré d'une croix
+Clock|schedule|exact|
+Timer|timer|exact|
+Gauge|speed|exact|
+Target|target|exact|
+Crosshair|my_location|approchant|réticule avec point central
+Compass|explore|exact|
+MapPin|location_on|exact|
+Flag|flag|exact|
+Route|route|exact|
+Mountain|landscape|approchant|paysage montagneux au lieu du triangle seul
+TreePine|forest|approchant|bosquet au lieu d'un sapin isolé
+Footprints|footprint|exact|
+Dumbbell|fitness_center|exact|
+Activity|vital_signs|exact|
+HeartPulse|ecg_heart|exact|
+Flame|local_fire_department|exact|
+Rocket|rocket_launch|approchant|fusée verticale avec flammes, alternative : `rocket`
+Zap|bolt|exact|
+TrendingUp|trending_up|exact|
+Leaf|eco|exact|
+Droplets|water_drop|approchant|une goutte au lieu de deux, alternative : `water_drops`
+Utensils|restaurant|exact|
+Coffee|coffee|exact|
+Pill|pill|exact|
+Snowflake|ac_unit|exact|
+Wheat|wheat|exact|
+Scale|balance|exact|
+FlaskConical|science|exact|
+Brain|psychology|approchant|profil de tête avec cerveau, alternatives : `neurology`, `cognition`
+Dices|casino|exact|
+ClipboardCheck|assignment_turned_in|exact|
+Bike|directions_bike|exact|
+Waves|waves|exact|
+GithubIcon|-|manquant|logo de marque, hors périmètre Material Symbols
+StravaIcon|-|manquant|logo de marque, hors périmètre Material Symbols
