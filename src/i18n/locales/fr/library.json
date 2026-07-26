@@ -367,7 +367,7 @@
       "rerolled": "Séance re-tirée",
       "rerollEmpty": "Aucune autre séance disponible avec ces réglages"
     },
-    "boardHint": "Survolez une carte pour la modifier · glissez-la pour la déplacer ou la retirer",
+    "boardHint": "Cliquez une séance pour la modifier · glissez-la pour la déplacer ou la retirer",
     "boardHintTouch": "Touchez une séance pour la modifier · maintenez pour la déplacer",
     "card": {
       "zone": "Zone {{zone}}"

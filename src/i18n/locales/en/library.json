@@ -367,7 +367,7 @@
       "rerolled": "Session re-rolled",
       "rerollEmpty": "No other session available with these settings"
     },
-    "boardHint": "Hover a card to edit it · drag it to move or remove it",
+    "boardHint": "Click a session to edit it · drag it to move or remove it",
     "boardHintTouch": "Tap a session to edit it · hold to drag it",
     "card": {
       "zone": "Zone {{zone}}"
