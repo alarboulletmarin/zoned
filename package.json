@@ -9,6 +9,8 @@
     "postinstall": "test -n \"$VERCEL\" || puppeteer browsers install chrome",
     "generate:sitemap": "bun run scripts/generate-sitemap.ts",
     "generate:og": "bun run scripts/generate-og-image.ts",
+    "generate:icons": "bun run scripts/generate-icons.ts",
+    "check:icons": "bun run scripts/generate-icons.ts --check",
     "demo:gif": "bun run scripts/record-demo.ts",
     "preview": "vite preview",
     "prerender": "bun run scripts/prerender.ts",
