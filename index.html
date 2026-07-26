@@ -16,11 +16,55 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="mobile-web-app-capable" content="yes" />
 
-    <!-- SEO metadata is owned by <SEOHead> via React 19 native auto-hoist.
-         Keeping a minimal default here so non-JS crawlers hitting an
-         un-prerendered URL still see something reasonable. The build's
-         prerender pass replaces this for every public route. -->
-    <title>Zoned</title>
+    <!-- SEO metadata is owned by <SEOHead> via React 19 native auto-hoist,
+         but that only runs once JS has executed. Social crawlers (Twitterbot,
+         facebookexternalhit, Slackbot, LinkedInBot, Discord…) never run JS, so
+         everything below is the static fallback they actually read.
+         `scripts/generate-route-meta.ts` rewrites these tags per route at
+         post-build time; `src/main.tsx` strips them right before React mounts
+         so the client-rendered <SEOHead> tags never end up duplicated. -->
+    <title data-default-seo>Zoned — Science-Based Endurance Training</title>
+    <meta
+      data-default-seo
+      name="description"
+      content="247 structured workouts, 9 training plans and 12 calculators built on a 6-zone system. Free, open source, no account, no tracking — everything runs in your browser."
+    />
+    <link data-default-seo rel="canonical" href="https://zoned.run" />
+
+    <meta data-default-seo property="og:type" content="website" />
+    <meta data-default-seo property="og:site_name" content="Zoned" />
+    <meta data-default-seo property="og:title" content="Zoned — Science-Based Endurance Training" />
+    <meta
+      data-default-seo
+      property="og:description"
+      content="247 structured workouts, 9 training plans and 12 calculators built on a 6-zone system. Free, open source, no account, no tracking — everything runs in your browser."
+    />
+    <meta data-default-seo property="og:url" content="https://zoned.run" />
+    <meta data-default-seo property="og:image" content="https://zoned.run/og-image.png" />
+    <meta data-default-seo property="og:image:width" content="1200" />
+    <meta data-default-seo property="og:image:height" content="630" />
+    <meta data-default-seo property="og:image:type" content="image/png" />
+    <meta
+      data-default-seo
+      property="og:image:alt"
+      content="Zoned — structured endurance training, free and open source"
+    />
+    <meta data-default-seo property="og:locale" content="en_US" />
+    <meta data-default-seo property="og:locale:alternate" content="fr_FR" />
+
+    <meta data-default-seo name="twitter:card" content="summary_large_image" />
+    <meta data-default-seo name="twitter:title" content="Zoned — Science-Based Endurance Training" />
+    <meta
+      data-default-seo
+      name="twitter:description"
+      content="247 structured workouts, 9 training plans and 12 calculators built on a 6-zone system. Free, open source, no account, no tracking — everything runs in your browser."
+    />
+    <meta data-default-seo name="twitter:image" content="https://zoned.run/og-image.png" />
+    <meta
+      data-default-seo
+      name="twitter:image:alt"
+      content="Zoned — structured endurance training, free and open source"
+    />
 
     <!-- Performance hints -->
     <link rel="dns-prefetch" href="https://vitals.vercel-insights.com" />

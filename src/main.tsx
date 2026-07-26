@@ -10,6 +10,11 @@ const hideLoadingShell = () => {
   if (shell) shell.classList.add("hidden");
 };
 
+// index.html ships static SEO tags for crawlers that never run JS. React 19
+// auto-hoists the <SEOHead> tags but does not dedupe <meta>, so drop the
+// static ones before mounting to avoid two og:title, two descriptions, etc.
+document.querySelectorAll("[data-default-seo]").forEach((el) => el.remove());
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />
