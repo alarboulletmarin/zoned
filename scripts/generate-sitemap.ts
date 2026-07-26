@@ -138,6 +138,22 @@ async function getPrebuiltPlanSlugs(): Promise<string[]> {
   return slugs;
 }
 
+async function getPrebuiltWeekSlugs(): Promise<string[]> {
+  const weeksDir = join(DATA_DIR, "prebuilt-weeks/weeks");
+  const files = readdirSync(weeksDir).filter((f) => f.endsWith(".ts"));
+  const slugs: string[] = [];
+
+  for (const file of files) {
+    const mod = await import(join(weeksDir, file));
+    for (const exported of Object.values(mod)) {
+      const slug = (exported as { slug?: string })?.slug;
+      if (slug) slugs.push(slug);
+    }
+  }
+
+  return slugs;
+}
+
 /**
  * Read the calculator routes straight out of the router, which is the source of
  * truth for what actually resolves. Text-matched rather than imported: importing
@@ -157,6 +173,7 @@ async function generateSitemap(): Promise<string> {
   const glossaryTerms = await getGlossaryTermIds();
   const collectionSlugs = await getCollectionSlugs();
   const prebuiltPlanSlugs = await getPrebuiltPlanSlugs();
+  const prebuiltWeekSlugs = await getPrebuiltWeekSlugs();
   const calculatorPaths = getCalculatorPaths();
 
   // Stable lastmod for non-data pages: tied to package.json mtime so it only
@@ -186,6 +203,13 @@ async function generateSitemap(): Promise<string> {
     { loc: "/guides/warmup", priority: "0.7", changefreq: "monthly", lastmod: pkgMtime },
     // Race simulator
     { loc: "/race-simulator", priority: "0.7", changefreq: "monthly", lastmod: pkgMtime },
+    // Curated weeks hub — the standalone-week counterpart of /plan/new/prebuilt.
+    // /weeks itself stays out: it is the user's saved-week list, like /plans.
+    { loc: "/weeks/new/prebuilt", priority: "0.7", changefreq: "monthly", lastmod: pkgMtime },
+    // Public tools with no per-user state
+    { loc: "/library/draw", priority: "0.6", changefreq: "monthly", lastmod: pkgMtime },
+    { loc: "/routes", priority: "0.6", changefreq: "monthly", lastmod: pkgMtime },
+    { loc: "/routes/tracks", priority: "0.6", changefreq: "monthly", lastmod: pkgMtime },
   ];
 
   // Calculators
@@ -201,6 +225,11 @@ async function generateSitemap(): Promise<string> {
   // Prebuilt plans
   for (const slug of prebuiltPlanSlugs) {
     urls.push({ loc: `/plan/prebuilt/${slug}`, priority: "0.7", changefreq: "monthly", lastmod: pkgMtime });
+  }
+
+  // Curated weeks
+  for (const slug of prebuiltWeekSlugs) {
+    urls.push({ loc: `/weeks/prebuilt/${slug}`, priority: "0.6", changefreq: "monthly", lastmod: pkgMtime });
   }
 
   // Articles — per-article publishedAt/updatedAt

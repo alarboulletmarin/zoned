@@ -1,8 +1,10 @@
 # Zoned
 
-> Zoned est une bibliothèque libre et open-source de plus de 200 séances de course à pied basées sur la science, organisées autour de 6 zones d'entraînement. Le site propose également des calculateurs (VMA, allures, zones), des plans d'entraînement personnalisés, un glossaire de plus de 50 termes et des articles pédagogiques — le tout sans compte, sans tracking, sans abonnement.
+> Zoned est une bibliothèque libre et open-source de 256 séances d'endurance basées sur la science — course à pied, vélo, natation et renforcement — organisées autour de 6 zones d'entraînement. Le site propose également 12 calculateurs (VMA, allures, zones, FTP, CSS), 9 plans d'entraînement, un générateur de parcours, un glossaire de plus de 50 termes et des articles pédagogiques — le tout sans compte, sans tracking, sans abonnement.
 
-Zoned (anciennement appelé "Zones") s'adresse aux coureurs autonomes qui cherchent à structurer leur entraînement sans la complexité d'un coach digital. La méthodologie s'appuie sur les travaux de Stephen Seiler (polarisé 80/20), Véronique Billat (vVO₂max, 30/30), Jack Daniels (VDOT), Joe Friel (zones LTHR) et Phil Maffetone (MAF 180).
+> English: Zoned is a free, open-source library of 256 science-based endurance workouts (running, cycling, swimming, strength) built on a 6-zone system, plus 12 calculators, 9 training plans and a route generator. The whole interface and all content are available in English — no account, no tracking, everything runs in the browser. The URLs below serve both languages; append `?lang=en` for English.
+
+Zoned (anciennement appelé "Zones") s'adresse aux coureurs autonomes qui cherchent à structurer leur entraînement sans la complexité d'un coach digital. La méthodologie s'appuie sur les travaux de Stephen Seiler (polarisé 80/20), Véronique Billat (vVO₂max, 30/30), Jack Daniels (VDOT), Joe Friel (zones LTHR) et Phil Maffetone (MAF 180). Le renforcement s'appuie sur Beattie 2017, Rønnestad 2014 et Lauersen 2014.
 
 Le site est :
 
@@ -10,12 +12,13 @@ Le site est :
 - Open source ([GitHub](https://github.com/alarboulletmarin/zoned))
 - Sans tracking, sans publicité, sans cookie tiers
 - Bilingue français / anglais
+- Local-first : toutes les données utilisateur restent dans le navigateur (localStorage)
 - Mobile-first et installable comme PWA
 
 ## Pages principales
 
 - [Accueil](https://zoned.run/): vue d'ensemble du site avec les zones, séances de la semaine et statistiques globales
-- [Bibliothèque de séances](https://zoned.run/library): catalogue filtrable de 200+ séances scientifiques par zone, catégorie, durée
+- [Bibliothèque de séances](https://zoned.run/library): catalogue filtrable de 256 séances scientifiques par zone, catégorie, durée, discipline (course, vélo, natation, renforcement)
 - [Plans d'entraînement](https://zoned.run/plan/new/prebuilt): plans pré-construits pour 5K, 10K, semi, marathon, trail, retour de blessure
 - [Calculateurs](https://zoned.run/calculators): VMA, allures, zones, table d'allures, tapis roulant, splits, équivalences, age-graded
 - [Glossaire](https://zoned.run/glossary): 50+ termes (VMA, FCmax, seuil, lactate, polarisé, etc.)
@@ -47,6 +50,9 @@ Le système Zoned utilise 6 zones d'intensité construites depuis la VMA et la F
 - [Splits négatifs](https://zoned.run/calculators/splits): planifie votre pacing course
 - [Équivalence courses](https://zoned.run/calculators/equivalence): prédit vos temps sur d'autres distances
 - [Age-graded](https://zoned.run/calculators/age-graded): performance ajustée par âge et sexe
+- [Test FTP vélo](https://zoned.run/calculators/ftp): zones de puissance cyclisme (modèle Coggan)
+- [Test CSS natation](https://zoned.run/calculators/css): vitesse critique de nage et allures associées
+- [Simulateur what-if](https://zoned.run/calculators/what-if): compare des scénarios d'entraînement (volume, niveau, objectif)
 
 ## Articles pédagogiques
 
@@ -71,8 +77,9 @@ Le système Zoned utilise 6 zones d'intensité construites depuis la VMA et la F
 - [10K intermédiaire](https://zoned.run/plan/prebuilt/10k-intermediaire): 10 semaines
 - [Semi-marathon](https://zoned.run/plan/prebuilt/semi-marathon): 12 semaines
 - [Marathon](https://zoned.run/plan/prebuilt/marathon): 16 semaines
-- [Construction de base aérobie](https://zoned.run/plan/prebuilt/construction-base): renforcer l'endurance fondamentale
-- [Retour de blessure](https://zoned.run/plan/prebuilt/retour-de-blessure): reprise progressive et sécurisée
+- [Construction de base aérobie](https://zoned.run/plan/prebuilt/base-building): renforcer l'endurance fondamentale
+- [Retour de blessure](https://zoned.run/plan/prebuilt/retour-blessure): reprise progressive et sécurisée
+- [Reprise après longue pause](https://zoned.run/plan/prebuilt/reprise-longue-pause): redémarrage après plusieurs mois d'arrêt
 
 ## Comparaisons
 
@@ -84,7 +91,7 @@ Le système Zoned utilise 6 zones d'intensité construites depuis la VMA et la F
 
 - [Sitemap complet](https://zoned.run/sitemap.xml): toutes les URL indexables
 - [Méthodologie des plans](https://zoned.run/plans/methodology): comment Zoned construit les plans
-- [Quiz de découverte](https://zoned.run/quiz): trouvez votre séance idéale en 5 questions
+- [Tirage de séance](https://zoned.run/library/draw): tire une séance au hasard selon vos filtres (discipline, durée, zones, terrain, matériel)
 - [À propos](https://zoned.run/about): histoire du projet et auteur
 - [Changelog](https://zoned.run/changelog): historique des versions
 - [Code source](https://github.com/alarboulletmarin/zoned): dépôt GitHub
