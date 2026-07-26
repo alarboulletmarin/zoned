@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "tsc && bun run scripts/generate-sitemap.ts && vite build",
+    "build": "tsc && bun run scripts/generate-icons.ts --check && bun run scripts/generate-sitemap.ts && vite build",
     "postinstall": "test -n \"$VERCEL\" || puppeteer browsers install chrome",
     "generate:sitemap": "bun run scripts/generate-sitemap.ts",
     "generate:og": "bun run scripts/generate-og-image.ts",
@@ -15,7 +15,7 @@
     "preview": "vite preview",
     "prerender": "bun run scripts/prerender.ts",
     "check:i18n": "bun run scripts/check-i18n-parity.ts",
-    "build:seo": "tsc && vite build && bun run scripts/generate-sitemap.ts && bun run scripts/prerender.ts",
+    "build:seo": "tsc && bun run scripts/generate-icons.ts --check && vite build && bun run scripts/generate-sitemap.ts && bun run scripts/prerender.ts",
     "build:seo:full": "bun run scripts/generate-og-image.ts && bun run build:seo",
     "deploy": "bun run build:seo && git add -f dist public/sitemap.xml && git diff --cached --quiet || git commit -m 'chore(build): regenerate prerendered dist'"
   },

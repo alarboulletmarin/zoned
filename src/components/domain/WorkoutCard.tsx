@@ -25,7 +25,7 @@ import { computeTrailMetrics } from "@/lib/workoutMetrics";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import type { WorkoutTemplate, AnyWorkoutTemplate } from "@/types";
-import { getDominantZone, getWorkoutDiscipline, DIFFICULTY_META, isStrengthWorkout } from "@/types";
+import { getDominantZone, getWorkoutDiscipline, isStrengthWorkout } from "@/types";
 import { useZoneColors } from "@/hooks/useZoneColors";
 import { StrengthWorkoutCard, StrengthWorkoutCardCompact } from "./StrengthWorkoutCard";
 import { usePickLang } from "@/lib/i18n-utils";
@@ -90,7 +90,6 @@ export function WorkoutCardChrome({
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);
   const CategoryIcon = CATEGORY_ICONS[workout.category];
-  void DIFFICULTY_META[workout.difficulty];
 
   const isMobile = useIsMobile();
   // Follows the workout's discipline, like the timelines do. The card used to

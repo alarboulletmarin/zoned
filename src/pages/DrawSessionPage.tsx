@@ -27,7 +27,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
-import { WorkoutCardChrome, ScanCard } from "@/components/domain";
+import { WorkoutCardChrome, ScanCard, DifficultyIcon } from "@/components/domain";
 import { FavoriteButton } from "@/components/domain/FavoriteButton";
 import { formatDurationMinutes } from "@/components/visualization";
 import { SEOHead } from "@/components/seo";
@@ -59,7 +59,6 @@ import {
   getDominantZone,
   isStrengthWorkout,
   isRunningWorkout,
-  DIFFICULTY_META,
 } from "@/types";
 import { usePickLang } from "@/lib/i18n-utils";
 import { buildScanSchedule } from "@/lib/scanSchedule";
@@ -522,7 +521,6 @@ export function DrawSessionPage() {
                 <div className="flex flex-col gap-1.5">
                   {LEVELS.map((l) => {
                     const selected = filters.levels.includes(l);
-                    const stars = DIFFICULTY_META[l].level;
                     return (
                       <button
                         key={l}
@@ -537,15 +535,7 @@ export function DrawSessionPage() {
                         )}
                       >
                         <span>{t(`difficulty.${l}`)}</span>
-                        <span className="flex items-center gap-0.5">
-                          {Array.from({ length: 4 }).map((_, i) => (
-                            <Star
-                              key={i}
-                              filled={i < stars}
-                              className={cn("size-3", i >= stars && "opacity-25")}
-                            />
-                          ))}
-                        </span>
+                        <DifficultyIcon difficulty={l} className="size-4 shrink-0" />
                       </button>
                     );
                   })}
