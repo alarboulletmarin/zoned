@@ -1353,3 +1353,21 @@ export function Level4({ className, size = 24 }: IconProps) {
     </Svg>
   );
 }
+
+// `graphic_eq-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Intervals({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M274.26-229.26v-501.48h73.57v501.48h-73.57ZM443.78-65.87V-894.7h72.44v828.83h-72.44ZM105.87-393.78v-172.44h73v172.44h-73Zm506.3 164.52v-501.48h73v501.48h-73Zm168.96-164.52v-172.44h73.57v172.44h-73.57Z"/>
+    </Svg>
+  );
+}
+
+// `rowing-fill` is identical to the outline upstream: `filled` is a no-op.
+export function UpperBody({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M735.13 0 619.74-115.39v-62L301-496.13q-6.57 1.43-13.35 2.72-6.78 1.28-12.91 1.28v-59.78q49.56-2.57 111.28-27.59t93.85-60.72l58-63q12.56-13.56 28.63-22.13 16.07-8.56 33.63-8.56 33.7 0 57.54 23.84 23.85 23.85 23.85 57.55v248q0 29.43-12.65 60.15t-33.78 42.85L513.74-423.44v-157.6q-28.31 24.3-62.48 42.61-34.17 18.3-64.35 29.17l282.92 282.35h62l115.39 115.39L735.13 0Zm-529-144-49.52-49.52 207.13-204.57 108.39 108.96h-119.3L206.13-144Zm343.83-658.57q-22.35-22.34-22.35-54.04 0-31.69 22.35-54.04Q572.3-933 604-933t54.04 22.35q22.35 22.35 22.35 54.04 0 31.7-22.35 54.04-22.34 22.35-54.04 22.35t-54.04-22.35Z"/>
+    </Svg>
+  );
+}

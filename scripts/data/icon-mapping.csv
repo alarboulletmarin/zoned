@@ -122,5 +122,7 @@ Level1|signal_cellular_1_bar|exact|échelle de difficulté : 1 barre sur 4 (déb
 Level2|signal_cellular_2_bar|exact|échelle de difficulté : 2 barres sur 4 (intermédiaire)
 Level3|signal_cellular_3_bar|exact|échelle de difficulté : 3 barres sur 4 (avancé)
 Level4|signal_cellular_4_bar|exact|échelle de difficulté : 4 barres sur 4 (élite)
+Intervals|graphic_eq|exact|catégorie « fartlek » — barres alternées haut/bas, l'alternance rapide/lent du jeu d'allures
+UpperBody|rowing|exact|catégorie renforcement « haut du corps » — mouvement de tirage
 GithubIcon|-|manquant|logo de marque, hors périmètre Material Symbols
 StravaIcon|-|manquant|logo de marque, hors périmètre Material Symbols

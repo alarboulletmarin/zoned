@@ -16,14 +16,14 @@
 
 | | |
 |---|---|
-| Exports | 122 (112 repris de l'ancien set + 10 ajoutés pour le contexte) |
-| Correspondance exacte | 108 |
+| Exports | 124 (112 repris de l'ancien set + 12 ajoutés pour le contexte) |
+| Correspondance exacte | 110 |
 | Correspondance approchante | 12 |
 | Manquants (logos de marque) | 2 |
-| Variante `-fill` disponible | 115 / 115 icônes mappées |
+| Variante `-fill` disponible | 122 / 122 icônes mappées |
 
-Sur les 118 glyphes distincts, 71 ont une variante pleine réellement différente
-du contour ; les 49 autres ont un `-fill` identique en amont et sont émis une
+Sur les 120 glyphes distincts, 71 ont une variante pleine réellement différente
+du contour ; les 51 autres ont un `-fill` identique en amont et sont émis une
 seule fois, avec un commentaire dans le fichier généré.
 
 ## Contrat de composant
@@ -62,6 +62,8 @@ partagé par plusieurs sens et que le glyphe ne convenait qu'à l'un d'eux :
 | `Healing` | `healing` | `HeartPulse` | catégorie renforcement « prévention blessures » |
 | `Sprint` | `sprint` | `Rocket` | catégorie VMA / VO2max |
 | `Level1`…`Level4` | `signal_cellular_1_bar`…`4_bar` | `Dumbbell` | échelle de difficulté |
+| `Intervals` | `graphic_eq` | `Crosshair` | catégorie « fartlek » |
+| `UpperBody` | `rowing` | `ArrowUp` | catégorie renforcement « haut du corps » |
 
 ### L'échelle de difficulté
 
@@ -72,6 +74,17 @@ exactement quatre paliers : le triangle vide donne la référence, la portion
 pleine croît avec le niveau, donc le glyphe **porte** l'information au lieu de la
 décorer. `DifficultyIcon` (`src/components/domain/`) fait la correspondance, sur
 le modèle de `CategoryIcon`.
+
+### Fartlek et haut du corps
+
+Deux reprises directes de l'ancien set n'avaient aucun rapport avec ce qu'elles
+désignaient : un réticule (`my_location`) pour le fartlek et une flèche vers le
+haut (`arrow_upward`) pour le renforcement du haut du corps. `graphic_eq` alterne
+des barres hautes et basses — l'alternance rapide/lent du jeu d'allures — et
+`rowing` montre un mouvement de tirage, typique du travail du haut du corps.
+
+`ArrowUp` reste en service sur le bouton « remonter en haut de page ».
+`Crosshair` n'est plus utilisé, comme `Waves`.
 
 `Rocket` reste en service sur le changelog, où la fusée désigne les entrées
 « performance ». `Dumbbell` reste l'icône du renforcement musculaire.
@@ -217,5 +230,7 @@ favoris. `HeartPulse` reste utilisé par les données (récupération, nutrition
 | `Level2` | `signal_cellular_2_bar` | oui | exact | échelle de difficulté : 2 barres sur 4 (intermédiaire) |
 | `Level3` | `signal_cellular_3_bar` | oui | exact | échelle de difficulté : 3 barres sur 4 (avancé) |
 | `Level4` | `signal_cellular_4_bar` | oui | exact | échelle de difficulté : 4 barres sur 4 (élite) |
+| `Intervals` | `graphic_eq` | oui | exact | catégorie « fartlek » — barres alternées haut/bas, l'alternance rapide/lent du jeu d'allures |
+| `UpperBody` | `rowing` | oui | exact | catégorie renforcement « haut du corps » — mouvement de tirage |
 | `GithubIcon` | — | — | **MANQUANT** | logo de marque, hors périmètre Material Symbols |
 | `StravaIcon` | — | — | **MANQUANT** | logo de marque, hors périmètre Material Symbols |
