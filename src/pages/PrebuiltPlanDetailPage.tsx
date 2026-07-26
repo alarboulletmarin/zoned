@@ -463,7 +463,7 @@ export function PrebuiltPlanDetailPage() {
                             {/* Badges */}
                             <div className="flex items-center gap-2 shrink-0">
                               {session.isKeySession && (
-                                <Star className="size-4 text-yellow-500 fill-yellow-500" />
+                                <Star filled className="size-4 text-yellow-500" />
                               )}
                               {!isSpecialSession && sessionLabel && (
                                 <Badge variant="outline" className="text-xs">

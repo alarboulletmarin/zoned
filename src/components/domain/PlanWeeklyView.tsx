@@ -1310,7 +1310,7 @@ const DayCell = memo(function DayCell({
                     )}
                     {session.isKeySession && (
                       <span className="shrink-0" title={t("view.keySession")}>
-                        <Star className="size-2.5 text-yellow-500 fill-yellow-500" />
+                        <Star filled className="size-2.5 text-yellow-500" />
                       </span>
                     )}
                   </div>

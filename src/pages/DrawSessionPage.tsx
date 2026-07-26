@@ -541,12 +541,8 @@ export function DrawSessionPage() {
                           {Array.from({ length: 4 }).map((_, i) => (
                             <Star
                               key={i}
-                              className={cn(
-                                "size-3",
-                                i < stars
-                                  ? "fill-current"
-                                  : "opacity-25",
-                              )}
+                              filled={i < stars}
+                              className={cn("size-3", i >= stars && "opacity-25")}
                             />
                           ))}
                         </span>

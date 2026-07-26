@@ -270,7 +270,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
           )}
           title={t("workoutPanel.favoritesOnly")}
         >
-          <Heart className={cn("size-4", favoritesOnly && "fill-primary")} />
+          <Heart filled={favoritesOnly} className={cn("size-4", favoritesOnly && "text-primary")} />
         </button>
       </div>
 

@@ -53,9 +53,9 @@ export function FavoriteButton({
       aria-label={label}
     >
       <Heart
+        filled={favorited}
         className={cn(
           size === "sm" && !showLabel ? "size-4" : "size-5",
-          favorited && "fill-current",
           animating && "animate-heart-bounce"
         )}
       />
