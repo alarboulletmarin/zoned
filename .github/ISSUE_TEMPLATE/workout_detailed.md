@@ -10,7 +10,8 @@ assignees: ''
 
 ## Basic Info
 
-**Name:**
+**Name (FR):**
+**Name (EN):**
 **Category:**
 <!-- recovery, endurance, tempo, threshold, vma_intervals, long_run, hills, fartlek, race_pace, mixed, assessment -->
 **Difficulty:**
@@ -18,6 +19,10 @@ assignees: ''
 **Typical duration:** min: ___ max: ___
 
 ## Description
+
+**FR:**
+
+**EN:**
 
 ## Environment
 <!-- Check what applies -->
