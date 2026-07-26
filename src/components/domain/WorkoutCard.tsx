@@ -3,25 +3,15 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   Clock,
-  Dumbbell,
   Circle,
   Mountain,
-  TreePine,
-  Leaf,
-  Footprints,
-  Zap,
-  Flame,
-  Rocket,
-  Route,
-  Timer,
-  Target,
-  Shuffle,
-  ClipboardCheck,
 } from "@/components/icons";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { InteractiveCard } from "@/components/editorial";
 import { ZoneBadge, ZoneBadges } from "./ZoneBadge";
+import { CATEGORY_ICONS } from "./CategoryIcon";
+import { DifficultyIcon } from "./DifficultyIcon";
 import { FavoriteButton } from "./FavoriteButton";
 import { getWorkoutZones } from "@/lib/landing-stats";
 import {
@@ -34,27 +24,11 @@ import {
 import { computeTrailMetrics } from "@/lib/workoutMetrics";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import type { WorkoutTemplate, WorkoutCategory, AnyWorkoutTemplate } from "@/types";
-import { getDominantZone, getWorkoutDiscipline, DIFFICULTY_META, isStrengthWorkout } from "@/types";
+import type { WorkoutTemplate, AnyWorkoutTemplate } from "@/types";
+import { getDominantZone, getWorkoutDiscipline, isStrengthWorkout } from "@/types";
 import { useZoneColors } from "@/hooks/useZoneColors";
 import { StrengthWorkoutCard, StrengthWorkoutCardCompact } from "./StrengthWorkoutCard";
 import { usePickLang } from "@/lib/i18n-utils";
-
-/** Category icons using Lucide */
-const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: string }>> = {
-  recovery: Leaf,
-  endurance: Footprints,
-  tempo: Zap,
-  threshold: Flame,
-  vma_intervals: Rocket,
-  long_run: Route,
-  hills: Mountain,
-  fartlek: Timer,
-  race_pace: Target,
-  mixed: Shuffle,
-  assessment: ClipboardCheck,
-  trail: TreePine,
-};
 
 interface WorkoutCardProps {
   workout: AnyWorkoutTemplate;
@@ -116,7 +90,6 @@ export function WorkoutCardChrome({
   const dominantZone = getDominantZone(workout);
   const duration = getWorkoutDuration(workout);
   const CategoryIcon = CATEGORY_ICONS[workout.category];
-  void DIFFICULTY_META[workout.difficulty];
 
   const isMobile = useIsMobile();
   // Follows the workout's discipline, like the timelines do. The card used to
@@ -194,7 +167,7 @@ export function WorkoutCardChrome({
         {showBadges && (
           <div className={cn("hidden sm:flex flex-wrap items-center gap-1.5", expanded && "flex")}>
             <Badge variant="secondary" className="text-xs whitespace-nowrap">
-              <Dumbbell className="size-3 mr-1" />
+              <DifficultyIcon difficulty={workout.difficulty} className="size-3 mr-1" />
               {t(`difficulty.${workout.difficulty}`)}
             </Badge>
             {workout.environment.requiresTrack && (

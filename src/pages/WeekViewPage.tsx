@@ -34,6 +34,7 @@ import { WeekSummaryBar, WeekGeneratorPanel } from "@/components/weekly";
 import { usePlan } from "@/hooks/usePlans";
 import { useWorkouts } from "@/hooks";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import {
@@ -408,6 +409,10 @@ export function WeekViewPage() {
   // so the user picks their parameters first — we never generate blindly.
   const didOpenSettingsRef = useRef(false);
   const isMobile = useIsMobile();
+  // The board hint describes a gesture, so it follows the input device rather
+  // than the viewport: a tablet is wide enough to miss `useIsMobile` but still
+  // has no hover, and the quick-action buttons it would point at never appear.
+  const canHover = useMediaQuery("(hover: hover) and (pointer: fine)");
   useEffect(() => {
     if (openSettingsOnMount && !didOpenSettingsRef.current && plan) {
       didOpenSettingsRef.current = true;
@@ -571,9 +576,9 @@ export function WeekViewPage() {
                     scanning && "invisible",
                   )}
                 >
-                  {isMobile
-                    ? t("library:weekly.boardHintTouch")
-                    : t("library:weekly.boardHint")}
+                  {canHover
+                    ? t("library:weekly.boardHint")
+                    : t("library:weekly.boardHintTouch")}
                 </p>
               )}
               <div ref={boardRef} className="relative scroll-mt-20">

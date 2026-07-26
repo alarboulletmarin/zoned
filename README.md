@@ -321,3 +321,8 @@ A ⭐ on the repo is also greatly appreciated and helps other runners find the p
 ## License
 
 [MIT](LICENSE) — free to use, fork, host or adapt. Attribution is appreciated.
+
+Third-party material redistributed in this repository keeps its own terms: the
+icon set is [Material Symbols](https://github.com/google/material-design-icons)
+(© Google, Apache 2.0, paths modified). See [THIRD-PARTY.md](THIRD-PARTY.md) for
+the full notices.

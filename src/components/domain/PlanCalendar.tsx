@@ -1014,7 +1014,7 @@ const SessionCell = memo(function SessionCell({
               />
             )}
             {session.isKeySession && (
-              <Star className="size-2.5 text-yellow-500 fill-yellow-500 shrink-0" />
+              <Star filled className="size-2.5 text-yellow-500 shrink-0" />
             )}
           </div>
           <span

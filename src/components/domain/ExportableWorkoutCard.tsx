@@ -10,7 +10,8 @@
 
 import { forwardRef } from "react";
 import { useTranslation } from "react-i18next";
-import { Clock, Dumbbell, Target, Zap } from "@/components/icons";
+import { Clock, Target, Zap } from "@/components/icons";
+import { DifficultyIcon } from "./DifficultyIcon";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ZoneBadge } from "./ZoneBadge";
@@ -66,7 +67,7 @@ export const ExportableWorkoutCard = forwardRef<
             {duration} {t("common:units.minutes")}
           </Badge>
           <Badge variant="secondary" className="gap-1.5 text-xs">
-            <Dumbbell className="size-3" />
+            <DifficultyIcon difficulty={workout.difficulty} className="size-3" />
             {t(`library:difficulty.${workout.difficulty}`)}
           </Badge>
           <Badge variant="secondary" className="gap-1.5 text-xs">

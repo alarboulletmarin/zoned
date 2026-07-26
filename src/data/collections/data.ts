@@ -369,7 +369,7 @@ export const collections: Collection[] = [
       "Un programme progressif pour développer votre vitesse maximale aérobie.",
     descriptionEn:
       "A progressive program to develop your maximal aerobic speed",
-    icon: "Rocket",
+    icon: "Sprint",
     gradient: "from-pink-500 to-rose-600",
     difficulty: "intermediate",
     isProgression: true,

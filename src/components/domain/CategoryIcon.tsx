@@ -3,21 +3,21 @@ import {
   Activity,
   Gauge,
   Flame,
-  Rocket,
+  Sprint,
   Route,
   Mountain,
   TreePine,
-  Crosshair,
+  Intervals,
   Flag,
   RefreshCw,
   ClipboardCheck,
   Dumbbell,
   Footprints,
   Shield,
-  ArrowUp,
+  UpperBody,
   Zap,
-  Waves,
-  HeartPulse,
+  Stretching,
+  Healing,
   type IconProps,
 } from "@/components/icons";
 import type { WorkoutCategory } from "@/types";
@@ -25,29 +25,34 @@ import type { StrengthCategory } from "@/types/strength";
 import { cn } from "@/lib/utils";
 import type { ComponentType } from "react";
 
-const CATEGORY_ICONS: Record<WorkoutCategory, ComponentType<IconProps>> = {
+/**
+ * Single source of truth for category glyphs. Exported so that call sites
+ * needing the raw component (a different size, another wrapper) reuse the same
+ * mapping instead of keeping a divergent copy.
+ */
+export const CATEGORY_ICONS: Record<WorkoutCategory, ComponentType<IconProps>> = {
   recovery: Leaf,
   endurance: Activity,
   tempo: Gauge,
   threshold: Flame,
-  vma_intervals: Rocket,
+  vma_intervals: Sprint,
   long_run: Route,
   hills: Mountain,
-  fartlek: Crosshair,
+  fartlek: Intervals,
   race_pace: Flag,
   mixed: RefreshCw,
   assessment: ClipboardCheck,
   trail: TreePine,
 };
 
-const STRENGTH_CATEGORY_ICONS: Record<StrengthCategory, ComponentType<IconProps>> = {
+export const STRENGTH_CATEGORY_ICONS: Record<StrengthCategory, ComponentType<IconProps>> = {
   runner_full_body: Dumbbell,
   runner_lower: Footprints,
   runner_core: Shield,
-  runner_upper: ArrowUp,
+  runner_upper: UpperBody,
   plyometrics: Zap,
-  mobility: Waves,
-  prehab: HeartPulse,
+  mobility: Stretching,
+  prehab: Healing,
 };
 
 interface CategoryIconProps {

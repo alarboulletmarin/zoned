@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Target, Gauge, RefreshCw, Route, Timer, ArrowRight, List, Shuffle, Star, Flag, Scale, Zap, Waves } from "@/components/icons";
+import { Target, Gauge, RefreshCw, Route, Timer, ArrowRight, List, Shuffle, Star, Flag, Scale, Zap, Pool } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
 import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
@@ -136,7 +136,7 @@ export const CALCULATEURS: CalculateurEntry[] = [
   },
   {
     id: "css",
-    icon: Waves,
+    icon: Pool,
     title: "Test CSS natation",
     titleEn: "CSS Swimming Test",
     description: "Estimez votre CSS depuis un test 400m + 200m",

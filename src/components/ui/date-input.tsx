@@ -86,7 +86,7 @@ function DateInput({
               ? formatDisplayDate(value, isEn)
               : placeholder ?? defaultPlaceholder}
           </span>
-          <CalendarIcon className="size-4 shrink-0 text-muted-foreground" size={16} />
+          <CalendarIcon className="size-4 shrink-0 text-muted-foreground" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">

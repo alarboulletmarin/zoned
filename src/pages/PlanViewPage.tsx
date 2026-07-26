@@ -1425,7 +1425,7 @@ export function PlanViewPage() {
                               {/* Badges — wraps on mobile */}
                               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 shrink-0">
                                 {session.isKeySession && (
-                                  <Star className="size-3.5 sm:size-4 text-yellow-500 fill-yellow-500" />
+                                  <Star filled className="size-3.5 sm:size-4 text-yellow-500" />
                                 )}
                                 {!isSpecialSession && sessionLabel && (
                                   <Badge variant="outline" className="text-[10px] sm:text-xs hidden sm:inline-flex">

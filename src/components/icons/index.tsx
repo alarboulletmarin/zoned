@@ -1,1197 +1,1373 @@
 /**
- * Inline SVG Icons - Replacement for lucide-react
+ * Material Symbols icons — GENERATED FILE, DO NOT EDIT BY HAND.
  *
- * All icons use the same interface and default props as lucide-react:
- * - viewBox="0 0 24 24"
- * - stroke="currentColor"
- * - strokeWidth="2"
- * - fill="none"
- * - strokeLinecap="round"
- * - strokeLinejoin="round"
+ * Regenerate with: bun run generate:icons
+ * Generator:       scripts/generate-icons.ts
+ * Mapping table:   scripts/data/icon-mapping.csv (rationale in docs/icon-mapping.md)
+ *
+ * Source:  Material Symbols, Sharp style, weight 600
+ *          https://github.com/google/material-design-icons
+ *          via the @material-symbols/svg-600 npm package (v0.45.9)
+ * Licence: Apache License 2.0, © Google — see licenses/APACHE-2.0.txt
+ *          The upstream package ships no NOTICE file, so none is propagated.
+ *
+ * Modifications applied to the original SVGs:
+ *   - each glyph is wrapped in a React component instead of a standalone file
+ *   - the <svg> wrapper attributes are rewritten: fixed width/height replaced
+ *     by a `size` prop, `fill` bound to `currentColor`, and
+ *     `aria-hidden`/`focusable` added so icons stay out of the a11y tree
+ *   - the outline and `-fill` path data of a glyph are merged into one
+ *     component, selected at runtime by the `filled` prop
+ *   - the path data itself is copied verbatim, unaltered
+ *
+ * Brand logos (GithubIcon, StravaIcon) have no Material equivalent and are
+ * re-exported from ./brand — that file is hand-maintained.
  */
 
-export interface IconProps {
-  className?: string;
-  size?: number | string;
-}
-
-const defaultProps = {
-  xmlns: "http://www.w3.org/2000/svg",
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: 2,
-  strokeLinecap: "round" as const,
-  strokeLinejoin: "round" as const,
-  viewBox: "0 0 24 24",
-};
-
-// ============================================================================
-// Navigation / UI Icons
-// ============================================================================
-
-export function Menu({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <line x1="4" x2="20" y1="12" y2="12" />
-      <line x1="4" x2="20" y1="6" y2="6" />
-      <line x1="4" x2="20" y1="18" y2="18" />
-    </svg>
-  );
-}
-
-export function X({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </svg>
-  );
-}
-
-export function Lock({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
-      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-    </svg>
-  );
-}
-
-export function LockOpen({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
-      <path d="M7 11V7a5 5 0 0 1 9.9-1" />
-    </svg>
-  );
-}
-
-export function Home({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
-      <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-    </svg>
-  );
-}
-
-export function ArrowRight({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M5 12h14" />
-      <path d="m12 5 7 7-7 7" />
-    </svg>
-  );
-}
-
-export function ArrowLeft({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="m12 19-7-7 7-7" />
-      <path d="M19 12H5" />
-    </svg>
-  );
-}
-
-export function ArrowUp({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="m5 12 7-7 7 7" />
-      <path d="M12 19V5" />
-    </svg>
-  );
-}
-
-export function ChevronLeft({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="m15 18-6-6 6-6" />
-    </svg>
-  );
-}
-
-export function ChevronRight({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="m9 18 6-6-6-6" />
-    </svg>
-  );
-}
-
-export function ChevronDown({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
-}
-
-export function ChevronUp({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="m18 15-6-6-6 6" />
-    </svg>
-  );
-}
-
-export function ExternalLink({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M15 3h6v6" />
-      <path d="M10 14 21 3" />
-      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-    </svg>
-  );
-}
-
-export function PanelLeftClose({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <rect width="18" height="18" x="3" y="3" rx="2" />
-      <path d="M9 3v18" />
-      <path d="m16 15-3-3 3-3" />
-    </svg>
-  );
-}
-
-export function PanelLeftOpen({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <rect width="18" height="18" x="3" y="3" rx="2" />
-      <path d="M9 3v18" />
-      <path d="m14 9 3 3-3 3" />
-    </svg>
-  );
-}
-
-export function LayoutGrid({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <rect width="7" height="7" x="3" y="3" rx="1" />
-      <rect width="7" height="7" x="14" y="3" rx="1" />
-      <rect width="7" height="7" x="14" y="14" rx="1" />
-      <rect width="7" height="7" x="3" y="14" rx="1" />
-    </svg>
-  );
-}
-
-export function Rows3({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <rect width="18" height="4" x="3" y="3" rx="1" />
-      <rect width="18" height="4" x="3" y="10" rx="1" />
-      <rect width="18" height="4" x="3" y="17" rx="1" />
-    </svg>
-  );
-}
-
-export function Grid3x3({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <rect width="5" height="5" x="2" y="2" rx="0.5" />
-      <rect width="5" height="5" x="9.5" y="2" rx="0.5" />
-      <rect width="5" height="5" x="17" y="2" rx="0.5" />
-      <rect width="5" height="5" x="2" y="9.5" rx="0.5" />
-      <rect width="5" height="5" x="9.5" y="9.5" rx="0.5" />
-      <rect width="5" height="5" x="17" y="9.5" rx="0.5" />
-      <rect width="5" height="5" x="2" y="17" rx="0.5" />
-      <rect width="5" height="5" x="9.5" y="17" rx="0.5" />
-      <rect width="5" height="5" x="17" y="17" rx="0.5" />
-    </svg>
-  );
-}
-
-export function List({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <line x1="8" x2="21" y1="6" y2="6" />
-      <line x1="8" x2="21" y1="12" y2="12" />
-      <line x1="8" x2="21" y1="18" y2="18" />
-      <line x1="3" x2="3.01" y1="6" y2="6" />
-      <line x1="3" x2="3.01" y1="12" y2="12" />
-      <line x1="3" x2="3.01" y1="18" y2="18" />
-    </svg>
-  );
-}
-
-// ============================================================================
-// Action Icons
-// ============================================================================
-
-export function Search({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
-    </svg>
-  );
-}
-
-export function Filter({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-    </svg>
-  );
-}
-
-export function Download({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <polyline points="7 10 12 15 17 10" />
-      <line x1="12" x2="12" y1="15" y2="3" />
-    </svg>
-  );
-}
-
-export function Upload({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <polyline points="17 8 12 3 7 8" />
-      <line x1="12" x2="12" y1="3" y2="15" />
-    </svg>
-  );
-}
-
-export function Save({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
-      <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
-      <path d="M7 3v4a1 1 0 0 0 1 1h7" />
-    </svg>
-  );
-}
-
-export function Trash2({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M3 6h18" />
-      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-      <line x1="10" x2="10" y1="11" y2="17" />
-      <line x1="14" x2="14" y1="11" y2="17" />
-    </svg>
-  );
-}
-
-export function RotateCcw({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-      <path d="M3 3v5h5" />
-    </svg>
-  );
-}
-
-export function Settings({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-      <circle cx="12" cy="12" r="3" />
-    </svg>
-  );
-}
-
-// ============================================================================
-// Content Icons
-// ============================================================================
-
-export function Heart({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-    </svg>
-  );
-}
-
-export function Droplets({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z" />
-      <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97" />
-    </svg>
-  );
-}
-
-export function Utensils({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
-      <path d="M7 2v20" />
-      <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
-    </svg>
-  );
-}
-
-export function Coffee({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M10 2v2" />
-      <path d="M14 2v2" />
-      <path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1" />
-      <path d="M6 2v2" />
-    </svg>
-  );
-}
-
-export function Pill({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M10.5 20.5 20.5 10.5a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z" />
-      <path d="m8.5 8.5 7 7" />
-    </svg>
-  );
-}
-
-export function Snowflake({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <line x1="2" x2="22" y1="12" y2="12" />
-      <line x1="12" x2="12" y1="2" y2="22" />
-      <path d="m20 16-4-4 4-4" />
-      <path d="m4 8 4 4-4 4" />
-      <path d="m16 4-4 4-4-4" />
-      <path d="m8 20 4-4 4 4" />
-    </svg>
-  );
-}
-
-export function Wheat({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M2 22 16 8" />
-      <path d="M3.47 12.53 5 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94L5 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" />
-      <path d="M7.47 8.53 9 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94L9 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" />
-      <path d="M11.47 4.53 13 3l1.53 1.53a3.5 3.5 0 0 1 0 4.94L13 11l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z" />
-      <path d="M20 9 9 20" />
-      <path d="M20.53 13.47 19 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94L19 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94Z" />
-      <path d="M16.53 17.47 15 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94L15 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94Z" />
-      <path d="M12.53 21.47 11 23l-1.53-1.53a3.5 3.5 0 0 1 0-4.94L11 15l1.53 1.53a3.5 3.5 0 0 1 0 4.94Z" />
-    </svg>
-  );
-}
-
-export function BookOpen({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M12 7v14" />
-      <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
-    </svg>
-  );
-}
-
-export function Book({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />
-    </svg>
-  );
-}
-
-export function GraduationCap({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />
-      <path d="M22 10v6" />
-      <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
-    </svg>
-  );
-}
-
-export function Library({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="m16 6 4 14" />
-      <path d="M12 6v14" />
-      <path d="M8 8v12" />
-      <path d="M4 4v16" />
-    </svg>
-  );
-}
-
-export function Lightbulb({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
-      <path d="M9 18h6" />
-      <path d="M10 22h4" />
-    </svg>
-  );
-}
-
-export function Info({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <circle cx="12" cy="12" r="10" />
-      <path d="M12 16v-4" />
-      <path d="M12 8h.01" />
-    </svg>
-  );
-}
-
-// ============================================================================
-// Sports Icons
-// ============================================================================
-
-export function Target({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <circle cx="12" cy="12" r="10" />
-      <circle cx="12" cy="12" r="6" />
-      <circle cx="12" cy="12" r="2" />
-    </svg>
-  );
-}
-
-export function Dumbbell({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M14.4 14.4 9.6 9.6" />
-      <path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z" />
-      <path d="m21.5 21.5-1.4-1.4" />
-      <path d="M3.9 3.9 2.5 2.5" />
-      <path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z" />
-    </svg>
-  );
-}
-
-// Person silhouette — "bodyweight / no equipment"
-export function UserRound({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <circle cx="12" cy="8" r="5" />
-      <path d="M20 21a8 8 0 0 0-16 0" />
-    </svg>
-  );
-}
-
-export function Gauge({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="m12 14 4-4" />
-      <path d="M3.34 19a10 10 0 1 1 17.32 0" />
-    </svg>
-  );
-}
-
-export function Timer({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <line x1="10" x2="14" y1="2" y2="2" />
-      <line x1="12" x2="15" y1="14" y2="11" />
-      <circle cx="12" cy="14" r="8" />
-    </svg>
-  );
-}
-
-export function Clock({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
-    </svg>
-  );
-}
-
-export function MapPin({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
-      <circle cx="12" cy="10" r="3" />
-    </svg>
-  );
-}
-
-export function Flag({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
-      <line x1="4" x2="4" y1="22" y2="15" />
-    </svg>
-  );
-}
-
-export function Route({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <circle cx="6" cy="19" r="3" />
-      <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" />
-      <circle cx="18" cy="5" r="3" />
-    </svg>
-  );
-}
-
-export function Mountain({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
-    </svg>
-  );
-}
-
-export function TreePine({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z" />
-      <path d="M12 22v-3" />
-    </svg>
-  );
-}
-
-// ============================================================================
-// Misc Icons
-// ============================================================================
-
-export function Calculator({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <rect width="16" height="20" x="4" y="2" rx="2" />
-      <line x1="8" x2="16" y1="6" y2="6" />
-      <line x1="16" x2="16" y1="14" y2="18" />
-      <path d="M16 10h.01" />
-      <path d="M12 10h.01" />
-      <path d="M8 10h.01" />
-      <path d="M12 14h.01" />
-      <path d="M8 14h.01" />
-      <path d="M12 18h.01" />
-      <path d="M8 18h.01" />
-    </svg>
-  );
-}
-
-export function Moon({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-    </svg>
-  );
-}
-
-export function Sun({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2" />
-      <path d="M12 20v2" />
-      <path d="m4.93 4.93 1.41 1.41" />
-      <path d="m17.66 17.66 1.41 1.41" />
-      <path d="M2 12h2" />
-      <path d="M20 12h2" />
-      <path d="m6.34 17.66-1.41 1.41" />
-      <path d="m19.07 4.93-1.41 1.41" />
-    </svg>
-  );
-}
-
-export function Languages({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="m5 8 6 6" />
-      <path d="m4 14 6-6 2-3" />
-      <path d="M2 5h12" />
-      <path d="M7 2h1" />
-      <path d="m22 22-5-10-5 10" />
-      <path d="M14 18h6" />
-    </svg>
-  );
-}
-
-export function Dices({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <rect width="12" height="12" x="2" y="10" rx="2" ry="2" />
-      <path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6" />
-      <path d="M6 18h.01" />
-      <path d="M10 14h.01" />
-      <path d="M15 6h.01" />
-      <path d="M18 9h.01" />
-    </svg>
-  );
-}
-
-export function Calendar({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M8 2v4" />
-      <path d="M16 2v4" />
-      <rect width="18" height="18" x="3" y="4" rx="2" />
-      <path d="M3 10h18" />
-    </svg>
-  );
-}
-
-export function CalendarOff({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M8 2v4" />
-      <path d="M16 2v4" />
-      <rect width="18" height="18" x="3" y="4" rx="2" />
-      <path d="M3 10h18" />
-      <path d="M4 3 21 22" />
-    </svg>
-  );
-}
-
-export function Image({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-      <circle cx="9" cy="9" r="2" />
-      <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-    </svg>
-  );
-}
-
-export function FileText({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-      <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-      <path d="M10 9H8" />
-      <path d="M16 13H8" />
-      <path d="M16 17H8" />
-    </svg>
-  );
-}
-
-export function Watch({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <circle cx="12" cy="12" r="6" />
-      <polyline points="12 10 12 12 13 13" />
-      <path d="m16.13 7.66-.81-4.05a2 2 0 0 0-2-1.61h-2.68a2 2 0 0 0-2 1.61l-.78 4.05" />
-      <path d="m7.88 16.36.8 4a2 2 0 0 0 2 1.61h2.72a2 2 0 0 0 2-1.61l.81-4.05" />
-    </svg>
-  );
-}
-
-export function Loader2({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-    </svg>
-  );
-}
-
-export function Code({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <polyline points="16 18 22 12 16 6" />
-      <polyline points="8 6 2 12 8 18" />
-    </svg>
-  );
-}
-
-export function Shield({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-    </svg>
-  );
-}
-
-export function Sparkles({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
-      <path d="M20 3v4" />
-      <path d="M22 5h-4" />
-      <path d="M4 17v2" />
-      <path d="M5 18H3" />
-    </svg>
-  );
-}
-
-export function Brain({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />
-      <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" />
-      <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4" />
-      <path d="M17.599 6.5a3 3 0 0 0 .399-1.375" />
-      <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />
-      <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />
-      <path d="M19.938 10.5a4 4 0 0 1 .585.396" />
-      <path d="M6 18a4 4 0 0 1-1.967-.516" />
-      <path d="M19.967 17.484A4 4 0 0 1 18 18" />
-    </svg>
-  );
-}
-
-export function Link2({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M9 17H7A5 5 0 0 1 7 7h2" />
-      <path d="M15 7h2a5 5 0 1 1 0 10h-2" />
-      <line x1="8" x2="16" y1="12" y2="12" />
-    </svg>
-  );
-}
-
-export function AlertTriangle({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
-      <path d="M12 9v4" />
-      <path d="M12 17h.01" />
-    </svg>
-  );
-}
-
-export function GithubIcon({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-      <path d="M9 18c-4.51 2-5-2-7-2" />
-    </svg>
-  );
-}
-
-// ============================================================================
-// Category Icons
-// ============================================================================
-
-export function Leaf({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
-      <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
-    </svg>
-  );
-}
-
-export function Activity({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />
-    </svg>
-  );
-}
-
-export function Flame({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
-    </svg>
-  );
-}
-
-export function Rocket({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
-      <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
-      <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
-      <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
-    </svg>
-  );
-}
-
-export function Crosshair({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <circle cx="12" cy="12" r="10" />
-      <line x1="22" x2="18" y1="12" y2="12" />
-      <line x1="6" x2="2" y1="12" y2="12" />
-      <line x1="12" x2="12" y1="6" y2="2" />
-      <line x1="12" x2="12" y1="22" y2="18" />
-    </svg>
-  );
-}
-
-export function RefreshCw({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
-      <path d="M21 3v5h-5" />
-      <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
-      <path d="M8 16H3v5" />
-    </svg>
-  );
-}
-
-export function ClipboardCheck({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
-      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-      <path d="m9 14 2 2 4-4" />
-    </svg>
-  );
-}
-
-// ============================================================================
-// UI Component Icons (Radix-style)
-// ============================================================================
-
-export function CheckIcon({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-
-export function CircleIcon({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <circle cx="12" cy="12" r="10" />
-    </svg>
-  );
-}
-
-// ============================================================================
-// Additional commonly needed icons
-// ============================================================================
-
-export function Plus({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </svg>
-  );
-}
-
-export function Minus({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M5 12h14" />
-    </svg>
-  );
-}
-
-export function Copy({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-    </svg>
-  );
-}
-
-export function Share({ className, size = 24 }: IconProps) {
-  return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-      <polyline points="16 6 12 2 8 6" />
-      <line x1="12" x2="12" y1="2" y2="15" />
-    </svg>
-  );
-}
+import type { ReactNode } from "react";
+import type { IconProps } from "./types";
+
+export type { IconProps } from "./types";
+export { GithubIcon, StravaIcon } from "./brand";
 
 /**
- * Strava brand mark. Unlike the stroke-based icons above this logo is
- * fill-based, so it sets its own SVG attributes instead of `defaultProps`.
+ * Shared <svg> wrapper. The viewBox is supplied per icon rather than fixed
+ * globally, so glyphs on a different grid stay renderable.
  */
-export function StravaIcon({ className, size = 24 }: IconProps) {
+function Svg({
+  viewBox,
+  size,
+  className,
+  children,
+}: {
+  viewBox: string;
+  size: number | string;
+  className?: string;
+  children: ReactNode;
+}) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      fill="currentColor"
-      viewBox="0 0 24 24"
+      viewBox={viewBox}
       width={size}
       height={size}
+      fill="currentColor"
+      aria-hidden="true"
+      focusable="false"
       className={className}
     >
-      <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169" />
+      {children}
     </svg>
   );
 }
 
-export function Eye({ className, size = 24 }: IconProps) {
+// `menu-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Menu({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
-      <circle cx="12" cy="12" r="3" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M105.87-219.09v-79.78H854.7v79.78H105.87Zm0-221.3v-79.22H854.7v79.22H105.87Zm0-220.74v-79.78H854.7v79.78H105.87Z"/>
+    </Svg>
   );
 }
 
-export function EyeOff({ className, size = 24 }: IconProps) {
+// `close-fill` is identical to the outline upstream: `filled` is a no-op.
+export function X({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
-      <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
-      <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
-      <path d="m2 2 20 20" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M249-193.43 193.43-249l231-231-231-231L249-766.57l231 231 231-231L766.57-711l-231 231 231 231L711-193.43l-231-231-231 231Z"/>
+    </Svg>
   );
 }
 
-export function Zap({ className, size = 24 }: IconProps) {
+export function Lock({ className, size = 24, filled = false }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M145.87-67v-582.83h137.91v-83.56q0-82.44 57.17-140.18 57.16-57.73 139.02-57.73 81.86 0 139.05 57.73 57.2 57.74 57.2 140.18v83.56H814.7V-67H145.87ZM534.5-303.16q22.5-22.03 22.5-52.97 0-30-22.67-54.5t-54.5-24.5q-31.83 0-54.33 24.5t-22.5 55q0 30.5 22.67 52.5t54.5 22q31.83 0 54.33-22.03ZM363-649.83h234v-83.43q0-49.96-33.79-84.11-33.8-34.15-82.96-34.15t-83.21 34.15Q363-783.22 363-733.26v83.43Z"/>
+      ) : (
+        <path d="M145.87-67v-582.83h137.91v-83.56q0-82.44 57.17-140.18 57.16-57.73 139.02-57.73 81.86 0 139.05 57.73 57.2 57.74 57.2 140.18v83.56H814.7V-67H145.87Zm79.22-79.22h509.82v-423.82H225.09v423.82ZM534.5-303.16q22.5-22.03 22.5-52.97 0-30-22.67-54.5t-54.5-24.5q-31.83 0-54.33 24.5t-22.5 55q0 30.5 22.67 52.5t54.5 22q31.83 0 54.33-22.03ZM363-649.83h234v-83.43q0-49.96-33.79-84.11-33.8-34.15-82.96-34.15t-83.21 34.15Q363-783.22 363-733.26v83.43ZM225.09-146.22v-423.82 423.82Z"/>
+      )}
+    </Svg>
   );
 }
 
-export function TrendingUp({ className, size = 24 }: IconProps) {
+export function LockOpen({ className, size = 24, filled = false }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
-      <polyline points="16 7 22 7 22 13" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M145.87-67v-582.83H597v-83.43q0-49.96-33.79-84.11-33.8-34.15-82.96-34.15t-83.21 34.15Q363-783.22 363-733.39h-79.22q0-82.59 57.17-140.25 57.16-57.66 139.02-57.66 81.86 0 139.05 57.73 57.2 57.74 57.2 140.18v83.56H814.7V-67H145.87ZM534.5-303.16q22.5-22.03 22.5-52.97 0-30-22.67-54.5t-54.5-24.5q-31.83 0-54.33 24.5t-22.5 55q0 30.5 22.67 52.5t54.5 22q31.83 0 54.33-22.03Z"/>
+      ) : (
+        <path d="M145.87-67v-582.83H597v-83.43q0-49.96-33.79-84.11-33.8-34.15-82.96-34.15t-83.21 34.15Q363-783.22 363-733.39h-79.22q0-82.59 57.17-140.25 57.16-57.66 139.02-57.66 81.86 0 139.05 57.73 57.2 57.74 57.2 140.18v83.56H814.7V-67H145.87Zm79.22-79.22h509.82v-423.82H225.09v423.82ZM534.5-303.16q22.5-22.03 22.5-52.97 0-30-22.67-54.5t-54.5-24.5q-31.83 0-54.33 24.5t-22.5 55q0 30.5 22.67 52.5t54.5 22q31.83 0 54.33-22.03ZM225.09-146.22v-423.82 423.82Z"/>
+      )}
+    </Svg>
   );
 }
 
-export function Users({ className, size = 24 }: IconProps) {
+export function Home({ className, size = 24, filled = false }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M145.87-105.87v-501.29L480-858.09l334.7 250.74v501.48H563.39v-297.52H396.61v297.52H145.87Z"/>
+      ) : (
+        <path d="M225.09-185.09h135.3v-254.52h239.22v254.52h135.3v-382.65L480-758.78 225.09-567.55v382.46Zm-79.22 79.22v-501.48L480-858.09l334.7 250.74v501.48H526.61v-260.74h-93.22v260.74H145.87ZM480-472.43Z"/>
+      )}
+    </Svg>
   );
 }
 
-export function Mail({ className, size = 24 }: IconProps) {
+// `arrow_forward-fill` is identical to the outline upstream: `filled` is a no-op.
+export function ArrowRight({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <rect width="20" height="16" x="2" y="4" rx="2" />
-      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M662.82-440.39H145.87v-79.22h516.95L423.87-758.57 480-814.7 814.7-480 480-145.87l-56.13-55.56 238.95-238.96Z"/>
+    </Svg>
   );
 }
 
-export function Bell({ className, size = 24 }: IconProps) {
+// `arrow_back-fill` is identical to the outline upstream: `filled` is a no-op.
+export function ArrowLeft({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="m297.18-440.39 238.95 238.96L480-145.87 145.87-480 480-814.7l56.13 56.13-238.95 238.96H814.7v79.22H297.18Z"/>
+    </Svg>
   );
 }
 
-export function Star({ className, size = 24 }: IconProps) {
+// `arrow_upward-fill` is identical to the outline upstream: `filled` is a no-op.
+export function ArrowUp({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M440.39-145.87v-516.95L201.43-423.87 145.87-480 480-814.7 814.7-480l-56.13 56.13-238.96-238.95v516.95h-79.22Z"/>
+    </Svg>
   );
 }
 
-export function MoreHorizontal({ className, size = 24 }: IconProps) {
+// `chevron_left-fill` is identical to the outline upstream: `filled` is a no-op.
+export function ChevronLeft({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <circle cx="12" cy="12" r="1" />
-      <circle cx="19" cy="12" r="1" />
-      <circle cx="5" cy="12" r="1" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M561-226.43 306.43-481 561-735.57 617.57-679l-198 198 198 198L561-226.43Z"/>
+    </Svg>
   );
 }
 
-export function MoreVertical({ className, size = 24 }: IconProps) {
+// `chevron_right-fill` is identical to the outline upstream: `filled` is a no-op.
+export function ChevronRight({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <circle cx="12" cy="12" r="1" />
-      <circle cx="12" cy="5" r="1" />
-      <circle cx="12" cy="19" r="1" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="m516.43-481-198-198L375-735.57 629.57-481 375-226.43 318.43-283l198-198Z"/>
+    </Svg>
   );
 }
 
-export function Circle({ className, size = 24 }: IconProps) {
+// `keyboard_arrow_down-fill` is identical to the outline upstream: `filled` is a no-op.
+export function ChevronDown({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <circle cx="12" cy="12" r="10" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M480-330.43 226.43-584 283-640.57l197 197 197-197L733.57-584 480-330.43Z"/>
+    </Svg>
   );
 }
 
-export function Footprints({ className, size = 24 }: IconProps) {
+// `keyboard_arrow_up-fill` is identical to the outline upstream: `filled` is a no-op.
+export function ChevronUp({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z" />
-      <path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z" />
-      <path d="M16 17h4" />
-      <path d="M4 13h4" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="m480-540.43-197 197L226.43-400 480-653.57 733.57-400 677-343.43l-197-197Z"/>
+    </Svg>
   );
 }
 
-export function Shuffle({ className, size = 24 }: IconProps) {
+// `open_in_new-fill` is identical to the outline upstream: `filled` is a no-op.
+export function ExternalLink({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="m18 14 4 4-4 4" />
-      <path d="m18 2 4 4-4 4" />
-      <path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22" />
-      <path d="M2 6h1.972a4 4 0 0 1 3.6 2.2" />
-      <path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M105.87-105.87V-854.7H459v79.79H185.09v589.82h589.82V-459h79.79v353.13H105.87ZM395-339l-55-56 379.91-379.91H519v-79.79h335.7V-519h-79.79v-199.91L395-339Z"/>
+    </Svg>
   );
 }
 
-export function Send({ className, size = 24 }: IconProps) {
+export function PanelLeftClose({ className, size = 24, filled = false }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
-      <path d="m21.854 2.147-10.94 10.939" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M675.44-331v-298L525.87-480l149.57 149ZM403.39-185.09h371.52v-589.82H403.39v589.82Zm-297.52 79.22V-854.7H854.7v748.83H105.87Z"/>
+      ) : (
+        <path d="M675.44-331v-298L525.87-480l149.57 149ZM185.09-185.09h138.52v-589.82H185.09v589.82Zm218.3 0h371.52v-589.82H403.39v589.82Zm-79.78 0H185.09h138.52Zm-217.74 79.22V-854.7H854.7v748.83H105.87Z"/>
+      )}
+    </Svg>
   );
 }
 
-export function CalendarRange({ className, size = 24 }: IconProps) {
+export function PanelLeftOpen({ className, size = 24, filled = false }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <rect width="18" height="18" x="3" y="4" rx="2" />
-      <path d="M16 2v4" />
-      <path d="M3 10h18" />
-      <path d="M8 2v4" />
-      <path d="M17 14h-6" />
-      <path d="M13 18H7" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M525.87-629v298l149.57-149-149.57-149ZM403.39-185.09h371.52v-589.82H403.39v589.82Zm-297.52 79.22V-854.7H854.7v748.83H105.87Z"/>
+      ) : (
+        <path d="M525.87-629v298l149.57-149-149.57-149ZM185.09-185.09h138.52v-589.82H185.09v589.82Zm218.3 0h371.52v-589.82H403.39v589.82Zm-79.78 0H185.09h138.52Zm-217.74 79.22V-854.7H854.7v748.83H105.87Z"/>
+      )}
+    </Svg>
   );
 }
 
-export function CalendarDays({ className, size = 24 }: IconProps) {
+export function LayoutGrid({ className, size = 24, filled = false }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M8 2v4" />
-      <path d="M16 2v4" />
-      <rect width="18" height="18" x="3" y="4" rx="2" />
-      <path d="M3 10h18" />
-      <path d="M8 14h.01" />
-      <path d="M12 14h.01" />
-      <path d="M16 14h.01" />
-      <path d="M8 18h.01" />
-      <path d="M12 18h.01" />
-      <path d="M16 18h.01" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M105.87-510v-344.7H450V-510H105.87Zm0 404.13V-450H450v344.13H105.87ZM510-510v-344.7h344.7V-510H510Zm0 404.13V-450h344.7v344.13H510Z"/>
+      ) : (
+        <path d="M105.87-510v-344.7H450V-510H105.87Zm0 404.13V-450H450v344.13H105.87ZM510-510v-344.7h344.7V-510H510Zm0 404.13V-450h344.7v344.13H510ZM185.09-589.78h185.69v-185.13H185.09v185.13Zm404.69 0h185.13v-185.13H589.78v185.13Zm0 404.69h185.13v-185.69H589.78v185.69Zm-404.69 0h185.69v-185.69H185.09v185.69Zm404.69-404.69Zm0 219Zm-219 0Zm0-219Z"/>
+      )}
+    </Svg>
   );
 }
 
-export function Compass({ className, size = 24 }: IconProps) {
+export function Rows3({ className, size = 24, filled = false }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <circle cx="12" cy="12" r="10" />
-      <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M105.87-185.87v-254.52H854.7v254.52H105.87Zm0-333.74V-774.7H854.7v255.09H105.87Z"/>
+      ) : (
+        <path d="M774.91-265.09v-175.3H185.09v175.3h589.82Zm0-254.52v-175.3H185.09v175.3h589.82ZM185.09-185.87q-32.51 0-55.87-23.35-23.35-23.36-23.35-55.87v-429.82q0-32.74 23.35-56.26 23.36-23.53 55.87-23.53h589.82q32.74 0 56.26 23.53 23.53 23.52 23.53 56.26v429.82q0 32.51-23.53 55.87-23.52 23.35-56.26 23.35H185.09Z"/>
+      )}
+    </Svg>
   );
 }
 
-export function Pencil({ className, size = 24 }: IconProps) {
+export function Grid3x3({ className, size = 24, filled = false }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
-      <path d="m15 5 4 4" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M105.87-105.87h209.04v-209.61H105.87v209.61Zm269.04 0h210.18v-209.61H374.91v209.61Zm270.18 0H854.7v-209.61H645.09v209.61ZM105.87-375.48h209.04v-209.04H105.87v209.04Zm269.04 0h210.18v-209.04H374.91v209.04Zm270.18 0H854.7v-209.04H645.09v209.04ZM105.87-644.52h209.04V-854.7H105.87v210.18Zm269.04 0h210.18V-854.7H374.91v210.18Zm270.18 0H854.7V-854.7H645.09v210.18Z"/>
+      ) : (
+        <path d="M105.87-105.87V-854.7H854.7v748.83H105.87Zm79.22-79.22h144.17v-144.17H185.09v144.17Zm223.39 0h143.04v-144.17H408.48v144.17Zm222.82 0h143.61v-144.17H631.3v144.17ZM185.09-408.48h144.17v-143.04H185.09v143.04Zm223.39 0h143.04v-143.04H408.48v143.04Zm222.82 0h143.61v-143.04H631.3v143.04ZM185.09-631.3h144.17v-143.61H185.09v143.61Zm223.39 0h143.04v-143.61H408.48v143.61Zm222.82 0h143.61v-143.61H631.3v143.61Z"/>
+      )}
+    </Svg>
   );
 }
 
-export function FlaskConical({ className, size = 24 }: IconProps) {
+// `format_list_bulleted-fill` is identical to the outline upstream: `filled` is a no-op.
+export function List({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2" />
-      <path d="M8.5 2h7" />
-      <path d="M7 16h10" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M379.83-188.39v-79.22H854.7v79.22H379.83Zm0-252v-79.22H854.7v79.22H379.83Zm0-253v-79.22H854.7v79.22H379.83ZM183.02-151.96q-31.68 0-54.2-21.69-22.52-21.7-22.52-53.99 0-31.75 22.18-54.08 22.18-22.32 54.31-22.32t53.59 22.67q21.45 22.68 21.45 54.53 0 31.02-21.98 52.95-21.97 21.93-52.83 21.93Zm0-252q-31.68 0-54.2-22.2-22.52-22.2-22.52-54T128.96-534q22.65-22.04 54.33-22.04 30.86 0 52.7 22.2 21.84 22.2 21.84 54T235.85-426q-21.97 22.04-52.83 22.04Zm-54.67-275.2q-22.05-22.2-22.05-54T128.39-787q22.09-22.04 53.72-22.04t53.67 22.2q22.05 22.2 22.05 54T235.74-679q-22.09 22.04-53.72 22.04t-53.67-22.2Z"/>
+    </Svg>
   );
 }
 
-export function Scale({ className, size = 24 }: IconProps) {
+// `search-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Search({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
-      <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
-      <path d="M7 21h10" />
-      <path d="M12 3v18" />
-      <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M795.43-105.17 529.04-371q-29.43 24.3-69.15 37.96-39.72 13.65-85.28 13.65-111.96 0-189.78-77.83Q107-475.04 107-585q0-109.96 77.83-187.78 77.82-77.83 188.78-77.83 109.96 0 187.28 77.83 77.33 77.82 77.33 187.78 0 44.13-13.15 83.28-13.16 39.15-39.46 73.59L853-162.74l-57.57 57.57ZM373.61-398.61q77.61 0 131.5-54.39T559-585q0-77.61-53.89-132t-131.5-54.39q-78.04 0-132.72 54.39-54.67 54.39-54.67 132t54.67 132q54.68 54.39 132.72 54.39Z"/>
+    </Svg>
   );
 }
 
-export function Bike({ className, size = 24 }: IconProps) {
+export function Filter({ className, size = 24, filled = false }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <circle cx="18.5" cy="17.5" r="3.5" />
-      <circle cx="5.5" cy="17.5" r="3.5" />
-      <circle cx="15" cy="5" r="1" />
-      <path d="M12 17.5V14l-3-3 4-3 2 3h2" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M385.87-145.87v-289.04L89.17-814.7h781.66L574.7-434.91v289.04H385.87Z"/>
+      ) : (
+        <path d="M385.87-145.87v-289.04L89.17-814.7h781.66L574.7-434.91v289.04H385.87ZM480-444.48l229.26-290.43H251.3L480-444.48Zm0 0Z"/>
+      )}
+    </Svg>
   );
 }
 
-export function Waves({ className, size = 24 }: IconProps) {
+// `download-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Download({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-      <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-      <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M480-318.09 266.65-531.44l57.13-56 116.61 116.61V-814.7h79.22v343.87l116.61-116.61 57.13 56L480-318.09ZM145.87-145.87v-222.22h79.22v143h509.82v-143h79.79v222.22H145.87Z"/>
+    </Svg>
   );
 }
 
-export function HeartPulse({ className, size = 24 }: IconProps) {
+// `upload-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Upload({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M19.5 12.572l-7.5 7.428l-7.5-7.428A5 5 0 1 1 12 6.006a5 5 0 1 1 7.5 6.572" />
-      <path d="M5 12h2l1 3 2-6 1 3h2" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M440.39-318.09v-343.87L323.78-544.78l-57.13-56.57L480-814.7l213.35 213.35-57.13 56.57-116.61-117.18v343.87h-79.22ZM145.87-145.87v-222.22h79.22v143h509.82v-143h79.79v222.22H145.87Z"/>
+    </Svg>
   );
 }
 
-export function Maximize2({ className, size = 24 }: IconProps) {
+export function Save({ className, size = 24, filled = false }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <polyline points="15 3 21 3 21 9" />
-      <polyline points="9 21 3 21 3 15" />
-      <line x1="21" x2="14" y1="3" y2="10" />
-      <line x1="3" x2="10" y1="21" y2="14" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M854.7-689.22v583.35H105.87V-854.7h583.35L854.7-689.22ZM553.5-280.35q30.5-30.27 30.5-73.5 0-43.24-30.26-73.74-30.27-30.5-73.5-30.5-43.24 0-73.74 30.27-30.5 30.26-30.5 73.5 0 43.23 30.26 73.73 30.27 30.5 73.5 30.5 43.24 0 73.74-30.26ZM238.09-578.91h358v-143h-358v143Z"/>
+      ) : (
+        <path d="M854.7-689.22v583.35H105.87V-854.7h583.35L854.7-689.22Zm-79.79 35.48L653.74-774.91H185.09v589.82h589.82v-468.65ZM553.5-280.35q30.5-30.27 30.5-73.5 0-43.24-30.26-73.74-30.27-30.5-73.5-30.5-43.24 0-73.74 30.27-30.5 30.26-30.5 73.5 0 43.23 30.26 73.73 30.27 30.5 73.5 30.5 43.24 0 73.74-30.26ZM238.09-578.91h358v-143h-358v143Zm-53-74.83v468.65-589.82 121.17Z"/>
+      )}
+    </Svg>
   );
 }
 
-export function Minimize2({ className, size = 24 }: IconProps) {
+export function Trash2({ className, size = 24, filled = false }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <polyline points="4 14 10 14 10 20" />
-      <polyline points="20 10 14 10 14 4" />
-      <line x1="14" x2="21" y1="10" y2="3" />
-      <line x1="3" x2="10" y1="21" y2="14" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M359.65-266.57h69.61v-399h-69.61v399Zm171.09 0h70.17v-399h-70.17v399Zm-354.05 160.7v-639.61h-50.6v-79.22h212.3v-40.17h282.65v40.17h212.87v79.22h-50.6v639.61H176.69Z"/>
+      ) : (
+        <path d="M176.69-105.87v-639.61h-50.6v-79.22h212.3v-40.17h282.65v40.17h212.87v79.22h-50.6v639.61H176.69Zm79.79-79.22h447.04v-560.39H256.48v560.39Zm103.17-81.48h69.61v-399h-69.61v399Zm171.09 0h70.17v-399h-70.17v399ZM256.48-745.48v560.39-560.39Z"/>
+      )}
+    </Svg>
   );
 }
 
-export function ArrowLeftRight({ className, size = 24 }: IconProps) {
+// `rotate_left-fill` is identical to the outline upstream: `filled` is a no-op.
+export function RotateCcw({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M8 3 4 7l4 4" />
-      <path d="M4 7h16" />
-      <path d="m16 21 4-4-4-4" />
-      <path d="M20 17H4" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M435-61.35q-51.96-7-100.07-25.84-48.1-18.85-88.67-51.68l57.7-57.56q31.43 24 64.3 36.93T435-141.13v79.78Zm90 0v-79.78q108.3-21.57 179.11-102.09 70.8-80.52 70.8-195.26 0-120.78-80.84-207.28-80.85-86.5-202.2-86.5H474.7L542.96-664l-57.57 57.57L318.82-773l166.57-166.57 57.57 56.44-70.52 71.09h18.3q76.13 0 142.48 29.69 66.35 29.7 115.63 80.68 49.28 50.97 77.56 118.74 28.29 67.76 28.29 144.45 0 145.65-93.24 250.61Q668.22-82.91 525-61.35ZM183.26-201.3Q153-241 133.65-290.04q-19.35-49.05-25.78-103.44h79.65q5 37.44 18.22 71.02 13.22 33.59 35.65 63.03l-58.13 58.13Zm-75.39-282.18q5.87-51.69 25-99.74 19.13-48.04 50.39-90.87l58.7 55.44q-22.44 33-35.66 66.87-13.21 33.87-18.78 68.3h-79.65Z"/>
+    </Svg>
   );
 }
 
+export function Settings({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M375.56-65.87 355-196.39q-15.61-5.31-34.07-15.89-18.45-10.59-31.63-21.33l-121.95 56.26-106-187.17 111.39-81.26q-1.44-7.31-1.94-17.11-.5-9.81-.5-17.11 0-7.3.5-17.11.5-9.8 1.94-17.11L61.35-596.04l106-186.05 123.08 55.7q12.61-10.18 30.79-20.48 18.17-10.3 33.78-15.17l20.56-132.66h208.88L605-763.04q15.61 5.87 34.28 15.67 18.68 9.8 31.42 20.98l122.52-55.7 105.43 186.05-111.95 79.82q1.43 8.31 2.21 18.11.79 9.81.79 18.11 0 8.3-.79 17.61-.78 9.3-2.21 17.61l111.95 80.26-106 187.17-122.52-56.26q-13.17 10.74-30.85 21.55-17.67 10.8-34.28 15.67L584.44-65.87H375.56ZM478.87-350q54 0 92-38t38-92q0-54-38-92t-92-38q-54 0-92 38t-38 92q0 54 38 92t92 38Z"/>
+      ) : (
+        <path d="M375.56-65.87 355-196.39q-15.61-5.31-34.07-15.89-18.45-10.59-31.63-21.33l-121.95 56.26-106-187.17 111.39-81.26q-1.44-7.31-1.94-17.11-.5-9.81-.5-17.11 0-7.3.5-17.11.5-9.8 1.94-17.11L61.35-596.04l106-186.05 123.08 55.7q12.61-10.18 30.79-20.48 18.17-10.3 33.78-15.17l20.56-132.66h208.88L605-763.04q15.61 5.87 34.28 15.67 18.68 9.8 31.42 20.98l122.52-55.7 105.43 186.05-111.95 79.82q1.43 8.31 2.21 18.11.79 9.81.79 18.11 0 8.3-.79 17.61-.78 9.3-2.21 17.61l111.95 80.26-106 187.17-122.52-56.26q-13.17 10.74-30.85 21.55-17.67 10.8-34.28 15.67L584.44-65.87H375.56Zm64.96-79.22h78.39l14.57-111.43q33.56-8 63.91-25 30.35-17 54.35-42.7l106 46 34.91-64.65-92.87-67.87q4-17.56 6.78-34.63 2.79-17.06 2.79-34.63 0-17.57-2.29-34.63-2.28-17.07-7.28-34.63l93.44-67.87-35.48-64.65-105.44 46q-23-27.13-53.13-45.48-30.13-18.35-65.69-22.78l-14-110.87h-78.96l-13.43 110.87q-35.13 6.43-65.76 24.28-30.63 17.85-54.2 43.98l-104.87-46-35.48 64.65 92.31 67.3q-4 17.57-6.79 34.92-2.78 17.34-2.78 34.91 0 17.57 2.78 35.2 2.79 17.63 6.79 34.63l-92.31 67.3 35.48 64.65 104.87-46q24.57 25.13 55.2 42.7 30.63 17.56 64.76 25.56l13.43 110.87ZM478.87-350q54 0 92-38t38-92q0-54-38-92t-92-38q-54 0-92 38t-38 92q0 54 38 92t92 38ZM480-480Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Heart({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="m479.43-101.78-50.6-45.48q-107.7-98.7-177.55-170.33-69.85-71.63-111.41-128.26Q98.3-502.48 81.8-548.89 65.3-595.3 65.3-643q0-96.22 64.46-160.96 64.46-64.74 159.67-64.74 56.44 0 104.66 25.31 48.21 25.3 85.34 74.04 43.14-51.74 89.57-75.54 46.43-23.81 100.43-23.81 95.79 0 160.53 64.74T894.7-643q0 47.7-16.5 93.83-16.5 46.13-58.07 102.76-41.56 56.63-111.69 128.54-70.14 71.91-177.83 170.61l-51.18 45.48Z"/>
+      ) : (
+        <path d="m479.43-101.78-50.6-45.48Q321.36-246.08 251.4-317.65q-69.97-71.57-111.53-128.2Q98.3-502.48 81.8-548.89q-16.5-46.41-16.5-94.17 0-96.41 64.55-161.02 64.55-64.62 159.58-64.62 56.6 0 104.74 25.31 48.13 25.3 85.26 74.04 43.14-51.74 89.59-75.54 46.45-23.81 100.41-23.81 96 0 160.63 64.63Q894.7-739.43 894.7-643q0 47.68-16.5 93.82-16.5 46.14-58.07 102.77-41.56 56.63-111.74 128.54-70.17 71.92-177.78 170.61l-51.18 45.48Zm-.28-104.44q100.96-92.99 165.77-158.65 64.82-65.65 102.75-114.8 37.94-49.16 52.87-87.53 14.94-38.37 14.94-75.64 0-63.9-40.79-105.27t-104.76-41.37q-50.1 0-93.1 31.78-43 31.79-70 88.22h-55.22q-25.86-56-69.33-88t-92.98-32q-63.19 0-103.7 41.01-40.51 41-40.51 105.79 0 38.16 15.18 77.14 15.18 38.98 53.15 88.56 37.97 49.59 102.56 114.74 64.59 65.15 163.17 156.02Zm1.42-291.91Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Pencil({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M106.87-105.87V-261l619.39-619.96 157.96 154-621.65 621.09h-155.7Zm623.09-581.52 40-39.44-41.57-42.13-40.56 40 42.13 41.57Z"/>
+      ) : (
+        <path d="M184.52-185.09h44.57l443.17-442.17-43.44-44-444.3 442.74v43.43Zm-78.65 79.22V-261l620.39-620.52 156.83 154.56-621.52 621.09h-155.7Zm664.09-620.96-41.57-42.13 41.57 42.13Zm-119.14 77.01-22-21.44 43.44 44-21.44-22.56Z"/>
+      )}
+    </Svg>
+  );
+}
+
+// `add-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Plus({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M440.39-440.39H185.87v-79.22h254.52V-774.7h79.22v255.09H774.7v79.22H519.61v254.52h-79.22v-254.52Z"/>
+    </Svg>
+  );
+}
+
+// `remove-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Minus({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M185.87-440.39v-79.22H774.7v79.22H185.87Z"/>
+    </Svg>
+  );
+}
+
+export function Copy({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M235.48-195.48v-708.83h588.83v708.83H235.48ZM95.69-55.69v-708.83h79.79v629.04h509.04v79.79H95.69Z"/>
+      ) : (
+        <path d="M235.48-195.48v-708.83h588.83v708.83H235.48Zm79.22-79.22h429.82v-549.82H314.7v549.82ZM95.69-55.69v-708.83h79.79v629.04h509.04v79.79H95.69ZM314.7-274.7v-549.82 549.82Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Share({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M687.66-65.87q-52.55 0-89.76-37.06-37.2-37.07-37.2-89.37 0-8 4.43-29.95l-284.3-166.62q-17.98 17.34-40.06 26.89-22.08 9.55-47.9 9.55-52.92 0-89.96-36.96Q65.87-426.35 65.87-480t37.04-90.61q37.04-36.96 89.96-36.96 25.13 0 47.21 9.3 22.08 9.3 39.88 25.7l284.6-163.39q-1.43-7.43-2.65-15.37-1.21-7.93-1.21-15.8 0-52.54 37.24-90.05 37.23-37.52 89.79-37.52 52.55 0 89.76 37.53 37.21 37.52 37.21 90.07 0 52.56-37.13 89.76-37.12 37.21-90.16 37.21-24.89 0-46.84-9.57-21.96-9.56-39.66-25.13L315-517.13q3 8.48 4.5 18.43t1.5 18.61q0 8.66-1 17-1 8.35-3.56 16.35l284.91 161.7q17.71-16.17 39.6-25.5 21.9-9.33 46.92-9.33 53.43 0 90.13 37.09 36.7 37.09 36.7 90.08 0 52.98-37.24 89.91-37.24 36.92-89.8 36.92Z"/>
+      ) : (
+        <path d="M687.66-65.87q-52.55 0-89.76-37.06-37.2-37.07-37.2-89.37 0-8 4.43-29.95l-284.3-166.62q-17.98 17.34-40.06 26.89-22.08 9.55-47.9 9.55-52.92 0-89.96-36.96Q65.87-426.35 65.87-480t37.04-90.61q37.04-36.96 89.96-36.96 25.13 0 47.21 9.3 22.08 9.3 39.88 25.7l284.6-163.39q-1.43-7.43-2.65-15.37-1.21-7.93-1.21-15.8 0-52.54 37.24-90.05 37.23-37.52 89.79-37.52 52.55 0 89.76 37.53 37.21 37.52 37.21 90.07 0 52.56-37.13 89.76-37.12 37.21-90.16 37.21-24.89 0-46.84-9.57-21.96-9.56-39.66-25.13L315-517.13q3 8.48 4.5 18.43t1.5 18.61q0 8.66-1 17-1 8.35-3.56 16.35l284.91 161.7q17.71-16.17 39.6-25.5 21.9-9.33 46.92-9.33 53.43 0 90.13 37.09 36.7 37.09 36.7 90.08 0 52.98-37.24 89.91-37.24 36.92-89.8 36.92Zm-.28-75.26q22.19 0 37.12-14.85 14.93-14.85 14.93-36.81 0-21.95-14.88-36.88-14.89-14.94-37.45-14.94-22.09 0-36.62 14.97-14.52 14.97-14.52 36.81 0 21.83 14.62 36.76 14.62 14.94 36.8 14.94ZM192.79-427.7q21.95 0 37.45-14.85 15.5-14.85 15.5-37.37 0-22.51-15.48-37.45-15.48-14.93-37.6-14.93-22.13 0-36.83 14.85t-14.7 37.37q0 22.51 14.85 37.45 14.85 14.93 36.81 14.93ZM724.5-730.34q14.93-14.95 14.93-37.04 0-21.86-14.96-36.96-14.97-15.09-37.09-15.09-22.12 0-37.05 15.12-14.94 15.13-14.94 37.5 0 21.88 15.25 36.65 15.26 14.77 37.09 14.77 21.84 0 36.77-14.95Zm-36.24 537.47ZM193.43-480ZM687.7-767.13Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Eye({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M600.5-379.5Q650-429 650-500t-49.5-120.5Q551-670 480-670t-120.5 49.5Q310-571 310-500t49.5 120.5Q409-330 480-330t120.5-49.5ZM407-427q-29.96-29.96-29.96-73T407-573q29.96-29.96 73-29.96T553-573q29.96 29.96 29.96 73T553-427q-29.96 29.96-73 29.96T407-427ZM208.09-273.96Q86.7-360.91 27-500q59.7-139.09 181.09-226.04Q329.48-813 480-813q150.52 0 271.91 86.96Q873.3-639.09 933-500q-59.7 139.09-181.09 226.04Q630.52-187 480-187q-150.52 0-271.91-86.96Z"/>
+      ) : (
+        <path d="M600.5-379.5Q650-429 650-500t-49.5-120.5Q551-670 480-670t-120.5 49.5Q310-571 310-500t49.5 120.5Q409-330 480-330t120.5-49.5ZM407-426.9q-29.96-29.86-29.96-73T406.9-573q29.86-29.96 73-29.96T553-573.1q29.96 29.86 29.96 73T553.1-427q-29.86 29.96-73 29.96T407-426.9ZM208.09-273.96Q86.7-360.91 27-500q59.7-139.09 181.09-226.04Q329.48-813 480-813q150.52 0 271.91 86.96Q873.3-639.09 933-500q-59.7 139.09-181.09 226.04Q630.52-187 480-187q-150.52 0-271.91-86.96ZM480-500Zm221.65 174.5Q802.87-391 855.87-500q-53-109-154.27-174.5Q600.33-740 479.95-740q-120.38 0-221.6 65.5T103.13-500q54 109 155.27 174.5Q359.67-260 480.05-260q120.38 0 221.6-65.5Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function EyeOff({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M810.91-58.91 650.83-216.56q-35 14-79.57 21.78Q526.7-187 480-187q-148.83 0-271.5-83.76Q85.83-354.52 27-500q18.87-51.43 55.22-102.35 36.34-50.91 86.21-97.61L44.13-823.13l46.52-48.09 763.78 763.79-43.52 48.52ZM480-330q12.3 0 26.33-2.5 14.02-2.5 23.32-6.93L318.3-549.65q-3.87 10.3-6.08 23.61Q310-512.74 310-500q0 72 50 121t120 49Zm291.57 44.52L631.26-426.35q8.87-13.74 13.81-34.39Q650-481.39 650-500q0-71-49.5-120.5T480-670q-19.17 0-38.48 4.43-19.3 4.44-35.17 13.74L285.61-773q35-16 91.19-28Q433-813 485-813q145.26 0 267.44 83.48Q874.61-646.04 933-500q-25.43 65.13-67.28 119.54-41.85 54.42-94.15 94.98ZM568.61-489l-103-103q19.96-9.3 43.04-5.91 23.09 3.39 41 19.17 17.35 17.35 23.81 38.5 6.45 21.15-4.85 51.24Z"/>
+      ) : (
+        <path d="m631.83-426.35-62.66-62.09q23.18-55.73-18.8-90.3-41.98-34.56-85.33-13.82l-58.69-59.27q15.87-9.3 35.17-13.74Q460.83-670 480-670q71 0 120.5 49.5T650-500q0 18.61-4.65 39.26t-13.52 34.39Zm139.74 140.87-48.48-49.04q46.17-35.44 80.41-78.52 34.24-43.09 52.93-86.96-51.13-110.43-150.28-175.22Q607-740 490-740q-42 0-83.74 7.43-41.74 7.44-63.35 17.31L285.61-773q35-16 91.19-28Q433-813 485-813q145.26 0 267.44 83.48Q874.61-646.04 933-500q-25.43 65.13-67.28 119.54-41.85 54.42-94.15 94.98Zm39.34 226.57L650.83-216.56q-35 14-79.57 21.78Q526.7-187 480-187q-148.83 0-271.5-83.76Q85.83-354.52 27-500q18.87-51.43 55.22-102.35 36.34-50.91 86.21-97.61L44.13-823.13l46.52-48.09 763.78 763.79-43.52 48.52ZM219.04-649.48q-36.43 28.13-68.39 69.59-31.95 41.46-47.52 79.89 51.57 111 153.22 175.5T488-260q29.61 0 59.63-3.43 30.02-3.44 46.02-11.44l-64-64q-9.3 4.44-23.32 6.65Q492.3-330 480-330q-70 0-120-49t-50-121q0-12.74 1.93-26.04 1.94-13.31 5.81-23.61l-98.7-99.83Zm315.18 134.09Zm-127.87 64.22Z"/>
+      )}
+    </Svg>
+  );
+}
+
+// `check-fill` is identical to the outline upstream: `filled` is a no-op.
 export function Check({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M378-232.43 140.43-470l57.14-57.13L378-346.7l383.43-383.43L818.57-673 378-232.43Z"/>
+    </Svg>
   );
 }
 
+// `check-fill` is identical to the outline upstream: `filled` is a no-op.
+export function CheckIcon({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M378-232.43 140.43-470l57.14-57.13L378-346.7l383.43-383.43L818.57-673 378-232.43Z"/>
+    </Svg>
+  );
+}
+
+export function Circle({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M480.08-65.87q-85.47 0-161.01-32.39-75.53-32.4-131.97-88.84-56.44-56.44-88.84-131.89-32.39-75.46-32.39-160.93 0-86.47 32.39-162.01 32.4-75.53 88.75-131.5t131.85-88.62q75.5-32.65 161.01-32.65 86.52 0 162.12 32.61 75.61 32.6 131.53 88.5 55.93 55.89 88.55 131.45Q894.7-566.58 894.7-480q0 85.55-32.65 161.07-32.65 75.53-88.62 131.9-55.97 56.37-131.42 88.77-75.46 32.39-161.93 32.39Z"/>
+      ) : (
+        <path d="M480.08-65.87q-85.47 0-161.01-32.39-75.53-32.4-131.97-88.84-56.44-56.44-88.84-131.89-32.39-75.46-32.39-160.93 0-86.47 32.39-162.01 32.4-75.53 88.75-131.5t131.85-88.62q75.5-32.65 161.01-32.65 86.52 0 162.12 32.61 75.61 32.6 131.53 88.5 55.93 55.89 88.55 131.45Q894.7-566.58 894.7-480q0 85.55-32.65 161.07-32.65 75.53-88.62 131.9-55.97 56.37-131.42 88.77-75.46 32.39-161.93 32.39Zm-.08-79.22q139.74 0 237.33-97.73 97.58-97.73 97.58-237.18 0-139.74-97.58-237.33-97.59-97.58-237.61-97.58-139.02 0-236.83 97.58-97.8 97.59-97.8 237.61 0 139.02 97.73 236.83 97.73 97.8 237.18 97.8ZM480-480Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function CircleIcon({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M480.08-65.87q-85.47 0-161.01-32.39-75.53-32.4-131.97-88.84-56.44-56.44-88.84-131.89-32.39-75.46-32.39-160.93 0-86.47 32.39-162.01 32.4-75.53 88.75-131.5t131.85-88.62q75.5-32.65 161.01-32.65 86.52 0 162.12 32.61 75.61 32.6 131.53 88.5 55.93 55.89 88.55 131.45Q894.7-566.58 894.7-480q0 85.55-32.65 161.07-32.65 75.53-88.62 131.9-55.97 56.37-131.42 88.77-75.46 32.39-161.93 32.39Z"/>
+      ) : (
+        <path d="M480.08-65.87q-85.47 0-161.01-32.39-75.53-32.4-131.97-88.84-56.44-56.44-88.84-131.89-32.39-75.46-32.39-160.93 0-86.47 32.39-162.01 32.4-75.53 88.75-131.5t131.85-88.62q75.5-32.65 161.01-32.65 86.52 0 162.12 32.61 75.61 32.6 131.53 88.5 55.93 55.89 88.55 131.45Q894.7-566.58 894.7-480q0 85.55-32.65 161.07-32.65 75.53-88.62 131.9-55.97 56.37-131.42 88.77-75.46 32.39-161.93 32.39Zm-.08-79.22q139.74 0 237.33-97.73 97.58-97.73 97.58-237.18 0-139.74-97.58-237.33-97.59-97.58-237.61-97.58-139.02 0-236.83 97.58-97.8 97.59-97.8 237.61 0 139.02 97.73 236.83 97.73 97.8 237.18 97.8ZM480-480Z"/>
+      )}
+    </Svg>
+  );
+}
+
+// `more_horiz-fill` is identical to the outline upstream: `filled` is a no-op.
+export function MoreHorizontal({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M194.82-425.78q-22.08 0-38.06-15.93-15.98-15.93-15.98-38.29 0-22.83 15.97-38.52 15.97-15.7 38.39-15.7 21.89 0 38.27 15.7 16.37 15.7 16.37 38.24 0 22.54-16.44 38.52-16.45 15.98-38.52 15.98Zm285.46 0q-22.54 0-38.52-15.93-15.98-15.93-15.98-38.29 0-22.83 15.93-38.52 15.93-15.7 38.29-15.7 22.83 0 38.52 15.7 15.7 15.7 15.7 38.24 0 22.54-15.7 38.52-15.7 15.98-38.24 15.98Zm284.6 0q-22.67 0-38.66-15.93-16-15.93-16-38.29 0-22.83 16.14-38.52 16.14-15.7 38.8-15.7 22.67 0 38.65 15.7 15.97 15.7 15.97 38.24 0 22.54-16.12 38.52-16.12 15.98-38.78 15.98Z"/>
+    </Svg>
+  );
+}
+
+// `more_vert-fill` is identical to the outline upstream: `filled` is a no-op.
+export function MoreVertical({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M480.28-140.78q-22.54 0-38.52-15.97-15.98-15.97-15.98-38.39 0-21.89 15.93-38.27 15.93-16.37 38.29-16.37 22.83 0 38.52 16.44 15.7 16.45 15.7 38.52 0 22.08-15.7 38.06-15.7 15.98-38.24 15.98Zm0-285q-22.54 0-38.52-15.93-15.98-15.93-15.98-38.29 0-22.83 15.93-38.52 15.93-15.7 38.29-15.7 22.83 0 38.52 15.7 15.7 15.7 15.7 38.24 0 22.54-15.7 38.52-15.7 15.98-38.24 15.98Zm0-284.44q-22.54 0-38.52-16.14-15.98-16.14-15.98-38.8 0-22.67 15.93-38.65 15.93-15.97 38.29-15.97 22.83 0 38.52 16.12 15.7 16.12 15.7 38.78 0 22.67-15.7 38.66-15.7 16-38.24 16Z"/>
+    </Svg>
+  );
+}
+
+// `open_in_full-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Maximize2({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M105.87-105.87v-319.22h79.22v183.87l533.69-533.69H534.91v-79.79H854.7v319.79h-79.79v-183.87L241.22-185.09h183.87v79.22H105.87Z"/>
+    </Svg>
+  );
+}
+
+// `close_fullscreen-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Minimize2({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="m121.43-65.87-55.56-55.56 279.35-279.35H145.87V-480H480v334.13h-79.22v-199.35L121.43-65.87ZM480-480v-334.7h79.78v199.35L839.13-894.7l55.57 55.57-279.35 279.35H814.7V-480H480Z"/>
+    </Svg>
+  );
+}
+
+// `swap_horiz-fill` is identical to the outline upstream: `filled` is a no-op.
+export function ArrowLeftRight({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M272.43-145.87 65.87-352.43 272.43-559 328-503.43 217.18-392.04h293.95v79.78H217.18L328-201.43l-55.57 55.56Zm415.14-255.69L632-457.13l111.39-110.83H449.43v-79.78h293.96L632-759.13l55.57-55.57L894.7-608.13 687.57-401.56Z"/>
+    </Svg>
+  );
+}
+
+// `undo-fill` is identical to the outline upstream: `filled` is a no-op.
 export function Undo2({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="M9 14 4 9l5-5" />
-      <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M264.09-185.87v-79.22h313.95q64.92 0 110.89-44.8 45.98-44.81 45.98-109.57 0-64.76-45.98-109.84-45.97-45.09-110.89-45.09H297.18l104.95 104.96-55.56 55.56L145.87-614l200.7-200.7 55.56 55.57-104.95 105.52h279.86q97.83 0 167.74 67.96 69.92 67.95 69.92 165.63 0 97.67-69.92 165.91-69.91 68.24-167.74 68.24H264.09Z"/>
+    </Svg>
   );
 }
 
+// `redo-fill` is identical to the outline upstream: `filled` is a no-op.
 export function Redo2({ className, size = 24 }: IconProps) {
   return (
-    <svg {...defaultProps} width={size} height={size} className={className}>
-      <path d="m15 14 5-5-5-5" />
-      <path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13" />
-    </svg>
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M382.96-185.87q-97.83 0-167.46-67.96-69.63-67.95-69.63-165.63 0-97.67 69.63-165.91t167.46-68.24h280.43L557.87-759.13l55.56-55.57L814.7-614 613.43-413.87l-55.56-55.56 105.52-104.96H381.96q-64.92 0-110.89 44.8-45.98 44.81-45.98 109.85 0 65.04 45.98 109.85 45.97 44.8 110.89 44.8h313.95v79.22H382.96Z"/>
+    </Svg>
   );
 }
 
+// `refresh-fill` is identical to the outline upstream: `filled` is a no-op.
+export function RefreshCw({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M478.3-145.87q-138.65 0-236.39-97.74-97.74-97.74-97.74-236.25t97.74-236.68q97.74-98.16 236.39-98.16 88.4 0 155.45 35.76 67.04 35.76 115.86 98.9V-814.7h66.78v274.92H540.91V-606h165.74q-38.56-57.74-95.3-93.33-56.74-35.58-133.05-35.58-106.88 0-180.89 73.98-74.02 73.99-74.02 180.83 0 106.84 74.02 180.93 74.02 74.08 180.91 74.08 80.16 0 147.74-46.08 67.59-46.09 95.16-121.83H803q-29.56 110.65-119.67 178.89-90.1 68.24-205.03 68.24Z"/>
+    </Svg>
+  );
+}
+
+// `progress_activity-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Loader2({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M317.13-97.76q-75.57-31.89-131.53-87.84-55.95-55.96-87.84-131.53-31.89-75.58-31.89-162.89 0-87.32 31.85-162.89 31.84-75.57 87.74-131.54 55.9-55.97 131.44-88.11Q392.44-894.7 480-894.7v79.79q-139.31 0-237.11 97.8-97.8 97.8-97.8 237.1 0 139.31 97.8 237.12 97.8 97.8 237.1 97.8 139.31 0 237.12-97.8 97.8-97.8 97.8-237.11h79.79q0 87.56-32.14 163.1-32.14 75.54-88.11 131.44-55.97 55.9-131.54 87.74-75.57 31.85-162.89 31.85-87.31 0-162.89-31.89Z"/>
+    </Svg>
+  );
+}
+
+// `shuffle-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Shuffle({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M573.74-145.87v-72.43h113.78L520.3-384.52l51.61-52.05 169.22 166.66V-384.7h73.57v238.83H573.74Zm-377.39 0-50.48-52.61 543.65-542.65H573.74v-73.57H814.7v239.96h-73.57v-114.35L196.35-145.87Zm193-374.3L145.87-762.09l51.48-52.61 244.61 242.48-52.61 52.05Z"/>
+    </Svg>
+  );
+}
+
+export function Send({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M107-146.43v-246.7L428.22-480 107-568.87v-244.7L896.96-480 107-146.43Z"/>
+      ) : (
+        <path d="M107-146.43v-667.14L896.96-480 107-146.43Zm73-112.79L708.17-480 180-703.78v155.56L428.22-480 180-413.78v154.56Zm0 0v-444.56 444.56Z"/>
+      )}
+    </Svg>
+  );
+}
+
+// `link-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Link2({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M443.78-265.87H280q-89.28 0-151.71-62.41-62.42-62.41-62.42-151.68 0-89.26 62.42-152Q190.72-694.7 280-694.7h163.78v79.79H280.24q-56.74 0-95.94 39.07-39.21 39.07-39.21 95.6 0 56.54 39.21 95.85 39.2 39.3 95.94 39.3h163.54v79.22ZM315.39-446.61v-66.78h329.22v66.78H315.39Zm200.83 180.74v-79.22h163.54q56.74 0 95.94-39.07 39.21-39.07 39.21-95.6 0-56.54-39.21-95.85-39.2-39.3-95.94-39.3H516.22v-79.79H680q89.28 0 151.99 62.7 62.71 62.69 62.71 151.96 0 89.26-62.71 151.71-62.71 62.46-151.99 62.46H516.22Z"/>
+    </Svg>
+  );
+}
+
+export function Info({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M446.78-273.78h72.44V-520h-72.44v246.22Zm62.66-323.38q12.04-11.64 12.04-28.84 0-18.69-11.92-30.58-11.92-11.9-29.54-11.9-18.26 0-29.88 11.9-11.62 11.89-11.62 30.3 0 17.55 12.08 29.16 12.07 11.6 29.43 11.6t29.41-11.64Zm-29.1 531.29q-86.2 0-161.5-32.39-75.3-32.4-131.74-88.84-56.44-56.44-88.84-131.73-32.39-75.3-32.39-161.59t32.39-161.67q32.4-75.37 88.75-131.34t131.69-88.62q75.34-32.65 161.67-32.65 86.34 0 161.78 32.61 75.45 32.6 131.37 88.5 55.93 55.89 88.55 131.45 32.63 75.56 32.63 161.87 0 86.29-32.65 161.58t-88.62 131.48q-55.97 56.18-131.42 88.76-75.46 32.58-161.67 32.58Z"/>
+      ) : (
+        <path d="M446.78-273.78h72.44V-520h-72.44v246.22Zm62.66-323.38q12.04-11.64 12.04-28.84 0-18.69-11.92-30.58-11.92-11.9-29.54-11.9-18.26 0-29.88 11.9-11.62 11.89-11.62 30.3 0 17.55 12.08 29.16 12.07 11.6 29.43 11.6t29.41-11.64Zm-29.1 531.29q-86.2 0-161.5-32.39-75.3-32.4-131.74-88.84-56.44-56.44-88.84-131.73-32.39-75.3-32.39-161.59t32.39-161.67q32.4-75.37 88.75-131.34t131.69-88.62q75.34-32.65 161.67-32.65 86.34 0 161.78 32.61 75.45 32.6 131.37 88.5 55.93 55.89 88.55 131.45 32.63 75.56 32.63 161.87 0 86.29-32.65 161.58t-88.62 131.48q-55.97 56.18-131.42 88.76-75.46 32.58-161.67 32.58Zm.16-79.22q139.24 0 236.83-97.73 97.58-97.73 97.58-237.68 0-139.24-97.4-236.83-97.4-97.58-237.79-97.58-139.02 0-236.83 97.4-97.8 97.4-97.8 237.79 0 139.02 97.73 236.83 97.73 97.8 237.68 97.8ZM480-480Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function AlertTriangle({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M27.56-112.65 480-894.7l452.44 782.05H27.56Zm479.35-135q9.35-9.53 9.35-22.92 0-13.39-9.52-22.45-9.53-9.07-22.92-9.07-13.39 0-22.73 9.24-9.35 9.24-9.35 22.63 0 13.39 9.52 22.74 9.53 9.35 22.92 9.35 13.39 0 22.73-9.52ZM454-348h60v-219.48h-60V-348Z"/>
+      ) : (
+        <path d="M27.56-112.65 480-894.7l452.44 782.05H27.56Zm127.18-73.57h650.52L480-748.13 154.74-186.22Zm352.17-61.43q9.35-9.53 9.35-22.92 0-13.39-9.52-22.45-9.53-9.07-22.92-9.07-13.39 0-22.73 9.24-9.35 9.24-9.35 22.63 0 13.39 9.52 22.74 9.53 9.35 22.92 9.35 13.39 0 22.73-9.52ZM454-348h60v-219.48h-60V-348Zm26-119.17Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Shield({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M479.96-66.3q-146.12-36.59-240.1-168.1-93.99-131.52-93.99-288.42v-248.05L480-895.7l334.7 124.85V-523q0 156.97-94.31 288.54-94.3 131.57-240.43 168.16Z"/>
+      ) : (
+        <path d="M479.96-66.3q-146.12-36.59-240.1-168.1-93.99-131.52-93.99-288.42v-248.05L480-895.7l334.7 124.85V-523q0 156.97-94.31 288.54-94.3 131.57-240.43 168.16Zm.04-81.22q112.17-40.83 183.54-143.78 71.37-102.96 71.37-231.53v-192.21L480-811.35l-254.91 96.58v191.67q0 128.84 71.37 231.8Q367.83-188.35 480-147.52Zm0-331.91Z"/>
+      )}
+    </Svg>
+  );
+}
+
+// `code-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Code({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M313.78-228.43 59.65-482l256.13-256.13 57.13 56.56-199 199 197 197-57.13 57.14Zm330.44 2.56-56.57-56.56 199-199-197-197 56.57-57.14L900.35-482 644.22-225.87Z"/>
+    </Svg>
+  );
+}
+
+export function Star({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="m212.09-90.61 70.65-305.3L45.52-601.3 358.39-628 480-916.18 601.61-628l312.87 26.7-237.22 205.39 71.22 305.3L480-253.17 212.09-90.61Z"/>
+      ) : (
+        <path d="m330.95-256.33 149.07-89 149.07 90.03-40.31-168.4L720-538.04l-172.96-14.87L480-711.87l-67.04 158.52L240-539.04l131.43 113.79-40.48 168.92ZM212.09-90.61l70.65-305.3L45.52-601.3l312.64-26.58L480-916.18l121.84 288.3 312.64 26.58-237.22 205.39 71.22 305.3L480-253.17 212.09-90.61ZM480-473.87Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Bell({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M145.87-185.87v-79.22h74.91v-289.87q0-88.91 51.48-160.58 51.48-71.68 138.13-90.56v-88.6h139.22v88.64q86.65 18.28 138.41 90.15 51.76 71.87 51.76 160.95v289.87h74.92v79.22H145.87ZM480.28-60.78q-34.95 0-59.87-25-24.93-24.99-24.93-60.09h169.61q0 35.26-25.05 60.18Q515-60.78 480.28-60.78Z"/>
+      ) : (
+        <path d="M145.87-185.87v-79.22h74.91v-289.87q0-88.91 51.48-160.58 51.48-71.68 138.13-90.56v-88.6h139.22v88.64q86.65 18.28 138.41 90.15 51.76 71.87 51.76 160.95v289.87h74.92v79.22H145.87ZM480-499.74Zm.28 438.96q-34.95 0-59.87-25-24.93-24.99-24.93-60.09h169.61q0 35.26-25.05 60.18Q515-60.78 480.28-60.78ZM300-265.09h360v-289.87q0-74.43-52.5-127.21Q555-734.96 480-734.96t-127.5 52.79Q300-629.39 300-554.96v289.87Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Mail({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M65.87-145.87V-814.7H894.7v668.83H65.87ZM480-443.91l334.91-223v-68L480-516.91l-334.91-218v68l334.91 223Z"/>
+      ) : (
+        <path d="M65.87-145.87V-814.7H894.7v668.83H65.87ZM480-443.91l-334.91-223v441.82h669.82v-441.82L480-443.91Zm0-73 330.91-218H150.09l329.91 218Zm-334.91-150v-68 509.82-441.82Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Users({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M25-138.52v-109.26q0-38.96 19.98-70.57 19.98-31.61 55.93-47.87 74.13-32 134.33-46.56 60.19-14.57 123.89-14.57 64.83 0 124.24 14.28 59.41 14.29 133.54 46.85 35.96 15.7 56.44 47.31 20.48 31.61 20.48 71.13v109.26H25Zm735.04 0v-108.13q0-64.13-31.71-106.89-31.72-42.76-84.85-73.98 64.48 8.56 121.8 23.5 57.33 14.93 94.2 33.8 34.69 19 55.11 51.52Q935-286.17 935-244.96v106.44H760.04Zm-514-393.52q-43.69-43.7-43.69-113.37 0-69.68 43.69-113.37 43.7-43.7 113.09-43.7t113.37 43.7q43.98 43.69 43.98 113.37 0 69.67-43.98 113.37-43.98 43.69-113.37 43.69-69.39 0-113.09-43.69Zm450.03-.29q-43.98 43.98-113.37 43.98-11.57 0-24.5-1.78-12.94-1.78-25.63-6.35 25.13-26.13 37.63-64.04 12.5-37.92 12.5-85.18 0-46.69-12.5-82.89-12.5-36.19-37.63-65.76 11.56-3.56 24.78-5.85 13.22-2.28 25.35-2.28 69.39 0 113.37 43.98 43.97 43.98 43.97 113.09 0 69.11-43.97 113.08Z"/>
+      ) : (
+        <path d="M25-138.52v-109.26q0-39.13 20.09-70.62 20.09-31.5 55.82-47.82 74.13-32 134.31-46.56 60.19-14.57 123.92-14.57 64.82 0 124.23 14.28 59.41 14.29 133.54 46.85 35.59 15.6 56.25 47.14 20.67 31.53 20.67 71.27v109.29H25Zm735.04 0v-108.13q0-64.13-31.71-106.89-31.72-42.76-84.85-73.98 64.48 8.56 121.8 23.5 57.33 14.93 94.2 33.8 34.69 19 55.11 51.42Q935-286.39 935-244.93v106.41H760.04Zm-514-393.52q-43.69-43.7-43.69-113.37 0-69.68 43.72-113.37 43.72-43.7 113.09-43.7 69.36 0 113.34 43.7 43.98 43.69 43.98 113.37 0 69.67-43.84 113.37-43.84 43.69-113.37 43.69t-113.23-43.69Zm450.06-.29q-43.95 43.98-113.54 43.98-11.6 0-24.45-1.78t-25.54-6.35q25.13-26.13 37.63-63.96 12.5-37.83 12.5-84.89t-12.59-83.25q-12.59-36.18-37.54-65.84 11.56-3.49 24.91-5.78 13.36-2.28 25.08-2.28 69.38 0 113.43 43.97 44.05 43.98 44.05 113.09 0 69.12-43.94 113.09ZM104.22-217.74h509.82v-27.78q0-15.64-9.5-30.34t-23.5-20.53Q511.3-326.7 464-337.13q-47.3-10.43-104.87-10.43-56.43 0-105.09 10.43-48.65 10.43-117.82 40.74-13.44 5.75-22.72 20.48-9.28 14.72-9.28 30.39v27.78Zm315.45-367.35q23.81-23.73 23.81-60.26 0-36.52-23.74-60.32-23.74-23.81-60.26-23.81-36.52 0-60.33 23.74-23.8 23.73-23.8 60.26 0 36.52 23.73 60.33 23.74 23.8 60.27 23.8 36.52 0 60.32-23.74Zm-60.54 367.35Zm0-427.96Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function UserRound({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M361.71-534.19q-45.84-45.84-45.84-118.17 0-72.34 45.84-118.29 45.84-45.96 118.17-45.96 72.34 0 118.58 45.96 46.24 45.95 46.24 118.29 0 72.33-46.24 118.17t-118.58 45.84q-72.33 0-118.17-45.84ZM145.87-138.52v-109.15q0-41.5 21.05-72.13 21.06-30.63 54.86-46.42 68.13-30.56 131.33-45.85 63.19-15.28 126.74-15.28 64.67 0 127.24 15.78 62.56 15.79 130.13 45.35 34.95 15.13 56.22 45.81 21.26 30.67 21.26 72.63v109.26H145.87Z"/>
+      ) : (
+        <path d="M361.71-534.19q-45.84-45.84-45.84-118.17 0-72.34 45.84-118.29 45.84-45.96 118.17-45.96 72.34 0 118.58 45.96 46.24 45.95 46.24 118.29 0 72.33-46.24 118.17t-118.58 45.84q-72.33 0-118.17-45.84ZM145.87-138.52v-109.15q0-41.67 21.16-72.19 21.17-30.51 54.75-46.36 68.13-30.56 131.31-45.85 63.17-15.28 126.76-15.28 64.67 0 127.24 15.78 62.56 15.79 130.13 45.35 34.73 15.11 56.11 45.8 21.37 30.68 21.37 72.61v109.29H145.87Zm79.22-79.22h509.82v-27.78q0-15.64-9.5-29.84t-23.5-21.03q-61.74-29.31-113.32-40.24-51.58-10.93-108.87-10.93-56.15 0-109.31 10.93-53.15 10.93-113.08 40.15-14.24 6.84-23.24 21.07-9 14.22-9 29.89v27.78Zm315.74-373.92q24.08-24.09 24.08-61.1 0-37.02-23.97-60.83-23.97-23.8-60.82-23.8-36.86 0-60.95 23.82-24.08 23.83-24.08 60.85t23.97 61.09q23.97 24.06 60.82 24.06 36.86 0 60.95-24.09ZM480-652.48Zm0 434.74Z"/>
+      )}
+    </Svg>
+  );
+}
+
+// `translate-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Languages({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M459.17-65.87 645.3-565.09h108.4L939.26-65.87h-86.48l-38.21-98.91H582.3l-38.21 98.91h-84.92ZM155.22-182.91l-56.13-56.13 198.73-198.18q-54.95-57.52-90.58-112.58-35.63-55.07-51.94-105.11h89.31q12.61 36.21 39.82 75.95 27.22 39.74 70.53 84.61 44.87-48 82.17-114.39 37.3-66.39 52.61-126.17H23.04v-79.79h290v-80h79.79v80h290v79.79H575.48q-17.57 75.74-62.91 156.95-45.35 81.22-102.61 141.18l81.65 83.08-31.35 85.05-107.43-111.44-197.61 197.18Zm454.3-56.65h177.83l-88.92-236.7-88.91 236.7Z"/>
+    </Svg>
+  );
+}
+
+export function Moon({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M479.9-113.78q-152.93 0-259.52-106.6-106.6-106.59-106.6-259.52 0-152.93 106.63-259.9Q327.03-846.78 480-846.78q6.87 0 14.74.21 7.87.22 21.3 1.22-30.91 34.26-48.08 78.72-17.18 44.46-17.18 93.06 0 92.88 65.29 158.11 65.28 65.24 158.63 65.24 48.04 0 92.78-15.39t78.43-43.87q.44 11.44.66 17.64.21 6.2.21 11.27 0 152.83-106.98 259.81-106.97 106.98-259.9 106.98Z"/>
+      ) : (
+        <path d="M479.9-113.78q-152.93 0-259.52-106.6-106.6-106.59-106.6-259.52 0-152.93 106.63-259.9Q327.03-846.78 480-846.78q6.87 0 14.74.21 7.87.22 21.3 1.22-30.91 34.26-48.08 78.72-17.18 44.46-17.18 93.06 0 93.07 65.31 158.21 65.31 65.14 158.61 65.14 48.04 0 92.78-15.39t78.43-43.87q.44 11.42.66 17.63.21 6.21.21 11.24 0 152.87-106.98 259.85-106.97 106.98-259.9 106.98ZM480-193q97.7 0 171.91-59.02 74.22-59.02 94.78-138.15-20.47 9.3-45.18 13.67-24.71 4.37-48.29 3.24-113-7.35-192.52-85.74-79.53-78.4-87.44-194.78-.56-19.1 3.02-42.27 3.59-23.17 14.89-53.64-85.56 28.13-141.87 103.84Q193-570.13 193-480q0 120 83.5 203.5T480-193Zm-9.65-278.35Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Sun({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M338.5-338.5Q280-397 280-480t58.5-141.5Q397-680 480-680t141.5 58.5Q680-563 680-480t-58.5 141.5Q563-280 480-280t-141.5-58.5ZM209.61-440.39H30.39v-79.22h179.22v79.22Zm720 0H750.39v-79.22h179.22v79.22Zm-489.22-310v-179.22h79.22v179.22h-79.22Zm0 720v-179.22h79.22v179.22h-79.22ZM261.43-643.87l-113-110.56 56-58.14 110.7 112.44-53.7 56.26Zm495.14 495.44-112.7-113L699-316.57l112.57 110.44-55 57.7ZM643.43-699l111-112.57 58.14 55-111.44 112.7-57.7-55.13Zm-495 494.57 112-112.7L316.57-261 206.13-148.43l-57.7-56Z"/>
+      ) : (
+        <path d="M565.43-394.92q35.35-35.13 35.35-85.15t-35.41-85.36q-35.42-35.35-85.44-35.35-50.02 0-85.08 35.41-35.07 35.42-35.07 85.44 0 50.02 35.14 85.08 35.13 35.07 85.15 35.07t85.36-35.14ZM338.5-338.5Q280-397 280-480t58.5-141.5Q397-680 480-680t141.5 58.5Q680-563 680-480t-58.5 141.5Q563-280 480-280t-141.5-58.5ZM209.61-440.39H30.39v-79.22h179.22v79.22Zm720 0H750.39v-79.22h179.22v79.22Zm-489.22-310v-179.22h79.22v179.22h-79.22Zm0 720v-179.22h79.22v179.22h-79.22ZM261.43-643.87l-113-110.56 56-58.14 110.7 112.44-53.7 56.26Zm495.14 495.44-112.7-113L699-316.57l112.57 110.44-55 57.7ZM643.43-699l111-112.57 58.14 55-111.44 112.7-57.7-55.13Zm-495 494.57 112-112.7L316.57-261 206.13-148.43l-57.7-56ZM480-480Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Image({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M228.65-271.91h503.7L578-481.48l-132 171-93-127-124.35 165.57ZM105.87-105.87V-854.7H854.7v748.83H105.87Z"/>
+      ) : (
+        <path d="M228.65-271.91h503.7L578-481.48l-132 171-93-127-124.35 165.57ZM105.87-105.87V-854.7H854.7v748.83H105.87Zm79.22-79.22h589.82v-589.82H185.09v589.82Zm0 0v-589.82 589.82Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function FileText({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M319-248.87h322v-66.22H319v66.22Zm0-170h322v-66.22H319v66.22Zm-173.13 353V-894.7h441.35L814.7-667.05v601.18H145.87Zm400.04-563.04h189l-189-186v186Z"/>
+      ) : (
+        <path d="M319-248.87h322v-66.22H319v66.22Zm0-170h322v-66.22H319v66.22Zm-173.13 353V-894.7h441.35L814.7-667.05v601.18H145.87Zm400.04-563.04v-186H225.09v669.82h509.82v-483.82h-189Zm-320.82-186v186-186 669.82-669.82Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Watch({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="m363.74-46.09-54.35-194.17q-56.13-36.13-89.83-98.96-33.69-62.82-33.69-140.78 0-77.96 33.69-141.28 33.7-63.33 89.83-99.02l54.35-193.61h233.09l53.78 193.61q56.13 35.69 90.11 99.02Q774.7-557.96 774.7-480q0 77.96-33.98 140.78-33.98 62.83-90.11 98.96L596.83-46.09H363.74Zm268.87-281.3q62.3-62.31 62.3-152.61 0-90.3-62.3-152.61-62.31-62.3-152.61-62.3-90.3 0-152.61 62.3-62.3 62.31-62.3 152.61 0 90.3 62.3 152.61 62.31 62.3 152.61 62.3 90.3 0 152.61-62.3Z"/>
+      ) : (
+        <path d="M418.35-841.48h123.3-123.3Zm0 722.39h123.3-123.3Zm-54.61 73-54.35-194.17q-56.13-36.13-89.83-98.96-33.69-62.82-33.69-140.78 0-77.96 33.69-141.28 33.7-63.33 89.83-99.02l54.35-193.61h233.09l53.78 193.61q56.13 35.69 90.11 99.02Q774.7-557.96 774.7-480q0 77.96-33.98 140.78-33.98 62.83-90.11 98.96L596.83-46.09H363.74Zm268.87-281.3q62.3-62.31 62.3-152.61 0-90.3-62.3-152.61-62.31-62.3-152.61-62.3-90.3 0-152.61 62.3-62.3 62.31-62.3 152.61 0 90.3 62.3 152.61 62.31 62.3 152.61 62.3 90.3 0 152.61-62.3ZM398.09-759.83q20.74-5.87 41.11-9.08 20.37-3.22 40.8-3.22 20.43 0 41.09 3.22 20.65 3.21 40.82 9.08l-20.26-81.65h-123.3l-20.26 81.65Zm20.26 640.74h123.3l20.26-81.08q-20.74 4.87-41.11 8.08-20.37 3.22-40.8 3.22-20.43 0-40.8-3.22-20.37-3.21-41.11-8.08l20.26 81.08Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Sparkles({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M860.48-224.87 744.87-340.48 801-396.61 916.61-281l-56.13 56.13ZM712.52-696.96l-56.13-56.13L772-868.7l56.13 55.57-115.61 116.17Zm-464.48 0L131.87-813.13 188-868.7l115.61 115.61-55.57 56.13ZM100.09-224.87 43.96-281l115.6-115.61 56.14 56.13-115.61 115.61Zm123.87 119 68.39-291.17L65.87-593.96l298.17-25.56L480-894.7l116.52 275.18 298.18 25.56-226.48 196.92 67.82 291.17L480-261.09 223.96-105.87Z"/>
+      ) : (
+        <path d="M860.48-224.87 744.87-340.48 801-396.61 916.61-281l-56.13 56.13ZM712.52-696.96l-56.13-56.13L772-868.7l56.13 55.57-115.61 116.17Zm-464.48 0L131.87-813.13 188-868.7l115.61 115.61-55.57 56.13ZM100.09-224.87 43.96-281l115.6-115.61 56.14 56.13-115.61 115.61Zm244.39-47.26L480-353.7l136.09 82.57-36.35-153.7 120.48-105.3-158.26-13.74L480-689.82l-61.39 144.95-158.26 14.31 120.48 104.73-36.35 153.7ZM223.96-105.87l68.39-291.17L65.87-593.96l298.17-25.56L480-894.7l116.52 275.18 298.18 25.56-226.48 196.92 67.82 291.17L480-261.09 223.96-105.87ZM480-480.48Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Lightbulb({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M419.11-80.32q-25.2-26.33-25.2-64.85h172.18q0 38.52-25.2 64.85Q515.7-54 480-54t-60.89-26.32ZM314.04-210.56v-66.79h331.92v66.79H314.04Zm5-131.18Q249.65-387 207.76-455.17q-41.89-68.18-41.89-153.7 0-127.65 93.24-220.89Q352.35-923 480-923q127.65 0 221.17 93.24 93.53 93.24 93.53 220.89 0 85.52-41.4 153.7Q711.91-387 640.96-341.74H319.04Z"/>
+      ) : (
+        <path d="M419.11-80.32q-25.2-26.33-25.2-64.85h172.18q0 38.52-25.22 64.85Q515.66-54 479.98-54t-60.87-26.32ZM314.04-210.56v-66.79h331.92v66.79H314.04Zm5-131.18Q249.65-387 207.76-455.06q-41.89-68.05-41.89-153.81 0-127.51 93.07-220.82Q352.02-923 479.83-923q127.82 0 221.34 93.31 93.53 93.31 93.53 220.82 0 85.52-41.4 153.7Q711.91-387 640.96-341.74H319.04Zm28.39-79.22h266.31q46.84-31.3 74.01-80.67 27.16-49.37 27.16-107.12 0-96.86-69.08-165.66-69.09-68.81-165.83-68.81-96.74 0-165.83 68.81-69.08 68.8-69.08 165.66 0 57.75 27.43 107.05 27.44 49.31 74.91 80.74Zm132.57 0Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Book({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M145.87-65.87V-894.7H814.7v828.83H145.87Zm341.26-483.04 97-56 97 56v-266h-194v266Z"/>
+      ) : (
+        <path d="M145.87-65.87V-894.7H814.7v828.83H145.87Zm79.22-79.22h509.82v-669.82h-53.78v266l-97-56-97 56v-266H225.09v669.82Zm0 0v-669.82 669.82Zm262.04-403.82 97-56 97 56-97-56-97 56Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function BookOpen({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M512-234.17q50-25 98-37.5t102-12.5q38 0 78.5 6t69.5 16v-429q-34-17.57-72-25.29-38-7.71-76-7.71-54 0-104.5 16.5t-95.5 46.5v427Zm-28.77 105.26q-51.66-37.44-111.48-59.63-59.82-22.2-123.75-22.2-56.36 0-121.18 25.87Q62-159 27-138.13V-742.9q44.26-26.27 103.07-40.56 58.81-14.28 116.8-14.28 63.74 0 123.44 17.28Q430-763.17 482-727.04q51-35.57 109.78-53.13 58.79-17.57 121.35-17.57 57.99 0 117.08 14.78Q889.3-768.17 933-742.9v604.77q-34.56-21.87-99.66-47.24T712-210.74q-63.13 0-120.4 22.98t-108.37 58.85ZM560-558.17v-48q33-14 67.5-21t72.5-7q26 0 51 4t49 10v44q-24-9-48.5-13.5t-51.5-4.5q-38 0-73 9.5t-67 26.5Zm0 220v-49q33-14 67.5-20.5t72.5-6.5q26 0 51 4t49 10v44q-24-9-48.5-13.5t-51.5-4.5q-38 0-73 9t-67 27Zm0-110v-48q33-14 67.5-21t72.5-7q26 0 51 4t49 10v44q-24-9-48.5-13.5t-51.5-4.5q-38 0-73 9.5t-67 26.5Z"/>
+      ) : (
+        <path d="M248-284.17q53.57 0 104.28 12.5 50.72 12.5 99.72 37.5v-427q-45-30-97.62-46.5-52.62-16.5-106.38-16.5-38 0-74.5 9.5t-73.5 23.5v434q31-14 70.5-20.5t77.5-6.5Zm264 50q50-25 98-37.5t102-12.5q38 0 78.5 6t69.5 16v-429q-34-17.57-71.82-25.29-37.82-7.71-76.18-7.71-54 0-104.5 16.5t-95.5 46.5v427Zm-28.77 105.26q-51.66-37.44-111.48-59.63-59.82-22.2-123.75-22.2-56.36 0-121.18 25.87Q62-159 27-138.13V-742.9q44.26-26.27 103.19-40.56 58.93-14.28 116.68-14.28 63.74 0 123.44 17.28Q430-763.17 482-727.04q51-35.57 109.78-53.13 58.79-17.57 121.35-17.57 57.75 0 116.96 14.78Q889.3-768.17 933-742.9v604.77q-34.56-21.87-99.66-47.24T712-210.74q-63.13 0-120.4 22.98t-108.37 58.85ZM276-479.17Zm284-79v-48q33-14 67.5-21t72.5-7q26 0 51 4t49 10v44q-24-9-48.5-13.5t-51.5-4.5q-38 0-73 9.5t-67 26.5Zm0 220v-49q33-13.5 67.5-20.25t72.5-6.75q26 0 51 4t49 10v44q-24-9-48.5-13.5t-51.5-4.5q-38 0-73 9t-67 27Zm0-110v-48q33-14 67.5-21t72.5-7q26 0 51 4t49 10v44q-24-9-48.5-13.5t-51.5-4.5q-38 0-73 9.5t-67 26.5Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function GraduationCap({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M859.43-276.78v-280.87L479-353.22 27.56-600 479-846.22 932.44-600v323.22h-73.01ZM479-114.35 183.35-275.61v-203.78L479-317l296.22-162.39v203.78L479-114.35Z"/>
+      ) : (
+        <path d="M479-114.35 183.35-275.61v-240L27.56-600 479-846.22 932.44-600v323.22h-73.01v-280.87l-84.21 42.04v240L479-114.35Zm0-322.13L778.17-600 479-760.52 181.83-600 479-436.48Zm0 239.44 222.65-123.05v-152.17L479-353.78 256.35-474.26v154.17L479-197.04Zm1-239.44Zm-1 79.65Zm0 0Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Library({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M345.83-422.26h231.78v-65.09H345.83v65.09Zm0-95.09h409.13v-65.09H345.83v65.09Zm0-95.09h409.13v-65.08H345.83v65.08ZM195.48-195.48v-708.83h708.83v708.83H195.48ZM55.69-55.69v-708.83h79.79v629.04h629.04v79.79H55.69Z"/>
+      ) : (
+        <path d="M345.83-422.26h231.78v-65.09H345.83v65.09Zm0-95.09h409.13v-65.09H345.83v65.09Zm0-95.09h409.13v-65.08H345.83v65.08ZM195.48-195.48v-708.83h708.83v708.83H195.48Zm79.22-79.22h549.82v-549.82H274.7v549.82ZM55.69-55.69v-708.83h79.79v629.04h629.04v79.79H55.69ZM274.7-824.52v549.82-549.82Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Calculator({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M316.83-230.83h50v-88h88v-50h-88v-88h-50v88h-88v50h88v88Zm209.91-35h201v-49h-201v49Zm0-107h201v-50h-201v50ZM243.83-605h196v-50h-196v50ZM105.87-105.87V-854.7H854.7v748.83H105.87Zm457.87-424.87 61-61 61 61 36-36-61-61 61-61-36-36-61 61-61-61-36 36 61 61-61 61 36 36Z"/>
+      ) : (
+        <path d="M316.83-230.83h50v-88h88v-50h-88v-88h-50v88h-88v50h88v88Zm209.91-35h201v-49h-201v49Zm0-107h201v-50h-201v50ZM243.83-605h196v-50h-196v50ZM105.87-105.87V-854.7H854.7v748.83H105.87Zm79.22-79.22h589.82v-589.82H185.09v589.82Zm0 0v-589.82 589.82Zm378.65-345.65 61-61 61 61 36-36-61-61 61-61-36-36-61 61-61-61-36 36 61 61-61 61 36 36Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Calendar({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M105.87-65.87V-834.7h139.24v-60h74.5v60h320.78v-60h74.72v60H854.7v768.83H105.87Zm79.22-79.22h589.82V-570H185.09v424.91Z"/>
+      ) : (
+        <path d="M105.87-65.87V-834.7h139.24v-60h74.5v60h320.78v-60h74.72v60H854.7v768.83H105.87Zm79.22-79.22h589.82V-570H185.09v424.91Zm0-484.91h589.82v-124.91H185.09V-630Zm0 0v-124.91V-630Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function CalendarDays({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M436.61-396.61v-86.78h86.78v86.78h-86.78Zm-160 0v-86.78h86.78v86.78h-86.78Zm320 0v-86.78h86.78v86.78h-86.78Zm-160 160v-86.78h86.78v86.78h-86.78Zm-160 0v-86.78h86.78v86.78h-86.78Zm320 0v-86.78h86.78v86.78h-86.78ZM105.87-65.87V-834.7h139.24v-60h74.5v60h320.78v-60h74.72v60H854.7v768.83H105.87Zm79.22-79.22h589.82V-570H185.09v424.91Z"/>
+      ) : (
+        <path d="M436.61-396.61v-86.78h86.78v86.78h-86.78Zm-160 0v-86.78h86.78v86.78h-86.78Zm320 0v-86.78h86.78v86.78h-86.78Zm-160 160v-86.78h86.78v86.78h-86.78Zm-160 0v-86.78h86.78v86.78h-86.78Zm320 0v-86.78h86.78v86.78h-86.78ZM105.87-65.87V-834.7h139.24v-60h74.5v60h320.78v-60h74.72v60H854.7v768.83H105.87Zm79.22-79.22h589.82V-570H185.09v424.91Zm0-484.91h589.82v-124.91H185.09V-630Zm0 0v-124.91V-630Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function CalendarRange({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M267.04-408.29q-12.91-13.15-12.91-32.18 0-19.02 12.98-32.21 12.98-13.19 32.18-13.19 19.19 0 32.1 13.19t12.91 32.21q0 19.03-12.98 32.18-12.98 13.16-32.17 13.16t-32.11-13.16Zm183.79 0q-12.92-13.15-12.92-32.18 0-19.02 12.99-32.21 12.98-13.19 32.17-13.19t32.1 13.19q12.92 13.19 12.92 32.21 0 19.03-12.99 32.18-12.98 13.16-32.17 13.16t-32.1-13.16Zm176.78 0q-12.91-13.15-12.91-32.18 0-19.02 12.98-32.21 12.98-13.19 32.17-13.19t32.11 13.19q12.91 13.19 12.91 32.21 0 19.03-12.98 32.18-12.98 13.16-32.18 13.16-19.19 0-32.1-13.16ZM105.87-65.87V-834.7h139.24v-60h74.5v60h320.78v-60h74.72v60H854.7v768.83H105.87Zm79.22-79.22h589.82V-570H185.09v424.91Z"/>
+      ) : (
+        <path d="M267.04-408.29q-12.91-13.15-12.91-32.18 0-19.02 12.98-32.21 12.98-13.19 32.18-13.19 19.19 0 32.1 13.19t12.91 32.21q0 19.03-12.98 32.18-12.98 13.16-32.17 13.16t-32.11-13.16Zm183.79 0q-12.92-13.15-12.92-32.18 0-19.02 12.99-32.21 12.98-13.19 32.17-13.19t32.1 13.19q12.92 13.19 12.92 32.21 0 19.03-12.99 32.18-12.98 13.16-32.17 13.16t-32.1-13.16Zm176.78 0q-12.91-13.15-12.91-32.18 0-19.02 12.98-32.21 12.98-13.19 32.17-13.19t32.11 13.19q12.91 13.19 12.91 32.21 0 19.03-12.98 32.18-12.98 13.16-32.18 13.16-19.19 0-32.1-13.16ZM105.87-65.87V-834.7h139.24v-60h74.5v60h320.78v-60h74.72v60H854.7v768.83H105.87Zm79.22-79.22h589.82V-570H185.09v424.91Zm0-484.91h589.82v-124.91H185.09V-630Zm0 0v-124.91V-630Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function CalendarOff({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="m383.26-215.74-47.52-47.52L433.48-360l-97.74-96.74 47.52-48.09L480-406.52l96.74-98.31 48.09 48.09L526.52-360l98.31 96.74-48.09 47.52L480-313.48l-96.74 97.74ZM105.87-65.87V-834.7h139.24v-60h74.5v60h320.78v-60h74.72v60H854.7v768.83H105.87Zm79.22-79.22h589.82V-570H185.09v424.91Z"/>
+      ) : (
+        <path d="m383.26-215.74-47.52-47.52L433.48-360l-97.74-96.74 47.52-48.09L480-406.52l96.74-98.31 48.09 48.09L526.52-360l98.31 96.74-48.09 47.52L480-313.48l-96.74 97.74ZM105.87-65.87V-834.7h139.24v-60h74.5v60h320.78v-60h74.72v60H854.7v768.83H105.87Zm79.22-79.22h589.82V-570H185.09v424.91Zm0-484.91h589.82v-124.91H185.09V-630Zm0 0v-124.91V-630Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Clock({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="m620.78-284.74 54.61-53.48-156.17-157.3v-195.22h-72.44v224.75l174 181.25ZM480.08-65.87q-85.47 0-160.94-32.55-75.48-32.56-131.81-88.87T98.44-319.04q-32.57-75.44-32.57-160.9 0-85.45 32.68-160.99 32.67-75.53 88.83-131.69t131.64-89.12Q394.5-894.7 480-894.7q85.5 0 160.98 32.96 75.48 32.96 131.64 89.12 56.16 56.16 89.12 131.64Q894.7-565.5 894.7-480q0 85.5-32.96 160.98-32.96 75.48-89.12 131.64-56.16 56.16-131.61 88.83-75.46 32.68-160.93 32.68Z"/>
+      ) : (
+        <path d="m620.78-284.74 54.61-53.48-156.17-157.3v-195.22h-72.44v224.75l174 181.25ZM480.08-65.87q-85.47 0-160.94-32.55-75.48-32.56-131.81-88.87T98.44-319.04q-32.57-75.44-32.57-160.9 0-85.45 32.68-160.99 32.67-75.53 88.83-131.69t131.64-89.12Q394.5-894.7 480-894.7q85.5 0 160.98 32.96 75.48 32.96 131.64 89.12 56.16 56.16 89.12 131.64Q894.7-565.5 894.7-480q0 85.5-32.96 160.98-32.96 75.48-89.12 131.64-56.16 56.16-131.61 88.83-75.46 32.68-160.93 32.68ZM480-480Zm-.29 334.91q138.03 0 236.62-98.02 98.58-98.02 98.58-236.61 0-138.58-98.51-236.89-98.51-98.3-236.39-98.3-138.31 0-236.62 98.23-98.3 98.24-98.3 236.68 0 138.87 98.3 236.89 98.3 98.02 236.32 98.02Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Timer({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M347-860v-73h266v73H347Zm96.78 458.87h72.44v-231.13h-72.44v231.13ZM334.34-84.6q-68.01-29.6-118.89-80.33-50.89-50.72-80.23-118.68-29.35-67.97-29.35-145.44t29.35-145.51q29.34-68.05 80.25-119.06 50.9-51 118.94-80.6 68.03-29.61 145.59-29.61 68.13 0 128.04 22 59.92 22 106.48 62.57l56.09-56.09 53.17 52.61-56.08 56.09q36.56 41.13 61.78 99.26t25.22 138.26q0 77.59-29.58 145.66-29.57 68.07-80.54 118.72-50.96 50.64-119.07 80.2Q557.39-55 479.87-55q-77.53 0-145.53-29.6Z"/>
+      ) : (
+        <path d="M347-860v-73h266v73H347Zm96.78 458.87h72.44v-231.13h-72.44v231.13ZM334.34-84.6q-68.01-29.6-118.89-80.33-50.89-50.72-80.23-118.68-29.35-67.97-29.35-145.44t29.35-145.51q29.34-68.05 80.25-119.06 50.9-51 118.94-80.6 68.03-29.61 145.59-29.61 68.13 0 128.54 22.5 60.42 22.5 106.98 63.07l56.09-56.09 52.17 51.61-56.08 56.09q36.56 41.13 61.78 99.26t25.22 138.26q0 77.59-29.58 145.66-29.57 68.07-80.54 118.72-50.96 50.64-119.07 80.2Q557.39-55 479.87-55q-77.53 0-145.53-29.6Zm354.77-135.61q85.8-85.42 85.8-208.82 0-123.4-85.7-209.21-85.71-85.8-209.11-85.8-123.4 0-209.21 85.7-85.8 85.71-85.8 209.11 0 123.4 85.7 208.93 85.71 85.52 209.11 85.52 123.4 0 209.21-85.43ZM480-428.13Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Gauge({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M418-340q25 25 62.72 23.5Q518.43-318 536-344l232.3-344.3L424-456q-26 18.57-28.22 55.07-2.21 36.5 22.22 60.93ZM192-145.87q-21.39 0-41.07-10.19-19.67-10.2-29.37-29.59-27.13-49.7-41.41-103.39Q65.87-342.74 65.87-399q0-85.83 32.35-161.37 32.34-75.54 88.32-132.02 55.98-56.48 131.02-89.39Q392.61-814.7 478-814.7q86.39 0 162.44 32.63 76.04 32.63 132.8 89.11 56.76 56.48 89.39 132.02Q895.26-485.39 894.7-399q0 56.26-13.57 110.46-13.56 54.19-41.13 102.89-11.83 18.82-30.65 29.3-18.83 10.48-40.78 10.48H192Z"/>
+      ) : (
+        <path d="M473.32-303.5Q516.43-305 537-336l227.3-350.3L418-456q-30 20.57-32 64.17-2 43.61 21.11 66.72 23.1 23.11 66.21 21.61Zm4.71-510.2q59.75 0 126.01 19.92 66.26 19.91 123.83 65.48l-69.52 50.56q-45-29.43-93.96-42.8-48.96-13.37-86.65-13.37-137.41 0-235.03 98.67t-97.62 239.03q0 45.21 11.93 88.95 11.94 43.74 34.37 82.17h572.13q22.09-36 34.24-81.45Q809.91-352 809.91-398q0-39.74-11.37-86.83-11.37-47.08-42.8-88.08l52.56-68.96q40.27 57.7 59.83 118.15Q887.7-463.26 889.7-404q1.43 61.1-12.86 116.27-14.29 55.18-42.4 102.08-14.83 26.39-31.1 33.09-16.28 6.69-40.34 6.69H192q-20.96 0-40.85-10.48t-29.59-29.3Q95-234.22 80.43-286.19q-14.56-51.97-14.56-109.85 0-85.79 32.39-161.49 32.39-75.71 88.43-132.57 56.03-56.87 131.44-90.23 75.4-33.37 159.9-33.37Zm-1.12 337.79Z"/>
+      )}
+    </Svg>
+  );
+}
+
+// `target-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Target({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M314.11-87.19q-77.81-33.2-135.48-90.87-57.67-57.68-91.15-135.61Q54-391.61 54-479.85q0-88.24 33.48-165.76t91.07-135.49q57.59-57.97 135.56-91.44Q392.09-906 480.09-906q88 0 165.92 33.46 77.92 33.47 135.48 91.44 57.55 57.97 91.03 135.62Q906-567.83 906-479.59q0 88.24-33.48 166.05-33.48 77.8-91.15 135.48-57.67 57.67-135.61 90.87Q567.83-54 479.87-54q-87.96 0-165.76-33.19Zm415.93-142.48Q833-332.35 833-479.72T730.04-730.04Q627.09-833 480-833q-147.09 0-250.04 102.96Q127-627.09 127-479.72t102.96 250.05Q332.91-127 480-127q147.09 0 250.04-102.67ZM296.15-295.8q-75.37-75.59-75.37-183.85 0-108.26 75.3-183.92 75.31-75.65 183.85-75.65 108.55 0 184.2 75.59 75.65 75.58 75.65 183.85 0 108.26-75.58 183.91-75.59 75.65-184.13 75.65-108.55 0-183.92-75.58Zm315.87-51.54q54.2-54.12 54.2-132.02T612.1-611.74q-54.12-54.48-132.02-54.48-77.91 0-132.1 54.48-54.2 54.48-54.2 132.38t54.12 132.02q54.12 54.12 132.02 54.12 77.91 0 132.1-54.12Zm-197.85-66.55Q387-440.78 387-479.35q0-38.57 27.26-66.11T480.09-573q38.56 0 65.74 27.54Q573-517.92 573-479.35t-27.26 65.46Q518.48-387 479.91-387q-38.56 0-65.74-26.89Z"/>
+    </Svg>
+  );
+}
+
+export function Crosshair({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M443.78-28.43v-75Q305.65-118 211.54-212.11q-94.11-94.11-108.11-231.67h-75v-72.44h75Q118-654.35 212.11-748.46q94.11-94.11 231.67-108.11v-75h72.44v75q137.56 14 231.67 108.11Q842-654.35 856.57-516.22h75v72.44h-75q-14 137.56-108.11 231.67Q654.35-118 516.22-103.43v75h-72.44Zm247.33-240.36q87.8-87.71 87.8-211.11 0-123.4-87.7-211.21-87.71-87.8-211.11-87.8-123.4 0-211.21 87.7-87.8 87.71-87.8 211.11 0 123.4 87.7 211.21 87.71 87.8 211.11 87.8 123.4 0 211.21-87.7ZM373.5-373.5Q330-417 330-480t43.5-106.5Q417-630 480-630t106.5 43.5Q630-543 630-480t-43.5 106.5Q543-330 480-330t-106.5-43.5Z"/>
+      ) : (
+        <path d="M443.78-28.43v-75Q305.65-118 211.54-212.11q-94.11-94.11-108.11-231.67h-75v-72.44h75Q118-654.35 212.11-748.46q94.11-94.11 231.67-108.11v-75h72.44v75q137.56 14 231.67 108.11Q842-654.35 856.57-516.22h75v72.44h-75q-14 137.56-108.11 231.67Q654.35-118 516.22-103.43v75h-72.44Zm247.33-240.36q87.8-87.71 87.8-211.11 0-123.4-87.7-211.21-87.71-87.8-211.11-87.8-123.4 0-211.21 87.7-87.8 87.71-87.8 211.11 0 123.4 87.7 211.21 87.71 87.8 211.11 87.8 123.4 0 211.21-87.7ZM373.5-373.5Q330-417 330-480t43.5-106.5Q417-630 480-630t106.5 43.5Q630-543 630-480t-43.5 106.5Q543-330 480-330t-106.5-43.5Zm161.17-51.62Q557-447.24 557-479.79q0-32.56-22.12-54.88Q512.76-557 480.21-557q-32.56 0-54.88 22.12Q403-512.76 403-480.21q0 32.56 22.12 54.88Q447.24-403 479.79-403q32.56 0 54.88-22.12ZM480-480Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Compass({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="m306.39-306.39 271.13-75.09 75.09-271.13-271.13 75.09-75.09 271.13Zm173.48-142.09q-12.91 0-22.15-9.37-9.24-9.37-9.24-22.28 0-12.91 9.37-22.15 9.37-9.24 22.28-9.24 12.91 0 22.15 9.37 9.24 9.37 9.24 22.28 0 12.91-9.37 22.15-9.37 9.24-22.28 9.24Zm.21 382.61q-85.47 0-161.01-32.39-75.53-32.4-131.97-88.84-56.44-56.44-88.84-131.89-32.39-75.46-32.39-160.93 0-86.47 32.39-162.01 32.4-75.53 88.75-131.5t131.85-88.62q75.5-32.65 161.01-32.65 86.52 0 162.12 32.61 75.61 32.6 131.53 88.5 55.93 55.89 88.55 131.45Q894.7-566.58 894.7-480q0 85.55-32.65 161.07-32.65 75.53-88.62 131.9-55.97 56.37-131.42 88.77-75.46 32.39-161.93 32.39Z"/>
+      ) : (
+        <path d="m306.39-306.39 271.13-75.09 75.09-271.13-271.13 75.09-75.09 271.13Zm173.24-142.09q-12.67 0-21.91-9.61-9.24-9.6-9.24-22.28 0-12.67 9.61-21.91 9.6-9.24 22.28-9.24 12.67 0 21.91 9.61 9.24 9.6 9.24 22.28 0 12.67-9.61 21.91-9.6 9.24-22.28 9.24Zm.71 382.61q-86.2 0-161.5-32.39-75.3-32.4-131.74-88.84-56.44-56.44-88.84-131.73-32.39-75.3-32.39-161.59t32.39-161.67q32.4-75.37 88.75-131.34t131.69-88.62q75.34-32.65 161.67-32.65 86.34 0 161.78 32.61 75.45 32.6 131.37 88.5 55.93 55.89 88.55 131.45 32.63 75.56 32.63 161.87 0 86.29-32.65 161.58t-88.62 131.48q-55.97 56.18-131.42 88.76-75.46 32.58-161.67 32.58Zm.05-79.22q140.48 0 237.5-97.41 97.02-97.4 97.02-237.89 0-140.48-96.92-237.5-96.92-97.02-237.41-97.02-140.48 0-237.99 96.92-97.5 96.92-97.5 237.41 0 140.48 97.41 237.99 97.4 97.5 237.89 97.5ZM480-480Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function MapPin({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M532.89-507.48q21.63-21.44 21.63-52.61 0-31.17-21.72-52.8-21.72-21.63-52.89-21.63t-52.52 21.72q-21.35 21.72-21.35 52.89t21.44 52.52q21.44 21.35 52.61 21.35 31.17 0 52.8-21.44ZM480-65.87Q312.22-206.83 229.04-325.46q-83.17-118.63-83.17-228.24 0-155.65 101.02-248.32Q347.91-894.7 480-894.7q132.09 0 233.39 92.68Q814.7-709.35 814.7-553.7q0 109.61-83.46 228.24Q647.78-206.83 480-65.87Z"/>
+      ) : (
+        <path d="M532.89-507.39q21.63-21.35 21.63-52.61 0-31.26-21.63-52.89T480-634.52q-31.26 0-52.61 21.63-21.35 21.63-21.35 52.89t21.35 52.61q21.35 21.35 52.61 21.35 31.26 0 52.89-21.35ZM480-170.3q130.17-117.61 192.54-210.74 62.37-93.13 62.37-172.66 0-115.17-74.08-188.19-74.09-73.02-180.83-73.02-106.74 0-180.83 73.02-74.08 73.02-74.08 188.19 0 79.53 63.87 172.37Q352.83-288.48 480-170.3Zm0 104.43Q312.22-206.83 229.04-325.46q-83.17-118.63-83.17-228.24 0-155.65 101.02-248.32Q347.91-894.7 480-894.7q132.09 0 233.39 92.68Q814.7-709.35 814.7-553.7q0 109.61-83.46 228.24Q647.78-206.83 480-65.87ZM480-560Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Flag({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M185.87-105.87V-814.7h369l19.19 86H814.7v398.83H532.13l-19-85H265.09v309h-79.22Z"/>
+      ) : (
+        <path d="M185.87-105.87V-814.7h369l19.19 86H814.7v398.83H532.13l-18.93-85H265.09v309h-79.22ZM500-572Zm99.52 162.91h135.39v-239.82H506.44l-18.96-86H265.09v240.82h315.46l18.97 85Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Route({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M177.39-110.39v-506.95q-35.57-15.41-57.78-44.87-22.22-29.46-22.22-67.46 0-50.33 35.29-85.14 35.3-34.8 84.79-34.8 49.49 0 84.31 34.94 34.83 34.94 34.83 84.86 0 37.57-22.22 67.45-22.22 29.88-57.78 44.58v428.17h183.78v-660h342.79v506.95q35 15.14 57.5 44.82 22.5 29.69 22.5 67.65 0 49.15-35 84.47-34.99 35.33-84.98 35.33-49.16 0-84.48-35.47-35.33-35.47-35.33-84.14 0-37.82 22.22-67.89t57.78-44.33v-428.17H519.61v660H177.39Z"/>
+      ) : (
+        <path d="M177.39-110.39v-506.95q-35.57-15.41-57.78-44.87-22.22-29.46-22.22-67.46 0-50.33 35.29-85.14 35.3-34.8 84.79-34.8 49.49 0 84.31 34.94 34.83 34.94 34.83 84.86 0 37.57-22.22 67.45-22.22 29.88-57.78 44.58v428.17h183.78v-660h342.79v506.95q35 15.14 57.5 44.82 22.5 29.69 22.5 67.65 0 49.15-35 84.47-34.99 35.33-84.98 35.33-49.16 0-84.48-35.47-35.33-35.47-35.33-84.14 0-37.82 22.22-67.89t57.78-44.33v-428.17H519.61v660H177.39Zm39.99-573q19.49 0 33.14-13.75 13.65-13.74 13.65-33.24 0-19.49-13.57-32.86-13.57-13.37-33.44-13.37-19.28 0-33.02 13.33-13.75 13.33-13.75 33.04 0 19.11 13.75 32.98 13.74 13.87 33.24 13.87Zm526.3 500q18.98 0 32.46-13.75 13.47-13.74 13.47-33.24 0-19.49-13.35-32.86-13.35-13.37-33.08-13.37-18.48 0-32.64 13.33-14.15 13.33-14.15 33.04 0 19.11 14.15 32.98 14.16 13.87 33.14 13.87ZM217.56-730ZM743-230Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Mountain({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M27-233.78 280-571.3 473.87-313h73.87L397-514.3l163-217 373 497.52H27Z"/>
+      ) : (
+        <path d="M27-233.78 280-571.3 473.87-313H774L560-597.52 447.44-447.35 397-514.3l163-217 373 497.52H27ZM547.74-313Zm-370.78 0h206.08L280-450.96 176.96-313Zm0 0h206.08-206.08Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function TreePine({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M543-65.87v-112.22h128v112.22H543Zm-253 0v-149H-32.78l190.69-274H60.09l293.69-416 293.13 416h-96.82l191.26 274H418v149H290Zm496.26-149L620.52-452.09h95.83L502.96-758.48l103.26-146.39 293.69 416h-96.26l189.7 274H786.26Z"/>
+      ) : (
+        <path d="M290-65.87v-149H-32.78l190.69-274H60.09l293.69-416L480-725.83l126.22-179.04 293.69 416h-96.26l189.7 274H671v149H543v-149H418v149H290Zm396.22-228.22h154.26l-190.7-274h91.83L606.22-759.96l-74.35 107.09 115.04 164h-96.82l136.13 194.78Zm-565.7 0h466.96l-190.7-274h92.39L353.78-759.96 218.39-568.09h92.83l-190.7 274Zm0 0h190.7-92.83 270.78-92.39 190.7-466.96Zm565.7 0H550.09h96.82-115.04 209.74-91.83 190.7-154.26ZM543-214.87h128-128Zm198.35 0Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Footprints({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M259.43-926.78q84.44 0 135.9 74.65 51.45 74.65 51.45 171 0 39.35-8.52 75.11T419.3-539.7l-297.6 62.66q-15.57-32.09-32.03-85.18-16.45-53.08-16.45-118.91 0-105.26 52.98-175.46 52.97-70.19 133.23-70.19Zm53.31 693.56q-71.74 0-113.78-50.8-42.05-50.81-45.18-123.33l267.7-56.39q9.56 18.7 17.43 43.7 7.87 25 7.87 49.87 0 58.13-37.76 97.54-37.76 39.41-96.28 39.41Zm388.39-493.56q79.7 0 132.67 70.19 52.98 70.2 52.98 175.46 0 63.13-15.11 114.17-15.1 51.05-29.54 81.57l-299.17-44.7q-11.57-33.39-20.66-71.69-9.08-38.31-9.08-79.35 0-96.35 51.45-171 51.46-74.65 136.46-74.65ZM647.26-33.22q-58.52 0-96.28-39.41t-37.76-97.54q0-22.61 7.58-45.63 7.59-23.03 15.46-40.59l271.09 40.26q-1.44 74.78-44.05 128.85-42.6 54.06-116.04 54.06Z"/>
+      ) : (
+        <path d="M260-851.52q-46.91 0-79.22 47.32-32.3 47.33-32.3 126.46 0 66.13 19.32 115.39 19.33 49.26 29.46 69.48l136.09-28.87q14-39.7 26.08-82.59 12.09-42.89 12.09-77.93 0-64.17-29.8-116.72-29.81-52.54-81.72-52.54Zm53.3 543.04q26.31 0 42.26-18.24 15.96-18.24 15.96-45.15 0-18.3-8.43-39.24-8.44-20.93-18.87-36.24l-115.74 23.61q.13 41.31 21.22 78.28 21.08 36.98 63.6 36.98ZM700-651.52q-51.91 0-81.72 52.54-29.8 52.55-29.8 117.85 0 32.09 11.46 74.19 11.45 42.11 28.28 88.03l134.52 22.78q10-17.26 29.39-68 19.39-50.74 19.39-115.87 0-76.87-32.3-124.2-32.31-47.32-79.22-47.32Zm-53.87 543.04q42.52 0 63.67-38.04 21.16-38.05 21.72-78.78l-116.87-20.35q-9.43 16.43-17.8 36.24-8.37 19.8-8.37 36.98 0 28.6 15.96 46.28 15.95 17.67 41.69 17.67ZM312.74-233.22q-74.74 0-117.57-55.58-42.82-55.59-41.95-132.81l-16.87-27Q118-475.78 95.61-539.17q-22.39-63.4-22.39-141.96 0-105.26 52.98-175.46 52.97-70.19 133.23-70.19 84.44 0 135.9 74.65 51.45 74.65 51.45 171 0 51.22-13.45 98.24-13.46 47.02-29.42 87.76l6.31 10.17q11.95 20.22 24.26 51.85 12.3 31.63 12.3 62.94 0 58.13-37.76 97.54-37.76 39.41-96.28 39.41Zm334.52 200q-58.52 0-96.28-39.41t-37.76-97.54q0-31.31 12.3-62.94 12.31-31.63 24.83-51.85l6.3-10.17q-16.52-40.17-29.98-87.48-13.45-47.3-13.45-98.52 0-96.35 51.45-171 51.46-74.65 136.46-74.65 79.7 0 132.67 70.19 52.98 70.2 52.98 175.46 0 78-22.39 140.33-22.39 62.32-40.74 91.76l-16.87 26.3q.44 76.65-42.17 133.09Q722-33.22 647.26-33.22Z"/>
+      )}
+    </Svg>
+  );
+}
+
+// `fitness_center-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Dumbbell({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="m543.78-76.65-51.61-52.18 142-142-363.34-363.34-142 142-52.18-51.61 56-56.87-56-56 86.13-86.13-42-40.87 55.57-55.57 41.87 41 85.13-85.13 56 56 56.87-56 52.17 51.61-142 142 363.35 363.35 142-142 51.61 52.17-56 56.87 56 56-87.13 87.13 42 40.87-55.57 55.57-40.87-42-85.13 85.13-56-56-56.87 56Z"/>
+    </Svg>
+  );
+}
+
+// `vital_signs-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Activity({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M38.39-440.39v-79.22h228.83L363-296.7l232-579 152.22 356.09h174.39v79.22H692.78L597-661.3l-233 579-151.22-358.09H38.39Z"/>
+    </Svg>
+  );
+}
+
+export function HeartPulse({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M645-848.48q102.83 0 173.15 75.98 70.33 75.98 70.33 182.5 0 19.43-2.72 28.37-2.72 8.93-8.15 48.8H627.22l-85.96-99.21H509.7l-83.31 199.47-67.56-100.26H82.96q-5.44-39.43-8.44-48.08-3-8.66-3-28.09 0-107.52 70.11-183.5T314-848.48q46.87 0 89.65 17.87 42.78 17.87 76.35 50.74 33.13-32.87 75.63-50.74 42.5-17.87 89.37-17.87ZM479-70.13 142.35-409.35q-8-7.43-14.44-15.37-6.43-7.93-12.43-17.37h204.65l93.96 123.26h40.26L531.7-518.3l59.39 76.21h252.43q-5.43 9-11.93 16.66-6.5 7.65-13.37 15.08L479-70.13Z"/>
+      ) : (
+        <path d="M142.35-409.35q-35.57-35-53.2-81.45-17.63-46.45-17.63-98.27 0-107.45 70.15-183.43T314-848.48q47.07 0 89.75 17.87T480-779.87q33.13-32.84 75.63-50.72 42.5-17.89 89.37-17.89 102.83 0 173.15 75.99 70.33 75.99 70.33 182.48 0 51.84-17.85 98.25t-52.41 81.41L479-70.13 142.35-409.35ZM314-773.22q-70.61 0-118.92 54.01-48.3 54-48.3 129.21 0 20.72 3.72 40.01t11.72 37.16h208.26l58.82 76.22 78.05-201.04h13.56l94.96 124.82h182.05q7.4-18.29 11.07-37.45 3.66-19.15 3.66-39.51.57-75.51-47.68-130.04-48.25-54.52-119.78-54.52-34.06 0-64.86 14.5-30.81 14.5-54.05 39.18l-32.08 34.89h-29.16l-32.32-34.89q-23.51-24.49-54.47-38.52-30.95-14.03-64.25-14.03Zm162.04 589.39 267.44-258.26H589.96L530.7-518.3l-77.35 199.47h-13.7l-95.52-123.26H215.52l260.52 258.26ZM480-478.52Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Flame({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M151.52-400q0-106.94 52.54-191.08 52.55-84.14 115.79-142.54 63.23-58.41 115.93-89.18l52.7-30.77V-708q0 33.08 22.37 52.3 22.38 19.22 50.13 19.22 14.76 0 28.87-6.34 14.1-6.34 25.93-20.83l21.96-27.65q77.26 44.77 124 122.4 46.74 77.64 46.74 168.91 0 96.38-49 174.01T629.91-107.91q24.87-27 38.13-61.24 13.26-34.25 13.26-71.44 0-40.75-14.84-76.15-14.85-35.4-43.43-63.9L480-520.09 338.65-380.74q-29.69 28.7-44.54 64.29-14.85 35.59-14.85 75.97 0 36.91 12.98 71.22 12.98 34.3 37.85 61.35-80.57-40.44-129.57-118.08-49-77.63-49-174.01ZM480-408.96l86.35 84.84q16.87 16.95 26.02 38.35 9.15 21.41 9.15 44.94 0 49.48-35.55 84.5-35.56 35.03-86.07 35.03-50.51 0-85.96-35.03-35.46-35.02-35.46-84.5 0-23.74 8.92-45.11 8.92-21.38 26.82-38.1L480-408.96Z"/>
+      ) : (
+        <path d="M231.3-400q0 53.97 22.85 101.83t64.81 80.91q-4-9.61-6-20.2-2-10.58-2-20.89 2.82-29.17 15.1-54.35 12.29-25.17 33.59-46.47L480-478.09l120.91 118.92q21.31 21.3 33.59 46.47 12.28 25.18 14.54 54.35 0 10.31-2 20.89-2 10.59-5.43 20.2 40.82-33.05 64.24-80.91 23.41-47.86 23.41-101.83 0-49.48-20.74-97.3-20.74-47.83-59.78-88.57-21 13.31-43.63 20.96-22.63 7.65-44.13 7.65-59.28 0-100.13-37.83-40.85-37.82-47.07-98.56v-20q-42.04 31.3-75.65 69.04-33.61 37.74-57.35 78.41-23.74 40.68-36.61 83.35Q231.3-440.17 231.3-400ZM480-366.96l-64.78 64.35q-13.44 12.87-20.09 28.35-6.65 15.48-6.65 33.71 0 37.52 26.74 63.38Q441.96-151.3 480-151.3q38.04 0 64.78-25.94 26.74-25.94 26.74-63.57 0-17.76-6.65-33.34-6.65-15.59-19.41-28.36L480-366.96Zm8.48-486.61V-708q0 30.68 20.91 51.1 20.92 20.42 51.56 20.42 16.35 0 30.16-6.65 13.8-6.65 24.67-20.52l21.96-27.65q79.21 45.33 124.98 123.47 45.76 78.13 45.76 167.66 0 137.41-95.58 233.03T479.96-71.52q-137.35 0-232.9-95.57-95.54-95.58-95.54-232.92 0-130.82 90.24-253.84Q332-776.87 488.48-853.57Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Rocket({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="m74.82-550.57 173.66-174.78q17.95-17.96 41.48-24.8 23.52-6.85 49.17-2.29l78.7 14q-57.83 65.4-94.37 125.13-36.55 59.74-69.5 139.4L74.82-550.57Zm222.92 93.53q34.35-82.61 77.89-149.94t96.11-119.89q87.43-87.44 204.39-130.94 116.96-43.5 221.74-27.63 16.44 105.35-26.56 222.03-43 116.67-130.44 204.11-53.13 53.13-120.96 96.67-67.82 43.54-149.87 77.89l-172.3-172.3Zm350.48-111.79q28.08 0 47.24-19.43 19.15-19.44 19.15-47.24t-19.15-46.96q-19.16-19.15-47.24-19.15-28.09 0-47.24 19.15-19.15 19.16-19.15 46.96t19.15 47.24q19.15 19.43 47.24 19.43ZM564-62.39l-77.65-179.13q79.65-32.39 139.11-69.22 59.45-36.83 125.41-94.09l14 78.7q5.13 25.65-2 49.39-7.13 23.74-25.09 41.13L564-62.39ZM143.91-317.43q38.96-38.96 94.33-38.9 55.37.07 94.33 38.46 38.39 38.96 38.67 94.33.28 55.37-38.67 94.32-29.96 29.96-93.44 48.94Q175.65-61.3 62.69-48 76-160.96 94.98-224.22q18.98-63.26 48.93-93.21Z"/>
+      ) : (
+        <path d="m191.52-564.57 95.83 41.05q16.3-30.92 34.26-61.96 17.95-31.04 37.56-59.65l-72.78-14.3-94.87 94.86Zm159.65 88.35 129.05 129.61q60.39-29.39 108.13-60.41 47.74-31.02 78.17-61.46 78.74-79.3 116.18-160.91 37.43-81.61 42.13-191.44-109.83 4.7-191.44 42.13-81.61 37.44-160.35 116.18-30.43 30.43-61.45 78.17-31.02 47.74-60.42 108.13Zm214.66-152q0-28.08 19.43-47.24 19.44-19.15 47.24-19.15t46.96 19.15q19.15 19.16 19.15 47.24 0 28.09-19.15 47.24-19.16 19.15-46.96 19.15t-47.24-19.15q-19.43-19.15-19.43-47.24Zm2.17 440.7 95.43-94.87-14.3-72.78q-28.61 19.61-59.65 37.84-31.04 18.24-61.96 33.98L568-187.52Zm338.44-714.35q7.87 152.96-36.55 269.48-44.41 116.52-142.28 214.96-2.13 1.56-4.26 3.97-2.13 2.42-3.7 3.98l22 111.13q4.13 20.09-2.06 38.89-6.2 18.81-20.59 33.2L541.78-48.04l-94.04-218.92-176.78-176.78-218.92-94.04L230.82-715q14.4-14.39 32.92-20.59 18.52-6.19 38.61-2.06l111.13 22q1.56-1.57 3.69-2.92 2.13-1.34 4.26-2.91 98.44-99 215.24-143.63 116.81-44.63 269.77-36.76ZM131.48-322.74q39.52-39.52 95.11-39.74 55.58-.22 94.54 38.74 38.39 38.39 38.17 94.26-.21 55.87-39.17 94.83-29.96 29.96-92.65 49.22-62.7 19.26-175.66 32 12.74-112.96 31.5-176.44 18.77-63.48 48.16-92.87Zm56.13 56.57q-13.44 14.43-22.46 41.91-9.02 27.48-17.02 74.09 46.61-8 74.09-17.59 27.48-9.59 41.34-23.02 17.31-14.74 17.24-37.42-.06-22.67-15.8-39.97-17.3-15.74-39.98-15.24-22.67.5-37.41 17.24Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Zap({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="m307.56-64.17 40-280H139.09l382.04-552.22h98.65l-40 320h251.31l-426 512.22h-97.53Z"/>
+      ) : (
+        <path d="M399.22-174.04 670.3-501.13H494.83l34.3-273.57-246.22 355.27h151.18l-34.87 245.39ZM307.56-64.17l40-280H139.09l382.04-552.22h98.65l-40 320h251.31l-426 512.22h-97.53Zm169.83-410.7Z"/>
+      )}
+    </Svg>
+  );
+}
+
+// `trending_up-fill` is identical to the outline upstream: `filled` is a no-op.
+export function TrendingUp({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="m122.43-227.56-56.56-56.57 308.39-306.83 167 167 219.52-220.65H638.87v-79.78H894.7v255.83h-78.79v-118.48L540.26-310.83l-167-167-250.83 250.27Z"/>
+    </Svg>
+  );
+}
+
+export function Leaf({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M446.26-66.43q-42.56 0-79.63-7.72-37.06-7.72-67.5-23.15 28.04-122.96 84.39-238.13Q439.87-450.61 535-530.13q-114.26 56.26-197.33 156.22-83.06 99.95-117.02 224.78-4.56-4.57-8.63-8.13-4.06-3.57-8.63-8.13-47.26-46.7-72.39-107.52-25.13-60.83-25.13-128.22 0-71.83 26.85-137.52 26.84-65.7 77.54-116.39 80.96-82.4 210.46-107.31Q550.22-787.26 802-768q22.39 241.39-3.52 376.3-25.91 134.92-109.87 219.44-49.13 51.13-112.11 78.48T446.26-66.43Z"/>
+      ) : (
+        <path d="M203.39-165.39q-46.42-47.26-71.97-109.3-25.55-62.03-25.55-126.44 0-74.69 26.63-137.74 26.63-63.04 78.76-115.17 40.65-40.66 100.57-66.07 59.91-25.41 135.5-38.06 75.58-12.66 165.15-14.74Q702.04-775 802-768q8.57 97.82 7.76 187.32-.8 89.5-13.45 166.12-12.66 76.62-38.57 138.42-25.91 61.79-68.13 103.88-50.96 51.54-112.45 78.68-61.48 27.15-131.07 27.15-72.22 0-131.98-23.22-59.76-23.22-110.72-75.74Zm115.44-14.7q25.38 17 58.19 25.44 32.81 8.43 68.87 8.43 51.84 0 100.63-21.72 48.78-21.71 88.09-62.02 30.96-31.52 50.24-81.24 19.28-49.71 29.58-111.19 10.31-61.48 12.61-131.11 2.31-69.63-1.13-140.41-92.3-2.57-165.67 2.21-73.37 4.79-129.52 16.79-56.15 12-96.02 30.78t-64.18 44.09q-40.3 40.74-62.87 88.36-22.56 47.63-22.56 95.49 0 45.57 19.08 97.05 19.09 51.49 49.25 82.92 49.45-94.61 121.75-170.35Q447.48-482.3 535-530.13q-84.74 75.56-138.17 162.5-53.44 86.93-78 187.54Zm0 0Zm0 0Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Droplets({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M480.13-210.26q17.7 0 27.89-6.91 10.2-6.92 10.2-19.05 0-12.69-9.92-20.11-9.91-7.41-29.17-7.41-44.83 0-82.67-25.93-37.85-25.94-49.29-86.16-2-9.56-9.84-16.47-7.85-6.92-18.11-6.92-13.83 0-20.68 9.63-6.84 9.63-4.84 20.33 15 84.56 71 121.78t115.43 37.22Zm-238.8 46.43Q145.87-261.78 145.87-408q0-103.39 82.89-225.41Q311.65-755.44 480-898.65q168.35 143.21 251.52 265.24Q814.7-511.39 814.7-408q0 146.22-95.74 244.17Q623.22-65.87 480-65.87q-143.22 0-238.67-97.96Z"/>
+      ) : (
+        <path d="M480.13-210.26q17.7 0 27.89-6.91 10.2-6.92 10.2-19.05 0-12.69-9.92-20.11-9.91-7.41-29.03-7.41-44.97 0-82.81-25.93-37.85-25.94-49.29-86.16-1.94-9.63-9.81-16.51-7.88-6.88-18.14-6.88-13.83 0-20.68 9.63-6.84 9.63-4.84 20.33 15.06 84.56 71.03 121.78t115.4 37.22Zm-238.86 46.48q-95.4-97.91-95.4-244.22 0-103.34 82.89-225.39Q311.65-755.44 480-898.65q168.35 143.21 251.52 265.26Q814.7-511.34 814.7-408q0 146.31-95.74 244.22T479.94-65.87q-143.27 0-238.67-97.91Zm421.06-56.31q72.58-75 72.58-187.91 0-76.17-65.08-174.13Q604.74-680.09 480-792.65 355.26-680.09 290.17-582.13 225.09-484.17 225.09-408q0 112.91 72.47 187.91 72.46 75 182.32 75t182.45-75ZM480-482.26Z"/>
+      )}
+    </Svg>
+  );
+}
+
+// `restaurant-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Utensils({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M278.78-73.78v-366.87q-54.82-10.44-96.41-56.18-41.59-45.74-41.59-109.39v-280h73v280h65v-280h72.44v280h65v-280h73.56v280q0 63.65-41.87 109.39t-96.69 56.12v366.93h-72.44Zm434.22 0v-320H598V-705q0-82.58 51.96-131.9 51.95-49.32 136.04-49.32v812.44h-73Z"/>
+    </Svg>
+  );
+}
+
+export function Coffee({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M434.93-246.52q-118.54 0-203.8-81.48t-85.26-198.61V-854.7h607.09q58.52 0 100.13 40.6 41.61 40.6 41.61 99.2 0 64.6-40.11 113.42-40.11 48.83-101.63 48.83h-25.57v26.04q-2.26 117.83-88.09 198.96-85.82 81.13-204.37 81.13ZM225.09-632.44h423.08v-142.47H225.09v142.47Zm502.3 0h24.01q29.36 0 46.44-25.35 17.07-25.36 17.07-57.04 0-25.67-18.74-42.88-18.74-17.2-44.91-17.2h-23.87v142.47ZM145.87-105.87v-78.65h650.74v78.65H145.87Z"/>
+      ) : (
+        <path d="M434.93-246.52q-118.54 0-203.8-81.48t-85.26-198.61V-854.7h607.09q58.52 0 100.13 40.6 41.61 40.6 41.61 99.2 0 64.6-40.11 113.42-40.11 48.83-101.63 48.83h-25.57v26.04q-2.26 117.83-88.09 198.96-85.82 81.13-204.37 81.13ZM225.09-632.44h423.08v-142.47H225.09v142.47Zm209.56 306.13q86.48 0 148.87-57.47 62.39-57.48 64.65-142.83v-26.04H225.09v26.04q-.57 85.53 61.46 142.92 62.03 57.38 148.1 57.38Zm292.74-306.13h24.01q29.36 0 46.44-25.35 17.07-25.36 17.07-57.04 0-25.67-18.74-42.88-18.74-17.2-44.91-17.2h-23.87v142.47ZM145.87-105.87v-78.65h650.74v78.65H145.87Zm290.48-446.78Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Pill({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="m674-343.13 106.22-106.65q32.51-33.14 50.39-75.8 17.87-42.66 17.87-89.48 0-97.52-68.07-165.47-68.08-67.95-165.41-67.95-46.66 0-89.35 17.87-42.69 17.88-75.87 50.39L343.13-674 674-343.13ZM345-111.52q46.66 0 89.35-17.87 42.69-17.88 75.87-50.96l106.65-106.21-330.31-330.31-106.21 106.65q-33.08 33.14-50.96 75.8-17.87 42.66-17.87 89.48 0 97.52 68.07 165.47 68.08 67.95 165.41 67.95Z"/>
+      ) : (
+        <path d="M345-111.52q-97.59 0-165.54-67.94-67.94-67.95-67.94-165.54 0-46.7 17.87-89.37 17.88-42.67 50.96-75.85l269.43-270q33.14-32.51 75.76-50.39 42.63-17.87 89.46-17.87 97.59 0 165.54 67.94 67.94 67.95 67.94 165.54 0 46.7-17.87 89.37-17.88 42.67-50.39 75.85l-270 269.43q-33.14 33.08-75.76 50.96-42.63 17.87-89.46 17.87ZM617.43-399.7l106.74-106.22q21.22-21.86 33.16-49.82 11.93-27.96 11.93-59.32 0-64.42-44.89-109.31t-109.31-44.89q-31.36 0-59.32 11.93-27.96 11.94-49.82 33.16L399.7-617.43 617.43-399.7ZM345-191.3q29.97 0 58.59-11.66 28.63-11.65 50.49-32.87l106.22-107.3L343.13-560.3l-107.3 106.22q-21.22 21.86-32.87 49.99Q191.3-375.97 191.3-345q0 64.48 44.61 109.09T345-191.3Z"/>
+      )}
+    </Svg>
+  );
+}
+
+// `ac_unit-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Snowflake({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M443.78-73.78v-185.39L301-116.96 248.96-168l194.82-194.83v-80.95h-80.95L172-252.96 118.96-303l140.21-140.78H73.78v-72.44h185.39L115.96-660 168-712.04l194.83 195.82h80.95v-82.52L252.96-789 304-842.04l139.78 140.21v-184.39h72.44v184.39L660-845.04 711.04-793 516.22-598.74v82.52h82.52L790-708.04 842.04-657 701.83-516.22h184.39v72.44H701.83L843.04-301 793-248.96 598.74-443.78h-82.52v80.95L711.04-167 661-114.96 516.22-259.17v185.39h-72.44Z"/>
+    </Svg>
+  );
+}
+
+export function Wheat({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="m120.87-65.87-56.13-55.56 101.56-101q-29-28.44-46.08-57.13-17.09-28.7-17.09-72 0-31.7 12.06-60.9 12.07-29.19 34.77-51.89l45.78-44.78 44.78 44.78q24.74 24.74 36.52 57.65 11.79 32.92 7 66.53l51.31-51.87q-28.44-28.87-45.24-57.29-16.81-28.41-16.81-71.71 0-32.26 11.85-61.18 11.85-28.91 33.98-51.61l45.78-44.78 44.79 44.78q24.73 24.74 36.23 57.81 11.5 33.06 7.29 66.67l62.82-62.82q-27-30-45.8-57.29-18.81-27.28-18.81-70.71 0-32.27 13.35-62.96 13.35-30.7 36.05-53.39l83.26-83.26 56.13 55.56-42.18 41.61 6 7q17.92 23.04 25.57 51.41 7.65 28.37 2.3 56.15L837-893.13l57.13 55.56-216.52 215.53q28.22-8.35 58.3-2.42 30.09 5.94 54 23.28l7 5 44.18-39.6 58.13 57.56-84.83 85.83q-23.69 22.69-52.61 34.76-28.91 12.06-61.17 12.06-43 0-71.72-20.3t-59.28-48.74l-71.13 72.7q34.48-9.66 71.26 1.91 36.78 11.57 62.96 37.17l46.34 45.79-45.34 44.78q-22.13 22.7-51.83 35.04-29.7 12.35-61.96 12.35-42.43 0-71.43-20.3-29-20.31-58-49.31L327-271.43q35.48-10.22 72.2.63 36.71 10.84 64.32 37.45l45.78 45.79-45.78 44.78q-22.13 22.69-51.32 35.04-29.2 12.35-61.46 12.35-42.87 0-71.87-20.3-29-20.31-59-49.18l-99 99Z"/>
+      ) : (
+        <path d="M121.43-65.87 65.3-122.43l122.57-122.7q-27.74-30-42.61-66.85-14.87-36.86-14.87-74.87 0-40.41 14.59-76.54 14.58-36.13 42.67-63.39L245-582.57l30.35 29.35q2.69-32.48 16.41-62.15t36.89-52.41L386-723.57l30.35 29.35q2.69-32.68 16.91-62.25t36.39-52.31l117.92-116.35 55.56 55.56L583-808.43l7 7q21.48 21.04 33.78 49.23 12.31 28.2 13.31 58.98l199.48-198.91L892.13-836 695.22-637.65q30.35 2.13 57.76 14.37 27.41 12.24 49.45 34.28l8 7L870-643.13 926.13-587 810.78-470.65q-23.74 23.74-54.13 37.67-30.39 13.94-63.43 16.07L723.57-386l-55.79 56.35q-23.74 23.74-53.31 37.67-29.58 13.94-62.25 16.63L582.57-245l-56.79 57.35q-27.69 28.13-64.34 42.69-36.64 14.57-76.44 14.57-34.91 0-68.82-15.17T248.13-191L121.43-65.87Zm123-237.96q18.05-18.17 27-39.45 8.96-21.28 8.96-42.57 0-21.06-8.98-41.77-8.98-20.7-26.98-41.55-17.91 20.74-26.86 41.49-8.96 20.75-8.96 42.06 0 21.1 8.96 42.36 8.95 21.26 26.86 39.43Zm141.29 95.22q20.63 0 41.61-9.12 20.97-9.11 41.84-27.27-20.17-16.91-41.28-25.87t-42.24-8.96q-21.13 0-42.17 8.96-21.04 8.96-40.65 26.3 19.17 17.48 40.48 26.72 21.31 9.24 42.41 9.24Zm-.29-235.22q18.05-20.17 27-41.13 8.96-20.95 8.96-42.34 0-21.18-8.98-42.17-8.98-20.99-26.98-39.7-17.91 18.74-26.86 39.82-8.96 21.09-8.96 42.28 0 20.98 8.96 42.03 8.95 21.04 26.86 41.21Zm142.38 94.22q21.21 0 41.92-9.24 20.7-9.24 39.44-27.15-18.76-16.86-39.48-26.13-20.72-9.26-41.95-9.26-21.22 0-42.2 9.24-20.97 9.24-40.71 26.58 19.62 17.43 40.79 26.7 21.16 9.26 42.19 9.26Zm-1.38-235.78q17.48-19.18 26.72-40.14 9.24-20.97 9.24-42.03 0-21.92-8.74-42.9-8.74-20.97-26.22-41.15-17.91 20.18-26.86 40.94-8.96 20.76-8.96 42.49 0 20.86 8.96 41.74 8.95 20.87 25.86 41.05Zm142.22 94.61q21.13 0 41.9-9.13 20.77-9.14 41.62-27.52-20.74-17.48-41.75-26.44T668-562.83q-21.12-.38-41.56 8.77T585.83-527q20.17 17.91 40.93 26.87 20.76 8.96 41.89 9.35Z"/>
+      )}
+    </Svg>
+  );
+}
+
+// `balance-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Scale({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M65.87-105.87v-79.22h374.52v-476.65q-24.87-9.56-43.96-28.93-19.08-19.37-28.65-44.24H225.17l119.92 290.69q-1 50.23-41.4 84.77t-98 34.54q-58.17 0-98.78-34.54t-41.04-84.77l119.91-290.69h-79.91v-79.79h261.91q14.26-35.56 44.45-57.78 30.19-22.22 67.83-22.22t67.77 22.22q30.13 22.22 44.39 57.78H854.7v79.79h-80.48L894.7-444.22q-1 50.23-41.68 84.77t-98.29 34.54q-57.6 0-98.21-34.54-40.61-34.54-41.61-84.77l119.92-290.69H592.22q-9.57 24.87-28.65 44.24-19.09 19.37-43.96 28.93v476.65H894.7v79.22H65.87ZM686.3-451.3h137l-68.78-168.74L686.3-451.3Zm-549.04 0h137l-68.78-168.74-68.22 168.74Zm342.9-276.61q19.71 0 33.08-14.16 13.37-14.15 13.37-32.69 0-19.54-13.42-32.96-13.41-13.41-32.95-13.41-19.11 0-32.98 13.41-13.87 13.42-13.87 32.96 0 18.54 13.75 32.69 13.74 14.16 33.02 14.16Z"/>
+    </Svg>
+  );
+}
+
+export function FlaskConical({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M172-105.87q-51.61 0-72.78-46.91-21.18-46.92 14.04-86.26l244.61-276.05v-255.3h-78.61v-79.22H681.3v79.22h-78.6v255.3l244.6 276.05q34.66 39.34 13.48 86.26-21.17 46.91-72.78 46.91H172Z"/>
+      ) : (
+        <path d="M172-105.87q-51.61 0-72.78-46.91-21.18-46.92 14.04-86.26l244.61-276.05v-255.3h-78.61v-79.22H681.3v79.22h-78.6v255.3l244.6 276.05q34.66 39.34 13.48 86.26-21.17 46.91-72.78 46.91H172Zm-.7-79.22h617.96L522.91-485.74v-284.65h-85.82v284.65L171.3-185.09ZM478-477.74Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Brain({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M449-374h60l3-44q12-2 22.5-8.5T553-441l41.43 14L623-475l-30-24q5-14 5-29t-5-29l30-24-28.57-48L553-615q-8-8-19-14t-22-9l-3-44h-60l-3 44q-11 3-22 9t-19 14l-40.87-14L335-581l30 24q-5 14-5 29t5 29l-30 24 29.13 48L405-441q8 8 18.5 14.5T446-418l3 44Zm-19.5-104.5Q409-499 409-528t20.5-49.5Q450-598 479-598t49.5 20.5Q549-557 549-528t-20.5 49.5Q508-458 479-458t-49.5-20.5ZM227.56-67.56v-178.79q-57-53.69-88.5-124.89-31.5-71.19-31.5-148.76 0-155.65 108.4-264.33Q324.35-893 480-893q128.96 0 228.85 76.61 99.89 76.61 130.59 198.56l67.95 270.27H773v200H613v80H227.56Z"/>
+      ) : (
+        <path d="M449-374h60l3-44q12-2 22.53-8.46 10.53-6.46 18.52-14.54l41.38 14L623-475l-30-24q5-14 5-29t-5-29l30-24-28.57-48-41.31 14q-8.26-7.69-19.14-13.85Q523.1-635 512.04-638L509-682h-60l-3 44q-11 3-21.83 9.15-10.84 6.16-19.06 13.85l-40.98-14L335-581l30 24q-5 14-5 29t5 29l-30 24 29.13 48 40.98-14q7.95 8.08 18.42 14.54Q434-420 446-418l3 44Zm-19.5-104.38q-20.5-20.38-20.5-49.5t20.38-49.62q20.38-20.5 49.5-20.5t49.62 20.38q20.5 20.38 20.5 49.5t-20.38 49.62q-20.38 20.5-49.5 20.5t-49.62-20.38ZM227.56-67.56v-178.79q-57-53.69-88.5-124.89-31.5-71.19-31.5-148.76 0-155.42 108.55-264.21Q324.66-893 479.73-893q129.23 0 229.12 76.61 99.89 76.61 130.59 198.56l67.95 270.27H773v200H613v80h-79.78v-159.22h160v-200h112.3L762.78-598.3q-24-94.18-103.3-154.55-79.31-60.37-179.22-60.37-122.3 0-207.89 84.72-85.59 84.71-85.59 206.17 0 62.51 25.76 119.68 25.76 57.17 72.98 100.56l21.26 20.19v214.34h-79.22Zm268.87-372.83Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function Dices({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M343.98-273.1q14.5-14.61 14.5-35.5 0-20.88-14.62-35.38-14.62-14.5-35.5-14.5-20.88 0-35.38 14.62-14.5 14.62-14.5 35.5 0 20.88 14.62 35.38 14.61 14.5 35.5 14.5 20.88 0 35.38-14.62Zm0-343.04q14.5-14.62 14.5-35.5 0-20.88-14.62-35.38-14.62-14.5-35.5-14.5-20.88 0-35.38 14.62-14.5 14.61-14.5 35.5 0 20.88 14.62 35.38 14.61 14.5 35.5 14.5 20.88 0 35.38-14.62ZM515.5-444.62q14.5-14.62 14.5-35.5 0-20.88-14.62-35.38-14.62-14.5-35.5-14.5-20.88 0-35.38 14.62-14.5 14.62-14.5 35.5 0 20.88 14.62 35.38 14.62 14.5 35.5 14.5 20.88 0 35.38-14.62ZM687.02-273.1q14.5-14.61 14.5-35.5 0-20.88-14.62-35.38-14.61-14.5-35.5-14.5-20.88 0-35.38 14.62-14.5 14.62-14.5 35.5 0 20.88 14.62 35.38 14.62 14.5 35.5 14.5 20.88 0 35.38-14.62Zm0-343.04q14.5-14.62 14.5-35.5 0-20.88-14.62-35.38-14.61-14.5-35.5-14.5-20.88 0-35.38 14.62-14.5 14.61-14.5 35.5 0 20.88 14.62 35.38 14.62 14.5 35.5 14.5 20.88 0 35.38-14.62ZM105.87-105.87V-854.7H854.7v748.83H105.87Z"/>
+      ) : (
+        <path d="M343.98-273.1q14.5-14.61 14.5-35.5 0-20.88-14.62-35.38-14.62-14.5-35.5-14.5-20.88 0-35.38 14.62-14.5 14.62-14.5 35.5 0 20.88 14.62 35.38 14.61 14.5 35.5 14.5 20.88 0 35.38-14.62Zm0-343.04q14.5-14.62 14.5-35.5 0-20.88-14.62-35.38-14.62-14.5-35.5-14.5-20.88 0-35.38 14.62-14.5 14.61-14.5 35.5 0 20.88 14.62 35.38 14.61 14.5 35.5 14.5 20.88 0 35.38-14.62ZM515.5-444.62q14.5-14.62 14.5-35.5 0-20.88-14.62-35.38-14.62-14.5-35.5-14.5-20.88 0-35.38 14.62-14.5 14.62-14.5 35.5 0 20.88 14.62 35.38 14.62 14.5 35.5 14.5 20.88 0 35.38-14.62ZM687.02-273.1q14.5-14.61 14.5-35.5 0-20.88-14.62-35.38-14.61-14.5-35.5-14.5-20.88 0-35.38 14.62-14.5 14.62-14.5 35.5 0 20.88 14.62 35.38 14.62 14.5 35.5 14.5 20.88 0 35.38-14.62Zm0-343.04q14.5-14.62 14.5-35.5 0-20.88-14.62-35.38-14.61-14.5-35.5-14.5-20.88 0-35.38 14.62-14.5 14.61-14.5 35.5 0 20.88 14.62 35.38 14.62 14.5 35.5 14.5 20.88 0 35.38-14.62ZM105.87-105.87V-854.7H854.7v748.83H105.87Zm79.22-79.22h589.82v-589.82H185.09v589.82Zm0 0v-589.82 589.82Z"/>
+      )}
+    </Svg>
+  );
+}
+
+export function ClipboardCheck({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="m421.87-314.87 283.22-283.78-54.31-54.31-228.91 228.92-115.91-115.92-53.31 53.31 169.22 171.78Zm-316 209V-854.7h270.09q8.39-35 37.08-57.5 28.7-22.5 66.96-22.5 38.26 0 66.96 22.5 28.69 22.5 37.08 57.5H854.7v748.83H105.87Zm401.17-699.09q11.35-11.34 11.35-27.04t-11.35-27.04Q495.7-870.39 480-870.39t-27.04 11.35Q441.61-847.7 441.61-832t11.35 27.04q11.34 11.35 27.04 11.35t27.04-11.35Z"/>
+      ) : (
+        <path d="m421.87-314.87 283.22-283.78-54.31-54.31-228.91 228.92-115.91-115.92-53.31 53.31 169.22 171.78Zm-316 209V-854.7h270.09q8.39-35 37.08-57.5 28.7-22.5 66.96-22.5 38.26 0 66.96 22.5 28.69 22.5 37.08 57.5H854.7v748.83H105.87Zm79.22-79.22h589.82v-589.82H185.09v589.82Zm321.95-619.87q11.35-11.34 11.35-27.04t-11.35-27.04Q495.7-870.39 480-870.39t-27.04 11.35Q441.61-847.7 441.61-832t11.35 27.04q11.34 11.35 27.04 11.35t27.04-11.35ZM185.09-185.09v-589.82 589.82Z"/>
+      )}
+    </Svg>
+  );
+}
+
+// `directions_bike-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Bike({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M618.68-752.87q-31.05 0-52.71-21.7-21.67-21.71-21.67-52.59 0-30.88 21.59-52.42 21.59-21.55 52.63-21.55 31.05 0 52.83 21.47 21.78 21.47 21.78 52.35 0 30.88-21.7 52.66-21.71 21.78-52.75 21.78ZM423.7-548l89 93.72v249.41h-63.4v-200.56l-188-165.15 172.13-171.55q7.44-7.44 21.37-14.22 13.94-6.78 30.6-6.78 16.66 0 31.63 5.93 14.97 5.94 24.1 15.07l78 78q27 27 64.54 45.93 37.54 18.94 84.46 18.94v63.39q-60.69 0-108.91-22.78t-86.79-60.78l-39.71-38.31L423.7-548Zm-220.85 80.26q81.16 0 136.94 55.87 55.78 55.86 55.78 137.02 0 81.15-55.87 136.59-55.86 55.43-137.02 55.43-81.16 0-136.59-55.52-55.44-55.52-55.44-136.68t55.52-136.93q55.53-55.78 136.68-55.78Zm95.78 287.98q38.33-38.33 38.33-95.24t-38.33-95.24q-38.33-38.32-95.52-38.32-57.2 0-95.52 38.32Q69.26-331.91 69.26-275t38.33 95.24q38.32 38.32 95.52 38.32 57.19 0 95.52-38.32Zm595.28-232.11q55.44 55.86 55.44 137.02 0 81.15-55.52 136.59-55.53 55.43-136.68 55.43-81.16 0-136.94-55.52t-55.78-136.68q0-81.16 55.87-136.93 55.86-55.78 137.02-55.78 81.16 0 136.59 55.87Zm-41.5 232.11q38.33-38.33 38.33-95.24t-38.33-95.24q-38.32-38.32-95.58-38.32-57.25 0-95.24 38.32-37.98 38.33-37.98 95.24t37.98 95.24q37.99 38.32 95.24 38.32 57.26 0 95.58-38.32Z"/>
+    </Svg>
+  );
+}
+
+// `waves-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Waves({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M67-114.35v-79.78q28.66-3 49.17-16.39 20.5-13.39 41.65-28.07 21.14-14.67 46.94-26.24 25.8-11.56 63.98-11.56 38.17 0 65.02 12.78 26.85 12.78 48.78 28.35 21.94 15.56 44.65 28.35 22.7 12.78 52.68 12.78 30.52 0 52.95-12.89 22.44-12.89 44.38-28.35 21.93-15.46 49.02-28.24 27.09-12.78 65.28-12.78t63.65 11.56q25.46 11.57 46.52 26.35 21.07 14.78 41.63 28.07 20.57 13.28 49.7 16.28v79.78q-35.65-2-59.91-14.76-24.26-12.76-45.65-27.56-21.4-14.81-43.24-27.09-21.85-12.28-52.98-12.28-30.57 0-53.63 12.78-23.07 12.78-45.33 28.09-22.26 15.3-48.7 28.06-26.45 12.76-63.62 12.76-37.18 0-63.44-12.76-26.26-12.76-48.64-28.06-22.38-15.31-45.46-28.09-23.09-12.78-53.92-12.78-30.83 0-52.89 12.28-22.07 12.28-43.17 27.09-21.09 14.8-45.59 27.56-24.49 12.76-59.83 14.76Zm0-189.56v-80.35q28.66-3 49.17-16.26 20.5-13.26 41.65-27.78 21.14-14.53 46.94-26.09 25.8-11.57 63.98-11.57 38.17 0 65.02 12.79 26.85 12.78 48.78 28.06 21.94 15.28 44.65 28.07 22.7 12.78 52.68 12.78 30.52 0 52.95-12.76 22.44-12.76 44.38-28.07 21.93-15.3 49.02-28.08 27.09-12.79 64.8-12.79 38.89 0 64.24 11.57 25.35 11.56 46.41 26.06 21.07 14.5 41.63 27.79 20.57 13.28 49.7 16.28v80.35q-35.65-4-59.91-17.39-24.26-13.39-45.65-27.57-21.4-14.17-43.24-25.74-21.85-11.56-52.74-11.56t-53.54 12.92q-22.65 12.92-45.3 28.44-22.66 15.51-49.05 28.21-26.39 12.69-63.54 12.69-37.16 0-63.54-12.8-26.38-12.8-48.58-28.15-22.21-15.35-45.47-28.33-23.26-12.98-53.93-12.98-30.67 0-52.83 12.28-22.16 12.28-43.26 27.24-21.09 14.96-45.59 27.85-24.49 12.89-59.83 14.89Zm0-189.57v-80.35q28.56-1.43 49.12-14.48 20.55-13.04 41.7-27.84 21.14-14.81 46.94-27.09 25.8-12.28 63.98-12.28 38.17 0 65.02 12.78 26.85 12.78 48.78 28.07 21.94 15.28 44.65 28.06 22.7 12.78 52.68 12.78 30.52 0 52.95-12.76 22.44-12.76 44.38-28.06 21.93-15.31 49.02-28.09 27.09-12.78 64.8-12.78 38.89 0 64.24 12.28 25.35 12.28 46.41 27.07 21.07 14.78 41.63 27.84 20.57 13.07 49.7 14.5v80.35q-35.65-2-59.91-14.89-24.26-12.89-45.65-27.85-21.4-14.95-43.24-27.24-21.85-12.28-52.98-12.28-30.57 0-53.63 12.94-23.07 12.94-45.45 28.24-22.39 15.3-48.66 28.19-26.26 12.89-63.44 12.89-37.17 0-63.55-12.8-26.38-12.8-48.58-28.15-22.21-15.35-45.47-28.33-23.26-12.98-53.93-12.98-30.67 0-52.83 12.28-22.16 12.29-43.26 27.24-21.09 14.96-45.59 27.85-24.49 12.89-59.83 14.89Zm0-189.56v-80.35q28.66-3 49.17-16.39 20.5-13.4 41.65-28.07 21.14-14.67 46.9-26.24 25.76-11.56 63.89-11.56 38.12 0 65.06 13.06 26.94 13.07 48.87 28.35 21.94 15.28 44.65 28.06 22.7 12.79 52.68 12.79 30.52 0 52.95-12.89 22.44-12.9 44.51-28.07 22.06-15.17 49.02-28.24 26.96-13.06 64.67-13.06 38.89 0 64.24 11.56 25.35 11.57 46.41 26.35 21.07 14.78 41.63 28.06 20.57 13.29 49.7 16.29v80.35q-35.65-2-59.91-14.9-24.26-12.89-45.65-27.84-21.4-14.96-43.24-27.24-21.85-12.28-52.98-12.28-30.57 0-53.63 12.93-23.07 12.94-45.45 28.24-22.39 15.3-48.66 28.19-26.26 12.9-63.44 12.9-37.17 0-63.55-12.8-26.38-12.8-48.58-28.16-22.21-15.35-45.47-28.33-23.26-12.97-53.93-12.97-30.67 0-52.83 12.28-22.16 12.28-43.26 27.24-21.09 14.95-45.59 27.84-24.49 12.9-59.83 14.9Z"/>
+    </Svg>
+  );
+}
+
+// `directions_run-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Run({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M528.78-33.78v-241.83L430.96-365l-40.87 182.35-277.44-57.26 13.26-68.44 199 40 69.61-352.04-88.69 42.48v136.26h-73.57v-186.31l172.48-70.13q32.56-14 46.63-18.06 14.06-4.07 28.63-4.07 21.7 0 38.61 9.92 16.91 9.91 28.48 28.04l43.13 67q25.43 40.87 70.15 70.46 44.72 29.58 105.85 29.58v73.57q-68.13 0-120.92-29.31-52.78-29.3-98.34-88.47l-35.61 143.3 89.87 82.87v299.48h-72.44ZM484.54-783.7q-23.19-23.47-23.19-56.58t23.19-56.31q23.2-23.19 56.31-23.19t56.3 23.19q23.2 23.2 23.2 56.31t-23.2 56.58q-23.19 23.48-56.3 23.48t-56.31-23.48Z"/>
+    </Svg>
+  );
+}
+
+// `pool-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Pool({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M73.78-100.78v-77q40.52-3 62.87-21 22.35-18 68.35-18 46 0 76.41 21.5 30.42 21.5 65.59 21.5t61.09-21.5q25.91-21.5 71.91-21.5t76.41 21.5q30.42 21.5 65.59 21.5t61.59-21.5q26.41-21.5 72.41-21.5t67.85 18q21.85 18 62.37 21v77q-38.39-3-66.72-22.5t-63.5-19.5q-35.17 0-63.59 21-28.41 21-70.41 21t-74.41-21q-32.42-21-67.59-21t-65.09 21q-29.91 21-71.91 21t-72.41-21q-30.42-21-65.59-21t-64 19.5q-28.83 19.5-67.22 22.5Zm0-194.22v-73q40.52-3 62.87-20.5Q159-406 205-406q46 0 74.13 19 28.13 19 63.87 19 35.17 0 63.09-19Q434-406 480-406t74.7 19q28.69 19 63.3 19 35.17 0 63.59-19Q710-406 756-406t67.85 17.5Q845.7-371 886.22-368v73q-38.39-3-66.72-22.5T756-337q-35.17 0-64.15 21-28.98 21-69.85 21-40.87 0-73.85-21T480-337q-35.17 0-63.65 21-28.48 21-69.35 21-40.87 0-73.85-21T205-337q-35.17 0-64 19.5T73.78-295Zm672.46-526.09q29.2 29.48 29.2 71.74 0 42.83-29.2 72.02-29.2 29.2-72.3 29.2-43.11 0-72.31-29.2-29.2-29.19-29.2-72.02 0-42.26 29.2-71.74 29.2-29.48 72.31-29.48 43.1 0 72.3 29.48ZM343-484.78q-19.13 0-37.59-8.7-18.45-8.69-28.15-21.39l135.57-135.56-49.48-48.92-158.57-55.3v-91.44L429.04-761l254.7 254.13q-12.7 11.26-31.15 16.67-18.46 5.42-34.59 5.42-38.57 0-67.2-21-28.63-21-70.8-21t-70.3 21q-28.13 21-66.7 21Z"/>
+    </Svg>
+  );
+}
+
+export function HeartRate({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M65.87-510v-304.7H894.7V-510H659l-72.78-144h-52.44L400-388l-61-122H65.87Zm0 364.13V-450H301l72.78 145h52.44L560-572l61 122h273.7v304.13H65.87Z"/>
+      ) : (
+        <path d="M65.87-570v-244.7H894.7V-570h-79.79v-164.91H145.09V-570H65.87Zm0 424.13V-390h79.22v164.91h669.82V-390h79.79v244.13H65.87ZM301-450l72.78 145h52.44L560-572l61 122h273.7v-60H659l-72.78-144h-52.44L400-388l-61-122H65.87v60H301Zm179-30Z"/>
+      )}
+    </Svg>
+  );
+}
+
+// `sports_gymnastics-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Stretching({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="m483.22-60.78-20-403.09-155.79-59.91H27v-72.44h253.74L577.78-813l47.48 55.61-156.91 117.17 74.95 34L886.13-827.7l42.91 51.61L580.22-494l-24 433.22h-73ZM240.15-653.22q-32.98 0-56.17-23.68-23.2-23.68-23.2-56.1 0-32.98 23.04-56.38 23.04-23.4 56.03-23.4 32.98 0 56.17 23.32 23.2 23.32 23.2 56.3 0 32.42-23.04 56.18-23.04 23.76-56.03 23.76Z"/>
+    </Svg>
+  );
+}
+
+export function Healing({ className, size = 24, filled = false }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      {filled ? (
+        <path d="M259.43-34.65 34.65-259.43l670.92-670.92 224.78 224.78L259.43-34.65Zm244.57-201L729.35-461l201 201.57L705.57-34.65 504-235.65Zm9.26-132.63q12.13-11.85 12.13-29.98 0-18.7-12.13-30.54-12.13-11.85-30.26-11.85-18.13 0-30.26 11.85-12.13 11.84-12.13 30.54 0 18.13 12.13 29.98 12.13 11.85 30.26 11.85 18.13 0 30.26-11.85Zm-115-72.33q18.7 0 30.54-12.13 11.85-12.13 11.85-30.26 0-18.13-11.85-30.26-11.84-12.13-30.54-12.13-18.13 0-29.98 12.13-11.85 12.13-11.85 30.26 0 18.13 11.85 30.26 11.85 12.13 29.98 12.13Zm168.48 0q18.13 0 29.98-12.13 11.85-12.13 11.85-30.26 0-18.13-11.85-30.26-11.85-12.13-29.98-12.13-18.7 0-30.54 12.13-11.85 12.13-11.85 30.26 0 18.13 11.85 30.26 11.84 12.13 30.54 12.13Zm-329.52-60.82L34.65-705.57l224.78-224.78 201.57 201-223.78 227.92Zm276.04-34.77q12.13-11.84 12.13-30.54 0-18.13-12.13-29.98-12.13-11.85-30.26-11.85-18.13 0-30.26 11.85-12.13 11.85-12.13 29.98 0 18.7 12.13 30.54 12.13 11.85 30.26 11.85 18.13 0 30.26-11.85Z"/>
+      ) : (
+        <path d="m483-256.65-223.57 222L34.65-259.43l221-222.57-221-223.57 224.78-224.78 223.57 223 222.57-223 224.78 224.78-222 223.57 222 222.57L705.57-34.65 483-256.65Zm30.26-279.65q12.13-11.94 12.13-30.16 0-17.97-12.07-30.04t-30.26-12.07q-18.19 0-30.32 12.03-12.13 12.03-12.13 29.81 0 18.26 12.07 30.32 12.07 12.06 30.26 12.06t30.32-11.95Zm-204.48 1.73 119.65-118.65L262-818.65 145.35-702l163.43 167.43Zm89.49 93.96q18.26 0 30.32-12.07 12.06-12.07 12.06-30.26t-11.95-30.32q-11.94-12.13-30.16-12.13-17.97 0-30.04 12.07t-12.07 30.26q0 18.19 12.03 30.32 12.03 12.13 29.81 12.13Zm114.99 72.15q12.13-12.03 12.13-29.81 0-18.26-12.07-30.32-12.07-12.06-30.26-12.06t-30.32 11.95q-12.13 11.94-12.13 30.16 0 17.97 12.07 30.04t30.26 12.07q18.19 0 30.32-12.03Zm53.2-72.15q17.97 0 30.04-12.07t12.07-30.26q0-18.19-12.03-30.32-12.03-12.13-29.81-12.13-18.26 0-30.32 12.07-12.06 12.07-12.06 30.26t11.95 30.32q11.94 12.13 30.16 12.13Zm-30.89 128.83L702-145.35 818.65-262 653.22-427.43 535.57-311.78ZM348.39-616.17Zm267.78 267.78Z"/>
+      )}
+    </Svg>
+  );
+}
+
+// `sprint-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Sprint({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M226.74-150.96 175.7-202l401.21-401.78H448.48v76.04h-72.44v-148.48h237.7q15.13 0 29.26 5.57 14.13 5.56 25.26 16.13l119.44 119q30.69 30.69 69.54 44 38.85 13.3 79.72 15.3v72.44q-52.57-1.44-104.52-18.65-51.96-17.22-90.22-57.61l-41.48-40.92L595.78-416l87.13 87.13-256.43 148.91-36.22-63.3L564-344.13l-71.26-71.83-266 265ZM103.04-425.3v-72.44h213v72.44h-213Zm-80-142.44v-73h213v73h-213Zm782.79-81.13q-32.39 0-54.31-21.91-21.91-21.92-21.91-54.31t21.91-54.3q21.92-21.91 54.31-21.91 31.82 0 53.74 22.19 21.91 22.2 21.91 54.02 0 31.83-21.91 54.02-21.92 22.2-53.74 22.2Zm-702.79-61.87v-72.44h213v72.44h-213Z"/>
+    </Svg>
+  );
+}
+
+// `signal_cellular_1_bar-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Level1({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M65.87-65.87 894.7-894.7v828.83H65.87Zm363.31-79.22h385.73v-558.69L429.18-318.15v173.06Z"/>
+    </Svg>
+  );
+}
+
+// `signal_cellular_2_bar-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Level2({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M65.87-65.87 894.7-894.7v828.83H65.87Zm453.35-79.22h295.69v-558.69L519.22-408.09v263Z"/>
+    </Svg>
+  );
+}
+
+// `signal_cellular_3_bar-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Level3({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M65.87-65.87 894.7-894.7v828.83H65.87Zm533.35-79.22h215.69v-558.69L599.22-488.09v343Z"/>
+    </Svg>
+  );
+}
+
+// `signal_cellular_4_bar-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Level4({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M65.87-65.87 894.7-894.7v828.83H65.87Z"/>
+    </Svg>
+  );
+}
+
+// `graphic_eq-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Intervals({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M274.26-229.26v-501.48h73.57v501.48h-73.57ZM443.78-65.87V-894.7h72.44v828.83h-72.44ZM105.87-393.78v-172.44h73v172.44h-73Zm506.3 164.52v-501.48h73v501.48h-73Zm168.96-164.52v-172.44h73.57v172.44h-73.57Z"/>
+    </Svg>
+  );
+}
+
+// `rowing-fill` is identical to the outline upstream: `filled` is a no-op.
+export function UpperBody({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M735.13 0 619.74-115.39v-62L301-496.13q-6.57 1.43-13.35 2.72-6.78 1.28-12.91 1.28v-59.78q49.56-2.57 111.28-27.59t93.85-60.72l58-63q12.56-13.56 28.63-22.13 16.07-8.56 33.63-8.56 33.7 0 57.54 23.84 23.85 23.85 23.85 57.55v248q0 29.43-12.65 60.15t-33.78 42.85L513.74-423.44v-157.6q-28.31 24.3-62.48 42.61-34.17 18.3-64.35 29.17l282.92 282.35h62l115.39 115.39L735.13 0Zm-529-144-49.52-49.52 207.13-204.57 108.39 108.96h-119.3L206.13-144Zm343.83-658.57q-22.35-22.34-22.35-54.04 0-31.69 22.35-54.04Q572.3-933 604-933t54.04 22.35q22.35 22.35 22.35 54.04 0 31.7-22.35 54.04-22.34 22.35-54.04 22.35t-54.04-22.35Z"/>
+    </Svg>
+  );
+}

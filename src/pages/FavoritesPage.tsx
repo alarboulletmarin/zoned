@@ -36,7 +36,7 @@ export function FavoritesPage() {
       <div className="py-8 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Heart className="size-6 text-red-500 fill-red-500 shrink-0" />
+        <Heart filled className="size-6 text-red-500 shrink-0" />
         <div>
           <EditorialTitle as="h1" size="md">
             {t("common:favorites.title")}

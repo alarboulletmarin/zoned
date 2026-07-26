@@ -5,19 +5,9 @@ import {
   ArrowLeft,
   Clock,
   Dumbbell,
-  Target,
   Circle,
   Mountain,
-  TreePine,
   Route,
-  Leaf,
-  Footprints,
-  Zap,
-  Flame,
-  Rocket,
-  Timer,
-  Shuffle,
-  ClipboardCheck,
   Link2,
   Shield,
   BookOpen,
@@ -63,7 +53,7 @@ import { MiniSessionTimeline } from "@/components/visualization/MiniSessionTimel
 import { useWorkout, useRelatedWorkouts, useTips } from "@/hooks";
 import { RelatedContent } from "@/components/domain/RelatedContent";
 import { useScrolledPast } from "@/hooks/useScrolledPast";
-import type { WorkoutCategory, ZoneRange, AnyWorkoutTemplate } from "@/types";
+import type { ZoneRange, AnyWorkoutTemplate } from "@/types";
 import {
   getWorkoutDiscipline,
   getDominantZone,
@@ -76,23 +66,8 @@ import { usePickLang, usePickLangArray } from "@/lib/i18n-utils";
 import { computeTrailMetrics } from "@/lib/workoutMetrics";
 import { MuscleGroupBadges } from "@/components/domain/MuscleGroupBadge";
 import { StrengthExerciseList } from "@/components/domain/StrengthExerciseList";
+import { CATEGORY_ICONS } from "@/components/domain/CategoryIcon";
 import { loadUserZonePrefs, calculateAllZones } from "@/lib/zones";
-
-/** Category icons using Lucide */
-const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: string }>> = {
-  recovery: Leaf,
-  endurance: Footprints,
-  tempo: Zap,
-  threshold: Flame,
-  vma_intervals: Rocket,
-  long_run: Route,
-  hills: Mountain,
-  fartlek: Timer,
-  race_pace: Target,
-  mixed: Shuffle,
-  assessment: ClipboardCheck,
-  trail: TreePine,
-};
 
 export function WorkoutDetailPage() {
   const { id } = useParams<{ id: string }>();
