@@ -25,7 +25,12 @@ import type { StrengthCategory } from "@/types/strength";
 import { cn } from "@/lib/utils";
 import type { ComponentType } from "react";
 
-const CATEGORY_ICONS: Record<WorkoutCategory, ComponentType<IconProps>> = {
+/**
+ * Single source of truth for category glyphs. Exported so that call sites
+ * needing the raw component (a different size, another wrapper) reuse the same
+ * mapping instead of keeping a divergent copy.
+ */
+export const CATEGORY_ICONS: Record<WorkoutCategory, ComponentType<IconProps>> = {
   recovery: Leaf,
   endurance: Activity,
   tempo: Gauge,
@@ -40,7 +45,7 @@ const CATEGORY_ICONS: Record<WorkoutCategory, ComponentType<IconProps>> = {
   trail: TreePine,
 };
 
-const STRENGTH_CATEGORY_ICONS: Record<StrengthCategory, ComponentType<IconProps>> = {
+export const STRENGTH_CATEGORY_ICONS: Record<StrengthCategory, ComponentType<IconProps>> = {
   runner_full_body: Dumbbell,
   runner_lower: Footprints,
   runner_core: Shield,

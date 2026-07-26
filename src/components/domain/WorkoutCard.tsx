@@ -5,22 +5,12 @@ import {
   Clock,
   Circle,
   Mountain,
-  TreePine,
-  Leaf,
-  Footprints,
-  Zap,
-  Flame,
-  Sprint,
-  Route,
-  Timer,
-  Target,
-  Shuffle,
-  ClipboardCheck,
 } from "@/components/icons";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { InteractiveCard } from "@/components/editorial";
 import { ZoneBadge, ZoneBadges } from "./ZoneBadge";
+import { CATEGORY_ICONS } from "./CategoryIcon";
 import { DifficultyIcon } from "./DifficultyIcon";
 import { FavoriteButton } from "./FavoriteButton";
 import { getWorkoutZones } from "@/lib/landing-stats";
@@ -34,27 +24,11 @@ import {
 import { computeTrailMetrics } from "@/lib/workoutMetrics";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import type { WorkoutTemplate, WorkoutCategory, AnyWorkoutTemplate } from "@/types";
+import type { WorkoutTemplate, AnyWorkoutTemplate } from "@/types";
 import { getDominantZone, getWorkoutDiscipline, DIFFICULTY_META, isStrengthWorkout } from "@/types";
 import { useZoneColors } from "@/hooks/useZoneColors";
 import { StrengthWorkoutCard, StrengthWorkoutCardCompact } from "./StrengthWorkoutCard";
 import { usePickLang } from "@/lib/i18n-utils";
-
-/** Category icons using Lucide */
-const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: string }>> = {
-  recovery: Leaf,
-  endurance: Footprints,
-  tempo: Zap,
-  threshold: Flame,
-  vma_intervals: Sprint,
-  long_run: Route,
-  hills: Mountain,
-  fartlek: Timer,
-  race_pace: Target,
-  mixed: Shuffle,
-  assessment: ClipboardCheck,
-  trail: TreePine,
-};
 
 interface WorkoutCardProps {
   workout: AnyWorkoutTemplate;
