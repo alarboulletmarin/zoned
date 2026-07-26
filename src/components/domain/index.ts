@@ -9,6 +9,7 @@ export {
   type WorkoutFiltersState,
 } from "./WorkoutFilters";
 export { CategoryIcon } from "./CategoryIcon";
+export { DifficultyIcon } from "./DifficultyIcon";
 export { FavoriteButton } from "./FavoriteButton";
 export { ZonePersonalizationCTA } from "./ZonePersonalizationCTA";
 export { TipCard } from "./TipCard";

@@ -1308,3 +1308,48 @@ export function Healing({ className, size = 24, filled = false }: IconProps) {
     </Svg>
   );
 }
+
+// `sprint-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Sprint({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="m216-160-42-42 408-408H440v80h-60v-140h223q14 0 27 5t23 15l120 119q29 29 67 44t80 17v60q-52-2-100-19.5T736-484l-46-46-114 114 86 86-244 141-30-52 176-102-82-82-266 265Zm-96-280v-60h200v60H120ZM40-570v-60h200v60H40Zm750-80q-29 0-49.5-20.5T720-720q0-29 20.5-49.5T790-790q29 0 49.5 20.5T860-720q0 29-20.5 49.5T790-650Zm-670-50v-60h200v60H120Z"/>
+    </Svg>
+  );
+}
+
+// `signal_cellular_1_bar-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Level1({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="m80-80 800-800v800H80Zm326-60h414v-596L406-322v182Z"/>
+    </Svg>
+  );
+}
+
+// `signal_cellular_2_bar-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Level2({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="m80-80 800-800v800H80Zm446-60h294v-596L526-442v302Z"/>
+    </Svg>
+  );
+}
+
+// `signal_cellular_3_bar-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Level3({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="m80-80 800-800v800H80Zm526-60h214v-596L606-522v382Z"/>
+    </Svg>
+  );
+}
+
+// `signal_cellular_4_bar-fill` is identical to the outline upstream: `filled` is a no-op.
+export function Level4({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="m80-80 800-800v800H80Z"/>
+    </Svg>
+  );
+}

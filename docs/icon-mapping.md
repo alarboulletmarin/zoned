@@ -16,14 +16,14 @@
 
 | | |
 |---|---|
-| Exports | 117 (112 repris de l'ancien set + 5 ajoutés pour le contexte) |
-| Correspondance exacte | 103 |
+| Exports | 122 (112 repris de l'ancien set + 10 ajoutés pour le contexte) |
+| Correspondance exacte | 108 |
 | Correspondance approchante | 12 |
 | Manquants (logos de marque) | 2 |
 | Variante `-fill` disponible | 115 / 115 icônes mappées |
 
-Sur les 113 glyphes distincts, 71 ont une variante pleine réellement différente
-du contour ; les 44 autres ont un `-fill` identique en amont et sont émis une
+Sur les 118 glyphes distincts, 71 ont une variante pleine réellement différente
+du contour ; les 49 autres ont un `-fill` identique en amont et sont émis une
 seule fois, avec un commentaire dans le fichier généré.
 
 ## Contrat de composant
@@ -60,6 +60,21 @@ partagé par plusieurs sens et que le glyphe ne convenait qu'à l'un d'eux :
 | `HeartRate` | `monitor_heart` | `Heart` | FC max dans le calculateur de zones |
 | `Stretching` | `sports_gymnastics` | `Waves` | catégorie renforcement « mobilité » |
 | `Healing` | `healing` | `HeartPulse` | catégorie renforcement « prévention blessures » |
+| `Sprint` | `sprint` | `Rocket` | catégorie VMA / VO2max |
+| `Level1`…`Level4` | `signal_cellular_1_bar`…`4_bar` | `Dumbbell` | échelle de difficulté |
+
+### L'échelle de difficulté
+
+Un haltère précédait le libellé de difficulté (« Débutant », « Intermédiaire »,
+« Avancé », « Élite ») — un choix hérité de l'ancien set, sans rapport avec un
+niveau, et illisible à `size-3`. La famille `signal_cellular_*_bar` offre
+exactement quatre paliers : le triangle vide donne la référence, la portion
+pleine croît avec le niveau, donc le glyphe **porte** l'information au lieu de la
+décorer. `DifficultyIcon` (`src/components/domain/`) fait la correspondance, sur
+le modèle de `CategoryIcon`.
+
+`Rocket` reste en service sur le changelog, où la fusée désigne les entrées
+« performance ». `Dumbbell` reste l'icône du renforcement musculaire.
 
 `Footprints` reste en service là où l'empreinte est juste (technique de foulée,
 collection « premiers pas », renforcement des jambes). `Heart` reste l'icône des
@@ -197,5 +212,10 @@ favoris. `HeartPulse` reste utilisé par les données (récupération, nutrition
 | `HeartRate` | `monitor_heart` | oui | exact | fréquence cardiaque (FC max, zones) — à distinguer de `Heart`, qui est l’icône « favoris » |
 | `Stretching` | `sports_gymnastics` | oui | exact | catégorie renforcement « mobilité » |
 | `Healing` | `healing` | oui | exact | catégorie renforcement « prévention blessures » |
+| `Sprint` | `sprint` | oui | exact | catégorie VMA / VO2max — coureur en action, remplace Rocket qui reste sur le changelog |
+| `Level1` | `signal_cellular_1_bar` | oui | exact | échelle de difficulté : 1 barre sur 4 (débutant) |
+| `Level2` | `signal_cellular_2_bar` | oui | exact | échelle de difficulté : 2 barres sur 4 (intermédiaire) |
+| `Level3` | `signal_cellular_3_bar` | oui | exact | échelle de difficulté : 3 barres sur 4 (avancé) |
+| `Level4` | `signal_cellular_4_bar` | oui | exact | échelle de difficulté : 4 barres sur 4 (élite) |
 | `GithubIcon` | — | — | **MANQUANT** | logo de marque, hors périmètre Material Symbols |
 | `StravaIcon` | — | — | **MANQUANT** | logo de marque, hors périmètre Material Symbols |

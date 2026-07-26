@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Clock, Dumbbell, UserRound } from "@/components/icons";
+import { DifficultyIcon } from "./DifficultyIcon";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FavoriteButton } from "./FavoriteButton";
@@ -149,7 +150,7 @@ export function StrengthWorkoutCard({ workout, className, expanded }: StrengthWo
           <div className={cn("hidden sm:flex items-center gap-2 flex-wrap", expanded && "flex")}>
             {/* Difficulty badge */}
             <Badge variant="secondary" className="text-xs">
-              <Dumbbell className="size-3 mr-1" />
+              <DifficultyIcon difficulty={workout.difficulty} className="size-3 mr-1" />
               {tLib(`difficulty.${workout.difficulty}`)}
             </Badge>
             {/* Intensity badge */}

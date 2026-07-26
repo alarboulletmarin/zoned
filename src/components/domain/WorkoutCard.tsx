@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   Clock,
-  Dumbbell,
   Circle,
   Mountain,
   TreePine,
@@ -11,7 +10,7 @@ import {
   Footprints,
   Zap,
   Flame,
-  Rocket,
+  Sprint,
   Route,
   Timer,
   Target,
@@ -22,6 +21,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { InteractiveCard } from "@/components/editorial";
 import { ZoneBadge, ZoneBadges } from "./ZoneBadge";
+import { DifficultyIcon } from "./DifficultyIcon";
 import { FavoriteButton } from "./FavoriteButton";
 import { getWorkoutZones } from "@/lib/landing-stats";
 import {
@@ -46,7 +46,7 @@ const CATEGORY_ICONS: Record<WorkoutCategory, React.ComponentType<{ className?: 
   endurance: Footprints,
   tempo: Zap,
   threshold: Flame,
-  vma_intervals: Rocket,
+  vma_intervals: Sprint,
   long_run: Route,
   hills: Mountain,
   fartlek: Timer,
@@ -194,7 +194,7 @@ export function WorkoutCardChrome({
         {showBadges && (
           <div className={cn("hidden sm:flex flex-wrap items-center gap-1.5", expanded && "flex")}>
             <Badge variant="secondary" className="text-xs whitespace-nowrap">
-              <Dumbbell className="size-3 mr-1" />
+              <DifficultyIcon difficulty={workout.difficulty} className="size-3 mr-1" />
               {t(`difficulty.${workout.difficulty}`)}
             </Badge>
             {workout.environment.requiresTrack && (

@@ -117,5 +117,10 @@ Pool|pool|exact|discipline « natation », remplace Waves sur les sélecteurs de
 HeartRate|monitor_heart|exact|fréquence cardiaque (FC max, zones) — à distinguer de `Heart`, qui est l’icône « favoris »
 Stretching|sports_gymnastics|exact|catégorie renforcement « mobilité »
 Healing|healing|exact|catégorie renforcement « prévention blessures »
+Sprint|sprint|exact|catégorie VMA / VO2max — coureur en action, remplace Rocket qui reste sur le changelog
+Level1|signal_cellular_1_bar|exact|échelle de difficulté : 1 barre sur 4 (débutant)
+Level2|signal_cellular_2_bar|exact|échelle de difficulté : 2 barres sur 4 (intermédiaire)
+Level3|signal_cellular_3_bar|exact|échelle de difficulté : 3 barres sur 4 (avancé)
+Level4|signal_cellular_4_bar|exact|échelle de difficulté : 4 barres sur 4 (élite)
 GithubIcon|-|manquant|logo de marque, hors périmètre Material Symbols
 StravaIcon|-|manquant|logo de marque, hors périmètre Material Symbols
