@@ -9,8 +9,9 @@
   Le paquet ne fournit aucun fichier NOTICE.
 - **Vérification :** chaque nom a été confirmé par un `ls` réel dans
   `node_modules/@material-symbols/svg-600/sharp/`. Aucun nom ne vient de mémoire.
-- **Régénérer :** `bun run generate:icons` — `bun run check:icons` échoue si le
-  fichier commité diverge de la table.
+- **Régénérer :** `bun run generate:icons`. `bun run build` et `build:seo` lancent
+  `generate-icons --check` en amont : un `index.tsx` édité à la main ou obsolète
+  fait échouer le build au lieu de partir en production.
 
 ## Résumé
 
