@@ -44,8 +44,8 @@ const zonedValues: Record<string, ComparisonValue> = {
   personalizedPlans: { type: "yes" },
   exportFit: { type: "yes" },
   exportPdf: { type: "yes" },
-  library: { type: "text", valueFr: "200+ séances", valueEn: "200+ workouts" },
-  calculators: { type: "text", valueFr: "9 calculateurs", valueEn: "9 calculators" },
+  library: { type: "text", valueFr: "256 séances", valueEn: "256 workouts" },
+  calculators: { type: "text", valueFr: "12 calculateurs", valueEn: "12 calculators" },
   openSource: { type: "yes" },
 };
 

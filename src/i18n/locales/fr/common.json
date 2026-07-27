@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "Zoned",
-    "tagline": "200 séances course, 10 vélo, 10 natation, 17 renforcement, plans du 5K au marathon, générateur de parcours et 9 calculateurs. Gratuit, sans compte.",
+    "tagline": "219 séances course, 10 vélo, 10 natation, 17 renforcement, plans du 5K au marathon, générateur de parcours et 12 calculateurs. Gratuit, sans compte.",
     "heroTitle": "Prépare ton prochain",
     "heroTitleAccent": "objectif"
   },
@@ -456,7 +456,7 @@
   "stats": {
     "workoutsTitle": "séances",
     "workoutsSubtitle": "Export Garmin FIT en 1 clic",
-    "calculatorsTitle": "9 calculateurs",
+    "calculatorsTitle": "12 calculateurs",
     "calculatorsSubtitle": "VMA, zones, splits, équivalences...",
     "simulatorTitle": "Simulateur de course",
     "simulatorSubtitle": "Splits, nutrition, échauffement, jour-J"

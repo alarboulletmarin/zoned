@@ -459,7 +459,7 @@ export function HomePage() {
         priceCurrency: "EUR",
       },
       featureList: [
-        "200+ science-based running workouts",
+        "256 science-based workouts: running, trail, cycling, swimming, strength",
         "6-zone training system",
         "Personalised training plans",
         "VMA / HRmax / pace calculators",

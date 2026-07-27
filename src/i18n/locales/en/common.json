@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "Zoned",
-    "tagline": "200 running, 10 cycling, 10 swimming, 17 strength sessions, 5K-to-marathon plans, route generator and 9 calculators. Free, no account.",
+    "tagline": "219 running, 10 cycling, 10 swimming, 17 strength sessions, 5K-to-marathon plans, route generator and 12 calculators. Free, no account.",
     "heroTitle": "Prepare your next",
     "heroTitleAccent": "race"
   },
@@ -456,7 +456,7 @@
   "stats": {
     "workoutsTitle": "workouts",
     "workoutsSubtitle": "One-click Garmin FIT export",
-    "calculatorsTitle": "9 calculators",
+    "calculatorsTitle": "12 calculators",
     "calculatorsSubtitle": "VMA, zones, splits, equivalences...",
     "simulatorTitle": "Race simulator",
     "simulatorSubtitle": "Splits, nutrition, warm-up, race day"
