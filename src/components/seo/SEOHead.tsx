@@ -60,7 +60,22 @@ export function SEOHead({
   const fullTitle = title
     ? `${title} | ${SITE_NAME}`
     : `${SITE_NAME} — ${isEn ? "Science-Based Running Workouts" : "Séances de course scientifiques par zones"}`;
-  const canonicalUrl = canonical ? `${SITE_URL}${canonical}` : SITE_URL;
+
+  const baseLoc = canonical || "/";
+
+  // Each locale URL canonicalises to itself. An alternate that points at its
+  // counterpart is not an alternate — Google files it under "page with proper
+  // canonical tag" and the locale never gets indexed, which is what kept the
+  // whole English side out of the index.
+  //
+  // Derived from the active language rather than location.search on purpose:
+  // several pages sync their state into the query string by rebuilding it from
+  // scratch (LibraryPage, the calculators), which drops `lang` shortly after
+  // mount. i18n.language survives that. The two agree for every crawler
+  // anyway — with an empty localStorage the language can only come from the
+  // URL, so ?lang=en ⇔ isEn.
+  const canonicalUrl = `${SITE_URL}${baseLoc}${isEn ? "?lang=en" : ""}`;
+
   const locale = isEn ? "en_US" : "fr_FR";
   const altLocale = isEn ? "fr_FR" : "en_US";
   const fullOgImage = ogImage.startsWith("http") ? ogImage : `${SITE_URL}${ogImage}`;
@@ -96,8 +111,6 @@ export function SEOHead({
 
   const pageLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
   const allLd = [...baseLd, ...pageLd];
-
-  const baseLoc = canonical || "/";
 
   return (
     <>

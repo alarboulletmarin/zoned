@@ -167,7 +167,7 @@ export function PrebuiltPlanDetailPage() {
   return (
     <>
       <SEOHead
-        title={name}
+        title={t("prebuilt.seoTitle", { name })}
         description={seoDescription}
         canonical={`/plan/prebuilt/${prebuilt.slug}`}
         jsonLd={[

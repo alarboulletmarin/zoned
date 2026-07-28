@@ -461,6 +461,7 @@
     "seoFr": "Plan d'entraînement {{name}} gratuit : {{weeks}} semaines, {{sessions}} séances/semaine. {{desc}}",
     "seoEn": "Free {{name}} training plan: {{weeks}} weeks, {{sessions}} sessions/week. {{desc}}",
     "seoDescription": "Free {{name}} training plan: {{weeks}} weeks, {{sessions}} sessions/week. {{desc}}",
+    "seoTitle": "{{name}} Training Plan",
     "weeksCount": "{{count}} weeks",
     "weeksShort": "wk",
     "sessionsPerWeek": "sessions/wk",

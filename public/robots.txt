@@ -7,7 +7,9 @@ Allow: /
 # Private state (per-user data, no SEO value)
 Disallow: /my-zones
 Disallow: /favorites
-Disallow: /plans
+# Anchored: a bare `/plans` is a prefix rule and also blocked
+# /plans/methodology, a public page listed in the sitemap.
+Disallow: /plans$
 Disallow: /plan/new/assisted
 Disallow: /plan/new/free
 Disallow: /routes/mine

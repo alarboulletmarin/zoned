@@ -57,8 +57,17 @@ i18n
 
     // Detection options
     detection: {
-      // Order of detection
-      order: ["querystring", "localStorage", "navigator", "htmlTag"],
+      // The URL is the source of truth for language, then the user's own
+      // stored choice. `navigator` is deliberately absent: it made the bare
+      // FR URL render in English for anyone whose browser asked for English —
+      // including Google's renderer, whose navigator.language is always
+      // "en-US". Google was therefore indexing English content on every URL
+      // the sitemap declares as hreflang="fr-FR"/x-default, and rejecting the
+      // ?lang=en twins as duplicates. Language now follows the URL, so the
+      // page a crawler renders always matches the one it was promised.
+      // English speakers reach English through ?lang=en or the switcher,
+      // which persists to localStorage.
+      order: ["querystring", "localStorage", "htmlTag"],
       // Read ?lang= query parameter (default is ?lng=)
       lookupQuerystring: "lang",
       // Key to store in localStorage
