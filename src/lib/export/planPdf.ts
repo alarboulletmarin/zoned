@@ -9,10 +9,11 @@
 
 import type { TDocumentDefinitions, Content, TableCell } from "pdfmake/interfaces";
 import type { TrainingPlan } from "@/types/plan";
-import type { WorkoutTemplate, WorkoutBlock, Zone } from "@/types";
+import type { AnyWorkoutTemplate, WorkoutTemplate, WorkoutBlock, Zone } from "@/types";
 import type { StrengthWorkoutTemplate, StrengthBlock } from "@/types/strength";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import { getDominantZone, parseZoneSpan } from "@/types";
+import { WORKOUT_PHASES, getWorkoutPhaseBlocks, isRunningWorkout, isStrengthWorkout } from "@/lib/workoutTemplate";
 import { getZoneHex } from "@/lib/zoneColors";
 import { computePlanStats, computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { calculatePaceZones, formatPace } from "@/lib/zones";
@@ -94,14 +95,6 @@ function t(key: string, opts?: Record<string, unknown>): string {
 }
 
 
-function isStrength(template: WorkoutTemplate): boolean {
-  return (template as unknown as { kind?: string }).kind === "strength";
-}
-
-function asStrength(template: WorkoutTemplate): StrengthWorkoutTemplate {
-  return template as unknown as StrengthWorkoutTemplate;
-}
-
 function toSuperscript(n: number): string {
   return String(n)
     .split("")
@@ -131,10 +124,9 @@ function dayLabel(dayOfWeek: number): string {
 }
 
 /** Get session type label (short) */
-function typeLabel(sessionType: string, template: WorkoutTemplate | undefined): string {
-  if (template && isStrength(template)) {
-    const cat = asStrength(template).category;
-    const label = STRENGTH_CAT_LABELS[cat];
+function typeLabel(sessionType: string, template: AnyWorkoutTemplate | undefined): string {
+  if (template && isStrengthWorkout(template)) {
+    const label = STRENGTH_CAT_LABELS[template.category];
     return label ? (isEn() ? label.en : label.fr) : (isEn() ? "Strength" : "Renfo");
   }
   const label = SESSION_TYPE_LABELS_SHORT[sessionType];
@@ -233,11 +225,7 @@ function buildStrengthSummary(
   template: StrengthWorkoutTemplate,
   exerciseNames: Record<string, string>,
 ): string {
-  const allBlocks = [
-    ...template.warmupBlocks,
-    ...template.mainBlocks,
-    ...template.cooldownBlocks,
-  ];
+  const allBlocks = WORKOUT_PHASES.flatMap((phase) => getWorkoutPhaseBlocks(template, phase));
   const count = allBlocks.length;
   const names = allBlocks
     .slice(0, 3)
@@ -267,16 +255,17 @@ function buildWorkoutIndex(plan: TrainingPlan): Map<string, number> {
 // ── Exercise name resolution ────────────────────────────────────────
 
 async function resolveExerciseNames(
-  templates: Record<string, WorkoutTemplate>,
+  templates: Record<string, AnyWorkoutTemplate>,
 ): Promise<Record<string, string>> {
   const names: Record<string, string> = {};
   const exerciseIds = new Set<string>();
 
-  for (const t of Object.values(templates)) {
-    if (!isStrength(t)) continue;
-    const st = asStrength(t);
-    for (const block of [...st.warmupBlocks, ...st.mainBlocks, ...st.cooldownBlocks]) {
-      exerciseIds.add(block.exerciseId);
+  for (const template of Object.values(templates)) {
+    if (!isStrengthWorkout(template)) continue;
+    for (const phase of WORKOUT_PHASES) {
+      for (const block of getWorkoutPhaseBlocks(template, phase)) {
+        exerciseIds.add(block.exerciseId);
+      }
     }
   }
 
@@ -521,7 +510,7 @@ function renderStrengthAppendixEntry(
 export async function exportPlanToPDF(
   plan: TrainingPlan,
   workoutNames: Record<string, string>,
-  workoutTemplates: Record<string, WorkoutTemplate>,
+  workoutTemplates: Record<string, AnyWorkoutTemplate>,
 ): Promise<void> {
   try {
       // Dynamic import pdfmake (code-split)
@@ -974,7 +963,7 @@ export async function exportPlanToPDF(
         const refNum = workoutIndex.get(session.workoutId);
         const wName = workoutNames[session.workoutId] || session.workoutId;
         const isKey = session.isKeySession;
-        const isStr = template ? isStrength(template) : session.workoutId.startsWith("STR-");
+        const isStr = template ? isStrengthWorkout(template) : session.workoutId.startsWith("STR-");
 
         // Name with key star + ref superscript
         const nameText: Content = {
@@ -1001,7 +990,7 @@ export async function exportPlanToPDF(
             bold: true,
             margin: [2, 2, 2, 2],
           };
-        } else if (template && !isStr) {
+        } else if (template && isRunningWorkout(template)) {
           const dominantZone = getDominantZone(template);
           const zStr = `Z${dominantZone}`;
           zoneCell = {
@@ -1028,9 +1017,9 @@ export async function exportPlanToPDF(
 
         // Summary
         let summary = "";
-        if (isStr && template) {
-          summary = buildStrengthSummary(asStrength(template), exerciseNames);
-        } else if (template && !isStr) {
+        if (template && isStrengthWorkout(template)) {
+          summary = buildStrengthSummary(template, exerciseNames);
+        } else if (template && isRunningWorkout(template)) {
           summary = buildCompactSummary(template, session.estimatedDurationMin);
         }
 
@@ -1115,8 +1104,8 @@ export async function exportPlanToPDF(
       const template = workoutTemplates[workoutId];
       if (!template) continue;
 
-      if (isStrength(template)) {
-        const entries = renderStrengthAppendixEntry(refNum, asStrength(template), exerciseNames);
+      if (isStrengthWorkout(template)) {
+        const entries = renderStrengthAppendixEntry(refNum, template, exerciseNames);
         content.push(...entries);
       } else {
         const entries = renderRunningAppendixEntry(refNum, template);

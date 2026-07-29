@@ -6,9 +6,9 @@
 
 import { createEvents, type EventAttributes } from "ics";
 import type { TrainingPlan } from "@/types/plan";
-import type { WorkoutTemplate, AnyWorkoutTemplate } from "@/types";
-import { getDominantZone, isStrengthWorkout } from "@/types";
-import type { StrengthWorkoutTemplate } from "@/types/strength";
+import type { AnyWorkoutTemplate } from "@/types";
+import { getDominantZone } from "@/types";
+import { isRunningWorkout, isStrengthWorkout } from "@/lib/workoutTemplate";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import { DAY_LABELS } from "@/lib/planGenerator/constants";
 import i18n from "@/i18n";
@@ -45,7 +45,7 @@ function getSessionDate(planMonday: Date, weekNumber: number, dayOfWeek: number)
 export function exportPlanToICS(
   plan: TrainingPlan,
   workoutNames: Record<string, string>,
-  workoutTemplates: Record<string, WorkoutTemplate>,
+  workoutTemplates: Record<string, AnyWorkoutTemplate>,
 ): void {
   try {
     const isEn = isEnglish();
@@ -140,19 +140,18 @@ export function exportPlanToICS(
             descriptionLines.push(notes);
           }
 
-          const template = workoutTemplates[session.workoutId] as AnyWorkoutTemplate | undefined;
+          const template = workoutTemplates[session.workoutId];
           const isStrength = template ? isStrengthWorkout(template) : false;
-          const primaryZone = template && !isStrength ? `Z${getDominantZone(template as WorkoutTemplate)}` : "";
+          const primaryZone = template && isRunningWorkout(template) ? `Z${getDominantZone(template)}` : "";
           const zoneTag = primaryZone ? ` [${primaryZone}]` : isStrength ? " [Renfo]" : "";
 
-          if (template && isStrength) {
-            const str = template as StrengthWorkoutTemplate;
-            const desc = pickLang(str, "description");
+          if (template && isStrengthWorkout(template)) {
+            const desc = pickLang(template, "description");
             descriptionLines.push("");
             descriptionLines.push(desc);
 
             // Coaching tips
-            const tips = pickLangArray<string>(str, "coachingTips");
+            const tips = pickLangArray<string>(template, "coachingTips");
             if (tips?.length) {
               descriptionLines.push("");
               descriptionLines.push(`--- ${t("tips")} ---`);
@@ -160,8 +159,8 @@ export function exportPlanToICS(
                 descriptionLines.push(`• ${tip}`);
               }
             }
-          } else if (template && !isStrength) {
-            const running = template as WorkoutTemplate;
+          } else if (template && isRunningWorkout(template)) {
+            const running = template;
             const desc = pickLang(running, "description");
             descriptionLines.push("");
             descriptionLines.push(desc);

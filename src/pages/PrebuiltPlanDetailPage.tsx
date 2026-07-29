@@ -26,7 +26,7 @@ import { savePlan } from "@/lib/planStorage";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
-import type { WorkoutTemplate } from "@/types";
+import type { AnyWorkoutTemplate } from "@/types";
 import { toast } from "sonner";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
@@ -81,7 +81,7 @@ export function PrebuiltPlanDetailPage() {
     Promise.all(
       Array.from(workoutIds).map(async (wid) => {
         const workout = await getWorkoutById(wid);
-        return [wid, workout] as [string, WorkoutTemplate | undefined];
+        return [wid, workout] as [string, AnyWorkoutTemplate | undefined];
       }),
     ).then((results) => {
       const names: Record<string, string> = {};

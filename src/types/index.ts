@@ -472,6 +472,23 @@ export * from "./strength";
 // ── Unified workout type (running + strength) ────────────────────
 import type { StrengthWorkoutTemplate } from "./strength";
 
+/**
+ * The one template contract. Every consumer that can receive either kind of
+ * workout takes this union and narrows with the guards below. Nothing should
+ * cast its way across the boundary.
+ *
+ * The two members deliberately keep different phase field names: running holds
+ * `warmupTemplate` / `mainSetTemplate` / `cooldownTemplate` of `WorkoutBlock`
+ * (zone + duration), strength holds `warmupBlocks` / `mainBlocks` /
+ * `cooldownBlocks` of `StrengthBlock` (exercise + sets + reps). Aligning the
+ * names was considered and rejected: the block types are not interchangeable,
+ * so identical names would advertise a substitutability that does not exist
+ * and would hide the mistake of feeding one to a consumer expecting the other.
+ *
+ * Consumers that do not care which naming applies use the accessors in
+ * `@/lib/workoutTemplate` (`getWorkoutPhaseBlocks`), which also re-export
+ * these guards so there is a single import path for "handle either kind".
+ */
 export type AnyWorkoutTemplate = WorkoutTemplate | StrengthWorkoutTemplate;
 
 export function isStrengthWorkout(w: AnyWorkoutTemplate): w is StrengthWorkoutTemplate {

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import type { WorkoutTemplate, WorkoutCategory } from "@/types";
+import type { AnyWorkoutTemplate, WorkoutTemplate, WorkoutCategory } from "@/types";
 import {
   loadAllWorkouts,
   loadCategory,
@@ -17,7 +17,8 @@ interface UseWorkoutsResult {
 }
 
 interface UseWorkoutResult {
-  workout: WorkoutTemplate | null;
+  /** Union: an `STR-` id resolves to a strength session. Narrow before use. */
+  workout: AnyWorkoutTemplate | null;
   isLoading: boolean;
   error: Error | null;
 }
@@ -92,7 +93,7 @@ export function useWorkouts(
  * Hook to load a single workout by ID
  */
 export function useWorkout(id: string | undefined): UseWorkoutResult {
-  const [workout, setWorkout] = useState<WorkoutTemplate | null>(null);
+  const [workout, setWorkout] = useState<AnyWorkoutTemplate | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 

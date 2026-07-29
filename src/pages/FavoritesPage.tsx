@@ -20,7 +20,7 @@ export function FavoritesPage() {
   // Get workout objects for all favorites (running + strength)
   const favoriteWorkouts = useMemo(() => {
     if (isLoading) return [];
-    const allWorkouts: AnyWorkoutTemplate[] = [...workouts, ...strengthWorkouts as AnyWorkoutTemplate[]];
+    const allWorkouts: AnyWorkoutTemplate[] = [...workouts, ...strengthWorkouts];
     return favorites
       .map((id) => allWorkouts.find((w) => w.id === id))
       .filter((w) => w !== undefined);

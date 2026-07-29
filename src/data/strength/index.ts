@@ -29,6 +29,10 @@ export const strengthCategories: StrengthCategory[] = [
 const exerciseCache: Partial<Record<string, StrengthExercise[]>> = {};
 let allExercisesCache: StrengthExercise[] | null = null;
 
+// The `as unknown as` casts below are load-bearing: TypeScript widens JSON
+// imports to plain string/number literals, so the union members (MuscleGroup,
+// StrengthEquipment…) never line up. They cross a data boundary, not the
+// workout union — nothing here bypasses AnyWorkoutTemplate.
 const exerciseLoaders: Record<string, () => Promise<StrengthCategoryFile>> = {
   lower_body: () =>
     import("./exercises/lower_body.json").then((m) => m.default as unknown as StrengthCategoryFile),
@@ -83,6 +87,8 @@ export async function getExerciseById(
 const sessionCache: Partial<Record<StrengthCategory, StrengthWorkoutTemplate[]>> = {};
 let allSessionsCache: StrengthWorkoutTemplate[] | null = null;
 
+// Same JSON-widening reason as exerciseLoaders above: the cast is the data
+// boundary, not a way around the workout union.
 const sessionLoaders: Partial<
   Record<StrengthCategory, () => Promise<StrengthSessionFile>>
 > = {

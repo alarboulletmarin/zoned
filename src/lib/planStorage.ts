@@ -1,11 +1,16 @@
 import type { TrainingPlan, PlanSession, CrossTrainingSession, PlanUndoableChange, AutoChange } from "@/types/plan";
-import type { SessionType, WorkoutCategory } from "@/types";
+import type { SessionType, StrengthCategory, WorkoutCategory } from "@/types";
 import { getWorkoutById } from "@/data/workouts";
 import { parseImportedPlanJson, preparePlanForStorage, normalizeStoredPlan } from "@/lib/planSchema";
 
 const STORAGE_KEY = "zoned-plans";
 
-function mapCategoryToSessionType(category: WorkoutCategory): SessionType {
+/**
+ * Strength categories are accepted because `addSessionToPlan` takes any
+ * catalogue id, `STR-` ones included; they are absent from the map and fall
+ * through to "endurance".
+ */
+function mapCategoryToSessionType(category: WorkoutCategory | StrengthCategory): SessionType {
   const map: Record<string, SessionType> = {
     recovery: "recovery",
     endurance: "endurance",

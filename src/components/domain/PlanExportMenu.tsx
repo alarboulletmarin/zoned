@@ -13,7 +13,7 @@ import { getWorkoutById } from "@/data/workouts";
 import { preparePlanForStorage } from "@/lib/planSchema";
 import { toast } from "sonner";
 import type { TrainingPlan } from "@/types/plan";
-import type { WorkoutTemplate } from "@/types";
+import type { AnyWorkoutTemplate } from "@/types";
 import { pickLang } from "@/lib/i18n-utils";
 
 interface PlanExportMenuProps {
@@ -21,7 +21,7 @@ interface PlanExportMenuProps {
   /** Pre-loaded workout names (optional — loaded on demand if absent) */
   workoutNames?: Record<string, string>;
   /** Pre-loaded workout templates (optional — loaded on demand if absent) */
-  workoutTemplates?: Record<string, WorkoutTemplate>;
+  workoutTemplates?: Record<string, AnyWorkoutTemplate>;
   size?: "sm" | "default";
   /** Visual weight. Use "outline" where another filled CTA already leads. */
   variant?: "default" | "outline";
@@ -32,7 +32,7 @@ interface PlanExportMenuProps {
  */
 async function resolvePlanWorkouts(plan: TrainingPlan) {
   const names: Record<string, string> = {};
-  const templates: Record<string, WorkoutTemplate> = {};
+  const templates: Record<string, AnyWorkoutTemplate> = {};
 
   const ids = new Set<string>();
   for (const week of plan.weeks) {

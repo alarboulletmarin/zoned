@@ -52,7 +52,7 @@ import {
   PHASE_META,
   RACE_DISTANCE_META,
 } from "@/types/plan";
-import type { WorkoutTemplate } from "@/types";
+import type { AnyWorkoutTemplate, WorkoutTemplate } from "@/types";
 import { toast } from "sonner";
 import { SwapSessionDialog } from "@/components/domain/SwapSessionDialog";
 import { SubstituteSessionDialog } from "@/components/domain/SubstituteSessionDialog";
@@ -123,7 +123,7 @@ export function PlanViewPage() {
   const [monthlyVisibleWeeks, setMonthlyVisibleWeeks] = useState<number[]>([]);
 
   const [workoutNames, setWorkoutNames] = useState<Record<string, string>>({});
-  const [workoutTemplates, setWorkoutTemplates] = useState<Record<string, WorkoutTemplate>>({});
+  const [workoutTemplates, setWorkoutTemplates] = useState<Record<string, AnyWorkoutTemplate>>({});
   const [swapTarget, setSwapTarget] = useState<{
     weekNumber: number;
     sessionIndex: number;
@@ -247,11 +247,11 @@ export function PlanViewPage() {
     Promise.all(
       Array.from(workoutIds).map(async (wid) => {
         const workout = await getWorkoutById(wid);
-        return [wid, workout] as [string, WorkoutTemplate | undefined];
+        return [wid, workout] as [string, AnyWorkoutTemplate | undefined];
       })
     ).then((results) => {
       const names: Record<string, string> = {};
-      const templates: Record<string, WorkoutTemplate> = {};
+      const templates: Record<string, AnyWorkoutTemplate> = {};
       for (const [wid, workout] of results) {
         if (workout) {
           names[wid] = pick(workout, "name");

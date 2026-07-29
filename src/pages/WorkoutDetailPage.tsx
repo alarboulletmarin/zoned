@@ -53,12 +53,12 @@ import { MiniSessionTimeline } from "@/components/visualization/MiniSessionTimel
 import { useWorkout, useRelatedWorkouts, useTips } from "@/hooks";
 import { RelatedContent } from "@/components/domain/RelatedContent";
 import { useScrolledPast } from "@/hooks/useScrolledPast";
-import type { ZoneRange, AnyWorkoutTemplate } from "@/types";
+import type { ZoneRange } from "@/types";
 import {
   getWorkoutDiscipline,
   getDominantZone,
-  isStrengthWorkout,
 } from "@/types";
+import { isRunningWorkout, isStrengthWorkout } from "@/lib/workoutTemplate";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { IntensityBadge } from "@/components/domain/IntensityBadge";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
@@ -90,11 +90,12 @@ export function WorkoutDetailPage() {
   } | null;
 
   const { workout, isLoading } = useWorkout(id);
-  const isStrength = workout ? isStrengthWorkout(workout as AnyWorkoutTemplate) : false;
-  const { workouts: relatedWorkouts } = useRelatedWorkouts(isStrength ? null : workout);
+  const runningWorkout = workout && isRunningWorkout(workout) ? workout : null;
+  const isStrength = workout ? isStrengthWorkout(workout) : false;
+  const { workouts: relatedWorkouts } = useRelatedWorkouts(runningWorkout);
 
   // Get contextual tip based on dominant zone (running workouts only)
-  const dominantZoneForTip = workout && !isStrength ? getDominantZone(workout) : undefined;
+  const dominantZoneForTip = runningWorkout ? getDominantZone(runningWorkout) : undefined;
   const { tip } = useTips({
     filters: dominantZoneForTip ? { zones: [dominantZoneForTip] } : undefined,
     autoLoad: !!workout && !isStrength,
@@ -174,10 +175,11 @@ export function WorkoutDetailPage() {
   }
 
   // ── Strength workout branch ─────────────────────────────────────
-  if (isStrengthWorkout(workout as AnyWorkoutTemplate)) {
+  // Narrowing here is what makes `workout` a WorkoutTemplate below.
+  if (isStrengthWorkout(workout)) {
     return (
       <StrengthWorkoutDetail
-        workout={workout as unknown as StrengthWorkoutTemplate}
+        workout={workout}
         locationState={locationState}
       />
     );

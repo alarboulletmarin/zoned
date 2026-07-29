@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { Clock, Dumbbell } from "@/components/icons";
 import { ZoneBadge } from "@/components/domain/ZoneBadge";
-import type { WorkoutTemplate, AnyWorkoutTemplate } from "@/types";
-import type { StrengthWorkoutTemplate } from "@/types/strength";
-import { getDominantZone, CATEGORY_META, isStrengthWorkout } from "@/types";
+import type { AnyWorkoutTemplate } from "@/types";
+import { getDominantZone, CATEGORY_META } from "@/types";
+import { isRunningWorkout, isStrengthWorkout } from "@/lib/workoutTemplate";
 import { getWorkoutDuration } from "@/components/visualization";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { cn } from "@/lib/utils";
@@ -21,14 +21,13 @@ export function SearchResultItem({ workout, isSelected, onClick }: SearchResultI
 
   const isStrength = isStrengthWorkout(workout);
   const name = pick(workout, "name");
-  const categoryMeta = isStrength ? null : CATEGORY_META[workout.category];
-  const categoryLabel = isStrength
-    ? tStrength(`categories.${(workout as StrengthWorkoutTemplate).category}`)
-    : pick(categoryMeta!, "label");
-  const dominantZone = isStrength ? null : getDominantZone(workout as WorkoutTemplate);
-  const duration = isStrength
-    ? formatDurationMinutes(Math.round(((workout as StrengthWorkoutTemplate).typicalDuration.min + (workout as StrengthWorkoutTemplate).typicalDuration.max) / 2))
-    : formatDurationMinutes(getWorkoutDuration(workout as WorkoutTemplate));
+  const categoryLabel = isStrengthWorkout(workout)
+    ? tStrength(`categories.${workout.category}`)
+    : pick(CATEGORY_META[workout.category], "label");
+  const dominantZone = isRunningWorkout(workout) ? getDominantZone(workout) : null;
+  const duration = isStrengthWorkout(workout)
+    ? formatDurationMinutes(Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2))
+    : formatDurationMinutes(getWorkoutDuration(workout));
 
   return (
     <button

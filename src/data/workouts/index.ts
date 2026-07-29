@@ -1,4 +1,5 @@
 import type {
+  AnyWorkoutTemplate,
   WorkoutTemplate,
   WorkoutCategory,
   WorkoutCategoryFile,
@@ -200,10 +201,14 @@ export async function getWorkoutsByCategory(
  * Get workout by ID (async)
  * Loads all workouts if not cached.
  * Checks strength sessions for STR- prefixed IDs.
+ *
+ * Returns the `AnyWorkoutTemplate` union: an `STR-` id resolves to a strength
+ * session, everything else to a running-shaped template. Narrow with
+ * `isStrengthWorkout()` / `isRunningWorkout()` from `@/lib/workoutTemplate`.
  */
 export async function getWorkoutById(
   id: string
-): Promise<WorkoutTemplate | undefined> {
+): Promise<AnyWorkoutTemplate | undefined> {
   // Check custom workouts first for CUSTOM- prefixed IDs
   if (id.startsWith("CUSTOM-")) {
     const { getCustomWorkout } = await import("@/lib/customWorkoutStorage");
@@ -212,9 +217,7 @@ export async function getWorkoutById(
   // Check strength sessions for STR- prefixed IDs
   if (id.startsWith("STR-")) {
     const { getStrengthSessionById } = await import("@/data/strength");
-    const session = await getStrengthSessionById(id);
-    // Return as WorkoutTemplate union — callers should use isStrengthWorkout() guard
-    return session as unknown as WorkoutTemplate | undefined;
+    return getStrengthSessionById(id);
   }
   // Cycling and swimming are on their own discipline loaders.
   if (id.startsWith("CYC-")) {
