@@ -1,0 +1,83 @@
+# Correctness gate for pull requests.
+#
+# Until this existed, nothing blocked a PR: neither tsc, nor the test suite,
+# nor FR/EN parity. Vercel builds every push, so a type error or a broken
+# namespace was only discovered once it was already on main.
+#
+# Deliberately excluded: prerender, generate:og, generate:pwa-screenshots,
+# demo:gif and the full `build`. They drive a headless Chrome and cost
+# minutes; the Lighthouse workflow already builds the production bundle, so
+# this one stays a fast source-level check.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# A PR that gets three pushes in a minute only needs the last one checked.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    env:
+      # Both are needed, and only the second one actually works.
+      #
+      # The postinstall is `test -n "$VERCEL" || puppeteer browsers install chrome`.
+      # PUPPETEER_SKIP_DOWNLOAD is the documented escape hatch, but
+      # @puppeteer/browsers only consults it on the pinned-browsers path
+      # (`install` with no argument). See the `!args.browser` guard in
+      # CLI.js. Because the script names `chrome` explicitly, the flag is
+      # ignored and a ~190 MB Chrome is downloaded anyway (verified locally).
+      #
+      # VERCEL=1 short-circuits the postinstall before puppeteer is ever
+      # invoked, which is why the Lighthouse workflow already uses it. Nothing
+      # else in this job reads VERCEL: only scripts/prerender.ts does, and
+      # this workflow never runs it.
+      PUPPETEER_SKIP_DOWNLOAD: "true"
+      VERCEL: "1"
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Typecheck
+        run: bunx tsc --noEmit
+
+      - name: Unit tests
+        run: bun test
+
+      - name: i18n FR/EN parity
+        run: bun run check:i18n
+
+      - name: Zone colours match themes.css
+        run: bun run scripts/qa-zone-colors.ts
+
+      - name: Workout schema
+        run: bun run scripts/qa-workout-schema.ts
+
+      # INFORMATIONAL, not a gate. It prints findings and exits 0 whatever it
+      # finds; it currently reports a duration drift on END-022 on a green
+      # main, so gating on its output would make CI red on day one. It also
+      # swallows per-item runtime throws (logs `[skip] <id>` and moves on), so
+      # the step only turns red on an import-time failure. That is still worth
+      # something: it exercises the zone machinery end to end. Read the log,
+      # don't trust the exit code.
+      - name: Zone audit (informational)
+        run: bun run scripts/qa-zone-audit.ts
+
+      # qa-plan-audit.ts and qa-prebuilt-audit.ts are deliberately NOT here.
+      # `.gitignore` keeps `scripts/qa-*.ts` out of the repo except the few
+      # negated gates, so those two exist on developer machines but never in a
+      # checkout: a step running them would fail on "Module not found", not on
+      # anything real. If they ever need to gate, un-ignore them first.
