@@ -23,6 +23,16 @@
           "zone": "Z1"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Pédalage souple en Z1, cadence 90-100 rpm",
+          "descriptionEn": "Easy spin in Z1, cadence 90-100 rpm",
+          "durationSec": 2100,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [],
       "coachingTips": [
         "Petit braquet, cadence haute, aucune pression dans les jambes",
@@ -74,6 +84,16 @@
           "zone": "Z1"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Mise en route progressive",
+          "descriptionEn": "Progressive warm-up",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Endurance continue en Z2, cadence 85-95 rpm",
@@ -82,12 +102,32 @@
           "zone": "Z2"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Endurance continue en Z2, cadence 85-95 rpm",
+          "descriptionEn": "Continuous Z2 endurance, cadence 85-95 rpm",
+          "durationSec": 4800,
+          "zone": "Z2",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Retour au calme en Z1",
           "descriptionEn": "Cool-down in Z1",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme en Z1",
+          "descriptionEn": "Cool-down in Z1",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -141,6 +181,16 @@
           "zone": "Z1-Z3"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Échauffement progressif + 3×1' en Z3 pour activer",
+          "descriptionEn": "Progressive warm-up + 3×1' in Z3 to activate",
+          "durationSec": 900,
+          "zone": "Z1-Z3",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "2×15' en sweet-spot (88-94 % FTP, Z3 haut / Z4 bas), récup 8' entre en Z1",
@@ -148,7 +198,35 @@
           "durationMin": 15,
           "repetitions": 2,
           "zone": "Z3-Z4",
-          "recovery": "8min Z1"
+          "recovery": "8min Z1",
+          "recoveryEn": "8min Z1"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 2,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "15' en sweet-spot (88-94 % FTP, Z3 haut / Z4 bas)",
+              "descriptionEn": "15' sweet spot (88-94 % FTP, upper Z3 / lower Z4), 8' recovery between in Z1",
+              "durationSec": 900,
+              "zone": "Z3-Z4",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "8min Z1",
+              "descriptionEn": "8min Z1",
+              "durationSec": 480,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -157,6 +235,16 @@
           "descriptionEn": "Cool-down",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme",
+          "descriptionEn": "Cool-down",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -209,6 +297,16 @@
           "zone": "Z1-Z5"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Échauffement + 3×30\" en Z5 pour ouvrir",
+          "descriptionEn": "Warm-up + 3×30\" Z5 openers",
+          "durationSec": 1200,
+          "zone": "Z1-Z5",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "4×8' au seuil (95-102 % FTP), récup 4' en Z1",
@@ -216,7 +314,35 @@
           "durationMin": 8,
           "repetitions": 4,
           "zone": "Z4",
-          "recovery": "4min Z1"
+          "recovery": "4min Z1",
+          "recoveryEn": "4min Z1"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 4,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "8' au seuil (95-102 % FTP)",
+              "descriptionEn": "8' threshold (95-102 % FTP), 4' recovery in Z1",
+              "durationSec": 480,
+              "zone": "Z4",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "4min Z1",
+              "descriptionEn": "4min Z1",
+              "durationSec": 240,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -225,6 +351,16 @@
           "descriptionEn": "Cool-down",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme",
+          "descriptionEn": "Cool-down",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -277,6 +413,16 @@
           "zone": "Z1-Z5"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Échauffement progressif + 2×1' Z4 + 2×30\" Z5",
+          "descriptionEn": "Progressive warm-up + 2×1' Z4 + 2×30\" Z5",
+          "durationSec": 1200,
+          "zone": "Z1-Z5",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "5×3' en Z5 (110-120 % FTP), récup 3' en Z1",
@@ -284,7 +430,35 @@
           "durationMin": 3,
           "repetitions": 5,
           "zone": "Z5",
-          "recovery": "3min Z1"
+          "recovery": "3min Z1",
+          "recoveryEn": "3min Z1"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 5,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "3' en Z5 (110-120 % FTP)",
+              "descriptionEn": "3' Z5 (110-120 % FTP), 3' recovery in Z1",
+              "durationSec": 180,
+              "zone": "Z5",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "3min Z1",
+              "descriptionEn": "3min Z1",
+              "durationSec": 180,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -293,6 +467,16 @@
           "descriptionEn": "Cool-down",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme",
+          "descriptionEn": "Cool-down",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -345,6 +529,16 @@
           "zone": "Z1"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Mise en route progressive en Z1",
+          "descriptionEn": "Progressive warm-up in Z1",
+          "durationSec": 900,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Endurance continue en Z2 avec quelques relances Z3 si terrain s'y prête",
@@ -353,12 +547,32 @@
           "zone": "Z2"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Endurance continue en Z2 avec quelques relances Z3 si terrain s'y prête",
+          "descriptionEn": "Continuous Z2 endurance with occasional Z3 surges if terrain allows",
+          "durationSec": 7800,
+          "zone": "Z2",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Retour au calme en Z1",
           "descriptionEn": "Cool-down in Z1",
           "durationMin": 15,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme en Z1",
+          "descriptionEn": "Cool-down in Z1",
+          "durationSec": 900,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -412,6 +626,16 @@
           "zone": "Z1-Z3"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Échauffement progressif + 2×1' en Z3 pour activer",
+          "descriptionEn": "Progressive warm-up + 2×1' Z3 to activate",
+          "durationSec": 900,
+          "zone": "Z1-Z3",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "3×12' en sweet-spot (90-94 % FTP), récup 6' Z1",
@@ -419,7 +643,35 @@
           "durationMin": 12,
           "repetitions": 3,
           "zone": "Z3-Z4",
-          "recovery": "6min Z1"
+          "recovery": "6min Z1",
+          "recoveryEn": "6min Z1"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 3,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "12' en sweet-spot (90-94 % FTP)",
+              "descriptionEn": "12' sweet spot (90-94 % FTP), 6' recovery Z1",
+              "durationSec": 720,
+              "zone": "Z3-Z4",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "6min Z1",
+              "descriptionEn": "6min Z1",
+              "durationSec": 360,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -428,6 +680,16 @@
           "descriptionEn": "Cool-down",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme",
+          "descriptionEn": "Cool-down",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -480,6 +742,16 @@
           "zone": "Z1-Z5"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Échauffement complet + 3×10\" en accélération",
+          "descriptionEn": "Full warm-up + 3×10\" build-ups",
+          "durationSec": 1200,
+          "zone": "Z1-Z5",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "8×30\" sprint maximal, récup 4' Z1 complète",
@@ -487,7 +759,35 @@
           "durationMin": 0.5,
           "repetitions": 8,
           "zone": "Z6",
-          "recovery": "4min Z1"
+          "recovery": "4min Z1",
+          "recoveryEn": "4min Z1"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 8,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "30\" sprint maximal",
+              "descriptionEn": "30\" maximal sprint, 4' Z1 full recovery",
+              "durationSec": 30,
+              "zone": "Z6",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "4min Z1",
+              "descriptionEn": "4min Z1",
+              "durationSec": 240,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -496,6 +796,16 @@
           "descriptionEn": "Cool-down",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme",
+          "descriptionEn": "Cool-down",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -548,6 +858,16 @@
           "zone": "Z1-Z5"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Échauffement progressif + 2×30\" Z5",
+          "descriptionEn": "Progressive warm-up + 2×30\" Z5",
+          "durationSec": 900,
+          "zone": "Z1-Z5",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "2×(10×(30\" Z5 / 30\" Z2)), récup 5' Z1 entre les blocs",
@@ -557,7 +877,53 @@
           "sets": 2,
           "zone": "Z5",
           "recovery": "30s Z2",
-          "restBetweenSets": "5min Z1"
+          "recoveryEn": "30s Z2",
+          "restBetweenSets": "5min Z1",
+          "restBetweenSetsEn": "5min Z1"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 2,
+          "unit": "sets",
+          "steps": [
+            {
+              "kind": "repeat",
+              "count": 10,
+              "unit": "reps",
+              "steps": [
+                {
+                  "kind": "segment",
+                  "description": "(10×(30\" Z5",
+                  "descriptionEn": "(10×(30\" Z5 / 30\" Z2)), 5' Z1 between blocks",
+                  "durationSec": 30,
+                  "zone": "Z5",
+                  "role": "effort"
+                }
+              ],
+              "between": [
+                {
+                  "kind": "segment",
+                  "description": "30s Z2",
+                  "descriptionEn": "30s Z2",
+                  "durationSec": 30,
+                  "zone": "Z2",
+                  "role": "recovery"
+                }
+              ]
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "5min Z1",
+              "descriptionEn": "5min Z1",
+              "durationSec": 300,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -566,6 +932,16 @@
           "descriptionEn": "Cool-down",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme",
+          "descriptionEn": "Cool-down",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -618,6 +994,16 @@
           "zone": "Z1-Z4"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Échauffement progressif + 2×30\" Z4 en montée",
+          "descriptionEn": "Progressive warm-up + 2×30\" Z4 uphill",
+          "durationSec": 1200,
+          "zone": "Z1-Z4",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "6×4' en montée à 100-110 % FTP, cadence 60-70 rpm, récup 4' Z1 en redescendant",
@@ -625,7 +1011,35 @@
           "durationMin": 4,
           "repetitions": 6,
           "zone": "Z4-Z5",
-          "recovery": "4min Z1"
+          "recovery": "4min Z1",
+          "recoveryEn": "4min Z1"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 6,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "4' en montée à 100-110 % FTP, cadence 60-70 rpm",
+              "descriptionEn": "4' uphill at 100-110 % FTP, 60-70 rpm cadence, 4' Z1 descending recovery",
+              "durationSec": 240,
+              "zone": "Z4-Z5",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "4min Z1",
+              "descriptionEn": "4min Z1",
+              "durationSec": 240,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -634,6 +1048,16 @@
           "descriptionEn": "Cool-down",
           "durationMin": 15,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme",
+          "descriptionEn": "Cool-down",
+          "durationSec": 900,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [

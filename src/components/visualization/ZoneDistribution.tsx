@@ -8,6 +8,7 @@ import type { WorkoutTemplate } from "@/types";
 import { getWorkoutDiscipline } from "@/types";
 import { transformSessionBlocks, formatDurationMinutes } from "./transforms";
 import { useZoneColors } from "@/hooks/useZoneColors";
+import { useIsEnglish } from "@/lib/i18n-utils";
 import { cn } from "@/lib/utils";
 
 interface ZoneDistributionProps {
@@ -16,9 +17,15 @@ interface ZoneDistributionProps {
 }
 
 export function ZoneDistribution({ workout, className }: ZoneDistributionProps) {
+  // `transformSessionBlocks` resolves the zone names through `pickLang`, which
+  // reads the active language when it is called. Without the language in the
+  // dependency list the memo keeps the labels it computed on first render, so
+  // switching FR/EN left "Récupération" on an otherwise English page until a
+  // reload.
+  const isEnglish = useIsEnglish();
   const { zoneBreakdown, totalDurationMin } = useMemo(() => {
     return transformSessionBlocks(workout);
-  }, [workout]);
+  }, [workout, isEnglish]);
   const zoneColors = useZoneColors(getWorkoutDiscipline(workout));
 
   if (zoneBreakdown.length === 0) {
@@ -71,9 +78,11 @@ interface SessionIntensityBarProps {
 }
 
 export function SessionIntensityBar({ workout, className }: SessionIntensityBarProps) {
+  // Same reason as in ZoneDistribution above.
+  const isEnglish = useIsEnglish();
   const { zoneBreakdown } = useMemo(() => {
     return transformSessionBlocks(workout);
-  }, [workout]);
+  }, [workout, isEnglish]);
   const zoneColors = useZoneColors(getWorkoutDiscipline(workout));
 
   if (zoneBreakdown.length === 0) {

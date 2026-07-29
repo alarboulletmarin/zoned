@@ -23,6 +23,17 @@
           "zone": "Z1"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "400m alterné : 100m nage complète, 100m éducatif, 100m nage complète, 100m dos",
+          "descriptionEn": "400m mixed: 100m full stroke, 100m drill, 100m full stroke, 100m backstroke",
+          "durationSec": 600,
+          "distanceM": 400,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "6×100m éducatif (rattrapage / poings fermés / 6-3) — repos 20\" entre",
@@ -31,7 +42,8 @@
           "repetitions": 6,
           "distanceM": 100,
           "zone": "Z1-Z2",
-          "recovery": "20s repos"
+          "recovery": "20s repos",
+          "recoveryEn": "20s rest"
         },
         {
           "description": "4×50m sensation en glisse (peu de coups, long et lent)",
@@ -40,7 +52,62 @@
           "repetitions": 4,
           "distanceM": 50,
           "zone": "Z1",
-          "recovery": "15s repos"
+          "recovery": "15s repos",
+          "recoveryEn": "15s rest"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 6,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "100m éducatif (rattrapage / poings fermés",
+              "descriptionEn": "100m drills (catch-up / fists",
+              "durationSec": 180,
+              "distanceM": 100,
+              "zone": "Z1-Z2",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "20s repos",
+              "descriptionEn": "20s rest",
+              "durationSec": 20,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
+        },
+        {
+          "kind": "repeat",
+          "count": 4,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "50m sensation en glisse (peu de coups, long et lent)",
+              "descriptionEn": "50m gliding sensation (few strokes, long and slow)",
+              "durationSec": 90,
+              "distanceM": 50,
+              "zone": "Z1",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "15s repos",
+              "descriptionEn": "15s rest",
+              "durationSec": 15,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -50,6 +117,17 @@
           "durationMin": 5,
           "distanceM": 200,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "200m nage complète très facile",
+          "descriptionEn": "200m very easy full stroke",
+          "durationSec": 300,
+          "distanceM": 200,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -103,6 +181,17 @@
           "zone": "Z1"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "300m progressifs en Z1",
+          "descriptionEn": "300m progressive in Z1",
+          "durationSec": 480,
+          "distanceM": 300,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "3×500m en Z2 (CSS + 8s/100m), repos 30\" entre",
@@ -111,7 +200,36 @@
           "repetitions": 3,
           "distanceM": 500,
           "zone": "Z2",
-          "recovery": "30s repos"
+          "recovery": "30s repos",
+          "recoveryEn": "30s rest"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 3,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "500m en Z2 (CSS + 8s",
+              "descriptionEn": "500m in Z2 (CSS + 8s",
+              "durationSec": 600,
+              "distanceM": 500,
+              "zone": "Z2",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "30s repos",
+              "descriptionEn": "30s rest",
+              "durationSec": 30,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -121,6 +239,17 @@
           "durationMin": 5,
           "distanceM": 200,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "200m nage facile",
+          "descriptionEn": "200m easy",
+          "durationSec": 300,
+          "distanceM": 200,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -175,6 +304,17 @@
           "zone": "Z1-Z3"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "400m progressif + 4×50m accélérations",
+          "descriptionEn": "400m progressive + 4×50m build-ups",
+          "durationSec": 720,
+          "distanceM": 600,
+          "zone": "Z1-Z3",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "8×200m à CSS, repos 20\" entre",
@@ -183,7 +323,36 @@
           "repetitions": 8,
           "distanceM": 200,
           "zone": "Z4",
-          "recovery": "20s repos"
+          "recovery": "20s repos",
+          "recoveryEn": "20s rest"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 8,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "200m à CSS, repos 20\" entre",
+              "descriptionEn": "200m at CSS, 20\" rest between",
+              "durationSec": 240,
+              "distanceM": 200,
+              "zone": "Z4",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "20s repos",
+              "descriptionEn": "20s rest",
+              "durationSec": 20,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -193,6 +362,17 @@
           "durationMin": 8,
           "distanceM": 300,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "300m décontraction",
+          "descriptionEn": "300m easy",
+          "durationSec": 480,
+          "distanceM": 300,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -246,6 +426,17 @@
           "zone": "Z1-Z4"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "400m + 4×50m accélérations",
+          "descriptionEn": "400m + 4×50m build-ups",
+          "durationSec": 720,
+          "distanceM": 600,
+          "zone": "Z1-Z4",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "16×50m en Z5 (CSS − 3s/100m), repos 30\"",
@@ -254,7 +445,36 @@
           "repetitions": 16,
           "distanceM": 50,
           "zone": "Z5",
-          "recovery": "30s repos"
+          "recovery": "30s repos",
+          "recoveryEn": "30s rest"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 16,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "50m en Z5 (CSS − 3s",
+              "descriptionEn": "50m Z5 (CSS − 3s",
+              "durationSec": 60,
+              "distanceM": 50,
+              "zone": "Z5",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "30s repos",
+              "descriptionEn": "30s rest",
+              "durationSec": 30,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -264,6 +484,17 @@
           "durationMin": 5,
           "distanceM": 200,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "200m récup",
+          "descriptionEn": "200m cool-down",
+          "durationSec": 300,
+          "distanceM": 200,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -317,6 +548,17 @@
           "zone": "Z1"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "300m alterné nage / éducatifs",
+          "descriptionEn": "300m mixed swim / drills",
+          "durationSec": 480,
+          "distanceM": 300,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "5×200m pull-buoy à CSS+5s/100m, repos 25\"",
@@ -325,7 +567,36 @@
           "repetitions": 5,
           "distanceM": 200,
           "zone": "Z3",
-          "recovery": "25s repos"
+          "recovery": "25s repos",
+          "recoveryEn": "25s rest"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 5,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "200m pull-buoy à CSS+5s",
+              "descriptionEn": "200m pull-buoy at CSS+5s",
+              "durationSec": 270,
+              "distanceM": 200,
+              "zone": "Z3",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "25s repos",
+              "descriptionEn": "25s rest",
+              "durationSec": 25,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -335,6 +606,17 @@
           "durationMin": 5,
           "distanceM": 200,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "200m décontraction",
+          "descriptionEn": "200m easy",
+          "durationSec": 300,
+          "distanceM": 200,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -388,6 +670,17 @@
           "zone": "Z1"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "200m nage facile",
+          "descriptionEn": "200m easy swim",
+          "durationSec": 300,
+          "distanceM": 200,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "8×50m battements (planche ou superman), repos 30\"",
@@ -396,7 +689,36 @@
           "repetitions": 8,
           "distanceM": 50,
           "zone": "Z2",
-          "recovery": "30s repos"
+          "recovery": "30s repos",
+          "recoveryEn": "30s rest"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 8,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "50m battements (planche ou superman), repos 30\"",
+              "descriptionEn": "50m kick (kickboard or superman), 30\" rest",
+              "durationSec": 90,
+              "distanceM": 50,
+              "zone": "Z2",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "30s repos",
+              "descriptionEn": "30s rest",
+              "durationSec": 30,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -406,6 +728,17 @@
           "durationMin": 5,
           "distanceM": 200,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "200m nage complète facile",
+          "descriptionEn": "200m easy full stroke",
+          "durationSec": 300,
+          "distanceM": 200,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -459,6 +792,17 @@
           "zone": "Z1"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "400m progressif",
+          "descriptionEn": "400m progressive",
+          "durationSec": 600,
+          "distanceM": 400,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "4×400m en Z2 (CSS+10s/100m), repos 45\"",
@@ -467,7 +811,36 @@
           "repetitions": 4,
           "distanceM": 400,
           "zone": "Z2",
-          "recovery": "45s repos"
+          "recovery": "45s repos",
+          "recoveryEn": "45s rest"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 4,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "400m en Z2 (CSS+10s",
+              "descriptionEn": "400m in Z2 (CSS+10s",
+              "durationSec": 540,
+              "distanceM": 400,
+              "zone": "Z2",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "45s repos",
+              "descriptionEn": "45s rest",
+              "durationSec": 45,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -477,6 +850,17 @@
           "durationMin": 8,
           "distanceM": 300,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "300m décontraction alternée",
+          "descriptionEn": "300m mixed cool-down",
+          "durationSec": 480,
+          "distanceM": 300,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -531,6 +915,17 @@
           "zone": "Z1"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "300m crawl progressif + 100m éducatifs des 4 nages",
+          "descriptionEn": "300m progressive crawl + 100m drills across the 4 strokes",
+          "durationSec": 600,
+          "distanceM": 400,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "8×100m IM (2× chaque nage), repos 20\"",
@@ -539,7 +934,36 @@
           "repetitions": 8,
           "distanceM": 100,
           "zone": "Z2-Z3",
-          "recovery": "20s repos"
+          "recovery": "20s repos",
+          "recoveryEn": "20s rest"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 8,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "100m IM (2× chaque nage), repos 20\"",
+              "descriptionEn": "100m IM (2× each stroke), 20\" rest",
+              "durationSec": 150,
+              "distanceM": 100,
+              "zone": "Z2-Z3",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "20s repos",
+              "descriptionEn": "20s rest",
+              "durationSec": 20,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -549,6 +973,17 @@
           "durationMin": 5,
           "distanceM": 200,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "200m crawl facile",
+          "descriptionEn": "200m easy crawl",
+          "durationSec": 300,
+          "distanceM": 200,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -602,6 +1037,17 @@
           "zone": "Z1-Z4"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "400m + 4×25m accélérations",
+          "descriptionEn": "400m + 4×25m build-ups",
+          "durationSec": 720,
+          "distanceM": 500,
+          "zone": "Z1-Z4",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "12×25m all-out, repos 1' complet",
@@ -610,7 +1056,36 @@
           "repetitions": 12,
           "distanceM": 25,
           "zone": "Z6",
-          "recovery": "1min repos"
+          "recovery": "1min repos",
+          "recoveryEn": "1min rest"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 12,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "25m all-out, repos 1' complet",
+              "descriptionEn": "25m all-out, 1' full rest",
+              "durationSec": 24,
+              "distanceM": 25,
+              "zone": "Z6",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "1min repos",
+              "descriptionEn": "1min rest",
+              "durationSec": 60,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -620,6 +1095,17 @@
           "durationMin": 5,
           "distanceM": 200,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "200m décontraction",
+          "descriptionEn": "200m cool-down",
+          "durationSec": 300,
+          "distanceM": 200,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -673,13 +1159,35 @@
           "zone": "Z1-Z3"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "400m progressif + 4×50m accélérations",
+          "descriptionEn": "400m progressive + 4×50m build-ups",
+          "durationSec": 720,
+          "distanceM": 600,
+          "zone": "Z1-Z3",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Pyramide 100/200/400/200/100m à CSS, repos 30\" entre chaque",
           "descriptionEn": "Pyramid 100/200/400/200/100m at CSS, 30\" rest between each",
           "durationMin": 22,
           "zone": "Z4",
-          "recovery": "30s repos"
+          "recovery": "30s repos",
+          "recoveryEn": "30s rest"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Pyramide 100/200/400/200/100m à CSS, repos 30\" entre chaque",
+          "descriptionEn": "Pyramid 100/200/400/200/100m at CSS, 30\" rest between each",
+          "durationSec": 1320,
+          "zone": "Z4",
+          "role": "effort"
         }
       ],
       "cooldownTemplate": [
@@ -689,6 +1197,17 @@
           "durationMin": 8,
           "distanceM": 300,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "300m décontraction",
+          "descriptionEn": "300m easy",
+          "durationSec": 480,
+          "distanceM": 300,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [

@@ -165,8 +165,8 @@ export function summarizeWorkoutSteps(steps: WorkoutStep[], isEnglish = false): 
 
 function convertLegacyBlockToStep(block: WorkoutBlock): WorkoutStep {
   const effort = buildLegacyEffortSegment(block);
-  const repetitionBetween = buildTextSegment(block.recovery ?? block.rest, "recovery");
-  const setBetween = buildTextSegment(block.restBetweenSets, "recovery")
+  const repetitionBetween = buildTextSegment(block.recovery ?? block.rest, "recovery", block.recoveryEn);
+  const setBetween = buildTextSegment(block.restBetweenSets, "recovery", block.restBetweenSetsEn)
     ?? buildBetweenSetsSegment(block.description, block.descriptionEn);
 
   const hasRepeat = (block.repetitions && block.repetitions > 1) || (block.sets && block.sets > 1);
@@ -223,6 +223,12 @@ function buildLegacyBlockFromStep(step: WorkoutStep): WorkoutBlock {
       ...(step.zone ? { zone: step.zone } : {}),
       ...(step.vmaPercent != null ? { vmaPercent: step.vmaPercent } : {}),
       ...(step.intensityType ? { intensityType: step.intensityType } : {}),
+      // The segment carries these, so dropping them here made the round trip
+      // lossy: a trail block normalised through the tree came back with no
+      // elevation, no gradient and no terrain.
+      ...(step.elevationGainM != null ? { elevationGainM: step.elevationGainM } : {}),
+      ...(step.gradientPercent != null ? { gradientPercent: step.gradientPercent } : {}),
+      ...(step.terrainType ? { terrainType: step.terrainType } : {}),
     };
   }
 
@@ -287,15 +293,14 @@ function buildSimpleRepeatBlock(step: Extract<WorkoutStep, { kind: "repeat" }>):
     const betweenSets = pickSingleSegment(step.between ?? []);
 
     return {
-      description: `${step.count}x(${inner.count}x ${effort.description}${recovery ? ` / ${recovery.description}` : ""})`,
+      description: `${step.count} × (${inner.count} × ${effort.description}${recovery ? ` / ${recovery.description}` : ""})`,
+      ...composeDescriptionEn(effort, recovery, (e, r) => `${step.count} × (${inner.count} × ${e}${r ? ` / ${r}` : ""})`),
       ...(effort.durationSec != null ? { durationMin: effort.durationSec / 60 } : {}),
       repetitions: inner.count,
       sets: step.count,
       ...(recovery ? { recovery: recovery.description } : {}),
       ...(betweenSets ? { restBetweenSets: betweenSets.description } : {}),
-      ...(effort.zone ? { zone: effort.zone } : {}),
-      ...(effort.vmaPercent != null ? { vmaPercent: effort.vmaPercent } : {}),
-      ...(effort.intensityType ? { intensityType: effort.intensityType } : {}),
+      ...effortFields(effort),
     };
   }
 
@@ -305,20 +310,57 @@ function buildSimpleRepeatBlock(step: Extract<WorkoutStep, { kind: "repeat" }>):
 
     const recovery = pickSingleSegment(step.between ?? []);
     return {
-      description: `${step.count}x ${effort.description}${recovery ? ` / ${recovery.description}` : ""}`,
+      description: `${step.count} × ${effort.description}${recovery ? ` / ${recovery.description}` : ""}`,
+      ...composeDescriptionEn(effort, recovery, (e, r) => `${step.count} × ${e}${r ? ` / ${r}` : ""}`),
       ...(effort.durationSec != null ? { durationMin: effort.durationSec / 60 } : {}),
       repetitions: step.count,
       ...(recovery ? { recovery: recovery.description } : {}),
-      ...(effort.zone ? { zone: effort.zone } : {}),
-      ...(effort.vmaPercent != null ? { vmaPercent: effort.vmaPercent } : {}),
-      ...(effort.intensityType ? { intensityType: effort.intensityType } : {}),
+      ...effortFields(effort),
     };
   }
 
   return null;
 }
 
-function buildTextSegment(text: string | undefined, role: WorkoutStepRole): WorkoutStepSegment | null {
+/**
+ * The effort's own measurements, carried back onto the rebuilt block. Kept in
+ * one place because both repeat shapes need the identical set, and because
+ * forgetting one is invisible: the block still renders, just without its
+ * distance, its elevation or its terrain.
+ */
+function effortFields(effort: WorkoutStepSegment): Partial<WorkoutBlock> {
+  return {
+    ...(effort.distanceM != null ? { distanceM: effort.distanceM } : {}),
+    ...(effort.distanceKm != null ? { distanceKm: effort.distanceKm } : {}),
+    ...(effort.zone ? { zone: effort.zone } : {}),
+    ...(effort.vmaPercent != null ? { vmaPercent: effort.vmaPercent } : {}),
+    ...(effort.intensityType ? { intensityType: effort.intensityType } : {}),
+    ...(effort.elevationGainM != null ? { elevationGainM: effort.elevationGainM } : {}),
+    ...(effort.gradientPercent != null ? { gradientPercent: effort.gradientPercent } : {}),
+    ...(effort.terrainType ? { terrainType: effort.terrainType } : {}),
+  };
+}
+
+/**
+ * Rebuild the English description the same way as the French one, so a repeat
+ * block keeps both languages. Omitted entirely when the effort has no English
+ * twin: half a translation reads worse than none, and the bilingual rule is
+ * enforced on committed data rather than on a derived string.
+ */
+function composeDescriptionEn(
+  effort: WorkoutStepSegment,
+  recovery: WorkoutStepSegment | null,
+  format: (effort: string, recovery?: string) => string,
+): Partial<WorkoutBlock> {
+  if (!effort.descriptionEn) return {};
+  return { descriptionEn: format(effort.descriptionEn, recovery?.descriptionEn) };
+}
+
+function buildTextSegment(
+  text: string | undefined,
+  role: WorkoutStepRole,
+  textEn?: string,
+): WorkoutStepSegment | null {
   if (!text) return null;
 
   const durationSec = parseDurationToSeconds(text);
@@ -328,6 +370,7 @@ function buildTextSegment(text: string | undefined, role: WorkoutStepRole): Work
   return {
     kind: "segment",
     description: text,
+    ...(textEn ? { descriptionEn: textEn } : {}),
     ...(durationSec ? { durationSec } : {}),
     ...(distanceM && !durationSec ? { distanceM } : {}),
     ...(zone ? { zone } : {}),
@@ -452,11 +495,11 @@ function formatStepInline(step: WorkoutStep, isEnglish: boolean): string {
   const betweenRecovery = formatBetweenInline(step.between, isEnglish, true);
 
   if (step.unit === "reps") {
-    return `${step.count} x ${content}${betweenInline ? `/${betweenInline}` : ""}`;
+    return `${step.count} × ${content}${betweenInline ? `/${betweenInline}` : ""}`;
   }
 
   if (step.unit === "sets") {
-    return `${step.count} x (${content})${betweenRecovery ? ` + ${betweenRecovery}` : ""}`;
+    return `${step.count} × (${content})${betweenRecovery ? ` + ${betweenRecovery}` : ""}`;
   }
 
   return `${step.count} ${isEnglish ? "blocks of" : "blocs de"} ${content}${betweenRecovery ? ` + ${betweenRecovery}` : ""}`;

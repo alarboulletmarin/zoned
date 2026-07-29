@@ -33,6 +33,23 @@
           "durationMin": 5
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 600,
+          "zone": "Z1-Z2",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Gammes et 3x accélérations",
+          "descriptionEn": "Drills and 3x accelerations",
+          "durationSec": 300,
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Test 6 minutes : courir la plus grande distance possible",
@@ -41,12 +58,32 @@
           "zone": "Z5"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Test 6 minutes : courir la plus grande distance possible",
+          "descriptionEn": "6-minute test: run the greatest distance possible",
+          "durationSec": 360,
+          "zone": "Z5",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Marche puis footing très lent",
           "descriptionEn": "Walking then very slow jog",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche puis footing très lent",
+          "descriptionEn": "Walking then very slow jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -127,6 +164,23 @@
           "durationMin": 5
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Gammes et accélérations",
+          "descriptionEn": "Drills and accelerations",
+          "durationSec": 300,
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "CLM 1200m (effort maximal)",
@@ -147,12 +201,48 @@
           "zone": "Z4-Z5"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "CLM 1200m (effort maximal)",
+          "descriptionEn": "1200m time trial (maximal effort)",
+          "distanceM": 1200,
+          "zone": "Z5",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Récupération complète",
+          "descriptionEn": "Full recovery",
+          "durationSec": 900,
+          "zone": "Z1",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "CLM 3600m (effort maximal)",
+          "descriptionEn": "3600m time trial (maximal effort)",
+          "distanceM": 3600,
+          "zone": "Z4-Z5",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -233,6 +323,23 @@
           "durationMin": 10
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Gammes et 4x lignes droites",
+          "descriptionEn": "Drills and 4x strides",
+          "durationSec": 600,
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "5000m contre-la-montre (effort maximal)",
@@ -241,12 +348,32 @@
           "zone": "Z4-Z5"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "5000m contre-la-montre (effort maximal)",
+          "descriptionEn": "5000m time trial (maximal effort)",
+          "distanceM": 5000,
+          "zone": "Z4-Z5",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Marche puis footing de récupération",
           "descriptionEn": "Walking then recovery jog",
           "durationMin": 15,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche puis footing de récupération",
+          "descriptionEn": "Walking then recovery jog",
+          "durationSec": 900,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -327,11 +454,37 @@
           "durationMin": 5
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing léger",
+          "descriptionEn": "Light jog",
+          "durationSec": 480,
+          "zone": "Z1",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Mobilité et accélérations courtes",
+          "descriptionEn": "Mobility and short accelerations",
+          "durationSec": 300,
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Test navettes 20m progressif (bip sonore) jusqu'à l'arrêt",
           "descriptionEn": "Progressive 20m shuttle test (audio beep) until failure",
           "zone": "Z1-Z5"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Test navettes 20m progressif (bip sonore) jusqu'à l'arrêt",
+          "descriptionEn": "Progressive 20m shuttle test (audio beep) until failure",
+          "zone": "Z1-Z5",
+          "role": "effort"
         }
       ],
       "cooldownTemplate": [
@@ -340,6 +493,16 @@
           "descriptionEn": "Walking and recovery",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche et récupération",
+          "descriptionEn": "Walking and recovery",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -421,6 +584,24 @@
           "zone": "Z2"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 720,
+          "zone": "Z2",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Gammes athlétiques et 3x accélérations progressives",
+          "descriptionEn": "Athletic drills and 3x progressive accelerations",
+          "durationSec": 300,
+          "zone": "Z2",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Test 12 minutes : courez la plus grande distance possible à effort soutenu",
@@ -429,12 +610,32 @@
           "zone": "Z5"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Test 12 minutes : courez la plus grande distance possible à effort soutenu",
+          "descriptionEn": "12-minute test: run the greatest distance possible at sustained effort",
+          "durationSec": 720,
+          "zone": "Z5",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Marche 3min puis footing très lent",
           "descriptionEn": "Walk 3min then very slow jog",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche 3min puis footing très lent",
+          "descriptionEn": "Walk 3min then very slow jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -512,6 +713,24 @@
           "zone": "Z2"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z2",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Mobilité et 2x accélérations douces",
+          "descriptionEn": "Mobility and 2x gentle accelerations",
+          "durationSec": 300,
+          "zone": "Z2",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course progressive : démarrer à 8-9 km/h, augmenter de 0.5 km/h toutes les 200m (ou 2 min). Noter FC à chaque palier. Continuer jusqu'à épuisement.",
@@ -520,12 +739,32 @@
           "zone": "Z4"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course progressive : démarrer à 8-9 km/h, augmenter de 0.5 km/h toutes les 200m (ou 2 min). Noter FC à chaque palier. Continuer jusqu'à épuisement.",
+          "descriptionEn": "Progressive run: start at 8-9 km/h, increase by 0.5 km/h every 200m (or 2 min). Record HR at each stage. Continue until exhaustion.",
+          "durationSec": 1200,
+          "zone": "Z4",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Marche puis footing très lent de récupération",
           "descriptionEn": "Walk then very slow recovery jog",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche puis footing très lent de récupération",
+          "descriptionEn": "Walk then very slow recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -604,6 +843,24 @@
           "zone": "Z3"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z2",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Gammes et 4x lignes droites",
+          "descriptionEn": "Drills and 4x strides",
+          "durationSec": 600,
+          "zone": "Z3",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "10x800m à allure cible (temps en min:sec = temps marathon en h:min)",
@@ -611,7 +868,35 @@
           "distanceM": 800,
           "repetitions": 10,
           "zone": "Z4",
-          "recovery": "Footing lent 4min (même durée que l'effort)"
+          "recovery": "Footing lent 4min (même durée que l'effort)",
+          "recoveryEn": "4min easy jog (same duration as the effort)"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 10,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "800m à allure cible (temps en min:sec = temps marathon en h:min)",
+              "descriptionEn": "800m at target pace (time in min:sec = marathon time in h:min)",
+              "distanceM": 800,
+              "zone": "Z4",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "Footing lent 4min (même durée que l'effort)",
+              "descriptionEn": "4min easy jog (same duration as the effort)",
+              "durationSec": 240,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -620,6 +905,16 @@
           "descriptionEn": "Recovery jog",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -692,6 +987,16 @@
           "zone": "Z1"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Échauffement progressif : marche puis accélération très graduelle sur 12-15 min jusqu'à atteindre la FC MAF",
+          "descriptionEn": "Progressive warmup: walk then very gradual acceleration over 12-15 min to reach MAF HR",
+          "durationSec": 900,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "5 km à FC MAF constante (180 - âge). Notez le temps de chaque kilomètre.",
@@ -700,12 +1005,32 @@
           "zone": "Z2"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "5 km à FC MAF constante (180 - âge). Notez le temps de chaque kilomètre.",
+          "descriptionEn": "5 km at constant MAF HR (180 - age). Record time for each kilometer.",
+          "distanceM": 5000,
+          "zone": "Z2",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Décroissance progressive de l'allure sur 10-15 min",
           "descriptionEn": "Progressive pace decrease over 10-15 min",
           "durationMin": 12,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Décroissance progressive de l'allure sur 10-15 min",
+          "descriptionEn": "Progressive pace decrease over 10-15 min",
+          "durationSec": 720,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -783,6 +1108,23 @@
           "durationMin": 5
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 600,
+          "zone": "Z1-Z2",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Gammes et 3× accélérations progressives",
+          "descriptionEn": "Drills and 3× progressive accelerations",
+          "durationSec": 300,
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "3 minutes d'effort maximal soutenu sur piste. Notez la distance totale et l'allure des 30 dernières secondes",
@@ -791,12 +1133,32 @@
           "zone": "Z5"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "3 minutes d'effort maximal soutenu sur piste. Notez la distance totale et l'allure des 30 dernières secondes",
+          "descriptionEn": "3 minutes of sustained maximal effort on track. Record total distance and pace of the last 30 seconds",
+          "durationSec": 180,
+          "zone": "Z5",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Marche puis footing très lent",
           "descriptionEn": "Walking then very slow jog",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche puis footing très lent",
+          "descriptionEn": "Walking then very slow jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -873,6 +1235,16 @@
           "zone": "Z1"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing lent",
+          "descriptionEn": "Slow jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Paliers de 4-5min à vitesse croissante (+0,5 km/h par palier). Départ à ~60% VMA. À chaque fin de palier : noter FC, RPE, lactate si disponible. Continuer jusqu'à épuisement",
@@ -895,6 +1267,16 @@
           "descriptionEn": "Walking then very slow jog",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche puis footing très lent",
+          "descriptionEn": "Walking then very slow jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [

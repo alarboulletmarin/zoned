@@ -29,6 +29,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Début très lent",
+          "descriptionEn": "Very slow start",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course en Z2 confortable",
@@ -45,6 +56,26 @@
           "intensityType": "M"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course en Z2 confortable",
+          "descriptionEn": "Comfortable Z2 running",
+          "durationSec": 3000,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Accélération progressive vers Z3",
+          "descriptionEn": "Progressive acceleration to Z3",
+          "durationSec": 1800,
+          "zone": "Z2-Z3",
+          "intensityType": "M",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Retour au calme",
@@ -52,6 +83,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme",
+          "descriptionEn": "Cool down",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -124,6 +166,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing tranquille",
+          "descriptionEn": "Easy jog",
+          "durationSec": 1200,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course Z2",
@@ -148,6 +201,35 @@
           "intensityType": "E"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course Z2",
+          "descriptionEn": "Z2 running",
+          "durationSec": 1800,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Bloc allure marathon",
+          "descriptionEn": "Marathon pace block",
+          "durationSec": 1800,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Retour en Z2",
+          "descriptionEn": "Return to Z2",
+          "durationSec": 1200,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -155,6 +237,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -226,6 +319,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Début très progressif",
+          "descriptionEn": "Very gradual start",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course continue Z2",
@@ -235,6 +339,17 @@
           "intensityType": "E"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course continue Z2",
+          "descriptionEn": "Continuous Z2 running",
+          "durationSec": 4200,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Retour au calme",
@@ -242,6 +357,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme",
+          "descriptionEn": "Cool down",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -312,6 +438,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course Z2",
@@ -336,6 +473,35 @@
           "intensityType": "E"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course Z2",
+          "descriptionEn": "Z2 running",
+          "durationSec": 1500,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Bloc allure semi",
+          "descriptionEn": "Half-marathon pace block",
+          "durationSec": 1500,
+          "zone": "Z3-Z4",
+          "intensityType": "T",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Retour Z2",
+          "descriptionEn": "Return to Z2",
+          "durationSec": 900,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -343,6 +509,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -413,6 +590,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Début sur terrain facile",
+          "descriptionEn": "Start on easy terrain",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course sur terrain vallonné, effort Z2",
@@ -425,6 +613,20 @@
           "terrainType": "trail_runnable"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course sur terrain vallonné, effort Z2",
+          "descriptionEn": "Running on hilly terrain, Z2 effort",
+          "durationSec": 4500,
+          "zone": "Z2",
+          "intensityType": "E",
+          "elevationGainM": 190,
+          "gradientPercent": 3.5,
+          "terrainType": "trail_runnable",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Retour tranquille",
@@ -432,6 +634,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour tranquille",
+          "descriptionEn": "Easy return",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -503,6 +716,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche puis footing sur chemin",
+          "descriptionEn": "Walk then jog on path",
+          "durationSec": 900,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course sur sentiers, effort Z2",
@@ -515,6 +739,20 @@
           "terrainType": "trail_runnable"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course sur sentiers, effort Z2",
+          "descriptionEn": "Trail running, Z2 effort",
+          "durationSec": 5400,
+          "zone": "Z2",
+          "intensityType": "E",
+          "elevationGainM": 380,
+          "gradientPercent": 5,
+          "terrainType": "trail_runnable",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Retour calme",
@@ -522,6 +760,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour calme",
+          "descriptionEn": "Calm return",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -592,6 +841,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Début très progressif",
+          "descriptionEn": "Very gradual start",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course Z2",
@@ -608,6 +868,26 @@
           "intensityType": "M"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course Z2",
+          "descriptionEn": "Z2 running",
+          "durationSec": 3600,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Tempo final",
+          "descriptionEn": "Final tempo",
+          "durationSec": 1200,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Retour au calme",
@@ -615,6 +895,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme",
+          "descriptionEn": "Cool down",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -686,6 +977,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche puis footing lent",
+          "descriptionEn": "Walk then slow jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Footing Z1-Z2, pauses marche autorisées",
@@ -695,11 +997,31 @@
           "intensityType": "E"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing Z1-Z2, pauses marche autorisées",
+          "descriptionEn": "Z1-Z2 jog, walk breaks allowed",
+          "durationSec": 4200,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Marche et étirements",
           "descriptionEn": "Walk and stretching",
           "durationMin": 10
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche et étirements",
+          "descriptionEn": "Walk and stretching",
+          "durationSec": 600,
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -768,6 +1090,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Démarrage très lent",
+          "descriptionEn": "Very slow start",
+          "durationSec": 900,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course Z1-Z2 bas",
@@ -777,6 +1110,17 @@
           "intensityType": "E"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course Z1-Z2 bas",
+          "descriptionEn": "Low Z1-Z2 running",
+          "durationSec": 3300,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Retour calme",
@@ -784,6 +1128,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour calme",
+          "descriptionEn": "Calm return",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -853,6 +1208,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Échauffement type jour de course",
+          "descriptionEn": "Race-day style warm-up",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course à allure marathon avec ravitos tous les 5km",
@@ -863,6 +1229,17 @@
           "intensityType": "M"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course à allure marathon avec ravitos tous les 5km",
+          "descriptionEn": "Marathon pace running with aid stations every 5km",
+          "durationSec": 6000,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Récupération active",
@@ -870,6 +1247,17 @@
           "durationMin": 15,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Récupération active",
+          "descriptionEn": "Active recovery",
+          "durationSec": 900,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -939,6 +1327,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Début très lent",
+          "descriptionEn": "Very slow start",
+          "durationSec": 900,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course Z2 sur jambes fatiguées",
@@ -948,6 +1347,17 @@
           "intensityType": "E"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course Z2 sur jambes fatiguées",
+          "descriptionEn": "Z2 running on tired legs",
+          "durationSec": 4200,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Retour calme",
@@ -955,6 +1365,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour calme",
+          "descriptionEn": "Calm return",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -1024,6 +1445,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Début progressif",
+          "descriptionEn": "Gradual start",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course Z2 avec 10min à allure course",
@@ -1033,6 +1465,17 @@
           "intensityType": "E"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course Z2 avec 10min à allure course",
+          "descriptionEn": "Z2 running with 10min at race pace",
+          "durationSec": 2700,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Retour tranquille",
@@ -1040,6 +1483,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour tranquille",
+          "descriptionEn": "Easy return",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -1109,6 +1563,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche rapide puis footing très lent",
+          "descriptionEn": "Brisk walk then very slow jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course continue en Z2, pauses marche si nécessaire",
@@ -1118,6 +1583,17 @@
           "intensityType": "E"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course continue en Z2, pauses marche si nécessaire",
+          "descriptionEn": "Continuous Z2 run, walk breaks if needed",
+          "durationSec": 2700,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Retour au calme et étirements",
@@ -1125,6 +1601,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme et étirements",
+          "descriptionEn": "Cool-down and stretching",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -1197,6 +1684,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Départ très progressif",
+          "descriptionEn": "Very gradual start",
+          "durationSec": 300,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course continue en Z2 confortable",
@@ -1206,6 +1704,17 @@
           "intensityType": "E"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course continue en Z2 confortable",
+          "descriptionEn": "Comfortable continuous Z2 run",
+          "durationSec": 2100,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Retour au calme et étirements",
@@ -1213,6 +1722,17 @@
           "durationMin": 5,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme et étirements",
+          "descriptionEn": "Cool-down and stretching",
+          "durationSec": 300,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -1286,6 +1806,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing très lent",
+          "descriptionEn": "Very slow jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "90-120min à allure Z2 constante (guidé par la pace ou la puissance, PAS par la FC). Relevez la FC à 30min, 60min, 90min et 120min. Score de durabilité = % de dérive cardiaque. Objectif : dérive < 10%. Arrêter si > 15%",
@@ -1295,6 +1826,17 @@
           "intensityType": "E"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "90-120min à allure Z2 constante (guidé par la pace ou la puissance, PAS par la FC). Relevez la FC à 30min, 60min, 90min et 120min. Score de durabilité = % de dérive cardiaque. Objectif : dérive < 10%. Arrêter si > 15%",
+          "descriptionEn": "90-120min at constant Z2 pace (guided by pace or power, NOT by HR). Record HR at 30min, 60min, 90min and 120min. Durability score = % cardiac drift. Target: drift < 10%. Stop if > 15%",
+          "durationSec": 6300,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Retour au calme progressif",
@@ -1302,6 +1844,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme progressif",
+          "descriptionEn": "Progressive cool-down",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -1380,6 +1933,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche progressive 10min",
+          "descriptionEn": "Progressive walk 10min",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "3-5h en Z1 strict (< 70% FCmax). Alternance : 20-30min course facile / 10-15min marche active (power hike, bras actifs). Ravitaillement toutes les 30-45min (gels, barres, eau + électrolytes). Sur sentier si possible",
@@ -1410,6 +1974,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche de récupération et étirements doux",
+          "descriptionEn": "Recovery walk and gentle stretches",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [

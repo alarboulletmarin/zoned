@@ -34,6 +34,24 @@
           "durationMin": 5
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing lent progressif",
+          "descriptionEn": "Slow progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Gammes et accélérations",
+          "descriptionEn": "Drills and accelerations",
+          "durationSec": 300,
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course tempo continue",
@@ -43,6 +61,17 @@
           "intensityType": "M"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course tempo continue",
+          "descriptionEn": "Continuous tempo run",
+          "durationSec": 1500,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -50,6 +79,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -121,6 +161,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Tempo continu",
@@ -130,6 +181,17 @@
           "intensityType": "M"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Tempo continu",
+          "descriptionEn": "Continuous tempo",
+          "durationSec": 900,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -137,6 +199,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -211,6 +284,24 @@
           "durationMin": 5
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Accélérations",
+          "descriptionEn": "Accelerations",
+          "durationSec": 300,
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Tempo continu",
@@ -220,6 +311,17 @@
           "intensityType": "M"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Tempo continu",
+          "descriptionEn": "Continuous tempo",
+          "durationSec": 2100,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -227,6 +329,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -297,6 +410,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "3x10min tempo avec 2min récup Z1",
@@ -305,7 +429,36 @@
           "zone": "Z3",
           "repetitions": 3,
           "recovery": "2min footing Z1",
+          "recoveryEn": "2min jog Z1",
           "intensityType": "M"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 3,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "10min tempo",
+              "descriptionEn": "10min tempo",
+              "durationSec": 600,
+              "zone": "Z3",
+              "intensityType": "M",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "2min footing Z1",
+              "descriptionEn": "2min jog Z1",
+              "durationSec": 120,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -315,6 +468,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -384,6 +548,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Tempo bas de Z3",
@@ -407,6 +582,35 @@
           "intensityType": "M"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Tempo bas de Z3",
+          "descriptionEn": "Tempo low Z3",
+          "durationSec": 600,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Tempo milieu Z3",
+          "descriptionEn": "Tempo mid Z3",
+          "durationSec": 480,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Tempo haut Z3",
+          "descriptionEn": "Tempo high Z3",
+          "durationSec": 420,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -414,6 +618,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -484,6 +699,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 600,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Endurance Z2",
@@ -507,6 +733,35 @@
           "intensityType": "E"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Endurance Z2",
+          "descriptionEn": "Endurance Z2",
+          "durationSec": 1200,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Tempo Z3",
+          "descriptionEn": "Tempo Z3",
+          "durationSec": 1200,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Endurance Z2",
+          "descriptionEn": "Endurance Z2",
+          "durationSec": 900,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -514,6 +769,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -591,6 +857,24 @@
           "durationMin": 5
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Accélérations",
+          "descriptionEn": "Accelerations",
+          "durationSec": 300,
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "12min tempo bas Z3",
@@ -628,6 +912,53 @@
           "intensityType": "T"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "12min tempo bas Z3",
+          "descriptionEn": "12min tempo low Z3",
+          "durationSec": 720,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Récup",
+          "descriptionEn": "Recovery",
+          "durationSec": 120,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "8min tempo milieu Z3",
+          "descriptionEn": "8min tempo mid Z3",
+          "durationSec": 480,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Récup",
+          "descriptionEn": "Recovery",
+          "durationSec": 120,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "4min tempo haut Z3/Z4",
+          "descriptionEn": "4min tempo high Z3/Z4",
+          "durationSec": 240,
+          "zone": "Z3-Z4",
+          "intensityType": "T",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -635,6 +966,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -705,6 +1047,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course à allure marathon exacte",
@@ -715,6 +1068,17 @@
           "intensityType": "M"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course à allure marathon exacte",
+          "descriptionEn": "Run at exact marathon pace",
+          "durationSec": 1500,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -722,6 +1086,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -793,6 +1168,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course à allure semi-marathon",
@@ -803,6 +1189,17 @@
           "intensityType": "T"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course à allure semi-marathon",
+          "descriptionEn": "Run at half-marathon pace",
+          "durationSec": 1200,
+          "zone": "Z3-Z4",
+          "intensityType": "T",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -810,6 +1207,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -881,6 +1289,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing sur le plat",
+          "descriptionEn": "Flat terrain jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Tempo sur parcours vallonné, effort constant",
@@ -893,6 +1312,20 @@
           "terrainType": "trail_runnable"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Tempo sur parcours vallonné, effort constant",
+          "descriptionEn": "Tempo on hilly course, constant effort",
+          "durationSec": 1500,
+          "zone": "Z3",
+          "intensityType": "M",
+          "elevationGainM": 130,
+          "gradientPercent": 5,
+          "terrainType": "trail_runnable",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -900,6 +1333,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -969,6 +1413,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Tempo Z3",
@@ -985,6 +1440,26 @@
           "intensityType": "T"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Tempo Z3",
+          "descriptionEn": "Tempo Z3",
+          "durationSec": 1080,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Finish à allure seuil Z4",
+          "descriptionEn": "Finish at threshold pace Z4",
+          "durationSec": 300,
+          "zone": "Z4",
+          "intensityType": "T",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -992,6 +1467,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -1062,6 +1548,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "5x5min tempo avec 1min récup",
@@ -1070,7 +1567,36 @@
           "zone": "Z3",
           "repetitions": 5,
           "recovery": "1min footing Z1",
+          "recoveryEn": "1min jog Z1",
           "intensityType": "M"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 5,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "5min tempo",
+              "descriptionEn": "5min tempo",
+              "durationSec": 300,
+              "zone": "Z3",
+              "intensityType": "M",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "1min footing Z1",
+              "descriptionEn": "1min jog Z1",
+              "durationSec": 60,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -1080,6 +1606,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -1151,6 +1688,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing facile",
+          "descriptionEn": "Easy jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Course à effort tempo au feeling",
@@ -1160,6 +1708,17 @@
           "intensityType": "M"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Course à effort tempo au feeling",
+          "descriptionEn": "Run at tempo effort by feel",
+          "durationSec": 1500,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -1167,6 +1726,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -1237,6 +1807,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de groupe",
+          "descriptionEn": "Group jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Tempo ensemble, relais de tête",
@@ -1246,6 +1827,17 @@
           "intensityType": "M"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Tempo ensemble, relais de tête",
+          "descriptionEn": "Tempo together, rotating lead",
+          "durationSec": 1500,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération ensemble",
@@ -1253,6 +1845,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération ensemble",
+          "descriptionEn": "Recovery jog together",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -1323,6 +1926,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Tempo contrôlé",
@@ -1332,6 +1946,17 @@
           "intensityType": "M"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Tempo contrôlé",
+          "descriptionEn": "Controlled tempo",
+          "durationSec": 720,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -1339,6 +1964,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -1414,6 +2050,24 @@
           "durationMin": 5
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Quelques accélérations",
+          "descriptionEn": "A few accelerations",
+          "durationSec": 300,
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "40min continu au seuil",
@@ -1424,6 +2078,17 @@
           "intensityType": "T"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "40min continu au seuil",
+          "descriptionEn": "40min continuous at threshold",
+          "durationSec": 2400,
+          "zone": "Z4",
+          "intensityType": "T",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -1431,6 +2096,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -1515,6 +2191,24 @@
           "durationMin": 5
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing lent progressif",
+          "descriptionEn": "Slow progressive jog",
+          "durationSec": 600,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Étirements dynamiques et 3x accélérations progressives",
+          "descriptionEn": "Dynamic stretches and 3x progressive accelerations",
+          "durationSec": 300,
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "8min tempo Z3",
@@ -1538,6 +2232,35 @@
           "intensityType": "M"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "8min tempo Z3",
+          "descriptionEn": "8min tempo Z3",
+          "durationSec": 480,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Récupération footing",
+          "descriptionEn": "Easy jog recovery",
+          "durationSec": 180,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "8min tempo Z3",
+          "descriptionEn": "8min tempo Z3",
+          "durationSec": 480,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération et étirements",
@@ -1545,6 +2268,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération et étirements",
+          "descriptionEn": "Recovery jog and stretching",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -1619,6 +2353,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing lent",
+          "descriptionEn": "Slow jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "Fraction 1 : 20min à 85% allure marathon (enchaînement direct avec la fraction suivante)",
@@ -1649,6 +2394,44 @@
           "intensityType": "M"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "Fraction 1 : 20min à 85% allure marathon (enchaînement direct avec la fraction suivante)",
+          "descriptionEn": "Fraction 1: 20min at 85% marathon pace (direct transition to next fraction)",
+          "durationSec": 1200,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Fraction 2 : 20min à 90% allure marathon (enchaînement direct)",
+          "descriptionEn": "Fraction 2: 20min at 90% marathon pace (direct transition)",
+          "durationSec": 1200,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Fraction 3 : 15min à 95% allure marathon (enchaînement direct)",
+          "descriptionEn": "Fraction 3: 15min at 95% marathon pace (direct transition)",
+          "durationSec": 900,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Fraction 4 : 10min à 100% allure marathon",
+          "descriptionEn": "Fraction 4: 10min at 100% marathon pace",
+          "durationSec": 600,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Retour au calme progressif",
@@ -1656,6 +2439,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour au calme progressif",
+          "descriptionEn": "Progressive cool-down",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -1732,6 +2526,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 600,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "10-13 km à allure marathon −5 à −10s/km (entre Z3 et Z4 bas)",
@@ -1741,6 +2546,17 @@
           "intensityType": "M"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "10-13 km à allure marathon −5 à −10s/km (entre Z3 et Z4 bas)",
+          "descriptionEn": "10-13 km at marathon pace −5 to −10s/km (between Z3 and low Z4)",
+          "durationSec": 2400,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -1748,6 +2564,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -1826,6 +2653,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif",
+          "descriptionEn": "Progressive jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "25-30min tempo continu Z3. Toutes les 5min : surge 30-40s à allure 5K (Z5), puis retour immédiat au tempo. 5-6 surges au total",
@@ -1835,6 +2673,17 @@
           "intensityType": "M"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "25-30min tempo continu Z3. Toutes les 5min : surge 30-40s à allure 5K (Z5), puis retour immédiat au tempo. 5-6 surges au total",
+          "descriptionEn": "25-30min continuous tempo Z3. Every 5min: 30-40s surge at 5K pace (Z5), then immediate return to tempo. 5-6 surges total",
+          "durationSec": 1680,
+          "zone": "Z3",
+          "intensityType": "M",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Footing de récupération",
@@ -1842,6 +2691,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing de récupération",
+          "descriptionEn": "Recovery jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [

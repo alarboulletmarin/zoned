@@ -115,9 +115,14 @@ export interface WorkoutBlock {
   zone?: ZoneSpec;
   rest?: string;
   recovery?: string; // Recovery description (e.g., "200m footing")
+  recoveryEn?: string; // English twin. Required whenever `recovery` is set:
+                       // the derived WorkoutStep tree turns it into a segment,
+                       // and a segment without its twin leaves an English
+                       // reader with French text.
   // ── New fields (v2) ──
   sets?: number;               // Number of series (e.g., 2 series of 12 reps)
   restBetweenSets?: string;    // Rest between series (e.g., "3min footing")
+  restBetweenSetsEn?: string;  // English twin, same rule as `recoveryEn`.
   vmaPercent?: number;         // % VMA target (alternative to zone)
   intensityType?: "E" | "M" | "T" | "I" | "R"; // Daniels intensity reference
   elevationGainM?: number;

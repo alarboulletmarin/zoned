@@ -240,7 +240,7 @@ describe("structured workout helpers", () => {
 
     expect(buildLegacyBlocksFromSteps(steps)).toEqual([
       {
-        description: "2x(3x 1min VMA / 30s jog Z1)",
+        description: "2 × (3 × 1min VMA / 30s jog Z1)",
         durationMin: 1,
         repetitions: 3,
         sets: 2,
@@ -249,6 +249,117 @@ describe("structured workout helpers", () => {
         zone: "Z5",
       },
     ]);
+  });
+
+  test("a trail segment keeps its elevation, gradient and terrain through the rebuild", () => {
+    const steps: WorkoutStep[] = [
+      {
+        kind: "segment",
+        description: "3min en côte",
+        descriptionEn: "3min uphill",
+        durationSec: 180,
+        zone: "Z4",
+        distanceM: 600,
+        elevationGainM: 55,
+        gradientPercent: 5.5,
+        terrainType: "trail_runnable",
+        role: "effort",
+      },
+    ];
+
+    expect(buildLegacyBlocksFromSteps(steps)[0]).toEqual({
+      description: "3min en côte",
+      descriptionEn: "3min uphill",
+      durationMin: 3,
+      distanceM: 600,
+      zone: "Z4",
+      elevationGainM: 55,
+      gradientPercent: 5.5,
+      terrainType: "trail_runnable",
+    });
+  });
+
+  test("a repeat keeps the effort's distance, terrain and English twin", () => {
+    const steps: WorkoutStep[] = [
+      {
+        kind: "repeat",
+        count: 5,
+        unit: "reps",
+        steps: [
+          {
+            kind: "segment",
+            description: "3min en côte",
+            descriptionEn: "3min uphill",
+            durationSec: 180,
+            zone: "Z4",
+            distanceM: 600,
+            elevationGainM: 55,
+            gradientPercent: 5.5,
+            terrainType: "trail_runnable",
+            role: "effort",
+          },
+        ],
+        between: [
+          { kind: "segment", description: "3min descente", durationSec: 180, zone: "Z1", role: "recovery" },
+        ],
+      },
+    ];
+
+    // Before this was fixed the rebuild dropped every field below except the
+    // French description, the duration, the count, the recovery and the zone,
+    // so a trail workout normalised through the tree lost its elevation and a
+    // bilingual workout lost its English copy.
+    expect(buildLegacyBlocksFromSteps(steps)[0]).toEqual({
+      description: "5 × 3min en côte / 3min descente",
+      descriptionEn: "5 × 3min uphill",
+      durationMin: 3,
+      repetitions: 5,
+      recovery: "3min descente",
+      distanceM: 600,
+      zone: "Z4",
+      elevationGainM: 55,
+      gradientPercent: 5.5,
+      terrainType: "trail_runnable",
+    });
+  });
+
+  test("a nested repeat composes both languages the same way", () => {
+    const steps: WorkoutStep[] = [
+      {
+        kind: "repeat",
+        count: 2,
+        unit: "sets",
+        steps: [
+          {
+            kind: "repeat",
+            count: 12,
+            unit: "reps",
+            steps: [
+              { kind: "segment", description: "30s VMA", descriptionEn: "30s VO2max", durationSec: 30, zone: "Z5", role: "effort" },
+            ],
+            between: [
+              { kind: "segment", description: "30s trot", descriptionEn: "30s jog", durationSec: 30, zone: "Z1", role: "recovery" },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const block = buildLegacyBlocksFromSteps(steps)[0];
+    expect(block.description).toBe("2 × (12 × 30s VMA / 30s trot)");
+    expect(block.descriptionEn).toBe("2 × (12 × 30s VO2max / 30s jog)");
+  });
+
+  test("no English twin means no half-translated description", () => {
+    const steps: WorkoutStep[] = [
+      {
+        kind: "repeat",
+        count: 4,
+        unit: "reps",
+        steps: [{ kind: "segment", description: "400m", durationSec: 90, zone: "Z5", role: "effort" }],
+      },
+    ];
+    expect(buildLegacyBlocksFromSteps(steps)[0].descriptionEn).toBeUndefined();
   });
 
   test("normalizes and synchronizes phase structures for editing", () => {
@@ -298,7 +409,7 @@ describe("structured workout helpers", () => {
       },
     ];
 
-    expect(summarizeWorkoutSteps(steps)).toBe(`3 x (15 x 20"/20") + 3' récup`);
+    expect(summarizeWorkoutSteps(steps)).toBe(`3 × (15 × 20"/20") + 3' récup`);
   });
 
   test("formats compound repeats with concise macro notation", () => {
@@ -325,6 +436,6 @@ describe("structured workout helpers", () => {
       },
     ];
 
-    expect(summarizeWorkoutSteps(steps)).toBe(`3 blocs de 5 x (30" + 20" + 10") + 2' récup`);
+    expect(summarizeWorkoutSteps(steps)).toBe(`3 blocs de 5 × (30" + 20" + 10") + 2' récup`);
   });
 });

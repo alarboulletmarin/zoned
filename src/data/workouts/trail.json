@@ -31,6 +31,28 @@
           "terrainType": "trail_runnable"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing progressif sur le plat",
+          "descriptionEn": "Progressive jog on flat terrain",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "terrainType": "trail_runnable",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Gammes + 2 accélérations courtes en côte",
+          "descriptionEn": "Drills + 2 short hill strides",
+          "durationSec": 300,
+          "elevationGainM": 15,
+          "gradientPercent": 10,
+          "terrainType": "trail_runnable",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "8×15s sprint en côte effort maximal, récup descente marche complète",
@@ -39,9 +61,40 @@
           "repetitions": 8,
           "zone": "Z6",
           "recovery": "Descente en marchant (2-3 min)",
+          "recoveryEn": "Walk down (2-3 min)",
           "elevationGainM": 8,
           "gradientPercent": 10,
           "terrainType": "trail_runnable"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 8,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "15s sprint en côte effort maximal",
+              "descriptionEn": "15s max-effort hill sprint, full walk-down recovery",
+              "durationSec": 15,
+              "zone": "Z6",
+              "elevationGainM": 8,
+              "gradientPercent": 10,
+              "terrainType": "trail_runnable",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "Descente en marchant (2-3 min)",
+              "descriptionEn": "Walk down (2-3 min)",
+              "durationSec": 120,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -52,6 +105,18 @@
           "zone": "Z1",
           "intensityType": "E",
           "terrainType": "trail_runnable"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing récupération sur le plat",
+          "descriptionEn": "Recovery jog on flat",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "terrainType": "trail_runnable",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -112,6 +177,25 @@
           "durationMin": 5
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing échauffement",
+          "descriptionEn": "Warm-up jog",
+          "durationSec": 900,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "terrainType": "trail_runnable",
+          "role": "effort"
+        },
+        {
+          "kind": "segment",
+          "description": "Gammes + 3 lignes droites",
+          "descriptionEn": "Drills + 3 strides",
+          "durationSec": 300,
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "8×60s à ~95-100 % VMA en côte, récup descente trottée 60s",
@@ -121,9 +205,41 @@
           "zone": "Z5",
           "vmaPercent": 98,
           "recovery": "60s descente trottée",
+          "recoveryEn": "60s jog down",
           "elevationGainM": 18,
           "gradientPercent": 7,
           "terrainType": "trail_runnable"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 8,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "60s à ~95-100 % VMA en côte",
+              "descriptionEn": "60s at ~95-100% VO2max on hill, jog down 60s recovery",
+              "durationSec": 60,
+              "zone": "Z5",
+              "vmaPercent": 98,
+              "elevationGainM": 18,
+              "gradientPercent": 7,
+              "terrainType": "trail_runnable",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "60s descente trottée",
+              "descriptionEn": "60s jog down",
+              "durationSec": 60,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -133,6 +249,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing retour calme",
+          "descriptionEn": "Cool-down jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -187,6 +314,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing échauffement progressif",
+          "descriptionEn": "Progressive warm-up jog",
+          "durationSec": 900,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "5×3min en côte à allure seuil, récup descente trottée 3 min",
@@ -196,9 +334,41 @@
           "zone": "Z4",
           "intensityType": "T",
           "recovery": "3 min descente trottée",
+          "recoveryEn": "3 min jog down",
           "elevationGainM": 55,
           "gradientPercent": 5.5,
           "terrainType": "trail_runnable"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 5,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "3min en côte à allure seuil",
+              "descriptionEn": "3min uphill at threshold, jog down 3 min recovery",
+              "durationSec": 180,
+              "zone": "Z4",
+              "intensityType": "T",
+              "elevationGainM": 55,
+              "gradientPercent": 5.5,
+              "terrainType": "trail_runnable",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "3 min descente trottée",
+              "descriptionEn": "3 min jog down",
+              "durationSec": 180,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -208,6 +378,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour souple",
+          "descriptionEn": "Easy cool-down",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -262,6 +443,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing + activation cardio progressive",
+          "descriptionEn": "Jog + progressive cardio activation",
+          "durationSec": 900,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "3×8min en montée à allure tempo (~Z3 haut/Z4)",
@@ -271,9 +463,41 @@
           "zone": "Z3-Z4",
           "intensityType": "T",
           "recovery": "4 min descente trottée",
+          "recoveryEn": "4 min jog down",
           "elevationGainM": 130,
           "gradientPercent": 8,
           "terrainType": "trail_runnable"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 3,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "8min en montée à allure tempo (~Z3 haut/Z4)",
+              "descriptionEn": "8min uphill at high tempo (~Z3 high/Z4)",
+              "durationSec": 480,
+              "zone": "Z3-Z4",
+              "intensityType": "T",
+              "elevationGainM": 130,
+              "gradientPercent": 8,
+              "terrainType": "trail_runnable",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "4 min descente trottée",
+              "descriptionEn": "4 min jog down",
+              "durationSec": 240,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -283,6 +507,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Retour calme",
+          "descriptionEn": "Easy cool-down",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -340,6 +575,20 @@
           "terrainType": "trail_runnable"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Montée en footing facile jusqu'au sommet",
+          "descriptionEn": "Easy jog up to the top",
+          "durationSec": 900,
+          "zone": "Z2",
+          "intensityType": "E",
+          "elevationGainM": 120,
+          "gradientPercent": 8,
+          "terrainType": "trail_runnable",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "5×8min descente contrôlée, sentier roulant, remontée trottée",
@@ -348,9 +597,40 @@
           "repetitions": 5,
           "zone": "Z2-Z3",
           "recovery": "12 min remontée trottée souple",
+          "recoveryEn": "12 min relaxed jog back up",
           "elevationGainM": 0,
           "gradientPercent": -9,
           "terrainType": "trail_runnable"
+        }
+      ],
+      "mainSetStructure": [
+        {
+          "kind": "repeat",
+          "count": 5,
+          "unit": "reps",
+          "steps": [
+            {
+              "kind": "segment",
+              "description": "8min descente contrôlée, sentier roulant, remontée trottée",
+              "descriptionEn": "8min controlled descent on runnable trail, jog back up",
+              "durationSec": 480,
+              "zone": "Z2-Z3",
+              "elevationGainM": 0,
+              "gradientPercent": -9,
+              "terrainType": "trail_runnable",
+              "role": "effort"
+            }
+          ],
+          "between": [
+            {
+              "kind": "segment",
+              "description": "12 min remontée trottée souple",
+              "descriptionEn": "12 min relaxed jog back up",
+              "durationSec": 720,
+              "zone": "Z1",
+              "role": "recovery"
+            }
+          ]
         }
       ],
       "cooldownTemplate": [
@@ -359,6 +639,16 @@
           "descriptionEn": "Walk + light quad and calf stretching",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche + étirements légers quadriceps et mollets",
+          "descriptionEn": "Walk + light quad and calf stretching",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -413,6 +703,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing approche sur plat",
+          "descriptionEn": "Approach jog on flat",
+          "durationSec": 600,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "70 min montée continue à allure conversation soutenue (Z2 haut → Z3)",
@@ -425,6 +726,20 @@
           "terrainType": "trail_runnable"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "70 min montée continue à allure conversation soutenue (Z2 haut → Z3)",
+          "descriptionEn": "70 min continuous climb at sustained conversational pace (high Z2 → Z3)",
+          "durationSec": 4200,
+          "zone": "Z2-Z3",
+          "intensityType": "E",
+          "elevationGainM": 600,
+          "gradientPercent": 6,
+          "terrainType": "trail_runnable",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Descente trottée souple",
@@ -434,6 +749,19 @@
           "intensityType": "E",
           "gradientPercent": -6,
           "terrainType": "trail_runnable"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Descente trottée souple",
+          "descriptionEn": "Easy jog descent",
+          "durationSec": 600,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "gradientPercent": -6,
+          "terrainType": "trail_runnable",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -488,6 +816,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing d'approche",
+          "descriptionEn": "Approach jog",
+          "durationSec": 600,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "80 min sur parcours vallonné, allure endurance, marche rapide sur >12 %",
@@ -501,12 +840,37 @@
           "terrainType": "trail_runnable"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "80 min sur parcours vallonné, allure endurance, marche rapide sur >12 %",
+          "descriptionEn": "80 min on rolling terrain, endurance pace, power-hike on >12% sections",
+          "durationSec": 4800,
+          "distanceKm": 12,
+          "zone": "Z2",
+          "intensityType": "E",
+          "elevationGainM": 240,
+          "gradientPercent": 3,
+          "terrainType": "trail_runnable",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Marche + étirements",
           "descriptionEn": "Walk + stretching",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche + étirements",
+          "descriptionEn": "Walk + stretching",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -561,6 +925,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Départ très facile sur le plat",
+          "descriptionEn": "Easy start on flat terrain",
+          "durationSec": 600,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "130 min parcours vallonné dense, allure endurance basse, marche rapide >15 %",
@@ -574,12 +949,37 @@
           "terrainType": "trail_technical"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "130 min parcours vallonné dense, allure endurance basse, marche rapide >15 %",
+          "descriptionEn": "130 min on dense rolling terrain, low endurance pace, power-hike >15%",
+          "durationSec": 7800,
+          "distanceKm": 18,
+          "zone": "Z2",
+          "intensityType": "E",
+          "elevationGainM": 900,
+          "gradientPercent": 5,
+          "terrainType": "trail_technical",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Marche + étirements globaux",
           "descriptionEn": "Walk + full-body stretching",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche + étirements globaux",
+          "descriptionEn": "Walk + full-body stretching",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -634,6 +1034,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Footing facile",
+          "descriptionEn": "Easy jog",
+          "durationSec": 600,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "100 min vallonné soutenu, densité ~30 m/km",
@@ -647,12 +1058,37 @@
           "terrainType": "trail_runnable"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "100 min vallonné soutenu, densité ~30 m/km",
+          "descriptionEn": "100 min sustained rolling, ~30 m/km density",
+          "durationSec": 6000,
+          "distanceKm": 14,
+          "zone": "Z2-Z3",
+          "intensityType": "E",
+          "elevationGainM": 700,
+          "gradientPercent": 5,
+          "terrainType": "trail_runnable",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Marche + étirements + récupération nutritionnelle dans les 30 min",
           "descriptionEn": "Walk + stretching + nutritional recovery within 30 min",
           "durationMin": 10,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche + étirements + récupération nutritionnelle dans les 30 min",
+          "descriptionEn": "Walk + stretching + nutritional recovery within 30 min",
+          "durationSec": 600,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -707,6 +1143,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche 5 min puis footing très lent",
+          "descriptionEn": "5 min walk then very slow jog",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "60 min footing souple, parcours peu vallonné (~10 m/km)",
@@ -720,12 +1167,37 @@
           "terrainType": "trail_runnable"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "60 min footing souple, parcours peu vallonné (~10 m/km)",
+          "descriptionEn": "60 min easy jog on lightly rolling terrain (~10 m/km)",
+          "durationSec": 3600,
+          "distanceKm": 9,
+          "zone": "Z1-Z2",
+          "intensityType": "E",
+          "elevationGainM": 95,
+          "gradientPercent": 2,
+          "terrainType": "trail_runnable",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "Marche + étirements doux",
           "descriptionEn": "Walk + gentle stretching",
           "durationMin": 5,
           "zone": "Z1"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "Marche + étirements doux",
+          "descriptionEn": "Walk + gentle stretching",
+          "durationSec": 300,
+          "zone": "Z1",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -787,6 +1259,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "10min sur chemin large et roulant, foulée courte",
+          "descriptionEn": "10min on wide, rolling path with a short stride",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "30-40min sur sentier, en marchant les montées raides sans culpabiliser. Regard porté 3 à 4 mètres devant, foulée raccourcie, bras utilisés pour l'équilibre",
@@ -796,6 +1279,17 @@
           "intensityType": "E"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "30-40min sur sentier, en marchant les montées raides sans culpabiliser. Regard porté 3 à 4 mètres devant, foulée raccourcie, bras utilisés pour l'équilibre",
+          "descriptionEn": "30-40min on trail, walking the steep climbs without guilt. Eyes 3 to 4 metres ahead, shortened stride, arms used for balance",
+          "durationSec": 2100,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "8min sur terrain facile pour relâcher les chevilles",
@@ -803,6 +1297,17 @@
           "durationMin": 8,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "8min sur terrain facile pour relâcher les chevilles",
+          "descriptionEn": "8min on easy ground to release the ankles",
+          "durationSec": 480,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
@@ -882,6 +1387,17 @@
           "intensityType": "E"
         }
       ],
+      "warmupStructure": [
+        {
+          "kind": "segment",
+          "description": "15min sur chemin roulant, mise en route progressive",
+          "descriptionEn": "15min on rolling path, progressive start",
+          "durationSec": 900,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "mainSetTemplate": [
         {
           "description": "50-65min en alternance libre : course sur le plat et les descentes douces, marche active et soutenue dès que la pente se redresse. Ne cherchez pas la régularité d'allure, cherchez la régularité d'effort",
@@ -891,6 +1407,17 @@
           "intensityType": "E"
         }
       ],
+      "mainSetStructure": [
+        {
+          "kind": "segment",
+          "description": "50-65min en alternance libre : course sur le plat et les descentes douces, marche active et soutenue dès que la pente se redresse. Ne cherchez pas la régularité d'allure, cherchez la régularité d'effort",
+          "descriptionEn": "50-65min freely alternating: run the flats and gentle descents, hike strongly as soon as the gradient steepens. Do not chase even pace, chase even effort",
+          "durationSec": 3420,
+          "zone": "Z2",
+          "intensityType": "E",
+          "role": "effort"
+        }
+      ],
       "cooldownTemplate": [
         {
           "description": "10min sur terrain facile, foulée relâchée",
@@ -898,6 +1425,17 @@
           "durationMin": 10,
           "zone": "Z1",
           "intensityType": "E"
+        }
+      ],
+      "cooldownStructure": [
+        {
+          "kind": "segment",
+          "description": "10min sur terrain facile, foulée relâchée",
+          "descriptionEn": "10min on easy ground with a relaxed stride",
+          "durationSec": 600,
+          "zone": "Z1",
+          "intensityType": "E",
+          "role": "effort"
         }
       ],
       "coachingTips": [
