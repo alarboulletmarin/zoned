@@ -3,6 +3,7 @@ import { normalizeWorkoutStructureSource } from "@/lib/workoutStructure";
 
 const STORAGE_KEY = "zoned-custom-workouts";
 const MAX_WORKOUTS = 20;
+const CUSTOM_ID_PREFIX = "CUSTOM-";
 
 export function getCustomWorkouts(): WorkoutTemplate[] {
   try {
@@ -38,8 +39,28 @@ export function deleteCustomWorkout(id: string): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(workouts));
 }
 
+/**
+ * A fresh id in the custom namespace. Every workout stored here must carry one:
+ * plans, favourites and share links all resolve by id, so reusing a catalogue
+ * id would silently reroute them to the copy.
+ */
+export function createCustomWorkoutId(): string {
+  return `${CUSTOM_ID_PREFIX}${Date.now().toString(36)}`;
+}
+
+/**
+ * Whether an id belongs to this store rather than to the catalogue.
+ *
+ * The distinction is not cosmetic: a catalogue id resolves for everyone, a
+ * custom one only inside its author's browser. Anything building a link, a QR
+ * code or a share text has to know which it is holding.
+ */
+export function isCustomWorkoutId(id: string): boolean {
+  return id.startsWith(CUSTOM_ID_PREFIX);
+}
+
 export function createEmptyWorkout(): WorkoutTemplate {
-  const id = `CUSTOM-${Date.now().toString(36)}`;
+  const id = createCustomWorkoutId();
   const emptyBlock: WorkoutBlock = {
     description: "",
     durationMin: 10,

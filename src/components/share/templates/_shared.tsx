@@ -79,16 +79,13 @@ export const ZONE_BG_TINT: Record<1 | 2 | 3 | 4 | 5 | 6, string> = {
 };
 
 /**
- * Public canonical URL for a workout. Used by QR codes on share templates.
- * Falls back to the prod host when window is unavailable (SSR/build).
+ * Public URL for a workout, used by QR codes on share templates.
+ *
+ * Re-exported rather than reimplemented: a custom workout needs its link to
+ * carry the workout itself, and a QR pointing at `/workout/CUSTOM-x` scans to
+ * "séance non trouvée" on anyone else's phone.
  */
-export function workoutShareUrl(workoutId: string): string {
-  const origin =
-    typeof window !== "undefined" && window.location.origin
-      ? window.location.origin
-      : "https://zoned.run";
-  return `${origin}/workout/${workoutId}`;
-}
+export { publicWorkoutUrl as workoutShareUrl } from "@/lib/share/workoutShare";
 
 /**
  * Share images render on their own light background regardless of the app

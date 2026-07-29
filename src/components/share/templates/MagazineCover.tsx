@@ -195,7 +195,7 @@ export function MagazineCover({ workout, transparent }: ShareTemplateProps) {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-            <QRSvg value={workoutShareUrl(workout.id)} size={140} />
+            <QRSvg value={workoutShareUrl(workout)} size={140} />
             <div
               style={{
                 fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",

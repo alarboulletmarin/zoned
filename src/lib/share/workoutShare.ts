@@ -14,9 +14,9 @@
  */
 
 import type { WorkoutStep, WorkoutStepSegment, WorkoutTemplate } from "@/types";
-import { createEmptyWorkout } from "@/lib/customWorkoutStorage";
+import { createEmptyWorkout, isCustomWorkoutId } from "@/lib/customWorkoutStorage";
 import { replaceWorkoutPhaseSteps } from "@/lib/workoutStructure";
-import { decodePayload, encodePayload, shareUrl } from "./codec";
+import { decodePayload, encodePayload, shareOrigin, shareUrl } from "./codec";
 import {
   INTENSITY_CODES,
   REPEAT_UNIT_CODES,
@@ -94,6 +94,27 @@ export function encodeSharedWorkout(workout: WorkoutTemplate): string {
 
 export function sharedWorkoutUrl(workout: WorkoutTemplate): string {
   return shareUrl("/workout/shared", encodeSharedWorkout(workout));
+}
+
+/**
+ * The URL to hand to somebody else — the single answer to "what is the link to
+ * this workout", whatever surface is asking.
+ *
+ * A catalogue workout has a public id, so its own page is the link. A custom
+ * workout lives only in its author's localStorage: `/workout/CUSTOM-x` renders
+ * "séance non trouvée" for every other visitor, so its link has to carry the
+ * workout itself. Getting this wrong is silent — the link copies fine, opens
+ * fine for the person who made it, and is dead for everyone else.
+ */
+export function publicWorkoutUrl(workout: WorkoutTemplate): string {
+  return isCustomWorkoutId(workout.id)
+    ? sharedWorkoutUrl(workout)
+    : `${shareOrigin()}/workout/${workout.id}`;
+}
+
+/** Same question for a workout we only have the id of — a catalogue id by construction. */
+export function catalogueWorkoutUrl(workoutId: string): string {
+  return `${shareOrigin()}/workout/${workoutId}`;
 }
 
 // ── Decoding ───────────────────────────────────────────────────────

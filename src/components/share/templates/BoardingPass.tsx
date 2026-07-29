@@ -198,7 +198,7 @@ export function BoardingPass({ workout, transparent }: ShareTemplateProps) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-              <QRSvg value={workoutShareUrl(workout.id)} size={140} />
+              <QRSvg value={workoutShareUrl(workout)} size={140} />
               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                 <Label>Scan</Label>
                 <span

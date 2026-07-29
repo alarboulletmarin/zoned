@@ -263,7 +263,7 @@ export function ReceiptTicket({ workout, transparent }: ShareTemplateProps) {
               justifyContent: "center",
             }}
           >
-            <QRSvg value={workoutShareUrl(workout.id)} size={220} />
+            <QRSvg value={workoutShareUrl(workout)} size={220} />
           </div>
           <div
             style={{

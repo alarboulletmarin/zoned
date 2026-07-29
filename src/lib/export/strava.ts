@@ -9,16 +9,8 @@
 
 import type { WorkoutTemplate } from "@/types";
 import { pickLang } from "@/lib/i18n-utils";
+import { publicWorkoutUrl } from "@/lib/share/workoutShare";
 import { formatWorkoutDescription } from "./ics";
-
-/** Canonical public URL for a workout (mirrors `workoutShareUrl`). */
-function workoutUrl(workoutId: string): string {
-  const origin =
-    typeof window !== "undefined" && window.location.origin
-      ? window.location.origin
-      : "https://zoned.run";
-  return `${origin}/workout/${workoutId}`;
-}
 
 /**
  * Build the Strava share text for a running workout: title, then the shared
@@ -28,7 +20,7 @@ function workoutUrl(workoutId: string): string {
 export function buildStravaShareText(workout: WorkoutTemplate): string {
   const title = pickLang(workout, "name");
   const body = formatWorkoutDescription(workout);
-  const footer = `via ${workoutUrl(workout.id)}`;
+  const footer = `via ${publicWorkoutUrl(workout)}`;
 
   return `${title}\n\n${body}\n\n${footer}`;
 }

@@ -88,7 +88,7 @@ export function QRCard({ workout, transparent }: ShareTemplateProps) {
             boxShadow: `0 12px 32px rgba(15,23,42,0.10)`,
           }}
         >
-          <QRSvg value={workoutShareUrl(workout.id)} size={520} fg="#0f172a" />
+          <QRSvg value={workoutShareUrl(workout)} size={520} fg="#0f172a" />
         </div>
 
         {/* Scan invitation */}

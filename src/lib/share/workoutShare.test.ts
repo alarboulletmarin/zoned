@@ -6,6 +6,7 @@ import { replaceWorkoutPhaseSteps } from "@/lib/workoutStructure";
 import {
   decodeSharedWorkout,
   encodeSharedWorkout,
+  publicWorkoutUrl,
   sharedWorkoutSteps,
   sharedWorkoutToTemplate,
   sharedWorkoutUrl,
@@ -115,6 +116,39 @@ describe("URL length", () => {
       { kind: "segment", description: "Footing en aisance respiratoire", durationSec: 2700, zone: "Z2" },
     ]);
     expect(sharedWorkoutUrl(workout).length).toBeLessThan(220);
+  });
+});
+
+/**
+ * The link handed to somebody else has to open for *them*. A custom workout
+ * lives only in its author's localStorage, so `/workout/CUSTOM-x` is a dead end
+ * for every other visitor — and a dead one that looks perfectly healthy to
+ * whoever copied it.
+ */
+describe("publicWorkoutUrl", () => {
+  test("points a catalogue workout at its own page", () => {
+    const workout = { ...buildWorkout(), id: "VMA-001" };
+
+    expect(publicWorkoutUrl(workout)).toEndWith("/workout/VMA-001");
+  });
+
+  test("carries a custom workout inside the link instead", () => {
+    const workout = { ...buildWorkout(), id: "CUSTOM-abc123" };
+    const url = publicWorkoutUrl(workout);
+
+    expect(url).toContain("/workout/shared?d=");
+    expect(url).not.toContain("CUSTOM-abc123");
+  });
+
+  test("the custom link decodes back to the same session", () => {
+    const workout = { ...buildWorkout(), id: "CUSTOM-abc123" };
+    const encoded = new URL(publicWorkoutUrl(workout)).searchParams.get("d")!;
+    const decoded = decodeSharedWorkout(encoded);
+
+    expect(decoded?.n).toBe(workout.name);
+    expect(sharedWorkoutSteps(decoded!).main).toEqual(
+      sharedWorkoutSteps(decodeSharedWorkout(encodeSharedWorkout(workout))!).main,
+    );
   });
 });
 

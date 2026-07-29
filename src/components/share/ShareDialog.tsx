@@ -277,7 +277,7 @@ export function ShareDialog({ workout, open, onOpenChange }: ShareDialogProps) {
   async function handleCopyLink() {
     setBusy("copyLink");
     try {
-      await navigator.clipboard.writeText(workoutShareUrl(workout.id));
+      await navigator.clipboard.writeText(workoutShareUrl(workout));
       toast.success(t("share.toast.linkCopied"));
     } catch {
       toast.error(t("share.toast.error"));
