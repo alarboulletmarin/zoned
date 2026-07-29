@@ -304,6 +304,7 @@
         "changelog": "Changelog"
       },
       "license": "© {{year}} · ZONED · Logiciel libre, licence MIT",
+      "licenses": "Licences tierces",
       "version": "v.{{version}}",
       "builtInPublic": "Construit en public"
     }

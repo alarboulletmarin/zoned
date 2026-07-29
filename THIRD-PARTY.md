@@ -4,6 +4,15 @@ Zoned's own source code is MIT licensed — see [LICENSE](LICENSE). This file co
 the third-party material redistributed inside the repository and the built site,
 which carries its own terms.
 
+It documents the material **committed into this repository** (icons, typeface) and
+the **non-open-source dependency** the build redistributes. The licences of the npm
+dependencies bundled into the built site are not listed by hand: they are generated
+from `node_modules` into `licenses.txt`, served at
+[zoned.run/licenses.txt](https://zoned.run/licenses.txt), by
+[`scripts/generate-licenses.ts`](scripts/generate-licenses.ts) on every build.
+Minification strips licence comments, so without that file the bundle would ship
+the code and drop the notice those licences require.
+
 ---
 
 ## Material Symbols — icon set
@@ -32,6 +41,71 @@ required by section 4(b) of the licence. The changes are:
 
 The upstream package ships **no `NOTICE` file**, so there is no attribution notice
 to propagate under section 4(d).
+
+---
+
+## Space Grotesk — typeface
+
+- **Copyright:** © 2020 The Space Grotesk Project Authors
+- **Licence:** SIL Open Font License 1.1 — full text in
+  [licenses/space-grotesk-OFL.txt](licenses/space-grotesk-OFL.txt)
+- **Upstream:** https://github.com/floriankarsten/space-grotesk
+- **Obtained via:** Google Fonts, latin subset of the variable font (weights 300–700)
+- **Where it lives:** `public/fonts/space-grotesk-latin.woff2`, declared in
+  `src/styles/fonts.css` and preloaded from `index.html`
+
+The font file is committed to this repository and copied into the built site, so
+every clone and every deploy redistributes it. **OFL clause 2 makes reproducing
+the copyright notice and the licence a condition of that redistribution** — that
+is what this entry and `licenses/space-grotesk-OFL.txt` provide. It was self-hosted
+in commit `da2fc8e` to drop the render-blocking Google Fonts chain; the notice was
+owed from that commit onward.
+
+**The redistributed form is modified**: it is a subset, restricted to the latin
+`unicode-range` listed in `src/styles/fonts.css`, which makes it a *Modified
+Version* under the licence. **No outline data is altered.**
+
+The upstream copyright line carries **no Reserved Font Name**, so clause 3 imposes
+no renaming on the subset and the family keeps its original name. Should the
+upstream notice ever gain one, the subset would have to be renamed.
+
+The metrics-matched `Space Grotesk Fallback` face in the same stylesheet contains
+no Space Grotesk data: it is a set of override percentages applied to the user's
+local Arial, and is not covered by the OFL.
+
+---
+
+## Garmin FIT SDK — export format
+
+- **Copyright:** © Garmin International, Inc.
+- **Licence:** **proprietary — not open source.** The *Flexible and Interoperable
+  Data Transfer (FIT) Protocol License Agreement*, shipped as `LICENSE.txt` inside
+  the [`@garmin/fitsdk`](https://github.com/garmin/fit-javascript-sdk) npm package
+- **Where it lives:** a runtime dependency, imported dynamically in
+  [`src/lib/export/fit.ts`](src/lib/export/fit.ts) to encode `.fit` workout files.
+  It is **not vendored into this repository**, but the build inlines it into the
+  export chunk, so the deployed site serves it
+
+**This is the one component of Zoned that is not free software, and MIT does not
+extend to it.** The [LICENSE](LICENSE) at the root grants you rights over Zoned's
+own source; it grants you nothing over the FIT SDK. If you fork, self-host or
+redistribute Zoned, the SDK reaches your users through you, and Garmin's terms —
+not MIT — govern that copy. Two clauses in particular:
+
+- **§2(c)** restricts making the Licensed Technology available to third parties
+- **§2(d)** forbids distributing it such that any part becomes subject to a licence
+  requiring it be disclosed in source form, or that others may modify it
+
+Garmin's §1 does grant the right to use the FIT protocol in software you create,
+which is the basis on which Zoned exports `.fit` files. Read the agreement in
+`node_modules/@garmin/fitsdk/LICENSE.txt` after install, or at
+[developer.garmin.com](https://developer.garmin.com/fit/), and reach your own
+conclusion before redistributing. Its full text is also reproduced in the
+generated `licenses.txt` on the built site.
+
+**Removing the dependency removes the constraint.** It is reached from a single
+dynamic `import()` behind the FIT export button; GPX, ICS, PDF and PNG export have
+no such restriction.
 
 ---
 

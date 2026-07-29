@@ -85,6 +85,19 @@ export function Footer() {
         <div className="mt-8 md:mt-10 pt-5 md:pt-6 border-t border-border flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-3">
           <p className="font-mono text-[10px] tracking-[0.16em] md:tracking-[0.18em] uppercase text-muted-foreground">
             {t("homepage:home.footer.license", { year })}
+            <span aria-hidden className="opacity-40 mx-1.5">
+              ·
+            </span>
+            {/* Static file emitted by scripts/generate-licenses.ts, not a route:
+                plain <a>, so it escapes the SPA instead of hitting the router. */}
+            <a
+              href="/licenses.txt"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-foreground transition-colors"
+            >
+              {t("homepage:home.footer.licenses")}
+            </a>
           </p>
           <div className="flex items-center gap-3 md:gap-4 font-mono text-[10px] tracking-[0.16em] md:tracking-[0.18em] uppercase text-muted-foreground">
             <a

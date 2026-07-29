@@ -326,7 +326,20 @@ A ⭐ on the repo is also greatly appreciated and helps other runners find the p
 
 [MIT](LICENSE) — free to use, fork, host or adapt. Attribution is appreciated.
 
-Third-party material redistributed in this repository keeps its own terms: the
-icon set is [Material Symbols](https://github.com/google/material-design-icons)
-(© Google, Apache 2.0, paths modified). See [THIRD-PARTY.md](THIRD-PARTY.md) for
-the full notices.
+**MIT covers Zoned's own source code.** Third-party material keeps its own terms:
+
+| | |
+|---|---|
+| [Material Symbols](https://github.com/google/material-design-icons) | icon set, © Google, Apache 2.0, paths unmodified but repackaged |
+| [Space Grotesk](https://github.com/floriankarsten/space-grotesk) | typeface, © 2020 the project authors, SIL OFL 1.1, latin subset |
+| **[Garmin FIT SDK](https://developer.garmin.com/fit/)** | **`.fit` export, © Garmin — proprietary, not open source** |
+
+The Garmin SDK is the one piece MIT does not reach: it is a runtime dependency
+that the build serves to visitors, under Garmin's own agreement rather than this
+licence. **If you fork or self-host, read its terms before you redistribute** —
+they restrict passing the SDK on to third parties. It sits behind a single dynamic
+import in `src/lib/export/fit.ts`; dropping FIT export drops the constraint.
+
+Full notices in [THIRD-PARTY.md](THIRD-PARTY.md). The licences of every bundled
+npm dependency are generated at build time and served at
+[zoned.run/licenses.txt](https://zoned.run/licenses.txt).
