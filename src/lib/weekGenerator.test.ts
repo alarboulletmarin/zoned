@@ -21,6 +21,10 @@ const catalog = [
   ...(await loadDisciplineWorkouts("swimming")),
 ] as AnyWorkoutTemplate[];
 
+// The two locked-slot tests below each run generateWeek several times against
+// the real 239-workout catalogue, so they are slow by nature: ~4.8s locally and
+// 7.5s on a GitHub runner, against bun's 5s default. They get an explicit
+// timeout rather than fewer iterations, which would weaken what they assert.
 describe("generateWeek — locked slots", () => {
   test("keeps a locked slot verbatim across regenerations", () => {
     const first = generateWeek(DEFAULT_WEEK_SETTINGS, catalog);
@@ -36,7 +40,7 @@ describe("generateWeek — locked slots", () => {
       expect(slot?.workout?.id).toBe(locked.workout!.id);
       expect(slot?.locked).toBe(true);
     }
-  });
+  }, 30_000);
 
   test("fills the other days without duplicating the locked workout", () => {
     const base = generateWeek(DEFAULT_WEEK_SETTINGS, catalog);
@@ -52,7 +56,7 @@ describe("generateWeek — locked slots", () => {
         filled.filter((s) => s.workout!.id === locked.workout!.id),
       ).toHaveLength(1);
     }
-  });
+  }, 30_000);
 });
 
 describe("redrawSlot", () => {
