@@ -22,6 +22,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export interface UseUndoRedoResult<T> {
   present: T;
   set: (next: T | ((prev: T) => T)) => void;
+  /**
+   * Move `present` without recording a snapshot. For continuous input — a
+   * slider being dragged — where every intermediate frame must render but only
+   * the released value belongs in history. Pair it with one `set` on release,
+   * built from the value captured before the gesture began.
+   */
+  replace: (next: T | ((prev: T) => T)) => void;
   reset: (next: T) => void;
   undo: () => void;
   redo: () => void;
@@ -76,6 +83,16 @@ export function useUndoRedo<T>(
     },
     [capacity],
   );
+
+  const replace = useCallback((next: T | ((prev: T) => T)) => {
+    setHistory((h) => {
+      const value =
+        typeof next === "function"
+          ? (next as (prev: T) => T)(h.present)
+          : next;
+      return Object.is(value, h.present) ? h : { ...h, present: value };
+    });
+  }, []);
 
   const reset = useCallback((next: T) => {
     setHistory({ past: [], present: next, future: [] });
@@ -132,6 +149,7 @@ export function useUndoRedo<T>(
   return {
     present: history.present,
     set,
+    replace,
     reset,
     undo,
     redo,

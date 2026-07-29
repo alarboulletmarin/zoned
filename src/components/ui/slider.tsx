@@ -9,8 +9,19 @@ function Slider({
   value,
   min = 0,
   max = 100,
+  thumbLabel,
+  thumbValueText,
   ...props
-}: React.ComponentProps<typeof SliderPrimitive.Root>) {
+}: React.ComponentProps<typeof SliderPrimitive.Root> & {
+  /**
+   * Accessible name for the thumb. Radix puts `role="slider"` on the thumb, not
+   * on the root, so an `aria-label` passed alongside the other root props never
+   * reaches the control a screen reader announces.
+   */
+  thumbLabel?: string;
+  /** Human reading of the current value — "15 min" rather than "900". */
+  thumbValueText?: string;
+}) {
   const _values = React.useMemo(
     () =>
       Array.isArray(value)
@@ -51,6 +62,8 @@ function Slider({
         <SliderPrimitive.Thumb
           data-slot="slider-thumb"
           key={index}
+          aria-label={thumbLabel}
+          aria-valuetext={thumbValueText}
           className="border-primary ring-ring/50 block size-4 shrink-0 rounded-full border bg-white shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
         />
       ))}
