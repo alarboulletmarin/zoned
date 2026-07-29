@@ -2,6 +2,60 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.8.0",
+    date: "2026-07-29",
+    changes: {
+      added: [
+        {
+          text: "Ajuster une séance du catalogue : un bouton ouvre une copie modifiable où les répétitions, les séries, les durées d'effort et de récupération se règlent au curseur ou se saisissent au clavier, avec un aperçu qui se recalcule en direct. La séance d'origine n'est jamais touchée, la copie arrive dans Mes séances et renvoie vers celle dont elle vient",
+          textEn: "Adjust a catalogue workout: a button opens an editable copy where repetitions, sets, effort and recovery durations are set with a slider or typed in, with a preview that recomputes live. The source workout is never touched, the copy lands in My Workouts and links back to where it came from",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Les bornes de réglage viennent de la séance elle-même : la plage que déclare son scaling, ou la moitié à une fois et demie ce qu'elle prescrit. Le curseur couvre cette recommandation, le champ à côté accepte n'importe quelle valeur, et seul l'aberrant est refusé",
+          textEn: "Parameter bounds read from the template itself — the range its scaling declares, or half to one and a half times what it prescribes. The slider spans that recommendation, the field beside it takes any value, and only the absurd is refused",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+      ],
+      changed: [
+        {
+          text: "Un glissement de curseur ne remplit plus la pile d'annulation : un geste vaut un cran, quelle que soit sa longueur",
+          textEn: "Dragging a slider no longer floods the undo stack: one gesture is one step, however long the drag",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Les curseurs annoncent enfin aux lecteurs d'écran ce qu'ils règlent et la valeur qu'ils portent",
+          textEn: "Sliders now announce what they control and the value they hold to screen readers",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Un bouton Modifier sur la page d'une séance personnelle. Arrivé par les favoris ou un signet, on ne pouvait rejoindre l'éditeur qu'en repassant par Mes séances",
+          textEn: "An Edit button on a personal workout's page. Reached from favourites or a bookmark, the editor was otherwise only accessible by going back through My Workouts",
+          category: "UX",
+          categoryEn: "UX",
+        },
+      ],
+      fixed: [
+        {
+          text: "Le lien d'une séance personnelle ne menait nulle part chez son destinataire : la copie du lien, les QR codes des quatre visuels de partage et le pied du texte Strava pointaient tous vers un identifiant qui n'existe que dans le navigateur de son auteur. Le lien transporte désormais la séance elle-même",
+          textEn: "A personal workout's link led nowhere for its recipient: the copy-link action, the QR codes on the four share visuals and the Strava footer all pointed at an id that exists only in its author's browser. The link now carries the workout itself",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Le nom anglais d'une séance copiée n'est plus effacé dès la première frappe dans le champ de nom",
+          textEn: "A copied workout's English name is no longer wiped by the first keystroke in the name field",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+      ],
+    },
+  },
+  {
     version: "0.7.6",
     date: "2026-07-29",
     changes: {

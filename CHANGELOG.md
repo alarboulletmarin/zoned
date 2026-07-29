@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2026-07-29
+
+### Added
+- Adjust a catalogue workout: a button opens an editable copy where repetitions, sets, effort and recovery durations are set with a slider or typed in, with a preview that recomputes live. The source workout is never touched, the copy lands in My Workouts and links back to where it came from
+- Parameter bounds read from the template itself — the range its `scaling` declares, or half to one and a half times what it prescribes. The slider spans that recommendation, the field beside it takes any value, and only the absurd is refused
+
+### Changed
+- Dragging a slider no longer floods the undo stack: one gesture is one step, however long the drag
+- Sliders announce what they control and the value they hold to screen readers, which the thumb never did
+- An Edit button on a personal workout's page. Reached from favourites or a bookmark, the editor was otherwise only accessible by going back through My Workouts
+
+### Fixed
+- A personal workout's link led nowhere for its recipient: the copy-link action, the QR codes on the four share visuals and the Strava footer all pointed at an id that exists only in its author's browser. The link now carries the workout itself
+- A copied workout's English name is no longer wiped by the first keystroke in the name field
+
 ## [0.7.6] - 2026-07-29
 
 ### Added
