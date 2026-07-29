@@ -15,6 +15,8 @@ import {
   Share,
   StravaIcon,
   MoreHorizontal,
+  SlidersHorizontal,
+  Pencil,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -68,6 +70,9 @@ import { MuscleGroupBadges } from "@/components/domain/MuscleGroupBadge";
 import { StrengthExerciseList } from "@/components/domain/StrengthExerciseList";
 import { CATEGORY_ICONS } from "@/components/domain/CategoryIcon";
 import { loadUserZonePrefs, calculateAllZones } from "@/lib/zones";
+import { hasAdjustableParams } from "@/lib/workoutAdjust";
+import { createCustomWorkoutId, isCustomWorkoutId } from "@/lib/customWorkoutStorage";
+import { publicWorkoutUrl } from "@/lib/share/workoutShare";
 
 export function WorkoutDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -187,6 +192,10 @@ export function WorkoutDetailPage() {
 
   const dominantZone = getDominantZone(workout);
   const workoutDiscipline = getWorkoutDiscipline(workout);
+  // Adjusting means copying: a workout already living in My Workouts is edited
+  // in place instead, and one with no number to move has nothing to offer.
+  const isOwnWorkout = isCustomWorkoutId(workout.id);
+  const canAdjust = !isOwnWorkout && hasAdjustableParams(workout);
   const canGenerateRoute = !workout.environment.requiresTrack && (workoutDiscipline === "running" || workoutDiscipline === "cycling");
   // Plan context: duration from plan generation (volume-scaled, may differ for long runs)
   const planWeekNumber = locationState?.weekNumber;
@@ -442,13 +451,47 @@ export function WorkoutDetailPage() {
             <GlossaryLinkedText text={pick(workout, "description")} />
           </p>
 
+          {workout.sourceWorkoutId && (
+            <WorkoutProvenance sourceId={workout.sourceWorkoutId} />
+          )}
+
           {/* Action bar — one primary, everything else behind the overflow
               menu. Five equally-weighted buttons used to fill a screen before
               the session itself; three of them (Partager, Strava, Copier le
               lien) are the same intent, and one (Parcours) is navigation.
-              Full width on phones, contained from sm: up. */}
-          <div className="flex items-center gap-2 mt-5 sm:max-w-sm">
+              Full width on phones, contained from sm: up.
+              Adjust stays out of the menu: an action nobody finds is an action
+              nobody uses, and it is the one that turns a fixed catalogue into
+              something a runner can fit to their week. */}
+          <div className="flex items-center gap-2 mt-5 sm:max-w-md">
             <ExportMenu workout={workout} size="default" className="flex-1 justify-center" />
+            {canAdjust && (
+              <Button
+                variant="outline"
+                className="rounded-full shrink-0"
+                onClick={() =>
+                  navigate(`/workout/builder/${createCustomWorkoutId()}?from=${workout.id}`)
+                }
+              >
+                <SlidersHorizontal className="size-4 mr-2" />
+                {t("session:actions.adjust")}
+              </Button>
+            )}
+            {/* A workout of one's own is edited, not copied again. Reached from
+                Favourites or a bookmark, this page was otherwise a dead end:
+                the only way back to the editor was through My Workouts. */}
+            {isOwnWorkout && (
+              <Button
+                variant="outline"
+                className="rounded-full shrink-0"
+                asChild
+              >
+                <Link to={`/workout/builder/${workout.id}`}>
+                  <Pencil className="size-4 mr-2" />
+                  {t("session:actions.edit")}
+                </Link>
+              </Button>
+            )}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -477,7 +520,7 @@ export function WorkoutDetailPage() {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={async () => {
-                    const ok = await copyToClipboard(window.location.href);
+                    const ok = await copyToClipboard(publicWorkoutUrl(workout));
                     if (ok) toast.success(t("common:actions.linkCopied"));
                     else toast.error(t("common:errors.generic"));
                   }}
@@ -649,6 +692,29 @@ export function WorkoutDetailPage() {
         </FadeUp>
       </div>
     </>
+  );
+}
+
+/**
+ * Where an adjusted copy came from (issue #130). The source is resolved rather
+ * than stored on the copy: names are bilingual and would go stale, and the id
+ * is the only thing that has to survive.
+ */
+function WorkoutProvenance({ sourceId }: { sourceId: string }) {
+  const { t } = useTranslation("session");
+  const pick = usePickLang();
+  const { workout: source } = useWorkout(sourceId);
+
+  return (
+    <p className="text-sm text-muted-foreground mt-3">
+      {t("provenance.adaptedFrom")}{" "}
+      <Link
+        to={`/workout/${sourceId}`}
+        className="underline underline-offset-2 hover:text-foreground transition-colors"
+      >
+        {source ? pick(source, "name") : sourceId}
+      </Link>
+    </p>
   );
 }
 

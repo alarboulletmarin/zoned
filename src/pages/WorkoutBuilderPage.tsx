@@ -1,6 +1,6 @@
 import { useState, useCallback, useReducer, useRef, useEffect, useMemo } from "react";
 import { usePageHint } from "@/hooks/usePageHint";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight, Download, Upload, Undo2, Redo2, Share } from "@/components/icons";
 import { useUndoRedo } from "@/hooks/useUndoRedo";
@@ -17,7 +17,9 @@ import {
 import { SEOHead } from "@/components/seo";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { WorkoutStepListEditor } from "@/components/domain/contribute/WorkoutStepListEditor";
+import { WorkoutParameterPanel } from "@/components/domain/WorkoutParameterPanel";
 import { SessionTimeline } from "@/components/visualization/SessionTimeline";
+import { PageLoader } from "@/components/ui/page-loader";
 import { getStructuredWorkoutDurationMinutes, getWorkoutPhaseSteps, normalizeWorkoutStructureSource, replaceWorkoutPhaseSteps } from "@/lib/workoutStructure";
 import { isMac } from "@/lib/platform";
 import { ExportMenu } from "@/components/domain/ExportMenu";
@@ -34,6 +36,15 @@ import {
   exportWorkoutsToJSON,
   importWorkoutsFromJSON,
 } from "@/lib/customWorkoutStorage";
+import {
+  applyAdjustments,
+  createAdjustedCopy,
+  getAdjustableParams,
+  mergeParamBounds,
+  widenParamTo,
+} from "@/lib/workoutAdjust";
+import { getWorkoutById } from "@/data/workouts";
+import { isRunningWorkout } from "@/lib/workoutTemplate";
 import type { WorkoutTemplate, WorkoutStep } from "@/types";
 
 type SectionKey = "warmup" | "main" | "cooldown";
@@ -227,26 +238,69 @@ function WorkoutListView() {
   );
 }
 
+// ── Seed resolution ──────────────────────────────────────────────────
+
+/** A blank draft under the id the URL asked for. */
+function emptyDraft(workoutId: string): WorkoutTemplate {
+  return normalizeWorkoutStructureSource({ ...createEmptyWorkout(), id: workoutId });
+}
+
+/**
+ * What the editor opens on. Three cases: an already-saved custom workout, a
+ * copy adapted from a catalogue workout (`?from=`, issue #130), or a blank
+ * draft.
+ *
+ * The adapted copy is resolved here rather than inside the editor because the
+ * catalogue loads asynchronously, and `useUndoRedo` reads its initial value
+ * once: seeding it late would leave the first history entry empty and flash a
+ * blank editor. Nothing is written to storage until the user saves, and the id
+ * lives in the URL, so a reload rebuilds the same copy.
+ */
+function WorkoutEditorGate({ workoutId, sourceId }: { workoutId: string; sourceId?: string }) {
+  const [seed, setSeed] = useState<WorkoutTemplate | null>(() => {
+    const existing = getCustomWorkout(workoutId);
+    if (existing) return normalizeWorkoutStructureSource(existing);
+    return sourceId ? null : emptyDraft(workoutId);
+  });
+
+  useEffect(() => {
+    if (seed || !sourceId) return;
+
+    let cancelled = false;
+    getWorkoutById(sourceId)
+      .then((source) => {
+        if (cancelled) return;
+        setSeed(
+          source && isRunningWorkout(source)
+            ? normalizeWorkoutStructureSource(createAdjustedCopy(source, workoutId))
+            : emptyDraft(workoutId),
+        );
+      })
+      .catch(() => {
+        if (!cancelled) setSeed(emptyDraft(workoutId));
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [seed, sourceId, workoutId]);
+
+  if (!seed) return <PageLoader />;
+
+  return <WorkoutEditorView initialWorkout={seed} />;
+}
+
 // ── Editor view (with id param) ──────────────────────────────────────
 
-function WorkoutEditorView({ workoutId }: { workoutId: string }) {
+function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate }) {
   usePageHint("workout-builder", "hints.workoutBuilder.title", "hints.workoutBuilder.description");
   const navigate = useNavigate();
   const { t } = useTranslation("common");
 
-  const initialWorkout = useMemo<WorkoutTemplate>(() => {
-    const existing = getCustomWorkout(workoutId);
-    if (existing) return normalizeWorkoutStructureSource(existing);
-    const fresh = createEmptyWorkout();
-    return normalizeWorkoutStructureSource({ ...fresh, id: workoutId });
-    // workoutId is the only effective input — re-evaluating on rerender would
-    // wipe in-flight edits.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workoutId]);
-
   const {
     present: workout,
     set: setWorkoutHistory,
+    replace: replaceWorkoutHistory,
     reset: resetWorkoutHistory,
     undo,
     redo,
@@ -331,6 +385,42 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
     setWorkout((prev) => replaceWorkoutPhaseSteps(prev, section, steps));
   }, [setWorkout]);
 
+  // ── Bounded parameters, for a draft adapted from the catalogue ──
+  // Bounds are read once from the seed so a scale cannot move under the
+  // cursor; only the values track the draft. A workout built from scratch has
+  // no source to bound it, and gets the step editor alone.
+  const baseParams = useMemo(
+    () => (initialWorkout.sourceWorkoutId ? getAdjustableParams(initialWorkout) : []),
+    [initialWorkout],
+  );
+  const params = useMemo(
+    () => (baseParams.length > 0 ? mergeParamBounds(getAdjustableParams(workout), baseParams) : []),
+    [workout, baseParams],
+  );
+
+  // A drag renders every frame but lands in history once, on release, built
+  // from where the gesture started — otherwise one slider sweep evicts the
+  // whole undo stack.
+  const preDragRef = useRef<WorkoutTemplate | null>(null);
+
+  const previewParam = useCallback((paramId: string, value: number) => {
+    if (!preDragRef.current) preDragRef.current = workout;
+    isDirtyRef.current = true;
+    replaceWorkoutHistory(applyAdjustments(workout, { [paramId]: value }, params));
+  }, [workout, params, replaceWorkoutHistory]);
+
+  // A typed value may land outside the recommendation; admitting it means
+  // opening that parameter's range first, or `applyAdjustments` would clamp it
+  // straight back and the field would look broken.
+  const commitParam = useCallback((paramId: string, value: number) => {
+    const base = preDragRef.current ?? workout;
+    preDragRef.current = null;
+    const admitted = params.map((param) =>
+      param.id === paramId ? widenParamTo(param, value) : param,
+    );
+    setWorkout(applyAdjustments(base, { [paramId]: value }, admitted));
+  }, [workout, params, setWorkout]);
+
   const toggleCollapse = (key: SectionKey) => {
     setCollapsed((prev) => ({ ...prev, [key]: !prev[key] }));
   };
@@ -370,7 +460,16 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
           <input
             type="text"
             value={workout.name}
-            onChange={(e) => setWorkout((prev) => ({ ...prev, name: e.target.value, nameEn: e.target.value }))}
+            onChange={(e) => setWorkout((prev) => ({
+              ...prev,
+              name: e.target.value,
+              // The builder is single-language (#67), so it mirrors the name
+              // into its English twin. A workout adapted from the catalogue
+              // arrives with a real translation, though, and mirroring would
+              // destroy it on the first keystroke — so mirror only while the
+              // two are already the same, i.e. a workout built from scratch.
+              nameEn: prev.nameEn === prev.name ? e.target.value : prev.nameEn,
+            }))}
             placeholder={t("calculators:workoutBuilder.namePlaceholder")}
             className="block w-full text-2xl md:text-3xl font-bold bg-transparent border-none focus:outline-none placeholder:text-muted-foreground/40 mb-1"
           />
@@ -451,6 +550,13 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
           <SessionTimeline workout={workout} />
         </div>
 
+        <WorkoutParameterPanel
+          params={params}
+          onPreview={previewParam}
+          onCommit={commitParam}
+        />
+
+
         {/* Sections */}
         {sections.map(({ key, label, color }) => {
           const steps = getSteps(key);
@@ -511,10 +617,12 @@ function WorkoutEditorView({ workoutId }: { workoutId: string }) {
 
 export function WorkoutBuilderPage() {
   const { id } = useParams<{ id: string }>();
+  // `?from=` carries the catalogue workout an Adjust action came from.
+  const [searchParams] = useSearchParams();
 
   if (!id) {
     return <WorkoutListView />;
   }
 
-  return <WorkoutEditorView workoutId={id} />;
+  return <WorkoutEditorGate workoutId={id} sourceId={searchParams.get("from") ?? undefined} />;
 }

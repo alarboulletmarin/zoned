@@ -293,6 +293,19 @@
       "subtitle": "This workout was shared with you. Add it to your workouts to edit or export it.",
       "add": "Add to my workouts",
       "invalid": "This share link is invalid or incomplete."
+    },
+    "parameters": {
+      "title": "Parameters",
+      "hint": "Adjust the session's key values. The slider spans the recommended range; the field takes any value.",
+      "kinds": {
+        "sets": "Sets",
+        "reps": "Reps",
+        "blocks": "Blocks",
+        "effortDuration": "Effort",
+        "recoveryDuration": "Recovery",
+        "distance": "Distance"
+      },
+      "offRecommendation": "Outside the recommended range ({{range}})"
     }
   },
   "raceSimulator": {

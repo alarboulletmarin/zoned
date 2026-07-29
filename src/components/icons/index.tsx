@@ -340,6 +340,15 @@ export function Settings({ className, size = 24, filled = false }: IconProps) {
   );
 }
 
+// `tune-fill` is identical to the outline upstream: `filled` is a no-op.
+export function SlidersHorizontal({ className, size = 24 }: IconProps) {
+  return (
+    <Svg viewBox="0 -960 960 960" size={size} className={className}>
+      <path d="M423.61-107v-238h73v83h353v73h-353v82h-73Zm-313.22-82v-73h260v73h-260Zm187-172.78v-82h-187v-72.44h187v-84h73v238.44h-73Zm126.22-82v-72.44h426v72.44h-426Zm166-171.22v-238h73v82h187v73h-187v83h-73Zm-479.22-83v-73h426v73h-426Z"/>
+    </Svg>
+  );
+}
+
 export function Heart({ className, size = 24, filled = false }: IconProps) {
   return (
     <Svg viewBox="0 -960 960 960" size={size} className={className}>

@@ -202,6 +202,12 @@ export interface WorkoutTemplate {
   estimatedDistanceKm?: DurationRange; // { min, max } distance range
   weeklyFrequencyMax?: number;         // Max times per week
   minimumRecoveryDays?: number;        // Min rest days after this workout
+  /**
+   * Id of the workout this one was adapted from. Only ever set on a custom
+   * copy, never on a catalogue template: adjusting a workout writes a new
+   * `CUSTOM-` entry and leaves its source untouched.
+   */
+  sourceWorkoutId?: string;
 }
 
 /** Resolves the discipline of a workout, defaulting to running for legacy entries. */

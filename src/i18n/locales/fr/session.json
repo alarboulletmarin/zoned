@@ -115,7 +115,9 @@
   "actions": {
     "findRoute": "Trouver un parcours adapté",
     "shareStrava": "Partager sur Strava",
-    "moreActions": "Plus d'actions"
+    "moreActions": "Plus d'actions",
+    "adjust": "Ajuster",
+    "edit": "Modifier"
   },
   "strava": {
     "copied": "Séance copiée, il ne reste plus qu'à la coller sur Strava !"
@@ -157,5 +159,8 @@
     "referencesCount_other": "{{count}} études",
     "viewStudy": "Voir l'étude",
     "crossDisciplineNote": "Le contenu scientifique ci-dessous est rédigé pour la course à pied. Les principes (zones, adaptations métaboliques) s'appliquent au vélo et à la natation avec des nuances propres à chaque discipline."
+  },
+  "provenance": {
+    "adaptedFrom": "Adapté de"
   }
 }

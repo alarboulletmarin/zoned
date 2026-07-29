@@ -293,6 +293,19 @@
       "subtitle": "Cette séance a été partagée avec vous. Ajoutez-la à vos séances pour la modifier ou l'exporter.",
       "add": "Ajouter à mes séances",
       "invalid": "Ce lien de partage est invalide ou incomplet."
+    },
+    "parameters": {
+      "title": "Paramètres",
+      "hint": "Ajuste les valeurs clés de la séance. Le curseur couvre la plage conseillée ; le champ accepte toute valeur.",
+      "kinds": {
+        "sets": "Séries",
+        "reps": "Répétitions",
+        "blocks": "Blocs",
+        "effortDuration": "Effort",
+        "recoveryDuration": "Récupération",
+        "distance": "Distance"
+      },
+      "offRecommendation": "Hors de la plage conseillée ({{range}})"
     }
   },
   "raceSimulator": {

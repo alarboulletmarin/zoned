@@ -115,7 +115,9 @@
   "actions": {
     "findRoute": "Find a matching route",
     "shareStrava": "Share on Strava",
-    "moreActions": "More actions"
+    "moreActions": "More actions",
+    "adjust": "Adjust",
+    "edit": "Edit"
   },
   "strava": {
     "copied": "Workout copied, just paste it on Strava!"
@@ -157,5 +159,8 @@
     "referencesCount_other": "{{count}} studies",
     "viewStudy": "View study",
     "crossDisciplineNote": "The science below is written for running. The principles (zones, metabolic adaptations) apply to cycling and swimming with sport-specific nuances."
+  },
+  "provenance": {
+    "adaptedFrom": "Adapted from"
   }
 }

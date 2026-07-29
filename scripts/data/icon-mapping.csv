@@ -29,6 +29,7 @@ Save|save|exact|
 Trash2|delete|exact|
 RotateCcw|rotate_left|exact|alternative sémantique : `restart_alt`
 Settings|settings|exact|
+SlidersHorizontal|tune|exact|
 Heart|favorite|exact|
 Pencil|edit|exact|
 Plus|add|exact|
