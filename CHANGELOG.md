@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.6] - 2026-07-29
+
+### Added
+- Third-party licence notices at `/licenses.txt`, linked from the footer and regenerated at every build from the 209 packages the bundle actually ships
+- A validator for the workout format that fails the build and CI on a malformed session, with a `--file` mode so a contributor gets an answer in two seconds instead of a failed deploy
+- A pull request gate running typecheck, the test suite, FR/EN parity and the workout schema — nothing checked a contribution before it reached `main`
+- A full format reference in `docs/workout-format.md`: file shapes, id prefixes, the three axes, the step tree, zone specs, trail fields and a worked example
+
+### Changed
+- All 239 workouts now carry a machine-readable structure on their three phases, up from 34 on the main set alone; the timeline no longer has to re-read a French sentence to know what a session is
+- The multiplier reads `7 × 400m` everywhere, where two competing conventions were in use
+- Third-party terms are documented, including the Garmin FIT SDK, which is proprietary rather than open source and restricts redistribution
+
+### Fixed
+- Recovery texts rendered in French on English pages: `recovery` was a French-only field, and the derived structure had no English twin
+- The zone distribution kept its labels until a reload when switching FR/EN, while the page title changed immediately
+- `/licenses.txt` and other static files were swallowed by the single-page routing fallback
+- Seven workouts announced a repetition range their own data contradicted, `6-8x` against a stored 7
+- `END-022` ran to 76min against a declared 60-75: its 20-second strides were stored as a full minute
+- Elevation, gradient, terrain and English descriptions were dropped when a custom workout was saved
+- Language is now derived from the URL and every page canonicalises to itself
+- The advertised catalogue counts no longer matched the real one
+
 ## [0.7.5] - 2026-07-26
 
 ### Added

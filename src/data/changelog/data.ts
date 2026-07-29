@@ -2,6 +2,108 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.7.6",
+    date: "2026-07-29",
+    changes: {
+      added: [
+        {
+          text: "Les licences des composants tiers sont publiées sur /licenses.txt, avec un lien en pied de page, et régénérées à chaque build depuis les 209 paquets réellement embarqués",
+          textEn: "Third-party licence notices published at /licenses.txt, linked from the footer and regenerated at every build from the 209 packages the bundle actually ships",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Un validateur du format des séances, qui fait échouer le build et la CI sur une séance mal formée. Un mode --file répond en deux secondes sur un seul fichier, au lieu d'attendre un déploiement raté",
+          textEn: "A validator for the workout format that fails the build and CI on a malformed session. A --file mode answers in two seconds on a single file instead of waiting for a failed deploy",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Une vérification automatique sur les pull requests : types, tests, parité FR/EN et schéma des séances. Rien ne contrôlait une contribution avant qu'elle n'arrive sur la branche principale",
+          textEn: "An automated check on pull requests: typecheck, tests, FR/EN parity and the workout schema. Nothing verified a contribution before it reached the main branch",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Une référence complète du format des séances : forme des fichiers, préfixes d'identifiants, les trois axes de classement, l'arbre des blocs, les specs de zone, les champs trail et un exemple commenté de bout en bout",
+          textEn: "A full workout format reference: file shapes, id prefixes, the three classification axes, the step tree, zone specs, trail fields and a fully worked example",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+      ],
+      changed: [
+        {
+          text: "Les 239 séances portent désormais une structure lisible par machine sur leurs trois phases, contre 34 sur le seul corps de séance. La chronologie n'a plus à relire une phrase en français pour savoir de quoi la séance est faite",
+          textEn: "All 239 workouts now carry a machine-readable structure across their three phases, up from 34 on the main set alone. The timeline no longer has to re-read a French sentence to know what a session is made of",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Le multiplicateur s'écrit 7 × 400m partout, là où deux conventions concurrentes coexistaient",
+          textEn: "The multiplier reads 7 × 400m everywhere, where two competing conventions were in use",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "Les conditions des composants tiers sont documentées, dont le SDK Garmin FIT, qui est propriétaire et non libre, et dont l'accord restreint la redistribution",
+          textEn: "Third-party terms are documented, including the Garmin FIT SDK, which is proprietary rather than open source and whose agreement restricts redistribution",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+      ],
+      fixed: [
+        {
+          text: "Les récupérations s'affichaient en français sur les pages anglaises : le champ n'existait qu'en français et la structure dérivée n'avait pas de jumeau anglais",
+          textEn: "Recovery texts rendered in French on English pages: the field existed in French only and the derived structure had no English twin",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "La répartition des zones gardait ses libellés jusqu'au rechargement lors d'une bascule FR/EN, alors que le titre changeait immédiatement",
+          textEn: "The zone distribution kept its labels until a reload when switching FR/EN, while the title changed immediately",
+          category: "UX",
+          categoryEn: "UX",
+        },
+        {
+          text: "/licenses.txt et les autres fichiers statiques étaient interceptés par le routage de l'application",
+          textEn: "/licenses.txt and other static files were swallowed by the single-page routing fallback",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Sept séances annonçaient une fourchette de répétitions que leur propre donnée contredisait : « 6-8x » pour un 7 enregistré. La fourchette est passée dans les conseils, où elle relève du coaching",
+          textEn: "Seven workouts announced a repetition range their own data contradicted: \"6-8x\" against a stored 7. The range moved to the coaching tips, where it belongs",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "END-022 durait 76min pour 60-75 annoncées : ses lignes droites de 20 secondes étaient enregistrées comme une minute pleine",
+          textEn: "END-022 ran to 76min against a declared 60-75: its 20-second strides were stored as a full minute",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "Dénivelé, pente, type de terrain et textes anglais disparaissaient à l'enregistrement d'une séance personnelle",
+          textEn: "Elevation, gradient, terrain type and English descriptions were dropped when a custom workout was saved",
+          category: "Seances",
+          categoryEn: "Workouts",
+        },
+        {
+          text: "La langue est déduite de l'URL et chaque page se canonicalise sur elle-même",
+          textEn: "Language is now derived from the URL and every page canonicalises to itself",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+        {
+          text: "Les compteurs annoncés ne correspondaient plus au catalogue réel",
+          textEn: "The advertised catalogue counts no longer matched the real one",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+      ],
+    },
+  },
+  {
     version: "0.7.5",
     date: "2026-07-26",
     changes: {
