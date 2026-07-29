@@ -68,9 +68,9 @@ Verifiez le dernier identifiant utilise dans le fichier JSON avant d'en attribue
 
 ### Structure WorkoutTemplate
 
-Chaque seance respecte l'interface `WorkoutTemplate` definie dans [`src/types/index.ts`](src/types/index.ts).
+Le format complet vit dans **[docs/workout-format.md](docs/workout-format.md)** : champs obligatoires et optionnels, arbre `WorkoutStep`, specs de zone, champs trail, `scaling`, seances de renforcement, exemple commente de bout en bout.
 
-La liste complete des champs, obligatoires et optionnels, est dans la section **[Workout format reference](#workout-format-reference)** en fin de document. C'est la reference unique : elle vaut pour les deux moities de ce document et elle suit le code.
+C'est la reference unique, en anglais parce qu'elle nomme du code, et elle vaut pour les deux moities de ce document. Ce fichier-ci decrit le processus de contribution, pas le format.
 
 ### Bilingue
 
@@ -124,7 +124,7 @@ For technical contributors, you can directly propose the JSON file.
 
 1. Fork the repository.
 2. Add your workout to the appropriate category file in `src/data/workouts/`.
-3. Follow the conventions described above (IDs, bilingual fields, WorkoutTemplate structure) and the [Workout format reference](#workout-format-reference) at the end of this document.
+3. Follow the conventions described above (IDs, bilingual fields, WorkoutTemplate structure).
 4. **Validate your JSON** before opening the PR:
 
    ```bash
@@ -138,6 +138,12 @@ For technical contributors, you can directly propose the JSON file.
 ### 3. Via the in-app form
 
 A built-in contribution form is available at `/contribute`.
+
+## Workout format
+
+The full format lives in **[docs/workout-format.md](docs/workout-format.md)**: required and optional fields, the `WorkoutStep` tree, zone specs, trail fields, `scaling`, strength sessions, and a fully worked example.
+
+It is the single reference, shared by both halves of this document. This file covers the contribution process, not the format.
 
 ## Local testing
 
@@ -158,137 +164,3 @@ Zoned is released under the MIT licence (see [LICENSE](LICENSE)). By offering a 
 In practice: submit only what you wrote yourself, or content whose licence permits this redistribution. Do not copy a workout, an article or a translation out of a book, a website or a competing app. Citing a source is the opposite of a problem — an attributed reference strengthens the methodology page.
 
 **There is no CLA to sign.**
-
----
-
-# Workout format reference
-
-Single shared reference for both halves of this document, kept in English because it names code.
-Source of truth: [`src/types/index.ts`](src/types/index.ts) and [`src/types/strength.ts`](src/types/strength.ts).
-Checked by `bun run scripts/qa-workout-schema.ts` — if this section and the validator ever disagree, the validator is right and this section is a bug.
-
-## File shapes
-
-| Path | Root shape | Files |
-|---|---|---|
-| `src/data/workouts/<category>.json` | `{ "category": WorkoutCategory, "templates": WorkoutTemplate[] }` | 12 |
-| `src/data/workouts/{cycling,swimming}.json` | `{ "discipline": Discipline, "templates": WorkoutTemplate[] }` | 2 |
-| `src/data/strength/sessions/*.json` | `{ "category": StrengthCategory, "templates": StrengthWorkoutTemplate[] }` | 5 |
-
-The two running shapes are deliberate: `src/data/workouts/index.ts` has one loader per shape. This is not a bug to be collapsed.
-
-## WorkoutTemplate — required fields
-
-| Field | Type | Purpose |
-|---|---|---|
-| `id` | `string` | `PREFIX-NNN`, unique across the entire catalogue, permanent. Plans, favourites and share links resolve through it. |
-| `name` / `nameEn` | `string` | Display title, FR / EN. |
-| `description` / `descriptionEn` | `string` | One-paragraph summary, FR / EN. |
-| `category` | `WorkoutCategory` | Must match the `category` of the file it lives in (cycling/swimming files excepted — see `discipline`). |
-| `sessionType` | `SessionType` | Training focus. Drives plan-generator selection and session colours. |
-| `targetSystem` | `TargetSystem` | Physiological system trained (`vo2max`, `lactate_threshold`, `aerobic_base`, …). |
-| `difficulty` | `Difficulty` | `beginner` \| `intermediate` \| `advanced` \| `elite`. |
-| `typicalDuration` | `{ min, max }` | Total session duration in minutes. `min <= max` is enforced. |
-| `environment` | `{ requiresHills, requiresTrack, prefersFlat?, prefersSoft? }` | Booleans. The first two are required, and gate whether a plan can schedule the session at all. |
-| `warmupTemplate` | `WorkoutBlock[]` | Warm-up, display copy. May be empty, must be present. |
-| `mainSetTemplate` | `WorkoutBlock[]` | Main set, display copy. This is what the user reads. |
-| `cooldownTemplate` | `WorkoutBlock[]` | Cool-down, display copy. May be empty, must be present. |
-| `coachingTips` / `coachingTipsEn` | `string[]` | Execution advice. Equal lengths. |
-| `commonMistakes` / `commonMistakesEn` | `string[]` | Pitfalls. Equal lengths. |
-| `variationIds` | `string[]` | Ids of related workouts. Every entry must resolve to a real id — use `[]` if there are none. |
-| `selectionCriteria` | `{ phases, weekPositions, relativeLoad, tags, priorityScore }` | How the plan generator picks the session: which `TrainingPhase[]`, which `WeekPosition[]` (`early`/`mid`/`late`), its `RelativeLoad` (`light`/`moderate`/`hard`/`key`), free-text `tags`, and a `priorityScore` (0-100, higher wins a tie). |
-
-## WorkoutTemplate — optional fields
-
-| Field | Type | Purpose |
-|---|---|---|
-| `discipline` | `Discipline` | `running` \| `cycling` \| `swimming`. **Absent means running** — that is why 219 of the 239 templates omit it. Only `cycling.json` and `swimming.json` set it (20 templates). Read it through `getWorkoutDiscipline()`, never `w.discipline` directly. |
-| `warmupStructure` | `WorkoutStep[]` | Machine-readable warm-up tree. Currently unused by any template. |
-| `mainSetStructure` | `WorkoutStep[]` | Machine-readable main set tree — see below. 34 of 239 templates. |
-| `cooldownStructure` | `WorkoutStep[]` | Machine-readable cool-down tree. Currently unused by any template. |
-| `scaling` | `WorkoutScaling` | Intra-phase progression rule — see below. 37 of 239 templates. |
-| `estimatedDistanceKm` | `{ min, max }` | Distance range in km, when duration alone is misleading. 4 of 239 templates. |
-| `weeklyFrequencyMax` | `number` | Maximum times per week a plan may schedule this session. Optional in the type, but present on all 239 templates — supply it. |
-| `minimumRecoveryDays` | `number` | Minimum rest days a plan must leave after this session. Same: optional in the type, present on all 239. |
-
-## WorkoutBlock — one line of display copy
-
-`description` is the only required field. `descriptionEn` is optional in the type but present on all 967 blocks in the catalogue: supply it.
-
-Everything else is optional and describes the effort: `durationMin`, `repetitions`, `sets`, `distance` (free text), `distanceM`, `distanceKm`, `zone` (a `ZoneSpec` string — `"Z4"`, or a span like `"Z1-Z2"`, parsed by `parseZoneSpan`), `vmaPercent`, `intensityType` (Daniels `E`/`M`/`T`/`I`/`R`), `rest`, `recovery`, `restBetweenSets`, `elevationGainM`, `gradientPercent`, `terrainType`.
-
-## `mainSetTemplate` vs `mainSetStructure`
-
-They describe the same session at two different levels, and both are read.
-
-- **`mainSetTemplate`** (`WorkoutBlock[]`, required) is **bilingual display copy** — a flat list of human sentences. Prose first, numbers as decoration.
-- **`mainSetStructure`** (`WorkoutStep[]`, optional) is the **machine-readable tree**. Two node kinds:
-  - `{ kind: "segment", … }` — one effort, with `durationSec` / `distanceM` / `distanceKm`, `zone`, `role` (`effort` \| `recovery` \| `transition`), and its own `description` / `descriptionEn`.
-  - `{ kind: "repeat", count, unit?, steps: [], between?: [] }` — repeats `steps` `count` times, inserting `between` in the gaps. `repeat` nests, which is how `2x(12x 30s / 30s)` is expressed exactly rather than approximated.
-
-The tree is what tooling reasons about: `src/lib/workoutStructure.ts` derives real duration, zone distribution and the dominant zone from it, and the timeline, share codec and workout builder all consume it. Without a structure, those consumers fall back to parsing the prose in `mainSetTemplate`, which is lossy.
-
-**Only 34 of 239 templates carry a `mainSetStructure` today.** It is optional for backward compatibility, not because it is second-class. Add one to any interval, hill or fartlek session you contribute — anything whose shape is more than a single steady effort.
-
-```jsonc
-// VMA-001 — 2 sets of 12x(30s Z5 / 30s Z1), 3min between sets
-"mainSetStructure": [
-  { "kind": "repeat", "count": 2, "unit": "sets",
-    "steps": [
-      { "kind": "repeat", "count": 12, "unit": "reps",
-        "steps":   [{ "kind": "segment", "description": "30s VMA", "descriptionEn": "30s VO2max", "durationSec": 30, "zone": "Z5", "role": "effort" }],
-        "between": [{ "kind": "segment", "description": "30s footing Z1", "descriptionEn": "30s jog Z1", "durationSec": 30, "zone": "Z1", "role": "recovery" }] }
-    ],
-    "between": [{ "kind": "segment", "description": "3min footing Z1", "descriptionEn": "3min jog Z1", "durationSec": 180, "zone": "Z1", "role": "recovery" }] }
-]
-```
-
-## `scaling` — progression within a phase
-
-```jsonc
-"scaling": { "progressionType": "reps", "minValue": 8, "maxValue": 14, "stepSize": 2 }
-```
-
-| Key | Meaning |
-|---|---|
-| `progressionType` | What grows: `reps` \| `duration` \| `distance` \| `sets`. |
-| `minValue` | Value at the **start** of the phase (progression = 0). |
-| `maxValue` | Value at the **end** of the phase (progression = 1). |
-| `stepSize` | Optional quantum. Without it the interpolation is rounded to the nearest integer. |
-
-The plan generator interpolates linearly between `minValue` and `maxValue` according to how far into a training phase the session falls, then snaps to `stepSize` (`scaleWorkout()` in `src/lib/planGenerator/sessionBuilder.ts`). The example above yields 8 reps in the first week of the phase and 14 in the last, always an even number. This is what lets one template serve a whole block instead of shipping four near-identical workouts.
-
-Only add `scaling` where progression is genuinely linear in one parameter. A session whose intervals change shape as the phase advances needs separate templates.
-
-## Bilingual rule
-
-French is the primary language; every user-facing string has an `*En` twin.
-
-- Required twins on `WorkoutTemplate`: `nameEn`, `descriptionEn`, `coachingTipsEn`, `commonMistakesEn`.
-- **Arrays must have equal length.** `coachingTips` and `coachingTipsEn` are matched by index, so a missing translation shifts every following tip.
-- Nested copy carries its own twin: `WorkoutBlock.descriptionEn`, `WorkoutStepSegment.descriptionEn`, `StrengthBlock.notesEn`.
-- Never leave an `*En` field as a copy of the French one — the validator cannot catch it, but a reader will.
-
-## Strength sessions
-
-Strength templates are `StrengthWorkoutTemplate` ([`src/types/strength.ts`](src/types/strength.ts)) and **do not use the running block type**. The differences that matter:
-
-| Running | Strength |
-|---|---|
-| `warmupTemplate` / `mainSetTemplate` / `cooldownTemplate` | `warmupBlocks` / `mainBlocks` / `cooldownBlocks` |
-| `WorkoutBlock` — a sentence, a zone, a duration | `StrengthBlock` — `exerciseId`, `sets`, `reps`, `restBetweenSets`, `intensity` |
-| zones `Z1`-`Z6` | `StrengthIntensity`: `mobility` \| `endurance` \| `hypertrophy` \| `strength` \| `power` |
-| `selectionCriteria` | `suitablePhases: TrainingPhase[]` |
-| `discipline?` absent means running | `kind: "strength"` — **required**, it is the union discriminator |
-
-`StrengthBlock.exerciseId` points into the exercise library under `src/data/strength/exercises/`; it must resolve. `weeklyFrequencyMax` and `minimumRecoveryDays` are required here, unlike on `WorkoutTemplate`.
-
-**This divergence is deliberate, do not "unify" it.** A strength block is a prescription for a named exercise, not an effort in a heart-rate zone; forcing one shape onto both would empty half the fields on each side. The contract is the discriminated union in `src/types/index.ts`:
-
-```ts
-export type AnyWorkoutTemplate = WorkoutTemplate | StrengthWorkoutTemplate;
-export function isStrengthWorkout(w: AnyWorkoutTemplate): w is StrengthWorkoutTemplate;
-export function isRunningWorkout(w: AnyWorkoutTemplate): w is WorkoutTemplate;
-```
-
-A consumer that can receive either kind branches on `isStrengthWorkout()` and lets TypeScript narrow. Never test for the presence of a field to guess which kind you hold. Code that genuinely does not care which naming applies reads the phase through `getWorkoutPhaseBlocks(workout, "main")` from `@/lib/workoutTemplate`, which re-exports both guards.
