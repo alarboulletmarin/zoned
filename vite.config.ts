@@ -95,6 +95,12 @@ export default defineConfig({
         globIgnores: ["**/pdfmake*", "**/vfs_fonts*", "**/fitsdk*", "**/garmin*"],
         cleanupOutdatedCaches: true,
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
+        // Files served verbatim out of public/, not SPA routes. The navigation
+        // fallback hands every navigation index.html, so without this the
+        // router receives /licenses.txt, matches nothing and renders its 404 —
+        // while curl, having no service worker, gets the real file. No route
+        // ends in .txt or .xml, so the pattern cannot swallow a real page.
+        navigateFallbackDenylist: [/\.(txt|xml)$/],
         // skipWaiting + clientsClaim: the new SW activates as soon as it's
         // installed, instead of waiting for every tab to close. Mobile users
         // never "close all tabs" (they just background the browser), so without
