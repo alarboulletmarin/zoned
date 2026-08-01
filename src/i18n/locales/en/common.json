@@ -395,6 +395,10 @@
   "settings": {
     "title": "Settings",
     "description": "Customize your experience",
+    "theme": {
+      "title": "Theme",
+      "description": "Light, dark, or follow your system"
+    },
     "colorPalette": {
       "title": "Color Palette",
       "description": "Adapted for visual accessibility",
@@ -743,6 +747,7 @@
     "installDesc": "Access Zoned directly from your home screen, even offline.",
     "install": "Install",
     "dismiss": "Later",
+    "updateTitle": "Update available",
     "updateAvailable": "A new version of Zoned is available.",
     "update": "Update",
     "offline": "You are offline. Your data remains accessible.",

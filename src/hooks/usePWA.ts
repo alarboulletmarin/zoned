@@ -8,11 +8,17 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
+/**
+ * Install prompt and connectivity. Service worker *updates* are not here:
+ * they belong to <UpdatePrompt>, which owns the registration and the banner.
+ * This hook used to carry them, through a `zoned-sw-update` CustomEvent and a
+ * `window.__zonedApplyUpdate` global — a seam that only existed because the
+ * worker was registered outside the component tree.
+ */
 export function usePWA() {
   const [installEvent, setInstallEvent] =
     useState<BeforeInstallPromptEvent | null>(null);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [updateAvailable, setUpdateAvailable] = useState(false);
   const [installDismissed, setInstallDismissed] = useState(() => {
     const ts = localStorage.getItem(DISMISS_KEY);
     return ts ? Date.now() - Number(ts) < DISMISS_TTL : false;
@@ -25,18 +31,15 @@ export function usePWA() {
     };
     const onOnline = () => setIsOnline(true);
     const onOffline = () => setIsOnline(false);
-    const onUpdate = () => setUpdateAvailable(true);
 
     window.addEventListener("beforeinstallprompt", onInstallPrompt);
     window.addEventListener("online", onOnline);
     window.addEventListener("offline", onOffline);
-    window.addEventListener("zoned-sw-update", onUpdate);
 
     return () => {
       window.removeEventListener("beforeinstallprompt", onInstallPrompt);
       window.removeEventListener("online", onOnline);
       window.removeEventListener("offline", onOffline);
-      window.removeEventListener("zoned-sw-update", onUpdate);
     };
   }, []);
 
@@ -54,17 +57,10 @@ export function usePWA() {
     setInstallDismissed(true);
   }, []);
 
-  const applyUpdate = useCallback(() => {
-    const fn = (window as any).__zonedApplyUpdate;
-    if (typeof fn === "function") fn();
-  }, []);
-
   return {
     canInstall,
     promptInstall,
     dismissInstall,
     isOnline,
-    updateAvailable,
-    applyUpdate,
   };
 }

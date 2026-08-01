@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { useState, useEffect, useRef, useCallback, lazy, Suspense, type ComponentType } from "react";
+import { useState, useEffect, useRef, lazy, Suspense, type ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 import { Analytics } from "@vercel/analytics/react";
 import { toast, Toaster } from "sonner";
@@ -11,7 +11,9 @@ import { CommandPaletteProvider, useCommandPalette } from "@/components/search";
 import { GlossaryMatcherProvider } from "@/contexts/GlossaryMatcherContext";
 import { StorageWarning } from "@/components/domain/StorageWarning";
 import { PWAInstallPrompt } from "@/components/domain/PWAInstallPrompt";
+import { UpdatePrompt } from "@/components/domain/UpdatePrompt";
 import { usePWA } from "@/hooks/usePWA";
+import { ThemeProvider } from "@/hooks/useTheme";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useIdleAfterLoad } from "@/hooks/useIdleAfterLoad";
 import { i18nReady } from "@/i18n";
@@ -174,7 +176,7 @@ function ScrollToTopOnNavigate() {
 
 function App() {
   const { t } = useTranslation("common");
-  const { canInstall, promptInstall, dismissInstall, isOnline, updateAvailable, applyUpdate } = usePWA();
+  const { canInstall, promptInstall, dismissInstall, isOnline } = usePWA();
   // Toaster placement: bottom-right covers the share-sheet action row on
   // mobile (Copier / Partager / Télécharger). On small viewports we surface
   // the toast at the top instead so it never overlaps a button the user just
@@ -189,51 +191,9 @@ function App() {
     if (preloadReady) preloadSidebarPages();
   }, [preloadReady]);
 
-  // Track if user has manually set theme preference
-  const userHasSetTheme = useRef(
-    typeof window !== "undefined" && localStorage.getItem("zoned-theme") !== null
-  );
-
-  // Theme — managed via ref + DOM to avoid re-rendering the entire app tree.
-  // Only the TopBar icon needs to know the current theme (handled via its own state).
-  const themeRef = useRef<"light" | "dark">(
-    (() => {
-      if (typeof window !== "undefined") {
-        const stored = localStorage.getItem("zoned-theme");
-        if (stored === "dark" || stored === "light") return stored;
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
-      }
-      return "light" as const;
-    })()
-  );
-
-  // Apply initial theme (no state involved)
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", themeRef.current === "dark");
-  }, []);
-
-  // Listen for system theme changes
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = (e: MediaQueryListEvent) => {
-      if (!userHasSetTheme.current) {
-        themeRef.current = e.matches ? "dark" : "light";
-        document.documentElement.classList.toggle("dark", themeRef.current === "dark");
-      }
-    };
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, []);
-
-  // PWA: toast on update available
-  useEffect(() => {
-    if (updateAvailable) {
-      toast(t("pwa.updateAvailable"), {
-        action: { label: t("pwa.update"), onClick: applyUpdate },
-        duration: Infinity,
-      });
-    }
-  }, [updateAvailable]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Theme lives in ThemeProvider (mounted below). Nothing here needs to know
+  // it: the TopBar button and the settings card read it from context, so a
+  // theme change never re-renders this tree.
 
   // PWA: toast on offline / back-online
   const prevOnline = useRef(true);
@@ -247,28 +207,11 @@ function App() {
     prevOnline.current = isOnline;
   }, [isOnline]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Toggle theme — NO setState, NO App re-render. Just DOM class + localStorage.
-  // Transitions are disabled during the switch to avoid border/background flash.
-  const toggleTheme = useCallback(() => {
-    userHasSetTheme.current = true;
-    document.documentElement.setAttribute("data-switching-theme", "");
-    const next = themeRef.current === "dark" ? "light" : "dark";
-    themeRef.current = next;
-    document.documentElement.classList.toggle("dark", next === "dark");
-    localStorage.setItem("zoned-theme", next);
-    // Dispatch custom event so TopBar can update its icon
-    window.dispatchEvent(new CustomEvent("zoned-theme-change", { detail: next }));
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        document.documentElement.removeAttribute("data-switching-theme");
-      });
-    });
-  }, []);
-
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
     <SettingsProvider>
+      <ThemeProvider>
         <FavoritesProvider>
           <BrowserRouter>
           <GlossaryMatcherProvider>
@@ -281,10 +224,7 @@ function App() {
             </a>
             <ScrollToTopOnNavigate />
             <div className="min-h-screen bg-background text-foreground flex flex-col">
-              <TopBar
-                onThemeToggle={toggleTheme}
-                onMobileMenuOpen={() => setMobileSidebarOpen(true)}
-              />
+              <TopBar onMobileMenuOpen={() => setMobileSidebarOpen(true)} />
 
               {/* Mobile slide-over nav (hamburger). Desktop uses the
                   horizontal nav inside TopBar, no sidebar. */}
@@ -400,6 +340,9 @@ function App() {
           <Analytics />
           <StorageWarning />
           {canInstall && <PWAInstallPrompt onInstall={promptInstall} onDismiss={dismissInstall} />}
+          {/* Mounted once, outside <Routes>, so the banner survives navigation.
+              Stacked above the install card when both are eligible. */}
+          <UpdatePrompt stacked={canInstall} />
           <Toaster
             richColors
             closeButton
@@ -408,7 +351,8 @@ function App() {
             offset={isMobile ? "calc(env(safe-area-inset-top, 0px) + 12px)" : undefined}
           />
           </BrowserRouter>
-      </FavoritesProvider>
+        </FavoritesProvider>
+      </ThemeProvider>
     </SettingsProvider>
   );
 }

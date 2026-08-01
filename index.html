@@ -7,8 +7,12 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" sizes="180x180" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <!-- One theme-color, deliberately WITHOUT `media`. A media-scoped meta
+         follows the OS, so a user who forces light on a dark phone would keep a
+         dark system bar. The inline script below and `applyResolvedTheme` in
+         src/lib/theme.ts both write this tag; the value here is the light
+         default they start from. -->
+    <meta name="theme-color" content="#f8fafc" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="application-name" content="Zoned" />
     <meta name="apple-mobile-web-app-title" content="Zoned" />
@@ -81,13 +85,30 @@
       crossorigin
     />
 
-    <!-- Theme sync script - MUST run before any render to prevent flash -->
+    <!-- Theme sync script - MUST run before any render to prevent flash.
+         Inline, synchronous, not a module and not deferred: it has to finish
+         before the browser paints. That is why it duplicates the logic of
+         src/lib/theme.ts rather than importing it, and why the preference is
+         stored as a bare string — one getItem, no JSON.parse.
+         The two hex values mirror THEME_COLOR in src/lib/theme.ts, itself a
+         mirror of --background in src/styles/themes.css. -->
     <script>
       (function() {
-        var stored = localStorage.getItem('zoned-theme');
-        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        var isDark = stored === 'dark' || (!stored && prefersDark);
-        if (isDark) document.documentElement.classList.add('dark');
+        try {
+          var raw = localStorage.getItem('zoned-theme');
+          var pref = (raw === 'light' || raw === 'dark' || raw === 'system') ? raw : 'system';
+          var isDark = pref === 'dark' ||
+            (pref === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          // toggle, not add: the class may already be there after a bfcache restore.
+          document.documentElement.classList.toggle('dark', isDark);
+          // Native controls — scrollbars, date pickers, autofill.
+          document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+          var meta = document.querySelector('meta[name="theme-color"]:not([media])');
+          if (meta) meta.setAttribute('content', isDark ? '#0b1120' : '#f8fafc');
+        } catch (e) {
+          // Private mode can throw on localStorage. Paint light and carry on.
+          document.documentElement.classList.remove('dark');
+        }
       })();
     </script>
 

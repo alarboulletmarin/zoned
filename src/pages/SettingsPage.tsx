@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { DataExportImport } from "@/components/domain/DataExportImport";
+import { useTheme } from "@/hooks/useTheme";
+import type { ThemePreference } from "@/lib/theme";
 import type { ColorPalette } from "@/types/settings";
 
 const ZONE_NUMBERS = [1, 2, 3, 4, 5, 6] as const;
@@ -45,6 +47,13 @@ export function SettingsPage() {
   const { t } = useTranslation(["common", "routes"]);
   const { settings, setColorPalette, setUnitSystem, setRouteGeneratorEnabled } =
     useSettings();
+  const { preference: themePreference, setPreference: setThemePreference } = useTheme();
+
+  const themeOptions: { value: ThemePreference; label: string }[] = [
+    { value: "light", label: t("theme.light") },
+    { value: "dark", label: t("theme.dark") },
+    { value: "system", label: t("theme.system") },
+  ];
 
   const paletteOptions: { value: ColorPalette; label: string }[] = [
     {
@@ -77,6 +86,33 @@ export function SettingsPage() {
         </div>
 
         <div className="space-y-6">
+          {/* Theme. `system` is the only option that keeps following the OS
+              after the choice is made — the TopBar button can only ever set an
+              explicit light or dark. */}
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("settings.theme.title")}</CardTitle>
+              <CardDescription>{t("settings.theme.description")}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Select
+                value={themePreference}
+                onValueChange={(value) => setThemePreference(value as ThemePreference)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {themeOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </CardContent>
+          </Card>
+
           {/* Color Palette */}
           <Card>
             <CardHeader>
