@@ -16,7 +16,11 @@ export default defineConfig({
     svgr(),
     tailwindcss(),
     VitePWA({
-      registerType: "autoUpdate",
+      // "prompt", not "autoUpdate": a new service worker installs, precaches,
+      // then sits in `waiting` until <UpdatePrompt> is told to activate it.
+      // Every byte of user data lives in this browser, so a deploy must never
+      // reload the page out from under someone mid-edit.
+      registerType: "prompt",
       includeAssets: ["favicon.svg", "favicon-32x32.png", "favicon-16x16.png"],
       manifest: {
         // English strings: the install prompt is the first thing an
@@ -100,16 +104,20 @@ export default defineConfig({
         // router receives /licenses.txt, matches nothing and renders its 404 —
         // while curl, having no service worker, gets the real file. No route
         // ends in .txt or .xml, so the pattern cannot swallow a real page.
+        navigateFallback: "/index.html",
         navigateFallbackDenylist: [/\.(txt|xml)$/],
-        // skipWaiting + clientsClaim: the new SW activates as soon as it's
-        // installed, instead of waiting for every tab to close. Mobile users
-        // never "close all tabs" (they just background the browser), so without
-        // this they're permanently stuck on whatever version was first cached.
-        // The trade-off: in-flight lazy chunks pointing to old hashes can 404
-        // mid-navigation; we accept that — a soft reload recovers, and a stale
-        // app is worse than one occasional refresh.
-        skipWaiting: true,
-        clientsClaim: true,
+        // No skipWaiting, no clientsClaim, deliberately. Together with
+        // registerType "prompt" they are the whole guarantee: with neither set,
+        // no code path can activate a new version behind the app's back.
+        //
+        // These two used to be true, on the reasoning that mobile users never
+        // "close all tabs" and would otherwise be stranded on the first version
+        // they cached. That problem is real, and the banner is what answers it:
+        // `watchForegroundUpdates` re-checks whenever the app comes back to the
+        // foreground, so a resumed PWA is *asked*, not stranded. The 404s that
+        // comment accepted — in-flight lazy chunks pointing at hashes the new
+        // worker no longer serves — stop happening too, because the old worker
+        // keeps serving its own precache until the user consents.
       },
     }),
   ],

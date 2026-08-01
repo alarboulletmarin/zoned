@@ -395,6 +395,10 @@
   "settings": {
     "title": "Paramètres",
     "description": "Personnalisez votre expérience",
+    "theme": {
+      "title": "Thème",
+      "description": "Clair, sombre ou selon votre système"
+    },
     "colorPalette": {
       "title": "Palette de couleurs",
       "description": "Adaptée à l'accessibilité visuelle",
@@ -743,6 +747,7 @@
     "installDesc": "Accédez à Zoned directement depuis votre écran d'accueil, même hors ligne.",
     "install": "Installer",
     "dismiss": "Plus tard",
+    "updateTitle": "Mise à jour disponible",
     "updateAvailable": "Une nouvelle version de Zoned est disponible.",
     "update": "Mettre à jour",
     "offline": "Vous êtes hors ligne. Vos données restent accessibles.",

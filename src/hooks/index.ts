@@ -10,6 +10,7 @@ export {
 } from "./useWorkouts";
 export { useTips } from "./useTips";
 export { usePWA } from "./usePWA";
+export { useTheme, ThemeProvider } from "./useTheme";
 
 // NOTE: useArticles and useGlossary are NOT exported here to avoid
 // pulling their data into the main bundle. Import them directly:

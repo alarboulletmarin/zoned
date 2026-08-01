@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -27,25 +26,12 @@ import { useCommandPalette } from "@/components/search";
 import { changeLanguage, getCurrentLanguage } from "@/i18n";
 import Logo from "@/assets/logo.svg?react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useTheme } from "@/hooks/useTheme";
 import { isMac } from "@/lib/platform";
 import { cn } from "@/lib/utils";
 
 interface TopBarProps {
-  onThemeToggle: () => void;
   onMobileMenuOpen: () => void;
-}
-
-/** Hook to track theme without causing parent re-renders */
-function useThemeIcon() {
-  const [isDark, setIsDark] = useState(() =>
-    typeof document !== "undefined" && document.documentElement.classList.contains("dark")
-  );
-  useEffect(() => {
-    const handler = (e: Event) => setIsDark((e as CustomEvent).detail === "dark");
-    window.addEventListener("zoned-theme-change", handler);
-    return () => window.removeEventListener("zoned-theme-change", handler);
-  }, []);
-  return isDark;
 }
 
 const touchTarget =
@@ -141,7 +127,7 @@ export function isNavActive(pathname: string, section: NavSection): boolean {
 // TopBar
 // ────────────────────────────────────────────────────────────────────────────
 
-export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
+export function TopBar({ onMobileMenuOpen }: TopBarProps) {
   const { t } = useTranslation("common");
   const { openPalette } = useCommandPalette();
   const currentLang = getCurrentLanguage();
@@ -149,8 +135,10 @@ export function TopBar({ onThemeToggle, onMobileMenuOpen }: TopBarProps) {
   // field and icon cluster — needs ~1100px and pushes the right-side icons
   // off-screen, so mid-size viewports use the compact hamburger layout.
   const isCompact = useMediaQuery("(max-width: 1023px)");
-  const isDark = useThemeIcon();
-  const theme = isDark ? "dark" : "light";
+  // Reading the resolved theme from context is what keeps this icon honest
+  // when the OS flips under a `system` preference. The button is a two-state
+  // light/dark switch; the third preference lives on /settings.
+  const { resolved: theme, toggle: onThemeToggle } = useTheme();
   const { pathname } = useLocation();
 
   return (
