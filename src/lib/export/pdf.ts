@@ -4,7 +4,7 @@
  * Creates comprehensive PDF documents from workout templates
  */
 
-import type { TDocumentDefinitions, Content, TableCell } from "pdfmake/interfaces";
+import type { TDocumentDefinitions, Content, Size, TableCell } from "pdfmake/interfaces";
 import type { WorkoutTemplate, WorkoutBlock } from "@/types";
 import { CATEGORY_META, DIFFICULTY_META, getZoneNumber } from "@/types";
 import { getZoneHex } from "@/lib/zoneColors";
@@ -26,11 +26,38 @@ function zoneColorFor(zoneSpec: string | undefined): string | undefined {
 }
 
 /**
- * Format blocks into table rows for PDF
+ * Geometry of the three phase tables (warmup / main set / cooldown). Declared
+ * once because every row has to match it: pdfmake validates the cell count of
+ * each row against the column count and throws on a mismatch.
  */
-function formatBlocksTable(blocks: WorkoutBlock[]): TableCell[][] {
-  if (blocks.length === 0) {
-    return [[{ text: i18n.t("common:export.workoutPdf.none"), italics: true, color: "#666" }]];
+const PHASE_TABLE_WIDTHS: Size[] = ["*", 50, 40, 35, 50];
+const PHASE_TABLE_COLUMNS = PHASE_TABLE_WIDTHS.length;
+
+/**
+ * Format blocks into table rows for PDF
+ *
+ * `blocks` is optional: `warmupTemplate` and `cooldownTemplate` are optional on
+ * `WorkoutStructureSource`, and a custom workout restored from localStorage can
+ * genuinely arrive without them.
+ */
+function formatBlocksTable(blocks: WorkoutBlock[] | undefined): TableCell[][] {
+  if (!blocks || blocks.length === 0) {
+    // The placeholder has to span the whole table, not sit in a one-cell row.
+    // pdfmake 0.3 rejects a short row outright — "Malformed table row, a cell
+    // is undefined" — which broke every session with an empty phase (the
+    // recovery runs, CYC-001). `colSpan` also has to be followed by the empty
+    // cells it swallows, or the row is short again by pdfmake's count.
+    return [
+      [
+        {
+          text: i18n.t("common:export.workoutPdf.none"),
+          italics: true,
+          color: "#666",
+          colSpan: PHASE_TABLE_COLUMNS,
+        },
+        ...Array.from({ length: PHASE_TABLE_COLUMNS - 1 }, () => ({}) as TableCell),
+      ],
+    ];
   }
 
   return blocks.map((block) => {
@@ -112,7 +139,7 @@ export async function exportToPDF(
       {
         table: {
           headerRows: 1,
-          widths: ["*", 50, 40, 35, 50],
+          widths: PHASE_TABLE_WIDTHS,
           body: [tableHeader, ...formatBlocksTable(workout.warmupTemplate)],
         },
         layout: "lightHorizontalLines",
@@ -124,7 +151,7 @@ export async function exportToPDF(
       {
         table: {
           headerRows: 1,
-          widths: ["*", 50, 40, 35, 50],
+          widths: PHASE_TABLE_WIDTHS,
           body: [tableHeader, ...formatBlocksTable(workout.mainSetTemplate)],
         },
         layout: "lightHorizontalLines",
@@ -136,7 +163,7 @@ export async function exportToPDF(
       {
         table: {
           headerRows: 1,
-          widths: ["*", 50, 40, 35, 50],
+          widths: PHASE_TABLE_WIDTHS,
           body: [tableHeader, ...formatBlocksTable(workout.cooldownTemplate)],
         },
         layout: "lightHorizontalLines",
