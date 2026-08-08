@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -280,10 +281,13 @@ export function TopBar({ onMobileMenuOpen }: TopBarProps) {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// NavSectionTrigger — primary nav item with an optional hover/focus dropdown.
-// Uses CSS-only group-hover for opening, plus focus-within so keyboard tab
-// navigation works. A small delay-out using opacity transitions feels
-// noticeably smoother than instant pop-on/pop-off.
+// NavSectionTrigger — primary nav item with an optional dropdown.
+// Opening is hover (CSS group-hover) for pointers, plus an explicit
+// click/tap/Enter toggle: a section with children is a disclosure, not a link,
+// so activating it reveals the sub-pages instead of navigating away. Each
+// section's own page is the first item of its dropdown.
+// A small delay-out using opacity transitions feels noticeably smoother than
+// instant pop-on/pop-off.
 // ────────────────────────────────────────────────────────────────────────────
 
 function NavSectionTrigger({
@@ -295,6 +299,26 @@ function NavSectionTrigger({
 }) {
   const { t } = useTranslation("common");
   const hasChildren = !!section.children?.length;
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  // A click-opened dropdown has no pointer-leave to close it, so dismiss on
+  // outside pointer-down and on Escape.
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
 
   const triggerClass = cn(
     "px-3 py-1.5 rounded-md text-sm font-medium transition-colors inline-flex items-center gap-1",
@@ -311,21 +335,47 @@ function NavSectionTrigger({
     );
   }
 
+  const panelId = `topnav-${section.to.replace(/\W+/g, "-")}`;
+
   return (
-    <div className="relative group">
-      <NavLink to={section.to} className={triggerClass}>
+    <div className="relative group" ref={wrapRef}>
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={() => setOpen((v) => !v)}
+        className={triggerClass}
+      >
         {t(section.labelKey)}
-        <ChevronDown className="size-3 opacity-60 transition-transform group-hover:rotate-180 group-focus-within:rotate-180" />
-      </NavLink>
+        <ChevronDown
+          className={cn(
+            "size-3 opacity-60 transition-transform group-hover:rotate-180",
+            open && "rotate-180",
+          )}
+        />
+      </button>
       {/* Spacer keeps the dropdown contiguous with the trigger so hovering
           between the two doesn't dismiss the menu. */}
-      <div className="absolute left-0 top-full pt-1.5 invisible group-hover:visible group-focus-within:visible opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-150 z-50">
+      <div
+        id={panelId}
+        className={cn(
+          "absolute left-0 top-full pt-1.5 transition-opacity duration-150 z-50",
+          // No group-focus-within here: the trigger keeps focus after a click,
+          // which would pin the panel open and make tap-to-close a no-op.
+          // Keyboard users open it with Enter/Space on the trigger, and the
+          // panel's links are unfocusable (visibility:hidden) while closed.
+          open
+            ? "visible opacity-100"
+            : "invisible opacity-0 group-hover:visible group-hover:opacity-100",
+        )}
+      >
         <div className="bg-popover text-popover-foreground border rounded-md shadow-lg p-1.5 min-w-[260px]">
           <ul className="space-y-0.5">
             {section.children!.map((child) => (
               <li key={child.to}>
                 <Link
                   to={child.to}
+                  onClick={() => setOpen(false)}
                   className="block px-3 py-2 rounded-md hover:bg-accent transition-colors"
                 >
                   <p className="text-sm font-medium leading-snug">

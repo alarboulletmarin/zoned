@@ -171,37 +171,39 @@ function MobileSection({
     );
   }
 
+  const panelId = `mobile-nav-${section.to.replace(/\W+/g, "-")}`;
+
   return (
     <div>
-      <div className="flex items-center">
-        <Link
-          to={section.to}
+      {/* The whole row is the disclosure control: tapping a section reveals
+          its pages instead of navigating away and closing the sheet. The
+          section's own page stays reachable — it is the first child of every
+          section. */}
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={() => setOpen((v) => !v)}
+        className={cn(
+          "flex w-full min-h-11 items-center gap-2 px-3 py-2.5 rounded-md text-left text-sm font-semibold transition-colors",
+          isActive
+            ? "text-foreground"
+            : "text-foreground/85 hover:bg-accent/50",
+        )}
+      >
+        <span className="flex-1">{t(section.labelKey)}</span>
+        <ChevronDown
           className={cn(
-            "flex-1 px-3 py-2.5 rounded-md text-sm font-semibold transition-colors",
-            isActive
-              ? "text-foreground"
-              : "text-foreground/85 hover:bg-accent/50",
+            "size-4 shrink-0 text-muted-foreground transition-transform",
+            open ? "rotate-0" : "-rotate-90",
           )}
-        >
-          {t(section.labelKey)}
-        </Link>
-        <button
-          type="button"
-          aria-label={open ? "Collapse" : "Expand"}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-          className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors"
-        >
-          <ChevronDown
-            className={cn(
-              "size-4 transition-transform",
-              open ? "rotate-0" : "-rotate-90",
-            )}
-          />
-        </button>
-      </div>
+        />
+      </button>
       {open && (
-        <ul className="ml-3 mt-0.5 mb-1 border-l border-border/60 pl-3 space-y-0.5">
+        <ul
+          id={panelId}
+          className="ml-3 mt-0.5 mb-1 border-l border-border/60 pl-3 space-y-0.5"
+        >
           {section.children!.map((child) => {
             const childActive = pathname === child.to;
             return (
