@@ -1,24 +1,24 @@
-# Contribuer a Zoned
+# Contribuer à Zoned
 
-Merci de votre interet pour Zoned ! Ce projet est une bibliotheque open-source de seances de course a pied basees sur un systeme d'entrainement a 6 zones. Toute contribution est la bienvenue, que vous soyez coureur debutant ou entraineur confirme.
+Merci de votre intérêt pour Zoned ! Ce projet est une bibliothèque open-source de séances de course à pied basées sur un système d'entraînement à 6 zones. Toute contribution est la bienvenue, que vous soyez coureur débutant ou entraîneur confirmé.
 
 ## Comment contribuer
 
-Il y a trois facons de proposer une nouvelle seance :
+Il y a trois façons de proposer une nouvelle séance :
 
 ### 1. Via les templates d'issue GitHub
 
-La methode la plus simple pour proposer une seance.
+La méthode la plus simple pour proposer une séance.
 
-- **[Idee de seance](https://github.com/alarboulletmarin/zoned/issues/new?template=workout_idea.md)** : pour partager une idee rapide sans details techniques.
-- **[Soumission detaillee](https://github.com/alarboulletmarin/zoned/issues/new?template=workout_detailed.md)** : pour soumettre une seance complete avec blocs, zones et conseils, alignee sur le format `WorkoutTemplate`.
+- **[Idée de séance](https://github.com/alarboulletmarin/zoned/issues/new?template=workout_idea.md)** : pour partager une idée rapide sans détails techniques.
+- **[Soumission détaillée](https://github.com/alarboulletmarin/zoned/issues/new?template=workout_detailed.md)** : pour soumettre une séance complète avec blocs, zones et conseils, alignée sur le format `WorkoutTemplate`.
 
-### 2. Via une Pull Request avec les donnees JSON
+### 2. Via une Pull Request avec les données JSON
 
 Pour les contributeurs techniques, vous pouvez directement proposer le fichier JSON.
 
-1. Forkez le depot.
-2. Ajoutez votre seance dans le fichier JSON correspondant a la categorie dans `src/data/workouts/`.
+1. Forkez le dépôt.
+2. Ajoutez votre séance dans le fichier JSON correspondant à la catégorie dans `src/data/workouts/`.
 3. Respectez les conventions (voir ci-dessous).
 4. **Validez votre JSON** avant d'ouvrir la PR :
 
@@ -27,20 +27,20 @@ Pour les contributeurs techniques, vous pouvez directement proposer le fichier J
    bun run scripts/qa-workout-schema.ts --file src/data/workouts/vma.json  # un seul fichier
    ```
 
-   Le script **echoue** (code de sortie non nul), il n'avertit pas. Il tourne sur chaque Pull Request en CI : une seance invalide passe au rouge avant la fusion, pas au deploiement.
+   Le script **échoue** (code de sortie non nul), il n'avertit pas. Il tourne sur chaque Pull Request en CI : une séance invalide passe au rouge avant la fusion, pas au déploiement.
 5. Ouvrez une Pull Request.
 
-### 3. Via le formulaire integre
+### 3. Via le formulaire intégré
 
-Un formulaire de contribution directement dans l'application est accessible a `/contribute`.
+Un formulaire de contribution directement dans l'application est accessible à `/contribute`.
 
 ## Conventions
 
-### Identifiants de seances
+### Identifiants de séances
 
-Chaque seance a un identifiant unique au format `PREFIX-XXX` (numero a 3 chiffres, commence a 001).
+Chaque séance a un identifiant unique au format `PREFIX-XXX` (numéro à 3 chiffres, commence à 001).
 
-| `category`      | Fichier                              | Prefixe       | Exemple    |
+| `category`      | Fichier                              | Préfixe       | Exemple    |
 |-----------------|--------------------------------------|---------------|------------|
 | recovery        | `recovery.json`                      | `REC`         | `REC-011`  |
 | endurance       | `endurance.json`                     | `END`         | `END-015`  |
@@ -58,23 +58,23 @@ Chaque seance a un identifiant unique au format `PREFIX-XXX` (numero a 3 chiffre
 | (natation)      | `swimming.json`                      | `SWM`         | `SWM-010`  |
 | (renforcement)  | `src/data/strength/sessions/*.json`  | `STR`         | `STR-017`  |
 
-Trois details qui ne se devinent pas :
+Trois détails qui ne se devinent pas :
 
-- La categorie s'ecrit `vma_intervals` dans le type et dans le JSON, alors que le fichier s'appelle `vma.json`.
-- `long_run.json` accepte deux prefixes : `SL-001` a `SL-012` (l'ancien « Sortie Longue ») puis `LR-013` a `LR-016`. Le compteur est partage : le prochain est `LR-017`, pas `LR-005`. Les nouvelles sorties longues utilisent `LR`.
-- `cycling.json` et `swimming.json` ne sont pas des categories : les seances y portent une `category` de course (`endurance`, `threshold`...) et un champ `discipline`. Les seances de renforcement vivent dans `src/data/strength/sessions/`, une `StrengthCategory` par fichier.
+- La catégorie s'écrit `vma_intervals` dans le type et dans le JSON, alors que le fichier s'appelle `vma.json`.
+- `long_run.json` accepte deux préfixes : `SL-001` à `SL-012` (l'ancien « Sortie Longue ») puis `LR-013` à `LR-016`. Le compteur est partagé : le prochain est `LR-017`, pas `LR-005`. Les nouvelles sorties longues utilisent `LR`.
+- `cycling.json` et `swimming.json` ne sont pas des catégories : les séances y portent une `category` de course (`endurance`, `threshold`...) et un champ `discipline`. Les séances de renforcement vivent dans `src/data/strength/sessions/`, une `StrengthCategory` par fichier.
 
-Verifiez le dernier identifiant utilise dans le fichier JSON avant d'en attribuer un nouveau. Un identifiant est definitif : les plans, les favoris et les liens de partage se resolvent par lui.
+Vérifiez le dernier identifiant utilisé dans le fichier JSON avant d'en attribuer un nouveau. Un identifiant est définitif : les plans, les favoris et les liens de partage se résolvent par lui.
 
 ### Structure WorkoutTemplate
 
-Le format complet vit dans **[docs/workout-format.md](docs/workout-format.md)** : champs obligatoires et optionnels, arbre `WorkoutStep`, specs de zone, champs trail, `scaling`, seances de renforcement, exemple commente de bout en bout.
+Le format complet vit dans **[docs/workout-format.md](docs/workout-format.md)** : champs obligatoires et optionnels, arbre `WorkoutStep`, specs de zone, champs trail, `scaling`, séances de renforcement, exemple commenté de bout en bout.
 
-C'est la reference unique, en anglais parce qu'elle nomme du code, et elle vaut pour les deux moities de ce document. Ce fichier-ci decrit le processus de contribution, pas le format.
+C'est la référence unique, en anglais parce qu'elle nomme du code, et elle vaut pour les deux moitiés de ce document. Ce fichier-ci décrit le processus de contribution, pas le format.
 
 ### Bilingue
 
-Toutes les seances doivent inclure les textes en francais (champ principal) et en anglais (champ `*En`). Le francais est la langue primaire du projet. Le validateur refuse une seance dont un champ `*En` manque, ou dont un tableau `*En` n'a pas la meme longueur que son equivalent francais.
+Toutes les séances doivent inclure les textes en français (champ principal) et en anglais (champ `*En`). Le français est la langue primaire du projet. Le validateur refuse une séance dont un champ `*En` manque, ou dont un tableau `*En` n'a pas la même longueur que son équivalent français.
 
 ## Tester en local
 
@@ -83,25 +83,31 @@ bun install
 bun run dev
 ```
 
-Le serveur de developpement demarre sur `http://localhost:5173`.
+Le serveur de développement démarre sur `http://localhost:5173`.
 
-Verifiez que le build TypeScript passe :
+Vérifiez que le build TypeScript passe :
 
 ```bash
 bun run build
 ```
 
+Lancez la suite de tests :
+
+```bash
+bun test
+```
+
 ## Code de conduite
 
-En contribuant a ce projet, vous acceptez de maintenir un environnement respectueux et inclusif. Soyez bienveillant dans vos echanges, acceptez les retours constructifs et concentrez-vous sur ce qui est le mieux pour la communaute.
+En contribuant à ce projet, vous acceptez de maintenir un environnement respectueux et inclusif. Soyez bienveillant dans vos échanges, acceptez les retours constructifs et concentrez-vous sur ce qui est le mieux pour la communauté.
 
 ## Licence des contributions
 
-Zoned est publie sous licence MIT (voir [LICENSE](LICENSE)). En proposant une contribution — Pull Request, contenu d'issue, traduction, article ou seance JSON — vous acceptez qu'elle soit publiee sous cette meme licence, et vous confirmez avoir le droit de la soumettre. Vous conservez le droit d'auteur sur ce que vous ecrivez ; vous accordez simplement au projet et a ses utilisateurs les droits que le MIT confere.
+Zoned est publié sous licence MIT (voir [LICENSE](LICENSE)). En proposant une contribution — Pull Request, contenu d'issue, traduction, article ou séance JSON — vous acceptez qu'elle soit publiée sous cette même licence, et vous confirmez avoir le droit de la soumettre. Vous conservez le droit d'auteur sur ce que vous écrivez ; vous accordez simplement au projet et à ses utilisateurs les droits que le MIT confère.
 
-Concretement : ne soumettez que ce que vous avez ecrit vous-meme, ou du contenu dont la licence autorise cette redistribution. Ne recopiez pas une seance, un article ou une traduction depuis un livre, un site ou une application tierce. Citer une source, en revanche, est encourage : une reference bibliographique attribuee a son auteur renforce la page methodologie.
+Concrètement : ne soumettez que ce que vous avez écrit vous-même, ou du contenu dont la licence autorise cette redistribution. Ne recopiez pas une séance, un article ou une traduction depuis un livre, un site ou une application tierce. Citer une source, en revanche, est encouragé : une référence bibliographique attribuée à son auteur renforce la page méthodologie.
 
-**Il n'y a aucun CLA a signer.**
+**Il n'y a aucun CLA à signer.**
 
 ---
 
@@ -139,11 +145,47 @@ For technical contributors, you can directly propose the JSON file.
 
 A built-in contribution form is available at `/contribute`.
 
-## Workout format
+## Conventions
+
+### Workout IDs
+
+Each workout has a unique identifier in the `PREFIX-XXX` format (3-digit number, starting at 001).
+
+| `category`      | File                                  | Prefix        | Example    |
+|------------------|---------------------------------------|---------------|------------|
+| recovery         | `recovery.json`                       | `REC`         | `REC-011`  |
+| endurance        | `endurance.json`                      | `END`         | `END-015`  |
+| tempo            | `tempo.json`                          | `TMP`         | `TMP-008`  |
+| threshold        | `threshold.json`                      | `THR`         | `THR-012`  |
+| vma_intervals    | `vma.json`                            | `VMA`         | `VMA-030`  |
+| long_run         | `long_run.json`                       | `SL` and `LR` | `LR-016`   |
+| hills            | `hills.json`                          | `HIL`         | `HIL-010`  |
+| fartlek          | `fartlek.json`                        | `FAR`         | `FAR-005`  |
+| race_pace        | `race_pace.json`                      | `RP`          | `RP-009`   |
+| mixed            | `mixed.json`                          | `MIX`         | `MIX-007`  |
+| assessment       | `assessment.json`                     | `ASS`         | `ASS-003`  |
+| trail            | `trail.json`                          | `TRL`         | `TRL-012`  |
+| (cycling)        | `cycling.json`                        | `CYC`         | `CYC-010`  |
+| (swimming)       | `swimming.json`                       | `SWM`         | `SWM-010`  |
+| (strength)       | `src/data/strength/sessions/*.json`   | `STR`         | `STR-017`  |
+
+Three details that don't guess themselves:
+
+- The category is written `vma_intervals` in the type and in the JSON, while the file is named `vma.json`.
+- `long_run.json` accepts two prefixes: `SL-001` through `SL-012` (the original "Sortie Longue") then `LR-013` through `LR-016`. The counter is shared: the next one is `LR-017`, not `LR-005`. New long runs use `LR`.
+- `cycling.json` and `swimming.json` are not categories: their workouts carry a running `category` (`endurance`, `threshold`...) and a `discipline` field. Strength workouts live in `src/data/strength/sessions/`, one `StrengthCategory` per file.
+
+Check the last identifier used in the JSON file before assigning a new one. An identifier is permanent: plans, favorites and share links resolve through it.
+
+### WorkoutTemplate structure
 
 The full format lives in **[docs/workout-format.md](docs/workout-format.md)**: required and optional fields, the `WorkoutStep` tree, zone specs, trail fields, `scaling`, strength sessions, and a fully worked example.
 
 It is the single reference, shared by both halves of this document. This file covers the contribution process, not the format.
+
+### Bilingual
+
+Every workout must include text in French (the primary field) and English (the `*En` field). French is the project's primary language. The validator rejects a workout that is missing an `*En` field, or whose `*En` array does not have the same length as its French counterpart.
 
 ## Local testing
 
@@ -151,6 +193,7 @@ It is the single reference, shared by both halves of this document. This file co
 bun install
 bun run dev    # Dev server at http://localhost:5173
 bun run build  # TypeScript check + production build
+bun test       # Test suite
 ```
 
 ## Code of conduct
