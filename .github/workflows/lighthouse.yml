@@ -14,6 +14,12 @@
 #   a heavy dependency leaking into the boot path)
 #   perf score: warn only — observed 0.37-0.55 across runs of the SAME
 #   commit on shared runners, too noisy to block on.
+#
+# TBT recalibrated 2026-08 to 1800ms. Medians on main had drifted to 901ms
+# (08-01), 961ms (08-07) and 1022ms (08-08), and a docs-only commit measured
+# 1475ms. Single runs on identical code ranged 834-2945ms, so 1300ms put the
+# tripwire inside the runner's own noise: it fired on a slow afternoon rather
+# than on a regression. Recheck the budget whenever the boot path changes.
 name: Lighthouse CI
 
 on:
