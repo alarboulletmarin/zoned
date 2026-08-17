@@ -1,12 +1,8 @@
 ---
-name: Workout idea
-about: Share a quick workout idea
-title: "[IDEA] "
-labels: workout-idea
-assignees: ''
+name: Workout idea about: Share a quick workout idea title: "[IDEA] " labels: workout-idea assignees: ''
 ---
 
-> Feel free to answer in French — les réponses en français sont les bienvenues.
+> Feel free to answer in French. Les réponses en français sont les bienvenues.
 
 ## Workout idea
 

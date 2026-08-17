@@ -2,14 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.8.0] - 2026-07-29
 
 ### Added
 - Adjust a catalogue workout: a button opens an editable copy where repetitions, sets, effort and recovery durations are set with a slider or typed in, with a preview that recomputes live. The source workout is never touched, the copy lands in My Workouts and links back to where it came from
-- Parameter bounds read from the template itself — the range its `scaling` declares, or half to one and a half times what it prescribes. The slider spans that recommendation, the field beside it takes any value, and only the absurd is refused
+- Parameter bounds read from the template itself: the range its `scaling` declares, or half to one and a half times what it prescribes. The slider spans that recommendation, the field beside it takes any value, and only the absurd is refused
 
 ### Changed
 - Dragging a slider no longer floods the undo stack: one gesture is one step, however long the drag
@@ -25,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Third-party licence notices at `/licenses.txt`, linked from the footer and regenerated at every build from the 209 packages the bundle actually ships
 - A validator for the workout format that fails the build and CI on a malformed session, with a `--file` mode so a contributor gets an answer in two seconds instead of a failed deploy
-- A pull request gate running typecheck, the test suite, FR/EN parity and the workout schema — nothing checked a contribution before it reached `main`
+- A pull request gate running typecheck, the test suite, FR/EN parity and the workout schema; nothing checked a contribution before it reached `main`
 - A full format reference in `docs/workout-format.md`: file shapes, id prefixes, the three axes, the step tree, zone specs, trail fields and a worked example
 
 ### Changed
@@ -46,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.7.5] - 2026-07-26
 
 ### Added
-- Social previews for crawlers that never run JavaScript, with metadata specific to each key route — links to zoned.run previewed as a bare URL on X, LinkedIn, Slack, Facebook and Discord
+- Social previews for crawlers that never run JavaScript, with metadata specific to each key route; links to zoned.run previewed as a bare URL on X, LinkedIn, Slack, Facebook and Discord
 - Six English share cards, one per section: site-wide, library, calculators, plans, learn and race simulator
 - Community health files: security policy with private vulnerability reporting, code of conduct, Sponsor button and a contact-link issue chooser
 - PWA install screenshots for both desktop and mobile form factors, plus manifest categories, so Chrome shows its rich install prompt
@@ -59,7 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Social crawlers saw no metadata at all: `<SEOHead>` only runs client-side, and the prerender pass does not run on Vercel
-- The sitemap listed slugs by hand and they had drifted — two dead URLs were submitted to Google while nine real pages never were
+- The sitemap listed slugs by hand and they had drifted. Two dead URLs were submitted to Google while nine real pages never were
 - Curated weeks, the workout draw, the route generator and the track finder were missing from the sitemap
 - `llms.txt` pointed at two plan slugs that do not exist, still described the retired quiz, and undercounted the catalogue
 - The week board hint named a gesture nothing implements, and picked its wording from viewport width rather than pointer capability
@@ -246,7 +245,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - D+/km and avg gradient now count all blocks (warmup/cooldown estimated via duration × zone-pace) for honest values
 - D− (elevation loss) displayed on WorkoutDetailPage, WorkoutCard, WorkoutListItem, WorkoutCardCompact for downhill or oscillating sessions
 - HIL-015 descents zoned Z2 (instead of Z3) so SessionTimeline visually distinguishes climbs (orange) from descents (green)
-- HIL-011 main block missing `distanceM` — added 250 m so D− computes correctly
+- HIL-011 main block missing `distanceM`; added 250 m so D− computes correctly
 - TRL-005 recovery "Remontée trottée souple" now carries an explicit "12 min" duration so the structure renders timing
 
 ## [0.5.3] - 2026-05-10
@@ -291,9 +290,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Coffee, Pill, Wheat, Snowflake icons added to inline icon library
 
 ### Changed
-- Protein recommendations updated: 1.4-2.2 g/kg/day based on training volume (Witard 2025, Sports Medicine) — previously 1.2-1.8
-- Glucose:fructose ratio modernized: 1:0.8 above 60 g/h (Rowlands 2020) — previously 2:1
-- Carb loading: 36-48 h at 10-12 g/kg (modern protocol) — 3-day method obsolete
+- Protein recommendations updated: 1.4-2.2 g/kg/day based on training volume (Witard 2025, Sports Medicine); previously 1.2-1.8
+- Glucose:fructose ratio modernized: 1:0.8 above 60 g/h (Rowlands 2020); previously 2:1
+- Carb loading: 36-48 h at 10-12 g/kg (modern protocol); 3-day method obsolete
 - Post-effort recovery window debunked in calculator and guide: real window is 4-6 h glycogen / 24-48 h protein, not 30 min
 - 4:1 carb:protein recovery ratio noted as myth (Margolis 2021): the apparent benefit comes from added calories
 - Calculator caffeine guidance: cite genotype CYP1A2 sensitivity
@@ -314,7 +313,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - How-it-works details on the route generator page
 
 ### Changed
-- Premium desktop one-page layout for routes (Strava-style strip, collapsible details, sticky CTA, dense top toolbar) — no scroll, footer hidden
+- Premium desktop one-page layout for routes (Strava-style strip, collapsible details, sticky CTA, dense top toolbar); no scroll, footer hidden
 - Mobile UX rebuilt around a map-first persistent card with candidate cards, slim 3-row top bar (chips + address + CTA) and Strava-style search row
 - Discipline-aware duration estimate replaces Brouter total-time, with a 200 km cap on cycling
 - Single distance chip, action bar split, h3 stats, elevation tooltip and sidebar sub-items in the route generator UI
@@ -355,7 +354,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Discipline filter tabs in library wrap on mobile to avoid horizontal scroll
 
 ### Fixed
-- Route candidates were all falling on the same waypoints — diversification by seed now ensures distinct proposals
+- Route candidates were all falling on the same waypoints; diversification by seed now ensures distinct proposals
 - Geolocation errors surface clear messages when blocked, denied or timed out
 - Z>6 zones clamp to Z6 and use sport-specific paces for distance-only segments
 - Substitute session preserves discipline through localStorage round-trip
@@ -458,7 +457,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Strength training for runners**: 46 exercises across 5 categories (lower body, core, plyometrics, mobility, upper body) with A/B position images, muscle group maps, and form cues
-- **17 structured strength sessions**: full body, legs, core, plyometrics, mobility, and prehab — science-based periodization (Beattie 2017, Rønnestad 2014, Lauersen 2014)
+- **17 structured strength sessions**: full body, legs, core, plyometrics, mobility, and prehab; science-based periodization (Beattie 2017, Rønnestad 2014, Lauersen 2014)
 - **Library toggle**: Course / Renforcement / Tout filter with adaptive sidebar filters per activity type
 - **Strength workout detail page**: exercise list with images, muscle timeline visualization, interactive body muscle map, intensity badges, and scientific references
 - **Plan integration**: auto-suggested strength sessions with phase-appropriate periodization (opt-in toggle + frequency selector in plan creation wizard)
@@ -600,7 +599,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Privacy-first positioning: visible badges on homepage hero, privacy note in footer, dedicated privacy section in settings
 - Ko-fi support link in footer and about page
 - SEO: H1 heading, intro text and JSON-LD WebApplication schema on Zones and Pace calculator pages
-- SEO: 53 new routes in sitemap — collections, prebuilt plans, calculators, methodology, guides (318 → 371 URLs)
+- SEO: 53 new routes in sitemap: collections, prebuilt plans, calculators, methodology, guides (318 → 371 URLs)
 - SEO: JSON-LD WebApplication schema on all 9 calculator pages
 - SEO: BreadcrumbList JSON-LD on Article, Collection and Prebuilt Plan detail pages
 - SEO: enriched Article JSON-LD with author, publisher, datePublished and dateModified
@@ -686,7 +685,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Display recovery between repetitions in phase details (3x30s, fartlek, etc.) without redundancy with description
 - Inter-series rest indication for multi-set blocks (e.g. 2x(10x 45s VO2max / 15s recovery) → ~3 min jog between sets)
 - Missing 'Mythic Workouts' collection on homepage (missing accent in slug)
-- Segments without zone (drills, transitions) invisible in timeline — fallback color fixed
+- Segments without zone (drills, transitions) invisible in timeline; fallback color fixed
 
 ## [0.1.7] - 2026-03-18
 

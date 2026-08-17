@@ -1,18 +1,12 @@
 ---
-name: Full workout submission
-about: Submit a complete workout with blocks and zones
-title: "[WORKOUT] "
-labels: workout-submission
-assignees: ''
+name: Full workout submission about: Submit a complete workout with blocks and zones title: "[WORKOUT] " labels: workout-submission assignees: ''
 ---
 
-> Feel free to answer in French — les réponses en français sont les bienvenues.
+> Feel free to answer in French. Les réponses en français sont les bienvenues.
 
 ## Basic Info
 
-**Name (FR):**
-**Name (EN):**
-**Category:**
+**Name (FR):** **Name (EN):** **Category:**
 <!-- recovery, endurance, tempo, threshold, vma_intervals, long_run, hills, fartlek, race_pace, mixed, assessment -->
 **Difficulty:**
 <!-- beginner, intermediate, advanced -->

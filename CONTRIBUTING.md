@@ -161,6 +161,6 @@ By contributing, you agree to maintain a respectful and inclusive environment. B
 
 Zoned is released under the MIT licence (see [LICENSE](LICENSE)). By offering a contribution — a Pull Request, issue content, a translation, an article or a workout JSON — you agree that it is published under that same licence, and you confirm you have the right to submit it. You keep the copyright on what you write; you are granting the project and its users the rights MIT conveys, nothing more.
 
-In practice: submit only what you wrote yourself, or content whose licence permits this redistribution. Do not copy a workout, an article or a translation out of a book, a website or a competing app. Citing a source is the opposite of a problem — an attributed reference strengthens the methodology page.
+In practice: submit only what you wrote yourself, or content whose licence permits this redistribution. Do not copy a workout, an article or a translation out of a book, a website or a competing app. Citing a source is the opposite of a problem. An attributed reference strengthens the methodology page.
 
 **There is no CLA to sign.**

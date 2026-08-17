@@ -1,12 +1,8 @@
 ---
-name: Bug report
-about: Report a bug or unexpected behavior
-title: "[BUG] "
-labels: bug
-assignees: ''
+name: Bug report about: Report a bug or unexpected behavior title: "[BUG] " labels: bug assignees: ''
 ---
 
-> Feel free to answer in French — les réponses en français sont les bienvenues.
+> Feel free to answer in French. Les réponses en français sont les bienvenues.
 
 ## Description
 
@@ -14,9 +10,7 @@ assignees: ''
 
 ## Steps to reproduce
 
-1.
-2.
-3.
+1. 2. 3.
 
 ## Expected behavior
 

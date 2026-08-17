@@ -1,17 +1,11 @@
 # Cartographie des icônes — Lucide → Material Symbols (Sharp)
 
-État **final** de la migration. Ce document et
-`scripts/data/icon-mapping.csv` sont la source de vérité : le CSV est lu par
-`scripts/generate-icons.ts`, qui émet `src/components/icons/index.tsx`.
+État **final** de la migration. Ce document et `scripts/data/icon-mapping.csv` sont la source de vérité : le CSV est lu par `scripts/generate-icons.ts`, qui émet `src/components/icons/index.tsx`.
 
 - **Cible :** `@material-symbols/svg-600` v0.45.9, dossier `sharp/`, poids 600.
-- **Licence :** Apache 2.0 (© Google), tracés modifiés — voir [THIRD-PARTY.md](../THIRD-PARTY.md).
-  Le paquet ne fournit aucun fichier NOTICE.
-- **Vérification :** chaque nom a été confirmé par un `ls` réel dans
-  `node_modules/@material-symbols/svg-600/sharp/`. Aucun nom ne vient de mémoire.
-- **Régénérer :** `bun run generate:icons`. `bun run build` et `build:seo` lancent
-  `generate-icons --check` en amont : un `index.tsx` édité à la main ou obsolète
-  fait échouer le build au lieu de partir en production.
+- **Licence :** Apache 2.0 (© Google), tracés modifiés, voir [THIRD-PARTY.md](../THIRD-PARTY.md). Le paquet ne fournit aucun fichier NOTICE.
+- **Vérification :** chaque nom a été confirmé par un `ls` réel dans `node_modules/@material-symbols/svg-600/sharp/`. Aucun nom ne vient de mémoire.
+- **Régénérer :** `bun run generate:icons`. `bun run build` et `build:seo` lancent `generate-icons --check` en amont : un `index.tsx` édité à la main ou obsolète fait échouer le build au lieu de partir en production.
 
 ## Résumé
 
@@ -23,9 +17,7 @@
 | Manquants (logos de marque) | 2 |
 | Variante `-fill` disponible | 122 / 122 icônes mappées |
 
-Sur les 120 glyphes distincts, 71 ont une variante pleine réellement différente
-du contour ; les 51 autres ont un `-fill` identique en amont et sont émis une
-seule fois, avec un commentaire dans le fichier généré.
+Sur les 120 glyphes distincts, 71 ont une variante pleine réellement différente du contour ; les 51 autres ont un `-fill` identique en amont et sont émis une seule fois, avec un commentaire dans le fichier généré.
 
 ## Contrat de composant
 
@@ -45,14 +37,11 @@ interface IconProps {
 | Variante pleine | inexistante (obtenue via `fill-*` en CSS) | prop `filled` |
 | Accessibilité | rien | `aria-hidden="true"`, `focusable="false"` |
 
-**Conséquence sur les appels :** les utilitaires `fill-*` ne remplissent plus rien
-(le glyphe est déjà peint en `currentColor`) ; il faut `filled`. Dix sites
-reposaient dessus pour les cœurs « favori » et les étoiles de notation.
+**Conséquence sur les appels :** les utilitaires `fill-*` ne remplissent plus rien (le glyphe est déjà peint en `currentColor`) ; il faut `filled`. Dix sites reposaient dessus pour les cœurs « favori » et les étoiles de notation.
 
 ## Ajouts contextuels
 
-Cinq exports ont été ajoutés après coup, parce que l'export d'origine était
-partagé par plusieurs sens et que le glyphe ne convenait qu'à l'un d'eux :
+Cinq exports ont été ajoutés après coup, parce que l'export d'origine était partagé par plusieurs sens et que le glyphe ne convenait qu'à l'un d'eux :
 
 | Export | Material | Remplace | Où |
 |---|---|---|---|
@@ -68,44 +57,23 @@ partagé par plusieurs sens et que le glyphe ne convenait qu'à l'un d'eux :
 
 ### L'échelle de difficulté
 
-Un haltère précédait le libellé de difficulté (« Débutant », « Intermédiaire »,
-« Avancé », « Élite ») — un choix hérité de l'ancien set, sans rapport avec un
-niveau, et illisible à `size-3`. La famille `signal_cellular_*_bar` offre
-exactement quatre paliers : le triangle vide donne la référence, la portion
-pleine croît avec le niveau, donc le glyphe **porte** l'information au lieu de la
-décorer. `DifficultyIcon` (`src/components/domain/`) fait la correspondance, sur
-le modèle de `CategoryIcon`.
+Un haltère précédait le libellé de difficulté (« Débutant », « Intermédiaire », « Avancé », « Élite »), un choix hérité de l'ancien set, sans rapport avec un niveau, et illisible à `size-3`. La famille `signal_cellular_*_bar` offre exactement quatre paliers : le triangle vide donne la référence, la portion pleine croît avec le niveau, donc le glyphe **porte** l'information au lieu de la décorer. `DifficultyIcon` (`src/components/domain/`) fait la correspondance, sur le modèle de `CategoryIcon`.
 
 ### Fartlek et haut du corps
 
-Deux reprises directes de l'ancien set n'avaient aucun rapport avec ce qu'elles
-désignaient : un réticule (`my_location`) pour le fartlek et une flèche vers le
-haut (`arrow_upward`) pour le renforcement du haut du corps. `graphic_eq` alterne
-des barres hautes et basses — l'alternance rapide/lent du jeu d'allures — et
-`rowing` montre un mouvement de tirage, typique du travail du haut du corps.
+Deux reprises directes de l'ancien set n'avaient aucun rapport avec ce qu'elles désignaient : un réticule (`my_location`) pour le fartlek et une flèche vers le haut (`arrow_upward`) pour le renforcement du haut du corps. `graphic_eq` alterne des barres hautes et basses — l'alternance rapide/lent du jeu d'allures — et `rowing` montre un mouvement de tirage, typique du travail du haut du corps.
 
-`ArrowUp` reste en service sur le bouton « remonter en haut de page ».
-`Crosshair` n'est plus utilisé, comme `Waves`.
+`ArrowUp` reste en service sur le bouton « remonter en haut de page ». `Crosshair` n'est plus utilisé, comme `Waves`.
 
-`Rocket` reste en service sur le changelog, où la fusée désigne les entrées
-« performance ». `Dumbbell` reste l'icône du renforcement musculaire.
+`Rocket` reste en service sur le changelog, où la fusée désigne les entrées « performance ». `Dumbbell` reste l'icône du renforcement musculaire.
 
-`Footprints` reste en service là où l'empreinte est juste (technique de foulée,
-collection « premiers pas », renforcement des jambes). `Heart` reste l'icône des
-favoris. `HeartPulse` reste utilisé par les données (récupération, nutrition).
+`Footprints` reste en service là où l'empreinte est juste (technique de foulée, collection « premiers pas », renforcement des jambes). `Heart` reste l'icône des favoris. `HeartPulse` reste utilisé par les données (récupération, nutrition).
 
 ## Points restés en l'état
 
-- **Deux manquants.** Material Symbols ne publie pas de logos tiers.
-  `GithubIcon` et `StravaIcon` gardent leur géométrie d'origine (viewBox 24) dans
-  `src/components/icons/brand.tsx`, fichier maintenu à la main et réexporté par le
-  fichier généré. `GithubIcon` vient de Lucide, d'où la section ISC de THIRD-PARTY.md.
-- **Doublons.** `Check`/`CheckIcon` et `Circle`/`CircleIcon` étaient des tracés
-  identiques dans l'ancien set ; les quatre exports sont conservés et pointent sur
-  le même SVG.
-- **Exports sans usage.** `Bell`, `Mail`, `Users`, `Languages`, `Minus`,
-  `PanelLeftClose`, `PanelLeftOpen` n'étaient déjà importés nulle part, et `Waves`
-  l'est devenu depuis le passage à `Pool`/`Stretching`. Tous sont conservés.
+- **Deux manquants.** Material Symbols ne publie pas de logos tiers. `GithubIcon` et `StravaIcon` gardent leur géométrie d'origine (viewBox 24) dans `src/components/icons/brand.tsx`, fichier maintenu à la main et réexporté par le fichier généré. `GithubIcon` vient de Lucide, d'où la section ISC de THIRD-PARTY.md.
+- **Doublons.** `Check`/`CheckIcon` et `Circle`/`CircleIcon` étaient des tracés identiques dans l'ancien set ; les quatre exports sont conservés et pointent sur le même SVG.
+- **Exports sans usage.** `Bell`, `Mail`, `Users`, `Languages`, `Minus`, `PanelLeftClose`, `PanelLeftOpen` n'étaient déjà importés nulle part, et `Waves` l'est devenu depuis le passage à `Pool`/`Stretching`. Tous sont conservés.
 
 ## Table de correspondance complète
 
@@ -223,15 +191,15 @@ favoris. `HeartPulse` reste utilisé par les données (récupération, nutrition
 | `Waves` | `waves` | oui | exact | — |
 | `Run` | `directions_run` | oui | exact | discipline « course à pied », remplace Footprints sur les sélecteurs de discipline |
 | `Pool` | `pool` | oui | exact | discipline « natation », remplace Waves sur les sélecteurs de discipline |
-| `HeartRate` | `monitor_heart` | oui | exact | fréquence cardiaque (FC max, zones) — à distinguer de `Heart`, qui est l’icône « favoris » |
+| `HeartRate` | `monitor_heart` | oui | exact | fréquence cardiaque (FC max, zones), à distinguer de `Heart`, qui est l’icône « favoris » |
 | `Stretching` | `sports_gymnastics` | oui | exact | catégorie renforcement « mobilité » |
 | `Healing` | `healing` | oui | exact | catégorie renforcement « prévention blessures » |
-| `Sprint` | `sprint` | oui | exact | catégorie VMA / VO2max — coureur en action, remplace Rocket qui reste sur le changelog |
+| `Sprint` | `sprint` | oui | exact | catégorie VMA / VO2max : coureur en action, remplace Rocket qui reste sur le changelog |
 | `Level1` | `signal_cellular_1_bar` | oui | exact | échelle de difficulté : 1 barre sur 4 (débutant) |
 | `Level2` | `signal_cellular_2_bar` | oui | exact | échelle de difficulté : 2 barres sur 4 (intermédiaire) |
 | `Level3` | `signal_cellular_3_bar` | oui | exact | échelle de difficulté : 3 barres sur 4 (avancé) |
 | `Level4` | `signal_cellular_4_bar` | oui | exact | échelle de difficulté : 4 barres sur 4 (élite) |
-| `Intervals` | `graphic_eq` | oui | exact | catégorie « fartlek » — barres alternées haut/bas, l'alternance rapide/lent du jeu d'allures |
-| `UpperBody` | `rowing` | oui | exact | catégorie renforcement « haut du corps » — mouvement de tirage |
+| `Intervals` | `graphic_eq` | oui | exact | catégorie « fartlek » : barres alternées haut/bas, l'alternance rapide/lent du jeu d'allures |
+| `UpperBody` | `rowing` | oui | exact | catégorie renforcement « haut du corps » : mouvement de tirage |
 | `GithubIcon` | — | — | **MANQUANT** | logo de marque, hors périmètre Material Symbols |
 | `StravaIcon` | — | — | **MANQUANT** | logo de marque, hors périmètre Material Symbols |
