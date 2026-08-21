@@ -2,8 +2,9 @@ import { describe, expect, test } from "bun:test";
 
 import {
   BACKUP_STORAGE_KEYS,
-  buildManagedStorageSnapshot,
+  computeImportDiff,
   parseBackupData,
+  resolveImportWrites,
 } from "./backup";
 
 describe("BACKUP_STORAGE_KEYS", () => {
@@ -21,37 +22,77 @@ describe("BACKUP_STORAGE_KEYS", () => {
   });
 });
 
-describe("buildManagedStorageSnapshot", () => {
-  test("merge preserves existing managed keys not present in backup", () => {
-    const snapshot = buildManagedStorageSnapshot(
+describe("computeImportDiff", () => {
+  test("splits imported keys into conflicts, additions and identical", () => {
+    const diff = computeImportDiff(
       {
         "zoned-plans": JSON.stringify([{ id: "local" }]),
+        "zoned-favorites": JSON.stringify(["a"]),
         "zoned-theme": JSON.stringify("dark"),
       },
       {
         "zoned-plans": [{ id: "backup" }],
+        "zoned-favorites": ["a"],
+        "zoned-custom-workouts": [{ id: "w1" }],
       },
-      "merge",
     );
 
-    expect(snapshot["zoned-plans"]).toBe(JSON.stringify([{ id: "backup" }]));
-    expect(snapshot["zoned-theme"]).toBe(JSON.stringify("dark"));
+    expect(diff.conflicts).toEqual(["zoned-plans"]);
+    expect(diff.additions).toEqual(["zoned-custom-workouts"]);
+    expect(diff.identical).toEqual(["zoned-favorites"]);
   });
 
-  test("replace drops managed keys absent from the backup", () => {
-    const snapshot = buildManagedStorageSnapshot(
+  test("ignores local keys the file does not carry and unmanaged file keys", () => {
+    const diff = computeImportDiff(
+      { "zoned-theme": JSON.stringify("dark") },
+      { "some-other-app-key": 1 },
+    );
+
+    expect(diff.conflicts).toEqual([]);
+    expect(diff.additions).toEqual([]);
+    expect(diff.identical).toEqual([]);
+  });
+});
+
+describe("resolveImportWrites", () => {
+  test("writes additions and replaced conflicts, skips kept conflicts", () => {
+    const writes = resolveImportWrites(
       {
         "zoned-plans": JSON.stringify([{ id: "local" }]),
-        "zoned-theme": JSON.stringify("dark"),
+        "zoned-favorites": JSON.stringify(["a"]),
       },
       {
         "zoned-plans": [{ id: "backup" }],
+        "zoned-favorites": ["b"],
+        "zoned-custom-workouts": [{ id: "w1" }],
       },
-      "replace",
+      { "zoned-plans": "keep", "zoned-favorites": "replace" },
     );
 
-    expect(snapshot["zoned-plans"]).toBe(JSON.stringify([{ id: "backup" }]));
-    expect(snapshot["zoned-theme"]).toBeUndefined();
+    expect(writes["zoned-plans"]).toBeUndefined();
+    expect(writes["zoned-favorites"]).toBe(JSON.stringify(["b"]));
+    expect(writes["zoned-custom-workouts"]).toBe(JSON.stringify([{ id: "w1" }]));
+  });
+
+  test("never touches managed keys the file does not carry", () => {
+    const writes = resolveImportWrites(
+      { "zoned-theme": JSON.stringify("dark") },
+      { "zoned-plans": [] },
+      {},
+    );
+
+    expect("zoned-theme" in writes).toBe(false);
+    expect(writes["zoned-plans"]).toBe("[]");
+  });
+
+  test("defaults an unanswered conflict to replacing", () => {
+    const writes = resolveImportWrites(
+      { "zoned-plans": JSON.stringify([{ id: "local" }]) },
+      { "zoned-plans": [{ id: "backup" }] },
+      {},
+    );
+
+    expect(writes["zoned-plans"]).toBe(JSON.stringify([{ id: "backup" }]));
   });
 });
 

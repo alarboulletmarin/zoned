@@ -24,7 +24,9 @@ export const BACKUP_STORAGE_KEYS = [
 ] as const;
 
 export type BackupStorageKey = typeof BACKUP_STORAGE_KEYS[number];
-export type RestoreMode = "merge" | "replace";
+
+/** Per-key decision taken on the import conflict screen. */
+export type ImportChoice = "keep" | "replace";
 
 export interface BackupData {
   _meta: { version: number; app: string; exportedAt: string };
@@ -79,21 +81,59 @@ export function parseBackupData(raw: unknown): BackupData | null {
   };
 }
 
-export function buildManagedStorageSnapshot(
+export interface ImportDiff {
+  /** Managed keys stored locally *and* in the file, with a different value:
+   *  the only ones the user has to arbitrate. */
+  conflicts: BackupStorageKey[];
+  /** Managed keys only the file carries — simply added, nothing to decide. */
+  additions: BackupStorageKey[];
+  /** Managed keys the file carries with the exact same value as locally. */
+  identical: BackupStorageKey[];
+}
+
+/** Compares a parsed backup against what this device already stores, at the
+ *  granularity of one managed key (favourites, zones, plans, …) — never
+ *  inside a key. Keys stored locally but absent from the file are not
+ *  reported: an import never removes them. */
+export function computeImportDiff(
   currentManagedEntries: Partial<Record<BackupStorageKey, string>>,
   importedEntries: Record<string, unknown>,
-  mode: RestoreMode,
-): Partial<Record<BackupStorageKey, string>> {
-  const snapshot: Partial<Record<BackupStorageKey, string>> = mode === "merge"
-    ? { ...currentManagedEntries }
-    : {};
+): ImportDiff {
+  const diff: ImportDiff = { conflicts: [], additions: [], identical: [] };
 
   for (const key of BACKUP_STORAGE_KEYS) {
     if (!(key in importedEntries)) continue;
-    snapshot[key] = serializeStorageValue(importedEntries[key]);
+    const current = currentManagedEntries[key];
+    if (current === undefined) {
+      diff.additions.push(key);
+    } else if (current === serializeStorageValue(importedEntries[key])) {
+      diff.identical.push(key);
+    } else {
+      diff.conflicts.push(key);
+    }
   }
 
-  return snapshot;
+  return diff;
+}
+
+/** The managed entries an import must actually write: every key the file
+ *  carries, minus the conflicts the user chose to keep. Keys the file does
+ *  not carry are left untouched. */
+export function resolveImportWrites(
+  currentManagedEntries: Partial<Record<BackupStorageKey, string>>,
+  importedEntries: Record<string, unknown>,
+  choices: Partial<Record<BackupStorageKey, ImportChoice>>,
+): Partial<Record<BackupStorageKey, string>> {
+  const writes: Partial<Record<BackupStorageKey, string>> = {};
+
+  for (const key of BACKUP_STORAGE_KEYS) {
+    if (!(key in importedEntries)) continue;
+    const isConflict = currentManagedEntries[key] !== undefined;
+    if (isConflict && choices[key] === "keep") continue;
+    writes[key] = serializeStorageValue(importedEntries[key]);
+  }
+
+  return writes;
 }
 
 /** Removes every key this app manages in localStorage — the "Tout effacer" action. */

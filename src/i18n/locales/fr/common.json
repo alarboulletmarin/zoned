@@ -25,41 +25,146 @@
     },
     "privacy": "L'image est générée dans ton navigateur — aucune donnée envoyée.",
     "template": {
-      "storyHero": { "label": "Story", "format": "Insta · 1080 × 1920" },
-      "squareStats": { "label": "Carré stats", "format": "Insta Feed · 1080 × 1080" },
-      "landscapeWide": { "label": "Paysage", "format": "Twitter · 1200 × 675" },
-      "minimalTypo": { "label": "Minimal", "format": "Éditorial · 1080 × 1080" },
-      "zoneHero": { "label": "Zone hero", "format": "Story coloré · 1080 × 1920" },
-      "heartbeatEcg": { "label": "Pulse ECG", "format": "Trace cardiaque · 1080 × 1920" },
-      "magazineCover": { "label": "Magazine", "format": "Couverture éditoriale · 1080 × 1920" },
-      "diagonalSplit": { "label": "Diagonal", "format": "Géométrique · 1080 × 1080" },
-      "receiptTicket": { "label": "Ticket", "format": "Reçu / dossard · 1080 × 1920" },
-      "qrCard": { "label": "QR Code", "format": "Scan direct vers la séance · 1080 × 1080" },
-      "bibCard": { "label": "Dossard", "format": "Style course à pied · 1080 × 1080" },
-      "spotifyWrap": { "label": "Recap", "format": "Gradient flashy & typo XL · 1080 × 1920" },
-      "boardingPass": { "label": "Boarding Pass", "format": "Billet d'avion · 1080 × 1920" },
-      "postcard": { "label": "Carte postale", "format": "Vintage avec timbre · 1080 × 1920" },
-      "moviePoster": { "label": "Affiche", "format": "Style A24 / movie poster · 1080 × 1920" },
-      "sneakerDrop": { "label": "Drop SNKRS", "format": "Fiche release sneaker · 1080 × 1920" },
-      "highlightBanner": { "label": "Bandeau", "format": "Sticker pour bas de photo paysage · 1080 × 360" },
-      "cornerStamp": { "label": "Tampon", "format": "Petit sticker coin de photo · 480 × 480" },
-      "spotifyWrapSquare": { "label": "Recap carré", "format": "Version Insta Feed du Recap · 1080 × 1080" },
-      "badgeChip": { "label": "Chip", "format": "Badge solide néo-brutaliste · 480 × 480" },
-      "holographicCard": { "label": "Holo", "format": "Carte chromatique iridescente · 480 × 480" },
-      "waxSeal": { "label": "Sceau", "format": "Sceau de cire premium · 480 × 480" },
-      "casinoChip": { "label": "Jeton", "format": "Jeton de poker · 480 × 480" },
-      "vinylDieCut": { "label": "Sticker", "format": "Vinyle die-cut laptop · 480 × 480" },
-      "mapPinDrop": { "label": "Pin", "format": "Pin Google Maps · 480 × 480" },
-      "coffeeStamp": { "label": "Fidélité", "format": "Carte de fidélité · 480 × 480" },
-      "enamelPin": { "label": "Broche", "format": "Broche émaillée varsity · 480 × 480" },
-      "polaroidSquare": { "label": "Polaroid", "format": "Photo Polaroid manuscrite · 1080 × 1080" },
-      "periodicElement": { "label": "Élément", "format": "Case tableau périodique · 1080 × 1080" },
-      "albumCover": { "label": "Vinyle", "format": "Pochette d'album duotone · 1080 × 1080" },
-      "tradingCard": { "label": "Trading Card", "format": "Carte collector style NBA · 1080 × 1080" },
-      "subwayMap": { "label": "Métro", "format": "Plan de métro stylisé · 1080 × 1080" },
-      "cassetteTape": { "label": "K7", "format": "Cassette audio rétro · 1080 × 1080" },
-      "y2kChrome": { "label": "Y2K", "format": "Chrome Frutiger Aero · 1080 × 1080" },
-      "boxingPoster": { "label": "Combat", "format": "Affiche de combat boxing · 1080 × 1080" }
+      "storyHero": {
+        "label": "Story",
+        "format": "Insta · 1080 × 1920"
+      },
+      "squareStats": {
+        "label": "Carré stats",
+        "format": "Insta Feed · 1080 × 1080"
+      },
+      "landscapeWide": {
+        "label": "Paysage",
+        "format": "Twitter · 1200 × 675"
+      },
+      "minimalTypo": {
+        "label": "Minimal",
+        "format": "Éditorial · 1080 × 1080"
+      },
+      "zoneHero": {
+        "label": "Zone hero",
+        "format": "Story coloré · 1080 × 1920"
+      },
+      "heartbeatEcg": {
+        "label": "Pulse ECG",
+        "format": "Trace cardiaque · 1080 × 1920"
+      },
+      "magazineCover": {
+        "label": "Magazine",
+        "format": "Couverture éditoriale · 1080 × 1920"
+      },
+      "diagonalSplit": {
+        "label": "Diagonal",
+        "format": "Géométrique · 1080 × 1080"
+      },
+      "receiptTicket": {
+        "label": "Ticket",
+        "format": "Reçu / dossard · 1080 × 1920"
+      },
+      "qrCard": {
+        "label": "QR Code",
+        "format": "Scan direct vers la séance · 1080 × 1080"
+      },
+      "bibCard": {
+        "label": "Dossard",
+        "format": "Style course à pied · 1080 × 1080"
+      },
+      "spotifyWrap": {
+        "label": "Recap",
+        "format": "Gradient flashy & typo XL · 1080 × 1920"
+      },
+      "boardingPass": {
+        "label": "Boarding Pass",
+        "format": "Billet d'avion · 1080 × 1920"
+      },
+      "postcard": {
+        "label": "Carte postale",
+        "format": "Vintage avec timbre · 1080 × 1920"
+      },
+      "moviePoster": {
+        "label": "Affiche",
+        "format": "Style A24 / movie poster · 1080 × 1920"
+      },
+      "sneakerDrop": {
+        "label": "Drop SNKRS",
+        "format": "Fiche release sneaker · 1080 × 1920"
+      },
+      "highlightBanner": {
+        "label": "Bandeau",
+        "format": "Sticker pour bas de photo paysage · 1080 × 360"
+      },
+      "cornerStamp": {
+        "label": "Tampon",
+        "format": "Petit sticker coin de photo · 480 × 480"
+      },
+      "spotifyWrapSquare": {
+        "label": "Recap carré",
+        "format": "Version Insta Feed du Recap · 1080 × 1080"
+      },
+      "badgeChip": {
+        "label": "Chip",
+        "format": "Badge solide néo-brutaliste · 480 × 480"
+      },
+      "holographicCard": {
+        "label": "Holo",
+        "format": "Carte chromatique iridescente · 480 × 480"
+      },
+      "waxSeal": {
+        "label": "Sceau",
+        "format": "Sceau de cire premium · 480 × 480"
+      },
+      "casinoChip": {
+        "label": "Jeton",
+        "format": "Jeton de poker · 480 × 480"
+      },
+      "vinylDieCut": {
+        "label": "Sticker",
+        "format": "Vinyle die-cut laptop · 480 × 480"
+      },
+      "mapPinDrop": {
+        "label": "Pin",
+        "format": "Pin Google Maps · 480 × 480"
+      },
+      "coffeeStamp": {
+        "label": "Fidélité",
+        "format": "Carte de fidélité · 480 × 480"
+      },
+      "enamelPin": {
+        "label": "Broche",
+        "format": "Broche émaillée varsity · 480 × 480"
+      },
+      "polaroidSquare": {
+        "label": "Polaroid",
+        "format": "Photo Polaroid manuscrite · 1080 × 1080"
+      },
+      "periodicElement": {
+        "label": "Élément",
+        "format": "Case tableau périodique · 1080 × 1080"
+      },
+      "albumCover": {
+        "label": "Vinyle",
+        "format": "Pochette d'album duotone · 1080 × 1080"
+      },
+      "tradingCard": {
+        "label": "Trading Card",
+        "format": "Carte collector style NBA · 1080 × 1080"
+      },
+      "subwayMap": {
+        "label": "Métro",
+        "format": "Plan de métro stylisé · 1080 × 1080"
+      },
+      "cassetteTape": {
+        "label": "K7",
+        "format": "Cassette audio rétro · 1080 × 1080"
+      },
+      "y2kChrome": {
+        "label": "Y2K",
+        "format": "Chrome Frutiger Aero · 1080 × 1080"
+      },
+      "boxingPoster": {
+        "label": "Combat",
+        "format": "Affiche de combat boxing · 1080 × 1080"
+      }
     },
     "toast": {
       "shared": "Partagé via le menu de l'appareil",
@@ -466,19 +571,29 @@
       "title": "Vos données",
       "description": "Exportez ou restaurez vos données (favoris, plans, zones, paramètres)",
       "exportButton": "Exporter mes données",
-      "importButton": "Restaurer mes données",
       "exportSuccess": "Données exportées avec succès",
       "importSuccess": "Données restaurées avec succès. La page va se recharger.",
       "importError": "Impossible de restaurer les données (espace de stockage insuffisant ou sauvegarde corrompue). Aucune modification n'a été conservée.",
       "invalidFile": "Fichier invalide. Utilisez un fichier exporté par Zoned.",
-      "confirmTitle": "Restaurer les données ?",
-      "confirmDescription": "Choisissez comment appliquer la sauvegarde avant de restaurer vos données Zoned.",
+      "dropzoneIdle": "Déposer un fichier .json ici",
+      "dropzoneActive": "Relâcher pour lire le fichier",
+      "dropzoneHint": "ou cliquez pour choisir un fichier exporté par Zoned",
+      "readError": "Fichier illisible — rien n'a été modifié.",
+      "fileRead": "Fichier lu · {{name}}",
+      "fileObjects_one": "{{count}} objet",
+      "fileObjects_other": "{{count}} objets",
+      "conflictEyebrow": "Avant d'importer",
+      "conflictTitle_one": "{{count}} section existe déjà sur cet appareil",
+      "conflictTitle_other": "{{count}} sections existent déjà sur cet appareil",
+      "conflictIntro": "Choisissez, pour chacune, ce que Zoned garde. Rien n'est écrit tant que vous n'avez pas validé.",
+      "keepExisting": "Garder l'existant",
+      "useImported": "Prendre l'importé",
+      "additionsSummary_one": "{{count}} section absente d'ici sera simplement ajoutée : {{keys}}.",
+      "additionsSummary_other": "{{count}} sections absentes d'ici seront simplement ajoutées : {{keys}}.",
+      "additionsNone": "Aucune section nouvelle dans ce fichier.",
+      "identicalSummary_one": "{{count}} section est déjà identique.",
+      "identicalSummary_other": "{{count}} sections sont déjà identiques.",
       "confirmButton": "Restaurer",
-      "restoreModeLabel": "Mode de restauration",
-      "replaceModeTitle": "Remplacer",
-      "replaceModeDescription": "Nettoie les données Zoned locales puis restaure uniquement le contenu de la sauvegarde.",
-      "mergeModeTitle": "Fusionner",
-      "mergeModeDescription": "Conserve les données Zoned locales absentes de la sauvegarde et remplace uniquement les clés présentes.",
       "manageLink": "Gérer mes données →"
     }
   },
