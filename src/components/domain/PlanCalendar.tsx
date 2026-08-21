@@ -3,12 +3,40 @@ import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { Star, Flag, Clock, Trash2, Eye, Dumbbell, Route as RouteIcon } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
-import type { TrainingPlan, PlanSession, IntermediateGoal } from "@/types/plan";
+import type { TrainingPlan, PlanWeek, PlanSession, IntermediateGoal } from "@/types/plan";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { usePickLang } from "@/lib/i18n-utils";
 import { toast } from "sonner";
-import { SESSION_COLORS } from "@/lib/sessionColors";
+import { SESSION_COLORS, SESSION_ZONE, SESSION_COLOR_FALLBACK } from "@/lib/sessionColors";
+
+// ── Mobile week list helpers ───────────────────────────────────────
+
+/**
+ * Per-week zone mini-bar segments for the mobile compact list — reuses the
+ * single session-type→zone-colour source (`SESSION_COLORS`/`SESSION_ZONE`,
+ * see CLAUDE.md) instead of introducing a second colour table. Segments are
+ * weighted by `estimatedDurationMin` and ordered by zone (aerobic zones
+ * ascending, non-zoned types such as strength last).
+ */
+function computeWeekZoneSegments(week: PlanWeek): { color: string; weight: number }[] {
+  const totals = new Map<string, number>();
+  for (const session of week.sessions) {
+    if (session.workoutId === "__race_day__" || session.workoutId === "__intermediate_race__") continue;
+    const duration = session.estimatedDurationMin || 0;
+    if (duration <= 0) continue;
+    const color = SESSION_COLORS[session.sessionType] || SESSION_COLOR_FALLBACK;
+    totals.set(color, (totals.get(color) || 0) + duration);
+  }
+  const order = Object.entries(SESSION_ZONE).reduce<Record<string, number>>((acc, [type, zone]) => {
+    const color = SESSION_COLORS[type];
+    if (color) acc[color] = zone;
+    return acc;
+  }, {});
+  return Array.from(totals.entries())
+    .sort(([a], [b]) => (order[a] ?? 99) - (order[b] ?? 99))
+    .map(([color, weight]) => ({ color, weight }));
+}
 
 // ── Props ───────────────────────────────────────────────────────────
 
@@ -31,6 +59,8 @@ interface PlanCalendarProps {
   onWorkoutAdd?: (workoutId: string, weekNumber: number, day: number) => void;
   /** Mobile: open the workout panel for a specific day */
   onAddToDay?: (weekNumber: number, day: number) => void;
+  /** Mobile compact week list: navigate to a specific week's detail */
+  onWeekClick?: (weekNumber: number) => void;
   /** If provided, only render these week numbers (used by monthly view) */
   filteredWeekNumbers?: Set<number>;
   /** If provided, show day-of-month numbers in cells (ISO date or datetime string) */
@@ -57,6 +87,7 @@ export const PlanCalendar = memo(function PlanCalendar({
   onToggleComplete,
   onValidateWeek,
   onWorkoutAdd,
+  onWeekClick,
   filteredWeekNumbers,
   planStartDate,
   visibleMonth,
@@ -70,13 +101,16 @@ export const PlanCalendar = memo(function PlanCalendar({
     [t],
   );
 
-  // ── Scroll-to-week ref ────────────────────────────────────────────
+  // ── Scroll-to-week refs (desktop grid row + mobile list row — whichever
+  // is visible at the current breakpoint) ─────────────────────────────
   const initialWeekRowRef = useRef<HTMLTableRowElement>(null);
+  const initialWeekMobileRowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (initialWeek == null || !initialWeekRowRef.current) return;
+    if (initialWeek == null) return;
     requestAnimationFrame(() => {
       initialWeekRowRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      initialWeekMobileRowRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
     });
   }, [initialWeek]);
 
@@ -155,6 +189,33 @@ export const PlanCalendar = memo(function PlanCalendar({
     if (firstWeek !== undefined) starts.delete(firstWeek);
     return starts;
   }, [plan.phases, plan.weeks]);
+
+  // Per-week derived data shared by the desktop grid and the mobile compact
+  // list (weekLabel/isCurrent/isPhaseStart used to live inline in the
+  // desktop row map only — hoisted here so both renderings agree).
+  const weekRows = useMemo(() => {
+    return plan.weeks
+      .filter((week) => !filteredWeekNumbers || filteredWeekNumbers.has(week.weekNumber))
+      .map((week) => {
+        const isCurrent =
+          currentWeek === week.weekNumber && currentWeek >= 1 && currentWeek <= plan.totalWeeks;
+        const phaseMeta = PHASE_META[week.phase];
+        const isPhaseStart = phaseStartWeeks.has(week.weekNumber);
+
+        let weekLabel: string;
+        if (week.weekNumber === plan.totalWeeks && week.sessions.some((s) => s.workoutId === "__race_day__")) {
+          weekLabel = t("calendar.race");
+        } else if (week.intermediateRace) {
+          weekLabel = t("intermediateGoals.weekLabel");
+        } else if (week.isRecoveryWeek) {
+          weekLabel = t("calendar.recoveryWeek");
+        } else {
+          weekLabel = `${t("calendar.weekPrefix")}${week.weekNumber}`;
+        }
+
+        return { week, isCurrent, phaseMeta, isPhaseStart, weekLabel, zoneSegments: computeWeekZoneSegments(week) };
+      });
+  }, [plan.weeks, plan.totalWeeks, filteredWeekNumbers, currentWeek, phaseStartWeeks, t]);
 
   // Build a lookup: weekNumber -> dayOfWeek -> sessions[]
   const sessionsByWeekDay = useMemo(() => {
@@ -426,8 +487,8 @@ export const PlanCalendar = memo(function PlanCalendar({
 
   return (
     <>
-      {/* ── Calendar grid ── */}
-      <div className="overflow-x-auto">
+      {/* ── Calendar grid (≥640px — below that, columns compress past readability) ── */}
+      <div className="hidden overflow-x-auto sm:block">
         <table className="w-full border-collapse text-sm table-fixed">
           <colgroup>
             <col className="w-[90px] md:w-[110px]" />
@@ -454,28 +515,10 @@ export const PlanCalendar = memo(function PlanCalendar({
 
           {/* Week rows */}
           <tbody>
-            {plan.weeks.filter(week => !filteredWeekNumbers || filteredWeekNumbers.has(week.weekNumber)).map((week) => {
-              const isCurrent =
-                currentWeek === week.weekNumber &&
-                currentWeek >= 1 &&
-                currentWeek <= plan.totalWeeks;
-              const phaseMeta = PHASE_META[week.phase];
-              const isPhaseStart = phaseStartWeeks.has(week.weekNumber);
+            {weekRows.map(({ week, isCurrent, phaseMeta, isPhaseStart, weekLabel }) => {
               const dayMap = sessionsByWeekDay.get(week.weekNumber);
 
               // No separator rows — month labels appear inline in cells (on the 1st of each month)
-
-              // Short label for calendar column (avoid overflow)
-              let weekLabel: string;
-              if (week.weekNumber === plan.totalWeeks && week.sessions.some(s => s.workoutId === "__race_day__")) {
-                weekLabel = t("calendar.race");
-              } else if (week.intermediateRace) {
-                weekLabel = t("intermediateGoals.weekLabel");
-              } else if (week.isRecoveryWeek) {
-                weekLabel = t("calendar.recoveryWeek");
-              } else {
-                weekLabel = `${t("calendar.weekPrefix")}${week.weekNumber}`;
-              }
 
               return (
                 <tr
@@ -725,6 +768,77 @@ export const PlanCalendar = memo(function PlanCalendar({
           </tbody>
         </table>
       </div>
+
+      {/* ── Mobile compact week list (<640px): one row per week — label,
+          zone-mix mini-bar, total volume. Day-by-day detail stays in the
+          desktop grid only; tap a row to open that week's detail. ── */}
+      <ul className="divide-y divide-border/40 border-b border-border/40 sm:hidden">
+        {weekRows.map(({ week, isCurrent, weekLabel, zoneSegments }) => {
+          const totalKm = computeWeekKm(week);
+          return (
+            <li key={week.weekNumber}>
+              <div
+                ref={week.weekNumber === initialWeek ? initialWeekMobileRowRef : undefined}
+                role={onWeekClick ? "button" : undefined}
+                tabIndex={onWeekClick ? 0 : undefined}
+                onClick={onWeekClick ? () => onWeekClick(week.weekNumber) : undefined}
+                onKeyDown={
+                  onWeekClick
+                    ? (e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          onWeekClick(week.weekNumber);
+                        }
+                      }
+                    : undefined
+                }
+                className={cn(
+                  "grid grid-cols-[44px_1fr_60px] items-center gap-2.5 px-1 py-3 transition-colors",
+                  isCurrent && "bg-primary/10",
+                  !isCurrent && week.isRecoveryWeek && "bg-muted/40",
+                  onWeekClick && "cursor-pointer hover:bg-accent/50 focus-visible:ring-2 focus-visible:ring-ring",
+                )}
+              >
+                <span className="min-w-0">
+                  <span
+                    className={cn(
+                      "block truncate font-mono text-xs",
+                      isCurrent ? "font-semibold text-foreground" : "text-muted-foreground",
+                    )}
+                  >
+                    {weekLabel}
+                  </span>
+                  {isCurrent && (
+                    <span className="block text-[9px] font-semibold text-primary">
+                      {t("calendar.now")}
+                    </span>
+                  )}
+                </span>
+                {zoneSegments.length > 0 ? (
+                  <div className="flex h-3 gap-px overflow-hidden" aria-hidden="true">
+                    {zoneSegments.map((segment, i) => (
+                      <div
+                        key={i}
+                        style={{ flex: segment.weight, backgroundColor: segment.color }}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="h-px bg-border" aria-hidden="true" />
+                )}
+                <span
+                  className={cn(
+                    "text-right font-mono text-[11px] tabular-nums",
+                    isCurrent ? "text-foreground" : "text-muted-foreground",
+                  )}
+                >
+                  {week.sessions.length > 0 ? `~${Math.round(totalKm)} km` : "—"}
+                </span>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
 
       {/* ── Context menu (long press mobile / right-click desktop) ── */}
       {contextMenu && (

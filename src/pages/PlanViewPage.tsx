@@ -116,6 +116,14 @@ export function PlanViewPage() {
 
   const { plan, isLoading, reload: reloadPlan } = usePlan(id);
   const { planViewMode, setPlanViewMode } = usePlanViewMode();
+  // `setWeekParam` (below) goes through react-router's `setSearchParams`, which
+  // doesn't land in the same commit as a plain `setPlanViewMode` call — so
+  // jumping straight to "weekly" mode for a specific week (mobile calendar
+  // list -> week detail) can't rely on `initialWeek` picking up the new URL
+  // param in time for `PlanWeeklyView`'s mount-only initial state. This local
+  // override is read once and cleared the next time the view mode is chosen
+  // through the normal selector.
+  const [pendingWeeklyWeek, setPendingWeeklyWeek] = useState<number | null>(null);
 
   const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set());
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -1012,7 +1020,13 @@ export function PlanViewPage() {
               <Plus className="size-4" />
               <span className="ml-1">{t("view.addWorkout")}</span>
             </Button>
-            <PlanViewModeSelector value={planViewMode} onChange={setPlanViewMode} />
+            <PlanViewModeSelector
+              value={planViewMode}
+              onChange={(mode) => {
+                setPendingWeeklyWeek(null);
+                setPlanViewMode(mode);
+              }}
+            />
           </div>
         </div>
 
@@ -1084,6 +1098,11 @@ export function PlanViewPage() {
                 onValidateWeek={handleValidateWeek}
                 onWorkoutAdd={handleWorkoutAdd}
                 onAddToDay={handleAddToDay}
+                onWeekClick={(weekNumber) => {
+                  setPendingWeeklyWeek(weekNumber);
+                  setWeekParam(weekNumber);
+                  setPlanViewMode("weekly");
+                }}
                 planStartDate={plan.config.startDate || plan.config.createdAt}
                 blockedDays={blockedDaysSet}
               />
@@ -1111,7 +1130,7 @@ export function PlanViewPage() {
                 plan={plan}
                 workoutNames={workoutNames}
                 currentWeek={currentWeek}
-                initialWeek={initialWeek}
+                initialWeek={pendingWeeklyWeek ?? initialWeek}
                 isEn={isEn}
                 onWeekChange={setWeekParam}
                 planStartDate={plan.config.startDate || plan.config.createdAt}
@@ -1148,6 +1167,7 @@ export function PlanViewPage() {
               <PlanMonthlyView
                 plan={plan}
                 workoutNames={workoutNames}
+                workoutTemplates={workoutTemplates}
                 currentWeek={currentWeek}
                 initialWeek={initialWeek}
                 isEn={isEn}
