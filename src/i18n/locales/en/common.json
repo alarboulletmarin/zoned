@@ -274,6 +274,8 @@
     "calcEquivalence": "Distance equivalence",
     "methodScience": "Scientific methodology",
     "methodScienceDesc": "Zones, polarisation, training load",
+    "methodPolarise": "The polarized model",
+    "methodPolariseDesc": "Why 80/20 works",
     "methodPlans": "Plan methodology",
     "methodPlansDesc": "How Zoned builds a plan",
     "learnArticles": "Articles",

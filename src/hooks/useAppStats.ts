@@ -8,22 +8,9 @@ import {
 } from "@/data/workouts";
 import { loadAllStrengthSessions } from "@/data/strength";
 import { getTermsCount } from "@/data/glossary";
-import { TARGET_SYSTEM_SCIENCE } from "@/data/science";
+import { countUniqueScienceSources } from "@/lib/scienceReferences";
 
 const ZONES = 6;
-
-/** Unique scientific references cited across the target-system science map
- *  (some papers are cited from more than one target system). Computed once
- *  — the data is a static import, not a lazy chunk. */
-function countUniqueScienceSources(): number {
-  const seen = new Set<string>();
-  for (const system of Object.values(TARGET_SYSTEM_SCIENCE)) {
-    for (const ref of system.references) {
-      seen.add(`${ref.title}|${ref.year}`);
-    }
-  }
-  return seen.size;
-}
 
 export type AppStats = {
   workouts: number;

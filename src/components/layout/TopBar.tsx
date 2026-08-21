@@ -103,6 +103,7 @@ export const PRIMARY_NAV: NavSection[] = [
     prefix: ["/methodology", "/plans/methodology"],
     children: [
       { to: "/methodology", labelKey: "topnav.methodScience", descKey: "topnav.methodScienceDesc" },
+      { to: "/methodology/polarise", labelKey: "topnav.methodPolarise", descKey: "topnav.methodPolariseDesc" },
       { to: "/plans/methodology", labelKey: "topnav.methodPlans", descKey: "topnav.methodPlansDesc" },
     ],
   },
