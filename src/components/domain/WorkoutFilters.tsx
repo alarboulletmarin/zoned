@@ -4,10 +4,11 @@ import { X, Search, Heart } from "@/components/icons";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
-import type { WorkoutCategory, Difficulty, TargetSystem } from "@/types";
+import type { WorkoutCategory, Difficulty, TargetSystem, ZoneNumber } from "@/types";
 import type { StrengthCategory, StrengthEquipment, MuscleGroup } from "@/types/strength";
 import { categories } from "@/data/workouts";
 import { strengthCategories } from "@/data/strength";
+import { zoneClass } from "@/lib/zoneColors";
 
 export type ActivityType = "running" | "strength" | "cycling" | "swimming" | "all";
 
@@ -57,6 +58,8 @@ const terrainOptions: TerrainFilter[] = ["flat", "hills", "track"];
 
 const difficultyOptions: Difficulty[] = ["beginner", "intermediate", "advanced", "elite"];
 
+const zoneOptions: ZoneNumber[] = [1, 2, 3, 4, 5, 6];
+
 export interface WorkoutFiltersState {
   category: WorkoutCategory[];
   difficulty: Difficulty[];
@@ -65,6 +68,7 @@ export interface WorkoutFiltersState {
   terrain: TerrainFilter[];
   targetSystem: TargetSystem[];
   favoritesOnly: boolean;
+  zone: ZoneNumber[];
   // Strength-specific filters
   strengthCategory: StrengthCategory[];
   equipment: StrengthEquipment[];
@@ -78,6 +82,10 @@ interface WorkoutFiltersProps {
   searchInputRef?: RefObject<HTMLInputElement | null>;
   hideSearch?: boolean;
   activityType?: ActivityType;
+  /** Session counts per running/cycling/swimming category, for the sidebar chips. */
+  categoryCounts?: Partial<Record<WorkoutCategory, number>>;
+  /** Session counts per strength category, for the sidebar chips. */
+  strengthCategoryCounts?: Partial<Record<StrengthCategory, number>>;
 }
 
 const DURATION_MIN = 0;
@@ -88,10 +96,12 @@ function FilterChip({
   label,
   selected,
   onClick,
+  count,
 }: {
   label: string;
   selected: boolean;
   onClick: () => void;
+  count?: number;
 }) {
   return (
     <button
@@ -105,6 +115,38 @@ function FilterChip({
       )}
     >
       {label}
+      {count !== undefined && (
+        <span className={cn(selected ? "text-ink/70" : "text-muted-foreground")}>
+          &nbsp;· {count}
+        </span>
+      )}
+    </button>
+  );
+}
+
+/* ── Zone chip — coloured with the zone ramp, same interaction as FilterChip ── */
+function ZoneChip({
+  zone,
+  selected,
+  onClick,
+}: {
+  zone: ZoneNumber;
+  selected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={selected}
+      className={cn(
+        "inline-flex items-center border-2 px-2.5 py-1 font-mono text-[11px] tracking-[0.04em] uppercase transition-colors",
+        selected
+          ? cn(zoneClass(zone, "bg"), zoneClass(zone, "textOn"), "border-transparent")
+          : cn(zoneClass(zone, "border"), zoneClass(zone, "text"), "bg-transparent hover:bg-secondary"),
+      )}
+    >
+      Z{zone}
     </button>
   );
 }
@@ -159,6 +201,8 @@ export function WorkoutFilters({
   searchInputRef,
   hideSearch = false,
   activityType = "all",
+  categoryCounts,
+  strengthCategoryCounts,
 }: WorkoutFiltersProps) {
   const { t } = useTranslation("library");
   const { t: tStrength } = useTranslation("strength");
@@ -190,6 +234,7 @@ export function WorkoutFilters({
     filters.terrain.length > 0 ||
     filters.targetSystem.length > 0 ||
     filters.favoritesOnly ||
+    filters.zone.length > 0 ||
     filters.strengthCategory.length > 0 ||
     filters.equipment.length > 0 ||
     filters.muscleGroup.length > 0;
@@ -203,6 +248,7 @@ export function WorkoutFilters({
       terrain: [],
       targetSystem: [],
       favoritesOnly: false,
+      zone: [],
       strengthCategory: [],
       equipment: [],
       muscleGroup: [],
@@ -242,6 +288,23 @@ export function WorkoutFilters({
         </div>
       )}
 
+      {/* Zone (running / cycling / swimming — strength has no aerobic zones) */}
+      {showRunningCategories && (
+        <div className="space-y-1.5">
+          <FilterGroupLabel>{t("filters.zone")}</FilterGroupLabel>
+          <div className="flex flex-wrap gap-1.5">
+            {zoneOptions.map((z) => (
+              <ZoneChip
+                key={z}
+                zone={z}
+                selected={filters.zone.includes(z)}
+                onClick={() => toggleFilter("zone", z)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Running: Category */}
       {showRunningCategories && (
         <div className="space-y-1.5">
@@ -251,6 +314,7 @@ export function WorkoutFilters({
               <FilterChip
                 key={cat}
                 label={t(`categories.${cat}`)}
+                count={categoryCounts?.[cat as WorkoutCategory]}
                 selected={filters.category.includes(cat as WorkoutCategory)}
                 onClick={() => toggleFilter("category", cat as WorkoutCategory)}
               />
@@ -268,6 +332,7 @@ export function WorkoutFilters({
               <FilterChip
                 key={cat}
                 label={tStrength(`categories.${cat}`)}
+                count={strengthCategoryCounts?.[cat as StrengthCategory]}
                 selected={filters.strengthCategory.includes(cat as StrengthCategory)}
                 onClick={() => toggleFilter("strengthCategory", cat as StrengthCategory)}
               />
@@ -421,6 +486,7 @@ export const defaultFilters: WorkoutFiltersState = {
   terrain: [],
   targetSystem: [],
   favoritesOnly: false,
+  zone: [],
   strengthCategory: [],
   equipment: [],
   muscleGroup: [],

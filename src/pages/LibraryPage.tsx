@@ -41,12 +41,14 @@ import {
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import { getWorkoutDuration } from "@/components/visualization";
+import { getAnyWorkoutZones } from "@/lib/workoutFilters";
 import { categories } from "@/data/workouts";
 import { strengthCategories } from "@/data/strength";
 import type {
   WorkoutCategory,
   AnyWorkoutTemplate,
   TargetSystem,
+  ZoneNumber,
 } from "@/types";
 import { isStrengthWorkout, isRunningWorkout, getWorkoutDiscipline } from "@/types";
 import type {
@@ -118,6 +120,15 @@ function parseFiltersFromParams(
     if (!isNaN(maxDur) && maxDur >= DURATION_MIN && maxDur <= DURATION_MAX) {
       filters.durationRange = [DURATION_MIN, maxDur];
     }
+  }
+
+  // Zone (comma-separated)
+  const zone = searchParams.get("zone");
+  if (zone) {
+    filters.zone = zone
+      .split(",")
+      .map((z) => parseInt(z, 10))
+      .filter((z): z is ZoneNumber => z >= 1 && z <= 6);
   }
 
   // Strength category (comma-separated)
@@ -258,6 +269,7 @@ export function LibraryPage() {
     count += f.terrain.length;
     count += f.targetSystem.length;
     if (f.favoritesOnly) count++;
+    count += f.zone.length;
     count += f.strengthCategory.length;
     count += f.equipment.length;
     count += f.muscleGroup.length;
@@ -344,6 +356,9 @@ export function LibraryPage() {
     if (filters.durationRange[1] !== DURATION_MAX) {
       params.set("maxDuration", filters.durationRange[1].toString());
     }
+    if (filters.zone.length > 0) {
+      params.set("zone", filters.zone.join(","));
+    }
     if (filters.strengthCategory.length > 0) {
       params.set("strengthCategory", filters.strengthCategory.join(","));
     }
@@ -361,6 +376,7 @@ export function LibraryPage() {
     filters.difficulty,
     filters.terrain,
     filters.durationRange,
+    filters.zone,
     filters.strengthCategory,
     filters.equipment,
     filters.muscleGroup,
@@ -398,6 +414,13 @@ export function LibraryPage() {
         (capped && duration > f.durationRange[1])
       ) {
         return false;
+      }
+
+      // Zone filter. Strength has no aerobic zones, so it's excluded as soon
+      // as a zone is selected (getAnyWorkoutZones returns [] for it).
+      if (f.zone.length > 0) {
+        const zones = getAnyWorkoutZones(workout);
+        if (!zones.some((z) => f.zone.includes(z))) return false;
       }
 
       // Search filter
@@ -541,6 +564,36 @@ export function LibraryPage() {
         ? "subtitleAll"
         : "subtitle";
 
+  // Raw catalogue total (all disciplines, independent of active filters) — the
+  // H1 headline figure.
+  const catalogueTotal =
+    runningWorkouts.length +
+    cyclingWorkouts.length +
+    swimmingWorkouts.length +
+    strengthWorkouts.length;
+
+  // Per-category counts within the currently selected discipline (not
+  // affected by the other active filters — a lightweight, non-faceted count).
+  const categoryCounts = useMemo(() => {
+    const counts: Partial<Record<WorkoutCategory, number>> = {};
+    for (const w of allWorkouts) {
+      if (isRunningWorkout(w)) {
+        counts[w.category] = (counts[w.category] ?? 0) + 1;
+      }
+    }
+    return counts;
+  }, [allWorkouts]);
+
+  const strengthCategoryCounts = useMemo(() => {
+    const counts: Partial<Record<StrengthCategory, number>> = {};
+    for (const w of allWorkouts) {
+      if (isStrengthWorkout(w)) {
+        counts[w.category] = (counts[w.category] ?? 0) + 1;
+      }
+    }
+    return counts;
+  }, [allWorkouts]);
+
   const seoDescription = isEn
     ? `Browse ${allWorkouts.length} science-based training sessions. Filter by category, difficulty, duration, and more.`
     : `Parcourez ${allWorkouts.length} séances d'entraînement scientifiques. Filtrez par catégorie, difficulté, durée et plus.`;
@@ -567,10 +620,12 @@ export function LibraryPage() {
                 {t("common:nav.library")}
               </p>
               <h1 className="font-sans font-bold uppercase leading-[0.9] tracking-[-0.05em] text-[36px] sm:text-[44px] md:text-[52px] mt-2">
-                {t("title")}
+                {t("catalogueCount", { count: catalogueTotal })}
               </h1>
               <p className="font-mono text-xs text-muted-foreground mt-2.5">
                 {t(subtitleKey, { count: filteredWorkouts.length })}
+                {subtitleKey === "subtitle" &&
+                  ` · ${t(`activityToggle.${activityType}`)}`}
               </p>
             </div>
 
@@ -717,6 +772,8 @@ export function LibraryPage() {
                 onFiltersChange={setFilters}
                 searchInputRef={searchInputRef}
                 activityType={activityType}
+                categoryCounts={categoryCounts}
+                strengthCategoryCounts={strengthCategoryCounts}
               />
             </div>
           </aside>
@@ -764,6 +821,8 @@ export function LibraryPage() {
                     onFiltersChange={setTempFilters}
                     hideSearch
                     activityType={activityType}
+                    categoryCounts={categoryCounts}
+                    strengthCategoryCounts={strengthCategoryCounts}
                   />
                 </div>
 
@@ -776,6 +835,7 @@ export function LibraryPage() {
                     tempFilters.terrain.length > 0 ||
                     tempFilters.targetSystem.length > 0 ||
                     tempFilters.favoritesOnly ||
+                    tempFilters.zone.length > 0 ||
                     tempFilters.strengthCategory.length > 0 ||
                     tempFilters.equipment.length > 0 ||
                     tempFilters.muscleGroup.length > 0) && (

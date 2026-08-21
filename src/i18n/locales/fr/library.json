@@ -1,5 +1,6 @@
 {
   "title": "Bibliothèque de séances",
+  "catalogueCount": "{{count}} séances",
   "subtitle": "{{count}} séances d'entraînement scientifiques",
   "subtitleStrength": "{{count}} séances de renforcement",
   "subtitleAll": "{{count}} séances au total",
@@ -19,6 +20,7 @@
   },
   "filters": {
     "title": "Filtres",
+    "zone": "Zone",
     "category": "Catégorie",
     "difficulty": "Difficulté",
     "duration": "Durée",
