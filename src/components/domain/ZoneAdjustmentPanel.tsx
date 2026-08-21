@@ -1,17 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { Save, RotateCcw } from "@/components/icons";
+import { RotateCcw } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { ResponsiveTable, type ResponsiveTableColumn } from "@/components/ui/responsive-table";
+import { Slider } from "@/components/ui/slider";
 import { zoneClass } from "@/lib/zoneColors";
 import { cn } from "@/lib/utils";
 import { usePickLang } from "@/lib/i18n-utils";
@@ -22,85 +14,236 @@ import {
   setZoneOverride,
   clearAllZoneOverrides,
 } from "@/lib/zones";
-import { ZONE_META, type ZoneNumber, type ZoneRange, type UserZonePreferences } from "@/types";
+import {
+  ZONE_META,
+  type ZoneNumber,
+  type ZoneRange,
+  type ZoneOverride,
+  type UserZonePreferences,
+} from "@/types";
 
 const ZONE_NUMBERS: ZoneNumber[] = [1, 2, 3, 4, 5, 6];
 
-/** "4:06" -> 4.1 (minutes, decimal). Returns undefined for anything that
- *  doesn't parse as m:ss with a non-negative, in-range second component. */
-function parsePaceString(value: string): number | undefined {
-  const trimmed = value.trim();
-  const match = /^(\d{1,2}):([0-5]?\d)$/.exec(trimmed);
-  if (!match) return undefined;
-  const minutes = Number(match[1]);
-  const seconds = Number(match[2]);
-  return minutes + seconds / 60;
+/** Which axis the sliders drive. `both` stacks one row per axis. */
+type ZoneBasis = "pace" | "hr" | "both";
+
+/** Tailwind needs literal class names — see the note in `zoneColors.ts`. */
+const ZONE_RANGE_CLASS: Record<ZoneNumber, string> = {
+  1: "bg-zone-1",
+  2: "bg-zone-2",
+  3: "bg-zone-3",
+  4: "bg-zone-4",
+  5: "bg-zone-5",
+  6: "bg-zone-6",
+};
+
+interface Domain {
+  min: number;
+  max: number;
+}
+
+/** Slider bounds wide enough to hold every zone edge, formula or manual. */
+function buildDomain(values: number[], pad: number): Domain | null {
+  if (values.length === 0) return null;
+  return {
+    min: Math.floor((Math.min(...values) - pad) / 5) * 5,
+    max: Math.ceil((Math.max(...values) + pad) / 5) * 5,
+  };
+}
+
+function paceSeconds(paceMinPerKm: number): number {
+  return Math.round(paceMinPerKm * 60);
+}
+
+/** One zone, one axis: chip · double-handle slider · current bounds. */
+function ZoneSliderRow({
+  zone,
+  axis,
+  values,
+  domain,
+  isManual,
+  readout,
+  thumbLabels,
+  onDrag,
+  onCommit,
+}: {
+  zone: ZoneNumber;
+  axis: "pace" | "hr";
+  values: [number, number];
+  domain: Domain;
+  isManual: boolean;
+  /** Formats the live slider values for the right-hand column. */
+  readout: (values: [number, number]) => string;
+  thumbLabels: [string, string];
+  onDrag?: (values: [number, number]) => void;
+  onCommit: (values: [number, number]) => void;
+}) {
+  const pickLang = usePickLang();
+  const [local, setLocal] = useState<[number, number]>(values);
+
+  useEffect(() => {
+    setLocal(values);
+    // Re-sync when the stored bounds change (save, reset, VMA edit).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values[0], values[1]]);
+
+  const text = readout(local);
+
+  return (
+    <div className="grid grid-cols-[44px_1fr] sm:grid-cols-[56px_1fr_112px] items-center gap-x-4 gap-y-2">
+      <span
+        className={cn(
+          "justify-self-start px-2 py-1 font-mono text-xs font-bold",
+          zoneClass(zone, "bg"),
+          zoneClass(zone, "textOn"),
+        )}
+        title={pickLang(ZONE_META[zone], "label")}
+      >
+        Z{zone}
+      </span>
+      <Slider
+        min={domain.min}
+        max={domain.max}
+        step={1}
+        inverted={axis === "pace"}
+        minStepsBetweenThumbs={1}
+        value={local}
+        onValueChange={(v) => {
+          const next: [number, number] = [v[0], v[1]];
+          setLocal(next);
+          onDrag?.(next);
+        }}
+        onValueCommit={(v) => onCommit([v[0], v[1]])}
+        rangeClassName={ZONE_RANGE_CLASS[zone]}
+        thumbClassName={isManual ? "bg-accent-acid" : "bg-background"}
+        thumbLabels={thumbLabels}
+        thumbValueTexts={[readout([local[0], local[0]]), readout([local[1], local[1]])]}
+      />
+      <span
+        className={cn(
+          "col-span-2 sm:col-span-1 font-mono text-[13px] sm:text-right",
+          isManual ? "text-foreground" : "text-muted-foreground",
+        )}
+      >
+        {text}
+      </span>
+    </div>
+  );
 }
 
 interface ZoneAdjustmentPanelProps {
   prefs: UserZonePreferences;
   /** Called after any save/reset so the parent can reload from storage. */
   onChange: () => void;
+  /** Real catalogue session counts per zone, for the "adjusted by hand" note. */
+  zoneSessionCounts?: Partial<Record<ZoneNumber, number>>;
 }
 
-export function ZoneAdjustmentPanel({ prefs, onChange }: ZoneAdjustmentPanelProps) {
+export function ZoneAdjustmentPanel({
+  prefs,
+  onChange,
+  zoneSessionCounts,
+}: ZoneAdjustmentPanelProps) {
   const { t } = useTranslation("profile");
-  const pickLang = usePickLang();
 
   const zones = useMemo(() => calculateAllZones(prefs), [prefs]);
   const formulaZones = useMemo(
     () => calculateAllZones({ fcMax: prefs.fcMax, vma: prefs.vma }),
     [prefs.fcMax, prefs.vma]
   );
-  const overlaps = useMemo(() => findOverlappingZonePairs(zones), [zones]);
   const hasPace = prefs.vma !== undefined;
   const hasHr = prefs.fcMax !== undefined;
 
-  const [selectedZone, setSelectedZone] = useState<ZoneNumber>(4);
-  const selected = zones.find((z) => z.zone === selectedZone);
-
-  const [paceMinText, setPaceMinText] = useState("");
-  const [paceMaxText, setPaceMaxText] = useState("");
-  const [hrMinText, setHrMinText] = useState("");
-  const [hrMaxText, setHrMaxText] = useState("");
-
+  const [basis, setBasis] = useState<ZoneBasis>(hasPace ? "pace" : "hr");
   useEffect(() => {
-    setPaceMinText(selected?.paceMinPerKm !== undefined ? formatPace(selected.paceMinPerKm) : "");
-    setPaceMaxText(selected?.paceMaxPerKm !== undefined ? formatPace(selected.paceMaxPerKm) : "");
-    setHrMinText(selected?.hrMin !== undefined ? String(selected.hrMin) : "");
-    setHrMaxText(selected?.hrMax !== undefined ? String(selected.hrMax) : "");
-    // Re-sync only when the selected zone or the underlying data changes.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedZone, prefs]);
+    setBasis(hasPace ? "pace" : "hr");
+  }, [hasPace, hasHr]);
+
+  const paceDomain = useMemo(
+    () =>
+      buildDomain(
+        [...zones, ...formulaZones]
+          .flatMap((z) => [z.paceMinPerKm, z.paceMaxPerKm])
+          .filter((v): v is number => v !== undefined)
+          .map(paceSeconds),
+        30
+      ),
+    [zones, formulaZones]
+  );
+  const hrDomain = useMemo(
+    () =>
+      buildDomain(
+        [...zones, ...formulaZones]
+          .flatMap((z) => [z.hrMin, z.hrMax])
+          .filter((v): v is number => v !== undefined),
+        8
+      ),
+    [zones, formulaZones]
+  );
+
+  /** Live bounds while a thumb is being dragged, so the overlap check and the
+   *  manual note react before the pointer is released. */
+  const [dragging, setDragging] = useState<{
+    zone: ZoneNumber;
+    axis: "pace" | "hr";
+    values: [number, number];
+  } | null>(null);
+
+  const previewZones = useMemo<ZoneRange[]>(() => {
+    if (!dragging) return zones;
+    return zones.map((z) =>
+      z.zone !== dragging.zone
+        ? z
+        : dragging.axis === "pace"
+          ? {
+              ...z,
+              paceMinPerKm: dragging.values[0] / 60,
+              paceMaxPerKm: dragging.values[1] / 60,
+            }
+          : { ...z, hrMin: dragging.values[0], hrMax: dragging.values[1] }
+    );
+  }, [zones, dragging]);
+
+  const overlaps = useMemo(
+    () => findOverlappingZonePairs(previewZones),
+    [previewZones]
+  );
 
   if (!hasPace && !hasHr) return null;
 
-  const parsedPaceMin = paceMinText ? parsePaceString(paceMinText) : undefined;
-  const parsedPaceMax = paceMaxText ? parsePaceString(paceMaxText) : undefined;
-  const paceError = hasPace && (paceMinText !== "" || paceMaxText !== "") &&
-    (parsedPaceMin === undefined || parsedPaceMax === undefined);
+  function commit(zone: ZoneNumber, axis: "pace" | "hr", values: [number, number]) {
+    setDragging(null);
+    const current = zones.find((z) => z.zone === zone);
+    if (!current) return;
 
-  const parsedHrMin = hrMinText ? Number(hrMinText) : undefined;
-  const parsedHrMax = hrMaxText ? Number(hrMaxText) : undefined;
-  const hrError = hasHr && (hrMinText !== "" || hrMaxText !== "") &&
-    (parsedHrMin === undefined || !Number.isFinite(parsedHrMin) ||
-      parsedHrMax === undefined || !Number.isFinite(parsedHrMax));
+    const next: ZoneOverride = {
+      paceMinPerKm: current.paceMinPerKm,
+      paceMaxPerKm: current.paceMaxPerKm,
+      hrMin: current.hrMin,
+      hrMax: current.hrMax,
+    };
+    if (axis === "pace") {
+      next.paceMinPerKm = values[0] / 60;
+      next.paceMaxPerKm = values[1] / 60;
+    } else {
+      next.hrMin = values[0];
+      next.hrMax = values[1];
+    }
 
-  function handleSave() {
-    if (paceError || hrError) return;
-    setZoneOverride(selectedZone, {
-      paceMinPerKm: hasPace ? parsedPaceMin : undefined,
-      paceMaxPerKm: hasPace ? parsedPaceMax : undefined,
-      hrMin: hasHr ? parsedHrMin : undefined,
-      hrMax: hasHr ? parsedHrMax : undefined,
-    });
-    toast.success(t("me.zones.saved"));
-    onChange();
-  }
+    // Slid back onto the formula: drop the override instead of freezing the
+    // computed value, so a later VMA change keeps flowing through.
+    const formula = formulaZones.find((z) => z.zone === zone);
+    const samePace =
+      formula?.paceMinPerKm === undefined ||
+      next.paceMinPerKm === undefined ||
+      (paceSeconds(next.paceMinPerKm) === paceSeconds(formula.paceMinPerKm) &&
+        paceSeconds(next.paceMaxPerKm!) === paceSeconds(formula.paceMaxPerKm!));
+    const sameHr =
+      formula?.hrMin === undefined ||
+      next.hrMin === undefined ||
+      (next.hrMin === formula.hrMin && next.hrMax === formula.hrMax);
 
-  function handleResetZone() {
-    setZoneOverride(selectedZone, null);
-    toast.success(t("me.zones.saved"));
+    setZoneOverride(zone, samePace && sameHr ? null : next);
     onChange();
   }
 
@@ -110,42 +253,97 @@ export function ZoneAdjustmentPanel({ prefs, onChange }: ZoneAdjustmentPanelProp
     onChange();
   }
 
-  const columns: ResponsiveTableColumn<ZoneRange>[] = [
-    {
-      key: "zone",
-      header: t("me.zones.adjustZoneLabel"),
-      cell: (z) => (
-        <span className={cn("inline-flex items-center gap-2 font-semibold", zoneClass(z.zone as ZoneNumber, "text"))}>
-          <span className={cn("size-2.5 rounded-none", zoneClass(z.zone as ZoneNumber, "bg"))} />
-          Z{z.zone} — {pickLang(ZONE_META[z.zone as ZoneNumber], "label")}
-        </span>
-      ),
-    },
-    {
-      key: "pace",
-      header: "min/km",
-      cell: (z) =>
-        z.paceMinPerKm !== undefined && z.paceMaxPerKm !== undefined
-          ? `${formatPace(z.paceMinPerKm)}–${formatPace(z.paceMaxPerKm)}`
-          : "—",
-      hideOnMobile: !hasPace,
-    },
-    {
-      key: "hr",
-      header: "bpm",
-      cell: (z) => (z.hrMin !== undefined && z.hrMax !== undefined ? `${z.hrMin}–${z.hrMax}` : "—"),
-      hideOnMobile: !hasHr,
-    },
-    {
-      key: "manual",
-      header: "",
-      cell: (z) =>
-        z.isManual ? <Badge variant="secondary">{t("me.dashboard.manualBadge")}</Badge> : null,
-    },
+  const paceReadout = (v: [number, number]) =>
+    `${formatPace(v[0] / 60)}–${formatPace(v[1] / 60)}`;
+  const hrReadout = (v: [number, number]) => `${v[0]}–${v[1]} bpm`;
+
+  const basisOptions: Array<{ value: ZoneBasis; label: string }> = [
+    ...(hasPace ? [{ value: "pace" as const, label: t("me.zones.basisPace") }] : []),
+    ...(hasHr ? [{ value: "hr" as const, label: t("me.zones.basisHr") }] : []),
+    ...(hasPace && hasHr
+      ? [{ value: "both" as const, label: t("me.zones.basisBoth") }]
+      : []),
   ];
 
+  const showPace = hasPace && (basis === "pace" || basis === "both");
+  const showHr = hasHr && (basis === "hr" || basis === "both");
+  const manualZones = zones.filter((z) => z.isManual);
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+      {basisOptions.length > 1 && (
+        <div className="flex flex-wrap gap-2 font-mono text-[11px] uppercase tracking-wider">
+          {basisOptions.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => setBasis(option.value)}
+              aria-pressed={basis === option.value}
+              className={cn(
+                "px-3.5 py-2.5 border transition-colors duration-150",
+                basis === option.value
+                  ? "bg-foreground text-background border-foreground"
+                  : "border-border text-muted-foreground hover:text-foreground"
+              )}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="space-y-4">
+        {ZONE_NUMBERS.map((zone) => {
+          const range = zones.find((z) => z.zone === zone);
+          if (!range) return null;
+          return (
+            <div key={zone} className="space-y-3">
+              {showPace &&
+                paceDomain &&
+                range.paceMinPerKm !== undefined &&
+                range.paceMaxPerKm !== undefined && (
+                  <ZoneSliderRow
+                    zone={zone}
+                    axis="pace"
+                    domain={paceDomain}
+                    isManual={!!range.isManual}
+                    values={[
+                      paceSeconds(range.paceMinPerKm),
+                      paceSeconds(range.paceMaxPerKm),
+                    ]}
+                    readout={paceReadout}
+                    thumbLabels={[
+                      `Z${zone} ${t("me.zones.adjustMinLabel")}`,
+                      `Z${zone} ${t("me.zones.adjustMaxLabel")}`,
+                    ]}
+                    onDrag={(values) => setDragging({ zone, axis: "pace", values })}
+                    onCommit={(values) => commit(zone, "pace", values)}
+                  />
+                )}
+              {showHr &&
+                hrDomain &&
+                range.hrMin !== undefined &&
+                range.hrMax !== undefined && (
+                  <ZoneSliderRow
+                    zone={zone}
+                    axis="hr"
+                    domain={hrDomain}
+                    isManual={!!range.isManual}
+                    values={[range.hrMin, range.hrMax]}
+                    readout={hrReadout}
+                    thumbLabels={[
+                      `Z${zone} ${t("me.zones.boundLow")}`,
+                      `Z${zone} ${t("me.zones.boundHigh")}`,
+                    ]}
+                    onDrag={(values) => setDragging({ zone, axis: "hr", values })}
+                    onCommit={(values) => commit(zone, "hr", values)}
+                  />
+                )}
+            </div>
+          );
+        })}
+      </div>
+
       {overlaps.length > 0 && (
         <div className="border-2 border-destructive p-4 space-y-2">
           {overlaps.map(([lower, upper]) => (
@@ -153,7 +351,9 @@ export function ZoneAdjustmentPanel({ prefs, onChange }: ZoneAdjustmentPanelProp
               {t("me.zones.overlapWarning", { lower, upper })}
             </p>
           ))}
-          <p className="text-xs text-muted-foreground">{t("me.zones.overlapOnlyInsists")}</p>
+          <p className="text-xs text-muted-foreground">
+            {t("me.zones.overlapOnlyInsists")}
+          </p>
           <div className="flex flex-wrap gap-2 pt-1">
             <Button size="sm" onClick={handleResetAll}>
               {t("me.zones.overlapFix")}
@@ -162,141 +362,58 @@ export function ZoneAdjustmentPanel({ prefs, onChange }: ZoneAdjustmentPanelProp
         </div>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-[200px_1fr]">
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">{t("me.zones.adjustZoneLabel")}</label>
-          <Select value={String(selectedZone)} onValueChange={(v) => setSelectedZone(Number(v) as ZoneNumber)}>
-            <SelectTrigger className="w-full">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {ZONE_NUMBERS.map((zone) => (
-                <SelectItem key={zone} value={String(zone)}>
-                  Z{zone} — {pickLang(ZONE_META[zone], "label")}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+      {manualZones.map((zone) => {
+        const formula = formulaZones.find((z) => z.zone === zone.zone);
+        const sessionCount = zoneSessionCounts?.[zone.zone as ZoneNumber];
+        return (
+          <div
+            key={zone.zone}
+            className={cn("border-2 p-4 space-y-1", zoneClass(zone.zone as ZoneNumber, "border"))}
+          >
+            <p
+              className={cn(
+                "font-mono text-[10px] tracking-wide uppercase",
+                zoneClass(zone.zone as ZoneNumber, "text")
+              )}
+            >
+              {t("me.zones.manualAdjustTitle")}
+            </p>
+            <p className="text-sm text-foreground">
+              {t("me.zones.manualAdjustBody", {
+                zone: zone.zone,
+                current:
+                  hasPace && zone.paceMinPerKm !== undefined
+                    ? `${formatPace(zone.paceMinPerKm)}–${formatPace(zone.paceMaxPerKm!)}`
+                    : `${zone.hrMin}–${zone.hrMax}`,
+                formula: (() => {
+                  if (!formula) return "—";
+                  return hasPace && formula.paceMinPerKm !== undefined
+                    ? `${formatPace(formula.paceMinPerKm)}–${formatPace(formula.paceMaxPerKm!)}`
+                    : `${formula.hrMin}–${formula.hrMax}`;
+                })(),
+              })}
+              {sessionCount !== undefined && sessionCount > 0 && (
+                <>
+                  {" "}
+                  {t("me.zones.manualAdjustSessions", { count: sessionCount })}
+                </>
+              )}
+            </p>
+          </div>
+        );
+      })}
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          {hasPace && (
-            <>
-              <div>
-                <label className="text-sm font-medium mb-1.5 block">
-                  {t("me.zones.adjustMinLabel")} (min/km)
-                </label>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  placeholder="4:06"
-                  value={paceMinText}
-                  onChange={(e) => setPaceMinText(e.target.value)}
-                  className={cn(
-                    "flex h-9 w-full rounded-none border-2 bg-transparent px-3 py-1 text-sm font-mono",
-                    "transition-[border-color] duration-150 ease-out outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring",
-                    paceError ? "border-destructive" : "border-input"
-                  )}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium mb-1.5 block">
-                  {t("me.zones.adjustMaxLabel")} (min/km)
-                </label>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  placeholder="4:18"
-                  value={paceMaxText}
-                  onChange={(e) => setPaceMaxText(e.target.value)}
-                  className={cn(
-                    "flex h-9 w-full rounded-none border-2 bg-transparent px-3 py-1 text-sm font-mono",
-                    "transition-[border-color] duration-150 ease-out outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring",
-                    paceError ? "border-destructive" : "border-input"
-                  )}
-                />
-              </div>
-            </>
-          )}
-          {hasHr && (
-            <>
-              <div>
-                <label className="text-sm font-medium mb-1.5 block">
-                  {t("me.zones.adjustMinLabel")} (bpm)
-                </label>
-                <input
-                  type="number"
-                  value={hrMinText}
-                  onChange={(e) => setHrMinText(e.target.value)}
-                  className={cn(
-                    "flex h-9 w-full rounded-none border-2 bg-transparent px-3 py-1 text-sm font-mono",
-                    "transition-[border-color] duration-150 ease-out outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring",
-                    hrError ? "border-destructive" : "border-input"
-                  )}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium mb-1.5 block">
-                  {t("me.zones.adjustMaxLabel")} (bpm)
-                </label>
-                <input
-                  type="number"
-                  value={hrMaxText}
-                  onChange={(e) => setHrMaxText(e.target.value)}
-                  className={cn(
-                    "flex h-9 w-full rounded-none border-2 bg-transparent px-3 py-1 text-sm font-mono",
-                    "transition-[border-color] duration-150 ease-out outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring",
-                    hrError ? "border-destructive" : "border-input"
-                  )}
-                />
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-
-      {selected?.isManual && (
-        <div className="border-2 border-zone-3 p-4 space-y-1">
-          <p className="font-mono text-[10px] tracking-wide uppercase text-zone-3">
-            {t("me.zones.manualAdjustTitle")}
-          </p>
-          <p className="text-sm text-foreground">
-            {t("me.zones.manualAdjustBody", {
-              zone: selectedZone,
-              current: hasPace && selected.paceMinPerKm !== undefined
-                ? `${formatPace(selected.paceMinPerKm)}–${formatPace(selected.paceMaxPerKm!)}`
-                : `${selected.hrMin}–${selected.hrMax}`,
-              formula: (() => {
-                const formula = formulaZones.find((z) => z.zone === selectedZone);
-                if (!formula) return "—";
-                return hasPace && formula.paceMinPerKm !== undefined
-                  ? `${formatPace(formula.paceMinPerKm)}–${formatPace(formula.paceMaxPerKm!)}`
-                  : `${formula.hrMin}–${formula.hrMax}`;
-              })(),
-            })}
-          </p>
-        </div>
-      )}
-
-      <div className="flex flex-wrap items-center gap-3">
-        <Button onClick={handleSave} disabled={paceError || hrError}>
-          <Save className="size-4 mr-2" />
-          {t("me.zones.save")}
-        </Button>
-        {selected?.isManual && (
-          <Button variant="outline" onClick={handleResetZone}>
+      <div className="flex flex-wrap items-center gap-4">
+        {manualZones.length > 0 && (
+          <Button variant="outline" onClick={handleResetAll}>
             <RotateCcw className="size-4 mr-2" />
-            {t("me.zones.resetZone")}
+            {t("me.zones.resetAll")}
           </Button>
         )}
+        <p className="font-mono text-[11px] text-muted-foreground">
+          {t("me.zones.autoSaved")}
+        </p>
       </div>
-
-      <ResponsiveTable
-        data={zones}
-        columns={columns}
-        rowKey={(z) => z.zone}
-        mobileCardTitle={(z) => `Z${z.zone}`}
-      />
     </div>
   );
 }

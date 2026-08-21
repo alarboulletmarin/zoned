@@ -6,8 +6,7 @@
     "description": "Your runner profile: physiological data, reference times, benchmark history and personal records."
   },
   "tabs": {
-    "base": "Profile",
-    "zones": "Zones",
+    "base": "Values & zones",
     "references": "References",
     "benchmarks": "Tests",
     "records": "Records",
@@ -260,7 +259,24 @@
       "overlapOnlyInsists": "The only case where Zoned insists: two sessions from different zones would become identical.",
       "suspiciousVma": "{{value}} km/h of vVO2max is a very high level for most runners — double-check the value is really in km/h and not another unit.",
       "keepValue": "Keep {{value}}",
-      "correctValue": "Correct"
+      "correctValue": "Correct",
+      "modelLink": "see the methodology",
+      "basisPace": "From pace",
+      "basisHr": "From heart rate",
+      "basisBoth": "Both",
+      "boundLow": "lower bound",
+      "boundHigh": "upper bound",
+      "weeklyKmHint": "Starting volume for a plan",
+      "longRunKmHint": "Starting long run for a plan",
+      "manualAdjustSessions_one": "{{count}} catalogue workout uses this zone.",
+      "manualAdjustSessions_other": "{{count}} catalogue workouts use this zone.",
+      "impactCalculatorsScope": "inputs",
+      "impactExports": "Future FIT exports",
+      "impactExportsScope": "targets",
+      "historyTitle": "Your value history",
+      "historyVma": "vVO2max {{value}}",
+      "historyEmpty": "No test recorded yet. Add one in the Tests tab: it is the only series Zoned keeps.",
+      "historyNote": "The only series Zoned keeps — and it is compared to no one."
     },
     "storage": {
       "seoTitle": "Storage Inventory — Zoned",
@@ -301,28 +317,94 @@
       "onlyBackupBody": "Zoned has no server: the JSON file you export is your backup. Two devices sync by exchanging this file, by hand.",
       "exportNow": "Export now · {{size}}",
       "keys": {
-        "zoned-runner-profile": { "content": "vVO2max, max HR, volume, level, tests and personal records", "consequence": "Paces go back to being percentages" },
-        "zoned-userZones": { "content": "Zone preferences (HR/vVO2max) and your manual adjustments", "consequence": "Back to computed zones" },
-        "zoned-favorites": { "content": "IDs of the sessions marked as favorites", "consequence": "Sessions stay in the catalogue" },
-        "zoned-plans": { "content": "Training plans and composed weeks (\"My Week\" included)", "consequence": "The plan regenerates, your edits don't" },
-        "zoned-custom-workouts": { "content": "Workouts you wrote yourself", "consequence": "Unrecoverable — export first" },
-        "zoned-race-simulations": { "content": "Saved race simulations", "consequence": "Lost — exportable to PDF" },
-        "zoned-whatif-scenarios": { "content": "\"What if\" comparison scenarios", "consequence": "Lost" },
-        "zoned-cycling-profile": { "content": "Cycling profile (FTP, power zones)", "consequence": "The plan falls back to default estimates" },
-        "zoned-swimming-profile": { "content": "Swimming profile (CSS, pace zones)", "consequence": "The plan falls back to default estimates" },
-        "zoned-commute-pattern": { "content": "Bike or run commute the generator accounts for", "consequence": "The commute is no longer built into the plan" },
-        "zoned-routes": { "content": "Generated or saved routes", "consequence": "Lost — exportable to GPX" },
-        "zoned-settings": { "content": "Theme, units, color palette, route generator opt-in", "consequence": "Back to default settings" },
-        "zoned-last-seen-version": { "content": "Last version seen (what's new banner)", "consequence": "The \"what's new\" banner reappears" },
-        "zoned-planViewMode": { "content": "Preferred plan view (calendar, week, list)", "consequence": "Back to the default view" },
-        "zoned-viewMode": { "content": "Preferred library view (grid, list)", "consequence": "Back to the default view" },
-        "zoned-dismissed-tips": { "content": "Contextual tips already dismissed", "consequence": "Tips reappear" },
-        "zoned-zone-cta-dismissed": { "content": "Zone personalization banner dismissed", "consequence": "The banner reappears" },
-        "zoned-racechecklist": { "content": "Checked race-prep checklist", "consequence": "The checklist resets" },
-        "zoned-theme": { "content": "Light, dark or system theme", "consequence": "Back to the system theme" },
-        "zoned-sidebar-collapsed": { "content": "Whether the sidebar is collapsed", "consequence": "Back to the default state" },
-        "zoned-language": { "content": "Chosen language (French or English)", "consequence": "Back to the detected language" },
-        "zoned-storage-warning-seen": { "content": "Full-storage warning already seen", "consequence": "The warning may reappear" }
+        "zoned-runner-profile": {
+          "content": "vVO2max, max HR, volume, level, tests and personal records",
+          "consequence": "Paces go back to being percentages"
+        },
+        "zoned-userZones": {
+          "content": "Zone preferences (HR/vVO2max) and your manual adjustments",
+          "consequence": "Back to computed zones"
+        },
+        "zoned-favorites": {
+          "content": "IDs of the sessions marked as favorites",
+          "consequence": "Sessions stay in the catalogue"
+        },
+        "zoned-plans": {
+          "content": "Training plans and composed weeks (\"My Week\" included)",
+          "consequence": "The plan regenerates, your edits don't"
+        },
+        "zoned-custom-workouts": {
+          "content": "Workouts you wrote yourself",
+          "consequence": "Unrecoverable — export first"
+        },
+        "zoned-race-simulations": {
+          "content": "Saved race simulations",
+          "consequence": "Lost — exportable to PDF"
+        },
+        "zoned-whatif-scenarios": {
+          "content": "\"What if\" comparison scenarios",
+          "consequence": "Lost"
+        },
+        "zoned-cycling-profile": {
+          "content": "Cycling profile (FTP, power zones)",
+          "consequence": "The plan falls back to default estimates"
+        },
+        "zoned-swimming-profile": {
+          "content": "Swimming profile (CSS, pace zones)",
+          "consequence": "The plan falls back to default estimates"
+        },
+        "zoned-commute-pattern": {
+          "content": "Bike or run commute the generator accounts for",
+          "consequence": "The commute is no longer built into the plan"
+        },
+        "zoned-routes": {
+          "content": "Generated or saved routes",
+          "consequence": "Lost — exportable to GPX"
+        },
+        "zoned-settings": {
+          "content": "Theme, units, color palette, route generator opt-in",
+          "consequence": "Back to default settings"
+        },
+        "zoned-last-seen-version": {
+          "content": "Last version seen (what's new banner)",
+          "consequence": "The \"what's new\" banner reappears"
+        },
+        "zoned-planViewMode": {
+          "content": "Preferred plan view (calendar, week, list)",
+          "consequence": "Back to the default view"
+        },
+        "zoned-viewMode": {
+          "content": "Preferred library view (grid, list)",
+          "consequence": "Back to the default view"
+        },
+        "zoned-dismissed-tips": {
+          "content": "Contextual tips already dismissed",
+          "consequence": "Tips reappear"
+        },
+        "zoned-zone-cta-dismissed": {
+          "content": "Zone personalization banner dismissed",
+          "consequence": "The banner reappears"
+        },
+        "zoned-racechecklist": {
+          "content": "Checked race-prep checklist",
+          "consequence": "The checklist resets"
+        },
+        "zoned-theme": {
+          "content": "Light, dark or system theme",
+          "consequence": "Back to the system theme"
+        },
+        "zoned-sidebar-collapsed": {
+          "content": "Whether the sidebar is collapsed",
+          "consequence": "Back to the default state"
+        },
+        "zoned-language": {
+          "content": "Chosen language (French or English)",
+          "consequence": "Back to the detected language"
+        },
+        "zoned-storage-warning-seen": {
+          "content": "Full-storage warning already seen",
+          "consequence": "The warning may reappear"
+        }
       }
     },
     "clearAll": {

@@ -6,8 +6,7 @@
     "description": "Votre fiche coureur : données physio, temps de référence, historique de tests et records personnels."
   },
   "tabs": {
-    "base": "Profil",
-    "zones": "Zones",
+    "base": "Valeurs & zones",
     "references": "Références",
     "benchmarks": "Tests",
     "records": "Records",
@@ -260,7 +259,24 @@
       "overlapOnlyInsists": "Seul cas où Zoned insiste : deux séances de zones différentes deviendraient identiques.",
       "suspiciousVma": "{{value}} km/h de VMA est un niveau très élevé pour la plupart des coureurs — vérifiez que la valeur est bien en km/h et pas dans une autre unité.",
       "keepValue": "Garder {{value}}",
-      "correctValue": "Corriger"
+      "correctValue": "Corriger",
+      "modelLink": "voir la méthodologie",
+      "basisPace": "Depuis l'allure",
+      "basisHr": "Depuis la FC",
+      "basisBoth": "Les deux",
+      "boundLow": "borne basse",
+      "boundHigh": "borne haute",
+      "weeklyKmHint": "Point de départ du volume dans un plan",
+      "longRunKmHint": "Point de départ de la sortie longue",
+      "manualAdjustSessions_one": "{{count}} séance du catalogue utilise cette zone.",
+      "manualAdjustSessions_other": "{{count}} séances du catalogue utilisent cette zone.",
+      "impactCalculatorsScope": "entrées",
+      "impactExports": "Exports FIT à venir",
+      "impactExportsScope": "cibles",
+      "historyTitle": "Historique de vos valeurs",
+      "historyVma": "VMA {{value}}",
+      "historyEmpty": "Aucun test enregistré. Ajoutez-en un dans l'onglet Tests : c'est la seule série que Zoned garde.",
+      "historyNote": "La seule série que Zoned garde — et elle n'est comparée à personne."
     },
     "storage": {
       "seoTitle": "Inventaire du stockage — Zoned",
@@ -301,28 +317,94 @@
       "onlyBackupBody": "Zoned n'a pas de serveur : le fichier JSON que vous exportez est votre sauvegarde. Deux appareils se synchronisent en s'échangeant ce fichier, à la main.",
       "exportNow": "Exporter maintenant · {{size}}",
       "keys": {
-        "zoned-runner-profile": { "content": "VMA, FC max, volume, niveau, tests et records personnels", "consequence": "Les allures redeviennent des pourcentages" },
-        "zoned-userZones": { "content": "Préférences de zones (FC/VMA) et vos ajustements manuels", "consequence": "Retour aux zones calculées" },
-        "zoned-favorites": { "content": "Identifiants des séances mises en favori", "consequence": "Les séances restent dans le catalogue" },
-        "zoned-plans": { "content": "Plans d'entraînement et semaines composées (« Ma semaine » incluses)", "consequence": "Le plan se régénère, vos retouches non" },
-        "zoned-custom-workouts": { "content": "Séances que vous avez créées vous-même", "consequence": "Irrécupérables — à exporter" },
-        "zoned-race-simulations": { "content": "Simulations de course sauvegardées", "consequence": "Perdues — exportables en PDF" },
-        "zoned-whatif-scenarios": { "content": "Scénarios de comparaison « Et si »", "consequence": "Perdus" },
-        "zoned-cycling-profile": { "content": "Profil vélo (FTP, zones de puissance)", "consequence": "Le plan revient aux estimations par défaut" },
-        "zoned-swimming-profile": { "content": "Profil natation (CSS, zones d'allure)", "consequence": "Le plan revient aux estimations par défaut" },
-        "zoned-commute-pattern": { "content": "Trajet vélotaf ou footing pris en compte par le générateur", "consequence": "Le vélotaf n'est plus intégré au plan" },
-        "zoned-routes": { "content": "Itinéraires générés ou sauvegardés", "consequence": "Perdus — exportables en GPX" },
-        "zoned-settings": { "content": "Thème, unités, palette de couleurs, opt-in itinéraires", "consequence": "Retour aux réglages par défaut" },
-        "zoned-last-seen-version": { "content": "Dernière version vue (bandeau nouveautés)", "consequence": "Le bandeau « nouveautés » réapparaît" },
-        "zoned-planViewMode": { "content": "Vue préférée d'un plan (calendrier, semaine, liste)", "consequence": "Retour à la vue par défaut" },
-        "zoned-viewMode": { "content": "Vue préférée de la bibliothèque (grille, liste)", "consequence": "Retour à la vue par défaut" },
-        "zoned-dismissed-tips": { "content": "Astuces contextuelles déjà masquées", "consequence": "Les astuces réapparaissent" },
-        "zoned-zone-cta-dismissed": { "content": "Bannière de personnalisation des zones masquée", "consequence": "La bannière réapparaît" },
-        "zoned-racechecklist": { "content": "Checklist de préparation de course cochée", "consequence": "La checklist revient à zéro" },
-        "zoned-theme": { "content": "Thème clair, sombre ou système", "consequence": "Retour au thème système" },
-        "zoned-sidebar-collapsed": { "content": "Barre latérale repliée ou non", "consequence": "Retour à l'état par défaut" },
-        "zoned-language": { "content": "Langue choisie (français ou anglais)", "consequence": "Retour à la langue détectée" },
-        "zoned-storage-warning-seen": { "content": "Avertissement de stockage plein déjà vu", "consequence": "L'avertissement peut réapparaître" }
+        "zoned-runner-profile": {
+          "content": "VMA, FC max, volume, niveau, tests et records personnels",
+          "consequence": "Les allures redeviennent des pourcentages"
+        },
+        "zoned-userZones": {
+          "content": "Préférences de zones (FC/VMA) et vos ajustements manuels",
+          "consequence": "Retour aux zones calculées"
+        },
+        "zoned-favorites": {
+          "content": "Identifiants des séances mises en favori",
+          "consequence": "Les séances restent dans le catalogue"
+        },
+        "zoned-plans": {
+          "content": "Plans d'entraînement et semaines composées (« Ma semaine » incluses)",
+          "consequence": "Le plan se régénère, vos retouches non"
+        },
+        "zoned-custom-workouts": {
+          "content": "Séances que vous avez créées vous-même",
+          "consequence": "Irrécupérables — à exporter"
+        },
+        "zoned-race-simulations": {
+          "content": "Simulations de course sauvegardées",
+          "consequence": "Perdues — exportables en PDF"
+        },
+        "zoned-whatif-scenarios": {
+          "content": "Scénarios de comparaison « Et si »",
+          "consequence": "Perdus"
+        },
+        "zoned-cycling-profile": {
+          "content": "Profil vélo (FTP, zones de puissance)",
+          "consequence": "Le plan revient aux estimations par défaut"
+        },
+        "zoned-swimming-profile": {
+          "content": "Profil natation (CSS, zones d'allure)",
+          "consequence": "Le plan revient aux estimations par défaut"
+        },
+        "zoned-commute-pattern": {
+          "content": "Trajet vélotaf ou footing pris en compte par le générateur",
+          "consequence": "Le vélotaf n'est plus intégré au plan"
+        },
+        "zoned-routes": {
+          "content": "Itinéraires générés ou sauvegardés",
+          "consequence": "Perdus — exportables en GPX"
+        },
+        "zoned-settings": {
+          "content": "Thème, unités, palette de couleurs, opt-in itinéraires",
+          "consequence": "Retour aux réglages par défaut"
+        },
+        "zoned-last-seen-version": {
+          "content": "Dernière version vue (bandeau nouveautés)",
+          "consequence": "Le bandeau « nouveautés » réapparaît"
+        },
+        "zoned-planViewMode": {
+          "content": "Vue préférée d'un plan (calendrier, semaine, liste)",
+          "consequence": "Retour à la vue par défaut"
+        },
+        "zoned-viewMode": {
+          "content": "Vue préférée de la bibliothèque (grille, liste)",
+          "consequence": "Retour à la vue par défaut"
+        },
+        "zoned-dismissed-tips": {
+          "content": "Astuces contextuelles déjà masquées",
+          "consequence": "Les astuces réapparaissent"
+        },
+        "zoned-zone-cta-dismissed": {
+          "content": "Bannière de personnalisation des zones masquée",
+          "consequence": "La bannière réapparaît"
+        },
+        "zoned-racechecklist": {
+          "content": "Checklist de préparation de course cochée",
+          "consequence": "La checklist revient à zéro"
+        },
+        "zoned-theme": {
+          "content": "Thème clair, sombre ou système",
+          "consequence": "Retour au thème système"
+        },
+        "zoned-sidebar-collapsed": {
+          "content": "Barre latérale repliée ou non",
+          "consequence": "Retour à l'état par défaut"
+        },
+        "zoned-language": {
+          "content": "Langue choisie (français ou anglais)",
+          "consequence": "Retour à la langue détectée"
+        },
+        "zoned-storage-warning-seen": {
+          "content": "Avertissement de stockage plein déjà vu",
+          "consequence": "L'avertissement peut réapparaître"
+        }
       }
     },
     "clearAll": {

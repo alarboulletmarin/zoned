@@ -1,15 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import {
   UserRound,
-  Gauge,
   Save,
   Trash2,
   Plus,
   Target,
-  Activity,
   TrendingUp,
   Flag,
 } from "@/components/icons";
@@ -54,11 +52,12 @@ import {
   deletePersonalRecord,
 } from "@/lib/runnerProfile";
 import { saveUserZonePrefs, loadUserZonePrefs } from "@/lib/zones";
-import { usePickLang } from "@/lib/i18n-utils";
+import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
+import { zoneClass } from "@/lib/zoneColors";
+import { loadAllWorkouts } from "@/data/workouts";
 import { CommuteSection } from "@/components/domain/CommuteSection";
 import { ZoneAdjustmentPanel } from "@/components/domain/ZoneAdjustmentPanel";
 import { PaceCalculator } from "@/components/domain/PaceCalculator";
-import { useAppStats } from "@/hooks/useAppStats";
 import { usePlans } from "@/hooks/usePlans";
 import type {
   RunnerProfile,
@@ -66,8 +65,8 @@ import type {
   BenchmarkEntry,
 } from "@/types/runner-profile";
 import type { RaceDistance } from "@/types/plan";
-import type { Difficulty } from "@/types";
-import { DIFFICULTY_META } from "@/types";
+import type { Difficulty, ZoneNumber } from "@/types";
+import { DIFFICULTY_META, parseZoneSpan } from "@/types";
 import { RACE_DISTANCE_META } from "@/types/plan";
 
 // ---------------------------------------------------------------------------
@@ -100,12 +99,6 @@ const INPUT_CLASS = cn(
   "transition-[border-color] duration-150 ease-out outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring",
 );
 
-/** Input with a unit suffix — extra right padding + hidden spinners */
-const UNIT_INPUT_CLASS = cn(
-  INPUT_CLASS,
-  "pr-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
-);
-
 const RACE_DISTANCES = Object.keys(RACE_DISTANCE_META) as RaceDistance[];
 const DIFFICULTY_KEYS: Difficulty[] = [
   "beginner",
@@ -113,6 +106,8 @@ const DIFFICULTY_KEYS: Difficulty[] = [
   "advanced",
   "elite",
 ];
+/** Tabs beyond the main values-and-zones flow, addressable via `?tab=`. */
+const SECONDARY_TABS = ["references", "benchmarks", "records", "commute"];
 const BENCHMARK_TYPES: BenchmarkType[] = [
   "half_cooper",
   "cooper_12min",
@@ -204,10 +199,252 @@ function fieldsToSeconds(h: string, m: string, s: string): number {
 }
 
 // ---------------------------------------------------------------------------
-// Tab 1: BaseDataSection
+// Tab 1: ValuesAndZonesSection — the editorial flow: values → zones → impact
 // ---------------------------------------------------------------------------
 
-function BaseDataSection({
+/** How many catalogue running workouts touch each zone. Real counts, read from
+ *  the workout blocks themselves rather than estimated. */
+function useZoneSessionCounts(): Partial<Record<ZoneNumber, number>> {
+  const [counts, setCounts] = useState<Partial<Record<ZoneNumber, number>>>({});
+
+  useEffect(() => {
+    let cancelled = false;
+    loadAllWorkouts().then((workouts) => {
+      if (cancelled) return;
+      const tally: Partial<Record<ZoneNumber, number>> = {};
+      for (const workout of workouts) {
+        const touched = new Set<ZoneNumber>();
+        for (const block of [
+          ...workout.warmupTemplate,
+          ...workout.mainSetTemplate,
+          ...workout.cooldownTemplate,
+        ]) {
+          const span = parseZoneSpan(block.zone);
+          if (!span) continue;
+          for (let z = span.min; z <= span.max; z++) touched.add(z as ZoneNumber);
+        }
+        for (const zone of touched) tally[zone] = (tally[zone] ?? 0) + 1;
+      }
+      setCounts(tally);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return counts;
+}
+
+/** One big underlined mono number — the mockup's editing gesture. */
+function BigValueField({
+  label,
+  unit,
+  value,
+  onChange,
+  min,
+  max,
+  step,
+  accent,
+  error,
+  errorText,
+  hint,
+}: {
+  label: string;
+  unit: string;
+  value: string;
+  onChange: (v: string) => void;
+  min: number;
+  max: number;
+  step?: number;
+  /** The primary value of the page (VMA) gets the heavier rule + acid tick. */
+  accent?: boolean;
+  error?: boolean;
+  errorText?: string;
+  hint?: React.ReactNode;
+}) {
+  const id = useId();
+  return (
+    <div>
+      <label
+        htmlFor={id}
+        className="block font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground mb-2"
+      >
+        {label}
+      </label>
+      <div
+        className={cn(
+          "flex items-baseline gap-2 px-0.5 py-2.5 border-b-2",
+          accent ? "border-b-[3px] border-foreground" : "border-border",
+          error && "border-destructive",
+          "has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-ring",
+        )}
+      >
+        <input
+          id={id}
+          type="number"
+          inputMode="decimal"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className={cn(
+            "w-24 shrink bg-transparent border-0 p-0 font-mono text-[28px] leading-none",
+            "focus:outline-none [appearance:textfield]",
+            "[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
+          )}
+        />
+        {accent && <span className="h-6 w-0.5 bg-accent-acid shrink-0" aria-hidden />}
+        <span className="ml-auto font-mono text-xs text-muted-foreground">{unit}</span>
+      </div>
+      {error && errorText ? (
+        <p className="mt-2 font-mono text-[11px] text-destructive">{errorText}</p>
+      ) : hint ? (
+        <p className="mt-2 font-mono text-[11px] text-muted-foreground">{hint}</p>
+      ) : null}
+    </div>
+  );
+}
+
+/** Right-hand rail: what a zone change touches, and the VMA series. */
+function ImpactRail({
+  profile,
+  zoneSessionCounts,
+}: {
+  profile: RunnerProfile | null;
+  zoneSessionCounts: Partial<Record<ZoneNumber, number>>;
+}) {
+  const { t } = useTranslation("profile");
+  const isEnglish = useIsEnglish();
+  const { plans } = usePlans();
+
+  const openPlan = plans.find((p) => !p.config.isSingleWeek);
+  const planSessionCount = openPlan
+    ? openPlan.weeks.reduce((sum, w) => sum + w.sessions.length, 0)
+    : 0;
+
+  // Every zoned workout in the catalogue reads its paces from the VMA, so the
+  // headline count is the number of workouts that carry at least one zone.
+  const zonedWorkouts = Math.max(
+    0,
+    ...Object.values(zoneSessionCounts).map((n) => n ?? 0),
+  );
+
+  const history = useMemo(
+    () =>
+      (profile?.benchmarks ?? [])
+        .filter((b) => b.derivedVma !== undefined)
+        .sort((a, b) => b.date.localeCompare(a.date))
+        .slice(0, 4),
+    [profile?.benchmarks],
+  );
+  const historyMax = Math.max(...history.map((b) => b.derivedVma ?? 0), 1);
+
+  const rows: Array<{ label: string; value: string }> = [
+    {
+      label: t("me.zones.impactWorkouts"),
+      value: zonedWorkouts > 0 ? String(zonedWorkouts) : t("me.zones.impactWorkoutsScope"),
+    },
+    {
+      label: t("me.zones.impactPlan"),
+      value: openPlan
+        ? t("me.zones.impactPlanScope", { count: planSessionCount })
+        : t("me.zones.impactPlanNone"),
+    },
+    {
+      label: t("me.zones.impactCalculators"),
+      value: t("me.zones.impactCalculatorsScope"),
+    },
+    {
+      label: t("me.zones.impactExports"),
+      value: t("me.zones.impactExportsScope"),
+    },
+  ];
+
+  return (
+    <aside className="space-y-7 lg:border-l lg:border-border lg:pl-7">
+      <div>
+        <h2 className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+          {t("me.zones.impactTitle")}
+        </h2>
+        <div className="mt-3 flex flex-col">
+          {rows.map((row, i) => (
+            <div
+              key={row.label}
+              className={cn(
+                "flex items-baseline justify-between gap-3 py-2.5 border-t border-border",
+                i === rows.length - 1 && "border-b",
+              )}
+            >
+              <span className="text-sm text-muted-foreground">{row.label}</span>
+              <span className="font-mono text-[11px] text-muted-foreground shrink-0">
+                {row.value}
+              </span>
+            </div>
+          ))}
+        </div>
+        <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+          {t("me.zones.impactNote")}
+        </p>
+      </div>
+
+      <div className="border-t border-border pt-5">
+        <h2 className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+          {t("me.zones.historyTitle")}
+        </h2>
+        {history.length === 0 ? (
+          <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+            {t("me.zones.historyEmpty")}
+          </p>
+        ) : (
+          <>
+            <div className="mt-3 flex flex-col font-mono text-xs">
+              {history.map((entry) => (
+                <div
+                  key={entry.id}
+                  className="flex items-baseline justify-between gap-3 py-2.5 border-t border-border"
+                >
+                  <span className="text-muted-foreground">
+                    {new Date(entry.date).toLocaleDateString(
+                      isEnglish ? "en-GB" : "fr-FR",
+                      { day: "numeric", month: "short", year: "numeric" },
+                    )}
+                  </span>
+                  <span className="text-foreground">
+                    {t("me.zones.historyVma", { value: entry.derivedVma })}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 flex h-14 items-end gap-1.5" aria-hidden>
+              {[...history].reverse().map((entry, i, all) => (
+                <div
+                  key={entry.id}
+                  className={cn(
+                    "flex-1",
+                    i === all.length - 1 ? zoneClass(2, "bg") : zoneClass(1, "bg"),
+                  )}
+                  style={{
+                    height: `${Math.round(((entry.derivedVma ?? 0) / historyMax) * 100)}%`,
+                  }}
+                />
+              ))}
+            </div>
+            <p className="mt-2.5 text-xs leading-relaxed text-muted-foreground">
+              {t("me.zones.historyNote")}
+            </p>
+          </>
+        )}
+      </div>
+
+      <div className="border border-border p-4 font-mono text-[11px] leading-relaxed text-muted-foreground">
+        {t("me.zones.privacyNote")}
+      </div>
+    </aside>
+  );
+}
+
+function ValuesAndZonesSection({
   profile,
   onSave,
 }: {
@@ -216,7 +453,7 @@ function BaseDataSection({
 }) {
   const { t } = useTranslation("profile");
   const pickLang = usePickLang();
-  const navigate = useNavigate();
+  const zoneSessionCounts = useZoneSessionCounts();
 
   const [fcMax, setFcMax] = useState("");
   const [vma, setVma] = useState("");
@@ -224,6 +461,7 @@ function BaseDataSection({
   const [longRunKm, setLongRunKm] = useState("");
   const [runnerLevel, setRunnerLevel] = useState("");
   const [vmaWarningDismissed, setVmaWarningDismissed] = useState(false);
+  const [zonesRefreshKey, setZonesRefreshKey] = useState(0);
 
   // Sync from profile when it changes
   useEffect(() => {
@@ -246,8 +484,7 @@ function BaseDataSection({
 
   const fcMaxError =
     parsedFcMax !== undefined && (parsedFcMax < 100 || parsedFcMax > 250);
-  const vmaError =
-    parsedVma !== undefined && (parsedVma < 8 || parsedVma > 30);
+  const vmaError = parsedVma !== undefined && (parsedVma < 8 || parsedVma > 30);
   const weeklyError =
     parsedWeekly !== undefined && (parsedWeekly < 0 || parsedWeekly > 500);
   const longError =
@@ -259,7 +496,10 @@ function BaseDataSection({
   // often a sign the value was entered in the wrong unit. Still inside the
   // hard 8-30 bounds, so it never blocks saving.
   const vmaSuspicious =
-    parsedVma !== undefined && !vmaError && parsedVma > 20 && !vmaWarningDismissed;
+    parsedVma !== undefined &&
+    !vmaError &&
+    parsedVma > 20 &&
+    !vmaWarningDismissed;
 
   function handleSave() {
     if (hasError) return;
@@ -279,172 +519,97 @@ function BaseDataSection({
       runnerLevel: (runnerLevel || undefined) as Difficulty | undefined,
     };
     saveRunnerProfile(updated);
+    // Recomputes the zone table from the new values; manual overrides survive
+    // because `saveUserZonePrefs` merges onto what is already stored.
+    if (parsedFcMax !== undefined || parsedVma !== undefined) {
+      saveUserZonePrefs({ fcMax: parsedFcMax, vma: parsedVma });
+    }
     onSave(loadRunnerProfile()!);
+    setZonesRefreshKey((n) => n + 1);
     toast.success(t("base.saved"));
   }
 
-  function handleUpdateZones() {
-    if (!parsedFcMax && !parsedVma) return;
-    saveUserZonePrefs({
-      fcMax: parsedFcMax,
-      vma: parsedVma,
-    });
-    toast.success(t("base.zonesUpdated"));
-  }
+  const prefs = loadUserZonePrefs();
+  const hasZoneBasis =
+    prefs !== null && (prefs.vma !== undefined || prefs.fcMax !== undefined);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Activity className="size-5" />
-          {t("base.title")}
-        </CardTitle>
-        <CardDescription>{t("base.description")}</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* FC Max */}
-          <div>
-            <label className="text-sm font-medium mb-1.5 block">
-              {t("base.fcMax")}
-            </label>
-            <div className="relative">
-              <input
-                type="number"
-                min={100}
-                max={250}
-                value={fcMax}
-                onChange={(e) => setFcMax(e.target.value)}
-                placeholder={t("base.fcMaxPlaceholder")}
-                className={cn(
-                  UNIT_INPUT_CLASS,
-                  fcMaxError
-                    ? "border-red-500 focus-visible:ring-red-500/20"
-                    : "border-input focus-visible:ring-ring/50",
-                )}
-              />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
-                {t("base.fcMaxUnit")}
-              </span>
-            </div>
-            {fcMaxError && (
-              <p className="text-xs text-red-500 mt-1">{t("base.fcMaxError")}</p>
-            )}
-          </div>
-
-          {/* VMA */}
-          <div>
-            <label className="text-sm font-medium mb-1.5 block">
-              {t("base.vma")}
-            </label>
-            <div className="relative">
-              <input
-                type="number"
-                min={8}
-                max={30}
-                step={0.1}
-                value={vma}
-                onChange={(e) => {
-                  setVma(e.target.value);
-                  setVmaWarningDismissed(false);
-                }}
-                placeholder={t("base.vmaPlaceholder")}
-                className={cn(
-                  UNIT_INPUT_CLASS,
-                  vmaError
-                    ? "border-red-500 focus-visible:ring-red-500/20"
-                    : "border-input focus-visible:ring-ring/50",
-                )}
-              />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
-                {t("base.vmaUnit")}
-              </span>
-            </div>
-            {vmaError && (
-              <p className="text-xs text-red-500 mt-1">
-                {t("base.vmaError")}
-              </p>
-            )}
-            {vmaSuspicious && (
-              <div className="mt-2 border-2 border-zone-3 p-3 space-y-2">
-                <p className="text-xs text-foreground">
-                  {t("me.zones.suspiciousVma", { value: parsedVma })}
-                </p>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={() => setVmaWarningDismissed(true)}>
-                    {t("me.zones.keepValue", { value: parsedVma })}
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Weekly km */}
-          <div>
-            <label className="text-sm font-medium mb-1.5 block">
-              {t("base.weeklyKm")}
-            </label>
-            <div className="relative">
-              <input
-                type="number"
-                min={0}
-                max={500}
-                value={weeklyKm}
-                onChange={(e) => setWeeklyKm(e.target.value)}
-                placeholder={t("base.weeklyKmPlaceholder")}
-                className={cn(
-                  UNIT_INPUT_CLASS,
-                  weeklyError
-                    ? "border-red-500 focus-visible:ring-red-500/20"
-                    : "border-input focus-visible:ring-ring/50",
-                )}
-              />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
-                {t("base.weeklyKmUnit")}
-              </span>
-            </div>
-            {weeklyError && (
-              <p className="text-xs text-red-500 mt-1">
-                {t("base.weeklyKmError")}
-              </p>
-            )}
-          </div>
-
-          {/* Long run km */}
-          <div>
-            <label className="text-sm font-medium mb-1.5 block">
-              {t("base.longRunKm")}
-            </label>
-            <div className="relative">
-              <input
-                type="number"
-                min={0}
-                max={200}
-                value={longRunKm}
-                onChange={(e) => setLongRunKm(e.target.value)}
-                placeholder={t("base.longRunKmPlaceholder")}
-                className={cn(
-                  UNIT_INPUT_CLASS,
-                  longError
-                    ? "border-red-500 focus-visible:ring-red-500/20"
-                    : "border-input focus-visible:ring-ring/50",
-                )}
-              />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
-                {t("base.longRunKmUnit")}
-              </span>
-            </div>
-            {longError && (
-              <p className="text-xs text-red-500 mt-1">
-                {t("base.longRunKmError")}
-              </p>
-            )}
-          </div>
+    <div className="grid gap-10 lg:grid-cols-[1fr_320px]">
+      <div className="space-y-10">
+        {/* ── Values ─────────────────────────────────────────────── */}
+        <div className="grid gap-7 sm:grid-cols-2">
+          <BigValueField
+            label={t("base.vma")}
+            unit={t("base.vmaUnit")}
+            value={vma}
+            onChange={(v) => {
+              setVma(v);
+              setVmaWarningDismissed(false);
+            }}
+            min={8}
+            max={30}
+            step={0.1}
+            accent
+            error={vmaError}
+            errorText={t("base.vmaError")}
+            hint={
+              <Link to="/calculators/vma" className="underline underline-offset-2">
+                {t("me.zones.vmaFromTime")}
+              </Link>
+            }
+          />
+          <BigValueField
+            label={t("base.fcMax")}
+            unit={t("base.fcMaxUnit")}
+            value={fcMax}
+            onChange={setFcMax}
+            min={100}
+            max={250}
+            error={fcMaxError}
+            errorText={t("base.fcMaxError")}
+            hint={t("me.zones.fcMaxHint")}
+          />
+          <BigValueField
+            label={t("base.weeklyKm")}
+            unit={t("base.weeklyKmUnit")}
+            value={weeklyKm}
+            onChange={setWeeklyKm}
+            min={0}
+            max={500}
+            error={weeklyError}
+            errorText={t("base.weeklyKmError")}
+            hint={t("me.zones.weeklyKmHint")}
+          />
+          <BigValueField
+            label={t("base.longRunKm")}
+            unit={t("base.longRunKmUnit")}
+            value={longRunKm}
+            onChange={setLongRunKm}
+            min={0}
+            max={200}
+            error={longError}
+            errorText={t("base.longRunKmError")}
+            hint={t("me.zones.longRunKmHint")}
+          />
         </div>
 
-        {/* Runner level */}
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">
+        {vmaSuspicious && (
+          <div className={cn("border-2 p-4 space-y-2", zoneClass(3, "border"))}>
+            <p className="text-sm text-foreground">
+              {t("me.zones.suspiciousVma", { value: parsedVma })}
+            </p>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setVmaWarningDismissed(true)}
+            >
+              {t("me.zones.keepValue", { value: parsedVma })}
+            </Button>
+          </div>
+        )}
+
+        <div className="max-w-sm">
+          <label className="block font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground mb-2">
             {t("base.runnerLevel")}
           </label>
           <Select value={runnerLevel} onValueChange={setRunnerLevel}>
@@ -461,111 +626,51 @@ function BaseDataSection({
           </Select>
         </div>
 
-        {/* Actions */}
-        <div className="flex flex-wrap gap-2 pt-2">
+        <div className="flex flex-wrap items-center gap-4">
           <Button onClick={handleSave} disabled={hasError}>
             <Save className="size-4 mr-2" />
-            {t("base.save")}
+            {t("me.zones.save")}
           </Button>
-          <Button
-            variant="outline"
-            onClick={handleUpdateZones}
-            disabled={!parsedFcMax && !parsedVma}
-          >
-            <Gauge className="size-4 mr-2" />
-            {t("base.updateZones")}
-          </Button>
-          <Button variant="outline" onClick={() => navigate("/plan/new")}>
-            <Target className="size-4 mr-2" />
-            {t("base.createPlan")}
-          </Button>
+          <p className="font-mono text-[11px] text-muted-foreground">
+            {t("me.zones.autoSaved")}
+          </p>
         </div>
-      </CardContent>
-    </Card>
-  );
-}
 
-// ---------------------------------------------------------------------------
-// Tab 2: ZonesTabSection — manual zone adjustment + what-this-changes panel
-// ---------------------------------------------------------------------------
-
-function ZonesTabSection({ refreshKey, onChange }: { refreshKey: number; onChange: () => void }) {
-  const { t } = useTranslation("profile");
-  const stats = useAppStats();
-  const { plans } = usePlans();
-  const openPlan = plans.find((p) => !p.config.isSingleWeek);
-  const planSessionCount = openPlan
-    ? openPlan.weeks.reduce((sum, w) => sum + w.sessions.length, 0)
-    : 0;
-
-  const prefs = loadUserZonePrefs();
-
-  if (!prefs || (prefs.vma === undefined && prefs.fcMax === undefined)) {
-    return (
-      <Card>
-        <CardContent className="py-8 text-center space-y-3">
-          <p className="text-sm text-muted-foreground">{t("me.dashboard.zonesEmpty")}</p>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-      <div className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Gauge className="size-5" />
-              {t("me.zones.adjustTitle")}
-            </CardTitle>
-            <CardDescription>{t("me.zones.privacyNote")}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ZoneAdjustmentPanel key={refreshKey} prefs={prefs} onChange={onChange} />
-            <p className="font-mono text-[11px] text-muted-foreground mt-4">
-              {t("me.zones.autoSaved")}
+        {/* ── Zone model ─────────────────────────────────────────── */}
+        <div className="border-t-2 border-foreground pt-6">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h2 className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
+              {t("me.zones.modelTitle")}
+            </h2>
+            <p className="font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
+              {t("me.zones.modelHint")}
+              {" · "}
+              <Link to="/methodology" className="underline underline-offset-2">
+                {t("me.zones.modelLink")}
+              </Link>
             </p>
-          </CardContent>
-        </Card>
+          </div>
+
+          <div className="mt-6">
+            {hasZoneBasis ? (
+              <ZoneAdjustmentPanel
+                key={zonesRefreshKey}
+                prefs={prefs}
+                onChange={() => setZonesRefreshKey((n) => n + 1)}
+                zoneSessionCounts={zoneSessionCounts}
+              />
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                {t("me.dashboard.zonesEmpty")}
+              </p>
+            )}
+          </div>
+        </div>
+
         <PaceCalculator />
       </div>
 
-      <div className="space-y-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-mono text-[10px] tracking-wide uppercase text-muted-foreground">
-              {t("me.zones.impactTitle")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-baseline justify-between py-2 border-t border-border text-sm">
-              <span className="text-muted-foreground">{t("me.zones.impactWorkouts")}</span>
-              <span className="font-mono text-xs text-muted-foreground">
-                {t("me.zones.impactWorkoutsScope")}
-              </span>
-            </div>
-            <div className="flex items-baseline justify-between py-2 border-t border-border text-sm">
-              <span className="text-muted-foreground">{t("me.zones.impactPlan")}</span>
-              <span className="font-mono text-xs text-muted-foreground">
-                {openPlan
-                  ? t("me.zones.impactPlanScope", { count: planSessionCount })
-                  : t("me.zones.impactPlanNone")}
-              </span>
-            </div>
-            <div className="flex items-baseline justify-between py-2 border-t border-b border-border text-sm">
-              <span className="text-muted-foreground">{t("me.zones.impactCalculators")}</span>
-              <span className="font-mono text-xs text-muted-foreground">
-                {stats.calculators || "—"}
-              </span>
-            </div>
-            <p className="text-xs text-muted-foreground">{t("me.zones.impactNote")}</p>
-          </CardContent>
-        </Card>
-        <div className="border border-border p-4 font-mono text-[11px] text-muted-foreground leading-relaxed">
-          {t("me.zones.privacyNote")}
-        </div>
-      </div>
+      <ImpactRail profile={profile} zoneSessionCounts={zoneSessionCounts} />
     </div>
   );
 }
@@ -1269,10 +1374,11 @@ function PersonalRecordsSection({
 export function MeZonesPage() {
   const { t } = useTranslation("profile");
   const [searchParams] = useSearchParams();
-  const initialTab = searchParams.get("tab") === "zones" ? "zones" : "base";
+  const tabParam = searchParams.get("tab");
+  const initialTab =
+    tabParam && SECONDARY_TABS.includes(tabParam) ? tabParam : "base";
 
   const [profile, setProfile] = useState<RunnerProfile | null>(null);
-  const [zonesRefreshKey, setZonesRefreshKey] = useState(0);
 
   useEffect(() => {
     const existedBefore =
@@ -1296,7 +1402,7 @@ export function MeZonesPage() {
         description={t("me.zones.seoDescription")}
         noindex={true}
       />
-      <div className="py-8 max-w-4xl mx-auto">
+      <div className="py-8 max-w-6xl mx-auto">
         <p className="font-mono text-[11px] tracking-wide uppercase text-muted-foreground">
           <Link to="/me" className="underline underline-offset-2">
             {t("me.zones.breadcrumb")}
@@ -1313,9 +1419,8 @@ export function MeZonesPage() {
         </FadeUp>
 
         <Tabs defaultValue={initialTab}>
-          <TabsList className="w-full grid grid-cols-3 sm:grid-cols-6 mb-6">
+          <TabsList className="w-full grid grid-cols-3 sm:grid-cols-5 mb-6">
             <TabsTrigger value="base">{t("tabs.base")}</TabsTrigger>
-            <TabsTrigger value="zones">{t("tabs.zones")}</TabsTrigger>
             <TabsTrigger value="references">{t("tabs.references")}</TabsTrigger>
             <TabsTrigger value="benchmarks">{t("tabs.benchmarks")}</TabsTrigger>
             <TabsTrigger value="records">{t("tabs.records")}</TabsTrigger>
@@ -1323,16 +1428,9 @@ export function MeZonesPage() {
           </TabsList>
 
           <TabsContent value="base">
-            <BaseDataSection
+            <ValuesAndZonesSection
               profile={profile}
               onSave={(p) => setProfile(p)}
-            />
-          </TabsContent>
-
-          <TabsContent value="zones">
-            <ZonesTabSection
-              refreshKey={zonesRefreshKey}
-              onChange={() => setZonesRefreshKey((n) => n + 1)}
             />
           </TabsContent>
 
