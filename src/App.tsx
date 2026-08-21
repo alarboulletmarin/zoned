@@ -92,6 +92,7 @@ const MyRoutesPage = lazyPage(() => import("@/pages/MyRoutesPage").then(m => ({ 
 const RouteDetailPage = lazyPage(() => import("@/pages/RouteDetailPage").then(m => ({ default: m.RouteDetailPage })));
 const TrackFinderPage = lazyPage(() => import("@/pages/TrackFinderPage").then(m => ({ default: m.TrackFinderPage })));
 const NotFoundPage = lazyPage(() => import("@/pages/NotFoundPage").then(m => ({ default: m.NotFoundPage })));
+const OfflinePage = lazyPage(() => import("@/pages/OfflinePage").then(m => ({ default: m.OfflinePage })));
 
 // Command palette body: lazy so its search index (workout structures,
 // collections, command surfaces, unified search) stays out of the entry
@@ -301,6 +302,7 @@ function App() {
                           <Route path="/glossary" element={<GlossaryPage />} />
                           <Route path="/glossary/:id" element={<GlossaryTermPage />} />
                           <Route path="/changelog" element={<ChangelogPage />} />
+                          <Route path="/offline" element={<OfflinePage />} />
                           <Route path="/guides" element={<GuidesPage />} />
                           <Route path="/guides/nutrition" element={<NutritionGuidePage />} />
                           <Route path="/guides/race-prep" element={<RacePrepGuidePage />} />

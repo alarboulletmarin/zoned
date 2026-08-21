@@ -1,28 +1,71 @@
-/* Self-hosted Space Grotesk (variable, latin subset, weights 300–700).
-   Replaces the render-blocking Google Fonts @import chain
-   (index CSS → fonts.googleapis.com CSS → fonts.gstatic.com woff2).
-   The single variable file covers every weight the app uses
-   (400/500/600/700) and is preloaded from index.html. */
+/* Self-hosted General Sans (Fontshare, latin, static weights 400/500/600/700).
+   Replaces Space Grotesk for the "Zoned Brut" identity. Static per-weight
+   files (no variable axis available from Fontshare), same self-hosting
+   rationale as before: avoids the render-blocking Fontshare CSS -> gstatic-
+   style chain and is preloaded from index.html. */
 
 @font-face {
-  font-family: "Space Grotesk";
+  font-family: "General Sans";
   font-style: normal;
-  font-weight: 300 700;
+  font-weight: 400;
   font-display: swap;
-  src: url("/fonts/space-grotesk-latin.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
-    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
-    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src: url("/fonts/general-sans-400.woff2") format("woff2");
 }
 
-/* Metrics-matched fallback so the Arial→Space Grotesk swap causes zero
-   layout shift (CLS 0). Overrides computed from the woff2 metrics:
-   UPM 1000, ascent 984, descent 292, xAvgCharWidth 559 vs Arial 904/2048. */
 @font-face {
-  font-family: "Space Grotesk Fallback";
+  font-family: "General Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/general-sans-500.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "General Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/general-sans-600.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "General Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/general-sans-700.woff2") format("woff2");
+}
+
+/* Metrics-matched fallback (400 weight) so the Arial -> General Sans swap
+   causes zero layout shift (CLS 0). Overrides computed from the woff2
+   metrics: UPM 1000, ascent 1010, descent -240, xAvgCharWidth 552 vs
+   Arial 904/2048 — same method as the previous Space Grotesk fallback. */
+@font-face {
+  font-family: "General Sans Fallback";
   src: local("Arial");
-  size-adjust: 126.64%;
-  ascent-override: 77.7%;
-  descent-override: 23.06%;
+  size-adjust: 125.05%;
+  ascent-override: 80.76%;
+  descent-override: 19.19%;
   line-gap-override: 0%;
+}
+
+/* Self-hosted Space Mono (Google Fonts, latin subset, weights 400/700).
+   Replaces JetBrains Mono. The previous mono stack ("JetBrains Mono", "Fira
+   Code") never actually shipped a @font-face, so it silently fell back to
+   the OS default monospace everywhere; Brut leans on mono for nearly every
+   label and data value, so it is now self-hosted like the sans font. */
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/space-mono-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/space-mono-700.woff2") format("woff2");
 }

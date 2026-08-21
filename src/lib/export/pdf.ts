@@ -26,6 +26,16 @@ function zoneColorFor(zoneSpec: string | undefined): string | undefined {
 }
 
 /**
+ * Zoned Brut print palette — ink on paper, zone hues as the only colour.
+ * Mirrors the light-theme `--fg`/`--fg2`/`--fg3` ramp in `themes.css`: dark
+ * mode never reaches a printed page ("le papier inverse le thème").
+ */
+const INK = "#0B0B0A";
+const INK_MUTED = "#3B3A33";
+const INK_FAINT = "#5B594F";
+const PAPER = "#FCFBF6";
+
+/**
  * Geometry of the three phase tables (warmup / main set / cooldown). Declared
  * once because every row has to match it: pdfmake validates the cell count of
  * each row against the column count and throws on a mismatch.
@@ -52,7 +62,7 @@ function formatBlocksTable(blocks: WorkoutBlock[] | undefined): TableCell[][] {
         {
           text: i18n.t("common:export.workoutPdf.none"),
           italics: true,
-          color: "#666",
+          color: INK_MUTED,
           colSpan: PHASE_TABLE_COLUMNS,
         },
         ...Array.from({ length: PHASE_TABLE_COLUMNS - 1 }, () => ({}) as TableCell),
@@ -120,8 +130,13 @@ export async function exportToPDF(
     ];
 
     const content: Content = [
-      // Header
-      { text: title, style: "header" },
+      // Header — "Zoned" wordmark over a ruled line, then the workout title.
+      { text: "Zoned", style: "wordmark", margin: [0, 0, 0, 8] },
+      {
+        canvas: [{ type: "line", x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 1.5, lineColor: INK }],
+        margin: [0, 0, 0, 14],
+      },
+      { text: title.toUpperCase(), style: "header" },
       { text: description, style: "description", margin: [0, 0, 0, 15] },
 
       // Metadata
@@ -195,41 +210,49 @@ export async function exportToPDF(
     const docDefinition: TDocumentDefinitions = {
       content,
       styles: {
-        header: {
-          fontSize: 22,
+        wordmark: {
+          fontSize: 13,
           bold: true,
+          color: INK,
+          characterSpacing: 0.5,
+        },
+        header: {
+          fontSize: 24,
+          bold: true,
+          color: INK,
           margin: [0, 0, 0, 5],
         },
         description: {
           fontSize: 12,
-          color: "#666",
+          color: INK_MUTED,
           italics: true,
         },
         metadata: {
           fontSize: 10,
-          color: "#888",
+          color: INK_FAINT,
         },
         sectionHeader: {
           fontSize: 14,
           bold: true,
           margin: [0, 10, 0, 8],
-          color: "#333",
+          color: INK,
         },
         tableHeader: {
           bold: true,
           fontSize: 10,
-          color: "#fff",
-          fillColor: "#333",
+          color: PAPER,
+          fillColor: INK,
           alignment: "center",
         },
         footer: {
           fontSize: 9,
-          color: "#999",
+          color: INK_FAINT,
           alignment: "center",
         },
       },
       defaultStyle: {
         fontSize: 10,
+        color: INK,
       },
       pageMargins: [40, 40, 40, 40],
     };

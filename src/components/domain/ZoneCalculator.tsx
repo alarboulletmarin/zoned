@@ -2,10 +2,11 @@ import { useState, useEffect, useMemo, useCallback, type ChangeEvent } from "rea
 import { zoneClass } from "@/lib/zoneColors";
 import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router-dom";
-import { Save, Trash2, HeartRate, Gauge, ChevronDown, Dumbbell } from "@/components/icons";
+import { Save, Trash2, HeartRate, Gauge, ChevronDown, Dumbbell, Download } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
 import { buildParamsUrl } from "@/lib/share/urlParams";
+import { exportZonesAtlasToPDF } from "@/lib/export";
 import {
   Card,
   CardContent,
@@ -419,6 +420,17 @@ export function ZoneCalculator() {
             title={t("myZones.zoneCalculator.title")}
             disabled={!hasValues || hasErrors}
           />
+          {hasValues && !hasErrors && (
+            <Button
+              variant="outline"
+              onClick={() => {
+                void exportZonesAtlasToPDF(prefs, unit);
+              }}
+            >
+              <Download className="size-4 mr-2" />
+              {t("myZones.zoneCalculator.exportPdf")}
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>

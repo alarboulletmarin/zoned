@@ -18,6 +18,7 @@ export { exportToPDF } from "./pdf";
 export { exportToFIT } from "./fit";
 export { exportPlanToICS } from "./planIcs";
 export { exportPlanToPDF } from "./planPdf";
+export { exportZonesAtlasToPDF } from "./zonesAtlasPdf";
 
 // Social share pipeline (download / copy / Web Share API).
 export {

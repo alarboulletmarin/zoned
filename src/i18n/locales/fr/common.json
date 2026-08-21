@@ -162,6 +162,19 @@
       "noMistakes": "Pas d'erreurs spécifiques",
       "generatedBy": "Généré par"
     },
+    "zonesAtlasPdf": {
+      "kicker": "Atlas des six zones",
+      "title": "Mes zones",
+      "metaBoth": "VMA {{vma}} {{unit}} · FC max {{fcMax}} · {{date}}",
+      "metaVmaOnly": "VMA {{vma}} {{unit}} · {{date}}",
+      "metaFcOnly": "FC max {{fcMax}} · {{date}}",
+      "zone": "Zone",
+      "usage": "Usage",
+      "pace": "Allure",
+      "heartRate": "FC",
+      "footerNote": "Estimations, pas des mesures",
+      "generatedBy": "Généré par"
+    },
     "raceSimPdf": {
       "racePlanTitle": "Plan de course - {{distance}}",
       "targetPace": "Allure cible: {{pace}}/km | Depart: {{start}} | Arrivee estimee: {{finish}} | Total: {{total}}",
@@ -286,7 +299,6 @@
     "learnGlossaryDesc": "50+ termes techniques"
   },
   "errors": {
-    "workoutNotFound": "Séance non trouvée",
     "planSaveFailed": "Impossible d'enregistrer le plan (espace de stockage insuffisant).",
     "notFound": {
       "title": "Page introuvable",
@@ -298,6 +310,13 @@
       "description": "Quelque chose s'est mal passé. Essayez de recharger la page.",
       "reload": "Recharger",
       "backHome": "Retour à l'accueil"
+    },
+    "workoutNotFoundPanel": {
+      "eyebrow": "Erreur 404",
+      "title": "Cette séance n'existe pas",
+      "descriptionGeneric": "Le lien est peut-être ancien : la séance a été renommée ou retirée du catalogue.",
+      "descriptionSuggestions": "Le lien est peut-être ancien, ou la séance a été renommée. Voici les séances les plus proches.",
+      "openLibrary": "Ouvrir la bibliothèque"
     }
   },
   "actions": {
@@ -354,6 +373,7 @@
       "save": "Sauvegarder",
       "saved": "Sauvegardé",
       "clear": "Effacer",
+      "exportPdf": "Exporter en PDF",
       "invalidFcMax": "FCmax doit être entre 100 et 250 bpm",
       "invalidVma": "VMA doit être entre 8 et 30 km/h",
       "sensation": "Sensation",
@@ -650,7 +670,8 @@
     "planNewDesc": "Choisissez comment créer votre plan d'entraînement.",
     "collectionsDesc": "Des parcours thématiques pour chaque objectif. Parcourez les collections de course à pied.",
     "libraryTitle": "Bibliothèque",
-    "aboutSeoTitle": "À propos"
+    "aboutSeoTitle": "À propos",
+    "offlineTitle": "Mode hors-ligne"
   },
   "compare": {
     "title": "Comparaisons",
@@ -747,8 +768,11 @@
     "installDesc": "Accédez à Zoned directement depuis votre écran d'accueil, même hors ligne.",
     "install": "Installer",
     "dismiss": "Plus tard",
-    "updateTitle": "Mise à jour disponible",
-    "updateAvailable": "Une nouvelle version de Zoned est disponible.",
+    "outdatedEyebrow": "Version obsolète",
+    "updateTitle": "Une version plus récente existe",
+    "updateAvailable": "Une nouvelle version de Zoned est disponible. Tes données locales sont migrées automatiquement, rien à réimporter.",
+    "currentVersion": "Tu utilises la version {{version}}.",
+    "releaseNotes": "Notes de version",
     "update": "Mettre à jour",
     "offline": "Vous êtes hors ligne. Vos données restent accessibles.",
     "backOnline": "Connexion rétablie."
@@ -760,5 +784,25 @@
       "corosPath": "Créer",
       "applePath": "Exercice → Créer (watchOS 9+)"
     }
+  },
+  "offline": {
+    "eyebrow": "Hors-ligne",
+    "statusOffline": "Hors-ligne",
+    "statusOnline": "Connecté",
+    "title": "Pas de réseau, et alors ?",
+    "description": "Zoned tourne dans ton navigateur. Le catalogue, les plans, les calculateurs et tes données sont déjà là : rien de ce que tu fais habituellement ne s'arrête.",
+    "worksTitle": "Fonctionne",
+    "worksCatalogue": "{{count}} séances · filtres · tirage",
+    "worksPlans": "{{count}} plans + le générateur",
+    "worksCalculators": "{{count}} calculateurs",
+    "worksExports": "Exports FIT · ICS · PDF · PNG",
+    "worksMethodology": "Méthodologie et glossaire",
+    "waitsTitle": "Attendra le réseau",
+    "waitsRoutes": "Génération de parcours (cartes)",
+    "waitsCatalogueUpdate": "Mise à jour du catalogue",
+    "waitsShare": "Partage par lien",
+    "autoResume": "Reprise automatique dès que la connexion revient. Rien à réessayer à la main.",
+    "continueCta": "Continuer sans réseau",
+    "retryCta": "Réessayer la connexion"
   }
 }
