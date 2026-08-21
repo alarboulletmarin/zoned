@@ -94,7 +94,7 @@ const CURATED_LINKS: Record<string, ContentRef[]> = {
     { type: "workout", id: "VMA-001" },
     { type: "workout", id: "ASS-001" },
   ],
-  "glossary:fcmax": [
+  "glossary:fc-max": [
     { type: "article", id: "zones" },
     { type: "article", id: "testing-vma" },
   ],

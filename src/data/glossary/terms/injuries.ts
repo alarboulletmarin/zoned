@@ -148,7 +148,7 @@ export const injuriesTerms: GlossaryTerm[] = [
       "Au 35e kilomètre d'un marathon, ton mollet se contracte violemment. Arrête-toi, étire doucement le muscle, masse-le, et prends des électrolytes avant de repartir progressivement.",
     exampleEn:
       "At kilometer 35 of a marathon, your calf seizes up violently. Stop, gently stretch the muscle, massage it, and take électrolytes before gradually resuming.",
-    relatedTerms: ["électrolytes", "hydratation", "doms"],
+    relatedTerms: ["electrolytes", "hydratation", "doms"],
     keywords: ["crampe", "muscle", "contraction", "électrolytes", "fatigue", "mollet"],
   },
   {

@@ -184,7 +184,7 @@ export const metricsTerms: GlossaryTerm[] = [
       "Après une première séance de côtes ou un trail avec beaucoup de descentes, les DOMS dans les quadriceps sont fréquents pendant 2-3 jours.",
     exampleEn:
       "After a first hill session or a trail run with many descents, DOMS in the quadriceps are common for 2-3 days.",
-    relatedTerms: ["recovery", "adaptation", "overtraining"],
+    relatedTerms: ["active-recovery", "adaptation", "overtraining"],
     keywords: ["douleur", "courbature", "muscle", "récupération"],
   },
   {
