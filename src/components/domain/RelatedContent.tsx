@@ -27,7 +27,7 @@ function ArticleCardCompact({ article }: { article: ArticleMeta }) {
   return (
     <Link
       to={`/learn/${article.slug}`}
-      className="group flex items-start gap-3 rounded-lg border p-3 hover:bg-accent/50 transition-colors"
+      className="group flex items-start gap-3 border-2 border-foreground p-3 hover:bg-secondary transition-colors"
     >
       <BookOpen className="size-4 text-muted-foreground mt-0.5 shrink-0" />
       <div className="flex-1 min-w-0">
@@ -51,10 +51,7 @@ function GlossaryChip({ term }: { term: GlossaryTerm }) {
 
   return (
     <Link to={`/glossary/${term.id}`}>
-      <Badge
-        variant="outline"
-        className="hover:bg-accent transition-colors cursor-pointer"
-      >
+      <Badge variant="outline" className="cursor-pointer">
         {label}
       </Badge>
     </Link>
@@ -128,7 +125,7 @@ export function RelatedContent({ source, className, showTitle = true }: RelatedC
   }
 
   return (
-    <Card className={cn("rounded-xl", className)}>
+    <Card className={className}>
       <CardHeader>
         <CardTitle className="text-lg flex items-center gap-2">
           {t("relatedContent.title")}

@@ -5,17 +5,17 @@ export function ProteinTargetTable() {
   const { t } = useTranslation("nutrition");
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-border/50 bg-muted/30">
+    <div className="overflow-x-auto border-2 border-foreground bg-card">
       <table className="w-full text-sm border-collapse">
-        <thead className="bg-muted/50">
-          <tr>
-            <th className="text-left px-4 py-3 font-semibold">
+        <thead>
+          <tr className="border-b border-filet">
+            <th className="text-left px-4 py-3 font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
               {t("hub.protein.targets.headers.profile")}
             </th>
-            <th className="text-left px-4 py-3 font-semibold hidden sm:table-cell">
+            <th className="text-left px-4 py-3 font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground hidden sm:table-cell">
               {t("hub.protein.targets.headers.volume")}
             </th>
-            <th className="text-left px-4 py-3 font-semibold">
+            <th className="text-left px-4 py-3 font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
               {t("hub.protein.targets.headers.target")}
             </th>
           </tr>
@@ -24,11 +24,7 @@ export function ProteinTargetTable() {
           {proteinTargets.map((row, idx) => (
             <tr
               key={row.profileKey}
-              className={
-                idx !== proteinTargets.length - 1
-                  ? "border-b border-border/40"
-                  : undefined
-              }
+              className={idx !== proteinTargets.length - 1 ? "border-b border-filet" : undefined}
             >
               <td className="px-4 py-3">
                 <div className="space-y-0.5">
@@ -43,9 +39,7 @@ export function ProteinTargetTable() {
               </td>
               <td className="px-4 py-3">
                 <div className="space-y-0.5">
-                  <span className="rounded-full bg-rose-100 dark:bg-rose-950/40 px-2.5 py-0.5 text-xs font-bold text-rose-800 dark:text-rose-300">
-                    {t(row.targetKey)}
-                  </span>
+                  <span className="font-mono text-sm font-bold">{t(row.targetKey)}</span>
                   <p className="text-xs text-muted-foreground">{t(row.helperKey)}</p>
                 </div>
               </td>

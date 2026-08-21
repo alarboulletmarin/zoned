@@ -8,7 +8,7 @@ import {
   Flag,
 } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
-import { cn } from "@/lib/utils";
+import { EditorialTitle } from "@/components/editorial";
 
 interface CtaItem {
   to: string;
@@ -29,24 +29,20 @@ export function NutritionCTAStrip() {
 
   return (
     <section aria-labelledby="cta-strip-heading" className="space-y-4">
-      <h2 id="cta-strip-heading" className="text-xl md:text-2xl font-bold tracking-tight">
-        {t("hub.ctaStrip.heading")}
-      </h2>
+      <EditorialTitle as="h2" size="md">
+        <span id="cta-strip-heading">{t("hub.ctaStrip.heading")}</span>
+      </EditorialTitle>
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {CTAS.map(({ to, Icon, titleKey, subtitleKey }) => (
           <Link
             key={to}
             to={to}
-            className={cn(
-              "group flex flex-col gap-2 rounded-xl border border-border/50 bg-muted/30 p-4",
-              "transition-all duration-200 motion-safe:hover:-translate-y-0.5 hover:shadow-md hover:bg-muted/50",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            )}
+            className="group flex flex-col gap-2 border-2 border-foreground bg-card p-4 transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             <div className="flex items-center justify-between">
               <Icon className="size-5 text-muted-foreground" aria-hidden="true" />
               <ArrowRight
-                className="size-4 text-muted-foreground transition-transform motion-safe:group-hover:translate-x-1"
+                className="size-4 text-muted-foreground transition-transform group-hover:translate-x-1"
                 aria-hidden="true"
               />
             </div>

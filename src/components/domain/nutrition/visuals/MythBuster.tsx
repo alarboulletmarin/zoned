@@ -10,15 +10,12 @@ export function MythBuster() {
       {myths.map((m) => (
         <details
           key={m.id}
-          className="group rounded-xl border border-border/50 bg-muted/30 transition-colors open:bg-muted/50"
+          className="group border-2 border-foreground bg-card transition-colors open:bg-secondary"
         >
           <summary className="flex cursor-pointer list-none items-start gap-3 p-4 [&::-webkit-details-marker]:hidden">
-            <AlertTriangle
-              className="size-4 shrink-0 text-rose-600 dark:text-rose-400 mt-0.5"
-              aria-hidden="true"
-            />
+            <AlertTriangle className="size-4 shrink-0 text-destructive mt-0.5" aria-hidden="true" />
             <div className="flex-1 space-y-0.5">
-              <p className="text-xs font-medium uppercase tracking-wider text-rose-600 dark:text-rose-400">
+              <p className="font-mono text-[10px] tracking-[0.1em] uppercase text-destructive">
                 {t("hub.myths.mythLabel")}
               </p>
               <p className="text-sm font-medium leading-snug">« {t(m.mythKey)} »</p>
@@ -30,14 +27,11 @@ export function MythBuster() {
               ▾
             </span>
           </summary>
-          <div className="border-t border-border/40 p-4 space-y-2">
+          <div className="border-t border-filet p-4 space-y-2">
             <div className="flex items-start gap-2">
-              <CheckIcon
-                className="size-4 shrink-0 text-green-600 dark:text-green-400 mt-0.5"
-                aria-hidden="true"
-              />
+              <CheckIcon className="size-4 shrink-0 text-success mt-0.5" aria-hidden="true" />
               <div className="flex-1 space-y-1">
-                <p className="text-xs font-medium uppercase tracking-wider text-green-600 dark:text-green-400">
+                <p className="font-mono text-[10px] tracking-[0.1em] uppercase text-success">
                   {t("hub.myths.truthLabel")}
                 </p>
                 <p className="text-sm text-foreground">{t(m.truthKey)}</p>

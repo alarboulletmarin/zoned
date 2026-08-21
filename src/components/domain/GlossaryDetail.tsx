@@ -54,11 +54,11 @@ export function GlossaryDetail({ term, className }: GlossaryDetailProps) {
 
       {/* Formula */}
       {term.formula && (
-        <div className="bg-muted/50 rounded-lg p-4">
-          <p className="text-sm font-medium text-muted-foreground mb-2">
+        <div className="border-2 border-foreground bg-card p-4">
+          <p className="font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-2">
             {t("formula")}
           </p>
-          <code className="text-sm font-mono bg-background px-2 py-1 rounded">
+          <code className="text-sm font-mono bg-secondary px-2 py-1">
             {term.formula}
           </code>
         </div>
@@ -66,8 +66,8 @@ export function GlossaryDetail({ term, className }: GlossaryDetailProps) {
 
       {/* Example */}
       {example && (
-        <div className="bg-primary/5 border-l-4 border-primary rounded-r-lg p-4">
-          <p className="text-sm font-medium text-muted-foreground mb-2">
+        <div className="border-l-4 border-primary p-4">
+          <p className="font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground mb-2">
             {t("example")}
           </p>
           <p className="text-sm"><GlossaryLinkedText text={example} /></p>

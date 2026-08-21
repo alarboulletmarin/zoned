@@ -16,18 +16,15 @@ export function WaterMeter() {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-blue-500/30 bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent dark:from-blue-500/20 p-4 md:p-6">
+      <div className="border-2 border-foreground bg-card p-4 md:p-6">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
           {MOMENTS.map(({ key, Icon }) => (
-            <div
-              key={key}
-              className="flex items-start gap-3 rounded-lg bg-background/60 backdrop-blur p-3"
-            >
-              <div className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-950/40">
-                <Icon className="size-4 text-blue-700 dark:text-blue-300" aria-hidden="true" />
+            <div key={key} className="flex items-start gap-3 border border-filet p-3">
+              <div className="inline-flex size-9 shrink-0 items-center justify-center bg-secondary">
+                <Icon className="size-4" aria-hidden="true" />
               </div>
               <div className="space-y-0.5">
-                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                <p className="font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
                   {t(`hub.hydration.${key}.label`)}
                 </p>
                 <p className="text-base font-semibold leading-tight">

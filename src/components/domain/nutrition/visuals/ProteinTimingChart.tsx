@@ -10,23 +10,17 @@ export function ProteinTimingChart() {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-rose-500/30 bg-gradient-to-br from-rose-500/10 via-rose-500/5 to-transparent dark:from-rose-500/20 p-4 md:p-6">
+      <div className="border-2 border-foreground bg-card p-4 md:p-6">
         <ol className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5 lg:gap-2">
           {proteinTimeline.map((step, i) => {
             const Icon = ICONS[i] ?? Utensils;
             return (
-              <li
-                key={step.labelKey}
-                className="flex flex-col gap-2 rounded-lg bg-background/60 backdrop-blur p-3"
-              >
+              <li key={step.labelKey} className="flex flex-col gap-2 border border-filet p-3">
                 <div className="flex items-center gap-2">
-                  <div className="inline-flex size-8 items-center justify-center rounded-md bg-rose-100 dark:bg-rose-950/50">
-                    <Icon
-                      className="size-4 text-rose-700 dark:text-rose-300"
-                      aria-hidden="true"
-                    />
+                  <div className="inline-flex size-8 items-center justify-center bg-secondary">
+                    <Icon className="size-4" aria-hidden="true" />
                   </div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-rose-700 dark:text-rose-300">
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
                     {t(step.labelKey)}
                   </span>
                 </div>

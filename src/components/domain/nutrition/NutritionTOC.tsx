@@ -35,8 +35,8 @@ export function NutritionTOC({ items }: Props) {
   }, [items]);
 
   return (
-    <nav aria-label={t("hub.toc.heading")}>
-      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+    <nav aria-label={t("hub.toc.heading")} className="border-r border-filet pr-4">
+      <p className="mb-3 font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
         {t("hub.toc.heading")}
       </p>
       <ul className="space-y-1">
@@ -48,11 +48,11 @@ export function NutritionTOC({ items }: Props) {
                 href={`#${item.id}`}
                 aria-current={active ? "true" : undefined}
                 className={cn(
-                  "block rounded-md px-3 py-1.5 text-sm transition-colors",
+                  "block px-2 py-1.5 text-sm transition-colors",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   active
-                    ? "bg-accent font-medium text-foreground"
-                    : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+                    ? "bg-ink text-paper"
+                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                 )}
               >
                 {item.label}

@@ -13,32 +13,24 @@ export function CaffeineTimeline({ steps, contraindicationsKeys = [] }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-xl border border-amber-500/30 bg-amber-50/40 dark:bg-amber-950/20 p-4 md:p-6">
+      <div className="border-2 border-foreground bg-card p-4 md:p-6">
         <ol className="relative space-y-5">
           <span
             aria-hidden="true"
-            className="absolute left-4 top-2 bottom-2 w-px bg-amber-500/30"
+            className="absolute left-4 top-2 bottom-2 w-px bg-filet"
           />
           {steps.map((step, idx) => (
             <li key={step.timeLabelKey} className="relative flex gap-4">
               <span
                 className={cn(
-                  "relative z-10 inline-flex size-8 shrink-0 items-center justify-center rounded-full border-2 border-amber-500 bg-background",
-                  idx === steps.length - 1 && "bg-amber-500 text-white border-amber-500"
+                  "relative z-10 inline-flex size-8 shrink-0 items-center justify-center border-2 border-foreground bg-background",
+                  idx === steps.length - 1 && "bg-ink text-accent-acid border-ink"
                 )}
               >
-                <Coffee
-                  className={cn(
-                    "size-3.5",
-                    idx === steps.length - 1
-                      ? "text-white"
-                      : "text-amber-700 dark:text-amber-300"
-                  )}
-                  aria-hidden="true"
-                />
+                <Coffee className="size-3.5" aria-hidden="true" />
               </span>
               <div className="flex-1 pt-1">
-                <p className="text-sm font-bold tracking-tight text-amber-700 dark:text-amber-300">
+                <p className="font-mono text-xs font-bold tracking-wide uppercase text-foreground">
                   {t(step.timeLabelKey)}
                 </p>
                 <p className="text-sm text-foreground">{t(step.actionKey)}</p>
@@ -49,11 +41,8 @@ export function CaffeineTimeline({ steps, contraindicationsKeys = [] }: Props) {
       </div>
 
       {contraindicationsKeys.length > 0 && (
-        <div className="flex gap-3 rounded-xl border border-amber-500/30 bg-amber-50 dark:bg-amber-950/20 p-4">
-          <AlertTriangle
-            className="size-5 shrink-0 text-amber-700 dark:text-amber-300"
-            aria-hidden="true"
-          />
+        <div className="flex gap-3 border-2 border-warning p-4">
+          <AlertTriangle className="size-5 shrink-0 text-warning" aria-hidden="true" />
           <div className="space-y-2 text-sm">
             <p className="font-semibold">{t("hub.caffeine.contraindications.heading")}</p>
             <ul className="ml-4 list-disc space-y-1 text-muted-foreground">

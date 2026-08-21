@@ -12,26 +12,24 @@ export function RatioGauge() {
           <div
             key={row.ratio}
             className={cn(
-              "relative flex flex-col gap-2 rounded-xl border p-4",
-              row.highlight
-                ? "border-amber-500/50 bg-gradient-to-br from-amber-500/15 via-amber-500/5 to-transparent dark:from-amber-500/25 shadow-sm"
-                : "border-border/50 bg-muted/30"
+              "relative flex flex-col gap-2 border-2 p-4",
+              row.highlight ? "border-ink bg-ink text-paper" : "border-foreground bg-card"
             )}
           >
             {row.highlight && (
-              <span className="absolute -top-2 right-3 rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+              <span className="absolute -top-3 right-3 bg-accent-acid px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wide text-ink">
                 {t("hub.carbs.ratios.recommended")}
               </span>
             )}
-            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              {t(row.labelKey)}
-            </p>
             <p
               className={cn(
-                "font-mono text-3xl md:text-4xl font-bold tracking-tight",
-                row.highlight ? "text-amber-700 dark:text-amber-300" : "text-foreground"
+                "font-mono text-[10px] tracking-[0.1em] uppercase",
+                row.highlight ? "text-paper/70" : "text-muted-foreground"
               )}
             >
+              {t(row.labelKey)}
+            </p>
+            <p className="font-mono text-3xl md:text-4xl font-bold tracking-tight">
               {row.ratio}
             </p>
             <p className="text-sm font-semibold">{t(row.capacityKey)}</p>

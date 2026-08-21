@@ -13,9 +13,9 @@ export function DosageGrid({ chips }: Props) {
       {chips.map((chip) => (
         <div
           key={chip.labelKey}
-          className="flex flex-col gap-1 rounded-xl border border-border/50 bg-muted/30 p-4"
+          className="flex flex-col gap-1 border-2 border-foreground bg-card p-4"
         >
-          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          <p className="font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
             {t(chip.labelKey)}
           </p>
           <p className="text-xl md:text-2xl font-bold tracking-tight">

@@ -25,32 +25,34 @@ export function RaceWeekTimeline({ days }: Props) {
               key={day.day}
               className={cn(
                 "snap-start shrink-0 w-[200px] lg:w-auto",
-                "flex flex-col gap-2 rounded-xl border p-3",
+                "flex flex-col gap-2 border-2 p-3",
                 isRaceDay
-                  ? "bg-gradient-to-br from-rose-500/15 via-rose-500/5 to-transparent dark:from-rose-500/25 border-rose-500/40"
-                  : "bg-muted/30 border-border/50"
+                  ? "border-ink bg-ink text-paper"
+                  : "border-foreground bg-card"
               )}
             >
               <div className="flex items-center justify-between">
                 <span
                   className={cn(
-                    "rounded-full px-2 py-0.5 text-xs font-bold",
+                    "font-mono px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide",
                     isRaceDay
-                      ? "bg-rose-500 text-white"
-                      : "bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300"
+                      ? "bg-accent-acid text-ink"
+                      : "border border-filet text-muted-foreground"
                   )}
                 >
                   {t(`hub.raceWeek.dayLabels.${day.day}`)}
                 </span>
                 <Icon
-                  className="size-3.5 text-muted-foreground"
+                  className={cn("size-3.5", isRaceDay ? "text-paper" : "text-muted-foreground")}
                   aria-hidden="true"
                 />
               </div>
               <h3 className="text-sm font-semibold leading-tight">
                 {t(day.titleKey)}
               </h3>
-              <p className="text-xs text-muted-foreground">{t(day.detailKey)}</p>
+              <p className={cn("text-xs", isRaceDay ? "text-paper/75" : "text-muted-foreground")}>
+                {t(day.detailKey)}
+              </p>
               <span className="sr-only">
                 {t("hub.raceWeek.stepLabel", { current: idx + 1, total: days.length })}
               </span>

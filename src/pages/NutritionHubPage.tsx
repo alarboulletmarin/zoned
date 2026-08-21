@@ -103,7 +103,6 @@ export function NutritionHubPage() {
             <NutritionThemeSection
               id="daily"
               iconName="Utensils"
-              accent="primary"
               titleKey="hub.daily.title"
               ledeKey="hub.daily.lede"
             >
@@ -113,7 +112,6 @@ export function NutritionHubPage() {
             <NutritionThemeSection
               id="carbs"
               iconName="Wheat"
-              accent="amber"
               titleKey="hub.carbs.title"
               ledeKey="hub.carbs.lede"
             >
@@ -123,7 +121,6 @@ export function NutritionHubPage() {
             <NutritionThemeSection
               id="protein"
               iconName="Activity"
-              accent="rose"
               titleKey="hub.protein.title"
               ledeKey="hub.protein.lede"
             >
@@ -136,7 +133,6 @@ export function NutritionHubPage() {
             <NutritionThemeSection
               id="caffeine"
               iconName="Coffee"
-              accent="amber"
               titleKey="hub.caffeine.title"
               ledeKey="hub.caffeine.lede"
             >
@@ -149,7 +145,6 @@ export function NutritionHubPage() {
             <NutritionThemeSection
               id="hydration"
               iconName="Droplets"
-              accent="blue"
               titleKey="hub.hydration.title"
               ledeKey="hub.hydration.lede"
             >
@@ -159,7 +154,6 @@ export function NutritionHubPage() {
             <NutritionThemeSection
               id="race-week"
               iconName="Flag"
-              accent="rose"
               titleKey="hub.raceWeek.title"
               ledeKey="hub.raceWeek.lede"
             >
@@ -169,7 +163,6 @@ export function NutritionHubPage() {
             <NutritionThemeSection
               id="before"
               iconName="Clock"
-              accent="primary"
               titleKey="hub.before.title"
               ledeKey="hub.before.lede"
             >
@@ -179,7 +172,6 @@ export function NutritionHubPage() {
             <NutritionThemeSection
               id="during"
               iconName="Zap"
-              accent="amber"
               titleKey="hub.during.title"
               ledeKey="hub.during.lede"
             >
@@ -192,7 +184,6 @@ export function NutritionHubPage() {
             <NutritionThemeSection
               id="recovery"
               iconName="HeartPulse"
-              accent="green"
               titleKey="hub.recovery.title"
               ledeKey="hub.recovery.lede"
             >
@@ -202,7 +193,6 @@ export function NutritionHubPage() {
             <NutritionThemeSection
               id="supplements"
               iconName="Pill"
-              accent="violet"
               titleKey="hub.supplements.title"
               ledeKey="hub.supplements.lede"
             >
@@ -215,7 +205,6 @@ export function NutritionHubPage() {
             <NutritionThemeSection
               id="cramps"
               iconName="Zap"
-              accent="orange"
               titleKey="hub.cramps.title"
               ledeKey="hub.cramps.lede"
             >
@@ -225,7 +214,6 @@ export function NutritionHubPage() {
             <NutritionThemeSection
               id="heat"
               iconName="Flame"
-              accent="rose"
               titleKey="hub.heat.title"
               ledeKey="hub.heat.lede"
             >
@@ -235,7 +223,6 @@ export function NutritionHubPage() {
             <NutritionThemeSection
               id="women"
               iconName="Sparkles"
-              accent="violet"
               titleKey="hub.women.title"
               ledeKey="hub.women.lede"
             >
@@ -245,7 +232,6 @@ export function NutritionHubPage() {
             <NutritionThemeSection
               id="myths"
               iconName="AlertTriangle"
-              accent="slate"
               titleKey="hub.myths.title"
               ledeKey="hub.myths.lede"
             >
