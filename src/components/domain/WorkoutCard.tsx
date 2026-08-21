@@ -203,7 +203,7 @@ export function WorkoutCardChrome({
         {showPeek && peekData.segments.length > 0 && (
           <div className="border-t border-border/30 pt-2 mt-1 space-y-1.5">
             {/* Compact session timeline bar */}
-            <div className={cn("flex items-end rounded-md overflow-hidden", isMobile ? "h-4" : "h-6")}>
+            <div className={cn("flex items-end rounded-none overflow-hidden", isMobile ? "h-4" : "h-6")}>
               {peekData.segments.map((seg, i) => {
                 const zoneColor = seg.zoneNumber
                   ? zoneColors[seg.zoneNumber]

@@ -45,8 +45,8 @@ export function FavoriteButton({
       size={showLabel ? "sm" : size === "sm" ? "icon-sm" : "icon"}
       className={cn(
         "shrink-0 relative after:absolute after:inset-[-6px] after:content-['']",
-        showLabel && "rounded-full px-3 min-h-11 gap-1.5",
-        favorited && "text-red-500 hover:text-red-600",
+        showLabel && "px-3 min-h-11 gap-1.5",
+        favorited && "text-zone-5 hover:text-zone-5/80",
         className
       )}
       onClick={handleClick}

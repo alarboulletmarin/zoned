@@ -48,7 +48,7 @@ export function WorkoutParameterPanel({ params, onPreview, onCommit }: WorkoutPa
   if (params.length === 0) return null;
 
   return (
-    <div className="rounded-lg border p-4 bg-card space-y-5">
+    <div className="rounded-none border-2 border-foreground p-4 bg-card space-y-5">
       <div>
         {/* A heading, not a caption: the phase names below are <h3>, and they
             need something to nest under. Styled like the preview card's label
@@ -240,9 +240,9 @@ function NumberField({
     <span
       className={cn(
         // h-9 matches the step editor's own number fields, which also keeps the
-        // hit area usable on a phone. The ring lives on the wrapper because the
-        // unit sits inside it: focusing the input must light the whole control.
-        "inline-flex h-9 items-baseline justify-end gap-0.5 rounded-md border border-input bg-background px-2 py-1.5 touch-manipulation focus-within:ring-2 focus-within:ring-ring/50",
+        // hit area usable on a phone. The outline lives on the wrapper because
+        // the unit sits inside it: focusing the input must light the whole control.
+        "inline-flex h-9 items-baseline justify-end gap-0.5 rounded-none border-2 border-foreground bg-background px-2 py-1.5 touch-manipulation outline-2 outline-offset-2 outline-transparent focus-within:outline-ring",
         className,
       )}
     >
@@ -262,9 +262,9 @@ function NumberField({
             event.currentTarget.blur();
           }
         }}
-        className="w-9 bg-transparent text-sm font-bold tabular-nums text-right focus-visible:outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+        className="w-9 bg-transparent font-mono text-sm font-bold tabular-nums text-right focus-visible:outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
       />
-      {unit && <span className="text-xs text-muted-foreground">{unit}</span>}
+      {unit && <span className="font-mono text-xs uppercase text-muted-foreground">{unit}</span>}
     </span>
   );
 }

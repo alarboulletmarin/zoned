@@ -27,7 +27,7 @@ const GLOSSARY_LINK_CLASS =
   "underline decoration-dotted underline-offset-2 decoration-primary/40 text-inherit hover:text-primary hover:decoration-primary transition-colors cursor-pointer";
 
 const ARTICLE_LINK_CLASS =
-  "underline decoration-dotted underline-offset-2 decoration-blue-400/40 text-inherit hover:text-blue-600 dark:hover:text-blue-400 hover:decoration-blue-500 transition-colors cursor-pointer";
+  "underline decoration-dotted underline-offset-2 decoration-accent-acid text-inherit hover:text-foreground hover:decoration-foreground transition-colors cursor-pointer";
 
 function getLinkHref(content: MatchableContent): string {
   return content.type === "glossary"
