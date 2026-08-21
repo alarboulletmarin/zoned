@@ -11,8 +11,11 @@ import { SEOHead } from "@/components/seo";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { MethodologyTabs } from "@/components/domain/methodology/MethodologyTabs";
+import { ConfidenceBadge } from "@/components/domain/methodology/ConfidenceBadge";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { getAllScienceReferences } from "@/lib/scienceReferences";
+import { useReadingSize } from "@/hooks/useReadingSize";
+import { cn } from "@/lib/utils";
 
 // The four studies backing this article — see the header comment: real
 // citations already present in src/data/science/data.ts, filtered by title.
@@ -35,6 +38,7 @@ const TERMS_USED = ["seuil ventilatoire", "polarisé", "zone grise", "économie 
 
 export function MethodologyPolarisePage() {
   const { t } = useTranslation("content");
+  const { readingSize, setReadingSize, sizes } = useReadingSize();
   const allSources = getAllScienceReferences();
   const articleSources = allSources.filter((r) => ARTICLE_TITLES.includes(r.title));
 
@@ -90,9 +94,33 @@ export function MethodologyPolarisePage() {
           </aside>
 
           {/* Center: article */}
-          <article className="max-w-[66ch]">
-            <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-muted-foreground">
-              {t("content:methodology.polarise.eyebrow")}
+          <article className="max-w-[66ch]" style={{ fontSize: `${readingSize}px` }}>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-muted-foreground">
+                {t("content:methodology.polarise.eyebrow")}
+              </div>
+              <div
+                role="group"
+                aria-label={t("content:methodology.polarise.readingSizeLabel")}
+                className="flex items-center gap-1.5"
+              >
+                {sizes.map((size) => (
+                  <button
+                    key={size}
+                    type="button"
+                    onClick={() => setReadingSize(size)}
+                    aria-pressed={readingSize === size}
+                    className={cn(
+                      "border px-2.5 py-1.5 font-mono text-[10px] tracking-[0.08em] uppercase transition-colors",
+                      readingSize === size
+                        ? "border-ink bg-ink text-paper"
+                        : "border-filet text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    Aa {size} px
+                  </button>
+                ))}
+              </div>
             </div>
             <EditorialTitle as="h1" size="xl" className="mt-3">
               {t("content:methodology.polarise.title")}
@@ -102,23 +130,29 @@ export function MethodologyPolarisePage() {
             </FadeUp>
 
             <div className="mt-7 border-t-2 border-foreground pt-6">
-              <h2 id="section-1" className="scroll-mt-20 text-xl font-bold uppercase tracking-tight">
-                {t("content:methodology.polarise.measuredTitle")}
-              </h2>
+              <div className="flex flex-wrap items-baseline gap-3">
+                <h2 id="section-1" className="scroll-mt-20 text-xl font-bold uppercase tracking-tight">
+                  {t("content:methodology.polarise.measuredTitle")}
+                </h2>
+                <ConfidenceBadge level="measured" />
+              </div>
               <GlossaryLinkedText
                 as="p"
-                className="mt-3.5 text-[17px] leading-relaxed text-muted-foreground"
+                className="mt-3.5 leading-relaxed text-muted-foreground"
                 text={t("content:methodology.polarise.measuredText1")}
               />
               <GlossaryLinkedText
                 as="p"
-                className="mt-3.5 text-[17px] leading-relaxed text-muted-foreground"
+                className="mt-3.5 leading-relaxed text-muted-foreground"
                 text={t("content:methodology.polarise.measuredText2")}
               />
 
               <div className="mt-6 bg-card p-5">
-                <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
-                  {t("content:methodology.polarise.distributionCaption")}
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
+                    {t("content:methodology.polarise.distributionCaption")}
+                  </span>
+                  <ConfidenceBadge level="choice" />
                 </div>
                 <div className="mt-4 flex h-3.5">
                   {DISTRIBUTION.map((d) => (
@@ -140,12 +174,12 @@ export function MethodologyPolarisePage() {
               </h2>
               <GlossaryLinkedText
                 as="p"
-                className="mt-3.5 text-[17px] leading-relaxed text-muted-foreground"
+                className="mt-3.5 leading-relaxed text-muted-foreground"
                 text={t("content:methodology.polarise.whyText1")}
               />
               <GlossaryLinkedText
                 as="p"
-                className="mt-3.5 text-[17px] leading-relaxed text-muted-foreground"
+                className="mt-3.5 leading-relaxed text-muted-foreground"
                 text={t("content:methodology.polarise.whyText2")}
               />
 
@@ -160,9 +194,12 @@ export function MethodologyPolarisePage() {
                 />
               </div>
 
-              <h2 id="section-4" className="scroll-mt-20 mt-8 text-xl font-bold uppercase tracking-tight">
-                {t("content:methodology.polarise.changeTitle")}
-              </h2>
+              <div className="mt-8 flex flex-wrap items-baseline gap-3">
+                <h2 id="section-4" className="scroll-mt-20 text-xl font-bold uppercase tracking-tight">
+                  {t("content:methodology.polarise.changeTitle")}
+                </h2>
+                <ConfidenceBadge level="estimated" />
+              </div>
               <div className="mt-4 grid gap-5 sm:grid-cols-2">
                 <div className="border-t-2 border-foreground pt-3.5">
                   <div className="font-mono text-xl">{t("content:methodology.polarise.change4h")}</div>
@@ -177,14 +214,14 @@ export function MethodologyPolarisePage() {
                   </p>
                 </div>
               </div>
-              <p className="mt-4 text-[17px] leading-relaxed text-muted-foreground">
+              <p className="mt-4 leading-relaxed text-muted-foreground">
                 {t("content:methodology.polarise.changeText")}
               </p>
 
               <h2 id="section-5" className="scroll-mt-20 mt-8 text-xl font-bold uppercase tracking-tight">
                 {t("content:methodology.polarise.limitsTitle")}
               </h2>
-              <ul className="mt-3.5 list-disc space-y-2 pl-5 text-[17px] leading-relaxed text-muted-foreground">
+              <ul className="mt-3.5 list-disc space-y-2 pl-5 leading-relaxed text-muted-foreground">
                 {(t("content:methodology.polarise.limits", { returnObjects: true }) as string[]).map((l) => (
                   <li key={l}>{l}</li>
                 ))}

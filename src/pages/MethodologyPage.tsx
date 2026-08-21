@@ -14,6 +14,7 @@ import { ResponsiveTable, type ResponsiveTableColumn } from "@/components/ui/res
 import { SEOHead } from "@/components/seo";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { MethodologyTabs } from "@/components/domain/methodology/MethodologyTabs";
+import { ConfidenceBadge } from "@/components/domain/methodology/ConfidenceBadge";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { usePickLang } from "@/lib/i18n-utils";
 import { useGlossaryCount } from "@/hooks/useGlossary";
@@ -199,8 +200,11 @@ export function MethodologyPage() {
               />
             ))}
           </div>
-          <div className="mt-2 font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
-            {t("content:methodology.scaleCaption")}
+          <div className="mt-2 flex flex-wrap items-center gap-3">
+            <span className="font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
+              {t("content:methodology.scaleCaption")}
+            </span>
+            <ConfidenceBadge level="estimated" />
           </div>
           <div className="mt-1 font-mono text-[10px] text-muted-foreground leading-relaxed">
             {t("content:methodology.scaleNote")}
@@ -227,8 +231,11 @@ export function MethodologyPage() {
           </Card>
 
           <Card size="compact" className="p-5">
-            <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
-              {t("content:methodology.zonedChoiceTitle")}
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+                {t("content:methodology.zonedChoiceTitle")}
+              </span>
+              <ConfidenceBadge level="choice" />
             </div>
             <p className="mt-3 text-sm text-muted-foreground">{t("content:methodology.zonedChoiceText")}</p>
             <div className="mt-3 flex flex-wrap gap-2">

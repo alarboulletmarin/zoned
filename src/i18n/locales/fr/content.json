@@ -45,6 +45,22 @@
       "Elles ne remplacent pas ton ressenti un jour de fatigue.",
       "Elles varient de quelques secondes d'un modèle à l'autre : Zoned assume le sien et le dit."
     ],
+    "confidence": {
+      "measured": "Mesuré",
+      "measuredMeta": "source citée",
+      "estimated": "Estimé",
+      "estimatedMeta": "formule",
+      "choice": "Choix de Zoned",
+      "choiceMeta": "assumé"
+    },
+    "confidence": {
+      "measured": "Mesuré",
+      "measuredMeta": "source citée",
+      "estimated": "Estimé",
+      "estimatedMeta": "formule",
+      "choice": "Choix de Zoned",
+      "choiceMeta": "assumé"
+    },
     "scaleCaption": "Échelle en % de VMA · la largeur de chaque aplat est celle de la zone.",
     "scaleNote": "Les fourchettes d'allure ci-dessous visent le cœur de chaque zone : elles laissent volontairement une marge entre deux zones.",
     "colZone": "Zone",
@@ -80,6 +96,7 @@
       "title": "Pourquoi le 80/20 marche",
       "seoDescription": "Ce que montrent les études sur la répartition d'entraînement des athlètes d'endurance, pourquoi le modèle polarisé fonctionne, et ses limites.",
       "eyebrow": "Méthodologie · article",
+      "readingSizeLabel": "Taille du texte",
       "readingTime": "6 min de lecture",
       "sourcesCount": "{{count}} sources",
       "lede": "Plusieurs études sur des athlètes d'endurance entraînés montrent la même chose : l'essentiel du volume se court très facilement. Ce n'est pas de la paresse, c'est ce qui rend les séances dures possibles.",

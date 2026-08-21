@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/card";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { ResponsiveTable, type ResponsiveTableColumn } from "@/components/ui/responsive-table";
 import { MethodologyTabs } from "@/components/domain/methodology/MethodologyTabs";
+import { ConfidenceBadge } from "@/components/domain/methodology/ConfidenceBadge";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { getAllScienceReferences, type ScienceReferenceEntry } from "@/lib/scienceReferences";
 
@@ -53,8 +54,11 @@ export function MethodologySourcesPage() {
         ) : (
           <div>
             <div className="text-[15px] font-medium">{t("content:methodology.sources.editorialChoiceText")}</div>
-            <div className="mt-1 font-mono text-[11px] text-zone-3">
-              {t("content:methodology.sources.editorialChoiceDetail")}
+            <div className="mt-1.5 flex flex-wrap items-center gap-2.5">
+              <ConfidenceBadge level="choice" />
+              <span className="font-mono text-[11px] text-zone-3">
+                {t("content:methodology.sources.editorialChoiceDetail")}
+              </span>
             </div>
           </div>
         ),

@@ -45,6 +45,22 @@
       "They don't replace how you feel on a tired day.",
       "They vary by a few seconds from one model to the next: Zoned owns its choice and says so."
     ],
+    "confidence": {
+      "measured": "Measured",
+      "measuredMeta": "cited source",
+      "estimated": "Estimated",
+      "estimatedMeta": "formula",
+      "choice": "Zoned's choice",
+      "choiceMeta": "owned"
+    },
+    "confidence": {
+      "measured": "Measured",
+      "measuredMeta": "cited source",
+      "estimated": "Estimated",
+      "estimatedMeta": "formula",
+      "choice": "Zoned's choice",
+      "choiceMeta": "owned"
+    },
     "scaleCaption": "Scale in % of VMA · each block's width is the zone's own width.",
     "scaleNote": "The pace ranges below target the core of each zone: they deliberately leave a margin between two zones.",
     "colZone": "Zone",
@@ -80,6 +96,7 @@
       "title": "Why 80/20 works",
       "seoDescription": "What the research shows about training intensity distribution in endurance athletes, why the polarized model works, and its limits.",
       "eyebrow": "Methodology · article",
+      "readingSizeLabel": "Text size",
       "readingTime": "6 min read",
       "sourcesCount": "{{count}} sources",
       "lede": "Several studies on trained endurance athletes show the same thing: most of their volume is run very easily. That's not laziness — it's what makes the hard sessions possible.",
