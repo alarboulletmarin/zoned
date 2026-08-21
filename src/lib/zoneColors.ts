@@ -8,8 +8,14 @@
  * Those copies drifted — the PDF ramp was off by one zone, colouring recovery
  * green and endurance blue.
  *
- * The tables below mirror themes.css exactly. `bun run scripts/qa-zone-colors.ts`
- * fails if they ever diverge, so the duplication cannot rot silently.
+ * The table below mirrors themes.css exactly. `bun run scripts/qa-zone-colors.ts`
+ * fails if it ever diverges, so the duplication cannot rot silently.
+ *
+ * Zoned Brut unifies the Z1-Z6 ramp across running, cycling and swimming
+ * ("la couleur ne dit qu'une chose : la zone") — the `discipline` parameter
+ * is kept only so call sites don't need to change; it no longer selects a
+ * different ramp. Cycling and swimming keep their own single-hue accent for
+ * plan-level cues (see `getDisciplineAccent` in `useZoneColors.ts`).
  */
 
 import type { Discipline, ZoneNumber } from "@/types";
@@ -18,55 +24,44 @@ export type ThemeMode = "light" | "dark";
 
 type ZoneHexMap = Record<ZoneNumber, string>;
 
-/** Running ramp, light theme — mirrors themes.css `:root`. */
+/** Unified Z1-Z6 ramp, light theme — mirrors themes.css `:root`. */
 export const ZONE_HEX_LIGHT: ZoneHexMap = {
-  1: "#94a3b8",
-  2: "#16a34a",
-  3: "#ca8a04",
-  4: "#f97316",
-  5: "#ef4444",
-  6: "#7c3aed",
+  1: "#8f8f86",
+  2: "#2fa84a",
+  3: "#e0b400",
+  4: "#ff6a1f",
+  5: "#e5261b",
+  6: "#8a46e0",
 };
 
-/** Running ramp, dark theme — mirrors themes.css `.dark`. */
+/** Unified Z1-Z6 ramp, dark theme — mirrors themes.css `.dark`. */
 export const ZONE_HEX_DARK: ZoneHexMap = {
-  1: "#94a3b8",
-  2: "#22c55e",
-  3: "#eab308",
-  4: "#f97316",
-  5: "#ef4444",
-  6: "#7c3aed",
+  1: "#8f8f86",
+  2: "#6ee07a",
+  3: "#f2d53c",
+  4: "#ff7a2f",
+  5: "#ff3b30",
+  6: "#b26bff",
 };
 
-const CYCLING_HEX: Record<ThemeMode, ZoneHexMap> = {
-  light: { 1: "#cfe2ff", 2: "#9ec5fe", 3: "#6ea8fe", 4: "#3d8bfd", 5: "#0d6efd", 6: "#084298" },
-  dark: { 1: "#1e3a5f", 2: "#2563eb", 3: "#3d8bfd", 4: "#60a5fa", 5: "#93c5fd", 6: "#bfdbfe" },
-};
-
-const SWIMMING_HEX: Record<ThemeMode, ZoneHexMap> = {
-  light: { 1: "#d1f2f4", 2: "#a2e5e9", 3: "#63cbd1", 4: "#2eb0b9", 5: "#1b8a93", 6: "#0d5e66" },
-  dark: { 1: "#134545", 2: "#1b8a93", 3: "#2eb0b9", 4: "#63cbd1", 5: "#a2e5e9", 6: "#d1f2f4" },
-};
-
-const BY_DISCIPLINE: Record<Discipline, Record<ThemeMode, ZoneHexMap>> = {
-  running: { light: ZONE_HEX_LIGHT, dark: ZONE_HEX_DARK },
-  cycling: CYCLING_HEX,
-  swimming: SWIMMING_HEX,
+const BY_THEME: Record<ThemeMode, ZoneHexMap> = {
+  light: ZONE_HEX_LIGHT,
+  dark: ZONE_HEX_DARK,
 };
 
 /** Literal hex for a zone. Use in exports; in the DOM prefer `var(--zone-N)`. */
 export function getZoneHex(
   zone: ZoneNumber,
-  { theme = "light", discipline = "running" }: { theme?: ThemeMode; discipline?: Discipline } = {},
+  { theme = "light" }: { theme?: ThemeMode; discipline?: Discipline } = {},
 ): string {
-  return BY_DISCIPLINE[discipline][theme][zone];
+  return BY_THEME[theme][zone];
 }
 
 /** Whole ramp, for renderers that need to build their own lookup. */
 export function getZoneHexMap(
-  { theme = "light", discipline = "running" }: { theme?: ThemeMode; discipline?: Discipline } = {},
+  { theme = "light" }: { theme?: ThemeMode; discipline?: Discipline } = {},
 ): ZoneHexMap {
-  return BY_DISCIPLINE[discipline][theme];
+  return BY_THEME[theme];
 }
 
 /** Neutral used wherever a step carries no zone (drills, rest, cross-training). */

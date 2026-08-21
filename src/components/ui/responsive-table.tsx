@@ -94,7 +94,7 @@ export function ResponsiveTable<T>({
           stray overflow contained without creating a scroll container. */}
       <div
         className={cn(
-          "hidden md:block",
+          "hidden md:block border-2 border-foreground bg-card",
           stickyHeader ? "overflow-x-clip" : "overflow-x-auto",
         )}
       >
@@ -102,18 +102,19 @@ export function ResponsiveTable<T>({
           {caption && <caption className="sr-only">{caption}</caption>}
           <thead
             className={cn(
+              "bg-ink text-paper",
               // top-14 clears the fixed h-14 TopBar so the header isn't hidden
               // behind it while scrolling (#103).
-              stickyHeader && "sticky top-14 bg-background z-10",
+              stickyHeader && "sticky top-14 z-10",
             )}
           >
-            <tr className="border-b">
+            <tr>
               {columns.map((col) => (
                 <th
                   key={col.key}
                   scope={col.scope ?? "col"}
                   className={cn(
-                    "py-2 px-3 text-left font-medium text-muted-foreground",
+                    "py-2.5 px-3 text-left font-mono text-[10px] font-bold tracking-wide uppercase",
                     col.className,
                   )}
                 >
@@ -127,14 +128,14 @@ export function ResponsiveTable<T>({
               <tr
                 key={getRowKey(row, rowIndex, rowKey)}
                 className={cn(
-                  "border-b last:border-0 hover:bg-muted/40 transition-colors",
+                  "border-b border-filet last:border-0 hover:bg-secondary transition-colors duration-150 ease-out",
                   rowClassName?.(row, rowIndex),
                 )}
               >
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    className={cn("py-2 px-3", col.className)}
+                    className={cn("py-2 px-3 font-mono text-sm", col.className)}
                   >
                     {col.cell(row, rowIndex)}
                   </td>
@@ -151,7 +152,7 @@ export function ResponsiveTable<T>({
           <div
             key={getRowKey(row, rowIndex, rowKey)}
             className={cn(
-              "rounded-lg border bg-card p-3 shadow-xs",
+              "rounded-none border-2 border-foreground bg-card p-3",
               rowClassName?.(row, rowIndex),
             )}
           >
