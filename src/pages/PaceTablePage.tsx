@@ -1,12 +1,14 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { CalculatorHero } from "@/components/calculators";
 import {
   ResponsiveTable,
   type ResponsiveTableColumn,
 } from "@/components/ui/responsive-table";
 import { loadUserZonePrefs, calculatePaceZones } from "@/lib/zones";
+import { zoneClass } from "@/lib/zoneColors";
+import { cn } from "@/lib/utils";
 import type { ZoneNumber } from "@/types";
 
 const KM_TO_MILES = 0.621371;
@@ -153,7 +155,11 @@ export function PaceTablePage() {
         cell: (r) =>
           r.zone != null ? (
             <span
-              className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium bg-zone-${r.zone}/10 text-zone-${r.zone}`}
+              className={cn(
+                "inline-flex items-center px-2 py-0.5 font-mono text-xs font-bold",
+                zoneClass(r.zone, "bgSoft"),
+                zoneClass(r.zone, "text"),
+              )}
             >
               Z{r.zone}
             </span>
@@ -190,15 +196,11 @@ export function PaceTablePage() {
         ]}
       />
       <div className="py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2">
-            {t("calculators:calculateurs.paceTable.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
-            {t("calculators:calculateurs.paceTable.subtitle")}
-          </FadeUp>
-        </div>
+        <CalculatorHero
+          groupLabel={t("calculators:calculateurs.groups.zonesAllures")}
+          title={t("calculators:calculateurs.paceTable.title")}
+          description={t("calculators:calculateurs.paceTable.subtitle")}
+        />
 
         {/* Table — responsive: scrollable table on tablet/desktop, stacked
             cards on mobile. */}
@@ -207,7 +209,7 @@ export function PaceTablePage() {
           columns={columns}
           rowKey="totalSeconds"
           stickyHeader
-          className="md:rounded-lg md:border"
+          className="md:border-2 md:border-foreground"
           mobileCardTitle={(row) => (
             <span className="font-mono tabular-nums">
               {formatPace(row.paceMinPerKm)}
@@ -216,7 +218,7 @@ export function PaceTablePage() {
           )}
           rowClassName={(row) =>
             highlightSeconds != null && row.totalSeconds === highlightSeconds
-              ? "bg-primary/10 font-medium ring-1 ring-primary/30"
+              ? "bg-accent-acid text-ink font-bold"
               : undefined
           }
         />

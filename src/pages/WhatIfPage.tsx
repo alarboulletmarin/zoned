@@ -38,7 +38,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { CalculatorHero } from "@/components/calculators";
 import { cn } from "@/lib/utils";
 import { generatePlan } from "@/lib/planGenerator";
 import { computePlanStats, computeEnhancedPlanAnalysis } from "@/lib/planStats";
@@ -316,6 +316,7 @@ function MetricRow({
 
 export function WhatIfPage() {
   const { t, i18n } = useTranslation("whatif");
+  const { t: tc } = useTranslation("common");
   const isEn = i18n.language?.startsWith("en") ?? false;
 
   // ── Shared config (pre-filled from runner profile if available) ─────
@@ -614,13 +615,12 @@ export function WhatIfPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div>
-            <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
-              <Scale className="size-8 shrink-0" />
-              {t("title")}
-            </EditorialTitle>
-            <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
-              {t("subtitle")}
-            </FadeUp>
+            <CalculatorHero
+              groupLabel={tc("calculators:calculateurs.groups.terrain")}
+              title={t("title")}
+              description={t("subtitle")}
+              className="mb-0"
+            />
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <Button

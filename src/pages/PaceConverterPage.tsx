@@ -4,11 +4,12 @@ import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
 import { buildParamsUrl } from "@/lib/share/urlParams";
-import { Card, CardContent } from "@/components/ui/card";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { useSettings } from "@/hooks/useSettings";
 import { loadUserZonePrefs, calculatePaceZones } from "@/lib/zones";
+import { zoneClass } from "@/lib/zoneColors";
+import { cn } from "@/lib/utils";
 import type { ZoneNumber } from "@/types";
+import { CalculatorHero, CalculatorPanel, CalculatorLabel } from "@/components/calculators";
 
 /**
  * Parse a pace string like "4:30" into total minutes (4.5).
@@ -233,75 +234,63 @@ export function PaceConverterPage() {
         ]}
       />
       <div className="py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2">
-            {t("calculators:calculateurs.converter.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
-            {t("calculators:calculateurs.converter.description")}
-          </FadeUp>
-        </div>
+        <CalculatorHero
+          groupLabel={t("calculators:calculateurs.groups.zonesAllures")}
+          title={t("calculators:calculateurs.converter.title")}
+          description={t("calculators:calculateurs.converter.description")}
+        />
 
         {/* Input grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Primary pace */}
-          <Card>
-            <CardContent className="pt-4">
-              <label className="text-sm font-medium text-muted-foreground block mb-2">
-                {primaryLabel}
-              </label>
-              <input
-                type="text"
-                inputMode="numeric"
-                placeholder="4:30"
-                value={primaryPace}
-                onChange={(e) => handlePrimaryPaceChange(e.target.value)}
-                className="w-full rounded-lg border border-input bg-background px-4 py-3 text-2xl font-mono tabular-nums focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-            </CardContent>
-          </Card>
+          <CalculatorPanel>
+            <CalculatorLabel className="mb-2.5">{primaryLabel}</CalculatorLabel>
+            <input
+              type="text"
+              inputMode="numeric"
+              placeholder="4:30"
+              value={primaryPace}
+              onChange={(e) => handlePrimaryPaceChange(e.target.value)}
+              className="w-full border-0 border-b-[3px] border-foreground bg-transparent px-1 py-2 text-2xl font-mono tabular-nums focus-visible:outline-none focus-visible:border-b-primary"
+            />
+          </CalculatorPanel>
 
           {/* Speed */}
-          <Card>
-            <CardContent className="pt-4">
-              <label className="text-sm font-medium text-muted-foreground block mb-2">
-                {speedLabel}
-              </label>
-              <input
-                type="text"
-                inputMode="decimal"
-                placeholder="13.3"
-                value={speed}
-                onChange={(e) => handleSpeedChange(e.target.value)}
-                className="w-full rounded-lg border border-input bg-background px-4 py-3 text-2xl font-mono tabular-nums focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-            </CardContent>
-          </Card>
+          <CalculatorPanel>
+            <CalculatorLabel className="mb-2.5">{speedLabel}</CalculatorLabel>
+            <input
+              type="text"
+              inputMode="decimal"
+              placeholder="13.3"
+              value={speed}
+              onChange={(e) => handleSpeedChange(e.target.value)}
+              className="w-full border-0 border-b-[3px] border-foreground bg-transparent px-1 py-2 text-2xl font-mono tabular-nums focus-visible:outline-none focus-visible:border-b-primary"
+            />
+          </CalculatorPanel>
 
           {/* Secondary pace */}
-          <Card>
-            <CardContent className="pt-4">
-              <label className="text-sm font-medium text-muted-foreground block mb-2">
-                {secondaryLabel}
-              </label>
-              <input
-                type="text"
-                inputMode="numeric"
-                placeholder="7:14"
-                value={secondaryPace}
-                onChange={(e) => handleSecondaryPaceChange(e.target.value)}
-                className="w-full rounded-lg border border-input bg-background px-4 py-3 text-2xl font-mono tabular-nums focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-            </CardContent>
-          </Card>
+          <CalculatorPanel>
+            <CalculatorLabel className="mb-2.5">{secondaryLabel}</CalculatorLabel>
+            <input
+              type="text"
+              inputMode="numeric"
+              placeholder="7:14"
+              value={secondaryPace}
+              onChange={(e) => handleSecondaryPaceChange(e.target.value)}
+              className="w-full border-0 border-b-[3px] border-foreground bg-transparent px-1 py-2 text-2xl font-mono tabular-nums focus-visible:outline-none focus-visible:border-b-primary"
+            />
+          </CalculatorPanel>
         </div>
 
         {/* Zone badge */}
         {paceZones && currentZone && (
           <div className="mt-6 flex justify-center">
             <span
-              className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium bg-zone-${currentZone}/10 text-zone-${currentZone}`}
+              className={cn(
+                "inline-flex items-center gap-2 px-4 py-2 font-mono text-xs font-bold uppercase tracking-wide",
+                zoneClass(currentZone, "bgSoft"),
+                zoneClass(currentZone, "text"),
+              )}
             >
               {t("calculators:calculateurs.converter.zoneForYou", { zone: currentZone })}
             </span>

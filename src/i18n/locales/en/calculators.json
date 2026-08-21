@@ -5,14 +5,28 @@
     "explore": "Open",
     "comingSoon": "Coming soon",
     "groups": {
-      "benchmarks": "Your benchmarks",
-      "pace": "Pace & conversions",
-      "race": "Race & planning"
+      "zonesAllures": "Zones & pace",
+      "performance": "Performance",
+      "terrain": "Terrain & conditions"
     },
     "hub": {
       "seoTitle": "Calculators — Running Tools",
       "seoDescription": "Running calculators: training zones, race paces, treadmill converter, split generator, VMA estimation.",
-      "seoCollectionName": "Running Calculators"
+      "seoCollectionName": "Running Calculators",
+      "toolCount": "{{count}} calculators",
+      "lead": "One input, one result, the method underneath. Everything runs in your browser: no value ever leaves the device, everything works offline.",
+      "savedValuesLabel": "Your saved values",
+      "savedValuesEmpty": "Enter your VMA or max HR to see them on every tool.",
+      "savedValuesEdit": "Edit · stays on this device",
+      "vmaUnit": "VMA km/h",
+      "fcMaxUnit": "Max HR",
+      "footerLocal": "Local calculation · no network request",
+      "footerFormulas": "Formulas and sources cited on every tool",
+      "footerMethodology": "Methodology · where these formulas come from"
+    },
+    "states": {
+      "offline": "Offline · the calculators still work",
+      "loading": "Rarely seen: the calculation runs locally and instantly."
     },
     "zones": {
       "seoTitle": "Training Zones Calculator",
@@ -59,14 +73,40 @@
       "estimatedVma": "Estimated VMA",
       "paceZonesPreview": "Pace zones preview",
       "zone": "Zone",
+      "usageCol": "Usage",
       "pace": "Pace",
+      "exportPdf": "Export as PDF",
       "useThisVma": "Use this VMA",
       "createPlan": "Create a plan",
       "vmaSaved": "VMA saved: {{vma}} km/h",
       "hours": "Hours",
       "minutes": "Minutes",
       "seconds": "Seconds",
-      "hoursShort": "h"
+      "hoursShort": "h",
+      "formulaLabel": "The formula used",
+      "formulaLine1": "v = distance / time",
+      "formulaLine2": "VMA ≈ v / 0.87",
+      "formulaNote": "0.87 = fraction of VMA sustainable for 40-45 min",
+      "formulaSource": "Léger & Mercier (1984) for the energy cost, Daniels for the pace-zone mapping.",
+      "toKnowLabel": "Worth knowing",
+      "toKnow1": "A race lasting 30 to 60 minutes gives the most reliable estimate.",
+      "toKnow2": "A hilly or windy course underestimates VMA: Zoned flags it but doesn't correct the terrain for you.",
+      "toKnow3": "Recalculate after six to eight weeks of training, not every week.",
+      "relatedLabel": "Continue with",
+      "relatedEquivalence": "Race equivalence",
+      "relatedZones": "Heart rate zones",
+      "localNote": "Calculated in your browser. Nothing is saved until you click.",
+      "copyTable": "Copy table",
+      "tableCopied": "Table copied",
+      "reset": "Reset",
+      "vpaceLabel": "vVMA pace",
+      "pace10kLabel": "10K pace",
+      "emptyHint": "The result is waiting, it won't fill in with a fake example. The six ranges stay hidden.",
+      "implausibleMessage": "{{time}} over {{distance}} gives a VMA of {{vma}} km/h: possible, but then it wasn't an all-out race.",
+      "implausibleProceed": "Calculate anyway",
+      "implausibleCorrect": "Correct",
+      "implausibleNote": "Your input is never erased.",
+      "pdfUnavailable": "PDF export isn't available for this tool"
     },
     "ftp": {
       "seoTitle": "FTP Cycling Test",
@@ -176,7 +216,17 @@
       "riegelExplanation": "Based on Riegel's formula (1977), used by most running calculators. More reliable between similar distances (5K→10K) than distant ones (5K→Marathon).",
       "hours": "Hours",
       "minutes": "Minutes",
-      "seconds": "Seconds"
+      "seconds": "Seconds",
+      "formulaLabel": "The formula",
+      "formulaLine": "t₂ = t₁ × (d₂/d₁)^1.06",
+      "formulaNote": "Riegel · exponent 1.06",
+      "whatItDoesntSayLabel": "What this doesn't tell you",
+      "whatItDoesntSay": "An equivalence assumes training suited to that distance. Without long runs, the marathon predicted here isn't really runnable: beyond the half, the value is extrapolated.",
+      "relatedLabel": "Logical next step",
+      "relatedPlan": "Generate a plan for this distance",
+      "referenceLabel": "Reference performance",
+      "extrapolatedLabel": "extrapolated",
+      "emptyHint": "Enter a recent race time to see your equivalences on the other distances."
     },
     "ageGraded": {
       "seoTitle": "Age-Graded Performance — Level Score",

@@ -1,23 +1,38 @@
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { zoneClass } from "@/lib/zoneColors";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { Timer, Save, ArrowRight } from "@/components/icons";
+import { Save, ArrowRight } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
 import { buildParamsUrl } from "@/lib/share/urlParams";
-import { Card, CardContent } from "@/components/ui/card";
-import { ResponsiveTable } from "@/components/ui/responsive-table";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import { ZONE_META, type ZoneNumber } from "@/types";
 import { calculatePaceZones, saveUserZonePrefs, formatPace } from "@/lib/zones";
+import { calculateRaceTimes } from "@/lib/paceCalculator";
 import { updateBaseData } from "@/lib/runnerProfile";
 import { useSettings } from "@/hooks/useSettings";
 import { convertPace, getPaceUnit } from "@/lib/units";
 import { usePickLang } from "@/lib/i18n-utils";
+import {
+  CalculatorHero,
+  CalculatorPanel,
+  CalculatorLabel,
+  CalculatorChip,
+  CalculatorChipGroup,
+  CalculatorTimeField,
+  CalculatorResultHeadline,
+  CalculatorResultStat,
+  CalculatorSidebar,
+  CalculatorFormulaBox,
+  CalculatorInfoList,
+  CalculatorRelatedLinks,
+  CalculatorLocalNote,
+  CalculatorEmptyResult,
+  CalculatorImplausibleWarning,
+} from "@/components/calculators";
 
 /**
  * Race distance configurations with VMA percentages.
@@ -26,9 +41,21 @@ import { usePickLang } from "@/lib/i18n-utils";
 const DISTANCES = [
   { id: "5k", label: "5 km", distanceKm: 5, vmaPercentage: 97 },
   { id: "10k", label: "10 km", distanceKm: 10, vmaPercentage: 92 },
-  { id: "semi", label: "Semi-marathon (21.1 km)", distanceKm: 21.1, vmaPercentage: 82 },
-  { id: "marathon", label: "Marathon (42.195 km)", distanceKm: 42.195, vmaPercentage: 77 },
+  { id: "semi", label: "Semi", distanceKm: 21.1, vmaPercentage: 82 },
+  { id: "marathon", label: "Marathon", distanceKm: 42.195, vmaPercentage: 77 },
 ] as const;
+
+/** Realistic VMA band for a real all-out effort — below/above this, the
+ *  result is possible but probably means the input wasn't a race PB (a
+ *  warm-up jog, a typo in the time field, etc.). Distinct from the hard
+ *  [4, 35] finiteness guard kept in the calculation itself. */
+const PLAUSIBLE_VMA_MIN = 8;
+const PLAUSIBLE_VMA_MAX = 26;
+
+function formatHms(hours: number, minutes: number, seconds: number): string {
+  const parts = hours > 0 ? [hours, minutes, seconds] : [minutes, seconds];
+  return parts.map((p, i) => (i === 0 ? String(p) : String(p).padStart(2, "0"))).join(":");
+}
 
 export function VmaCalculatorPage() {
   const { t } = useTranslation("common");
@@ -44,6 +71,7 @@ export function VmaCalculatorPage() {
   const [hours, setHours] = useState<string>(() => searchParams.get("h") ?? "");
   const [minutes, setMinutes] = useState<string>(() => searchParams.get("m") ?? "");
   const [seconds, setSeconds] = useState<string>(() => searchParams.get("s") ?? "");
+  const [forceShow, setForceShow] = useState(false);
 
   const selectedDistance = DISTANCES.find((d) => d.id === distanceId)!;
 
@@ -55,21 +83,37 @@ export function VmaCalculatorPage() {
   const totalTimeMinutes = parsedHours * 60 + parsedMinutes + parsedSeconds / 60;
   const hasValidTime = totalTimeMinutes > 0;
 
-  // Calculate VMA
-  const calculatedVma = useMemo(() => {
+  // Raw VMA from input — the only guard here is finiteness/sign, not plausibility.
+  const rawVma = useMemo(() => {
     if (!hasValidTime) return null;
     const raceSpeedKmh = selectedDistance.distanceKm / (totalTimeMinutes / 60);
     const vma = raceSpeedKmh / (selectedDistance.vmaPercentage / 100);
-    // Sanity check: VMA should be between 8 and 30
-    if (!Number.isFinite(vma) || vma < 4 || vma > 35) return null;
+    if (!Number.isFinite(vma) || vma <= 0 || vma > 40) return null;
     return Math.round(vma * 10) / 10;
   }, [hasValidTime, selectedDistance.distanceKm, selectedDistance.vmaPercentage, totalTimeMinutes]);
+
+  const isImplausible =
+    rawVma !== null && (rawVma < PLAUSIBLE_VMA_MIN || rawVma > PLAUSIBLE_VMA_MAX);
+
+  // Reset the override whenever the input changes so a stale "calculate
+  // anyway" doesn't silently apply to a different, newly-plausible entry.
+  useEffect(() => {
+    setForceShow(false);
+  }, [distanceId, hours, minutes, seconds]);
+
+  const calculatedVma = rawVma !== null && (!isImplausible || forceShow) ? rawVma : null;
 
   // Calculate pace zones from VMA
   const paceZones = useMemo(() => {
     if (!calculatedVma) return null;
     return calculatePaceZones(calculatedVma);
   }, [calculatedVma]);
+
+  const raceEstimates = useMemo(() => {
+    if (!calculatedVma) return null;
+    return calculateRaceTimes(calculatedVma);
+  }, [calculatedVma]);
+  const pace10k = raceEstimates?.find((r) => r.distance === "10K")?.paceMinKm;
 
   const handleUseVma = () => {
     if (!calculatedVma) return;
@@ -83,6 +127,33 @@ export function VmaCalculatorPage() {
     saveUserZonePrefs({ vma: calculatedVma });
     updateBaseData({ vma: calculatedVma });
     navigate("/plan/new");
+  };
+
+  const handleCopyTable = () => {
+    if (!paceZones) return;
+    const lines = paceZones.map((z) => {
+      const meta = ZONE_META[z.zone as ZoneNumber];
+      return `Z${z.zone} ${pickLang(meta, "label")}\t${formatPace(convertPace(z.paceMinPerKm!, unit))}-${formatPace(convertPace(z.paceMaxPerKm!, unit))} ${getPaceUnit(unit)}`;
+    });
+    navigator.clipboard?.writeText(lines.join("\n"));
+    toast.success(t("calculators:calculateurs.vma.tableCopied"));
+  };
+
+  const handleExportPdf = () => {
+    toast.error(t("calculators:calculateurs.vma.pdfUnavailable"));
+  };
+
+  const handleReset = () => {
+    setHours("");
+    setMinutes("");
+    setSeconds("");
+    setForceShow(false);
+  };
+
+  const handleCorrect = () => {
+    setHours("");
+    setMinutes("");
+    setSeconds("");
   };
 
   // Clamp numeric input within range
@@ -128,180 +199,231 @@ export function VmaCalculatorPage() {
           },
         ]}
       />
-      <div className="py-8 max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
-            <Timer className="size-8 text-primary shrink-0" />
-            {t("calculators:calculateurs.vma.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
-            {t("calculators:calculateurs.vma.description")}
-          </FadeUp>
-        </div>
+      <div className="py-8">
+        <CalculatorPanel className="p-0">
+          <div className="grid lg:grid-cols-[1fr_360px]">
+            {/* ── Main column: form + result ── */}
+            <div className="p-5 sm:p-7 md:p-8">
+              <CalculatorHero
+                groupLabel={t("calculators:calculateurs.groups.performance")}
+                title={t("calculators:calculateurs.vma.title")}
+                description={t("calculators:calculateurs.vma.description")}
+                className="mb-7 md:mb-8"
+              />
 
-        {/* Input Card */}
-        <Card className="mb-6">
-          <CardContent className="pt-6 space-y-6">
-            {/* Distance Select */}
-            <div className="space-y-2">
-              <label htmlFor="distance" className="text-sm font-medium">
-                {t("calculators:calculateurs.vma.raceDistance")}
-              </label>
-              <select
-                id="distance"
-                value={distanceId}
-                onChange={(e) => setDistanceId(e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              >
-                {DISTANCES.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.label}
-                  </option>
-                ))}
-              </select>
-              <p className="text-xs text-muted-foreground">
-                {t("calculators:calculateurs.vma.vmaPercentUsed", { percent: selectedDistance.vmaPercentage })}
-              </p>
-            </div>
+              <div className="grid sm:grid-cols-2 gap-6">
+                <CalculatorChipGroup label={t("calculators:calculateurs.vma.raceDistance")}>
+                  {DISTANCES.map((d) => (
+                    <CalculatorChip
+                      key={d.id}
+                      active={distanceId === d.id}
+                      onClick={() => setDistanceId(d.id)}
+                    >
+                      {d.label}
+                    </CalculatorChip>
+                  ))}
+                </CalculatorChipGroup>
 
-            {/* Time Inputs */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium">
-                {t("calculators:calculateurs.vma.raceTime")}
-              </label>
-              <div className="flex items-center gap-2">
-                <div className="flex flex-col items-center">
-                  <input
-                    type="number"
-                    min={0}
-                    max={9}
-                    placeholder="0"
-                    value={hours}
-                    onChange={(e) => handleNumericInput(e.target.value, setHours, 9)}
-                    className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculators:calculateurs.vma.hours")}
-                  />
-                  <span className="text-xs text-muted-foreground mt-1">
-                    {t("calculators:calculateurs.vma.hoursShort")}
-                  </span>
-                </div>
-                <span className="text-xl font-bold text-muted-foreground pb-4">:</span>
-                <div className="flex flex-col items-center">
-                  <input
-                    type="number"
-                    min={0}
-                    max={59}
-                    placeholder="00"
-                    value={minutes}
-                    onChange={(e) => handleNumericInput(e.target.value, setMinutes, 59)}
-                    className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculators:calculateurs.vma.minutes")}
-                  />
-                  <span className="text-xs text-muted-foreground mt-1">min</span>
-                </div>
-                <span className="text-xl font-bold text-muted-foreground pb-4">:</span>
-                <div className="flex flex-col items-center">
-                  <input
-                    type="number"
-                    min={0}
-                    max={59}
-                    placeholder="00"
-                    value={seconds}
-                    onChange={(e) => handleNumericInput(e.target.value, setSeconds, 59)}
-                    className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculators:calculateurs.vma.seconds")}
-                  />
-                  <span className="text-xs text-muted-foreground mt-1">sec</span>
+                <div>
+                  <CalculatorLabel className="mb-2.5">
+                    {t("calculators:calculateurs.vma.raceTime")}
+                  </CalculatorLabel>
+                  <div className="flex items-end gap-2">
+                    <CalculatorTimeField
+                      value={hours}
+                      onChange={(v) => handleNumericInput(v, setHours, 9)}
+                      max={9}
+                      placeholder="0"
+                      unitLabel={t("calculators:calculateurs.vma.hoursShort")}
+                      ariaLabel={t("calculators:calculateurs.vma.hours")}
+                    />
+                    <span className="pb-6 font-mono text-xl text-muted-foreground">:</span>
+                    <CalculatorTimeField
+                      value={minutes}
+                      onChange={(v) => handleNumericInput(v, setMinutes, 59)}
+                      max={59}
+                      placeholder="00"
+                      unitLabel="min"
+                      ariaLabel={t("calculators:calculateurs.vma.minutes")}
+                    />
+                    <span className="pb-6 font-mono text-xl text-muted-foreground">:</span>
+                    <CalculatorTimeField
+                      value={seconds}
+                      onChange={(v) => handleNumericInput(v, setSeconds, 59)}
+                      max={59}
+                      placeholder="00"
+                      unitLabel="sec"
+                      ariaLabel={t("calculators:calculateurs.vma.seconds")}
+                    />
+                  </div>
                 </div>
               </div>
+
+              {/* Result */}
+              <div className="mt-8 md:mt-9">
+                {!hasValidTime && (
+                  <CalculatorEmptyResult hint={t("calculators:calculateurs.vma.emptyHint")} />
+                )}
+
+                {hasValidTime && rawVma !== null && isImplausible && !forceShow && (
+                  <CalculatorImplausibleWarning
+                    message={t("calculators:calculateurs.vma.implausibleMessage", {
+                      time: formatHms(parsedHours, parsedMinutes, parsedSeconds),
+                      distance: selectedDistance.label,
+                      vma: rawVma,
+                    })}
+                    onProceed={() => setForceShow(true)}
+                    onCorrect={handleCorrect}
+                    proceedLabel={t("calculators:calculateurs.vma.implausibleProceed")}
+                    correctLabel={t("calculators:calculateurs.vma.implausibleCorrect")}
+                    note={t("calculators:calculateurs.vma.implausibleNote")}
+                  />
+                )}
+
+                {calculatedVma && paceZones && (
+                  <>
+                    <div className="border-t-2 border-foreground pt-6 flex flex-wrap items-end gap-8 sm:gap-11">
+                      <CalculatorResultHeadline
+                        label={t("calculators:calculateurs.vma.estimatedVma")}
+                        value={calculatedVma.toLocaleString("fr-FR")}
+                        unit="km/h"
+                      />
+                      <div className="flex gap-7 sm:gap-8">
+                        <CalculatorResultStat
+                          label={t("calculators:calculateurs.vma.vpaceLabel")}
+                          value={formatPace(convertPace(60 / calculatedVma, unit))}
+                        />
+                        {pace10k && (
+                          <CalculatorResultStat
+                            label={t("calculators:calculateurs.vma.pace10kLabel")}
+                            value={pace10k}
+                          />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Zone table */}
+                    <div className="mt-7">
+                      <CalculatorLabel>{t("calculators:calculateurs.vma.paceZonesPreview")}</CalculatorLabel>
+                      <div className="border-2 border-border/70 mt-3 overflow-x-auto">
+                        <table className="w-full text-left min-w-[480px]">
+                          <thead>
+                            <tr className="bg-ink text-paper font-mono text-[10px] tracking-[0.1em] uppercase">
+                              <th className="px-3 py-2.5 font-normal">{t("calculators:calculateurs.vma.zone")}</th>
+                              <th className="px-3 py-2.5 font-normal">{t("calculators:calculateurs.vma.usageCol")}</th>
+                              <th className="px-3 py-2.5 font-normal">{t("calculators:calculateurs.vma.pace")}</th>
+                              <th className="px-3 py-2.5 font-normal">% VMA</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {paceZones.map((z) => {
+                              const meta = ZONE_META[z.zone as ZoneNumber];
+                              const isThreshold = z.zone === 4;
+                              const minPct = Math.round((60 / z.paceMaxPerKm! / calculatedVma) * 100);
+                              const maxPct = Math.round((60 / z.paceMinPerKm! / calculatedVma) * 100);
+                              return (
+                                <tr
+                                  key={z.zone}
+                                  className={cn(
+                                    "border-t border-border/70 font-mono text-[13px]",
+                                    isThreshold && "bg-accent-acid text-ink font-bold",
+                                  )}
+                                >
+                                  <td className={cn("px-3 py-2.5", !isThreshold && zoneClass(z.zone as ZoneNumber, "text"))}>
+                                    Z{z.zone}
+                                  </td>
+                                  <td className="px-3 py-2.5 font-sans text-[14px]">
+                                    {pickLang(meta, "label")}
+                                  </td>
+                                  <td className={cn("px-3 py-2.5 tabular-nums", !isThreshold && "text-foreground/80")}>
+                                    {formatPace(convertPace(z.paceMinPerKm!, unit))}-{formatPace(convertPace(z.paceMaxPerKm!, unit))}
+                                  </td>
+                                  <td className={cn("px-3 py-2.5 tabular-nums", !isThreshold && "text-muted-foreground")}>
+                                    {minPct}-{maxPct}%
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex flex-wrap items-center gap-3 mt-7">
+                      <Button onClick={handleUseVma}>
+                        <Save className="size-4" />
+                        {t("calculators:calculateurs.vma.useThisVma")}
+                      </Button>
+                      <Button onClick={handleCreatePlan} variant="outline">
+                        <ArrowRight className="size-4" />
+                        {t("calculators:calculateurs.vma.createPlan")}
+                      </Button>
+                      <Button onClick={handleCopyTable} variant="outline">
+                        {t("calculators:calculateurs.vma.copyTable")}
+                      </Button>
+                      <Button onClick={handleExportPdf} variant="outline">
+                        {t("calculators:calculateurs.vma.exportPdf")}
+                      </Button>
+                      <button
+                        type="button"
+                        onClick={handleReset}
+                        className="font-mono text-[11px] tracking-[0.08em] uppercase text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        {t("calculators:calculateurs.vma.reset")}
+                      </button>
+                      <ShareLinkButton
+                        buildUrl={() =>
+                          buildParamsUrl("/calculators/vma", {
+                            d: distanceId,
+                            h: hours,
+                            m: minutes,
+                            s: seconds,
+                          })
+                        }
+                        title={t("calculators:calculateurs.vma.title")}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
-          </CardContent>
-        </Card>
 
-        {/* Results */}
-        {calculatedVma && paceZones && (
-          <div className="space-y-6">
-            {/* VMA Display */}
-            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-              <CardContent className="py-8 flex flex-col items-center text-center">
-                <p className="text-sm font-medium text-muted-foreground mb-2">
-                  {t("calculators:calculateurs.vma.estimatedVma")}
-                </p>
-                <p className="text-5xl font-bold text-primary tabular-nums">
-                  {calculatedVma.toFixed(1)}
-                </p>
-                <p className="text-lg text-muted-foreground mt-1">km/h</p>
-              </CardContent>
-            </Card>
-
-            {/* Zones Preview Table */}
-            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-              <CardContent className="pt-6">
-                <h2 className="text-lg font-semibold mb-4">
-                  {t("calculators:calculateurs.vma.paceZonesPreview")}
-                </h2>
-                <ResponsiveTable
-                  data={paceZones}
-                  rowKey="zone"
-                  stickyHeader
-                  columns={[
-                    {
-                      key: "zone",
-                      header: t("calculators:calculateurs.vma.zone"),
-                      cell: (z) => {
-                        const meta = ZONE_META[z.zone as ZoneNumber];
-                        return (
-                          <span
-                            className={cn(
-                              "inline-flex items-center gap-2 font-medium",
-                              zoneClass(z.zone as ZoneNumber, "text"),
-                            )}
-                          >
-                            <span
-                              className={cn("size-3 rounded-full", zoneClass(z.zone as ZoneNumber, "bg"))}
-                            />
-                            Z{z.zone} - {pickLang(meta, "label")}
-                          </span>
-                        );
-                      },
-                    },
-                    {
-                      key: "pace",
-                      header: t("calculators:calculateurs.vma.pace"),
-                      className: "tabular-nums",
-                      cell: (z) =>
-                        `${formatPace(convertPace(z.paceMinPerKm!, unit))}-${formatPace(convertPace(z.paceMaxPerKm!, unit))} ${getPaceUnit(unit)}`,
-                    },
-                  ]}
-                />
-              </CardContent>
-            </Card>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button onClick={handleUseVma} className="flex-1">
-                <Save className="size-4" />
-                {t("calculators:calculateurs.vma.useThisVma")}
-              </Button>
-              <Button onClick={handleCreatePlan} variant="outline" className="flex-1">
-                <ArrowRight className="size-4" />
-                {t("calculators:calculateurs.vma.createPlan")}
-              </Button>
-              <ShareLinkButton
-                buildUrl={() =>
-                  buildParamsUrl("/calculators/vma", {
-                    d: distanceId,
-                    h: hours,
-                    m: minutes,
-                    s: seconds,
-                  })
+            {/* ── Sidebar ── */}
+            <CalculatorSidebar className="border-t-2 lg:border-t-0 lg:border-l-2 border-foreground p-5 sm:p-7 md:p-8">
+              <CalculatorFormulaBox
+                label={t("calculators:calculateurs.vma.formulaLabel")}
+                formula={
+                  <>
+                    {t("calculators:calculateurs.vma.formulaLine1")}
+                    <br />
+                    {t("calculators:calculateurs.vma.formulaLine2")}
+                  </>
                 }
-                title={t("calculators:calculateurs.vma.title")}
+                note={t("calculators:calculateurs.vma.formulaNote")}
+                source={t("calculators:calculateurs.vma.formulaSource")}
               />
-            </div>
+              <CalculatorInfoList
+                label={t("calculators:calculateurs.vma.toKnowLabel")}
+                items={[
+                  t("calculators:calculateurs.vma.toKnow1"),
+                  t("calculators:calculateurs.vma.toKnow2"),
+                  t("calculators:calculateurs.vma.toKnow3"),
+                ]}
+              />
+              <CalculatorRelatedLinks
+                label={t("calculators:calculateurs.vma.relatedLabel")}
+                links={[
+                  { label: t("calculators:calculateurs.vma.relatedEquivalence"), to: "/calculators/equivalence" },
+                  { label: t("calculators:calculateurs.vma.relatedZones"), to: "/calculators/zones" },
+                ]}
+              />
+              <CalculatorLocalNote>
+                {t("calculators:calculateurs.vma.localNote")}
+              </CalculatorLocalNote>
+            </CalculatorSidebar>
           </div>
-        )}
+        </CalculatorPanel>
       </div>
     </>
   );
