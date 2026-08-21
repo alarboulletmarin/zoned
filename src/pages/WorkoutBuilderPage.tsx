@@ -15,9 +15,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SEOHead } from "@/components/seo";
+import { Input } from "@/components/ui/input";
 import { WorkoutStepListEditor } from "@/components/domain/contribute/WorkoutStepListEditor";
 import { WorkoutParameterPanel } from "@/components/domain/WorkoutParameterPanel";
 import { SessionTimeline } from "@/components/visualization/SessionTimeline";
+import { SessionIntensityBar } from "@/components/visualization/ZoneDistribution";
+import { transformSessionBlocks } from "@/components/visualization/transforms";
+import { useIsEnglish } from "@/lib/i18n-utils";
 import { PageLoader } from "@/components/ui/page-loader";
 import { getStructuredWorkoutDurationMinutes, getWorkoutPhaseSteps, normalizeWorkoutStructureSource, replaceWorkoutPhaseSteps } from "@/lib/workoutStructure";
 import { isMac } from "@/lib/platform";
@@ -47,6 +51,21 @@ import { isRunningWorkout } from "@/lib/workoutTemplate";
 import type { WorkoutTemplate, WorkoutStep } from "@/types";
 
 type SectionKey = "warmup" | "main" | "cooldown";
+
+/**
+ * Above this share of the session spent in Z4 or above, the side column raises
+ * the mockup's "Vérification" note. 35 % is roughly a 20-minute threshold block
+ * inside a one-hour session — past that, a weekday session is a race effort.
+ */
+const HIGH_INTENSITY_THRESHOLD = 35;
+
+/**
+ * One action row of the side column: a filet, mono small caps, no chrome.
+ * Written so it also survives being merged onto a `Button` (the export menu's
+ * trigger), whose own padding, weight and border it has to undo.
+ */
+const SIDE_ROW =
+  "flex w-full h-auto items-center justify-start gap-3 rounded-none border-0 border-b border-filet bg-transparent px-0 has-[>svg]:px-0 py-3 font-mono text-[11px] font-normal tracking-[0.1em] uppercase text-muted-foreground transition-colors hover:bg-transparent hover:text-foreground hover:shadow-none disabled:pointer-events-none disabled:opacity-40";
 
 // ── List view (no id param) ──────────────────────────────────────────
 
@@ -434,6 +453,26 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
     getSteps("main").length +
     getSteps("cooldown").length;
 
+  // The side column reads the same transform the timeline does, so the split
+  // bar, the percentages and the warning can never disagree with the preview.
+  // `transformSessionBlocks` resolves zone labels through the active language,
+  // which the memo has to depend on — same reason as in `ZoneDistribution`.
+  const isEnglish = useIsEnglish();
+  const { zoneBreakdown } = useMemo(
+    () => transformSessionBlocks(workout),
+    [workout, isEnglish],
+  );
+
+  const highIntensityPercent = useMemo(
+    () =>
+      Math.round(
+        zoneBreakdown
+          .filter((item) => item.zone != null && item.zone >= 4)
+          .reduce((sum, item) => sum + item.percent, 0),
+      ),
+    [zoneBreakdown],
+  );
+
   const sections: { key: SectionKey; label: string; color: string }[] = [
     { key: "warmup", label: t("calculators:workoutBuilder.warmup"), color: "text-zone-2" },
     { key: "main", label: t("calculators:workoutBuilder.mainSet"), color: "text-zone-5" },
@@ -448,51 +487,33 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
         canonical="/workout/builder"
       />
 
-      <div className="py-6 md:py-8 max-w-3xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="mb-8 border-t border-filet pt-5 md:pt-6">
+      <div className="py-6 md:py-8 max-w-6xl mx-auto">
+        {/* Header — title left, the three verbs of the mockup on the right */}
+        <div className="border-t border-filet pt-5 md:pt-6">
           <Link
             to="/workout/builder"
             className="font-mono text-xs tracking-[0.06em] uppercase text-muted-foreground hover:text-foreground transition-colors inline-block mb-4"
           >
             {t("calculators:workoutBuilder.backToList")}
           </Link>
-          <input
-            type="text"
-            value={workout.name}
-            onChange={(e) => setWorkout((prev) => ({
-              ...prev,
-              name: e.target.value,
-              // The builder is single-language (#67), so it mirrors the name
-              // into its English twin. A workout adapted from the catalogue
-              // arrives with a real translation, though, and mirroring would
-              // destroy it on the first keystroke — so mirror only while the
-              // two are already the same, i.e. a workout built from scratch.
-              nameEn: prev.nameEn === prev.name ? e.target.value : prev.nameEn,
-            }))}
-            placeholder={t("calculators:workoutBuilder.namePlaceholder")}
-            className="block w-full font-sans font-bold uppercase tracking-[-0.03em] text-2xl md:text-4xl bg-transparent border-none focus:outline-none placeholder:text-muted-foreground/40 mb-1"
-          />
-          <div className="flex items-center gap-3 font-mono text-xs text-muted-foreground mb-6">
-            <span>~{totalMin} min · {blockCount} {t("calculators:workoutBuilder.blocks")}</span>
-            {isSaved && <FavoriteButton workoutId={workout.id} />}
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <Button
-              onClick={handleSave}
-              disabled={!canSave}
-            >
-              <Save className="size-4 mr-2" />
-              {t("calculators:workoutBuilder.save")}
-            </Button>
+          <div className="flex flex-wrap items-end justify-between gap-4 border-b border-filet pb-5">
+            <div className="min-w-0">
+              <h1 className="font-sans font-bold uppercase leading-[0.9] tracking-[-0.05em] text-[32px] sm:text-[38px] md:text-[44px]">
+                {t("calculators:workoutBuilder.builderTitle")}
+              </h1>
+              <div className="flex items-center gap-3 font-mono text-[11px] text-muted-foreground mt-2">
+                <span>{t("calculators:workoutBuilder.draftSubtitle")}</span>
+                {isSaved && <FavoriteButton workoutId={workout.id} />}
+              </div>
+            </div>
             <div className="flex items-center gap-1">
               <Button
                 variant="ghost"
                 size="icon-sm"
                 onClick={undo}
                 disabled={!canUndo}
-                aria-label={t("calculators:workoutBuilder.undo", "Annuler")}
-                title={t("calculators:workoutBuilder.undo", "Annuler") + (isMac ? " (⌘Z)" : " (Ctrl+Z)")}
+                aria-label={t("calculators:workoutBuilder.undo")}
+                title={t("calculators:workoutBuilder.undo") + (isMac ? " (⌘Z)" : " (Ctrl+Z)")}
               >
                 <Undo2 className="size-4" />
               </Button>
@@ -501,87 +522,170 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
                 size="icon-sm"
                 onClick={redo}
                 disabled={!canRedo}
-                aria-label={t("calculators:workoutBuilder.redo", "Rétablir")}
-                title={t("calculators:workoutBuilder.redo", "Rétablir") + (isMac ? " (⇧⌘Z)" : " (Ctrl+Shift+Z)")}
+                aria-label={t("calculators:workoutBuilder.redo")}
+                title={t("calculators:workoutBuilder.redo") + (isMac ? " (⇧⌘Z)" : " (Ctrl+Shift+Z)")}
               >
                 <Redo2 className="size-4" />
               </Button>
+              <Button
+                variant="accent"
+                className="ml-2"
+                onClick={handleSave}
+                disabled={!canSave}
+              >
+                <Save className="size-4 mr-2" />
+                {t("calculators:workoutBuilder.save")}
+              </Button>
             </div>
-            <Button
-              variant="outline"
-              onClick={handleShare}
-              disabled={!canSave}
-            >
-              <Share className="size-4 mr-2" />
-              {t("calculators:workoutBuilder.shareLink")}
-            </Button>
-            {isSaved && <ExportMenu workout={workout} />}
-            {isSaved && (
-              <Button
-                variant="outline"
-                onClick={() => {
-                  exportWorkoutsToJSON([workout]);
-                  toast.success(t("calculators:workoutBuilder.workoutExported"));
-                }}
-              >
-                <Download className="size-4 mr-2" />
-                JSON
-              </Button>
-            )}
-            {isSaved && (
-              <Button
-                variant="secondary"
-                className="text-destructive hover:text-destructive"
-                onClick={() => setShowDeleteConfirm(true)}
-              >
-                <Trash2 className="size-4 mr-2" />
-                {t("calculators:workoutBuilder.delete")}
-              </Button>
-            )}
           </div>
         </div>
 
-        {/* Preview */}
-        <div className="rounded-none border-2 border-foreground p-4 bg-card">
-          <p className="text-xs text-muted-foreground mb-2">{t("calculators:workoutBuilder.preview")}</p>
-          <SessionTimeline workout={workout} />
-        </div>
-
-        <WorkoutParameterPanel
-          params={params}
-          onPreview={previewParam}
-          onCommit={commitParam}
-        />
-
-
-        {/* Sections */}
-        {sections.map(({ key, label, color }) => {
-          const steps = getSteps(key);
-          const isCollapsed = collapsed[key];
-          return (
-            <div key={key} className="space-y-3">
-              <button
-                type="button"
-                onClick={() => toggleCollapse(key)}
-                className="flex items-center gap-2 w-full text-left"
+        <div className="grid gap-8 lg:grid-cols-[1fr_360px] items-start mt-6 md:mt-8">
+          {/* ── Editor column ── */}
+          <div className="min-w-0 space-y-6">
+            <div>
+              <label
+                htmlFor="workout-name"
+                className="block font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground mb-2"
               >
-                {isCollapsed ? <ChevronDown className="size-4" /> : <ChevronUp className="size-4" />}
-                <h2 className={`font-sans font-bold uppercase tracking-tight text-lg ${color}`}>{label}</h2>
-                <span className="text-xs text-muted-foreground">({steps.length})</span>
-              </button>
+                {t("calculators:workoutBuilder.nameLabel")}
+              </label>
+              <Input
+                id="workout-name"
+                type="text"
+                value={workout.name}
+                onChange={(e) => setWorkout((prev) => ({
+                  ...prev,
+                  name: e.target.value,
+                  // The builder is single-language (#67), so it mirrors the name
+                  // into its English twin. A workout adapted from the catalogue
+                  // arrives with a real translation, though, and mirroring would
+                  // destroy it on the first keystroke — so mirror only while the
+                  // two are already the same, i.e. a workout built from scratch.
+                  nameEn: prev.nameEn === prev.name ? e.target.value : prev.nameEn,
+                }))}
+                placeholder={t("calculators:workoutBuilder.namePlaceholder")}
+              />
+            </div>
 
-              {!isCollapsed && (
-                <div className="space-y-3 pl-2">
-                  <WorkoutStepListEditor
-                    steps={steps}
-                    onChange={(nextSteps) => updateSteps(key, nextSteps)}
-                    label={label}
-                  />
+            <WorkoutParameterPanel
+              params={params}
+              onPreview={previewParam}
+              onCommit={commitParam}
+            />
+
+            {/* Sections */}
+            {sections.map(({ key, label, color }) => {
+              const steps = getSteps(key);
+              const isCollapsed = collapsed[key];
+              return (
+                <div key={key} className="border-t border-filet pt-5">
+                  <button
+                    type="button"
+                    onClick={() => toggleCollapse(key)}
+                    className="flex items-center gap-3 w-full text-left"
+                  >
+                    {isCollapsed ? <ChevronDown className="size-4 shrink-0" /> : <ChevronUp className="size-4 shrink-0" />}
+                    <h2 className={`font-sans font-bold uppercase tracking-[-0.02em] text-lg ${color}`}>{label}</h2>
+                    <span className="font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
+                      {steps.length} {t("calculators:workoutBuilder.blocks")}
+                    </span>
+                  </button>
+
+                  {!isCollapsed && (
+                    <div className="mt-4">
+                      <WorkoutStepListEditor
+                        steps={steps}
+                        onChange={(nextSteps) => updateSteps(key, nextSteps)}
+                        label={label}
+                      />
+                    </div>
+                  )}
                 </div>
+              );
+            })}
+          </div>
+
+          {/* ── Live side column ── */}
+          <aside className="border-2 border-foreground bg-background p-5 space-y-6 lg:sticky lg:top-20">
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+                {t("calculators:workoutBuilder.preview")}
+              </p>
+              <div className="mt-3">
+                <SessionTimeline workout={workout} />
+              </div>
+              <p className="font-mono text-xs text-muted-foreground mt-3">
+                {formatDurationMinutes(totalMin)} · {blockCount} {t("calculators:workoutBuilder.blocks")}
+              </p>
+              {zoneBreakdown.length > 0 && (
+                <>
+                  <SessionIntensityBar workout={workout} className="h-2.5 mt-3" />
+                  <p className="font-mono text-[11px] text-muted-foreground mt-2">
+                    {zoneBreakdown
+                      .map((item) => `${Math.round(item.percent)} % ${item.zone != null ? `Z${item.zone}` : item.label}`)
+                      .join(" · ")}
+                  </p>
+                </>
               )}
             </div>
-          );
-        })}
+
+            {/* Contextual check — a filet in Z3 orange, never a red alert box */}
+            {(blockCount === 0 || highIntensityPercent > HIGH_INTENSITY_THRESHOLD) && (
+              <div className="border-2 border-zone-3 p-4">
+                <p className="font-mono text-[10px] tracking-[0.12em] uppercase text-zone-3">
+                  {t("calculators:workoutBuilder.check.title")}
+                </p>
+                <p className="text-sm leading-relaxed text-muted-foreground mt-2">
+                  {blockCount === 0
+                    ? t("calculators:workoutBuilder.check.empty")
+                    : t("calculators:workoutBuilder.check.highIntensity", { percent: highIntensityPercent })}
+                </p>
+              </div>
+            )}
+
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+                {t("calculators:workoutBuilder.afterSave")}
+              </p>
+              <div className="mt-3 flex flex-col">
+                {isSaved && <ExportMenu workout={workout} className={SIDE_ROW} />}
+                <button type="button" className={SIDE_ROW} onClick={handleShare} disabled={!canSave}>
+                  <Share className="size-4" />
+                  {t("calculators:workoutBuilder.shareByLink")}
+                </button>
+                {isSaved && (
+                  <button
+                    type="button"
+                    className={SIDE_ROW}
+                    onClick={() => {
+                      exportWorkoutsToJSON([workout]);
+                      toast.success(t("calculators:workoutBuilder.workoutExported"));
+                    }}
+                  >
+                    <Download className="size-4" />
+                    {t("calculators:workoutBuilder.exportJson")}
+                  </button>
+                )}
+                {isSaved && (
+                  <button
+                    type="button"
+                    className={`${SIDE_ROW} text-destructive hover:text-destructive`}
+                    onClick={() => setShowDeleteConfirm(true)}
+                  >
+                    <Trash2 className="size-4" />
+                    {t("calculators:workoutBuilder.delete")}
+                  </button>
+                )}
+              </div>
+              {!isSaved && (
+                <p className="font-mono text-[11px] text-muted-foreground mt-3">
+                  {t("calculators:workoutBuilder.saveToExport")}
+                </p>
+              )}
+            </div>
+          </aside>
+        </div>
       </div>
 
       {/* Delete Confirmation */}

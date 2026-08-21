@@ -339,6 +339,19 @@
     "addBlock": "Ajouter un bloc",
     "listSubtitle": "Séances personnalisées stockées dans votre navigateur",
     "shareLink": "Lien",
+    "draftSubtitle": "Brouillon local · conservé dans ce navigateur",
+    "nameLabel": "Nom",
+    "undo": "Annuler",
+    "redo": "Rétablir",
+    "check": {
+      "title": "Vérification",
+      "highIntensity": "{{percent}} % du temps en Z4 ou plus : c'est beaucoup pour une séance de semaine. Ajoute de la récupération ou raccourcis un bloc.",
+      "empty": "Aucun bloc pour l'instant. Ajoute un échauffement, un corps de séance et un retour au calme."
+    },
+    "afterSave": "Une fois enregistrée",
+    "saveToExport": "Enregistre la séance pour débloquer les exports.",
+    "shareByLink": "Partager par lien",
+    "exportJson": "Exporter en JSON",
     "shared": {
       "title": "Séance partagée",
       "subtitle": "Cette séance a été partagée avec vous. Ajoutez-la à vos séances pour la modifier ou l'exporter.",

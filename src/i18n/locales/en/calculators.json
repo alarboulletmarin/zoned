@@ -339,6 +339,19 @@
     "addBlock": "Add block",
     "listSubtitle": "Custom workouts stored locally in your browser",
     "shareLink": "Link",
+    "draftSubtitle": "Local draft · kept in this browser",
+    "nameLabel": "Name",
+    "undo": "Undo",
+    "redo": "Redo",
+    "check": {
+      "title": "Check",
+      "highIntensity": "{{percent}}% of the time in Z4 or above: that is a lot for a weekday session. Add recovery or shorten a block.",
+      "empty": "No blocks yet. Add a warm-up, a main set and a cool-down."
+    },
+    "afterSave": "Once saved",
+    "saveToExport": "Save the workout to unlock exports.",
+    "shareByLink": "Share by link",
+    "exportJson": "Export as JSON",
     "shared": {
       "title": "Shared workout",
       "subtitle": "This workout was shared with you. Add it to your workouts to edit or export it.",

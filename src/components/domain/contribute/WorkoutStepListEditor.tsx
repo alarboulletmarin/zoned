@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Plus, Trash2, ChevronUp, ChevronDown } from "@/components/icons";
 import type { WorkoutRepeatUnit, WorkoutStep, WorkoutStepRole, WorkoutStepRepeat, WorkoutStepSegment } from "@/types";
 import { cn } from "@/lib/utils";
@@ -66,14 +67,14 @@ export function WorkoutStepListEditor({ steps, onChange, label, depth = 0 }: Wor
   return (
     <div className={cn("space-y-3", depth > 0 && "pl-3 sm:pl-4")}>
       <div className="flex items-center justify-between gap-3">
-        <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+        <h3 className="font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground">
           {label}
         </h3>
-        <span className="text-xs text-muted-foreground">{steps.length}</span>
+        <span className="font-mono text-[10px] text-muted-foreground">{steps.length}</span>
       </div>
 
       {steps.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-muted-foreground/30 p-6 text-center">
+        <div className="border-2 border-dashed border-filet p-6 text-center">
           <p className="text-sm text-muted-foreground">{t("blocks.emptyState")}</p>
         </div>
       ) : (
@@ -183,73 +184,67 @@ function SegmentEditor({
     <div className="space-y-4">
       <div className="grid grid-cols-1 gap-4">
         <div className="space-y-1">
-          <label className="text-xs font-medium text-muted-foreground">{t("blocks.description")}</label>
-          <input
+          <label className="block font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground">{t("blocks.description")}</label>
+          <Input
             type="text"
             value={step.description}
             onChange={(e) => onChange({ ...step, description: e.target.value })}
             placeholder={t("blocks.descriptionPlaceholder")}
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
           />
         </div>
         <div className="space-y-1">
-          <label className="text-xs font-medium text-muted-foreground">{t("blocks.descriptionEn")}</label>
-          <input
+          <label className="block font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground">{t("blocks.descriptionEn")}</label>
+          <Input
             type="text"
             value={step.descriptionEn ?? ""}
             onChange={(e) => onChange({ ...step, descriptionEn: e.target.value || undefined })}
             placeholder={t("blocks.descriptionEnPlaceholder")}
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="space-y-1">
-          <label className="text-xs font-medium text-muted-foreground">{t("blocks.durationMinutes")}</label>
-          <input
+          <label className="block font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground">{t("blocks.durationMinutes")}</label>
+          <Input
             type="number"
             min={0}
             value={minutes}
             onChange={(e) => updateDuration(Number(e.target.value || 0), seconds)}
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
           />
         </div>
         <div className="space-y-1">
-          <label className="text-xs font-medium text-muted-foreground">{t("blocks.durationSeconds")}</label>
-          <input
+          <label className="block font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground">{t("blocks.durationSeconds")}</label>
+          <Input
             type="number"
             min={0}
             max={59}
             value={seconds}
             onChange={(e) => updateDuration(minutes, Number(e.target.value || 0))}
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
           />
         </div>
         <div className="space-y-1">
-          <label className="text-xs font-medium text-muted-foreground">{t("blocks.distanceM")}</label>
-          <input
+          <label className="block font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground">{t("blocks.distanceM")}</label>
+          <Input
             type="number"
             min={0}
             value={step.distanceM ?? ""}
             onChange={(e) => onChange({ ...step, distanceM: e.target.value ? Number(e.target.value) : undefined })}
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
           />
         </div>
         <div className="space-y-1">
-          <label className="text-xs font-medium text-muted-foreground">{t("blocks.zone")}</label>
-          <input
+          <label className="block font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground">{t("blocks.zone")}</label>
+          <Input
             type="text"
             value={step.zone ?? ""}
             onChange={(e) => onChange({ ...step, zone: e.target.value || undefined })}
             placeholder={t("blocks.zonePlaceholder")}
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
           />
         </div>
       </div>
 
       <div className="space-y-1">
-        <label className="text-xs font-medium text-muted-foreground">{t("blocks.role")}</label>
+        <label className="block font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground">{t("blocks.role")}</label>
         <Select
           value={step.role ?? "effort"}
           onValueChange={(value) => onChange({ ...step, role: value as WorkoutStepRole })}
@@ -285,17 +280,16 @@ function RepeatEditor({
     <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="space-y-1">
-          <label className="text-xs font-medium text-muted-foreground">{t("blocks.count")}</label>
-          <input
+          <label className="block font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground">{t("blocks.count")}</label>
+          <Input
             type="number"
             min={1}
             value={step.count}
             onChange={(e) => onChange({ ...step, count: Math.max(1, Number(e.target.value || 1)) })}
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
           />
         </div>
         <div className="space-y-1">
-          <label className="text-xs font-medium text-muted-foreground">{t("blocks.unit")}</label>
+          <label className="block font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground">{t("blocks.unit")}</label>
           <Select
             value={step.unit ?? "blocks"}
             onValueChange={(value) => onChange({ ...step, unit: value as WorkoutRepeatUnit })}
