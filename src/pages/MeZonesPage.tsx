@@ -96,8 +96,8 @@ function deriveVma(type: BenchmarkType, result: number): number | undefined {
 const TODAY_ISO = new Date().toISOString().slice(0, 10);
 
 const INPUT_CLASS = cn(
-  "flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs",
-  "focus-visible:outline-none focus-visible:ring-[3px]",
+  "flex h-9 w-full rounded-none border-2 border-foreground bg-transparent px-3 py-1 font-mono text-sm",
+  "transition-[border-color] duration-150 ease-out outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring",
 );
 
 /** Input with a unit suffix — extra right padding + hidden spinners */
@@ -621,7 +621,7 @@ function ReferenceRow({
   }
 
   return (
-    <div className="border rounded-lg p-4">
+    <div className="border-2 border-foreground p-4">
       <div className="flex items-center justify-between mb-3">
         <span className="font-medium">{pickLang(meta, "label")}</span>
         {initialRef && (
@@ -951,7 +951,7 @@ function BenchmarkCard({
   const { t } = useTranslation("profile");
 
   return (
-    <div className="border rounded-lg p-4">
+    <div className="border-2 border-foreground p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Badge variant="secondary">
@@ -1112,7 +1112,7 @@ function PersonalRecordsSection({
             {sortedWithIndex.map(({ record, originalIndex }) => (
               <div
                 key={`${record.distance}-${originalIndex}`}
-                className="border rounded-lg p-4 flex items-center justify-between"
+                className="border-2 border-foreground p-4 flex items-center justify-between"
               >
                 <div>
                   <div className="flex items-center gap-2">

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Trash2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -66,12 +67,12 @@ export function ClearAllDataDialog({ children, onExportFirst }: ClearAllDataDial
           <label className="text-sm font-medium block">
             {t("me.clearAll.typeToConfirmLabel", { word: confirmWord })}
           </label>
-          <input
+          <Input
             type="text"
             value={confirmText}
             onChange={(e) => setConfirmText(e.target.value)}
             placeholder={confirmWord}
-            className="flex h-10 w-full rounded-md border-2 border-input bg-transparent px-3 py-1 font-mono text-sm uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="text-sm uppercase tracking-wide"
             autoComplete="off"
             autoCapitalize="characters"
           />

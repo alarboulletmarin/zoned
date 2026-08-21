@@ -165,9 +165,9 @@ export function CommuteSection() {
                   type="button"
                   onClick={() => toggleDay(index)}
                   className={cn(
-                    "rounded-md border px-3 py-2 text-sm font-medium transition-colors min-w-[52px]",
+                    "rounded-none border-2 px-3 py-2 text-sm font-medium transition-colors min-w-[52px]",
                     selected
-                      ? "border-primary bg-primary/10 text-primary"
+                      ? "border-foreground bg-accent-acid text-ink"
                       : "border-input bg-background hover:bg-muted",
                   )}
                 >
@@ -191,7 +191,7 @@ export function CommuteSection() {
             placeholder="30"
             value={durationMin}
             onChange={(e) => handleDurationChange(e.target.value)}
-            className="flex h-10 w-32 rounded-md border border-input bg-transparent px-3 py-1 text-center text-base tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex h-10 w-32 rounded-none border-2 border-input bg-transparent px-3 py-1 text-center font-mono text-base tabular-nums transition-[border-color] duration-150 ease-out outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring placeholder:text-muted-foreground"
           />
           <p className="text-xs text-muted-foreground">
             {t("commute.durationHint")}
@@ -205,7 +205,7 @@ export function CommuteSection() {
             type="checkbox"
             checked={includeInPlan}
             onChange={(e) => setIncludeInPlan(e.target.checked)}
-            className="mt-1 size-4 rounded border-input accent-primary"
+            className="mt-1 size-4 rounded-none border-input accent-primary"
           />
           <div className="flex-1">
             <label

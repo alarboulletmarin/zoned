@@ -116,7 +116,7 @@ export function ZoneAdjustmentPanel({ prefs, onChange }: ZoneAdjustmentPanelProp
       header: t("me.zones.adjustZoneLabel"),
       cell: (z) => (
         <span className={cn("inline-flex items-center gap-2 font-semibold", zoneClass(z.zone as ZoneNumber, "text"))}>
-          <span className={cn("size-2.5 rounded-full", zoneClass(z.zone as ZoneNumber, "bg"))} />
+          <span className={cn("size-2.5 rounded-none", zoneClass(z.zone as ZoneNumber, "bg"))} />
           Z{z.zone} — {pickLang(ZONE_META[z.zone as ZoneNumber], "label")}
         </span>
       ),
@@ -193,9 +193,9 @@ export function ZoneAdjustmentPanel({ prefs, onChange }: ZoneAdjustmentPanelProp
                   value={paceMinText}
                   onChange={(e) => setPaceMinText(e.target.value)}
                   className={cn(
-                    "flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs font-mono",
-                    "focus-visible:outline-none focus-visible:ring-2",
-                    paceError ? "border-destructive" : "border-input focus-visible:ring-ring"
+                    "flex h-9 w-full rounded-none border-2 bg-transparent px-3 py-1 text-sm font-mono",
+                    "transition-[border-color] duration-150 ease-out outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring",
+                    paceError ? "border-destructive" : "border-input"
                   )}
                 />
               </div>
@@ -210,9 +210,9 @@ export function ZoneAdjustmentPanel({ prefs, onChange }: ZoneAdjustmentPanelProp
                   value={paceMaxText}
                   onChange={(e) => setPaceMaxText(e.target.value)}
                   className={cn(
-                    "flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs font-mono",
-                    "focus-visible:outline-none focus-visible:ring-2",
-                    paceError ? "border-destructive" : "border-input focus-visible:ring-ring"
+                    "flex h-9 w-full rounded-none border-2 bg-transparent px-3 py-1 text-sm font-mono",
+                    "transition-[border-color] duration-150 ease-out outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring",
+                    paceError ? "border-destructive" : "border-input"
                   )}
                 />
               </div>
@@ -229,9 +229,9 @@ export function ZoneAdjustmentPanel({ prefs, onChange }: ZoneAdjustmentPanelProp
                   value={hrMinText}
                   onChange={(e) => setHrMinText(e.target.value)}
                   className={cn(
-                    "flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs font-mono",
-                    "focus-visible:outline-none focus-visible:ring-2",
-                    hrError ? "border-destructive" : "border-input focus-visible:ring-ring"
+                    "flex h-9 w-full rounded-none border-2 bg-transparent px-3 py-1 text-sm font-mono",
+                    "transition-[border-color] duration-150 ease-out outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring",
+                    hrError ? "border-destructive" : "border-input"
                   )}
                 />
               </div>
@@ -244,9 +244,9 @@ export function ZoneAdjustmentPanel({ prefs, onChange }: ZoneAdjustmentPanelProp
                   value={hrMaxText}
                   onChange={(e) => setHrMaxText(e.target.value)}
                   className={cn(
-                    "flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs font-mono",
-                    "focus-visible:outline-none focus-visible:ring-2",
-                    hrError ? "border-destructive" : "border-input focus-visible:ring-ring"
+                    "flex h-9 w-full rounded-none border-2 bg-transparent px-3 py-1 text-sm font-mono",
+                    "transition-[border-color] duration-150 ease-out outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring",
+                    hrError ? "border-destructive" : "border-input"
                   )}
                 />
               </div>

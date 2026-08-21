@@ -170,10 +170,10 @@ export function DataExportImport() {
                 type="button"
                 onClick={() => setRestoreMode("replace")}
                 className={cn(
-                  "rounded-lg border p-3 text-left transition-colors",
+                  "rounded-none border-2 p-3 text-left transition-colors",
                   restoreMode === "replace"
-                    ? "border-primary bg-primary/10"
-                    : "hover:bg-accent/50"
+                    ? "border-foreground bg-accent-acid/20"
+                    : "border-input hover:bg-secondary"
                 )}
               >
                 <div className="font-medium text-sm">{t("settings.data.replaceModeTitle")}</div>
@@ -183,10 +183,10 @@ export function DataExportImport() {
                 type="button"
                 onClick={() => setRestoreMode("merge")}
                 className={cn(
-                  "rounded-lg border p-3 text-left transition-colors",
+                  "rounded-none border-2 p-3 text-left transition-colors",
                   restoreMode === "merge"
-                    ? "border-primary bg-primary/10"
-                    : "hover:bg-accent/50"
+                    ? "border-foreground bg-accent-acid/20"
+                    : "border-input hover:bg-secondary"
                 )}
               >
                 <div className="font-medium text-sm">{t("settings.data.mergeModeTitle")}</div>
