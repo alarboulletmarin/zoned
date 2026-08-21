@@ -446,7 +446,12 @@
     "noStartDate": "Définissez une date de début pour afficher la vue mensuelle",
     "setStartDate": "Définir la date",
     "previousMonth": "Mois précédent",
-    "nextMonth": "Mois suivant"
+    "nextMonth": "Mois suivant",
+    "strengthLabel": "Renfo",
+    "weekRange": "S{{from}} → S{{to}} · {{km}} km",
+    "weekRangeSingle": "S{{week}} · {{km}} km",
+    "footerScopeNote": "Seules les semaines du mois affiché sont visibles",
+    "footerGuidanceNote": "Le conseil de semaine suit la navigation"
   },
   "weeklyView": {
     "weekTitle": "Semaine {{week}}",

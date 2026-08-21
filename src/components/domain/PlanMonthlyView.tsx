@@ -1,9 +1,14 @@
 import { useState, useMemo, memo, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
-import { Calendar, ChevronLeft, ChevronRight } from "@/components/icons";
-import type { TrainingPlan } from "@/types/plan";
-import { PlanCalendar } from "./PlanCalendar";
+import { Calendar, ChevronLeft, ChevronRight, Flag, Dumbbell, Clock } from "@/components/icons";
+import type { TrainingPlan, PlanSession } from "@/types/plan";
+import type { AnyWorkoutTemplate } from "@/types";
+import { getDominantZone, isRunningWorkout } from "@/types";
+import { zoneClass } from "@/lib/zoneColors";
+import { computeWeekKm } from "@/lib/planStats";
+import { formatDurationMinutes } from "@/components/visualization/transforms";
+import { dateToWeekAndDay } from "@/lib/planDates";
 
 // ── Month names ─────────────────────────────────────────────────────
 
@@ -21,6 +26,7 @@ const MONTH_NAMES_EN = [
 interface PlanMonthlyViewProps {
   plan: TrainingPlan;
   workoutNames: Record<string, string>;
+  workoutTemplates?: Record<string, AnyWorkoutTemplate>;
   currentWeek: number;
   initialWeek?: number;
   isEn: boolean;
@@ -43,21 +49,13 @@ interface PlanMonthlyViewProps {
 export const PlanMonthlyView = memo(function PlanMonthlyView({
   plan,
   workoutNames,
+  workoutTemplates,
   currentWeek,
   initialWeek,
-  isEn,
   startDate,
   onSessionClick,
-  onSessionMove,
-  onSessionDelete,
-  onFindRoute,
-  onToggleComplete,
-  onValidateWeek,
-  onWorkoutAdd,
-  onAddToDay,
   onWeekChange,
   onVisibleWeeksChange,
-  blockedDays,
 }: PlanMonthlyViewProps) {
   const { t, i18n } = useTranslation("plan");
   // ── No start date fallback ──────────────────────────────────────
@@ -159,6 +157,11 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
     if (week != null) onWeekChange?.(week);
   }, [canGoNext, selectedMonth, firstWeekInMonth, onWeekChange]);
 
+  // Adjacent month labels for the "← Avril / Juin →" nav
+  const monthNames = i18n.language?.startsWith("en") ? MONTH_NAMES_EN : MONTH_NAMES_FR;
+  const prevMonthLabel = selectedMonth.month === 0 ? monthNames[11] : monthNames[selectedMonth.month - 1];
+  const nextMonthLabel = selectedMonth.month === 11 ? monthNames[0] : monthNames[selectedMonth.month + 1];
+
   // ── Filter weeks that have at least one day in the selected month ──
   const filteredWeekNumbers = useMemo(() => {
     const monthStart = new Date(selectedMonth.year, selectedMonth.month, 1);
@@ -177,29 +180,88 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
     onVisibleWeeksChange?.([...filteredWeekNumbers].sort((a, b) => a - b));
   }, [filteredWeekNumbers, onVisibleWeeksChange]);
 
-  const monthNames = i18n.language?.startsWith("en") ? MONTH_NAMES_EN : MONTH_NAMES_FR;
+  // ── Week range + cumulative volume summary ("S5 → S8 · 179 km") ──
+  const monthSummary = useMemo(() => {
+    const weeks = [...filteredWeekNumbers].sort((a, b) => a - b);
+    if (weeks.length === 0) return null;
+    const totalKm = Math.round(
+      plan.weeks
+        .filter((w) => filteredWeekNumbers.has(w.weekNumber))
+        .reduce((sum, w) => sum + computeWeekKm(w), 0),
+    );
+    return { minWeek: weeks[0], maxWeek: weeks[weeks.length - 1], totalKm };
+  }, [filteredWeekNumbers, plan.weeks]);
+
+  // ── Lookup: weekNumber -> dayOfWeek -> sessions[] ───────────────
+  const sessionsByWeekDay = useMemo(() => {
+    const map = new Map<number, Map<number, PlanSession[]>>();
+    for (const week of plan.weeks) {
+      const dayMap = new Map<number, PlanSession[]>();
+      for (const session of week.sessions) {
+        const existing = dayMap.get(session.dayOfWeek) || [];
+        existing.push(session);
+        dayMap.set(session.dayOfWeek, existing);
+      }
+      map.set(week.weekNumber, dayMap);
+    }
+    return map;
+  }, [plan.weeks]);
+
+  const dayHeaders = useMemo(
+    () => [0, 1, 2, 3, 4, 5, 6].map((i) => t(`daysShort.${i}`)),
+    [t],
+  );
+
+  // ── Build the 7-column month grid (full weeks, Monday first) ───
+  const gridCells = useMemo(() => {
+    const daysInMonth = new Date(selectedMonth.year, selectedMonth.month + 1, 0).getDate();
+    const firstJsDay = new Date(selectedMonth.year, selectedMonth.month, 1).getDay(); // 0=Sun...6=Sat
+    const leadingBlanks = firstJsDay === 0 ? 6 : firstJsDay - 1; // Monday-first offset
+    const totalCells = Math.ceil((leadingBlanks + daysInMonth) / 7) * 7;
+
+    return Array.from({ length: totalCells }, (_, i) => {
+      const dayOffset = i - leadingBlanks; // 0-based day-of-month offset (can be negative or >= daysInMonth)
+      const date = new Date(selectedMonth.year, selectedMonth.month, 1 + dayOffset);
+      const isOutsideMonth = dayOffset < 0 || dayOffset >= daysInMonth;
+      const mapping = dateToWeekAndDay(planStart, date);
+      const inPlan = mapping != null && mapping.weekNumber >= 1 && mapping.weekNumber <= plan.totalWeeks;
+      const sessions = inPlan
+        ? sessionsByWeekDay.get(mapping!.weekNumber)?.get(mapping!.dayOfWeek) ?? []
+        : [];
+      return {
+        key: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
+        dayOfMonth: date.getDate(),
+        isOutsideMonth,
+        inPlan,
+        weekNumber: mapping?.weekNumber,
+        sessions,
+        week: inPlan ? plan.weeks.find((w) => w.weekNumber === mapping!.weekNumber) : undefined,
+      };
+    });
+  }, [selectedMonth, planStart, plan.totalWeeks, plan.weeks, sessionsByWeekDay]);
 
   // ── Render ────────────────────────────────────────────────────────
   return (
     <div className="w-full">
       {/* Month navigation */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between gap-2 mb-2">
         <button
           type="button"
           onClick={goToPrevMonth}
           disabled={!canGoPrev}
           className={cn(
-            "p-1.5 rounded-none transition-colors",
+            "flex items-center gap-1 px-1.5 py-1 rounded-none font-mono text-[11px] uppercase tracking-[0.04em] transition-colors",
             canGoPrev
-              ? "hover:bg-muted text-foreground"
+              ? "hover:bg-muted text-muted-foreground hover:text-foreground"
               : "text-muted-foreground/30 cursor-not-allowed",
           )}
           aria-label={t("monthlyView.previousMonth")}
         >
-          <ChevronLeft className="size-5" />
+          <ChevronLeft className="size-4 shrink-0" />
+          <span className="hidden sm:inline">{prevMonthLabel}</span>
         </button>
 
-        <h3 className="text-sm font-semibold">
+        <h3 className="font-mono font-bold uppercase tracking-[-0.04em] text-xl md:text-2xl text-center">
           {monthNames[selectedMonth.month]} {selectedMonth.year}
         </h3>
 
@@ -208,36 +270,172 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
           onClick={goToNextMonth}
           disabled={!canGoNext}
           className={cn(
-            "p-1.5 rounded-none transition-colors",
+            "flex items-center gap-1 px-1.5 py-1 rounded-none font-mono text-[11px] uppercase tracking-[0.04em] transition-colors",
             canGoNext
-              ? "hover:bg-muted text-foreground"
+              ? "hover:bg-muted text-muted-foreground hover:text-foreground"
               : "text-muted-foreground/30 cursor-not-allowed",
           )}
           aria-label={t("monthlyView.nextMonth")}
         >
-          <ChevronRight className="size-5" />
+          <span className="hidden sm:inline">{nextMonthLabel}</span>
+          <ChevronRight className="size-4 shrink-0" />
         </button>
       </div>
 
-      {/* Reuse PlanCalendar with filtered weeks */}
-      <PlanCalendar
-        plan={plan}
-        workoutNames={workoutNames}
-        currentWeek={currentWeek}
-        isEn={isEn}
-        onSessionClick={onSessionClick}
-        onSessionMove={onSessionMove}
-        onSessionDelete={onSessionDelete}
-        onFindRoute={onFindRoute}
-        onToggleComplete={onToggleComplete}
-        onValidateWeek={onValidateWeek}
-        onWorkoutAdd={onWorkoutAdd}
-        onAddToDay={onAddToDay}
-        filteredWeekNumbers={filteredWeekNumbers}
-        planStartDate={startDate}
-        visibleMonth={selectedMonth}
-        blockedDays={blockedDays}
-      />
+      {/* Week range + cumulative volume */}
+      {monthSummary && (
+        <p className="text-right font-mono text-[11px] tracking-[0.04em] text-muted-foreground mb-3">
+          {monthSummary.minWeek === monthSummary.maxWeek
+            ? t("monthlyView.weekRangeSingle", { week: monthSummary.minWeek, km: monthSummary.totalKm })
+            : t("monthlyView.weekRange", { from: monthSummary.minWeek, to: monthSummary.maxWeek, km: monthSummary.totalKm })}
+        </p>
+      )}
+
+      {/* Day-of-week header row */}
+      <div className="grid grid-cols-7 border-t border-filet">
+        {dayHeaders.map((day, i) => (
+          <div
+            key={i}
+            className="px-1 py-1.5 text-center font-mono text-[10px] tracking-[0.08em] uppercase text-muted-foreground"
+          >
+            {day}
+          </div>
+        ))}
+      </div>
+
+      {/* Month grid — 72px rows on mobile/tablet, 118px on desktop (spec) */}
+      <div className="grid grid-cols-7 auto-rows-[72px] md:auto-rows-[118px] border-l border-filet">
+        {gridCells.map((cell) => {
+          const isRestDay = cell.inPlan && cell.sessions.length === 0;
+          return (
+            <div
+              key={cell.key}
+              className={cn(
+                "border-t border-r border-filet px-1 py-1 flex flex-col gap-0.5 overflow-hidden",
+                cell.isOutsideMonth && "opacity-25",
+              )}
+            >
+              <span
+                className={cn(
+                  "font-mono text-[10px] tabular-nums leading-none",
+                  cell.sessions.length > 0 ? "text-foreground" : "text-muted-foreground/60",
+                )}
+              >
+                {cell.dayOfMonth}
+              </span>
+
+              {isRestDay && (
+                <span className="font-mono text-[9px] text-muted-foreground/60 leading-tight">
+                  {t("prebuilt.rest")}
+                </span>
+              )}
+
+              {cell.sessions.map((session, sIdx) => {
+                const isRaceDay = session.workoutId === "__race_day__";
+                const isIntermediateRace = session.workoutId === "__intermediate_race__";
+                const isSpecialSession = isRaceDay || isIntermediateRace;
+                const isStrength = session.sessionType === "strength" || session.workoutId?.startsWith("STR-");
+                const template = workoutTemplates?.[session.workoutId];
+                const zone = !isSpecialSession && !isStrength && template && isRunningWorkout(template)
+                  ? getDominantZone(template)
+                  : undefined;
+                const workoutName = workoutNames[session.workoutId] || session.workoutId;
+                const originalIndex = cell.week?.sessions.indexOf(session) ?? -1;
+                const clickable = onSessionClick && !isSpecialSession && cell.weekNumber != null && originalIndex >= 0;
+
+                const handleClick = clickable
+                  ? () => onSessionClick(cell.weekNumber!, originalIndex, session.workoutId)
+                  : undefined;
+
+                if (isSpecialSession) {
+                  return (
+                    <div
+                      key={sIdx}
+                      className="shrink-0 bg-ink text-paper px-1 py-0.5 font-mono text-[9px] font-bold leading-tight flex items-center gap-0.5"
+                    >
+                      <Flag className="size-2.5 shrink-0" />
+                      <span className="truncate">
+                        {isIntermediateRace ? t("intermediateGoals.raceDayLabel") : t("calendar.race")}
+                      </span>
+                    </div>
+                  );
+                }
+
+                if (isStrength) {
+                  return (
+                    <div
+                      key={sIdx}
+                      role={handleClick ? "button" : undefined}
+                      tabIndex={handleClick ? 0 : undefined}
+                      onClick={handleClick}
+                      onKeyDown={
+                        handleClick
+                          ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleClick(); } }
+                          : undefined
+                      }
+                      className={cn(
+                        "flex items-center gap-0.5 font-mono text-[9px] text-muted-foreground leading-tight",
+                        handleClick && "cursor-pointer hover:text-foreground",
+                      )}
+                    >
+                      <Dumbbell className="size-2.5 shrink-0" />
+                      <span className="truncate">
+                        {t("monthlyView.strengthLabel")} · {formatDurationMinutes(session.estimatedDurationMin)}
+                      </span>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div
+                    key={sIdx}
+                    role={handleClick ? "button" : undefined}
+                    tabIndex={handleClick ? 0 : undefined}
+                    onClick={handleClick}
+                    onKeyDown={
+                      handleClick
+                        ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleClick(); } }
+                        : undefined
+                    }
+                    className={cn("flex flex-col gap-0.5 min-w-0", handleClick && "cursor-pointer group")}
+                  >
+                    <span
+                      className={cn(
+                        "self-start px-1 py-px font-mono text-[9px] font-bold leading-none tabular-nums",
+                        zone
+                          ? cn(zoneClass(zone, "bg"), zoneClass(zone, "textOn"))
+                          : "border border-foreground text-foreground",
+                      )}
+                    >
+                      {zone ? `Z${zone} · ` : ""}{formatDurationMinutes(session.estimatedDurationMin)}
+                    </span>
+                    <span
+                      className={cn(
+                        "text-[10px] leading-tight text-foreground/80 line-clamp-2",
+                        handleClick && "group-hover:text-primary",
+                      )}
+                      title={workoutName}
+                    >
+                      {workoutName}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Footer note */}
+      <div className="mt-3 space-y-0.5">
+        <p className="font-mono text-[10px] text-muted-foreground/70 flex items-center gap-1">
+          <Clock className="size-2.5 shrink-0" />
+          {t("monthlyView.footerScopeNote")}
+        </p>
+        <p className="font-mono text-[10px] text-muted-foreground/70">
+          {t("monthlyView.footerGuidanceNote")}
+        </p>
+      </div>
     </div>
   );
 });

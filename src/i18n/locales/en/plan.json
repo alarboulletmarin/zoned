@@ -446,7 +446,12 @@
     "noStartDate": "Set a start date to display the monthly view",
     "setStartDate": "Set date",
     "previousMonth": "Previous month",
-    "nextMonth": "Next month"
+    "nextMonth": "Next month",
+    "strengthLabel": "Strength",
+    "weekRange": "W{{from}} → W{{to}} · {{km}} km",
+    "weekRangeSingle": "W{{week}} · {{km}} km",
+    "footerScopeNote": "Only weeks in the displayed month are shown",
+    "footerGuidanceNote": "Weekly guidance follows month navigation"
   },
   "weeklyView": {
     "weekTitle": "Week {{week}}",
