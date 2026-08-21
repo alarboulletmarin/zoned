@@ -2,7 +2,7 @@ import type { ZoneNumber, ZoneRange, UserZonePreferences, ZoneOverride } from "@
 import { loadRunnerProfile, saveRunnerProfile } from "@/lib/runnerProfile";
 
 // HR Zone percentages (% of FCmax)
-const HR_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
+export const HR_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
   1: [50, 60],
   2: [60, 70],
   3: [70, 80],

@@ -52,6 +52,7 @@ const AboutPage = lazyPage(() => import("@/pages/AboutPage").then(m => ({ defaul
 const LearnPage = lazyPage(() => import("@/pages/LearnPage").then(m => ({ default: m.LearnPage })));
 const MethodologyPage = lazyPage(() => import("@/pages/MethodologyPage").then(m => ({ default: m.MethodologyPage })));
 const MethodologyPolarisePage = lazyPage(() => import("@/pages/MethodologyPolarisePage").then(m => ({ default: m.MethodologyPolarisePage })));
+const MethodologyPacesPage = lazyPage(() => import("@/pages/MethodologyPacesPage").then(m => ({ default: m.MethodologyPacesPage })));
 const MethodologySourcesPage = lazyPage(() => import("@/pages/MethodologySourcesPage").then(m => ({ default: m.MethodologySourcesPage })));
 const ArticlePage = lazyPage(() => import("@/pages/ArticlePage").then(m => ({ default: m.ArticlePage })));
 const GlossaryPage = lazyPage(() => import("@/pages/GlossaryPage").then(m => ({ default: m.GlossaryPage })));
@@ -222,7 +223,7 @@ function App() {
           <CommandPaletteProvider>
             <a
               href="#main-content"
-              className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:outline-none"
+              className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-none focus:outline-none"
             >
               {t("accessibility.skipToContent", "Aller au contenu")}
             </a>
@@ -303,6 +304,7 @@ function App() {
                           <Route path="/learn" element={<LearnPage />} />
                           <Route path="/methodology" element={<MethodologyPage />} />
                           <Route path="/methodology/polarise" element={<MethodologyPolarisePage />} />
+                          <Route path="/methodology/allures" element={<MethodologyPacesPage />} />
                           <Route path="/methodology/sources" element={<MethodologySourcesPage />} />
                           <Route path="/learn/:slug" element={<ArticlePage />} />
                           <Route path="/collections" element={<CollectionsPage />} />
@@ -353,12 +355,18 @@ function App() {
           {/* Mounted once, outside <Routes>, so the banner survives navigation.
               Stacked above the install card when both are eligible. */}
           <UpdatePrompt stacked={canInstall} />
+          {/* Brut toasts: paper card, 2px contour, zero radius, mono copy.
+              `richColors` is dropped — it paints generic green/red panels that
+              belong to no token. Sonner injects its own stylesheet at runtime,
+              so the tokens are applied through descendant selectors that
+              outrank its `[data-sonner-toast]` rules; success and error carry
+              a --zone-2 / --poster-red contour instead of a coloured fill. */}
           <Toaster
-            richColors
             closeButton
             position={isMobile ? "top-center" : "bottom-right"}
             duration={isMobile ? 2500 : 4000}
             offset={isMobile ? "calc(env(safe-area-inset-top, 0px) + 12px)" : undefined}
+            className="[&_[data-sonner-toast]]:rounded-none [&_[data-sonner-toast]]:border-2 [&_[data-sonner-toast]]:border-foreground [&_[data-sonner-toast]]:bg-background [&_[data-sonner-toast]]:text-foreground [&_[data-sonner-toast]]:font-mono [&_[data-sonner-toast]]:shadow-none [&_[data-sonner-toast][data-type=success]]:border-zone-2 [&_[data-sonner-toast][data-type=error]]:border-poster-red [&_[data-title]]:uppercase [&_[data-title]]:tracking-[0.06em] [&_[data-description]]:normal-case [&_[data-close-button]]:rounded-none [&_[data-close-button]]:border-foreground [&_[data-close-button]]:bg-background [&_[data-close-button]]:text-foreground"
           />
           </BrowserRouter>
         </FavoritesProvider>

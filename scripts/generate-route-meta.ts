@@ -149,6 +149,13 @@ const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
     ogType: "article",
   },
   {
+    path: "/methodology/allures",
+    title: "D'où viennent les allures",
+    description:
+      "Le calibrage des allures de Zoned en clair : une seule donnée d'entrée, la VMA, la formule, les pourcentages par zone et les limites du modèle.",
+    image: "og-learn.png",
+  },
+  {
     path: "/methodology/sources",
     title: "Sources scientifiques",
     description:
