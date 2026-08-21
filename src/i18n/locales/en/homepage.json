@@ -4,44 +4,8 @@
     "findWorkout": "Find your workout",
     "findWorkoutDesc": "5 questions to find the perfect session",
     "raceSimulator": "Race simulator",
-    "raceSimulatorSplits": "Splits, nutrition, race day",
-    "planYourRace": "Plan your race",
     "random": "Random",
-    "surpriseMe": "Surprise me!",
     "calculators": "Calculators",
-    "nineTools": "12 tools",
-    "myZones": "My Zones",
-    "hrPaceZones": "HR & pace zones",
-    "featuredWorkouts": "Featured Workouts",
-    "viewAll": "View all",
-    "strengthForRunners": "Strength for Runners",
-    "strengthForRunnersDesc": "Science-based strength sessions to improve running economy and prevent injuries.",
-    "seeAll": "See all",
-    "browseByCategory": "Browse by Category",
-    "newBadge": "New",
-    "spotlightLabel": "What's new",
-    "spotlightGoto": "Go to slide {{index}}",
-    "routesEyebrow": "Route Generator",
-    "routesTitle": "Build your route in one click",
-    "routesDesc": "Real-world loop or out-and-back from your position, with elevation and GPX export.",
-    "routesCta": "Generate a route",
-    "cyclingEyebrow": "Cycling",
-    "cyclingTitle": "Cycling lands on Zoned",
-    "cyclingDesc": "10 sessions: endurance, sweet spot, threshold, intervals. Built-in FTP zones.",
-    "cyclingCta": "See cycling sessions",
-    "swimmingEyebrow": "Swimming",
-    "swimmingTitle": "Dive into the pool",
-    "swimmingDesc": "10 sessions: technique, endurance, sprints, pyramids. Built-in CSS zones.",
-    "swimmingCta": "See swimming sessions",
-
-    "masthead": {
-      "volume": "Vol.",
-      "issue": "No.",
-      "openSource": "Open-source",
-      "local": "100 % local",
-      "noAccount": "No account"
-    },
-
     "today": {
       "eyebrow": "Today",
       "title": "What to run today",
@@ -53,7 +17,6 @@
       "empty": "No session matches this duration right now.",
       "mobileHint": "Swipe to compare"
     },
-
     "prepare": {
       "eyebrow": "In a few weeks",
       "title": "Prepare for a race",
@@ -74,12 +37,10 @@
       "ctaPrimaryHasPlans": "View my plans",
       "ctaSecondary": "See the {{count}} ready-made plans"
     },
-
     "statline": {
       "text": "{{sessions}} sessions · {{plans}} plans · {{calculators}} calculators · no account",
       "cta": "What Zoned is"
     },
-
     "manifesto": {
       "eyebrow": "The project",
       "title": "A catalogue of sessions, not another logbook",
@@ -87,7 +48,6 @@
       "bodyEmphasis": "what to run today",
       "bodyAfter": ". A catalogue of documented sessions, plans you can read before committing, calculations whose formula is written out. Nothing to create, nothing nagging you back."
     },
-
     "sections": {
       "library": {
         "kicker": "01 · the library",
@@ -131,7 +91,6 @@
         "cta": "Read the methodology"
       }
     },
-
     "notDo": {
       "eyebrow": "What Zoned doesn't do",
       "items": {
@@ -155,19 +114,6 @@
       "ctaPrimary": "Find today's session",
       "ctaSecondary": "Browse the {{count}} sessions"
     },
-
-    "s07": {
-      "kicker": "Session of the week",
-      "open": "Start session",
-      "target": "Targeted adaptation",
-      "metrics": "Metrics",
-      "dur": "Duration",
-      "zone": "Zone",
-      "lvl": "Level"
-    },
-
-    "tip": "Tip of the day",
-
     "footer": {
       "tagline": "A scientific training journal, local, free and open. For those who want to understand what they're doing.",
       "groups": {

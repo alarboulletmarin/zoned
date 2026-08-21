@@ -4,44 +4,8 @@
     "findWorkout": "Trouve ta séance",
     "findWorkoutDesc": "5 questions pour trouver la séance parfaite",
     "raceSimulator": "Simulateur",
-    "raceSimulatorSplits": "Splits, nutrition, jour-J",
-    "planYourRace": "Planifier ta course",
     "random": "Aléatoire",
-    "surpriseMe": "Surprends-moi !",
     "calculators": "Calculateurs",
-    "nineTools": "12 outils",
-    "myZones": "Mes Zones",
-    "hrPaceZones": "FC & allures",
-    "featuredWorkouts": "Séances en vedette",
-    "viewAll": "Voir tout",
-    "strengthForRunners": "Renforcement pour coureurs",
-    "strengthForRunnersDesc": "Séances de renforcement basées sur la science pour améliorer votre économie de course et prévenir les blessures.",
-    "seeAll": "Voir tout",
-    "browseByCategory": "Parcourir par catégorie",
-    "newBadge": "Nouveau",
-    "spotlightLabel": "Nouveautés",
-    "spotlightGoto": "Aller à la slide {{index}}",
-    "routesEyebrow": "Générateur de parcours",
-    "routesTitle": "Crée ton parcours en un clic",
-    "routesDesc": "Boucle ou aller-retour réel depuis ta position, avec dénivelé et export GPX.",
-    "routesCta": "Générer un parcours",
-    "cyclingEyebrow": "Cyclisme",
-    "cyclingTitle": "Le vélo arrive sur Zoned",
-    "cyclingDesc": "10 séances : endurance, sweet spot, seuil, intervalles. Zones FTP intégrées.",
-    "cyclingCta": "Voir les séances vélo",
-    "swimmingEyebrow": "Natation",
-    "swimmingTitle": "Plonge dans le bassin",
-    "swimmingDesc": "10 séances : technique, endurance, sprints, pyramides. Zones CSS intégrées.",
-    "swimmingCta": "Voir les séances natation",
-
-    "masthead": {
-      "volume": "Vol.",
-      "issue": "N°",
-      "openSource": "Open-source",
-      "local": "100 % local",
-      "noAccount": "Sans compte"
-    },
-
     "today": {
       "eyebrow": "Aujourd'hui",
       "title": "Quoi courir aujourd'hui",
@@ -53,7 +17,6 @@
       "empty": "Aucune séance ne correspond à cette durée pour le moment.",
       "mobileHint": "Glisse pour comparer"
     },
-
     "prepare": {
       "eyebrow": "Dans quelques semaines",
       "title": "Préparer une course",
@@ -74,12 +37,10 @@
       "ctaPrimaryHasPlans": "Voir mes plans",
       "ctaSecondary": "Voir les {{count}} plans prêts"
     },
-
     "statline": {
       "text": "{{sessions}} séances · {{plans}} plans · {{calculators}} calculateurs · aucun compte",
       "cta": "Ce qu'est Zoned"
     },
-
     "manifesto": {
       "eyebrow": "Le projet",
       "title": "Un catalogue de séances, pas un carnet de plus",
@@ -87,7 +48,6 @@
       "bodyEmphasis": "quoi courir aujourd'hui",
       "bodyAfter": ". Un catalogue de séances documentées, des plans qui se lisent avant de s'engager, des calculs dont la formule est écrite. Rien à créer, rien qui te relance."
     },
-
     "sections": {
       "library": {
         "kicker": "01 · la bibliothèque",
@@ -131,7 +91,6 @@
         "cta": "Lire la méthodologie"
       }
     },
-
     "notDo": {
       "eyebrow": "Ce que Zoned ne fait pas",
       "items": {
@@ -155,19 +114,6 @@
       "ctaPrimary": "Trouver ma séance d'aujourd'hui",
       "ctaSecondary": "Parcourir les {{count}} séances"
     },
-
-    "s07": {
-      "kicker": "Séance de la semaine",
-      "open": "Lancer la séance",
-      "target": "Adaptation visée",
-      "metrics": "Métriques",
-      "dur": "Durée",
-      "zone": "Zone",
-      "lvl": "Niveau"
-    },
-
-    "tip": "Conseil du jour",
-
     "footer": {
       "tagline": "Un carnet d'entraînement scientifique, local, gratuit et libre. Pour celles et ceux qui veulent comprendre ce qu'ils font.",
       "groups": {
