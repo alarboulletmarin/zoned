@@ -92,6 +92,21 @@
     "footerSources": "{{count}} sources cited · all publicly accessible",
     "footerMedical": "No medical advice",
     "footerGlossary": "Glossary · {{count}} terms →",
+    "whyAtlas": {
+      "eyebrow": "Why this atlas",
+      "oneRow": {
+        "title": "One row per zone, six rows total.",
+        "body": "The table gives the purpose, your own pace, how it feels and how many sessions land there: the theory turns straight into something you can run."
+      },
+      "limitsFirst": {
+        "title": "Limits first, not in fine print.",
+        "body": "What the zones don't say is boxed off top-right, before the table: you don't discover the caveats after already trusting the number."
+      },
+      "choiceOwned": {
+        "title": "The choice is owned.",
+        "body": "Six zones is an arguable decision: the page explains it, compares it to other models, and lets you see them rather than deciding for you."
+      }
+    },
     "polarise": {
       "title": "Why 80/20 works",
       "seoDescription": "What the research shows about training intensity distribution in endurance athletes, why the polarized model works, and its limits.",

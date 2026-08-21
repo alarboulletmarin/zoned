@@ -295,6 +295,23 @@ export function MethodologyPage() {
             {t("content:methodology.footerGlossary", { count: glossaryCount })}
           </Link>
         </div>
+
+        {/* Why this atlas — editorial 3-column block, mirrors the design mockup */}
+        <div className="border-2 border-foreground bg-card p-6 md:p-10">
+          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
+            {t("content:methodology.whyAtlas.eyebrow")}
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-7 mt-4 text-sm leading-[1.6] text-foreground/75">
+            {(["oneRow", "limitsFirst", "choiceOwned"] as const).map((key) => (
+              <p key={key}>
+                <strong className="font-semibold text-foreground">
+                  {t(`content:methodology.whyAtlas.${key}.title`)}
+                </strong>{" "}
+                {t(`content:methodology.whyAtlas.${key}.body`)}
+              </p>
+            ))}
+          </div>
+        </div>
       </PageContainer>
     </>
   );

@@ -92,6 +92,21 @@
     "footerSources": "{{count}} sources citées · toutes accessibles publiquement",
     "footerMedical": "Aucun conseil médical",
     "footerGlossary": "Glossaire · {{count}} termes →",
+    "whyAtlas": {
+      "eyebrow": "Pourquoi cet atlas",
+      "oneRow": {
+        "title": "Une ligne par zone, six lignes en tout.",
+        "body": "Le tableau donne l'usage, l'allure personnelle, le ressenti et le nombre de séances : la théorie débouche immédiatement sur du contenu à courir."
+      },
+      "limitsFirst": {
+        "title": "Les limites d'abord, pas en petits caractères.",
+        "body": "Ce que les zones ne disent pas est encadré en haut à droite, avant le tableau : on ne découvre pas les réserves après avoir cru au chiffre."
+      },
+      "choiceOwned": {
+        "title": "Le choix est assumé.",
+        "body": "Six zones est une décision discutable : la page l'explique, la compare aux autres modèles et permet de les voir plutôt que de trancher à ta place."
+      }
+    },
     "polarise": {
       "title": "Pourquoi le 80/20 marche",
       "seoDescription": "Ce que montrent les études sur la répartition d'entraînement des athlètes d'endurance, pourquoi le modèle polarisé fonctionne, et ses limites.",
