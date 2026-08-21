@@ -111,7 +111,7 @@ export function SplitsPanel({
       {showTable && (
         <div
           className={cn(
-            "overflow-x-auto rounded-lg border",
+            "overflow-x-auto border-2 border-foreground",
             scrolls && "max-h-[26rem] overflow-y-auto",
           )}
         >

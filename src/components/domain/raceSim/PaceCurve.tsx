@@ -39,7 +39,7 @@ export function PaceCurve({
 
   return (
     <figure className={cn("space-y-1.5", className)}>
-      <figcaption className="flex items-baseline justify-between text-[0.6875rem] uppercase tracking-wider text-muted-foreground">
+      <figcaption className="flex items-baseline justify-between font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
         <span>{t("splits.curve")}</span>
         <span className="tabular-nums normal-case tracking-normal">
           {formatPaceDisplay(fastest)} – {formatPaceDisplay(slowest)}
@@ -55,7 +55,7 @@ export function PaceCurve({
             fastest: formatPaceDisplay(fastest),
             slowest: formatPaceDisplay(slowest),
           })}
-          className="h-20 w-full rounded-md border bg-muted/30"
+          className="h-20 w-full border border-filet bg-muted/30"
         >
           <polygon
             points={`0,100 ${points.join(" ")} 100,100`}

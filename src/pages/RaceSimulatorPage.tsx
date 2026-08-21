@@ -505,8 +505,8 @@ export function RaceSimulatorPage() {
         </header>
 
         {isShared && (
-          <div className="mb-4 flex items-center gap-2 rounded-lg border border-zone-2/30 bg-zone-2/5 px-3 py-2 text-sm">
-            <Share className="size-4 shrink-0 text-foreground/70" />
+          <div className="mb-4 flex items-center gap-2 border border-filet bg-secondary/50 px-4 py-3 text-sm text-muted-foreground">
+            <Share className="size-4 shrink-0" />
             {t("shared.banner")}
           </div>
         )}
@@ -535,7 +535,7 @@ export function RaceSimulatorPage() {
           <aside className="hidden lg:block lg:sticky lg:top-20 lg:self-start">
             {formOpen || !plan ? (
               <Card size="flush" className="p-5">
-                <h2 className="mb-4 text-sm font-semibold tracking-tight">
+                <h2 className="mb-4 font-mono text-[11px] font-bold tracking-[0.14em] uppercase text-muted-foreground">
                   {t("inputs.title")}
                 </h2>
                 {formNode}
@@ -577,7 +577,7 @@ export function RaceSimulatorPage() {
             {/* Mobile settings — inline until a plan exists, then behind "Ajuster". */}
             {!plan && (
               <Card size="flush" className="mb-4 p-5 lg:hidden">
-                <h2 className="mb-4 text-sm font-semibold tracking-tight">
+                <h2 className="mb-4 font-mono text-[11px] font-bold tracking-[0.14em] uppercase text-muted-foreground">
                   {t("inputs.title")}
                 </h2>
                 {formNode}
@@ -644,14 +644,14 @@ export function RaceSimulatorPage() {
             {/* Saved simulations */}
             {savedSimulations.length > 0 && (
               <section className="mt-8">
-                <h2 className="mb-3 text-sm font-semibold tracking-tight">
+                <h2 className="mb-3 font-mono text-[11px] font-bold tracking-[0.14em] uppercase text-muted-foreground">
                   {t("saved.title")}
                 </h2>
                 <ul className="grid gap-2 sm:grid-cols-2">
                   {savedSimulations.map((sim) => (
                     <li
                       key={sim.id}
-                      className="flex items-center justify-between gap-2 rounded-lg border bg-card p-3"
+                      className="flex items-center justify-between gap-2 border-2 border-foreground bg-card p-3"
                     >
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium">{sim.label}</p>

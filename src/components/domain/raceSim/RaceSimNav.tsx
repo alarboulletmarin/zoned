@@ -90,11 +90,11 @@ export function RaceSimNav({
             onClick={() => onJump(item.id)}
             aria-current={current === item.id ? "true" : undefined}
             className={cn(
-              "shrink-0 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+              "shrink-0 border-2 px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.04em] transition-colors",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               current === item.id
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-border bg-background text-muted-foreground hover:text-foreground",
+                ? "border-foreground bg-accent-acid text-ink"
+                : "border-filet bg-background text-muted-foreground hover:text-foreground",
             )}
           >
             {item.label}
@@ -107,14 +107,14 @@ export function RaceSimNav({
   return (
     <nav aria-label={t("nav.title")} className={className}>
       <div className="mb-2 flex items-center justify-between gap-2">
-        <p className="text-[0.6875rem] font-medium uppercase tracking-wider text-muted-foreground">
+        <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
           {t("nav.title")}
         </p>
         {onToggleAll && (
           <button
             type="button"
             onClick={onToggleAll}
-            className="inline-flex items-center gap-1 rounded text-[0.6875rem] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.08em] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {allOpen ? (
               <Minimize2 className="size-3" />

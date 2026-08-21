@@ -2,6 +2,7 @@ import { useId } from "react";
 import { useTranslation } from "react-i18next";
 import { Flag } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Segmented } from "@/components/ui/segmented";
 import { usePickLang } from "@/lib/i18n-utils";
 import type { SplitStrategy } from "@/lib/splits";
@@ -66,10 +67,6 @@ export function resolveSettings(s: RaceSimSettings): ResolvedSettings {
   };
 }
 
-const FIELD =
-  "h-10 w-full rounded-md border border-input bg-transparent px-3 text-sm shadow-sm " +
-  "placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
-
 // Native steppers are tiny targets and look dated; the value is typed, not nudged.
 const NO_SPINNER =
   "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none";
@@ -125,11 +122,11 @@ export function RaceSimForm({
               onClick={() => set("distance", opt.value)}
               aria-pressed={settings.distance === opt.value}
               className={cn(
-                "rounded-md border px-3 py-2 text-sm font-medium transition-all active:scale-[0.98]",
+                "border-2 px-3 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.04em] transition-colors",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                 settings.distance === opt.value
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-input hover:bg-muted",
+                  ? "border-foreground bg-accent-acid text-ink"
+                  : "border-filet hover:bg-secondary",
               )}
             >
               {pick(opt, "label")}
@@ -140,11 +137,11 @@ export function RaceSimForm({
             onClick={() => set("distance", "custom")}
             aria-pressed={settings.distance === "custom"}
             className={cn(
-              "col-span-2 rounded-md border px-3 py-2 text-sm font-medium transition-all active:scale-[0.98]",
+              "col-span-2 border-2 px-3 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.04em] transition-colors",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               settings.distance === "custom"
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-input hover:bg-muted",
+                ? "border-foreground bg-accent-acid text-ink"
+                : "border-filet hover:bg-secondary",
             )}
           >
             {t("inputs.custom")}
@@ -152,7 +149,7 @@ export function RaceSimForm({
         </div>
         {settings.distance === "custom" && (
           <div className="mt-2 flex items-center gap-2">
-            <input
+            <Input
               type="number"
               min={0.5}
               max={200}
@@ -162,7 +159,7 @@ export function RaceSimForm({
               aria-label={t("inputs.custom")}
               value={settings.customDistance}
               onChange={(e) => set("customDistance", e.target.value)}
-              className={cn(FIELD, NO_SPINNER, "max-w-[8rem] tabular-nums")}
+              className={cn(NO_SPINNER, "max-w-[8rem] tabular-nums")}
             />
             <span className="text-sm text-muted-foreground">km</span>
           </div>
@@ -174,7 +171,7 @@ export function RaceSimForm({
         <label htmlFor={`${uid}-time`}>
           <FieldLabel>{t("inputs.targetTime")}</FieldLabel>
         </label>
-        <input
+        <Input
           id={`${uid}-time`}
           type="text"
           inputMode="numeric"
@@ -185,9 +182,8 @@ export function RaceSimForm({
           value={settings.targetTime}
           onChange={(e) => set("targetTime", e.target.value)}
           className={cn(
-            FIELD,
-            "mt-2 font-mono text-lg tabular-nums tracking-tight",
-            resolved.timeError && "border-destructive",
+            "mt-2 text-lg tabular-nums tracking-tight",
+            resolved.timeError && "border-destructive text-destructive",
           )}
         />
         <p
@@ -206,12 +202,12 @@ export function RaceSimForm({
         <label htmlFor={`${uid}-start`}>
           <FieldLabel>{t("inputs.startTime")}</FieldLabel>
         </label>
-        <input
+        <Input
           id={`${uid}-start`}
           type="time"
           value={settings.startTime}
           onChange={(e) => set("startTime", e.target.value)}
-          className={cn(FIELD, "mt-2 font-mono tabular-nums")}
+          className="mt-2 tabular-nums"
         />
       </div>
 
@@ -236,7 +232,7 @@ export function RaceSimForm({
           <FieldLabel>{t("inputs.weight")}</FieldLabel>
         </label>
         <div className="mt-2 flex items-center gap-2">
-          <input
+          <Input
             id={`${uid}-weight`}
             type="number"
             min={30}
@@ -245,7 +241,7 @@ export function RaceSimForm({
             placeholder="70"
             value={settings.weight}
             onChange={(e) => set("weight", e.target.value)}
-            className={cn(FIELD, NO_SPINNER, "max-w-[8rem] tabular-nums")}
+            className={cn(NO_SPINNER, "max-w-[8rem] tabular-nums")}
           />
           <span className="text-sm text-muted-foreground">
             {t("inputs.weightUnit")}

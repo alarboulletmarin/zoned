@@ -43,11 +43,11 @@ export function RaceSimSection({
           )}
         >
           <span className="text-muted-foreground shrink-0">{icon}</span>
-          <h3 className="min-w-0 flex-1 text-sm font-semibold tracking-tight">
+          <h3 className="min-w-0 flex-1 font-sans text-sm font-bold uppercase tracking-tight">
             {title}
           </h3>
           {meta && (
-            <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
+            <span className="shrink-0 font-mono text-[10px] tracking-[0.08em] uppercase tabular-nums text-muted-foreground">
               {meta}
             </span>
           )}
@@ -59,7 +59,7 @@ export function RaceSimSection({
           />
         </button>
         {open && (
-          <div id={`${id}-panel`} className="border-t px-5 py-4">
+          <div id={`${id}-panel`} className="border-t border-filet px-5 py-4">
             {children}
           </div>
         )}
@@ -79,7 +79,7 @@ export function FieldLabel({
   return (
     <p
       className={cn(
-        "text-[0.6875rem] font-medium uppercase tracking-wider text-muted-foreground",
+        "font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground",
         className,
       )}
     >
@@ -103,7 +103,7 @@ export function Stat({
   return (
     <div className={cn("min-w-0", className)}>
       <FieldLabel>{label}</FieldLabel>
-      <p className="mt-1 text-xl font-semibold tabular-nums tracking-tight">
+      <p className="mt-1 font-sans text-xl font-bold tabular-nums tracking-tight">
         {value}
       </p>
       {hint && <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>}

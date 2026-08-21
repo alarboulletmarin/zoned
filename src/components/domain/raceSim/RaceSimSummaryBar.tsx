@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Settings } from "@/components/icons";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -32,14 +33,14 @@ export function RaceSimSummaryBar({
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border bg-card px-4 py-3",
+        "flex flex-wrap items-center gap-x-3 gap-y-2 border-2 border-foreground bg-card px-4 py-3",
         className,
       )}
     >
-      <span className="text-base font-semibold tracking-tight">
+      <span className="font-sans text-base font-bold uppercase tracking-tight">
         {distanceLabel}
       </span>
-      <span className="font-mono text-base font-semibold tabular-nums tracking-tight">
+      <span className="font-mono text-base font-bold tabular-nums tracking-tight">
         {timeLabel}
       </span>
       <span className="text-sm tabular-nums text-muted-foreground">
@@ -48,11 +49,9 @@ export function RaceSimSummaryBar({
       <span className="text-sm text-muted-foreground">
         {t("summary.startAt", { time: startTime })}
       </span>
-      {/* A chip rather than a "·" separator: the row wraps on narrow screens
+      {/* A badge rather than a "·" separator: the row wraps on narrow screens
           and a dangling bullet at the end of a line looks like a typo. */}
-      <span className="rounded-full border px-2 py-0.5 text-xs text-muted-foreground">
-        {strategyLabel}
-      </span>
+      <Badge variant="outline">{strategyLabel}</Badge>
 
       <Button
         variant="outline"

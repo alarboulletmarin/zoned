@@ -43,7 +43,7 @@ export function Checklist({
               <span
                 aria-hidden
                 className={cn(
-                  "mt-0.5 grid size-[18px] shrink-0 place-items-center rounded border transition-colors",
+                  "mt-0.5 grid size-[18px] shrink-0 place-items-center border-2 border-foreground transition-colors",
                   "peer-checked:border-primary peer-checked:bg-primary peer-checked:text-primary-foreground",
                   "peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-1",
                   "[&>svg]:opacity-0 peer-checked:[&>svg]:opacity-100",
@@ -86,7 +86,7 @@ export function Checklist({
               </span>
 
               {entry.meta && (
-                <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 font-mono text-[0.6875rem] tabular-nums text-muted-foreground">
+                <span className="shrink-0 border border-filet px-2 py-0.5 font-mono text-[0.6875rem] tabular-nums text-muted-foreground">
                   {entry.meta}
                 </span>
               )}

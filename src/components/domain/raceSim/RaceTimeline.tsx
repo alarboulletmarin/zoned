@@ -53,7 +53,7 @@ export function RaceTimeline({
               <span
                 aria-hidden
                 className={cn(
-                  "absolute -left-[4.5px] top-[0.9rem] size-[9px] rounded-full border-2 border-background",
+                  "absolute -left-[4.5px] top-[0.9rem] size-[9px] border-2 border-background",
                   isStart ? "bg-foreground" : "bg-muted-foreground/40",
                 )}
               />
@@ -94,13 +94,13 @@ function NowMarker({ now, label }: { now: number; label: string }) {
     <div className="relative flex items-center gap-3 border-l border-primary pl-4">
       <span
         aria-hidden
-        className="absolute -left-[5px] size-[11px] rounded-full border-2 border-background bg-primary"
+        className="absolute -left-[5px] size-[11px] border-2 border-background bg-primary"
       />
       <span className="w-12 shrink-0 font-mono text-sm font-semibold tabular-nums text-primary">
         {minutesToTime(now)}
       </span>
       <span className="flex flex-1 items-center gap-2">
-        <span className="text-xs font-semibold uppercase tracking-wider text-primary">
+        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-primary">
           {label}
         </span>
         <span aria-hidden className="h-px flex-1 bg-primary/30" />

@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Info } from "@/components/icons";
 import type { FuelingResult } from "@/data/guides/nutrition/calculator";
 import { usePickLang } from "@/lib/i18n-utils";
-import { Stat } from "./RaceSimSection";
+import { FieldLabel, Stat } from "./RaceSimSection";
 
 /**
  * Fuelling figures — but only the ones that carry a number.
@@ -67,10 +67,8 @@ export function NutritionPanel({
       )}
 
       {fuelingPlan.tips.length > 0 && (
-        <div className="space-y-2 border-t pt-4">
-          <p className="text-[0.6875rem] font-medium uppercase tracking-wider text-muted-foreground">
-            {t("nutrition.tips")}
-          </p>
+        <div className="space-y-2 border-t border-filet pt-4">
+          <FieldLabel>{t("nutrition.tips")}</FieldLabel>
           <ul className="space-y-1.5">
             {fuelingPlan.tips.map((tip, i) => (
               <li

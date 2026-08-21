@@ -143,7 +143,7 @@ function Block({
     <Card size="flush" className="px-5 py-4">
       <div className="mb-3 flex items-center gap-2">
         {icon && <span className="text-muted-foreground">{icon}</span>}
-        <h3 className="text-sm font-semibold tracking-tight">{title}</h3>
+        <h3 className="font-sans text-sm font-bold uppercase tracking-tight">{title}</h3>
       </div>
       {children}
     </Card>
@@ -183,19 +183,16 @@ function NextUp({ plan }: { plan: RacePlan }) {
   return (
     <Card
       size="flush"
-      className={cn(
-        "border-primary/40 bg-primary/5 px-5 py-4",
-        "shadow-[inset_0_1px_0_rgb(255_255_255/0.06)]",
-      )}
+      className={cn("border-2 border-foreground bg-accent-acid/10 px-5 py-4")}
     >
       <div className="flex items-baseline justify-between gap-3">
-        <FieldLabel className="text-primary">{t("raceDay.nextUp")}</FieldLabel>
+        <FieldLabel className="text-accent-acid">{t("raceDay.nextUp")}</FieldLabel>
         <span className="font-mono text-xs tabular-nums text-muted-foreground">
           {minutesToTime(now)}
         </span>
       </div>
       <p className="mt-2 flex items-baseline gap-3">
-        <span className="font-mono text-2xl font-semibold tabular-nums tracking-tight">
+        <span className="font-mono text-2xl font-bold tabular-nums tracking-tight">
           {next.time}
         </span>
         <span className="text-sm text-muted-foreground">
