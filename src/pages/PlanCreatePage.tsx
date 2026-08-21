@@ -1480,10 +1480,32 @@ export function PlanCreatePage() {
           </div>
         )}
 
-        {/* Four named tabs — the high-level navigation of the wizard */}
+        {/* Mobile: compact "Step X/4" indicator + thin 4-segment progress bar —
+            the named-tabs row below overflows narrow viewports with no scroll
+            affordance, so small screens get this instead. */}
+        <div className="mt-6 sm:hidden" aria-label={t("tabs.label")}>
+          <div className="flex items-baseline justify-between font-mono text-[11px] tracking-[0.08em] uppercase text-muted-foreground">
+            <span>{t("tabs.stepOf", { current: tabIndex + 1, total: TABS.length })}</span>
+            <span className="text-foreground">{t(TABS[tabIndex].labelKey)}</span>
+          </div>
+          <div className="mt-2 flex gap-1">
+            {TABS.map((tab, idx) => (
+              <div
+                key={tab.id}
+                aria-current={idx === tabIndex ? "step" : undefined}
+                className={cn(
+                  "h-1 flex-1 transition-colors",
+                  idx <= tabIndex ? "bg-accent-acid" : "bg-filet"
+                )}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Four named tabs — the high-level navigation of the wizard (desktop) */}
         <nav
           aria-label={t("tabs.label")}
-          className="mt-6 flex gap-5 overflow-x-auto border-b border-filet font-mono text-[11px] tracking-[0.08em] uppercase"
+          className="mt-6 hidden gap-5 overflow-x-auto border-b border-filet font-mono text-[11px] tracking-[0.08em] uppercase sm:flex"
         >
           {TABS.map((tab, idx) => (
             <button

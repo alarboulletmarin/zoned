@@ -796,9 +796,9 @@ export function PlanViewPage() {
                 </div>
               )}
               {plan.raceTimePrediction && (
-                <Badge variant="secondary">
+                <Badge variant="secondary" className="border-transparent bg-accent-acid text-ink">
                   <Clock className="size-3 mr-1" />
-                  {plan.raceTimePrediction}
+                  {t("view.racePrediction")} {plan.raceTimePrediction}
                 </Badge>
               )}
               {plan.config.startDate && (
