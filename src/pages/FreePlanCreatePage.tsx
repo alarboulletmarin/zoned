@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { ArrowLeft, CalendarRange, ChevronDown } from "@/components/icons";
+import { ArrowLeft, ChevronDown } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { savePlan } from "@/lib/planStorage";
 import { createFreePlan } from "@/lib/createFreePlan";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
@@ -21,6 +21,20 @@ const DEFAULT_WEEKS = 12;
 const MIN_DAYS = 3;
 const MAX_DAYS = 7;
 const DEFAULT_DAYS = 4;
+
+const DAYS_OPTIONS = Array.from(
+  { length: MAX_DAYS - MIN_DAYS + 1 },
+  (_, i) => MIN_DAYS + i
+);
+
+const GOAL_OPTIONS: TrainingGoal[] = ["finish", "time", "compete"];
+
+const PURPOSE_OPTIONS: { value: PlanPurpose; labelKey: string }[] = [
+  { value: "race", labelKey: "race" },
+  { value: "base_building", labelKey: "baseBuilding" },
+  { value: "return_from_injury", labelKey: "returnFromInjury" },
+  { value: "beginner_start", labelKey: "beginnerStart" },
+];
 
 export function FreePlanCreatePage() {
   const { t } = useTranslation(["calculators", "plan"]);
@@ -60,277 +74,209 @@ export function FreePlanCreatePage() {
         description={t("calculators:freePlan.seoDescription")}
         canonical="/plan/new/free"
       />
-      <div className="py-8">
-        <div className="max-w-lg mx-auto space-y-6">
-          {/* Back */}
+      <div className="mx-auto max-w-xl py-6 md:py-8">
+        <div className="pb-2">
           <Button variant="ghost" size="sm" asChild>
             <Link to="/plan/new">
-              <ArrowLeft className="mr-2 size-4" />
+              <ArrowLeft className="mr-1 size-4" />
               {t("calculators:freePlan.back")}
             </Link>
           </Button>
+        </div>
 
-          {/* Title */}
-          <div className="text-center space-y-2">
-            <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-              <CalendarRange className="size-8 text-primary" />
+        <h1 className="font-sans font-bold uppercase leading-[1.02] tracking-[-0.03em] text-3xl md:text-4xl">
+          {t("calculators:freePlan.title")}
+        </h1>
+        <p className="mt-2 max-w-md text-sm leading-[1.5] text-muted-foreground">
+          {t("calculators:freePlan.subtitle")}
+        </p>
+
+        <div className="mt-8 space-y-8">
+          <FormSection title={t("calculators:freePlan.planName")}>
+            <div className="max-w-sm">
+              <Input
+                id="plan-name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && isValid) handleSubmit();
+                }}
+                placeholder={t("calculators:freePlan.namePlaceholder")}
+                maxLength={100}
+                autoFocus
+              />
             </div>
-            <EditorialTitle as="h1" size="md">
-              {t("calculators:freePlan.title")}
-            </EditorialTitle>
-            <FadeUp as="p" delay={0.1} className="text-muted-foreground">
-              {t("calculators:freePlan.subtitle")}
-            </FadeUp>
-          </div>
+          </FormSection>
 
-          {/* Form */}
-          <Card>
-            <CardContent className="p-6 space-y-5">
-              {/* Plan name */}
-              <div>
-                <label htmlFor="plan-name" className="text-sm font-medium mb-2 block">
-                  {t("calculators:freePlan.planName")}
-                </label>
-                <input
-                  id="plan-name"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && isValid) handleSubmit();
-                  }}
-                  placeholder={t("calculators:freePlan.namePlaceholder")}
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  maxLength={100}
-                  autoFocus
-                />
-              </div>
+          <FormSection
+            title={t("calculators:freePlan.numberOfWeeks")}
+            description={`${MIN_WEEKS} - ${MAX_WEEKS} ${t("calculators:freePlan.weeks")}`}
+          >
+            <div className="flex max-w-sm items-center gap-4">
+              <Slider
+                className="flex-1"
+                min={MIN_WEEKS}
+                max={MAX_WEEKS}
+                step={1}
+                thumbLabel={t("calculators:freePlan.numberOfWeeks")}
+                thumbValueText={`${weeks} ${t("calculators:freePlan.weeks")}`}
+                value={[weeks]}
+                onValueChange={([v]) => setWeeks(v)}
+              />
+              <Input
+                id="plan-weeks"
+                type="number"
+                inputMode="numeric"
+                min={MIN_WEEKS}
+                max={MAX_WEEKS}
+                value={weeks}
+                onChange={(e) => {
+                  const v = parseInt(e.target.value, 10);
+                  if (!isNaN(v) && v >= MIN_WEEKS && v <= MAX_WEEKS) {
+                    setWeeks(v);
+                  }
+                }}
+                className="w-20 shrink-0"
+              />
+            </div>
+          </FormSection>
 
-              {/* Number of weeks */}
-              <div>
-                <label htmlFor="plan-weeks" className="text-sm font-medium mb-2 block">
-                  {t("calculators:freePlan.numberOfWeeks")}
-                </label>
-                <div className="flex items-center gap-4">
-                  <input
-                    id="plan-weeks"
-                    type="range"
-                    min={MIN_WEEKS}
-                    max={MAX_WEEKS}
-                    value={weeks}
-                    onChange={(e) => setWeeks(parseInt(e.target.value, 10))}
-                    className="flex-1 accent-primary"
-                  />
-                  <div className="w-16 text-center">
-                    <input
-                      type="number"
-                      min={MIN_WEEKS}
-                      max={MAX_WEEKS}
-                      value={weeks}
-                      onChange={(e) => {
-                        const v = parseInt(e.target.value, 10);
-                        if (!isNaN(v) && v >= MIN_WEEKS && v <= MAX_WEEKS) {
-                          setWeeks(v);
-                        }
-                      }}
-                      className="w-full rounded-md border bg-background px-2 py-1 text-sm text-center focus:outline-none focus:ring-2 focus:ring-primary"
-                    />
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {MIN_WEEKS} - {MAX_WEEKS} {t("calculators:freePlan.weeks")}
-                </p>
-              </div>
-
-              {/* Days per week */}
-              <div>
-                <label htmlFor="plan-days" className="text-sm font-medium mb-2 block">
-                  {t("calculators:freePlan.daysPerWeek")}
-                </label>
-                <div className="flex items-center gap-4">
-                  <input
-                    id="plan-days"
-                    type="range"
-                    min={MIN_DAYS}
-                    max={MAX_DAYS}
-                    value={daysPerWeek}
-                    onChange={(e) => setDaysPerWeek(parseInt(e.target.value, 10))}
-                    className="flex-1 accent-primary"
-                  />
-                  <div className="w-16 text-center">
-                    <input
-                      type="number"
-                      min={MIN_DAYS}
-                      max={MAX_DAYS}
-                      value={daysPerWeek}
-                      onChange={(e) => {
-                        const v = parseInt(e.target.value, 10);
-                        if (!isNaN(v) && v >= MIN_DAYS && v <= MAX_DAYS) {
-                          setDaysPerWeek(v);
-                        }
-                      }}
-                      className="w-full rounded-md border bg-background px-2 py-1 text-sm text-center focus:outline-none focus:ring-2 focus:ring-primary"
-                    />
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {t("calculators:freePlan.daysPerWeekHint")}
-                </p>
-              </div>
-
-              {/* Advanced options */}
-              <div>
-                <button
-                  type="button"
-                  onClick={() => setShowAdvanced((v) => !v)}
-                  className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          <FormSection
+            title={t("calculators:freePlan.daysPerWeek")}
+            description={t("calculators:freePlan.daysPerWeekHint")}
+          >
+            <div className="flex max-w-sm gap-2">
+              {DAYS_OPTIONS.map((n) => (
+                <Chip
+                  key={n}
+                  selected={daysPerWeek === n}
+                  className="flex-1 justify-center py-2"
+                  onClick={() => setDaysPerWeek(n)}
                 >
-                  <ChevronDown
-                    className={cn(
-                      "size-4 transition-transform",
-                      showAdvanced && "rotate-180"
-                    )}
-                  />
-                  {t("calculators:freePlan.advancedOptions")}
-                </button>
+                  {n}
+                </Chip>
+              ))}
+            </div>
+          </FormSection>
 
-                {showAdvanced && (
-                  <div className="mt-4 space-y-5">
-                    {/* Training Goal */}
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">
-                        {t("plan:goal.title")}
-                      </label>
-                      <div className="flex flex-wrap gap-2">
-                        {(["finish", "time", "compete"] as const).map((goal) => (
-                          <button
-                            key={goal}
-                            type="button"
-                            onClick={() => setTrainingGoal(trainingGoal === goal ? undefined : goal)}
-                            className={cn(
-                              "flex-1 rounded-lg border p-3 text-sm transition-colors",
-                              trainingGoal === goal
-                                ? "border-primary bg-primary/10 font-medium"
-                                : "hover:bg-accent/50"
-                            )}
-                          >
-                            {t(`plan:goal.${goal}`)}
-                          </button>
-                        ))}
-                        <button
-                          type="button"
-                          onClick={() => setTrainingGoal(undefined)}
-                          className={cn(
-                            "flex-1 rounded-lg border p-3 text-sm transition-colors",
-                            trainingGoal === undefined
-                              ? "border-primary bg-primary/10 font-medium"
-                              : "hover:bg-accent/50"
-                          )}
-                        >
-                          {t("calculators:freePlan.noneSelected")}
-                        </button>
-                      </div>
-                    </div>
+          <section>
+            <button
+              type="button"
+              onClick={() => setShowAdvanced((v) => !v)}
+              aria-expanded={showAdvanced}
+              className="flex items-center gap-2 font-mono text-[11px] font-bold tracking-[0.14em] uppercase text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <ChevronDown
+                className={cn(
+                  "size-3.5 transition-transform",
+                  showAdvanced && "rotate-180"
+                )}
+              />
+              {t("calculators:freePlan.advancedOptions")}
+            </button>
 
-                    {/* Plan Purpose */}
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">
-                        {t("plan:purpose.title")}
-                      </label>
-                      <div className="flex flex-wrap gap-2">
-                        {(["race", "base_building", "return_from_injury", "beginner_start"] as const).map((purpose) => {
-                          const labelKey = {
-                            race: "race",
-                            base_building: "baseBuilding",
-                            return_from_injury: "returnFromInjury",
-                            beginner_start: "beginnerStart",
-                          }[purpose];
-                          return (
-                            <button
-                              key={purpose}
-                              type="button"
-                              onClick={() => setPlanPurpose(planPurpose === purpose ? undefined : purpose)}
-                              className={cn(
-                                "rounded-lg border p-3 text-sm transition-colors",
-                                planPurpose === purpose
-                                  ? "border-primary bg-primary/10 font-medium"
-                                  : "hover:bg-accent/50"
-                              )}
-                            >
-                              {t(`plan:purpose.${labelKey}`)}
-                            </button>
-                          );
-                        })}
-                        <button
-                          type="button"
-                          onClick={() => setPlanPurpose(undefined)}
-                          className={cn(
-                            "rounded-lg border p-3 text-sm transition-colors",
-                            planPurpose === undefined
-                              ? "border-primary bg-primary/10 font-medium"
-                              : "hover:bg-accent/50"
-                          )}
-                        >
-                          {t("calculators:freePlan.noneSelected")}
-                        </button>
-                      </div>
-                    </div>
+            {showAdvanced && (
+              <div className="mt-4 space-y-6 border-l-2 border-filet pl-4">
+                <div>
+                  <FieldLabel>{t("plan:goal.title")}</FieldLabel>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {GOAL_OPTIONS.map((goal) => (
+                      <Chip
+                        key={goal}
+                        selected={trainingGoal === goal}
+                        onClick={() =>
+                          setTrainingGoal(trainingGoal === goal ? undefined : goal)
+                        }
+                      >
+                        {t(`plan:goal.${goal}`)}
+                      </Chip>
+                    ))}
+                    <Chip
+                      selected={trainingGoal === undefined}
+                      onClick={() => setTrainingGoal(undefined)}
+                    >
+                      {t("calculators:freePlan.noneSelected")}
+                    </Chip>
                   </div>
-                )}
-              </div>
-
-              {/* Optional dates */}
-              <div>
-                <label className="text-sm font-medium mb-2 block">
-                  {t("calculators:freePlan.startDate")}
-                </label>
-                <div className="flex gap-2 mb-3">
-                  <button
-                    type="button"
-                    onClick={() => { setUseCustomDate(false); setStartDate(""); }}
-                    className={cn(
-                      "flex-1 rounded-lg border p-3 text-sm transition-colors",
-                      !useCustomDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
-                    )}
-                  >
-                    {t("calculators:freePlan.startNow")}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => { setUseCustomDate(true); setStartDate(new Date().toISOString().split("T")[0]); }}
-                    className={cn(
-                      "flex-1 rounded-lg border p-3 text-sm transition-colors",
-                      useCustomDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
-                    )}
-                  >
-                    {t("calculators:freePlan.chooseDate")}
-                  </button>
                 </div>
-                {useCustomDate && (
-                  <DateInput
-                    id="plan-start"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="px-4 py-3 min-h-[44px] text-base"
-                  />
-                )}
-                {startDate && (
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {t("calculators:freePlan.endDate")} :{" "}
-                    {(() => {
-                      const d = new Date(startDate);
-                      d.setDate(d.getDate() + weeks * 7);
-                      return formatDate(d);
-                    })()}
-                  </p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
 
-          {/* Submit */}
+                <div>
+                  <FieldLabel>{t("plan:purpose.title")}</FieldLabel>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {PURPOSE_OPTIONS.map(({ value, labelKey }) => (
+                      <Chip
+                        key={value}
+                        selected={planPurpose === value}
+                        onClick={() =>
+                          setPlanPurpose(planPurpose === value ? undefined : value)
+                        }
+                      >
+                        {t(`plan:purpose.${labelKey}`)}
+                      </Chip>
+                    ))}
+                    <Chip
+                      selected={planPurpose === undefined}
+                      onClick={() => setPlanPurpose(undefined)}
+                    >
+                      {t("calculators:freePlan.noneSelected")}
+                    </Chip>
+                  </div>
+                </div>
+              </div>
+            )}
+          </section>
+
+          <FormSection title={t("calculators:freePlan.startDate")}>
+            <div className="max-w-sm space-y-3">
+              <div className="flex gap-2">
+                <Chip
+                  selected={!useCustomDate}
+                  className="flex-1 justify-center py-2"
+                  onClick={() => {
+                    setUseCustomDate(false);
+                    setStartDate("");
+                  }}
+                >
+                  {t("calculators:freePlan.startNow")}
+                </Chip>
+                <Chip
+                  selected={useCustomDate}
+                  className="flex-1 justify-center py-2"
+                  onClick={() => {
+                    setUseCustomDate(true);
+                    setStartDate(new Date().toISOString().split("T")[0]);
+                  }}
+                >
+                  {t("calculators:freePlan.chooseDate")}
+                </Chip>
+              </div>
+              {useCustomDate && (
+                <DateInput
+                  id="plan-start"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="px-4 py-3 min-h-[44px] text-base"
+                />
+              )}
+              {startDate && (
+                <p className="font-mono text-[11px] text-muted-foreground">
+                  {t("calculators:freePlan.endDate")}:{" "}
+                  {(() => {
+                    const d = new Date(startDate);
+                    d.setDate(d.getDate() + weeks * 7);
+                    return formatDate(d);
+                  })()}
+                </p>
+              )}
+            </div>
+          </FormSection>
+        </div>
+
+        <div className="mt-8 border-t border-filet pt-5">
           <Button
             size="lg"
+            variant="accent"
             className="w-full"
             onClick={handleSubmit}
             disabled={!isValid}
@@ -340,5 +286,66 @@ export function FreePlanCreatePage() {
         </div>
       </div>
     </>
+  );
+}
+
+// ── Helper components ────────────────────────────────────────────────
+
+function FormSection({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section>
+      <h2 className="font-mono text-[11px] font-bold tracking-[0.14em] uppercase">
+        {title}
+      </h2>
+      {description && (
+        <p className="mt-1 text-sm leading-[1.5] text-muted-foreground">{description}</p>
+      )}
+      <div className="mt-4">{children}</div>
+    </section>
+  );
+}
+
+function FieldLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="block font-mono text-[11px] font-bold uppercase tracking-[0.08em]">
+      {children}
+    </span>
+  );
+}
+
+function Chip({
+  selected,
+  onClick,
+  className,
+  children,
+}: {
+  selected: boolean;
+  onClick: () => void;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={selected}
+      onClick={onClick}
+      className={cn(
+        "inline-flex items-center border-2 px-2.5 py-1 font-mono text-[11px] tracking-[0.04em] uppercase transition-colors",
+        selected
+          ? "border-transparent bg-accent-acid text-ink"
+          : "border-foreground bg-transparent text-foreground/80 hover:bg-secondary",
+        className
+      )}
+    >
+      {children}
+    </button>
   );
 }
