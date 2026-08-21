@@ -61,7 +61,7 @@ export function FavoritesPage() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 space-y-4">
+        <div className="border-2 border-foreground bg-card text-center px-6 py-16 space-y-4">
           {/* Animated beating heart SVG */}
           <div className="mx-auto w-16 h-16">
             <svg

@@ -133,19 +133,19 @@ export function WorkoutDetailPage() {
     return (
       <div className="py-8 space-y-8">
         {/* Back button skeleton */}
-        <Skeleton className="h-9 w-40 rounded-md" />
+        <Skeleton className="h-9 w-40 rounded-none" />
 
         {/* Bento header skeleton */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Session identity card skeleton */}
-          <Skeleton className="lg:col-span-8 h-48 lg:h-60 rounded-xl" />
+          <Skeleton className="lg:col-span-8 h-48 lg:h-60 rounded-none" />
 
           {/* Summary metrics skeleton (2x2 grid) */}
           <div className="lg:col-span-4 grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
-            <Skeleton className="h-20 lg:h-28 rounded-lg lg:rounded-xl" />
-            <Skeleton className="h-20 lg:h-28 rounded-lg lg:rounded-xl" />
-            <Skeleton className="h-20 lg:h-28 rounded-lg lg:rounded-xl" />
-            <Skeleton className="h-20 lg:h-28 rounded-lg lg:rounded-xl" />
+            <Skeleton className="h-20 lg:h-28 rounded-none" />
+            <Skeleton className="h-20 lg:h-28 rounded-none" />
+            <Skeleton className="h-20 lg:h-28 rounded-none" />
+            <Skeleton className="h-20 lg:h-28 rounded-none" />
           </div>
         </div>
 
@@ -153,13 +153,13 @@ export function WorkoutDetailPage() {
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-8">
             {/* Timeline skeleton with zone shimmer */}
-            <Skeleton variant="zone-shimmer" className="h-40 rounded-xl" />
+            <Skeleton variant="zone-shimmer" className="h-40 rounded-none" />
             {/* Structure skeleton */}
-            <Skeleton className="h-64 rounded-xl" />
+            <Skeleton className="h-64 rounded-none" />
           </div>
           <div className="space-y-6">
-            <Skeleton className="h-48 rounded-xl" />
-            <Skeleton className="h-32 rounded-xl" />
+            <Skeleton className="h-48 rounded-none" />
+            <Skeleton className="h-32 rounded-none" />
           </div>
         </div>
       </div>
@@ -608,7 +608,7 @@ export function WorkoutDetailPage() {
 
         {/* Sticky mini timeline (existing behaviour) */}
         {timelineScrolledPast && (
-          <div className="sticky top-12 z-40 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 bg-background/90 backdrop-blur-sm md:backdrop-blur-md shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_6px_12px_-4px_rgba(0,0,0,0.15)] dark:shadow-[0_1px_3px_0_rgba(0,0,0,0.3),0_6px_12px_-4px_rgba(0,0,0,0.4)] border-b border-border/30 will-change-[transform,opacity] animate-slide-in-top print:hidden">
+          <div className="sticky top-12 z-40 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 bg-background border-t-2 border-foreground will-change-[transform,opacity] animate-slide-in-top print:hidden">
             <MiniSessionTimeline
               workout={workout}
               onClickScrollBack={() => {
@@ -1089,7 +1089,7 @@ function StrengthCoachingTips({
             {tips.map((tip, i) => (
               <li
                 key={i}
-                className="text-sm text-muted-foreground pl-5 relative before:content-[''] before:absolute before:left-0 before:top-[7px] before:w-1.5 before:h-1.5 before:rounded-full before:bg-success/60"
+                className="text-sm text-muted-foreground pl-5 relative before:content-[''] before:absolute before:left-0 before:top-[7px] before:w-1.5 before:h-1.5 before:rounded-none before:bg-success/60"
               >
                 <GlossaryLinkedText text={tip} />
               </li>
@@ -1108,7 +1108,7 @@ function StrengthCoachingTips({
             {mistakes.map((mistake, i) => (
               <li
                 key={i}
-                className="text-sm text-muted-foreground pl-5 relative before:content-[''] before:absolute before:left-0 before:top-[7px] before:w-1.5 before:h-1.5 before:rounded-full before:bg-destructive/60"
+                className="text-sm text-muted-foreground pl-5 relative before:content-[''] before:absolute before:left-0 before:top-[7px] before:w-1.5 before:h-1.5 before:rounded-none before:bg-destructive/60"
               >
                 <GlossaryLinkedText text={mistake} />
               </li>

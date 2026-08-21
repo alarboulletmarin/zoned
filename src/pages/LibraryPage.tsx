@@ -852,8 +852,8 @@ export function LibraryPage() {
                 )}
 
                 {/* Pagination: count + infinite scroll */}
-                <div className="mt-6 flex flex-col items-center gap-3">
-                  <p className="font-mono text-xs tracking-[0.04em] text-muted-foreground">
+                <div className="mt-6 border-t border-filet pt-5 flex flex-col items-center gap-3">
+                  <p className="font-mono text-[11px] tracking-[0.1em] uppercase text-muted-foreground">
                     {t("showingCount", {
                       visible: visibleWorkouts.length,
                       total: filteredWorkouts.length,
