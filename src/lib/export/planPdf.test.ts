@@ -566,7 +566,7 @@ describe("exportPlanToPDF: unresolvable workoutId", () => {
     // become the strength cell (see the STR- test below for the other side).
     const zoneCell = sessionCell(captured().content, 0, 3);
     expect(zoneCell.fillColor).toBeUndefined();
-    expect(zoneCell.color).toBe("#aaa");
+    expect(zoneCell.color).toBe("#5B594F");
   });
 
   test("an unresolvable STR- id is still treated as strength, by prefix", async () => {
@@ -581,7 +581,7 @@ describe("exportPlanToPDF: unresolvable workoutId", () => {
     // strength branch.
     const zoneCell = sessionCell(captured().content, 0, 3);
     expect(zoneCell.text).toBe("—");
-    expect(zoneCell.fillColor).toBe("#94a3b8");
+    expect(zoneCell.fillColor).toBe("#0B0B0A");
     expect(zoneCell.bold).toBe(true);
     // No template to read a zone from, and the STR- prefix keeps it off the
     // running path, so no zone token appears anywhere.

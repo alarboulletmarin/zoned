@@ -74,6 +74,7 @@ export function Footer() {
                   href: "https://github.com/alarboulletmarin/zoned",
                 },
                 { label: t("homepage:home.footer.project.changelog"), to: "/changelog" },
+                { label: t("homepage:home.footer.project.offline"), to: "/offline" },
               ]}
             />
           </div>

@@ -35,6 +35,7 @@ import {
   ZonePersonalizationCTA,
   TipCard,
 } from "@/components/domain";
+import { WorkoutNotFound } from "@/components/domain/WorkoutNotFound";
 import { WorkoutStructure, CoachingTips } from "@/components/domain/WorkoutStructure";
 import { ExportMenu } from "@/components/domain/ExportMenu";
 import { ShareDialog } from "@/components/share/ShareDialog";
@@ -166,17 +167,7 @@ export function WorkoutDetailPage() {
   }
 
   if (!workout) {
-    return (
-      <div className="py-12 text-center">
-        <p className="text-muted-foreground">{t("common:errors.workoutNotFound")}</p>
-        <Button variant="link" asChild className="mt-4">
-          <Link to="/library">
-            <ArrowLeft className="mr-2 size-4" />
-            {t("common:actions.backToLibrary")}
-          </Link>
-        </Button>
-      </div>
-    );
+    return <WorkoutNotFound id={id} />;
   }
 
   // ── Strength workout branch ─────────────────────────────────────

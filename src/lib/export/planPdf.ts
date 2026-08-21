@@ -23,12 +23,27 @@ import { formatDateMedium, pickLang } from "@/lib/i18n-utils";
 
 // ── Constants ──────────────────────────────────────────────────────
 
+/**
+ * Zoned Brut print palette — ink on paper, zone hues as the only colour.
+ * Mirrors the light-theme `--fg`/`--fg2`/`--fg3` ramp in `themes.css`: dark
+ * mode never reaches a printed page ("le papier inverse le thème"). Shared
+ * with `pdf.ts`; kept as a local copy rather than a shared module because a
+ * literal-hex export helper already exists per-file (`zoneColorFor`) and a
+ * cross-file constants module would be one more layer for four colours.
+ */
+const INK = "#0B0B0A";
+const INK_MUTED = "#3B3A33";
+const INK_FAINT = "#5B594F";
+const RULE = "#CFCCC0";
+const SOFT_BG = "#F2F0E6";
+const PAPER = "#FCFBF6";
+
 const PHASE_COLORS: Record<string, { bg: string; text: string }> = {
-  base: { bg: "#dbeafe", text: "#1e40af" },
-  build: { bg: "#fef9c3", text: "#854d0e" },
-  peak: { bg: "#ffedd5", text: "#9a3412" },
-  taper: { bg: "#dcfce7", text: "#166534" },
-  recovery: { bg: "#f1f5f9", text: "#475569" },
+  base: { bg: "#dbeafe", text: INK },
+  build: { bg: "#fef9c3", text: INK },
+  peak: { bg: "#ffedd5", text: INK },
+  taper: { bg: "#dcfce7", text: INK },
+  recovery: { bg: SOFT_BG, text: INK },
 };
 
 /**
@@ -40,7 +55,7 @@ const PHASE_COLORS: Record<string, { bg: string; text: string }> = {
  * previously this file split on "-" and took the first part, disagreeing with
  * every other surface.
  */
-function zoneColorFor(zoneSpec: string | undefined | null, fallback = "#555"): string {
+function zoneColorFor(zoneSpec: string | undefined | null, fallback = INK_MUTED): string {
   if (!zoneSpec) return fallback;
   const span = parseZoneSpan(zoneSpec);
   return span ? getZoneHex(span.max, { theme: "light" }) : fallback;
@@ -304,11 +319,11 @@ function renderRunningAppendixEntry(
   // Header line (with anchor for internal PDF links)
   result.push({
     text: [
-      { text: `[${refNum}] `, bold: true, fontSize: 9, color: "#333" },
-      { text: name, bold: true, fontSize: 9, color: "#333" },
-      { text: `   ${catStr} \u00b7 `, fontSize: 8, color: "#666" },
+      { text: `[${refNum}] `, bold: true, fontSize: 9, color: "#0B0B0A" },
+      { text: name, bold: true, fontSize: 9, color: "#0B0B0A" },
+      { text: `   ${catStr} \u00b7 `, fontSize: 8, color: "#3B3A33" },
       { text: zone, fontSize: 8, color: zoneColor, bold: true },
-      { text: ` \u00b7 ${dur}`, fontSize: 8, color: "#666" },
+      { text: ` \u00b7 ${dur}`, fontSize: 8, color: "#3B3A33" },
     ],
     id: `ref-${refNum}`,
     margin: [0, 8, 0, 2] as [number, number, number, number],
@@ -343,7 +358,7 @@ function renderRunningAppendixEntry(
       }
 
       rows.push([
-        { text: phase, fontSize: 7, color: "#888", margin: [2, 1, 2, 1] },
+        { text: phase, fontSize: 7, color: "#5B594F", margin: [2, 1, 2, 1] },
         { text: desc, fontSize: 7, margin: [2, 1, 2, 1] },
         { text: dur, fontSize: 7, alignment: "center" as const, margin: [2, 1, 2, 1] },
         blockZone
@@ -356,7 +371,7 @@ function renderRunningAppendixEntry(
               alignment: "center" as const,
               margin: [2, 1, 2, 1],
             }
-          : { text: "\u2014", fontSize: 7, color: "#aaa", alignment: "center" as const, margin: [2, 1, 2, 1] },
+          : { text: "\u2014", fontSize: 7, color: "#5B594F", alignment: "center" as const, margin: [2, 1, 2, 1] },
         { text: repsStr, fontSize: 7, alignment: "center" as const, margin: [2, 1, 2, 1] },
       ] as TableCell[]);
     }
@@ -378,11 +393,11 @@ function renderRunningAppendixEntry(
         body: [headerRow, ...rows],
       },
       layout: {
-        fillColor: (rowIndex: number) => (rowIndex === 0 ? "#f1f5f9" : null),
+        fillColor: (rowIndex: number) => (rowIndex === 0 ? "#F2F0E6" : null),
         hLineWidth: () => 0.5,
         vLineWidth: () => 0.5,
-        hLineColor: () => "#e2e8f0",
-        vLineColor: () => "#e2e8f0",
+        hLineColor: () => RULE,
+        vLineColor: () => RULE,
       },
       margin: [0, 0, 0, 2] as [number, number, number, number],
     });
@@ -398,7 +413,7 @@ function renderRunningAppendixEntry(
         text: tipTexts,
         italics: true,
         fontSize: 7,
-        color: "#888",
+        color: "#5B594F",
         margin: [0, 1, 0, 2] as [number, number, number, number],
       });
     }
@@ -425,9 +440,9 @@ function renderStrengthAppendixEntry(
   // Header line (with anchor for internal PDF links)
   result.push({
     text: [
-      { text: `[${refNum}] `, bold: true, fontSize: 9, color: "#333" },
-      { text: name, bold: true, fontSize: 9, color: "#333" },
-      { text: `   ${catStr} \u00b7 ${intensityStr} \u00b7 ${dur}`, fontSize: 8, color: "#666" },
+      { text: `[${refNum}] `, bold: true, fontSize: 9, color: "#0B0B0A" },
+      { text: name, bold: true, fontSize: 9, color: "#0B0B0A" },
+      { text: `   ${catStr} \u00b7 ${intensityStr} \u00b7 ${dur}`, fontSize: 8, color: "#3B3A33" },
     ],
     id: `ref-${refNum}`,
     margin: [0, 8, 0, 2] as [number, number, number, number],
@@ -454,7 +469,7 @@ function renderStrengthAppendixEntry(
       const setsReps = `${block.sets}\u00d7${block.reps}`;
 
       rows.push([
-        { text: phase, fontSize: 7, color: "#888", margin: [2, 1, 2, 1] },
+        { text: phase, fontSize: 7, color: "#5B594F", margin: [2, 1, 2, 1] },
         { text: exName, fontSize: 7, margin: [2, 1, 2, 1] },
         { text: setsReps, fontSize: 7, alignment: "center" as const, margin: [2, 1, 2, 1] },
         { text: block.restBetweenSets || "\u2014", fontSize: 7, alignment: "center" as const, margin: [2, 1, 2, 1] },
@@ -479,11 +494,11 @@ function renderStrengthAppendixEntry(
         body: [headerRow, ...rows],
       },
       layout: {
-        fillColor: (rowIndex: number) => (rowIndex === 0 ? "#f1f5f9" : null),
+        fillColor: (rowIndex: number) => (rowIndex === 0 ? "#F2F0E6" : null),
         hLineWidth: () => 0.5,
         vLineWidth: () => 0.5,
-        hLineColor: () => "#e2e8f0",
-        vLineColor: () => "#e2e8f0",
+        hLineColor: () => RULE,
+        vLineColor: () => RULE,
       },
       margin: [0, 0, 0, 2] as [number, number, number, number],
     });
@@ -497,7 +512,7 @@ function renderStrengthAppendixEntry(
       text: tipTexts,
       italics: true,
       fontSize: 7,
-      color: "#888",
+      color: "#5B594F",
       margin: [0, 1, 0, 2] as [number, number, number, number],
     });
   }
@@ -545,22 +560,22 @@ export async function exportPlanToPDF(
         body: [[
           {
             stack: [
-              { text: planName, fontSize: 18, bold: true, color: "#fff" },
-              ...(subtitleText ? [{ text: subtitleText, fontSize: 11, color: "#94a3b8", margin: [0, 2, 0, 0] as [number, number, number, number] }] : []),
+              { text: planName.toUpperCase(), fontSize: 18, bold: true, color: PAPER },
+              ...(subtitleText ? [{ text: subtitleText, fontSize: 11, color: "#BDBBB2", margin: [0, 2, 0, 0] as [number, number, number, number] }] : []),
             ],
             margin: [10, 8, 0, 8] as [number, number, number, number],
           },
           {
             text: "zoned.run",
             fontSize: 9,
-            color: "#94a3b8",
+            color: "#BDBBB2",
             alignment: "right" as const,
             margin: [0, 10, 10, 0] as [number, number, number, number],
           },
         ]],
       },
       layout: {
-        fillColor: () => "#1e293b",
+        fillColor: () => "#0B0B0A",
         hLineWidth: () => 0,
         vLineWidth: () => 0,
       },
@@ -596,20 +611,20 @@ export async function exportPlanToPDF(
         widths: ["*", "*"],
         body: [[
           {
-            stack: metaLeft.map((t) => ({ text: t, fontSize: 8, color: "#555", margin: [4, 2, 4, 2] as [number, number, number, number] })),
-            fillColor: "#f8fafc",
+            stack: metaLeft.map((t) => ({ text: t, fontSize: 8, color: "#3B3A33", margin: [4, 2, 4, 2] as [number, number, number, number] })),
+            fillColor: "#F2F0E6",
           },
           {
-            stack: metaRight.map((t) => ({ text: t, fontSize: 8, color: "#555", margin: [4, 2, 4, 2] as [number, number, number, number] })),
-            fillColor: "#f8fafc",
+            stack: metaRight.map((t) => ({ text: t, fontSize: 8, color: "#3B3A33", margin: [4, 2, 4, 2] as [number, number, number, number] })),
+            fillColor: "#F2F0E6",
           },
         ]],
       },
       layout: {
         hLineWidth: () => 0.5,
         vLineWidth: () => 0.5,
-        hLineColor: () => "#e2e8f0",
-        vLineColor: () => "#e2e8f0",
+        hLineColor: () => RULE,
+        vLineColor: () => RULE,
       },
       margin: [0, 0, 0, 10] as [number, number, number, number],
     });
@@ -624,29 +639,29 @@ export async function exportPlanToPDF(
         body: [[
           {
             stack: [
-              { text: `${stats.totalSessions}`, fontSize: 14, bold: true, color: "#1e293b", alignment: "center" as const },
-              { text: t("sessions"), fontSize: 7, color: "#888", alignment: "center" as const },
-              { text: `~${Math.round(stats.totalEstimatedKm)} km`, fontSize: 9, bold: true, color: "#3b82f6", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
+              { text: `${stats.totalSessions}`, fontSize: 14, bold: true, color: "#0B0B0A", alignment: "center" as const },
+              { text: t("sessions"), fontSize: 7, color: "#5B594F", alignment: "center" as const },
+              { text: `~${Math.round(stats.totalEstimatedKm)} km`, fontSize: 9, bold: true, color: "#0B0B0A", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
             ],
-            fillColor: "#f0f9ff",
+            fillColor: "#F2F0E6",
             margin: [4, 6, 4, 6] as [number, number, number, number],
           },
           {
             stack: [
-              { text: `${totalHours}h`, fontSize: 14, bold: true, color: "#1e293b", alignment: "center" as const },
-              { text: "total", fontSize: 7, color: "#888", alignment: "center" as const },
-              { text: `${stats.keySessionCount} ${t("key")}`, fontSize: 9, bold: true, color: "#854d0e", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
+              { text: `${totalHours}h`, fontSize: 14, bold: true, color: "#0B0B0A", alignment: "center" as const },
+              { text: "total", fontSize: 7, color: "#5B594F", alignment: "center" as const },
+              { text: `${stats.keySessionCount} ${t("key")}`, fontSize: 9, bold: true, color: "#0B0B0A", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
             ],
-            fillColor: "#f0f9ff",
+            fillColor: "#F2F0E6",
             margin: [4, 6, 4, 6] as [number, number, number, number],
           },
           {
             stack: [
-              { text: `S${stats.peakVolumeWeek}`, fontSize: 14, bold: true, color: "#1e293b", alignment: "center" as const },
-              { text: t("peakWeek"), fontSize: 7, color: "#888", alignment: "center" as const },
-              { text: `${stats.avgDurationPerWeekMin}min/${t("wk")}`, fontSize: 9, bold: true, color: "#666", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
+              { text: `S${stats.peakVolumeWeek}`, fontSize: 14, bold: true, color: "#0B0B0A", alignment: "center" as const },
+              { text: t("peakWeek"), fontSize: 7, color: "#5B594F", alignment: "center" as const },
+              { text: `${stats.avgDurationPerWeekMin}min/${t("wk")}`, fontSize: 9, bold: true, color: "#3B3A33", alignment: "center" as const, margin: [0, 2, 0, 0] as [number, number, number, number] },
             ],
-            fillColor: "#f0f9ff",
+            fillColor: "#F2F0E6",
             margin: [4, 6, 4, 6] as [number, number, number, number],
           },
         ]],
@@ -654,8 +669,8 @@ export async function exportPlanToPDF(
       layout: {
         hLineWidth: () => 0.5,
         vLineWidth: () => 0.5,
-        hLineColor: () => "#e2e8f0",
-        vLineColor: () => "#e2e8f0",
+        hLineColor: () => RULE,
+        vLineColor: () => RULE,
       },
       margin: [0, 0, 0, 6] as [number, number, number, number],
     });
@@ -666,7 +681,7 @@ export async function exportPlanToPDF(
       text: t("appendixNote", { count: totalUniqueWorkouts }),
       italics: true,
       fontSize: 7,
-      color: "#888",
+      color: "#5B594F",
       margin: [0, 0, 0, 10] as [number, number, number, number],
     });
 
@@ -681,15 +696,15 @@ export async function exportPlanToPDF(
       ];
 
       content.push(
-        { text: t("targetPaces"), fontSize: 10, bold: true, color: "#333", margin: [0, 0, 0, 4] as [number, number, number, number] },
+        { text: t("targetPaces"), fontSize: 10, bold: true, color: "#0B0B0A", margin: [0, 0, 0, 4] as [number, number, number, number] },
         {
           table: {
             headerRows: 1,
             widths: ["*", "auto"],
             body: [
               [
-                { text: t("sessionType"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
-                { text: t("paceCol"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
+                { text: t("sessionType"), bold: true, fontSize: 7, color: "#fff", fillColor: "#0B0B0A", margin: [4, 3, 4, 3] as [number, number, number, number] },
+                { text: t("paceCol"), bold: true, fontSize: 7, color: "#fff", fillColor: "#0B0B0A", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
               ],
               ...paceRows.map(([type, paceVal]) => [
                 { text: type, fontSize: 8, margin: [4, 2, 4, 2] as [number, number, number, number] },
@@ -708,16 +723,16 @@ export async function exportPlanToPDF(
       const paceZones = calculatePaceZones(plan.config.vma);
 
       content.push(
-        { text: t("zonePaces"), fontSize: 10, bold: true, color: "#333", margin: [0, 0, 0, 4] as [number, number, number, number] },
+        { text: t("zonePaces"), fontSize: 10, bold: true, color: "#0B0B0A", margin: [0, 0, 0, 4] as [number, number, number, number] },
         {
           table: {
             headerRows: 1,
             widths: [35, "*", "auto"],
             body: [
               [
-                { text: "Zone", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
-                { text: t("range"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
-                { text: t("paceCol"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
+                { text: "Zone", bold: true, fontSize: 7, color: "#fff", fillColor: "#0B0B0A", margin: [4, 3, 4, 3] as [number, number, number, number] },
+                { text: t("range"), bold: true, fontSize: 7, color: "#fff", fillColor: "#0B0B0A", margin: [4, 3, 4, 3] as [number, number, number, number] },
+                { text: t("paceCol"), bold: true, fontSize: 7, color: "#fff", fillColor: "#0B0B0A", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
               ],
               ...paceZones.map((z) => [
                 {
@@ -753,16 +768,16 @@ export async function exportPlanToPDF(
 
     // 1F. Training phases overview
     content.push(
-      { text: t("trainingPhases"), fontSize: 10, bold: true, color: "#333", margin: [0, 0, 0, 4] as [number, number, number, number] },
+      { text: t("trainingPhases"), fontSize: 10, bold: true, color: "#0B0B0A", margin: [0, 0, 0, 4] as [number, number, number, number] },
       {
         table: {
           headerRows: 1,
           widths: ["*", "auto", "auto"],
           body: [
             [
-              { text: "Phase", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
-              { text: t("phasesWeeks"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
-              { text: "Description", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [4, 3, 4, 3] as [number, number, number, number] },
+              { text: "Phase", bold: true, fontSize: 7, color: "#fff", fillColor: "#0B0B0A", margin: [4, 3, 4, 3] as [number, number, number, number] },
+              { text: t("phasesWeeks"), bold: true, fontSize: 7, color: "#fff", fillColor: "#0B0B0A", alignment: "center" as const, margin: [4, 3, 4, 3] as [number, number, number, number] },
+              { text: "Description", bold: true, fontSize: 7, color: "#fff", fillColor: "#0B0B0A", margin: [4, 3, 4, 3] as [number, number, number, number] },
             ],
             ...plan.phases.map((phaseRange) => {
               const meta = PHASE_META[phaseRange.phase];
@@ -896,7 +911,7 @@ export async function exportPlanToPDF(
           text: t("noSessions"),
           italics: true,
           fontSize: 7,
-          color: "#888",
+          color: "#5B594F",
           margin: [0, 2, 0, 8] as [number, number, number, number],
         });
         continue;
@@ -904,12 +919,12 @@ export async function exportPlanToPDF(
 
       // Session table: Jour | Seance | Type | Zone | Duree | Resume
       const tableHeader: TableCell[] = [
-        { text: t("day"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
-        { text: t("workout"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [2, 3, 2, 3] as [number, number, number, number] },
-        { text: "Type", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
-        { text: "Zone", bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "center" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
-        { text: t("dur"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", alignment: "right" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
-        { text: t("summary"), bold: true, fontSize: 7, color: "#fff", fillColor: "#333", margin: [2, 3, 2, 3] as [number, number, number, number] },
+        { text: t("day"), bold: true, fontSize: 7, color: "#fff", fillColor: "#0B0B0A", alignment: "center" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
+        { text: t("workout"), bold: true, fontSize: 7, color: "#fff", fillColor: "#0B0B0A", margin: [2, 3, 2, 3] as [number, number, number, number] },
+        { text: "Type", bold: true, fontSize: 7, color: "#fff", fillColor: "#0B0B0A", alignment: "center" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
+        { text: "Zone", bold: true, fontSize: 7, color: "#fff", fillColor: "#0B0B0A", alignment: "center" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
+        { text: t("dur"), bold: true, fontSize: 7, color: "#fff", fillColor: "#0B0B0A", alignment: "right" as const, margin: [2, 3, 2, 3] as [number, number, number, number] },
+        { text: t("summary"), bold: true, fontSize: 7, color: "#fff", fillColor: "#0B0B0A", margin: [2, 3, 2, 3] as [number, number, number, number] },
       ];
 
       const rows: TableCell[][] = [];
@@ -949,7 +964,7 @@ export async function exportPlanToPDF(
               text: `${i18n.t("plan:intermediateGoals.raceDayLabel")} — ${raceName}${priorityLabel}`,
               bold: true,
               fontSize: 7,
-              color: "#c2410c",
+              color: "#0B0B0A",
               colSpan: 4,
               margin: [2, 2, 2, 2],
             },
@@ -968,9 +983,9 @@ export async function exportPlanToPDF(
         // Name with key star + ref superscript
         const nameText: Content = {
           text: [
-            ...(isKey ? [{ text: "\u2605 ", color: "#854d0e", bold: true, fontSize: 8 }] : []),
+            ...(isKey ? [{ text: "\u2605 ", color: "#0B0B0A", bold: true, fontSize: 8 }] : []),
             { text: wName },
-            ...(refNum ? [{ text: ` ${toSuperscript(refNum)}`, fontSize: 6, color: "#3b82f6", decoration: "underline" as const, linkToDestination: `ref-${refNum}` }] : []),
+            ...(refNum ? [{ text: ` ${toSuperscript(refNum)}`, fontSize: 6, color: "#0B0B0A", decoration: "underline" as const, linkToDestination: `ref-${refNum}` }] : []),
           ],
           fontSize: 7,
         };
@@ -984,8 +999,8 @@ export async function exportPlanToPDF(
           zoneCell = {
             text: "\u2014",
             fontSize: 7,
-            color: "#fff",
-            fillColor: "#94a3b8",
+            color: PAPER,
+            fillColor: INK,
             alignment: "center" as const,
             bold: true,
             margin: [2, 2, 2, 2],
@@ -1006,7 +1021,7 @@ export async function exportPlanToPDF(
           zoneCell = {
             text: "\u2014",
             fontSize: 7,
-            color: "#aaa",
+            color: INK_FAINT,
             alignment: "center" as const,
             margin: [2, 2, 2, 2],
           };
@@ -1029,7 +1044,7 @@ export async function exportPlanToPDF(
           { text: tLabel, fontSize: 7, alignment: "center" as const, margin: [2, 2, 2, 2] },
           zoneCell,
           { text: durStr, fontSize: 7, alignment: "right" as const, margin: [2, 2, 2, 2] },
-          { text: summary, fontSize: 7, color: "#555", margin: [2, 2, 2, 2] },
+          { text: summary, fontSize: 7, color: "#3B3A33", margin: [2, 2, 2, 2] },
         ] as TableCell[]);
 
         // Collect pace notes for key sessions
@@ -1058,7 +1073,7 @@ export async function exportPlanToPDF(
             colSpan: 6,
             fontSize: 7,
             italics: true,
-            color: "#666",
+            color: "#3B3A33",
             margin: [22, 0, 2, 1] as [number, number, number, number],
           },
           {}, {}, {}, {}, {},
@@ -1074,13 +1089,13 @@ export async function exportPlanToPDF(
         },
         layout: {
           fillColor: (rowIndex: number) => {
-            if (rowIndex === 0) return "#333";
+            if (rowIndex === 0) return "#0B0B0A";
             return rowIndex % 2 === 0 ? phaseColors.bg : null;
           },
           hLineWidth: () => 0.5,
           vLineWidth: () => 0.5,
-          hLineColor: () => "#e2e8f0",
-          vLineColor: () => "#e2e8f0",
+          hLineColor: () => RULE,
+          vLineColor: () => RULE,
         },
         margin: [0, 0, 0, 6] as [number, number, number, number],
       });
@@ -1092,7 +1107,7 @@ export async function exportPlanToPDF(
       text: t("workoutReference"),
       fontSize: 13,
       bold: true,
-      color: "#1e293b",
+      color: "#0B0B0A",
       margin: [0, 0, 0, 8] as [number, number, number, number],
       pageBreak: "before" as const,
     });
@@ -1119,17 +1134,17 @@ export async function exportPlanToPDF(
       content,
       footer: (currentPage: number, pageCount: number) => ({
         columns: [
-          { text: planName, fontSize: 7, color: "#aaa", margin: [25, 0, 0, 0] },
+          { text: planName, fontSize: 7, color: "#5B594F", margin: [25, 0, 0, 0] },
           {
             text: `${t("generatedBy")} Zoned \u00b7 zoned.run`,
             fontSize: 7,
-            color: "#aaa",
+            color: "#5B594F",
             alignment: "center" as const,
           },
           {
             text: `${currentPage} / ${pageCount}`,
             fontSize: 7,
-            color: "#aaa",
+            color: "#5B594F",
             alignment: "right" as const,
             margin: [0, 0, 25, 0],
           },
@@ -1139,7 +1154,7 @@ export async function exportPlanToPDF(
         tinyHeader: {
           bold: true,
           fontSize: 7,
-          color: "#666",
+          color: "#3B3A33",
           margin: [2, 2, 2, 2],
         },
       },

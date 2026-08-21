@@ -189,7 +189,8 @@
       "project": {
         "about": "About",
         "github": "GitHub",
-        "changelog": "Changelog"
+        "changelog": "Changelog",
+        "offline": "Offline mode"
       },
       "license": "© {{year}} · ZONED · Free software, MIT licence",
       "licenses": "Third-party licences",
