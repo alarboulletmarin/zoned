@@ -252,7 +252,7 @@ export function RouteParametersForm({
     // convention and cost the user a guess. Shape now opens a small
     // popover list, mirroring distance/elevation.
     const chipBase =
-      "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-background px-3.5 text-sm font-medium transition-colors active:scale-[0.97] active:bg-accent data-[state=open]:border-primary data-[state=open]:bg-primary/10";
+      "inline-flex h-9 shrink-0 items-center gap-1.5 border-2 border-foreground bg-background px-3.5 font-mono text-[11px] uppercase tracking-[0.04em] transition-colors active:bg-secondary data-[state=open]:bg-accent-acid data-[state=open]:text-ink";
 
     const DISTANCE_PRESETS = [5, 10, 21.1, 42.2, 80].filter(
       (d) => d <= maxDistanceKm,
@@ -277,7 +277,7 @@ export function RouteParametersForm({
                 type="button"
                 aria-label={`${t("form.discipline")} : ${selectedDiscipline?.label}`}
                 aria-haspopup="dialog"
-                className="inline-flex h-11 shrink-0 items-center gap-1 rounded-full border border-border/60 bg-background pl-2.5 pr-2 text-foreground transition-colors active:scale-[0.97] active:bg-accent data-[state=open]:border-primary [&_svg]:size-[18px]"
+                className="inline-flex h-11 shrink-0 items-center gap-1 border-2 border-foreground bg-background pl-2.5 pr-2 text-foreground transition-colors active:bg-secondary data-[state=open]:bg-secondary [&_svg]:size-[18px]"
               >
                 {selectedDiscipline?.icon}
                 <ChevronDown className="!size-4 opacity-60" />
@@ -290,7 +290,7 @@ export function RouteParametersForm({
                   type="button"
                   onClick={() => setDiscipline(opt.value)}
                   data-active={discipline === opt.value}
-                  className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-left transition-colors hover:bg-accent data-[active=true]:bg-primary/10 data-[active=true]:text-primary [&_svg]:size-4"
+                  className="flex w-full items-center gap-2 px-3 py-2 text-sm font-medium text-left transition-colors hover:bg-secondary data-[active=true]:bg-accent-acid/20 data-[active=true]:text-foreground [&_svg]:size-4"
                 >
                   {opt.icon}
                   <span>{opt.label}</span>
@@ -356,7 +356,7 @@ export function RouteParametersForm({
                   type="button"
                   onClick={() => setShape(opt.value)}
                   data-active={shape === opt.value}
-                  className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-left transition-colors hover:bg-accent data-[active=true]:bg-primary/10 data-[active=true]:text-primary [&_svg]:size-4"
+                  className="flex w-full items-center gap-2 px-3 py-2 text-sm font-medium text-left transition-colors hover:bg-secondary data-[active=true]:bg-accent-acid/20 data-[active=true]:text-foreground [&_svg]:size-4"
                 >
                   {opt.icon}
                   <span>{opt.label}</span>
@@ -402,7 +402,7 @@ export function RouteParametersForm({
                       type="button"
                       onClick={() => setDistanceKm(Math.min(d, maxDistanceKm))}
                       data-active={active}
-                      className="rounded-full border border-border/60 px-2.5 py-1 text-xs tabular-nums transition-colors hover:bg-accent data-[active=true]:border-primary data-[active=true]:bg-primary/10 data-[active=true]:text-primary"
+                      className="border-2 border-foreground px-2.5 py-1 font-mono text-xs tabular-nums transition-colors hover:bg-secondary data-[active=true]:bg-accent-acid data-[active=true]:text-ink"
                     >
                       {d} {t("form.distanceUnit")}
                     </button>
@@ -472,7 +472,7 @@ export function RouteParametersForm({
                           setUseElevationTarget(m > 0);
                         }}
                         data-active={active}
-                        className="rounded-full border border-border/60 px-2.5 py-1 text-xs tabular-nums transition-colors hover:bg-accent data-[active=true]:border-primary data-[active=true]:bg-primary/10 data-[active=true]:text-primary"
+                        className="border-2 border-foreground px-2.5 py-1 font-mono text-xs tabular-nums transition-colors hover:bg-secondary data-[active=true]:bg-accent-acid data-[active=true]:text-ink"
                       >
                         {m === 0 ? t("form.elevationFree") : `${m} ${t("form.elevationUnit")}`}
                       </button>
@@ -491,19 +491,19 @@ export function RouteParametersForm({
   return (
     <form
       data-slot="route-form"
-      className="space-y-5 rounded-xl border border-border/60 bg-background p-4 sm:p-5"
+      className="space-y-5 border-2 border-foreground bg-background p-4 sm:p-5"
       onSubmit={(e) => {
         e.preventDefault();
         submit();
       }}
     >
       <fieldset className="space-y-2">
-        <legend className="text-sm font-semibold">{t("form.shape")}</legend>
+        <legend className="font-mono text-[11px] font-bold uppercase tracking-[0.08em]">{t("form.shape")}</legend>
         <Segmented value={shape} onChange={setShape} options={shapeOptions} label={t("form.shape")} />
       </fieldset>
 
       <fieldset className="space-y-2">
-        <legend className="text-sm font-semibold">{t("form.discipline")}</legend>
+        <legend className="font-mono text-[11px] font-bold uppercase tracking-[0.08em]">{t("form.discipline")}</legend>
         <Segmented
           value={discipline}
           onChange={setDiscipline}
@@ -513,13 +513,13 @@ export function RouteParametersForm({
       </fieldset>
 
       <fieldset className="space-y-2">
-        <legend className="text-sm font-semibold">{t("form.surface")}</legend>
+        <legend className="font-mono text-[11px] font-bold uppercase tracking-[0.08em]">{t("form.surface")}</legend>
         <Segmented value={surface} onChange={setSurface} options={surfaceOptions} label={t("form.surface")} />
       </fieldset>
 
       <fieldset className="space-y-3">
         <div className="flex items-center justify-between gap-2">
-          <legend className="text-sm font-semibold">{t("form.distance")}</legend>
+          <legend className="font-mono text-[11px] font-bold uppercase tracking-[0.08em]">{t("form.distance")}</legend>
           <div className="flex items-center gap-1.5">
             <input
               type="number"
@@ -531,7 +531,7 @@ export function RouteParametersForm({
               onChange={(e) =>
                 setDistanceKm(clampDistance(Number(e.target.value) || 1, maxDistanceKm))
               }
-              className="h-9 w-20 rounded-md border border-input bg-transparent px-2 text-right text-sm font-semibold tabular-nums shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="h-9 w-20 border-2 border-foreground bg-transparent px-2 text-right font-mono text-sm font-semibold tabular-nums outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring"
               aria-label={t("form.distanceEdit")}
             />
             <span className="text-xs text-muted-foreground">{t("form.distanceUnit")}</span>
@@ -564,7 +564,7 @@ export function RouteParametersForm({
                   type="button"
                   onClick={() => setDistanceKm(clampDistance(p.km, maxDistanceKm))}
                   data-active={active}
-                  className="rounded-full border border-border/60 px-2.5 py-0.5 text-xs font-medium tabular-nums transition-colors hover:bg-accent data-[active=true]:border-primary data-[active=true]:bg-primary/10 data-[active=true]:text-primary"
+                  className="border-2 border-foreground px-2.5 py-0.5 font-mono text-xs tabular-nums transition-colors hover:bg-secondary data-[active=true]:bg-accent-acid data-[active=true]:text-ink"
                 >
                   {p.label}
                 </button>
@@ -582,7 +582,7 @@ export function RouteParametersForm({
         <fieldset className="space-y-3">
           <div className="flex items-center justify-between gap-2">
             <div>
-              <legend className="text-sm font-semibold">{t("form.elevationTarget")}</legend>
+              <legend className="font-mono text-[11px] font-bold uppercase tracking-[0.08em]">{t("form.elevationTarget")}</legend>
               <p className="text-xs text-muted-foreground">{t("form.elevationTargetHint")}</p>
             </div>
             <Button
@@ -613,14 +613,14 @@ export function RouteParametersForm({
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === "Escape") setEditingElevation(false);
                     }}
-                    className="w-24 rounded-md border border-primary bg-background px-2 py-1 text-right text-base font-semibold tabular-nums focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    className="w-24 border-2 border-foreground bg-background px-2 py-1 text-right font-mono text-base font-semibold tabular-nums outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring"
                     aria-label={t("form.elevationTargetEdit")}
                   />
                 ) : (
                   <button
                     type="button"
                     onClick={() => setEditingElevation(true)}
-                    className="rounded-md px-2 py-0.5 text-base font-semibold tabular-nums hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                    className="px-2 py-0.5 font-mono text-base font-semibold tabular-nums hover:bg-secondary outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring"
                     aria-label={t("form.elevationTargetEdit")}
                   >
                     {elevationGainTargetM} {t("form.elevationUnit")}
@@ -648,7 +648,7 @@ export function RouteParametersForm({
       {shape === "out_and_back" && (
         <fieldset className="space-y-3">
           <div className="flex items-baseline justify-between gap-2">
-            <legend className="text-sm font-semibold">{t("form.bearing")}</legend>
+            <legend className="font-mono text-[11px] font-bold uppercase tracking-[0.08em]">{t("form.bearing")}</legend>
             <span className="sr-only">{bearingDisplay}</span>
           </div>
           <div className="flex justify-center pt-1">
@@ -664,7 +664,7 @@ export function RouteParametersForm({
 
       {/* Point de départ */}
       <fieldset className="space-y-2">
-        <legend className="text-sm font-semibold">{t("form.start")}</legend>
+        <legend className="font-mono text-[11px] font-bold uppercase tracking-[0.08em]">{t("form.start")}</legend>
         <AddressSearchInput
           onSelect={(point, label) => updateStart(point, label)}
           onClear={() => updateStart(null, null)}
@@ -696,7 +696,7 @@ export function RouteParametersForm({
           (long forms with elevation target + bearing can outgrow short
           viewports). Negative margins extend the bar across the full
           form padding so the bg fully covers content scrolled behind. */}
-      <div className="sticky bottom-0 -mx-4 -mb-4 mt-2 border-t border-border/60 bg-background/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/80 sm:-mx-5 sm:-mb-5 sm:px-5">
+      <div className="sticky bottom-0 -mx-4 -mb-4 mt-2 border-t-2 border-foreground bg-background/95 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-background/80 sm:-mx-5 sm:-mb-5 sm:px-5">
         <Button
           type="submit"
           size="lg"

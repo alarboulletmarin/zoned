@@ -29,6 +29,7 @@ import { useRoutes } from "@/hooks/useRoutes";
 import { useSettings } from "@/hooks/useSettings";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { cn } from "@/lib/utils";
+import { zoneClass } from "@/lib/zoneColors";
 import { usePickLang, usePickLocale } from "@/lib/i18n-utils";
 import { loadRunnerProfile } from "@/lib/runnerProfile";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
@@ -51,7 +52,7 @@ function MapSkeleton({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "h-72 w-full animate-pulse rounded-xl border border-border/60 bg-muted/40 sm:h-96 lg:h-[28rem]",
+        "h-72 w-full animate-pulse border-2 border-foreground bg-muted/40 sm:h-96 lg:h-[28rem]",
         className,
       )}
     />
@@ -80,13 +81,13 @@ interface RouteGeneratorLocationState {
 
 // Tailwind classes for the unique distance-match chip (replaces the
 // previous "closest_to_target_distance" reason + amber "approximate"
-// banner that could fire together in the 5–10 % window).
+// banner that could fire together in the 5–10 % window). Reuses the
+// Z1-Z6 ramp: zone-2 (green) reads as "on target", zone-3 (amber) as
+// "close enough, worth a glance".
 const DISTANCE_MATCH_CLASSES: Record<DistanceMatchLabel, string> = {
-  very_close:
-    "border-emerald-300/60 bg-emerald-50/80 text-emerald-900 dark:border-emerald-700/60 dark:bg-emerald-950/30 dark:text-emerald-100",
-  close: "border-border/60 bg-background text-foreground",
-  approximate:
-    "border-amber-300/60 bg-amber-50/80 text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/30 dark:text-amber-100",
+  very_close: cn(zoneClass(2, "border"), zoneClass(2, "bgSoft"), "text-foreground"),
+  close: "border-foreground bg-background text-foreground",
+  approximate: cn(zoneClass(3, "border"), zoneClass(3, "bgSoft"), "text-foreground"),
 };
 
 export function RouteGeneratorPage() {
@@ -349,10 +350,10 @@ export function RouteGeneratorPage() {
       <>
         <SEOHead title={t("title")} description={t("subtitle")} canonical="/routes" noindex />
         <div className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
-          <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed border-border/60 bg-muted/10 p-10 text-center">
+          <div className="flex flex-col items-center gap-4 border-2 border-dashed border-muted-foreground p-10 text-center">
             <EyeOff className="size-10 text-muted-foreground" />
             <div className="space-y-1">
-              <h1 className="text-xl font-bold">{t("disabled.title")}</h1>
+              <h1 className="font-sans text-xl font-bold uppercase tracking-tight">{t("disabled.title")}</h1>
               <p className="text-sm text-muted-foreground">{t("disabled.body")}</p>
             </div>
             <Button asChild>
@@ -394,8 +395,8 @@ export function RouteGeneratorPage() {
   const presetNode = trainingPreset ? (
     <>
       {presetSession && (
-        <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary/80">
+        <div className="border-2 border-foreground p-4">
+          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
             {t(`recommendation.eyebrow.${trainingPreset.intent.source}`)}
           </p>
           <div className="mt-2 space-y-1.5">
@@ -413,14 +414,14 @@ export function RouteGeneratorPage() {
             )}
           </div>
           <div className="mt-3 flex flex-wrap gap-2">
-            <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
+            <span className="inline-flex items-center border border-foreground px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.04em] text-foreground">
               {t(`recommendation.preferences.${trainingPreset.intent.terrainPreference}`)}
             </span>
-            <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
+            <span className="inline-flex items-center border border-foreground px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.04em] text-foreground">
               {t(`recommendation.preferences.continuity_${trainingPreset.intent.continuityPriority}`)}
             </span>
             {trainingPreset.intent.repeatabilityPriority !== "low" && (
-              <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
+              <span className="inline-flex items-center border border-foreground px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.04em] text-foreground">
                 {t("recommendation.preferences.repeatable")}
               </span>
             )}
@@ -428,7 +429,7 @@ export function RouteGeneratorPage() {
           <div className="mt-3">
             <Link
               to={`/plan/${trainingPreset.planSessionRef?.planId}?week=${trainingPreset.planSessionRef?.weekNumber}`}
-              className="text-xs font-medium text-primary hover:underline"
+              className="font-mono text-[11px] uppercase tracking-[0.04em] text-foreground underline underline-offset-2 hover:text-muted-foreground"
             >
               {t("recommendation.backToPlan")}
             </Link>
@@ -436,8 +437,8 @@ export function RouteGeneratorPage() {
         </div>
       )}
       {!presetSession && presetWorkout && (
-        <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary/80">
+        <div className="border-2 border-foreground p-4">
+          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
             {t(`recommendation.eyebrow.${trainingPreset.intent.source}`)}
           </p>
           <div className="mt-2 space-y-1.5">
@@ -458,14 +459,14 @@ export function RouteGeneratorPage() {
             )}
           </div>
           <div className="mt-3 flex flex-wrap gap-2">
-            <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
+            <span className="inline-flex items-center border border-foreground px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.04em] text-foreground">
               {t(`recommendation.preferences.${trainingPreset.intent.terrainPreference}`)}
             </span>
-            <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
+            <span className="inline-flex items-center border border-foreground px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.04em] text-foreground">
               {t(`recommendation.preferences.continuity_${trainingPreset.intent.continuityPriority}`)}
             </span>
             {trainingPreset.intent.repeatabilityPriority !== "low" && (
-              <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
+              <span className="inline-flex items-center border border-foreground px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.04em] text-foreground">
                 {t("recommendation.preferences.repeatable")}
               </span>
             )}
@@ -499,7 +500,7 @@ export function RouteGeneratorPage() {
       )}
     >
       {!route && (
-        <div className="pointer-events-none absolute left-1/2 top-3 z-[600] -translate-x-1/2 rounded-full border border-border/60 bg-background/95 px-3 py-1.5 text-[11px] font-medium text-muted-foreground shadow-sm backdrop-blur-sm">
+        <div className="pointer-events-none absolute left-1/2 top-3 z-[600] -translate-x-1/2 border-2 border-foreground bg-background/95 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.04em] text-muted-foreground backdrop-blur-sm">
           {previewStart ? t("form.mapPickedHint") : t("form.mapPickStartHint")}
         </div>
       )}
@@ -521,7 +522,7 @@ export function RouteGeneratorPage() {
         />
       </Suspense>
       {isEditing && (
-        <div className="pointer-events-none absolute left-1/2 top-3 z-[600] -translate-x-1/2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-[11px] font-medium text-primary shadow-sm backdrop-blur-sm">
+        <div className="pointer-events-none absolute left-1/2 top-3 z-[600] -translate-x-1/2 border-2 border-foreground bg-accent-acid px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.04em] text-ink backdrop-blur-sm">
           {isReRouting ? t("edit.rerouting") : t("edit.hint")}
         </div>
       )}
@@ -533,7 +534,7 @@ export function RouteGeneratorPage() {
             setIsMapExpanded((v) => !v);
           }}
           onPointerDownCapture={(e) => e.stopPropagation()}
-          className="absolute right-3 top-3 z-[1100] inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-background/95 px-2.5 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm hover:bg-background"
+          className="absolute right-3 top-3 z-[1100] inline-flex items-center gap-1.5 border-2 border-foreground bg-background/95 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.04em] backdrop-blur-sm hover:bg-background"
           aria-label={isMapExpanded ? t("form.mapShrink") : t("form.mapExpand")}
         >
           {isMapExpanded ? <Minimize2 className="size-3.5" /> : <Maximize2 className="size-3.5" />}
@@ -555,7 +556,7 @@ export function RouteGeneratorPage() {
               onReverseTrace();
             }}
             onPointerDownCapture={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-background/95 px-2.5 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm hover:bg-background"
+            className="inline-flex items-center gap-1.5 border-2 border-foreground bg-background/95 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.04em] backdrop-blur-sm hover:bg-background"
             aria-label={t("form.reverseDirection")}
             title={t("form.reverseDirection")}
           >
@@ -571,7 +572,7 @@ export function RouteGeneratorPage() {
               onEnterEdit();
             }}
             onPointerDownCapture={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1.5 rounded-md border border-primary/40 bg-primary px-2.5 py-1.5 text-xs font-medium text-primary-foreground shadow-sm hover:bg-primary/90"
+            className="inline-flex items-center gap-1.5 border-2 border-foreground bg-accent-acid px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.04em] text-ink hover:bg-accent-acid/85"
             aria-label={t("edit.enter")}
             title={t("edit.enter")}
           >
@@ -589,7 +590,7 @@ export function RouteGeneratorPage() {
               onExitEdit();
             }}
             onPointerDownCapture={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-background/95 px-2.5 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm hover:bg-background"
+            className="inline-flex items-center gap-1.5 border-2 border-foreground bg-background/95 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.04em] backdrop-blur-sm hover:bg-background"
           >
             <X className="size-3.5" />
             <span className="hidden sm:inline">{t("edit.cancel")}</span>
@@ -602,7 +603,7 @@ export function RouteGeneratorPage() {
             }}
             onPointerDownCapture={(e) => e.stopPropagation()}
             disabled={isReRouting || !editPreview}
-            className="inline-flex items-center gap-1.5 rounded-md border border-primary/40 bg-primary px-2.5 py-1.5 text-xs font-medium text-primary-foreground shadow-sm hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center gap-1.5 border-2 border-foreground bg-accent-acid px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.04em] text-ink hover:bg-accent-acid/85 disabled:cursor-not-allowed disabled:opacity-60"
           >
             <Check className="size-3.5" />
             <span className="hidden sm:inline">{t("edit.apply")}</span>
@@ -618,7 +619,7 @@ export function RouteGeneratorPage() {
   // weight; the pager "Proposition X/N" reads as a discreet caption to
   // their right (Strava 2025 Routes pattern).
   const desktopStatsBar = route ? (
-    <div className="flex items-center justify-between gap-3 border-t border-border/60 bg-background px-3 pt-2 pb-1.5">
+    <div className="flex items-center justify-between gap-3 border-t-2 border-foreground bg-background px-3 pt-2 pb-1.5">
       <h3 className="flex items-baseline gap-4 text-lg font-semibold tabular-nums">
         <span className="inline-flex items-baseline gap-1">
           <Activity className="size-4 self-center text-primary" />
@@ -636,11 +637,11 @@ export function RouteGeneratorPage() {
         </span>
       </h3>
       {candidates.length > 1 && (
-        <div className="flex items-center gap-0.5 rounded-full border border-border/60 bg-muted/40 p-0.5 text-sm">
+        <div className="flex items-center gap-0.5 border-2 border-foreground p-0.5 text-sm">
           <Button
             variant="ghost"
             size="icon"
-            className="size-7 rounded-full"
+            className="size-7"
             onClick={() => setSelectedIndex((i) => (i - 1 + candidates.length) % candidates.length)}
             aria-label={t("form.candidatesLabel")}
           >
@@ -653,7 +654,7 @@ export function RouteGeneratorPage() {
           <Button
             variant="ghost"
             size="icon"
-            className="size-7 rounded-full"
+            className="size-7"
             onClick={() => setSelectedIndex((i) => (i + 1) % candidates.length)}
             aria-label={t("form.candidatesLabel")}
           >
@@ -672,7 +673,7 @@ export function RouteGeneratorPage() {
   // Apply so all editing affordances live in one predictable location
   // — no more buttons floating over the map.
   const desktopStrip = route ? (
-    <div className="flex h-12 items-center gap-3 border-t border-border/60 bg-background/95 px-3 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+    <div className="flex h-12 items-center gap-3 border-t-2 border-foreground bg-background/95 px-3 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="flex items-center gap-1.5">
         {isEditing ? (
           <>
@@ -720,7 +721,7 @@ export function RouteGeneratorPage() {
           </>
         )}
       </div>
-      <span className="h-6 w-px bg-border/60" aria-hidden />
+      <span className="h-6 w-px bg-filet" aria-hidden />
       <div className="ml-auto flex items-center gap-1.5">
         <Button onClick={onSave} size="sm" className="h-8 gap-1.5 px-3 text-xs">
           <Save className="size-3.5" />
@@ -755,17 +756,17 @@ export function RouteGeneratorPage() {
   // Closed by default — accent + reasons + elevation profile only get
   // unfolded when the user explicitly asks. Keeps the map dominant.
   const desktopDetails = route ? (
-    <div className="border-t border-border/60 bg-background">
+    <div className="border-t-2 border-foreground bg-background">
       <button
         type="button"
         onClick={() => setDetailsOpen((v) => !v)}
         aria-expanded={detailsOpen}
-        className="flex h-9 w-full items-center justify-between px-3 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground"
+        className="flex h-9 w-full items-center justify-between px-3 font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground"
       >
         <span className="flex items-center gap-2">
           {t("recommendation.resultEyebrow")}
           {selectedRecommendation && (
-            <span className="rounded-full border border-primary/20 bg-primary/5 px-2 py-0.5 text-[10px] font-medium tracking-normal normal-case text-primary">
+            <span className="border border-foreground px-2 py-0.5 font-mono text-[10px] font-medium normal-case tracking-normal text-foreground">
               {t(`recommendation.accents.${selectedRecommendation.accent}`)}
             </span>
           )}
@@ -778,12 +779,12 @@ export function RouteGeneratorPage() {
         />
       </button>
       {detailsOpen && (
-        <div className="max-h-[40svh] space-y-3 overflow-y-auto border-t border-border/60 px-3 py-3">
+        <div className="max-h-[40svh] space-y-3 overflow-y-auto border-t border-filet px-3 py-3">
           <div className="flex flex-wrap gap-1.5">
             {distanceMatchLabel && (
               <span
                 className={cn(
-                  "rounded-full border px-2 py-0.5 text-[11px] font-medium",
+                  "border-2 px-2 py-0.5 font-mono text-[11px] uppercase tracking-[0.04em]",
                   DISTANCE_MATCH_CLASSES[distanceMatchLabel],
                 )}
               >
@@ -793,7 +794,7 @@ export function RouteGeneratorPage() {
             {selectedRecommendation?.reasons.map((reason) => (
               <span
                 key={reason}
-                className="rounded-full border border-border/60 bg-background px-2 py-0.5 text-[11px] font-medium"
+                className="border border-foreground px-2 py-0.5 font-mono text-[11px] uppercase tracking-[0.04em]"
               >
                 {t(`recommendation.reasons.${reason}`)}
               </span>
@@ -844,7 +845,7 @@ export function RouteGeneratorPage() {
               already wraps tightly (~120 px) so letting it size to its
               content is safe and the popover-based filters expand
               outward via Radix Portal anyway. */}
-          <div className="shrink-0 space-y-2 border-b border-border/60 px-3 py-2">
+          <div className="shrink-0 space-y-2 border-b-2 border-foreground px-3 py-2">
             {presetNode}
             <RouteParametersForm
               key={trainingPreset ? `${trainingPreset.planSessionRef?.planId}-${trainingPreset.planSessionRef?.weekNumber}-${trainingPreset.planSessionRef?.sessionIndex}` : "manual-route-form"}
@@ -865,7 +866,7 @@ export function RouteGeneratorPage() {
           <div className="relative min-h-0 flex-1">
             {mapBlock}
             {displayedRoute && (
-              <div className="pointer-events-none absolute right-3 top-3 z-30 rounded-full border border-border/60 bg-background/95 px-3 py-1.5 text-xs font-semibold tabular-nums shadow-md backdrop-blur">
+              <div className="pointer-events-none absolute right-3 top-3 z-30 border-2 border-foreground bg-background/95 px-3 py-1.5 font-mono text-xs font-semibold tabular-nums backdrop-blur">
                 {distanceKmDisplay} km · ↑ {elevationDisplay} m
               </div>
             )}
@@ -878,10 +879,10 @@ export function RouteGeneratorPage() {
               the user can sweep through candidates without losing the
               map. */}
           {route && (
-            <div className="shrink-0 space-y-2 border-t border-border/60 bg-background px-3 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+            <div className="shrink-0 space-y-2 border-t-2 border-foreground bg-background px-3 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
               <div className="flex items-center justify-between gap-2">
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                  <p className="truncate font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
                     {selectedRecommendation
                       ? t(`recommendation.accents.${selectedRecommendation.accent}`)
                       : t("recommendation.accents.closest_to_target")}
@@ -931,10 +932,10 @@ export function RouteGeneratorPage() {
                         type="button"
                         onClick={() => setSelectedIndex(i)}
                         className={cn(
-                          "flex shrink-0 items-center gap-2 rounded-lg border px-2 py-1.5 text-left transition-colors",
+                          "flex shrink-0 items-center gap-2 border-2 px-2 py-1.5 text-left transition-colors",
                           isSel
-                            ? "border-primary bg-primary/5"
-                            : "border-border/60 bg-background",
+                            ? "border-foreground bg-accent-acid/20"
+                            : "border-filet bg-background",
                         )}
                         aria-pressed={isSel}
                       >
@@ -959,7 +960,7 @@ export function RouteGeneratorPage() {
               {distanceMatchLabel && (
                 <span
                   className={cn(
-                    "inline-flex w-fit rounded-full border px-2 py-0.5 text-[11px] font-medium",
+                    "inline-flex w-fit border-2 px-2 py-0.5 font-mono text-[11px] uppercase tracking-[0.04em]",
                     DISTANCE_MATCH_CLASSES[distanceMatchLabel],
                   )}
                 >
@@ -994,7 +995,7 @@ export function RouteGeneratorPage() {
             navigation links sit on the right where the user expects a
             "more from this section" rail. */}
         <header className="mb-3 flex shrink-0 items-center justify-between gap-3">
-          <h1 className="text-base font-semibold tracking-tight sm:text-lg">
+          <h1 className="font-mono text-[13px] font-bold uppercase tracking-[0.06em] sm:text-sm">
             {t("title")}
           </h1>
         </header>
@@ -1022,9 +1023,9 @@ export function RouteGeneratorPage() {
 
           {/* Right column: map (flex) + strip (auto) + collapsible
               details (auto). The whole column lives inside a single
-              rounded card so the map, strip and details read as one
+              hard-edged frame so the map, strip and details read as one
               cohesive surface — no double borders, no orphan blocks. */}
-          <main className="min-w-0 md:flex md:min-h-0 md:flex-col md:overflow-hidden md:rounded-xl md:border md:border-border/60 md:bg-background md:shadow-sm">
+          <main className="min-w-0 md:flex md:min-h-0 md:flex-col md:overflow-hidden md:border-2 md:border-foreground md:bg-background">
             <div className="relative md:flex-1 md:min-h-0">{mapBlock}</div>
             {desktopStatsBar}
             {desktopStrip}

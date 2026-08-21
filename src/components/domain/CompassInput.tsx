@@ -95,8 +95,8 @@ export function CompassInput({
           updateFromPointer(e.clientX, e.clientY);
         }}
         className={cn(
-          "relative touch-none rounded-full border border-border/60 bg-background shadow-sm transition-colors",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
+          "relative touch-none rounded-full border-2 border-foreground bg-background transition-colors",
+          "outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring",
           dragging ? "cursor-grabbing" : "cursor-grab",
         )}
         style={{ width: size, height: size }}
@@ -154,8 +154,8 @@ export function CompassInput({
             transformOrigin: "50% 100%",
           }}
         >
-          <div className="h-full w-full rounded-full bg-primary shadow-[0_0_0_1px_rgba(255,255,255,0.6)]" />
-          <div className="absolute -top-1 left-1/2 size-2.5 -translate-x-1/2 rotate-45 rounded-sm bg-primary" />
+          <div className="h-full w-full bg-primary" />
+          <div className="absolute -top-1 left-1/2 size-2.5 -translate-x-1/2 rotate-45 bg-primary" />
         </div>
 
         <div className="absolute left-1/2 top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-primary bg-background" />

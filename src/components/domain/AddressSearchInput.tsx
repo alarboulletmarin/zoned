@@ -108,9 +108,9 @@ export function AddressSearchInput({
           placeholder={t("form.addressPlaceholder")}
           disabled={disabled}
           className={cn(
-            "w-full rounded-md border border-input bg-background py-2 pl-9 pr-9 text-base",
+            "w-full border-2 border-foreground bg-background py-2 pl-9 pr-9 font-mono text-base",
             "placeholder:text-muted-foreground",
-            "focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20",
+            "outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring",
             "disabled:cursor-not-allowed disabled:opacity-50",
           )}
           aria-label={t("form.addressPlaceholder")}
@@ -125,7 +125,7 @@ export function AddressSearchInput({
             type="button"
             onClick={handleClear}
             aria-label="Clear"
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:bg-secondary hover:text-foreground"
           >
             <X className="size-4" />
           </button>
@@ -136,10 +136,10 @@ export function AddressSearchInput({
         <ul
           id="address-suggestions"
           role="listbox"
-          className="absolute left-0 right-0 z-[1200] mt-1 max-h-64 overflow-y-auto rounded-md border border-border bg-popover shadow-lg"
+          className="absolute left-0 right-0 z-[1200] mt-1 max-h-64 overflow-y-auto border-2 border-foreground bg-popover shadow-[4px_4px_0_var(--shadow-hard)]"
         >
           {results.length === 0 ? (
-            <li className="px-3 py-2 text-xs text-muted-foreground">
+            <li className="px-3 py-2 font-mono text-xs text-muted-foreground">
               {t("form.addressNoResults")}
             </li>
           ) : (
@@ -148,7 +148,7 @@ export function AddressSearchInput({
                 <button
                   type="button"
                   onClick={() => handleSelect(result)}
-                  className="flex w-full items-start gap-2 px-3 py-2 text-left text-sm hover:bg-accent"
+                  className="flex w-full items-start gap-2 px-3 py-2 text-left text-sm hover:bg-secondary"
                 >
                   <MapPin className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
                   <span className="flex-1 truncate">{result.label}</span>

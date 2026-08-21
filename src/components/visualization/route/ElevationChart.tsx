@@ -199,14 +199,7 @@ export function ElevationChart({
           strokeWidth={1}
         />
 
-        <defs>
-          <linearGradient id="elev-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity={0.35} />
-            <stop offset="100%" stopColor={color} stopOpacity={0.05} />
-          </linearGradient>
-        </defs>
-
-        <path d={geometry.area} fill="url(#elev-grad)" stroke="none" />
+        <path d={geometry.area} fill={color} fillOpacity={0.15} stroke="none" />
         <path d={geometry.line} fill="none" stroke={color} strokeWidth={2} strokeLinejoin="round" />
 
         {hoverPoint && (
@@ -236,7 +229,7 @@ export function ElevationChart({
       {hoverPoint && hoverPctX != null && (
         <div
           className={cn(
-            "pointer-events-none absolute -top-1 -translate-x-1/2 rounded-md border border-border/60 bg-background/95 px-2 py-1 text-[11px] font-medium leading-tight tabular-nums shadow-sm backdrop-blur-sm",
+            "pointer-events-none absolute -top-1 -translate-x-1/2 border-2 border-foreground bg-background px-2 py-1 font-mono text-[11px] font-medium leading-tight tabular-nums",
             "flex items-center gap-2",
           )}
           style={{

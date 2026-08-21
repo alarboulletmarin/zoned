@@ -487,7 +487,7 @@ export function RouteMap({
     <div
       ref={containerRef}
       className={cn(
-        "h-72 w-full overflow-hidden rounded-xl border border-border/60 bg-muted/30 sm:h-96 lg:h-[28rem]",
+        "h-72 w-full overflow-hidden border-2 border-foreground bg-muted/30 sm:h-96 lg:h-[28rem]",
         onMapClick ? "cursor-crosshair" : undefined,
         className,
       )}

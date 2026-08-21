@@ -25,7 +25,7 @@ const RouteMap = lazy(() =>
 
 function MapSkeleton() {
   return (
-    <div className="h-72 w-full animate-pulse rounded-xl border border-border/60 bg-muted/40 sm:h-96 lg:h-[28rem]" />
+    <div className="h-72 w-full animate-pulse border-2 border-foreground bg-muted/40 sm:h-96 lg:h-[28rem]" />
   );
 }
 
@@ -207,10 +207,10 @@ export function TrackFinderPage() {
       <>
         <SEOHead title={t("trackFinder.title")} description={t("trackFinder.subtitle")} canonical="/routes/tracks" noindex />
         <div className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
-          <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed border-border/60 bg-muted/10 p-10 text-center">
+          <div className="flex flex-col items-center gap-4 border-2 border-dashed border-muted-foreground p-10 text-center">
             <EyeOff className="size-10 text-muted-foreground" />
             <div className="space-y-1">
-              <h1 className="text-xl font-bold">{t("disabled.title")}</h1>
+              <h1 className="font-sans text-xl font-bold uppercase tracking-tight">{t("disabled.title")}</h1>
               <p className="text-sm text-muted-foreground">{t("disabled.body")}</p>
             </div>
             <Button asChild>
@@ -230,14 +230,17 @@ export function TrackFinderPage() {
         canonical="/routes/tracks"
       />
       <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <header className="mb-6 space-y-1">
+        <header className="mb-6 space-y-2 border-t border-filet pt-5 md:pt-6">
+          <p className="font-mono text-[10px] md:text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
+            {t("trackFinder.title")}
+          </p>
           <EditorialTitle as="h1" size="md">{t("trackFinder.title")}</EditorialTitle>
           <FadeUp as="p" delay={0.1} className="text-sm text-muted-foreground">
             {t("trackFinder.subtitle")}
           </FadeUp>
           <Link
             to="/routes"
-            className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+            className="inline-flex items-center gap-1 font-mono text-[11px] tracking-[0.06em] uppercase text-muted-foreground underline underline-offset-2 hover:text-foreground"
           >
             {t("trackFinder.backToGenerator")} <ArrowRight className="size-3.5" />
           </Link>
@@ -245,9 +248,9 @@ export function TrackFinderPage() {
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,360px)_1fr] xl:gap-8">
           <aside className="min-w-0 space-y-4">
-            <div className="rounded-xl border border-border/60 bg-background p-4 sm:p-5">
+            <div className="border-2 border-foreground p-4 sm:p-5">
               <fieldset className="space-y-2">
-                <legend className="text-sm font-semibold">{t("form.start")}</legend>
+                <legend className="font-mono text-[11px] font-bold uppercase tracking-[0.08em]">{t("form.start")}</legend>
                 <AddressSearchInput
                   onSelect={(point, label) => updateStart(point, label)}
                   onClear={() => updateStart(null, null)}
@@ -289,8 +292,8 @@ export function TrackFinderPage() {
             </div>
 
             {tracks && tracks.length > 0 && (
-              <div className="rounded-xl border border-border/60 bg-background p-2">
-                <p className="px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              <div className="border-2 border-foreground p-2">
+                <p className="px-2 py-1 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
                   {t("trackFinder.results", { count: tracks.length })}
                 </p>
                 <ul className="space-y-1">
@@ -302,17 +305,17 @@ export function TrackFinderPage() {
                           type="button"
                           onClick={() => onPickTrack(track)}
                           className={cn(
-                            "flex w-full items-start justify-between gap-3 rounded-lg border p-3 text-left transition-colors",
+                            "flex w-full items-start justify-between gap-3 border-2 p-3 text-left transition-colors",
                             isSelected
-                              ? "border-primary bg-primary/5"
-                              : "border-transparent hover:border-border/60 hover:bg-accent/50",
+                              ? "border-foreground bg-accent-acid/20"
+                              : "border-transparent hover:bg-secondary",
                           )}
                         >
                           <div className="min-w-0">
                             <p className="truncate text-sm font-semibold text-foreground">
                               {track.name ?? t("trackFinder.unnamedTrack")}
                             </p>
-                            <p className="text-[11px] tabular-nums text-muted-foreground">
+                            <p className="font-mono text-[11px] tabular-nums text-muted-foreground">
                               {t("trackFinder.distance", { km: formatHaversineKm(track.haversineDistanceM) })}
                             </p>
                           </div>
@@ -342,24 +345,30 @@ export function TrackFinderPage() {
 
             {route && (
               <>
-                <div className="grid grid-cols-3 gap-3 rounded-xl border border-border/60 bg-muted/20 p-4 text-sm">
+                <dl className="grid grid-cols-3 gap-3 border-t border-filet pt-4">
                   <div>
-                    <p className="text-xs text-muted-foreground">{t("result.actualDistance")}</p>
-                    <p className="text-lg font-semibold tabular-nums">
+                    <dt className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-1">
+                      {t("result.actualDistance")}
+                    </dt>
+                    <dd className="font-sans font-bold text-lg sm:text-xl tabular-nums">
                       {(route.distanceM / 1000).toFixed(2)} km
-                    </p>
+                    </dd>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">{t("result.elevationGain")}</p>
-                    <p className="text-lg font-semibold tabular-nums">{route.elevationGainM} m</p>
+                    <dt className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-1">
+                      {t("result.elevationGain")}
+                    </dt>
+                    <dd className="font-sans font-bold text-lg sm:text-xl tabular-nums">{route.elevationGainM} m</dd>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">{t("result.estimatedDuration")}</p>
-                    <p className="text-lg font-semibold tabular-nums">
+                    <dt className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-1">
+                      {t("result.estimatedDuration")}
+                    </dt>
+                    <dd className="font-sans font-bold text-lg sm:text-xl tabular-nums">
                       {formatDurationMinutes(route.estimatedDurationSec / 60)}
-                    </p>
+                    </dd>
                   </div>
-                </div>
+                </dl>
 
                 <div className="flex flex-wrap gap-2">
                   <Button onClick={onSave} className="gap-2">
@@ -384,13 +393,13 @@ export function TrackFinderPage() {
             )}
 
             {!route && tracks && tracks.length > 0 && !isRouting && (
-              <div className="rounded-xl border border-dashed border-border/60 bg-muted/10 p-4 text-sm text-muted-foreground">
+              <div className="border-2 border-dashed border-muted-foreground p-4 font-mono text-[11px] text-muted-foreground">
                 {t("trackFinder.pickHint")}
               </div>
             )}
 
             {tracks?.length === 0 && (
-              <div className="rounded-xl border border-amber-300/60 bg-amber-50/80 p-4 text-sm text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/30 dark:text-amber-100">
+              <div className="border-2 border-zone-3 p-4 font-mono text-[11px] text-foreground">
                 {t("trackFinder.noResults")}
               </div>
             )}

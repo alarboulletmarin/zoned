@@ -26,7 +26,20 @@ const ElevationChart = lazy(() =>
 
 function MapFallback() {
   return (
-    <div className="h-72 w-full animate-pulse rounded-xl border border-border/60 bg-muted/40 sm:h-96" />
+    <div className="h-72 w-full animate-pulse border-2 border-foreground bg-muted/40 sm:h-96" />
+  );
+}
+
+/** Single inline stat — mono uppercase label, bold value. Mirrors the
+ *  HeroStat strip used on the workout detail page. */
+function RouteStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-1">
+        {label}
+      </dt>
+      <dd className="font-sans font-bold text-lg sm:text-xl tabular-nums">{value}</dd>
+    </div>
   );
 }
 
@@ -56,7 +69,7 @@ export function RouteDetailPage() {
             <ArrowLeft className="size-4" /> {t("myRoutes")}
           </Link>
         </Button>
-        <p className="text-sm text-muted-foreground">{t("list.empty")}</p>
+        <p className="font-mono text-[11px] text-muted-foreground">{t("list.empty")}</p>
       </div>
     );
   }
@@ -83,12 +96,16 @@ export function RouteDetailPage() {
           </Link>
         </Button>
 
-        <header className="space-y-1">
+        <header className="space-y-4 border-t border-filet pt-5 md:pt-6">
           <EditorialTitle as="h1" size="md">{route.name}</EditorialTitle>
-          <p className="text-sm text-muted-foreground">
-            {(route.distanceM / 1000).toFixed(2)} km · D+ {route.elevationGainM} m · ~
-            {formatDurationMinutes(route.estimatedDurationSec / 60)}
-          </p>
+          <dl className="grid grid-cols-3 gap-x-6 gap-y-4 max-w-md">
+            <RouteStat label={t("result.actualDistance")} value={`${(route.distanceM / 1000).toFixed(2)} km`} />
+            <RouteStat label={t("result.elevationGain")} value={`${route.elevationGainM} m`} />
+            <RouteStat
+              label={t("result.estimatedDuration")}
+              value={formatDurationMinutes(route.estimatedDurationSec / 60)}
+            />
+          </dl>
         </header>
 
         <Suspense fallback={<MapFallback />}>
@@ -96,8 +113,8 @@ export function RouteDetailPage() {
         </Suspense>
 
         {route.elevation.length > 1 && (
-          <div className="rounded-xl border border-border/60 bg-background p-3 sm:p-4">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          <div className="border-t border-filet pt-4">
+            <p className="mb-2 font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
               {t("result.elevationProfile")}
             </p>
             <Suspense fallback={null}>
@@ -107,9 +124,9 @@ export function RouteDetailPage() {
         )}
 
         {route.planSessionRef && (
-          <div className="flex flex-col gap-3 rounded-xl border border-primary/20 bg-primary/5 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 border-2 border-foreground p-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">
+              <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-muted-foreground">
                 {t("result.linkedToPlan")}
               </p>
               <p className="mt-1 text-sm text-foreground">

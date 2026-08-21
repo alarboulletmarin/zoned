@@ -69,7 +69,7 @@ export function MiniRouteMap({
   if (!path) {
     return (
       <div
-        className={`flex items-center justify-center rounded-md border border-border/60 ${className}`}
+        className={`flex items-center justify-center border border-foreground ${className}`}
         style={{ background }}
         aria-hidden
       />
@@ -78,7 +78,7 @@ export function MiniRouteMap({
 
   return (
     <svg
-      className={`shrink-0 rounded-md border border-border/60 ${className}`}
+      className={`shrink-0 border border-foreground ${className}`}
       viewBox={path.viewBox}
       preserveAspectRatio="xMidYMid meet"
       style={{ background }}
