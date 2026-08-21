@@ -124,42 +124,38 @@ function renderMarkdown(content: string): React.ReactNode {
     const config = {
       tip: {
         icon: Lightbulb,
-        bg: "bg-emerald-50 dark:bg-emerald-950/30",
-        border: "border-emerald-200 dark:border-emerald-800",
-        iconColor: "text-emerald-600 dark:text-emerald-400",
+        border: "border-success",
+        iconColor: "text-success",
         title: "Conseil",
       },
       warning: {
         icon: AlertTriangle,
-        bg: "bg-amber-50 dark:bg-amber-950/30",
-        border: "border-amber-200 dark:border-amber-800",
-        iconColor: "text-amber-600 dark:text-amber-400",
+        border: "border-warning",
+        iconColor: "text-warning",
         title: "Attention",
       },
       key: {
         icon: Info,
-        bg: "bg-blue-50 dark:bg-blue-950/30",
-        border: "border-blue-200 dark:border-blue-800",
-        iconColor: "text-blue-600 dark:text-blue-400",
+        border: "border-foreground",
+        iconColor: "text-foreground",
         title: "À retenir",
       },
       stat: {
         icon: Activity,
-        bg: "bg-purple-50 dark:bg-purple-950/30",
-        border: "border-purple-200 dark:border-purple-800",
-        iconColor: "text-purple-600 dark:text-purple-400",
+        border: "border-accent-acid",
+        iconColor: "text-accent-acid",
         title: "Chiffre clé",
       },
     };
 
-    const { icon: Icon, bg, border, iconColor, title } = config[type];
+    const { icon: Icon, border, iconColor, title } = config[type];
 
     return (
-      <div key={calloutKey} className={`my-6 rounded-lg border ${border} ${bg} p-4`}>
+      <div key={calloutKey} className={`my-6 border-2 ${border} p-4`}>
         <div className="flex gap-3">
           <Icon className={`size-5 shrink-0 mt-0.5 ${iconColor}`} />
           <div className="flex-1 min-w-0">
-            <p className="font-semibold text-sm mb-1">{title}</p>
+            <p className={`font-mono text-[10px] font-bold uppercase tracking-wide mb-1 ${iconColor}`}>{title}</p>
             <div className="text-sm text-muted-foreground leading-relaxed">{parseInline(text)}</div>
           </div>
         </div>
@@ -570,7 +566,7 @@ export function ArticlePage() {
 
       {/* CTA to My Zones (for zones article) */}
       {article.slug === "zones" && (
-        <div className="mt-8 p-6 bg-muted rounded-lg text-center">
+        <div className="mt-8 p-6 border-2 border-foreground text-center">
           <p className="text-muted-foreground mb-4">
             {t("content:learn.zonesCtaText")}
           </p>
@@ -591,7 +587,7 @@ export function ArticlePage() {
           <Link
             to={`/learn/${prev.slug}`}
             className={cn(
-              "flex-1 group p-4 rounded-lg border hover:bg-muted transition-colors",
+              "flex-1 group p-4 border-2 border-foreground hover:bg-secondary transition-colors",
               "flex flex-col gap-1"
             )}
           >
@@ -611,7 +607,7 @@ export function ArticlePage() {
           <Link
             to={`/learn/${next.slug}`}
             className={cn(
-              "flex-1 group p-4 rounded-lg border hover:bg-muted transition-colors",
+              "flex-1 group p-4 border-2 border-foreground hover:bg-secondary transition-colors",
               "flex flex-col gap-1 text-right"
             )}
           >
