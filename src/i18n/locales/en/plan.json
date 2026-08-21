@@ -410,7 +410,8 @@
     "goal": "Goal",
     "availability": "Availability",
     "volume": "Volume",
-    "review": "Review"
+    "review": "Review",
+    "stepOf": "Step {{current}} of {{total}}"
   },
   "preview": {
     "title": "Plan preview",
@@ -486,12 +487,31 @@
     "cancelButton": "Cancel",
     "weekProgress": "Week {{current}} / {{total}}",
     "target": "Target: ",
+    "duplicate": "Duplicate",
+    "copySuffix": "(copy)",
+    "duplicated": "Plan duplicated",
+    "duplicateError": "Duplication failed",
     "sessionsCount": "{{count}} sessions",
     "planCount": "{{count}} plans",
     "ended": "Ended",
     "endedSection": "Past plans",
     "prebuiltHeading": "{{count}} ready-to-read plans",
-    "filterAll": "All distances"
+    "filterAll": "All distances",
+    "whyCatalogue": {
+      "eyebrow": "Why this catalogue",
+      "readable": {
+        "title": "A plan reads before you commit.",
+        "body": "Duration, weekly volume and the zone split are on the card: you know what you're signing up for before opening anything."
+      },
+      "nine": {
+        "title": "Nine plans, not forty.",
+        "body": "One row per distance, two or three level variants. Custom exists for edge cases, not as the front door."
+      },
+      "noTracking": {
+        "title": "No plan tracks you.",
+        "body": "Taking a plan opens no attendance counter: it's a read, exportable, that you follow or don't."
+      }
+    }
   },
   "prebuilt": {
     "notFound": "Plan not found",

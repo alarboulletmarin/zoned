@@ -410,7 +410,8 @@
     "goal": "Objectif",
     "availability": "Disponibilité",
     "volume": "Volume",
-    "review": "Relecture"
+    "review": "Relecture",
+    "stepOf": "Étape {{current}} sur {{total}}"
   },
   "preview": {
     "title": "Aperçu du plan",
@@ -486,12 +487,31 @@
     "cancelButton": "Annuler",
     "weekProgress": "Semaine {{current}} / {{total}}",
     "target": "Objectif : ",
+    "duplicate": "Dupliquer",
+    "copySuffix": "(copie)",
+    "duplicated": "Plan dupliqué",
+    "duplicateError": "La duplication a échoué",
     "sessionsCount": "{{count}} séances",
     "planCount": "{{count}} plans",
     "ended": "Terminé",
     "endedSection": "Plans terminés",
     "prebuiltHeading": "{{count}} plans prêts à lire",
-    "filterAll": "Toutes distances"
+    "filterAll": "Toutes distances",
+    "whyCatalogue": {
+      "eyebrow": "Pourquoi ce catalogue",
+      "readable": {
+        "title": "Un plan se lit avant de s'engager.",
+        "body": "Durée, volume hebdo et répartition par zone sont sur la carte : on sait ce qu'on signe avant d'ouvrir quoi que ce soit."
+      },
+      "nine": {
+        "title": "Neuf plans, pas quarante.",
+        "body": "Une ligne par distance, deux ou trois variantes de niveau. Le sur-mesure existe pour les cas particuliers, il n'est pas la porte d'entrée."
+      },
+      "noTracking": {
+        "title": "Aucun plan ne te suit.",
+        "body": "Prendre un plan n'ouvre aucun compteur d'assiduité : c'est une lecture, exportable, que tu suis ou pas."
+      }
+    }
   },
   "prebuilt": {
     "notFound": "Plan introuvable",

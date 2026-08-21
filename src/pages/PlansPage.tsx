@@ -9,6 +9,7 @@ import {
   ArrowRight,
   Trash2,
   Download,
+  Copy,
   FlaskConical,
   Scale,
 } from "@/components/icons";
@@ -26,7 +27,7 @@ import {
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { usePlans } from "@/hooks/usePlans";
-import { importPlan } from "@/lib/planStorage";
+import { importPlan, duplicatePlan } from "@/lib/planStorage";
 import { toast } from "sonner";
 import {
   PHASE_META,
@@ -57,9 +58,11 @@ function getCurrentPhase(
 function PlanCard({
   plan,
   onDelete,
+  onDuplicate,
 }: {
   plan: TrainingPlan;
   onDelete: (id: string) => void;
+  onDuplicate: (plan: TrainingPlan) => void;
 }) {
   const { t } = useTranslation("plan");
   const navigate = useNavigate();
@@ -205,6 +208,17 @@ function PlanCard({
             {t("plansPage.view")}
           </Link>
         </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDuplicate(plan);
+          }}
+        >
+          <Copy className="size-3.5" />
+          {t("plansPage.duplicate")}
+        </Button>
         <PlanExportMenu
           plan={plan}
           size="sm"
@@ -309,6 +323,20 @@ export function PlansPage() {
     };
     input.click();
   }, [t, reload, navigate]);
+
+  const handleDuplicate = useCallback((plan: TrainingPlan) => {
+    const newId = duplicatePlan(
+      plan.id,
+      `${pick(plan, "name")} ${t("plansPage.copySuffix")}`
+    );
+    if (!newId) {
+      toast.error(t("plansPage.duplicateError"));
+      return;
+    }
+    reload();
+    toast.success(t("plansPage.duplicated"));
+  }, [t, pick, reload]);
+
   const deleteTargetPlan = plans.find((p) => p.id === deleteTarget);
 
   // Sort plans by creation date (newest first). Standalone weeks live under
@@ -400,6 +428,7 @@ export function PlansPage() {
                       key={plan.id}
                       plan={plan}
                       onDelete={setDeleteTarget}
+                      onDuplicate={handleDuplicate}
                     />
                   ))}
                   <CreatePlanTile t={t} />
@@ -429,6 +458,7 @@ export function PlansPage() {
                       key={plan.id}
                       plan={plan}
                       onDelete={setDeleteTarget}
+                      onDuplicate={handleDuplicate}
                     />
                   ))}
                 </div>
@@ -555,6 +585,23 @@ export function PlansPage() {
           <div className="grid gap-px bg-border border border-border grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {filteredPrebuiltPlans.map((plan) => (
               <PrebuiltPlanCard key={plan.id} plan={plan} />
+            ))}
+          </div>
+        </div>
+
+        {/* Why this catalogue — editorial 3-column block, mirrors the design mockup */}
+        <div className="border-2 border-foreground bg-card p-6 md:p-10">
+          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
+            {t("plansPage.whyCatalogue.eyebrow")}
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-7 mt-4 text-sm leading-[1.6] text-foreground/75">
+            {(["readable", "nine", "noTracking"] as const).map((key) => (
+              <p key={key}>
+                <strong className="font-semibold text-foreground">
+                  {t(`plansPage.whyCatalogue.${key}.title`)}
+                </strong>{" "}
+                {t(`plansPage.whyCatalogue.${key}.body`)}
+              </p>
             ))}
           </div>
         </div>
