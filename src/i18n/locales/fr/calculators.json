@@ -22,7 +22,22 @@
       "fcMaxUnit": "FC max",
       "footerLocal": "Calcul local · aucune requête réseau",
       "footerFormulas": "Formules et sources citées sur chaque outil",
-      "footerMethodology": "Méthodologie · d'où viennent ces formules"
+      "footerMethodology": "Méthodologie · d'où viennent ces formules",
+      "whyIndex": {
+        "eyebrow": "Pourquoi cet index",
+        "example": {
+          "title": "Chaque carte montre son résultat.",
+          "body": "« 10 km 43:20 → 16,5 km/h » : on choisit l'outil sur son exemple, pas sur son nom. Aucune carte n'est un simple lien à deviner."
+        },
+        "families": {
+          "title": "Trois familles, quatre outils chacune.",
+          "body": "Douze outils tiennent en trois rangées lisibles ; les familles suivent la question posée (mes zones, ma performance, mes conditions), pas la formule employée."
+        },
+        "savedValues": {
+          "title": "Tes valeurs en haut à droite.",
+          "body": "VMA et FC max : les deux entrées qui alimentent la moitié des outils sont visibles et modifiables, avec la mention qu'elles ne quittent pas l'appareil."
+        }
+      }
     },
     "states": {
       "offline": "Hors-ligne · les calculateurs fonctionnent",

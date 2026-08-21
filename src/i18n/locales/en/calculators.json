@@ -22,7 +22,22 @@
       "fcMaxUnit": "Max HR",
       "footerLocal": "Local calculation · no network request",
       "footerFormulas": "Formulas and sources cited on every tool",
-      "footerMethodology": "Methodology · where these formulas come from"
+      "footerMethodology": "Methodology · where these formulas come from",
+      "whyIndex": {
+        "eyebrow": "Why this index",
+        "example": {
+          "title": "Every card shows its result.",
+          "body": "\"10K 43:20 → 16.5 km/h\": you pick the tool from its example, not its name. No card is a plain link you have to guess."
+        },
+        "families": {
+          "title": "Three families, four tools each.",
+          "body": "Twelve tools fit in three readable rows; the families follow the question you're asking (my zones, my performance, my conditions), not the formula behind them."
+        },
+        "savedValues": {
+          "title": "Your values, top right.",
+          "body": "VMA and max HR: the two inputs that feed half the tools are visible and editable, with a note that they never leave the device."
+        }
+      }
     },
     "states": {
       "offline": "Offline · the calculators still work",

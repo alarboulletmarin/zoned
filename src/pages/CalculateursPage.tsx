@@ -323,6 +323,23 @@ export function CalculateursPage() {
         </div>
 
         <CalculatorOfflineNote className="mt-4 inline-block" />
+
+        {/* Why this index — editorial 3-column block, mirrors the design mockup */}
+        <div className="border-2 border-foreground bg-card p-6 md:p-10 mt-10 md:mt-12">
+          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
+            {t("calculators:calculateurs.hub.whyIndex.eyebrow")}
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-7 mt-4 text-sm leading-[1.6] text-foreground/75">
+            {(["example", "families", "savedValues"] as const).map((key) => (
+              <p key={key}>
+                <strong className="font-semibold text-foreground">
+                  {t(`calculators:calculateurs.hub.whyIndex.${key}.title`)}
+                </strong>{" "}
+                {t(`calculators:calculateurs.hub.whyIndex.${key}.body`)}
+              </p>
+            ))}
+          </div>
+        </div>
       </div>
     </>
   );
