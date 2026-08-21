@@ -10,16 +10,6 @@ import { usePickLang } from "@/lib/i18n-utils";
 import { toast } from "sonner";
 import { SESSION_COLORS } from "@/lib/sessionColors";
 
-// ── Color maps ──────────────────────────────────────────────────────
-
-const PHASE_BG: Record<string, string> = {
-  base: "bg-blue-50/50 dark:bg-blue-950/20",
-  build: "bg-orange-50/50 dark:bg-orange-950/20",
-  peak: "bg-red-50/50 dark:bg-red-950/20",
-  taper: "bg-green-50/50 dark:bg-green-950/20",
-  recovery: "bg-slate-50/50 dark:bg-slate-950/20",
-};
-
 // ── Props ───────────────────────────────────────────────────────────
 
 interface PlanCalendarProps {
@@ -263,7 +253,7 @@ export const PlanCalendar = memo(function PlanCalendar({
         position: fixed; z-index: 9999; pointer-events: none;
         width: ${target?.offsetWidth || 80}px;
         opacity: 0.85;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        box-shadow: 4px 4px 0 var(--shadow-hard);
         transform: translate(-50%, -50%);
       `;
       ghost.style.left = `${touch.clientX}px`;
@@ -496,7 +486,6 @@ export const PlanCalendar = memo(function PlanCalendar({
                     isPhaseStart && "border-t-2 border-t-border",
                     isCurrent && "bg-primary/10",
                     !isCurrent && week.isRecoveryWeek && "bg-muted/40",
-                    !isCurrent && !week.isRecoveryWeek && PHASE_BG[week.phase as string]
                   )}
                 >
                   {/* Week label column (sticky on mobile) */}
@@ -510,7 +499,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                   >
                     <div className="flex items-center gap-1.5">
                       <div
-                        className={cn("size-2 rounded-full shrink-0", phaseMeta.color)}
+                        className={cn("size-2 rounded-none shrink-0", phaseMeta.color)}
                       />
                       <span className="font-medium text-xs whitespace-nowrap">
                         {weekLabel}
@@ -540,7 +529,7 @@ export const PlanCalendar = memo(function PlanCalendar({
 
                       if (allResolved && resolved > 0) {
                         return (
-                          <div className="text-[9px] text-green-600 dark:text-green-400 font-medium mt-0.5 flex items-center gap-0.5">
+                          <div className="font-mono text-[9px] text-zone-2 mt-0.5 flex items-center gap-0.5">
                             <svg viewBox="0 0 12 12" className="size-2.5" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 6l3 3 5-5" /></svg>
                             {done}/{total}
                           </div>
@@ -552,7 +541,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                           <button
                             type="button"
                             onClick={(e) => { e.stopPropagation(); onValidateWeek(week.weekNumber); }}
-                            className="text-[9px] mt-0.5 px-1 py-0.5 rounded bg-primary/10 hover:bg-primary/20 text-primary font-medium transition-colors"
+                            className="font-mono text-[9px] mt-0.5 px-1 py-0.5 rounded-none bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
                             title={t("calendar.validateWeek")}
                           >
                             {t("calendar.validateCount", { done, total })}
@@ -609,7 +598,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                         onDrop={isOutsideMonth ? undefined : (e) => handleDrop(e, week.weekNumber, dayIndex)}
                         className={cn(
                           "px-0.5 py-1 align-top transition-colors",
-                          isDropHere && !isOutsideMonth && "ring-2 ring-primary/50 bg-primary/5 rounded",
+                          isDropHere && !isOutsideMonth && "ring-2 ring-primary/50 bg-primary/5 rounded-none",
                           isOutsideMonth && "opacity-25",
                           isFirstOfMonth && "border-l-2 border-l-primary/40",
                           isBlockedDay && !isOutsideMonth && "bg-muted/50 bg-[repeating-linear-gradient(135deg,transparent,transparent_4px,rgba(0,0,0,0.04)_4px,rgba(0,0,0,0.04)_6px)]",
@@ -744,7 +733,7 @@ export const PlanCalendar = memo(function PlanCalendar({
           onPointerDown={() => setContextMenu(null)}
         >
           <div
-            className="fixed bg-card border rounded-none shadow-lg py-1 min-w-[160px] z-50"
+            className="fixed bg-card border-2 rounded-none shadow-[4px_4px_0_var(--shadow-hard)] py-1 min-w-[160px] z-50"
             style={{
               left: contextMenu.x,
               top: contextMenu.y,
@@ -788,7 +777,7 @@ export const PlanCalendar = memo(function PlanCalendar({
                     setContextMenu(null);
                   }}
                 >
-                  <svg viewBox="0 0 24 24" className="size-4 text-green-500 shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg viewBox="0 0 24 24" className="size-4 text-zone-2 shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12l5 5 9-9" />
                   </svg>
                   {t("completion.toggleDone")}
@@ -846,7 +835,7 @@ const SessionCell = memo(function SessionCell({
   const pick = usePickLang();
   if (isRaceDay) {
     return (
-      <div className="rounded border border-primary/30 bg-primary/10 px-1 py-1 text-center">
+      <div className="rounded-none border-2 border-primary bg-primary/10 px-1 py-1 text-center">
         <Flag className="size-3 text-primary mx-auto" />
         <span className="text-[10px] font-semibold text-primary leading-tight block">
           {t("calendar.race")}
@@ -859,17 +848,17 @@ const SessionCell = memo(function SessionCell({
     const distMeta = intermediateRace?.raceDistance ? RACE_DISTANCE_META[intermediateRace.raceDistance] : null;
     const distLabel = distMeta ? pick(distMeta, "label") : intermediateRace?.raceDistance;
     return (
-      <div className="rounded border border-orange-300 bg-orange-50 dark:border-orange-700 dark:bg-orange-900/30 px-1 py-1 text-center">
-        <Flag className="size-3 text-orange-500 mx-auto" />
-        <span className="text-[10px] font-semibold text-orange-700 dark:text-orange-300 leading-tight block">
+      <div className="rounded-none border-2 border-poster-red bg-card px-1 py-1 text-center">
+        <Flag className="size-3 text-poster-red mx-auto" />
+        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.06em] text-poster-red leading-tight block">
           {distLabel || t("intermediateGoals.raceDayLabel")}
         </span>
         {intermediateRace?.priority && (
           <span className={cn(
-            "text-[8px] font-bold leading-tight block",
-            intermediateRace.priority === "A" && "text-red-600 dark:text-red-400",
-            intermediateRace.priority === "B" && "text-orange-600 dark:text-orange-400",
-            intermediateRace.priority === "C" && "text-yellow-600 dark:text-yellow-400",
+            "font-mono text-[8px] font-bold uppercase tracking-[0.06em] leading-tight block",
+            intermediateRace.priority === "A" && "text-poster-red",
+            intermediateRace.priority === "B" && "text-zone-4",
+            intermediateRace.priority === "C" && "text-muted-foreground",
           )}>
             {t(`intermediateGoals.badge.${intermediateRace.priority}`)}
           </span>
@@ -950,14 +939,16 @@ const SessionCell = memo(function SessionCell({
             }}
             onPointerDown={(e) => e.stopPropagation()}
             className={cn(
-              "size-3.5 rounded-sm border shrink-0 flex items-center justify-center transition-colors mt-1",
+              // Status doctrine: contour = planned, flat = done,
+              // flat filet = skipped.
+              "size-3.5 rounded-none border shrink-0 flex items-center justify-center transition-colors mt-1",
               isCompleted
-                ? "bg-green-500 border-green-500 text-white"
+                ? "bg-foreground border-foreground text-background"
                 : isModified
-                  ? "bg-blue-500 border-blue-500 text-white"
+                  ? "border-2 border-foreground text-foreground"
                   : isSkipped
-                    ? "bg-muted border-muted-foreground/30"
-                    : "border-muted-foreground/40 hover:border-primary"
+                    ? "bg-filet border-filet text-muted-foreground"
+                    : "border-filet hover:border-foreground"
             )}
             title={
               isCompleted ? t("completion.completed")
@@ -991,37 +982,36 @@ const SessionCell = memo(function SessionCell({
           onClick={onClick}
           onKeyDown={onClick ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } } : undefined}
           className={cn(
-            "flex-1 min-w-0 rounded px-1 py-1 text-left transition-colors",
+            // Status doctrine: contour = planned, flat = done, flat filet = skipped.
+            "flex-1 min-w-0 rounded-none px-1 py-1 text-left transition-colors",
             isStrength
-              ? "bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/30 dark:hover:bg-amber-950/50 border border-amber-300 dark:border-amber-700"
-              : "bg-secondary/60 hover:bg-secondary",
-            isCompleted && !isStrength && "bg-green-500/10 hover:bg-green-500/15 ring-1 ring-green-500/30",
-            isCompleted && isStrength && "ring-1 ring-green-500/30",
-            isModified && !isStrength && "bg-blue-500/10 hover:bg-blue-500/15 ring-1 ring-blue-500/30",
-            isModified && isStrength && "ring-1 ring-blue-500/30",
-            isSkipped && "opacity-50",
+              ? "border-2 border-foreground bg-card hover:bg-secondary"
+              : "border border-filet bg-card hover:bg-secondary",
+            (isCompleted || isModified) && "border-foreground bg-secondary hover:bg-secondary",
+            isSkipped && "border-filet bg-filet opacity-60",
             !onClick && "cursor-default",
             onClick && "cursor-pointer focus-visible:ring-2 focus-visible:ring-ring"
           )}
         >
           <div className="flex items-center gap-1">
             {isStrength ? (
-              <Dumbbell className="size-3 text-amber-600 dark:text-amber-400 shrink-0" />
+              <Dumbbell className="size-3 text-foreground shrink-0" />
             ) : (
               <span
-                className="size-1.5 rounded-full shrink-0"
+                className="size-1.5 rounded-none shrink-0"
                 style={{ backgroundColor: dotColor }}
               />
             )}
             {session.isKeySession && (
-              <Star filled className="size-2.5 text-yellow-500 shrink-0" />
+              <span className="shrink-0 bg-accent-acid p-0.5 text-ink" title={t("view.keySession")}>
+                <Star filled className="size-2.5" />
+              </span>
             )}
           </div>
           <span
             className={cn(
               "text-[11px] leading-tight font-medium line-clamp-2 mt-0.5 block",
               isSkipped && "line-through text-muted-foreground",
-              isStrength && !isSkipped && "text-amber-900 dark:text-amber-100"
             )}
             title={displayName}
           >
@@ -1035,7 +1025,7 @@ const SessionCell = memo(function SessionCell({
               <span> · {session.sessionType !== "long_run" && "~"}{session.targetDistanceKm}km</span>
             )}
             {session.rpe && (
-              <span className="ml-1 text-[9px] font-medium text-amber-600">RPE {session.rpe}</span>
+              <span className="ml-1 font-mono text-[9px] text-foreground">RPE {session.rpe}</span>
             )}
           </span>
         )}

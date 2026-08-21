@@ -214,7 +214,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
         <button
           type="button"
           onClick={onClose}
-          className="p-1 rounded-md hover:bg-muted transition-colors"
+          className="p-1 rounded-none hover:bg-muted transition-colors"
           aria-label={t("workoutPanel.close")}
         >
           <X className="size-4" />
@@ -241,7 +241,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={t("workoutPanel.searchPlaceholder")}
-            className="w-full rounded-md border bg-background pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full rounded-none border-2 bg-background pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       </div>
@@ -251,7 +251,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
         <select
           value={activeFilter}
           onChange={(e) => setActiveFilter(e.target.value)}
-          className="w-full h-9 rounded-md border border-input bg-transparent px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="w-full h-9 rounded-none border-2 border-input bg-transparent px-3 font-mono text-xs uppercase tracking-[0.06em] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {FILTERS.map((f) => (
             <option key={f.key} value={f.key}>
@@ -263,7 +263,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
           type="button"
           onClick={() => setFavoritesOnly(v => !v)}
           className={cn(
-            "shrink-0 size-9 rounded-md border flex items-center justify-center transition-colors",
+            "shrink-0 size-9 rounded-none border-2 flex items-center justify-center transition-colors",
             favoritesOnly
               ? "bg-primary/10 border-primary text-primary"
               : "border-input text-muted-foreground hover:text-foreground"
@@ -316,14 +316,14 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
                     inline
                       ? "cursor-grab active:cursor-grabbing"
                       : "cursor-pointer active:scale-95",
-                    "rounded-lg border bg-card p-2.5",
+                    "rounded-none border border-filet bg-card p-2.5",
                     "hover:bg-accent/50 transition-all select-none",
                   )}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5 mb-0.5">
-                        <Dumbbell className="size-3 shrink-0 text-violet-500" />
+                        <Dumbbell className="size-3 shrink-0 text-foreground" />
                         <span className="text-xs font-medium truncate block">
                           {name}
                         </span>
@@ -378,11 +378,11 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
                 }}
                 className={cn(
                   inline ? "cursor-grab active:cursor-grabbing" : "cursor-pointer active:scale-95",
-                  "rounded-lg border bg-card p-2.5 hover:bg-accent/50 transition-all select-none"
+                  "rounded-none border border-filet bg-card p-2.5 hover:bg-accent/50 transition-all select-none"
                 )}
               >
                 <div className="flex items-center gap-2">
-                  <span className="size-2 rounded-full shrink-0 bg-muted-foreground/40" />
+                  <span className="size-2 rounded-none shrink-0 bg-muted-foreground/40" />
                   <span className="text-xs font-medium">
                     {t(`crossTraining.${item.translationKey}`)}
                   </span>
@@ -427,7 +427,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
                   inline
                     ? "cursor-grab active:cursor-grabbing"
                     : "cursor-pointer active:scale-95",
-                  "rounded-lg border bg-card p-2.5",
+                  "rounded-none border border-filet bg-card p-2.5",
                   "hover:bg-accent/50 transition-all select-none",
                 )}
               >
@@ -435,7 +435,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 mb-0.5">
                       <span
-                        className="size-2 rounded-full shrink-0"
+                        className="size-2 rounded-none shrink-0"
                         style={{ backgroundColor: dotColor }}
                       />
                       <span className="text-xs font-medium truncate block">
@@ -479,7 +479,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
   // Inline mode: render content directly (used in desktop flex layout)
   if (inline) {
     return (
-      <div className="bg-card border rounded-xl flex flex-col h-[calc(100vh-10rem)] overflow-hidden">
+      <div className="bg-card border-2 rounded-none flex flex-col h-[calc(100vh-10rem)] overflow-hidden">
         {panelContent}
       </div>
     );
@@ -493,7 +493,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
         <div
           className={cn(
             "md:hidden fixed inset-0 z-20",
-            "bg-black/20",
+            "bg-ink/20",
             "transition-opacity duration-300",
             isOpen ? "opacity-100" : "opacity-0 pointer-events-none",
           )}
@@ -507,7 +507,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
           onTouchEnd={handleSheetDragEnd}
           className={cn(
             "md:hidden fixed bottom-0 left-0 right-0 z-30",
-            "bg-background rounded-t-2xl shadow-2xl",
+            "bg-background rounded-none border-t-2 shadow-[0_-4px_0_var(--shadow-hard)]",
             "flex flex-col",
             "transition-transform duration-300",
             isOpen ? "translate-y-0" : "translate-y-full",
@@ -519,7 +519,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
             data-sheet-handle
             className="flex justify-center pt-2 pb-1 cursor-grab shrink-0"
           >
-            <div className="w-10 h-1 rounded-full bg-muted-foreground/30" />
+            <div className="w-10 h-1 rounded-none bg-muted-foreground/30" />
           </div>
           {panelContent}
         </div>

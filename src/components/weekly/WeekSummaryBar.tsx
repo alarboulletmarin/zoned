@@ -30,7 +30,7 @@ export function WeekSummaryBar({
   return (
     <div
       className={cn(
-        "rounded-xl border bg-card p-3 sm:p-4",
+        "rounded-none border-2 bg-card p-3 sm:p-4",
         "grid gap-4 lg:grid-cols-[1fr_18rem] lg:items-center",
         className,
       )}
@@ -59,7 +59,7 @@ export function WeekSummaryBar({
         </div>
 
         {overBudget && (
-          <p className="flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
+          <p className="flex items-center gap-1.5 border-l-2 border-poster-red pl-2 font-mono text-[11px] uppercase tracking-[0.06em] text-poster-red">
             <AlertTriangle className="size-3.5 shrink-0" />
             {t("weekly.summary.overBudget", { target: targetVolumeH })}
           </p>
@@ -89,21 +89,21 @@ function Metric({
 }) {
   return (
     <div className="min-w-0">
-      <div className="text-xs text-muted-foreground">{label}</div>
+      <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">{label}</div>
       <div
         className={cn(
-          "text-lg font-semibold tabular-nums",
-          alert && "text-amber-600 dark:text-amber-400",
+          "font-mono text-lg tabular-nums",
+          alert && "text-poster-red",
         )}
       >
         {value}
       </div>
       {progress != null && (
-        <div className="mt-1 h-1 w-full min-w-16 overflow-hidden rounded-full bg-muted">
+        <div className="mt-1 h-1.5 w-full min-w-16 overflow-hidden rounded-none bg-muted">
           <div
             className={cn(
-              "h-full rounded-full transition-[width]",
-              alert ? "bg-amber-500" : "bg-primary",
+              "h-full rounded-none transition-[width]",
+              alert ? "bg-poster-red" : "bg-foreground",
             )}
             style={{ width: `${Math.min(100, Math.max(0, progress * 100))}%` }}
           />

@@ -1,20 +1,19 @@
 import { useMemo } from "react";
 import type { TrainingPlan } from "@/types/plan";
-import { PHASE_META } from "@/types/plan";
 import type { TrainingPhase } from "@/types";
+import { PHASE_ZONE_BAR } from "@/components/domain/PrebuiltPlanCard";
 
-// ── Tailwind class -> SVG hex color mapping ───────────────────────────
-const TAILWIND_COLOR_MAP: Record<string, string> = {
-  "bg-blue-500": "#3b82f6",
-  "bg-yellow-500": "#eab308",
-  "bg-orange-500": "#f97316",
-  "bg-green-500": "#22c55e",
-  "bg-slate-400": "#94a3b8",
-};
-
+/**
+ * Phase -> SVG paint. The bars used to carry their own decorative hex ramp
+ * (blue/yellow/orange/green), unrelated to anything the app paints elsewhere.
+ * They now read the same phase->zone approximation as the segmented phase bar
+ * (`PHASE_ZONE_BAR`, see CLAUDE.md #114) and resolve it to the live
+ * `var(--zone-N)` token, so the sparkline follows the theme and the
+ * colour-blind palettes instead of freezing a copy of the ramp.
+ */
 function phaseToSvgColor(phase: TrainingPhase): string {
-  const twClass = PHASE_META[phase].color;
-  return TAILWIND_COLOR_MAP[twClass] ?? "#6b7280";
+  const zone = /^bg-zone-([1-6])$/.exec(PHASE_ZONE_BAR[phase] ?? "")?.[1];
+  return zone ? `var(--zone-${zone})` : "var(--filet)";
 }
 
 interface PlanSparklineProps {
@@ -105,7 +104,6 @@ export function PlanSparkline({ plan, currentWeek, isEn }: PlanSparklineProps) {
               y={bar.y}
               width={barWidth}
               height={bar.height}
-              rx={2}
               fill={bar.color}
               opacity={bar.opacity}
             />
@@ -117,17 +115,14 @@ export function PlanSparkline({ plan, currentWeek, isEn }: PlanSparklineProps) {
                   y={bar.y}
                   width={barWidth}
                   height={bar.height}
-                  rx={2}
                   fill="none"
-                  stroke="white"
+                  stroke="var(--foreground)"
                   strokeWidth={1.5}
-                  strokeOpacity={0.9}
                 />
                 {/* Triangle marker above current week */}
                 <polygon
                   points={`${bar.x + barWidth / 2 - 3},${bar.y - 2} ${bar.x + barWidth / 2 + 3},${bar.y - 2} ${bar.x + barWidth / 2},${bar.y - 6}`}
-                  fill="white"
-                  opacity={0.9}
+                  fill="var(--foreground)"
                 />
               </>
             )}

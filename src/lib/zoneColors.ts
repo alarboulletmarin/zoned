@@ -87,6 +87,12 @@ const ZONE_CLASS_TABLE = {
     1: "border-zone-1", 2: "border-zone-2", 3: "border-zone-3",
     4: "border-zone-4", 5: "border-zone-5", 6: "border-zone-6",
   },
+  /** Legible foreground for text sitting *on* a `bg` flat of the same zone —
+   *  ink on the light end of the ramp, paper on Z5/Z6. */
+  textOn: {
+    1: "text-zone-1-text", 2: "text-zone-2-text", 3: "text-zone-3-text",
+    4: "text-zone-4-text", 5: "text-zone-5-text", 6: "text-zone-6-text",
+  },
 } as const satisfies Record<string, Record<ZoneNumber, string>>;
 
 export type ZoneClassVariant = keyof typeof ZONE_CLASS_TABLE;

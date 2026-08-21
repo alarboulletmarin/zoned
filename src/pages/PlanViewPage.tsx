@@ -885,7 +885,7 @@ export function PlanViewPage() {
 
         {/* Ended plan notice: the plan stays viewable as training history */}
         {isPlanEnded(plan) && (
-          <div className="flex items-center gap-2 rounded-lg border border-border/60 bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2 border border-filet bg-secondary/50 px-4 py-3 text-sm text-muted-foreground">
             <ClipboardCheck className="size-4 shrink-0" />
             <span>{t("view.planEnded")}</span>
           </div>
@@ -1019,15 +1019,15 @@ export function PlanViewPage() {
         {/* Completion legend */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground mb-2 px-1">
           <span className="flex items-center gap-1.5">
-            <span className="size-3 rounded-sm border-2 border-muted-foreground/30 inline-block" />
+            <span className="size-3 border-2 border-foreground/40 inline-block" />
             {t("completion.planned")}
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="size-3 rounded-sm bg-green-500 inline-block" />
+            <span className="size-3 bg-zone-2 inline-block" />
             {t("completion.completed")}
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="size-3 rounded-sm bg-muted border border-muted-foreground/30 inline-flex items-center justify-center">
+            <span className="size-3 bg-filet text-ink inline-flex items-center justify-center">
               <svg viewBox="0 0 12 12" className="size-2" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M3 3l6 6M9 3l-6 6" />
               </svg>
@@ -1213,7 +1213,9 @@ export function PlanViewPage() {
                 key={week.weekNumber}
                 size="flush"
                 className={cn(
-                  isCurrent && "ring-2 ring-primary"
+                  // Current week: a flat fill instead of a soft ring — the
+                  // acid badge in the header carries the emphasis.
+                  isCurrent && "bg-secondary"
                 )}
               >
                 {/* Week Header (clickable) */}
@@ -1239,7 +1241,7 @@ export function PlanViewPage() {
                       )}
                     </div>
                     {isCurrent && (
-                      <Badge variant="default" className="shrink-0">
+                      <Badge variant="default" className="shrink-0 text-accent-acid">
                         {t("view.currentWeek")}
                       </Badge>
                     )}
@@ -1249,7 +1251,7 @@ export function PlanViewPage() {
                       </Badge>
                     )}
                     {week.intermediateRace && (
-                      <Badge variant="outline" className="shrink-0 border-orange-300 text-orange-700 dark:border-orange-600 dark:text-orange-300">
+                      <Badge variant="outline" className="shrink-0 border-poster-red text-poster-red">
                         {t("intermediateGoals.weekLabel")}
                       </Badge>
                     )}
@@ -1308,17 +1310,17 @@ export function PlanViewPage() {
                             <div
                               key={originalIndex}
                               className={cn(
-                                "flex items-start gap-2 sm:gap-3 rounded-lg p-2.5 sm:p-3",
+                                "flex items-start gap-2 sm:gap-3 p-2.5 sm:p-3",
                                 isRaceDay
                                   ? "bg-primary/10 border border-primary/20"
                                   : isIntermediateRace
-                                    ? "bg-orange-50 border border-orange-300 dark:bg-orange-900/30 dark:border-orange-700"
+                                    ? "bg-poster-red/10 border border-poster-red/50"
                                     : blockedDaysSet.has(`${week.weekNumber}-${session.dayOfWeek}`)
                                     ? "bg-muted/50 bg-[repeating-linear-gradient(135deg,transparent,transparent_4px,rgba(0,0,0,0.04)_4px,rgba(0,0,0,0.04)_6px)]"
                                     : session.status === "completed" || session.status === "modified"
                                       ? session.status === "modified"
-                                        ? "bg-blue-500/5 ring-1 ring-blue-500/20"
-                                        : "bg-green-500/5 ring-1 ring-green-500/20"
+                                        ? "bg-secondary border border-foreground/30"
+                                        : "bg-zone-2/10 border border-zone-2/40"
                                       : session.status === "skipped"
                                         ? "bg-secondary/30 opacity-60"
                                         : "bg-secondary/50"
@@ -1337,14 +1339,14 @@ export function PlanViewPage() {
                                   data-completion-key={`${week.weekNumber}-${originalIndex}`}
                                   onClick={() => handleToggleComplete(week.weekNumber, originalIndex)}
                                   className={cn(
-                                    "size-5 mt-0.5 rounded border-2 shrink-0 flex items-center justify-center transition-colors",
+                                    "size-5 mt-0.5 border-2 shrink-0 flex items-center justify-center transition-colors",
                                     session.status === "completed"
-                                      ? "bg-green-500 border-green-500 text-white"
+                                      ? "bg-zone-2 border-zone-2 text-ink"
                                       : session.status === "modified"
-                                        ? "bg-blue-500 border-blue-500 text-white"
+                                        ? "bg-ink border-ink text-paper"
                                         : session.status === "skipped"
-                                          ? "bg-muted border-muted-foreground/30 text-muted-foreground"
-                                          : "border-muted-foreground/30 hover:border-primary"
+                                          ? "bg-filet border-filet text-ink"
+                                          : "border-foreground/40 hover:border-foreground"
                                   )}
                                 >
                                   {session.status === "completed" && (
@@ -1376,27 +1378,29 @@ export function PlanViewPage() {
                                   </div>
                                 ) : isIntermediateRace ? (
                                   <div className="flex items-center gap-2 flex-wrap">
-                                    <Flag className="size-4 text-orange-500" />
-                                    <span className="font-semibold text-orange-700 dark:text-orange-300">
+                                    <Flag className="size-4 text-poster-red" />
+                                    <span className="font-semibold text-poster-red">
                                       {t("intermediateGoals.raceDayLabel")}
                                     </span>
                                     {week.intermediateRace && (
                                       <>
                                         {week.intermediateRace.raceName && (
-                                          <span className="text-sm text-orange-600 dark:text-orange-400">
+                                          <span className="text-sm text-poster-red">
                                             — {week.intermediateRace.raceName}
                                           </span>
                                         )}
-                                        <Badge variant="outline" className="text-[10px] border-orange-300 text-orange-700 dark:border-orange-600 dark:text-orange-300">
+                                        <Badge variant="outline" className="text-[10px] border-poster-red text-poster-red">
                                           {RACE_DISTANCE_META[week.intermediateRace.raceDistance]
                                             ? pick(RACE_DISTANCE_META[week.intermediateRace.raceDistance], "label")
                                             : week.intermediateRace.raceDistance}
                                         </Badge>
                                         <Badge variant="outline" className={cn(
                                           "text-[10px]",
-                                          week.intermediateRace.priority === "A" && "border-red-400 text-red-600 dark:border-red-500 dark:text-red-400",
-                                          week.intermediateRace.priority === "B" && "border-orange-400 text-orange-600 dark:border-orange-500 dark:text-orange-400",
-                                          week.intermediateRace.priority === "C" && "border-yellow-400 text-yellow-600 dark:border-yellow-500 dark:text-yellow-400",
+                                          // Descending emphasis A > B > C, built
+                                          // from the Brut tokens only.
+                                          week.intermediateRace.priority === "A" && "border-poster-red text-poster-red",
+                                          week.intermediateRace.priority === "B" && "border-foreground text-foreground",
+                                          week.intermediateRace.priority === "C" && "border-filet text-muted-foreground",
                                         )}>
                                           {t(`intermediateGoals.badge.${week.intermediateRace.priority}`)}
                                         </Badge>
@@ -1429,7 +1433,7 @@ export function PlanViewPage() {
                               {/* Badges — wraps on mobile */}
                               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 shrink-0">
                                 {session.isKeySession && (
-                                  <Star filled className="size-3.5 sm:size-4 text-yellow-500" />
+                                  <Star filled className="size-3.5 sm:size-4 text-foreground" />
                                 )}
                                 {!isSpecialSession && sessionLabel && (
                                   <Badge variant="outline" className="text-[10px] sm:text-xs hidden sm:inline-flex">
@@ -1528,7 +1532,7 @@ export function PlanViewPage() {
 
                       if (allDone && hasResolved) {
                         return (
-                          <div className="mt-2 text-center text-xs text-green-600 dark:text-green-400 flex items-center justify-center gap-1.5">
+                          <div className="mt-2 text-center text-xs text-zone-2 flex items-center justify-center gap-1.5">
                             <svg viewBox="0 0 12 12" className="size-3" fill="none" stroke="currentColor" strokeWidth="2">
                               <path d="M2 6l3 3 5-5" />
                             </svg>
@@ -1542,7 +1546,7 @@ export function PlanViewPage() {
                           <button
                             type="button"
                             onClick={() => handleValidateWeek(week.weekNumber)}
-                            className="mt-2 w-full rounded-lg bg-primary/10 hover:bg-primary/20 border border-primary/20 p-2 flex items-center justify-center gap-2 text-primary text-sm font-medium transition-colors"
+                            className="mt-2 w-full border border-filet bg-secondary hover:bg-secondary/70 p-2 flex items-center justify-center gap-2 text-foreground text-sm font-medium transition-colors"
                           >
                             <svg viewBox="0 0 12 12" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="2">
                               <path d="M2 6l3 3 5-5" />
@@ -1562,7 +1566,7 @@ export function PlanViewPage() {
                         setAddTarget({ weekNumber: week.weekNumber, day: 0 });
                         setShowWorkoutPanel(true);
                       }}
-                      className="md:hidden w-full mt-1 rounded-lg border border-dashed border-muted-foreground/30 p-2.5 flex items-center justify-center gap-2 text-muted-foreground/50 active:text-primary transition-colors"
+                      className="md:hidden w-full mt-1 bg-ink text-accent-acid p-2.5 flex items-center justify-center gap-2 active:bg-ink/80 transition-colors"
                     >
                       <Plus className="size-4" />
                       <span className="text-sm">{t("view.add")}</span>
@@ -1666,7 +1670,7 @@ export function PlanViewPage() {
               </DialogDescription>
             </DialogHeader>
             {pendingWeekValidation && pendingWeekValidation.unresolvedSessions.length > 0 && (
-              <ul className="text-sm space-y-1 max-h-48 overflow-y-auto rounded-md border bg-muted/30 p-2">
+              <ul className="text-sm space-y-1 max-h-48 overflow-y-auto border border-filet bg-secondary/50 p-2">
                 {pendingWeekValidation.unresolvedSessions.map((s, i) => {
                   const label = SESSION_TYPE_LABELS[s.sessionType];
                   return (
@@ -1753,7 +1757,7 @@ export function PlanViewPage() {
                 const isPast = startD < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
                 return (
-                  <div className="space-y-3 rounded-lg border bg-muted/30 p-3">
+                  <div className="space-y-3 border border-filet bg-secondary/50 p-3">
                     <div className="space-y-1.5 text-sm">
                       <div className="flex items-center gap-2">
                         <Calendar className="size-4 text-muted-foreground shrink-0" />
@@ -1775,7 +1779,7 @@ export function PlanViewPage() {
                       </div>
                     </div>
                     {isPast && (
-                      <div className="flex items-center gap-2 text-sm text-amber-600 dark:text-amber-400">
+                      <div className="flex items-center gap-2 text-sm text-poster-red">
                         <AlertTriangle className="size-4 shrink-0" />
                         <span>
                           {t("view.pastDateWarning")}

@@ -4,22 +4,14 @@ import { cn } from "@/lib/utils";
 import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, Dumbbell, Dices, Lock, LockOpen, Route as RouteIcon } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
+import type { ZoneNumber } from "@/types";
+import { zoneClass } from "@/lib/zoneColors";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { usePickLang } from "@/lib/i18n-utils";
 import { toast } from "sonner";
 import { WeekGuidancePanel } from "@/components/domain/WeekGuidancePanel";
 import { sessionColor } from "@/lib/sessionColors";
-
-// ── Color maps ──────────────────────────────────────────────────────
-
-const PHASE_BG: Record<string, string> = {
-  base: "bg-blue-50/50 dark:bg-blue-950/20",
-  build: "bg-orange-50/50 dark:bg-orange-950/20",
-  peak: "bg-red-50/50 dark:bg-red-950/20",
-  taper: "bg-green-50/50 dark:bg-green-950/20",
-  recovery: "bg-slate-50/50 dark:bg-slate-950/20",
-};
 
 /** Placeholder sessions (race day, cross-training activities) have no catalog
  *  workout behind them, so there is nothing to draw a replacement from. */
@@ -260,7 +252,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
         position: fixed; z-index: 9999; pointer-events: none;
         width: ${target?.offsetWidth || 80}px;
         opacity: 0.85;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        box-shadow: 4px 4px 0 var(--shadow-hard);
         transform: translate(-50%, -50%);
       `;
       ghost.style.left = `${touch.clientX}px`;
@@ -544,7 +536,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
 
           if (allResolved && resolved > 0) {
             return (
-              <div className="flex items-center justify-center gap-1.5 text-xs text-green-600 dark:text-green-400 font-medium">
+              <div className="flex items-center justify-center gap-1.5 font-mono text-[11px] tracking-[0.08em] uppercase text-zone-2">
                 <svg
                   viewBox="0 0 12 12"
                   className="size-3"
@@ -608,7 +600,6 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
               "rounded-none p-2 transition-colors",
               singleWeek && "lg:flex-1 lg:min-h-0",
               weekData.isRecoveryWeek && "bg-muted/40",
-              !weekData.isRecoveryWeek && PHASE_BG[weekData.phase as string],
             )}
           >
             {/* Mobile: 4+3 grid layout */}
@@ -782,7 +773,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
       {contextMenu && (
         <div className="fixed inset-0 z-50" onPointerDown={() => setContextMenu(null)}>
           <div
-            className="fixed bg-card border rounded-none shadow-lg py-1 min-w-[160px] z-50"
+            className="fixed bg-card border-2 rounded-none shadow-[4px_4px_0_var(--shadow-hard)] py-1 min-w-[160px] z-50"
             style={{
               left: contextMenu.x,
               top: contextMenu.y,
@@ -831,7 +822,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
               >
                 <svg
                   viewBox="0 0 24 24"
-                  className="size-4 text-green-500 shrink-0"
+                  className="size-4 text-zone-2 shrink-0"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
@@ -1026,7 +1017,7 @@ const DayCell = memo(function DayCell({
 
       {scanContent && (
         <div
-          className="overflow-hidden rounded-none bg-background/85 backdrop-blur-sm"
+          className="overflow-hidden rounded-none bg-background/85"
           aria-hidden="true"
         >
           {scanContent}
@@ -1039,16 +1030,18 @@ const DayCell = memo(function DayCell({
             type="button"
             onClick={() => onAddToDay(selectedWeek, dayIndex)}
             className={cn(
-              "group/rest w-full rounded bg-card/50 border border-dashed border-muted-foreground/30 flex flex-col items-center justify-center gap-0.5 text-muted-foreground/40 active:text-primary hover:text-primary hover:border-primary/40 transition-colors",
+              "group/rest w-full rounded-none bg-card/50 border-2 border-dashed border-filet flex flex-col items-center justify-center gap-0.5 font-mono text-muted-foreground active:text-primary hover:text-foreground hover:border-foreground transition-colors",
               isDesktop ? "p-4" : "p-3",
             )}
           >
             {singleWeek && (
-              <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground/50 transition-colors group-hover/rest:text-primary">
+              <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-muted-foreground transition-colors group-hover/rest:text-foreground">
                 {t("library:weekly.kinds.rest")}
               </span>
             )}
-            <span className="text-sm font-medium">+</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.08em]">
+              {t("calendar.dropHere")}
+            </span>
           </button>
         ) : (
           <span className="text-[10px] text-muted-foreground/30 block text-center mt-4">
@@ -1106,13 +1099,13 @@ const DayCell = memo(function DayCell({
           >
             <div
                     className={cn(
-                      "rounded mb-1 relative group",
+                      "rounded-none mb-1 relative group",
                       isDesktop ? "p-2" : "p-1.5",
                 isIntermediateRace
-                  ? "bg-orange-50 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700"
+                  ? "bg-card border-2 border-poster-red"
                   : isStrength
-                    ? "bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700"
-                    : "bg-card border border-border/50",
+                    ? "bg-card border-2 border-foreground"
+                    : "bg-card border border-filet",
                 // Reserve room for the always-visible padlock.
                 session.locked && "ring-1 ring-primary/50 border-primary/50 pr-5",
               )}
@@ -1126,18 +1119,18 @@ const DayCell = memo(function DayCell({
                 </div>
               ) : isIntermediateRace ? (
                 <div className="text-center py-1">
-                  <Flag className="size-3.5 text-orange-500 mx-auto" />
-                  <span className="text-[10px] font-bold text-orange-700 dark:text-orange-300 block">
+                  <Flag className="size-3.5 text-poster-red mx-auto" />
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-[0.06em] text-poster-red block">
                     {weekData?.intermediateRace?.raceDistance
                       ? pickLang(RACE_DISTANCE_META[weekData.intermediateRace.raceDistance], "label")
                       : t("intermediateGoals.raceDayLabel")}
                   </span>
                   {weekData?.intermediateRace?.priority && (
                     <span className={cn(
-                      "text-[8px] font-bold leading-tight block",
-                      weekData.intermediateRace.priority === "A" && "text-red-600 dark:text-red-400",
-                      weekData.intermediateRace.priority === "B" && "text-orange-600 dark:text-orange-400",
-                      weekData.intermediateRace.priority === "C" && "text-yellow-600 dark:text-yellow-400",
+                      "font-mono text-[8px] font-bold leading-tight uppercase tracking-[0.06em] block",
+                      weekData.intermediateRace.priority === "A" && "text-poster-red",
+                      weekData.intermediateRace.priority === "B" && "text-zone-4",
+                      weekData.intermediateRace.priority === "C" && "text-muted-foreground",
                     )}>
                       {t(`intermediateGoals.badge.${weekData.intermediateRace.priority}`)}
                     </span>
@@ -1156,7 +1149,7 @@ const DayCell = memo(function DayCell({
                           e.stopPropagation();
                           onFindRoute(selectedWeek, originalIndex);
                         }}
-                        className="hidden rounded text-muted-foreground transition-colors hover:text-primary md:group-hover:block"
+                        className="hidden rounded-none text-muted-foreground transition-colors hover:text-primary md:group-hover:block"
                         title={t("view.findRoute")}
                       >
                         <RouteIcon className="size-3.5" />
@@ -1169,7 +1162,7 @@ const DayCell = memo(function DayCell({
                           e.stopPropagation();
                           onRedraw(selectedWeek, originalIndex);
                         }}
-                        className="hidden rounded text-muted-foreground transition-colors hover:text-primary md:group-hover:block"
+                        className="hidden rounded-none text-muted-foreground transition-colors hover:text-primary md:group-hover:block"
                         title={t("library:weekly.slot.reroll")}
                         aria-label={t("library:weekly.slot.reroll")}
                       >
@@ -1183,7 +1176,7 @@ const DayCell = memo(function DayCell({
                           e.stopPropagation();
                           onSessionDelete(selectedWeek, originalIndex);
                         }}
-                        className="hidden rounded text-muted-foreground transition-colors hover:text-destructive md:group-hover:block"
+                        className="hidden rounded-none text-muted-foreground transition-colors hover:text-destructive md:group-hover:block"
                         title={t("calendar.deleteSession")}
                         aria-label={t("calendar.deleteSession")}
                       >
@@ -1199,7 +1192,7 @@ const DayCell = memo(function DayCell({
                         }}
                         aria-pressed={session.locked === true}
                         className={cn(
-                          "rounded transition-colors hover:text-primary",
+                          "rounded-none transition-colors hover:text-primary",
                           session.locked
                             ? "block text-primary"
                             : "hidden text-muted-foreground md:group-hover:block",
@@ -1233,14 +1226,16 @@ const DayCell = memo(function DayCell({
                           onToggleComplete(selectedWeek, originalIndex);
                         }}
                         className={cn(
-                          "size-3.5 rounded-sm border shrink-0 flex items-center justify-center transition-colors",
+                          // Status doctrine: contour = planned, flat = done,
+                          // flat filet = skipped.
+                          "size-3.5 rounded-none border shrink-0 flex items-center justify-center transition-colors",
                           session.status === "completed"
-                            ? "bg-green-500 border-green-500 text-white"
+                            ? "bg-foreground border-foreground text-background"
                             : session.status === "modified"
-                              ? "bg-blue-500 border-blue-500 text-white"
+                              ? "border-2 border-foreground text-foreground"
                               : session.status === "skipped"
-                                ? "bg-muted border-muted-foreground/30"
-                                : "border-muted-foreground/40 hover:border-primary",
+                                ? "bg-filet border-filet text-muted-foreground"
+                                : "border-filet hover:border-foreground",
                         )}
                         title={
                           session.status === "completed"
@@ -1287,30 +1282,38 @@ const DayCell = memo(function DayCell({
                         )}
                       </button>
                     )}
-                    {isStrength ? (
-                      <Dumbbell className="size-3 text-amber-600 dark:text-amber-400 shrink-0" />
-                    ) : (
-                      <span
-                        className="size-2 rounded-full shrink-0"
-                        style={{
-                          backgroundColor: sessionColor(session.sessionType),
-                        }}
-                      />
+                    {isStrength && (
+                      <Dumbbell className="size-3 text-foreground shrink-0" />
                     )}
-                    {/* The zone label is the dot's legend — colour alone carries
-                        no meaning for a first-time reader. */}
-                    {meta?.zone != null && (
+                    {/* The zone is a full flat chip, not a dot plus a legend:
+                        the colour and the "Z4" it stands for are one object. */}
+                    {meta?.zone != null ? (
                       <span
-                        className="text-[9px] font-semibold leading-none tabular-nums shrink-0"
-                        style={{ color: `var(--zone-${meta.zone}-text)` }}
+                        className={cn(
+                          "shrink-0 px-1 py-px font-mono text-[9px] font-bold leading-none tabular-nums",
+                          zoneClass(meta.zone as ZoneNumber, "bg"),
+                          zoneClass(meta.zone as ZoneNumber, "textOn"),
+                        )}
                         title={t("library:weekly.card.zone", { zone: meta.zone })}
                       >
                         Z{meta.zone}
                       </span>
+                    ) : (
+                      !isStrength && (
+                        <span
+                          className="size-2 rounded-none shrink-0"
+                          style={{
+                            backgroundColor: sessionColor(session.sessionType),
+                          }}
+                        />
+                      )
                     )}
                     {session.isKeySession && (
-                      <span className="shrink-0" title={t("view.keySession")}>
-                        <Star filled className="size-2.5 text-yellow-500" />
+                      <span
+                        className="shrink-0 bg-accent-acid p-0.5 text-ink"
+                        title={t("view.keySession")}
+                      >
+                        <Star filled className="size-2.5" />
                       </span>
                     )}
                   </div>
@@ -1338,7 +1341,6 @@ const DayCell = memo(function DayCell({
                       singleWeek ? "line-clamp-3" : "line-clamp-2",
                       isDesktop && "text-[11px]",
                       session.status === "skipped" && "line-through text-muted-foreground",
-                      isStrength && session.status !== "skipped" && "text-amber-900 dark:text-amber-100",
                       onSessionClick && "cursor-pointer hover:text-primary transition-colors",
                     )}
                     title={sessionName}
@@ -1359,7 +1361,7 @@ const DayCell = memo(function DayCell({
                           )}
                         </span>
                         {session.rpe && (
-                          <span className="ml-0.5 text-[9px] font-medium text-amber-600 shrink-0 hidden md:inline">RPE {session.rpe}</span>
+                          <span className="ml-0.5 font-mono text-[9px] text-foreground shrink-0 hidden md:inline">RPE {session.rpe}</span>
                         )}
                       </span>
                     )}
@@ -1375,10 +1377,12 @@ const DayCell = memo(function DayCell({
           type="button"
           onClick={() => onAddToDay(selectedWeek, dayIndex)}
           className={cn(
-            "w-full mt-1 rounded bg-card/50 border border-dashed border-muted-foreground/30 p-1.5 flex items-center justify-center gap-1 text-muted-foreground/40 active:text-primary hover:text-primary hover:border-primary/40 transition-colors",
+            "w-full mt-1 rounded-none bg-card/50 border-2 border-dashed border-filet p-1.5 flex items-center justify-center gap-1 text-muted-foreground active:text-primary hover:text-foreground hover:border-foreground transition-colors",
           )}
         >
-          <span className="text-sm font-medium">+</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.08em]">
+            {t("calendar.dropHere")}
+          </span>
         </button>
       )}
     </div>

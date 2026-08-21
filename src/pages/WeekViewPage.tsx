@@ -218,7 +218,7 @@ export function WeekViewPage() {
       return w ? (
         <ScanCard workout={w} pick={pick} compact />
       ) : (
-        <div className="h-14 rounded border border-dashed border-border/60 bg-muted/30" />
+        <div className="h-14 rounded-none border-2 border-dashed border-filet bg-muted/30" />
       );
     },
     [scanning, scanTargets, scanCells, pick],
@@ -508,7 +508,7 @@ export function WeekViewPage() {
                 onBlur={(e) => handleRename(e.target.value.trim() || displayName)}
                 onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
                 aria-label={t("library:weekly.generate.namePlaceholder")}
-                className="w-full min-w-0 bg-transparent text-2xl sm:text-3xl font-semibold italic focus:outline-none focus:ring-2 focus:ring-primary rounded-md px-1 -mx-1"
+                className="w-full min-w-0 bg-transparent text-2xl sm:text-3xl font-bold uppercase tracking-[-0.03em] leading-[0.95] focus:outline-none focus:ring-2 focus:ring-primary rounded-none px-1 -mx-1"
               />
               {/* Meta row: category badge (left) · share + export (right) */}
               <div className="flex items-center justify-between gap-2">
@@ -625,7 +625,7 @@ export function WeekViewPage() {
 
       {/* Mobile sticky action bar (thumb zone) — hidden once the generator
           panel becomes a visible column (md+). */}
-      <div className="md:hidden fixed bottom-0 inset-x-0 z-30 border-t bg-background/95 backdrop-blur px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+      <div className="md:hidden fixed bottom-0 inset-x-0 z-30 border-t-2 bg-background px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <div className="flex gap-2">
           <Button
             className="flex-1"
@@ -657,7 +657,7 @@ export function WeekViewPage() {
       <Sheet open={settingsOpen} onOpenChange={setSettingsOpen}>
         <SheetContent
           side="bottom"
-          className="max-h-[90vh] overflow-y-auto rounded-t-2xl px-4 pt-4 pb-6 md:hidden"
+          className="max-h-[90vh] overflow-y-auto rounded-none px-4 pt-4 pb-6 md:hidden"
         >
           <SheetHeader className="p-0">
             <SheetTitle>{t("library:weekly.generate.title")}</SheetTitle>

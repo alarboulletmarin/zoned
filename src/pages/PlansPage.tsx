@@ -37,7 +37,7 @@ import type { TrainingPhase } from "@/types";
 import { getCurrentWeek, isPlanEnded } from "@/lib/planUtils";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { PlanSparkline } from "@/components/domain/PlanSparkline";
-import { PrebuiltPlanCard } from "@/components/domain/PrebuiltPlanCard";
+import { PrebuiltPlanCard, PhaseZoneBar } from "@/components/domain/PrebuiltPlanCard";
 import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
 import { useIsEnglish, usePickLang, formatDateShort } from "@/lib/i18n-utils";
 
@@ -139,15 +139,27 @@ function PlanCard({
           )}
         </p>
 
-        {/* Current Phase */}
-        {currentPhase && (
-          <div className="flex items-center gap-2 mt-3">
-            <div
-              className={cn("size-2", PHASE_META[currentPhase].color)}
+        {/* Phase bar — the whole plan at a glance, current phase highlighted */}
+        {plan.phases.length > 0 && (
+          <div className="mt-3">
+            <PhaseZoneBar
+              phases={plan.phases}
+              totalWeeks={plan.totalWeeks}
             />
-            <span className="font-mono text-[11px] tracking-[0.06em] uppercase text-muted-foreground">
-              {pick(PHASE_META[currentPhase], "label")}
-            </span>
+            <p className="mt-2 font-mono text-[10px] tracking-[0.08em] uppercase text-muted-foreground">
+              {plan.phases.map((range, i) => (
+                <span key={`${range.phase}-${i}`}>
+                  {i > 0 && " · "}
+                  <span
+                    className={cn(
+                      range.phase === currentPhase && "text-foreground",
+                    )}
+                  >
+                    {pick(PHASE_META[range.phase], "label")}
+                  </span>
+                </span>
+              ))}
+            </p>
           </div>
         )}
 

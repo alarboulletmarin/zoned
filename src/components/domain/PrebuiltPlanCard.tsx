@@ -2,8 +2,11 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { RACE_DISTANCE_META } from "@/types/plan";
+import type { PhaseRange } from "@/types/plan";
+import type { TrainingPhase } from "@/types";
 import type { PrebuiltPlan } from "@/data/prebuilt-plans/types";
 import { usePickLang } from "@/lib/i18n-utils";
+import { cn } from "@/lib/utils";
 
 const DIFFICULTY_KEYS: Record<string, string> = {
   beginner: "collections.difficulty.beginner",
@@ -24,6 +27,40 @@ export const PHASE_ZONE_BAR: Record<string, string> = {
   taper: "bg-zone-1",
   recovery: "bg-zone-1",
 };
+
+/**
+ * Segmented phase bar — one flat block per phase, width proportional to the
+ * phase's span. Shared by the prebuilt card, the prebuilt detail panel and the
+ * /plans dashboard card so the three read the same figure.
+ */
+export function PhaseZoneBar({
+  phases,
+  totalWeeks,
+  className,
+  titleFor,
+}: {
+  phases: PhaseRange[];
+  totalWeeks: number;
+  className?: string;
+  titleFor?: (phase: TrainingPhase, weeks: number) => string;
+}) {
+  if (phases.length === 0 || totalWeeks <= 0) return null;
+  return (
+    <div className={cn("flex h-2 gap-px", className)} aria-hidden="true">
+      {phases.map((p, i) => {
+        const weeks = p.endWeek - p.startWeek + 1;
+        return (
+          <div
+            key={`${p.phase}-${i}`}
+            className={PHASE_ZONE_BAR[p.phase] ?? "bg-foreground/20"}
+            style={{ width: `${(weeks / totalWeeks) * 100}%` }}
+            title={titleFor?.(p.phase, weeks)}
+          />
+        );
+      })}
+    </div>
+  );
+}
 
 interface PrebuiltPlanCardProps {
   plan: PrebuiltPlan;
@@ -56,19 +93,16 @@ export function PrebuiltPlanCard({ plan }: PrebuiltPlanCardProps) {
       <p className="mt-2 text-sm leading-[1.5] text-foreground/70 line-clamp-2">
         {description}
       </p>
-      <div className="flex h-2 gap-px mt-4" aria-hidden="true">
-        {plan.phases.map((p, i) => {
-          const span = p.endWeek - p.startWeek + 1;
-          const pct = (span / plan.totalWeeks) * 100;
-          return (
-            <div
-              key={i}
-              className={PHASE_ZONE_BAR[p.phase] ?? "bg-foreground/20"}
-              style={{ width: `${pct}%` }}
-            />
-          );
-        })}
-      </div>
+      <PhaseZoneBar
+        phases={plan.phases}
+        totalWeeks={plan.totalWeeks}
+        className="mt-4"
+      />
+      {plan.peakWeeklyKm ? (
+        <p className="mt-2.5 font-mono text-[11px] text-muted-foreground">
+          {t("prebuilt.peakWeeklyKm", { km: plan.peakWeeklyKm })}
+        </p>
+      ) : null}
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2.5 font-mono text-[10px] tracking-[0.08em] uppercase text-muted-foreground">
         {difficultyKey && <span>{t(difficultyKey)}</span>}
         <span>

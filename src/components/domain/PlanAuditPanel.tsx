@@ -15,27 +15,27 @@ interface PlanAuditPanelProps {
   onFix?: (finding: PlanFinding) => void;
 }
 
+/** Zoned Brut: no pastel tints — a flat card, a 2px contour, and a square
+ *  severity flat. Error is the poster red, a warning borrows Z3 (the "watch
+ *  this" end of the ramp), info stays plain ink. */
 const SEVERITY_CONFIG: Record<
   FindingSeverity,
-  { textColor: string; bgColor: string; borderColor: string; dotColor: string }
+  { textColor: string; borderColor: string; dotColor: string }
 > = {
   error: {
-    textColor: "text-red-700 dark:text-red-300",
-    bgColor: "bg-red-50 dark:bg-red-950/30",
-    borderColor: "border-red-200 dark:border-red-800",
-    dotColor: "bg-red-500",
+    textColor: "text-poster-red",
+    borderColor: "border-poster-red",
+    dotColor: "bg-poster-red",
   },
   warning: {
-    textColor: "text-amber-700 dark:text-amber-300",
-    bgColor: "bg-amber-50 dark:bg-amber-950/30",
-    borderColor: "border-amber-200 dark:border-amber-800",
-    dotColor: "bg-amber-500",
+    textColor: "text-foreground",
+    borderColor: "border-zone-3",
+    dotColor: "bg-zone-3",
   },
   info: {
-    textColor: "text-blue-700 dark:text-blue-300",
-    bgColor: "bg-blue-50 dark:bg-blue-950/30",
-    borderColor: "border-blue-200 dark:border-blue-800",
-    dotColor: "bg-blue-500",
+    textColor: "text-foreground",
+    borderColor: "border-foreground",
+    dotColor: "bg-foreground",
   },
 };
 
@@ -55,17 +55,17 @@ export function PlanAuditPanel({ findings, onGoToWeek, onFix }: PlanAuditPanelPr
   const config = SEVERITY_CONFIG[bannerSeverity];
 
   return (
-    <div className={cn("rounded-lg border", config.borderColor, config.bgColor)}>
+    <div className={cn("rounded-none border-2 bg-card", config.borderColor)}>
       {/* Header - always visible */}
       <button
         type="button"
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-center justify-between gap-2 px-3 py-2 text-sm"
       >
-        <span className={cn("font-medium flex items-center gap-2", config.textColor)}>
+        <span className={cn("font-mono text-xs uppercase tracking-[0.1em] flex items-center gap-2", config.textColor)}>
           <AlertTriangle className="size-4" />
           {t("audit.title")}
-          <span className="text-xs font-normal">
+          <span className="font-mono text-[11px] tracking-[0.06em] text-muted-foreground">
             {errors.length > 0 && t("audit.errors", { count: errors.length })}
             {errors.length > 0 && warnings.length > 0 && " \u00B7 "}
             {warnings.length > 0 && t("audit.warnings", { count: warnings.length })}
@@ -78,12 +78,12 @@ export function PlanAuditPanel({ findings, onGoToWeek, onFix }: PlanAuditPanelPr
 
       {/* Expanded findings list */}
       {expanded && (
-        <div className="border-t px-3 py-2 space-y-1.5">
+        <div className="border-t border-filet px-3 py-2 space-y-1.5">
           {findings.map((finding) => {
             const fConfig = SEVERITY_CONFIG[finding.severity];
             return (
               <div key={finding.id} className="flex items-start gap-2 text-sm">
-                <span className={cn("shrink-0 mt-1.5 size-2 rounded-full", fConfig.dotColor)} />
+                <span className={cn("shrink-0 mt-1.5 size-2 rounded-none", fConfig.dotColor)} />
                 <div className="flex-1 min-w-0">
                   <span className={fConfig.textColor}>
                     {pick(finding, "message")}
@@ -100,7 +100,7 @@ export function PlanAuditPanel({ findings, onGoToWeek, onFix }: PlanAuditPanelPr
                     <Button
                       variant="outline"
                       size="sm"
-                      className="h-6 text-xs px-2 border-primary/30 text-primary hover:bg-primary/10"
+                      className="h-6 font-mono text-[11px] uppercase tracking-[0.06em] px-2"
                       onClick={() => onFix(finding)}
                     >
                       {t("audit.fix")}
@@ -110,7 +110,7 @@ export function PlanAuditPanel({ findings, onGoToWeek, onFix }: PlanAuditPanelPr
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-6 text-xs px-2"
+                      className="h-6 font-mono text-[11px] uppercase tracking-[0.06em] px-2"
                       onClick={() => onGoToWeek(finding.weekNumber)}
                     >
                       S{finding.weekNumber}

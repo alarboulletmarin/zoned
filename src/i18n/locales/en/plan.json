@@ -356,6 +356,7 @@
     "deleteSession": "Delete",
     "deleteSessionTitle": "Delete session",
     "dropToDelete": "Drop here to remove",
+    "dropHere": "+ Drop",
     "validateWeek": "Validate week",
     "validateCount": "Validate {{done}}/{{total}}"
   },

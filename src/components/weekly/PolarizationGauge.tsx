@@ -48,13 +48,15 @@ export function PolarizationGauge({
   return (
     <div className={cn("space-y-2", className)}>
       <div className="flex items-center justify-between gap-2">
-        <span className="text-sm font-medium">{t("weekly.gauge.title")}</span>
+        <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">{t("weekly.gauge.title")}</span>
         <span
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium",
+            "inline-flex items-center gap-1.5 rounded-none px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.06em]",
+            // Ink, not acid: the acid flat is spent on the key session of the
+            // board this gauge sits above — one acid accent per screen.
             balanced
-              ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
-              : "bg-amber-500/15 text-amber-600 dark:text-amber-400",
+              ? "bg-foreground text-background"
+              : "border-2 border-poster-red text-poster-red",
           )}
           title={t("weekly.gauge.tolerance", {
             min: Math.round(HARD_MIN * 100),
@@ -77,7 +79,7 @@ export function PolarizationGauge({
       {/* Target caption sits above the bar — never on top of a segment. */}
       <div className="relative h-4">
         <span
-          className="absolute top-0 -translate-x-1/2 whitespace-nowrap text-[10px] font-medium text-muted-foreground"
+          className="absolute top-0 -translate-x-1/2 whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.06em] text-muted-foreground"
           style={{ left: `${TARGET_LOW * 100}%` }}
         >
           {t("weekly.gauge.target")}
@@ -86,7 +88,7 @@ export function PolarizationGauge({
 
       {/* Stacked bar + 80 % marker */}
       <div className="relative">
-        <div className="flex h-4 w-full overflow-hidden rounded-full bg-muted">
+        <div className="flex h-4 w-full overflow-hidden rounded-none bg-muted">
           {segments.map((s) =>
             s.share > 0 ? (
               <div
@@ -110,23 +112,20 @@ export function PolarizationGauge({
       {/* Verdict caption */}
       {!balanced && (
         <p
-          className={cn(
-            "text-xs",
-            "text-amber-600 dark:text-amber-400",
-          )}
+          className="border-l-2 border-poster-red pl-2 font-mono text-[11px] uppercase tracking-[0.06em] text-poster-red"
         >
           {t(`weekly.gauge.${status}Hint`)}
         </p>
       )}
 
       {/* Legend — only the bands actually present in the bar. */}
-      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+      <div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] tabular-nums text-muted-foreground">
         {segments
           .filter((s) => s.share > 0)
           .map((s) => (
             <span key={s.key} className="inline-flex items-center gap-1.5">
               <span
-                className="size-2.5 rounded-full"
+                className="size-2.5 rounded-none"
                 style={{ backgroundColor: `var(--zone-${s.zone})` }}
               />
               {t(`weekly.gauge.${s.key}`)} {pct(s.share)} %

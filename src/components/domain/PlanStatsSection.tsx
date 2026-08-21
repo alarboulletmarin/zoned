@@ -25,14 +25,13 @@ import { usePickLang, usePickLocale } from "@/lib/i18n-utils";
 
 // ── Constants ────────────────────────────────────────────────────────
 
-const ZONE_COLORS: Record<string, string> = {
-  Z1: "#94a3b8",
-  Z2: "#22c55e",
-  Z3: "#eab308",
-  Z4: "#f97316",
-  Z5: "#ef4444",
-  Z6: "#7c3aed",
-};
+/** "Z3" -> the live zone token. Never a private hex ramp: `zoneColors.ts`
+ *  and `themes.css` own the values, and only `var(--zone-N)` follows the
+ *  theme and the colour-blind palettes. */
+function zoneVar(zone: string): string {
+  const n = /^Z([1-6])$/.exec(zone)?.[1];
+  return n ? `var(--zone-${n})` : "var(--filet)";
+}
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
@@ -285,7 +284,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
               )}
               {currentWeekData.keySession && (
                 <span className="flex items-center gap-1.5">
-                  <Star className="size-3.5 text-yellow-500" />
+                  <Star className="size-3.5 text-foreground" />
                   <span className="capitalize">{currentWeekData.keySession.sessionType.replace("_", " ")}</span>
                 </span>
               )}
@@ -305,7 +304,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
             <div className="flex items-end gap-[2px] h-28">
               {weeklyKmData.map((week) => {
                 const heightPct = maxWeeklyKm > 0 ? (week.km / maxWeeklyKm) * 100 : 0;
-                const phaseColor = PHASE_META[week.phase]?.color || "bg-gray-400";
+                const phaseColor = PHASE_META[week.phase]?.color || "bg-filet";
                 const isCurrent = currentWeek === week.weekNumber;
                 return (
                   <div key={week.weekNumber} className="flex-1 flex flex-col items-center justify-end h-full relative">
@@ -350,7 +349,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
               const heightPercent =
                 maxVolume > 0 ? (week.durationMin / maxVolume) * 100 : 0;
               const phaseColor =
-                PHASE_META[week.phase]?.color || "bg-gray-400";
+                PHASE_META[week.phase]?.color || "bg-filet";
               const isCurrentWeek = currentWeek === week.weekNumber;
               return (
                 <div
@@ -467,7 +466,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                       <div className="flex-1 h-2.5 bg-secondary rounded-none overflow-hidden">
                         <div
                           className="h-full rounded-none"
-                          style={{ width: `${percent}%`, backgroundColor: ZONE_COLORS[zone] }}
+                          style={{ width: `${percent}%`, backgroundColor: zoneVar(zone) }}
                         />
                       </div>
                       <span className="text-xs text-muted-foreground w-20 text-right">
@@ -522,11 +521,11 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                   title={`S${week.weekNumber}: ${week.easyPct}% easy / ${week.hardPct}% hard`}
                 >
                   <div
-                    className="bg-red-400/70 w-full"
+                    className="bg-poster-red/70 w-full"
                     style={{ height: `${week.hardPct}%` }}
                   />
                   <div
-                    className="bg-green-400/50 w-full flex-1"
+                    className="bg-zone-2/50 w-full flex-1"
                   />
                   {isCurrent && (
                     <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 size-1.5 rounded-none bg-primary" />
@@ -537,11 +536,11 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
           </div>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span className="flex items-center gap-1.5">
-              <span className="size-2.5 rounded-none bg-green-400/50" />
+              <span className="size-2.5 rounded-none bg-zone-2/50" />
               {t("stats.easyZ12")}
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="size-2.5 rounded-none bg-red-400/70" />
+              <span className="size-2.5 rounded-none bg-poster-red/70" />
               {t("stats.hardZ3")}
             </span>
             <span className="text-muted-foreground/50">
@@ -562,7 +561,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
             <div className="flex items-end gap-[2px] h-24">
               {weeklyLoads.map((week) => {
                 const heightPct = maxLoad > 0 ? (week.load / maxLoad) * 100 : 0;
-                const phaseColor = PHASE_META[week.phase]?.color || "bg-gray-400";
+                const phaseColor = PHASE_META[week.phase]?.color || "bg-filet";
                 const isCurrent = currentWeek === week.weekNumber;
                 return (
                   <div key={week.weekNumber} className="flex-1 flex flex-col items-center justify-end h-full relative">
@@ -597,7 +596,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                   <div className="flex items-end gap-[2px] h-24">
                     {lrWeeks.map((w) => {
                       const heightPct = (w.km / maxLr) * 100;
-                      const phaseColor = PHASE_META[w.phase]?.color || "bg-gray-400";
+                      const phaseColor = PHASE_META[w.phase]?.color || "bg-filet";
                       return (
                         <div
                           key={w.weekNumber}
@@ -649,11 +648,11 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                 {/* Progress bar */}
                 <div className="flex-1 h-3 bg-secondary rounded-none overflow-hidden flex">
                   <div
-                    className="h-full bg-green-500 transition-all"
+                    className="h-full bg-zone-2 transition-all"
                     style={{ width: `${(cs.completed / cs.totalSessions) * 100}%` }}
                   />
                   <div
-                    className="h-full bg-muted-foreground/20 transition-all"
+                    className="h-full bg-filet transition-all"
                     style={{ width: `${(cs.skipped / cs.totalSessions) * 100}%` }}
                   />
                 </div>
@@ -663,11 +662,11 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
               </div>
               <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
-                  <span className="size-2 rounded-none bg-green-500" />
+                  <span className="size-2 rounded-none bg-zone-2" />
                   {cs.completed} {t("stats.done")}
                 </span>
                 <span className="flex items-center gap-1">
-                  <span className="size-2 rounded-none bg-muted-foreground/20" />
+                  <span className="size-2 rounded-none bg-filet" />
                   {cs.skipped} {t("stats.skipped")}
                 </span>
                 <span>{cs.planned} {t("stats.remaining")}</span>

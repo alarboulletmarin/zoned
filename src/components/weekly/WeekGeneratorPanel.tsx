@@ -93,11 +93,11 @@ export function WeekGeneratorPanel({
           // 11rem ≈ the page header sitting above the rail plus a bottom margin:
           // the cap has to hold at the rail's *initial* position, not only once
           // it sticks, otherwise the footer starts below the fold.
-          : "flex flex-col overflow-hidden rounded-xl border bg-card md:max-h-[calc(100dvh-11rem)]",
+          : "flex flex-col overflow-hidden rounded-none border-2 bg-card md:max-h-[calc(100dvh-11rem)]",
       )}
     >
       {!bare && (
-        <span className="block border-b px-4 py-3 text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+        <span className="block border-b border-filet px-4 py-3 font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground">
           {t("weekly.generate.title")}
         </span>
       )}
@@ -117,7 +117,7 @@ export function WeekGeneratorPanel({
                 key={preset.id}
                 type="button"
                 onClick={() => onSettingsChange(preset.settings)}
-                className="rounded-full border border-dashed border-border px-3 py-1 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+                className="rounded-none border-2 border-dashed border-filet px-3 py-1 font-mono text-[11px] uppercase tracking-[0.06em] text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
               >
                 {t(`weekly.presets.options.${preset.id}`)}
               </button>
@@ -135,8 +135,8 @@ export function WeekGeneratorPanel({
 
         <div className="space-y-2">
           <div className="flex items-baseline justify-between">
-            <label className="text-sm font-medium">{t("weekly.settings.volume")}</label>
-            <span className="text-sm tabular-nums text-muted-foreground">
+            <label className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">{t("weekly.settings.volume")}</label>
+            <span className="font-mono text-sm tabular-nums text-foreground">
               {settings.targetVolumeH} h
             </span>
           </div>
@@ -224,7 +224,7 @@ export function WeekGeneratorPanel({
 
       {/* Pinned below the scrolling body: the primary action stays on screen
           whatever the settings above are worth reading. */}
-      <div className={cn("space-y-1.5", !bare && "border-t px-4 py-3")}>
+      <div className={cn("space-y-1.5", !bare && "border-t border-filet px-4 py-3")}>
         <Button onClick={() => onGenerate(settings)} disabled={busy} className="w-full">
           {busy ? (
             <Loader2 className="size-4 animate-spin" />
@@ -262,7 +262,7 @@ export function WeekGeneratorPanel({
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-sm font-medium">{label}</label>
+      <label className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">{label}</label>
       {children}
     </div>
   );
@@ -285,10 +285,10 @@ function Chip({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "flex w-full min-w-0 items-center justify-center gap-1.5 rounded-full border px-2.5 py-1.5 text-sm transition-colors",
+        "flex w-full min-w-0 items-center justify-center gap-1.5 rounded-none border-2 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.06em] transition-colors",
         active
-          ? "border-primary bg-primary/10 text-primary"
-          : "border-border text-muted-foreground hover:bg-muted",
+          ? "border-foreground bg-foreground text-background"
+          : "border-filet text-muted-foreground hover:bg-muted",
         className,
       )}
     >
