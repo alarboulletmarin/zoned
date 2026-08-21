@@ -50,7 +50,7 @@ export function ZonePersonalizationCTA({ className }: ZonePersonalizationCTAProp
       </div>
       <div className="flex items-center gap-2 sm:shrink-0">
         <Button variant="outline" size="sm" asChild className="w-full sm:w-auto">
-          <Link to="/my-zones">
+          <Link to="/me/zones">
             {t("zonePersonalization.ctaButton")}
           </Link>
         </Button>

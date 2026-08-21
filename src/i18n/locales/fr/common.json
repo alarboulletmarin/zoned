@@ -444,7 +444,8 @@
       "replaceModeTitle": "Remplacer",
       "replaceModeDescription": "Nettoie les données Zoned locales puis restaure uniquement le contenu de la sauvegarde.",
       "mergeModeTitle": "Fusionner",
-      "mergeModeDescription": "Conserve les données Zoned locales absentes de la sauvegarde et remplace uniquement les clés présentes."
+      "mergeModeDescription": "Conserve les données Zoned locales absentes de la sauvegarde et remplace uniquement les clés présentes.",
+      "manageLink": "Gérer mes données →"
     }
   },
   "tips": {

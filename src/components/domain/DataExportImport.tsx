@@ -21,13 +21,13 @@ import {
 } from "@/components/ui/dialog";
 import {
   BACKUP_STORAGE_KEYS,
-  buildBackupData,
   buildManagedStorageSnapshot,
   parseBackupData,
   type BackupData,
   type BackupStorageKey,
   type RestoreMode,
 } from "@/lib/backup";
+import { downloadBackup } from "@/lib/downloadBackup";
 
 export function DataExportImport() {
   const { t } = useTranslation("common");
@@ -38,18 +38,7 @@ export function DataExportImport() {
   const [isRestoring, setIsRestoring] = useState(false);
 
   function handleExport() {
-    const backup = buildBackupData((key) => localStorage.getItem(key));
-
-    const blob = new Blob([JSON.stringify(backup, null, 2)], {
-      type: "application/json",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    const date = new Date().toISOString().split("T")[0];
-    a.href = url;
-    a.download = `zoned-backup-${date}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadBackup();
     toast.success(t("settings.data.exportSuccess"));
   }
 

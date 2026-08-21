@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { SEOHead } from "@/components/seo";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { useSettings } from "@/hooks/useSettings";
@@ -17,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { DataExportImport } from "@/components/domain/DataExportImport";
+import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
 import type { ThemePreference } from "@/lib/theme";
 import type { ColorPalette } from "@/types/settings";
@@ -207,8 +208,20 @@ export function SettingsPage() {
             </CardContent>
           </Card>
 
-          {/* Data Export/Import */}
-          <DataExportImport />
+          {/* Data — export/import/clear moved to /me/storage, the
+              consolidated "Mes données" dashboard, so it lives next to the
+              inventory it acts on rather than being duplicated here. */}
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("settings.data.title")}</CardTitle>
+              <CardDescription>{t("settings.data.description")}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button variant="outline" asChild>
+                <Link to="/me/storage">{t("settings.data.manageLink")}</Link>
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </>

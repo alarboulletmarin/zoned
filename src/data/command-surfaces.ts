@@ -288,12 +288,12 @@ export const COMMAND_SURFACES: CommandSurface[] = [
   {
     id: "profile",
     section: "page",
-    title: "Profil coureur",
-    titleEn: "Runner Profile",
-    subtitle: "Vos données, niveaux et records personnels",
-    subtitleEn: "Your data, levels and personal records",
-    url: "/profile",
-    keywords: ["profil", "profile", "coureur", "runner", "records", "niveau"],
+    title: "Mes données",
+    titleEn: "My Data",
+    subtitle: "Vos valeurs, vos zones, vos favoris, votre profil coureur",
+    subtitleEn: "Your values, zones, favorites and runner profile",
+    url: "/me",
+    keywords: ["profil", "profile", "coureur", "runner", "records", "niveau", "zones", "données", "data"],
   },
   {
     id: "favorites",

@@ -461,10 +461,21 @@ export function getDominantZone(workout: WorkoutTemplate): ZoneNumber {
   return Math.max(...zones) as ZoneNumber;
 }
 
+// Manual override of a single zone's bounds — the formula proposes, the
+// person decides. Only the fields the user actually touched are set; the
+// other axis (HR vs pace) keeps following the formula.
+export interface ZoneOverride {
+  hrMin?: number;
+  hrMax?: number;
+  paceMinPerKm?: number; // min/km (lower = faster)
+  paceMaxPerKm?: number; // min/km (higher = slower)
+}
+
 // User Zone Preferences (for personalized zones)
 export interface UserZonePreferences {
   fcMax?: number; // Max heart rate in bpm
   vma?: number; // Maximal Aerobic Speed in km/h
+  zoneOverrides?: Partial<Record<ZoneNumber, ZoneOverride>>;
   updatedAt?: string; // ISO timestamp
 }
 
@@ -475,6 +486,8 @@ export interface ZoneRange {
   hrMax?: number;
   paceMinPerKm?: number; // min/km (lower = faster)
   paceMaxPerKm?: number; // min/km (higher = slower)
+  /** True when this zone's bounds come from a manual override, not the formula. */
+  isManual?: boolean;
 }
 
 // ── Strength training types ──────────────────────────────────────

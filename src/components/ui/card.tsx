@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const cardVariants = cva(
-  "bg-card text-card-foreground flex flex-col rounded-xl border shadow-sm",
+  "bg-card text-card-foreground flex flex-col rounded-none border-2 border-foreground",
   {
     variants: {
       size: {
@@ -13,7 +13,7 @@ const cardVariants = cva(
         flush: "gap-0 py-0",
       },
       interactive: {
-        true: "cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all",
+        true: "cursor-pointer transition-shadow duration-150 ease-out hover:shadow-[6px_6px_0_var(--shadow-hard)]",
         false: "",
       },
     },
