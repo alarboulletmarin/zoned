@@ -31,8 +31,8 @@ export const THEME_STORAGE_KEY = "zoned-theme";
  * from here. Change one, change the other.
  */
 const THEME_COLOR: Record<ResolvedTheme, string> = {
-  light: "#f8fafc",
-  dark: "#0b1120",
+  light: "#efede6",
+  dark: "#0b0b0a",
 };
 
 export function isThemePreference(value: unknown): value is ThemePreference {

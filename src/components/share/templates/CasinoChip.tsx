@@ -102,7 +102,7 @@ export function CasinoChip({ workout, transparent }: ShareTemplateProps) {
           textAlign: "center",
         }}
       >
-        <Logo style={{ width: 44, height: 22, opacity: 0.9 }} />
+        <Logo style={{ width: 28, height: 22, opacity: 0.9 }} />
         <div
           style={{
             fontSize: 88,

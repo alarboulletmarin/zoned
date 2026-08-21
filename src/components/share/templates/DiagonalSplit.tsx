@@ -77,7 +77,7 @@ export function DiagonalSplit({ workout, transparent }: ShareTemplateProps) {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <Logo style={{ width: 72, height: 36 }} />
+            <Logo style={{ width: 45, height: 36 }} />
             <span
               style={{
                 fontSize: 36,

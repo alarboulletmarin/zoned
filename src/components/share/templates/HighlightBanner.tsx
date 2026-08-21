@@ -71,7 +71,7 @@ export function HighlightBanner({ workout, transparent }: ShareTemplateProps) {
         {/* Left: brand + name */}
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 10 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <Logo style={{ width: 56, height: 28 }} />
+            <Logo style={{ width: 35, height: 28 }} />
             <span style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.02em" }}>
               ZONED
             </span>

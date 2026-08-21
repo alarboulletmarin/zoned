@@ -62,7 +62,7 @@ export function CornerStamp({ workout, transparent }: ShareTemplateProps) {
           textAlign: "center",
         }}
       >
-        <Logo style={{ width: 60, height: 30 }} />
+        <Logo style={{ width: 38, height: 30 }} />
         <div
           style={{
             marginTop: 6,

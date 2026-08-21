@@ -62,7 +62,7 @@ export function SneakerDrop({ workout, transparent }: ShareTemplateProps) {
         {/* Top — brand + drop tag */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <Logo style={{ width: 72, height: 36 }} />
+            <Logo style={{ width: 45, height: 36 }} />
             <span style={{ fontSize: 32, fontWeight: 800, letterSpacing: "-0.02em" }}>
               ZONED
             </span>

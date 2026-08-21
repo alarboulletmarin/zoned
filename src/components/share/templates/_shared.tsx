@@ -7,25 +7,33 @@ import Logo from "@/assets/logo.svg?react";
 import type { WorkoutTemplate } from "@/types";
 import { ZONE_HEX_LIGHT } from "@/lib/zoneColors";
 
+/** Brut ink and paper, pinned as literals: share images render on their own
+ *  background regardless of the app theme (same reason as `ZONE_HEX` below). */
+const BRUT_INK = "#0b0b0a";
+const BRUT_PAPER = "#efede6";
+
 interface BrandStripProps {
   scale?: number;
   /** White wordmark for use over a dark/coloured background. */
   inverted?: boolean;
 }
 
-/** Brand bar with the gradient pulse logo + "Zoned" wordmark. */
+/** Brand bar with the réglette sign + "Zoned" wordmark. */
 export function BrandStrip({ scale = 1, inverted = false }: BrandStripProps) {
   const logoSize = 36 * scale;
   const wordmarkSize = 32 * scale;
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 12 * scale }}>
-      <Logo style={{ width: logoSize * 2, height: logoSize, display: "block" }} />
+      {/* The sign is 121×96, not square: hard-coding a 2:1 box letterboxed it. */}
+      <Logo
+        style={{ width: Math.round(logoSize * 1.26), height: logoSize, display: "block" }}
+      />
       <span
         style={{
           fontSize: wordmarkSize,
           fontWeight: 700,
           letterSpacing: "-0.02em",
-          color: inverted ? "#ffffff" : "#0f172a",
+          color: inverted ? BRUT_PAPER : BRUT_INK,
           lineHeight: 1,
         }}
       >

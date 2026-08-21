@@ -62,7 +62,7 @@ export function CoffeeStamp({ workout, transparent }: ShareTemplateProps) {
               alignItems: "center",
             }}
           >
-            <Logo style={{ width: 50, height: 25, opacity: 0.85 }} />
+            <Logo style={{ width: 32, height: 25, opacity: 0.85 }} />
             <span
               style={{
                 fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",

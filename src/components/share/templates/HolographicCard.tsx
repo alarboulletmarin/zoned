@@ -102,7 +102,7 @@ export function HolographicCard({ workout, transparent }: ShareTemplateProps) {
             alignItems: "center",
           }}
         >
-          <Logo style={{ width: 60, height: 30 }} />
+          <Logo style={{ width: 38, height: 30 }} />
           <span
             style={{
               fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",

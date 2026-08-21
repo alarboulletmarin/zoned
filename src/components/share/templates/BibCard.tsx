@@ -102,7 +102,7 @@ export function BibCard({ workout, transparent }: ShareTemplateProps) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              <Logo style={{ width: 80, height: 40 }} />
+              <Logo style={{ width: 50, height: 40 }} />
               <div
                 style={{
                   fontSize: 36,

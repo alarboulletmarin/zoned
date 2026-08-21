@@ -115,7 +115,7 @@ export function Postcard({ workout, transparent }: ShareTemplateProps) {
               background: "#fefae0",
             }}
           >
-            <Logo style={{ width: 80, height: 40 }} />
+            <Logo style={{ width: 50, height: 40 }} />
             <div
               style={{
                 fontSize: 76,

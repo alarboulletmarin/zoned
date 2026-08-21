@@ -58,7 +58,7 @@ export function SpotifyWrap({ workout }: ShareTemplateProps) {
       >
         {/* Eyebrow + brand */}
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <Logo style={{ width: 80, height: 40 }} />
+          <Logo style={{ width: 50, height: 40 }} />
           <span
             style={{
               fontSize: 36,

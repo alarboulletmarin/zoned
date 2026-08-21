@@ -66,7 +66,7 @@ export function MagazineCover({ workout, transparent }: ShareTemplateProps) {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <Logo style={{ width: 96, height: 48 }} />
+            <Logo style={{ width: 60, height: 48 }} />
             <span
               style={{
                 fontSize: 80,

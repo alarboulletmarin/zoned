@@ -62,7 +62,7 @@ export function SpotifyWrapSquare({ workout }: ShareTemplateProps) {
         {/* Brand row */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <Logo style={{ width: 64, height: 32 }} />
+            <Logo style={{ width: 40, height: 32 }} />
             <span style={{ fontSize: 28, fontWeight: 800, letterSpacing: "-0.02em" }}>
               ZONED
             </span>

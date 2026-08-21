@@ -130,7 +130,7 @@ export function ReceiptTicket({ workout, transparent }: ShareTemplateProps) {
               marginBottom: 4,
             }}
           >
-            <Logo style={{ width: 64, height: 32 }} />
+            <Logo style={{ width: 40, height: 32 }} />
             <span
               style={{
                 fontSize: 40,
