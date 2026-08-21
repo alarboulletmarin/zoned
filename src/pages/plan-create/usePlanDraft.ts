@@ -16,7 +16,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
  */
 
 const STORAGE_KEY = "zoned:plan-draft";
-const DRAFT_VERSION = 1;
+// v2: the wizard moved from 12 sequential steps to 4 named tabs, so a stored
+// `stepIndex` from v1 no longer points at anything. Bumping discards those.
+const DRAFT_VERSION = 2;
 /** Drafts older than this are treated as stale and silently discarded. */
 const DRAFT_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 

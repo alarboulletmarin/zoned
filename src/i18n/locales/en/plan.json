@@ -386,10 +386,36 @@
   },
   "nav": {
     "back": "Back",
-    "next": "Next",
-    "continue": "Continue",
-    "skip": "Skip",
-    "step": "Step {{current}} of {{total}}"
+    "next": "Next"
+  },
+  "tabs": {
+    "label": "Plan creation steps",
+    "goal": "Goal",
+    "availability": "Availability",
+    "volume": "Volume",
+    "review": "Review"
+  },
+  "preview": {
+    "title": "Plan preview",
+    "empty": "Pick a goal and a duration to see the shape of the plan.",
+    "weeks": "Weeks",
+    "sessionsPerWeek": "Sessions/wk",
+    "peakVolume": "Peak volume",
+    "totalVolume": "Total volume",
+    "watchTitle": "Watch out",
+    "watchNone": "Nothing to flag.",
+    "watch": {
+      "missingDistance": "No race distance chosen yet.",
+      "missingDate": "No race date set yet.",
+      "missingDuration": "No plan duration chosen yet.",
+      "missingLevel": "No runner level set: the plan cannot be generated.",
+      "tooSoon": "Too soon: this distance needs at least {{min}} weeks.",
+      "tooLong": "{{weeks}} weeks, beyond the {{max}} recommended: risk of mental fatigue.",
+      "intermediateGoals": "One intermediate race sits badly in the calendar.",
+      "bigJump": "A {{peak}} km/wk peak is a big jump from {{current}} km/wk.",
+      "ambitiousPace": "The target pace asks for more than your stored VMA supports.",
+      "noVolume": "Current volume not set: the plan will start from an estimate."
+    }
   },
   "viewMode": {
     "label": "View mode",
@@ -461,6 +487,23 @@
     "recovery": "Recovery",
     "noSessions": "No sessions this week",
     "raceDay": "Race Day!",
+    "peakWeeklyKm": "Peak {{km}} km/wk",
+    "typicalWeek": "Typical week · W{{week}}",
+    "rest": "Rest",
+    "typicalWeekFooter": "Week {{week}} · {{km}} km",
+    "forYouIf": {
+      "title": "This plan is for you if",
+      "volumeKm": "You're already running about {{km}} km a week",
+      "volumeMin": "You're already running about {{min}} min a week",
+      "sessions": "You can train {{count}} times a week",
+      "weeks": "You have {{count}} weeks before the goal"
+    },
+    "otherwise": {
+      "title": "Otherwise",
+      "body": "If this plan doesn't match your current level yet, these alternatives start closer to where you are."
+    },
+    "usedSessions": "Sessions used ({{count}})",
+    "noAccountNotice": "Taking this plan creates no account. It's saved in this browser — export or delete it whenever you want.",
     "seoFr": "Plan d'entraînement {{name}} gratuit : {{weeks}} semaines, {{sessions}} séances/semaine. {{desc}}",
     "seoEn": "Free {{name}} training plan: {{weeks}} weeks, {{sessions}} sessions/week. {{desc}}",
     "seoDescription": "Free {{name}} training plan: {{weeks}} weeks, {{sessions}} sessions/week. {{desc}}",

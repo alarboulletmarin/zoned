@@ -14,7 +14,7 @@ import type { TrainingPlan, AssistedPlanConfig, PlanWeek, PlanSession } from "@/
 import type { SessionType } from "@/types";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import { loadAllWorkouts } from "@/data/workouts";
-import { calculatePhases, getPhaseForWeek, getWeekInPhase } from "./phases";
+import { calculatePhases, calculatePurposePhases, getPhaseForWeek, getWeekInPhase } from "./phases";
 import { calculateVolumeProgression } from "./volume";
 import { buildWeekTemplate } from "./weekTemplate";
 import { generateRaceWeek } from "./raceWeek";
@@ -185,39 +185,10 @@ export async function generatePlan(config: AssistedPlanConfig): Promise<Training
   // Step 5: Calculate phases
   const trainingGoal = config.trainingGoal;
 
-  let phases;
-  if (purposeConfig) {
+  const phases = purposeConfig
     // Non-race plans: use purpose-specific phase distribution (no taper)
-    const pc = purposeConfig.phases;
-    const availableWeeks = totalWeeks;
-    let baseWeeks = Math.max(1, Math.round(availableWeeks * pc.base));
-    let buildWeeks = Math.max(1, Math.round(availableWeeks * pc.build));
-    let peakWeeks = availableWeeks - baseWeeks - buildWeeks;
-    // Ensure all phases have at least 1 week and total equals availableWeeks
-    if (peakWeeks < 1) {
-      peakWeeks = 1;
-      const excess = baseWeeks + buildWeeks + peakWeeks - availableWeeks;
-      if (excess > 0) {
-        if (baseWeeks >= buildWeeks && baseWeeks > 1) {
-          baseWeeks = Math.max(1, baseWeeks - excess);
-        } else if (buildWeeks > 1) {
-          buildWeeks = Math.max(1, buildWeeks - excess);
-        }
-      }
-    }
-
-    phases = [];
-    let w = 1;
-    phases.push({ phase: "base" as const, startWeek: w, endWeek: w + baseWeeks - 1 });
-    w += baseWeeks;
-    phases.push({ phase: "build" as const, startWeek: w, endWeek: w + buildWeeks - 1 });
-    w += buildWeeks;
-    if (peakWeeks > 0) {
-      phases.push({ phase: "peak" as const, startWeek: w, endWeek: w + peakWeeks - 1 });
-    }
-  } else {
-    phases = calculatePhases(totalWeeks, effectiveDistance, trainingGoal);
-  }
+    ? calculatePurposePhases(totalWeeks, purposeConfig.phases)
+    : calculatePhases(totalWeeks, effectiveDistance, trainingGoal);
 
   // Step 6: Calculate volume progression.
   // The purpose multiplier is passed in so it scales the reference table only:

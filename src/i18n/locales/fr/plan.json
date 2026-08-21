@@ -386,10 +386,36 @@
   },
   "nav": {
     "back": "Retour",
-    "next": "Suivant",
-    "continue": "Continuer",
-    "skip": "Passer",
-    "step": "Étape {{current}} sur {{total}}"
+    "next": "Suivant"
+  },
+  "tabs": {
+    "label": "Étapes de création du plan",
+    "goal": "Objectif",
+    "availability": "Disponibilité",
+    "volume": "Volume",
+    "review": "Relecture"
+  },
+  "preview": {
+    "title": "Aperçu du plan",
+    "empty": "Choisissez un objectif et une durée pour voir la forme du plan.",
+    "weeks": "Semaines",
+    "sessionsPerWeek": "Séances/sem.",
+    "peakVolume": "Volume pic",
+    "totalVolume": "Volume total",
+    "watchTitle": "À surveiller",
+    "watchNone": "Rien à signaler.",
+    "watch": {
+      "missingDistance": "Distance de course non choisie.",
+      "missingDate": "Date de course non renseignée.",
+      "missingDuration": "Durée du plan non choisie.",
+      "missingLevel": "Niveau non renseigné : le plan ne peut pas être généré.",
+      "tooSoon": "Délai trop court : {{min}} semaines minimum pour cette distance.",
+      "tooLong": "{{weeks}} semaines, au-delà des {{max}} recommandées : risque de fatigue mentale.",
+      "intermediateGoals": "Un objectif intermédiaire est mal placé dans le calendrier.",
+      "bigJump": "Le pic à {{peak}} km/sem. demande un gros saut depuis {{current}} km/sem.",
+      "ambitiousPace": "L'allure visée dépasse ce que votre VMA enregistrée soutient.",
+      "noVolume": "Volume actuel non renseigné : le plan partira d'une estimation."
+    }
   },
   "viewMode": {
     "label": "Mode d'affichage",
@@ -461,6 +487,23 @@
     "recovery": "Récup",
     "noSessions": "Aucune séance cette semaine",
     "raceDay": "Jour de course !",
+    "peakWeeklyKm": "Pic {{km}} km/sem.",
+    "typicalWeek": "Semaine type · S{{week}}",
+    "rest": "Repos",
+    "typicalWeekFooter": "Semaine {{week}} · {{km}} km",
+    "forYouIf": {
+      "title": "Ce plan est pour toi si",
+      "volumeKm": "Tu cours déjà environ {{km}} km par semaine",
+      "volumeMin": "Tu cours déjà environ {{min}} min par semaine",
+      "sessions": "Tu peux t'entraîner {{count}} fois par semaine",
+      "weeks": "Tu as {{count}} semaines devant toi avant l'objectif"
+    },
+    "otherwise": {
+      "title": "Sinon",
+      "body": "Si ce plan ne correspond pas encore à ton niveau, ces alternatives partent d'un point plus proche du tien."
+    },
+    "usedSessions": "Les séances employées ({{count}})",
+    "noAccountNotice": "Prendre ce plan ne crée aucun compte. Il est enregistré dans ce navigateur ; tu peux l'exporter ou le supprimer quand tu veux.",
     "seoFr": "Plan d'entraînement {{name}} gratuit : {{weeks}} semaines, {{sessions}} séances/semaine. {{desc}}",
     "seoEn": "Free {{name}} training plan: {{weeks}} weeks, {{sessions}} sessions/week. {{desc}}",
     "seoDescription": "Plan d'entraînement {{name}} gratuit : {{weeks}} semaines, {{sessions}} séances/semaine. {{desc}}",

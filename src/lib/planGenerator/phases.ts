@@ -156,6 +156,47 @@ export function calculatePhases(
 }
 
 /**
+ * Phase distribution for non-race plans (base building, return from injury,
+ * beginner start): fixed per-purpose ratios and no taper.
+ *
+ * Lifted out of `generatePlan` unchanged so the plan-creation preview can show
+ * the phase shape the generator will actually produce instead of a second,
+ * drifting approximation of it.
+ */
+export function calculatePurposePhases(
+  totalWeeks: number,
+  distribution: { base: number; build: number; peak: number },
+): PhaseRange[] {
+  const availableWeeks = totalWeeks;
+  let baseWeeks = Math.max(1, Math.round(availableWeeks * distribution.base));
+  let buildWeeks = Math.max(1, Math.round(availableWeeks * distribution.build));
+  let peakWeeks = availableWeeks - baseWeeks - buildWeeks;
+  // Ensure all phases have at least 1 week and total equals availableWeeks
+  if (peakWeeks < 1) {
+    peakWeeks = 1;
+    const excess = baseWeeks + buildWeeks + peakWeeks - availableWeeks;
+    if (excess > 0) {
+      if (baseWeeks >= buildWeeks && baseWeeks > 1) {
+        baseWeeks = Math.max(1, baseWeeks - excess);
+      } else if (buildWeeks > 1) {
+        buildWeeks = Math.max(1, buildWeeks - excess);
+      }
+    }
+  }
+
+  const phases: PhaseRange[] = [];
+  let w = 1;
+  phases.push({ phase: "base", startWeek: w, endWeek: w + baseWeeks - 1 });
+  w += baseWeeks;
+  phases.push({ phase: "build", startWeek: w, endWeek: w + buildWeeks - 1 });
+  w += buildWeeks;
+  if (peakWeeks > 0) {
+    phases.push({ phase: "peak", startWeek: w, endWeek: w + peakWeeks - 1 });
+  }
+  return phases;
+}
+
+/**
  * Get the phase for a given week number.
  */
 export function getPhaseForWeek(weekNumber: number, phases: PhaseRange[]): TrainingPhase {

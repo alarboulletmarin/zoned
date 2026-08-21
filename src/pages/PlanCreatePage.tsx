@@ -8,27 +8,26 @@ import {
   Timer,
   Route,
   Flag,
-  Calendar,
   Target,
   Mountain,
-  CheckIcon,
   Loader2,
   Heart,
   Footprints,
   TrendingUp,
   AlertTriangle,
-  Dumbbell,
   Plus,
   Trash2,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { useCreatePlan } from "@/hooks/usePlans";
 import { loadUserZonePrefs } from "@/lib/zones";
 import {
+  PHASE_META,
   RACE_DISTANCE_META,
   type RaceDistance,
   type AssistedPlanConfig,
@@ -39,24 +38,38 @@ import {
 } from "@/types/plan";
 import type { Difficulty, UserZonePreferences } from "@/types";
 import { DIFFICULTY_META } from "@/types";
+import { PhaseZoneBar } from "@/components/domain/PrebuiltPlanCard";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { usePickLang, formatDate } from "@/lib/i18n-utils";
 import { DateInput } from "@/components/ui/date-input";
 import { addWeeksToDate, buildRacePlanDateRange, calculateWeeksBetweenDates } from "@/lib/planDates";
 import { RECOMMENDED_PLAN_WEEKS } from "@/lib/planGenerator/constants";
+import { previewPlanShape, type PlanShapePreview } from "@/lib/planGenerator/preview";
 import { validateIntermediateGoals, sortIntermediateGoals } from "@/lib/intermediateGoalValidation";
 import { loadRunnerProfile } from "@/lib/runnerProfile";
 import { usePlanDraft } from "./plan-create/usePlanDraft";
 
 // ── Constants ────────────────────────────────────────────────────────
 
-// Steps are dynamic based on plan purpose
-type StepId = "purpose" | "distance" | "date" | "duration" | "race_name" | "intermediate_goals" | "level" | "goal" | "fitness" | "schedule" | "pace" | "summary";
+/**
+ * Four named tabs, not twelve sequential screens. Every field the generator
+ * reads is still here — they are grouped by the question they answer rather
+ * than shown one per viewport, so the persistent preview column on the right
+ * can react to any of them.
+ */
+type TabId = "goal" | "availability" | "volume" | "review";
 
-const RACE_STEPS: StepId[] = ["purpose", "distance", "date", "race_name", "intermediate_goals", "level", "goal", "fitness", "schedule", "pace", "summary"];
-const NON_RACE_STEPS: StepId[] = ["purpose", "duration", "level", "goal", "fitness", "schedule", "summary"];
+const TABS: { id: TabId; labelKey: string }[] = [
+  { id: "goal", labelKey: "tabs.goal" },
+  { id: "availability", labelKey: "tabs.availability" },
+  { id: "volume", labelKey: "tabs.volume" },
+  { id: "review", labelKey: "tabs.review" },
+];
 
 const DAYS_PER_WEEK_OPTIONS = [3, 4, 5, 6, 7] as const;
+
+/** Upper bound of the weekly-volume slider, in km. */
+const WEEKLY_KM_SLIDER_MAX = 150;
 
 /**
  * Recommended week ranges per distance — warnings, not hard blocks.
@@ -67,44 +80,81 @@ const DAYS_PER_WEEK_OPTIONS = [3, 4, 5, 6, 7] as const;
 const RECOMMENDED_WEEKS = RECOMMENDED_PLAN_WEEKS;
 
 const RACE_DISTANCE_ICONS: Record<RaceDistance, React.ReactNode> = {
-  "5K": <Zap className="size-5 md:size-6 text-primary" />,
-  "10K": <Timer className="size-5 md:size-6 text-primary" />,
-  semi: <Route className="size-5 md:size-6 text-primary" />,
-  marathon: <Flag className="size-5 md:size-6 text-primary" />,
-  trail_short: <Mountain className="size-5 md:size-6 text-primary" />,
-  trail: <Mountain className="size-5 md:size-6 text-primary" />,
-  ultra: <Mountain className="size-5 md:size-6 text-primary" />,
+  "5K": <Zap className="size-4" />,
+  "10K": <Timer className="size-4" />,
+  semi: <Route className="size-4" />,
+  marathon: <Flag className="size-4" />,
+  trail_short: <Mountain className="size-4" />,
+  trail: <Mountain className="size-4" />,
+  ultra: <Mountain className="size-4" />,
 };
 
-const DURATION_OPTIONS = [
-  { weeks: 4 },
-  { weeks: 6 },
-  { weeks: 8 },
-  { weeks: 10 },
-  { weeks: 12 },
-  { weeks: 16 },
+const DURATION_OPTIONS = [4, 6, 8, 10, 12, 16];
+
+const PURPOSE_OPTIONS: { value: PlanPurpose; icon: React.ReactNode; labelKey: string; descKey: string }[] = [
+  {
+    value: "race",
+    icon: <Target className="size-4" />,
+    labelKey: "purpose.race",
+    descKey: "purpose.raceDesc",
+  },
+  {
+    value: "base_building",
+    icon: <TrendingUp className="size-4" />,
+    labelKey: "purpose.baseBuilding",
+    descKey: "purpose.baseBuildingDesc",
+  },
+  {
+    value: "return_from_injury",
+    icon: <Heart className="size-4" />,
+    labelKey: "purpose.returnFromInjury",
+    descKey: "purpose.returnFromInjuryDesc",
+  },
+  {
+    value: "beginner_start",
+    icon: <Footprints className="size-4" />,
+    labelKey: "purpose.beginnerStart",
+    descKey: "purpose.beginnerStartDesc",
+  },
 ];
 
 const GOAL_OPTION_KEYS: { value: TrainingGoal; icon: React.ReactNode; labelKey: string; descKey: string }[] = [
   {
     value: "finish",
-    icon: <Flag className="size-5 text-zone-2" />,
+    icon: <Flag className="size-4" />,
     labelKey: "goal.finish",
     descKey: "goal.finishDesc",
   },
   {
     value: "time",
-    icon: <Timer className="size-5 text-primary" />,
+    icon: <Timer className="size-4" />,
     labelKey: "goal.time",
     descKey: "goal.timeDesc",
   },
   {
     value: "compete",
-    icon: <TrendingUp className="size-5 text-zone-5" />,
+    icon: <TrendingUp className="size-4" />,
     labelKey: "goal.compete",
     descKey: "goal.competeDesc",
   },
 ];
+
+const PRIORITY_OPTIONS: { value: RacePriority; labelKey: string; descKey: string }[] = [
+  { value: "A", labelKey: "intermediateGoals.priorityA", descKey: "intermediateGoals.priorityADesc" },
+  { value: "B", labelKey: "intermediateGoals.priorityB", descKey: "intermediateGoals.priorityBDesc" },
+  { value: "C", labelKey: "intermediateGoals.priorityC", descKey: "intermediateGoals.priorityCDesc" },
+];
+
+const INTERMEDIATE_GOAL_ERROR_KEYS: Record<string, string> = {
+  BEFORE_START: "intermediateGoals.validation.beforeStart",
+  AFTER_MAIN_RACE: "intermediateGoals.validation.afterMain",
+  TOO_CLOSE_TO_MAIN: "intermediateGoals.validation.tooCloseToMain",
+  TOO_CLOSE_TO_EACH_OTHER: "intermediateGoals.validation.tooCloseToOther",
+  PRIORITY_A_IN_TAPER_ZONE: "intermediateGoals.validation.priorityAInTaper",
+  INVALID_DATE: "intermediateGoals.validation.invalidDate",
+  DISTANCE_TOO_LONG_FOR_PRIORITY: "intermediateGoals.validation.distanceTooLongForPriority",
+  DISTANCE_LONGER_THAN_MAIN: "intermediateGoals.validation.distanceLongerThanMain",
+};
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
@@ -213,8 +263,7 @@ export function PlanCreatePage() {
   const navigate = useNavigate();
   const { createPlan, isGenerating, error } = useCreatePlan();
 
-  const [stepIndex, setStepIndex] = useState(0);
-  const [direction, setDirection] = useState<"forward" | "backward">("forward");
+  const [tabIndex, setTabIndex] = useState(0);
   const [paceInputMode, setPaceInputMode] = useState<"pace" | "time">("pace");
   const [targetFinishTime, setTargetFinishTime] = useState("");
   const todayDate = useMemo(() => getTodayDateInputValue(), []);
@@ -248,8 +297,8 @@ export function PlanCreatePage() {
   const { hasDraft, restoreDraft, clearDraft, finalize } = usePlanDraft<FormState>(
     form,
     setForm,
-    stepIndex,
-    setStepIndex,
+    tabIndex,
+    setTabIndex,
   );
 
   // Load user zone preferences for VMA suggestion
@@ -258,24 +307,8 @@ export function PlanCreatePage() {
     []
   );
 
-  // ── Dynamic step flow ────────────────────────────────────────────
-
   const isRacePlan = form.planPurpose === "race";
-  const steps = isRacePlan ? RACE_STEPS : NON_RACE_STEPS;
-  const currentStep = steps[stepIndex] ?? "purpose";
-  const totalSteps = steps.length;
-
-  // ── Navigation ───────────────────────────────────────────────────
-
-  const goForward = useCallback(() => {
-    setDirection("forward");
-    setStepIndex((s) => Math.min(s + 1, steps.length - 1));
-  }, [steps.length]);
-
-  const goBack = useCallback(() => {
-    setDirection("backward");
-    setStepIndex((s) => Math.max(s - 1, 0));
-  }, []);
+  const currentTab = TABS[tabIndex]?.id ?? "goal";
 
   // ── Derived values ───────────────────────────────────────────────
 
@@ -307,6 +340,115 @@ export function PlanCreatePage() {
     () => (userPrefs?.vma ? suggestLevel(userPrefs.vma) : null),
     [userPrefs]
   );
+
+  const distanceKm = form.raceDistance
+    ? RACE_DISTANCE_META[form.raceDistance].distanceKm
+    : 0;
+
+  const intermediateGoalValidation = useMemo(() => {
+    if (form.intermediateGoals.length === 0 || !form.raceDate) return { valid: true, errors: [] };
+    return validateIntermediateGoals(
+      form.intermediateGoals,
+      form.raceDate,
+      form.startDate || todayDate,
+      form.raceDistance ?? "10K",
+    );
+  }, [form.intermediateGoals, form.raceDate, form.startDate, form.raceDistance, todayDate]);
+
+  const parsedWeeklyKm = form.currentWeeklyKm
+    ? parseInt(form.currentWeeklyKm, 10)
+    : undefined;
+  // A number field still accepts "e" and "-", so the parse can come back NaN.
+  const currentWeeklyKmValue = Number.isFinite(parsedWeeklyKm as number)
+    ? parsedWeeklyKm
+    : undefined;
+  // The slider is a view on the same value: clamped, never NaN.
+  const weeklyKmSliderValue = Math.min(
+    WEEKLY_KM_SLIDER_MAX,
+    Math.max(0, currentWeeklyKmValue ?? 0)
+  );
+
+  // ── Live plan shape preview ──────────────────────────────────────
+  // Recomputed on every keystroke from whatever the form already knows —
+  // no session is built, only the phase split and the volume envelope.
+
+  const preview: PlanShapePreview | null = useMemo(
+    () =>
+      previewPlanShape({
+        planPurpose: form.planPurpose,
+        totalWeeks: isRacePlan ? weeksCount : form.totalWeeksOverride,
+        raceDistance: form.raceDistance,
+        runnerLevel: form.runnerLevel,
+        daysPerWeek: form.daysPerWeek,
+        trainingGoal: form.trainingGoal,
+        currentWeeklyKm: currentWeeklyKmValue,
+        targetPaceMinKm: paceSeconds ? paceSeconds / 60 : undefined,
+        vma: userPrefs?.vma,
+      }),
+    [
+      form.planPurpose,
+      form.raceDistance,
+      form.runnerLevel,
+      form.daysPerWeek,
+      form.trainingGoal,
+      form.totalWeeksOverride,
+      isRacePlan,
+      weeksCount,
+      currentWeeklyKmValue,
+      paceSeconds,
+      userPrefs,
+    ]
+  );
+
+  // Everything the plan is missing or that deserves a second look, in one list.
+  const watchItems = useMemo(() => {
+    const items: string[] = [];
+    if (isRacePlan && !form.raceDistance) items.push(t("preview.watch.missingDistance"));
+    if (isRacePlan && !form.raceDate) items.push(t("preview.watch.missingDate"));
+    if (isRacePlan && form.raceDate && !dateValid) {
+      items.push(t("preview.watch.tooSoon", { min: minWeeksForDistance }));
+    }
+    if (isRacePlan && dateTooLong) {
+      items.push(t("preview.watch.tooLong", { weeks: weeksCount, max: recommendedWeeks.max }));
+    }
+    if (!isRacePlan && form.totalWeeksOverride <= 0) items.push(t("preview.watch.missingDuration"));
+    if (!form.runnerLevel) items.push(t("preview.watch.missingLevel"));
+    if (!intermediateGoalValidation.valid) items.push(t("preview.watch.intermediateGoals"));
+    if (!form.currentWeeklyKm) items.push(t("preview.watch.noVolume"));
+    if (preview && currentWeeklyKmValue && preview.peakWeeklyKm > currentWeeklyKmValue * 1.8) {
+      items.push(
+        t("preview.watch.bigJump", {
+          peak: preview.peakWeeklyKm,
+          current: currentWeeklyKmValue,
+        })
+      );
+    }
+    if (preview && preview.demandFactor > 1.05) items.push(t("preview.watch.ambitiousPace"));
+    return items;
+  }, [
+    isRacePlan,
+    form.raceDistance,
+    form.raceDate,
+    form.totalWeeksOverride,
+    form.runnerLevel,
+    form.currentWeeklyKm,
+    dateValid,
+    dateTooLong,
+    weeksCount,
+    minWeeksForDistance,
+    recommendedWeeks.max,
+    intermediateGoalValidation.valid,
+    preview,
+    currentWeeklyKmValue,
+    t,
+  ]);
+
+  const canGenerate =
+    !!form.runnerLevel &&
+    (isRacePlan
+      ? !!form.raceDistance && !!form.raceDate && dateValid && intermediateGoalValidation.valid
+      : form.totalWeeksOverride > 0) &&
+    (form.targetPace === "" || !!paceSeconds);
 
   // ── Submit handler ───────────────────────────────────────────────
 
@@ -352,427 +494,9 @@ export function PlanCreatePage() {
     } catch {
       // Error is exposed via the hook's error state
     }
-  }, [form, userPrefs, paceSeconds, createPlan, navigate, finalize]);
+  }, [form, isRacePlan, userPrefs, paceSeconds, createPlan, navigate, finalize]);
 
-  // ── Step indicator (dots + step number) ────────────────────────
-
-  const renderStepIndicator = () => (
-    <div className="py-4">
-      <div className="flex items-baseline justify-between font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
-        <span>{t("nav.step", { current: stepIndex + 1, total: totalSteps })}</span>
-      </div>
-      <div className="flex gap-1 mt-2" aria-hidden="true">
-        {Array.from({ length: totalSteps }, (_, i) => (
-          <div
-            key={i}
-            className={cn(
-              "h-[3px] flex-1 transition-colors duration-300",
-              i <= stepIndex ? "bg-accent-acid" : "bg-border"
-            )}
-          />
-        ))}
-      </div>
-    </div>
-  );
-
-  // ── Navigation buttons ────────────────────────────────────────
-
-  const renderNavButtons = (
-    canProceed: boolean,
-    nextLabel?: string,
-    showSkip?: boolean,
-  ) => (
-    <div className="py-4 flex justify-between gap-3 border-t border-filet">
-      <Button variant="ghost" size="sm" onClick={goBack} disabled={stepIndex === 0}>
-        <ArrowLeft className="size-4 mr-1" />
-        {t("nav.back")}
-      </Button>
-      <div className="flex gap-2">
-        {showSkip && (
-          <Button variant="ghost" size="sm" onClick={goForward}>
-            {t("nav.skip")}
-          </Button>
-        )}
-        <Button size="sm" onClick={goForward} disabled={!canProceed}>
-          {nextLabel ?? t("nav.next")}
-          <ArrowRight className="size-4 ml-1" />
-        </Button>
-      </div>
-    </div>
-  );
-
-  // ── Purpose options for Step 1 ────────────────────────────────────
-  const PURPOSE_OPTIONS: { value: PlanPurpose; icon: React.ReactNode; ringClass: string; bgClass: string; iconBgClass: string; labelKey: string; descKey: string }[] = [
-    {
-      value: "race",
-      icon: <Target className="size-5 sm:size-6 text-primary" />,
-      ringClass: "ring-primary bg-primary/5",
-      bgClass: "hover:bg-muted/50",
-      iconBgClass: "bg-primary/10",
-      labelKey: "purpose.race",
-      descKey: "purpose.raceDesc",
-    },
-    {
-      value: "base_building",
-      icon: <TrendingUp className="size-5 sm:size-6 text-zone-2" />,
-      ringClass: "ring-zone-2 bg-zone-2/5",
-      bgClass: "hover:bg-muted/50",
-      iconBgClass: "bg-zone-2/10",
-      labelKey: "purpose.baseBuilding",
-      descKey: "purpose.baseBuildingDesc",
-    },
-    {
-      value: "return_from_injury",
-      icon: <Heart className="size-5 sm:size-6 text-zone-1" />,
-      ringClass: "ring-zone-1 bg-zone-1/5",
-      bgClass: "hover:bg-muted/50",
-      iconBgClass: "bg-zone-1/10",
-      labelKey: "purpose.returnFromInjury",
-      descKey: "purpose.returnFromInjuryDesc",
-    },
-    {
-      value: "beginner_start",
-      icon: <Footprints className="size-5 sm:size-6 text-zone-3" />,
-      ringClass: "ring-zone-3 bg-zone-3/5",
-      bgClass: "hover:bg-muted/50",
-      iconBgClass: "bg-zone-3/10",
-      labelKey: "purpose.beginnerStart",
-      descKey: "purpose.beginnerStartDesc",
-    },
-  ];
-
-  // ── Step 1: Plan Purpose ────────────────────────────────────────
-
-  const renderStep1 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-none bg-primary/10 flex items-center justify-center mb-4">
-          <Zap className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("purpose.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("purpose.subtitle")}
-        </p>
-
-        <div className="w-full max-w-md md:max-w-lg grid grid-cols-1 gap-2 mt-6">
-          {PURPOSE_OPTIONS.map((opt) => (
-            <Card
-              key={opt.value}
-              interactive
-              className={cn(
-                "cursor-pointer border-border/50 transition-all duration-200",
-                form.planPurpose === opt.value
-                  ? `ring-2 ${opt.ringClass}`
-                  : opt.bgClass
-              )}
-              onClick={() => {
-                setForm((f) => ({
-                  ...f,
-                  planPurpose: opt.value,
-                  // Set defaults for non-race plans
-                  ...(opt.value === "beginner_start" ? { daysPerWeek: 3, totalWeeksOverride: 8, trainingGoal: "finish" as TrainingGoal } : {}),
-                  ...(opt.value === "return_from_injury" ? { daysPerWeek: 3, totalWeeksOverride: 10, trainingGoal: "finish" as TrainingGoal } : {}),
-                  ...(opt.value === "base_building" ? { totalWeeksOverride: 12, trainingGoal: "time" as TrainingGoal } : {}),
-                }));
-                goForward();
-              }}
-            >
-              <CardContent className="p-3 flex items-center gap-3">
-                <div className={cn("size-10 rounded-none flex items-center justify-center shrink-0", opt.iconBgClass)}>
-                  {opt.icon}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold">{t(opt.labelKey)}</p>
-                  <p className="text-xs text-muted-foreground">{t(opt.descKey)}</p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-      {renderNavButtons(!!form.planPurpose)}
-    </div>
-  );
-
-  // ── Step 2: Race Distance (or Duration for non-race) ───────────
-
-  const renderStep2 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-none bg-primary/10 flex items-center justify-center mb-4">
-          <Target className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("distance.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("distance.subtitle")}
-        </p>
-        <div className="w-full max-w-md md:max-w-xl lg:max-w-2xl grid grid-cols-2 gap-2 mt-6">
-          {(Object.keys(RACE_DISTANCE_META) as RaceDistance[]).map((dist) => {
-            const meta = RACE_DISTANCE_META[dist];
-            return (
-              <Card
-                key={dist}
-                interactive
-                className={cn(
-                  "cursor-pointer border-border/50 hover:shadow-md hover:-translate-y-1 transition-all duration-200",
-                  form.raceDistance === dist
-                    ? "bg-gradient-to-br from-primary/10 dark:from-primary/20 to-transparent ring-2 ring-primary"
-                    : "hover:bg-gradient-to-br hover:from-primary/5 dark:hover:from-primary/10 hover:to-transparent"
-                )}
-                onClick={() => {
-                  setForm((f) => ({ ...f, raceDistance: dist }));
-                  goForward();
-                }}
-              >
-                <CardContent className="p-3 md:p-4 flex items-center gap-3">
-                  <div className="size-9 md:size-10 rounded-none bg-primary/10 flex items-center justify-center shrink-0">
-                    {RACE_DISTANCE_ICONS[dist]}
-                  </div>
-                  <div className="min-w-0">
-                    <div className="font-medium text-sm md:text-base leading-tight">
-                      {pick(meta, "label")}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      {meta.distanceKm} km
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      </div>
-      {renderNavButtons(!!form.raceDistance)}
-    </div>
-  );
-
-  // ── Step Duration: Choose plan length (non-race plans) ──────────
-
-  const renderStepDuration = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-none bg-zone-2/10 flex items-center justify-center mb-4">
-          <Calendar className="size-6 md:size-8 text-zone-2" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("duration.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("duration.subtitle")}
-        </p>
-        <div className="w-full max-w-xs grid grid-cols-3 gap-2 mt-6">
-          {DURATION_OPTIONS.map((opt) => (
-            <Card
-              key={opt.weeks}
-              interactive
-              className={cn(
-                "cursor-pointer border-border/50 transition-all duration-200",
-                form.totalWeeksOverride === opt.weeks
-                  ? "ring-2 ring-primary bg-primary/5"
-                  : "hover:bg-muted/50"
-              )}
-              onClick={() => {
-                setForm((f) => ({ ...f, totalWeeksOverride: opt.weeks }));
-                goForward();
-              }}
-            >
-              <CardContent className="p-3 flex flex-col items-center justify-center">
-                <span className="text-lg font-bold">{opt.weeks}</span>
-                <span className="text-xs text-muted-foreground">
-                  {t("duration.weeks")}
-                </span>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-      {renderNavButtons(form.totalWeeksOverride > 0)}
-    </div>
-  );
-
-  // ── Step 3: Race Date (or Duration for non-race) ────────────────
-
-  const renderStep3 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-none bg-primary/10 flex items-center justify-center mb-4">
-          <Calendar className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("date.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("date.subtitle", { min: minWeeksForDistance })}
-        </p>
-
-        <div className="w-full max-w-sm mt-6 space-y-3">
-          <DateInput
-            min={minDate}
-            value={form.raceDate}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, raceDate: e.target.value }))
-            }
-            aria-label={t("date.raceDate")}
-            className="px-4 py-3 min-h-[44px] text-base"
-          />
-
-          <div className="space-y-2 pt-2">
-            <p className="text-sm font-medium text-center">{t("date.startLabel")}</p>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => setForm((f) => ({ ...f, useCustomStartDate: false, startDate: todayDate }))}
-                className={cn(
-                  "flex-1 rounded-none border p-3 text-sm transition-colors",
-                  !form.useCustomStartDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
-                )}
-              >
-                {t("date.startNow")}
-              </button>
-              <button
-                type="button"
-                onClick={() => setForm((f) => ({ ...f, useCustomStartDate: true, startDate: f.startDate || todayDate }))}
-                className={cn(
-                  "flex-1 rounded-none border p-3 text-sm transition-colors",
-                  form.useCustomStartDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
-                )}
-              >
-                {t("date.chooseStartDate")}
-              </button>
-            </div>
-            {form.useCustomStartDate && (
-              <DateInput
-                value={form.startDate}
-                max={form.raceDate || undefined}
-                onChange={(e) => setForm((f) => ({ ...f, startDate: e.target.value }))}
-                className="px-4 py-3 min-h-[44px] text-base"
-              />
-            )}
-          </div>
-
-          {form.raceDate && dateValid && (
-            <p className="text-sm text-muted-foreground text-center">
-              {t("date.weeks", { count: weeksCount })}
-            </p>
-          )}
-
-          {form.raceDate && !dateValid && (
-            <p className="text-sm text-destructive text-center">
-              {t("date.tooSoon", { min: minWeeksForDistance })}
-            </p>
-          )}
-
-          {form.raceDate && form.useCustomStartDate && (
-            <p className="text-xs text-muted-foreground text-center">
-              {t("date.startHint", {
-                date: formatDate(form.startDate, { year: "numeric", month: "short", day: "numeric" }),
-              })}
-            </p>
-          )}
-
-          {form.raceDate && dateTooLong && (
-            <div className="rounded-none border border-amber-300 dark:border-amber-600 bg-amber-50 dark:bg-amber-950/30 p-3 text-sm text-amber-800 dark:text-amber-300 text-center space-y-1">
-              <p className="font-semibold flex items-center justify-center gap-1.5">
-                <AlertTriangle className="size-4 shrink-0" />
-                {t("date.tooLong", { weeks: weeksCount })}
-              </p>
-              <p className="text-xs">
-                {t("date.tooLongDetail", { min: recommendedWeeks.min, max: recommendedWeeks.max })}
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-      {renderNavButtons(dateValid, t("nav.continue"))}
-    </div>
-  );
-
-  // ── Step 4: Race Name (optional) ─────────────────────────────────
-
-  const renderStep4 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-none bg-primary/10 flex items-center justify-center mb-4">
-          <Flag className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("raceName.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("raceName.subtitle")}
-        </p>
-
-        <div className="w-full max-w-sm mt-6">
-          <input
-            type="text"
-            value={form.raceName}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, raceName: e.target.value }))
-            }
-            onKeyDown={(e) => {
-              if (e.key === "Enter") goForward();
-            }}
-            placeholder={t("raceName.placeholder")}
-            aria-label={t("raceName.label")}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            maxLength={100}
-          />
-        </div>
-      </div>
-      {renderNavButtons(true, t("nav.continue"), true)}
-    </div>
-  );
-
-  // ── Step Intermediate Goals: Optional prep races ──────────────────
-
-  const intermediateGoalValidation = useMemo(() => {
-    if (form.intermediateGoals.length === 0 || !form.raceDate) return { valid: true, errors: [] };
-    return validateIntermediateGoals(
-      form.intermediateGoals,
-      form.raceDate,
-      form.startDate || todayDate,
-      form.raceDistance ?? "10K",
-    );
-  }, [form.intermediateGoals, form.raceDate, form.startDate, form.raceDistance, todayDate]);
+  // ── Intermediate goal editing ────────────────────────────────────
 
   const addIntermediateGoal = useCallback(() => {
     setForm((f) => {
@@ -806,12 +530,6 @@ export function PlanCreatePage() {
     [],
   );
 
-  const PRIORITY_OPTIONS: { value: RacePriority; labelKey: string; descKey: string; color: string }[] = [
-    { value: "A", labelKey: "intermediateGoals.priorityA", descKey: "intermediateGoals.priorityADesc", color: "text-zone-5" },
-    { value: "B", labelKey: "intermediateGoals.priorityB", descKey: "intermediateGoals.priorityBDesc", color: "text-primary" },
-    { value: "C", labelKey: "intermediateGoals.priorityC", descKey: "intermediateGoals.priorityCDesc", color: "text-zone-2" },
-  ];
-
   const intermediateGoalMaxDate = useMemo(() => {
     if (!form.raceDate) return undefined;
     // 2 weeks before main race
@@ -823,484 +541,397 @@ export function PlanCreatePage() {
     return `${y}-${m}-${day}`;
   }, [form.raceDate]);
 
-  const renderStepIntermediateGoals = () => {
-    const errorsForGoal = (idx: number) =>
-      intermediateGoalValidation.errors.filter((e) => e.goalIndex === idx);
+  // ── Tab: Objectif ────────────────────────────────────────────────
 
-    return (
-      <div
-        className={cn(
-          "flex-1 flex flex-col",
-          direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
-        )}
-      >
-        <div className="flex-1 flex flex-col items-center justify-center px-4">
-          <div className="size-12 md:size-16 rounded-none bg-primary/10 flex items-center justify-center mb-4">
-            <Flag className="size-6 md:size-8 text-primary" />
-          </div>
-          <h2 className="text-lg md:text-xl font-semibold text-center">
-            {t("intermediateGoals.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1 text-center max-w-md">
-            {t("intermediateGoals.subtitle")}
-          </p>
+  const renderGoalTab = () => (
+    <div className="space-y-8">
+      <FormSection title={t("purpose.title")} description={t("purpose.subtitle")}>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {PURPOSE_OPTIONS.map((opt) => (
+            <OptionCard
+              key={opt.value}
+              selected={form.planPurpose === opt.value}
+              icon={opt.icon}
+              label={t(opt.labelKey)}
+              description={t(opt.descKey)}
+              onClick={() =>
+                setForm((f) => ({
+                  ...f,
+                  planPurpose: opt.value,
+                  // Set defaults for non-race plans
+                  ...(opt.value === "beginner_start" ? { daysPerWeek: 3, totalWeeksOverride: 8, trainingGoal: "finish" as TrainingGoal } : {}),
+                  ...(opt.value === "return_from_injury" ? { daysPerWeek: 3, totalWeeksOverride: 10, trainingGoal: "finish" as TrainingGoal } : {}),
+                  ...(opt.value === "base_building" ? { totalWeeksOverride: 12, trainingGoal: "time" as TrainingGoal } : {}),
+                }))
+              }
+            />
+          ))}
+        </div>
+      </FormSection>
 
-          <div className="w-full max-w-lg mt-6 space-y-3">
-            {form.intermediateGoals.map((goal, idx) => {
-              const goalErrors = errorsForGoal(idx);
+      {isRacePlan && (
+        <FormSection title={t("distance.title")} description={t("distance.subtitle")}>
+          <div className="grid gap-2 grid-cols-2 sm:grid-cols-3">
+            {(Object.keys(RACE_DISTANCE_META) as RaceDistance[]).map((dist) => {
+              const meta = RACE_DISTANCE_META[dist];
               return (
-                <Card key={idx} className="border-border/50">
-                  <CardContent className="p-3 space-y-3">
-                    {/* Header with remove button */}
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-muted-foreground">
-                        #{idx + 1}
-                      </span>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-7 px-2 text-xs text-destructive hover:text-destructive"
-                        onClick={() => removeIntermediateGoal(idx)}
-                      >
-                        <Trash2 className="size-3.5 mr-1" />
-                        {t("intermediateGoals.remove")}
-                      </Button>
-                    </div>
+                <OptionCard
+                  key={dist}
+                  selected={form.raceDistance === dist}
+                  icon={RACE_DISTANCE_ICONS[dist]}
+                  label={pick(meta, "label")}
+                  description={`${meta.distanceKm} km`}
+                  onClick={() => setForm((f) => ({ ...f, raceDistance: dist }))}
+                />
+              );
+            })}
+          </div>
+        </FormSection>
+      )}
 
-                    {/* Distance selector (compact grid) */}
-                    <div>
-                      <label className="text-xs font-medium mb-1.5 block">
-                        {t("intermediateGoals.distance")}
-                      </label>
-                      <div className="grid grid-cols-4 sm:grid-cols-7 gap-1">
-                        {(Object.keys(RACE_DISTANCE_META) as RaceDistance[]).map((dist) => {
-                          const meta = RACE_DISTANCE_META[dist];
-                          return (
-                            <button
-                              key={dist}
-                              type="button"
-                              onClick={() => updateIntermediateGoal(idx, { raceDistance: dist })}
-                              className={cn(
-                                "rounded-md border px-1.5 py-1.5 text-xs text-center transition-colors",
-                                goal.raceDistance === dist
-                                  ? "border-primary bg-primary/10 font-medium"
-                                  : "hover:bg-accent/50"
-                              )}
-                            >
-                              {pick(meta, "label")}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
+      {isRacePlan && (
+        <FormSection
+          title={t("date.title")}
+          description={t("date.subtitle", { min: minWeeksForDistance })}
+        >
+          <div className="max-w-sm space-y-3">
+            <DateInput
+              min={minDate}
+              value={form.raceDate}
+              onChange={(e) => setForm((f) => ({ ...f, raceDate: e.target.value }))}
+              aria-label={t("date.raceDate")}
+              className="px-4 py-3 min-h-[44px] text-base"
+            />
 
-                    {/* Date picker */}
-                    <div>
-                      <label className="text-xs font-medium mb-1.5 block">
-                        {t("intermediateGoals.date")}
-                      </label>
-                      <DateInput
-                        min={form.startDate || todayDate}
-                        max={intermediateGoalMaxDate}
-                        value={goal.raceDate}
-                        onChange={(e) => updateIntermediateGoal(idx, { raceDate: e.target.value })}
-                        className="px-3 py-2 min-h-[40px] text-sm"
-                      />
-                    </div>
+            <div className="space-y-2 pt-2">
+              <FieldLabel>{t("date.startLabel")}</FieldLabel>
+              <div className="flex gap-2">
+                <Chip
+                  selected={!form.useCustomStartDate}
+                  className="flex-1"
+                  onClick={() => setForm((f) => ({ ...f, useCustomStartDate: false, startDate: todayDate }))}
+                >
+                  {t("date.startNow")}
+                </Chip>
+                <Chip
+                  selected={form.useCustomStartDate}
+                  className="flex-1"
+                  onClick={() => setForm((f) => ({ ...f, useCustomStartDate: true, startDate: f.startDate || todayDate }))}
+                >
+                  {t("date.chooseStartDate")}
+                </Chip>
+              </div>
+              {form.useCustomStartDate && (
+                <DateInput
+                  value={form.startDate}
+                  max={form.raceDate || undefined}
+                  onChange={(e) => setForm((f) => ({ ...f, startDate: e.target.value }))}
+                  className="px-4 py-3 min-h-[44px] text-base"
+                />
+              )}
+            </div>
 
-                    {/* Race name (optional) */}
-                    <div>
-                      <label className="text-xs font-medium mb-1.5 block">
-                        {t("intermediateGoals.name")}
-                      </label>
-                      <input
-                        type="text"
-                        value={goal.raceName ?? ""}
-                        onChange={(e) => updateIntermediateGoal(idx, { raceName: e.target.value })}
-                        placeholder={t("intermediateGoals.namePlaceholder")}
-                        className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                        maxLength={100}
-                      />
-                    </div>
+            {form.raceDate && dateValid && (
+              <p className="font-mono text-[11px] text-muted-foreground">
+                {t("date.weeks", { count: weeksCount })}
+              </p>
+            )}
 
-                    {/* Priority selector */}
-                    <div>
-                      <label className="text-xs font-medium mb-1.5 block">
-                        {t("intermediateGoals.priority")}
-                      </label>
-                      <div className="grid grid-cols-3 gap-1.5">
-                        {PRIORITY_OPTIONS.map((opt) => (
-                          <button
-                            key={opt.value}
-                            type="button"
-                            onClick={() => updateIntermediateGoal(idx, { priority: opt.value })}
+            {form.raceDate && !dateValid && (
+              <p className="font-mono text-[11px] text-poster-red">
+                {t("date.tooSoon", { min: minWeeksForDistance })}
+              </p>
+            )}
+
+            {form.raceDate && form.useCustomStartDate && (
+              <p className="font-mono text-[11px] text-muted-foreground">
+                {t("date.startHint", {
+                  date: formatDate(form.startDate, { year: "numeric", month: "short", day: "numeric" }),
+                })}
+              </p>
+            )}
+
+            {form.raceDate && dateTooLong && (
+              <WarningBox>
+                <p className="flex items-center gap-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.06em]">
+                  <AlertTriangle className="size-3.5 shrink-0" />
+                  {t("date.tooLong", { weeks: weeksCount })}
+                </p>
+                <p className="mt-1 text-xs leading-[1.5]">
+                  {t("date.tooLongDetail", { min: recommendedWeeks.min, max: recommendedWeeks.max })}
+                </p>
+              </WarningBox>
+            )}
+          </div>
+        </FormSection>
+      )}
+
+      {isRacePlan && (
+        <FormSection title={t("raceName.title")} description={t("raceName.subtitle")}>
+          <div className="max-w-sm">
+            <Input
+              type="text"
+              value={form.raceName}
+              onChange={(e) => setForm((f) => ({ ...f, raceName: e.target.value }))}
+              placeholder={t("raceName.placeholder")}
+              aria-label={t("raceName.label")}
+              maxLength={100}
+            />
+          </div>
+        </FormSection>
+      )}
+
+      {isRacePlan && (
+        <FormSection
+          title={t("intermediateGoals.title")}
+          description={t("intermediateGoals.subtitle")}
+        >
+          <div className="max-w-xl space-y-3">
+            {form.intermediateGoals.map((goal, idx) => {
+              const goalErrors = intermediateGoalValidation.errors.filter(
+                (e) => e.goalIndex === idx
+              );
+              return (
+                <div key={idx} className="border-2 border-foreground p-3 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[11px] tracking-[0.08em] uppercase text-muted-foreground">
+                      #{idx + 1}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 px-2 text-xs text-destructive hover:text-destructive"
+                      onClick={() => removeIntermediateGoal(idx)}
+                    >
+                      <Trash2 className="size-3.5 mr-1" />
+                      {t("intermediateGoals.remove")}
+                    </Button>
+                  </div>
+
+                  <div>
+                    <FieldLabel>{t("intermediateGoals.distance")}</FieldLabel>
+                    <div className="mt-1.5 grid grid-cols-4 sm:grid-cols-7 gap-1">
+                      {(Object.keys(RACE_DISTANCE_META) as RaceDistance[]).map((dist) => (
+                        <Chip
+                          key={dist}
+                          selected={goal.raceDistance === dist}
+                          onClick={() => updateIntermediateGoal(idx, { raceDistance: dist })}
+                        >
+                          {pick(RACE_DISTANCE_META[dist], "label")}
+                        </Chip>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <FieldLabel>{t("intermediateGoals.date")}</FieldLabel>
+                    <DateInput
+                      min={form.startDate || todayDate}
+                      max={intermediateGoalMaxDate}
+                      value={goal.raceDate}
+                      onChange={(e) => updateIntermediateGoal(idx, { raceDate: e.target.value })}
+                      className="mt-1.5 px-3 py-2 min-h-[40px] text-sm"
+                    />
+                  </div>
+
+                  <div>
+                    <FieldLabel>{t("intermediateGoals.name")}</FieldLabel>
+                    <Input
+                      type="text"
+                      value={goal.raceName ?? ""}
+                      onChange={(e) => updateIntermediateGoal(idx, { raceName: e.target.value })}
+                      placeholder={t("intermediateGoals.namePlaceholder")}
+                      className="mt-1.5"
+                      maxLength={100}
+                    />
+                  </div>
+
+                  <div>
+                    <FieldLabel>{t("intermediateGoals.priority")}</FieldLabel>
+                    <div className="mt-1.5 grid grid-cols-3 gap-1.5">
+                      {PRIORITY_OPTIONS.map((opt) => (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          aria-pressed={goal.priority === opt.value}
+                          onClick={() => updateIntermediateGoal(idx, { priority: opt.value })}
+                          className={cn(
+                            "border-2 px-2 py-2 text-left transition-colors",
+                            goal.priority === opt.value
+                              ? "border-foreground bg-accent-acid/20"
+                              : "border-filet hover:bg-secondary"
+                          )}
+                        >
+                          <span className="font-mono text-[11px] font-bold uppercase tracking-[0.06em]">
+                            {t(opt.labelKey)}
+                          </span>
+                          <p className="mt-0.5 text-[10px] leading-tight text-muted-foreground">
+                            {t(opt.descKey)}
+                          </p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {goalErrors.length > 0 && (
+                    <div className="space-y-1">
+                      {goalErrors.map((err, eIdx) => {
+                        const key = INTERMEDIATE_GOAL_ERROR_KEYS[err.code];
+                        const isWarning =
+                          err.code === "DISTANCE_TOO_LONG_FOR_PRIORITY" ||
+                          err.code === "DISTANCE_LONGER_THAN_MAIN";
+                        return (
+                          <p
+                            key={eIdx}
                             className={cn(
-                              "rounded-md border px-2 py-2 text-left transition-colors",
-                              goal.priority === opt.value
-                                ? "border-primary bg-primary/10"
-                                : "hover:bg-accent/50"
+                              "flex items-center gap-1 font-mono text-[11px]",
+                              isWarning ? "text-zone-3" : "text-poster-red"
                             )}
                           >
-                            <span className={cn("text-xs font-semibold", opt.color)}>
-                              {t(opt.labelKey)}
-                            </span>
-                            <p className="text-[10px] text-muted-foreground leading-tight mt-0.5">
-                              {t(opt.descKey)}
-                            </p>
-                          </button>
-                        ))}
-                      </div>
+                            <AlertTriangle className="size-3 shrink-0" />
+                            {key ? t(key) : err.message}
+                          </p>
+                        );
+                      })}
                     </div>
-
-                    {/* Inline validation errors */}
-                    {goalErrors.length > 0 && (
-                      <div className="space-y-1">
-                        {goalErrors.map((err, eIdx) => {
-                          const i18nMap: Record<string, string> = {
-                            BEFORE_START: "intermediateGoals.validation.beforeStart",
-                            AFTER_MAIN_RACE: "intermediateGoals.validation.afterMain",
-                            TOO_CLOSE_TO_MAIN: "intermediateGoals.validation.tooCloseToMain",
-                            TOO_CLOSE_TO_EACH_OTHER: "intermediateGoals.validation.tooCloseToOther",
-                            PRIORITY_A_IN_TAPER_ZONE: "intermediateGoals.validation.priorityAInTaper",
-                            INVALID_DATE: "intermediateGoals.validation.invalidDate",
-                            DISTANCE_TOO_LONG_FOR_PRIORITY: "intermediateGoals.validation.distanceTooLongForPriority",
-                            DISTANCE_LONGER_THAN_MAIN: "intermediateGoals.validation.distanceLongerThanMain",
-                          };
-                          const key = i18nMap[err.code];
-                          const isWarning = err.code === "DISTANCE_TOO_LONG_FOR_PRIORITY" || err.code === "DISTANCE_LONGER_THAN_MAIN";
-                          return (
-                            <p key={eIdx} className={`text-xs flex items-center gap-1 ${isWarning ? "text-amber-600 dark:text-amber-400" : "text-destructive"}`}>
-                              <AlertTriangle className="size-3 shrink-0" />
-                              {key ? t(key) : err.message}
-                            </p>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
+                  )}
+                </div>
               );
             })}
 
-            {/* Add button or max reached */}
             {form.intermediateGoals.length < 5 ? (
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={addIntermediateGoal}
-              >
+              <Button variant="outline" className="w-full" onClick={addIntermediateGoal}>
                 <Plus className="size-4 mr-1.5" />
                 {t("intermediateGoals.add")}
               </Button>
             ) : (
-              <p className="text-xs text-muted-foreground text-center">
+              <p className="font-mono text-[11px] text-muted-foreground">
                 {t("intermediateGoals.maxReached")}
               </p>
             )}
           </div>
-        </div>
-        {renderNavButtons(
-          form.intermediateGoals.length === 0 || intermediateGoalValidation.valid,
-          t("nav.continue"),
-          true,
-        )}
-      </div>
-    );
-  };
-
-  // ── Step 5: Runner Level ─────────────────────────────────────────
-
-  const renderStep5 = () => {
-    const levels: Difficulty[] = [
-      "beginner",
-      "intermediate",
-      "advanced",
-      "elite",
-    ];
-
-    return (
-      <div
-        className={cn(
-          "flex-1 flex flex-col",
-          direction === "forward"
-            ? "animate-slide-in-right"
-            : "animate-slide-in-left"
-        )}
-      >
-        <div className="flex-1 flex flex-col items-center justify-center px-4">
-          <div className="size-12 md:size-16 rounded-none bg-primary/10 flex items-center justify-center mb-4">
-            <Target className="size-6 md:size-8 text-primary" />
-          </div>
-          <h2 className="text-lg md:text-xl font-semibold text-center">
-            {t("level.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1 text-center">
-            {t("level.subtitle")}
-          </p>
-
-          {userPrefs?.vma && suggestedLevel && (
-            <div className="rounded-none border bg-primary/5 p-2 text-xs text-center mt-3 max-w-sm w-full">
-              {t("level.vmaSuggestion", { vma: userPrefs.vma })}
-              <span className="font-semibold">
-                {pick(DIFFICULTY_META[suggestedLevel], "label")}
-              </span>
-              {t("level.vmaSuggestionSuffix")}
-            </div>
-          )}
-
-          <div className="w-full max-w-md md:max-w-xl lg:max-w-2xl grid grid-cols-2 gap-2 mt-6">
-            {levels.map((level) => {
-              const meta = DIFFICULTY_META[level];
-              const isSuggested = level === suggestedLevel;
-              return (
-                <Card
-                  key={level}
-                  interactive
-                  className={cn(
-                    "cursor-pointer border-border/50 hover:shadow-md hover:-translate-y-1 transition-all duration-200",
-                    form.runnerLevel === level
-                      ? "bg-gradient-to-br from-primary/10 dark:from-primary/20 to-transparent ring-2 ring-primary"
-                      : "hover:bg-gradient-to-br hover:from-primary/5 dark:hover:from-primary/10 hover:to-transparent",
-                    isSuggested &&
-                      form.runnerLevel !== level &&
-                      "border-primary/40"
-                  )}
-                  onClick={() => {
-                    setForm((f) => ({ ...f, runnerLevel: level }));
-                    goForward();
-                  }}
-                >
-                  <CardContent className="p-3 md:p-4 flex items-center gap-3">
-                    <div className="size-9 md:size-10 rounded-none bg-primary/10 flex items-center justify-center shrink-0">
-                      <span className="text-base md:text-lg font-bold text-primary">
-                        {meta.level}
-                      </span>
-                    </div>
-                    <div className="min-w-0">
-                      <div className="font-medium text-sm md:text-base leading-tight">
-                        {pick(meta, "label")}
-                      </div>
-                      <div className="text-[11px] text-muted-foreground leading-tight mt-0.5">
-                        {pick(meta, "desc")}
-                      </div>
-                      {isSuggested && (
-                        <div className="text-xs text-primary">
-                          {t("level.suggested")}
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-        <div className="py-4 flex justify-center">
-          <Button variant="ghost" size="sm" onClick={goBack}>
-            <ArrowLeft className="size-4 mr-1" />
-            {t("nav.back")}
-          </Button>
-        </div>
-      </div>
-    );
-  };
-
-  // ── Step Goal: Training mindset (finish/time/compete) ────────────
-
-  const renderStepGoal = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
+        </FormSection>
       )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("goal.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("goal.subtitle")}
-        </p>
-        <div className="w-full max-w-sm grid grid-cols-1 gap-2 mt-6">
+
+      <FormSection title={t("level.title")} description={t("level.subtitle")}>
+        {userPrefs?.vma && suggestedLevel && (
+          <p className="mb-3 border-l-2 border-accent-acid pl-3 font-mono text-[11px] text-muted-foreground">
+            {t("level.vmaSuggestion", { vma: userPrefs.vma })}
+            <span className="font-bold text-foreground">
+              {pick(DIFFICULTY_META[suggestedLevel], "label")}
+            </span>
+            {t("level.vmaSuggestionSuffix")}
+          </p>
+        )}
+        <div className="grid gap-2 sm:grid-cols-2">
+          {(["beginner", "intermediate", "advanced", "elite"] as Difficulty[]).map((level) => {
+            const meta = DIFFICULTY_META[level];
+            return (
+              <OptionCard
+                key={level}
+                selected={form.runnerLevel === level}
+                icon={<span className="font-mono text-sm font-bold">{meta.level}</span>}
+                label={pick(meta, "label")}
+                description={
+                  level === suggestedLevel
+                    ? `${pick(meta, "desc")} — ${t("level.suggested")}`
+                    : pick(meta, "desc")
+                }
+                onClick={() => setForm((f) => ({ ...f, runnerLevel: level }))}
+              />
+            );
+          })}
+        </div>
+      </FormSection>
+
+      <FormSection title={t("goal.title")} description={t("goal.subtitle")}>
+        <div className="grid gap-2 sm:grid-cols-3">
           {GOAL_OPTION_KEYS.map((opt) => (
-            <Card
+            <OptionCard
               key={opt.value}
-              interactive
-              className={cn(
-                "cursor-pointer border-border/50 transition-all duration-200",
-                form.trainingGoal === opt.value
-                  ? "ring-2 ring-primary bg-primary/5"
-                  : "hover:bg-muted/50"
-              )}
-              onClick={() => {
-                setForm((f) => ({ ...f, trainingGoal: opt.value }));
-                goForward();
-              }}
-            >
-              <CardContent className="p-3 flex items-center gap-3">
-                <div className="size-9 rounded-none bg-secondary/80 flex items-center justify-center shrink-0">
-                  {opt.icon}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold">{t(opt.labelKey)}</p>
-                  <p className="text-xs text-muted-foreground">{t(opt.descKey)}</p>
-                </div>
-              </CardContent>
-            </Card>
+              selected={form.trainingGoal === opt.value}
+              icon={opt.icon}
+              label={t(opt.labelKey)}
+              description={t(opt.descKey)}
+              onClick={() => setForm((f) => ({ ...f, trainingGoal: opt.value }))}
+            />
           ))}
         </div>
-      </div>
-      {renderNavButtons(!!form.trainingGoal)}
+      </FormSection>
     </div>
   );
 
-  // ── Step Fitness: Current fitness evaluation ───────────────────────
+  // ── Tab: Disponibilité ───────────────────────────────────────────
 
-  const renderStepFitness = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("fitness.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center max-w-md">
-          {t("fitness.subtitle")}
-        </p>
-        <div className="w-full max-w-sm space-y-4 mt-6">
-          {/* Current weekly km */}
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium" htmlFor="weeklyKm">
-              {t("fitness.weeklyKm")}
-            </label>
-            <p className="text-xs text-muted-foreground">
-              {t("fitness.weeklyKmDesc")}
-            </p>
-            <input
-              id="weeklyKm"
-              type="number"
-              inputMode="numeric"
-              min={0}
-              max={300}
-              placeholder={t("fitness.weeklyKmPlaceholder")}
-              value={form.currentWeeklyKm}
-              onChange={(e) => setForm((f) => ({ ...f, currentWeeklyKm: e.target.value }))}
-              className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
-            />
+  const renderAvailabilityTab = () => (
+    <div className="space-y-8">
+      {!isRacePlan && (
+        <FormSection title={t("duration.title")} description={t("duration.subtitle")}>
+          <div className="grid grid-cols-3 gap-2 max-w-xs">
+            {DURATION_OPTIONS.map((weeks) => (
+              <Chip
+                key={weeks}
+                selected={form.totalWeeksOverride === weeks}
+                className="justify-center py-2"
+                onClick={() => setForm((f) => ({ ...f, totalWeeksOverride: weeks }))}
+              >
+                {weeks} {t("duration.weeksShort")}
+              </Chip>
+            ))}
           </div>
-
-          {/* Current long run */}
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium" htmlFor="longRunKm">
-              {t("fitness.longRunKm")}
-            </label>
-            <p className="text-xs text-muted-foreground">
-              {t("fitness.longRunKmDesc")}
-            </p>
-            <input
-              id="longRunKm"
-              type="number"
-              inputMode="numeric"
-              min={0}
-              max={100}
-              placeholder={t("fitness.longRunKmPlaceholder")}
-              value={form.currentLongRunKm}
-              onChange={(e) => setForm((f) => ({ ...f, currentLongRunKm: e.target.value }))}
-              className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
-            />
-          </div>
-        </div>
-      </div>
-      {renderNavButtons(true, t("nav.continue"), true)}
-    </div>
-  );
-
-  // ── Step 6: Training Configuration ───────────────────────────────
-
-  const renderStep6 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
+        </FormSection>
       )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-none bg-primary/10 flex items-center justify-center mb-4">
-          <Calendar className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("schedule.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("schedule.subtitle")}
-        </p>
 
-        <div className="w-full max-w-sm mt-6 space-y-6">
+      <FormSection title={t("schedule.title")} description={t("schedule.subtitle")}>
+        <div className="max-w-sm space-y-6">
           <div>
-            <label className="text-sm font-medium mb-3 block text-center">
-              {t("schedule.sessionsPerWeek")}
-            </label>
-            <div className="flex gap-2">
+            <FieldLabel>{t("schedule.sessionsPerWeek")}</FieldLabel>
+            <div className="mt-2 flex gap-2">
               {DAYS_PER_WEEK_OPTIONS.filter((n) =>
                 form.planPurpose === "return_from_injury" ? n <= 4
                   : form.planPurpose === "beginner_start" ? n <= 5
                     : true
               ).map((n) => (
-                <Button
+                <Chip
                   key={n}
-                  variant={form.daysPerWeek === n ? "default" : "outline"}
-                  className="flex-1"
+                  selected={form.daysPerWeek === n}
+                  className="flex-1 justify-center py-2"
                   onClick={() => setForm((f) => ({ ...f, daysPerWeek: n }))}
                 >
                   {n}
-                </Button>
+                </Chip>
               ))}
             </div>
           </div>
 
-          {/* Long run day picker */}
           <div>
-            <label className="text-sm font-medium mb-2 block text-center">
-              {t("schedule.longRunDay")}
-            </label>
-            <p className="text-xs text-muted-foreground text-center mb-3">
+            <FieldLabel>{t("schedule.longRunDay")}</FieldLabel>
+            <p className="mt-1 text-xs text-muted-foreground">
               {t("schedule.longRunDayDesc")}
             </p>
-            <div className="grid grid-cols-7 gap-1">
+            <div className="mt-2 grid grid-cols-7 gap-1">
               {Array.from({ length: 7 }, (_, idx) => (
-                <Button
+                <Chip
                   key={idx}
-                  variant={form.longRunDay === idx ? "default" : "outline"}
-                  size="sm"
-                  className="text-xs px-0"
+                  selected={form.longRunDay === idx}
+                  className="justify-center px-0 py-2"
                   onClick={() => setForm((f) => ({ ...f, longRunDay: idx }))}
                 >
                   {t(`daysShort.${idx}`)}
-                </Button>
+                </Chip>
               ))}
             </div>
           </div>
 
-          {/* Strength training toggle */}
-          <div className="border-t pt-4">
+          <div className="border-t border-filet pt-4">
             <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2 min-w-0">
-                <div className="size-8 rounded-none bg-orange-500/10 flex items-center justify-center shrink-0">
-                  <Dumbbell className="size-4 text-orange-500" />
-                </div>
-                <div className="min-w-0">
-                  <label htmlFor="includeStrength" className="text-sm font-medium cursor-pointer">
-                    {t("schedule.includeStrength")}
-                  </label>
-                  <p className="text-xs text-muted-foreground leading-tight">
-                    {t("schedule.includeStrengthDesc")}
-                  </p>
-                </div>
+              <div className="min-w-0">
+                <label htmlFor="includeStrength" className="cursor-pointer font-mono text-[11px] font-bold uppercase tracking-[0.08em]">
+                  {t("schedule.includeStrength")}
+                </label>
+                <p className="text-xs leading-tight text-muted-foreground">
+                  {t("schedule.includeStrengthDesc")}
+                </p>
               </div>
               <Switch
                 id="includeStrength"
@@ -1312,128 +943,141 @@ export function PlanCreatePage() {
             </div>
 
             {form.includeStrength && (
-              <div className="mt-3 ml-10">
-                <label className="text-xs font-medium text-muted-foreground mb-2 block">
-                  {t("schedule.strengthFrequency")}
-                </label>
-                <div className="flex gap-2">
+              <div className="mt-3">
+                <FieldLabel>{t("schedule.strengthFrequency")}</FieldLabel>
+                <div className="mt-2 flex gap-2">
                   {([1, 2, 3] as const).map((n) => (
-                    <Button
+                    <Chip
                       key={n}
-                      variant={form.strengthFrequency === n ? "default" : "outline"}
-                      size="sm"
-                      className="flex-1 text-xs"
+                      selected={form.strengthFrequency === n}
+                      className="flex-1 justify-center py-2"
                       onClick={() => setForm((f) => ({ ...f, strengthFrequency: n }))}
                     >
                       {t("schedule.strengthPerWeek", { n })}
-                    </Button>
+                    </Chip>
                   ))}
                 </div>
               </div>
             )}
           </div>
         </div>
-      </div>
-      {renderNavButtons(true, t("nav.continue"))}
+      </FormSection>
     </div>
   );
 
-  // ── Step 7: Pace & Elevation (optional) ──────────────────────────
+  // ── Tab: Volume ──────────────────────────────────────────────────
 
-  const renderStep7 = () => {
-    const distanceKm = form.raceDistance
-      ? RACE_DISTANCE_META[form.raceDistance].distanceKm
-      : 0;
-
-    return (
-      <div
-        className={cn(
-          "flex-1 flex flex-col",
-          direction === "forward"
-            ? "animate-slide-in-right"
-            : "animate-slide-in-left"
-        )}
-      >
-        <div className="flex-1 flex flex-col items-center justify-center px-4">
-          <div className="size-12 md:size-16 rounded-none bg-primary/10 flex items-center justify-center mb-4">
-            <Mountain className="size-6 md:size-8 text-primary" />
+  const renderVolumeTab = () => (
+    <div className="space-y-8">
+      <FormSection title={t("fitness.title")} description={t("fitness.subtitle")}>
+        <div className="max-w-sm space-y-6">
+          <div>
+            <label className="font-mono text-[11px] font-bold uppercase tracking-[0.08em]" htmlFor="weeklyKm">
+              {t("fitness.weeklyKm")}
+            </label>
+            <p className="mt-1 text-xs text-muted-foreground">{t("fitness.weeklyKmDesc")}</p>
+            <div className="mt-3 flex items-center gap-4">
+              <Slider
+                className="flex-1"
+                min={0}
+                max={WEEKLY_KM_SLIDER_MAX}
+                step={1}
+                thumbLabel={t("fitness.weeklyKm")}
+                thumbValueText={`${weeklyKmSliderValue} km`}
+                value={[weeklyKmSliderValue]}
+                onValueChange={([v]) =>
+                  // 0 means "unknown", the same as an empty field: the generator
+                  // then estimates the starting volume from its own tables
+                  // instead of being told the runner covers zero km.
+                  setForm((f) => ({ ...f, currentWeeklyKm: v === 0 ? "" : String(v) }))
+                }
+              />
+              <Input
+                id="weeklyKm"
+                type="number"
+                inputMode="numeric"
+                min={0}
+                max={300}
+                placeholder={t("fitness.weeklyKmPlaceholder")}
+                value={form.currentWeeklyKm}
+                onChange={(e) => setForm((f) => ({ ...f, currentWeeklyKm: e.target.value }))}
+                className="w-24 shrink-0"
+              />
+            </div>
           </div>
-          <h2 className="text-lg md:text-xl font-semibold text-center">
-            {t("pace.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1 text-center">
-            {t("pace.subtitle")}
-          </p>
+
+          <div>
+            <label className="font-mono text-[11px] font-bold uppercase tracking-[0.08em]" htmlFor="longRunKm">
+              {t("fitness.longRunKm")}
+            </label>
+            <p className="mt-1 text-xs text-muted-foreground">{t("fitness.longRunKmDesc")}</p>
+            <Input
+              id="longRunKm"
+              type="number"
+              inputMode="numeric"
+              min={0}
+              max={100}
+              placeholder={t("fitness.longRunKmPlaceholder")}
+              value={form.currentLongRunKm}
+              onChange={(e) => setForm((f) => ({ ...f, currentLongRunKm: e.target.value }))}
+              className="mt-3"
+            />
+          </div>
+        </div>
+      </FormSection>
+
+      {isRacePlan && (
+        <FormSection title={t("pace.title")} description={t("pace.subtitle")}>
           {(form.raceDistance === "trail_short" || form.raceDistance === "trail" || form.raceDistance === "ultra") && (
-            <p className="text-xs text-primary text-center mt-1">
+            <p className="mb-3 border-l-2 border-accent-acid pl-3 font-mono text-[11px] text-muted-foreground">
               {t("pace.trailHint")}
             </p>
           )}
-
-          <div className="w-full max-w-sm mt-6 space-y-4">
-            {/* Pace input mode toggle */}
-            <div className="flex rounded-none border overflow-hidden">
-              <button
-                type="button"
-                className={cn(
-                  "flex-1 px-3 py-1.5 text-xs font-medium transition-colors",
-                  paceInputMode === "pace" ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
-                )}
+          <div className="max-w-sm space-y-4">
+            <div className="flex gap-2">
+              <Chip
+                selected={paceInputMode === "pace"}
+                className="flex-1 justify-center py-2"
                 onClick={() => setPaceInputMode("pace")}
               >
                 {t("pace.targetPaceTab")}
-              </button>
-              <button
-                type="button"
-                className={cn(
-                  "flex-1 px-3 py-1.5 text-xs font-medium transition-colors",
-                  paceInputMode === "time" ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
-                )}
+              </Chip>
+              <Chip
+                selected={paceInputMode === "time"}
+                className="flex-1 justify-center py-2"
                 onClick={() => setPaceInputMode("time")}
               >
                 {t("pace.targetTimeTab")}
-              </button>
+              </Chip>
             </div>
 
-            {/* Target pace or finish time */}
             {paceInputMode === "pace" ? (
               <div>
-                <label className="text-sm font-medium mb-2 block">
-                  {t("pace.targetPaceLabel")}
-                </label>
-                <input
+                <FieldLabel>{t("pace.targetPaceLabel")}</FieldLabel>
+                <Input
                   type="text"
                   value={form.targetPace}
                   onChange={(e) => {
                     setForm((f) => ({ ...f, targetPace: e.target.value }));
                     setTargetFinishTime("");
                   }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && (paceSeconds || !form.targetPace)) goForward();
-                  }}
                   placeholder="5:30"
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="mt-1.5"
+                  error={form.targetPace && !paceSeconds ? t("pace.paceFormatError") : undefined}
                 />
                 {paceSeconds && distanceKm > 0 && (
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="mt-1.5 font-mono text-[11px] text-muted-foreground">
                     {t("pace.estimatedFinish")}
-                    <span className="font-medium">
+                    <span className="font-bold text-foreground">
                       {estimateFinishTime(paceSeconds, distanceKm)}
                     </span>
-                  </p>
-                )}
-                {form.targetPace && !paceSeconds && (
-                  <p className="text-xs text-destructive mt-1">
-                    {t("pace.paceFormatError")}
                   </p>
                 )}
               </div>
             ) : (
               <div>
-                <label className="text-sm font-medium mb-2 block">
-                  {t("pace.targetFinishTimeLabel")}
-                </label>
-                <input
+                <FieldLabel>{t("pace.targetFinishTimeLabel")}</FieldLabel>
+                <Input
                   type="text"
                   value={targetFinishTime}
                   onChange={(e) => {
@@ -1447,110 +1091,57 @@ export function PlanCreatePage() {
                       setForm((f) => ({ ...f, targetPace: "" }));
                     }
                   }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      const totalSec = parseFinishTimeToSeconds(targetFinishTime);
-                      if (totalSec || !targetFinishTime) goForward();
-                    }
-                  }}
                   placeholder={t("pace.timePlaceholder")}
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="mt-1.5"
+                  error={
+                    targetFinishTime && !parseFinishTimeToSeconds(targetFinishTime)
+                      ? t("pace.timeFormatHint")
+                      : undefined
+                  }
                 />
-                {(() => {
-                  const totalSec = parseFinishTimeToSeconds(targetFinishTime);
-                  if (totalSec && distanceKm > 0) {
-                    const paceSec = finishTimeToPaceSeconds(totalSec, distanceKm);
-                    return (
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {t("pace.requiredPace")}
-                        <span className="font-medium">{formatPace(paceSec)} min/km</span>
-                      </p>
-                    );
-                  }
-                  if (targetFinishTime && !totalSec) {
-                    return (
-                      <p className="text-xs text-destructive mt-1">
-                        {t("pace.timeFormatHint")}
-                      </p>
-                    );
-                  }
-                  return null;
-                })()}
+                {paceSeconds && distanceKm > 0 && parseFinishTimeToSeconds(targetFinishTime) && (
+                  <p className="mt-1.5 font-mono text-[11px] text-muted-foreground">
+                    {t("pace.requiredPace")}
+                    <span className="font-bold text-foreground">
+                      {formatPace(paceSeconds)} min/km
+                    </span>
+                  </p>
+                )}
               </div>
             )}
 
-            {/* Elevation gain */}
             <div>
-              <label className="text-sm font-medium mb-2 block">
-                {t("pace.elevation")}
-              </label>
-              <input
+              <FieldLabel>{t("pace.elevation")}</FieldLabel>
+              <Input
                 type="number"
                 value={form.elevationGain}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, elevationGain: e.target.value }))
-                }
+                onChange={(e) => setForm((f) => ({ ...f, elevationGain: e.target.value }))}
                 placeholder={t("pace.elevationPlaceholder")}
                 min={0}
                 max={10000}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                className="mt-1.5"
               />
             </div>
           </div>
-        </div>
-        {renderNavButtons(
-          form.targetPace === "" || !!paceSeconds,
-          t("nav.continue"),
-          true
-        )}
-      </div>
-    );
-  };
+        </FormSection>
+      )}
+    </div>
+  );
 
-  // ── Step 8: Summary & Generate ───────────────────────────────────
+  // ── Tab: Relecture ───────────────────────────────────────────────
 
-  const renderStep8 = () => {
-    const distMeta = form.raceDistance
-      ? RACE_DISTANCE_META[form.raceDistance]
-      : null;
-    const levelMeta = form.runnerLevel
-      ? DIFFICULTY_META[form.runnerLevel]
-      : null;
-    const distanceKm = distMeta?.distanceKm ?? 0;
+  const renderReviewTab = () => {
+    const distMeta = form.raceDistance ? RACE_DISTANCE_META[form.raceDistance] : null;
+    const levelMeta = form.runnerLevel ? DIFFICULTY_META[form.runnerLevel] : null;
 
     return (
-      <div
-        className={cn(
-          "space-y-4",
-          direction === "forward"
-            ? "animate-slide-in-right"
-            : "animate-slide-in-left"
-        )}
-      >
-        <div className="text-center mb-4">
-          <div className="size-12 md:size-16 bg-accent-acid flex items-center justify-center mx-auto mb-3">
-            <CheckIcon className="size-6 md:size-8 text-ink" />
-          </div>
-          <h2 className="font-sans font-bold uppercase tracking-[-0.03em] text-2xl md:text-3xl">
-            {t("summary.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            {t("summary.subtitle")}
-          </p>
-        </div>
-
-        <Card>
-          <CardContent className="p-4 md:p-6 space-y-2">
-            {/* Distance */}
+      <div className="space-y-6">
+        <FormSection title={t("summary.title")} description={t("summary.subtitle")}>
+          <div className="border-2 border-foreground p-4 md:p-5">
             <SummaryRow
               label={t("summary.distance")}
-              value={
-                distMeta
-                  ? `${pick(distMeta, "label")} (${distMeta.distanceKm} km)`
-                  : "-"
-              }
+              value={distMeta ? `${pick(distMeta, "label")} (${distMeta.distanceKm} km)` : "-"}
             />
-            {/* Race date */}
             <SummaryRow
               label={t("summary.date")}
               value={
@@ -1561,80 +1152,53 @@ export function PlanCreatePage() {
             />
             <SummaryRow
               label={t("summary.startDate")}
-              value={
-                form.startDate
-                  ? formatDate(form.startDate)
-                  : "-"
-              }
+              value={form.startDate ? formatDate(form.startDate) : "-"}
             />
-            {/* Race name */}
             {form.raceName && (
-              <SummaryRow
-                label={t("summary.name")}
-                value={form.raceName}
-              />
+              <SummaryRow label={t("summary.name")} value={form.raceName} />
             )}
-            {/* Intermediate goals */}
             {form.intermediateGoals.length > 0 && (
-              <div className="py-1.5 border-b space-y-1.5">
-                <span className="text-sm text-muted-foreground">
+              <div className="space-y-1.5 border-b border-filet py-2">
+                <span className="font-mono text-[11px] tracking-[0.08em] uppercase text-muted-foreground">
                   {t("intermediateGoals.title")}
                 </span>
-                {sortIntermediateGoals(form.intermediateGoals).map((goal, idx) => {
-                  const distMeta2 = RACE_DISTANCE_META[goal.raceDistance];
-                  return (
-                    <div key={idx} className="flex items-center gap-2 pl-2 text-sm">
-                      <span className={cn(
-                        "inline-flex items-center px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase leading-none",
-                        goal.priority === "A" ? "bg-zone-5 text-ink"
-                          : goal.priority === "B" ? "bg-zone-4 text-ink"
-                            : "bg-zone-2 text-ink"
-                      )}>
-                        {t(`intermediateGoals.badge.${goal.priority}`)}
-                      </span>
-                      <span className="font-medium">
-                        {pick(distMeta2, "label")}
-                      </span>
-                      {goal.raceName && (
-                        <span className="text-muted-foreground truncate">
-                          — {goal.raceName}
-                        </span>
-                      )}
-                      <span className="text-muted-foreground ml-auto shrink-0">
-                        {goal.raceDate ? formatDate(goal.raceDate) : "-"}
-                      </span>
-                    </div>
-                  );
-                })}
+                {sortIntermediateGoals(form.intermediateGoals).map((goal, idx) => (
+                  <div key={idx} className="flex items-center gap-2 pl-2 text-sm">
+                    <span className={cn(
+                      "inline-flex items-center px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase leading-none",
+                      goal.priority === "A" ? "bg-zone-5 text-ink"
+                        : goal.priority === "B" ? "bg-zone-4 text-ink"
+                          : "bg-zone-2 text-ink"
+                    )}>
+                      {t(`intermediateGoals.badge.${goal.priority}`)}
+                    </span>
+                    <span className="font-medium">
+                      {pick(RACE_DISTANCE_META[goal.raceDistance], "label")}
+                    </span>
+                    {goal.raceName && (
+                      <span className="truncate text-muted-foreground">— {goal.raceName}</span>
+                    )}
+                    <span className="ml-auto shrink-0 font-mono text-xs text-muted-foreground">
+                      {goal.raceDate ? formatDate(goal.raceDate) : "-"}
+                    </span>
+                  </div>
+                ))}
               </div>
             )}
-            {/* Level */}
             <SummaryRow
               label={t("summary.level")}
-              value={
-                levelMeta ? pick(levelMeta, "label") : "-"
-              }
+              value={levelMeta ? pick(levelMeta, "label") : "-"}
             />
-            {/* Days */}
-            <SummaryRow
-              label={t("summary.days")}
-              value={`${form.daysPerWeek}`}
-            />
-            {/* Pace */}
+            <SummaryRow label={t("summary.days")} value={`${form.daysPerWeek}`} />
             {paceSeconds && (
               <SummaryRow
                 label={t("summary.pace")}
                 value={`${formatPace(paceSeconds)}/km → ${estimateFinishTime(paceSeconds, distanceKm)}`}
               />
             )}
-            {/* Elevation */}
             {form.elevationGain && (
-              <SummaryRow
-                label={t("summary.elevation")}
-                value={`${form.elevationGain} m D+`}
-              />
+              <SummaryRow label={t("summary.elevation")} value={`${form.elevationGain} m D+`} />
             )}
-            {/* v2: Goal */}
             <SummaryRow
               label={t("summary.goal")}
               value={
@@ -1643,8 +1207,7 @@ export function PlanCreatePage() {
                     : t("goal.time")
               }
             />
-            {/* v2: Purpose (non-race only) */}
-            {form.planPurpose !== "race" && (
+            {!isRacePlan && (
               <SummaryRow
                 label={t("summary.purpose")}
                 value={
@@ -1654,70 +1217,55 @@ export function PlanCreatePage() {
                 }
               />
             )}
-            {/* v2: Duration (non-race) */}
-            {form.planPurpose !== "race" && form.totalWeeksOverride > 0 && (
+            {!isRacePlan && form.totalWeeksOverride > 0 && (
               <SummaryRow
                 label={t("summary.duration")}
                 value={t("summary.durationValue", { weeks: form.totalWeeksOverride })}
               />
             )}
-            {/* v2: Fitness */}
             {form.currentWeeklyKm && (
               <SummaryRow
                 label={t("summary.weeklyKm")}
                 value={t("summary.currentVolume", { km: form.currentWeeklyKm })}
               />
             )}
-            {/* v2: Long run day */}
-            <SummaryRow
-              label={t("summary.longRun")}
-              value={t(`days.${form.longRunDay}`)}
-            />
-            {/* v2: Strength training */}
+            {form.currentLongRunKm && (
+              <SummaryRow
+                label={t("fitness.longRunKm")}
+                value={`${form.currentLongRunKm} km`}
+              />
+            )}
+            <SummaryRow label={t("summary.longRun")} value={t(`days.${form.longRunDay}`)} />
             {form.includeStrength && (
               <SummaryRow
                 label={t("summary.strengthTraining")}
                 value={t("schedule.strengthPerWeek", { n: form.strengthFrequency })}
               />
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </FormSection>
 
         {error && (
-          <div className="rounded-none border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive text-center">
+          <div className="border-2 border-poster-red p-3 font-mono text-[11px] text-poster-red">
             {error}
           </div>
         )}
 
-        <div className="flex justify-between gap-3">
-          <Button variant="ghost" size="sm" onClick={goBack}>
-            <ArrowLeft className="size-4 mr-1" />
-            {t("nav.back")}
-          </Button>
-          <Button
-            onClick={handleGenerate}
-            disabled={isGenerating}
-          >
-            {isGenerating ? (
-              <>
-                <Loader2 className="size-4 animate-spin mr-2" />
-                {t("summary.generating")}
-              </>
-            ) : (
-              <>
-                {t("summary.generate")}
-              </>
-            )}
-          </Button>
-        </div>
+        <Button onClick={handleGenerate} disabled={isGenerating || !canGenerate} variant="accent">
+          {isGenerating ? (
+            <>
+              <Loader2 className="size-4 animate-spin mr-2" />
+              {t("summary.generating")}
+            </>
+          ) : (
+            t("summary.generate")
+          )}
+        </Button>
       </div>
     );
   };
 
   // ── Render ───────────────────────────────────────────────────────
-
-  // Summary step can scroll; other steps use full viewport layout
-  const isFullViewportStep = currentStep !== "summary";
 
   return (
     <>
@@ -1726,26 +1274,23 @@ export function PlanCreatePage() {
         description={t("seo.createDescription")}
         canonical="/plan/create"
       />
-      <div className={cn(
-        "max-w-2xl mx-auto",
-        isFullViewportStep
-          ? "flex flex-col min-h-[calc(100dvh-8rem)] md:min-h-0 md:py-8"
-          : "py-8"
-      )}>
-        {/* Back to plan selection */}
-        {stepIndex === 0 && (
-          <div className="pt-1 pb-2">
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/plan/new">
-                <ArrowLeft className="mr-1 size-4" />
-                {t("nav.back")}
-              </Link>
-            </Button>
-          </div>
-        )}
-        {hasDraft && stepIndex === 0 && (
-          <div className="mb-4 flex flex-wrap items-center gap-3 rounded-none border border-primary/20 bg-primary/5 px-4 py-3 text-sm">
-            <span className="flex-1 min-w-0 text-foreground">
+      <div className="mx-auto max-w-6xl py-6 md:py-8">
+        <div className="pb-2">
+          <Button variant="ghost" size="sm" asChild>
+            <Link to="/plan/new">
+              <ArrowLeft className="mr-1 size-4" />
+              {t("nav.back")}
+            </Link>
+          </Button>
+        </div>
+
+        <h1 className="font-sans font-bold uppercase leading-[1.02] tracking-[-0.03em] text-3xl md:text-4xl">
+          {t("createTitle")}
+        </h1>
+
+        {hasDraft && (
+          <div className="mt-4 flex flex-wrap items-center gap-3 border-2 border-foreground px-4 py-3 text-sm">
+            <span className="min-w-0 flex-1">
               {t("draft.found", "Un brouillon de plan a été retrouvé.")}
             </span>
             <div className="flex items-center gap-2">
@@ -1758,31 +1303,298 @@ export function PlanCreatePage() {
             </div>
           </div>
         )}
-        {renderStepIndicator()}
-        {currentStep === "purpose" && renderStep1()}
-        {currentStep === "distance" && renderStep2()}
-        {currentStep === "date" && renderStep3()}
-        {currentStep === "duration" && renderStepDuration()}
-        {currentStep === "race_name" && renderStep4()}
-        {currentStep === "intermediate_goals" && renderStepIntermediateGoals()}
-        {currentStep === "level" && renderStep5()}
-        {currentStep === "goal" && renderStepGoal()}
-        {currentStep === "fitness" && renderStepFitness()}
-        {currentStep === "schedule" && renderStep6()}
-        {currentStep === "pace" && renderStep7()}
-        {currentStep === "summary" && renderStep8()}
+
+        {/* Four named tabs — the high-level navigation of the wizard */}
+        <nav
+          aria-label={t("tabs.label")}
+          className="mt-6 flex gap-5 overflow-x-auto border-b border-filet font-mono text-[11px] tracking-[0.08em] uppercase"
+        >
+          {TABS.map((tab, idx) => (
+            <button
+              key={tab.id}
+              type="button"
+              aria-current={idx === tabIndex ? "step" : undefined}
+              onClick={() => setTabIndex(idx)}
+              className={cn(
+                "-mb-px shrink-0 whitespace-nowrap border-b-2 pb-2.5 pt-1 transition-colors",
+                idx === tabIndex
+                  ? "border-accent-acid text-foreground"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <span className="mr-1.5 opacity-60">{String(idx + 1).padStart(2, "0")}</span>
+              {t(tab.labelKey)}
+            </button>
+          ))}
+        </nav>
+
+        <div className="mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_360px]">
+          <div>
+            {currentTab === "goal" && renderGoalTab()}
+            {currentTab === "availability" && renderAvailabilityTab()}
+            {currentTab === "volume" && renderVolumeTab()}
+            {currentTab === "review" && renderReviewTab()}
+
+            <div className="mt-8 flex justify-between gap-3 border-t border-filet pt-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setTabIndex((i) => Math.max(0, i - 1))}
+                disabled={tabIndex === 0}
+              >
+                <ArrowLeft className="size-4 mr-1" />
+                {t("nav.back")}
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => setTabIndex((i) => Math.min(TABS.length - 1, i + 1))}
+                disabled={tabIndex === TABS.length - 1}
+              >
+                {t("nav.next")}
+                <ArrowRight className="size-4 ml-1" />
+              </Button>
+            </div>
+          </div>
+
+          <PlanPreviewPanel
+            preview={preview}
+            daysPerWeek={form.daysPerWeek}
+            strengthPerWeek={form.includeStrength ? form.strengthFrequency : 0}
+            watchItems={watchItems}
+          />
+        </div>
       </div>
     </>
   );
 }
 
-// ── Helper component ─────────────────────────────────────────────────
+// ── Preview column ───────────────────────────────────────────────────
+
+/**
+ * The plan as it stands, recomputed on every change: phase split, four key
+ * numbers, and everything worth a second look. Sticky on desktop, stacked
+ * under the form on narrow screens.
+ */
+function PlanPreviewPanel({
+  preview,
+  daysPerWeek,
+  strengthPerWeek,
+  watchItems,
+}: {
+  preview: PlanShapePreview | null;
+  daysPerWeek: number;
+  strengthPerWeek: number;
+  watchItems: string[];
+}) {
+  const { t } = useTranslation("plan");
+  const pick = usePickLang();
+
+  return (
+    <aside className="border-2 border-foreground bg-background p-5 lg:sticky lg:top-20">
+      <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
+        {t("preview.title")}
+      </p>
+
+      {preview ? (
+        <>
+          <PhaseZoneBar
+            phases={preview.phases}
+            totalWeeks={preview.totalWeeks}
+            className="mt-4 h-2.5"
+            titleFor={(phase, weeks) =>
+              `${pick(PHASE_META[phase], "label")} (${weeks})`
+            }
+          />
+          <div className="mt-2.5 flex flex-wrap gap-x-3 gap-y-1 font-mono text-[10px] tracking-[0.06em] uppercase text-muted-foreground">
+            {preview.phases.map((segment, idx) => (
+              <span key={`${segment.phase}-${idx}`}>
+                {pick(PHASE_META[segment.phase], "label")}{" "}
+                {segment.endWeek - segment.startWeek + 1}
+              </span>
+            ))}
+          </div>
+
+          <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 border-t border-filet pt-5">
+            <PreviewStat label={t("preview.weeks")} value={`${preview.totalWeeks}`} />
+            <PreviewStat
+              label={t("preview.sessionsPerWeek")}
+              value={
+                strengthPerWeek > 0
+                  ? `${daysPerWeek} + ${strengthPerWeek}`
+                  : `${daysPerWeek}`
+              }
+            />
+            <PreviewStat label={t("preview.peakVolume")} value={`${preview.peakWeeklyKm} km`} />
+            <PreviewStat label={t("preview.totalVolume")} value={`${preview.totalKm} km`} />
+          </dl>
+        </>
+      ) : (
+        <p className="mt-4 text-sm leading-[1.5] text-muted-foreground">
+          {t("preview.empty")}
+        </p>
+      )}
+
+      <div className="mt-5 border-t border-filet pt-5">
+        <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
+          {t("preview.watchTitle")}
+        </p>
+        {watchItems.length > 0 ? (
+          <WarningBox className="mt-2.5">
+            <ul className="space-y-1.5">
+              {watchItems.map((item, idx) => (
+                <li key={idx} className="flex gap-1.5 text-xs leading-[1.45]">
+                  <AlertTriangle className="mt-0.5 size-3 shrink-0" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </WarningBox>
+        ) : (
+          <p className="mt-2 font-mono text-[11px] text-muted-foreground">
+            {t("preview.watchNone")}
+          </p>
+        )}
+      </div>
+    </aside>
+  );
+}
+
+function PreviewStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dd className="font-mono text-2xl leading-none">{value}</dd>
+      <dt className="mt-1.5 font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
+        {label}
+      </dt>
+    </div>
+  );
+}
+
+// ── Helper components ────────────────────────────────────────────────
+
+function FormSection({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section>
+      <h2 className="font-mono text-[11px] font-bold tracking-[0.14em] uppercase">
+        {title}
+      </h2>
+      {description && (
+        <p className="mt-1 text-sm leading-[1.5] text-muted-foreground">{description}</p>
+      )}
+      <div className="mt-4">{children}</div>
+    </section>
+  );
+}
+
+function FieldLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="block font-mono text-[11px] font-bold uppercase tracking-[0.08em]">
+      {children}
+    </span>
+  );
+}
+
+function OptionCard({
+  selected,
+  icon,
+  label,
+  description,
+  onClick,
+}: {
+  selected: boolean;
+  icon?: React.ReactNode;
+  label: string;
+  description?: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={selected}
+      onClick={onClick}
+      className={cn(
+        "flex items-start gap-3 border-2 p-3 text-left transition-colors",
+        selected
+          ? "border-foreground bg-accent-acid/20"
+          : "border-filet hover:bg-secondary"
+      )}
+    >
+      {icon && (
+        <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center">
+          {icon}
+        </span>
+      )}
+      <span className="min-w-0">
+        <span className="block font-mono text-[11px] font-bold uppercase tracking-[0.06em]">
+          {label}
+        </span>
+        {description && (
+          <span className="mt-0.5 block text-xs leading-[1.4] text-muted-foreground">
+            {description}
+          </span>
+        )}
+      </span>
+    </button>
+  );
+}
+
+function Chip({
+  selected,
+  onClick,
+  className,
+  children,
+}: {
+  selected: boolean;
+  onClick: () => void;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={selected}
+      onClick={onClick}
+      className={cn(
+        "inline-flex items-center border-2 px-2.5 py-1 font-mono text-[11px] tracking-[0.04em] uppercase transition-colors",
+        selected
+          ? "border-transparent bg-accent-acid text-ink"
+          : "border-foreground bg-transparent text-foreground/80 hover:bg-secondary",
+        className
+      )}
+    >
+      {children}
+    </button>
+  );
+}
+
+/** Attention block — 2px zone-3 contour, no fill. */
+function WarningBox({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={cn("border-2 border-zone-3 p-3", className)}>{children}</div>
+  );
+}
 
 function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex justify-between items-center py-1.5 border-b last:border-0">
-      <span className="text-sm text-muted-foreground">{label}</span>
-      <span className="text-sm font-medium">{value}</span>
+    <div className="flex items-center justify-between gap-3 border-b border-filet py-2 last:border-0">
+      <span className="font-mono text-[11px] tracking-[0.08em] uppercase text-muted-foreground">
+        {label}
+      </span>
+      <span className="text-sm font-medium text-right">{value}</span>
     </div>
   );
 }
