@@ -1,16 +1,20 @@
 import { useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Star } from "@/components/icons";
-import { Button } from "@/components/ui/button";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
 import { buildParamsUrl } from "@/lib/share/urlParams";
-import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { useSettings } from "@/hooks/useSettings";
 import { formatPaceWithUnit } from "@/lib/units";
 import { usePickLang } from "@/lib/i18n-utils";
+import {
+  CalculatorHero,
+  CalculatorPanel,
+  CalculatorLabel,
+  CalculatorChip,
+  CalculatorTimeField,
+  CalculatorResultHeadline,
+} from "@/components/calculators";
 
 // Open-class world records in seconds
 const WORLD_RECORDS = {
@@ -195,210 +199,161 @@ export function AgeGradedPage() {
         ]}
       />
       <div className="py-8 max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
-            <Star className="size-8 text-primary shrink-0" />
-            {t("calculators:calculateurs.ageGraded.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
-            {t("calculators:calculateurs.ageGraded.description")}
-          </FadeUp>
-        </div>
+        <CalculatorHero
+          groupLabel={t("calculators:calculateurs.groups.terrain")}
+          title={t("calculators:calculateurs.ageGraded.title")}
+          description={t("calculators:calculateurs.ageGraded.description")}
+        />
 
-        {/* Input Card */}
-        <Card className="mb-6">
-          <CardContent className="pt-6 space-y-6">
-            {/* Age + Gender row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Age */}
-              <div className="space-y-2">
-                <label htmlFor="age" className="text-sm font-medium">
-                  {t("calculators:calculateurs.ageGraded.age")}
-                </label>
-                <input
-                  id="age"
-                  type="number"
-                  min={15}
-                  max={99}
-                  placeholder={t("calculators:calculateurs.ageGraded.agePlaceholder")}
-                  value={age}
-                  onChange={(e) => handleNumericInput(e.target.value, setAge, 99)}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  aria-label={t("calculators:calculateurs.ageGraded.age")}
+        {/* Input panel */}
+        <CalculatorPanel className="mb-6 space-y-6">
+          {/* Age + Gender row */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* Age */}
+            <div>
+              <label htmlFor="age" className="font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
+                {t("calculators:calculateurs.ageGraded.age")}
+              </label>
+              <input
+                id="age"
+                type="number"
+                min={15}
+                max={99}
+                placeholder={t("calculators:calculateurs.ageGraded.agePlaceholder")}
+                value={age}
+                onChange={(e) => handleNumericInput(e.target.value, setAge, 99)}
+                className="block w-full border-0 border-b-[3px] border-foreground bg-transparent px-1 py-2 mt-2 font-mono text-2xl tabular-nums focus-visible:outline-none"
+                aria-label={t("calculators:calculateurs.ageGraded.age")}
+              />
+            </div>
+
+            {/* Gender */}
+            <div>
+              <CalculatorLabel className="mb-2.5">
+                {t("calculators:calculateurs.ageGraded.gender")}
+              </CalculatorLabel>
+              <div className="flex gap-2">
+                <CalculatorChip active={gender === "male"} onClick={() => setGender("male")} className="flex-1">
+                  {t("calculators:calculateurs.ageGraded.male")}
+                </CalculatorChip>
+                <CalculatorChip active={gender === "female"} onClick={() => setGender("female")} className="flex-1">
+                  {t("calculators:calculateurs.ageGraded.female")}
+                </CalculatorChip>
+              </div>
+            </div>
+          </div>
+
+          {/* Distance + Time row */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {/* Distance */}
+            <div>
+              <label htmlFor="distance" className="font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
+                {t("calculators:calculateurs.ageGraded.distance")}
+              </label>
+              <select
+                id="distance"
+                value={distanceKey}
+                onChange={(e) =>
+                  setDistanceKey(parseFloat(e.target.value) as DistanceKey)
+                }
+                className="block w-full border-0 border-b-[3px] border-foreground bg-transparent px-1 py-2 mt-2 font-mono text-lg focus-visible:outline-none"
+              >
+                {DISTANCES.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {pickLang(d, "label")}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Time */}
+            <div>
+              <CalculatorLabel className="mb-2.5">
+                {t("calculators:calculateurs.ageGraded.time")}
+              </CalculatorLabel>
+              <div className="flex items-end gap-2">
+                <CalculatorTimeField
+                  value={hours}
+                  onChange={(v) => handleNumericInput(v, setHours, 9)}
+                  max={9}
+                  placeholder="0"
+                  unitLabel="h"
+                  ariaLabel={t("calculators:calculateurs.ageGraded.hours")}
+                  className="w-12 sm:w-14"
+                />
+                <span className="pb-6 font-mono text-lg text-muted-foreground">:</span>
+                <CalculatorTimeField
+                  value={minutes}
+                  onChange={(v) => handleNumericInput(v, setMinutes, 59)}
+                  max={59}
+                  placeholder="00"
+                  unitLabel="min"
+                  ariaLabel={t("calculators:calculateurs.ageGraded.minutes")}
+                  className="w-12 sm:w-14"
+                />
+                <span className="pb-6 font-mono text-lg text-muted-foreground">:</span>
+                <CalculatorTimeField
+                  value={seconds}
+                  onChange={(v) => handleNumericInput(v, setSeconds, 59)}
+                  max={59}
+                  placeholder="00"
+                  unitLabel="sec"
+                  ariaLabel={t("calculators:calculateurs.ageGraded.seconds")}
+                  className="w-12 sm:w-14"
                 />
               </div>
-
-              {/* Gender */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  {t("calculators:calculateurs.ageGraded.gender")}
-                </label>
-                <div className="flex gap-2">
-                  <Button
-                    variant={gender === "male" ? "default" : "outline"}
-                    onClick={() => setGender("male")}
-                    className="flex-1"
-                  >
-                    {t("calculators:calculateurs.ageGraded.male")}
-                  </Button>
-                  <Button
-                    variant={gender === "female" ? "default" : "outline"}
-                    onClick={() => setGender("female")}
-                    className="flex-1"
-                  >
-                    {t("calculators:calculateurs.ageGraded.female")}
-                  </Button>
-                </div>
-              </div>
             </div>
-
-            {/* Distance + Time row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Distance */}
-              <div className="space-y-2">
-                <label htmlFor="distance" className="text-sm font-medium">
-                  {t("calculators:calculateurs.ageGraded.distance")}
-                </label>
-                <select
-                  id="distance"
-                  value={distanceKey}
-                  onChange={(e) =>
-                    setDistanceKey(parseFloat(e.target.value) as DistanceKey)
-                  }
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                >
-                  {DISTANCES.map((d) => (
-                    <option key={d.id} value={d.id}>
-                      {pickLang(d, "label")}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Time */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  {t("calculators:calculateurs.ageGraded.time")}
-                </label>
-                <div className="flex items-center gap-2">
-                  <div className="flex flex-col items-center">
-                    <input
-                      type="number"
-                      min={0}
-                      max={9}
-                      placeholder="0"
-                      value={hours}
-                      onChange={(e) =>
-                        handleNumericInput(e.target.value, setHours, 9)
-                      }
-                      className="flex h-12 w-14 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      aria-label={t("calculators:calculateurs.ageGraded.hours")}
-                    />
-                    <span className="text-xs text-muted-foreground mt-1">
-                      h
-                    </span>
-                  </div>
-                  <span className="text-xl font-bold text-muted-foreground pb-4">
-                    :
-                  </span>
-                  <div className="flex flex-col items-center">
-                    <input
-                      type="number"
-                      min={0}
-                      max={59}
-                      placeholder="00"
-                      value={minutes}
-                      onChange={(e) =>
-                        handleNumericInput(e.target.value, setMinutes, 59)
-                      }
-                      className="flex h-12 w-14 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      aria-label={t("calculators:calculateurs.ageGraded.minutes")}
-                    />
-                    <span className="text-xs text-muted-foreground mt-1">
-                      min
-                    </span>
-                  </div>
-                  <span className="text-xl font-bold text-muted-foreground pb-4">
-                    :
-                  </span>
-                  <div className="flex flex-col items-center">
-                    <input
-                      type="number"
-                      min={0}
-                      max={59}
-                      placeholder="00"
-                      value={seconds}
-                      onChange={(e) =>
-                        handleNumericInput(e.target.value, setSeconds, 59)
-                      }
-                      className="flex h-12 w-14 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      aria-label={t("calculators:calculateurs.ageGraded.seconds")}
-                    />
-                    <span className="text-xs text-muted-foreground mt-1">
-                      sec
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+          </div>
+        </CalculatorPanel>
 
         {/* Results */}
         {result && performanceLevel && (
           <div className="space-y-6">
             {/* Big percentage display */}
-            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-              <CardContent className="py-8 flex flex-col items-center text-center">
-                <p className="text-5xl font-bold tabular-nums">
-                  {result.percentage.toFixed(1)}%
-                </p>
-                <p className={`text-lg font-semibold mt-2 ${performanceLevel.colorClass}`}>
-                  {performanceLevel.label}
-                </p>
-              </CardContent>
-            </Card>
+            <CalculatorPanel className="flex flex-col items-center text-center py-8">
+              <CalculatorResultHeadline
+                label={performanceLevel.label}
+                value={`${result.percentage.toFixed(1)}%`}
+              />
+            </CalculatorPanel>
 
-            {/* Context card */}
-            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-              <CardContent className="pt-6">
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center py-2 border-b">
-                    <span className="text-sm text-muted-foreground">
-                      {t("calculators:calculateurs.ageGraded.openWorldRecord")}
-                    </span>
-                    <span className="text-sm font-medium tabular-nums">
-                      {formatTime(result.worldRecord)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 border-b">
-                    <span className="text-sm text-muted-foreground">
-                      {t("calculators:calculateurs.ageGraded.ageAdjustedRecord")}
-                    </span>
-                    <span className="text-sm font-medium tabular-nums">
-                      {formatTime(result.ageGradedRecord)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 border-b">
-                    <span className="text-sm text-muted-foreground">
-                      {t("calculators:calculateurs.ageGraded.yourTime")}
-                    </span>
-                    <span className="text-sm font-medium tabular-nums">
-                      {formatTime(totalTimeSeconds)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2">
-                    <span className="text-sm text-muted-foreground">
-                      {t("calculators:calculateurs.ageGraded.paceLabel")}
-                    </span>
-                    <span className="text-sm font-medium tabular-nums">
-                      {formatPaceWithUnit(result.paceMinPerKm, unit)}
-                    </span>
-                  </div>
+            {/* Context panel */}
+            <CalculatorPanel>
+              <div className="space-y-0 font-mono">
+                <div className="flex justify-between items-center py-2.5 border-b border-border">
+                  <span className="text-[13px] text-muted-foreground">
+                    {t("calculators:calculateurs.ageGraded.openWorldRecord")}
+                  </span>
+                  <span className="text-[13px] tabular-nums">
+                    {formatTime(result.worldRecord)}
+                  </span>
                 </div>
-              </CardContent>
-            </Card>
+                <div className="flex justify-between items-center py-2.5 border-b border-border">
+                  <span className="text-[13px] text-muted-foreground">
+                    {t("calculators:calculateurs.ageGraded.ageAdjustedRecord")}
+                  </span>
+                  <span className="text-[13px] tabular-nums">
+                    {formatTime(result.ageGradedRecord)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center py-2.5 border-b border-border">
+                  <span className="text-[13px] text-muted-foreground">
+                    {t("calculators:calculateurs.ageGraded.yourTime")}
+                  </span>
+                  <span className="text-[13px] tabular-nums">
+                    {formatTime(totalTimeSeconds)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center py-2.5">
+                  <span className="text-[13px] text-muted-foreground">
+                    {t("calculators:calculateurs.ageGraded.paceLabel")}
+                  </span>
+                  <span className="text-[13px] tabular-nums">
+                    {formatPaceWithUnit(result.paceMinPerKm, unit)}
+                  </span>
+                </div>
+              </div>
+            </CalculatorPanel>
 
             <ShareLinkButton
               buildUrl={() =>

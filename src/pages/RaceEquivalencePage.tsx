@@ -2,19 +2,25 @@ import { useState, useMemo } from "react";
 import { zoneClass } from "@/lib/zoneColors";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Shuffle, Info } from "@/components/icons";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
 import { buildParamsUrl } from "@/lib/share/urlParams";
-import { Card, CardContent } from "@/components/ui/card";
-import { ResponsiveTable } from "@/components/ui/responsive-table";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import { ZONE_META, type ZoneNumber } from "@/types";
 import { calculatePaceZones, loadUserZonePrefs } from "@/lib/zones";
 import { useSettings } from "@/hooks/useSettings";
 import { convertPace, getPaceUnit } from "@/lib/units";
 import { usePickLang } from "@/lib/i18n-utils";
+import {
+  CalculatorHero,
+  CalculatorPanel,
+  CalculatorLabel,
+  CalculatorTimeField,
+  CalculatorSidebar,
+  CalculatorFormulaBox,
+  CalculatorRelatedLinks,
+  CalculatorEmptyResult,
+} from "@/components/calculators";
 
 /**
  * Standard race distances in km.
@@ -134,9 +140,16 @@ export function RaceEquivalencePage() {
         paceMinPerKm,
         zone,
         isReference: distanceId !== "custom" && d.id === distanceId,
+        // Beyond the half, Riegel's extrapolation error grows fast without
+        // distance-specific endurance training — flagged rather than hidden.
+        isExtrapolated: d.km > 21.1 && inputDistanceKm <= 21.1,
       };
     });
   }, [hasValidInput, totalSeconds, inputDistanceKm, distanceId, paceZones]);
+
+  const maxPace = predictions
+    ? Math.max(...predictions.map((p) => p.paceMinPerKm))
+    : null;
 
   // Clamp numeric input
   const handleNumericInput = (
@@ -181,221 +194,234 @@ export function RaceEquivalencePage() {
           },
         ]}
       />
-      <div className="py-8 max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
-            <Shuffle className="size-8 text-primary shrink-0" />
-            {t("calculators:calculateurs.equivalence.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
-            {t("calculators:calculateurs.equivalence.description")}
-          </FadeUp>
-        </div>
+      <div className="py-8">
+        <CalculatorPanel className="p-0">
+          {/* Header row — hero + reference performance inputs */}
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 p-5 sm:p-7 md:p-8 border-b-2 border-border">
+            <CalculatorHero
+              groupLabel={t("calculators:calculateurs.groups.performance")}
+              title={t("calculators:calculateurs.equivalence.title")}
+              description={t("calculators:calculateurs.equivalence.description")}
+              className="mb-0"
+            />
 
-        {/* Input Card */}
-        <Card className="mb-6">
-          <CardContent className="pt-6 space-y-6">
-            {/* Distance Select */}
-            <div className="space-y-2">
-              <label htmlFor="distance" className="text-sm font-medium">
-                {t("calculators:calculateurs.equivalence.raceDistance")}
-              </label>
-              <select
-                id="distance"
-                value={distanceId}
-                onChange={(e) => setDistanceId(e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              >
-                {DISTANCE_OPTIONS.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {pickLang(d, "label")}
-                    {d.km > 0 ? ` (${d.km} km)` : ""}
-                  </option>
-                ))}
-              </select>
-
-              {/* Custom distance input */}
-              {distanceId === "custom" && (
-                <div className="flex items-center gap-2 mt-2">
-                  <input
-                    type="number"
-                    min={0.1}
-                    step={0.1}
-                    placeholder="km"
-                    value={customKm}
-                    onChange={(e) => setCustomKm(e.target.value)}
-                    className="flex h-10 w-28 rounded-md border border-input bg-transparent px-3 py-1 text-sm tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculators:calculateurs.equivalence.customDistanceLabel")}
-                  />
-                  <span className="text-sm text-muted-foreground">km</span>
+            <div className="shrink-0">
+              <CalculatorLabel>{t("calculators:calculateurs.equivalence.referenceLabel")}</CalculatorLabel>
+              <div className="flex items-end gap-3 mt-2.5">
+                <div>
+                  <select
+                    id="distance"
+                    value={distanceId}
+                    onChange={(e) => setDistanceId(e.target.value)}
+                    aria-label={t("calculators:calculateurs.equivalence.raceDistance")}
+                    className="border-0 border-b-[3px] border-foreground bg-transparent px-1 py-2 font-mono text-2xl focus-visible:outline-none"
+                  >
+                    {DISTANCE_OPTIONS.map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {pickLang(d, "label")}
+                        {d.km > 0 ? ` (${d.km} km)` : ""}
+                      </option>
+                    ))}
+                  </select>
+                  {distanceId === "custom" && (
+                    <div className="flex items-center gap-2 mt-2">
+                      <input
+                        type="number"
+                        min={0.1}
+                        step={0.1}
+                        placeholder="km"
+                        value={customKm}
+                        onChange={(e) => setCustomKm(e.target.value)}
+                        className="w-24 border-0 border-b-2 border-foreground bg-transparent px-1 py-1 font-mono text-sm tabular-nums focus-visible:outline-none"
+                        aria-label={t("calculators:calculateurs.equivalence.customDistanceLabel")}
+                      />
+                      <span className="font-mono text-xs text-muted-foreground">km</span>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-
-            {/* Time Inputs */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium">
-                {t("calculators:calculateurs.equivalence.raceTime")}
-              </label>
-              <div className="flex items-center gap-2">
-                <div className="flex flex-col items-center">
-                  <input
-                    type="number"
-                    min={0}
+                <div className="flex items-end gap-1.5">
+                  <CalculatorTimeField
+                    value={hours}
+                    onChange={(v) => handleNumericInput(v, setHours, 9)}
                     max={9}
                     placeholder="0"
-                    value={hours}
-                    onChange={(e) => handleNumericInput(e.target.value, setHours, 9)}
-                    className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculators:calculateurs.equivalence.hours")}
+                    unitLabel="h"
+                    ariaLabel={t("calculators:calculateurs.equivalence.hours")}
+                    className="w-11 sm:w-12"
                   />
-                  <span className="text-xs text-muted-foreground mt-1">h</span>
-                </div>
-                <span className="text-xl font-bold text-muted-foreground pb-4">:</span>
-                <div className="flex flex-col items-center">
-                  <input
-                    type="number"
-                    min={0}
-                    max={59}
-                    placeholder="00"
+                  <span className="pb-6 font-mono text-lg text-muted-foreground">:</span>
+                  <CalculatorTimeField
                     value={minutes}
-                    onChange={(e) => handleNumericInput(e.target.value, setMinutes, 59)}
-                    className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label="Minutes"
-                  />
-                  <span className="text-xs text-muted-foreground mt-1">min</span>
-                </div>
-                <span className="text-xl font-bold text-muted-foreground pb-4">:</span>
-                <div className="flex flex-col items-center">
-                  <input
-                    type="number"
-                    min={0}
+                    onChange={(v) => handleNumericInput(v, setMinutes, 59)}
                     max={59}
                     placeholder="00"
-                    value={seconds}
-                    onChange={(e) => handleNumericInput(e.target.value, setSeconds, 59)}
-                    className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculators:calculateurs.equivalence.seconds")}
+                    unitLabel="min"
+                    ariaLabel="Minutes"
+                    className="w-11 sm:w-12"
                   />
-                  <span className="text-xs text-muted-foreground mt-1">sec</span>
+                  <span className="pb-6 font-mono text-lg text-muted-foreground">:</span>
+                  <CalculatorTimeField
+                    value={seconds}
+                    onChange={(v) => handleNumericInput(v, setSeconds, 59)}
+                    max={59}
+                    placeholder="00"
+                    unitLabel="sec"
+                    ariaLabel={t("calculators:calculateurs.equivalence.seconds")}
+                    className="w-11 sm:w-12"
+                  />
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Results Table */}
-        {predictions && (
-          <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50 mb-6">
-            <CardContent className="pt-6">
-              <h2 className="text-lg font-semibold mb-4">
-                {t("calculators:calculateurs.equivalence.predictedTimes")}
-              </h2>
-              <ResponsiveTable
-                data={predictions}
-                rowKey="id"
-                stickyHeader
-                mobileCardTitle={(p) => (
-                  <span className="flex items-center gap-2">
-                    {pickLang(p, "label")}
-                    {p.isReference && (
-                      <span className="text-xs font-normal text-muted-foreground">
-                        ({t("calculators:calculateurs.equivalence.ref")})
-                      </span>
-                    )}
-                  </span>
-                )}
-                columns={[
-                  {
-                    key: "distance",
-                    header: t("calculators:calculateurs.equivalence.distanceCol"),
-                    className: "font-medium",
-                    hideOnMobile: true,
-                    cell: (p) => (
-                      <>
-                        {pickLang(p, "label")}
-                        {p.isReference && (
-                          <span className="ml-2 text-xs text-muted-foreground">
-                            ({t("calculators:calculateurs.equivalence.ref")})
-                          </span>
-                        )}
-                      </>
-                    ),
-                  },
-                  {
-                    key: "time",
-                    header: t("calculators:calculateurs.equivalence.timeCol"),
-                    className: "tabular-nums font-medium",
-                    cell: (p) => formatTime(p.predictedSeconds),
-                  },
-                  {
-                    key: "pace",
-                    header: t("calculators:calculateurs.equivalence.paceCol"),
-                    className: "tabular-nums text-muted-foreground",
-                    cell: (p) => `${formatPaceValue(convertPace(p.paceMinPerKm, unit))} ${getPaceUnit(unit)}`,
-                  },
-                  ...(paceZones
-                    ? [
-                        {
-                          key: "zone",
-                          header: t("calculators:calculateurs.equivalence.zoneCol"),
-                          cell: (p: typeof predictions[number]) => {
-                            const zoneMeta = p.zone ? ZONE_META[p.zone] : null;
-                            return zoneMeta ? (
-                              <span
-                                className={cn(
-                                  "inline-flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded-full",
-                                  cn(zoneClass(p.zone!, "bgSoft"), zoneClass(p.zone!, "text")),
+          <div className="grid lg:grid-cols-[1fr_360px]">
+            {/* ── Main column: table + chart ── */}
+            <div className="p-5 sm:p-7 md:p-8">
+              {!predictions && (
+                <CalculatorEmptyResult hint={t("calculators:calculateurs.equivalence.emptyHint")} />
+              )}
+
+              {predictions && (
+                <>
+                  <div className="border-2 border-border/70 overflow-x-auto">
+                    <table className="w-full text-left min-w-[560px]">
+                      <thead>
+                        <tr className="bg-ink text-paper font-mono text-[10px] tracking-[0.1em] uppercase">
+                          <th className="px-3 py-2.5 font-normal">{t("calculators:calculateurs.equivalence.distanceCol")}</th>
+                          <th className="px-3 py-2.5 font-normal">{t("calculators:calculateurs.equivalence.timeCol")}</th>
+                          <th className="px-3 py-2.5 font-normal">{t("calculators:calculateurs.equivalence.paceCol")}</th>
+                          {paceZones && (
+                            <th className="px-3 py-2.5 font-normal">{t("calculators:calculateurs.equivalence.zoneCol")}</th>
+                          )}
+                          <th className="px-3 py-2.5 font-normal" />
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {predictions.map((p) => {
+                          const zoneMeta = p.zone ? ZONE_META[p.zone] : null;
+                          return (
+                            <tr
+                              key={p.id}
+                              className={cn(
+                                "border-t border-border/70",
+                                p.isReference && "bg-secondary",
+                              )}
+                            >
+                              <td className="px-3 py-3 font-sans font-bold text-lg uppercase tracking-tight">
+                                {pickLang(p, "label")}
+                                {p.isReference && (
+                                  <span className="ml-2 font-mono text-[10px] font-normal text-muted-foreground normal-case tracking-normal">
+                                    ({t("calculators:calculateurs.equivalence.ref")})
+                                  </span>
                                 )}
-                              >
-                                <span
-                                  className={cn(
-                                    "size-2 rounded-full",
-                                    zoneClass(p.zone!, "bg"),
+                              </td>
+                              <td className="px-3 py-3 font-mono text-xl tabular-nums">
+                                {formatTime(p.predictedSeconds)}
+                              </td>
+                              <td className="px-3 py-3 font-mono text-[13px] tabular-nums text-foreground/80">
+                                {formatPaceValue(convertPace(p.paceMinPerKm, unit))} {getPaceUnit(unit)}
+                              </td>
+                              {paceZones && (
+                                <td className="px-3 py-3">
+                                  {zoneMeta ? (
+                                    <span
+                                      className={cn(
+                                        "font-mono text-[11px] font-bold px-1.5 py-0.5",
+                                        zoneClass(p.zone!, "bg"),
+                                      )}
+                                    >
+                                      Z{p.zone}
+                                    </span>
+                                  ) : (
+                                    <span className="text-xs text-muted-foreground">—</span>
                                   )}
-                                />
-                                Z{p.zone}
-                              </span>
-                            ) : (
-                              <span className="text-xs text-muted-foreground">-</span>
-                            );
-                          },
-                        },
-                      ]
-                    : []),
+                                </td>
+                              )}
+                              <td className="px-3 py-3 font-mono text-[10px] tracking-[0.08em] uppercase text-right">
+                                {p.isExtrapolated ? (
+                                  <span className="text-zone-3">
+                                    {t("calculators:calculateurs.equivalence.extrapolatedLabel")}
+                                  </span>
+                                ) : !p.isReference ? (
+                                  <span className="text-muted-foreground">
+                                    {t("calculators:calculateurs.equivalence.ref")}
+                                  </span>
+                                ) : null}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Bar chart */}
+                  {maxPace && (
+                    <div className="mt-7">
+                      <div className="flex items-end gap-1.5 h-24">
+                        {predictions.map((p) => (
+                          <div key={p.id} className="flex-1 flex flex-col justify-end items-stretch gap-2 h-full">
+                            <span className="font-mono text-[10px] text-muted-foreground text-center">
+                              {formatPaceValue(p.paceMinPerKm)}
+                            </span>
+                            <div
+                              className={cn("w-full", zoneClass((p.zone ?? 2) as ZoneNumber, "bg"))}
+                              style={{ height: `${Math.max(8, (p.paceMinPerKm / maxPace) * 100)}%` }}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex justify-between mt-2 font-mono text-[10px] tracking-[0.08em] uppercase text-muted-foreground">
+                        {predictions.map((p) => (
+                          <span key={p.id}>{pickLang(p, "label")}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="mt-6">
+                    <ShareLinkButton
+                      buildUrl={() =>
+                        buildParamsUrl("/calculators/equivalence", {
+                          d: distanceId,
+                          km: customKm,
+                          h: hours,
+                          m: minutes,
+                          s: seconds,
+                        })
+                      }
+                      title={t("calculators:calculateurs.equivalence.title")}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* ── Sidebar ── */}
+            <CalculatorSidebar className="border-t-2 lg:border-t-0 lg:border-l-2 border-foreground p-5 sm:p-7 md:p-8">
+              <CalculatorFormulaBox
+                label={t("calculators:calculateurs.equivalence.formulaLabel")}
+                formula={t("calculators:calculateurs.equivalence.formulaLine")}
+                note={t("calculators:calculateurs.equivalence.formulaNote")}
+              />
+              <div className="border-2 border-zone-3 px-4 py-3.5">
+                <CalculatorLabel className="text-zone-3">
+                  {t("calculators:calculateurs.equivalence.whatItDoesntSayLabel")}
+                </CalculatorLabel>
+                <p className="mt-2 text-sm leading-[1.6] text-foreground/85">
+                  {t("calculators:calculateurs.equivalence.whatItDoesntSay")}
+                </p>
+              </div>
+              <CalculatorRelatedLinks
+                label={t("calculators:calculateurs.equivalence.relatedLabel")}
+                links={[
+                  { label: t("calculators:calculateurs.equivalence.relatedPlan"), to: "/plan/new" },
+                  { label: t("calculators:calculateurs.splits.title"), to: "/calculators/splits" },
                 ]}
               />
-            </CardContent>
-          </Card>
-        )}
-
-        {predictions && (
-          <ShareLinkButton
-            buildUrl={() =>
-              buildParamsUrl("/calculators/equivalence", {
-                d: distanceId,
-                km: customKm,
-                h: hours,
-                m: minutes,
-                s: seconds,
-              })
-            }
-            title={t("calculators:calculateurs.equivalence.title")}
-          />
-        )}
-
-        {/* Explanation Card */}
-        <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-          <CardContent className="pt-6">
-            <div className="flex gap-3">
-              <Info className="size-5 text-muted-foreground shrink-0 mt-0.5" />
-              <p className="text-sm text-muted-foreground">
-                {t("calculators:calculateurs.equivalence.riegelExplanation")}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+            </CalculatorSidebar>
+          </div>
+        </CalculatorPanel>
       </div>
     </>
   );

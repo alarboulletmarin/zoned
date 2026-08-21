@@ -1,8 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { Activity } from "@/components/icons";
 import { ZoneCalculator } from "@/components/domain/ZoneCalculator";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { CalculatorHero } from "@/components/calculators";
 
 export function ZonesCalculatorPage() {
   const { t } = useTranslation("common");
@@ -32,15 +31,11 @@ export function ZonesCalculatorPage() {
         ]}
       />
       <div className="py-8 max-w-2xl mx-auto">
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
-            <Activity className="size-8 text-primary shrink-0" />
-            {t("calculators:calculateurs.zones.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
-            {t("calculators:calculateurs.zones.description")}
-          </FadeUp>
-        </div>
+        <CalculatorHero
+          groupLabel={t("calculators:calculateurs.groups.zonesAllures")}
+          title={t("calculators:calculateurs.zones.title")}
+          description={t("calculators:calculateurs.zones.description")}
+        />
 
         <ZoneCalculator />
       </div>

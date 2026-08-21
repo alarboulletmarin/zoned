@@ -5,14 +5,28 @@
     "explore": "Ouvrir",
     "comingSoon": "Bientôt",
     "groups": {
-      "benchmarks": "Tes références",
-      "pace": "Allures & conversions",
-      "race": "Course & planification"
+      "zonesAllures": "Zones & allures",
+      "performance": "Performance",
+      "terrain": "Terrain & conditions"
     },
     "hub": {
       "seoTitle": "Calculateurs — Outils de Course",
       "seoDescription": "Calculateurs de course à pied : zones d'entraînement, allures, convertisseur tapis roulant, splits, estimation VMA.",
-      "seoCollectionName": "Calculateurs Course à Pied"
+      "seoCollectionName": "Calculateurs Course à Pied",
+      "toolCount": "{{count}} calculateurs",
+      "lead": "Une saisie, un résultat, la méthode en dessous. Tout tourne dans le navigateur : aucune valeur ne sort de l'appareil, tout fonctionne hors-ligne.",
+      "savedValuesLabel": "Tes valeurs enregistrées",
+      "savedValuesEmpty": "Renseigne ta VMA ou ta FC max pour les retrouver sur tous les outils.",
+      "savedValuesEdit": "Modifier · reste sur cet appareil",
+      "vmaUnit": "VMA km/h",
+      "fcMaxUnit": "FC max",
+      "footerLocal": "Calcul local · aucune requête réseau",
+      "footerFormulas": "Formules et sources citées sur chaque outil",
+      "footerMethodology": "Méthodologie · d'où viennent ces formules"
+    },
+    "states": {
+      "offline": "Hors-ligne · les calculateurs fonctionnent",
+      "loading": "Quasiment jamais vu : le calcul est local et instantané."
     },
     "zones": {
       "seoTitle": "Calculateur de Zones d'Entraînement",
@@ -59,14 +73,40 @@
       "estimatedVma": "VMA estimée",
       "paceZonesPreview": "Aperçu des zones d'allure",
       "zone": "Zone",
+      "usageCol": "Usage",
       "pace": "Allure",
+      "exportPdf": "Exporter en PDF",
       "useThisVma": "Utiliser cette VMA",
       "createPlan": "Créer un plan",
       "vmaSaved": "VMA enregistrée : {{vma}} km/h",
       "hours": "Heures",
       "minutes": "Minutes",
       "seconds": "Secondes",
-      "hoursShort": "h"
+      "hoursShort": "h",
+      "formulaLabel": "La formule utilisée",
+      "formulaLine1": "v = distance / temps",
+      "formulaLine2": "VMA ≈ v / 0,87",
+      "formulaNote": "0,87 = fraction de VMA tenable sur 40-45 min",
+      "formulaSource": "Léger & Mercier (1984) pour le coût énergétique, Daniels pour la correspondance allure-zone.",
+      "toKnowLabel": "À savoir",
+      "toKnow1": "Une course de 30 à 60 minutes donne l'estimation la plus fiable.",
+      "toKnow2": "Un parcours vallonné ou venté sous-estime la VMA : Zoned ne corrige pas le terrain à ta place.",
+      "toKnow3": "Recalcule après six à huit semaines d'entraînement, pas toutes les semaines.",
+      "relatedLabel": "Enchaîner sur",
+      "relatedEquivalence": "Équivalences de course",
+      "relatedZones": "Zones de fréquence",
+      "localNote": "Calcul effectué dans ton navigateur. Rien n'est enregistré tant que tu ne cliques pas.",
+      "copyTable": "Copier le tableau",
+      "tableCopied": "Tableau copié",
+      "reset": "Réinitialiser",
+      "vpaceLabel": "allure vVMA",
+      "pace10kLabel": "allure 10 km",
+      "emptyHint": "Le résultat attend, il ne se remplit pas d'un exemple bidon. Les six fourchettes restent masquées.",
+      "implausibleMessage": "{{time}} sur {{distance}} donne une VMA de {{vma}} km/h : possible, mais alors ce n'était pas une course à fond.",
+      "implausibleProceed": "Calculer quand même",
+      "implausibleCorrect": "Corriger",
+      "implausibleNote": "La saisie n'est jamais effacée.",
+      "pdfUnavailable": "Export PDF indisponible pour cet outil"
     },
     "ftp": {
       "seoTitle": "Test FTP Vélo",
@@ -176,7 +216,17 @@
       "riegelExplanation": "Basé sur la formule de Riegel (1977), utilisée par la plupart des calculateurs de course. Plus fiable entre distances proches (5K→10K) qu'entre distances éloignées (5K→Marathon).",
       "hours": "Heures",
       "minutes": "Minutes",
-      "seconds": "Secondes"
+      "seconds": "Secondes",
+      "formulaLabel": "La formule",
+      "formulaLine": "t₂ = t₁ × (d₂/d₁)^1,06",
+      "formulaNote": "Riegel · exposant 1,06",
+      "whatItDoesntSayLabel": "Ce que ça ne dit pas",
+      "whatItDoesntSay": "Une équivalence suppose un entraînement adapté à la distance. Sans sorties longues, le marathon prédit ici ne se court pas vraiment : au-delà du semi, la valeur est extrapolée.",
+      "relatedLabel": "Suite logique",
+      "relatedPlan": "Générer un plan pour cette distance",
+      "referenceLabel": "Performance de référence",
+      "extrapolatedLabel": "extrapolé",
+      "emptyHint": "Entre un chrono récent pour voir tes équivalences sur les autres distances."
     },
     "ageGraded": {
       "seoTitle": "Performance Age-Graded — Score de niveau",

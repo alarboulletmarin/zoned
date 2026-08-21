@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Target, Gauge, RefreshCw, Route, Timer, ArrowRight, List, Shuffle, Star, Flag, Scale, Zap, Pool } from "@/components/icons";
+import { Target, Gauge, RefreshCw, Route, Timer, List, Shuffle, Star, Zap, Pool } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import { usePickLang } from "@/lib/i18n-utils";
+import { loadUserZonePrefs } from "@/lib/zones";
+import { CalculatorOfflineNote } from "@/components/calculators";
 
 interface CalculateurEntry {
   id: string;
@@ -14,16 +15,15 @@ interface CalculateurEntry {
   titleEn: string;
   description: string;
   descriptionEn: string;
+  /** One-line worked example, "input → output", read on the card itself. */
+  example: string;
+  exampleEn: string;
   href: string;
-  comingSoon?: boolean;
-  gradient: string;
-  iconBg: string;
-  iconColor: string;
 }
 
-/** Group ids surfaced in the hub. Each group reads as a small editorial
- *  section with its own mono caption + the matching cards underneath. */
-type CalcGroupId = "benchmarks" | "pace" | "race";
+/** Group ids surfaced in the hub — three families of four, matching the
+ *  question each tool answers rather than the formula it runs. */
+type CalcGroupId = "zonesAllures" | "performance" | "terrain";
 
 interface CalcGroup {
   id: CalcGroupId;
@@ -33,19 +33,19 @@ interface CalcGroup {
 
 const CALC_GROUPS: CalcGroup[] = [
   {
-    id: "benchmarks",
-    titleKey: "calculators:calculateurs.groups.benchmarks",
-    members: ["zones", "vma", "ftp", "css"],
+    id: "zonesAllures",
+    titleKey: "calculators:calculateurs.groups.zonesAllures",
+    members: ["zones", "allures", "convertisseur", "table-allures"],
   },
   {
-    id: "pace",
-    titleKey: "calculators:calculateurs.groups.pace",
-    members: ["allures", "table-allures", "tapis-roulant"],
+    id: "performance",
+    titleKey: "calculators:calculateurs.groups.performance",
+    members: ["vma", "ftp", "css", "equivalence"],
   },
   {
-    id: "race",
-    titleKey: "calculators:calculateurs.groups.race",
-    members: ["splits", "equivalence", "age-graded", "race-simulator", "what-if"],
+    id: "terrain",
+    titleKey: "calculators:calculateurs.groups.terrain",
+    members: ["tapis-roulant", "splits", "age-graded", "what-if"],
   },
 ];
 
@@ -57,22 +57,31 @@ export const CALCULATEURS: CalculateurEntry[] = [
     titleEn: "Training Zones",
     description: "Calculez vos zones FC et allures depuis votre VMA ou FCmax",
     descriptionEn: "Calculate your HR and pace zones from VMA or max HR",
+    example: "VMA 16,5 → 6 fourchettes",
+    exampleEn: "VMA 16.5 → 6 pace ranges",
     href: "/calculators/zones",
-    gradient: "from-primary/10 dark:from-primary/20",
-    iconBg: "bg-primary/15",
-    iconColor: "text-primary",
   },
   {
     id: "allures",
     icon: Gauge,
+    title: "Calculateur d'allures",
+    titleEn: "Pace Calculator",
+    description: "Estimez vos temps de course du 5 km au marathon depuis votre VMA",
+    descriptionEn: "Estimate your race times from 5K to marathon from your VMA",
+    example: "VMA 16,5 → 10 km 43:20",
+    exampleEn: "VMA 16.5 → 10K 43:20",
+    href: "/calculators/allures",
+  },
+  {
+    id: "convertisseur",
+    icon: RefreshCw,
     title: "Convertisseur d'allures",
     titleEn: "Pace Converter",
     description: "Convertissez entre min/km, km/h et min/mile en temps réel",
     descriptionEn: "Convert between min/km, km/h and min/mile in real time",
+    example: "4:12/km ↔ 14,3 km/h",
+    exampleEn: "4:12/km ↔ 8.9 mph",
     href: "/calculators/convertisseur",
-    gradient: "from-zone-2/10 dark:from-zone-2/20",
-    iconBg: "bg-zone-2/15",
-    iconColor: "text-zone-2",
   },
   {
     id: "table-allures",
@@ -81,34 +90,9 @@ export const CALCULATEURS: CalculateurEntry[] = [
     titleEn: "Pace Reference Table",
     description: "Toutes les allures de 3:00 à 10:00/km avec temps estimés",
     descriptionEn: "All paces from 3:00 to 10:00/km with estimated times",
+    example: "3:00 → 10:00 /km",
+    exampleEn: "3:00 → 10:00 /km",
     href: "/calculators/table-allures",
-    gradient: "from-zone-3/10 dark:from-zone-3/20",
-    iconBg: "bg-zone-3/15",
-    iconColor: "text-zone-3",
-  },
-  {
-    id: "tapis-roulant",
-    icon: RefreshCw,
-    title: "Convertisseur tapis roulant",
-    titleEn: "Treadmill Converter",
-    description: "Convertissez vitesse et inclinaison en allure équivalente",
-    descriptionEn: "Convert speed and incline to equivalent pace",
-    href: "/calculators/tapis-roulant",
-    gradient: "from-zone-4/10 dark:from-zone-4/20",
-    iconBg: "bg-zone-4/15",
-    iconColor: "text-zone-4",
-  },
-  {
-    id: "splits",
-    icon: Route,
-    title: "Générateur de splits",
-    titleEn: "Split Generator",
-    description: "Planifiez vos passages pour atteindre votre objectif chrono",
-    descriptionEn: "Plan your splits to reach your target time",
-    href: "/calculators/splits",
-    gradient: "from-zone-5/10 dark:from-zone-5/20",
-    iconBg: "bg-zone-5/15",
-    iconColor: "text-zone-5",
   },
   {
     id: "vma",
@@ -117,10 +101,9 @@ export const CALCULATEURS: CalculateurEntry[] = [
     titleEn: "VMA from Race Time",
     description: "Estimez votre VMA à partir d'un résultat de course",
     descriptionEn: "Estimate your VMA from a race result",
+    example: "10 km 43:20 → 16,5 km/h",
+    exampleEn: "10K 43:20 → 16.5 km/h",
     href: "/calculators/vma",
-    gradient: "from-zone-6/10 dark:from-zone-6/20",
-    iconBg: "bg-zone-6/15",
-    iconColor: "text-zone-6",
   },
   {
     id: "ftp",
@@ -129,10 +112,9 @@ export const CALCULATEURS: CalculateurEntry[] = [
     titleEn: "FTP Cycling Test",
     description: "Estimez votre FTP depuis un test 20 minutes ou un ramp test",
     descriptionEn: "Estimate your FTP from a 20-minute or ramp test",
+    example: "20 min 250 W → FTP 238 W",
+    exampleEn: "20 min 250 W → FTP 238 W",
     href: "/calculators/ftp",
-    gradient: "from-zone-4/10 dark:from-zone-4/20",
-    iconBg: "bg-zone-4/15",
-    iconColor: "text-zone-4",
   },
   {
     id: "css",
@@ -141,10 +123,9 @@ export const CALCULATEURS: CalculateurEntry[] = [
     titleEn: "CSS Swimming Test",
     description: "Estimez votre CSS depuis un test 400m + 200m",
     descriptionEn: "Estimate your CSS from a 400m + 200m test",
+    example: "400 m + 200 m → CSS 1:38/100m",
+    exampleEn: "400 m + 200 m → CSS 1:38/100m",
     href: "/calculators/css",
-    gradient: "from-zone-2/10 dark:from-zone-2/20",
-    iconBg: "bg-zone-2/15",
-    iconColor: "text-zone-2",
   },
   {
     id: "equivalence",
@@ -153,10 +134,31 @@ export const CALCULATEURS: CalculateurEntry[] = [
     titleEn: "Race Equivalence",
     description: "Prédisez vos temps sur toutes les distances depuis un résultat",
     descriptionEn: "Predict your times across all distances from one result",
+    example: "10 km 43:20 → semi 1:35:40",
+    exampleEn: "10K 43:20 → half 1:35:40",
     href: "/calculators/equivalence",
-    gradient: "from-zone-3/10 dark:from-zone-3/20",
-    iconBg: "bg-zone-3/15",
-    iconColor: "text-zone-3",
+  },
+  {
+    id: "tapis-roulant",
+    icon: RefreshCw,
+    title: "Convertisseur tapis roulant",
+    titleEn: "Treadmill Converter",
+    description: "Convertissez vitesse et inclinaison en allure équivalente",
+    descriptionEn: "Convert speed and incline to equivalent pace",
+    example: "12 km/h à 2% → 4:35/km",
+    exampleEn: "12 km/h at 2% → 4:35/km",
+    href: "/calculators/tapis-roulant",
+  },
+  {
+    id: "splits",
+    icon: Route,
+    title: "Générateur de splits",
+    titleEn: "Split Generator",
+    description: "Planifiez vos passages pour atteindre votre objectif chrono",
+    descriptionEn: "Plan your splits to reach your target time",
+    example: "Semi en 1:35 → splits au km",
+    exampleEn: "Half in 1:35 → per-km splits",
+    href: "/calculators/splits",
   },
   {
     id: "age-graded",
@@ -165,40 +167,31 @@ export const CALCULATEURS: CalculateurEntry[] = [
     titleEn: "Age-Graded Performance",
     description: "Comparez votre performance au record mondial de votre catégorie",
     descriptionEn: "Compare your performance to the world record for your category",
+    example: "10 km 43:20 → score 71 %",
+    exampleEn: "10K 43:20 → 71% score",
     href: "/calculators/age-graded",
-    gradient: "from-zone-2/10 dark:from-zone-2/20",
-    iconBg: "bg-zone-2/15",
-    iconColor: "text-zone-2",
-  },
-  {
-    id: "race-simulator",
-    icon: Flag,
-    title: "Simulateur jour de course",
-    titleEn: "Race Day Simulator",
-    description: "Générez un plan complet pour votre journée de course : horaires, allures, nutrition, mental",
-    descriptionEn: "Generate a complete race day plan: schedule, pacing, nutrition, mental cues",
-    href: "/race-simulator",
-    gradient: "from-zone-4/10 dark:from-zone-4/20",
-    iconBg: "bg-zone-4/15",
-    iconColor: "text-zone-4",
   },
   {
     id: "what-if",
-    icon: Scale,
+    icon: RefreshCw,
     title: "Simulateur What-If",
     titleEn: "What-If Simulator",
     description: "Comparez deux scénarios d'entraînement et visualisez les différences",
     descriptionEn: "Compare two training scenarios and visualize the differences",
+    example: "3x vs 5x/sem → écart de charge",
+    exampleEn: "3x vs 5x/week → load gap",
     href: "/calculators/what-if",
-    gradient: "from-primary/10 dark:from-primary/20",
-    iconBg: "bg-primary/15",
-    iconColor: "text-primary",
   },
 ];
+
+const TOTAL_TOOLS = CALCULATEURS.length;
 
 export function CalculateursPage() {
   const { t } = useTranslation("common");
   const pickLang = usePickLang();
+
+  const savedValues = loadUserZonePrefs();
+  const hasSavedValues = Boolean(savedValues?.vma || savedValues?.fcMax);
 
   return (
     <>
@@ -223,101 +216,113 @@ export function CalculateursPage() {
         ]}
       />
       <div className="py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2">
-            {t("calculators:calculateurs.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
-            {t("calculators:calculateurs.description")}
-          </FadeUp>
+        {/* Header — big count + lead, saved-values panel on the side */}
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8 md:mb-10">
+          <div>
+            <p className="font-mono text-[10px] sm:text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
+              {t("calculators:calculateurs.breadcrumb")}
+            </p>
+            <h1 className="font-sans font-bold uppercase leading-[0.9] tracking-[-0.05em] text-[32px] sm:text-[42px] md:text-[52px] mt-3">
+              {t("calculators:calculateurs.hub.toolCount", { count: TOTAL_TOOLS })}
+            </h1>
+            <p className="mt-3 text-[15px] md:text-base leading-[1.55] text-foreground/80 max-w-[56ch]">
+              {t("calculators:calculateurs.hub.lead")}
+            </p>
+          </div>
+
+          <div className="border-2 border-foreground px-4 py-4 sm:px-[18px] sm:py-[18px] shrink-0 md:w-[260px]">
+            <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+              {t("calculators:calculateurs.hub.savedValuesLabel")}
+            </p>
+            {hasSavedValues ? (
+              <div className="flex gap-6 mt-3 font-mono">
+                {savedValues?.vma && (
+                  <div>
+                    <div className="text-xl sm:text-2xl">{savedValues.vma.toLocaleString("fr-FR")}</div>
+                    <div className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground mt-1">
+                      {t("calculators:calculateurs.hub.vmaUnit")}
+                    </div>
+                  </div>
+                )}
+                {savedValues?.fcMax && (
+                  <div>
+                    <div className="text-xl sm:text-2xl">{savedValues.fcMax}</div>
+                    <div className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground mt-1">
+                      {t("calculators:calculateurs.hub.fcMaxUnit")}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <p className="mt-3 text-[13px] leading-[1.5] text-muted-foreground">
+                {t("calculators:calculateurs.hub.savedValuesEmpty")}
+              </p>
+            )}
+            <Link
+              to="/calculators/vma"
+              className="block mt-3 font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground underline underline-offset-2 hover:text-foreground transition-colors"
+            >
+              {t("calculators:calculateurs.hub.savedValuesEdit")}
+            </Link>
+          </div>
         </div>
 
-        {/* Calculateur Cards — grouped by theme. Each group reads as a
-            small editorial section: mono caption + matching cards. On
-            mobile cards collapse to icon + title + arrow; from sm+ they
-            expand to the full card with description + CTA. */}
+        {/* Grouped grid — three families of four */}
         <div className="space-y-10 sm:space-y-12">
           {CALC_GROUPS.map((group) => {
             const groupItems = group.members
-              .map((memberId) =>
-                CALCULATEURS.find((c) => c.id === memberId),
-              )
+              .map((memberId) => CALCULATEURS.find((c) => c.id === memberId))
               .filter((c): c is CalculateurEntry => c != null);
             if (groupItems.length === 0) return null;
             return (
               <section key={group.id} aria-labelledby={`calc-${group.id}`}>
                 <p
                   id={`calc-${group.id}`}
-                  className="font-mono text-[10px] sm:text-[11px] tracking-[0.18em] uppercase text-muted-foreground mb-3 sm:mb-4 flex items-center gap-3"
+                  className="font-mono text-[10px] sm:text-[11px] tracking-[0.16em] uppercase text-primary-text mb-3 sm:mb-4"
                 >
-                  <span className="inline-block h-px w-8 bg-border" />
-                  {t(group.titleKey)}
+                  {t(group.titleKey)} · {groupItems.length}
                 </p>
-                <StaggerGrid className={cn("grid gap-3 sm:gap-4", "grid-cols-2 lg:grid-cols-3")}>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                   {groupItems.map((item) => {
                     const Icon = item.icon;
-
-                    if (item.comingSoon) {
-                      return (
-                        <StaggerItem key={item.id}>
-                          <div className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-lg sm:rounded-xl border border-border/50 h-full opacity-60 p-4 sm:p-6">
-                            <div className="flex flex-col items-center text-center gap-3 sm:gap-4 h-full">
-                              <div className={cn("size-10 sm:size-14 rounded-lg sm:rounded-2xl flex items-center justify-center shrink-0", `bg-muted/20`)}>
-                                <Icon className="size-5 sm:size-7 text-muted-foreground" />
-                              </div>
-                              <div className="space-y-1 min-w-0">
-                                <h2 className="text-sm sm:text-lg font-semibold leading-snug">
-                                  {pickLang(item, "title")}
-                                </h2>
-                                <span className="inline-block bg-muted text-muted-foreground text-[10px] sm:text-xs px-2 py-0.5 rounded-full whitespace-nowrap mt-1">
-                                  {t("calculators:calculateurs.comingSoon")}
-                                </span>
-                                <p className="hidden sm:block text-sm text-muted-foreground">
-                                  {pickLang(item, "description")}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </StaggerItem>
-                      );
-                    }
-
                     return (
-                      <StaggerItem key={item.id}>
-                        <Link to={item.href} className="group block h-full">
-                          <div className={cn(
-                            "bg-gradient-to-br to-transparent rounded-lg sm:rounded-xl border border-border/50 h-full p-4 sm:p-6",
-                            "hover:shadow-sm hover:-translate-y-0.5 hover:border-foreground/40 transition-all duration-200",
-                            item.gradient,
-                          )}>
-                            <div className="flex flex-col items-center text-center gap-3 sm:gap-4 h-full">
-                              <div className={cn("size-10 sm:size-14 rounded-lg sm:rounded-2xl flex items-center justify-center shrink-0", item.iconBg)}>
-                                <Icon className={cn("size-5 sm:size-7", item.iconColor)} />
-                              </div>
-                              <div className="space-y-1 min-w-0 flex-1">
-                                <h2 className="text-sm sm:text-lg font-semibold leading-snug group-hover:text-primary transition-colors">
-                                  {pickLang(item, "title")}
-                                </h2>
-                                <p className="hidden sm:block text-sm text-muted-foreground">
-                                  {pickLang(item, "description")}
-                                </p>
-                              </div>
-                              <div className={cn("hidden sm:flex items-center gap-1 text-sm font-medium", item.iconColor)}>
-                                {t("calculators:calculateurs.explore")}
-                                <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
-                              </div>
-                            </div>
-                          </div>
-                        </Link>
-                      </StaggerItem>
+                      <Link key={item.id} to={item.href} className="group block h-full">
+                        <div
+                          className={cn(
+                            "bg-card h-full p-4 sm:p-[18px] transition-colors",
+                            "hover:bg-secondary",
+                          )}
+                        >
+                          <Icon className="size-4 text-muted-foreground" />
+                          <h2 className="font-sans font-bold uppercase leading-[1.05] tracking-[-0.03em] text-lg sm:text-[22px] mt-2.5">
+                            {pickLang(item, "title")}
+                          </h2>
+                          <p className="font-mono text-[11px] sm:text-xs text-muted-foreground mt-3 sm:mt-3.5">
+                            {pickLang(item, "example")}
+                          </p>
+                        </div>
+                      </Link>
                     );
                   })}
-                </StaggerGrid>
+                </div>
               </section>
             );
           })}
         </div>
+
+        {/* Footer bar — trust signals + methodology link */}
+        <div className="mt-10 md:mt-12 border-t border-border pt-5 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-7 font-mono text-[11px] tracking-[0.06em] uppercase text-muted-foreground">
+          <span>{t("calculators:calculateurs.hub.footerLocal")}</span>
+          <span>{t("calculators:calculateurs.hub.footerFormulas")}</span>
+          <Link
+            to="/methodology"
+            className="sm:ml-auto text-foreground/80 hover:text-foreground underline underline-offset-2"
+          >
+            {t("calculators:calculateurs.hub.footerMethodology")} →
+          </Link>
+        </div>
+
+        <CalculatorOfflineNote className="mt-4 inline-block" />
       </div>
     </>
   );
