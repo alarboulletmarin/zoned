@@ -20,19 +20,17 @@ export function ContributePage() {
           ],
         }}
       />
-      <div className="py-8">
+      <div className="py-8 max-w-2xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="mb-8">
           <EditorialTitle as="h1" size="md">{t("title")}</EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-2">
             {t("subtitle")}
           </FadeUp>
         </div>
 
         {/* Form */}
-        <div className="max-w-2xl mx-auto">
-          <ContributeForm />
-        </div>
+        <ContributeForm />
       </div>
     </>
   );

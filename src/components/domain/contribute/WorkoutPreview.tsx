@@ -68,7 +68,7 @@ export function WorkoutPreview({ data }: WorkoutPreviewProps) {
       </CardHeader>
       <CardContent className="space-y-6">
         {!hasBlocks ? (
-          <div className="rounded-lg border border-dashed border-muted-foreground/30 p-6 text-center">
+          <div className="border-2 border-dashed border-filet p-6 text-center">
             <p className="text-sm text-muted-foreground">
               {t("preview.emptyState")}
             </p>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -68,7 +69,7 @@ export function QuickIdeaForm() {
 
   return (
     <div className="space-y-6">
-      <div className="text-center">
+      <div>
         <p className="text-sm text-muted-foreground">
           {t("quickIdea.subtitle")}
         </p>
@@ -76,21 +77,20 @@ export function QuickIdeaForm() {
 
       {/* Name */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">
+        <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.08em]">
           {t("quickIdea.nameLabel")} <span className="text-destructive">*</span>
         </label>
-        <input
+        <Input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder={t("quickIdea.namePlaceholder")}
-          className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 placeholder:italic focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50"
         />
       </div>
 
       {/* Description */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">
+        <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.08em]">
           {t("quickIdea.descriptionLabel")} <span className="text-destructive">*</span>
         </label>
         <textarea
@@ -98,7 +98,7 @@ export function QuickIdeaForm() {
           onChange={(e) => setDescription(e.target.value)}
           placeholder={t("quickIdea.descriptionPlaceholder")}
           rows={4}
-          className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 placeholder:italic focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 resize-none"
+          className="flex w-full min-w-0 border-2 border-foreground bg-background px-4 py-2 font-mono text-base outline-2 outline-offset-2 outline-transparent transition-[border-color,box-shadow] duration-150 ease-out placeholder:text-muted-foreground focus-visible:outline-ring resize-none"
         />
       </div>
 
@@ -106,7 +106,7 @@ export function QuickIdeaForm() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Category */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">
+          <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.08em]">
             {t("quickIdea.categoryLabel")}
           </label>
           <Select
@@ -131,7 +131,7 @@ export function QuickIdeaForm() {
 
         {/* Difficulty */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">
+          <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.08em]">
             {t("quickIdea.difficultyLabel")}
           </label>
           <Select

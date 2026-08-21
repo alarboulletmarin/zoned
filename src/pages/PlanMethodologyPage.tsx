@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { PageContainer } from "@/components/layout/PageContainer";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { PLAN_PRINCIPLES } from "@/data/plan-methodology";
 import { cn } from "@/lib/utils";
@@ -47,20 +48,6 @@ function PrincipleIcon({ name, className }: { name: string; className?: string }
   const Icon = ICON_MAP[name] ?? Activity;
   return <Icon className={className} />;
 }
-
-// ---------------------------------------------------------------------------
-// Color palette for principle cards (cycling through)
-// ---------------------------------------------------------------------------
-
-const CARD_COLORS = [
-  { bg: "bg-blue-500/10", text: "text-blue-500" },
-  { bg: "bg-orange-500/10", text: "text-orange-500" },
-  { bg: "bg-green-500/10", text: "text-green-500" },
-  { bg: "bg-purple-500/10", text: "text-purple-500" },
-  { bg: "bg-amber-500/10", text: "text-amber-500" },
-  { bg: "bg-rose-500/10", text: "text-rose-500" },
-  { bg: "bg-teal-500/10", text: "text-teal-500" },
-];
 
 // ---------------------------------------------------------------------------
 // Scientific references for the bottom section
@@ -138,32 +125,30 @@ export function PlanMethodologyPage() {
         }}
       />
 
-      <div className="py-8 space-y-12 max-w-4xl mx-auto">
+      <PageContainer width="narrow" as="div" className="py-8 space-y-12">
         {/* Header */}
-        <div className="text-center space-y-4">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <div className="p-2.5 rounded-xl bg-primary/10">
-              <FlaskConical className="size-6 text-primary" />
-            </div>
+        <div>
+          <div className="flex items-center gap-3">
+            <FlaskConical className="size-6 shrink-0 text-foreground" />
+            <EditorialTitle as="h1">
+              {t("content:planMethodology.heading")}
+            </EditorialTitle>
           </div>
-          <EditorialTitle as="h1">
-            {t("content:planMethodology.heading")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <FadeUp as="p" delay={0.1} className="mt-4 max-w-[62ch] text-lg text-muted-foreground">
             {t("content:planMethodology.intro")}
           </FadeUp>
         </div>
 
         {/* Intro paragraph */}
         <section className="space-y-3">
-          <div className="text-muted-foreground space-y-3 pl-0">
+          <div className="text-muted-foreground space-y-3">
             <GlossaryLinkedText
               as="p"
               text={t("content:planMethodology.introText")}
             />
             <GlossaryLinkedText
               as="p"
-              className="text-sm italic border-l-2 border-primary/30 pl-4"
+              className="border-l-2 border-accent-acid pl-4 text-sm italic"
               text={t("content:planMethodology.introDisclaimer")}
             />
           </div>
@@ -171,25 +156,18 @@ export function PlanMethodologyPage() {
 
         {/* Principles cards */}
         <section className="space-y-4">
-          {PLAN_PRINCIPLES.map((principle, index) => {
+          {PLAN_PRINCIPLES.map((principle) => {
             const isExpanded = expandedId === principle.id;
-            const color = CARD_COLORS[index % CARD_COLORS.length];
 
             return (
-              <Card
-                key={principle.id}
-                className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent transition-shadow hover:shadow-md"
-              >
+              <Card key={principle.id} interactive>
                 <CardHeader
                   className="cursor-pointer select-none"
                   onClick={() => toggleCard(principle.id)}
                 >
                   <div className="flex items-start gap-4">
-                    <div className={cn("p-2 rounded-lg shrink-0", color.bg)}>
-                      <PrincipleIcon
-                        name={principle.icon}
-                        className={cn("size-5", color.text)}
-                      />
+                    <div className="flex size-9 shrink-0 items-center justify-center border-2 border-foreground">
+                      <PrincipleIcon name={principle.icon} className="size-4" />
                     </div>
                     <div className="flex-1 min-w-0 space-y-1">
                       <div className="flex items-center justify-between gap-2">
@@ -215,7 +193,7 @@ export function PlanMethodologyPage() {
                 {isExpanded && (
                   <CardContent className="pt-0 space-y-5">
                     {/* Details */}
-                    <div className="pl-12">
+                    <div className="pl-13">
                       <GlossaryLinkedText
                         as="p"
                         className="text-sm text-muted-foreground leading-relaxed"
@@ -224,13 +202,13 @@ export function PlanMethodologyPage() {
                     </div>
 
                     {/* Rules */}
-                    <ul className="pl-12 space-y-1.5">
+                    <ul className="pl-13 space-y-1.5">
                       {principle.rules.map((rule, ruleIndex) => (
                         <li
                           key={ruleIndex}
                           className="flex items-start gap-2 text-sm"
                         >
-                          <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary/60" />
+                          <span className="mt-1.5 size-1.5 shrink-0 bg-foreground" />
                           <span className="text-muted-foreground">
                             {pick(rule, "text")}
                           </span>
@@ -240,8 +218,8 @@ export function PlanMethodologyPage() {
 
                     {/* References */}
                     {principle.references && principle.references.length > 0 && (
-                      <div className="pl-12 space-y-1">
-                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      <div className="pl-13 space-y-1">
+                        <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
                           Sources
                         </p>
                         <ul className="space-y-0.5">
@@ -259,7 +237,7 @@ export function PlanMethodologyPage() {
 
                     {/* Related article link */}
                     {principle.relatedArticle && (
-                      <div className="pl-12">
+                      <div className="pl-13">
                         <Link
                           to={`/learn/${principle.relatedArticle}`}
                           className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
@@ -277,12 +255,10 @@ export function PlanMethodologyPage() {
         </section>
 
         {/* Bottom references section */}
-        <section className="space-y-6">
+        <section className="space-y-6 border-t-2 border-foreground pt-8">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-green-500/10">
-              <BookOpen className="size-5 text-green-500" />
-            </div>
-            <h2 className="text-2xl font-semibold">
+            <BookOpen className="size-5 text-muted-foreground" />
+            <h2 className="text-2xl font-bold uppercase tracking-tight">
               {t("content:planMethodology.scientificReferences")}
             </h2>
           </div>
@@ -291,9 +267,9 @@ export function PlanMethodologyPage() {
             {SCIENTIFIC_REFERENCES.map((ref, i) => (
               <div
                 key={i}
-                className="rounded-lg border border-border/50 bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent p-4 flex flex-col sm:flex-row sm:items-start gap-3"
+                className="flex flex-col gap-3 border border-filet p-4 sm:flex-row sm:items-start"
               >
-                <span className="shrink-0 inline-flex items-center justify-center size-8 rounded-full bg-muted text-sm font-semibold text-muted-foreground">
+                <span className="inline-flex size-9 shrink-0 items-center justify-center border-2 border-foreground font-mono text-sm font-bold">
                   {ref.year}
                 </span>
                 <div className="flex-1 min-w-0 space-y-1">
@@ -318,7 +294,7 @@ export function PlanMethodologyPage() {
             ))}
           </div>
         </section>
-      </div>
+      </PageContainer>
     </>
   );
 }

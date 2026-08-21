@@ -34,7 +34,7 @@ export function StringListEditor({
 
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+      <h3 className="font-mono text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
         {label}
       </h3>
 
@@ -47,7 +47,7 @@ export function StringListEditor({
                 onChange={(e) => handleChange(index, e.target.value)}
                 placeholder={placeholder}
                 rows={1}
-                className="flex flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 placeholder:italic focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] resize-none"
+                className="flex flex-1 border-2 border-foreground bg-background px-4 py-2 font-mono text-sm outline-2 outline-offset-2 outline-transparent transition-[border-color,box-shadow] duration-150 ease-out placeholder:text-muted-foreground focus-visible:outline-ring resize-none"
               />
               <Button
                 type="button"

@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -208,16 +209,18 @@ export function FullWorkoutWizard() {
 
     return (
       <div className="mb-6">
-        <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
+        <div className="flex items-baseline justify-between font-mono text-[11px] tracking-[0.08em] uppercase text-muted-foreground mb-2">
           <span>
-            {t("steps.step")} {step}/{TOTAL_STEPS} - {stepTitles[step - 1]}
+            {t("steps.step")} {step}/{TOTAL_STEPS} — {stepTitles[step - 1]}
           </span>
         </div>
-        <div className="h-2 bg-muted rounded-full overflow-hidden">
-          <div
-            className="h-full bg-primary transition-all duration-300 ease-out rounded-full"
-            style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
-          />
+        <div className="flex gap-1">
+          {Array.from({ length: TOTAL_STEPS }, (_, i) => (
+            <div
+              key={i}
+              className={cn("h-1 flex-1 transition-colors", i < step ? "bg-accent-acid" : "bg-filet")}
+            />
+          ))}
         </div>
       </div>
     );
@@ -236,47 +239,45 @@ export function FullWorkoutWizard() {
     >
       {/* Name FR */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">
+        <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.08em]">
           {t("fullWorkout.nameLabel")} <span className="text-destructive">*</span>
         </label>
-        <input
+        <Input
           type="text"
           value={data.name ?? ""}
           onChange={(e) => update({ name: e.target.value })}
-          className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
         />
       </div>
 
       {/* Name EN */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">
+        <label className="block font-mono text-[11px] uppercase tracking-[0.08em] text-muted-foreground">
           {t("fullWorkout.nameEnLabel")}
         </label>
-        <input
+        <Input
           type="text"
           value={data.nameEn ?? ""}
           onChange={(e) => update({ nameEn: e.target.value })}
           placeholder={t("fullWorkout.nameEnPlaceholder")}
-          className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 placeholder:italic focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
         />
       </div>
 
       {/* Description FR */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">
+        <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.08em]">
           {t("fullWorkout.descriptionLabel")} <span className="text-destructive">*</span>
         </label>
         <textarea
           value={data.description ?? ""}
           onChange={(e) => update({ description: e.target.value })}
           rows={3}
-          className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] resize-none"
+          className="flex w-full min-w-0 border-2 border-foreground bg-background px-4 py-2 font-mono text-base outline-2 outline-offset-2 outline-transparent transition-[border-color,box-shadow] duration-150 ease-out placeholder:text-muted-foreground focus-visible:outline-ring resize-none"
         />
       </div>
 
       {/* Description EN */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-muted-foreground">
+        <label className="block font-mono text-[11px] uppercase tracking-[0.08em] text-muted-foreground">
           {t("fullWorkout.descriptionEnLabel")}
         </label>
         <textarea
@@ -284,14 +285,14 @@ export function FullWorkoutWizard() {
           onChange={(e) => update({ descriptionEn: e.target.value })}
           placeholder={t("fullWorkout.descriptionEnPlaceholder")}
           rows={2}
-          className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-xs shadow-xs placeholder:text-muted-foreground/60 placeholder:italic focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] resize-none"
+          className="flex w-full min-w-0 border-2 border-foreground bg-background px-4 py-2 font-mono text-sm outline-2 outline-offset-2 outline-transparent transition-[border-color,box-shadow] duration-150 ease-out placeholder:text-muted-foreground focus-visible:outline-ring resize-none"
         />
       </div>
 
       {/* Category + Difficulty */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <label className="text-sm font-medium">
+          <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.08em]">
             {t("quickIdea.categoryLabel")}
           </label>
           <Select
@@ -315,7 +316,7 @@ export function FullWorkoutWizard() {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">
+          <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.08em]">
             {t("quickIdea.difficultyLabel")}
           </label>
           <Select
@@ -342,7 +343,7 @@ export function FullWorkoutWizard() {
       {/* Session Type + Target System */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <label className="text-sm font-medium">
+          <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.08em]">
             {t("fullWorkout.sessionTypeLabel")}
           </label>
           <Select
@@ -363,7 +364,7 @@ export function FullWorkoutWizard() {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">
+          <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.08em]">
             {t("fullWorkout.targetSystemLabel")}
           </label>
           <Select
@@ -386,15 +387,15 @@ export function FullWorkoutWizard() {
 
       {/* Duration Range */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">
+        <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.08em]">
           {t("fullWorkout.durationLabel")}
         </label>
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1">
-            <label className="text-xs text-muted-foreground">
+            <label className="block font-mono text-[10px] uppercase tracking-[0.08em] text-muted-foreground">
               {t("fullWorkout.durationMin")}
             </label>
-            <input
+            <Input
               type="number"
               min={0}
               value={data.typicalDuration?.min ?? 30}
@@ -406,14 +407,13 @@ export function FullWorkoutWizard() {
                   },
                 })
               }
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
             />
           </div>
           <div className="space-y-1">
-            <label className="text-xs text-muted-foreground">
+            <label className="block font-mono text-[10px] uppercase tracking-[0.08em] text-muted-foreground">
               {t("fullWorkout.durationMax")}
             </label>
-            <input
+            <Input
               type="number"
               min={0}
               value={data.typicalDuration?.max ?? 60}
@@ -425,7 +425,6 @@ export function FullWorkoutWizard() {
                   },
                 })
               }
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
             />
           </div>
         </div>
@@ -433,7 +432,7 @@ export function FullWorkoutWizard() {
 
       {/* Environment toggles */}
       <div className="space-y-3">
-        <label className="text-sm font-medium">
+        <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.08em]">
           {t("environment.title")}
         </label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -447,7 +446,7 @@ export function FullWorkoutWizard() {
           ).map(({ key, label }) => (
             <div
               key={key}
-              className="flex items-center justify-between rounded-lg border p-3"
+              className="flex items-center justify-between border-2 border-filet p-3"
             >
               <label className="text-sm">{label}</label>
               <Switch
@@ -617,7 +616,7 @@ export function FullWorkoutWizard() {
       {step === 4 && renderStep4()}
 
       {/* Navigation buttons */}
-      <div className="flex justify-between pt-4 border-t">
+      <div className="flex justify-between pt-4 border-t border-filet">
         <Button
           type="button"
           variant="outline"
