@@ -9,29 +9,17 @@ import type { ChangeType, ChangelogItem } from "@/data/changelog";
 import { useWhatsNew } from "@/hooks/useWhatsNew";
 import { usePickLang } from "@/lib/i18n-utils";
 
-const changeTypeConfig: Record<
+/** Brut treatment: entry types are told apart by their glyph and their label,
+ *  not by a colour code — the palette stays ink/paper and the single acid
+ *  accent is spent on the latest version badge below. */
+const changeTypeIcon: Record<
   ChangeType,
-  { color: string; dotColor: string; icon?: React.ComponentType<{ className?: string; size?: number | string }> }
+  React.ComponentType<{ className?: string; size?: number | string }> | undefined
 > = {
-  added: {
-    color: "text-green-600 dark:text-green-400",
-    dotColor: "bg-green-500",
-    icon: Sparkles,
-  },
-  changed: {
-    color: "text-blue-600 dark:text-blue-400",
-    dotColor: "bg-blue-500",
-    icon: RefreshCw,
-  },
-  fixed: {
-    color: "text-amber-600 dark:text-amber-400",
-    dotColor: "bg-amber-500",
-  },
-  performance: {
-    color: "text-purple-600 dark:text-purple-400",
-    dotColor: "bg-purple-500",
-    icon: Rocket,
-  },
+  added: Sparkles,
+  changed: RefreshCw,
+  fixed: undefined,
+  performance: Rocket,
 };
 
 export function ChangelogPage() {
@@ -81,43 +69,42 @@ export function ChangelogPage() {
 
         {/* Timeline */}
         <StaggerGrid className="space-y-10">
-          {changelogVersions.map((version) => (
+          {changelogVersions.map((version, versionIdx) => (
             <StaggerItem key={version.version}>
             <div className="space-y-4">
               {/* Version header */}
               <div className="flex items-center gap-3">
-                <Badge className="text-sm px-3 py-1">
+                <Badge
+                  className={
+                    versionIdx === 0
+                      ? "text-sm px-3 py-1 bg-accent-acid text-ink"
+                      : "text-sm px-3 py-1"
+                  }
+                >
                   v{version.version}
                 </Badge>
-                <span className="text-sm text-muted-foreground">
+                <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground">
                   {formatDate(version.date)}
                 </span>
               </div>
 
               {/* Change sections */}
-              <div className="space-y-5 pl-2 border-l-2 border-border ml-3">
+              <div className="space-y-5 pl-2 border-l-2 border-filet ml-3">
                 {(
                   Object.entries(version.changes) as [
                     ChangeType,
                     ChangelogItem[],
                   ][]
                 ).map(([type, items]) => {
-                  const config = changeTypeConfig[type];
-                  const Icon = config.icon;
+                  const Icon = changeTypeIcon[type];
 
                   return (
                     <div key={type} className="pl-6 space-y-2">
-                      <h3
-                        className={`flex items-center gap-2 text-sm font-semibold ${config.color}`}
-                      >
-                        {Icon ? (
-                          <Icon className="size-4" />
-                        ) : (
-                          <span
-                            className={`size-2.5 rounded-full ${config.dotColor}`}
-                          />
-                        )}
-                        {getChangeTypeLabel(type)}
+                      <h3>
+                        <Badge variant="outline">
+                          {Icon && <Icon />}
+                          {getChangeTypeLabel(type)}
+                        </Badge>
                       </h3>
                       <ul className="space-y-1.5">
                         {items.map((item, idx) => (
@@ -125,7 +112,7 @@ export function ChangelogPage() {
                             key={idx}
                             className="flex items-start gap-2 text-sm text-muted-foreground"
                           >
-                            <span className="mt-1.5 shrink-0 size-1.5 rounded-full bg-current opacity-40" />
+                            <span className="mt-2 shrink-0 size-1.5 bg-current opacity-40" />
                             <span>
                               {pickLang(item, "category") && (
                                 <Badge
