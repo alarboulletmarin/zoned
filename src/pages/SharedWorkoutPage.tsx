@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { FadeUp } from "@/components/editorial";
 import { SessionTimeline } from "@/components/visualization/SessionTimeline";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { decodeSharedWorkout, sharedWorkoutToTemplate } from "@/lib/share/workoutShare";
@@ -83,11 +83,11 @@ export function SharedWorkoutPage() {
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="size-11 rounded-full bg-gradient-to-br from-zone-2/10 dark:from-zone-2/20 to-transparent flex items-center justify-center shrink-0">
-                <Share className="size-5 text-foreground/80" />
-              </div>
-              <EditorialTitle as="h1">{workout.name}</EditorialTitle>
+            <div className="flex items-center gap-2">
+              <Share className="size-5 text-muted-foreground shrink-0" />
+              <h1 className="font-sans font-bold uppercase text-3xl md:text-5xl leading-[0.9] tracking-[-0.04em]">
+                {workout.name}
+              </h1>
             </div>
             <FadeUp as="p" delay={0.1} className="text-muted-foreground max-w-2xl">
               {t("workoutBuilder.shared.subtitle")}
@@ -110,11 +110,13 @@ export function SharedWorkoutPage() {
         </div>
 
         {/* Preview — same timeline the builder shows while editing. */}
-        <div className="rounded-lg border p-4 bg-card">
-          <p className="text-xs text-muted-foreground mb-2">
+        <div className="border-2 border-foreground bg-background p-5">
+          <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
             {t("workoutBuilder.preview")}
           </p>
-          <SessionTimeline workout={workout} />
+          <div className="mt-3">
+            <SessionTimeline workout={workout} />
+          </div>
         </div>
 
         {/* Phase breakdown */}
@@ -124,7 +126,7 @@ export function SharedWorkoutPage() {
             if (steps.length === 0) return null;
 
             return (
-              <Card key={key} size="flush" className="border-border/50">
+              <Card key={key} size="flush">
                 <CardContent className="p-3 sm:p-4 space-y-1">
                   <h2 className={`text-sm font-semibold ${color}`}>{t(labelKey)}</h2>
                   <p className="text-sm text-muted-foreground">

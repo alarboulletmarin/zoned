@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { FadeUp } from "@/components/editorial";
 import { WeekSummaryBar } from "@/components/weekly";
 import { cn } from "@/lib/utils";
 import { decodeSharedWeek, sharedWeekSessions, sharedWeekToPlan } from "@/lib/weekShare";
@@ -115,11 +115,11 @@ export function SharedWeekPage() {
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="size-11 rounded-full bg-gradient-to-br from-zone-2/10 dark:from-zone-2/20 to-transparent flex items-center justify-center shrink-0">
-                <Share className="size-5 text-foreground/80" />
-              </div>
-              <EditorialTitle as="h1">{payload.n}</EditorialTitle>
+            <div className="flex items-center gap-2">
+              <Share className="size-5 text-muted-foreground shrink-0" />
+              <h1 className="font-sans font-bold uppercase text-3xl md:text-5xl leading-[0.9] tracking-[-0.04em]">
+                {payload.n}
+              </h1>
             </div>
             <FadeUp as="p" delay={0.1} className="text-muted-foreground max-w-2xl">
               {t("weekly.shared.subtitle")}
@@ -161,7 +161,7 @@ export function SharedWeekPage() {
             const dayLabel = t(`weekly.days.${session.dayOfWeek}`);
 
             return (
-              <Card key={idx} size="flush" className="border-border/50">
+              <Card key={idx} size="flush">
                 <CardContent className="p-3 sm:p-4">
                   <div className="flex items-start gap-3">
                     <span className="text-xs font-medium text-muted-foreground w-10 shrink-0 pt-0.5">
