@@ -24,20 +24,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import {
-  EditorialTitle,
-  FadeUp,
-  StaggerGrid,
-  StaggerItem,
-} from "@/components/editorial";
+import { StaggerGrid, StaggerItem } from "@/components/editorial";
 import { WeekRhythmChart } from "@/components/weekly";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
 import { usePlans } from "@/hooks/usePlans";
@@ -64,7 +53,7 @@ function WeekStat({
   value: string;
 }) {
   return (
-    <span className="inline-flex items-center gap-1 text-xs text-muted-foreground tabular-nums">
+    <span className="inline-flex items-center gap-1 font-mono text-[11px] text-muted-foreground tabular-nums">
       <Icon className="size-3.5 text-zone-2" />
       {value}
     </span>
@@ -97,37 +86,27 @@ function WeekCard({
   const to = `/weeks/${week.id}`;
 
   return (
-    <Card
-      interactive
-      className="h-full bg-gradient-to-br from-zone-2/10 dark:from-zone-2/20 to-transparent border-border/50"
-    >
-      <CardHeader className="cursor-pointer" onClick={() => navigate(to)}>
+    <div className="h-full bg-card p-5 flex flex-col">
+      <div className="cursor-pointer flex-1" onClick={() => navigate(to)}>
         <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-lg line-clamp-1 flex-1">
+          <h3 className="font-sans font-bold uppercase leading-[1.02] tracking-[-0.03em] text-2xl line-clamp-1 flex-1">
             {pick(week, "name")}
-          </CardTitle>
+          </h3>
           <Badge variant="secondary" className="shrink-0">
             {week.config.weekCategory
               ? t(`weekly.prebuilt.category.${week.config.weekCategory}`)
               : t("weekly.title")}
           </Badge>
         </div>
-        <CardDescription>
-          <span className="flex items-center gap-1">
-            <CalendarRange className="size-3.5" />
-            {t("weekly.list.sessionsCount", { count: stats.sessions })}
-            {" · "}
-            {new Date(week.config.createdAt).toLocaleDateString()}
-          </span>
-        </CardDescription>
-      </CardHeader>
+        <p className="mt-1.5 font-mono text-xs text-muted-foreground flex items-center gap-1.5">
+          <CalendarRange className="size-3.5" />
+          {t("weekly.list.sessionsCount", { count: stats.sessions })}
+          {" · "}
+          {new Date(week.config.createdAt).toLocaleDateString()}
+        </p>
 
-      <CardContent
-        className="space-y-3 cursor-pointer"
-        onClick={() => navigate(to)}
-      >
         {/* Mini-stats: sessions · volume (h) · TSS */}
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mt-3">
           <WeekStat
             icon={Activity}
             value={t("weekly.list.sessionsCount", { count: stats.sessions })}
@@ -137,11 +116,13 @@ function WeekCard({
         </div>
 
         {/* Graphic: the 7-day rhythm (shape of the week at a glance) */}
-        <WeekRhythmChart slots={slots} />
-      </CardContent>
+        <div className="mt-3">
+          <WeekRhythmChart slots={slots} />
+        </div>
+      </div>
 
       {/* Actions — View · Export · overflow menu (share / duplicate / delete) */}
-      <div className="px-6 pb-4 flex gap-2">
+      <div className="flex gap-2 mt-4 pt-4 border-t border-filet">
         <Button variant="outline" size="sm" className="flex-1" asChild>
           <Link to={to}>
             <ArrowRight className="size-3.5" />
@@ -179,11 +160,11 @@ function WeekCard({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </Card>
+    </div>
   );
 }
 
-/** Toggle chip for the category filter — mirrors WorkoutFilters' FilterChip. */
+/** Toggle chip for the category filter — mirrors PlansPage's distance filter. */
 function CategoryChip({
   label,
   selected,
@@ -198,10 +179,10 @@ function CategoryChip({
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors",
+        "px-2.5 py-1.5 transition-colors",
         selected
-          ? "border-primary bg-primary/10 text-primary"
-          : "border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground",
+          ? "bg-foreground text-background"
+          : "hover:text-foreground",
       )}
     >
       {label}
@@ -313,14 +294,14 @@ export function WeeksListPage() {
     <>
       <SEOHead noindex title={t("weekly.list.title")} canonical="/weeks" />
       <div className="py-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex flex-col gap-4 border-b border-filet pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <EditorialTitle as="h1" size="md">
-              {t("weekly.list.title")}
-            </EditorialTitle>
-            <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
+            <p className="font-mono text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
               {t("weekly.list.subtitle")}
-            </FadeUp>
+            </p>
+            <h1 className="font-sans font-bold uppercase leading-[0.9] tracking-[-0.05em] text-5xl sm:text-6xl mt-2">
+              {t("weekly.list.title")}
+            </h1>
           </div>
           <div className="flex items-center gap-2">
             <input
@@ -348,7 +329,7 @@ export function WeeksListPage() {
         </div>
 
         {presentCategories.length > 0 && (
-          <div className="flex flex-wrap items-center gap-1.5">
+          <div className="flex flex-wrap gap-x-4 gap-y-1.5 font-mono text-[10px] tracking-[0.08em] uppercase text-muted-foreground">
             <CategoryChip
               label={t("weekly.list.filterAll")}
               selected={categoryFilter === "all"}
@@ -384,7 +365,7 @@ export function WeeksListPage() {
             // grid has played its entrance would otherwise stay at opacity 0
             // (viewport once) — duplicated/imported weeks were invisible.
             key={visibleWeeks.map((w) => w.id).join("|")}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border border border-border"
           >
             {visibleWeeks.map((week) => (
               <StaggerItem key={week.id}>

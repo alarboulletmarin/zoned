@@ -21,7 +21,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { WeekSummaryBar } from "@/components/weekly";
 import { cn } from "@/lib/utils";
 import { getPrebuiltWeekBySlug } from "@/data/prebuilt-weeks";
@@ -46,11 +45,13 @@ const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
   HeartPulse,
 };
 
-const DIFFICULTY_GRADIENT: Record<string, string> = {
-  beginner: "from-green-500/10 dark:from-green-500/20",
-  intermediate: "from-yellow-500/10 dark:from-yellow-500/20",
-  advanced: "from-orange-500/10 dark:from-orange-500/20",
-  elite: "from-red-500/10 dark:from-red-500/20",
+// Difficulty reads as a flat border tint on the icon square and the "why this
+// week" panel — no fill, no gradient (Zoned Brut has no soft surfaces).
+const DIFFICULTY_BORDER: Record<string, string> = {
+  beginner: "border-zone-2",
+  intermediate: "border-zone-3",
+  advanced: "border-zone-4",
+  elite: "border-zone-5",
 };
 
 export function PrebuiltWeekDetailPage() {
@@ -103,6 +104,7 @@ export function PrebuiltWeekDetailPage() {
   const whyItWorks = pick(week, "whyItWorks");
   const provenance = week.provenance ? pick(week, "provenance") : null;
   const Icon = ICON_MAP[week.icon] ?? Mountain;
+  const difficultyBorder = DIFFICULTY_BORDER[week.difficulty] ?? "border-filet";
 
   const handleUse = () => {
     const plan = prebuiltWeekToPlan(week);
@@ -143,22 +145,24 @@ export function PrebuiltWeekDetailPage() {
         </Button>
 
         {/* Header */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex flex-col gap-4 border-b border-filet pb-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-3">
             <div className="flex items-center gap-3">
               <div
                 className={cn(
-                  "size-11 rounded-full bg-gradient-to-br to-transparent flex items-center justify-center shrink-0",
-                  DIFFICULTY_GRADIENT[week.difficulty] ?? "from-gray-400/10",
+                  "size-11 border-2 flex items-center justify-center shrink-0",
+                  difficultyBorder,
                 )}
               >
                 <Icon className="size-5 text-foreground/80" />
               </div>
-              <EditorialTitle as="h1">{name}</EditorialTitle>
+              <h1 className="font-sans font-bold uppercase leading-[0.92] tracking-[-0.04em] text-4xl sm:text-5xl">
+                {name}
+              </h1>
             </div>
-            <FadeUp as="p" delay={0.1} className="text-muted-foreground max-w-2xl">
+            <p className="text-base leading-[1.55] text-foreground/75 max-w-2xl">
               {description}
-            </FadeUp>
+            </p>
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="secondary">
                 {t(`weekly.prebuilt.category.${week.category}`)}
@@ -183,7 +187,9 @@ export function PrebuiltWeekDetailPage() {
 
         {/* Preview: stats + 80/20 gauge + rhythm (reuses WeekSummaryBar). */}
         <div className="space-y-2">
-          <h2 className="text-lg font-semibold">{t("weekly.prebuilt.preview")}</h2>
+          <h2 className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground">
+            {t("weekly.prebuilt.preview")}
+          </h2>
           <WeekSummaryBar
             stats={stats}
             slots={slots}
@@ -192,22 +198,24 @@ export function PrebuiltWeekDetailPage() {
         </div>
 
         {/* Why this week */}
-        <Card className={cn("border-border/60 bg-gradient-to-br to-transparent", DIFFICULTY_GRADIENT[week.difficulty] ?? "from-gray-400/10")}>
-          <CardContent className="p-4 sm:p-5 space-y-2">
-            <div className="flex items-center gap-2">
-              <Lightbulb className="size-4 text-foreground/70" />
-              <h2 className="text-base font-semibold">{t("weekly.prebuilt.whyTitle")}</h2>
-            </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">{whyItWorks}</p>
-            {provenance && (
-              <p className="text-xs text-muted-foreground/80 italic pt-1">— {provenance}</p>
-            )}
-          </CardContent>
-        </Card>
+        <div className={cn("border-2 p-4 sm:p-5 space-y-2", difficultyBorder)}>
+          <div className="flex items-center gap-2">
+            <Lightbulb className="size-4 text-foreground/70" />
+            <h2 className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+              {t("weekly.prebuilt.whyTitle")}
+            </h2>
+          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed">{whyItWorks}</p>
+          {provenance && (
+            <p className="text-xs text-muted-foreground/80 italic pt-1">— {provenance}</p>
+          )}
+        </div>
 
         {/* Session list with per-session "why" */}
         <div className="space-y-2">
-          <h2 className="text-lg font-semibold">{t("weekly.prebuilt.whySessionTitle")}</h2>
+          <h2 className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+            {t("weekly.prebuilt.whySessionTitle")}
+          </h2>
           <div className="space-y-2">
             {orderedSessions.map((session, idx) => {
               const workout = byId.get(session.workoutId);
@@ -217,7 +225,7 @@ export function PrebuiltWeekDetailPage() {
               const dayLabel = t(`weekly.days.${session.dayOfWeek}`);
 
               return (
-                <Card key={idx} size="flush" className="border-border/50">
+                <Card key={idx} size="flush">
                   <CardContent className="p-3 sm:p-4 space-y-2">
                     {/* Top row: day, name, badges */}
                     <div className="flex items-start gap-3">
@@ -229,13 +237,13 @@ export function PrebuiltWeekDetailPage() {
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
                         {session.isKeySession && (
-                          <Star filled className="size-4 text-yellow-500" />
+                          <Star filled className="size-4 text-foreground" />
                         )}
                         {sessionLabel && (
                           <Badge variant="outline" className="text-xs">
                             <div
                               className={cn(
-                                "size-2 rounded-full",
+                                "size-2",
                                 sessionColorClass(session.sessionType),
                               )}
                             />
@@ -269,7 +277,7 @@ export function PrebuiltWeekDetailPage() {
       </div>
 
       {/* Mobile sticky CTA (thumb zone). */}
-      <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 border-t bg-background/95 backdrop-blur px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 border-t-2 bg-background px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <Button className="w-full" size="lg" onClick={handleUse}>
           <Sparkles className="size-4" />
           {t("weekly.prebuilt.useThisWeek")}
