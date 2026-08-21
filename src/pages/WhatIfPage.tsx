@@ -19,6 +19,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
@@ -38,8 +39,9 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { SEOHead } from "@/components/seo";
-import { CalculatorHero } from "@/components/calculators";
+import { CalculatorHero, CalculatorLabel } from "@/components/calculators";
 import { cn } from "@/lib/utils";
+import { zoneClass } from "@/lib/zoneColors";
 import { generatePlan } from "@/lib/planGenerator";
 import { computePlanStats, computeEnhancedPlanAnalysis } from "@/lib/planStats";
 import { generateInsights } from "@/lib/whatIfInsights";
@@ -58,6 +60,14 @@ import { loadRunnerProfile } from "@/lib/runnerProfile";
 const STORAGE_KEY = "zoned-whatif-scenarios";
 
 const ALL_ZONES = ["Z1", "Z2", "Z3", "Z4", "Z5", "Z6"] as const;
+
+/**
+ * Scenario A/B is never encoded with a hue: A is solid ink, B is the same ink
+ * drawn as a 2px outline. The Z1-Z6 ramp stays reserved for real intensities
+ * and the single acid accent stays on the primary action (Zoned Brut).
+ */
+const SCENARIO_A_FILL = "bg-foreground";
+const SCENARIO_B_FILL = "border-2 border-foreground bg-transparent";
 
 const RACE_DISTANCES: RaceDistance[] = [
   "5K",
@@ -206,14 +216,14 @@ function ScenarioCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">{label}</CardTitle>
+        <CardTitle className="font-mono text-[11px] tracking-[0.16em] uppercase">
+          {label}
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Days per week */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">
-            {t("scenario.daysPerWeek")}
-          </label>
+          <CalculatorLabel>{t("scenario.daysPerWeek")}</CalculatorLabel>
           <div className="flex items-center gap-3">
             <Slider
               value={[scenario.daysPerWeek]}
@@ -225,7 +235,7 @@ function ScenarioCard({
               }
               className="flex-1"
             />
-            <span className="text-sm font-medium tabular-nums w-6 text-right">
+            <span className="font-mono text-sm tabular-nums w-6 text-right">
               {scenario.daysPerWeek}
             </span>
           </div>
@@ -233,7 +243,7 @@ function ScenarioCard({
 
         {/* Training goal */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">{t("scenario.goal")}</label>
+          <CalculatorLabel>{t("scenario.goal")}</CalculatorLabel>
           <Select
             value={scenario.trainingGoal}
             onValueChange={(v) =>
@@ -255,7 +265,7 @@ function ScenarioCard({
 
         {/* Total weeks */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">{t("scenario.weeks")}</label>
+          <CalculatorLabel>{t("scenario.weeks")}</CalculatorLabel>
           <div className="flex items-center gap-3">
             <Slider
               value={[scenario.totalWeeks]}
@@ -267,7 +277,7 @@ function ScenarioCard({
               }
               className="flex-1"
             />
-            <span className="text-sm font-medium tabular-nums w-6 text-right">
+            <span className="font-mono text-sm tabular-nums w-6 text-right">
               {scenario.totalWeeks}
             </span>
           </div>
@@ -292,23 +302,56 @@ function MetricRow({
 }) {
   const isPositive = delta.startsWith("+");
   return (
-    <tr className="border-b last:border-b-0">
-      <td className="py-2 px-2 text-sm font-medium">{label}</td>
-      <td className="py-2 px-2 text-sm tabular-nums text-center">{valueA}</td>
-      <td className="py-2 px-2 text-sm tabular-nums text-center">{valueB}</td>
+    <tr className="border-b border-filet last:border-b-0">
+      <td className="py-2.5 px-2 text-sm">{label}</td>
+      <td className="py-2.5 px-2 font-mono text-sm tabular-nums text-center">
+        {valueA}
+      </td>
+      <td className="py-2.5 px-2 font-mono text-sm tabular-nums text-center">
+        {valueB}
+      </td>
       <td
         className={cn(
-          "py-2 px-2 text-sm tabular-nums text-center font-medium",
+          "py-2.5 px-2 font-mono text-sm tabular-nums text-center",
           deltaWarning
-            ? "text-red-600 dark:text-red-400"
+            ? "text-poster-red"
             : isPositive
-              ? "text-green-600 dark:text-green-400"
+              ? "text-zone-2"
               : "text-muted-foreground",
         )}
       >
         {delta}
       </td>
     </tr>
+  );
+}
+
+/** Ink-solid (A) / ink-outline (B) key shared by both comparison charts. */
+function ScenarioLegend({
+  labelA,
+  labelB,
+  className,
+}: {
+  labelA: string;
+  labelB: string;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "flex items-center gap-4 font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground",
+        className,
+      )}
+    >
+      <span className="flex items-center gap-1.5">
+        <span className={cn("size-2.5 rounded-none", SCENARIO_A_FILL)} />
+        {labelA}
+      </span>
+      <span className="flex items-center gap-1.5">
+        <span className={cn("size-2.5 rounded-none", SCENARIO_B_FILL)} />
+        {labelB}
+      </span>
+    </div>
   );
 }
 
@@ -591,9 +634,6 @@ export function WhatIfPage() {
     elite: t("levels.elite"),
   };
 
-  const inputClassName =
-    "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
-
   // ── Render ─────────────────────────────────────────────────────────
 
   return (
@@ -646,15 +686,15 @@ export function WhatIfPage() {
         {/* Shared Config Card */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t("shared.title")}</CardTitle>
+            <CardTitle className="font-mono text-[11px] tracking-[0.16em] uppercase">
+              {t("shared.title")}
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Race distance */}
               <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  {t("shared.distance")}
-                </label>
+                <CalculatorLabel>{t("shared.distance")}</CalculatorLabel>
                 <Select
                   value={raceDistance}
                   onValueChange={(v) => {
@@ -679,9 +719,7 @@ export function WhatIfPage() {
 
               {/* Runner level */}
               <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  {t("shared.level")}
-                </label>
+                <CalculatorLabel>{t("shared.level")}</CalculatorLabel>
                 <Select
                   value={runnerLevel}
                   onValueChange={(v) => {
@@ -704,9 +742,7 @@ export function WhatIfPage() {
 
               {/* Current weekly km */}
               <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  {t("shared.currentKm")}
-                </label>
+                <CalculatorLabel>{t("shared.currentKm")}</CalculatorLabel>
                 <div className="flex items-center gap-3">
                   <Slider
                     value={[currentWeeklyKm]}
@@ -719,20 +755,18 @@ export function WhatIfPage() {
                     }}
                     className="flex-1"
                   />
-                  <span className="text-sm font-medium tabular-nums w-12 text-right">
+                  <span className="font-mono text-sm tabular-nums w-12 text-right">
                     {currentWeeklyKm} km
                   </span>
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="font-mono text-[11px] leading-[1.6] text-muted-foreground">
                   {t("shared.currentKmHelp")}
                 </p>
               </div>
 
               {/* Current long run km */}
               <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  {t("shared.currentLongRun")}
-                </label>
+                <CalculatorLabel>{t("shared.currentLongRun")}</CalculatorLabel>
                 <div className="flex items-center gap-3">
                   <Slider
                     value={[currentLongRunKm]}
@@ -745,11 +779,11 @@ export function WhatIfPage() {
                     }}
                     className="flex-1"
                   />
-                  <span className="text-sm font-medium tabular-nums w-12 text-right">
+                  <span className="font-mono text-sm tabular-nums w-12 text-right">
                     {currentLongRunKm} km
                   </span>
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="font-mono text-[11px] leading-[1.6] text-muted-foreground">
                   {t("shared.currentLongRunHelp")}
                 </p>
               </div>
@@ -759,7 +793,7 @@ export function WhatIfPage() {
 
         {/* Quick Compare Presets */}
         <div className="space-y-2">
-          <h2 className="text-sm font-medium text-muted-foreground">
+          <h2 className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
             {t("presets.title")}
           </h2>
           <div className="flex flex-wrap gap-2">
@@ -862,7 +896,7 @@ export function WhatIfPage() {
             {/* Metric Comparison Table */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">
+                <CardTitle className="font-mono text-[11px] tracking-[0.16em] uppercase">
                   {t("results.title")}
                 </CardTitle>
               </CardHeader>
@@ -870,17 +904,17 @@ export function WhatIfPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b">
-                        <th className="py-2 px-2 text-left font-medium">
+                      <tr className="border-b-2 border-foreground">
+                        <th className="py-2 px-2 text-left font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground">
                           {t("results.metric")}
                         </th>
-                        <th className="py-2 px-2 text-center font-medium">
+                        <th className="py-2 px-2 text-center font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground">
                           A
                         </th>
-                        <th className="py-2 px-2 text-center font-medium">
+                        <th className="py-2 px-2 text-center font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground">
                           B
                         </th>
-                        <th className="py-2 px-2 text-center font-medium">
+                        <th className="py-2 px-2 text-center font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground">
                           {t("results.delta")}
                         </th>
                       </tr>
@@ -899,7 +933,7 @@ export function WhatIfPage() {
             {volumeData && (
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">
+                  <CardTitle className="font-mono text-[11px] tracking-[0.16em] uppercase">
                     {t("results.volumeProgression")}
                   </CardTitle>
                   <CardDescription>
@@ -907,7 +941,7 @@ export function WhatIfPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-end gap-[2px] h-48">
+                  <div className="flex items-end gap-[2px] h-48 border-b-2 border-foreground">
                     {Array.from({ length: volumeData.maxWeeks }).map((_, i) => {
                       const weekA = results.statsA.weeklyVolumes[i];
                       const weekB = results.statsB.weeklyVolumes[i];
@@ -919,14 +953,20 @@ export function WhatIfPage() {
                           className="flex-1 flex items-end gap-[1px] h-full"
                         >
                           <div
-                            className="flex-1 bg-blue-500/60 rounded-t-sm min-h-[1px]"
+                            className={cn(
+                              "flex-1 rounded-none min-h-[2px]",
+                              SCENARIO_A_FILL,
+                            )}
                             style={{
                               height: `${(durA / volumeData.maxDuration) * 100}%`,
                             }}
                             title={`A S${i + 1}: ${formatMinutes(durA)}`}
                           />
                           <div
-                            className="flex-1 bg-orange-500/60 rounded-t-sm min-h-[1px]"
+                            className={cn(
+                              "flex-1 rounded-none min-h-[2px]",
+                              SCENARIO_B_FILL,
+                            )}
                             style={{
                               height: `${(durB / volumeData.maxDuration) * 100}%`,
                             }}
@@ -942,7 +982,7 @@ export function WhatIfPage() {
                       <div
                         key={i}
                         className={cn(
-                          "flex-1 text-center text-[9px] text-muted-foreground",
+                          "flex-1 text-center font-mono text-[9px] tabular-nums text-muted-foreground",
                           i % 2 !== 0 &&
                             volumeData.maxWeeks > 10 &&
                             "hidden sm:block",
@@ -953,16 +993,11 @@ export function WhatIfPage() {
                     ))}
                   </div>
                   {/* Legend */}
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground mt-2">
-                    <span className="flex items-center gap-1.5">
-                      <span className="size-2.5 rounded-full bg-blue-500/60" />
-                      {t("scenario.a")}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <span className="size-2.5 rounded-full bg-orange-500/60" />
-                      {t("scenario.b")}
-                    </span>
-                  </div>
+                  <ScenarioLegend
+                    labelA={t("scenario.a")}
+                    labelB={t("scenario.b")}
+                    className="mt-3"
+                  />
                 </CardContent>
               </Card>
             )}
@@ -971,7 +1006,7 @@ export function WhatIfPage() {
             {zoneData && (
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">
+                  <CardTitle className="font-mono text-[11px] tracking-[0.16em] uppercase">
                     {t("results.zoneDistribution")}
                   </CardTitle>
                 </CardHeader>
@@ -997,38 +1032,46 @@ export function WhatIfPage() {
                       <div key={zone} className="space-y-1">
                         <div className="flex items-center gap-2">
                           <span
-                            className="text-xs font-medium w-6"
-                            style={{ color: `var(--zone-${getZoneNumber(zone)})` }}
+                            className={cn(
+                              "font-mono text-[11px] tracking-[0.1em] uppercase w-6",
+                              zoneClass(getZoneNumber(zone), "text"),
+                            )}
                           >
                             {zone}
                           </span>
                         </div>
                         <div className="space-y-0.5">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs w-6 text-right text-muted-foreground">
+                            <span className="font-mono text-[10px] w-6 text-right text-muted-foreground">
                               A
                             </span>
-                            <div className="flex-1 h-4 bg-muted rounded-sm overflow-hidden">
+                            <div className="flex-1 h-4 bg-muted rounded-none overflow-hidden">
                               <div
-                                className="h-full bg-blue-500/60 rounded-sm transition-all"
+                                className={cn(
+                                  "h-full rounded-none transition-[width] duration-300",
+                                  SCENARIO_A_FILL,
+                                )}
                                 style={{ width: `${pctA}%` }}
                               />
                             </div>
-                            <span className="text-xs w-16 text-right tabular-nums">
+                            <span className="font-mono text-[11px] w-16 text-right tabular-nums">
                               {formatMinutes(minutesA)}
                             </span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-xs w-6 text-right text-muted-foreground">
+                            <span className="font-mono text-[10px] w-6 text-right text-muted-foreground">
                               B
                             </span>
-                            <div className="flex-1 h-4 bg-muted rounded-sm overflow-hidden">
+                            <div className="flex-1 h-4 bg-muted rounded-none overflow-hidden">
                               <div
-                                className="h-full bg-orange-500/60 rounded-sm transition-all"
+                                className={cn(
+                                  "h-full rounded-none transition-[width] duration-300",
+                                  SCENARIO_B_FILL,
+                                )}
                                 style={{ width: `${pctB}%` }}
                               />
                             </div>
-                            <span className="text-xs w-16 text-right tabular-nums">
+                            <span className="font-mono text-[11px] w-16 text-right tabular-nums">
                               {formatMinutes(minutesB)}
                             </span>
                           </div>
@@ -1037,16 +1080,11 @@ export function WhatIfPage() {
                     );
                   })}
                   {/* Legend */}
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2">
-                    <span className="flex items-center gap-1.5">
-                      <span className="size-2.5 rounded-full bg-blue-500/60" />
-                      {t("scenario.a")}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <span className="size-2.5 rounded-full bg-orange-500/60" />
-                      {t("scenario.b")}
-                    </span>
-                  </div>
+                  <ScenarioLegend
+                    labelA={t("scenario.a")}
+                    labelB={t("scenario.b")}
+                    className="pt-2"
+                  />
                 </CardContent>
               </Card>
             )}
@@ -1055,7 +1093,7 @@ export function WhatIfPage() {
             {results.insights.length > 0 && (
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">
+                  <CardTitle className="font-mono text-[11px] tracking-[0.16em] uppercase">
                     {t("insights.title")}
                   </CardTitle>
                 </CardHeader>
@@ -1068,12 +1106,12 @@ export function WhatIfPage() {
                       >
                         <span
                           className={cn(
-                            "mt-1.5 size-2 rounded-full shrink-0",
+                            "mt-1.5 size-2 rounded-none shrink-0",
                             insight.type === "warning"
-                              ? "bg-amber-500"
+                              ? "bg-poster-red"
                               : insight.type === "stimulus"
-                                ? "bg-green-500"
-                                : "bg-blue-500",
+                                ? "bg-zone-2"
+                                : "bg-foreground",
                           )}
                         />
                         <span>{t(insight.key, insight.params)}</span>
@@ -1088,9 +1126,9 @@ export function WhatIfPage() {
             <Card>
               <CardContent className="pt-6">
                 <div className="flex items-start gap-3">
-                  <AlertTriangle className="size-5 text-amber-500 shrink-0 mt-0.5" />
+                  <AlertTriangle className="size-5 text-poster-red shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium mb-1">
+                    <p className="font-mono text-[11px] tracking-[0.14em] uppercase mb-1.5">
                       {t("disclaimer.title")}
                     </p>
                     <p className="text-sm text-muted-foreground">
@@ -1118,16 +1156,14 @@ export function WhatIfPage() {
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-2">
-              <label className="text-sm font-medium">
-                {t("actions.scenarioName")}
-              </label>
-              <input
+              <CalculatorLabel>{t("actions.scenarioName")}</CalculatorLabel>
+              <Input
                 type="text"
                 value={saveName}
                 onChange={(e) => setSaveName(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSave()}
                 placeholder={t("saveDialog.placeholder")}
-                className={inputClassName}
+                aria-label={t("actions.scenarioName")}
                 autoFocus
               />
             </div>
@@ -1154,7 +1190,7 @@ export function WhatIfPage() {
               </DialogTitle>
             </DialogHeader>
             {savedScenarios.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4 text-center">
+              <p className="font-mono text-[11px] text-muted-foreground py-4 text-center">
                 {t("actions.noSaved")}
               </p>
             ) : (
@@ -1162,13 +1198,13 @@ export function WhatIfPage() {
                 {savedScenarios.map((scenario) => (
                   <li
                     key={scenario.id}
-                    className="flex items-center justify-between gap-2 rounded-md border p-2"
+                    className="flex items-center justify-between gap-2 rounded-none border-2 border-foreground p-2"
                   >
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium truncate">
                         {scenario.name}
                       </p>
-                      <p className="text-xs text-muted-foreground tabular-nums">
+                      <p className="font-mono text-[10px] text-muted-foreground tabular-nums">
                         {formatDate(new Date(scenario.savedAt))}
                       </p>
                     </div>

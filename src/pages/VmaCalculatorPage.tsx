@@ -3,10 +3,11 @@ import { zoneClass } from "@/lib/zoneColors";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { Save, ArrowRight } from "@/components/icons";
+import { Save, ArrowRight, Download } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
 import { buildParamsUrl } from "@/lib/share/urlParams";
+import { exportZonesAtlasToPDF } from "@/lib/export";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { ZONE_META, type ZoneNumber } from "@/types";
@@ -140,7 +141,8 @@ export function VmaCalculatorPage() {
   };
 
   const handleExportPdf = () => {
-    toast.error(t("calculators:calculateurs.vma.pdfUnavailable"));
+    if (!calculatedVma) return;
+    void exportZonesAtlasToPDF({ vma: calculatedVma }, unit);
   };
 
   const handleReset = () => {
@@ -363,6 +365,7 @@ export function VmaCalculatorPage() {
                         {t("calculators:calculateurs.vma.copyTable")}
                       </Button>
                       <Button onClick={handleExportPdf} variant="outline">
+                        <Download className="size-4" />
                         {t("calculators:calculateurs.vma.exportPdf")}
                       </Button>
                       <button

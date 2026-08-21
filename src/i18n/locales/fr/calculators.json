@@ -105,8 +105,7 @@
       "implausibleMessage": "{{time}} sur {{distance}} donne une VMA de {{vma}} km/h : possible, mais alors ce n'était pas une course à fond.",
       "implausibleProceed": "Calculer quand même",
       "implausibleCorrect": "Corriger",
-      "implausibleNote": "La saisie n'est jamais effacée.",
-      "pdfUnavailable": "Export PDF indisponible pour cet outil"
+      "implausibleNote": "La saisie n'est jamais effacée."
     },
     "ftp": {
       "seoTitle": "Test FTP Vélo",
@@ -218,8 +217,10 @@
       "minutes": "Minutes",
       "seconds": "Secondes",
       "formulaLabel": "La formule",
-      "formulaLine": "t₂ = t₁ × (d₂/d₁)^1,06",
-      "formulaNote": "Riegel · exposant 1,06",
+      "formulaLine": "t₂ = t₁ × (d₂/d₁)^{{exponent}}",
+      "formulaNote": "Riegel · exposant {{exponent}}",
+      "exponentLabel": "Exposant Riegel",
+      "exponentNote": "1,06 est la valeur publiée par Riegel. Descends à 1,04 si ton endurance tient bien sur long, monte à 1,08 si tu es plutôt vitesse.",
       "whatItDoesntSayLabel": "Ce que ça ne dit pas",
       "whatItDoesntSay": "Une équivalence suppose un entraînement adapté à la distance. Sans sorties longues, le marathon prédit ici ne se court pas vraiment : au-delà du semi, la valeur est extrapolée.",
       "relatedLabel": "Suite logique",

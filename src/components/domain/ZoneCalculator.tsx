@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router-dom";
 import { Save, Trash2, HeartRate, Gauge, ChevronDown, Dumbbell, Download } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
 import { buildParamsUrl } from "@/lib/share/urlParams";
 import { exportZonesAtlasToPDF } from "@/lib/export";
@@ -159,71 +160,53 @@ export function ZoneCalculator() {
       <CardContent className="space-y-6">
         {/* Inputs */}
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <label htmlFor="fcMax" className="flex items-center gap-2 text-sm font-medium">
-              <HeartRate className="size-4 text-red-500" />
-              {t("myZones.zoneCalculator.fcMax")}
+          <div className="space-y-2.5">
+            <label
+              htmlFor="fcMax"
+              className="flex items-center gap-2 font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground"
+            >
+              <HeartRate className="size-3.5" />
+              {t("myZones.zoneCalculator.fcMax")} (bpm)
             </label>
-            <div className="flex items-center gap-2">
-              <input
-                id="fcMax"
-                type="number"
-                min={100}
-                max={250}
-                placeholder="180"
-                value={fcMax}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  setFcMax(e.target.value);
-                  setSaved(false);
-                }}
-                className={cn(
-                  "flex h-9 w-full max-w-[120px] rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2",
-                  fcMaxError
-                    ? "border-red-500 focus-visible:ring-red-500"
-                    : "border-input focus-visible:ring-ring"
-                )}
-              />
-              <span className="text-sm text-muted-foreground">bpm</span>
-            </div>
-            {fcMaxError && (
-              <p className="text-xs text-red-500">
-                {t("myZones.zoneCalculator.invalidFcMax")}
-              </p>
-            )}
+            <Input
+              id="fcMax"
+              type="number"
+              min={100}
+              max={250}
+              placeholder="180"
+              value={fcMax}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setFcMax(e.target.value);
+                setSaved(false);
+              }}
+              className="max-w-[140px] tabular-nums"
+              error={fcMaxError ? t("myZones.zoneCalculator.invalidFcMax") : undefined}
+            />
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="vma" className="flex items-center gap-2 text-sm font-medium">
-              <Gauge className="size-4 text-blue-500" />
-              {t("myZones.zoneCalculator.vma")}
+          <div className="space-y-2.5">
+            <label
+              htmlFor="vma"
+              className="flex items-center gap-2 font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground"
+            >
+              <Gauge className="size-3.5" />
+              {t("myZones.zoneCalculator.vma")} ({getSpeedUnit(unit)})
             </label>
-            <div className="flex items-center gap-2">
-              <input
-                id="vma"
-                type="number"
-                min={8}
-                max={30}
-                step={0.5}
-                placeholder="15"
-                value={vma}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  setVma(e.target.value);
-                  setSaved(false);
-                }}
-                className={cn(
-                  "flex h-9 w-full max-w-[120px] rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2",
-                  vmaError
-                    ? "border-red-500 focus-visible:ring-red-500"
-                    : "border-input focus-visible:ring-ring"
-                )}
-              />
-              <span className="text-sm text-muted-foreground">{getSpeedUnit(unit)}</span>
-            </div>
-            {vmaError && (
-              <p className="text-xs text-red-500">
-                {t("myZones.zoneCalculator.invalidVma")}
-              </p>
-            )}
+            <Input
+              id="vma"
+              type="number"
+              min={8}
+              max={30}
+              step={0.5}
+              placeholder="15"
+              value={vma}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setVma(e.target.value);
+                setSaved(false);
+              }}
+              className="max-w-[140px] tabular-nums"
+              error={vmaError ? t("myZones.zoneCalculator.invalidVma") : undefined}
+            />
           </div>
         </div>
 
@@ -231,7 +214,7 @@ export function ZoneCalculator() {
         {hasValues && (
           <div className="space-y-0 overflow-hidden">
             {/* Header row -- hidden on mobile where zone rows stack vertically */}
-            <div className="hidden sm:grid grid-cols-[1fr_auto_auto_32px] items-center border-b px-3 py-2 text-sm font-medium">
+            <div className="hidden sm:grid grid-cols-[1fr_auto_auto_32px] items-center border-b-2 border-foreground px-3 py-2 font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
               <span>{t("myZones.zoneCalculator.zone")}</span>
               {prefs.fcMax && (
                 <span className="min-w-[110px] text-left">
@@ -280,7 +263,7 @@ export function ZoneCalculator() {
                       >
                         <span
                           className={cn(
-                            "size-3 shrink-0 rounded-full",
+                            "size-3 shrink-0",
                             zoneClass(z.zone as ZoneNumber, "bg")
                           )}
                         />
@@ -303,12 +286,12 @@ export function ZoneCalculator() {
                     {(prefs.fcMax || prefs.vma) && (
                       <span className="flex flex-wrap gap-x-3 gap-y-0.5 pl-5 sm:contents sm:pl-0">
                         {prefs.fcMax && (
-                          <span className="tabular-nums text-foreground sm:min-w-[110px]">
+                          <span className="font-mono tabular-nums text-foreground sm:min-w-[110px]">
                             {z.hrMin}-{z.hrMax} bpm
                           </span>
                         )}
                         {prefs.vma && (
-                          <span className="tabular-nums text-foreground sm:min-w-[130px]">
+                          <span className="font-mono tabular-nums text-foreground sm:min-w-[130px]">
                             {formatPace(convertPace(z.paceMinPerKm!, unit))}-
                             {formatPace(convertPace(z.paceMaxPerKm!, unit))} {getPaceUnit(unit)}
                           </span>
@@ -340,13 +323,13 @@ export function ZoneCalculator() {
                     <div className="overflow-hidden">
                       <div
                         className={cn(
-                          "border-l-4 px-3 sm:px-4 py-3 space-y-2",
+                          "border-l-2 px-3 sm:px-4 py-3 space-y-2",
                           zoneClass(z.zone as ZoneNumber, "border")
                         )}
                       >
                         {/* Sensation */}
                         <div>
-                          <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                             {t("myZones.zoneCalculator.sensation")}
                           </span>
                           <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
@@ -356,7 +339,7 @@ export function ZoneCalculator() {
 
                         {/* Benefit */}
                         <div>
-                          <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                             {t("myZones.zoneCalculator.benefit")}
                           </span>
                           <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
@@ -367,7 +350,7 @@ export function ZoneCalculator() {
                         {/* Example workouts */}
                         {examples.length > 0 && (
                           <div>
-                            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-muted-foreground flex items-center gap-1.5">
+                            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground flex items-center gap-1.5">
                               <Dumbbell className="size-3" />
                               {t("myZones.zoneCalculator.exampleWorkouts")}
                             </span>

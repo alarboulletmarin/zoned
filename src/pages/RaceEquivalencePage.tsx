@@ -10,11 +10,13 @@ import { ZONE_META, type ZoneNumber } from "@/types";
 import { calculatePaceZones, loadUserZonePrefs } from "@/lib/zones";
 import { useSettings } from "@/hooks/useSettings";
 import { convertPace, getPaceUnit } from "@/lib/units";
-import { usePickLang } from "@/lib/i18n-utils";
+import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
 import {
   CalculatorHero,
   CalculatorPanel,
   CalculatorLabel,
+  CalculatorChip,
+  CalculatorChipGroup,
   CalculatorTimeField,
   CalculatorSidebar,
   CalculatorFormulaBox,
@@ -41,10 +43,24 @@ const DISTANCE_OPTIONS = [
 ] as const;
 
 /**
- * Riegel formula: t2 = t1 * (d2 / d1) ^ 1.06
+ * Riegel formula: t2 = t1 * (d2 / d1) ^ exponent
  */
-function riegel(t1Seconds: number, d1Km: number, d2Km: number): number {
-  return t1Seconds * Math.pow(d2Km / d1Km, 1.06);
+function riegel(t1Seconds: number, d1Km: number, d2Km: number, exponent: number): number {
+  return t1Seconds * Math.pow(d2Km / d1Km, exponent);
+}
+
+/**
+ * Selectable Riegel exponents. 1.06 is Riegel's published value and stays the
+ * default; 1.04 suits well-trained runners whose endurance decays more slowly,
+ * 1.08 fits speed-biased runners fading on long distances.
+ */
+const EXPONENTS = [1.04, 1.06, 1.08] as const;
+const DEFAULT_EXPONENT = 1.06;
+
+/** Parse the `e` share param, falling back to Riegel's own 1.06. */
+function parseExponent(raw: string | null): number {
+  const value = raw !== null ? parseFloat(raw) : NaN;
+  return EXPONENTS.includes(value as (typeof EXPONENTS)[number]) ? value : DEFAULT_EXPONENT;
 }
 
 /**
@@ -91,6 +107,7 @@ function findZoneForPace(
 export function RaceEquivalencePage() {
   const { t } = useTranslation("common");
   const pickLang = usePickLang();
+  const isEnglish = useIsEnglish();
   const { settings } = useSettings();
   const unit = settings.unitSystem;
 
@@ -102,6 +119,11 @@ export function RaceEquivalencePage() {
   const [hours, setHours] = useState<string>(() => searchParams.get("h") ?? "");
   const [minutes, setMinutes] = useState<string>(() => searchParams.get("m") ?? "");
   const [seconds, setSeconds] = useState<string>(() => searchParams.get("s") ?? "");
+  const [exponent, setExponent] = useState<number>(() => parseExponent(searchParams.get("e")));
+
+  // Riegel's exponent is written with the locale's decimal separator.
+  const formatExponent = (value: number) =>
+    value.toFixed(2).replace(".", isEnglish ? "." : ",");
 
   // Resolve input distance in km
   const inputDistanceKm = useMemo(() => {
@@ -131,7 +153,7 @@ export function RaceEquivalencePage() {
   const predictions = useMemo(() => {
     if (!hasValidInput) return null;
     return STANDARD_DISTANCES.map((d) => {
-      const predictedSeconds = riegel(totalSeconds, inputDistanceKm, d.km);
+      const predictedSeconds = riegel(totalSeconds, inputDistanceKm, d.km, exponent);
       const paceMinPerKm = predictedSeconds / 60 / d.km;
       const zone = paceZones ? findZoneForPace(paceMinPerKm, paceZones) : null;
       return {
@@ -145,7 +167,7 @@ export function RaceEquivalencePage() {
         isExtrapolated: d.km > 21.1 && inputDistanceKm <= 21.1,
       };
     });
-  }, [hasValidInput, totalSeconds, inputDistanceKm, distanceId, paceZones]);
+  }, [hasValidInput, totalSeconds, inputDistanceKm, distanceId, paceZones, exponent]);
 
   const maxPace = predictions
     ? Math.max(...predictions.map((p) => p.paceMinPerKm))
@@ -388,6 +410,7 @@ export function RaceEquivalencePage() {
                           h: hours,
                           m: minutes,
                           s: seconds,
+                          e: String(exponent),
                         })
                       }
                       title={t("calculators:calculateurs.equivalence.title")}
@@ -401,9 +424,31 @@ export function RaceEquivalencePage() {
             <CalculatorSidebar className="border-t-2 lg:border-t-0 lg:border-l-2 border-foreground p-5 sm:p-7 md:p-8">
               <CalculatorFormulaBox
                 label={t("calculators:calculateurs.equivalence.formulaLabel")}
-                formula={t("calculators:calculateurs.equivalence.formulaLine")}
-                note={t("calculators:calculateurs.equivalence.formulaNote")}
+                formula={t("calculators:calculateurs.equivalence.formulaLine", {
+                  exponent: formatExponent(exponent),
+                })}
+                note={t("calculators:calculateurs.equivalence.formulaNote", {
+                  exponent: formatExponent(exponent),
+                })}
               />
+              <div>
+                <CalculatorChipGroup
+                  label={t("calculators:calculateurs.equivalence.exponentLabel")}
+                >
+                  {EXPONENTS.map((e) => (
+                    <CalculatorChip
+                      key={e}
+                      active={exponent === e}
+                      onClick={() => setExponent(e)}
+                    >
+                      {formatExponent(e)}
+                    </CalculatorChip>
+                  ))}
+                </CalculatorChipGroup>
+                <p className="mt-3 text-[13px] leading-[1.6] text-muted-foreground">
+                  {t("calculators:calculateurs.equivalence.exponentNote")}
+                </p>
+              </div>
               <div className="border-2 border-zone-3 px-4 py-3.5">
                 <CalculatorLabel className="text-zone-3">
                   {t("calculators:calculateurs.equivalence.whatItDoesntSayLabel")}

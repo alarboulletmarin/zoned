@@ -105,8 +105,7 @@
       "implausibleMessage": "{{time}} over {{distance}} gives a VMA of {{vma}} km/h: possible, but then it wasn't an all-out race.",
       "implausibleProceed": "Calculate anyway",
       "implausibleCorrect": "Correct",
-      "implausibleNote": "Your input is never erased.",
-      "pdfUnavailable": "PDF export isn't available for this tool"
+      "implausibleNote": "Your input is never erased."
     },
     "ftp": {
       "seoTitle": "FTP Cycling Test",
@@ -218,8 +217,10 @@
       "minutes": "Minutes",
       "seconds": "Seconds",
       "formulaLabel": "The formula",
-      "formulaLine": "t₂ = t₁ × (d₂/d₁)^1.06",
-      "formulaNote": "Riegel · exponent 1.06",
+      "formulaLine": "t₂ = t₁ × (d₂/d₁)^{{exponent}}",
+      "formulaNote": "Riegel · exponent {{exponent}}",
+      "exponentLabel": "Riegel exponent",
+      "exponentNote": "1.06 is Riegel's published value. Drop to 1.04 if your endurance holds up over long distances, raise it to 1.08 if you are speed-biased.",
       "whatItDoesntSayLabel": "What this doesn't tell you",
       "whatItDoesntSay": "An equivalence assumes training suited to that distance. Without long runs, the marathon predicted here isn't really runnable: beyond the half, the value is extrapolated.",
       "relatedLabel": "Logical next step",

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Timer, Gauge, Info } from "@/components/icons";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
 import { buildParamsUrl } from "@/lib/share/urlParams";
+import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -58,30 +59,27 @@ export function PaceCalculator() {
       </CardHeader>
       <CardContent className="space-y-6">
         {/* VMA Input */}
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           <label
             htmlFor="pace-vma"
-            className="flex items-center gap-2 text-sm font-medium"
+            className="flex items-center gap-2 font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground"
           >
-            <Gauge className="size-4 text-blue-500" />
-            {t("myZones.zoneCalculator.vma")}
+            <Gauge className="size-3.5" />
+            {t("myZones.zoneCalculator.vma")} ({getSpeedUnit(unit)})
           </label>
-          <div className="flex items-center gap-2">
-            <input
-              id="pace-vma"
-              type="number"
-              min={8}
-              max={30}
-              step={0.5}
-              placeholder="15"
-              value={vma}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setVma(e.target.value);
-              }}
-              className="flex h-9 w-full max-w-[120px] rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            />
-            <span className="text-sm text-muted-foreground">{getSpeedUnit(unit)}</span>
-          </div>
+          <Input
+            id="pace-vma"
+            type="number"
+            min={8}
+            max={30}
+            step={0.5}
+            placeholder="15"
+            value={vma}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setVma(e.target.value);
+            }}
+            className="max-w-[140px] tabular-nums"
+          />
         </div>
 
         {/* Race Times Table */}
@@ -89,17 +87,17 @@ export function PaceCalculator() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b">
-                  <th className="py-2 px-3 text-left font-medium">
+                <tr className="border-b-2 border-foreground font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+                  <th className="py-2 px-3 text-left font-normal">
                     {t("myZones.paceCalculator.distance")}
                   </th>
-                  <th className="py-2 px-3 text-left font-medium">
+                  <th className="py-2 px-3 text-left font-normal">
                     {t("myZones.paceCalculator.vmaPercent")}
                   </th>
-                  <th className="py-2 px-3 text-left font-medium">
+                  <th className="py-2 px-3 text-left font-normal">
                     {t("myZones.paceCalculator.pace")}
                   </th>
-                  <th className="py-2 px-3 text-left font-medium">
+                  <th className="py-2 px-3 text-left font-normal">
                     {t("myZones.paceCalculator.time")}
                   </th>
                 </tr>
@@ -122,13 +120,13 @@ export function PaceCalculator() {
                       <td className="py-2 px-3 font-medium">
                         {convertDistanceText(estimate.distance, unit)}
                       </td>
-                      <td className="py-2 px-3 tabular-nums text-muted-foreground">
+                      <td className="py-2 px-3 font-mono tabular-nums text-muted-foreground">
                         {estimate.vmaPercentage}%
                       </td>
-                      <td className="py-2 px-3 tabular-nums">
+                      <td className="py-2 px-3 font-mono tabular-nums">
                         {paceDisplay}{getPaceUnit(unit)}
                       </td>
-                      <td className="py-2 px-3 tabular-nums font-medium">
+                      <td className="py-2 px-3 font-mono tabular-nums font-bold">
                         {estimate.estimatedTime}
                       </td>
                     </tr>
