@@ -542,7 +542,7 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
         </div>
 
         {/* Preview */}
-        <div className="rounded-lg border p-4 bg-card">
+        <div className="rounded-none border-2 border-foreground p-4 bg-card">
           <p className="text-xs text-muted-foreground mb-2">{t("calculators:workoutBuilder.preview")}</p>
           <SessionTimeline workout={workout} />
         </div>
@@ -566,7 +566,7 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
                 className="flex items-center gap-2 w-full text-left"
               >
                 {isCollapsed ? <ChevronDown className="size-4" /> : <ChevronUp className="size-4" />}
-                <h2 className={`text-lg font-semibold ${color}`}>{label}</h2>
+                <h2 className={`font-sans font-bold uppercase tracking-tight text-lg ${color}`}>{label}</h2>
                 <span className="text-xs text-muted-foreground">({steps.length})</span>
               </button>
 
