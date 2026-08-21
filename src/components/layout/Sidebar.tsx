@@ -19,7 +19,6 @@ import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   ChevronDown,
-  UserRound,
   Heart,
   Gauge,
   Plus,
@@ -44,8 +43,7 @@ interface MobileSidebarProps {
 
 /** Account / utility links shown at the bottom of the mobile sheet. */
 const ACCOUNT_LINKS = [
-  { to: "/profile", icon: UserRound, labelKey: "nav.profile" },
-  { to: "/my-zones", icon: Gauge, labelKey: "nav.myZones" },
+  { to: "/me", icon: Gauge, labelKey: "nav.myZones" },
   { to: "/favorites", icon: Heart, labelKey: "nav.favorites" },
   { to: "/workout/builder", icon: Plus, labelKey: "nav.builder" },
 ];

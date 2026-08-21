@@ -5,7 +5,11 @@ User-agent: *
 Allow: /
 
 # Private state (per-user data, no SEO value)
-Disallow: /my-zones
+# Anchored: a bare `/me` is a prefix rule and would also block `/methodology`,
+# a public page listed in the sitemap — so both the exact page and its
+# sub-routes are spelled out.
+Disallow: /me$
+Disallow: /me/
 Disallow: /favorites
 # Anchored: a bare `/plans` is a prefix rule and also blocked
 # /plans/methodology, a public page listed in the sitemap.
@@ -13,7 +17,6 @@ Disallow: /plans$
 Disallow: /plan/new/assisted
 Disallow: /plan/new/free
 Disallow: /routes/mine
-Disallow: /profile
 Disallow: /settings
 Disallow: /plan/$
 Disallow: /routes/$

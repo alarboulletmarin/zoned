@@ -43,7 +43,9 @@ const SharedWeekPage = lazyPage(() => import("@/pages/SharedWeekPage").then(m =>
 const WorkoutDetailPage = lazyPage(() => import("@/pages/WorkoutDetailPage").then(m => ({ default: m.WorkoutDetailPage })));
 const SharedWorkoutPage = lazyPage(() => import("@/pages/SharedWorkoutPage").then(m => ({ default: m.SharedWorkoutPage })));
 const SharedPlanPage = lazyPage(() => import("@/pages/SharedPlanPage").then(m => ({ default: m.SharedPlanPage })));
-const MyZonesPage = lazyPage(() => import("@/pages/MyZonesPage").then(m => ({ default: m.MyZonesPage })));
+const MePage = lazyPage(() => import("@/pages/MePage").then(m => ({ default: m.MePage })));
+const MeZonesPage = lazyPage(() => import("@/pages/MeZonesPage").then(m => ({ default: m.MeZonesPage })));
+const MeStoragePage = lazyPage(() => import("@/pages/MeStoragePage").then(m => ({ default: m.MeStoragePage })));
 const FavoritesPage = lazyPage(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
 const ContributePage = lazyPage(() => import("@/pages/ContributePage").then(m => ({ default: m.ContributePage })));
 const AboutPage = lazyPage(() => import("@/pages/AboutPage").then(m => ({ default: m.AboutPage })));
@@ -88,7 +90,6 @@ const WorkoutBuilderPage = lazyPage(() => import("@/pages/WorkoutBuilderPage").t
 const RaceSimulatorPage = lazyPage(() => import("@/pages/RaceSimulatorPage").then(m => ({ default: m.RaceSimulatorPage })));
 const CompareHubPage = lazyPage(() => import("@/pages/CompareHubPage").then(m => ({ default: m.CompareHubPage })));
 const CompareDetailPage = lazyPage(() => import("@/pages/CompareDetailPage").then(m => ({ default: m.CompareDetailPage })));
-const RunnerProfilePage = lazyPage(() => import("@/pages/RunnerProfilePage").then(m => ({ default: m.RunnerProfilePage })));
 const RouteGeneratorPage = lazyPage(() => import("@/pages/RouteGeneratorPage").then(m => ({ default: m.RouteGeneratorPage })));
 const MyRoutesPage = lazyPage(() => import("@/pages/MyRoutesPage").then(m => ({ default: m.MyRoutesPage })));
 const RouteDetailPage = lazyPage(() => import("@/pages/RouteDetailPage").then(m => ({ default: m.RouteDetailPage })));
@@ -276,7 +277,10 @@ function App() {
                           <Route path="/workout/builder/:id" element={<WorkoutBuilderPage />} />
                           <Route path="/workout/shared" element={<SharedWorkoutPage />} />
                           <Route path="/workout/:id" element={<WorkoutDetailPage />} />
-                          <Route path="/my-zones" element={<MyZonesPage />} />
+                          <Route path="/me" element={<MePage />} />
+                          <Route path="/me/zones" element={<MeZonesPage />} />
+                          <Route path="/me/storage" element={<MeStoragePage />} />
+                          <Route path="/my-zones" element={<Navigate to="/me" replace />} />
                           <Route path="/calculators" element={<CalculateursPage />} />
                           <Route path="/calculators/zones" element={<ZonesCalculatorPage />} />
                           <Route path="/calculators/allures" element={<PaceCalculatorPage />} />
@@ -291,7 +295,7 @@ function App() {
                           <Route path="/calculators/age-graded" element={<AgeGradedPage />} />
                           <Route path="/calculators/what-if" element={<WhatIfPage />} />
                           <Route path="/settings" element={<SettingsPage />} />
-                          <Route path="/profile" element={<RunnerProfilePage />} />
+                          <Route path="/profile" element={<Navigate to="/me" replace />} />
                           <Route path="/favorites" element={<FavoritesPage />} />
                           <Route path="/quiz" element={<Navigate to="/library/draw" replace />} />
                           <Route path="/contribute" element={<ContributePage />} />

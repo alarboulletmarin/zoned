@@ -575,7 +575,7 @@ export function ArticlePage() {
             {t("content:learn.zonesCtaText")}
           </p>
           <Button asChild>
-            <Link to="/my-zones">{t("content:learn.zonesCtaButton")}</Link>
+            <Link to="/me/zones">{t("content:learn.zonesCtaButton")}</Link>
           </Button>
         </div>
       )}

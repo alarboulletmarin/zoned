@@ -466,7 +466,8 @@
       "replaceModeTitle": "Replace",
       "replaceModeDescription": "Clears local Zoned data first, then restores only what is present in the backup.",
       "mergeModeTitle": "Merge",
-      "mergeModeDescription": "Keeps local Zoned data missing from the backup and only replaces keys present in the file."
+      "mergeModeDescription": "Keeps local Zoned data missing from the backup and only replaces keys present in the file.",
+      "manageLink": "Manage my data →"
     }
   },
   "tips": {

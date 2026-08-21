@@ -389,13 +389,7 @@ function UserMenu() {
         className="w-56 rounded-none border-2 border-foreground"
       >
         <DropdownMenuItem asChild>
-          <Link to="/profile" className="flex items-center gap-2 cursor-pointer">
-            <UserRound className="size-4" />
-            {t("nav.profile")}
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link to="/my-zones" className="flex items-center gap-2 cursor-pointer">
+          <Link to="/me" className="flex items-center gap-2 cursor-pointer">
             <Gauge className="size-4" />
             {t("nav.myZones")}
           </Link>

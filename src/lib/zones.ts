@@ -1,4 +1,4 @@
-import type { ZoneNumber, ZoneRange, UserZonePreferences } from "@/types";
+import type { ZoneNumber, ZoneRange, UserZonePreferences, ZoneOverride } from "@/types";
 import { loadRunnerProfile, saveRunnerProfile } from "@/lib/runnerProfile";
 
 // HR Zone percentages (% of FCmax)
@@ -100,34 +100,78 @@ export function calculateAllZones(prefs: UserZonePreferences): ZoneRange[] {
   const hrZones = validated.fcMax ? calculateHRZones(validated.fcMax) : null;
   const paceZones = validated.vma ? calculatePaceZones(validated.vma) : null;
 
-  if (!hrZones && !paceZones) {
+  if (!hrZones && !paceZones && !validated.zoneOverrides) {
     return [];
   }
 
   return ([1, 2, 3, 4, 5, 6] as ZoneNumber[]).map((zone) => {
     const hr = hrZones?.find((z) => z.zone === zone);
     const pace = paceZones?.find((z) => z.zone === zone);
+    const override = validated.zoneOverrides?.[zone];
 
     return {
       zone,
-      hrMin: hr?.hrMin,
-      hrMax: hr?.hrMax,
-      paceMinPerKm: pace?.paceMinPerKm,
-      paceMaxPerKm: pace?.paceMaxPerKm,
+      hrMin: override?.hrMin ?? hr?.hrMin,
+      hrMax: override?.hrMax ?? hr?.hrMax,
+      paceMinPerKm: override?.paceMinPerKm ?? pace?.paceMinPerKm,
+      paceMaxPerKm: override?.paceMaxPerKm ?? pace?.paceMaxPerKm,
+      isManual: !!override,
     };
   });
+}
+
+/**
+ * Zone pairs whose pace ranges overlap — e.g. a manually widened Z4 that now
+ * reaches into Z3's territory. Pace zones run slower→faster as the zone
+ * number rises, so zone N's fast edge must stay at or beyond zone N+1's slow
+ * edge; anything else means the same pace would fall in two zones at once.
+ */
+export function findOverlappingZonePairs(
+  zones: ZoneRange[]
+): Array<[ZoneNumber, ZoneNumber]> {
+  const sorted = [...zones].sort((a, b) => a.zone - b.zone);
+  const pairs: Array<[ZoneNumber, ZoneNumber]> = [];
+
+  for (let i = 0; i < sorted.length - 1; i++) {
+    const slower = sorted[i];
+    const faster = sorted[i + 1];
+    if (
+      slower.paceMinPerKm !== undefined &&
+      faster.paceMaxPerKm !== undefined &&
+      slower.paceMinPerKm < faster.paceMaxPerKm
+    ) {
+      pairs.push([slower.zone, faster.zone]);
+    }
+  }
+
+  return pairs;
 }
 
 // localStorage key
 const STORAGE_KEY = "zoned-userZones";
 
+function readRawZonePrefs(): UserZonePreferences {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? (JSON.parse(stored) as UserZonePreferences) : {};
+  } catch {
+    return {};
+  }
+}
+
 /**
- * Save user zone preferences to localStorage.
- * Also syncs to runner profile if it exists (dual-write).
+ * Save user zone preferences to localStorage. Merges onto whatever is
+ * already stored (e.g. a `{ fcMax, vma }` save from the calculator never
+ * wipes a manually adjusted zone that was saved separately).
+ * Also syncs fcMax/vma to the runner profile if it exists (dual-write).
  */
 export function saveUserZonePrefs(prefs: UserZonePreferences): void {
   const validated = validateZonePrefs(prefs);
-  const data = { ...validated, updatedAt: new Date().toISOString() };
+  const data: UserZonePreferences = {
+    ...readRawZonePrefs(),
+    ...validated,
+    updatedAt: new Date().toISOString(),
+  };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 
   // Dual-write: sync to runner profile if it exists
@@ -141,18 +185,23 @@ export function saveUserZonePrefs(prefs: UserZonePreferences): void {
 
 /**
  * Load user zone preferences from localStorage.
- * Checks runner profile first (source of truth), falls back to legacy key.
+ * fcMax/vma check the runner profile first (source of truth), falling back
+ * to the legacy key; zone overrides always live in the legacy key since the
+ * runner profile has no concept of them.
  */
 export function loadUserZonePrefs(): UserZonePreferences | null {
   try {
+    const raw = readRawZonePrefs();
     const profile = loadRunnerProfile();
     if (profile && (profile.fcMax !== undefined || profile.vma !== undefined)) {
-      return validateZonePrefs({ fcMax: profile.fcMax, vma: profile.vma });
+      return validateZonePrefs({
+        fcMax: profile.fcMax,
+        vma: profile.vma,
+        zoneOverrides: raw.zoneOverrides,
+      });
     }
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) return null;
-    const parsed = JSON.parse(stored) as UserZonePreferences;
-    return validateZonePrefs(parsed);
+    if (localStorage.getItem(STORAGE_KEY) === null) return null;
+    return validateZonePrefs(raw);
   } catch {
     return null;
   }
@@ -163,4 +212,32 @@ export function loadUserZonePrefs(): UserZonePreferences | null {
  */
 export function clearUserZonePrefs(): void {
   localStorage.removeItem(STORAGE_KEY);
+}
+
+/** Manually override one zone's bounds, or clear the override with `null`. */
+export function setZoneOverride(zone: ZoneNumber, override: ZoneOverride | null): void {
+  const raw = readRawZonePrefs();
+  const zoneOverrides = { ...raw.zoneOverrides };
+  if (override === null) {
+    delete zoneOverrides[zone];
+  } else {
+    zoneOverrides[zone] = override;
+  }
+  const data: UserZonePreferences = {
+    ...raw,
+    zoneOverrides,
+    updatedAt: new Date().toISOString(),
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+/** Drops every manual zone override, reverting all six zones to the formula. */
+export function clearAllZoneOverrides(): void {
+  const raw = readRawZonePrefs();
+  const data: UserZonePreferences = {
+    ...raw,
+    zoneOverrides: {},
+    updatedAt: new Date().toISOString(),
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }

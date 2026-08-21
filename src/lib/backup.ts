@@ -95,3 +95,26 @@ export function buildManagedStorageSnapshot(
 
   return snapshot;
 }
+
+/** Removes every key this app manages in localStorage — the "Tout effacer" action. */
+export function clearAllManagedStorage(removeValue: (key: BackupStorageKey) => void): void {
+  for (const key of BACKUP_STORAGE_KEYS) {
+    removeValue(key);
+  }
+}
+
+/**
+ * Whether `localStorage` actually accepts writes in this context. Private
+ * browsing in some engines (older Safari) and a full quota both throw on
+ * `setItem` even though `localStorage` itself is defined.
+ */
+export function isLocalStorageAvailable(): boolean {
+  const probeKey = "zoned-storage-probe";
+  try {
+    localStorage.setItem(probeKey, "1");
+    localStorage.removeItem(probeKey);
+    return true;
+  } catch {
+    return false;
+  }
+}
