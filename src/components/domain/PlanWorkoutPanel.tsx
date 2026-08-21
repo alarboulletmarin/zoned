@@ -135,6 +135,28 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allWorkouts, activeFilter, search, pick, favoritesOnly, favorites]);
 
+  // Per-filter counts (favorites-aware), shown next to each option so the
+  // list isn't a shot in the dark before picking a category.
+  const filterCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    const passesFavorites = (workoutId: string) =>
+      !favoritesOnly || favorites.includes(workoutId);
+    for (const f of FILTERS) {
+      if (f.key === "strength") {
+        counts[f.key] = strengthSessions.filter((s) => passesFavorites(s.id)).length;
+      } else if (f.key === "cross_training") {
+        counts[f.key] = favoritesOnly ? 0 : CROSS_TRAINING_ITEMS.length;
+      } else if (f.key === "all") {
+        counts[f.key] = allWorkouts.filter((w) => passesFavorites(w.id)).length;
+      } else {
+        counts[f.key] = allWorkouts.filter(
+          (w) => passesFavorites(w.id) && f.categories.includes(w.category),
+        ).length;
+      }
+    }
+    return counts;
+  }, [allWorkouts, strengthSessions, favoritesOnly, favorites]);
+
   // Filter strength sessions by search and favorites
   const filteredStrength = useMemo(() => {
     if (activeFilter !== "strength") return [];
@@ -255,7 +277,7 @@ export function PlanWorkoutPanel({ isOpen, onClose, inline, onSelectWorkout }: P
         >
           {FILTERS.map((f) => (
             <option key={f.key} value={f.key}>
-              {t(`workoutFilter.${f.key}`)}
+              {t(`workoutFilter.${f.key}`)} · {filterCounts[f.key] ?? 0}
             </option>
           ))}
         </select>

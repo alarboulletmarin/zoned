@@ -131,7 +131,19 @@ export function WeekViewPage() {
     return names;
   }, [catalog, pick, t]);
 
-  const [showPanel, setShowPanel] = useState(false);
+  // Desktop right-column default: the "Generate" entry (openSettings=true)
+  // always opens on the generator, as before. Any other arrival on a still-
+  // empty week (the "compose by hand" case, or a page reload that lost the
+  // router state) opens straight on the picker instead, since there is
+  // nothing to generate settings for yet. A populated week always defaults
+  // to the generator, so revisiting an existing week (list, prebuilt, shared
+  // link) is unaffected. Reads the plan synchronously from storage — the
+  // `usePlan` hook above only resolves on a later render.
+  const [showPanel, setShowPanel] = useState(() => {
+    if (openSettingsOnMount) return false;
+    const existing = id ? getPlan(id) : undefined;
+    return (existing?.weeks[0]?.sessions.length ?? 0) === 0;
+  });
   const [addTarget, setAddTarget] = useState<{ day: number } | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
