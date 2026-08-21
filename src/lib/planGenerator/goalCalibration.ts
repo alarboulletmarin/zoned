@@ -38,6 +38,17 @@ export function vmaRequiredForPace(paceMinKm: number, raceDistance: RaceDistance
 }
 
 /**
+ * Pace (min/km) `vma` supports over `raceDistance` — the inverse of
+ * `vmaRequiredForPace`. This is the equivalence a target time is measured
+ * against when the wizard has to say "here is what your fitness predicts".
+ */
+export function paceForVma(vma: number, raceDistance: RaceDistance): number {
+  if (vma <= 0) return 0;
+  const speedKmh = vma * (VMA_RACE_PERCENTAGES[raceDistance] / 100);
+  return speedKmh > 0 ? 60 / speedKmh : 0;
+}
+
+/**
  * Volume multiplier implied by the target time.
  *
  * 1.0 means the goal matches current fitness. Above 1.0 the runner is reaching

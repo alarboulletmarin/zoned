@@ -108,7 +108,15 @@
     "startLabel": "Plan start",
     "startNow": "Start now",
     "chooseStartDate": "Choose a date",
-    "startHint": "The preparation will start from {{date}}"
+    "startHint": "The preparation will start from {{date}}",
+    "shortWindow": {
+      "eyebrow": "Race date too close",
+      "body": "{{weeks}} weeks before a {{distance}}: the plan fits into {{weeks}} weeks, but it skips part of the base phase ({{min}} weeks recommended).",
+      "hardBlock": "Under {{min}} weeks: the generator cannot build any plan in that window. Pick a later date.",
+      "generateAnyway": "Generate anyway",
+      "switchTo": "Aim for a {{distance}}",
+      "accepted": "Shortened plan accepted — generating stays available."
+    }
   },
   "raceName": {
     "title": "Name your race",
@@ -156,7 +164,16 @@
     "timeFormatHint": "Format: H:MM or H:MM:SS (e.g. 3:30 or 3:30:00)",
     "elevation": "Elevation gain (m)",
     "elevationPlaceholder": "e.g. 350",
-    "skip": "Skip this step"
+    "skip": "Skip this step",
+    "outOfReach": {
+      "eyebrow": "Goal out of reach",
+      "body": "That time from a {{vma}} km/h VMA assumes {{gap}} s/km better than an equivalence: doable in a year, not in one cycle.",
+      "equivalence": "Equivalence · {{time}}",
+      "entered": "Entered goal · {{time}}",
+      "take": "Take {{time}}",
+      "keep": "Keep {{time}}",
+      "kept": "Goal kept — the plan pushes volume as far as is safe."
+    }
   },
   "summary": {
     "title": "Summary",
@@ -239,11 +256,11 @@
     "substituteMatchDeviation": "±{{deviation}}%",
     "substituteLongRunWarningTitle": "Long run: degraded substitution",
     "substituteLongRunWarningBody": "The long run develops orthopedic adaptations (tendon capillarization, running economy, impact tolerance) that cycling or swimming cannot reproduce. Use this when running is impossible (injury, weather, travel), not as a regular alternative.",
-      "sessionSubstituted": "Session swapped",
-      "findRoute": "Find a matching route",
-      "findWeekRoute": "Route for this week",
-      "removeSession": "Remove session",
-      "noSessionsThisWeek": "No sessions this week",
+    "sessionSubstituted": "Session swapped",
+    "findRoute": "Find a matching route",
+    "findWeekRoute": "Route for this week",
+    "removeSession": "Remove session",
+    "noSessionsThisWeek": "No sessions this week",
     "schedule": "Schedule",
     "statistics": "Statistics",
     "trainingVolume": "Training volume relative to plan peak",
@@ -668,11 +685,11 @@
     "qualityPeak2": "Add a 2nd quality session (tempo, VO2max)",
     "qualityTaper": "Add a short race-pace reminder",
     "recoveryWeekNote": "Easy week: focus on easy runs, skip intensity",
-    "phaseBase": "Base phase \u2014 Build your aerobic foundation with easy volume.",
-    "phaseBuild": "Build phase \u2014 Gradually increase intensity with quality sessions.",
-    "phasePeak": "Peak phase \u2014 Sharpen your race-specific paces, approaching top form.",
-    "phaseTaper": "Taper phase \u2014 Reduce volume, keep a touch of intensity to stay fresh.",
-    "phaseRecovery": "Recovery week \u2014 Let your body absorb the training adaptations."
+    "phaseBase": "Base phase — Build your aerobic foundation with easy volume.",
+    "phaseBuild": "Build phase — Gradually increase intensity with quality sessions.",
+    "phasePeak": "Peak phase — Sharpen your race-specific paces, approaching top form.",
+    "phaseTaper": "Taper phase — Reduce volume, keep a touch of intensity to stay fresh.",
+    "phaseRecovery": "Recovery week — Let your body absorb the training adaptations."
   },
   "intermediateGoals": {
     "title": "Intermediate races",

@@ -43,7 +43,12 @@ import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { usePickLang, formatDate } from "@/lib/i18n-utils";
 import { DateInput } from "@/components/ui/date-input";
 import { addWeeksToDate, buildRacePlanDateRange, calculateWeeksBetweenDates } from "@/lib/planDates";
-import { RECOMMENDED_PLAN_WEEKS } from "@/lib/planGenerator/constants";
+import { MIN_PLAN_WEEKS, RECOMMENDED_PLAN_WEEKS } from "@/lib/planGenerator/constants";
+import {
+  goalDemandFactor,
+  paceForVma,
+  UNREALISTIC_DEMAND,
+} from "@/lib/planGenerator/goalCalibration";
 import { previewPlanShape, type PlanShapePreview } from "@/lib/planGenerator/preview";
 import { validateIntermediateGoals, sortIntermediateGoals } from "@/lib/intermediateGoalValidation";
 import { loadRunnerProfile } from "@/lib/runnerProfile";
@@ -228,6 +233,18 @@ function finishTimeToPaceSeconds(finishTimeSeconds: number, distanceKm: number):
   return finishTimeSeconds / distanceKm;
 }
 
+/** Clock notation ("1:35:40", "43:20") for the equivalence comparison. */
+function formatClock(totalSeconds: number): string {
+  const rounded = Math.round(totalSeconds);
+  const h = Math.floor(rounded / 3600);
+  const m = Math.floor((rounded % 3600) / 60);
+  const s = rounded % 60;
+  const mm = m.toString().padStart(h > 0 ? 2 : 1, "0");
+  return h > 0
+    ? `${h}:${mm}:${s.toString().padStart(2, "0")}`
+    : `${mm}:${s.toString().padStart(2, "0")}`;
+}
+
 function generateId(): string {
   return `plan-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
@@ -266,6 +283,13 @@ export function PlanCreatePage() {
   const [tabIndex, setTabIndex] = useState(0);
   const [paceInputMode, setPaceInputMode] = useState<"pace" | "time">("pace");
   const [targetFinishTime, setTargetFinishTime] = useState("");
+  /**
+   * "Avertir, expliquer, laisser faire" — the two decisions the runner can take
+   * against the generator's advice. Both reset as soon as the input they answer
+   * changes, so an old acceptance never silently covers a new value.
+   */
+  const [acceptShortWindow, setAcceptShortWindow] = useState(false);
+  const [keepAmbitiousGoal, setKeepAmbitiousGoal] = useState(false);
   const todayDate = useMemo(() => getTodayDateInputValue(), []);
   const [form, setForm] = useState<FormState>(() => {
     const rp = loadRunnerProfile();
@@ -323,13 +347,30 @@ export function PlanCreatePage() {
 
   const minWeeksForDistance = recommendedWeeks.min;
 
-  // Valid if enough weeks (min is a hard constraint, max is just a warning)
+  // The recommended minimum is advice, not a wall: below it the wizard explains
+  // what the plan loses and offers a shorter race, but still generates on
+  // demand. Only `MIN_PLAN_WEEKS` is a real block — `generatePlan()` throws.
   const dateValid = weeksCount >= minWeeksForDistance;
+  const dateBelowHardMin = weeksCount < MIN_PLAN_WEEKS;
   const dateTooLong = weeksCount > recommendedWeeks.max;
 
   const minDate = useMemo(() => {
-    return addWeeksToDate(form.startDate || todayDate, minWeeksForDistance);
-  }, [form.startDate, minWeeksForDistance, todayDate]);
+    return addWeeksToDate(form.startDate || todayDate, MIN_PLAN_WEEKS);
+  }, [form.startDate, todayDate]);
+
+  /** Longest race the remaining weeks actually cover, for the "aim shorter" way out. */
+  const shorterDistance = useMemo((): RaceDistance | null => {
+    if (!form.raceDistance) return null;
+    const currentKm = RACE_DISTANCE_META[form.raceDistance].distanceKm;
+    const shorter = (Object.keys(RACE_DISTANCE_META) as RaceDistance[])
+      .filter((d) => RACE_DISTANCE_META[d].distanceKm < currentKm)
+      .sort((a, b) => RACE_DISTANCE_META[b].distanceKm - RACE_DISTANCE_META[a].distanceKm);
+    return (
+      shorter.find((d) => RECOMMENDED_WEEKS[d].min <= weeksCount)
+      ?? shorter[shorter.length - 1]
+      ?? null
+    );
+  }, [form.raceDistance, weeksCount]);
 
   const paceSeconds = useMemo(
     () => parsePaceToSeconds(form.targetPace),
@@ -344,6 +385,27 @@ export function PlanCreatePage() {
   const distanceKm = form.raceDistance
     ? RACE_DISTANCE_META[form.raceDistance].distanceKm
     : 0;
+
+  /**
+   * The target time against the one the declared VMA predicts. Null whenever a
+   * piece is missing (no VMA, no target, no distance) — the wizard then has
+   * nothing to compare and says nothing.
+   */
+  const goalReach = useMemo(() => {
+    if (!isRacePlan || !paceSeconds || !form.raceDistance || !userPrefs?.vma) return null;
+    const equivalencePaceMinKm = paceForVma(userPrefs.vma, form.raceDistance);
+    if (equivalencePaceMinKm <= 0) return null;
+    const demand = goalDemandFactor(paceSeconds / 60, userPrefs.vma, form.raceDistance);
+    const equivalencePaceSeconds = equivalencePaceMinKm * 60;
+    return {
+      demand,
+      outOfReach: demand >= UNREALISTIC_DEMAND,
+      equivalencePaceSeconds,
+      equivalenceTime: formatClock(equivalencePaceSeconds * distanceKm),
+      targetTime: formatClock(paceSeconds * distanceKm),
+      gapSecPerKm: Math.round(equivalencePaceSeconds - paceSeconds),
+    };
+  }, [isRacePlan, paceSeconds, form.raceDistance, userPrefs, distanceKm]);
 
   const intermediateGoalValidation = useMemo(() => {
     if (form.intermediateGoals.length === 0 || !form.raceDate) return { valid: true, errors: [] };
@@ -446,7 +508,11 @@ export function PlanCreatePage() {
   const canGenerate =
     !!form.runnerLevel &&
     (isRacePlan
-      ? !!form.raceDistance && !!form.raceDate && dateValid && intermediateGoalValidation.valid
+      ? !!form.raceDistance
+        && !!form.raceDate
+        && !dateBelowHardMin
+        && (dateValid || acceptShortWindow)
+        && intermediateGoalValidation.valid
       : form.totalWeeksOverride > 0) &&
     (form.targetPace === "" || !!paceSeconds);
 
@@ -581,7 +647,10 @@ export function PlanCreatePage() {
                   icon={RACE_DISTANCE_ICONS[dist]}
                   label={pick(meta, "label")}
                   description={`${meta.distanceKm} km`}
-                  onClick={() => setForm((f) => ({ ...f, raceDistance: dist }))}
+                  onClick={() => {
+                    setAcceptShortWindow(false);
+                    setForm((f) => ({ ...f, raceDistance: dist }));
+                  }}
                 />
               );
             })}
@@ -598,7 +667,10 @@ export function PlanCreatePage() {
             <DateInput
               min={minDate}
               value={form.raceDate}
-              onChange={(e) => setForm((f) => ({ ...f, raceDate: e.target.value }))}
+              onChange={(e) => {
+                setAcceptShortWindow(false);
+                setForm((f) => ({ ...f, raceDate: e.target.value }));
+              }}
               aria-label={t("date.raceDate")}
               className="px-4 py-3 min-h-[44px] text-base"
             />
@@ -637,10 +709,66 @@ export function PlanCreatePage() {
               </p>
             )}
 
+            {/* État 01 — la date est trop proche : on explique, on propose, on obéit. */}
             {form.raceDate && !dateValid && (
-              <p className="font-mono text-[11px] text-poster-red">
-                {t("date.tooSoon", { min: minWeeksForDistance })}
-              </p>
+              dateBelowHardMin ? (
+                <div className="border-2 border-poster-red p-3.5">
+                  <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-poster-red">
+                    {t("date.shortWindow.eyebrow")}
+                  </p>
+                  <p className="mt-2.5 text-[13px] leading-[1.55] text-muted-foreground">
+                    {t("date.shortWindow.hardBlock", { min: MIN_PLAN_WEEKS })}
+                  </p>
+                </div>
+              ) : (
+                <div className="border-2 border-zone-3 p-3.5">
+                  <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+                    {t("date.shortWindow.eyebrow")}
+                  </p>
+                  <p className="mt-2.5 text-[13px] leading-[1.55] text-muted-foreground">
+                    {t("date.shortWindow.body", {
+                      weeks: weeksCount,
+                      distance: form.raceDistance
+                        ? pick(RACE_DISTANCE_META[form.raceDistance], "label")
+                        : "",
+                      min: minWeeksForDistance,
+                    })}
+                  </p>
+                  <div className="mt-3.5 flex flex-wrap gap-2.5 font-mono text-[11px] tracking-[0.08em] uppercase">
+                    <button
+                      type="button"
+                      onClick={() => setAcceptShortWindow(true)}
+                      className={cn(
+                        "px-3.5 py-2.5 transition-colors",
+                        acceptShortWindow
+                          ? "border border-filet text-muted-foreground"
+                          : "bg-accent-acid text-ink hover:bg-accent-acid/85"
+                      )}
+                    >
+                      {t("date.shortWindow.generateAnyway")}
+                    </button>
+                    {shorterDistance && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setAcceptShortWindow(false);
+                          setForm((f) => ({ ...f, raceDistance: shorterDistance }));
+                        }}
+                        className="border border-filet px-3.5 py-2.5 text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {t("date.shortWindow.switchTo", {
+                          distance: pick(RACE_DISTANCE_META[shorterDistance], "label"),
+                        })}
+                      </button>
+                    )}
+                  </div>
+                  {acceptShortWindow && (
+                    <p className="mt-3 font-mono text-[10px] leading-[1.7] text-muted-foreground">
+                      {t("date.shortWindow.accepted")}
+                    </p>
+                  )}
+                </div>
+              )
             )}
 
             {form.raceDate && form.useCustomStartDate && (
@@ -1058,6 +1186,7 @@ export function PlanCreatePage() {
                   type="text"
                   value={form.targetPace}
                   onChange={(e) => {
+                    setKeepAmbitiousGoal(false);
                     setForm((f) => ({ ...f, targetPace: e.target.value }));
                     setTargetFinishTime("");
                   }}
@@ -1082,6 +1211,7 @@ export function PlanCreatePage() {
                   value={targetFinishTime}
                   onChange={(e) => {
                     const val = e.target.value;
+                    setKeepAmbitiousGoal(false);
                     setTargetFinishTime(val);
                     const totalSec = parseFinishTimeToSeconds(val);
                     if (totalSec && distanceKm > 0) {
@@ -1108,6 +1238,52 @@ export function PlanCreatePage() {
                   </p>
                 )}
               </div>
+            )}
+
+            {/* État 02 — l'objectif dépasse l'équivalence : on chiffre l'écart. */}
+            {goalReach?.outOfReach && !keepAmbitiousGoal && (
+              <div className="border-2 border-zone-5 p-3.5">
+                <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+                  {t("pace.outOfReach.eyebrow")}
+                </p>
+                <p className="mt-2.5 text-[13px] leading-[1.55] text-muted-foreground">
+                  {t("pace.outOfReach.body", {
+                    vma: userPrefs?.vma,
+                    gap: Math.abs(goalReach.gapSecPerKm),
+                  })}
+                </p>
+                <p className="mt-3 font-mono text-xs leading-[1.8] text-muted-foreground">
+                  {t("pace.outOfReach.equivalence", { time: goalReach.equivalenceTime })}
+                  <br />
+                  {t("pace.outOfReach.entered", { time: goalReach.targetTime })}
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2.5 font-mono text-[11px] tracking-[0.08em] uppercase">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const pace = formatPace(goalReach.equivalencePaceSeconds);
+                      setForm((f) => ({ ...f, targetPace: pace }));
+                      setTargetFinishTime(goalReach.equivalenceTime);
+                    }}
+                    className="border border-filet px-3.5 py-2.5 text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {t("pace.outOfReach.take", { time: goalReach.equivalenceTime })}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setKeepAmbitiousGoal(true)}
+                    className="px-3.5 py-2.5 text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
+                  >
+                    {t("pace.outOfReach.keep", { time: goalReach.targetTime })}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {goalReach?.outOfReach && keepAmbitiousGoal && (
+              <p className="border-l-2 border-zone-5 pl-3 font-mono text-[11px] leading-[1.7] text-muted-foreground">
+                {t("pace.outOfReach.kept")}
+              </p>
             )}
 
             <div>
