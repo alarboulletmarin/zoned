@@ -33,6 +33,7 @@ import {
   WorkoutCardCompact,
   FavoriteButton,
   ZonePersonalizationCTA,
+  WorkoutPaceZonesCard,
   TipCard,
 } from "@/components/domain";
 import { WorkoutNotFound } from "@/components/domain/WorkoutNotFound";
@@ -110,6 +111,7 @@ export function WorkoutDetailPage() {
   // Load user zones from localStorage
   const [userZones, setUserZones] = useState<ZoneRange[]>([]);
   const [hasUserZones, setHasUserZones] = useState(false);
+  const [userVma, setUserVma] = useState<number | undefined>(undefined);
 
   // Share modal (5 social templates)
   const [shareOpen, setShareOpen] = useState(false);
@@ -120,9 +122,11 @@ export function WorkoutDetailPage() {
       const zones = calculateAllZones(prefs);
       setUserZones(zones);
       setHasUserZones(true);
+      setUserVma(prefs.vma);
     } else {
       setUserZones([]);
       setHasUserZones(false);
+      setUserVma(undefined);
     }
   }, []);
 
@@ -603,8 +607,16 @@ export function WorkoutDetailPage() {
           </FadeUp>
         )}
 
-        {/* Discreet zone-personalization CTA — only when zones are missing */}
+        {/* Discreet zone-personalization CTA when zones are missing; once the
+            runner has a VMA, the same slot shows their personal pace table
+            instead, with this session's own zone highlighted. Guarded on
+            `userVma` specifically (not just `hasUserZones`): an HR-only
+            profile has no pace data to show, and a misleading empty table
+            would be worse than no table. */}
         {!hasUserZones && <ZonePersonalizationCTA />}
+        {hasUserZones && userVma != null && workoutDiscipline === "running" && (
+          <WorkoutPaceZonesCard zones={userZones} vma={userVma} targetZone={dominantZone} />
+        )}
 
         {/* Sticky mini timeline (existing behaviour) */}
         {timelineScrolledPast && (

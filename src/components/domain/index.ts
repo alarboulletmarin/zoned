@@ -12,6 +12,7 @@ export { CategoryIcon } from "./CategoryIcon";
 export { DifficultyIcon } from "./DifficultyIcon";
 export { FavoriteButton } from "./FavoriteButton";
 export { ZonePersonalizationCTA } from "./ZonePersonalizationCTA";
+export { WorkoutPaceZonesCard } from "./WorkoutPaceZonesCard";
 export { TipCard } from "./TipCard";
 export { CollectionCard } from "./CollectionCard";
 export { ScanCard } from "./ScanCard";

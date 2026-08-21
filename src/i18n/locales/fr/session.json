@@ -162,5 +162,9 @@
   },
   "provenance": {
     "adaptedFrom": "Adapté de"
+  },
+  "paceZones": {
+    "title": "Tes allures — VMA {{vma}} km/h",
+    "editLink": "Modifier mes zones"
   }
 }

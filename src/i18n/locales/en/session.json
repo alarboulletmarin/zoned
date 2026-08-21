@@ -162,5 +162,9 @@
   },
   "provenance": {
     "adaptedFrom": "Adapted from"
+  },
+  "paceZones": {
+    "title": "Your paces — VMA {{vma}} km/h",
+    "editLink": "Edit my zones"
   }
 }
