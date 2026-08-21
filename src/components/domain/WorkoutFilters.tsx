@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useState, type RefObject } from "react";
 import { X, Search, Heart } from "@/components/icons";
-import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
@@ -99,10 +98,10 @@ function FilterChip({
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors",
+        "inline-flex items-center border-2 px-2.5 py-1 font-mono text-[11px] tracking-[0.04em] uppercase transition-colors",
         selected
-          ? "border-primary bg-primary/10 text-primary"
-          : "border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground",
+          ? "border-transparent bg-accent-acid text-ink"
+          : "border-foreground bg-transparent text-foreground/80 hover:bg-secondary",
       )}
     >
       {label}
@@ -113,7 +112,7 @@ function FilterChip({
 /* ── Group heading ── */
 function FilterGroupLabel({ children }: { children: React.ReactNode }) {
   return (
-    <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
+    <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
       {children}
     </span>
   );
@@ -144,7 +143,7 @@ function ExpandableChipGroup({
         <button
           type="button"
           onClick={() => setExpanded(true)}
-          className="inline-flex items-center rounded-full border border-dashed border-border px-2.5 py-0.5 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+          className="inline-flex items-center border-2 border-dashed border-muted-foreground px-2.5 py-1 font-mono text-[11px] uppercase text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
         >
           +{hiddenCount}
         </button>
@@ -238,7 +237,7 @@ export function WorkoutFilters({
             placeholder={t("filters.search")}
             value={filters.searchQuery}
             onChange={(e) => updateFilter("searchQuery", e.target.value)}
-            className="w-full h-9 pl-9 pr-3 rounded-md border border-input bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="w-full h-10 pl-9 pr-3 border-2 border-foreground bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
           />
         </div>
       )}
@@ -378,16 +377,16 @@ export function WorkoutFilters({
             updateFilter("durationRange", value as [number, number])
           }
         />
-        <div className="flex justify-between text-xs text-muted-foreground">
+        <div className="flex justify-between font-mono text-[11px] text-muted-foreground">
           <span>{filters.durationRange[0]} min</span>
           <span>{filters.durationRange[1]} min</span>
         </div>
       </div>
 
       {/* Favorites Only */}
-      <div className="flex items-center justify-between py-2">
-        <label htmlFor="favoritesOnly" className="flex items-center gap-2 text-sm font-medium cursor-pointer">
-          <Heart className="size-4 text-red-500" />
+      <div className="flex items-center justify-between py-2 border-t border-filet">
+        <label htmlFor="favoritesOnly" className="flex items-center gap-2 font-mono text-[11px] tracking-[0.06em] uppercase cursor-pointer">
+          <Heart className="size-4 text-zone-5" />
           {t("filters.favoritesOnly")}
         </label>
         <Switch
@@ -400,15 +399,14 @@ export function WorkoutFilters({
 
       {/* Clear Filters — desktop only (mobile has it in the drawer footer) */}
       {!hideSearch && hasActiveFilters && (
-        <Button
-          variant="ghost"
-          size="sm"
+        <button
+          type="button"
           onClick={clearFilters}
-          className="w-full"
+          className="flex w-full items-center justify-center gap-1.5 border-t border-filet pt-3 font-mono text-[11px] tracking-[0.08em] uppercase text-poster-red hover:underline"
         >
-          <X className="size-4 mr-1" />
+          <X className="size-3.5" />
           {t("clearFilters")}
-        </Button>
+        </button>
       )}
     </div>
   );
