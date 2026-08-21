@@ -1363,7 +1363,7 @@ export function PlanViewPage() {
                                     session.status === "completed"
                                       ? "bg-zone-2 border-zone-2 text-ink"
                                       : session.status === "modified"
-                                        ? "bg-ink border-ink text-paper"
+                                        ? "bg-ink border-foreground text-paper"
                                         : session.status === "skipped"
                                           ? "bg-filet border-filet text-ink"
                                           : "border-foreground/40 hover:border-foreground"

@@ -113,7 +113,7 @@ export function MethodologyPolarisePage() {
                     className={cn(
                       "border px-2.5 py-1.5 font-mono text-[10px] tracking-[0.08em] uppercase transition-colors",
                       readingSize === size
-                        ? "border-ink bg-ink text-paper"
+                        ? "border-foreground bg-ink text-paper"
                         : "border-filet text-muted-foreground hover:text-foreground",
                     )}
                   >
