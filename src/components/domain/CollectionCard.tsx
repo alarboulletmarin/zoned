@@ -71,7 +71,7 @@ export function CollectionCard({ collection }: CollectionCardProps) {
       <InteractiveCard
         accent={`var(--zone-${zone})`}
         className={cn(
-          "border-2 border-foreground bg-card h-full p-4 sm:p-6",
+          "bg-card h-full p-4 sm:p-6",
           "hover:shadow-[6px_6px_0_var(--shadow-hard)] transition-shadow duration-150 ease-out",
           "focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
         )}

@@ -25,7 +25,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
     <Link to={`/learn/${article.slug}`} className="block h-full">
       <InteractiveCard
         className={cn(
-          "rounded-none border-2 border-foreground bg-card h-full p-4 sm:p-6",
+          "rounded-none bg-card h-full p-4 sm:p-6",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         )}
       >

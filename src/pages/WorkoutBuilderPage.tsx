@@ -187,7 +187,7 @@ function WorkoutListView() {
               return (
                 <div
                   key={w.id}
-                  className="group relative border-2 border-foreground bg-card hover:shadow-[4px_4px_0_var(--shadow-hard)] transition-shadow duration-150 ease-out"
+                  className="group relative bg-card hover:shadow-[4px_4px_0_var(--shadow-hard)] transition-shadow duration-150 ease-out"
                 >
                   <Link
                     to={`/workout/builder/${w.id}`}

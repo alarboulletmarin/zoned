@@ -20,7 +20,7 @@ export function ScanCard({
   return (
     <div
       className={cn(
-        "relative overflow-hidden border-2 border-foreground bg-card",
+        "relative overflow-hidden bg-card",
         compact ? "p-1.5" : "p-5",
         className,
       )}

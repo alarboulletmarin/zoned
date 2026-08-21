@@ -298,7 +298,7 @@ function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTem
     <Link to={`/workout/${workout.id}`} className="block h-full">
       <InteractiveCard
         accent={`var(--zone-${dominantZone})`}
-        className={cn("block p-3 rounded-none border-2 border-foreground bg-card h-full", className)}
+        className={cn("block p-3 rounded-none bg-card h-full", className)}
       >
       <div className="flex items-center justify-between gap-2">
         <ZoneBadge zone={dominantZone} size="sm" />

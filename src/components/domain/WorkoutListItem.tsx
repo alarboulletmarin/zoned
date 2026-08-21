@@ -43,7 +43,7 @@ function RunningWorkoutListItem({ workout, className }: { workout: WorkoutTempla
     <Link
       to={`/workout/${workout.id}`}
       className={cn(
-        "flex items-center gap-3 p-3 border-2 border-foreground bg-card hover:shadow-[4px_4px_0_var(--shadow-hard)] transition-shadow duration-150 ease-out focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2",
+        "flex items-center gap-3 p-3 bg-card hover:shadow-[4px_4px_0_var(--shadow-hard)] transition-shadow duration-150 ease-out focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2",
         className
       )}
     >

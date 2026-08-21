@@ -818,7 +818,7 @@ function ResultCard({
     <div className={animateIn}>
       <Link
         to={`/workout/${workout.id}`}
-        className="block border-2 border-foreground bg-card p-5 hover:shadow-[6px_6px_0_var(--shadow-hard)] transition-shadow duration-150 ease-out"
+        className="block bg-card p-5 hover:shadow-[6px_6px_0_var(--shadow-hard)] transition-shadow duration-150 ease-out"
       >
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">{eyebrow}</div>
