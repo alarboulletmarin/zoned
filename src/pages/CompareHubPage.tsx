@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
 import { competitors } from "@/data/competitors";
 import { ArrowRight } from "@/components/icons";
 import { usePickLang } from "@/lib/i18n-utils";
@@ -29,53 +28,61 @@ export function CompareHubPage() {
         }}
       />
 
-      <div className="py-8 space-y-10 max-w-3xl mx-auto">
+      <div className="py-8 max-w-3xl mx-auto">
         {/* Header */}
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-widest text-primary font-semibold">
+        <div className="mb-8 md:mb-10">
+          <p className="font-mono text-[10px] sm:text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
             {t("compare.subtitle")}
           </p>
-          <EditorialTitle as="h1">{title}</EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground max-w-xl">
+          <h1 className="font-sans font-bold uppercase leading-[0.9] tracking-[-0.05em] text-[32px] sm:text-[42px] md:text-[52px] mt-3">
+            {title}
+          </h1>
+          <p className="mt-3 text-[15px] md:text-base leading-[1.55] text-foreground/80 max-w-[56ch]">
             {description}
-          </FadeUp>
+          </p>
         </div>
 
-        {/* Competitor cards */}
-        <StaggerGrid className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {/* Competitor tiles */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           {competitors.map((competitor) => {
             const name = pickLang(competitor, "name");
             const tagline = pickLang(competitor, "tagline");
+            const price = pickLang(competitor, "price");
             return (
-              <StaggerItem key={competitor.slug}>
-                <Link
-                  to={`/compare/${competitor.slug}`}
-                  className="group flex h-full flex-col gap-3 rounded-xl border border-border p-5 hover:border-foreground/40 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200"
-                >
-                  <div className="space-y-1">
-                    <p className="font-semibold text-sm">
-                      Zoned <span className="text-muted-foreground">vs</span> {name}
-                    </p>
-                    <p className="text-xs text-muted-foreground line-clamp-2">{tagline}</p>
-                  </div>
-                  <div className="flex items-center justify-between mt-auto">
-                    <span className="text-xs rounded-full border px-2 py-0.5 text-muted-foreground">
-                      {pickLang(competitor, "price")}
-                    </span>
-                    <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
-                  </div>
-                </Link>
-              </StaggerItem>
+              <Link
+                key={competitor.slug}
+                to={`/compare/${competitor.slug}`}
+                className="group flex h-full flex-col gap-3 bg-card p-4 sm:p-[18px] transition-colors hover:bg-secondary"
+              >
+                <div className="space-y-1.5">
+                  <p className="font-sans font-bold uppercase leading-[1.05] tracking-[-0.03em] text-lg sm:text-xl">
+                    Zoned{" "}
+                    <span className="font-mono text-xs normal-case tracking-normal text-muted-foreground align-middle">
+                      vs
+                    </span>{" "}
+                    {name}
+                  </p>
+                  <p className="font-mono text-xs text-muted-foreground line-clamp-2">
+                    {tagline}
+                  </p>
+                </div>
+                <div className="flex items-center justify-between mt-auto pt-2">
+                  <span className="font-mono text-[10px] tracking-[0.1em] uppercase border border-foreground px-2 py-0.5 text-muted-foreground">
+                    {price}
+                  </span>
+                  <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
+                </div>
+              </Link>
             );
           })}
-        </StaggerGrid>
+        </div>
 
         {/* Zoned pitch */}
-        <div className="rounded-xl border bg-muted/30 p-6 space-y-2">
-          <p className="font-semibold">
+        <div className="border-2 border-foreground bg-card p-6 md:p-10 mt-10 md:mt-12">
+          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
             {t("comparePage.whyComparisons")}
           </p>
-          <p className="text-sm text-muted-foreground">
+          <p className="mt-3 text-sm leading-[1.6] text-foreground/80 max-w-[64ch]">
             {t("comparePage.whyComparisonsDesc")}
           </p>
         </div>
