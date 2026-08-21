@@ -189,7 +189,7 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
           onClick={goToPrevMonth}
           disabled={!canGoPrev}
           className={cn(
-            "p-1.5 rounded-md transition-colors",
+            "p-1.5 rounded-none transition-colors",
             canGoPrev
               ? "hover:bg-muted text-foreground"
               : "text-muted-foreground/30 cursor-not-allowed",
@@ -208,7 +208,7 @@ export const PlanMonthlyView = memo(function PlanMonthlyView({
           onClick={goToNextMonth}
           disabled={!canGoNext}
           className={cn(
-            "p-1.5 rounded-md transition-colors",
+            "p-1.5 rounded-none transition-colors",
             canGoNext
               ? "hover:bg-muted text-foreground"
               : "text-muted-foreground/30 cursor-not-allowed",

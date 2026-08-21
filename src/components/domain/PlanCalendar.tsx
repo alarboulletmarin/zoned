@@ -744,7 +744,7 @@ export const PlanCalendar = memo(function PlanCalendar({
           onPointerDown={() => setContextMenu(null)}
         >
           <div
-            className="fixed bg-card border rounded-lg shadow-lg py-1 min-w-[160px] z-50"
+            className="fixed bg-card border rounded-none shadow-lg py-1 min-w-[160px] z-50"
             style={{
               left: contextMenu.x,
               top: contextMenu.y,

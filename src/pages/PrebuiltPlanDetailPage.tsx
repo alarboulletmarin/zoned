@@ -4,7 +4,6 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
-  Calendar,
   Clock,
   ChevronDown,
   ChevronUp,
@@ -15,9 +14,8 @@ import {
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import { getPrebuiltBySlug } from "@/data/prebuilt-plans";
 import { getWorkoutById } from "@/data/workouts";
@@ -30,6 +28,7 @@ import type { AnyWorkoutTemplate } from "@/types";
 import { toast } from "sonner";
 import { PlanCalendar } from "@/components/domain/PlanCalendar";
 import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
+import { PHASE_ZONE_BAR } from "@/components/domain/PrebuiltPlanCard";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
 import { SESSION_TYPE_LABELS } from "@/lib/labels";
 import { useIsEnglish, usePickLang, usePickLocale } from "@/lib/i18n-utils";
@@ -209,85 +208,70 @@ export function PrebuiltPlanDetailPage() {
         </Button>
 
         {/* Header */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div className="space-y-3">
-            <EditorialTitle as="h1">{name}</EditorialTitle>
-            <FadeUp as="p" delay={0.1} className="text-muted-foreground max-w-2xl">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 border-b border-filet pb-8 items-end">
+          <div>
+            <p className="font-mono text-[11px] tracking-[0.12em] uppercase text-muted-foreground">
+              {difficultyLabel}
+              {raceMeta ? ` · ${pick(raceMeta, "label")}` : ""}
+            </p>
+            <h1 className="font-sans font-bold uppercase leading-[0.86] tracking-[-0.05em] text-5xl sm:text-6xl lg:text-7xl mt-3">
+              {name}
+            </h1>
+            <p className="mt-4 text-base leading-[1.55] text-foreground/75 max-w-2xl">
               {description}
-            </FadeUp>
-            <div className="flex flex-wrap items-center gap-2">
-              {difficultyLabel && (
-                <Badge variant="secondary">
-                  {difficultyLabel}
-                </Badge>
-              )}
-              <Badge variant="outline">
-                <Calendar className="size-3" />
-                {t("prebuilt.weeksCount", { count: prebuilt.totalWeeks })}
-              </Badge>
-              <Badge variant="outline">
-                <Clock className="size-3" />
-                {prebuilt.sessionsPerWeek}{" "}
-                {t("prebuilt.sessionsPerWeek")}
-              </Badge>
-              {raceMeta && (
-                <Badge variant="default">
-                  {pick(raceMeta, "label")}
-                </Badge>
-              )}
+            </p>
+            <div className="flex flex-wrap items-center gap-4 mt-5">
+              <Button size="lg" onClick={handleUse}>
+                {t("prebuilt.useThisPlan")}
+              </Button>
             </div>
           </div>
 
-          {/* CTA top */}
-          <Button size="lg" onClick={handleUse} className="shrink-0">
-            {t("prebuilt.useThisPlan")}
-          </Button>
-        </div>
-
-        {/* Phase bar */}
-        {phaseSegments.length > 0 && (
-          <Card size="compact">
-            <CardContent className="px-4">
-              <p className="text-sm font-medium mb-2">
-                {t("prebuilt.trainingPhases")}
-              </p>
-              <div className="flex rounded-full overflow-hidden h-3">
-                {phaseSegments.map((segment, idx) => {
-                  const meta = PHASE_META[segment.phase];
-                  const widthPercent =
-                    (segment.weeks / prebuilt.totalWeeks) * 100;
-                  return (
-                    <div
-                      key={`${segment.phase}-${idx}`}
-                      className={cn(meta.color)}
-                      style={{ width: `${widthPercent}%` }}
-                      title={`${pick(meta, "label")} (${t("prebuilt.weeksCount", { count: segment.weeks })})`}
-                    />
-                  );
-                })}
+          {/* "What this plan asks" stat panel */}
+          <div className="border border-border p-5">
+            <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+              {t("prebuilt.trainingPhases")}
+            </p>
+            <div className="grid grid-cols-2 gap-4 mt-3 font-mono">
+              <div>
+                <p className="text-2xl">{prebuilt.totalWeeks}</p>
+                <p className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground mt-1">
+                  {t("prebuilt.weeksShort")}
+                </p>
               </div>
-              <div className="flex flex-wrap gap-3 mt-2">
-                {phaseSegments.map((segment, idx) => {
-                  const meta = PHASE_META[segment.phase];
-                  return (
-                    <div
-                      key={`legend-${segment.phase}-${idx}`}
-                      className="flex items-center gap-1.5 text-xs text-muted-foreground"
-                    >
+              <div>
+                <p className="text-2xl">{prebuilt.sessionsPerWeek}</p>
+                <p className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground mt-1">
+                  {t("prebuilt.sessionsPerWeek")}
+                </p>
+              </div>
+            </div>
+            {phaseSegments.length > 0 && (
+              <>
+                <div className="flex gap-px mt-4 h-2.5" aria-hidden="true">
+                  {phaseSegments.map((segment, idx) => {
+                    const widthPercent = (segment.weeks / prebuilt.totalWeeks) * 100;
+                    return (
                       <div
-                        className={cn("size-2.5 rounded-full", meta.color)}
+                        key={`${segment.phase}-${idx}`}
+                        className={PHASE_ZONE_BAR[segment.phase] ?? "bg-foreground/20"}
+                        style={{ width: `${widthPercent}%` }}
+                        title={`${pick(PHASE_META[segment.phase], "label")} (${t("prebuilt.weeksCount", { count: segment.weeks })})`}
                       />
-                      <span>
-                        {pick(meta, "label")} ({segment.weeks}{" "}
-                        {t("prebuilt.weeksShort")})
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        )}
+                    );
+                  })}
+                </div>
+                <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2.5 font-mono text-[10px] tracking-[0.06em] uppercase text-muted-foreground">
+                  {phaseSegments.map((segment, idx) => (
+                    <span key={`legend-${segment.phase}-${idx}`}>
+                      {pick(PHASE_META[segment.phase], "label")}
+                    </span>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
 
         {/* Stats */}
         {previewPlan && (
@@ -295,13 +279,13 @@ export function PrebuiltPlanDetailPage() {
         )}
 
         {/* View toggle + content */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">
+        <div className="space-y-3">
+          <div className="flex items-center justify-between border-b border-filet pb-1">
+            <h2 className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground">
               {t("prebuilt.weekByWeek")}
             </h2>
             <div
-              className="inline-flex items-center gap-0.5 rounded-lg bg-muted p-1"
+              className="flex items-center gap-5 font-mono text-[11px] tracking-[0.1em] uppercase"
               role="radiogroup"
               aria-label={t("viewMode.label")}
             >
@@ -311,15 +295,14 @@ export function PrebuiltPlanDetailPage() {
                 aria-checked={viewMode === "calendar"}
                 onClick={() => setViewMode("calendar")}
                 className={cn(
-                  "inline-flex items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  "inline-flex items-center gap-1.5 pb-1.5 border-b-2 transition-colors",
                   viewMode === "calendar"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+                    ? "border-accent-acid text-foreground"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
                 )}
               >
-                <CalendarRange size={16} />
-                <span className="hidden sm:inline">{t("viewMode.calendar")}</span>
+                <CalendarRange size={14} />
+                {t("viewMode.calendar")}
               </button>
               <button
                 type="button"
@@ -327,15 +310,14 @@ export function PrebuiltPlanDetailPage() {
                 aria-checked={viewMode === "list"}
                 onClick={() => setViewMode("list")}
                 className={cn(
-                  "inline-flex items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  "inline-flex items-center gap-1.5 pb-1.5 border-b-2 transition-colors",
                   viewMode === "list"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+                    ? "border-accent-acid text-foreground"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
                 )}
               >
-                <List size={16} />
-                <span className="hidden sm:inline">{t("viewMode.list")}</span>
+                <List size={14} />
+                {t("viewMode.list")}
               </button>
             </div>
           </div>

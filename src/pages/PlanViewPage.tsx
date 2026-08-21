@@ -22,7 +22,7 @@ import {
 } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -755,11 +755,11 @@ export function PlanViewPage() {
                   if (e.key === "Enter") e.currentTarget.blur();
                   if (e.key === "Escape") setIsEditingName(false);
                 }}
-                className="font-sans font-semibold italic text-3xl md:text-4xl tracking-tight bg-transparent border-b-2 border-primary outline-none w-full"
+                className="font-sans font-bold uppercase text-3xl md:text-5xl leading-[0.9] tracking-[-0.04em] bg-transparent border-b-2 border-accent-acid outline-none w-full"
               />
             ) : (
               <h1
-                className="font-sans font-semibold italic text-3xl md:text-4xl leading-[1.05] tracking-tight cursor-pointer group flex items-center gap-2"
+                className="font-sans font-bold uppercase text-3xl md:text-5xl leading-[0.9] tracking-[-0.04em] cursor-pointer group flex items-center gap-2"
                 onClick={() => { setEditName(planName); setIsEditingName(true); }}
                 title={t("view.clickToRename")}
               >
@@ -844,7 +844,6 @@ export function PlanViewPage() {
             <Button
               variant="outline"
               size="sm"
-              className="rounded-full"
               onClick={() => setShowUnavailabilityManager(true)}
             >
               <CalendarOff className="size-4" />
@@ -853,7 +852,6 @@ export function PlanViewPage() {
             <Button
               variant="outline"
               size="sm"
-              className="rounded-full"
               disabled={(plan.config.unavailabilities ?? []).length === 0}
               onClick={handleReschedule}
             >
@@ -872,13 +870,11 @@ export function PlanViewPage() {
                 buildUrl={() => sharedPlanUrl(plan.config)}
                 title={planName}
                 label={t("shared.shareLink")}
-                className="rounded-full"
               />
             )}
             <Button
               variant="destructive"
               size="sm"
-              className="rounded-full"
               onClick={() => setShowDeleteDialog(true)}
               title={t("view.delete")}
             >
@@ -897,55 +893,53 @@ export function PlanViewPage() {
 
         {/* Phase Timeline */}
         {plan.phases.length > 0 && (
-          <Card size="compact">
-            <CardContent className="px-4">
-              <p className="text-sm font-medium mb-2">
-                {t("view.phases")}
+          <div className="border border-border p-4">
+            <div className="flex items-baseline justify-between">
+              <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+                {t("view.phases")} · {plan.totalWeeks}
               </p>
-              <div className="flex rounded-full overflow-hidden h-3">
-                {plan.phases.map((phaseRange) => {
-                  const meta = PHASE_META[phaseRange.phase];
-                  const widthPercent =
-                    ((phaseRange.endWeek - phaseRange.startWeek + 1) /
-                      plan.totalWeeks) *
-                    100;
-                  return (
-                    <div
-                      key={`${phaseRange.phase}-${phaseRange.startWeek}`}
-                      className={cn(meta.color, "relative")}
-                      style={{ width: `${widthPercent}%` }}
-                      title={`${pick(meta, "label")} (S${phaseRange.startWeek}-S${phaseRange.endWeek})`}
-                    >
-                      {/* Current week marker */}
-                      {currentWeek >= phaseRange.startWeek &&
-                        currentWeek <= phaseRange.endWeek && (
-                          <div
-                            className="absolute top-0 bottom-0 w-0.5 bg-foreground"
-                            style={{
-                              left: `${((currentWeek - phaseRange.startWeek) / (phaseRange.endWeek - phaseRange.startWeek + 1)) * 100}%`,
-                            }}
-                          />
-                        )}
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="flex flex-wrap gap-3 mt-2">
-                {plan.phases.map((phaseRange) => {
-                  const meta = PHASE_META[phaseRange.phase];
-                  return (
-                    <div
-                      key={`legend-${phaseRange.phase}-${phaseRange.startWeek}`}
-                      className="flex items-center gap-1.5 text-xs text-muted-foreground"
-                    >
-                      <div className={cn("size-2.5 rounded-full", meta.color)} />
-                      <span>{pick(meta, "label")}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
+              {currentWeek >= 1 && currentWeek <= plan.totalWeeks && (
+                <p className="font-mono text-[10px] tracking-[0.1em] uppercase text-accent-acid">
+                  S{currentWeek}
+                </p>
+              )}
+            </div>
+            <div className="flex h-3 mt-3">
+              {plan.phases.map((phaseRange) => {
+                const meta = PHASE_META[phaseRange.phase];
+                const widthPercent =
+                  ((phaseRange.endWeek - phaseRange.startWeek + 1) /
+                    plan.totalWeeks) *
+                  100;
+                return (
+                  <div
+                    key={`${phaseRange.phase}-${phaseRange.startWeek}`}
+                    className={cn(meta.color, "relative")}
+                    style={{ width: `${widthPercent}%` }}
+                    title={`${pick(meta, "label")} (S${phaseRange.startWeek}-S${phaseRange.endWeek})`}
+                  >
+                    {/* Current week marker */}
+                    {currentWeek >= phaseRange.startWeek &&
+                      currentWeek <= phaseRange.endWeek && (
+                        <div
+                          className="absolute top-0 bottom-0 w-[3px] bg-foreground"
+                          style={{
+                            left: `${((currentWeek - phaseRange.startWeek) / (phaseRange.endWeek - phaseRange.startWeek + 1)) * 100}%`,
+                          }}
+                        />
+                      )}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2.5 font-mono text-[10px] tracking-[0.06em] uppercase text-muted-foreground">
+              {plan.phases.map((phaseRange) => (
+                <span key={`legend-${phaseRange.phase}-${phaseRange.startWeek}`}>
+                  {pick(PHASE_META[phaseRange.phase], "label")} · S{phaseRange.startWeek}–S{phaseRange.endWeek}
+                </span>
+              ))}
+            </div>
+          </div>
         )}
 
         {/* Undo last change panel */}
@@ -985,9 +979,19 @@ export function PlanViewPage() {
 
         {/* Programme / Statistiques toggle */}
         <Tabs defaultValue="programme">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="programme">{t("view.schedule")}</TabsTrigger>
-            <TabsTrigger value="stats">{t("view.statistics")}</TabsTrigger>
+          <TabsList className="w-fit h-auto rounded-none bg-transparent p-0 gap-5 justify-start border-b border-filet">
+            <TabsTrigger
+              value="programme"
+              className="rounded-none border-0 border-b-2 border-transparent data-[state=active]:border-accent-acid data-[state=active]:bg-transparent data-[state=active]:shadow-none font-mono text-[11px] tracking-[0.12em] uppercase px-0 py-2 flex-none"
+            >
+              {t("view.schedule")}
+            </TabsTrigger>
+            <TabsTrigger
+              value="stats"
+              className="rounded-none border-0 border-b-2 border-transparent data-[state=active]:border-accent-acid data-[state=active]:bg-transparent data-[state=active]:shadow-none font-mono text-[11px] tracking-[0.12em] uppercase px-0 py-2 flex-none"
+            >
+              {t("view.statistics")}
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="stats" className="mt-4">
@@ -1003,7 +1007,7 @@ export function PlanViewPage() {
               variant="default"
               size="sm"
               onClick={() => setShowWorkoutPanel(v => !v)}
-              className="rounded-full hidden md:inline-flex"
+              className="hidden md:inline-flex"
             >
               <Plus className="size-4" />
               <span className="ml-1">{t("view.addWorkout")}</span>
@@ -1220,12 +1224,12 @@ export function PlanViewPage() {
                   <div className="flex items-center gap-3 min-w-0">
                     <div
                       className={cn(
-                        "size-2.5 rounded-full shrink-0",
+                        "size-2.5 shrink-0",
                         phaseMeta.color
                       )}
                     />
                     <div className="min-w-0">
-                      <span className="font-medium truncate block">
+                      <span className="font-sans font-semibold uppercase tracking-[-0.01em] truncate block">
                         {weekLabel} — {pick(phaseMeta, "label")}
                       </span>
                       {weekDateRange && (

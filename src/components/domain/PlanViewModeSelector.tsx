@@ -26,7 +26,7 @@ export function PlanViewModeSelector({
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-0.5 rounded-lg bg-muted p-1",
+        "flex items-center gap-4 font-mono text-[11px] tracking-[0.1em] uppercase",
         className
       )}
       role="radiogroup"
@@ -43,15 +43,14 @@ export function PlanViewModeSelector({
             aria-label={t(labelKey)}
             onClick={() => onChange(mode)}
             className={cn(
-              "items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm transition-colors",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              "items-center gap-1.5 px-2.5 py-1.5 transition-colors",
               desktopOnly ? "hidden md:inline-flex" : "inline-flex",
               isActive
-                ? "bg-background text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+                ? "bg-foreground text-background"
+                : "text-muted-foreground hover:text-foreground"
             )}
           >
-            <Icon size={16} />
+            <Icon size={14} />
             <span className="hidden sm:inline">{t(labelKey)}</span>
           </button>
         );

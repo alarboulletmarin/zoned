@@ -2,24 +2,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, Sparkles, BookOpen } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import {
-  EditorialTitle,
-  FadeUp,
-  StaggerGrid,
-  StaggerItem,
-} from "@/components/editorial";
+import { cn } from "@/lib/utils";
 import { savePlan } from "@/lib/planStorage";
 import { createEmptyWeekPlan } from "@/lib/weekToPlan";
 
 /**
- * Week creation mode picker — mirrors PlanNewPage (3 gradient mode cards),
- * mobile-first (cards stack to one column under sm:). The "Generate" and
- * "Scratch" modes both create an empty single-week plan; "Generate" passes
- * `state.openSettings` so WeekViewPage surfaces the generator settings on
- * arrival (the user picks their parameters, then generates — never blindly).
- * "Pre-built" links to the gallery.
+ * Week creation mode picker — mobile-first (cards stack to one column
+ * under sm:). The "Generate" and "Scratch" modes both create an empty
+ * single-week plan; "Generate" passes `state.openSettings` so WeekViewPage
+ * surfaces the generator settings on arrival (the user picks their
+ * parameters, then generates — never blindly). "Pre-built" links to the
+ * gallery.
  */
 export function WeekNewPage() {
   const { t } = useTranslation("library");
@@ -52,69 +46,57 @@ export function WeekNewPage() {
           </Button>
 
           {/* Title */}
-          <div className="text-center space-y-2">
-            <EditorialTitle as="h1" size="md">
-              {t("weekly.new.title")}
-            </EditorialTitle>
-            <FadeUp as="p" delay={0.1} className="text-muted-foreground">
+          <div className="border-b border-filet pb-6">
+            <p className="font-mono text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
               {t("weekly.new.subtitle")}
-            </FadeUp>
+            </p>
+            <h1 className="font-sans font-bold uppercase leading-[0.92] tracking-[-0.04em] text-4xl sm:text-5xl mt-2">
+              {t("weekly.new.title")}
+            </h1>
           </div>
 
           {/* Cards — two modes: create (generate or build), or pre-built. */}
-          <StaggerGrid className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-border border border-border">
             {/* Create a week (generate 80/20 or build by hand) */}
-            <StaggerItem>
-              <button
-                type="button"
-                onClick={() => createWeek(true)}
-                className="block h-full w-full text-left"
-              >
-                <Card
-                  interactive
-                  className="h-full bg-gradient-to-br from-primary/10 dark:from-primary/20 to-transparent border-border/50 hover:shadow-md hover:-translate-y-1 hover:border-foreground/40 transition-all duration-200"
-                >
-                  <CardContent className="p-4 sm:p-6 flex items-center gap-4 sm:flex-col sm:text-center">
-                    <div className="size-10 sm:size-16 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                      <Sparkles className="size-5 sm:size-8 text-primary" />
-                    </div>
-                    <div className="space-y-1 sm:space-y-2 min-w-0">
-                      <h2 className="text-base sm:text-lg font-semibold">
-                        {t("weekly.new.modes.create.title")}
-                      </h2>
-                      <p className="text-xs sm:text-sm text-muted-foreground">
-                        {t("weekly.new.modes.create.desc")}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </button>
-            </StaggerItem>
+            <button
+              type="button"
+              onClick={() => createWeek(true)}
+              className={cn(
+                "h-full w-full text-left bg-background p-5 sm:p-6 transition-colors hover:bg-secondary",
+                "flex items-center gap-4 sm:flex-col sm:items-start sm:text-left"
+              )}
+            >
+              <div className="size-10 sm:size-12 bg-primary/10 flex items-center justify-center shrink-0">
+                <Sparkles className="size-5 sm:size-6 text-primary" />
+              </div>
+              <div className="min-w-0">
+                <h2 className="font-sans font-bold uppercase tracking-[-0.02em] text-lg sm:text-xl mt-0 sm:mt-3">
+                  {t("weekly.new.modes.create.title")}
+                </h2>
+                <p className="mt-1.5 text-sm text-muted-foreground">
+                  {t("weekly.new.modes.create.desc")}
+                </p>
+              </div>
+            </button>
 
             {/* Pre-built week */}
-            <StaggerItem>
-              <Link to="/weeks/new/prebuilt" className="block h-full">
-                <Card
-                  interactive
-                  className="h-full bg-gradient-to-br from-zone-5/10 dark:from-zone-5/20 to-transparent border-border/50 hover:shadow-md hover:-translate-y-1 hover:border-foreground/40 transition-all duration-200"
-                >
-                  <CardContent className="p-4 sm:p-6 flex items-center gap-4 sm:flex-col sm:text-center">
-                    <div className="size-10 sm:size-16 rounded-full bg-zone-5/10 flex items-center justify-center shrink-0">
-                      <BookOpen className="size-5 sm:size-8 text-zone-5" />
-                    </div>
-                    <div className="space-y-1 sm:space-y-2 min-w-0">
-                      <h2 className="text-base sm:text-lg font-semibold">
-                        {t("weekly.new.modes.prebuilt.title")}
-                      </h2>
-                      <p className="text-xs sm:text-sm text-muted-foreground">
-                        {t("weekly.new.modes.prebuilt.desc")}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            </StaggerItem>
-          </StaggerGrid>
+            <Link
+              to="/weeks/new/prebuilt"
+              className="h-full w-full bg-background p-5 sm:p-6 transition-colors hover:bg-secondary flex items-center gap-4 sm:flex-col sm:items-start sm:text-left"
+            >
+              <div className="size-10 sm:size-12 bg-zone-5/10 flex items-center justify-center shrink-0">
+                <BookOpen className="size-5 sm:size-6 text-zone-5" />
+              </div>
+              <div className="min-w-0">
+                <h2 className="font-sans font-bold uppercase tracking-[-0.02em] text-lg sm:text-xl mt-0 sm:mt-3">
+                  {t("weekly.new.modes.prebuilt.title")}
+                </h2>
+                <p className="mt-1.5 text-sm text-muted-foreground">
+                  {t("weekly.new.modes.prebuilt.desc")}
+                </p>
+              </div>
+            </Link>
+          </div>
         </div>
       </div>
     </>

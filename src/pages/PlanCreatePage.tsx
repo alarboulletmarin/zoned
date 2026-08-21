@@ -357,20 +357,21 @@ export function PlanCreatePage() {
   // ── Step indicator (dots + step number) ────────────────────────
 
   const renderStepIndicator = () => (
-    <div className="flex items-center justify-center gap-2 py-4">
-      {Array.from({ length: totalSteps }, (_, i) => (
-        <div
-          key={i}
-          className={cn(
-            "size-2 rounded-full transition-all duration-300",
-            i === stepIndex
-              ? "bg-primary scale-125"
-              : i < stepIndex
-                ? "bg-primary/50"
-                : "bg-muted-foreground/25"
-          )}
-        />
-      ))}
+    <div className="py-4">
+      <div className="flex items-baseline justify-between font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+        <span>{t("nav.step", { current: stepIndex + 1, total: totalSteps })}</span>
+      </div>
+      <div className="flex gap-1 mt-2" aria-hidden="true">
+        {Array.from({ length: totalSteps }, (_, i) => (
+          <div
+            key={i}
+            className={cn(
+              "h-[3px] flex-1 transition-colors duration-300",
+              i <= stepIndex ? "bg-accent-acid" : "bg-border"
+            )}
+          />
+        ))}
+      </div>
     </div>
   );
 
@@ -381,7 +382,7 @@ export function PlanCreatePage() {
     nextLabel?: string,
     showSkip?: boolean,
   ) => (
-    <div className="py-4 flex justify-between gap-3">
+    <div className="py-4 flex justify-between gap-3 border-t border-filet">
       <Button variant="ghost" size="sm" onClick={goBack} disabled={stepIndex === 0}>
         <ArrowLeft className="size-4 mr-1" />
         {t("nav.back")}
@@ -452,7 +453,7 @@ export function PlanCreatePage() {
       )}
     >
       <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+        <div className="size-12 md:size-16 rounded-none bg-primary/10 flex items-center justify-center mb-4">
           <Zap className="size-6 md:size-8 text-primary" />
         </div>
         <h2 className="text-lg md:text-xl font-semibold text-center">
@@ -486,7 +487,7 @@ export function PlanCreatePage() {
               }}
             >
               <CardContent className="p-3 flex items-center gap-3">
-                <div className={cn("size-10 rounded-full flex items-center justify-center shrink-0", opt.iconBgClass)}>
+                <div className={cn("size-10 rounded-none flex items-center justify-center shrink-0", opt.iconBgClass)}>
                   {opt.icon}
                 </div>
                 <div className="min-w-0">
@@ -514,7 +515,7 @@ export function PlanCreatePage() {
       )}
     >
       <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+        <div className="size-12 md:size-16 rounded-none bg-primary/10 flex items-center justify-center mb-4">
           <Target className="size-6 md:size-8 text-primary" />
         </div>
         <h2 className="text-lg md:text-xl font-semibold text-center">
@@ -542,7 +543,7 @@ export function PlanCreatePage() {
                 }}
               >
                 <CardContent className="p-3 md:p-4 flex items-center gap-3">
-                  <div className="size-9 md:size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                  <div className="size-9 md:size-10 rounded-none bg-primary/10 flex items-center justify-center shrink-0">
                     {RACE_DISTANCE_ICONS[dist]}
                   </div>
                   <div className="min-w-0">
@@ -575,7 +576,7 @@ export function PlanCreatePage() {
       )}
     >
       <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-zone-2/10 flex items-center justify-center mb-4">
+        <div className="size-12 md:size-16 rounded-none bg-zone-2/10 flex items-center justify-center mb-4">
           <Calendar className="size-6 md:size-8 text-zone-2" />
         </div>
         <h2 className="text-lg md:text-xl font-semibold text-center">
@@ -626,7 +627,7 @@ export function PlanCreatePage() {
       )}
     >
       <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+        <div className="size-12 md:size-16 rounded-none bg-primary/10 flex items-center justify-center mb-4">
           <Calendar className="size-6 md:size-8 text-primary" />
         </div>
         <h2 className="text-lg md:text-xl font-semibold text-center">
@@ -654,7 +655,7 @@ export function PlanCreatePage() {
                 type="button"
                 onClick={() => setForm((f) => ({ ...f, useCustomStartDate: false, startDate: todayDate }))}
                 className={cn(
-                  "flex-1 rounded-lg border p-3 text-sm transition-colors",
+                  "flex-1 rounded-none border p-3 text-sm transition-colors",
                   !form.useCustomStartDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
                 )}
               >
@@ -664,7 +665,7 @@ export function PlanCreatePage() {
                 type="button"
                 onClick={() => setForm((f) => ({ ...f, useCustomStartDate: true, startDate: f.startDate || todayDate }))}
                 className={cn(
-                  "flex-1 rounded-lg border p-3 text-sm transition-colors",
+                  "flex-1 rounded-none border p-3 text-sm transition-colors",
                   form.useCustomStartDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
                 )}
               >
@@ -702,7 +703,7 @@ export function PlanCreatePage() {
           )}
 
           {form.raceDate && dateTooLong && (
-            <div className="rounded-lg border border-amber-300 dark:border-amber-600 bg-amber-50 dark:bg-amber-950/30 p-3 text-sm text-amber-800 dark:text-amber-300 text-center space-y-1">
+            <div className="rounded-none border border-amber-300 dark:border-amber-600 bg-amber-50 dark:bg-amber-950/30 p-3 text-sm text-amber-800 dark:text-amber-300 text-center space-y-1">
               <p className="font-semibold flex items-center justify-center gap-1.5">
                 <AlertTriangle className="size-4 shrink-0" />
                 {t("date.tooLong", { weeks: weeksCount })}
@@ -730,7 +731,7 @@ export function PlanCreatePage() {
       )}
     >
       <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+        <div className="size-12 md:size-16 rounded-none bg-primary/10 flex items-center justify-center mb-4">
           <Flag className="size-6 md:size-8 text-primary" />
         </div>
         <h2 className="text-lg md:text-xl font-semibold text-center">
@@ -834,7 +835,7 @@ export function PlanCreatePage() {
         )}
       >
         <div className="flex-1 flex flex-col items-center justify-center px-4">
-          <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+          <div className="size-12 md:size-16 rounded-none bg-primary/10 flex items-center justify-center mb-4">
             <Flag className="size-6 md:size-8 text-primary" />
           </div>
           <h2 className="text-lg md:text-xl font-semibold text-center">
@@ -1027,7 +1028,7 @@ export function PlanCreatePage() {
         )}
       >
         <div className="flex-1 flex flex-col items-center justify-center px-4">
-          <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+          <div className="size-12 md:size-16 rounded-none bg-primary/10 flex items-center justify-center mb-4">
             <Target className="size-6 md:size-8 text-primary" />
           </div>
           <h2 className="text-lg md:text-xl font-semibold text-center">
@@ -1038,7 +1039,7 @@ export function PlanCreatePage() {
           </p>
 
           {userPrefs?.vma && suggestedLevel && (
-            <div className="rounded-lg border bg-primary/5 p-2 text-xs text-center mt-3 max-w-sm w-full">
+            <div className="rounded-none border bg-primary/5 p-2 text-xs text-center mt-3 max-w-sm w-full">
               {t("level.vmaSuggestion", { vma: userPrefs.vma })}
               <span className="font-semibold">
                 {pick(DIFFICULTY_META[suggestedLevel], "label")}
@@ -1070,7 +1071,7 @@ export function PlanCreatePage() {
                   }}
                 >
                   <CardContent className="p-3 md:p-4 flex items-center gap-3">
-                    <div className="size-9 md:size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                    <div className="size-9 md:size-10 rounded-none bg-primary/10 flex items-center justify-center shrink-0">
                       <span className="text-base md:text-lg font-bold text-primary">
                         {meta.level}
                       </span>
@@ -1137,7 +1138,7 @@ export function PlanCreatePage() {
               }}
             >
               <CardContent className="p-3 flex items-center gap-3">
-                <div className="size-9 rounded-full bg-secondary/80 flex items-center justify-center shrink-0">
+                <div className="size-9 rounded-none bg-secondary/80 flex items-center justify-center shrink-0">
                   {opt.icon}
                 </div>
                 <div className="min-w-0">
@@ -1229,7 +1230,7 @@ export function PlanCreatePage() {
       )}
     >
       <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+        <div className="size-12 md:size-16 rounded-none bg-primary/10 flex items-center justify-center mb-4">
           <Calendar className="size-6 md:size-8 text-primary" />
         </div>
         <h2 className="text-lg md:text-xl font-semibold text-center">
@@ -1289,7 +1290,7 @@ export function PlanCreatePage() {
           <div className="border-t pt-4">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2 min-w-0">
-                <div className="size-8 rounded-full bg-orange-500/10 flex items-center justify-center shrink-0">
+                <div className="size-8 rounded-none bg-orange-500/10 flex items-center justify-center shrink-0">
                   <Dumbbell className="size-4 text-orange-500" />
                 </div>
                 <div className="min-w-0">
@@ -1354,7 +1355,7 @@ export function PlanCreatePage() {
         )}
       >
         <div className="flex-1 flex flex-col items-center justify-center px-4">
-          <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+          <div className="size-12 md:size-16 rounded-none bg-primary/10 flex items-center justify-center mb-4">
             <Mountain className="size-6 md:size-8 text-primary" />
           </div>
           <h2 className="text-lg md:text-xl font-semibold text-center">
@@ -1371,7 +1372,7 @@ export function PlanCreatePage() {
 
           <div className="w-full max-w-sm mt-6 space-y-4">
             {/* Pace input mode toggle */}
-            <div className="flex rounded-lg border overflow-hidden">
+            <div className="flex rounded-none border overflow-hidden">
               <button
                 type="button"
                 className={cn(
@@ -1527,10 +1528,10 @@ export function PlanCreatePage() {
         )}
       >
         <div className="text-center mb-4">
-          <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
-            <CheckIcon className="size-6 md:size-8 text-primary" />
+          <div className="size-12 md:size-16 bg-accent-acid flex items-center justify-center mx-auto mb-3">
+            <CheckIcon className="size-6 md:size-8 text-ink" />
           </div>
-          <h2 className="text-lg md:text-xl font-semibold">
+          <h2 className="font-sans font-bold uppercase tracking-[-0.03em] text-2xl md:text-3xl">
             {t("summary.title")}
           </h2>
           <p className="text-sm text-muted-foreground mt-1">
@@ -1584,10 +1585,10 @@ export function PlanCreatePage() {
                   return (
                     <div key={idx} className="flex items-center gap-2 pl-2 text-sm">
                       <span className={cn(
-                        "inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-semibold leading-none",
-                        goal.priority === "A" ? "bg-zone-5/10 text-zone-5"
-                          : goal.priority === "B" ? "bg-primary/10 text-primary"
-                            : "bg-zone-2/10 text-zone-2"
+                        "inline-flex items-center px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase leading-none",
+                        goal.priority === "A" ? "bg-zone-5 text-ink"
+                          : goal.priority === "B" ? "bg-zone-4 text-ink"
+                            : "bg-zone-2 text-ink"
                       )}>
                         {t(`intermediateGoals.badge.${goal.priority}`)}
                       </span>
@@ -1683,7 +1684,7 @@ export function PlanCreatePage() {
         </Card>
 
         {error && (
-          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive text-center">
+          <div className="rounded-none border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive text-center">
             {error}
           </div>
         )}
@@ -1743,7 +1744,7 @@ export function PlanCreatePage() {
           </div>
         )}
         {hasDraft && stepIndex === 0 && (
-          <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-sm">
+          <div className="mb-4 flex flex-wrap items-center gap-3 rounded-none border border-primary/20 bg-primary/5 px-4 py-3 text-sm">
             <span className="flex-1 min-w-0 text-foreground">
               {t("draft.found", "Un brouillon de plan a été retrouvé.")}
             </span>

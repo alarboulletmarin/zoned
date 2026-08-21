@@ -445,7 +445,9 @@
     "sessionsCount": "{{count}} sessions",
     "planCount": "{{count}} plans",
     "ended": "Ended",
-    "endedSection": "Past plans"
+    "endedSection": "Past plans",
+    "prebuiltHeading": "{{count}} ready-to-read plans",
+    "filterAll": "All distances"
   },
   "prebuilt": {
     "notFound": "Plan not found",
