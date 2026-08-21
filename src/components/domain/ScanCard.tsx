@@ -20,11 +20,11 @@ export function ScanCard({
   return (
     <div
       className={cn(
-        "relative overflow-hidden border border-border",
-        compact ? "rounded p-1.5" : "rounded-xl p-5",
-        `zone-${zone} bg-gradient-to-br from-zone-${zone}/10 to-transparent`,
+        "relative overflow-hidden border-2 border-foreground bg-card",
+        compact ? "p-1.5" : "p-5",
         className,
       )}
+      style={{ borderLeft: `4px solid var(--zone-${zone})` }}
       aria-hidden="true"
     >
       {/* Accent scan line sweeping across the card */}

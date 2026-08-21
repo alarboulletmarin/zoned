@@ -2,12 +2,10 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
-  Clock,
   Circle,
   Mountain,
 } from "@/components/icons";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { InteractiveCard } from "@/components/editorial";
 import { ZoneBadge, ZoneBadges } from "./ZoneBadge";
 import { CATEGORY_ICONS } from "./CategoryIcon";
@@ -122,25 +120,28 @@ export function WorkoutCardChrome({
     <Card
       interactive={interactive}
       size="compact"
-      className={cn(
-        `zone-${dominantZone} bg-gradient-to-br from-zone-${dominantZone}/10 dark:from-zone-${dominantZone}/20 to-transparent`,
-        "border-border/50",
-        "overflow-hidden h-full flex flex-col",
-        className
-      )}
+      className={cn("overflow-hidden h-full flex flex-col", className)}
     >
       <CardHeader className={cn("pb-1.5 sm:pb-2 px-3 sm:px-4", expanded && "pb-2 px-4")}>
         {eyebrow && <div className="mb-1">{eyebrow}</div>}
-        <div className="flex items-start justify-between gap-2">
-          <CardTitle className={cn("text-sm sm:text-base line-clamp-2 sm:line-clamp-1 flex-1 min-w-0 break-words", expanded && "text-base line-clamp-none")}>
+        <div className="flex items-center justify-between gap-2">
+          <ZoneBadge zone={dominantZone} size="sm" />
+          <span className="font-mono text-xs text-muted-foreground shrink-0">
+            {formatDurationMinutes(duration)}
+          </span>
+        </div>
+        <div className="flex items-start justify-between gap-2 mt-2.5">
+          <CardTitle
+            className={cn(
+              "font-sans font-bold uppercase leading-[1.05] tracking-tight text-base sm:text-lg line-clamp-2 sm:line-clamp-1 flex-1 min-w-0 break-words",
+              expanded && "text-xl line-clamp-none",
+            )}
+          >
             {pick(workout, "name")}
           </CardTitle>
-          <div className="flex items-center gap-1">
-            {showFavorite && <FavoriteButton workoutId={workout.id} size="sm" />}
-            <ZoneBadge zone={dominantZone} size="sm" />
-          </div>
+          {showFavorite && <FavoriteButton workoutId={workout.id} size="sm" />}
         </div>
-        <p className={cn("hidden sm:block text-muted-foreground text-sm line-clamp-2", expanded && "block")}>
+        <p className={cn("hidden sm:block text-muted-foreground text-sm leading-snug mt-1.5 line-clamp-2", expanded && "block")}>
           {pick(workout, "description")}
         </p>
       </CardHeader>
@@ -149,54 +150,48 @@ export function WorkoutCardChrome({
         {/* Intensity bar showing zone distribution */}
         <SessionIntensityBar workout={workout} />
 
-        <div className={cn("flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground", expanded && "gap-3 text-sm")}>
-          <div className="flex items-center gap-1 shrink-0">
-            <Clock className="size-3.5 shrink-0" />
-            <span>{formatDurationMinutes(duration)}</span>
-          </div>
-          <div className="flex items-center gap-1 min-w-0">
-            <CategoryIcon className="size-3.5 shrink-0" />
-            <span className="truncate">{t(`categories.${workout.category}`)}</span>
-          </div>
-        </div>
-
         {showZoneBadges && zones.length > 0 && (
           <ZoneBadges zones={zones} size="sm" />
         )}
 
         {showBadges && (
-          <div className={cn("hidden sm:flex flex-wrap items-center gap-1.5", expanded && "flex")}>
-            <Badge variant="secondary" className="text-xs whitespace-nowrap">
-              <DifficultyIcon difficulty={workout.difficulty} className="size-3 mr-1" />
+          <div
+            className={cn(
+              "hidden sm:flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[10px] tracking-[0.08em] uppercase text-muted-foreground",
+              expanded && "flex",
+            )}
+          >
+            <span className="inline-flex items-center gap-1">
+              <CategoryIcon className="size-3 shrink-0" />
+              {t(`categories.${workout.category}`)}
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <DifficultyIcon difficulty={workout.difficulty} className="size-3" />
               {t(`difficulty.${workout.difficulty}`)}
-            </Badge>
+            </span>
             {workout.environment.requiresTrack && (
-              <Badge variant="outline" className="text-xs gap-1 whitespace-nowrap">
+              <span className="inline-flex items-center gap-1">
                 <Circle className="size-3" />
                 {t("common:library.track")}
-              </Badge>
+              </span>
             )}
             {workout.environment.requiresHills && !hasTrail && (
-              <Badge variant="outline" className="text-xs gap-1 whitespace-nowrap">
+              <span className="inline-flex items-center gap-1">
                 <Mountain className="size-3" />
                 {t("common:library.hills")}
-              </Badge>
+              </span>
             )}
             {hasTrail && trailMetrics.totalElevationGainM > 0 && (
-              <Badge variant="outline" className="text-xs gap-1 whitespace-nowrap">
+              <span className="inline-flex items-center gap-1">
                 <Mountain className="size-3" />
                 {t("library:trail.elevationGain", { value: trailMetrics.totalElevationGainM })}
-              </Badge>
+              </span>
             )}
             {hasTrail && trailMetrics.totalElevationLossM > 0 && (
-              <Badge variant="outline" className="text-xs gap-1 whitespace-nowrap">
-                {t("library:trail.elevationLoss", { value: trailMetrics.totalElevationLossM })}
-              </Badge>
+              <span>{t("library:trail.elevationLoss", { value: trailMetrics.totalElevationLossM })}</span>
             )}
             {hasTrail && trailMetrics.dominantTerrain && (
-              <Badge variant="outline" className="text-xs whitespace-nowrap">
-                {t(`library:trail.terrainType.${trailMetrics.dominantTerrain}`)}
-              </Badge>
+              <span>{t(`library:trail.terrainType.${trailMetrics.dominantTerrain}`)}</span>
             )}
           </div>
         )}
@@ -256,7 +251,7 @@ function RunningWorkoutCard({ workout, className, expanded }: { workout: Workout
     <Link to={`/workout/${workout.id}`} className="block h-full">
       <InteractiveCard
         accent={`var(--zone-${dominantZone})`}
-        className="block h-full rounded-xl"
+        className="block h-full"
       >
         <WorkoutCardChrome
           workout={workout}
@@ -303,34 +298,26 @@ function RunningWorkoutCardCompact({ workout, className }: { workout: WorkoutTem
     <Link to={`/workout/${workout.id}`} className="block h-full">
       <InteractiveCard
         accent={`var(--zone-${dominantZone})`}
-        className={cn(
-          `zone-${dominantZone} bg-gradient-to-br from-zone-${dominantZone}/10 dark:from-zone-${dominantZone}/20 to-transparent`,
-          "border-border/50",
-          "block p-3 rounded-xl border h-full",
-          className
-        )}
+        className={cn("block p-3 rounded-none border-2 border-foreground bg-card h-full", className)}
       >
       <div className="flex items-center justify-between gap-2">
-        <span className="font-medium text-sm line-clamp-1 flex-1">
-          {pick(workout, "name")}
-        </span>
         <ZoneBadge zone={dominantZone} size="sm" />
+        <span className="font-mono text-[10px] text-muted-foreground">
+          {formatDurationMinutes(duration)}
+        </span>
       </div>
-      <div className="flex items-center justify-between mt-1.5 text-xs text-muted-foreground">
-        <span className="flex items-center gap-2">
-          <span className="flex items-center gap-1">
-            <Clock className="size-3" />
-            {formatDurationMinutes(duration)}
-          </span>
-          {climbLabel && (
-            <span className="flex items-center gap-1">
-              <Mountain className="size-3" />
-              {climbLabel}
-            </span>
-          )}
+      <div className="flex items-start justify-between gap-2 mt-2">
+        <span className="font-sans font-bold uppercase leading-tight tracking-tight text-sm line-clamp-2 flex-1">
+          {pick(workout, "name")}
         </span>
         <FavoriteButton workoutId={workout.id} size="sm" />
       </div>
+      {climbLabel && (
+        <div className="flex items-center gap-1 mt-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-muted-foreground">
+          <Mountain className="size-3" />
+          {climbLabel}
+        </div>
+      )}
       </InteractiveCard>
     </Link>
   );

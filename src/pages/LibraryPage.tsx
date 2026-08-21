@@ -15,7 +15,6 @@ import {
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 import { Button } from "@/components/ui/button";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 
 import { WorkoutCardSkeleton } from "@/components/skeletons";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
@@ -559,17 +558,20 @@ export function LibraryPage() {
           url: "https://zoned.run/library",
         }}
       />
-      <div className="py-8 max-w-7xl mx-auto">
+      <div className="py-6 md:py-8 max-w-7xl mx-auto">
         {/* Header */}
-        <div ref={filterSectionRef} className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+        <div ref={filterSectionRef} className="mb-6 md:mb-8 border-t border-filet pt-5 md:pt-6">
+          <div className="flex items-end justify-between gap-3 mb-5">
             <div>
-              <EditorialTitle as="h1" size="md">
+              <p className="font-mono text-[10px] md:text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
+                {t("common:nav.library")}
+              </p>
+              <h1 className="font-sans font-bold uppercase leading-[0.9] tracking-[-0.05em] text-[36px] sm:text-[44px] md:text-[52px] mt-2">
                 {t("title")}
-              </EditorialTitle>
-              <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
+              </h1>
+              <p className="font-mono text-xs text-muted-foreground mt-2.5">
                 {t(subtitleKey, { count: filteredWorkouts.length })}
-              </FadeUp>
+              </p>
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
@@ -589,7 +591,7 @@ export function LibraryPage() {
                   {t("filters.title")}
                 </span>
                 {activeFiltersCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 size-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 size-5 bg-accent-acid text-ink font-mono text-[10px] font-bold flex items-center justify-center">
                     {activeFiltersCount}
                   </span>
                 )}
@@ -599,16 +601,16 @@ export function LibraryPage() {
 
           {/* Activity type toggle */}
           <div className="mb-4">
-            <div className="flex w-fit max-w-full flex-wrap items-center gap-0.5 rounded-lg border border-border bg-muted/50 p-0.5">
+            <div className="flex w-fit max-w-full flex-wrap items-center gap-1 font-mono text-[11px] tracking-[0.08em] uppercase">
               {(["all", "running", "cycling", "swimming", "strength"] as const).map(
                 (type) => (
                   <button
                     key={type}
                     onClick={() => handleActivityTypeChange(type)}
                     className={cn(
-                      "inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+                      "inline-flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 transition-colors",
                       activityType === type
-                        ? "bg-background text-foreground shadow-sm"
+                        ? "bg-accent-acid text-ink"
                         : "text-muted-foreground hover:text-foreground",
                     )}
                   >
@@ -635,7 +637,7 @@ export function LibraryPage() {
               onChange={(e) =>
                 setFilters({ ...filters, searchQuery: e.target.value })
               }
-              className="w-full h-10 pl-9 pr-3 rounded-md border border-input bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="w-full h-10 pl-9 pr-3 border-2 border-foreground bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
             />
           </div>
 
@@ -663,10 +665,10 @@ export function LibraryPage() {
                       })
                     }
                     className={cn(
-                      "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                      "inline-flex items-center border-2 px-3 py-1 font-mono text-[11px] uppercase transition-colors",
                       filters.category.includes(cat as WorkoutCategory)
-                        ? "border-primary bg-primary/10 text-primary"
-                        : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
+                        ? "border-transparent bg-accent-acid text-ink"
+                        : "border-foreground text-foreground/80 hover:bg-secondary",
                     )}
                   >
                     {t(`categories.${cat}`)}
@@ -693,10 +695,10 @@ export function LibraryPage() {
                       })
                     }
                     className={cn(
-                      "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                      "inline-flex items-center border-2 px-3 py-1 font-mono text-[11px] uppercase transition-colors",
                       filters.strengthCategory.includes(cat as StrengthCategory)
-                        ? "border-primary bg-primary/10 text-primary"
-                        : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
+                        ? "border-transparent bg-accent-acid text-ink"
+                        : "border-foreground text-foreground/80 hover:bg-secondary",
                     )}
                   >
                     {tStrength(`categories.${cat}`)}
@@ -706,9 +708,9 @@ export function LibraryPage() {
           </div>
         </div>
 
-        <div className="flex gap-8">
+        <div className="flex gap-8 border-t border-filet pt-6">
           {/* Sidebar Filters - Desktop */}
-          <aside className="hidden lg:block w-80 shrink-0">
+          <aside className="hidden lg:block w-72 shrink-0 border-r border-filet pr-6">
             <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto overscroll-contain">
               <WorkoutFilters
                 filters={filters}
@@ -719,22 +721,30 @@ export function LibraryPage() {
             </div>
           </aside>
 
-          {/* Mobile Filters Drawer */}
+          {/* Mobile Filters — bottom sheet */}
           {showMobileFilters && (
             <div className="fixed inset-0 z-50 lg:hidden">
               <div
-                className="absolute inset-0 bg-background/80 backdrop-blur-sm"
+                className="absolute inset-0 bg-ink/60"
                 onClick={cancelFilters}
               />
               <div
-                className="absolute inset-y-0 right-0 w-full max-w-xs bg-background border-l shadow-lg flex flex-col"
+                className="absolute inset-x-0 bottom-0 max-h-[86vh] bg-background border-t-2 border-foreground flex flex-col"
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="mobile-filters-title"
               >
+                {/* Grab handle */}
+                <div className="flex justify-center pt-2.5 shrink-0" aria-hidden="true">
+                  <span className="h-1 w-10 bg-filet" />
+                </div>
+
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b shrink-0">
-                  <h2 id="mobile-filters-title" className="font-semibold">
+                <div className="flex items-center justify-between px-5 py-4 border-b border-filet shrink-0">
+                  <h2
+                    id="mobile-filters-title"
+                    className="font-sans font-bold uppercase tracking-tight text-lg"
+                  >
                     {t("filters.title")}
                   </h2>
                   <Button
@@ -748,7 +758,7 @@ export function LibraryPage() {
                 </div>
 
                 {/* Filters content - scrollable */}
-                <div className="flex-1 overflow-y-auto p-6">
+                <div className="flex-1 overflow-y-auto p-5">
                   <WorkoutFilters
                     filters={tempFilters}
                     onFiltersChange={setTempFilters}
@@ -758,7 +768,7 @@ export function LibraryPage() {
                 </div>
 
                 {/* Footer with Clear / Cancel / Apply */}
-                <div className="border-t p-4 flex flex-col gap-2 shrink-0">
+                <div className="border-t-2 border-foreground p-4 flex flex-col gap-2 shrink-0">
                   {(tempFilters.category.length > 0 ||
                     tempFilters.difficulty.length > 0 ||
                     tempFilters.durationRange[0] !== DURATION_MIN ||
@@ -769,15 +779,14 @@ export function LibraryPage() {
                     tempFilters.strengthCategory.length > 0 ||
                     tempFilters.equipment.length > 0 ||
                     tempFilters.muscleGroup.length > 0) && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
+                    <button
+                      type="button"
                       onClick={() => setTempFilters(defaultFilters)}
-                      className="w-full"
+                      className="flex w-full items-center justify-center gap-1.5 py-2 font-mono text-[11px] tracking-[0.08em] uppercase text-poster-red"
                     >
-                      <X className="size-4 mr-1" />
+                      <X className="size-3.5" />
                       {t("clearFilters")}
-                    </Button>
+                    </button>
                   )}
                   <div className="flex gap-2">
                     <Button
@@ -844,7 +853,7 @@ export function LibraryPage() {
 
                 {/* Pagination: count + infinite scroll */}
                 <div className="mt-6 flex flex-col items-center gap-3">
-                  <p className="text-sm text-muted-foreground">
+                  <p className="font-mono text-xs tracking-[0.04em] text-muted-foreground">
                     {t("showingCount", {
                       visible: visibleWorkouts.length,
                       total: filteredWorkouts.length,

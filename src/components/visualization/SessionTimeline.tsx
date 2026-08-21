@@ -117,8 +117,8 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
 
   if (segments.length === 0) {
     return (
-      <div className={cn("rounded-lg bg-muted/50 p-4 text-center", className)}>
-        <p className="text-sm text-muted-foreground italic">
+      <div className={cn("bg-muted/50 p-4 text-center", className)}>
+        <p className="text-sm text-muted-foreground">
           {t("visualization.noData")}
         </p>
       </div>
@@ -130,7 +130,7 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
       <div className={cn("w-full pt-3", className)}>
         {/* Timeline bar container */}
         <div
-          className="relative flex items-end h-40 md:h-56 rounded-xl overflow-hidden"
+          className="relative flex items-end h-40 md:h-56 border-2 border-foreground overflow-hidden"
           style={{ backgroundColor: "color-mix(in srgb, var(--muted) 40%, transparent)" }}
           role="img"
           aria-label={t("visualization.timeline")}
@@ -156,7 +156,7 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
                 <TooltipTrigger asChild>
                   <div
                     className={cn(
-                      "relative transition-all duration-200 cursor-pointer rounded-t-sm",
+                      "relative transition-all duration-200 cursor-pointer",
                       "hover:brightness-110 hover:z-10",
                       segment.isRecovery && "opacity-70",
                       isHovered && "brightness-110"
@@ -180,7 +180,7 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
                   >
                     {/* Hover label */}
                     {isHovered && segment.zoneNumber && segment.widthPercent > 3 && (
-                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground text-background text-[10px] px-2 py-1 rounded font-bold whitespace-nowrap z-20 pointer-events-none">
+                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-ink text-accent-acid font-mono text-[10px] px-2 py-1 font-bold whitespace-nowrap z-20 pointer-events-none">
                         Z{segment.zoneNumber} · {formatDurationMinutes(segment.durationMin)}
                       </div>
                     )}

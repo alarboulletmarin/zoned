@@ -15,7 +15,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { WorkoutStepListEditor } from "@/components/domain/contribute/WorkoutStepListEditor";
 import { WorkoutParameterPanel } from "@/components/domain/WorkoutParameterPanel";
 import { SessionTimeline } from "@/components/visualization/SessionTimeline";
@@ -100,19 +99,22 @@ function WorkoutListView() {
         title={t("calculators:workoutBuilder.myWorkouts")}
         canonical="/workout/builder"
       />
-      <div className="py-8 max-w-3xl mx-auto space-y-6">
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+      <div className="py-6 md:py-8 max-w-3xl mx-auto space-y-6">
+        <div className="mb-8 border-t border-filet pt-5 md:pt-6">
+          <div className="flex items-end justify-between gap-3 mb-5">
             <div>
-              <EditorialTitle as="h1" size="md">
+              <p className="font-mono text-[10px] md:text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
+                {t("common:nav.library")}
+              </p>
+              <h1 className="font-sans font-bold uppercase leading-[0.9] tracking-[-0.05em] text-[32px] sm:text-[40px] md:text-[48px] mt-2">
                 {t("calculators:workoutBuilder.myWorkouts")}
-              </EditorialTitle>
-              <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
+              </h1>
+              <p className="font-mono text-xs text-muted-foreground mt-2">
                 {t("calculators:workoutBuilder.listSubtitle")}
-              </FadeUp>
+              </p>
             </div>
             <Button
-              className="rounded-full px-5 py-2.5 h-auto font-bold"
+              className="px-5 py-2.5 h-auto"
               onClick={() => {
                 const w = createEmptyWorkout();
                 navigate(`/workout/builder/${w.id}`, { state: { fresh: true } });
@@ -136,7 +138,6 @@ function WorkoutListView() {
               variant="outline"
               size="sm"
               onClick={() => fileInputRef.current?.click()}
-              className="rounded-full"
             >
               <Upload className="size-4 mr-1.5" />
               {t("calculators:workoutBuilder.import")}
@@ -146,7 +147,6 @@ function WorkoutListView() {
                 variant="outline"
                 size="sm"
                 onClick={handleExportAll}
-                className="rounded-full"
               >
                 <Download className="size-4 mr-1.5" />
                 {t("calculators:workoutBuilder.exportAll")}
@@ -168,7 +168,7 @@ function WorkoutListView() {
               return (
                 <div
                   key={w.id}
-                  className="group relative rounded-lg border bg-card hover:bg-accent/50 transition-colors"
+                  className="group relative border-2 border-foreground bg-card hover:shadow-[4px_4px_0_var(--shadow-hard)] transition-shadow duration-150 ease-out"
                 >
                   <Link
                     to={`/workout/builder/${w.id}`}
@@ -178,8 +178,8 @@ function WorkoutListView() {
                       <div className="flex items-center gap-2">
                         <FavoriteButton workoutId={w.id} size="sm" />
                         <div>
-                          <h3 className="font-medium">{w.name || t("calculators:workoutBuilder.untitled")}</h3>
-                          <p className="text-sm text-muted-foreground">
+                          <h3 className="font-sans font-bold uppercase tracking-tight">{w.name || t("calculators:workoutBuilder.untitled")}</h3>
+                          <p className="font-mono text-xs text-muted-foreground mt-0.5">
                             ~{formatDurationMinutes(totalMin)} · {mainStepCount} {t("calculators:workoutBuilder.blocks")}
                           </p>
                         </div>
@@ -191,7 +191,7 @@ function WorkoutListView() {
                     <button
                       type="button"
                       onClick={() => handleExportOne(w)}
-                      className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                      className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
                       aria-label={t("calculators:workoutBuilder.exportLabel")}
                     >
                       <Download className="size-4" />
@@ -199,7 +199,7 @@ function WorkoutListView() {
                     <button
                       type="button"
                       onClick={() => setDeleteTarget(w.id)}
-                      className="p-1.5 rounded-md text-destructive/70 hover:text-destructive hover:bg-destructive/10 active:text-destructive transition-colors"
+                      className="p-1.5 text-destructive/70 hover:text-destructive hover:bg-destructive/10 active:text-destructive transition-colors"
                       aria-label={t("calculators:workoutBuilder.deleteLabel")}
                     >
                       <Trash2 className="size-4" />
@@ -448,12 +448,12 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
         canonical="/workout/builder"
       />
 
-      <div className="py-8 max-w-3xl mx-auto space-y-6">
+      <div className="py-6 md:py-8 max-w-3xl mx-auto space-y-6">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 border-t border-filet pt-5 md:pt-6">
           <Link
             to="/workout/builder"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-block mb-4"
+            className="font-mono text-xs tracking-[0.06em] uppercase text-muted-foreground hover:text-foreground transition-colors inline-block mb-4"
           >
             {t("calculators:workoutBuilder.backToList")}
           </Link>
@@ -471,9 +471,9 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
               nameEn: prev.nameEn === prev.name ? e.target.value : prev.nameEn,
             }))}
             placeholder={t("calculators:workoutBuilder.namePlaceholder")}
-            className="block w-full text-2xl md:text-3xl font-bold bg-transparent border-none focus:outline-none placeholder:text-muted-foreground/40 mb-1"
+            className="block w-full font-sans font-bold uppercase tracking-[-0.03em] text-2xl md:text-4xl bg-transparent border-none focus:outline-none placeholder:text-muted-foreground/40 mb-1"
           />
-          <div className="flex items-center gap-3 text-muted-foreground mb-6">
+          <div className="flex items-center gap-3 font-mono text-xs text-muted-foreground mb-6">
             <span>~{totalMin} min · {blockCount} {t("calculators:workoutBuilder.blocks")}</span>
             {isSaved && <FavoriteButton workoutId={workout.id} />}
           </div>
@@ -481,7 +481,6 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
             <Button
               onClick={handleSave}
               disabled={!canSave}
-              className="rounded-full px-5 py-2.5 h-auto font-bold"
             >
               <Save className="size-4 mr-2" />
               {t("calculators:workoutBuilder.save")}
@@ -510,7 +509,6 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
             </div>
             <Button
               variant="outline"
-              className="rounded-full px-5 py-2.5 h-auto font-bold"
               onClick={handleShare}
               disabled={!canSave}
             >
@@ -521,7 +519,6 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
             {isSaved && (
               <Button
                 variant="outline"
-                className="rounded-full px-5 py-2.5 h-auto font-bold"
                 onClick={() => {
                   exportWorkoutsToJSON([workout]);
                   toast.success(t("calculators:workoutBuilder.workoutExported"));
@@ -534,7 +531,7 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
             {isSaved && (
               <Button
                 variant="secondary"
-                className="rounded-full px-5 py-2.5 h-auto font-bold text-destructive hover:text-destructive"
+                className="text-destructive hover:text-destructive"
                 onClick={() => setShowDeleteConfirm(true)}
               >
                 <Trash2 className="size-4 mr-2" />

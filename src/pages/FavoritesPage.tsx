@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { Heart, ArrowRight, Loader2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { WorkoutCard } from "@/components/domain";
 import { useFavorites, useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
@@ -33,17 +32,20 @@ export function FavoritesPage() {
         title={t("common:favorites.title")}
         canonical="/favorites"
       />
-      <div className="py-8 space-y-6">
+      <div className="py-6 md:py-8 space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <Heart filled className="size-6 text-red-500 shrink-0" />
+      <div className="border-t border-filet pt-5 md:pt-6 flex items-start gap-3">
+        <Heart filled className="size-7 text-zone-5 shrink-0 mt-1.5" />
         <div>
-          <EditorialTitle as="h1" size="md">
+          <p className="font-mono text-[10px] md:text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
+            {t("common:nav.favorites")}
+          </p>
+          <h1 className="font-sans font-bold uppercase leading-[0.9] tracking-[-0.05em] text-[32px] sm:text-[40px] md:text-[48px] mt-2">
             {t("common:favorites.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
+          </h1>
+          <p className="font-mono text-xs text-muted-foreground mt-2">
             {t("common:favorites.savedWorkouts", { count: favoriteWorkouts.length })}
-          </FadeUp>
+          </p>
         </div>
       </div>
 
@@ -105,7 +107,7 @@ export function FavoritesPage() {
             </svg>
           </div>
           <div className="space-y-2">
-            <p className="text-lg font-medium">
+            <p className="font-sans font-bold uppercase tracking-tight text-xl">
               {t("common:favorites.noFavoritesYet")}
             </p>
             <p className="text-muted-foreground max-w-md mx-auto">

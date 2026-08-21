@@ -22,10 +22,8 @@ import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
 import { WorkoutCard } from "@/components/domain";
 import { useCollection } from "@/hooks/useCollections";
-import { cn } from "@/lib/utils";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { usePickLang } from "@/lib/i18n-utils";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 
 /** Map collection icon strings to actual icon components (same as CollectionCard) */
 const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
@@ -140,30 +138,29 @@ export function CollectionDetailPage() {
         </Button>
 
         {/* Hero Section */}
-        <div
-          className={cn(
-            "rounded-xl border border-border/50 shadow-sm",
-            `zone-${getCollectionZone(collection.slug)}`,
-            `bg-gradient-to-br from-zone-${getCollectionZone(collection.slug)}/10 dark:from-zone-${getCollectionZone(collection.slug)}/20 to-transparent`,
-            "p-8 md:p-10"
-          )}
-        >
+        <div className="border-2 border-foreground bg-card p-6 md:p-10">
           {/* Content */}
           <div className="space-y-4 max-w-2xl">
             {/* Icon */}
-            <div className="inline-flex items-center justify-center rounded-xl bg-secondary p-3">
+            <div
+              className="inline-flex items-center justify-center p-3"
+              style={{
+                backgroundColor: `var(--zone-${getCollectionZone(collection.slug)})`,
+                color: `var(--zone-${getCollectionZone(collection.slug)}-text)`,
+              }}
+            >
               <Icon className="size-8" />
             </div>
 
             {/* Name */}
-            <EditorialTitle as="h1" size="lg">
+            <h1 className="font-sans font-bold uppercase leading-[0.94] tracking-[-0.04em] text-[32px] sm:text-[40px] md:text-[48px]">
               {name}
-            </EditorialTitle>
+            </h1>
 
             {/* Description */}
-            <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg leading-relaxed">
+            <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
               <GlossaryLinkedText text={description} />
-            </FadeUp>
+            </p>
 
             {/* Badges */}
             <div className="flex flex-wrap items-center gap-2 pt-2">
@@ -185,7 +182,7 @@ export function CollectionDetailPage() {
             <div key={workout.id} className="relative">
               {/* Step number for progression collections */}
               {collection.isProgression && (
-                <div className="absolute -top-2 -left-2 z-10 size-7 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shadow-sm">
+                <div className="absolute -top-2 -left-2 z-10 size-7 border-2 border-foreground bg-accent-acid text-ink font-mono text-xs font-bold flex items-center justify-center">
                   {index + 1}
                 </div>
               )}

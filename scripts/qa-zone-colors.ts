@@ -7,13 +7,17 @@
  * they never say different things, which is how the PDF ramp ended up off by
  * one zone.
  *
+ * Zoned Brut unifies Z1-Z6 across running, cycling and swimming into a single
+ * ramp, so this only checks the `--zone-N` variables (not per-discipline
+ * variants, which no longer exist) across light/dark.
+ *
  * Usage: bun run scripts/qa-zone-colors.ts   (exits 1 on mismatch)
  */
 
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { getZoneHexMap, type ThemeMode } from "../src/lib/zoneColors";
-import type { Discipline, ZoneNumber } from "../src/types";
+import type { ZoneNumber } from "../src/types";
 
 const CSS_PATH = join(import.meta.dir, "..", "src", "styles", "themes.css");
 const css = readFileSync(CSS_PATH, "utf8");
@@ -29,30 +33,22 @@ const blocks: Record<ThemeMode, string> = {
   dark: css.slice(darkIndex),
 };
 
-const VAR_PREFIX: Record<Discipline, string> = {
-  running: "--zone-",
-  cycling: "--zone-cyclo-",
-  swimming: "--zone-swim-",
-};
-
 const failures: string[] = [];
 
 for (const theme of ["light", "dark"] as ThemeMode[]) {
-  for (const discipline of Object.keys(VAR_PREFIX) as Discipline[]) {
-    const map = getZoneHexMap({ theme, discipline });
-    for (let zone = 1 as ZoneNumber; zone <= 6; zone++) {
-      const varName = `${VAR_PREFIX[discipline]}${zone}`;
-      // `--zone-1:` must not match `--zone-1-bg:`; require the colon directly.
-      const match = blocks[theme].match(new RegExp(`${varName}\\s*:\\s*(#[0-9a-fA-F]{3,8})\\s*;`));
-      if (!match) {
-        failures.push(`${theme}/${discipline} Z${zone}: ${varName} not found in themes.css`);
-        continue;
-      }
-      const cssHex = match[1].toLowerCase();
-      const tsHex = map[zone as ZoneNumber].toLowerCase();
-      if (cssHex !== tsHex) {
-        failures.push(`${theme}/${discipline} Z${zone}: themes.css ${cssHex} vs zoneColors.ts ${tsHex}`);
-      }
+  const map = getZoneHexMap({ theme });
+  for (let zone = 1 as ZoneNumber; zone <= 6; zone++) {
+    const varName = `--zone-${zone}`;
+    // `--zone-1:` must not match `--zone-1-bg:`; require the colon directly.
+    const match = blocks[theme].match(new RegExp(`${varName}\\s*:\\s*(#[0-9a-fA-F]{3,8})\\s*;`));
+    if (!match) {
+      failures.push(`${theme} Z${zone}: ${varName} not found in themes.css`);
+      continue;
+    }
+    const cssHex = match[1].toLowerCase();
+    const tsHex = map[zone as ZoneNumber].toLowerCase();
+    if (cssHex !== tsHex) {
+      failures.push(`${theme} Z${zone}: themes.css ${cssHex} vs zoneColors.ts ${tsHex}`);
     }
   }
 }
@@ -63,4 +59,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log("Zone colours match themes.css across light/dark and all 3 disciplines.");
+console.log("Zone colours match themes.css across light/dark (unified ramp).");

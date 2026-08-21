@@ -45,7 +45,7 @@ import { NutritionRecoverySection } from "@/components/domain/NutritionRecoveryS
 import { ScienceSection } from "@/components/domain/ScienceSection";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { FadeUp } from "@/components/editorial";
 import { Section } from "@/components/editorial/Section";
 import { SessionTimeline, ZoneDistribution, transformSessionBlocks, MiniElevationProfile } from "@/components/visualization";
 import { StrengthSessionTimeline } from "@/components/visualization/StrengthSessionTimeline";
@@ -380,7 +380,7 @@ export function WorkoutDetailPage() {
               {t("common:pages.workoutDetail.back")}
             </Button>
             {hasPlanContext && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary">
+              <span className="inline-flex items-center gap-1.5 bg-accent-acid text-ink px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-[0.04em]">
                 <Clock className="size-3" />
                 {t("session:planContext.banner", {
                   week: planWeekNumber,
@@ -443,9 +443,9 @@ export function WorkoutDetailPage() {
             </span>
           </div>
 
-          <EditorialTitle as="h1" size="lg" className="mb-3 sm:text-4xl md:text-5xl">
+          <h1 className="font-sans font-bold uppercase leading-[0.94] tracking-[-0.04em] text-[32px] sm:text-[44px] md:text-[52px] mb-3">
             {pick(workout, "name")}
-          </EditorialTitle>
+          </h1>
 
           <p className="text-muted-foreground max-w-2xl leading-relaxed text-base sm:text-lg">
             <GlossaryLinkedText text={pick(workout, "description")} />
@@ -468,7 +468,7 @@ export function WorkoutDetailPage() {
             {canAdjust && (
               <Button
                 variant="outline"
-                className="rounded-full shrink-0"
+                className="shrink-0"
                 onClick={() =>
                   navigate(`/workout/builder/${createCustomWorkoutId()}?from=${workout.id}`)
                 }
@@ -483,7 +483,7 @@ export function WorkoutDetailPage() {
             {isOwnWorkout && (
               <Button
                 variant="outline"
-                className="rounded-full shrink-0"
+                className="shrink-0"
                 asChild
               >
                 <Link to={`/workout/builder/${workout.id}`}>
@@ -497,7 +497,7 @@ export function WorkoutDetailPage() {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="rounded-full shrink-0 size-10"
+                  className="shrink-0 size-10"
                   aria-label={t("session:actions.moreActions")}
                 >
                   <MoreHorizontal className="size-4" />
@@ -735,10 +735,10 @@ function HeroStat({
       <dt className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-1">
         {label}
       </dt>
-      <dd className="font-sans font-semibold italic text-lg sm:text-xl tabular-nums">
+      <dd className="font-sans font-bold text-lg sm:text-xl tabular-nums">
         {value}
         {hint && (
-          <span className="ml-2 text-xs not-italic font-normal text-muted-foreground line-through">
+          <span className="ml-2 text-xs font-normal text-muted-foreground line-through">
             {hint}
           </span>
         )}
@@ -901,9 +901,9 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
             </span>
           </div>
 
-          <EditorialTitle as="h1" size="lg" className="mb-3 sm:text-4xl md:text-5xl">
+          <h1 className="font-sans font-bold uppercase leading-[0.94] tracking-[-0.04em] text-[32px] sm:text-[44px] md:text-[52px] mb-3">
             {workoutName}
-          </EditorialTitle>
+          </h1>
 
           <p className="text-muted-foreground max-w-2xl leading-relaxed text-base sm:text-lg">
             <GlossaryLinkedText text={description} />
@@ -922,7 +922,7 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
             <Button
               variant="ghost"
               size="sm"
-              className="rounded-full px-4 text-muted-foreground hover:text-foreground"
+              className="px-4 text-muted-foreground hover:text-foreground"
               onClick={async () => {
                 const ok = await copyToClipboard(window.location.href);
                 if (ok) toast.success(tCommon("actions.linkCopied"));

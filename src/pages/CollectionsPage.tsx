@@ -4,7 +4,7 @@ import { SEOHead } from "@/components/seo";
 import { CollectionCard } from "@/components/domain/CollectionCard";
 import { useCollections } from "@/hooks/useCollections";
 import { cn } from "@/lib/utils";
-import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
+import { StaggerGrid, StaggerItem } from "@/components/editorial";
 
 /** Collections grouped into small editorial sections, mirroring the
  *  calculators hub: a mono caption per group + the matching cards. */
@@ -77,15 +77,18 @@ export function CollectionsPage() {
           },
         ]}
       />
-      <div className="py-8">
+      <div className="py-6 md:py-8">
         {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2">
+        <div className="mb-8 border-t border-filet pt-5 md:pt-6">
+          <p className="font-mono text-[10px] md:text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
+            {t("common:nav.collections")}
+          </p>
+          <h1 className="font-sans font-bold uppercase leading-[0.9] tracking-[-0.05em] text-[36px] sm:text-[44px] md:text-[52px] mt-2">
             {t("collections.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
+          </h1>
+          <p className="font-mono text-xs text-muted-foreground mt-2.5 max-w-[52ch]">
             {t("collections.subtitle")}
-          </FadeUp>
+          </p>
         </div>
 
         {/* Collections — grouped by theme. Each group reads as a small

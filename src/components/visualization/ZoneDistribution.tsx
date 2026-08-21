@@ -39,7 +39,7 @@ export function ZoneDistribution({ workout, className }: ZoneDistributionProps) 
         {zoneBreakdown.map((item) => (
           <div key={item.zone ?? "unzoned"} className="space-y-1.5">
             <div className="flex items-baseline justify-between gap-3 text-xs">
-              <span className="font-medium truncate">
+              <span className="font-sans font-bold uppercase tracking-tight truncate">
                 {item.zone != null && <span className="font-mono">Z{item.zone}</span>}
                 {item.zone != null && " · "}
                 {item.label}
@@ -48,9 +48,9 @@ export function ZoneDistribution({ workout, className }: ZoneDistributionProps) 
                 {Math.round(item.percent)}% · {formatDurationMinutes(item.durationMin)}
               </span>
             </div>
-            <div className="h-2.5 rounded-full bg-muted overflow-hidden">
+            <div className="h-3 bg-muted overflow-hidden">
               <div
-                className="h-full rounded-full transition-all"
+                className="h-full transition-all"
                 style={{
                   width: `${item.percent}%`,
                   backgroundColor: item.zone != null ? zoneColors[item.zone] : "var(--muted-foreground)",
@@ -62,7 +62,7 @@ export function ZoneDistribution({ workout, className }: ZoneDistributionProps) 
       </div>
 
       {/* Total duration */}
-      <div className="text-xs text-muted-foreground text-center pt-2 border-t">
+      <div className="font-mono text-xs text-muted-foreground text-center pt-2 border-t border-filet">
         Total: {formatDurationMinutes(totalDurationMin)}
       </div>
     </div>
@@ -90,7 +90,7 @@ export function SessionIntensityBar({ workout, className }: SessionIntensityBarP
   }
 
   return (
-    <div className={cn("flex h-1 w-full overflow-hidden rounded-full bg-muted", className)}>
+    <div className={cn("flex h-1 w-full overflow-hidden bg-muted", className)}>
       {zoneBreakdown.map((item) => (
         <div
           key={item.zone ?? "unzoned"}

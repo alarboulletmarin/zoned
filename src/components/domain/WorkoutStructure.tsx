@@ -155,7 +155,7 @@ function StepItem({ step, depth, userZones, t, isEnglish }: StepItemProps) {
   return (
     <div
       className={cn(
-        "rounded-xl border border-border/60 bg-muted/20 p-3 sm:p-4 space-y-3",
+        "border-2 border-foreground/70 bg-muted/20 p-3 sm:p-4 space-y-3",
         depth > 0 && "ml-4 sm:ml-6",
       )}
     >
@@ -172,7 +172,7 @@ function StepItem({ step, depth, userZones, t, isEnglish }: StepItemProps) {
       </div>
 
       {(step.between && step.between.length > 0) || showBetweenPlaceholder ? (
-        <div className="rounded-lg border border-dashed border-border/60 bg-background/70 p-3 space-y-2">
+        <div className="border-2 border-dashed border-muted-foreground bg-background/70 p-3 space-y-2">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
             {betweenLabel}
           </p>
@@ -209,7 +209,7 @@ function CompactNestedRepeatItem({
   const betweenSetsLabel = t(`structure.between.${step.unit ?? "blocks"}`);
 
   return (
-    <div className={cn("rounded-xl border border-border/60 bg-muted/20 p-3 sm:p-4 space-y-3", depth > 0 && "ml-4 sm:ml-6")}>
+    <div className={cn("border-2 border-foreground/70 bg-muted/20 p-3 sm:p-4 space-y-3", depth > 0 && "ml-4 sm:ml-6")}>
       {/* Plain text, not pills: these are counts to read, not controls to
           press. The previous rounded secondary badges read as toggles. */}
       <p className="text-sm font-semibold tracking-tight">
@@ -226,7 +226,7 @@ function CompactNestedRepeatItem({
       </RepeatGroup>
 
       {setBetween.length > 0 && (
-        <div className="rounded-lg border border-dashed border-border/60 bg-background/70 p-3 space-y-2">
+        <div className="border-2 border-dashed border-muted-foreground bg-background/70 p-3 space-y-2">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{betweenSetsLabel}</p>
           {setBetween.map((segment, index) => (
             <StepRow key={`compact-between-${index}`} step={segment} userZones={userZones} t={t} muted />
@@ -244,7 +244,7 @@ function CompactNestedRepeatItem({
  */
 function RepeatGroup({ count, children }: { count: number; children: React.ReactNode }) {
   return (
-    <div className="rounded-lg border border-border/40 bg-background/50 p-3">
+    <div className="border border-filet bg-background/50 p-3">
       <div className="flex items-center gap-2 mb-2">
         <span className="font-mono text-xs font-semibold text-foreground tabular-nums shrink-0">
           {count} ×
@@ -270,7 +270,7 @@ function CompactRepeatItem({
   const showBetweenPlaceholder = (step.unit === "sets" || step.unit === "blocks") && betweenSegments.length === 0;
 
   return (
-    <div className={cn("rounded-xl border border-border/60 bg-muted/20 p-3 sm:p-4 space-y-3", depth > 0 && "ml-4 sm:ml-6")}>
+    <div className={cn("border-2 border-foreground/70 bg-muted/20 p-3 sm:p-4 space-y-3", depth > 0 && "ml-4 sm:ml-6")}>
       <RepeatGroup count={step.count}>
         {stepSegments.map((segment, index) => (
           <StepRow key={`compact-step-${index}`} step={segment} userZones={userZones} t={t} />
@@ -285,7 +285,7 @@ function CompactRepeatItem({
       )}
 
       {showBetweenPlaceholder && (
-        <div className="rounded-lg border border-dashed border-border/60 bg-background/70 p-3 space-y-2">
+        <div className="border-2 border-dashed border-muted-foreground bg-background/70 p-3 space-y-2">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{betweenLabel}</p>
           <p className="text-sm text-muted-foreground italic">{t("structure.notSpecified")}</p>
         </div>
@@ -345,9 +345,9 @@ function StepRow({
   return (
     <div
       className={cn(
-        "rounded-lg border border-border/40 bg-background/80 p-3",
+        "border border-filet bg-background/80 p-3",
         muted && "bg-muted/35",
-        isRecovery && "border-dashed border-border/50 bg-muted/20",
+        isRecovery && "border-dashed border-muted-foreground bg-muted/20",
         depth > 0 && "ml-4 sm:ml-6",
       )}
     >
@@ -357,7 +357,7 @@ function StepRow({
             {step.zone ? (
               <ZoneBadge zone={step.zone} size="sm" showLabel={!targets} />
             ) : (
-              <span className="inline-flex items-center rounded-full border border-border/60 bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground">
+              <span className="inline-flex items-center border border-filet bg-muted/40 px-2 py-0.5 font-mono text-[11px] text-muted-foreground">
                 {t("structure.noZone")}
               </span>
             )}

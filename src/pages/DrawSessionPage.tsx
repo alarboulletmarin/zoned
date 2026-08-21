@@ -31,7 +31,6 @@ import { WorkoutCardChrome, ScanCard, DifficultyIcon } from "@/components/domain
 import { FavoriteButton } from "@/components/domain/FavoriteButton";
 import { formatDurationMinutes } from "@/components/visualization";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { usePageHint } from "@/hooks/usePageHint";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useWorkouts } from "@/hooks";
@@ -328,18 +327,21 @@ export function DrawSessionPage() {
         description={seoDescription}
         canonical="/library/draw"
       />
-      <div className="py-8 max-w-7xl mx-auto">
+      <div className="py-6 md:py-8 max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-6">
-          <EditorialTitle as="h1" size="md">
+        <div className="mb-6 border-t border-filet pt-5 md:pt-6">
+          <p className="font-mono text-[10px] md:text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
+            {t("common:nav.library")}
+          </p>
+          <h1 className="font-sans font-bold uppercase leading-[0.9] tracking-[-0.05em] text-[32px] sm:text-[40px] md:text-[48px] mt-2">
             {t("draw.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
+          </h1>
+          <p className="font-mono text-xs text-muted-foreground mt-2.5 max-w-[52ch]">
             {t("draw.subtitle")}
-          </FadeUp>
+          </p>
           <Link
             to="/weeks"
-            className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+            className="mt-3 inline-flex items-center gap-1.5 font-mono text-xs tracking-[0.06em] uppercase underline underline-offset-4 hover:text-primary"
           >
             <CalendarRange className="size-4" />
             {t("draw.toWeek")}
@@ -377,38 +379,37 @@ export function DrawSessionPage() {
                 <div className="flex items-baseline justify-between gap-2">
                   <div>
                     <p
-                      className="text-4xl font-bold tabular-nums leading-none"
+                      className="font-sans text-4xl font-bold tabular-nums leading-none"
                       aria-live="polite"
                     >
                       {filtered.length}
                     </p>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="font-mono text-xs text-muted-foreground mt-1.5">
                       {t("draw.counter.match", { count: filtered.length })}
                     </p>
                   </div>
                   {filtersActive && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
+                    <button
+                      type="button"
                       onClick={resetFilters}
-                      className="shrink-0"
+                      className="shrink-0 inline-flex items-center gap-1 font-mono text-[11px] tracking-[0.06em] uppercase text-poster-red hover:underline"
                     >
-                      <RotateCcw className="size-3.5 mr-1" />
+                      <RotateCcw className="size-3.5" />
                       {t("draw.filters.reset")}
-                    </Button>
+                    </button>
                   )}
                 </div>
                 {/* Proportion bar */}
                 <div
-                  className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted"
+                  className="mt-3 h-1.5 w-full overflow-hidden bg-muted"
                   role="presentation"
                 >
                   <div
-                    className="h-full rounded-full bg-primary transition-[width] duration-300"
+                    className="h-full bg-accent-acid transition-[width] duration-300"
                     style={{ width: `${Math.max(proportion * 100, filtered.length > 0 ? 4 : 0)}%` }}
                   />
                 </div>
-                <p className="mt-1.5 text-xs text-muted-foreground">
+                <p className="mt-1.5 font-mono text-[11px] text-muted-foreground">
                   {t("draw.counter.ofTotal", { total: catalog.length })}
                 </p>
               </Card>
@@ -426,10 +427,10 @@ export function DrawSessionPage() {
                         onClick={() => toggleDiscipline(d)}
                         aria-pressed={selected}
                         className={cn(
-                          "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors",
+                          "inline-flex items-center gap-1.5 border-2 px-3 py-1.5 font-mono text-[11px] tracking-[0.04em] uppercase transition-colors",
                           selected
-                            ? "border-primary bg-primary/10 text-primary"
-                            : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
+                            ? "border-transparent bg-accent-acid text-ink"
+                            : "border-foreground text-foreground/80 hover:bg-secondary",
                         )}
                       >
                         <Icon className="size-3.5" />
@@ -452,18 +453,12 @@ export function DrawSessionPage() {
                         onClick={() => toggleZone(z)}
                         aria-pressed={selected}
                         className={cn(
-                          `zone-${z}`,
-                          "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-semibold transition-all",
-                          selected
-                            ? "ring-2 ring-offset-1 ring-offset-background"
-                            : "opacity-60 hover:opacity-100",
+                          "inline-flex items-center gap-1 px-2.5 py-1 font-mono text-[11px] font-bold transition-opacity",
+                          selected ? "opacity-100" : "opacity-40 hover:opacity-70",
                         )}
                         style={{
-                          backgroundColor: `color-mix(in srgb, var(--zone-${z}) 18%, transparent)`,
-                          borderColor: `var(--zone-${z})`,
-                          color: `var(--zone-${z})`,
-                          // @ts-expect-error CSS custom prop for ring color
-                          "--tw-ring-color": `var(--zone-${z})`,
+                          backgroundColor: `var(--zone-${z})`,
+                          color: `var(--zone-${z}-text)`,
                         }}
                       >
                         {t(`draw.zoneChips.${z}`)}
@@ -485,9 +480,9 @@ export function DrawSessionPage() {
                   }
                   aria-label={t("draw.filters.maxDuration")}
                 />
-                <div className="mt-1.5 flex items-center justify-between text-xs text-muted-foreground">
+                <div className="mt-1.5 flex items-center justify-between font-mono text-[11px] text-muted-foreground">
                   <span>{DURATION_MIN} min</span>
-                  <span className="font-semibold text-foreground">
+                  <span className="font-bold text-foreground">
                     {filters.maxDuration > DURATION_MAX
                       ? `+${DURATION_MAX} min`
                       : `≤ ${filters.maxDuration} min`}
@@ -504,10 +499,10 @@ export function DrawSessionPage() {
                       }
                       aria-pressed={filters.maxDuration === p.value}
                       className={cn(
-                        "rounded-md border px-2 py-1 text-xs font-medium transition-colors",
+                        "border-2 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.04em] transition-colors",
                         filters.maxDuration === p.value
-                          ? "border-primary bg-primary/10 text-primary"
-                          : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
+                          ? "border-transparent bg-accent-acid text-ink"
+                          : "border-foreground text-foreground/80 hover:bg-secondary",
                       )}
                     >
                       {p.label}
@@ -528,10 +523,10 @@ export function DrawSessionPage() {
                         onClick={() => toggleLevel(l)}
                         aria-pressed={selected}
                         className={cn(
-                          "flex items-center justify-between rounded-md border px-3 py-2 text-sm font-medium transition-colors",
+                          "flex items-center justify-between border-2 px-3 py-2 font-mono text-[11px] tracking-[0.04em] uppercase transition-colors",
                           selected
-                            ? "border-primary bg-primary/10 text-primary"
-                            : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
+                            ? "border-transparent bg-accent-acid text-ink"
+                            : "border-foreground text-foreground/80 hover:bg-secondary",
                         )}
                       >
                         <span>{t(`difficulty.${l}`)}</span>
@@ -546,7 +541,7 @@ export function DrawSessionPage() {
 
           {/* ── Draw zone ─────────────────────────────────────────────────── */}
           <section className="min-w-0">
-            <div className="rounded-2xl border border-border bg-gradient-to-b from-muted/40 to-transparent p-4 sm:p-6">
+            <div className="border-2 border-foreground bg-card p-4 sm:p-6">
               {/* Draw controls */}
               <div className="flex flex-col items-center gap-2">
                 <Button
@@ -563,7 +558,7 @@ export function DrawSessionPage() {
                       : t("draw.draw")}
                 </Button>
                 {!isMobile && (
-                  <p className="text-xs text-muted-foreground">
+                  <p className="font-mono text-[11px] text-muted-foreground">
                     {t("draw.spaceHint")}
                   </p>
                 )}
@@ -572,7 +567,7 @@ export function DrawSessionPage() {
                     type="button"
                     onClick={handleSurprise}
                     disabled={isDrawing}
-                    className="mt-1 inline-flex items-center gap-1.5 rounded-full border border-dashed border-border px-4 py-1.5 text-sm text-muted-foreground hover:border-primary hover:text-primary transition-colors disabled:opacity-50"
+                    className="mt-1 inline-flex items-center gap-1.5 border-2 border-dashed border-muted-foreground px-4 py-1.5 font-mono text-[11px] tracking-[0.04em] uppercase text-muted-foreground hover:border-foreground hover:text-foreground transition-colors disabled:opacity-50"
                   >
                     <Sparkles className="size-3.5" />
                     {t("draw.surprise")}
@@ -603,11 +598,11 @@ export function DrawSessionPage() {
             {history.length > 0 && (
               <div className="mt-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-sm font-semibold flex items-center gap-1.5">
-                    <RotateCcw className="size-4 text-muted-foreground" />
+                  <h2 className="font-mono text-[11px] tracking-[0.1em] uppercase flex items-center gap-1.5 text-muted-foreground">
+                    <RotateCcw className="size-4" />
                     {t("draw.recent.title")}
                   </h2>
-                  <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer">
+                  <label className="flex items-center gap-2 font-mono text-[10px] tracking-[0.06em] uppercase text-muted-foreground cursor-pointer">
                     {t("draw.recent.avoidRepeats")}
                     <Switch
                       checked={avoidRepeats}
@@ -630,16 +625,15 @@ export function DrawSessionPage() {
                           setResult(w);
                         }}
                         className={cn(
-                          "inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-colors hover:bg-accent",
-                          zone ? `zone-${zone}` : "",
+                          "inline-flex items-center gap-2 border-2 px-3 py-2 font-mono text-xs transition-colors hover:bg-secondary",
                           result?.id === w.id
-                            ? "border-primary bg-primary/5"
-                            : "border-border",
+                            ? "border-accent-acid"
+                            : "border-foreground",
                         )}
                       >
                         {zone && (
                           <span
-                            className="size-2 rounded-full"
+                            className="size-2"
                             style={{ backgroundColor: `var(--zone-${zone})` }}
                             aria-hidden="true"
                           />
@@ -673,7 +667,7 @@ function FilterGroup({
 }) {
   return (
     <div className="space-y-2.5">
-      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+      <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
         {label}
       </p>
       {children}
@@ -683,9 +677,9 @@ function FilterGroup({
 
 function Placeholder({ t }: { t: (k: string) => string }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-14 text-center">
+    <div className="flex flex-col items-center justify-center border-2 border-dashed border-muted-foreground py-14 text-center">
       <Dices className="size-10 text-muted-foreground/50 mb-3" />
-      <h3 className="text-base font-medium text-foreground">
+      <h3 className="font-sans font-bold uppercase tracking-tight text-base text-foreground">
         {t("draw.placeholder.title")}
       </h3>
       <p className="mt-1 max-w-xs text-sm text-muted-foreground">
@@ -703,9 +697,9 @@ function EmptyState({
   t: (k: string) => string;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-14 text-center">
+    <div className="flex flex-col items-center justify-center border-2 border-dashed border-muted-foreground py-14 text-center">
       <X className="size-10 text-muted-foreground/50 mb-3" />
-      <h3 className="text-base font-medium text-foreground">
+      <h3 className="font-sans font-bold uppercase tracking-tight text-base text-foreground">
         {t("draw.empty.title")}
       </h3>
       <p className="mt-1 max-w-xs text-sm text-muted-foreground">
@@ -754,7 +748,7 @@ function ResultCard({
 
   // Eyebrow: discipline · method · n°
   const eyebrow = (
-    <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+    <div className="flex items-center gap-1.5 font-mono text-[11px] tracking-[0.06em] uppercase text-muted-foreground">
       <DisciplineIcon className="size-3.5" />
       <span>{t(`activityToggle.${discipline}`)}</span>
       <span aria-hidden="true">·</span>
@@ -824,13 +818,13 @@ function ResultCard({
     <div className={animateIn}>
       <Link
         to={`/workout/${workout.id}`}
-        className="block rounded-xl border border-border p-5 hover:bg-accent/40 transition-colors"
+        className="block border-2 border-foreground bg-card p-5 hover:shadow-[6px_6px_0_var(--shadow-hard)] transition-shadow duration-150 ease-out"
       >
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">{eyebrow}</div>
           <FavoriteButton workoutId={workout.id} size="sm" />
         </div>
-        <h3 className="mt-1.5 text-xl font-bold leading-snug">
+        <h3 className="mt-2 font-sans font-bold uppercase leading-snug tracking-tight text-xl">
           {pick(workout, "name")}
         </h3>
         <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
@@ -853,12 +847,12 @@ function Metric({
   value: string;
 }) {
   return (
-    <div className="rounded-lg border border-border/60 bg-background/60 px-3 py-2">
-      <div className="flex items-center gap-1 text-[11px] uppercase tracking-wide text-muted-foreground">
+    <div className="border border-filet px-3 py-2">
+      <div className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.06em] text-muted-foreground">
         <Icon className="size-3" />
         {label}
       </div>
-      <p className="mt-0.5 text-sm font-semibold tabular-nums line-clamp-1">
+      <p className="mt-0.5 font-mono text-sm font-bold tabular-nums line-clamp-1">
         {value}
       </p>
     </div>

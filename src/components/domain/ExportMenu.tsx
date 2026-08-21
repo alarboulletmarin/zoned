@@ -119,7 +119,7 @@ export function ExportMenu({ workout, className, size = "sm" }: ExportMenuProps)
             variant="default"
             size={size}
             disabled={isExporting}
-            className={cn("rounded-full px-4", className)}
+            className={cn("px-4", className)}
           >
             {isExporting ? (
               <Loader2 className="size-3.5 mr-1.5 animate-spin" />

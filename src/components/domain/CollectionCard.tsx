@@ -38,16 +38,6 @@ function getCollectionZone(slug: string): number {
   return ZONE_MAP[slug] ?? 3;
 }
 
-// Full literal gradient classes per zone. Tailwind only generates utilities
-// it can see as complete strings, so these can't be built by interpolation.
-const ZONE_GRADIENT: Record<number, string> = {
-  1: "from-zone-1/10 dark:from-zone-1/20",
-  2: "from-zone-2/10 dark:from-zone-2/20",
-  3: "from-zone-3/10 dark:from-zone-3/20",
-  4: "from-zone-4/10 dark:from-zone-4/20",
-  5: "from-zone-5/10 dark:from-zone-5/20",
-  6: "from-zone-6/10 dark:from-zone-6/20",
-};
 const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
   Footprints,
   Leaf,
@@ -81,20 +71,20 @@ export function CollectionCard({ collection }: CollectionCardProps) {
       <InteractiveCard
         accent={`var(--zone-${zone})`}
         className={cn(
-          "rounded-lg sm:rounded-xl border border-border/50 h-full p-4 sm:p-6",
-          `zone-${zone}`,
-          "bg-gradient-to-br to-transparent",
-          ZONE_GRADIENT[zone],
-          "hover:shadow-sm hover:border-foreground/40 transition-[box-shadow,border-color] duration-200",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          "border-2 border-foreground bg-card h-full p-4 sm:p-6",
+          "hover:shadow-[6px_6px_0_var(--shadow-hard)] transition-shadow duration-150 ease-out",
+          "focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
         )}
       >
         <div className="flex flex-col items-center text-center gap-3 sm:gap-4 h-full">
-          <div className="size-10 sm:size-14 rounded-lg sm:rounded-2xl flex items-center justify-center shrink-0 bg-secondary">
+          <div
+            className="size-10 sm:size-14 flex items-center justify-center shrink-0"
+            style={{ backgroundColor: `var(--zone-${zone})`, color: `var(--zone-${zone}-text)` }}
+          >
             <Icon className="size-5 sm:size-7" />
           </div>
           <div className="space-y-1 min-w-0 flex-1">
-            <h3 className="text-sm sm:text-lg font-semibold leading-snug group-hover:text-primary transition-colors">
+            <h3 className="font-sans font-bold uppercase tracking-tight leading-snug text-sm sm:text-lg">
               {name}
             </h3>
             <p className="hidden sm:block text-sm text-muted-foreground line-clamp-2">
