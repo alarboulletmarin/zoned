@@ -1,42 +1,47 @@
 /**
- * InteractiveCard — the shared motion shell for every card grid in the app.
+ * InteractiveCard — the shared interaction shell for every card grid in the app.
  *
- * Mobile-first by design (≈95 % of traffic is touch):
- *  - Tap feedback (`whileTap`) is the *primary* interaction and runs on every
- *    device, so a tap always feels physical.
- *  - The cursor-following spotlight glow and the spring lift are *progressive
- *    enhancement* — they only mount on hover-capable, fine-pointer devices, so
- *    touch devices never pay for pointer maths they can't use.
- *  - Under `prefers-reduced-motion` it renders as a plain element with no
- *    transforms or glow, matching the rest of the editorial atoms.
+ * Zoned Brut: no blur, no bounce.
+ *  - Hover reveals a *hard* offset shadow (`6px 6px 0 var(--shadow-hard)`) and
+ *    lifts the card 2 px toward the top-left, on a fixed 150 ms `ease-out`
+ *    transition. No spring, no scale, no overshoot — the card lands where it
+ *    was aimed and stays there.
+ *  - Under `prefers-reduced-motion` the lift is dropped entirely (`motion-safe:`
+ *    gates it) and the shadow simply fades in over 120 ms.
+ *  - Pure CSS: nothing mounts per pointer device, so touch and desktop share
+ *    one code path.
  *
  * Polymorphic: pass `to` for a router link, `href` for an anchor, or neither
- * for a div. Keep your existing Tailwind on `className` (gradient, border,
- * `rounded-*`, `focus-visible:*`); just drop the old `hover:-translate-y-*` /
- * `transition-all` lift — the spring owns that now. The glow is tinted by
- * `accent` (any CSS colour; zone cards pass `var(--zone-N)`).
+ * for a div. Keep your existing Tailwind on `className` (border, background,
+ * `focus-visible:*`) — it is merged last, so a card that wants a different
+ * offset or timing just declares it and wins.
  */
 
 import { Link } from "react-router-dom";
-import {
-  motion,
-  useMotionValue,
-  useMotionTemplate,
-  useReducedMotion,
-} from "framer-motion";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 
-const MotionLink = motion.create(Link);
-
-// Refined, not bouncy — a controlled spring that settles quickly.
-const SPRING = { type: "spring", stiffness: 380, damping: 30 } as const;
+/**
+ * `group group/card`: the unnamed group keeps consumers' existing
+ * `group-hover:` utilities working when InteractiveCard replaces their Link;
+ * `group/card` stays available for card-scoped hover styling.
+ * `relative` is kept so absolutely-positioned children (favourite buttons,
+ * badges) still anchor to the card.
+ */
+const CARD_INTERACTION = cn(
+  "group group/card relative",
+  "transition-[box-shadow,transform] duration-150 ease-out",
+  "hover:shadow-[6px_6px_0_var(--shadow-hard)]",
+  "motion-safe:hover:-translate-x-0.5 motion-safe:hover:-translate-y-0.5",
+  "motion-reduce:duration-[120ms]"
+);
 
 interface InteractiveCardProps {
-  /** CSS colour used to tint the cursor-following glow. Defaults to the brand
-   *  primary; zone cards pass `var(--zone-N)`. */
+  /** @deprecated Ignored since the Zoned Brut pass — the hover shadow is a flat
+   *  `var(--shadow-hard)`, not an accent-tinted glow. Kept so existing call
+   *  sites keep compiling. */
   accent?: string;
-  /** Opt out of the desktop spotlight glow (lift + tap stay). */
+  /** @deprecated Ignored since the Zoned Brut pass — there is no glow to opt
+   *  out of. Kept so existing call sites keep compiling. */
   glow?: boolean;
   /** Render as a router `<Link to>`. */
   to?: string;
@@ -51,8 +56,8 @@ interface InteractiveCardProps {
 }
 
 export function InteractiveCard({
-  accent = "var(--primary)",
-  glow = true,
+  accent: _accent,
+  glow: _glow,
   to,
   href,
   target,
@@ -61,65 +66,24 @@ export function InteractiveCard({
   children,
   ...rest
 }: InteractiveCardProps) {
-  const reduced = useReducedMotion();
-  const canHover = useMediaQuery("(hover: hover) and (pointer: fine)");
-
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const background = useMotionTemplate`radial-gradient(240px circle at ${mx}px ${my}px, ${accent}, transparent 70%)`;
-
-  const enableHover = canHover && !reduced;
-  const enableTap = !reduced;
-
-  const handlePointerMove = enableHover
-    ? (e: React.PointerEvent<HTMLElement>) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        mx.set(e.clientX - rect.left);
-        my.set(e.clientY - rect.top);
-      }
-    : undefined;
-
-  // `group group/card`: the unnamed group keeps consumers' existing
-  // `group-hover:` utilities working when InteractiveCard replaces their Link;
-  // `group/card` drives the glow opacity independently.
-  const motionProps = {
-    className: cn("group group/card relative", className),
-    onPointerMove: handlePointerMove,
-    whileHover: enableHover ? { y: -3, scale: 1.02 } : undefined,
-    whileTap: enableTap ? { scale: 0.97 } : undefined,
-    transition: SPRING,
+  const props = {
+    className: cn(CARD_INTERACTION, className),
     ...rest,
   };
 
-  const overlay =
-    enableHover && glow ? (
-      <motion.span
-        aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover/card:opacity-[0.16]"
-        style={{ background }}
-      />
-    ) : null;
-
   if (to) {
     return (
-      <MotionLink to={to} {...motionProps}>
-        {overlay}
+      <Link to={to} {...props}>
         {children}
-      </MotionLink>
+      </Link>
     );
   }
   if (href) {
     return (
-      <motion.a href={href} target={target} rel={rel} {...motionProps}>
-        {overlay}
+      <a href={href} target={target} rel={rel} {...props}>
         {children}
-      </motion.a>
+      </a>
     );
   }
-  return (
-    <motion.div {...motionProps}>
-      {overlay}
-      {children}
-    </motion.div>
-  );
+  return <div {...props}>{children}</div>;
 }

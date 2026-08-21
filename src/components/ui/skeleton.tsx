@@ -24,12 +24,12 @@ export function Skeleton({
   ...props
 }: SkeletonProps) {
   if (variant === "zone-shimmer") {
-    return <div className={cn("rounded-md zone-shimmer", className)} {...props} />;
+    return <div className={cn("rounded-none zone-shimmer", className)} {...props} />;
   }
   return (
     <div
       className={cn(
-        "block overflow-hidden rounded-md leading-none",
+        "block overflow-hidden rounded-none leading-none",
         className,
       )}
       {...props}
@@ -40,7 +40,7 @@ export function Skeleton({
         baseColor="var(--muted)"
         highlightColor="color-mix(in srgb, var(--muted) 70%, var(--background))"
         duration={1.6}
-        borderRadius="inherit"
+        borderRadius={0}
       />
     </div>
   );

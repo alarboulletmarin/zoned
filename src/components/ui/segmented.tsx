@@ -17,9 +17,10 @@ interface SegmentedProps<T extends string> {
 }
 
 /**
- * iOS-style segmented control. Single-choice radiogroup with the active
- * option lifted by background + shadow. Wraps each option in a `flex-1`
- * cell so the layout fills the parent row width.
+ * Segmented control. Single-choice radiogroup framed by a 2px contour, its
+ * cells separated by 1px filets, with the active option filled in ink.
+ * Wraps each option in a `flex-1` cell so the layout fills the parent row
+ * width.
  */
 export function Segmented<T extends string>({
   value,
@@ -34,7 +35,7 @@ export function Segmented<T extends string>({
       role="radiogroup"
       aria-label={label}
       className={cn(
-        "grid gap-1 rounded-lg bg-muted p-1",
+        "grid gap-px rounded-none border-2 border-foreground bg-foreground p-0",
         cols === 2 && "grid-cols-2",
         cols === 3 && "grid-cols-3",
         cols === 4 && "grid-cols-4",
@@ -53,11 +54,11 @@ export function Segmented<T extends string>({
           className={cn(
             // Horizontal padding stays modest so narrow columns (7-day rows)
             // never clip their label.
-            "inline-flex min-w-0 items-center justify-center gap-1.5 rounded-md px-1.5 py-1.5 text-sm font-medium transition-all sm:px-2",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30",
+            "inline-flex min-w-0 items-center justify-center gap-1.5 rounded-none px-1.5 py-1.5 font-mono text-[11px] font-bold tracking-wide uppercase transition-colors duration-150 ease-out sm:px-2",
+            "outline-2 -outline-offset-2 outline-transparent focus-visible:outline-ring",
             value === opt.value
-              ? "bg-background text-foreground shadow-sm"
-              : "text-muted-foreground hover:text-foreground",
+              ? "bg-ink text-accent-acid"
+              : "bg-background text-foreground hover:bg-secondary",
           )}
         >
           {opt.icon}

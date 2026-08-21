@@ -13,20 +13,6 @@ const CATEGORY_ICONS: Record<ArticleCategory, React.ComponentType<{ className?: 
   lifestyle: Heart,
 };
 
-const CATEGORY_GRADIENT: Record<ArticleCategory, string> = {
-  fundamentals: "from-blue-500/10 dark:from-blue-500/20",
-  training: "from-orange-500/10 dark:from-orange-500/20",
-  lifestyle: "from-green-500/10 dark:from-green-500/20",
-};
-
-// Spotlight tint per category — matches the gradient hue above
-// (blue-500 / orange-500 / green-500).
-const CATEGORY_ACCENT: Record<ArticleCategory, string> = {
-  fundamentals: "#3b82f6",
-  training: "#f97316",
-  lifestyle: "#22c55e",
-};
-
 interface ArticleCardProps {
   article: ArticleMeta;
 }
@@ -38,17 +24,13 @@ export function ArticleCard({ article }: ArticleCardProps) {
   return (
     <Link to={`/learn/${article.slug}`} className="block h-full">
       <InteractiveCard
-        accent={CATEGORY_ACCENT[article.category]}
         className={cn(
-          "rounded-lg sm:rounded-xl border border-border/50 h-full p-4 sm:p-6",
-          "bg-gradient-to-br to-transparent",
-          CATEGORY_GRADIENT[article.category],
-          "hover:shadow-sm hover:border-foreground/40 transition-[box-shadow,border-color] duration-200",
+          "rounded-none border-2 border-foreground bg-card h-full p-4 sm:p-6",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         )}
       >
         <div className="flex flex-col items-center text-center gap-3 sm:gap-4 h-full">
-          <div className="size-10 sm:size-14 rounded-lg sm:rounded-2xl flex items-center justify-center shrink-0 bg-secondary">
+          <div className="size-10 sm:size-14 rounded-none flex items-center justify-center shrink-0 bg-secondary">
             <CategoryIcon className="size-5 sm:size-7" />
           </div>
           <div className="space-y-1 min-w-0 flex-1">
