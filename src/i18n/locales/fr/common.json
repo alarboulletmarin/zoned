@@ -162,6 +162,17 @@
       "noMistakes": "Pas d'erreurs spécifiques",
       "generatedBy": "Généré par"
     },
+    "collectionPdf": {
+      "kicker": "Collection de séances",
+      "number": "Nº",
+      "session": "Séance",
+      "zone": "Zone",
+      "duration": "Durée",
+      "sessionCount_one": "{{count}} séance",
+      "sessionCount_other": "{{count}} séances",
+      "zoneMix": "Répartition :",
+      "footerNote": "Durées estimées à partir des blocs de chaque séance"
+    },
     "zonesAtlasPdf": {
       "kicker": "Atlas des six zones",
       "title": "Mes zones",
@@ -256,6 +267,7 @@
     "profile": "Mon Profil",
     "nutrition": "Nutrition",
     "calculators": "Calculateurs",
+    "collections": "Collections",
     "primary": "Navigation principale"
   },
   "topnav": {
@@ -513,8 +525,8 @@
   "collections": {
     "title": "Collections",
     "subtitle": "Des parcours thématiques pour chaque objectif",
-    "workoutCount": "{{count}} séance",
-    "workoutCount_plural": "{{count}} séances",
+    "workoutCount_one": "{{count}} séance",
+    "workoutCount_other": "{{count}} séances",
     "viewAll": "Voir toutes les collections",
     "backToCollections": "Retour aux collections",
     "progression": "Parcours progressif",
@@ -641,12 +653,22 @@
   },
   "collectionsDetail": {
     "collectionNotFound": "Collection introuvable",
-    "noWorkoutsFound": "Aucune séance trouvée pour cette collection."
+    "noWorkoutsFound": "Aucune séance trouvée pour cette collection.",
+    "zoneMix": "Répartition des zones",
+    "colNumber": "Nº",
+    "colSession": "Séance",
+    "colZone": "Zone",
+    "colDuration": "Durée",
+    "colOpen": "Ouvrir",
+    "bulkActions": "Actions groupées",
+    "favoriteAll": "Tout mettre en favoris",
+    "allFavorited": "Tout est en favoris",
+    "exportPdf": "Exporter la collection (PDF)"
   },
   "favorites": {
     "title": "Mes Favoris",
-    "savedWorkouts": "{{count}} séance sauvegardée",
-    "savedWorkouts_plural": "{{count}} séances sauvegardées",
+    "savedWorkouts_one": "{{count}} séance sauvegardée",
+    "savedWorkouts_other": "{{count}} séances sauvegardées",
     "noFavoritesYet": "Pas encore de favoris",
     "noFavoritesDesc": "Parcourez la bibliothèque et appuyez sur l'icône cœur pour sauvegarder vos séances préférées ici."
   },
