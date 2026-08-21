@@ -26,6 +26,9 @@
   "viewDefinition": "View definition of {{term}}",
   "seeFullDefinition": "See full definition",
   "readArticle": "Read article",
+  "yourPace": "Your pace · {{range}}",
+  "viewZoneSessions": "Z{{zone}} sessions →",
+  "relatedTermLabel": "Related term",
   "categories": {
     "metrics": "Metrics",
     "periodization": "Periodization",

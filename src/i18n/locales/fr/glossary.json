@@ -26,6 +26,9 @@
   "viewDefinition": "Voir la définition de {{term}}",
   "seeFullDefinition": "Voir la définition complète",
   "readArticle": "Lire l'article",
+  "yourPace": "Chez toi · {{range}}",
+  "viewZoneSessions": "Séances Z{{zone}} →",
+  "relatedTermLabel": "Terme voisin",
   "categories": {
     "metrics": "Métriques",
     "periodization": "Périodisation",

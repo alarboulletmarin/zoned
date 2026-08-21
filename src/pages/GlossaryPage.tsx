@@ -1,7 +1,7 @@
 // src/pages/GlossaryPage.tsx
 // Full glossary page with search, category filters and an alphabetical index.
 
-import { useDeferredValue, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Search, Loader2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -11,12 +11,14 @@ import { GlossaryCard } from "@/components/domain/GlossaryCard";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { cn } from "@/lib/utils";
+import { calculateAllZones, loadUserZonePrefs } from "@/lib/zones";
 import {
   useGlossary,
   useGlossaryCategories,
   useGlossaryCount,
 } from "@/hooks/useGlossary";
 import type { GlossaryCategory, GlossaryTerm } from "@/data/glossary/types";
+import type { ZoneRange } from "@/types";
 
 export function GlossaryPage() {
   const { t, i18n } = useTranslation("glossary");
@@ -33,6 +35,19 @@ export function GlossaryPage() {
   const { count: totalCount } = useGlossaryCount();
 
   const isLoading = termsLoading || categoriesLoading;
+
+  // Reader's calibrated zones, used to show a personal pace repere on
+  // zone-linked terms (e.g. "Chez toi · 4:06–4:18/km"). Empty when uncalibrated.
+  const [userZones, setUserZones] = useState<ZoneRange[]>([]);
+  useEffect(() => {
+    const prefs = loadUserZonePrefs();
+    setUserZones(prefs ? calculateAllZones(prefs) : []);
+  }, []);
+
+  const termsById = useMemo(
+    () => new Map(allTerms.map((term) => [term.id, term])),
+    [allTerms],
+  );
 
   // Helper to get the display label for a term (acronym or localized term)
   const getTermDisplayLabel = (term: GlossaryTerm): string => {
@@ -244,7 +259,12 @@ export function GlossaryPage() {
                       </div>
                       <div className="flex flex-col">
                         {groupedTerms[letter].map((term) => (
-                          <GlossaryCard key={`${term.id}-${i18n.language}`} term={term} />
+                          <GlossaryCard
+                            key={`${term.id}-${i18n.language}`}
+                            term={term}
+                            userZones={userZones}
+                            termsById={termsById}
+                          />
                         ))}
                       </div>
                     </div>
