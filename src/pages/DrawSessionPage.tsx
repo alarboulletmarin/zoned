@@ -22,6 +22,8 @@ import {
   Pool,
   Dumbbell,
   CalendarRange,
+  Watch,
+  Loader2,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -47,8 +49,11 @@ import {
   isFilterActive,
   matchesFilters,
   type DrawDiscipline,
+  type TerrainFilter,
   type WorkoutFilterCriteria,
 } from "@/lib/workoutFilters";
+import { exportToFIT } from "@/lib/export/fit";
+import { toast } from "sonner";
 import type {
   AnyWorkoutTemplate,
   Difficulty,
@@ -91,6 +96,8 @@ const DISCIPLINE_ICONS: Record<
 
 const ZONE_NUMBERS: ZoneNumber[] = [1, 2, 3, 4, 5, 6];
 const LEVELS: Difficulty[] = ["beginner", "intermediate", "advanced", "elite"];
+// Same vocabulary as the library's terrain facet (WorkoutFilters.tsx).
+const TERRAIN_OPTIONS: TerrainFilter[] = ["flat", "hills", "track"];
 
 const HISTORY_LIMIT = 5;
 
@@ -184,6 +191,7 @@ export function DrawSessionPage() {
   );
   const [scanWorkout, setScanWorkout] = useState<AnyWorkoutTemplate | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
+  const [isExportingFit, setIsExportingFit] = useState(false);
   const [history, setHistory] = useState<AnyWorkoutTemplate[]>(
     restored.history ?? [],
   );
@@ -313,7 +321,32 @@ export function DrawSessionPage() {
         : [...f.levels, l],
     }));
 
+  const toggleTerrain = (ter: TerrainFilter) =>
+    setFilters((f) => ({
+      ...f,
+      terrain: (f.terrain ?? []).includes(ter)
+        ? (f.terrain ?? []).filter((x) => x !== ter)
+        : [...(f.terrain ?? []), ter],
+    }));
+
   const resetFilters = () => setFilters(defaultFilters);
+
+  const handleFitExport = useCallback(
+    async (workout: AnyWorkoutTemplate) => {
+      if (isStrengthWorkout(workout)) return;
+      setIsExportingFit(true);
+      const toastId = toast.loading(t("common:export.loading.garmin"));
+      try {
+        await exportToFIT(workout);
+        toast.success(t("common:export.success.garmin"), { id: toastId });
+      } catch {
+        toast.error(t("common:export.error.garmin"), { id: toastId });
+      } finally {
+        setIsExportingFit(false);
+      }
+    },
+    [t],
+  );
 
   const seoDescription = isEn
     ? "Let chance pick your next training session. Filter by discipline, zone, duration and level, then draw from the catalogue."
@@ -376,29 +409,15 @@ export function DrawSessionPage() {
             <div className="lg:sticky lg:top-20 space-y-6">
               {/* Live counter */}
               <Card className="p-4">
-                <div className="flex items-baseline justify-between gap-2">
-                  <div>
-                    <p
-                      className="font-sans text-4xl font-bold tabular-nums leading-none"
-                      aria-live="polite"
-                    >
-                      {filtered.length}
-                    </p>
-                    <p className="font-mono text-xs text-muted-foreground mt-1.5">
-                      {t("draw.counter.match", { count: filtered.length })}
-                    </p>
-                  </div>
-                  {filtersActive && (
-                    <button
-                      type="button"
-                      onClick={resetFilters}
-                      className="shrink-0 inline-flex items-center gap-1 font-mono text-[11px] tracking-[0.06em] uppercase text-poster-red hover:underline"
-                    >
-                      <RotateCcw className="size-3.5" />
-                      {t("draw.filters.reset")}
-                    </button>
-                  )}
-                </div>
+                <p
+                  className="font-sans text-4xl font-bold tabular-nums leading-none"
+                  aria-live="polite"
+                >
+                  {filtered.length}
+                </p>
+                <p className="font-mono text-xs text-muted-foreground mt-1.5">
+                  {t("draw.counter.match", { count: filtered.length })}
+                </p>
                 {/* Proportion bar */}
                 <div
                   className="mt-3 h-1.5 w-full overflow-hidden bg-muted"
@@ -511,6 +530,31 @@ export function DrawSessionPage() {
                 </div>
               </FilterGroup>
 
+              {/* Terrain (running-only; same vocabulary as the library filters) */}
+              <FilterGroup label={t("filters.terrain")}>
+                <div className="flex flex-wrap gap-1.5">
+                  {TERRAIN_OPTIONS.map((ter) => {
+                    const selected = (filters.terrain ?? []).includes(ter);
+                    return (
+                      <button
+                        key={ter}
+                        type="button"
+                        onClick={() => toggleTerrain(ter)}
+                        aria-pressed={selected}
+                        className={cn(
+                          "border-2 px-3 py-1.5 font-mono text-[11px] tracking-[0.04em] uppercase transition-colors",
+                          selected
+                            ? "border-transparent bg-accent-acid text-ink"
+                            : "border-foreground text-foreground/80 hover:bg-secondary",
+                        )}
+                      >
+                        {t(`terrain.${ter}`)}
+                      </button>
+                    );
+                  })}
+                </div>
+              </FilterGroup>
+
               {/* Level */}
               <FilterGroup label={t("draw.filters.level")}>
                 <div className="flex flex-col gap-1.5">
@@ -536,19 +580,15 @@ export function DrawSessionPage() {
                   })}
                 </div>
               </FilterGroup>
-            </div>
-          </aside>
 
-          {/* ── Draw zone ─────────────────────────────────────────────────── */}
-          <section className="min-w-0">
-            <div className="border-2 border-foreground bg-card p-4 sm:p-6">
-              {/* Draw controls */}
-              <div className="flex flex-col items-center gap-2">
+              {/* Draw CTA — anchored to the bottom of the filters sidebar,
+                  next to the reset action (mirrors the mockup's pairing). */}
+              <div className="flex flex-col gap-2 pt-2 border-t border-filet">
                 <Button
                   size="lg"
                   onClick={handleDraw}
                   disabled={!hasMatches || isDrawing}
-                  className="h-14 px-8 text-base w-full sm:w-auto"
+                  className="h-14 w-full text-base shadow-[6px_6px_0_var(--poster-red)] hover:shadow-[6px_6px_0_var(--poster-red)]"
                 >
                   <Dices className={cn("size-5", isDrawing && "animate-spin")} />
                   {isDrawing
@@ -558,7 +598,7 @@ export function DrawSessionPage() {
                       : t("draw.draw")}
                 </Button>
                 {!isMobile && (
-                  <p className="font-mono text-[11px] text-muted-foreground">
+                  <p className="text-center font-mono text-[11px] text-muted-foreground">
                     {t("draw.spaceHint")}
                   </p>
                 )}
@@ -567,31 +607,46 @@ export function DrawSessionPage() {
                     type="button"
                     onClick={handleSurprise}
                     disabled={isDrawing}
-                    className="mt-1 inline-flex items-center gap-1.5 border-2 border-dashed border-muted-foreground px-4 py-1.5 font-mono text-[11px] tracking-[0.04em] uppercase text-muted-foreground hover:border-foreground hover:text-foreground transition-colors disabled:opacity-50"
+                    className="inline-flex items-center justify-center gap-1.5 border-2 border-dashed border-muted-foreground px-4 py-1.5 font-mono text-[11px] tracking-[0.04em] uppercase text-muted-foreground hover:border-foreground hover:text-foreground transition-colors disabled:opacity-50"
                   >
                     <Sparkles className="size-3.5" />
                     {t("draw.surprise")}
                   </button>
                 )}
-              </div>
-
-              {/* Result / scan / placeholder / empty */}
-              <div className="mt-6">
-                {!hasMatches ? (
-                  <EmptyState onReset={resetFilters} t={t} />
-                ) : isDrawing && scanWorkout ? (
-                  <ScanCard workout={scanWorkout} pick={pick} />
-                ) : result ? (
-                  <ResultCard
-                    workout={result}
-                    pick={pick}
-                    t={t}
-                    tStrength={tStrength}
-                  />
-                ) : (
-                  <Placeholder t={t} />
+                {filtersActive && (
+                  <button
+                    type="button"
+                    onClick={resetFilters}
+                    className="inline-flex items-center justify-center gap-1.5 border border-filet px-4 py-2 font-mono text-[11px] tracking-[0.06em] uppercase text-muted-foreground hover:border-foreground hover:text-foreground transition-colors"
+                  >
+                    <RotateCcw className="size-3.5" />
+                    {t("draw.filters.reset")}
+                  </button>
                 )}
               </div>
+            </div>
+          </aside>
+
+          {/* ── Draw zone ─────────────────────────────────────────────────── */}
+          <section className="min-w-0">
+            <div className="border-2 border-foreground bg-card p-4 sm:p-6">
+              {/* Result / scan / placeholder / empty */}
+              {!hasMatches ? (
+                <EmptyState onReset={resetFilters} t={t} />
+              ) : isDrawing && scanWorkout ? (
+                <ScanCard workout={scanWorkout} pick={pick} />
+              ) : result ? (
+                <ResultCard
+                  workout={result}
+                  pick={pick}
+                  t={t}
+                  tStrength={tStrength}
+                  onExportFit={handleFitExport}
+                  isExportingFit={isExportingFit}
+                />
+              ) : (
+                <Placeholder t={t} />
+              )}
             </div>
 
             {/* Recent draws */}
@@ -728,11 +783,15 @@ function ResultCard({
   pick,
   t,
   tStrength,
+  onExportFit,
+  isExportingFit,
 }: {
   workout: AnyWorkoutTemplate;
   pick: ReturnType<typeof usePickLang>;
   t: (k: string, o?: Record<string, unknown>) => string;
   tStrength: (k: string) => string;
+  onExportFit: (workout: AnyWorkoutTemplate) => void;
+  isExportingFit: boolean;
 }) {
   const isStrength = isStrengthWorkout(workout);
   const discipline = getDrawDiscipline(workout);
@@ -759,7 +818,7 @@ function ResultCard({
   );
 
   const metrics = (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div className="grid grid-cols-2 gap-px bg-filet sm:grid-cols-4">
       <Metric
         icon={Clock}
         label={t("draw.metrics.duration")}
@@ -786,12 +845,33 @@ function ResultCard({
   const animateIn =
     "motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:duration-300";
 
-  // Explicit "view detail" CTA. Kept outside the card link below to avoid an
+  // Explicit result actions. Kept outside the card link below to avoid an
   // anchor nested inside an anchor (the whole card is already a link).
-  const detailAction = (
-    <Button asChild variant="outline" className="mt-3 w-full sm:w-auto">
-      <Link to={`/workout/${workout.id}`}>{t("draw.viewDetail")}</Link>
-    </Button>
+  const resultActions = (
+    <div className="mt-3 flex flex-wrap items-center gap-2">
+      <Button asChild variant="outline">
+        <Link to={`/workout/${workout.id}`}>{t("draw.viewDetail")}</Link>
+      </Button>
+      <FavoriteButton
+        workoutId={workout.id}
+        showLabel
+        className="border-2 border-foreground text-foreground/80 hover:bg-secondary hover:text-foreground"
+      />
+      {isRunningWorkout(workout) && (
+        <Button
+          variant="outline"
+          disabled={isExportingFit}
+          onClick={() => onExportFit(workout)}
+        >
+          {isExportingFit ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <Watch className="size-4" />
+          )}
+          {t("common:export.garmin")}
+        </Button>
+      )}
+    </div>
   );
 
   // Running / cycling / swimming → reuse the shared library card chrome.
@@ -808,7 +888,7 @@ function ResultCard({
             showBadges={false}
           />
         </Link>
-        {detailAction}
+        {resultActions}
       </div>
     );
   }
@@ -832,7 +912,7 @@ function ResultCard({
         </p>
         <div className="mt-4">{metrics}</div>
       </Link>
-      {detailAction}
+      {resultActions}
     </div>
   );
 }
@@ -847,7 +927,7 @@ function Metric({
   value: string;
 }) {
   return (
-    <div className="border border-filet px-3 py-2">
+    <div className="bg-card px-3 py-2">
       <div className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.06em] text-muted-foreground">
         <Icon className="size-3" />
         {label}

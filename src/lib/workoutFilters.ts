@@ -12,8 +12,13 @@ import {
 } from "@/components/visualization";
 import { estimateTSS, getWorkoutZones } from "@/lib/landing-stats";
 import type { AnyWorkoutTemplate, Difficulty, ZoneNumber } from "@/types";
-import { getWorkoutDiscipline, isStrengthWorkout } from "@/types";
+import { getWorkoutDiscipline, isRunningWorkout, isStrengthWorkout } from "@/types";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
+// Re-exported so callers (the draw page) reuse the exact same terrain
+// vocabulary as the library filters instead of declaring their own.
+import type { TerrainFilter } from "@/components/domain/WorkoutFilters";
+
+export type { TerrainFilter };
 
 /** The four disciplines surfaced in the filters — strength sits alongside the
  *  three endurance sports. */
@@ -61,6 +66,8 @@ export interface WorkoutFilterCriteria {
   zones: ZoneNumber[];
   maxDuration: number;
   levels: Difficulty[];
+  /** Optional: the week generator doesn't set it, so it stays inert there. */
+  terrain?: TerrainFilter[];
 }
 
 export const defaultFilterCriteria: WorkoutFilterCriteria = {
@@ -68,6 +75,7 @@ export const defaultFilterCriteria: WorkoutFilterCriteria = {
   zones: [],
   maxDuration: DURATION_NO_LIMIT, // no cap by default (the "+300" preset)
   levels: [],
+  terrain: [],
 };
 
 export function isFilterActive(f: WorkoutFilterCriteria): boolean {
@@ -75,6 +83,7 @@ export function isFilterActive(f: WorkoutFilterCriteria): boolean {
     f.disciplines.length > 0 ||
     f.zones.length > 0 ||
     f.levels.length > 0 ||
+    (f.terrain?.length ?? 0) > 0 ||
     f.maxDuration !== DURATION_NO_LIMIT
   );
 }
@@ -102,6 +111,18 @@ export function matchesFilters(
   if (f.zones.length > 0) {
     const zones = getAnyWorkoutZones(w);
     if (!zones.some((z) => f.zones.includes(z))) return false;
+  }
+  // Terrain (multi-select, running-only attribute — mirrors the library
+  // filter, which leaves cycling/swimming/strength sessions unaffected).
+  if (f.terrain && f.terrain.length > 0 && isRunningWorkout(w) && getWorkoutDiscipline(w) === "running") {
+    const env = w.environment;
+    const matchesTerrain = f.terrain.some((ter) => {
+      if (ter === "flat") return !env.requiresHills && !env.requiresTrack;
+      if (ter === "track") return !env.requiresHills;
+      if (ter === "hills") return !env.requiresTrack;
+      return true;
+    });
+    if (!matchesTerrain) return false;
   }
   return true;
 }
