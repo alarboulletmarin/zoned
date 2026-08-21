@@ -74,7 +74,7 @@ export function StrengthWorkoutCard({ workout, className, expanded }: StrengthWo
         size="compact"
         className={cn(
           "bg-gradient-to-br from-amber-500/10 dark:from-amber-500/15 to-transparent",
-          "border-border/50",
+          "border-0",
           "overflow-hidden h-full flex flex-col",
           className
         )}

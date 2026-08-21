@@ -55,7 +55,7 @@ export function PrebuiltWeekCard({ week }: PrebuiltWeekCardProps) {
       <Card
         interactive
         className={cn(
-          "h-full border-border/50",
+          "h-full border-0",
           DIFFICULTY_GRADIENT[week.difficulty] ??
             "bg-gradient-to-br from-gray-400/10 dark:from-gray-400/20 to-transparent",
         )}

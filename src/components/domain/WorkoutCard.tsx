@@ -120,7 +120,7 @@ export function WorkoutCardChrome({
     <Card
       interactive={interactive}
       size="compact"
-      className={cn("overflow-hidden h-full flex flex-col", className)}
+      className={cn("overflow-hidden h-full flex flex-col border-0", className)}
     >
       <CardHeader className={cn("pb-1.5 sm:pb-2 px-3 sm:px-4", expanded && "pb-2 px-4")}>
         {eyebrow && <div className="mb-1">{eyebrow}</div>}
