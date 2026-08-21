@@ -1,11 +1,9 @@
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Utensils, Target, Flame, ArrowRight } from "@/components/icons";
 import type { IconProps } from "@/components/icons";
-import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
-import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
+import { InteractiveCard, StaggerGrid, StaggerItem } from "@/components/editorial";
 
 interface GuideEntry {
   id: string;
@@ -66,11 +64,13 @@ export function GuidesPage() {
       />
       <div className="py-8">
         {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2">Guides</EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
+        <div className="mb-8 border-t border-filet pt-5 md:pt-6">
+          <p className="font-mono text-[10px] md:text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
             {t("guides.subtitle")}
-          </FadeUp>
+          </p>
+          <h1 className="font-sans font-bold uppercase leading-[0.9] tracking-[-0.05em] text-[36px] sm:text-[44px] md:text-[52px] mt-2">
+            {t("guides.title")}
+          </h1>
         </div>
 
         {/* Guide Cards */}
@@ -79,27 +79,25 @@ export function GuidesPage() {
             const Icon = guide.icon;
             return (
               <StaggerItem key={guide.id}>
-                <Link to={guide.href} className="group block h-full">
-                  <Card interactive className="h-full bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent hover:-translate-y-0.5 hover:border-foreground/40 hover:shadow-sm transition-all duration-200">
-                    <CardContent className="flex flex-col items-center text-center gap-4 pt-8 pb-6">
-                      <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                        <Icon className="size-7 text-primary" />
-                      </div>
-                      <div className="space-y-1">
-                        <h2 className="text-lg font-semibold">
-                          {t(guide.titleKey)}
-                        </h2>
-                        <p className="text-sm text-muted-foreground">
-                          {t(guide.descriptionKey)}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-1 text-sm text-primary font-medium">
-                        {t("explore")}
-                        <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
+                <InteractiveCard to={guide.href} className="group block h-full bg-card p-6">
+                  <div className="flex flex-col items-center text-center gap-4 h-full">
+                    <div className="size-14 flex items-center justify-center shrink-0 bg-secondary">
+                      <Icon className="size-7" />
+                    </div>
+                    <div className="space-y-1 flex-1">
+                      <h2 className="font-sans font-bold uppercase tracking-tight text-lg">
+                        {t(guide.titleKey)}
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        {t(guide.descriptionKey)}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1 font-mono text-[11px] tracking-wide uppercase text-foreground">
+                      {t("explore")}
+                      <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
+                    </div>
+                  </div>
+                </InteractiveCard>
               </StaggerItem>
             );
           })}

@@ -16,7 +16,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { FadeUp } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { warmupSections, warmupRoutines } from "@/data/guides/warmup";
@@ -59,7 +59,7 @@ function ExerciseItem({
 
   return (
     <div className="flex gap-4 items-start">
-      <div className="flex items-center justify-center size-7 rounded-full bg-primary/10 text-primary text-xs font-bold shrink-0 mt-0.5">
+      <div className="flex items-center justify-center size-7 bg-primary/10 text-primary text-xs font-bold shrink-0 mt-0.5">
         {index + 1}
       </div>
       <div className="min-w-0 flex-1 space-y-1">
@@ -134,23 +134,17 @@ export function WarmupGuidePage() {
 
       case "tip":
         return (
-          <div
-            key={blockIdx}
-            className="flex gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4"
-          >
-            <Info className="size-5 shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
-            <p className="text-sm text-emerald-800 dark:text-emerald-200"><GlossaryLinkedText text={text ?? ""} /></p>
+          <div key={blockIdx} className="flex gap-3 border-2 border-success p-4">
+            <Info className="size-5 shrink-0 text-success mt-0.5" />
+            <p className="text-sm text-foreground"><GlossaryLinkedText text={text ?? ""} /></p>
           </div>
         );
 
       case "warning":
         return (
-          <div
-            key={blockIdx}
-            className="flex gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4"
-          >
-            <AlertTriangle className="size-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
-            <p className="text-sm text-amber-800 dark:text-amber-200"><GlossaryLinkedText text={text ?? ""} /></p>
+          <div key={blockIdx} className="flex gap-3 border-2 border-warning p-4">
+            <AlertTriangle className="size-5 shrink-0 text-warning mt-0.5" />
+            <p className="text-sm text-foreground"><GlossaryLinkedText text={text ?? ""} /></p>
           </div>
         );
 
@@ -169,17 +163,17 @@ export function WarmupGuidePage() {
         key={routine.id}
         onClick={() => setSelectedRoutine(isActive ? null : routine.id)}
         className={cn(
-          "flex flex-col items-center gap-2 rounded-xl border p-4 text-center transition-all cursor-pointer",
+          "flex flex-col items-center gap-2 border-2 p-4 text-center transition-colors duration-150 ease-out cursor-pointer",
           isActive
-            ? "border-primary bg-primary/5 shadow-sm"
-            : "border-border hover:border-primary/40 hover:bg-accent/50"
+            ? "border-transparent bg-accent-acid text-ink"
+            : "border-foreground/70 bg-transparent hover:border-foreground"
         )}
       >
-        <Icon className={cn("size-6", isActive ? "text-primary" : "text-muted-foreground")} />
-        <span className={cn("text-sm font-medium", isActive ? "text-primary" : "")}>
+        <Icon className={cn("size-6", isActive ? "text-ink" : "text-muted-foreground")} />
+        <span className={cn("text-sm font-medium", isActive && "text-ink")}>
           {name}
         </span>
-        <Badge variant="secondary" className="text-xs">
+        <Badge variant="secondary" className={cn("text-xs", isActive && "border-ink text-ink")}>
           {routine.totalDurationMin} min
         </Badge>
       </button>
@@ -254,9 +248,9 @@ export function WarmupGuidePage() {
 
         {/* Header */}
         <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2">
+          <h1 className="font-sans font-bold uppercase leading-[0.94] tracking-[-0.04em] text-[32px] sm:text-[40px] md:text-[48px] mb-2">
             {t("warmup.title")}
-          </EditorialTitle>
+          </h1>
           <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
             {t("warmup.subtitle")}
           </FadeUp>
@@ -273,7 +267,7 @@ export function WarmupGuidePage() {
 
           {/* Selected routine detail */}
           {activeRoutine && (
-            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
+            <Card>
               <CardContent className="pt-6 space-y-1">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold">

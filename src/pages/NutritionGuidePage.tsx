@@ -23,7 +23,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { FadeUp } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import {
@@ -53,7 +53,7 @@ const SECTION_ICONS: Record<string, React.ComponentType<IconProps>> = {
 // Input styling (matches ZoneCalculator pattern)
 // ---------------------------------------------------------------------------
 const inputClass =
-  "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  "flex h-9 w-full rounded-none border-2 border-foreground bg-transparent px-3 py-1 font-mono text-sm placeholder:text-muted-foreground transition-[border-color] duration-150 ease-out outline-2 outline-offset-2 outline-transparent focus-visible:outline-ring";
 
 // ---------------------------------------------------------------------------
 // Shared preset distances
@@ -91,12 +91,9 @@ function renderBlock(block: NutritionBlock, index: number) {
 
     case "tip":
       return (
-        <div
-          key={index}
-          className="flex gap-3 rounded-xl border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950/20"
-        >
-          <Lightbulb className="size-5 shrink-0 text-green-600 dark:text-green-400 mt-0.5" />
-          <p className="text-sm text-green-800 dark:text-green-200">
+        <div key={index} className="flex gap-3 border-2 border-success p-4">
+          <Lightbulb className="size-5 shrink-0 text-success mt-0.5" />
+          <p className="text-sm text-foreground">
             {pickLang(block, "text")}
           </p>
         </div>
@@ -104,12 +101,9 @@ function renderBlock(block: NutritionBlock, index: number) {
 
     case "warning":
       return (
-        <div
-          key={index}
-          className="flex gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-950/20"
-        >
-          <AlertTriangle className="size-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
-          <p className="text-sm text-amber-800 dark:text-amber-200">
+        <div key={index} className="flex gap-3 border-2 border-warning p-4">
+          <AlertTriangle className="size-5 shrink-0 text-warning mt-0.5" />
+          <p className="text-sm text-foreground">
             {pickLang(block, "text")}
           </p>
         </div>
@@ -342,7 +336,7 @@ function FuelingCalculator() {
                       <div className="flex flex-col items-center">
                         <div
                           className={cn(
-                            "size-2.5 rounded-full shrink-0 mt-1.5",
+                            "size-2.5 shrink-0 mt-1.5",
                             phase === "pre"
                               ? "bg-blue-500"
                               : phase === "post"
@@ -412,7 +406,7 @@ function SummaryCard({
   sub: string;
 }) {
   return (
-    <div className="rounded-xl bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent border border-border/50 p-3 space-y-1">
+    <div className="border-2 border-foreground bg-card p-3 space-y-1">
       <p className="text-xs text-muted-foreground">{label}</p>
       <p className="text-xl font-bold text-foreground">{value}</p>
       <p className="text-xs text-muted-foreground">{sub}</p>
@@ -518,9 +512,9 @@ export function NutritionGuidePage() {
       <div className="py-8 space-y-8">
         {/* Page header */}
         <div>
-          <EditorialTitle as="h1" className="mb-2">
+          <h1 className="font-sans font-bold uppercase leading-[0.94] tracking-[-0.04em] text-[32px] sm:text-[40px] md:text-[48px] mb-2">
             {t("nutrition.pageTitle")}
-          </EditorialTitle>
+          </h1>
           <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg max-w-2xl">
             {t("nutrition.subtitle")}
           </FadeUp>
@@ -547,7 +541,7 @@ export function NutritionGuidePage() {
 
           {nutritionSections.map((section) => (
             <TabsContent key={section.id} value={section.id}>
-              <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
+              <Card>
                 <CardHeader>
                   <CardTitle>
                     {pickLang(section, "title")}

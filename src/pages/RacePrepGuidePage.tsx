@@ -18,7 +18,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { FadeUp } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { racePrepSections, recoveryTimelines } from "@/data/guides/race-prep";
@@ -111,7 +111,7 @@ export function RacePrepGuidePage() {
                       aria-checked={isChecked}
                       onClick={() => toggleCheck(key)}
                       className={cn(
-                        "mt-0.5 shrink-0 size-5 rounded border-2 flex items-center justify-center transition-colors",
+                        "mt-0.5 shrink-0 size-5 rounded-none border-2 flex items-center justify-center transition-colors",
                         isChecked
                           ? "bg-primary border-primary text-primary-foreground"
                           : "border-muted-foreground/30 group-hover:border-primary/50"
@@ -140,7 +140,7 @@ export function RacePrepGuidePage() {
         return (
           <div key={blockIdx} className="space-y-2">
             {text && <h4 className="font-medium text-sm">{text}</h4>}
-            <div className="overflow-x-auto rounded-xl border">
+            <div className="overflow-x-auto border-2 border-foreground">
               <table className="w-full text-sm">
                 <tbody>
                   {block.rows?.map((row, i) => (
@@ -161,23 +161,17 @@ export function RacePrepGuidePage() {
 
       case "tip":
         return (
-          <div
-            key={blockIdx}
-            className="flex gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4"
-          >
-            <Info className="size-5 shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
-            <p className="text-sm text-emerald-800 dark:text-emerald-200"><GlossaryLinkedText text={text ?? ""} /></p>
+          <div key={blockIdx} className="flex gap-3 border-2 border-success p-4">
+            <Info className="size-5 shrink-0 text-success mt-0.5" />
+            <p className="text-sm text-foreground"><GlossaryLinkedText text={text ?? ""} /></p>
           </div>
         );
 
       case "warning":
         return (
-          <div
-            key={blockIdx}
-            className="flex gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4"
-          >
-            <AlertTriangle className="size-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
-            <p className="text-sm text-amber-800 dark:text-amber-200"><GlossaryLinkedText text={text ?? ""} /></p>
+          <div key={blockIdx} className="flex gap-3 border-2 border-warning p-4">
+            <AlertTriangle className="size-5 shrink-0 text-warning mt-0.5" />
+            <p className="text-sm text-foreground"><GlossaryLinkedText text={text ?? ""} /></p>
           </div>
         );
 
@@ -189,7 +183,7 @@ export function RacePrepGuidePage() {
   function renderRecoveryTimeline(timeline: RecoveryTimeline) {
     const distance = pick(timeline, "distance");
     return (
-      <Card key={timeline.distance} size="compact" className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
+      <Card key={timeline.distance} size="compact">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span>{distance}</span>
@@ -200,7 +194,7 @@ export function RacePrepGuidePage() {
         </CardHeader>
         <CardContent className="space-y-3">
           {/* Horizontal bar */}
-          <div className="flex h-3 rounded-full overflow-hidden">
+          <div className="flex h-3 overflow-hidden border border-foreground">
             {timeline.phases.map((phase, i) => {
               const match = phase.dayRange.match(/\d+/g);
               const start = match ? parseInt(match[0]) : 1;
@@ -221,7 +215,7 @@ export function RacePrepGuidePage() {
           <div className="space-y-2">
             {timeline.phases.map((phase, i) => (
               <div key={i} className="flex gap-3 items-start">
-                <div className={cn("size-3 rounded-full mt-1 shrink-0", PHASE_COLORS[i % PHASE_COLORS.length])} />
+                <div className={cn("size-3 mt-1 shrink-0", PHASE_COLORS[i % PHASE_COLORS.length])} />
                 <div className="min-w-0">
                   <span className="text-xs font-medium">{phase.dayRange}</span>
                   <p className="text-xs text-muted-foreground">
@@ -308,9 +302,9 @@ export function RacePrepGuidePage() {
 
         {/* Header */}
         <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2">
+          <h1 className="font-sans font-bold uppercase leading-[0.94] tracking-[-0.04em] text-[32px] sm:text-[40px] md:text-[48px] mb-2">
             {t("racePrep.title")}
-          </EditorialTitle>
+          </h1>
           <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
             {t("racePrep.subtitle")}
           </FadeUp>
