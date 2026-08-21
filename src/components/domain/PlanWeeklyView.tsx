@@ -474,7 +474,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
               onWeekChange?.(newWeek);
             }}
             disabled={selectedWeek <= 1}
-            className="px-3 py-1.5 rounded-lg bg-muted text-sm font-medium disabled:opacity-30 transition-colors hover:bg-muted/80"
+            className="px-3 py-1.5 rounded-none bg-muted text-sm font-medium disabled:opacity-30 transition-colors hover:bg-muted/80"
           >
             <ChevronLeft className="size-4" />
           </button>
@@ -526,7 +526,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
               onWeekChange?.(newWeek);
             }}
             disabled={selectedWeek >= plan.totalWeeks}
-            className="px-3 py-1.5 rounded-lg bg-muted text-sm font-medium disabled:opacity-30 transition-colors hover:bg-muted/80"
+            className="px-3 py-1.5 rounded-none bg-muted text-sm font-medium disabled:opacity-30 transition-colors hover:bg-muted/80"
           >
             <ChevronRight className="size-4" />
           </button>
@@ -585,7 +585,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
             <button
               type="button"
               onClick={() => onFindWeekRoute(selectedWeek)}
-              className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/10"
+              className="inline-flex items-center gap-2 rounded-none border border-primary/30 bg-primary/5 px-3 py-1.5 font-mono text-[11px] tracking-[0.06em] uppercase text-primary transition-colors hover:bg-primary/10"
             >
               <RouteIcon className="size-3.5" />
               {t("view.findWeekRoute")}
@@ -605,7 +605,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
         {weekData && (
           <div
             className={cn(
-              "rounded-lg p-2 transition-colors",
+              "rounded-none p-2 transition-colors",
               singleWeek && "lg:flex-1 lg:min-h-0",
               weekData.isRecoveryWeek && "bg-muted/40",
               !weekData.isRecoveryWeek && PHASE_BG[weekData.phase as string],
@@ -767,7 +767,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
             }
           }}
           className={cn(
-            "fixed inset-x-0 bottom-24 z-50 mx-auto flex w-fit items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium shadow-lg transition-colors md:bottom-8",
+            "fixed inset-x-0 bottom-24 z-50 mx-auto flex w-fit items-center gap-2 rounded-none border-2 px-4 py-2.5 font-mono text-xs uppercase tracking-wide transition-colors md:bottom-8",
             overTrash
               ? "border-destructive bg-destructive text-destructive-foreground"
               : "border-destructive/40 bg-card text-destructive",
@@ -782,7 +782,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
       {contextMenu && (
         <div className="fixed inset-0 z-50" onPointerDown={() => setContextMenu(null)}>
           <div
-            className="fixed bg-card border rounded-lg shadow-lg py-1 min-w-[160px] z-50"
+            className="fixed bg-card border rounded-none shadow-lg py-1 min-w-[160px] z-50"
             style={{
               left: contextMenu.x,
               top: contextMenu.y,
@@ -991,7 +991,7 @@ const DayCell = memo(function DayCell({
       onDragLeave={onDragLeave}
       onDrop={(e) => onDrop(e, selectedWeek, dayIndex)}
       className={cn(
-        "rounded-lg bg-secondary/30 p-1.5 transition-colors",
+        "rounded-none bg-secondary/30 p-1.5 transition-colors",
         isDesktop ? "min-h-[120px]" : (singleWeek ? "min-h-[120px]" : "min-h-[80px]"),
         isDropHere && "ring-2 ring-primary/50 bg-primary/5",
         isBlockedDay && "bg-muted/50 bg-[repeating-linear-gradient(135deg,transparent,transparent_4px,rgba(0,0,0,0.04)_4px,rgba(0,0,0,0.04)_6px)]",
@@ -1026,7 +1026,7 @@ const DayCell = memo(function DayCell({
 
       {scanContent && (
         <div
-          className="overflow-hidden rounded-lg bg-background/85 backdrop-blur-sm"
+          className="overflow-hidden rounded-none bg-background/85 backdrop-blur-sm"
           aria-hidden="true"
         >
           {scanContent}

@@ -6,7 +6,7 @@ import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { PrebuiltPlanCard } from "@/components/domain/PrebuiltPlanCard";
 import { getAllPrebuiltPlans } from "@/data/prebuilt-plans";
-import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
+import { FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
 
 export function PrebuiltPlansPage() {
   const { t } = useTranslation("plan");
@@ -38,20 +38,23 @@ export function PrebuiltPlansPage() {
         </Button>
 
         {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2">
+        <div className="mb-8 border-b border-filet pb-6">
+          <p className="font-mono text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
+            {t("prebuiltList.available", { count: plans.length })}
+          </p>
+          <h1 className="font-sans font-bold uppercase leading-[0.92] tracking-[-0.04em] text-4xl sm:text-5xl mt-2">
             {t("prebuiltList.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
+          </h1>
+          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-base mt-2 max-w-xl">
             {t("prebuiltList.subtitle")}
           </FadeUp>
         </div>
 
-        {/* Grid */}
+        {/* Grid — hairline dividers between cells (bg-border + gap-px) */}
         <StaggerGrid
           className={cn(
-            "grid gap-4",
-            "grid-cols-2 lg:grid-cols-3",
+            "grid gap-px bg-border border border-border",
+            "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
           )}
         >
           {plans.map((plan) => (
@@ -60,11 +63,6 @@ export function PrebuiltPlansPage() {
             </StaggerItem>
           ))}
         </StaggerGrid>
-
-        {/* Stats */}
-        <div className="mt-8 text-center text-sm text-muted-foreground">
-          {t("prebuiltList.available", { count: plans.length })}
-        </div>
       </div>
     </>
   );

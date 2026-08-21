@@ -445,7 +445,9 @@
     "sessionsCount": "{{count}} séances",
     "planCount": "{{count}} plans",
     "ended": "Terminé",
-    "endedSection": "Plans terminés"
+    "endedSection": "Plans terminés",
+    "prebuiltHeading": "{{count}} plans prêts à lire",
+    "filterAll": "Toutes distances"
   },
   "prebuilt": {
     "notFound": "Plan introuvable",

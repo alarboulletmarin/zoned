@@ -161,12 +161,12 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         )}
       >
         <div className="flex items-center gap-3">
-          <h2 className="text-lg font-semibold">
+          <h2 className="font-sans font-bold uppercase tracking-[-0.02em] text-xl">
             {t("stats.title")}
           </h2>
           {/* Summary badges when collapsed */}
           {!isOpen && (
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
               <span className="hidden sm:inline">
                 {stats.totalSessions} {t("stats.sessions").toLowerCase()}
               </span>
@@ -240,8 +240,8 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
 
         {/* ── Race time prediction ─────────────────────────────────── */}
         {plan.raceTimePrediction && (
-          <div className="rounded-lg bg-primary/5 border border-primary/20 p-3 flex items-center gap-3">
-            <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+          <div className="rounded-none bg-primary/5 border border-primary/20 p-3 flex items-center gap-3">
+            <div className="size-10 rounded-none bg-primary/10 flex items-center justify-center shrink-0">
               <Timer className="size-5 text-primary" />
             </div>
             <div>
@@ -255,12 +255,12 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
 
         {/* ── Current week summary ────────────────────────────────── */}
         {currentWeekData && (
-          <div className="rounded-lg bg-secondary/50 border border-border/50 p-3 space-y-1.5">
+          <div className="rounded-none bg-secondary/50 border border-border/50 p-3 space-y-1.5">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold">
                 {t("stats.thisWeek")}
               </h3>
-              <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full",
+              <span className={cn("text-xs font-medium px-2 py-0.5 rounded-none",
                 PHASE_META[currentWeekData.week.phase]?.color, "text-white"
               )}>
                 S{currentWeekData.week.weekNumber} · {pick(PHASE_META[currentWeekData.week.phase], "label")}
@@ -296,7 +296,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         {/* ── Section 2: Weekly km Chart ───────────────────────────── */}
         {weeklyKmData.some(w => w.km > 0) && (
           <div className="space-y-2">
-            <h3 className="text-sm font-medium">
+            <h3 className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
               {t("stats.weeklyKm")}
             </h3>
             <p className="text-xs text-muted-foreground">
@@ -310,12 +310,12 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                 return (
                   <div key={week.weekNumber} className="flex-1 flex flex-col items-center justify-end h-full relative">
                     <div
-                      className={cn(phaseColor, week.isRecovery && "opacity-50", "w-full rounded-t-sm min-h-[2px]")}
+                      className={cn(phaseColor, week.isRecovery && "opacity-50", "w-full rounded-none min-h-[2px]")}
                       style={{ height: `${heightPct}%` }}
                       title={`S${week.weekNumber}: ${Math.round(week.km)}km`}
                     />
                     {isCurrent && (
-                      <div className="absolute -bottom-4 size-1.5 rounded-full bg-primary" />
+                      <div className="absolute -bottom-4 size-1.5 rounded-none bg-primary" />
                     )}
                   </div>
                 );
@@ -339,7 +339,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
 
         {/* ── Section 2b: Weekly Volume (minutes) Chart ───────────── */}
         <div className="space-y-2">
-          <h3 className="text-sm font-medium">
+          <h3 className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
             {t("stats.weeklyVolume")}
           </h3>
           <p className="text-xs text-muted-foreground">
@@ -361,13 +361,13 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                     className={cn(
                       phaseColor,
                       week.isRecovery && "opacity-50",
-                      "w-full rounded-t-sm min-h-[2px]",
+                      "w-full rounded-none min-h-[2px]",
                     )}
                     style={{ height: `${heightPercent}%` }}
                     title={`S${week.weekNumber}: ${formatMinutes(week.durationMin)}`}
                   />
                   {isCurrentWeek && (
-                    <div className="absolute -bottom-4 size-1.5 rounded-full bg-primary" />
+                    <div className="absolute -bottom-4 size-1.5 rounded-none bg-primary" />
                   )}
                 </div>
               );
@@ -398,7 +398,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                   key={key}
                   className="flex items-center gap-1.5 text-xs text-muted-foreground"
                 >
-                  <div className={cn("size-2.5 rounded-full", meta.color)} />
+                  <div className={cn("size-2.5 rounded-none", meta.color)} />
                   <span>{pick(meta, "label")}</span>
                 </div>
               ))}
@@ -408,11 +408,11 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         {/* ── Section 3: Session Type Distribution ──────────────────── */}
         {sortedTypes.length > 0 && (
           <div className="space-y-2">
-            <h3 className="text-sm font-medium">
+            <h3 className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
               {t("stats.sessionTypes")}
             </h3>
             {/* Stacked bar */}
-            <div className="flex rounded-full overflow-hidden h-3">
+            <div className="flex rounded-none overflow-hidden h-3">
               {sortedTypes.map(([type, count]) => (
                 <div
                   key={type}
@@ -433,7 +433,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                 >
                   <div
                     className={cn(
-                      "size-2.5 rounded-full",
+                      "size-2.5 rounded-none",
                       sessionColorClass(type),
                     )}
                   />
@@ -457,16 +457,16 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Zone distribution */}
               <div className="space-y-2">
-                <h3 className="text-sm font-medium">
+                <h3 className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
                   {t("stats.zoneDistribution")}
                 </h3>
                 <div className="space-y-1.5">
                   {analysis.zoneDistribution.map(({ zone, minutes, percent }) => (
                     <div key={zone} className="flex items-center gap-2">
                       <span className="text-xs font-medium w-6">{zone}</span>
-                      <div className="flex-1 h-2.5 bg-secondary rounded-full overflow-hidden">
+                      <div className="flex-1 h-2.5 bg-secondary rounded-none overflow-hidden">
                         <div
-                          className="h-full rounded-full"
+                          className="h-full rounded-none"
                           style={{ width: `${percent}%`, backgroundColor: ZONE_COLORS[zone] }}
                         />
                       </div>
@@ -480,7 +480,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
 
               {/* Target system */}
               <div className="space-y-2">
-                <h3 className="text-sm font-medium">
+                <h3 className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
                   {t("stats.targetSystems")}
                 </h3>
                 <div className="space-y-1.5">
@@ -490,9 +490,9 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                         <span className="text-xs w-28 truncate">
                           {t(`targetSystems.${system}`, { defaultValue: system })}
                         </span>
-                        <div className="flex-1 h-2.5 bg-secondary rounded-full overflow-hidden">
+                        <div className="flex-1 h-2.5 bg-secondary rounded-none overflow-hidden">
                           <div
-                            className="h-full rounded-full bg-primary/70"
+                            className="h-full rounded-none bg-primary/70"
                             style={{ width: `${percent}%` }}
                           />
                         </div>
@@ -509,7 +509,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         )}
         {/* ── 80/20 Intensity Distribution per week ──────────────── */}
         <div className="space-y-2">
-          <h3 className="text-sm font-medium">
+          <h3 className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
             {t("stats.easyHardSplit")}
           </h3>
           <div className="flex items-end gap-[2px] h-16">
@@ -518,7 +518,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
               return (
                 <div
                   key={week.weekNumber}
-                  className="flex-1 flex flex-col h-full rounded-t-sm overflow-hidden relative"
+                  className="flex-1 flex flex-col h-full rounded-none overflow-hidden relative"
                   title={`S${week.weekNumber}: ${week.easyPct}% easy / ${week.hardPct}% hard`}
                 >
                   <div
@@ -529,7 +529,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                     className="bg-green-400/50 w-full flex-1"
                   />
                   {isCurrent && (
-                    <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 size-1.5 rounded-full bg-primary" />
+                    <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 size-1.5 rounded-none bg-primary" />
                   )}
                 </div>
               );
@@ -537,11 +537,11 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
           </div>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span className="flex items-center gap-1.5">
-              <span className="size-2.5 rounded-full bg-green-400/50" />
+              <span className="size-2.5 rounded-none bg-green-400/50" />
               {t("stats.easyZ12")}
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="size-2.5 rounded-full bg-red-400/70" />
+              <span className="size-2.5 rounded-none bg-red-400/70" />
               {t("stats.hardZ3")}
             </span>
             <span className="text-muted-foreground/50">
@@ -553,7 +553,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         {/* ── Training load per week ──────────────────────────────── */}
         {weeklyLoads.some(w => w.load > 0) && (
           <div className="space-y-2">
-            <h3 className="text-sm font-medium">
+            <h3 className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
               {t("stats.trainingLoad")}
             </h3>
             <p className="text-xs text-muted-foreground">
@@ -567,12 +567,12 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                 return (
                   <div key={week.weekNumber} className="flex-1 flex flex-col items-center justify-end h-full relative">
                     <div
-                      className={cn(phaseColor, "w-full rounded-t-sm min-h-[2px]")}
+                      className={cn(phaseColor, "w-full rounded-none min-h-[2px]")}
                       style={{ height: `${heightPct}%` }}
                       title={`S${week.weekNumber}: ${week.load}`}
                     />
                     {isCurrent && (
-                      <div className="absolute -bottom-4 size-1.5 rounded-full bg-primary" />
+                      <div className="absolute -bottom-4 size-1.5 rounded-none bg-primary" />
                     )}
                   </div>
                 );
@@ -584,7 +584,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
         {/* ── Section 5: Long Run Progression (v2) ─────────────────── */}
         {plan.weeks.some(w => w.targetLongRunKm && w.targetLongRunKm > 0) && (
           <div className="space-y-2">
-            <h3 className="text-sm font-medium">
+            <h3 className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
               {t("stats.longRunProgression")}
             </h3>
             {(() => {
@@ -604,7 +604,7 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                           className="flex-1 flex flex-col items-center justify-end h-full"
                         >
                           <div
-                            className={cn(phaseColor, "w-full rounded-t-sm min-h-[2px]")}
+                            className={cn(phaseColor, "w-full rounded-none min-h-[2px]")}
                             style={{ height: `${heightPct}%` }}
                             title={`S${w.weekNumber}: ${w.km}km`}
                           />
@@ -642,12 +642,12 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
           if (cs.completed + cs.skipped === 0) return null;
           return (
             <div className="space-y-2">
-              <h3 className="text-sm font-medium">
+              <h3 className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
                 {t("stats.completion")}
               </h3>
               <div className="flex items-center gap-3">
                 {/* Progress bar */}
-                <div className="flex-1 h-3 bg-secondary rounded-full overflow-hidden flex">
+                <div className="flex-1 h-3 bg-secondary rounded-none overflow-hidden flex">
                   <div
                     className="h-full bg-green-500 transition-all"
                     style={{ width: `${(cs.completed / cs.totalSessions) * 100}%` }}
@@ -663,11 +663,11 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
               </div>
               <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
-                  <span className="size-2 rounded-full bg-green-500" />
+                  <span className="size-2 rounded-none bg-green-500" />
                   {cs.completed} {t("stats.done")}
                 </span>
                 <span className="flex items-center gap-1">
-                  <span className="size-2 rounded-full bg-muted-foreground/20" />
+                  <span className="size-2 rounded-none bg-muted-foreground/20" />
                   {cs.skipped} {t("stats.skipped")}
                 </span>
                 <span>{cs.planned} {t("stats.remaining")}</span>
@@ -713,12 +713,10 @@ function StatCard({
   label: string;
 }) {
   return (
-    <div className="flex items-center gap-3 rounded-lg bg-secondary/50 p-3">
-      <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-        <Icon className="size-4 text-primary" />
-      </div>
+    <div className="flex items-center gap-3 border border-border p-3">
+      <Icon className="size-4 text-muted-foreground shrink-0" />
       <div>
-        <p className="text-lg font-bold leading-none">
+        <p className="font-mono text-lg leading-none">
           {value}
           {sublabel && (
             <span className="text-xs font-normal text-muted-foreground ml-1">
@@ -726,7 +724,7 @@ function StatCard({
             </span>
           )}
         </p>
-        <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
+        <p className="font-mono text-[10px] tracking-[0.06em] uppercase text-muted-foreground mt-1">{label}</p>
       </div>
     </div>
   );

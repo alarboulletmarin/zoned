@@ -1,29 +1,9 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { InteractiveCard } from "@/components/editorial";
-import { cn } from "@/lib/utils";
 import { RACE_DISTANCE_META } from "@/types/plan";
 import type { PrebuiltPlan } from "@/data/prebuilt-plans/types";
 import { usePickLang } from "@/lib/i18n-utils";
-
-const DIFFICULTY_GRADIENT: Record<string, string> = {
-  beginner: "bg-gradient-to-br from-green-500/10 dark:from-green-500/20 to-transparent",
-  intermediate: "bg-gradient-to-br from-yellow-500/10 dark:from-yellow-500/20 to-transparent",
-  advanced: "bg-gradient-to-br from-orange-500/10 dark:from-orange-500/20 to-transparent",
-  elite: "bg-gradient-to-br from-red-500/10 dark:from-red-500/20 to-transparent",
-};
-
-// Spotlight tint per difficulty — matches the gradient hue above
-// (green / yellow / orange / red -500).
-const DIFFICULTY_ACCENT: Record<string, string> = {
-  beginner: "#22c55e",
-  intermediate: "#eab308",
-  advanced: "#f97316",
-  elite: "#ef4444",
-};
 
 const DIFFICULTY_KEYS: Record<string, string> = {
   beginner: "collections.difficulty.beginner",
@@ -32,12 +12,25 @@ const DIFFICULTY_KEYS: Record<string, string> = {
   elite: "collections.difficulty.advanced",
 };
 
+// Phase colors (PHASE_META) are plain Tailwind swatches unrelated to the
+// zone ramp (see CLAUDE.md #114). For this card's illustrative distribution
+// bar we approximate each phase with the zone it visually reads closest to
+// — same "teaching figure" spirit as HomePage's PROGRESSION_WEEKS, not a
+// measurement of the plan's real per-session zones (that's PlanStatsSection).
+export const PHASE_ZONE_BAR: Record<string, string> = {
+  base: "bg-zone-2",
+  build: "bg-zone-3",
+  peak: "bg-zone-4",
+  taper: "bg-zone-1",
+  recovery: "bg-zone-1",
+};
+
 interface PrebuiltPlanCardProps {
   plan: PrebuiltPlan;
 }
 
 export function PrebuiltPlanCard({ plan }: PrebuiltPlanCardProps) {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("plan");
   const pickLang = usePickLang();
 
   const name = pickLang(plan, "name");
@@ -48,45 +41,40 @@ export function PrebuiltPlanCard({ plan }: PrebuiltPlanCardProps) {
     : null;
 
   return (
-    <Link to={`/plan/prebuilt/${plan.slug}`} className="group block h-full">
-      <InteractiveCard
-        accent={DIFFICULTY_ACCENT[plan.difficulty] ?? "var(--primary)"}
-        className="block h-full rounded-xl"
-      >
-      <Card
-        className={cn(
-          "h-full border-border/50",
-          DIFFICULTY_GRADIENT[plan.difficulty] ?? "bg-gradient-to-br from-gray-400/10 dark:from-gray-400/20 to-transparent",
-        )}
-      >
-        <CardContent className="p-3 sm:p-4 flex flex-col gap-2 sm:gap-3 h-full">
-          {/* Name */}
-          <h3 className="font-semibold text-sm sm:text-base leading-tight">{name}</h3>
-
-          {/* Description */}
-          <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 flex-1">
-            {description}
-          </p>
-
-          {/* Badges */}
-          <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 pt-1">
-            {difficultyKey && (
-              <Badge variant="secondary" className="text-[10px] sm:text-xs px-1.5 py-0">
-                {t(difficultyKey)}
-              </Badge>
-            )}
-            <Badge variant="outline" className="text-[10px] sm:text-xs px-1.5 py-0">
-              {plan.totalWeeks} {t("plans.weeks")}
-            </Badge>
-            {raceMeta && (
-              <Badge variant="default" className="text-[10px] sm:text-xs px-1.5 py-0">
-                {pickLang(raceMeta, "label")}
-              </Badge>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-      </InteractiveCard>
+    <Link
+      to={`/plan/prebuilt/${plan.slug}`}
+      className="group block h-full bg-background p-5 transition-colors hover:bg-secondary"
+    >
+      <p className="font-mono text-[10px] tracking-[0.12em] uppercase text-muted-foreground">
+        {raceMeta ? pickLang(raceMeta, "label") : ""}
+        {raceMeta ? " · " : ""}
+        {t("prebuilt.weeksCount", { count: plan.totalWeeks })}
+      </p>
+      <h3 className="mt-2.5 font-sans font-bold uppercase leading-[1.02] tracking-[-0.03em] text-xl sm:text-2xl">
+        {name}
+      </h3>
+      <p className="mt-2 text-sm leading-[1.5] text-foreground/70 line-clamp-2">
+        {description}
+      </p>
+      <div className="flex h-2 gap-px mt-4" aria-hidden="true">
+        {plan.phases.map((p, i) => {
+          const span = p.endWeek - p.startWeek + 1;
+          const pct = (span / plan.totalWeeks) * 100;
+          return (
+            <div
+              key={i}
+              className={PHASE_ZONE_BAR[p.phase] ?? "bg-foreground/20"}
+              style={{ width: `${pct}%` }}
+            />
+          );
+        })}
+      </div>
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2.5 font-mono text-[10px] tracking-[0.08em] uppercase text-muted-foreground">
+        {difficultyKey && <span>{t(difficultyKey)}</span>}
+        <span>
+          {plan.sessionsPerWeek} {t("prebuilt.sessionsPerWeek")}
+        </span>
+      </div>
     </Link>
   );
 }
