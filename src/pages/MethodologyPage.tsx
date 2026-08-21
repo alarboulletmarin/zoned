@@ -1,300 +1,144 @@
+// src/pages/MethodologyPage.tsx
+// The zone atlas — /methodology. Six rows, one per zone: what it's for, the
+// visitor's own pace when available, how it feels, and how many sessions in
+// the catalogue land there. See docs/workout-format.md for the zone model
+// itself; this page is where it's explained to a human.
+
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ExternalLink, FlaskConical, BookOpen, GraduationCap, Activity } from "@/components/icons";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Link } from "react-router-dom";
+import { Info } from "@/components/icons";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ResponsiveTable, type ResponsiveTableColumn } from "@/components/ui/responsive-table";
 import { SEOHead } from "@/components/seo";
-import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
-import { usePickLang } from "@/lib/i18n-utils";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { MethodologyTabs } from "@/components/domain/methodology/MethodologyTabs";
+import { PageContainer } from "@/components/layout/PageContainer";
+import { usePickLang } from "@/lib/i18n-utils";
+import { useGlossaryCount } from "@/hooks/useGlossary";
+import { countUniqueScienceSources } from "@/lib/scienceReferences";
+import { loadAllWorkouts } from "@/data/workouts";
+import { getDominantZone, ZONE_META } from "@/types";
+import { loadUserZonePrefs, calculatePaceZones, formatPace, VMA_ZONE_PERCENTAGES } from "@/lib/zones";
+import type { ZoneNumber } from "@/types";
+import { cn } from "@/lib/utils";
 
-// ---------------------------------------------------------------------------
-// Zone data
-// ---------------------------------------------------------------------------
+const ZONES: readonly ZoneNumber[] = [1, 2, 3, 4, 5, 6];
 
-interface ZoneInfo {
-  zone: number;
-  nameFr: string;
-  nameEn: string;
-  marker: string;
-  markerEn: string;
-  developsFr: string;
-  developsEn: string;
-}
-
-const zones: ZoneInfo[] = [
-  {
-    zone: 1,
-    nameFr: "Récupération",
-    nameEn: "Recovery",
-    marker: "Sous le VT1",
-    markerEn: "Below VT1",
-    developsFr: "Favorise la circulation sanguine et l'élimination des déchets métaboliques",
-    developsEn: "Promotes blood flow and eliminates metabolic waste",
-  },
-  {
-    zone: 2,
-    nameFr: "Endurance",
-    nameEn: "Endurance",
-    marker: "Autour du VT1",
-    markerEn: "Around VT1",
-    developsFr: "Adaptations mitochondriales, oxydation des graisses, base aérobie",
-    developsEn: "Mitochondrial adaptations, fat oxidation, aerobic base",
-  },
-  {
-    zone: 3,
-    nameFr: "Tempo",
-    nameEn: "Tempo",
-    marker: "Entre VT1 et VT2",
-    markerEn: "Between VT1 and VT2",
-    developsFr: "Capacité aérobie et clairance du lactate",
-    developsEn: "Aerobic capacity and lactate clearance",
-  },
-  {
-    zone: 4,
-    nameFr: "Seuil",
-    nameEn: "Threshold",
-    marker: "Autour du VT2 / seuil lactique",
-    markerEn: "Around VT2 / lactate turn point",
-    developsFr: "Relève le seuil anaérobie",
-    developsEn: "Raises anaerobic threshold",
-  },
-  {
-    zone: 5,
-    nameFr: "VO2max",
-    nameEn: "VO2max",
-    marker: "Au-dessus du VT2",
-    markerEn: "Above VT2",
-    developsFr: "Puissance aérobie maximale",
-    developsEn: "Maximal aerobic power",
-  },
-  {
-    zone: 6,
-    nameFr: "Neuromusculaire",
-    nameEn: "Neuromuscular",
-    marker: "Effort maximal",
-    markerEn: "Maximal effort",
-    developsFr: "Recrutement des unités motrices, puissance de sprint, anaérobie alactique",
-    developsEn: "Motor unit recruitment, sprint power, anaerobic alactic",
-  },
-];
-
-// ---------------------------------------------------------------------------
-// Researchers data
-// ---------------------------------------------------------------------------
-
-interface Researcher {
-  name: string;
-  contributionFr: string;
-  contributionEn: string;
-  publicationFr: string;
-  publicationEn: string;
-  link?: string;
-}
-
-const researchers: Researcher[] = [
-  {
-    name: "Stephen Seiler",
-    contributionFr: "Modèle d'entraînement polarisé (80/20)",
-    contributionEn: "Polarized training model (80/20)",
-    publicationFr: "\"Quantifying training intensity distribution in elite endurance athletes\" (2006, Scand J Med Sci Sports)",
-    publicationEn: "\"Quantifying training intensity distribution in elite endurance athletes\" (2006, Scand J Med Sci Sports)",
-    link: "https://pubmed.ncbi.nlm.nih.gov/16430681/",
-  },
-  {
-    name: "Véronique Billat",
-    contributionFr: "Chercheuse française. Intervalles à VO2max, protocole 30/30, concept de vVO2max",
-    contributionEn: "French researcher. VO2max intervals, 30/30 protocol, vVO2max concept",
-    publicationFr: "\"Intermittent runs at vVO2max\" (1999)",
-    publicationEn: "\"Intermittent runs at vVO2max\" (1999)",
-    link: "https://pubmed.ncbi.nlm.nih.gov/10638376/",
-  },
-  {
-    name: "Jack Daniels",
-    contributionFr: "Système VDOT et zones d'entraînement (1933–2025)",
-    contributionEn: "VDOT system and training zones (1933–2025)",
-    publicationFr: "Livre : \"Daniels' Running Formula\"",
-    publicationEn: "Book: \"Daniels' Running Formula\"",
-  },
-  {
-    name: "Arthur Lydiard",
-    contributionFr: "Périodisation et construction de la base aérobie",
-    contributionEn: "Periodization and aerobic base building",
-    publicationFr: "Pionnier de l'approche par construction de base",
-    publicationEn: "Pioneer of the base-building approach",
-  },
-  {
-    name: "Tim Noakes",
-    contributionFr: "Théorie du gouverneur central",
-    contributionEn: "Central governor theory",
-    publicationFr: "Livre : \"Lore of Running\"",
-    publicationEn: "Book: \"Lore of Running\"",
-  },
-  {
-    name: "Wildor Hollmann & Alois Mader",
-    contributionFr: "Origines du concept de seuil lactique (groupe de Cologne, années 1970)",
-    contributionEn: "Lactate threshold concept origins (Cologne group, 1970s)",
-    publicationFr: "Travaux fondateurs sur le métabolisme lactique",
-    publicationEn: "Foundational work on lactate metabolism",
-  },
-  {
-    name: "Oliver Faude",
-    contributionFr: "Revue définitive des concepts de seuil lactique (2009)",
-    contributionEn: "Definitive review of lactate threshold concepts (2009)",
-    publicationFr: "\"Lactate Threshold Concepts\" (Sports Med, 2009)",
-    publicationEn: "\"Lactate Threshold Concepts\" (Sports Med, 2009)",
-    link: "https://link.springer.com/article/10.2165/00007256-200939060-00003",
-  },
-  {
-    name: "Iñigo San Millán",
-    contributionFr: "Entraînement en Zone 2 et recherche sur la santé métabolique",
-    contributionEn: "Zone 2 training and metabolic health research",
-    publicationFr: "Recherche sur la santé métabolique et les mitochondries",
-    publicationEn: "Research on metabolic health and mitochondria",
-  },
-];
-
-// ---------------------------------------------------------------------------
-// Studies data
-// ---------------------------------------------------------------------------
-
-interface Study {
-  authors: string;
-  year: number;
-  titleFr: string;
-  titleEn: string;
-  journal: string;
-  link?: string;
-}
-
-const studies: Study[] = [
-  {
-    authors: "Seiler & Kjerland",
-    year: 2006,
-    titleFr: "Quantifying training intensity distribution in elite endurance athletes",
-    titleEn: "Quantifying training intensity distribution in elite endurance athletes",
-    journal: "Scand J Med Sci Sports 16(1):49-56",
-    link: "https://pubmed.ncbi.nlm.nih.gov/16430681/",
-  },
-  {
-    authors: "Billat et al.",
-    year: 1999,
-    titleFr: "Interval training at VO2max: effects on aerobic performance",
-    titleEn: "Interval training at VO2max: effects on aerobic performance",
-    journal: "Med Sci Sports Exerc",
-    link: "https://pubmed.ncbi.nlm.nih.gov/9927024/",
-  },
-  {
-    authors: "Billat et al.",
-    year: 2000,
-    titleFr: "Intermittent runs at vVO2max enables longer time at VO2max",
-    titleEn: "Intermittent runs at vVO2max enables longer time at VO2max",
-    journal: "Eur J Appl Physiol",
-    link: "https://pubmed.ncbi.nlm.nih.gov/10638376/",
-  },
-  {
-    authors: "Faude et al.",
-    year: 2009,
-    titleFr: "Lactate Threshold Concepts",
-    titleEn: "Lactate Threshold Concepts",
-    journal: "Sports Med 39(6):469-490",
-    link: "https://link.springer.com/article/10.2165/00007256-200939060-00003",
-  },
-  {
-    authors: "Kindermann et al.",
-    year: 1979,
-    titleFr: "The significance of the aerobic-anaerobic transition for training",
-    titleEn: "The significance of the aerobic-anaerobic transition for training",
-    journal: "Dtsch Z Sportmed",
-  },
-  {
-    authors: "Wasserman & McIlroy",
-    year: 1964,
-    titleFr: "Detecting the threshold of anaerobic metabolism",
-    titleEn: "Detecting the threshold of anaerobic metabolism",
-    journal: "Am J Cardiol",
-  },
-];
-
-// ---------------------------------------------------------------------------
-// Resources data
-// ---------------------------------------------------------------------------
-
-interface Resource {
-  nameFr: string;
-  nameEn: string;
-  link?: string;
-}
-
-interface ResourceGroup {
-  labelFr: string;
-  labelEn: string;
-  items: Resource[];
-}
-
-const resources: ResourceGroup[] = [
-  {
-    labelFr: "Livres",
-    labelEn: "Books",
-    items: [
-      { nameFr: "\"Daniels' Running Formula\" - Jack Daniels", nameEn: "\"Daniels' Running Formula\" - Jack Daniels" },
-      { nameFr: "\"Lore of Running\" - Tim Noakes", nameEn: "\"Lore of Running\" - Tim Noakes" },
-      { nameFr: "\"Entraînement pratique et scientifique à la course à pied\" - Véronique Billat", nameEn: "\"Practical and Scientific Training for Running\" - Véronique Billat" },
-    ],
-  },
-  {
-    labelFr: "Blogs",
-    labelEn: "Blogs",
-    items: [
-      { nameFr: "Science of Running", nameEn: "Science of Running", link: "https://scienceofrunning.com" },
-      { nameFr: "Running Writings", nameEn: "Running Writings", link: "https://runningwritings.com" },
-      { nameFr: "Conseils Course à Pied", nameEn: "Conseils Course à Pied", link: "https://conseils-courseapied.com" },
-    ],
-  },
-  {
-    labelFr: "Podcasts",
-    labelEn: "Podcasts",
-    items: [
-      { nameFr: "Science of Running (Steve Magness)", nameEn: "Science of Running (Steve Magness)" },
-      { nameFr: "The Real Science of Sport (Ross Tucker)", nameEn: "The Real Science of Sport (Ross Tucker)" },
-      { nameFr: "Fast Talk (VeloNews)", nameEn: "Fast Talk (VeloNews)" },
-    ],
-  },
-];
-
-// ---------------------------------------------------------------------------
-// Zone border color mapping (Tailwind can't generate dynamic class names)
-// ---------------------------------------------------------------------------
-
-const zoneTextClasses: Record<number, string> = {
-  1: "text-zone-1",
-  2: "text-zone-2",
-  3: "text-zone-3",
-  4: "text-zone-4",
-  5: "text-zone-5",
-  6: "text-zone-6",
+// Tailwind needs literal class names (see CLAUDE.md) — no `bg-zone-${n}` interpolation.
+const ZONE_BG: Record<ZoneNumber, string> = {
+  1: "bg-zone-1", 2: "bg-zone-2", 3: "bg-zone-3", 4: "bg-zone-4", 5: "bg-zone-5", 6: "bg-zone-6",
+};
+const ZONE_TEXT: Record<ZoneNumber, string> = {
+  1: "text-zone-1-text", 2: "text-zone-2-text", 3: "text-zone-3-text", 4: "text-zone-4-text", 5: "text-zone-5-text", 6: "text-zone-6-text",
 };
 
-const zoneBgClasses: Record<number, string> = {
-  1: "bg-zone-1/10",
-  2: "bg-zone-2/10",
-  3: "bg-zone-3/10",
-  4: "bg-zone-4/10",
-  5: "bg-zone-5/10",
-  6: "bg-zone-6/10",
-};
+/** Illustrative weekly split — a teaching example (see HomePage's
+ *  PROGRESSION_WEEKS for the same convention), not a measurement of any
+ *  real plan. Shape follows the polarized pattern: mostly Z1-Z2, a little
+ *  Z3, and a small hard share spread across Z4-Z6. */
+const WEEK_EXAMPLE: Record<ZoneNumber, number> = { 1: 15, 2: 60, 3: 8, 4: 9, 5: 6, 6: 2 };
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
+interface ZoneRow {
+  zone: ZoneNumber;
+}
 
 export function MethodologyPage() {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("content");
   const pickLang = usePickLang();
+  const { count: glossaryCount } = useGlossaryCount();
+  const [compareModel, setCompareModel] = useState<"coggan" | "seiler" | null>(null);
+
+  const [zoneCounts, setZoneCounts] = useState<Partial<Record<ZoneNumber, number>>>({});
+  useEffect(() => {
+    let cancelled = false;
+    loadAllWorkouts().then((workouts) => {
+      if (cancelled) return;
+      const counts: Partial<Record<ZoneNumber, number>> = {};
+      for (const w of workouts) {
+        const z = getDominantZone(w);
+        counts[z] = (counts[z] ?? 0) + 1;
+      }
+      setZoneCounts(counts);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const prefs = loadUserZonePrefs();
+  const paceZones = prefs?.vma ? calculatePaceZones(prefs.vma) : null;
+
+  const sourcesCount = countUniqueScienceSources();
+  const rows: ZoneRow[] = ZONES.map((zone) => ({ zone }));
+
+  const columns: ResponsiveTableColumn<ZoneRow>[] = [
+    {
+      key: "zone",
+      header: t("content:methodology.colZone"),
+      cell: (row) => (
+        <span
+          className={cn(
+            "inline-flex items-center px-2 py-0.5 font-mono text-xs font-bold",
+            ZONE_BG[row.zone],
+            ZONE_TEXT[row.zone],
+          )}
+        >
+          Z{row.zone}
+        </span>
+      ),
+      className: "w-16",
+    },
+    {
+      key: "name",
+      header: t("content:methodology.colName"),
+      cell: (row) => (
+        <span className="font-sans text-base font-semibold not-italic">
+          {pickLang(ZONE_META[row.zone], "label")}
+        </span>
+      ),
+    },
+    {
+      key: "use",
+      header: t("content:methodology.colUse"),
+      cell: (row) => (
+        <span className="text-sm text-muted-foreground">{pickLang(ZONE_META[row.zone], "benefit")}</span>
+      ),
+      hideOnMobile: false,
+    },
+    {
+      key: "pace",
+      header: t("content:methodology.colPace"),
+      cell: (row) => {
+        if (paceZones) {
+          const pz = paceZones.find((p) => p.zone === row.zone);
+          if (pz?.paceMinPerKm && pz?.paceMaxPerKm) {
+            return <span className="font-mono text-sm">{formatPace(pz.paceMinPerKm)}–{formatPace(pz.paceMaxPerKm)}</span>;
+          }
+        }
+        const [min, max] = VMA_ZONE_PERCENTAGES[row.zone];
+        return <span className="font-mono text-sm text-muted-foreground">{min}–{max}%</span>;
+      },
+      mobileLabel: paceZones ? t("content:methodology.colPace") : t("content:methodology.colPaceGeneric"),
+    },
+    {
+      key: "feel",
+      header: t("content:methodology.colFeel"),
+      cell: (row) => (
+        <span className="text-sm text-muted-foreground">{pickLang(ZONE_META[row.zone], "sensation")}</span>
+      ),
+      hideOnMobile: true,
+    },
+    {
+      key: "sessions",
+      header: t("content:methodology.colSessions"),
+      cell: (row) => (
+        <span className="font-mono text-sm text-muted-foreground">{zoneCounts[row.zone] ?? "…"}</span>
+      ),
+      className: "text-right",
+    },
+  ];
 
   return (
     <>
@@ -319,229 +163,132 @@ export function MethodologyPage() {
         ]}
       />
 
-      <div className="py-8 space-y-12 max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center space-y-4">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <div className="p-2.5 rounded-xl bg-primary/10">
-              <FlaskConical className="size-6 text-primary" />
-            </div>
+      <PageContainer width="wide" as="div" className="py-8 space-y-8">
+        <MethodologyTabs />
+
+        <div className="grid gap-8 lg:grid-cols-[1fr_360px] items-end">
+          <div>
+            <EditorialTitle as="h1" size="xl" className="whitespace-pre-line">
+              {t("content:methodology.heading")}
+            </EditorialTitle>
+            <FadeUp as="p" delay={0.1} className="mt-4 max-w-[58ch] text-muted-foreground">
+              {t("content:methodology.intro")}
+            </FadeUp>
           </div>
-          <EditorialTitle as="h1">
-            {t("content:methodology.heading")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t("content:methodology.intro")}
-          </FadeUp>
+          <Card size="compact" className="p-5">
+            <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+              <Info className="size-3.5" />
+              {t("content:methodology.notMeasuredTitle")}
+            </div>
+            <ul className="mt-3 space-y-2 text-sm text-muted-foreground list-disc pl-4">
+              {(t("content:methodology.notMeasured", { returnObjects: true }) as string[]).map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </Card>
         </div>
 
-        {/* Section 1: Our Approach */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-blue-500/10">
-              <Activity className="size-5 text-blue-500" />
-            </div>
-            <h2 className="text-2xl font-semibold">
-              {t("content:methodology.ourApproach")}
-            </h2>
-          </div>
-          <div className="text-muted-foreground space-y-3 pl-12">
-            <GlossaryLinkedText
-              as="p"
-              text={t("content:methodology.ourApproachText1")}
-            />
-            <GlossaryLinkedText
-              as="p"
-              text={t("content:methodology.ourApproachText2")}
-            />
-            <GlossaryLinkedText
-              as="p"
-              className="text-sm italic border-l-2 border-primary/30 pl-4"
-              text={t("content:methodology.ourApproachDisclaimer")}
-            />
-          </div>
-        </section>
-
-        {/* Section 2: The 6 Zones */}
-        <section className="space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-orange-500/10">
-              <Activity className="size-5 text-orange-500" />
-            </div>
-            <h2 className="text-2xl font-semibold">
-              {t("content:methodology.sixZones")}
-            </h2>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {zones.map((z) => (
+        {/* Zone scale */}
+        <div>
+          <div className="flex h-4">
+            {ZONES.map((z) => (
               <div
-                key={z.zone}
-                className={`rounded-xl border border-border/50 bg-gradient-to-br from-zone-${z.zone}/10 dark:from-zone-${z.zone}/20 to-transparent p-5 space-y-3`}
+                key={z}
+                className={ZONE_BG[z]}
+                style={{ width: `${VMA_ZONE_PERCENTAGES[z][1] - VMA_ZONE_PERCENTAGES[z][0]}%` }}
+              />
+            ))}
+          </div>
+          <div className="mt-2 font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
+            {t("content:methodology.scaleCaption")}
+          </div>
+          <div className="mt-1 font-mono text-[10px] text-muted-foreground leading-relaxed">
+            {t("content:methodology.scaleNote")}
+          </div>
+        </div>
+
+        {/* Zone table */}
+        <ResponsiveTable data={rows} columns={columns} rowKey="zone" />
+
+        {/* Three panels */}
+        <div className="grid gap-6 lg:grid-cols-3">
+          <Card size="compact" className="p-5">
+            <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+              {t("content:methodology.threeWaysTitle")}
+            </div>
+            <div className="mt-3 flex flex-col divide-y divide-filet text-sm">
+              {(["Pace", "Hr", "Feel"] as const).map((k) => (
+                <div key={k} className="py-2.5">
+                  <strong className="font-semibold">{t(`content:methodology.way${k}`)}</strong>{" "}
+                  <span className="text-muted-foreground">{t(`content:methodology.way${k}Desc`)}</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          <Card size="compact" className="p-5">
+            <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+              {t("content:methodology.zonedChoiceTitle")}
+            </div>
+            <p className="mt-3 text-sm text-muted-foreground">{t("content:methodology.zonedChoiceText")}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCompareModel(compareModel === "coggan" ? null : "coggan")}
               >
-                <div className="flex items-center gap-2">
-                  <span
-                    className={`inline-flex items-center justify-center size-8 rounded-full text-sm font-bold ${zoneBgClasses[z.zone]} ${zoneTextClasses[z.zone]}`}
-                  >
-                    Z{z.zone}
-                  </span>
-                  <h3 className="font-semibold">
-                    {pickLang(z, "name")}
-                  </h3>
-                </div>
-                <div className="space-y-2 text-sm">
-                  <div>
-                    <span className="font-medium text-foreground">
-                      {t("content:methodology.marker")}
-                    </span>{" "}
-                    <GlossaryLinkedText
-                      className="text-muted-foreground"
-                      text={pickLang(z, "marker")}
-                    />
-                  </div>
-                  <div>
-                    <span className="font-medium text-foreground">
-                      {t("content:methodology.develops")}
-                    </span>{" "}
-                    <GlossaryLinkedText
-                      className="text-muted-foreground"
-                      text={pickLang(z, "develops")}
-                    />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Section 3: Key Researchers & Methods */}
-        <section className="space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-purple-500/10">
-              <GraduationCap className="size-5 text-purple-500" />
-            </div>
-            <h2 className="text-2xl font-semibold">
-              {t("content:methodology.researchers")}
-            </h2>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            {researchers.map((r) => (
-              <Card key={r.name} className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">{r.name}</CardTitle>
-                  <CardDescription>
-                    <GlossaryLinkedText text={pickLang(r, "contribution")} />
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    {pickLang(r, "publication")}
-                  </p>
-                  {r.link && (
-                    <a
-                      href={r.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-2"
-                    >
-                      {t("content:methodology.viewPublication")}
-                      <ExternalLink className="size-3" />
-                    </a>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        {/* Section 4: Key Studies */}
-        <section className="space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-green-500/10">
-              <BookOpen className="size-5 text-green-500" />
-            </div>
-            <h2 className="text-2xl font-semibold">
-              {t("content:methodology.keyStudies")}
-            </h2>
-          </div>
-
-          <div className="space-y-3">
-            {studies.map((s, i) => (
-              <div
-                key={i}
-                className="rounded-lg border border-border/50 bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent p-4 flex flex-col sm:flex-row sm:items-start gap-3"
+                {t("content:methodology.compareCoggan")}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCompareModel(compareModel === "seiler" ? null : "seiler")}
               >
-                <span className="shrink-0 inline-flex items-center justify-center size-8 rounded-full bg-muted text-sm font-semibold text-muted-foreground">
-                  {s.year}
-                </span>
-                <div className="flex-1 min-w-0 space-y-1">
-                  <p className="font-medium text-sm">
-                    {pickLang(s, "title")}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {s.authors} &mdash; {s.journal}
-                  </p>
-                  {s.link && (
-                    <a
-                      href={s.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
-                    >
-                      {t("content:methodology.viewStudy")}
-                      <ExternalLink className="size-3" />
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Section 5: Resources */}
-        <section className="space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-amber-500/10">
-              <BookOpen className="size-5 text-amber-500" />
+                {t("content:methodology.compareSeiler")}
+              </Button>
             </div>
-            <h2 className="text-2xl font-semibold">
-              {t("content:methodology.resources")}
-            </h2>
-          </div>
-
-          <div className="grid gap-6 sm:grid-cols-3">
-            {resources.map((group) => (
-              <div key={group.labelFr} className="space-y-3">
-                <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">
-                  {pickLang(group, "label")}
-                </h3>
-                <ul className="space-y-2">
-                  {group.items.map((item) => (
-                    <li key={item.nameFr} className="text-sm">
-                      {item.link ? (
-                        <a
-                          href={item.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-primary hover:underline"
-                        >
-                          {pickLang(item, "name")}
-                          <ExternalLink className="size-3" />
-                        </a>
-                      ) : (
-                        <span className="text-muted-foreground">
-                          {pickLang(item, "name")}
-                        </span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
+            {compareModel && (
+              <div className="mt-3 border-t border-filet pt-3 text-sm">
+                <p className="font-semibold">{t(`content:methodology.${compareModel}Title`)}</p>
+                <p className="mt-1.5 text-muted-foreground">{t(`content:methodology.${compareModel}Text`)}</p>
               </div>
-            ))}
-          </div>
-        </section>
-      </div>
+            )}
+          </Card>
+
+          <Card size="compact" className="bg-ink text-paper p-5">
+            <div className="font-mono text-[10px] tracking-[0.14em] uppercase opacity-65">
+              {t("content:methodology.weekTitle")}
+            </div>
+            <div className="mt-4 flex h-24 items-end gap-2">
+              {ZONES.map((z) => (
+                <div key={z} className="flex flex-1 h-full flex-col justify-end gap-1.5">
+                  <span className="font-mono text-[11px] opacity-70">{WEEK_EXAMPLE[z]}%</span>
+                  <div className={ZONE_BG[z]} style={{ height: `${(WEEK_EXAMPLE[z] / 60) * 100}%` }} />
+                </div>
+              ))}
+            </div>
+            <div className="mt-2 flex justify-between font-mono text-[10px] opacity-55">
+              {ZONES.map((z) => (
+                <span key={z}>Z{z}</span>
+              ))}
+            </div>
+            <div className="mt-2.5 font-mono text-[11px] leading-relaxed opacity-70">
+              {t("content:methodology.weekCaption")}
+              <br />
+              {t("content:methodology.weekNote")}
+            </div>
+          </Card>
+        </div>
+
+        {/* Footer bar */}
+        <div className="flex flex-wrap gap-6 border-t border-filet pt-5 font-mono text-[11px] tracking-[0.08em] uppercase text-muted-foreground">
+          <span>{t("content:methodology.footerSources", { count: sourcesCount })}</span>
+          <span>{t("content:methodology.footerMedical")}</span>
+          <Link to="/glossary" className="ml-auto text-foreground hover:text-primary">
+            {t("content:methodology.footerGlossary", { count: glossaryCount })}
+          </Link>
+        </div>
+      </PageContainer>
     </>
   );
 }

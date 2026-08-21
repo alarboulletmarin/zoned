@@ -1,21 +1,16 @@
 // src/pages/GlossaryPage.tsx
-// Full glossary page with search and category filtering
+// Full glossary page with search, category filters and an alphabetical index.
 
 import { useDeferredValue, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Search, Book, Filter, Loader2 } from "@/components/icons";
+import { Search, Loader2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { SEOHead } from "@/components/seo";
 import { GlossaryCard } from "@/components/domain/GlossaryCard";
 import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { PageContainer } from "@/components/layout/PageContainer";
+import { cn } from "@/lib/utils";
 import {
   useGlossary,
   useGlossaryCategories,
@@ -27,7 +22,7 @@ export function GlossaryPage() {
   const { t, i18n } = useTranslation("glossary");
   const isEn = i18n.language?.startsWith("en") ?? false;
   const [searchQuery, setSearchQuery] = useState("");
-  // Defer the heavy filtering so typing stays at 60fps even on 50+ terms.
+  // Defer the heavy filtering so typing stays at 60fps even on 100+ terms.
   const deferredSearchQuery = useDeferredValue(searchQuery);
   const [selectedCategory, setSelectedCategory] = useState<
     GlossaryCategory | "all"
@@ -95,6 +90,11 @@ export function GlossaryPage() {
     return groups;
   }, [filteredTerms]);
 
+  const sortedLetters = useMemo(
+    () => Object.keys(groupedTerms).sort((a, b) => a.localeCompare(b, i18n.language)),
+    [groupedTerms, i18n.language],
+  );
+
   const handleClearFilters = () => {
     setSearchQuery("");
     setSelectedCategory("all");
@@ -127,124 +127,147 @@ export function GlossaryPage() {
           },
         ]}
       />
-      <div className="py-8">
-      {/* Page Header */}
-      <div className="mb-6">
-        <div className="flex items-center gap-3 mb-2">
-          <Book className="h-6 w-6 text-primary" />
-          <EditorialTitle as="h1" size="md">{t("title")}</EditorialTitle>
-        </div>
-        <FadeUp as="p" delay={0.1} className="text-muted-foreground">
-          {t("subtitle", { count: totalCount })}
-        </FadeUp>
-      </div>
+      <PageContainer width="wide" as="div" className="py-8">
+        {/* Page Header */}
+        <div className="flex flex-wrap items-end justify-between gap-6 border-b border-filet pb-6">
+          <div>
+            <EditorialTitle as="h1" size="xl">
+              {t("subtitle", { count: totalCount })}
+            </EditorialTitle>
+            <FadeUp as="p" delay={0.1} className="mt-3 max-w-[56ch] text-muted-foreground">
+              {t("seoDefinedTermSetDescription")}
+            </FadeUp>
+          </div>
 
-      {/* Loading State */}
-      {isLoading ? (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="size-8 animate-spin text-muted-foreground" />
-        </div>
-      ) : (
-        <>
-          {/* Search and Filters */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <div className="flex w-full min-w-0 flex-none flex-col items-stretch gap-3 sm:w-auto sm:items-end">
+            <div className="relative w-full sm:w-72">
+              <Search className="absolute left-1 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
               <input
                 type="text"
                 placeholder={t("searchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-10 pl-9 pr-3 rounded-md border border-input bg-transparent text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="w-full border-0 border-b-[3px] border-foreground bg-transparent py-2 pl-6 text-base placeholder:text-muted-foreground focus-visible:outline-none"
               />
             </div>
-            <Select
-              value={selectedCategory}
-              onValueChange={(v) =>
-                setSelectedCategory(v as typeof selectedCategory)
-              }
-            >
-              <SelectTrigger className="w-full sm:w-56">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder={t("categoryPlaceholder")} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{t("allCategories")}</SelectItem>
-                {categories.map((cat) => (
-                  <SelectItem key={cat.id} value={cat.id}>
-                    {getCategoryLabel(cat.id)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Results count and active filters */}
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-            <span>
-              {t("resultCount", { count: filteredTerms.length })}
-            </span>
-            {selectedCategory !== "all" && (
-              <Badge variant="secondary" className="ml-2">
-                {getCategoryLabel(selectedCategory)}
+            <div className="flex w-full min-w-0 gap-1.5 overflow-x-auto font-mono text-[11px] tracking-[0.08em] uppercase">
+              <button
+                type="button"
+                onClick={() => setSelectedCategory("all")}
+                className={cn(
+                  "shrink-0 px-2.5 py-2",
+                  selectedCategory === "all"
+                    ? "bg-ink text-paper"
+                    : "border border-filet text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {t("allCategories")}
+              </button>
+              {categories.map((cat) => (
                 <button
-                  onClick={() => setSelectedCategory("all")}
-                  className="ml-1 hover:text-foreground"
-                  aria-label={t("removeCategoryFilter")}
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={cn(
+                    "shrink-0 px-2.5 py-2",
+                    selectedCategory === cat.id
+                      ? "bg-ink text-paper"
+                      : "border border-filet text-muted-foreground hover:text-foreground",
+                  )}
                 >
-                  x
+                  {getCategoryLabel(cat.id)}
                 </button>
-              </Badge>
-            )}
-            {searchQuery && (
-              <Badge variant="secondary" className="ml-1">
-                "{searchQuery}"
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="ml-1 hover:text-foreground"
-                  aria-label={t("clearSearch")}
-                >
-                  x
-                </button>
-              </Badge>
-            )}
+              ))}
+            </div>
           </div>
+        </div>
 
-          {/* Terms List - Grouped alphabetically */}
-          {filteredTerms.length > 0 ? (
-            <div className="space-y-8">
-              {Object.keys(groupedTerms)
-                .sort()
-                .map((letter) => (
-                  <div key={letter}>
-                    <h2 className="text-lg font-semibold text-primary mb-4 sticky top-14 bg-background/95 backdrop-blur-sm py-2 z-10 border-b shadow-sm">
-                      {letter}
-                    </h2>
-                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                      {groupedTerms[letter].map((term) => (
-                        <GlossaryCard key={`${term.id}-${i18n.language}`} term={term} />
-                      ))}
+        {/* Loading State */}
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="size-8 animate-spin text-muted-foreground" />
+          </div>
+        ) : (
+          <>
+            {/* Results count and active filters */}
+            <div className="mt-4 flex items-center gap-2 font-mono text-xs text-muted-foreground">
+              <span>{t("resultCount", { count: filteredTerms.length })}</span>
+              {selectedCategory !== "all" && (
+                <Badge variant="secondary">
+                  {getCategoryLabel(selectedCategory)}
+                  <button
+                    onClick={() => setSelectedCategory("all")}
+                    className="ml-1 hover:text-foreground"
+                    aria-label={t("removeCategoryFilter")}
+                  >
+                    x
+                  </button>
+                </Badge>
+              )}
+              {searchQuery && (
+                <Badge variant="secondary">
+                  "{searchQuery}"
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="ml-1 hover:text-foreground"
+                    aria-label={t("clearSearch")}
+                  >
+                    x
+                  </button>
+                </Badge>
+              )}
+            </div>
+
+            {/* Alphabet index + term rows */}
+            {filteredTerms.length > 0 ? (
+              <div className="mt-4 grid gap-8 md:grid-cols-[100px_1fr]">
+                <nav
+                  aria-label={t("title")}
+                  className="hidden flex-col gap-1 border-r border-filet pr-4 font-mono text-sm md:flex md:sticky md:top-20 md:self-start"
+                >
+                  {sortedLetters.map((letter) => (
+                    <a
+                      key={letter}
+                      href={`#letter-${letter}`}
+                      className="px-2 py-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground"
+                    >
+                      {letter} · {groupedTerms[letter].length}
+                    </a>
+                  ))}
+                </nav>
+
+                <div className="space-y-6">
+                  {sortedLetters.map((letter) => (
+                    <div key={letter} id={`letter-${letter}`} className="scroll-mt-20">
+                      <div className="font-mono text-[11px] tracking-[0.16em] uppercase text-primary">
+                        {letter}
+                      </div>
+                      <div className="flex flex-col">
+                        {groupedTerms[letter].map((term) => (
+                          <GlossaryCard key={`${term.id}-${i18n.language}`} term={term} />
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
-            </div>
-          ) : (
-            /* Empty state */
-            <div className="text-center py-12">
-              <p className="text-muted-foreground mb-4">
-                {t("noResults")}
-                {searchQuery && ` ${t("noResultsForQuery", { query: searchQuery })}`}
-                {selectedCategory !== "all" &&
-                  ` ${t("noResultsInCategory", { category: getCategoryLabel(selectedCategory) })}`}
-              </p>
-              <Button variant="outline" onClick={handleClearFilters}>
-                {t("resetFilters")}
-              </Button>
-            </div>
-          )}
-        </>
-      )}
-    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              /* Empty state */
+              <div className="py-12 text-center">
+                <p className="mb-4 text-muted-foreground">
+                  {t("noResults")}
+                  {searchQuery && ` ${t("noResultsForQuery", { query: searchQuery })}`}
+                  {selectedCategory !== "all" &&
+                    ` ${t("noResultsInCategory", { category: getCategoryLabel(selectedCategory) })}`}
+                </p>
+                <Button variant="outline" onClick={handleClearFilters}>
+                  {t("resetFilters")}
+                </Button>
+              </div>
+            )}
+          </>
+        )}
+      </PageContainer>
     </>
   );
 }

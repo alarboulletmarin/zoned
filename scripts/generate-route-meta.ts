@@ -141,6 +141,21 @@ const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
     image: "og-learn.png",
   },
   {
+    path: "/methodology/polarise",
+    title: "Pourquoi le 80/20 marche",
+    description:
+      "Ce que montrent les études sur la répartition d'entraînement des athlètes d'endurance, pourquoi le modèle polarisé fonctionne, et ses limites.",
+    image: "og-learn.png",
+    ogType: "article",
+  },
+  {
+    path: "/methodology/sources",
+    title: "Sources scientifiques",
+    description:
+      "Les références citées par Zoned : auteurs, année, revue, et à quoi chacune sert dans l'app. Aucun conseil médical, code ouvert sous licence MIT.",
+    image: "og-learn.png",
+  },
+  {
     path: "/glossary",
     title: "Glossaire du running",
     description: `${glossaryTerms} termes d'entraînement en endurance expliqués sur 9 catégories : zones, physiologie, nutrition, récupération et compétition. Bilingue.`,

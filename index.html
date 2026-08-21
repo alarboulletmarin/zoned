@@ -74,12 +74,19 @@
     <link rel="dns-prefetch" href="https://vitals.vercel-insights.com" />
     <link rel="preconnect" href="https://vitals.vercel-insights.com" crossorigin />
 
-    <!-- Self-hosted critical font: single variable woff2 (latin, 300–700)
-         covers every weight incl. the hero h1 (LCP element). crossorigin is
-         required for font preloads even same-origin (CORS-mode fetch). -->
+    <!-- Self-hosted critical fonts: General Sans 400 (body) and 700 (hero h1,
+         the LCP element on most pages). crossorigin is required for font
+         preloads even same-origin (CORS-mode fetch). -->
     <link
       rel="preload"
-      href="/fonts/space-grotesk-latin.woff2"
+      href="/fonts/general-sans-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/general-sans-700.woff2"
       as="font"
       type="font/woff2"
       crossorigin

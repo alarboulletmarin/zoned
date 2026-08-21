@@ -10,7 +10,7 @@
 import { GithubIcon } from "@/components/icons";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import Logo from "@/assets/logo.svg?react";
+import { Wordmark } from "./Wordmark";
 
 // Package version is injected at build time by Vite via __APP_VERSION__.
 // Falls back to "dev" when the constant is missing (eg. unit tests).
@@ -21,11 +21,11 @@ const APP_VERSION =
     : "dev";
 
 export function Footer() {
-  const { t } = useTranslation(["homepage", "common"]);
+  const { t } = useTranslation("homepage");
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative w-screen left-1/2 -ml-[50vw] mt-8 border-t border-border bg-card">
+    <footer className="relative w-screen left-1/2 -ml-[50vw] mt-8 border-t border-filet bg-card">
       <div className="mx-auto max-w-6xl px-4 md:px-6 lg:px-8 py-10 md:py-16">
         {/* Mobile (md-): brand + tagline span full width on top, the three
             link columns sit side by side underneath. Desktop (md+): the
@@ -37,10 +37,7 @@ export function Footer() {
               className="inline-flex items-center gap-2 mb-3 md:mb-4"
               aria-label="Zoned"
             >
-              <Logo className="w-9 h-4.5 md:w-10 md:h-5" />
-              <span className="font-bold text-base">
-                {t("common:app.name")}
-              </span>
+              <Wordmark className="text-lg" />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {t("homepage:home.footer.tagline")}

@@ -12,7 +12,7 @@ const HR_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
 };
 
 // VMA Zone percentages (% of VMA)
-const VMA_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
+export const VMA_ZONE_PERCENTAGES: Record<ZoneNumber, [number, number]> = {
   1: [50, 60],
   2: [60, 75],
   3: [75, 85],

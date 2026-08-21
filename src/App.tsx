@@ -49,6 +49,8 @@ const ContributePage = lazyPage(() => import("@/pages/ContributePage").then(m =>
 const AboutPage = lazyPage(() => import("@/pages/AboutPage").then(m => ({ default: m.AboutPage })));
 const LearnPage = lazyPage(() => import("@/pages/LearnPage").then(m => ({ default: m.LearnPage })));
 const MethodologyPage = lazyPage(() => import("@/pages/MethodologyPage").then(m => ({ default: m.MethodologyPage })));
+const MethodologyPolarisePage = lazyPage(() => import("@/pages/MethodologyPolarisePage").then(m => ({ default: m.MethodologyPolarisePage })));
+const MethodologySourcesPage = lazyPage(() => import("@/pages/MethodologySourcesPage").then(m => ({ default: m.MethodologySourcesPage })));
 const ArticlePage = lazyPage(() => import("@/pages/ArticlePage").then(m => ({ default: m.ArticlePage })));
 const GlossaryPage = lazyPage(() => import("@/pages/GlossaryPage").then(m => ({ default: m.GlossaryPage })));
 const GlossaryTermPage = lazyPage(() => import("@/pages/GlossaryTermPage").then(m => ({ default: m.GlossaryTermPage })));
@@ -295,6 +297,8 @@ function App() {
                           <Route path="/about" element={<AboutPage />} />
                           <Route path="/learn" element={<LearnPage />} />
                           <Route path="/methodology" element={<MethodologyPage />} />
+                          <Route path="/methodology/polarise" element={<MethodologyPolarisePage />} />
+                          <Route path="/methodology/sources" element={<MethodologySourcesPage />} />
                           <Route path="/learn/:slug" element={<ArticlePage />} />
                           <Route path="/collections" element={<CollectionsPage />} />
                           <Route path="/collections/:slug" element={<CollectionDetailPage />} />
