@@ -1,10 +1,14 @@
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Loader2 } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
 import { CollectionCard } from "@/components/domain/CollectionCard";
 import { useCollections } from "@/hooks/useCollections";
+import { useWorkouts } from "@/hooks/useWorkouts";
+import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { cn } from "@/lib/utils";
 import { StaggerGrid, StaggerItem } from "@/components/editorial";
+import type { AnyWorkoutTemplate } from "@/types";
 
 /** Collections grouped into small editorial sections, mirroring the
  *  calculators hub: a mono caption per group + the matching cards. */
@@ -52,6 +56,17 @@ export function CollectionsPage() {
   const isEn = i18n.language?.startsWith("en") ?? false;
 
   const collections = useCollections();
+  const { workouts } = useWorkouts();
+  const { workouts: strengthWorkouts } = useStrengthWorkouts();
+
+  // Resolved once here (both loaders are cached singletons) and handed down
+  // to every card, rather than each card loading the catalogue on its own.
+  const workoutsById = useMemo(() => {
+    const map = new Map<string, AnyWorkoutTemplate>();
+    for (const w of workouts) map.set(w.id, w);
+    for (const w of strengthWorkouts) map.set(w.id, w);
+    return map;
+  }, [workouts, strengthWorkouts]);
 
   return (
     <>
@@ -84,7 +99,7 @@ export function CollectionsPage() {
             {t("common:nav.collections")}
           </p>
           <h1 className="font-sans font-bold uppercase leading-[0.9] tracking-[-0.05em] text-[36px] sm:text-[44px] md:text-[52px] mt-2">
-            {t("collections.title")}
+            {t("collections.count", { count: collections.length })}
           </h1>
           <p className="font-mono text-xs text-muted-foreground mt-2.5 max-w-[52ch]">
             {t("collections.subtitle")}
@@ -119,7 +134,7 @@ export function CollectionsPage() {
                     <StaggerGrid className={cn("grid gap-3 sm:gap-4", "grid-cols-2 lg:grid-cols-3")}>
                       {groupItems.map((collection) => (
                         <StaggerItem key={collection.id}>
-                          <CollectionCard collection={collection} />
+                          <CollectionCard collection={collection} workoutsById={workoutsById} />
                         </StaggerItem>
                       ))}
                     </StaggerGrid>

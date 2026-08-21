@@ -640,6 +640,9 @@
   "collections": {
     "title": "Collections",
     "subtitle": "Des parcours thématiques pour chaque objectif",
+    "count_one": "{{count}} collection",
+    "count_other": "{{count}} collections",
+    "zoneMix": "Répartition des zones : {{zones}}",
     "workoutCount_one": "{{count}} séance",
     "workoutCount_other": "{{count}} séances",
     "viewAll": "Voir toutes les collections",

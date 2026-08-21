@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -18,6 +19,9 @@ import { InteractiveCard } from "@/components/editorial";
 import { cn } from "@/lib/utils";
 import type { Collection } from "@/data/collections/types";
 import { usePickLang } from "@/lib/i18n-utils";
+import type { AnyWorkoutTemplate, ZoneNumber } from "@/types";
+import { getAnyWorkoutZones } from "@/lib/workoutFilters";
+import { zoneClass } from "@/lib/zoneColors";
 
 const ZONE_MAP: Record<string, number> = {
   "debuter-le-running": 1,
@@ -38,6 +42,28 @@ function getCollectionZone(slug: string): number {
   return ZONE_MAP[slug] ?? 3;
 }
 
+/** Zone mix across a collection's sessions: each workout contributes one
+ *  count per distinct zone it touches (`getAnyWorkoutZones`), strength
+ *  sessions contribute none since they carry no aerobic zone. */
+function computeZoneMix(
+  workoutIds: string[],
+  workoutsById: Map<string, AnyWorkoutTemplate>
+): { zone: ZoneNumber; percent: number }[] {
+  const counts = new Map<ZoneNumber, number>();
+  for (const id of workoutIds) {
+    const workout = workoutsById.get(id);
+    if (!workout) continue;
+    for (const zone of getAnyWorkoutZones(workout)) {
+      counts.set(zone, (counts.get(zone) ?? 0) + 1);
+    }
+  }
+  const total = [...counts.values()].reduce((sum, n) => sum + n, 0);
+  if (total === 0) return [];
+  return [...counts.entries()]
+    .sort((a, b) => a[0] - b[0])
+    .map(([zone, n]) => ({ zone, percent: (n / total) * 100 }));
+}
+
 const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
   Footprints,
   Leaf,
@@ -53,9 +79,13 @@ const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
 
 interface CollectionCardProps {
   collection: Collection;
+  /** Catalogue lookup used to compute the zone mix bar. Optional so the
+   *  card still renders (without the bar) if the caller hasn't resolved
+   *  the workouts yet. */
+  workoutsById?: Map<string, AnyWorkoutTemplate>;
 }
 
-export function CollectionCard({ collection }: CollectionCardProps) {
+export function CollectionCard({ collection, workoutsById }: CollectionCardProps) {
   const { t } = useTranslation("common");
   const pick = usePickLang();
 
@@ -66,12 +96,18 @@ export function CollectionCard({ collection }: CollectionCardProps) {
 
   const zone = getCollectionZone(collection.slug);
 
+  const zoneMix = useMemo(
+    () =>
+      workoutsById ? computeZoneMix(collection.workoutIds, workoutsById) : [],
+    [collection.workoutIds, workoutsById]
+  );
+
   return (
     <Link to={`/collections/${collection.slug}`} className="block h-full">
       <InteractiveCard
         accent={`var(--zone-${zone})`}
         className={cn(
-          "bg-card h-full p-4 sm:p-6",
+          "bg-card border-t border-filet h-full p-4 sm:p-6",
           "hover:shadow-[6px_6px_0_var(--shadow-hard)] transition-shadow duration-150 ease-out",
           "focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
         )}
@@ -91,6 +127,23 @@ export function CollectionCard({ collection }: CollectionCardProps) {
               {description}
             </p>
           </div>
+          {zoneMix.length > 0 && (
+            <div
+              className="hidden sm:flex h-1.5 w-full gap-[3px]"
+              role="img"
+              aria-label={t("collections.zoneMix", {
+                zones: zoneMix.map((entry) => `Z${entry.zone}`).join(", "),
+              })}
+            >
+              {zoneMix.map((entry) => (
+                <div
+                  key={entry.zone}
+                  className={zoneClass(entry.zone, "bg")}
+                  style={{ flex: entry.percent }}
+                />
+              ))}
+            </div>
+          )}
           <div className="hidden sm:flex flex-wrap items-center justify-center gap-1.5">
             <Badge variant="secondary" className="text-xs">
               {t("collections.workoutCount", { count: workoutCount })}

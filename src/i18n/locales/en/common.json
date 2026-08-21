@@ -640,6 +640,9 @@
   "collections": {
     "title": "Collections",
     "subtitle": "Themed workout paths for every goal",
+    "count_one": "{{count}} collection",
+    "count_other": "{{count}} collections",
+    "zoneMix": "Zone mix: {{zones}}",
     "workoutCount_one": "{{count}} workout",
     "workoutCount_other": "{{count}} workouts",
     "viewAll": "View all collections",
