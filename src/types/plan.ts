@@ -269,7 +269,11 @@ export const PHASE_META: Record<
   {
     label: string;
     labelEn: string;
+    /** Flat zone background \u2014 a phase reads as the zone it trains hardest,
+     *  not an arbitrary swatch ("la couleur ne veut dire que la zone"). */
     color: string;
+    /** Legible foreground for text sitting on `color`. */
+    textOn: string;
     description: string;
     descriptionEn: string;
   }
@@ -277,35 +281,40 @@ export const PHASE_META: Record<
   base: {
     label: "Base",
     labelEn: "Base",
-    color: "bg-blue-500",
+    color: "bg-zone-2",
+    textOn: "text-zone-2-text",
     description: "Construction de l'endurance fondamentale",
     descriptionEn: "Building fundamental endurance",
   },
   build: {
     label: "Construction",
     labelEn: "Build",
-    color: "bg-yellow-500",
+    color: "bg-zone-3",
+    textOn: "text-zone-3-text",
     description: "Augmentation progressive de l'intensit\u00e9",
     descriptionEn: "Progressive intensity increase",
   },
   peak: {
     label: "Pic",
     labelEn: "Peak",
-    color: "bg-orange-500",
+    color: "bg-zone-4",
+    textOn: "text-zone-4-text",
     description: "Aff\u00fbtage des allures sp\u00e9cifiques",
     descriptionEn: "Sharpening race-specific paces",
   },
   taper: {
     label: "Aff\u00fbtage",
     labelEn: "Taper",
-    color: "bg-green-500",
+    color: "bg-zone-5",
+    textOn: "text-zone-5-text",
     description: "R\u00e9duction du volume, fra\u00eecheur maximale",
     descriptionEn: "Volume reduction, maximum freshness",
   },
   recovery: {
     label: "R\u00e9cup\u00e9ration",
     labelEn: "Recovery",
-    color: "bg-slate-400",
+    color: "bg-zone-1",
+    textOn: "text-zone-1-text",
     description: "Semaine de r\u00e9cup\u00e9ration active",
     descriptionEn: "Active recovery week",
   },

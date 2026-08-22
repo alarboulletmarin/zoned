@@ -4,14 +4,37 @@ import { cn } from "@/lib/utils";
 import { Star, Flag, Clock, Trash2, Eye, ChevronLeft, ChevronRight, Dumbbell, Dices, Lock, LockOpen, Route as RouteIcon } from "@/components/icons";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
-import type { ZoneNumber } from "@/types";
+import type { AnyWorkoutTemplate, ZoneNumber } from "@/types";
+import { getDominantZone, isRunningWorkout } from "@/types";
 import { zoneClass } from "@/lib/zoneColors";
 import { computeWeekKm, computeWeekDuration } from "@/lib/planStats";
-import { formatDurationMinutes } from "@/components/visualization/transforms";
+import { formatDurationMinutes, SessionIntensityBar } from "@/components/visualization";
 import { usePickLang } from "@/lib/i18n-utils";
 import { toast } from "sonner";
 import { WeekGuidancePanel } from "@/components/domain/WeekGuidancePanel";
 import { sessionColor } from "@/lib/sessionColors";
+import { ZoneBadge } from "@/components/domain/ZoneBadge";
+import { useSettings } from "@/hooks/useSettings";
+import { formatPaceWithUnit, formatDistanceWithUnit } from "@/lib/units";
+
+/** Pace + distance line for a session row ("4:06-4:18/km · 12,4 km"),
+ *  built from data the plan generator already computes — no new logic. */
+function sessionDetailLine(
+  session: TrainingPlan["weeks"][number]["sessions"][number],
+  unit: "metric" | "imperial",
+): string {
+  const parts: string[] = [];
+  const primary = session.paceNotes?.[0];
+  if (primary) {
+    parts.push(
+      `${formatPaceWithUnit(primary.paceMinKm, unit)}–${formatPaceWithUnit(primary.paceMaxKm, unit)}`,
+    );
+  }
+  if (session.targetDistanceKm && session.targetDistanceKm > 0) {
+    parts.push(formatDistanceWithUnit(session.targetDistanceKm, unit));
+  }
+  return parts.join(" · ");
+}
 
 /** Placeholder sessions (race day, cross-training activities) have no catalog
  *  workout behind them, so there is nothing to draw a replacement from. */
@@ -32,6 +55,9 @@ interface PlanWeeklyViewProps {
   workoutNames: Record<string, string>;
   /** Optional zone/TSS per workout id — adds a meta line to each card. */
   workoutMeta?: Record<string, WorkoutCardMeta>;
+  /** Full workout templates by id — powers the per-row intensity bar and,
+   *  when `workoutMeta` doesn't already carry a zone, the zone badge. */
+  workoutTemplates?: Record<string, AnyWorkoutTemplate>;
   currentWeek: number;
   initialWeek?: number;
   isEn: boolean;
@@ -68,6 +94,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
   plan,
   workoutNames,
   workoutMeta,
+  workoutTemplates,
   currentWeek,
   initialWeek,
   isEn,
@@ -90,6 +117,7 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
 }: PlanWeeklyViewProps) {
   const { t } = useTranslation(["plan", "library"]);
   const pickLang = usePickLang();
+  const { settings } = useSettings();
   // ── Week navigation state ──────────────────────────────────────
   const [selectedWeek, setSelectedWeek] = useState(Math.max(1, initialWeek ?? currentWeek));
 
@@ -445,10 +473,6 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
     () => [0, 1, 2, 3, 4, 5, 6].map((i) => t(`daysShort.${i}`)),
     [t],
   );
-  const dayHeadersFull = useMemo(
-    () => [0, 1, 2, 3, 4, 5, 6].map((i) => t(`days.${i}`)),
-    [t],
-  );
 
   // ── Render ────────────────────────────────────────────────────
 
@@ -674,8 +698,8 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
               ))}
             </div>
 
-            {/* Desktop: single 7-column row */}
-            <div className="hidden md:grid md:grid-cols-7 md:gap-2 md:items-start">
+            {/* Desktop: one full-width row per day */}
+            <div className="hidden md:flex md:flex-col">
               {Array.from({ length: 7 }, (_, dayIndex) => {
                 let dayOfMonth: number | null = null;
                 let monthLabel = "";
@@ -701,12 +725,14 @@ export const PlanWeeklyView = memo(function PlanWeeklyView({
                     dayIndex={dayIndex}
                     weekData={weekData}
                     selectedWeek={selectedWeek}
-                    dayLabel={dayHeadersFull[dayIndex]}
+                    dayLabel={dayHeadersShort[dayIndex]}
                     dayOfMonth={dayOfMonth}
                     monthLabel={monthLabel}
                     isToday={isToday}
                     workoutNames={workoutNames}
                     workoutMeta={workoutMeta}
+                    workoutTemplates={workoutTemplates}
+                    unit={settings.unitSystem}
                     dropTarget={dropTarget}
                     draggedSession={draggedSession}
                     isDesktop
@@ -896,6 +922,10 @@ interface DayCellProps {
   isToday?: boolean;
   workoutNames: Record<string, string>;
   workoutMeta?: Record<string, WorkoutCardMeta>;
+  /** Full templates, used by the desktop row's intensity bar + zone fallback. */
+  workoutTemplates?: Record<string, AnyWorkoutTemplate>;
+  /** Unit system for the desktop row's pace/distance detail line. */
+  unit?: "metric" | "imperial";
   dropTarget: { weekNumber: number; day: number } | null;
   draggedSession: { weekNumber: number; sessionIndex: number } | null;
   isDesktop?: boolean;
@@ -944,6 +974,8 @@ const DayCell = memo(function DayCell({
   isToday,
   workoutNames,
   workoutMeta,
+  workoutTemplates,
+  unit = "metric",
   dropTarget,
   draggedSession,
   isDesktop,
@@ -975,6 +1007,305 @@ const DayCell = memo(function DayCell({
   const scanContent = renderScanCell?.(dayIndex) ?? null;
   const isDropHere = dropTarget?.weekNumber === selectedWeek && dropTarget?.day === dayIndex;
 
+  // ── Desktop: one full-width row per session (or a rest row), matching the
+  // "vue Semaine" reference — density and detail over a compact card grid. ──
+  if (isDesktop) {
+    return (
+      <div
+        data-drop-id={`${selectedWeek}-${dayIndex}`}
+        onDragOver={(e) => onDragOver(e, selectedWeek, dayIndex)}
+        onDragLeave={onDragLeave}
+        onDrop={(e) => onDrop(e, selectedWeek, dayIndex)}
+        className={cn(
+          "transition-colors",
+          isDropHere && "ring-2 ring-inset ring-primary/50 bg-primary/5",
+          isBlockedDay && "bg-[repeating-linear-gradient(135deg,transparent,transparent_8px,var(--muted)_8px,var(--muted)_10px)]",
+        )}
+      >
+        {scanContent ? (
+          <div className="border-t border-filet py-3.5 overflow-hidden rounded-none bg-background/85" aria-hidden="true">
+            {scanContent}
+          </div>
+        ) : sessions.length === 0 ? (
+          <div className="group flex items-center gap-4 border-t border-filet py-3.5">
+            <div className="w-[104px] shrink-0 font-mono text-[11px] tracking-[0.1em] uppercase text-foreground">
+              {dayLabel} {dayOfMonth}
+              {isBlockedDay && (
+                <span className="mt-1 block text-[10px] font-normal normal-case text-muted-foreground">
+                  {t("unavailability.blocked")}
+                </span>
+              )}
+            </div>
+            <div className="flex-1 min-w-0 text-sm text-muted-foreground">
+              {t("library:weekly.kinds.rest")}
+            </div>
+            <div className="hidden w-[130px] shrink-0 lg:block" />
+            <div className="w-16 shrink-0" />
+            <div className="flex w-[130px] shrink-0 justify-end">
+              {onAddToDay && !isBlockedDay && (
+                <button
+                  type="button"
+                  onClick={() => onAddToDay(selectedWeek, dayIndex)}
+                  className="font-mono text-[10px] uppercase tracking-[0.08em] text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {t("calendar.dropHere")}
+                </button>
+              )}
+            </div>
+          </div>
+        ) : (
+          sessions.map((session, sIdx) => {
+            const isRaceDay = session.workoutId === "__race_day__";
+            const isIntermediateRace = session.workoutId === "__intermediate_race__";
+            const isSpecialSession = isRaceDay || isIntermediateRace;
+            const originalIndex = weekData.sessions.indexOf(session);
+            const isDragging =
+              draggedSession?.weekNumber === selectedWeek &&
+              draggedSession?.sessionIndex === originalIndex;
+            const sessionName = workoutNames[session.workoutId] || session.workoutId;
+            const isStrength = session.sessionType === "strength" || session.workoutId?.startsWith("STR-");
+            const meta = workoutMeta?.[session.workoutId];
+            const template = !isSpecialSession ? workoutTemplates?.[session.workoutId] : undefined;
+            const runningTemplate = template && isRunningWorkout(template) ? template : null;
+            const zone: ZoneNumber | undefined = !isStrength
+              ? (runningTemplate ? getDominantZone(runningTemplate) : (meta?.zone as ZoneNumber | undefined))
+              : undefined;
+            const isKey = session.isKeySession && !isSpecialSession;
+            const statusLabel = isKey
+              ? t("view.keySession")
+              : session.status === "completed"
+                ? t("completion.completed")
+                : session.status === "modified"
+                  ? t("completion.modified")
+                  : session.status === "skipped"
+                    ? t("completion.skipped")
+                    : t("completion.planned");
+            const detailLine = !isSpecialSession ? sessionDetailLine(session, unit) : "";
+
+            return (
+              <div
+                key={sIdx}
+                draggable={!isSpecialSession}
+                onDragStart={
+                  isSpecialSession ? undefined : (e) => onDragStart(e, selectedWeek, originalIndex)
+                }
+                onDragEnd={isSpecialSession ? undefined : onDragEnd}
+                onTouchStart={
+                  isSpecialSession
+                    ? undefined
+                    : (e) => onTouchStart(e, selectedWeek, originalIndex, session.workoutId)
+                }
+                onTouchMove={isSpecialSession ? undefined : onTouchMove}
+                onTouchEnd={isSpecialSession ? undefined : onTouchEnd}
+                onContextMenu={
+                  isSpecialSession
+                    ? undefined
+                    : (e: React.MouseEvent) => {
+                        e.preventDefault();
+                        setContextMenu({
+                          x: e.clientX,
+                          y: e.clientY,
+                          weekNumber: selectedWeek,
+                          sessionIndex: originalIndex,
+                          workoutId: session.workoutId,
+                        });
+                      }
+                }
+                style={isSpecialSession ? undefined : { touchAction: "none", WebkitUserSelect: "none", userSelect: "none" }}
+                className={cn(
+                  "group flex items-center gap-4 border-t border-filet py-3.5 transition-colors",
+                  !isSpecialSession && "cursor-grab active:cursor-grabbing",
+                  isDragging && "opacity-40",
+                  isKey && "bg-accent-acid text-ink",
+                )}
+              >
+                {isRaceDay ? (
+                  <div className="flex flex-1 items-center justify-center gap-2 py-1">
+                    <Flag className="size-4 text-primary" />
+                    <span className="text-sm font-bold text-primary">{t("calendar.race")}</span>
+                  </div>
+                ) : isIntermediateRace ? (
+                  <div className="flex flex-1 items-center justify-center gap-2 py-1">
+                    <Flag className="size-4 text-poster-red" />
+                    <span className="font-mono text-xs font-bold uppercase tracking-[0.06em] text-poster-red">
+                      {weekData?.intermediateRace?.raceDistance
+                        ? pickLang(RACE_DISTANCE_META[weekData.intermediateRace.raceDistance], "label")
+                        : t("intermediateGoals.raceDayLabel")}
+                    </span>
+                    {weekData?.intermediateRace?.priority && (
+                      <span className={cn(
+                        "font-mono text-[10px] font-bold uppercase tracking-[0.06em]",
+                        weekData.intermediateRace.priority === "A" && "text-poster-red",
+                        weekData.intermediateRace.priority === "B" && "text-zone-4",
+                        weekData.intermediateRace.priority === "C" && "text-muted-foreground",
+                      )}>
+                        {t(`intermediateGoals.badge.${weekData.intermediateRace.priority}`)}
+                      </span>
+                    )}
+                  </div>
+                ) : (
+                  <>
+                    {/* Day + status */}
+                    <div className="w-[104px] shrink-0">
+                      <div className={cn("font-mono text-[11px] tracking-[0.1em] uppercase", isKey ? "text-ink" : "text-foreground")}>
+                        {sIdx === 0 ? `${dayLabel} ${dayOfMonth ?? ""}`.trim() : ""}
+                      </div>
+                      {onToggleComplete && (
+                        <button
+                          type="button"
+                          data-completion-key={`${selectedWeek}-${originalIndex}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onToggleComplete(selectedWeek, originalIndex);
+                          }}
+                          className={cn(
+                            "mt-1 font-mono text-[10px] uppercase tracking-[0.08em] transition-colors",
+                            isKey
+                              ? "text-ink"
+                              : session.status === "completed"
+                                ? "text-zone-2"
+                                : "text-muted-foreground hover:text-foreground",
+                          )}
+                          title={t("completion.hint")}
+                        >
+                          {statusLabel}
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Title + zone + detail */}
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-baseline gap-3">
+                        {isStrength && <Dumbbell className={cn("size-4 shrink-0", isKey ? "text-ink" : "text-foreground")} />}
+                        <span
+                          role="button"
+                          tabIndex={onSessionClick ? 0 : undefined}
+                          onClick={
+                            onSessionClick
+                              ? () => onSessionClick(selectedWeek, originalIndex, session.workoutId)
+                              : undefined
+                          }
+                          onKeyDown={
+                            onSessionClick
+                              ? (e) => {
+                                  if (e.key === "Enter")
+                                    onSessionClick(selectedWeek, originalIndex, session.workoutId);
+                                }
+                              : undefined
+                          }
+                          className={cn(
+                            "truncate font-sans text-lg font-bold uppercase leading-tight tracking-tight",
+                            session.status === "skipped" && "text-muted-foreground line-through",
+                            onSessionClick && "cursor-pointer hover:opacity-80 transition-opacity",
+                          )}
+                          title={sessionName}
+                        >
+                          {sessionName}
+                        </span>
+                        {zone != null && <ZoneBadge zone={zone} size="sm" />}
+                        {session.locked && (
+                          <Lock className={cn("size-3 shrink-0", isKey ? "text-ink" : "text-primary")} />
+                        )}
+                      </div>
+                      {detailLine && (
+                        <div className={cn("mt-1 truncate font-mono text-xs", isKey ? "text-ink/80" : "text-muted-foreground")}>
+                          {detailLine}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Intensity mini-bar */}
+                    <div className="hidden w-[130px] shrink-0 lg:block">
+                      {runningTemplate && <SessionIntensityBar workout={runningTemplate} className="h-6" />}
+                    </div>
+
+                    {/* Duration */}
+                    <div className={cn("w-16 shrink-0 text-right font-mono text-sm", isKey ? "text-ink" : "text-muted-foreground")}>
+                      {session.estimatedDurationMin > 0 && formatDurationMinutes(session.estimatedDurationMin)}
+                    </div>
+
+                    {/* Actions */}
+                    <div
+                      className={cn(
+                        "flex w-[130px] shrink-0 items-center justify-end gap-3 font-mono text-[10px] uppercase tracking-[0.08em]",
+                        isKey ? "text-ink" : "text-muted-foreground",
+                      )}
+                    >
+                      {onToggleLock && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onToggleLock(selectedWeek, originalIndex);
+                          }}
+                          aria-pressed={session.locked === true}
+                          className={cn(
+                            "shrink-0 transition-colors hover:text-primary",
+                            session.locked
+                              ? "block text-primary"
+                              : "hidden group-hover:block",
+                          )}
+                          title={
+                            session.locked
+                              ? t("library:weekly.slot.lockedHint")
+                              : t("library:weekly.slot.lock")
+                          }
+                          aria-label={
+                            session.locked
+                              ? t("library:weekly.slot.unlock")
+                              : t("library:weekly.slot.lock")
+                          }
+                        >
+                          {session.locked ? <Lock className="size-3.5" /> : <LockOpen className="size-3.5" />}
+                        </button>
+                      )}
+                      {onRedraw && isRedrawable(session.workoutId) && !session.locked && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onRedraw(selectedWeek, originalIndex);
+                          }}
+                          className="hover:text-foreground transition-colors"
+                        >
+                          {t("weeklyView.replaceAction")}
+                        </button>
+                      )}
+                      {onFindRoute && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onFindRoute(selectedWeek, originalIndex);
+                          }}
+                          className="hover:text-foreground transition-colors"
+                        >
+                          {t("weeklyView.routeAction")}
+                        </button>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })
+        )}
+        {!scanContent && sessions.length > 0 && onAddToDay && !isBlockedDay && (
+          <div className="group flex items-center gap-4 border-t border-filet py-1.5">
+            <div className="w-[104px] shrink-0" />
+            <button
+              type="button"
+              onClick={() => onAddToDay(selectedWeek, dayIndex)}
+              className="font-mono text-[10px] uppercase tracking-[0.08em] text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
+            >
+              {t("calendar.dropHere")}
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div
       data-drop-id={`${selectedWeek}-${dayIndex}`}
@@ -983,7 +1314,7 @@ const DayCell = memo(function DayCell({
       onDrop={(e) => onDrop(e, selectedWeek, dayIndex)}
       className={cn(
         "rounded-none bg-secondary/30 p-1.5 transition-colors",
-        isDesktop ? "min-h-[120px]" : (singleWeek ? "min-h-[120px]" : "min-h-[80px]"),
+        singleWeek ? "min-h-[120px]" : "min-h-[80px]",
         isDropHere && "ring-2 ring-primary/50 bg-primary/5",
         isBlockedDay && "bg-muted/50 bg-[repeating-linear-gradient(135deg,transparent,transparent_4px,rgba(0,0,0,0.04)_4px,rgba(0,0,0,0.04)_6px)]",
       )}
@@ -996,7 +1327,7 @@ const DayCell = memo(function DayCell({
       <span
         className={cn(
           "font-semibold text-muted-foreground block",
-          isDesktop ? "text-xs" : "text-[10px]",
+          "text-[10px]",
           dayOfMonth != null ? "mb-0" : "mb-1",
         )}
       >
@@ -1029,10 +1360,7 @@ const DayCell = memo(function DayCell({
           <button
             type="button"
             onClick={() => onAddToDay(selectedWeek, dayIndex)}
-            className={cn(
-              "group/rest w-full rounded-none bg-card/50 border-2 border-dashed border-filet flex flex-col items-center justify-center gap-0.5 font-mono text-muted-foreground active:text-primary hover:text-foreground hover:border-foreground transition-colors",
-              isDesktop ? "p-4" : "p-3",
-            )}
+            className="group/rest w-full rounded-none bg-card/50 border-2 border-dashed border-filet flex flex-col items-center justify-center gap-0.5 font-mono text-muted-foreground active:text-primary hover:text-foreground hover:border-foreground transition-colors p-3"
           >
             {singleWeek && (
               <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-muted-foreground transition-colors group-hover/rest:text-foreground">
@@ -1099,8 +1427,7 @@ const DayCell = memo(function DayCell({
           >
             <div
                     className={cn(
-                      "rounded-none mb-1 relative group",
-                      isDesktop ? "p-2" : "p-1.5",
+                      "rounded-none mb-1 relative group p-1.5",
                 isIntermediateRace
                   ? "bg-card border-2 border-poster-red"
                   : isStrength
@@ -1339,7 +1666,6 @@ const DayCell = memo(function DayCell({
                       // single-week board has room for a third line.
                       "text-[10px] leading-tight font-medium",
                       singleWeek ? "line-clamp-3" : "line-clamp-2",
-                      isDesktop && "text-[11px]",
                       session.status === "skipped" && "line-through text-muted-foreground",
                       onSessionClick && "cursor-pointer hover:text-primary transition-colors",
                     )}

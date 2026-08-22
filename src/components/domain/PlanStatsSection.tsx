@@ -260,7 +260,8 @@ export const PlanStatsSection = memo(function PlanStatsSection({ plan, currentWe
                 {t("stats.thisWeek")}
               </h3>
               <span className={cn("text-xs font-medium px-2 py-0.5 rounded-none",
-                PHASE_META[currentWeekData.week.phase]?.color, "text-white"
+                PHASE_META[currentWeekData.week.phase]?.color,
+                PHASE_META[currentWeekData.week.phase]?.textOn,
               )}>
                 S{currentWeekData.week.weekNumber} · {pick(PHASE_META[currentWeekData.week.phase], "label")}
               </span>

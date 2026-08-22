@@ -131,6 +131,13 @@ export function WeekViewPage() {
     return names;
   }, [catalog, pick, t]);
 
+  // Full templates — powers the weekly view's per-row intensity bar.
+  const workoutTemplates = useMemo(() => {
+    const templates: Record<string, AnyWorkoutTemplate> = {};
+    for (const w of catalog) templates[w.id] = w;
+    return templates;
+  }, [catalog]);
+
   // Desktop right-column default: the "Generate" entry (openSettings=true)
   // always opens on the generator, as before. Any other arrival on a still-
   // empty week (the "compose by hand" case, or a page reload that lost the
@@ -598,6 +605,7 @@ export function WeekViewPage() {
                 plan={plan}
                 workoutNames={workoutNames}
                 workoutMeta={workoutMeta}
+                workoutTemplates={workoutTemplates}
                 currentWeek={1}
                 initialWeek={1}
                 isEn={isEn}

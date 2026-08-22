@@ -241,6 +241,15 @@ export function PlanViewPage() {
     }
   }, [plan]);
 
+  // The "vue Semaine" keeps the add-a-session panel open by default on
+  // desktop, same as the standalone week composer (/weeks/:id) — the panel
+  // stays a permanent third column instead of a toggle the user has to find.
+  useEffect(() => {
+    if (planViewMode === "weekly") {
+      setShowWorkoutPanel(true);
+    }
+  }, [planViewMode]);
+
   // Load workout names
   useEffect(() => {
     if (!plan) return;
@@ -1129,6 +1138,7 @@ export function PlanViewPage() {
               <PlanWeeklyView
                 plan={plan}
                 workoutNames={workoutNames}
+                workoutTemplates={workoutTemplates}
                 currentWeek={currentWeek}
                 initialWeek={pendingWeeklyWeek ?? initialWeek}
                 isEn={isEn}
