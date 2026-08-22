@@ -100,7 +100,8 @@
   "showingCount": "{{visible}} sur {{total}} séances",
   "draw": {
     "title": "Tirer une séance",
-    "subtitle": "Laisse le hasard choisir ta prochaine séance dans le catalogue",
+    "subtitleCount_one": "Tu cadres, la machine tranche. {{count}} séance entre dans le tirage.",
+    "subtitleCount_other": "Tu cadres, la machine tranche. {{count}} séances entrent dans le tirage.",
     "scanning": "Scan du catalogue…",
     "draw": "Tirer une séance",
     "redraw": "Re-tirer",
@@ -111,25 +112,18 @@
     "filters": {
       "title": "Filtres",
       "discipline": "Discipline",
-      "zone": "Objectif · zone visée",
-      "maxDuration": "Durée maximale",
-      "level": "Niveau",
-      "reset": "Réinitialiser"
-    },
-    "zoneChips": {
-      "1": "Z1 · Récup",
-      "2": "Z2 · Endurance",
-      "3": "Z3 · Tempo",
-      "4": "Z4 · Seuil",
-      "5": "Z5 · VO₂max / VMA",
-      "6": "Z6 · Sprint"
+      "zone": "Zones acceptées",
+      "maxDuration": "Temps dispo",
+      "reset": "Réinitialiser",
+      "terrainShort": {
+        "flat": "Route",
+        "track": "Piste",
+        "hills": "Côtes"
+      }
     },
     "counter": {
-      "match_one": "séance correspond",
-      "match_other": "séances correspondent",
       "short_one": "{{count}} séance",
-      "short_other": "{{count}} séances",
-      "ofTotal": "sur {{total}} au catalogue"
+      "short_other": "{{count}} séances"
     },
     "metrics": {
       "duration": "Durée",

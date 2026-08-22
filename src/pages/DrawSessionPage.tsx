@@ -28,8 +28,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import { Card } from "@/components/ui/card";
-import { WorkoutCardChrome, ScanCard, DifficultyIcon } from "@/components/domain";
+import { WorkoutCardChrome, ScanCard } from "@/components/domain";
 import { FavoriteButton } from "@/components/domain/FavoriteButton";
 import { formatDurationMinutes } from "@/components/visualization";
 import { SEOHead } from "@/components/seo";
@@ -54,11 +53,7 @@ import {
 } from "@/lib/workoutFilters";
 import { exportToFIT } from "@/lib/export/fit";
 import { toast } from "sonner";
-import type {
-  AnyWorkoutTemplate,
-  Difficulty,
-  ZoneNumber,
-} from "@/types";
+import type { AnyWorkoutTemplate, ZoneNumber } from "@/types";
 import {
   getDominantZone,
   isStrengthWorkout,
@@ -73,16 +68,7 @@ import { cn } from "@/lib/utils";
 // ────────────────────────────────────────────────────────────────────────────
 
 const DURATION_MIN = 25;
-const DURATION_MAX = 300; // slider ceiling
-const DURATION_PRESETS: { label: string; value: number }[] = [
-  { label: "≤30", value: 30 },
-  { label: "≤45", value: 45 },
-  { label: "≤60", value: 60 },
-  { label: "≤90", value: 90 },
-  { label: "≤150", value: 150 },
-  { label: "≤300", value: 300 },
-  { label: "+300", value: DURATION_NO_LIMIT },
-];
+const DURATION_MAX = 300; // slider ceiling; reaching it lifts the cap entirely
 
 const DISCIPLINE_ICONS: Record<
   DrawDiscipline,
@@ -95,9 +81,8 @@ const DISCIPLINE_ICONS: Record<
 };
 
 const ZONE_NUMBERS: ZoneNumber[] = [1, 2, 3, 4, 5, 6];
-const LEVELS: Difficulty[] = ["beginner", "intermediate", "advanced", "elite"];
 // Same vocabulary as the library's terrain facet (WorkoutFilters.tsx).
-const TERRAIN_OPTIONS: TerrainFilter[] = ["flat", "hills", "track"];
+const TERRAIN_OPTIONS: TerrainFilter[] = ["flat", "track", "hills"];
 
 const HISTORY_LIMIT = 5;
 
@@ -204,7 +189,6 @@ export function DrawSessionPage() {
 
   const filtersActive = isFilterActive(filters);
   const hasMatches = filtered.length > 0;
-  const proportion = catalog.length > 0 ? filtered.length / catalog.length : 0;
 
   const clearTimeouts = useCallback(() => {
     timeoutsRef.current.forEach(clearTimeout);
@@ -313,14 +297,6 @@ export function DrawSessionPage() {
         : [...f.zones, z],
     }));
 
-  const toggleLevel = (l: Difficulty) =>
-    setFilters((f) => ({
-      ...f,
-      levels: f.levels.includes(l)
-        ? f.levels.filter((x) => x !== l)
-        : [...f.levels, l],
-    }));
-
   const toggleTerrain = (ter: TerrainFilter) =>
     setFilters((f) => ({
       ...f,
@@ -370,7 +346,7 @@ export function DrawSessionPage() {
             {t("draw.title")}
           </h1>
           <p className="font-mono text-xs text-muted-foreground mt-2.5 max-w-[52ch]">
-            {t("draw.subtitle")}
+            {t("draw.subtitleCount", { count: filtered.length })}
           </p>
           <Link
             to="/weeks"
@@ -407,32 +383,6 @@ export function DrawSessionPage() {
             )}
           >
             <div className="lg:sticky lg:top-20 space-y-6">
-              {/* Live counter */}
-              <Card className="p-4">
-                <p
-                  className="font-sans text-4xl font-bold tabular-nums leading-none"
-                  aria-live="polite"
-                >
-                  {filtered.length}
-                </p>
-                <p className="font-mono text-xs text-muted-foreground mt-1.5">
-                  {t("draw.counter.match", { count: filtered.length })}
-                </p>
-                {/* Proportion bar */}
-                <div
-                  className="mt-3 h-1.5 w-full overflow-hidden bg-muted"
-                  role="presentation"
-                >
-                  <div
-                    className="h-full bg-accent-acid transition-[width] duration-300"
-                    style={{ width: `${Math.max(proportion * 100, filtered.length > 0 ? 4 : 0)}%` }}
-                  />
-                </div>
-                <p className="mt-1.5 font-mono text-[11px] text-muted-foreground">
-                  {t("draw.counter.ofTotal", { total: catalog.length })}
-                </p>
-              </Card>
-
               {/* Discipline */}
               <FilterGroup label={t("draw.filters.discipline")}>
                 <div className="flex flex-wrap gap-2">
@@ -480,7 +430,7 @@ export function DrawSessionPage() {
                           color: `var(--zone-${z}-text)`,
                         }}
                       >
-                        {t(`draw.zoneChips.${z}`)}
+                        {`Z${z}`}
                       </button>
                     );
                   })}
@@ -495,38 +445,21 @@ export function DrawSessionPage() {
                   max={DURATION_MAX}
                   step={5}
                   onValueChange={([v]) =>
-                    setFilters((f) => ({ ...f, maxDuration: v }))
+                    setFilters((f) => ({
+                      ...f,
+                      maxDuration: v >= DURATION_MAX ? DURATION_NO_LIMIT : v,
+                    }))
                   }
                   aria-label={t("draw.filters.maxDuration")}
                 />
                 <div className="mt-1.5 flex items-center justify-between font-mono text-[11px] text-muted-foreground">
                   <span>{DURATION_MIN} min</span>
                   <span className="font-bold text-foreground">
-                    {filters.maxDuration > DURATION_MAX
+                    {filters.maxDuration >= DURATION_MAX
                       ? `+${DURATION_MAX} min`
                       : `≤ ${filters.maxDuration} min`}
                   </span>
                   <span>{DURATION_MAX} min</span>
-                </div>
-                <div className="mt-2 flex flex-wrap gap-1.5">
-                  {DURATION_PRESETS.map((p) => (
-                    <button
-                      key={p.label}
-                      type="button"
-                      onClick={() =>
-                        setFilters((f) => ({ ...f, maxDuration: p.value }))
-                      }
-                      aria-pressed={filters.maxDuration === p.value}
-                      className={cn(
-                        "border-2 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.04em] transition-colors",
-                        filters.maxDuration === p.value
-                          ? "border-transparent bg-accent-acid text-ink"
-                          : "border-foreground text-foreground/80 hover:bg-secondary",
-                      )}
-                    >
-                      {p.label}
-                    </button>
-                  ))}
                 </div>
               </FilterGroup>
 
@@ -548,33 +481,7 @@ export function DrawSessionPage() {
                             : "border-foreground text-foreground/80 hover:bg-secondary",
                         )}
                       >
-                        {t(`terrain.${ter}`)}
-                      </button>
-                    );
-                  })}
-                </div>
-              </FilterGroup>
-
-              {/* Level */}
-              <FilterGroup label={t("draw.filters.level")}>
-                <div className="flex flex-col gap-1.5">
-                  {LEVELS.map((l) => {
-                    const selected = filters.levels.includes(l);
-                    return (
-                      <button
-                        key={l}
-                        type="button"
-                        onClick={() => toggleLevel(l)}
-                        aria-pressed={selected}
-                        className={cn(
-                          "flex items-center justify-between border-2 px-3 py-2 font-mono text-[11px] tracking-[0.04em] uppercase transition-colors",
-                          selected
-                            ? "border-transparent bg-accent-acid text-ink"
-                            : "border-foreground text-foreground/80 hover:bg-secondary",
-                        )}
-                      >
-                        <span>{t(`difficulty.${l}`)}</span>
-                        <DifficultyIcon difficulty={l} className="size-4 shrink-0" />
+                        {t(`draw.filters.terrainShort.${ter}`)}
                       </button>
                     );
                   })}
