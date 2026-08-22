@@ -1,27 +1,16 @@
 import { useState, useEffect, useMemo } from "react";
-import { sessionColorClass } from "@/lib/sessionColors";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-  ArrowLeft,
-  Clock,
-  ChevronDown,
-  ChevronUp,
-  Star,
-  Flag,
-  List,
-  CalendarRange,
-} from "@/components/icons";
-import { Badge } from "@/components/ui/badge";
+import { ArrowLeft } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
 import { getPrebuiltBySlug, getAllPrebuiltPlans } from "@/data/prebuilt-plans";
 import { getWorkoutById } from "@/data/workouts";
 import { convertPrebuiltToPlan } from "@/lib/prebuiltPlanConverter";
 import { savePlan } from "@/lib/planStorage";
-import { computeWeekKm } from "@/lib/planStats";
+import { computeWeekKm, computeEnhancedPlanAnalysis } from "@/lib/planStats";
+import type { ZoneDistribution } from "@/lib/planStats";
 import { zoneClass } from "@/lib/zoneColors";
 import { PHASE_META, RACE_DISTANCE_META } from "@/types/plan";
 import type { TrainingPlan } from "@/types/plan";
@@ -29,12 +18,46 @@ import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { getDominantZone, isRunningWorkout } from "@/types";
 import type { AnyWorkoutTemplate, ZoneNumber } from "@/types";
 import { toast } from "sonner";
-import { PlanCalendar } from "@/components/domain/PlanCalendar";
-import { PlanStatsSection } from "@/components/domain/PlanStatsSection";
-import { PhaseZoneBar } from "@/components/domain/PrebuiltPlanCard";
 import { triggerStorageWarning } from "@/components/domain/StorageWarning";
-import { SESSION_TYPE_LABELS } from "@/lib/labels";
-import { useIsEnglish, usePickLang, usePickLocale } from "@/lib/i18n-utils";
+import { useIsEnglish, usePickLang } from "@/lib/i18n-utils";
+
+/** Segmented zone-mix bar — width per zone proportional to its share of
+ *  planned minutes. Shared by the header stat panel and the per-phase rows
+ *  so both read the plan's real zone composition, not an illustrative
+ *  approximation. */
+function ZoneMixBar({
+  distribution,
+  className,
+}: {
+  distribution: ZoneDistribution[];
+  className?: string;
+}) {
+  const segments = distribution.filter((z) => z.percent > 0);
+  if (segments.length === 0) return null;
+  return (
+    <div className={cn("flex gap-px", className)} aria-hidden="true">
+      {segments.map((z) => {
+        const zoneNum = Number(z.zone.slice(1)) as ZoneNumber;
+        return (
+          <div
+            key={z.zone}
+            className={zoneClass(zoneNum, "bg")}
+            style={{ flexGrow: z.percent, flexBasis: 0 }}
+            title={`${z.zone} · ${Math.round(z.percent)}%`}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+/** minutes-per-km → "5:51", metric only (this page never surfaces the
+ *  imperial toggle for its other km figures either). */
+function formatPaceValue(minPerKm: number): string {
+  const minutes = Math.floor(minPerKm);
+  const seconds = Math.round((minPerKm - minutes) * 60);
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
 
 export function PrebuiltPlanDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -42,15 +65,12 @@ export function PrebuiltPlanDetailPage() {
   const { t } = useTranslation("plan");
   const isEn = useIsEnglish();
   const pick = usePickLang();
-  const pickLocale = usePickLocale();
 
   const prebuilt = slug ? getPrebuiltBySlug(slug) : undefined;
   const [workoutNames, setWorkoutNames] = useState<Record<string, string>>({});
   const [workoutZones, setWorkoutZones] = useState<Record<string, ZoneNumber>>({});
-  const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set());
-  const [viewMode, setViewMode] = useState<"calendar" | "list">("calendar");
 
-  // Build a read-only TrainingPlan for PlanCalendar
+  // Build a read-only TrainingPlan for zone analysis
   const previewPlan: TrainingPlan | null = useMemo(() => {
     if (!prebuilt) return null;
     return {
@@ -100,24 +120,34 @@ export function PrebuiltPlanDetailPage() {
     });
   }, [prebuilt, isEn]);
 
-  // Expand first week by default
+  /** Zone-time composition for the header stat panel and, filtered to each
+   *  phase's own weeks, for the per-phase mini bars below — same function,
+   *  just scoped to a narrower week range, so the two never disagree. */
+  const [planZoneMix, setPlanZoneMix] = useState<ZoneDistribution[] | null>(null);
+  const [phaseZoneMix, setPhaseZoneMix] = useState<ZoneDistribution[][] | null>(null);
   useEffect(() => {
-    if (prebuilt && prebuilt.weeks.length > 0) {
-      setExpandedWeeks(new Set([1]));
-    }
-  }, [prebuilt]);
-
-  const toggleWeek = (weekNumber: number) => {
-    setExpandedWeeks((prev) => {
-      const next = new Set(prev);
-      if (next.has(weekNumber)) {
-        next.delete(weekNumber);
-      } else {
-        next.add(weekNumber);
-      }
-      return next;
-    });
-  };
+    if (!previewPlan || !prebuilt) return;
+    let cancelled = false;
+    (async () => {
+      const overall = await computeEnhancedPlanAnalysis(previewPlan);
+      const perPhase = await Promise.all(
+        prebuilt.phases.map((p) =>
+          computeEnhancedPlanAnalysis({
+            ...previewPlan,
+            weeks: previewPlan.weeks.filter(
+              (w) => w.weekNumber >= p.startWeek && w.weekNumber <= p.endWeek,
+            ),
+          }),
+        ),
+      );
+      if (cancelled) return;
+      setPlanZoneMix(overall.zoneDistribution);
+      setPhaseZoneMix(perPhase.map((a) => a.zoneDistribution));
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [previewPlan, prebuilt]);
 
   const handleUse = () => {
     if (!prebuilt) return;
@@ -131,13 +161,27 @@ export function PrebuiltPlanDetailPage() {
     navigate(`/plan/${plan.id}`);
   };
 
-  // Phase distribution for phase bar
-  const phaseSegments = useMemo(() => {
+  /** One row per phase: its week span, its own km range (the real min/max
+   *  across its weeks, taper decline included), and whether race day falls
+   *  inside it. */
+  const phaseDetails = useMemo(() => {
     if (!prebuilt) return [];
-    return prebuilt.phases.map((phaseRange) => ({
-      phase: phaseRange.phase,
-      weeks: phaseRange.endWeek - phaseRange.startWeek + 1,
-    }));
+    return prebuilt.phases.map((p, idx) => {
+      const weeksInPhase = prebuilt.weeks.filter(
+        (w) => w.weekNumber >= p.startWeek && w.weekNumber <= p.endWeek,
+      );
+      const kms = weeksInPhase.map((w) => Math.round(computeWeekKm(w)));
+      const hasRace = weeksInPhase.some((w) =>
+        w.sessions.some((s) => s.workoutId === "__race_day__"),
+      );
+      return {
+        ...p,
+        index: idx,
+        minKm: kms.length > 0 ? Math.min(...kms) : 0,
+        maxKm: kms.length > 0 ? Math.max(...kms) : 0,
+        hasRace,
+      };
+    });
   }, [prebuilt]);
 
   /** What the plan asks on week 1 — the honest entry ticket, not the peak. */
@@ -146,6 +190,38 @@ export function PrebuiltPlanDetailPage() {
   const startWeeklyMin = startWeek
     ? startWeek.sessions.reduce((sum, s) => sum + s.estimatedDurationMin, 0)
     : 0;
+
+  /** Entry ask → peak ask, not the taper's decline — matches
+   *  `prebuilt.peakWeeklyKm` already used on the card/dashboard. */
+  const peakWeeklyKm = useMemo(() => {
+    if (prebuilt?.peakWeeklyKm) return prebuilt.peakWeeklyKm;
+    if (!prebuilt) return 0;
+    return Math.max(...prebuilt.weeks.map((w) => Math.round(computeWeekKm(w))));
+  }, [prebuilt]);
+
+  /** Goal race pace, read from the "M" (goal-pace) annotations the plan
+   *  generator already attaches to sessions — constant across the plan. */
+  const targetPace = useMemo(() => {
+    // Only meaningful when the plan actually targets a race — some plans
+    // (base building, return from injury) carry "M"-zone pace notes as a
+    // generic reference pace even with no race goal.
+    if (!prebuilt || !prebuilt.raceDistance) return null;
+    for (const week of prebuilt.weeks) {
+      for (const session of week.sessions) {
+        const note = session.paceNotes?.find((n) => n.zone === "M");
+        if (note) return formatPaceValue((note.paceMinKm + note.paceMaxKm) / 2);
+      }
+    }
+    return null;
+  }, [prebuilt]);
+
+  const easyHardSplit = useMemo(() => {
+    if (!planZoneMix) return null;
+    const easy = planZoneMix
+      .filter((z) => z.zone === "Z1" || z.zone === "Z2")
+      .reduce((sum, z) => sum + z.percent, 0);
+    return { easy: Math.round(easy), hard: Math.round(100 - easy) };
+  }, [planZoneMix]);
 
   /** The heaviest non-recovery week — what a normal week actually looks like
    *  once the plan is running, which is what people want to see before they
@@ -298,7 +374,7 @@ export function PrebuiltPlanDetailPage() {
           {/* "What this plan asks" stat panel */}
           <div className="border border-border p-5">
             <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
-              {t("prebuilt.trainingPhases")}
+              {t("prebuilt.whatItAsks")}
             </p>
             <div className="grid grid-cols-2 gap-4 mt-3 font-mono">
               <div>
@@ -313,24 +389,40 @@ export function PrebuiltPlanDetailPage() {
                   {t("prebuilt.sessionsPerWeek")}
                 </p>
               </div>
-            </div>
-            {phaseSegments.length > 0 && (
-              <>
-                <PhaseZoneBar
-                  phases={prebuilt.phases}
-                  totalWeeks={prebuilt.totalWeeks}
-                  className="mt-4 h-2.5"
-                  titleFor={(phase, weeks) =>
-                    `${pick(PHASE_META[phase], "label")} (${t("prebuilt.weeksCount", { count: weeks })})`
-                  }
-                />
-                <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2.5 font-mono text-[10px] tracking-[0.06em] uppercase text-muted-foreground">
-                  {phaseSegments.map((segment, idx) => (
-                    <span key={`legend-${segment.phase}-${idx}`}>
-                      {pick(PHASE_META[segment.phase], "label")}
-                    </span>
-                  ))}
+              <div>
+                <p className="text-2xl">
+                  {startWeeklyKm === peakWeeklyKm
+                    ? peakWeeklyKm
+                    : `${startWeeklyKm} → ${peakWeeklyKm}`}
+                </p>
+                <p className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground mt-1">
+                  {t("prebuilt.kmPerWeekShort")}
+                </p>
+              </div>
+              {targetPace && (
+                <div>
+                  <p className="text-2xl">{targetPace}</p>
+                  <p className="text-[10px] tracking-[0.1em] uppercase text-muted-foreground mt-1">
+                    {t("prebuilt.targetPaceShort")}
+                  </p>
                 </div>
+              )}
+            </div>
+            {planZoneMix && planZoneMix.some((z) => z.percent > 0) && (
+              <>
+                <ZoneMixBar distribution={planZoneMix} className="mt-4 h-2.5" />
+                <p className="mt-2.5 font-mono text-[11px] leading-[1.7] text-muted-foreground">
+                  {planZoneMix
+                    .filter((z) => Math.round(z.percent) > 0)
+                    .map((z) => `${Math.round(z.percent)} % ${z.zone}`)
+                    .join(" · ")}
+                  {easyHardSplit && (
+                    <>
+                      <br />
+                      {t("prebuilt.zoneSummary", easyHardSplit)}
+                    </>
+                  )}
+                </p>
               </>
             )}
           </div>
@@ -338,6 +430,57 @@ export function PrebuiltPlanDetailPage() {
 
         {/* What the plan asks / who it's for / what it reuses */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
+          <div className="space-y-10">
+          {/* The four phases — one row per phase: its span, its own km range
+              (real min/max, taper decline included) and its zone mix. */}
+          {phaseDetails.length > 0 && (
+            <div>
+              <h2 className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
+                {t("prebuilt.phases.title", { count: phaseDetails.length })}
+              </h2>
+              <div className="mt-3 border-t border-b border-filet divide-y divide-filet">
+                {phaseDetails.map((detail) => {
+                  const meta = PHASE_META[detail.phase];
+                  const zoneMix = phaseZoneMix?.[detail.index];
+                  const kmLabel =
+                    detail.minKm === detail.maxKm
+                      ? `${detail.maxKm} km`
+                      : `${detail.minKm} → ${detail.maxKm} km`;
+                  return (
+                    <div
+                      key={`${detail.phase}-${detail.index}`}
+                      className="grid grid-cols-1 sm:grid-cols-[100px_1fr_200px] gap-3 sm:gap-6 py-4 items-start"
+                    >
+                      <span className="font-mono text-[13px] text-foreground/60">
+                        {detail.startWeek === detail.endWeek
+                          ? t("prebuilt.phases.weekSingle", { week: detail.startWeek })
+                          : t("prebuilt.phases.weekRange", {
+                              from: detail.startWeek,
+                              to: detail.endWeek,
+                            })}
+                      </span>
+                      <div>
+                        <p className="font-sans font-bold uppercase tracking-[-0.02em] text-lg sm:text-xl">
+                          {pick(meta, "label")}
+                        </p>
+                        <p className="mt-1.5 text-sm leading-[1.55] text-foreground/60">
+                          {pick(meta, "description")}
+                        </p>
+                      </div>
+                      <div>
+                        {zoneMix && <ZoneMixBar distribution={zoneMix} className="h-2" />}
+                        <p className="mt-2 font-mono text-[11px] text-muted-foreground">
+                          {kmLabel}
+                          {detail.hasRace ? t("prebuilt.phases.raceSuffix") : ""}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* Typical week — the heaviest normal week, laid out day by day */}
           {typicalWeek && (
             <div>
@@ -413,6 +556,7 @@ export function PrebuiltPlanDetailPage() {
               </div>
             </div>
           )}
+          </div>
 
           {/* Sidebar: honesty about who this plan is for */}
           <div className="flex flex-col gap-6 lg:border-l lg:border-filet lg:pl-7">
@@ -494,211 +638,6 @@ export function PrebuiltPlanDetailPage() {
               {t("prebuilt.noAccountNotice")}
             </p>
           </div>
-        </div>
-
-        {/* Stats */}
-        {previewPlan && (
-          <PlanStatsSection plan={previewPlan} />
-        )}
-
-        {/* View toggle + content */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between border-b border-filet pb-1">
-            <h2 className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground">
-              {t("prebuilt.weekByWeek")}
-            </h2>
-            <div
-              className="flex items-center gap-5 font-mono text-[11px] tracking-[0.1em] uppercase"
-              role="radiogroup"
-              aria-label={t("viewMode.label")}
-            >
-              <button
-                type="button"
-                role="radio"
-                aria-checked={viewMode === "calendar"}
-                onClick={() => setViewMode("calendar")}
-                className={cn(
-                  "inline-flex items-center gap-1.5 pb-1.5 border-b-2 transition-colors",
-                  viewMode === "calendar"
-                    ? "border-accent-acid text-foreground"
-                    : "border-transparent text-muted-foreground hover:text-foreground"
-                )}
-              >
-                <CalendarRange size={14} />
-                {t("viewMode.calendar")}
-              </button>
-              <button
-                type="button"
-                role="radio"
-                aria-checked={viewMode === "list"}
-                onClick={() => setViewMode("list")}
-                className={cn(
-                  "inline-flex items-center gap-1.5 pb-1.5 border-b-2 transition-colors",
-                  viewMode === "list"
-                    ? "border-accent-acid text-foreground"
-                    : "border-transparent text-muted-foreground hover:text-foreground"
-                )}
-              >
-                <List size={14} />
-                {t("viewMode.list")}
-              </button>
-            </div>
-          </div>
-
-          {/* Calendar view */}
-          {viewMode === "calendar" && previewPlan && (
-            <PlanCalendar
-              plan={previewPlan}
-              workoutNames={workoutNames}
-              currentWeek={0}
-              isEn={isEn}
-            />
-          )}
-
-          {/* List view */}
-          {viewMode === "list" && (
-          <>
-          {prebuilt.weeks.map((week) => {
-            const isExpanded = expandedWeeks.has(week.weekNumber);
-            const phaseMeta = PHASE_META[week.phase];
-            const weekLabel = isEn
-              ? week.weekLabelEn || `W${week.weekNumber}`
-              : week.weekLabel || `S${week.weekNumber}`;
-
-            return (
-              <Card
-                key={week.weekNumber}
-                size="flush"
-              >
-                {/* Week Header */}
-                <button
-                  onClick={() => toggleWeek(week.weekNumber)}
-                  className="w-full flex items-center justify-between gap-3 p-4 text-left hover:bg-accent/50 transition-colors"
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div
-                      className={cn(
-                        "size-2.5 shrink-0",
-                        phaseMeta.color,
-                      )}
-                    />
-                    <span className="font-medium truncate">
-                      {weekLabel} &mdash;{" "}
-                      {pick(phaseMeta, "label")}
-                    </span>
-                    {week.isRecoveryWeek && (
-                      <Badge variant="secondary" className="shrink-0">
-                        {t("prebuilt.recovery")}
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-3 shrink-0">
-                    <span className="text-sm text-muted-foreground">
-                      {t("prebuilt.sessionsCount", { count: week.sessions.length })}
-                    </span>
-                    {isExpanded ? (
-                      <ChevronUp className="size-4 text-muted-foreground" />
-                    ) : (
-                      <ChevronDown className="size-4 text-muted-foreground" />
-                    )}
-                  </div>
-                </button>
-
-                {/* Sessions */}
-                {isExpanded && (
-                  <div className="border-t px-4 py-4 space-y-2">
-                    {week.sessions.length === 0 ? (
-                      <p className="text-sm text-muted-foreground py-3">
-                        {t("prebuilt.noSessions")}
-                      </p>
-                    ) : (
-                      week.sessions.map((session, idx) => {
-                        const isRaceDay =
-                          session.workoutId === "__race_day__";
-                        const isIntermediateRace =
-                          session.workoutId === "__intermediate_race__";
-                        const isSpecialSession = isRaceDay || isIntermediateRace;
-                        const sessionLabel =
-                          SESSION_TYPE_LABELS[session.sessionType];
-                        const dayLabel = t(`prebuilt.day.${session.dayOfWeek}`);
-
-                        return (
-                          <div
-                            key={idx}
-                            className={cn(
-                              "flex items-center gap-3 p-3",
-                              isRaceDay
-                                ? "bg-primary/10 border border-primary/20"
-                                : isIntermediateRace
-                                  ? "bg-poster-red/10 border border-poster-red/50"
-                                  : "bg-secondary/50",
-                            )}
-                          >
-                            {/* Day badge */}
-                            {dayLabel && (
-                              <span className="text-xs font-medium text-muted-foreground w-8 shrink-0">
-                                {dayLabel}
-                              </span>
-                            )}
-
-                            {/* Content */}
-                            <div className="flex-1 min-w-0">
-                              {isRaceDay ? (
-                                <div className="flex items-center gap-2">
-                                  <Flag className="size-4 text-primary" />
-                                  <span className="font-semibold text-primary">
-                                    {t("prebuilt.raceDay")}
-                                  </span>
-                                </div>
-                              ) : isIntermediateRace ? (
-                                <div className="flex items-center gap-2">
-                                  <Flag className="size-4 text-poster-red" />
-                                  <span className="font-semibold text-poster-red">
-                                    {t("intermediateGoals.raceDayLabel")}
-                                  </span>
-                                </div>
-                              ) : (
-                                <span className="text-sm font-medium line-clamp-1">
-                                  {workoutNames[session.workoutId] ||
-                                    session.workoutId}
-                                </span>
-                              )}
-                            </div>
-
-                            {/* Badges */}
-                            <div className="flex items-center gap-2 shrink-0">
-                              {session.isKeySession && (
-                                <Star filled className="size-4 text-foreground" />
-                              )}
-                              {!isSpecialSession && sessionLabel && (
-                                <Badge variant="outline" className="text-xs">
-                                  <div
-                                    className={cn(
-                                      "size-2",
-                                      sessionColorClass(session.sessionType),
-                                    )}
-                                  />
-                                  {pickLocale(sessionLabel)}
-                                </Badge>
-                              )}
-                              {!isSpecialSession && (
-                                <span className="text-xs text-muted-foreground flex items-center gap-1">
-                                  <Clock className="size-3" />
-                                  {formatDurationMinutes(session.estimatedDurationMin)}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })
-                    )}
-                  </div>
-                )}
-              </Card>
-            );
-          })}
-          </>
-          )}
         </div>
 
         {/* CTA bottom */}
