@@ -385,6 +385,42 @@
         "distance": "Distance"
       },
       "offRecommendation": "Hors de la plage conseillée ({{range}})"
+    },
+    "blockEditor": {
+      "blockLabel": "Bloc {{number}}",
+      "editing": "En édition",
+      "modify": "Modifier",
+      "duplicate": "Dupliquer",
+      "remove": "Retirer",
+      "moveUp": "Monter le bloc",
+      "moveDown": "Descendre le bloc",
+      "close": "Terminer l'édition",
+      "repetitions": "Répétitions",
+      "duration": "Durée",
+      "minutes": "Min",
+      "seconds": "Sec",
+      "distance": "Distance (m)",
+      "zone": "Zone",
+      "recovery": "Récup",
+      "role": "Rôle",
+      "roles": {
+        "effort": "Effort",
+        "recovery": "Récup",
+        "transition": "Transition"
+      },
+      "instruction": "Consigne",
+      "instructionPlaceholder": "Ex : Tenir 4:12/km, respiration contrôlée.",
+      "advancedNotice": "Cette répétition contient plusieurs étapes imbriquées : édition détaillée ci-dessous.",
+      "steps": "Étapes",
+      "between": "Récupération entre les répétitions",
+      "count": "Nombre",
+      "quickAdd": {
+        "warmup": "Échauffement",
+        "intervals": "Intervalles",
+        "continuous": "Continu",
+        "recovery": "Récup",
+        "cooldown": "Retour au calme"
+      }
     }
   },
   "raceSimulator": {

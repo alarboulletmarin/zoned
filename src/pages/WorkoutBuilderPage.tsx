@@ -2,7 +2,7 @@ import { useState, useCallback, useReducer, useRef, useEffect, useMemo } from "r
 import { usePageHint } from "@/hooks/usePageHint";
 import { useParams, useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Save, Trash2, Plus, ChevronDown, ChevronUp, ArrowRight, Download, Upload, Undo2, Redo2, Share } from "@/components/icons";
+import { Save, Trash2, Plus, ArrowRight, Download, Upload, Undo2, Redo2, Share } from "@/components/icons";
 import { useUndoRedo } from "@/hooks/useUndoRedo";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { SEOHead } from "@/components/seo";
 import { Input } from "@/components/ui/input";
-import { WorkoutStepListEditor } from "@/components/domain/contribute/WorkoutStepListEditor";
+import { WorkoutBlockListEditor } from "@/components/domain/WorkoutBlockListEditor";
 import { WorkoutParameterPanel } from "@/components/domain/WorkoutParameterPanel";
 import { SessionTimeline } from "@/components/visualization/SessionTimeline";
 import { SessionIntensityBar } from "@/components/visualization/ZoneDistribution";
@@ -335,11 +335,6 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
     [setWorkoutHistory],
   );
 
-  const [collapsed, setCollapsed] = useState<Record<SectionKey, boolean>>({
-    warmup: false,
-    main: false,
-    cooldown: false,
-  });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const isDirtyRef = useRef(false);
 
@@ -440,10 +435,6 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
     setWorkout(applyAdjustments(base, { [paramId]: value }, admitted));
   }, [workout, params, setWorkout]);
 
-  const toggleCollapse = (key: SectionKey) => {
-    setCollapsed((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
-
   const [isSaved, setIsSaved] = useState(() => getCustomWorkouts().some((w) => w.id === workout.id));
 
   const totalMin = getStructuredWorkoutDurationMinutes(workout);
@@ -473,10 +464,10 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
     [zoneBreakdown],
   );
 
-  const sections: { key: SectionKey; label: string; color: string }[] = [
-    { key: "warmup", label: t("calculators:workoutBuilder.warmup"), color: "text-zone-2" },
-    { key: "main", label: t("calculators:workoutBuilder.mainSet"), color: "text-zone-5" },
-    { key: "cooldown", label: t("calculators:workoutBuilder.cooldown"), color: "text-zone-1" },
+  const sections: { key: SectionKey; label: string }[] = [
+    { key: "warmup", label: t("calculators:workoutBuilder.warmup") },
+    { key: "main", label: t("calculators:workoutBuilder.mainSet") },
+    { key: "cooldown", label: t("calculators:workoutBuilder.cooldown") },
   ];
 
   return (
@@ -574,36 +565,14 @@ function WorkoutEditorView({ initialWorkout }: { initialWorkout: WorkoutTemplate
               onCommit={commitParam}
             />
 
-            {/* Sections */}
-            {sections.map(({ key, label, color }) => {
-              const steps = getSteps(key);
-              const isCollapsed = collapsed[key];
-              return (
-                <div key={key} className="border-t border-filet pt-5">
-                  <button
-                    type="button"
-                    onClick={() => toggleCollapse(key)}
-                    className="flex items-center gap-3 w-full text-left"
-                  >
-                    {isCollapsed ? <ChevronDown className="size-4 shrink-0" /> : <ChevronUp className="size-4 shrink-0" />}
-                    <h2 className={`font-sans font-bold uppercase tracking-[-0.02em] text-lg ${color}`}>{label}</h2>
-                    <span className="font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground">
-                      {steps.length} {t("calculators:workoutBuilder.blocks")}
-                    </span>
-                  </button>
-
-                  {!isCollapsed && (
-                    <div className="mt-4">
-                      <WorkoutStepListEditor
-                        steps={steps}
-                        onChange={(nextSteps) => updateSteps(key, nextSteps)}
-                        label={label}
-                      />
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+            <WorkoutBlockListEditor
+              sections={sections.map(({ key, label }) => ({
+                key,
+                label,
+                steps: getSteps(key),
+                onChange: (nextSteps: WorkoutStep[]) => updateSteps(key, nextSteps),
+              }))}
+            />
           </div>
 
           {/* ── Live side column ── */}
