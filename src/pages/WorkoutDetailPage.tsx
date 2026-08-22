@@ -5,14 +5,10 @@ import {
   ArrowLeft,
   Clock,
   Dumbbell,
-  Circle,
-  Mountain,
-  Route,
   Link2,
   Shield,
   BookOpen,
   Sparkles,
-  Share,
   StravaIcon,
   MoreHorizontal,
   SlidersHorizontal,
@@ -25,7 +21,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -37,19 +32,25 @@ import {
   TipCard,
 } from "@/components/domain";
 import { WorkoutNotFound } from "@/components/domain/WorkoutNotFound";
-import { WorkoutStructure, CoachingTips } from "@/components/domain/WorkoutStructure";
-import { ExportMenu } from "@/components/domain/ExportMenu";
+import { ExportDatePicker } from "@/components/domain/ExportDatePicker";
+import { FitTransferGuide } from "@/components/domain/FitTransferGuide";
+import { ExportableWorkoutCard } from "@/components/domain/ExportableWorkoutCard";
+import { exportToICS, exportToPNG, exportToPDF, exportToFIT } from "@/lib/export";
 import { ShareDialog } from "@/components/share/ShareDialog";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/issueBuilder";
 import { buildStravaShareText } from "@/lib/export";
 import { NutritionRecoverySection } from "@/components/domain/NutritionRecoverySection";
 import { ScienceSection } from "@/components/domain/ScienceSection";
+import { TARGET_SYSTEM_SCIENCE } from "@/data/science";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
+import { useGlossaryMatcher } from "@/contexts/GlossaryMatcherContext";
+import { findContentMatches } from "@/lib/content-matcher";
 import { SEOHead } from "@/components/seo";
 import { FadeUp } from "@/components/editorial";
 import { Section } from "@/components/editorial/Section";
-import { SessionTimeline, ZoneDistribution, transformSessionBlocks, MiniElevationProfile } from "@/components/visualization";
+import { SessionTimeline, SessionIntensityBar, transformSessionBlocks, MiniElevationProfile } from "@/components/visualization";
+import type { TimelineSegment } from "@/components/visualization";
 import { StrengthSessionTimeline } from "@/components/visualization/StrengthSessionTimeline";
 import { MuscleDistribution } from "@/components/visualization/MuscleDistribution";
 import { MuscleMap } from "@/components/visualization/MuscleMap";
@@ -57,7 +58,7 @@ import { MiniSessionTimeline } from "@/components/visualization/MiniSessionTimel
 import { useWorkout, useRelatedWorkouts, useTips } from "@/hooks";
 import { RelatedContent } from "@/components/domain/RelatedContent";
 import { useScrolledPast } from "@/hooks/useScrolledPast";
-import type { ZoneRange } from "@/types";
+import type { ZoneRange, ZoneNumber, WorkoutTemplate } from "@/types";
 import {
   getWorkoutDiscipline,
   getDominantZone,
@@ -70,7 +71,6 @@ import { usePickLang, usePickLangArray } from "@/lib/i18n-utils";
 import { computeTrailMetrics } from "@/lib/workoutMetrics";
 import { MuscleGroupBadges } from "@/components/domain/MuscleGroupBadge";
 import { StrengthExerciseList } from "@/components/domain/StrengthExerciseList";
-import { CATEGORY_ICONS } from "@/components/domain/CategoryIcon";
 import { loadUserZonePrefs, calculateAllZones } from "@/lib/zones";
 import { hasAdjustableParams } from "@/lib/workoutAdjust";
 import { createCustomWorkoutId, isCustomWorkoutId } from "@/lib/customWorkoutStorage";
@@ -82,6 +82,8 @@ export function WorkoutDetailPage() {
   const navigate = useNavigate();
   const { t } = useTranslation(["session", "library", "common"]);
   const pick = usePickLang();
+  const pickLangArray = usePickLangArray();
+  const glossaryMatcher = useGlossaryMatcher();
 
   const locationState = location.state as {
     from?: string;
@@ -218,8 +220,6 @@ export function WorkoutDetailPage() {
     ? planDuration
     : baseDuration;
 
-  const CategoryIcon = CATEGORY_ICONS[workout.category];
-
   // Breadcrumb trail
   const workoutName = pick(workout, "name");
   const categoryLabel = t(`library:categories.${workout.category}`);
@@ -260,21 +260,40 @@ export function WorkoutDetailPage() {
     trailMetrics.totalElevationLossM > 0 ||
     trailMetrics.dominantTerrain != null;
 
-  const envRequirements: { icon: React.ComponentType<{ className?: string }>; text: string }[] = [];
-  if (workout.environment.requiresTrack) {
-    envRequirements.push({ icon: Circle, text: t("environment.requiresTrack") });
-  }
-  if (workout.environment.requiresHills && !hasTrail) {
-    envRequirements.push({ icon: Mountain, text: t("environment.requiresHills") });
-  }
-  if (workout.environment.prefersFlat) {
-    envRequirements.push({ icon: Route, text: t("environment.prefersFlat") });
-  }
+  // Per-phase descriptions, built from the raw block text (same join the SEO
+  // HowTo steps above already use) — no data is invented, only reused.
+  const warmupDescription = workout.warmupTemplate.map((b) => pick(b, "description")).filter(Boolean).join(" — ");
+  const mainDescription = workout.mainSetTemplate.map((b) => pick(b, "description")).filter(Boolean).join(" — ");
+  const cooldownDescription = workout.cooldownTemplate.map((b) => pick(b, "description")).filter(Boolean).join(" — ");
 
-  // Derive the environment label for the metric card
-  const envLabel = envRequirements.length > 0
-    ? envRequirements.map((r) => r.text).join(", ")
-    : t("details.environment");
+  const tipsAndMistakes = [
+    ...pickLangArray<string>(workout, "coachingTips"),
+    ...pickLangArray<string>(workout, "commonMistakes"),
+  ];
+
+  const science = TARGET_SYSTEM_SCIENCE[workout.targetSystem];
+  const scienceLine = science
+    ? [
+        science.references.map((ref) => `${ref.authors} (${ref.year})`).join(" · "),
+        pick(science, "rationale"),
+      ].filter(Boolean).join(" — ")
+    : null;
+
+  // Glossary chips — the same matcher GlossaryLinkedText uses, applied to the
+  // session's own text so "Termes & science" only ever shows terms this
+  // specific workout actually mentions.
+  const termChips = glossaryMatcher
+    ? (() => {
+        const text = [pick(workout, "description"), warmupDescription, mainDescription, cooldownDescription, ...tipsAndMistakes].join(" ");
+        const seen = new Map<string, string>();
+        for (const match of findContentMatches(text, glossaryMatcher)) {
+          if (match.content.type !== "glossary") continue;
+          const { id } = match.content.data;
+          if (!seen.has(id)) seen.set(id, pick(match.content.data, "term"));
+        }
+        return [...seen.entries()].slice(0, 6).map(([id, label]) => ({ id, label }));
+      })()
+    : [];
 
   return (
     <>
@@ -366,7 +385,7 @@ export function WorkoutDetailPage() {
           },
         ]}
       />
-      <div className={`zone-${dominantZone} py-6 md:py-8 space-y-10 sm:space-y-12 md:space-y-16`}>
+      <div className={`zone-${dominantZone} py-6 md:py-8`}>
         {/* Top strip — back, breadcrumb, optional plan chip. */}
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-3 flex-wrap">
@@ -424,199 +443,292 @@ export function WorkoutDetailPage() {
           </nav>
         </div>
 
-        {/* Hero block — title + badges + description + actions + inline
-            stats row. Replaces the previous bento + 5-card summary grid. */}
+        {/* Two-column layout: article (timeline, phases, tips, related) on
+            the left, sticky action rail (favourite/share, personal paces,
+            distribution, export, route) on the right. Mirrors the Brut
+            mockup instead of the previous single-column bento. */}
         <FadeUp as="section">
-          <div className="flex flex-wrap items-center gap-2 mb-3">
-            <ZoneBadge zone={dominantZone} size="md" showLabel />
-            <Badge variant="outline" className="gap-1.5 text-muted-foreground">
-              <CategoryIcon className="size-3.5" />
-              {t(`library:categories.${workout.category}`)}
-            </Badge>
-            <span className="ml-auto">
-              <FavoriteButton workoutId={workout.id} showLabel />
-            </span>
-          </div>
-
-          <h1 className="font-sans font-bold uppercase leading-[0.94] tracking-[-0.04em] text-[32px] sm:text-[44px] md:text-[52px] mb-3">
-            {pick(workout, "name")}
-          </h1>
-
-          <p className="text-muted-foreground max-w-2xl leading-relaxed text-base sm:text-lg">
-            <GlossaryLinkedText text={pick(workout, "description")} />
-          </p>
-
-          {workout.sourceWorkoutId && (
-            <WorkoutProvenance sourceId={workout.sourceWorkoutId} />
-          )}
-
-          {/* Action bar — one primary, everything else behind the overflow
-              menu. Five equally-weighted buttons used to fill a screen before
-              the session itself; three of them (Partager, Strava, Copier le
-              lien) are the same intent, and one (Parcours) is navigation.
-              Full width on phones, contained from sm: up.
-              Adjust stays out of the menu: an action nobody finds is an action
-              nobody uses, and it is the one that turns a fixed catalogue into
-              something a runner can fit to their week. */}
-          <div className="flex items-center gap-2 mt-5 sm:max-w-md">
-            <ExportMenu workout={workout} size="default" className="flex-1 justify-center" />
-            {canAdjust && (
-              <Button
-                variant="outline"
-                className="shrink-0"
-                onClick={() =>
-                  navigate(`/workout/builder/${createCustomWorkoutId()}?from=${workout.id}`)
-                }
-              >
-                <SlidersHorizontal className="size-4 mr-2" />
-                {t("session:actions.adjust")}
-              </Button>
-            )}
-            {/* A workout of one's own is edited, not copied again. Reached from
-                Favourites or a bookmark, this page was otherwise a dead end:
-                the only way back to the editor was through My Workouts. */}
-            {isOwnWorkout && (
-              <Button
-                variant="outline"
-                className="shrink-0"
-                asChild
-              >
-                <Link to={`/workout/builder/${workout.id}`}>
-                  <Pencil className="size-4 mr-2" />
-                  {t("session:actions.edit")}
-                </Link>
-              </Button>
-            )}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="shrink-0 size-10"
-                  aria-label={t("session:actions.moreActions")}
-                >
-                  <MoreHorizontal className="size-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem onClick={() => setShareOpen(true)}>
-                  <Share className="size-4" />
-                  {t("common:share.trigger")}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={async () => {
-                    const ok = await copyToClipboard(buildStravaShareText(workout));
-                    if (ok) toast.success(t("session:strava.copied"));
-                    else toast.error(t("common:errors.generic"));
-                  }}
-                >
-                  <StravaIcon className="size-4 text-[#FC4C02]" />
-                  {t("session:actions.shareStrava")}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={async () => {
-                    const ok = await copyToClipboard(publicWorkoutUrl(workout));
-                    if (ok) toast.success(t("common:actions.linkCopied"));
-                    else toast.error(t("common:errors.generic"));
-                  }}
-                >
-                  <Link2 className="size-4" />
-                  {t("common:actions.copyLink")}
-                </DropdownMenuItem>
-                {canGenerateRoute && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link to="/routes" state={{ workoutRouteWorkout: workout }}>
-                        <Route className="size-4" />
-                        {t("session:actions.findRoute")}
-                      </Link>
-                    </DropdownMenuItem>
-                  </>
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-10 lg:gap-16 items-start mt-8">
+            {/* ── Main column ───────────────────────────────────────── */}
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <ZoneBadge zone={dominantZone} size="md" showLabel />
+                <span className="font-mono text-[11px] tracking-[0.1em] uppercase text-muted-foreground px-2 py-1">
+                  {t(`library:activityToggle.${workoutDiscipline}`)}
+                </span>
+                <span className="font-mono text-[11px] tracking-[0.1em] uppercase text-muted-foreground px-2 py-1">
+                  {t(`library:difficulty.${workout.difficulty}`)}
+                </span>
+                <span className="font-mono text-[11px] tracking-[0.1em] uppercase text-muted-foreground px-2 py-1">
+                  {formatDurationMinutes(duration)}
+                  {hasPlanContext && duration < baseDuration - 3 && (
+                    <span className="ml-1.5 line-through text-muted-foreground/50">
+                      {formatDurationMinutes(baseDuration)}
+                    </span>
+                  )}
+                </span>
+                {planTargetDistanceKm != null && planTargetDistanceKm > 0 && (
+                  <span className="font-mono text-[11px] tracking-[0.1em] uppercase text-muted-foreground px-2 py-1">
+                    {workout.category !== "long_run" ? "~" : ""}{planTargetDistanceKm} km
+                  </span>
                 )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+
+                {/* Secondary actions — adjusting, editing one's own copy,
+                    Strava text and the permalink all live behind this "…"
+                    so they don't compete with the title for space. */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      className="ml-auto"
+                      aria-label={t("session:actions.moreActions")}
+                    >
+                      <MoreHorizontal className="size-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    {canAdjust && (
+                      <DropdownMenuItem
+                        onClick={() =>
+                          navigate(`/workout/builder/${createCustomWorkoutId()}?from=${workout.id}`)
+                        }
+                      >
+                        <SlidersHorizontal className="size-4" />
+                        {t("session:actions.adjust")}
+                      </DropdownMenuItem>
+                    )}
+                    {isOwnWorkout && (
+                      <DropdownMenuItem asChild>
+                        <Link to={`/workout/builder/${workout.id}`}>
+                          <Pencil className="size-4" />
+                          {t("session:actions.edit")}
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem
+                      onClick={async () => {
+                        const ok = await copyToClipboard(buildStravaShareText(workout));
+                        if (ok) toast.success(t("session:strava.copied"));
+                        else toast.error(t("common:errors.generic"));
+                      }}
+                    >
+                      <StravaIcon className="size-4 text-[#FC4C02]" />
+                      {t("session:actions.shareStrava")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={async () => {
+                        const ok = await copyToClipboard(publicWorkoutUrl(workout));
+                        if (ok) toast.success(t("common:actions.linkCopied"));
+                        else toast.error(t("common:errors.generic"));
+                      }}
+                    >
+                      <Link2 className="size-4" />
+                      {t("common:actions.copyLink")}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              <h1 className="font-sans font-bold uppercase leading-[0.86] tracking-[-0.05em] text-5xl sm:text-6xl lg:text-7xl mt-5">
+                {workoutName}
+              </h1>
+
+              <p className="mt-5 text-lg leading-relaxed text-muted-foreground max-w-[58ch]">
+                <GlossaryLinkedText text={pick(workout, "description")} />
+              </p>
+
+              {workout.sourceWorkoutId && (
+                <WorkoutProvenance sourceId={workout.sourceWorkoutId} />
+              )}
+
+              {/* Déroulé — the bar timeline, unchanged from before. */}
+              <div ref={timelineCardRef} className="mt-9 border-t border-border pt-4">
+                <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
+                  {t("common:pages.workoutDetail.timeline")}
+                </p>
+                <div className="mt-4">
+                  <SessionTimeline workout={workout} />
+                </div>
+              </div>
+
+              {/* Trail elevation profile — only when meaningful, not part of
+                  the mockup (which has no trail example) but real data a
+                  trail runner needs. */}
+              {hasTrail && (
+                <div className="mt-6">
+                  <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-2">
+                    {t("session:titles.trailProfile")}
+                  </p>
+                  <MiniElevationProfile workout={workout} height={64} />
+                  <p className="text-xs text-muted-foreground mt-2">
+                    {trailMetrics.totalElevationGainM > 0 && <>+{trailMetrics.totalElevationGainM} m</>}
+                    {trailMetrics.dominantTerrain && (
+                      <> · {t(`library:trail.terrainType.${trailMetrics.dominantTerrain}`)}</>
+                    )}
+                    {trailMetrics.verticalDensityMPerKm > 0 && (
+                      <> · {t("library:trail.verticalDensity", { value: trailMetrics.verticalDensityMPerKm })}</>
+                    )}
+                    {trailMetrics.avgGradientPercent !== 0 && (
+                      <> · {t("library:trail.gradientAvg", { value: trailMetrics.avgGradientPercent })}</>
+                    )}
+                  </p>
+                </div>
+              )}
+
+              {/* Échauffement / Corps de séance / Retour au calme — flowing
+                  sections, not boxed cards: a title line with duration and
+                  zone at the right, a description underneath, and (for the
+                  main set, when it reduces to simple repeats) the block
+                  list. Deliberately lighter than the previous nested-repeat
+                  visualisation — see report for what that trades away. */}
+              <div className="mt-2">
+                <PhaseFlow
+                  label={t("session:structure.warmup")}
+                  phase="warmup"
+                  segments={baseSessionData.segments}
+                  description={warmupDescription}
+                />
+                <PhaseFlow
+                  label={t("session:structure.main")}
+                  phase="main"
+                  segments={baseSessionData.segments}
+                  description={mainDescription}
+                  isMain
+                />
+                <PhaseFlow
+                  label={t("session:structure.cooldown")}
+                  phase="cooldown"
+                  segments={baseSessionData.segments}
+                  description={cooldownDescription}
+                />
+              </div>
+
+              {/* Conseils / Termes & science — two compact columns. */}
+              <div className="mt-9 grid sm:grid-cols-2 gap-8 sm:gap-10">
+                <div>
+                  <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground border-b border-border pb-2">
+                    {t("coaching.tips")}
+                  </p>
+                  {tipsAndMistakes.length > 0 && (
+                    <ul className="mt-3 space-y-2 text-[15px] leading-relaxed text-muted-foreground list-disc pl-4">
+                      {tipsAndMistakes.map((entry, i) => (
+                        <li key={i}>
+                          <GlossaryLinkedText text={entry} />
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {tip && (
+                    <div className="mt-4">
+                      <TipCard tip={tip} variant="banner" />
+                    </div>
+                  )}
+                </div>
+                <div id="glossaire">
+                  <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground border-b border-border pb-2">
+                    {t("common:pages.workoutDetail.termsAndScience")}
+                  </p>
+                  {termChips.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {termChips.map((chip) => (
+                        <Link
+                          key={chip.id}
+                          to={`/glossary/${chip.id}`}
+                          className="font-mono text-[11px] tracking-[0.06em] uppercase text-muted-foreground hover:text-foreground px-2.5 py-1.5 border border-border transition-colors"
+                        >
+                          {chip.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                  {scienceLine && (
+                    <p className="mt-3.5 text-sm leading-relaxed text-muted-foreground">
+                      {scienceLine}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Séances proches — the 3-card grid the mockup shows. Articles
+                  and glossary suggestions (RelatedContent) move to the
+                  bottom accordion below: real navigation, but not part of
+                  this layout. */}
+              {relatedWorkouts.length > 0 && (
+                <div className="mt-9 border-t border-border pt-4">
+                  <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
+                    {t("session:titles.relatedWorkouts")}
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-3.5">
+                    {relatedWorkouts.slice(0, 3).map((related) => (
+                      <WorkoutCardCompact key={related.id} workout={related} />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ── Sidebar ───────────────────────────────────────────── */}
+            <aside className="lg:sticky lg:top-24 lg:border-l lg:border-border lg:pl-10 flex flex-col gap-7">
+              <div className="flex items-center gap-2">
+                <FavoriteButton workoutId={workout.id} showLabel className="rounded-none border-2 border-foreground" />
+                <Button variant="outline" size="sm" onClick={() => setShareOpen(true)}>
+                  {t("common:share.trigger")}
+                </Button>
+              </div>
+
+              {/* Discreet zone-personalization CTA when zones are missing;
+                  once the runner has a VMA, the same slot shows their
+                  personal pace table instead, with this session's own zone
+                  highlighted. Guarded on `userVma` specifically (not just
+                  `hasUserZones`): an HR-only profile has no pace data to
+                  show, and a misleading empty table would be worse than no
+                  table. */}
+              {hasUserZones && userVma != null && workoutDiscipline === "running" ? (
+                <WorkoutPaceZonesCard zones={userZones} vma={userVma} targetZone={dominantZone} />
+              ) : (
+                <ZonePersonalizationCTA />
+              )}
+
+              <div>
+                <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+                  {t("common:pages.workoutDetail.distribution")}
+                </p>
+                <SessionIntensityBar workout={workout} className="h-3 mt-3" />
+                {baseSessionData.zoneBreakdown.length > 0 && (
+                  <p className="mt-2 font-mono text-[11px] text-muted-foreground">
+                    {baseSessionData.zoneBreakdown
+                      .map((z) => `${Math.round(z.percent)}% ${z.zone != null ? `Z${z.zone}` : z.label}`)
+                      .join(" · ")}
+                  </p>
+                )}
+              </div>
+
+              <WorkoutExportList workout={workout} />
+
+              {canGenerateRoute && (
+                <div className="border-t border-border pt-5">
+                  <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+                    {t("common:pages.workoutDetail.goRun")}
+                  </p>
+                  <Link
+                    to="/routes"
+                    state={{ workoutRouteWorkout: workout }}
+                    className="mt-3 block text-center border border-border px-3.5 py-3 font-mono text-[11px] tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+                  >
+                    {t("session:actions.findRoute")}
+                  </Link>
+                </div>
+              )}
+            </aside>
           </div>
-
-          <ShareDialog
-            workout={workout}
-            open={shareOpen}
-            onOpenChange={setShareOpen}
-          />
-
-          {/* Inline stats row — single horizontal strip. Trail metrics
-              fold in naturally when applicable so we don't need a
-              separate trail bar. */}
-          <dl className="mt-6 grid grid-cols-2 sm:flex sm:flex-wrap sm:items-baseline sm:gap-x-8 gap-x-4 gap-y-5 sm:gap-y-3 border-t border-border/60 pt-6">
-            <HeroStat
-              label={t("session:stats.duration")}
-              value={formatDurationMinutes(duration)}
-              hint={
-                hasPlanContext && duration < baseDuration - 3
-                  ? formatDurationMinutes(baseDuration)
-                  : undefined
-              }
-            />
-            {planTargetDistanceKm != null && planTargetDistanceKm > 0 && (
-              <HeroStat
-                label={t("session:stats.distance")}
-                value={`${workout.category !== "long_run" ? "~" : ""}${planTargetDistanceKm} km`}
-              />
-            )}
-            <HeroStat
-              label={t("session:stats.difficulty")}
-              value={t(`library:difficulty.${workout.difficulty}`)}
-            />
-            <HeroStat
-              label={t("session:stats.target")}
-              value={t(`targetSystems.${workout.targetSystem}`)}
-            />
-            {envRequirements.length > 0 && (
-              <HeroStat
-                label={t("session:stats.environment")}
-                value={envLabel}
-              />
-            )}
-            {hasTrail && trailMetrics.totalElevationGainM > 0 && (
-              <HeroStat
-                label={t("library:trail.elevationGain", { value: "" }).replace(/[\s+0-9]+m?\s*$/, "")}
-                value={`+${trailMetrics.totalElevationGainM} m`}
-              />
-            )}
-          </dl>
         </FadeUp>
 
-        {/* Trail elevation profile — only when meaningful. Kept tight. */}
-        {hasTrail && (
-          <FadeUp as="section">
-            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-2">
-              {t("session:titles.trailProfile")}
-            </p>
-            <MiniElevationProfile workout={workout} height={64} />
-            {trailMetrics.dominantTerrain && (
-              <p className="text-xs text-muted-foreground mt-2">
-                {t(`library:trail.terrainType.${trailMetrics.dominantTerrain}`)}
-                {trailMetrics.verticalDensityMPerKm > 0 && (
-                  <> · {t("library:trail.verticalDensity", { value: trailMetrics.verticalDensityMPerKm })}</>
-                )}
-                {trailMetrics.avgGradientPercent !== 0 && (
-                  <> · {t("library:trail.gradientAvg", { value: trailMetrics.avgGradientPercent })}</>
-                )}
-              </p>
-            )}
-          </FadeUp>
-        )}
-
-        {/* Discreet zone-personalization CTA when zones are missing; once the
-            runner has a VMA, the same slot shows their personal pace table
-            instead, with this session's own zone highlighted. Guarded on
-            `userVma` specifically (not just `hasUserZones`): an HR-only
-            profile has no pace data to show, and a misleading empty table
-            would be worse than no table. */}
-        {!hasUserZones && <ZonePersonalizationCTA />}
-        {hasUserZones && userVma != null && workoutDiscipline === "running" && (
-          <WorkoutPaceZonesCard zones={userZones} vma={userVma} targetZone={dominantZone} />
-        )}
+        <ShareDialog
+          workout={workout}
+          open={shareOpen}
+          onOpenChange={setShareOpen}
+        />
 
         {/* Sticky mini timeline (existing behaviour) */}
         {timelineScrolledPast && (
@@ -630,68 +742,22 @@ export function WorkoutDetailPage() {
           </div>
         )}
 
-        {/* Session viz — the actual workout. Always visible.
-            Every block below is a Section: one heading each, no eyebrow
-            restating the title, no inner card repeating it. */}
+        {/* Accordions — secondary content not shown in the mockup at all
+            (nutrition timing, the full science rationale). Real content, so
+            it stays, just folded away below the fold instead of competing
+            with the two-column layout above. */}
         <FadeUp>
-          <div ref={timelineCardRef}>
-            <Section title={t("session:titles.sessionTimeline")}>
-              <SessionTimeline workout={workout} />
-            </Section>
-          </div>
-        </FadeUp>
-
-        <FadeUp>
-          <Section title={t("session:titles.workoutStructure")}>
-            <WorkoutStructure workout={workout} userZones={hasUserZones ? userZones : undefined} />
-          </Section>
-        </FadeUp>
-
-        {/* Zone distribution + coaching tips paired in a compact 2-col on
-            md+, stacked on mobile. */}
-        <FadeUp>
-          <div className="grid md:grid-cols-[2fr_3fr] gap-8 md:gap-10">
-            <Section title={t("session:titles.zoneDistribution")}>
-              <ZoneDistribution workout={workout} />
-            </Section>
-            <Section title={t("session:titles.coachingTips")}>
-              <CoachingTips workout={workout} />
-              {tip && (
-                <div className="mt-4">
-                  <TipCard tip={tip} variant="banner" />
-                </div>
-              )}
-            </Section>
-          </div>
-        </FadeUp>
-
-        {/* Accordions — secondary content, closed by default so the page
-            scans at a glance. Pattern identical to the home FAQ. */}
-        <FadeUp>
-          <div className="border-t border-foreground/15">
+          <div className="mt-12 border-t border-foreground/15">
             <Section collapsible title={t("session:titles.nutritionRecovery")}>
               <NutritionRecoverySection workout={workout} />
             </Section>
             <Section collapsible title={t("session:titles.scienceMode")}>
               <ScienceSection workout={workout} />
             </Section>
+            <Section collapsible title={t("session:titles.continueExploring")}>
+              <RelatedContent source={{ type: "workout", id: workout.id }} showTitle={false} />
+            </Section>
           </div>
-        </FadeUp>
-
-        {/* Continue exploring. Similar sessions lead: they are the most
-            likely next tap, so they come before articles and glossary
-            terms rather than sitting below them. */}
-        <FadeUp>
-          <Section title={t("session:titles.continueExploring")}>
-            {relatedWorkouts.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-                {relatedWorkouts.slice(0, 3).map((related) => (
-                  <WorkoutCardCompact key={related.id} workout={related} />
-                ))}
-              </div>
-            )}
-            <RelatedContent source={{ type: "workout", id: workout.id }} showTitle={false} />
-          </Section>
         </FadeUp>
       </div>
     </>
@@ -746,6 +812,213 @@ function HeroStat({
           </span>
         )}
       </dd>
+    </div>
+  );
+}
+
+/**
+ * One flowing phase section — Échauffement / Corps de séance / Retour au
+ * calme. Title and a duration · zone summary share a line, the description
+ * sits underneath, and for the main set specifically — when it reduces to a
+ * simple N × M′ repeat — a "Bloc 1 — 10′ …" list follows. Deliberately not
+ * the nested boxed-repeat visualisation `WorkoutStructure` renders: the
+ * mockup treats this as prose the runner scans once, not a tree to inspect.
+ */
+function PhaseFlow({
+  label,
+  phase,
+  segments,
+  description,
+  isMain = false,
+}: {
+  label: string;
+  phase: "warmup" | "main" | "cooldown";
+  segments: TimelineSegment[];
+  description: string;
+  isMain?: boolean;
+}) {
+  const { t } = useTranslation("common");
+  const phaseSegments = segments.filter((s) => s.type === phase);
+  if (phaseSegments.length === 0) return null;
+
+  const totalDurationMin = phaseSegments.reduce((sum, s) => sum + s.durationMin, 0);
+  const effortSegments = phaseSegments.filter((s) => !s.isRecovery);
+  const zoneCandidates = (effortSegments.length > 0 ? effortSegments : phaseSegments)
+    .map((s) => s.zoneNumber)
+    .filter((z): z is ZoneNumber => z != null);
+  const zone = zoneCandidates.length > 0 ? (Math.max(...zoneCandidates) as ZoneNumber) : null;
+
+  // Simple repeat detection: every effort segment carries a repetitionIndex
+  // (e.g. "3 × 10′ seuil"). Deduped by index since a nested repeat can
+  // otherwise list the same repetition twice.
+  const indexed = effortSegments.filter((s) => s.repetitionIndex != null);
+  const blocks = indexed.length > 1
+    ? [...new Map(indexed.map((s) => [s.repetitionIndex as number, s.durationMin])).entries()]
+      .sort((a, b) => a[0] - b[0])
+    : null;
+
+  let headerValue: string;
+  if (isMain && blocks && blocks.length > 1) {
+    const durations = blocks.map(([, d]) => d);
+    const allEqual = durations.every((d) => Math.abs(d - durations[0]) < 0.01);
+    headerValue = allEqual
+      ? `${blocks.length} × ${formatDurationMinutes(durations[0])}`
+      : formatDurationMinutes(totalDurationMin);
+  } else {
+    headerValue = formatDurationMinutes(totalDurationMin);
+  }
+  if (zone != null) headerValue += ` · Z${zone}`;
+
+  return (
+    <div className="border-t border-border py-4">
+      <div className="flex items-baseline justify-between gap-3">
+        <h3 className="font-sans font-bold text-xl uppercase tracking-[-0.02em]">{label}</h3>
+        <span
+          className={`font-mono text-[13px] shrink-0 ${isMain ? "text-accent-acid" : "text-muted-foreground"}`}
+        >
+          {headerValue}
+        </span>
+      </div>
+      {description && (
+        <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">
+          <GlossaryLinkedText text={description} />
+        </p>
+      )}
+      {isMain && blocks && blocks.length > 1 && (
+        <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] text-muted-foreground">
+          {blocks.map(([index, durationMin]) => (
+            <span key={index}>
+              {t("pages.workoutDetail.block", { index })} — {formatDurationMinutes(durationMin)}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Sidebar export list — same export logic as `ExportMenu` (ICS/PNG/PDF/FIT),
+ * reformatted as a vertical stack instead of a dropdown to match the Brut
+ * sidebar. Garmin FIT leads, acid-highlighted, since it's the export a
+ * runner reaches for most.
+ */
+function WorkoutExportList({ workout }: { workout: WorkoutTemplate }) {
+  const { t } = useTranslation(["common", "session"]);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showFitGuide, setShowFitGuide] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [renderForExport, setRenderForExport] = useState(false);
+  const exportCardRef = useRef<HTMLDivElement>(null);
+
+  const rowClass =
+    "w-full text-left border-b border-border py-3 font-mono text-[11px] tracking-[0.1em] uppercase text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50";
+
+  const handleICSExport = async (dateTime: Date) => {
+    setShowDatePicker(false);
+    setBusy(true);
+    const toastId = toast.loading(t("common:export.loading.calendar", t("common:export.title")));
+    try {
+      await exportToICS(workout, dateTime);
+      toast.success(t("common:export.success.calendar"), { id: toastId });
+    } catch {
+      toast.error(t("common:export.error.calendar"), { id: toastId });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handlePNGExport = async () => {
+    setBusy(true);
+    setRenderForExport(true);
+    const toastId = toast.loading(t("common:export.loading.image", t("common:export.title")));
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    try {
+      if (exportCardRef.current) {
+        await exportToPNG(exportCardRef.current, workout.id);
+        toast.success(t("common:export.success.image"), { id: toastId });
+      } else {
+        throw new Error("Export card not rendered");
+      }
+    } catch {
+      toast.error(t("common:export.error.image"), { id: toastId });
+    } finally {
+      setRenderForExport(false);
+      setBusy(false);
+    }
+  };
+
+  const handlePDFExport = async () => {
+    setBusy(true);
+    const toastId = toast.loading(t("common:export.loading.pdf", t("common:export.title")));
+    try {
+      await exportToPDF(workout);
+      toast.success(t("common:export.success.pdf"), { id: toastId });
+    } catch {
+      toast.error(t("common:export.error.pdf"), { id: toastId });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleFITExport = async () => {
+    setBusy(true);
+    const toastId = toast.loading(t("common:export.loading.garmin", t("common:export.title")));
+    try {
+      await exportToFIT(workout);
+      toast.success(t("common:export.success.garmin"), { id: toastId });
+      setShowFitGuide(true);
+    } catch {
+      toast.error(t("common:export.error.garmin"), { id: toastId });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleStravaExport = async () => {
+    const ok = await copyToClipboard(buildStravaShareText(workout));
+    if (ok) toast.success(t("session:strava.copied"));
+    else toast.error(t("common:errors.generic"));
+  };
+
+  return (
+    <div>
+      <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
+        {t("common:export.title")}
+      </p>
+      <div className="mt-3 flex flex-col gap-2">
+        <button
+          type="button"
+          disabled={busy}
+          onClick={handleFITExport}
+          className="bg-accent-acid text-ink px-3.5 py-3 font-mono text-[11px] font-bold tracking-[0.1em] uppercase text-left hover:brightness-95 transition disabled:opacity-50"
+        >
+          {t("common:export.garmin")}
+        </button>
+        <button type="button" disabled={busy} onClick={() => setShowDatePicker(true)} className={rowClass}>
+          {t("common:export.calendar")}
+        </button>
+        <button type="button" disabled={busy} onClick={handlePDFExport} className={rowClass}>
+          {t("common:export.pdf")}
+        </button>
+        <button type="button" disabled={busy} onClick={handlePNGExport} className={rowClass}>
+          {t("common:export.image")}
+        </button>
+        <button type="button" onClick={handleStravaExport} className={`${rowClass} border-b-0`}>
+          {t("session:actions.shareStrava")}
+        </button>
+      </div>
+
+      {showDatePicker && (
+        <ExportDatePicker onSelect={handleICSExport} onCancel={() => setShowDatePicker(false)} />
+      )}
+      <FitTransferGuide open={showFitGuide} onOpenChange={setShowFitGuide} workout={workout} />
+      {renderForExport && (
+        <div style={{ position: "fixed", left: "-9999px", top: 0, zIndex: -1 }}>
+          <ExportableWorkoutCard ref={exportCardRef} workout={workout} />
+        </div>
+      )}
     </div>
   );
 }

@@ -33,37 +33,32 @@ export function ZonePersonalizationCTA({ className }: ZonePersonalizationCTAProp
   return (
     <div
       className={cn(
-        // Stacks vertically on mobile so the button never overlaps the text;
-        // reverts to the original inline row at sm+.
-        "relative flex flex-col gap-3 p-3 rounded-lg",
-        "sm:flex-row sm:items-center sm:justify-between sm:gap-4",
-        "bg-primary/5 border border-primary/20",
+        // Stacks vertically so it reads well both full-width and in the
+        // 320px workout-detail sidebar.
+        "relative flex flex-col gap-3 p-3 border border-border",
         className
       )}
     >
-      {/* pr-10 on mobile keeps the text clear of the absolutely-placed close */}
-      <div className="flex items-start gap-3 pr-10 sm:pr-0">
-        <Settings className="size-4 text-primary shrink-0 mt-0.5 sm:mt-0" />
+      <div className="flex items-start gap-3 pr-8">
+        <Settings className="size-4 text-muted-foreground shrink-0 mt-0.5" />
         <p className="text-sm text-muted-foreground">
           {t("zonePersonalization.ctaMessage")}
         </p>
       </div>
-      <div className="flex items-center gap-2 sm:shrink-0">
-        <Button variant="outline" size="sm" asChild className="w-full sm:w-auto">
-          <Link to="/me/zones">
-            {t("zonePersonalization.ctaButton")}
-          </Link>
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleDismiss}
-          aria-label={t("zonePersonalization.dismiss")}
-          className="absolute right-1.5 top-1.5 size-9 sm:static"
-        >
-          <X className="size-4" />
-        </Button>
-      </div>
+      <Button variant="outline" size="sm" asChild className="w-full">
+        <Link to="/me/zones">
+          {t("zonePersonalization.ctaButton")}
+        </Link>
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={handleDismiss}
+        aria-label={t("zonePersonalization.dismiss")}
+        className="absolute right-1 top-1 size-8"
+      >
+        <X className="size-4" />
+      </Button>
     </div>
   );
 }
