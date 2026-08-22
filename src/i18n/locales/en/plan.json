@@ -455,7 +455,9 @@
   },
   "weeklyView": {
     "weekTitle": "Week {{week}}",
-    "completed": "completed"
+    "completed": "completed",
+    "replaceAction": "Replace",
+    "routeAction": "Route"
   },
   "workoutPanel": {
     "title": "Add a workout",
@@ -502,6 +504,7 @@
     "endedSection": "Past plans",
     "prebuiltHeading": "{{count}} ready-to-read plans",
     "filterAll": "All distances",
+    "createPlanDesc": "Guided from your goal and volume, ready-made from a template, or free-form if you'd rather build it by hand.",
     "whyCatalogue": {
       "eyebrow": "Why this catalogue",
       "readable": {

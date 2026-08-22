@@ -866,7 +866,11 @@
       "planFallback": "Plan",
       "collectionFallback": "Collection",
       "envAny": "Any",
-      "exerciseCredits": "Exercise illustrations from free-exercise-db (Public Domain)."
+      "exerciseCredits": "Exercise illustrations from free-exercise-db (Public Domain).",
+      "block": "Block {{index}}",
+      "termsAndScience": "Terms & science",
+      "distribution": "Distribution",
+      "goRun": "Go for a run"
     },
     "about": {
       "seoDescription": "Learn about Zoned, an open-source running workout library with zone-based training.",

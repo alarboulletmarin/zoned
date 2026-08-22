@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import {
   Calendar,
   Clock,
-  Plus,
   Loader2,
   ArrowRight,
   Trash2,
@@ -240,17 +239,20 @@ function PlanCard({
 
 /** "Créer un plan" tile — sits alongside the plan cards, matching the
  *  three entry points already offered on /plan/new (assisted / free /
- *  prebuilt) so the dashboard doesn't need a second decision tree. */
+ *  prebuilt) so the dashboard doesn't need a second decision tree. No card
+ *  fill of its own: the caller decides whether it needs the dashed rule
+ *  that separates it from a neighbouring plan card (mirrors the mockup,
+ *  where this tile reads as plain text next to the filled plan card). */
 function CreatePlanTile({ t }: { t: ReturnType<typeof useTranslation>["t"] }) {
   return (
-    <div className="h-full bg-card p-5 flex flex-col justify-center">
+    <div className="flex flex-col justify-center">
       <h3 className="font-sans font-bold uppercase leading-[1.02] tracking-[-0.03em] text-2xl">
         {t("plans.createPlan")}
       </h3>
-      <p className="mt-2 text-sm leading-[1.5] text-foreground/70">
-        {t("plansPage.subtitle")}
+      <p className="mt-2.5 text-[15px] leading-[1.55] text-muted-foreground max-w-[44ch]">
+        {t("plansPage.createPlanDesc")}
       </p>
-      <div className="flex flex-col gap-2.5 mt-4 font-mono text-[11px] tracking-[0.08em] uppercase">
+      <div className="flex flex-wrap gap-x-5 gap-y-2.5 mt-4 font-mono text-[11px] tracking-[0.08em] uppercase">
         <Link
           to="/plan/new/assisted"
           className="inline-flex items-center bg-accent-acid text-ink px-4 py-3 font-bold hover:bg-accent-acid/90 transition-colors w-fit"
@@ -259,13 +261,13 @@ function CreatePlanTile({ t }: { t: ReturnType<typeof useTranslation>["t"] }) {
         </Link>
         <Link
           to="/plan/new/prebuilt"
-          className="text-muted-foreground hover:text-foreground transition-colors w-fit"
+          className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors w-fit"
         >
           {t("plans.prebuiltPlans")}
         </Link>
         <Link
           to="/plan/new/free"
-          className="text-muted-foreground hover:text-foreground transition-colors w-fit"
+          className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors w-fit"
         >
           {t("plans.freePlan")}
         </Link>
@@ -365,16 +367,16 @@ export function PlansPage() {
         canonical="/plans"
       />
       <div className="py-8 space-y-10">
-        {/* Header */}
-        <div className="flex flex-col gap-4 border-b border-filet pb-6 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="font-mono text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
-              {t("plansPage.subtitle")}
-            </p>
-            <h1 className="font-sans font-bold uppercase leading-[0.9] tracking-[-0.05em] text-5xl sm:text-6xl mt-2">
-              {t("plansPage.title")}
+        {/* Header — compact eyebrow doubling as the page heading, secondary
+            actions folded into plain text links (no oversized hero, no
+            buttons in the header: matches the mockup's editorial density).
+            The "Mes plans" grid lives right below it, no separate hero. */}
+        <div className="space-y-6 border-b border-filet pb-8">
+          <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2">
+            <h1 className="font-mono text-[11px] tracking-[0.16em] uppercase text-accent-acid">
+              {t("plans.myPlans")}
             </h1>
-            <div className="flex flex-wrap gap-x-5 gap-y-2 mt-4 font-mono text-[11px] tracking-[0.08em] uppercase text-muted-foreground">
+            <div className="flex flex-wrap gap-x-5 gap-y-2 font-mono text-[11px] tracking-[0.08em] uppercase text-muted-foreground">
               <Link
                 to="/plans/methodology"
                 className="inline-flex items-center gap-1.5 underline underline-offset-4 hover:text-foreground transition-colors"
@@ -389,161 +391,72 @@ export function PlansPage() {
                 <Scale className="size-3.5" />
                 {t("plansPage.whatIf")}
               </Link>
+              <button
+                type="button"
+                onClick={handleImport}
+                className="inline-flex items-center gap-1.5 font-mono text-[11px] tracking-[0.08em] uppercase underline underline-offset-4 hover:text-foreground transition-colors"
+              >
+                <Download className="size-3.5 rotate-180" />
+                {t("plansPage.import")}
+              </button>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleImport}>
-              <Download className="size-4 rotate-180" />
-              <span className="hidden sm:inline ml-1">{t("plansPage.import")}</span>
-            </Button>
-            <Button asChild>
-              <Link to="/plan/new">
-                <Plus className="size-4" />
-                {t("create")}
-              </Link>
-            </Button>
-          </div>
+
+          {isLoading ? (
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="size-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+              {activePlans.map((plan) => (
+                <PlanCard
+                  key={plan.id}
+                  plan={plan}
+                  onDelete={setDeleteTarget}
+                  onDuplicate={handleDuplicate}
+                />
+              ))}
+              <div
+                className={cn(
+                  activePlans.length > 0 &&
+                    "border-t border-dashed border-filet pt-6"
+                )}
+              >
+                <CreatePlanTile t={t} />
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Content */}
-        {isLoading ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 className="size-8 animate-spin text-muted-foreground" />
-          </div>
-        ) : planCount > 0 ? (
-          <>
-            <div className="space-y-4">
-              <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-accent-acid">
-                {t("plans.myPlans")}
-              </p>
-              {activePlans.length > 0 && (
-                <div
-                  className={cn(
-                    "grid gap-px bg-border border border-border",
-                    "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-                  )}
-                >
-                  {activePlans.map((plan) => (
-                    <PlanCard
-                      key={plan.id}
-                      plan={plan}
-                      onDelete={setDeleteTarget}
-                      onDuplicate={handleDuplicate}
-                    />
-                  ))}
-                  <CreatePlanTile t={t} />
-                </div>
-              )}
-              {activePlans.length === 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border border border-border">
-                  <CreatePlanTile t={t} />
-                </div>
-              )}
-            </div>
-
-            {/* Ended plans: kept as training history, visually separated */}
-            {endedPlans.length > 0 && (
-              <div className="space-y-4">
-                <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground">
-                  {t("plansPage.endedSection")}
-                </p>
-                <div
-                  className={cn(
-                    "grid gap-px bg-border border border-border",
-                    "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-                  )}
-                >
-                  {endedPlans.map((plan) => (
-                    <PlanCard
-                      key={plan.id}
-                      plan={plan}
-                      onDelete={setDeleteTarget}
-                      onDuplicate={handleDuplicate}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Stats */}
-            <p className="font-mono text-[11px] text-muted-foreground text-center">
-              {t("plansPage.planCount", { count: planCount })}
+        {/* Ended plans: kept as training history, visually separated */}
+        {!isLoading && endedPlans.length > 0 && (
+          <div className="space-y-4">
+            <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground">
+              {t("plansPage.endedSection")}
             </p>
-          </>
-        ) : (
-          <div className="text-center py-16 space-y-4">
-            {/* Animated calendar grid SVG */}
-            <div className="mx-auto w-[36px] h-[44px]">
-              <svg
-                viewBox="0 0 36 44"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-full h-full"
-                aria-hidden="true"
-              >
-                <defs>
-                  <style>{`
-                    @keyframes plans-cell-fill {
-                      0% { opacity: 0.1; }
-                      100% { opacity: 0.7; }
-                    }
-                    @media (prefers-reduced-motion: reduce) {
-                      .plans-cell { animation: none !important; opacity: 0.7; }
-                    }
-                  `}</style>
-                </defs>
-                {/* 3x4 grid of rounded squares - each 8x8 with 3px gap */}
-                {/* Row-by-row, left-to-right: base -> build -> peak -> taper */}
-                {[
-                  /* Row 1 - Base (Z1 blue, Z2 green) */
-                  { x: 0,  y: 0,  color: "var(--zone-1)", delay: 0 },
-                  { x: 11, y: 0,  color: "var(--zone-1)", delay: 1 },
-                  { x: 22, y: 0,  color: "var(--zone-2)", delay: 2 },
-                  /* Row 2 - Build (Z2 green, Z3 yellow) */
-                  { x: 0,  y: 11, color: "var(--zone-2)", delay: 3 },
-                  { x: 11, y: 11, color: "var(--zone-3)", delay: 4 },
-                  { x: 22, y: 11, color: "var(--zone-3)", delay: 5 },
-                  /* Row 3 - Peak (Z4 orange, Z5 red) */
-                  { x: 0,  y: 22, color: "var(--zone-4)", delay: 6 },
-                  { x: 11, y: 22, color: "var(--zone-4)", delay: 7 },
-                  { x: 22, y: 22, color: "var(--zone-5)", delay: 8 },
-                  /* Row 4 - Taper (Z5 red, back to Z2 green) */
-                  { x: 0,  y: 33, color: "var(--zone-5)", delay: 9 },
-                  { x: 11, y: 33, color: "var(--zone-2)", delay: 10 },
-                  { x: 22, y: 33, color: "var(--zone-2)", delay: 11 },
-                ].map((cell, i) => (
-                  <rect
-                    key={i}
-                    className="plans-cell"
-                    x={cell.x}
-                    y={cell.y}
-                    width="8"
-                    height="8"
-                    rx="2"
-                    fill={cell.color}
-                    opacity="0.1"
-                    style={{
-                      animation: `plans-cell-fill 0.3s ease-out ${cell.delay * 0.25}s forwards`,
-                    }}
-                  />
-                ))}
-              </svg>
+            <div
+              className={cn(
+                "grid gap-px bg-border border border-border",
+                "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+              )}
+            >
+              {endedPlans.map((plan) => (
+                <PlanCard
+                  key={plan.id}
+                  plan={plan}
+                  onDelete={setDeleteTarget}
+                  onDuplicate={handleDuplicate}
+                />
+              ))}
             </div>
-            <div className="space-y-2">
-              <p className="text-lg font-medium">
-                {t("plansPage.buildArc")}
-              </p>
-              <p className="text-muted-foreground max-w-md mx-auto">
-                {t("plansPage.buildArcDesc")}
-              </p>
-            </div>
-            <Button asChild className="mt-4">
-              <Link to="/plan/new">
-                {t("plansPage.createFirst")}
-                <ArrowRight className="ml-2 size-4" />
-              </Link>
-            </Button>
           </div>
+        )}
+
+        {/* Stats */}
+        {!isLoading && planCount > 0 && (
+          <p className="font-mono text-[11px] text-muted-foreground text-center">
+            {t("plansPage.planCount", { count: planCount })}
+          </p>
         )}
 
         {/* Ready-made plans catalogue — real data from src/data/prebuilt-plans */}
@@ -589,15 +502,17 @@ export function PlansPage() {
           </div>
         </div>
 
-        {/* Why this catalogue — editorial 3-column block, mirrors the design mockup */}
-        <div className="border-2 border-foreground bg-card p-6 md:p-10">
-          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
+        {/* Why this catalogue — editorial 3-column block, mirrors the design
+            mockup. Fixed paper/ink regardless of theme: this is a deliberate
+            editorial insert (like a magazine sidebar), not a themed panel. */}
+        <div className="border-2 border-foreground bg-paper p-6 md:p-10">
+          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-ink/60">
             {t("plansPage.whyCatalogue.eyebrow")}
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-7 mt-4 text-sm leading-[1.6] text-foreground/75">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-7 mt-4 text-sm leading-[1.6] text-ink/70">
             {(["readable", "nine", "noTracking"] as const).map((key) => (
               <p key={key}>
-                <strong className="font-semibold text-foreground">
+                <strong className="font-semibold text-ink">
                   {t(`plansPage.whyCatalogue.${key}.title`)}
                 </strong>{" "}
                 {t(`plansPage.whyCatalogue.${key}.body`)}

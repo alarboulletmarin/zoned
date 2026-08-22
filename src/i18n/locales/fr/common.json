@@ -866,7 +866,11 @@
       "planFallback": "Plan",
       "collectionFallback": "Collection",
       "envAny": "Tous",
-      "exerciseCredits": "Illustrations des exercices issues de free-exercise-db (Domaine Public)."
+      "exerciseCredits": "Illustrations des exercices issues de free-exercise-db (Domaine Public).",
+      "block": "Bloc {{index}}",
+      "termsAndScience": "Termes & science",
+      "distribution": "Répartition",
+      "goRun": "Aller courir"
     },
     "about": {
       "seoDescription": "Découvrez Zoned, une bibliothèque open-source de séances de course à pied basée sur les zones.",

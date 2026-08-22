@@ -455,7 +455,9 @@
   },
   "weeklyView": {
     "weekTitle": "Semaine {{week}}",
-    "completed": "terminées"
+    "completed": "terminées",
+    "replaceAction": "Remplacer",
+    "routeAction": "Parcours"
   },
   "workoutPanel": {
     "title": "Ajouter une séance",
@@ -502,6 +504,7 @@
     "endedSection": "Plans terminés",
     "prebuiltHeading": "{{count}} plans prêts à lire",
     "filterAll": "Toutes distances",
+    "createPlanDesc": "Assisté depuis votre objectif et votre volume, prêt-à-l'emploi depuis un modèle, ou libre si vous préférez tout construire à la main.",
     "whyCatalogue": {
       "eyebrow": "Pourquoi ce catalogue",
       "readable": {
