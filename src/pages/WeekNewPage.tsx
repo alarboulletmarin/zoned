@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, Sparkles, BookOpen } from "@/components/icons";
+import { ArrowLeft, Sparkles, Plus, BookOpen } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
 import { cn } from "@/lib/utils";
@@ -9,11 +9,12 @@ import { createEmptyWeekPlan } from "@/lib/weekToPlan";
 
 /**
  * Week creation mode picker — mobile-first (cards stack to one column
- * under sm:). The "Generate" and "Scratch" modes both create an empty
- * single-week plan; "Generate" passes `state.openSettings` so WeekViewPage
- * surfaces the generator settings on arrival (the user picks their
- * parameters, then generates — never blindly). "Pre-built" links to the
- * gallery.
+ * under sm:). "Generate" and "Scratch" both create an empty single-week
+ * plan; "Generate" passes `state.openSettings` so WeekViewPage surfaces the
+ * generator settings on arrival (the user picks their parameters, then
+ * generates — never blindly), while "Scratch" lands straight on the
+ * composer, which defaults an empty week to the source picker. "Pre-built"
+ * links to the gallery.
  */
 export function WeekNewPage() {
   const { t } = useTranslation("library");
@@ -55,9 +56,9 @@ export function WeekNewPage() {
             </h1>
           </div>
 
-          {/* Cards — two modes: create (generate or build), or pre-built. */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-border border border-border">
-            {/* Create a week (generate 80/20 or build by hand) */}
+          {/* Cards — three modes: generate, build from scratch, or pre-built. */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-border border border-border">
+            {/* Generate a balanced 80/20 week */}
             <button
               type="button"
               onClick={() => createWeek(true)}
@@ -71,10 +72,32 @@ export function WeekNewPage() {
               </div>
               <div className="min-w-0">
                 <h2 className="font-sans font-bold uppercase tracking-[-0.02em] text-lg sm:text-xl mt-0 sm:mt-3">
-                  {t("weekly.new.modes.create.title")}
+                  {t("weekly.new.generate")}
                 </h2>
                 <p className="mt-1.5 text-sm text-muted-foreground">
-                  {t("weekly.new.modes.create.desc")}
+                  {t("weekly.new.generateDesc")}
+                </p>
+              </div>
+            </button>
+
+            {/* Build an empty week by hand, session by session */}
+            <button
+              type="button"
+              onClick={() => createWeek(false)}
+              className={cn(
+                "h-full w-full text-left bg-background p-5 sm:p-6 transition-colors hover:bg-secondary",
+                "flex items-center gap-4 sm:flex-col sm:items-start sm:text-left"
+              )}
+            >
+              <div className="size-10 sm:size-12 bg-zone-2/10 flex items-center justify-center shrink-0">
+                <Plus className="size-5 sm:size-6 text-zone-2" />
+              </div>
+              <div className="min-w-0">
+                <h2 className="font-sans font-bold uppercase tracking-[-0.02em] text-lg sm:text-xl mt-0 sm:mt-3">
+                  {t("weekly.new.scratch")}
+                </h2>
+                <p className="mt-1.5 text-sm text-muted-foreground">
+                  {t("weekly.new.scratchDesc")}
                 </p>
               </div>
             </button>

@@ -12,7 +12,7 @@ import type { AnyWorkoutTemplate } from "@/types";
 
 /** Collections grouped into small editorial sections, mirroring the
  *  calculators hub: a mono caption per group + the matching cards. */
-const COLLECTION_GROUPS: { id: string; titleKey: string; members: string[] }[] = [
+export const COLLECTION_GROUPS: { id: string; titleKey: string; members: string[] }[] = [
   {
     id: "starter",
     titleKey: "collections.groups.starter",

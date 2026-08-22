@@ -193,10 +193,6 @@
       "subtitle": "Choose how to compose your training week.",
       "back": "Back to weeks",
       "modes": {
-        "create": {
-          "title": "Create a week",
-          "desc": "Auto-generate a balanced 80/20 week, or build it session by session."
-        },
         "prebuilt": {
           "title": "Pre-built week",
           "desc": "Pick a sourced template week and start right away."

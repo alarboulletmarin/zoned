@@ -772,13 +772,13 @@
   "collectionsDetail": {
     "collectionNotFound": "Collection introuvable",
     "noWorkoutsFound": "Aucune séance trouvée pour cette collection.",
+    "category": "Collection · {{group}}",
     "zoneMix": "Répartition des zones",
     "colNumber": "Nº",
     "colSession": "Séance",
     "colZone": "Zone",
     "colDuration": "Durée",
     "colOpen": "Ouvrir",
-    "bulkActions": "Actions groupées",
     "favoriteAll": "Tout mettre en favoris",
     "allFavorited": "Tout est en favoris",
     "exportPdf": "Exporter la collection (PDF)"

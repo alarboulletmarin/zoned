@@ -1,27 +1,7 @@
 import { useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Download,
-  Heart,
-  Loader2,
-  Footprints,
-  Leaf,
-  Shield,
-  RefreshCw,
-  Flag,
-  Star,
-  Target,
-  Route,
-  Mountain,
-  Rocket,
-  Dumbbell,
-  HeartPulse,
-} from "@/components/icons";
-import type { IconProps } from "@/components/icons";
-import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, ArrowRight, Download, Heart, Loader2 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
 import { useCollection } from "@/hooks/useCollections";
@@ -38,41 +18,7 @@ import { cn } from "@/lib/utils";
 import type { AnyWorkoutTemplate, ZoneNumber } from "@/types";
 import { getDominantZone, isStrengthWorkout } from "@/types";
 import { usePickLang } from "@/lib/i18n-utils";
-
-/** Map collection icon strings to actual icon components (same as CollectionCard) */
-const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
-  Footprints,
-  Leaf,
-  Shield,
-  RefreshCw,
-  Flag,
-  Star,
-  Target,
-  Route,
-  Mountain,
-  Rocket,
-  Dumbbell,
-  HeartPulse,
-};
-
-const ZONE_MAP: Record<string, number> = {
-  "debuter-le-running": 1,
-  "anti-stress": 1,
-  "retour-de-blessure": 1,
-  "post-course": 1,
-  "pre-course": 3,
-  "seances-mythiques": 5,
-  "objectif-5k": 5,
-  "objectif-10k": 4,
-  "objectif-semi": 4,
-  "objectif-marathon": 4,
-  "objectif-ultra": 3,
-  "progresser-vma": 5,
-};
-
-function getCollectionZone(slug: string): number {
-  return ZONE_MAP[slug] ?? 3;
-}
+import { COLLECTION_GROUPS } from "@/pages/CollectionsPage";
 
 /**
  * Duration a row shows: the real block total for running-family sessions, the
@@ -184,10 +130,9 @@ export function CollectionDetailPage() {
     );
   }
 
-  const Icon = ICON_MAP[collection.icon] ?? Target;
   const name = pickLang(collection, "name");
   const description = pickLang(collection, "description");
-  const workoutCount = collection.workoutIds.length;
+  const group = COLLECTION_GROUPS.find((g) => g.members.includes(collection.slug));
 
   return (
     <>
@@ -228,50 +173,32 @@ export function CollectionDetailPage() {
           </Link>
         </Button>
 
-        {/* Hero Section */}
-        <div className="border-2 border-foreground bg-card p-6 md:p-10">
-          {/* Content */}
-          <div className="space-y-4 max-w-2xl">
-            {/* Icon */}
-            <div
-              className="inline-flex items-center justify-center p-3"
-              style={{
-                backgroundColor: `var(--zone-${getCollectionZone(collection.slug)})`,
-                color: `var(--zone-${getCollectionZone(collection.slug)}-text)`,
-              }}
-            >
-              <Icon className="size-8" />
-            </div>
-
-            {/* Name */}
-            <h1 className="font-sans font-bold uppercase leading-[0.94] tracking-[-0.04em] text-[32px] sm:text-[40px] md:text-[48px]">
-              {name}
-            </h1>
-
-            {/* Description */}
-            <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
-              <GlossaryLinkedText text={description} />
-            </p>
-
-            {/* Badges */}
-            <div className="flex flex-wrap items-center gap-2 pt-2">
-              <Badge variant="secondary">
-                {t("collections.workoutCount", { count: workoutCount })}
-              </Badge>
-              <Badge variant="outline">
-                {collection.isProgression
-                  ? t("collections.progression")
-                  : t("collections.freeSelection")}
-              </Badge>
+        {/* One continuous panel — hero, numbered table and bulk actions,
+            separated by filet rules rather than stacked as separate boxes. */}
+        <div className="border-2 border-foreground bg-card">
+          {/* Hero */}
+          <div className="p-6 md:p-8 border-b border-filet grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 lg:items-end">
+            <div>
+              <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted-foreground">
+                {group
+                  ? t("collectionsDetail.category", { group: t(group.titleKey) })
+                  : t("collections.title")}
+              </p>
+              <h1 className="font-sans font-bold uppercase leading-[0.86] tracking-[-0.05em] text-5xl sm:text-6xl lg:text-7xl mt-3">
+                {name}
+              </h1>
+              <p className="mt-4 text-muted-foreground text-base md:text-lg leading-relaxed max-w-[58ch]">
+                <GlossaryLinkedText text={description} />
+              </p>
             </div>
 
             {/* Zone mix, read from the collection's own sessions */}
             {zoneMix.length > 0 && (
-              <div className="pt-4 space-y-2">
-                <h2 className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
+              <div className="border-t border-filet pt-4 lg:pb-1">
+                <h2 className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
                   {t("collectionsDetail.zoneMix")}
                 </h2>
-                <div className="flex h-2.5 w-full border border-foreground">
+                <div className="flex h-2.5 w-full mt-3">
                   {zoneMix.map((entry) => (
                     <div
                       key={entry.zone}
@@ -280,7 +207,7 @@ export function CollectionDetailPage() {
                     />
                   ))}
                 </div>
-                <p className="font-mono text-[11px] tabular-nums text-muted-foreground">
+                <p className="font-mono text-[11px] tabular-nums text-muted-foreground mt-2.5 leading-relaxed">
                   {/* The bar keeps every zone so it always fills; the legend
                       drops the slivers that would read "0% Z6". */}
                   {zoneMix
@@ -291,78 +218,73 @@ export function CollectionDetailPage() {
               </div>
             )}
           </div>
-        </div>
 
-        {/* Numbered session table */}
-        {workouts.length > 0 && (
-          <div className="border-2 border-foreground">
-            <div className="grid grid-cols-[2.5rem_1fr_3.25rem_4rem] md:grid-cols-[3.5rem_1fr_4rem_5rem_6.5rem] bg-ink text-paper font-mono text-[10px] tracking-[0.12em] uppercase">
-              <div className="px-2 py-2 text-center">
-                {t("collectionsDetail.colNumber")}
+          {/* Numbered session table */}
+          {workouts.length > 0 && (
+            <div>
+              <div className="grid grid-cols-[2.5rem_1fr_3.25rem_4rem] md:grid-cols-[3.5rem_1fr_4rem_5rem_6.5rem] bg-ink text-paper font-mono text-[10px] tracking-[0.12em] uppercase">
+                <div className="px-2 py-2 text-center">
+                  {t("collectionsDetail.colNumber")}
+                </div>
+                <div className="px-2 py-2">{t("collectionsDetail.colSession")}</div>
+                <div className="px-2 py-2 text-center">
+                  {t("collectionsDetail.colZone")}
+                </div>
+                <div className="px-2 py-2 text-center">
+                  {t("collectionsDetail.colDuration")}
+                </div>
+                <div className="hidden md:block px-2 py-2 text-right">
+                  {t("collectionsDetail.colOpen")}
+                </div>
               </div>
-              <div className="px-2 py-2">{t("collectionsDetail.colSession")}</div>
-              <div className="px-2 py-2 text-center">
-                {t("collectionsDetail.colZone")}
-              </div>
-              <div className="px-2 py-2 text-center">
-                {t("collectionsDetail.colDuration")}
-              </div>
-              <div className="hidden md:block px-2 py-2 text-right">
-                {t("collectionsDetail.colOpen")}
-              </div>
+
+              {workouts.map((workout, index) => {
+                const zone = rowZone(workout);
+                return (
+                  <Link
+                    key={workout.id}
+                    to={`/workout/${workout.id}`}
+                    className="grid grid-cols-[2.5rem_1fr_3.25rem_4rem] md:grid-cols-[3.5rem_1fr_4rem_5rem_6.5rem] items-center border-t border-filet hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ring transition-colors"
+                  >
+                    <div className="px-2 py-3 text-center font-mono text-xs tabular-nums text-muted-foreground">
+                      {String(index + 1).padStart(2, "0")}
+                    </div>
+                    <div className="px-2 py-3 font-sans font-bold uppercase leading-tight tracking-tight text-sm truncate">
+                      {pickLang(workout, "name")}
+                    </div>
+                    <div className="px-2 py-3 flex justify-center">
+                      {zone != null ? (
+                        <span
+                          className={cn(
+                            "px-1.5 py-0.5 font-mono text-[10px] font-bold",
+                            zoneClass(zone, "bg"),
+                            zoneClass(zone, "textOn"),
+                          )}
+                        >
+                          Z{zone}
+                        </span>
+                      ) : (
+                        <span className="font-mono text-[10px] text-muted-foreground">
+                          —
+                        </span>
+                      )}
+                    </div>
+                    <div className="px-2 py-3 text-center font-mono text-xs tabular-nums text-muted-foreground">
+                      {formatDurationMinutes(rowDurationMin(workout))}
+                    </div>
+                    <div className="hidden md:flex px-2 py-3 items-center justify-end gap-1.5 font-mono text-[10px] tracking-[0.12em] uppercase">
+                      {t("collectionsDetail.colOpen")}
+                      <ArrowRight className="size-3" />
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
+          )}
 
-            {workouts.map((workout, index) => {
-              const zone = rowZone(workout);
-              return (
-                <Link
-                  key={workout.id}
-                  to={`/workout/${workout.id}`}
-                  className="grid grid-cols-[2.5rem_1fr_3.25rem_4rem] md:grid-cols-[3.5rem_1fr_4rem_5rem_6.5rem] items-center border-t border-filet hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-ring transition-colors"
-                >
-                  <div className="px-2 py-3 text-center font-mono text-xs tabular-nums text-muted-foreground">
-                    {String(index + 1).padStart(2, "0")}
-                  </div>
-                  <div className="px-2 py-3 font-sans font-bold uppercase leading-tight tracking-tight text-sm truncate">
-                    {pickLang(workout, "name")}
-                  </div>
-                  <div className="px-2 py-3 flex justify-center">
-                    {zone != null ? (
-                      <span
-                        className={cn(
-                          "px-1.5 py-0.5 font-mono text-[10px] font-bold",
-                          zoneClass(zone, "bg"),
-                          zoneClass(zone, "textOn"),
-                        )}
-                      >
-                        Z{zone}
-                      </span>
-                    ) : (
-                      <span className="font-mono text-[10px] text-muted-foreground">
-                        —
-                      </span>
-                    )}
-                  </div>
-                  <div className="px-2 py-3 text-center font-mono text-xs tabular-nums text-muted-foreground">
-                    {formatDurationMinutes(rowDurationMin(workout))}
-                  </div>
-                  <div className="hidden md:flex px-2 py-3 items-center justify-end gap-1.5 font-mono text-[10px] tracking-[0.12em] uppercase">
-                    {t("collectionsDetail.colOpen")}
-                    <ArrowRight className="size-3" />
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Bulk actions */}
-        {workouts.length > 0 && (
-          <div className="border-2 border-foreground p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
-              {t("collectionsDetail.bulkActions")}
-            </p>
-            <div className="flex flex-wrap gap-2">
+          {/* Bulk actions */}
+          {workouts.length > 0 && (
+            <div className="border-t border-filet p-4 md:p-6 flex flex-wrap gap-2">
               <Button
                 variant="accent"
                 onClick={handleFavoriteAll}
@@ -386,8 +308,8 @@ export function CollectionDetailPage() {
                 {t("collectionsDetail.exportPdf")}
               </Button>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Empty state if workouts failed to resolve */}
         {workouts.length === 0 && !isLoading && (

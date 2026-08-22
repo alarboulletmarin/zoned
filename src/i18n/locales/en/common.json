@@ -772,13 +772,13 @@
   "collectionsDetail": {
     "collectionNotFound": "Collection not found",
     "noWorkoutsFound": "No workouts found for this collection.",
+    "category": "Collection · {{group}}",
     "zoneMix": "Zone mix",
     "colNumber": "No.",
     "colSession": "Workout",
     "colZone": "Zone",
     "colDuration": "Duration",
     "colOpen": "Open",
-    "bulkActions": "Bulk actions",
     "favoriteAll": "Favorite them all",
     "allFavorited": "All favorited",
     "exportPdf": "Export collection (PDF)"

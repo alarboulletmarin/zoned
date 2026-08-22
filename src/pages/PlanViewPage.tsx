@@ -908,8 +908,10 @@ export function PlanViewPage() {
           </div>
         )}
 
-        {/* Phase Timeline */}
-        {plan.phases.length > 0 && (
+        {/* Phase Timeline — the detailed control chrome (phases, undo,
+            audit) only belongs to the Semaine working view per the Brut
+            mockup; the overview grids (Calendrier/Mois/Liste) stay light. */}
+        {planViewMode === "weekly" && plan.phases.length > 0 && (
           <div className="border border-border p-4">
             <div className="flex items-baseline justify-between">
               <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-muted-foreground">
@@ -960,7 +962,7 @@ export function PlanViewPage() {
         )}
 
         {/* Undo last change panel */}
-        {plan._lastUndoableChange && (
+        {planViewMode === "weekly" && plan._lastUndoableChange && (
           <LastChangePanel
             label={plan._lastUndoableChange.label}
             labelEn={plan._lastUndoableChange.labelEn}
@@ -975,21 +977,15 @@ export function PlanViewPage() {
         )}
 
         {/* Plan audit panel */}
-        {auditFindings.length > 0 && (
+        {planViewMode === "weekly" && auditFindings.length > 0 && (
           <PlanAuditPanel
             findings={auditFindings}
             onFix={handleAuditFix}
             onGoToWeek={(weekNumber) => {
+              // Audit only renders in the Semaine view, so jumping to a
+              // finding just moves the single-week view there.
               setWeekParam(weekNumber);
-              // List view: expand the target week
-              if (planViewMode === "list") {
-                setExpandedWeeks((prev) => new Set([...prev, weekNumber]));
-              }
-              // Scroll to the week header in calendar/list views
-              requestAnimationFrame(() => {
-                const el = document.querySelector(`[data-week="${weekNumber}"]`);
-                el?.scrollIntoView({ behavior: "smooth", block: "center" });
-              });
+              setPendingWeeklyWeek(weekNumber);
             }}
           />
         )}

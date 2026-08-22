@@ -193,10 +193,6 @@
       "subtitle": "Choisis comment composer ta semaine d'entraînement.",
       "back": "Retour aux semaines",
       "modes": {
-        "create": {
-          "title": "Créer une semaine",
-          "desc": "Génère une semaine 80/20 automatiquement, ou compose-la séance par séance."
-        },
         "prebuilt": {
           "title": "Semaine pré-construite",
           "desc": "Choisis une semaine type sourcée et commence immédiatement."
