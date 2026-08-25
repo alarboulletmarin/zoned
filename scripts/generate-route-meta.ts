@@ -241,6 +241,12 @@ const getStaticRoutes = (glossaryTerms: number): RouteMeta[] => [
     description: `Pourquoi Zoned existe : ${stats.workouts} séances fondées sur la science, ${stats.plans} plans et ${stats.calculators} calculateurs — gratuits, open source, sans compte ni tracking, pour toujours.`,
   },
   {
+    path: "/legal",
+    title: "Confidentialité et mentions légales",
+    description:
+      "Aucun compte ni serveur : tout reste dans votre navigateur. Ce que mesure Vercel Analytics, les tiers appelés par le générateur, et qui édite le site.",
+  },
+  {
     path: "/contribute",
     title: "Contribuer",
     description:

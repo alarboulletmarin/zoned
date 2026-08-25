@@ -261,5 +261,96 @@
     "noAccount": "Aucun compte requis",
     "localData": "Vos données restent sur votre appareil",
     "footerNote": "Pas de tracking. Pas de cookies."
+  },
+  "legal": {
+    "eyebrow": "Informations légales",
+    "title": "Confidentialité et mentions légales",
+    "description": "Ce que Zoned enregistre, ce qu'il envoie, à qui, et qui l'édite.",
+    "seoDescription": "Confidentialité et mentions légales de Zoned : aucune donnée de compte, tout reste dans votre navigateur, et la liste exacte des services tiers contactés par le générateur de parcours.",
+    "updatedLabel": "Mis à jour",
+    "updated": "Août 2026",
+    "privacy": {
+      "title": "Confidentialité",
+      "intro": "Zoned n'a ni compte, ni serveur applicatif, ni base de données. Tout ce que vous créez vit dans votre navigateur, et nulle part ailleurs. Une seule fonctionnalité fait exception, et elle est désactivée par défaut.",
+      "sections": [
+        {
+          "heading": "Ce que l'app enregistre, et où",
+          "body": [
+            "Vos réglages, votre profil, vos zones, vos séances personnelles, vos plans et vos semaines sont écrits dans le stockage local de votre navigateur. Vos parcours enregistrés vont dans sa base IndexedDB, mieux adaptée à des tracés volumineux. C'est le seul endroit où ces informations existent.",
+            "Rien de tout cela n'est transmis. Il n'y a pas d'inscription, donc pas d'adresse e-mail, pas de mot de passe, pas d'identifiant : l'app est un ensemble de fichiers statiques servis à votre navigateur, et tout le calcul s'y fait.",
+            "La contrepartie, qu'il faut connaître : vider les données de votre navigateur les efface, et personne — l'éditeur compris — ne peut vous les rendre. Rien ne se synchronise non plus d'un appareil à l'autre. D'où l'export, dans Mes données, qui vous rend un fichier que vous rangez où vous voulez."
+          ]
+        },
+        {
+          "heading": "Mesure d'audience",
+          "body": [
+            "Les pages vues sont comptées par Vercel Analytics, actif sur tout le site. Il ne dépose aucun cookie, n'écrit rien dans votre navigateur et ne construit aucun profil : il compte des pages, pas des personnes. Les mesures partent vers vitals.vercel-insights.com.",
+            "C'est pourquoi il n'y a pas de bandeau de consentement à fermer. Un bandeau vous ferait cliquer pour rien : il n'y a ni traceur à accepter, ni traceur à refuser."
+          ]
+        },
+        {
+          "heading": "Le générateur de parcours, et lui seul, sort de votre navigateur",
+          "body": [
+            "Tracer un parcours suppose d'interroger des services de cartographie publics. Votre point de départ leur est alors transmis : BRouter (brouter.de) pour calculer l'itinéraire, Nominatim (openstreetmap.org) pour retrouver une adresse ou un nom de lieu, Overpass (overpass-api.de) pour repérer les parcs, les points d'eau et les pistes autour de vous. La carte affichée charge par ailleurs ses tuiles depuis tile.openstreetmap.org, ce qui revient à demander les carreaux d'image qui couvrent la zone regardée.",
+            "Le bouton « Utiliser ma position » demande la géolocalisation à votre navigateur — vous seul l'autorisez, et la réponse ne sert qu'à remplir le champ de départ, d'où elle suit le même chemin que si vous l'aviez saisi à la main.",
+            "Aucun identifiant n'est joint à ces requêtes et Zoned n'en conserve rien. Ces services sont opérés par des tiers, avec leurs propres politiques : la requête part de votre navigateur, pas d'un serveur Zoned.",
+            "C'est la seule fonctionnalité qui envoie une position à un tiers, et c'est pourquoi elle est désactivée par défaut. Elle s'active dans les Réglages, en un interrupteur. Tant qu'elle est éteinte, aucune coordonnée ne quitte votre navigateur."
+          ]
+        },
+        {
+          "heading": "Ce que l'hébergeur voit",
+          "body": [
+            "Servir une page laisse une trace chez l'hébergeur : ses journaux techniques conservent l'adresse IP qui se connecte, l'horodatage et l'adresse demandée. C'est le fonctionnement normal d'un serveur web, et c'est le seul traitement de données personnelles dont l'éditeur soit responsable.",
+            "Finalité : faire fonctionner le site et le protéger des abus. Base légale : l'intérêt légitime de l'éditeur à fournir un service qui tienne debout (article 6.1.f du RGPD). Durée : celle que l'hébergeur applique à ses propres journaux."
+          ]
+        },
+        {
+          "heading": "Vos droits",
+          "body": [
+            "Sur ce que l'app enregistre, ils s'exercent directement, sans passer par personne : Mes données exporte tout dans un fichier, réimporte un fichier, et efface tout. Il n'y a aucune demande à formuler, puisqu'il n'y a personne à qui la formuler.",
+            "Sur les journaux de l'hébergeur, la demande passe par le dépôt GitHub, dont le lien est en pied de page. Vous pouvez aussi introduire une réclamation auprès de la CNIL."
+          ]
+        }
+      ]
+    },
+    "notice": {
+      "title": "Mentions légales",
+      "intro": "Qui édite ce site, qui l'héberge, et sous quelle licence il est publié.",
+      "sections": [
+        {
+          "heading": "Éditeur",
+          "body": [
+            "Zoned est édité par une personne physique agissant à titre non professionnel. Le site est gratuit, sans publicité, sans abonnement et sans revente de données — il n'y a d'ailleurs rien à revendre, puisque rien ne quitte votre navigateur.",
+            "L'éditeur ne publie pas son identité sur cette page : l'article 1-1 de la LCEN — l'ancien article 6 III, déplacé par la loi du 21 mai 2024 — le permet aux personnes non professionnelles, à condition d'avoir communiqué son identité à son hébergeur, lequel est nommé ci-dessous.",
+            "Directeur de la publication : la même personne."
+          ]
+        },
+        {
+          "heading": "Joindre l'éditeur",
+          "body": [
+            "Le dépôt de code est le point de contact : une issue publique pour un bug, une question ou une demande, et le signalement privé de GitHub pour une faille de sécurité ou pour toute demande qui n'a pas à être publique. Le lien est en pied de page."
+          ]
+        },
+        {
+          "heading": "Hébergeur",
+          "body": [
+            "Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis — vercel.com.",
+            "Le site est servi depuis son infrastructure. Il n'y a aucun autre serveur : l'app est un paquet de fichiers statiques, et tout le calcul se fait dans votre navigateur."
+          ]
+        },
+        {
+          "heading": "Nom de domaine",
+          "body": ["zoned.run, enregistré par l'éditeur."]
+        },
+        {
+          "heading": "Code et licences",
+          "body": [
+            "Le code de Zoned est publié sous licence MIT, sur github.com/alarboulletmarin/zoned : il peut être lu, copié, modifié et redistribué, y compris pour un usage commercial, à condition d'en conserver la notice.",
+            "L'app embarque des composants tiers qui portent leurs propres licences. Leurs notices intégrales sont servies avec l'app, sur /licenses.txt, et régénérées à chaque build depuis les paquets réellement embarqués.",
+            "Les fonds de carte proviennent d'OpenStreetMap, dont les données sont publiées sous Open Database License par ses contributeurs."
+          ]
+        }
+      ]
+    }
   }
 }

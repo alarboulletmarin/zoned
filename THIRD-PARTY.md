@@ -2,7 +2,7 @@
 
 Zoned's own source code is MIT licensed; see [LICENSE](LICENSE). This file covers the third-party material redistributed inside the repository and the built site, which carries its own terms.
 
-It documents the material **committed into this repository** (icons, typeface) and the **non-open-source dependency** the build redistributes. The licences of the npm dependencies bundled into the built site are not listed by hand: they are generated from `node_modules` into `licenses.txt`, served at [zoned.run/licenses.txt](https://zoned.run/licenses.txt), by [`scripts/generate-licenses.ts`](scripts/generate-licenses.ts) on every build. Minification strips licence comments, so without that file the bundle would ship the code and drop the notice those licences require.
+It documents the material **committed into this repository** (icons, typefaces) and the **non-open-source dependencies** the build redistributes — one of which, the General Sans typeface, is committed under terms that do not allow it. That entry is flagged and awaiting a decision. The licences of the npm dependencies bundled into the built site are not listed by hand: they are generated from `node_modules` into `licenses.txt`, served at [zoned.run/licenses.txt](https://zoned.run/licenses.txt), by [`scripts/generate-licenses.ts`](scripts/generate-licenses.ts) on every build. Minification strips licence comments, so without that file the bundle would ship the code and drop the notice those licences require.
 
 ---
 
@@ -27,21 +27,64 @@ The upstream package ships **no `NOTICE` file**, so there is no attribution noti
 
 ---
 
-## Space Grotesk — typeface
+## General Sans — typeface (⚠ redistribution is not granted)
+
+- **Copyright:** © Indian Type Foundry
+- **Licence:** ITF Free Font License (FFL) v2.0, full text in [licenses/general-sans-ITF-FFL.txt](licenses/general-sans-ITF-FFL.txt)
+- **Upstream:** https://www.fontshare.com/fonts/general-sans
+- **Obtained via:** Fontshare, static per-weight latin files (400/500/600/700); Fontshare publishes no variable axis for this family
+- **Where it lives:** `public/fonts/general-sans-{400,500,600,700}.woff2`, declared in `src/styles/fonts.css`, with 400 and 700 preloaded from `index.html`
+
+It replaced Space Grotesk in commit `e98154e` as the typeface of the "Zoned Brut" identity.
+
+**The FFL is not an open-source font licence, and it does not permit what this repository does with these four files.** Two clauses pull in opposite directions:
+
+- **§01 permits self-hosting.** Serving the files from zoned.run for Zoned's own site is expressly allowed, and Fontshare recommends it over their API. *The deployed site is fine.*
+- **§02 forbids redistribution.** The Font Software may not be "distributed, duplicated […] or otherwise made available to any other person or entity, whether for free or for a fee", and the clause names "repository" and "publicly accessible servers" among the prohibited means.
+
+Committing the `.woff2` files to a public repository is the second thing, not the first. Every clone takes a copy, and [LICENSE](LICENSE) grants recipients MIT rights over the tree — rights that ITF has not granted over these files and that Zoned cannot sublicense. §02 also forbids subsetting and format conversion, so the files must stay exactly as Fontshare served them; they are committed unmodified, and no `unicode-range` is applied to them.
+
+**This is unresolved and needs a decision from the author.** The options, roughly:
+
+1. drop General Sans for a system font stack, and delete the files (what the sibling project `zoned-tri` did);
+2. keep the files out of git and fetch them from Fontshare at build time, so the deploy self-hosts them but the repository never redistributes them;
+3. ask ITF for written consent to redistribute them in a public repository, per §01's closing paragraph and §09.
+
+Until one of those happens, this entry is a disclosure, not a licence: it does not make the redistribution permitted, and no reader should treat the presence of these files as permission to reuse them. Obtain your own copy from Fontshare.
+
+The metrics-matched `General Sans Fallback` face in the same stylesheet contains no General Sans data: it is a set of override percentages applied to the user's local Arial, and is not covered by the FFL.
+
+---
+
+## Space Mono — typeface
+
+- **Copyright:** © 2016 The Space Mono Project Authors
+- **Licence:** SIL Open Font License 1.1, full text in [licenses/space-mono-OFL.txt](licenses/space-mono-OFL.txt)
+- **Upstream:** https://github.com/googlefonts/spacemono
+- **Obtained via:** Google Fonts, latin subset, weights 400 and 700
+- **Where it lives:** `public/fonts/space-mono-{400,700}.woff2`, declared in `src/styles/fonts.css`
+
+Added in commit `e98154e`. The previous mono stack named JetBrains Mono and Fira Code but never shipped a `@font-face`, so it silently fell through to the OS monospace; Brut leans on mono for nearly every label and data value, so it is self-hosted like the sans font.
+
+The font files are committed to this repository and copied into the built site, so every clone and every deploy redistributes them. **OFL clause 2 makes reproducing the copyright notice and the licence a condition of that redistribution**. That is what this entry and `licenses/space-mono-OFL.txt` provide; the notice was owed from `e98154e` onward.
+
+**The redistributed form is modified**: it is the latin subset as served by Google Fonts, which makes it a *Modified Version* under the licence. **No outline data is altered.**
+
+The upstream copyright line carries **no Reserved Font Name**, so clause 3 imposes no renaming on the subset and the family keeps its original name.
+
+---
+
+## Space Grotesk — typeface (historical)
 
 - **Copyright:** © 2020 The Space Grotesk Project Authors
 - **Licence:** SIL Open Font License 1.1, full text in [licenses/space-grotesk-OFL.txt](licenses/space-grotesk-OFL.txt)
 - **Upstream:** https://github.com/floriankarsten/space-grotesk
 - **Obtained via:** Google Fonts, latin subset of the variable font (weights 300–700)
-- **Where it lives:** `public/fonts/space-grotesk-latin.woff2`, declared in `src/styles/fonts.css` and preloaded from `index.html`
+- **Where it lived:** `public/fonts/space-grotesk-latin.woff2`, removed in commit `e98154e`
 
-The font file is committed to this repository and copied into the built site, so every clone and every deploy redistributes it. **OFL clause 2 makes reproducing the copyright notice and the licence a condition of that redistribution**. That is what this entry and `licenses/space-grotesk-OFL.txt` provide. It was self-hosted in commit `da2fc8e` to drop the render-blocking Google Fonts chain; the notice was owed from that commit onward.
+Space Grotesk is **no longer shipped**: the Brut migration replaced it with General Sans above. The attribution stays for the same reason Lucide's does — it was self-hosted from commit `da2fc8e` to `e98154e`, and the git history of this repository still redistributes the file to every clone. OFL clause 2 attaches to those copies.
 
-**The redistributed form is modified**: it is a subset, restricted to the latin `unicode-range` listed in `src/styles/fonts.css`, which makes it a *Modified Version* under the licence. **No outline data is altered.**
-
-The upstream copyright line carries **no Reserved Font Name**, so clause 3 imposes no renaming on the subset and the family keeps its original name. Should the upstream notice ever gain one, the subset would have to be renamed.
-
-The metrics-matched `Space Grotesk Fallback` face in the same stylesheet contains no Space Grotesk data: it is a set of override percentages applied to the user's local Arial, and is not covered by the OFL.
+**The redistributed form was modified**: a subset restricted to a latin `unicode-range`, which made it a *Modified Version* under the licence. **No outline data was altered.** The upstream copyright line carries no Reserved Font Name, so clause 3 imposed no renaming.
 
 ---
 

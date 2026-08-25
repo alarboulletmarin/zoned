@@ -2,6 +2,36 @@ import type { ChangelogVersion } from "./types";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
+    version: "0.8.1",
+    date: "2026-08-25",
+    changes: {
+      added: [
+        {
+          text: "Une page de confidentialité et de mentions légales, à /legal, liée depuis le pied de page. Ce que l'app enregistre et où, ce que mesure Vercel Analytics et pourquoi il n'y a pas de bandeau de consentement, les trois services que le générateur de parcours contacte avec votre point de départ, ce que voit l'hébergeur, et qui édite le site",
+          textEn: "A privacy policy and legal notice at /legal, linked from the footer. What the app stores and where, what Vercel Analytics measures and why there is no consent banner, the three services the route generator hands your start point to, what the host sees, and who publishes the site",
+          category: "Contenu",
+          categoryEn: "Content",
+        },
+      ],
+      changed: [
+        {
+          text: "Le générateur de parcours est désormais désactivé par défaut. Il était documenté comme une option à activer, mais arrivait activé : votre position de départ pouvait partir vers BRouter, Nominatim et Overpass sans que personne ne l'ait demandé. Un interrupteur dans les Réglages l'allume, et les pages concernées y renvoient déjà",
+          textEn: "The route generator is now off by default. It was documented as opt-in but shipped on, so a start position could reach BRouter, Nominatim and Overpass without anyone asking for it. A switch in Settings turns it on, and the route pages already point there",
+          category: "Fonctionnalite",
+          categoryEn: "Feature",
+        },
+      ],
+      fixed: [
+        {
+          text: "Les notices des deux polices embarquées manquaient depuis le passage à l'identité Brut : Space Mono est publiée sous licence ouverte et sa notice était due, General Sans est sous une licence qui autorise l'auto-hébergement mais pas la redistribution des fichiers. Les deux sont documentées, la seconde avec l'avertissement qui s'impose",
+          textEn: "Notices for both bundled typefaces were missing since the Brut identity landed: Space Mono ships under an open licence whose notice was owed, and General Sans under one that allows self-hosting but not redistributing the files. Both are documented, the second with the warning it warrants",
+          category: "Infrastructure",
+          categoryEn: "Infrastructure",
+        },
+      ],
+    },
+  },
+  {
     version: "0.8.0",
     date: "2026-07-29",
     changes: {

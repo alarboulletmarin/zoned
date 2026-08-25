@@ -75,6 +75,7 @@ export function Footer() {
                 },
                 { label: t("homepage:home.footer.project.changelog"), to: "/changelog" },
                 { label: t("homepage:home.footer.project.offline"), to: "/offline" },
+                { label: t("homepage:home.footer.project.legal"), to: "/legal" },
               ]}
             />
           </div>

@@ -193,8 +193,11 @@ means a given build may not include all of them. Erring towards one notice too
 many is deliberate: a missing notice breaks a licence, a surplus one does not.
 
 Third-party material committed into the repository itself — the Material
-Symbols icon set, Lucide, and the Space Grotesk typeface — is documented
-separately in THIRD-PARTY.md, with the full texts under licenses/.
+Symbols icon set, Lucide, and the General Sans, Space Mono and Space Grotesk
+typefaces — is documented separately in THIRD-PARTY.md, with the full texts
+under licenses/. General Sans is served under the ITF Free Font License, which
+permits self-hosting this site but grants you no right to redistribute the
+font files themselves; get your own copy from fontshare.com.
 
 Note: the Garmin FIT SDK below is proprietary, not open source. Its agreement is
 between Garmin and Zoned; it is reproduced here because Zoned redistributes the

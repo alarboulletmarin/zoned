@@ -151,7 +151,8 @@ Training zones · Pace converter · Pace reference table · Treadmill converter 
 - **Colorblind-safe palettes**: standard, deuteranopia and tritanopia zone color schemes
 - **Units**: metric (km, min/km) or imperial (mi, min/mile), applied app-wide
 - **Bilingual**: full French / English interface and content; light / dark theme
-- **Privacy panel**: plain-language summary of what is stored where (everything in `localStorage`, no server, no account) and the single opt-in network feature (route generation)
+- **Privacy panel**: plain-language summary of what is stored where (everything in `localStorage`, no server, no account) and the single opt-in network feature (route generation), **off by default**
+- **Privacy policy & legal notice** (`/legal`): what the app stores and where, what Vercel Analytics measures, the exact third-party services the route generator contacts, and who publishes and hosts the site
 
 ### Export & sharing
 - **Workouts**: ICS (Google/Apple/Outlook) · PNG · PDF · **Garmin FIT** (native workout file, with on-device transfer guide)
@@ -320,9 +321,13 @@ A ⭐ on the repo is also greatly appreciated and helps other runners find the p
 | | |
 |---|---|
 | [Material Symbols](https://github.com/google/material-design-icons) | icon set, © Google, Apache 2.0, paths unmodified but repackaged |
-| [Space Grotesk](https://github.com/floriankarsten/space-grotesk) | typeface, © 2020 the project authors, SIL OFL 1.1, latin subset |
+| [Space Mono](https://github.com/googlefonts/spacemono) | typeface, © 2016 the project authors, SIL OFL 1.1, latin subset |
+| **[General Sans](https://www.fontshare.com/fonts/general-sans)** | **typeface, © Indian Type Foundry, ITF Free Font License: self-hosting is allowed, redistribution is not — get your own copy from Fontshare** |
 | **[Garmin FIT SDK](https://developer.garmin.com/fit/)** | **`.fit` export, © Garmin: proprietary, not open source** |
 
-The Garmin SDK is the one piece MIT does not reach: it is a runtime dependency that the build serves to visitors, under Garmin's own agreement rather than this licence. **If you fork or self-host, read its terms before you redistribute**. They restrict passing the SDK on to third parties. It sits behind a single dynamic import in `src/lib/export/fit.ts`; dropping FIT export drops the constraint.
+Two pieces MIT does not reach, and both matter if you fork:
+
+- **The Garmin SDK** is a runtime dependency that the build serves to visitors, under Garmin's own agreement rather than this licence. **If you fork or self-host, read its terms before you redistribute**. They restrict passing the SDK on to third parties. It sits behind a single dynamic import in `src/lib/export/fit.ts`; dropping FIT export drops the constraint.
+- **General Sans** is committed under a licence that allows this site to self-host it but **not** to redistribute the font files — including through a public repository. That makes its presence here a known problem rather than a permission: see [THIRD-PARTY.md](THIRD-PARTY.md) for the clauses and the options being weighed. Do not reuse those `.woff2` files; download your own from [Fontshare](https://www.fontshare.com/fonts/general-sans), which is free.
 
 Full notices in [THIRD-PARTY.md](THIRD-PARTY.md). The licences of every bundled npm dependency are generated at build time and served at [zoned.run/licenses.txt](https://zoned.run/licenses.txt).

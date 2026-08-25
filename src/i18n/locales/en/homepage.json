@@ -136,7 +136,8 @@
         "about": "About",
         "github": "GitHub",
         "changelog": "Changelog",
-        "offline": "Offline mode"
+        "offline": "Offline mode",
+        "legal": "Privacy"
       },
       "license": "© {{year}} · ZONED · Free software, MIT licence",
       "licenses": "Third-party licences",

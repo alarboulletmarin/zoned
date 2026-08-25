@@ -261,5 +261,96 @@
     "noAccount": "No account required",
     "localData": "Your data stays on your device",
     "footerNote": "No tracking. No cookies."
+  },
+  "legal": {
+    "eyebrow": "Legal",
+    "title": "Privacy and legal notice",
+    "description": "What Zoned stores, what it sends, to whom, and who publishes it.",
+    "seoDescription": "Zoned's privacy policy and legal notice: no account data, everything stays in your browser, and the exact list of third-party services the route generator contacts.",
+    "updatedLabel": "Updated",
+    "updated": "August 2026",
+    "privacy": {
+      "title": "Privacy",
+      "intro": "Zoned has no accounts, no application server and no database. Everything you create lives in your browser and nowhere else. One feature is the exception, and it is off by default.",
+      "sections": [
+        {
+          "heading": "What the app stores, and where",
+          "body": [
+            "Your settings, your profile, your zones, your personal workouts, your plans and your weeks are written to your browser's local storage. Saved routes go to its IndexedDB database, which suits large tracks better. That is the only place this information exists.",
+            "None of it is transmitted. There is no sign-up, so no email address, no password, no identifier: the app is a set of static files served to your browser, and all the computing happens there.",
+            "The trade-off, which you should know about: clearing your browser data erases it, and nobody — the publisher included — can give it back. Nothing syncs between devices either. Hence the export, under My Data, which hands you a file you keep wherever you like."
+          ]
+        },
+        {
+          "heading": "Audience measurement",
+          "body": [
+            "Page views are counted by Vercel Analytics, which runs across the whole site. It sets no cookie, writes nothing to your browser and builds no profile: it counts pages, not people. Measurements go to vitals.vercel-insights.com.",
+            "That is why there is no consent banner to dismiss. A banner would make you click for nothing: there is no tracker to accept, and none to refuse."
+          ]
+        },
+        {
+          "heading": "The route generator, and only it, leaves your browser",
+          "body": [
+            "Drawing a route means querying public mapping services. Your start point is then sent to them: BRouter (brouter.de) to compute the itinerary, Nominatim (openstreetmap.org) to resolve an address or a place name, Overpass (overpass-api.de) to find the parks, water points and tracks around you. The map itself also loads its tiles from tile.openstreetmap.org, which amounts to requesting the image squares covering the area on screen.",
+            "The \"Use my location\" button asks your browser for geolocation — you alone grant it, and the answer only fills the start field, from where it follows the same path as an address you typed in yourself.",
+            "No identifier is attached to these requests and Zoned keeps nothing from them. These services are run by third parties under their own policies: the request leaves your browser, not a Zoned server.",
+            "It is the only feature that sends a position to a third party, which is why it is off by default. You turn it on in Settings, with a single switch. While it is off, no coordinate leaves your browser."
+          ]
+        },
+        {
+          "heading": "What the host sees",
+          "body": [
+            "Serving a page leaves a trace with the host: its technical logs keep the IP address that connected, the timestamp and the address requested. That is how a web server normally works, and it is the only processing of personal data the publisher is responsible for.",
+            "Purpose: running the site and protecting it from abuse. Legal basis: the publisher's legitimate interest in providing a service that stays up (GDPR article 6.1.f). Retention: whatever the host applies to its own logs."
+          ]
+        },
+        {
+          "heading": "Your rights",
+          "body": [
+            "Over what the app stores, you exercise them directly, without going through anyone: My Data exports everything to a file, imports a file back, and erases everything. There is no request to file, because there is nobody to file it with.",
+            "For the host's logs, the request goes through the GitHub repository, linked in the footer. You may also lodge a complaint with the CNIL, the French data protection authority."
+          ]
+        }
+      ]
+    },
+    "notice": {
+      "title": "Legal notice",
+      "intro": "Who publishes this site, who hosts it, and under which licence it is released.",
+      "sections": [
+        {
+          "heading": "Publisher",
+          "body": [
+            "Zoned is published by a natural person acting in a non-professional capacity. The site is free, with no advertising, no subscription and no data resale — there is nothing to resell anyway, since nothing leaves your browser.",
+            "The publisher does not disclose their identity on this page: article 1-1 of the French LCEN — formerly article 6 III, moved by the law of 21 May 2024 — allows this for non-professional publishers, provided they have given their identity to their host, which is named below.",
+            "Publication director: the same person."
+          ]
+        },
+        {
+          "heading": "Contacting the publisher",
+          "body": [
+            "The code repository is the point of contact: a public issue for a bug, a question or a request, and GitHub's private reporting for a security flaw or anything that should not be public. The link is in the footer."
+          ]
+        },
+        {
+          "heading": "Host",
+          "body": [
+            "Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, United States — vercel.com.",
+            "The site is served from its infrastructure. There is no other server: the app is a bundle of static files, and all the computing happens in your browser."
+          ]
+        },
+        {
+          "heading": "Domain name",
+          "body": ["zoned.run, registered by the publisher."]
+        },
+        {
+          "heading": "Code and licences",
+          "body": [
+            "Zoned's code is published under the MIT licence, at github.com/alarboulletmarin/zoned: it may be read, copied, modified and redistributed, including commercially, as long as the notice is kept.",
+            "The app ships third-party components carrying their own licences. Their full notices are served with the app, at /licenses.txt, regenerated at every build from the packages actually bundled.",
+            "Map data comes from OpenStreetMap, published under the Open Database License by its contributors."
+          ]
+        }
+      ]
+    }
   }
 }

@@ -345,6 +345,30 @@ export const COMMAND_SURFACES: CommandSurface[] = [
     url: "/about",
     keywords: ["a propos", "about", "zoned", "qui", "projet"],
   },
+  {
+    id: "legal",
+    section: "page",
+    title: "Confidentialité et mentions légales",
+    titleEn: "Privacy and legal notice",
+    subtitle: "Ce que Zoned enregistre, ce qu'il envoie, et qui l'édite",
+    subtitleEn: "What Zoned stores, what it sends, and who publishes it",
+    url: "/legal",
+    keywords: [
+      "confidentialite",
+      "vie privee",
+      "privacy",
+      "donnees",
+      "data",
+      "rgpd",
+      "gdpr",
+      "cookies",
+      "tracking",
+      "mentions legales",
+      "legal",
+      "hebergeur",
+      "host",
+    ],
+  },
 ];
 
 /** Surfaces shown in the empty-state quick-access list, in registry order. */

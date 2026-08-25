@@ -49,6 +49,7 @@ const MeStoragePage = lazyPage(() => import("@/pages/MeStoragePage").then(m => (
 const FavoritesPage = lazyPage(() => import("@/pages/FavoritesPage").then(m => ({ default: m.FavoritesPage })));
 const ContributePage = lazyPage(() => import("@/pages/ContributePage").then(m => ({ default: m.ContributePage })));
 const AboutPage = lazyPage(() => import("@/pages/AboutPage").then(m => ({ default: m.AboutPage })));
+const LegalPage = lazyPage(() => import("@/pages/LegalPage").then(m => ({ default: m.LegalPage })));
 const LearnPage = lazyPage(() => import("@/pages/LearnPage").then(m => ({ default: m.LearnPage })));
 const MethodologyPage = lazyPage(() => import("@/pages/MethodologyPage").then(m => ({ default: m.MethodologyPage })));
 const MethodologyPolarisePage = lazyPage(() => import("@/pages/MethodologyPolarisePage").then(m => ({ default: m.MethodologyPolarisePage })));
@@ -301,6 +302,7 @@ function App() {
                           <Route path="/quiz" element={<Navigate to="/library/draw" replace />} />
                           <Route path="/contribute" element={<ContributePage />} />
                           <Route path="/about" element={<AboutPage />} />
+                          <Route path="/legal" element={<LegalPage />} />
                           <Route path="/learn" element={<LearnPage />} />
                           <Route path="/methodology" element={<MethodologyPage />} />
                           <Route path="/methodology/polarise" element={<MethodologyPolarisePage />} />

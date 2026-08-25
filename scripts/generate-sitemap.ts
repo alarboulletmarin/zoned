@@ -223,6 +223,7 @@ async function generateSitemap(): Promise<string> {
     { loc: "/learn", lastmod: shell },
     { loc: "/glossary", lastmod: shell },
     { loc: "/about", lastmod: shell },
+    { loc: "/legal", lastmod: shell },
     { loc: "/collections", lastmod: shell },
     { loc: "/calculators", lastmod: shell },
     { loc: "/methodology", lastmod: shell },

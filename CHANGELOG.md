@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1] - 2026-08-25
+
+### Added
+- A privacy policy and legal notice at `/legal`, linked from the footer: what the app stores and where, what Vercel Analytics measures and why there is no consent banner, the three services the route generator hands your start point to, what the host sees, and who publishes and hosts the site
+
+### Changed
+- The route generator is now off by default. It was documented as opt-in but shipped on, so a start position could reach BRouter, Nominatim and Overpass without anyone asking for it. A one-shot migration drops the `true` that older builds wrote unprompted, and keeps a deliberate opt-out
+
+### Fixed
+- Notices for both bundled typefaces were missing since the Brut identity landed: Space Mono ships under SIL OFL 1.1 and its notice was owed, and General Sans under the ITF Free Font License, which permits self-hosting but not redistributing the font files — including through a public repository. Both are documented in THIRD-PARTY.md, the second flagged as unresolved
+
 ## [0.8.0] - 2026-07-29
 
 ### Added
