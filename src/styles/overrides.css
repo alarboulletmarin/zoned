@@ -57,18 +57,7 @@
   opacity: 0.8;
 }
 
-/* ==========================================================================
-   REDUCED MOTION — global override (applies to all keyframes & transitions)
-   ========================================================================== */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+/* Reduced motion is handled once, in design/motion.css. */
 
 /* ==========================================================================
    ACCENT TEXT — WCAG AA contrast fix (#96)
@@ -150,8 +139,15 @@
     transform var(--duration-fast) ease-out;
 }
 
+/* The system changes colour on hover and pushes 1px down on press; nothing
+   scales. */
 .zone-badge:hover {
-  transform: scale(1.05);
+  background: var(--zone-color);
+  color: var(--zone-text);
+}
+
+.zone-badge:active {
+  transform: translateY(var(--press-shift));
 }
 
 .intensity-bar {
@@ -180,8 +176,10 @@
   background: var(--zone-color);
 }
 
+/* The ramp is a fill, not a type colour: Z1 as text would be 14% ink on
+   paper. The zone code is written in ink, and the ramp says which zone it is. */
 .text-zone {
-  color: var(--zone-color);
+  color: var(--text-body);
 }
 
 .bg-zone {
@@ -210,8 +208,8 @@
     transform var(--duration-fast) ease-out;
 }
 
-.muscle-badge:hover {
-  transform: scale(1.05);
+.muscle-badge:active {
+  transform: translateY(var(--press-shift));
 }
 
 .intensity-badge {
@@ -228,8 +226,8 @@
     transform var(--duration-fast) ease-out;
 }
 
-.intensity-badge:hover {
-  transform: scale(1.05);
+.intensity-badge:active {
+  transform: translateY(var(--press-shift));
 }
 
 /* ==========================================================================

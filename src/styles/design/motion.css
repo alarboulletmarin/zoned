@@ -1,0 +1,24 @@
+/* Motion says where something came from, or that a wait is real. Nothing else
+   moves, nothing blinks to catch the eye. Press is a 1px push down — the
+   stamp pressing into the paper. */
+:root {
+  --dur-fast: 120ms;
+  --dur-base: 180ms;
+  --dur-slow: 240ms;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --press-shift: 1px;
+}
+
+@keyframes zoned-spin { to { transform: rotate(360deg); } }
+@keyframes zoned-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+@keyframes zoned-slide-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 1ms; --dur-base: 1ms; --dur-slow: 1ms; --press-shift: 0px; }
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}

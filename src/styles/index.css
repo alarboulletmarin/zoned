@@ -1,14 +1,27 @@
 /* Zoned design system — entry point.
-   Tokens (theme inline + breakpoints), themes (light/dark), accessible
-   palettes, animations, and overrides are split into focused modules. */
+
+   Order matters: the design tokens define the values, the shadcn compatibility
+   layer republishes them under the names the not-yet-migrated components read,
+   and Tailwind's @theme maps them onto utilities. */
 
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
 
-@import "./fonts.css";
-@import "./tokens.css";
+/* The redesign's source of truth — paper, ink, one accent. */
+@import "./design/fonts.css";
+@import "./design/colors.css";
+@import "./design/zones.css";
+@import "./design/typography.css";
+@import "./design/spacing.css";
+@import "./design/borders.css";
+@import "./design/motion.css";
+
+/* Transitional: shadcn variable names + Tailwind theme keys. Both disappear
+   with Tailwind in the final phase. */
 @import "./themes.css";
-@import "./palettes-a11y.css";
+@import "./tokens.css";
+
+@import "./base.css";
 @import "./animations.css";
 @import "./overrides.css";

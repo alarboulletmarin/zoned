@@ -16,12 +16,13 @@
      a denser-than-mobile but lighter-than-desktop treatment. */
   --breakpoint-tablet: 900px;
 
-  /* Radius scale */
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
+  /* Radius scale — the design system's own ladder, not calc() off one base.
+     4px micro-swatch, 10px field, 16px alert, 20-22px card, 26px screen. */
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+  --radius-2xl: var(--r-3xl);
 
   /* Semantic color mappings */
   --color-background: var(--background);
@@ -37,8 +38,11 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
+  /* shadcn's "accent" is the quiet surface behind a hovered row, NOT an accent
+     colour. The redesign's --accent is the vermillon, so bg-accent points at
+     the paper band instead — the two names mean opposite things. */
+  --color-accent: var(--surface-band);
+  --color-accent-foreground: var(--text-body);
   --color-destructive: var(--destructive);
   --color-success: var(--success);
   --color-warning: var(--warning);
@@ -109,6 +113,7 @@
   --color-intensity-power: var(--intensity-power);
 
   /* Typography */
-  --font-sans: "Space Grotesk", "Space Grotesk Fallback", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --font-sans: var(--font-text);
+  --font-mono: var(--font-mono);
+  --font-display: var(--font-display);
 }

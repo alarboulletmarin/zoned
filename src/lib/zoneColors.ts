@@ -1,15 +1,27 @@
 /**
  * Zone colours — the one place a zone becomes a colour.
  *
- * `src/styles/themes.css` owns the values for anything the browser paints
- * (`var(--zone-N)`), because only CSS can follow the light/dark theme and the
- * colour-blind palettes. But exports have no DOM: pdfmake and the share-image
- * renderers need literal hex, and each of them used to carry its own copy.
- * Those copies drifted — the PDF ramp was off by one zone, colouring recovery
- * green and endurance blue.
+ * The redesign replaced the six-hue system (grey/green/yellow/orange/red/violet)
+ * with a single ink ramp: Z1 is 14% ink on paper, Z6 is solid ink. Darker means
+ * harder, the scale is learned once, and it survives greyscale — which is what
+ * frees the vermillon accent for the primary action. Intensity is always coded
+ * twice, by ink density and by block height; this file owns the first channel
+ * only. Thresholds, zone numbers and every calculation are unchanged.
  *
- * The tables below mirror themes.css exactly. `bun run scripts/qa-zone-colors.ts`
- * fails if they ever diverge, so the duplication cannot rot silently.
+ * `src/styles/design/zones.css` owns the values for anything the browser paints
+ * (`var(--zone-N)`), because only CSS can composite an rgba ink over whatever
+ * paper it lands on and follow the theme. But exports have no DOM: pdfmake and
+ * the share-image renderers need literal hex, and each of them used to carry
+ * its own copy. Those copies drifted — the PDF ramp was off by one zone,
+ * colouring recovery green and endurance blue.
+ *
+ * The tables below are that ramp already composited over the card surface.
+ * `bun run scripts/qa-zone-colors.ts` recomputes the compositing from the CSS
+ * and fails if a single byte differs, so the duplication cannot rot silently.
+ *
+ * The three disciplines share one ramp. An effort in Z4 is an effort in Z4
+ * whether you run, ride or swim, and the discipline is already named in words
+ * next to every chart that shows one.
  */
 
 import type { Discipline, ZoneNumber } from "@/types";
@@ -18,59 +30,59 @@ export type ThemeMode = "light" | "dark";
 
 type ZoneHexMap = Record<ZoneNumber, string>;
 
-/** Running ramp, light theme — mirrors themes.css `:root`. */
+/** The ink ramp, light theme — `--zone-1..6` composited over `--paper-raised`. */
 export const ZONE_HEX_LIGHT: ZoneHexMap = {
-  1: "#94a3b8",
-  2: "#16a34a",
-  3: "#ca8a04",
-  4: "#f97316",
-  5: "#ef4444",
-  6: "#7c3aed",
+  1: "#dedbd4",
+  2: "#b9b6af",
+  3: "#94918a",
+  4: "#6f6c65",
+  5: "#45423c",
+  6: "#16130e",
 };
 
-/** Running ramp, dark theme — mirrors themes.css `.dark`. */
+/** The ink ramp, dark theme — the same alphas, cream over the dark card. */
 export const ZONE_HEX_DARK: ZoneHexMap = {
-  1: "#94a3b8",
-  2: "#22c55e",
-  3: "#eab308",
-  4: "#f97316",
-  5: "#ef4444",
-  6: "#7c3aed",
+  1: "#3e3931",
+  2: "#5f5a51",
+  3: "#807a70",
+  4: "#a19b90",
+  5: "#c6bfb3",
+  6: "#efe8da",
 };
 
-const CYCLING_HEX: Record<ThemeMode, ZoneHexMap> = {
-  light: { 1: "#cfe2ff", 2: "#9ec5fe", 3: "#6ea8fe", 4: "#3d8bfd", 5: "#0d6efd", 6: "#084298" },
-  dark: { 1: "#1e3a5f", 2: "#2563eb", 3: "#3d8bfd", 4: "#60a5fa", 5: "#93c5fd", 6: "#bfdbfe" },
+const BY_THEME: Record<ThemeMode, ZoneHexMap> = {
+  light: ZONE_HEX_LIGHT,
+  dark: ZONE_HEX_DARK,
 };
 
-const SWIMMING_HEX: Record<ThemeMode, ZoneHexMap> = {
-  light: { 1: "#d1f2f4", 2: "#a2e5e9", 3: "#63cbd1", 4: "#2eb0b9", 5: "#1b8a93", 6: "#0d5e66" },
-  dark: { 1: "#134545", 2: "#1b8a93", 3: "#2eb0b9", 4: "#63cbd1", 5: "#a2e5e9", 6: "#d1f2f4" },
-};
-
-const BY_DISCIPLINE: Record<Discipline, Record<ThemeMode, ZoneHexMap>> = {
-  running: { light: ZONE_HEX_LIGHT, dark: ZONE_HEX_DARK },
-  cycling: CYCLING_HEX,
-  swimming: SWIMMING_HEX,
-};
-
-/** Literal hex for a zone. Use in exports; in the DOM prefer `var(--zone-N)`. */
+/**
+ * Literal hex for a zone. Use in exports; in the DOM prefer `var(--zone-N)`.
+ * `discipline` is accepted and ignored: the three disciplines share one ramp.
+ * The parameter stays so no call site has to change.
+ */
 export function getZoneHex(
   zone: ZoneNumber,
   { theme = "light", discipline = "running" }: { theme?: ThemeMode; discipline?: Discipline } = {},
 ): string {
-  return BY_DISCIPLINE[discipline][theme][zone];
+  void discipline;
+  return BY_THEME[theme][zone];
 }
 
 /** Whole ramp, for renderers that need to build their own lookup. */
 export function getZoneHexMap(
   { theme = "light", discipline = "running" }: { theme?: ThemeMode; discipline?: Discipline } = {},
 ): ZoneHexMap {
-  return BY_DISCIPLINE[discipline][theme];
+  void discipline;
+  return BY_THEME[theme];
 }
 
-/** Neutral used wherever a step carries no zone (drills, rest, cross-training). */
-export const UNZONED_HEX = "#9ca3af";
+/**
+ * Used wherever a step carries no zone (drills, rest, cross-training).
+ * A recovery block is not a zone, so it never takes a ramp value: on screen it
+ * is a 45 degree hatch, and where only a flat fill is possible — PDF, PNG — it
+ * falls back to the sunken paper it would be cut out of.
+ */
+export const UNZONED_HEX = "#efe7d7";
 
 /**
  * Tailwind classes per zone, written out in full.

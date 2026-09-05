@@ -1,0 +1,39 @@
+/* The grid is 2px-based, not 4px-snapped: the paper look needs 26px card
+   padding and 22px stacks. Use the named steps; do not invent in-between
+   values and do not round them to a 4px grid. */
+:root {
+  --sp-1: 2px;
+  --sp-2: 4px;
+  --sp-3: 6px;
+  --sp-4: 8px;
+  --sp-5: 10px;
+  --sp-6: 12px;
+  --sp-7: 14px;
+  --sp-8: 16px;
+  --sp-9: 18px;
+  --sp-10: 20px;
+  --sp-11: 22px;
+  --sp-12: 24px;
+  --sp-13: 26px;
+  --sp-14: 32px;
+  --sp-15: 40px;
+  --sp-16: 44px;
+  --sp-17: 48px;
+  --sp-18: 56px;
+  --sp-19: 64px;
+  --sp-20: 72px;
+
+  /* recurring roles */
+  --pad-card: var(--sp-13);
+  --pad-card-sm: var(--sp-8);
+  --pad-screen-x: var(--sp-15);
+  --gap-grid: var(--sp-10);
+  --gap-stack: var(--sp-7);
+  --hit-min: 44px;
+}
+
+/* Mobile screen margin is 20px, not 40px. Declared as an override of the same
+   role so no component needs to know which viewport it is on. */
+@media (max-width: 768px) {
+  :root { --pad-screen-x: var(--sp-10); }
+}

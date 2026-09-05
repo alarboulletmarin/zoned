@@ -1,0 +1,32 @@
+/* Element-level defaults for the paper/ink system. Deliberately small:
+   components carry their own styling, this only sets the page itself. */
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--surface-page);
+  color: var(--text-body);
+  font: var(--type-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Focus is vermillon, 2.5px, offset 2px — and never removed. */
+:where(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: var(--bw-heavy) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink-1);
+}

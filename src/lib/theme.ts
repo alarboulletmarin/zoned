@@ -24,15 +24,16 @@ export type ResolvedTheme = "light" | "dark";
 export const THEME_STORAGE_KEY = "zoned-theme";
 
 /**
- * Browser-chrome colour per resolved theme — mirrors `--background` in
- * `src/styles/themes.css` (`:root` for light, `.dark` for dark).
+ * Browser-chrome colour per resolved theme — mirrors `--paper-page` in
+ * `src/styles/design/colors.css` (`:root` for light, `.dark` for dark), which
+ * is what `--background` resolves to.
  *
  * Duplicated in the inline boot script in `index.html`, which cannot import
  * from here. Change one, change the other.
  */
 const THEME_COLOR: Record<ResolvedTheme, string> = {
-  light: "#f8fafc",
-  dark: "#0b1120",
+  light: "#F5EFE2",
+  dark: "#16130E",
 };
 
 export function isThemePreference(value: unknown): value is ThemePreference {

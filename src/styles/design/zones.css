@@ -1,0 +1,66 @@
+/* Effort zones Z1 -> Z6: ONE encoding, an ink ramp on paper.
+   No hue, no six-colour system. Darker = harder.
+   Always pair a zone fill with its Z-code in text: the ramp orders, it does
+   not name. Every surface carrying zone fills shows the ZoneScale legend once.
+
+   The thresholds, the zone numbers and every calculation are unchanged —
+   only the rendering moved. */
+:root {
+  --zone-1: rgba(22, 19, 14, 0.14);
+  --zone-2: rgba(22, 19, 14, 0.30);
+  --zone-3: rgba(22, 19, 14, 0.46);
+  --zone-4: rgba(22, 19, 14, 0.62);
+  --zone-5: rgba(22, 19, 14, 0.80);
+  --zone-6: #16130E;
+
+  /* The tinted background a zone chip sits on, and the ink that stays legible
+     on it. Z1-Z3 are light enough for dark text; Z4-Z6 need the cream. */
+  --zone-1-bg: rgba(22, 19, 14, 0.07);
+  --zone-2-bg: rgba(22, 19, 14, 0.12);
+  --zone-3-bg: rgba(22, 19, 14, 0.18);
+  --zone-4-bg: rgba(22, 19, 14, 0.62);
+  --zone-5-bg: rgba(22, 19, 14, 0.80);
+  --zone-6-bg: #16130E;
+
+  --zone-1-text: var(--ink-1);
+  --zone-2-text: var(--ink-1);
+  --zone-3-text: var(--ink-1);
+  --zone-4-text: var(--ink-on-dark);
+  --zone-5-text: var(--ink-on-dark);
+  --zone-6-text: var(--ink-on-dark);
+
+  /* recovery / unmeasured blocks: a faint 45 degree rule, never a zone tint */
+  --zone-recovery: repeating-linear-gradient(45deg, #6B6459 0 1.5px, transparent 1.5px 6px);
+
+  /* second, redundant channel: block height inside a session profile */
+  --zone-h-1: 30%;
+  --zone-h-2: 44%;
+  --zone-h-3: 58%;
+  --zone-h-4: 72%;
+  --zone-h-5: 86%;
+  --zone-h-6: 100%;
+
+  /* the threshold: Z1-Z3 is "easy", Z4+ is "above threshold" */
+  --zone-threshold: 4;
+}
+
+/* Dark: the ramp inverts with the paper. "More ink" becomes "more cream", so
+   the ordering survives and so does the greyscale legibility. The height
+   channel is unchanged, which is what keeps the encoding readable either way. */
+.dark {
+  --zone-1: rgba(239, 232, 218, 0.14);
+  --zone-2: rgba(239, 232, 218, 0.30);
+  --zone-3: rgba(239, 232, 218, 0.46);
+  --zone-4: rgba(239, 232, 218, 0.62);
+  --zone-5: rgba(239, 232, 218, 0.80);
+  --zone-6: #EFE8DA;
+
+  --zone-1-bg: rgba(239, 232, 218, 0.07);
+  --zone-2-bg: rgba(239, 232, 218, 0.12);
+  --zone-3-bg: rgba(239, 232, 218, 0.18);
+  --zone-4-bg: rgba(239, 232, 218, 0.62);
+  --zone-5-bg: rgba(239, 232, 218, 0.80);
+  --zone-6-bg: #EFE8DA;
+
+  --zone-recovery: repeating-linear-gradient(45deg, #948C7D 0 1.5px, transparent 1.5px 6px);
+}

@@ -1,0 +1,105 @@
+/* Paper, ink, one accent. Everything else is a tint of those three.
+   Values come from design_handoff/design/tokens/colors.css — do not recompute
+   or re-round them. */
+:root {
+  /* paper — from the desk surface up to the raised card */
+  --paper-desk: #E7DFCE;
+  --paper-page: #F5EFE2;
+  --paper-raised: #FFFCF4;
+  --paper-sunken: #EFE7D7;
+
+  /* ink */
+  --ink-1: #16130E;
+  --ink-2: #4A4439;
+  --ink-3: #6B6459;
+  --ink-on-dark: #F5EFE2;
+
+  /* accent — vermillon. One accent: the primary action, and danger. */
+  --accent: #E8452A;
+  --accent-press: #A32B12;
+  --accent-soft: #FBE3DA;
+  --accent-fg: #FFFCF4;
+
+  /* the single added hue: success. Never used for anything else.
+     Chosen darker than the accent so the two stay separable in greyscale. */
+  --ok: #2F6B4F;
+  --ok-soft: #DDE8DF;
+  --ok-fg: #FFFCF4;
+
+  /* lines */
+  --line-strong: var(--ink-1);
+  --line-divider: rgba(22, 19, 14, 0.18);
+  --line-axis: rgba(22, 19, 14, 0.28);
+
+  /* semantic aliases — prefer these in components */
+  --surface-page: var(--paper-page);
+  --surface-card: var(--paper-raised);
+  --surface-band: var(--paper-sunken);
+  --surface-inverse: var(--ink-1);
+  --text-body: var(--ink-1);
+  --text-muted: var(--ink-2);
+  --text-faint: var(--ink-3);
+  --text-inverse: var(--ink-on-dark);
+  --text-link: var(--accent);
+  --border-default: var(--line-strong);
+  --focus-ring: var(--accent);
+
+  --state-danger: var(--accent);
+  --state-danger-soft: var(--accent-soft);
+  --state-warning-soft: var(--accent-soft);
+  --state-success: var(--ok);
+  --state-success-soft: var(--ok-soft);
+  --state-info: var(--ink-1);
+  --state-info-soft: var(--paper-sunken);
+  --state-disabled-text: rgba(22, 19, 14, 0.38);
+  --state-disabled-border: rgba(22, 19, 14, 0.3);
+  --state-disabled-fill: rgba(22, 19, 14, 0.06);
+}
+
+/* ==========================================================================
+   DARK — not in the design bundle, derived from it.
+
+   The bundle is light-only. Zoned ships a dark theme with a settings toggle,
+   so the paper/ink relation is inverted rather than dropped: the ink colour
+   becomes the page, the cream becomes the ink, and the warm hue family is
+   kept (this is a brown-black ink, not a blue-black one).
+
+   The inversion lives entirely here. No component carries a dark-mode branch:
+   every rule downstream reads the semantic aliases, so the theme switches at
+   the token layer and nowhere else.
+   ========================================================================== */
+.dark {
+  /* paper, inverted: the desk is below the page, the card is above it */
+  --paper-desk: #0A0907;
+  --paper-page: #16130E;
+  --paper-raised: #211D16;
+  --paper-sunken: #100E0A;
+
+  /* ink, inverted. --ink-1 sits a hair below pure cream: it is both the body
+     text and every 1.5px outline, and pure cream at that width reads as glare. */
+  --ink-1: #EFE8DA;
+  --ink-2: #C4BCAB;
+  --ink-3: #948C7D;
+  --ink-on-dark: #16130E;
+
+  /* The accent keeps its hue — it is the brand, and it reaches 4.8:1 on the
+     dark page (better than the 4.0:1 it manages on cream).
+     Press moves toward the page's depth, which is lighter here, not darker. */
+  --accent: #E8452A;
+  --accent-press: #F2694F;
+  --accent-soft: #3A1A12;
+  --accent-fg: #FFFCF4;
+
+  /* Success lightens so it stays legible on ink, and stays darker in hue than
+     the accent so the two remain separable in greyscale. */
+  --ok: #4E9E77;
+  --ok-soft: #17301F;
+  --ok-fg: #0A0907;
+
+  --line-divider: rgba(239, 232, 218, 0.18);
+  --line-axis: rgba(239, 232, 218, 0.3);
+
+  --state-disabled-text: rgba(239, 232, 218, 0.38);
+  --state-disabled-border: rgba(239, 232, 218, 0.3);
+  --state-disabled-fill: rgba(239, 232, 218, 0.07);
+}
