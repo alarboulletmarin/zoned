@@ -36,6 +36,7 @@ import {
 import { ExportMenu } from "@/components/domain/ExportMenu";
 import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
 import { Annotation } from "@/components/domain/Annotation";
+import Plank from "@/assets/doodles/plank.svg?react";
 import Runner from "@/assets/doodles/runner.svg?react";
 import { ZoneRow } from "@/components/domain/ZoneRow";
 import { ShareDialog } from "@/components/share/ShareDialog";
@@ -1092,14 +1093,19 @@ function StrengthWorkoutDetail({
             <FactStrip facts={facts} />
           </div>
 
-          {/* Le gainage attend son dessin. Deux tentatives ont échoué et sont
-              documentées dans docs/doodles.md : un contour fermé d'abord, puis
-              une pose où le vermillon peignait l'avant-bras en l'air au lieu du
-              contact — l'accent culminait six unités AU-DESSUS de la ligne de
-              sol. Le brief imprimé dit « page sous presse » ; un dessin qui
-              casse la règle de signature dirait autre chose. */}
+          {/* Le gainage, à la quatrième tentative. Les deux contacts au sol —
+              avant-bras et orteils — sont en vermillon comme docs/doodles.md
+              les nomme, et cette fois ils mordent vraiment la ligne : de 0,2 à
+              3,9 px sous elle, le duo approuvé étant à 3,07.
+
+              Il garde un défaut nommé : les jambes s'arrêtent au sol sans pied
+              dessiné. Le corriger a été tenté sur vingt tours et le résultat
+              était pire — un nœud de chevilles qui perdait l'effilement des
+              jambes. À 260 px, la taille de ce bloc, le manque ne se voit pas.
+              Voir docs/doodles.md. */}
           <IllustrationSlot
-            height={340}
+            height={260}
+            art={Plank}
             brief={tSession("illustration.strengthBrief")}
             label={tSession("illustration.label")}
           />

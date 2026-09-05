@@ -244,8 +244,24 @@ toujours pas livré, et que trois approches ont été essayées.
 
 La cause est structurelle : le bras du gréement part vers l'arrière et son
 avant-bras remonte. Aucune rotation ne lui donne un **bras d'appui vertical**
-sans casser les proportions. Le gainage demande donc sa propre traversée, écrite
-à la main, en transplantant les boucles de tête, de main et de pied de `BASE`.
+sans casser les proportions.
+
+4. **Traversée écrite à la main**, 83 ancres, en transplantant les boucles de
+   tête, de main et de pied de `BASE` par rotation et translation, sans jamais
+   d'échelle. Dix-sept tours. **C'est celle qui est en page.** Le corps est en
+   ligne des épaules aux talons, les deux accents mordent le sol de 0,2 à 3,9 px
+   — le duo approuvé mord de 3,07 — et le trait se croise treize fois.
+
+Elle garde **un défaut nommé** : les jambes s'arrêtent au sol sans pied dessiné.
+Une reprise de vingt tours a été faite pour l'ajouter et **le résultat était
+pire** : la palette de pied de `BASE` s'effile de 14 à 5 px, posée à plat elle
+s'enterre, posée verticale elle fait un biseau, et la colonne de cheville
+nécessaire pour la relever noue les deux pieds en une seule masse. L'effilement
+propre des jambes était perdu pour un détail que personne ne voit.
+
+La leçon vaut au-delà du gainage : **un défaut nommé vaut mieux qu'un correctif
+qui déplace le problème**. À 260 px, la taille du bloc qui l'affiche, le pied
+manquant est invisible ; le nœud, lui, se voyait.
 
 ## Où les dessins doivent aller
 
