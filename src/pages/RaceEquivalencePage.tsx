@@ -1,16 +1,22 @@
-import { useState, useMemo } from "react";
-import { zoneClass } from "@/lib/zoneColors";
+import { useState, useMemo, type CSSProperties } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Shuffle, Info } from "@/components/icons";
+import { Info } from "@/components/icons";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
+import { ZoneBadge } from "@/components/domain/ZoneBadge";
+import { ZoneScale } from "@/components/visualization";
 import { buildParamsUrl } from "@/lib/share/urlParams";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ResponsiveTable } from "@/components/ui/responsive-table";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
-import { cn } from "@/lib/utils";
-import { ZONE_META, type ZoneNumber } from "@/types";
+import { type ZoneNumber } from "@/types";
 import { calculatePaceZones, loadUserZonePrefs } from "@/lib/zones";
 import { useSettings } from "@/hooks/useSettings";
 import { convertPace, getPaceUnit } from "@/lib/units";
@@ -181,221 +187,216 @@ export function RaceEquivalencePage() {
           },
         ]}
       />
-      <div className="py-8 max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
-            <Shuffle className="size-8 text-primary shrink-0" />
+
+      <div className="zn-num">
+        <section
+          className="zn-num__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">
+            {t("calculators:calculateurs.equivalence.kicker")}
+          </span>
+          <h1 className="zn-display" data-level="3">
             {t("calculators:calculateurs.equivalence.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
+          </h1>
+          <p className="zn-body zn-body--lead zn-num__lede">
             {t("calculators:calculateurs.equivalence.description")}
-          </FadeUp>
-        </div>
+          </p>
+        </section>
 
-        {/* Input Card */}
-        <Card className="mb-6">
-          <CardContent className="pt-6 space-y-6">
-            {/* Distance Select */}
-            <div className="space-y-2">
-              <label htmlFor="distance" className="text-sm font-medium">
-                {t("calculators:calculateurs.equivalence.raceDistance")}
-              </label>
-              <select
-                id="distance"
-                value={distanceId}
-                onChange={(e) => setDistanceId(e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              >
-                {DISTANCE_OPTIONS.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {pickLang(d, "label")}
-                    {d.km > 0 ? ` (${d.km} km)` : ""}
-                  </option>
-                ))}
-              </select>
+        {/* The prediction below paints a whole zone column. */}
+        {paceZones && (
+          <div className="zn-num__legend">
+            <ZoneScale />
+          </div>
+        )}
 
-              {/* Custom distance input */}
-              {distanceId === "custom" && (
-                <div className="flex items-center gap-2 mt-2">
-                  <input
-                    type="number"
-                    min={0.1}
-                    step={0.1}
-                    placeholder="km"
-                    value={customKm}
-                    onChange={(e) => setCustomKm(e.target.value)}
-                    className="flex h-10 w-28 rounded-md border border-input bg-transparent px-3 py-1 text-sm tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculators:calculateurs.equivalence.customDistanceLabel")}
-                  />
-                  <span className="text-sm text-muted-foreground">km</span>
-                </div>
-              )}
-            </div>
+        <section className="zn-num__panel zn-tool__band zn-split zn-tool">
+          {/* The result you already have. */}
+          <Card>
+            <CardContent
+              className="zn-stack"
+              style={{ "--gap": "var(--sp-12)" } as CSSProperties}
+            >
+              <div className="zn-calc__field">
+                <label htmlFor="distance" className="zn-calc__label">
+                  {t("calculators:calculateurs.equivalence.raceDistance")}
+                </label>
+                <Select value={distanceId} onValueChange={setDistanceId}>
+                  <SelectTrigger id="distance" className="zn-tool__wide">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {DISTANCE_OPTIONS.map((d) => (
+                      <SelectItem key={d.id} value={d.id}>
+                        {pickLang(d, "label")}
+                        {d.km > 0 ? ` (${d.km} km)` : ""}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-            {/* Time Inputs */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium">
-                {t("calculators:calculateurs.equivalence.raceTime")}
-              </label>
-              <div className="flex items-center gap-2">
-                <div className="flex flex-col items-center">
-                  <input
-                    type="number"
-                    min={0}
-                    max={9}
-                    placeholder="0"
-                    value={hours}
-                    onChange={(e) => handleNumericInput(e.target.value, setHours, 9)}
-                    className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculators:calculateurs.equivalence.hours")}
-                  />
-                  <span className="text-xs text-muted-foreground mt-1">h</span>
-                </div>
-                <span className="text-xl font-bold text-muted-foreground pb-4">:</span>
-                <div className="flex flex-col items-center">
-                  <input
-                    type="number"
-                    min={0}
-                    max={59}
-                    placeholder="00"
-                    value={minutes}
-                    onChange={(e) => handleNumericInput(e.target.value, setMinutes, 59)}
-                    className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label="Minutes"
-                  />
-                  <span className="text-xs text-muted-foreground mt-1">min</span>
-                </div>
-                <span className="text-xl font-bold text-muted-foreground pb-4">:</span>
-                <div className="flex flex-col items-center">
-                  <input
-                    type="number"
-                    min={0}
-                    max={59}
-                    placeholder="00"
-                    value={seconds}
-                    onChange={(e) => handleNumericInput(e.target.value, setSeconds, 59)}
-                    className="flex h-12 w-16 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={t("calculators:calculateurs.equivalence.seconds")}
-                  />
-                  <span className="text-xs text-muted-foreground mt-1">sec</span>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Results Table */}
-        {predictions && (
-          <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50 mb-6">
-            <CardContent className="pt-6">
-              <h2 className="text-lg font-semibold mb-4">
-                {t("calculators:calculateurs.equivalence.predictedTimes")}
-              </h2>
-              <ResponsiveTable
-                data={predictions}
-                rowKey="id"
-                stickyHeader
-                mobileCardTitle={(p) => (
-                  <span className="flex items-center gap-2">
-                    {pickLang(p, "label")}
-                    {p.isReference && (
-                      <span className="text-xs font-normal text-muted-foreground">
-                        ({t("calculators:calculateurs.equivalence.ref")})
-                      </span>
-                    )}
+                {distanceId === "custom" && (
+                  <span className="zn-numfield" style={{ "--field-w": "56px" } as CSSProperties}>
+                    <input
+                      type="number"
+                      min={0.1}
+                      step={0.1}
+                      placeholder="10"
+                      value={customKm}
+                      onChange={(e) => setCustomKm(e.target.value)}
+                      className="zn-numfield__input"
+                      aria-label={t("calculators:calculateurs.equivalence.customDistanceLabel")}
+                    />
+                    <span className="zn-numfield__unit">km</span>
                   </span>
                 )}
-                columns={[
-                  {
-                    key: "distance",
-                    header: t("calculators:calculateurs.equivalence.distanceCol"),
-                    className: "font-medium",
-                    hideOnMobile: true,
-                    cell: (p) => (
-                      <>
-                        {pickLang(p, "label")}
-                        {p.isReference && (
-                          <span className="ml-2 text-xs text-muted-foreground">
-                            ({t("calculators:calculateurs.equivalence.ref")})
-                          </span>
-                        )}
-                      </>
-                    ),
-                  },
-                  {
-                    key: "time",
-                    header: t("calculators:calculateurs.equivalence.timeCol"),
-                    className: "tabular-nums font-medium",
-                    cell: (p) => formatTime(p.predictedSeconds),
-                  },
-                  {
-                    key: "pace",
-                    header: t("calculators:calculateurs.equivalence.paceCol"),
-                    className: "tabular-nums text-muted-foreground",
-                    cell: (p) => `${formatPaceValue(convertPace(p.paceMinPerKm, unit))} ${getPaceUnit(unit)}`,
-                  },
-                  ...(paceZones
-                    ? [
-                        {
-                          key: "zone",
-                          header: t("calculators:calculateurs.equivalence.zoneCol"),
-                          cell: (p: typeof predictions[number]) => {
-                            const zoneMeta = p.zone ? ZONE_META[p.zone] : null;
-                            return zoneMeta ? (
-                              <span
-                                className={cn(
-                                  "inline-flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded-full",
-                                  cn(zoneClass(p.zone!, "bgSoft"), zoneClass(p.zone!, "text")),
-                                )}
-                              >
-                                <span
-                                  className={cn(
-                                    "size-2 rounded-full",
-                                    zoneClass(p.zone!, "bg"),
-                                  )}
-                                />
-                                Z{p.zone}
-                              </span>
-                            ) : (
-                              <span className="text-xs text-muted-foreground">-</span>
-                            );
-                          },
-                        },
-                      ]
-                    : []),
-                ]}
-              />
+              </div>
+
+              <div className="zn-calc__field">
+                <span className="zn-calc__label">
+                  {t("calculators:calculateurs.equivalence.raceTime")}
+                </span>
+                <div className="zn-num__time">
+                  <span className="zn-numfield">
+                    <input
+                      type="number"
+                      min={0}
+                      max={9}
+                      placeholder="0"
+                      value={hours}
+                      onChange={(e) => handleNumericInput(e.target.value, setHours, 9)}
+                      className="zn-numfield__input"
+                      aria-label={t("calculators:calculateurs.equivalence.hours")}
+                    />
+                    <span className="zn-numfield__unit">h</span>
+                  </span>
+                  <span className="zn-numfield">
+                    <input
+                      type="number"
+                      min={0}
+                      max={59}
+                      placeholder="00"
+                      value={minutes}
+                      onChange={(e) => handleNumericInput(e.target.value, setMinutes, 59)}
+                      className="zn-numfield__input"
+                      aria-label={t("calculators:calculateurs.equivalence.minutes")}
+                    />
+                    <span className="zn-numfield__unit">min</span>
+                  </span>
+                  <span className="zn-numfield">
+                    <input
+                      type="number"
+                      min={0}
+                      max={59}
+                      placeholder="00"
+                      value={seconds}
+                      onChange={(e) => handleNumericInput(e.target.value, setSeconds, 59)}
+                      className="zn-numfield__input"
+                      aria-label={t("calculators:calculateurs.equivalence.seconds")}
+                    />
+                    <span className="zn-numfield__unit">sec</span>
+                  </span>
+                </div>
+              </div>
             </CardContent>
           </Card>
-        )}
 
-        {predictions && (
-          <ShareLinkButton
-            buildUrl={() =>
-              buildParamsUrl("/calculators/equivalence", {
-                d: distanceId,
-                km: customKm,
-                h: hours,
-                m: minutes,
-                s: seconds,
-              })
-            }
-            title={t("calculators:calculateurs.equivalence.title")}
-          />
-        )}
+          {/* The same effort, projected onto the four standard distances. */}
+          <div className="zn-stack" style={{ "--gap": "var(--sp-13)" } as CSSProperties}>
+            {predictions && (
+              <>
+                <h2 className="zn-title" data-level="4">
+                  {t("calculators:calculateurs.equivalence.predictedTimes")}
+                </h2>
 
-        {/* Explanation Card */}
-        <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-          <CardContent className="pt-6">
-            <div className="flex gap-3">
-              <Info className="size-5 text-muted-foreground shrink-0 mt-0.5" />
-              <p className="text-sm text-muted-foreground">
+                <ResponsiveTable
+                  data={predictions}
+                  rowKey="id"
+                  stickyHeader
+                  mobileCardTitle={(p) => (
+                    <span>
+                      {pickLang(p, "label")}
+                      {p.isReference && (
+                        <span className="zn-faint">
+                          {" "}
+                          ({t("calculators:calculateurs.equivalence.ref")})
+                        </span>
+                      )}
+                    </span>
+                  )}
+                  columns={[
+                    {
+                      key: "distance",
+                      header: t("calculators:calculateurs.equivalence.distanceCol"),
+                      hideOnMobile: true,
+                      cell: (p) => (
+                        <>
+                          {pickLang(p, "label")}
+                          {p.isReference && (
+                            <span className="zn-faint">
+                              {" "}
+                              ({t("calculators:calculateurs.equivalence.ref")})
+                            </span>
+                          )}
+                        </>
+                      ),
+                    },
+                    {
+                      key: "time",
+                      header: t("calculators:calculateurs.equivalence.timeCol"),
+                      className: "zn-num__num",
+                      cell: (p) => formatTime(p.predictedSeconds),
+                    },
+                    {
+                      key: "pace",
+                      header: t("calculators:calculateurs.equivalence.paceCol"),
+                      className: "zn-num__num",
+                      cell: (p) =>
+                        `${formatPaceValue(convertPace(p.paceMinPerKm, unit))} ${getPaceUnit(unit)}`,
+                    },
+                    ...(paceZones
+                      ? [
+                          {
+                            key: "zone",
+                            header: t("calculators:calculateurs.equivalence.zoneCol"),
+                            cell: (p: typeof predictions[number]) =>
+                              p.zone ? (
+                                <ZoneBadge zone={p.zone} size="sm" />
+                              ) : (
+                                <span className="zn-faint">—</span>
+                              ),
+                          },
+                        ]
+                      : []),
+                  ]}
+                />
+
+                <div className="zn-cluster">
+                  <ShareLinkButton
+                    buildUrl={() =>
+                      buildParamsUrl("/calculators/equivalence", {
+                        d: distanceId,
+                        km: customKm,
+                        h: hours,
+                        m: minutes,
+                        s: seconds,
+                      })
+                    }
+                    title={t("calculators:calculateurs.equivalence.title")}
+                  />
+                </div>
+              </>
+            )}
+
+            <div className="zn-tool__note">
+              <Info />
+              <p className="zn-body zn-body--sm zn-muted">
                 {t("calculators:calculateurs.equivalence.riegelExplanation")}
               </p>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </section>
       </div>
     </>
   );

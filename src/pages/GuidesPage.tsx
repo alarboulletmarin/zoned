@@ -1,15 +1,20 @@
-import { Link } from "react-router-dom";
+import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
-import { Utensils, Target, Flame, ArrowRight } from "@/components/icons";
-import type { IconProps } from "@/components/icons";
-import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import { cn } from "@/lib/utils";
-import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
+import { DoorCard } from "@/components/domain/DoorCard";
 
+/**
+ * The three practical guides.
+ *
+ * A hub is three doors and nothing else, so it is built out of the same
+ * DoorCard the calculators hub uses: the whole card is the link, the mono
+ * kicker says what is behind it, and the vermillon line at the foot is the
+ * promise. The icon medallions the page used to carry are gone — three tinted
+ * chips are three accents on a screen allowed one.
+ */
 interface GuideEntry {
   id: string;
-  icon: React.ComponentType<IconProps>;
+  kickerKey: string;
   titleKey: string;
   descriptionKey: string;
   href: string;
@@ -18,21 +23,21 @@ interface GuideEntry {
 const GUIDES: GuideEntry[] = [
   {
     id: "nutrition",
-    icon: Utensils,
+    kickerKey: "nutrition.kicker",
     titleKey: "nutrition.title",
     descriptionKey: "nutrition.description",
     href: "/guides/nutrition",
   },
   {
     id: "race-prep",
-    icon: Target,
+    kickerKey: "racePrep.kicker",
     titleKey: "racePrep.title",
     descriptionKey: "racePrep.description",
     href: "/guides/race-prep",
   },
   {
     id: "warmup",
-    icon: Flame,
+    kickerKey: "warmup.kicker",
     titleKey: "warmup.title",
     descriptionKey: "warmup.description",
     href: "/guides/warmup",
@@ -64,46 +69,37 @@ export function GuidesPage() {
           },
         ]}
       />
-      <div className="py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2">Guides</EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
-            {t("guides.subtitle")}
-          </FadeUp>
-        </div>
 
-        {/* Guide Cards */}
-        <StaggerGrid className={cn("grid gap-4", "grid-cols-1 md:grid-cols-3")}>
-          {GUIDES.map((guide) => {
-            const Icon = guide.icon;
-            return (
-              <StaggerItem key={guide.id}>
-                <Link to={guide.href} className="group block h-full">
-                  <Card interactive className="h-full bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent hover:-translate-y-0.5 hover:border-foreground/40 hover:shadow-sm transition-all duration-200">
-                    <CardContent className="flex flex-col items-center text-center gap-4 pt-8 pb-6">
-                      <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                        <Icon className="size-7 text-primary" />
-                      </div>
-                      <div className="space-y-1">
-                        <h2 className="text-lg font-semibold">
-                          {t(guide.titleKey)}
-                        </h2>
-                        <p className="text-sm text-muted-foreground">
-                          {t(guide.descriptionKey)}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-1 text-sm text-primary font-medium">
-                        {t("explore")}
-                        <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              </StaggerItem>
-            );
-          })}
-        </StaggerGrid>
+      <div className="zn-guide">
+        <section
+          className="zn-stack zn-guide__head"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">
+            {t("guides.kicker", { n: GUIDES.length })}
+          </span>
+          <h1 className="zn-display" data-level="2">
+            {t("guides.heading")}
+          </h1>
+          <p className="zn-body zn-body--lead zn-guide__lede">
+            {t("guides.subtitle")}
+          </p>
+        </section>
+
+        <section className="zn-guide__band">
+          <div className="zn-grid">
+            {GUIDES.map((guide) => (
+              <DoorCard
+                key={guide.id}
+                to={guide.href}
+                kicker={t(guide.kickerKey)}
+                title={t(guide.titleKey)}
+                body={t(guide.descriptionKey)}
+                cta={t("explore")}
+              />
+            ))}
+          </div>
+        </section>
       </div>
     </>
   );

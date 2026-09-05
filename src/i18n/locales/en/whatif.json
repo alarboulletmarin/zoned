@@ -1,6 +1,7 @@
 {
   "title": "What-If Simulator",
-  "subtitle": "Compare two training scenarios and visualize the differences",
+  "kicker": "Two scenarios",
+  "subtitle": "Compare two training scenarios and read the differences",
   "shared": {
     "title": "Runner Profile",
     "distance": "Race distance",
@@ -82,7 +83,9 @@
     "breadcrumbCalculators": "Calculators"
   },
   "errors": {
-    "generic": "An error occurred"
+    "generic": "An error occurred",
+    "title": "The comparison did not finish",
+    "intact": "Your settings are kept — run the comparison again."
   },
   "toast": {
     "saved": "Scenario saved",

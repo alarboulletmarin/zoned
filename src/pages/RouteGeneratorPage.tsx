@@ -1,17 +1,28 @@
-import { lazy, Suspense, useCallback, useMemo, useRef, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
-import { Activity, ArrowLeftRight, Check, ChevronDown, ChevronLeft, ChevronRight, Clock, Download, EyeOff, Maximize2, Minimize2, Pencil, RotateCcw, Save, TrendingUp, X } from "@/components/icons";
+import { Activity, ArrowLeftRight, Check, ChevronDown, ChevronLeft, ChevronRight, Clock, Download, EyeOff, Loader2, Maximize2, Minimize2, Pencil, RotateCcw, Save, TrendingUp, X } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { MiniRouteMap } from "@/components/visualization/route/MiniRouteMap";
 import { SEOHead } from "@/components/seo";
 import {
   RouteParametersForm,
   type RouteFormSubmitPayload,
 } from "@/components/domain/RouteParametersForm";
+import { RouteCandidateCard } from "@/components/domain/RouteCandidateCard";
 import { generateRouteCandidates } from "@/lib/routeGenerator";
 import { useRouteEditor } from "@/hooks/useRouteEditor";
 import {
@@ -47,24 +58,21 @@ const ElevationChart = lazy(() =>
   })),
 );
 
+/**
+ * RouteMap still ships its own Tailwind base — `h-72 sm:h-96 lg:h-[28rem]`
+ * plus a rounded border. It is a visualization component and out of this
+ * screen's scope, and Tailwind's utilities layer beats the component layer
+ * this family's CSS lives in, so the override has to be Tailwind too. These
+ * are the only utilities left on the four route screens: the frame, the
+ * radius and the clipping are `.zn-rt__map`'s job, and inside the stage the
+ * map takes the whole cell.
+ */
+const MAP_FILL = "h-full sm:h-full lg:h-full rounded-none border-0";
+
 function MapSkeleton({ className }: { className?: string }) {
-  return (
-    <div
-      className={cn(
-        "h-72 w-full animate-pulse rounded-xl border border-border/60 bg-muted/40 sm:h-96 lg:h-[28rem]",
-        className,
-      )}
-    />
-  );
+  return <Skeleton className={cn("zn-rt__mapskel", className)} />;
 }
 
-/**
- * Pick the editor's initial waypoint list by sampling the trace at roughly
- * one-kilometre intervals. The original Brouter "via points" aren't stored
- * on the Route, so we approximate: a denser handle list lets the user grab
- * the trace closer to the spot they want to move without having to insert
- * a fresh waypoint first. Capped at 10 to keep the map readable.
- */
 interface DisplayCandidate {
   route: Route;
   recommendation: RankedRouteCandidate | null;
@@ -77,17 +85,6 @@ interface RouteGeneratorLocationState {
   };
   workoutRouteWorkout?: WorkoutTemplate;
 }
-
-// Tailwind classes for the unique distance-match chip (replaces the
-// previous "closest_to_target_distance" reason + amber "approximate"
-// banner that could fire together in the 5–10 % window).
-const DISTANCE_MATCH_CLASSES: Record<DistanceMatchLabel, string> = {
-  very_close:
-    "border-emerald-300/60 bg-emerald-50/80 text-emerald-900 dark:border-emerald-700/60 dark:bg-emerald-950/30 dark:text-emerald-100",
-  close: "border-border/60 bg-background text-foreground",
-  approximate:
-    "border-amber-300/60 bg-amber-50/80 text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/30 dark:text-amber-100",
-};
 
 export function RouteGeneratorPage() {
   const { t } = useTranslation("routes");
@@ -106,10 +103,9 @@ export function RouteGeneratorPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [reversedIds, setReversedIds] = useState<Record<string, boolean>>({});
   const [isMapExpanded, setIsMapExpanded] = useState(false);
-  // Desktop one-page layout: the "Pourquoi ce parcours" panel collapses
-  // by default so the map keeps the maximum vertical room. Users only
-  // pop it open when they want to compare the rationale or read the
-  // elevation profile in detail.
+  // Desktop one-page layout: the "why this route" panel is folded by default
+  // so the map keeps the maximum vertical room. Users only pop it open when
+  // they want to compare the rationale or read the elevation profile.
   const [detailsOpen, setDetailsOpen] = useState(false);
 
   const routeState = location.state as RouteGeneratorLocationState | null;
@@ -244,9 +240,6 @@ export function RouteGeneratorPage() {
 
   const onMapClick = useCallback((point: RouteCoordinate) => {
     setPreviewStart(point);
-    // Drop the sheet to peek (snap index 1 = peek, 0 = expanded) so the
-    // user sees the marker land where they tapped — Komoot/Strava
-    // collapse on map tap to keep the cartography hero.
   }, []);
 
   const generate = useCallback(
@@ -294,11 +287,7 @@ export function RouteGeneratorPage() {
         setCandidates(nextCandidates);
         setSelectedIndex(0);
         setLastPayload(payload);
-        // Stay at peek so the trace is the hero; the stat strip + first
-        // candidate card are already in the peek-visible header. The user
-        // drags the sheet up only when they want to compare alternates or
-        // re-tune the form.
-          } catch (err) {
+      } catch (err) {
         console.warn("RouteGenerator: routing failed", err);
         toast.error(t("errors.routingFailed"));
       } finally {
@@ -348,162 +337,92 @@ export function RouteGeneratorPage() {
     return (
       <>
         <SEOHead title={t("title")} description={t("subtitle")} canonical="/routes" noindex />
-        <div className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
-          <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed border-border/60 bg-muted/10 p-10 text-center">
-            <EyeOff className="size-10 text-muted-foreground" />
-            <div className="space-y-1">
-              <h1 className="text-xl font-bold">{t("disabled.title")}</h1>
-              <p className="text-sm text-muted-foreground">{t("disabled.body")}</p>
-            </div>
-            <Button asChild>
-              <Link to="/settings">{t("disabled.cta")}</Link>
-            </Button>
-          </div>
+        <div className="zn-rt">
+          <section className="zn-rt__band zn-rt__band--first">
+            <EmptyState
+              variant="not-started"
+              icon={EyeOff}
+              title={t("disabled.title")}
+              description={t("disabled.body")}
+              action={
+                <Button asChild>
+                  <Link to="/settings">{t("disabled.cta")}</Link>
+                </Button>
+              }
+            />
+          </section>
         </div>
       </>
     );
   }
 
-  // ─── Content blocks shared by mobile (drawer) and desktop (grid) ──
+  // ─── Blocks shared by the phone and the desktop arrangement ───────────
+  //
+  // Secondary nav (Mes parcours / Trouver une piste) lives in the global
+  // Sidebar rather than in this header: they belong to the same navigation
+  // domain as /routes itself, which keeps this screen to a single h1.
 
-  // Note: secondary nav (Mes parcours / Trouver une piste) used to live
-  // in the page header on the right. Since they belong to the same
-  // navigation domain as /routes itself, they're now sub-items in the
-  // global Sidebar (cf. Sidebar.tsx). This keeps the page header to a
-  // single h1 and de-duplicates navigation entry points.
-
-  // Map height: full-bleed inside the mobile drawer's fixed parent;
-  // generous on tablet/desktop so the carto dominates the viewport instead
-  // of being capped at 28rem like before. Override `sm:h-96` from the
-  // RouteMap default so it doesn't kick in inside the mobile fixed wrapper.
-  // Komoot/AllTrails pattern on md+: the map fills its parent (which
-  // is a flex-1 cell inside the right-column card). On smaller
-  // screens we keep an explicit height so the map doesn't collapse.
-  // No `min-h` on md+: the parent already constrains the column to
-  // the viewport, and a `min-h` would push the strip down below the
-  // fold and leave a blank gap when the map fills less than min-h.
-  const mapHeightClass = isMobile
-    ? "h-full w-full sm:h-full rounded-none border-0"
-    : isMapExpanded
-      ? "h-[calc(100svh-10rem)] sm:h-[calc(100svh-10rem)] lg:h-[calc(100svh-10rem)]"
-      // RouteMap defaults to `lg:h-[28rem]` which would override
-      // `md:h-full` on large screens and leave blank space below the
-      // map. Re-assert h-full at lg/xl to keep the carto edge-to-edge.
-      : "h-72 sm:h-96 md:h-full lg:h-full xl:h-full md:rounded-none md:border-0";
-
-  const presetNode = trainingPreset ? (
-    <>
-      {presetSession && (
-        <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary/80">
-            {t(`recommendation.eyebrow.${trainingPreset.intent.source}`)}
-          </p>
-          <div className="mt-2 space-y-1.5">
-            <p className="text-sm font-semibold text-foreground">
-              {t("recommendation.optimizedFor", { session: presetSessionLabel ?? t("recommendation.genericSession") })}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              {t("recommendation.sessionSummary", {
-                distance: trainingPreset.formDefaults.targetDistanceKm.toFixed(1),
-                duration: presetSession.targetDurationMin ?? presetSession.estimatedDurationMin,
-              })}
-            </p>
-            {presetSessionNotes && (
-              <p className="text-xs leading-relaxed text-muted-foreground">{presetSessionNotes}</p>
-            )}
-          </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
-              {t(`recommendation.preferences.${trainingPreset.intent.terrainPreference}`)}
-            </span>
-            <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
-              {t(`recommendation.preferences.continuity_${trainingPreset.intent.continuityPriority}`)}
-            </span>
-            {trainingPreset.intent.repeatabilityPriority !== "low" && (
-              <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
-                {t("recommendation.preferences.repeatable")}
-              </span>
-            )}
-          </div>
-          <div className="mt-3">
-            <Link
-              to={`/plan/${trainingPreset.planSessionRef?.planId}?week=${trainingPreset.planSessionRef?.weekNumber}`}
-              className="text-xs font-medium text-primary hover:underline"
-            >
-              {t("recommendation.backToPlan")}
-            </Link>
-          </div>
-        </div>
+  // The session this route is being built for, quoted from the plan or from
+  // the library. One block covers both: only the headline sentence and the
+  // link back to the plan differ.
+  const presetNode: ReactNode = trainingPreset ? (
+    <div className="zn-rt__preset">
+      <span className="zn-kicker">
+        {t(`recommendation.eyebrow.${trainingPreset.intent.source}`)}
+      </span>
+      <p className="zn-rt__preset-title">
+        {presetSession
+          ? t("recommendation.optimizedFor", {
+              session: presetSessionLabel ?? t("recommendation.genericSession"),
+            })
+          : t("recommendation.optimizedForWorkout", {
+              session: presetSessionLabel ?? t("recommendation.genericSession"),
+              workout: presetTitle ?? t("recommendation.genericWorkout"),
+            })}
+      </p>
+      <p className="zn-mono zn-rt__facts">
+        {t("recommendation.sessionSummary", {
+          distance: trainingPreset.formDefaults.targetDistanceKm.toFixed(1),
+          duration: presetSession
+            ? presetSession.targetDurationMin ?? presetSession.estimatedDurationMin
+            : trainingPreset.intent.targetDurationMin ?? 0,
+        })}
+      </p>
+      {presetSessionNotes && <p className="zn-rt__preset-note">{presetSessionNotes}</p>}
+      <div className="zn-cluster">
+        <span className="zn-rt__tag">
+          {t(`recommendation.preferences.${trainingPreset.intent.terrainPreference}`)}
+        </span>
+        <span className="zn-rt__tag">
+          {t(`recommendation.preferences.continuity_${trainingPreset.intent.continuityPriority}`)}
+        </span>
+        {trainingPreset.intent.repeatabilityPriority !== "low" && (
+          <span className="zn-rt__tag">{t("recommendation.preferences.repeatable")}</span>
+        )}
+      </div>
+      {presetSession && trainingPreset.planSessionRef && (
+        <Button variant="link" size="sm" asChild>
+          <Link
+            to={`/plan/${trainingPreset.planSessionRef.planId}?week=${trainingPreset.planSessionRef.weekNumber}`}
+          >
+            {t("recommendation.backToPlan")}
+          </Link>
+        </Button>
       )}
-      {!presetSession && presetWorkout && (
-        <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary/80">
-            {t(`recommendation.eyebrow.${trainingPreset.intent.source}`)}
-          </p>
-          <div className="mt-2 space-y-1.5">
-            <p className="text-sm font-semibold text-foreground">
-              {t("recommendation.optimizedForWorkout", {
-                session: presetSessionLabel ?? t("recommendation.genericSession"),
-                workout: presetTitle ?? t("recommendation.genericWorkout"),
-              })}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              {t("recommendation.sessionSummary", {
-                distance: trainingPreset.formDefaults.targetDistanceKm.toFixed(1),
-                duration: trainingPreset.intent.targetDurationMin ?? 0,
-              })}
-            </p>
-            {presetSessionNotes && (
-              <p className="text-xs leading-relaxed text-muted-foreground">{presetSessionNotes}</p>
-            )}
-          </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
-              {t(`recommendation.preferences.${trainingPreset.intent.terrainPreference}`)}
-            </span>
-            <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
-              {t(`recommendation.preferences.continuity_${trainingPreset.intent.continuityPriority}`)}
-            </span>
-            {trainingPreset.intent.repeatabilityPriority !== "low" && (
-              <span className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-[11px] font-medium text-foreground">
-                {t("recommendation.preferences.repeatable")}
-              </span>
-            )}
-          </div>
-        </div>
-      )}
-    </>
+    </div>
   ) : null;
 
-  const formNode = (
-    <RouteParametersForm
-      key={trainingPreset ? `${trainingPreset.planSessionRef?.planId}-${trainingPreset.planSessionRef?.weekNumber}-${trainingPreset.planSessionRef?.sessionIndex}` : "manual-route-form"}
-      isGenerating={isGenerating}
-      onSubmit={onSubmit}
-      onError={(msg) => toast.error(msg)}
-      onStartChange={(point) => setPreviewStart(point)}
-      externalStart={previewStart}
-      initialValues={trainingPreset?.formDefaults}
-    />
-  );
-
-  // Map + overlays. The map fills its parent (fixed-positioned on mobile,
-  // flex-1 inside the right-column card on desktop). Hint banner sits
-  // above; action chips (reverse / edit / maximize) ride on top via
-  // absolute positioning.
+  // Map plus the marks that ride on it. The frame, the radius and the
+  // clipping belong to .zn-rt__map; the map itself fills the cell.
   const mapBlock = (
-    <div
-      className={cn(
-        "relative",
-        isMobile ? "h-full w-full" : "md:h-full",
-      )}
-    >
+    <div className="zn-rt__map">
       {!route && (
-        <div className="pointer-events-none absolute left-1/2 top-3 z-[600] -translate-x-1/2 rounded-full border border-border/60 bg-background/95 px-3 py-1.5 text-[11px] font-medium text-muted-foreground shadow-sm backdrop-blur-sm">
+        <p className="zn-rt__maphint">
           {previewStart ? t("form.mapPickedHint") : t("form.mapPickStartHint")}
-        </div>
+        </p>
       )}
-      <Suspense fallback={<MapSkeleton className={mapHeightClass} />}>
+
+      <Suspense fallback={<MapSkeleton className="zn-rt__mapskel--fill" />}>
         <RouteMap
           points={displayPoints}
           candidates={isEditing ? [] : candidateTraces}
@@ -517,14 +436,22 @@ export function RouteGeneratorPage() {
           onWaypointMove={onWaypointMove}
           onWaypointInsert={onWaypointInsert}
           onWaypointRemove={onWaypointRemove}
-          className={mapHeightClass}
+          className={MAP_FILL}
         />
       </Suspense>
+
       {isEditing && (
-        <div className="pointer-events-none absolute left-1/2 top-3 z-[600] -translate-x-1/2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-[11px] font-medium text-primary shadow-sm backdrop-blur-sm">
+        <p className="zn-rt__maphint" data-kind="edit">
           {isReRouting ? t("edit.rerouting") : t("edit.hint")}
-        </div>
+        </p>
       )}
+
+      {displayedRoute && isMobile && (
+        <p className="zn-rt__readout">
+          {(displayedRoute.distanceM / 1000).toFixed(1)} km · ↑ {displayedRoute.elevationGainM} m
+        </p>
+      )}
+
       {!isMobile && (
         <button
           type="button"
@@ -533,21 +460,18 @@ export function RouteGeneratorPage() {
             setIsMapExpanded((v) => !v);
           }}
           onPointerDownCapture={(e) => e.stopPropagation()}
-          className="absolute right-3 top-3 z-[1100] inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-background/95 px-2.5 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm hover:bg-background"
+          className="zn-rt__mapbtn zn-rt__mapbtn--corner"
           aria-label={isMapExpanded ? t("form.mapShrink") : t("form.mapExpand")}
         >
-          {isMapExpanded ? <Minimize2 className="size-3.5" /> : <Maximize2 className="size-3.5" />}
-          <span className="hidden sm:inline">
-            {isMapExpanded ? t("form.mapShrink") : t("form.mapExpand")}
-          </span>
+          {isMapExpanded ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+          {isMapExpanded ? t("form.mapShrink") : t("form.mapExpand")}
         </button>
       )}
-      {/* Mobile keeps the floating action overlays — no horizontal
-          strip on phones so the user needs an in-map fallback. Desktop
-          has its dedicated action strip below the map (cf. desktopStrip)
-          so we hide these to keep the cartography clean. */}
+
+      {/* The phone keeps its editing affordances on the map; the desktop has
+          a dedicated strip under it, so exactly one of the two is on screen. */}
       {isMobile && route && !isEditing && (
-        <div className="absolute bottom-3 right-3 z-[1100] flex flex-wrap items-center gap-2">
+        <div className="zn-rt__mapdock">
           <button
             type="button"
             onClick={(e) => {
@@ -555,14 +479,12 @@ export function RouteGeneratorPage() {
               onReverseTrace();
             }}
             onPointerDownCapture={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-background/95 px-2.5 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm hover:bg-background"
+            className="zn-rt__mapbtn"
             aria-label={t("form.reverseDirection")}
             title={t("form.reverseDirection")}
           >
-            <ArrowLeftRight className="size-3.5" />
-            <span className="hidden sm:inline">
-              {isSelectedReversed ? t("form.reversedActive") : t("form.reverseDirection")}
-            </span>
+            <ArrowLeftRight size={15} />
+            {isSelectedReversed ? t("form.reversedActive") : t("form.reverseDirection")}
           </button>
           <button
             type="button"
@@ -571,17 +493,19 @@ export function RouteGeneratorPage() {
               onEnterEdit();
             }}
             onPointerDownCapture={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1.5 rounded-md border border-primary/40 bg-primary px-2.5 py-1.5 text-xs font-medium text-primary-foreground shadow-sm hover:bg-primary/90"
+            className="zn-rt__mapbtn"
+            data-tone="accent"
             aria-label={t("edit.enter")}
             title={t("edit.enter")}
           >
-            <Pencil className="size-3.5" />
-            <span className="hidden sm:inline">{t("edit.enter")}</span>
+            <Pencil size={15} />
+            {t("edit.enter")}
           </button>
         </div>
       )}
+
       {isMobile && isEditing && (
-        <div className="absolute bottom-3 right-3 z-[1100] flex flex-wrap items-center gap-2">
+        <div className="zn-rt__mapdock">
           <button
             type="button"
             onClick={(e) => {
@@ -589,10 +513,10 @@ export function RouteGeneratorPage() {
               onExitEdit();
             }}
             onPointerDownCapture={(e) => e.stopPropagation()}
-            className="inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-background/95 px-2.5 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm hover:bg-background"
+            className="zn-rt__mapbtn"
           >
-            <X className="size-3.5" />
-            <span className="hidden sm:inline">{t("edit.cancel")}</span>
+            <X size={15} />
+            {t("edit.cancel")}
           </button>
           <button
             type="button"
@@ -602,203 +526,182 @@ export function RouteGeneratorPage() {
             }}
             onPointerDownCapture={(e) => e.stopPropagation()}
             disabled={isReRouting || !editPreview}
-            className="inline-flex items-center gap-1.5 rounded-md border border-primary/40 bg-primary px-2.5 py-1.5 text-xs font-medium text-primary-foreground shadow-sm hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
+            className="zn-rt__mapbtn"
+            data-tone="accent"
           >
-            <Check className="size-3.5" />
-            <span className="hidden sm:inline">{t("edit.apply")}</span>
+            {isReRouting ? <Loader2 size={15} className="zn-route-spin" /> : <Check size={15} />}
+            {t("edit.apply")}
           </button>
         </div>
       )}
     </div>
   );
 
-  // ─── Desktop stats bar (route stats promoted to h3 + pager) ──────
-  // Sits *above* the action strip. Stats are the headline information
-  // for a generated route (km, m, duration) and deserve real visual
-  // weight; the pager "Proposition X/N" reads as a discreet caption to
-  // their right (Strava 2025 Routes pattern).
-  const desktopStatsBar = route ? (
-    <div className="flex items-center justify-between gap-3 border-t border-border/60 bg-background px-3 pt-2 pb-1.5">
-      <h3 className="flex items-baseline gap-4 text-lg font-semibold tabular-nums">
-        <span className="inline-flex items-baseline gap-1">
-          <Activity className="size-4 self-center text-primary" />
+  // ─── The numbers, on the rule under the map ───────────────────────────
+  // Distance, ascent and duration are the headline of a generated route; the
+  // pager beside them says which of the three proposals they belong to.
+  const statsBar = route ? (
+    <div className="zn-rt__stats">
+      <h3 className="zn-rt__statline">
+        <span className="zn-rt__stat">
+          <Activity size={14} />
           {((displayedRoute?.distanceM ?? 0) / 1000).toFixed(1)}
-          <span className="text-xs font-normal text-muted-foreground">km</span>
+          <span className="zn-rt__stat-unit">km</span>
         </span>
-        <span className="inline-flex items-baseline gap-1">
-          <TrendingUp className="size-4 self-center text-primary" />
+        <span className="zn-rt__stat">
+          <TrendingUp size={14} />
           {displayedRoute?.elevationGainM ?? 0}
-          <span className="text-xs font-normal text-muted-foreground">m</span>
+          <span className="zn-rt__stat-unit">m</span>
         </span>
-        <span className="inline-flex items-baseline gap-1 font-medium text-muted-foreground">
-          <Clock className="size-4 self-center" />
+        <span className="zn-rt__stat">
+          <Clock size={14} />
           {formatDurationMinutes(displayDurationSec / 60)}
         </span>
       </h3>
+
       {candidates.length > 1 && (
-        <div className="flex items-center gap-0.5 rounded-full border border-border/60 bg-muted/40 p-0.5 text-sm">
+        <div className="zn-rt__pager">
           <Button
             variant="ghost"
-            size="icon"
-            className="size-7 rounded-full"
+            size="icon-sm"
+            className="zn-rt__pager-step"
             onClick={() => setSelectedIndex((i) => (i - 1 + candidates.length) % candidates.length)}
-            aria-label={t("form.candidatesLabel")}
+            aria-label={t("form.candidatePrev")}
           >
-            <ChevronLeft className="size-4" />
+            <ChevronLeft size={16} />
           </Button>
-          <span className="min-w-[6rem] px-1 text-center font-semibold tabular-nums text-foreground">
+          <span className="zn-rt__pager-label">
             {t("form.candidate", { index: selectedIndex + 1 })}
-            <span className="text-muted-foreground">{` / ${candidates.length}`}</span>
+            <span className="zn-rt__pager-total">{` / ${candidates.length}`}</span>
           </span>
           <Button
             variant="ghost"
-            size="icon"
-            className="size-7 rounded-full"
+            size="icon-sm"
+            className="zn-rt__pager-step"
             onClick={() => setSelectedIndex((i) => (i + 1) % candidates.length)}
-            aria-label={t("form.candidatesLabel")}
+            aria-label={t("form.candidateNext")}
           >
-            <ChevronRight className="size-4" />
+            <ChevronRight size={16} />
           </Button>
         </div>
       )}
     </div>
   ) : null;
 
-  // ─── Desktop action strip (refactor: edit | output) ──────────────
-  // Two clearly separated groups: editing actions on the left
-  // (Modifier le tracé, Inverser le sens), output actions on the right
-  // (Enregistrer, Régénérer, Télécharger), divided by a vertical rule.
-  // When the user is in edit mode, the left group flips to Cancel /
-  // Apply so all editing affordances live in one predictable location
-  // — no more buttons floating over the map.
-  const desktopStrip = route ? (
-    <div className="flex h-12 items-center gap-3 border-t border-border/60 bg-background/95 px-3 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="flex items-center gap-1.5">
+  // ─── The action strip ─────────────────────────────────────────────────
+  // Two groups on one rule: what you do to the trace on the left, what you do
+  // with it on the right. In edit mode the left group flips to cancel/apply so
+  // every editing affordance stays in one predictable place.
+  const actionStrip = route ? (
+    <div className="zn-rt__strip">
+      <div className="zn-cluster">
         {isEditing ? (
           <>
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-8 gap-1.5 px-3 text-xs"
-              onClick={onExitEdit}
-            >
-              <X className="size-3.5" />
+            <Button variant="outline" size="sm" onClick={onExitEdit}>
+              <X size={16} />
               {t("edit.cancel")}
             </Button>
             <Button
+              variant="outline-primary"
               size="sm"
-              className="h-8 gap-1.5 px-3 text-xs"
               onClick={onApplyEdit}
               disabled={isReRouting || !editPreview}
             >
-              <Check className="size-3.5" />
+              {isReRouting ? <Loader2 size={16} className="zn-route-spin" /> : <Check size={16} />}
               {t("edit.apply")}
             </Button>
           </>
         ) : (
           <>
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-8 gap-1.5 px-3 text-xs"
-              onClick={onEnterEdit}
-            >
-              <Pencil className="size-3.5" />
+            <Button variant="outline" size="sm" onClick={onEnterEdit}>
+              <Pencil size={16} />
               {t("edit.enter")}
             </Button>
             <Button
               variant="outline"
               size="sm"
-              className="h-8 gap-1.5 px-3 text-xs"
               onClick={onReverseTrace}
               aria-label={t("form.reverseDirection")}
               title={t("form.reverseDirection")}
             >
-              <ArrowLeftRight className="size-3.5" />
+              <ArrowLeftRight size={16} />
               {isSelectedReversed ? t("form.reversedActive") : t("form.reverseDirection")}
             </Button>
           </>
         )}
       </div>
-      <span className="h-6 w-px bg-border/60" aria-hidden />
-      <div className="ml-auto flex items-center gap-1.5">
-        <Button onClick={onSave} size="sm" className="h-8 gap-1.5 px-3 text-xs">
-          <Save className="size-3.5" />
+
+      <span className="zn-rt__strip-rule" aria-hidden="true" />
+
+      <div className="zn-cluster zn-push">
+        <Button onClick={onSave} size="sm">
+          <Save size={16} />
           {t("result.save")}
         </Button>
         <Button
           variant="outline"
-          size="icon"
-          className="size-8"
+          size="icon-sm"
           onClick={onRegenerate}
           disabled={isGenerating}
           aria-label={t("form.regenerate")}
           title={t("form.regenerate")}
         >
-          <RotateCcw className="size-3.5" />
+          <RotateCcw size={16} />
         </Button>
         <Button
           variant="outline"
-          size="icon"
-          className="size-8"
+          size="icon-sm"
           onClick={onExport}
           aria-label={t("result.exportGpx")}
           title={t("result.exportGpx")}
         >
-          <Download className="size-3.5" />
+          <Download size={16} />
         </Button>
       </div>
     </div>
   ) : null;
 
-  // ─── Desktop collapsible "Pourquoi ce parcours" panel ────────────
-  // Closed by default — accent + reasons + elevation profile only get
-  // unfolded when the user explicitly asks. Keeps the map dominant.
-  const desktopDetails = route ? (
-    <div className="border-t border-border/60 bg-background">
+  // The verdicts: how close the trace landed, and why the algorithm ranked it
+  // first. Outlined tags, never fills — a row of filled tags would spend the
+  // screen's one accent six times over.
+  const verdicts = (
+    <div className="zn-cluster" style={{ "--gap": "var(--sp-3)" } as CSSProperties}>
+      {distanceMatchLabel && (
+        <span className="zn-rt__tag" data-match={distanceMatchLabel}>
+          {t(`recommendation.distanceMatch.${distanceMatchLabel}`)}
+        </span>
+      )}
+      {selectedRecommendation?.reasons.map((reason) => (
+        <span key={reason} className="zn-rt__tag">
+          {t(`recommendation.reasons.${reason}`)}
+        </span>
+      ))}
+    </div>
+  );
+
+  // ─── "Why this route", folded away ────────────────────────────────────
+  const detailsPanel = route ? (
+    <div className="zn-rt__details">
       <button
         type="button"
         onClick={() => setDetailsOpen((v) => !v)}
         aria-expanded={detailsOpen}
-        className="flex h-9 w-full items-center justify-between px-3 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground"
+        className="zn-rt__summary"
       >
-        <span className="flex items-center gap-2">
-          {t("recommendation.resultEyebrow")}
+        <span className="zn-row" style={{ "--gap": "var(--sp-5)" } as CSSProperties}>
+          <span className="zn-kicker">{t("recommendation.resultEyebrow")}</span>
           {selectedRecommendation && (
-            <span className="rounded-full border border-primary/20 bg-primary/5 px-2 py-0.5 text-[10px] font-medium tracking-normal normal-case text-primary">
+            <span className="zn-rt__tag">
               {t(`recommendation.accents.${selectedRecommendation.accent}`)}
             </span>
           )}
         </span>
-        <ChevronDown
-          className={cn(
-            "size-4 transition-transform duration-200",
-            detailsOpen && "rotate-180",
-          )}
-        />
+        <ChevronDown size={16} className="zn-rt__summary-chevron" />
       </button>
+
       {detailsOpen && (
-        <div className="max-h-[40svh] space-y-3 overflow-y-auto border-t border-border/60 px-3 py-3">
-          <div className="flex flex-wrap gap-1.5">
-            {distanceMatchLabel && (
-              <span
-                className={cn(
-                  "rounded-full border px-2 py-0.5 text-[11px] font-medium",
-                  DISTANCE_MATCH_CLASSES[distanceMatchLabel],
-                )}
-              >
-                {t(`recommendation.distanceMatch.${distanceMatchLabel}`)}
-              </span>
-            )}
-            {selectedRecommendation?.reasons.map((reason) => (
-              <span
-                key={reason}
-                className="rounded-full border border-border/60 bg-background px-2 py-0.5 text-[11px] font-medium"
-              >
-                {t(`recommendation.reasons.${reason}`)}
-              </span>
-            ))}
-          </div>
+        <div className="zn-rt__panel">
+          {verdicts}
           {displayElevation.length > 1 && (
             <Suspense fallback={null}>
               <ElevationChart profile={displayElevation} />
@@ -809,42 +712,95 @@ export function RouteGeneratorPage() {
     </div>
   ) : null;
 
-  // "How it works" — collapsed by default, action-first page. Native
-  // <details> for zero-JS toggling.
+  // ─── The phone's result strip ─────────────────────────────────────────
+  // One line of facts and the three output actions; the alternates sweep
+  // sideways underneath so the map never loses its height.
+  const mobileResult = route ? (
+    <div className="zn-rt__result">
+      <div className="zn-row zn-row--split">
+        <div className="zn-fill zn-stack" style={{ "--gap": "var(--sp-2)" } as CSSProperties}>
+          <span className="zn-kicker zn-truncate">
+            {selectedRecommendation
+              ? t(`recommendation.accents.${selectedRecommendation.accent}`)
+              : t("recommendation.accents.closest_to_target")}
+          </span>
+          <span className="zn-mono zn-rt__facts">
+            <strong>{((displayedRoute?.distanceM ?? 0) / 1000).toFixed(1)} km</strong>
+            <span>↑ {displayedRoute?.elevationGainM ?? 0} m</span>
+            <span>{formatDurationMinutes(displayDurationSec / 60)}</span>
+          </span>
+        </div>
 
-  // ─── Mobile: Strava-style persistent card over a full-bleed map ───
-  // Pattern (Komoot / Strava / AllTrails 2024-2025): the sheet never
-  // covers the map — it's a fixed card with two states (peek + expanded)
-  // sitting permanently above the map. `react-modal-sheet` uses Motion
-  // and supports `disableDrag` driven by scroll position, which solves
-  // the scroll-vs-drag conflict that vaul leaves to the consumer.
-  if (isMobile) {
-    const distanceKmDisplay = displayedRoute ? (displayedRoute.distanceM / 1000).toFixed(1) : null;
-    const elevationDisplay = displayedRoute?.elevationGainM ?? 0;
-    const durationDisplay = formatDurationMinutes(displayDurationSec / 60);
-    return (
-      <>
-        <SEOHead title={t("title")} description={t("subtitle")} canonical="/routes" />
-        {/* Mobile layout = top form (compact, scroll if too tall) → map
-            fills the rest → optional bottom result strip when a route is
-            active. No drawer / no sheet ceremony: the user wanted the
-            classic "controls on top, map below, action at bottom"
-            pattern (cf. Komoot search header + map + result list).
-            z-30 sits above the App-level <Footer /> (which renders as a
-            flow-normal sibling of <main>) so neither the "Nouveautés"
-            link nor the legal footer leak into the map area. */}
-        <div className="fixed inset-x-0 top-12 bottom-0 z-30 flex flex-col bg-background">
-          {/* Top filter bar — chip popovers + address + CTA. The compact
-              form keeps itself ~150-180px tall; cap at 240px to give room
-              for an optional plan-preset card without ever stealing more
-              than 30 % of the viewport. */}
-          {/* No max-h / overflow on the top form: an `overflow:auto`
-              parent clips the address autocomplete dropdown so the
-              Nominatim suggestions disappear behind the map. The form
-              already wraps tightly (~120 px) so letting it size to its
-              content is safe and the popover-based filters expand
-              outward via Radix Portal anyway. */}
-          <div className="shrink-0 space-y-2 border-b border-border/60 px-3 py-2">
+        <div className="zn-row zn-fixed" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
+          <Button onClick={onSave} size="sm">
+            <Save size={16} />
+            {t("result.save")}
+          </Button>
+          <Button
+            variant="outline"
+            size="icon-sm"
+            onClick={onRegenerate}
+            disabled={isGenerating}
+            aria-label={t("form.regenerate")}
+            title={t("form.regenerate")}
+          >
+            <RotateCcw size={16} />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon-sm"
+            onClick={onExport}
+            aria-label={t("result.exportGpx")}
+            title={t("result.exportGpx")}
+          >
+            <Download size={16} />
+          </Button>
+        </div>
+      </div>
+
+      {candidates.length > 1 && (
+        <div
+          className="zn-rt__cands zn-scroll-x"
+          role="group"
+          aria-label={t("form.candidatesLabel")}
+        >
+          {candidates.map((c, i) => (
+            <RouteCandidateCard
+              key={c.route.id}
+              route={c.route}
+              recommendation={c.recommendation}
+              selected={i === selectedIndex}
+              onSelect={() => setSelectedIndex(i)}
+            />
+          ))}
+        </div>
+      )}
+
+      {distanceMatchLabel && (
+        <span className="zn-rt__tag" data-match={distanceMatchLabel}>
+          {t(`recommendation.distanceMatch.${distanceMatchLabel}`)}
+        </span>
+      )}
+    </div>
+  ) : null;
+
+  // ─── One arrangement: rail then stage ─────────────────────────────────
+  // Side by side on a desktop, stacked on a phone. /routes is the app's one
+  // fullscreen route — App.tsx hides the footer for it — so the screen claims
+  // exactly one viewport and each column scrolls inside itself.
+  return (
+    <>
+      <SEOHead title={t("title")} description={t("subtitle")} canonical="/routes" />
+
+      <div className="zn-rt__screen">
+        <header className="zn-rt__topline">
+          <h1 className="zn-title" data-level="4">
+            {t("title")}
+          </h1>
+        </header>
+
+        <div className="zn-rt__grid" data-expanded={!isMobile && isMapExpanded}>
+          <aside className="zn-rt__rail">
             {presetNode}
             <RouteParametersForm
               key={trainingPreset ? `${trainingPreset.planSessionRef?.planId}-${trainingPreset.planSessionRef?.weekNumber}-${trainingPreset.planSessionRef?.sessionIndex}` : "manual-route-form"}
@@ -854,181 +810,21 @@ export function RouteGeneratorPage() {
               onStartChange={(point) => setPreviewStart(point)}
               externalStart={previewStart}
               initialValues={trainingPreset?.formDefaults}
-              compact
+              compact={isMobile}
             />
-          </div>
-
-          {/* Map fills the remaining vertical space. min-h-0 is the
-              flexbox-on-mobile incantation that lets the child shrink
-              below its content height — without it the map would push
-              the result strip off-screen. */}
-          <div className="relative min-h-0 flex-1">
-            {mapBlock}
-            {displayedRoute && (
-              <div className="pointer-events-none absolute right-3 top-3 z-30 rounded-full border border-border/60 bg-background/95 px-3 py-1.5 text-xs font-semibold tabular-nums shadow-md backdrop-blur">
-                {distanceKmDisplay} km · ↑ {elevationDisplay} m
-              </div>
-            )}
-          </div>
-
-          {/* Result strip: only when a route exists. Stat line on top,
-              action buttons inline; horizontal candidate scroll below
-              when there are 2+ alternates to compare. Strava lays this
-              out vertically, but on a 100px strip we go horizontal so
-              the user can sweep through candidates without losing the
-              map. */}
-          {route && (
-            <div className="shrink-0 space-y-2 border-t border-border/60 bg-background px-3 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
-              <div className="flex items-center justify-between gap-2">
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                    {selectedRecommendation
-                      ? t(`recommendation.accents.${selectedRecommendation.accent}`)
-                      : t("recommendation.accents.closest_to_target")}
-                  </p>
-                  <p className="truncate text-sm font-semibold tabular-nums">
-                    {distanceKmDisplay} km
-                    <span className="ml-2 text-xs font-normal text-muted-foreground">
-                      ↑ {elevationDisplay} m · {durationDisplay}
-                    </span>
-                  </p>
-                </div>
-                <div className="flex shrink-0 items-center gap-1.5">
-                  <Button onClick={onSave} className="h-9 gap-1.5 text-xs font-semibold">
-                    <Save className="size-3.5" />
-                    {t("result.save")}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={onRegenerate}
-                    disabled={isGenerating}
-                    aria-label={t("form.regenerate")}
-                    title={t("form.regenerate")}
-                    className="h-9 w-9 shrink-0"
-                  >
-                    <RotateCcw className="size-3.5" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={onExport}
-                    aria-label={t("result.exportGpx")}
-                    title={t("result.exportGpx")}
-                    className="h-9 w-9 shrink-0"
-                  >
-                    <Download className="size-3.5" />
-                  </Button>
-                </div>
-              </div>
-              {candidates.length > 1 && (
-                <div className="-mx-3 flex gap-2 overflow-x-auto px-3 pb-1 [scrollbar-width:thin]">
-                  {candidates.map((c, i) => {
-                    const isSel = i === selectedIndex;
-                    return (
-                      <button
-                        key={c.route.id}
-                        type="button"
-                        onClick={() => setSelectedIndex(i)}
-                        className={cn(
-                          "flex shrink-0 items-center gap-2 rounded-lg border px-2 py-1.5 text-left transition-colors",
-                          isSel
-                            ? "border-primary bg-primary/5"
-                            : "border-border/60 bg-background",
-                        )}
-                        aria-pressed={isSel}
-                      >
-                        <MiniRouteMap
-                          points={c.route.points}
-                          color={isSel ? "#ea580c" : "#94a3b8"}
-                          className="h-8 w-12"
-                        />
-                        <div className="text-[11px] leading-tight">
-                          <p className="font-semibold tabular-nums text-foreground">
-                            {(c.route.distanceM / 1000).toFixed(1)} km
-                          </p>
-                          <p className="tabular-nums text-muted-foreground">
-                            ↑ {c.route.elevationGainM} m
-                          </p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-              {distanceMatchLabel && (
-                <span
-                  className={cn(
-                    "inline-flex w-fit rounded-full border px-2 py-0.5 text-[11px] font-medium",
-                    DISTANCE_MATCH_CLASSES[distanceMatchLabel],
-                  )}
-                >
-                  {t(`recommendation.distanceMatch.${distanceMatchLabel}`)}
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-      </>
-    );
-  }
-
-  // ─── Desktop / Tablet: 2-col one-page layout (Strava Routes pattern) ─
-  // The whole interactive zone fits in a single viewport. The left rail
-  // hosts only the form (no embedded result panel). The right column
-  // stacks map (flex) + horizontal results strip + collapsible "why this
-  // route" details. The Zoned footer is hidden on this route via
-  // App.tsx so the page truly takes 100svh.
-  return (
-    <>
-      <SEOHead title={t("title")} description={t("subtitle")} canonical="/routes" />
-      {/* Total chrome above + below this page = pt-16 (TopBar offset)
-          + pb-4 (main bottom padding) = 5rem. Subtracting that here
-          keeps the page exactly viewport-sized — no scroll on the body
-          (the previous 4rem ignored the bottom padding and produced a
-          1rem overflow). */}
-      <div className="mx-auto w-full max-w-[1600px] px-4 py-3 sm:px-5 md:flex md:h-[calc(100svh-5rem)] md:flex-col md:overflow-hidden">
-        {/* Mini-toolbar replacing the previous oversized hero banner.
-            ~36 px of vertical space instead of 130 px, leaves the map
-            room to dominate. Title is small and informative; secondary
-            navigation links sit on the right where the user expects a
-            "more from this section" rail. */}
-        <header className="mb-3 flex shrink-0 items-center justify-between gap-3">
-          <h1 className="text-base font-semibold tracking-tight sm:text-lg">
-            {t("title")}
-          </h1>
-        </header>
-
-        <div
-          className={cn(
-            "grid grid-cols-1 gap-4 md:flex-1 md:min-h-0",
-            isMapExpanded ? "md:grid-cols-1" : "md:grid-cols-[360px_1fr] xl:grid-cols-[380px_1fr]",
-          )}
-        >
-          {/* Left rail: form only. Scrolls internally if the form
-              outgrows the viewport (tablet, small laptops, training
-              presets with extra fields). overscroll-contain stops the
-              wheel from leaking into the page or the map. */}
-          <aside
-            className={cn(
-              "min-w-0 space-y-3 md:flex md:flex-col md:min-h-0",
-              !isMapExpanded && "md:overflow-y-auto md:overscroll-contain md:pr-1",
-              isMapExpanded && "md:hidden",
-            )}
-          >
-            {presetNode}
-            {formNode}
           </aside>
 
-          {/* Right column: map (flex) + strip (auto) + collapsible
-              details (auto). The whole column lives inside a single
-              rounded card so the map, strip and details read as one
-              cohesive surface — no double borders, no orphan blocks. */}
-          <main className="min-w-0 md:flex md:min-h-0 md:flex-col md:overflow-hidden md:rounded-xl md:border md:border-border/60 md:bg-background md:shadow-sm">
-            <div className="relative md:flex-1 md:min-h-0">{mapBlock}</div>
-            {desktopStatsBar}
-            {desktopStrip}
-            {desktopDetails}
+          <main className="zn-rt__stage">
+            {mapBlock}
+            {isMobile ? (
+              mobileResult
+            ) : (
+              <>
+                {statsBar}
+                {actionStrip}
+                {detailsPanel}
+              </>
+            )}
           </main>
         </div>
       </div>

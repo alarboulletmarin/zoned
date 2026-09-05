@@ -911,7 +911,7 @@ function BenchmarkHistorySection({
                 value={bmType}
                 onValueChange={(v) => setBmType(v as BenchmarkType)}
               >
-                <SelectTrigger id="bm-type" className="w-full">
+                <SelectTrigger id="bm-type" className="zn-num__control">
                   <SelectValue placeholder={t("benchmarks.selectType")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -1189,7 +1189,7 @@ function PersonalRecordsSection({
                 {t("records.distance")}
               </label>
               <Select value={prDistance} onValueChange={setPrDistance}>
-                <SelectTrigger id="pr-distance" className="w-full">
+                <SelectTrigger id="pr-distance" className="zn-num__control">
                   <SelectValue placeholder={t("records.selectDistance")} />
                 </SelectTrigger>
                 <SelectContent>

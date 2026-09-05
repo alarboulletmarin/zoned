@@ -4,18 +4,20 @@
     "title": "Guides",
     "subtitle": "Ressources pour progresser",
     "seoDescription": "Guides de course : nutrition, préparation course, routines d'échauffement et plus.",
-    "seoCollectionDescription": "Guides de course : nutrition, préparation course, routines d'échauffement et plus."
+    "seoCollectionDescription": "Guides de course : nutrition, préparation course, routines d'échauffement et plus.",
+    "kicker": "{{n}} guides",
+    "heading": "Se préparer, manger, s'échauffer"
   },
   "nutrition": {
     "title": "Nutrition",
-    "pageTitle": "Nutrition du Coureur",
+    "pageTitle": "Nutrition du coureur",
     "description": "Alimentation, hydratation et ravitaillement en course",
     "seoDescription": "Guide nutrition complet pour coureurs : alimentation quotidienne, surcharge glucidique, ravitaillement en course, hydratation, récupération et calculateur interactif.",
     "seoArticleName": "Guide Nutrition du Coureur",
     "seoArticleDescription": "Guide nutrition complet pour coureurs avec calculateur de ravitaillement interactif.",
-    "subtitle": "Stratégies nutritionnelles basées sur la science pour l'entraînement, la compétition et la récupération. Utilisez le calculateur pour construire votre plan de ravitaillement personnalisé.",
+    "subtitle": "Ce que tu manges et bois à l'entraînement, en course et après la ligne.",
     "calculatorTitle": "Calculateur de ravitaillement",
-    "calculatorDescription": "Obtenez un plan de ravitaillement personnalisé basé sur Jeukendrup 2014 et les recommandations ACSM.",
+    "calculatorDescription": "Ton plan de ravitaillement, calculé d'après Jeukendrup 2014 et les recommandations ACSM.",
     "distanceLabel": "Distance (km)",
     "durationLabel": "Durée (min)",
     "weightLabel": "Poids (kg, optionnel)",
@@ -44,10 +46,12 @@
       "preRaceMealAnswer": "Manger 3-4 heures avant le départ : 1-4g de glucides/kg, protéines modérées (15-25g), faibles lipides (<15g), faibles fibres (<10g). Options : toast pain blanc avec confiture et banane, porridge au miel, ou riz blanc avec poulet maigre. S'hydrater avec 5-7ml/kg 4 heures avant. Éviter les produits laitiers lourds, les aliments épicés, l'excès de caféine et les aliments non testés.",
       "recovery": "Que dois-je manger après une course pour récupérer ?",
       "recoveryAnswer": "La fameuse « fenêtre de 30 minutes » est un mythe : la vraie fenêtre est de 4-6 h pour le glycogène et 24-48 h pour les protéines (Aragon & Schoenfeld 2013, Margolis 2021). Le repas suivant suffit dans 9 cas sur 10. Si tu enchaînes une autre séance dans les 4 h : 1 à 1,2 g de glucides/kg + 0,3 g de protéines/kg (lait chocolaté validé). Sinon, repas complet dans les 2 h. Caséine 40 g avant le coucher (Trommelen 2023). Réhydrater à 1,5x le poids perdu, avec sodium. Éviter l'alcool 4-6 h après (-24 % de réparation musculaire)."
-    }
+    },
+    "kicker": "{{n}} thèmes",
+    "presetsLabel": "Distance de course"
   },
   "racePrep": {
-    "title": "Préparation Course",
+    "title": "Préparation de course",
     "subtitle": "Tout ce qu'il faut pour performer le jour J",
     "description": "Checklist, stratégie, récupération",
     "seoDescription": "Guide complet de préparation course : checklists, stratégie, échauffement, allure et timelines de récupération.",
@@ -71,10 +75,11 @@
     },
     "recoveryTimelines": "Timelines de récupération",
     "recoveryTimelinesDescription": "Périodes de récupération recommandées par distance de course",
-    "days": "jours"
+    "days": "jours",
+    "kicker": "{{n}} étapes"
   },
   "warmup": {
-    "title": "Échauffement & Retour au Calme",
+    "title": "Échauffement et retour au calme",
     "subtitle": "Routines, étirements et exercices d'activation",
     "description": "Routines d'échauffement et étirements",
     "seoDescription": "Routines d'échauffement, protocoles de retour au calme, étirements dynamiques et exercices d'activation pour coureurs.",
@@ -95,7 +100,8 @@
       "restText": "Terminer l'échauffement 5-10 minutes avant le départ. Profiter de ce temps pour se positionner, s'hydrater une dernière fois, visualiser sa course et revoir son plan d'allure."
     },
     "routines": "Routines d'échauffement",
-    "selectRoutine": "Sélectionnez une routine"
+    "selectRoutine": "Choisis une routine",
+    "kicker": "{{n}} routines"
   },
   "explore": "Explorer",
   "home": "Accueil",

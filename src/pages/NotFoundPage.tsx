@@ -1,9 +1,17 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 
+/**
+ * The one screen the design kit deliberately leaves unmocked: it says a 404
+ * is an `Alert kind="error"` on an otherwise empty page, and nothing more.
+ *
+ * The copy follows the system's rule for an error — what happened, what is
+ * still intact, and the way out — because an error with no way forward is a
+ * dead end.
+ */
 export function NotFoundPage() {
   const { t } = useTranslation("common");
 
@@ -14,19 +22,23 @@ export function NotFoundPage() {
         description={t("errors.notFound.description")}
         noindex
       />
-      <div className="py-16 flex flex-col items-center justify-center text-center space-y-6 max-w-md md:max-w-lg mx-auto">
-        <span className="font-sans font-semibold italic text-8xl text-muted-foreground/40 tracking-tight">
+      <div className="zn-ref__void">
+        <span className="zn-ref__code" aria-hidden="true">
           404
         </span>
-        <EditorialTitle as="h1" size="md">
+        <h1 className="zn-display" data-level="3">
           {t("errors.notFound.title")}
-        </EditorialTitle>
-        <FadeUp as="p" delay={0.1} className="text-muted-foreground">
-          {t("errors.notFound.description")}
-        </FadeUp>
-        <Button asChild>
-          <Link to="/">{t("errors.notFound.backHome")}</Link>
-        </Button>
+        </h1>
+        <Alert
+          kind="error"
+          action={
+            <Button asChild>
+              <Link to="/">{t("errors.notFound.backHome")}</Link>
+            </Button>
+          }
+        >
+          {t("errors.notFound.body")}
+        </Alert>
       </div>
     </>
   );

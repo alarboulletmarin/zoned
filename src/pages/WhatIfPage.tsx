@@ -1,4 +1,10 @@
-import { useState, useCallback, useEffect, useMemo } from "react";
+import {
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+  type CSSProperties,
+} from "react";
 import { useTranslation } from "react-i18next";
 import {
   Scale,
@@ -6,7 +12,6 @@ import {
   Target,
   Calendar,
   Loader2,
-  AlertTriangle,
   Save,
   Trash2,
   Plus,
@@ -18,8 +23,10 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ResponsiveTable } from "@/components/ui/responsive-table";
 import {
   Select,
   SelectContent,
@@ -37,9 +44,9 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
+import { ZoneScale } from "@/components/visualization";
+import { PageContainer } from "@/components/layout/PageContainer";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
-import { cn } from "@/lib/utils";
 import { generatePlan } from "@/lib/planGenerator";
 import { computePlanStats, computeEnhancedPlanAnalysis } from "@/lib/planStats";
 import { generateInsights } from "@/lib/whatIfInsights";
@@ -86,7 +93,7 @@ interface ScenarioConfig {
 
 const PRESETS: {
   id: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
   a: ScenarioConfig;
   b: ScenarioConfig;
 }[] = [
@@ -134,6 +141,14 @@ interface SavedScenario {
   };
   scenarioA: ScenarioConfig;
   scenarioB: ScenarioConfig;
+}
+
+interface MetricRow {
+  label: string;
+  valueA: string;
+  valueB: string;
+  delta: string;
+  deltaWarning?: boolean;
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────
@@ -187,11 +202,13 @@ function formatMinutes(min: number): string {
 // ── Sub-components ───────────────────────────────────────────────────
 
 function ScenarioCard({
+  id,
   label,
   scenario,
   onChange,
   t,
 }: {
+  id: string;
   label: string;
   scenario: ScenarioConfig;
   onChange: (s: ScenarioConfig) => void;
@@ -206,41 +223,45 @@ function ScenarioCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">{label}</CardTitle>
+        <CardTitle>{label}</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent
+        className="zn-stack"
+        style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+      >
         {/* Days per week */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium">
-            {t("scenario.daysPerWeek")}
-          </label>
-          <div className="flex items-center gap-3">
+        <div className="zn-ct__field">
+          <span className="zn-label">{t("scenario.daysPerWeek")}</span>
+          <div className="zn-row zn-ct__slider" style={{ "--gap": "var(--sp-8)" } as CSSProperties}>
             <Slider
               value={[scenario.daysPerWeek]}
               min={3}
               max={7}
               step={1}
-              onValueChange={([v]) =>
-                onChange({ ...scenario, daysPerWeek: v })
-              }
-              className="flex-1"
+              onValueChange={([v]) => onChange({ ...scenario, daysPerWeek: v })}
+              thumbLabel={`${label} · ${t("scenario.daysPerWeek")}`}
+              thumbValueText={String(scenario.daysPerWeek)}
+              className="zn-fill"
             />
-            <span className="text-sm font-medium tabular-nums w-6 text-right">
-              {scenario.daysPerWeek}
-            </span>
+            <span className="zn-mono zn-fixed">{scenario.daysPerWeek}</span>
           </div>
         </div>
 
         {/* Training goal */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium">{t("scenario.goal")}</label>
+        <div className="zn-ct__field">
+          <span id={`${id}-goal-label`} className="zn-label">
+            {t("scenario.goal")}
+          </span>
           <Select
             value={scenario.trainingGoal}
             onValueChange={(v) =>
               onChange({ ...scenario, trainingGoal: v as TrainingGoal })
             }
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger
+              aria-labelledby={`${id}-goal-label`}
+              className="zn-ct__wide"
+            >
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -254,22 +275,20 @@ function ScenarioCard({
         </div>
 
         {/* Total weeks */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium">{t("scenario.weeks")}</label>
-          <div className="flex items-center gap-3">
+        <div className="zn-ct__field">
+          <span className="zn-label">{t("scenario.weeks")}</span>
+          <div className="zn-row zn-ct__slider" style={{ "--gap": "var(--sp-8)" } as CSSProperties}>
             <Slider
               value={[scenario.totalWeeks]}
               min={6}
               max={24}
               step={1}
-              onValueChange={([v]) =>
-                onChange({ ...scenario, totalWeeks: v })
-              }
-              className="flex-1"
+              onValueChange={([v]) => onChange({ ...scenario, totalWeeks: v })}
+              thumbLabel={`${label} · ${t("scenario.weeks")}`}
+              thumbValueText={String(scenario.totalWeeks)}
+              className="zn-fill"
             />
-            <span className="text-sm font-medium tabular-nums w-6 text-right">
-              {scenario.totalWeeks}
-            </span>
+            <span className="zn-mono zn-fixed">{scenario.totalWeeks}</span>
           </div>
         </div>
       </CardContent>
@@ -277,38 +296,17 @@ function ScenarioCard({
   );
 }
 
-function MetricRow({
-  label,
-  valueA,
-  valueB,
-  delta,
-  deltaWarning,
-}: {
-  label: string;
-  valueA: string;
-  valueB: string;
-  delta: string;
-  deltaWarning?: boolean;
-}) {
-  const isPositive = delta.startsWith("+");
+/** Which of the two series a mark belongs to: A is hollow, B is solid ink. */
+function SeriesKey({ series, label }: { series: "a" | "b"; label: string }) {
   return (
-    <tr className="border-b last:border-b-0">
-      <td className="py-2 px-2 text-sm font-medium">{label}</td>
-      <td className="py-2 px-2 text-sm tabular-nums text-center">{valueA}</td>
-      <td className="py-2 px-2 text-sm tabular-nums text-center">{valueB}</td>
-      <td
-        className={cn(
-          "py-2 px-2 text-sm tabular-nums text-center font-medium",
-          deltaWarning
-            ? "text-red-600 dark:text-red-400"
-            : isPositive
-              ? "text-green-600 dark:text-green-400"
-              : "text-muted-foreground",
-        )}
-      >
-        {delta}
-      </td>
-    </tr>
+    <span className="zn-ct__key">
+      <span
+        className="zn-ct__key-swatch"
+        data-series={series}
+        aria-hidden="true"
+      />
+      {label}
+    </span>
   );
 }
 
@@ -350,6 +348,7 @@ export function WhatIfPage() {
   // ── Results ────────────────────────────────────────────────────────
   const [isGenerating, setIsGenerating] = useState(false);
   const [results, setResults] = useState<ComparisonResults | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   // ── Save/Load ──────────────────────────────────────────────────────
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
@@ -373,6 +372,7 @@ export function WhatIfPage() {
 
   const handleCompare = useCallback(async () => {
     setIsGenerating(true);
+    setError(null);
     try {
       const configA = buildConfig(shared, scenarioA);
       const configB = buildConfig(shared, scenarioB);
@@ -402,9 +402,9 @@ export function WhatIfPage() {
         insights,
       });
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : t("errors.generic");
-      toast.error(message);
+      // An in-page Alert rather than a toast: a toast leaves before the
+      // sentence is read, and it cannot hold the way forward.
+      setError(err instanceof Error ? err.message : t("errors.generic"));
     } finally {
       setIsGenerating(false);
     }
@@ -487,7 +487,7 @@ export function WhatIfPage() {
 
   // ── Metric comparison rows ─────────────────────────────────────────
 
-  const metricRows = useMemo(() => {
+  const metricRows = useMemo<MetricRow[]>(() => {
     if (!results) return [];
     const { statsA, statsB, planA, planB } = results;
 
@@ -590,9 +590,6 @@ export function WhatIfPage() {
     elite: t("levels.elite"),
   };
 
-  const inputClassName =
-    "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
-
   // ── Render ─────────────────────────────────────────────────────────
 
   return (
@@ -610,209 +607,201 @@ export function WhatIfPage() {
           ],
         }}
       />
-      <div className="py-8 max-w-4xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-          <div>
-            <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
-              <Scale className="size-8 shrink-0" />
-              {t("title")}
-            </EditorialTitle>
-            <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
-              {t("subtitle")}
-            </FadeUp>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setSaveDialogOpen(true)}
+
+      <PageContainer className="zn-ct">
+        {/* Mono kicker, display title, one sentence — and the two records
+            actions, which are outlines: the screen's one fill is "Comparer". */}
+        <header className="zn-ct__head">
+          <div
+            className="zn-row zn-row--split zn-row--start zn-ct__headrow"
+            style={{ "--gap": "var(--sp-12)" } as CSSProperties}
+          >
+            <div
+              className="zn-stack"
+              style={{ "--gap": "var(--sp-6)" } as CSSProperties}
             >
-              <Save className="size-4" />
-              {t("actions.save")}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setLoadDialogOpen(true)}
-              disabled={savedScenarios.length === 0}
-            >
-              <Plus className="size-4" />
-              {t("actions.load")}
-            </Button>
-          </div>
-        </div>
-
-        {/* Shared Config Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{t("shared.title")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Race distance */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  {t("shared.distance")}
-                </label>
-                <Select
-                  value={raceDistance}
-                  onValueChange={(v) => {
-                    setRaceDistance(v as RaceDistance);
-                    setResults(null);
-                  }}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {RACE_DISTANCES.map((d) => (
-                      <SelectItem key={d} value={d}>
-                        {isEn
-                          ? RACE_DISTANCE_META[d].labelEn
-                          : RACE_DISTANCE_META[d].label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Runner level */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  {t("shared.level")}
-                </label>
-                <Select
-                  value={runnerLevel}
-                  onValueChange={(v) => {
-                    setRunnerLevel(v as Difficulty);
-                    setResults(null);
-                  }}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {DIFFICULTIES.map((d) => (
-                      <SelectItem key={d} value={d}>
-                        {levelLabels[d]}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Current weekly km */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  {t("shared.currentKm")}
-                </label>
-                <div className="flex items-center gap-3">
-                  <Slider
-                    value={[currentWeeklyKm]}
-                    min={5}
-                    max={120}
-                    step={5}
-                    onValueChange={([v]) => {
-                      setCurrentWeeklyKm(v);
-                      setResults(null);
-                    }}
-                    className="flex-1"
-                  />
-                  <span className="text-sm font-medium tabular-nums w-12 text-right">
-                    {currentWeeklyKm} km
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  {t("shared.currentKmHelp")}
-                </p>
-              </div>
-
-              {/* Current long run km */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  {t("shared.currentLongRun")}
-                </label>
-                <div className="flex items-center gap-3">
-                  <Slider
-                    value={[currentLongRunKm]}
-                    min={3}
-                    max={40}
-                    step={1}
-                    onValueChange={([v]) => {
-                      setCurrentLongRunKm(v);
-                      setResults(null);
-                    }}
-                    className="flex-1"
-                  />
-                  <span className="text-sm font-medium tabular-nums w-12 text-right">
-                    {currentLongRunKm} km
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  {t("shared.currentLongRunHelp")}
-                </p>
-              </div>
+              <span className="zn-kicker">{t("kicker")}</span>
+              <h1 className="zn-display" data-level="2">
+                {t("title")}
+              </h1>
+              <p className="zn-body zn-body--lead zn-ct__lede">
+                {t("subtitle")}
+              </p>
             </div>
-          </CardContent>
-        </Card>
 
-        {/* Quick Compare Presets */}
-        <div className="space-y-2">
-          <h2 className="text-sm font-medium text-muted-foreground">
-            {t("presets.title")}
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {PRESETS.map((preset) => {
-              const Icon = preset.icon;
-              return (
-                <Button
-                  key={preset.id}
-                  variant="outline"
-                  size="sm"
-                  onClick={() => applyPreset(preset)}
-                  className="gap-2"
-                >
-                  <Icon className="size-4" />
-                  {t(`presets.${preset.id}`)}
-                </Button>
-              );
-            })}
+            <div className="zn-cluster zn-fixed">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setSaveDialogOpen(true)}
+              >
+                <Save size={15} />
+                {t("actions.save")}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setLoadDialogOpen(true)}
+                disabled={savedScenarios.length === 0}
+              >
+                <Plus size={15} />
+                {t("actions.load")}
+              </Button>
+            </div>
           </div>
-        </div>
+        </header>
 
-        {/* Scenario Inputs */}
-        {/* Desktop: side by side */}
-        <div className="hidden md:grid md:grid-cols-2 gap-4">
-          <ScenarioCard
-            label={t("scenario.a")}
-            scenario={scenarioA}
-            onChange={(s) => {
-              setScenarioA(s);
-              setResults(null);
-            }}
-            t={t}
-          />
-          <ScenarioCard
-            label={t("scenario.b")}
-            scenario={scenarioB}
-            onChange={(s) => {
-              setScenarioB(s);
-              setResults(null);
-            }}
-            t={t}
-          />
-        </div>
+        {/* ── What both scenarios share, then what separates them ─────── */}
+        <section
+          className="zn-ct__band zn-stack"
+          style={{ "--gap": "var(--sp-13)" } as CSSProperties}
+        >
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("shared.title")}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="zn-grid" style={{ "--cols": 2, "--cols-md": 2 } as CSSProperties}>
+                {/* Race distance */}
+                <div className="zn-ct__field">
+                  <span id="whatif-distance-label" className="zn-label">
+                    {t("shared.distance")}
+                  </span>
+                  <Select
+                    value={raceDistance}
+                    onValueChange={(v) => {
+                      setRaceDistance(v as RaceDistance);
+                      setResults(null);
+                    }}
+                  >
+                    <SelectTrigger
+                      aria-labelledby="whatif-distance-label"
+                      className="zn-ct__wide"
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {RACE_DISTANCES.map((d) => (
+                        <SelectItem key={d} value={d}>
+                          {isEn
+                            ? RACE_DISTANCE_META[d].labelEn
+                            : RACE_DISTANCE_META[d].label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-        {/* Mobile: tabs */}
-        <div className="md:hidden">
-          <Tabs defaultValue="a">
-            <TabsList className="w-full grid grid-cols-2">
-              <TabsTrigger value="a">{t("scenario.a")}</TabsTrigger>
-              <TabsTrigger value="b">{t("scenario.b")}</TabsTrigger>
-            </TabsList>
-            <TabsContent value="a">
+                {/* Runner level */}
+                <div className="zn-ct__field">
+                  <span id="whatif-level-label" className="zn-label">
+                    {t("shared.level")}
+                  </span>
+                  <Select
+                    value={runnerLevel}
+                    onValueChange={(v) => {
+                      setRunnerLevel(v as Difficulty);
+                      setResults(null);
+                    }}
+                  >
+                    <SelectTrigger
+                      aria-labelledby="whatif-level-label"
+                      className="zn-ct__wide"
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {DIFFICULTIES.map((d) => (
+                        <SelectItem key={d} value={d}>
+                          {levelLabels[d]}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Current weekly km */}
+                <div className="zn-ct__field">
+                  <span className="zn-label">{t("shared.currentKm")}</span>
+                  <div
+                    className="zn-row zn-ct__slider"
+                    style={{ "--gap": "var(--sp-8)" } as CSSProperties}
+                  >
+                    <Slider
+                      thumbLabel={t("shared.currentKm")}
+                      thumbValueText={`${currentWeeklyKm} km`}
+                      value={[currentWeeklyKm]}
+                      min={5}
+                      max={120}
+                      step={5}
+                      onValueChange={([v]) => {
+                        setCurrentWeeklyKm(v);
+                        setResults(null);
+                      }}
+                      className="zn-fill"
+                    />
+                    <span className="zn-mono zn-fixed">{currentWeeklyKm} km</span>
+                  </div>
+                  <p className="zn-ct__hint">{t("shared.currentKmHelp")}</p>
+                </div>
+
+                {/* Current long run km */}
+                <div className="zn-ct__field">
+                  <span className="zn-label">{t("shared.currentLongRun")}</span>
+                  <div
+                    className="zn-row zn-ct__slider"
+                    style={{ "--gap": "var(--sp-8)" } as CSSProperties}
+                  >
+                    <Slider
+                      thumbLabel={t("shared.currentLongRun")}
+                      thumbValueText={`${currentLongRunKm} km`}
+                      value={[currentLongRunKm]}
+                      min={3}
+                      max={40}
+                      step={1}
+                      onValueChange={([v]) => {
+                        setCurrentLongRunKm(v);
+                        setResults(null);
+                      }}
+                      className="zn-fill"
+                    />
+                    <span className="zn-mono zn-fixed">{currentLongRunKm} km</span>
+                  </div>
+                  <p className="zn-ct__hint">{t("shared.currentLongRunHelp")}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Compare Presets */}
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+          >
+            <h2 className="zn-kicker">{t("presets.title")}</h2>
+            <div className="zn-cluster">
+              {PRESETS.map((preset) => {
+                const Icon = preset.icon;
+                return (
+                  <Button
+                    key={preset.id}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => applyPreset(preset)}
+                  >
+                    <Icon size={15} />
+                    {t(`presets.${preset.id}`)}
+                  </Button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Scenario inputs — side by side on desktop, tabbed on a phone */}
+          <div className="zn-ct__scenarios">
+            <div className="zn-grid" style={{ "--cols": 2, "--cols-md": 2 } as CSSProperties}>
               <ScenarioCard
+                id="scenario-a"
                 label={t("scenario.a")}
                 scenario={scenarioA}
                 onChange={(s) => {
@@ -821,9 +810,8 @@ export function WhatIfPage() {
                 }}
                 t={t}
               />
-            </TabsContent>
-            <TabsContent value="b">
               <ScenarioCard
+                id="scenario-b"
                 label={t("scenario.b")}
                 scenario={scenarioB}
                 onChange={(s) => {
@@ -832,251 +820,262 @@ export function WhatIfPage() {
                 }}
                 t={t}
               />
-            </TabsContent>
-          </Tabs>
-        </div>
+            </div>
+          </div>
 
-        {/* Compare Button */}
-        <Button
-          onClick={handleCompare}
-          disabled={!isValid || isGenerating}
-          className="w-full"
-          size="lg"
-        >
-          {isGenerating ? (
-            <>
-              <Loader2 className="size-4 animate-spin" />
-              {t("actions.comparing")}
-            </>
-          ) : (
-            <>
-              <Scale className="size-4" />
-              {t("actions.compare")}
-            </>
+          <div className="zn-ct__scenariotabs">
+            <Tabs defaultValue="a">
+              <TabsList>
+                <TabsTrigger value="a">{t("scenario.a")}</TabsTrigger>
+                <TabsTrigger value="b">{t("scenario.b")}</TabsTrigger>
+              </TabsList>
+              <TabsContent value="a">
+                <ScenarioCard
+                  id="scenario-a-mobile"
+                  label={t("scenario.a")}
+                  scenario={scenarioA}
+                  onChange={(s) => {
+                    setScenarioA(s);
+                    setResults(null);
+                  }}
+                  t={t}
+                />
+              </TabsContent>
+              <TabsContent value="b">
+                <ScenarioCard
+                  id="scenario-b-mobile"
+                  label={t("scenario.b")}
+                  scenario={scenarioB}
+                  onChange={(s) => {
+                    setScenarioB(s);
+                    setResults(null);
+                  }}
+                  t={t}
+                />
+              </TabsContent>
+            </Tabs>
+          </div>
+
+          {/* The screen's one vermillon fill. */}
+          <Button
+            onClick={handleCompare}
+            disabled={!isValid || isGenerating}
+            size="lg"
+            className="zn-ct__wide"
+          >
+            {isGenerating ? (
+              <>
+                <Loader2 size={15} className="zn-ct__spinner" />
+                {t("actions.comparing")}
+              </>
+            ) : (
+              <>
+                <Scale size={15} />
+                {t("actions.compare")}
+              </>
+            )}
+          </Button>
+
+          {error && (
+            <Alert
+              kind="error"
+              title={t("errors.title")}
+              action={
+                <Button size="sm" onClick={handleCompare} disabled={isGenerating}>
+                  {t("actions.compare")}
+                </Button>
+              }
+            >
+              {error} {t("errors.intact")}
+            </Alert>
           )}
-        </Button>
+        </section>
 
-        {/* ── Comparison Results ──────────────────────────────────────── */}
+        {/* ── Comparison results ───────────────────────────────────────── */}
         {results && (
-          <div className="space-y-6">
-            {/* Metric Comparison Table */}
+          <section
+            className="zn-ct__band zn-stack"
+            style={{ "--gap": "var(--sp-13)" } as CSSProperties}
+          >
+            {/* Metric comparison table */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">
-                  {t("results.title")}
-                </CardTitle>
+                <CardTitle>{t("results.title")}</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-b">
-                        <th className="py-2 px-2 text-left font-medium">
-                          {t("results.metric")}
-                        </th>
-                        <th className="py-2 px-2 text-center font-medium">
-                          A
-                        </th>
-                        <th className="py-2 px-2 text-center font-medium">
-                          B
-                        </th>
-                        <th className="py-2 px-2 text-center font-medium">
-                          {t("results.delta")}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {metricRows.map((row) => (
-                        <MetricRow key={row.label} {...row} />
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <ResponsiveTable
+                  data={metricRows}
+                  rowKey={(row) => row.label}
+                  columns={[
+                    {
+                      key: "metric",
+                      header: t("results.metric"),
+                      cell: (row) => row.label,
+                    },
+                    {
+                      key: "a",
+                      header: t("scenario.a"),
+                      className: "zn-ct__num",
+                      cell: (row) => row.valueA,
+                    },
+                    {
+                      key: "b",
+                      header: t("scenario.b"),
+                      className: "zn-ct__num",
+                      cell: (row) => row.valueB,
+                    },
+                    {
+                      key: "delta",
+                      header: t("results.delta"),
+                      className: "zn-ct__num",
+                      cell: (row) => (
+                        <span
+                          className="zn-ct__delta"
+                          data-warning={row.deltaWarning ? "true" : undefined}
+                        >
+                          {row.delta}
+                        </span>
+                      ),
+                    },
+                  ]}
+                  mobileCardTitle={(row) => row.label}
+                />
               </CardContent>
             </Card>
 
-            {/* Volume Progression Chart */}
+            {/* Volume progression — A hollow, B solid ink */}
             {volumeData && (
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">
-                    {t("results.volumeProgression")}
-                  </CardTitle>
+                  <CardTitle>{t("results.volumeProgression")}</CardTitle>
                   <CardDescription>
                     {t("results.volumeProgressionDesc")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-end gap-[2px] h-48">
+                  <div className="zn-ct__chart">
                     {Array.from({ length: volumeData.maxWeeks }).map((_, i) => {
-                      const weekA = results.statsA.weeklyVolumes[i];
-                      const weekB = results.statsB.weeklyVolumes[i];
-                      const durA = weekA?.durationMin ?? 0;
-                      const durB = weekB?.durationMin ?? 0;
+                      const durA = results.statsA.weeklyVolumes[i]?.durationMin ?? 0;
+                      const durB = results.statsB.weeklyVolumes[i]?.durationMin ?? 0;
                       return (
-                        <div
-                          key={i}
-                          className="flex-1 flex items-end gap-[1px] h-full"
-                        >
+                        <div key={i} className="zn-ct__week">
                           <div
-                            className="flex-1 bg-blue-500/60 rounded-t-sm min-h-[1px]"
-                            style={{
-                              height: `${(durA / volumeData.maxDuration) * 100}%`,
-                            }}
-                            title={`A S${i + 1}: ${formatMinutes(durA)}`}
+                            className="zn-ct__bar"
+                            data-series="a"
+                            style={{ "--h": `${(durA / volumeData.maxDuration) * 100}%` } as CSSProperties}
+                            title={`${t("scenario.a")} · ${t("results.week")} ${i + 1} · ${formatMinutes(durA)}`}
                           />
                           <div
-                            className="flex-1 bg-orange-500/60 rounded-t-sm min-h-[1px]"
-                            style={{
-                              height: `${(durB / volumeData.maxDuration) * 100}%`,
-                            }}
-                            title={`B S${i + 1}: ${formatMinutes(durB)}`}
+                            className="zn-ct__bar"
+                            data-series="b"
+                            style={{ "--h": `${(durB / volumeData.maxDuration) * 100}%` } as CSSProperties}
+                            title={`${t("scenario.b")} · ${t("results.week")} ${i + 1} · ${formatMinutes(durB)}`}
                           />
                         </div>
                       );
                     })}
                   </div>
-                  {/* Week numbers */}
-                  <div className="flex gap-[2px] mt-1">
+
+                  <div className="zn-ct__ticks">
                     {Array.from({ length: volumeData.maxWeeks }).map((_, i) => (
-                      <div
+                      <span
                         key={i}
-                        className={cn(
-                          "flex-1 text-center text-[9px] text-muted-foreground",
-                          i % 2 !== 0 &&
-                            volumeData.maxWeeks > 10 &&
-                            "hidden sm:block",
-                        )}
+                        className="zn-ct__tick"
+                        data-dense={
+                          i % 2 !== 0 && volumeData.maxWeeks > 10
+                            ? "true"
+                            : undefined
+                        }
                       >
                         {i + 1}
-                      </div>
+                      </span>
                     ))}
                   </div>
-                  {/* Legend */}
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground mt-2">
-                    <span className="flex items-center gap-1.5">
-                      <span className="size-2.5 rounded-full bg-blue-500/60" />
-                      {t("scenario.a")}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <span className="size-2.5 rounded-full bg-orange-500/60" />
-                      {t("scenario.b")}
-                    </span>
+
+                  <div
+                    className="zn-cluster zn-ct__keys"
+                    style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+                  >
+                    <SeriesKey series="a" label={t("scenario.a")} />
+                    <SeriesKey series="b" label={t("scenario.b")} />
                   </div>
                 </CardContent>
               </Card>
             )}
 
-            {/* Zone Distribution Comparison */}
+            {/* Zone distribution — the only place zone fills are painted */}
             {zoneData && (
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">
-                    {t("results.zoneDistribution")}
-                  </CardTitle>
+                  <CardTitle>{t("results.zoneDistribution")}</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3">
+                <CardContent
+                  className="zn-stack"
+                  style={{ "--gap": "var(--sp-10)" } as CSSProperties}
+                >
                   {ALL_ZONES.map((zone) => {
-                    const zdA = results.analysisA.zoneDistribution.find(
-                      (z) => z.zone === zone,
-                    );
-                    const zdB = results.analysisB.zoneDistribution.find(
-                      (z) => z.zone === zone,
-                    );
-                    const minutesA = zdA?.minutes ?? 0;
-                    const minutesB = zdB?.minutes ?? 0;
-                    const pctA =
-                      zoneData.maxMinutes > 0
-                        ? (minutesA / zoneData.maxMinutes) * 100
-                        : 0;
-                    const pctB =
-                      zoneData.maxMinutes > 0
-                        ? (minutesB / zoneData.maxMinutes) * 100
-                        : 0;
+                    const minutesA =
+                      results.analysisA.zoneDistribution.find((z) => z.zone === zone)
+                        ?.minutes ?? 0;
+                    const minutesB =
+                      results.analysisB.zoneDistribution.find((z) => z.zone === zone)
+                        ?.minutes ?? 0;
+                    const pctA = (minutesA / zoneData.maxMinutes) * 100;
+                    const pctB = (minutesB / zoneData.maxMinutes) * 100;
                     return (
-                      <div key={zone} className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className="text-xs font-medium w-6"
-                            style={{ color: `var(--zone-${getZoneNumber(zone)})` }}
-                          >
-                            {zone}
-                          </span>
-                        </div>
-                        <div className="space-y-0.5">
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs w-6 text-right text-muted-foreground">
-                              A
+                      <div key={zone} className="zn-ct__zonerow">
+                        <span className="zn-zone-badge" data-zone={getZoneNumber(zone)}>
+                          {zone}
+                        </span>
+                        {(
+                          [
+                            ["a", t("scenario.a"), minutesA, pctA],
+                            ["b", t("scenario.b"), minutesB, pctB],
+                          ] as const
+                        ).map(([series, seriesLabel, minutes, pct]) => (
+                          <div key={series} className="zn-ct__zonebar">
+                            <span className="zn-ct__series" aria-hidden="true">
+                              {series.toUpperCase()}
                             </span>
-                            <div className="flex-1 h-4 bg-muted rounded-sm overflow-hidden">
-                              <div
-                                className="h-full bg-blue-500/60 rounded-sm transition-all"
-                                style={{ width: `${pctA}%` }}
+                            <span
+                              className="zn-ct__track"
+                              role="img"
+                              aria-label={`${seriesLabel} · ${zone} · ${formatMinutes(minutes)}`}
+                            >
+                              <span
+                                className="zn-ct__fill"
+                                data-series={series}
+                                style={{ "--w": `${pct}%` } as CSSProperties}
                               />
-                            </div>
-                            <span className="text-xs w-16 text-right tabular-nums">
-                              {formatMinutes(minutesA)}
+                            </span>
+                            <span className="zn-ct__minutes">
+                              {formatMinutes(minutes)}
                             </span>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs w-6 text-right text-muted-foreground">
-                              B
-                            </span>
-                            <div className="flex-1 h-4 bg-muted rounded-sm overflow-hidden">
-                              <div
-                                className="h-full bg-orange-500/60 rounded-sm transition-all"
-                                style={{ width: `${pctB}%` }}
-                              />
-                            </div>
-                            <span className="text-xs w-16 text-right tabular-nums">
-                              {formatMinutes(minutesB)}
-                            </span>
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     );
                   })}
-                  {/* Legend */}
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2">
-                    <span className="flex items-center gap-1.5">
-                      <span className="size-2.5 rounded-full bg-blue-500/60" />
-                      {t("scenario.a")}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <span className="size-2.5 rounded-full bg-orange-500/60" />
-                      {t("scenario.b")}
-                    </span>
+
+                  {/* The ramp orders the zones; it does not name them. */}
+                  <div className="zn-ct__legend">
+                    <ZoneScale />
                   </div>
                 </CardContent>
               </Card>
             )}
 
-            {/* Qualitative Insights */}
+            {/* Qualitative insights */}
             {results.insights.length > 0 && (
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">
-                    {t("insights.title")}
-                  </CardTitle>
+                  <CardTitle>{t("insights.title")}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2">
+                  <ul className="zn-ct__insights">
                     {results.insights.map((insight, i) => (
-                      <li
-                        key={i}
-                        className="flex items-start gap-2 text-sm"
-                      >
-                        <span
-                          className={cn(
-                            "mt-1.5 size-2 rounded-full shrink-0",
-                            insight.type === "warning"
-                              ? "bg-amber-500"
-                              : insight.type === "stimulus"
-                                ? "bg-green-500"
-                                : "bg-blue-500",
-                          )}
-                        />
-                        <span>{t(insight.key, insight.params)}</span>
+                      <li key={i} className="zn-ct__insight" data-type={insight.type}>
+                        {t(insight.key, insight.params)}
                       </li>
                     ))}
                   </ul>
@@ -1084,61 +1083,43 @@ export function WhatIfPage() {
               </Card>
             )}
 
-            {/* Model Disclaimer */}
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-3">
-                  <AlertTriangle className="size-5 text-amber-500 shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium mb-1">
-                      {t("disclaimer.title")}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {t("disclaimer.text")}
-                    </p>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {t("disclaimer.variability")}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+            {/* What the model does not claim */}
+            <Alert kind="warning" title={t("disclaimer.title")}>
+              {t("disclaimer.text")} {t("disclaimer.variability")}
+            </Alert>
+          </section>
         )}
 
         {/* ── Save Dialog ────────────────────────────────────────────── */}
         <Dialog open={saveDialogOpen} onOpenChange={setSaveDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>
-                {t("actions.save")}
-              </DialogTitle>
+              <DialogTitle>{t("actions.save")}</DialogTitle>
               <DialogDescription>
                 {t("saveDialog.description")}
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">
+            <div className="zn-ct__field">
+              <label htmlFor="whatif-name" className="zn-label">
                 {t("actions.scenarioName")}
               </label>
               <input
+                id="whatif-name"
                 type="text"
                 value={saveName}
                 onChange={(e) => setSaveName(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSave()}
                 placeholder={t("saveDialog.placeholder")}
-                className={inputClassName}
+                className="zn-ct__input"
                 autoFocus
               />
             </div>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline">
-                  {t("saveDialog.cancel")}
-                </Button>
+                <Button variant="outline">{t("saveDialog.cancel")}</Button>
               </DialogClose>
               <Button onClick={handleSave} disabled={!saveName.trim()}>
-                <Save className="size-4" />
+                <Save size={15} />
                 {t("actions.save")}
               </Button>
             </DialogFooter>
@@ -1149,30 +1130,25 @@ export function WhatIfPage() {
         <Dialog open={loadDialogOpen} onOpenChange={setLoadDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>
-                {t("actions.savedScenarios")}
-              </DialogTitle>
+              <DialogTitle>{t("actions.savedScenarios")}</DialogTitle>
             </DialogHeader>
             {savedScenarios.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4 text-center">
+              <p className="zn-body zn-body--sm zn-muted">
                 {t("actions.noSaved")}
               </p>
             ) : (
-              <ul className="space-y-2 max-h-80 overflow-y-auto">
+              <ul className="zn-ct__saved">
                 {savedScenarios.map((scenario) => (
-                  <li
-                    key={scenario.id}
-                    className="flex items-center justify-between gap-2 rounded-md border p-2"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium truncate">
+                  <li key={scenario.id} className="zn-ct__saveditem">
+                    <div className="zn-fill">
+                      <span className="zn-ct__savedname zn-truncate">
                         {scenario.name}
-                      </p>
-                      <p className="text-xs text-muted-foreground tabular-nums">
+                      </span>
+                      <span className="zn-ct__saveddate">
                         {formatDate(new Date(scenario.savedAt))}
-                      </p>
+                      </span>
                     </div>
-                    <div className="flex items-center gap-1 shrink-0">
+                    <div className="zn-cluster zn-fixed" style={{ "--gap": "var(--sp-2)" } as CSSProperties}>
                       <Button
                         variant="ghost"
                         size="sm"
@@ -1182,10 +1158,11 @@ export function WhatIfPage() {
                       </Button>
                       <Button
                         variant="ghost"
-                        size="sm"
+                        size="icon-sm"
+                        aria-label={t("actions.delete")}
                         onClick={() => setDeleteTarget(scenario.id)}
                       >
-                        <Trash2 className="size-4" />
+                        <Trash2 size={15} />
                       </Button>
                     </div>
                   </li>
@@ -1202,27 +1179,23 @@ export function WhatIfPage() {
         >
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>
-                {t("deleteDialog.title")}
-              </DialogTitle>
+              <DialogTitle>{t("deleteDialog.title")}</DialogTitle>
               <DialogDescription>
                 {t("deleteDialog.description")}
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline">
-                  {t("deleteDialog.cancel")}
-                </Button>
+                <Button variant="outline">{t("deleteDialog.cancel")}</Button>
               </DialogClose>
               <Button variant="destructive" onClick={confirmDelete}>
-                <Trash2 className="size-4" />
+                <Trash2 size={15} />
                 {t("actions.delete")}
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </div>
+      </PageContainer>
     </>
   );
 }

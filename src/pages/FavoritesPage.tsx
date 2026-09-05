@@ -1,13 +1,16 @@
-import { useMemo } from "react";
+import { useMemo, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Heart, ArrowRight, Loader2 } from "@/components/icons";
+import { Heart } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Spinner } from "@/components/ui/spinner";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { WorkoutCard } from "@/components/domain";
+import { ZoneScale } from "@/components/visualization";
 import { useFavorites, useWorkouts } from "@/hooks";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
+import { useAppStats } from "@/hooks/useAppStats";
 import type { AnyWorkoutTemplate } from "@/types";
 
 export function FavoritesPage() {
@@ -15,6 +18,7 @@ export function FavoritesPage() {
   const { favorites } = useFavorites();
   const { workouts, isLoading: isLoadingRunning } = useWorkouts();
   const { workouts: strengthWorkouts, isLoading: isLoadingStrength } = useStrengthWorkouts();
+  const stats = useAppStats();
   const isLoading = isLoadingRunning || isLoadingStrength;
 
   // Get workout objects for all favorites (running + strength)
@@ -33,94 +37,63 @@ export function FavoritesPage() {
         title={t("common:favorites.title")}
         canonical="/favorites"
       />
-      <div className="py-8 space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <Heart filled className="size-6 text-red-500 shrink-0" />
-        <div>
-          <EditorialTitle as="h1" size="md">
-            {t("common:favorites.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
-            {t("common:favorites.savedWorkouts", { count: favoriteWorkouts.length })}
-          </FadeUp>
-        </div>
-      </div>
 
-      {/* Content */}
-      {isLoading ? (
-        <div className="flex items-center justify-center py-16">
-          <Loader2 className="size-8 animate-spin text-muted-foreground" />
-        </div>
-      ) : favoriteWorkouts.length > 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {favoriteWorkouts.map((workout) => (
-            <WorkoutCard key={workout.id} workout={workout} />
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-16 space-y-4">
-          {/* Animated beating heart SVG */}
-          <div className="mx-auto w-16 h-16">
-            <svg
-              viewBox="0 0 64 64"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-full h-full"
-              aria-hidden="true"
-            >
-              <defs>
-                <style>{`
-                  @keyframes fav-heartbeat {
-                    0%, 100% { transform: scale(1); }
-                    50% { transform: scale(1.08); }
-                  }
-                  @media (prefers-reduced-motion: reduce) {
-                    .fav-heart-group { animation: none !important; }
-                  }
-                `}</style>
-              </defs>
-              <g
-                className="fav-heart-group"
-                style={{
-                  transformOrigin: "32px 30px",
-                  animation: "fav-heartbeat 3s ease-in-out infinite",
-                }}
-              >
-                <path
-                  d="M32 50 C32 50, 12 36, 12 22 C12 16, 17 10, 23 10 C27 10, 30 12, 32 16 C34 12, 37 10, 41 10 C47 10, 52 16, 52 22 C52 36, 32 50, 32 50Z"
-                  fill="var(--zone-5)"
-                  opacity="0.3"
-                />
-                <path
-                  d="M32 50 C32 50, 12 36, 12 22 C12 16, 17 10, 23 10 C27 10, 30 12, 32 16 C34 12, 37 10, 41 10 C47 10, 52 16, 52 22 C52 36, 32 50, 32 50Z"
-                  fill="none"
-                  stroke="var(--zone-5)"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  opacity="0.5"
-                />
-              </g>
-            </svg>
+      <div className="zn-disc">
+        {/* 1 — what is kept, counted against the catalogue */}
+        <section
+          className="zn-disc__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">
+            {t("common:favorites.kicker", {
+              count: favoriteWorkouts.length,
+              total: stats.workouts,
+            })}
+          </span>
+          <h1 className="zn-display" data-level="2">
+            {t("common:favorites.title")}
+          </h1>
+          <p className="zn-body zn-body--lead zn-disc__lede">
+            {t("common:favorites.subtitle")}
+          </p>
+        </section>
+
+        {/* 2 — the ink ramp orders the zones, it does not name them */}
+        {favoriteWorkouts.length > 0 && (
+          <div className="zn-disc__legend">
+            <ZoneScale />
           </div>
-          <div className="space-y-2">
-            <p className="text-lg font-medium">
-              {t("common:favorites.noFavoritesYet")}
-            </p>
-            <p className="text-muted-foreground max-w-md mx-auto">
-              {t("common:favorites.noFavoritesDesc")}
-            </p>
-          </div>
-          <Button asChild className="mt-4">
-            <Link to="/library">
-              {t("library:title")}
-              <ArrowRight className="ml-2 size-4" />
-            </Link>
-          </Button>
-        </div>
-      )}
-    </div>
+        )}
+
+        {/* 3 — the sessions */}
+        <section className="zn-disc__results" aria-busy={isLoading}>
+          {isLoading ? (
+            <div className="zn-disc__wait">
+              <Spinner size={22} label={t("common:status.loading")} />
+            </div>
+          ) : favoriteWorkouts.length > 0 ? (
+            <div className="zn-grid">
+              {favoriteWorkouts.map((workout) => (
+                <WorkoutCard key={workout.id} workout={workout} />
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              variant="no-results"
+              icon={Heart}
+              title={t("common:favorites.noFavoritesYet")}
+              description={t("common:favorites.emptyDescription", {
+                total: stats.workouts,
+              })}
+              action={
+                <Button variant="outline" asChild>
+                  <Link to="/library">{t("common:favorites.emptyAction")}</Link>
+                </Button>
+              }
+            />
+          )}
+        </section>
+      </div>
     </>
   );
 }

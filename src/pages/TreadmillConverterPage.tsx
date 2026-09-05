@@ -1,12 +1,14 @@
-import { useState, useEffect, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useState, useEffect, useMemo, type CSSProperties } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { RefreshCw, Gauge, Info } from "@/components/icons";
-import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
-import { buildParamsUrl } from "@/lib/share/urlParams";
+import { Info } from "@/components/icons";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
+import { StatBlock } from "@/components/domain/StatBlock";
+import { buildParamsUrl } from "@/lib/share/urlParams";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { ZoneBadge } from "@/components/domain/ZoneBadge";
 import { loadUserZonePrefs, calculatePaceZones } from "@/lib/zones";
 import { useSettings } from "@/hooks/useSettings";
@@ -119,36 +121,37 @@ export function TreadmillConverterPage() {
           },
         ]}
       />
-      <div className="py-8 max-w-2xl mx-auto space-y-6">
-        {/* Header */}
-        <div>
-          <EditorialTitle as="h1" className="mb-2">
-            {t("calculators:calculateurs.treadmill.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
-            {t("calculators:calculateurs.treadmill.description")}
-          </FadeUp>
-        </div>
 
-        {/* Inputs */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <RefreshCw className="size-5" />
-              {t("calculators:calculateurs.treadmill.settings")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              {/* Speed input */}
-              <div className="space-y-2">
-                <label
-                  htmlFor="treadmill-speed"
-                  className="text-sm font-medium"
-                >
+      <div className="zn-num">
+        <section
+          className="zn-num__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">
+            {t("calculators:calculateurs.treadmill.kicker")}
+          </span>
+          <h1 className="zn-display" data-level="3">
+            {t("calculators:calculateurs.treadmill.title")}
+          </h1>
+          <p className="zn-body zn-body--lead zn-num__lede">
+            {t("calculators:calculateurs.treadmill.description")}
+          </p>
+        </section>
+
+        <section className="zn-num__panel zn-tool__band zn-split zn-tool">
+          {/* What you set on the machine. */}
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                {t("calculators:calculateurs.treadmill.settings")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="zn-calc__fields">
+              <div className="zn-calc__field">
+                <label htmlFor="treadmill-speed" className="zn-calc__label">
                   {t("calculators:calculateurs.treadmill.speed")}
                 </label>
-                <div className="flex items-center gap-2">
+                <span className="zn-numfield" style={{ "--field-w": "56px" } as CSSProperties}>
                   <input
                     id="treadmill-speed"
                     type="number"
@@ -157,23 +160,17 @@ export function TreadmillConverterPage() {
                     step={0.1}
                     value={speed}
                     onChange={(e) => setSpeed(e.target.value)}
-                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="zn-numfield__input"
                   />
-                  <span className="text-sm text-muted-foreground whitespace-nowrap">
-                    km/h
-                  </span>
-                </div>
+                  <span className="zn-numfield__unit">km/h</span>
+                </span>
               </div>
 
-              {/* Incline input */}
-              <div className="space-y-2">
-                <label
-                  htmlFor="treadmill-incline"
-                  className="text-sm font-medium"
-                >
+              <div className="zn-calc__field">
+                <label htmlFor="treadmill-incline" className="zn-calc__label">
                   {t("calculators:calculateurs.treadmill.incline")}
                 </label>
-                <div className="flex items-center gap-2">
+                <span className="zn-numfield" style={{ "--field-w": "56px" } as CSSProperties}>
                   <input
                     id="treadmill-incline"
                     type="number"
@@ -182,88 +179,80 @@ export function TreadmillConverterPage() {
                     step={0.5}
                     value={incline}
                     onChange={(e) => setIncline(e.target.value)}
-                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="zn-numfield__input"
                   />
-                  <span className="text-sm text-muted-foreground">%</span>
-                </div>
+                  <span className="zn-numfield__unit">%</span>
+                </span>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Results */}
-        {hasValidInput && (
-          <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Gauge className="size-5" />
-                {t("calculators:calculateurs.treadmill.equivalentEffort")}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 gap-6">
-                {/* Pace */}
-                <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">
-                    {t("calculators:calculateurs.treadmill.pace")}
-                  </p>
-                  <p className="text-2xl font-bold tabular-nums">
-                    {displayPace}
-                    <span className="text-base font-normal text-muted-foreground ml-1">
-                      {getPaceUnit(unit)}
-                    </span>
-                  </p>
-                </div>
-
-                {/* Speed */}
-                <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">
-                    {t("calculators:calculateurs.treadmill.speed")}
-                  </p>
-                  <p className="text-2xl font-bold tabular-nums">
-                    {displaySpeed}
-                    <span className="text-base font-normal text-muted-foreground ml-1">
-                      {getSpeedUnit(unit)}
-                    </span>
-                  </p>
-                </div>
-              </div>
-
-              {/* Zone badge */}
-              {matchedZone && (
-                <div className="mt-4 pt-4 border-t flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">
-                    {t("calculators:calculateurs.treadmill.trainingZone")}
-                  </span>
-                  <ZoneBadge zone={matchedZone} showLabel size="md" />
-                </div>
-              )}
-
-              {!vma && (
-                <div className="mt-4 pt-4 border-t flex items-center gap-2 text-sm text-muted-foreground">
-                  <Info className="size-4 shrink-0" />
-                  {t("calculators:calculateurs.treadmill.configureVma")}
-                </div>
-              )}
             </CardContent>
           </Card>
-        )}
 
-        <ShareLinkButton
-          buildUrl={() =>
-            buildParamsUrl("/calculators/tapis-roulant", { speed, incline })
-          }
-          title={t("calculators:calculateurs.treadmill.title")}
-        />
+          {/* What it costs outside. */}
+          <div className="zn-stack" style={{ "--gap": "var(--sp-13)" } as CSSProperties}>
+            {hasValidInput ? (
+              <>
+                <h2 className="zn-title" data-level="4">
+                  {t("calculators:calculateurs.treadmill.equivalentEffort")}
+                </h2>
 
-        {/* Explanation */}
-        <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-          <CardContent className="pt-6">
-            <p className="text-sm text-muted-foreground italic">
-              {t("calculators:calculateurs.treadmill.formula")}
-            </p>
-          </CardContent>
-        </Card>
+                <div className="zn-tool__figures">
+                  <StatBlock
+                    value={`${displayPace} ${getPaceUnit(unit)}`}
+                    label={t("calculators:calculateurs.treadmill.pace")}
+                  />
+                  <StatBlock
+                    value={`${displaySpeed} ${getSpeedUnit(unit)}`}
+                    label={t("calculators:calculateurs.treadmill.speed")}
+                  />
+                </div>
+
+                {/* A single zone, named where it is painted. */}
+                {matchedZone && (
+                  <div className="zn-row" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+                    <span className="zn-kicker">
+                      {t("calculators:calculateurs.treadmill.trainingZone")}
+                    </span>
+                    <ZoneBadge zone={matchedZone} showLabel />
+                  </div>
+                )}
+
+                {!vma && (
+                  <Alert
+                    action={
+                      <Button variant="outline" size="sm" asChild>
+                        <Link to="/my-zones">
+                          {t("calculators:calculateurs.treadmill.configureVmaCta")}
+                        </Link>
+                      </Button>
+                    }
+                  >
+                    {t("calculators:calculateurs.treadmill.configureVma")}
+                  </Alert>
+                )}
+
+                <div className="zn-cluster">
+                  <ShareLinkButton
+                    buildUrl={() =>
+                      buildParamsUrl("/calculators/tapis-roulant", { speed, incline })
+                    }
+                    title={t("calculators:calculateurs.treadmill.title")}
+                  />
+                </div>
+              </>
+            ) : (
+              <Alert kind="warning">
+                {t("calculators:calculateurs.treadmill.outOfRange")}
+              </Alert>
+            )}
+
+            <div className="zn-tool__note">
+              <Info />
+              <p className="zn-body zn-body--sm zn-muted">
+                {t("calculators:calculateurs.treadmill.formula")}
+              </p>
+            </div>
+          </div>
+        </section>
       </div>
     </>
   );

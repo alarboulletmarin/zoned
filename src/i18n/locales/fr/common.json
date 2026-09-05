@@ -305,11 +305,12 @@
     "notFound": {
       "title": "Page introuvable",
       "description": "La page que tu cherches n'existe pas ou a été déplacée.",
-      "backHome": "Retour à l'accueil"
+      "backHome": "Retour à l'accueil",
+      "body": "Cette adresse ne mène à aucune page. Tes plans, tes séances et tes réglages enregistrés sont intacts."
     },
     "boundary": {
       "title": "Une erreur est survenue",
-      "description": "Quelque chose s'est mal passé. Essayez de recharger la page.",
+      "description": "Quelque chose s'est mal passé. Essaie de recharger la page.",
       "reload": "Recharger",
       "backHome": "Retour à l'accueil"
     }
@@ -528,7 +529,15 @@
       "beginner": "Débutant",
       "intermediate": "Intermédiaire",
       "advanced": "Avancé"
-    }
+    },
+    "kicker": "{{collections}} collections · {{groups}} thèmes",
+    "groupCount_one": "{{count}} collection",
+    "groupCount_other": "{{count}} collections",
+    "workoutCount_one": "{{count}} séance",
+    "workoutCount_other": "{{count}} séances",
+    "emptyTitle": "Aucune collection chargée",
+    "emptyDescription": "Le catalogue n'a rendu aucun parcours. Recharge la page, ou ouvre la bibliothèque et ses {{workouts}} séances.",
+    "emptyAction": "Ouvrir la bibliothèque"
   },
   "hints": {
     "draw": {
@@ -567,7 +576,7 @@
     "freePlan": "Plan libre",
     "freePlanDesc": "Crée un plan vierge et place tes séances à la main",
     "prebuiltPlans": "Plans prêt-à-l'emploi",
-    "prebuiltPlansDesc": "Choisissez un plan structuré et commencez immédiatement",
+    "prebuiltPlansDesc": "Choisis un plan structuré et commence immédiatement",
     "planExported": "Plan exporté",
     "replaceSession": "Remplacer la séance",
     "chooseFromLibrary": "Choisissez une séance dans la bibliothèque",
@@ -642,14 +651,23 @@
   },
   "collectionsDetail": {
     "collectionNotFound": "Collection introuvable",
-    "noWorkoutsFound": "Aucune séance trouvée pour cette collection."
+    "noWorkoutsFound": "Aucune séance trouvée pour cette collection.",
+    "notFoundDescription": "Cette adresse ne correspond à aucun des {{count}} parcours. L'index les liste tous.",
+    "noWorkoutsTitle": "Aucune séance chargée",
+    "noWorkoutsDescription": "Les {{count}} séances de ce parcours n'ont pas été lues. Recharge la page pour réessayer.",
+    "kicker": "{{count}} séances · {{kind}}"
   },
   "favorites": {
-    "title": "Mes Favoris",
+    "title": "Mes favoris",
     "savedWorkouts": "{{count}} séance sauvegardée",
     "savedWorkouts_plural": "{{count}} séances sauvegardées",
     "noFavoritesYet": "Pas encore de favoris",
-    "noFavoritesDesc": "Parcours la bibliothèque et appuie sur le cœur pour garder tes séances préférées ici."
+    "noFavoritesDesc": "Parcours la bibliothèque et appuie sur le cœur pour garder tes séances préférées ici.",
+    "subtitle": "Les séances que tu as marquées, prêtes à relancer.",
+    "kicker_one": "{{count}} favori · {{total}} au catalogue",
+    "kicker_other": "{{count}} favoris · {{total}} au catalogue",
+    "emptyDescription": "Aucun favori pour l'instant. La bibliothèque en compte {{total}} : appuie sur le cœur d'une séance pour la garder ici.",
+    "emptyAction": "Ouvrir la bibliothèque"
   },
   "comparePage": {
     "whyComparisons": "Pourquoi ces comparaisons ?",
@@ -680,6 +698,8 @@
     "title": "Comparaisons",
     "subtitle": "Zoned face aux alternatives",
     "backToCompare": "Retour aux comparaisons",
+    "criteriaCount_one": "{{count}} critère",
+    "criteriaCount_other": "{{count}} critères",
     "tableHeader": {
       "criterion": "Critère",
       "zoned": "Zoned",
@@ -698,7 +718,7 @@
       },
       "noAccount": {
         "title": "Sans inscription",
-        "description": "Pas de formulaire, pas de mot de passe. Ouvrez l'app et commencez à courir."
+        "description": "Pas de formulaire, pas de mot de passe. Ouvre l'app et commence à courir."
       },
       "noData": {
         "title": "Zéro donnée collectée",
@@ -710,14 +730,18 @@
       }
     },
     "cta": {
-      "title": "Essayez Zoned gratuitement",
+      "title": "Essaie Zoned gratuitement",
       "subtitle": "Sans compte. Sans carte bancaire. Maintenant.",
       "button": "Commencer"
     },
     "hub": {
       "title": "Alternatives à Runna, Kiprun Pacer & Campus Coach",
-      "description": "Comparez Zoned avec les principales apps de running. Prix, confidentialité, fonctionnalités.",
-      "compareWith": "Comparer avec {{name}}"
+      "description": "Compare Zoned avec les principales apps de running. Prix, confidentialité, fonctionnalités.",
+      "compareWith": "Comparer avec {{name}}",
+      "kicker_one": "{{count}} application comparée",
+      "kicker_other": "{{count}} applications comparées",
+      "readComparison": "Lire la comparaison",
+      "noteKicker": "Parti pris"
     }
   },
   "pages": {

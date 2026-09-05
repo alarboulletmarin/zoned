@@ -1,66 +1,12 @@
-import { useState } from "react";
+import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { usePickLang } from "@/lib/i18n-utils";
 import { Link } from "react-router-dom";
-import {
-  FlaskConical,
-  ChevronDown,
-  BookOpen,
-  Activity,
-  TrendingUp,
-  Dumbbell,
-  Timer,
-  Calendar,
-  Route,
-  RefreshCw,
-  ArrowRight,
-} from "@/components/icons";
-import type { IconProps } from "@/components/icons";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { ArrowRight } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { Section } from "@/components/editorial/Section";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { PLAN_PRINCIPLES } from "@/data/plan-methodology";
-import { cn } from "@/lib/utils";
-
-// ---------------------------------------------------------------------------
-// Icon resolver -- maps icon string name to component
-// ---------------------------------------------------------------------------
-
-const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
-  Calendar,
-  Activity,
-  RefreshCw,
-  TrendingUp,
-  Route,
-  Dumbbell,
-  Timer,
-};
-
-function PrincipleIcon({ name, className }: { name: string; className?: string }) {
-  const Icon = ICON_MAP[name] ?? Activity;
-  return <Icon className={className} />;
-}
-
-// ---------------------------------------------------------------------------
-// Color palette for principle cards (cycling through)
-// ---------------------------------------------------------------------------
-
-const CARD_COLORS = [
-  { bg: "bg-blue-500/10", text: "text-blue-500" },
-  { bg: "bg-orange-500/10", text: "text-orange-500" },
-  { bg: "bg-green-500/10", text: "text-green-500" },
-  { bg: "bg-purple-500/10", text: "text-purple-500" },
-  { bg: "bg-amber-500/10", text: "text-amber-500" },
-  { bg: "bg-rose-500/10", text: "text-rose-500" },
-  { bg: "bg-teal-500/10", text: "text-teal-500" },
-];
 
 // ---------------------------------------------------------------------------
 // Scientific references for the bottom section
@@ -118,12 +64,6 @@ export function PlanMethodologyPage() {
   const { t } = useTranslation("common");
   const pick = usePickLang();
 
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-
-  function toggleCard(id: string) {
-    setExpandedId((prev) => (prev === id ? null : id));
-  }
-
   return (
     <>
       <SEOHead
@@ -138,167 +78,151 @@ export function PlanMethodologyPage() {
         }}
       />
 
-      <div className="py-8 space-y-12 max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center space-y-4">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <div className="p-2.5 rounded-xl bg-primary/10">
-              <FlaskConical className="size-6 text-primary" />
-            </div>
-          </div>
-          <EditorialTitle as="h1">
+      <div className="zn-guide">
+        {/* 1 — what the generator does, in one sentence */}
+        <section
+          className="zn-stack zn-guide__head"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">
+            {t("content:planMethodology.kicker", {
+              n: PLAN_PRINCIPLES.length,
+            })}
+          </span>
+          <h1 className="zn-display" data-level="2">
             {t("content:planMethodology.heading")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          </h1>
+          <p className="zn-body zn-body--lead zn-guide__lede">
             {t("content:planMethodology.intro")}
-          </FadeUp>
-        </div>
+          </p>
+        </section>
 
-        {/* Intro paragraph */}
-        <section className="space-y-3">
-          <div className="text-muted-foreground space-y-3 pl-0">
+        {/* 2 — how the pieces fit, as prose, with the caveat pulled out */}
+        <section className="zn-guide__band">
+          <div className="zn-prose zn-measure">
             <GlossaryLinkedText
               as="p"
+              className="zn-prose__p"
               text={t("content:planMethodology.introText")}
             />
-            <GlossaryLinkedText
-              as="p"
-              className="text-sm italic border-l-2 border-primary/30 pl-4"
-              text={t("content:planMethodology.introDisclaimer")}
-            />
+            <aside className="zn-prose__callout" data-kind="key">
+              <span className="zn-kicker zn-prose__callout-label">
+                {t("content:article.callout.key")}
+              </span>
+              <GlossaryLinkedText
+                as="p"
+                className="zn-prose__callout-text"
+                text={t("content:planMethodology.introDisclaimer")}
+              />
+            </aside>
           </div>
         </section>
 
-        {/* Principles cards */}
-        <section className="space-y-4">
-          {PLAN_PRINCIPLES.map((principle, index) => {
-            const isExpanded = expandedId === principle.id;
-            const color = CARD_COLORS[index % CARD_COLORS.length];
-
-            return (
-              <Card
-                key={principle.id}
-                className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent transition-shadow hover:shadow-md"
+        {/* 3 — the seven principles, each a disclosure on its own rule. It was
+            a div with an onClick and no aria-expanded; <details> gives the
+            keyboard path and the state for nothing. */}
+        <section className="zn-guide__band">
+          {PLAN_PRINCIPLES.map((principle) => (
+            <Section
+              key={principle.id}
+              id={principle.id}
+              collapsible
+              as="h3"
+              title={pick(principle, "title")}
+              description={
+                <GlossaryLinkedText text={pick(principle, "summary")} />
+              }
+            >
+              <div
+                className="zn-stack zn-measure"
+                style={{ "--gap": "var(--sp-11)" } as CSSProperties}
               >
-                <CardHeader
-                  className="cursor-pointer select-none"
-                  onClick={() => toggleCard(principle.id)}
-                >
-                  <div className="flex items-start gap-4">
-                    <div className={cn("p-2 rounded-lg shrink-0", color.bg)}>
-                      <PrincipleIcon
-                        name={principle.icon}
-                        className={cn("size-5", color.text)}
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0 space-y-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <CardTitle className="text-lg">
-                          {pick(principle, "title")}
-                        </CardTitle>
-                        <ChevronDown
-                          className={cn(
-                            "size-5 shrink-0 text-muted-foreground transition-transform duration-200",
-                            isExpanded && "rotate-180"
-                          )}
-                        />
-                      </div>
-                      <CardDescription className="text-sm">
-                        <GlossaryLinkedText
-                          text={pick(principle, "summary")}
-                        />
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
+                <GlossaryLinkedText
+                  as="p"
+                  className="zn-body zn-body--sm zn-muted"
+                  text={pick(principle, "details")}
+                />
 
-                {isExpanded && (
-                  <CardContent className="pt-0 space-y-5">
-                    {/* Details */}
-                    <div className="pl-12">
-                      <GlossaryLinkedText
-                        as="p"
-                        className="text-sm text-muted-foreground leading-relaxed"
-                        text={pick(principle, "details")}
-                      />
-                    </div>
+                <ul className="zn-prose__list">
+                  {principle.rules.map((rule, ruleIndex) => (
+                    <li key={ruleIndex} className="zn-body zn-body--sm zn-muted">
+                      {pick(rule, "text")}
+                    </li>
+                  ))}
+                </ul>
 
-                    {/* Rules */}
-                    <ul className="pl-12 space-y-1.5">
-                      {principle.rules.map((rule, ruleIndex) => (
-                        <li
-                          key={ruleIndex}
-                          className="flex items-start gap-2 text-sm"
-                        >
-                          <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary/60" />
-                          <span className="text-muted-foreground">
-                            {pick(rule, "text")}
-                          </span>
+                {principle.references && principle.references.length > 0 && (
+                  <div
+                    className="zn-stack"
+                    style={{ "--gap": "var(--sp-3)" } as CSSProperties}
+                  >
+                    <span className="zn-kicker">
+                      {t("content:planMethodology.sources")}
+                    </span>
+                    <ul
+                      className="zn-stack"
+                      style={
+                        {
+                          "--gap": "var(--sp-1)",
+                          listStyle: "none",
+                          margin: 0,
+                          padding: 0,
+                        } as CSSProperties
+                      }
+                    >
+                      {principle.references.map((ref, refIndex) => (
+                        <li key={refIndex} className="zn-source">
+                          {ref.author} ({ref.year}). {ref.title}
                         </li>
                       ))}
                     </ul>
-
-                    {/* References */}
-                    {principle.references && principle.references.length > 0 && (
-                      <div className="pl-12 space-y-1">
-                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                          Sources
-                        </p>
-                        <ul className="space-y-0.5">
-                          {principle.references.map((ref, refIndex) => (
-                            <li
-                              key={refIndex}
-                              className="text-xs text-muted-foreground"
-                            >
-                              {ref.author} ({ref.year}). <span className="italic">{ref.title}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    {/* Related article link */}
-                    {principle.relatedArticle && (
-                      <div className="pl-12">
-                        <Link
-                          to={`/learn/${principle.relatedArticle}`}
-                          className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
-                        >
-                          {t("content:planMethodology.learnMore")}
-                          <ArrowRight className="size-3.5" />
-                        </Link>
-                      </div>
-                    )}
-                  </CardContent>
+                  </div>
                 )}
-              </Card>
-            );
-          })}
+
+                {principle.relatedArticle && (
+                  <Link
+                    to={`/learn/${principle.relatedArticle}`}
+                    className="zn-prose__link zn-guide__extlink"
+                  >
+                    {t("content:planMethodology.learnMore")}
+                    <ArrowRight />
+                  </Link>
+                )}
+              </div>
+            </Section>
+          ))}
         </section>
 
-        {/* Bottom references section */}
-        <section className="space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-green-500/10">
-              <BookOpen className="size-5 text-green-500" />
-            </div>
-            <h2 className="text-2xl font-semibold">
-              {t("content:planMethodology.scientificReferences")}
-            </h2>
-          </div>
+        {/* 4 — the papers the seven principles are built on */}
+        <section className="zn-guide__band" aria-labelledby="plan-meth-refs">
+          <h2
+            id="plan-meth-refs"
+            className="zn-title zn-guide__bandhead"
+            data-level="2"
+          >
+            {t("content:planMethodology.scientificReferences")}
+          </h2>
 
-          <div className="space-y-3">
+          <ul
+            className="zn-stack"
+            style={
+              {
+                "--gap": "var(--sp-6)",
+                listStyle: "none",
+                margin: 0,
+                padding: 0,
+              } as CSSProperties
+            }
+          >
             {SCIENTIFIC_REFERENCES.map((ref, i) => (
-              <div
-                key={i}
-                className="rounded-lg border border-border/50 bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent p-4 flex flex-col sm:flex-row sm:items-start gap-3"
-              >
-                <span className="shrink-0 inline-flex items-center justify-center size-8 rounded-full bg-muted text-sm font-semibold text-muted-foreground">
-                  {ref.year}
-                </span>
-                <div className="flex-1 min-w-0 space-y-1">
-                  <p className="font-medium text-sm">{ref.title}</p>
-                  <p className="text-sm text-muted-foreground">
+              <li key={i} className="zn-guide__ref">
+                <span className="zn-mono zn-guide__refyear">{ref.year}</span>
+                <div
+                  className="zn-stack zn-fill"
+                  style={{ "--gap": "var(--sp-3)" } as CSSProperties}
+                >
+                  <p className="zn-guide__reftitle">{ref.title}</p>
+                  <p className="zn-source">
                     {ref.author}
                     {ref.journal && <> &mdash; {ref.journal}</>}
                   </p>
@@ -307,16 +231,16 @@ export function PlanMethodologyPage() {
                       href={ref.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                      className="zn-prose__link zn-guide__extlink"
                     >
                       {t("content:planMethodology.viewStudy")}
-                      <ArrowRight className="size-3" />
+                      <ArrowRight />
                     </a>
                   )}
                 </div>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       </div>
     </>

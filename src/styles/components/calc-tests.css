@@ -1,0 +1,746 @@
+/* The four tools that end in a number: the two field tests (/calculators/ftp,
+ * /calculators/css), the scenario comparison (/calculators/what-if) and the
+ * page frame of the race simulator (/race-simulator).
+ *
+ * The kit does not mock any of these screens, so NOTHING is rearranged here:
+ * the columns, the cards and the order of the blocks are the ones that were
+ * already on the page. This file only repaints them — it swaps Tailwind for
+ * tokens, drops the gradients, the translucency and the backdrop blur the
+ * system forbids, and puts every figure on the mono face with tabular
+ * numerals so a column of watts, paces and minutes lines up.
+ *
+ * Two blocks live here because they are two page frames, not two systems:
+ *
+ *   .zn-ct   the tests and the comparison — a form, a figure, a table
+ *   .zn-rsp  the race simulator's frame — the rail, the anchor strip, the
+ *            mobile action bar. The plan blocks inside it are already painted
+ *            by race-sim.css and are only composed with, never redeclared.
+ *
+ * What this file does NOT redeclare: the flow vocabulary of _layout.css, the
+ * type roles of _type.css, and the paint of card.css, button.css, alert.css,
+ * dialog.css, segmented.css, select.css, slider.css, tabs.css, sheet.css,
+ * responsive-table.css, empty-state.css and the shared .zn-numfield of
+ * workout.css.
+ *
+ * Zone fills: the comparison paints them (the six zone codes of the
+ * distribution) and therefore carries the ZoneScale legend once. The two field
+ * tests do NOT — Coggan power runs to seven zones and the swim ramp to six
+ * differently-named ones, so the ink ramp would order them under the wrong
+ * names. Those tables name every zone in words in their first column instead,
+ * which is the legend the reader actually needs.
+ */
+
+/* ══ the tests and the comparison ═══════════════════════════════════════ */
+
+.zn-ct {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── head ─────────────────────────────────────────────────────────────── */
+
+/* Mono kicker, display title, one-sentence lede — the reading order of every
+   screen in the system. */
+.zn-ct__head {
+  padding-block: var(--sp-10) var(--sp-13);
+}
+
+.zn-ct__lede {
+  max-inline-size: 52ch;
+}
+
+/* A band of the page, on the rule. Sections are separated by a full-width ink
+   rule, never by blank space. */
+.zn-ct__band {
+  padding-block: var(--sp-14);
+  border-block-start: var(--border-rule);
+}
+
+.zn-ct__bandhead {
+  margin-block-end: var(--sp-11);
+}
+
+/* ── form ─────────────────────────────────────────────────────────────── */
+
+/* A label, its control, and the line that says what is wrong with it. */
+.zn-ct__field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+}
+
+/* What is wrong with the value above, in the accent — which carries danger as
+   type, never as a second fill. The outline on the field says the same thing
+   a second time. */
+.zn-ct__error {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--state-danger);
+}
+
+/* The sentence that explains a protocol or a field. Not an error. */
+.zn-ct__hint {
+  margin: 0;
+  font: var(--type-caption);
+  color: var(--text-muted);
+  max-inline-size: 64ch;
+}
+
+/* A free-text field — the name of a saved comparison. Numbers use the shared
+   .zn-numfield, which already frames a mono value and its unit. */
+.zn-ct__input {
+  inline-size: 100%;
+  min-block-size: 36px;
+  padding: var(--sp-4) var(--sp-6);
+
+  font: var(--type-body-sm);
+  color: var(--text-body);
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-md);
+}
+
+.zn-ct__input::placeholder {
+  color: var(--text-faint);
+}
+
+@media (pointer: coarse) {
+  .zn-ct__input {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* Minutes and seconds on one baseline, each in its own frame, with the unit
+   printed under the box it names. */
+.zn-ct__time {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-5);
+}
+
+.zn-ct__timepart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.zn-ct__timeunit {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+/* The colon between mm and ss. It is punctuation, not data. */
+.zn-ct__timesep {
+  padding-block-start: var(--sp-5);
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-lg);
+  color: var(--text-faint);
+}
+
+/* A number field wide enough for the value it holds. */
+.zn-ct__numfield {
+  --field-w: 56px;
+}
+
+/* A control that fills the column it sits in — a select trigger, the primary
+   call at the foot of the form. */
+.zn-ct__wide {
+  inline-size: 100%;
+}
+
+/* A slider and the figure it is currently on. */
+.zn-ct__slider {
+  inline-size: 100%;
+}
+
+/* The screen title on one side, the two records actions on the other. They
+   stack rather than squeeze once the title needs the width. */
+.zn-ct__headrow {
+  flex-wrap: wrap;
+}
+
+/* The two scenarios: side by side from 768px, one tabbed panel below it —
+   two 3-slider forms do not fit on a phone side by side. */
+.zn-ct__scenarios {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .zn-ct__scenarios {
+    display: block;
+  }
+
+  .zn-ct__scenariotabs {
+    display: none;
+  }
+}
+
+/* ── the answer ───────────────────────────────────────────────────────── */
+
+/* The figure the whole screen exists to produce: ink, not vermillon. The one
+   vermillon fill on these screens is the button that saves it. */
+.zn-ct__figure {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-3);
+}
+
+.zn-ct__figure-value {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-display-3);
+  line-height: var(--lh-display-3);
+  letter-spacing: var(--ls-display-3);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+.zn-ct__figure-unit {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* ── table ────────────────────────────────────────────────────────────── */
+
+/* A numeric column of the ResponsiveTable. The class lands on both the <th>
+   and the <td>, so the alignment is shared — but only the cell takes the mono
+   face: a column head is a kicker and keeps the kicker's own tracking. */
+.zn-ct__num {
+  text-align: end;
+}
+
+.zn-table__td.zn-ct__num {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The zone's name — "Z4 · Seuil". The code is data, the name is prose; both
+   are read as one label, so the whole cell stays on the text face and only the
+   code is emphasised. */
+.zn-ct__zonename {
+  font-weight: var(--fw-medium);
+}
+
+/* ── the comparison table ─────────────────────────────────────────────── */
+
+/* The gap between A and B. Ink when it is only a difference; the accent, as
+   type, when the generator considers the jump risky. */
+.zn-ct__delta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.zn-ct__delta[data-warning="true"] {
+  font-weight: var(--fw-bold);
+  color: var(--state-danger);
+}
+
+.zn-ct__center {
+  text-align: center;
+}
+
+/* ── two series, no second colour ─────────────────────────────────────── */
+
+/* A is hollow — paper inside an ink hairline. B is solid ink. That is the
+   printer's way of telling two series apart, and it survives greyscale, a
+   photocopy and colour blindness alike. */
+.zn-ct__chart {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--bw-hair);
+  block-size: calc(var(--sp-19) * 3);
+}
+
+.zn-ct__week {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  gap: 1px;
+  block-size: 100%;
+  min-inline-size: 0;
+}
+
+.zn-ct__bar {
+  flex: 1;
+  min-inline-size: 0;
+  min-block-size: var(--bw-rule);
+  block-size: var(--h, 0%);
+  border-radius: 2px 2px 0 0;
+}
+
+.zn-ct__bar[data-series="a"],
+.zn-ct__fill[data-series="a"],
+.zn-ct__key-swatch[data-series="a"] {
+  background: var(--surface-card);
+  border: var(--bw-hair) solid var(--line-strong);
+}
+
+.zn-ct__bar[data-series="b"],
+.zn-ct__fill[data-series="b"],
+.zn-ct__key-swatch[data-series="b"] {
+  background: var(--ink-1);
+}
+
+/* The week numbers under the columns. 10px is the mono floor. */
+.zn-ct__ticks {
+  display: flex;
+  gap: var(--bw-hair);
+  margin-block-start: var(--sp-2);
+}
+
+.zn-ct__tick {
+  flex: 1;
+  min-inline-size: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+/* Past ten weeks the odd labels stop fitting on a phone. */
+@media (max-width: 639px) {
+  .zn-ct__tick[data-dense="true"] {
+    display: none;
+  }
+}
+
+/* Which of the two is which. Printed once per graphic. */
+.zn-ct__key {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-4);
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-ct__key-swatch {
+  inline-size: 22px;
+  block-size: 12px;
+  flex: none;
+  border-radius: var(--r-xs);
+}
+
+.zn-ct__keys {
+  margin-block-start: var(--sp-8);
+}
+
+/* ── zone distribution ────────────────────────────────────────────────── */
+
+.zn-ct__zonerow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.zn-ct__zonebar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+}
+
+/* Which scenario this bar belongs to. One character, so it is a label. */
+.zn-ct__series {
+  flex: none;
+  inline-size: var(--sp-6);
+  text-align: end;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-faint);
+}
+
+.zn-ct__track {
+  flex: 1;
+  min-inline-size: 0;
+  block-size: var(--sp-8);
+  background: var(--surface-band);
+  border: var(--bw-hair) solid var(--line-divider);
+  border-radius: var(--r-xs);
+  overflow: hidden;
+}
+
+.zn-ct__fill {
+  block-size: 100%;
+  inline-size: var(--w, 0%);
+  min-inline-size: var(--bw-rule);
+  border-radius: var(--r-xs);
+  transition: inline-size var(--dur-base) var(--ease-out);
+}
+
+.zn-ct__minutes {
+  flex: none;
+  inline-size: var(--sp-19);
+  text-align: end;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+/* The ramp orders the zones but does not name them, so the legend is printed
+   once, on the sunken band, under the graphic that paints the fills. */
+.zn-ct__legend {
+  padding-block-start: var(--sp-10);
+  border-block-start: var(--border-divider);
+}
+
+/* ── insights ─────────────────────────────────────────────────────────── */
+
+.zn-ct__insights {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A ruled margin rather than a coloured dot: the kind of the line is said by
+   the weight of its rule. A warning gets the 2.5px vermillon edge, which is
+   the system's danger mark as a stroke. */
+.zn-ct__insight {
+  padding-inline-start: var(--sp-8);
+  border-inline-start: var(--bw-rule) solid var(--line-divider);
+  font: var(--type-body-sm);
+  color: var(--text-body);
+}
+
+.zn-ct__insight[data-type="stimulus"] {
+  border-inline-start-color: var(--line-strong);
+}
+
+.zn-ct__insight[data-type="warning"] {
+  border-inline-start: var(--bw-heavy) solid var(--accent);
+}
+
+/* ── saved records ────────────────────────────────────────────────────── */
+
+.zn-ct__saved {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-block-size: calc(var(--sp-19) * 5);
+  overflow-y: auto;
+}
+
+/* A list card never floats: an ink outline, no shadow. */
+.zn-ct__saveditem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  padding: var(--sp-5) var(--sp-8);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-ct__savedname {
+  font: var(--fw-medium) var(--fs-body-sm) / 1.3 var(--font-text);
+}
+
+.zn-ct__saveddate {
+  display: block;
+  margin-block-start: var(--sp-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+/* ── waiting ──────────────────────────────────────────────────────────── */
+
+/* An ink ring turning inside the button that started the wait. */
+.zn-ct__spinner {
+  animation: zoned-spin 700ms linear infinite;
+}
+
+/* ══ race simulator — the page frame ════════════════════════════════════ */
+
+/* The plan blocks, the pacing table, the two graphics and the run sheet are
+   painted by race-sim.css. What is left here is the frame around them. */
+
+.zn-rsp {
+  padding-block: var(--sp-10) calc(var(--sp-19) + var(--sp-15));
+}
+
+@media (min-width: 1024px) {
+  .zn-rsp {
+    padding-block-end: var(--sp-15);
+  }
+}
+
+.zn-rsp__head {
+  padding-block-end: var(--sp-13);
+}
+
+/* The line that says this plan arrived through a shared link, and the folded
+   inputs under it. */
+.zn-rsp__banner,
+.zn-rsp__summary {
+  margin-block-end: var(--sp-10);
+}
+
+.zn-rsp__layout {
+  display: grid;
+  gap: var(--sp-12);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .zn-rsp__layout {
+    grid-template-columns: 320px minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .zn-rsp__layout {
+    grid-template-columns: 360px minmax(0, 1fr);
+  }
+}
+
+/* Settings before the plan exists, the anchor rail after it. The header is in
+   flow in this design — it scrolls away — so the rail sticks to the top of the
+   viewport with only the page's own breathing room above it. */
+.zn-rsp__rail {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .zn-rsp__rail {
+    display: block;
+    position: sticky;
+    inset-block-start: var(--sp-10);
+    align-self: start;
+  }
+}
+
+.zn-rsp__panel {
+  min-inline-size: 0;
+}
+
+/* The settings panel, in the rail and above the plan on a phone. Named with
+   the flush size it carries, which zeroes the block padding at a higher
+   specificity than a bare class could beat. */
+.zn-card[data-size="flush"].zn-rsp__settings {
+  gap: var(--sp-10);
+  padding: var(--sp-11);
+}
+
+.zn-rsp__closeform {
+  inline-size: 100%;
+}
+
+.zn-rsp__mobileform {
+  margin-block-end: var(--sp-8);
+}
+
+@media (min-width: 1024px) {
+  .zn-rsp__mobileform {
+    display: none;
+  }
+}
+
+/* The view switch and the sentence that says what the view is for. */
+.zn-rsp__viewbar {
+  margin-block-end: var(--sp-8);
+}
+
+@media (max-width: 639px) {
+  .zn-rsp__switch {
+    inline-size: 100%;
+  }
+}
+
+@media (min-width: 640px) {
+  .zn-rsp__switch {
+    min-inline-size: 256px;
+  }
+}
+
+/* The mobile anchor strip. It used to pin 56px down, under a header that was
+   fixed; that header is in flow now, so the strip pins to the top of the
+   viewport instead — 56px lower left a band of page scrolling above it. Opaque
+   cream on an ink rule: the system has no translucency and no backdrop blur.
+
+   The chips pay their own bleed for a 16px gutter; here the strip pays the
+   page's real gutter instead, so the first and last chip clear it exactly. */
+.zn-rsp__strip {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 20;
+
+  margin-inline: calc(var(--pad-screen-x) * -1);
+  margin-block-end: var(--sp-6);
+  padding: var(--sp-5) var(--pad-screen-x) var(--sp-4);
+
+  background: var(--surface-page);
+  border-block-end: var(--border-rule);
+}
+
+.zn-rsp__strip .zn-rs-chips {
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+@media (min-width: 1024px) {
+  .zn-rsp__strip {
+    display: none;
+  }
+}
+
+.zn-rsp__sections {
+  display: grid;
+  align-items: start;
+  gap: var(--sp-8);
+}
+
+@media (min-width: 1280px) {
+  .zn-rsp__sections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* The pacing table is the widest thing on the page; it takes both columns. */
+.zn-rsp__section--wide {
+  grid-column: 1 / -1;
+}
+
+/* A jumped-to heading has to clear the sticky strip. Named alongside
+   .zn-rs-section so the override does not depend on the import order. */
+.zn-rs-section.zn-rsp__section {
+  scroll-margin-block-start: calc(var(--sp-19) + var(--sp-8));
+}
+
+@media (min-width: 1024px) {
+  .zn-rs-section.zn-rsp__section {
+    scroll-margin-block-start: var(--sp-12);
+  }
+}
+
+/* ── saved simulations ────────────────────────────────────────────────── */
+
+.zn-rsp__saved {
+  margin-block-start: var(--sp-15);
+  padding-block-start: var(--sp-13);
+  border-block-start: var(--border-rule);
+}
+
+.zn-rsp__savedtitle {
+  margin: 0 0 var(--sp-8);
+}
+
+.zn-rsp__savedlist {
+  display: grid;
+  gap: var(--sp-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .zn-rsp__savedlist {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ── the empty plan ───────────────────────────────────────────────────── */
+
+/* Dashed, because nothing has been printed on it yet. */
+.zn-card[data-size="flush"].zn-rsp__empty {
+  gap: var(--sp-13);
+  padding: var(--sp-15) var(--pad-card);
+  border: var(--border-dashed);
+}
+
+.zn-rsp__steps {
+  display: grid;
+  gap: var(--sp-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .zn-rsp__steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.zn-rsp__step {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  font: var(--type-body-sm);
+}
+
+.zn-rsp__step > svg {
+  flex: none;
+  color: var(--text-faint);
+}
+
+/* ── mobile action bar ────────────────────────────────────────────────── */
+
+/* The PDF is what ends up on a phone on race morning, so its button is
+   reachable at all times below the fold. Opaque cream on an ink rule — no
+   blur, no translucency. */
+.zn-rsp__bar {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 30;
+
+  display: flex;
+  gap: var(--sp-4);
+  padding: var(--sp-6) var(--pad-screen-x);
+  padding-block-end: calc(var(--sp-6) + env(safe-area-inset-bottom));
+
+  background: var(--surface-page);
+  border-block-start: var(--border-rule);
+}
+
+@media (min-width: 1024px) {
+  .zn-rsp__bar {
+    display: none;
+  }
+}
+
+.zn-rsp__bar .zn-rs-actions {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* ── the settings sheet ───────────────────────────────────────────────── */
+
+.zn-rsp__sheet {
+  max-block-size: 85vh;
+  overflow-y: auto;
+}
+
+.zn-rsp__sheetbody {
+  padding: 0 var(--sp-8) var(--sp-13);
+}

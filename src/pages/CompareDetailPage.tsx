@@ -1,71 +1,88 @@
+import type { CSSProperties, ReactNode } from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
-import { getCompetitorBySlug, type ComparisonValue } from "@/data/competitors";
-import { CheckIcon, X, Shield, EyeOff, GithubIcon, Sparkles, ArrowLeft, ArrowRight } from "@/components/icons";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  ResponsiveTable,
+  type ResponsiveTableColumn,
+} from "@/components/ui/responsive-table";
+import {
+  getCompetitorBySlug,
+  type ComparisonCriterion,
+  type ComparisonValue,
+} from "@/data/competitors";
+import {
+  CheckIcon,
+  X,
+  Shield,
+  EyeOff,
+  GithubIcon,
+  Sparkles,
+  ArrowLeft,
+  ArrowRight,
+} from "@/components/icons";
 import { usePickLang } from "@/lib/i18n-utils";
 
 const SITE_URL = "https://zoned.run";
 
-function ComparisonBadge({ value, t }: { value: ComparisonValue; t: (key: string) => string }) {
+const HEAD_GAP = { "--gap": "var(--sp-6)" } as CSSProperties;
+
+/**
+ * One answer in the comparison grid.
+ *
+ * The four shapes used to be four hues — green, red, amber, plain — which read
+ * as a verdict rather than as a value: "no account required" is a yes on our
+ * column and a no on theirs, and colour cannot say that. Here the glyph and
+ * the word carry the value, the ink weight carries nothing else, and a figure
+ * (a price, a count) is set in mono so the two columns line up.
+ */
+function ComparisonBadge({
+  value,
+  t,
+}: {
+  value: ComparisonValue;
+  t: (key: string) => string;
+}) {
   const pickLang = usePickLang();
   switch (value.type) {
     case "yes":
       return (
-        <span className="inline-flex items-center gap-1 text-green-600 dark:text-green-400 font-medium text-sm">
-          <CheckIcon className="w-3.5 h-3.5" />
+        <span className="zn-ref__val" data-value="yes">
+          <CheckIcon />
           {t("compare.values.yes")}
         </span>
       );
     case "no":
       return (
-        <span className="inline-flex items-center gap-1 text-red-500 dark:text-red-400 font-medium text-sm">
-          <X className="w-3.5 h-3.5" />
+        <span className="zn-ref__val" data-value="no">
+          <X />
           {t("compare.values.no")}
         </span>
       );
     case "partial":
       return (
-        <span className="inline-flex items-center gap-1 text-amber-600 dark:text-amber-400 text-sm">
-          ~ {pickLang(value, "label")}
+        <span className="zn-ref__val" data-value="partial">
+          {pickLang(value, "label")}
         </span>
       );
     case "text":
       return (
-        <span className="text-sm text-foreground">
+        <span className="zn-ref__val" data-value="text">
           {pickLang(value, "value")}
         </span>
       );
   }
 }
 
-const advantageCards = [
-  {
-    key: "free",
-    icon: <Sparkles className="w-5 h-5" />,
-    color: "from-green-500/10 to-emerald-500/5 border-green-500/20",
-    iconColor: "text-green-600 dark:text-green-400",
-  },
-  {
-    key: "noAccount",
-    icon: <Shield className="w-5 h-5" />,
-    color: "from-blue-500/10 to-sky-500/5 border-blue-500/20",
-    iconColor: "text-blue-600 dark:text-blue-400",
-  },
-  {
-    key: "noData",
-    icon: <EyeOff className="w-5 h-5" />,
-    color: "from-orange-500/10 to-amber-500/5 border-orange-500/20",
-    iconColor: "text-orange-600 dark:text-orange-400",
-  },
-  {
-    key: "openSource",
-    icon: <GithubIcon className="w-5 h-5" />,
-    color: "from-purple-500/10 to-violet-500/5 border-purple-500/20",
-    iconColor: "text-purple-600 dark:text-purple-400",
-  },
-] as const;
+/** The four reasons, each an outlined block with an ink glyph. */
+const advantageCards: ReadonlyArray<{ key: string; icon: ReactNode }> = [
+  { key: "free", icon: <Sparkles /> },
+  { key: "noAccount", icon: <Shield /> },
+  { key: "noData", icon: <EyeOff /> },
+  { key: "openSource", icon: <GithubIcon /> },
+];
 
 export function CompareDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -82,6 +99,31 @@ export function CompareDetailPage() {
   const tagline = pickLang(competitor, "tagline");
   const description = pickLang(competitor, "description");
   const title = `Zoned vs ${name}`;
+
+  // The middle column is us, and it is inverted end to end — the answer to
+  // "which one is Zoned" then survives greyscale with no colour spent on it.
+  const columns: ResponsiveTableColumn<ComparisonCriterion>[] = [
+    {
+      key: "criterion",
+      header: t("compare.tableHeader.criterion"),
+      className: "zn-ref__crit",
+      cell: (criterion) => pickLang(criterion, "label"),
+      hideOnMobile: true,
+    },
+    {
+      key: "zoned",
+      header: t("compare.tableHeader.zoned"),
+      className: "zn-ref__us",
+      cell: (criterion) => <ComparisonBadge value={criterion.zoned} t={t} />,
+    },
+    {
+      key: "competitor",
+      header: name,
+      cell: (criterion) => (
+        <ComparisonBadge value={criterion.competitor} t={t} />
+      ),
+    },
+  ];
 
   return (
     <>
@@ -107,95 +149,65 @@ export function CompareDetailPage() {
         ]}
       />
 
-      <div className="py-8 space-y-12 max-w-3xl mx-auto">
-        {/* Back link */}
-        <Link
-          to="/compare"
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          {t("compare.backToCompare")}
-        </Link>
-
-        {/* Hero */}
-        <section className="space-y-4">
-          <p className="text-xs uppercase tracking-widest text-primary font-semibold">
-            Zoned {t("compare.tableHeader.zoned") !== "Zoned" ? "" : "vs"} {name}
-          </p>
-          <EditorialTitle as="h1">
-            Zoned <span className="text-muted-foreground not-italic">vs</span> {name}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground max-w-xl">
-            {tagline}
-          </FadeUp>
-          <div className="flex flex-wrap gap-2">
-            {[t("comparePage.badgeFree"), t("comparePage.badgeNoAccount"), "Open Source"].map((badge) => (
-              <span
-                key={badge}
-                className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-0.5 text-xs font-medium text-primary"
-              >
-                {badge}
-              </span>
-            ))}
+      <div className="zn-ref">
+        {/* 1 — the way out, then what this page compares */}
+        <section className="zn-ref__head zn-stack" style={HEAD_GAP}>
+          <Link to="/compare" className="zn-ref__back">
+            <ArrowLeft />
+            {t("compare.backToCompare")}
+          </Link>
+          <span className="zn-kicker">{t("compare.subtitle")}</span>
+          <h1 className="zn-display" data-level="2">
+            {title}
+          </h1>
+          <p className="zn-body zn-body--lead zn-ref__lede">{tagline}</p>
+          <div className="zn-cluster">
+            {[t("comparePage.badgeFree"), t("comparePage.badgeNoAccount"), "Open Source"].map(
+              (badge) => (
+                <Badge key={badge} variant="outline">
+                  {badge}
+                </Badge>
+              ),
+            )}
           </div>
         </section>
 
-        {/* Comparison table */}
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold">
-            {t("comparePage.featureComparison")}
-          </h2>
-          <div className="overflow-x-auto rounded-xl border border-border">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border bg-muted/40">
-                  <th className="text-left px-4 py-3 font-medium text-muted-foreground w-1/2">
-                    {t("compare.tableHeader.criterion")}
-                  </th>
-                  <th className="text-left px-4 py-3 font-medium text-primary">
-                    {t("compare.tableHeader.zoned")}
-                  </th>
-                  <th className="text-left px-4 py-3 font-medium text-muted-foreground">
-                    {name}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {competitor.criteria.map((criterion, i) => (
-                  <tr
-                    key={criterion.key}
-                    className={`border-b border-border/50 last:border-0 ${i % 2 === 0 ? "" : "bg-muted/20"}`}
-                  >
-                    <td className="px-4 py-3 text-muted-foreground">
-                      {pickLang(criterion, "label")}
-                    </td>
-                    <td className="px-4 py-3">
-                      <ComparisonBadge value={criterion.zoned} t={t} />
-                    </td>
-                    <td className="px-4 py-3">
-                      <ComparisonBadge value={criterion.competitor} t={t} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* 2 — the grid, criterion by criterion */}
+        <section className="zn-ref__section" aria-labelledby="compare-table">
+          <div className="zn-row zn-row--split zn-ref__sectionhead">
+            <h2 id="compare-table" className="zn-title" data-level="3">
+              {t("comparePage.featureComparison")}
+            </h2>
+            <span className="zn-mono zn-faint">
+              {t("compare.criteriaCount", { count: competitor.criteria.length })}
+            </span>
           </div>
+          <ResponsiveTable
+            data={competitor.criteria}
+            columns={columns}
+            rowKey="key"
+            caption={t("comparePage.featureComparison")}
+            mobileCardTitle={(criterion) => pickLang(criterion, "label")}
+          />
         </section>
 
-        {/* Advantages */}
-        <section className="space-y-4">
-          <h2 className="text-xl font-semibold">{t("compare.advantages.title")}</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {/* 3 — the four reasons */}
+        <section className="zn-ref__section" aria-labelledby="compare-advantages">
+          <div className="zn-ref__sectionhead">
+            <h2 id="compare-advantages" className="zn-title" data-level="3">
+              {t("compare.advantages.title")}
+            </h2>
+          </div>
+          <div className="zn-grid" style={{ "--cols": 4 } as CSSProperties}>
             {advantageCards.map((card) => (
-              <div
-                key={card.key}
-                className={`rounded-xl border bg-gradient-to-br p-4 space-y-1.5 ${card.color}`}
-              >
-                <div className={`${card.iconColor}`}>{card.icon}</div>
-                <p className="font-semibold text-sm">
+              <div key={card.key} className="zn-ref__adv">
+                <span className="zn-ref__adv-glyph" aria-hidden="true">
+                  {card.icon}
+                </span>
+                <p className="zn-ref__adv-title">
                   {t(`compare.advantages.${card.key}.title`)}
                 </p>
-                <p className="text-xs text-muted-foreground">
+                <p className="zn-caption zn-muted">
                   {t(`compare.advantages.${card.key}.description`)}
                 </p>
               </div>
@@ -203,18 +215,19 @@ export function CompareDetailPage() {
           </div>
         </section>
 
-        {/* CTA */}
-        <section>
-          <div className="rounded-2xl border bg-gradient-to-br from-primary/10 to-transparent p-8 text-center space-y-4">
-            <h2 className="text-2xl font-bold">{t("compare.cta.title")}</h2>
-            <p className="text-muted-foreground">{t("compare.cta.subtitle")}</p>
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              {t("compare.cta.button")}
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+        {/* 4 — the screen's one primary action */}
+        <section className="zn-ref__section">
+          <div className="zn-ref__cta">
+            <h2 className="zn-title" data-level="3">
+              {t("compare.cta.title")}
+            </h2>
+            <p className="zn-body zn-muted">{t("compare.cta.subtitle")}</p>
+            <Button asChild size="lg">
+              <Link to="/">
+                {t("compare.cta.button")}
+                <ArrowRight />
+              </Link>
+            </Button>
           </div>
         </section>
       </div>

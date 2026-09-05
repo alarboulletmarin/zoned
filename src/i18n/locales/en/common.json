@@ -305,7 +305,8 @@
     "notFound": {
       "title": "Page not found",
       "description": "The page you are looking for does not exist or has been moved.",
-      "backHome": "Back to home"
+      "backHome": "Back to home",
+      "body": "This address leads to no page. Your saved plans, sessions and settings are intact."
     },
     "boundary": {
       "title": "Something went wrong",
@@ -528,7 +529,15 @@
       "beginner": "Beginner",
       "intermediate": "Intermediate",
       "advanced": "Advanced"
-    }
+    },
+    "kicker": "{{collections}} collections · {{groups}} themes",
+    "groupCount_one": "{{count}} collection",
+    "groupCount_other": "{{count}} collections",
+    "workoutCount_one": "{{count}} workout",
+    "workoutCount_other": "{{count}} workouts",
+    "emptyTitle": "No collection loaded",
+    "emptyDescription": "The catalogue returned no path. Reload the page, or open the library and its {{workouts}} sessions.",
+    "emptyAction": "Open the library"
   },
   "hints": {
     "draw": {
@@ -642,14 +651,23 @@
   },
   "collectionsDetail": {
     "collectionNotFound": "Collection not found",
-    "noWorkoutsFound": "No workouts found for this collection."
+    "noWorkoutsFound": "No workouts found for this collection.",
+    "notFoundDescription": "This address matches none of the {{count}} paths. The index lists them all.",
+    "noWorkoutsTitle": "No session loaded",
+    "noWorkoutsDescription": "The {{count}} sessions of this path could not be read. Reload the page to try again.",
+    "kicker": "{{count}} sessions · {{kind}}"
   },
   "favorites": {
-    "title": "My Favorites",
+    "title": "My favorites",
     "savedWorkouts": "{{count}} saved workout",
     "savedWorkouts_plural": "{{count}} saved workouts",
     "noFavoritesYet": "No favorites yet",
-    "noFavoritesDesc": "Browse the library and tap the heart icon to save your favorite workouts here."
+    "noFavoritesDesc": "Browse the library and tap the heart icon to save your favorite workouts here.",
+    "subtitle": "The sessions you starred, ready to run again.",
+    "kicker_one": "{{count}} favourite · {{total}} in the catalogue",
+    "kicker_other": "{{count}} favourites · {{total}} in the catalogue",
+    "emptyDescription": "No favourite yet. The library holds {{total}}: tap a session's heart to keep it here.",
+    "emptyAction": "Open the library"
   },
   "comparePage": {
     "whyComparisons": "Why these comparisons?",
@@ -680,6 +698,8 @@
     "title": "Comparisons",
     "subtitle": "Zoned vs alternatives",
     "backToCompare": "Back to comparisons",
+    "criteriaCount_one": "{{count}} criterion",
+    "criteriaCount_other": "{{count}} criteria",
     "tableHeader": {
       "criterion": "Criterion",
       "zoned": "Zoned",
@@ -717,7 +737,11 @@
     "hub": {
       "title": "Alternatives to Runna, Kiprun Pacer & Campus Coach",
       "description": "Compare Zoned with the main running apps. Pricing, privacy, features.",
-      "compareWith": "Compare with {{name}}"
+      "compareWith": "Compare with {{name}}",
+      "kicker_one": "{{count}} app compared",
+      "kicker_other": "{{count}} apps compared",
+      "readComparison": "Read the comparison",
+      "noteKicker": "Where we stand"
     }
   },
   "pages": {

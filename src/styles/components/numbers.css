@@ -269,3 +269,12 @@
   gap: var(--sp-5);
   max-inline-size: 68ch;
 }
+
+/* ── control ──────────────────────────────────────────────────────────── */
+
+/* A select that fills the column it is given. select.css deliberately declares
+   no width on the trigger, so the width belongs to the screen that places it —
+   here, the two dialogs on /profile. */
+.zn-select-trigger.zn-num__control {
+  inline-size: 100%;
+}

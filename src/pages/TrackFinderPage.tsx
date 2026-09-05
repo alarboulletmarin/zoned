@@ -1,12 +1,24 @@
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { ArrowRight, Download, EyeOff, Loader2, MapPin, RotateCcw, Save } from "@/components/icons";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { StatBlock } from "@/components/domain/StatBlock";
 import { AddressSearchInput } from "@/components/domain/AddressSearchInput";
 import { findNearbyTracks, type NearbyTrack } from "@/lib/routeGenerator/poi/overpass";
 import { BrouterError, routeFromWaypoints } from "@/lib/routeGenerator";
@@ -14,7 +26,6 @@ import { downloadRouteGpx } from "@/lib/export/gpx";
 import { useRoutes } from "@/hooks/useRoutes";
 import { useSettings } from "@/hooks/useSettings";
 import { formatDurationMinutes } from "@/components/visualization/transforms";
-import { cn } from "@/lib/utils";
 import type { Route, RouteCoordinate, RoutePoiSummary } from "@/types/route";
 
 const RouteMap = lazy(() =>
@@ -24,10 +35,18 @@ const RouteMap = lazy(() =>
 );
 
 function MapSkeleton() {
-  return (
-    <div className="h-72 w-full animate-pulse rounded-xl border border-border/60 bg-muted/40 sm:h-96 lg:h-[28rem]" />
-  );
+  return <Skeleton className="zn-rt__mapskel" />;
 }
+
+/**
+ * RouteMap ships its own Tailwind base — `h-72 sm:h-96 lg:h-[28rem]` plus a
+ * rounded border. It is a visualization component and out of this lot's scope,
+ * and Tailwind's utilities layer beats the component layer this family's CSS
+ * lives in, so the override has to be Tailwind too. Only the frame is dropped:
+ * the outline, the radius and the clipping belong to `.zn-rt__map`, and the
+ * map keeps its own heights.
+ */
+const MAP_FRAME = "rounded-none border-0";
 
 const SEARCH_RADIUS_M = 15_000;
 const MAX_RESULTS = 10;
@@ -206,17 +225,20 @@ export function TrackFinderPage() {
     return (
       <>
         <SEOHead title={t("trackFinder.title")} description={t("trackFinder.subtitle")} canonical="/routes/tracks" noindex />
-        <div className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
-          <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed border-border/60 bg-muted/10 p-10 text-center">
-            <EyeOff className="size-10 text-muted-foreground" />
-            <div className="space-y-1">
-              <h1 className="text-xl font-bold">{t("disabled.title")}</h1>
-              <p className="text-sm text-muted-foreground">{t("disabled.body")}</p>
-            </div>
-            <Button asChild>
-              <Link to="/settings">{t("disabled.cta")}</Link>
-            </Button>
-          </div>
+        <div className="zn-rt">
+          <section className="zn-rt__band zn-rt__band--first">
+            <EmptyState
+              variant="not-started"
+              icon={EyeOff}
+              title={t("disabled.title")}
+              description={t("disabled.body")}
+              action={
+                <Button asChild>
+                  <Link to="/settings">{t("disabled.cta")}</Link>
+                </Button>
+              }
+            />
+          </section>
         </div>
       </>
     );
@@ -229,71 +251,96 @@ export function TrackFinderPage() {
         description={t("trackFinder.subtitle")}
         canonical="/routes/tracks"
       />
-      <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <header className="mb-6 space-y-1">
-          <EditorialTitle as="h1" size="md">{t("trackFinder.title")}</EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-sm text-muted-foreground">
-            {t("trackFinder.subtitle")}
-          </FadeUp>
-          <Link
-            to="/routes"
-            className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
-          >
-            {t("trackFinder.backToGenerator")} <ArrowRight className="size-3.5" />
-          </Link>
-        </header>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,360px)_1fr] xl:gap-8">
-          <aside className="min-w-0 space-y-4">
-            <div className="rounded-xl border border-border/60 bg-background p-4 sm:p-5">
-              <fieldset className="space-y-2">
-                <legend className="text-sm font-semibold">{t("form.start")}</legend>
+      <div className="zn-rt">
+        {/* 1 — what this screen looks for, and how far it looks */}
+        <section className="zn-rt__band zn-rt__band--first">
+          <div className="zn-rt__head">
+            <div
+              className="zn-stack zn-rt__headtext"
+              style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+            >
+              <span className="zn-kicker">
+                {t("trackFinder.kicker", { radius: Math.round(SEARCH_RADIUS_M / 1_000) })}
+              </span>
+              <h1 className="zn-display" data-level="2">
+                {t("trackFinder.title")}
+              </h1>
+              <p className="zn-body zn-body--lead zn-rt__lede">{t("trackFinder.subtitle")}</p>
+            </div>
+
+            <Button variant="outline" asChild>
+              <Link to="/routes">
+                {t("trackFinder.backToGenerator")}
+                <ArrowRight size={17} />
+              </Link>
+            </Button>
+          </div>
+        </section>
+
+        {/* 2 — the search on the left, the cartography on the right */}
+        <section className="zn-rt__band zn-rt__split">
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-10)" } as CSSProperties}
+          >
+            <div className="zn-rt__panelcard">
+              <fieldset className="zn-rt__field">
+                <legend className="zn-rt__legend">{t("form.start")}</legend>
                 <AddressSearchInput
                   onSelect={(point, label) => updateStart(point, label)}
                   onClear={() => updateStart(null, null)}
                   selectedLabel={startLabel}
                   disabled={isLocating}
                 />
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="zn-cluster">
                   <Button
                     type="button"
-                    variant={start ? "outline" : "secondary"}
+                    variant="outline"
                     size="sm"
                     onClick={requestGps}
                     disabled={isLocating}
-                    className="gap-2"
                   >
-                    {isLocating ? <Loader2 className="size-4 animate-spin" /> : <MapPin className="size-4" />}
+                    {isLocating ? (
+                      <Loader2 size={16} className="zn-route-spin" />
+                    ) : (
+                      <MapPin size={16} />
+                    )}
                     {isLocating ? t("form.gpsLocating") : t("form.useGps")}
                   </Button>
                   {start && (
-                    <span className="text-[11px] tabular-nums text-muted-foreground">
+                    <span className="zn-route-form__coords">
                       {start[1].toFixed(4)}, {start[0].toFixed(4)}
                     </span>
                   )}
                 </div>
               </fieldset>
-              <Button
-                type="button"
-                size="lg"
-                className="mt-4 h-12 w-full text-base font-semibold"
-                onClick={onSearch}
-                disabled={!start || isSearching}
+
+              <div
+                className="zn-stack"
+                style={{ "--gap": "var(--sp-5)" } as CSSProperties}
               >
-                {isSearching && <Loader2 className="mr-2 size-4 animate-spin" />}
-                {t("trackFinder.search")}
-              </Button>
-              <p className="mt-2 text-[11px] text-muted-foreground">
-                {t("trackFinder.searchHint", { radius: Math.round(SEARCH_RADIUS_M / 1_000) })}
-              </p>
+                <Button
+                  type="button"
+                  className="zn-rt__submit"
+                  onClick={onSearch}
+                  disabled={!start || isSearching}
+                >
+                  {isSearching && <Loader2 size={17} className="zn-route-spin" />}
+                  {t("trackFinder.search")}
+                </Button>
+                <p className="zn-rt__hint">
+                  {t("trackFinder.searchHint", { radius: Math.round(SEARCH_RADIUS_M / 1_000) })}
+                </p>
+              </div>
             </div>
 
             {tracks && tracks.length > 0 && (
-              <div className="rounded-xl border border-border/60 bg-background p-2">
-                <p className="px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              <div className="zn-rt__tracks">
+                <p className="zn-kicker zn-rt__tracks-head">
                   {t("trackFinder.results", { count: tracks.length })}
                 </p>
-                <ul className="space-y-1">
+                <ul className="zn-rt__tracklist">
                   {tracks.map((track) => {
                     const isSelected = track.id === selectedTrackId;
                     return (
@@ -301,23 +348,21 @@ export function TrackFinderPage() {
                         <button
                           type="button"
                           onClick={() => onPickTrack(track)}
-                          className={cn(
-                            "flex w-full items-start justify-between gap-3 rounded-lg border p-3 text-left transition-colors",
-                            isSelected
-                              ? "border-primary bg-primary/5"
-                              : "border-transparent hover:border-border/60 hover:bg-accent/50",
-                          )}
+                          className="zn-rt__track"
+                          aria-pressed={isSelected}
                         >
-                          <div className="min-w-0">
-                            <p className="truncate text-sm font-semibold text-foreground">
+                          <span className="zn-fill">
+                            <span className="zn-rt__track-name">
                               {track.name ?? t("trackFinder.unnamedTrack")}
-                            </p>
-                            <p className="text-[11px] tabular-nums text-muted-foreground">
-                              {t("trackFinder.distance", { km: formatHaversineKm(track.haversineDistanceM) })}
-                            </p>
-                          </div>
+                            </span>
+                            <span className="zn-rt__track-dist">
+                              {t("trackFinder.distance", {
+                                km: formatHaversineKm(track.haversineDistanceM),
+                              })}
+                            </span>
+                          </span>
                           {isSelected && isRouting && (
-                            <Loader2 className="size-4 shrink-0 animate-spin text-primary" />
+                            <Loader2 size={16} className="zn-rt__track-wait" />
                           )}
                         </button>
                       </li>
@@ -326,57 +371,59 @@ export function TrackFinderPage() {
                 </ul>
               </div>
             )}
-          </aside>
+          </div>
 
-          <main className="min-w-0 space-y-4 lg:sticky lg:top-20 lg:self-start">
-            <div className="relative">
+          <div
+            className="zn-stack zn-rt__sticky"
+            style={{ "--gap": "var(--sp-10)" } as CSSProperties}
+          >
+            <div className="zn-rt__map">
               <Suspense fallback={<MapSkeleton />}>
                 <RouteMap
                   points={route?.points ?? []}
                   pois={tracks ? trackPois : route?.pois}
                   start={route ? null : start}
                   showDirection={!!route}
+                  className={MAP_FRAME}
                 />
               </Suspense>
             </div>
 
             {route && (
               <>
-                <div className="grid grid-cols-3 gap-3 rounded-xl border border-border/60 bg-muted/20 p-4 text-sm">
-                  <div>
-                    <p className="text-xs text-muted-foreground">{t("result.actualDistance")}</p>
-                    <p className="text-lg font-semibold tabular-nums">
-                      {(route.distanceM / 1000).toFixed(2)} km
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">{t("result.elevationGain")}</p>
-                    <p className="text-lg font-semibold tabular-nums">{route.elevationGainM} m</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">{t("result.estimatedDuration")}</p>
-                    <p className="text-lg font-semibold tabular-nums">
-                      {formatDurationMinutes(route.estimatedDurationSec / 60)}
-                    </p>
-                  </div>
+                <div className="zn-rt__figures">
+                  <StatBlock
+                    size="sm"
+                    value={`${(route.distanceM / 1000).toFixed(2)} km`}
+                    label={t("result.actualDistance")}
+                  />
+                  <StatBlock
+                    size="sm"
+                    value={`${route.elevationGainM} m`}
+                    label={t("result.elevationGain")}
+                  />
+                  <StatBlock
+                    size="sm"
+                    value={formatDurationMinutes(route.estimatedDurationSec / 60)}
+                    label={t("result.estimatedDuration")}
+                  />
                 </div>
 
-                <div className="flex flex-wrap gap-2">
-                  <Button onClick={onSave} className="gap-2">
-                    <Save className="size-4" />
+                <div className="zn-cluster">
+                  <Button onClick={onSave}>
+                    <Save size={17} />
                     {t("result.save")}
                   </Button>
                   <Button
                     variant="outline"
                     onClick={() => selectedTrack && void buildRouteToTrack(selectedTrack)}
-                    className="gap-2"
                     disabled={!selectedTrack || isRouting}
                   >
-                    <RotateCcw className="size-4" />
+                    <RotateCcw size={17} />
                     {t("form.regenerate")}
                   </Button>
-                  <Button variant="outline" onClick={onExport} className="gap-2">
-                    <Download className="size-4" />
+                  <Button variant="outline" onClick={onExport}>
+                    <Download size={17} />
                     {t("result.exportGpx")}
                   </Button>
                 </div>
@@ -384,18 +431,16 @@ export function TrackFinderPage() {
             )}
 
             {!route && tracks && tracks.length > 0 && !isRouting && (
-              <div className="rounded-xl border border-dashed border-border/60 bg-muted/10 p-4 text-sm text-muted-foreground">
-                {t("trackFinder.pickHint")}
-              </div>
+              <Alert kind="info">{t("trackFinder.pickHint")}</Alert>
             )}
 
             {tracks?.length === 0 && (
-              <div className="rounded-xl border border-amber-300/60 bg-amber-50/80 p-4 text-sm text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/30 dark:text-amber-100">
+              <Alert kind="warning" title={t("trackFinder.noResultsTitle")}>
                 {t("trackFinder.noResults")}
-              </div>
+              </Alert>
             )}
-          </main>
-        </div>
+          </div>
+        </section>
       </div>
     </>
   );

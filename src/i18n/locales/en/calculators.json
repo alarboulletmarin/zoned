@@ -48,7 +48,9 @@
       "zoneForYou": "Zone {{zone}} for you",
       "displayingUnits": "Displaying in {{system}} units. Change in Settings.",
       "metric": "metric",
-      "imperial": "imperial"
+      "imperial": "imperial",
+      "kicker": "min/km · km/h",
+      "yourZone": "Your zone"
     },
     "vma": {
       "seoTitle": "VMA from Race Time",
@@ -71,7 +73,8 @@
       "hours": "Hours",
       "minutes": "Minutes",
       "seconds": "Seconds",
-      "hoursShort": "h"
+      "hoursShort": "h",
+      "kicker": "race time → VMA"
     },
     "ftp": {
       "seoTitle": "FTP Cycling Test",
@@ -80,6 +83,8 @@
       "seoAppDescription": "Estimate your FTP from a 20-min or ramp test",
       "seoBreadcrumb": "FTP Test",
       "title": "FTP Test",
+      "kicker": "20 min or ramp",
+      "invalidPower": "Power must be between 1 and {{max}} W.",
       "description": "Enter the result of a power test to estimate your FTP (Functional Threshold Power). Coggan zones are derived from it.",
       "protocol": "Protocol",
       "protocol20min": "20-minute test",
@@ -109,6 +114,8 @@
       "seoAppDescription": "Estimate your CSS from a 400m + 200m test",
       "seoBreadcrumb": "CSS Test",
       "title": "CSS Test",
+      "kicker": "400 m then 200 m",
+      "invalidOrder": "The 400 m must be slower than the 200 m. Fix one of the two times.",
       "description": "Enter your 400m and 200m times to estimate your CSS (Critical Swim Speed) and your swim pace zones.",
       "protocolHelp": "Swim a 400m all-out, recover 5-10 min, then swim a 200m all-out. CSS = (400 − 200) ÷ (t400 − t200), reported as seconds per 100m.",
       "time400": "400m time",
@@ -159,7 +166,13 @@
       "total": "Total",
       "downloadPng": "Download PNG",
       "emptyState": "Enter a distance and target time to generate your splits.",
-      "customDistancePlaceholder": "15"
+      "customDistancePlaceholder": "15",
+      "kicker": "km by km",
+      "emptyTitle": "No splits yet",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds",
+      "customDistanceLabel": "Custom distance in km"
     },
     "equivalence": {
       "seoTitle": "Race Equivalence — Riegel Formula",
@@ -181,7 +194,8 @@
       "riegelExplanation": "Based on Riegel's formula (1977), used by most running calculators. More reliable between similar distances (5K→10K) than distant ones (5K→Marathon).",
       "hours": "Hours",
       "minutes": "Minutes",
-      "seconds": "Seconds"
+      "seconds": "Seconds",
+      "kicker": "5K → marathon"
     },
     "ageGraded": {
       "seoTitle": "Age-Graded Performance — Level Score",
@@ -190,7 +204,7 @@
       "seoAppDescription": "Compare your performance to the age and gender adjusted world record",
       "seoBreadcrumb": "Age-Graded Performance",
       "title": "Age-Graded Performance",
-      "description": "Enter your age, gender, distance and time to see how your performance compares to the world record for your category.",
+      "description": "Enter your age, gender, distance and time: your performance is placed against the world record.",
       "age": "Age",
       "agePlaceholder": "e.g. 35",
       "gender": "Gender",
@@ -210,7 +224,10 @@
       "levelRecreational": "Recreational",
       "hours": "Hours",
       "minutes": "Minutes",
-      "seconds": "Seconds"
+      "seconds": "Seconds",
+      "kicker": "% world record",
+      "scoreLabel": "Age-graded score",
+      "yearsShort": "yrs"
     },
     "paceTable": {
       "seoTitle": "Pace Reference Table",
@@ -222,7 +239,8 @@
       "subtitle": "All paces from 3:00 to 10:00/km with estimated race times.",
       "halfLabel": "Half",
       "yourZone": "Your zone",
-      "highlightNote": "The highlighted row is closest to your 100% VMA pace."
+      "highlightNote": "The highlighted row is closest to your 100% VMA pace.",
+      "kicker": "3:00 → 10:00/km"
     },
     "treadmill": {
       "seoTitle": "Treadmill Converter",
@@ -237,9 +255,12 @@
       "incline": "Incline",
       "equivalentEffort": "Equivalent Outdoor Effort",
       "pace": "Pace",
-      "trainingZone": "Training zone:",
+      "trainingZone": "Training zone",
       "configureVma": "Configure your VMA in My Zones to see the training zone.",
-      "formula": "The formula accounts for the lack of air resistance and incline effect. A 1% incline roughly compensates for indoor running. Each additional 1% incline adds approximately 3% to the effort."
+      "formula": "The formula accounts for the lack of air resistance and incline effect. A 1% incline roughly compensates for indoor running. Each additional 1% incline adds approximately 3% to the effort.",
+      "kicker": "% incline",
+      "configureVmaCta": "Set my zones",
+      "outOfRange": "Speed between 4 and 25 km/h, incline between 0 and 15%."
     },
     "whatIf": {
       "seoTitle": "What-If Simulator",
@@ -260,7 +281,7 @@
     "breadcrumb": "Calculators"
   },
   "workoutBuilder": {
-    "myWorkouts": "My Workouts",
+    "myWorkouts": "My workouts",
     "workoutDeleted": "Workout deleted",
     "workoutsExported": "{{count}} workout(s) exported",
     "workoutExported": "Workout exported",
@@ -272,6 +293,12 @@
     "exportAll": "Export all",
     "noWorkoutsYet": "No custom workouts yet",
     "createFirst": "Create your first workout above",
+    "noWorkoutsDescription": "No custom workout in this browser. You can keep 20 — start with the first one.",
+    "listKicker_one": "{{count}} workout saved",
+    "listKicker_other": "{{count}} workouts saved",
+    "editorKicker": "Local draft",
+    "sectionCount_one": "{{count}} block",
+    "sectionCount_other": "{{count}} blocks",
     "untitled": "Untitled",
     "blocks": "blocks",
     "exportLabel": "Export",
@@ -285,7 +312,7 @@
     "warmup": "Warm-up",
     "mainSet": "Main set",
     "cooldown": "Cool-down",
-    "builderTitle": "Workout Builder",
+    "builderTitle": "Workout builder",
     "backToList": "← My workouts",
     "namePlaceholder": "Workout name...",
     "save": "Save",

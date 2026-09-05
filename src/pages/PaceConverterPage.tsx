@@ -1,11 +1,10 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, type CSSProperties } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
+import { ZoneBadge } from "@/components/domain/ZoneBadge";
 import { buildParamsUrl } from "@/lib/share/urlParams";
-import { Card, CardContent } from "@/components/ui/card";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { useSettings } from "@/hooks/useSettings";
 import { loadUserZonePrefs, calculatePaceZones } from "@/lib/zones";
 import type { ZoneNumber } from "@/types";
@@ -232,103 +231,119 @@ export function PaceConverterPage() {
           },
         ]}
       />
-      <div className="py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2">
-            {t("calculators:calculateurs.converter.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
-            {t("calculators:calculateurs.converter.description")}
-          </FadeUp>
-        </div>
 
-        {/* Input grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Primary pace */}
-          <Card>
-            <CardContent className="pt-4">
-              <label className="text-sm font-medium text-muted-foreground block mb-2">
+      <div className="zn-num">
+        <section
+          className="zn-num__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">
+            {t("calculators:calculateurs.converter.kicker")}
+          </span>
+          <h1 className="zn-display" data-level="3">
+            {t("calculators:calculateurs.converter.title")}
+          </h1>
+          <p className="zn-body zn-body--lead zn-num__lede">
+            {t("calculators:calculateurs.converter.description")}
+          </p>
+        </section>
+
+        {/* The three units are one value written three ways, so they are three
+            equal fields rather than a form and a result. */}
+        <section
+          className="zn-num__panel zn-tool__band zn-stack"
+          style={{ "--gap": "var(--sp-14)" } as CSSProperties}
+        >
+          <div className="zn-grid">
+            <div className="zn-stack" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
+              <label className="zn-kicker" htmlFor="pace-primary">
                 {primaryLabel}
               </label>
-              <input
-                type="text"
-                inputMode="numeric"
-                placeholder="4:30"
-                value={primaryPace}
-                onChange={(e) => handlePrimaryPaceChange(e.target.value)}
-                className="w-full rounded-lg border border-input bg-background px-4 py-3 text-2xl font-mono tabular-nums focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-            </CardContent>
-          </Card>
+              <span className="zn-tool__entry">
+                <input
+                  id="pace-primary"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="4:30"
+                  value={primaryPace}
+                  onChange={(e) => handlePrimaryPaceChange(e.target.value)}
+                  className="zn-tool__entry-input"
+                />
+                <span className="zn-tool__entry-unit">{primaryLabel}</span>
+              </span>
+            </div>
 
-          {/* Speed */}
-          <Card>
-            <CardContent className="pt-4">
-              <label className="text-sm font-medium text-muted-foreground block mb-2">
+            <div className="zn-stack" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
+              <label className="zn-kicker" htmlFor="pace-speed">
                 {speedLabel}
               </label>
-              <input
-                type="text"
-                inputMode="decimal"
-                placeholder="13.3"
-                value={speed}
-                onChange={(e) => handleSpeedChange(e.target.value)}
-                className="w-full rounded-lg border border-input bg-background px-4 py-3 text-2xl font-mono tabular-nums focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-            </CardContent>
-          </Card>
+              <span className="zn-tool__entry">
+                <input
+                  id="pace-speed"
+                  type="text"
+                  inputMode="decimal"
+                  placeholder="13.3"
+                  value={speed}
+                  onChange={(e) => handleSpeedChange(e.target.value)}
+                  className="zn-tool__entry-input"
+                />
+                <span className="zn-tool__entry-unit">{speedLabel}</span>
+              </span>
+            </div>
 
-          {/* Secondary pace */}
-          <Card>
-            <CardContent className="pt-4">
-              <label className="text-sm font-medium text-muted-foreground block mb-2">
+            <div className="zn-stack" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
+              <label className="zn-kicker" htmlFor="pace-secondary">
                 {secondaryLabel}
               </label>
-              <input
-                type="text"
-                inputMode="numeric"
-                placeholder="7:14"
-                value={secondaryPace}
-                onChange={(e) => handleSecondaryPaceChange(e.target.value)}
-                className="w-full rounded-lg border border-input bg-background px-4 py-3 text-2xl font-mono tabular-nums focus:outline-none focus:ring-2 focus:ring-primary/50"
+              <span className="zn-tool__entry">
+                <input
+                  id="pace-secondary"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="7:14"
+                  value={secondaryPace}
+                  onChange={(e) => handleSecondaryPaceChange(e.target.value)}
+                  className="zn-tool__entry-input"
+                />
+                <span className="zn-tool__entry-unit">{secondaryLabel}</span>
+              </span>
+            </div>
+          </div>
+
+          {/* One zone on screen, named where it is painted: the badge carries
+              its own label, so this surface owes no six-item legend. */}
+          {paceZones && currentZone && (
+            <div className="zn-stack" style={{ "--gap": "var(--sp-5)" } as CSSProperties}>
+              <span className="zn-kicker">
+                {t("calculators:calculateurs.converter.yourZone")}
+              </span>
+              <span>
+                <ZoneBadge zone={currentZone} showLabel size="lg" />
+              </span>
+            </div>
+          )}
+
+          {currentPaceMinPerKm != null && (
+            <div className="zn-cluster">
+              <ShareLinkButton
+                buildUrl={() =>
+                  buildParamsUrl("/calculators/convertisseur", {
+                    kmh: (60 / currentPaceMinPerKm).toFixed(2),
+                  })
+                }
+                title={t("calculators:calculateurs.converter.title")}
               />
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+          )}
 
-        {/* Zone badge */}
-        {paceZones && currentZone && (
-          <div className="mt-6 flex justify-center">
-            <span
-              className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium bg-zone-${currentZone}/10 text-zone-${currentZone}`}
-            >
-              {t("calculators:calculateurs.converter.zoneForYou", { zone: currentZone })}
-            </span>
-          </div>
-        )}
-
-        {currentPaceMinPerKm != null && (
-          <div className="mt-6 flex justify-center">
-            <ShareLinkButton
-              buildUrl={() =>
-                buildParamsUrl("/calculators/convertisseur", {
-                  kmh: (60 / currentPaceMinPerKm).toFixed(2),
-                })
-              }
-              title={t("calculators:calculateurs.converter.title")}
-            />
-          </div>
-        )}
-
-        {/* Unit system note */}
-        <p className="mt-6 text-center text-xs text-muted-foreground">
-          {t("calculators:calculateurs.converter.displayingUnits", {
-            system: isImperial
-              ? t("calculators:calculateurs.converter.imperial")
-              : t("calculators:calculateurs.converter.metric"),
-          })}
-        </p>
+          <p className="zn-source">
+            {t("calculators:calculateurs.converter.displayingUnits", {
+              system: isImperial
+                ? t("calculators:calculateurs.converter.imperial")
+                : t("calculators:calculateurs.converter.metric"),
+            })}
+          </p>
+        </section>
       </div>
     </>
   );

@@ -1,5 +1,6 @@
 {
   "title": "Race Day Simulator",
+  "kicker": "Km by km",
   "description": "Generate your complete race day plan: per-kilometer pacing, nutrition, warm-up, timeline and checklist.",
   "inputs": {
     "title": "Race parameters",

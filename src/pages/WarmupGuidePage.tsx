@@ -1,12 +1,10 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import {
   Zap,
   Activity,
   ArrowLeft,
-  AlertTriangle,
-  Info,
   Clock,
   Flame,
   Target,
@@ -14,10 +12,7 @@ import {
 import type { IconProps } from "@/components/icons";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
-import { cn } from "@/lib/utils";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { warmupSections, warmupRoutines } from "@/data/guides/warmup";
 import type { ContentBlock, Exercise, WarmupRoutine } from "@/data/guides/warmup";
@@ -47,6 +42,10 @@ function formatDuration(seconds: number): string {
   return `${seconds}s`;
 }
 
+/**
+ * One drill of a routine: its rank in mono, its name, its dose as outlined
+ * badges, then the sentence that says how to do it.
+ */
 function ExerciseItem({
   exercise,
   index,
@@ -58,32 +57,34 @@ function ExerciseItem({
   const description = pickLang(exercise, "description");
 
   return (
-    <div className="flex gap-4 items-start">
-      <div className="flex items-center justify-center size-7 rounded-full bg-primary/10 text-primary text-xs font-bold shrink-0 mt-0.5">
-        {index + 1}
-      </div>
-      <div className="min-w-0 flex-1 space-y-1">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-medium text-sm">{name}</span>
+    <li className="zn-guide__exercise">
+      <span className="zn-mono zn-guide__rank">{index + 1}</span>
+      <div
+        className="zn-stack zn-fill"
+        style={{ "--gap": "var(--sp-4)" } as CSSProperties}
+      >
+        <div
+          className="zn-cluster"
+          style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+        >
+          <span className="zn-guide__exname">{name}</span>
           {exercise.durationSeconds && (
-            <Badge variant="secondary" className="text-xs">
+            <Badge variant="outline">
               {formatDuration(exercise.durationSeconds)}
             </Badge>
           )}
           {exercise.repetitions && (
-            <Badge variant="secondary" className="text-xs">
+            <Badge variant="outline">
               {exercise.repetitions} {exercise.sets && exercise.sets > 1 ? `x${exercise.sets}` : "rep"}
             </Badge>
           )}
           {exercise.sets && !exercise.repetitions && exercise.durationSeconds && (
-            <Badge variant="outline" className="text-xs">
-              x{exercise.sets}
-            </Badge>
+            <Badge variant="outline">x{exercise.sets}</Badge>
           )}
         </div>
-        <p className="text-xs text-muted-foreground leading-relaxed">{description}</p>
+        <p className="zn-body zn-body--sm zn-muted">{description}</p>
       </div>
-    </div>
+    </li>
   );
 }
 
@@ -94,64 +95,73 @@ export function WarmupGuidePage() {
 
   const activeRoutine = warmupRoutines.find((r) => r.id === selectedRoutine) ?? null;
 
+  /**
+   * A block of a section, rendered with the article's own reading treatment —
+   * .zn-prose and its parts, written once in learn.css. A tip and a warning
+   * are the same pulled-out callout the articles use: two ink rules and a mono
+   * label saying which kind it is.
+   */
   function renderBlock(block: ContentBlock, blockIdx: number) {
     const text = pickLang(block, "text");
 
     switch (block.type) {
       case "paragraph":
         return (
-          <p key={blockIdx} className="text-muted-foreground leading-relaxed">
-            <GlossaryLinkedText text={text ?? ""} />
-          </p>
+          <GlossaryLinkedText
+            key={blockIdx}
+            as="p"
+            className="zn-prose__p"
+            text={text ?? ""}
+          />
         );
 
       case "list":
         return (
-          <div key={blockIdx} className="space-y-2">
-            {text && <h4 className="font-medium text-sm">{text}</h4>}
-            <ul className="space-y-1.5 ml-1">
+          <figure key={blockIdx} className="zn-prose__figure">
+            {text && <figcaption>{text}</figcaption>}
+            <ul className="zn-prose__list">
               {block.items?.map((item, i) => (
-                <li key={i} className="flex gap-2 text-sm text-muted-foreground">
-                  <span className="text-primary mt-1 shrink-0">&#8226;</span>
-                  <span>{pickLang(item, "text")}</span>
-                </li>
+                <li key={i}>{pickLang(item, "text")}</li>
               ))}
             </ul>
-          </div>
+          </figure>
         );
 
       case "exercise":
         return (
-          <div key={blockIdx} className="space-y-3">
-            {text && <h4 className="font-medium text-sm">{text}</h4>}
-            <div className="space-y-4 ml-1">
+          <figure key={blockIdx} className="zn-prose__figure">
+            {text && <figcaption>{text}</figcaption>}
+            <ul
+              className="zn-stack"
+              style={
+                {
+                  "--gap": "var(--sp-9)",
+                  listStyle: "none",
+                  margin: 0,
+                  padding: 0,
+                } as CSSProperties
+              }
+            >
               {block.exercises?.map((ex, i) => (
                 <ExerciseItem key={i} exercise={ex} index={i} />
               ))}
-            </div>
-          </div>
+            </ul>
+          </figure>
         );
 
       case "tip":
-        return (
-          <div
-            key={blockIdx}
-            className="flex gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4"
-          >
-            <Info className="size-5 shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
-            <p className="text-sm text-emerald-800 dark:text-emerald-200"><GlossaryLinkedText text={text ?? ""} /></p>
-          </div>
-        );
-
       case "warning":
         return (
-          <div
-            key={blockIdx}
-            className="flex gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4"
-          >
-            <AlertTriangle className="size-5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
-            <p className="text-sm text-amber-800 dark:text-amber-200"><GlossaryLinkedText text={text ?? ""} /></p>
-          </div>
+          <aside key={blockIdx} className="zn-prose__callout" data-kind={block.type}>
+            <span className="zn-kicker zn-prose__callout-label">
+              {t(`content:article.callout.${block.type}`)}
+            </span>
+            <GlossaryLinkedText
+              as="p"
+              className="zn-prose__callout-text"
+              text={text ?? ""}
+            />
+          </aside>
         );
 
       default:
@@ -159,6 +169,11 @@ export function WarmupGuidePage() {
     }
   }
 
+  /**
+   * One of the four routines. A toggle, not a link: pressing it opens the
+   * detail below and pressing it again closes it, which is what `aria-pressed`
+   * says. Chosen is the 2.5px vermillon frame — never a tint.
+   */
   function renderRoutineCard(routine: WarmupRoutine) {
     const name = pickLang(routine, "name");
     const isActive = selectedRoutine === routine.id;
@@ -167,21 +182,16 @@ export function WarmupGuidePage() {
     return (
       <button
         key={routine.id}
+        type="button"
+        aria-pressed={isActive}
         onClick={() => setSelectedRoutine(isActive ? null : routine.id)}
-        className={cn(
-          "flex flex-col items-center gap-2 rounded-xl border p-4 text-center transition-all cursor-pointer",
-          isActive
-            ? "border-primary bg-primary/5 shadow-sm"
-            : "border-border hover:border-primary/40 hover:bg-accent/50"
-        )}
+        className="zn-guide__routine"
       >
-        <Icon className={cn("size-6", isActive ? "text-primary" : "text-muted-foreground")} />
-        <span className={cn("text-sm font-medium", isActive ? "text-primary" : "")}>
-          {name}
+        <Icon aria-hidden="true" />
+        <span className="zn-guide__routinename">{name}</span>
+        <span className="zn-mono zn-faint">
+          {routine.totalDurationMin} {t("min")}
         </span>
-        <Badge variant="secondary" className="text-xs">
-          {routine.totalDurationMin} min
-        </Badge>
       </button>
     );
   }
@@ -242,84 +252,109 @@ export function WarmupGuidePage() {
           },
         ]}
       />
-      <div className="py-8">
-        {/* Back link */}
-        <Link
-          to="/guides"
-          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
+
+      <div className="zn-guide">
+        {/* 1 — the way back, then what this page is */}
+        <section
+          className="zn-stack zn-guide__head"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
         >
-          <ArrowLeft className="size-4" />
-          {t("backToGuides")}
-        </Link>
-
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2">
+          <Link
+            to="/guides"
+            className="zn-row zn-mono zn-guide__back"
+            style={{ "--gap": "var(--sp-3)" } as CSSProperties}
+          >
+            <ArrowLeft />
+            {t("backToGuides")}
+          </Link>
+          <span className="zn-kicker">
+            {t("warmup.kicker", { n: warmupRoutines.length })}
+          </span>
+          <h1 className="zn-display" data-level="2">
             {t("warmup.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
+          </h1>
+          <p className="zn-body zn-body--lead zn-guide__lede">
             {t("warmup.subtitle")}
-          </FadeUp>
-        </div>
+          </p>
+        </section>
 
-        {/* Routine Selector */}
-        <section className="mb-10">
-          <h2 className="text-xl font-semibold mb-4">
-            {t("warmup.routines")}
-          </h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        {/* 2 — pick a routine, read its drills */}
+        <section className="zn-guide__band" aria-labelledby="warmup-routines">
+          <div className="zn-row zn-row--split zn-guide__bandhead">
+            <h2 id="warmup-routines" className="zn-title" data-level="2">
+              {t("warmup.routines")}
+            </h2>
+            <span className="zn-mono zn-faint">{t("warmup.selectRoutine")}</span>
+          </div>
+
+          <div
+            className="zn-grid"
+            style={{ "--cols": 4, "--cols-md": 2 } as CSSProperties}
+          >
             {warmupRoutines.map((routine) => renderRoutineCard(routine))}
           </div>
 
-          {/* Selected routine detail */}
           {activeRoutine && (
-            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-              <CardContent className="pt-6 space-y-1">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold">
-                    {pickLang(activeRoutine, "name")}
-                  </h3>
-                  <Badge>
-                    {activeRoutine.totalDurationMin} min
-                  </Badge>
-                </div>
-                <div className="space-y-4">
-                  {activeRoutine.exercises.map((ex, i) => (
-                    <ExerciseItem key={i} exercise={ex} index={i} />
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <div
+              className="zn-stack"
+              style={{ "--gap": "var(--sp-11)", marginBlockStart: "var(--sp-13)" } as CSSProperties}
+            >
+              <div className="zn-row zn-row--split">
+                <h3 className="zn-title" data-level="4">
+                  {pickLang(activeRoutine, "name")}
+                </h3>
+                <span className="zn-mono zn-faint">
+                  {activeRoutine.totalDurationMin} {t("min")}
+                </span>
+              </div>
+              <ul
+                className="zn-stack zn-measure"
+                style={
+                  {
+                    "--gap": "var(--sp-9)",
+                    listStyle: "none",
+                    margin: 0,
+                    padding: 0,
+                  } as CSSProperties
+                }
+              >
+                {activeRoutine.exercises.map((ex, i) => (
+                  <ExerciseItem key={i} exercise={ex} index={i} />
+                ))}
+              </ul>
+            </div>
           )}
         </section>
 
-        {/* Educational Sections */}
-        <Tabs defaultValue={warmupSections[0].id}>
-          <TabsList className="flex-wrap h-auto gap-1 mb-6">
-            {warmupSections.map((section) => {
-              const Icon = SECTION_ICONS[section.icon];
-              return (
-                <TabsTrigger key={section.id} value={section.id} className="gap-1.5">
-                  {Icon && <Icon className="size-3.5" />}
-                  <span className="hidden sm:inline">
+        {/* 3 — the reading: one section per tab, in the article's own column */}
+        <section className="zn-guide__band">
+          <Tabs defaultValue={warmupSections[0].id}>
+            <TabsList className="zn-guide__tabs">
+              {warmupSections.map((section) => {
+                const Icon = SECTION_ICONS[section.icon];
+                return (
+                  <TabsTrigger key={section.id} value={section.id}>
+                    {Icon && <Icon aria-hidden="true" />}
                     {pickLang(section, "title")}
-                  </span>
-                </TabsTrigger>
-              );
-            })}
-          </TabsList>
+                  </TabsTrigger>
+                );
+              })}
+            </TabsList>
 
-          {warmupSections.map((section) => (
-            <TabsContent key={section.id} value={section.id}>
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold">
-                  {pickLang(section, "title")}
-                </h2>
-                {section.content.map((block, i) => renderBlock(block, i))}
-              </div>
-            </TabsContent>
-          ))}
-        </Tabs>
+            {warmupSections.map((section) => (
+              <TabsContent key={section.id} value={section.id}>
+                <div className="zn-guide__panel">
+                  <h2 className="zn-title zn-guide__bandhead" data-level="2">
+                    {pickLang(section, "title")}
+                  </h2>
+                  <div className="zn-prose zn-measure">
+                    {section.content.map((block, i) => renderBlock(block, i))}
+                  </div>
+                </div>
+              </TabsContent>
+            ))}
+          </Tabs>
+        </section>
       </div>
     </>
   );

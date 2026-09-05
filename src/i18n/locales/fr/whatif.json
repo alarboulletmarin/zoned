@@ -1,6 +1,7 @@
 {
   "title": "Simulateur What-If",
-  "subtitle": "Comparez deux scénarios d'entraînement et visualisez les différences",
+  "kicker": "Deux scénarios",
+  "subtitle": "Compare deux scénarios d'entraînement et lis les différences",
   "shared": {
     "title": "Profil coureur",
     "distance": "Distance de course",
@@ -82,7 +83,9 @@
     "breadcrumbCalculators": "Calculateurs"
   },
   "errors": {
-    "generic": "Une erreur est survenue"
+    "generic": "Une erreur est survenue",
+    "title": "La comparaison n'a pas abouti",
+    "intact": "Tes réglages sont conservés : relance la comparaison."
   },
   "toast": {
     "saved": "Scénario sauvegardé",

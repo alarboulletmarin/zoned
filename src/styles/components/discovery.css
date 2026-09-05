@@ -1,0 +1,532 @@
+/* The catalogue's secondary surfaces: favourites, collections, the workout
+ * finder and the custom-workout builder.
+ *
+ * These five screens are the library's siblings and read as such — a mono
+ * kicker counting the catalogue, one display title, then the same outlined
+ * chips and the same card grid. `library.css` is the sheet they follow; this
+ * file only adds what those screens have and the library does not.
+ *
+ * The shell already wraps every route in .zn-page, which pays the 40px (20px
+ * mobile) screen margin once. "Full width" here means the width of that
+ * column: every rule runs from one of its edges to the other, and nothing
+ * bleeds outside it, so the page never scrolls sideways.
+ *
+ * What this file does NOT redeclare: the flex/stack/grid vocabulary of
+ * _layout.css, the type roles of _type.css, the chip of library.css, the ink
+ * ramp of zone.css, and the paint of card.css, button.css, empty-state.css,
+ * stat-block.css, content.css and workout-card.css. Those are composed with.
+ */
+
+.zn-disc {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── the head band ────────────────────────────────────────────────────── */
+
+/* Kicker, title, lede — the same band the library and the calculators hub
+   open on, so a reader arriving from either recognises the paper. */
+.zn-disc__head {
+  padding-block: var(--sp-10) var(--sp-13);
+}
+
+.zn-disc__lede {
+  max-inline-size: 52ch;
+}
+
+/* The head's own actions, hanging under the lede: a back link, an import, a
+   "create". */
+.zn-disc__headactions {
+  padding-block-start: var(--sp-4);
+}
+
+/* ── bands ────────────────────────────────────────────────────────────── */
+
+/* One band of the page, opened by the full-width ink rule that separates it
+   from the one above. Blank space alone would make the page read as a feed. */
+.zn-disc__group {
+  padding-block: var(--sp-14);
+  border-block-start: var(--border-rule);
+}
+
+.zn-disc__grouphead {
+  margin-block-end: var(--sp-11);
+}
+
+/* The last band on a screen: results, under the rule, with room below. */
+.zn-disc__results {
+  padding-block: var(--sp-14) var(--sp-17);
+  border-block-start: var(--border-rule);
+}
+
+/* The ink ramp orders the zones but does not name them, so each screen that
+   paints zone fills carries the legend once, on the sunken band.
+
+   The band draws only its opening rule: the band below it draws its own, and
+   two adjacent 1.5px rules would print as a 3px one. */
+.zn-disc__legend {
+  padding-block: var(--sp-10);
+  background: var(--surface-band);
+  border-block-start: var(--border-rule);
+}
+
+/* A wait with no shape yet, centred in the band it will fill. */
+.zn-disc__wait {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--sp-19);
+}
+
+/* ── the chip, in its toggle-button spelling ──────────────────────────── */
+
+/* library.css paints .zn-chip for the `role="checkbox"` groups. A row where
+   only one value can be on at a time — the duration presets, the recent draw
+   being shown — is a plain toggle button and says so with `aria-pressed`.
+   Same paint, same full ink inversion: selected is never a tint. */
+.zn-chip[aria-pressed="true"] {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+.zn-chip[aria-pressed="true"]:hover:not(:disabled) {
+  background: var(--ink-2);
+}
+
+/* A zone's rung of the ramp, printed inside its chip. The plate stays cream
+   and the outline follows the type, so a Z6 block (solid ink) is still
+   visible once the chip itself inverts. */
+.zn-disc__swatch {
+  display: block;
+  inline-size: 15px;
+  block-size: 15px;
+  flex: none;
+  overflow: hidden;
+
+  background: var(--surface-card);
+  border: var(--bw-hair) solid currentColor;
+  border-radius: var(--r-xs);
+}
+
+.zn-disc__swatch > span {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  background: var(--zn-swatch-fill, transparent);
+}
+
+.zn-disc__swatch > span[data-zone="1"] { --zn-swatch-fill: var(--zone-1); }
+.zn-disc__swatch > span[data-zone="2"] { --zn-swatch-fill: var(--zone-2); }
+.zn-disc__swatch > span[data-zone="3"] { --zn-swatch-fill: var(--zone-3); }
+.zn-disc__swatch > span[data-zone="4"] { --zn-swatch-fill: var(--zone-4); }
+.zn-disc__swatch > span[data-zone="5"] { --zn-swatch-fill: var(--zone-5); }
+.zn-disc__swatch > span[data-zone="6"] { --zn-swatch-fill: var(--zone-6); }
+
+/* ══ collections ═══════════════════════════════════════════════════════ */
+
+/* The detail hero. An outlined sheet, not a tinted one: the collection's
+   intensity is already carried by the sessions inside it, and a wash behind a
+   title is exactly the gradient this system does not have. */
+.zn-coll__hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  padding: var(--sp-15);
+  align-items: flex-start;
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-4xl);
+}
+
+@media (max-width: 640px) {
+  .zn-coll__hero {
+    padding: var(--pad-card);
+  }
+}
+
+.zn-coll__heroinner {
+  max-inline-size: 62ch;
+}
+
+/* The collection's glyph in its own drawn square — the one box inside the
+   hero, because the hero is a sheet and not a card in a grid. */
+.zn-coll__glyph {
+  display: grid;
+  place-items: center;
+  inline-size: 52px;
+  block-size: 52px;
+  flex: none;
+
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  color: var(--text-body);
+}
+
+.zn-coll__glyph > svg {
+  inline-size: 26px;
+  block-size: 26px;
+}
+
+/* A progression's step number. A full ink inversion rather than the accent:
+   a screen spends its single vermillon fill on its primary action, and a grid
+   of twelve numbered cards would spend it twelve times. */
+.zn-coll__item {
+  position: relative;
+}
+
+.zn-coll__step {
+  position: absolute;
+  inset-block-start: calc(var(--sp-5) * -1);
+  inset-inline-start: calc(var(--sp-5) * -1);
+  z-index: 1;
+
+  display: grid;
+  place-items: center;
+  inline-size: 30px;
+  block-size: 30px;
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--ls-mono);
+
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+/* ══ draw a session ════════════════════════════════════════════════════ */
+
+/* Filters on the left, the draw on the right — the arrangement the screen
+   already had. It collapses to one column at 900px like every other split. */
+.zn-draw__layout {
+  --split: 300px minmax(0, 1fr);
+  --gap: var(--sp-15);
+  padding-block: var(--sp-14) var(--sp-17);
+  border-block-start: var(--border-rule);
+}
+
+.zn-draw__aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-13);
+}
+
+/* Closed drawer on a phone. Reopened unconditionally at desktop width, where
+   the toggle that closes it is not rendered at all. */
+.zn-draw__aside[data-open="false"] {
+  display: none;
+}
+
+@media (min-width: 901px) {
+  .zn-draw__aside,
+  .zn-draw__aside[data-open="false"] {
+    display: flex;
+    position: sticky;
+    inset-block-start: var(--sp-15);
+  }
+}
+
+/* The filter drawer is a phone affordance: at desktop width it is always open
+   and the toggle above it is gone. */
+.zn-btn.zn-draw__toggle {
+  inline-size: 100%;
+  justify-content: space-between;
+  margin-block-end: var(--sp-10);
+}
+
+@media (min-width: 901px) {
+  .zn-btn.zn-draw__toggle {
+    display: none;
+  }
+}
+
+/* How many sessions the filters let through, out of the whole catalogue. */
+.zn-draw__counter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: var(--pad-card);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+}
+
+/* The proportion, drawn: an outlined track with an ink fill. Ink, not
+   vermillon — the accent fill on this screen belongs to the draw button. */
+.zn-draw__ratio {
+  block-size: 10px;
+  overflow: hidden;
+  background: var(--surface-band);
+  border: var(--border-hair);
+  border-radius: var(--r-pill);
+}
+
+.zn-draw__ratiofill {
+  display: block;
+  block-size: 100%;
+  background: var(--ink-1);
+  transition: inline-size var(--dur-base) var(--ease-out);
+}
+
+/* One filter: its mono label, then its values. */
+.zn-draw__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+/* The levels read as a column rather than a wrapped row — four values, each
+   with its gauge glyph on the far side. Still the chip, squared off. */
+.zn-chip.zn-draw__level {
+  inline-size: 100%;
+  justify-content: space-between;
+  border-radius: var(--r-lg);
+}
+
+/* The gauge glyph on the far side of a level: sized here because
+   DifficultyIcon only forwards a class name. */
+.zn-chip.zn-draw__level > svg {
+  inline-size: 18px;
+  block-size: 18px;
+  flex: none;
+}
+
+.zn-draw__ends {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+/* The stage: the button that draws, and whatever the draw produced. */
+.zn-draw__stage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-14);
+  padding: var(--pad-card);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-4xl);
+}
+
+.zn-draw__controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-6);
+}
+
+.zn-draw__cta {
+  inline-size: 100%;
+}
+
+@media (min-width: 641px) {
+  .zn-draw__cta {
+    inline-size: auto;
+  }
+}
+
+/* Four facts about the drawn session, on one line where there is room. */
+.zn-draw__metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-6);
+}
+
+@media (max-width: 640px) {
+  .zn-draw__metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.zn-draw__metric {
+  padding: var(--sp-8);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+}
+
+.zn-draw__result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+/* The whole card is the target, so its anchor takes the card's box. */
+.zn-draw__result > a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* A metric inside the result: the outlined frame belongs to the tile, the
+   number and its mono label come from StatBlock. Four of them share a row, so
+   the value drops a step — the selector carries the size attribute because
+   stat-block.css is imported after this file and states its own step. */
+.zn-stat[data-size="sm"].zn-draw__metric .zn-stat__value {
+  font-size: var(--fs-h4);
+  letter-spacing: var(--ls-h4);
+}
+
+/* The strength fallback — a session with no aerobic profile still gets the
+   card's outline, so the two results read as one component. */
+.zn-draw__plaincard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: var(--pad-card);
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+  text-decoration: none;
+}
+
+.zn-draw__plaincard:hover {
+  background: var(--surface-band);
+}
+
+.zn-draw__plaincard:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-draw__recent {
+  padding-block-start: var(--sp-13);
+  border-block-start: var(--border-divider);
+}
+
+/* A recent draw's name must not push the chip past the column. */
+.zn-draw__recentname {
+  max-inline-size: 14rem;
+}
+
+/* ══ workout builder ═══════════════════════════════════════════════════ */
+
+.zn-build__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+/* One saved draft. An outlined row, never a shadow: this is a list. */
+.zn-build__row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding-inline-end: var(--sp-6);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.zn-build__row:hover {
+  background: var(--surface-band);
+}
+
+/* The whole row is the link; the two icon buttons sit beside it, outside the
+   anchor, so an export never has to be an anchor inside an anchor. */
+.zn-build__rowlink {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  flex: 1;
+  min-inline-size: 0;
+  padding: var(--sp-10) 0 var(--sp-10) var(--pad-card-sm);
+  color: var(--text-body);
+  text-decoration: none;
+}
+
+.zn-build__rowname {
+  margin: 0;
+  font: var(--fw-semibold) var(--fs-body) / 1.3 var(--font-text);
+}
+
+/* The draft's name, edited in place. It keeps the display face of the title
+   it replaces and admits it is a field by the rule under it. */
+.zn-build__name {
+  inline-size: 100%;
+  padding: var(--sp-4) 0;
+
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-h2);
+  letter-spacing: var(--ls-h2);
+
+  color: var(--text-body);
+  background: transparent;
+  border: none;
+  border-block-end: var(--border-rule);
+  border-radius: 0;
+}
+
+.zn-build__name::placeholder {
+  color: var(--text-faint);
+}
+
+.zn-build__name:focus-visible {
+  outline: none;
+  border-block-end-color: var(--accent);
+  border-block-end-width: var(--bw-heavy);
+}
+
+/* Save, undo, share, export, delete — one row, wrapping. */
+.zn-build__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-6);
+}
+
+.zn-build__preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding: var(--pad-card);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+}
+
+/* A phase of the session, opened by its own rule. The chevron turns; nothing
+   else moves. */
+.zn-build__section {
+  padding-block: var(--sp-13);
+  border-block-start: var(--border-divider);
+}
+
+.zn-build__sectionhead {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  inline-size: 100%;
+  min-block-size: var(--hit-min);
+  padding: 0;
+
+  text-align: start;
+  background: transparent;
+  border: none;
+  color: var(--text-body);
+  cursor: pointer;
+}
+
+.zn-build__chevron {
+  inline-size: 20px;
+  block-size: 20px;
+  flex: none;
+  color: var(--text-faint);
+}
+
+.zn-build__steps {
+  padding-block-start: var(--sp-10);
+}

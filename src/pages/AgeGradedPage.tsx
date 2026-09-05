@@ -1,13 +1,19 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, type CSSProperties } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Star } from "@/components/icons";
-import { Button } from "@/components/ui/button";
 import { ShareLinkButton } from "@/components/domain/ShareLinkButton";
+import { StatBlock } from "@/components/domain/StatBlock";
 import { buildParamsUrl } from "@/lib/share/urlParams";
 import { Card, CardContent } from "@/components/ui/card";
+import { Segmented } from "@/components/ui/segmented";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { useSettings } from "@/hooks/useSettings";
 import { formatPaceWithUnit } from "@/lib/units";
 import { usePickLang } from "@/lib/i18n-utils";
@@ -59,34 +65,23 @@ function formatTime(totalSeconds: number): string {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
+/**
+ * The five bands of the age-graded scale, in the user's words.
+ *
+ * They used to be painted with the zone ramp (`text-zone-2` … `text-zone-6`),
+ * which said "this is a training zone" about something that is not one. The
+ * band is now the figure's footnote, in plain type: the score itself is the
+ * number that carries the meaning.
+ */
 function getPerformanceLevel(
   percentage: number,
   t: (key: string) => string,
-): { label: string; colorClass: string } {
-  if (percentage >= 90)
-    return {
-      label: t("calculators:calculateurs.ageGraded.levelWorldClass"),
-      colorClass: "text-zone-6",
-    };
-  if (percentage >= 80)
-    return {
-      label: t("calculators:calculateurs.ageGraded.levelNational"),
-      colorClass: "text-zone-5",
-    };
-  if (percentage >= 70)
-    return {
-      label: t("calculators:calculateurs.ageGraded.levelRegional"),
-      colorClass: "text-zone-4",
-    };
-  if (percentage >= 60)
-    return {
-      label: t("calculators:calculateurs.ageGraded.levelLocal"),
-      colorClass: "text-zone-3",
-    };
-  return {
-    label: t("calculators:calculateurs.ageGraded.levelRecreational"),
-    colorClass: "text-zone-2",
-  };
+): string {
+  if (percentage >= 90) return t("calculators:calculateurs.ageGraded.levelWorldClass");
+  if (percentage >= 80) return t("calculators:calculateurs.ageGraded.levelNational");
+  if (percentage >= 70) return t("calculators:calculateurs.ageGraded.levelRegional");
+  if (percentage >= 60) return t("calculators:calculateurs.ageGraded.levelLocal");
+  return t("calculators:calculateurs.ageGraded.levelRecreational");
 }
 
 export function AgeGradedPage() {
@@ -166,9 +161,7 @@ export function AgeGradedPage() {
     setter(String(num));
   };
 
-  const performanceLevel = result
-    ? getPerformanceLevel(result.percentage, t)
-    : null;
+  const performanceLevel = result ? getPerformanceLevel(result.percentage, t) : null;
 
   return (
     <>
@@ -194,232 +187,181 @@ export function AgeGradedPage() {
           },
         ]}
       />
-      <div className="py-8 max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
-            <Star className="size-8 text-primary shrink-0" />
-            {t("calculators:calculateurs.ageGraded.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
-            {t("calculators:calculateurs.ageGraded.description")}
-          </FadeUp>
-        </div>
 
-        {/* Input Card */}
-        <Card className="mb-6">
-          <CardContent className="pt-6 space-y-6">
-            {/* Age + Gender row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Age */}
-              <div className="space-y-2">
-                <label htmlFor="age" className="text-sm font-medium">
+      <div className="zn-num">
+        <section
+          className="zn-num__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">
+            {t("calculators:calculateurs.ageGraded.kicker")}
+          </span>
+          <h1 className="zn-display" data-level="3">
+            {t("calculators:calculateurs.ageGraded.title")}
+          </h1>
+          <p className="zn-body zn-body--lead zn-num__lede">
+            {t("calculators:calculateurs.ageGraded.description")}
+          </p>
+        </section>
+
+        <section className="zn-num__panel zn-tool__band zn-split zn-tool">
+          {/* Who you are and what you ran. */}
+          <Card>
+            <CardContent
+              className="zn-stack"
+              style={{ "--gap": "var(--sp-12)" } as CSSProperties}
+            >
+              <div className="zn-calc__field">
+                <label htmlFor="age" className="zn-calc__label">
                   {t("calculators:calculateurs.ageGraded.age")}
                 </label>
-                <input
-                  id="age"
-                  type="number"
-                  min={15}
-                  max={99}
-                  placeholder={t("calculators:calculateurs.ageGraded.agePlaceholder")}
-                  value={age}
-                  onChange={(e) => handleNumericInput(e.target.value, setAge, 99)}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  aria-label={t("calculators:calculateurs.ageGraded.age")}
+                <span className="zn-numfield" style={{ "--field-w": "48px" } as CSSProperties}>
+                  <input
+                    id="age"
+                    type="number"
+                    min={15}
+                    max={99}
+                    placeholder="35"
+                    value={age}
+                    onChange={(e) => handleNumericInput(e.target.value, setAge, 99)}
+                    className="zn-numfield__input"
+                    aria-label={t("calculators:calculateurs.ageGraded.age")}
+                  />
+                  <span className="zn-numfield__unit">
+                    {t("calculators:calculateurs.ageGraded.yearsShort")}
+                  </span>
+                </span>
+              </div>
+
+              <div className="zn-calc__field">
+                <span className="zn-calc__label">
+                  {t("calculators:calculateurs.ageGraded.gender")}
+                </span>
+                <Segmented
+                  value={gender}
+                  onChange={setGender}
+                  label={t("calculators:calculateurs.ageGraded.gender")}
+                  options={[
+                    { value: "male", label: t("calculators:calculateurs.ageGraded.male") },
+                    { value: "female", label: t("calculators:calculateurs.ageGraded.female") },
+                  ]}
                 />
               </div>
 
-              {/* Gender */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  {t("calculators:calculateurs.ageGraded.gender")}
-                </label>
-                <div className="flex gap-2">
-                  <Button
-                    variant={gender === "male" ? "default" : "outline"}
-                    onClick={() => setGender("male")}
-                    className="flex-1"
-                  >
-                    {t("calculators:calculateurs.ageGraded.male")}
-                  </Button>
-                  <Button
-                    variant={gender === "female" ? "default" : "outline"}
-                    onClick={() => setGender("female")}
-                    className="flex-1"
-                  >
-                    {t("calculators:calculateurs.ageGraded.female")}
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            {/* Distance + Time row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Distance */}
-              <div className="space-y-2">
-                <label htmlFor="distance" className="text-sm font-medium">
+              <div className="zn-calc__field">
+                <label htmlFor="distance" className="zn-calc__label">
                   {t("calculators:calculateurs.ageGraded.distance")}
                 </label>
-                <select
-                  id="distance"
-                  value={distanceKey}
-                  onChange={(e) =>
-                    setDistanceKey(parseFloat(e.target.value) as DistanceKey)
-                  }
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                <Select
+                  value={String(distanceKey)}
+                  onValueChange={(v) => setDistanceKey(parseFloat(v) as DistanceKey)}
                 >
-                  {DISTANCES.map((d) => (
-                    <option key={d.id} value={d.id}>
-                      {pickLang(d, "label")}
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger id="distance" className="zn-tool__wide">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {DISTANCES.map((d) => (
+                      <SelectItem key={d.id} value={String(d.id)}>
+                        {pickLang(d, "label")}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
-              {/* Time */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">
+              <div className="zn-calc__field">
+                <span className="zn-calc__label">
                   {t("calculators:calculateurs.ageGraded.time")}
-                </label>
-                <div className="flex items-center gap-2">
-                  <div className="flex flex-col items-center">
+                </span>
+                <div className="zn-num__time">
+                  <span className="zn-numfield">
                     <input
                       type="number"
                       min={0}
                       max={9}
                       placeholder="0"
                       value={hours}
-                      onChange={(e) =>
-                        handleNumericInput(e.target.value, setHours, 9)
-                      }
-                      className="flex h-12 w-14 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      onChange={(e) => handleNumericInput(e.target.value, setHours, 9)}
+                      className="zn-numfield__input"
                       aria-label={t("calculators:calculateurs.ageGraded.hours")}
                     />
-                    <span className="text-xs text-muted-foreground mt-1">
-                      h
-                    </span>
-                  </div>
-                  <span className="text-xl font-bold text-muted-foreground pb-4">
-                    :
+                    <span className="zn-numfield__unit">h</span>
                   </span>
-                  <div className="flex flex-col items-center">
+                  <span className="zn-numfield">
                     <input
                       type="number"
                       min={0}
                       max={59}
                       placeholder="00"
                       value={minutes}
-                      onChange={(e) =>
-                        handleNumericInput(e.target.value, setMinutes, 59)
-                      }
-                      className="flex h-12 w-14 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      onChange={(e) => handleNumericInput(e.target.value, setMinutes, 59)}
+                      className="zn-numfield__input"
                       aria-label={t("calculators:calculateurs.ageGraded.minutes")}
                     />
-                    <span className="text-xs text-muted-foreground mt-1">
-                      min
-                    </span>
-                  </div>
-                  <span className="text-xl font-bold text-muted-foreground pb-4">
-                    :
+                    <span className="zn-numfield__unit">min</span>
                   </span>
-                  <div className="flex flex-col items-center">
+                  <span className="zn-numfield">
                     <input
                       type="number"
                       min={0}
                       max={59}
                       placeholder="00"
                       value={seconds}
-                      onChange={(e) =>
-                        handleNumericInput(e.target.value, setSeconds, 59)
-                      }
-                      className="flex h-12 w-14 rounded-md border border-input bg-transparent px-2 py-1 text-center text-lg tabular-nums shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      onChange={(e) => handleNumericInput(e.target.value, setSeconds, 59)}
+                      className="zn-numfield__input"
                       aria-label={t("calculators:calculateurs.ageGraded.seconds")}
                     />
-                    <span className="text-xs text-muted-foreground mt-1">
-                      sec
-                    </span>
-                  </div>
+                    <span className="zn-numfield__unit">sec</span>
+                  </span>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* Where that puts you against the record. */}
+          {result && performanceLevel && (
+            <div className="zn-stack" style={{ "--gap": "var(--sp-13)" } as CSSProperties}>
+              <StatBlock
+                tone="ink"
+                size="lg"
+                value={`${result.percentage.toFixed(1)} %`}
+                label={t("calculators:calculateurs.ageGraded.scoreLabel")}
+                footnote={performanceLevel}
+              />
+
+              <dl className="zn-tool__facts">
+                <dt>{t("calculators:calculateurs.ageGraded.openWorldRecord")}</dt>
+                <dd>{formatTime(result.worldRecord)}</dd>
+                <dt>{t("calculators:calculateurs.ageGraded.ageAdjustedRecord")}</dt>
+                <dd>{formatTime(result.ageGradedRecord)}</dd>
+                <dt>{t("calculators:calculateurs.ageGraded.yourTime")}</dt>
+                <dd>{formatTime(totalTimeSeconds)}</dd>
+                <dt>{t("calculators:calculateurs.ageGraded.paceLabel")}</dt>
+                <dd>{formatPaceWithUnit(result.paceMinPerKm, unit)}</dd>
+              </dl>
+
+              <div className="zn-cluster">
+                <ShareLinkButton
+                  buildUrl={() =>
+                    buildParamsUrl("/calculators/age-graded", {
+                      age,
+                      g: gender,
+                      d: distanceKey,
+                      h: hours,
+                      m: minutes,
+                      s: seconds,
+                    })
+                  }
+                  title={t("calculators:calculateurs.ageGraded.title")}
+                />
+              </div>
+
+              <p className="zn-body zn-body--sm zn-muted zn-measure">
+                {t("calculators:calculateurs.ageGraded.explanation")}
+              </p>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Results */}
-        {result && performanceLevel && (
-          <div className="space-y-6">
-            {/* Big percentage display */}
-            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-              <CardContent className="py-8 flex flex-col items-center text-center">
-                <p className="text-5xl font-bold tabular-nums">
-                  {result.percentage.toFixed(1)}%
-                </p>
-                <p className={`text-lg font-semibold mt-2 ${performanceLevel.colorClass}`}>
-                  {performanceLevel.label}
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Context card */}
-            <Card className="bg-gradient-to-br from-muted/30 dark:from-muted/50 to-transparent rounded-xl border border-border/50">
-              <CardContent className="pt-6">
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center py-2 border-b">
-                    <span className="text-sm text-muted-foreground">
-                      {t("calculators:calculateurs.ageGraded.openWorldRecord")}
-                    </span>
-                    <span className="text-sm font-medium tabular-nums">
-                      {formatTime(result.worldRecord)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 border-b">
-                    <span className="text-sm text-muted-foreground">
-                      {t("calculators:calculateurs.ageGraded.ageAdjustedRecord")}
-                    </span>
-                    <span className="text-sm font-medium tabular-nums">
-                      {formatTime(result.ageGradedRecord)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 border-b">
-                    <span className="text-sm text-muted-foreground">
-                      {t("calculators:calculateurs.ageGraded.yourTime")}
-                    </span>
-                    <span className="text-sm font-medium tabular-nums">
-                      {formatTime(totalTimeSeconds)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2">
-                    <span className="text-sm text-muted-foreground">
-                      {t("calculators:calculateurs.ageGraded.paceLabel")}
-                    </span>
-                    <span className="text-sm font-medium tabular-nums">
-                      {formatPaceWithUnit(result.paceMinPerKm, unit)}
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <ShareLinkButton
-              buildUrl={() =>
-                buildParamsUrl("/calculators/age-graded", {
-                  age,
-                  g: gender,
-                  d: distanceKey,
-                  h: hours,
-                  m: minutes,
-                  s: seconds,
-                })
-              }
-              title={t("calculators:calculateurs.ageGraded.title")}
-            />
-
-            {/* Explanation */}
-            <p className="text-sm text-muted-foreground">
-              {t("calculators:calculateurs.ageGraded.explanation")}
-            </p>
-          </div>
-        )}
+          )}
+        </section>
       </div>
     </>
   );

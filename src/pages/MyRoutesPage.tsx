@@ -1,14 +1,24 @@
+import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { ArrowRight, Plus, Route as RouteIcon, Trash2 } from "@/components/icons";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle } from "@/components/editorial";
 import { useRoutes } from "@/hooks/useRoutes";
 import { useIsEnglish } from "@/lib/i18n-utils";
 import { ROUTE_STORAGE_SOFT_LIMIT } from "@/lib/routeGenerator";
+import type { Discipline } from "@/types";
 import { toast } from "sonner";
+
+/** The two disciplines the generator can route. A saved route never carries a
+ *  third, but the raw value is printed rather than swallowed if one appears. */
+const DISCIPLINE_KEY: Partial<Record<Discipline, string>> = {
+  running: "form.disciplineRunning",
+  cycling: "form.disciplineCycling",
+};
 
 export function MyRoutesPage() {
   const { t } = useTranslation("routes");
@@ -35,76 +45,108 @@ export function MyRoutesPage() {
   return (
     <>
       <SEOHead title={t("myRoutes")} description={t("subtitle")} canonical="/routes/mine" noindex />
-      <div className="space-y-6 py-6">
-        <header className="flex items-center justify-between">
-          <div>
-            <EditorialTitle as="h1" size="md">{t("myRoutes")}</EditorialTitle>
-            <p className="text-sm text-muted-foreground">{routes.length} / {ROUTE_STORAGE_SOFT_LIMIT}</p>
-          </div>
-          <Button asChild>
-            <Link to="/routes" className="gap-2">
-              <Plus className="size-4" />
-              {t("newRoute")}
-            </Link>
-          </Button>
-        </header>
 
-        {reachedSoftLimit && (
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200">
-            {t("list.softLimitReached", { limit: ROUTE_STORAGE_SOFT_LIMIT })}
-          </div>
-        )}
+      <div className="zn-rt">
+        {/* 1 — what is stored, counted, and the way to store one more */}
+        <section className="zn-rt__band zn-rt__band--first">
+          <div className="zn-rt__head">
+            <div
+              className="zn-stack zn-rt__headtext"
+              style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+            >
+              <span className="zn-kicker">
+                {t("list.kicker", {
+                  count: routes.length,
+                  limit: ROUTE_STORAGE_SOFT_LIMIT,
+                })}
+              </span>
+              <h1 className="zn-display" data-level="2">
+                {t("myRoutes")}
+              </h1>
+              <p className="zn-body zn-body--lead zn-rt__lede">{t("list.lede")}</p>
+            </div>
 
-        {routes.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border/60 bg-muted/10 p-10 text-center">
-            <RouteIcon className="size-8 text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">{t("list.empty")}</p>
             <Button asChild>
-              <Link to="/routes" className="gap-2">
-                <Plus className="size-4" />
-                {t("list.emptyCta")}
+              <Link to="/routes">
+                <Plus size={17} />
+                {t("newRoute")}
               </Link>
             </Button>
           </div>
-        ) : (
-          <ul className="space-y-2">
-            {routes.map((route) => (
-              <li
-                key={route.id}
-                className="flex items-center justify-between rounded-lg border border-border/60 bg-background p-4 transition-colors hover:border-primary/40"
-              >
-                <Link to={`/routes/${route.id}`} className="flex flex-1 flex-col gap-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium truncate">{route.name}</span>
-                    <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground">
-                      {route.discipline}
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
-                    <span>{(route.distanceM / 1000).toFixed(1)} km</span>
-                    <span>D+ {route.elevationGainM} m</span>
-                    <span>{t("list.savedAt", { date: formatDate(route.generatedAt) })}</span>
-                  </div>
-                </Link>
-                <div className="flex items-center gap-1">
-                  <Button asChild variant="ghost" size="icon" aria-label={t("myRoutes")}>
-                    <Link to={`/routes/${route.id}`}>
-                      <ArrowRight className="size-4" />
+        </section>
+
+        {/* 2 — the index, or the reason there is none */}
+        <section className="zn-rt__band">
+          {reachedSoftLimit && (
+            <Alert
+              kind="warning"
+              title={t("list.softLimitTitle", { limit: ROUTE_STORAGE_SOFT_LIMIT })}
+              className="zn-rt__notice"
+            >
+              {t("list.softLimitReached", { limit: ROUTE_STORAGE_SOFT_LIMIT })}
+            </Alert>
+          )}
+
+          {routes.length === 0 ? (
+            <EmptyState
+              variant="not-started"
+              icon={RouteIcon}
+              title={t("list.emptyTitle")}
+              description={t("list.empty")}
+              action={
+                // The header already spends the screen's one vermillon fill on
+                // this exact call, so here it is the outlined accent.
+                <Button variant="outline-primary" asChild>
+                  <Link to="/routes">
+                    <Plus size={17} />
+                    {t("list.emptyCta")}
+                  </Link>
+                </Button>
+              }
+            />
+          ) : (
+            <ul className="zn-rt__list">
+              {routes.map((route) => {
+                const disciplineKey = DISCIPLINE_KEY[route.discipline];
+                return (
+                  <li key={route.id} className="zn-rt__item">
+                    <Link to={`/routes/${route.id}`} className="zn-rt__item-link">
+                      <span className="zn-rt__item-name">{route.name}</span>
+                      <span className="zn-mono zn-rt__facts">
+                        <strong>{(route.distanceM / 1000).toFixed(1)} km</strong>
+                        <span>↑ {route.elevationGainM} m</span>
+                        <span>{disciplineKey ? t(disciplineKey) : route.discipline}</span>
+                        <span>{t("list.savedAt", { date: formatDate(route.generatedAt) })}</span>
+                      </span>
                     </Link>
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label={t("result.delete")}
-                    onClick={() => onDelete(route.id)}
-                  >
-                    <Trash2 className="size-4 text-destructive" />
-                  </Button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
+
+                    <div className="zn-rt__item-actions">
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="icon-sm"
+                        aria-label={t("list.open", { name: route.name })}
+                      >
+                        <Link to={`/routes/${route.id}`}>
+                          <ArrowRight size={16} />
+                        </Link>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="icon-sm"
+                        className="zn-rt__danger"
+                        aria-label={t("list.deleteRoute", { name: route.name })}
+                        onClick={() => onDelete(route.id)}
+                      >
+                        <Trash2 size={16} />
+                      </Button>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
       </div>
     </>
   );
