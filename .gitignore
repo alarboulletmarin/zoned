@@ -76,3 +76,7 @@ scripts/qa-*.ts
 # Design handoff bundle — reference material, not project source.
 # Source of truth: the Claude Design project.
 design_handoff/
+
+# Live-vs-mockup screenshot pairs from the pre-refonte design. Regenerate
+# locally when needed; do not track binaries that go stale with every redesign.
+.qa-pixel/
