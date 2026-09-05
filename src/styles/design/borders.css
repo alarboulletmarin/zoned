@@ -11,7 +11,7 @@
   --border-rule: var(--bw-rule) solid var(--line-strong);
   --border-heavy: var(--bw-heavy) solid var(--accent);
   --border-divider: var(--bw-rule) solid var(--line-divider);
-  --border-dashed: var(--bw-rule) dashed rgba(22, 19, 14, 0.4);
+  --border-dashed: var(--bw-rule) dashed rgba(23, 22, 20, 0.4);
 
   --r-xs: 3px;
   --r-sm: 4px;
@@ -24,20 +24,20 @@
   --r-phone: 36px;
   --r-pill: 999px;
 
-  --shadow-block: 8px 8px 0 rgba(22, 19, 14, 0.09);
-  --shadow-block-lg: 10px 10px 0 rgba(22, 19, 14, 0.09);
+  --shadow-block: 8px 8px 0 rgba(23, 22, 20, 0.09);
+  --shadow-block-lg: 10px 10px 0 rgba(23, 22, 20, 0.09);
   --shadow-none: none;
 
   /* the creme hatch used behind an empty illustration slot */
-  --fill-slot: repeating-linear-gradient(45deg, #EDE4D2 0 7px, #F5EFE2 7px 14px);
+  --fill-slot: repeating-linear-gradient(45deg, #EFEEEA 0 7px, #F6F5F2 7px 14px);
 }
 
 /* Dark: a hard ink offset is invisible on an ink page, so the shadow deepens
    to true black instead of lightening — depth still reads as "further from
    the lamp", which is the same rule the light theme follows. */
 .dark {
-  --border-dashed: var(--bw-rule) dashed rgba(239, 232, 218, 0.4);
+  --border-dashed: var(--bw-rule) dashed rgba(237, 235, 231, 0.4);
   --shadow-block: 8px 8px 0 rgba(0, 0, 0, 0.5);
   --shadow-block-lg: 10px 10px 0 rgba(0, 0, 0, 0.5);
-  --fill-slot: repeating-linear-gradient(45deg, #1C1811 0 7px, #16130E 7px 14px);
+  --fill-slot: repeating-linear-gradient(45deg, #1C1811 0 7px, #171614 7px 14px);
 }

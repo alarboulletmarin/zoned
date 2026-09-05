@@ -1,10 +1,10 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Ink on cream: the same paper the app is printed on. A favicon has no
-       page to inherit from, so the two tokens are written out — #16130E ink,
-       #F5EFE2 page. -->
-  <rect width="64" height="64" rx="14" fill="#F5EFE2"/>
+       page to inherit from, so the two tokens are written out — #171614 ink,
+       #F6F5F2 page. -->
+  <rect width="64" height="64" rx="14" fill="#F6F5F2"/>
   <path d="M 4 32 L 12 32 L 15 38 L 20 20 L 25 44 L 30 12 L 35 40 L 40 16 L 45 32 L 52 32"
-        stroke="#16130E"
+        stroke="#171614"
         stroke-width="4"
         stroke-linecap="round"
         stroke-linejoin="round"

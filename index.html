@@ -12,7 +12,7 @@
          dark system bar. The inline script below and `applyResolvedTheme` in
          src/lib/theme.ts both write this tag; the value here is the light
          default they start from. -->
-    <meta name="theme-color" content="#F5EFE2" />
+    <meta name="theme-color" content="#F6F5F2" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="application-name" content="Zoned" />
     <meta name="apple-mobile-web-app-title" content="Zoned" />
@@ -114,7 +114,7 @@
           // Native controls — scrollbars, date pickers, autofill.
           document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
           var meta = document.querySelector('meta[name="theme-color"]:not([media])');
-          if (meta) meta.setAttribute('content', isDark ? '#16130E' : '#F5EFE2');
+          if (meta) meta.setAttribute('content', isDark ? '#171614' : '#F6F5F2');
         } catch (e) {
           // Private mode can throw on localStorage. Paint light and carry on.
           document.documentElement.classList.remove('dark');
@@ -128,18 +128,18 @@
          tokens in src/styles/design/colors.css — the shell has to be the same
          cream the app fades into, or the load flashes. */
       :root {
-        --bg: #F5EFE2;
-        --fg: #16130E;
-        --muted: #6B6459;
-        --border: rgba(22, 19, 14, 0.18);
+        --bg: #F6F5F2;
+        --fg: #171614;
+        --muted: #6C6A65;
+        --border: rgba(23, 22, 20, 0.18);
         --primary: #E8452A;
       }
       /* Dark mode via class (applied by script above) */
       .dark {
-        --bg: #16130E;
-        --fg: #EFE8DA;
+        --bg: #171614;
+        --fg: #EDEBE7;
         --muted: #948C7D;
-        --border: rgba(239, 232, 218, 0.18);
+        --border: rgba(237, 235, 231, 0.18);
         --primary: #E8452A;
       }
 

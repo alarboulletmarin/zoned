@@ -32,22 +32,22 @@ type ZoneHexMap = Record<ZoneNumber, string>;
 
 /** The ink ramp, light theme — `--zone-1..6` composited over `--paper-raised`. */
 export const ZONE_HEX_LIGHT: ZoneHexMap = {
-  1: "#dedbd4",
-  2: "#b9b6af",
-  3: "#94918a",
-  4: "#6f6c65",
-  5: "#45423c",
-  6: "#16130e",
+  1: "#dfdede",
+  2: "#b9b9b9",
+  3: "#949493",
+  4: "#6f6f6d",
+  5: "#454543",
+  6: "#171614",
 };
 
 /** The ink ramp, dark theme — the same alphas, cream over the dark card. */
 export const ZONE_HEX_DARK: ZoneHexMap = {
-  1: "#3e3931",
-  2: "#5f5a51",
-  3: "#807a70",
-  4: "#a19b90",
-  5: "#c6bfb3",
-  6: "#efe8da",
+  1: "#3e3c39",
+  2: "#5e5c5a",
+  3: "#7f7d7a",
+  4: "#9f9d9a",
+  5: "#c4c2bf",
+  6: "#edebe7",
 };
 
 const BY_THEME: Record<ThemeMode, ZoneHexMap> = {
@@ -82,7 +82,7 @@ export function getZoneHexMap(
  * is a 45 degree hatch, and where only a flat fill is possible — PDF, PNG — it
  * falls back to the sunken paper it would be cut out of.
  */
-export const UNZONED_HEX = "#efe7d7";
+export const UNZONED_HEX = "#efeeea";
 
 /**
  * Tailwind classes per zone, written out in full.
