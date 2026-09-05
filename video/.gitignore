@@ -1,0 +1,12 @@
+# Rendered videos
+out/
+
+# Screenshots captured from the live site by `bun run shots`.
+# Regenerable, heavy, and locale/version dependent — not worth tracking.
+public/shots/
+
+# Generated from the app's data and engines by `bun run sync`.
+src/data/facts.json
+
+node_modules/
+.remotion/

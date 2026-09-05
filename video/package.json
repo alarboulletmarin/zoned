@@ -1,0 +1,29 @@
+{
+  "name": "zoned-video",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "sync": "bun run scripts/sync-data.ts",
+    "shots": "bun run scripts/capture-shots.ts",
+    "studio": "bun run sync && remotion studio",
+    "compositions": "remotion compositions",
+    "render": "bun run scripts/render.ts",
+    "qa:motion": "bun run scripts/qa-motion.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.501",
+    "@remotion/google-fonts": "^4.0.501",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "remotion": "^4.0.501",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "puppeteer": "^25.4.0",
+    "typescript": "5.9.3"
+  }
+}

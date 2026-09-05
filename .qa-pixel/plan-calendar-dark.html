@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f%5B%5D=general-sans@400,500,600,700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap">
+<style>
+  body { margin:0; background:#EFEDE6; }
+  :root {
+    --bg:#0B0B0A; --card:#141412; --line:#2A2A26;
+    --fg:#EFEDE6; --fg2:#BDBBB2; --fg3:#8F8F86;
+    --inv-bg:#EFEDE6; --inv-fg:#0B0B0A; --accent-text:#D6F24B;
+    --z1:#8F8F86; --z2:#6EE07A; --z3:#F2D53C; --z4:#FF7A2F; --z5:#FF3B30; --z6:#B26BFF;
+  }
+  [data-theme="light"] {
+    --bg:#EFEDE6; --card:#FCFBF6; --line:#CFCCC0;
+    --fg:#0B0B0A; --fg2:#3B3A33; --fg3:#5B594F;
+    --inv-bg:#0B0B0A; --inv-fg:#EFEDE6; --accent-text:#6B7A12;
+    --z1:#8F8F86; --z2:#2FA84A; --z3:#E0B400; --z4:#FF6A1F; --z5:#E5261B; --z6:#8A46E0;
+  }
+  a { color:#0B0B0A; text-decoration:underline; }
+  a:hover { color:#FF6A1F; }
+</style>
+</head>
+<body>
+<div data-theme="dark" style="font-family:'General Sans',system-ui,sans-serif; width:max-content; padding:32px;">
+<div data-screen-label="Plan généré — calendrier" style="display:flex; flex-direction:column; gap:14px;">
+      <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#5B594F;">/plan/:id — vue calendrier (toutes les semaines)</div>
+      <div style="width:1280px; background:var(--bg); border:2px solid #0B0B0A;">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 24px 14px;">
+          <div style="display:flex; align-items:baseline; gap:16px;">
+            <span style="font-weight:700; font-size:30px; letter-spacing:-.04em; text-transform:uppercase; color:var(--fg);">Semi de Nantes</span>
+            <span style="font-family:'Space Mono',monospace; font-size:11px; color:var(--fg3);">12 semaines · 6 avr. → 28 juin</span>
+          </div>
+          <div style="display:flex; gap:22px; font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--fg3);">
+            <span style="background:var(--inv-bg); color:var(--inv-fg); padding:8px 12px;">Calendrier</span><span>Semaine</span><span>Mois</span><span>Liste</span>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:150px repeat(7,1fr); border-top:1px solid var(--line); font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--fg3);">
+          <div style="padding:10px 24px;">Semaine</div>
+          <div style="padding:10px 8px;">Lun</div><div style="padding:10px 8px;">Mar</div><div style="padding:10px 8px;">Mer</div><div style="padding:10px 8px;">Jeu</div><div style="padding:10px 8px;">Ven</div><div style="padding:10px 8px;">Sam</div><div style="padding:10px 8px;">Dim</div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:150px repeat(7,1fr); border-top:1px solid var(--line); align-items:stretch;">
+          <div style="padding:12px 24px;">
+            <div style="display:flex; align-items:center; gap:8px;"><span style="width:8px; height:8px; background:var(--z2);"></span><span style="font-weight:700; font-size:15px; letter-spacing:-.02em; text-transform:uppercase; color:var(--fg);">S5</span></div>
+            <div style="font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3); margin-top:6px;">4 – 10 mai · 46 km</div>
+          </div>
+          <div style="padding:10px 8px; font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3);">Repos</div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z3); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z3 · 48′</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">20′ tempo</div></div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z2); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z2 · 45′</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">Footing</div></div>
+          <div style="padding:10px 8px; font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3);">Renfo</div>
+          <div style="padding:10px 8px; font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3);">Repos</div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z5); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z5 · 36′</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">10 × 200 m</div></div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z2); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z2 · 1 h 30</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">Longue</div></div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:150px repeat(7,1fr); border-top:1px solid var(--line);">
+          <div style="padding:12px 24px;">
+            <div style="display:flex; align-items:center; gap:8px;"><span style="width:8px; height:8px; background:var(--z3);"></span><span style="font-weight:700; font-size:15px; letter-spacing:-.02em; text-transform:uppercase; color:var(--fg);">S6</span></div>
+            <div style="font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3); margin-top:6px;">11 – 17 mai · 49 km</div>
+          </div>
+          <div style="padding:10px 8px; font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3);">Repos</div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z4); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z4 · 50′</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">2 × 12′ seuil</div></div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z2); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z2 · 45′</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">Footing</div></div>
+          <div style="padding:10px 8px; font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3);">Renfo</div>
+          <div style="padding:10px 8px; font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3);">Repos</div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z5); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z5 · 42′</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">Billat 30/30</div></div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z2); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z2 · 1 h 40</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">Longue</div></div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:150px repeat(7,1fr); border-top:1px solid var(--line); background:var(--card);">
+          <div style="padding:12px 24px;">
+            <div style="display:flex; align-items:center; gap:8px;"><span style="width:8px; height:8px; background:var(--z3);"></span><span style="font-weight:700; font-size:15px; letter-spacing:-.02em; text-transform:uppercase; color:var(--fg);">S7</span></div>
+            <div style="font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; background:#D6F24B; color:#0B0B0A; padding:3px 6px; display:inline-block; margin-top:8px;">En cours</div>
+            <div style="font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3); margin-top:6px;">13 – 19 avr. · 52 km</div>
+            <div style="font-family:'Space Mono',monospace; font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-text); margin-top:8px;">Valider</div>
+          </div>
+          <div style="padding:10px 8px; font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3);">Repos</div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z4); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z4 · 54′</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">3 × 10′ seuil</div><div style="font-family:'Space Mono',monospace; font-size:9px; color:var(--z2); margin-top:4px;">Faite</div></div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z2); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z2 · 45′</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">Footing</div><div style="font-family:'Space Mono',monospace; font-size:9px; color:var(--z2); margin-top:4px;">Faite</div></div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3); text-decoration:line-through;">Renfo</div><div style="font-family:'Space Mono',monospace; font-size:9px; color:var(--fg3); margin-top:4px;">Sautée</div></div>
+          <div style="padding:10px 8px; font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3);">Repos</div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z5); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z5 · 42′</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">Billat 30/30</div></div>
+          <div style="padding:10px 8px; background:#D6F24B;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; color:#0B0B0A;">Z2 · 1 H 45</div><div style="font-size:12px; line-height:1.25; color:#0B0B0A; margin-top:6px;">Longue progressive</div><div style="font-family:'Space Mono',monospace; font-size:9px; color:#0B0B0A; margin-top:4px;">Séance clé</div></div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:150px repeat(7,1fr); border-top:1px solid var(--line);">
+          <div style="padding:12px 24px;">
+            <div style="display:flex; align-items:center; gap:8px;"><span style="width:8px; height:8px; background:var(--z1);"></span><span style="font-weight:700; font-size:15px; letter-spacing:-.02em; text-transform:uppercase; color:var(--fg);">S8</span></div>
+            <div style="font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--fg3); margin-top:8px;">Coupure</div>
+            <div style="font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3); margin-top:6px;">20 – 26 avr. · 38 km</div>
+          </div>
+          <div style="padding:10px 8px; font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3);">Repos</div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z2); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z2 · 40′</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">Footing</div></div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z3); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z3 · 40′</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">Fartlek court</div></div>
+          <div style="padding:10px 8px; font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3);">Repos</div>
+          <div style="padding:10px 8px; font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3);">Renfo</div>
+          <div style="padding:10px 8px; font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3);">Repos</div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z2); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z2 · 1 h 10</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">Longue courte</div></div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:150px repeat(7,1fr); border-top:1px solid var(--line);">
+          <div style="padding:12px 24px;">
+            <div style="display:flex; align-items:center; gap:8px;"><span style="width:8px; height:8px; background:var(--z5);"></span><span style="font-weight:700; font-size:15px; letter-spacing:-.02em; text-transform:uppercase; color:var(--fg);">S12</span></div>
+            <div style="font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3); margin-top:6px;">22 – 28 juin · 28 km</div>
+          </div>
+          <div style="padding:10px 8px; font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3);">Repos</div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z4); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z4 · 32′</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">2 × 6′ allure</div></div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z2); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z2 · 30′</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">Footing court</div></div>
+          <div style="padding:10px 8px; font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3);">Repos</div>
+          <div style="padding:10px 8px;"><div style="font-family:'Space Mono',monospace; font-size:9px; font-weight:700; background:var(--z1); color:#0B0B0A; padding:2px 5px; display:inline-block;">Z1 · 20′</div><div style="font-size:12px; line-height:1.25; color:var(--fg2); margin-top:6px;">Déverrouillage</div></div>
+          <div style="padding:10px 8px; font-family:'Space Mono',monospace; font-size:10px; color:var(--fg3);">Repos</div>
+          <div style="padding:10px 8px; background:var(--inv-bg);"><div style="font-family:'Space Mono',monospace; font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:var(--inv-fg);">Course</div><div style="font-weight:700; font-size:14px; letter-spacing:-.02em; text-transform:uppercase; color:var(--inv-fg); margin-top:6px;">Semi de Nantes</div><div style="font-family:'Space Mono',monospace; font-size:9px; color:var(--inv-fg); margin-top:4px;">Objectif 1:35</div></div>
+        </div>
+
+        <div style="border-top:1px solid var(--line); padding:14px 24px; display:flex; gap:26px; font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--fg3);">
+          <span>Glisser une séance pour la déplacer</span><span>Clic droit : remplacer · parcours · supprimer</span><span>4 semaines masquées</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3d. MOIS -->
+    
+</div>
+</body>
+</html>
