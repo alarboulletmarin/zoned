@@ -1,31 +1,25 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, type CSSProperties, type ReactNode } from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
-  Clock,
   Dumbbell,
-  Circle,
-  Mountain,
-  Route,
   Link2,
-  Shield,
-  BookOpen,
-  Sparkles,
+  Route,
   Share,
   StravaIcon,
   MoreHorizontal,
   SlidersHorizontal,
   Pencil,
 } from "@/components/icons";
+import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -35,8 +29,13 @@ import {
   ZonePersonalizationCTA,
   TipCard,
 } from "@/components/domain";
-import { WorkoutStructure, CoachingTips } from "@/components/domain/WorkoutStructure";
+import {
+  WorkoutStructure,
+  CoachingTips,
+} from "@/components/domain/WorkoutStructure";
 import { ExportMenu } from "@/components/domain/ExportMenu";
+import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
+import { ZoneRow } from "@/components/domain/ZoneRow";
 import { ShareDialog } from "@/components/share/ShareDialog";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/issueBuilder";
@@ -45,25 +44,26 @@ import { NutritionRecoverySection } from "@/components/domain/NutritionRecoveryS
 import { ScienceSection } from "@/components/domain/ScienceSection";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { Section } from "@/components/editorial/Section";
-import { SessionTimeline, ZoneDistribution, transformSessionBlocks, MiniElevationProfile } from "@/components/visualization";
+import {
+  ZoneBar,
+  toZoneBarBlocks,
+  transformSessionBlocks,
+  formatDurationMinutes,
+  MiniElevationProfile,
+  type ZoneNumber,
+} from "@/components/visualization";
 import { StrengthSessionTimeline } from "@/components/visualization/StrengthSessionTimeline";
 import { MuscleDistribution } from "@/components/visualization/MuscleDistribution";
 import { MuscleMap } from "@/components/visualization/MuscleMap";
-import { MiniSessionTimeline } from "@/components/visualization/MiniSessionTimeline";
 import { useWorkout, useRelatedWorkouts, useTips } from "@/hooks";
 import { RelatedContent } from "@/components/domain/RelatedContent";
-import { useScrolledPast } from "@/hooks/useScrolledPast";
 import type { ZoneRange } from "@/types";
-import {
-  getWorkoutDiscipline,
-  getDominantZone,
-} from "@/types";
+import { getWorkoutDiscipline, getDominantZone } from "@/types";
 import { isRunningWorkout, isStrengthWorkout } from "@/lib/workoutTemplate";
+import { getWorkoutPhaseSteps } from "@/lib/workoutStructure";
 import type { StrengthWorkoutTemplate } from "@/types/strength";
 import { IntensityBadge } from "@/components/domain/IntensityBadge";
-import { formatDurationMinutes } from "@/components/visualization/transforms";
 import { usePickLang, usePickLangArray } from "@/lib/i18n-utils";
 import { computeTrailMetrics } from "@/lib/workoutMetrics";
 import { MuscleGroupBadges } from "@/components/domain/MuscleGroupBadge";
@@ -71,8 +71,26 @@ import { StrengthExerciseList } from "@/components/domain/StrengthExerciseList";
 import { CATEGORY_ICONS } from "@/components/domain/CategoryIcon";
 import { loadUserZonePrefs, calculateAllZones } from "@/lib/zones";
 import { hasAdjustableParams } from "@/lib/workoutAdjust";
-import { createCustomWorkoutId, isCustomWorkoutId } from "@/lib/customWorkoutStorage";
+import {
+  createCustomWorkoutId,
+  isCustomWorkoutId,
+} from "@/lib/customWorkoutStorage";
 import { publicWorkoutUrl } from "@/lib/share/workoutShare";
+
+const PHASE_KEYS = ["warmup", "main", "cooldown"] as const;
+
+type BreadcrumbItem = {
+  label: string;
+  to?: string;
+  state?: Record<string, unknown>;
+};
+
+interface Fact {
+  label: string;
+  value: string;
+  /** The value this one replaced — printed struck through beside it. */
+  was?: string;
+}
 
 export function WorkoutDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -100,7 +118,9 @@ export function WorkoutDetailPage() {
   const { workouts: relatedWorkouts } = useRelatedWorkouts(runningWorkout);
 
   // Get contextual tip based on dominant zone (running workouts only)
-  const dominantZoneForTip = runningWorkout ? getDominantZone(runningWorkout) : undefined;
+  const dominantZoneForTip = runningWorkout
+    ? getDominantZone(runningWorkout)
+    : undefined;
   const { tip } = useTips({
     filters: dominantZoneForTip ? { zones: [dominantZoneForTip] } : undefined,
     autoLoad: !!workout && !isStrength,
@@ -125,56 +145,36 @@ export function WorkoutDetailPage() {
     }
   }, []);
 
-  const timelineCardRef = useRef<HTMLDivElement>(null);
-  const timelineScrolledPast = useScrolledPast(timelineCardRef);
-
   if (isLoading) {
     return (
-      <div className="py-8 space-y-8">
-        {/* Back button skeleton */}
-        <Skeleton className="h-9 w-40 rounded-md" />
-
-        {/* Bento header skeleton */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Session identity card skeleton */}
-          <Skeleton className="lg:col-span-8 h-48 lg:h-60 rounded-xl" />
-
-          {/* Summary metrics skeleton (2x2 grid) */}
-          <div className="lg:col-span-4 grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
-            <Skeleton className="h-20 lg:h-28 rounded-lg lg:rounded-xl" />
-            <Skeleton className="h-20 lg:h-28 rounded-lg lg:rounded-xl" />
-            <Skeleton className="h-20 lg:h-28 rounded-lg lg:rounded-xl" />
-            <Skeleton className="h-20 lg:h-28 rounded-lg lg:rounded-xl" />
-          </div>
-        </div>
-
-        {/* Content area skeleton */}
-        <div className="grid gap-8 lg:grid-cols-3">
-          <div className="lg:col-span-2 space-y-8">
-            {/* Timeline skeleton with zone shimmer */}
-            <Skeleton variant="zone-shimmer" className="h-40 rounded-xl" />
-            {/* Structure skeleton */}
-            <Skeleton className="h-64 rounded-xl" />
-          </div>
-          <div className="space-y-6">
-            <Skeleton className="h-48 rounded-xl" />
-            <Skeleton className="h-32 rounded-xl" />
-          </div>
-        </div>
+      <div className="zn-session__loading" aria-busy="true">
+        <Skeleton className="zn-session__loading-title" />
+        <Skeleton className="zn-session__loading-line" />
+        <Skeleton className="zn-session__loading-facts" />
+        <Skeleton variant="zone-shimmer" className="zn-session__loading-bar" />
       </div>
     );
   }
 
+  // A dead end with a way out of it: the id is gone, everything the athlete
+  // saved is not, and the catalogue is one click away.
   if (!workout) {
     return (
-      <div className="py-12 text-center">
-        <p className="text-muted-foreground">{t("common:errors.workoutNotFound")}</p>
-        <Button variant="link" asChild className="mt-4">
-          <Link to="/library">
-            <ArrowLeft className="mr-2 size-4" />
-            {t("common:actions.backToLibrary")}
-          </Link>
-        </Button>
+      <div className="zn-session__missing">
+        <Alert
+          kind="error"
+          title={t("session:screen.notFoundTitle")}
+          action={
+            <Button variant="outline" asChild>
+              <Link to="/library">
+                <ArrowLeft />
+                {t("common:actions.backToLibrary")}
+              </Link>
+            </Button>
+          }
+        >
+          {t("session:screen.notFoundBody")}
+        </Alert>
       </div>
     );
   }
@@ -183,10 +183,7 @@ export function WorkoutDetailPage() {
   // Narrowing here is what makes `workout` a WorkoutTemplate below.
   if (isStrengthWorkout(workout)) {
     return (
-      <StrengthWorkoutDetail
-        workout={workout}
-        locationState={locationState}
-      />
+      <StrengthWorkoutDetail workout={workout} locationState={locationState} />
     );
   }
 
@@ -196,16 +193,20 @@ export function WorkoutDetailPage() {
   // in place instead, and one with no number to move has nothing to offer.
   const isOwnWorkout = isCustomWorkoutId(workout.id);
   const canAdjust = !isOwnWorkout && hasAdjustableParams(workout);
-  const canGenerateRoute = !workout.environment.requiresTrack && (workoutDiscipline === "running" || workoutDiscipline === "cycling");
+  const canGenerateRoute =
+    !workout.environment.requiresTrack &&
+    (workoutDiscipline === "running" || workoutDiscipline === "cycling");
   // Plan context: duration from plan generation (volume-scaled, may differ for long runs)
   const planWeekNumber = locationState?.weekNumber;
   const planVolumePercent = locationState?.volumePercent;
   const planEstimatedDuration = locationState?.estimatedDurationMin;
   const planTargetDistanceKm = locationState?.targetDistanceKm;
-  const hasPlanContext = locationState?.from === "plan" && planEstimatedDuration != null;
+  const hasPlanContext =
+    locationState?.from === "plan" && planEstimatedDuration != null;
 
-  // Base session data from workout template
-  const baseSessionData = transformSessionBlocks({
+  // Base session data from workout template. One call, reused three times: the
+  // profile bar, the zone split and the durations all read the same segments.
+  const sessionData = transformSessionBlocks({
     warmupTemplate: workout.warmupTemplate,
     mainSetTemplate: workout.mainSetTemplate,
     cooldownTemplate: workout.cooldownTemplate,
@@ -214,34 +215,55 @@ export function WorkoutDetailPage() {
     cooldownStructure: workout.cooldownStructure,
     discipline: workout.discipline,
   });
-  const baseDuration = Math.round(baseSessionData.totalDurationMin);
+  const baseDuration = Math.round(sessionData.totalDurationMin);
 
   // Always use plan duration when coming from a plan — it's the authoritative value
   // that matches what the calendar shows.
-  const planDuration = planEstimatedDuration != null ? Math.round(planEstimatedDuration) : null;
-  const duration = (locationState?.from === "plan" && planDuration != null)
-    ? planDuration
-    : baseDuration;
+  const planDuration =
+    planEstimatedDuration != null ? Math.round(planEstimatedDuration) : null;
+  const duration =
+    locationState?.from === "plan" && planDuration != null
+      ? planDuration
+      : baseDuration;
+
+  const profileBlocks = toZoneBarBlocks(workout);
+  const phaseCount = PHASE_KEYS.filter(
+    (key) => getWorkoutPhaseSteps(workout, key).length > 0,
+  ).length;
+  const zonedRows = sessionData.zoneBreakdown.filter(
+    (row): row is typeof row & { zone: ZoneNumber } => row.zone != null,
+  );
+  const unzonedRow = sessionData.zoneBreakdown.find((row) => row.zone == null);
 
   const CategoryIcon = CATEGORY_ICONS[workout.category];
 
   // Breadcrumb trail
   const workoutName = pick(workout, "name");
   const categoryLabel = t(`library:categories.${workout.category}`);
-  type BreadcrumbItem = { label: string; to?: string; state?: Record<string, unknown> };
-  const breadcrumbs: BreadcrumbItem[] = [{ label: t("common:nav.home"), to: "/" }];
+  const breadcrumbs: BreadcrumbItem[] = [
+    { label: t("common:nav.home"), to: "/" },
+  ];
 
   if (locationState?.from === "plan" && locationState.planId) {
     breadcrumbs.push({ label: t("common:nav.plans"), to: "/plans" });
     breadcrumbs.push({
-      label: locationState.planName || t("common:pages.workoutDetail.planFallback"),
+      label:
+        locationState.planName || t("common:pages.workoutDetail.planFallback"),
       to: `/plan/${locationState.planId}?week=${locationState.weekNumber}`,
       state: { returnScrollY: locationState.scrollY },
     });
-  } else if (locationState?.from === "collection" && locationState.collectionSlug) {
-    breadcrumbs.push({ label: t("common:collections.title"), to: "/collections" });
+  } else if (
+    locationState?.from === "collection" &&
+    locationState.collectionSlug
+  ) {
     breadcrumbs.push({
-      label: locationState.collectionName || t("common:pages.workoutDetail.collectionFallback"),
+      label: t("common:collections.title"),
+      to: "/collections",
+    });
+    breadcrumbs.push({
+      label:
+        locationState.collectionName ||
+        t("common:pages.workoutDetail.collectionFallback"),
       to: `/collections/${locationState.collectionSlug}`,
     });
   } else {
@@ -253,9 +275,6 @@ export function WorkoutDetailPage() {
   }
   breadcrumbs.push({ label: workoutName });
 
-  // The immediate parent is the second-to-last breadcrumb (for mobile)
-  const parentCrumb = breadcrumbs[breadcrumbs.length - 2];
-
   const seoTitle = pick(workout, "name");
   const seoDescription = pick(workout, "description").slice(0, 155);
 
@@ -265,21 +284,54 @@ export function WorkoutDetailPage() {
     trailMetrics.totalElevationLossM > 0 ||
     trailMetrics.dominantTerrain != null;
 
-  const envRequirements: { icon: React.ComponentType<{ className?: string }>; text: string }[] = [];
+  const envRequirements: string[] = [];
   if (workout.environment.requiresTrack) {
-    envRequirements.push({ icon: Circle, text: t("environment.requiresTrack") });
+    envRequirements.push(t("session:environment.requiresTrack"));
   }
   if (workout.environment.requiresHills && !hasTrail) {
-    envRequirements.push({ icon: Mountain, text: t("environment.requiresHills") });
+    envRequirements.push(t("session:environment.requiresHills"));
   }
   if (workout.environment.prefersFlat) {
-    envRequirements.push({ icon: Route, text: t("environment.prefersFlat") });
+    envRequirements.push(t("session:environment.prefersFlat"));
   }
 
-  // Derive the environment label for the metric card
-  const envLabel = envRequirements.length > 0
-    ? envRequirements.map((r) => r.text).join(", ")
-    : t("details.environment");
+  // The strip: the numbers that decide whether this is today's session.
+  const facts: Fact[] = [
+    {
+      label: t("session:stats.duration"),
+      value: formatDurationMinutes(duration),
+      was:
+        hasPlanContext && duration < baseDuration - 3
+          ? formatDurationMinutes(baseDuration)
+          : undefined,
+    },
+  ];
+  if (planTargetDistanceKm != null && planTargetDistanceKm > 0) {
+    facts.push({
+      label: t("session:stats.distance"),
+      value: `${workout.category !== "long_run" ? "~" : ""}${planTargetDistanceKm} km`,
+    });
+  }
+  facts.push({
+    label: t("session:stats.difficulty"),
+    value: t(`library:difficulty.${workout.difficulty}`),
+  });
+  facts.push({
+    label: t("session:stats.target"),
+    value: t(`session:targetSystems.${workout.targetSystem}`),
+  });
+  if (envRequirements.length > 0) {
+    facts.push({
+      label: t("session:stats.environment"),
+      value: envRequirements.join(" · "),
+    });
+  }
+  if (hasTrail && trailMetrics.totalElevationGainM > 0) {
+    facts.push({
+      label: t("session:stats.elevation"),
+      value: `+${trailMetrics.totalElevationGainM} m`,
+    });
+  }
 
   return (
     <>
@@ -304,10 +356,26 @@ export function WorkoutDetailPage() {
               audienceType: workout.difficulty,
             },
             additionalProperty: [
-              { "@type": "PropertyValue", name: "Category", value: workout.category },
-              { "@type": "PropertyValue", name: "Target System", value: workout.targetSystem },
-              { "@type": "PropertyValue", name: "Difficulty", value: workout.difficulty },
-              { "@type": "PropertyValue", name: "Dominant Zone", value: `Z${dominantZone}` },
+              {
+                "@type": "PropertyValue",
+                name: "Category",
+                value: workout.category,
+              },
+              {
+                "@type": "PropertyValue",
+                name: "Target System",
+                value: workout.targetSystem,
+              },
+              {
+                "@type": "PropertyValue",
+                name: "Difficulty",
+                value: workout.difficulty,
+              },
+              {
+                "@type": "PropertyValue",
+                name: "Dominant Zone",
+                value: `Z${dominantZone}`,
+              },
             ],
             isPartOf: {
               "@type": "CollectionPage",
@@ -326,8 +394,16 @@ export function WorkoutDetailPage() {
             name: seoTitle,
             description: seoDescription,
             totalTime: `PT${duration}M`,
-            estimatedCost: { "@type": "MonetaryAmount", currency: "EUR", value: "0" },
-            tool: ["Running shoes", "Heart rate monitor (optional)", "GPS watch (optional)"],
+            estimatedCost: {
+              "@type": "MonetaryAmount",
+              currency: "EUR",
+              value: "0",
+            },
+            tool: [
+              "Running shoes",
+              "Heart rate monitor (optional)",
+              "GPS watch (optional)",
+            ],
             step: [
               {
                 "@type": "HowToStep",
@@ -364,308 +440,308 @@ export function WorkoutDetailPage() {
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: "Bibliothèque", item: "https://zoned.run/library" },
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Accueil",
+                item: "https://zoned.run/",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Bibliothèque",
+                item: "https://zoned.run/library",
+              },
               { "@type": "ListItem", position: 3, name: seoTitle },
             ],
           },
         ]}
       />
-      <div className={`zone-${dominantZone} py-6 md:py-8 space-y-10 sm:space-y-12 md:space-y-16`}>
-        {/* Top strip — back, breadcrumb, optional plan chip. */}
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between gap-3 flex-wrap">
-            <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="-ml-2">
-              <ArrowLeft className="mr-1.5 size-4" />
-              {t("common:pages.workoutDetail.back")}
-            </Button>
+
+      <div className="zn-session">
+        <SessionTrail breadcrumbs={breadcrumbs} onBack={() => navigate(-1)} />
+
+        {/* 1 — what the session is, and the one thing to do with it */}
+        <section className="zn-session__hero">
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-12)" } as CSSProperties}
+          >
+            <div
+              className="zn-cluster"
+              style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+            >
+              <span className="zn-mono zn-session__code">{workout.id}</span>
+              <ZoneBadge zone={dominantZone} size="md" showLabel />
+              <Badge variant="outline">
+                <CategoryIcon className="zn-cat-icon" />
+                {categoryLabel}
+              </Badge>
+              <Badge variant="secondary">
+                {t(`library:activityToggle.${workoutDiscipline}`)}
+              </Badge>
+            </div>
+
+            <h1 className="zn-display">{workoutName}</h1>
+
+            <p className="zn-body zn-body--lead zn-session__lede">
+              <GlossaryLinkedText text={pick(workout, "description")} />
+            </p>
+
+            {workout.sourceWorkoutId && (
+              <WorkoutProvenance sourceId={workout.sourceWorkoutId} />
+            )}
+
             {hasPlanContext && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary">
-                <Clock className="size-3" />
+              <p className="zn-mono zn-faint">
                 {t("session:planContext.banner", {
                   week: planWeekNumber,
                   volume: planVolumePercent,
                   duration,
                 })}
-              </span>
+              </p>
             )}
-          </div>
 
-          <nav aria-label="Breadcrumb">
-            <ol className="hidden sm:flex items-center flex-wrap">
-              {breadcrumbs.map((crumb, i) => {
-                const isLast = i === breadcrumbs.length - 1;
-                return (
-                  <li key={i} className="flex items-center">
-                    {i > 0 && (
-                      <span className="text-muted-foreground/50 mx-1.5 text-sm">/</span>
-                    )}
-                    {isLast ? (
-                      <span className="text-foreground text-sm font-medium truncate max-w-[280px]">{crumb.label}</span>
-                    ) : (
-                      <Link
-                        to={crumb.to!}
-                        state={crumb.state}
-                        className="text-muted-foreground text-sm hover:text-foreground transition-colors"
-                      >
-                        {crumb.label}
-                      </Link>
-                    )}
-                  </li>
-                );
-              })}
-            </ol>
-            <div className="flex sm:hidden items-center text-sm">
-              <Link
-                to={parentCrumb.to!}
-                state={parentCrumb.state}
-                className="text-muted-foreground hover:text-foreground transition-colors"
+            {/* One primary call — the only vermillon fill on the screen. The
+                route hand-off comes second, everything that is a variant of
+                "share this" goes behind the overflow menu. */}
+            <div
+              className="zn-stack"
+              style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+            >
+              <div
+                className="zn-cluster"
+                style={{ "--gap": "var(--sp-6)" } as CSSProperties}
               >
-                {parentCrumb.label}
-              </Link>
-              <span className="text-muted-foreground/50 mx-1.5">/</span>
-              <span className="text-foreground font-medium truncate">{workoutName}</span>
-            </div>
-          </nav>
-        </div>
+                <ExportMenu workout={workout} size="lg" />
 
-        {/* Hero block — title + badges + description + actions + inline
-            stats row. Replaces the previous bento + 5-card summary grid. */}
-        <FadeUp as="section">
-          <div className="flex flex-wrap items-center gap-2 mb-3">
-            <ZoneBadge zone={dominantZone} size="md" showLabel />
-            <Badge variant="outline" className="gap-1.5 text-muted-foreground">
-              <CategoryIcon className="size-3.5" />
-              {t(`library:categories.${workout.category}`)}
-            </Badge>
-            <span className="ml-auto">
-              <FavoriteButton workoutId={workout.id} showLabel />
-            </span>
-          </div>
-
-          <EditorialTitle as="h1" size="lg" className="mb-3 sm:text-4xl md:text-5xl">
-            {pick(workout, "name")}
-          </EditorialTitle>
-
-          <p className="text-muted-foreground max-w-2xl leading-relaxed text-base sm:text-lg">
-            <GlossaryLinkedText text={pick(workout, "description")} />
-          </p>
-
-          {workout.sourceWorkoutId && (
-            <WorkoutProvenance sourceId={workout.sourceWorkoutId} />
-          )}
-
-          {/* Action bar — one primary, everything else behind the overflow
-              menu. Five equally-weighted buttons used to fill a screen before
-              the session itself; three of them (Partager, Strava, Copier le
-              lien) are the same intent, and one (Parcours) is navigation.
-              Full width on phones, contained from sm: up.
-              Adjust stays out of the menu: an action nobody finds is an action
-              nobody uses, and it is the one that turns a fixed catalogue into
-              something a runner can fit to their week. */}
-          <div className="flex items-center gap-2 mt-5 sm:max-w-md">
-            <ExportMenu workout={workout} size="default" className="flex-1 justify-center" />
-            {canAdjust && (
-              <Button
-                variant="outline"
-                className="rounded-full shrink-0"
-                onClick={() =>
-                  navigate(`/workout/builder/${createCustomWorkoutId()}?from=${workout.id}`)
-                }
-              >
-                <SlidersHorizontal className="size-4 mr-2" />
-                {t("session:actions.adjust")}
-              </Button>
-            )}
-            {/* A workout of one's own is edited, not copied again. Reached from
-                Favourites or a bookmark, this page was otherwise a dead end:
-                the only way back to the editor was through My Workouts. */}
-            {isOwnWorkout && (
-              <Button
-                variant="outline"
-                className="rounded-full shrink-0"
-                asChild
-              >
-                <Link to={`/workout/builder/${workout.id}`}>
-                  <Pencil className="size-4 mr-2" />
-                  {t("session:actions.edit")}
-                </Link>
-              </Button>
-            )}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="rounded-full shrink-0 size-10"
-                  aria-label={t("session:actions.moreActions")}
-                >
-                  <MoreHorizontal className="size-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem onClick={() => setShareOpen(true)}>
-                  <Share className="size-4" />
-                  {t("common:share.trigger")}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={async () => {
-                    const ok = await copyToClipboard(buildStravaShareText(workout));
-                    if (ok) toast.success(t("session:strava.copied"));
-                    else toast.error(t("common:errors.generic"));
-                  }}
-                >
-                  <StravaIcon className="size-4 text-[#FC4C02]" />
-                  {t("session:actions.shareStrava")}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={async () => {
-                    const ok = await copyToClipboard(publicWorkoutUrl(workout));
-                    if (ok) toast.success(t("common:actions.linkCopied"));
-                    else toast.error(t("common:errors.generic"));
-                  }}
-                >
-                  <Link2 className="size-4" />
-                  {t("common:actions.copyLink")}
-                </DropdownMenuItem>
                 {canGenerateRoute && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link to="/routes" state={{ workoutRouteWorkout: workout }}>
-                        <Route className="size-4" />
-                        {t("session:actions.findRoute")}
-                      </Link>
-                    </DropdownMenuItem>
-                  </>
+                  <Button variant="secondary" size="lg" asChild>
+                    <Link to="/routes" state={{ workoutRouteWorkout: workout }}>
+                      <Route />
+                      {t("session:actions.findRoute")}
+                    </Link>
+                  </Button>
                 )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+
+                {canAdjust && (
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    onClick={() =>
+                      navigate(
+                        `/workout/builder/${createCustomWorkoutId()}?from=${workout.id}`,
+                      )
+                    }
+                  >
+                    <SlidersHorizontal />
+                    {t("session:actions.adjust")}
+                  </Button>
+                )}
+
+                {/* A workout of one's own is edited, not copied again. Reached
+                  from Favourites or a bookmark, this page was otherwise a dead
+                  end: the only way back to the editor was through My Workouts. */}
+                {isOwnWorkout && (
+                  <Button variant="outline" size="lg" asChild>
+                    <Link to={`/workout/builder/${workout.id}`}>
+                      <Pencil />
+                      {t("session:actions.edit")}
+                    </Link>
+                  </Button>
+                )}
+
+                <FavoriteButton workoutId={workout.id} />
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      aria-label={t("session:actions.moreActions")}
+                    >
+                      <MoreHorizontal />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => setShareOpen(true)}>
+                      <Share />
+                      {t("common:share.trigger")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={async () => {
+                        const ok = await copyToClipboard(
+                          buildStravaShareText(workout),
+                        );
+                        if (ok) toast.success(t("session:strava.copied"));
+                        else toast.error(t("common:errors.generic"));
+                      }}
+                    >
+                      <StravaIcon />
+                      {t("session:actions.shareStrava")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={async () => {
+                        const ok = await copyToClipboard(
+                          publicWorkoutUrl(workout),
+                        );
+                        if (ok) toast.success(t("common:actions.linkCopied"));
+                        else toast.error(t("common:errors.generic"));
+                      }}
+                    >
+                      <Link2 />
+                      {t("common:actions.copyLink")}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              {/* What the primary call actually produces. The formats live
+                  inside the export menu; naming them here is what tells a
+                  runner the session reaches their watch at all. */}
+              <p className="zn-mono zn-faint">
+                {t("session:screen.exportFormats")}
+              </p>
+            </div>
+
+            <FactStrip facts={facts} />
+
+            {!hasUserZones && <ZonePersonalizationCTA />}
           </div>
 
-          <ShareDialog
-            workout={workout}
-            open={shareOpen}
-            onOpenChange={setShareOpen}
+          <IllustrationSlot
+            height={340}
+            brief={t("session:illustration.brief")}
+            label={t("session:illustration.label")}
           />
+        </section>
 
-          {/* Inline stats row — single horizontal strip. Trail metrics
-              fold in naturally when applicable so we don't need a
-              separate trail bar. */}
-          <dl className="mt-6 grid grid-cols-2 sm:flex sm:flex-wrap sm:items-baseline sm:gap-x-8 gap-x-4 gap-y-5 sm:gap-y-3 border-t border-border/60 pt-6">
-            <HeroStat
-              label={t("session:stats.duration")}
-              value={formatDurationMinutes(duration)}
-              hint={
-                hasPlanContext && duration < baseDuration - 3
-                  ? formatDurationMinutes(baseDuration)
-                  : undefined
-              }
-            />
-            {planTargetDistanceKm != null && planTargetDistanceKm > 0 && (
-              <HeroStat
-                label={t("session:stats.distance")}
-                value={`${workout.category !== "long_run" ? "~" : ""}${planTargetDistanceKm} km`}
-              />
-            )}
-            <HeroStat
-              label={t("session:stats.difficulty")}
-              value={t(`library:difficulty.${workout.difficulty}`)}
-            />
-            <HeroStat
-              label={t("session:stats.target")}
-              value={t(`targetSystems.${workout.targetSystem}`)}
-            />
-            {envRequirements.length > 0 && (
-              <HeroStat
-                label={t("session:stats.environment")}
-                value={envLabel}
-              />
-            )}
-            {hasTrail && trailMetrics.totalElevationGainM > 0 && (
-              <HeroStat
-                label={t("library:trail.elevationGain", { value: "" }).replace(/[\s+0-9]+m?\s*$/, "")}
-                value={`+${trailMetrics.totalElevationGainM} m`}
-              />
-            )}
-          </dl>
-        </FadeUp>
+        {/* 2 — the session itself: the whole profile, then phase by phase */}
+        <section className="zn-section" aria-labelledby="session-structure">
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-12)" } as CSSProperties}
+          >
+            <div
+              className="zn-row zn-row--baseline"
+              style={{ "--gap": "var(--sp-8)" } as CSSProperties}
+            >
+              <h2 id="session-structure" className="zn-title" data-level="1">
+                {t("session:screen.structureTitle")}
+              </h2>
+              <span className="zn-kicker zn-kicker--inline">
+                {t("session:screen.structureKicker", {
+                  duration: formatDurationMinutes(duration),
+                  phases: phaseCount,
+                })}
+              </span>
+            </div>
 
-        {/* Trail elevation profile — only when meaningful. Kept tight. */}
-        {hasTrail && (
-          <FadeUp as="section">
-            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-2">
-              {t("session:titles.trailProfile")}
+            <div>
+              <ZoneBar
+                blocks={profileBlocks}
+                height={112}
+                className="zn-session__profile"
+              />
+              <div className="zn-session__axis">
+                <span className="zn-kicker zn-kicker--inline">
+                  {t("session:screen.axisStart")}
+                </span>
+                <span className="zn-kicker zn-kicker--inline">
+                  {t("session:screen.axisEnd", {
+                    duration: formatDurationMinutes(duration),
+                  })}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <WorkoutStructure
+            workout={workout}
+            userZones={hasUserZones ? userZones : undefined}
+            className="zn-session__phases"
+          />
+        </section>
+
+        {/* 3 — where the time goes, against how to spend it */}
+        <section className="zn-session__split">
+          <div
+            className="zn-session__half zn-stack"
+            style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+            aria-labelledby="session-zones"
+          >
+            <h2 id="session-zones" className="zn-title">
+              {t("session:titles.zoneDistribution")}
+            </h2>
+            <div className="zn-session__zones">
+              {zonedRows.map((row) => (
+                <ZoneRow
+                  key={row.zone}
+                  zone={row.zone}
+                  name={row.label}
+                  value={formatDurationMinutes(row.durationMin)}
+                  percent={row.percent}
+                />
+              ))}
+            </div>
+            <p className="zn-mono zn-session__zones-total">
+              {t("session:screen.total", {
+                duration: formatDurationMinutes(duration),
+              })}
+              {unzonedRow
+                ? ` · ${unzonedRow.label} ${formatDurationMinutes(unzonedRow.durationMin)}`
+                : ""}
             </p>
-            <MiniElevationProfile workout={workout} height={64} />
+          </div>
+
+          <div className="zn-session__half zn-session__advice">
+            <CoachingTips workout={workout} />
+            {tip && (
+              <TipCard tip={tip} variant="banner" className="zn-session__tip" />
+            )}
+          </div>
+        </section>
+
+        {/* 4 — the ground, when the session has one */}
+        {hasTrail && (
+          <section
+            className="zn-section zn-stack"
+            style={{ "--gap": "var(--sp-8)" } as CSSProperties}
+            aria-labelledby="session-trail"
+          >
+            <h2 id="session-trail" className="zn-title" data-level="3">
+              {t("session:titles.trailProfile")}
+            </h2>
+            <div className="zn-session__elevation">
+              <MiniElevationProfile workout={workout} height={72} />
+            </div>
             {trailMetrics.dominantTerrain && (
-              <p className="text-xs text-muted-foreground mt-2">
+              <p className="zn-mono zn-faint">
                 {t(`library:trail.terrainType.${trailMetrics.dominantTerrain}`)}
                 {trailMetrics.verticalDensityMPerKm > 0 && (
-                  <> · {t("library:trail.verticalDensity", { value: trailMetrics.verticalDensityMPerKm })}</>
+                  <>
+                    {" · "}
+                    {t("library:trail.verticalDensity", {
+                      value: trailMetrics.verticalDensityMPerKm,
+                    })}
+                  </>
                 )}
                 {trailMetrics.avgGradientPercent !== 0 && (
-                  <> · {t("library:trail.gradientAvg", { value: trailMetrics.avgGradientPercent })}</>
+                  <>
+                    {" · "}
+                    {t("library:trail.gradientAvg", {
+                      value: trailMetrics.avgGradientPercent,
+                    })}
+                  </>
                 )}
               </p>
             )}
-          </FadeUp>
+          </section>
         )}
 
-        {/* Discreet zone-personalization CTA — only when zones are missing */}
-        {!hasUserZones && <ZonePersonalizationCTA />}
-
-        {/* Sticky mini timeline (existing behaviour) */}
-        {timelineScrolledPast && (
-          <div className="sticky top-12 z-40 -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 bg-background/90 backdrop-blur-sm md:backdrop-blur-md shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_6px_12px_-4px_rgba(0,0,0,0.15)] dark:shadow-[0_1px_3px_0_rgba(0,0,0,0.3),0_6px_12px_-4px_rgba(0,0,0,0.4)] border-b border-border/30 will-change-[transform,opacity] animate-slide-in-top print:hidden">
-            <MiniSessionTimeline
-              workout={workout}
-              onClickScrollBack={() => {
-                timelineCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-              }}
-            />
-          </div>
-        )}
-
-        {/* Session viz — the actual workout. Always visible.
-            Every block below is a Section: one heading each, no eyebrow
-            restating the title, no inner card repeating it. */}
-        <FadeUp>
-          <div ref={timelineCardRef}>
-            <Section title={t("session:titles.sessionTimeline")}>
-              <SessionTimeline workout={workout} />
-            </Section>
-          </div>
-        </FadeUp>
-
-        <FadeUp>
-          <Section title={t("session:titles.workoutStructure")}>
-            <WorkoutStructure workout={workout} userZones={hasUserZones ? userZones : undefined} />
-          </Section>
-        </FadeUp>
-
-        {/* Zone distribution + coaching tips paired in a compact 2-col on
-            md+, stacked on mobile. */}
-        <FadeUp>
-          <div className="grid md:grid-cols-[2fr_3fr] gap-8 md:gap-10">
-            <Section title={t("session:titles.zoneDistribution")}>
-              <ZoneDistribution workout={workout} />
-            </Section>
-            <Section title={t("session:titles.coachingTips")}>
-              <CoachingTips workout={workout} />
-              {tip && (
-                <div className="mt-4">
-                  <TipCard tip={tip} variant="banner" />
-                </div>
-              )}
-            </Section>
-          </div>
-        </FadeUp>
-
-        {/* Accordions — secondary content, closed by default so the page
-            scans at a glance. Pattern identical to the home FAQ. */}
-        <FadeUp>
-          <div className="border-t border-foreground/15">
+        {/* 5 — the rest, folded: it stays in the DOM, it just waits its turn */}
+        <section className="zn-section">
+          <div className="zn-session__folds">
             <Section collapsible title={t("session:titles.nutritionRecovery")}>
               <NutritionRecoverySection workout={workout} />
             </Section>
@@ -673,25 +749,111 @@ export function WorkoutDetailPage() {
               <ScienceSection workout={workout} />
             </Section>
           </div>
-        </FadeUp>
+        </section>
 
-        {/* Continue exploring. Similar sessions lead: they are the most
-            likely next tap, so they come before articles and glossary
-            terms rather than sitting below them. */}
-        <FadeUp>
-          <Section title={t("session:titles.continueExploring")}>
-            {relatedWorkouts.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-                {relatedWorkouts.slice(0, 3).map((related) => (
-                  <WorkoutCardCompact key={related.id} workout={related} />
-                ))}
-              </div>
-            )}
-            <RelatedContent source={{ type: "workout", id: workout.id }} showTitle={false} />
-          </Section>
-        </FadeUp>
+        <ShareDialog
+          workout={workout}
+          open={shareOpen}
+          onOpenChange={setShareOpen}
+        />
+
+        {/* 6 — the next tap */}
+        <section
+          className="zn-section zn-stack"
+          style={{ "--gap": "var(--sp-13)" } as CSSProperties}
+          aria-labelledby="session-next"
+        >
+          <h2 id="session-next" className="zn-title" data-level="1">
+            {t("session:titles.continueExploring")}
+          </h2>
+          {relatedWorkouts.length > 0 && (
+            <div className="zn-grid">
+              {relatedWorkouts.slice(0, 3).map((related) => (
+                <WorkoutCardCompact key={related.id} workout={related} />
+              ))}
+            </div>
+          )}
+          <RelatedContent
+            source={{ type: "workout", id: workout.id }}
+            showTitle={false}
+          />
+        </section>
       </div>
     </>
+  );
+}
+
+// ── shared furniture ────────────────────────────────────────────────────
+
+/**
+ * Back, then the trail. Mono, because a breadcrumb is a path rather than
+ * prose; on a phone only the last two steps survive, which is the only part
+ * of it a thumb ever uses.
+ */
+function SessionTrail({
+  breadcrumbs,
+  onBack,
+}: {
+  breadcrumbs: BreadcrumbItem[];
+  onBack: () => void;
+}) {
+  const { t } = useTranslation("common");
+
+  return (
+    <div className="zn-session__trail">
+      <Button variant="ghost" size="sm" onClick={onBack}>
+        <ArrowLeft />
+        {t("pages.workoutDetail.back")}
+      </Button>
+
+      <nav aria-label="Breadcrumb" className="zn-fill">
+        <ol className="zn-session__crumbs zn-mono">
+          {breadcrumbs.map((crumb, i) => {
+            const isLast = i === breadcrumbs.length - 1;
+            return (
+              <li key={i} className="zn-session__crumb">
+                {i > 0 && (
+                  <span className="zn-session__crumb-sep" aria-hidden="true">
+                    /
+                  </span>
+                )}
+                {isLast || !crumb.to ? (
+                  <span
+                    className="zn-session__crumb--current zn-truncate"
+                    aria-current="page"
+                  >
+                    {crumb.label}
+                  </span>
+                ) : (
+                  <Link to={crumb.to} state={crumb.state}>
+                    {crumb.label}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      </nav>
+    </div>
+  );
+}
+
+/** The four-up strip of facts under the hero: mono label, display value. */
+function FactStrip({ facts }: { facts: Fact[] }) {
+  return (
+    <dl className="zn-session__facts">
+      {facts.map((fact) => (
+        <div key={fact.label} className="zn-session__fact">
+          <dt className="zn-kicker zn-kicker--inline">{fact.label}</dt>
+          <dd className="zn-session__fact-value">
+            {fact.value}
+            {fact.was && (
+              <span className="zn-session__fact-was">{fact.was}</span>
+            )}
+          </dd>
+        </div>
+      ))}
+    </dl>
   );
 }
 
@@ -706,44 +868,12 @@ function WorkoutProvenance({ sourceId }: { sourceId: string }) {
   const { workout: source } = useWorkout(sourceId);
 
   return (
-    <p className="text-sm text-muted-foreground mt-3">
+    <p className="zn-body zn-body--sm zn-muted">
       {t("provenance.adaptedFrom")}{" "}
-      <Link
-        to={`/workout/${sourceId}`}
-        className="underline underline-offset-2 hover:text-foreground transition-colors"
-      >
+      <Link to={`/workout/${sourceId}`} className="zn-clink">
         {source ? pick(source, "name") : sourceId}
       </Link>
     </p>
-  );
-}
-
-/** Single inline stat in the hero strip. Mono uppercase label, semibold
- *  italic value, optional grey strikethrough for plan-context volume
- *  scaling. */
-function HeroStat({
-  label,
-  value,
-  hint,
-}: {
-  label: string;
-  value: string;
-  hint?: string;
-}) {
-  return (
-    <div>
-      <dt className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground mb-1">
-        {label}
-      </dt>
-      <dd className="font-sans font-semibold italic text-lg sm:text-xl tabular-nums">
-        {value}
-        {hint && (
-          <span className="ml-2 text-xs not-italic font-normal text-muted-foreground line-through">
-            {hint}
-          </span>
-        )}
-      </dd>
-    </div>
   );
 }
 
@@ -766,7 +896,10 @@ interface StrengthWorkoutDetailProps {
   } | null;
 }
 
-function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetailProps) {
+function StrengthWorkoutDetail({
+  workout,
+  locationState,
+}: StrengthWorkoutDetailProps) {
   const navigate = useNavigate();
   const { t: tSession } = useTranslation("session");
   const { t: tStrength } = useTranslation("strength");
@@ -779,18 +912,24 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
   const description = pick(workout, "description");
 
   // Estimate total duration from typical range
-  const duration = Math.round((workout.typicalDuration.min + workout.typicalDuration.max) / 2);
+  const duration = Math.round(
+    (workout.typicalDuration.min + workout.typicalDuration.max) / 2,
+  );
 
-  // Breadcrumbs
-  type BreadcrumbItem = { label: string; to?: string; state?: Record<string, unknown> };
-  const breadcrumbs: BreadcrumbItem[] = [{ label: tCommon("nav.home"), to: "/" }];
+  const breadcrumbs: BreadcrumbItem[] = [
+    { label: tCommon("nav.home"), to: "/" },
+  ];
 
   if (locationState?.from === "plan" && locationState.planId) {
     breadcrumbs.push({ label: tCommon("nav.plans"), to: "/plans" });
     breadcrumbs.push({
-      label: locationState.planName || "Plan",
+      label:
+        locationState.planName || tCommon("pages.workoutDetail.planFallback"),
       to: `/plan/${locationState.planId}`,
-      state: { returnToWeek: locationState.weekNumber, returnScrollY: locationState.scrollY },
+      state: {
+        returnToWeek: locationState.weekNumber,
+        returnScrollY: locationState.scrollY,
+      },
     });
   } else {
     breadcrumbs.push({ label: tCommon("nav.library"), to: "/library" });
@@ -801,18 +940,38 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
   }
   breadcrumbs.push({ label: workoutName });
 
-  const parentCrumb = breadcrumbs[breadcrumbs.length - 2];
-
   // Coaching tips (shared shape with running)
   const tips = pickLangArray<string>(workout, "coachingTips");
   const mistakes = pickLangArray<string>(workout, "commonMistakes");
 
-  // Equipment display
   const equipmentList = workout.equipment.filter((e) => e !== "none");
   const hasEquipment = equipmentList.length > 0;
 
   const seoTitle = workoutName;
   const seoDescription = description.slice(0, 155);
+
+  const facts: Fact[] = [
+    {
+      label: tSession("stats.duration"),
+      value: `${formatDurationMinutes(workout.typicalDuration.min)}–${formatDurationMinutes(workout.typicalDuration.max)}`,
+    },
+    {
+      label: tSession("stats.difficulty"),
+      value: tLib(`difficulty.${workout.difficulty}`),
+    },
+    {
+      label: tSession("stats.frequency"),
+      value: tStrength("detail.weeklyMax", {
+        count: workout.weeklyFrequencyMax,
+      }),
+    },
+    {
+      label: tSession("stats.recovery"),
+      value: tStrength("detail.minRecovery", {
+        days: workout.minimumRecoveryDays,
+      }),
+    },
+  ];
 
   return (
     <>
@@ -833,187 +992,168 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: "Bibliothèque", item: "https://zoned.run/library" },
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Accueil",
+                item: "https://zoned.run/",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Bibliothèque",
+                item: "https://zoned.run/library",
+              },
               { "@type": "ListItem", position: 3, name: seoTitle },
             ],
           },
         ]}
       />
-      <div className="py-6 md:py-8 space-y-8">
-        {/* Top strip — back + breadcrumb. Strength sessions don't have
-            plan-context decoration, so we skip the chip slot. */}
-        <div className="flex flex-col gap-2">
-          <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="-ml-2 self-start">
-            <ArrowLeft className="mr-1.5 size-4" />
-            {tCommon("pages.workoutDetail.back")}
-          </Button>
 
-          <nav aria-label="Breadcrumb">
-            <ol className="hidden sm:flex items-center flex-wrap">
-              {breadcrumbs.map((crumb, i) => {
-                const isLast = i === breadcrumbs.length - 1;
-                return (
-                  <li key={i} className="flex items-center">
-                    {i > 0 && (
-                      <span className="text-muted-foreground/50 mx-1.5 text-sm">/</span>
-                    )}
-                    {isLast ? (
-                      <span className="text-foreground text-sm font-medium truncate max-w-[280px]">{crumb.label}</span>
-                    ) : (
-                      <Link
-                        to={crumb.to!}
-                        state={crumb.state}
-                        className="text-muted-foreground text-sm hover:text-foreground transition-colors"
-                      >
-                        {crumb.label}
-                      </Link>
-                    )}
-                  </li>
-                );
-              })}
-            </ol>
-            <div className="flex sm:hidden items-center text-sm">
-              <Link
-                to={parentCrumb.to!}
-                state={parentCrumb.state}
-                className="text-muted-foreground hover:text-foreground transition-colors"
+      <div className="zn-session">
+        <SessionTrail breadcrumbs={breadcrumbs} onBack={() => navigate(-1)} />
+
+        <section className="zn-session__hero">
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-12)" } as CSSProperties}
+          >
+            <div
+              className="zn-cluster"
+              style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+            >
+              <span className="zn-mono zn-session__code">{workout.id}</span>
+              <IntensityBadge intensity={workout.intensity} size="md" />
+              <Badge variant="outline">
+                <Dumbbell className="zn-cat-icon" />
+                {tStrength(`categories.${workout.category}`)}
+              </Badge>
+              <Badge variant="secondary">
+                {tLib("activityToggle.strength")}
+              </Badge>
+            </div>
+
+            <h1 className="zn-display">{workoutName}</h1>
+
+            <p className="zn-body zn-body--lead zn-session__lede">
+              <GlossaryLinkedText text={description} />
+            </p>
+
+            <div
+              className="zn-cluster"
+              style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+            >
+              <span className="zn-kicker zn-kicker--inline">
+                {tStrength("detail.targetMuscles")}
+              </span>
+              <MuscleGroupBadges
+                muscles={workout.primaryMuscleGroups}
+                size="md"
+              />
+            </div>
+
+            <div
+              className="zn-cluster"
+              style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+            >
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={async () => {
+                  const ok = await copyToClipboard(window.location.href);
+                  if (ok) toast.success(tCommon("actions.linkCopied"));
+                  else toast.error(tCommon("errors.generic"));
+                }}
               >
-                {parentCrumb.label}
-              </Link>
-              <span className="text-muted-foreground/50 mx-1.5">/</span>
-              <span className="text-foreground font-medium truncate">{workoutName}</span>
+                <Link2 />
+                {tCommon("actions.copyLink")}
+              </Button>
+              <FavoriteButton workoutId={workout.id} />
             </div>
-          </nav>
-        </div>
 
-        {/* Hero block — same shape as the running variant, with strength-
-            flavoured badges + stats (frequency, recovery). */}
-        <FadeUp as="section">
-          <div className="flex flex-wrap items-center gap-2 mb-3">
-            <IntensityBadge intensity={workout.intensity} size="md" />
-            <Badge variant="outline" className="gap-1.5 text-muted-foreground">
-              <Dumbbell className="size-3.5" />
-              {tStrength(`categories.${workout.category}`)}
-            </Badge>
-            <span className="ml-auto">
-              <FavoriteButton workoutId={workout.id} showLabel />
-            </span>
+            <FactStrip facts={facts} />
           </div>
 
-          <EditorialTitle as="h1" size="lg" className="mb-3 sm:text-4xl md:text-5xl">
-            {workoutName}
-          </EditorialTitle>
+          <IllustrationSlot
+            height={340}
+            brief={tSession("illustration.strengthBrief")}
+            label={tSession("illustration.label")}
+          />
+        </section>
 
-          <p className="text-muted-foreground max-w-2xl leading-relaxed text-base sm:text-lg">
-            <GlossaryLinkedText text={description} />
-          </p>
+        <section
+          className="zn-section zn-stack"
+          style={{ "--gap": "var(--sp-12)" } as CSSProperties}
+          aria-labelledby="strength-structure"
+        >
+          <h2 id="strength-structure" className="zn-title" data-level="1">
+            {tStrength("detail.sessionTimeline")}
+          </h2>
+          <StrengthSessionTimeline workout={workout} />
+        </section>
 
-          {/* Primary muscle groups — inline under description so the user
-              sees what the session works without scrolling. */}
-          <div className="mt-4 flex items-center gap-2 flex-wrap">
-            <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
-              {tStrength("detail.targetMuscles")}
-            </span>
-            <MuscleGroupBadges muscles={workout.primaryMuscleGroups} size="md" />
+        <section
+          className="zn-section zn-stack"
+          style={{ "--gap": "var(--sp-13)" } as CSSProperties}
+          aria-labelledby="strength-exercises"
+        >
+          <h2 id="strength-exercises" className="zn-title" data-level="1">
+            {tStrength("detail.exerciseDetail")}
+          </h2>
+          <StrengthExerciseList blocks={workout.warmupBlocks} phase="warmup" />
+          <StrengthExerciseList blocks={workout.mainBlocks} phase="main" />
+          <StrengthExerciseList
+            blocks={workout.cooldownBlocks}
+            phase="cooldown"
+          />
+        </section>
+
+        <section className="zn-session__split">
+          <div
+            className="zn-session__half zn-stack"
+            style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+            aria-labelledby="strength-muscles"
+          >
+            <h2 id="strength-muscles" className="zn-title">
+              {tStrength("detail.muscleDistribution")}
+            </h2>
+            <MuscleDistribution workout={workout} />
           </div>
-
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-5">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="rounded-full px-4 text-muted-foreground hover:text-foreground"
-              onClick={async () => {
-                const ok = await copyToClipboard(window.location.href);
-                if (ok) toast.success(tCommon("actions.linkCopied"));
-                else toast.error(tCommon("errors.generic"));
-              }}
-            >
-              <Link2 className="size-3.5 mr-1.5" />
-              {tCommon("actions.copyLink")}
-            </Button>
+          <div
+            className="zn-session__half zn-stack"
+            style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+            aria-labelledby="strength-map"
+          >
+            <h2 id="strength-map" className="zn-title">
+              {tStrength("detail.muscleMap")}
+            </h2>
+            <MuscleMap workout={workout} />
           </div>
+        </section>
 
-          {/* Inline stats row — 3-4 stats max. */}
-          <dl className="mt-6 grid grid-cols-2 sm:flex sm:flex-wrap sm:items-baseline sm:gap-x-8 gap-y-3 border-t border-border/60 pt-5">
-            <HeroStat
-              label={tSession("stats.duration")}
-              value={`${formatDurationMinutes(workout.typicalDuration.min)}–${formatDurationMinutes(workout.typicalDuration.max)}`}
-            />
-            <HeroStat
-              label={tSession("stats.difficulty")}
-              value={tLib(`difficulty.${workout.difficulty}`)}
-            />
-            <HeroStat
-              label={tSession("stats.frequency")}
-              value={tStrength("detail.weeklyMax", { count: workout.weeklyFrequencyMax })}
-            />
-            <HeroStat
-              label={tSession("stats.recovery")}
-              value={tStrength("detail.minRecovery", { days: workout.minimumRecoveryDays })}
-            />
-          </dl>
-        </FadeUp>
-
-        {/* Main viz — timeline + exercise list, both always visible. */}
-        <FadeUp>
-          <Section title={tStrength("detail.sessionTimeline")}>
-            <StrengthSessionTimeline workout={workout} />
-          </Section>
-        </FadeUp>
-
-        <FadeUp>
-          <Section title={tStrength("detail.exerciseDetail")}>
-            <div className="space-y-6">
-              <StrengthExerciseList blocks={workout.warmupBlocks} phase="warmup" />
-              <StrengthExerciseList blocks={workout.mainBlocks} phase="main" />
-              <StrengthExerciseList blocks={workout.cooldownBlocks} phase="cooldown" />
-            </div>
-          </Section>
-        </FadeUp>
-
-        {/* Muscle distribution + map paired in compact 2-col on md+. */}
-        <FadeUp>
-          <div className="grid md:grid-cols-2 gap-6 md:gap-10">
-            <Section title={tStrength("detail.muscleDistribution")}>
-              <MuscleDistribution workout={workout} />
-            </Section>
-            <Section title={tStrength("detail.muscleMap")}>
-              <MuscleMap workout={workout} />
-            </Section>
-          </div>
-        </FadeUp>
-
-        {/* Accordions — secondary content collapsed by default. */}
-        <FadeUp as="section">
-          <div className="border-t border-foreground/15">
-            <Section
-              collapsible
-              title={tSession("titles.equipment")}
-            >
+        <section className="zn-section">
+          <div className="zn-session__folds">
+            <Section collapsible title={tSession("titles.equipment")}>
               {hasEquipment ? (
-                <div className="flex flex-wrap gap-2">
+                <div className="zn-cluster">
                   {equipmentList.map((eq) => (
-                    <Badge key={eq} variant="secondary" className="text-xs">
+                    <Badge key={eq} variant="secondary">
                       {tStrength(`equipment.${eq}`)}
                     </Badge>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">
+                <p className="zn-body zn-body--sm zn-muted">
                   {tStrength("detail.noEquipment")}
                 </p>
               )}
             </Section>
 
             {workout.suitablePhases.length > 0 && (
-              <Section
-                collapsible
-                title={tSession("titles.suitablePhases")}
-              >
-                <div className="flex flex-wrap gap-2">
+              <Section collapsible title={tSession("titles.suitablePhases")}>
+                <div className="zn-cluster">
                   {workout.suitablePhases.map((phase) => (
-                    <Badge key={phase} variant="outline" className="text-xs capitalize">
+                    <Badge key={phase} variant="outline">
                       {tStrength(`trainingPhases.${phase}`)}
                     </Badge>
                   ))}
@@ -1022,34 +1162,22 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
             )}
 
             {(tips.length > 0 || mistakes.length > 0) && (
-              <Section
-                collapsible
-                title={tSession("titles.coachingTips")}
-              >
+              <Section collapsible title={tSession("titles.coachingTips")}>
                 <StrengthCoachingTips tips={tips} mistakes={mistakes} />
               </Section>
             )}
 
             {workout.references && workout.references.length > 0 && (
-              <Section
-                collapsible
-                title={tSession("titles.scientificRefs")}
-              >
-                <ul className="space-y-2">
+              <Section collapsible title={tSession("titles.scientificRefs")}>
+                <ul className="zn-session__refs zn-source">
                   {workout.references.map((ref, i) => (
-                    <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                      <BookOpen className="size-4 shrink-0 mt-0.5" />
+                    <li key={i}>
                       {ref.startsWith("http") ? (
-                        <a
-                          href={ref}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:text-foreground underline underline-offset-2 transition-colors break-all"
-                        >
+                        <a href={ref} target="_blank" rel="noopener noreferrer">
                           {ref}
                         </a>
                       ) : (
-                        <span>{ref}</span>
+                        ref
                       )}
                     </li>
                   ))}
@@ -1057,26 +1185,36 @@ function StrengthWorkoutDetail({ workout, locationState }: StrengthWorkoutDetail
               </Section>
             )}
           </div>
-        </FadeUp>
+        </section>
 
-        {/* Continue exploring — same pattern as the running variant. */}
-        <FadeUp>
-          <Section title={tSession("titles.continueExploring")}>
-            <RelatedContent source={{ type: "workout", id: workout.id }} showTitle={false} />
-          </Section>
-        </FadeUp>
-
-        {/* Image source credit — small footnote */}
-        <p className="text-xs text-muted-foreground/60 mt-8">
-          {tCommon("pages.workoutDetail.exerciseCredits")}
-        </p>
+        <section
+          className="zn-section zn-stack"
+          style={{ "--gap": "var(--sp-13)" } as CSSProperties}
+          aria-labelledby="strength-next"
+        >
+          <h2 id="strength-next" className="zn-title" data-level="1">
+            {tSession("titles.continueExploring")}
+          </h2>
+          <RelatedContent
+            source={{ type: "workout", id: workout.id }}
+            showTitle={false}
+          />
+          <p className="zn-source">
+            {tCommon("pages.workoutDetail.exerciseCredits")}
+          </p>
+        </section>
       </div>
     </>
   );
 }
 
-// ── Strength Coaching Tips (reused shape) ──────────────────────────
+// ── Strength coaching tips ──────────────────────────────────────────────
 
+/**
+ * The same two lists the running session prints, from the strength template's
+ * own fields: an em rule for advice, a cross for a mistake, both in vermillon
+ * type. The paint is `.zn-coaching`, shared with `CoachingTips`.
+ */
 function StrengthCoachingTips({
   tips,
   mistakes,
@@ -1086,45 +1224,30 @@ function StrengthCoachingTips({
 }) {
   const { t } = useTranslation("session");
 
-  return (
-    <div className="space-y-6">
-      {tips.length > 0 && (
-        <div className="space-y-2">
-          <h4 className="text-sm font-semibold flex items-center gap-2">
-            <Sparkles className="size-4 text-success" />
-            {t("coaching.tips")}
-          </h4>
-          <ul className="space-y-1.5">
-            {tips.map((tip, i) => (
-              <li
-                key={i}
-                className="text-sm text-muted-foreground pl-5 relative before:content-[''] before:absolute before:left-0 before:top-[7px] before:w-1.5 before:h-1.5 before:rounded-full before:bg-success/60"
-              >
-                <GlossaryLinkedText text={tip} />
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+  const groups: { title: string; mark: ReactNode; items: string[] }[] = [
+    { title: t("coaching.tips"), mark: "—", items: tips },
+    { title: t("coaching.mistakes"), mark: "×", items: mistakes },
+  ];
 
-      {mistakes.length > 0 && (
-        <div className="space-y-2">
-          <h4 className="text-sm font-semibold flex items-center gap-2">
-            <Shield className="size-4 text-destructive" />
-            {t("coaching.mistakes")}
-          </h4>
-          <ul className="space-y-1.5">
-            {mistakes.map((mistake, i) => (
-              <li
-                key={i}
-                className="text-sm text-muted-foreground pl-5 relative before:content-[''] before:absolute before:left-0 before:top-[7px] before:w-1.5 before:h-1.5 before:rounded-full before:bg-destructive/60"
-              >
-                <GlossaryLinkedText text={mistake} />
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+  return (
+    <div className="zn-coaching">
+      {groups
+        .filter((group) => group.items.length > 0)
+        .map((group) => (
+          <div key={group.title} className="zn-coaching__group">
+            <h4 className="zn-coaching__title">{group.title}</h4>
+            <ul className="zn-coaching__list">
+              {group.items.map((item, index) => (
+                <li key={index} className="zn-coaching__item">
+                  <span className="zn-coaching__mark" aria-hidden="true">
+                    {group.mark}
+                  </span>
+                  <GlossaryLinkedText text={item} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
     </div>
   );
 }

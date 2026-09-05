@@ -1,4 +1,12 @@
-import { useState, useCallback, useMemo } from "react";
+import {
+  useCallback,
+  useId,
+  useMemo,
+  useState,
+  type CSSProperties,
+  type ComponentType,
+  type ReactNode,
+} from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -8,24 +16,25 @@ import {
   Timer,
   Route,
   Flag,
-  Calendar,
   Target,
   Mountain,
-  CheckIcon,
-  Loader2,
+  Check,
   Heart,
   Footprints,
   TrendingUp,
   AlertTriangle,
-  Dumbbell,
   Plus,
   Trash2,
+  type IconProps,
 } from "@/components/icons";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Segmented } from "@/components/ui/segmented";
+import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
+import { StatBlock } from "@/components/domain/StatBlock";
 import { SEOHead } from "@/components/seo";
-import { cn } from "@/lib/utils";
 import { useCreatePlan } from "@/hooks/usePlans";
 import { loadUserZonePrefs } from "@/lib/zones";
 import {
@@ -66,14 +75,14 @@ const DAYS_PER_WEEK_OPTIONS = [3, 4, 5, 6, 7] as const;
  */
 const RECOMMENDED_WEEKS = RECOMMENDED_PLAN_WEEKS;
 
-const RACE_DISTANCE_ICONS: Record<RaceDistance, React.ReactNode> = {
-  "5K": <Zap className="size-5 md:size-6 text-primary" />,
-  "10K": <Timer className="size-5 md:size-6 text-primary" />,
-  semi: <Route className="size-5 md:size-6 text-primary" />,
-  marathon: <Flag className="size-5 md:size-6 text-primary" />,
-  trail_short: <Mountain className="size-5 md:size-6 text-primary" />,
-  trail: <Mountain className="size-5 md:size-6 text-primary" />,
-  ultra: <Mountain className="size-5 md:size-6 text-primary" />,
+const RACE_DISTANCE_ICONS: Record<RaceDistance, ComponentType<IconProps>> = {
+  "5K": Zap,
+  "10K": Timer,
+  semi: Route,
+  marathon: Flag,
+  trail_short: Mountain,
+  trail: Mountain,
+  ultra: Mountain,
 };
 
 const DURATION_OPTIONS = [
@@ -85,26 +94,51 @@ const DURATION_OPTIONS = [
   { weeks: 16 },
 ];
 
-const GOAL_OPTION_KEYS: { value: TrainingGoal; icon: React.ReactNode; labelKey: string; descKey: string }[] = [
+const GOAL_OPTION_KEYS: { value: TrainingGoal; icon: ComponentType<IconProps>; labelKey: string; descKey: string }[] = [
   {
     value: "finish",
-    icon: <Flag className="size-5 text-zone-2" />,
+    icon: Flag,
     labelKey: "goal.finish",
     descKey: "goal.finishDesc",
   },
   {
     value: "time",
-    icon: <Timer className="size-5 text-primary" />,
+    icon: Timer,
     labelKey: "goal.time",
     descKey: "goal.timeDesc",
   },
   {
     value: "compete",
-    icon: <TrendingUp className="size-5 text-zone-5" />,
+    icon: TrendingUp,
     labelKey: "goal.compete",
     descKey: "goal.competeDesc",
   },
 ];
+
+const PURPOSE_OPTIONS: { value: PlanPurpose; icon: ComponentType<IconProps>; labelKey: string; descKey: string }[] = [
+  { value: "race", icon: Target, labelKey: "purpose.race", descKey: "purpose.raceDesc" },
+  { value: "base_building", icon: TrendingUp, labelKey: "purpose.baseBuilding", descKey: "purpose.baseBuildingDesc" },
+  { value: "return_from_injury", icon: Heart, labelKey: "purpose.returnFromInjury", descKey: "purpose.returnFromInjuryDesc" },
+  { value: "beginner_start", icon: Footprints, labelKey: "purpose.beginnerStart", descKey: "purpose.beginnerStartDesc" },
+];
+
+const PRIORITY_OPTIONS: { value: RacePriority; labelKey: string; descKey: string }[] = [
+  { value: "A", labelKey: "intermediateGoals.priorityA", descKey: "intermediateGoals.priorityADesc" },
+  { value: "B", labelKey: "intermediateGoals.priorityB", descKey: "intermediateGoals.priorityBDesc" },
+  { value: "C", labelKey: "intermediateGoals.priorityC", descKey: "intermediateGoals.priorityCDesc" },
+];
+
+/** Validation code → the sentence that says what to do about it. */
+const VALIDATION_KEYS: Record<string, string> = {
+  BEFORE_START: "intermediateGoals.validation.beforeStart",
+  AFTER_MAIN_RACE: "intermediateGoals.validation.afterMain",
+  TOO_CLOSE_TO_MAIN: "intermediateGoals.validation.tooCloseToMain",
+  TOO_CLOSE_TO_EACH_OTHER: "intermediateGoals.validation.tooCloseToOther",
+  PRIORITY_A_IN_TAPER_ZONE: "intermediateGoals.validation.priorityAInTaper",
+  INVALID_DATE: "intermediateGoals.validation.invalidDate",
+  DISTANCE_TOO_LONG_FOR_PRIORITY: "intermediateGoals.validation.distanceTooLongForPriority",
+  DISTANCE_LONGER_THAN_MAIN: "intermediateGoals.validation.distanceLongerThanMain",
+};
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
@@ -205,12 +239,82 @@ interface FormState {
   intermediateGoals: IntermediateGoal[];
 }
 
+// ── One answer, drawn ────────────────────────────────────────────────
+
+/**
+ * A radio wearing paper. The input stays a real radio — same name, same
+ * arrow keys, same checked state — and the label around it is what the eye
+ * reads. Chosen is the 2.5px vermillon frame, never a tint.
+ */
+function Option({
+  name,
+  checked,
+  onSelect,
+  title,
+  body,
+  data,
+  glyph: Glyph,
+  shape,
+}: {
+  name: string;
+  checked: boolean;
+  onSelect: () => void;
+  title: string;
+  body?: string;
+  data?: string;
+  glyph?: ComponentType<IconProps>;
+  shape?: "tile";
+}) {
+  return (
+    <label className="zn-wiz-opt" data-shape={shape}>
+      <input
+        type="radio"
+        className="sr-only"
+        name={name}
+        checked={checked}
+        onChange={onSelect}
+      />
+      {Glyph ? (
+        <span className="zn-wiz-opt__glyph" aria-hidden="true">
+          <Glyph size={18} />
+        </span>
+      ) : null}
+      <span className="zn-wiz-opt__text">
+        <span className="zn-wiz-opt__title">{title}</span>
+        {body ? <span className="zn-wiz-opt__body">{body}</span> : null}
+      </span>
+      {data ? <span className="zn-mono zn-wiz-opt__data">{data}</span> : null}
+    </label>
+  );
+}
+
+/** One line of the recap: a term and its value. */
+function SummaryRow({
+  label,
+  value,
+  mono,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+}) {
+  return (
+    <>
+      <dt className="zn-wiz-sum__label">{label}</dt>
+      <dd className="zn-wiz-sum__value" data-mono={mono ? "true" : undefined}>
+        {value}
+      </dd>
+    </>
+  );
+}
+
 // ── Component ────────────────────────────────────────────────────────
 
 export function PlanCreatePage() {
   const { t } = useTranslation("plan");
   const pick = usePickLang();
   const navigate = useNavigate();
+  const uid = useId();
   const { createPlan, isGenerating, error } = useCreatePlan();
 
   const [stepIndex, setStepIndex] = useState(0);
@@ -275,6 +379,12 @@ export function PlanCreatePage() {
   const goBack = useCallback(() => {
     setDirection("backward");
     setStepIndex((s) => Math.max(s - 1, 0));
+  }, []);
+
+  /** The stepper only walks backwards: a step ahead has not been answered. */
+  const goBackTo = useCallback((index: number) => {
+    setDirection("backward");
+    setStepIndex(index);
   }, []);
 
   // ── Derived values ───────────────────────────────────────────────
@@ -352,416 +462,9 @@ export function PlanCreatePage() {
     } catch {
       // Error is exposed via the hook's error state
     }
-  }, [form, userPrefs, paceSeconds, createPlan, navigate, finalize]);
+  }, [form, userPrefs, paceSeconds, createPlan, navigate, finalize, isRacePlan]);
 
-  // ── Step indicator (dots + step number) ────────────────────────
-
-  const renderStepIndicator = () => (
-    <div className="flex items-center justify-center gap-2 py-4">
-      {Array.from({ length: totalSteps }, (_, i) => (
-        <div
-          key={i}
-          className={cn(
-            "size-2 rounded-full transition-all duration-300",
-            i === stepIndex
-              ? "bg-primary scale-125"
-              : i < stepIndex
-                ? "bg-primary/50"
-                : "bg-muted-foreground/25"
-          )}
-        />
-      ))}
-    </div>
-  );
-
-  // ── Navigation buttons ────────────────────────────────────────
-
-  const renderNavButtons = (
-    canProceed: boolean,
-    nextLabel?: string,
-    showSkip?: boolean,
-  ) => (
-    <div className="py-4 flex justify-between gap-3">
-      <Button variant="ghost" size="sm" onClick={goBack} disabled={stepIndex === 0}>
-        <ArrowLeft className="size-4 mr-1" />
-        {t("nav.back")}
-      </Button>
-      <div className="flex gap-2">
-        {showSkip && (
-          <Button variant="ghost" size="sm" onClick={goForward}>
-            {t("nav.skip")}
-          </Button>
-        )}
-        <Button size="sm" onClick={goForward} disabled={!canProceed}>
-          {nextLabel ?? t("nav.next")}
-          <ArrowRight className="size-4 ml-1" />
-        </Button>
-      </div>
-    </div>
-  );
-
-  // ── Purpose options for Step 1 ────────────────────────────────────
-  const PURPOSE_OPTIONS: { value: PlanPurpose; icon: React.ReactNode; ringClass: string; bgClass: string; iconBgClass: string; labelKey: string; descKey: string }[] = [
-    {
-      value: "race",
-      icon: <Target className="size-5 sm:size-6 text-primary" />,
-      ringClass: "ring-primary bg-primary/5",
-      bgClass: "hover:bg-muted/50",
-      iconBgClass: "bg-primary/10",
-      labelKey: "purpose.race",
-      descKey: "purpose.raceDesc",
-    },
-    {
-      value: "base_building",
-      icon: <TrendingUp className="size-5 sm:size-6 text-zone-2" />,
-      ringClass: "ring-zone-2 bg-zone-2/5",
-      bgClass: "hover:bg-muted/50",
-      iconBgClass: "bg-zone-2/10",
-      labelKey: "purpose.baseBuilding",
-      descKey: "purpose.baseBuildingDesc",
-    },
-    {
-      value: "return_from_injury",
-      icon: <Heart className="size-5 sm:size-6 text-zone-1" />,
-      ringClass: "ring-zone-1 bg-zone-1/5",
-      bgClass: "hover:bg-muted/50",
-      iconBgClass: "bg-zone-1/10",
-      labelKey: "purpose.returnFromInjury",
-      descKey: "purpose.returnFromInjuryDesc",
-    },
-    {
-      value: "beginner_start",
-      icon: <Footprints className="size-5 sm:size-6 text-zone-3" />,
-      ringClass: "ring-zone-3 bg-zone-3/5",
-      bgClass: "hover:bg-muted/50",
-      iconBgClass: "bg-zone-3/10",
-      labelKey: "purpose.beginnerStart",
-      descKey: "purpose.beginnerStartDesc",
-    },
-  ];
-
-  // ── Step 1: Plan Purpose ────────────────────────────────────────
-
-  const renderStep1 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-          <Zap className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("purpose.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("purpose.subtitle")}
-        </p>
-
-        <div className="w-full max-w-md md:max-w-lg grid grid-cols-1 gap-2 mt-6">
-          {PURPOSE_OPTIONS.map((opt) => (
-            <Card
-              key={opt.value}
-              interactive
-              className={cn(
-                "cursor-pointer border-border/50 transition-all duration-200",
-                form.planPurpose === opt.value
-                  ? `ring-2 ${opt.ringClass}`
-                  : opt.bgClass
-              )}
-              onClick={() => {
-                setForm((f) => ({
-                  ...f,
-                  planPurpose: opt.value,
-                  // Set defaults for non-race plans
-                  ...(opt.value === "beginner_start" ? { daysPerWeek: 3, totalWeeksOverride: 8, trainingGoal: "finish" as TrainingGoal } : {}),
-                  ...(opt.value === "return_from_injury" ? { daysPerWeek: 3, totalWeeksOverride: 10, trainingGoal: "finish" as TrainingGoal } : {}),
-                  ...(opt.value === "base_building" ? { totalWeeksOverride: 12, trainingGoal: "time" as TrainingGoal } : {}),
-                }));
-                goForward();
-              }}
-            >
-              <CardContent className="p-3 flex items-center gap-3">
-                <div className={cn("size-10 rounded-full flex items-center justify-center shrink-0", opt.iconBgClass)}>
-                  {opt.icon}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold">{t(opt.labelKey)}</p>
-                  <p className="text-xs text-muted-foreground">{t(opt.descKey)}</p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-      {renderNavButtons(!!form.planPurpose)}
-    </div>
-  );
-
-  // ── Step 2: Race Distance (or Duration for non-race) ───────────
-
-  const renderStep2 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-          <Target className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("distance.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("distance.subtitle")}
-        </p>
-        <div className="w-full max-w-md md:max-w-xl lg:max-w-2xl grid grid-cols-2 gap-2 mt-6">
-          {(Object.keys(RACE_DISTANCE_META) as RaceDistance[]).map((dist) => {
-            const meta = RACE_DISTANCE_META[dist];
-            return (
-              <Card
-                key={dist}
-                interactive
-                className={cn(
-                  "cursor-pointer border-border/50 hover:shadow-md hover:-translate-y-1 transition-all duration-200",
-                  form.raceDistance === dist
-                    ? "bg-gradient-to-br from-primary/10 dark:from-primary/20 to-transparent ring-2 ring-primary"
-                    : "hover:bg-gradient-to-br hover:from-primary/5 dark:hover:from-primary/10 hover:to-transparent"
-                )}
-                onClick={() => {
-                  setForm((f) => ({ ...f, raceDistance: dist }));
-                  goForward();
-                }}
-              >
-                <CardContent className="p-3 md:p-4 flex items-center gap-3">
-                  <div className="size-9 md:size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                    {RACE_DISTANCE_ICONS[dist]}
-                  </div>
-                  <div className="min-w-0">
-                    <div className="font-medium text-sm md:text-base leading-tight">
-                      {pick(meta, "label")}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      {meta.distanceKm} km
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      </div>
-      {renderNavButtons(!!form.raceDistance)}
-    </div>
-  );
-
-  // ── Step Duration: Choose plan length (non-race plans) ──────────
-
-  const renderStepDuration = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-zone-2/10 flex items-center justify-center mb-4">
-          <Calendar className="size-6 md:size-8 text-zone-2" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("duration.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("duration.subtitle")}
-        </p>
-        <div className="w-full max-w-xs grid grid-cols-3 gap-2 mt-6">
-          {DURATION_OPTIONS.map((opt) => (
-            <Card
-              key={opt.weeks}
-              interactive
-              className={cn(
-                "cursor-pointer border-border/50 transition-all duration-200",
-                form.totalWeeksOverride === opt.weeks
-                  ? "ring-2 ring-primary bg-primary/5"
-                  : "hover:bg-muted/50"
-              )}
-              onClick={() => {
-                setForm((f) => ({ ...f, totalWeeksOverride: opt.weeks }));
-                goForward();
-              }}
-            >
-              <CardContent className="p-3 flex flex-col items-center justify-center">
-                <span className="text-lg font-bold">{opt.weeks}</span>
-                <span className="text-xs text-muted-foreground">
-                  {t("duration.weeks")}
-                </span>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-      {renderNavButtons(form.totalWeeksOverride > 0)}
-    </div>
-  );
-
-  // ── Step 3: Race Date (or Duration for non-race) ────────────────
-
-  const renderStep3 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-          <Calendar className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("date.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("date.subtitle", { min: minWeeksForDistance })}
-        </p>
-
-        <div className="w-full max-w-sm mt-6 space-y-3">
-          <DateInput
-            min={minDate}
-            value={form.raceDate}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, raceDate: e.target.value }))
-            }
-            aria-label={t("date.raceDate")}
-            className="px-4 py-3 min-h-[44px] text-base"
-          />
-
-          <div className="space-y-2 pt-2">
-            <p className="text-sm font-medium text-center">{t("date.startLabel")}</p>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => setForm((f) => ({ ...f, useCustomStartDate: false, startDate: todayDate }))}
-                className={cn(
-                  "flex-1 rounded-lg border p-3 text-sm transition-colors",
-                  !form.useCustomStartDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
-                )}
-              >
-                {t("date.startNow")}
-              </button>
-              <button
-                type="button"
-                onClick={() => setForm((f) => ({ ...f, useCustomStartDate: true, startDate: f.startDate || todayDate }))}
-                className={cn(
-                  "flex-1 rounded-lg border p-3 text-sm transition-colors",
-                  form.useCustomStartDate ? "border-primary bg-primary/10 font-medium" : "hover:bg-accent/50"
-                )}
-              >
-                {t("date.chooseStartDate")}
-              </button>
-            </div>
-            {form.useCustomStartDate && (
-              <DateInput
-                value={form.startDate}
-                max={form.raceDate || undefined}
-                onChange={(e) => setForm((f) => ({ ...f, startDate: e.target.value }))}
-                className="px-4 py-3 min-h-[44px] text-base"
-              />
-            )}
-          </div>
-
-          {form.raceDate && dateValid && (
-            <p className="text-sm text-muted-foreground text-center">
-              {t("date.weeks", { count: weeksCount })}
-            </p>
-          )}
-
-          {form.raceDate && !dateValid && (
-            <p className="text-sm text-destructive text-center">
-              {t("date.tooSoon", { min: minWeeksForDistance })}
-            </p>
-          )}
-
-          {form.raceDate && form.useCustomStartDate && (
-            <p className="text-xs text-muted-foreground text-center">
-              {t("date.startHint", {
-                date: formatDate(form.startDate, { year: "numeric", month: "short", day: "numeric" }),
-              })}
-            </p>
-          )}
-
-          {form.raceDate && dateTooLong && (
-            <div className="rounded-lg border border-amber-300 dark:border-amber-600 bg-amber-50 dark:bg-amber-950/30 p-3 text-sm text-amber-800 dark:text-amber-300 text-center space-y-1">
-              <p className="font-semibold flex items-center justify-center gap-1.5">
-                <AlertTriangle className="size-4 shrink-0" />
-                {t("date.tooLong", { weeks: weeksCount })}
-              </p>
-              <p className="text-xs">
-                {t("date.tooLongDetail", { min: recommendedWeeks.min, max: recommendedWeeks.max })}
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-      {renderNavButtons(dateValid, t("nav.continue"))}
-    </div>
-  );
-
-  // ── Step 4: Race Name (optional) ─────────────────────────────────
-
-  const renderStep4 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-          <Flag className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("raceName.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("raceName.subtitle")}
-        </p>
-
-        <div className="w-full max-w-sm mt-6">
-          <input
-            type="text"
-            value={form.raceName}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, raceName: e.target.value }))
-            }
-            onKeyDown={(e) => {
-              if (e.key === "Enter") goForward();
-            }}
-            placeholder={t("raceName.placeholder")}
-            aria-label={t("raceName.label")}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            maxLength={100}
-          />
-        </div>
-      </div>
-      {renderNavButtons(true, t("nav.continue"), true)}
-    </div>
-  );
-
-  // ── Step Intermediate Goals: Optional prep races ──────────────────
+  // ── Intermediate goals ───────────────────────────────────────────
 
   const intermediateGoalValidation = useMemo(() => {
     if (form.intermediateGoals.length === 0 || !form.raceDate) return { valid: true, errors: [] };
@@ -805,12 +508,6 @@ export function PlanCreatePage() {
     [],
   );
 
-  const PRIORITY_OPTIONS: { value: RacePriority; labelKey: string; descKey: string; color: string }[] = [
-    { value: "A", labelKey: "intermediateGoals.priorityA", descKey: "intermediateGoals.priorityADesc", color: "text-zone-5" },
-    { value: "B", labelKey: "intermediateGoals.priorityB", descKey: "intermediateGoals.priorityBDesc", color: "text-primary" },
-    { value: "C", labelKey: "intermediateGoals.priorityC", descKey: "intermediateGoals.priorityCDesc", color: "text-zone-2" },
-  ];
-
   const intermediateGoalMaxDate = useMemo(() => {
     if (!form.raceDate) return undefined;
     // 2 weeks before main race
@@ -822,154 +519,385 @@ export function PlanCreatePage() {
     return `${y}-${m}-${day}`;
   }, [form.raceDate]);
 
-  const renderStepIntermediateGoals = () => {
+  // ── Furniture ────────────────────────────────────────────────────
+
+  const questionId = `${uid}-question`;
+
+  /** Previous / next, over the divider that closes the step. */
+  const renderNav = (
+    canProceed: boolean,
+    nextLabel?: string,
+    showSkip?: boolean,
+  ) => (
+    <CardFooter className="zn-wiz__nav">
+      <Button variant="outline" onClick={goBack} disabled={stepIndex === 0}>
+        <ArrowLeft />
+        {t("nav.back")}
+      </Button>
+      <span className="zn-push" />
+      {showSkip && (
+        <Button variant="ghost" onClick={goForward}>
+          {t("nav.skip")}
+        </Button>
+      )}
+      <Button onClick={goForward} disabled={!canProceed}>
+        {nextLabel ?? t("nav.next")}
+        <ArrowRight />
+      </Button>
+    </CardFooter>
+  );
+
+  /** The question, then whatever answers it. */
+  const renderQuestion = (title: string, sub: string | null, body: ReactNode) => (
+    <CardContent
+      className="zn-wiz__pane"
+      data-direction={direction}
+    >
+      <div className="zn-stack" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
+        <h2 id={questionId} className="zn-title" data-level="3">
+          {title}
+        </h2>
+        {sub ? <p className="zn-body zn-body--sm zn-muted">{sub}</p> : null}
+      </div>
+      {body}
+    </CardContent>
+  );
+
+  const optionStack = (children: ReactNode) => (
+    <fieldset
+      className="zn-contrib-group zn-stack"
+      style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+      aria-labelledby={questionId}
+    >
+      {children}
+    </fieldset>
+  );
+
+  // ── Step: plan purpose ───────────────────────────────────────────
+
+  const renderPurpose = () => (
+    <>
+      {renderQuestion(
+        t("purpose.title"),
+        t("purpose.subtitle"),
+        optionStack(
+          PURPOSE_OPTIONS.map((opt) => (
+            <Option
+              key={opt.value}
+              name={`${uid}-purpose`}
+              glyph={opt.icon}
+              checked={form.planPurpose === opt.value}
+              title={t(opt.labelKey)}
+              body={t(opt.descKey)}
+              onSelect={() =>
+                setForm((f) => ({
+                  ...f,
+                  planPurpose: opt.value,
+                  // Set defaults for non-race plans
+                  ...(opt.value === "beginner_start" ? { daysPerWeek: 3, totalWeeksOverride: 8, trainingGoal: "finish" as TrainingGoal } : {}),
+                  ...(opt.value === "return_from_injury" ? { daysPerWeek: 3, totalWeeksOverride: 10, trainingGoal: "finish" as TrainingGoal } : {}),
+                  ...(opt.value === "base_building" ? { totalWeeksOverride: 12, trainingGoal: "time" as TrainingGoal } : {}),
+                }))
+              }
+            />
+          )),
+        ),
+      )}
+      {renderNav(!!form.planPurpose)}
+    </>
+  );
+
+  // ── Step: race distance ──────────────────────────────────────────
+
+  const renderDistance = () => (
+    <>
+      {renderQuestion(
+        t("distance.title"),
+        t("distance.subtitle"),
+        optionStack(
+          (Object.keys(RACE_DISTANCE_META) as RaceDistance[]).map((dist) => {
+            const meta = RACE_DISTANCE_META[dist];
+            return (
+              <Option
+                key={dist}
+                name={`${uid}-distance`}
+                glyph={RACE_DISTANCE_ICONS[dist]}
+                checked={form.raceDistance === dist}
+                title={pick(meta, "label")}
+                data={`${meta.distanceKm} km`}
+                onSelect={() => setForm((f) => ({ ...f, raceDistance: dist }))}
+              />
+            );
+          }),
+        ),
+      )}
+      {renderNav(!!form.raceDistance)}
+    </>
+  );
+
+  // ── Step: plan length (non-race plans) ───────────────────────────
+
+  const renderDuration = () => (
+    <>
+      {renderQuestion(
+        t("duration.title"),
+        t("duration.subtitle"),
+        <fieldset
+          className="zn-contrib-group zn-grid zn-wiz__tiles"
+          style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+          aria-labelledby={questionId}
+        >
+          {DURATION_OPTIONS.map((opt) => (
+            <Option
+              key={opt.weeks}
+              name={`${uid}-duration`}
+              shape="tile"
+              checked={form.totalWeeksOverride === opt.weeks}
+              title={String(opt.weeks)}
+              body={t("duration.weeks")}
+              onSelect={() =>
+                setForm((f) => ({ ...f, totalWeeksOverride: opt.weeks }))
+              }
+            />
+          ))}
+        </fieldset>,
+      )}
+      {renderNav(form.totalWeeksOverride > 0)}
+    </>
+  );
+
+  // ── Step: race date ──────────────────────────────────────────────
+
+  const renderDate = () => (
+    <>
+      {renderQuestion(
+        t("date.title"),
+        t("date.subtitle", { min: minWeeksForDistance }),
+        <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
+          <div className="zn-contrib-field">
+            <label className="zn-contrib-field__label" htmlFor={`${uid}-race-date`}>
+              {t("date.raceDate")}
+              <span className="zn-contrib-field__req" aria-hidden="true">*</span>
+            </label>
+            <DateInput
+              id={`${uid}-race-date`}
+              min={minDate}
+              value={form.raceDate}
+              onChange={(e) => setForm((f) => ({ ...f, raceDate: e.target.value }))}
+              aria-label={t("date.raceDate")}
+            />
+            {form.raceDate && dateValid && (
+              <p className="zn-mono zn-faint">
+                {t("date.weeks", { count: weeksCount })}
+              </p>
+            )}
+            {form.raceDate && !dateValid && (
+              <p role="alert" className="zn-contrib-field__error">
+                <AlertTriangle size={14} />
+                {t("date.tooSoon", { min: minWeeksForDistance })}
+              </p>
+            )}
+          </div>
+
+          <div className="zn-contrib-field">
+            <span className="zn-contrib-field__label">{t("date.startLabel")}</span>
+            <Segmented
+              label={t("date.startLabel")}
+              value={form.useCustomStartDate ? "custom" : "now"}
+              onChange={(v) =>
+                setForm((f) => ({
+                  ...f,
+                  useCustomStartDate: v === "custom",
+                  startDate: v === "custom" ? f.startDate || todayDate : todayDate,
+                }))
+              }
+              options={[
+                { value: "now", label: t("date.startNow") },
+                { value: "custom", label: t("date.chooseStartDate") },
+              ]}
+            />
+            {form.useCustomStartDate && (
+              <DateInput
+                id={`${uid}-start-date`}
+                value={form.startDate}
+                max={form.raceDate || undefined}
+                onChange={(e) => setForm((f) => ({ ...f, startDate: e.target.value }))}
+                aria-label={t("date.startLabel")}
+              />
+            )}
+            {form.raceDate && form.useCustomStartDate && (
+              <p className="zn-caption zn-faint">
+                {t("date.startHint", {
+                  date: formatDate(form.startDate, { year: "numeric", month: "short", day: "numeric" }),
+                })}
+              </p>
+            )}
+          </div>
+
+          {form.raceDate && dateTooLong && (
+            <Alert kind="warning" title={t("date.tooLong", { weeks: weeksCount })}>
+              {t("date.tooLongDetail", { min: recommendedWeeks.min, max: recommendedWeeks.max })}
+            </Alert>
+          )}
+        </div>,
+      )}
+      {renderNav(dateValid, t("nav.continue"))}
+    </>
+  );
+
+  // ── Step: race name (optional) ───────────────────────────────────
+
+  const renderRaceName = () => (
+    <>
+      {renderQuestion(
+        t("raceName.title"),
+        t("raceName.subtitle"),
+        <div className="zn-contrib-field">
+          <label className="zn-contrib-field__label" htmlFor={`${uid}-race-name`}>
+            {t("raceName.label")}
+          </label>
+          <input
+            id={`${uid}-race-name`}
+            type="text"
+            className="zn-contrib-input"
+            value={form.raceName}
+            onChange={(e) => setForm((f) => ({ ...f, raceName: e.target.value }))}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") goForward();
+            }}
+            placeholder={t("raceName.placeholder")}
+            maxLength={100}
+          />
+        </div>,
+      )}
+      {renderNav(true, t("nav.continue"), true)}
+    </>
+  );
+
+  // ── Step: prep races (optional) ──────────────────────────────────
+
+  const renderIntermediateGoals = () => {
     const errorsForGoal = (idx: number) =>
       intermediateGoalValidation.errors.filter((e) => e.goalIndex === idx);
 
     return (
-      <div
-        className={cn(
-          "flex-1 flex flex-col",
-          direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
-        )}
-      >
-        <div className="flex-1 flex flex-col items-center justify-center px-4">
-          <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-            <Flag className="size-6 md:size-8 text-primary" />
-          </div>
-          <h2 className="text-lg md:text-xl font-semibold text-center">
-            {t("intermediateGoals.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1 text-center max-w-md">
-            {t("intermediateGoals.subtitle")}
-          </p>
-
-          <div className="w-full max-w-lg mt-6 space-y-3">
+      <>
+        {renderQuestion(
+          t("intermediateGoals.title"),
+          t("intermediateGoals.subtitle"),
+          <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as CSSProperties}>
             {form.intermediateGoals.map((goal, idx) => {
               const goalErrors = errorsForGoal(idx);
               return (
-                <Card key={idx} className="border-border/50">
-                  <CardContent className="p-3 space-y-3">
-                    {/* Header with remove button */}
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-muted-foreground">
-                        #{idx + 1}
-                      </span>
+                <Card key={idx} size="compact" className="zn-wiz-race">
+                  <CardContent
+                    className="zn-stack"
+                    style={{ "--gap": "var(--sp-8)" } as CSSProperties}
+                  >
+                    <div className="zn-row zn-row--split">
+                      <span className="zn-mono zn-faint">{`#${idx + 1}`}</span>
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-7 px-2 text-xs text-destructive hover:text-destructive"
+                        className="zn-wiz-race__remove"
                         onClick={() => removeIntermediateGoal(idx)}
                       >
-                        <Trash2 className="size-3.5 mr-1" />
+                        <Trash2 />
                         {t("intermediateGoals.remove")}
                       </Button>
                     </div>
 
-                    {/* Distance selector (compact grid) */}
-                    <div>
-                      <label className="text-xs font-medium mb-1.5 block">
+                    <div className="zn-contrib-field">
+                      <span
+                        className="zn-contrib-field__label"
+                        id={`${uid}-goal-${idx}-distance-label`}
+                      >
                         {t("intermediateGoals.distance")}
-                      </label>
-                      <div className="grid grid-cols-4 sm:grid-cols-7 gap-1">
-                        {(Object.keys(RACE_DISTANCE_META) as RaceDistance[]).map((dist) => {
-                          const meta = RACE_DISTANCE_META[dist];
-                          return (
-                            <button
-                              key={dist}
-                              type="button"
-                              onClick={() => updateIntermediateGoal(idx, { raceDistance: dist })}
-                              className={cn(
-                                "rounded-md border px-1.5 py-1.5 text-xs text-center transition-colors",
-                                goal.raceDistance === dist
-                                  ? "border-primary bg-primary/10 font-medium"
-                                  : "hover:bg-accent/50"
-                              )}
-                            >
-                              {pick(meta, "label")}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Date picker */}
-                    <div>
-                      <label className="text-xs font-medium mb-1.5 block">
-                        {t("intermediateGoals.date")}
-                      </label>
-                      <DateInput
-                        min={form.startDate || todayDate}
-                        max={intermediateGoalMaxDate}
-                        value={goal.raceDate}
-                        onChange={(e) => updateIntermediateGoal(idx, { raceDate: e.target.value })}
-                        className="px-3 py-2 min-h-[40px] text-sm"
-                      />
-                    </div>
-
-                    {/* Race name (optional) */}
-                    <div>
-                      <label className="text-xs font-medium mb-1.5 block">
-                        {t("intermediateGoals.name")}
-                      </label>
-                      <input
-                        type="text"
-                        value={goal.raceName ?? ""}
-                        onChange={(e) => updateIntermediateGoal(idx, { raceName: e.target.value })}
-                        placeholder={t("intermediateGoals.namePlaceholder")}
-                        className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                        maxLength={100}
-                      />
-                    </div>
-
-                    {/* Priority selector */}
-                    <div>
-                      <label className="text-xs font-medium mb-1.5 block">
-                        {t("intermediateGoals.priority")}
-                      </label>
-                      <div className="grid grid-cols-3 gap-1.5">
-                        {PRIORITY_OPTIONS.map((opt) => (
+                      </span>
+                      <div
+                        className="zn-cluster"
+                        role="radiogroup"
+                        aria-labelledby={`${uid}-goal-${idx}-distance-label`}
+                      >
+                        {(Object.keys(RACE_DISTANCE_META) as RaceDistance[]).map((dist) => (
                           <button
-                            key={opt.value}
+                            key={dist}
                             type="button"
-                            onClick={() => updateIntermediateGoal(idx, { priority: opt.value })}
-                            className={cn(
-                              "rounded-md border px-2 py-2 text-left transition-colors",
-                              goal.priority === opt.value
-                                ? "border-primary bg-primary/10"
-                                : "hover:bg-accent/50"
-                            )}
+                            role="radio"
+                            aria-checked={goal.raceDistance === dist}
+                            className="zn-chip"
+                            onClick={() => updateIntermediateGoal(idx, { raceDistance: dist })}
                           >
-                            <span className={cn("text-xs font-semibold", opt.color)}>
-                              {t(opt.labelKey)}
-                            </span>
-                            <p className="text-[10px] text-muted-foreground leading-tight mt-0.5">
-                              {t(opt.descKey)}
-                            </p>
+                            {pick(RACE_DISTANCE_META[dist], "label")}
                           </button>
                         ))}
                       </div>
                     </div>
 
-                    {/* Inline validation errors */}
+                    <div className="zn-contrib-field">
+                      <label
+                        className="zn-contrib-field__label"
+                        htmlFor={`${uid}-goal-${idx}-date`}
+                      >
+                        {t("intermediateGoals.date")}
+                      </label>
+                      <DateInput
+                        id={`${uid}-goal-${idx}-date`}
+                        min={form.startDate || todayDate}
+                        max={intermediateGoalMaxDate}
+                        value={goal.raceDate}
+                        onChange={(e) => updateIntermediateGoal(idx, { raceDate: e.target.value })}
+                        aria-label={t("intermediateGoals.date")}
+                      />
+                    </div>
+
+                    <div className="zn-contrib-field">
+                      <label
+                        className="zn-contrib-field__label"
+                        htmlFor={`${uid}-goal-${idx}-name`}
+                      >
+                        {t("intermediateGoals.name")}
+                      </label>
+                      <input
+                        id={`${uid}-goal-${idx}-name`}
+                        type="text"
+                        className="zn-contrib-input"
+                        value={goal.raceName ?? ""}
+                        onChange={(e) => updateIntermediateGoal(idx, { raceName: e.target.value })}
+                        placeholder={t("intermediateGoals.namePlaceholder")}
+                        maxLength={100}
+                      />
+                    </div>
+
+                    <fieldset className="zn-contrib-group">
+                      <legend className="zn-contrib-group__legend">
+                        {t("intermediateGoals.priority")}
+                      </legend>
+                      <div
+                        className="zn-stack"
+                        style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+                      >
+                        {PRIORITY_OPTIONS.map((opt) => (
+                          <Option
+                            key={opt.value}
+                            name={`${uid}-priority-${idx}`}
+                            checked={goal.priority === opt.value}
+                            title={t(opt.labelKey)}
+                            body={t(opt.descKey)}
+                            data={t(`intermediateGoals.badge.${opt.value}`)}
+                            onSelect={() => updateIntermediateGoal(idx, { priority: opt.value })}
+                          />
+                        ))}
+                      </div>
+                    </fieldset>
+
                     {goalErrors.length > 0 && (
-                      <div className="space-y-1">
+                      <div className="zn-stack" style={{ "--gap": "var(--sp-3)" } as CSSProperties}>
                         {goalErrors.map((err, eIdx) => {
-                          const i18nMap: Record<string, string> = {
-                            BEFORE_START: "intermediateGoals.validation.beforeStart",
-                            AFTER_MAIN_RACE: "intermediateGoals.validation.afterMain",
-                            TOO_CLOSE_TO_MAIN: "intermediateGoals.validation.tooCloseToMain",
-                            TOO_CLOSE_TO_EACH_OTHER: "intermediateGoals.validation.tooCloseToOther",
-                            PRIORITY_A_IN_TAPER_ZONE: "intermediateGoals.validation.priorityAInTaper",
-                            INVALID_DATE: "intermediateGoals.validation.invalidDate",
-                            DISTANCE_TOO_LONG_FOR_PRIORITY: "intermediateGoals.validation.distanceTooLongForPriority",
-                            DISTANCE_LONGER_THAN_MAIN: "intermediateGoals.validation.distanceLongerThanMain",
-                          };
-                          const key = i18nMap[err.code];
-                          const isWarning = err.code === "DISTANCE_TOO_LONG_FOR_PRIORITY" || err.code === "DISTANCE_LONGER_THAN_MAIN";
+                          const key = VALIDATION_KEYS[err.code];
                           return (
-                            <p key={eIdx} className={`text-xs flex items-center gap-1 ${isWarning ? "text-amber-600 dark:text-amber-400" : "text-destructive"}`}>
-                              <AlertTriangle className="size-3 shrink-0" />
+                            <p key={eIdx} role="alert" className="zn-contrib-field__error">
+                              <AlertTriangle size={14} />
                               {key ? t(key) : err.message}
                             </p>
                           );
@@ -981,428 +909,283 @@ export function PlanCreatePage() {
               );
             })}
 
-            {/* Add button or max reached */}
             {form.intermediateGoals.length < 5 ? (
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={addIntermediateGoal}
-              >
-                <Plus className="size-4 mr-1.5" />
+              <Button variant="outline" onClick={addIntermediateGoal}>
+                <Plus />
                 {t("intermediateGoals.add")}
               </Button>
             ) : (
-              <p className="text-xs text-muted-foreground text-center">
-                {t("intermediateGoals.maxReached")}
-              </p>
+              <p className="zn-mono zn-faint">{t("intermediateGoals.maxReached")}</p>
             )}
-          </div>
-        </div>
-        {renderNavButtons(
+          </div>,
+        )}
+        {renderNav(
           form.intermediateGoals.length === 0 || intermediateGoalValidation.valid,
           t("nav.continue"),
           true,
         )}
-      </div>
+      </>
     );
   };
 
-  // ── Step 5: Runner Level ─────────────────────────────────────────
+  // ── Step: runner level ───────────────────────────────────────────
 
-  const renderStep5 = () => {
-    const levels: Difficulty[] = [
-      "beginner",
-      "intermediate",
-      "advanced",
-      "elite",
-    ];
+  const renderLevel = () => {
+    const levels: Difficulty[] = ["beginner", "intermediate", "advanced", "elite"];
 
     return (
-      <div
-        className={cn(
-          "flex-1 flex flex-col",
-          direction === "forward"
-            ? "animate-slide-in-right"
-            : "animate-slide-in-left"
+      <>
+        {renderQuestion(
+          t("level.title"),
+          t("level.subtitle"),
+          <div className="zn-stack" style={{ "--gap": "var(--sp-8)" } as CSSProperties}>
+            {userPrefs?.vma && suggestedLevel && (
+              <p className="zn-mono zn-faint">
+                {t("level.vmaSuggestion", { vma: userPrefs.vma })}
+                <span className="zn-accent">
+                  {pick(DIFFICULTY_META[suggestedLevel], "label")}
+                </span>
+                {t("level.vmaSuggestionSuffix")}
+              </p>
+            )}
+            {optionStack(
+              levels.map((level) => {
+                const meta = DIFFICULTY_META[level];
+                return (
+                  <Option
+                    key={level}
+                    name={`${uid}-level`}
+                    checked={form.runnerLevel === level}
+                    title={pick(meta, "label")}
+                    body={pick(meta, "desc")}
+                    data={level === suggestedLevel ? t("level.suggested") : undefined}
+                    onSelect={() => setForm((f) => ({ ...f, runnerLevel: level }))}
+                  />
+                );
+              }),
+            )}
+          </div>,
         )}
-      >
-        <div className="flex-1 flex flex-col items-center justify-center px-4">
-          <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-            <Target className="size-6 md:size-8 text-primary" />
-          </div>
-          <h2 className="text-lg md:text-xl font-semibold text-center">
-            {t("level.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1 text-center">
-            {t("level.subtitle")}
-          </p>
-
-          {userPrefs?.vma && suggestedLevel && (
-            <div className="rounded-lg border bg-primary/5 p-2 text-xs text-center mt-3 max-w-sm w-full">
-              {t("level.vmaSuggestion", { vma: userPrefs.vma })}
-              <span className="font-semibold">
-                {pick(DIFFICULTY_META[suggestedLevel], "label")}
-              </span>
-              {t("level.vmaSuggestionSuffix")}
-            </div>
-          )}
-
-          <div className="w-full max-w-md md:max-w-xl lg:max-w-2xl grid grid-cols-2 gap-2 mt-6">
-            {levels.map((level) => {
-              const meta = DIFFICULTY_META[level];
-              const isSuggested = level === suggestedLevel;
-              return (
-                <Card
-                  key={level}
-                  interactive
-                  className={cn(
-                    "cursor-pointer border-border/50 hover:shadow-md hover:-translate-y-1 transition-all duration-200",
-                    form.runnerLevel === level
-                      ? "bg-gradient-to-br from-primary/10 dark:from-primary/20 to-transparent ring-2 ring-primary"
-                      : "hover:bg-gradient-to-br hover:from-primary/5 dark:hover:from-primary/10 hover:to-transparent",
-                    isSuggested &&
-                      form.runnerLevel !== level &&
-                      "border-primary/40"
-                  )}
-                  onClick={() => {
-                    setForm((f) => ({ ...f, runnerLevel: level }));
-                    goForward();
-                  }}
-                >
-                  <CardContent className="p-3 md:p-4 flex items-center gap-3">
-                    <div className="size-9 md:size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                      <span className="text-base md:text-lg font-bold text-primary">
-                        {meta.level}
-                      </span>
-                    </div>
-                    <div className="min-w-0">
-                      <div className="font-medium text-sm md:text-base leading-tight">
-                        {pick(meta, "label")}
-                      </div>
-                      <div className="text-[11px] text-muted-foreground leading-tight mt-0.5">
-                        {pick(meta, "desc")}
-                      </div>
-                      {isSuggested && (
-                        <div className="text-xs text-primary">
-                          {t("level.suggested")}
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-        <div className="py-4 flex justify-center">
-          <Button variant="ghost" size="sm" onClick={goBack}>
-            <ArrowLeft className="size-4 mr-1" />
-            {t("nav.back")}
-          </Button>
-        </div>
-      </div>
+        {renderNav(!!form.runnerLevel)}
+      </>
     );
   };
 
-  // ── Step Goal: Training mindset (finish/time/compete) ────────────
+  // ── Step: training mindset ───────────────────────────────────────
 
-  const renderStepGoal = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("goal.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("goal.subtitle")}
-        </p>
-        <div className="w-full max-w-sm grid grid-cols-1 gap-2 mt-6">
-          {GOAL_OPTION_KEYS.map((opt) => (
-            <Card
+  const renderGoal = () => (
+    <>
+      {renderQuestion(
+        t("goal.title"),
+        t("goal.subtitle"),
+        optionStack(
+          GOAL_OPTION_KEYS.map((opt) => (
+            <Option
               key={opt.value}
-              interactive
-              className={cn(
-                "cursor-pointer border-border/50 transition-all duration-200",
-                form.trainingGoal === opt.value
-                  ? "ring-2 ring-primary bg-primary/5"
-                  : "hover:bg-muted/50"
-              )}
-              onClick={() => {
-                setForm((f) => ({ ...f, trainingGoal: opt.value }));
-                goForward();
-              }}
-            >
-              <CardContent className="p-3 flex items-center gap-3">
-                <div className="size-9 rounded-full bg-secondary/80 flex items-center justify-center shrink-0">
-                  {opt.icon}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold">{t(opt.labelKey)}</p>
-                  <p className="text-xs text-muted-foreground">{t(opt.descKey)}</p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-      {renderNavButtons(!!form.trainingGoal)}
-    </div>
+              name={`${uid}-goal`}
+              glyph={opt.icon}
+              checked={form.trainingGoal === opt.value}
+              title={t(opt.labelKey)}
+              body={t(opt.descKey)}
+              onSelect={() => setForm((f) => ({ ...f, trainingGoal: opt.value }))}
+            />
+          )),
+        ),
+      )}
+      {renderNav(!!form.trainingGoal)}
+    </>
   );
 
-  // ── Step Fitness: Current fitness evaluation ───────────────────────
+  // ── Step: current fitness (optional) ─────────────────────────────
 
-  const renderStepFitness = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward" ? "animate-slide-in-right" : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("fitness.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center max-w-md">
-          {t("fitness.subtitle")}
-        </p>
-        <div className="w-full max-w-sm space-y-4 mt-6">
-          {/* Current weekly km */}
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium" htmlFor="weeklyKm">
+  const renderFitness = () => (
+    <>
+      {renderQuestion(
+        t("fitness.title"),
+        t("fitness.subtitle"),
+        <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
+          <div className="zn-contrib-field">
+            <label className="zn-contrib-field__label" htmlFor={`${uid}-weekly-km`}>
               {t("fitness.weeklyKm")}
             </label>
-            <p className="text-xs text-muted-foreground">
-              {t("fitness.weeklyKmDesc")}
-            </p>
             <input
-              id="weeklyKm"
+              id={`${uid}-weekly-km`}
               type="number"
               inputMode="numeric"
               min={0}
               max={300}
+              data-mono="true"
+              className="zn-contrib-input"
               placeholder={t("fitness.weeklyKmPlaceholder")}
               value={form.currentWeeklyKm}
+              aria-describedby={`${uid}-weekly-km-hint`}
               onChange={(e) => setForm((f) => ({ ...f, currentWeeklyKm: e.target.value }))}
-              className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
             />
+            <p id={`${uid}-weekly-km-hint`} className="zn-caption zn-faint">
+              {t("fitness.weeklyKmDesc")}
+            </p>
           </div>
 
-          {/* Current long run */}
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium" htmlFor="longRunKm">
+          <div className="zn-contrib-field">
+            <label className="zn-contrib-field__label" htmlFor={`${uid}-long-run-km`}>
               {t("fitness.longRunKm")}
             </label>
-            <p className="text-xs text-muted-foreground">
-              {t("fitness.longRunKmDesc")}
-            </p>
             <input
-              id="longRunKm"
+              id={`${uid}-long-run-km`}
               type="number"
               inputMode="numeric"
               min={0}
               max={100}
+              data-mono="true"
+              className="zn-contrib-input"
               placeholder={t("fitness.longRunKmPlaceholder")}
               value={form.currentLongRunKm}
+              aria-describedby={`${uid}-long-run-km-hint`}
               onChange={(e) => setForm((f) => ({ ...f, currentLongRunKm: e.target.value }))}
-              className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
             />
+            <p id={`${uid}-long-run-km-hint`} className="zn-caption zn-faint">
+              {t("fitness.longRunKmDesc")}
+            </p>
           </div>
-        </div>
-      </div>
-      {renderNavButtons(true, t("nav.continue"), true)}
-    </div>
+        </div>,
+      )}
+      {renderNav(true, t("nav.continue"), true)}
+    </>
   );
 
-  // ── Step 6: Training Configuration ───────────────────────────────
+  // ── Step: the typical week ───────────────────────────────────────
 
-  const renderStep6 = () => (
-    <div
-      className={cn(
-        "flex-1 flex flex-col",
-        direction === "forward"
-          ? "animate-slide-in-right"
-          : "animate-slide-in-left"
-      )}
-    >
-      <div className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-          <Calendar className="size-6 md:size-8 text-primary" />
-        </div>
-        <h2 className="text-lg md:text-xl font-semibold text-center">
-          {t("schedule.title")}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1 text-center">
-          {t("schedule.subtitle")}
-        </p>
+  const renderSchedule = () => {
+    const dayOptions = DAYS_PER_WEEK_OPTIONS.filter((n) =>
+      form.planPurpose === "return_from_injury" ? n <= 4
+        : form.planPurpose === "beginner_start" ? n <= 5
+          : true
+    );
 
-        <div className="w-full max-w-sm mt-6 space-y-6">
-          <div>
-            <label className="text-sm font-medium mb-3 block text-center">
-              {t("schedule.sessionsPerWeek")}
-            </label>
-            <div className="flex gap-2">
-              {DAYS_PER_WEEK_OPTIONS.filter((n) =>
-                form.planPurpose === "return_from_injury" ? n <= 4
-                  : form.planPurpose === "beginner_start" ? n <= 5
-                    : true
-              ).map((n) => (
-                <Button
-                  key={n}
-                  variant={form.daysPerWeek === n ? "default" : "outline"}
-                  className="flex-1"
-                  onClick={() => setForm((f) => ({ ...f, daysPerWeek: n }))}
-                >
-                  {n}
-                </Button>
-              ))}
+    return (
+      <>
+        {renderQuestion(
+          t("schedule.title"),
+          t("schedule.subtitle"),
+          <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
+            <div className="zn-contrib-field">
+              <span className="zn-contrib-field__label">
+                {t("schedule.sessionsPerWeek")}
+              </span>
+              <Segmented
+                label={t("schedule.sessionsPerWeek")}
+                value={String(form.daysPerWeek)}
+                onChange={(v) => setForm((f) => ({ ...f, daysPerWeek: parseInt(v, 10) }))}
+                options={dayOptions.map((n) => ({ value: String(n), label: String(n) }))}
+              />
             </div>
-          </div>
 
-          {/* Long run day picker */}
-          <div>
-            <label className="text-sm font-medium mb-2 block text-center">
-              {t("schedule.longRunDay")}
-            </label>
-            <p className="text-xs text-muted-foreground text-center mb-3">
-              {t("schedule.longRunDayDesc")}
-            </p>
-            <div className="grid grid-cols-7 gap-1">
-              {Array.from({ length: 7 }, (_, idx) => (
-                <Button
-                  key={idx}
-                  variant={form.longRunDay === idx ? "default" : "outline"}
-                  size="sm"
-                  className="text-xs px-0"
-                  onClick={() => setForm((f) => ({ ...f, longRunDay: idx }))}
-                >
-                  {t(`daysShort.${idx}`)}
-                </Button>
-              ))}
+            <div className="zn-contrib-field">
+              <span className="zn-contrib-field__label">
+                {t("schedule.longRunDay")}
+              </span>
+              <Segmented
+                label={t("schedule.longRunDay")}
+                value={String(form.longRunDay)}
+                onChange={(v) => setForm((f) => ({ ...f, longRunDay: parseInt(v, 10) }))}
+                options={Array.from({ length: 7 }, (_, idx) => ({
+                  value: String(idx),
+                  label: t(`daysShort.${idx}`),
+                  title: t(`days.${idx}`),
+                }))}
+              />
+              <p className="zn-caption zn-faint">{t("schedule.longRunDayDesc")}</p>
             </div>
-          </div>
 
-          {/* Strength training toggle */}
-          <div className="border-t pt-4">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2 min-w-0">
-                <div className="size-8 rounded-full bg-orange-500/10 flex items-center justify-center shrink-0">
-                  <Dumbbell className="size-4 text-orange-500" />
-                </div>
-                <div className="min-w-0">
-                  <label htmlFor="includeStrength" className="text-sm font-medium cursor-pointer">
-                    {t("schedule.includeStrength")}
-                  </label>
-                  <p className="text-xs text-muted-foreground leading-tight">
-                    {t("schedule.includeStrengthDesc")}
-                  </p>
-                </div>
-              </div>
+            <div className="zn-contrib-toggle">
+              <label className="zn-contrib-toggle__label" htmlFor={`${uid}-strength`}>
+                {t("schedule.includeStrength")}
+              </label>
               <Switch
-                id="includeStrength"
+                id={`${uid}-strength`}
                 checked={form.includeStrength}
                 onCheckedChange={(checked) =>
                   setForm((f) => ({ ...f, includeStrength: !!checked }))
                 }
               />
             </div>
+            <p className="zn-caption zn-faint">{t("schedule.includeStrengthDesc")}</p>
 
             {form.includeStrength && (
-              <div className="mt-3 ml-10">
-                <label className="text-xs font-medium text-muted-foreground mb-2 block">
+              <div className="zn-contrib-field">
+                <span className="zn-contrib-field__label">
                   {t("schedule.strengthFrequency")}
-                </label>
-                <div className="flex gap-2">
-                  {([1, 2, 3] as const).map((n) => (
-                    <Button
-                      key={n}
-                      variant={form.strengthFrequency === n ? "default" : "outline"}
-                      size="sm"
-                      className="flex-1 text-xs"
-                      onClick={() => setForm((f) => ({ ...f, strengthFrequency: n }))}
-                    >
-                      {t("schedule.strengthPerWeek", { n })}
-                    </Button>
-                  ))}
-                </div>
+                </span>
+                <Segmented
+                  label={t("schedule.strengthFrequency")}
+                  value={String(form.strengthFrequency)}
+                  onChange={(v) =>
+                    setForm((f) => ({
+                      ...f,
+                      strengthFrequency: parseInt(v, 10) as 1 | 2 | 3,
+                    }))
+                  }
+                  options={[1, 2, 3].map((n) => ({
+                    value: String(n),
+                    label: t("schedule.strengthPerWeek", { n }),
+                  }))}
+                />
               </div>
             )}
-          </div>
-        </div>
-      </div>
-      {renderNavButtons(true, t("nav.continue"))}
-    </div>
-  );
+          </div>,
+        )}
+        {renderNav(true, t("nav.continue"))}
+      </>
+    );
+  };
 
-  // ── Step 7: Pace & Elevation (optional) ──────────────────────────
+  // ── Step: target pace and elevation (optional) ───────────────────
 
-  const renderStep7 = () => {
+  const renderPace = () => {
     const distanceKm = form.raceDistance
       ? RACE_DISTANCE_META[form.raceDistance].distanceKm
       : 0;
+    const finishSeconds = parseFinishTimeToSeconds(targetFinishTime);
+    const isTrail =
+      form.raceDistance === "trail_short" ||
+      form.raceDistance === "trail" ||
+      form.raceDistance === "ultra";
 
     return (
-      <div
-        className={cn(
-          "flex-1 flex flex-col",
-          direction === "forward"
-            ? "animate-slide-in-right"
-            : "animate-slide-in-left"
-        )}
-      >
-        <div className="flex-1 flex flex-col items-center justify-center px-4">
-          <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-            <Mountain className="size-6 md:size-8 text-primary" />
-          </div>
-          <h2 className="text-lg md:text-xl font-semibold text-center">
-            {t("pace.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1 text-center">
-            {t("pace.subtitle")}
-          </p>
-          {(form.raceDistance === "trail_short" || form.raceDistance === "trail" || form.raceDistance === "ultra") && (
-            <p className="text-xs text-primary text-center mt-1">
-              {t("pace.trailHint")}
-            </p>
-          )}
+      <>
+        {renderQuestion(
+          t("pace.title"),
+          t("pace.subtitle"),
+          <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
+            {isTrail && <p className="zn-caption zn-faint">{t("pace.trailHint")}</p>}
 
-          <div className="w-full max-w-sm mt-6 space-y-4">
-            {/* Pace input mode toggle */}
-            <div className="flex rounded-lg border overflow-hidden">
-              <button
-                type="button"
-                className={cn(
-                  "flex-1 px-3 py-1.5 text-xs font-medium transition-colors",
-                  paceInputMode === "pace" ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
-                )}
-                onClick={() => setPaceInputMode("pace")}
-              >
-                {t("pace.targetPaceTab")}
-              </button>
-              <button
-                type="button"
-                className={cn(
-                  "flex-1 px-3 py-1.5 text-xs font-medium transition-colors",
-                  paceInputMode === "time" ? "bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
-                )}
-                onClick={() => setPaceInputMode("time")}
-              >
-                {t("pace.targetTimeTab")}
-              </button>
-            </div>
+            <Segmented
+              label={t("pace.title")}
+              value={paceInputMode}
+              onChange={(v) => setPaceInputMode(v as "pace" | "time")}
+              options={[
+                { value: "pace", label: t("pace.targetPaceTab") },
+                { value: "time", label: t("pace.targetTimeTab") },
+              ]}
+            />
 
-            {/* Target pace or finish time */}
             {paceInputMode === "pace" ? (
-              <div>
-                <label className="text-sm font-medium mb-2 block">
+              <div className="zn-contrib-field">
+                <label className="zn-contrib-field__label" htmlFor={`${uid}-pace`}>
                   {t("pace.targetPaceLabel")}
                 </label>
                 <input
+                  id={`${uid}-pace`}
                   type="text"
+                  inputMode="numeric"
+                  data-mono="true"
+                  className="zn-contrib-input"
+                  placeholder={t("pace.pacePlaceholder")}
                   value={form.targetPace}
+                  aria-invalid={(!!form.targetPace && !paceSeconds) || undefined}
+                  aria-describedby={
+                    form.targetPace && !paceSeconds ? `${uid}-pace-error` : undefined
+                  }
                   onChange={(e) => {
                     setForm((f) => ({ ...f, targetPace: e.target.value }));
                     setTargetFinishTime("");
@@ -1410,31 +1193,37 @@ export function PlanCreatePage() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && (paceSeconds || !form.targetPace)) goForward();
                   }}
-                  placeholder="5:30"
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
                 {paceSeconds && distanceKm > 0 && (
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="zn-mono zn-faint">
                     {t("pace.estimatedFinish")}
-                    <span className="font-medium">
-                      {estimateFinishTime(paceSeconds, distanceKm)}
-                    </span>
+                    {estimateFinishTime(paceSeconds, distanceKm)}
                   </p>
                 )}
                 {form.targetPace && !paceSeconds && (
-                  <p className="text-xs text-destructive mt-1">
+                  <p id={`${uid}-pace-error`} role="alert" className="zn-contrib-field__error">
+                    <AlertTriangle size={14} />
                     {t("pace.paceFormatError")}
                   </p>
                 )}
               </div>
             ) : (
-              <div>
-                <label className="text-sm font-medium mb-2 block">
+              <div className="zn-contrib-field">
+                <label className="zn-contrib-field__label" htmlFor={`${uid}-finish`}>
                   {t("pace.targetFinishTimeLabel")}
                 </label>
                 <input
+                  id={`${uid}-finish`}
                   type="text"
+                  inputMode="numeric"
+                  data-mono="true"
+                  className="zn-contrib-input"
+                  placeholder={t("pace.timePlaceholder")}
                   value={targetFinishTime}
+                  aria-invalid={(!!targetFinishTime && !finishSeconds) || undefined}
+                  aria-describedby={
+                    targetFinishTime && !finishSeconds ? `${uid}-finish-error` : undefined
+                  }
                   onChange={(e) => {
                     const val = e.target.value;
                     setTargetFinishTime(val);
@@ -1447,193 +1236,171 @@ export function PlanCreatePage() {
                     }
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      const totalSec = parseFinishTimeToSeconds(targetFinishTime);
-                      if (totalSec || !targetFinishTime) goForward();
-                    }
+                    if (e.key === "Enter" && (finishSeconds || !targetFinishTime)) goForward();
                   }}
-                  placeholder={t("pace.timePlaceholder")}
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
-                {(() => {
-                  const totalSec = parseFinishTimeToSeconds(targetFinishTime);
-                  if (totalSec && distanceKm > 0) {
-                    const paceSec = finishTimeToPaceSeconds(totalSec, distanceKm);
-                    return (
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {t("pace.requiredPace")}
-                        <span className="font-medium">{formatPace(paceSec)} min/km</span>
-                      </p>
-                    );
-                  }
-                  if (targetFinishTime && !totalSec) {
-                    return (
-                      <p className="text-xs text-destructive mt-1">
-                        {t("pace.timeFormatHint")}
-                      </p>
-                    );
-                  }
-                  return null;
-                })()}
+                {finishSeconds && distanceKm > 0 && (
+                  <p className="zn-mono zn-faint">
+                    {t("pace.requiredPace")}
+                    {`${formatPace(finishTimeToPaceSeconds(finishSeconds, distanceKm))} min/km`}
+                  </p>
+                )}
+                {targetFinishTime && !finishSeconds && (
+                  <p id={`${uid}-finish-error`} role="alert" className="zn-contrib-field__error">
+                    <AlertTriangle size={14} />
+                    {t("pace.timeFormatHint")}
+                  </p>
+                )}
               </div>
             )}
 
-            {/* Elevation gain */}
-            <div>
-              <label className="text-sm font-medium mb-2 block">
+            <div className="zn-contrib-field">
+              <label className="zn-contrib-field__label" htmlFor={`${uid}-elevation`}>
                 {t("pace.elevation")}
               </label>
               <input
+                id={`${uid}-elevation`}
                 type="number"
-                value={form.elevationGain}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, elevationGain: e.target.value }))
-                }
-                placeholder={t("pace.elevationPlaceholder")}
+                inputMode="numeric"
                 min={0}
                 max={10000}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                data-mono="true"
+                className="zn-contrib-input"
+                placeholder={t("pace.elevationPlaceholder")}
+                value={form.elevationGain}
+                onChange={(e) => setForm((f) => ({ ...f, elevationGain: e.target.value }))}
               />
             </div>
-          </div>
-        </div>
-        {renderNavButtons(
-          form.targetPace === "" || !!paceSeconds,
-          t("nav.continue"),
-          true
+          </div>,
         )}
-      </div>
+        {renderNav(form.targetPace === "" || !!paceSeconds, t("nav.continue"), true)}
+      </>
     );
   };
 
-  // ── Step 8: Summary & Generate ───────────────────────────────────
+  // ── Step: the recap ──────────────────────────────────────────────
 
-  const renderStep8 = () => {
-    const distMeta = form.raceDistance
-      ? RACE_DISTANCE_META[form.raceDistance]
-      : null;
-    const levelMeta = form.runnerLevel
-      ? DIFFICULTY_META[form.runnerLevel]
-      : null;
+  const renderSummary = () => {
+    const distMeta = form.raceDistance ? RACE_DISTANCE_META[form.raceDistance] : null;
+    const levelMeta = form.runnerLevel ? DIFFICULTY_META[form.runnerLevel] : null;
     const distanceKm = distMeta?.distanceKm ?? 0;
+    const planWeeks = isRacePlan ? weeksCount : form.totalWeeksOverride;
+
+    const stats: {
+      value: string;
+      label: string;
+      footnote?: string;
+      tone: "card" | "ink";
+    }[] = [];
+    if (isRacePlan && distMeta) {
+      stats.push({ value: pick(distMeta, "label"), label: t("summary.distance"), tone: "card" });
+    }
+    if (planWeeks > 0) {
+      stats.push({
+        value: String(planWeeks),
+        label: t("duration.weeks"),
+        footnote: form.raceDate
+          ? formatDate(form.raceDate, { month: "short", day: "numeric" })
+          : undefined,
+        tone: "card",
+      });
+    }
+    stats.push({ value: String(form.daysPerWeek), label: t("summary.days"), tone: "card" });
+    if (form.currentWeeklyKm) {
+      stats.push({
+        value: `${form.currentWeeklyKm} km`,
+        label: t("summary.weeklyKm"),
+        tone: "ink",
+      });
+    }
 
     return (
-      <div
-        className={cn(
-          "space-y-4",
-          direction === "forward"
-            ? "animate-slide-in-right"
-            : "animate-slide-in-left"
-        )}
-      >
-        <div className="text-center mb-4">
-          <div className="size-12 md:size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
-            <CheckIcon className="size-6 md:size-8 text-primary" />
+      <>
+        <CardContent className="zn-wiz__pane" data-direction={direction}>
+          <div className="zn-stack" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
+            <h2 id={questionId} className="zn-title" data-level="3">
+              {t("summary.title")}
+            </h2>
+            <p className="zn-body zn-body--sm zn-muted">{t("summary.subtitle")}</p>
           </div>
-          <h2 className="text-lg md:text-xl font-semibold">
-            {t("summary.title")}
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            {t("summary.subtitle")}
-          </p>
-        </div>
 
-        <Card>
-          <CardContent className="p-4 md:p-6 space-y-2">
-            {/* Distance */}
-            <SummaryRow
-              label={t("summary.distance")}
-              value={
-                distMeta
-                  ? `${pick(distMeta, "label")} (${distMeta.distanceKm} km)`
-                  : "-"
-              }
-            />
-            {/* Race date */}
-            <SummaryRow
-              label={t("summary.date")}
-              value={
-                form.raceDate
-                  ? `${formatDate(form.raceDate)} (${weeksCount} ${t("summary.weeksShort")})`
-                  : "-"
-              }
-            />
-            <SummaryRow
-              label={t("summary.startDate")}
-              value={
-                form.startDate
-                  ? formatDate(form.startDate)
-                  : "-"
-              }
-            />
-            {/* Race name */}
-            {form.raceName && (
+          {/* The plan in numbers, before the line-by-line recap. Only the ones
+              the athlete actually answered: a stat block reading "—" is a
+              hole, and a hole is not a measure. */}
+          <div
+            className="zn-grid"
+            style={{ "--cols": stats.length, "--gap": "var(--sp-6)" } as CSSProperties}
+          >
+            {stats.map((stat) => (
+              <StatBlock key={stat.label} size="sm" {...stat} />
+            ))}
+          </div>
+
+          <dl className="zn-wiz-sum">
+            {distMeta && (
               <SummaryRow
-                label={t("summary.name")}
-                value={form.raceName}
+                label={t("summary.distance")}
+                value={`${pick(distMeta, "label")} · ${distMeta.distanceKm} km`}
               />
             )}
-            {/* Intermediate goals */}
-            {form.intermediateGoals.length > 0 && (
-              <div className="py-1.5 border-b space-y-1.5">
-                <span className="text-sm text-muted-foreground">
-                  {t("intermediateGoals.title")}
-                </span>
-                {sortIntermediateGoals(form.intermediateGoals).map((goal, idx) => {
-                  const distMeta2 = RACE_DISTANCE_META[goal.raceDistance];
-                  return (
-                    <div key={idx} className="flex items-center gap-2 pl-2 text-sm">
-                      <span className={cn(
-                        "inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-semibold leading-none",
-                        goal.priority === "A" ? "bg-zone-5/10 text-zone-5"
-                          : goal.priority === "B" ? "bg-primary/10 text-primary"
-                            : "bg-zone-2/10 text-zone-2"
-                      )}>
-                        {t(`intermediateGoals.badge.${goal.priority}`)}
-                      </span>
-                      <span className="font-medium">
-                        {pick(distMeta2, "label")}
-                      </span>
-                      {goal.raceName && (
-                        <span className="text-muted-foreground truncate">
-                          — {goal.raceName}
-                        </span>
-                      )}
-                      <span className="text-muted-foreground ml-auto shrink-0">
-                        {goal.raceDate ? formatDate(goal.raceDate) : "-"}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
+            {form.raceDate && (
+              <SummaryRow
+                label={t("summary.date")}
+                value={`${formatDate(form.raceDate)} · ${weeksCount} ${t("summary.weeksShort")}`}
+              />
             )}
-            {/* Level */}
-            <SummaryRow
-              label={t("summary.level")}
-              value={
-                levelMeta ? pick(levelMeta, "label") : "-"
-              }
-            />
-            {/* Days */}
-            <SummaryRow
-              label={t("summary.days")}
-              value={`${form.daysPerWeek}`}
-            />
-            {/* Pace */}
-            {paceSeconds && (
+            {form.startDate && (
+              <SummaryRow
+                label={t("summary.startDate")}
+                value={formatDate(form.startDate)}
+              />
+            )}
+            {form.raceName && (
+              <SummaryRow label={t("summary.name")} value={form.raceName} />
+            )}
+
+            {form.intermediateGoals.length > 0 && (
+              <>
+                <dt className="zn-wiz-sum__label">{t("intermediateGoals.title")}</dt>
+                <dd className="zn-wiz-sum__nest">
+                  <div className="zn-stack" style={{ "--gap": "var(--sp-4)" } as CSSProperties}>
+                    {sortIntermediateGoals(form.intermediateGoals).map((goal, idx) => (
+                      <div key={idx} className="zn-row" style={{ "--gap": "var(--sp-5)" } as CSSProperties}>
+                        <span className="zn-mono zn-accent zn-fixed">
+                          {t(`intermediateGoals.badge.${goal.priority}`)}
+                        </span>
+                        <span className="zn-body zn-body--sm zn-truncate zn-fill">
+                          {pick(RACE_DISTANCE_META[goal.raceDistance], "label")}
+                          {goal.raceName ? ` · ${goal.raceName}` : ""}
+                        </span>
+                        <span className="zn-mono zn-faint zn-fixed">
+                          {goal.raceDate ? formatDate(goal.raceDate, { month: "short", day: "numeric" }) : "—"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </dd>
+              </>
+            )}
+
+            {levelMeta && (
+              <SummaryRow label={t("summary.level")} value={pick(levelMeta, "label")} />
+            )}
+            <SummaryRow label={t("summary.days")} value={String(form.daysPerWeek)} mono />
+            {!!paceSeconds && (
               <SummaryRow
                 label={t("summary.pace")}
+                mono
                 value={`${formatPace(paceSeconds)}/km → ${estimateFinishTime(paceSeconds, distanceKm)}`}
               />
             )}
-            {/* Elevation */}
             {form.elevationGain && (
               <SummaryRow
                 label={t("summary.elevation")}
                 value={`${form.elevationGain} m D+`}
+                mono
               />
             )}
-            {/* v2: Goal */}
             <SummaryRow
               label={t("summary.goal")}
               value={
@@ -1642,7 +1409,6 @@ export function PlanCreatePage() {
                     : t("goal.time")
               }
             />
-            {/* v2: Purpose (non-race only) */}
             {form.planPurpose !== "race" && (
               <SummaryRow
                 label={t("summary.purpose")}
@@ -1653,70 +1419,80 @@ export function PlanCreatePage() {
                 }
               />
             )}
-            {/* v2: Duration (non-race) */}
             {form.planPurpose !== "race" && form.totalWeeksOverride > 0 && (
               <SummaryRow
                 label={t("summary.duration")}
                 value={t("summary.durationValue", { weeks: form.totalWeeksOverride })}
+                mono
               />
             )}
-            {/* v2: Fitness */}
             {form.currentWeeklyKm && (
               <SummaryRow
                 label={t("summary.weeklyKm")}
                 value={t("summary.currentVolume", { km: form.currentWeeklyKm })}
+                mono
               />
             )}
-            {/* v2: Long run day */}
             <SummaryRow
               label={t("summary.longRun")}
               value={t(`days.${form.longRunDay}`)}
             />
-            {/* v2: Strength training */}
             {form.includeStrength && (
               <SummaryRow
                 label={t("summary.strengthTraining")}
                 value={t("schedule.strengthPerWeek", { n: form.strengthFrequency })}
+                mono
               />
             )}
-          </CardContent>
-        </Card>
+          </dl>
 
-        {error && (
-          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive text-center">
-            {error}
-          </div>
-        )}
+          {error && (
+            <Alert kind="error" title={t("wizard.errorTitle")}>
+              {error} {t("wizard.errorHint")}
+            </Alert>
+          )}
+        </CardContent>
 
-        <div className="flex justify-between gap-3">
-          <Button variant="ghost" size="sm" onClick={goBack}>
-            <ArrowLeft className="size-4 mr-1" />
+        <CardFooter className="zn-wiz__nav">
+          <Button variant="outline" onClick={goBack}>
+            <ArrowLeft />
             {t("nav.back")}
           </Button>
-          <Button
-            onClick={handleGenerate}
-            disabled={isGenerating}
-          >
+          <span className="zn-push" />
+          <Button onClick={handleGenerate} disabled={isGenerating}>
             {isGenerating ? (
               <>
-                <Loader2 className="size-4 animate-spin mr-2" />
+                <Spinner size={16} inline />
                 {t("summary.generating")}
               </>
             ) : (
               <>
+                <Check />
                 {t("summary.generate")}
               </>
             )}
           </Button>
-        </div>
-      </div>
+        </CardFooter>
+      </>
     );
   };
 
   // ── Render ───────────────────────────────────────────────────────
 
-  // Summary step can scroll; other steps use full viewport layout
-  const isFullViewportStep = currentStep !== "summary";
+  const STEP_RENDERERS: Record<StepId, () => ReactNode> = {
+    purpose: renderPurpose,
+    distance: renderDistance,
+    date: renderDate,
+    duration: renderDuration,
+    race_name: renderRaceName,
+    intermediate_goals: renderIntermediateGoals,
+    level: renderLevel,
+    goal: renderGoal,
+    fitness: renderFitness,
+    schedule: renderSchedule,
+    pace: renderPace,
+    summary: renderSummary,
+  };
 
   return (
     <>
@@ -1725,63 +1501,109 @@ export function PlanCreatePage() {
         description={t("seo.createDescription")}
         canonical="/plan/create"
       />
-      <div className={cn(
-        "max-w-2xl mx-auto",
-        isFullViewportStep
-          ? "flex flex-col min-h-[calc(100dvh-8rem)] md:min-h-0 md:py-8"
-          : "py-8"
-      )}>
-        {/* Back to plan selection */}
-        {stepIndex === 0 && (
-          <div className="pt-1 pb-2">
-            <Button variant="ghost" size="sm" asChild>
+
+      <div className="zn-wiz">
+        <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
+          {stepIndex === 0 && (
+            <Button variant="ghost" size="sm" asChild className="zn-wiz__lone">
               <Link to="/plan/new">
-                <ArrowLeft className="mr-1 size-4" />
+                <ArrowLeft />
                 {t("nav.back")}
               </Link>
             </Button>
+          )}
+
+          <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+            <span className="zn-kicker">{t("wizard.kicker")}</span>
+            <h1 className="zn-display" data-level="2">
+              {t("wizard.title")}
+            </h1>
           </div>
-        )}
-        {hasDraft && stepIndex === 0 && (
-          <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-sm">
-            <span className="flex-1 min-w-0 text-foreground">
-              {t("draft.found", "Un brouillon de plan a été retrouvé.")}
-            </span>
-            <div className="flex items-center gap-2">
-              <Button size="sm" variant="default" onClick={restoreDraft}>
-                {t("draft.restore", "Reprendre")}
-              </Button>
-              <Button size="sm" variant="ghost" onClick={clearDraft}>
-                {t("draft.discard", "Repartir de zéro")}
-              </Button>
+
+          {/* The promise and its limits are stated once, on the first step —
+              past that the question on screen is what matters. */}
+          {stepIndex === 0 && (
+            <div
+              className="zn-split"
+              style={{ "--split": "1fr 340px", "--gap": "var(--sp-14)" } as CSSProperties}
+            >
+              <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+                <p className="zn-body zn-body--lead">{t("wizard.lede")}</p>
+                <p className="zn-source">{t("wizard.source")}</p>
+              </div>
+              <Card size="compact">
+                <CardContent
+                  className="zn-stack"
+                  style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+                >
+                  <span className="zn-kicker zn-kicker--inline">
+                    {t("wizard.limitsKicker")}
+                  </span>
+                  <p className="zn-body zn-body--sm zn-muted">{t("wizard.limitsBody")}</p>
+                </CardContent>
+              </Card>
             </div>
+          )}
+        </div>
+
+        <section className="zn-wiz__band">
+          {hasDraft && stepIndex === 0 && (
+            <Alert
+              kind="info"
+              title={t("draft.found")}
+              action={
+                <span
+                  className="zn-cluster"
+                  style={{ "--gap": "var(--sp-4)" } as CSSProperties}
+                >
+                  <Button size="sm" variant="outline" onClick={restoreDraft}>
+                    {t("draft.restore")}
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={clearDraft}>
+                    {t("draft.discard")}
+                  </Button>
+                </span>
+              }
+            >
+              {t("wizard.draftBody")}
+            </Alert>
+          )}
+
+          <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+            <ol className="zn-stepper zn-wiz__steps">
+              {steps.map((id, index) => {
+                const done = index < stepIndex;
+                const current = index === stepIndex;
+                return (
+                  <li key={id} className="zn-stepper__item">
+                    <button
+                      type="button"
+                      className="zn-stepper__step"
+                      data-state={done ? "done" : current ? "current" : "todo"}
+                      aria-current={current ? "step" : undefined}
+                      disabled={!done}
+                      onClick={() => goBackTo(index)}
+                    >
+                      <span className="zn-stepper__rail" aria-hidden="true" />
+                      <span className="zn-stepper__name">
+                        <span className="zn-stepper__num">
+                          {done ? <Check size={12} /> : String(index + 1).padStart(2, "0")}
+                        </span>
+                        <span className="zn-stepper__label">{t(`wizard.step.${id}`)}</span>
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ol>
+            <p className="zn-mono zn-wiz__where">
+              {t("wizard.where", { current: stepIndex + 1, total: totalSteps })}
+            </p>
           </div>
-        )}
-        {renderStepIndicator()}
-        {currentStep === "purpose" && renderStep1()}
-        {currentStep === "distance" && renderStep2()}
-        {currentStep === "date" && renderStep3()}
-        {currentStep === "duration" && renderStepDuration()}
-        {currentStep === "race_name" && renderStep4()}
-        {currentStep === "intermediate_goals" && renderStepIntermediateGoals()}
-        {currentStep === "level" && renderStep5()}
-        {currentStep === "goal" && renderStepGoal()}
-        {currentStep === "fitness" && renderStepFitness()}
-        {currentStep === "schedule" && renderStep6()}
-        {currentStep === "pace" && renderStep7()}
-        {currentStep === "summary" && renderStep8()}
+
+          <Card className="zn-wiz__col">{STEP_RENDERERS[currentStep]()}</Card>
+        </section>
       </div>
     </>
-  );
-}
-
-// ── Helper component ─────────────────────────────────────────────────
-
-function SummaryRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex justify-between items-center py-1.5 border-b last:border-0">
-      <span className="text-sm text-muted-foreground">{label}</span>
-      <span className="text-sm font-medium">{value}</span>
-    </div>
   );
 }

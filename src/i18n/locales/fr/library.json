@@ -182,14 +182,18 @@
       "title": "Mes semaines",
       "subtitle": "Tes semaines d'entraînement, générées ou composées à la main.",
       "create": "Créer une semaine",
-      "empty": "Aucune semaine pour l'instant. Génère-en une ou compose-la de zéro.",
+      "empty": "Génère ta première semaine, ou compose-la séance par séance.",
       "sessionsCount_one": "{{count}} séance",
       "sessionsCount_other": "{{count}} séances",
       "view": "Voir",
       "delete": "Supprimer",
       "filterAll": "Toutes",
       "import": "Importer",
-      "actions": "Plus d'actions"
+      "actions": "Plus d'actions",
+      "saved_one": "{{count}} semaine enregistrée",
+      "saved_other": "{{count}} semaines enregistrées",
+      "emptyTitle": "Aucune semaine pour l'instant",
+      "filteredOut": "Aucune de tes {{total}} semaines n'est dans cette catégorie."
     },
     "category": {
       "label": "Catégorie",
@@ -200,11 +204,13 @@
     },
     "shared": {
       "title": "Semaine partagée",
-      "subtitle": "Quelqu'un t'a partagé cette semaine d'entraînement. Ajoute-la à tes semaines pour la personnaliser.",
+      "subtitle": "Quelqu'un t'a partagé cette semaine : ajoute-la pour la modifier.",
       "invalid": "Ce lien de partage est invalide ou incomplet.",
       "add": "Ajouter à mes semaines",
       "unknownCount_one": "{{count}} séance n'existe pas dans ton catalogue et sera ignorée.",
-      "unknownCount_other": "{{count}} séances n'existent pas dans ton catalogue et seront ignorées."
+      "unknownCount_other": "{{count}} séances n'existent pas dans ton catalogue et seront ignorées.",
+      "invalidHelp": "Le lien est tronqué ou périmé. Tes semaines enregistrées sont intactes : redemande un lien.",
+      "unknownHelp": "Les {{count}} autres séances seront ajoutées telles quelles."
     },
     "new": {
       "title": "Créer une semaine",
@@ -213,11 +219,15 @@
       "modes": {
         "create": {
           "title": "Créer une semaine",
-          "desc": "Génère une semaine 80/20 automatiquement, ou compose-la séance par séance."
+          "desc": "Génère une semaine 80/20 automatiquement, ou compose-la séance par séance.",
+          "kicker": "Générateur 80/20",
+          "cta": "Composer ma semaine"
         },
         "prebuilt": {
           "title": "Semaine pré-construite",
-          "desc": "Choisis une semaine type sourcée et commence immédiatement."
+          "desc": "Choisis une semaine type sourcée et commence immédiatement.",
+          "kicker": "Catalogue",
+          "cta": "{{count}} semaines prêtes"
         }
       },
       "generate": "Générer (80/20)",
@@ -225,11 +235,12 @@
       "scratch": "Partir de zéro",
       "scratchDesc": "Une semaine vide que tu remplis à la main, séance par séance.",
       "namePlaceholder": "Nom de la semaine",
-      "scratchCreate": "Créer la semaine vide"
+      "scratchCreate": "Créer la semaine vide",
+      "kicker": "2 façons de commencer"
     },
     "prebuilt": {
       "title": "Semaines pré-construites",
-      "subtitle": "Des semaines types sourcées, prêtes à l'emploi. Choisis-en une, comprends pourquoi elle marche, puis personnalise-la.",
+      "subtitle": "Des semaines types sourcées : choisis-en une, comprends pourquoi elle marche.",
       "back": "Retour à la création",
       "backToList": "Toutes les semaines pré-construites",
       "available": "{{count}} semaines disponibles",
@@ -247,7 +258,8 @@
         "peak": "Pic de forme",
         "recovery": "Récupération",
         "sharpening": "Affûtage"
-      }
+      },
+      "notFoundHelp": "Le lien pointe vers une semaine qui n'existe plus. Tes semaines enregistrées sont intactes."
     },
     "generate": {
       "title": "Générer ma semaine",
@@ -385,6 +397,7 @@
     "boardHintTouch": "Touchez une séance pour la modifier · maintenez pour la déplacer",
     "card": {
       "zone": "Zone {{zone}}"
-    }
+    },
+    "keySession": "Séance clé"
   }
 }

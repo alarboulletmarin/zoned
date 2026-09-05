@@ -1,9 +1,12 @@
 {
   "calculateurs": {
     "title": "Calculators",
-    "description": "All the calculation tools for your training",
-    "explore": "Open",
+    "description": "Convert a pace, estimate a finish time, set your zones: every tool computes on your device.",
+    "explore": "Open the tool",
     "comingSoon": "Coming soon",
+    "kicker": "{{tools}} tools · {{groups}} families",
+    "groupCount_one": "{{count}} tool",
+    "groupCount_other": "{{count}} tools",
     "groups": {
       "benchmarks": "Your benchmarks",
       "pace": "Pace & conversions",
@@ -20,8 +23,9 @@
       "seoAppName": "Training Zones Calculator",
       "seoAppDescription": "Calculate your 6 heart rate and pace training zones from your VMA or max HR",
       "seoBreadcrumb": "Training Zones",
-      "title": "Training Zones Calculator",
-      "description": "Enter your max heart rate (FCmax) or VMA to calculate your 6 personalized training zones with heart rate ranges and pace targets."
+      "title": "Training zones calculator",
+      "description": "Enter your max heart rate or vVO2max: the six zones, their heart-rate ranges and their target paces follow.",
+      "kicker": "Zones Z1 to Z6"
     },
     "paces": {
       "seoTitle": "Race Pace Calculator",
@@ -29,8 +33,9 @@
       "seoAppName": "Race Pace Calculator",
       "seoAppDescription": "Estimate your race times from 5K to marathon based on your VMA",
       "seoBreadcrumb": "Race Pace Calculator",
-      "title": "Race Pace Calculator",
-      "description": "Enter your VMA to estimate your race paces and predicted finish times for distances from 5K to marathon."
+      "title": "Race pace calculator",
+      "description": "Enter your vVO2max: your predicted finish times from 5K to marathon are computed, pace by pace.",
+      "kicker": "5K → marathon"
     },
     "converter": {
       "seoTitle": "Pace Converter",
@@ -290,9 +295,10 @@
     "shareLink": "Link",
     "shared": {
       "title": "Shared workout",
-      "subtitle": "This workout was shared with you. Add it to your workouts to edit or export it.",
+      "subtitle": "Someone sent you this session. Add it to your workouts to edit or export it.",
       "add": "Add to my workouts",
-      "invalid": "This share link is invalid or incomplete."
+      "invalid": "The link is incomplete, most likely cut short when copied. Your saved workouts are untouched.",
+      "invalidTitle": "This share link is incomplete"
     },
     "parameters": {
       "title": "Parameters",

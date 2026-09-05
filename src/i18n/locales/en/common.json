@@ -300,6 +300,7 @@
   },
   "errors": {
     "workoutNotFound": "Workout not found",
+    "generic": "That didn't go through. Try again in a moment.",
     "planSaveFailed": "Couldn't save the plan (not enough storage space).",
     "notFound": {
       "title": "Page not found",
@@ -354,8 +355,11 @@
     "dismiss": "Dismiss"
   },
   "myZones": {
-    "title": "My Zones",
-    "description": "Customize your training zones",
+    "title": "My zones",
+    "description": "One value drives the rest: your vVO2max. The six zones and the training paces follow from it.",
+    "kicker": "Computed on this device",
+    "caveat": "Paces are targets, not contracts: uphill, in wind or above 15 °C, heart rate leads and pace follows.",
+    "source": "Billat, Med Sci Sports Exerc, 1999 · Karvonen, Ann Med Exp Biol Fenn, 1957",
     "zoneCalculator": {
       "title": "Zone Calculator",
       "description": "Enter your max HR and/or VMA to display your personalized zones",
@@ -789,5 +793,41 @@
   },
   "status": {
     "loading": "Loading"
+  },
+  "settingsPage": {
+    "kicker": "Local profile · no account",
+    "display": "Display",
+    "displayHint": "Language, theme and units. All of it stays in this browser.",
+    "language": "Interface language",
+    "languageHint": "The catalogue exists in French and English.",
+    "unitsHint": "Changes paces, distances and elevation.",
+    "unitsMetric": "km · min/km",
+    "unitsImperial": "mi · min/mi",
+    "routesCaveat": "Your position goes to a public routing service for one request. Nothing is stored.",
+    "about": "About",
+    "tableItem": "Item",
+    "tableValue": "Value",
+    "rowVersion": "Version",
+    "rowLicence": "Licence",
+    "rowWorkouts": "Workouts in the catalogue",
+    "rowOffline": "Offline",
+    "offlineInstalled": "installed",
+    "offlineTab": "browser tab",
+    "sourceCode": "Source code",
+    "contribute": "Suggest a workout",
+    "privacyTitle": "What stays on your device",
+    "privacyBody": "No account, no server. Your data stays in this browser. Vercel Analytics counts page views, with no cookie and no identification.",
+    "statStorage": "local data",
+    "statFavorites": "favourites",
+    "storageValue": "{{n}} kB",
+    "storageFoot": "of {{n}} MB available",
+    "wipeTitle": "Erase everything",
+    "wipeBadge": "irreversible",
+    "wipeBody": "Deletes the profile, {{favorites}} favourites, {{plans}} plans and the test history. Export a backup first: without one, nothing comes back.",
+    "wipeButton": "Erase my data",
+    "wipeConfirmTitle": "Erase all your data?",
+    "wipeConfirmBody": "Profile, {{favorites}} favourites, {{plans}} plans and test history. This cannot be undone.",
+    "wipeConfirmButton": "Erase permanently",
+    "wipeDone": "Data erased. Nothing to undo."
   }
 }

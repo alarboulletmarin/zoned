@@ -1,22 +1,53 @@
+import { useMemo, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
-import { Loader2 } from "@/components/icons";
+import { BookOpen } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
 import { ArticleCard } from "@/components/domain/ArticleCard";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Segmented, type SegmentedOption } from "@/components/ui/segmented";
 import { useArticles } from "@/hooks/useArticles";
 import type { ArticleCategory } from "@/data/articles/types";
-import { cn } from "@/lib/utils";
-import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
 
-const ARTICLE_CATEGORIES: ArticleCategory[] = [
+/** "all" is a view of the index, not a category. */
+type CategoryFilter = ArticleCategory | "all";
+
+const CATEGORIES: CategoryFilter[] = [
+  "all",
   "fundamentals",
   "training",
   "lifestyle",
 ];
 
 export function LearnPage() {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation(["content", "common"]);
+  const { articles } = useArticles();
+  const [category, setCategory] = useState<CategoryFilter>("all");
 
-  const { articles, isLoading } = useArticles();
+  // The kicker states what the index holds, in numbers: how many pieces and
+  // how long they take. Both come from the article metadata, never from prose.
+  const minutes = useMemo(
+    () => articles.reduce((total, article) => total + article.readTime, 0),
+    [articles],
+  );
+
+  const shown = useMemo(
+    () =>
+      category === "all"
+        ? articles
+        : articles.filter((article) => article.category === category),
+    [articles, category],
+  );
+
+  const options: SegmentedOption<CategoryFilter>[] = CATEGORIES.map(
+    (value) => ({
+      value,
+      label:
+        value === "all"
+          ? t("content:learn.allCategories")
+          : t(`content:learn.categories.${value}`),
+    }),
+  );
 
   return (
     <>
@@ -34,65 +65,91 @@ export function LearnPage() {
           {
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: t("content:article.home"), item: "https://zoned.run/" },
-              { "@type": "ListItem", position: 2, name: t("content:learn.title") },
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: t("content:article.home"),
+                item: "https://zoned.run/",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: t("content:learn.title"),
+              },
             ],
           },
         ]}
       />
-      <div className="py-8">
-      {/* Header */}
-      <div className="mb-8">
-        <EditorialTitle as="h1" className="mb-2">
-          {t("content:learn.title")}
-        </EditorialTitle>
-        <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
-          {t("content:learn.description")}
-        </FadeUp>
-      </div>
 
-      {/* Articles — grouped by category. Each category reads as a small
-          editorial section: mono caption + matching cards. On mobile cards
-          collapse to icon + title; from sm+ they expand to the full card
-          with description + read time. */}
-      {isLoading ? (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="size-8 animate-spin text-muted-foreground" />
-        </div>
-      ) : (
-        <>
-          <div className="space-y-10 sm:space-y-12">
-            {ARTICLE_CATEGORIES.map((category) => {
-              const categoryArticles = articles.filter((a) => a.category === category);
-              if (categoryArticles.length === 0) return null;
-              return (
-                <section key={category} aria-labelledby={`learn-${category}`}>
-                  <p
-                    id={`learn-${category}`}
-                    className="font-mono text-[10px] sm:text-[11px] tracking-[0.18em] uppercase text-muted-foreground mb-3 sm:mb-4 flex items-center gap-3"
-                  >
-                    <span className="inline-block h-px w-8 bg-border" />
-                    {t(`content:learn.categories.${category}`)}
-                  </p>
-                  <StaggerGrid className={cn("grid gap-3 sm:gap-4", "grid-cols-2 lg:grid-cols-3")}>
-                    {categoryArticles.map((article) => (
-                      <StaggerItem key={article.id}>
-                        <ArticleCard article={article} />
-                      </StaggerItem>
-                    ))}
-                  </StaggerGrid>
-                </section>
-              );
+      <div className="zn-learn">
+        {/* 1 — what this door holds, counted, then named */}
+        <section
+          className="zn-stack zn-learn__head"
+          style={{ "--gap": "var(--sp-8)" } as CSSProperties}
+        >
+          <span className="zn-kicker">
+            {t("content:learn.catalogue", {
+              count: articles.length,
+              minutes,
             })}
-          </div>
+          </span>
+          <h1 className="zn-display" data-level="2">
+            {t("common:nav.understand")}
+          </h1>
+          <p className="zn-body zn-body--lead zn-learn__lede">
+            {t("content:learn.lede")}
+          </p>
+        </section>
 
-          {/* Stats */}
-          <div className="mt-10 sm:mt-12 text-center text-sm text-muted-foreground">
-            {t("content:learn.articleCount", { count: articles.length })}
+        {/* 2 — the category filter, on the rule, with what it left on screen */}
+        <div
+          className="zn-cluster zn-learn__strip"
+          style={{ "--gap": "var(--sp-8)" } as CSSProperties}
+        >
+          <Segmented
+            value={category}
+            onChange={setCategory}
+            options={options}
+            label={t("content:learn.categoriesLabel")}
+          />
+          <span className="zn-mono zn-push zn-learn__count">
+            {t("content:learn.articleCount", { count: shown.length })}
+          </span>
+        </div>
+
+        {/* 3 — the index. The lead article takes two columns. */}
+        {shown.length > 0 ? (
+          <div className="zn-grid zn-learn__grid">
+            {shown.map((article, index) => (
+              <ArticleCard
+                key={article.id}
+                article={article}
+                className={
+                  index === 0 && category === "all"
+                    ? "zn-learn__feature"
+                    : undefined
+                }
+              />
+            ))}
           </div>
-        </>
-      )}
-    </div>
+        ) : (
+          <div className="zn-learn__empty">
+            <EmptyState
+              variant="no-results"
+              icon={BookOpen}
+              title={t("content:learn.empty")}
+              description={t("content:learn.emptyDescription", {
+                total: articles.length,
+              })}
+              action={
+                <Button variant="outline" onClick={() => setCategory("all")}>
+                  {t("content:learn.showAll", { total: articles.length })}
+                </Button>
+              }
+            />
+          </div>
+        )}
+      </div>
     </>
   );
 }

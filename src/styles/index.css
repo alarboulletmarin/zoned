@@ -51,11 +51,16 @@
 @import "./components/footer.css" layer(components);
 @import "./components/home.css" layer(components);
 @import "./components/illustration-slot.css" layer(components);
+@import "./components/learn.css" layer(components);
 @import "./components/library.css" layer(components);
+@import "./components/numbers.css" layer(components);
 @import "./components/nutrition.css" layer(components);
 @import "./components/page-loader.css" layer(components);
 @import "./components/plan-calendar.css" layer(components);
 @import "./components/plan-panels.css" layer(components);
+@import "./components/plan-view.css" layer(components);
+@import "./components/plan-weeks.css" layer(components);
+@import "./components/plan-wizard.css" layer(components);
 @import "./components/popover.css" layer(components);
 @import "./components/race-sim.css" layer(components);
 @import "./components/responsive-table.css" layer(components);
@@ -63,6 +68,8 @@
 @import "./components/scroll-to-top.css" layer(components);
 @import "./components/segmented.css" layer(components);
 @import "./components/select.css" layer(components);
+@import "./components/session.css" layer(components);
+@import "./components/settings.css" layer(components);
 @import "./components/sheet.css" layer(components);
 @import "./components/shell-misc.css" layer(components);
 @import "./components/shell.css" layer(components);

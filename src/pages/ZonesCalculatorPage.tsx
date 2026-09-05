@@ -1,9 +1,14 @@
+import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
-import { Activity } from "@/components/icons";
 import { ZoneCalculator } from "@/components/domain/ZoneCalculator";
+import { ZoneScale } from "@/components/visualization";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 
+/**
+ * The zones calculator, in the frame the "mes chiffres" door uses: mono
+ * kicker, display title, lede, the ink-ramp legend, then the tool. The
+ * calculator itself was ported in its own lot and is not restyled here.
+ */
 export function ZonesCalculatorPage() {
   const { t } = useTranslation("common");
 
@@ -31,18 +36,31 @@ export function ZonesCalculatorPage() {
           },
         ]}
       />
-      <div className="py-8 max-w-2xl mx-auto">
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
-            <Activity className="size-8 text-primary shrink-0" />
+
+      <div className="zn-num">
+        <section
+          className="zn-num__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">
+            {t("calculators:calculateurs.zones.kicker")}
+          </span>
+          <h1 className="zn-display" data-level="3">
             {t("calculators:calculateurs.zones.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
+          </h1>
+          <p className="zn-body zn-body--lead zn-num__lede">
             {t("calculators:calculateurs.zones.description")}
-          </FadeUp>
+          </p>
+        </section>
+
+        {/* The ramp orders the zones but does not name them: the legend once. */}
+        <div className="zn-num__legend">
+          <ZoneScale />
         </div>
 
-        <ZoneCalculator />
+        <section className="zn-num__panel">
+          <ZoneCalculator />
+        </section>
       </div>
     </>
   );

@@ -300,6 +300,7 @@
   },
   "errors": {
     "workoutNotFound": "Séance non trouvée",
+    "generic": "L'action n'a pas abouti. Réessaie dans un instant.",
     "planSaveFailed": "Impossible d'enregistrer le plan (espace de stockage insuffisant).",
     "notFound": {
       "title": "Page introuvable",
@@ -354,8 +355,11 @@
     "dismiss": "Masquer"
   },
   "myZones": {
-    "title": "Mes Zones",
-    "description": "Personnalise tes zones d'entraînement",
+    "title": "Mes zones",
+    "description": "Une seule valeur commande le reste : ta VMA. Les six zones et les allures en découlent.",
+    "kicker": "Calculé sur cet appareil",
+    "caveat": "Les allures sont des cibles, pas des contrats : en côte, par vent ou au-dessus de 15 °C, la fréquence cardiaque commande et l'allure suit.",
+    "source": "Billat, Med Sci Sports Exerc, 1999 · Karvonen, Ann Med Exp Biol Fenn, 1957",
     "zoneCalculator": {
       "title": "Calculateur de Zones",
       "description": "Entre ta FCmax et/ou ta VMA pour afficher tes zones personnalisées",
@@ -789,5 +793,41 @@
   },
   "status": {
     "loading": "Chargement"
+  },
+  "settingsPage": {
+    "kicker": "Profil local · aucun compte",
+    "display": "Affichage",
+    "displayHint": "Langue, thème et unités. Tout reste dans ce navigateur.",
+    "language": "Langue de l'interface",
+    "languageHint": "Le catalogue existe en français et en anglais.",
+    "unitsHint": "Change les allures, les distances et les dénivelés.",
+    "unitsMetric": "km · min/km",
+    "unitsImperial": "mi · min/mi",
+    "routesCaveat": "Ta position part vers un service de routage public le temps d'une requête. Rien n'est stocké.",
+    "about": "À propos",
+    "tableItem": "Élément",
+    "tableValue": "Valeur",
+    "rowVersion": "Version",
+    "rowLicence": "Licence",
+    "rowWorkouts": "Séances au catalogue",
+    "rowOffline": "Hors connexion",
+    "offlineInstalled": "installée",
+    "offlineTab": "onglet navigateur",
+    "sourceCode": "Code source",
+    "contribute": "Proposer une séance",
+    "privacyTitle": "Ce qui reste sur ton appareil",
+    "privacyBody": "Pas de compte, pas de serveur. Tes données restent dans ce navigateur. Vercel Analytics compte les pages vues, sans cookie ni identification.",
+    "statStorage": "données locales",
+    "statFavorites": "favoris",
+    "storageValue": "{{n}} Ko",
+    "storageFoot": "sur {{n}} Mo disponibles",
+    "wipeTitle": "Tout effacer",
+    "wipeBadge": "irréversible",
+    "wipeBody": "Supprime le profil, {{favorites}} favoris, {{plans}} plans et l'historique des tests. Exporte une sauvegarde avant : sans elle, rien ne revient.",
+    "wipeButton": "Effacer mes données",
+    "wipeConfirmTitle": "Effacer toutes tes données ?",
+    "wipeConfirmBody": "Profil, {{favorites}} favoris, {{plans}} plans et historique des tests. Cette action ne peut pas être annulée.",
+    "wipeConfirmButton": "Effacer définitivement",
+    "wipeDone": "Données effacées. Rien à annuler."
   }
 }

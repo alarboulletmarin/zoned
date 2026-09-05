@@ -161,3 +161,87 @@
   white-space: nowrap;
   border: 0;
 }
+
+/* ── editorial atoms ──────────────────────────────────────────────────────
+   Used by the shared helpers in src/components/editorial/. */
+
+/* The rule between two blocks. */
+.zn-divider {
+  border: 0;
+  border-block-start: var(--border-divider);
+  margin: 0;
+}
+
+/* A card that is itself a link or a button. It answers the pointer by
+   changing colour — never by lifting, never by gaining a shadow. The one
+   shadow in this system is a hard offset for surfaces that really float. */
+.zn-card-hover {
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-card-hover:hover {
+  background: var(--surface-band);
+  border-color: var(--line-strong);
+}
+
+.zn-card-hover:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* A section's heading row: the heading on one side, its actions on the other. */
+.zn-section__head {
+  margin-block-end: var(--sp-8);
+  align-items: flex-end;
+  gap: var(--sp-12) var(--sp-4);
+}
+
+/* ── disclosure ───────────────────────────────────────────────────────────
+   A <details> block on an ink rule. The chevron turns; nothing else moves. */
+
+.zn-disclosure {
+  border-block-end: var(--border-divider);
+}
+
+.zn-disclosure__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  min-block-size: var(--hit-min);
+  padding-block: var(--sp-9);
+  padding-inline: var(--sp-6);
+  margin-inline: calc(var(--sp-6) * -1);
+
+  border-radius: var(--r-md);
+  cursor: pointer;
+  list-style: none;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+/* Safari draws its own marker unless this is said explicitly. */
+.zn-disclosure__summary::-webkit-details-marker {
+  display: none;
+}
+
+.zn-disclosure__summary:hover {
+  background: var(--surface-band);
+}
+
+.zn-disclosure__chevron {
+  inline-size: 20px;
+  block-size: 20px;
+  flex: none;
+  color: var(--text-faint);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.zn-disclosure[open] .zn-disclosure__chevron {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+.zn-disclosure__panel {
+  padding-block: var(--sp-4) var(--sp-13);
+  padding-inline: var(--sp-2);
+}

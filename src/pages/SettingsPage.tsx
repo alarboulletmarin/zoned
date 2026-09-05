@@ -1,7 +1,12 @@
+import { useMemo, useState, type CSSProperties } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
+import { Code, FileText, Send, Trash2 } from "@/components/icons";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
-import { useSettings } from "@/hooks/useSettings";
+import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,6 +15,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  ResponsiveTable,
+  type ResponsiveTableColumn,
+} from "@/components/ui/responsive-table";
+import { Segmented } from "@/components/ui/segmented";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -17,37 +35,69 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { StatBlock } from "@/components/domain/StatBlock";
 import { DataExportImport } from "@/components/domain/DataExportImport";
+import { useAppStats } from "@/hooks/useAppStats";
+import { useFavorites } from "@/hooks/useFavorites";
+import { usePlans } from "@/hooks/usePlans";
+import { useSettings } from "@/hooks/useSettings";
 import { useTheme } from "@/hooks/useTheme";
+import { changeLanguage } from "@/i18n";
+import { getLatestVersionString } from "@/data/changelog";
+import { BACKUP_STORAGE_KEYS } from "@/lib/backup";
 import type { ThemePreference } from "@/lib/theme";
-import type { ColorPalette } from "@/types/settings";
+import type { UnitSystem } from "@/types/settings";
 
-const ZONE_NUMBERS = [1, 2, 3, 4, 5, 6] as const;
+const REPO_URL = "https://github.com/alarboulletmarin/zoned";
 
-function ZonePreview() {
-  return (
-    <div className="flex gap-1 mt-4">
-      {ZONE_NUMBERS.map((zone) => (
-        <div
-          key={zone}
-          className="flex-1 h-8 rounded flex items-center justify-center text-xs font-medium"
-          style={{
-            backgroundColor: `var(--zone-${zone})`,
-            color: "white",
-          }}
-        >
-          Z{zone}
-        </div>
-      ))}
-    </div>
-  );
+/** localStorage sits on a ~5 MB budget; the stat says how much of it is used. */
+const STORAGE_BUDGET_KB = 5 * 1024;
+
+interface AboutRow {
+  key: string;
+  label: string;
+  value: string;
 }
 
+/**
+ * Settings — the local profile, and the facts about the app itself.
+ *
+ * The discipline palettes and the colour-blind palettes used to be set here.
+ * The redesign made both meaningless: there is one ink ramp for all three
+ * disciplines, and it is legible in greyscale by construction, which is the
+ * whole argument for it. The controls are gone; the hook state they wrote to
+ * is reported to the cleanup lot rather than deleted here.
+ */
 export function SettingsPage() {
-  const { t } = useTranslation(["common", "routes"]);
-  const { settings, setColorPalette, setUnitSystem, setRouteGeneratorEnabled } =
-    useSettings();
-  const { preference: themePreference, setPreference: setThemePreference } = useTheme();
+  const { t, i18n } = useTranslation(["common", "routes", "content"]);
+  const { settings, setUnitSystem, setRouteGeneratorEnabled } = useSettings();
+  const { preference: themePreference, setPreference: setThemePreference } =
+    useTheme();
+  const { favorites } = useFavorites();
+  const { plans } = usePlans();
+  const stats = useAppStats();
+  const [confirmWipe, setConfirmWipe] = useState(false);
+
+  const language = i18n.language?.startsWith("en") ? "en" : "fr";
+
+  // What the app actually occupies in this browser, read from the same keys
+  // the backup writes — a number, not an adjective.
+  const storageKb = useMemo(() => {
+    let chars = 0;
+    for (const key of BACKUP_STORAGE_KEYS) {
+      chars += (localStorage.getItem(key) ?? "").length + key.length;
+    }
+    return Math.max(1, Math.round((chars * 2) / 1024));
+  }, []);
+
+  // "Installée" means launched from the home screen rather than from a tab.
+  const installed = useMemo(
+    () =>
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(display-mode: standalone)").matches,
+    [],
+  );
 
   const themeOptions: { value: ThemePreference; label: string }[] = [
     { value: "light", label: t("theme.light") },
@@ -55,162 +105,356 @@ export function SettingsPage() {
     { value: "system", label: t("theme.system") },
   ];
 
-  const paletteOptions: { value: ColorPalette; label: string }[] = [
+  const aboutColumns: ResponsiveTableColumn<AboutRow>[] = [
     {
-      value: "standard",
-      label: t("settings.colorPalette.options.standard"),
+      key: "label",
+      header: t("settingsPage.tableItem"),
+      cell: (row) => row.label,
+      scope: "col",
     },
     {
-      value: "deuteranopia",
-      label: t("settings.colorPalette.options.deuteranopia"),
-    },
-    {
-      value: "tritanopia",
-      label: t("settings.colorPalette.options.tritanopia"),
+      key: "value",
+      header: t("settingsPage.tableValue"),
+      cell: (row) => <span className="zn-mono">{row.value}</span>,
     },
   ];
 
+  const aboutRows: AboutRow[] = [
+    {
+      key: "version",
+      label: t("settingsPage.rowVersion"),
+      value: getLatestVersionString(),
+    },
+    { key: "licence", label: t("settingsPage.rowLicence"), value: "MIT" },
+    {
+      key: "workouts",
+      label: t("settingsPage.rowWorkouts"),
+      value: stats.workouts > 0 ? String(stats.workouts) : "—",
+    },
+    {
+      key: "offline",
+      label: t("settingsPage.rowOffline"),
+      value: installed
+        ? t("settingsPage.offlineInstalled")
+        : t("settingsPage.offlineTab"),
+    },
+  ];
+
+  function wipeEverything() {
+    for (const key of BACKUP_STORAGE_KEYS) {
+      localStorage.removeItem(key);
+    }
+    setConfirmWipe(false);
+    toast.success(t("settingsPage.wipeDone"));
+    setTimeout(() => window.location.reload(), 800);
+  }
+
   return (
     <>
-      <SEOHead
-        noindex={true}
-        title={t("seo.settings")}
-        canonical="/settings"
-      />
-      <div className="py-8 max-w-2xl mx-auto">
-        <div className="mb-6">
-          <EditorialTitle as="h1" size="md">{t("settings.title")}</EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground">
-            {t("settings.description")}
-          </FadeUp>
-        </div>
+      <SEOHead noindex={true} title={t("seo.settings")} canonical="/settings" />
 
-        <div className="space-y-6">
-          {/* Theme. `system` is the only option that keeps following the OS
-              after the choice is made — the TopBar button can only ever set an
-              explicit light or dark. */}
-          <Card>
-            <CardHeader>
-              <CardTitle>{t("settings.theme.title")}</CardTitle>
-              <CardDescription>{t("settings.theme.description")}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Select
-                value={themePreference}
-                onValueChange={(value) => setThemePreference(value as ThemePreference)}
+      <div className="zn-set">
+        {/* 1 — what this screen is, and the two numbers it is about */}
+        <section
+          className="zn-section zn-section--first zn-split zn-set__head"
+          style={
+            { "--split": "1fr auto", "--gap": "var(--sp-15)" } as CSSProperties
+          }
+        >
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+          >
+            <span className="zn-kicker">{t("settingsPage.kicker")}</span>
+            <h1 className="zn-display" data-level="2">
+              {t("settings.title")}
+            </h1>
+            <p className="zn-body zn-body--lead zn-measure">
+              {t("settings.description")}
+            </p>
+          </div>
+
+          <div
+            className="zn-cluster zn-set__stats"
+            style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+          >
+            <StatBlock
+              tone="card"
+              size="sm"
+              value={t("settingsPage.storageValue", { n: storageKb })}
+              label={t("settingsPage.statStorage")}
+              footnote={t("settingsPage.storageFoot", {
+                n: STORAGE_BUDGET_KB / 1024,
+              })}
+            />
+            <StatBlock
+              tone="card"
+              size="sm"
+              value={String(favorites.length)}
+              label={t("settingsPage.statFavorites")}
+            />
+          </div>
+        </section>
+
+        {/* 2 — the two columns: what you see, and what you own */}
+        <section
+          className="zn-section zn-grid"
+          style={
+            {
+              "--cols": 2,
+              "--cols-md": 1,
+              "--gap": "var(--sp-17)",
+            } as CSSProperties
+          }
+        >
+          {/* ── left: display, then the facts about the app ─────────────── */}
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("settingsPage.display")}</CardTitle>
+                <CardDescription>
+                  {t("settingsPage.displayHint")}
+                </CardDescription>
+              </CardHeader>
+              <CardContent
+                className="zn-stack"
+                style={{ "--gap": "var(--sp-11)" } as CSSProperties}
               >
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {themeOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </CardContent>
-          </Card>
-
-          {/* Color Palette */}
-          <Card>
-            <CardHeader>
-              <CardTitle>{t("settings.colorPalette.title")}</CardTitle>
-              <CardDescription>
-                {t("settings.colorPalette.description")}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Select
-                value={settings.colorPalette}
-                onValueChange={(value) => setColorPalette(value as ColorPalette)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {paletteOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <ZonePreview />
-            </CardContent>
-          </Card>
-
-          {/* Unit System */}
-          <Card>
-            <CardHeader>
-              <CardTitle>{t("settings.unitSystem.title")}</CardTitle>
-              <CardDescription>
-                {t("settings.unitSystem.description")}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center justify-between">
-                <span className="text-sm">
-                  {settings.unitSystem === "metric"
-                    ? t("settings.unitSystem.metric")
-                    : t("settings.unitSystem.imperial")}
-                </span>
-                <div className="flex items-center gap-3">
-                  <span className="text-sm text-muted-foreground">km</span>
-                  <Switch
-                    checked={settings.unitSystem === "imperial"}
-                    onCheckedChange={(checked) =>
-                      setUnitSystem(checked ? "imperial" : "metric")
+                <div
+                  className="zn-stack"
+                  style={{ "--gap": "var(--sp-4)" } as CSSProperties}
+                >
+                  <label className="zn-label" htmlFor="settings-language">
+                    {t("settingsPage.language")}
+                  </label>
+                  <p className="zn-caption zn-muted" id="settings-language-hint">
+                    {t("settingsPage.languageHint")}
+                  </p>
+                  <Select
+                    value={language}
+                    onValueChange={(value) =>
+                      void changeLanguage(value as "fr" | "en")
                     }
+                  >
+                    <SelectTrigger
+                      id="settings-language"
+                      aria-describedby="settings-language-hint"
+                      className="zn-set__control"
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="fr">Français</SelectItem>
+                      <SelectItem value="en">English</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div
+                  className="zn-stack"
+                  style={{ "--gap": "var(--sp-4)" } as CSSProperties}
+                >
+                  <label className="zn-label" htmlFor="settings-theme">
+                    {t("settings.theme.title")}
+                  </label>
+                  <p className="zn-caption zn-muted" id="settings-theme-hint">
+                    {t("settings.theme.description")}
+                  </p>
+                  <Select
+                    value={themePreference}
+                    onValueChange={(value) =>
+                      setThemePreference(value as ThemePreference)
+                    }
+                  >
+                    <SelectTrigger
+                      id="settings-theme"
+                      aria-describedby="settings-theme-hint"
+                      className="zn-set__control"
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {themeOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div
+                  className="zn-stack"
+                  style={{ "--gap": "var(--sp-4)" } as CSSProperties}
+                >
+                  <span className="zn-label">
+                    {t("settings.unitSystem.title")}
+                  </span>
+                  <p className="zn-caption zn-muted">
+                    {t("settingsPage.unitsHint")}
+                  </p>
+                  <Segmented<UnitSystem>
+                    className="zn-set__control"
+                    label={t("settings.unitSystem.title")}
+                    value={settings.unitSystem}
+                    onChange={setUnitSystem}
+                    options={[
+                      {
+                        value: "metric",
+                        label: t("settingsPage.unitsMetric"),
+                        title: t("settings.unitSystem.metric"),
+                      },
+                      {
+                        value: "imperial",
+                        label: t("settingsPage.unitsImperial"),
+                        title: t("settings.unitSystem.imperial"),
+                      },
+                    ]}
                   />
-                  <span className="text-sm text-muted-foreground">mi</span>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
 
-          {/* Privacy */}
-          <Card>
-            <CardHeader>
-              <CardTitle>{t("settings.privacy.title")}</CardTitle>
-              <CardDescription>
-                {t("settings.privacy.description")}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <ul className="text-sm text-muted-foreground space-y-2">
-                <li>{t("settings.privacy.noServer")}</li>
-                <li>{t("settings.privacy.noAccount")}</li>
-                <li>{t("settings.privacy.localStorage")}</li>
-                <li>{t("settings.privacy.analytics")}</li>
-              </ul>
-
-              {/* Route Generator opt-in: the only feature that emits the
-                  user's start coordinate to a public service, so it gets a
-                  dedicated toggle here rather than buried in the route page. */}
-              <div className="flex items-start justify-between gap-4 border-t border-border/60 pt-4">
-                <div className="min-w-0 space-y-1">
-                  <p className="text-sm font-medium">
-                    {t("routes:privacy.toggle")}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {t("routes:privacy.body")}
+                {/* The one feature that emits a coordinate to a public
+                    service, so it keeps its own switch and its caveat. */}
+                <div className="zn-set__toggle">
+                  <div
+                    className="zn-row zn-row--split zn-row--start"
+                    style={{ "--gap": "var(--sp-10)" } as CSSProperties}
+                  >
+                    <label
+                      className="zn-label zn-fill"
+                      htmlFor="settings-routes"
+                    >
+                      {t("routes:privacy.toggle")}
+                    </label>
+                    <Switch
+                      id="settings-routes"
+                      aria-describedby="settings-routes-hint"
+                      className="zn-fixed"
+                      checked={settings.routeGeneratorEnabled}
+                      onCheckedChange={setRouteGeneratorEnabled}
+                    />
+                  </div>
+                  <p
+                    id="settings-routes-hint"
+                    className="zn-caption zn-muted"
+                    style={{ marginBlockStart: "var(--sp-4)" }}
+                  >
+                    {t("settingsPage.routesCaveat")}
                   </p>
                 </div>
-                <Switch
-                  checked={settings.routeGeneratorEnabled}
-                  onCheckedChange={setRouteGeneratorEnabled}
-                  aria-label={t("routes:privacy.toggle")}
+              </CardContent>
+            </Card>
+
+            <Card className="zn-set__band">
+              <CardHeader>
+                <CardTitle>{t("settingsPage.about")}</CardTitle>
+              </CardHeader>
+              <CardContent
+                className="zn-stack"
+                style={{ "--gap": "var(--sp-10)" } as CSSProperties}
+              >
+                <ResponsiveTable
+                  data={aboutRows}
+                  columns={aboutColumns}
+                  rowKey="key"
+                  caption={t("settingsPage.about")}
                 />
-              </div>
-            </CardContent>
-          </Card>
+                <div
+                  className="zn-cluster"
+                  style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+                >
+                  <Button variant="outline" size="sm" asChild>
+                    <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
+                      <Code />
+                      {t("settingsPage.sourceCode")}
+                    </a>
+                  </Button>
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/changelog">
+                      <FileText />
+                      {t("content:changelog.title")}
+                    </Link>
+                  </Button>
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/contribute">
+                      <Send />
+                      {t("settingsPage.contribute")}
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
-          {/* Data Export/Import */}
-          <DataExportImport />
-        </div>
+          {/* ── right: the data, and the one way to lose it ─────────────── */}
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+          >
+            <DataExportImport />
+
+            <Alert kind="info" title={t("settingsPage.privacyTitle")}>
+              {t("settingsPage.privacyBody")}
+            </Alert>
+
+            <Card className="zn-set__danger">
+              <CardHeader>
+                <CardTitle>
+                  <span
+                    className="zn-row"
+                    style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+                  >
+                    {t("settingsPage.wipeTitle")}
+                    <Badge variant="outline">
+                      {t("settingsPage.wipeBadge")}
+                    </Badge>
+                  </span>
+                </CardTitle>
+                <CardDescription>
+                  {t("settingsPage.wipeBody", {
+                    favorites: favorites.length,
+                    plans: plans.length,
+                  })}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button
+                  variant="destructive"
+                  onClick={() => setConfirmWipe(true)}
+                >
+                  <Trash2 />
+                  {t("settingsPage.wipeButton")}
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
       </div>
+
+      <Dialog open={confirmWipe} onOpenChange={setConfirmWipe}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("settingsPage.wipeConfirmTitle")}</DialogTitle>
+            <DialogDescription>
+              {t("settingsPage.wipeConfirmBody", {
+                favorites: favorites.length,
+                plans: plans.length,
+              })}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setConfirmWipe(false)}>
+              {t("actions.cancel")}
+            </Button>
+            <Button variant="destructive" onClick={wipeEverything}>
+              {t("settingsPage.wipeConfirmButton")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

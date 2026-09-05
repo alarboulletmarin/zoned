@@ -1,6 +1,6 @@
+import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 import { ContributeForm } from "@/components/domain/contribute/ContributeForm";
 
 export function ContributePage() {
@@ -15,24 +15,39 @@ export function ContributePage() {
         jsonLd={{
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Accueil", item: "https://zoned.run/" },
+            { "@type": "ListItem", position: 1, name: t("common:nav.home"), item: "https://zoned.run/" },
             { "@type": "ListItem", position: 2, name: t("common:seo.contribute") },
           ],
         }}
       />
-      <div className="py-8">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <EditorialTitle as="h1" size="md">{t("title")}</EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground mt-1">
-            {t("subtitle")}
-          </FadeUp>
-        </div>
 
-        {/* Form */}
-        <div className="max-w-2xl mx-auto">
-          <ContributeForm />
-        </div>
+      <div className="zn-contrib-page">
+        <section className="zn-section zn-section--first">
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-10)" } as CSSProperties}
+          >
+            <span className="zn-kicker">{t("kicker")}</span>
+            <h1 className="zn-display" data-level="2">
+              {t("title")}
+            </h1>
+            <p className="zn-body zn-body--lead zn-measure">{t("subtitle")}</p>
+          </div>
+        </section>
+
+        <section className="zn-section">
+          <div
+            className="zn-measure"
+            style={
+              {
+                "--measure": "var(--page-max-narrow)",
+                marginInline: "auto",
+              } as CSSProperties
+            }
+          >
+            <ContributeForm />
+          </div>
+        </section>
       </div>
     </>
   );

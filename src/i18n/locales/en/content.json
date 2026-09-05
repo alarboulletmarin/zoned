@@ -3,11 +3,11 @@
     "seoHeroLabel": "About",
     "statsWorkouts": "Workouts",
     "statsCalculators": "Calculators",
-    "title": "A training library, built by a runner, for runners",
-    "description": "Zoned brings together zone-based workouts, training plans, and practical tools. The goal: make training science accessible — no subscription, no tracking, no fluff.",
+    "title": "A training library, built by a runner",
+    "description": "Zone-based workouts, training plans and calculators. No subscription, no tracking, no fluff.",
     "personal": {
       "title": "The project",
-      "bio": "Zoned is built by a passionate runner, in the open. The project was born from the need for a simple, zone-based tool to structure training without depending on any proprietary platform."
+      "bio": "Zoned was born from the need for a simple, zone-based tool to train without a proprietary platform."
     },
     "openSource": {
       "title": "Open source",
@@ -58,7 +58,22 @@
   },
   "article": {
     "home": "Home",
-    "learn": "Learn"
+    "learn": "Learn",
+    "breadcrumb": "Breadcrumb",
+    "pager": "Previous and next article",
+    "loading": "Loading the article",
+    "readTimeLabel": "Reading time",
+    "updatedOn": "updated {{date}}",
+    "callout": {
+      "tip": "Tip",
+      "warning": "Careful",
+      "key": "Worth keeping",
+      "stat": "Key figure"
+    },
+    "error": {
+      "title": "The article text did not arrive",
+      "text": "The load stopped part way. The index and the other articles are still open: try again from the list."
+    }
   },
   "changelog": {
     "title": "What's New",
@@ -88,13 +103,34 @@
     "prevArticle": "Previous article",
     "nextArticle": "Next article",
     "backToHub": "Back to articles",
-    "zonesCtaText": "Ready to personalize your training zones?",
-    "zonesCtaButton": "Configure my zones"
+    "zonesCtaText": "These six zones become yours the moment you enter your VMA.",
+    "zonesCtaButton": "Set my zones",
+    "catalogue": "{{count}} articles · {{minutes}} min of reading",
+    "lede": "Why a session works, not just how to run it. Every claim carries its source.",
+    "categoriesLabel": "Article category",
+    "articleCount_one": "{{count}} article",
+    "articleCount_other": "{{count}} articles",
+    "empty": "No article in this category",
+    "emptyDescription": "This category is empty for now. All {{total}} published articles stay visible under \"All\".",
+    "showAll": "See all {{total}} articles"
   },
   "privacy": {
     "free": "100% free",
     "noAccount": "No account required",
     "localData": "Your data stays on your device",
     "footerNote": "No tracking. No cookies."
+  },
+  "aboutPage": {
+    "kicker": "Open source · no account",
+    "statsPlans": "Plans",
+    "statsCollections": "Collections",
+    "statsArticles": "Articles",
+    "statsZones": "Zones",
+    "countsLabel": "The catalogue in numbers",
+    "claimsTitle": "What that means"
+  },
+  "changelogPage": {
+    "releases": "{{n}} releases shipped",
+    "showOlder": "Show the {{n}} earlier releases"
   }
 }

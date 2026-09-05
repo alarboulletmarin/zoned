@@ -1,9 +1,12 @@
+import type { CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
-import { Gauge } from "@/components/icons";
 import { PaceCalculator } from "@/components/domain/PaceCalculator";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
 
+/**
+ * The pace calculator, in the "mes chiffres" frame. The tool paints no zone
+ * fill, so this screen carries no ink-ramp legend.
+ */
 export function PaceCalculatorPage() {
   const { t } = useTranslation("common");
 
@@ -31,18 +34,26 @@ export function PaceCalculatorPage() {
           },
         ]}
       />
-      <div className="py-8 max-w-2xl mx-auto">
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2 flex items-center gap-3">
-            <Gauge className="size-8 text-primary shrink-0" />
-            {t("calculators:calculateurs.paces.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg">
-            {t("calculators:calculateurs.paces.description")}
-          </FadeUp>
-        </div>
 
-        <PaceCalculator />
+      <div className="zn-num">
+        <section
+          className="zn-num__head zn-stack"
+          style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+        >
+          <span className="zn-kicker">
+            {t("calculators:calculateurs.paces.kicker")}
+          </span>
+          <h1 className="zn-display" data-level="3">
+            {t("calculators:calculateurs.paces.title")}
+          </h1>
+          <p className="zn-body zn-body--lead zn-num__lede">
+            {t("calculators:calculateurs.paces.description")}
+          </p>
+        </section>
+
+        <section className="zn-num__panel">
+          <PaceCalculator />
+        </section>
       </div>
     </>
   );

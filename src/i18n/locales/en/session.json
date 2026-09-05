@@ -87,7 +87,8 @@
     "target": "Target",
     "environment": "Environment",
     "frequency": "Frequency",
-    "recovery": "Recovery"
+    "recovery": "Recovery",
+    "elevation": "Elevation"
   },
   "targetSystems": {
     "aerobic_base": "Aerobic Base",
@@ -168,5 +169,20 @@
     "blockCount_other": "{{count}} blocks",
     "andMore_one": "+{{count}} more",
     "andMore_other": "+{{count}} more"
+  },
+  "screen": {
+    "structureTitle": "Session structure",
+    "structureKicker": "{{duration}} · {{phases}} phases",
+    "axisStart": "0 min · start",
+    "axisEnd": "{{duration}} · end",
+    "total": "Total {{duration}}",
+    "exportFormats": ".fit · .ics · .pdf · .png",
+    "notFoundTitle": "This session left the catalogue",
+    "notFoundBody": "The link points to an id the catalogue no longer knows. Your favourites, plans and saved sessions are untouched."
+  },
+  "illustration": {
+    "brief": "Runner on a track, side view, 2 px line, stopwatch in accent",
+    "strengthBrief": "Plank seen from the side, 2 px line, contact points in accent",
+    "label": "Slot reserved for a hand-drawn illustration"
   }
 }

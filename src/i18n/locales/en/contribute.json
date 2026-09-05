@@ -111,5 +111,6 @@
     "next": "Next",
     "previous": "Previous",
     "step": "Step"
-  }
+  },
+  "kicker": "Prefilled GitHub issue"
 }

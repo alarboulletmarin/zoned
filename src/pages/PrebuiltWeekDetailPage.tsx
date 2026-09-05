@@ -1,29 +1,14 @@
 import { useMemo } from "react";
-import { sessionColorClass } from "@/lib/sessionColors";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import {
-  Activity,
-  ArrowLeft,
-  Clock,
-  HeartPulse,
-  Leaf,
-  Lightbulb,
-  Mountain,
-  Sparkles,
-  Star,
-  TrendingUp,
-  Zap,
-} from "@/components/icons";
-import type { IconProps } from "@/components/icons";
-import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, Clock, Sparkles, Star } from "@/components/icons";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { ZoneScale } from "@/components/visualization";
 import { WeekSummaryBar } from "@/components/weekly";
-import { cn } from "@/lib/utils";
+import { sessionColor } from "@/lib/sessionColors";
 import { getPrebuiltWeekBySlug } from "@/data/prebuilt-weeks";
 import { prebuiltWeekToPlan, planWeekToSlots } from "@/lib/weekToPlan";
 import { computeWeekStats } from "@/lib/weekStats";
@@ -37,26 +22,25 @@ import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
 import type { AnyWorkoutTemplate } from "@/types";
 
-const ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
-  Mountain,
-  TrendingUp,
-  Zap,
-  Leaf,
-  Activity,
-  HeartPulse,
+const DIFFICULTY_KEYS: Record<string, string> = {
+  beginner: "collections.difficulty.beginner",
+  intermediate: "collections.difficulty.intermediate",
+  advanced: "collections.difficulty.advanced",
+  elite: "collections.difficulty.advanced",
 };
 
-const DIFFICULTY_GRADIENT: Record<string, string> = {
-  beginner: "from-green-500/10 dark:from-green-500/20",
-  intermediate: "from-yellow-500/10 dark:from-yellow-500/20",
-  advanced: "from-orange-500/10 dark:from-orange-500/20",
-  elite: "from-red-500/10 dark:from-red-500/20",
-};
-
+/**
+ * One ready-made week, read before it is taken.
+ *
+ * The sheet reads: what this week is (mono facts), its name, one paragraph,
+ * the one call — then the preview, why the week works, and why each session is
+ * where it is. Its provenance is printed in mono under the block that claims
+ * it, never invoked as "des études montrent".
+ */
 export function PrebuiltWeekDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { t } = useTranslation("library");
+  const { t } = useTranslation(["library", "common"]);
   const pick = usePickLang();
   const pickLocale = usePickLocale();
 
@@ -86,14 +70,23 @@ export function PrebuiltWeekDetailPage() {
 
   if (!week) {
     return (
-      <div className="py-12 text-center">
-        <p className="text-muted-foreground">{t("weekly.prebuilt.notFound")}</p>
-        <Button variant="link" asChild className="mt-4">
-          <Link to="/weeks/new/prebuilt">
-            <ArrowLeft className="mr-2 size-4" />
-            {t("weekly.prebuilt.backToList")}
-          </Link>
-        </Button>
+      <div className="zn-pw">
+        <section className="zn-pw__band zn-pw__band--first">
+          <Alert
+            kind="error"
+            title={t("weekly.prebuilt.notFound")}
+            action={
+              <Button variant="outline" asChild>
+                <Link to="/weeks/new/prebuilt">
+                  <ArrowLeft size={16} />
+                  {t("weekly.prebuilt.backToList")}
+                </Link>
+              </Button>
+            }
+          >
+            {t("weekly.prebuilt.notFoundHelp")}
+          </Alert>
+        </section>
       </div>
     );
   }
@@ -102,7 +95,7 @@ export function PrebuiltWeekDetailPage() {
   const description = pick(week, "description");
   const whyItWorks = pick(week, "whyItWorks");
   const provenance = week.provenance ? pick(week, "provenance") : null;
-  const Icon = ICON_MAP[week.icon] ?? Mountain;
+  const difficultyKey = DIFFICULTY_KEYS[week.difficulty];
 
   const handleUse = () => {
     const plan = prebuiltWeekToPlan(week);
@@ -114,6 +107,15 @@ export function PrebuiltWeekDetailPage() {
     toast.success(t("weekly.prebuilt.weekAdded"));
     navigate(`/weeks/${plan.id}`);
   };
+
+  // The mono line above the title: what kind of week, how hard, how much.
+  const kicker = [
+    t(`weekly.prebuilt.category.${week.category}`),
+    difficultyKey ? t(`common:${difficultyKey}`) : null,
+    t("weekly.prebuilt.sessions", { count: week.sessions.length }),
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   // Sessions ordered Mon→Sun for the list.
   const orderedSessions = [...week.sessions].sort((a, b) => a.dayOfWeek - b.dayOfWeek);
@@ -133,145 +135,134 @@ export function PrebuiltWeekDetailPage() {
           ],
         }}
       />
-      <div className="py-8 space-y-6 pb-28 lg:pb-8">
-        {/* Back */}
-        <Button variant="ghost" size="sm" asChild>
+
+      <div className="zn-pw" data-dock="true">
+        <Button variant="ghost" size="sm" asChild className="zn-pw__back">
           <Link to="/weeks/new/prebuilt">
-            <ArrowLeft className="mr-2 size-4" />
+            <ArrowLeft size={16} />
             {t("weekly.prebuilt.backToList")}
           </Link>
         </Button>
 
-        {/* Header */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div
-                className={cn(
-                  "size-11 rounded-full bg-gradient-to-br to-transparent flex items-center justify-center shrink-0",
-                  DIFFICULTY_GRADIENT[week.difficulty] ?? "from-gray-400/10",
-                )}
-              >
-                <Icon className="size-5 text-foreground/80" />
-              </div>
-              <EditorialTitle as="h1">{name}</EditorialTitle>
+        <section className="zn-pw__band zn-pw__band--first">
+          <div className="zn-pw__head">
+            <div
+              className="zn-stack zn-pw__headtext"
+              style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+            >
+              <span className="zn-kicker">{kicker}</span>
+              <h1 className="zn-display" data-level="2">
+                {name}
+              </h1>
+              <p className="zn-body zn-body--lead zn-pw__lede">{description}</p>
             </div>
-            <FadeUp as="p" delay={0.1} className="text-muted-foreground max-w-2xl">
-              {description}
-            </FadeUp>
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="secondary">
-                {t(`weekly.prebuilt.category.${week.category}`)}
-              </Badge>
-              <Badge variant="outline">
-                {t("weekly.prebuilt.sessions", { count: week.sessions.length })}
-              </Badge>
-              {provenance && (
-                <Badge variant="outline" className="font-normal">
-                  {provenance}
-                </Badge>
-              )}
-            </div>
+
+            {/* The one call. Below 900px the dock carries it instead, so only
+                ever one of the two is on screen. */}
+            <Button size="lg" onClick={handleUse} className="zn-pw__call">
+              <Sparkles size={17} />
+              {t("weekly.prebuilt.useThisWeek")}
+            </Button>
           </div>
+        </section>
 
-          {/* CTA top (desktop) */}
-          <Button size="lg" onClick={handleUse} className="shrink-0 hidden lg:inline-flex">
-            <Sparkles className="size-4" />
-            {t("weekly.prebuilt.useThisWeek")}
-          </Button>
-        </div>
-
-        {/* Preview: stats + 80/20 gauge + rhythm (reuses WeekSummaryBar). */}
-        <div className="space-y-2">
-          <h2 className="text-lg font-semibold">{t("weekly.prebuilt.preview")}</h2>
-          <WeekSummaryBar
-            stats={stats}
-            slots={slots}
-            targetVolumeH={week.settings.targetVolumeH}
-          />
-        </div>
-
-        {/* Why this week */}
-        <Card className={cn("border-border/60 bg-gradient-to-br to-transparent", DIFFICULTY_GRADIENT[week.difficulty] ?? "from-gray-400/10")}>
-          <CardContent className="p-4 sm:p-5 space-y-2">
-            <div className="flex items-center gap-2">
-              <Lightbulb className="size-4 text-foreground/70" />
-              <h2 className="text-base font-semibold">{t("weekly.prebuilt.whyTitle")}</h2>
+        <section className="zn-pw__band" aria-labelledby="pw-preview">
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-11)" } as React.CSSProperties}
+          >
+            <div
+              className="zn-cluster zn-cluster--split"
+              style={{ "--gap": "var(--sp-10)" } as React.CSSProperties}
+            >
+              <h2 id="pw-preview" className="zn-title" data-level="3">
+                {t("weekly.prebuilt.preview")}
+              </h2>
+              <ZoneScale className="zn-push" />
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">{whyItWorks}</p>
-            {provenance && (
-              <p className="text-xs text-muted-foreground/80 italic pt-1">— {provenance}</p>
-            )}
-          </CardContent>
-        </Card>
+            <WeekSummaryBar
+              stats={stats}
+              slots={slots}
+              targetVolumeH={week.settings.targetVolumeH}
+            />
+          </div>
+        </section>
 
-        {/* Session list with per-session "why" */}
-        <div className="space-y-2">
-          <h2 className="text-lg font-semibold">{t("weekly.prebuilt.whySessionTitle")}</h2>
-          <div className="space-y-2">
-            {orderedSessions.map((session, idx) => {
-              const workout = byId.get(session.workoutId);
-              const workoutName = workout ? pick(workout, "name") : session.workoutId;
-              const sessionLabel = SESSION_TYPE_LABELS[session.sessionType];
-              const why = pick(session, "why");
-              const dayLabel = t(`weekly.days.${session.dayOfWeek}`);
+        <section className="zn-pw__band" aria-labelledby="pw-why">
+          <div
+            className="zn-stack zn-measure"
+            style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+          >
+            <h2 id="pw-why" className="zn-title" data-level="3">
+              {t("weekly.prebuilt.whyTitle")}
+            </h2>
+            <p className="zn-body">{whyItWorks}</p>
+            {provenance && <span className="zn-source">{provenance}</span>}
+          </div>
+        </section>
 
-              return (
-                <Card key={idx} size="flush" className="border-border/50">
-                  <CardContent className="p-3 sm:p-4 space-y-2">
-                    {/* Top row: day, name, badges */}
-                    <div className="flex items-start gap-3">
-                      <span className="text-xs font-medium text-muted-foreground w-10 shrink-0 pt-0.5">
-                        {dayLabel}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <span className="text-sm font-medium">{workoutName}</span>
-                      </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        {session.isKeySession && (
-                          <Star filled className="size-4 text-yellow-500" />
-                        )}
-                        {sessionLabel && (
-                          <Badge variant="outline" className="text-xs">
-                            <div
-                              className={cn(
-                                "size-2 rounded-full",
-                                sessionColorClass(session.sessionType),
-                              )}
-                            />
-                            {pickLocale(sessionLabel)}
-                          </Badge>
-                        )}
-                        <span className="text-xs text-muted-foreground flex items-center gap-1">
-                          <Clock className="size-3" />
-                          {formatDurationMinutes(session.estimatedDurationMin)}
-                        </span>
-                      </div>
+        <section className="zn-pw__band" aria-labelledby="pw-sessions">
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-11)" } as React.CSSProperties}
+          >
+            <h2 id="pw-sessions" className="zn-title" data-level="3">
+              {t("weekly.prebuilt.whySessionTitle")}
+            </h2>
+
+            <div className="zn-pw__list">
+              {orderedSessions.map((session, idx) => {
+                const workout = byId.get(session.workoutId);
+                const workoutName = workout
+                  ? pick(workout, "name")
+                  : session.workoutId;
+                const sessionLabel = SESSION_TYPE_LABELS[session.sessionType];
+                const why = pick(session, "why");
+
+                return (
+                  <div key={idx} className="zn-pw__sess">
+                    <span className="zn-mono zn-pw__sess-day">
+                      {t(`weekly.daysShort.${session.dayOfWeek}`)}
+                    </span>
+
+                    <div className="zn-pw__sess-main">
+                      <span className="zn-pw__sess-name">{workoutName}</span>
+                      {why && <p className="zn-pw__sess-why">{why}</p>}
                     </div>
-                    {/* Per-session pedagogy */}
-                    <p className="text-xs text-muted-foreground leading-relaxed pl-[3.25rem]">
-                      {why}
-                    </p>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
 
-        {/* CTA bottom (desktop) */}
-        <div className="hidden lg:flex justify-center pt-2">
-          <Button size="lg" onClick={handleUse}>
-            <Sparkles className="size-4" />
-            {t("weekly.prebuilt.useThisWeek")}
-          </Button>
-        </div>
+                    <span className="zn-mono zn-pw__sess-marks">
+                      {session.isKeySession && (
+                        <span className="zn-sess__key">
+                          <Star filled size={15} aria-hidden="true" />
+                          <span className="sr-only">
+                            {t("weekly.keySession")}
+                          </span>
+                        </span>
+                      )}
+                      <span
+                        className="zn-sess__dot"
+                        aria-hidden="true"
+                        style={
+                          {
+                            "--zn-dot": sessionColor(session.sessionType),
+                          } as React.CSSProperties
+                        }
+                      />
+                      {sessionLabel && <span>{pickLocale(sessionLabel)}</span>}
+                      <Clock size={13} aria-hidden="true" />
+                      {formatDurationMinutes(session.estimatedDurationMin)}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
       </div>
 
-      {/* Mobile sticky CTA (thumb zone). */}
-      <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 border-t bg-background/95 backdrop-blur px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-        <Button className="w-full" size="lg" onClick={handleUse}>
-          <Sparkles className="size-4" />
+      <div className="zn-pw__dock">
+        <Button size="lg" onClick={handleUse}>
+          <Sparkles size={17} />
           {t("weekly.prebuilt.useThisWeek")}
         </Button>
       </div>

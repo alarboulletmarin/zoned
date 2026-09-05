@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import {
   Link,
   useParams,
@@ -25,7 +32,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle } from "@/components/editorial";
+import { ZoneScale } from "@/components/visualization";
 import { PlanWeeklyView, type WorkoutCardMeta } from "@/components/domain/PlanWeeklyView";
 import { PlanWorkoutPanel } from "@/components/domain/PlanWorkoutPanel";
 import { PlanExportMenu } from "@/components/domain/PlanExportMenu";
@@ -33,7 +40,6 @@ import { ScanCard } from "@/components/domain";
 import { WeekSummaryBar, WeekGeneratorPanel } from "@/components/weekly";
 import { usePlan } from "@/hooks/usePlans";
 import { useWorkouts } from "@/hooks";
-import { useIsMobile } from "@/hooks/useIsMobile";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useStrengthWorkouts } from "@/hooks/useStrengthWorkouts";
 import { useCrossDisciplineWorkouts } from "@/hooks/useCrossDisciplineWorkouts";
@@ -56,7 +62,6 @@ import {
 import { computeWeekStats } from "@/lib/weekStats";
 import { buildScanSchedule } from "@/lib/scanSchedule";
 import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
-import { cn } from "@/lib/utils";
 import type { AnyWorkoutTemplate } from "@/types";
 import { getDominantZone, isStrengthWorkout } from "@/types";
 import type { SessionType } from "@/types";
@@ -218,7 +223,7 @@ export function WeekViewPage() {
       return w ? (
         <ScanCard workout={w} pick={pick} compact />
       ) : (
-        <div className="h-14 rounded border border-dashed border-border/60 bg-muted/30" />
+        <div className="zn-pw__scan" />
       );
     },
     [scanning, scanTargets, scanCells, pick],
@@ -408,17 +413,20 @@ export function WeekViewPage() {
   // Arriving from the "Générer une semaine" creation mode: surface the settings
   // so the user picks their parameters first — we never generate blindly.
   const didOpenSettingsRef = useRef(false);
-  const isMobile = useIsMobile();
+  // The same 900px at which the generator rail folds away — below it the
+  // settings live in the bottom sheet, so the query has to be the one the
+  // stylesheet uses, not a different breakpoint that leaves a dead band.
+  const railIsHidden = useMediaQuery("(max-width: 900px)");
   // The board hint describes a gesture, so it follows the input device rather
-  // than the viewport: a tablet is wide enough to miss `useIsMobile` but still
+  // than the viewport: a tablet is wide enough to miss a width query but still
   // has no hover, and the quick-action buttons it would point at never appear.
   const canHover = useMediaQuery("(hover: hover) and (pointer: fine)");
   useEffect(() => {
     if (openSettingsOnMount && !didOpenSettingsRef.current && plan) {
       didOpenSettingsRef.current = true;
-      if (isMobile) setSettingsOpen(true);
+      if (railIsHidden) setSettingsOpen(true);
     }
-  }, [openSettingsOnMount, plan, isMobile]);
+  }, [openSettingsOnMount, plan, railIsHidden]);
 
   const handleRename = useCallback(
     (value: string) => {
@@ -483,183 +491,195 @@ export function WeekViewPage() {
   return (
     <>
       <SEOHead noindex title={displayName} canonical={`/weeks/${plan.id}`} />
-      <div className="py-8 space-y-5 pb-28 md:pb-8">
-        <Button variant="ghost" size="sm" asChild>
+
+      <div className="zn-pw" data-dock="true">
+        <Button variant="ghost" size="sm" asChild className="zn-pw__back">
           <Link to="/weeks">
-            <ArrowLeft className="mr-2 size-4" />
+            <ArrowLeft size={16} />
             {t("library:weekly.list.title")}
           </Link>
         </Button>
 
-        {/* Board column (left) + always-visible generator rail (right, tablet /
-            desktop). The grid starts right under the back link — not below the
-            summary — so the rail begins high enough for its own CTA to sit
-            above the fold. A rail that starts mid-page pushes its actions out
-            of sight, and a `sticky` column never scrolls its own bottom back.
-            items-start: without it the board column is stretched to the rail's
-            height, and the scan overlay (absolute inset-0) would cover that
-            whole empty area instead of just the board. */}
-        <div className="relative grid gap-6 md:grid-cols-[1fr_300px] md:items-start lg:grid-cols-[1fr_340px]">
-          <div className="min-w-0 space-y-5">
-            <div className="space-y-2">
-              <input
-                value={displayName}
-                onChange={(e) => setName(e.target.value)}
-                onBlur={(e) => handleRename(e.target.value.trim() || displayName)}
-                onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
-                aria-label={t("library:weekly.generate.namePlaceholder")}
-                className="w-full min-w-0 bg-transparent text-2xl sm:text-3xl font-semibold italic focus:outline-none focus:ring-2 focus:ring-primary rounded-md px-1 -mx-1"
-              />
-              {/* Meta row: category badge (left) · share + export (right) */}
-              <div className="flex items-center justify-between gap-2">
-                <DropdownMenu>
-                  <DropdownMenuTrigger
-                    className={cn(
-                      badgeVariants({
-                        variant: plan.config.weekCategory ? "secondary" : "outline",
-                      }),
-                      "cursor-pointer",
-                      !plan.config.weekCategory && "text-muted-foreground",
-                    )}
-                  >
-                    {plan.config.weekCategory
-                      ? t(`library:weekly.prebuilt.category.${plan.config.weekCategory}`)
-                      : t("library:weekly.category.label")}
-                    <ChevronDown className="size-3" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start">
-                    <DropdownMenuRadioGroup
-                      value={plan.config.weekCategory ?? "none"}
-                      onValueChange={handleCategoryChange}
+        <section className="zn-pw__band zn-pw__band--first">
+          {/* The board takes the column; the generator is a rail beside it, so
+              it never covers or compresses the week being edited. Below 900px
+              the rail folds away and the dock carries the same two actions. */}
+          <div className="zn-pw__editor">
+            <div
+              className="zn-stack"
+              style={{ "--gap": "var(--sp-13)" } as CSSProperties}
+            >
+              <div
+                className="zn-stack"
+                style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+              >
+                <h1 className="sr-only">{displayName}</h1>
+                <input
+                  value={displayName}
+                  onChange={(e) => setName(e.target.value)}
+                  onBlur={(e) =>
+                    handleRename(e.target.value.trim() || displayName)
+                  }
+                  onKeyDown={(e) =>
+                    e.key === "Enter" && (e.target as HTMLInputElement).blur()
+                  }
+                  aria-label={t("library:weekly.generate.namePlaceholder")}
+                  className="zn-pw__name"
+                />
+
+                {/* What kind of week this is (left), and what you can send it
+                    out as (right). */}
+                <div
+                  className="zn-cluster zn-cluster--split"
+                  style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+                >
+                  <DropdownMenu>
+                    <DropdownMenuTrigger
+                      className={badgeVariants({
+                        variant: plan.config.weekCategory
+                          ? "secondary"
+                          : "outline",
+                        className: "zn-pw__cat",
+                      })}
                     >
-                      <DropdownMenuRadioItem value="none">
-                        {t("library:weekly.category.none")}
-                      </DropdownMenuRadioItem>
-                      {WEEK_CATEGORIES.map((c) => (
-                        <DropdownMenuRadioItem key={c} value={c}>
-                          {t(`library:weekly.prebuilt.category.${c}`)}
+                      {plan.config.weekCategory
+                        ? t(
+                            `library:weekly.prebuilt.category.${plan.config.weekCategory}`,
+                          )
+                        : t("library:weekly.category.label")}
+                      <ChevronDown size={13} />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start">
+                      <DropdownMenuRadioGroup
+                        value={plan.config.weekCategory ?? "none"}
+                        onValueChange={handleCategoryChange}
+                      >
+                        <DropdownMenuRadioItem value="none">
+                          {t("library:weekly.category.none")}
                         </DropdownMenuRadioItem>
-                      ))}
-                    </DropdownMenuRadioGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleShare}
-                    aria-label={t("library:weekly.share.action")}
+                        {WEEK_CATEGORIES.map((c) => (
+                          <DropdownMenuRadioItem key={c} value={c}>
+                            {t(`library:weekly.prebuilt.category.${c}`)}
+                          </DropdownMenuRadioItem>
+                        ))}
+                      </DropdownMenuRadioGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  <div
+                    className="zn-row"
+                    style={{ "--gap": "var(--sp-4)" } as CSSProperties}
                   >
-                    <Share className="size-3.5" />
-                  </Button>
-                  <PlanExportMenu plan={plan} workoutNames={workoutNames} size="sm" variant="outline" />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleShare}
+                      aria-label={t("library:weekly.share.action")}
+                    >
+                      <Share size={15} />
+                    </Button>
+                    <PlanExportMenu
+                      plan={plan}
+                      workoutNames={workoutNames}
+                      size="sm"
+                      variant="outline"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <WeekSummaryBar
+                stats={stats}
+                slots={slots}
+                targetVolumeH={settings.targetVolumeH}
+              />
+
+              {/* The ramp orders the zones on the board but does not name them. */}
+              <ZoneScale />
+
+              <div>
+                {/* The editing legend sits OUTSIDE the positioned wrapper below,
+                    so the scan overlay covers the board and nothing else. Touch
+                    has no hover, so its actions live in the tap menu instead. */}
+                {weekIsPopulated && (
+                  <p
+                    className="zn-mono zn-pw__hint"
+                    data-hidden={scanning ? "true" : undefined}
+                  >
+                    {canHover
+                      ? t("library:weekly.boardHint")
+                      : t("library:weekly.boardHintTouch")}
+                  </p>
+                )}
+                <div ref={boardRef} className="zn-pw__board">
+                  <PlanWeeklyView
+                    plan={plan}
+                    workoutNames={workoutNames}
+                    workoutMeta={workoutMeta}
+                    currentWeek={1}
+                    initialWeek={1}
+                    isEn={isEn}
+                    onSessionClick={handleSessionClick}
+                    onSessionMove={handleMove}
+                    onSessionDelete={handleDelete}
+                    onToggleLock={handleToggleLock}
+                    onRedraw={handleRedraw}
+                    onWorkoutAdd={handleWorkoutAdd}
+                    onAddToDay={handleAddToDay}
+                    renderScanCell={renderScanCell}
+                    singleWeek
+                  />
                 </div>
               </div>
             </div>
 
-            {/* Compact summary strip above the board */}
-            <WeekSummaryBar stats={stats} slots={slots} targetVolumeH={settings.targetVolumeH} />
-
-            {/* Board — kept full width, never compressed (picker sits in the column). */}
-            <div className="min-w-0">
-              <EditorialTitle as="h2" size="md" className="sr-only">
-                {displayName}
-              </EditorialTitle>
-              {/* Editing legend, right above the board it describes. Touch has no
-                  hover, so its actions live in the tap menu instead. It sits
-                  OUTSIDE the positioned wrapper below, so the scan overlay covers
-                  the board and nothing else. */}
-              {weekIsPopulated && (
-                <p
-                  className={cn(
-                    "mb-1.5 text-right text-[11px] leading-tight text-muted-foreground/80",
-                    scanning && "invisible",
-                  )}
-                >
-                  {canHover
-                    ? t("library:weekly.boardHint")
-                    : t("library:weekly.boardHintTouch")}
-                </p>
+            {/* The rail: the generator, or the workout picker while a session
+                is being added. */}
+            <aside className="zn-pw__rail">
+              {showPanel ? (
+                <PlanWorkoutPanel
+                  isOpen={showPanel}
+                  onClose={() => {
+                    setShowPanel(false);
+                    setAddTarget(null);
+                  }}
+                  inline
+                />
+              ) : (
+                generatorPanel
               )}
-              <div ref={boardRef} className="relative scroll-mt-20">
-              <PlanWeeklyView
-                plan={plan}
-                workoutNames={workoutNames}
-                workoutMeta={workoutMeta}
-                currentWeek={1}
-                initialWeek={1}
-                isEn={isEn}
-                onSessionClick={handleSessionClick}
-                onSessionMove={handleMove}
-                onSessionDelete={handleDelete}
-                onToggleLock={handleToggleLock}
-                onRedraw={handleRedraw}
-                onWorkoutAdd={handleWorkoutAdd}
-                onAddToDay={handleAddToDay}
-                renderScanCell={renderScanCell}
-                singleWeek
-              />
-              </div>
-            </div>
+            </aside>
           </div>
-
-          {/* Right column: the always-visible generator — or, while adding a
-              session, the workout picker. The picker lives in THIS column, so
-              the board on the left is never covered or compressed. */}
-          <aside className="hidden md:block md:sticky md:top-20 md:self-start">
-            {showPanel ? (
-              <PlanWorkoutPanel
-                isOpen={showPanel}
-                onClose={() => {
-                  setShowPanel(false);
-                  setAddTarget(null);
-                }}
-                inline
-              />
-            ) : (
-              generatorPanel
-            )}
-          </aside>
-        </div>
+        </section>
       </div>
 
-      {/* Mobile sticky action bar (thumb zone) — hidden once the generator
-          panel becomes a visible column (md+). */}
-      <div className="md:hidden fixed bottom-0 inset-x-0 z-30 border-t bg-background/95 backdrop-blur px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-        <div className="flex gap-2">
-          <Button
-            className="flex-1"
-            disabled={scanning}
-            onClick={() => handleGenerate(settings)}
-          >
-            {scanning ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              <Sparkles className="size-4" />
-            )}
-            {scanning
-              ? t("library:weekly.generate.busy")
-              : t("library:weekly.generate.action")}
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => setSettingsOpen(true)}
-            disabled={scanning}
-          >
-            <Settings className="size-4" />
-            {t("library:weekly.actions.adjust")}
-          </Button>
-        </div>
-      </div>
-
-      {/* Mobile generator bottom-sheet ("Régler") — compact `bare` panel so the
-          whole form fits without scrolling. */}
-      <Sheet open={settingsOpen} onOpenChange={setSettingsOpen}>
-        <SheetContent
-          side="bottom"
-          className="max-h-[90vh] overflow-y-auto rounded-t-2xl px-4 pt-4 pb-6 md:hidden"
+      {/* The two actions the rail carries, kept in the thumb zone once it is
+          gone. One vermillon fill: the draw. */}
+      <div className="zn-pw__dock">
+        <Button
+          disabled={scanning}
+          onClick={() => handleGenerate(settings)}
         >
-          <SheetHeader className="p-0">
+          {scanning ? <Loader2 size={17} /> : <Sparkles size={17} />}
+          {scanning
+            ? t("library:weekly.generate.busy")
+            : t("library:weekly.generate.action")}
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => setSettingsOpen(true)}
+          disabled={scanning}
+        >
+          <Settings size={17} />
+          {t("library:weekly.actions.adjust")}
+        </Button>
+      </div>
+
+      {/* The generator's parameters, as a bottom sheet, where the rail cannot
+          fit. `bare` so the whole form lands without a scroll. */}
+      <Sheet open={settingsOpen} onOpenChange={setSettingsOpen}>
+        <SheetContent side="bottom">
+          <SheetHeader>
             <SheetTitle>{t("library:weekly.generate.title")}</SheetTitle>
           </SheetHeader>
           <WeekGeneratorPanel

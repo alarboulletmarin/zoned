@@ -3,11 +3,11 @@
     "seoHeroLabel": "À propos",
     "statsWorkouts": "Séances",
     "statsCalculators": "Calculateurs",
-    "title": "Une bibliothèque d'entraînement, faite par un coureur, pour les coureurs",
-    "description": "Zoned rassemble des séances structurées par zones, des plans d'entraînement et des outils pratiques. L'objectif : rendre la science de l'entraînement accessible, sans abonnement, sans suivi, sans superflu.",
+    "title": "Une bibliothèque d'entraînement, par un coureur",
+    "description": "Des séances par zones, des plans et des calculateurs. Sans abonnement, sans suivi, sans superflu.",
     "personal": {
       "title": "Le projet",
-      "bio": "Zoned est développé par un coureur passionné, en open source. Le projet est né du besoin d'un outil simple, basé sur les zones, pour structurer l'entraînement sans dépendre d'une plateforme propriétaire."
+      "bio": "Zoned est né du besoin d'un outil simple, par zones, pour s'entraîner sans dépendre d'une plateforme propriétaire."
     },
     "openSource": {
       "title": "Open source",
@@ -58,7 +58,22 @@
   },
   "article": {
     "home": "Accueil",
-    "learn": "Apprendre"
+    "learn": "Apprendre",
+    "breadcrumb": "Fil d'Ariane",
+    "pager": "Article précédent et suivant",
+    "loading": "Chargement de l'article",
+    "readTimeLabel": "Temps de lecture",
+    "updatedOn": "mis à jour le {{date}}",
+    "callout": {
+      "tip": "Conseil",
+      "warning": "Attention",
+      "key": "À retenir",
+      "stat": "Chiffre clé"
+    },
+    "error": {
+      "title": "Le texte de l'article n'est pas arrivé",
+      "text": "Le chargement s'est interrompu. L'index et les autres articles restent ouverts : réessaie depuis la liste."
+    }
   },
   "changelog": {
     "title": "Nouveautés",
@@ -88,13 +103,34 @@
     "prevArticle": "Article précédent",
     "nextArticle": "Article suivant",
     "backToHub": "Retour aux articles",
-    "zonesCtaText": "Prêt à personnaliser vos zones d'entraînement ?",
-    "zonesCtaButton": "Configurer mes zones"
+    "zonesCtaText": "Ces six zones deviennent les tiennes dès que tu saisis ta VMA.",
+    "zonesCtaButton": "Régler mes zones",
+    "catalogue": "{{count}} articles · {{minutes}} min de lecture",
+    "lede": "Pourquoi une séance marche, pas seulement comment la faire. Chaque affirmation porte sa source.",
+    "categoriesLabel": "Catégorie d'article",
+    "articleCount_one": "{{count}} article",
+    "articleCount_other": "{{count}} articles",
+    "empty": "Aucun article dans cette catégorie",
+    "emptyDescription": "Cette catégorie est vide pour l'instant. Les {{total}} articles publiés restent visibles sous « Tous ».",
+    "showAll": "Voir les {{total}} articles"
   },
   "privacy": {
     "free": "100% gratuit",
     "noAccount": "Aucun compte requis",
     "localData": "Vos données restent sur votre appareil",
     "footerNote": "Pas de tracking. Pas de cookies."
+  },
+  "aboutPage": {
+    "kicker": "Open source · sans compte",
+    "statsPlans": "Plans",
+    "statsCollections": "Collections",
+    "statsArticles": "Articles",
+    "statsZones": "Zones",
+    "countsLabel": "Le catalogue en chiffres",
+    "claimsTitle": "Ce que ça implique"
+  },
+  "changelogPage": {
+    "releases": "{{n}} versions publiées",
+    "showOlder": "Voir les {{n}} versions précédentes"
   }
 }

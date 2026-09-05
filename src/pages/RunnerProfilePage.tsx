@@ -1,17 +1,19 @@
-import { useState, useEffect } from "react";
+import {
+  useState,
+  useEffect,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import {
-  UserRound,
   Gauge,
   Save,
   Trash2,
   Plus,
   Target,
-  Activity,
-  TrendingUp,
-  Flag,
+  FlaskConical,
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,6 +25,13 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Alert } from "@/components/ui/alert";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Segmented } from "@/components/ui/segmented";
+import {
+  ResponsiveTable,
+  type ResponsiveTableColumn,
+} from "@/components/ui/responsive-table";
 import {
   Dialog,
   DialogContent,
@@ -38,9 +47,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DateInput } from "@/components/ui/date-input";
+import { StatBlock } from "@/components/domain/StatBlock";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
-import { cn } from "@/lib/utils";
 import {
   getRunnerProfileOrMigrate,
   saveRunnerProfile,
@@ -70,6 +78,10 @@ import { RACE_DISTANCE_META } from "@/types/plan";
 // Helpers
 // ---------------------------------------------------------------------------
 
+/** Nothing measured yet. A dash, not a sentence — the label already says what
+ *  the missing number would have been. */
+const NOT_SET = "—";
+
 function formatTime(totalSeconds: number): string {
   const h = Math.floor(totalSeconds / 3600);
   const m = Math.floor((totalSeconds % 3600) / 60);
@@ -91,17 +103,6 @@ function deriveVma(type: BenchmarkType, result: number): number | undefined {
 
 const TODAY_ISO = new Date().toISOString().slice(0, 10);
 
-const INPUT_CLASS = cn(
-  "flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs",
-  "focus-visible:outline-none focus-visible:ring-[3px]",
-);
-
-/** Input with a unit suffix — extra right padding + hidden spinners */
-const UNIT_INPUT_CLASS = cn(
-  INPUT_CLASS,
-  "pr-20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
-);
-
 const RACE_DISTANCES = Object.keys(RACE_DISTANCE_META) as RaceDistance[];
 const DIFFICULTY_KEYS: Difficulty[] = [
   "beginner",
@@ -118,10 +119,14 @@ const BENCHMARK_TYPES: BenchmarkType[] = [
   "other",
 ];
 
+type PersonalRecordEntry = RunnerProfile["personalRecords"][number];
+
 // ---------------------------------------------------------------------------
 // TimeInputs (reusable sub-component)
 // ---------------------------------------------------------------------------
 
+/** Hours, minutes, seconds — three outlined number fields, each carrying its
+ *  own unit inside the frame, so the row reads as one duration. */
 function TimeInputs({
   hours,
   minutes,
@@ -144,37 +149,77 @@ function TimeInputs({
   sLabel: string;
 }) {
   return (
-    <div className="flex items-center gap-1">
-      <input
-        type="number"
-        min={0}
-        max={9}
-        value={hours}
-        onChange={(e) => onHoursChange(e.target.value)}
-        className={cn(INPUT_CLASS, "w-12 border-input focus-visible:ring-ring/50")}
-        aria-label={hLabel}
-      />
-      <span className="text-xs text-muted-foreground">{hLabel}</span>
-      <input
-        type="number"
-        min={0}
-        max={59}
-        value={minutes}
-        onChange={(e) => onMinutesChange(e.target.value)}
-        className={cn(INPUT_CLASS, "w-14 border-input focus-visible:ring-ring/50")}
-        aria-label={mLabel}
-      />
-      <span className="text-xs text-muted-foreground">{mLabel}</span>
-      <input
-        type="number"
-        min={0}
-        max={59}
-        value={seconds}
-        onChange={(e) => onSecondsChange(e.target.value)}
-        className={cn(INPUT_CLASS, "w-14 border-input focus-visible:ring-ring/50")}
-        aria-label={sLabel}
-      />
-      <span className="text-xs text-muted-foreground">{sLabel}</span>
+    <div className="zn-num__time">
+      <span className="zn-numfield" style={{ "--field-w": "30px" } as CSSProperties}>
+        <input
+          type="number"
+          min={0}
+          max={9}
+          value={hours}
+          onChange={(e) => onHoursChange(e.target.value)}
+          className="zn-numfield__input"
+          aria-label={hLabel}
+        />
+        <span className="zn-numfield__unit">{hLabel}</span>
+      </span>
+      <span className="zn-numfield" style={{ "--field-w": "36px" } as CSSProperties}>
+        <input
+          type="number"
+          min={0}
+          max={59}
+          value={minutes}
+          onChange={(e) => onMinutesChange(e.target.value)}
+          className="zn-numfield__input"
+          aria-label={mLabel}
+        />
+        <span className="zn-numfield__unit">{mLabel}</span>
+      </span>
+      <span className="zn-numfield" style={{ "--field-w": "36px" } as CSSProperties}>
+        <input
+          type="number"
+          min={0}
+          max={59}
+          value={seconds}
+          onChange={(e) => onSecondsChange(e.target.value)}
+          className="zn-numfield__input"
+          aria-label={sLabel}
+        />
+        <span className="zn-numfield__unit">{sLabel}</span>
+      </span>
+    </div>
+  );
+}
+
+/**
+ * The head of a tab panel: what the panel holds, what it is for, how many
+ * there are, and the one action that adds to it. A panel that is already a
+ * list of outlined blocks does not get wrapped in a card as well — a frame
+ * inside a frame reads as a mistake on paper.
+ */
+function PanelHead({
+  title,
+  description,
+  meta,
+  action,
+}: {
+  title: string;
+  description: string;
+  meta?: string;
+  action?: ReactNode;
+}) {
+  return (
+    <div className="zn-row zn-row--split zn-row--start">
+      <div
+        className="zn-stack zn-measure"
+        style={{ "--gap": "var(--sp-4)" } as CSSProperties}
+      >
+        <h2 className="zn-title" data-level="3">
+          {title}
+        </h2>
+        <p className="zn-body zn-body--sm zn-muted">{description}</p>
+        {meta && <span className="zn-mono zn-faint">{meta}</span>}
+      </div>
+      {action && <div className="zn-fixed">{action}</div>}
     </div>
   );
 }
@@ -203,6 +248,67 @@ function fieldsToSeconds(h: string, m: string, s: string): number {
 // Tab 1: BaseDataSection
 // ---------------------------------------------------------------------------
 
+/** One measured value: a label, an outlined mono field carrying its unit, and
+ *  the line that says what is out of range. */
+function NumberField({
+  id,
+  label,
+  unit,
+  value,
+  onChange,
+  error,
+  min,
+  max,
+  step,
+  placeholder,
+  width,
+}: {
+  id: string;
+  label: string;
+  unit: string;
+  value: string;
+  onChange: (v: string) => void;
+  error?: string;
+  min?: number;
+  max?: number;
+  step?: number;
+  placeholder: string;
+  width: string;
+}) {
+  return (
+    <div className="zn-num__field">
+      <label className="zn-label" htmlFor={id}>
+        {label}
+      </label>
+      <span
+        className="zn-numfield"
+        data-invalid={error ? "true" : undefined}
+        style={{ "--field-w": width } as CSSProperties}
+      >
+        <input
+          id={id}
+          type="number"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          placeholder={placeholder}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? `${id}-error` : undefined}
+          onChange={(e) => onChange(e.target.value)}
+          className="zn-numfield__input"
+        />
+        <span className="zn-numfield__unit">{unit}</span>
+      </span>
+      {error && (
+        <p id={`${id}-error`} className="zn-num__error">
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
+
 function BaseDataSection({
   profile,
   onSave,
@@ -212,7 +318,6 @@ function BaseDataSection({
 }) {
   const { t } = useTranslation("profile");
   const pickLang = usePickLang();
-  const navigate = useNavigate();
 
   const [fcMax, setFcMax] = useState("");
   const [vma, setVma] = useState("");
@@ -282,178 +387,142 @@ function BaseDataSection({
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Activity className="size-5" />
-          {t("base.title")}
-        </CardTitle>
-        <CardDescription>{t("base.description")}</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* FC Max */}
-          <div>
-            <label className="text-sm font-medium mb-1.5 block">
-              {t("base.fcMax")}
-            </label>
-            <div className="relative">
-              <input
-                type="number"
-                min={100}
-                max={250}
-                value={fcMax}
-                onChange={(e) => setFcMax(e.target.value)}
-                placeholder={t("base.fcMaxPlaceholder")}
-                className={cn(
-                  UNIT_INPUT_CLASS,
-                  fcMaxError
-                    ? "border-red-500 focus-visible:ring-red-500/20"
-                    : "border-input focus-visible:ring-ring/50",
-                )}
-              />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
-                {t("base.fcMaxUnit")}
-              </span>
-            </div>
-            {fcMaxError && (
-              <p className="text-xs text-red-500 mt-1">{t("base.fcMaxError")}</p>
-            )}
+    <div
+      className="zn-split"
+      style={{ "--split": "1fr 1fr", "--gap": "var(--sp-17)" } as CSSProperties}
+    >
+      <Card>
+        <CardHeader>
+          <CardTitle>{t("base.title")}</CardTitle>
+          <CardDescription>{t("base.description")}</CardDescription>
+        </CardHeader>
+        <CardContent
+          className="zn-stack"
+          style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+        >
+          <div className="zn-num__fields">
+            <NumberField
+              id="profile-vma"
+              label={t("base.vma")}
+              unit={t("base.vmaUnit")}
+              value={vma}
+              onChange={setVma}
+              error={vmaError ? t("base.vmaError") : undefined}
+              min={8}
+              max={30}
+              step={0.1}
+              placeholder="16.5"
+              width="52px"
+            />
+            <NumberField
+              id="profile-fcmax"
+              label={t("base.fcMax")}
+              unit={t("base.fcMaxUnit")}
+              value={fcMax}
+              onChange={setFcMax}
+              error={fcMaxError ? t("base.fcMaxError") : undefined}
+              min={100}
+              max={250}
+              placeholder="185"
+              width="52px"
+            />
+            <NumberField
+              id="profile-weekly"
+              label={t("base.weeklyKm")}
+              unit={t("base.weeklyKmUnit")}
+              value={weeklyKm}
+              onChange={setWeeklyKm}
+              error={weeklyError ? t("base.weeklyKmError") : undefined}
+              min={0}
+              max={500}
+              placeholder="40"
+              width="52px"
+            />
+            <NumberField
+              id="profile-longrun"
+              label={t("base.longRunKm")}
+              unit={t("base.longRunKmUnit")}
+              value={longRunKm}
+              onChange={setLongRunKm}
+              error={longError ? t("base.longRunKmError") : undefined}
+              min={0}
+              max={200}
+              placeholder="18"
+              width="52px"
+            />
           </div>
 
-          {/* VMA */}
-          <div>
-            <label className="text-sm font-medium mb-1.5 block">
-              {t("base.vma")}
-            </label>
-            <div className="relative">
-              <input
-                type="number"
-                min={8}
-                max={30}
-                step={0.1}
-                value={vma}
-                onChange={(e) => setVma(e.target.value)}
-                placeholder={t("base.vmaPlaceholder")}
-                className={cn(
-                  UNIT_INPUT_CLASS,
-                  vmaError
-                    ? "border-red-500 focus-visible:ring-red-500/20"
-                    : "border-input focus-visible:ring-ring/50",
-                )}
-              />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
-                {t("base.vmaUnit")}
-              </span>
-            </div>
-            {vmaError && (
-              <p className="text-xs text-red-500 mt-1">{t("base.vmaError")}</p>
-            )}
+          {/* Level: a single choice, so the selected one inverts to ink rather
+              than hiding inside a dropdown. */}
+          <div className="zn-num__field">
+            <span className="zn-label">{t("base.runnerLevel")}</span>
+            <Segmented<Difficulty>
+              label={t("base.runnerLevel")}
+              value={runnerLevel as Difficulty}
+              onChange={(v) => setRunnerLevel(v)}
+              options={DIFFICULTY_KEYS.map((d) => ({
+                value: d,
+                label: pickLang(DIFFICULTY_META[d], "label"),
+              }))}
+            />
           </div>
 
-          {/* Weekly km */}
-          <div>
-            <label className="text-sm font-medium mb-1.5 block">
-              {t("base.weeklyKm")}
-            </label>
-            <div className="relative">
-              <input
-                type="number"
-                min={0}
-                max={500}
-                value={weeklyKm}
-                onChange={(e) => setWeeklyKm(e.target.value)}
-                placeholder={t("base.weeklyKmPlaceholder")}
-                className={cn(
-                  UNIT_INPUT_CLASS,
-                  weeklyError
-                    ? "border-red-500 focus-visible:ring-red-500/20"
-                    : "border-input focus-visible:ring-ring/50",
-                )}
-              />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
-                {t("base.weeklyKmUnit")}
+          <div className="zn-num__actions">
+            {/* The screen's single vermillon fill. */}
+            <Button onClick={handleSave} disabled={hasError}>
+              <Save />
+              {t("base.save")}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleUpdateZones}
+              disabled={!parsedFcMax && !parsedVma}
+            >
+              <Gauge />
+              {t("base.updateZones")}
+            </Button>
+            <Button variant="outline" asChild>
+              <Link to="/plan/new">
+                <Target />
+                {t("base.createPlan")}
+              </Link>
+            </Button>
+            {hasError && (
+              <span className="zn-mono zn-faint zn-push">
+                {t("base.errorHint")}
               </span>
-            </div>
-            {weeklyError && (
-              <p className="text-xs text-red-500 mt-1">
-                {t("base.weeklyKmError")}
-              </p>
             )}
           </div>
+        </CardContent>
+      </Card>
 
-          {/* Long run km */}
-          <div>
-            <label className="text-sm font-medium mb-1.5 block">
-              {t("base.longRunKm")}
-            </label>
-            <div className="relative">
-              <input
-                type="number"
-                min={0}
-                max={200}
-                value={longRunKm}
-                onChange={(e) => setLongRunKm(e.target.value)}
-                placeholder={t("base.longRunKmPlaceholder")}
-                className={cn(
-                  UNIT_INPUT_CLASS,
-                  longError
-                    ? "border-red-500 focus-visible:ring-red-500/20"
-                    : "border-input focus-visible:ring-ring/50",
-                )}
-              />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
-                {t("base.longRunKmUnit")}
-              </span>
-            </div>
-            {longError && (
-              <p className="text-xs text-red-500 mt-1">
-                {t("base.longRunKmError")}
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Runner level */}
-        <div>
-          <label className="text-sm font-medium mb-1.5 block">
-            {t("base.runnerLevel")}
-          </label>
-          <Select value={runnerLevel} onValueChange={setRunnerLevel}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder={t("base.selectLevel")} />
-            </SelectTrigger>
-            <SelectContent>
-              {DIFFICULTY_KEYS.map((d) => (
-                <SelectItem key={d} value={d}>
-                  {pickLang(DIFFICULTY_META[d], "label")}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Actions */}
-        <div className="flex flex-wrap gap-2 pt-2">
-          <Button onClick={handleSave} disabled={hasError}>
-            <Save className="size-4 mr-2" />
-            {t("base.save")}
-          </Button>
-          <Button
-            variant="outline"
-            onClick={handleUpdateZones}
-            disabled={!parsedFcMax && !parsedVma}
+      <div className="zn-num__aside">
+        {/* An empty VMA is not an error, but it is the reason five other
+            screens stay blank — so it says so, and offers the six-minute way
+            out. */}
+        {!profile?.vma && (
+          <Alert
+            kind="warning"
+            title={t("base.noVmaTitle")}
+            action={
+              <Button variant="outline" size="sm" asChild>
+                <Link to="/calculators/vma">{t("base.noVmaAction")}</Link>
+              </Button>
+            }
           >
-            <Gauge className="size-4 mr-2" />
-            {t("base.updateZones")}
-          </Button>
-          <Button variant="outline" onClick={() => navigate("/plan/new")}>
-            <Target className="size-4 mr-2" />
-            {t("base.createPlan")}
-          </Button>
+            {t("base.noVmaBody")}
+          </Alert>
+        )}
+
+        <div className="zn-num__source">
+          <span className="zn-kicker zn-kicker--inline">
+            {t("base.sourceTitle")}
+          </span>
+          <p className="zn-body zn-body--sm zn-muted">{t("base.sourceBody")}</p>
+          <span className="zn-source">{t("base.sourceCitation")}</span>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 
@@ -497,6 +566,7 @@ function ReferenceRow({
   }, [initialRef?.totalSeconds, initialRef?.date, initialRef?.label]);
 
   const totalSec = fieldsToSeconds(hours, minutes, seconds);
+  const distanceLabel = pickLang(meta, "label");
 
   function handleSave() {
     if (totalSec <= 0) return;
@@ -508,66 +578,73 @@ function ReferenceRow({
   }
 
   return (
-    <div className="border rounded-lg p-4">
-      <div className="flex items-center justify-between mb-3">
-        <span className="font-medium">{pickLang(meta, "label")}</span>
+    <div className="zn-num__row" data-filled={initialRef ? "true" : undefined}>
+      <div className="zn-row zn-row--split">
+        <span className="zn-title" data-level="4">
+          {distanceLabel}
+        </span>
         {initialRef && (
           <Button
             variant="ghost"
-            size="sm"
+            size="icon-sm"
             onClick={() => onClear(distance)}
-            aria-label={t("references.clear")}
+            aria-label={`${t("references.clear")} · ${distanceLabel}`}
           >
-            <Trash2 className="size-4" />
+            <Trash2 />
           </Button>
         )}
       </div>
 
-      <div className="space-y-3">
-        <div>
-          <label className="text-sm text-muted-foreground mb-1 block">
-            {t("references.time")}
+      <div className="zn-num__field">
+        <span className="zn-label">{t("references.time")}</span>
+        <TimeInputs
+          hours={hours}
+          minutes={minutes}
+          seconds={seconds}
+          onHoursChange={setHours}
+          onMinutesChange={setMinutes}
+          onSecondsChange={setSeconds}
+          hLabel={t("references.hours")}
+          mLabel={t("references.minutes")}
+          sLabel={t("references.seconds")}
+        />
+      </div>
+
+      <div className="zn-num__fields">
+        <div className="zn-num__field">
+          <label className="zn-label" htmlFor={`ref-${distance}-date`}>
+            {t("references.date")}
           </label>
-          <TimeInputs
-            hours={hours}
-            minutes={minutes}
-            seconds={seconds}
-            onHoursChange={setHours}
-            onMinutesChange={setMinutes}
-            onSecondsChange={setSeconds}
-            hLabel={t("references.hours")}
-            mLabel={t("references.minutes")}
-            sLabel={t("references.seconds")}
+          <DateInput
+            id={`ref-${distance}-date`}
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            max={TODAY_ISO}
           />
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label className="text-sm text-muted-foreground mb-1 block">
-              {t("references.date")}
-            </label>
-            <DateInput
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              max={TODAY_ISO}
-            />
-          </div>
-          <div>
-            <label className="text-sm text-muted-foreground mb-1 block">
-              {t("references.label")}
-            </label>
-            <input
-              type="text"
-              value={label}
-              onChange={(e) => setLabel(e.target.value)}
-              placeholder={t("references.labelPlaceholder")}
-              className={cn(INPUT_CLASS, "border-input focus-visible:ring-ring/50")}
-            />
-          </div>
+        <div className="zn-num__field">
+          <label className="zn-label" htmlFor={`ref-${distance}-label`}>
+            {t("references.label")}
+          </label>
+          <input
+            id={`ref-${distance}-label`}
+            type="text"
+            value={label}
+            onChange={(e) => setLabel(e.target.value)}
+            placeholder={t("references.labelPlaceholder")}
+            className="zn-num__input"
+          />
         </div>
+      </div>
 
-        <Button size="sm" onClick={handleSave} disabled={totalSec <= 0}>
-          <Save className="size-4 mr-2" />
+      <div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleSave}
+          disabled={totalSec <= 0}
+        >
+          <Save />
           {t("references.save")}
         </Button>
       </div>
@@ -601,16 +678,24 @@ function PerformanceReferencesSection({
     toast.success(t("references.cleared"));
   }
 
+  const filled = RACE_DISTANCES.filter(
+    (d) => profile?.performanceReferences[d],
+  ).length;
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Flag className="size-5" />
-          {t("references.title")}
-        </CardTitle>
-        <CardDescription>{t("references.description")}</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <div
+      className="zn-stack"
+      style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+    >
+      <PanelHead
+        title={t("references.title")}
+        description={t("references.description")}
+        meta={t("references.count", {
+          count: filled,
+          total: RACE_DISTANCES.length,
+        })}
+      />
+      <div className="zn-num__rows">
         {RACE_DISTANCES.map((distance) => (
           <ReferenceRow
             key={distance}
@@ -620,8 +705,8 @@ function PerformanceReferencesSection({
             onClear={handleClear}
           />
         ))}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 
@@ -653,6 +738,11 @@ function BenchmarkHistorySection({
     setBmDate(TODAY_ISO);
     setBmResult("");
     setBmNotes("");
+  }
+
+  function openDialog() {
+    resetDialog();
+    setDialogOpen(true);
   }
 
   function handleAdd() {
@@ -688,47 +778,120 @@ function BenchmarkHistorySection({
     toast.success(t("benchmarks.vmaUpdated", { vma }));
   }
 
-  return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="size-5" />
-              {t("benchmarks.title")}
-            </CardTitle>
-            <CardDescription>{t("benchmarks.description")}</CardDescription>
-          </div>
-          <Button
-            size="sm"
-            onClick={() => {
-              resetDialog();
-              setDialogOpen(true);
-            }}
+  const columns: ResponsiveTableColumn<BenchmarkEntry>[] = [
+    {
+      key: "type",
+      header: t("benchmarks.type"),
+      hideOnMobile: true,
+      cell: (bm) => t(`benchmarks.types.${bm.type}`),
+    },
+    {
+      key: "date",
+      header: t("benchmarks.date"),
+      className: "zn-num__num",
+      cell: (bm) => bm.date,
+    },
+    {
+      key: "result",
+      header: t("benchmarks.result"),
+      className: "zn-num__num",
+      cell: (bm) =>
+        `${bm.result} ${t(`benchmarks.resultUnits.${bm.type}`)}`.trim(),
+    },
+    {
+      key: "vma",
+      header: t("benchmarks.derivedVma"),
+      cell: (bm) =>
+        bm.derivedVma ? (
+          <span
+            className="zn-row"
+            style={{ "--gap": "var(--sp-5)" } as CSSProperties}
           >
-            <Plus className="size-4 mr-2" />
-            {t("benchmarks.add")}
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        {benchmarks.length === 0 ? (
-          <p className="text-sm text-muted-foreground py-4 text-center">
-            {t("benchmarks.empty")}
-          </p>
+            <span className="zn-mono">{bm.derivedVma} km/h</span>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => handleUseVma(bm.derivedVma!)}
+            >
+              {t("benchmarks.useVma")}
+            </Button>
+          </span>
         ) : (
-          <div className="space-y-3">
-            {benchmarks.map((bm) => (
-              <BenchmarkCard
-                key={bm.id}
-                benchmark={bm}
-                onDelete={handleDelete}
-                onUseVma={handleUseVma}
-              />
-            ))}
-          </div>
-        )}
-      </CardContent>
+          <span className="zn-mono zn-faint">{NOT_SET}</span>
+        ),
+    },
+    {
+      key: "notes",
+      header: t("benchmarks.notes"),
+      cell: (bm) =>
+        bm.notes ? (
+          <span className="zn-body zn-body--sm zn-muted">{bm.notes}</span>
+        ) : (
+          <span className="zn-faint">{NOT_SET}</span>
+        ),
+    },
+    {
+      key: "actions",
+      header: <span className="sr-only">{t("benchmarks.delete")}</span>,
+      className: "zn-num__rowaction",
+      cell: (bm) => (
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={() => handleDelete(bm.id)}
+          aria-label={`${t("benchmarks.delete")} · ${bm.date}`}
+        >
+          <Trash2 />
+        </Button>
+      ),
+    },
+  ];
+
+  return (
+    <div
+      className="zn-stack"
+      style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+    >
+      <PanelHead
+        title={t("benchmarks.title")}
+        description={t("benchmarks.description")}
+        meta={
+          benchmarks.length > 0
+            ? t("benchmarks.count", { count: benchmarks.length })
+            : undefined
+        }
+        action={
+          benchmarks.length > 0 ? (
+            <Button size="sm" onClick={openDialog}>
+              <Plus />
+              {t("benchmarks.add")}
+            </Button>
+          ) : undefined
+        }
+      />
+
+      {benchmarks.length === 0 ? (
+        <EmptyState
+          variant="not-started"
+          icon={FlaskConical}
+          title={t("benchmarks.emptyTitle")}
+          description={t("benchmarks.empty")}
+          action={
+            <Button onClick={openDialog}>
+              <Plus />
+              {t("benchmarks.add")}
+            </Button>
+          }
+        />
+      ) : (
+        <ResponsiveTable<BenchmarkEntry>
+          data={benchmarks}
+          columns={columns}
+          rowKey={(bm) => bm.id}
+          caption={t("benchmarks.title")}
+          mobileCardTitle={(bm) => t(`benchmarks.types.${bm.type}`)}
+        />
+      )}
 
       {/* Add dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -736,16 +899,19 @@ function BenchmarkHistorySection({
           <DialogHeader>
             <DialogTitle>{t("benchmarks.add")}</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-1.5 block">
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+          >
+            <div className="zn-num__field">
+              <label className="zn-label" htmlFor="bm-type">
                 {t("benchmarks.type")}
               </label>
               <Select
                 value={bmType}
                 onValueChange={(v) => setBmType(v as BenchmarkType)}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger id="bm-type" className="w-full">
                   <SelectValue placeholder={t("benchmarks.selectType")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -758,53 +924,41 @@ function BenchmarkHistorySection({
               </Select>
             </div>
 
-            <div>
-              <label className="text-sm font-medium mb-1.5 block">
+            <div className="zn-num__field">
+              <label className="zn-label" htmlFor="bm-date">
                 {t("benchmarks.date")}
               </label>
               <DateInput
+                id="bm-date"
                 value={bmDate}
                 onChange={(e) => setBmDate(e.target.value)}
                 max={TODAY_ISO}
               />
             </div>
 
-            <div>
-              <label className="text-sm font-medium mb-1.5 block">
-                {t("benchmarks.result")}
-                {t(`benchmarks.resultUnits.${bmType}`) && (
-                  <span className="text-muted-foreground font-normal ml-1">
-                    ({t(`benchmarks.resultUnits.${bmType}`)})
-                  </span>
-                )}
-              </label>
-              <input
-                type="number"
-                min={0}
-                step={bmType === "lab_test" ? 0.1 : 1}
-                value={bmResult}
-                onChange={(e) => setBmResult(e.target.value)}
-                placeholder={t(`benchmarks.resultPlaceholders.${bmType}`)}
-                className={cn(
-                  INPUT_CLASS,
-                  "border-input focus-visible:ring-ring/50",
-                )}
-              />
-            </div>
+            <NumberField
+              id="bm-result"
+              label={t("benchmarks.result")}
+              unit={t(`benchmarks.resultUnits.${bmType}`)}
+              value={bmResult}
+              onChange={setBmResult}
+              min={0}
+              step={bmType === "lab_test" ? 0.1 : 1}
+              placeholder={t(`benchmarks.resultPlaceholders.${bmType}`)}
+              width="72px"
+            />
 
-            <div>
-              <label className="text-sm font-medium mb-1.5 block">
+            <div className="zn-num__field">
+              <label className="zn-label" htmlFor="bm-notes">
                 {t("benchmarks.notes")}
               </label>
               <input
+                id="bm-notes"
                 type="text"
                 value={bmNotes}
                 onChange={(e) => setBmNotes(e.target.value)}
                 placeholder={t("benchmarks.notesPlaceholder")}
-                className={cn(
-                  INPUT_CLASS,
-                  "border-input focus-visible:ring-ring/50",
-                )}
+                className="zn-num__input"
               />
             </div>
           </div>
@@ -816,70 +970,12 @@ function BenchmarkHistorySection({
               onClick={handleAdd}
               disabled={!bmResult || Number(bmResult) <= 0}
             >
-              <Save className="size-4 mr-2" />
+              <Save />
               {t("benchmarks.add")}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </Card>
-  );
-}
-
-function BenchmarkCard({
-  benchmark,
-  onDelete,
-  onUseVma,
-}: {
-  benchmark: BenchmarkEntry;
-  onDelete: (id: string) => void;
-  onUseVma: (vma: number) => void;
-}) {
-  const { t } = useTranslation("profile");
-
-  return (
-    <div className="border rounded-lg p-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Badge variant="secondary">
-            {t(`benchmarks.types.${benchmark.type}`)}
-          </Badge>
-          <span className="text-sm text-muted-foreground">{benchmark.date}</span>
-        </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => onDelete(benchmark.id)}
-          aria-label={t("benchmarks.delete")}
-        >
-          <Trash2 className="size-4" />
-        </Button>
-      </div>
-      <div className="mt-2 text-sm">
-        <span className="font-medium">{benchmark.result}</span>
-        {t(`benchmarks.resultUnits.${benchmark.type}`) && (
-          <span className="text-muted-foreground ml-1">
-            {t(`benchmarks.resultUnits.${benchmark.type}`)}
-          </span>
-        )}
-      </div>
-      {benchmark.derivedVma && (
-        <div className="mt-2 flex items-center gap-2">
-          <span className="text-sm">
-            {t("benchmarks.derivedVma")}: {benchmark.derivedVma} km/h
-          </span>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => onUseVma(benchmark.derivedVma!)}
-          >
-            {t("benchmarks.useVma")}
-          </Button>
-        </div>
-      )}
-      {benchmark.notes && (
-        <p className="mt-1 text-xs text-muted-foreground">{benchmark.notes}</p>
-      )}
     </div>
   );
 }
@@ -887,6 +983,11 @@ function BenchmarkCard({
 // ---------------------------------------------------------------------------
 // Tab 4: PersonalRecordsSection
 // ---------------------------------------------------------------------------
+
+interface RecordRow {
+  record: PersonalRecordEntry;
+  originalIndex: number;
+}
 
 function PersonalRecordsSection({
   profile,
@@ -926,6 +1027,11 @@ function PersonalRecordsSection({
     setPrLabel("");
   }
 
+  function openDialog() {
+    resetDialog();
+    setDialogOpen(true);
+  }
+
   function handleAdd() {
     const totalSec = fieldsToSeconds(prHours, prMinutes, prSeconds);
     if (totalSec <= 0) return;
@@ -955,7 +1061,7 @@ function PersonalRecordsSection({
   // We need the original index for deletion (since we sort for display)
   // Map sorted records back to their original indices
   const originalRecords = profile?.personalRecords ?? [];
-  const sortedWithIndex = records.map((r) => ({
+  const sortedWithIndex: RecordRow[] = records.map((r) => ({
     record: r,
     originalIndex: originalRecords.indexOf(r),
   }));
@@ -966,77 +1072,107 @@ function PersonalRecordsSection({
     return distance;
   }
 
+  const columns: ResponsiveTableColumn<RecordRow>[] = [
+    {
+      key: "distance",
+      header: t("records.distance"),
+      hideOnMobile: true,
+      cell: ({ record }) => getDistanceLabel(record.distance),
+    },
+    {
+      key: "time",
+      header: t("records.time"),
+      className: "zn-num__num",
+      cell: ({ record }) => formatTime(record.timeSeconds),
+    },
+    {
+      key: "date",
+      header: t("records.date"),
+      className: "zn-num__num",
+      cell: ({ record }) =>
+        record.date ?? <span className="zn-faint">{NOT_SET}</span>,
+    },
+    {
+      key: "label",
+      header: t("records.label"),
+      cell: ({ record }) =>
+        record.label ?? <span className="zn-faint">{NOT_SET}</span>,
+    },
+    {
+      key: "provenance",
+      header: t("records.provenance"),
+      cell: ({ record }) => (
+        <Badge variant="outline">
+          {t(`records.provenances.${record.provenance}`)}
+        </Badge>
+      ),
+    },
+    {
+      key: "actions",
+      header: <span className="sr-only">{t("records.delete")}</span>,
+      className: "zn-num__rowaction",
+      cell: ({ record, originalIndex }) => (
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={() => handleDelete(originalIndex)}
+          aria-label={`${t("records.delete")} · ${getDistanceLabel(record.distance)}`}
+        >
+          <Trash2 />
+        </Button>
+      ),
+    },
+  ];
+
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <Target className="size-5" />
-              {t("records.title")}
-            </CardTitle>
-            <CardDescription>{t("records.description")}</CardDescription>
-          </div>
-          <Button
-            size="sm"
-            onClick={() => {
-              resetDialog();
-              setDialogOpen(true);
-            }}
-          >
-            <Plus className="size-4 mr-2" />
-            {t("records.add")}
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        {sortedWithIndex.length === 0 ? (
-          <p className="text-sm text-muted-foreground py-4 text-center">
-            {t("records.empty")}
-          </p>
-        ) : (
-          <div className="space-y-3">
-            {sortedWithIndex.map(({ record, originalIndex }) => (
-              <div
-                key={`${record.distance}-${originalIndex}`}
-                className="border rounded-lg p-4 flex items-center justify-between"
-              >
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">
-                      {getDistanceLabel(record.distance)}
-                    </span>
-                    <Badge variant="outline">
-                      {t(`records.provenances.${record.provenance}`)}
-                    </Badge>
-                  </div>
-                  <div className="text-sm mt-1">
-                    {formatTime(record.timeSeconds)}
-                    {record.date && (
-                      <span className="text-muted-foreground ml-2">
-                        {record.date}
-                      </span>
-                    )}
-                    {record.label && (
-                      <span className="text-muted-foreground ml-2">
-                        &middot; {record.label}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleDelete(originalIndex)}
-                  aria-label={t("records.delete")}
-                >
-                  <Trash2 className="size-4" />
-                </Button>
-              </div>
-            ))}
-          </div>
-        )}
-      </CardContent>
+    <div
+      className="zn-stack"
+      style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+    >
+      <PanelHead
+        title={t("records.title")}
+        description={t("records.description")}
+        meta={
+          sortedWithIndex.length > 0
+            ? t("records.count", { count: sortedWithIndex.length })
+            : undefined
+        }
+        action={
+          sortedWithIndex.length > 0 ? (
+            <Button size="sm" onClick={openDialog}>
+              <Plus />
+              {t("records.add")}
+            </Button>
+          ) : undefined
+        }
+      />
+
+      {sortedWithIndex.length === 0 ? (
+        <EmptyState
+          variant="not-started"
+          icon={Target}
+          title={t("records.emptyTitle")}
+          description={t("records.empty", {
+            distances: RACE_DISTANCES.length,
+          })}
+          action={
+            <Button onClick={openDialog}>
+              <Plus />
+              {t("records.add")}
+            </Button>
+          }
+        />
+      ) : (
+        <ResponsiveTable<RecordRow>
+          data={sortedWithIndex}
+          columns={columns}
+          rowKey={({ record, originalIndex }) =>
+            `${record.distance}-${originalIndex}`
+          }
+          caption={t("records.title")}
+          mobileCardTitle={({ record }) => getDistanceLabel(record.distance)}
+        />
+      )}
 
       {/* Add dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -1044,13 +1180,16 @@ function PersonalRecordsSection({
           <DialogHeader>
             <DialogTitle>{t("records.add")}</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-1.5 block">
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+          >
+            <div className="zn-num__field">
+              <label className="zn-label" htmlFor="pr-distance">
                 {t("records.distance")}
               </label>
               <Select value={prDistance} onValueChange={setPrDistance}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger id="pr-distance" className="w-full">
                   <SelectValue placeholder={t("records.selectDistance")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -1067,27 +1206,23 @@ function PersonalRecordsSection({
             </div>
 
             {prDistance === "other" && (
-              <div>
-                <label className="text-sm font-medium mb-1.5 block">
+              <div className="zn-num__field">
+                <label className="zn-label" htmlFor="pr-custom">
                   {t("records.customDistance")}
                 </label>
                 <input
+                  id="pr-custom"
                   type="text"
                   value={prCustom}
                   onChange={(e) => setPrCustom(e.target.value)}
                   placeholder={t("records.customDistancePlaceholder")}
-                  className={cn(
-                    INPUT_CLASS,
-                    "border-input focus-visible:ring-ring/50",
-                  )}
+                  className="zn-num__input"
                 />
               </div>
             )}
 
-            <div>
-              <label className="text-sm font-medium mb-1.5 block">
-                {t("records.time")}
-              </label>
+            <div className="zn-num__field">
+              <span className="zn-label">{t("records.time")}</span>
               <TimeInputs
                 hours={prHours}
                 minutes={prMinutes}
@@ -1101,30 +1236,29 @@ function PersonalRecordsSection({
               />
             </div>
 
-            <div>
-              <label className="text-sm font-medium mb-1.5 block">
+            <div className="zn-num__field">
+              <label className="zn-label" htmlFor="pr-date">
                 {t("records.date")}
               </label>
               <DateInput
+                id="pr-date"
                 value={prDate}
                 onChange={(e) => setPrDate(e.target.value)}
                 max={TODAY_ISO}
               />
             </div>
 
-            <div>
-              <label className="text-sm font-medium mb-1.5 block">
+            <div className="zn-num__field">
+              <label className="zn-label" htmlFor="pr-label">
                 {t("records.label")}
               </label>
               <input
+                id="pr-label"
                 type="text"
                 value={prLabel}
                 onChange={(e) => setPrLabel(e.target.value)}
                 placeholder={t("records.labelPlaceholder")}
-                className={cn(
-                  INPUT_CLASS,
-                  "border-input focus-visible:ring-ring/50",
-                )}
+                className="zn-num__input"
               />
             </div>
           </div>
@@ -1139,13 +1273,13 @@ function PersonalRecordsSection({
                 (prDistance === "other" && !prCustom.trim())
               }
             >
-              <Save className="size-4 mr-2" />
+              <Save />
               {t("records.add")}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </Card>
+    </div>
   );
 }
 
@@ -1173,6 +1307,8 @@ export function RunnerProfilePage() {
     if (updated) setProfile(updated);
   };
 
+  const testCount = profile?.benchmarks.length ?? 0;
+
   return (
     <>
       <SEOHead
@@ -1180,19 +1316,70 @@ export function RunnerProfilePage() {
         description={t("seo.description")}
         noindex={true}
       />
-      <div className="py-8 max-w-2xl mx-auto">
-        <div className="mb-6">
-          <div className="flex items-center gap-3 mb-2">
-            <UserRound className="size-7 text-primary shrink-0" />
-            <EditorialTitle as="h1" size="md">{t("title")}</EditorialTitle>
+
+      <div className="zn-num">
+        {/* The four numbers everything else is computed from, next to the
+            title that names them. */}
+        <section
+          className="zn-split zn-num__head"
+          style={{ "--split": "1fr 380px" } as CSSProperties}
+        >
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+          >
+            <span className="zn-kicker">{t("kicker")}</span>
+            <h1 className="zn-display" data-level="2">
+              {t("title")}
+            </h1>
+            <p className="zn-body zn-body--lead zn-num__lede">
+              {t("description")}
+            </p>
           </div>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground">
-            {t("description")}
-          </FadeUp>
-        </div>
+
+          <div className="zn-num__stats">
+            {/* The one value the five other screens are computed from, so it
+                takes the full ink inversion rather than a tint. */}
+            <StatBlock
+              tone="ink"
+              value={profile?.vma != null ? String(profile.vma) : NOT_SET}
+              label={t("stats.vma")}
+              footnote={
+                testCount > 0
+                  ? t("stats.vmaFoot", { count: testCount })
+                  : undefined
+              }
+            />
+            <StatBlock
+              tone="card"
+              value={profile?.fcMax != null ? String(profile.fcMax) : NOT_SET}
+              label={t("stats.fcMax")}
+            />
+            <StatBlock
+              tone="card"
+              size="sm"
+              value={
+                profile?.currentWeeklyKm != null
+                  ? String(profile.currentWeeklyKm)
+                  : NOT_SET
+              }
+              label={t("stats.weekly")}
+            />
+            <StatBlock
+              tone="card"
+              size="sm"
+              value={
+                profile?.currentLongRunKm != null
+                  ? String(profile.currentLongRunKm)
+                  : NOT_SET
+              }
+              label={t("stats.longRun")}
+            />
+          </div>
+        </section>
 
         <Tabs defaultValue="base">
-          <TabsList className="w-full grid grid-cols-5 mb-6">
+          <TabsList className="zn-num__tabs">
             <TabsTrigger value="base">{t("tabs.base")}</TabsTrigger>
             <TabsTrigger value="references">{t("tabs.references")}</TabsTrigger>
             <TabsTrigger value="benchmarks">{t("tabs.benchmarks")}</TabsTrigger>
@@ -1200,35 +1387,32 @@ export function RunnerProfilePage() {
             <TabsTrigger value="commute">{t("tabs.commute")}</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="base">
-            <BaseDataSection
-              profile={profile}
-              onSave={(p) => setProfile(p)}
-            />
+          <TabsContent value="base" className="zn-num__panel">
+            <BaseDataSection profile={profile} onSave={(p) => setProfile(p)} />
           </TabsContent>
 
-          <TabsContent value="references">
+          <TabsContent value="references" className="zn-num__panel">
             <PerformanceReferencesSection
               profile={profile}
               onUpdate={reloadProfile}
             />
           </TabsContent>
 
-          <TabsContent value="benchmarks">
+          <TabsContent value="benchmarks" className="zn-num__panel">
             <BenchmarkHistorySection
               profile={profile}
               onUpdate={reloadProfile}
             />
           </TabsContent>
 
-          <TabsContent value="records">
+          <TabsContent value="records" className="zn-num__panel">
             <PersonalRecordsSection
               profile={profile}
               onUpdate={reloadProfile}
             />
           </TabsContent>
 
-          <TabsContent value="commute">
+          <TabsContent value="commute" className="zn-num__panel">
             <CommuteSection />
           </TabsContent>
         </Tabs>

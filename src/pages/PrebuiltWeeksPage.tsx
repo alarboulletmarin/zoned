@@ -3,11 +3,13 @@ import { useTranslation } from "react-i18next";
 import { ArrowLeft } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo";
-import { cn } from "@/lib/utils";
 import { PrebuiltWeekCard } from "@/components/domain/PrebuiltWeekCard";
 import { getAllPrebuiltWeeks } from "@/data/prebuilt-weeks";
-import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
 
+/**
+ * The ten ready-made weeks, as a catalogue — the same shape as the prebuilt
+ * plans index and as the library: count, title, one sentence, card grid.
+ */
 export function PrebuiltWeeksPage() {
   const { t } = useTranslation("library");
 
@@ -28,43 +30,39 @@ export function PrebuiltWeeksPage() {
           ],
         }}
       />
-      <div className="py-8">
-        {/* Back */}
-        <Button variant="ghost" size="sm" asChild className="mb-6">
+
+      <div className="zn-pw">
+        <Button variant="ghost" size="sm" asChild className="zn-pw__back">
           <Link to="/weeks/new">
-            <ArrowLeft className="mr-2 size-4" />
+            <ArrowLeft size={16} />
             {t("weekly.prebuilt.back")}
           </Link>
         </Button>
 
-        {/* Header */}
-        <div className="mb-8">
-          <EditorialTitle as="h1" className="mb-2">
-            {t("weekly.prebuilt.title")}
-          </EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-muted-foreground text-lg max-w-2xl">
-            {t("weekly.prebuilt.subtitle")}
-          </FadeUp>
-        </div>
+        <section className="zn-pw__band zn-pw__band--first">
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-6)" } as React.CSSProperties}
+          >
+            <span className="zn-kicker">
+              {t("weekly.prebuilt.available", { count: weeks.length })}
+            </span>
+            <h1 className="zn-display" data-level="2">
+              {t("weekly.prebuilt.title")}
+            </h1>
+            <p className="zn-body zn-body--lead zn-pw__lede">
+              {t("weekly.prebuilt.subtitle")}
+            </p>
+          </div>
+        </section>
 
-        {/* Grid — mobile-first: 1 column, then 2 from sm. */}
-        <StaggerGrid
-          className={cn(
-            "grid gap-4",
-            "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
-          )}
-        >
-          {weeks.map((week) => (
-            <StaggerItem key={week.id}>
-              <PrebuiltWeekCard week={week} />
-            </StaggerItem>
-          ))}
-        </StaggerGrid>
-
-        {/* Stats */}
-        <div className="mt-8 text-center text-sm text-muted-foreground">
-          {t("weekly.prebuilt.available", { count: weeks.length })}
-        </div>
+        <section className="zn-pw__band">
+          <div className="zn-grid">
+            {weeks.map((week) => (
+              <PrebuiltWeekCard key={week.id} week={week} />
+            ))}
+          </div>
+        </section>
       </div>
     </>
   );

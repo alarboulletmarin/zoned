@@ -1,60 +1,38 @@
-import { useEffect } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
-import { Sparkles, Rocket, RefreshCw } from "@/components/icons";
-import { Badge } from "@/components/ui/badge";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
+import { Button } from "@/components/ui/button";
 import { changelogVersions } from "@/data/changelog";
 import type { ChangeType, ChangelogItem } from "@/data/changelog";
 import { useWhatsNew } from "@/hooks/useWhatsNew";
 import { usePickLang } from "@/lib/i18n-utils";
 
-const changeTypeConfig: Record<
-  ChangeType,
-  { color: string; dotColor: string; icon?: React.ComponentType<{ className?: string; size?: number | string }> }
-> = {
-  added: {
-    color: "text-green-600 dark:text-green-400",
-    dotColor: "bg-green-500",
-    icon: Sparkles,
-  },
-  changed: {
-    color: "text-blue-600 dark:text-blue-400",
-    dotColor: "bg-blue-500",
-    icon: RefreshCw,
-  },
-  fixed: {
-    color: "text-amber-600 dark:text-amber-400",
-    dotColor: "bg-amber-500",
-  },
-  performance: {
-    color: "text-purple-600 dark:text-purple-400",
-    dotColor: "bg-purple-500",
-    icon: Rocket,
-  },
-};
+/** How many releases the page opens with. The rest is one click away. */
+const VISIBLE_RELEASES = 5;
 
 export function ChangelogPage() {
-  const { t, i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation(["common", "content"]);
   const pickLang = usePickLang();
   const { markAsSeen } = useWhatsNew();
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     markAsSeen();
   }, [markAsSeen]);
 
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr + "T00:00:00");
-    return new Intl.DateTimeFormat(i18n.language, {
+  const formatDate = (dateStr: string) =>
+    new Intl.DateTimeFormat(i18n.language, {
       year: "numeric",
       month: "long",
       day: "numeric",
-    }).format(date);
-  };
+    }).format(new Date(dateStr + "T00:00:00"));
 
-  const getChangeTypeLabel = (type: ChangeType): string => {
-    return t(`content:changelog.${type}`);
-  };
+  // 37 releases is a long page and most of it is history. The recent ones are
+  // what a returning user came for; the rest is named and counted, not hidden.
+  const releases = showAll
+    ? changelogVersions
+    : changelogVersions.slice(0, VISIBLE_RELEASES);
+  const hidden = changelogVersions.length - releases.length;
 
   return (
     <>
@@ -70,84 +48,98 @@ export function ChangelogPage() {
           ],
         }}
       />
-      <div className="py-8 space-y-8 max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center space-y-4">
-          <EditorialTitle as="h1">{t("content:changelog.title")}</EditorialTitle>
-          <FadeUp as="p" delay={0.1} className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t("content:changelog.subtitle")}
-          </FadeUp>
-        </div>
 
-        {/* Timeline */}
-        <StaggerGrid className="space-y-10">
-          {changelogVersions.map((version) => (
-            <StaggerItem key={version.version}>
-            <div className="space-y-4">
-              {/* Version header */}
-              <div className="flex items-center gap-3">
-                <Badge className="text-sm px-3 py-1">
+      <div className="zn-log">
+        <section className="zn-section zn-section--first">
+          <div
+            className="zn-stack"
+            style={{ "--gap": "var(--sp-10)" } as CSSProperties}
+          >
+            <span className="zn-kicker">
+              {t("content:changelogPage.releases", {
+                n: changelogVersions.length,
+              })}
+            </span>
+            <h1 className="zn-display" data-level="2">
+              {t("content:changelog.title")}
+            </h1>
+            <p className="zn-body zn-body--lead zn-measure">
+              {t("content:changelog.subtitle")}
+            </p>
+          </div>
+        </section>
+
+        {releases.map((version) => {
+          const groups = Object.entries(version.changes) as [
+            ChangeType,
+            ChangelogItem[],
+          ][];
+
+          return (
+            <section
+              key={version.version}
+              className="zn-section zn-split"
+              style={
+                {
+                  "--split": "200px 1fr",
+                  "--gap": "var(--sp-15)",
+                } as CSSProperties
+              }
+              aria-labelledby={`release-${version.version}`}
+            >
+              <div
+                className="zn-stack"
+                style={{ "--gap": "var(--sp-3)" } as CSSProperties}
+              >
+                <h2 id={`release-${version.version}`} className="zn-log__version">
                   v{version.version}
-                </Badge>
-                <span className="text-sm text-muted-foreground">
+                </h2>
+                <span className="zn-caption zn-faint">
                   {formatDate(version.date)}
                 </span>
               </div>
 
-              {/* Change sections */}
-              <div className="space-y-5 pl-2 border-l-2 border-border ml-3">
-                {(
-                  Object.entries(version.changes) as [
-                    ChangeType,
-                    ChangelogItem[],
-                  ][]
-                ).map(([type, items]) => {
-                  const config = changeTypeConfig[type];
-                  const Icon = config.icon;
-
-                  return (
-                    <div key={type} className="pl-6 space-y-2">
-                      <h3
-                        className={`flex items-center gap-2 text-sm font-semibold ${config.color}`}
-                      >
-                        {Icon ? (
-                          <Icon className="size-4" />
-                        ) : (
-                          <span
-                            className={`size-2.5 rounded-full ${config.dotColor}`}
-                          />
-                        )}
-                        {getChangeTypeLabel(type)}
-                      </h3>
-                      <ul className="space-y-1.5">
-                        {items.map((item, idx) => (
-                          <li
-                            key={idx}
-                            className="flex items-start gap-2 text-sm text-muted-foreground"
-                          >
-                            <span className="mt-1.5 shrink-0 size-1.5 rounded-full bg-current opacity-40" />
-                            <span>
-                              {pickLang(item, "category") && (
-                                <Badge
-                                  variant="outline"
-                                  className="mr-2 text-[10px] px-1.5 py-0"
-                                >
-                                  {pickLang(item, "category")}
-                                </Badge>
-                              )}
-                              {pickLang(item, "text")}
+              <div
+                className="zn-stack"
+                style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+              >
+                {groups.map(([type, items]) => (
+                  <div
+                    key={type}
+                    className="zn-stack"
+                    style={{ "--gap": "var(--sp-5)" } as CSSProperties}
+                  >
+                    <span className="zn-kicker">
+                      {t(`content:changelog.${type}`)} · {items.length}
+                    </span>
+                    <ul className="zn-log__group">
+                      {items.map((item, idx) => (
+                        <li key={idx} className="zn-log__entry">
+                          {pickLang(item, "category") ? (
+                            <span className="zn-kicker zn-kicker--xs">
+                              {pickLang(item, "category")}
                             </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  );
-                })}
+                          ) : null}
+                          <span className="zn-body zn-body--sm zn-muted">
+                            {pickLang(item, "text")}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
-            </div>
-            </StaggerItem>
-          ))}
-        </StaggerGrid>
+            </section>
+          );
+        })}
+
+        {hidden > 0 ? (
+          <section className="zn-section">
+            <Button variant="outline" onClick={() => setShowAll(true)}>
+              {t("content:changelogPage.showOlder", { n: hidden })}
+            </Button>
+          </section>
+        ) : null}
       </div>
     </>
   );

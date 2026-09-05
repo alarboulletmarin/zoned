@@ -1,9 +1,12 @@
 {
   "calculateurs": {
     "title": "Calculateurs",
-    "description": "Tous les outils de calcul pour vos entraînements",
-    "explore": "Ouvrir",
+    "description": "Convertis une allure, estime un chrono, pose tes zones : chaque outil calcule sur ton appareil.",
+    "explore": "Ouvrir l'outil",
     "comingSoon": "Bientôt",
+    "kicker": "{{tools}} outils · {{groups}} familles",
+    "groupCount_one": "{{count}} outil",
+    "groupCount_other": "{{count}} outils",
     "groups": {
       "benchmarks": "Tes références",
       "pace": "Allures & conversions",
@@ -21,7 +24,8 @@
       "seoAppDescription": "Calculez vos 6 zones de fréquence cardiaque et d'allure depuis votre VMA ou FCmax",
       "seoBreadcrumb": "Zones d'entraînement",
       "title": "Calculateur de zones d'entraînement",
-      "description": "Entrez votre fréquence cardiaque maximale (FCmax) ou votre VMA pour calculer vos 6 zones d'entraînement personnalisées avec les plages de fréquence cardiaque et les allures cibles."
+      "description": "Entre ta FCmax ou ta VMA : les six zones, leurs plages de fréquence et leurs allures cibles suivent.",
+      "kicker": "Zones Z1 à Z6"
     },
     "paces": {
       "seoTitle": "Calculateur d'Allures de Course",
@@ -30,7 +34,8 @@
       "seoAppDescription": "Estimez vos temps de course du 5K au marathon à partir de votre VMA",
       "seoBreadcrumb": "Calculateur d'allures",
       "title": "Calculateur d'allures de course",
-      "description": "Entrez votre VMA pour estimer vos allures de course et vos temps prévisionnels du 5 km au marathon."
+      "description": "Entre ta VMA : tes temps prévisionnels du 5 km au marathon se calculent, allure par allure.",
+      "kicker": "5 km → marathon"
     },
     "converter": {
       "seoTitle": "Convertisseur d'allures",
@@ -290,9 +295,10 @@
     "shareLink": "Lien",
     "shared": {
       "title": "Séance partagée",
-      "subtitle": "Cette séance a été partagée avec vous. Ajoutez-la à vos séances pour la modifier ou l'exporter.",
+      "subtitle": "Quelqu'un t'a envoyé cette séance. Ajoute-la à tes séances pour la modifier ou l'exporter.",
       "add": "Ajouter à mes séances",
-      "invalid": "Ce lien de partage est invalide ou incomplet."
+      "invalid": "Le lien est incomplet, sans doute coupé au copier-coller. Tes séances enregistrées sont intactes.",
+      "invalidTitle": "Ce lien de partage est incomplet"
     },
     "parameters": {
       "title": "Paramètres",

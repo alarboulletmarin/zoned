@@ -299,3 +299,47 @@ vouvoiement (33 occurrences de « vous » contre 1 de « tu »). Aucune chaîne 
 lot ne dépassait les longueurs, donc aucune n'a été réécrite, et le handoff
 demande que la bascule d'un fichier se fasse en une fois. À faire avec l'écran
 « plan ».
+
+### Lot 9 — Les atomes éditoriaux ✅
+
+Un trou dans le découpage : `src/components/editorial/` n'était dans aucun lot,
+et **56 fichiers** en dépendent. `EditorialTitle` codait en dur
+`font-sans font-semibold italic` — l'ancien display de l'app. Un seul correctif
+a basculé les 56 pages sur Bricolage Grotesque.
+
+Tout ce dossier était du mouvement décoratif : titre qui monte au défilement,
+grilles en cascade, compteurs animés, et une `InteractiveCard` qui soulevait la
+carte de 3 px, l'agrandissait de 2 % et promenait un dégradé radial sous le
+curseur. Le système interdit les quatre. Les composants restent, signatures
+intactes — c'est ce qui évite d'éditer 56 sites d'appel — et rendent du DOM
+simple. **`framer-motion` disparaît de l'app.**
+
+### Lot 10 — La palette ✅
+
+Le crème kraft du bundle a été neutralisé à la demande : page `#F6F5F2`, cartes
+en blanc franc, encre `#171614`. La refonte tient sur le trait, pas sur la
+teinte du fond, donc rien du système ne bouge. Les hex exportés de la rampe sont
+recalculés sur le nouveau papier.
+
+### Lot 11 — Les cinq écrans maquettés ✅
+
+Séance, plan (générateur / calendrier / prêt-à-l'emploi), comprendre, chiffres,
+réglages — 21 pages. `pages/` passe de 9 923 utilitaires Tailwind à 4 517 ;
+l'app entière de 13 966 à 10 327.
+
+`fr/plan.json` est passé entièrement au tutoiement, comme le handoff le demande
+— en une fois, sans renommer ni supprimer une clé.
+
+Cinq régressions rattrapées après revue, dont deux qui comptaient vraiment :
+
+- **La page réglages affirmait « pas de tracker » et « aucune donnée ne quitte
+  l'appareil »**, alors que `<Analytics />` de Vercel est monté dans `App.tsx`.
+  La refonte avait supprimé la mention existante. C'était une fausse promesse de
+  confidentialité ; elle est rétablie, et le titre ne surpromet plus.
+- **`FreePlanCreatePage` posait `role="radiogroup"` sur des boutons** sans les
+  flèches ni l'arrêt de tabulation unique que ce rôle promet — exactement le
+  défaut corrigé sur `segmented` au lot 2. Un lecteur d'écran annonçait une
+  touche qui ne faisait rien.
+
+Plus une interpolation cassée qui imprimait `{{tools}}` littéralement sur le hub
+des calculateurs.

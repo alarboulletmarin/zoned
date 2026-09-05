@@ -1,107 +1,81 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, Zap, CalendarRange, BookOpen } from "@/components/icons";
+import type { CSSProperties } from "react";
+import { ArrowLeft } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { DoorCard } from "@/components/domain/DoorCard";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp, StaggerGrid, StaggerItem } from "@/components/editorial";
+import { useAppStats } from "@/hooks/useAppStats";
 
+/**
+ * The mode chooser: three doors, one per way of getting a plan.
+ *
+ * Nothing is generated here — the screen's whole job is to name the three
+ * routes honestly and get out of the way, which is what DoorCard is for.
+ */
 export function PlanNewPage() {
-  const { t } = useTranslation("common");
+  const { t } = useTranslation(["plan", "common"]);
+  const stats = useAppStats();
 
   return (
     <>
       <SEOHead
-        title={t("seo.planNew")}
-        description={t("seo.planNewDesc")}
+        title={t("common:seo.planNew")}
+        description={t("common:seo.planNewDesc")}
         canonical="/plan/new"
       />
-      <div className="py-8">
-        <div className="max-w-4xl mx-auto space-y-6">
-          {/* Back */}
-          <Button variant="ghost" size="sm" asChild>
+
+      <div className="zn-wiz">
+        <div className="zn-stack" style={{ "--gap": "var(--sp-11)" } as CSSProperties}>
+          <Button variant="ghost" size="sm" asChild className="zn-wiz__lone">
             <Link to="/plans">
-              <ArrowLeft className="mr-2 size-4" />
-              {t("plans.backToPlans")}
+              <ArrowLeft />
+              {t("common:plans.backToPlans")}
             </Link>
           </Button>
 
-          {/* Title */}
-          <div className="text-center space-y-2">
-            <EditorialTitle as="h1" size="md">
-              {t("plans.createPlan")}
-            </EditorialTitle>
-            <FadeUp as="p" delay={0.1} className="text-muted-foreground">
-              {t("plans.choosePlanType")}
-            </FadeUp>
+          <div className="zn-stack" style={{ "--gap": "var(--sp-6)" } as CSSProperties}>
+            <span className="zn-kicker">{t("newPlan.kicker")}</span>
+            <h1 className="zn-display" data-level="2">
+              {t("newPlan.title")}
+            </h1>
+            <p
+              className="zn-body zn-body--lead zn-measure"
+              style={{ "--measure": "54ch" } as CSSProperties}
+            >
+              {t("newPlan.lede")}
+            </p>
           </div>
-
-          {/* Cards */}
-          <StaggerGrid className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-            {/* Assisted plan */}
-            <StaggerItem>
-              <Link to="/plan/new/assisted" className="block h-full">
-                <Card interactive className="h-full bg-gradient-to-br from-primary/10 dark:from-primary/20 to-transparent border-border/50 hover:shadow-md hover:-translate-y-1 hover:border-foreground/40 transition-all duration-200">
-                  <CardContent className="p-4 sm:p-6 flex items-center gap-4 sm:flex-col sm:text-center">
-                    <div className="size-10 sm:size-16 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                      <Zap className="size-5 sm:size-8 text-primary" />
-                    </div>
-                    <div className="space-y-1 sm:space-y-2 min-w-0">
-                      <h2 className="text-base sm:text-lg font-semibold">
-                        {t("plans.assistedPlan")}
-                      </h2>
-                      <p className="text-xs sm:text-sm text-muted-foreground">
-                        {t("plans.assistedPlanDesc")}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            </StaggerItem>
-
-            {/* Free plan */}
-            <StaggerItem>
-              <Link to="/plan/new/free" className="block h-full">
-                <Card interactive className="h-full bg-gradient-to-br from-zone-2/10 dark:from-zone-2/20 to-transparent border-border/50 hover:shadow-md hover:-translate-y-1 hover:border-foreground/40 transition-all duration-200">
-                  <CardContent className="p-4 sm:p-6 flex items-center gap-4 sm:flex-col sm:text-center">
-                    <div className="size-10 sm:size-16 rounded-full bg-zone-2/10 flex items-center justify-center shrink-0">
-                      <CalendarRange className="size-5 sm:size-8 text-zone-2" />
-                    </div>
-                    <div className="space-y-1 sm:space-y-2 min-w-0">
-                      <h2 className="text-base sm:text-lg font-semibold">
-                        {t("plans.freePlan")}
-                      </h2>
-                      <p className="text-xs sm:text-sm text-muted-foreground">
-                        {t("plans.freePlanDesc")}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            </StaggerItem>
-
-            {/* Pre-built plans */}
-            <StaggerItem>
-              <Link to="/plan/new/prebuilt" className="block h-full">
-                <Card interactive className="h-full bg-gradient-to-br from-zone-5/10 dark:from-zone-5/20 to-transparent border-border/50 hover:shadow-md hover:-translate-y-1 hover:border-foreground/40 transition-all duration-200">
-                  <CardContent className="p-4 sm:p-6 flex items-center gap-4 sm:flex-col sm:text-center">
-                    <div className="size-10 sm:size-16 rounded-full bg-zone-5/10 flex items-center justify-center shrink-0">
-                      <BookOpen className="size-5 sm:size-8 text-zone-5" />
-                    </div>
-                    <div className="space-y-1 sm:space-y-2 min-w-0">
-                      <h2 className="text-base sm:text-lg font-semibold">
-                        {t("plans.prebuiltPlans")}
-                      </h2>
-                      <p className="text-xs sm:text-sm text-muted-foreground">
-                        {t("plans.prebuiltPlansDesc")}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            </StaggerItem>
-          </StaggerGrid>
         </div>
+
+        <section className="zn-wiz__band" aria-labelledby="plan-new-doors">
+          <h2 id="plan-new-doors" className="sr-only">
+            {t("newPlan.doorsTitle")}
+          </h2>
+          <div className="zn-grid">
+            <DoorCard
+              to="/plan/new/assisted"
+              kicker={t("newPlan.assistedKicker")}
+              title={t("newPlan.assistedTitle")}
+              body={t("newPlan.assistedBody")}
+              cta={t("newPlan.assistedCta")}
+            />
+            <DoorCard
+              to="/plan/new/free"
+              kicker={t("newPlan.freeKicker")}
+              title={t("newPlan.freeTitle")}
+              body={t("newPlan.freeBody")}
+              cta={t("newPlan.freeCta")}
+            />
+            <DoorCard
+              to="/plan/new/prebuilt"
+              kicker={t("newPlan.prebuiltKicker", { n: stats.plans })}
+              title={t("newPlan.prebuiltTitle")}
+              body={t("newPlan.prebuiltBody")}
+              cta={t("newPlan.prebuiltCta", { n: stats.plans })}
+            />
+          </div>
+        </section>
       </div>
     </>
   );

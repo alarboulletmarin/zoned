@@ -1,41 +1,69 @@
+import type { CSSProperties } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ChevronLeft, ChevronRight, Clock, BookOpen, Home, Loader2, Lightbulb, AlertTriangle, Info, Activity } from "@/components/icons";
+import { BookOpen, ChevronLeft, ChevronRight, Home } from "@/components/icons";
+import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { SEOHead } from "@/components/seo";
-import { EditorialTitle, FadeUp } from "@/components/editorial";
+import { StatBlock } from "@/components/domain/StatBlock";
+import { ZoneScale } from "@/components/visualization";
 import { useArticle, useAdjacentArticles } from "@/hooks/useArticles";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { ReadingProgress } from "@/components/domain/ReadingProgress";
 import { TableOfContents } from "@/components/domain/TableOfContents";
-import { cn } from "@/lib/utils";
-import { usePickLang } from "@/lib/i18n-utils";
+import { usePickLang, useIsEnglish } from "@/lib/i18n-utils";
 import { RelatedContent } from "@/components/domain/RelatedContent";
 
+/** The four kinds of pulled-out block an article can carry. */
+type CalloutKind = "tip" | "warning" | "key" | "stat";
+type CalloutLabels = Record<CalloutKind, string>;
+
 /**
- * Simple Markdown renderer
- * Handles: headers, bold, links, lists, tables, horizontal rules
+ * The article renderer.
+ *
+ * Handles the markdown-ish subset the article files actually use: headings,
+ * bold, links, wiki-links, bullet and numbered lists, tables, rules, plain
+ * blockquotes and the four marker-prefixed callouts. Everything it emits
+ * carries a `.zn-prose__*` class — the reading treatment lives in
+ * `src/styles/components/learn.css` and is shared with the guides.
+ *
+ * `labels` is passed in rather than translated here: this is a plain function,
+ * not a component, so it has no hook of its own.
  */
-function renderMarkdown(content: string): React.ReactNode {
+function renderMarkdown(
+  content: string,
+  labels: CalloutLabels,
+): React.ReactNode {
   const lines = content.split("\n");
   const elements: React.ReactNode[] = [];
   let inTable = false;
   let tableRows: string[][] = [];
   let inList = false;
+  let listOrdered = false;
   let listItems: string[] = [];
   let key = 0;
 
   const flushList = () => {
     if (inList && listItems.length > 0) {
+      const items = listItems.map((item, i) => (
+        <li key={i}>{parseInline(item)}</li>
+      ));
       elements.push(
-        <ul key={key++} className="list-disc list-inside space-y-1 my-4 text-muted-foreground">
-          {listItems.map((item, i) => (
-            <li key={i}>{parseInline(item)}</li>
-          ))}
-        </ul>
+        listOrdered ? (
+          <ol key={key++} className="zn-prose__list" data-ordered="true">
+            {items}
+          </ol>
+        ) : (
+          <ul key={key++} className="zn-prose__list">
+            {items}
+          </ul>
+        ),
       );
       listItems = [];
       inList = false;
+      listOrdered = false;
     }
   };
 
@@ -44,12 +72,12 @@ function renderMarkdown(content: string): React.ReactNode {
       const header = tableRows[0];
       const body = tableRows.slice(2); // Skip header and separator
       elements.push(
-        <div key={key++} className="my-4 overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
+        <div key={key++} className="zn-scroll-x">
+          <table className="zn-prose__table">
             <thead>
-              <tr className="border-b">
+              <tr>
                 {header.map((cell, i) => (
-                  <th key={i} className="text-left py-2 px-3 font-semibold">
+                  <th key={i} scope="col">
                     {parseInline(cell.trim())}
                   </th>
                 ))}
@@ -57,24 +85,30 @@ function renderMarkdown(content: string): React.ReactNode {
             </thead>
             <tbody>
               {body.map((row, i) => (
-                <tr key={i} className="border-b border-border/50">
+                <tr key={i}>
                   {row.map((cell, j) => (
-                    <td key={j} className="py-2 px-3 text-muted-foreground">
-                      {parseInline(cell.trim())}
-                    </td>
+                    <td key={j}>{parseInline(cell.trim())}</td>
                   ))}
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
+        </div>,
       );
       tableRows = [];
       inTable = false;
     }
   };
 
-  const parseInline = (text: string): React.ReactNode => {
+  const parseInline = (raw: string): React.ReactNode => {
+    // A wiki-link names a glossary entry by its id. The id is not prose, so
+    // the brackets come off and the hyphens become spaces — the auto-linker
+    // then matches the phrase exactly as it does everywhere else, instead of
+    // the reader being shown "[[seuil-lactique]]" mid-sentence.
+    const text = raw.replace(/\[\[([^\]]+)\]\]/g, (_, id: string) =>
+      id.replace(/-/g, " "),
+    );
+
     // Split on bold markers and links, producing React elements
     const parts: React.ReactNode[] = [];
     let partKey = 0;
@@ -97,9 +131,9 @@ function renderMarkdown(content: string): React.ReactNode {
       } else if (match[4] !== undefined && match[5] !== undefined) {
         // Link: [text](url)
         parts.push(
-          <a key={partKey++} href={match[5]} className="text-primary underline hover:no-underline">
+          <a key={partKey++} href={match[5]} className="zn-prose__link">
             {match[4]}
-          </a>
+          </a>,
         );
       }
 
@@ -120,52 +154,21 @@ function renderMarkdown(content: string): React.ReactNode {
     return <>{parts}</>;
   };
 
-  const renderCallout = (type: "tip" | "warning" | "key" | "stat", text: string, calloutKey: number): React.ReactNode => {
-    const config = {
-      tip: {
-        icon: Lightbulb,
-        bg: "bg-emerald-50 dark:bg-emerald-950/30",
-        border: "border-emerald-200 dark:border-emerald-800",
-        iconColor: "text-emerald-600 dark:text-emerald-400",
-        title: "Conseil",
-      },
-      warning: {
-        icon: AlertTriangle,
-        bg: "bg-amber-50 dark:bg-amber-950/30",
-        border: "border-amber-200 dark:border-amber-800",
-        iconColor: "text-amber-600 dark:text-amber-400",
-        title: "Attention",
-      },
-      key: {
-        icon: Info,
-        bg: "bg-blue-50 dark:bg-blue-950/30",
-        border: "border-blue-200 dark:border-blue-800",
-        iconColor: "text-blue-600 dark:text-blue-400",
-        title: "À retenir",
-      },
-      stat: {
-        icon: Activity,
-        bg: "bg-purple-50 dark:bg-purple-950/30",
-        border: "border-purple-200 dark:border-purple-800",
-        iconColor: "text-purple-600 dark:text-purple-400",
-        title: "Chiffre clé",
-      },
-    };
-
-    const { icon: Icon, bg, border, iconColor, title } = config[type];
-
-    return (
-      <div key={calloutKey} className={`my-6 rounded-lg border ${border} ${bg} p-4`}>
-        <div className="flex gap-3">
-          <Icon className={`size-5 shrink-0 mt-0.5 ${iconColor}`} />
-          <div className="flex-1 min-w-0">
-            <p className="font-semibold text-sm mb-1">{title}</p>
-            <div className="text-sm text-muted-foreground leading-relaxed">{parseInline(text)}</div>
-          </div>
-        </div>
-      </div>
-    );
-  };
+  /**
+   * A pulled-out block. One treatment for the four kinds — two ink rules and a
+   * mono label — because the label is the only thing that differs, and a
+   * coloured panel per kind would spend four accents on a page allowed one.
+   */
+  const renderCallout = (
+    kind: CalloutKind,
+    text: string,
+    calloutKey: number,
+  ): React.ReactNode => (
+    <aside key={calloutKey} className="zn-prose__callout" data-kind={kind}>
+      <span className="zn-kicker zn-prose__callout-label">{labels[kind]}</span>
+      <p className="zn-prose__callout-text">{parseInline(text)}</p>
+    </aside>
+  );
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -186,7 +189,7 @@ function renderMarkdown(content: string): React.ReactNode {
       const firstLine = blockLines[0];
 
       // Detect callout type from first line
-      let calloutType: "tip" | "warning" | "key" | "stat" | null = null;
+      let calloutType: CalloutKind | null = null;
       let markerLength = 0;
 
       if (firstLine.startsWith("\u{1F4A1}")) {
@@ -224,12 +227,9 @@ function renderMarkdown(content: string): React.ReactNode {
         // Regular blockquote (no recognized marker)
         const text = blockLines.join(" ").trim();
         elements.push(
-          <blockquote
-            key={key++}
-            className="my-6 border-l-4 border-border pl-4 italic text-muted-foreground"
-          >
+          <blockquote key={key++} className="zn-prose__quote">
             {parseInline(text)}
-          </blockquote>
+          </blockquote>,
         );
       }
       continue;
@@ -239,7 +239,7 @@ function renderMarkdown(content: string): React.ReactNode {
     if (line.trim() === "---") {
       flushList();
       flushTable();
-      elements.push(<hr key={key++} className="my-6 border-border" />);
+      elements.push(<hr key={key++} className="zn-prose__rule" />);
       continue;
     }
 
@@ -250,13 +250,7 @@ function renderMarkdown(content: string): React.ReactNode {
         inTable = true;
         tableRows = [];
       }
-      const cells = line.split("|").filter((c) => c.trim() !== "");
-      // Skip separator row (contains only dashes)
-      if (cells.every((c) => /^[\s-]+$/.test(c))) {
-        tableRows.push(cells);
-      } else {
-        tableRows.push(cells);
-      }
+      tableRows.push(line.split("|").filter((c) => c.trim() !== ""));
       continue;
     } else if (inTable) {
       flushTable();
@@ -273,9 +267,9 @@ function renderMarkdown(content: string): React.ReactNode {
         .replace(/[^a-z0-9\s-]/g, "")
         .replace(/\s+/g, "-");
       elements.push(
-        <h2 key={key++} id={headerId} className="text-xl font-bold mt-8 mb-4 scroll-mt-16">
+        <h2 key={key++} id={headerId} className="zn-prose__h2">
           {headerText}
-        </h2>
+        </h2>,
       );
       continue;
     }
@@ -283,49 +277,53 @@ function renderMarkdown(content: string): React.ReactNode {
     if (line.startsWith("### ")) {
       flushList();
       elements.push(
-        <h3 key={key++} className="text-lg font-semibold mt-6 mb-3">
+        <h3 key={key++} className="zn-prose__h3">
           {line.slice(4)}
-        </h3>
+        </h3>,
       );
       continue;
     }
 
-    // Lists
+    // Bullet list
     if (line.trim().startsWith("- ")) {
+      if (inList && listOrdered) flushList();
       inList = true;
+      listOrdered = false;
       listItems.push(line.trim().slice(2));
       continue;
-    } else if (inList && line.trim() === "") {
-      flushList();
+    }
+
+    // Numbered list
+    const numbered = line.trim().match(/^\d+\.\s(.*)$/);
+    if (numbered) {
+      if (inList && !listOrdered) flushList();
+      inList = true;
+      listOrdered = true;
+      listItems.push(numbered[1]);
       continue;
     }
 
-    // Numbered lists
-    if (/^\d+\.\s/.test(line.trim())) {
-      flushList();
-      const match = line.trim().match(/^\d+\.\s(.*)$/);
-      if (match) {
-        if (!inList) {
-          inList = true;
-          listItems = [];
-        }
-        listItems.push(match[1]);
-      }
-      continue;
-    }
-
-    // Empty line
+    // Empty line. A blank line between two items does NOT end the list — the
+    // article files space their numbered steps out, and closing the list on
+    // every gap turned one sequence of four steps into four one-item lists.
     if (line.trim() === "") {
-      flushList();
+      const next = lines.slice(i + 1).find((l) => l.trim() !== "");
+      const continues =
+        inList &&
+        next !== undefined &&
+        (listOrdered
+          ? /^\d+\.\s/.test(next.trim())
+          : next.trim().startsWith("- "));
+      if (!continues) flushList();
       continue;
     }
 
     // Regular paragraph
     flushList();
     elements.push(
-      <p key={key++} className="my-4 text-muted-foreground leading-relaxed">
+      <p key={key++} className="zn-prose__p">
         {parseInline(line)}
-      </p>
+      </p>,
     );
   }
 
@@ -337,18 +335,41 @@ function renderMarkdown(content: string): React.ReactNode {
 
 export function ArticlePage() {
   const { slug } = useParams<{ slug: string }>();
-  const { t } = useTranslation("common");
+  const { t } = useTranslation(["content", "common"]);
   const pick = usePickLang();
+  const isEn = useIsEnglish();
 
-  const { article, isLoading } = useArticle(slug);
+  const { article, isLoading, error } = useArticle(slug);
   const { prev, next } = useAdjacentArticles(slug);
 
   // Loading state
   if (isLoading) {
     return (
-      <div className="py-8 max-w-3xl mx-auto">
-        <div className="flex items-center justify-center py-24">
-          <Loader2 className="size-8 animate-spin text-muted-foreground" />
+      <div className="zn-article">
+        <div className="zn-article__loading">
+          <Spinner size={22} label={t("content:article.loading")} />
+        </div>
+      </div>
+    );
+  }
+
+  // The text did not arrive. Say so, say what is still reachable, and give the
+  // way back — a redirect here would look like the article never existed.
+  if (error) {
+    return (
+      <div className="zn-article">
+        <div className="zn-article__head">
+          <Alert
+            kind="error"
+            title={t("content:article.error.title")}
+            action={
+              <Button variant="outline" asChild>
+                <Link to="/learn">{t("content:learn.backToHub")}</Link>
+              </Button>
+            }
+          >
+            {t("content:article.error.text")}
+          </Alert>
         </div>
       </div>
     );
@@ -369,12 +390,24 @@ export function ArticlePage() {
   const publishedAt = `${article.publishedAt}T08:00:00+01:00`;
   const updatedAt = `${article.updatedAt || article.publishedAt}T08:00:00+01:00`;
 
+  const updatedLabel = new Date(updatedAt).toLocaleDateString(
+    isEn ? "en-US" : "fr-FR",
+    { year: "numeric", month: "long", day: "numeric" },
+  );
+
   // Word count drives Article richness for Google. Strip markdown noise first.
   const wordCount = content
     .replace(/[#>*_`\-|]/g, " ")
     .replace(/\[(.*?)\]\(.*?\)/g, "$1")
     .split(/\s+/)
     .filter((w) => w.length > 0).length;
+
+  const calloutLabels: CalloutLabels = {
+    tip: t("content:article.callout.tip"),
+    warning: t("content:article.callout.warning"),
+    key: t("content:article.callout.key"),
+    stat: t("content:article.callout.stat"),
+  };
 
   return (
     <>
@@ -520,124 +553,169 @@ export function ArticlePage() {
         ]}
       />
       <ReadingProgress />
-      <div className="py-8 max-w-3xl mx-auto xl:max-w-5xl">
-      {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-        <Link to="/" aria-label={t("content:article.home")} className="hover:text-foreground transition-colors">
-          <Home className="size-4" aria-hidden="true" />
-        </Link>
-        <ChevronRight className="size-3" aria-hidden="true" />
-        <Link to="/learn" className="hover:text-foreground transition-colors">
-          {t("content:learn.title")}
-        </Link>
-        <ChevronRight className="size-3" aria-hidden="true" />
-        <span className="text-foreground truncate" aria-current="page">{title}</span>
-      </nav>
 
-      {/* Header */}
-      <header className="mb-8 max-w-3xl">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-          <BookOpen className="size-4" />
-          <span>{t(`content:learn.categories.${article.category}`)}</span>
-          <span>-</span>
-          <Clock className="size-3" />
-          <span>{article.readTime} min {t("content:learn.readTime")}</span>
-        </div>
-        <EditorialTitle as="h1" className="mb-3">{title}</EditorialTitle>
-        <FadeUp as="p" delay={0.1} className="text-lg text-muted-foreground">
-          <GlossaryLinkedText text={description} />
-        </FadeUp>
-      </header>
+      <div className="zn-article">
+        {/* 1 — where you are, what this is, and what it is called */}
+        <section
+          className="zn-stack zn-article__head"
+          style={{ "--gap": "var(--sp-10)" } as CSSProperties}
+        >
+          <nav
+            aria-label={t("content:article.breadcrumb")}
+            className="zn-row zn-article__crumbs"
+            style={{ "--gap": "var(--sp-4)" } as CSSProperties}
+          >
+            <Link
+              to="/"
+              aria-label={t("content:article.home")}
+              className="zn-article__crumb"
+            >
+              <Home size={15} />
+            </Link>
+            <ChevronRight size={13} />
+            <Link to="/learn" className="zn-body zn-body--sm zn-article__crumb">
+              {t("content:learn.title")}
+            </Link>
+            <ChevronRight size={13} />
+            <span
+              className="zn-body zn-body--sm zn-fill zn-truncate"
+              aria-current="page"
+            >
+              {title}
+            </span>
+          </nav>
 
-      {/* Mobile TOC */}
-      <div className="xl:hidden">
-        <TableOfContents content={content} />
-      </div>
-
-      {/* Content + Desktop TOC sidebar */}
-      <div className="xl:flex xl:gap-10">
-        <article className="prose prose-neutral dark:prose-invert max-w-3xl flex-1 min-w-0">
-          {renderMarkdown(content)}
-        </article>
-
-        {/* Desktop sticky TOC */}
-        <aside className="hidden xl:block w-56 shrink-0">
-          <div className="sticky top-20">
-            <TableOfContents content={content} />
+          <div
+            className="zn-cluster"
+            style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+          >
+            <Badge variant="outline">
+              {t(`content:learn.categories.${article.category}`)}
+            </Badge>
+            <span className="zn-mono zn-article__meta">
+              {t("content:article.updatedOn", { date: updatedLabel })}
+            </span>
           </div>
-        </aside>
-      </div>
 
-      {/* CTA to My Zones (for zones article) */}
-      {article.slug === "zones" && (
-        <div className="mt-8 p-6 bg-muted rounded-lg text-center">
-          <p className="text-muted-foreground mb-4">
-            {t("content:learn.zonesCtaText")}
+          <h1 className="zn-display zn-article__title" data-level="2">
+            {title}
+          </h1>
+
+          <p className="zn-body zn-body--lead zn-article__lede">
+            <GlossaryLinkedText text={description} />
           </p>
-          <Button asChild>
-            <Link to="/my-zones">{t("content:learn.zonesCtaButton")}</Link>
-          </Button>
+        </section>
+
+        {/* 2 — the reading column, and the rail that says how long and where.
+            The rail is first in the DOM so it lands above the article on a
+            phone and beside it on a desktop. */}
+        <div
+          className="zn-split zn-article__body"
+          style={
+            {
+              "--split": "1fr 300px",
+              "--gap": "var(--sp-18)",
+            } as CSSProperties
+          }
+        >
+          <aside
+            className="zn-stack zn-article__rail"
+            style={{ "--gap": "var(--sp-11)" } as CSSProperties}
+          >
+            <StatBlock
+              tone="card"
+              size="sm"
+              value={`${article.readTime} ${t("common:units.minutes")}`}
+              label={t("content:article.readTimeLabel")}
+            />
+            <TableOfContents content={content} />
+          </aside>
+
+          <article className="zn-prose zn-measure">
+            {renderMarkdown(content, calloutLabels)}
+          </article>
         </div>
-      )}
 
-      {/* Related Content */}
-      <div className="mt-10 max-w-3xl">
-        <RelatedContent source={{ type: "article", id: article.slug }} />
-      </div>
-
-      {/* Navigation */}
-      <nav className="mt-12 pt-8 border-t flex justify-between gap-4">
-        {prev ? (
-          <Link
-            to={`/learn/${prev.slug}`}
-            className={cn(
-              "flex-1 group p-4 rounded-lg border hover:bg-muted transition-colors",
-              "flex flex-col gap-1"
-            )}
+        {/* 3 — the zones article ends on the scale it explained, and on the one
+            filled action this screen spends */}
+        {article.slug === "zones" && (
+          <section
+            className="zn-section zn-stack"
+            style={{ "--gap": "var(--sp-11)" } as CSSProperties}
           >
-            <span className="text-xs text-muted-foreground flex items-center gap-1">
-              <ChevronLeft className="size-3" />
-              {t("content:learn.prevArticle")}
-            </span>
-            <span className="font-medium group-hover:text-primary transition-colors">
-              {pick(prev, "title")}
-            </span>
-          </Link>
-        ) : (
-          <div className="flex-1" />
+            <ZoneScale />
+            <p className="zn-body zn-measure">
+              {t("content:learn.zonesCtaText")}
+            </p>
+            <Button asChild className="zn-article__cta">
+              <Link to="/my-zones">{t("content:learn.zonesCtaButton")}</Link>
+            </Button>
+          </section>
         )}
 
-        {next ? (
-          <Link
-            to={`/learn/${next.slug}`}
-            className={cn(
-              "flex-1 group p-4 rounded-lg border hover:bg-muted transition-colors",
-              "flex flex-col gap-1 text-right"
-            )}
-          >
-            <span className="text-xs text-muted-foreground flex items-center gap-1 justify-end">
-              {t("content:learn.nextArticle")}
-              <ChevronRight className="size-3" />
-            </span>
-            <span className="font-medium group-hover:text-primary transition-colors">
-              {pick(next, "title")}
-            </span>
-          </Link>
-        ) : (
-          <div className="flex-1" />
-        )}
-      </nav>
+        {/* 4 — what to read next. Related content, the two neighbours, the way
+            back — one band, so an article with no neighbours never leaves a
+            rule with nothing under it. */}
+        <section
+          className="zn-section zn-stack"
+          style={{ "--gap": "var(--sp-15)" } as CSSProperties}
+        >
+          <RelatedContent source={{ type: "article", id: article.slug }} />
 
-      {/* Back to Learn */}
-      <div className="mt-8 text-center">
-        <Button variant="outline" asChild>
-          <Link to="/learn">
-            <BookOpen className="size-4 mr-2" />
-            {t("content:learn.backToHub")}
-          </Link>
-        </Button>
+          {(prev || next) && (
+            <nav
+              className="zn-grid"
+              aria-label={t("content:article.pager")}
+              style={{ "--cols": 2 } as CSSProperties}
+            >
+              {prev && (
+                <Link
+                  to={`/learn/${prev.slug}`}
+                  className="zn-article__navcard"
+                  data-dir="prev"
+                >
+                  <span
+                    className="zn-kicker zn-row zn-article__navdir"
+                    style={{ "--gap": "var(--sp-3)" } as CSSProperties}
+                  >
+                    <ChevronLeft size={12} />
+                    {t("content:learn.prevArticle")}
+                  </span>
+                  <span className="zn-article__navname">
+                    {pick(prev, "title")}
+                  </span>
+                </Link>
+              )}
+
+              {next && (
+                <Link
+                  to={`/learn/${next.slug}`}
+                  className="zn-article__navcard"
+                  data-dir="next"
+                >
+                  <span
+                    className="zn-kicker zn-row zn-article__navdir"
+                    style={{ "--gap": "var(--sp-3)" } as CSSProperties}
+                  >
+                    {t("content:learn.nextArticle")}
+                    <ChevronRight size={12} />
+                  </span>
+                  <span className="zn-article__navname">
+                    {pick(next, "title")}
+                  </span>
+                </Link>
+              )}
+            </nav>
+          )}
+
+          <Button variant="outline" asChild className="zn-article__cta">
+            <Link to="/learn">
+              <BookOpen size={16} />
+              {t("content:learn.backToHub")}
+            </Link>
+          </Button>
+        </section>
       </div>
-    </div>
     </>
   );
 }
