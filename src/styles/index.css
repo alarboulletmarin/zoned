@@ -77,6 +77,7 @@
 @import "./components/scroll-to-top.css" layer(components);
 @import "./components/segmented.css" layer(components);
 @import "./components/select.css" layer(components);
+@import "./components/search.css" layer(components);
 @import "./components/session.css" layer(components);
 @import "./components/settings.css" layer(components);
 @import "./components/sheet.css" layer(components);
@@ -92,6 +93,8 @@
 @import "./components/toast.css" layer(components);
 @import "./components/tooltip.css" layer(components);
 @import "./components/topbar.css" layer(components);
+@import "./components/visualization.css" layer(components);
+@import "./components/weekly.css" layer(components);
 @import "./components/wordmark.css" layer(components);
 @import "./components/workout-card.css" layer(components);
 @import "./components/workout.css" layer(components);

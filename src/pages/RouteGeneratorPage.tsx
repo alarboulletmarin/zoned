@@ -58,17 +58,6 @@ const ElevationChart = lazy(() =>
   })),
 );
 
-/**
- * RouteMap still ships its own Tailwind base — `h-72 sm:h-96 lg:h-[28rem]`
- * plus a rounded border. It is a visualization component and out of this
- * screen's scope, and Tailwind's utilities layer beats the component layer
- * this family's CSS lives in, so the override has to be Tailwind too. These
- * are the only utilities left on the four route screens: the frame, the
- * radius and the clipping are `.zn-rt__map`'s job, and inside the stage the
- * map takes the whole cell.
- */
-const MAP_FILL = "h-full sm:h-full lg:h-full rounded-none border-0";
-
 function MapSkeleton({ className }: { className?: string }) {
   return <Skeleton className={cn("zn-rt__mapskel", className)} />;
 }
@@ -436,7 +425,6 @@ export function RouteGeneratorPage() {
           onWaypointMove={onWaypointMove}
           onWaypointInsert={onWaypointInsert}
           onWaypointRemove={onWaypointRemove}
-          className={MAP_FILL}
         />
       </Suspense>
 

@@ -148,17 +148,17 @@ export function MiniElevationProfile({ workout, className, height = 60 }: MiniEl
   const gainDisplay = Math.round(maxAlt - minAlt);
 
   return (
-    <div className={cn("relative w-full", className)}>
+    <div className={cn("zn-elev-mini", className)}>
       <svg
         viewBox={`0 0 200 ${height}`}
         preserveAspectRatio="none"
-        className="w-full block"
+        className="zn-elev-mini__svg"
         style={{ height }}
         role="img"
         aria-label={`Profil altimétrique : +${gainDisplay} m sur ${Math.round(totalMin)} min`}
       >
-        <path d={areaPath} fill="currentColor" className="text-primary/15" />
-        <path d={path} fill="none" stroke="currentColor" strokeWidth={1.5} className="text-primary" />
+        <path d={areaPath} className="zn-elev-mini__area" />
+        <path d={path} strokeWidth={1.5} className="zn-elev-mini__line" />
       </svg>
     </div>
   );

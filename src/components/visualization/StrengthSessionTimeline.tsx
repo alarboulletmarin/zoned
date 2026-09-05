@@ -9,7 +9,7 @@
  * - Summary bar with exercise count, total sets, total duration
  */
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, type CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import type { StrengthWorkoutTemplate, StrengthBlock, StrengthExercise } from "@/types/strength";
@@ -162,8 +162,8 @@ export function StrengthSessionTimeline({ workout, className }: StrengthSessionT
 
   if (segments.length === 0) {
     return (
-      <div className={cn("rounded-lg bg-muted/50 p-4 text-center", className)}>
-        <p className="text-sm text-muted-foreground italic">
+      <div className={cn("zn-viz-empty", className)}>
+        <p className="zn-viz-empty__text">
           {t("detail.loadingExercises")}
         </p>
       </div>
@@ -172,20 +172,20 @@ export function StrengthSessionTimeline({ workout, className }: StrengthSessionT
 
   return (
     <TooltipProvider delayDuration={100}>
-      <div className={cn("w-full", className)}>
+      <div className={cn("zn-timeline", className)}>
         {/* Summary bar */}
-        <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3">
-          <span className="font-medium text-foreground">
+        <div className="zn-timeline__summary">
+          <strong>
             {totalExercises} {t("detail.totalExercises")}
-          </span>
+          </strong>
           <span>{totalSets} {t("detail.totalSets")}</span>
           <span>{t("detail.estimatedDuration", { minutes: totalMinutes })}</span>
         </div>
 
         {/* Timeline bar */}
         <div
-          className="relative flex items-end h-32 md:h-44 rounded-xl overflow-hidden"
-          style={{ backgroundColor: "color-mix(in srgb, var(--muted) 40%, transparent)" }}
+          className="zn-timeline__plot"
+          data-size="sm"
           role="img"
           aria-label={t("detail.sessionTimeline")}
         >
@@ -214,20 +214,16 @@ export function StrengthSessionTimeline({ workout, className }: StrengthSessionT
               >
                 <TooltipTrigger asChild>
                   <div
-                    className={cn(
-                      "relative transition-all duration-200 cursor-pointer rounded-t-sm",
-                      "hover:brightness-110 hover:z-10",
-                      isHovered && "brightness-110"
-                    )}
-                    style={{
-                      width: `${segment.widthPercent}%`,
-                      height: `${heightPercent}%`,
-                      backgroundColor: segment.color,
-                      marginLeft: index > 0 ? "2px" : undefined,
-                      borderLeft: isPhaseChange
-                        ? "3px solid rgba(0,0,0,0.3)"
-                        : undefined,
-                    }}
+                    className="zn-timeline__seg"
+                    data-phase-change={isPhaseChange || undefined}
+                    data-hovered={isHovered || undefined}
+                    style={
+                      {
+                        "--flex": segment.widthPercent,
+                        "--h": `${heightPercent}%`,
+                        "--fill": segment.color,
+                      } as CSSProperties
+                    }
                     onMouseEnter={() => setHoveredIndex(index)}
                     onMouseLeave={() => setHoveredIndex(null)}
                     onClick={() =>
@@ -236,37 +232,32 @@ export function StrengthSessionTimeline({ workout, className }: StrengthSessionT
                   >
                     {/* Hover label */}
                     {isHovered && segment.widthPercent > 4 && (
-                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground text-background text-[10px] px-2 py-1 rounded font-bold whitespace-nowrap z-20 pointer-events-none">
+                      <div className="zn-timeline__flag">
                         {segment.exerciseName}
                       </div>
                     )}
 
                     {/* Superset indicator */}
                     {segment.supersetGroup && (
-                      <div
-                        className="absolute inset-x-0 top-0 h-1.5"
-                        style={{
-                          background: "linear-gradient(90deg, transparent 40%, hsl(var(--foreground)/0.3) 50%, transparent 60%)",
-                        }}
-                      />
+                      <div className="zn-timeline__superset" />
                     )}
                   </div>
                 </TooltipTrigger>
-                <TooltipContent side="top" className="max-w-xs">
-                  <div className="space-y-1">
-                    <p className="font-medium text-sm">{segment.exerciseName}</p>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <TooltipContent side="top">
+                  <div className="zn-timeline__tip">
+                    <p className="zn-timeline__tip-title">{segment.exerciseName}</p>
+                    <div className="zn-timeline__tip-meta">
                       <span
-                        className="inline-block w-3 h-3 rounded-full shrink-0"
-                        style={{ backgroundColor: segment.color }}
+                        className="zn-timeline__tip-dot"
+                        style={{ "--fill": segment.color } as CSSProperties}
                       />
-                      <span className="capitalize">{t(`detail.${segment.phase === "main" ? "mainSet" : segment.phase}`)}</span>
-                      <span className="font-mono">
+                      <span>{t(`detail.${segment.phase === "main" ? "mainSet" : segment.phase}`)}</span>
+                      <span>
                         {segment.sets}x{segment.reps}
                       </span>
                     </div>
                     {segment.supersetGroup && (
-                      <p className="text-xs text-muted-foreground">
+                      <p className="zn-timeline__tip-note">
                         {t("detail.superset")} {segment.supersetGroup}
                       </p>
                     )}
@@ -278,11 +269,9 @@ export function StrengthSessionTimeline({ workout, className }: StrengthSessionT
         </div>
 
         {/* Phase labels */}
-        <div className="flex justify-between text-xs text-muted-foreground mt-3 px-1">
+        <div className="zn-timeline__phases">
           <span>{t("detail.warmup")}</span>
-          <span className="font-mono font-bold text-foreground">
-            ~{totalMinutes} min
-          </span>
+          <strong>~{totalMinutes} min</strong>
           <span>{t("detail.cooldown")}</span>
         </div>
       </div>

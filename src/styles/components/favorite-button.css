@@ -18,6 +18,24 @@
   inset: -6px;
 }
 
+/* The heart runs a notch larger than the button family's glyph. Everywhere else
+   an icon is a mark beside a word; here it IS the control, and at the button
+   sheet's 17px it read as a speck in a 40px circle. The two sizes are the ones
+   the Tailwind base stated, carried over unrounded.
+
+   Both selectors match .zn-btn[data-size]'s weight exactly, so this sheet has
+   to be imported after button.css — it is. */
+.zn-favorite[data-size] > svg {
+  inline-size: 20px;
+  block-size: 20px;
+}
+
+/* The dense card variant: a 32px circle cannot hold a 20px heart. */
+.zn-favorite[data-size="icon-sm"] > svg {
+  inline-size: 16px;
+  block-size: 16px;
+}
+
 .zn-favorite[aria-pressed="true"] {
   color: var(--accent);
 }

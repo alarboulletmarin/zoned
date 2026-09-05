@@ -235,64 +235,51 @@ export function CommandPalette() {
         <DialogOverlay />
         <DialogPrimitive.Content
           aria-describedby={undefined}
-          className={cn(
-            "fixed left-1/2 top-[15%] z-50 w-[calc(100%-2rem)] max-w-lg -translate-x-1/2",
-            "rounded-lg border bg-background shadow-lg",
-            "sm:top-[20%] sm:w-full",
-            "max-h-[80vh] flex flex-col",
-            "data-[state=open]:animate-in data-[state=closed]:animate-out",
-            "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-            "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-            "data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]",
-            "data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]",
-            "duration-200"
-          )}
+          className="zn-cmdk"
           onKeyDown={handleKeyDown}
         >
           {/* Accessible title (visually hidden) */}
           <DialogTitle className="sr-only">{t("actions.search")}</DialogTitle>
 
           {/* Search input */}
-          <div className="flex items-center gap-3 px-4 py-3 border-b">
-            <Search className="size-5 text-muted-foreground flex-shrink-0" />
+          <div className="zn-cmdk__field">
+            <Search className="zn-cmdk__search" />
             <input
               ref={inputRef}
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t("search.placeholder")}
-              className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+              className="zn-cmdk__input"
             />
             {isLoading ? (
-              <Loader2 className="size-4 text-muted-foreground animate-spin" />
+              <Loader2 className="zn-cmdk__spin" />
             ) : query ? (
               <button
                 type="button"
                 onClick={() => setQuery("")}
-                className="p-1 rounded hover:bg-accent"
+                className="zn-cmdk__clear"
                 aria-label="Effacer la recherche"
               >
-                <X className="size-4 text-muted-foreground" />
+                <X />
               </button>
             ) : (
-              <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-                {shortcutKey}
-              </kbd>
+              <kbd className="zn-cmdk__kbd">{shortcutKey}</kbd>
             )}
           </div>
 
           {/* Results */}
-          <div className="flex-1 overflow-y-auto p-2" ref={resultsRef} aria-live="polite" aria-atomic="false">
+          <div className="zn-cmdk__results" ref={resultsRef} aria-live="polite" aria-atomic="false">
             {/* Loading state */}
             {query.trim() && isLoading && (
-              <div className="px-3 py-8 text-center">
-                <Loader2 className="size-5 mx-auto text-muted-foreground animate-spin" />
+              <div className="zn-cmdk__state">
+                <Loader2 className="zn-cmdk__spin" />
               </div>
             )}
 
             {/* No results */}
             {query.trim() && !isLoading && searchResults && searchResults.total === 0 && (
-              <div className="px-3 py-8 text-center text-sm text-muted-foreground" role="status">
+              <div className="zn-cmdk__state" role="status">
                 {t("search.noResults")}
               </div>
             )}
@@ -303,11 +290,8 @@ export function CommandPalette() {
                 if (item.kind === "header") {
                   const Icon = item.icon;
                   return (
-                    <div
-                      key={`header-${i}`}
-                      className="px-3 pt-3 pb-1 text-xs font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"
-                    >
-                      <Icon className="size-3" />
+                    <div key={`header-${i}`} className="zn-cmdk__group zn-kicker">
+                      <Icon />
                       {item.label}
                     </div>
                   );
@@ -337,18 +321,15 @@ export function CommandPalette() {
                     data-selectable
                     onClick={() => handleNavigate(item.result.url)}
                     className={cn(
-                      "w-full flex items-center gap-3 px-3 py-2.5 text-left rounded-md transition-colors",
-                      "hover:bg-accent focus:outline-none focus:bg-accent",
-                      currentIdx === selectedIndex && "bg-accent"
+                      "zn-cmdk__item",
+                      currentIdx === selectedIndex && "zn-cmdk__item--active"
                     )}
                   >
-                    <Icon className="size-4 text-muted-foreground flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-sm truncate">{item.result.title}</div>
+                    <Icon />
+                    <div className="zn-fill">
+                      <div className="zn-cmdk__item-title zn-truncate">{item.result.title}</div>
                       {item.result.subtitle && (
-                        <div className="text-xs text-muted-foreground truncate mt-0.5">
-                          {item.result.subtitle}
-                        </div>
+                        <div className="zn-cmdk__item-sub zn-truncate">{item.result.subtitle}</div>
                       )}
                     </div>
                   </button>
@@ -358,17 +339,10 @@ export function CommandPalette() {
 
           {/* Footer with "View all" link */}
           {searchResults && searchResults.workouts.length > 0 && !isLoading && (
-            <div className="border-t p-2">
-              <button
-                type="button"
-                onClick={handleViewAll}
-                className={cn(
-                  "w-full flex items-center justify-between px-3 py-2 text-sm",
-                  "text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
-                )}
-              >
+            <div className="zn-cmdk__foot">
+              <button type="button" onClick={handleViewAll} className="zn-cmdk__viewall">
                 <span>{t("search.viewAll")}</span>
-                <ArrowRight className="size-4" />
+                <ArrowRight />
               </button>
             </div>
           )}

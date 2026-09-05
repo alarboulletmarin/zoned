@@ -1,0 +1,526 @@
+/* The standalone-week instruments: the summary strip, the 80/20 gauge, the
+ * seven-day rhythm chart and the generator rail.
+ *
+ * These four are the *contents* of the /weeks screens, whose paper — bands,
+ * session list, rail geometry, mobile dock — is already drawn by
+ * plan-weeks.css. Nothing here redraws a band or a card frame that file
+ * already owns; the summary strip is the one exception, because it is a
+ * self-contained instrument panel that also renders inside a shared-week page
+ * and a prebuilt-week page, neither of which hands it a surface.
+ *
+ * Two system rules shape almost every decision below:
+ *
+ *   THE RAMP ORDERS, IT DOES NOT NAME. Zone fills stay inline styles reading
+ *   `var(--zone-N)` — the escape hatch _layout.css blesses and 635 call sites
+ *   already use — and every screen printing them prints the ZoneScale legend
+ *   once (all four /weeks screens do).
+ *
+ *   NO STATE RESTS ON COLOUR ALONE. The polarisation verdict, the over-budget
+ *   volume and the rest day each say what they are in words or in shape, not
+ *   only in paint. That is also why the verdict word no longer hides below
+ *   640px: on a phone it was the only thing naming the state.
+ *
+ * There is no warning hue in this system. A caution is the accent on the
+ * glyph over the tinted paper of --state-warning-soft, exactly as alert.css
+ * states it; success is the one added hue, --ok.
+ */
+
+/* ── the summary strip ────────────────────────────────────────────────── */
+
+/* Metrics + gauge on one side, the rhythm chart on the other. They stack on a
+   phone and only sit side by side once the viewport can pay for a 288px
+   second column — below that the chart would be too narrow to read. */
+.zn-wk-summary {
+  display: grid;
+  gap: var(--sp-8);
+  padding: var(--sp-6);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+}
+
+@media (min-width: 640px) {
+  .zn-wk-summary {
+    padding: var(--pad-card-sm);
+  }
+}
+
+@media (min-width: 1024px) {
+  .zn-wk-summary {
+    grid-template-columns: 1fr 18rem;
+    align-items: center;
+  }
+}
+
+.zn-wk-summary__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  min-inline-size: 0;
+}
+
+/* A wrapping run of numbers, not a table: four metrics fit one line on a
+   desktop and break into two on a phone without any column bookkeeping. */
+.zn-wk-summary__metrics {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: var(--sp-4) var(--sp-10);
+}
+
+/* The over-budget line. The accent is on the glyph only — a fully vermillon
+   sentence would spend the screen's one accent on a caption. */
+.zn-wk-summary__warn {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-wk-summary__warn > svg {
+  inline-size: 14px;
+  block-size: 14px;
+  flex: none;
+  color: var(--accent);
+}
+
+/* ── one metric ───────────────────────────────────────────────────────── */
+
+/* Smaller than .zn-stat on purpose: that block is a headline number at the h1
+   step, and four of them in a strip would out-shout the week itself. */
+.zn-wk-metric {
+  min-inline-size: 0;
+}
+
+.zn-wk-metric__value {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h4);
+  line-height: 1.15;
+  letter-spacing: var(--ls-h4);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Over budget: the number itself turns, which is legal at this size and
+   weight, and the words next to it say so too. The bar below stays ink: the
+   screen already spends its one vermillon fill on the Generate call, and a
+   second one cancels the first. */
+.zn-wk-metric--alert .zn-wk-metric__value {
+  color: var(--state-danger);
+}
+
+/* Achieved against a target, read as a bar because that is how the gauge
+   below reads the same kind of fact. */
+.zn-wk-metric__track {
+  margin-block-start: var(--sp-2);
+  block-size: var(--sp-2);
+  inline-size: 100%;
+  min-inline-size: var(--sp-19);
+  overflow: hidden;
+  border-radius: var(--r-pill);
+  background: var(--surface-band);
+}
+
+.zn-wk-metric__fill {
+  block-size: 100%;
+  border-radius: var(--r-pill);
+  background: var(--ink-1);
+  transition: inline-size var(--dur-base) var(--ease-out);
+}
+
+/* ── the 80/20 gauge ──────────────────────────────────────────────────── */
+
+.zn-wk-gauge {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+}
+
+/* Wraps rather than squeezes: "Pas assez d'intensité" plus two numbers does
+   not share a 350px line with the title. */
+.zn-wk-gauge__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+/* The verdict in words, on the tinted paper of a caution. Sentence case and
+   text-face, not the mono capsule of .zn-badge: this is a short sentence, and
+   that badge is for a code. */
+.zn-wk-gauge__verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+
+  padding: var(--sp-2) var(--sp-5);
+
+  font: var(--fw-medium) var(--fs-caption) / 1.2 var(--font-text);
+  color: var(--text-body);
+  background: var(--state-warning-soft);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+.zn-wk-gauge__verdict--ok {
+  background: var(--state-success-soft);
+}
+
+.zn-wk-gauge__verdict > svg {
+  inline-size: 14px;
+  block-size: 14px;
+  flex: none;
+  color: var(--accent);
+}
+
+.zn-wk-gauge__verdict--ok > svg {
+  color: var(--state-success);
+}
+
+/* The 80 % caption rides above the bar on its own line — printed over a
+   segment it would be unreadable against half the ink ramp. */
+.zn-wk-gauge__scale {
+  position: relative;
+  block-size: var(--sp-8);
+}
+
+.zn-wk-gauge__target {
+  position: absolute;
+  inset-block-start: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.zn-wk-gauge__bar {
+  position: relative;
+}
+
+.zn-wk-gauge__track {
+  display: flex;
+  block-size: var(--sp-8);
+  overflow: hidden;
+
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+}
+
+/* Hairlines between the bands, like the phase ramp: three abutting greys of
+   the ink scale need an edge to be counted as three. */
+.zn-wk-gauge__seg + .zn-wk-gauge__seg {
+  border-inline-start: var(--bw-hair) solid var(--line-strong);
+}
+
+/* The target itself is a hole in the bar, so it is dashed — the same mark
+   this system uses for anything not yet filled. */
+.zn-wk-gauge__mark {
+  position: absolute;
+  inset-block: calc(var(--sp-2) * -1);
+  border-inline-start: var(--border-dashed);
+  pointer-events: none;
+}
+
+.zn-wk-gauge__hint {
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-wk-gauge__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-8);
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-wk-gauge__key {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+/* Outlined, like every other zone fill in this system: an unbordered dot of
+   --zone-1 is invisible on the card. */
+.zn-wk-gauge__dot {
+  inline-size: var(--sp-5);
+  block-size: var(--sp-5);
+  flex: none;
+  border: var(--bw-hair) solid var(--line-strong);
+  border-radius: var(--r-pill);
+}
+
+/* ── the seven-day rhythm ─────────────────────────────────────────────── */
+
+.zn-wk-rhythm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-inline-size: 0;
+}
+
+/* 128px is the chart's own geometry, not a spacing step: it is the height at
+   which a 20-minute day and a two-hour day are still told apart. */
+.zn-wk-rhythm__days {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-3);
+  block-size: 128px;
+}
+
+@media (min-width: 640px) {
+  .zn-wk-rhythm__days {
+    gap: var(--sp-4);
+  }
+}
+
+.zn-wk-rhythm__day {
+  display: flex;
+  flex: 1;
+  min-inline-size: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--sp-2);
+  block-size: 100%;
+}
+
+.zn-wk-rhythm__slot {
+  position: relative;
+  display: flex;
+  flex: 1;
+  inline-size: 100%;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+/* One column per day, one segment per session, stacked bottom-up. 40px caps
+   the width so a four-session week does not draw seven fat slabs. */
+.zn-wk-rhythm__col {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--sp-1);
+  inline-size: 100%;
+  max-inline-size: 40px;
+  overflow: hidden;
+  border-radius: var(--r-md) var(--r-md) 0 0;
+  transition: block-size var(--dur-base) var(--ease-out);
+}
+
+.zn-wk-rhythm__seg {
+  inline-size: 100%;
+}
+
+/* A rest day is a flat baseline, not a zero-height bar: absence has to be
+   drawn or the day reads as missing data. */
+.zn-wk-rhythm__rest {
+  inline-size: 100%;
+  max-inline-size: 40px;
+  block-size: var(--sp-2);
+  border-radius: var(--r-pill);
+  background: var(--line-axis);
+}
+
+/* ── the generator rail ───────────────────────────────────────────────── */
+
+/* A column capped to the viewport, split into a scrolling body and a pinned
+   footer: the rail is sticky, so a panel taller than the screen would put its
+   own Generate button permanently out of reach. 11rem is the page header
+   above the rail plus a bottom margin — the cap has to hold at the rail's
+   initial position, not only once it sticks. */
+.zn-wk-gen {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+}
+
+@media (min-width: 768px) {
+  .zn-wk-gen {
+    max-block-size: calc(100dvh - 11rem);
+  }
+}
+
+/* Inside the mobile "Régler" sheet the surface, the cap and the title are all
+   redundant — the sheet already is the surface and carries the title — so the
+   panel becomes a plain stack and the whole thing fits without scrolling. */
+.zn-wk-gen--bare {
+  gap: var(--sp-6);
+  overflow: visible;
+  /* The cap belongs to the sticky rail, not to the sheet: the sheet scrolls
+     itself. Without this the 768px rule above still capped the bare panel and
+     its box lied about its own height. */
+  max-block-size: none;
+  background: none;
+  border: none;
+  border-radius: 0;
+}
+
+.zn-wk-gen__title {
+  display: block;
+  padding: var(--sp-6) var(--sp-8);
+  border-block-end: var(--border-divider);
+}
+
+.zn-wk-gen__body {
+  min-block-size: 0;
+  flex: 1;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+  padding: var(--sp-8);
+}
+
+.zn-wk-gen--bare .zn-wk-gen__body {
+  flex: none;
+  overflow: visible;
+  gap: var(--sp-6);
+  padding: 0;
+}
+
+/* Pinned below the scrolling body: the primary action stays on screen
+   whatever the settings above are worth reading. */
+.zn-wk-gen__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-6) var(--sp-8);
+  border-block-start: var(--border-divider);
+}
+
+.zn-wk-gen--bare .zn-wk-gen__actions {
+  padding: 0;
+  border-block-start: none;
+}
+
+/* The panel's one call, and the escape hatch under it, both run the width of
+   the rail — a centred pill in a 340px column reads as an afterthought. */
+.zn-wk-gen__actions > .zn-btn {
+  inline-size: 100%;
+}
+
+/* The way out of a locked week: quieter than the call above it, so the panel
+   still has exactly one primary action. Three selectors deep because the
+   ghost variant sets its colour on an attribute, and this has to win whatever
+   order the two sheets are imported in. */
+.zn-btn[data-variant="ghost"].zn-wk-gen__unlock {
+  color: var(--text-muted);
+}
+
+.zn-wk-gen__hint {
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-wk-gen__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-inline-size: 0;
+}
+
+/* Presets fill in every setting below in one click. They are shortcuts, not a
+   selectable state — hence the dashed outline this system gives to a hole
+   waiting to be filled, and never the ink inversion of a chosen chip. */
+.zn-wk-gen__presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+}
+
+.zn-wk-gen__preset {
+  padding: var(--sp-3) var(--sp-6);
+
+  font: var(--type-label);
+  color: var(--text-muted);
+  background: transparent;
+  border: var(--border-dashed);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.zn-wk-gen__preset:hover {
+  color: var(--text-body);
+  border-color: var(--accent);
+}
+
+.zn-wk-gen__preset:active {
+  transform: translateY(var(--press-shift));
+}
+
+@media (pointer: coarse) {
+  .zn-wk-gen__preset {
+    min-block-size: var(--hit-min);
+  }
+}
+
+/* The volume row: its label and its current value on one baseline, the rail
+   underneath. */
+.zn-wk-gen__vol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.zn-wk-gen__volhead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+/* Two chips per line, on a phone as much as on a desktop: .zn-grid folds to
+   one column below 640px, and five stacked chips inside a sheet is a scroll. */
+.zn-wk-gen__chips {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
+}
+
+/* Composes .zn-chip from library.css for the shape, the hover, the press and
+   the 44px touch floor. Only two things differ: these fill their grid cell,
+   and they are toggles, so the ink inversion has to answer to the
+   aria-pressed they emit rather than to the aria-checked a filter emits.
+
+   Both classes on purpose: .zn-chip sets its own colour and padding at the
+   same specificity, so a single class would depend on the import order. */
+.zn-chip.zn-wk-chip {
+  inline-size: 100%;
+  min-inline-size: 0;
+  justify-content: center;
+  padding-inline: var(--sp-5);
+  color: var(--text-muted);
+}
+
+.zn-wk-chip[aria-pressed="true"] {
+  background: var(--ink-1);
+  color: var(--ink-on-dark);
+}
+
+.zn-wk-chip[aria-pressed="true"]:hover:not(:disabled) {
+  background: var(--ink-2);
+}
+
+.zn-wk-chip > svg {
+  inline-size: 14px;
+  block-size: 14px;
+  flex: none;
+}
+
+/* "Toutes" spans the row: it is the state the other chips are exceptions to,
+   not a sixth peer. */
+.zn-wk-chip--wide {
+  grid-column: 1 / -1;
+}

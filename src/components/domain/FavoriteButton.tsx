@@ -54,7 +54,7 @@ export function FavoriteButton({
       aria-label={label}
       onClick={handleClick}
     >
-      <Heart className={size === "sm" && !showLabel ? "size-4" : "size-5"} />
+      <Heart />
       {showLabel && <span className="zn-favorite__label">{label}</span>}
     </Button>
   );

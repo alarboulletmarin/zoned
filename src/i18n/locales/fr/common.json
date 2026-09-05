@@ -62,7 +62,9 @@
       "subwayMap": { "label": "Métro", "format": "Plan de métro stylisé · 1080 × 1080" },
       "cassetteTape": { "label": "K7", "format": "Cassette audio rétro · 1080 × 1080" },
       "y2kChrome": { "label": "Y2K", "format": "Chrome Frutiger Aero · 1080 × 1080" },
-      "boxingPoster": { "label": "Combat", "format": "Affiche de combat boxing · 1080 × 1080" }
+      "boxingPoster": { "label": "Combat", "format": "Affiche de combat boxing · 1080 × 1080" },
+      "paperSheet": { "label": "Papier", "format": "Papier, encre, un dessin · 1080 × 1350" },
+      "zonePlate": { "label": "Planche des zones", "format": "Les six zones dessinées · 1080 × 1080" }
     },
     "toast": {
       "shared": "Partagé via le menu de l'appareil",

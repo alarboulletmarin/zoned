@@ -3,7 +3,7 @@
  * Uses transformed data that accounts for repetitions
  */
 
-import { useMemo } from "react";
+import { useMemo, type CSSProperties } from "react";
 import type { WorkoutTemplate } from "@/types";
 import { getWorkoutDiscipline } from "@/types";
 import { transformSessionBlocks, formatDurationMinutes } from "./transforms";
@@ -33,28 +33,31 @@ export function ZoneDistribution({ workout, className }: ZoneDistributionProps) 
   }
 
   return (
-    <div className={cn("space-y-3", className)}>
+    <div className={className}>
       {/* Horizontal bars */}
-      <div className="space-y-3">
+      <div className="zn-viz-bars">
         {zoneBreakdown.map((item) => (
-          <div key={item.zone ?? "unzoned"} className="space-y-1.5">
-            <div className="flex items-baseline justify-between gap-3 text-xs">
-              <span className="font-medium truncate">
-                {item.zone != null && <span className="font-mono">Z{item.zone}</span>}
+          <div key={item.zone ?? "unzoned"} className="zn-viz-bar">
+            <div className="zn-viz-bar__head">
+              <span className="zn-viz-bar__label">
+                {item.zone != null && <span className="zn-viz-bar__code">Z{item.zone}</span>}
                 {item.zone != null && " · "}
                 {item.label}
               </span>
-              <span className="text-muted-foreground font-mono tabular-nums shrink-0">
+              <span className="zn-viz-bar__value">
                 {Math.round(item.percent)}% · {formatDurationMinutes(item.durationMin)}
               </span>
             </div>
-            <div className="h-2.5 rounded-full bg-muted overflow-hidden">
+            <div className="zn-viz-bar__track">
               <div
-                className="h-full rounded-full transition-all"
-                style={{
-                  width: `${item.percent}%`,
-                  backgroundColor: item.zone != null ? zoneColors[item.zone] : "var(--muted-foreground)",
-                }}
+                className="zn-viz-bar__fill"
+                style={
+                  {
+                    "--pct": `${item.percent}%`,
+                    "--fill":
+                      item.zone != null ? zoneColors[item.zone] : "var(--text-faint)",
+                  } as CSSProperties
+                }
               />
             </div>
           </div>
@@ -62,7 +65,7 @@ export function ZoneDistribution({ workout, className }: ZoneDistributionProps) 
       </div>
 
       {/* Total duration */}
-      <div className="text-xs text-muted-foreground text-center pt-2 border-t">
+      <div className="zn-viz-total">
         Total: {formatDurationMinutes(totalDurationMin)}
       </div>
     </div>
@@ -90,14 +93,18 @@ export function SessionIntensityBar({ workout, className }: SessionIntensityBarP
   }
 
   return (
-    <div className={cn("flex h-1 w-full overflow-hidden rounded-full bg-muted", className)}>
+    <div className={cn("zn-viz-strip", className)}>
       {zoneBreakdown.map((item) => (
         <div
           key={item.zone ?? "unzoned"}
-          style={{
-            flex: item.percent,
-            backgroundColor: item.zone != null ? zoneColors[item.zone] : "var(--muted-foreground)",
-          }}
+          className="zn-viz-strip__seg"
+          style={
+            {
+              flex: item.percent,
+              "--fill":
+                item.zone != null ? zoneColors[item.zone] : "var(--text-faint)",
+            } as CSSProperties
+          }
         />
       ))}
     </div>

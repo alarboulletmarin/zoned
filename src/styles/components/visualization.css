@@ -1,0 +1,749 @@
+/* Visualization — les figures d'une séance : la frise, les distributions et
+   les profils altimétriques.
+ *
+ * Une seule idée traverse le fichier : une figure est une feuille de papier
+ * cernée d'encre, et la donnée est peinte DEDANS. Pas de fond translucide qui
+ * flotte, pas d'ombre — une figure ne flotte pas, elle est imprimée.
+ *
+ * Ce que ce fichier ne fait PAS :
+ *
+ *   - il ne redéclare aucune teinte de zone. La rampe vit dans design/zones.css
+ *     et son miroir JS dans lib/zoneColors.ts ; les composants passent la
+ *     teinte en propriété personnalisée (--fill), exactement comme .zn-zonebar
+ *     reçoit la sienne par data-zone. Une seule source de vérité.
+ *   - il ne porte aucune branche .dark. Les deux endroits qui en avaient une
+ *     (la pente d'un profil, l'encre d'une infobulle) lisent maintenant un
+ *     token qui s'inverse tout seul.
+ *
+ * Deux marques codent la même chose deux fois, comme partout ailleurs dans le
+ * système : la densité d'encre ET la hauteur du bloc disent l'intensité, si
+ * bien que la frise survit au niveau de gris.
+ */
+
+/* ── le trou : pas de données ─────────────────────────────────────────── */
+
+/* Une figure sans données n'est pas une figure vide, c'est une absence : le
+   pointillé le dit, comme pour .zn-empty. */
+.zn-viz-empty {
+  padding: var(--sp-8);
+  text-align: center;
+
+  background: var(--surface-card);
+  border: var(--border-dashed);
+  border-radius: var(--r-lg);
+}
+
+.zn-viz-empty__text {
+  margin: 0;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+/* ── la frise de séance ───────────────────────────────────────────────── */
+
+/* Course et renforcement partagent ces classes : ce sont deux lectures de la
+   même figure — un bloc par phase, la largeur vaut le temps, la hauteur vaut
+   l'intensité. Seule la teinte du bloc diffère (rampe d'encre d'un côté,
+   groupe musculaire de l'autre) et elle arrive par --fill. */
+
+.zn-timeline {
+  inline-size: 100%;
+}
+
+/* La ligne de compte au-dessus d'une frise de renfo : nombre d'exercices,
+   séries, durée estimée. */
+.zn-timeline__summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-3) var(--sp-8);
+  margin-block-end: var(--sp-6);
+
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-timeline__summary strong {
+  font-weight: var(--fw-semibold);
+  color: var(--text-body);
+}
+
+/* Le cadre. 160px sur téléphone, 224px au-delà — la frise est le contenu
+   principal de la page séance, elle mérite sa demi-hauteur d'écran, mais pas
+   au point de pousser le reste sous la ligne de flottaison à 390px. */
+.zn-timeline__plot {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  box-sizing: border-box;
+
+  block-size: var(--zn-tl-h, 160px);
+  padding-inline: 3px;
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+/* La frise de renfo est plus courte : ses blocs codent l'intensité sur cinq
+   crans, pas six, et elle partage sa page avec la planche musculaire. */
+.zn-timeline__plot[data-size="sm"] {
+  --zn-tl-h: 128px;
+}
+
+@media (min-width: 768px) {
+  .zn-timeline__plot {
+    --zn-tl-h: 224px;
+  }
+  .zn-timeline__plot[data-size="sm"] {
+    --zn-tl-h: 176px;
+  }
+}
+
+/* Un bloc. Largeur = temps, hauteur = intensité, remplissage = teinte reçue.
+   Le contour à 1px empêche deux blocs de même zone de fusionner en une seule
+   masse ; c'est le même cerne que .zn-zonebar__block, et c'est LUI qui sépare
+   deux blocs voisins — pas une gouttière.
+
+   Le cadre n'a donc ni gap ni largeur minimale de 2px, contrairement à
+   .zn-zonebar : celle-ci porte dix blocs, la frise en porte jusqu'à
+   quatre-vingt-douze (VMA-012). À 296px de large — la mesure réelle du cadre
+   à 390px — quatre-vingt-douze planchers de 2px plus quatre-vingt-onze
+   gouttières de 2px font 366px : tous les blocs se figeaient sur leur
+   plancher, l'échauffement de 15 minutes rendait la même largeur qu'une rép
+   de 20 secondes, et les vingt-six derniers blocs tombaient sous l'overflow.
+   La largeur ne disait plus le temps. Avec le plancher à 1px et sans
+   gouttière, le minimum tombe à 92px et flex-grow rend les proportions. */
+.zn-timeline__seg {
+  position: relative;
+  flex: var(--flex, 1) 1 0;
+  min-inline-size: var(--bw-hair);
+
+  block-size: var(--h, 40%);
+
+  background: var(--fill, var(--text-faint));
+  border: var(--border-hair);
+  border-block-end: none;
+  border-radius: 2px 2px 0 0;
+
+  cursor: pointer;
+  transition: filter var(--dur-fast) var(--ease-out);
+}
+
+/* Le survol ne bouge rien : il fonce, comme un doigt qui appuie sur l'encre. */
+.zn-timeline__seg:hover,
+.zn-timeline__seg[data-hovered="true"] {
+  filter: brightness(0.9);
+  z-index: 1;
+}
+
+/* Une récupération n'est pas une zone : c'est la hachure à 45 degrés, la
+   marque que le système réserve à tout ce qui n'est pas mesuré. Même règle
+   que .zn-zonebar__block[data-zone="0"]. */
+.zn-timeline__seg[data-recovery="true"] {
+  background-color: var(--surface-card);
+  background-image: var(--zone-recovery);
+}
+
+/* Le changement de phase : un filet d'encre pleine, pas une ombre. */
+.zn-timeline__seg[data-phase-change="true"] {
+  border-inline-start: var(--border-rule);
+}
+
+/* L'étiquette de survol. Elle se pose SUR le bloc, à l'intérieur du cadre :
+   au-dessus, elle tombait sous l'overflow du cadre et ne s'est jamais vue. */
+.zn-timeline__flag {
+  position: absolute;
+  inset-block-end: 100%;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  margin-block-end: var(--sp-2);
+  z-index: 2;
+
+  padding: var(--sp-1) var(--sp-3);
+
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  border-radius: var(--r-xs);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Superset : deux exercices enchaînés. Un trait plein sur l'arête haute du
+   bloc — un lien, donc une ligne, pas un dégradé. */
+.zn-timeline__superset {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 25%;
+  block-size: var(--bw-heavy);
+  background: var(--surface-inverse);
+  border-radius: var(--r-pill);
+}
+
+/* ── l'axe des temps ──────────────────────────────────────────────────── */
+
+/* Une vraie échelle : les graduations rondes à gauche, le total à droite, là
+   où la séance se termine réellement. */
+.zn-timeline__axis {
+  position: relative;
+  block-size: var(--sp-13);
+  margin-block-start: var(--sp-2);
+  user-select: none;
+}
+
+.zn-timeline__tick,
+.zn-timeline__end {
+  position: absolute;
+  inset-block-start: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.zn-timeline__tick {
+  inset-inline-start: var(--x, 0%);
+  align-items: flex-start;
+}
+
+/* La première graduation garde son 0 aligné sur le bord ; les suivantes se
+   centrent sur leur trait. */
+.zn-timeline__tick[data-centered="true"] .zn-timeline__tick-label {
+  transform: translateX(-50%);
+}
+
+.zn-timeline__end {
+  inset-inline-end: 0;
+  align-items: flex-end;
+}
+
+.zn-timeline__tick-mark {
+  display: block;
+  inline-size: var(--bw-hair);
+  block-size: var(--sp-3);
+  background: var(--line-axis);
+}
+
+.zn-timeline__tick-label {
+  margin-block-start: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.zn-timeline__end .zn-timeline__tick-label {
+  font-weight: var(--fw-bold);
+  color: var(--text-body);
+}
+
+@media (min-width: 640px) {
+  .zn-timeline__tick-label {
+    font-size: var(--fs-mono);
+  }
+}
+
+/* Les bornes d'une frise de renfo : échauffement à gauche, retour au calme à
+   droite, la durée au milieu. */
+.zn-timeline__phases {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-block-start: var(--sp-6);
+  padding-inline: var(--sp-1);
+
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-timeline__phases strong {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-body);
+}
+
+/* ── ce que dit l'infobulle d'un bloc ─────────────────────────────────── */
+
+/* .zn-tooltip retourne la relation papier/encre : tout ce qui est écrit
+   dedans est crème sur encre. Le gris de texte secondaire y était illisible —
+   ici la hiérarchie se fait par la graisse et la casse, pas par la teinte. */
+.zn-timeline__tip {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  max-inline-size: 34ch;
+}
+
+.zn-timeline__tip-title {
+  margin: 0;
+  font: var(--type-label);
+  color: var(--text-inverse);
+}
+
+.zn-timeline__tip-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-inverse);
+}
+
+/* La pastille de zone : le seul aplat de couleur de l'infobulle, cerné de
+   crème pour qu'un Z6 (encre pleine) ne disparaisse pas dans le fond. */
+.zn-timeline__tip-dot {
+  display: block;
+  inline-size: var(--sp-5);
+  block-size: var(--sp-5);
+  flex: none;
+  background: var(--fill, transparent);
+  border: var(--bw-hair) solid var(--text-inverse);
+  border-radius: var(--r-xs);
+}
+
+.zn-timeline__tip-note {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-inverse);
+}
+
+/* ── les distributions ────────────────────────────────────────────────── */
+
+/* Une liste de barres pleine largeur : libellé et valeur sur une ligne, la
+   barre en dessous. Le format empilé, plutôt que la grille en quatre colonnes
+   de .zn-zone-row, parce qu'à 390px un libellé de zone et « 35 % · 12min » ne
+   tiennent pas côte à côte avec une piste lisible. */
+.zn-viz-bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.zn-viz-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.zn-viz-bar__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-6);
+}
+
+.zn-viz-bar__label {
+  min-inline-size: 0;
+  font: var(--type-label);
+  color: var(--text-body);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Un muscle secondaire recule d'un cran d'encre, comme .zn-muscle le fait
+   déjà pour sa pastille. */
+.zn-viz-bar[data-involvement="secondary"] .zn-viz-bar__label {
+  font-weight: var(--fw-regular);
+  color: var(--text-muted);
+}
+
+.zn-viz-bar__code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-mono);
+}
+
+.zn-viz-bar__note {
+  margin-inline-start: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-viz-bar__value {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+/* La piste est cernée : une zone à 0 % dessine quand même sa boîte au lieu de
+   disparaître. Même recette que .zn-zone-row__track, en plus fin — c'est une
+   liste de proportions, pas le tableau des zones. */
+.zn-viz-bar__track {
+  display: block;
+  block-size: var(--sp-5);
+  overflow: hidden;
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xs);
+}
+
+/* Un muscle secondaire garde sa teinte mais perd le trait plein — c'est
+   exactement ce que .zn-muscle fait de son côté, et l'implication se lit donc
+   pareil qu'on regarde la pastille ou la barre. */
+.zn-viz-bar[data-involvement="secondary"] .zn-viz-bar__track {
+  border-style: dashed;
+}
+
+.zn-viz-bar__fill {
+  display: block;
+  block-size: 100%;
+  inline-size: var(--pct, 0%);
+  background: var(--fill, var(--zone-1));
+  transition: inline-size var(--dur-slow) var(--ease-out);
+}
+
+/* La version carte : la même répartition en un seul filet de 4px, sans
+   libellé. Trop fine pour porter un cadre — un contour de 1,5px sur 4px de
+   haut ne laisserait rien de la donnée — donc elle se contente du papier
+   creux dessous, qui la borne. */
+.zn-viz-strip {
+  display: flex;
+  inline-size: 100%;
+  block-size: var(--sp-2);
+  overflow: hidden;
+
+  background: var(--surface-band);
+  border-radius: var(--r-pill);
+}
+
+.zn-viz-strip__seg {
+  background: var(--fill, var(--text-faint));
+}
+
+/* Le total, sous un filet : c'est une somme, pas une ligne de plus. */
+.zn-viz-total {
+  margin-block-start: var(--sp-6);
+  padding-block-start: var(--sp-6);
+  border-block-start: var(--border-divider);
+
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+/* ── la planche musculaire ────────────────────────────────────────────── */
+
+/* react-body-highlighter peint des attributs `fill` SVG bruts qu'aucune
+   variable CSS n'atteint : la rampe de chaleur et la teinte du corps restent
+   donc en dur dans le composant. Ce qui est autour, en revanche, est du
+   papier ordinaire. */
+.zn-musclemap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.zn-musclemap__views {
+  display: flex;
+  justify-content: center;
+  gap: var(--sp-8);
+}
+
+.zn-musclemap__view {
+  flex: 1;
+  max-inline-size: 140px;
+}
+
+.zn-musclemap__caption {
+  margin: var(--sp-2) 0 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-musclemap__legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-3) var(--sp-8);
+}
+
+.zn-musclemap__key {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-muted);
+}
+
+/* Cerné comme la pastille de .zn-zonescale : trois teintes chaudes sur du
+   papier crème ont besoin d'un trait pour tenir leur bord. */
+.zn-musclemap__swatch {
+  display: block;
+  inline-size: var(--sp-5);
+  block-size: var(--sp-5);
+  flex: none;
+  background: var(--fill, transparent);
+  border: var(--border-hair);
+  border-radius: var(--r-xs);
+}
+
+.zn-musclemap__loading {
+  block-size: 256px;
+  border-radius: var(--r-lg);
+}
+
+/* ── les profils altimétriques ────────────────────────────────────────── */
+
+/* La vignette d'une carte de séance trail. Elle est en encre, pas en
+   vermillon : il y en a une par carte, et le système ne tolère qu'un seul
+   aplat d'accent par écran. */
+.zn-elev-mini {
+  position: relative;
+  inline-size: 100%;
+}
+
+.zn-elev-mini__svg {
+  display: block;
+  inline-size: 100%;
+}
+
+.zn-elev-mini__area {
+  fill: var(--zone-1);
+}
+
+.zn-elev-mini__line {
+  fill: none;
+  stroke: var(--line-strong);
+}
+
+/* Le profil d'un parcours, lui, est LA figure de sa page : il a droit à
+   l'accent. La teinte arrive par --elev-ink, parce qu'un attribut de
+   présentation SVG (`stroke="…"`) ne résout pas var() — seule la propriété
+   CSS le fait. */
+.zn-elev {
+  position: relative;
+  inline-size: 100%;
+  max-block-size: 288px;
+  touch-action: pan-y;
+}
+
+.zn-elev__svg {
+  display: block;
+  inline-size: 100%;
+  color: var(--text-muted);
+}
+
+/* Un lavis plat, pas un dégradé : le système n'en a aucun. C'est aussi ce qui
+   permet de supprimer le <defs> — deux graphiques sur une même page
+   partageaient le même id de dégradé.
+
+   Le lavis est le premier cran de la rampe d'encre, pas un accent dilué : la
+   seule transparence que le système autorise est celle de la rampe, et un
+   `color-mix(… , transparent)` en aurait ouvert une deuxième. C'est aussi ce
+   que remplit .zn-elev-mini__area, donc les deux profils se lisent pareil. */
+.zn-elev__area {
+  fill: var(--zone-1);
+}
+
+.zn-elev__line {
+  fill: none;
+  stroke: var(--elev-ink, var(--accent));
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.zn-elev__label {
+  fill: currentColor;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+}
+
+.zn-elev__baseline {
+  stroke: var(--line-axis);
+  stroke-width: 1;
+}
+
+.zn-elev__cursor {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.zn-elev__dot {
+  fill: var(--elev-ink, var(--accent));
+  stroke: var(--surface-card);
+  stroke-width: 1.5;
+}
+
+/* L'étiquette qui suit le doigt. Encre pleine comme une infobulle : c'est
+   une étiquette posée sur la page, pas un panneau de plus. */
+.zn-elev__tip {
+  position: absolute;
+  inset-block-start: calc(var(--sp-2) * -1);
+  inset-inline-start: var(--x, 50%);
+  transform: translateX(-50%);
+  z-index: 1;
+  pointer-events: none;
+
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-4);
+
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+  border-radius: var(--r-md);
+
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* La pente. Elle portait deux teintes catégorielles et une branche `dark:`
+   par teinte ; toutes deux tombaient sous 4,5:1 sur la capsule d'encre, dans
+   un sens ou dans l'autre. Le signe « + » ou « - » dit déjà la direction et
+   il la dit en toutes lettres — la teinte était redondante, la graisse suffit
+   à la sortir de la ligne. */
+.zn-elev__slope {
+  font-weight: var(--fw-bold);
+}
+
+/* ── la frise épinglée ────────────────────────────────────────────────── */
+
+/* Le rappel qui reste en tête de page quand la vraie frise est sortie de
+   l'écran. Un bouton : donc un plancher tactile, et une cible entière plutôt
+   qu'un chevron de 12px à viser. */
+.zn-minitl {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  padding-block: var(--sp-4);
+  cursor: pointer;
+}
+
+@media (pointer: coarse) {
+  .zn-minitl {
+    min-block-size: var(--hit-min);
+  }
+}
+
+.zn-minitl__head {
+  flex: none;
+  min-inline-size: 0;
+  max-inline-size: 140px;
+}
+
+@media (min-width: 768px) {
+  .zn-minitl__head {
+    max-inline-size: 200px;
+  }
+}
+
+.zn-minitl__name {
+  margin: 0;
+  font: var(--type-label);
+  color: var(--text-body);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zn-minitl__meta {
+  margin: var(--sp-1) 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-faint);
+}
+
+.zn-minitl__bar {
+  display: flex;
+  align-items: flex-end;
+  flex: 1;
+  min-inline-size: 0;
+  box-sizing: border-box;
+
+  block-size: 20px;
+  padding-inline: var(--sp-1);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .zn-minitl__bar {
+    block-size: 28px;
+  }
+}
+
+/* Aucun dégradé, aucun biseau, aucun halo : la version d'origine en avait
+   trois, et le système n'en autorise aucun. Ce qui reste dit la même chose —
+   l'encre et la hauteur. */
+.zn-minitl__seg {
+  flex: var(--flex, 1) 1 0;
+  min-inline-size: var(--bw-hair);
+  block-size: var(--h, 100%);
+  background: var(--fill, var(--text-faint));
+}
+
+.zn-minitl__seg[data-recovery="true"] {
+  background-color: var(--surface-card);
+  background-image: var(--zone-recovery);
+}
+
+.zn-minitl__end {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex: none;
+}
+
+.zn-minitl__time {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--text-faint);
+}
+
+.zn-minitl__hint {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: var(--sp-12);
+  block-size: var(--sp-12);
+  color: var(--text-faint);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-minitl:hover .zn-minitl__hint {
+  color: var(--text-body);
+}

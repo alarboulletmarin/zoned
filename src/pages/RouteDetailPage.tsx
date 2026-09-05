@@ -25,16 +25,6 @@ const ElevationChart = lazy(() =>
   })),
 );
 
-/**
- * RouteMap ships its own Tailwind base — `h-72 sm:h-96 lg:h-[28rem]` plus a
- * rounded border. It is a visualization component and out of this lot's scope,
- * and Tailwind's utilities layer beats the component layer this family's CSS
- * lives in, so the override has to be Tailwind too. Only the frame is dropped:
- * the outline, the radius and the clipping belong to `.zn-rt__map`, and the
- * map keeps its own heights.
- */
-const MAP_FRAME = "rounded-none border-0";
-
 function MapFallback() {
   return <Skeleton className="zn-rt__mapskel" />;
 }
@@ -154,7 +144,7 @@ export function RouteDetailPage() {
         >
           <div className="zn-rt__map">
             <Suspense fallback={<MapFallback />}>
-              <RouteMap points={route.points} pois={route.pois} className={MAP_FRAME} />
+              <RouteMap points={route.points} pois={route.pois} />
             </Suspense>
           </div>
 

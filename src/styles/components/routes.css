@@ -579,6 +579,25 @@
   color: var(--text-link);
 }
 
+/* ── the sketch ───────────────────────────────────────────────────────── */
+
+/* MiniRouteMap: a projected polyline, no tiles. It is a drawn box like every
+   other object in this family — 1.5px ink outline, field radius — and it never
+   shrinks in the row that holds it.
+
+   The size here is the component's own default, the one its Tailwind base
+   stated. It must stay ABOVE .zn-route-cand__map in this file: same weight,
+   later rule wins, and the candidate card is the one call site that overrides
+   the box. */
+.zn-mini-route {
+  flex: none;
+  inline-size: 96px;
+  block-size: 64px;
+
+  border: var(--border-rule);
+  border-radius: var(--r-md);
+}
+
 /* ── candidate card ───────────────────────────────────────────────────── */
 
 /* Three proposals in a column. The picked one wears the 2.5px vermillon frame

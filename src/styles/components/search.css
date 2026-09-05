@@ -1,0 +1,418 @@
+/* The command palette (Cmd+K) — one sheet of paper dropped over the page.
+ *
+ * It is a dialog, so it is one of the few surfaces allowed --shadow-block, and
+ * it borrows the dialog's arrival (a fade and an 8px rise, nothing scales).
+ * What it does NOT borrow is the vertical centring: a search field belongs
+ * under the thumb and under the eye, not in the middle of the screen, so the
+ * panel is pinned near the top and grows downward until it runs out of room.
+ *
+ * Two things carry the meaning here:
+ *
+ *   1. The rows of a result list are one component, not two. A running session
+ *      and a page shortcut are the same piece of paper (.zn-cmdk__item); only
+ *      what sits inside them differs. That is why SearchResultItem reuses this
+ *      class instead of growing a twin that drifts.
+ *   2. The active row — the one the arrows are on — is marked by a 2.5px
+ *      vermillon frame, the system's "this one is retained" mark, never by an
+ *      accent fill. A fill would swallow the zone badge sitting inside the row,
+ *      and the frame reads in greyscale because it is a thickness.
+ *
+ * Keyboard is CommandPalette.tsx's job (arrows, Enter, Escape) and Radix's
+ * (focus trap, scroll lock). Everything below is paint.
+ */
+
+/* ── the panel ────────────────────────────────────────────────────────── */
+
+.zn-cmdk {
+  position: fixed;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+
+  display: flex;
+  flex-direction: column;
+
+  /* The same width the dialog takes, so the two floating surfaces measure the
+     same: full width less one screen margin either side, capped at 500px. */
+  inline-size: calc(100% - var(--sp-10) * 2);
+  max-inline-size: 500px;
+
+  /* dvh, not vh: on a phone the field is focused immediately and the software
+     keyboard eats the bottom of the viewport. vh would keep sizing the panel
+     against a viewport that is no longer there. */
+  max-block-size: 80vh;
+  max-block-size: 80dvh;
+
+  background: var(--surface-card);
+  color: var(--text-body);
+  border: var(--border-rule);
+  border-radius: var(--r-4xl);
+  box-shadow: var(--shadow-block);
+
+  /* The field's rule and the scrolling list both run edge to edge; without
+     this they would paint over the rounded corners. */
+  overflow: hidden;
+}
+
+/* Below the sm step the palette is nearly the whole screen, so it sits higher
+   and gives the results more room. */
+@media (min-width: 640px) {
+  .zn-cmdk {
+    top: 20%;
+  }
+}
+
+@keyframes zn-cmdk-in {
+  from { opacity: 0; transform: translate(-50%, var(--sp-4)); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+@keyframes zn-cmdk-out {
+  from { opacity: 1; transform: translate(-50%, 0); }
+  to   { opacity: 0; transform: translate(-50%, var(--sp-4)); }
+}
+
+/* Radix keeps the node mounted on [data-state="closed"] while the exit runs. */
+.zn-cmdk[data-state="open"] {
+  animation: zn-cmdk-in var(--dur-base) var(--ease-out);
+}
+.zn-cmdk[data-state="closed"] {
+  animation: zn-cmdk-out var(--dur-base) var(--ease-out);
+}
+
+/* ── the field ────────────────────────────────────────────────────────── */
+
+.zn-cmdk__field {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-8);
+  border-block-end: var(--border-rule);
+}
+
+.zn-cmdk__search {
+  inline-size: var(--sp-10);
+  block-size: var(--sp-10);
+  flex: none;
+  color: var(--text-faint);
+}
+
+.zn-cmdk__input {
+  flex: 1;
+  min-inline-size: 0;
+
+  /* 16px, not the 14px this row would otherwise take: iOS zooms the whole page
+     when a focused input is under 16px, and this input is focused on open. */
+  font: var(--type-body);
+  color: var(--text-body);
+
+  background: transparent;
+  border: none;
+  /* No outline rule here on purpose. base.css states "focus is vermillon,
+     2.5px, offset 2px — and never removed", and it is imported UNLAYERED, so
+     nothing written in @layer components could suppress it anyway: an
+     `outline: none` at this spot is a dead declaration that reads like a
+     decision. The field wears the ring like every other control. */
+}
+
+.zn-cmdk__input::placeholder {
+  color: var(--text-faint);
+}
+
+/* Clearing the query: a glyph on paper, no chrome until the pointer arrives. */
+.zn-cmdk__clear {
+  display: grid;
+  place-items: center;
+  inline-size: var(--sp-13);
+  block-size: var(--sp-13);
+  flex: none;
+  padding: 0;
+
+  background: transparent;
+  color: var(--text-faint);
+  border: none;
+  border-radius: var(--r-md);
+
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.zn-cmdk__clear:hover {
+  background: var(--surface-band);
+  color: var(--text-body);
+}
+
+.zn-cmdk__clear:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-cmdk__clear svg {
+  inline-size: var(--sp-8);
+  block-size: var(--sp-8);
+  pointer-events: none;
+}
+
+/* The shortcut reminder. Meaningless without a keyboard, so it starts hidden
+   and appears at the width where one is likely. */
+.zn-cmdk__kbd {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .zn-cmdk__kbd {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+
+    block-size: var(--sp-10);
+    padding-inline: var(--sp-3);
+
+    font-family: var(--font-mono);
+    font-size: var(--fs-mono-xs);
+    font-weight: var(--fw-medium);
+    color: var(--text-faint);
+
+    background: var(--surface-band);
+    border: var(--border-divider);
+    border-radius: var(--r-sm);
+  }
+}
+
+/* ── the list ─────────────────────────────────────────────────────────── */
+
+.zn-cmdk__results {
+  flex: 1;
+  min-block-size: 0;
+  overflow-y: auto;
+  /* The page behind the palette must not start scrolling when the list ends. */
+  overscroll-behavior: contain;
+  padding: var(--sp-4);
+}
+
+/* Waiting, or nothing found. One centred line, never an illustration: the user
+   is mid-keystroke and the next result is 150ms away. */
+.zn-cmdk__state {
+  padding: var(--sp-14) var(--sp-6);
+  text-align: center;
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-cmdk__state svg {
+  inline-size: var(--sp-10);
+  block-size: var(--sp-10);
+  color: var(--text-faint);
+}
+
+/* The one turning thing in the palette; same tempo as .zn-spinner__ring. */
+.zn-cmdk__spin {
+  inline-size: var(--sp-8);
+  block-size: var(--sp-8);
+  flex: none;
+  color: var(--text-faint);
+  animation: zoned-spin 700ms linear infinite;
+}
+
+/* A section head — "Séances", "Calculateurs". A mono micro-label, so it
+   composes with .zn-kicker and only states its own box here. */
+.zn-cmdk__group {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-6) var(--sp-6) var(--sp-2);
+}
+
+.zn-cmdk__group svg {
+  inline-size: var(--sp-6);
+  block-size: var(--sp-6);
+  flex: none;
+}
+
+/* ── a row ────────────────────────────────────────────────────────────── */
+
+/* Shared by every result: workout, collection, calculator, guide, article,
+   glossary term, page. */
+.zn-cmdk__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  inline-size: 100%;
+
+  padding: var(--sp-5) var(--sp-6);
+
+  text-align: start;
+  color: var(--text-body);
+  background: transparent;
+  border: none;
+  border-radius: var(--r-lg);
+
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.zn-cmdk__item:hover {
+  background: var(--surface-band);
+}
+
+.zn-cmdk__item:active {
+  transform: translateY(var(--press-shift));
+}
+
+/* The row the arrow keys are on. A frame, drawn inside the row's own radius so
+   it never enlarges the row, and never a fill — a fill would put an accent
+   ground behind the zone badge and the rail, which are themselves ink.
+
+   The frame is INK at the house 1.5px, not vermillon at 2.5px, and that is the
+   whole point: --focus-ring is --accent, the input is focused the entire time
+   the palette is open, so a vermillon frame here would put two identical
+   vermillon frames on screen at once and neither would say where the keyboard
+   is. Three separable states now: hover = band, arrows = band + ink rule,
+   focus = the vermillon ring base.css draws. */
+.zn-cmdk__item--active {
+  background: var(--surface-band);
+  outline: var(--bw-rule) solid var(--line-strong);
+  outline-offset: calc(var(--bw-rule) * -1);
+}
+
+/* Leading type icon, and the trailing glyph that stands in for a zone badge on
+   a session that has no aerobic zone. */
+.zn-cmdk__item > svg {
+  inline-size: var(--sp-8);
+  block-size: var(--sp-8);
+  flex: none;
+  color: var(--text-faint);
+}
+
+.zn-cmdk__item-title {
+  font: var(--type-label);
+  color: var(--text-body);
+}
+
+.zn-cmdk__item-sub {
+  margin-block-start: var(--sp-1);
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+/* ── a session row's own organs ───────────────────────────────────────── */
+
+/* The intensity rail. Filled with the zone ink for a running session; hollow —
+   sunken paper inside a hairline — for a strength session, which has no
+   aerobic zone. That is the same "filled = measurable, hollow = none" rule the
+   plan calendar follows, and it is why no hue is invented here. The hairline
+   is 1px rather than the house 1.5px purely because the rail is 4px wide and
+   1.5px either side would leave no paper to see.
+
+   Zones are written out one by one on purpose: `bg-zone-${n}` is the exact
+   interpolation that made border-zone-3 vanish from the built CSS. */
+.zn-cmdk__rail {
+  inline-size: var(--sp-2);
+  block-size: var(--sp-15);
+  flex: none;
+  /* 6 + 4 + 6 = the 16px a leading type icon takes, so a session title and a
+     collection title start on the same vertical — a ragged left edge is the
+     first thing that stops a list reading as one sheet of paper. */
+  margin-inline: var(--sp-3);
+  border-radius: var(--r-pill);
+  background: var(--surface-band);
+  box-shadow: inset 0 0 0 var(--bw-hair) var(--line-strong);
+}
+
+.zn-cmdk__rail[data-zone="1"] { background: var(--zone-1); box-shadow: none; }
+.zn-cmdk__rail[data-zone="2"] { background: var(--zone-2); box-shadow: none; }
+.zn-cmdk__rail[data-zone="3"] { background: var(--zone-3); box-shadow: none; }
+.zn-cmdk__rail[data-zone="4"] { background: var(--zone-4); box-shadow: none; }
+.zn-cmdk__rail[data-zone="5"] { background: var(--zone-5); box-shadow: none; }
+.zn-cmdk__rail[data-zone="6"] { background: var(--zone-6); box-shadow: none; }
+
+/* Category · duration, under the session name. */
+.zn-cmdk__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-block-start: var(--sp-1);
+  font: var(--type-caption);
+  color: var(--text-muted);
+}
+
+.zn-cmdk__meta svg {
+  inline-size: var(--sp-6);
+  block-size: var(--sp-6);
+  flex: none;
+}
+
+/* The separator between the two facts. Faint ink, not a transparency: the only
+   alpha this system allows is the zone ramp. */
+.zn-cmdk__dot {
+  color: var(--text-faint);
+}
+
+.zn-cmdk__dur {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* ── the way out ──────────────────────────────────────────────────────── */
+
+.zn-cmdk__foot {
+  padding: var(--sp-4);
+  border-block-start: var(--border-rule);
+}
+
+.zn-cmdk__viewall {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  inline-size: 100%;
+
+  padding: var(--sp-4) var(--sp-6);
+
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--r-lg);
+
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.zn-cmdk__viewall:hover {
+  background: var(--surface-band);
+  color: var(--text-body);
+}
+
+.zn-cmdk__viewall:active {
+  transform: translateY(var(--press-shift));
+}
+
+.zn-cmdk__viewall svg {
+  inline-size: var(--sp-8);
+  block-size: var(--sp-8);
+  flex: none;
+}
+
+/* ── touch ────────────────────────────────────────────────────────────── */
+
+/* WCAG 2.5.8. The field reserves the clear button's 44px whether or not the
+   button is showing, so the panel does not jump on the first keystroke. */
+@media (pointer: coarse) {
+  .zn-cmdk__field {
+    min-block-size: calc(var(--hit-min) + var(--sp-6) * 2);
+  }
+
+  .zn-cmdk__clear {
+    min-inline-size: var(--hit-min);
+    min-block-size: var(--hit-min);
+  }
+
+  .zn-cmdk__item,
+  .zn-cmdk__viewall {
+    min-block-size: var(--hit-min);
+  }
+}

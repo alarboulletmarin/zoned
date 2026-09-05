@@ -8,7 +8,7 @@
  * - Repetitions expanded into individual segments
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, type CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import type { WorkoutTemplate } from "@/types";
@@ -71,23 +71,21 @@ function SegmentTooltipContent({ segment, zoneColors, t }: SegmentTooltipContent
   }[segment.type];
 
   return (
-    <div className="space-y-1">
-      <p className="font-medium text-sm">{segment.description}</p>
-      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+    <div className="zn-timeline__tip">
+      <p className="zn-timeline__tip-title">{segment.description}</p>
+      <div className="zn-timeline__tip-meta">
         {segment.zoneNumber && (
           <span
-            className="inline-block w-3 h-3 rounded-full shrink-0"
-            style={{ backgroundColor: zoneColors[segment.zoneNumber] }}
+            className="zn-timeline__tip-dot"
+            style={{ "--fill": zoneColors[segment.zoneNumber] } as CSSProperties}
           />
         )}
         <span>{typeLabel}</span>
-        <span className="font-mono">{formatDurationMinutes(segment.durationMin)}</span>
-        {segment.zoneNumber && (
-          <span className="font-mono font-medium">Z{segment.zoneNumber}</span>
-        )}
+        <span>{formatDurationMinutes(segment.durationMin)}</span>
+        {segment.zoneNumber && <span>Z{segment.zoneNumber}</span>}
       </div>
       {segment.repetitionIndex && segment.totalRepetitions && (
-        <p className="text-xs text-muted-foreground font-mono">
+        <p className="zn-timeline__tip-note">
           {segment.setIndex && segment.totalSets && (
             <span>Série {segment.setIndex}/{segment.totalSets} • </span>
           )}
@@ -95,7 +93,7 @@ function SegmentTooltipContent({ segment, zoneColors, t }: SegmentTooltipContent
         </p>
       )}
       {segment.isSeriesRecovery && (
-        <p className="text-xs text-muted-foreground italic">
+        <p className="zn-timeline__tip-note">
           Récupération inter-séries
         </p>
       )}
@@ -117,8 +115,8 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
 
   if (segments.length === 0) {
     return (
-      <div className={cn("rounded-lg bg-muted/50 p-4 text-center", className)}>
-        <p className="text-sm text-muted-foreground italic">
+      <div className={cn("zn-viz-empty", className)}>
+        <p className="zn-viz-empty__text">
           {t("visualization.noData")}
         </p>
       </div>
@@ -127,11 +125,10 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
 
   return (
     <TooltipProvider delayDuration={100}>
-      <div className={cn("w-full pt-3", className)}>
+      <div className={cn("zn-timeline", className)}>
         {/* Timeline bar container */}
         <div
-          className="relative flex items-end h-40 md:h-56 rounded-xl overflow-hidden"
-          style={{ backgroundColor: "color-mix(in srgb, var(--muted) 40%, transparent)" }}
+          className="zn-timeline__plot"
           role="img"
           aria-label={t("visualization.timeline")}
         >
@@ -155,23 +152,19 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
               >
                 <TooltipTrigger asChild>
                   <div
-                    className={cn(
-                      "relative transition-all duration-200 cursor-pointer rounded-t-sm",
-                      "hover:brightness-110 hover:z-10",
-                      segment.isRecovery && "opacity-70",
-                      isHovered && "brightness-110"
-                    )}
-                    style={{
-                      width: `${segment.widthPercent}%`,
-                      height: `${heightPercent}%`,
-                      backgroundColor: segment.zoneNumber
-                        ? zoneColors[segment.zoneNumber]
-                        : "var(--muted-foreground)",
-                      marginLeft: index > 0 ? "2px" : undefined,
-                      borderLeft: isTypeChange
-                        ? "3px solid rgba(0,0,0,0.3)"
-                        : undefined,
-                    }}
+                    className="zn-timeline__seg"
+                    data-recovery={segment.isRecovery || undefined}
+                    data-phase-change={isTypeChange || undefined}
+                    data-hovered={isHovered || undefined}
+                    style={
+                      {
+                        "--flex": segment.widthPercent,
+                        "--h": `${heightPercent}%`,
+                        "--fill": segment.zoneNumber
+                          ? zoneColors[segment.zoneNumber]
+                          : "var(--text-faint)",
+                      } as CSSProperties
+                    }
                     onMouseEnter={() => setHoveredIndex(index)}
                     onMouseLeave={() => setHoveredIndex(null)}
                     onClick={() => {
@@ -180,24 +173,13 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
                   >
                     {/* Hover label */}
                     {isHovered && segment.zoneNumber && segment.widthPercent > 3 && (
-                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground text-background text-[10px] px-2 py-1 rounded font-bold whitespace-nowrap z-20 pointer-events-none">
+                      <div className="zn-timeline__flag">
                         Z{segment.zoneNumber} · {formatDurationMinutes(segment.durationMin)}
                       </div>
                     )}
-
-                    {/* Recovery indicator pattern */}
-                    {segment.isRecovery && (
-                      <div
-                        className="absolute inset-0 opacity-30"
-                        style={{
-                          backgroundImage:
-                            "repeating-linear-gradient(45deg, transparent, transparent 3px, hsl(var(--background)) 3px, hsl(var(--background)) 6px)",
-                        }}
-                      />
-                    )}
                   </div>
                 </TooltipTrigger>
-                <TooltipContent side="top" className="max-w-xs">
+                <TooltipContent side="top">
                   <SegmentTooltipContent segment={segment} zoneColors={zoneColors} t={t} />
                 </TooltipContent>
               </Tooltip>
@@ -208,27 +190,23 @@ export function SessionTimeline({ workout, className }: SessionTimelineProps) {
         {/* Time axis — a real scale. The total duration sits at the right
             edge, where the session actually ends; centring it read as
             "56min at the halfway point". */}
-        <div className="relative h-7 mt-2 select-none" aria-hidden="true">
+        <div className="zn-timeline__axis" aria-hidden="true">
           {ticks.map((minute) => (
             <div
               key={minute}
-              className="absolute top-0 flex flex-col items-start"
-              style={{ left: `${(minute / totalDurationMin) * 100}%` }}
+              className="zn-timeline__tick"
+              data-centered={minute > 0 || undefined}
+              style={
+                { "--x": `${(minute / totalDurationMin) * 100}%` } as CSSProperties
+              }
             >
-              <span className="block h-1.5 w-px bg-border" />
-              <span
-                className={cn(
-                  "font-mono text-[10px] sm:text-xs text-muted-foreground mt-1",
-                  minute > 0 && "-translate-x-1/2"
-                )}
-              >
-                {minute}
-              </span>
+              <span className="zn-timeline__tick-mark" />
+              <span className="zn-timeline__tick-label">{minute}</span>
             </div>
           ))}
-          <div className="absolute top-0 right-0 flex flex-col items-end">
-            <span className="block h-1.5 w-px bg-border" />
-            <span className="font-mono text-[10px] sm:text-xs font-bold text-foreground mt-1">
+          <div className="zn-timeline__end">
+            <span className="zn-timeline__tick-mark" />
+            <span className="zn-timeline__tick-label">
               {formatDurationMinutes(totalDurationMin)}
             </span>
           </div>

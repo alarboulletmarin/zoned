@@ -4,10 +4,11 @@
    What is left is a faint fill inside a divider outline, pulsing once every
    1.4s — the same treatment the design bundle's Skeleton uses.
 
-   Deliberately declares no border-radius, no width and no height. Every call
-   site still sizes and rounds its own blocks with Tailwind (`h-4 w-3/4`,
-   `rounded-full`, `aspect-square`), and this file is unlayered, so anything
-   declared here would beat those utilities and flatten them. */
+   The primitive deliberately declares no border-radius, no width and no
+   height: six pages still hand it Tailwind sizes (`h-4 w-3/4`, `rounded-full`,
+   `aspect-square`) through className, and a size on `.zn-skeleton` would be one
+   more thing to unpick when those pages are ported. The sizes live with the
+   silhouette that needs them — the composites at the bottom of this file. */
 
 .zn-skeleton {
   display: block;
@@ -28,3 +29,310 @@
 .zn-skeleton-group {
   display: contents;
 }
+
+/* ══ composites ═══════════════════════════════════════════════════════════
+
+   Four silhouettes: a session card, a plan week, a table, an article.
+
+   The one rule they all obey: a skeleton is measured against the component it
+   stands in for, not eyeballed. Every height here is either a token the real
+   sheet uses (`--r-3xl`, `--sp-12`) or that sheet's own type expressed as a
+   line box — `calc(font-size x line-height)` — so the two cannot drift apart
+   when a type step moves. Where the real component states a raw pixel
+   (workout-card.css's 66px description well, plan-calendar.css's 80px day,
+   badge.css's 7px capsule padding), the same raw pixel is repeated here and
+   the source is named: re-deriving it would be inventing a second truth.
+
+   Bar WIDTHS are the exception and are percentages throughout. A placeholder
+   line is a drawing of text, not a measurement of it — three quarters of a
+   line is a proportion, and a proportion is not a design value looking for a
+   token. */
+
+/* ── the session card ──────────────────────────────────────────────────────
+   Mirrors .zn-wcard (workout-card.css) block for block: same paper, same
+   22px frame, same 24px padding, same 16px rhythm. `block-size: 100%` matters
+   as much as the rest — the real cards stretch to their grid row, so a
+   skeleton that only wraps its content would shrink the row and shift the
+   whole grid when the data lands. */
+.zn-wcard-skel {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  block-size: 100%;
+  padding: var(--sp-12);
+
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-3xl);
+}
+
+/* The dense variant. `compact` is a boolean prop that reaches no attribute, so
+   it is a modifier class rather than an invented data-*; the values are the
+   ones .zn-wcard[data-size="compact"] already uses. */
+.zn-wcard-skel--compact {
+  gap: var(--sp-5);
+  padding: var(--pad-card-sm);
+}
+
+/* A compact card is not a small full card. WorkoutCardCompact renders a title
+   row and the facts and nothing else — no profile, no badges — and
+   .zn-wcard[data-size="compact"] sets that title in --type-label on one line
+   instead of h3. Drawing the profile and the badges anyway reserved ~90px per
+   card that never arrive, which is the layout shift this file exists to
+   prevent, only upside down. Hidden rather than removed from the markup: what
+   a silhouette shows is paint, and a port does not touch the DOM. */
+.zn-wcard-skel--compact .zn-wcard-skel__title {
+  block-size: calc(var(--fs-body-sm) * 1.2);
+}
+
+.zn-wcard-skel--compact > .zn-wcard-skel__bar,
+.zn-wcard-skel--compact > .zn-cluster {
+  display: none;
+}
+
+/* The h3 line box the session name fills. */
+.zn-wcard-skel__title {
+  block-size: calc(var(--fs-h3) * 1.05);
+  inline-size: 75%;
+}
+
+/* The favourite toggle is a 32px icon-sm button (button.css), and the header
+   row is exactly as tall as it is. */
+.zn-wcard-skel__fav {
+  flex: none;
+  inline-size: 32px;
+  block-size: 32px;
+  border-radius: var(--r-pill);
+}
+
+/* Not a hit target — the whole skeleton is aria-hidden and nothing in it is
+   clickable. It follows the button's coarse-pointer floor because the button
+   does: on a phone that header row is 44px tall, and a skeleton that is 32px
+   there hands the reader a 12px jump for free. */
+@media (pointer: coarse) {
+  .zn-wcard-skel__fav {
+    inline-size: var(--hit-min);
+    block-size: var(--hit-min);
+  }
+}
+
+/* The description well. .zn-wcard__desc clamps to two lines and reserves 66px
+   whether or not the text fills them, so the meta rows of a card grid line up;
+   two body-sm line boxes stacked flush is what that well actually contains. */
+.zn-wcard-skel__desc {
+  min-block-size: 66px;
+}
+
+.zn-wcard-skel__line {
+  block-size: calc(var(--fs-body-sm) * var(--lh-body-sm));
+}
+
+.zn-wcard-skel__line--short { inline-size: 83%; }
+
+/* The zone profile: ZoneBar is 36px tall with a 6px radius (zone.css). The
+   4px bar this replaced was a third of the height the card really reserves. */
+.zn-wcard-skel__bar {
+  block-size: var(--zn-zonebar-h, 36px);
+  border-radius: var(--r-md);
+}
+
+/* The facts line sits over a divider with 4px of air, like .zn-wcard__meta —
+   including the auto top margin that pins it to the floor of the card. Without
+   it the slack of a tall grid row pools under the block instead of inside it,
+   and a skeleton beside a real card in the same row ends higher than it. */
+.zn-wcard-skel__meta {
+  margin-block-start: auto;
+  padding-block-start: var(--sp-2);
+  border-block-start: var(--border-divider);
+}
+
+/* Mono inside a card sets a face and a size but no line-height, so a fact
+   occupies the body's line box, not the mono role's 1.3. Measured: sizing
+   these at 1.3 left the row 3px short of .zn-wcard__meta. */
+.zn-wcard-skel__fact {
+  block-size: calc(var(--fs-mono) * var(--lh-body));
+}
+
+.zn-wcard-skel__fact--short { inline-size: 24%; }
+.zn-wcard-skel__fact--long { inline-size: 28%; }
+
+/* A badge capsule: 12px mono between 7px of padding inside a 1.5px outline —
+   badge.css states all three, and they add up to the 33px pill that a badge
+   row reserves. */
+.zn-wcard-skel__badge {
+  block-size: calc(var(--fs-mono) * 1.3 + 7px * 2 + var(--bw-rule) * 2);
+  border-radius: var(--r-pill);
+}
+
+.zn-wcard-skel__badge--short { inline-size: 22%; }
+.zn-wcard-skel__badge--long { inline-size: 32%; }
+
+/* ── the plan week ─────────────────────────────────────────────────────────
+   Mirrors the day board of PlanWeeklyView: the outlined 20px card, then the
+   seven days. */
+.zn-planweek-skel {
+  box-sizing: border-box;
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-2xl);
+  padding: var(--pad-card-sm);
+}
+
+.zn-planweek-skel__label {
+  block-size: calc(var(--fs-h4) * 1.05);
+  inline-size: 30%;
+}
+
+.zn-planweek-skel__label--short {
+  inline-size: 20%;
+}
+
+/* Four days then three on a phone, the whole week on one line from 768px —
+   the same two shapes .zn-planweek__row and .zn-planweek__week-row draw, and
+   the reason this is not .zn-grid: .zn-grid collapses to one column at 640px,
+   which would stack seven days into a column half a screen tall. */
+.zn-planweek-skel__board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-3);
+}
+
+/* 80px is the phone day; the desktop row is data-desktop and reserves 120px. */
+.zn-planweek-skel__day {
+  min-block-size: 80px;
+  border-radius: var(--r-lg);
+}
+
+@media (min-width: 768px) {
+  .zn-planweek-skel__board {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: var(--sp-4);
+  }
+
+  .zn-planweek-skel__day {
+    min-block-size: 120px;
+  }
+}
+
+.zn-planweek-skel__fact {
+  block-size: calc(var(--fs-mono-sm) * var(--lh-body));
+}
+
+.zn-planweek-skel__fact--long { inline-size: 26%; }
+.zn-planweek-skel__fact--mid { inline-size: 20%; }
+.zn-planweek-skel__fact--short { inline-size: 15%; }
+
+/* ── the table ─────────────────────────────────────────────────────────────
+   Mirrors ResponsiveTable's framed grid (responsive-table.css): 1.5px outline,
+   16px radius, a banded header over a rule, hairlines between rows. The column
+   count arrives as an inline grid-template from the `columns` prop, which is
+   why the rows are a plain grid here and not .zn-grid. */
+.zn-table-skel {
+  box-sizing: border-box;
+  overflow: hidden;
+  background: var(--surface-card);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+/* .zn-table__th: 12px/16px on the band paper, closed by the full rule. */
+.zn-table-skel__head {
+  display: grid;
+  align-items: center;
+  gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-8);
+  background: var(--surface-band);
+  border-block-end: var(--border-rule);
+}
+
+/* .zn-table__td: the same 12px/16px, a hairline above every row but the first. */
+.zn-table-skel__row {
+  display: grid;
+  align-items: center;
+  gap: var(--sp-6);
+  padding: var(--sp-6) var(--sp-8);
+}
+
+/* What `divide-y` drew: a hairline between rows and none above the first. On
+   the group rather than on the row so a row can never be added without it. */
+.zn-table-skel__body > * + * {
+  border-block-start: var(--border-divider);
+}
+
+/* A column head is a mono kicker; a cell is body-sm. Two different line boxes,
+   which is why the header row is ~6px shorter than a body row in the real
+   table too. */
+.zn-table-skel__th {
+  block-size: calc(var(--fs-mono-sm) * 1.3);
+}
+
+.zn-table-skel__td {
+  block-size: calc(var(--fs-body-sm) * var(--lh-body-sm));
+}
+
+/* ── the article ───────────────────────────────────────────────────────────
+   Mirrors ArticlePage: crumbs, the display-2 title, a mono meta line, then
+   .zn-prose — 19px on 1.7 with 18px between paragraphs, inside the reading
+   measure. The title line box follows --fs-display-2, so it shrinks from 63px
+   to 35px at 640px exactly when the real title does.
+
+   The reading measure comes from .zn-measure, composed on the element; all
+   this adds is the centring the component already had, and the font size that
+   makes the measure resolve. --measure is 62ch and a ch is font-relative, so
+   the same class on a 16px box and on .zn-prose's 19px box are two different
+   columns — measured, 636px against 755px. Stating the prose size here is what
+   makes the two agree; nothing inside reads it, every block is sized from its
+   own token. */
+.zn-article-skel {
+  margin-inline: auto;
+  font-size: var(--fs-body-lg);
+}
+
+.zn-article-skel__crumb {
+  block-size: calc(var(--fs-body-sm) * var(--lh-body-sm));
+  inline-size: 33%;
+}
+
+.zn-article-skel__title {
+  block-size: calc(var(--fs-display-2) * var(--lh-display-2));
+}
+
+.zn-article-skel__title--long { inline-size: 83%; }
+.zn-article-skel__title--short { inline-size: 60%; }
+
+.zn-article-skel__meta {
+  block-size: calc(var(--fs-mono) * var(--lh-body));
+}
+
+.zn-article-skel__meta--long { inline-size: 20%; }
+.zn-article-skel__meta--mid { inline-size: 17%; }
+.zn-article-skel__meta--short { inline-size: 14%; }
+
+/* The one block with no counterpart on the page: ArticlePage renders no hero
+   today. It keeps the 176px the component already reserved rather than
+   inventing a height for something that is not there — see the note in
+   ArticleSkeleton.tsx. */
+.zn-article-skel__hero {
+  block-size: 176px;
+  border-radius: var(--r-xl);
+}
+
+/* .zn-prose__h2 is set solid — line-height 1 — so its line box is the font
+   size and nothing more, and it opens its section with 16px of extra air on
+   top of the prose gap. */
+.zn-article-skel__h2 {
+  block-size: var(--fs-h2);
+  inline-size: 40%;
+  margin-block-start: var(--sp-8);
+}
+
+/* A prose line: 19px on 1.7. .zn-prose sets no gap inside a paragraph, so the
+   lines of one paragraph stack flush and only the paragraphs are 18px apart. */
+.zn-article-skel__line {
+  block-size: calc(var(--fs-body-lg) * 1.7);
+}
+
+.zn-article-skel__line--long { inline-size: 92%; }
+.zn-article-skel__line--mid { inline-size: 83%; }
+.zn-article-skel__line--short { inline-size: 75%; }

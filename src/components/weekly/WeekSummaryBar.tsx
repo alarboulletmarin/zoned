@@ -28,15 +28,9 @@ export function WeekSummaryBar({
   const overBudget = targetVolumeH != null && stats.totalHours > targetVolumeH;
 
   return (
-    <div
-      className={cn(
-        "rounded-xl border bg-card p-3 sm:p-4",
-        "grid gap-4 lg:grid-cols-[1fr_18rem] lg:items-center",
-        className,
-      )}
-    >
-      <div className="space-y-3">
-        <div className="flex flex-wrap items-stretch gap-x-5 gap-y-2">
+    <div className={cn("zn-wk-summary", className)}>
+      <div className="zn-wk-summary__main">
+        <div className="zn-wk-summary__metrics">
           <Metric label={t("weekly.summary.sessions")} value={String(stats.sessions)} />
           <Metric
             label={t("weekly.summary.volume")}
@@ -59,8 +53,8 @@ export function WeekSummaryBar({
         </div>
 
         {overBudget && (
-          <p className="flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
-            <AlertTriangle className="size-3.5 shrink-0" />
+          <p className="zn-wk-summary__warn">
+            <AlertTriangle />
             {t("weekly.summary.overBudget", { target: targetVolumeH })}
           </p>
         )}
@@ -88,23 +82,13 @@ function Metric({
   progress?: number;
 }) {
   return (
-    <div className="min-w-0">
-      <div className="text-xs text-muted-foreground">{label}</div>
-      <div
-        className={cn(
-          "text-lg font-semibold tabular-nums",
-          alert && "text-amber-600 dark:text-amber-400",
-        )}
-      >
-        {value}
-      </div>
+    <div className={cn("zn-wk-metric", alert && "zn-wk-metric--alert")}>
+      <div className="zn-kicker">{label}</div>
+      <div className="zn-wk-metric__value">{value}</div>
       {progress != null && (
-        <div className="mt-1 h-1 w-full min-w-16 overflow-hidden rounded-full bg-muted">
+        <div className="zn-wk-metric__track">
           <div
-            className={cn(
-              "h-full rounded-full transition-[width]",
-              alert ? "bg-amber-500" : "bg-primary",
-            )}
+            className="zn-wk-metric__fill"
             style={{ width: `${Math.min(100, Math.max(0, progress * 100))}%` }}
           />
         </div>

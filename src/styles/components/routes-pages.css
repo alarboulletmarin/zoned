@@ -87,24 +87,49 @@
 /* ── the map ──────────────────────────────────────────────────────────── */
 
 /* Every screen here shows the same object, so it wears the same frame: an
-   outlined sheet with the cartography bled to its edges. */
+   outlined sheet with the cartography bled to its edges.
+
+   The wrapper also states how tall the map is, once, in --map-h: the Leaflet
+   canvas and the skeleton standing in for it both read that one number, so the
+   wait and the thing waited for can never be different heights — which is the
+   only way this screen keeps CLS at zero. The three steps are the ones the
+   component's Tailwind base stated, unrounded. */
 .zn-rt__map {
+  --map-h: 288px;
+
   position: relative;
   overflow: hidden;
   border: var(--border-rule);
   border-radius: var(--r-2xl);
 }
 
-/* The wait, in the shape of what is coming. */
-.zn-rt__mapskel {
-  block-size: 288px;
-  border-radius: var(--r-2xl);
+@media (min-width: 640px) {
+  .zn-rt__map {
+    --map-h: 384px;
+  }
 }
 
-@media (min-width: 640px) {
-  .zn-rt__mapskel {
-    block-size: 384px;
+@media (min-width: 1024px) {
+  .zn-rt__map {
+    --map-h: 448px;
   }
+}
+
+/* The map itself. Leaflet paints into this box and nothing else sizes it, so
+   the height has to be stated here rather than left to the content. No frame:
+   the wrapper above is the frame, and all three screens were already cancelling
+   this one with `rounded-none border-0`. */
+.zn-route-map {
+  inline-size: 100%;
+  block-size: var(--map-h, 288px);
+  overflow: hidden;
+  background: var(--surface-band);
+}
+
+/* The wait, in the shape of what is coming. */
+.zn-rt__mapskel {
+  block-size: var(--map-h, 288px);
+  border-radius: var(--r-2xl);
 }
 
 /* Inside the generator's stage the map has no height of its own: it takes the
@@ -347,8 +372,11 @@
   border-radius: var(--r-2xl);
 }
 
-/* Inside the stage the map has no frame of its own — the stage is the frame. */
+/* Inside the stage the map has no frame of its own — the stage is the frame —
+   and no height of its own either: it takes the cell it is given. */
 .zn-rt__stage .zn-rt__map {
+  --map-h: 100%;
+
   flex: 1;
   min-block-size: 0;
   border: none;

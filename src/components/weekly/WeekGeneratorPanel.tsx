@@ -44,7 +44,8 @@ const DISCIPLINE_ICONS: Record<
  * On desktop the panel is capped to the viewport and split into a scrolling
  * body + a pinned action footer: it lives in a `sticky` column, so a panel
  * taller than the screen would put its own CTA permanently out of reach
- * (scrolling the page never brings a stuck element's bottom back).
+ * (scrolling the page never brings a stuck element's bottom back). The cap and
+ * the surface live in `.zn-wk-gen`; `--bare` drops both.
  */
 export function WeekGeneratorPanel({
   settings,
@@ -86,38 +87,25 @@ export function WeekGeneratorPanel({
   };
 
   return (
-    <div
-      className={cn(
-        bare
-          ? "space-y-3"
-          // 11rem ≈ the page header sitting above the rail plus a bottom margin:
-          // the cap has to hold at the rail's *initial* position, not only once
-          // it sticks, otherwise the footer starts below the fold.
-          : "flex flex-col overflow-hidden rounded-xl border bg-card md:max-h-[calc(100dvh-11rem)]",
-      )}
-    >
+    <div className={cn("zn-wk-gen", bare && "zn-wk-gen--bare")}>
       {!bare && (
-        <span className="block border-b px-4 py-3 text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+        <span className="zn-kicker zn-wk-gen__title">
           {t("weekly.generate.title")}
         </span>
       )}
 
-      <div
-        className={cn(
-          bare ? "space-y-3" : "min-h-0 flex-1 overflow-y-auto px-4 py-4 space-y-5",
-        )}
-      >
+      <div className="zn-wk-gen__body">
         {/* Presets fill in every setting below in one click. They are shortcuts,
             not a selectable state — hence the label and the flat, unselected
             styling, so they never read as "the current phase of the week". */}
         <Field label={t("weekly.presets.label")}>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="zn-wk-gen__presets">
             {WEEK_PRESETS.map((preset) => (
               <button
                 key={preset.id}
                 type="button"
                 onClick={() => onSettingsChange(preset.settings)}
-                className="rounded-full border border-dashed border-border px-3 py-1 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+                className="zn-wk-gen__preset"
               >
                 {t(`weekly.presets.options.${preset.id}`)}
               </button>
@@ -133,12 +121,10 @@ export function WeekGeneratorPanel({
           />
         </Field>
 
-        <div className="space-y-2">
-          <div className="flex items-baseline justify-between">
-            <label className="text-sm font-medium">{t("weekly.settings.volume")}</label>
-            <span className="text-sm tabular-nums text-muted-foreground">
-              {settings.targetVolumeH} h
-            </span>
+        <div className="zn-wk-gen__vol">
+          <div className="zn-wk-gen__volhead">
+            <label className="zn-label">{t("weekly.settings.volume")}</label>
+            <span className="zn-mono zn-muted">{settings.targetVolumeH} h</span>
           </div>
           <Slider
             min={VOLUME_MIN}
@@ -150,10 +136,12 @@ export function WeekGeneratorPanel({
         </div>
 
         <Field label={t("weekly.settings.quality")}>
+          {/* No column class: .zn-segmented already lays one equal track per
+              option, which is exactly what the `grid-cols-2` here used to
+              resolve to — four 1fr cells on one row. */}
           <Segmented
             value={settings.quality}
             onChange={(v) => set({ quality: v as QualityType })}
-            className="grid-cols-2"
             options={QUALITY_OPTIONS.map((q) => ({
               value: q,
               label: t(`weekly.settings.qualityOptions.${q}`),
@@ -163,11 +151,12 @@ export function WeekGeneratorPanel({
 
         <Field label={t("weekly.settings.longRunDay")}>
           {/* One letter per day: a 7-cell row is far too narrow for "Lun". The
-              full day name lives in the tooltip and the accessible name. */}
+              full day name lives in the tooltip and the accessible name.
+              .zn-segmented already lays one equal track per option, so seven
+              of them need no extra class. */}
           <Segmented
             value={String(settings.longRunDay)}
             onChange={(v) => set({ longRunDay: Number(v) as DayIndex })}
-            className="grid-cols-7"
             options={DAYS.map((d) => ({
               value: String(d),
               label: t(`weekly.daysShort.${d}`).charAt(0),
@@ -180,9 +169,9 @@ export function WeekGeneratorPanel({
             picked" means "all" — so they share one chip treatment, with an
             explicit "All" state instead of a silently empty selection. */}
         <Field label={t("weekly.settings.disciplines")}>
-          <div className="grid grid-cols-2 gap-1.5">
+          <div className="zn-wk-gen__chips">
             <Chip
-              className="col-span-2"
+              className="zn-wk-chip--wide"
               active={settings.disciplines.length === 0}
               onClick={() => set({ disciplines: [] })}
             >
@@ -196,8 +185,8 @@ export function WeekGeneratorPanel({
                   active={settings.disciplines.includes(d)}
                   onClick={() => toggle("disciplines", d)}
                 >
-                  <Icon className="size-3.5 shrink-0" />
-                  <span className="truncate">{t(`activityToggle.${d}`)}</span>
+                  <Icon />
+                  <span className="zn-truncate">{t(`activityToggle.${d}`)}</span>
                 </Chip>
               );
             })}
@@ -205,9 +194,9 @@ export function WeekGeneratorPanel({
         </Field>
 
         <Field label={t("weekly.settings.levels")}>
-          <div className="grid grid-cols-2 gap-1.5">
+          <div className="zn-wk-gen__chips">
             <Chip
-              className="col-span-2"
+              className="zn-wk-chip--wide"
               active={settings.levels.length === 0}
               onClick={() => set({ levels: [] })}
             >
@@ -215,7 +204,7 @@ export function WeekGeneratorPanel({
             </Chip>
             {LEVELS.map((l) => (
               <Chip key={l} active={settings.levels.includes(l)} onClick={() => toggle("levels", l)}>
-                <span className="truncate">{pick(DIFFICULTY_META[l], "label")}</span>
+                <span className="zn-truncate">{pick(DIFFICULTY_META[l], "label")}</span>
               </Chip>
             ))}
           </div>
@@ -224,13 +213,9 @@ export function WeekGeneratorPanel({
 
       {/* Pinned below the scrolling body: the primary action stays on screen
           whatever the settings above are worth reading. */}
-      <div className={cn("space-y-1.5", !bare && "border-t px-4 py-3")}>
-        <Button onClick={() => onGenerate(settings)} disabled={busy} className="w-full">
-          {busy ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            <Sparkles className="size-4" />
-          )}
+      <div className="zn-wk-gen__actions">
+        <Button onClick={() => onGenerate(settings)} disabled={busy}>
+          {busy ? <Loader2 className="zn-spin" /> : <Sparkles />}
           {busy ? t("weekly.generate.busy") : t("weekly.generate.action")}
         </Button>
         {lockedCount > 0 && onUnlockAll && (
@@ -239,14 +224,14 @@ export function WeekGeneratorPanel({
             size="sm"
             onClick={onUnlockAll}
             disabled={busy}
-            className="w-full text-muted-foreground"
+            className="zn-wk-gen__unlock"
           >
-            <LockOpen className="size-3.5" />
+            <LockOpen />
             {t("weekly.actions.unlockAll")}
           </Button>
         )}
         {!bare && (
-          <p className="text-xs text-muted-foreground">
+          <p className="zn-wk-gen__hint">
             {lockedCount > 0
               ? t("weekly.generate.hintLocked", { count: lockedCount })
               : weekIsPopulated
@@ -261,8 +246,8 @@ export function WeekGeneratorPanel({
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="space-y-1.5">
-      <label className="text-sm font-medium">{label}</label>
+    <div className="zn-wk-gen__field">
+      <label className="zn-label">{label}</label>
       {children}
     </div>
   );
@@ -284,13 +269,7 @@ function Chip({
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={cn(
-        "flex w-full min-w-0 items-center justify-center gap-1.5 rounded-full border px-2.5 py-1.5 text-sm transition-colors",
-        active
-          ? "border-primary bg-primary/10 text-primary"
-          : "border-border text-muted-foreground hover:bg-muted",
-        className,
-      )}
+      className={cn("zn-chip zn-wk-chip", className)}
     >
       {children}
     </button>

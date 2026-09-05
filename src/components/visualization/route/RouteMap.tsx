@@ -483,14 +483,14 @@ export function RouteMap({
     return () => cancelAnimationFrame(id);
   }, [className]);
 
+  // No crosshair when the map is waiting for a start-point click: Leaflet's own
+  // .leaflet-grab is unlayered CSS and outranks every layer we can write, so the
+  // `cursor-crosshair` this used to carry never applied either. Porting it would
+  // have shipped a rule that does nothing.
   return (
     <div
       ref={containerRef}
-      className={cn(
-        "h-72 w-full overflow-hidden rounded-xl border border-border/60 bg-muted/30 sm:h-96 lg:h-[28rem]",
-        onMapClick ? "cursor-crosshair" : undefined,
-        className,
-      )}
+      className={cn("zn-route-map", className)}
       role="region"
       aria-label="Carte du parcours"
     />

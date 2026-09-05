@@ -12,8 +12,9 @@
  * press it moves 1px down, like a stamp meeting paper.
  *
  * The whole signature is kept so no call site changes: `accent` and `glow` are
- * accepted and ignored, and the `group group/card` classes stay because
- * consumers hang their own `group-hover:` utilities off them.
+ * accepted and ignored. The `group group/card` markers are gone with the last
+ * `group-hover:` utility that hung off them, and `relative` with them — the
+ * grep for both across src comes back empty.
  *
  * Polymorphic: pass `to` for a router link, `href` for an anchor, or neither
  * for a div.
@@ -54,7 +55,7 @@ export function InteractiveCard({
   void glow;
 
   const props = {
-    className: cn("group group/card zn-card-hover relative", className),
+    className: cn("zn-card-hover", className),
     ...rest,
   };
 

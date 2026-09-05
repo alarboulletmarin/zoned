@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, type CSSProperties } from "react";
 
 import type { RouteElevationPoint } from "@/types/route";
 import { cn } from "@/lib/utils";
@@ -12,7 +12,11 @@ interface ElevationChartProps {
    * the container width thanks to CSS `aspect-ratio`, capped via `max-h`.
    */
   height?: number;
-  /** Stroke / fill accent. */
+  /**
+   * Stroke / wash colour. Handed to CSS as `--elev-ink` rather than to the
+   * SVG attributes directly: a presentation attribute does not resolve
+   * `var()`, so `stroke="var(--accent)"` would silently paint nothing.
+   */
   color?: string;
 }
 
@@ -86,7 +90,7 @@ export function ElevationChart({
   profile,
   className,
   height = 140,
-  color = "#ea580c",
+  color = "var(--accent)",
 }: ElevationChartProps) {
   const geometry = useMemo(() => buildGeometry(profile, height), [profile, height]);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
@@ -161,31 +165,31 @@ export function ElevationChart({
   return (
     <div
       ref={wrapperRef}
-      className={cn("relative w-full max-h-72", className)}
+      className={cn("zn-elev", className)}
       onPointerMove={onPointerMove}
       onPointerLeave={onPointerLeave}
       onPointerDown={onPointerMove}
-      style={{ touchAction: "pan-y" }}
+      style={{ "--elev-ink": color } as CSSProperties}
     >
       <svg
         viewBox={`0 0 ${VIEW_WIDTH} ${height}`}
-        className="block w-full text-muted-foreground"
+        className="zn-elev__svg"
         style={{ aspectRatio: `${VIEW_WIDTH} / ${height}` }}
         role="img"
         aria-label="Profil de dénivelé"
         preserveAspectRatio="none"
       >
-        <text x={PADDING.left - 6} y={PADDING.top + 4} fontSize={10} textAnchor="end" fill="currentColor">
+        <text x={PADDING.left - 6} y={PADDING.top + 4} textAnchor="end" className="zn-elev__label">
           {Math.round(yMax)} m
         </text>
-        <text x={PADDING.left - 6} y={baseY} fontSize={10} textAnchor="end" fill="currentColor">
+        <text x={PADDING.left - 6} y={baseY} textAnchor="end" className="zn-elev__label">
           {Math.round(yMin)} m
         </text>
 
-        <text x={PADDING.left} y={height - 4} fontSize={10} textAnchor="start" fill="currentColor">
+        <text x={PADDING.left} y={height - 4} textAnchor="start" className="zn-elev__label">
           0 km
         </text>
-        <text x={VIEW_WIDTH - PADDING.right} y={height - 4} fontSize={10} textAnchor="end" fill="currentColor">
+        <text x={VIEW_WIDTH - PADDING.right} y={height - 4} textAnchor="end" className="zn-elev__label">
           {Math.round(totalKm * 10) / 10} km
         </text>
 
@@ -194,20 +198,11 @@ export function ElevationChart({
           x2={VIEW_WIDTH - PADDING.right}
           y1={baseY}
           y2={baseY}
-          stroke="currentColor"
-          strokeOpacity={0.2}
-          strokeWidth={1}
+          className="zn-elev__baseline"
         />
 
-        <defs>
-          <linearGradient id="elev-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity={0.35} />
-            <stop offset="100%" stopColor={color} stopOpacity={0.05} />
-          </linearGradient>
-        </defs>
-
-        <path d={geometry.area} fill="url(#elev-grad)" stroke="none" />
-        <path d={geometry.line} fill="none" stroke={color} strokeWidth={2} strokeLinejoin="round" />
+        <path d={geometry.area} className="zn-elev__area" />
+        <path d={geometry.line} className="zn-elev__line" />
 
         {hoverPoint && (
           <>
@@ -216,18 +211,13 @@ export function ElevationChart({
               x2={xFor(hoverPoint.distanceM)}
               y1={PADDING.top}
               y2={baseY}
-              stroke="currentColor"
-              strokeOpacity={0.4}
-              strokeWidth={1}
-              strokeDasharray="3 3"
+              className="zn-elev__cursor"
             />
             <circle
               cx={xFor(hoverPoint.distanceM)}
               cy={yFor(hoverPoint.altitudeM)}
               r={3.5}
-              fill={color}
-              stroke="white"
-              strokeWidth={1.5}
+              className="zn-elev__dot"
             />
           </>
         )}
@@ -235,27 +225,18 @@ export function ElevationChart({
 
       {hoverPoint && hoverPctX != null && (
         <div
-          className={cn(
-            "pointer-events-none absolute -top-1 -translate-x-1/2 rounded-md border border-border/60 bg-background/95 px-2 py-1 text-[11px] font-medium leading-tight tabular-nums shadow-sm backdrop-blur-sm",
-            "flex items-center gap-2",
-          )}
-          style={{
-            left: `${Math.min(95, Math.max(5, hoverPctX))}%`,
-          }}
+          className="zn-elev__tip"
+          style={
+            {
+              "--x": `${Math.min(95, Math.max(5, hoverPctX))}%`,
+            } as CSSProperties
+          }
         >
           <span>{(hoverPoint.distanceM / 1000).toFixed(2)} km</span>
-          <span className="text-muted-foreground">·</span>
+          <span>·</span>
           <span>{Math.round(hoverPoint.altitudeM)} m</span>
-          <span className="text-muted-foreground">·</span>
-          <span
-            className={cn(
-              hoverSlope > 0
-                ? "text-orange-600 dark:text-orange-400"
-                : hoverSlope < 0
-                  ? "text-emerald-600 dark:text-emerald-400"
-                  : "text-muted-foreground",
-            )}
-          >
+          <span>·</span>
+          <span className="zn-elev__slope">
             {hoverSlope > 0 ? "+" : ""}
             {hoverSlope.toFixed(1)}%
           </span>

@@ -6,7 +6,7 @@
  * Primary muscles are highlighted in a strong color, secondary in a lighter shade.
  */
 
-import { lazy, Suspense, useMemo, useEffect, useState, useSyncExternalStore } from "react";
+import { lazy, Suspense, useMemo, useEffect, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 const Model = lazy(() => import("react-body-highlighter"));
 import type { IExerciseData } from "react-body-highlighter";
@@ -136,11 +136,11 @@ export function MuscleMap({ workout, className }: MuscleMapProps) {
   }
 
   return (
-    <Suspense fallback={<div className="h-64 animate-pulse bg-muted rounded" />}>
-      <div className={cn("space-y-2", className)}>
-        <div className="flex items-center justify-center gap-2">
+    <Suspense fallback={<div className="zn-skeleton zn-musclemap__loading" />}>
+      <div className={cn("zn-musclemap", className)}>
+        <div className="zn-musclemap__views">
           {/* Anterior (front) view */}
-          <div className="flex-1 max-w-[140px]">
+          <div className="zn-musclemap__view">
             <Model
               data={modelData}
               style={{ width: "100%", padding: "0" }}
@@ -148,13 +148,13 @@ export function MuscleMap({ workout, className }: MuscleMapProps) {
               bodyColor={isDark ? BODY_BG_DARK : BODY_BG_LIGHT}
               type="anterior"
             />
-            <p className="text-[10px] text-muted-foreground text-center mt-1">
+            <p className="zn-musclemap__caption">
               {t("detail.front")}
             </p>
           </div>
 
           {/* Posterior (back) view */}
-          <div className="flex-1 max-w-[140px]">
+          <div className="zn-musclemap__view">
             <Model
               data={modelData}
               style={{ width: "100%", padding: "0" }}
@@ -162,24 +162,24 @@ export function MuscleMap({ workout, className }: MuscleMapProps) {
               bodyColor={isDark ? BODY_BG_DARK : BODY_BG_LIGHT}
               type="posterior"
             />
-            <p className="text-[10px] text-muted-foreground text-center mt-1">
+            <p className="zn-musclemap__caption">
               {t("detail.back")}
             </p>
           </div>
         </div>
 
         {/* Legend */}
-        <div className="flex items-center justify-center gap-3 text-[10px] text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: MUSCLE_HEATMAP_RAMP[0] }} />
+        <div className="zn-musclemap__legend">
+          <span className="zn-musclemap__key">
+            <span className="zn-musclemap__swatch" style={{ "--fill": MUSCLE_HEATMAP_RAMP[0] } as CSSProperties} />
             {t("detail.lowIntensity")}
           </span>
-          <span className="flex items-center gap-1">
-            <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: MUSCLE_HEATMAP_RAMP[1] }} />
+          <span className="zn-musclemap__key">
+            <span className="zn-musclemap__swatch" style={{ "--fill": MUSCLE_HEATMAP_RAMP[1] } as CSSProperties} />
             {t("detail.mediumIntensity")}
           </span>
-          <span className="flex items-center gap-1">
-            <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: MUSCLE_HEATMAP_RAMP[2] }} />
+          <span className="zn-musclemap__key">
+            <span className="zn-musclemap__swatch" style={{ "--fill": MUSCLE_HEATMAP_RAMP[2] } as CSSProperties} />
             {t("detail.highIntensity")}
           </span>
         </div>

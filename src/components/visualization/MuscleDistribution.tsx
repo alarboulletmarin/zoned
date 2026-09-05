@@ -5,11 +5,10 @@
  * Calculates approximate time per muscle group across all blocks.
  */
 
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useState, type CSSProperties } from "react";
 import { useTranslation } from "react-i18next";
 import type { StrengthWorkoutTemplate, StrengthExercise, MuscleGroup } from "@/types/strength";
 import { loadAllExercises } from "@/data/strength";
-import { cn } from "@/lib/utils";
 
 interface MuscleDistributionProps {
   workout: StrengthWorkoutTemplate;
@@ -120,31 +119,36 @@ export function MuscleDistribution({ workout, className }: MuscleDistributionPro
   )].reduce((sum, b) => sum + b.sets, 0);
 
   return (
-    <div className={cn("space-y-3", className)}>
-      <div className="space-y-2">
+    <div className={className}>
+      <div className="zn-viz-bars">
         {breakdown.map((item) => (
-          <div key={item.muscle} className="space-y-1">
-            <div className="flex items-center justify-between text-xs">
-              <span className={cn("font-medium", !item.isPrimary && "text-muted-foreground")}>
+          <div
+            key={item.muscle}
+            className="zn-viz-bar"
+            data-involvement={item.isPrimary ? "primary" : "secondary"}
+          >
+            <div className="zn-viz-bar__head">
+              <span className="zn-viz-bar__label">
                 {item.label}
                 {!item.isPrimary && (
-                  <span className="ml-1 text-[10px] text-muted-foreground/70">
+                  <span className="zn-viz-bar__note">
                     ({t("detail.secondary")})
                   </span>
                 )}
               </span>
-              <span className="text-muted-foreground">
+              <span className="zn-viz-bar__value">
                 {item.sets} {t("detail.sets")}
               </span>
             </div>
-            <div className="h-2 rounded-full bg-muted overflow-hidden">
+            <div className="zn-viz-bar__track">
               <div
-                className="h-full rounded-full transition-all"
-                style={{
-                  width: `${item.percent}%`,
-                  backgroundColor: MUSCLE_COLORS[item.muscle],
-                  opacity: item.isPrimary ? 1 : 0.6,
-                }}
+                className="zn-viz-bar__fill"
+                style={
+                  {
+                    "--pct": `${item.percent}%`,
+                    "--fill": MUSCLE_COLORS[item.muscle],
+                  } as CSSProperties
+                }
               />
             </div>
           </div>
@@ -152,7 +156,7 @@ export function MuscleDistribution({ workout, className }: MuscleDistributionPro
       </div>
 
       {/* Total */}
-      <div className="text-xs text-muted-foreground text-center pt-2 border-t">
+      <div className="zn-viz-total">
         Total: {totalSets} {t("detail.totalSets")}
       </div>
     </div>
