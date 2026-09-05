@@ -27,9 +27,25 @@ pas de `<text>`, pas de raster. `viewBox` carré, aucun attribut `width`/`height
 Une ligne de sol ondule légèrement. Une ligne mathématiquement droite se lit
 comme un schéma technique.
 
-## Les deux règles qui font la signature
+## Les trois règles qui font la signature
 
-**1. Des personnages, jamais d'objets.**
+**1. Le trait se croise.**
+
+C'est la distinction qui sépare un dessin d'une découpe, et elle a coûté deux
+dessins à comprendre.
+
+Un **contour fermé** trace le bord extérieur de la silhouette : techniquement un
+seul trait, visuellement un pochoir, une forme pleine qu'on aurait évidée. Un
+**trait qui se croise** entre dans la figure, passe par-dessus lui-même là où les
+membres se chevauchent, et ressort. Le bras passe *devant* le torse et on voit
+les deux lignes se croiser, au lieu de les fondre en un seul bord.
+
+Le duo de coureurs approuvé est du second type. Les deux premiers coureur et
+gainage étaient du premier, et ont été rejetés pour ça exactement.
+
+Les chevauchements se dessinent, ils ne s'évitent pas.
+
+**2. Des personnages, jamais d'objets.**
 
 Pas de chronomètre, pas de calendrier, pas de pictogramme. L'app embarque déjà
 123 glyphes Material Symbols : un dessin qui représente un objet entre en
@@ -40,7 +56,7 @@ Un premier essai avait produit un chronomètre et un calendrier techniquement
 propres. Ils ont été rejetés pour cette raison exacte : à 400 px, ils étaient
 indistinguables d'un glyphe Material agrandi.
 
-**2. Le vermillon marque l'appui.**
+**3. Le vermillon marque l'appui.**
 
 C'est la règle qui fait tenir la famille ensemble. Sur chaque dessin, **le point
 où le corps touche le sol** est tracé en `var(--accent)` ; tout le reste est en
