@@ -1,0 +1,114 @@
+/* Alert — an in-page message about something that just happened.
+
+   Not a toast: a toast leaves before a person can act on it and cannot hold a
+   recovery button. The four kinds share one shape; only the glyph disc and the
+   paper behind them change. */
+
+.zn-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-6);
+
+  padding: var(--sp-7) var(--sp-8);
+
+  background: var(--surface-band);
+  border: var(--border-rule);
+  border-radius: var(--r-xl);
+}
+
+/* The kind is carried by the disc, not by tinting the whole block: a full
+   vermillon panel would spend the screen's one accent on a message. */
+.zn-alert__glyph {
+  inline-size: 26px;
+  block-size: 26px;
+  flex: none;
+  display: grid;
+  place-items: center;
+
+  border: var(--border-rule);
+  border-radius: var(--r-pill);
+  background: var(--ink-1);
+  color: var(--paper-raised);
+}
+
+.zn-alert[data-kind="error"] {
+  background: var(--state-danger-soft);
+}
+.zn-alert[data-kind="error"] .zn-alert__glyph {
+  background: var(--state-danger);
+}
+
+.zn-alert[data-kind="success"] {
+  background: var(--state-success-soft);
+}
+.zn-alert[data-kind="success"] .zn-alert__glyph {
+  background: var(--state-success);
+}
+
+/* Warning shares the accent disc but keeps the sunken paper: it is a caution,
+   not a failure, and the two must not read the same at a glance. */
+.zn-alert[data-kind="warning"] .zn-alert__glyph {
+  background: var(--accent);
+}
+
+.zn-alert__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* The kind, named in words. No state in this system rests on colour alone. */
+.zn-alert__kind {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: var(--ls-mono-label);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.zn-alert__title {
+  font: var(--fw-semibold) var(--fs-h4) / 1.15 var(--font-display);
+  letter-spacing: var(--ls-h4);
+}
+
+.zn-alert__text {
+  font: var(--type-body-sm);
+  color: var(--text-muted);
+}
+
+.zn-alert__action {
+  margin-block-start: var(--sp-3);
+}
+
+.zn-alert__dismiss {
+  inline-size: 28px;
+  block-size: 28px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  padding: 0;
+
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.zn-alert__dismiss:hover {
+  color: var(--ink-1);
+}
+
+.zn-alert__dismiss:active {
+  transform: translateY(var(--press-shift));
+}
+
+@media (pointer: coarse) {
+  .zn-alert__dismiss {
+    inline-size: var(--hit-min);
+    block-size: var(--hit-min);
+  }
+}

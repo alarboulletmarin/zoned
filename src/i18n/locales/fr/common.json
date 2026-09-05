@@ -760,5 +760,14 @@
       "corosPath": "Créer",
       "applePath": "Exercice → Créer (watchOS 9+)"
     }
+  },
+  "alert": {
+    "error": "Erreur",
+    "success": "Succès",
+    "warning": "Attention",
+    "info": "Info"
+  },
+  "status": {
+    "loading": "Chargement"
   }
 }
