@@ -36,7 +36,6 @@ import {
 import { ExportMenu } from "@/components/domain/ExportMenu";
 import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
 import { Annotation } from "@/components/domain/Annotation";
-import Plank from "@/assets/doodles/plank.svg?react";
 import Runner from "@/assets/doodles/runner.svg?react";
 import { ZoneRow } from "@/components/domain/ZoneRow";
 import { ShareDialog } from "@/components/share/ShareDialog";
@@ -1093,13 +1092,14 @@ function StrengthWorkoutDetail({
             <FactStrip facts={facts} />
           </div>
 
-          {/* Le gainage porte DEUX contacts au sol, avant-bras et orteils, et
-              les deux sont en vermillon : docs/doodles.md les nomme tous les
-              deux. Il remplace un contour fermé — un pochoir, pas le trait qui
-              se croise — qui jurait à côté du duo. */}
+          {/* Le gainage attend son dessin. Deux tentatives ont échoué et sont
+              documentées dans docs/doodles.md : un contour fermé d'abord, puis
+              une pose où le vermillon peignait l'avant-bras en l'air au lieu du
+              contact — l'accent culminait six unités AU-DESSUS de la ligne de
+              sol. Le brief imprimé dit « page sous presse » ; un dessin qui
+              casse la règle de signature dirait autre chose. */}
           <IllustrationSlot
-            height={260}
-            art={Plank}
+            height={340}
             brief={tSession("illustration.strengthBrief")}
             label={tSession("illustration.label")}
           />

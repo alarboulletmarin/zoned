@@ -484,3 +484,20 @@
     align-self: start;
   }
 }
+
+/* Le dessin d'en-tête d'un guide. Aligné sur la colonne de lecture, pas
+   centré : l'en-tête se lit du haut vers le bas et un dessin centré casserait
+   l'axe que le retour, le sur-titre, le titre et le chapô tiennent. */
+.zn-guide__art {
+  block-size: 148px;
+  inline-size: auto;
+  max-inline-size: 100%;
+  align-self: flex-start;
+  color: var(--text-body);
+}
+
+@media (max-width: 640px) {
+  .zn-guide__art {
+    block-size: 120px;
+  }
+}

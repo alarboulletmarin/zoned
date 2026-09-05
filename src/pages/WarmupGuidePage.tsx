@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { SEOHead } from "@/components/seo";
 import { GlossaryLinkedText } from "@/components/domain/GlossaryLinkedText";
 import { warmupSections, warmupRoutines } from "@/data/guides/warmup";
+import Stretching from "@/assets/doodles/stretching.svg?react";
 import type { ContentBlock, Exercise, WarmupRoutine } from "@/data/guides/warmup";
 import { pickLang } from "@/lib/i18n-utils";
 
@@ -276,6 +277,15 @@ export function WarmupGuidePage() {
           <p className="zn-body zn-body--lead zn-guide__lede">
             {t("warmup.subtitle")}
           </p>
+          {/* Le seul guide dont le sujet est une posture : le dessin y dit en
+              un coup d'œil ce que le titre met une phrase à dire. Les autres
+              guides n'en portent pas — un dessin par en-tête ferait une
+              collection, pas une identité. */}
+          <Stretching
+            className="zn-guide__art"
+            aria-hidden="true"
+            focusable="false"
+          />
         </section>
 
         {/* 2 — pick a routine, read its drills */}

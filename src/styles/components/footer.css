@@ -84,6 +84,35 @@
     border-block-start: var(--border-divider);
     padding-block-start: var(--sp-10);
   }
+
+  /* Douze liens empilés à 44 px de plancher tactile, plus trois intitulés et
+     leurs filets, font huit cents pixels de pied de page : sur un téléphone le
+     document se termine par un mur. Les liens coulent donc en deux colonnes.
+
+     Le plancher de 44 px ne bouge pas — il n'est pas négociable, et c'est lui
+     qui impose la mesure : c'est la LARGEUR qui est disponible ici, pas la
+     hauteur. Sept rangées au lieu de douze, la hiérarchie des groupes intacte,
+     et leurs filets toujours là pour les séparer. */
+  .zn-footer__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-2) var(--sp-8);
+  }
+
+  /* Le bloc de marque n'a pas de liste : il garde toute la largeur pour sa
+     signature et sa phrase. */
+  .zn-footer__body {
+    padding-block: var(--sp-13) var(--sp-11);
+  }
+}
+
+/* Sous 380 px, deux colonnes de liens laissent « Générateur de parcours » sur
+   deux lignes et le pied redevient irrégulier. Une seule colonne y est plus
+   propre — c'est le seul cas où la hauteur reprend le dessus. */
+@media (max-width: 379px) {
+  .zn-footer__list {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (pointer: coarse) {

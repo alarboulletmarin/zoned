@@ -452,3 +452,19 @@
   line-height: 1;
   color: var(--text-faint);
 }
+
+/* Le dessin du 404. Il est aligné à gauche comme tout le reste de la colonne,
+   et pas centré : l'écran se lit en une phrase du haut vers le bas, et un
+   dessin centré au-dessus d'un texte aligné à gauche casse cet axe. */
+.zn-ref__art {
+  block-size: 132px;
+  inline-size: auto;
+  max-inline-size: 100%;
+  color: var(--text-body);
+}
+
+@media (max-width: 640px) {
+  .zn-ref__art {
+    block-size: 108px;
+  }
+}
