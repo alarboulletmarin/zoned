@@ -54,7 +54,7 @@
       "title": "What am I running today?",
       "lede": "{{plans}} plans from 5K to marathon, {{sessions}} sessions explained by the science, {{calculators}} calculators. Free, no account, everything stays in your browser.",
       "week": "week {{n}}",
-      "illustrationBrief": "Two runners, continuous 2 px line, no fill, ink #16130E",
+      "illustrationBrief": "Two runners, continuous 2 px line, no fill, ink currentColor, ground contact in vermillon",
       "illustrationLabel": "Slot reserved for a hand-drawn illustration",
       "fig": {
         "kicker": "Fig. 01 — polarised model",

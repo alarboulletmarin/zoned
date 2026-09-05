@@ -54,7 +54,7 @@
       "title": "Qu'est-ce que je cours aujourd'hui ?",
       "lede": "{{plans}} plans du 5K au marathon, {{sessions}} séances expliquées par la science, {{calculators}} calculateurs. Gratuit, sans compte, tout reste dans ton navigateur.",
       "week": "semaine {{n}}",
-      "illustrationBrief": "Duo de coureurs, trait continu 2 px, sans remplissage, encre #16130E",
+      "illustrationBrief": "Duo de coureurs, trait continu 2 px, sans remplissage, encre currentColor, appui au sol en vermillon",
       "illustrationLabel": "Emplacement réservé à une illustration dessinée à la main",
       "fig": {
         "kicker": "Fig. 01 — modèle polarisé",

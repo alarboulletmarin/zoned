@@ -181,7 +181,7 @@
     "notFoundBody": "The link points to an id the catalogue no longer knows. Your favourites, plans and saved sessions are untouched."
   },
   "illustration": {
-    "brief": "Runner on a track, side view, 2 px line, stopwatch in accent",
+    "brief": "Runner on a track, side view, 2 px line, no objects, ground contact in accent",
     "strengthBrief": "Plank seen from the side, 2 px line, contact points in accent",
     "label": "Slot reserved for a hand-drawn illustration"
   }

@@ -35,6 +35,8 @@ import {
 } from "@/components/domain/WorkoutStructure";
 import { ExportMenu } from "@/components/domain/ExportMenu";
 import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
+import Runner from "@/assets/doodles/runner.svg?react";
+import Plank from "@/assets/doodles/plank.svg?react";
 import { ZoneRow } from "@/components/domain/ZoneRow";
 import { ShareDialog } from "@/components/share/ShareDialog";
 import { toast } from "sonner";
@@ -611,6 +613,7 @@ export function WorkoutDetailPage() {
 
           <IllustrationSlot
             height={340}
+            art={Runner}
             brief={t("session:illustration.brief")}
             label={t("session:illustration.label")}
           />
@@ -1076,6 +1079,7 @@ function StrengthWorkoutDetail({
 
           <IllustrationSlot
             height={340}
+            art={Plank}
             brief={tSession("illustration.strengthBrief")}
             label={tSession("illustration.label")}
           />

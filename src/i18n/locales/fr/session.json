@@ -181,7 +181,7 @@
     "notFoundBody": "Le lien pointe vers un identifiant que le catalogue ne connaît pas. Tes favoris, tes plans et tes séances enregistrées sont intacts."
   },
   "illustration": {
-    "brief": "Coureur sur piste vu de côté, trait 2 px, chronomètre en accent",
+    "brief": "Coureur sur piste vu de côté, trait 2 px, aucun objet, appui au sol en accent",
     "strengthBrief": "Gainage vu de profil, trait 2 px, appuis en accent",
     "label": "Emplacement réservé à une illustration dessinée à la main"
   }

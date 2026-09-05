@@ -27,3 +27,17 @@
   text-transform: uppercase;
   color: var(--text-faint);
 }
+
+/* A drawing landed. It carries its own frame, so the dashed outline and the
+   hatch go: the art is the texture now. Ink follows currentColor, the ground
+   contacts keep their var(--accent). */
+.zn-slot--art {
+  padding: 0;
+  background: none;
+  border: 0;
+}
+
+.zn-slot__art {
+  inline-size: 100%;
+  block-size: 100%;
+}

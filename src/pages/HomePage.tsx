@@ -26,6 +26,7 @@ import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
 import { WorkoutCard } from "@/components/domain/WorkoutCard";
 import { DoorCard } from "@/components/domain/DoorCard";
 import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
+import RunnersDuo from "@/assets/doodles/runners-duo.svg?react";
 import { StatBlock } from "@/components/domain/StatBlock";
 import { ZoneRow } from "@/components/domain/ZoneRow";
 import {
@@ -563,6 +564,7 @@ export function HomePage() {
 
         <IllustrationSlot
           height={400}
+          art={RunnersDuo}
           brief={t("homepage:home.hero.illustrationBrief")}
           label={t("homepage:home.hero.illustrationLabel")}
         />
