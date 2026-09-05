@@ -178,7 +178,9 @@
     "total": "Total {{duration}}",
     "exportFormats": ".fit · .ics · .pdf · .png",
     "notFoundTitle": "Cette séance n'est plus au catalogue",
-    "notFoundBody": "Le lien pointe vers un identifiant que le catalogue ne connaît pas. Tes favoris, tes plans et tes séances enregistrées sont intacts."
+    "notFoundBody": "Le lien pointe vers un identifiant que le catalogue ne connaît pas. Tes favoris, tes plans et tes séances enregistrées sont intacts.",
+    "profileNote": "la hauteur dit l'intensité, la largeur dit le temps passé dedans",
+    "zonesNote": "des minutes, pas des kilomètres : c'est le temps passé qui fait l'adaptation"
   },
   "illustration": {
     "brief": "Coureur sur piste vu de côté, trait 2 px, aucun objet, appui au sol en accent",

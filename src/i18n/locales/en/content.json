@@ -19,7 +19,7 @@
     },
     "privacy": {
       "title": "Privacy",
-      "noServer": "No server, no account, no tracker. Your data stays in your browser."
+      "noServer": "No server, no account, no cookie. Your data stays in your browser."
     },
     "credits": {
       "title": "Tech stack",
@@ -121,7 +121,7 @@
     "free": "100% free",
     "noAccount": "No account required",
     "localData": "Your data stays on your device",
-    "footerNote": "No tracking. No cookies."
+    "footerNote": "No cookie. No profile."
   },
   "aboutPage": {
     "kicker": "Open source · no account",

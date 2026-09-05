@@ -26,6 +26,11 @@ import { ZoneDetailModal } from "@/components/domain/ZoneDetailModal";
 import { WorkoutCard } from "@/components/domain/WorkoutCard";
 import { DoorCard } from "@/components/domain/DoorCard";
 import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
+import { ZoneFigures } from "@/components/domain/ZoneFigures";
+import DoorSessions from "@/assets/doodles/door-sessions.svg?react";
+import DoorPlan from "@/assets/doodles/door-plan.svg?react";
+import DoorLearn from "@/assets/doodles/door-learn.svg?react";
+import DoorNumbers from "@/assets/doodles/door-numbers.svg?react";
 import RunnersDuo from "@/assets/doodles/runners-duo.svg?react";
 import { StatBlock } from "@/components/domain/StatBlock";
 import { ZoneRow } from "@/components/domain/ZoneRow";
@@ -579,6 +584,7 @@ export function HomePage() {
         </h2>
         <DoorCard
           to="/library"
+          art={DoorSessions}
           kicker={t("homepage:home.s01.e1Kicker")}
           title={t("homepage:home.s01.e1Title")}
           body={t("homepage:home.s01.e1Body")}
@@ -586,6 +592,7 @@ export function HomePage() {
         />
         <DoorCard
           to="/plans"
+          art={DoorPlan}
           kicker={t("homepage:home.s01.e2Kicker")}
           title={t("homepage:home.s01.e2Title")}
           body={t("homepage:home.s01.e2Body")}
@@ -593,6 +600,7 @@ export function HomePage() {
         />
         <DoorCard
           to="/methodology"
+          art={DoorLearn}
           kicker={t("homepage:home.s01.e3Kicker")}
           title={t("homepage:home.s01.e3Title")}
           body={t("homepage:home.s01.e3Body")}
@@ -603,6 +611,7 @@ export function HomePage() {
             and the number is already in the lede. */}
         <DoorCard
           to="/calculators"
+          art={DoorNumbers}
           kicker={t("homepage:home.s06.kicker")}
           title={t("homepage:home.s06.title")}
           body={t("homepage:home.s06.body")}
@@ -733,6 +742,8 @@ export function HomePage() {
             }
             body={t("homepage:home.s03.body")}
           />
+
+          <ZoneFigures label={t("homepage:home.s03.figuresLabel")} />
 
           <ZonesPersonaliser
             prefs={userPrefs}

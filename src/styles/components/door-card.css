@@ -59,3 +59,34 @@
   block-size: 15px;
   flex: none;
 }
+
+/* ── la porte qui porte un dessin ─────────────────────────────────────────
+   Le doodle est le visage de la porte : il vient avant le sur-titre, à
+   gauche comme tout le reste de la carte, et il pousse le texte vers le bas
+   sans changer la hauteur de la carte — les quatre portes restent alignées.
+
+   Il hérite de l'encre du texte, donc il pâlit avec elle au survol, et il
+   n'a pas de couleur propre à surveiller. */
+
+.zn-door__art {
+  block-size: 88px;
+  inline-size: auto;
+  max-inline-size: 100%;
+  align-self: flex-start;
+  margin-block-end: calc(-1 * var(--sp-2));
+}
+
+/* Avec un dessin, la carte n'a plus besoin d'un plancher : c'est le dessin
+   qui lui donne sa hauteur, et le forcer à 210px laisserait un vide sous la
+   ligne d'action. */
+.zn-door--art {
+  min-block-size: 0;
+}
+
+/* Le mobile est le format principal — la carte y fait toute la largeur, donc
+   le dessin peut garder sa taille au lieu de rétrécir avec la colonne. */
+@media (max-width: 640px) {
+  .zn-door__art {
+    block-size: 92px;
+  }
+}

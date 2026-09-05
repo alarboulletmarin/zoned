@@ -33,7 +33,6 @@
     "swimmingTitle": "Plonge dans le bassin",
     "swimmingDesc": "10 séances : technique, endurance, sprints, pyramides. Zones CSS intégrées.",
     "swimmingCta": "Voir les séances natation",
-
     "masthead": {
       "volume": "Vol.",
       "issue": "N°",
@@ -41,11 +40,15 @@
       "local": "100 % local",
       "noAccount": "Sans compte"
     },
-
     "hero": {
       "head": "L'entraînement",
       "tail": "sans bruit",
-      "accent": ["structuré", "lisible", "outillé", "documenté"],
+      "accent": [
+        "structuré",
+        "lisible",
+        "outillé",
+        "documenté"
+      ],
       "lead": "Sache exactement quoi courir demain. {{plans}} plans d'entraînement du 5K au marathon, {{sessions}} séances expliquées par la science (Seiler, Daniels, Billat, Coggan) et {{calculators}} calculateurs. Gratuit, sans compte, tout reste dans ton navigateur.",
       "ctaPrimary": "Générer mon plan",
       "ctaPrimaryHasPlans": "Voir mes plans",
@@ -75,7 +78,6 @@
         "highCaption": "qualité intense"
       }
     },
-
     "stats": {
       "sessions": "Séances classées",
       "plansFrom": "Plans",
@@ -83,7 +85,6 @@
       "trackers": "Tracker",
       "noAccount": "0 compte"
     },
-
     "s01": {
       "kicker": "Trois entrées",
       "title": "Un outil par usage, pas par persona",
@@ -101,13 +102,11 @@
       "e3Body": "Chaque séance cite sa méthode, la zone visée et sa référence publiée.",
       "e3Link": "Méthodes"
     },
-
     "s02": {
       "kicker": "Suggéré cette semaine",
       "title": "Trois séances pour rester dans le bon volume cette semaine",
       "body": "Sélection déterministe par semaine ISO. Ni A/B, ni boucle d'engagement."
     },
-
     "s03": {
       "kicker": "L'atlas des zones",
       "title1": "Six zones, six adaptations,",
@@ -128,9 +127,9 @@
         "fcMaxLabel": "FCmax (bpm)",
         "submit": "Calculer mes zones",
         "cancel": "Annuler"
-      }
+      },
+      "figuresLabel": "Le même coureur à six intensités, du pas de marche au sprint : plus la zone monte, plus le buste s'engage et plus le trait est sombre."
     },
-
     "s04": {
       "kicker": "Les méthodes",
       "title": "Chercheurs & méthodes de référence",
@@ -171,7 +170,6 @@
         }
       }
     },
-
     "s05": {
       "kicker": "Plans · 5K → Marathon",
       "title": "Une trajectoire pour chaque distance",
@@ -196,7 +194,6 @@
         "trail": "Trail"
       }
     },
-
     "s06": {
       "kicker": "Calculateurs",
       "title": "Mesurer mes plages",
@@ -220,7 +217,6 @@
         "whatIf": "Comparez deux scénarios d'entraînement et visualisez les différences."
       }
     },
-
     "s07": {
       "kicker": "Séance de la semaine",
       "open": "Lancer la séance",
@@ -230,20 +226,18 @@
       "zone": "Zone",
       "lvl": "Niveau"
     },
-
     "s08": {
       "kicker": "Éthos",
       "title1": "Aucune donnée",
       "title2": "ne quitte ton appareil",
       "body": "Pas de serveur, pas de compte, pas de cookie tiers. Code public sous licence MIT.",
       "lines": {
-        "trackers": "Tracker tiers",
+        "trackers": "Cookie",
         "account": "Compte requis",
         "network": "Données envoyées",
         "exports": "Exports locaux"
       }
     },
-
     "s09": {
       "kicker": "Questions fréquentes",
       "title": "Cinq points levés d'avance",
@@ -280,9 +274,7 @@
         }
       }
     },
-
     "tip": "Conseil du jour",
-
     "cta": {
       "kicker": "Commencer maintenant",
       "line1": "Ta prochaine course commence ici",
@@ -290,7 +282,6 @@
       "primary": "Générer mon plan",
       "secondary": "Explorer les séances"
     },
-
     "footer": {
       "tagline": "Un carnet d'entraînement local, gratuit et libre.",
       "groups": {
@@ -318,7 +309,7 @@
       "licenses": "Licences tierces",
       "version": "v.{{version}}",
       "builtInPublic": "Construit en public",
-      "local": "100 % local · sans compte · sans tracker"
+      "local": "100 % local · sans compte · sans cookie"
     }
   }
 }

@@ -1,0 +1,65 @@
+/* Annotation — la légende qui montre.
+
+   Une ligne : la figure éventuelle, le texte, la flèche. L'alignement se fait
+   sur la ligne de base du texte, pas au centre : c'est le texte qui est lu, la
+   flèche n'est qu'un prolongement de sa dernière lettre. */
+
+.zn-note {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-5);
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.zn-note[data-align="end"] {
+  justify-content: flex-end;
+}
+
+.zn-note__text {
+  max-inline-size: 30ch;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  line-height: 1.6;
+  letter-spacing: var(--ls-mono);
+}
+
+/* La flèche descend sous la ligne de texte pour aller chercher le bloc : le
+   décalage négatif est ce qui la fait mordre sur l'espace de la cible au lieu
+   de repousser celle-ci vers le bas. */
+.zn-note__arrow {
+  inline-size: 68px;
+  block-size: auto;
+  flex: none;
+  color: var(--ink-1);
+  margin-block-end: calc(-1 * var(--sp-8));
+}
+
+.zn-note[data-arrow="up-right"] .zn-note__arrow,
+.zn-note[data-arrow="hook"] .zn-note__arrow {
+  margin-block-end: 0;
+  margin-block-start: calc(-1 * var(--sp-8));
+}
+
+.zn-note__figure {
+  block-size: 84px;
+  inline-size: auto;
+  flex: none;
+  color: var(--ink-1);
+}
+
+/* Sous 640 px la colonne fait 340 px : figure + texte + flèche ne tiennent pas
+   sur une ligne. La figure part la première — c'est le texte qui informe. */
+@media (max-width: 640px) {
+  .zn-note__figure {
+    display: none;
+  }
+
+  .zn-note__arrow {
+    inline-size: 52px;
+  }
+
+  .zn-note__text {
+    font-size: calc(var(--fs-mono) - 1px);
+  }
+}

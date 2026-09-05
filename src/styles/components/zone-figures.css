@@ -1,0 +1,43 @@
+/* ZoneFigures — la planche des six zones.
+
+   Six cellules d'égale largeur : c'est l'égalité des cadres qui fait lire la
+   progression. Une grille, pas un flex, pour que la sixième figure ne soit pas
+   plus large que la première sous prétexte qu'elle est plus penchée. */
+
+.zn-zfig {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--sp-6);
+  align-items: end;
+}
+
+.zn-zfig__cell {
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-4);
+  /* La rampe est faite pour des aplats ; sur un trait de 2 px, Z1 à 14 %
+     disparaît. Le plancher d'opacité remonte le pâle sans toucher la rampe,
+     qui reste la source de vérité pour les fonds. */
+  color: color-mix(in srgb, var(--zfig-ink) 100%, var(--ink-1) 22%);
+}
+
+.zn-zfig__art {
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.zn-zfig__code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-mono);
+  color: var(--text-faint);
+}
+
+/* Sous 640 px, six cadres côte à côte donnent des figures de 40 px : illisible.
+   Deux rangées de trois gardent la lecture de gauche à droite, ligne à ligne. */
+@media (max-width: 640px) {
+  .zn-zfig {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-8) var(--sp-5);
+  }
+}

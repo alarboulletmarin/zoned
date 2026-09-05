@@ -35,8 +35,9 @@ import {
 } from "@/components/domain/WorkoutStructure";
 import { ExportMenu } from "@/components/domain/ExportMenu";
 import { IllustrationSlot } from "@/components/domain/IllustrationSlot";
-import Runner from "@/assets/doodles/runner.svg?react";
+import { Annotation } from "@/components/domain/Annotation";
 import Plank from "@/assets/doodles/plank.svg?react";
+import Runner from "@/assets/doodles/runner.svg?react";
 import { ZoneRow } from "@/components/domain/ZoneRow";
 import { ShareDialog } from "@/components/share/ShareDialog";
 import { toast } from "sonner";
@@ -641,6 +642,17 @@ export function WorkoutDetailPage() {
             </div>
 
             <div>
+              {/* Le profil est la seule chose de la page qui se lit sur deux
+                  axes à la fois. Sans un mot, on le prend pour une frise
+                  décorative — d'où l'annotation, qui dit quoi regarder et le
+                  montre. Une par écran : c'est la même discipline que l'aplat
+                  vermillon unique. */}
+              <Annotation
+                text={t("session:screen.profileNote")}
+                arrow="down-right"
+                align="start"
+                figure
+              />
               <ZoneBar
                 blocks={profileBlocks}
                 height={112}
@@ -676,6 +688,10 @@ export function WorkoutDetailPage() {
             <h2 id="session-zones" className="zn-title">
               {t("session:titles.zoneDistribution")}
             </h2>
+            {/* Deuxième annotation de la page, et sans figure : le personnage
+                n'apparaît qu'une fois par écran, les flèches peuvent se
+                répéter. Sinon deux narrateurs se disputent la même page. */}
+            <Annotation text={t("session:screen.zonesNote")} arrow="down-right" />
             <div className="zn-session__zones">
               {zonedRows.map((row) => (
                 <ZoneRow
@@ -1077,8 +1093,12 @@ function StrengthWorkoutDetail({
             <FactStrip facts={facts} />
           </div>
 
+          {/* Le gainage porte DEUX contacts au sol, avant-bras et orteils, et
+              les deux sont en vermillon : docs/doodles.md les nomme tous les
+              deux. Il remplace un contour fermé — un pochoir, pas le trait qui
+              se croise — qui jurait à côté du duo. */}
           <IllustrationSlot
-            height={340}
+            height={260}
             art={Plank}
             brief={tSession("illustration.strengthBrief")}
             label={tSession("illustration.label")}

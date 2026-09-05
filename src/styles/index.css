@@ -54,6 +54,8 @@
 @import "./components/footer.css" layer(components);
 @import "./components/guides.css" layer(components);
 @import "./components/home.css" layer(components);
+@import "./components/zone-figures.css" layer(components);
+@import "./components/annotation.css" layer(components);
 @import "./components/illustration-slot.css" layer(components);
 @import "./components/learn.css" layer(components);
 @import "./components/library.css" layer(components);

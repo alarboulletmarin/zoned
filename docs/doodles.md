@@ -129,6 +129,72 @@ Puppeteer est déjà une dépendance de développement et Chrome est télécharg
 `scripts/generate-og.ts` montre comment ce dépôt le pilote. Des scripts de rendu
 utilisables traînent dans le répertoire de travail des runs précédents.
 
+## Le gréement
+
+Le premier atelier écrivait chaque dessin à la main, en coordonnées. Il a produit
+des bonshommes-bâtons, puis, après huit tours de correction, trois dessins qui
+tiennent. Cette méthode ne passe pas à l'échelle : vingt dessins, c'est vingt
+fois huit tours, et rien ne garantit qu'ils partagent la même écriture.
+
+Le dessin approuvé, lui, est une **traversée de 78 ancres lissée en
+Catmull-Rom**. On peut donc la découper en articulations et la reposer. C'est ce
+que fait `scripts/doodles/rig.mjs` : toute figure produite avec lui hérite de
+l'écriture exacte du duo — mêmes boucles de main, même tête, même pied, même
+tremblement. Le trait n'est plus à retrouver à chaque dessin, il est acquis ; il
+ne reste que la pose à juger.
+
+```js
+import { Figure, svg, ground } from "./rig.mjs";
+
+const f = new Figure();                       // la figure approuvée
+f.pose({ leadHip: 20, frontArm: -30, head: 6 });   // degrés, horaire positif
+f.plantLead({ knee: -5 });                    // pose le pied avant au sol
+f.flip();                                     // elle regarde à gauche
+```
+
+Douze articulations, de la plus proximale à la plus distale — une rotation de
+hanche emporte le genou, qui emporte le pied : `torso`, `head`, `backArm` /
+`backElbow` / `backHand`, `frontArm` / `frontElbow` / `frontHand`, `leadHip` /
+`leadKnee` / `leadFoot`, `standHip` / `standKnee` / `standFoot`.
+
+`f.paths(accents)` découpe la traversée en sous-chemins qui partagent leurs
+extrémités : le trait reste continu, seule la couleur change. C'est exactement ce
+que le dessin approuvé fait pour sa semelle.
+
+**Ne devine pas les signes de rotation** : rends une planche avec la même pose à
+±20° et regarde-la. Deux minutes contre une heure.
+
+### Ce que le gréement fait bien, et ce qu'il ne fait pas
+
+Trouvé en le poussant, pas en le lisant.
+
+- **La famille debout marche.** Marcher, courir, se tenir droit, se pencher,
+  lever un bras, porter la main au visage : le trait se croise proprement, les
+  membres se lisent.
+- **Les poses pliées échouent.** Assis genoux repliés, accroupi : au-delà d'une
+  flexion d'environ 90°, les deux bords d'un membre se rejoignent et le trait
+  fait un nœud au lieu d'un chevauchement. Deux dessins ont été jetés pour ça.
+  Ce n'est pas un réglage à trouver, c'est une limite : choisir une autre pose.
+- **Le gainage n'entre pas dans le gréement.** Basculer la figure de 80° donne
+  un coureur couché, pas un gainage : les bras restent en position de foulée et
+  ne descendent pas au sol. Il demande une traversée écrite pour lui, en
+  reprenant les boucles de tête, de main et de pied de `BASE`.
+
+## Le cadre est en paysage, la figure est verticale
+
+Une silhouette debout serrée dans son propre gabarit fait un trait perdu au
+milieu d'une carte large — vu en page, sur l'état vide de `/plans`, et c'est
+sans appel. Le dessin approuvé est en 440×323 : c'est **le sol, prolongé de part
+et d'autre, qui fait le dessin**. Cadre autour de 1,3:1, avec un peu plus de sol
+devant la figure que derrière.
+
+## Le vermillon ne se pose que sur un contact réel
+
+La règle 3 dit « le point où le corps touche le sol ». Il faut la lire au pied de
+la lettre : un accent peint sur une semelle qui flotte à dix pixels au-dessus de
+la ligne de sol est une faute, pas une licence. Elle arrive dès qu'on repose une
+jambe sans revérifier — c'est arrivé ici. Regarde le contact, pas le code.
+
 Et **regarder dans la page** avant de valider : un dessin peut tenir seul et
 échouer à côté de la vraie typo, à la vraie taille. Vérifier aussi le thème
 sombre — l'encre suit `currentColor`, l'accent doit rester lisible.

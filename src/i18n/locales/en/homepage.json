@@ -33,7 +33,6 @@
     "swimmingTitle": "Dive into the pool",
     "swimmingDesc": "10 sessions: technique, endurance, sprints, pyramids. Built-in CSS zones.",
     "swimmingCta": "See swimming sessions",
-
     "masthead": {
       "volume": "Vol.",
       "issue": "No.",
@@ -41,11 +40,15 @@
       "local": "100 % local",
       "noAccount": "No account"
     },
-
     "hero": {
       "head": "Training",
       "tail": "without the noise",
-      "accent": ["structured", "readable", "instrumented", "documented"],
+      "accent": [
+        "structured",
+        "readable",
+        "instrumented",
+        "documented"
+      ],
       "lead": "Know exactly what to run tomorrow. {{plans}} training plans from 5K to marathon, {{sessions}} workouts grounded in the science (Seiler, Daniels, Billat, Coggan) and {{calculators}} calculators. Free, no account, everything stays in your browser.",
       "ctaPrimary": "Generate my plan",
       "ctaPrimaryHasPlans": "View my plans",
@@ -75,7 +78,6 @@
         "highCaption": "intense quality"
       }
     },
-
     "stats": {
       "sessions": "Catalogued sessions",
       "plansFrom": "Plans",
@@ -83,7 +85,6 @@
       "trackers": "Tracker",
       "noAccount": "0 account"
     },
-
     "s01": {
       "kicker": "Three entry points",
       "title": "One tool per use, not per persona",
@@ -101,13 +102,11 @@
       "e3Body": "Every session cites its method, the zone it targets and its published reference.",
       "e3Link": "Methods"
     },
-
     "s02": {
       "kicker": "Suggested this week",
       "title": "Three sessions to stay on the right volume",
       "body": "Deterministic by ISO week. No A/B, no engagement loop."
     },
-
     "s03": {
       "kicker": "The zone atlas",
       "title1": "Six zones, six adaptations,",
@@ -128,9 +127,9 @@
         "fcMaxLabel": "HRmax (bpm)",
         "submit": "Compute my zones",
         "cancel": "Cancel"
-      }
+      },
+      "figuresLabel": "The same runner at six intensities, from a walk to a sprint: the higher the zone, the more the torso leans and the darker the line."
     },
-
     "s04": {
       "kicker": "The methods",
       "title": "Researchers & reference methods",
@@ -171,7 +170,6 @@
         }
       }
     },
-
     "s05": {
       "kicker": "Plans · 5K → Marathon",
       "title": "One trajectory per distance",
@@ -196,7 +194,6 @@
         "trail": "Trail"
       }
     },
-
     "s06": {
       "kicker": "Calculators",
       "title": "Measure my ranges",
@@ -220,7 +217,6 @@
         "whatIf": "Compare two training scenarios side by side."
       }
     },
-
     "s07": {
       "kicker": "Session of the week",
       "open": "Start session",
@@ -230,20 +226,18 @@
       "zone": "Zone",
       "lvl": "Level"
     },
-
     "s08": {
       "kicker": "Ethos",
       "title1": "No data",
       "title2": "ever leaves your device",
       "body": "No server, no account, no third-party cookies. Public code under the MIT licence.",
       "lines": {
-        "trackers": "Third-party trackers",
+        "trackers": "Cookie",
         "account": "Account required",
         "network": "Data sent",
         "exports": "Local exports"
       }
     },
-
     "s09": {
       "kicker": "Frequently asked",
       "title": "Five questions answered upfront",
@@ -280,9 +274,7 @@
         }
       }
     },
-
     "tip": "Tip of the day",
-
     "cta": {
       "kicker": "Get started",
       "line1": "Your next race starts here",
@@ -290,7 +282,6 @@
       "primary": "Generate my plan",
       "secondary": "Explore the workouts"
     },
-
     "footer": {
       "tagline": "A local training journal, free and open.",
       "groups": {
@@ -318,7 +309,7 @@
       "licenses": "Third-party licences",
       "version": "v.{{version}}",
       "builtInPublic": "Built in public",
-      "local": "100% local · no account · no tracker"
+      "local": "100% local · no account · no cookie"
     }
   }
 }

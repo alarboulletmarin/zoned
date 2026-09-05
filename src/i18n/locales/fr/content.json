@@ -19,7 +19,7 @@
     },
     "privacy": {
       "title": "Vie privée",
-      "noServer": "Aucun serveur, aucun compte, aucun tracker. Tes données restent dans ton navigateur."
+      "noServer": "Aucun serveur, aucun compte, aucun cookie. Tes données restent dans ton navigateur."
     },
     "credits": {
       "title": "Stack technique",
@@ -121,7 +121,7 @@
     "free": "100% gratuit",
     "noAccount": "Aucun compte requis",
     "localData": "Tes données restent sur ton appareil",
-    "footerNote": "Pas de tracking. Pas de cookies."
+    "footerNote": "Pas de cookie. Pas de profil."
   },
   "aboutPage": {
     "kicker": "Open source · sans compte",

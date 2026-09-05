@@ -79,3 +79,44 @@
 .zn-empty[data-variant="no-results"] .zn-empty__description {
   color: var(--text-body);
 }
+
+/* ── un dessin à la place du glyphe ───────────────────────────────────────
+   Le cercle de 52 px et son glyphe de 22 px disent « pas de données ». Un
+   personnage dessiné dit de quelle page il s'agit — et c'est le même trait
+   que le reste de l'app, à la même encre, donc il n'a pas besoin d'un cadre
+   pour appartenir à la page. Le cercle part avec le glyphe.
+
+   La hauteur est plafonnée plutôt que fixée : le dessin porte son propre
+   rapport de forme et le cadre en tirets ne doit pas grandir avec lui. */
+.zn-empty__art {
+  display: block;
+  block-size: 156px;
+  inline-size: auto;
+  max-inline-size: 100%;
+  flex: none;
+  color: var(--text-body);
+}
+
+/* Le dessin occupe déjà l'espace que le cercle prenait ; garder l'écart de
+   base ferait flotter le titre. */
+.zn-empty--art {
+  gap: var(--sp-4);
+}
+
+/* Sur un pointeur grossier la carte est étroite : le dessin cède la place au
+   texte, qui porte l'information. */
+@media (max-width: 640px) {
+  .zn-empty__art {
+    block-size: 128px;
+  }
+}
+
+/* Les variantes teintent le glyphe. Un dessin, lui, garde son encre : le
+   vermillon y est réservé au contact avec le sol, et une figure entièrement
+   rouge lirait comme une erreur de rendu. Seul l'état positif fait exception,
+   et encore : il ne teinte rien, il laisse le trait tel quel. */
+.zn-empty[data-variant="error"] .zn-empty__art,
+.zn-empty[data-variant="offline"] .zn-empty__art,
+.zn-empty[data-variant="not-started"] .zn-empty__art {
+  color: var(--text-body);
+}
