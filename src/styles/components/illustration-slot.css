@@ -41,3 +41,24 @@
   inline-size: 100%;
   block-size: 100%;
 }
+
+/* A slot is sized in px by its caller, which is right on a 1440px page and
+   wrong on a phone: 400px of an 844px screen is half the viewport, and a
+   drawing whose frame is wider than tall floats in it with dead space above
+   and below. Cap the height on small screens and let the aspect ratio decide,
+   so the drawing sizes itself to the column it actually has. */
+@media (max-width: 640px) {
+  .zn-slot {
+    block-size: auto;
+    max-block-size: var(--slot-h, 340px);
+  }
+
+  /* With no artwork the slot still needs a body to print the brief in. */
+  .zn-slot:not(.zn-slot--art) {
+    min-block-size: 200px;
+  }
+
+  .zn-slot--art .zn-slot__art {
+    block-size: auto;
+  }
+}
