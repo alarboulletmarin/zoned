@@ -89,6 +89,14 @@
   padding-inline: 0;
 }
 
+/* The reserve a lazy route holds while it loads. It is a viewport tall for one
+   reason: the footer sits under it, and a short page resolving into a shorter
+   hold would drag the footer up into view — appearing is free, moving is a
+   layout shift, and the Lighthouse budget on this project is CLS exactly 0. */
+.zn-page__hold {
+  min-block-size: 100vh;
+}
+
 /* ── skip link ────────────────────────────────────────────────────────── */
 
 /* Off-screen until focused, then a full ink inversion in the top corner. It

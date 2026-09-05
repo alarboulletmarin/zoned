@@ -306,53 +306,53 @@ function AccountMenu() {
           <UserRound />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
+      <DropdownMenuContent align="end" className="zn-topbar__account-menu">
         <DropdownMenuItem asChild>
-          <Link to="/profile" className="flex items-center gap-2 cursor-pointer">
-            <UserRound className="size-4" />
+          <Link to="/profile">
+            <UserRound />
             {t("nav.profile")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/my-zones" className="flex items-center gap-2 cursor-pointer">
-            <Gauge className="size-4" />
+          <Link to="/my-zones">
+            <Gauge />
             {t("nav.myZones")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/favorites" className="flex items-center gap-2 cursor-pointer">
-            <Heart className="size-4" />
+          <Link to="/favorites">
+            <Heart />
             {t("nav.favorites")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/workout/builder" className="flex items-center gap-2 cursor-pointer">
-            <Plus className="size-4" />
+          <Link to="/workout/builder">
+            <Plus />
             {t("nav.builder")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link to="/settings" className="flex items-center gap-2 cursor-pointer">
-            <Settings className="size-4" />
+          <Link to="/settings">
+            <Settings />
             {t("nav.settings")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/contribute" className="flex items-center gap-2 cursor-pointer">
-            <Send className="size-4" />
+          <Link to="/contribute">
+            <Send />
             {t("nav.contribute")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/changelog" className="flex items-center gap-2 cursor-pointer">
-            <Sparkles className="size-4" />
+          <Link to="/changelog">
+            <Sparkles />
             {t("nav.changelog")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link to="/about" className="flex items-center gap-2 cursor-pointer">
-            <Info className="size-4" />
+          <Link to="/about">
+            <Info />
             {t("nav.about")}
           </Link>
         </DropdownMenuItem>

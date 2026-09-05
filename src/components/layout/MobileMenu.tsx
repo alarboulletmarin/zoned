@@ -155,7 +155,7 @@ export function MobileMenu() {
       <dialog
         id="mobile-menu"
         ref={dialogRef}
-        className="zn-menu"
+        className="zn-mobile-menu"
         aria-label={t("actions.menu")}
       >
         <div className="zn-menu__inner">

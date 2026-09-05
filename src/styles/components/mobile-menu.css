@@ -19,7 +19,15 @@
  * the floor applies to every pointer that can reach it.
  */
 
-/* ── the two pills, one on top of the other's place ───────────────────── */
+/* Le panneau s'appelle .zn-mobile-menu et pas .zn-menu : dropdown-menu.css
+   possède déjà .zn-menu pour tous les DropdownMenuContent de Radix. Les deux
+   ont vécu ensemble le temps d'un commit, dans la même couche et à la même
+   spécificité, et comme cette feuille est importée après, ses règles de
+   dialogue plein écran — position fixed, inset 0, fond encre — s'appliquaient
+   à CHAQUE menu déroulant de l'app : encre sur encre, et 176 px hors du
+   viewport. Deux revues l'ont mesuré indépendamment. Ne réutilise pas ce nom.
+
+── the two pills, one on top of the other's place ───────────────────── */
 
 /* Closed and open, the button lives at the same coordinates: the panel opens
    under the thumb and closes under it too. */
@@ -88,7 +96,7 @@
 
 /* A dialog ships with a border, padding, auto margins and a size capped below
    the viewport — all four are undone here so it can be the whole screen. */
-.zn-menu {
+.zn-mobile-menu {
   position: fixed;
   inset: 0;
   margin: 0;
@@ -109,7 +117,7 @@
 /* Only the open state gets a display value: the UA rule that hides a closed
    dialog is `dialog:not([open])`, and an unconditional display here would
    defeat it. */
-.zn-menu[open] {
+.zn-mobile-menu[open] {
   display: flex;
   flex-direction: column;
   animation: zn-menu-in var(--dur-base) var(--ease-out);
@@ -120,7 +128,7 @@
   to { opacity: 1; }
 }
 
-.zn-menu::backdrop {
+.zn-mobile-menu::backdrop {
   background: var(--panel-ink);
 }
 

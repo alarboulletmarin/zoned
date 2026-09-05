@@ -743,9 +743,38 @@
   }
 }
 
-.zn-rsp__bar .zn-rs-actions {
+/* The bar carries one call, like every other dock in the system. What the
+   pill leaves at 390px is 230px, and "Exporter en PDF" measures 194px on its
+   own: a second control here does not shrink, it slides under the pill. Save
+   and share sit in the page instead, and adjust is on the summary line. */
+.zn-rsp__barcall {
   flex: 1;
   min-inline-size: 0;
+}
+
+.zn-rsp__barspin {
+  animation: zoned-spin 700ms linear infinite;
+}
+
+/* ── keeping the plan ─────────────────────────────────────────────────── */
+
+/* Save and share, in the flow of the page under the plan they act on. The
+   rail carries the same pair from 1024px up, so this row stops there. */
+.zn-rsp__keep {
+  display: flex;
+  gap: var(--sp-4);
+  margin-block-start: var(--sp-13);
+}
+
+.zn-rsp__keep > .zn-btn {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+@media (min-width: 1024px) {
+  .zn-rsp__keep {
+    display: none;
+  }
 }
 
 /* ── the settings sheet ───────────────────────────────────────────────── */

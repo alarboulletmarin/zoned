@@ -51,6 +51,7 @@
 @import "./components/dropdown-menu.css" layer(components);
 @import "./components/empty-state.css" layer(components);
 @import "./components/favorite-button.css" layer(components);
+@import "./components/error-boundary.css" layer(components);
 @import "./components/footer.css" layer(components);
 @import "./components/guides.css" layer(components);
 @import "./components/home.css" layer(components);

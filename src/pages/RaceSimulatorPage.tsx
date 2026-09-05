@@ -5,12 +5,15 @@ import {
   Brain,
   ClipboardCheck,
   Clock,
+  Download,
   Flag,
   Flame,
   Heart,
   Info,
+  Loader2,
   Route,
-  Settings,
+  Save,
+  Share,
   Trash2,
   Utensils,
 } from "@/components/icons";
@@ -286,7 +289,7 @@ export function RaceSimulatorPage() {
         id: "timeline",
         label: t("sections.timeline"),
         navLabel: t("nav.timeline"),
-        icon: <Clock className="size-4" />,
+        icon: <Clock />,
         meta: `${plan.wakeUpTime} → ${plan.estimatedFinishTime}`,
         body: <RaceTimeline timeline={plan.timeline} />,
       },
@@ -297,7 +300,7 @@ export function RaceSimulatorPage() {
         id: "dayBefore",
         label: t("sections.dayBefore"),
         navLabel: t("nav.dayBefore"),
-        icon: <Flag className="size-4" />,
+        icon: <Flag />,
         meta: t("meta.items", { count: plan.dayBeforeChecklist.length }),
         body: (
           <Checklist
@@ -317,7 +320,7 @@ export function RaceSimulatorPage() {
         id: "packing",
         label: t("sections.packing"),
         navLabel: t("nav.packing"),
-        icon: <ClipboardCheck className="size-4" />,
+        icon: <ClipboardCheck />,
         meta: t("meta.items", { count: plan.raceDayChecklist.length }),
         body: (
           <Checklist
@@ -336,7 +339,7 @@ export function RaceSimulatorPage() {
       id: "morning",
       label: t("sections.morning"),
       navLabel: t("nav.morning"),
-      icon: <Utensils className="size-4" />,
+      icon: <Utensils />,
       meta: plan.wakeUpTime,
       body: (
         <div className="zn-stack" style={{ "--gap": "var(--sp-10)" } as React.CSSProperties}>
@@ -360,7 +363,7 @@ export function RaceSimulatorPage() {
         id: "warmup",
         label: t("sections.warmup"),
         navLabel: t("nav.warmup"),
-        icon: <Flame className="size-4" />,
+        icon: <Flame />,
         meta: `${plan.warmupStartTime} · ${plan.warmupDurationMin} min`,
         body: (
           <WarmupChecklist
@@ -378,7 +381,7 @@ export function RaceSimulatorPage() {
       id: "race",
       label: t("sections.race"),
       navLabel: t("nav.race"),
-      icon: <Route className="size-4" />,
+      icon: <Route />,
       wide: true,
       meta: `${formatPaceDisplay(convertPace(plan.targetTimeSeconds / 60 / plan.distanceKm, unit))}${paceUnit}`,
       body: (
@@ -394,7 +397,7 @@ export function RaceSimulatorPage() {
       id: "nutrition",
       label: t("sections.nutrition"),
       navLabel: t("nav.nutrition"),
-      icon: <Utensils className="size-4" />,
+      icon: <Utensils />,
       meta:
         plan.fuelingPlan.carbsPerHourG > 0
           ? `${plan.fuelingPlan.carbsPerHourG} g/h`
@@ -411,7 +414,7 @@ export function RaceSimulatorPage() {
       id: "mental",
       label: t("sections.mental"),
       navLabel: t("nav.mental"),
-      icon: <Brain className="size-4" />,
+      icon: <Brain />,
       meta: t("meta.segments", { count: plan.mentalCues.length }),
       body: <MentalCuesPanel cues={plan.mentalCues} />,
     });
@@ -421,7 +424,7 @@ export function RaceSimulatorPage() {
         id: "recovery",
         label: t("sections.recovery"),
         navLabel: t("nav.recovery"),
-        icon: <Heart className="size-4" />,
+        icon: <Heart />,
         body: (
           <ul className="zn-rs-cp">
             {recovery.map((cp, i) => (
@@ -647,6 +650,21 @@ export function RaceSimulatorPage() {
                     onToggle={toggleChecked}
                   />
                 )}
+
+                {/* Keeping the plan is secondary, so it stays in the page.
+                    The thumb dock below has room for the call and nothing
+                    else once the menu pill has taken its end of the gutter,
+                    and "Ajuster" is already on the summary line above. */}
+                <div className="zn-rsp__keep">
+                  <Button variant="outline" onClick={handleSave}>
+                    <Save />
+                    {t("actions.save")}
+                  </Button>
+                  <Button variant="outline" onClick={handleShare}>
+                    <Share />
+                    {t("actions.share")}
+                  </Button>
+                </div>
               </>
             )}
 
@@ -697,23 +715,18 @@ export function RaceSimulatorPage() {
       </PageContainer>
 
       {/* Mobile action bar — the PDF is what ends up on a phone race morning.
-          Opaque cream on an ink rule: no blur, no translucency. */}
+          Opaque cream on an ink rule: no blur, no translucency. One call and
+          nothing else: below 1024px the menu pill takes 120px of this bar's
+          end, and what is left measures the export button exactly. */}
       {plan && (
         <div className="zn-rsp__bar">
-          <RaceSimActions
-            variant="bar"
-            onExportPdf={handleExportPdf}
-            onSave={handleSave}
-            onShare={handleShare}
-            exporting={exporting}
-          />
           <Button
-            variant="outline"
-            size="icon"
-            aria-label={t("inputs.adjust")}
-            onClick={() => setSheetOpen(true)}
+            className="zn-rsp__barcall"
+            onClick={handleExportPdf}
+            disabled={exporting}
           >
-            <Settings size={15} />
+            {exporting ? <Loader2 className="zn-rsp__barspin" /> : <Download />}
+            {t("actions.exportPdf")}
           </Button>
         </div>
       )}

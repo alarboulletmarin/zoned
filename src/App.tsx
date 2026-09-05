@@ -230,7 +230,7 @@ function App() {
                 <ErrorBoundary>
                 {/* The Suspense boundary wraps BOTH the page and the footer:
                     with the footer outside, it sat just below the
-                    min-h-screen fallback during the initial load, then
+                    viewport-tall fallback during the initial load, then
                     jumped up into the viewport when a shorter page (e.g. a
                     calculator) resolved — a real CLS hit. Inside, footer and
                     page appear together (appearance is not a shift), and
@@ -240,7 +240,7 @@ function App() {
                   fallback={
                     <main id="main-content" className="zn-main">
                       <div className="zn-page">
-                        <div className="min-h-screen" />
+                        <div className="zn-page__hold" />
                       </div>
                     </main>
                   }

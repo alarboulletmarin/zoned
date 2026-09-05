@@ -271,6 +271,19 @@
   background: var(--surface-band);
 }
 
+/* ── the account menu ─────────────────────────────────────────────────── */
+
+/* Everything personal plus settings, behind the outlined circle. A stated
+   width rather than the menu's 128px floor: the entries are two words and a
+   glyph, and a menu that resizes per label reads as an accident. Only mounted
+   above 1024px — below that the same routes live in the full-screen menu.
+
+   Its rows are .zn-menu__item already (dropdown-menu.css), which is what
+   carries the icon size, the gap and the ink inversion. Nothing repeats here. */
+.zn-topbar__account-menu {
+  inline-size: 224px;
+}
+
 /* WCAG 2.5.8 — the 44px floor on a coarse pointer, which Tailwind used to
    carry per-utility and which would vanish silently with it. */
 @media (pointer: coarse) {

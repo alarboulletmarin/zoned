@@ -1,5 +1,5 @@
 import { Component } from "react";
-import type { ReactNode, ErrorInfo } from "react";
+import type { CSSProperties, ReactNode, ErrorInfo } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 
@@ -12,16 +12,35 @@ interface ErrorBoundaryProps {
   children: ReactNode;
 }
 
+/**
+ * The screen of last resort: it exists because a page threw.
+ *
+ * It follows the system's rule for an error, the one NotFoundPage and Alert
+ * already apply — say what happened, then give the way out. The third beat that
+ * rule asks for, *what is still intact*, has no key under `errors.boundary`:
+ * the 404 says "tes plans, tes séances et tes réglages sont intacts" and this
+ * screen owes the same reassurance. Copy debt, not layout debt.
+ *
+ * And it carries nothing that could throw in turn — no Alert, no icon, no
+ * drawing, no page stylesheet. React has no boundary above this one, so a
+ * fallback that crashes takes the whole app down with it. `Button` stays
+ * because it is a native `<button>` plus a class name.
+ */
 function ErrorFallback() {
   const { t } = useTranslation("common");
 
   return (
-    <div className="py-16 flex flex-col items-center justify-center text-center space-y-6 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold">{t("errors.boundary.title")}</h1>
-      <p className="text-muted-foreground">
+    <div className="zn-crash">
+      <h1 className="zn-display" data-level="3">
+        {t("errors.boundary.title")}
+      </h1>
+      <p className="zn-body zn-body--lead">
         {t("errors.boundary.description")}
       </p>
-      <div className="flex gap-3">
+      <div
+        className="zn-cluster"
+        style={{ "--gap": "var(--sp-6)" } as CSSProperties}
+      >
         <Button variant="outline" onClick={() => window.location.reload()}>
           {t("errors.boundary.reload")}
         </Button>
